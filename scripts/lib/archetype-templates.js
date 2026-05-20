@@ -6781,6 +6781,9 @@ THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical +
 
 2. **CONSTRUCTED FROM FLOWERS OR SCALE-INVERTED** — every render's hero is EITHER (a) a natural form (tree / mushroom / hill / mountain / waterfall / etc.) constructed entirely from flowers, OR (b) a regular flower scaled up to landscape-form size (e.g., a single oversized cherry-blossom-tree-sized tulip), OR (c) a natural element replaced by flowers (river of petals / hill of blooms / lake of floating petals).
 
+🚨 **INDIVIDUAL-FLOWER VISIBILITY (CRITICAL)** — the trees / mushrooms / forms must look like they are COVERED IN HUNDREDS OF INDIVIDUAL VISIBLE FLOWERS, NOT trees with monochrome colored leaves. Every individual flower must be recognizable as a flower (petals + center + form visible). The canopy / surface is a DENSE MASS OF DISTINCT INDIVIDUAL BLOOMS — you can count many separate flowers in the cluster.
+🚫 NEVER render as "colored leaves / colored foliage / monochrome canopy / red-leaved tree" — every flower stays a visible distinct flower.
+
 3. **NATURAL-WORLD LANDSCAPE CONTEXT** — the scene is set in a recognizable natural landscape (forest / valley / meadow / glade / hillside / riverbed / mountainside) — NOT a manmade setting. The hero form lives in this natural context.
 
 4. **SUPPORTING FLOOR-CARPET OF SMALLER FLOWERS** — the ground around the hero form is carpeted with smaller flowers (wildflowers, mixed meadow blooms, cosmos / daisies / forget-me-nots / poppies / etc.) — providing the "flowers everywhere" foundation that supports the surreal scale-inversion.
@@ -6793,7 +6796,7 @@ THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical +
 
 🚫 ABSOLUTE BANS:
   • 🚫 NO ANIMALS in any form — no flower-deer / flower-rabbit / flower-fox / flower-bear / NO wildlife (no real animals either)
-  • 🚫 NO HUMANS / NO PEOPLE / NO FIGURES / NO SILHOUETTES / NO HANDS / NO BODY PARTS / NO FACES
+  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS, NO FACES, NO WOMEN, NO MEN, NO CHILDREN, NO ROBED FIGURE WALKING DOWN A PATH, NO LONE TRAVELER, NO EXPLORER, NO HUMANOID ANYWHERE in foreground, midground, OR background. The flower-fantasy landscape is COMPLETELY empty of any human presence. If a figure / face / silhouette appears in the frame, the render FAILS — even a tiny distant figure walking on the path. NO HUMANS EVER 🚫🚫🚫
   • 🚫 NO MANMADE OBJECTS — no flower-houses / no flower-arches / no flower-cathedrals / no flower-clocks / no flower-vases / no flower-vehicles / no buildings of any kind
   • 🚫 NO RUINS / no archways / no urban / no interior
   • 🚫 NO macro / extreme closeup — the scale-inversion needs LANDSCAPE SCALE to read
@@ -10742,6 +10745,290 @@ MID-CLOSE framing with the SLEEPING CREATURE filling 40-60% of the frame. The co
 Open with: "[creature description] [sleep-pose verb-phrase], curled inside/on [nap-spot], [drowsy lighting]..."
 
 Then unfold the rest. Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, opening immediately with the sleeping creature.`;
+  },
+
+
+  CHIBIBOT_COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      room,
+      room_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(room_detail) ? room_detail : [room_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing COZY-INTERIOR scenes for ChibiBot — an UNEXPECTED chibi-scale cozy interior (often INSIDE a real object — teacup, music-box, matchbox, piano) with a tiny creature doing a story-driven cozy activity. Pixar / Studio Ghibli / Howl-Moving-Castle / Beatrix-Potter painterly storybook aesthetic. The viewer's reaction: "WAIT — they live INSIDE a teacup?? And look at how cozy this room is!" Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: WIDE-SHOT INTERIOR + CREATURE MUST BE VISIBLE ━━━
+
+The cozy ROOM is the hero of every render's FRAMING — but the CREATURE MUST BE VISIBLE in the scene. NEVER an empty room.
+
+ABSOLUTE FRAMING RULE:
+- Room / architecture / furniture / details fill 75-85% of the frame
+- The creature is 10-20% of the frame — small enough that the eye reads the cozy space first, BUT visible enough that the viewer immediately notices "OH THERE'S THE LITTLE GUY" — they are unambiguously present
+- Camera is PULLED BACK — wide-shot establishing — capturing the whole cozy room
+- Reference: Studio Ghibli's Howl's-Moving-Castle wide-shot interiors / Beatrix Potter dollhouse cross-section views / Wes Anderson dollhouse-tableau framing / Arrietty's chibi-scale dollhouse interiors
+- The creature is tucked in a SPECIFIC SPOT — in a corner armchair / on a window-seat / at a tiny table / in a bed-nook / on a quilt-pile — but always clearly visible
+- NOT a centered portrait. NOT a creature-fills-frame close-up. NOT a chest-up shot. ALSO NOT an empty room.
+
+⚠ HARD BAN — EMPTY-ROOM RENDERS. The creature MUST appear in the brief and MUST be described in the FIRST HALF of the output, doing their cozy activity, in a specific spot in the room. The output is FAILED if the room is described without the creature visibly present.
+
+HARD BAN: creature occupying more than 25% of the frame. Hard ban on close-ups. Hard ban on portrait crops.
+
+━━━ ⚠ HARD RULE #2: REAL-OBJECT-AS-HOME — THE OBJECT *IS* THE ARCHITECTURE ━━━
+
+This is the SIGNATURE of this path. When the room is a REAL-OBJECT-AS-HOME, you are NOT writing a chibi-cottage decorated with a teacup motif. You ARE writing the INTERIOR of the object itself, viewed from INSIDE it.
+
+The viewer is INSIDE the teacup / music-box / matchbox / piano / kettle / pumpkin / hatbox / lantern. The CURVED WALLS OF THE OBJECT ARE THE WALLS OF THE ROOM. There is no separate room around the object — THE OBJECT IS THE ROOM.
+
+You MUST describe the object-as-architecture EXPLICITLY:
+- TEACUP: the curved porcelain wall arcs around the whole room, the saucer is the floor with a saucer-rim lip, the giant teacup-handle arches overhead like an archway, the porcelain glaze reflects warm light, the rim is the ceiling-edge
+- MUSIC-BOX: the velvet-lined curved walls of the music-box rise on all sides, the dancing-figurine is a giant bedpost looming over the bed, the winding-mechanism brass-gears are visible in the ceiling, the lid is the sky overhead
+- MATCHBOX: matchstick rafters run across the ceiling, the cardboard side-walls have the matchbox label printed huge across them, the matchbox-rim is the doorframe, sulfur-strip floor at one end
+- PIANO: piano-string-walls rise on every side, the giant felt-hammers are visible above, the polished-wood lid arches overhead like a vaulted ceiling, the brass-pedals are giant furniture
+- POT / KETTLE: enamel-curved walls arc around, the spout is a window letting in light, the lid is the dome-ceiling, brass-handle is a wall-bracket
+- PUMPKIN: orange-ribbed curved walls glow translucent, seeds dangle from the ceiling like chandeliers, the carved jack-o'-lantern face is the window, the stem is the chimney
+- HATBOX: round cardboard walls rise on all sides, the round lid is the dome-ceiling above, the hatbox-label-pattern decorates the curved wall, ribbon-loops are wall-hooks
+- BOOK: giant open pages are the floor + walls, the spine is the back-wall, words are painted huge across the walls, bookmark is a curtain
+- LANTERN / LIGHTBULB: curved glass walls with brass-frame ribs, hot-warmth radiating from the floor, the bulb-top is the dome-ceiling
+- ACORN: round wooden walls with grain visible, the acorn-cap is the dome-roof, stem is the chimney
+
+The viewer should INSTANTLY recognize the object on first glance: "OH, the room is inside a TEACUP."
+
+When the room is a PURPOSE-BUILT chibi-dwelling (mushroom-house / treehouse / hobbit-hole / chibi-cottage) — same wide-shot establishing rule applies. The architecture is the hero. The chibi-scale is sold by tiny-furniture proportions.
+
+━━━ MANDATORY OUTPUT STRUCTURE — ROOM ESTABLISHED FIRST, CREATURE WOVEN IN EARLY ━━━
+
+Because the ROOM is the hero of FRAMING, the brief LEADS with the room/setting (15-25 words) and THEN immediately introduces the visible creature doing their activity. The creature must be named + described + their cozy activity stated WITHIN THE FIRST 30 WORDS — never just a setting paragraph alone.
+
+Structure: "[Wide-shot room description, 15-25 words] — and tucked [in a corner / on a window-seat / etc.] is [tiny creature], [cozy snuggle activity], [creature visual detail], [more room atmosphere]..."
+
+⚠ The creature appears explicitly in the brief — not implied. If you mention "the resident" or "the homeowner" abstractly, you have failed. Name the creature, place them in a specific spot, describe what they're doing.
+
+━━━ THE FOREGROUND CREATURE ━━━
+${creature}
+
+━━━ THE CREATURE'S COZY ACTIVITY ━━━
+${resident_activity}
+
+━━━ THE COZY ROOM ━━━
+${room}
+
+━━━ THREE ROOM DETAILS (populate the room with lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Pixar / Studio Ghibli / Howl's-Moving-Castle / Beatrix-Potter interior framings. Warm-amber pooling on surfaces. Layered atmospheric depth (foreground creature / midground furniture / background architectural depth).
+
+━━━ STORY BEAT — every render tells a STORY ━━━
+
+The creature is MID-ACTION — stirring, pouring, reading, painting, knitting, watering. NEVER posing. NEVER static.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-INTERIOR EFFECTS ━━━
+
+Layer ALL on EVERY render:
+- Warm-amber lamp/fireplace/candle glow pooling across surfaces
+- Steam wisps from teapots/mugs/kettles
+- Dust motes drifting in warm light beams
+- Light spill across hardwood floors / rugs
+- Soft bokeh-orbs from interior lights
+- Reflections in polished surfaces (kettle / mirror / window-glass)
+- Texture detail on knits / quilts / sheepskin / wood
+- Plant-leaf shadows from windowsill flora
+- Tiny glowing accents (fairy-lights / candle-flames / lantern-glow)
+- Subtle dust on bookshelves / corners
+- Warm color gradient (golden-amber center to slight blue-grey edges)
+- Light leaks from sun-windows
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+"I want to live in this room" longing. Wholesome cottagecore.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering, warm volumetric god-rays, painterly bokeh. Chibi proportions.
+
+━━━ NO ADULT HUMANS (children OK from unified pool) ━━━
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER (affects what's visible through windows) ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (WIDE INTERIOR ESTABLISHING — ENFORCE) ━━━
+
+WIDE INTERIOR ESTABLISHING SHOT. Camera pulled WAY back to capture the entire cozy room. Room/architecture/furniture fills 80-90% of the frame. Creature is a TINY 5-15% anchor tucked somewhere — NOT centered, NOT a portrait, NOT a close-up. The eye reads ROOM FIRST then discovers the creature. Studio Ghibli wide-shot / Beatrix Potter dollhouse-cross-section / Arrietty chibi-scale interior. Three room-details visible across the space. Surprise element tucked elsewhere.
+
+HARD BAN: portrait crops, chest-up framing, creature filling more than 20% of frame, centered close-ups. The room is the hero.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+If the room is a REAL-OBJECT-AS-HOME, open with: "Wide-shot view from INSIDE a giant [object] — curved [object-material] walls arc around, [object-bottom] is the floor, [object-feature] overhead — and tucked [specific location] is [tiny creature] [cozy snuggle activity], warm-amber light pouring through [object-feature-as-window], [cottagecore details all around]..."
+
+If the room is a PURPOSE-BUILT chibi-dwelling, open with: "Wide-shot interior of a chibi-scale [dwelling-type], and tucked [specific location] is [tiny creature] [cozy snuggle activity], warm-amber light, [cottagecore details around them]..."
+
+Then unfold the rest of the room/details/sparkle-stack. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The CREATURE must appear by word 30. NEVER an empty room.`;
+  },
+
+
+  CHIBIBOT_MINIATURE_FEAST: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      food_hero,
+      scene_setting,
+      creature_group,
+      chibi_food_activity,
+      food_decoration,
+      kawaii_atmosphere,
+      time_of_day,
+      camera_angle,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const creatureList = Array.isArray(creature_group) ? creature_group : [creature_group];
+    const creatureBlock = creatureList.filter(Boolean).map((c, i) => `${i + 1}. ${c}`).join('\n');
+    const decorList = Array.isArray(food_decoration) ? food_decoration : [food_decoration];
+    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const isGroup = creatureList.length >= 2 && Math.random() < 0.7;
+
+    return `You are writing KAWAII POP-MART FEAST scenes for ChibiBot — adorable chibi creatures interacting with a SMILING-FACED kawaii food/drink in a heavily-decorated kawaii scene. Sister path to cute-food (which is food-only) — this path is CHIBIS + FOOD together. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: THE FOOD HAS A SMILING FACE ━━━
+
+The hero food/drink centerpiece has a literal kawaii smiling face on it — dimpled-blush cheeks, closed-arc-eyes, tiny printed mouth. Boba cup, sundae, pancake-stack, mochi-tray, cake, taiyaki, cereal bowl — whatever the food hero, it's anthropomorphized with a sweet smiling face. This is the bex.ai Pop-Mart aesthetic non-negotiable.
+
+━━━ ⚠ HARD RULE #2: TONS OF CHIBIS + TONS OF FOOD — CUTE-MAXX FEAST ━━━
+
+This is a CUTE-MAXX FEAST scene with MANY chibis and an ABUNDANCE of kawaii food spread across the scene. NOT a tasteful minimalist composition — PACKED with cuteness wall-to-wall.
+
+${isGroup ? `GROUP MODE — 3-4 chibi creatures (different species, different heights, all equally cute) gathered around the kawaii food hero. They are PLURAL — never a duo, always a friend-party. Each chibi mid-action, each adorable, each interacting with the food spread.` : `SOLO MODE — ONE adorable chibi creature with the kawaii food hero. Intimate one-on-one scene. Even in solo mode, the food spread is ABUNDANT — multiple kawaii treats arranged around the hero.`}
+
+ALONGSIDE the food hero centerpiece, the scene includes an ABUNDANT spread of OTHER kawaii smiling-face foods — extra cupcakes, donuts, macarons, mini-tarts, fruit-with-faces, candies, treats — piled, stacked, scattered across the picnic blanket / camp-table / boat-deck / etc. The frame is FULL of treats. Think kawaii-pop-mart-feast-MAXIMIZED. Multiple smiling-face foods fill the space.
+
+The food and the chibis BOTH read as adorable. The composition has chibis arranged AMONG the abundant food spread with treats EVERYWHERE — never an empty / sparse scene.
+
+━━━ ⚠ HARD RULE #3: SETTING-AS-CO-HERO — OUTDOOR VARIETY ━━━
+
+The scene_setting below is part of the hero composition — picnic, beach, camping, treehouse, garden, hot-air-balloon, boat, mountain. The setting is shown CLEARLY — the chibis + food are SET IN that specific outdoor place. The setting reads instantly: "this is a beach picnic" or "this is a forest camping trip" — NEVER a generic indoor table-scene.
+
+━━━ ⚠ HARD RULE #4: KAWAII SCENE DECORATION — MAX CUTE-MAXX ━━━
+
+The entire scene is heavily decorated with kawaii motifs — scattered tiny sprinkles, mini-macarons, star-confetti, petal-blossoms, tiny mini-fruits-with-smiling-faces, cream-swirls, pearl-beads, candy. The 3 food_decoration items below MUST appear as visible scattered decor across the scene. Cherry-blossom branches may arch from a corner. Pastel-bunting / fairy-lights / paper-lanterns where setting allows. Rainbow motif welcomed. Pop-Mart designer-vinyl glossy-pearlescent rendering throughout.
+
+━━━ THE KAWAII FOOD HERO (smiling-face centerpiece) ━━━
+${food_hero}
+
+━━━ THE CHIBI CREATURE${isGroup ? 'S' : ''} ━━━
+${creatureBlock}
+
+${isGroup ? `These chibis are GATHERED AROUND the food hero — 2-3 chibis, mixed species, different heights, all equally cute. Different positions: one sipping, one mid-bite, one wide-eyed-amazed, one holding a mini decoration.` : `This solo chibi is one-on-one with the food hero — facing it, holding it, interacting with it. Adorable expression.`}
+
+━━━ THE CHIBI FOOD ACTIVITY ━━━
+${chibi_food_activity}
+
+━━━ THE KAWAII SCENE SETTING ━━━
+${scene_setting}
+
+━━━ THREE FOOD DECORATIONS (scattered throughout the scene as visible decor) ━━━
+${decorBlock}
+
+━━━ KAWAII ATMOSPHERE LAYER ━━━
+${kawaii_atmosphere}
+
+━━━ CAMERA ANGLE ━━━
+${camera_angle}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER (affects window light / outdoor mood) ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SPARKLE STACK — MAXIMUM KAWAII EFFECTS ━━━
+
+Layer ALL on EVERY render:
+- Glossy pearlescent 3D-rendered Pop-Mart designer-vinyl finish on everything
+- Soft-pastel palette (blush pink, lavender, mint, peach, cream, baby-blue)
+- Soft bokeh-pastel background
+- Scattered tiny sprinkles / star-confetti / petal-blossoms throughout the frame
+- Mini smiling-face accents on some decorations (mini fruits / hearts / stars)
+- Cherry-blossom or pastel-floral branches as accents
+- Steam-curl wisps from the food hero with tiny smiling-face hints
+- Rainbow accents welcomed (rainbow soft-serve / rainbow milk / rainbow-sparkle dust)
+- Pastel cream / icing / glaze drips on the food hero
+- Tiny pearl-beads or sugar-glitter dust around the food hero
+- Warm soft-pastel ambient light
+- Designer-vinyl glossy surfaces with pearlescent sheen
+
+━━━ MOVIE POSTER MOMENT — every render reads "OMG THE CUTEST" ━━━
+
+bex.ai Instagram aesthetic. Pop-Mart designer-vinyl quality. Glossy pearlescent everything. The viewer's reaction: "OMG THIS IS THE CUTEST" — peak kawaii cute-maxxing.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD BANS ━━━
+- NO realistic / photoreal rendering — must be glossy Pop-Mart vinyl
+- NO dark / moody lighting — soft pastel only
+- NO humans / NO adult human figures
+- NO scary / weird food — only kawaii sweet-treats and cute drinks
+- The food MUST have a smiling face — never plain food
+- The scene MUST be heavily decorated — never sparse / minimalist
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD WITH THE OUTDOOR SETTING FIRST. Then chibis. Then the abundant food spread. The setting must be ESTABLISHED in the first 20-30 words so Flux locks onto the outdoor location and doesn't default to a generic Pop-Mart studio backdrop.
+
+Open with: "[outdoor kawaii scene setting — picnic blanket on a meadow / sandy-pink beach / campsite with tents / treehouse / hot-air-balloon / etc., 20-30 words with setting details visible: trees / sky / waves / mountains / mossy ground / etc.], ${isGroup ? '3-4 adorable chibi creatures of different species are gathered around' : 'one adorable chibi creature is sitting with'} [kawaii smiling-face food hero centerpiece], abundant kawaii treats spread everywhere across the scene, [scattered kawaii food decorations throughout the frame], pastel Pop-Mart glossy pearlescent rendering, [soft pastel light]..."
+
+⚠ THE SETTING APPEARS FIRST. The scene must read as "[outdoor location] with kawaii food + chibis spread across it" — NOT a "Pop-Mart product shot of food with chibis." Trees / sky / waves / pastel-mountains / etc. visible in the background.
+
+⚠ THE FRAME IS FULL — multiple chibis, multiple kawaii smiling-face foods, scattered decorations everywhere. Never a sparse / minimalist composition.
+
+Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases.`;
   },
 
 

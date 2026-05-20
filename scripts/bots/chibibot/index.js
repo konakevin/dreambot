@@ -90,6 +90,8 @@ module.exports = {
     'sleepy-naptime': 'chibibot_pixar',
     'jungle-village': 'chibibot_pixar',
     'cozy-interior': 'chibibot_pixar',
+    // miniature-feast — locked to Pop-Mart glossy chibi register (NOT pixar)
+    'miniature-feast': 'chibibot_render',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -209,7 +211,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'miniature-feast'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;

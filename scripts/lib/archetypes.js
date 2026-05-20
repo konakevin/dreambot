@@ -1506,6 +1506,36 @@ const ARCHETYPES = {
   },
 
 
+  CHIBIBOT_COZY_INTERIOR: {
+    description:
+      'PATH-BESPOKE — ChibiBot cozy-interior path (2026-05-19 full-bespoke). SETTING-AS-HERO INDOOR cozy space, often a REAL-OBJECT-AS-HOME (chibi has moved into a teacup / music-box / matchbox / piano / kettle / pumpkin / etc.) — 60%, OR a purpose-built chibi-scale dwelling (mushroom-house / treehouse / hobbit-hole / chibi-cottage) — 40%. SOLO peripheral creature does a cozy-snuggle activity. Wide-shot interior establishing — room fills 75-85% of frame, creature 10-20% as a tiny visible anchor. Pixar painterly storybook register via chibibot_pixar medium lock. 10 axes: 3 universal + 7 path-bespoke.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'resident_activity', 'room', 'room_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { room_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_MINIATURE_FEAST: {
+    description:
+      'PATH-BESPOKE — ChibiBot miniature-feast path (2026-05-19 full-bespoke). KAWAII POP-MART CUTE-MAXX FEAST with TONS of chibis (3-4 in group mode) + TONS of smiling-face kawaii food in OUTDOOR-VARIETY settings (picnic / beach / camping / treehouse / garden / boat / hot-air-balloon / mountain / snow / fairytale-forest — ~90% outdoor). Sister to cute-food (which is food-only) — this is CHIBIS + FOOD + SETTING all packed together. chibibot_render Pop-Mart glossy lock. 11 axes: 3 universal + 8 path-bespoke (food_hero + scene_setting + creature_group pickN:4 + chibi_food_activity + food_decoration pickN:3 + kawaii_atmosphere + time_of_day + camera_angle).',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['food_hero', 'scene_setting', 'creature_group', 'chibi_food_activity', 'food_decoration', 'kawaii_atmosphere', 'time_of_day', 'camera_angle'],
+    },
+    pickN: { creature_group: 4, food_decoration: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
   CHIBIBOT_JUNGLE_VILLAGE: {
     description:
       'PATH-BESPOKE — ChibiBot jungle-village path (2026-05-19 full-bespoke). SETTING-AS-HERO village in a jungle/rainforest. Treehouse villages, mushroom-house clearings, leaf-roof huts, vine-bridge connectors. Architecture + jungle atmosphere are the hero; SOLO peripheral resident creature (JUNGLE-tagged from unified pool) adds story. Studio Ghibli / Encanto / Princess-Mononoke / Avatar-Pandora-village aesthetic. 10 axes: 3 universal + 7 path-bespoke.',

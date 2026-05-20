@@ -154,6 +154,15 @@ module.exports = {
   COZY_INTERIOR_SURPRISE: load('cozy_interior_surprise'),
   COZY_INTERIOR_PHENOMENA: load('cozy_interior_phenomena'),
 
+  // Miniature-feast path-bespoke axes (2026-05-19 full-bespoke migration)
+  MINIATURE_FEAST_FOOD_HERO: load('miniature_feast_food_hero'),
+  MINIATURE_FEAST_SCENE_SETTING: load('miniature_feast_scene_setting'),
+  MINIATURE_FEAST_CHIBI_ACTIVITY: load('miniature_feast_chibi_activity'),
+  MINIATURE_FEAST_FOOD_DECORATION: load('miniature_feast_food_decoration'),
+  MINIATURE_FEAST_KAWAII_ATMOSPHERE: load('miniature_feast_kawaii_atmosphere'),
+  MINIATURE_FEAST_TIME_OF_DAY: load('miniature_feast_time_of_day'),
+  MINIATURE_FEAST_CAMERA_ANGLE: load('miniature_feast_camera_angle'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each

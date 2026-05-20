@@ -1,61 +1,24 @@
 /**
- * CuddleBot miniature-feast path — creatures at tiny tea parties, in
- * miniature bakeries, stirring pots of stew, carrying oversized pastries.
- * Rilakkuma / Sumikko Gurashi energy.
+ * ChibiBot miniature-feast path — full-bespoke axis-system (2026-05-19).
+ *
+ * KAWAII POP-MART FOOD scene with chibi creatures interacting with a
+ * smiling-faced food hero. Sister to cute-food (which is food-only) —
+ * this path is CHIBIS + FOOD together. Heavily decorated kawaii scene.
+ *
+ * 11 axes: 3 universal + 8 path-bespoke. chibibot_render medium lock.
+ * Skip two-pass polish (scene-decoration language gets stripped).
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const creature1 = picker.pickWithRecency(pools.CUTE_CREATURES, 'creature');
-  const creature2 = picker.pickWithRecency(pools.CUTE_CREATURES, 'creature');
-  const feastScene = picker.pickWithRecency(pools.MINIATURE_FEAST_SCENES, 'feast_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  const isGroup = Math.random() < 0.7;
-  const creatureBlock = isGroup
-    ? `A SMALL GROUP (3-5) of adorable creatures together — led by: ${creature1}, joined by: ${creature2} and a few others. Different species, different sizes, all equally cute, cooking or feasting together.`
-    : `${creature1} — solo chef or tiny foodie.`;
-
-  return `You are writing MINIATURE FEAST scenes for CuddleBot — ${isGroup ? 'a group of adorable creatures' : 'an adorable creature'} in a tiny food or cooking scenario. Rilakkuma-meets-Ratatouille energy. Oversized pastries, tiny kitchens, steaming mugs bigger than heads. Output wraps with style prefix + suffix.
-
-${blocks.CUTE_CUDDLY_COZY_BLOCK}
-
-${blocks.STYLIZED_NOT_PHOTOREAL_BLOCK}
-
-${blocks.NO_DARK_NO_INTENSE_BLOCK}
-
-${blocks.NO_PEOPLE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE CUTE CREATURE(S) ━━━
-${creatureBlock}
-
-━━━ THE MINIATURE FEAST SCENE ━━━
-${feastScene}
-
-━━━ LIGHTING (warm kitchen / bakery glow) ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-${isGroup ? 'Mid-wide frame with the group cooking or feasting together. 3-5 creatures visible — one stirring, one tasting, one covered in flour, one carrying oversized ingredient. Different heights and species for visual variety.' : 'Mid frame with creature and food/cooking as co-stars.'} Food is oversized relative to creatures OR creatures are tiny in a normal kitchen. Warm bakery glow. Stacked food details — crumbs, steam swirls, dripping frosting, tiny utensils. Maximum charm.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'CHIBIBOT_MINIATURE_FEAST',
+  pools: {
+    food_hero: 'MINIATURE_FEAST_FOOD_HERO',
+    scene_setting: 'MINIATURE_FEAST_SCENE_SETTING',
+    creature_group: { name: 'CUTE_CREATURES_UNIFIED', tags: ['LAND', 'FANTASY', 'ANY'] },
+    chibi_food_activity: 'MINIATURE_FEAST_CHIBI_ACTIVITY',
+    food_decoration: 'MINIATURE_FEAST_FOOD_DECORATION',
+    kawaii_atmosphere: 'MINIATURE_FEAST_KAWAII_ATMOSPHERE',
+    time_of_day: 'MINIATURE_FEAST_TIME_OF_DAY',
+    camera_angle: 'MINIATURE_FEAST_CAMERA_ANGLE',
+  },
 };
