@@ -17,6 +17,56 @@
  *
  * Single deliberate consolidation: the bot uses EarthBot's 5-medium list
  * across all paths (photography/canvas/watercolor/illustration/pencil).
+ *
+ * ═══════════════════════════════════════════════════════════════════════
+ * AXIS-SYSTEM MIGRATION ROADMAP (2026-05-20 — conservative consolidation)
+ * ═══════════════════════════════════════════════════════════════════════
+ *
+ * Final inventory after migration = 20 paths (was 25, dropped 5 via consolidation).
+ *
+ * MIGRATED (1 of 20):
+ *   ✓ epic-vista — canonical reference (BOT_SCENE_QUALITY_PLAYBOOK.md)
+ *
+ * EARTH — 9 paths remaining to migrate:
+ *   - sky-drama — NEW path; subsumes legacy `dramatic-sky` + `weather-drama`
+ *     (extreme atmospheric/weather phenomena as primary subject)
+ *   - hidden-corner (intimate small-scene nature)
+ *   - sacred-light (single intimate divine light moment)
+ *   - national-parks (US National Parks amplified — closest sibling to epic-vista)
+ *   - seasonal-shift (autumn fire / first snow / cherry blossom / etc.)
+ *   - geological-wonder (crystal caves / basalt columns / slot canyons / geysers)
+ *   - micro-nature (extreme macro close-ups)
+ *   - deep-forest (old-growth temperate forest cathedrals)
+ *   - lush-jungle (Amazon / Borneo / Daintree tropical rainforest)
+ *
+ * BEACH — 10 paths remaining to migrate:
+ *   - coastal-vista (DRAMATIC craggy coast — Iceland / Big Sur / 12 Apostles)
+ *   - waves — NEW path; subsumes legacy `wave` + `big-wave`
+ *     (intimate-curl through monumental-wall, variance via subject pool)
+ *   - tropical-paradise (PARADISE coast — Maldives / Bora Bora / Bali)
+ *   - tide-pool (macro biological coastal detail)
+ *   - beach-still-life — NEW path; subsumes legacy `beach-moment` + `seashell`
+ *     (small-foreground story — shells, driftwood, sea-glass, footprints)
+ *   - cozy-beach (coastal villages / lighthouses / huts)
+ *   - hawaii-flowers (Hawaiian coast + tropical flowers co-star)
+ *   - reef-paradise (shallow tropical reefs visible from beach)
+ *   - beach-night (magical tropical beaches after dark)
+ *   - epic-sunset (once-in-a-lifetime tropical sunsets)
+ *
+ * DROPPED (5 paths fully subsumed, no migration):
+ *   ✗ luminous-landscape (subsumed by epic-vista's STACKED LIGHT DRAMA)
+ *   ✗ dramatic-sky (merges into sky-drama)
+ *   ✗ weather-drama (merges into sky-drama)
+ *   ✗ beach-landscape (covered by coastal-vista + tropical-paradise)
+ *   ✗ wave + big-wave (merges into waves)
+ *   ✗ beach-moment + seashell (merges into beach-still-life)
+ *
+ * Migration policy: legacy paths stay in rotation until their replacement
+ * lands. When migrating a NEW consolidated path (sky-drama / waves /
+ * beach-still-life), delete BOTH legacy ancestors AND remove from index.js
+ * after the new path proves out. When dropping a path entirely
+ * (luminous-landscape / beach-landscape), delete after epic-vista or its
+ * coastal replacement is confirmed handling that aesthetic.
  */
 
 const earthPools = require('./earth/pools');
