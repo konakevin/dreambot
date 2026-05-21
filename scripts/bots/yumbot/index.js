@@ -14,6 +14,7 @@ const pathBuilders = {
   'floral-garden-cup': require('./paths/floral-garden-cup'),
   'rainbow-dreamscape': require('./paths/rainbow-dreamscape'),
   'checkered-tabletop': require('./paths/checkered-tabletop'),
+  'candy-fantasy': require('./paths/candy-fantasy'),
 };
 
 module.exports = {
@@ -37,12 +38,13 @@ module.exports = {
     'cinematic', 'surreal',
   ],
 
-  paths: ['floral-garden-cup', 'rainbow-dreamscape', 'checkered-tabletop'],
+  paths: ['floral-garden-cup', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy'],
 
   pathWeights: {
     'floral-garden-cup': 1,
     'rainbow-dreamscape': 1,
     'checkered-tabletop': 1,
+    'candy-fantasy': 1,
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },
@@ -50,6 +52,14 @@ module.exports = {
   sensoryAnchors: { enabled: false },
 
   defaultPools: {},
+
+  // Per-path prefix override — prepended BEFORE the medium style prefix
+  // as the FIRST tokens Flux sees. Used to lock path-specific world DNA
+  // that the shared medium prefix can't establish on its own.
+  promptPrefixByPath: {
+    'candy-fantasy':
+      'Kawaii candy-fantasy scene — composition follows the scene description below (NOT a default candy meadow). The scene sits inside a RICH KAWAII CANDY-FANTASY WORLD with a lush layered candy-world backdrop visible BEHIND the foreground scene — frosted-cake mountains, oversized lollipop-trees, marshmallow drifts, sprinkle-grass, cotton-candy clouds, sugar-glitter air, gumdrop bushes, candy-cane accents — every surface confectionary, NEVER real wood/grass/stone/metal/fabric. The candy-world backdrop is RICH AND DETAILED but never overrides the foreground composition the scene description establishes.',
+  },
 
 
   poolByName(name) {

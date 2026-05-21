@@ -40,6 +40,17 @@ module.exports = {
   // Tagged substantial landscape features (streams / ponds / trees / rocks / bridges)
   LANDSCAPE_FEATURES: load('landscape_features'),
 
+  // ============ CANDY-FANTASY path pools (Wreck-It-Ralph Sugar Rush) ============
+  CANDY_FANTASY_LANDSCAPE: load('candy_fantasy_landscape'),
+  CANDY_FANTASY_SCENE_TYPE: load('candy_fantasy_scene_type'),
+  CANDY_FANTASY_SIGNATURE: load('candy_fantasy_signature'),
+  CANDY_FANTASY_TERRAIN: load('candy_fantasy_terrain'),
+  CANDY_FANTASY_SKY: load('candy_fantasy_sky'),
+  CANDY_FANTASY_LIGHTING: load('candy_fantasy_lighting'),
+  CANDY_FANTASY_CAMERA: load('candy_fantasy_camera'),
+  CANDY_FANTASY_TIME_OF_DAY: load('candy_fantasy_time_of_day'),
+  CANDY_FANTASY_WEATHER: load('candy_fantasy_weather'),
+
   // ============ FLORAL-GARDEN-CUP path pools ============
   FLORAL_VESSEL: load('floral_vessel'),
   FLORAL_OVERFLOWING_FLORA: load('floral_overflowing_flora'),

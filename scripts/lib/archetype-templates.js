@@ -13106,7 +13106,7 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
     const compList = Array.isArray(companions) ? companions : [companions];
     const compBlock = compList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
-    return `You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape with rainbows. Output wraps with style prefix + suffix.
+    return `You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape, COLORFUL and VIBRANT pastel palette throughout (the "rainbow-" in the path name is a reminder that the palette is colorful pastels — it does NOT mean the render must be rainbow-themed). Output wraps with style prefix + suffix.
 
 ━━━ ⚠ HARD RULE #1: NAME ALL 5 FOODS EXPLICITLY — COUNT THEM ━━━
 
@@ -13114,25 +13114,15 @@ The 5 foods below MUST appear in the output by name. Count them: 1, 2, 3, 4, 5. 
 
 ⚠ FAILURE: rendering 1, 2, or 3 foods. PASS: 5 distinct kawaii foods visible.
 
-━━━ ⚠ HARD RULE #2: 2+ VISIBLE RAINBOWS IN THE SCENE ━━━
+━━━ ⚠ HARD RULE #2: COLORFUL VIBRANT PASTEL PALETTE ━━━
 
-Rainbows are the signature. EVERY render must show at least 2 distinct rainbow visual elements simultaneously — examples:
-- A rainbow ARCHING across the sky overhead
-- A rainbow CASCADING out of one of the foods like spillover
-- A rainbow-STREAM flowing across the meadow
-- A rainbow-WATERFALL off a rock
-- Rainbow-CONFETTI drifting through the air
-- Rainbow-PRISM light scattered on the grass
+The signature is a colorful vibrant pastel palette — saturated pinks, mints, lavenders, peaches, baby-blues, creams. The whole scene SINGS with color. Rainbows MAY appear as one accent among many (a rainbow arching softly overhead, rainbow-confetti drifting through air, rainbow-prism light scattered across the grass) — they are NOT the hero of the composition and NOT required in every render. The colorful palette is the hero.
 
-The rainbow_element below names the SPECIFIC rainbow density for this render — render it as described. The rainbows are LITERAL bands of vivid color, NOT just pastel-rainbow lighting tint.
+━━━ ⚠ HARD RULE #3: OUTDOOR PASTEL LANDSCAPE ━━━
 
-⚠ FAILURE: zero rainbows visible. PASS: rainbow band(s) clearly in the rendered image.
+The 3 landscape features below MUST be visibly rendered in the scene — flowers, foliage, pastel hills, soft grass, cherry-blossom trees, rocks, sugar-glitter air, etc. The foods are nestled IN this landscape — on grass / on rocks / on a soft hilltop / under blossoming trees / among flowers — like meadow-creatures living there.
 
-━━━ ⚠ HARD RULE #3: OUTDOOR LANDSCAPE WITH VISIBLE FEATURES ━━━
-
-The 3 landscape features below MUST be visibly rendered in the scene — water reflecting, trees with foliage, rocks with moss, paths winding. The foods are nestled IN this landscape — on grass / on rocks / beside streams / under trees — like meadow-creatures living there.
-
-⚠ HARD BAN: tabletop / counter / flat-surface composition. NO bokeh-only backdrop. The scene is OUTDOOR NATURE.
+⚠ HARD BAN: tabletop / counter / flat-surface composition. NO bokeh-only backdrop. NO river/stream/brook/path/lane/trail/bridge running through the composition or splitting the frame from foreground to vanishing point — this was a chronic failure mode of older renders. The scene is OUTDOOR NATURE composed as a wide cluster / gathering / clearing, NOT a Z-axis recede.
 
 ━━━ THE 5 KAWAII FOOD INHABITANTS (each MUST appear by name in the output) ━━━
 ${foodBlock}
@@ -13169,16 +13159,103 @@ ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
-Lead with the outdoor landscape, then NAME ALL 5 FOODS, then rainbows + sky + decor.
+Lead with the outdoor pastel landscape, then NAME ALL 5 FOODS, then sky + decor + optional rainbow accent.
 
 Template:
-"Wider scenic outdoor shot of [dreamscape setting] with [landscape feature 1], [landscape feature 2], [landscape feature 3] visible — five kawaii food-creatures gathered: (1) [food 1 named in 6-10 words], (2) [food 2 named], (3) [food 3 named], (4) [food 4 named], (5) [food 5 named] — [rainbow element], [sky element], [decor 1, 2, 3 scattered], [companion 1 + 2 fluttering], painterly Pop-Mart pearlescent rendering, sunny pastel light."
+"Wider scenic outdoor shot of [dreamscape setting] with [landscape feature 1], [landscape feature 2], [landscape feature 3] visible — five kawaii food-creatures gathered: (1) [food 1 named in 6-10 words], (2) [food 2 named], (3) [food 3 named], (4) [food 4 named], (5) [food 5 named] — [sky element], [decor 1, 2, 3 scattered], [companion 1 + 2 fluttering], [rainbow_element as optional accent if it fits naturally], painterly Pop-Mart pearlescent rendering, sunny vibrant pastel light."
 
 ⚠ Count the (1) (2) (3) (4) (5) explicitly in the output to ensure all 5 foods appear. The numbered list is required.
 
-⚠ Rainbow(s) appear as literal visible bands in the rendered image — not implied.
+⚠ NO river / stream / brook / path / trail / lane / bridge as a compositional element. The landscape is a wide pastel meadow / clearing / hillside / garden — not a path-cuts-through-the-frame scene.
 
-Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. All 5 foods + rainbow(s) + landscape features + companions read clearly.`;
+Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. All 5 foods + landscape features + companions read clearly.`;
+  },
+
+  YUMBOT_CANDY_FANTASY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { candy_scene_type, candy_world_signature, candy_terrain, candy_sky, food_inhabitants, companions, decor_accents, candy_camera, candy_lighting, candy_time_of_day, candy_weather } = slots;
+    const sigList = Array.isArray(candy_world_signature) ? candy_world_signature : [candy_world_signature];
+    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
+    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const compList = Array.isArray(companions) ? companions : [companions];
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+
+    return `You are writing CANDY-FANTASY renders for YumBot. The SCENE-TYPE is the WHOLE point — it dictates where the 5 food-characters are placed and how the composition is framed. Atmosphere, lighting, time-of-day, weather wrap around the scene-type. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: SCENE-TYPE IS THE COMPOSITION ━━━
+
+The scene-type below is a COMPOSITION-LOCKED scene with explicit character placement (perched on a railing / seated around a campfire / clinging to a pinwheel / inside a glass jar / atop a cake mountain / on a roller-coaster crest / etc.). The 5 kawaii food-characters take the EXACT positions described in the scene-type. The render is ABOUT the scene-type — atmosphere is decoration around it.
+
+DO NOT replace the scene-type with a generic "kawaii characters in candy meadow". Whatever the scene-type prop is (bridge railing / treehouse / Easter-egg boat / advent-calendar wall / lazy-Susan turntable / etc.) must be the visual anchor of the composition.
+
+━━━ ⚠ HARD RULE #2: 5 FOOD-CHARACTERS TAKE THE SCENE-TYPE POSITIONS ━━━
+
+The 5 kawaii foods below are the (1) (2) (3) (4) (5) food-friends from the scene-type. Assign each food to one of the positions/poses described in the scene-type (e.g. if the scene-type says "perched along a bridge railing", then (1) is leaning forward, (2) is sitting cross-legged, etc.). Use the foods' specific shapes — but their PLACEMENT comes from the scene-type.
+
+━━━ ⚠ HARD RULE #3: CANDY-FANTASY WORLD AESTHETIC ━━━
+
+Everything is made of candy/cake/sugar/cookie/frosting/marshmallow. NOT real wood / metal / fabric / stone — every prop in the scene-type is rendered in confectionary material. Disney-CGI lush saturated pastel palette — kawaii vinyl-pearlescent finish.
+
+━━━ THE SCENE (this is the COMPOSITION — character placement is built in) ━━━
+${candy_scene_type}
+
+━━━ 5 KAWAII FOOD-CHARACTERS (these are the (1)-(5) food-friends in the scene above) ━━━
+${foodBlock}
+
+━━━ 1 BACKGROUND SIGNATURE ELEMENT (subtle accent, NOT a competing landmark) ━━━
+${sigBlock}
+
+━━━ TIME OF DAY ━━━
+${candy_time_of_day}
+
+━━━ WEATHER / ATMOSPHERE ━━━
+${candy_weather}
+
+━━━ LIGHTING DIRECTION / QUALITY ━━━
+${candy_lighting}
+
+━━━ CAMERA FRAMING ━━━
+${candy_camera}
+
+━━━ TERRAIN / SKY / DECOR / COMPANION (background dressing) ━━━
+Terrain: ${candy_terrain}
+Sky: ${candy_sky}
+Decor accent: ${decorList[0] || ''}
+Companion: ${compList[0] || ''}
+
+━━━ SCENE PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ SPARKLE STACK ━━━
+
+- Glossy designer-vinyl finish on EVERY candy element
+- Saturated lush pastel + warm Disney-CGI palette
+- Sugar-glitter dust catching light
+- Painterly Pop-Mart-illustration-fusion on the whole scene
+
+━━━ HARD BANS ━━━
+
+- NO replacing the scene-type with a generic candy-meadow composition
+- NO real grass / soil / wood / metal — everything is candy/sugar/frosting
+- NO photoreal terrain or sky
+- NO dark / moody / scary
+- NO industrial / modern setting
+- NO neon-electric colors — lush saturated pastels
+- NO chibi creatures / humans / animals (food is the only cast)
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD WITH THE SCENE — exactly as described above, with the 5 food-characters slotted into the positions. The scene-type opens the prompt and is the composition. Then BUILD OUT THE RICH CANDY-WORLD BACKDROP that surrounds the scene — describe the candy-fantasy landscape visible behind/around the foreground scene (frosted-cake mountains, oversized lollipop-trees, marshmallow drifts, candy-cane forests, sprinkle-grass terrain, cotton-candy clouds, candy-rainbow arches, sugar-glitter air, distant candy-monuments) so the render has VISUAL DEPTH and RICHNESS behind the scene. The backdrop is the world the scene lives in — not negotiable, not optional.
+
+Template:
+"[scene-type rewritten with (1)-(5) named foods in the positions] — set inside a RICH candy-fantasy world: [rich layered candy-landscape backdrop: 3-5 concrete candy-world elements like frosted-cake mountains / lollipop-tree groves / marshmallow drifts / candy-rainbow arches / cotton-candy clouds / sugar-crystal formations / candy-monuments — describe them in the background filling out the scene's depth] — [time-of-day], [weather], [lighting], [camera framing]. [1 signature element accent / 1 decor accent / 1 companion]. Painterly kawaii Pop-Mart candy-fantasy rendering."
+
+⚠ THREE LAYERS: (1) foreground scene-type composition with characters placed, (2) RICH candy-world backdrop visible behind/around, (3) atmosphere/framing. Skip layer 2 = the render looks empty. Make layer 2 visually concrete with 3-5 candy-world elements.
+
+Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
   },
 
   YUMBOT_CHECKERED_TABLETOP: ({ slots, sharedDNA, vibeDirective }) => {

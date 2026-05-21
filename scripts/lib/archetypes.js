@@ -1881,6 +1881,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  YUMBOT_CANDY_FANTASY: {
+    description:
+      'PATH-BESPOKE — YumBot candy-fantasy (2026-05-21 R8 scene-axis + composition-lock). Candy-fantasy world; scene-type axis locks character placement (table/campfire/bridge/ledge/cake-tier/treehouse/etc) so renders are not generic candy meadows. 11 axes: candy_scene_type (composition lead), candy_world_signature (1 pick, standalone vertical landmark), candy_terrain, candy_sky, candy_camera, candy_lighting, candy_time_of_day, candy_weather, food_inhabitants (5), companions (1), decor_accents (1). Path prefix puts rich candy-world backdrop language; medium prefix is slim aesthetic-only so other yumbot paths inherit clean kawaii DNA.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['candy_scene_type', 'candy_world_signature', 'candy_terrain', 'candy_sky', 'food_inhabitants', 'companions', 'decor_accents', 'candy_camera', 'candy_lighting', 'candy_time_of_day', 'candy_weather'],
+    },
+    pickN: { candy_world_signature: 1, food_inhabitants: 5, companions: 1, decor_accents: 1 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   YUMBOT_CHECKERED_TABLETOP: {
     description:
       'PATH-BESPOKE — YumBot checkered-tabletop (2026-05-20). bex.ai-modeled. Kawaii food/drink hero on a pastel gingham/checkered tablecloth, cluster of smiling mini-food-friends piled around AND ON TOP. 3/4 tabletop or overhead-flatlay. Pop-Mart-collectible-grid/sticker-card feel. 7 path-bespoke axes.',

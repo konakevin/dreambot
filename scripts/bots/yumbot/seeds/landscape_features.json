@@ -1,46 +1,5 @@
 [
   {
-    "description": "A pastel-pink stream winding gently through the soft meadow grass with rainbow ripples",
-    "tags": [
-      "STREAM",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE"
-    ]
-  },
-  {
-    "description": "A glassy pastel-mint stream reflecting cotton-candy clouds as it meanders across the dreamscape",
-    "tags": [
-      "STREAM",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE"
-    ]
-  },
-  {
-    "description": "A soft sparkling pastel-blue brook babbling over smooth pebbles through the flowering meadow",
-    "tags": [
-      "STREAM",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE",
-      "PICNIC"
-    ]
-  },
-  {
-    "description": "A rainbow-ribbon stream cutting a gentle curve across the pastel grass with shimmering water",
-    "tags": [
-      "STREAM",
-      "RAINBOW_DREAMSCAPE",
-      "CANDY_FANTASY"
-    ]
-  },
-  {
-    "description": "A pastel forest stream flowing past mossy rocks under cherry-blossom branches",
-    "tags": [
-      "STREAM",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
-  },
-  {
     "description": "A chocolate-syrup river flowing through soft candy-banks with marshmallow-foam",
     "tags": [
       "STREAM",
@@ -103,43 +62,10 @@
     ]
   },
   {
-    "description": "A mossy stone-trail winding gently through the pastel grass toward a distant hilltop",
-    "tags": [
-      "TRAIL",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
-  },
-  {
-    "description": "A pastel-petal-strewn path lined with stones leading off into the meadow",
-    "tags": [
-      "TRAIL",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE"
-    ]
-  },
-  {
-    "description": "A smooth pebble-path of pastel rounded stones meandering through wildflowers",
-    "tags": [
-      "TRAIL",
-      "COTTAGECORE",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
-  },
-  {
     "description": "A pastel-stepping-stone trail crossing a stream toward a cottage",
     "tags": [
       "TRAIL",
       "COTTAGECORE"
-    ]
-  },
-  {
-    "description": "A golden-pastel-pollen trail glowing softly as if magical",
-    "tags": [
-      "TRAIL",
-      "RAINBOW_DREAMSCAPE",
-      "CANDY_FANTASY"
     ]
   },
   {
@@ -194,14 +120,6 @@
     "tags": [
       "ROCKS",
       "COTTAGECORE"
-    ]
-  },
-  {
-    "description": "A cluster of pastel-pebbles arranged like a small cairn beside a path",
-    "tags": [
-      "ROCKS",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
     ]
   },
   {
@@ -285,22 +203,6 @@
     "tags": [
       "BRIDGE",
       "COTTAGECORE"
-    ]
-  },
-  {
-    "description": "An arched stone-bridge with mossy edges spanning a small pastel-stream",
-    "tags": [
-      "BRIDGE",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
-  },
-  {
-    "description": "A pastel-painted bridge with ribbon-railings and curved pastel-pink boards",
-    "tags": [
-      "BRIDGE",
-      "CANDY_FANTASY",
-      "RAINBOW_DREAMSCAPE"
     ]
   },
   {
@@ -572,14 +474,6 @@
       "OPEN_MEADOW",
       "RAINBOW_DREAMSCAPE",
       "PICNIC"
-    ]
-  },
-  {
-    "description": "A pastel-valley with rolling hills and a winding stream at the floor",
-    "tags": [
-      "OPEN_MEADOW",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE"
     ]
   },
   {
