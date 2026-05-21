@@ -2478,6 +2478,588 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     ],
     instructions: `Each entry is ONE specific dramatic atmospheric / wildlife / geologic / hydrologic / celestial PHENOMENON, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visible drama + secondary detail + position in frame". Vary across the 10 categories above. Each phenomenon is the "stop-the-scroll wow moment" but doesn't replace the bloom-carpet. NO humans, NO vehicles, NO architecture, NO surreal physics. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
+  // ─── forest-fairy-scene path (2026-05-20 axis-system migration, 10 axes) ───
+  faebot_forest_fairy_scene_creature: {
+    format: 'simple',
+    theme: `STACKED-EXOTIC MYTHIC FOREST CREATURE for FaeBot's forest-fairy-scene path. Each entry is ONE unified description of a single mythic plant-merged forest spirit — dryad / naiad / Leshy / kodama / fox-spirit / glow-moth fairy / vine-nymph / hamadryad / forest queen / pixie / green-man / meliae / etc. Each entry 50-90 words. 5+ stacked exotic features per creature.
+
+⚠️ THE BAR: each creature reads as a SINGLE coherent mythic being. NOT a list — a unified painted-fantasy character description. Otherworldly mythic-creature beauty, NEVER human-model beauty. Hidden-camera candid posture — NEVER posing, NEVER eye-contact, NEVER pinup.
+
+⚠️ EVERY ENTRY MUST include AT LEAST 5 of these stacked exotic feature categories:
+  - SPECIES LINEAGE — dryad / naiad / Leshy / kodama / hamadryad / pixie-sprite / fae queen / nymph / fox-spirit / glow-moth-fae / vine-nymph / green-man / meliae / sidhe / banshee-spirit / etc.
+  - SKIN TREATMENT — translucent with constellations / bark-textured / moss-tinted olive / bioluminescent-freckled / mottled green-flecked / luminous pearl / silver-bark patches / lichen-detail / pale-jade / etc.
+  - PLANT-MERGED HAIR — living vines woven with blooms / river-water flowing / pale willow-fronds / wisteria-petals cascading / moss tendrils with asphodel / dark pine-needles crowned with antlers / silver-leaf cascade / cherry-blossom braided / autumn-leaf flowing / etc.
+  - PLANT-MERGED GARMENT — petal-shawl / leaf-bodice woven of ferns / vine-skirt / silk-petal wrap / overlapping rose-petals / moss-skirt with woven ivy / cape of willow-leaves / draped garland of clematis / birch-bark tunic / overlapping calla-lily / etc.
+  - ANATOMICAL EXTRAS — small antlers branching with leaves / luna-moth wings / dragonfly wings veined with sap / three fox-tails / multiple delicate gills / third eye glowing / pointed feathered ears / vertical-slit pupils / branching deer-antlers / bird-spine / etc.
+  - MAGICAL SIGNATURE — glowing pearl-iris eyes / glowing vein-patterns under skin / soft halo of pollen-light / will-o-wisp hovering nearby / luminescent freckles / glowing-amber eyes / pale luminous-aura / fingertips trailing sparkles / etc.
+  - CANDID POSTURE/MOMENT — kneeling pressing palm to roots / crouched over a tiny mushroom / standing waist-deep in a moonlit pool / half-emerged from ancient trunk / sitting cross-legged on fern-cushion / perched on moss-covered stone / side-profile leaning against bark / etc.
+
+⚠️ SPECIES DISTRIBUTION (across 25 entries):
+  • ~5 DRYADS (oak / birch / rowan / willow / ash / cherry-blossom / pine)
+  • ~3 NAIADS (river / pond / waterfall / brook / spring)
+  • ~3 LESHY / GREEN-MAN (forest-spirit elders, masculine register OK)
+  • ~3 NYMPHS (moonlight / vine / flower / forest)
+  • ~3 PIXIE / FAE-COURT (queen / sidhe / Tylwyth Teg)
+  • ~3 ANIMAL-MERGED SPIRITS (fox-spirit / owl-fae / deer-spirit / swan-maiden)
+  • ~2 INSECT-FAE (glow-moth / pixie-dragonfly / firefly-fae)
+  • ~2 KODAMA / WOODLAND-SPRITE (smaller mythic beings)
+  • ~1 RARE / OTHERWORLDLY (Meliae / hamadryad / banshee-spirit)
+
+🚫 ABSOLUTE BANS:
+  • NO human-model beauty / NO pin-up / NO sexualized framing
+  • NO posing for camera / NO direct eye-contact with viewer
+  • NO modern attire / NO contemporary references
+  • NO scared / angry / edgy / dark moods (peaceful-fairy register only)
+  • NO "small figure in distance" — she's the focal subject
+  • NO ethnic-codes from real-world cultures — fantasy-canon only
+  • NO closed-eyes (she's awake and present in the moment)`,
+    touchpoints: [
+      'An oak-dryad with bark-textured shoulders fading to smooth moss-tinted skin and long hair of living vines woven with tiny yellow blossoms, leaf-petal bodice and moss-skirt of woven ferns, small antlers branching with fresh oak-leaves, kneeling with one palm pressed to ancient roots as soft amber light filters from her veins, glowing-amber eyes lowered to the earth in quiet blessing',
+      'A naiad with translucent skin showing tiny constellations beneath and hair of river-water flowing slowly past her waist, draped petal-shawl over a band of folded leaves, softly glowing pearl-iris eyes radiating gentle light, standing waist-deep in a moonlit pool with cupped palms holding liquid starlight, delicate gills along her neck shimmering faintly',
+      'A Leshy lord with bark-textured skin showing faint glowing vein-patterns and hair of dark pine-needles crowned with branching antlers sprouting tiny oak-leaves, loose tunic woven of birch-bark strips, eyes like deep forest amber, half-emerged from an ancient trunk with one shoulder merged into bark, weathered face turned in profile',
+      'A fox-spirit with mottled green-flecked skin like dappled forest light and hair of pale willow-fronds threaded with foxglove blooms, thin wrap of silk-petal across chest with vine-skirt, three fox-tails tipped in silver, luminous amber eyes with vertical-slit pupils, crouched over a tiny mushroom-cluster in candid examination',
+      'A moonlight nymph with bioluminescent freckles tracing her collarbone and hair of moss tendrils with white asphodel buds, shoulder-strap of woven vine and skirt of overlapping calla-lily petals, third eye glowing softly on her forehead, perched on moss-covered stone with a will-o-wisp hovering above her cupped hand',
+      'A glow-moth fairy with pale luminescent pearl skin and wisteria-petal hair cascading past her waist, translucent luna-moth wings folded against shoulder-blades, snug bodice of overlapping rose-petals fading to gauzy mist below hip, sitting cross-legged on a fern-cushion with softly glowing pollen-motes drifting from her fingertips',
+      'A swan-maiden with translucent skin showing tiny constellations and hair of pale willow-fronds woven with single white moonflowers, cape of overlapping willow-leaves draped across shoulders, delicate gills along her graceful neck, luminous pearl-iris eyes lowered, standing at water-edge with a halo of soft pollen-light',
+      'A vine-nymph with lichen-detail on cheekbones and moss-tinted gold-olive skin, hair of living vines woven with tiny purple clematis blooms, draped garland of ivy across torso with low vine-skirt, tall pointed ears feathered with down, half-turned profile leaning against moss-covered bark, vine-tendrils sprouting from her wrist',
+      'A rowan-dryad with bark-textured shoulders fading to smooth moss-tinted skin and hair of living vines woven with tiny crimson rowan berries, draped garland of ivy across collarbone, small antlers branching with autumn leaves, head bowed as she gathers fallen berries into her cupped palm, autumn light filtering through her hair',
+      'A birch-hamadryad with mottled green-flecked skin like dappled forest light and waist-long hair of pale willow-fronds threaded with white moonflowers, thin wrap of pale silk-petal across her chest, third eye glowing softly on her forehead, side-profile leaning her cheek against ancient birch bark in silent communion',
+      'A cherry-blossom dryad with porcelain-pale skin showing the faintest pink undertones and hair of dark moss threaded with pink cherry-blossom branches, draped bodice of overlapping silk-petals, small antlers crowned with cherry-blossom buds, branching from her temples, sitting on a moss-cushion catching a drifting petal',
+      'A willow-dryad with silver-bark patches on her arms and hair of pale willow-fronds cascading past her waist, draped cape of overlapping willow-leaves, glowing-amber eyes lowered, kneeling beside a slow brook with one palm dipped into the water, weeping-willow tendrils framing her face like a curtain',
+      'A pixie-sprite of small stature with translucent dragonfly wings veined with sap-gold, hair of pale silk threaded with dewdrop-pearls, leaf-petal bodice and moss-skirt of woven ferns, softly glowing amber eyes, perched on a toadstool rim within a fairy-circle, fingertips trailing tiny sparkles',
+      'A fae queen with skin like luminous pearl and subtle vine-pattern marks, floor-length hair of living vines woven with hundreds of tiny white flowers, flowing gown of woven petals with long trailing fern-fronds at the hem, regal cape of fern-fronds and antler-crown woven with honeysuckle, seated upon a moss-throne, gaze cast downward in benediction',
+      'A sidhe noblewoman with porcelain-pale skin with bioluminescent freckles tracing her collarbone, elaborate braided hair of dark moss with violet wisteria flowing past her waist, regal cloak of fern-fronds over a layered robe of overlapping willow-leaves, vine-belted waist, walking slowly through a sacred stone-circle at twilight',
+      'A green-man with face composed entirely of overlapping oak leaves and moss-beard cascading to his chest, bark-textured shoulders fading into moss-tinted skin, half-hidden among a fern-grotto wall, tiny white wildflowers blooming from his temples, luminescent moss glow emanating from his eye-hollows, lichen detail covering his skin',
+      'A meliae ash-tree nymph with silver-bark patches on her arms and small sprouting leaves emerging from her cheekbones, hair of dark moss with violet wisteria, draped garland of ash-leaves, crouched over a tiny seedling to whisper blessing as soft violet-twilight magic glows from her hands, wisteria draping her shoulders',
+      'An owl-fae with mottled bark-textured skin and feathered hair of pale willow-fronds with single white moonflowers, owl-feather cape draped across shoulders, large pearl-iris eyes with horizontal-slit pupils, sitting motionless on a high mossy branch in profile, weathered face turned to one side listening to forest sounds',
+      'A deer-spirit with mottled green-flecked skin and hair of dark moss threaded with autumn-leaves, draped cape of overlapping willow-leaves, large branching deer-antlers crowning her head, soft fawn-marks dotting her shoulders, kneeling at the edge of a forest-pool with one hand brushing the water',
+      'A firefly-fae with luminous pearl skin and hair of silver-leaf cascading past her waist, translucent dragonfly wings veined with gold, snug bodice of overlapping luminescent petals, softly glowing fingertips trailing fairy-light, sitting on a moss-stone with her cupped palm holding a cluster of fireflies',
+      'A kodama tree-spirit with round white head and gentle painted eyes, slender translucent body merging with mossy bark, bobbing politely beside a mushroom ring, tiny violets blooming where its translucent feet touch moss, soft pearl-glow haloing its small form, ancient lichen detail on its small hands',
+      'A Tylwyth Teg sidhe with cascading silver hair threaded with gold-leaf and dewdrop-pearls, layered robe of overlapping willow-leaves with vine-belted waist and floor-length train, porcelain skin with faint constellation freckles, walking slowly through a moonlit wisteria-archway in regal procession',
+      'A banshee-spirit with translucent silver-grey skin and hair of cool mist flowing past her waist, draped cape of woven cobweb and willow-leaves, ghost-white pearl-iris eyes, hovering just above ground in a misty pine-grove, fingertips trailing slow-drifting cold-pollen, mournful gentle bearing not aggressive',
+      'A flower-dryad with porcelain skin showing faint pink undertones and hair of cherry-blossom branches with single white moonflowers woven through, draped bodice of overlapping rose-petals, small antlers crowned with foxglove-bells, kneeling in a meadow with palm extended to a hovering will-o-wisp, soft pollen-light haloing her face',
+      'A pine-dryad with bark-textured shoulders and hair of dark pine-needles woven with pine-cones, draped cape of pine-bough, weathered amber eyes, small antlers branching with fresh pine-sprouts, standing tall against an ancient pine trunk with one shoulder merged into bark, weathered hands resting at her sides',
+    ],
+    instructions: `Each entry is ONE unified mythic forest creature description, 50-90 words. Format: prose, comma-separated phrases. MANDATORY — 5+ stacked exotic features (species + skin + plant-merged hair + plant-merged garment + anatomical extras + magical signature + candid posture). NO human-model beauty. NO posing. NO eye-contact. NO modern attire. NO scared/edgy moods. NO real-world ethnic codes. NO closed-eyes. NO "small figure in distance". Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_biome: {
+    format: 'simple',
+    theme: `FOREST BIOME for FaeBot's forest-fairy-scene path. Each entry describes ONE specific forest setting type with its signature features — pure WHERE (the wrapping backdrop). Each entry 30-55 words.
+
+⚠️ THE BAR: each biome reads as a distinct deep-wild-forest environment with painted-fantasy gallery-tier visual richness. Multi-tier depth (foreground tactile detail + midground holding her + background fading into atmospheric depth). NEVER generic "forest" — always a specific type with named features.
+
+⚠️ BIOME CATEGORIES (across 25 entries):
+  • ~4 ANCIENT OAK GROVE / SUN-CATHEDRAL — soaring oak cathedrals with god-ray-piercing canopy, massive twisted roots, emerald moss-covered floor
+  • ~3 FERN GROTTO — moss-covered boulders cradling a hidden grove, tall fern-fronds, dripping springs
+  • ~3 WILLOW THICKET — cascading willow-trees along a slow stream, dappled water reflections, weeping-branch curtains
+  • ~3 BIRCH GLADE — pale-bark birch grove with delicate canopy, scattered fairy-rings of mushrooms
+  • ~3 REDWOOD / PINE CATHEDRAL — towering trunks reaching impossible heights, deep needle-carpet, soaring scale
+  • ~2 BLUE-GROTTO / BIOLUMINESCENT GLEN — bioluminescent moss + glowing mushrooms + cave-mouth grotto
+  • ~2 AUTUMN-BLAZE MAPLE GROVE — orange/red/gold canopy, falling leaves, golden afternoon light
+  • ~2 SNOWY PINE FOREST — frost-dusted pines, gentle snow on forest floor, breath-mist atmosphere
+  • ~2 MOSS-CANYON / OLD-GROWTH RAVINE — moss-covered cliff walls, vertical scale, hidden grotto feel
+  • ~1 CHERRY-BLOSSOM GROVE — pink-blossom canopy, drifting petal-snow, ethereal magical register
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC FOREST TYPE (named tree species + structural register)
+  - 2+ SIGNATURE FEATURES (mossy stream / fairy-ring / fern-grotto / ancient roots / canopy detail)
+  - MULTI-TIER DEPTH implied (foreground / midground / background)
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO lighting / weather description (separate axes)
+  • NO modern setting / urban elements
+  • NO IP / pop-culture references
+  • NO "small figure" — biome is pure environment`,
+    touchpoints: [
+      'Ancient oak sun-cathedral with massive twisted gnarled roots like sleeping dragons across the foreground earth, towering oak trunks rising impossibly tall to a vaulted canopy of layered emerald leaves, soft amber-and-emerald painted depth fading into atmospheric background mist, mossy boulder clusters and lichen-rich bark patterns',
+      'Fern-grotto cradled by moss-covered boulders, tall lacy fern-fronds dominating the foreground at chest-height, a quiet spring trickling between the rocks midground, ancient ferns layered in painted depth fading into soft green mist, painted gallery-tier richness',
+      'Willow-thicket along a slow forest stream, cascading weeping-willow branches creating natural curtains in the foreground, dappled water reflections shimmering midground, distant willow-grove fading into soft pearl-mist, painted-fantasy reflective register',
+      'Birch glade with pale-bark slender trunks rising tall and graceful, scattered mushroom fairy-ring at her feet, lacy birch canopy creating dappled light patterns across the moss-floor, distant birches fading into atmospheric haze, ethereal painted register',
+      'Redwood cathedral with massive ridged ancient trunks rising into a soaring canopy 100 feet above, deep cinnamon-red needle-carpet across the forest-floor, painted gallery-tier scale, distant trunks receding into soft red-brown atmospheric depth',
+      'Pine cathedral with towering ancient pine trunks creating natural columns, deep needle-carpet softening every step, single pine-bough drooping across the foreground frame, distant pine-trunks fading into soft blue-green mist, soaring scale painted register',
+      'Blue grotto with bioluminescent moss covering ancient cave-walls in soft cyan glow, cluster of glowing mushroom-spires emerging from the moss, hidden grotto-pool reflecting the bioluminescent light, painted gallery-tier magical register',
+      'Bioluminescent glen with glowing moss carpeting the forest-floor in soft cyan-and-violet, cluster of pearl-glowing mushrooms ringing a small pool, ancient ferns silhouetted by the soft glow, magical painted depth fading into deep-blue forest beyond',
+      'Autumn-blaze maple grove with brilliant orange-red-gold canopy overhead, scattered fallen leaves carpeting the forest-floor in painted depth, ancient maple trunks rising in painted silhouette, distant trunks fading into warm-amber atmospheric haze',
+      'Autumn oak grove with russet-and-gold canopy filtering golden light, fallen acorns and oak-leaves carpeting the forest-floor, gnarled oak roots crossing the foreground, distant grove fading into warm amber-painted depth, autumn-storybook register',
+      'Snowy pine forest with frost-dusted pine boughs draped overhead, gentle snow blanket across the forest-floor and ancient stumps, single pine-bough heavy with snow drooping across the foreground, distant pines silhouetted in soft cool-blue mist',
+      'Winter birch glade with snow softening every surface, pale birch-bark silhouettes ringing a small frozen pool, scattered winter-berries dotting the snow, distant birches fading into pearl-grey winter mist, hushed painted register',
+      'Moss-canyon with vertical moss-covered cliff walls towering on either side, ancient ferns clinging to the cliff faces, hidden grotto-pool at the canyon-floor, single shaft of green-filtered light from above, painted vertical-scale register',
+      'Old-growth ravine with moss-covered ancient roots clinging to the ravine walls, dripping ferns cascading from above, hidden grotto floor with a small stream, single shaft of warm light from the canopy gap, painted gallery-tier richness',
+      'Cherry-blossom grove with pink-blossom canopy creating a painted ceiling overhead, drifting petals filling the air across the painted depth, single mossy stump at her feet, distant blossom-grove fading into soft pearl-pink mist, ethereal magical register',
+      'Wisteria-cathedral archway with cascading violet wisteria clusters draping overhead like a natural cathedral, moss-grown path leading into the depth, dappled violet-and-gold light filtering through, distant wisteria fading into soft pearl-mist',
+      'Mushroom-ring grotto with massive ancient mushroom-spires ringing the forest clearing, soft pearl-glow emanating from their gills, deep moss-carpet across the forest-floor, distant mushroom-spires fading into atmospheric depth, magical painted register',
+      'Hidden glen with a small forest-pool reflecting the canopy, mossy boulders ringing the pool, ancient ferns cascading from the surrounding bank, deep emerald-and-amber painted depth, gallery-tier reflective register',
+      'Forest waterfall grotto with a soft cascading waterfall in the midground over moss-covered rocks, hidden grove-pool at the base, fern-fronds arching across the foreground, distant grotto fading into soft mist, painted depth richness',
+      'Beech grove with smooth grey-bark beech-trunks rising tall, scattered beech-nuts on the forest-floor, dappled canopy creating intricate light patterns, distant beech grove fading into warm amber-green mist, painted register',
+      'Ancient yew grove with twisted dark-green yew-trees ringing a sacred clearing, weathered standing-stones half-buried in moss, fern-cluster at the foreground, distant yew grove fading into deep blue-green mystery',
+      'Aspen grove with pale-bark slender aspens trembling in the air, golden-yellow autumn leaves carpeting the forest-floor, distant aspens fading into soft golden mist, painted golden register',
+      'Hemlock cathedral with towering ancient hemlock trees forming natural columns, deep needle-carpet across the forest-floor, hanging-moss curtains draping from the branches overhead, distant hemlocks fading into deep emerald-shadow depth',
+      'Cedar-grove with soaring cedar trunks rising into a layered canopy, deep cedar-needle carpet, scattered fern-fronds emerging through the needles, distant cedar grove fading into rich brown-green painted depth',
+      'Magnolia grove in early spring with large white magnolia-blossoms suspended overhead like painted lanterns, soft fallen petals on the forest-floor, distant magnolias fading into soft pearl-pink mist, painted gallery-tier spring register',
+    ],
+    instructions: `Each entry is ONE specific FOREST BIOME, 30-55 words. Format: prose, comma-separated phrases. MANDATORY — (a) named forest type with tree species, (b) 2+ signature features, (c) multi-tier depth implied (foreground/midground/background). NO creature description. NO lighting/weather. NO modern. NO IP. NO small-figure. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_lighting: {
+    format: 'simple',
+    theme: `LIGHTING (time-of-day + light drama) for FaeBot's forest-fairy-scene path. Each entry describes ONE specific time-of-day + light moment combination. Each entry 25-45 words.
+
+⚠️ THE BAR: each entry establishes a SPECIFIC light moment with dramatic potential — NOT generic "soft light". Painted-fantasy lighting drama: god-rays piercing canopy, moonlit silver shafts, blue-hour warm under-light, pearl-mist dawn beams, bioluminescent ambient. Light is its own character in the frame.
+
+⚠️ LIGHTING CATEGORIES (across 25 entries):
+  • ~5 GOLDEN-HOUR — afternoon god-rays / late-afternoon warm sidelight / golden-amber painted light
+  • ~4 BLUE-HOUR / TWILIGHT — cool-blue twilight with warm under-light / blue-hour magical glow
+  • ~3 DAWN — pearl-mist dawn beams / soft-pink dawn / golden dawn light filtering
+  • ~3 MIDDAY GOD-RAYS — midday sun piercing canopy in dramatic shafts / harsh god-ray contrast
+  • ~3 MOONLIT — silver moonlight shafts cutting through canopy / blue-moon ambient
+  • ~3 BIOLUMINESCENT — soft cyan glow from bioluminescent moss / pearl-glow from mushrooms ambient
+  • ~2 STORM-LIT — dramatic dark-grey-blue lighting with pixel-lightning illumination
+  • ~2 AURORA-LIT — aurora ambient filtering through canopy
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TIME-OF-DAY
+  - SPECIFIC LIGHT QUALITY (god-rays / shafts / ambient / sidelight / etc.)
+  - PALETTE CUE (warm-amber / cool-blue / pearl-pink / cyan-glow / etc.)
+  - DIRECTION OR DRAMA (from above / sidelight / under-light / piercing / etc.)
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO weather (separate axis)
+  • NO modern light sources (no lamps / no neon / no LED)
+  • NO photographic technique language`,
+    touchpoints: [
+      'Golden afternoon god-rays piercing the canopy in dramatic shafts of warm-amber light, dust-motes catching the beams, soft warm-glow saturating the lower canopy, painted gallery-tier light drama',
+      'Late-afternoon warm sidelight raking across the forest from a low angle, long painted shadows stretching across the moss-floor, warm-amber palette with cool-blue shadows, dramatic painted light register',
+      'Magic-hour golden light filtering through the canopy with dappled warm patterns across every surface, painted-storybook softness, warm-amber-and-gold palette saturating the painting',
+      'Golden afternoon warm sidelight from a low angle creating long painted shadows, warm halo-glow around her hair, cool-blue shadows pooling in the negative space, painted gallery-tier light',
+      'Late-afternoon backlight piercing through the canopy behind her creating warm halo-glow on every leaf-edge, soft warm-amber painted register, atmospheric backlit depth',
+      'Cool-blue twilight with warm-yellow under-light from glowing moss illuminating the forest-floor, cool-blue ambient overhead, warm-blue contrast painted register, magical twilight drama',
+      'Blue-hour twilight with the last warm-orange of sunset bleeding through distant trunks, cool-blue overhead transitioning to warm-amber at the horizon, painted magical twilight register',
+      'Magical violet-twilight glow saturating the forest in soft lavender-and-blue, faint pollen-light particles catching the ambient, dreamy painted-fantasy twilight palette',
+      'Blue-hour low warm under-light from will-o-wisps illuminating her face from below, cool-blue ambient overhead, dramatic painted-fantasy underlight register',
+      'Pearl-mist dawn beams angling low through the canopy in shafts of soft white-gold, drifting mist catching the beams, fresh morning painted register, cool-warm contrast',
+      'Soft-pink dawn light filtering through the canopy with rose-gold-and-lavender palette, gentle peaceful painted-storybook register, early-morning warmth',
+      'Golden dawn beams angling through the canopy from a low east angle, drifting dust-motes catching the beams, warm-gold painted register, fresh-morning hopeful drama',
+      'Midday god-rays piercing the canopy in dramatic vertical shafts of brilliant white-gold, harsh painted contrast between shafted-light and deep-shadow, soaring drama',
+      'High-noon canopy-filter with dappled bright-gold patches across every surface, harsh-amber-with-cool-shadow painted contrast, bright midday painted register',
+      'Strong midday backlight piercing through the upper-canopy creating dramatic silhouette-edges, warm-gold-and-shadow painted register, dramatic high-contrast lighting drama',
+      'Silver moonlight shafts cutting through the canopy creating cool-blue painted shafts illuminating the mossy floor, deep-blue shadow ambient, magical night painted register',
+      'Blue-moon ambient flooding the forest with cool silver-blue painted light, soft white-glow on every leaf-edge, magical hushed nighttime register',
+      'Moonlit silver-and-violet ambient with distant moon visible through the canopy gap, scattered pixel-stars beyond, deep-blue painted ambient saturating the scene',
+      'Soft cyan-glow ambient from bioluminescent moss carpeting the forest floor, gentle teal-and-violet painted illumination, magical bioluminescent register',
+      'Pearl-glow from cluster of glowing mushrooms casting soft cyan-warm light onto the surrounding moss, magical bioluminescent painted register with warm-cool contrast',
+      'Bioluminescent ambient with the entire forest faintly glowing in soft pearl-cyan from glowing fungi clusters, magical magical painted depth, ethereal register',
+      'Dramatic dark-grey-blue storm-lit forest with distant lightning-flash illuminating the canopy in silver flash, dramatic painted-storm register, tension-and-peace contrast',
+      'Pre-storm dim painted-amber light with low storm clouds darkening the upper canopy, warm forest-floor still catching gentle light, atmospheric storm-approach register',
+      'Aurora-lit canopy with magical green-pink aurora filtering through the upper-pines, painted multi-color ambient on the forest-floor, magical arctic-painted register',
+      'Soft aurora ambient with pink-and-green painted curtains visible through the canopy gap, magical northern-forest painted register, mystical color drama',
+    ],
+    instructions: `Each entry is ONE specific LIGHTING moment, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) time-of-day, (b) light quality (god-rays / shafts / ambient / sidelight), (c) palette cue, (d) direction or drama. NO creature. NO biome. NO weather. NO modern. NO photographic language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_weather: {
+    format: 'simple',
+    theme: `WEATHER (air condition + particle motion) for FaeBot's forest-fairy-scene path. Each entry describes ONE specific atmospheric air condition + particle motion. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry establishes a SPECIFIC air condition with particle motion adding painted-storybook depth. NEVER generic "atmospheric" — always named particles + air quality. Weather is its own character contributing depth and motion.
+
+⚠️ WEATHER CATEGORIES (across 25 entries):
+  • ~4 MIST / FOG — dawn mist drifting / low fog blanket / pearl-mist haze
+  • ~3 RAIN — gentle rain dripping from leaves / soft drizzle / post-rain wet shimmer
+  • ~3 SNOW — gentle snow flurries / light snow blanket / drifting snowflakes
+  • ~3 AUTUMN-LEAF DRIFT — red-orange-gold leaves drifting / settled leaf carpet stirring
+  • ~3 PETAL DRIFT — cherry-blossom petal-snow / wildflower petals / wisteria-petals drifting
+  • ~3 CLEAR / STILL — clear painted-still air with crisp visibility / motionless forest hush
+  • ~2 POLLEN-HAZE — drifting golden pollen-motes / floating spore-light / dust-motes catching beams
+  • ~2 DEW-GLINTS — glistening dew on every leaf / shimmering droplets / wet-glistening fresh
+  • ~2 BREEZE — gentle breeze waving foliage / soft wind moving hair and fabric
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC AIR CONDITION (mist / rain / snow / clear / haze / breeze)
+  - PARTICLE MOTION (drifting / settling / glistening / haze)
+  - PALETTE / TEMPERATURE CUE (cool / warm / pearl / etc.)
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO lighting (separate axis)
+  • NO catastrophic weather (no hurricanes / no destructive storms — peaceful register)
+  • NO modern weather references (no rainbows-from-prisms / etc.)`,
+    touchpoints: [
+      'Soft dawn mist drifting slowly through the lower forest in pearl-grey wisps, atmospheric depth softening every silhouette, fresh painted-morning hush',
+      'Low fog blanket settled across the forest-floor at knee-height, painted pearl-grey atmospheric depth, painted softness with edges fading into haze',
+      'Pearl-mist haze drifting through the upper canopy in soft cool-grey wisps, painted depth with multiple parallax layers, ethereal painted register',
+      'Soft drifting mist threading between trunks in painted whisps, atmospheric depth softening distant trees into silhouette, magical hushed register',
+      'Gentle rain dripping from leaves with painted water-droplets visible on every leaf-edge, soft pattering atmosphere, wet-shimmer painted register',
+      'Soft drizzle painting every surface with a wet shimmer, gentle rain-pixels suspended in painted depth, fresh peaceful register',
+      'Post-rain wet shimmer with every leaf glistening with dew-and-rain droplets, painted reflective register, freshly-washed painted softness',
+      'Gentle snow flurries drifting through the painted air in soft white-pixel motes, light snow-blanket softening the forest-floor, painted winter-hush register',
+      'Light snow blanket settled across moss and ancient roots in soft pearl-white, drifting flakes still falling through the painted air, hushed winter register',
+      'Drifting snowflakes catching the canopy light in soft sparkling painted motes, fresh snow-dust on every leaf-edge, magical winter register',
+      'Red-orange-gold autumn leaves drifting through the painted air in slow-motion seasonal motion, settling carpet stirring underfoot, magical autumn register',
+      'Settled autumn-leaf carpet stirring with gentle motion as a soft breeze lifts a few back into the air, warm-amber-and-russet palette, autumn painted register',
+      'Slow falling autumn-leaves filling the painted depth in red-orange-yellow drifting flakes, warm seasonal palette, magical autumn painted register',
+      'Drifting cherry-blossom petals filling the painted air in soft pink-snow, settled petal-carpet underfoot, ethereal painted-spring register',
+      'Wildflower petals drifting through the painted air on a gentle breeze, soft warm color palette, magical spring-meadow register',
+      'Wisteria petals drifting in painted violet-clusters from overhead, soft pearl-violet palette, magical spring painted register',
+      'Clear painted-still air with crisp visibility into the forest depth, painted gallery-tier clarity, motionless hush register',
+      'Motionless forest hush with crystalline clear air, every leaf-edge sharply painted, painted gallery-tier stillness register',
+      'Crisp clear painted air with gentle dust-motes suspended in light beams, painted-still register',
+      'Drifting golden pollen-motes catching the canopy-filtered light, soft painted golden-warm haze, magical painted register',
+      'Floating spore-light particles drifting through the painted depth in soft white-glow, magical fae register',
+      'Glistening dew on every leaf, painted reflective droplet detail on fern-fronds and bark, fresh-morning painted register',
+      'Shimmering dew-droplets catching the canopy light in painted pearl-glints, fresh-morning crystal register',
+      'Gentle breeze waving the foliage in soft painted motion, her hair and fabric drifting in the same breeze, magical painted-life register',
+      'Soft wind moving hair and fabric with painted flow, leaves stirring overhead in synchronized painted motion, magical alive-forest register',
+    ],
+    instructions: `Each entry is ONE specific WEATHER condition, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) air condition, (b) particle motion, (c) palette/temperature cue. NO creature. NO biome. NO lighting. NO catastrophic weather. NO modern references. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHOR (closest depth element bringing true 3-tier depth) for FaeBot's forest-fairy-scene path. Each entry describes ONE specific tactile foreground element that sits between the camera and the creature. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry adds proper 3-tier composition depth (foreground / midground her / background fading). Without this, renders feel flat. NEVER blocks her — frames her. Painted-storybook tactile detail.
+
+⚠️ FOREGROUND CATEGORIES (across 25 entries):
+  • ~5 HANGING VINES / WILLOW CURTAINS — vine-curtain in foreground-left / weeping willow draping
+  • ~4 MOSSY BOULDER / STONE — moss-covered boulder cluster crowding lower frame
+  • ~4 FERN CLUSTER — tall fern-fronds arching across bottom of frame
+  • ~3 MUSHROOM CLUSTER — cluster of mushrooms in lower-frame carpet
+  • ~3 WILDFLOWER CARPET — wildflower carpet at her feet
+  • ~3 DRIFTING PETAL / LEAF CLUSTER — drifting cherry-blossom petals / autumn-leaf cluster in foreground
+  • ~2 ANCIENT ROOT — gnarled ancient root crossing the foreground
+  • ~1 FALLEN LOG — moss-covered fallen log across the foreground
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TYPE
+  - POSITION IN FRAME (foreground-left / lower-right / arching across / etc.)
+  - TACTILE DETAIL (moss-covered / leaf-veined / bloom-laden / etc.)
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome / setting (separate axis)
+  • NO weather (separate axis)
+  • NO modern objects
+  • NO blocking the creature — element frames her, not obscures her`,
+    touchpoints: [
+      'Hanging vine-curtain in foreground-left with bloom-laden tendrils cascading from above, leaf-veined translucent detail catching the light, framing her without blocking',
+      'Weeping willow branches draping in foreground-right with delicate willow-leaves shimmering in painted motion, framing her face like a curtain of green-gold',
+      'Cluster of hanging ivy-vines threading across the upper-left foreground with painted leaf-veining detail, painted depth between camera and her',
+      'Bloom-laden hanging vine-cluster in foreground-right with foxglove-bells dangling, painted detail catching the light, magical framing register',
+      'Wisteria-cascade hanging in foreground-left with painted violet petals catching the light, framing her in painted spring drape',
+      'Moss-covered boulder crowding the lower-right foreground with thick painted moss texture, lichen-rich detail, painted tactile depth',
+      'Boulder cluster with moss-and-fern cascading down the painted stone faces in foreground-left, painted tactile depth, anchored base for the composition',
+      'Mossy stone outcrop dominating foreground-right with painted lichen-detail and small flowers blooming from cracks, anchored depth',
+      'Ancient stone with deep moss-coat in foreground-left, painted weathered texture, anchored painted depth',
+      'Tall fern-cluster arching across the bottom of the frame with lacy painted fronds, painted tactile foreground detail',
+      'Fern-fronds in foreground-left with painted leaf-veining detail, soft cool-green palette, painted depth',
+      'Cluster of unfurling fern-fronds in foreground-right with painted spiral-detail, fresh-spring painted register',
+      'Tall fern-grass cluster across the lower painted depth with delicate leaf-edge detail, painted gallery-tier richness',
+      'Cluster of mushrooms in lower-frame painted carpet with red-and-white spotted painted detail, magical painted register',
+      'Painted mushroom-ring in foreground-right with small fairy-ring of round mushrooms, magical fae register',
+      'Cluster of glowing mushrooms in lower foreground with soft pearl-glow on their painted gills, magical bioluminescent register',
+      'Wildflower carpet at her feet with painted bluebells / foxgloves / wood-anemones in foreground depth, painted storybook detail',
+      'Foreground carpet of bluebells in painted-spring pearl-violet, painted carpet of color leading the eye to her',
+      'Wildflower foreground cluster with painted daisies / forget-me-nots / wild-rose in painted soft palette, magical meadow register',
+      'Drifting cherry-blossom petal-cluster filling the foreground in painted pink-snow, soft motion captured, magical spring register',
+      'Autumn-leaf drift in foreground with painted red-orange-gold leaves cascading through painted depth, magical autumn register',
+      'Drifting petal-cluster across the painted foreground in soft pearl-pink, painted depth with motion, magical register',
+      'Gnarled ancient root crossing the foreground earth like a sleeping serpent, painted tactile bark-detail, painted depth anchor',
+      'Massive root system crossing the foreground in painted twisted forms, painted tactile depth, anchored compositional weight',
+      'Moss-covered fallen log across the foreground with painted weathered bark, small mushrooms emerging, painted tactile depth',
+    ],
+    instructions: `Each entry is ONE specific FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific type, (b) position in frame, (c) tactile detail. NO creature. NO biome. NO weather. NO modern. NO blocking. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_botanical_accent: {
+    format: 'simple',
+    theme: `BOTANICAL ACCENT (signature bloom cluster) for FaeBot's forest-fairy-scene path. Each entry describes ONE specific named-species bloom cluster near her in the scene. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC named bloom species painted with species-specific detail — painted-storybook chromatic pop. NEVER generic "wildflowers" — always the exact species cluster with its characteristic shape and color.
+
+⚠️ BLOOM CATEGORIES (across 25 entries — vary species):
+  Spring blooms: bluebells / foxgloves / wood-anemones / lily-of-the-valley / primrose / forget-me-nots / wisteria / wild-rose / dogwood / magnolia
+  Summer blooms: honeysuckle / jasmine / wild-iris / columbine / harebells / meadowsweet / wild-lupine / clematis
+  Autumn blooms: asters / wild-chrysanthemum / autumn-anemones / autumn-crocus / rowan-berries
+  Year-round: moss-rose / fairy-rose / fern-spore / glowing-fungus / luminous-mushroom-cluster
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC NAMED SPECIES (NEVER generic "wildflowers" / "flowers")
+  - COLOR detail (the species' characteristic palette)
+  - POSITION RELATIVE TO HER (at her feet / behind her / beside her / hanging above / crowning her / etc.)
+  - CLUSTER SIZE (small cluster / dense carpet / scattered / overflowing)
+
+🚫 STRICT BANS:
+  • NO generic "flowers" / "wildflowers" — must be species-named
+  • NO creature description (separate axis)
+  • NO biome (separate axis)
+  • NO lighting / weather`,
+    touchpoints: [
+      'Cluster of indigo-blue bluebells carpeting the forest-floor at her feet in a painted-spring overflow, soft pearl-violet bell-shapes catching the light, painted-storybook richness',
+      'Tall foxglove-spires blooming behind her in painted pink-and-purple bell-shaped clusters, fairy-thimble detail, magical painted register',
+      'Wood-anemones scattered across the moss at her feet in painted white-petal clusters with golden centers, fresh-spring painted register',
+      'Lily-of-the-valley clusters at her feet with delicate painted white bell-shapes on slender green stems, gentle painted-spring register',
+      'Primrose cluster crowning the mossy ground beside her with painted pale-yellow petal-rosettes, fresh-morning register',
+      'Forget-me-nots scattered through the moss in painted soft-blue clusters with golden centers, gentle painted-spring register',
+      'Wisteria-cascade hanging in painted violet-clusters above her like a natural cathedral ceiling, ethereal painted register',
+      'Wild-rose bramble blooming beside her shoulder in painted pink-and-cream cluster with painted thorny vines, romantic painted register',
+      'Dogwood-blossom branch overhanging her with painted white-and-pink four-petal blooms, ethereal painted-spring register',
+      'White-magnolia blossoms suspended overhead like painted lanterns, large luminous painted petals, magical spring register',
+      'Honeysuckle-cluster trailing through painted depth behind her in painted yellow-and-cream trumpet-blooms, summer painted register',
+      'Jasmine-cluster nearby with painted white-star blooms scattered through painted green-leaves, magical summer register',
+      'Wild-iris cluster in painted purple-and-yellow blooms emerging from the painted moss, magical late-spring register',
+      'Columbine-cluster blooming beside her in painted red-and-yellow nodding bell-shapes, magical painted register',
+      'Harebells nodding gently in painted blue clusters from a mossy rock, magical fae register',
+      'Meadowsweet bloom-spires nearby in painted creamy-white plume-clusters, magical summer-meadow register',
+      'Wild-lupine spires blooming behind her in painted violet-and-pink upright clusters, magical meadow register',
+      'Clematis-blossoms cascading through painted depth in soft pearl-purple star-shaped clusters, magical painted register',
+      'Wild-aster cluster blooming at her feet in painted violet-and-pink star-shaped blooms, magical autumn register',
+      'Autumn-anemones blooming in painted pink-and-white clusters scattered through the mossy ground, painted autumn register',
+      'Autumn-crocus emerging from painted moss in delicate pale-violet cluster, magical seasonal register',
+      'Rowan-berry cluster hanging in painted crimson-orange beside her, painted autumn-amber register',
+      'Moss-rose cluster blooming from the painted mossy ground in soft pearl-pink rosettes, magical painted-fae register',
+      'Glowing-fungus cluster emerging from painted moss in soft pearl-cyan glow-shapes, magical bioluminescent register',
+      'Luminous-mushroom cluster ringing her painted feet in soft pearl-glow shapes, magical fae register',
+    ],
+    instructions: `Each entry is ONE specific BOTANICAL ACCENT cluster, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific named species, (b) color detail, (c) position relative to her, (d) cluster size. NO generic "flowers". NO creature. NO biome. NO lighting/weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_candid_action: {
+    format: 'simple',
+    theme: `CANDID ACTION + COMPOSITION (the captured moment) for FaeBot's forest-fairy-scene path. Each entry describes ONE specific candid moment with composition framing baked in. Each entry 30-50 words.
+
+⚠️ THE BAR: each entry describes a SPECIFIC captured-on-camera moment with the composition spec baked in. NEVER posing for camera, NEVER looking at viewer. Caught-in-the-act, off-center via rule-of-thirds, the forest wrapping around her like a frame.
+
+⚠️ ACTION + COMPOSITION CATEGORIES (across 25 entries):
+  • ~5 NATURE INTERACTION — cupping water / pressing palm to bark / brushing mossy stone / etc.
+  • ~5 INSPECTING / EXAMINING — kneeling over mushroom / examining a leaf / looking at a small creature
+  • ~4 LISTENING / STILL — listening to forest sounds / motionless watching / pausing mid-walk
+  • ~3 BLESSING / TENDING — whispering blessing over seedling / weaving a vine / planting a seed
+  • ~3 CARRYING / GATHERING — holding a basket of moss / cradling a small bloom / gathering pollen
+  • ~3 RESTING — sleeping in moss-hollow / leaning against ancient tree / sitting cross-legged
+  • ~2 MOVEMENT — gentle walking / mid-step in stream / drifting through ferns
+
+⚠️ COMPOSITION SPEC must be baked in per entry — choose ONE per entry:
+  - medium-shot off-center via rule-of-thirds, body fills 40-55% of frame, face in 3/4 profile
+  - close medium-shot, waist-up to thigh-up framing, anchored at left or right third, head turned in candid profile
+  - eye-level full-figure framing, seated or kneeling, body fills 45-60% of frame, intimate distance like wildlife photography
+  - three-quarter rear angle, half-turned away revealing back/shoulder details, head in soft profile
+  - low-angle medium shot, on moss-covered log or root, body 40-50% of frame, framed by hanging vines in foreground
+  - high-angle medium shot looking down, crouched or seated, body 40-55% of frame, surrounded by ferns and wildflowers
+  - side-profile medium shot, in stillness with one shoulder forward, hair and limbs draping naturally
+  - slight low-angle close, standing waist-deep in pool or among tall ferns, body 50-65% of frame
+
+🚫 STRICT BANS:
+  • NO posing for camera / NO eye-contact with viewer
+  • NO sexualized framing
+  • NO centered hero-shot (always off-center)
+  • NO "small figure in distance" — she's the focal subject
+  • NO violence / NO scared / NO edgy moods (peaceful candid only)
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)`,
+    touchpoints: [
+      'Kneeling at a pond-edge to cup forest-water in her palms, captured eye-level full-figure framing with body filling 45-60% of frame, intimate wildlife-photography distance, off-center via rule-of-thirds',
+      'Pressing one open palm to ancient bark in silent communion, captured low-angle medium shot with body 40-50% of frame, framed by hanging vines in foreground, candid 3/4 profile',
+      'Brushing a moss-covered stone with reverent fingertips, captured high-angle medium shot looking down at body 40-55% of frame, surrounded by ferns and wildflowers, off-center',
+      'Dipping fingertips into a forest-stream to catch a single floating petal, captured close medium-shot waist-up framing at the left third, head turned in candid profile',
+      'Trailing one hand along a stream-bank as she walks, captured side-profile medium shot in motion with one shoulder forward, hair and limbs draping naturally, painted candid register',
+      'Kneeling over a tiny mushroom-cluster in candid examination, captured high-angle medium shot at body 40-55% of frame, surrounded by ferns, head bowed in soft 3/4',
+      'Examining a single leaf in cupped palms, captured close medium-shot waist-up framing at the right third, head bowed in candid profile, painted intimate register',
+      'Watching a small forest creature in motionless absorption, captured medium-shot off-center at body 40-55% of frame, face in 3/4 profile, candid wildlife register',
+      'Inspecting a glowing-mushroom cluster at her feet, captured eye-level full-figure framing, seated or kneeling, body 45-60% of frame, intimate distance',
+      'Studying a small bird perched on her shoulder, captured close medium-shot at the left third, head turned to face the bird in candid 3/4',
+      'Standing motionless mid-listen with head tilted to one side, captured slight low-angle close with body 50-65% of frame, framed by tall ferns',
+      'Pausing mid-walk to listen to a distant sound, captured side-profile medium shot in stillness with one shoulder forward, hair drifting in painted motion',
+      'Motionless watching a deer cross a distant clearing, captured three-quarter rear angle half-turned away revealing back/shoulder details, head in soft profile',
+      'Leaning her cheek against ancient tree-bark in silent listening, captured side-profile medium shot at the right third, painted intimate register',
+      'Whispering a blessing over a tiny sprouting seedling at her feet, captured high-angle medium shot looking down, body 40-55% of frame, head bowed in tender candid',
+      'Weaving a delicate vine into a small circle in her cupped palms, captured close medium-shot waist-up framing at the left third, head bowed over hands in candid 3/4',
+      'Planting a seed in the painted moss with one outstretched palm, captured eye-level full-figure framing, kneeling, body fills 45-60% of frame, off-center',
+      'Cradling a basket of soft moss against her hip as she walks, captured medium-shot off-center via rule-of-thirds, body 40-55% of frame, face in 3/4 profile',
+      'Holding a single delicate bloom in her cupped palms, captured close medium-shot waist-up framing at the right third, head bowed over the bloom',
+      'Gathering golden pollen-motes onto her fingertips with one outstretched hand, captured slight low-angle close, body 50-65% of frame, framed by ferns in foreground',
+      'Sleeping curled in a moss-hollow with one cheek pressed to moss, captured high-angle medium shot looking down, body 40-55% of frame, surrounded by ferns and wildflowers',
+      'Leaning against an ancient tree-trunk with one shoulder forward, captured side-profile medium shot in stillness, hair and limbs draping naturally, painted intimate register',
+      'Sitting cross-legged on a moss-cushion in quiet contemplation, captured eye-level full-figure framing, body fills 45-60% of frame, intimate distance',
+      'Walking gently between ferns mid-step, captured medium-shot off-center via rule-of-thirds, body 40-55% of frame, face in soft 3/4 profile, painted motion register',
+      'Standing waist-deep in a moonlit pool with arms lifted in a candid magical gesture, captured slight low-angle close, body 50-65% of frame, painted intimate register',
+    ],
+    instructions: `Each entry is ONE specific candid action moment with composition spec baked in, 30-50 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific candid action, (b) composition spec, (c) body % of frame, (d) face/posture detail. NO posing. NO eye-contact. NO centered. NO small-figure. NO violence/scared/edgy. NO creature description. NO biome description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_magical_flavor: {
+    format: 'simple',
+    theme: `MAGICAL FLAVOR (supernatural atmospheric accent) for FaeBot's forest-fairy-scene path. Each entry describes ONE specific magical accent visible in the scene. Each entry 15-35 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC magical detail painted as luminous painted register, NEVER crude particle-effect. Range from subtle (pollen-haze) to dramatic (will-o-wisp cluster). Always-on but pool curated low-to-high drama.
+
+⚠️ MAGIC CATEGORIES (across 25 entries):
+  • ~5 SUBTLE / AMBIENT — soft pollen-haze drifting / faint pearl-aura / subtle glow under skin
+  • ~5 WILL-O-WISPS — single will-o-wisp / cluster / drifting trail
+  • ~4 FAIRY-DUST / SPARKLES — spiral of fairy-dust / glittering trail / sparkle-fingertips
+  • ~4 GLOWING POLLEN — drifting golden pollen-glow / pollen-mote swarm
+  • ~3 FIREFLIES — firefly-swarm / single firefly / firefly-cluster trail
+  • ~2 BIOLUMINESCENT FUNGUS — glowing-mushroom-circle / fungus-glow ambient
+  • ~2 MAGIC AURA — soft halo around her / glowing veins under skin
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC MAGIC TYPE
+  - POSITION OR INTERACTION (around her / drifting from her / cluster nearby / etc.)
+  - LIGHT QUALITY (luminous / glowing / sparkling / etc.)
+
+🚫 STRICT BANS:
+  • NO crude particle-effect language
+  • NO modern-CGI references
+  • NO creature description (separate axis)
+  • NO violence / NO threatening magic (peaceful register only)`,
+    touchpoints: [
+      'Soft pollen-haze drifting through the painted air around her in faint golden-warm motes, magical subtle ambient register',
+      'Faint pearl-aura surrounding her painted silhouette in soft warm-glow, magical ambient register',
+      'Subtle glow beneath her painted skin pulsing faintly with magical light, gentle painted register',
+      'Soft warm-glow ambient drifting from her painted form into the surrounding mossy air, magical subtle register',
+      'Faint magical shimmer painted across the forest-air near her, subtle painted-ambient register',
+      'Single bright will-o-wisp hovering near her cupped palm in painted soft golden-warm glow, magical fae register',
+      'Cluster of three-four small will-o-wisps drifting through the painted depth around her, magical painted register',
+      'Will-o-wisp trail drifting in a soft painted curve through the forest-air around her, magical fae register',
+      'Two larger will-o-wisps orbiting her painted face in soft pearl-glow, magical intimate register',
+      'Small cluster of will-o-wisps suspended in painted depth near her shoulder, magical fae register',
+      'Spiral of fairy-dust rising from her painted fingertips in soft sparkle-glow, magical painted register',
+      'Glittering fairy-dust trail drifting from her painted hand into the surrounding air, magical sparkle register',
+      'Sparkle-fingertips trailing painted-gold light as she moves, magical painted-motion register',
+      'Painted fairy-dust scattering around her painted form in soft glittering motes, magical fae register',
+      'Drifting golden pollen-glow filling the painted air around her in soft warm-light motes, magical magical register',
+      'Pollen-mote swarm catching the canopy light in painted golden-warm specks, magical painted register',
+      'Soft pollen-light particles drifting through the painted forest-depth around her, magical ambient register',
+      'Painted pollen-glow saturating the forest-air with warm-golden ambient, magical register',
+      'Firefly-swarm drifting through the painted depth around her in soft warm-yellow points, magical evening register',
+      'Single firefly hovering near her cheek in painted soft warm-glow, magical intimate register',
+      'Firefly-cluster trail drifting through the painted forest-depth around her, magical fae register',
+      'Glowing-mushroom-circle ringing her painted feet in soft pearl-cyan glow, magical bioluminescent register',
+      'Bioluminescent fungus-glow ambient illuminating her painted face from below, magical glow register',
+      'Soft halo around her painted head in luminous painted golden-warm glow, magical sacred register',
+      'Glowing veins beneath her painted skin pulsing faintly with magical light, magical painted register',
+    ],
+    instructions: `Each entry is ONE specific MAGICAL FLAVOR accent, 15-35 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific magic type, (b) position or interaction, (c) light quality. NO crude particle-effect. NO modern-CGI. NO creature description. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_scale_prover: {
+    format: 'simple',
+    theme: `SCALE PROVER (environmental scale element establishing her scale) for FaeBot's forest-fairy-scene path. Each entry describes ONE specific environmental element that establishes her scale and the soaring or intimate quality of the space. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry adds a SPECIFIC scale-prover that makes the scene feel epic or intimate. Playbook component — without scale-provers, scenes feel flat. Choose either MAJESTIC scale (she's small in soaring space) or INTIMATE scale (she's normal in cozy detail).
+
+⚠️ SCALE CATEGORIES (across 25 entries):
+  • ~5 MASSIVE ROOTS — ancient roots like sleeping dragons / serpent-roots dwarfing her / root-cathedral
+  • ~5 SOARING CANOPY — cathedral canopy 100 feet above / towering trunks vanishing into mist / vertical scale
+  • ~4 OVERSIZED FLORA — mushroom-cap larger than her head / fern-fronds arching above her / giant-bloom
+  • ~3 ANCIENT TREE — massive ancient-tree-trunk filling background / wider than three of her
+  • ~3 INTIMATE DETAIL — leaf-veining at painted human-eye-level / lichen-detail at intimate scale
+  • ~3 STONE / ROCK SCALE — boulder larger than her / cliff-face soaring above / standing-stone ancient
+  • ~2 WATER SCALE — small pool reflecting upward / waterfall dwarfing her / glistening dewdrop close
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC SCALE ELEMENT
+  - SCALE RELATIONSHIP TO HER (dwarfing her / at her shoulder / overhead / at her feet / etc.)
+  - PAINTED TACTILE DETAIL
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome / setting (separate axis)
+  • NO modern references
+  • NO breaking the painted-fantasy register`,
+    touchpoints: [
+      'Massive gnarled ancient root like a sleeping serpent arching across the painted foreground earth in painted twisted form, wider than her entire body, painted dwarfing scale',
+      'Cluster of ancient roots like sleeping dragons painted across the foreground, painted bark-detail at intimate human-eye-level, dwarfing painted scale',
+      'Ancient root-cathedral arching over her painted form like a natural ceiling, painted depth between roots and her, soaring painted scale',
+      'Single massive root-tendril crossing the painted depth behind her, wider than her shoulders, painted tactile bark detail',
+      'Painted root-system carpeting the foreground in painted twisted forms, painted dwarfing texture, anchored painted scale',
+      'Cathedral canopy 100 feet above her painted head with soaring vertical scale, painted trunks rising into atmospheric depth, painted majestic scale',
+      'Towering ancient trunks vanishing into painted upper-mist, soaring vertical painted scale dwarfing her, painted gallery-tier depth',
+      'Painted vertical scale of soaring trunks rising above her painted form into deep painted mist, painted majestic dwarfing register',
+      'Massive tree-canopy painted overhead like a painted ceiling 80 feet up, painted dwarfing scale, painted soaring register',
+      'Painted vertical depth of trunks ascending into the canopy-mist above her, painted majestic register',
+      'Single oversized mushroom-cap painted larger than her head crowning a moss-covered stump, painted scale-contrast detail',
+      'Tall fern-fronds painted arching protectively over her painted shoulders, painted intimate-yet-soaring scale',
+      'Giant painted bloom (foxglove-spire / lupine) standing taller than her at her shoulder, painted dwarfing detail',
+      'Cluster of oversized painted mushrooms ringing her painted feet, painted cap-larger-than-head scale-contrast',
+      'Massive ancient tree-trunk filling the painted background, wider than three of her painted form, painted texture detail',
+      'Painted ancient-tree-trunk dominating the midground at painted intimate scale, painted bark-detail at painted human-eye-level',
+      'Wide-ridged painted ancient-trunk behind her in painted depth, painted bark-detail revealing painted scale',
+      'Painted leaf-veining at intimate scale catching the painted light, painted gallery-tier botanical detail at painted human-eye-level',
+      'Lichen-detail on painted bark at painted intimate scale, painted texture richness at painted human-eye-level',
+      'Painted dewdrop-cluster larger than painted intimate scale on painted leaf-edges, painted gallery-tier detail',
+      'Painted boulder painted larger than her in painted foreground, painted moss-and-lichen texture at painted human-eye-level',
+      'Painted cliff-face soaring above her painted form in painted depth, painted dwarfing register',
+      'Ancient painted standing-stone painted half-buried in painted moss, painted dwarfing scale-prover',
+      'Painted small pool painted reflecting the canopy painted upward, painted scale element with painted reflection',
+      'Painted waterfall painted dwarfing her painted in painted background, painted soaring scale-prover',
+    ],
+    instructions: `Each entry is ONE specific SCALE PROVER, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific scale element, (b) scale relationship to her, (c) painted tactile detail. NO creature. NO biome. NO modern. NO breaking painted-fantasy register. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_forest_fairy_scene_companion: {
+    format: 'simple',
+    theme: `COMPANION (small woodland animal sharing the moment with her) for FaeBot's forest-fairy-scene path. Each entry describes ONE specific small companion animal woven naturally into the scene. Each entry 15-35 words.
+
+⚠️ THE BAR: companion is at HER SCALE OR SMALLER, NEVER a competing focal subject. The eye still lands on the creature first; the companion adds story-warmth + scale-prover. Woven naturally — fox-cub at her feet, robin on her shoulder, glow-moth circling.
+
+⚠️ COMPANION CATEGORIES (across 25 entries):
+  • ~5 BIRD — robin / sparrow / hummingbird / owl / wren on her shoulder or nearby branch
+  • ~4 FOX / FOX-CUB — fox-cub at her feet / fox watching from ferns
+  • ~3 DEER / FAWN — spotted-fawn beside her / doe in distant midground
+  • ~3 RABBIT / HARE — hare watching from ferns / rabbit at her feet
+  • ~3 BUTTERFLY / MOTH — luna-moth perched on her finger / butterfly-cluster circling
+  • ~2 SQUIRREL / SMALL MAMMAL — squirrel on a branch / weasel pausing
+  • ~2 OWL / RAPTOR — owl on nearby branch / hawk perched in midground
+  • ~2 GLOW-MOTH / FIREFLY-COMPANION — glow-moth circling her / firefly orbiting
+  • ~1 RARE — turtle / frog / dragonfly / small fawn
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC ANIMAL SPECIES (NEVER generic "bird" or "small animal")
+  - POSITION RELATIVE TO HER (at her feet / on her shoulder / in nearby ferns / etc.)
+  - POSTURE / ACTION (watching / pausing / mid-flight / etc.)
+  - SCALE CUE (her scale or smaller)
+
+🚫 STRICT BANS:
+  • NO competing focal subject — companion is secondary
+  • NO predator-prey moments (peaceful register only)
+  • NO creature description (separate axis)
+  • NO modern or fantasy hybrids (real woodland animals only)`,
+    touchpoints: [
+      'A small painted robin with crimson breast perched on her painted shoulder, head tilted in candid watching, painted intimate scale',
+      'A painted sparrow pausing on a painted fern-frond beside her, painted soft-brown plumage, candid woodland register',
+      'A painted hummingbird hovering near her painted cupped palm, painted iridescent wing-blur, magical fae register',
+      'A painted owl on a nearby painted branch in watchful stillness, painted soft-grey plumage and large luminous eyes, magical companion register',
+      'A small painted wren perched on her painted finger, painted tiny brown form with bright eye, painted intimate register',
+      'A painted fox-cub sitting at her painted feet in candid trust, painted russet fur and bright amber eyes, magical companion register',
+      'A painted red fox pausing beside her painted form, painted curious head-tilt, soft-russet painted fur',
+      'A painted fox-cub watching from painted ferns nearby, painted bright amber eyes peering out, magical companion register',
+      'A painted silver-fox crouched beside her in painted candid presence, painted soft silver-grey fur, magical fae register',
+      'A painted spotted-fawn beside her in painted candid attention, painted soft white-spotted brown fur, magical companion register',
+      'A painted doe pausing in painted midground watching her, painted gentle eyes, candid wildlife register',
+      'A painted young-fawn at her painted side, painted small white-spotted form, magical intimate register',
+      'A painted hare watching from painted ferns nearby, painted long ears and bright eye, candid woodland register',
+      'A painted rabbit pausing at her painted feet in painted candid presence, painted soft fur and gentle eyes, magical companion register',
+      'A painted snow-hare crouched in painted nearby ferns, painted soft white fur, magical winter register',
+      'A painted luna-moth perched on her painted fingertip with painted iridescent green wings spread, magical intimate register',
+      'A painted butterfly-cluster circling her painted form in soft painted motion, painted orange-and-yellow wings, magical painted register',
+      'A painted monarch butterfly perched on her painted hand, painted orange-and-black wings spread, magical painted register',
+      'A painted red-squirrel pausing on a painted branch above her, painted bright orange fur and bushy tail, candid woodland register',
+      'A painted weasel pausing in painted ferns nearby, painted soft brown fur and bright eyes, candid wildlife register',
+      'A painted owl on a painted high branch behind her, painted soft brown plumage and large round eyes, magical companion register',
+      'A painted hawk perched in painted midground, painted majestic stillness, painted candid wildlife register',
+      'A painted glow-moth circling her painted form in soft pearl-glow, painted magical wing-motion, magical fae register',
+      'A painted firefly orbiting her painted cupped palm in soft warm-glow, magical intimate register',
+      'A painted small turtle pausing at painted stream-edge nearby, painted weathered shell-detail, candid woodland register',
+    ],
+    instructions: `Each entry is ONE specific COMPANION animal, 15-35 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific species, (b) position relative to her, (c) posture/action, (d) scale cue (her scale or smaller). NO competing focal subject. NO predator-prey. NO creature description. NO modern or fantasy hybrids. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+
 };
 
 const recipe = POOL_RECIPES[POOL];

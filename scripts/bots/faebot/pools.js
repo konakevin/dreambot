@@ -44,5 +44,16 @@ module.exports = {
   // ─── flower-fairy path (R11 reset, 2026-05-17) ───
   FLOWER_FAIRY_CREATURES: loadIfExists('flower_fairy_creatures'),
   FLOWER_FAIRY_SCENES: loadIfExists('flower_fairy_scenes'),
+  // ─── forest-fairy-scene axis-system pools (2026-05-20) ───
+  FAEBOT_FOREST_FAIRY_SCENE_CREATURE: loadIfExists('faebot_forest_fairy_scene_creature'),
+  FAEBOT_FOREST_FAIRY_SCENE_BIOME: loadIfExists('faebot_forest_fairy_scene_biome'),
+  FAEBOT_FOREST_FAIRY_SCENE_LIGHTING: loadIfExists('faebot_forest_fairy_scene_lighting'),
+  FAEBOT_FOREST_FAIRY_SCENE_WEATHER: loadIfExists('faebot_forest_fairy_scene_weather'),
+  FAEBOT_FOREST_FAIRY_SCENE_FOREGROUND_ANCHOR: loadIfExists('faebot_forest_fairy_scene_foreground_anchor'),
+  FAEBOT_FOREST_FAIRY_SCENE_BOTANICAL_ACCENT: loadIfExists('faebot_forest_fairy_scene_botanical_accent'),
+  FAEBOT_FOREST_FAIRY_SCENE_CANDID_ACTION: loadIfExists('faebot_forest_fairy_scene_candid_action'),
+  FAEBOT_FOREST_FAIRY_SCENE_MAGICAL_FLAVOR: loadIfExists('faebot_forest_fairy_scene_magical_flavor'),
+  FAEBOT_FOREST_FAIRY_SCENE_SCALE_PROVER: loadIfExists('faebot_forest_fairy_scene_scale_prover'),
+  FAEBOT_FOREST_FAIRY_SCENE_COMPANION: loadIfExists('faebot_forest_fairy_scene_companion'),
   VIBE_COLOR,
 };

@@ -1,82 +1,64 @@
 /**
- * ForestBot forest-fairy-scene path.
+ * FaeBot forest-fairy-scene path — declarative axis-system form (2026-05-20).
  *
- * Mirrors the vampire-girls-2 pattern: ONE creature is the SUBJECT of the
- * frame. The CREATURE comes from a unified Sonnet-seeded pool of stacked-
- * exotic forest spirit descriptions. The path-builder mandates the creature
- * is the focal point (35-55% of frame), medium-shot or closer, and frames
- * the surrounding forest as her natural backdrop.
+ * THE SOUL OF THE PATH:
+ *   ONE mythic forest creature is the focal subject (40-55% of frame, off-
+ *   center, candid). Hidden-camera glimpse of an exotic plant-merged fae
+ *   spirit. NEVER posing, NEVER eye-contact. The forest WRAPS AROUND her
+ *   like a frame. Painted-fantasy concept art (Manchess + Giancola + Bonner
+ *   + Froud lineage). Otherworldly mythic-creature beauty, NOT human-model
+ *   beauty.
+ *
+ * THE BAR (from BOT_SCENE_QUALITY_PLAYBOOK):
+ *   Every render is a poster-worthy painted-fantasy gallery frame. Multi-
+ *   tier depth (foreground vines + midground her + background mist).
+ *   Visible material truth (oil-brush register). Light drama (god-rays /
+ *   moonlit / blue-hour). Narrative beat (specific candid moment). Stacked
+ *   exotic features readable on the creature (5+ plant-merged details).
+ *
+ * 10 AXES (9 always-on + 1 gated companion):
+ *   - creature: stacked-exotic mythic being (species + skin + hair +
+ *     garment + anatomical extras + magical signature)
+ *   - forest_biome: WHERE — pure forest type + signature features
+ *     (sun-cathedral oak / fern-grotto / willow-thicket / blue-grotto /
+ *     redwood-cathedral / autumn-blaze / moss-canyon / snowy-pine / etc.)
+ *   - lighting: TIME + LIGHT DRAMA — golden afternoon god-rays / moonlit
+ *     silver shafts / blue-hour low under-light / pearl-mist dawn beams /
+ *     bioluminescent ambient / etc.
+ *   - weather: AIR CONDITION + particle motion — gentle rain / dawn mist
+ *     / snow flurries / clear / autumn-leaves drift / pollen-haze /
+ *     post-storm dew-glints / etc.
+ *   - foreground_anchor: closest depth element bringing 3-tier depth
+ *     (hanging vines / mossy boulder / fern-cluster / mushroom-cluster /
+ *     wildflower carpet / drifting petal-cluster / etc.)
+ *   - botanical_accent: signature bloom cluster (foxgloves / bluebells /
+ *     wisteria-cascade / wild-rose / lily-of-the-valley / dogwood / etc.)
+ *   - candid_action: captured moment + composition baked in (cupping
+ *     water close-medium / pressing palm to roots low-angle / blessing
+ *     seedling high-angle / sleeping in moss-hollow / etc.)
+ *   - magical_flavor: supernatural accent — always-on, pool ranges from
+ *     subtle to dramatic (subtle pollen-haze → will-o-wisps / fairy-dust
+ *     spiral / bioluminescent fungus-circle / firefly swarm)
+ *   - scale_prover: environmental scale element (massive ancient roots
+ *     dwarfing her / cathedral canopy soaring above / mushroom-cap
+ *     larger than her head / etc.)
+ *   - companion: small woodland animal (50%-gated for solo intimacy
+ *     half the time) — fox-cub at her feet / robin on her shoulder /
+ *     glow-moth circling / spotted-fawn beside her / hare watching
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-const COMPOSITIONS = [
-  'medium-shot framing, the creature off-center via rule-of-thirds, body fills 40-55% of frame, face clearly visible in 3/4 profile',
-  'close medium-shot, waist-up to thigh-up framing, creature anchored at the left or right third, head turned in candid profile',
-  'eye-level full-figure framing, creature seated or kneeling, body fills 45-60% of frame, intimate distance like wildlife photography',
-  'three-quarter rear angle, creature half-turned away from viewer revealing back/shoulder details, head in soft profile, the forest receding past her',
-  'low-angle medium shot, creature on a moss-covered log or root, body 40-50% of frame, framed by hanging vines in foreground',
-  'high-angle medium shot looking down, creature crouched or seated, body 40-55% of frame, surrounded by ferns and wildflowers',
-  'side-profile medium shot, creature in stillness with one shoulder forward, hair and limbs draping naturally, the forest framing her like a painted theatre',
-  'slight low-angle close, creature standing waist-deep in a pool or among tall ferns, body 50-65% of frame, hands lifted in a candid magical gesture',
-];
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const creature = picker.pickWithRecency(pools.FOREST_CREATURES, 'forest_creature');
-  const composition =
-    COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
-  const scene = picker.pickWithRecency(pools.FOREST_FAIRY_SCENES, 'forest_fairy_scene_setting');
-
-  return `You are writing ONE Flux prompt for an enchanted-forest creature painting. Output ONLY the prompt — comma-separated phrases, 70-95 words, no preamble, no headers.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt, BEFORE setting/lighting/anything else.
-
-1. THE CREATURE IS THE SUBJECT. Not the landscape. The creature fills 40-55% of the frame and is the eye's first landing place. NEVER write a "wide landscape with tiny figure". NEVER write "small figure in distance".
-
-2. The creature description below is THE creature — render her with EVERY exotic feature listed (the moss-tinted skin, the vine-hair, the leaf-garment, the antlers/wings/glowing-marks, the magical signature, the candid posture). 4+ stacked exotic features must visibly land in the painting.
-
-Open your prompt with the creature description in this format:
-"[creature unified description], [composition framing], [forest setting wrapping around her], [lighting + magical atmosphere], [palette]."
-
-The creature opens. Everything else is HER FRAME.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-${blocks.PEACEFUL_FAIRY_BLOCK}
-
-${blocks.NO_TEXT_BLOCK}
-
-━━━ 1. THE CREATURE (this is the subject — render her exactly this way) ━━━
-${creature}
-
-This unified description is the FACE of the painting. Preserve every exotic feature: the skin tone, the hair, the garment, the eyes/face/antlers/wings/glowing-marks, the magical signature, the candid posture. She is otherworldly-beautiful — mythic-creature beauty, not human-model beauty. Confident at-home-in-her-wildness. NEVER posing, NEVER looking at the viewer.
-
-━━━ 2. COMPOSITION (the creature dominates the frame) ━━━
-${composition}.
-
-The forest WRAPS AROUND her like a frame — vines hanging in foreground, mossy rocks beside her, dappled canopy behind. But SHE is what the eye lands on first. NOT a landscape with tiny figure. NOT a centered hero portrait either — caught-on-camera-candid, off-center, real moment.
-
-━━━ 3. THE FOREST SETTING (her natural backdrop — wraps around her) ━━━
-${scene}
-
-This setting is HER FRAME, not the subject. Render with atmospheric depth — foreground tactile detail (ferns, moss, vines), midground holding her, background fading into soft painted mist or canopy.
-
-━━━ 4. LIGHTING + MAGIC + ATMOSPHERE ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
-
-Visible magical signature near her: glowing pollen, sparkles, will-o-wisps, fireflies, soft halo, glowing veins under skin, luminescent dewdrops — at least one. Atmospheric haze and dappled light sell the forest depth.
-
-━━━ 5. HARD BANS ━━━
-- NO landscape with tiny figure (the creature MUST fill 40-55% of frame)
-- NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
-- NO sexualized framing — focus is mythic-creature beauty
-- NO modern objects (phones, glasses, electronics)
-- NO realistic non-magical humans
-- NO violence / NO scared expressions / NO edgy moods
-- NO photographic / digital / 3D / cgi descriptors at the technique level
-- NO additional figures beyond the focal creature + ONE small animal companion
-
-━━━ OUTPUT ━━━
-Write 70-95 words, comma-separated phrases. Lead with the creature unified description from section 1 — preserve her exotic features unmistakably. Composition framing follows. Forest setting wraps around her. Lighting and magic close. NO preamble, NO headers, NO ━━━ markers.`;
+module.exports = {
+  archetype: 'FAEBOT_FOREST_FAIRY_SCENE',
+  pools: {
+    creature: 'FAEBOT_FOREST_FAIRY_SCENE_CREATURE',
+    forest_biome: 'FAEBOT_FOREST_FAIRY_SCENE_BIOME',
+    lighting: 'FAEBOT_FOREST_FAIRY_SCENE_LIGHTING',
+    weather: 'FAEBOT_FOREST_FAIRY_SCENE_WEATHER',
+    foreground_anchor: 'FAEBOT_FOREST_FAIRY_SCENE_FOREGROUND_ANCHOR',
+    botanical_accent: 'FAEBOT_FOREST_FAIRY_SCENE_BOTANICAL_ACCENT',
+    candid_action: 'FAEBOT_FOREST_FAIRY_SCENE_CANDID_ACTION',
+    magical_flavor: 'FAEBOT_FOREST_FAIRY_SCENE_MAGICAL_FLAVOR',
+    scale_prover: 'FAEBOT_FOREST_FAIRY_SCENE_SCALE_PROVER',
+    companion: 'FAEBOT_FOREST_FAIRY_SCENE_COMPANION',
+  },
 };
