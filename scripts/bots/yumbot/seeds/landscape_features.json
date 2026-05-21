@@ -1,5 +1,41 @@
 [
   {
+    "description": "A pastel-pink stream winding gently through the soft meadow grass with rainbow ripples",
+    "tags": [
+      "STREAM",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A glassy pastel-mint stream reflecting cotton-candy clouds as it meanders across the dreamscape",
+    "tags": [
+      "STREAM",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A soft sparkling pastel-blue brook babbling over smooth pebbles through the flowering meadow",
+    "tags": [
+      "STREAM",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A rainbow-ribbon stream cutting a gentle curve across the pastel grass with shimmering water",
+    "tags": [
+      "STREAM",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A pastel forest stream flowing past mossy rocks under cherry-blossom branches",
+    "tags": [
+      "STREAM",
+      "COTTAGECORE"
+    ]
+  },
+  {
     "description": "A chocolate-syrup river flowing through soft candy-banks with marshmallow-foam",
     "tags": [
       "STREAM",
@@ -62,10 +98,39 @@
     ]
   },
   {
+    "description": "A mossy stone-trail winding gently through the pastel grass toward a distant hilltop",
+    "tags": [
+      "TRAIL",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-petal-strewn path lined with stones leading off into the meadow",
+    "tags": [
+      "TRAIL",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A smooth pebble-path of pastel rounded stones meandering through wildflowers",
+    "tags": [
+      "TRAIL",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
     "description": "A pastel-stepping-stone trail crossing a stream toward a cottage",
     "tags": [
       "TRAIL",
       "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A golden-pastel-pollen trail glowing softly as if magical",
+    "tags": [
+      "TRAIL",
+      "CANDY_FANTASY"
     ]
   },
   {
@@ -120,6 +185,14 @@
     "tags": [
       "ROCKS",
       "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A cluster of pastel-pebbles arranged like a small cairn beside a path",
+    "tags": [
+      "ROCKS",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
     ]
   },
   {
@@ -203,6 +276,20 @@
     "tags": [
       "BRIDGE",
       "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "An arched stone-bridge with mossy edges spanning a small pastel-stream",
+    "tags": [
+      "BRIDGE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-painted bridge with ribbon-railings and curved pastel-pink boards",
+    "tags": [
+      "BRIDGE",
+      "CANDY_FANTASY"
     ]
   },
   {
@@ -343,15 +430,13 @@
     "description": "A small pastel-waterfall cascading off a rocky shelf into a glassy pool",
     "tags": [
       "WATERFALL",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
+      "COTTAGECORE"
     ]
   },
   {
     "description": "A rainbow-mist waterfall splashing into a pool of pearl-pastel water",
     "tags": [
       "WATERFALL",
-      "RAINBOW_DREAMSCAPE",
       "CANDY_FANTASY"
     ]
   },
@@ -359,7 +444,7 @@
     "description": "A glassy waterfall with sparkle-spray rising in iridescent mist",
     "tags": [
       "WATERFALL",
-      "RAINBOW_DREAMSCAPE"
+      "COTTAGECORE"
     ]
   },
   {
@@ -373,7 +458,6 @@
     "description": "A small floating pastel-rock-island hovering in the air with a tiny waterfall trickling off",
     "tags": [
       "FLOATING_ISLAND",
-      "RAINBOW_DREAMSCAPE",
       "CANDY_FANTASY"
     ]
   },
@@ -381,8 +465,7 @@
     "description": "A mossy floating-cliff with a waterfall splashing into clouds below",
     "tags": [
       "FLOATING_ISLAND",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
+      "COTTAGECORE"
     ]
   },
   {
@@ -477,6 +560,13 @@
     ]
   },
   {
+    "description": "A pastel-valley with rolling hills and a winding stream at the floor",
+    "tags": [
+      "OPEN_MEADOW",
+      "COTTAGECORE"
+    ]
+  },
+  {
     "description": "A festival-stall row of wooden-frame yatai with paper-lanterns hanging overhead",
     "tags": [
       "TRAIL",
@@ -503,6 +593,175 @@
     "tags": [
       "TRAIL",
       "MARKET"
+    ]
+  },
+  {
+    "description": "A single pastel-cherry-blossom tree in full bloom standing alone in soft meadow grass",
+    "tags": [
+      "TREES",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-pink wisteria-tree with cascading lavender blooms hanging in dense drapes",
+    "tags": [
+      "TREES",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A small cluster of pastel-bonsai-trees on a soft mossy mound",
+    "tags": [
+      "TREES",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-pearl-leaved tree with iridescent leaves shimmering in the breeze",
+    "tags": [
+      "TREES",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A tiny pastel-magnolia-tree with creamy oversized blooms tilting toward the light",
+    "tags": [
+      "TREES",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A cluster of pastel-glowing-orbs floating mid-air like soft fireflies",
+    "tags": [
+      "ROCKS",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A heap of soft pastel-cushion-mounds scattered like landscape pillows",
+    "tags": [
+      "ROCKS",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A standalone pastel-stone-archway covered in trailing pastel-vines",
+    "tags": [
+      "ROCKS",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A weathered pastel-wishing-well with mossy stones and a wooden roof",
+    "tags": [
+      "ROCKS",
+      "RAINBOW_DREAMSCAPE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-clamshell open in the grass with a glowing pearl inside",
+    "tags": [
+      "ROCKS",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A small pastel-gazebo with curved frosted-glass roof and ribbon-bunting",
+    "tags": [
+      "ROCKS",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A sweeping pastel-cosmos-meadow in soft pinks and creams covering the foreground",
+    "tags": [
+      "FLORAL_FIELD",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A field of pastel-peonies in pink, peach, and butter-cream blooming around the scene",
+    "tags": [
+      "FLORAL_FIELD",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A dense bed of pastel-ranunculus in mixed pastel-rainbow colors",
+    "tags": [
+      "FLORAL_FIELD",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A meadow patch of pastel-baby-breath and forget-me-nots in soft white-and-blue",
+    "tags": [
+      "FLORAL_FIELD",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-dandelion-field with seedheads catching the breeze in golden drift",
+    "tags": [
+      "FLORAL_FIELD",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A glowing pastel-mushroom-cluster in soft pink and mint with iridescent shimmer",
+    "tags": [
+      "MUSHROOM_GROVE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A floating pastel-cloud-island with a single tree sitting on top",
+    "tags": [
+      "FLOATING_ISLAND",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A floating pastel-rock-platform with pastel-flowers blooming on its surface",
+    "tags": [
+      "FLOATING_ISLAND",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A small floating pastel-pearl-orb suspended in mid-air",
+    "tags": [
+      "FLOATING_ISLAND",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-rainbow ribbon arcing softly across the upper sky like a gentle accent",
+    "tags": [
+      "OPEN_MEADOW",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A wide pastel-grass meadow with pastel-mountain peaks in soft pastel-haze on the horizon",
+    "tags": [
+      "OPEN_MEADOW",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-meadow with floating pastel-dandelion-seedheads drifting through the air",
+    "tags": [
+      "OPEN_MEADOW",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-clearing among soft cherry-blossom trees opening into a circle",
+    "tags": [
+      "OPEN_MEADOW",
+      "RAINBOW_DREAMSCAPE"
     ]
   }
 ]
