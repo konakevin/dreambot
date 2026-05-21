@@ -1,5 +1,5 @@
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../beach/pools');
+const blocks = require('../../beach/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.TROPICAL_PARADISE_SCENES, 'tropical_paradise');

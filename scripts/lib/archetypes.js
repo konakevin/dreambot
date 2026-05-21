@@ -1971,6 +1971,19 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  EARTHBOT_HAWAII_FLOWERS: {
+    description:
+      'PATH-BESPOKE — EarthBot hawaii-flowers (2026-05-21 R3 architecture). Hawaiian/tropical-paradise coast with TROPICAL FLOWERS as visible co-star. Different from EARTHBOT_EPIC_VISTA in that flowers are a SEPARATE always-on axis (HAWAII_FLOWERS_ARRANGEMENTS — 200-entry production pool reused from legacy beach/tropical_flower_arrangements). Subject pool is ground-level beach-only (no flower content). Template explicitly composes flowers as TASTEFULLY SPRINKLED through the scene (R6/R7 iterations: not foreground-wall, not invisible, distributed positions). 7 axes: 6 always-on (subject + flowers + lighting + atmosphere + hero_feature + sky_layer) + 1 conditional 30%-gated phenomenon.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['subject', 'flowers', 'lighting', 'atmosphere', 'hero_feature', 'sky_layer'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 
 };
 

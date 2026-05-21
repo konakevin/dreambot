@@ -95,17 +95,17 @@ const pathBuilders = {
   // Beach paths (13)
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   wave: require('./beach/paths/wave'),
-  'tropical-paradise': require('./beach/paths/tropical-paradise'),
+  'tropical-paradise': require('./paths/tropical-paradise'), // axis-system (2026-05-20)
   'beach-landscape': require('./beach/paths/beach-landscape'),
   'tide-pool': require('./beach/paths/tide-pool'),
   'beach-moment': require('./beach/paths/beach-moment'),
   'cozy-beach': require('./beach/paths/cozy-beach'),
-  'hawaii-flowers': require('./beach/paths/hawaii-flowers'),
+  'hawaii-flowers': require('./paths/hawaii-flowers'), // axis-system (2026-05-21)
   'reef-paradise': require('./beach/paths/reef-paradise'),
   'big-wave': require('./beach/paths/big-wave'),
   seashell: require('./beach/paths/seashell'),
   'beach-night': require('./beach/paths/beach-night'),
-  'epic-sunset': require('./beach/paths/epic-sunset'),
+  'epic-sunset': require('./paths/epic-sunset'), // axis-system (2026-05-20)
 };
 
 const EARTH_PATHS = [
@@ -231,8 +231,8 @@ module.exports = {
   // add it here.
   chaos: {
     enabled: true,
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista'],
-    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => p !== 'coastal-vista')],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers'],
+    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers'].includes(p))],
   },
 
   // Two-pass polish — both bots use identical config.
@@ -245,7 +245,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers'],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their

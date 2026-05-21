@@ -39,4 +39,17 @@ module.exports = {
   // coastal-vista (2026-05-20) — FIRST BEACH-SIDE path migrated. Validates
   // canonical landscape template clones cross-namespace.
   COASTAL_VISTA_SUBJECT: load('coastal_vista_subject'),
+  // tropical-paradise (2026-05-20) — PARADISE coast sibling to coastal-vista.
+  // Palm-fringed lagoons / atolls / white-sand crescents.
+  TROPICAL_PARADISE_SUBJECT: load('tropical_paradise_subject'),
+  // epic-sunset (2026-05-20) — SUNSET-AS-SUBJECT. Sky is the show, geology
+  // silhouette/anchor only.
+  EPIC_SUNSET_SUBJECT: load('epic_sunset_subject'),
+  // hawaii-flowers (2026-05-21) — Hawaiian/tropical coast + tropical flowers
+  // as visible co-star. Multi-time-of-day variety (not all sunset).
+  // R3 architecture: subject is BEACH-ONLY (ground-level POV), flowers are
+  // a separate axis reusing the legacy 200-entry tropical_flower_arrangements
+  // pool copied from beach/seeds/.
+  HAWAII_FLOWERS_SUBJECT: load('hawaii_flowers_subject'),
+  HAWAII_FLOWERS_ARRANGEMENTS: load('hawaii_flowers_arrangements'),
 };

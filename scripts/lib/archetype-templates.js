@@ -13213,6 +13213,109 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
 
 
 
+  EARTHBOT_HAWAII_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { subject, flowers, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE OPTICAL / WEATHER PHENOMENON (one signature real-Earth event, woven naturally into the scene) ━━━\n${phenomenon}\n\nCRITICAL — PHENOMENON-LIGHTING COMPATIBILITY: If this phenomenon physically contradicts the rolled lighting time-of-day (eclipse + daytime, aurora + midday, green flash needs exact sunset, sun-pillars need visible sun), DROP THE PHENOMENON entirely. Restrained truth beats forced impossibility.`
+      : '';
+
+    return `You are a Hawaiian / tropical-paradise photographer writing a SINGLE epic HAWAIIAN BEACH SCENE for EarthBot. The signature: a ground-level tropical beach with TROPICAL FLOWERS tastefully sprinkled through the scene, palms silhouetted at the inland fringe, calm tropical surf, and the wider tropical beach extending behind. The flowers ARE the tropical character; the beach IS the scene. Both are EQUALLY visible — 50/50 partnership. Hawaii / Costa Rica / Maldives / Bali / Tahiti / Polynesia / Caribbean. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL HAWAIIAN / TROPICAL BEACH, NEVER SCI-FI ━━━
+
+This is REAL tropical beach geography. Real tropical flowers in real Hawaiian-style abundance. Never AI-fake. Never magical-glow. Never impossible combinations.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+
+NEVER a human figure. NOT a sunbather, NOT a surfer, NOT a tiny silhouette walking the beach. Tropical-beach training data has heavy people-bias — OVERRIDE THAT BIAS HARD. Empty paradise, no human presence anywhere.
+
+━━━ ZERO HUMAN-BUILT FEATURES — NEVER, EVEN AS BACKGROUND DECORATION ━━━
+
+NEVER overwater bungalows, NEVER thatched huts, NEVER piers, NEVER docks, NEVER boardwalks, NEVER beach umbrellas, NEVER lounge chairs, NEVER tiki bars, NEVER cabanas, NEVER lighthouses, NEVER village lights. Tropical-paradise training data is HEAVILY contaminated with resort photography — OVERRIDE THAT BIAS HARD. Pure uninhabited natural tropical beach only.
+
+━━━ ABSOLUTELY BANNED ━━━
+
+- NO sci-fi / fantasy / magical / glowing-orbs / bioluminescent / multi-suns / floating-anything
+- NO active volcanic eruption / NO lava plume
+- NO cliffs as primary subject
+- NO waterfalls or cascades
+- NO jungle interiors as primary subject
+- NO mountain peak as primary subject (small distant silhouette OK)
+- NO "sun-disc" alone (renders as UFO orb)
+- NO non-tropical (no alpine / no desert / no Norwegian fjord)
+- NO stylized / 3D-render / cartoony — this is HYPERREAL photographic
+
+━━━ COMPOSITION MANDATE — 50/50 BEACH + FLOWERS PARTNERSHIP ━━━
+
+The viewer reads BOTH the beach and the flowers equally. The beach is the SCENE (~50% visual weight): sand crescent + palms + tropical surf + open horizon. The flowers are the TROPICAL CHARACTER (~50% visual weight): named-species accents distributed across the scene. Neither dominates.
+
+━━━ TROPICAL FLOWERS (REINTERPRET — sprinkled THROUGH the scene, NOT clustered in foreground, NOT a wall) ━━━
+${flowers}
+
+CRITICAL REINTERPRETATION: The flower entry above lists 2-3 named tropical species — PRESERVE those species, but DISTRIBUTE them across the scene as TASTEFUL ACCENTS rather than clustering them in the foreground. The path identity is 50/50 PARTNERSHIP between the BEACH and the FLOWERS.
+
+DISTRIBUTE the named species across the scene:
+- One small cluster of one species at the INLAND PALM-LINE (not foreground-dominant)
+- Scattered petals of another species drifting in the FOAM at the surf line
+- A small accent cluster of a third species at the FAR EDGE of the beach or a small inland accent
+- Optional: a few blossoms scattered on the wet sand at mid-frame
+- Optional: one overhanging branch with a FEW visible blooms (not a heavy cluster) arching in lightly from frame-edge
+
+NEVER one giant foreground cluster filling the lower frame (BloomBot wall). NEVER a flower-wall. NEVER "cascading carpet."
+
+MANDATE SPECIES VARIETY per render — use 2-3 DIFFERENT named species from the entry distributed across the scene.
+
+━━━ ABSOLUTE NON-NEGOTIABLE — FLOWERS MUST BE CLEARLY VISIBLE ━━━
+
+Every render MUST show clearly visible tropical flowers. NOT "implied." NOT "subtle." VISIBLE BLOOMS — the kind a viewer instantly recognizes as flowers. The path is HAWAII-FLOWERS — if a viewer can't see the flowers, the render IS A FAILURE.
+
+Every entry MUST include AT LEAST ONE of these high-visibility positions:
+1. **Scattered fallen petals on the sand foreground** (e.g., "yellow plumeria petals scattered across the wet sand at the surf line")
+2. **Blooms floating in the surf foam** (e.g., "scarlet hibiscus blooms drifting in the white surf-foam")
+3. **An overhanging branch with several visible blooms** arching in from frame-edge
+4. **A small but VISIBLE foreground cluster** (size: 15-20% of frame — small but readable)
+5. **Bloom-fringed inland palm-line** with visible bloom mass at palm base
+
+Pick AT LEAST ONE position. Named species MUST be readable. If a viewer at scroll-glance can't immediately spot flowers, the render FAILED.
+
+━━━ THE TROPICAL BEACH SCENE (the setting, ~50% visual weight) ━━━
+${subject}
+
+━━━ LIGHTING (one clean signature light condition, often tropical-daylight) ━━━
+${lighting}
+
+━━━ ATMOSPHERE (default crisp clear tropical air; particulate only when scene-natural) ━━━
+${atmosphere}
+
+━━━ SKY LAYER (what the sky is doing above the tropical beach) ━━━
+${sky_layer}
+
+━━━ DISTANT SCALE PROVER (TINY element in deep distance, not competing with flowers/beach) ━━━
+
+${hero_feature}
+
+Render as TINY scale-prover (comma-speck, postage-stamp small) in the deep distance only.${phenomenonBlock}
+
+━━━ MOMENT IN MOTION — every render captures one beat of physical motion ━━━
+
+Catch a SECOND in time. One specific motion: gentle surf curling, palm fronds shifting in trade-wind breeze, a blossom-petal drifting on the surf-foam, sun-glare flare shimmering on the water, scattered petals on wet sand catching the light, a few seabirds gliding the distant sky.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'saturated tropical color, hyperreal but never artificial, turquoise water + emerald palm + saturated flower-accent'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — 50/50 BEACH + FLOWERS PARTNERSHIP ━━━
+
+Ground-level POV. The tropical beach extends across the midground (~50% visual weight). Tropical flowers distributed through the scene as visible named-species accents (~50% visual weight). Both equally readable, neither dominating. Hyperreal photographic — Marc-Adamus / Peter-Lik / Iurie-Belegurschi caliber gallery-print tropical-paradise photography.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
 
   YUMBOT_FLORAL_GARDEN_CUP: ({ slots, sharedDNA, vibeDirective }) => {
     const { vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting } = slots;

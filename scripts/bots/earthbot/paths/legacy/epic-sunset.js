@@ -4,8 +4,8 @@
  * of sunset that makes everyone on the beach stop and stare.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../beach/pools');
+const blocks = require('../../beach/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.EPIC_SUNSET_SCENES, 'epic_sunset_scene');

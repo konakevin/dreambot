@@ -5,8 +5,8 @@
  * everywhere. Kauai, Maui, Oahu, Big Island.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../beach/pools');
+const blocks = require('../../beach/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const arrangement = picker.pickWithRecency(pools.TROPICAL_FLOWER_ARRANGEMENTS, 'tropical_flower_arrangement');
