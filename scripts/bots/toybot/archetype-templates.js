@@ -1,0 +1,464 @@
+/**
+ * toybot archetype templates — Sonnet brief composer functions.
+ *
+ * Each function takes the rolled slots + sharedDNA + vibeDirective and
+ * returns the final brief string sent to Sonnet for polish.
+ *
+ * Auto-discovered by scripts/lib/archetypeRegistry.js.
+ *
+ * To add a new template: add an entry here + the matching archetype
+ * definition in ./archetypes.js.
+ */
+
+module.exports = {
+  TOYBOT_BARBIE_STORYTELLING: ({ slots, sharedDNA }) => {
+    const { camera_angle, scene } = slots;
+
+    // Barbie-playroom mischief scene. The seed (scene) is a 6-slot DNA
+    // entry containing the FULL story: real surface + unexpected story
+    // setup; protagonist Barbie/Ken + absurd action; 3-5 supporting
+    // dolls mixing Barbie/Ken/sister/Bratz; multilayered real-prop
+    // set decoration; warm playroom light; overhead chaos element.
+    // Skips chaos / two-pass polish / sensory anchors.
+    return `You are a kid's-playroom-diorama photographer capturing a BARBIE-PLAYTIME-MISCHIEF MOMENT for ToyBot. The scene below is a fully-specified UNEXPECTED kid-playroom scenario — a packed action beat with multiple Mattel-style fashion-dolls coexisting in a multilayered real-prop set. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six story slots, captures the FUN absurd kid-playtime energy, and reads as a populated playroom scene with the story playing out.
+
+⚠️ ABSOLUTE BANS
+NEVER use: "diorama" / "scratch-built" / "ground-foam" / "static-grass" / "tilt-shift" / "model railroad" — although the scene IS staged like a diorama, do not name it as such.
+NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / dark / cold / monsoon / storm / moonlit / horror / nightmare / grim. The vibe is FUN + WARM + BRIGHT KID-PLAYROOM + SLIGHTLY-ABSURD.
+NEVER render real women — every doll is a MATTEL-style 11.5-inch articulated fashion-doll (glossy plastic, molded hair, painted-makeup face, fashion-doll proportions).
+NEVER render Barbie-movie promotional posters / red-carpet shots / static product displays.
+NEVER include LEGO / Lego / brick-built / studded / blocky-limb minifigs — separate bot.
+NEVER include plush stuffed-animals or burlap-Sackboy — those are separate paths.
+
+━━━ THE PLAYROOM-MISCHIEF SCENE (fully specified — preserve ALL six slots) ━━━
+${scene}
+
+This 6-part scene has these mandatory slots in order:
+  1. REAL surface + the UNEXPECTED BARBIE STORY SETUP (lip-gloss empire / intervention / courtroom / Olympic disaster / etc.)
+  2. PROTAGONIST Barbie/Ken + their specific absurd action
+  3. 3-5 SUPPORTING CAST dolls mixing Barbies + Kens + sisters + Bratz-style
+  4. MULTILAYERED REAL-PROP SET DECORATION (kid-playroom found household objects)
+  5. WARM BRIGHT KID-PLAYROOM LIGHT
+  6. WHIMSICAL OVERHEAD / FLOATING CHAOS ELEMENT
+
+ALL six MUST appear visibly in your output. If a slot is missing, the render is REJECTED.
+
+━━━ DOLL AESTHETIC — MATTEL-STYLE 11.5-INCH FASHION-DOLLS ━━━
+Every doll character is an articulated MATTEL-style 11.5-inch fashion-doll — glossy plastic body, molded hair (mix of blonde / brunette / redhead / black / pastel-dyed across the cast), oversized head with painted-glossy-makeup, fashion-forward outfits varying per role, articulated joints, spike-heel or sneaker plastic shoes. The cast comes ENTIRELY from the scene seed above — DO NOT add or substitute dolls. The aesthetic is what to lock: GLOSSY-PLASTIC ARTICULATED FASHION-DOLLS in kid-playroom playtime.
+
+Anti-list: NOT real women, NOT CGI, NOT illustration, NOT Barbie-movie poster, NOT red-carpet glamour shot, NOT promotional static product display.
+
+━━━ GIRLY-LIFESTYLE SET DECORATION — NON-NEGOTIABLE ━━━
+The frame is DRESSED with curated aspirational-Barbie lifestyle accessories — Pinterest-Barbie tableau energy, NOT messy / NOT chaos / NOT spilled-debris. Beyond the doll cast there are 5-7 visible Barbie-scale lifestyle props arranged tastefully around the scene. The PROPS make the world feel COMPLETE — not posed dolls in an empty room. Examples to draw from across the props slot:
+
+  • GIRLY ACCESSORIES: designer handbags / clutch purses / heart-shape sunglasses / oversized hats / chunky bracelets / silk scarves / pearl necklaces
+  • MAKEUP + BEAUTY: lipstick tubes lined up / perfume bottles / compact mirrors / nail-polish bottles / blush palettes open / mascara wands
+  • DRINKS: pink cocktail glasses with tiny umbrellas / rosé in tiny wine-glasses / iced lattes with whipped cream / fruity smoothies / champagne flutes
+  • PETS: a tiny plush cat / a Pomeranian with a pink bow / a chihuahua in a designer handbag
+  • FLOWERS: pink peony bouquets / single-stem roses / succulent planters / tropical-leaf arrangements
+  • OUTFIT PIECES: folded scarves / hanging dresses / bikini tops / oversized straw hats / stiletto heels lined up / shopping-bag pile
+  • SPORTS / FITNESS GEAR: yoga mat / tennis racket / golf clubs / surfboard / pickleball paddle / ski-poles / ice-skates
+  • AESTHETIC LIFESTYLE: pink candles / framed Polaroid photos / coffee-table books / fairy-lights / vinyl record / vintage Polaroid camera
+  • TINY TECH: phone face-up with heart-wallpaper / laptop with pink stickers / AirPods case / camera on strap
+  • SNACKS + TREATS: macarons in tiny box / cupcakes on tray / sushi roll on plate / iced cookies / donut tower
+
+Curated GIRLY-LIFESTYLE aesthetic — feels intentional, like a Barbie magazine spread. NOT spills / NOT chaos / NOT debris.
+
+━━━ CAMERA — MEDIUM-WIDE NARRATIVE-ACTION FRAMING ━━━
+${camera_angle}
+
+Medium-wide cinematic playroom-diorama still — NOT a posed Barbie-movie poster, NOT a tight close-up portrait. The hero doll is mid-action as the compositional anchor; supporting dolls are in distinct individual mini-actions, NOT facing camera in a glamour lineup. Deep-focus throughout so every doll's outfit + hair-color + accessory is readable. NEVER unify dolls into a "Barbie product-shot" style — each doll stays distinct in her own outfit + role.
+
+━━━ ACTION ≠ POSED LINEUP — NON-NEGOTIABLE ━━━
+The scene captures a STORY MOMENT mid-progression. Hero doll mid-action. Supporting cast each captured mid-DISTINCT-action (one shocked, one mid-shouting, one fleeing, one laughing, one mid-grab, one taking notes). NEVER: dolls facing camera arranged in rows / lineups / group-portrait poses. NEVER: glamour-shoot "gathered Barbies looking at camera." Always: playroom-mischief in motion.
+
+━━━ COMPOSITION ━━━
+- Medium-wide narrative-action shot — hero doll mid-action dominates 30-40% of frame
+- Supporting dolls in distinct mid-action poses arrayed around at various depths
+- The FRAME IS PACKED — 4-6 visible dolls all DOING DISTINCT things
+- A SPECIFIC UNEXPECTED STORY IS HAPPENING — narrative beat readable in one glance
+- Real-prop scene-dressing visible throughout — multilayered set decoration
+- FUN + ABSURD + KID-PLAYROOM-MISCHIEF energy — sitcom not glamour
+- The light specified in the seed is the ONLY light — no chaos, no winter, no night
+- The overhead chaos element is visible in the upper third
+- Deep-focus throughout — every doll + prop readable, outfits sharply distinct
+
+⚠️ FAILURE CONDITIONS
+• If render is a POSED GLAMOUR LINEUP / Barbie-movie poster / dolls facing camera in a row → FAILED.
+• If render is a TIGHT CLOSE-UP / macro / shallow-DOF on one doll → FAILED.
+• If real women / CGI / illustration appears → FAILED.
+• If any of the 6 slots is dropped → FAILED.
+• If winter / snow / night / storm / horror tokens appear → FAILED.
+• If scene reads as serious or grim → FAILED. MUST be fun + silly + kid-playroom.
+• If the frame is empty / sparse / only the protagonist visible → FAILED.
+• If no STORY ACTION is happening (static dolls, no motion) → FAILED. Action mid-progression.
+• If real-prop set decoration is missing / sparse → FAILED. The scene must be DRESSED.
+
+Output ONLY the raw scene description as comma-separated phrases (90-130 words). Lead with the STORY ACTION + setting + props, not the doll cast list. NO preamble, NO ━━━ markers, NO bullet lists, NO titles.`;
+  },
+
+  TOYBOT_PLUSH_STORYTELLING: ({ slots, sharedDNA }) => {
+    const { camera_angle, scene } = slots;
+
+    // Plush-storybook mischief scene. The seed (scene) is a 6-slot DNA
+    // entry containing the FULL story: real surface + unexpected story
+    // setup; protagonist plush + specific action; 3-5 supporting cast
+    // across plush archetypes; multilayered real-prop set decoration;
+    // warm cozy storybook light; overhead/floating chaos element.
+    // Sonnet's only job is to render it as ONE comma-separated Flux
+    // prompt that preserves ALL six story slots, captures the cozy-
+    // mischief energy, and reads as a populated storybook scene with
+    // the story playing out. Path skips chaos / two-pass polish /
+    // sensory anchors — seeds are pre-tuned, downstream layers strip
+    // slots or contradict the storybook-diorama intent.
+    return `You are a children's-storybook-diorama photographer capturing a PLUSH-STORYBOOK MOMENT for ToyBot. The scene below is a fully-specified UNEXPECTED storybook scenario — a packed cozy-mischief beat with multiple plush characters coexisting in a multilayered real-prop set. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six story slots, captures the cute-cozy-mischief energy, and reads as a populated storybook scene with the story playing out.
+
+⚠️ ABSOLUTE BANS
+NEVER use: "diorama" / "scratch-built" / "ground-foam" / "static-grass" / "tilt-shift" / "model railroad" — although the scene IS staged like a diorama, do not name it as such.
+NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / dark / cold / monsoon / storm / moonlit / horror / nightmare / grim. The vibe is COZY + WARM + STORYBOOK + SLIGHTLY-ABSURD.
+NEVER include LEGO / Lego / brick-built / studded / blocky-limb minifigs — separate bot.
+NEVER include Sackboy burlap-with-zipper aesthetic — different ToyBot path. This is HUGGABLE PLUSH-FABRIC.
+NEVER render needle-felted Etsy handcraft creatures, NOT small felt cutouts, NOT craft-y figurines — every plush is a CUTE Squishmallow-style fluffy huggable plushie (oversized round-pudgy fiberfill body, soft visible plush-fur, big embroidered eyes).
+NEVER unify the plush characters' fur-colors — each plush has its OWN distinct fur color + archetype, but ALL render with the same fluffy-fiberfill huggable plush-fur quality.
+NEVER render real animals or CGI — these are SOFT-FABRIC FLUFFY stuffed-animal characters.
+
+━━━ THE STORYBOOK SCENE (fully specified — preserve ALL six slots) ━━━
+${scene}
+
+This 6-part scene has these mandatory slots in order:
+  1. REAL surface + the UNEXPECTED STORY SETUP (what's happening — black-market honey trade / knit-off / comedy club / etc.)
+  2. PROTAGONIST plush + their specific action
+  3. 3-5 SUPPORTING CAST plush across DIFFERENT plush archetypes, each with a distinct action
+  4. MULTILAYERED REAL-PROP SET DECORATION (kid-found household objects dressing the scene)
+  5. WARM COZY STORYBOOK LIGHT
+  6. WHIMSICAL OVERHEAD / FLOATING CHAOS ELEMENT
+
+ALL six MUST appear visibly in your output. If a slot is missing, the render is REJECTED.
+
+━━━ PLUSH AESTHETIC ━━━
+Every plush character in the scene is a CUTE Squishmallow-style fluffy huggable plushie — oversized round-pudgy fiberfill body, soft visible plush-fur coating, floppy limbs, big embroidered or button eyes, sewn-on muzzle. The plush cast (which specific animals appear) comes ENTIRELY from the scene seed above — DO NOT add or substitute animals. The aesthetic is what to lock: CUTE + ROUND + FLUFFY + HUGGABLE.
+
+Anti-list: NOT needle-felted Etsy creatures, NOT small felt cutouts, NOT craft-figurines, NOT Sylvanian / Calico Critter flocked figurines, NOT Pop-Mart collectibles, NOT realistic stuffed-animal collector pieces.
+
+━━━ MULTILAYERED REAL-PROP SET DECORATION (NON-NEGOTIABLE) ━━━
+The scene is DRESSED. Beyond the plush cast there are 3-4 visible real-world kid-found household objects acting as scenery: real coffee mugs, real coins, real twigs, real moss, real petals, real autumn leaves, real ribbons, real teacups, real candy wrappers, real Post-it notes, real chalk, real glass jars, real wooden blocks, real fabric scraps, real spoons, real corks, real buttons, real string-lights, real lavender sprigs, real seashells. The PROPS BUILD THE WORLD around the plush characters.
+
+━━━ CAMERA — MEDIUM-WIDE STORYBOOK-DIORAMA FRAMING ━━━
+${camera_angle}
+
+Medium-wide cinematic storybook-diorama still — NOT a posed group photo, NOT a tight close-up macro. The hero plush is mid-action as the compositional anchor; supporting plush is in distinct individual mini-actions, NOT facing camera in a lineup. Deep-focus throughout so every plush's NATIVE fabric/knit/felt texture is readable. NEVER unify plush characters into a "cute Pop-Mart plushie" cartoon look — each plush stays distinct in its native plush-fiber medium.
+
+━━━ ACTION ≠ POSED LINEUP — NON-NEGOTIABLE ━━━
+The scene captures a STORY MOMENT mid-progression. Hero plush mid-action. Supporting cast each captured mid-DISTINCT-action (one shocked, one mid-stir, one fleeing, one laughing, one mid-grab, one taking notes). NEVER: plush facing camera arranged in rows / lineups / group-portrait poses. NEVER: cute static "gathered plushies looking at camera." Always: storybook-mischief in motion.
+
+━━━ COMPOSITION ━━━
+- Medium-wide narrative-action shot — hero plush mid-action dominates 30-40% of frame
+- Supporting plush in distinct mid-action poses arrayed around at various depths
+- The FRAME IS PACKED — 4-6 visible plush figures all DOING DISTINCT things
+- A SPECIFIC UNEXPECTED STORY IS HAPPENING — narrative beat readable in one glance
+- Each plush renders in its OWN plush-fiber type — NEVER unified style
+- Real-prop scene-dressing visible throughout — multilayered set decoration
+- COZY + WARM + STORYBOOK energy — cute-fluffy plush mischief mood
+- The light specified in the seed is the ONLY light — no chaos, no winter, no night
+- The overhead chaos element is visible in the upper third
+- Deep-focus throughout — every plush + prop readable, textures sharply distinct
+
+⚠️ FAILURE CONDITIONS
+• If render is a POSED LINEUP / group portrait / plushies facing camera in a row → FAILED.
+• If render is a TIGHT CLOSE-UP / macro / shallow-DOF on one plush → FAILED.
+• If all plush render in UNIFIED CUTE-POP-MART style (all same texture) → FAILED. Textures MUST stay distinct.
+• If plush render as NEEDLE-FELTED Etsy-handcraft creatures / small felt cutouts / craft-figurines → FAILED. They must be FLUFFY HUGGABLE FULL-BODIED stuffed animals.
+• If any LEGO / Lego / brick-built figure appears → FAILED. Wrong bot.
+• If any Sackboy burlap-with-zipper appears → FAILED. Wrong path.
+• If real animals or CGI rendering appears → FAILED.
+• If any of the 6 slots is dropped → FAILED.
+• If winter / snow / night / storm / horror tokens appear → FAILED.
+• If scene reads as serious or grim → FAILED. MUST be cozy + storybook + slightly absurd.
+• If the frame is empty / sparse / only the protagonist visible → FAILED.
+• If no STORY ACTION is happening (static plush, no motion) → FAILED. Action mid-progression.
+• If real-prop set decoration is missing / sparse → FAILED. The scene must be DRESSED.
+
+Output ONLY the raw scene description as comma-separated phrases (90-130 words). Lead with the STORY ACTION + setting + props, not the plush cast list. NO preamble, NO ━━━ markers, NO bullet lists, NO titles.`;
+  },
+
+  TOYBOT_TOYBOX_STORYTELLING: ({ slots, sharedDNA }) => {
+    const { camera_angle, scene } = slots;
+
+    // Mixed-medium toy-mischief storytelling scene. The seed (scene) is a
+    // 6-slot DNA entry containing the FULL story: real surface + story
+    // setup; protagonist + dramatic absurd action; 3-5 supporting cast
+    // across brand families; absurd visual gag prop; warm play light;
+    // overhead/floating chaos element. Sonnet's only job is to render
+    // it as ONE comma-separated Flux prompt that preserves ALL six slots.
+    // Path skips chaos / two-pass polish / sensory anchors — seeds are
+    // pre-tuned, downstream layers strip slots or contradict the
+    // populated-mischief-scene intent.
+    return `You are a kid's-playroom photographer capturing a TOY-MISCHIEF MOMENT for ToyBot. The scene below is a fully-specified absurd toy-story — a packed comedy beat with multiple toy mediums coexisting. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six story slots, captures the FUN energy, and reads as a populated mischief scene with the story playing out.
+
+⚠️ ABSOLUTE BANS
+NEVER use: "diorama" / "scratch-built" / "ground-foam" / "static-grass" / "cozy storybook" / "model railroad" — this is REAL kid playtime, not a hobbyist diorama.
+NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / monsoon / storm / dark / moonlit / horror / nightmare / grim. The vibe is FUN + WARM + SILLY + SLAPSTICK.
+NEVER include LEGO / Lego / brick-built / studded / blocky-limb minifigs — they belong to a separate bot. If the seed text mentions a "LEGO minifig" or any LEGO figure, SILENTLY SWAP it for a different toy-brand figure (Funko Pop, vintage action figure, Polly Pocket, plush, plastic dinosaur, Power Ranger, etc.) playing the same role. The output must contain NO LEGO references.
+NEVER unify the toys' art style — each toy stays in its OWN native medium (plush stays plush with fabric texture, vinyl Funko stays cube-headed glossy, action-figures stay articulated, Hot Wheels stay die-cast chrome, army-men stay olive-green molded plastic, Calico Critter stays flocked-velvet).
+
+━━━ THE MISCHIEF SCENE (fully specified — preserve ALL six slots) ━━━
+${scene}
+
+This 6-part scene has these mandatory slots in order:
+  1. REAL surface + the STORY SETUP (what's happening — heist / wedding / talent show / rescue / etc.)
+  2. PROTAGONIST + their dramatic absurd action
+  3. 3-5 SUPPORTING CAST characters across different toy-brand families, each with a distinct action
+  4. ABSURD VISUAL GAG / comedy prop detail
+  5. WARM PLAY LIGHT (lamp / window sun / fairy lights / etc.)
+  6. OVERHEAD / FLOATING CHAOS ELEMENT suspended above or drifting through
+
+ALL six MUST appear visibly in your output. If a slot is missing, the render is REJECTED.
+
+━━━ MIXED-MEDIUM TOY-ENSEMBLE RULES (NO LEGO) ━━━
+Every render shows 4-6+ DIFFERENT toy mediums coexisting in ONE scene at their REAL real-world physical sizes. Scale mismatches are THE POINT — a 4-inch action-figure next to a 1.5-inch Hot Wheels next to a 12-inch plush teddy next to a tiny Calico Critter figurine — as it would actually look on a real floor.
+
+Each toy gets rendered in its OWN native medium (NO LEGO):
+  • plush stuffed animal — visible fabric texture + button or embroidered eyes + sewn seams
+  • Funko Pop vinyl — oversized cube head + small stocky body + solid black dot eyes + glossy finish
+  • 3.75-inch action figure (G.I. Joe / Power Ranger / Buzz Lightyear / Transformer style) — visible ball-joint articulation + painted detail wash + sculpted gear
+  • Barbie / Ken / Bratz / Lalaloopsy / fashion doll — articulated plastic + molded glossy hair + painted face
+  • Hot Wheels / Micro Machines — 1:64 die-cast with chrome accents + oversized wheels
+  • Olive-green army-man — solid-color molded plastic + visible vertical mold-seam + oval base + fixed pose
+  • Calico Critter / Sylvanian Family — flocked velvet-textured small-animal figurine + tiny cloth outfit
+  • Vintage Kenner 3.75-inch — sandy hand-paint detail + period-correct accessory
+  • Polly Pocket / Strawberry Shortcake / Shopkins / My Little Pony — period-correct visual signatures
+  • plastic toy dinosaur / farm animal / wrestler / superhero — molded plastic at toybox scale
+  • stitched-Sackboy with button-eyes (NOT LEGO)
+
+━━━ CAMERA — MEDIUM-WIDE NARRATIVE-ACTION FRAMING ━━━
+${camera_angle}
+
+Medium-wide cinematic action-still — NOT a posed group photo. The hero is mid-action as the compositional anchor; supporting cast is in distinct individual mini-actions, NOT facing camera in a lineup. Deep-focus throughout so every toy's NATIVE MATERIAL is readable (plush=fabric, vinyl=glossy cube-head, die-cast=chrome, articulated action-figure=ball-joints, fashion-doll=glossy painted face, army-man=olive-green plastic, Calico Critter=flocked velvet). NEVER unify into "cute cartoon toy" style — each toy STAYS distinct in its native medium.
+
+━━━ ACTION ≠ POSED LINEUP — NON-NEGOTIABLE ━━━
+The scene captures a STORY MOMENT mid-progression. Hero is mid-leap / mid-charge / mid-confrontation / mid-dramatic-beat. Supporting cast each captured mid-DISTINCT-action (one shocked, one fleeing, one laughing, one pointing, one mid-tackle, one taking notes). NEVER: toys facing camera arranged in rows / lineups / group-portrait poses. NEVER: cute static "gathered toys looking at camera." Always: chaos in motion.
+
+━━━ COMPOSITION ━━━
+- Medium-wide narrative-action shot — hero mid-action dominates 30-40% of frame
+- Supporting cast in distinct mid-action poses arrayed around at various depths
+- The FRAME IS PACKED — 5-8 visible toy figures all DOING DISTINCT things
+- A SPECIFIC STORY IS HAPPENING — narrative beat readable from one glance
+- Each toy renders in its OWN native material — NEVER unified style
+- Real-world surface textures: real wood grain / real fabric weave / real grass / real concrete
+- FUN energy — silly, slapstick, sitcom, toys-dicking-off vibe
+- The gag prop is visible somewhere in the frame
+- The light specified in the seed is the ONLY light — no chaos, no winter, no night
+- The overhead chaos element is visible in the upper third
+- Deep-focus throughout — every cast member readable, materials sharply distinct
+
+⚠️ FAILURE CONDITIONS
+• If render is a POSED LINEUP / group portrait / toys facing camera in a row → FAILED.
+• If render is a TIGHT CLOSE-UP / macro / shallow-DOF on one toy → FAILED.
+• If all toys render in UNIFIED CUTE STYLE (all cube-headed / all cartoon-y) → FAILED. Materials MUST stay distinct.
+• If any LEGO / Lego / brick-built figure appears → FAILED. Wrong bot.
+• If any of the 6 slots is dropped → FAILED.
+• If winter / snow / night / storm / horror tokens appear → FAILED.
+• If scene reads as serious or grim → FAILED. MUST be fun + silly.
+• If the frame is empty / sparse / only the protagonist visible → FAILED.
+• If no STORY ACTION is happening (static toys, no motion) → FAILED. Action mid-progression.
+
+Output ONLY the raw scene description as comma-separated phrases (90-130 words). Lead with the STORY ACTION, not the toys. NO preamble, NO ━━━ markers, NO bullet lists, NO titles.`;
+  },
+
+  TOYBOT_MODEL_TRAIN_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      camera_angle,
+      scene,
+      train_consist,
+      train_weather,
+      drama_moment,
+      unusual_cargo,
+      world_real_setting,
+      world_themed_setting,
+    } = slots;
+
+    // RENDER MODE BRANCHING — three modes:
+    //   1. classic-diorama   → handcrafted diorama terrain (existing)
+    //   2. real-world        → toy train in REAL everyday environments
+    //                          (family room floor, garden, sandbox,
+    //                          porch, camp site, gutter, kid's bedroom)
+    //   3. themed-cinematic  → train in genre-coded immersive worlds
+    //
+    // World-mode fires when sharedDNA.renderMode === 'world'.
+    // Inside world-mode: 100% real-world for now (themed mode dialed
+    // to 0% while we focus on real-everyday quality — bump back up
+    // when real-world converges).
+    const isWorldMode = sharedDNA.renderMode === 'world';
+    const worldRoll = Math.random();
+    const mode = !isWorldMode ? 'classic' : worldRoll < 1.0 ? 'real' : 'themed';
+
+    // ─── CLASSIC DIORAMA MODE ──────────────────────────────────────────
+    if (mode === 'classic') {
+      const dramaMomentSection = drama_moment
+        ? `
+━━━ THE DRAMATIC BEAT — MANDATORY ACTION ━━━
+${drama_moment}
+
+Render this beat as frozen mid-action: kinetic motion, dust/spray/sparks where appropriate. NEVER ignore this beat for a generic "train rolls through pretty terrain" composition.
+
+`
+        : '';
+      const unusualCargoSection = unusual_cargo
+        ? `
+━━━ UNUSUAL CARGO — VISIBLE ON THE TRAIN ━━━
+${unusual_cargo}
+
+Place this cargo on a flat / gondola / specialized car. The cargo MUST be visible in the frame.
+
+`
+        : '';
+
+      return `You are an HO-scale model-train hobbyist photographer writing MODEL-TRAIN-DIORAMA scenes for ToyBot. Pure miniature-railroad world — obsessive scratch-built terrain populated by tiny model trains. Cozy + dioramic.
+
+━━━ TOY PHOTOGRAPHY (NON-NEGOTIABLE) ━━━
+Render as a REAL PHYSICAL TOY photographed in a handcrafted set with dramatic cinematic lighting. Toy-ness IS the art. Model-train means HO-scale / N-scale die-cast train on twin nickel-silver rails on a scratch-built terrain board. Visible scale: 1/87 or 1/160. Construction tells: ground foam, lichen-trees, plaster rock, static-grass.
+
+━━━ PATH MEDIUM LOCK ━━━
+Locked to model_train_diorama medium. NEVER LEGO, claymation, vinyl, action figures, plush. ONLY HO/N-scale hobbyist diorama.
+
+━━━ CAMERA ━━━
+${camera_angle}
+
+━━━ WEATHER + SEASON + TIME-OF-DAY ━━━
+${train_weather}
+
+━━━ THE TRAIN — EXACT CONSIST ━━━
+${train_consist}
+
+━━━ THE MODEL-TRAIN SCENE ━━━
+${scene}
+
+${dramaMomentSection}${unusualCargoSection}━━━ CAMERA FRAMING ━━━
+${sharedDNA.camera}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ BLOW IT UP — TOY AMPLIFICATION ━━━
+Ballast, weathered rail-tops, panel-line wash, brake-shoes, knuckle-couplers, grab-irons, sand-domes, headlight glow, exhaust steam, marker-lights, lit depot windows. Obsessive railroad-hobbyist craft.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Wide diorama frame — tiny model-train in sweeping handcrafted terrain. Track-side or aerial-quarter angle. Lit windows, smoke, atmospheric haze. NO PEOPLE.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
+    }
+
+    // ─── REAL-WORLD MODE — toy train in REAL everyday playtime scene ───
+    //
+    // The seed (world_real_setting) is a 6-slot DNA entry containing the
+    // FULL scene (surface, floral arch, named toy, critter, warm light,
+    // floating extra). Sonnet's only job is to render it as a single
+    // comma-separated Flux prompt — NOT to expand or reframe it. Adding
+    // scenePalette / colorPalette / vibeDirective / weather slots
+    // here injects winter / midnight / monsoon tokens that override
+    // the seed's warm-daylight slot (R6 audit 2026-05-19 — caused
+    // whiteout-winter and midnight-storm-cloud failures).
+    if (mode === 'real') {
+      return `You are a casual playtime photographer capturing a SMALL TOY TRAIN moment for ToyBot. The scene below is a fully-specified PLAYTIME SCENE — a kid set it up with named toys, real flowers, a tiny real critter, warm light, and a whimsical floating element. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six elements.
+
+⚠️ ABSOLUTE BANS
+NEVER use: "HO-scale" / "N-scale" / "1:87" / "1:160" / "model train" / "model locomotive" / "model railroad" / "diorama" / "scratch-built" / "ground-foam" / "lichen-tree" / "plaster-rock" / "static-grass" / "baseboard" / "cozy storybook".
+NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / monsoon / storm / dark / moonlit. The scene is warm daylight or warm interior light — preserve the light specified in the seed.
+USE INSTEAD: "small toy train" / "tiny toy locomotive" / "kids' toy train" / "Lionel-style toy train".
+
+━━━ THE PLAYTIME SCENE (fully specified — preserve ALL six slots) ━━━
+${world_real_setting}
+
+This 6-part scene has these mandatory slots in order:
+  1. Real playtime surface (rug / beach / sandbox / picnic blanket / etc.)
+  2. Real floral architecture along the tracks (lavender hedgerow / daisy fenceposts / etc.)
+  3. Named specific toy character + action beside the rails (Barbie / LEGO / G.I. Joe / Funko / etc.)
+  4. Tiny real critter at real scale on/near the rails (ladybug / ant / butterfly / etc.)
+  5. Warm natural light (golden hour / dappled sun / window light / etc.)
+  6. Whimsical floating/atmospheric extra overhead (UFO toy / paper airplane / balloons / etc.)
+
+ALL six MUST appear in your output. If a slot is missing, the render is REJECTED.
+
+━━━ THE TRAIN ━━━
+Render the train as a SMALL TOY train — Lionel-style or Brio-style or Thomas-style, a few inches long, visibly a toy in a kid's playtime scene. NEVER a hobbyist scale model.
+
+━━━ CAMERA ━━━
+${camera_angle}
+
+━━━ COMPOSITION ━━━
+- The TRAIN is small and toy-like (a few inches long)
+- The SCENE is the wow — populated kid's-playtime moment, NOT a lonely train
+- The named toy character + flowers + critter + floating extra are equally important to the train
+- Real-world textures: real wood grain / real fabric weave / real grass / real sand / real petals
+- The light specified in the seed is the ONLY light — no chaos, no winter, no night
+
+⚠️ FAILURE CONDITIONS
+• If render reads as a cozy storybook / HO-scale / hobbyist diorama → FAILED
+• If any of the 6 slots is dropped → FAILED
+• If winter / snow / night / storm tokens appear → FAILED
+• If the train is 1:1 real-size → FAILED
+
+Output ONLY the raw scene description as comma-separated phrases (60-100 words). NO preamble, NO ━━━ markers, NO bullet lists.`;
+    }
+
+    // ─── THEMED-CINEMATIC MODE — train as hero in genre-coded world ────
+    return `You are a cinematic-still photographer capturing a TINY MODEL TRAIN as the hero in an IMMERSIVE GENRE-CODED WORLD for ToyBot. NOT a diorama. NOT a real kitchen. A movie-still or video-game-screenshot vibe where the train is the protagonist in a recognizable cinematic environment.
+
+⚠️⚠️⚠️ ABSOLUTE RULE — IMMERSIVE WORLD, NOT DIORAMA ⚠️⚠️⚠️
+This is NOT scratch-built terrain. NOT ground-foam. NOT lichen-trees. NOT plaster-rock. This IS a fully-realized cinematic environment — Hollywood-grade location, genre-coded setting, atmospheric and lived-in. The toy train stays tiny in scale, but the world looms huge and immersive around it. If render reads as "handcrafted hobbyist diorama" → CRITICAL FAILURE.
+
+━━━ TOY-IN-CINEMATIC-WORLD PHOTOGRAPHY ━━━
+HO-scale (1:87) or N-scale die-cast model train preserves its toy-ness (visible scale, panel-line wash, brass detail, knuckle couplers). The WORLD around it is movie-set-grade — photoreal cinematic environment from a recognizable genre. Like a National-Geographic shot of a tiny train inserted into a real Hollywood-scale themed world.
+
+━━━ THE TRAIN — EXACT CONSIST ━━━
+${train_consist}
+
+━━━ WEATHER + TIME OF DAY ━━━
+${train_weather}
+
+━━━ THE THEMED-CINEMATIC SETTING ━━━
+${world_themed_setting}
+
+This is the WHERE. The setting must be CINEMATIC and GENRE-CODED — Western dust-canyon / fantasy magical-forest / cyberpunk neon-city / Polar Express deep-snow midnight / Mad Max post-apoc wasteland / Studio Ghibli watercolor-dreamscape / underwater coral-reef / etc. Lighting + atmosphere appropriate to the genre. The world is HUGE around the toy-scale train.
+
+━━━ SCALE TENSION ━━━
+The train stays toy-scale (visible 1/87 detail at macro). The cinematic world is at world-scale — a dinosaur is real-scale to the world, a castle is full-scale, an armored car beside the train is at train-scale. The collision of toy-train + real-world-cinematic-scenery is the wow.
+
+━━━ CAMERA ━━━
+${camera_angle}
+
+━━━ CAMERA FRAMING ━━━
+${sharedDNA.camera}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION RULES ━━━
+- Cinematic FRAMING — wide establishing shot, rule-of-thirds, leading lines, dramatic foreground-anchor
+- The TRAIN is tiny but readable — viewer's eye finds it as the hero
+- The WORLD is immersive — atmospheric depth, layered backgrounds, lived-in feeling
+- Lighting is genre-appropriate — aurora for Polar Express, dust haze for Western, neon glow for cyberpunk, watercolor pastels for Ghibli, blood-red sunset for Mad Max
+- Atmospheric particulate (dust / mist / snow / spark / fog) where appropriate to genre
+
+⚠️ FAILURE CONDITIONS
+• If render reads as a model-railroad diorama / hobbyist setup → FAILED
+• If world reads as scratch-built / hobbyist-handcrafted instead of cinematic → FAILED
+• If world reads as a generic real kitchen / sandbox instead of genre-coded → FAILED (that's real-world mode, not themed)
+• If the train is 1:1 (real-size) → FAILED. Train stays TINY.
+• If genre is unclear / generic / undecided → FAILED. Lean hard into the named genre.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
+  },
+};
