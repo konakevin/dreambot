@@ -14,6 +14,12 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
+function loadIfExists(name) {
+  const p = path.join(__dirname, 'seeds', `${name}.json`);
+  if (!fs.existsSync(p)) return [];
+  return JSON.parse(fs.readFileSync(p, 'utf8'));
+}
+
 const VIBE_COLOR = {
   cinematic: 'teal-and-orange pixel grade, dramatic pixel shadows',
   dark: 'oil-black pixel palette, crimson-pixel accents',
@@ -69,6 +75,37 @@ module.exports = {
   PIXEL_SCI_FI_ACTION_ATMOSPHERE: load('pixel_sci_fi_action_atmosphere'),
   CLASSIC_JRPG_ATMOSPHERE: load('classic_jrpg_atmosphere'),
   EPIC_VISTA_ATMOSPHERE: load('epic_vista_atmosphere'),
+
+  // ─── cozy-rpg-town axis-system pools (2026-05-20 reference migration) ───
+  PIXELBOT_COZY_RPG_TOWN_LOCALE: loadIfExists('pixelbot_cozy_rpg_town_locale'),
+  PIXELBOT_COZY_RPG_TOWN_BIOME: loadIfExists('pixelbot_cozy_rpg_town_biome'),
+  PIXELBOT_COZY_RPG_TOWN_NPC_LIFE: loadIfExists('pixelbot_cozy_rpg_town_npc_life'),
+  PIXELBOT_COZY_RPG_TOWN_ATMOSPHERIC_PHENOMENON: loadIfExists('pixelbot_cozy_rpg_town_atmospheric_phenomenon'),
+  // ─── dungeon-depth axis-system pools (2026-05-20) ───
+  PIXELBOT_DUNGEON_DEPTH_CHAMBER: loadIfExists('pixelbot_dungeon_depth_chamber'),
+  PIXELBOT_DUNGEON_DEPTH_BIOME: loadIfExists('pixelbot_dungeon_depth_biome'),
+  PIXELBOT_DUNGEON_DEPTH_HERO_ENCOUNTER: loadIfExists('pixelbot_dungeon_depth_hero_encounter'),
+  PIXELBOT_DUNGEON_DEPTH_LOOT_DETAIL: loadIfExists('pixelbot_dungeon_depth_loot_detail'),
+  // ─── side-scroller-world axis-system pools (2026-05-20) ───
+  PIXELBOT_SIDE_SCROLLER_BIOME_SETTING: loadIfExists('pixelbot_side_scroller_biome_setting'),
+  PIXELBOT_SIDE_SCROLLER_PLATFORM_GEOGRAPHY: loadIfExists('pixelbot_side_scroller_platform_geography'),
+  PIXELBOT_SIDE_SCROLLER_HERO_ACTION: loadIfExists('pixelbot_side_scroller_hero_action'),
+  PIXELBOT_SIDE_SCROLLER_ATMOSPHERIC_PHENOMENON: loadIfExists('pixelbot_side_scroller_atmospheric_phenomenon'),
+  // ─── boss-arena axis-system pools (2026-05-20) ───
+  PIXELBOT_BOSS_ARENA_SETTING: loadIfExists('pixelbot_boss_arena_setting'),
+  PIXELBOT_BOSS_ARENA_BOSS_CREATURE: loadIfExists('pixelbot_boss_arena_boss_creature'),
+  PIXELBOT_BOSS_ARENA_PLAYER_ENGAGEMENT: loadIfExists('pixelbot_boss_arena_player_engagement'),
+  PIXELBOT_BOSS_ARENA_PHENOMENON: loadIfExists('pixelbot_boss_arena_phenomenon'),
+  // ─── jrpg-combat axis-system pools (2026-05-20) ───
+  PIXELBOT_JRPG_COMBAT_OPEN_WORLD_SETTING: loadIfExists('pixelbot_jrpg_combat_open_world_setting'),
+  PIXELBOT_JRPG_COMBAT_MONSTER_ENEMY: loadIfExists('pixelbot_jrpg_combat_monster_enemy'),
+  PIXELBOT_JRPG_COMBAT_PARTY_ENGAGEMENT: loadIfExists('pixelbot_jrpg_combat_party_engagement'),
+  PIXELBOT_JRPG_COMBAT_SPELL_EFFECT: loadIfExists('pixelbot_jrpg_combat_spell_effect'),
+  // ─── pixel-horror axis-system pools (2026-05-20) ───
+  PIXELBOT_PIXEL_HORROR_GOTHIC_SETTING: loadIfExists('pixelbot_pixel_horror_gothic_setting'),
+  PIXELBOT_PIXEL_HORROR_CLASSIC_ENEMY: loadIfExists('pixelbot_pixel_horror_classic_enemy'),
+  PIXELBOT_PIXEL_HORROR_HERO_ACTION: loadIfExists('pixelbot_pixel_horror_hero_action'),
+  PIXELBOT_PIXEL_HORROR_GOTHIC_PROPS: loadIfExists('pixelbot_pixel_horror_gothic_props'),
 
   // Shared across all paths (camera/grade)
   PIXEL_PERSPECTIVES: load('pixel_perspectives'),

@@ -130,10 +130,36 @@ module.exports = {
     };
   },
 
+  // Bot-level pool defaults for declarative axis paths. PixelBot's axis
+  // paths use path-bespoke pools for most slots; this stays empty for now.
+  defaultPools: {},
+
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`PixelBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`PixelBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    // Declarative axis-system paths export an object { archetype, pools }.
+    // Legacy compositional paths export a function. Dispatch on shape.
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    throw new Error(`PixelBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {

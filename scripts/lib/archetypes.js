@@ -1669,6 +1669,48 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  PIXELBOT_PIXEL_HORROR: {
+    description:
+      'PATH-BESPOKE — PixelBot pixel-horror path (2026-05-20 axis-system migration). 16-BIT GOTHIC-ACTION GAMEPLAY SCREENSHOTS — Castlevania / Ghosts n Goblins / Demon Crest / Splatterhouse / Rondo of Blood / Bloodstained pixel. CLASSIC gothic monster-slaying (NOT psychological horror). Camera flexibility per setting (side-view / 3/4-iso / top-down). Single-hero monster-slayer (genre-correct). 4 mandatory elements (gothic setting + classic enemy + hero knight-sprite + gothic-flavor props). 3 path-bespoke pools + 40%-gated props.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['gothic_setting', 'classic_enemy', 'hero_action'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'gothic_props', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  PIXELBOT_JRPG_COMBAT: {
+    description:
+      'PATH-BESPOKE — PixelBot jrpg-combat path (2026-05-20 axis-system migration). 16-BIT JRPG COMBAT GAMEPLAY SCREENSHOTS — Final Fantasy IV/V/VI / Chrono Trigger / Secret of Mana / Star Ocean / Tales of Phantasia / Lufia II. Top-down OR 3/4-iso camera. 5 mandatory elements (tile floor + party of 2-4 + monster + visible spell-effect + open-world setting). 3 path-bespoke pools + 40%-gated spell_effect.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['open_world_setting', 'monster_enemy', 'party_engagement'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'spell_effect', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  PIXELBOT_BOSS_ARENA: {
+    description:
+      'PATH-BESPOKE — PixelBot boss-arena path (2026-05-20 axis-system migration). 16-BIT BOSS-BATTLE GAMEPLAY SCREENSHOTS — Chrono Trigger / FFVI / Secret of Mana / LttP / Diablo II / Hyper Light Drifter / Hades / Octopath. Camera flexibility (top-down OR 3/4-iso OR side-view per arena). 4 mandatory elements: arena floor + boss sprite + player sprite + arena walls. 3 path-bespoke pools + 40%-gated phenomenon.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['arena_setting', 'boss_creature', 'player_engagement'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'arena_phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   PIXELBOT_SIDE_SCROLLER_WORLD: {
     description:
       'PATH-BESPOKE — PixelBot side-scroller-world path (2026-05-20 axis-system migration). 16-BIT SIDE-SCROLLING PLATFORMER GAMEPLAY SCREENSHOTS — Castlevania IV / Super Metroid / Donkey Kong Country / Mega Man X / Owlboy / Hollow Knight pixel / Dead Cells / Ori / Celeste. HORIZONTAL SIDE-VIEW camera, 5 mandatory elements (horizontal frame + foreground platform + player-sprite + middle parallax + far backdrop). 3 path-bespoke pools + 40%-gated atmospheric_phenomenon.',
@@ -1713,17 +1755,23 @@ const ARCHETYPES = {
 
   EARTHBOT_EPIC_VISTA: {
     description:
-      'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Wide panoramic real-Earth landscape at maximum jaw-dropping beauty — larger than life, but every element grounded in something that actually exists on Earth. Identity-corrected from legacy "stack 3+ phenomena per frame" mandate which drifted into AI-fake territory. Composition discipline: ONE hero subject + supporting clean light/atmosphere/sky + 3-tier depth (NEAR foreground anchor → MID vista → FAR scale prover). R1 adds foreground_anchor axis + template "MOMENT IN MOTION" + "PEAK LIGHT MOMENT" + phenomenon-lighting compatibility. 7 axes: 6 always-on path-bespoke (subject, lighting, atmosphere, foreground_anchor, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
+      'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Nat-Geo-best-of-best caliber real-Earth landscape: the SUBJECT IS THE WOW. Larger than life via geology + lighting + weather amplification, never AI-fake / sci-fi / fantasy. R2 (2026-05-20) pivoted from R1 3-tier (subject + foreground prop) to SCENE-AS-HERO — subject dominates 60-70%+ of frame, no competing foreground props. R1 lessons retained: PEAK LIGHT MOMENT + MOMENT IN MOTION template blocks, phenomenon-lighting compatibility, biome-tagged subject pool. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. R1 foreground_anchor axis + matchTagsFromSlot composer extension preserved as infrastructure for future paths that need them. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
     slots: {
       universal: [],
       bot: [],
-      path: ['subject', 'lighting', 'atmosphere', 'foreground_anchor', 'hero_feature', 'sky_layer'],
+      path: ['subject', 'lighting', 'atmosphere', 'hero_feature', 'sky_layer'],
     },
     pickN: {},
     conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
     framingModes: null,
     anchorScaleRange: null,
   },
+
+
+
+
+
+
 
   YUMBOT_FLORAL_GARDEN_CUP: {
     description:

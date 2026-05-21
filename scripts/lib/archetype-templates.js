@@ -12051,6 +12051,239 @@ Open with: "[creature description] [jungle-activity verb-phrase], [village descr
 Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
   },
 
+  PIXELBOT_PIXEL_HORROR: ({ slots, sharedDNA, vibeDirective }) => {
+    const { gothic_setting, classic_enemy, hero_action, gothic_props } = slots;
+
+    const propsSection = gothic_props
+      ? `\n\n━━━ GOTHIC FLAVOR PROPS ━━━\n${gothic_props}\n\nGothic-flavor atmospheric props accenting the Castlevania-style scene.`
+      : '';
+
+    return `You are writing a 16-bit RETRO PIXEL ART GOTHIC-ACTION GAMEPLAY SCREENSHOT for PixelBot. The frame must read INSTANTLY as a level from a Castlevania / Ghosts n Goblins / Black Tiger / Demon Crest / Splatterhouse-style classic-arcade-era gothic-fantasy action game. NOT modern psychological horror. NOT creeping dread. CLASSIC monster-slaying action vibe.
+
+Genre lineage: Castlevania (NES/SNES) + Ghosts n Goblins + Ghouls n Ghosts + Black Tiger (Capcom) + Demon Crest + Magical Quest + Splatterhouse + Rondo of Blood + Bloodstained pixel-tribute + Maximo pixel.
+
+━━━ ABSOLUTE CAMERA + COMPOSITION LOCK (NON-NEGOTIABLE) ━━━
+
+Pick ONE per render based on the gothic setting:
+  - HORIZONTAL SIDE-VIEW (Castlevania / Ghouls n Ghosts) — character sliced flat, foreground platform, parallax depth behind
+  - 3/4 ISOMETRIC (Black Tiger interior chambers / Demon Crest aerial views) — angled-down on the floor with knight-sprite mid-action
+  - TOP-DOWN action-arena — looking down at a tile-floor with knight + enemies
+
+🚫 NEVER first-person, NEVER static-vista painting, NEVER concept-art portraits, NEVER vertical-key-art.
+
+━━━ MANDATORY ELEMENTS (every render must include all 4) ━━━
+
+1. GOTHIC SETTING — vampire castle hallway, graveyard at midnight, dragon-cave treasure-room, cathedral with toppled pews, crypt-corridor with sarcophagi, demon-realm lava-pit, swamp-witch hut, cursed forest with twisted trees, ruined fortress ramparts, undead arena with bone-piles
+2. CLASSIC FANTASY-ENEMIES on the scene — skeletons rising from graves, demon-imp with pitchfork, vampire silhouette, gargoyle on a parapet, zombie shambling, ghost float, dragon coiled, lich casting, undead knight, werewolf prowling, harpy in flight, ogre with club
+3. HERO KNIGHT-SPRITE small on the foreground — armored knight / cloaked vampire-hunter / barbarian / mage with staff — tiny scale, mid-action (sword raised / leaping / casting / drawing crossbow)
+4. GOTHIC-FLAVOR ATMOSPHERIC PROPS — flickering torches / candelabras / stained-glass windows / hanging chandeliers / iron portcullises / spiked railings / cursed roses / dragon-skull arches / dripping wax / lit braziers / cursed runes / crucifixes / cobwebbed pillars
+
+━━━ THE GOTHIC SETTING ━━━
+${gothic_setting}
+
+━━━ THE CLASSIC ENEMY (mid-action) ━━━
+${classic_enemy}
+
+━━━ HERO ACTION (solo monster-slayer mid-attack) ━━━
+${hero_action}
+${propsSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era. NEVER smooth illustration, NEVER 3D render, NEVER photoreal.
+2. **NO IP REFERENCES** — no specific game characters / logos / franchises.
+3. **NO UI ELEMENTS** — no health bars, dialogue boxes, menus.
+4. **CHUNKY 16-BIT PIXEL GRID** — visible pixel grid on every surface.
+5. **SATURATED GOTHIC PALETTE** — deep purples, blood reds, candle-orange highlights, deep blue-black shadows.
+6. **CLASSIC-ARCADE GOTHIC** — NOT modern psychological horror, NOT jump-scare, NOT photoreal-horror. Castlevania-style monster-slaying action.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal
+  • NO modern psychological horror / NO creeping dread
+  • NO IP references
+  • NO UI / HUD / menus
+  • NO sexualized characters
+  • NO explicit gore (Castlevania-style is action-violence, not gore)
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ COMPOSITION CRAFT — CASTLEVANIA-STYLE GOTHIC-ACTION GAMEPLAY ━━━
+
+  • Camera: side-view / 3/4-iso / top-down (per setting)
+  • GOTHIC SETTING dominant — castle / graveyard / cathedral / crypt / dragon-cave
+  • CLASSIC ENEMY positioned in the scene mid-action — skeleton / vampire / gargoyle / etc.
+  • HERO KNIGHT-SPRITE small on the foreground mid-action
+  • Gothic-flavor props throughout — torches / candelabras / stained-glass / etc.
+  • Animated particles (drifting bats / falling cobwebs / dripping wax / sparks)
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[16-bit gothic-action pixel-art composition with camera (side-view / iso / top-down) per setting], [the specific gothic setting (vampire castle / graveyard / cathedral / crypt / dragon-cave)], [the classic fantasy-enemy on the scene mid-action], [hero knight-sprite small on the foreground mid-action]${gothic_props ? ', [gothic-flavor atmospheric props — torches / candelabras / stained-glass]' : ''}, [chunky 16-bit pixel grid + saturated gothic palette (deep purples / blood reds / candle-orange / blue-black shadows)]
+
+CRITICAL — CASTLEVANIA-STYLE MONSTER-SLAYING ACTION (NOT modern psychological horror). PIXEL ART ONLY. All 4 mandatory elements present.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
+  PIXELBOT_JRPG_COMBAT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { open_world_setting, monster_enemy, party_engagement, spell_effect } = slots;
+
+    const spellSection = spell_effect
+      ? `\n\n━━━ SPELL / WEAPON EFFECT ACCENT ━━━\n${spell_effect}\n\nA specific visible spell/weapon effect mid-arc/mid-cast amplifying the JRPG-combat feel.`
+      : '';
+
+    return `You are writing a 16-bit RETRO PIXEL ART JRPG-COMBAT GAMEPLAY SCREENSHOT for PixelBot. The frame must read INSTANTLY as a screenshot from a classic 16-bit JRPG mid-combat — top-down OR 3/4 isometric view, hero party fighting monsters in an open-world setting, spell effects flying across the screen, monster creatures mid-attack, party mid-cast or mid-strike.
+
+Genre lineage: Final Fantasy IV/V/VI battle scenes + Chrono Trigger active-time combat + Secret of Mana real-time combat + Seiken Densetsu 3 boss fights + Star Ocean / Tales of Phantasia / Lufia II / Y action combat.
+
+━━━ ABSOLUTE CAMERA + COMPOSITION LOCK (NON-NEGOTIABLE) ━━━
+
+TOP-DOWN OR 3/4 ISOMETRIC — the camera looks DOWN at the play area from above. 5 mandatory elements: tile floor + hero party (2-4) + monster + visible spell-effect + open-world setting.
+
+🚫 NEVER side-scrolling. NEVER first-person. NEVER vertical-portrait dramatic cutscene. NEVER cosmic-void abstract.
+
+━━━ THE OPEN-WORLD SETTING ━━━
+${open_world_setting}
+
+━━━ THE MONSTER ENEMY (mid-attack) ━━━
+${monster_enemy}
+
+━━━ THE HERO PARTY ENGAGEMENT (2-4 sprites in formation) ━━━
+${party_engagement}
+${spellSection}
+
+━━━ HARD MANDATES ━━━
+
+1. PIXEL-ART REGISTER ONLY — 16-bit / SNES-era. NEVER smooth illustration / 3D / photoreal. Crunchy individual pixels, dithered shading.
+2. NO IP REFERENCES.
+3. NO UI ELEMENTS (no health bars / dialogue / menus / HUDs).
+4. CHUNKY 16-BIT PIXEL GRID on every surface.
+5. SATURATED SNES-ERA PALETTE — emerald / royal-blue / desert-amber / sunset-orange / cave-violet / golden-glow / ruby-red / electric-cyan.
+
+🚫 ABSOLUTE BANS: NO smooth illustration / NO 3D / NO photoreal; NO side-scrolling / first-person / vertical-portrait / cosmic-void; NO IP; NO UI; NO sexualized characters.
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ COMPOSITION CRAFT — 16-BIT JRPG-COMBAT ━━━
+
+  • TOP-DOWN OR 3/4-ISO camera
+  • TILE FLOOR / GROUND dominant
+  • HERO PARTY of 2-4 sprites in classic JRPG formation
+  • MONSTER ENEMY positioned across the play area, mid-attack
+  • VISIBLE SPELL/WEAPON EFFECT mid-arc between party and enemy
+  • OPEN-WORLD SETTING giving play-area context
+  • Animated particles in motion
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[16-bit JRPG-combat top-down or 3/4-iso composition with tile-floor visible], [the specific open-world setting (forest / mountain / lakeshore / ruined-temple / etc.)], [the monster enemy on the tile floor mid-attack], [hero party of 2-4 chunky 16-bit sprites in formation mid-action], [visible spell/weapon effect mid-arc between party and monster]${spell_effect ? ', [specific spell-effect detail]' : ''}, [chunky 16-bit pixel grid + saturated SNES-era palette]
+
+CRITICAL — TOP-DOWN OR 3/4-ISO (NEVER side-view / first-person / portrait). PIXEL ART ONLY. All 5 mandatory elements present including the VISIBLE SPELL/WEAPON EFFECT.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
+  PIXELBOT_BOSS_ARENA: ({ slots, sharedDNA, vibeDirective }) => {
+    const { arena_setting, boss_creature, player_engagement, arena_phenomenon } = slots;
+
+    const phenomenonSection = arena_phenomenon
+      ? `\n\n━━━ ARENA PHENOMENON / EFFECTS ━━━\n${arena_phenomenon}\n\nA specific particle/effect accent amplifying the boss-fight intensity.`
+      : '';
+
+    return `You are writing a 16-bit RETRO PIXEL ART BOSS-BATTLE GAMEPLAY SCREENSHOT for PixelBot. The frame must read INSTANTLY as an in-game boss-battle moment — not concept art, not a key-art poster, not a movie still. A screenshot you would capture mid-fight in a SNES-era pixel RPG.
+
+Genre lineage: Chrono Trigger / Final Fantasy VI / Secret of Mana / Earthbound / Link to the Past / Diablo II / Hyper Light Drifter / Hades / Octopath Traveler.
+
+━━━ ABSOLUTE CAMERA + COMPOSITION LOCK (NON-NEGOTIABLE) ━━━
+
+The frame uses a CLASSIC 16-BIT BOSS-BATTLE CAMERA — pick ONE per render based on the arena setting:
+  - TOP-DOWN gameplay view (Hyper Light Drifter / Diablo / Bastion / Children of Morta) — looking straight down or near-straight-down at the arena floor
+  - 3/4 ISOMETRIC view (Hades / Octopath / Disco Elysium / Salt and Sanctuary / Bastion) — angled-down 30-45° on the arena floor
+  - SIDE-VIEW arena (Castlevania / Hollow Knight pixel / Salt and Sanctuary platforms) — flat side perspective on a horizontal arena
+
+🚫 NEVER vertical-portrait dramatic-key-art with a towering silhouette. NEVER concept-art looking-up-at-massive-boss compositions. NEVER cinematic close-up. The player CAN see the entire fightable space.
+
+━━━ MANDATORY ELEMENTS (every render must include all 4) ━━━
+
+1. ARENA FLOOR clearly visible — tiled stone, mossy ground, magic-circle inscribed floor, sand-pit, lava-bridge platform, ice-floor, etc. The fightable space is EXPLICIT.
+2. BOSS CREATURE/FIGURE as a SPRITE on the arena — not a towering background silhouette. The boss is an enemy-sprite IN the play-space, mid-action (rearing, roaring, swinging weapon, charging energy, wings spread).
+3. PLAYER-SPRITE small on the arena floor — a single hero pixel-sprite somewhere in the frame, scaled tiny relative to the boss, positioned where the player would actually fight from. Optional 2nd companion sprite.
+4. ARENA EDGES/WALLS framing the play space — pillars, broken-stones, cliff-edges, mossy walls, magma-cracks, frozen-spike-walls — visible boundaries that define the arena.
+
+━━━ THE ARENA SETTING ━━━
+${arena_setting}
+
+━━━ THE BOSS CREATURE (mid-action sprite) ━━━
+${boss_creature}
+
+━━━ PLAYER ENGAGEMENT (hero + optional companion mid-combat) ━━━
+${player_engagement}
+${phenomenonSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era. NEVER smooth illustration, NEVER 3D render, NEVER photoreal. Crunchy individual visible pixels, dithered shading.
+2. **NO IP REFERENCES** — no specific game characters / logos / recognizable franchises.
+3. **NO UI ELEMENTS** — no health bars, dialogue boxes, menus, HUDs, button prompts.
+4. **CHUNKY 16-BIT PIXEL GRID** — visible pixel grid on every surface.
+5. **BOSS IS A SPRITE ON THE ARENA, NOT A SILHOUETTE-IN-THE-SKY** — the boss has a definite position on the play-floor where the player would actually engage it.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal
+  • NO vertical-portrait key-art camera
+  • NO IP references
+  • NO UI / HUD / menus
+  • NO sexualized content
+  • NO single-sprite-key-art-poster framing
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ COMPOSITION CRAFT — 16-BIT BOSS-BATTLE GAMEPLAY ━━━
+
+  • CAMERA: top-down OR 3/4-iso OR side-view (matching the arena setting)
+  • ARENA FLOOR: dominant playable surface (>40% of frame)
+  • BOSS: enemy-sprite on the arena floor, mid-action — rearing / roaring / casting / charging / wings-spread
+  • PLAYER: small hero-sprite in the play-space, mid-action posture toward the boss
+  • COMPANIONS (optional): 1-2 supporting hero-sprites at different positions in the arena
+  • ARENA EDGES: visible walls / pillars / cliffs framing the play space
+  • PARTICLES: dust, sparks, magic, fire, ice-shards, debris — boss-fight intensity
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[16-bit BOSS-BATTLE composition with arena-floor visible + camera-angle (top-down / iso / side-view)], [the specific arena setting (lava-bridge / castle-throne / void-arena / etc.)], [the BOSS creature as a sprite ON the arena floor, mid-action], [player-sprite small on the floor + optional companion mid-engagement with the boss], [arena edges/walls framing the play space]${arena_phenomenon ? ', [arena phenomenon — fire / lightning / magic-circle / smoke / etc.]' : ''}, [chunky 16-bit pixel grid throughout]
+
+CRITICAL — BOSS IS A SPRITE ON THE ARENA FLOOR (not a towering silhouette). PIXEL ART ONLY. All 4 mandatory elements present.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   PIXELBOT_SIDE_SCROLLER_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
     const { biome_setting, platform_geography, hero_action, atmospheric_phenomenon } = slots;
 
@@ -12295,18 +12528,21 @@ CRITICAL — PIXEL ART ONLY (NEVER smooth illustration). The town is INHABITED. 
 Output ONLY 65-90 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
-
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
-    const { subject, lighting, atmosphere, foreground_anchor, hero_feature, sky_layer, phenomenon } = slots;
+    const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon
       ? `\n\n━━━ RARE OPTICAL / WEATHER PHENOMENON (one signature real-Earth event, woven naturally into the scene) ━━━\n${phenomenon}\n\nCRITICAL — PHENOMENON-LIGHTING COMPATIBILITY: If this phenomenon physically contradicts the rolled lighting time-of-day (e.g., total eclipse corona cannot co-exist with golden hour or daylight; aurora cannot appear in midday sun; green flash only happens at the exact moment the sunset disc disappears; sun pillars/sun-dogs/halos need the sun visible so can't appear at night), DROP THE PHENOMENON entirely from the render and just render the clean lighting + sky + scene. Restrained truth beats forced impossibility every single time.`
       : '';
 
-    return `You are a landscape photographer writing a SINGLE EPIC VISTA scene for EarthBot. Wide panoramic real-Earth landscape at maximum jaw-dropping beauty — larger than life, but every element grounded in something that actually exists on Earth. The viewer's reaction: "is this real? I want to book a flight there." Output wraps with style prefix + suffix.
+    return `You are a fine-art landscape photographer writing a SINGLE EPIC VISTA scene for EarthBot. The work bar: a Marc Adamus / Peter Lik / Max Rive / Daniel Kordan / Iurie Belegurschi / Albert Dros / Ryan Dyar caliber gallery-print masterpiece — extreme dramatic landscape art with theatrical peak-moment light, the kind of frame people print three feet wide and hang as the centerpiece of a room, the kind that stops a phone-scroller dead and makes them screenshot it. NOT documentary travel photography. NOT a competent travel snapshot. NOT a journalism frame. This is gallery-tier fine art — peak-drama composition, peak-drama light, peak-drama scale. Real Earth, larger than life via geology + lighting + weather amplification, never AI-fake. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL EARTH, NEVER SCI-FI, NEVER AI-FAKE ━━━
 
 This is REAL geography, REAL weather, REAL light. Larger-than-life is fine — Earth genuinely produces alpenglow on Himalayan peaks, sun pillars in Arctic air, double rainbows across canyons, mammatus storm-cells lit by sunset, fjord cliffs plunging straight into the sea. But every render must look like something a photographer could have captured on the BEST possible day at that location. Never AI-fake. Never combinatorial impossibility. The viewer should think "this is real — but I've never seen a photo quite this magnificent."
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+
+NEVER a human figure anywhere in the frame. NOT wading in a pool, NOT silhouetted on a ridge, NOT standing at a vantage, NOT a hiker, NOT a climber, NOT a tiny figure for scale, NOT a photographer-self-portrait. Flux's training data WILL try to insert a figure into moody-pool / waterfall / forest / cliff-edge compositions because those are dominant stock-photo templates. OVERRIDE THAT BIAS. The scale prover in this scene is wildlife or geology, NEVER a person. If Flux's instinct is to render a person, render the same composition WITHOUT them. Empty wilderness. No civilization. No human presence anywhere.
 
 ━━━ ABSOLUTELY BANNED (these break EarthBot identity instantly) ━━━
 
@@ -12317,34 +12553,50 @@ This is REAL geography, REAL weather, REAL light. Larger-than-life is fine — E
 - NO bioluminescent fungi / glowworms / phosphorescent moss / glowing-anything-landscape
 - NO floating-islands / impossible-physics geometry / Pandora-style alien biomes
 - NO galaxies "above sunset" — stars + sunset don't co-exist on Earth (Milky Way only over pure-night sky)
-- NO human figures / hikers / climbers / silhouettes-on-ridges
 - NO structures-as-subject (rare distant scale-prover huts OK as hero_feature, but never the focal subject)
+- NO stylized / 3D-render / illustrated / cartoony aesthetic — this is HYPERREAL photographic, gallery-print tier
 
-━━━ COMPOSITION DISCIPLINE — RESTRAINT IS THE SIGNATURE ━━━
+━━━ SCENE-AS-HERO MANDATE — THE SUBJECT IS THE WOW ━━━
 
-ONE hero subject + supporting clean light/atmosphere/sky + 3-tier depth (NEAR foreground anchor → MID vista → FAR scale prover). NOT five phenomena stacked. Most legendary landscape photographs have ONE clear thing happening — the storm break, the lone weathered tree at cliff-edge, the ribbon waterfall, the alpenglow on the summit. The signature of EarthBot quality is RESTRAINT — resist the urge to layer rainbows + aurora + sun-dogs + crepuscular rays + mammatus all into the same frame. When the PHENOMENON section below fires (only ~30% of renders), ONE phenomenon, woven naturally — never added as an extra checkbox layer.
+THE SCENE IS THE PHOTO. The vista subject DOMINATES the frame — fills 60-70%+ of the visual real estate. NO foreground prop pulled across the lower frame, NO secondary subject competing for the viewer's eye. Think gallery-print fine-art landscape: the cliff face IS the photo, the wave barrel IS the photo, the canyon IS the photo, the volcano caldera IS the photo. The scene's monumental scale + dramatic geology + theatrical peak-moment light is the entire show. Restraint on additional compositional clutter is what lets the subject HIT.
 
-━━━ THE VISTA SUBJECT (the location + its core geology, the hero of the frame) ━━━
+━━━ GEOLOGY WOW FACTOR — DIAL THE SCALE TO ELEVEN ━━━
+
+The subject's geological character is the wow, and "wow" means VERTIGINOUS THEATRICAL DRAMA, not pleasant scenery. Push every dimension of its monumental scale to MAXIMUM dramatic impact. Use this drama-vocabulary explicitly in every render:
+
+- VERTIGO-INDUCING — the cliff face plunges in a way that makes the viewer's stomach drop
+- CATHEDRAL-VERTICAL — walls so steep they swallow scale
+- MILE-DEEP / CONTINENT-SCALE / SKY-PIERCING — the size makes the viewer feel insignificant
+- THEATRICAL / OPERATIC / EXTREME / STAGED — the scene is being framed at maximum drama
+- The cliff's terrifying vertical drop into the abyss, the caldera's mile-wide gape, the dune-sea's infinite-shadow ridges receding to vanishing point, the fjord wall's cathedral-vertical plunge, the cresting wave's translucent-glass barrel, the ice-cap's continent-scale spread, the canyon's billion-year-strata depth.
+
+The viewer's first reaction must be "look at the SIZE of that — it can't be real, but it is." NOT genteel competent scenery — render the SCALE at MAXIMUM dramatic impact, specific to the subject's actual geology. This is the SINGLE most important lever between "pretty travel photo" and "wallpaper masterpiece." Push it HARD. Theatrical wide-angle low-POV looking up at the wall. Aerial drone POV looking down into the chasm. Eye-level into the heart of the storm. Choose the most dramatic possible vantage for the rolled subject.
+
+━━━ THE VISTA SUBJECT (the location + its core geology — the hero of the frame, fills it) ━━━
 ${subject}
 
-━━━ LIGHTING (one clean signature light condition) ━━━
+━━━ LIGHTING (stacked light drama — render every dimension at peak) ━━━
 ${lighting}
 
-━━━ PEAK LIGHT MOMENT — render the MAGIC MOMENT, not the generic version ━━━
+━━━ STACKED LIGHT DRAMA — render every dimension at gallery-print peak intensity ━━━
 
-The lighting above is a category — render the EXACT PEAK MOMENT of that category. Not generic "golden hour" — render the precise 90-second window when the alpenglow is at its absolute brightest, when the rake-light is at its most chromatic red-orange-gold. Not generic "storm break" — render the 30 seconds when the sun shaft is wide-open through the cloud tear and the lit area glows like stage spotlighting. Not generic "blue hour" — render the precise minute the sky reads deepest indigo while the snow still holds a whisper of warm rose. The MAGIC moment of the light, not the average. The light is doing its most dramatic version of itself, NOW.
+The lighting above stacks 2-3 light dimensions (time + direction + color + shadow). Render ALL of them at the absolute peak of their drama, simultaneously. Not generic — the 90-second magic-window version. Color at maximum chromatic saturation, shadow at maximum depth-contrast, direction at maximum theatricality. Marc-Adamus / Peter-Lik gallery-print bar: light is THE protagonist of the frame, and every dimension is at eleven. This is the signature lever — light drama is what separates a competent travel snapshot from a wallpaper masterpiece. Push every light dimension HARD, every render.
 
-━━━ ATMOSPHERE (default is crisp clear air; particulate only when scene-natural) ━━━
+━━━ ATMOSPHERE (render exactly as rolled — DO NOT override) ━━━
 ${atmosphere}
+
+The atmosphere rolled above dictates what's in the AIR. If it says "crisp clear," render crisp clear air with sharp distance — drama comes from light stacking alone, NO godrays or volumetric beams. If it says "valley fog" or "post-rain mist" or "sea spray," godrays and atmospheric beams emerge NATURALLY where light meets the particulate — render that emergence at peak drama. The light drama is always maximum; the atmospheric quality (clear vs hazy vs misty vs spray-veiled) is dictated SOLELY by what this axis rolled. Never force volumetric beams onto clear-air rolls. Never strip atmosphere on particulate rolls.
 
 ━━━ SKY LAYER (what the sky is doing above the vista) ━━━
 ${sky_layer}
 
-━━━ NEAR-FOREGROUND ANCHOR (the compositional element at the FRONT of the frame — eye lands here first) ━━━
-${foreground_anchor}
+CRITICAL — SKY-LIGHTING COMPATIBILITY: If the sky rolled above describes a NIGHT-sky element (Milky Way / star field / clean star pinpoints / pre-dawn velvet w/ last stars / pure-night sky) AND the lighting axis rolled a DAYTIME, SUNSET, GOLDEN-HOUR, ALPENGLOW, MIDDAY, or STORM-BREAK condition (anything with the sun visible in the sky), DROP the night-sky elements. Stars and Milky Way ONLY appear in pure-night renders (post-twilight, no sun anywhere in the sky). Substitute a sky condition compatible with the rolled lighting — e.g., for sunset lighting, render the sunset sky gradient; for alpenglow, render the indigo-east-with-rose-west sky; for storm-break, render the cloud-tear with backlit clouds; for midday, render the bright cobalt zenith. STARS + SUNSET DO NOT CO-EXIST ON EARTH — render only the version compatible with the lit-sky moment. Restrained truth beats forced impossibility.
 
-━━━ FAR HERO FEATURE (the distant scale-prover anchoring the bigness) ━━━
-${hero_feature}${phenomenonBlock}
+━━━ DISTANT SCALE PROVER (one TINY element in deep distance proving the subject's bigness — no foreground prop) ━━━
+
+${hero_feature}
+
+This is a SCALE PROVER ONLY — a marker-dot in the deep middle or far distance that gives the eye proof of the subject's monumental scale. Render it TINY (postage-stamp-sized, comma-speck, pinprick). It does NOT compete with the subject for visual attention. If it's a tree or boulder, it stays in the deep distance — never near-frame. If it's wildlife, it's a far-away silhouette. The subject is the hero; this is just the yardstick.${phenomenonBlock}
 
 ━━━ MOMENT IN MOTION — every render captures one beat of physical motion ━━━
 
@@ -12359,12 +12611,18 @@ ${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ COMPOSITION — 3-TIER DEPTH ━━━
+━━━ COMPOSITION — SUBJECT FILLS THE FRAME ━━━
 
-Wide sweeping panoramic vista with explicit 3-tier depth: NEAR foreground anchor (eye lands here first) → MID vista subject (the hero geology) → FAR scale prover (proves the bigness) → SKY (above it all). Horizon prominent, scale monumental. The viewer's eye reads NEAR → MID → FAR, registering depth at each layer. Photographic, hyperreal, alive — captured at the PEAK moment of light, with one beat of motion implied. Wallpaper-worthy single frame.
+Wide sweeping panoramic vista where the SUBJECT geology fills 60-70%+ of the frame's visual weight. Sky above (~25-35%), scale-prover as a tiny dot in deep distance, no near-foreground prop. The viewer's eye lands on the SUBJECT immediately, registers its scale, follows the lighting drama across it, finds the tiny scale-prover as evidence. Photographic, hyperreal, alive — Marc-Adamus / Peter-Lik / Max-Rive gallery-print caliber, the kind of frame collectors pay four figures for and people screenshot to set as wallpaper. Theatrical fine-art landscape, never documentary snapshot.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
+
+
+
+
+
 
 
   YUMBOT_FLORAL_GARDEN_CUP: ({ slots, sharedDNA, vibeDirective }) => {
