@@ -1753,6 +1753,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  PIXELBOT_COZY_FARMING_LIFE_SIM: {
+    description:
+      'PATH-BESPOKE — PixelBot cozy-farming-life-sim (2026-05-20 axis-system migration). 16-BIT COZY LIFE-SIM SCREENSHOTS — Stardew Valley + Harvest Moon + Animal Crossing pixel-spin + My Time at Sandrock + Spiritfarer + Ooblets + Coffee Talk + Story of Seasons + Graveyard Keeper pixel. Solo farmer protagonist + ambient villager / animal NPCs populating the cozy world. NOT party-combat; life-sim ambient is genre-correct. 4 path-bespoke pools (farm_locale / farm_biome / farmer_villager_life / cozy_phenomenon-40%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['farm_locale', 'farm_biome', 'farmer_villager_life'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'cozy_phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_EPIC_VISTA: {
     description:
       'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Nat-Geo-best-of-best caliber real-Earth landscape: the SUBJECT IS THE WOW. Larger than life via geology + lighting + weather amplification, never AI-fake / sci-fi / fantasy. R2 (2026-05-20) pivoted from R1 3-tier (subject + foreground prop) to SCENE-AS-HERO — subject dominates 60-70%+ of frame, no competing foreground props. R1 lessons retained: PEAK LIGHT MOMENT + MOMENT IN MOTION template blocks, phenomenon-lighting compatibility, biome-tagged subject pool. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. R1 foreground_anchor axis + matchTagsFromSlot composer extension preserved as infrastructure for future paths that need them. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',

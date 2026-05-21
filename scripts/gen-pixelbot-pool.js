@@ -1546,6 +1546,229 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE specific GOTHIC FLAVOR PROP, 20-40 words. Format: "PROP NAME CAPS — primary prop + position in scene + atmospheric detail". Vary across the 10 categories. NO IP/UI/sexual/gore. Castlevania-style gothic atmosphere only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── cozy-farming-life-sim path (2026-05-20 axis-system migration) ───
+  pixelbot_cozy_farming_farm_locale: {
+    format: 'simple',
+    theme: `FARM / LIFE-SIM LOCALE for the PixelBot cozy-farming-life-sim path. Each entry describes ONE specific cozy Stardew-Valley / Harvest-Moon / Animal-Crossing / Spiritfarer-style farm or village locale. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry reads as a screenshot from a 16-bit cozy farming life-sim. Tiny farms / cottages / barns / orchards / villages — WARM, INHABITED, SAFE, INVITING. Never industrial / urban / dystopian.
+
+⚠️ LOCALE CATEGORIES — distribute the 25 entries:
+  • ~3 CROP-FIELD / GARDEN — neat rows of crops, garden plots, tilled rows
+  • ~3 BARN / PASTURE — barn with cows, sheep pasture, horse-stable, goat-pen
+  • ~3 HENHOUSE / COOP — chicken-coop, duck-pond, pen with poultry
+  • ~3 ORCHARD — apple-orchard, cherry-orchard, peach-grove, walnut-trees
+  • ~2 GREENHOUSE — glass greenhouse with sprouts, herb-greenhouse
+  • ~2 COTTAGE / PORCH — wooden cottage exterior, porch with rocking chairs, cottage-kitchen
+  • ~2 BEACH-SIDE FISH-SHACK — coastal fish-shack, dock with boat, beachfront cottage
+  • ~2 VILLAGE-SQUARE — small village square with well, market-square at festival
+  • ~2 BAKERY / SHOP — bakery storefront, general-store front, flower-shop
+  • ~2 FOREST-EDGE / MEADOW — wildflower meadow, forest-edge with logs, mushroom-circle clearing
+  • ~1 WINTER-CABIN — winter cabin exterior, snowy cottage with smoke
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC LOCALE TYPE
+  - GROUND / TILE / TERRAIN detail
+  - LOCALE LANDMARKS (barn / well / fence / lantern-post / etc.)
+  - INHABITED CUE (smoke / chicken / cat / sign / lantern-glow / etc.)
+  - IMPLIED CAMERA (3/4-iso / top-down / side-view per setting)
+
+🚫 STRICT BANS:
+  • NO industrial / urban / dystopian
+  • NO empty / abandoned / ghost-farm
+  • NO sci-fi / fantasy / horror
+  • NO villager / farmer / animal description (separate axes)
+  • NO IP / UI / sexualized content
+  • NO modern equipment (no tractors / no electric tools — pastoral only)`,
+    touchpoints: [
+      'CROP-ROW WITH SCARECROW — 3/4-iso angled-down on a neat-rowed crop-field with green pumpkin-vines and corn-stalks in tilled-dirt rows, wooden scarecrow at the center, wooden picket-fence boundary, lantern-post at the corner',
+      'TILLED GARDEN PLOTS — top-down on a tilled garden patch divided into 6-8 plots with sprouting greens in each, wooden plot-edges, watering-can resting at the corner, cobblestone path running between plots',
+      'STRAWBERRY PATCH WITH BASKETS — 3/4-iso on a strawberry-patch with red berries dotting the green leaves, woven baskets half-full at the edges, lantern-post nearby, wooden fence behind',
+      'BARN WITH RED-SIDING — 3/4-iso angled-down on a classic red-sided wooden barn with white-trim, open double-doors revealing hay-bales inside, cobblestone path leading up, wooden fence around a pasture beside',
+      'SHEEP-PASTURE WITH FENCE — 3/4-iso on a green-grass sheep-pasture with white-painted wooden fence boundary, wooden barn-corner visible in the background, distant treeline, cozy pastoral cue',
+      'HORSE-STABLE OPEN DOOR — 3/4-iso on a wooden horse-stable with split-door open, hay-pile in the foreground, lantern hanging from the rafter, cobblestone aisle running through',
+      'CHICKEN-COOP WITH NESTING-BOXES — 3/4-iso angled-down on a wooden chicken-coop with nesting-boxes along one wall, hay-strewn floor, lantern hanging from the rafter, small ramp leading out',
+      'DUCK-POND WITH WILLOW — 3/4-iso on a small duck-pond with willow-tree dipping branches, wooden boardwalk along one edge, lily-pads dotting the surface, cattails at the perimeter',
+      'POULTRY-PEN WITH FEED-TROUGH — 3/4-iso on a wooden poultry-pen with wire-mesh fencing, feed-trough at one end, scattered seed on the ground, small wooden shelter at the back',
+      'APPLE-ORCHARD ROWS — 3/4-iso angled-down on rows of apple-trees with red fruit clusters, dirt path running between rows, wooden basket of picked apples at the foreground edge, lantern-post at the corner',
+      'CHERRY-ORCHARD IN BLOOM — 3/4-iso on a cherry-orchard with pink-blossom-laden trees in neat rows, drifting petals on the dirt path between, wooden bench at the edge, fence at the far side',
+      'PEACH-GROVE WITH LADDERS — 3/4-iso on a peach-grove with orange fruit clusters and wooden picking-ladders leaning against several trees, woven baskets at the bases, golden afternoon light',
+      'GLASS GREENHOUSE WITH SPROUTS — 3/4-iso angled-down on a wood-and-glass greenhouse with rows of sprouts on wooden tables inside visible through the glass, terracotta-pots stacked outside, watering-can at the door',
+      'HERB-GREENHOUSE WITH HANGING-BUNDLES — top-down on a small herb-greenhouse with rows of potted herbs on wooden shelves, hanging-bundles of dried herbs from the rafters, cobblestone floor with a watering-can',
+      'WOODEN COTTAGE PORCH — 3/4-iso angled-down on a small wooden cottage with porch and two rocking chairs, lantern hanging beside the door, flower-pots flanking the steps, cobblestone path leading up',
+      'COTTAGE-KITCHEN INTERIOR — top-down on a cottage kitchen interior with wooden floor, central wooden table with bread-and-jam, cast-iron stove at one side, herb-bundles hanging from rafters, warm hearth-glow',
+      'BEACHSIDE FISH-SHACK — 3/4-iso on a wooden fish-shack with peaked roof at the edge of a beach, sand-and-cobblestone path leading to it, fishing-nets hanging on the side, smoke curling from the chimney',
+      'COASTAL DOCK WITH BOAT — 3/4-iso on a wooden coastal dock with a small-fishing-boat tied at the end, lantern at the dock-post, fishing-tackle stacked at the boat-edge, gentle waves below',
+      'VILLAGE-SQUARE WITH STONE-WELL — 3/4-iso angled-down on a village-square with central cobblestone well, half-timbered shop-fronts surrounding, cobblestone paths radiating outward, lantern-posts at the corners',
+      'FESTIVAL MARKET-SQUARE — 3/4-iso on a village-square at festival with hanging-lanterns strung between shop-fronts, market-stalls with awnings, cobblestone path with flower-petals scattered, generous celebratory mood',
+      'BAKERY STOREFRONT — 3/4-iso angled-down on a wooden bakery storefront with painted sign overhead, display-window with breads visible, lantern beside the door, cobblestone path with a wooden bench outside',
+      'GENERAL-STORE FRONT — 3/4-iso on a wooden general-store front with painted sign, barrels-and-crates flanking the door, lantern hanging overhead, cobblestone path with wooden bench',
+      'WILDFLOWER MEADOW PATH — 3/4-iso on a wildflower-meadow with cobblestone path running through, scattered red-pink-yellow blooms across the grass, wooden bench at the edge, distant treeline backdrop',
+      'FOREST-EDGE WITH LOGS — 3/4-iso angled-down on a forest-edge clearing with stacked logs and woodpile against a small wooden shed, axe leaning against the wall, dirt path leading into the trees',
+      'WINTER CABIN WITH SMOKE — 3/4-iso on a small wooden winter-cabin exterior with snow on the roof, smoke curling from the stone chimney, lit-window-glow warm-yellow against the snow, wooden fence partially buried',
+    ],
+    instructions: `Each entry is ONE specific FARM / LIFE-SIM LOCALE, 25-50 words. Format: "LOCALE NAME CAPS — specific locale + ground detail + landmarks + inhabited cue + implied camera". MANDATORY — (a) locale type, (b) ground detail, (c) landmarks, (d) inhabited cue, (e) implied camera. NO industrial / urban / dystopian. NO empty / abandoned. NO sci-fi / fantasy / horror. NO villager / animal description. NO IP/UI/sexual/modern equipment. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_cozy_farming_farm_biome: {
+    format: 'simple',
+    theme: `FARM BIOME (season + time + atmosphere) for the PixelBot cozy-farming-life-sim path. Each entry describes ONE specific seasonal + time-of-day + atmospheric combination that envelops the farm scene. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry establishes a SEASON + TIME + WEATHER / MOOD that defines the scene's overall feel — spring morning rain / summer noon golden / autumn twilight orange / winter night fireplace / first-frost dawn / festival evening / etc. Cozy life-sim register.
+
+⚠️ BIOME CATEGORIES — distribute the 25 entries across 4 seasons + festival:
+  • ~6 SPRING — rainy spring morning, sprout-bright spring noon, gentle spring twilight, cherry-blossom spring, mud-and-puddles spring, mist-and-dew dawn
+  • ~6 SUMMER — golden noon, lazy-afternoon haze, glowing sunset, firefly dusk, midsummer-festival evening, lush-green humid
+  • ~6 AUTUMN — crisp morning, harvest-orange afternoon, twilight purple, foggy harvest dawn, falling-leaves breeze, harvest-festival sunset
+  • ~6 WINTER — snowy dawn, snow-drift afternoon, cozy fireplace-night, first-frost dawn, gentle-flurries dusk, holiday-festival evening
+  • ~1 FLEXIBLE festival / sunny-day / etc.
+
+⚠️ EVERY entry MUST include:
+  - SEASON
+  - TIME OF DAY (dawn / morning / noon / afternoon / twilight / dusk / evening / night)
+  - WEATHER / ATMOSPHERIC CUE (rain / sun / fog / snow / haze / clear / etc.)
+  - PALETTE CUE (warm-golden / cool-blue / soft-pastel / etc.)
+
+🚫 STRICT BANS:
+  • NO catastrophic weather (no hurricanes / blizzards / floods)
+  • NO horror / dystopian / dark
+  • NO sci-fi / fantasy / supernatural
+  • NO locale description (separate axis)
+  • NO IP / UI / sexualized`,
+    touchpoints: [
+      'SPRING-RAIN MORNING — soft spring morning with light drizzle falling, cool-grey-and-green palette, wet cobblestone-and-grass reflective, distant sprouting-greens vibrant under the rain, gentle pastoral mood',
+      'SPRING-SPROUT NOON — bright spring noon with golden sun and bright-green sprouting palette, warm sun-glow flooding the scene, dew-still-glistening on leaves, optimistic generative mood',
+      'SPRING TWILIGHT GENTLE — gentle spring twilight with soft-purple-and-pink sky, warm-yellow lantern-glow beginning to register, cool-blue ambient settling, peaceful end-of-day register',
+      'CHERRY-BLOSSOM SPRING — spring afternoon with cherry-blossoms in peak bloom, drifting pink-petals filling the scene, soft-pastel palette, generous magical-spring register',
+      'MUD-AND-PUDDLES SPRING — after-rain spring morning with mud-and-puddles dotting the dirt-paths, soft reflective surfaces, cool-grey-and-green palette, fresh post-rain register',
+      'MIST-AND-DEW DAWN — spring dawn with low mist drifting across the fields and dew still on the grass, soft-pastel cool-blue-and-pink sky, gentle peaceful register',
+      'GOLDEN SUMMER NOON — bright summer noon with peak golden sun overhead, warm-yellow-and-green palette, sharp pixel-shadows, generous warm-cozy register',
+      'LAZY-SUMMER HAZY-AFTERNOON — lazy summer afternoon with soft heat-haze in the distance, warm-yellow palette with hazy soft edges, slow languid pastoral register',
+      'GLOWING SUMMER SUNSET — summer evening with sun setting low on the horizon, warm-orange-and-pink palette flooding the scene, long pixel-shadows, gorgeous magical-golden-hour register',
+      'FIREFLY-DUSK SUMMER — summer dusk with cool-blue twilight settling and warm-yellow firefly-pixels drifting through the air, magical late-summer register',
+      'MIDSUMMER FESTIVAL EVENING — summer festival evening with hanging-lanterns lit warm-yellow, cool-blue twilight sky above, celebratory generous mood, festival-music implied',
+      'LUSH-GREEN HUMID — summer afternoon with peak lush-green palette, warm-humid air implied through soft-haze, golden-warm side-light, abundant pastoral register',
+      'CRISP AUTUMN MORNING — autumn morning with crisp cool air implied, warm-orange-and-red leaves on trees, soft-yellow sun cutting through, peaceful seasonal register',
+      'HARVEST-ORANGE AFTERNOON — autumn afternoon with peak harvest-orange palette across the scene, warm-yellow side-light, sharp pixel-shadows from the lower sun, generous harvest register',
+      'AUTUMN TWILIGHT PURPLE — autumn twilight with soft-purple-and-orange sky transitioning, warm-yellow lantern-glow beginning to register, cool-blue shadows, peaceful end-of-day register',
+      'FOGGY HARVEST DAWN — autumn dawn with low fog drifting across the harvested fields, soft-orange sun cutting through the fog, cool-blue-and-orange palette, atmospheric harvest register',
+      'FALLING-LEAVES BREEZE — autumn afternoon with falling-leaves drifting through the air, warm-orange-and-red palette, gentle breeze implied, generous seasonal register',
+      'HARVEST-FESTIVAL SUNSET — autumn harvest-festival sunset with hanging-lanterns and pumpkin-decorations, warm-orange-and-purple sky, celebratory generous mood',
+      'SNOWY WINTER DAWN — winter dawn with fresh snow covering everything in soft-white, cool-blue-and-pink sky, soft pastel palette, peaceful magical winter register',
+      'SNOW-DRIFT AFTERNOON — winter afternoon with snow-drifts piled against fences and walls, cool-blue palette with warm-yellow window-glow contrasting, gentle generous winter register',
+      'COZY FIREPLACE-NIGHT — winter night with snow on the roof and warm-yellow fireplace-glow pouring from windows, cool-blue-and-warm-yellow contrast, deeply cozy register',
+      'FIRST-FROST DAWN — early winter dawn with first-frost dusting the grass and crystalline-detail catching low golden morning light, cool-blue-and-warm-yellow palette, magical seasonal register',
+      'GENTLE-FLURRIES DUSK — winter dusk with gentle snow-flurries drifting through cool-blue twilight, warm-yellow lantern-glow contrasting, peaceful magical register',
+      'HOLIDAY-FESTIVAL EVENING — winter holiday-festival evening with strung-lights warm-yellow and snow on rooftops, cool-blue sky above, celebratory generous winter mood',
+      'SUNNY MILD AFTERNOON — undefined-season mild afternoon with bright sun and warm-yellow palette, gentle breeze implied through animated crops, generally cozy register',
+    ],
+    instructions: `Each entry is ONE specific FARM BIOME (season + time + atmosphere), 25-50 words. Format: "BIOME NAME CAPS — season + time + weather/atmospheric cue + palette cue + mood register". MANDATORY — (a) season, (b) time of day, (c) weather/atmospheric cue, (d) palette cue. NO catastrophic weather. NO horror / dystopian. NO sci-fi / supernatural. NO locale description. NO IP/UI/sexual. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_cozy_farming_farmer_villager_life: {
+    format: 'simple',
+    theme: `SOLO FARMER + AMBIENT VILLAGER / ANIMAL LIFE for the PixelBot cozy-farming-life-sim path. Each entry describes ONE specific cozy-life-sim moment — solo farmer mid-cozy-task OR ambient villager / animal-life cluster on the scene. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry produces a recognizable Stardew-Valley / Harvest-Moon / Animal-Crossing-style cozy-life-sim moment. Solo farmer-protagonist mid-task AND/OR ambient villager / animal moment populating the scene. NOT party-combat.
+
+⚠️ ACTIVITY CATEGORIES — distribute the 25 entries:
+  • ~6 SOLO FARMER MID-TASK — watering crops, harvesting, chopping wood, fishing, milking, feeding chickens, planting
+  • ~5 ANIMAL CLUSTER — chickens pecking, sheep grazing, cows munching, cats curled, ducks paddling
+  • ~4 VILLAGER NPC AMBIENT — vendor at stall, baker pulling bread, blacksmith hammering, gardener tending, fisherman casting
+  • ~3 SOCIAL / FRIEND moment — two friends chatting, child playing, couple sitting on bench
+  • ~3 FESTIVAL ACTIVITY — vendor selling at festival, kids playing festival-games, villagers dancing
+  • ~2 PET / COMPANION — pet dog/cat with farmer, pet rabbit, pet companion in scene
+  • ~2 RESTING / IDLE — farmer sitting on porch, villager napping under tree
+
+⚠️ EVERY entry MUST include:
+  - SOLO HERO OR AMBIENT NPC AS FOCUS
+  - SPECIFIC COZY-TASK / MOMENT
+  - POSITION IN SCENE (foreground / midground / on the locale)
+  - VISIBLE PROP / CONTEXT (tool / animal / item / etc.)
+
+🚫 STRICT BANS:
+  • NO combat / weapons / aggression — cozy ambient only
+  • NO sexualized / inappropriate
+  • NO IP characters
+  • NO setting description (separate axis)
+  • NO party-combat (life-sim ambient, not adventure-party)`,
+    touchpoints: [
+      'FARMER WATERING CROPS — solo farmer with straw-hat and overalls tiny on the foreground mid-watering a crop-row with watering-can tilted, gentle water-pixels falling, mid-stride pose toward the next row',
+      'FARMER HARVESTING PUMPKINS — solo farmer mid-pumpkin-harvest crouched over an orange pumpkin in a crop-row, woven basket beside him with picked pumpkins, mid-task pose',
+      'FARMER CHOPPING WOOD — solo farmer with axe raised mid-swing about to split a log on a chopping-block, woodpile stacked beside, mid-action pose, suspenders and rolled-sleeves',
+      'FARMER FISHING AT DOCK — solo farmer tiny on a wooden dock mid-fishing with rod cast out over the water, bobber on the surface, fishing-tackle box beside, peaceful pose',
+      'FARMER MILKING COW — solo farmer crouched on a stool beside a brown-and-white cow in a barn, milk-pail catching the milk, mid-task pose, cozy domestic register',
+      'FARMER FEEDING CHICKENS — solo farmer mid-stride scattering seed-pixels from a sack to a cluster of pecking chickens at her feet, generous cozy register',
+      'CHICKENS PECKING IN COOP — a cluster of 5-6 brown-and-white chickens pecking at scattered seed on hay-floor of a chicken-coop, no farmer needed, ambient pastoral life',
+      'SHEEP GRAZING IN PASTURE — three-four white sheep grazing across a green pasture with heads lowered, ambient grazing register, peaceful pastoral life',
+      'COWS MUNCHING IN BARN — two-three black-and-white cows in a barn munching hay from a feed-trough, heads lowered, ambient pastoral cozy register',
+      'CATS CURLED ON PORCH — two pixel-cats curled on the wooden porch of a cottage, one orange-tabby and one calico, peacefully napping, generous cozy register',
+      'DUCKS PADDLING ON POND — three-four white-and-brown ducks paddling across a small duck-pond with lily-pads, gentle ripples, peaceful ambient register',
+      'VENDOR AT MARKET STALL — villager-vendor in apron standing behind a wooden market-stall with displayed produce (apples-and-bread), mid-customer-greeting pose, hanging-sign overhead',
+      'BAKER PULLING BREAD — villager-baker in apron mid-task pulling a loaf from a wood-fired oven with a wooden peel, flour-dusted, warm hearth-glow behind, mid-stride',
+      'BLACKSMITH AT FORGE — villager-blacksmith in leather-apron mid-hammer-strike at a glowing-anvil with sparks flying upward, warm forge-glow behind, mid-action',
+      'GARDENER TENDING FLOWERS — villager-gardener crouched beside a flower-bed mid-task pruning with hand-shears, basket of cut blooms beside, mid-task pose',
+      'FISHERMAN CASTING LINE — villager-fisherman in coat standing at the dock mid-casting a fishing-rod with line arcing through the air, mid-action pose',
+      'TWO FRIENDS CHATTING — two villagers seated on a wooden bench mid-chat with smiles on their faces, hands gesturing, cozy social register, peaceful afternoon mood',
+      'CHILD PLAYING WITH BALL — pixel-child tiny on the cobblestone mid-play-with-a-ball, mid-stride pose chasing it, generous cozy childhood register',
+      'COUPLE SITTING ON BENCH — two villagers seated together on a wooden bench under a tree, peaceful resting register, gentle social moment',
+      'VENDOR AT FESTIVAL — villager-vendor at a festival-stall with hanging-bunting and colorful-awning, presenting a fresh-baked-pie to a customer, generous celebratory register',
+      'KIDS PLAYING FESTIVAL-GAMES — two-three pixel-kids mid-play at a festival ring-toss or apple-bobbing station, hanging-lanterns and bunting overhead, generous celebratory mood',
+      'VILLAGERS DANCING AT FESTIVAL — three-four villagers mid-dance in a circle at a festival, hanging-lanterns and bunting overhead, generous celebratory cozy mood',
+      'PET-DOG WITH FARMER — solo farmer mid-stride across the foreground with a pet-dog trotting alongside her, mid-walk pose, generous cozy companion register',
+      'PET-RABBIT IN GARDEN — solo farmer crouched beside a pet-rabbit in a flower-garden, gently petting it, mid-action peaceful register',
+      'FARMER RESTING ON PORCH — solo farmer seated in a rocking-chair on a cottage porch with a mug-of-tea in hand, peaceful resting register, generous cozy register',
+    ],
+    instructions: `Each entry is ONE specific COZY LIFE-SIM moment, 25-50 words. Format: "ENTITY + ACTION CAPS — focal entity + mid-task pose + position in scene + visible prop/context". MANDATORY — (a) solo hero or ambient NPC, (b) cozy-task / moment, (c) position in scene, (d) visible prop/context. NO combat / weapons. NO sexualized. NO IP. NO setting description. NO party-combat. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_cozy_farming_cozy_phenomenon: {
+    format: 'simple',
+    theme: `40%-GATED COZY ATMOSPHERIC PHENOMENON for the PixelBot cozy-farming-life-sim path. Each entry describes ONE specific magical cozy atmospheric moment accenting the scene — petals / fireflies / butterflies / rainbows / drifting smoke / falling leaves / first-snow / hanging-lanterns / etc. Each entry 20-40 words.
+
+🚫 STRICT BANS: NO horror / dark / sci-fi / catastrophic weather / IP / UI / sexualized.
+
+✓ PHENOMENON CATEGORIES:
+  A. PETAL-DRIFT — cherry-blossom petals / wildflower petals / dandelion seeds drifting
+  B. FIREFLY-SWARM — fireflies drifting at twilight, glowing-pixel-points
+  C. BUTTERFLY-CLOUD — butterfly cloud drifting through the scene
+  D. RAINBOW-AFTER-RAIN — soft pastel rainbow arcing over the scene
+  E. CHIMNEY-SMOKE-CURL — chimney smoke curling and drifting through the air
+  F. FALLING-LEAVES — autumn leaves drifting through the air
+  G. FIRST-SNOWFALL — gentle first-snowflakes drifting through the air
+  H. HANGING-LANTERN-GLOW — strung-lanterns glowing warm-yellow against twilight
+  I. DRIFTING-DANDELION-FLUFF — drifting dandelion-seed-pixels
+  J. SOFT-DAPPLED-SUNLIGHT — soft dappled sunlight through canopy / through window`,
+    touchpoints: [
+      'CHERRY-BLOSSOM PETAL-DRIFT — drifting cherry-blossom pink petals filling the air across the scene, gentle breeze implied, generous magical-spring register',
+      'WILDFLOWER PETAL-DRIFT — drifting red-and-yellow wildflower petals across the meadow scene, gentle breeze implied, magical pastoral register',
+      'DANDELION SEED-DRIFT — drifting dandelion-seed-pixels through the air across the scene, gentle breeze implied, peaceful summer register',
+      'FIREFLY-SWARM AT TWILIGHT — cluster of warm-yellow firefly-pixels drifting through cool-blue twilight, magical-late-summer register, peaceful evening mood',
+      'FIREFLY-LANTERN PAIR — fireflies drifting through twilight beside lit-lanterns warm-yellow, both glowing-pixel-points combining magically, evening register',
+      'BUTTERFLY-CLOUD DRIFTING — cluster of orange-and-yellow butterflies drifting through the scene at multiple parallax depths, magical summer-spring register',
+      'PASTEL RAINBOW ARCH — soft pastel rainbow arcing over the scene after rain, wet cobblestone-and-grass reflecting it slightly, warm-sunlight returning, peaceful post-rain register',
+      'CHIMNEY-SMOKE-CURL — warm-grey chimney-smoke curling and drifting upward from a cottage / barn chimney, gentle breeze implied, peaceful cozy register',
+      'MULTIPLE CHIMNEY-SMOKES — chimney-smoke curling from multiple cottages across the village, all gently drifting, generous cozy inhabited register',
+      'AUTUMN LEAVES DRIFTING — orange-red-yellow autumn leaves drifting through the air across the scene, gentle breeze implied, magical seasonal register',
+      'SETTLED LEAF-CARPET — settled carpet of fallen autumn leaves covering the cobblestone-and-grass in orange-red-yellow, gentle breeze stirring a few back into the air',
+      'FIRST-SNOWFALL DRIFT — gentle first-snowflakes drifting through the air across the scene, fresh dusting on rooftops, magical winter register',
+      'GENTLE SNOW-FLURRIES — gentle snow-flurries drifting through cool-blue twilight, warm-yellow lantern-glow contrasting, peaceful magical winter mood',
+      'STRUNG-LANTERN GLOW — strung-lanterns glowing warm-yellow against cool-blue twilight sky, generous celebratory cozy register',
+      'WINDOW-LANTERN-GLOW SET — every cottage / shop window glowing warm-yellow against deep-blue twilight, the village becoming a constellation of warm lights, deeply cozy register',
+      'DAPPLED CANOPY-LIGHT — soft dappled warm-yellow sunlight filtering through a leafy canopy onto the scene below, sun-spots dancing across cobblestone, magical summer register',
+      'DAPPLED WINDOW-LIGHT — soft dappled warm-yellow sunlight filtering through a window onto the cottage-interior wooden floor, magical cozy register',
+      'MORNING DEW-GLINTS — soft morning dew-glints catching low golden sun across the grass and crops, crystalline magical register',
+      'PIXEL-BOKEH SOFT-FOCUS — softly-blurred pixel-bokeh in the deep distance with the foreground locale sharp, HD-2D-style tilt-shift depth, atmospheric cinematic register',
+      'WHISPS-OF-MORNING-MIST — soft whisps of morning mist drifting low across the meadow / fields, atmospheric magical morning register',
+      'GENTLE-BREEZE WAVING — gentle breeze waving the crops / wildflowers in the scene with subtle motion implied, peaceful pastoral register',
+      'GOLDEN-HOUR LIGHT-BEAM — single warm-yellow golden-hour light-beam cutting between trees / buildings onto the scene below, dust-motes catching the beam, magical register',
+      'DUST-MOTES IN-LIGHT — dust-motes drifting through a beam of warm-yellow sunlight, atmospheric peaceful register, soft warm cozy mood',
+      'STAR-FIELD ABOVE COZY — soft star-field above the cool-blue night sky over the cozy cottage / village, peaceful magical night register',
+      'AURORA-PASTEL SUBTLE — soft pastel-aurora drifting across a cool-blue night sky above the snowy farm / cabin, gentle magical winter register',
+    ],
+    instructions: `Each entry is ONE specific COZY ATMOSPHERIC magic-moment, 20-40 words. Format: "EFFECT NAME CAPS — primary detail + position in scene + cozy register cue". Vary across the 10 categories. NO horror / dark / sci-fi / catastrophic / IP/UI/sexual. Cozy atmospheric only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // PixelBot recipes go here — one entry per bespoke pool.
   // Each entry: { format: 'simple', theme: '...', touchpoints: [...], instructions: '...' }
   // See BOT_SCENE_QUALITY_PLAYBOOK.md "How to seed pools" section.

@@ -12528,6 +12528,75 @@ CRITICAL — PIXEL ART ONLY (NEVER smooth illustration). The town is INHABITED. 
 Output ONLY 65-90 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  PIXELBOT_COZY_FARMING_LIFE_SIM: ({ slots, sharedDNA, vibeDirective }) => {
+    const { farm_locale, farm_biome, farmer_villager_life, cozy_phenomenon } = slots;
+
+    const phenomenonSection = cozy_phenomenon
+      ? `\n\n━━━ COZY ATMOSPHERIC MAGIC ━━━\n${cozy_phenomenon}\n\nA specific atmospheric detail amplifying the warm-fuzzy life-sim register (NOT competing with the scene).`
+      : '';
+
+    return `You are a pixel-art game-art director writing a COZY FARMING / LIFE-SIM scene for PixelBot. Genre lineage: Stardew Valley + Harvest Moon + Animal Crossing pixel-spinoff + My Time at Sandrock + Spiritfarer + Ooblets + Coffee Talk + Story of Seasons + Graveyard Keeper pixel. Tiny pixel farms with crops in neat rows, henhouses with chickens, pixel-cats curled on porches, beachside fish-shacks with smoke curling, summer-festival town squares with hanging lanterns, autumn-harvest barns with pumpkins stacked, spring-rain greenhouses with sprouts, winter-cabin interiors with fire crackling. WARM, SAFE, INVITING — the kind of cozy pixel-life-sim moment that triggers immediate "I want to play this for 200 hours" feeling.
+
+━━━ THE FARM LOCALE ━━━
+${farm_locale}
+
+━━━ THE FARM BIOME — SEASON / TIME / ATMOSPHERE ━━━
+${farm_biome}
+
+━━━ INHABITED LIFE — SOLO FARMER + AMBIENT VILLAGERS / ANIMALS ━━━
+${farmer_villager_life}
+
+This world is ALIVE and INHABITED — a tiny farmer-protagonist mid-cozy-task on the foreground OR an ambient villager moment in the scene, surrounded by signs of daily farm-life. Chickens pecking, cats curled, smoke curling from chimneys, crops swaying, lanterns lit.
+${phenomenonSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era / HD-2D pixel art. NEVER smooth illustration, NEVER 3D render, NEVER photoreal. Crunchy individual visible pixels, dithered shading, limited palette.
+2. **NO IP REFERENCES** — no specific game characters / logos / recognizable franchises. The bot's identity IS the medium + the genre.
+3. **NO UI ELEMENTS** — no health bars, dialogue boxes, menus, HUDs, button prompts, mini-maps, text-overlays. Pure scene only.
+4. **NORTH STAR** — every render is "a screenshot from a cozy farming life-sim I desperately wish existed." Frame it as cinematic-pixel-art key-art, not a casual screenshot.
+5. **WARM-COZY REGISTER** — the scene is SAFE, INVITING, gentle. Warm sun-glow, soft palette, animated life. Never grim, never dark, never combat.
+6. **INHABITED FEEL** — solo farmer OR ambient villager IS in the scene, plus animals / crops / signs of daily life. Never an empty ghost-farm.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal — pixel art ONLY
+  • NO IP references (no Stardew NPCs / no Animal Crossing villagers / etc.)
+  • NO UI / HUD / dialogue boxes / health bars / button prompts / menus
+  • NO modern industrial / urban — pastoral / village-scale only
+  • NO empty / desolate / abandoned — the farm is INHABITED
+  • NO sci-fi / cyberpunk / horror / combat — those are separate paths
+  • NO sexualized / inappropriate content
+  • NO party-combat (life-sim ambient, not adventure-party)
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ COMPOSITION CRAFT — INHABITED COZY FARM / LIFE-SIM ━━━
+
+  • FOREGROUND: cobblestone / dirt-path / wooden-porch / crop-row edge with inhabited detail
+  • MIDGROUND: the focal farm locale — barn, henhouse, greenhouse, cottage, market-stall, fish-shack — with the solo farmer or villager mid-cozy-task
+  • BACKGROUND: rolling pastures, distant village rooftops, mountain backdrop, treeline, smoke curling from chimneys
+  • DEPTH: HD-2D-style multi-tier depth — sharp foreground / sharp midground / atmospheric distance
+  • LIGHTING: warm sun-glow OR lit-window lantern-glow in middle distance, generous, inviting
+  • LIFE: solo farmer-or-villager + animals + crops + lanterns + smoke + signs — the scene BREATHES warm-fuzzy life
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[the SPECIFIC farm locale (crop-row / barn / henhouse / greenhouse / beachside-shack / festival-square / cottage-porch / etc.) framed in cinematic-pixel-art composition], [the season + time + atmospheric biome (spring-morning rain / summer-noon golden / autumn-twilight orange / winter-night fireplace / first-frost dawn / festival-evening / etc.)], [the INHABITED LIFE — solo farmer mid-cozy-task OR ambient villager moment + animals + signs of daily farm-life]${cozy_phenomenon ? ', [cozy atmospheric phenomenon supporting the warm-fuzzy feel]' : ''}, [warm sun-glow OR lantern-glow + smoke + animated crops creating the cozy-inhabited atmosphere], [HD-2D-style multi-tier depth — Stardew Valley + Harvest Moon + Spiritfarer register], [16-bit pixel-art register with crunchy individual visible pixels and dithered shading]
+
+CRITICAL — PIXEL ART ONLY (NEVER smooth illustration). The scene is INHABITED and COZY. Cozy-life-sim key-art quality — warm sun-glow, animated crops + animals + smoke, generous warm-fuzzy register, "I want to play this for 200 hours" feel.
+
+Output ONLY 65-90 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon

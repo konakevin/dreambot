@@ -106,6 +106,11 @@ module.exports = {
   PIXELBOT_PIXEL_HORROR_CLASSIC_ENEMY: loadIfExists('pixelbot_pixel_horror_classic_enemy'),
   PIXELBOT_PIXEL_HORROR_HERO_ACTION: loadIfExists('pixelbot_pixel_horror_hero_action'),
   PIXELBOT_PIXEL_HORROR_GOTHIC_PROPS: loadIfExists('pixelbot_pixel_horror_gothic_props'),
+  // ─── cozy-farming-life-sim axis-system pools (2026-05-20) ───
+  PIXELBOT_COZY_FARMING_FARM_LOCALE: loadIfExists('pixelbot_cozy_farming_farm_locale'),
+  PIXELBOT_COZY_FARMING_FARM_BIOME: loadIfExists('pixelbot_cozy_farming_farm_biome'),
+  PIXELBOT_COZY_FARMING_FARMER_VILLAGER_LIFE: loadIfExists('pixelbot_cozy_farming_farmer_villager_life'),
+  PIXELBOT_COZY_FARMING_COZY_PHENOMENON: loadIfExists('pixelbot_cozy_farming_cozy_phenomenon'),
 
   // Shared across all paths (camera/grade)
   PIXEL_PERSPECTIVES: load('pixel_perspectives'),
