@@ -1769,6 +1769,486 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE specific COZY ATMOSPHERIC magic-moment, 20-40 words. Format: "EFFECT NAME CAPS — primary detail + position in scene + cozy register cue". Vary across the 10 categories. NO horror / dark / sci-fi / catastrophic / IP/UI/sexual. Cozy atmospheric only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── pixel-sci-fi-action path (2026-05-20 axis-system migration) ───
+  pixelbot_pixel_sci_fi_action_setting: {
+    format: 'simple',
+    theme: `SCI-FI SETTING for the PixelBot pixel-sci-fi-action path. Each entry describes ONE specific Contra / Mega Man / Metroid / Gradius / Blaster Master-style sci-fi-action setting — alien jungle / robot factory / space-station corridor / asteroid-field / mech-bay / post-apocalyptic ruins / etc. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry reads as a level from a 16-bit retro sci-fi action game. Saturated retro-arcade sci-fi. NOT cyberpunk-noir. NOT modern indie-illustrated.
+
+⚠️ SETTING CATEGORIES — distribute the 25 entries:
+  • ~3 ALIEN JUNGLE PLANET — Contra-style alien jungle platforms with vines and giant alien flora
+  • ~3 ROBOT FACTORY / INDUSTRIAL — Mega-Man-style mechanized factory with conveyors and turret racks
+  • ~3 SPACE-STATION CORRIDOR — Metroid-style hi-tech corridor with energy doors and shafts
+  • ~3 ASTEROID-FIELD / SPACE — Gradius-style asteroid field or nebula seen from spaceship
+  • ~2 MECH-BAY / HANGAR — Blaster-Master-style mech-bay with robots in maintenance racks
+  • ~2 POST-APOCALYPTIC RUINS — Turrican-style ruined city with rusted-metal and broken consoles
+  • ~2 LUNAR / HOSTILE-PLANET SURFACE — Star-Soldier-style barren planet surface with craters
+  • ~2 STARFIGHTER DOGFIGHT — Star-Fox-style cockpit view OR side-shooter view of dogfight
+  • ~2 ALIEN HIVE / CYBER-FORTRESS — Salamander-style biomechanical interior with pulsing organic-tech
+  • ~2 VOLCANIC ALIEN PLANET / ORBITAL RING — Axelay-style volcanic surface or orbital structure
+  • ~1 UNDERWATER ALIEN TEMPLE — Cybernator-style submerged alien complex
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC SETTING TYPE
+  - FLOOR / TERRAIN / SHIP detail (platform / catwalk / cockpit / asteroid)
+  - SCI-FI LANDMARKS (consoles / reactor / cables / energy-shields)
+  - SCI-FI ATMOSPHERIC CUE (steam-vents / plasma-haze / sparks / etc.)
+  - IMPLIED CAMERA (side-view / horizontal-shooter / top-down / 3/4-iso)
+
+🚫 STRICT BANS:
+  • NO cyberpunk-noir / NO modern-illustrated / NO concept-portrait
+  • NO IP / UI / sexualized content
+  • NO first-person / NO vertical-portrait-vista
+  • NO hero / enemy description (separate axes)`,
+    touchpoints: [
+      'ALIEN JUNGLE PLATFORM — side-view of an alien-jungle platforming level with giant glowing-blue alien-fungi flanking the foreground platform, dense alien-vine canopy in the background parallax, mist drifting between layers, Contra-style level',
+      'ALIEN-JUNGLE WATERFALL TIER — side-view of an alien-jungle level with multiple platform-tiers cascading down past a giant alien-waterfall on the right, glowing-pink alien-flora dotting the foreground, mid-level parallax depth',
+      'ALIEN-FOREST CANOPY PLATFORMS — side-view of an alien-forest canopy with floating-platforms suspended between giant alien-trees, glowing-green alien-leaves casting prismatic light, dense parallax depth',
+      'ROBOT-FACTORY CONVEYOR FLOOR — side-view of a Mega-Man-style robot factory level with conveyor-belts running along the foreground floor, suspended turret-racks on the back wall, industrial steel platforms, fluorescent overhead light',
+      'MECHANIZED INDUSTRIAL CORRIDOR — side-view of a mechanized industrial corridor with steel-plate floor, hanging cables and pipe-mazes overhead, sparks falling from broken machinery, retro-arcade industrial register',
+      'ROBOT-FACTORY GEARS-ROOM — side-view of a robot-factory gear-room with massive bronze-gear wheels turning in the background parallax, foreground steel-grate floor, hanging chains, classic Mega-Man-style level',
+      'SPACE-STATION HI-TECH CORRIDOR — side-view of a Metroid-style hi-tech space-station corridor with metallic-blue walls, glowing-orange energy-door at the far end, hanging cables overhead, steel-plate floor',
+      'SPACE-STATION VERTICAL SHAFT — top-down looking down a Metroid-style vertical shaft with steel-grate floor at the bottom, energy-tubes lining the walls, glowing-blue console lights, ladder running up the side',
+      'SPACE-STATION CARGO BAY — 3/4-iso angled-down on a space-station cargo bay with stacked crates and floating cargo-cranes overhead, steel-plate floor, fluorescent overhead light, blaster-master interior feel',
+      'ASTEROID-FIELD HORIZONTAL — horizontal-shooter view of an asteroid-field with massive rocks scrolling from the right, deep starfield backdrop with distant nebula, plasma-bolt trails crossing the foreground',
+      'NEBULA HORIZONTAL-SHOOTER — horizontal-shooter view of a hot-pink nebula backdrop with cosmic-dust drifting, electric-blue plasma-bolts crossing the screen, distant alien-mothership silhouette in deep background',
+      'ASTEROID-FIELD VERTICAL — top-down vertical-scroller view of an asteroid-field with massive rocks scrolling from the top, deep-space backdrop, enemy-ship silhouettes incoming, Star-Soldier-style level',
+      'MECH-BAY MAINTENANCE-RACKS — 3/4-iso angled-down on a mech-bay with multiple mech-walkers in maintenance-racks lining the side walls, central catwalk floor, overhead fluorescent light, hanging power-cables',
+      'MECH-BAY HANGAR-WIDE — 3/4-iso wide-angle on a mech-bay hangar with multiple mech-walker silhouettes in racks against the back wall, catwalk-floor running through the foreground, hanging cables, sparks from welding',
+      'POST-APOCALYPTIC RUINED-CITY — side-view of a Turrican-style ruined city level with rusted-steel rubble in the foreground, broken concrete walls, distant collapsed skyscrapers silhouetted, atmospheric haze',
+      'POST-APOCALYPTIC SUBWAY-TUNNEL — side-view of a Turrican-style post-apocalyptic subway-tunnel with cracked-concrete floor, broken-train-wreckage in the background, rusted-metal pipes overhead, dim atmosphere',
+      'LUNAR SURFACE WITH CRATERS — top-down on a barren lunar surface with multiple craters dotting the dust-gray floor, distant alien-structure silhouette, deep-black starfield above with Earth visible',
+      'HOSTILE-PLANET TOXIC-SURFACE — side-view of a hostile-planet surface with bubbling acid-green pools dotting the ash-gray floor, jagged-rock formations in midground, toxic-haze in the air, hostile alien register',
+      'STARFIGHTER COCKPIT VIEW — first-person-style starfighter cockpit view (NOT FPS, render the cockpit-frame from outside as a side-shooter would) with hero spaceship banking through asteroid-field, dynamic action',
+      'SIDE-SHOOTER DOGFIGHT — horizontal-shooter view of a dogfight with hero spaceship on the left in flight, enemy spaceships incoming from the right, plasma-bolts streaking, deep-space backdrop',
+      'ALIEN HIVE BIOMECHANICAL — side-view of an alien-hive biomechanical interior with pulsing organic-tech walls (Salamander-style), hanging fleshy-tubes overhead, foreground tech-flesh platform',
+      'CYBER-FORTRESS GUN-BATTERY — side-view of a cyber-fortress level with multiple gun-batteries mounted along the back wall, steel-plate foreground platform, glowing-red targeting-lasers, dim industrial atmosphere',
+      'VOLCANIC ALIEN PLANET — side-view of a volcanic alien planet surface with magma-rivers flowing through the foreground, alien-rock pillars in midground, lava-spurts erupting in the parallax background',
+      'ORBITAL RING-STATION — 3/4-iso angled-down on an orbital ring-station with curving steel-platform floor, energy-shields lining the perimeter, deep-space starfield visible through the perimeter, Axelay-style level',
+      'UNDERWATER ALIEN-TEMPLE — side-view of an underwater alien-temple level with submerged hi-tech walls, glowing-blue alien-runes embedded in the stone, drifting water-particles, foreground temple-floor',
+    ],
+    instructions: `Each entry is ONE specific SCI-FI SETTING, 25-50 words. Format: "SETTING NAME CAPS — specific setting + floor/terrain + sci-fi landmarks + atmospheric cue + implied camera". MANDATORY — (a) setting type, (b) floor/terrain, (c) sci-fi landmarks, (d) atmospheric cue, (e) implied camera. NO cyberpunk-noir / modern-illustrated. NO IP/UI/sexual. NO hero/enemy. NO first-person / vertical-portrait. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_pixel_sci_fi_action_enemy: {
+    format: 'simple',
+    theme: `SCI-FI ENEMY for the PixelBot pixel-sci-fi-action path. Each entry describes ONE specific Contra / Mega Man / Metroid / Gradius-style sci-fi enemy mid-action on the scene — alien creature / robot-soldier / mech-walker / drone-swarm / plasma-turret / xenobeast / etc. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry produces a recognizable retro-arcade sci-fi enemy sprite mid-action — Contra alien / Mega Man robot-master / Metroid xenobeast / Gradius enemy-ship. NOT modern-realistic-horror.
+
+⚠️ ENEMY CATEGORIES — distribute the 25 entries:
+  • ~3 ALIEN CREATURE — alien with claws / xenomorph-style / alien-queen / alien-warrior
+  • ~3 ROBOT-SOLDIER — robot-grunt / sentry-bot / armored-robot / pulse-rifle-trooper
+  • ~3 MECH-WALKER — bipedal mech / tripod-mech / spider-mech / battle-mech
+  • ~3 ALIEN-DRONE SWARM — drone-cluster / floating-mine / hovering-orb-drone
+  • ~2 PLASMA-TURRET — wall-mounted turret / ceiling-turret / rotating cannon
+  • ~2 ENEMY-SPACESHIP — enemy fighter / interceptor / bomber (for space-shooter contexts)
+  • ~2 BIOMECHANICAL HORROR — fleshy-mech-fusion / organic-cannon / parasite-mech
+  • ~2 ALIEN HIVE-QUEEN / BOSS-CREATURE — large alien boss / cybernetic-general
+  • ~2 PARASITE / WORM — segmented alien-worm / acid-spitter / parasite-attacker
+  • ~2 BATTLE-DRONE / WAR-MACHINE — heavy-walker / battle-tank / siege-mech
+  • ~1 ALIEN PLANT-PREDATOR — carnivorous-plant / acid-flower
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC ENEMY TYPE
+  - MID-ACTION POSE (firing / charging / lunging / patrolling / striking)
+  - SIGNATURE FEATURE (claws / weapons / armor / wings / energy)
+  - ON THE SCENE (in the play-area)
+
+🚫 STRICT BANS:
+  • NO gore / explicit violence
+  • NO realistic-horror / NO modern-distressed
+  • NO IP characters (no Xenomorph / no Sigma / no Mother-Brain — only generic)
+  • NO hero description (separate axis)
+  • NO sexualized monsters`,
+    touchpoints: [
+      'ALIEN-XENOBEAST LUNGING — alien-xenobeast with claws extended mid-lunge across the play-area, glowing-yellow eye-clusters, segmented-armor body, biomech-feel, mid-attack pose',
+      'ALIEN-WARRIOR CHARGING — bipedal alien-warrior with claw-arms charging across the play-area mid-stride, alien-helmet, glowing-blue energy-shield, mid-attack pose',
+      'ALIEN-QUEEN REARING — massive alien-queen rearing up on the back of the play-area with multiple arm-claws raised, glowing-purple bio-light from her core, mid-roar pose, dramatic boss-creature',
+      'ROBOT-GRUNT FIRING — armored robot-grunt mid-pulse-rifle-fire on the play-area, muzzle-flash erupting from the rifle, optical-eye glowing red, mid-attack pose, retro-arcade enemy',
+      'SENTRY-BOT PATROLLING — wheeled sentry-bot mid-patrol across the play-area with rotating-radar-dish on top and pulse-cannon mounted at the front, glowing-red targeting-laser',
+      'ARMORED ROBOT-TROOPER CHARGING — armored robot-trooper mid-charge across the play-area with shield in one arm and plasma-blade in the other, mid-stride pose, classic Contra-style enemy',
+      'BIPEDAL MECH-WALKER STOMPING — massive bipedal mech-walker mid-stomp across the play-area with arm-cannons mid-fire, mech-pilot silhouette visible in cockpit, dramatic boss-scale enemy',
+      'TRIPOD-MECH WALKING — three-legged tripod-mech walking across the play-area with central plasma-cannon mid-rotating, glowing-orange energy-core in the body, mid-attack pose',
+      'SPIDER-MECH SKITTERING — eight-legged spider-mech mid-skitter across the play-area with multiple weapon-mounts on the back, glowing-red targeting-eyes, mid-charge pose',
+      'ALIEN-DRONE CLUSTER SWARMING — cluster of 5-8 floating alien-drones swarming through the play-area, each with single glowing-eye and small pulse-cannon, mid-attack swarm',
+      'FLOATING MINE-DRONES — multiple spherical floating mine-drones positioned across the play-area with blinking-red lights, mid-deployment pose, hovering threat',
+      'HOVERING ORB-DRONE — single hovering orb-drone mid-pulse-cannon-fire on the play-area, pulsing-blue energy-shield around it, mid-attack pose, glowing-red optical-eye',
+      'WALL-MOUNTED PLASMA-TURRET — wall-mounted plasma-turret rotating with cannon-barrel tracking the hero, glowing-orange energy-core visible, mid-aim pose, classic Contra-style hazard',
+      'CEILING-TURRET DESCENDING — ceiling-mounted turret descending from the ceiling on a hydraulic-arm with twin-barrels mid-fire, sparks flying, dramatic mid-deploy moment',
+      'ENEMY FIGHTER INCOMING — sleek enemy fighter mid-strafe across the right side of the play-area, plasma-bolt streaks trailing from its wing-cannons, mid-attack run, side-shooter classic',
+      'ENEMY BOMBER STRAFING — bulky enemy bomber mid-strafe across the play-area with bomb-bay open and bombs falling, plasma-cannon mid-fire from the nose, mid-attack pose',
+      'BIOMECH PARASITE-MECH — biomechanical parasite-mech with fleshy organic-tech body wrapped around a humanoid frame, claws extended mid-attack, glowing-red bio-core, mid-charge pose',
+      'ORGANIC-CANNON FLESHY — biomechanical organic-cannon (a wall-mounted fleshy-mech-fusion) mid-pulse-fire, pulsing organic-tech tubes, glowing-yellow energy-core, mid-attack pose',
+      'CYBERNETIC GENERAL CHARGING — massive cybernetic general (a half-organic half-mech boss) mid-charge across the play-area with pulse-rifle in one cyber-arm and energy-shield in the other, dramatic boss-creature',
+      'ALIEN HIVE-QUEEN BOSS — massive alien hive-queen boss filling the back of the play-area with multiple arm-claws and tail-cannon, glowing-purple bio-core, mid-roar pose, dramatic encounter',
+      'SEGMENTED ALIEN-WORM — massive segmented alien-worm coiling across the play-area with multiple-segment body, glowing-red mouth-maw at the head mid-roar, dramatic boss-scale enemy',
+      'ACID-SPITTER ALIEN — small acid-spitter alien on the play-area mid-spit with acid-droplets arcing toward the hero, glowing-green acid-sac on its back, mid-attack pose',
+      'HEAVY-WALKER BATTLE-MECH — heavy walker battle-mech (treads instead of legs) mid-roll across the play-area with twin-plasma-cannons mid-fire, dramatic boss-scale war-machine',
+      'BATTLE-TANK MID-FIRE — sci-fi battle-tank on the play-area mid-fire of its main-gun, muzzle-flash erupting, treads on the floor, mid-attack pose',
+      'ALIEN CARNIVOROUS-PLANT — massive alien carnivorous-plant rooted to the play-area floor with vine-tentacles extended mid-attack, glowing-pink flytrap-maw at the head, mid-snap pose',
+    ],
+    instructions: `Each entry is ONE specific SCI-FI ENEMY, 25-50 words. Format: "ENEMY NAME + ACTION CAPS — enemy type + mid-action pose + signature feature + on play-area". MANDATORY — (a) enemy type, (b) mid-action pose, (c) signature feature, (d) on the scene. NO gore. NO realistic-horror. NO IP characters. NO hero. NO sexualized. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_pixel_sci_fi_action_hero_action: {
+    format: 'simple',
+    theme: `SOLO HERO RUN-AND-GUN ACTION for the PixelBot pixel-sci-fi-action path. Each entry describes ONE specific Contra / Mega Man / Metroid / Gradius-style solo hero pixel-sprite mid-action on the foreground — armored space-marine / mech-pilot / jetpack-soldier / starfighter-pilot / cybernetic-warrior / etc. Tiny scale, mid-action. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry produces a solo retro-arcade-action hero sprite on the foreground mid-attack — single run-and-gun protagonist (Contra-style). 1 sidekick acceptable but never party.
+
+⚠️ HERO ARCHETYPE VARIETY:
+  • Armored space-marine (pulse-rifle / plasma-rifle / energy-shield)
+  • Jetpack-soldier (mid-flight / hover-pose)
+  • Mech-pilot (mid-cockpit / mid-mech-step)
+  • Starfighter-pilot (in cockpit silhouette mid-banking)
+  • Cybernetic-warrior (cyber-arms / energy-blade)
+  • Lone-wanderer (post-apoc / pulse-rifle / coat)
+  • Heavy-trooper (rocket-launcher / heavy-armor)
+  • Stealth-operative (cloaked / energy-knife / silenced-rifle)
+  • Power-suit explorer (Metroid-style power-suit with arm-cannon)
+
+⚠️ MID-ACTION POSES MANDATORY:
+  - Mid-rifle-fire / mid-pulse-shot
+  - Mid-jump / leaping-attack
+  - Mid-strafe (Contra running while firing sideways)
+  - Mid-roll (dodging incoming fire)
+  - Mid-mech-step
+  - Mid-spaceship-bank
+  - Mid-jetpack-hover
+  - Mid-grenade-throw
+
+🚫 STRICT BANS:
+  • NO modern-realistic / NO concept-art-portrait
+  • NO sexualized armor
+  • NO gore / dismemberment
+  • NO IP characters (no Master Chief / no Samus / no Mega Man)
+  • NO enemy description (separate axis)
+  • NO party-multi-hero (solo run-and-gun is genre-correct)`,
+    touchpoints: [
+      'SPACE-MARINE MID-RIFLE-FIRE — armored space-marine tiny on the foreground platform mid-pulse-rifle-fire with muzzle-flash erupting, plasma-bolts streaking toward the enemy, mid-strafe pose, dynamic action',
+      'SPACE-MARINE MID-LEAP-FIRE — armored space-marine tiny on the foreground mid-leap-attack with rifle blazing mid-air, plasma-bolts streaking, mid-air pose, dynamic Contra-style action',
+      'SPACE-MARINE MID-ROLL-DODGE — armored space-marine tiny on the foreground mid-dodge-roll with rifle in one hand evading incoming enemy fire, plasma-bolts crossing overhead',
+      'SPACE-MARINE GRENADE-THROW — armored space-marine tiny on the foreground mid-grenade-throw with grenade arcing through the air toward the enemy, mid-strafe pose, secondary action',
+      'JETPACK-SOLDIER HOVERING — jetpack-soldier tiny on the foreground mid-jetpack-hover above the platform with jet-trail blue-flame erupting from the pack, rifle aimed mid-fire',
+      'JETPACK-SOLDIER MID-FLIGHT — jetpack-soldier tiny mid-flight across the foreground with jet-trail trailing behind, rifle in one hand mid-fire, dynamic mid-air action',
+      'MECH-PILOT MID-COCKPIT — mech-pilot silhouette visible in the cockpit of a mid-sized walker mech on the foreground with pilot mid-stride, mech-arm-cannon mid-fire',
+      'MECH-PILOT MID-MECH-STEP — mech-pilot in a walker mech mid-step across the foreground with mech-leg in mid-stride, twin arm-cannons mid-pulse-fire, dramatic mech-pilot action',
+      'STARFIGHTER-PILOT MID-BANK — starfighter spaceship mid-bank across the left of the frame with cockpit-silhouette of pilot visible, plasma-cannons mid-fire from wing-tips, side-shooter classic',
+      'STARFIGHTER MID-LOOP — starfighter spaceship mid-loop across the frame with engine-trail arcing behind, cockpit-silhouette of pilot visible, plasma-bolts streaking forward, dynamic action',
+      'CYBERNETIC-WARRIOR MID-BLADE-STRIKE — cybernetic-warrior tiny on the foreground mid-energy-blade-strike with glowing-cyan energy-blade arcing toward the enemy, mid-attack pose',
+      'CYBERNETIC-WARRIOR MID-CHARGE — cybernetic-warrior tiny on the foreground mid-charge across the platform with cyber-arms extended and energy-blade glowing, mid-attack pose',
+      'LONE-WANDERER MID-RIFLE-FIRE — lone-wanderer with coat tiny on the foreground mid-pulse-rifle-fire from a kneeling stance, muzzle-flash erupting, hood obscuring the face, mid-shoot pose',
+      'LONE-WANDERER MID-DODGE — lone-wanderer with coat tiny on the foreground mid-dodge-roll evading incoming fire, rifle in one hand, mid-action pose, post-apoc register',
+      'HEAVY-TROOPER MID-ROCKET-FIRE — heavy-trooper in bulk-armor tiny on the foreground mid-rocket-launcher-fire with rocket arcing toward the enemy with smoke-trail, mid-attack pose',
+      'HEAVY-TROOPER MID-CHARGE — heavy-trooper in bulk-armor tiny on the foreground mid-charge with heavy-machine-gun mid-fire, muzzle-flash erupting, ammo-belt swaying, mid-attack pose',
+      'STEALTH-OPERATIVE MID-CLOAK-DROP — stealth-operative tiny on the foreground mid-cloak-drop with energy-knife in one hand and silenced-rifle in the other, mid-reveal pose',
+      'STEALTH-OPERATIVE MID-KNIFE-STRIKE — stealth-operative tiny on the foreground mid-energy-knife-strike with glowing-blue energy-knife arcing toward the enemy, mid-attack pose',
+      'POWER-SUIT EXPLORER MID-CANNON-FIRE — power-suit explorer (Metroid-style with arm-cannon) tiny on the foreground mid-cannon-fire with plasma-bolt streaking toward the enemy, mid-shoot pose',
+      'POWER-SUIT EXPLORER MID-MORPH-BALL — power-suit explorer mid-morph-ball-roll across the platform foreground as a small glowing-orb-form, classic Metroid-style mid-action',
+      'SPACE-MARINE WITH SIDEKICK — armored space-marine + small floating-companion-drone tiny on the foreground mid-strafe-fire, both mid-action, drone-light glowing, dynamic moment',
+      'MECH-PILOT WITH SIDEKICK — mech-pilot in walker mech + small support-drone hovering beside on the foreground both mid-action, mech-arm-cannon mid-fire, drone-light glowing',
+      'JETPACK-SOLDIER MID-DOUBLE-JUMP — jetpack-soldier tiny mid-double-jump above the platform foreground with jet-trail behind, rifle mid-fire, dynamic vertical action',
+      'STARFIGHTER MID-BARREL-ROLL — starfighter spaceship mid-barrel-roll across the frame with engine-trail spiraling, cockpit-silhouette mid-roll, dynamic Star-Fox-style action',
+      'SPACE-MARINE MID-WALL-SLIDE — armored space-marine tiny on the foreground mid-wall-slide down a vertical surface with rifle braced, sparks flying from the wall, dynamic action',
+    ],
+    instructions: `Each entry is ONE specific SOLO HERO action moment, 25-50 words. Format: "HERO + ACTION CAPS — solo hero class + mid-action pose + weapon detail + on foreground". MANDATORY — (a) solo hero class, (b) mid-action pose, (c) weapon detail, (d) on the foreground. NO modern-realistic / concept-art-portrait. NO sexualized. NO gore. NO IP characters. NO enemy description. NO party-multi-hero. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_pixel_sci_fi_action_props: {
+    format: 'simple',
+    theme: `40%-GATED SCI-FI FLAVOR PROPS for the PixelBot pixel-sci-fi-action path. Each entry describes ONE specific Contra / Mega Man / Metroid / Gradius-style sci-fi-flavor atmospheric prop accenting the scene. Each entry 20-40 words.
+
+🚫 STRICT BANS: NO IP / UI / sexualized / explicit gore / cyberpunk-noir.
+
+✓ PROP CATEGORIES:
+  A. PULSING CONSOLES / MONITORS — hi-tech console panels with glowing screens
+  B. REACTOR CORES / ENERGY-PILLARS — glowing reactor cores / plasma-pillars
+  C. HANGING CABLES / PIPES — overhead cables / pipe-mazes / coolant-pipes
+  D. METALLIC CATWALKS / RAILINGS — steel catwalks / industrial railings
+  E. ENERGY-SHIELD WALLS / DOORS — translucent energy-shields / glowing energy-doors
+  F. FLICKERING MONITORS / SCREENS — broken-screens / glitching displays
+  G. PLASMA-PILLAR WEAPONS / TURRETS-INACTIVE — ambient turrets not mid-fire
+  H. NEON ENERGY-ARCS / RIBBON-TUBES — glowing energy-arcs / neon-tubes
+  I. SLIDING BLAST-DOORS / AIRLOCKS — sci-fi blast-doors / airlocks
+  J. BUBBLING CHEMICAL-TANKS / SPECIMEN-PODS — bubbling tanks / specimen-pods
+  K. FLOATING DEBRIS / SHATTERED HULL — drifting debris / hull-plating
+  L. GLOWING ALIEN RUNES — alien-runic markings on walls / floor`,
+    touchpoints: [
+      'PULSING CONSOLE PANELS — multiple pulsing console panels mounted along a back wall with glowing-blue screens displaying scrolling-data, mid-blink LED-indicators, retro hi-tech atmosphere',
+      'GLOWING REACTOR-CORE — massive glowing-cyan reactor-core mounted at the center of a back wall with energy-arcs crackling around it, retro-arcade sci-fi power-source register',
+      'PLASMA-PILLAR ENERGY — vertical plasma-pillar of glowing-magenta energy in the background mid-scene, pulsing rhythmically, retro arcade sci-fi register',
+      'HANGING COOLANT-PIPES — overhead network of coolant-pipes with steam-vents hissing periodically, drips of coolant falling, atmospheric industrial register',
+      'HANGING POWER-CABLES — overhead network of hanging power-cables with glowing-blue energy pulsing through them, atmospheric hi-tech register',
+      'STEEL-CATWALK CROSSING — steel-catwalk crossing the scene at mid-height with industrial railings, perforated-steel floor visible, atmospheric industrial register',
+      'INDUSTRIAL RAILINGS FOREGROUND — industrial railings along the foreground edge of the play-area with bolts visible and steel-plate underneath, retro arcade sci-fi register',
+      'ENERGY-SHIELD WALL — translucent glowing-blue energy-shield wall blocking off part of the play-area, electric-arcs crackling along its surface, atmospheric hi-tech',
+      'GLOWING ENERGY-DOOR — glowing-orange energy-door at the back of the scene closed and pulsing rhythmically, mounted in metallic steel-frame, atmospheric hi-tech',
+      'FLICKERING MONITOR-WALL — wall of flickering monitors at the back of the scene with glitching-displays and broken-screens, occasional sparks erupting, atmospheric',
+      'BROKEN HOLOGRAM-PROJECTOR — broken hologram-projector with glitching-blue holographic-imagery flickering above it, sparks erupting periodically, atmospheric',
+      'INACTIVE PLASMA-TURRET — inactive plasma-turret mounted on the wall with cannon-barrel idle and glowing-orange energy-core visible, atmospheric threat-detail',
+      'NEON ENERGY-ARC LIGHT-FIXTURE — large neon-energy-arc light-fixture mounted on the wall with electric-blue arcs crackling between the contact-points, glowing illumination',
+      'RIBBON-TUBE LIGHTING — long neon ribbon-tubes lining the walls of the scene with glowing-cyan light, retro hi-tech atmospheric register',
+      'SLIDING BLAST-DOOR — large sliding blast-door at the back of the scene closed and mid-opening with hydraulic-pistons visible, steel-plate door panels',
+      'AIRLOCK-CHAMBER FOREGROUND — airlock-chamber in the foreground with two doors visible and pressure-gauges on the wall, atmospheric sci-fi-station detail',
+      'BUBBLING CHEMICAL-TANK — large bubbling chemical-tank with glowing-green liquid and pipes connecting to it, atmospheric retro-arcade register',
+      'SPECIMEN-POD WITH CREATURE — specimen-pod with glowing-blue liquid and an alien-creature silhouette floating inside, atmospheric retro arcade hi-tech',
+      'FLOATING DEBRIS DRIFTING — multiple chunks of floating-debris drifting through the scene at parallax depths, hi-tech wreckage register, atmospheric',
+      'SHATTERED HULL-PLATING — shattered hull-plating scattered across the foreground floor with twisted-metal edges, atmospheric post-apoc / disaster register',
+      'GLOWING ALIEN-RUNES WALL — glowing-cyan alien-runic markings carved into the back wall pulsing rhythmically, ancient-alien register, atmospheric',
+      'GLOWING ALIEN-RUNES FLOOR — glowing-magenta alien-runic markings carved into the foreground floor pulsing rhythmically, ancient-alien register, atmospheric',
+      'BIOMECHANICAL VEIN-PIPES — biomechanical vein-pipes pulsing with glowing-red bio-fluid along the walls, organic-tech fusion, atmospheric Salamander-style',
+      'SPARKS-AND-EMBERS PARTICLES — sparks and embers drifting through the scene at multiple parallax depths from broken machinery, atmospheric industrial-damage register',
+      'STEAM-VENTS HISSING — multiple steam-vents in the foreground/midground hissing white-steam upward periodically, atmospheric industrial register',
+    ],
+    instructions: `Each entry is ONE specific SCI-FI FLAVOR PROP, 20-40 words. Format: "PROP NAME CAPS — primary prop + position in scene + atmospheric detail". Vary across the 12 categories. NO IP/UI/sexual/gore/cyberpunk-noir. Retro-arcade sci-fi atmosphere only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── classic-jrpg path (2026-05-20 axis-system migration) ───
+  pixelbot_classic_jrpg_locale: {
+    format: 'simple',
+    theme: `JRPG LOCALE for the PixelBot classic-jrpg path. Each entry describes ONE specific Zelda LttP / FF6 / Chrono Trigger / Secret of Mana-style 3/4 top-down tile-based JRPG locale. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry reads as a level / scene from a 16-bit classic SNES-era top-down JRPG. Tile-grid floor + characteristic biome / setting. Cinematic-pixel-art.
+
+⚠️ LOCALE CATEGORIES — distribute the 25 entries:
+  • ~3 OVERWORLD GRASS-PLAIN — open overworld with grass tiles, distant mountains, scattered trees
+  • ~3 DENSE FOREST — forest tile-grid with canopy, dirt paths through trees
+  • ~2 MOUNTAIN PASS — mountain pass with rocky tiles, cliffs, climbing path
+  • ~3 TOWN HUB — village square with cobblestone tiles, shops, fountain
+  • ~2 INN / TAVERN INTERIOR — inn-interior wooden floor, tables, fireplace, NPC bartender
+  • ~3 CASTLE / THRONE-ROOM — castle interior with stone-tile floor, columns, throne, banners
+  • ~3 DUNGEON / CRYPT — dungeon corridor with stone-tile floor, torches, broken pillars
+  • ~2 SACRED GROVE / TEMPLE — sacred forest grove or stone-temple with altar and runes
+  • ~2 VOLCANIC CAVE — volcanic cave with lava-tile floor, stalactites, glowing-orange
+  • ~1 FROZEN TUNDRA — frozen-tile floor, snow-and-ice, igloo, frostbite atmosphere
+  • ~1 COASTAL PIER / OCEAN — wooden-pier on the ocean, boats, lighthouse
+  • ~1 SKY-TEMPLE / FLOATING ISLAND — sky-temple on floating island, cloud-tiles, columns
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC LOCALE TYPE
+  - TILE-GRID FLOOR detail (grass tiles / stone tiles / cobble / wooden / cave-stone / etc.)
+  - LOCALE LANDMARKS (trees / columns / throne / altar / fountain / etc.)
+  - BIOME ATMOSPHERIC CUE (canopy / torchlight / sun-shafts / etc.)
+  - 3/4 TOP-DOWN CAMERA implied
+
+🚫 STRICT BANS:
+  • NO modern / contemporary setting
+  • NO sci-fi / horror / cozy-farming
+  • NO IP / UI / sexualized content
+  • NO empty / desolate
+  • NO hero / NPC / enemy description (separate axes)
+  • NO side-scrolling / first-person / straight-down god's-eye / 3D-iso-grid (3/4 top-down ONLY)`,
+    touchpoints: [
+      'OVERWORLD GRASS-PLAIN — 3/4 top-down view of an overworld grass-plain with bright-green grass tiles, scattered trees on the edges, distant mountain silhouette in the parallax background, dirt path winding through',
+      'OVERWORLD WITH BRIDGE — 3/4 top-down view of an overworld grass-plain with a stone-bridge crossing a river, grass tiles around, distant town silhouette in the parallax background, classic Zelda-LttP register',
+      'OVERWORLD AT CROSSROADS — 3/4 top-down view of an overworld grass-plain with crossroads-signpost at the intersection of two dirt-paths, grass tiles around, distant village silhouette',
+      'DENSE FOREST WITH CANOPY — 3/4 top-down view of a dense forest with green-canopy filtering sun-shafts, dirt-path through tree-tiles, scattered mushrooms, atmospheric forest register',
+      'FOREST CLEARING WITH RUINS — 3/4 top-down view of a forest clearing with ancient stone-ruins half-buried in grass-tiles, vines growing over them, atmospheric mystery register',
+      'FOREST PATH WITH WATERFALL — 3/4 top-down view of a forest path leading past a small waterfall and pond, dirt-path tiles, lily-pads on the water, atmospheric peaceful register',
+      'MOUNTAIN PASS WITH CLIFF — 3/4 top-down view of a mountain pass with rocky-tile floor, cliff-edge on one side, distant peaks in the parallax background, climbing-rope visible',
+      'MOUNTAIN PASS WITH BRIDGE — 3/4 top-down view of a mountain pass with rope-and-plank bridge crossing a chasm, rocky-tile floor, distant peaks, atmospheric peril register',
+      'TOWN-SQUARE WITH FOUNTAIN — 3/4 top-down view of a town-square with central stone-fountain on a cobblestone-tile floor, half-timbered shop-fronts surrounding, lantern-posts at the corners',
+      'TOWN-SQUARE WITH MARKET — 3/4 top-down view of a town-square with market-stalls along the perimeter, cobblestone-tile floor, awnings overhead, signs above the stalls',
+      'COTTAGE-ROW STREET — 3/4 top-down view of a cottage-row street with cobblestone-tile floor running between two rows of half-timbered cottages, lantern-posts and flower-pots',
+      'INN-INTERIOR WITH TABLES — 3/4 top-down view of an inn-interior with wooden-tile floor, round-tables with chairs around the room, fireplace at the back wall, hanging signs',
+      'TAVERN-INTERIOR WITH BAR — 3/4 top-down view of a tavern-interior with wooden-tile floor, bar counter at the back, barrels stacked beside, hanging-lanterns warm-yellow glow',
+      'CASTLE-THRONE ROOM — 3/4 top-down view of a castle throne-room with red-carpet running down the center on stone-tile floor, twin rows of stone columns, throne on a raised dais at the back',
+      'CASTLE-COURTYARD — 3/4 top-down view of a castle-courtyard with stone-tile floor, central fountain, castle walls surrounding, banners hanging from the towers, atmospheric royal register',
+      'CASTLE-LIBRARY — 3/4 top-down view of a castle library with wooden-tile floor, bookshelves lining the walls, central reading-table with a glowing-magic-book, atmospheric arcane register',
+      'DUNGEON-CRYPT CORRIDOR — 3/4 top-down view of a dungeon-crypt corridor with stone-tile floor, broken pillars on either side, hanging torches on the walls, atmospheric perilous register',
+      'DUNGEON-CRYPT WITH SARCOPHAGUS — 3/4 top-down view of a dungeon-crypt with stone-tile floor and a central stone-sarcophagus, hanging cobwebs, dim torch-light, atmospheric tomb register',
+      'DUNGEON-PRISON CELLS — 3/4 top-down view of a dungeon prison-cellblock with iron-barred doors lining both walls, stone-tile floor, single torch hanging, atmospheric perilous register',
+      'SACRED GROVE WITH ALTAR — 3/4 top-down view of a sacred forest-grove with stone-altar at the center, ancient-tree behind, grass-tiles around, sun-shafts filtering through canopy, magical register',
+      'STONE-TEMPLE WITH RUNES — 3/4 top-down view of a stone-temple with stone-tile floor inscribed with glowing-cyan runes, columns lining the walls, central altar with offering-bowl, magical atmosphere',
+      'VOLCANIC CAVE INTERIOR — 3/4 top-down view of a volcanic cave with lava-pool tiles glowing-orange in some sections, stalactites hanging from above, ash-and-rock floor between lava-pools',
+      'VOLCANIC CAVE WITH BRIDGE — 3/4 top-down view of a volcanic cave with stone-bridge crossing a lava-river, glowing-orange ambient, stalactites hanging, atmospheric perilous register',
+      'FROZEN TUNDRA WITH IGLOO — 3/4 top-down view of a frozen-tundra with snow-and-ice tiles, scattered igloos, distant snow-mountain silhouette, atmospheric frosty register, breath-mist implied',
+      'COASTAL PIER WITH BOATS — 3/4 top-down view of a coastal wooden-pier on the ocean with two small fishing-boats tied up, wooden-plank tile floor, distant lighthouse, atmospheric coastal register',
+    ],
+    instructions: `Each entry is ONE specific JRPG LOCALE, 25-50 words. Format: "LOCALE NAME CAPS — 3/4 top-down view + specific locale + tile-grid floor + landmarks + atmospheric cue". MANDATORY — (a) 3/4 top-down camera, (b) locale type, (c) tile-grid floor, (d) landmarks, (e) atmospheric cue. NO modern. NO sci-fi/horror/cozy-farming. NO IP/UI/sexual. NO empty/desolate. NO hero/NPC/enemy. NO side-scrolling/first-person/god's-eye/3D-iso-grid. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_classic_jrpg_party_action: {
+    format: 'simple',
+    theme: `HERO PARTY MID-MOMENT for the PixelBot classic-jrpg path. Each entry describes ONE specific Zelda LttP / FF6 / Chrono Trigger-style hero party-sprite mid-action on the tile-grid — single hero or 2-4 party members walking / examining / mid-cutscene / mid-action. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry produces tiny SNES-JRPG hero-sprite(s) mid-stride / mid-action on the tile-grid. Solo or party. Genre signatures: kid in green tunic with sword, mage in robe with staff, warrior in armor with shield, princess in gown, ninja in dark garb.
+
+⚠️ PARTY-COMPOSITION VARIETY:
+  • ~10 SOLO HERO — single hero mid-action
+  • ~10 PARTY OF 2-3 — 2-3 party members walking together
+  • ~5 PARTY OF 4 — full party of 4 in formation
+
+⚠️ ACTION VARIETY:
+  • Walking the tile-grid mid-stride
+  • Examining a signpost / chest / altar
+  • Mid-cutscene gesturing / talking
+  • Mid-magic-spell cast
+  • Mid-sword-swing (if combat-flavored)
+  • Standing at the edge of a vista
+  • Climbing a staircase
+  • Crossing a bridge
+  • Approaching an NPC
+  • Discovering a treasure-chest
+
+⚠️ EVERY entry MUST include:
+  - PARTY SIZE (solo / 2 / 3 / 4)
+  - HERO ARCHETYPES (specific SNES-era forms — green-tunic kid / robed mage / armored warrior / etc.)
+  - MID-ACTION POSE (walking / examining / casting / etc.)
+  - POSITION ON TILE-GRID
+  - SMALL SCALE (tiny sprite, ~1/15 of frame)
+
+🚫 STRICT BANS:
+  • NO sexualized armor / character design
+  • NO modern attire
+  • NO IP characters (no Link / no Crono / no Cloud — generic SNES-era forms only)
+  • NO setting description (separate axis)`,
+    touchpoints: [
+      'SOLO GREEN-TUNIC KID WALKING — solo kid in green-tunic with sword sheathed mid-stride across the tile-grid foreground, classic Zelda-LttP-style sprite, mid-walk pose',
+      'SOLO ARMORED WARRIOR APPROACHING — solo armored warrior with shield mid-stride across the tile-grid approaching the back of the scene, classic SNES-JRPG-style sprite',
+      'SOLO ROBED MAGE CASTING — solo robed mage with staff held aloft mid-magic-cast on the tile-grid, glowing-blue magic-circle below the mage feet, mid-cast pose',
+      'SOLO PRINCESS RUNNING — solo princess in gown mid-stride across the tile-grid, hair flowing behind, mid-run pose, classic SNES-JRPG-style sprite',
+      'SOLO NINJA MID-LEAP — solo ninja in dark garb mid-leap across the tile-grid foreground, twin-daggers in hand, dynamic mid-air pose, classic SNES-style sprite',
+      'SOLO MONK MID-PUNCH — solo monk in saffron robe mid-punch-strike on the tile-grid, energy-fist mid-action, classic SNES-JRPG sprite',
+      'SOLO HERO EXAMINING SIGNPOST — solo kid in green-tunic standing beside a wooden-signpost mid-examine pose on the tile-grid, classic moment of player exploration',
+      'SOLO HERO AT TREASURE-CHEST — solo armored warrior crouched beside a wooden-treasure-chest mid-opening, glowing-yellow light spilling from the lid, classic loot-discovery moment',
+      'SOLO HERO AT VISTA-EDGE — solo kid in green-tunic standing at the edge of a vista on the tile-grid, looking out toward distant mountains, contemplative mid-pose',
+      'SOLO HERO CLIMBING STAIRS — solo warrior mid-stride climbing a wide-set of stone-stairs at the back of the scene, mid-step pose, classic exploration moment',
+      'PARTY OF 2 WALKING TOGETHER — party of 2 (green-tunic kid + robed mage) mid-stride together across the tile-grid, side-by-side, mid-walk pose, classic JRPG party-mode',
+      'PARTY OF 2 EXAMINING CHEST — party of 2 (armored warrior + princess) crouched together beside a wooden-treasure-chest, both mid-examine pose, atmospheric discovery moment',
+      'PARTY OF 2 AT NPC — party of 2 (kid + mage) standing in front of a NPC-villager mid-dialogue-pose, both mid-conversation gesture, classic moment',
+      'PARTY OF 2 MID-MAGIC — party of 2 (mage + warrior) on the tile-grid with mage mid-magic-cast, warrior mid-shield-raise defensively, classic combat-prep moment',
+      'PARTY OF 2 CROSSING BRIDGE — party of 2 (warrior + ninja) mid-stride crossing a stone-bridge on the tile-grid, atmospheric exploration moment, parallel walking',
+      'PARTY OF 3 WALKING IN FORMATION — party of 3 (warrior + mage + princess) walking together in formation across the tile-grid, mid-walk pose, classic JRPG party-mode',
+      'PARTY OF 3 AROUND ALTAR — party of 3 (kid + mage + warrior) gathered around a stone-altar at the back of the scene, all mid-examine pose, atmospheric magical moment',
+      'PARTY OF 3 ENTERING CASTLE — party of 3 (warrior + mage + ninja) mid-stride entering a castle through the gate, mid-walk pose, atmospheric exploration moment',
+      'PARTY OF 3 MID-CUTSCENE — party of 3 (warrior + princess + mage) gathered together mid-cutscene gesturing toward each other, atmospheric story moment',
+      'PARTY OF 3 AT INN-BAR — party of 3 (warrior + ninja + monk) standing at an inn-bar with mugs raised, mid-toast pose, atmospheric rest-and-recover moment',
+      'PARTY OF 4 WALKING IN FORMATION — party of 4 (kid + mage + warrior + princess) walking together in formation across the tile-grid, classic complete-party arrangement',
+      'PARTY OF 4 AT BOSS-DOOR — party of 4 (warrior + mage + ninja + monk) standing in formation in front of a massive boss-door at the back of the scene, atmospheric pre-battle moment',
+      'PARTY OF 4 IN THRONE-ROOM — party of 4 standing in formation in front of a throne at the back of the scene, mid-respectful-bow pose, atmospheric royal-audience moment',
+      'PARTY OF 4 ESCAPING DUNGEON — party of 4 (kid + warrior + mage + princess) mid-stride running across the tile-grid escaping a dungeon, all mid-run pose, dynamic moment',
+      'PARTY OF 4 EXAMINING MAP — party of 4 gathered around a glowing-magic-map on a tile-grid floor, all mid-examine pose, atmospheric quest-planning moment',
+    ],
+    instructions: `Each entry is ONE specific PARTY MOMENT, 25-50 words. Format: "PARTY-SIZE + ACTION CAPS — party-size + hero-archetypes + mid-action pose + on tile-grid". MANDATORY — (a) party size, (b) hero archetypes, (c) mid-action pose, (d) on tile-grid, (e) small scale. NO sexualized. NO modern. NO IP. NO setting description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_classic_jrpg_npc_or_enemy_life: {
+    format: 'simple',
+    theme: `NPC LIFE OR ENEMY CREATURE for the PixelBot classic-jrpg path. Each entry describes ONE specific Zelda LttP / FF6 / Chrono Trigger-style NPC villager mid-routine OR enemy creature patrolling the tile-grid. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry produces tiny SNES-era NPC-or-enemy sprites populating the world. NPCs going about routines OR enemy creatures patrolling. Classic genre-signatures.
+
+⚠️ NPC / ENEMY CATEGORIES — distribute the 25 entries:
+  • ~3 VENDOR / SHOPKEEPER — vendor at market-stall, weapon-merchant, potion-shop owner
+  • ~3 VILLAGER ROUTINE — villager doing daily routine (sweeping, fishing, gardening)
+  • ~2 PRIEST / RELIGIOUS NPC — priest at altar, monk meditating
+  • ~2 SOLDIER / GUARD — soldier on patrol, castle-guard at post
+  • ~2 ENTERTAINER / DANCER — dancer in inn, bard with lute, jester
+  • ~3 ENEMY-SLIME — single or cluster of green-slime creatures patrolling
+  • ~3 ENEMY-BAT / FLYING — bats / harpies in mid-flight across the scene
+  • ~2 ENEMY-SKELETON — skeleton-warriors patrolling
+  • ~2 ENEMY-ORC / GOBLIN — orc-warrior or goblin-scout patrolling
+  • ~2 ENEMY-WOLF / BEAST — wolf-pack patrolling forest, bear / panther
+  • ~1 BOSS-CREATURE — single mid-sized boss-creature (dragon / hydra / chimera) on the scene
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC NPC OR ENEMY TYPE
+  - MID-ROUTINE / MID-PATROL POSE
+  - SIGNATURE FEATURE (apron / weapons / armor / claws / etc.)
+  - POSITION ON TILE-GRID
+  - SMALL SCALE (tiny sprite)
+
+🚫 STRICT BANS:
+  • NO gore / explicit violence
+  • NO sexualized NPCs / enemies
+  • NO IP characters
+  • NO hero description (separate axis)
+  • NO modern setting`,
+    touchpoints: [
+      'VENDOR AT MARKET-STALL — NPC-vendor in apron standing behind a wooden market-stall with displayed produce, mid-customer-greeting gesture, on the tile-grid, classic JRPG-town NPC',
+      'WEAPON-MERCHANT AT SHOP — NPC-weapon-merchant in leather-apron standing behind a counter with swords-and-shields on display, mid-greeting pose, on the tile-grid',
+      'POTION-SHOP OWNER — NPC-alchemist in robe standing behind a counter with potion-bottles on shelves behind, mid-stir pose with cauldron beside, on the tile-grid',
+      'VILLAGER SWEEPING PORCH — NPC-villager mid-stride sweeping a wooden-porch with broom, classic daily-life moment, on the tile-grid',
+      'VILLAGER FISHING AT POND — NPC-villager seated at the edge of a pond with fishing-rod mid-cast, on the tile-grid, peaceful daily-life moment',
+      'VILLAGER GARDENING — NPC-villager crouched in a garden-bed mid-pruning with shears, basket of cut blooms beside, on the tile-grid, classic daily-life',
+      'PRIEST AT ALTAR — NPC-priest in robe standing at a stone-altar with hands raised mid-prayer-gesture, candles flickering, on the tile-grid',
+      'MONK MEDITATING — NPC-monk in saffron-robe seated cross-legged in meditation on the tile-grid, eyes closed, atmospheric peaceful moment',
+      'SOLDIER ON PATROL — NPC-soldier in armor mid-stride patrolling across the tile-grid with spear-and-shield, classic guard-routine pose',
+      'CASTLE-GUARD AT POST — NPC-castle-guard in heavy-armor standing at-attention with halberd at a doorway, on the tile-grid, classic guard-post pose',
+      'DANCER IN INN — NPC-dancer in colorful-garb mid-twirl on the wooden-floor of an inn, atmospheric entertainment moment, classic SNES-JRPG NPC',
+      'BARD WITH LUTE — NPC-bard with lute mid-strum standing on an inn-floor, atmospheric music-moment, classic SNES-JRPG NPC',
+      'GREEN-SLIME PATROLLING — single green-slime creature mid-bounce across the tile-grid, classic SNES-JRPG-style enemy sprite, mid-patrol pose',
+      'CLUSTER OF SLIMES — cluster of 3-4 green-slime creatures patrolling the tile-grid together, all mid-bounce, classic JRPG mob encounter',
+      'RED-SLIME ENCOUNTER — single red-slime creature mid-pulse on the tile-grid, slightly larger than green-slime, atmospheric mid-tier enemy register',
+      'BATS IN MID-FLIGHT — cluster of 3-4 bats mid-flight across the scene at parallax depths, classic SNES-JRPG flying-enemy sprite, mid-attack swoop',
+      'HARPY MID-FLIGHT — single harpy mid-flight across the scene with wings spread and talons extended, classic JRPG-style winged-enemy sprite',
+      'BANSHEE-GHOST DRIFTING — single banshee-ghost drifting across the tile-grid mid-wail pose, translucent-blue body fading at edges, atmospheric undead enemy',
+      'SKELETON-WARRIOR PATROLLING — single skeleton-warrior with rusty sword mid-stride patrolling the tile-grid, classic SNES-JRPG-style undead sprite',
+      'CLUSTER OF SKELETONS — cluster of 2-3 skeleton-warriors patrolling the tile-grid together with rusty weapons, atmospheric dungeon-mob encounter',
+      'ORC-WARRIOR PATROLLING — single orc-warrior with club mid-stride patrolling the tile-grid, green-skin and tusks, classic SNES-JRPG-style enemy sprite',
+      'GOBLIN-SCOUT MID-CROUCH — single goblin-scout mid-crouch on the tile-grid with dagger drawn, atmospheric small-enemy register, classic JRPG sprite',
+      'WOLF-PACK PATROLLING — pack of 2-3 wolves patrolling the tile-grid together with heads lowered, atmospheric forest-enemy register, classic JRPG-style beast-sprite',
+      'BEAR MID-ROAR — single bear mid-roar on the tile-grid with claws extended, atmospheric large-beast-enemy register, classic JRPG-style sprite',
+      'DRAGON BOSS-CREATURE — single mid-sized dragon coiled on the tile-grid with wings half-spread, mid-roar pose, glowing-red eyes, atmospheric mid-tier-boss moment',
+    ],
+    instructions: `Each entry is ONE specific NPC OR ENEMY moment, 25-50 words. Format: "ENTITY + ACTION CAPS — entity type + mid-routine/mid-patrol pose + signature feature + on tile-grid". MANDATORY — (a) entity type, (b) mid-routine/mid-patrol pose, (c) signature feature, (d) on tile-grid, (e) small scale. NO gore. NO sexualized. NO IP. NO hero. NO modern. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_classic_jrpg_props: {
+    format: 'simple',
+    theme: `40%-GATED CLASSIC JRPG PROPS for the PixelBot classic-jrpg path. Each entry describes ONE specific Zelda LttP / FF6 / Chrono Trigger-style classic-JRPG flavor prop accenting the scene. Each entry 20-40 words.
+
+🚫 STRICT BANS: NO IP / UI / sexualized / explicit gore / modern.
+
+✓ PROP CATEGORIES:
+  A. TREASURE CHESTS — wooden / iron / silver / gold chest, open or closed
+  B. SIGNPOSTS — wooden signpost with arrows, crossroads marker
+  C. POTS / BARRELS / CRATES — clay-pots, wooden barrels, crates
+  D. STATUES — stone statue (hero / monster / animal)
+  E. FOUNTAINS — stone fountain with water
+  F. TAVERN / SHOP SIGNS — hanging painted sign
+  G. WEAPON-RACKS / ARMOR-STANDS — weapon-rack with swords
+  H. BOOKSHELVES / SCROLLS — bookshelf or scroll-collection
+  I. ALTARS WITH CANDLES — stone altar with candles / offerings
+  J. MOSSY-RUNE-STONES — ancient stone with glowing runes
+  K. BRIDGES — stone or wooden bridge
+  L. WATERFALLS / PONDS — small waterfall or reflective pond
+  M. CASTLE-BANNERS / TAPESTRIES — hanging banner / tapestry
+  N. SCATTERED-WEAPONS / BATTLE-DEBRIS — scattered swords on the ground
+  O. GLOWING-RUNE-FLOOR — magical glowing-rune carved into the floor`,
+    touchpoints: [
+      'WOODEN TREASURE-CHEST CLOSED — wooden treasure-chest closed on the tile-grid, iron-banded, atmospheric loot-discovery prop',
+      'IRON TREASURE-CHEST OPEN — iron treasure-chest open on the tile-grid with glowing-yellow light spilling from the lid, gold-coins visible inside, atmospheric reward moment',
+      'GOLD TREASURE-CHEST WITH GEMS — gold treasure-chest open on the tile-grid with gems spilling from the lid, atmospheric high-tier reward register',
+      'WOODEN SIGNPOST WITH ARROWS — wooden signpost mounted on a stake with arrow-shaped signs pointing in two directions, classic JRPG-overworld marker',
+      'CROSSROADS SIGNPOST — wooden crossroads signpost at the intersection of two dirt-paths with multiple-direction arrows, classic exploration marker',
+      'CLAY-POTS CLUSTERED — cluster of 3-4 clay-pots clustered against a back wall, classic JRPG breakable-loot prop register',
+      'WOODEN BARRELS STACKED — stack of wooden-barrels in a corner of the scene with iron-bands, classic JRPG breakable-loot register',
+      'CRATES SCATTERED — scattered wooden-crates across the foreground floor with stamped markings, classic JRPG inventory-storage register',
+      'STONE-HERO-STATUE — stone-statue of a hero with sword raised mounted on a pedestal in the scene, classic JRPG monument register',
+      'STONE-MONSTER-STATUE — stone-statue of a dragon or chimera mounted on a pedestal in the scene, atmospheric mysterious-monument register',
+      'STONE-ANIMAL-STATUE — stone-statue of an animal (wolf / lion / griffin) mounted on a pedestal in the scene, classic guardian-statue register',
+      'CENTRAL STONE-FOUNTAIN — central stone-fountain with water spilling from the basin into the lower pool, classic town-square focal-point',
+      'WALL-FOUNTAIN BASIN — small wall-fountain with water spilling from a lion-head spout into a basin, classic JRPG town-detail',
+      'HANGING TAVERN-SIGN — hanging painted tavern-sign over a doorway with mug-and-foam illustration, classic JRPG town-detail',
+      'HANGING SHOP-SIGN — hanging painted shop-sign over a doorway with sword-or-potion illustration, classic JRPG town-detail',
+      'WEAPON-RACK WITH SWORDS — wooden weapon-rack with multiple swords mounted along it against a back wall, classic JRPG armory register',
+      'ARMOR-STAND WITH ARMOR — wooden armor-stand displaying a full suit of armor against a back wall, classic JRPG armory register',
+      'BOOKSHELF WITH BOOKS — wooden bookshelf filled with books mounted against a back wall, classic JRPG-library register',
+      'SCROLL-COLLECTION ON TABLE — collection of scrolls spread on a wooden-table with one open mid-read, atmospheric JRPG-library register',
+      'STONE-ALTAR WITH CANDLES — stone-altar at the back of the scene with multiple candles flickering, offering-bowl at the center, classic JRPG-temple register',
+      'BLESSED-ALTAR WITH GLOW — stone-altar at the back of the scene with golden-glow halo above it, atmospheric blessed-place register',
+      'MOSSY RUNE-STONE — mossy-stone with glowing-cyan runes carved into it standing in the scene, atmospheric ancient-magic register',
+      'GLOWING RUNE-PILLAR — tall stone-pillar with glowing-magenta runes carved spiraling up it, atmospheric ancient-magic register',
+      'STONE-BRIDGE WITH RAILINGS — stone-bridge crossing a river with stone-railings on both sides, classic JRPG-exploration detail',
+      'WOODEN ROPE-BRIDGE — wooden rope-bridge crossing a chasm with rope-handrails on both sides, classic JRPG-exploration atmospheric detail',
+    ],
+    instructions: `Each entry is ONE specific CLASSIC JRPG flavor prop, 20-40 words. Format: "PROP NAME CAPS — primary prop + position in scene + atmospheric detail". Vary across the 15 categories. NO IP/UI/sexual/gore/modern. Classic SNES-JRPG atmospheric prop only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // PixelBot recipes go here — one entry per bespoke pool.
   // Each entry: { format: 'simple', theme: '...', touchpoints: [...], instructions: '...' }
   // See BOT_SCENE_QUALITY_PLAYBOOK.md "How to seed pools" section.

@@ -1767,6 +1767,34 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  PIXELBOT_PIXEL_SCI_FI_ACTION: {
+    description:
+      'PATH-BESPOKE — PixelBot pixel-sci-fi-action (2026-05-20 axis-system migration). 16-BIT SCI-FI ACTION GAMEPLAY SCREENSHOTS — Contra III + Mega Man X + Super Metroid + Blaster Master + Turrican II + Gradius + R-Type + Salamander + Gunstar Heroes + Axelay + Cybernator + Star Fox pixel. Solo run-and-gun marine / mech-pilot / starfighter-pilot is genre-correct. Camera flexibility (side-view / horizontal-shooter / top-down / 3-quarter-iso) per setting. 4 mandatory elements (sci-fi setting + sci-fi enemy + hero sprite + sci-fi flavor props). 3 path-bespoke pools + 40%-gated props.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['sci_fi_setting', 'sci_fi_enemy', 'hero_action'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'sci_fi_props', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  PIXELBOT_CLASSIC_JRPG: {
+    description:
+      'PATH-BESPOKE — PixelBot classic-jrpg (2026-05-20 axis-system migration). 16-BIT CLASSIC JRPG GAMEPLAY SCREENSHOTS — Zelda LttP + Final Fantasy IV/V/VI + Chrono Trigger + Secret of Mana + Terranigma + Earthbound + Lufia II + Dragon Quest VI + Breath of Fire + Lunar: Silver Star Story + Tales of Phantasia. 3/4 top-down camera locked (genre signature). Hero party (single or 2-4 members) walking the tile-map + NPC life / enemy creature + classic JRPG props. 3 path-bespoke pools + 40%-gated props.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['jrpg_locale', 'party_action', 'npc_or_enemy_life'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'jrpg_props', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_EPIC_VISTA: {
     description:
       'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Nat-Geo-best-of-best caliber real-Earth landscape: the SUBJECT IS THE WOW. Larger than life via geology + lighting + weather amplification, never AI-fake / sci-fi / fantasy. R2 (2026-05-20) pivoted from R1 3-tier (subject + foreground prop) to SCENE-AS-HERO — subject dominates 60-70%+ of frame, no competing foreground props. R1 lessons retained: PEAK LIGHT MOMENT + MOMENT IN MOTION template blocks, phenomenon-lighting compatibility, biome-tagged subject pool. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. R1 foreground_anchor axis + matchTagsFromSlot composer extension preserved as infrastructure for future paths that need them. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
@@ -1803,13 +1831,13 @@ const ARCHETYPES = {
 
   YUMBOT_RAINBOW_DREAMSCAPE: {
     description:
-      'PATH-BESPOKE — YumBot rainbow-dreamscape (2026-05-20 v2). bex.ai-modeled. 3-7 MIXED kawaii food-creatures (cups + desserts + savory) inhabiting a lush pastel dreamscape landscape with 3 substantial environmental features (streams / ponds / trails / rocks / trees / bridges). Rainbow pouring or arching. Cherry-blossom mountains + hot-air-balloons + sunny pastel sky. Wider lush scenic composition. 8 path-bespoke axes.',
+      'PATH-BESPOKE — YumBot rainbow-dreamscape (2026-05-20 v3 shared-catalog refactor). bex.ai-modeled. 5 MIXED kawaii food-creatures picked uniform-random from FOOD_CATALOG with RAINBOW_DREAMSCAPE tag, inhabiting a lush pastel dreamscape with 3 substantial landscape features + 3 decor items + 2 tiny companions (all tag-filtered from shared catalogs). Rainbow density + cherry-blossom mountains + balloons + sunny pastel sky. Wider lush scenic composition. 9 path-bespoke axes.',
     slots: {
       universal: [],
       bot: [],
-      path: ['food_inhabitants', 'dreamscape_setting', 'rainbow_element', 'sky_atmosphere', 'environment', 'decor', 'camera', 'lighting'],
+      path: ['food_inhabitants', 'dreamscape_setting', 'rainbow_element', 'sky_atmosphere', 'environment', 'decor', 'companions', 'camera', 'lighting'],
     },
-    pickN: { decor: 3, environment: 3 },
+    pickN: { food_inhabitants: 3, environment: 3, decor: 3, companions: 2 },
     conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,

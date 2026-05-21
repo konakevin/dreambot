@@ -111,6 +111,16 @@ module.exports = {
   PIXELBOT_COZY_FARMING_FARM_BIOME: loadIfExists('pixelbot_cozy_farming_farm_biome'),
   PIXELBOT_COZY_FARMING_FARMER_VILLAGER_LIFE: loadIfExists('pixelbot_cozy_farming_farmer_villager_life'),
   PIXELBOT_COZY_FARMING_COZY_PHENOMENON: loadIfExists('pixelbot_cozy_farming_cozy_phenomenon'),
+  // ─── pixel-sci-fi-action axis-system pools (2026-05-20) ───
+  PIXELBOT_PIXEL_SCI_FI_ACTION_SETTING: loadIfExists('pixelbot_pixel_sci_fi_action_setting'),
+  PIXELBOT_PIXEL_SCI_FI_ACTION_ENEMY: loadIfExists('pixelbot_pixel_sci_fi_action_enemy'),
+  PIXELBOT_PIXEL_SCI_FI_ACTION_HERO_ACTION: loadIfExists('pixelbot_pixel_sci_fi_action_hero_action'),
+  PIXELBOT_PIXEL_SCI_FI_ACTION_PROPS: loadIfExists('pixelbot_pixel_sci_fi_action_props'),
+  // ─── classic-jrpg axis-system pools (2026-05-20) ───
+  PIXELBOT_CLASSIC_JRPG_LOCALE: loadIfExists('pixelbot_classic_jrpg_locale'),
+  PIXELBOT_CLASSIC_JRPG_PARTY_ACTION: loadIfExists('pixelbot_classic_jrpg_party_action'),
+  PIXELBOT_CLASSIC_JRPG_NPC_OR_ENEMY_LIFE: loadIfExists('pixelbot_classic_jrpg_npc_or_enemy_life'),
+  PIXELBOT_CLASSIC_JRPG_PROPS: loadIfExists('pixelbot_classic_jrpg_props'),
 
   // Shared across all paths (camera/grade)
   PIXEL_PERSPECTIVES: load('pixel_perspectives'),

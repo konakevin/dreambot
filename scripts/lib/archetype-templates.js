@@ -12597,6 +12597,143 @@ CRITICAL — PIXEL ART ONLY (NEVER smooth illustration). The scene is INHABITED 
 Output ONLY 65-90 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  PIXELBOT_PIXEL_SCI_FI_ACTION: ({ slots, sharedDNA, vibeDirective }) => {
+    const { sci_fi_setting, sci_fi_enemy, hero_action, sci_fi_props } = slots;
+
+    const propsSection = sci_fi_props
+      ? `\n\n━━━ SCI-FI FLAVOR PROPS ━━━\n${sci_fi_props}\n\nA specific atmospheric prop reinforcing the sci-fi-action register (NOT competing with the action).`
+      : '';
+
+    return `You are a pixel-art game-art director writing a 16-BIT SCI-FI ACTION GAMEPLAY SCREENSHOT for PixelBot. Genre lineage: Contra III: The Alien Wars + Mega Man X + Super Metroid + Blaster Master + Turrican II + Gradius + R-Type + Salamander + Gunstar Heroes + Axelay + Cybernator + Star Soldier + Star Fox pixel. Run-and-gun marine on alien-jungle platforms, mech-pilot in robot factory, starfighter dodging asteroids, lone-wanderer in post-apocalyptic ruins blasting drones. Saturated retro-arcade sci-fi action. NOT cyberpunk-noir. NOT modern indie-illustrated. CLASSIC arcade sci-fi action.
+
+━━━ THE SCI-FI SETTING ━━━
+${sci_fi_setting}
+
+━━━ SCI-FI ENEMY MID-ACTION ━━━
+${sci_fi_enemy}
+
+━━━ HERO MID-ACTION (solo run-and-gun) ━━━
+${hero_action}
+${propsSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era pixel art. NEVER smooth illustration, NEVER 3D render, NEVER photoreal. Crunchy individual visible pixels, dithered shading, saturated retro sci-fi palette.
+2. **CAMERA LOCK PER SETTING** — pick ONE per render based on the setting:
+   • HORIZONTAL SIDE-VIEW (Contra / Mega Man / Metroid / Turrican) — character flat across the world, foreground platform, parallax sci-fi backdrop
+   • HORIZONTAL SIDE-SCROLLING SPACE-SHOOTER (Gradius / R-Type / Salamander / Axelay) — hero spaceship left, enemies attacking from right, asteroid/nebula backdrop
+   • TOP-DOWN VERTICAL SCROLLER (1942 / Star Soldier / Blaster Master overworld) — hero ship/tank/marine at bottom, enemies from top
+   • 3/4 ISOMETRIC SCI-FI INTERIOR (Blaster Master interior / station corridors) — mech-bay / starship-corridor / laboratory
+3. **NEVER first-person, NEVER vertical-portrait static-vista, NEVER cyberpunk-neon-streets, NEVER concept-art portrait composition**
+4. **NO IP REFERENCES** — no specific game characters / logos / recognizable franchises.
+5. **NO UI ELEMENTS** — no health bars, score-display, dialogue boxes, menus, HUDs, button prompts.
+6. **NORTH STAR** — every render is "a screenshot from a Contra / Mega Man / Metroid / Blaster Master / Star Fox-style game I'd play right now." Cinematic-arcade-action frame.
+7. **HERO + ENEMY + SETTING + ATMOSPHERIC FLAVOR** — all four must be readable in the frame. Hero is small relative to scene (sprite-scale), mid-action. Enemy is mid-action too — never both static.
+8. **SOLO HERO** — single run-and-gun protagonist (Contra-style). 1 sidekick acceptable but never party-combat.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal — pixel art ONLY
+  • NO IP references (no Master Chief / no Samus / no Mega Man / no specific franchise)
+  • NO UI / HUD / health bars / score / dialogue boxes / menus
+  • NO cyberpunk-noir / NO modern-indie / NO concept-art portrait
+  • NO first-person / NO vertical-portrait static-vista
+  • NO sexualized / inappropriate content
+  • NO party-combat (solo run-and-gun is genre-correct)
+  • NO horror / cozy / fantasy — those are separate paths
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING / ENERGY VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ COMPOSITION CRAFT — RETRO SCI-FI ACTION ━━━
+
+  • Camera matches the setting (side-view / horizontal-shooter / top-down / 3/4-iso)
+  • FOREGROUND: action floor — platform, ship's-cockpit-edge, mech-bay floor, asteroid-foreground
+  • MIDGROUND: hero sprite small mid-action + enemy sprite mid-action
+  • BACKGROUND: parallax sci-fi backdrop (alien jungle, nebula, robot-factory interior, asteroid-field)
+  • DEPTH: multi-tier parallax — sharp foreground / sharp midground / atmospheric distance
+  • LIGHTING: electric-blue energy / hot-magenta plasma / acid-green toxic / metallic-orange explosions
+  • PARTICLES: plasma-bolt trails / muzzle-flashes / laser-beams / explosion-shrapnel / energy-arcs / sparks
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[the SPECIFIC sci-fi setting (alien jungle platform / robot factory / space-station corridor / asteroid-field / mech-bay / post-apoc ruins / starfighter-cockpit / lunar surface / etc.) framed in cinematic-retro-arcade composition], [the SPECIFIC sci-fi enemy mid-action (alien with claws lunging / robot-soldier firing / mech-walker stomping / drone-swarm / plasma-turret rotating / xenobeast charging / etc.)], [the SOLO HERO sprite small on the action floor mid-action (space-marine firing rifle / mech-pilot mid-step / starfighter banking / jetpack-soldier leaping / etc.)]${sci_fi_props ? ', [sci-fi flavor props supporting the action (pulsing consoles / reactor cores / cables / catwalks / energy-shields / plasma-pillars / etc.)]' : ''}, [electric-energy lighting + plasma-bolts + muzzle-flashes + sparks creating the retro-arcade-action atmosphere], [parallax multi-tier depth — Contra / Mega Man / Metroid / Gradius register], [16-bit pixel-art register with crunchy individual visible pixels, dithered shading, saturated retro sci-fi palette]
+
+CRITICAL — PIXEL ART ONLY (NEVER smooth illustration). The scene is RETRO-ARCADE-ACTION. Sci-fi-action key-art quality — solo run-and-gun hero, enemy mid-action, electric energy lighting, "I want to play this Contra-clone right now" feel.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
+  PIXELBOT_CLASSIC_JRPG: ({ slots, sharedDNA, vibeDirective }) => {
+    const { jrpg_locale, party_action, npc_or_enemy_life, jrpg_props } = slots;
+
+    const propsSection = jrpg_props
+      ? `\n\n━━━ CLASSIC JRPG PROPS ━━━\n${jrpg_props}\n\nA specific classic-JRPG prop reinforcing the SNES-era RPG register (NOT competing with the hero / NPCs).`
+      : '';
+
+    return `You are a pixel-art game-art director writing a 16-BIT CLASSIC JRPG GAMEPLAY SCREENSHOT for PixelBot. Genre lineage: Zelda: A Link to the Past + Link's Awakening + Final Fantasy IV / V / VI + Chrono Trigger + Secret of Mana + Seiken Densetsu 3 + Terranigma + Earthbound / Mother 2 + Illusion of Gaia + Soul Blazer + Lufia II + Dragon Quest VI + Breath of Fire + Suikoden + Lunar: Silver Star Story + Tales of Phantasia + Live A Live. Tile-based world rendered from a 3-quarter top-down camera, hero party walking through, NPCs at named locations, characteristic biome.
+
+━━━ THE JRPG LOCALE ━━━
+${jrpg_locale}
+
+━━━ HERO PARTY MID-MOMENT ━━━
+${party_action}
+
+━━━ NPC LIFE OR ENEMY CREATURE IN THE SCENE ━━━
+${npc_or_enemy_life}
+${propsSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era pixel art. NEVER smooth illustration, NEVER 3D render, NEVER photoreal. Crunchy individual visible pixels, dithered shading, saturated SNES-era palette.
+2. **CAMERA LOCK — 3/4 TOP-DOWN** — looking down at the world from a slight angle, classic SNES-RPG perspective. The viewer sees the tile-based ground clearly + hero party-sprite from above-and-behind + buildings/trees in front-facing isometric-ish projection. Reference: Zelda LttP / Chrono Trigger / FF6 / Secret of Mana / Earthbound. NEVER side-scrolling, NEVER first-person, NEVER straight-down god's-eye, NEVER pure 3D-iso-grid.
+3. **TILE-BASED WORLD VISIBLE** — clear tile-grid floor (grass / stone-path / cobble / sand / wooden-floor / cave-stone / water). The terrain reads as JRPG-overworld or town-hub or dungeon-floor with discrete tiles.
+4. **HERO PARTY-SPRITE on the world** — single hero or 2-4 party members walking the tile-map, tiny scale, mid-stride. Simple SNES-era forms (kid in green tunic with sword, mage in robe with staff, warrior in armor with shield, princess in gown).
+5. **NO IP REFERENCES** — no Link, no Cloud, no Crono, no specific game characters.
+6. **NO UI ELEMENTS** — no health bars, dialogue boxes, menus, HUDs, mini-map.
+7. **NORTH STAR** — every render is "a screenshot from a SNES-era classic top-down JRPG I'd play right now." Cinematic-pixel-art tile-based moment.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal — pixel art ONLY
+  • NO IP references (no Link / no Cloud / no Crono / no Pokemon / no Mario)
+  • NO UI / HUD / dialogue boxes / health bars / mini-map
+  • NO side-scrolling / first-person / straight-down / 3D-iso-grid
+  • NO modern / contemporary setting — fantasy-RPG era only
+  • NO sci-fi / horror / cozy-farming — those are separate paths
+  • NO empty / desolate — the world is INHABITED (NPC or enemy)
+  • NO sexualized / inappropriate content
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ COMPOSITION CRAFT — CLASSIC SNES-JRPG 3/4 TOP-DOWN ━━━
+
+  • CAMERA: 3-quarter top-down (Zelda LttP / Chrono Trigger / FF6)
+  • FOREGROUND: tile-grid floor edge (grass / stone-path / cobble / sand / wooden-floor / cave-stone / water tiles)
+  • MIDGROUND: hero party-sprite small mid-stride on the tile-grid + NPC life or enemy creature
+  • BACKGROUND: characteristic biome backdrop (forest canopy / mountain pass / castle wall / dungeon arch / town gates / sky-temple edge)
+  • DEPTH: multi-tier — sharp foreground tiles / mid characters / atmospheric distance
+  • LIGHTING: warm sun-glow OR torch-glow OR moonlit OR magical-rune-glow per biome
+  • ATMOSPHERIC PARTICLES: drifting petals / dust motes / firefly-glow / dripping water / falling leaves / sparkles
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[the SPECIFIC JRPG locale (overworld grass-plain / dense forest / mountain pass / town hub / castle throne-room / dungeon-crypt / sacred grove / volcanic cave / etc.) framed in 3/4 top-down camera composition], [the HERO PARTY-SPRITE small mid-stride on the tile-grid (single hero OR 2-4 party members walking / examining / mid-cutscene)], [the NPC LIFE OR ENEMY CREATURE in the scene (vendor / villager / priest / soldier OR slime / bat / skeleton / orc / goblin / harpy mid-patrol)]${jrpg_props ? ', [classic JRPG props supporting the world (treasure chest / signpost / pot / statue / fountain / altar / glowing-rune-floor / etc.)]' : ''}, [biome-appropriate lighting + animated particles creating the SNES-JRPG atmosphere], [multi-tier depth — Zelda LttP / Chrono Trigger / FF6 / Secret of Mana register], [16-bit pixel-art register with chunky tile-grid floor, sprite-art hero / NPCs, dithered shading, saturated SNES-era palette]
+
+CRITICAL — PIXEL ART ONLY (NEVER smooth illustration). The scene is CLASSIC SNES-JRPG. 3/4 top-down camera locked. Hero party-sprite + NPC/enemy + tile-grid + biome — "I want to play this SNES RPG right now" feel.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon
