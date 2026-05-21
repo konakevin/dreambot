@@ -6,8 +6,8 @@
  * The "could you imagine being here right now" rainforest awe.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../earth/pools');
+const blocks = require('../../earth/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.LUSH_JUNGLE_SCENES, 'lush_jungle_scene');

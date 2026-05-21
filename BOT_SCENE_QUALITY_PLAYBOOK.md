@@ -1871,6 +1871,31 @@ Subject pool entries are tagged with biome categories (`{ tags: ['alpine'], desc
 
 **Apply this to:** any future path that needs cross-axis consistency (subject↔foreground, subject↔wildlife, lighting↔atmosphere style, etc.). Generalizable beyond EarthBot.
 
+### CRITICAL LESSON 7 — Strip tourist-coded names/locations from subject pools (Flux pigeonholes them as stock photos)
+
+Discovered on EarthBot national-parks R0 (2026-05-20). The Sonnet output prompts were gorgeous — packed with "vertigo-inducing / cathedral-vertical / razor-cut shadow boundary / blood-disc sun / Sahara-amber sidelight" drama vocab. The PROMPTS were gallery-tier. But Flux rendered pedestrian-pretty travel photos, ignoring 90% of the drama.
+
+Root cause: the subject pool entries named recognizable tourist vantages and famous landmarks ("Tunnel View" / "Mather Point" / "Inspiration Point" / "Watchman Overlook" / "Half Dome" / "El Capitan" / "Delicate Arch"). These are Flux training-data LABELS for stock-tourist-snapshots. When any of them appear in the prompt, Flux pulls toward its prototype (the classic tourist-vantage photo) and IGNORES the surrounding dramatic prose. Famous park names (Yosemite / Bryce / Grand Canyon) have similar pull-toward-stock-photo bias.
+
+**The fix:** keep the subject pool's CONTENT identity but strip tourist-vocabulary entirely. Describe the GEOLOGY through dramatic descriptive prose; let Sonnet's beautiful prompt-writing carry the scene. Don't name famous viewpoints. Don't even name parks unless absolutely necessary as broad regional anchors. The pool curation determines which scenes appear (US Park geology); the prose describes the geology in pure drama-vocabulary; Sonnet does the rest.
+
+| ❌ Tourist-coded (pigeonholes to stock) | ✓ Drama-led (lets Sonnet + Flux render fresh) |
+|---|---|
+| "Bryce Canyon Amphitheater from Inspiration Point" | "Thousand-foot vermilion sandstone hoodoo amphitheater, cathedral-vertical procession of spires packed in tiered ranks, rust-orange labyrinth below forested rim" |
+| "Yosemite Tunnel View" | "Glacier-carved granite valley with three-thousand-foot monolithic face, cascading ribbon waterfall from hanging valley, ancient sequoia and oak filling the valley floor" |
+| "Watchman Overlook at sunset" | "Six-thousand-foot sandstone monolith of cream-and-rust banded strata dominating a canyon mouth, river winding the valley floor" |
+| "Crater Lake from Watchman Overlook" | "Two-thousand-foot-deep cobalt caldera lake of impossible clarity, cinder-cone island emerging from center, twenty-six hundred-foot pumice cliffs ringing the basin" |
+
+**The general rule:** if a place name in a subject pool entry has a dominant stock-photo Wikipedia-image, strip it. Specifically banned terms in landscape-path subject pools:
+- Tourist vantage names: "Tunnel View" / "Mather Point" / "Inspiration Point" / "Glacier Point" / "Artist Point" / "Watchman Overlook" / "Cadillac Mountain summit" / "Tipsoo Lake" / any "X Overlook" / "X Vista" / "X Point" / "X View"
+- Famous monument names that have iconic single-shot training data: "Half Dome" / "El Capitan" / "Delicate Arch" / "Mesa Arch" / "The Watchman" / "Wizard Island"
+- Famous park names (use sparingly as broad anchor only, prefer geographic regions): "Yosemite" / "Bryce" / "Grand Canyon" / "Yellowstone" → prefer "Sierra granite valley" / "Colorado Plateau red rock" / "Northern Rockies geothermal basin"
+- Broad geographic regions are SAFE because they don't have a single stock-photo prototype: "Colorado Plateau" / "Sierra Nevada" / "Cascade Range" / "Sonoran Desert" / "Pacific Northwest old-growth" / etc.
+
+**Apply this to:** every subject pool on every landscape/scenery path on every bot. EarthBot, BloomBot landscape, OceanBot coastal — same rule. The lesson generalizes to character paths too (if a character pool entry names "Aragorn" or "Geralt," Flux pulls toward that screenshot rather than the surrounding prose; same dynamic).
+
+**Diagnostic test:** when renders feel pedestrian despite gorgeous prose in the ai_prompt DB record, audit the SUBJECT pool entries for tourist-coded names. The pool's vocabulary is what Flux's tokenizer matches against its training prototypes; the prose around it is secondary.
+
 ### Canonical 6-axis structure for landscape paths (real-Earth photographic)
 
 For ANY future landscape path on EarthBot (or BloomBot landscape, OceanBot coastal-vista, etc.) targeting "Marc Adamus / Peter Lik gallery-print" tier:

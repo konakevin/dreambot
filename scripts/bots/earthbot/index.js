@@ -86,12 +86,12 @@ const pathBuilders = {
   'dramatic-sky': require('./earth/paths/dramatic-sky'),
   'luminous-landscape': require('./earth/paths/luminous-landscape'),
   'sacred-light': require('./earth/paths/sacred-light'),
-  'national-parks': require('./earth/paths/national-parks'),
+  'national-parks': require('./paths/national-parks'), // axis-system (2026-05-20)
   'seasonal-shift': require('./earth/paths/seasonal-shift'),
   'geological-wonder': require('./earth/paths/geological-wonder'),
   'micro-nature': require('./earth/paths/micro-nature'),
-  'deep-forest': require('./earth/paths/deep-forest'),
-  'lush-jungle': require('./earth/paths/lush-jungle'),
+  'deep-forest': require('./paths/deep-forest'), // axis-system (2026-05-20)
+  'lush-jungle': require('./paths/lush-jungle'), // axis-system (2026-05-20)
   // Beach paths (13)
   'coastal-vista': require('./beach/paths/coastal-vista'),
   wave: require('./beach/paths/wave'),
@@ -231,7 +231,7 @@ module.exports = {
   // add it here.
   chaos: {
     enabled: true,
-    skipPaths: ['epic-vista'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle'],
     allowSubjectChaosPaths: [...BEACH_PATHS],
   },
 
@@ -245,7 +245,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['epic-vista'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle'],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their

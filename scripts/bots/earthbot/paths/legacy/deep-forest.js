@@ -6,8 +6,8 @@
  * The "I'm in a real-life Lord of the Rings forest" feeling.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../earth/pools');
+const blocks = require('../../earth/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.DEEP_FOREST_SCENES, 'deep_forest_scene');

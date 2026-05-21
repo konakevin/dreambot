@@ -4,8 +4,8 @@
  * Real geography amplified to jaw-dropping extremes.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../earth/pools');
+const blocks = require('../../earth/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.NATIONAL_PARKS, 'national_park');

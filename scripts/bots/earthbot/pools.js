@@ -26,4 +26,14 @@ module.exports = {
   EPIC_VISTA_PHENOMENON: load('epic_vista_phenomenon'),
   // R1 (2026-05-20) — adds 3-tier depth via near-frame compositional anchor.
   EPIC_VISTA_FOREGROUND_ANCHOR: load('epic_vista_foreground_anchor'),
+  // national-parks (2026-05-20 axis-system migration). Subject pool ONLY is
+  // bespoke (path-specific US National Park scenes). Other 5 axes reuse
+  // epic-vista pools — axis-clean discipline means they serve any real-Earth
+  // landscape path uniformly.
+  NATIONAL_PARKS_SUBJECT: load('national_parks_subject'),
+  // deep-forest (2026-05-20 axis-system migration). Bespoke subject pool
+  // ONLY — reuses epic-vista's lighting/atmosphere/hero_feature/sky/phenomenon.
+  DEEP_FOREST_SUBJECT: load('deep_forest_subject'),
+  // lush-jungle (2026-05-20). Same clone pattern — bespoke subject only.
+  LUSH_JUNGLE_SUBJECT: load('lush_jungle_subject'),
 };
