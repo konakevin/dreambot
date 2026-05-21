@@ -2035,7 +2035,7 @@ const ARCHETYPES = {
 
   YUMBOT_MINI_CHEF: {
     description:
-      'PATH-BESPOKE — YumBot mini-chef (2026-05-21 12-axis). Kawaii kitchen scenes — 5 kawaii food-characters wearing tiny chef outfits (mini chef hats, aprons) gathered in a kawaii kitchen preparing a kawaii dish. Natural family-portrait cluster with slight pose variation. Full 12-axis architecture: scene_type (composed pose-varied cluster + activity), kitchen_backdrop (cottage / patisserie / sushi-bar / Italian trattoria / French country / mochi-pounding / etc.), 2 signature kitchen props, terrain (counter / floor surface), sky (kitchen ceiling / hanging utensils / chandeliers), camera, lighting, time_of_day, atmosphere (flour dust / steam / sparkle), food_inhabitants (5 from FOOD_CATALOG tagged BAKERY), companion (1 — sugar-mouse / dough-spirit / spice-fairy / etc.), dish_being_prepared (1 — centerpiece dish in progress).',
+      'PATH-BESPOKE — YumBot mini-chef (2026-05-21 R2 no-human-apparel + 12-axis + 200-pool). Kawaii kitchen scenes — 5 kawaii food-characters (the foods themselves are the cooks — NO human/chibi-human chef figures, NO chef hats/aprons/neckerchiefs/uniforms) gathered in a kawaii kitchen preparing a kawaii dish. Natural family-portrait cluster with slight pose variation. Full 12-axis architecture: scene_type, kitchen_backdrop, 2 signatures, terrain, sky, camera, lighting, time_of_day, atmosphere, foods (5 from FOOD_CATALOG tagged BAKERY), companion (1), dish_being_prepared (1 centerpiece). All pools at 200 entries.',
     slots: {
       universal: [],
       bot: [],

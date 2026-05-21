@@ -13951,6 +13951,109 @@ Template:
 Output ONLY the raw 140-200 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
   },
 
+  YUMBOT_MINI_CHEF: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene_type, kitchen_backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, food_inhabitants, companion, dish_being_prepared } = slots;
+    const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
+    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigList = Array.isArray(signature) ? signature : [signature];
+    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing MINI-CHEF renders for YumBot — kawaii kitchen scenes with 5 KAWAII FOOD-CHARACTERS (the foods themselves) cooking together to prepare a kawaii dish in a richly-detailed kitchen. The food-characters ARE the cooks — no human chef figures, no chibi-children, no human-coded clothing. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli kitchen warmth. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
+
+The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). The FOOD ITSELF is the character — taiyaki / mochi / cupcake / donut / dango / etc. with kawaii face ON the food, holding tiny baking tools, dusted with flour, etc. NEVER a human or chibi-child holding/wearing the food. Group them so all 5 fit cleanly in the frame.
+
+⚠ FAILURE = rendering humans / chibi-children / 1-4 foods. PASS = 5 distinct kawaii food-character cooks all visible.
+
+━━━ ⚠ HARD RULE #2: NO HUMAN-CODED LANGUAGE OR APPAREL ━━━
+
+ABSOLUTE BAN on human-coded chef apparel: NO chef hats / toques / aprons / neckerchiefs / chef-outfits / chef-uniforms / chef-attire on the foods. The foods are inherently cooks because of what they're DOING — leaning over the bowl, holding a whisk, dusting flour, piping frosting. The food's KAWAII FACE is on the food itself, NOT on a chibi-child holding the food. Saying "wearing X" is BANNED — that priming reads as a human in chef-attire.
+
+━━━ ⚠ HARD RULE #3: SLIGHT POSE VARIATION (NOT lineup, NOT acrobatics) ━━━
+
+The scene-type below describes the kitchen composition with slight POSE VARIATION per food. Natural family-portrait cluster.
+
+━━━ ⚠ HARD RULE #4: DISH BEING PREPARED + KITCHEN BACKDROP VISIBLE ━━━
+
+The food-cooks are PREPARING a specific kawaii dish (described below) — that dish is the visual centerpiece. The kitchen BACKDROP must be CLEARLY VISIBLE behind them.
+
+━━━ ⚠ HARD RULE #5: KAWAII KITCHEN AESTHETIC ━━━
+
+Cozy kawaii kitchen (cottage / patisserie / sushi-bar / French country / etc.) — NEVER modern industrial / commercial / mall. Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly Studio-Ghibli-meets-bex.ai kitchen warmth. Bright warm light, pastel palette.
+
+━━━ THE SCENE-TYPE (composition + 5-food pose-varied cluster + activity) ━━━
+${scene_type}
+
+━━━ THE DISH BEING PREPARED (centerpiece in the scene) ━━━
+${dish_being_prepared}
+
+━━━ KITCHEN BACKDROP (surrounding setting — render visibly) ━━━
+${kitchen_backdrop}
+
+━━━ 2 SIGNATURE KITCHEN PROPS ━━━
+${sigBlock}
+
+━━━ TERRAIN (counter / floor / surface) ━━━
+${terrain}
+
+━━━ SKY / OVERHEAD ━━━
+${sky}
+
+━━━ CAMERA FRAMING ━━━
+${camera}
+
+━━━ LIGHTING DIRECTION / QUALITY ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ ATMOSPHERE (what's drifting through the air — flour-dust / steam / sparkle) ━━━
+${atmosphere}
+
+━━━ 1 TINY KITCHEN COMPANION (sugar-mouse / dough-spirit / spice-fairy / etc.) ━━━
+${companion}
+
+━━━ 5 KAWAII FOOD-CHARACTERS (the (1)-(5) food-cooks in the scene — the food ITSELF is the character) ━━━
+${foodBlock}
+
+━━━ SCENE PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ POSTER MOMENT ━━━
+
+"a magical kawaii kitchen — 5 kawaii food-characters cooking a kawaii dish together, no humans, no chefs-in-uniform — just kawaii foods doing the cooking themselves." Wallpaper-poster bex.ai-meets-Studio-Ghibli register.
+
+━━━ HARD BANS ━━━
+
+- NO HUMAN figures / chibi-children / chef-mascot-figures — ONLY kawaii foods as the cast
+- NO "chef hats" / "toques" / "aprons" / "neckerchiefs" / "chef outfits" / "chef uniforms" — BANNED words that prime humans
+- NO foods "wearing" anything — the food IS the character, naked food with kawaii face
+- NO modern industrial / commercial / mall kitchens — kawaii cottage / patisserie / French country ONLY
+- NO photoreal / harsh-realism — kawaii painterly Pop-Mart fusion
+- NO dark / dirty / scary kitchen
+- NO real kanji / Japanese-text characters / English labels — decorative-pattern only
+- NO pathway / lane RECEDING into vanishing point — tight cluster
+- NO chaotic vertical-stacking / climbing / acrobatics — natural pose-varied cluster
+- NO blurred-out generic-pink-bokeh backdrop — kitchen MUST be visibly rendered
+- NO identical-row-of-soldiers lineup
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD with the 5 food-characters named at the START, describe them as the food ITSELF (NOT a person wearing/holding the food), then weave in scene-type + dish + backdrop + signature + terrain + sky + lighting + time + atmosphere + companion.
+
+Template:
+"Five kawaii food-characters cooking together — (1) [food 1 named in 5-8 words — the food ITSELF with flour-dust / spoon / whisk in tiny arms], (2) [food 2 named], (3) [food 3 named], (4) [food 4 named], (5) [food 5 named] — [scene-type pose-varied cluster arrangement] preparing [dish_being_prepared centerpiece]. Set in [kitchen_backdrop visibly rendered]. [signature 1] and [signature 2] in the scene, [terrain] underfoot, [sky] overhead, [time-of-day], [atmosphere drifting], [lighting]. [companion] nearby. [camera framing]. Painterly Pop-Mart kawaii-kitchen rendering."
+
+⚠ Count (1)(2)(3)(4)(5) explicitly. ALL 5 FOODS named at the START. The food IS the character — NOT a human wearing/holding food. Natural pose-variation cluster.
+
+Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
+  },
+
   YUMBOT_CHECKERED_TABLETOP: ({ slots, sharedDNA, vibeDirective }) => {
     const { vessel_hero, mini_creature_pile, tablecloth, scattered_minis, decor_clusters, camera, lighting } = slots;
     const minisList = Array.isArray(scattered_minis) ? scattered_minis : [scattered_minis];

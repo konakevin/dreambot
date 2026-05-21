@@ -51,6 +51,19 @@ module.exports = {
   CANDY_FANTASY_TIME_OF_DAY: load('candy_fantasy_time_of_day'),
   CANDY_FANTASY_WEATHER: load('candy_fantasy_weather'),
 
+  // ============ MINI-CHEF path pools (12-axis) ============
+  CHEF_SCENE_TYPE: load('chef_scene_type'),
+  CHEF_KITCHEN_BACKDROP: load('chef_kitchen_backdrop'),
+  CHEF_SIGNATURE: load('chef_signature'),
+  CHEF_TERRAIN: load('chef_terrain'),
+  CHEF_SKY: load('chef_sky'),
+  CHEF_CAMERA: load('chef_camera'),
+  CHEF_LIGHTING: load('chef_lighting'),
+  CHEF_TIME_OF_DAY: load('chef_time_of_day'),
+  CHEF_ATMOSPHERE: load('chef_atmosphere'),
+  CHEF_COMPANION: load('chef_companion'),
+  CHEF_DISH_BEING_PREPARED: load('chef_dish_being_prepared'),
+
   // ============ JAPANESE-FESTIVAL path pools (11-axis) ============
   FESTIVAL_SCENE_TYPE: load('festival_scene_type'),
   FESTIVAL_MARKET_BACKDROP: load('festival_market_backdrop'),

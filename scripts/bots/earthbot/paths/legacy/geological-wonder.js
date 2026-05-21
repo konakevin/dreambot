@@ -4,8 +4,8 @@
  * The raw architecture of the planet.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../earth/pools');
+const blocks = require('../../earth/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.GEOLOGICAL_SCENES, 'geological_scene');
