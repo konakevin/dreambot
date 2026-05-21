@@ -13757,6 +13757,101 @@ Template:
 Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
   },
 
+  YUMBOT_JAPANESE_FESTIVAL: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene_type, market_backdrop, signature, terrain, sky, camera, lighting, time_of_day, weather, food_inhabitants, companion } = slots;
+    const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
+    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigList = Array.isArray(signature) ? signature : [signature];
+    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing JAPANESE-FESTIVAL renders for YumBot — kawaii matsuri scenes with 5 kawaii Japanese festival foods composed cleanly in a richly-detailed matsuri/market setting. Natural family-portrait cluster with slight pose variation per food — NOT identical lineup, NOT chaotic action. Painterly Pop-Mart fusion register with Studio-Ghibli warmth. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: 5 FOODS NAMED FIRST — ALL VISIBLE ━━━
+
+The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). Group them so all 5 fit cleanly in the frame — close enough that each face is visible. NEVER drop a food. Natural family-portrait cluster.
+
+⚠ FAILURE = rendering 1, 2, 3, or 4 foods. PASS = 5 distinct kawaii foods all visible.
+
+━━━ ⚠ HARD RULE #2: SLIGHT POSE VARIATION (NOT lineup, NOT acrobatics) ━━━
+
+The scene-type below describes the composition with slight POSE VARIATION per food — one peeking forward, one tilted, one leaning back, one looking up, one tallest at center. Render EXACTLY that composition. NOT a row of identical-posed soldiers. NOT chaotic stacking / acrobatics / vendor drama.
+
+━━━ ⚠ HARD RULE #3: VISIBLE MATSURI BACKDROP + ATMOSPHERIC LAYERS ━━━
+
+The matsuri/market BACKDROP must be CLEARLY VISIBLE behind the foods. Plus the SIGNATURE elements accent the scene. Plus terrain underfoot. Plus sky overhead. Plus time-of-day light. Plus weather drift. Plus one tiny companion accent. All 11 axes layer into the render.
+
+━━━ ⚠ HARD RULE #4: MATSURI ATMOSPHERE ━━━
+
+Traditional Japanese FESTIVAL — chochin paper-lanterns, wooden festival architecture, sakura petals OR autumn maple-leaves drifting, warm lantern-glow + soft sky palette. NO modern urban / mall / shopping. Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly Studio-Ghibli-meets-bex.ai warmth.
+
+━━━ THE SCENE-TYPE (composition + 5-food pose-varied cluster) ━━━
+${scene_type}
+
+━━━ MATSURI / MARKET BACKDROP (surrounding setting — render visibly) ━━━
+${market_backdrop}
+
+━━━ 2 SIGNATURE MATSURI ELEMENTS (iconic accents) ━━━
+${sigBlock}
+
+━━━ TERRAIN (underfoot ground texture) ━━━
+${terrain}
+
+━━━ SKY / OVERHEAD ━━━
+${sky}
+
+━━━ CAMERA FRAMING ━━━
+${camera}
+
+━━━ LIGHTING DIRECTION / QUALITY ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER / ATMOSPHERE (what's drifting through the air) ━━━
+${weather}
+
+━━━ 1 TINY COMPANION (small peripheral accent — firefly / goldfish / origami-crane / etc.) ━━━
+${companion}
+
+━━━ 5 KAWAII JAPANESE FESTIVAL FOODS (the (1)-(5) food-friends in the scene) ━━━
+${foodBlock}
+
+━━━ SCENE PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ POSTER MOMENT ━━━
+
+"a magical Japanese matsuri night — 5 kawaii foods gathered together in a rich festival setting with natural personality." Wallpaper-poster bex.ai-meets-Studio-Ghibli register.
+
+━━━ HARD BANS ━━━
+
+- NO modern urban / shopping / mall scenes — traditional matsuri ONLY
+- NO Western carnival / fairground / Ferris wheel — Japanese festival ONLY
+- NO photoreal / harsh-realism — kawaii painterly Pop-Mart fusion
+- NO dark / moody / scary atmosphere
+- NO chibi creatures / humans / animals as cast — only kawaii foods (tiny companion is OK)
+- NO real kanji / Japanese-text characters — decorative-pattern only, never legible-text
+- NO pathway / road / lane RECEDING into vanishing point — tight cluster composition
+- NO chaotic vertical-stacking / climbing / vendor-customer drama — natural pose-varied cluster
+- NO blurred-out generic-pink-bokeh backdrop — matsuri setting MUST be visibly rendered
+- NO identical-row-of-soldiers lineup — natural family-portrait pose variation per food
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD with the 5 foods named at the START (early tokens = Flux locks them), then weave in scene-type + backdrop + signature + terrain + sky + lighting + time + weather + companion as one integrated description.
+
+Template:
+"Five kawaii Japanese-festival foods together — (1) [food 1 named in 5-8 words], (2) [food 2 named], (3) [food 3 named], (4) [food 4 named], (5) [food 5 named] — [scene-type pose-varied cluster arrangement]. Set in [market_backdrop matsuri setting visibly rendered]. [signature 1] and [signature 2] visible in the scene, [terrain] underfoot, [sky] overhead, [time-of-day], [weather drifting], [lighting]. [companion] nearby. [camera framing]. Painterly Pop-Mart kawaii-matsuri rendering."
+
+⚠ Count (1)(2)(3)(4)(5) explicitly. ALL 5 FOODS named at the START. Natural pose-variation cluster.
+
+Output ONLY the raw 140-200 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
+  },
+
   YUMBOT_CHECKERED_TABLETOP: ({ slots, sharedDNA, vibeDirective }) => {
     const { vessel_hero, mini_creature_pile, tablecloth, scattered_minis, decor_clusters, camera, lighting } = slots;
     const minisList = Array.isArray(scattered_minis) ? scattered_minis : [scattered_minis];

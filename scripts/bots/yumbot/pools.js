@@ -51,6 +51,18 @@ module.exports = {
   CANDY_FANTASY_TIME_OF_DAY: load('candy_fantasy_time_of_day'),
   CANDY_FANTASY_WEATHER: load('candy_fantasy_weather'),
 
+  // ============ JAPANESE-FESTIVAL path pools (11-axis) ============
+  FESTIVAL_SCENE_TYPE: load('festival_scene_type'),
+  FESTIVAL_MARKET_BACKDROP: load('festival_market_backdrop'),
+  FESTIVAL_SIGNATURE: load('festival_signature'),
+  FESTIVAL_TERRAIN: load('festival_terrain'),
+  FESTIVAL_SKY: load('festival_sky'),
+  FESTIVAL_CAMERA: load('festival_camera'),
+  FESTIVAL_LIGHTING: load('festival_lighting'),
+  FESTIVAL_TIME_OF_DAY: load('festival_time_of_day'),
+  FESTIVAL_WEATHER: load('festival_weather'),
+  FESTIVAL_COMPANION: load('festival_companion'),
+
   // ============ FLORAL-GARDEN-CUP path pools ============
   FLORAL_GARDEN_SCENE_TYPE: load('floral_garden_scene_type'),
   FLORAL_VESSEL: load('floral_vessel'),

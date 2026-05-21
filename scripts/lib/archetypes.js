@@ -1995,6 +1995,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  YUMBOT_JAPANESE_FESTIVAL: {
+    description:
+      'PATH-BESPOKE — YumBot japanese-festival (2026-05-21 R7 11-axis + pose-variation). Kawaii matsuri scenes — 5 kawaii Japanese festival foods composed cleanly with NATURAL POSE VARIATION (one peeking forward, one tilted, one leaning back, one looking up, one tallest at center) — natural family-portrait cluster, NOT identical lineup, NOT chaotic acrobatics. Full 11-axis architecture: scene_type (pose-varied cluster), market_backdrop (yatai-lane / shrine courtyard / fish market / Edo street / hanami grove / etc.), signature (2 picks — chochin / torii / yatai / taiko / etc.), terrain, sky, camera, lighting, time_of_day, weather, food_inhabitants (5 from FOOD_CATALOG tagged FESTIVAL), companion (1 — firefly / goldfish / origami-crane / etc.). All pools at 200 entries.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['scene_type', 'market_backdrop', 'signature', 'terrain', 'sky', 'camera', 'lighting', 'time_of_day', 'weather', 'food_inhabitants', 'companion'],
+    },
+    pickN: { signature: 2, food_inhabitants: 5 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   YUMBOT_CHECKERED_TABLETOP: {
     description:
       'PATH-BESPOKE — YumBot checkered-tabletop (2026-05-20). bex.ai-modeled. Kawaii food/drink hero on a pastel gingham/checkered tablecloth, cluster of smiling mini-food-friends piled around AND ON TOP. 3/4 tabletop or overhead-flatlay. Pop-Mart-collectible-grid/sticker-card feel. 7 path-bespoke axes.',
