@@ -3060,6 +3060,586 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   },
 
 
+  // ─── flower-fairy path (2026-05-20 axis-system migration, 10 axes) ───
+  faebot_flower_fairy_creature: {
+    format: 'simple',
+    theme: `STACKED-EXOTIC FLOWER-MERGED FAIRY for FaeBot's flower-fairy path. Each entry is ONE unified description of a single mythic flower-merged fairy creature — rose-fae / wisteria-fae / sunflower-fae / lotus-fae / cherry-blossom-fae / morning-glory-fae / etc. Each entry 50-90 words. 5+ stacked exotic features per fairy. SHE HAS WINGS.
+
+⚠️ THE BAR: each fairy reads as a SINGLE coherent mythic flower-merged being. NOT a list — a unified painted-fantasy character description. Otherworldly mythic-fairy beauty, NEVER human-model beauty. Hidden-camera candid posture — NEVER posing, NEVER eye-contact, NEVER pinup.
+
+⚠️ CRITICAL: SHE HAS WINGS — butterfly / gossamer / sakura-petal / luna-moth / dragonfly. Specify wing-type per fairy.
+
+⚠️ EVERY ENTRY MUST include AT LEAST 5 of these stacked exotic feature categories:
+  - FLOWER-SPECIES LINEAGE — rose-fae / wisteria-fae / sunflower-fae / lotus-fae / cherry-blossom-fae / morning-glory-fae / peony-fae / iris-fae / poppy-fae / orchid-fae / lily-fae / tulip-fae / dahlia-fae / hibiscus-fae / jasmine-fae / etc.
+  - PETAL-SKIN — petal-soft blushed skin / dewdrop-translucent skin / luminous pearl-glowing / petal-tinted / iridescent shimmer
+  - BLOSSOM-HAIR — cascading rose-blooms / cascading wisteria-racemes / dense sunflower-ray petals / cascading lotus-petals / pink-sakura petals / blue morning-glory trumpets / etc. — hair MADE OF her flower-species
+  - PETAL-GARMENT — woven rose-petal bodice / cascading wisteria petal-shawl / golden sunflower-ray bodice / lotus-petal wrap / sakura-petal layered / etc.
+  - WINGS (CRITICAL — every fairy has them) — butterfly-wings of layered rose-petals / gossamer wings stitched with wisteria / large butterfly-wings of sunflower-rays / luna-moth wings veined with sap / dragonfly-wings of golden-mesh / sakura-petal wings / etc.
+  - POLLEN-GLOW SIGNATURE — gold pollen dusted on shoulders / luminous lavender-glow / sun-gold pollen heavy on her / dewdrop-pearl glow / golden-stamen detail / pollen-mote halo
+  - CANDID POSTURE/MOMENT — perched on a giant petal / nestled inside a bloom / wading through poppies / cupping pollen-light / sitting on lotus-pad / sleeping in tulip-bell / etc.
+
+⚠️ FLOWER-SPECIES DISTRIBUTION (across 25 entries):
+  • ~3 ROSE-FAMILY (rose / wild-rose / dog-rose / hybrid-rose)
+  • ~3 TRUMPET / BELL (morning-glory / tulip / foxglove / bluebell)
+  • ~3 CASCADING (wisteria / jasmine / honeysuckle / clematis)
+  • ~3 SUNFLOWER / LARGE-DISK (sunflower / daisy / coneflower / dahlia)
+  • ~2 LOTUS / WATER (lotus / water-lily / lily-pad / lotus-bud)
+  • ~2 CHERRY-BLOSSOM / DELICATE (cherry-blossom / magnolia / dogwood / plum-blossom)
+  • ~2 IRIS / ORCHID (iris / orchid / lily / amaryllis)
+  • ~2 POPPY / WILDFLOWER (poppy / cornflower / lupine / harebell)
+  • ~2 PEONY / RUFFLED (peony / dahlia / camellia / chrysanthemum)
+  • ~2 EXOTIC (bird-of-paradise / hibiscus / passionflower / lotus-bud)
+  • ~1 RARE / SEASONAL (snowdrop / autumn-crocus / forget-me-not)
+
+🚫 ABSOLUTE BANS:
+  • NO human-model beauty / NO pin-up / NO sexualized framing
+  • NO posing for camera / NO direct eye-contact with viewer
+  • NO modern attire / NO contemporary references
+  • NO scared / angry / edgy / dark moods (peaceful-fairy register only)
+  • NO "small figure in distance" — she's the focal subject
+  • NO wings missing — every fairy has wings
+  • NO human-scale fairy (she's smaller than human)
+  • NO ethnic-codes from real-world cultures — fantasy-canon only`,
+    touchpoints: [
+      'A rose-fae with petal-soft rose-blushed skin dusted in gold pollen and waist-long hair of cascading deep-crimson garden-rose blooms threaded with pearl-white buds, woven bodice of overlapping crimson rose-petals over a leaf-skirt of dark rose-foliage, butterfly-wings of layered red-rose petals with gold veining, golden-amber eyes lowered to a single bloom in her cupped palm, perched on a curled rose-petal',
+      'A wisteria-fae with luminous lavender-glowing skin and trailing hair of cascading deep-purple wisteria racemes brushing her ankles, draped petal-shawl of pale-violet wisteria blooms over a vine-and-leaf bodice woven with twisting green tendrils, gossamer wings of stitched wisteria-petals with silver veining, head tilted up to catch wisteria petals drifting down',
+      'A sunflower-fae with deep-golden-bronze skin dusted heavily in sun-gold pollen and hair of vibrant yellow-and-amber sunflower-ray petals arranged in a dense corona, woven petal-bodice of golden sunflower-rays with brown seed-center medallion detail, large butterfly-wings of layered golden sunflower-petals, perched on a giant sunflower stamen with bare feet dangling',
+      'A lotus-fae with dewdrop-translucent pearl-pink-glowing skin and hair of cascading pale-pink and ivory lotus-petals flowing past her waist in soft waves, petal-wrap bodice of blush-pink lotus blooms layered over a skirt of jade water-lily leaves, gossamer wings of woven pink lotus-petals with luminous golden veining, seated cross-legged on a giant lotus-pad cupping liquid-starlight',
+      'A cherry-blossom-fae with pale porcelain-glowing skin and ink-black hair threaded throughout with hundreds of pale-pink-and-white sakura petals in soft clusters, petal-wrap of overlapping sakura blooms with tiny golden-stamen detail, translucent wings of layered cherry-blossom petals with soft pink veining, head tilted as a single petal lands on her open palm',
+      'A morning-glory-fae with translucent cool-fair skin showing tiny blue constellations visible beneath the surface and hair of cascading blue-and-indigo morning-glory trumpets still curled at the edges, draped petal-shawl of deep-indigo morning-glory blooms over a vine-tendril bodice, gossamer wings of stitched morning-glory petals with silver veining, perched on a tulip-bell',
+      'A peony-fae with petal-soft pink-glowing skin and waist-long hair of overlapping ruffled peony-blooms cascading in pearl-pink and cream tones, woven petal-bodice of overlapping peony petals fading into a skirt of green peony-foliage, butterfly-wings of layered ruffled peony-petals, half-emerged from the heart of a giant blooming peony, fingers pressed to glowing pollen-runes',
+      'An iris-fae with iridescent purple-tinted skin and elaborate hair of cascading deep-violet bearded-iris blooms with golden falls visible at intervals, draped iris-petal cape with woven leaf-belt, gossamer wings of stitched iris petals with golden veining, three-quarter rear angle with her face in soft profile listening to the breeze',
+      'A poppy-fae with petal-soft warm-cream skin dusted in red pollen and hair of cascading scarlet poppy-petals with dark seed-pod centers visible at her temples, woven petal-bodice of overlapping red poppy-petals, large butterfly-wings of layered scarlet poppies, wading waist-deep through a wild poppy field with hands trailing over the bloom-tops',
+      'An orchid-fae with luminous pearl-white skin with faint magenta blush and hair of cascading exotic-orchid blooms in soft pink-and-white with magenta veining, draped petal-shawl of layered orchid-blooms with green-leaf-trim, gossamer wings of stitched orchid-petals with iridescent shimmer, perched on a hanging orchid-bough in candid stillness',
+      'A jasmine-fae with luminous pearl-skin glowing faintly and hair of cascading white-jasmine star-blooms with green-leaf threading, draped petal-shawl of layered jasmine blossoms over a green-leaf bodice, gossamer wings of woven jasmine-petals with silver veining, sitting cross-legged on a jasmine-vine with hands cupping drifting pollen',
+      'A tulip-fae with petal-soft warm-blushed skin and hair of cascading striped-tulip petals in soft pearl-pink-and-cream tones, woven petal-bodice of overlapping tulip-petals fading to a leaf-skirt, butterfly-wings of layered tulip-petals with subtle striping, nestled inside a giant tulip-bell with head resting against the curled inner petal-edge',
+      'A dahlia-fae with petal-soft deep-pink-glowing skin and hair of cascading ruffled dahlia-blooms in painted layered pink-and-purple, woven petal-bodice of overlapping dahlia-petals with golden-stamen detail, butterfly-wings of layered ruffled dahlia-petals with iridescent shimmer, half-turned profile inspecting a tiny falling petal in her palm',
+      'A hibiscus-fae with petal-soft warm-coral-glowing skin and hair of cascading large-bloom hibiscus-petals in vivid coral-and-pink with prominent red-stamens visible, draped petal-shawl of overlapping hibiscus-blooms with green-leaf trim, large butterfly-wings of layered hibiscus-petals with golden veining, perched on a hibiscus-stem with one knee drawn up',
+      'A daisy-fae with porcelain-glowing skin and hair of cascading white-daisy-petals with bright-yellow center-disks visible at intervals, woven petal-bodice of overlapping white-daisy petals with golden-center detail, gossamer wings of stitched daisy-petals with green veining, walking gently through a meadow of buttercups and white daisies',
+      'A foxglove-fae with porcelain-glowing skin and hair of cascading pink-and-purple foxglove-bell blooms with mottled-throat detail visible, draped petal-shawl of overlapping foxglove-bells, gossamer wings of stitched foxglove-petals with mottled veining, perched on a foxglove-spire with hands cupping a single bell',
+      'A bluebell-fae with translucent skin showing tiny constellations beneath and hair of cascading indigo-bluebell blooms in soft pearl-violet clusters, draped petal-shawl of overlapping bluebells over a green-leaf bodice, gossamer wings of stitched bluebell-petals with silver veining, sitting cross-legged in a sea of bluebells',
+      'A water-lily-fae with dewdrop-translucent skin and hair of cascading white-and-cream water-lily petals with golden-stamen-centers visible, woven petal-bodice of overlapping water-lily-petals fading to a skirt of jade lily-pad leaves, gossamer wings of woven water-lily petals with luminous golden veining, kneeling at a pond-edge dipping fingertips',
+      'A magnolia-fae with luminous-pearl skin and hair of cascading large-bloom magnolia-petals in cream and soft-pink with subtle veining, draped petal-shawl of overlapping magnolia blooms over a green-leaf bodice, gossamer wings of stitched magnolia-petals with golden veining, head bowed in candid contemplation of a magnolia-bough',
+      'A clematis-fae with iridescent purple-tinted skin and hair of cascading purple-and-pink clematis-star-blooms threaded with green tendrils, draped petal-shawl of overlapping clematis blooms with green-leaf-trim, gossamer wings of stitched clematis-petals with silver veining, perched on a clematis-vine inspecting a single bloom',
+      'A honeysuckle-fae with petal-soft warm-amber-glowing skin and hair of cascading yellow-and-cream honeysuckle-trumpet blooms with subtle nectar-glints, woven petal-bodice of overlapping honeysuckle blossoms, gossamer wings of stitched honeysuckle-petals with iridescent shimmer, sitting cross-legged on a honeysuckle-vine with hands cupping nectar-light',
+      'A bird-of-paradise-fae with iridescent warm-bronze skin and elaborate hair of cascading orange-and-purple bird-of-paradise blooms with sharp-spike-detail, draped petal-shawl of overlapping bird-of-paradise blooms, large butterfly-wings of layered bird-of-paradise petals with metallic shimmer, perched on a bloom-stem in candid profile',
+      'A passionflower-fae with petal-soft magenta-glowing skin and hair of cascading exotic-purple passionflower-blooms with intricate central-corona detail, draped petal-shawl of overlapping passionflower blossoms, gossamer wings of stitched passionflower-petals with silver veining, sitting cross-legged on a passionflower-vine inspecting a single bloom',
+      'A snowdrop-fae with translucent pearl-white-glowing skin and hair of cascading delicate snowdrop-bell blooms with green-tip details, draped petal-shawl of overlapping snowdrop blossoms over a green-leaf bodice, gossamer wings of stitched snowdrop-petals with silver veining, perched on a snowdrop-stem in early-spring candid',
+      'A forget-me-not-fae with translucent soft-fair skin and hair of cascading tiny-blue forget-me-not blooms with golden-center detail, draped petal-shawl of overlapping forget-me-nots over a green-leaf bodice, gossamer wings of stitched forget-me-not petals with silver veining, walking gently through a forget-me-not meadow with hands trailing',
+      'A camellia-fae with luminous-pearl skin and hair of cascading deep-pink camellia-blooms with golden-center detail, draped petal-shawl of overlapping camellia blossoms over a glossy green-leaf bodice, gossamer wings of stitched camellia-petals with iridescent shimmer, perched on a camellia-bough cupping a fallen petal',
+    ],
+    instructions: `Each entry is ONE unified mythic flower-merged fairy description, 50-90 words. Format: prose, comma-separated phrases. MANDATORY — 5+ stacked exotic features (species + petal-skin + blossom-hair + petal-garment + WINGS + magical signature + candid posture). NO human-model beauty. NO posing. NO eye-contact. NO modern attire. NO scared/edgy moods. NO wings missing. NO human-scale fairy. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_biome: {
+    format: 'simple',
+    theme: `FLOWER BIOME for FaeBot's flower-fairy path. Each entry describes ONE specific flower-saturated setting type — pure WHERE (the wrapping backdrop). Each entry 30-55 words.
+
+⚠️ THE BAR: each biome reads as a distinct flower-saturated environment with painted-fantasy gallery-tier visual richness. Multi-tier depth (foreground tactile detail + midground holding her + background fading into bloom-mist). NEVER generic "flower garden" — always a specific type with named flower species.
+
+⚠️ BIOME CATEGORIES (across 25 entries):
+  • ~4 WILDFLOWER MEADOW — varied wildflowers stretching to bloom-horizon
+  • ~3 GIANT-BLOOM CLUSTER — giant peonies / giant tulips / giant magnolias she could nestle inside
+  • ~3 SUNFLOWER FIELD — towering sunflowers forming a forest of giant blooms
+  • ~3 WISTERIA-CASCADE ARBOR — hanging wisteria racemes forming a natural cathedral
+  • ~3 LOTUS POND — floating lotus and water-lilies on still water
+  • ~2 SAKURA / BLOSSOM GROVE — pink-blossom canopy with drifting petals
+  • ~2 POPPY FIELD — vast scarlet poppy meadow
+  • ~2 IRIS / DAFFODIL MEADOW — tall iris-spires or daffodil cluster
+  • ~2 ROSE-BRAMBLE GARDEN — climbing rose-vines forming natural curtains
+  • ~1 EXOTIC / TROPICAL — hibiscus garden / orchid grove / bird-of-paradise cluster
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC FLOWER-SETTING TYPE (named species)
+  - 2+ SIGNATURE FEATURES (giant blooms / bloom-cluster / pond / arbor / etc.)
+  - MULTI-TIER DEPTH implied (foreground / midground / background)
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO lighting / weather description (separate axes)
+  • NO modern setting / urban elements
+  • NO IP / pop-culture references
+  • NO "small figure" — biome is pure environment`,
+    touchpoints: [
+      'A vast wildflower meadow at chest-height with painted overlapping clusters of bluebells, foxgloves, wood-anemones, and lily-of-the-valley, scattered tall foxglove-spires creating natural punctuation, painted depth fading into a soft bloom-mist on the horizon',
+      'A rolling wildflower meadow with painted overlapping clusters of poppies, cornflowers, and buttercups stretching to a soft painted bloom-horizon, foreground tactile bloom-cluster detail, painted gallery-tier richness',
+      'A wildflower meadow at sunset with painted overlapping clusters of asters, daisies, and lupines, distant treeline silhouette, painted bloom-depth fading into warm-amber haze',
+      'A sea of wildflowers at chest-height with painted overlapping clusters of wild-iris, harebells, and wildroses, gentle painted breeze moving the bloom-tops, painted multi-tier depth',
+      'A giant peony-cluster forming a natural hollow she could nestle inside, painted overlapping ruffled pink-and-cream peony-petals dominating the painted frame in painted gallery-tier richness, soft bloom-mist beyond',
+      'A grove of giant magnolia-blooms suspended like painted lanterns from above, painted multi-tier depth between foreground bloom-cluster and distant magnolia-grove, ethereal painted register',
+      'A cluster of giant tulip-bells in painted pearl-pink-and-cream forming natural rooms she could enter, painted dramatic scale-richness, soft bloom-mist beyond, painted gallery-tier register',
+      'A sunflower field with towering golden sunflowers forming a painted natural forest of giant disk-blooms, painted tactile detail at intimate scale, distant field fading into warm-amber haze',
+      'A vast sunflower field with sun-gold blooms dominating the painted depth, scattered fallen sunflower-petals in painted foreground, painted gallery-tier scale-richness',
+      'A sunflower meadow at golden hour with painted golden disks turned toward the painted sun, painted multi-tier depth, painted soft-golden bloom-mist behind',
+      'A wisteria-cascade arbor with cascading violet-wisteria racemes draping overhead like a painted cathedral ceiling, moss-grown path through the painted depth, painted gallery-tier register',
+      'A wisteria-cascade with violet-purple racemes painted hanging in painted layers from overhead, painted multi-tier depth, ethereal painted-spring register',
+      'A wisteria-arbor over a winding garden path with painted violet-cluster draping from above and painted scattered fallen wisteria-petals on the path below, painted depth',
+      'A lotus pond with painted floating lotus-blooms and water-lilies dotting the surface in painted gallery-tier richness, painted reflections of the canopy above on the painted water, magical painted register',
+      'A still lotus-pond at twilight with painted floating lotus-blooms and water-lilies in painted layers, painted distant trees mirrored on the water, magical painted register',
+      'A floating lotus-meadow on a painted reflective pond, painted overlapping lotus-blooms creating a painted island for her, soft bloom-mist beyond',
+      'A sakura grove with painted pink-blossom canopy overhead creating a painted natural ceiling, painted drifting petals filling the painted air, painted multi-tier depth fading into soft pearl-pink mist',
+      'A sakura grove at peak bloom with painted dense pink-and-white canopy and painted carpeted ground of fallen petals, painted gallery-tier ethereal register',
+      'A vast scarlet poppy field with painted overlapping crimson-poppy blooms stretching to a painted horizon, painted seed-pod detail visible at intimate scale, painted bloom-depth haze',
+      'A poppy meadow with painted scarlet blooms dominating the painted frame, painted scattered cornflowers and wild-grasses, painted multi-tier depth',
+      'An iris-meadow with painted tall purple-iris spires rising above painted lower wildflower carpet, painted multi-tier depth fading into soft iris-violet haze',
+      'A daffodil meadow with painted golden-yellow daffodil cluster covering the painted ground, painted multi-tier depth fading into warm-gold bloom-mist',
+      'A rose-bramble garden with painted climbing rose-vines forming painted natural curtains in painted depth, painted scattered crimson rose-blooms throughout, painted gallery-tier richness',
+      'A rose-garden with painted overlapping rose-blooms in painted varying pinks and creams, painted vine-tendrils crossing the painted depth, painted multi-tier register',
+      'A tropical-garden with painted hibiscus blooms in vivid coral-and-pink dominating the painted depth, painted exotic foliage forming a painted multi-tier canopy, painted gallery-tier richness',
+    ],
+    instructions: `Each entry is ONE specific FLOWER BIOME, 30-55 words. Format: prose, comma-separated phrases. MANDATORY — (a) named flower-setting type with species, (b) 2+ signature features, (c) multi-tier depth implied. NO creature description. NO lighting/weather. NO modern. NO IP. NO small-figure. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_lighting: {
+    format: 'simple',
+    theme: `LIGHTING (time-of-day + light drama) for FaeBot's flower-fairy path. Each entry describes ONE specific time-of-day + light moment combination. Each entry 25-45 words.
+
+⚠️ THE BAR: each entry establishes a SPECIFIC light moment with dramatic potential — NOT generic "soft light". Painted-fantasy lighting drama specifically suited to flower-garden contexts: golden-hour through petals, dawn-pink on dewy blooms, twilight blue-hour with firefly accents, moonlit silver-glow on pond blooms.
+
+⚠️ LIGHTING CATEGORIES (across 25 entries):
+  • ~7 GOLDEN-HOUR — afternoon warm-amber through petals / late-afternoon backlight gilding her
+  • ~4 DAWN — soft-pink dawn / golden dawn beams / pearl-mist dawn / fresh-spring morning light
+  • ~4 BLUE-HOUR / TWILIGHT — cool-blue twilight / magical-violet twilight / blue-hour with firefly accents
+  • ~3 MIDDAY — bright midday light through petal-cluster / harsh-light filtering through canopy
+  • ~3 MOONLIT — silver-moonlight on dewy blooms / blue-moon ambient on pond
+  • ~4 BIOLUMINESCENT — soft pollen-light ambient / glowing-bloom register / enchanted fairy-light shafts
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TIME-OF-DAY
+  - SPECIFIC LIGHT QUALITY
+  - PALETTE CUE
+  - DIRECTION OR DRAMA (through petals / from above / sidelight / etc.)
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO weather (separate axis)
+  • NO modern light sources
+  • NO photographic technique language`,
+    touchpoints: [
+      'Golden afternoon warm-amber light filtering through painted overlapping petals creating painted dappled bloom-shadows, painted gallery-tier warm-golden register',
+      'Late-afternoon backlight piercing through bloom-cluster creating painted halo-glow on every petal-edge, painted soft warm-amber register, atmospheric backlit depth',
+      'Magic-hour golden light gilding the painted blooms with warm-amber-and-gold palette saturating the painted scene, painted-storybook softness',
+      'Golden warm sidelight raking across the painted bloom-field from a low angle, painted long shadows stretching across the painted petals, painted gallery-tier register',
+      'Late-afternoon warm light filtering through petal-cluster creating painted golden-pink dappled patterns on her painted form, painted-storybook register',
+      'Golden-hour through wisteria-cascade creating painted warm-golden-and-violet dappled pattern on the painted ground, painted gallery-tier register',
+      'Soft-pink dawn light filtering through the painted blooms with rose-gold-and-lavender palette, gentle painted-storybook register, early-morning warmth',
+      'Golden dawn beams angling through the painted blooms from a low east angle, painted drifting dust-motes catching the painted beams, fresh-morning register',
+      'Pearl-mist dawn beams angling low through the painted blooms in painted shafts of soft white-gold, painted drifting mist catching the beams, fresh painted-morning register',
+      'Fresh-spring morning light with painted soft cool-warm palette and painted gentle dappled patterns on the painted blooms, painted hopeful register',
+      'Cool-blue twilight with painted warm-yellow accents from fireflies, painted twilight magical register, soft pearl-violet bloom-tint',
+      'Blue-hour twilight with the last warm-orange of sunset bleeding through painted distant blooms, cool-blue overhead, painted magical twilight register',
+      'Magical violet-twilight glow saturating the painted bloom-garden in soft lavender-and-blue, painted faint pollen-light particles, dreamy painted-fantasy register',
+      'Blue-hour low warm under-light from fireflies illuminating her painted face from below, cool-blue ambient overhead, painted magical underlight register',
+      'Midday god-rays piercing the painted bloom-canopy in painted vertical shafts of brilliant white-gold, painted harsh contrast between shafted-light and painted shadow',
+      'High-noon bloom-canopy filter with painted dappled bright-gold patches across painted petals, painted harsh-amber-with-cool-shadow contrast',
+      'Strong midday backlight piercing through painted blooms creating dramatic painted silhouette-edges, painted warm-gold-and-shadow register',
+      'Silver moonlight on painted dewy blooms creating painted cool-blue glints across every painted petal, painted hushed magical register',
+      'Blue-moon ambient on painted pond with painted moonlit reflection of lotus-blooms, painted silver-and-blue magical register',
+      'Moonlit silver-and-violet ambient with painted blooms catching painted silver-edge light, painted deep-blue painted ambient saturating the scene',
+      'Soft pollen-light ambient illuminating her painted form with painted warm-golden glow, painted bioluminescent register',
+      'Bioluminescent ambient with painted glowing-blooms casting soft warm-pink painted light, painted gallery-tier magical register',
+      'Magical pollen-light suffusing the painted scene with painted soft warm-glow on every painted petal, painted ethereal register',
+      'Dramatic dark-grey-blue storm-lit garden with painted distant lightning-flash illuminating the painted blooms in silver flash, painted dramatic-storm register',
+      'Pre-storm dim painted-amber light with low storm clouds darkening the painted upper-canopy, painted blooms still catching gentle light',
+    ],
+    instructions: `Each entry is ONE specific LIGHTING moment, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) time-of-day, (b) light quality, (c) palette cue, (d) direction or drama. NO creature. NO biome. NO weather. NO modern. NO photographic language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_weather: {
+    format: 'simple',
+    theme: `WEATHER (air condition + drifting accents) for FaeBot's flower-fairy path. Each entry describes ONE specific atmospheric air condition + drifting accents suited to flower-garden contexts. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry establishes a SPECIFIC air condition with drifting accents adding painted-storybook depth. ALWAYS petal-friendly weather — no destructive storms. Drifting accents often petal-themed (drifting petals dominant).
+
+⚠️ WEATHER CATEGORIES (across 25 entries):
+  • ~5 PETAL-DRIFT — drifting petals from blooms / falling petal-snow / scattered settled petals
+  • ~3 MIST / FOG — dawn mist drifting through blooms / low pearl-mist / soft bloom-mist
+  • ~3 RAIN — gentle rain on petals / soft drizzle on blooms / post-rain wet-glistening blooms
+  • ~3 POLLEN-HAZE — drifting golden pollen-motes / floating pollen-clouds / pollen-snow
+  • ~3 DEW-GLINTS — glistening morning dew on blooms / pearl-dew droplets / dew-soaked
+  • ~3 BREEZE — gentle bloom-bobbing breeze / petals stirring on breeze / soft wind moving foliage
+  • ~2 CLEAR / STILL — clear painted-still air with crisp bloom visibility
+  • ~2 BUTTERFLY-CLOUD — butterfly swarm drifting through / butterfly-cloud filling air
+  • ~1 SNOW-PETAL — winter petal-snow / first-frost on petals
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC AIR CONDITION
+  - DRIFTING ACCENTS
+  - PALETTE / TEMPERATURE CUE
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO lighting (separate axis)
+  • NO catastrophic weather
+  • NO modern weather references`,
+    touchpoints: [
+      'Drifting cherry-blossom petals filling the painted air in soft pink-snow, painted gentle motion captured, magical painted-spring register',
+      'Falling petal-snow through the painted air in painted pearl-pink drift, painted settled petal-carpet underfoot, magical painted register',
+      'Wisteria petals drifting in painted violet-clusters from overhead, painted soft pearl-violet palette, magical spring register',
+      'Painted drifting rose-petals through the painted air in soft crimson-and-cream cascade, magical painted register',
+      'Drifting magnolia-petals through painted depth in painted large pearl-cream petals, painted gallery-tier register',
+      'Soft dawn mist drifting slowly through the painted blooms in pearl-grey wisps, painted depth softening the bloom-silhouettes, fresh painted-morning hush',
+      'Low pearl-mist settled across the painted bloom-meadow at knee-height, painted depth with edges fading into haze, magical painted register',
+      'Soft bloom-mist drifting through painted depth in painted soft cool-pink-grey wisps, painted gallery-tier ethereal register',
+      'Gentle rain dripping from painted petal-edges with painted water-droplets visible on every bloom, painted soft pattering atmosphere, wet-shimmer register',
+      'Soft drizzle painting every painted bloom with wet shimmer, painted gentle rain-pixels suspended, painted fresh peaceful register',
+      'Post-rain wet shimmer with every painted bloom glistening with painted dew-and-rain droplets, painted reflective register',
+      'Drifting golden pollen-motes catching the painted bloom-light in painted soft warm-light specks, painted magical register',
+      'Floating pollen-clouds drifting through the painted depth around the painted blooms, painted soft warm-glow, magical register',
+      'Pollen-snow drifting through the painted air in painted golden-warm motes, painted magical register',
+      'Glistening morning dew on painted blooms, painted reflective droplet detail on petal-edges, fresh-morning painted register',
+      'Pearl-dew droplets on painted bloom-petals catching the painted light in painted pearl-glints, fresh-morning crystal register',
+      'Dew-soaked painted bloom-garden with painted shimmering droplets across every petal-edge, painted fresh peaceful register',
+      'Gentle bloom-bobbing breeze with painted blooms swaying in painted soft synchronized motion, magical painted-life register',
+      'Petals stirring on a painted gentle breeze with painted soft-motion drift through painted depth, magical painted register',
+      'Soft wind moving painted foliage with painted bloom-cluster swaying gently, magical alive-garden register',
+      'Clear painted-still air with crisp painted bloom-visibility into the depth, painted gallery-tier clarity, motionless hush register',
+      'Motionless painted bloom-garden hush with crystalline clear painted air, every painted petal sharply painted, painted gallery-tier stillness register',
+      'Painted butterfly-swarm drifting through the painted depth in painted colorful clusters, painted soft motion, magical register',
+      'Painted butterfly-cloud filling the painted air around painted blooms in painted orange-and-yellow flight, magical painted-spring register',
+      'Painted first-frost dusting painted petal-edges in soft pearl-white, painted gentle winter-petal-snow drifting through painted air, magical register',
+    ],
+    instructions: `Each entry is ONE specific WEATHER condition, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) air condition, (b) drifting accents, (c) palette/temperature cue. NO creature. NO biome. NO lighting. NO catastrophic weather. NO modern references. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHOR (closest depth element bringing true 3-tier depth) for FaeBot's flower-fairy path. Each entry describes ONE specific tactile foreground element. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry adds proper 3-tier composition depth (foreground / midground her / background fading). NEVER blocks her — frames her. Painted-storybook tactile detail. Often flower-themed for flower-fairy context.
+
+⚠️ FOREGROUND CATEGORIES (across 25 entries):
+  • ~5 OVERSIZED BLOSSOM — giant bloom in foreground / large petal-curtain crowding lower frame
+  • ~4 BLOOM-CLUSTER — cluster of small blooms / wildflower carpet at her feet
+  • ~4 VINE / TENDRIL — hanging-vine cluster with blooms / trailing tendril
+  • ~3 BUTTERFLY / INSECT CLUSTER — butterfly cluster mid-flight / dragonfly hovering
+  • ~3 DEW / DROPLET — glistening dewdrops on petal-cluster / wet-petal cluster
+  • ~3 PETAL-DRIFT — drifting petal-cluster filling foreground / cascade of falling petals
+  • ~2 LILY-PAD / WATER ELEMENT — lily-pad edge / water-bloom reflection
+  • ~1 FALLEN-PETAL CARPET — painted petal-carpet across foreground
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TYPE
+  - POSITION IN FRAME
+  - TACTILE DETAIL
+
+🚫 STRICT BANS:
+  • NO creature description
+  • NO biome / setting (separate axis)
+  • NO weather (separate axis)
+  • NO modern objects
+  • NO blocking the creature`,
+    touchpoints: [
+      'Giant peony-bloom crowding the foreground in painted ruffled pink-and-cream petals, painted tactile petal-veining detail, painted depth between bloom and her',
+      'Large magnolia-bloom dominating foreground-left in painted cream-and-pink with painted golden-stamen-center, painted gallery-tier tactile detail',
+      'Oversized sunflower-disk crowding lower-right foreground with painted golden-ray petals and painted brown seed-center, painted dramatic scale-contrast',
+      'Painted large blooming hibiscus in foreground-right with painted coral-and-pink petals and painted red-stamens visible, painted gallery-tier tactile detail',
+      'Petal-curtain of cascading wisteria-racemes in foreground-left with painted hanging violet-petal clusters, painted gallery-tier framing',
+      'Cluster of small bluebells in painted carpet across the lower painted foreground, painted soft-violet bell-shapes catching the light',
+      'Wildflower carpet at her feet with painted overlapping clusters of foxgloves, wood-anemones, and daisies, painted storybook detail',
+      'Painted foreground cluster of poppies in painted scarlet-and-black, painted seed-pod detail visible at painted intimate scale',
+      'Painted forget-me-not cluster across the painted foreground in soft pearl-blue, painted carpet of color leading to her',
+      'Hanging-vine cluster with painted blooms (clematis / honeysuckle) cascading from above in painted foreground-left, painted leaf-veined detail',
+      'Trailing tendril of jasmine-vine in painted foreground-right with painted white-star blooms, painted framing detail',
+      'Painted clematis-vine in painted foreground draped across the lower-edge of the frame with painted purple star-blooms, painted gallery-tier detail',
+      'Painted honeysuckle-vine in painted foreground with painted yellow-and-cream trumpet-blooms cascading, painted tactile detail',
+      'Painted butterfly-cluster mid-flight in painted foreground in painted orange-and-yellow swarm, painted motion captured',
+      'Painted dragonfly hovering in painted foreground-right with painted iridescent wing-blur, painted magical register',
+      'Painted bee-cluster in painted foreground moving between blooms in painted soft motion, painted gallery-tier detail',
+      'Painted glistening dewdrops on painted petal-cluster in painted foreground, painted reflective detail at painted human-eye-level',
+      'Painted dew-soaked petal-cluster in painted foreground with painted shimmering droplets, painted gallery-tier tactile register',
+      'Painted wet petal-cluster in painted foreground with painted pearl-dew detail, painted reflective fresh-morning register',
+      'Painted drifting petal-cluster filling painted foreground in painted pearl-pink snow, painted soft motion captured',
+      'Painted cascade of falling petals in painted foreground in painted soft cherry-blossom drift, painted magical register',
+      'Painted scattered fallen petals in painted foreground carpet in painted pearl-cream cascade, painted gallery-tier detail',
+      'Painted lily-pad edge in painted foreground with painted jade leaves and painted pink-edged lotus-blooms, painted tactile detail',
+      'Painted water-bloom reflection in painted foreground pond with painted lotus visible above and painted reflection below, painted gallery-tier register',
+      'Painted fallen-petal carpet across painted foreground in painted soft pearl-pink, painted carpeted depth leading to her',
+    ],
+    instructions: `Each entry is ONE specific FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific type, (b) position in frame, (c) tactile detail. NO creature. NO biome. NO weather. NO modern. NO blocking. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_botanical_accent: {
+    format: 'simple',
+    theme: `BOTANICAL ACCENT (signature secondary-bloom cluster near her) for FaeBot's flower-fairy path. Each entry describes ONE specific named-species bloom cluster painted nearby — DIFFERENT from the primary flower-biome so it adds chromatic variety. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC named bloom species painted with species-specific detail — painted-storybook chromatic pop. NEVER generic "wildflowers". Species cluster complements (not duplicates) the primary flower-biome.
+
+⚠️ BLOOM SPECIES VARIETY (across 25 entries — chromatic complements):
+  Spring: bluebells / foxgloves / wood-anemones / lily-of-the-valley / primrose / forget-me-nots / wisteria / dogwood / magnolia / wild-rose
+  Summer: honeysuckle / jasmine / wild-iris / columbine / harebells / clematis
+  Autumn: asters / wild-chrysanthemum / autumn-anemones / autumn-crocus
+  Year-round: moss-rose / fern-frond / glowing-fungus / luminous-mushroom-cluster
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC NAMED SPECIES
+  - COLOR DETAIL
+  - POSITION RELATIVE TO HER
+  - CLUSTER SIZE
+
+🚫 STRICT BANS:
+  • NO generic "flowers" / "wildflowers"
+  • NO creature description
+  • NO biome
+  • NO lighting / weather`,
+    touchpoints: [
+      'Cluster of indigo-blue bluebells carpeting the painted ground beside her in painted-spring overflow, painted soft pearl-violet bell-shapes',
+      'Tall foxglove-spires blooming behind her in painted pink-and-purple bell-shaped clusters, painted fairy-thimble detail',
+      'Painted wood-anemones scattered across the painted ground at her feet in painted white-petal clusters with painted golden centers',
+      'Painted lily-of-the-valley clusters at her feet with painted delicate white bell-shapes on painted slender green stems',
+      'Painted primrose cluster painted beside her with painted pale-yellow petal-rosettes, fresh-morning register',
+      'Painted forget-me-nots scattered through the painted ground in painted soft-blue clusters with painted golden centers',
+      'Painted wisteria-cascade hanging in painted violet-clusters above her like painted natural ceiling, ethereal register',
+      'Painted dogwood-blossom branch overhanging her with painted white-and-pink four-petal blooms, painted ethereal register',
+      'Painted white-magnolia blossoms painted suspended overhead like painted lanterns, painted large luminous petals',
+      'Painted wild-rose bramble blooming beside her in painted pink-and-cream cluster with painted thorny vines',
+      'Painted honeysuckle-cluster trailing through painted depth behind her in painted yellow-and-cream trumpet-blooms',
+      'Painted jasmine-cluster nearby with painted white-star blooms scattered through painted green-leaves',
+      'Painted wild-iris cluster in painted purple-and-yellow blooms painted emerging from the painted ground',
+      'Painted columbine-cluster blooming beside her in painted red-and-yellow nodding bell-shapes',
+      'Painted harebells nodding gently in painted blue clusters from a painted mossy rock, magical fae register',
+      'Painted clematis-blossoms cascading through painted depth in painted soft pearl-purple star-shaped clusters',
+      'Painted wild-aster cluster blooming at her feet in painted violet-and-pink star-shaped blooms, painted autumn register',
+      'Painted autumn-anemones blooming in painted pink-and-white clusters scattered through the painted ground',
+      'Painted autumn-crocus emerging from painted ground in painted delicate pale-violet cluster',
+      'Painted wild-chrysanthemum cluster in painted golden-yellow ruffled blooms, painted autumn register',
+      'Painted moss-rose cluster blooming from painted painted ground in painted soft pearl-pink rosettes',
+      'Painted fern-fronds painted unfurling beside her in painted spiral pattern with painted soft green-detail, fresh-spring register',
+      'Painted glowing-fungus cluster painted emerging from painted moss in painted soft pearl-cyan glow-shapes',
+      'Painted luminous-mushroom cluster painted ringing her painted feet in painted soft pearl-glow shapes, magical fae register',
+      'Painted small-toad-stool cluster painted at her feet in painted red-and-white spotted painted detail, magical painted register',
+    ],
+    instructions: `Each entry is ONE specific BOTANICAL ACCENT cluster, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific named species, (b) color detail, (c) position relative to her, (d) cluster size. NO generic "flowers". NO creature. NO biome. NO lighting/weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_candid_action: {
+    format: 'simple',
+    theme: `CANDID ACTION + COMPOSITION (the captured moment) for FaeBot's flower-fairy path. Each entry describes ONE specific candid moment with composition framing baked in. Each entry 30-50 words.
+
+⚠️ THE BAR: each entry describes a SPECIFIC captured-on-camera moment with composition spec baked in. NEVER posing, NEVER eye-contact. Caught-in-the-act, off-center via rule-of-thirds. Often exploits the flower-as-home scale (nestled in tulip-bell / perched on sunflower-stamen / cupping pollen-light).
+
+⚠️ ACTION + COMPOSITION CATEGORIES (across 25 entries):
+  • ~5 LIVING-IN-FLOWERS — nestled inside tulip-bell / nestled inside peony / perched on sunflower / on lotus-pad
+  • ~4 BLOOM-INTERACTION — cupping pollen-light / cradling fallen petal / inspecting bloom / brushing petal-edge
+  • ~3 GATHERING / TENDING — gathering pollen / weaving petal-crown / planting seedling
+  • ~3 MOVEMENT — wading through poppies / dancing through daisies / drifting through bloom-field
+  • ~3 RESTING — sleeping in lotus / leaning against bloom-stalk / sitting cross-legged on petal
+  • ~3 LISTENING / WATCHING — head tilted listening / watching butterfly / motionless absorption
+  • ~2 MID-FLIGHT — wings spread mid-hover / mid-flight between blooms
+  • ~2 GESTURE — open palm catching petal / hand raised in benediction
+
+⚠️ COMPOSITION SPEC must be baked in per entry — same options as forest-fairy-scene.
+
+🚫 STRICT BANS:
+  • NO posing for camera / NO eye-contact with viewer
+  • NO sexualized framing
+  • NO centered hero-shot
+  • NO "small figure in distance"
+  • NO violence / NO scared / NO edgy moods
+  • NO creature description
+  • NO biome description`,
+    touchpoints: [
+      'Nestled inside a giant tulip-bell with head resting against curled inner petal-edge, captured eye-level full-figure framing, body fills 45-60% of frame, intimate painted register, off-center via rule-of-thirds',
+      'Half-emerged from the heart of a giant blooming peony as if it were her home, captured medium-shot off-center, body fills 40-55% of frame, face in 3/4 profile',
+      'Perched on a giant sunflower stamen with one bare foot dangling over the bloom-disk, captured close medium-shot at the right third, head turned in candid profile',
+      'Seated cross-legged on a giant lotus-pad floating on a moonlit pond, captured eye-level full-figure framing, body fills 45-60% of frame, intimate painted distance',
+      'Curled inside a giant rose-bloom as if it were her bedroom, captured high-angle medium shot looking down, body 40-55% of frame, surrounded by overlapping rose-petals',
+      'Cupping pollen-light in her painted hands, captured close medium-shot waist-up framing at the left third, head bowed over hands in candid 3/4',
+      'Cradling a single fallen petal in cupped palms, captured close medium-shot waist-up framing at the right third, head bowed over the petal',
+      'Inspecting a single bloom in candid examination, captured medium-shot off-center at body 40-55% of frame, face in 3/4 profile',
+      'Brushing a painted petal-edge with reverent fingertips, captured high-angle medium shot looking down at body 40-55% of frame, surrounded by blooms',
+      'Gathering golden pollen-motes onto her fingertips with one outstretched hand, captured slight low-angle close, body 50-65% of frame',
+      'Weaving a painted petal-crown in painted cupped palms, captured close medium-shot waist-up framing, head bowed over hands in candid 3/4',
+      'Planting a tiny seedling in the painted earth with one outstretched palm, captured eye-level full-figure framing, kneeling, body fills 45-60% of frame',
+      'Wading waist-deep through a painted wild poppy field with both hands trailing over the bloom-tops, captured slight low-angle close, body 50-65% of frame',
+      'Dancing barefoot through a painted meadow of buttercups and white daisies, captured medium-shot off-center, body 40-55% of frame, painted motion register',
+      'Drifting through a painted bloom-field with wings half-spread, captured side-profile medium shot in painted motion, hair and fabric drifting in painted breeze',
+      'Sleeping curled inside a painted lotus-bloom with one cheek pressed to petal, captured high-angle medium shot, body 40-55% of frame, painted intimate register',
+      'Leaning against a painted bloom-stalk with one shoulder forward, captured side-profile medium shot in painted stillness, painted intimate register',
+      'Sitting cross-legged on a painted petal-cushion in quiet painted contemplation, captured eye-level full-figure framing, body fills 45-60% of frame',
+      'Standing motionless mid-listen with painted head tilted to one side, captured slight low-angle close, body 50-65% of frame, framed by painted blooms',
+      'Watching a painted butterfly land on a nearby bloom, captured medium-shot off-center at body 40-55% of frame, face in 3/4 profile',
+      'Motionless watching a painted bee gather pollen, captured three-quarter rear angle half-turned away, head in soft profile',
+      'Mid-hover between painted blooms with wings spread in painted soft motion, captured slight low-angle close, body 50-65% of frame, painted magical register',
+      'Mid-flight between painted blooms with wings spread, captured side-profile medium shot in painted motion, painted magical register',
+      'Open palm catching a painted falling petal in painted candid moment, captured close medium-shot at the left third, head turned to follow the petal',
+      'Hand raised in painted benediction over a painted seedling, captured eye-level full-figure framing, body 45-60% of frame, head bowed in painted tender register',
+    ],
+    instructions: `Each entry is ONE specific candid action moment with composition spec baked in, 30-50 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific candid action, (b) composition spec, (c) body % of frame, (d) face/posture detail. NO posing. NO eye-contact. NO centered. NO small-figure. NO violence/scared. NO creature description. NO biome description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_magical_flavor: {
+    format: 'simple',
+    theme: `MAGICAL FLAVOR (pollen-glow / supernatural atmospheric accent) for FaeBot's flower-fairy path. Each entry describes ONE specific magical accent visible in the scene. Each entry 15-35 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC magical detail painted as luminous painted register. Range from subtle (pollen-haze) to dramatic (fairy-dust trail). Pollen-glow is the DOMINANT magical signature for flower-fairy.
+
+⚠️ MAGIC CATEGORIES (across 25 entries):
+  • ~7 POLLEN-GLOW — drifting golden pollen / pollen-cloud / silver pollen-motes / glowing pollen-trail
+  • ~5 FAIRY-DUST / SPARKLES — spiral of fairy-dust / glittering trail / sparkle-fingertips
+  • ~4 BUTTERFLY / INSECT MAGIC — luminous butterfly cluster / firefly orbit / glowing-bee-trail
+  • ~3 GLOWING WINGS — glowing wing-edges / luminous wing-trail / wing-light
+  • ~2 GLOWING BLOOM — bloom glowing with magical light / pulsing-petal glow
+  • ~2 MAGIC AURA — soft halo around her / glowing veins beneath skin
+  • ~2 WILL-O-WISPS — single will-o-wisp / wisp orbiting her
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC MAGIC TYPE
+  - POSITION OR INTERACTION
+  - LIGHT QUALITY
+
+🚫 STRICT BANS:
+  • NO crude particle-effect language
+  • NO modern-CGI references
+  • NO creature description
+  • NO violence`,
+    touchpoints: [
+      'Drifting golden pollen-motes filling the painted air around her in painted soft warm-light specks, painted magical register',
+      'Painted pollen-cloud drifting lazily past her in painted golden-warm haze, painted magical register',
+      'Painted silver pollen-motes drifting upward from her hands into the painted night air, painted magical register',
+      'Painted glowing pollen-trail trailing behind her like painted slow embers, painted magical motion register',
+      'Painted soft pollen-light particles drifting through the painted depth around her, painted magical ambient register',
+      'Painted golden pollen-ribbon trailing behind her through the air in painted slow motion, painted magical register',
+      'Painted scattered pollen-sparks around her hands in painted golden glints, painted magical register',
+      'Painted spiral of fairy-dust rising from her painted fingertips in painted soft sparkle-glow, painted magical register',
+      'Painted glittering fairy-dust trail drifting from her painted hand into the surrounding air, painted magical register',
+      'Painted sparkle-fingertips trailing painted-gold light as she moves, painted magical motion register',
+      'Painted fairy-dust scattering around her painted form in painted soft glittering motes, painted magical register',
+      'Painted glittering pollen-and-fairy-dust mix drifting around her in painted golden glow, painted magical register',
+      'Painted luminous butterfly cluster circling her painted form in painted soft warm-glow, painted magical register',
+      'Painted firefly orbit around her in painted soft warm-yellow points at painted dusk, painted magical register',
+      'Painted glowing-bee-trail trailing behind a painted bee gathering pollen, painted magical register',
+      'Painted dragonfly-glow trailing painted iridescent light through painted depth, painted magical register',
+      'Painted glowing wing-edges with painted soft golden-warm light tracing her wings, painted magical register',
+      'Painted luminous wing-trail trailing behind her in painted soft sparkle-glow, painted magical motion register',
+      'Painted wing-light radiating soft painted golden-warm glow from her wings, painted magical register',
+      'Painted bloom near her glowing with painted magical pearl-light, painted magical register',
+      'Painted pulsing-petal glow on painted nearby bloom with painted soft warm-light pulsing, painted magical register',
+      'Painted soft halo around her painted head in painted luminous golden-warm glow, painted sacred register',
+      'Painted glowing veins beneath her painted skin pulsing faintly with painted magical light, painted magical register',
+      'Painted single bright will-o-wisp hovering near her painted cupped palm in painted soft golden-warm glow, painted fae register',
+      'Painted wisp orbiting her painted face in painted soft pearl-glow, painted intimate register',
+    ],
+    instructions: `Each entry is ONE specific MAGICAL FLAVOR accent, 15-35 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific magic type, (b) position or interaction, (c) light quality. NO crude particle-effect. NO modern-CGI. NO creature description. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_scale_prover: {
+    format: 'simple',
+    theme: `SCALE PROVER (giant-flower-as-home element establishing her sub-human scale) for FaeBot's flower-fairy path. Each entry describes ONE specific scale-contrast element that establishes the fairy is SMALLER THAN HUMAN — flowers are her home, her room, her platform. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry adds a SPECIFIC giant-flower-as-home element that makes her scale read as sub-human. CRITICAL for path identity — without it, she just looks like a human in a flower garden. The flower must be the SCALE-PROOF (bigger than her body).
+
+⚠️ SCALE CATEGORIES (across 25 entries):
+  • ~5 GIANT BLOOM AS HOME — peony as bedroom / tulip-bell as room / magnolia as bedchamber
+  • ~5 BLOOM AS PLATFORM — sunflower-disk as balcony / lotus-pad as raft / lily-pad as seat
+  • ~4 OVERSIZED PETAL — single petal larger than her body / petal-curtain dwarfing her
+  • ~3 STEM SCALE — bloom-stalk tall as a tree above her / vine-pillar dwarfing her
+  • ~3 LEAF SCALE — single leaf larger than her body / leaf as umbrella overhead
+  • ~3 BUTTERFLY / INSECT SCALE — butterfly at her scale or larger / bee her size
+  • ~2 DEWDROP SCALE — single dewdrop the size of her head / pearl-droplet larger than her hand
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC SCALE ELEMENT
+  - SCALE RELATIONSHIP TO HER (larger than her body / her room / her platform)
+  - PAINTED TACTILE DETAIL
+
+🚫 STRICT BANS:
+  • NO creature description
+  • NO biome / setting (separate axis)
+  • NO modern references
+  • NO breaking the painted-fantasy register
+  • NO human-scale fairy reads — she MUST be sub-human scale`,
+    touchpoints: [
+      'A painted giant peony-bloom forming her painted bedroom, painted ruffled pink-and-cream petals dwarfing her painted form, painted overlapping bloom-layers creating a painted natural hollow',
+      'A painted giant tulip-bell forming her painted room, painted curled inner petals taller than her painted body, painted striped-petal walls creating a painted natural chamber',
+      'A painted giant magnolia-bloom as her painted bedchamber, painted large cream-and-pink petals dwarfing her painted form, painted overlapping bloom-layers creating a painted natural alcove',
+      'A painted giant blooming rose forming her painted home, painted overlapping crimson rose-petals taller than her painted body, painted natural-hollow chamber',
+      'A painted giant blooming lotus as her painted home, painted pink-and-cream petals dwarfing her painted form, painted hollow center as her painted chamber',
+      'A painted giant sunflower-disk as her painted balcony, painted golden-ray petals fanning out around her painted form, painted brown seed-center as her painted seat',
+      'A painted floating lotus-pad as her painted raft, painted jade pad larger than her painted body, painted overlapping nearby lily-pads',
+      'A painted water-lily pad as her painted seat, painted jade leaf-platform larger than her painted body, painted floating on painted reflective water',
+      'A painted giant fern-frond as her painted platform, painted unfurling spiral larger than her painted body, painted gallery-tier scale-contrast',
+      'A painted giant leaf as her painted platform, painted broad leaf-surface larger than her painted body, painted natural perch',
+      'A painted single oversized rose-petal larger than her painted body curving around her painted form, painted tactile petal-veining detail at painted intimate scale',
+      'A painted single oversized magnolia-petal painted dwarfing her painted form, painted cream-and-pink petal-surface in painted intimate scale',
+      'A painted petal-curtain of oversized falling petals painted dwarfing her painted form, painted cascade of large petals',
+      'A painted single oversized lotus-petal larger than her painted body, painted pearl-pink-and-cream petal at painted intimate scale',
+      'A painted oversized cherry-blossom-petal painted larger than her painted hand, painted soft pink-and-white at painted intimate scale',
+      'A painted sunflower-stalk rising painted tall as a tree above her painted form, painted ribbed-green stem at painted intimate scale',
+      'A painted bloom-stalk rising painted tall as a tree above her painted form, painted ridged stem and overhanging painted bloom',
+      'A painted vine-pillar painted dwarfing her painted form, painted thick painted vine-trunk wrapping painted overhead',
+      'A painted oversized fern-frond painted arching above her painted form like painted umbrella, painted lacy painted detail at painted intimate scale',
+      'A painted single oversized leaf as painted umbrella overhead, painted broad leaf-surface painted dwarfing her painted form',
+      'A painted painted leaf-canopy painted formed by painted oversized leaves dwarfing her painted form, painted natural-ceiling register',
+      'A painted butterfly painted at her painted scale or painted larger, painted iridescent wings painted catching painted light, painted scale-prover',
+      'A painted bee painted her painted size painted gathering pollen, painted intimate scale-contrast detail',
+      'A painted single painted dewdrop painted the painted size of her painted head, painted pearl-glistening painted droplet at painted intimate scale',
+      'A painted pearl-droplet painted larger than her painted hand painted on a painted petal-edge, painted reflective painted detail at painted intimate scale',
+    ],
+    instructions: `Each entry is ONE specific SCALE PROVER, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific scale element, (b) scale relationship to her, (c) painted tactile detail. NO creature. NO biome. NO modern. NO breaking painted-fantasy register. NO human-scale fairy. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_flower_fairy_companion: {
+    format: 'simple',
+    theme: `COMPANION (small flower-garden animal sharing the moment with her) for FaeBot's flower-fairy path. Each entry describes ONE specific small companion woven naturally into the scene. Each entry 15-35 words.
+
+⚠️ THE BAR: companion is at HER SCALE OR SMALLER (which means TINY — butterfly / bee / hummingbird / dragonfly / ladybug since she's sub-human scale). NEVER a competing focal subject. The eye lands on the fairy first; the companion adds story-warmth.
+
+⚠️ COMPANION CATEGORIES (across 25 entries):
+  • ~6 BUTTERFLY — monarch / swallowtail / blue morpho / luna-moth / sphinx-moth
+  • ~4 HUMMINGBIRD — ruby-throated / iridescent green / mid-hover near bloom
+  • ~4 BEE — honeybee / bumblebee / pollen-gathering bee
+  • ~3 DRAGONFLY — iridescent dragonfly / damselfly / mid-flight
+  • ~3 LADYBUG / SMALL BEETLE — ladybug on petal / iridescent beetle
+  • ~2 GLOW-MOTH / FIREFLY — glowing-moth / single firefly orbit
+  • ~2 SMALL FROG / TADPOLE — lily-frog / tiny tree-frog
+  • ~1 BIRD (TINY) — tiny wren / small finch
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC ANIMAL SPECIES (NEVER generic "insect" or "butterfly")
+  - POSITION RELATIVE TO HER (at her feet / on her hand / mid-hover near bloom / etc.)
+  - POSTURE / ACTION
+  - SCALE CUE (her scale or smaller)
+
+🚫 STRICT BANS:
+  • NO competing focal subject
+  • NO predator-prey moments
+  • NO creature description
+  • NO modern or fantasy hybrids
+  • NO larger-than-fairy companions (forest animals don't fit her sub-human scale)`,
+    touchpoints: [
+      'A painted monarch butterfly perched on her painted finger with painted orange-and-black wings spread, painted intimate scale',
+      'A painted swallowtail butterfly hovering near her painted shoulder with painted yellow-and-black wing-pattern, painted soft motion captured',
+      'A painted blue morpho butterfly perched on a nearby painted bloom with painted iridescent blue wings spread, painted magical register',
+      'A painted luna-moth perched on her painted fingertip with painted iridescent green wings spread, painted magical register',
+      'A painted sphinx-moth hovering near a painted bloom with painted soft brown wing-pattern, painted intimate register',
+      'A painted small painted cabbage-white butterfly on a painted nearby bloom, painted simple painted white wing-pattern, painted intimate register',
+      'A painted ruby-throated hummingbird hovering near her painted cupped palm, painted iridescent wing-blur, painted magical register',
+      'A painted iridescent-green hummingbird mid-hover near a painted bloom, painted long-beak detail, painted intimate register',
+      'A painted hummingbird mid-flight between painted blooms, painted iridescent wing-detail, painted magical register',
+      'A painted small painted hummingbird painted sipping painted nectar from a painted bloom, painted intimate register',
+      'A painted honeybee pausing on a painted bloom near her, painted soft yellow-and-black painted fur-detail, painted intimate register',
+      'A painted bumblebee mid-hover near her painted shoulder, painted soft yellow-and-black painted fur, painted soft motion captured',
+      'A painted pollen-gathering bee on a painted bloom near her, painted pollen-glints on its painted legs, painted intimate register',
+      'A painted painted bee painted resting on a painted petal at her feet, painted intimate register',
+      'A painted iridescent dragonfly perched on a painted bloom-stalk near her, painted iridescent wing-detail catching painted light, painted magical register',
+      'A painted damselfly mid-flight between painted blooms, painted thin elongated body with painted iridescent wings, painted intimate register',
+      'A painted dragonfly mid-hover with painted iridescent wings spread, painted magical register',
+      'A painted ladybug on a painted petal at her feet, painted bright red-and-black dotted painted shell, painted intimate scale',
+      'A painted iridescent beetle painted resting on a painted leaf near her, painted soft metallic-shimmer painted shell, painted intimate register',
+      'A painted small painted bug on a painted bloom near her, painted intimate scale-contrast detail',
+      'A painted glowing-moth circling her painted form in painted soft pearl-glow, painted magical wing-motion, painted fae register',
+      'A painted firefly orbiting her painted cupped palm in painted soft warm-glow, painted intimate register',
+      'A painted lily-frog at painted painted pond-edge nearby, painted soft green-and-yellow painted skin, painted intimate register',
+      'A painted tiny tree-frog on a painted leaf near her, painted intimate scale-contrast, painted magical register',
+      'A painted tiny wren perched on a painted bloom-stalk near her, painted tiny brown form with painted bright eye, painted intimate register',
+    ],
+    instructions: `Each entry is ONE specific COMPANION animal, 15-35 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific species, (b) position relative to her, (c) posture/action, (d) scale cue (her scale or smaller). NO competing focal subject. NO predator-prey. NO creature description. NO modern or fantasy hybrids. NO larger-than-fairy companions. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+
 };
 
 const recipe = POOL_RECIPES[POOL];

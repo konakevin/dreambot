@@ -12902,6 +12902,105 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE CREATURE — preserve her stacked exotic features unmistakably. Then composition framing. Then forest biome wrapping around her. Then lighting + weather. Then foreground anchor + botanical accent. Then magical flavor. Then scale prover.${companion ? ' Then companion woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_FLOWER_FAIRY: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      flower_biome,
+      lighting,
+      weather,
+      foreground_anchor,
+      botanical_accent,
+      candid_action,
+      magical_flavor,
+      scale_prover,
+      companion,
+    } = slots;
+
+    const companionSection = companion
+      ? `\n\n━━━ COMPANION (a single small flower-garden presence sharing the moment with her) ━━━\n${companion}\n\nWoven naturally into the scene at her scale or smaller — NEVER a competing focal subject. The eye still lands on the fairy first; the companion adds story-warmth and scale-prover.`
+      : '';
+
+    return `You are writing ONE Flux prompt for an enchanted-flower-garden fairy painting in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt, BEFORE setting / lighting / anything else.
+
+1. THE FAIRY IS THE SUBJECT. Not the landscape. The fairy fills 40-55% of the frame and is the eye's first landing place. NEVER write a "wide landscape with tiny figure". NEVER write "small figure in distance".
+
+2. The fairy description below is THE creature — render her with EVERY stacked exotic flower-merged feature listed (petal-skin, blossom-hair, petal-garment, petal-wings, pollen-glow signature, the candid posture). 5+ stacked exotic features must visibly land in the painting. SHE HAS WINGS — butterfly / gossamer / sakura-petal / luna-moth (one type per creature).
+
+3. SCALE — she is SMALLER than human-scale. Flowers can be her HOME. A peony can be her bedroom, a tulip-bell her room, a sunflower-disk her balcony, a lotus-pad her raft. This sub-human scale must read in the composition.
+
+4. NEVER posing for camera. NEVER looking at viewer. NEVER human-model beauty — she is mythic-creature beauty, otherworldly, at-home-in-her-flower-garden.
+
+Open your prompt with the fairy description. The fairy opens; everything else is HER FRAME.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE FAIRY (the subject — render her exactly as described) ━━━
+${creature}
+
+Preserve every exotic flower-merged feature unmistakably. She HAS WINGS. She is otherworldly-beautiful — mythic-fairy beauty, NOT human-model beauty. Confident at-home-in-her-flower-garden. NEVER posing, NEVER looking at the viewer.
+
+━━━ 2. THE FLOWER BIOME (her natural home — wraps around her) ━━━
+${flower_biome}
+
+This biome is HER FRAME, not the subject. Atmospheric depth: foreground tactile detail / midground holding her / background fading into painted bloom-mist.
+
+━━━ 3. CANDID ACTION + COMPOSITION (the captured moment — frames her in the scene) ━━━
+${candid_action}
+
+This is the captured-on-camera moment. Caught-in-the-act candid, off-center via rule-of-thirds, the flower-garden wrapping around her like a frame. NEVER a centered hero portrait, NEVER a pose-for-camera shot.
+
+━━━ 4. LIGHTING (time-of-day + light drama) ━━━
+${lighting}
+
+━━━ 5. WEATHER (air condition + drifting accents) ━━━
+${weather}
+
+━━━ 6. FOREGROUND ANCHOR (closest depth element — bringing 3-tier depth) ━━━
+${foreground_anchor}
+
+Tactile foreground detail bringing true depth between camera and fairy. The painting reads in three tiers: this foreground close + her in midground + the deep bloom-mist fading behind.
+
+━━━ 7. BOTANICAL ACCENT (secondary signature bloom cluster near her) ━━━
+${botanical_accent}
+
+Specific secondary bloom cluster painted with species-specific detail — painted-storybook chromatic pop alongside the primary flower biome. Not generic "wildflowers" — this exact named species cluster.
+
+━━━ 8. MAGICAL FLAVOR (pollen-glow / supernatural atmospheric accent) ━━━
+${magical_flavor}
+
+Pollen-glow is the dominant magical signature. Painted as luminous detail, never crude particle-effect. Drifting pollen-motes, fairy-dust spirals, glowing wing-trail.
+
+━━━ 9. SCALE PROVER (giant-flower-as-home element establishing her sub-human scale) ━━━
+${scale_prover}
+
+A specific giant-flower-as-home or scale-contrast element that establishes she is smaller than human-scale. Critical for this path's identity — without it, she just looks like a human in flowers.
+${companionSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
+
+━━━ HARD BANS ━━━
+- NO landscape with tiny figure (the fairy MUST fill 40-55% of frame)
+- NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
+- NO sexualized framing — focus is mythic-fairy beauty
+- NO modern objects (phones, glasses, electronics)
+- NO realistic non-magical humans / NO human-scale fairy (she's smaller)
+- NO violence / NO scared expressions / NO edgy moods
+- NO photographic / digital / 3D / CGI descriptors at the technique level
+- NO additional figures beyond the focal fairy${companion ? ' + the small companion' : ''}
+- NO smooth illustration / NO airbrushed / NO modern-anime / NO Pixar-3D
+- NO wings missing — she MUST have wings (butterfly / gossamer / petal)
+- NO storm / lightning / dark-grey-blue (peaceful enchanted register only)
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE FAIRY — preserve her stacked exotic flower-merged features unmistakably (including wings). Then composition framing. Then flower biome wrapping around her. Then lighting + weather. Then foreground anchor + botanical accent. Then pollen-magical flavor. Then giant-flower scale prover.${companion ? ' Then companion woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon

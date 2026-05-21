@@ -1833,6 +1833,30 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_FLOWER_FAIRY: {
+    description:
+      'PATH-BESPOKE — FaeBot flower-fairy (2026-05-20 axis-system migration). Sister to forest-fairy-scene. ONE flower-merged mythic fae creature (40-55% of frame, off-center, candid). DISTINCT DNA: creatures whose BODIES ARE FLOWERS (petal-skin / blossom-hair / petal-wings / petal-garment / pollen-glow). Sub-human scale — flowers can be her HOME. Color-coherent via matchTagsFromSlot: creature carries a palette tag (WARM/COOL/WHITE/MULTI), biome + botanical_accent filter to match. 10 axes (9 always-on + 1 gated companion): creature / flower_biome / lighting / weather / foreground_anchor / botanical_accent / candid_action / magical_flavor / scale_prover + companion (50%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'creature',
+        'flower_biome',
+        'lighting',
+        'weather',
+        'foreground_anchor',
+        'botanical_accent',
+        'candid_action',
+        'magical_flavor',
+        'scale_prover',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'companion', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_EPIC_VISTA: {
     description:
       'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Nat-Geo-best-of-best caliber real-Earth landscape: the SUBJECT IS THE WOW. Larger than life via geology + lighting + weather amplification, never AI-fake / sci-fi / fantasy. R2 (2026-05-20) pivoted from R1 3-tier (subject + foreground prop) to SCENE-AS-HERO — subject dominates 60-70%+ of frame, no competing foreground props. R1 lessons retained: PEAK LIGHT MOMENT + MOMENT IN MOTION template blocks, phenomenon-lighting compatibility, biome-tagged subject pool. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. R1 foreground_anchor axis + matchTagsFromSlot composer extension preserved as infrastructure for future paths that need them. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
