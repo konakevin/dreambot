@@ -36,4 +36,7 @@ module.exports = {
   DEEP_FOREST_SUBJECT: load('deep_forest_subject'),
   // lush-jungle (2026-05-20). Same clone pattern — bespoke subject only.
   LUSH_JUNGLE_SUBJECT: load('lush_jungle_subject'),
+  // coastal-vista (2026-05-20) — FIRST BEACH-SIDE path migrated. Validates
+  // canonical landscape template clones cross-namespace.
+  COASTAL_VISTA_SUBJECT: load('coastal_vista_subject'),
 };

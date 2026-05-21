@@ -1896,6 +1896,37 @@ Root cause: the subject pool entries named recognizable tourist vantages and fam
 
 **Diagnostic test:** when renders feel pedestrian despite gorgeous prose in the ai_prompt DB record, audit the SUBJECT pool entries for tourist-coded names. The pool's vocabulary is what Flux's tokenizer matches against its training prototypes; the prose around it is secondary.
 
+### CRITICAL LESSON 8 — Hoist NO HUMAN-BUILT FEATURES to standalone block (Flux inserts structures even unprompted)
+
+Discovered on EarthBot lush-jungle R2 (2026-05-20). One of 5 renders had cut-stone steps + mossy retaining wall flanking a tropical pool. The Sonnet output didn't ask for stone steps — it asked for "mossy basalt boulders at the pool edge." Flux interpreted "mossy boulders + pool" through its "scenic park photography" training-data lens and rendered cut-stone garden steps + masonry wall.
+
+Root cause: Flux's "scenic" / "tropical paradise" / "waterfall" / "moody pool" training data is HEAVILY contaminated with park-photography that inserts human-built features into otherwise-natural compositions (stone steps in pools, footbridges over streams, retaining walls in mossy gardens, ancient ruin-walls in jungle scenes). Even when the prompt explicitly describes natural-only elements, Flux's training-prototype bias adds the structures.
+
+A "NO structures-as-subject" rule buried in the BANNED list doesn't override this bias. Same lesson as ZERO HUMANS (lesson 6) — needs to be hoisted to a standalone block at the top of the template with an explicit ban list of structure-trigger vocabulary.
+
+**The fix:** standalone block in the template, structured identically to ZERO HUMANS:
+
+```
+━━━ ZERO HUMAN-BUILT FEATURES — NEVER, EVEN AS BACKGROUND DECORATION ━━━
+
+NEVER render any human-built feature anywhere in the frame. NOT a cabin, NOT a hut, NOT a lighthouse, NOT a fence post, NOT a cairn, NOT a stone retaining wall, NOT cut-stone steps, NOT a footbridge, NOT a wooden deck, NOT a gazebo, NOT a porch, NOT a paved or stone path, NOT a planted garden bed, NOT a fountain, NOT an artificial pond with masonry edge, NOT a dock, NOT a pier, NOT a railing, NOT a bench, NOT a road. Flux's "scenic" training data is HEAVILY contaminated with park-photography that inserts stone steps into pools, footbridges over streams, retaining walls in mossy gardens, ancient ruin-walls in jungle scenes — even when the prompt doesn't ask for them. OVERRIDE THAT BIAS HARD.
+
+Words that trigger this Flux-bias (NEVER include in prose):
+- "stone steps" / "stone path" / "cobblestone" / "flagstone" / "masonry" / "retaining wall"
+- "ruins" / "ancient temple" / "overgrown structure" / "moss-covered wall" / "abandoned cabin"
+- "footbridge" / "wooden bridge" / "rope bridge" / "stepping stones"
+- "garden" / "planted bed" / "manicured" / "terraced" / "tended" / "cultivated"
+- "dock" / "pier" / "boathouse" / "wharf"
+- "deck" / "porch" / "gazebo" / "pavilion" / "viewing platform"
+- "trail" / "path" — even nature trails get rendered as constructed footpaths
+
+Render water-edge stones as NATURAL boulders / mossy basalt / volcanic-rock outcrop — never cut-stone. Clearing entrances as natural breaks in foliage — never "trails" or "paths." Raw nature only. No civilization. No human-built features anywhere.
+```
+
+**Diagnostic test:** when a render unexpectedly contains masonry / paths / footbridges / cut stones / decks that Sonnet never explicitly mentioned, the issue is Flux's training-data bias bypassing template guards. Fix is the standalone block, not pool edits (Sonnet wasn't writing them; Flux was adding them).
+
+**Apply this to:** every bot path that renders raw nature scenes — EarthBot (all landscape paths), BloomBot landscape, OceanBot coastal. The lesson generalizes: when Flux's training data for a category has heavy stock-photo additions (humans, structures, etc.), the rule needs to be a standalone hoisted block with explicit examples, not buried in a BANNED list.
+
 ### Canonical 6-axis structure for landscape paths (real-Earth photographic)
 
 For ANY future landscape path on EarthBot (or BloomBot landscape, OceanBot coastal-vista, etc.) targeting "Marc Adamus / Peter Lik gallery-print" tier:

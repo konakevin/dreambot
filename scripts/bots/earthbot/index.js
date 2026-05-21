@@ -93,7 +93,7 @@ const pathBuilders = {
   'deep-forest': require('./paths/deep-forest'), // axis-system (2026-05-20)
   'lush-jungle': require('./paths/lush-jungle'), // axis-system (2026-05-20)
   // Beach paths (13)
-  'coastal-vista': require('./beach/paths/coastal-vista'),
+  'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   wave: require('./beach/paths/wave'),
   'tropical-paradise': require('./beach/paths/tropical-paradise'),
   'beach-landscape': require('./beach/paths/beach-landscape'),
@@ -231,8 +231,8 @@ module.exports = {
   // add it here.
   chaos: {
     enabled: true,
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle'],
-    allowSubjectChaosPaths: [...BEACH_PATHS],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista'],
+    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => p !== 'coastal-vista')],
   },
 
   // Two-pass polish — both bots use identical config.
@@ -245,7 +245,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista'],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their

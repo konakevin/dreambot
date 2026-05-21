@@ -12918,6 +12918,21 @@ This is REAL geography, REAL weather, REAL light. Larger-than-life is fine — E
 
 NEVER a human figure anywhere in the frame. NOT wading in a pool, NOT silhouetted on a ridge, NOT standing at a vantage, NOT a hiker, NOT a climber, NOT a tiny figure for scale, NOT a photographer-self-portrait. Flux's training data WILL try to insert a figure into moody-pool / waterfall / forest / cliff-edge compositions because those are dominant stock-photo templates. OVERRIDE THAT BIAS. The scale prover in this scene is wildlife or geology, NEVER a person. If Flux's instinct is to render a person, render the same composition WITHOUT them. Empty wilderness. No civilization. No human presence anywhere.
 
+━━━ ZERO HUMAN-BUILT FEATURES — NEVER, EVEN AS BACKGROUND DECORATION ━━━
+
+NEVER render any human-built feature anywhere in the frame. NOT a cabin, NOT a hut, NOT a lighthouse, NOT a fence post, NOT a cairn (rock pile), NOT a stone retaining wall, NOT cut-stone steps, NOT a footbridge, NOT a wooden deck, NOT a gazebo, NOT a porch, NOT a paved or stone path, NOT a planted garden bed, NOT a fountain, NOT an artificial pond with masonry edge, NOT a dock, NOT a pier, NOT a railing, NOT a bench, NOT a road. Flux's "scenic" training data is HEAVILY contaminated with park-photography that inserts stone steps into pools, footbridges over streams, retaining walls in mossy gardens, ancient ruin-walls in jungle scenes — even when the prompt doesn't ask for them. OVERRIDE THAT BIAS HARD.
+
+Words that trigger this Flux-bias (NEVER include in prose — author atmosphere natural-only):
+- "stone steps" / "stone path" / "cobblestone" / "flagstone" / "masonry" / "retaining wall"
+- "ruins" / "ancient temple" / "overgrown structure" / "moss-covered wall" / "abandoned cabin"
+- "footbridge" / "wooden bridge" / "rope bridge" / "stepping stones" (Flux interprets as cut stones)
+- "garden" / "planted bed" / "manicured" / "terraced" / "tended" / "cultivated"
+- "dock" / "pier" / "boathouse" / "wharf"
+- "deck" / "porch" / "gazebo" / "pavilion" / "viewing platform"
+- "trail" / "path" — even nature trails get rendered as constructed footpaths
+
+If the scene wants water-edge stones, render them as NATURAL boulders / mossy basalt / volcanic-rock outcrop — never as cut-stone steps. If the scene wants a clearing entrance, render as a natural break in foliage — never as a "trail" or "path." This is raw nature. No civilization. No human-built features anywhere.
+
 ━━━ ABSOLUTELY BANNED (these break EarthBot identity instantly) ━━━
 
 - NO multi-moons / twin-suns / triple-moons (Earth has ONE of each)
@@ -12927,7 +12942,6 @@ NEVER a human figure anywhere in the frame. NOT wading in a pool, NOT silhouette
 - NO bioluminescent fungi / glowworms / phosphorescent moss / glowing-anything-landscape
 - NO floating-islands / impossible-physics geometry / Pandora-style alien biomes
 - NO galaxies "above sunset" — stars + sunset don't co-exist on Earth (Milky Way only over pure-night sky)
-- NO structures-as-subject (rare distant scale-prover huts OK as hero_feature, but never the focal subject)
 - NO stylized / 3D-render / illustrated / cartoony aesthetic — this is HYPERREAL photographic, gallery-print tier
 
 ━━━ SCENE-AS-HERO MANDATE — THE SUBJECT IS THE WOW ━━━
