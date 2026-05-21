@@ -13,8 +13,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/epic_vista_phenomenon.json',
-  total: 25,
-  batch: 15,
+  total: 50,
+  batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} PHENOMENON entries for EarthBot epic-vista — each entry describes ONE rare real-Earth optical or weather phenomenon that occasionally fires (~30% of renders).
 
 ━━━ THE BAR ━━━

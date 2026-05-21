@@ -3,8 +3,8 @@
  * Patagonian peaks, Icelandic coasts, Saharan dunes, volcanic islands.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../earth/pools');
+const blocks = require('../../earth/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const vista = picker.pickWithRecency(pools.EPIC_VISTAS, 'epic_vista');

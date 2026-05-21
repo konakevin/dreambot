@@ -1752,3 +1752,140 @@ For each pool slated for expansion:
 4. **The injection point isn't shadowed by an absolute rule.** E.g. "she is sealed in armor" + `${hairstyle}` is wired but cancelled — Flux sees "sealed in armor" and ignores the hairstyle. Make any conflicting rule biome-conditional.
 
 Skipping this audit wastes ~10 min of Sonnet calls per pool expanded into nothing. The pool sits there padded to 200 entries while the prompt never references it.
+
+---
+
+## CANONICAL REFERENCE — EarthBot epic-vista: real-Earth landscape path migration (2026-05-20)
+
+First EarthBot path migrated to the axis system. Converged in 5 rounds. The lessons here are reusable across **any landscape-photography path on any bot** (BloomBot landscape, OceanBot coastal-vista, etc.). Read before starting another landscape migration.
+
+**Commits to read in order:**
+- R0 baseline (`e4b325e`): 6-axis bespoke (subject + lighting + atmosphere + hero_feature + sky_layer + phenomenon-30%-gated). Identity correction from legacy "stack 3+ phenomena per frame" mandate. Renders were clean but pedestrian — restraint too aggressive.
+- R1: foreground_anchor axis added + biome-tagged composer infrastructure (matchTagsFromSlot) + PEAK LIGHT MOMENT + MOMENT IN MOTION blocks. Renders gained 3-tier depth but the foreground prop COMPETED with the wow-factor subject.
+- R2: dropped foreground_anchor → SCENE-AS-HERO pivot + GEOLOGY WOW FACTOR mandate. Subject filled the frame but renders still pedestrian.
+- R3: stripped "Nat Geo" references, swapped for fine-art landscape photographer names (Marc Adamus / Peter Lik / Max Rive / Iurie Belegurschi / Albert Dros / Ryan Dyar) + ZERO HUMANS hoisted to standalone block. Drama up significantly but lighting still single-dimensional.
+- R4: rewrote lighting pool with stacked-drama legacy density (each entry stacks 2-3 PURE light dimensions: time + direction + color + shadow), template replaced "PEAK LIGHT MOMENT" with "STACKED LIGHT DRAMA" mandate that honors atmosphere axis as-rolled. Renders hit gallery-tier on 4 of 5; one sky-lighting clash (stars + sunset).
+- R5: added sky-lighting compatibility clause (mirror of phenomenon-lighting compatibility from R0). 5 of 5 gallery-tier, identity clean.
+
+### CRITICAL LESSON 1 — "ONE concept per axis = pedestrian; STACK inside the axis = jaw-drop"
+
+The biggest discovery of this migration. The CHAOS-vs-RESTRAINT tradeoff has a third option both extremes miss:
+
+- **Legacy bot pattern (chaos):** template mandates "stack 3+ phenomena per frame" + every pool entry packs 3-5 phenomena. Renders feel AI-fake because impossibilities accumulate. Failure mode: stars + sunset, eclipse + golden hour, bioluminescent fungi on Arctic ice, etc.
+- **Axis R0 (over-restraint):** each pool entry isolates ONE concept (subject describes location only, lighting describes ONE light condition only). Renders look real but PEDESTRIAN — single-dimension lighting and atmosphere produce competent-but-flat scenes.
+- **Axis R4+ (the win):** each pool entry stacks 2-3 dimensions WITHIN its own axis (lighting stacks time + direction + color + shadow), but axes themselves stay CLEAN of each other's dimensions (lighting pool has NO fog / NO godrays / NO weather — those belong to atmosphere/phenomenon axes). DENSE inside each axis, PURE between axes.
+
+**The pattern:** "axis-clean stacked-density" — each axis entry is gallery-print rich within its lane, never bleeds into adjacent axes' lanes. Combinations of independently-rolled pure axes produce variance organically; the template doesn't need conditional logic to gate which dimensions appear together.
+
+**Apply this to:** every future axis-system migration where individual axes need to feel rich without crossing into other axes' territory.
+
+### CRITICAL LESSON 2 — "Nat Geo" in landscape prompts pulls toward pedestrian; use fine-art landscape photographers
+
+Reference points encode aesthetic. **National Geographic** in a prompt pulls Flux toward documentary-photojournalism training data — competent travel snapshots, not gallery prints. Verified on EarthBot R0-R2: every render with "Nat Geo cover caliber" wording came back competent-pretty-pedestrian.
+
+**The fix:** swap to fine-art landscape photographer references. These photographers' work is labeled in Flux's training data as dramatic-art-print, not documentary:
+- **Marc Adamus** — peak-moment dramatic landscapes, stormy/sunrise theatrical
+- **Peter Lik** — saturated gallery prints with extreme color
+- **Max Rive** — theatrical mountain compositions with dramatic depth
+- **Daniel Kordan** — cinematic locations with peak-moment timing
+- **Iurie Belegurschi** — Iceland-style ultra-dramatic
+- **Albert Dros** — cranked color, perfect composition
+- **Ryan Dyar** — dramatic mood, gallery print
+
+Plus terminology: "fine-art landscape" / "gallery-print quality" / "wallpaper-tier dramatic landscape" / "the kind of frame people print three feet wide."
+
+**Apply this to:** any landscape/scenery path where the bar is "jaw-drop" not "documentary." NEVER use "Nat Geo" or "National Geographic" in scenery prompts.
+
+### CRITICAL LESSON 3 — Scene-as-hero beats 3-tier composition for jaw-drop landscape
+
+Conventional landscape photography wisdom: NEAR foreground anchor + MID subject + FAR scale prover (3-tier depth). EarthBot R1 implemented this with biome-matched foreground_anchor axis. Result: foreground props COMPETED with the wow-factor subject (Mitre Peak rendered with conch shells in foreground — shells distracted from peak). Kevin: "the foreground element is actually distracting, i want the bigger scene as a whole to be the focal point."
+
+**The fix:** SCENE-AS-HERO composition — subject dominates 60-70%+ of frame, scale prover stays TINY in deep distance, no near-foreground prop axis. The cliff face IS the photo. The wave barrel IS the photo. The canyon IS the photo.
+
+**Apply this to:** landscape paths where the geological/scene wow-factor is the show. Character paths and intimate paths still benefit from 3-tier depth — this lesson is **landscape-specific**.
+
+**The foreground_anchor axis + biome-tagged composer infrastructure is preserved** in EarthBot for future paths that genuinely benefit (intimate-detail / forest-floor / tidepool / canyon-floor close-vista paths). It's just not right for epic-vista's "subject fills frame" identity.
+
+### CRITICAL LESSON 4 — Axis-clean discipline (vocabulary isolation)
+
+Each axis pool must own ONE conceptual lane and stay strictly off others' lanes:
+- **Subject axis** = location + geology + scale ONLY. No weather, no lighting, no phenomena, no atmosphere.
+- **Lighting axis** = time + direction + color + shadow dimensions ONLY. No fog, no godrays, no volumetric beams, no rainbows, no phenomena.
+- **Atmosphere axis** = what the AIR is doing (crisp clear / fog / mist / spray / dust / haze). NO light, no phenomena.
+- **Sky axis** = clouds + sky color / formation ONLY. NO lighting time-of-day, NO phenomena.
+- **Phenomenon axis** = rare optical/weather events ONLY (rainbows / sun-pillars / aurora / halos). NO light, NO sky.
+- **Hero_feature axis** = scale-prover element ONLY. NO lighting, no atmosphere.
+
+When axes stay pure, the COMBINATIONS produce all the variance naturally. When lighting pool includes "golden hour through fog godrays," it forces fog into every golden-hour render regardless of what atmosphere axis rolled — variance dies.
+
+**The litmus test:** read a sample of 5 entries from each pool. If you find any cross-axis vocabulary (fog in lighting / aurora in sky / rainbow in subject), audit the gen-script recipe and strip the contamination.
+
+**Apply this to:** every axis-system migration on every bot. This is a foundational discipline that enables all other variance/composition work.
+
+### CRITICAL LESSON 5 — Cross-axis compatibility clauses (template-level "drop if conflicts")
+
+Physical incompatibilities can still arise even with clean axes (the same way real Earth combinations have constraints: eclipses can't co-exist with golden hour; stars can't appear during sunset). The pattern:
+
+For each cross-axis physical incompatibility, add a template clause: "If [axis A] is [value] AND [axis B] is [value], DROP [the lesser/optional one]. [Physical reason]. Restrained truth beats forced impossibility."
+
+EarthBot epic-vista has two such clauses:
+1. **Phenomenon-lighting compatibility** (R0 fix) — if phenomenon is "total eclipse / aurora / green flash" AND lighting is "golden hour / midday / alpenglow" → drop the phenomenon. Eclipse sky is dark; aurora requires polar night; green flash is the single sunset-disc moment.
+2. **Sky-lighting compatibility** (R5 fix) — if sky is "night-sky / Milky Way / star field" AND lighting is "daytime / sunset / golden hour / alpenglow / midday / storm-break" → drop the night-sky elements, substitute lit-sky variant. Stars + sunset don't co-exist on Earth.
+
+**Apply this to:** any axis-system path where two axes can roll physically-incompatible combinations. The pattern is reusable: name the conflict, name which to drop, name the physical reason, end with "restrained truth beats forced impossibility."
+
+### CRITICAL LESSON 6 — ZERO HUMANS as standalone block (overrides Flux stock-template bias)
+
+Burying "NO human figures" in a long BANNED list doesn't override Flux's stock-template bias. Verified on EarthBot R2: a "moody waterfall + pool + forest" composition rendered a human figure wading despite the buried rule. Flux's training data for that composition is dominated by stock-photo templates with figures.
+
+**The fix:** hoist NO HUMANS to a standalone block at the top of the template — bolded mandate with explicit examples of where Flux's bias tries to insert figures (waterfall/pool/forest, cliff edge, vantage point, hiker). EarthBot R3+ template:
+
+```
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+
+NEVER a human figure anywhere in the frame. NOT wading in a pool, NOT silhouetted on a ridge, NOT standing at a vantage, NOT a hiker, NOT a climber, NOT a tiny figure for scale, NOT a photographer-self-portrait. Flux's training data WILL try to insert a figure into moody-pool / waterfall / forest / cliff-edge compositions because those are dominant stock-photo templates. OVERRIDE THAT BIAS. The scale prover in this scene is wildlife or geology, NEVER a person. If Flux's instinct is to render a person, render the same composition WITHOUT them. Empty wilderness.
+```
+
+R3+ rendered 5/5 clean (vs R2 with a human figure violation, and legacy with 2/5 figure violations).
+
+**Apply this to:** any bot path with a NO HUMANS rule (EarthBot, BloomBot landscape, OceanBot wildlife). Hoist to standalone block, name the specific Flux-bias compositions to override.
+
+### NEW INFRASTRUCTURE — `matchTagsFromSlot` composer extension (2026-05-20)
+
+Added to `scripts/lib/brief-composer.js`. New pool-spec field that filters one slot's pool dynamically based on the rolled tags of an earlier slot. Used for biome-tagged cross-axis consistency (no palm trees in arctic scenes, no Joshua trees in fjords).
+
+```js
+// In path config:
+pools: {
+  subject: 'EPIC_VISTA_SUBJECT',                                 // tagged pool
+  foreground_anchor: { name: 'EPIC_VISTA_FOREGROUND_ANCHOR', matchTagsFromSlot: 'subject' },
+}
+```
+
+Subject pool entries are tagged with biome categories (`{ tags: ['alpine'], description: '...' }`). Foreground pool entries tagged with biomes they fit. Composer rolls subject first, then filters foreground pool to entries whose tags overlap with the rolled subject's tags before picking.
+
+**Requirements:**
+- Both source and filtered pools must use object format `{ tags: [...], description: '...' }`
+- Source slot MUST appear EARLIER in `archetype.slots.path` than the dependent slot (composer rolls in declaration order)
+- Tags use shared vocabulary — for landscape paths the 8 biome tags are: `alpine`, `arctic-polar`, `desert`, `coastal-temperate`, `coastal-tropical`, `temperate-forest`, `tropical-jungle`, `volcanic`
+
+**Apply this to:** any future path that needs cross-axis consistency (subject↔foreground, subject↔wildlife, lighting↔atmosphere style, etc.). Generalizable beyond EarthBot.
+
+### Canonical 6-axis structure for landscape paths (real-Earth photographic)
+
+For ANY future landscape path on EarthBot (or BloomBot landscape, OceanBot coastal-vista, etc.) targeting "Marc Adamus / Peter Lik gallery-print" tier:
+
+| Axis | Slot | Production target | Notes |
+|---|---|---|---|
+| Path-bespoke | `subject` | 200 | Real-Earth location + geology + scale only. Biome-tagged for cross-axis matching. |
+| Path-bespoke | `lighting` | 150 | Stacked-drama: time + direction + color + shadow. No atmosphere/phenomenon vocabulary. |
+| Path-bespoke | `atmosphere` | 150 | Crisp-clear-weighted (~40%), localized particulate when scene-natural. |
+| Path-bespoke | `hero_feature` | 150 | TINY scale-prover (wildlife / lone tree / distant micro-object). Never near-frame. |
+| Path-bespoke | `sky_layer` | 100 | Clean cobalt default (~30%), distinctive cloud forms (~30%), sunset/twilight (~15%), etc. |
+| Path-bespoke | `phenomenon` (30% conditional) | 50 | Rare optical/weather event. With cross-axis compatibility clauses. |
+
+Plus template blocks: SCENE-AS-HERO, GEOLOGY WOW FACTOR, STACKED LIGHT DRAMA, ATMOSPHERE-AS-ROLLED, MOMENT IN MOTION, SKY-LIGHTING COMPATIBILITY, PHENOMENON-LIGHTING COMPATIBILITY, ZERO HUMANS, ABSOLUTELY BANNED.
+
+Plus bot config: chaos.skipPaths includes the path, twoPassPolish.skipPaths includes the path, promptPrefixByPath kept short (photography style locks only, not stuffed).
+
+This is the canonical template for "real Earth larger than life" landscape paths. Clone it for every future EarthBot path (weather-drama / hidden-corner / dramatic-sky / luminous-landscape / sacred-light / national-parks / seasonal-shift / geological-wonder / micro-nature / deep-forest / lush-jungle + 13 beach paths).

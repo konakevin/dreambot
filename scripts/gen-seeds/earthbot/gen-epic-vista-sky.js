@@ -10,8 +10,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/epic_vista_sky.json',
-  total: 25,
-  batch: 15,
+  total: 100,
+  batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} SKY entries for EarthBot epic-vista — ONE sky condition per entry, describing what the sky is DOING above the vista.
 
 ━━━ THE BAR ━━━

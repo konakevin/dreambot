@@ -24,4 +24,6 @@ module.exports = {
   EPIC_VISTA_HERO_FEATURE: load('epic_vista_hero_feature'),
   EPIC_VISTA_SKY: load('epic_vista_sky'),
   EPIC_VISTA_PHENOMENON: load('epic_vista_phenomenon'),
+  // R1 (2026-05-20) — adds 3-tier depth via near-frame compositional anchor.
+  EPIC_VISTA_FOREGROUND_ANCHOR: load('epic_vista_foreground_anchor'),
 };

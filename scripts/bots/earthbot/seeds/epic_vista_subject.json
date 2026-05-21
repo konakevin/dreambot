@@ -1,32 +1,1260 @@
 [
-  "Torres del Paine in Patagonia: three granite spires rising sheer two-thousand meters from turquoise glacial lake, wind-scoured east faces dropping vertical, blue-grey ridges receding to horizon",
-  "Reynisfjara in Iceland: hexagonal basalt column cliffs rising sixty meters from north-Atlantic shore, charcoal-black volcanic sand beach stretching wide, sea-stacks standing fifty meters offshore",
-  "Namib Desert at Sossusvlei: thousand-foot rust-orange star dunes flanking bone-white cracked clay pan, shadow-striped ridgelines converging to vanishing point, apricot and deep-ochre sand walls",
-  "Vatnajökull Glacier in Iceland: ice cap stretching to horizon, electric-blue calving fronts dropping vertical into black volcanic-sand fjord, crevasse fields scoring the surface for kilometers",
-  "Grand Canyon in Arizona: one-mile-deep layered sandstone and limestone gorge, eighteen miles wide, rust-red and cream-white strata stepping down to the dark-schist inner gorge",
-  "Dolomites in northern Italy: sheer cream-white and rose-tinged limestone towers rising twelve-hundred meters from dark pine forest floor, vertical east faces split by deep couloirs",
-  "Nā Pali Coast on Kauai: fluted green basalt sea cliffs rising four-thousand feet directly from Pacific swells, narrow hanging valleys scoring the ridgelines, deep cobalt water below",
-  "Salar de Uyuni in Bolivia: twelve-thousand square kilometers of blinding white hexagonal salt crust at 3,656-meter elevation, mirror-flat to horizon, distant volcanic cones rising at the edge",
-  "Lemaire Channel in Antarctica: two-kilometer-wide passage flanked by vertical glaciated peaks rising nine-hundred meters, fractured blue-white ice floes covering the black polar water below",
-  "Bryce Canyon in Utah: amphitheater of thousands of rust-red and cream sandstone hoodoos dropping six-hundred feet from plateau rim, packed column forests filling the curved bowl",
-  "Cliffs of Moher in Ireland: vertical two-hundred-meter sea cliffs running fourteen kilometers along Atlantic coast, layered Liscannor flagstone in slate-grey and amber-ochre horizontal bands",
-  "Karakoram Highway corridor at K2 base: granite and gneiss faces of K2 rising 3,600 meters above the Baltoro Glacier, serrated black ridgelines, white glacial ice filling the valley floor",
-  "Wadi Rum in Jordan: sheer rose-red and amber sandstone massifs rising three-hundred meters from flat desert floor, narrow slot canyons cutting between, vast open plains of rust sand",
-  "Mount Bromo in East Java: active volcanic crater two-hundred meters deep inside a collapsed caldera ten kilometers wide, grey ash plain stretching to the outer caldera wall",
-  "Zhangjiajie in Hunan Province: over three-thousand sandstone pillars rising two-hundred to four-hundred meters vertically from valley floor, columns dressed in moss, deep ravines cutting between",
-  "Tre Cime di Lavaredo in the Italian Dolomites: three cylindrical dolomite towers rising nine-hundred meters sheer from a boulder-strewn plateau, north faces overhanging, pale-grey and cream rock splitting vertically",
-  "Étretat in Normandy: chalk-white sea cliffs rising ninety meters from grey-pebble beach, natural arches punching through the headlands, a freestanding chalk needle stack rising offshore",
-  "Banff Icefields Parkway in Alberta: Columbia Icefield spilling six square kilometers of blue-white glacial ice down between three-thousand-meter limestone peaks, moraines of pale rubble framing both flanks",
-  "Monument Valley on the Arizona-Utah border: six-hundred-meter rust-red Navajo sandstone buttes and mesas rising isolated from a flat desert plain, sheer vertical walls, talus skirts of deep-ochre debris",
-  "Fiordland at Milford Sound in New Zealand: granite and gneiss valley walls rising twelve-hundred meters sheer from dark fjord water, hanging valleys perched mid-cliff, mirror-smooth black water below",
-  "Atacama Desert at Valle de la Luna in Chile: cracked salt-flat basin flanked by jagged salt-and-gypsum ridges, terracotta and ash-white mineral crust, eroded clay formations rising ten meters from the pan",
-  "Kirkjufell Mountain on the Snæfellsnes Peninsula: steep-sided syenite peak rising four-hundred-sixty-three meters from sea level in a near-symmetrical cone, surrounded by grey lava field and cobalt fjord",
-  "Greenland Ice Sheet at Ilulissat Icefjord: calving glacier front four kilometers wide and eighty meters tall, fractured blue-white seracs collapsing into a fjord choked with car-sized ice debris",
-  "Zion Narrows in Utah: slot canyon one-thousand feet deep and twenty feet wide, rose-red and cream Navajo sandstone walls curving continuously, layered cross-bedding visible in every vertical face",
-  "Twelve Apostles on Victoria's Great Ocean Road: limestone sea stacks rising forty-five meters from Southern Ocean swells, amber and cream-layered rock faces, wave-cut platforms of pale stone at their bases",
-  "Cerro Torre in Patagonia: needle-thin granite and rime-encrusted tower rising three-thousand-one-hundred meters, vertical east face dropping sheer eight-hundred meters, flanked by glaciated col and lateral moraines",
-  "Hoh Rainforest in Olympic National Park: old-growth Sitka spruce and Douglas fir reaching sixty meters, every trunk and branch mantled in thick chartreuse moss, fern floor covering the entire valley",
-  "Jiuzhaigou Valley in Sichuan: travertine terraced lakes stacked in a glaciated limestone valley, electric turquoise and cobalt water over white calcite steps, submerged dead trunks visible through the clarity",
-  "Namib-Naukluft Tsauchab riverbed at Deadvlei: dead camel-thorn trees standing on a white clay pan enclosed by four-hundred-meter apricot-orange dunes, dune crests sharp-edged and sheer above the flat floor",
-  "Lofoten Islands in Norway: steep quartzite and granite peaks rising seven-hundred meters directly from the Norwegian Sea, narrow rock ridges connecting summits, dark cobalt water filling the fjords between"
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Karakoram Range at K2 Base Camp: pyramid granite summit rising eight-thousand six-hundred meters, sheer ice-armored faces fractured by seracs, slate-grey moraine fields below"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Cliffs of Moher in County Clare: six-hundred-foot vertical limestone ramparts stretching eight kilometers along Ireland's Atlantic edge, dark grey striated rock dropping to cobalt swells"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Wadi Rum in Jordan: rust-red sandstone monoliths rising three-hundred meters from flat ochre desert floor, wind-carved arches and narrow siq corridors, rose-pink cliff faces"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Lemaire Channel in Antarctica: twin black basalt cliffs compressing a two-kilometer-wide strait, electric-blue pack ice grinding the passage, glaciated peaks rising behind sheer-faced walls"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Dolomites at Tre Cime di Lavaredo: three pale limestone cylinders rising nine-hundred meters sheer, cream and grey rock banded with ancient reef strata, dark pine forest fringe below"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Bora Bora Lagoon in French Polynesia: extinct basalt volcano peak rising seven-hundred meters at center, concentric reef shelf in turquoise and deep cobalt, white carbonate sand motu ring"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Bryce Canyon in Utah: amphitheater of thousands of orange-pink limestone hoodoos descending six-hundred feet, eroded spire forest in amber, cream, and deep crimson banded stone"
+  },
+  {
+    "tags": [
+      "volcanic",
+      "arctic-polar"
+    ],
+    "description": "Vatnajökull caldera rim in Iceland: broad ice-filled volcanic crater nine kilometers across, electric-blue crevassed glacier surface fractured along caldera edge, black subglacial basalt exposed at rim"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Hoh Rainforest in Olympic National Park: cathedral bigleaf maple and Sitka spruce canopy forty meters tall, every surface draped in chartreuse moss and club-moss, fern-carpeted forest floor"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Fitz Roy Massif in Argentine Patagonia: jagged granite ridgeline of five linked spires reaching three-thousand four-hundred meters, sheer vertical east walls streaked with quartz veins, ice-blue glacial lake below"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "volcanic"
+    ],
+    "description": "Faroe Islands at Trøllkonufingur: vertical basalt sea-stack rising nearly seven-hundred feet from North Atlantic, columnar jointing etched by centuries of wave undercutting, deep-green sea-turf cap"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Salar de Uyuni in Bolivia: ten-thousand-square-kilometer salt flat at three-thousand six-hundred meters elevation, blinding white hexagonal crust cracked in geometric tessellations, distant rust-red volcanic cones at margin"
+  },
+  {
+    "tags": [
+      "tropical-jungle"
+    ],
+    "description": "Yasuni National Park in Ecuador: Amazon basin triple-canopy rainforest stretching unbroken to horizon, emergent ceiba trees breaching the canopy fifty meters above root buttresses, dark oxbow river channel below"
+  },
+  {
+    "tags": [
+      "volcanic",
+      "coastal-tropical"
+    ],
+    "description": "Kilauea on Hawaii's Big Island: active shield volcano lava bench where fresh black pāhoehoe lava meets Pacific, steam cracks splitting the coastal platform, deep cobalt ocean beyond"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "coastal-temperate"
+    ],
+    "description": "Svalbard Fjords at Magdalenefjorden: calving tidewater glacier face seventy meters tall dropping into dark sub-Arctic water, striated blue-white ice wall two kilometers across, black talus shore below"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Eiger North Face in the Bernese Alps: four-thousand-meter limestone fortress with a fifteen-hundred-meter vertical headwall, grey and black overhanging rock bands, deep glacial cirque below"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Étretat in Normandy: white chalk sea cliffs rising ninety meters with a freestanding needle arch and pierced rock gateway, pale cream limestone against dark pebble beach"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Monument Valley on the Navajo Nation: three sandstone buttes rising three-hundred meters from flat rust-red desert floor, vertical-sided West and East Mittens flanking Merrick Butte, deep-ochre plateau"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Greenland Ice Sheet at Ilulissat Icefjord: continent-scale white ice surface calving colossal blue-white bergs into a forty-kilometer fjord, fractured pressure ridges scoring the inland plateau surface"
+  },
+  {
+    "tags": [
+      "alpine",
+      "volcanic"
+    ],
+    "description": "Mount Bromo in East Java: active crater cone rising two-thousand three-hundred meters from the Sand Sea caldera, ash-grey volcanic rim breached at summit, pale pumice plain surrounding the cone base"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Twelve Apostles in Victoria: twelve limestone stacks rising forty-five meters from Southern Ocean swells, cream and amber sedimentary columns isolated by wave erosion, rust-orange coastal cliff edge behind"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Aiguille du Midi above Chamonix: granite needle summit reaching three-thousand eight-hundred meters, near-vertical north face draped in permanent blue-white ice, shattered rock aiguilles stretching along the Mont Blanc massif"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Antelope Canyon near Page Arizona: slot canyon walls of wave-sculpted Navajo sandstone reaching forty feet, smooth flowing amber and deep burgundy stone compressed to two feet wide at the floor"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Whitehaven Beach in the Whitsundays: seven-kilometer crescent of ninety-eight-percent silica white sand curving around Hill Inlet, swirling turquoise and aquamarine tidal channels cutting the sandbar"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Great Smoky Mountains at Clingmans Dome: ancient Appalachian ridgelines of old-growth hemlock and hardwood rolling to every horizon, dark green canopy continuous across rounded summits at two-thousand meters"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Banff Icefields Parkway at Columbia Icefield: three-hundred-square-kilometer alpine ice cap spilling four outlet glaciers into U-shaped valley, crevassed blue-white tongues terminating on grey lateral moraine"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "temperate-forest"
+    ],
+    "description": "Great Bear Rainforest on British Columbia coast: fjord-carved temperate coast where old-growth Sitka spruce and western red cedar reach sixty meters to the saltwater edge, dark green walls above black rock shelves"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Atacama Desert at Valle de la Luna: wind-eroded salt and gypsum formations rising from a basin three-thousand meters above sea level, chalk-white salt crust cracked across the valley floor, burnt-sienna ridgelines"
+  },
+  {
+    "tags": [
+      "coastal-tropical",
+      "tropical-jungle"
+    ],
+    "description": "Fiordland on New Zealand's Milford Sound coast: two-thousand-meter sheer granite walls plunging directly into deep fjord, dense temperate rainforest clinging to near-vertical rock faces, Mitre Peak summit rising above"
+  },
+  {
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Yellowstone Grand Prismatic Spring in Wyoming: one-hundred-meter-wide geothermal pool in a broad caldera basin, silica-white terraced rim surrounding deep cobalt center, orange and rust mineral-mat apron extending outward"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Matterhorn above Zermatt in the Swiss Alps: four-thousand-four-hundred-seventy-eight-meter pyramidal hornfels peak with four sheer faces of dark gneiss and pale limestone, corniced ridgelines converging at summit"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Nærøyfjord in western Norway: two-kilometer-wide UNESCO fjord slicing two-hundred-fifty meters deep between near-vertical granite walls rising sixteen-hundred meters, bare grey rock terraces descending to dark-green water"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Erg Chebbi near Merzouga in Morocco: hundred-fifty-meter rust-orange star dunes of Saharan sand rising from flat hammada gravel plain, sinuous sharp-edged crests casting deep shadow, apricot and burnt-sienna dune flanks"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Ross Ice Shelf in Antarctica: continent-scale floating ice platform five-hundred kilometers wide, sheer white ice cliffs rising fifty meters from Southern Ocean, pressure ridges and calved tabular bergs at the margin"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Mount Rainier in Washington State: four-thousand-three-hundred-ninety-two-meter glaciated stratovolcano dome capped by twenty-six named glaciers, pale crevassed ice apron descending to old-growth subalpine fir and hemlock below"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Phi Phi Islands in Thailand: vertical karst limestone towers rising three-hundred meters from the Andaman Sea, sheer pale-grey cliff faces dropping to luminous turquoise lagoon, bleached coral-white sand floor visible below"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Grand Canyon in Arizona: four-hundred-fifty-kilometer gorge carved one-thousand-eight-hundred meters through layered Kaibab limestone and Vishnu schist, rust-red Redwall and cream Coconino bands stacked in sheer terraced profiles"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "coastal-temperate"
+    ],
+    "description": "Scoresby Sound in East Greenland: world's largest fjord system at three-hundred-fifty kilometers long, kilometre-high red-brown basalt walls flanking dark Arctic water, calving glacier tongues discharging blue-white ice at the head"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Tongass National Forest in Southeast Alaska: old-growth Sitka spruce and western hemlock reaching fifty meters, massive moss-draped trunks standing above a deep fern and devil's club understory across rolling coastal terrain"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Cerro Torre in Argentine Patagonia: near-vertical granite needle rising three-thousand one-hundred-twenty-eight meters, ice mushroom capping the summit, sheer two-thousand-meter southeast face of pale grey and orange lichen-stained rock"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "volcanic"
+    ],
+    "description": "Vestmannaeyjar at Eldfell on Heimaey Island: basalt-and-scoria cone rising two-hundred-twenty meters above an Icelandic harbour, dark rust-red and charcoal-black volcanic debris fields sloping to a jagged black-lava coastline"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Death Valley at Mesquite Flat Sand Dunes: crescent-shaped golden dunes rising thirty meters from the lowest basin floor in North America at eighty-six meters below sea level, pale salt flat visible beyond the dune toe"
+  },
+  {
+    "tags": [
+      "tropical-jungle"
+    ],
+    "description": "Daintree Rainforest at Cape Tribulation in Queensland: Gondwanan lowland rainforest of fan palms and ancient cycads reaching canopy at thirty meters, dense root-buttressed trunks crowding dark creek channels, continuous green wall to horizon"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Gangkhar Puensum in Bhutan: four-thousand-meter unclimbed Himalayan massif with broad ice-draped summit plateau, serrated dark-grey ridgelines angling below, enormous bergschrund crevasses splitting the north-face glacier"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Cape Raoul in Tasmania: dolerite organ-pipe sea cliffs rising three-hundred-twenty meters from the Tasman Sea, perfect columnar jointing in dark blue-grey rock, isolated stack platforms standing at the headland base"
+  },
+  {
+    "tags": [
+      "volcanic",
+      "tropical-jungle"
+    ],
+    "description": "Mount Bromo's neighbour Semeru in East Java: Indonesia's highest active stratovolcano at three-thousand-six-hundred-seventy-six meters, ash-grey summit cone venting above dense tropical forest skirt, lava ridges descending through jungle"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Painted Desert in Arizona: pastel badlands of bentonite and mudstone rolling across kilometre-wide drainage basins, horizontal bands in pale lavender, cream, peach, and burgundy exposed across deeply eroded draws and mesas"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Huascarán in the Peruvian Andes: highest tropical mountain on Earth at six-thousand-seven-hundred-sixty-eight meters, twin ice-capped summits of white glacial ice and dark gneiss above a twelve-kilometer-wide west face"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Palawan's Bacuit Archipelago in the Philippines: hundreds of sheer-sided karst limestone islands rising two-hundred meters from a shallow turquoise sea, pale grey cliff faces undercut at waterline, emerald-green vegetation atop each tower"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Franz Josef Land in the Russian Arctic: archipelago of flat-topped basalt islands ninety percent ice-covered, dark columnar cliffs of black dolerite framing sheer tidewater glacier fronts calving into an ice-choked polar sea"
+  },
+  {
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "Cirque of the Towers in Wyoming's Wind River Range: granite towers of pale pink and grey quartzite rising six-hundred meters above a high-alpine basin at three-thousand-two-hundred meters, polished glacial pavement and talus between spires"
+  },
+  {
+    "tags": [
+      "coastal-tropical",
+      "volcanic"
+    ],
+    "description": "Na Pali Coast of Kauai from the water: fluted basaltic sea cliffs of dark olive and rust-red rising twelve-hundred meters from Pacific surf, vertical ridgelines carved by erosion into knife-edge arêtes plunging to cobalt water"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Białowieża Forest on the Poland-Belarus border: last lowland primeval temperate forest of Europe, pedunculate oaks and linden reaching forty meters, deadwood volumes of five-hundred cubic meters per hectare across flat glacial terrain"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Charyn Canyon in Kazakhstan: wind-sculpted sandstone and conglomerate walls rising three-hundred meters above the Charyn River gorge, amber and burnt-sienna banded cliffs eroded into columns and halls, pale gravel riverbed below"
+  },
+  {
+    "tags": [
+      "alpine",
+      "volcanic"
+    ],
+    "description": "Mount Cook Aoraki in New Zealand's Southern Alps: schist and greywacke pyramid reaching three-thousand-seven-hundred-twenty-four meters, massive Hooker and Tasman glaciers descending each flank, dark serrated ridgelines of ice-scoured rock"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Trango Towers in Pakistan's Karakoram: great Trango Tower rising four-thousand-four-hundred-meters with a sheer one-thousand-three-hundred-meter vertical east face of pale granite, widest cliff on Earth"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Lofoten Islands at Svolværgeita in Norway: jagged gneiss peaks rising seven-hundred meters directly from Arctic shoreline, narrow skerries and dark mirror-calm fjord water surrounding glacier-carved village terraces below"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "White Sands National Park in New Mexico: fifty-five-kilometer expanse of pure gypsum dune field, blinding-white wave-crests rising fifteen meters, interlocking parabolic dune forms on chalky flat basin floor"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Perito Moreno Glacier in Argentine Patagonia: seventy-meter-tall calving ice wall five kilometers wide, electric-blue serrated face of compressed glacial ice terminating at slate-grey Argentino Lake, fractured pressure ridges above"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Yosemite Valley in California: three-thousand-foot vertical granite walls of El Capitan and Half Dome flanking a two-kilometer-wide glacially carved valley, ponderosa pine and black oak forest on valley floor"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "volcanic"
+    ],
+    "description": "Staffa Island in Scotland: sea cave of perfectly hexagonal black basalt columns rising twenty meters from Atlantic swells, sixty-meter-wide Fingal's Cave formed by columnar jointing in ancient lava flow"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Zhangye Danxia in Gansu Province China: stacked layers of red sandstone and conglomerate eroded into sweeping ridgelines and mesas, vivid horizontal bands of crimson, ochre, cream, and purple across broad undulating terrain"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "coastal-temperate"
+    ],
+    "description": "Kenai Fjords at Aialik Glacier in Alaska: tidewater glacier face eighty meters tall dropping sheer into dark sub-Arctic Pacific water, blue-white ice wall one-point-five kilometers across, black moraine-draped headlands flanking"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Namcha Barwa in Tibet: nine-thousand-three-hundred-meter pyramid of dark gneiss and ice dominating the Tsangpo Gorge bend, deepest gorge on Earth flanking its base, serrated ice ridgelines above sheer rock buttresses"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Los Roques Archipelago in Venezuela: vast coral atoll in the Caribbean with forty kilometers of white carbonate sand cays, electric-turquoise shallow lagoon grading to deep cobalt beyond the reef crest"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Avenue of the Giants in California's Humboldt Redwoods: coast redwood trunks six meters in diameter rising ninety meters, continuous closed canopy blocking light at ground level, thick oxalis and fern carpet on root mounds"
+  },
+  {
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Erta Ale in Ethiopia's Danakil Depression: persistently active basaltic shield volcano with a lava lake one-hundred meters across, black solidified lava crust breaking to reveal incandescent orange magma below, caldera rim dropping sheer"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Canyonlands at Island in the Sky in Utah: mesa-top plateau dropping six-hundred meters in sheer Cedar Mesa sandstone walls to a confluence of the Green and Colorado Rivers, dark desert varnish streaking burnt-sienna cliff faces"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Kilt Rock on the Isle of Skye: vertical dolerite sill columns rising ninety meters from basalt shore, pleated columnar jointing in dark blue-grey rock standing directly above the dark Sound of Raasay"
+  },
+  {
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "Quebrada de Humahuaca in northwest Argentina: gorge walls of polychrome Cerro de Siete Colores rising four-hundred meters in horizontal bands of green, purple, orange, and cream sedimentary rock above dry valley floor"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Ellesmere Island at Quttinirpaaq: northernmost land on Earth, ice-capped plateau three-thousand meters above sea level, dark nunatak ridges of black Precambrian rock breaching continuous white ice surface in every direction"
+  },
+  {
+    "tags": [
+      "coastal-tropical",
+      "volcanic"
+    ],
+    "description": "Pitons of Saint Lucia in the Caribbean: two ancient lava plugs rising seven-hundred-fifty meters from the sea, sheer dark-grey volcanic rock walls draped with tropical vegetation, turquoise Caribbean water at their base"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Valdivian Temperate Rainforest at Alerce Andino in Chile: two-thousand-year-old alerce cypress reaching sixty meters, massive red-brown trunks on mossy terrain, closed dark canopy above dense coigüe understory on steep terrain"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Sossusvlei Dune 45 in Namibia: four-hundred-meter apricot-orange star dune with sharp sinuous crests above the bone-white clay pan floor, deep shadow-filled slip faces of powdery rust-red sand on the windward side"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Kangchenjunga in the Sikkim Himalaya: five-summited massif spanning twelve kilometers at eight-thousand-five-hundred-eighty-six meters, massive south face of ice-plastered dark-grey gneiss dropping four-thousand meters to the Talung Glacier below"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "temperate-forest"
+    ],
+    "description": "Olympic National Park's coastal strip in Washington: sea stacks of dark basalt rising thirty meters from driftwood-strewn shore, old-growth Sitka spruce overhanging the tideline, surge channels cutting through flat basalt reef shelves"
+  },
+  {
+    "tags": [
+      "tropical-jungle"
+    ],
+    "description": "Borneo's Danum Valley in Sabah: Southeast Asia's largest lowland dipterocarp rainforest block, emergent tualang trees breaching the sixty-meter canopy above dark tannin-stained river channels, root buttresses spanning four meters across"
+  },
+  {
+    "tags": [
+      "volcanic",
+      "coastal-temperate"
+    ],
+    "description": "Stromboli Island in the Tyrrhenian Sea: conical basalt stratovolcano rising nine-hundred-twenty-four meters from the Mediterranean, dark grey and black scoria slopes angled at thirty-five degrees to the sea, active summit crater breaching the cone"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Goblin Valley in Utah: sandstone hoodoos and mushroom-shaped goblins of Entrada sandstone densely packed across a half-kilometer basin, uniform pale-orange and buff formations eroded to bulbous tops on thin pedestals"
+  },
+  {
+    "tags": [
+      "alpine",
+      "arctic-polar"
+    ],
+    "description": "Denali's Wickersham Wall in Alaska: largest continuous mountain wall in the world rising five-thousand meters in a single face, blue-white hanging glaciers plastered across dark grey granite and schist of the north buttress"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Annapurna South Face in Nepal: eight-thousand-meter massif presenting a four-thousand-meter continuous wall of dark gneiss and ice, hanging seracs and fractured buttresses descending to the Modi Khola gorge below"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Giant's Causeway in County Antrim: forty-thousand interlocking hexagonal basalt columns ranging from fifteen to thirty centimeters across, stepping from sea cliffs down to North Atlantic shore in pale grey and rust-stained tiers"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Fisher Towers near Moab in Utah: dark red Cutler Formation sandstone needles rising nine-hundred feet above the Colorado River, heavily varnished iron-brown walls with eroded fins and chimneys, crumbling talus slopes below"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Sermilik Fjord in East Greenland: eighty-kilometer Arctic fjord choked with calved icebergs ranging from house-sized to cathedral-scale, sheer dark-brown gneiss walls rising one-thousand meters, blue-black meltwater surface throughout"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Cradle Mountain in Tasmania: dolerite organ-pipe summit ridge rising one-thousand-five-hundred meters, sheer columnar cliffs of blue-grey rock flanking a glacially scoured cirque lake, dense pencil pine and pandani heath below"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Aitutaki Lagoon in the Cook Islands: triangular coral atoll enclosing a fifty-square-kilometer turquoise lagoon at depths of one to three meters, white carbonate sand motu islets ringing a vivid cobalt-blue passage channel"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Cappadocia at Göreme in Turkey: valley floor dense with hundreds of pale cream and soft-pink tufa fairy chimneys rising fifteen to forty meters, eroded from ignimbrite volcanic ash, dark basalt caps capping the tallest cones"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "coastal-temperate"
+    ],
+    "description": "Geirangerfjord in western Norway: fifteen-kilometer UNESCO fjord with sheer grey granite walls rising one-thousand-four-hundred meters, dark-green water surface two-hundred-sixty meters deep, rock terraces descending in steps to waterline"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Quinault Rainforest in Olympic National Park: world-record Sitka spruce and Douglas fir reaching sixty-five meters, trunk girths exceeding eight meters, floor of continuous deep-green oxalis and sword fern beneath a closed triple canopy"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Teton Range at Grand Teton in Wyoming: sheer east face of pale grey gneiss rising two-thousand-one-hundred meters in a single wall above Jackson Hole valley floor, cathedral-flanked horns and arêtes extending north along the range"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "volcanic"
+    ],
+    "description": "Snaefellsnes Peninsula at Snæfellsjökull in Iceland: basalt stratovolcano reaching one-thousand-four-hundred-forty-six meters above a jagged lava-field coast, columnar-jointed sea cliffs dropping to black volcanic sand at the peninsula tip"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Rub' al Khali in Saudi Arabia at Uruq Subaykhi: largest continuous sand desert on Earth, crescent megadunes rising two-hundred-fifty meters, deep rust-orange windward flanks and pale apricot slip faces, gravel sabkha plain between dune corridors"
+  },
+  {
+    "tags": [
+      "tropical-jungle"
+    ],
+    "description": "Lorentz National Park in Papua: lowland Asmat tropical rainforest stretching unbroken from mangrove coast to alpine snowfields, emergent ironwood trees at fifty meters above dark tannin channels, root buttresses spanning five meters across"
+  },
+  {
+    "tags": [
+      "volcanic",
+      "alpine"
+    ],
+    "description": "Popocatépetl above Cholula in Mexico: active stratovolcano cone rising five-thousand-four-hundred-twenty-six meters, grey-white ash-dusted upper flanks above permanent ice cap, deep active summit crater breaching the symmetrical cone apex"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Baffin Island at Auyuittuq on Mount Thor: vertical granite wall rising one-thousand-two-hundred-fifty meters with a one-hundred-five-degree negative overhang, pale pink and grey Precambrian rock face dropping to glaciated U-shaped valley"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Watzmann East Face in the Berchtesgaden Alps: two-thousand-meter limestone face of dark grey and pale cream Dachstein rock falling sheer above Königssee Lake, widest continuous Alpine wall in Germany, corniced summit ridge above"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Preikestolen above Lysefjord in Norway: flat-topped granite cliff rising six-hundred-four meters sheer above a forty-two-kilometer-long fjord, horizontal joint-cracked pale grey rock platform cantilevering over dark green-black deep water"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Zhangye Rainbow Mountains in Gansu: folded Cretaceous red-beds of sandstone and siltstone forming sweeping ridge crests in vivid horizontal bands of crimson, chrome-yellow, teal, and ivory across a four-hundred-square-kilometer terrain"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Lyngen Alps in Arctic Norway: granite and gabbro spires rising one-thousand-eight-hundred meters directly from a sub-Arctic fjord, permanent glaciers plastered on north faces, dark polished rock plunging below sea surface without a shore"
+  },
+  {
+    "tags": [
+      "coastal-tropical",
+      "volcanic"
+    ],
+    "description": "Fatu Hiva in the Marquesas Islands: deeply eroded basalt caldera walls rising nine-hundred meters from the Pacific, near-vertical dark grey volcanic cliffs draped in tropical vegetation, narrow cobalt sea inlet cutting a bay at base"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Tarkine Wilderness in northwest Tasmania: largest temperate rainforest in the Southern Hemisphere outside South America, myrtle beech and Huon pine on dark peaty soils, horizontal scrub forming impenetrable thickets across flat wet plateau"
+  },
+  {
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "Atacama's Licancabur Volcano on the Bolivia-Chile border: perfectly symmetrical andesite stratovolcano rising five-thousand-nine-hundred-twenty meters above the altiplano at four-thousand meters, pale ash flanks descending to rust-red volcanic gravel plain"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Hornelen Sea Cliff in western Norway: world's highest sea cliff at eight-hundred-sixty meters of sheer dark gneiss rising directly from a saltwater fjord, near-vertical rock face fractured into massive vertical planes above narrow gravel shore"
+  },
+  {
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Dallol Hydrothermal Field in Ethiopia's Danakil Depression: acid-brine geothermal pools at one-hundred-sixteen meters below sea level, concentric terraces of sulfur-yellow and acid-green mineral crusts surrounding boiling salt-rimmed vents on a salt plateau"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Siula Grande in the Peruvian Andes: six-thousand-three-hundred-fifty-four-meter ice peak with a sheer one-thousand-five-hundred-meter west face of pale granite and blue seracs, corniced north ridge dropping to the Sarapo glacier basin"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Charakusa Valley in Pakistan's Karakoram: cluster of granite needles and walls rising two-thousand meters from a single glacial basin, pale grey and orange lichen-stained rock faces split by massive vertical crack systems"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Trolltunga above Hardangerfjord in Norway: horizontal slab of pale grey gneiss cantilevering twenty meters over a six-hundred-meter vertical drop, sheer fjord walls and dark-blue water visible one kilometre directly below"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Bisti Badlands in New Mexico: pale cream and charcoal bentonite badlands eroded into mushroom-capped hoodoos and crumbling spires across a flat basin, dark ironstone cap rocks balancing on narrow pedestals of grey mudstone"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Nordaustlandet Ice Cap in Svalbard: three-thousand-square-kilometer dome of blue-white ice calving tabular bergs from a sheer forty-meter ice cliff into a black polar sea, dark nunatak ridges breaching the interior surface"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Yakushima Island in Japan: ancient Cryptomeria cedar trunks sixteen meters in circumference rising forty meters, every surface coated in dense emerald moss across a steep boulder-choked terrain of dark granite outcrops"
+  },
+  {
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "Rila Mountains at Malyovitsa in Bulgaria: pale grey granite cirque walls rising six-hundred meters above a glacially scoured basin at two-thousand-two-hundred meters, polished pavements and boulder fields descending to a dark cirque lake"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Socotra Island in Yemen: dragon-blood tree plateau two-thousand meters above an Indian Ocean coastline, pale limestone karst terrain flanking turquoise bays, white carbonate sand beaches curving below cream-coloured sea cliffs"
+  },
+  {
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Oldoinyo Lengai in Tanzania: active natrocarbonatite stratovolcano rising two-thousand-eight-hundred-sixty meters from the Rift Valley floor, pale grey and white carbonatite lava flows streaking black scoria flanks, summit crater venting actively"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Enchantments in Washington's Cascades: pale granite core zone of worn domes and spires rising two-thousand-seven-hundred meters, polished glacial slabs connecting a chain of ice-blue tarns, subalpine larch fringe below the treeline"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "volcanic"
+    ],
+    "description": "Pico Island in the Azores: dark basalt stratovolcano rising two-thousand-three-hundred-fifty-one meters from the Atlantic, black aa-lava coastal platform at base, columnar-jointed cliffs dropping straight to cobalt-blue deep water"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Namib-Naukluft at Deadvlei: bone-white cracked clay pan floor at nine-hundred meters elevation, charcoal-black dead camel thorn skeletons standing against rust-orange dune walls rising over two-hundred meters on three sides"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Spitsbergen at Pyramiden Glacier in Svalbard: ice-draped dark sandstone pyramid rising seven-hundred meters from a calving tidewater fjord, striated blue-white glacier face one kilometre across, black lateral moraine banks flanking the tongue"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Latok I in Pakistan's Karakoram: massive granite and gneiss summit block at seven-thousand-one-hundred-forty-five meters, sheer north ridge of pale grey rock rising three-thousand meters continuously, massive hanging seracs on the east flank"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Slieve League in County Donegal: six-hundred-meter quartzite sea cliffs descending in angled strata of dark grey, rust, and pale cream directly to Atlantic swells, three kilometres of continuous headland dropping sheer to black rock shore"
+  },
+  {
+    "tags": [
+      "tropical-jungle"
+    ],
+    "description": "Taman Negara in Peninsular Malaysia: Gondwanan lowland dipterocarp rainforest estimated at one-hundred-thirty million years old, emergent trees reaching seventy meters above a dark understory of tree ferns and rattan, buttressed trunks five meters across"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Kata Tjuta in Australia's Northern Territory: thirty-six dome-shaped conglomerate monoliths rising five-hundred meters from flat red sand plain, dark rust and purple-brown arkose surfaces split by sheer-walled gorges, pale spinifex plain surrounding"
+  },
+  {
+    "tags": [
+      "alpine",
+      "volcanic"
+    ],
+    "description": "Villarrica Volcano above Pucón in Chile: symmetrical basalt stratovolcano cone rising two-thousand-eight-hundred-forty-seven meters, permanent blue-white ice cap covering upper flanks, deep active summit crater breaching the pale ash-dusted apex"
+  },
+  {
+    "tags": [
+      "coastal-tropical",
+      "tropical-jungle"
+    ],
+    "description": "Raja Ampat Archipelago in West Papua: hundreds of karst limestone islands rising eighty meters from turquoise shallows, dark grey undercut cliff bases above electric-blue coral lagoons, dense tropical canopy covering every flat surface above waterline"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Masherbrum in Pakistan's Karakoram: seven-thousand-eight-hundred-twenty-one-meter twin-summited peak of dark gneiss and pale granite, sheer four-thousand-meter south face split by hanging glaciers and black rock ribs above the Hushe Valley"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Tsarabanjina Island off Madagascar: pale pink granite boulders stacked ten meters high above a turquoise Indian Ocean bay, smooth wave-worn surfaces in cream and rose-grey descending to white carbonate sand and dark-green seagrass beds below"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Valley of the Moon in San Pedro de Atacama: wind-sculpted salt and alabaster ridges rising forty meters across a closed basin at two-thousand-four-hundred meters, pale cream and ash-grey mineral formations cracked into angular polygon fields"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Devon Island Ice Cap in Arctic Canada: world's largest uninhabited island with a five-thousand-square-kilometer plateau glacier, flat white ice surface broken by dark basalt nunataks, sheer calving cliffs dropping to frozen Lancaster Sound"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Fiordland's Darran Mountains in New Zealand: grey granite and schist spires rising two-thousand-seven-hundred meters above Milford Sound floor, sheer walls plunging directly to dark fjord water, dense silver beech forest clinging to lower angled rock faces"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Palau's Rock Islands in Micronesia: three-hundred-forty-six mushroom-shaped limestone islands rising forty meters from shallow turquoise lagoons, pale grey undercut bases above electric-blue water, dark-green vegetation capping every rounded dome"
+  },
+  {
+    "tags": [
+      "volcanic",
+      "coastal-temperate"
+    ],
+    "description": "Whakaari White Island in New Zealand: active marine stratovolcano rising three-hundred-twenty meters from Bay of Plenty, sulfur-yellow and rust-orange hydrothermal vents across a collapsed crater floor, black basalt sea cliffs dropping to blue-green water"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Kangchenjunga South Face in Sikkim: five-summited massif spanning twelve kilometers at eight-thousand-five-hundred-eighty-six meters, massive ice-plastered dark-grey gneiss dropping four-thousand meters to the Talung Glacier below"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Cape Wrath in northwest Scotland: sandstone sea cliffs rising two-hundred-eighty meters from North Atlantic swells, horizontally bedded Torridonian rock in dark rust-brown tiers above a black rock shore platform"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Zion Narrows in Utah: slot canyon carved nine-hundred meters deep through pale cream and rust-red Navajo sandstone, canyon floor only nine meters wide, vertical walls of smooth cross-bedded stone rising sheer overhead"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Wrangel Island in the Russian Arctic: flat-topped basalt plateau nine-hundred meters above a polar sea, dark Precambrian rock flanked by permanent snowfields, sheer cliffs of black dolerite dropping to sea ice below"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Bernese Oberland at Lauterbrunnen Valley in Switzerland: glacier-carved trough three-hundred meters deep flanked by sheer pale limestone walls, dark green conifer forest terracing the mid-slopes, valley floor two kilometers wide"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Huahine Lagoon in French Polynesia: ancient basalt caldera rim rising four-hundred meters encircling a double-lobed turquoise lagoon, fringing coral reef crest separating electric-blue shallows from deep cobalt Pacific beyond"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Tsodilo Hills in Botswana: four quartzite inselbergs rising four-hundred meters from flat Kalahari sand plain, pale grey and rust-streaked rock faces fractured into massive vertical slabs, white sand apron extending to the horizon"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "coastal-temperate"
+    ],
+    "description": "Disko Bay at Ilulissat in west Greenland: eighty-kilometer fjord discharging massive tabular and pinnacled blue-white icebergs into dark sub-Arctic water, sheer brown gneiss headlands rising six-hundred meters on each shore"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Grandes Jorasses above Chamonix in France: four-kilometer-wide granite and gneiss north face rising one-thousand-two-hundred meters, six summit needles of dark grey rock edged with hanging blue-white seracs, sheer couloirs splitting the wall"
+  },
+  {
+    "tags": [
+      "tropical-jungle"
+    ],
+    "description": "Corcovado National Park in Costa Rica: primary Pacific lowland rainforest of silk-cotton and strangler fig reaching forty-five meters, root buttresses spanning three meters across dark ferrous creek channels, unbroken canopy to every horizon"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "volcanic"
+    ],
+    "description": "Kirkjufell on the Snæfellsnes Peninsula in Iceland: symmetrical basalt peak rising four-hundred-sixty-three meters from a narrow gravel spit, columnar-jointed dark grey cliff faces dropping to black volcanic sand on three sides"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Ennedi Plateau in northeast Chad: orange Nubian sandstone arches, towers, and natural bridges rising three-hundred meters above a flat Saharan plain, deep iron-oxide desert varnish coating sheer walls above white sandy canyon floors"
+  },
+  {
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "Cordillera de Sal near San Pedro de Atacama in Chile: salt-encrusted mountain ridge of pale cream and ochre at four-thousand meters, folded Tertiary evaporite layers forming sharp serrated crests above a bone-dry valley floor"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Thwaites Glacier front in West Antarctica: continent-scale ice sheet margin two-hundred kilometers wide, sheer calving cliffs of electric-blue and white ice rising forty meters above the Amundsen Sea, fractured pressure ridges extending inland"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Cathedral Grove in MacMillan Provincial Park on Vancouver Island: Douglas fir trunks nine meters in circumference rising seventy-five meters, bark-plated columns standing in deep shadow above a sword-fern understory on flat glacial outwash"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Cabo de São Vicente in the Algarve: southwesternmost point of Europe, dark schist and greywacke sea cliffs rising sixty meters above the North Atlantic, shattered angular rock platforms extending into deep cobalt swell below the headland"
+  },
+  {
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Nyiragongo Crater in the Democratic Republic of Congo: active shield volcano at three-thousand-four-hundred-seventy meters with a lava lake four-hundred meters across, solidified black basalt crust breaking to reveal incandescent orange magma below crater rim"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Quebrada de las Flechas in Argentina's Puna: wind-eroded calchaquí sandstone fins and blades rising forty meters, razor-edged rust-red and cream strata tilted at sixty degrees forming continuous parallel ridgelines across a dry valley"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Grandes Aiguilles at Aiguille Verte above Chamonix: four-thousand-one-hundred-twenty-two-meter granite and gneiss pyramid with a sheer north face of dark grey rock split by the Couturier Couloir, pale glacier basin sweeping below"
+  },
+  {
+    "tags": [
+      "coastal-tropical",
+      "tropical-jungle"
+    ],
+    "description": "Bako National Park in Sarawak on Borneo's coast: sheer ironstone and sandstone sea cliffs rising one-hundred-fifty meters, dense dipterocarp and kerangas forest clinging to cliff tops, pale cream wave-cut platforms at the base"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Bylot Island at Oliver Sound in Nunavut: dark basalt and quartzite spires rising two-thousand-one-hundred meters from a sea-ice-choked channel, hanging glaciers plastered on north-facing walls, sheer tidewater ice cliffs at the fjord head"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Tepuis of Roraima in Venezuela: three-billion-year-old sandstone table mountain rising two-thousand-seven-hundred-seventy-two meters on vertical burgundy-red walls, flat summit plateau of black quartzite above sweeping talus aprons and jungle below"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Myrdalsskogur Forest Reserve in the Faroe Islands: dense birch and willow woodland filling steep glacially carved ravines, pale silver bark against dark basalt bedrock, continuous green canopy below six-hundred-meter columnar cliff walls"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Langanes Peninsula in northeast Iceland: low basalt headland of dark columnar rock extending forty kilometers into the Arctic Ocean, wave-cut platforms of black scoria dropping to deep cobalt swells, pale green sea-turf surface above"
+  },
+  {
+    "tags": [
+      "alpine",
+      "volcanic"
+    ],
+    "description": "Cotopaxi in the Ecuadorian Andes: near-perfectly symmetrical andesite stratovolcano at five-thousand-eight-hundred-ninety-seven meters, permanent ice cap of brilliant white glacial ice descending to sheer dark-grey ash-scoured flanks above the altiplano"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Cerro Castillo in Chilean Patagonia: jagged basalt spires rising two-thousand-three-hundred meters, sheer dark-grey columnar walls fractured into cathedral buttresses, pale turquoise glacial lake filling the cirque basin below"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Cabo Ortegal in Galicia, Spain: ancient eclogite and serpentinite sea cliffs rising two-hundred meters, dark green and rust-banded metamorphic rock dropping in angled strata to Atlantic swells, isolated stack platforms at headland base"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Richat Structure in Mauritania: concentric rings of pale quartzite ridges spanning fifty kilometers across flat Saharan hammada, eroded circular walls of cream and rust-grey stone rising forty meters, gravel desert floor between each ring"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Austfonna Ice Cap on Nordaustlandet in Svalbard: eight-thousand-one-hundred-square-kilometer dome glacier calving a continuous sheer blue-white ice cliff two-hundred kilometers long into dark polar sea, interior surface fractured by radial crevasse fields"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Bavella Needles in Corsica: pale pink granite towers rising one-thousand-six-hundred meters, sheer fractured spires split by deep chimneys and couloirs, dense Laricio pine forest filling the valley approaches below the rock walls"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Tetiaroa Atoll in French Polynesia: flat coral atoll enclosing a vivid turquoise lagoon twelve kilometers across, white carbonate motu islands at sea level, deep cobalt-blue Pacific visible beyond the narrow outer reef crest"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Akakus Mountains in Libya: dark sandstone massifs rising six-hundred meters from flat Saharan erg, wind-carved natural arches spanning forty meters, burnt-sienna and charcoal cliff faces above pale apricot sand dune corridors below"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "coastal-temperate"
+    ],
+    "description": "Prins Christian Sund in south Greenland: narrow fjord passage flanked by dark red-brown gneiss walls rising one-thousand-two-hundred meters, calved blue-white icebergs grounding in the shallows, glacier tongues descending from ice cap above"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Nanga Parbat Rupal Face in Pakistan: eight-thousand-one-hundred-twenty-six-meter Himalayan summit with the world's tallest mountain face rising four-thousand-five-hundred meters, dark schist ribs and hanging blue-white seracs above the Rupal Glacier"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Coombadjha Wilderness in New South Wales: ancient Gondwanan Antarctic beech forest of twisted multi-stemmed nothofagus filling mist-prone plateau gullies, pale grey bark on trunks six meters in circumference, deep moss carpet on black volcanic soil"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "volcanic"
+    ],
+    "description": "Dyrholaey Promontory in southern Iceland: black basalt headland rising one-hundred-twenty meters above a two-kilometer charcoal-sand beach, natural sea arch carved through columnar-jointed lava, dark volcanic cliffs dropping to North Atlantic swells"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Saharan Tassili n'Ajjer Plateau in Algeria: ancient Devonian sandstone plateau rising two-thousand meters, thousands of wind-carved rock towers and arches in rust-red and ochre stone spanning a terrain four-hundred kilometers wide"
+  },
+  {
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "Quebrada del Toro in Salta Province Argentina: deeply incised river gorge cutting through polychrome Puna sedimentary strata at three-thousand-five-hundred meters, tilted rust-red and cream mudstone walls rising four-hundred meters above a dry gravel riverbed"
+  },
+  {
+    "tags": [
+      "tropical-jungle"
+    ],
+    "description": "Manu National Park in the Peruvian Amazon: unbroken lowland rainforest canopy of Brazil nut and fig stretching five-hundred kilometers, emergent trees at fifty meters above oxbow lakes, buttressed trunks spanning four meters across dark river edges"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Handa Island off northwest Scotland: Torridonian sandstone sea cliffs rising one-hundred-twenty meters, dark rust-brown horizontally bedded rock stacks standing forty meters offshore, wave-cut geo inlets splitting the cliff edge along vertical joint lines"
+  },
+  {
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Marum Crater on Ambrym Island in Vanuatu: twin lava lakes within a basaltic caldera three kilometers wide, black solidified crust breaking across glowing orange magma surfaces, sheer ash-grey inner walls dropping two-hundred meters to the crater floor"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Badile Needle in the Bregaglia Alps on the Swiss-Italian border: sheer two-thousand-meter north face of pale grey granite, near-vertical compact rock wall split by a single diagonal crack system, dark ice couloirs flanking the main face"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Bungle Bungle Range in Western Australia: orange and charcoal-banded beehive domes of Devonian sandstone rising three-hundred meters, horizontal algae and silica bands alternating across smooth rounded surfaces, sheer narrow gorges between domes"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Alert on Ellesmere Island in Nunavut: northernmost permanently occupied point on Earth at eighty-two degrees north, flat dark-grey gravel tundra plain bordered by fractured sea ice, low dark basalt headlands extending into ice-covered Arctic Ocean"
+  },
+  {
+    "tags": [
+      "coastal-tropical",
+      "tropical-jungle"
+    ],
+    "description": "Sohoton Caves and Karst in Samar, Philippines: sheer grey limestone towers rising one-hundred meters above a tannin-dark tidal river, dense tropical forest crowding the cliff tops, pale karst walls undercut at waterline above mangrove roots"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Arrigetch Peaks in Alaska's Brooks Range: cathedral granite spires rising one-thousand-five-hundred meters from a remote Arctic valley, sheer pale-grey and orange-lichen walls split by wide crack systems, spruce and alder forest filling the valley floor below"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Wahiba Sands in Oman: two-hundred-kilometer dune sea of rust-orange and pale apricot linear dunes rising one-hundred-fifty meters, sinuous sharp crests running parallel for thirty kilometers, flat sabkha salt corridors between dune ridges"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Surtsey Island off Iceland: youngest land on Earth formed in 1963, low dark basalt and tephra cone rising one-hundred-fifty-five meters from North Atlantic, sheer black sea cliffs of crumbling scoria dropping to pale grey wave-cut platform below"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Huandoy North Peak in the Cordillera Blanca of Peru: six-thousand-three-hundred-ninety-five-meter ice-armored granite massif presenting a sheer three-thousand-meter west face of pale rock and blue serac bands above the Llanganuco glacial valley"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Mount Field National Park in Tasmania: ancient swamp gum eucalyptus reaching ninety meters, widest trees in the Southern Hemisphere with trunk girths of sixteen meters, continuous understorey of soft tree ferns on dark peaty soils across flat valley floor"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Kebnekaise South Peak in Swedish Lapland: ice-capped gneiss summit rising two-thousand-one-hundred meters, sheer cirque headwall of dark grey fractured rock descending to a broad U-shaped glacially scoured valley, pale quartzite ridgelines extending north"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Nugget Point in the Catlins of New Zealand: dark grey schist sea stack rising forty meters from a wave-cut basalt platform, horizontally bedded rock strata dropping in angled tiers to deep cobalt Southern Ocean swells below the headland"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Faja de Cima in the Canary Islands: pale cream and rust-orange ignimbrite badlands of Tenerife's Teide foothills, wind-eroded pumice pinnacles rising twenty meters from a broad ash-grey volcanic plain, dark obsidian lava tongues crossing the basin floor"
+  },
+  {
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Cape Farewell at Greenland's southern tip: dark brown gneiss headlands rising nine-hundred meters from the confluence of Atlantic and Arctic seas, calved blue-white icebergs grounding on shallow rock shelves, fractured ice surface extending offshore"
+  },
+  {
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Boundary Waters Canopy Range at Boundary Peak in the Sierra Nevada: pale grey and cream granite ridgelines rising four-thousand-three-hundred meters above broad talus fields, dense lodgepole pine and red fir forest filling the glaciated basin floor below treeline"
+  },
+  {
+    "tags": [
+      "coastal-temperate",
+      "volcanic"
+    ],
+    "description": "Tasman Peninsula at Cape Hauy in Tasmania: dark grey dolerite organ-pipe sea columns rising three-hundred meters directly from the Tasman Sea, sheer columnar-jointed walls of blue-grey rock dropping to a pale grey wave-cut platform, isolated stack offshore"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Tsauchab Valley at Sesriem Canyon in Namibia: slot canyon carved eighteen meters deep through pale cream and rust-red Tsauchab conglomerate, sheer vertical walls of rounded cobble matrix compressed into solid stone, dry sandy canyon floor below"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Jan Mayen Island at Beerenberg Volcano in the Norwegian Arctic: active stratovolcano rising two-thousand-two-hundred-seventy-seven meters from sub-Arctic sea, permanent ice cap of blue-white glacial ice descending dark basalt flanks to sheer sea cliffs below"
+  },
+  {
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Cevennes Beech Forest at Mont Aigoual in southern France: ancient high-plateau beechwood of massive grey-barked trunks reaching thirty meters, deep continuous moss carpet on dark schist boulders, closed canopy across a two-thousand-meter windswept ridge"
+  },
+  {
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Lifou Island in New Caledonia: raised coral platform cliff of pale cream limestone rising forty meters above a turquoise lagoon, sheer undercut base above electric-blue shallows, dark ironshore platform extending into cobalt Pacific beyond the fringing reef"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Paine Chico in Chilean Patagonia: dark grey basalt spire rising one-thousand-eight-hundred meters from a wind-scoured moraine plain, sheer columnar walls split by wide crack systems, pale turquoise glacial lake pressed against the base of the tower"
+  },
+  {
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Haleakalā Crater on Maui: dormant shield volcano caldera three kilometers wide and eight-hundred meters deep, dark red and charcoal cinder cones rising two-hundred meters from a flat ash-grey crater floor, pale pumice apron surrounding each cone base"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Saharan Aïr Mountains in Niger: ancient Precambrian granite massif rising two-thousand meters from a flat gravel erg, pale grey and rust-orange domed inselbergs split by wide vertical joints, apricot sand corridors threading between dark rock buttresses"
+  },
+  {
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Vagar Island at Sorvagsvatn in the Faroe Islands: freshwater lake perched two-hundred meters above the North Atlantic on dark basalt plateau, sheer columnar-jointed cliff edge dropping directly to cobalt swells, pale-green sea turf surface above"
+  },
+  {
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "Pamir Plateau at Kongur Tagh in Xinjiang: seven-thousand-seven-hundred-nineteen-meter pale granite and gneiss massif rising above a broad four-thousand-meter desert plateau, wind-scoured rust-red gravel plain stretching to distant ice-capped ridgelines on every side"
+  },
+  {
+    "tags": [
+      "tropical-jungle"
+    ],
+    "description": "Sangay National Park in Ecuador's Amazon headwaters: lowland Amazonian rainforest of ceibo and strangler fig rising to a continuous canopy at forty-five meters, dark tannin-black river channels cutting between root buttresses spanning four meters across"
+  },
+  {
+    "tags": [
+      "arctic-polar",
+      "coastal-temperate"
+    ],
+    "description": "Hornstrandir Peninsula in northwest Iceland: basalt and hyaloclastite sea cliffs rising five-hundred meters from the Greenland Sea, sheer dark grey and rust-brown volcanic rock walls dropping to a narrow black scoria beach, calving ice visible offshore"
+  },
+  {
+    "tags": [
+      "alpine"
+    ],
+    "description": "Alpamayo in the Peruvian Cordillera Blanca: near-perfect ice pyramid rising five-thousand-nine-hundred-forty-seven meters, fluted blue-white seracs scoring a sheer southwest face of glacial ice, dark grey granite base flanks descending to a high glacial cirque"
+  },
+  {
+    "tags": [
+      "coastal-tropical",
+      "volcanic"
+    ],
+    "description": "Nuku Hiva in the Marquesas: ancient eroded caldera walls of dark basalt rising one-thousand-two-hundred meters above a wide Pacific bay, sheer fluted cliff faces dropping to turquoise water, narrow black-sand beach at the base of each volcanic headland"
+  },
+  {
+    "tags": [
+      "desert"
+    ],
+    "description": "Black Desert at Harrat Rahat in Saudi Arabia: vast basalt lava field stretching eighteen-thousand square kilometers, dark charcoal-black aa-lava surface broken by pale cream limestone inliers and low scoria cones rising fifty meters from the flat volcanic plain"
+  }
 ]

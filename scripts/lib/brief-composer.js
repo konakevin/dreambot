@@ -28,6 +28,11 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
   }
 
   const slots = {};
+  // Tracks the raw rolled entry (with .tags) per slot, so later slots can
+  // filter their own pool against an already-rolled slot's tags via the
+  // `matchTagsFromSlot` pool-spec field. Only populated for slots whose
+  // pool entries are tagged objects ({ tags, description }).
+  const rolledMeta = {};
 
   // 1. Universal axes — path override → bot default
   for (const slot of arch.slots.universal) {
@@ -80,12 +85,27 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
         `composeBrief: path missing required pool for slot "${slot}" (archetype: ${pathConfig.archetype})`
       );
     }
-    const pool = resolveSpecPool(spec, bot);
-    if (!pool || pool.length === 0) {
-      throw new Error(`composeBrief: pool spec for slot "${slot}" resolved to empty pool`);
+    // resolveSpecPoolRaw returns the raw entries (objects when tagged,
+    // strings otherwise). Supports matchTagsFromSlot via rolledMeta.
+    const rawPool = resolveSpecPoolRaw(spec, bot, rolledMeta);
+    if (!rawPool || rawPool.length === 0) {
+      throw new Error(
+        `composeBrief: pool spec for slot "${slot}" resolved to empty pool (after tag filter)`
+      );
     }
+    const stringPool = rawPool.map((e) => (typeof e === 'string' ? e : e.description));
     const n = arch.pickN?.[slot];
-    slots[slot] = n ? pickN(pool, n, picker, slot) : picker.pickWithRecency(pool, slot);
+    const picked = n ? pickN(stringPool, n, picker, slot) : picker.pickWithRecency(stringPool, slot);
+    slots[slot] = picked;
+    // If this slot's pool entries are tagged objects, remember the rolled
+    // entry's tags so later slots can match against them. Only tracks
+    // single-pick (not pickN multi-pick) for now.
+    if (typeof picked === 'string') {
+      const rawEntry = rawPool.find((e) => typeof e !== 'string' && e.description === picked);
+      if (rawEntry) {
+        rolledMeta[slot] = { tags: Array.isArray(rawEntry.tags) ? rawEntry.tags : [] };
+      }
+    }
   }
 
   // 4. Conditional drama layer (probability-gated)
@@ -127,37 +147,69 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
 }
 
 /**
- * Resolve a path's pool spec to an array of string entries the picker can
- * draw from. Spec is either:
- *   string  — name of a pool registered on the bot. Pool entries used as-is.
- *   { name, tags? }  — tagged-pool filtered access. Pool entries must be
- *                      objects { tags: [...], description: '...' }. Returns
- *                      .description for entries where (a) tags omitted, or
- *                      (b) entry has at least one matching tag, or
- *                      (c) entry has the 'ANY' tag (wildcard).
+ * Resolve a path's pool spec to an array of RAW entries (objects when
+ * tagged, strings otherwise). Spec is either:
+ *   string  — name of a pool registered on the bot. Entries returned as-is.
+ *   { name, tags? }            — static-tag filter against the named pool.
+ *   { name, matchTagsFromSlot } — DYNAMIC tag filter — reads the rolled
+ *                                  source slot's tags from rolledMeta and
+ *                                  filters this pool to entries whose tags
+ *                                  overlap. Requires the source slot to
+ *                                  appear EARLIER in archetype.slots.path
+ *                                  (composer rolls slots in declaration
+ *                                  order). 'ANY'-tagged entries always pass.
+ *
+ * Returns RAW entries (not .description strings) so the composer can both
+ * pick from them and track tags via rolledMeta. Wrap with .map(entryToString)
+ * before passing to a picker.
  */
-function resolveSpecPool(spec, bot) {
+function resolveSpecPoolRaw(spec, bot, rolledMeta) {
   if (typeof spec === 'string') {
     return bot.poolByName(spec);
   }
   if (spec && typeof spec === 'object' && spec.name) {
     const raw = bot.poolByName(spec.name);
-    if (!raw) throw new Error(`resolveSpecPool: pool "${spec.name}" not found on bot`);
-    if (!spec.tags || spec.tags.length === 0) {
-      // No filter — extract .description if entries are objects, else use as-is
-      return raw.map((e) => (typeof e === 'string' ? e : e.description));
+    if (!raw) throw new Error(`resolveSpecPoolRaw: pool "${spec.name}" not found on bot`);
+
+    let allowedTags;
+    if (spec.matchTagsFromSlot) {
+      const sourceMeta = rolledMeta && rolledMeta[spec.matchTagsFromSlot];
+      if (!sourceMeta) {
+        throw new Error(
+          `resolveSpecPoolRaw: matchTagsFromSlot="${spec.matchTagsFromSlot}" but that slot has not been rolled yet — declare it EARLIER in archetype.slots.path`
+        );
+      }
+      allowedTags = sourceMeta.tags || [];
+      if (allowedTags.length === 0) {
+        // Source slot has no tags — return everything unfiltered
+        return raw;
+      }
+    } else if (spec.tags && spec.tags.length > 0) {
+      allowedTags = spec.tags;
+    } else {
+      // No tag filter — return all
+      return raw;
     }
-    const allowed = new Set(spec.tags);
-    return raw
-      .filter((e) => {
-        if (typeof e === 'string') return true; // unfiltered if not tagged
-        if (!Array.isArray(e.tags)) return false;
-        if (e.tags.includes('ANY')) return true;
-        return e.tags.some((t) => allowed.has(t));
-      })
-      .map((e) => (typeof e === 'string' ? e : e.description));
+
+    const allowed = new Set(allowedTags);
+    return raw.filter((e) => {
+      if (typeof e === 'string') return true; // unfiltered if not tagged
+      if (!Array.isArray(e.tags)) return false;
+      if (e.tags.includes('ANY')) return true;
+      return e.tags.some((t) => allowed.has(t));
+    });
   }
-  throw new Error(`resolveSpecPool: invalid spec ${JSON.stringify(spec)}`);
+  throw new Error(`resolveSpecPoolRaw: invalid spec ${JSON.stringify(spec)}`);
+}
+
+/**
+ * Backward-compatible wrapper — returns .description strings (or strings
+ * as-is) for callers that don't need raw entries or matchTagsFromSlot.
+ * Used by the conditional layer below + any external callers.
+ */
+function resolveSpecPool(spec, bot) {
+  const raw = resolveSpecPoolRaw(spec, bot, null);
+  return raw.map((e) => (typeof e === 'string' ? e : e.description));
 }
 
 function resolvePool(slot, pathConfig, bot) {

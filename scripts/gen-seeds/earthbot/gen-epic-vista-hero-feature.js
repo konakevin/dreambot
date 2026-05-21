@@ -14,8 +14,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/epic_vista_hero_feature.json',
-  total: 25,
-  batch: 15,
+  total: 150,
+  batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} HERO FEATURE entries for EarthBot epic-vista — each entry names ONE scale-proving element that anchors the monumental scale of the landscape.
 
 ━━━ THE BAR ━━━

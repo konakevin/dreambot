@@ -23,6 +23,12 @@ module.exports = {
     subject: 'EPIC_VISTA_SUBJECT',
     lighting: 'EPIC_VISTA_LIGHTING',
     atmosphere: 'EPIC_VISTA_ATMOSPHERE',
+    // R2 (2026-05-20): foreground_anchor axis DROPPED. The always-on
+    // foreground prop competed with the wow-factor subject rather than
+    // supporting it (Mitre Peak + conch shells failure mode). Pivoted to
+    // SCENE-AS-HERO composition — subject dominates the frame. The
+    // foreground pool + composer matchTagsFromSlot infrastructure are
+    // preserved for potential future scene-paths that want them.
     hero_feature: 'EPIC_VISTA_HERO_FEATURE',
     sky_layer: 'EPIC_VISTA_SKY',
     phenomenon: 'EPIC_VISTA_PHENOMENON',

@@ -1,37 +1,65 @@
 #!/usr/bin/env node
 /**
- * EarthBot epic-vista — SUBJECT axis (the iconic vista anchor).
+ * EarthBot epic-vista — SUBJECT axis (BIOME-TAGGED for compositional consistency).
  *
- * Each entry = ONE real Earth location, geography + geology + scale only.
- * NO weather, NO lighting, NO phenomena, NO sky baked in. Those are
- * separate axes and the composer stacks them at render time.
+ * Each entry = ONE real Earth location, geography + geology + scale only,
+ * with biome tag(s) so the composer can dynamically filter the foreground
+ * anchor pool to match. R1 update (2026-05-20): tagged object format.
  *
- * Identity correction (2026-05-20): the legacy epic_vistas pool packed
- * 3-5 phenomena per entry ("granite spires + storm clouds + THREE rainbows
- * + glacial lake + golden light" all in one sentence). That stacking is
- * the AI-fake drift Kevin called out. This pool restores discipline:
- * one location, one scene anchor.
+ * Biome tag vocabulary (8 categories, used across all EarthBot axes):
+ *   alpine             — high mountain peaks, granite, snow/ice fringe, treeline
+ *   arctic-polar       — polar ice cap, polar ocean, true tundra, ice shelf
+ *   desert             — sand dunes, sandstone canyon, badlands, dry plateau
+ *   coastal-temperate  — cool sea cliffs, fjord, basalt coast, kelp coast
+ *   coastal-tropical   — palm beach, reef coast, mangrove, tropical lagoon
+ *   temperate-forest   — old-growth conifer, redwood, deciduous, cool forest
+ *   tropical-jungle    — Amazon / Borneo / true tropical rainforest
+ *   volcanic           — fresh lava, ash, geothermal, active caldera
+ *
+ * Most subjects span 1-3 biomes (Patagonia = alpine + temperate-forest, etc.).
  */
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/epic_vista_subject.json',
-  total: 30,
-  batch: 15,
-  metaPrompt: (n) => `You are writing ${n} EPIC VISTA SUBJECT entries for EarthBot — each entry names ONE iconic real-world Earth landscape and describes its core geological character + scale.
+  total: 200,
+  batch: 25,
+  append: true,
+  metaPrompt: (n) => `You are writing ${n} EPIC VISTA SUBJECT entries for EarthBot — each entry names ONE iconic real-world Earth landscape and tags it with biome category/categories so the composer can match a biome-appropriate foreground anchor.
 
-━━━ THE BAR ━━━
+━━━ OUTPUT FORMAT (NON-NEGOTIABLE — JSON OBJECTS NOT STRINGS) ━━━
 
-EarthBot's identity: jaw-dropping vistas of REAL EARTH, larger-than-life but never AI-fake / never sci-fi / never fantasy. The viewer's reaction: "is this real? I want to BOOK A FLIGHT THERE." Each entry should make a future Flux render of THAT specific place at vista-scale.
+Output a JSON array of OBJECTS in this exact shape:
 
-━━━ FORMAT (NON-NEGOTIABLE) ━━━
+{ "tags": ["<biome>", "<biome>"], "description": "<location + geology + scale, 18-30 words>" }
 
-Each entry: 18-30 words. ONE location. Describe:
-- Location NAME (real specific place — Torres del Paine, Vatnajökull, Reynisfjara, Etretat, Bryce, Zhangjiajie, etc.)
+Biome tag vocabulary (use ONLY these 8 values — pick 1-3 per entry):
+- "alpine" — high mountain peaks, granite spires, treeline, mountain snow/ice
+- "arctic-polar" — polar ice cap, polar ocean, true tundra, ice shelf (genuinely treeless)
+- "desert" — sand dunes, sandstone canyons, badlands, dry plateau
+- "coastal-temperate" — cool sea cliffs, fjord, basalt coast, kelp coast (Norway, Iceland, BC, Faroe)
+- "coastal-tropical" — palm beach, reef coast, mangrove, tropical lagoon (Hawaii, Maldives, Bali)
+- "temperate-forest" — old-growth conifer, redwood, deciduous, cool forest
+- "tropical-jungle" — Amazon, Borneo, true tropical rainforest
+- "volcanic" — fresh lava, ash, geothermal, active caldera
+
+Subjects that span multiple biomes get multiple tags. Examples:
+- Torres del Paine → ["alpine", "temperate-forest"] (granite spires AND beech-forest fringe)
+- Vatnajökull → ["arctic-polar", "coastal-temperate"] (ice cap dropping into fjord)
+- Reynisfjara → ["coastal-temperate", "volcanic"] (basalt coast on volcanic island)
+- Saharan dunes → ["desert"] (single tag)
+- Napali coast → ["coastal-tropical", "tropical-jungle"] (cliff coast + jungle)
+- Antarctic ice shelf → ["arctic-polar"]
+- Kilauea lava flow → ["volcanic", "coastal-tropical"] (when meeting ocean)
+
+━━━ THE BAR — DESCRIPTION FIELD ━━━
+
+Each "description": 18-30 words. ONE location. Describe:
+- Location NAME (real specific place)
 - Core geological character (granite spires / basalt columns / sandstone hoodoos / ice cap / hexagonal columns / star dunes / etc.)
 - Scale character (vertical drop, breadth, depth — concrete physical scale)
 - Base material/palette (charcoal-black sand / electric-blue ice / rust-red sandstone / cobalt water / lime-green moss)
 
-WHAT TO ABSOLUTELY EXCLUDE — these go in OTHER axes, never in subject:
+WHAT TO EXCLUDE FROM DESCRIPTION (these go in OTHER axes, never in subject):
 - NO weather (no storms, no clouds, no rain, no snow falling)
 - NO lighting / time-of-day (no "golden hour", no "sunset", no "dawn", no "midnight sun")
 - NO optical phenomena (no rainbows, no aurora, no sun-pillars, no halos)
@@ -39,41 +67,41 @@ WHAT TO ABSOLUTELY EXCLUDE — these go in OTHER axes, never in subject:
 - NO sky description (no cobalt sky, no mammatus clouds)
 - NO scale-prover wildlife (no eagles, no goats — that's hero_feature axis)
 
-This is the LOCATION + GEOLOGY only. Other axes layer on top at render time.
+━━━ EXAMPLES (study format + biome tagging) ━━━
 
-━━━ EXAMPLES (study the format — clean isolation of just the subject) ━━━
+✓ { "tags": ["alpine", "temperate-forest"], "description": "Torres del Paine in Patagonia: three granite spires rising sheer two-thousand meters from turquoise glacial lake, wind-scoured east faces, blue-grey ridges receding to horizon" }
 
-✓ "Torres del Paine in Patagonia: three granite spires rising sheer two-thousand meters from turquoise glacial lake, sheer wind-scoured east faces, blue-grey ridges receding to horizon"
-✓ "Vatnajökull Glacier in Iceland: ice cap stretching to horizon, electric-blue calving fronts dropping vertical into black volcanic-sand fjord, crevasse fields scoring the surface"
-✓ "Reynisfjara in Iceland: hexagonal basalt column cliffs rising from north-Atlantic surf, charcoal-black volcanic sand, sea-stacks standing offshore"
-✓ "Saharan Star Dunes near Erg Chebbi: thousand-foot pyramid sand crests, shadow-striped ridgelines converging to vanishing point, tangerine sand and pure ochre hollows"
-✓ "Zhangjiajie sandstone pillars in China: thousand sandstone towers rising vertical from valley floor, every column dressed in moss and clinging pines, deep ravines cutting between"
-✓ "Cliffs of Moher in Ireland: vertical 700-foot sea cliffs running fourteen kilometers along Atlantic coast, layered Liscannor flagstone, slate-grey and ochre"
+✓ { "tags": ["arctic-polar", "coastal-temperate"], "description": "Vatnajökull Glacier in Iceland: ice cap stretching to horizon, electric-blue calving fronts dropping vertical into black volcanic-sand fjord, crevasse fields scoring the surface" }
 
-✗ BAD — stacks too much: "Torres del Paine granite spires pierce storm clouds while three rainbows arc over turquoise glacial lake, golden light exploding through breaking tempest" (this packs subject + storm + rainbow + light into one entry)
-✗ BAD — adds wildlife: "Patagonian peaks with condors soaring above" (wildlife is a separate axis)
-✗ BAD — adds atmosphere: "Patagonian peaks under low rolling fog" (atmosphere is a separate axis)
+✓ { "tags": ["coastal-temperate", "volcanic"], "description": "Reynisfjara in Iceland: hexagonal basalt column cliffs rising sixty meters from north-Atlantic shore, charcoal-black volcanic sand beach stretching wide, sea-stacks standing offshore" }
 
-━━━ CATEGORY DISTRIBUTION (across ${n} entries) ━━━
+✓ { "tags": ["desert"], "description": "Namib Desert at Sossusvlei: thousand-foot rust-orange star dunes flanking bone-white cracked clay pan, shadow-striped ridgelines, apricot and deep-ochre sand walls" }
 
-- ~30% Mountain ranges (Patagonia / Himalayan / Karakoram / Alps / Dolomites / Sierra / Cascades / Andes / Atlas)
-- ~20% Coastal sea-cliff (Reynisfjara / Napali / Faroe / Cliffs of Moher / Big Sur / Etretat / 12 Apostles)
-- ~15% Desert/dunes (Sahara / Namib / Atacama / Sonoran / Wadi Rum / Death Valley / Salar de Uyuni)
-- ~15% Ice/Arctic (Vatnajökull / Antarctic ice shelf / Greenland ice cap / Banff icefields / Lemaire Channel)
-- ~10% Canyon/plateau/karst (Grand Canyon / Bryce / Monument Valley / Zion / Plitvice / Jiuzhaigou)
-- ~10% Forest giants / jungle / volcanic landscape (Sequoia / Redwood / Daintree / Hoh Rainforest / Kilauea / Mount Bromo / Yellowstone hot springs)
+✓ { "tags": ["coastal-tropical", "tropical-jungle"], "description": "Napali Coast of Kauai: cathedral-tall emerald sea cliffs plunging two thousand feet into Pacific, ancient lava ridges thick with tropical jungle, hidden valleys" }
 
-NEVER repeat a location twice. Each entry is a UNIQUE real place.
+━━━ CATEGORY DISTRIBUTION (across ${n} entries — spread biomes intentionally) ━━━
 
-━━━ HARD BANS — EARTHBOT IDENTITY ━━━
+- ~25% alpine (Patagonia / Himalayan / Karakoram / Alps / Dolomites / Sierra / Cascades / Andes / Atlas / Caucasus)
+- ~15% coastal-temperate (Norwegian fjord / Faroe / Reynisfjara / Cliffs of Moher / Big Sur / Etretat / 12 Apostles / BC coast)
+- ~12% desert (Sahara / Namib / Atacama / Sonoran / Wadi Rum / Death Valley / Salar de Uyuni / Painted Desert)
+- ~12% arctic-polar (Antarctica / Greenland / Banff icefields / Lemaire Channel / Svalbard / Russian Arctic / Vatnajökull)
+- ~10% temperate-forest (Hoh Rainforest / Olympic / Tongass / Smoky Mountains / Black Forest / Daintree edge / Tasmania)
+- ~10% canyon/plateau (Grand Canyon / Bryce / Monument Valley / Zion / Plitvice / Jiuzhaigou / Antelope Canyon — usually "desert" tag)
+- ~8% coastal-tropical (Napali / Bora Bora / Maldives / Whitehaven / Phi Phi / Seychelles)
+- ~5% volcanic (Kilauea / Mount Bromo / Yellowstone hot springs / Stromboli / Whakaari / Iceland geothermal — often combined with another tag)
+- ~3% tropical-jungle (Amazon / Borneo / Daintree interior / Congo / Yasuni)
+
+NEVER repeat a location twice. Each entry is a UNIQUE real place. Many subjects span multiple biomes — tag accordingly.
+
+━━━ HARD BANS ━━━
 
 - NO sci-fi vocabulary ("alien", "otherworldly", "Pandora", "biomechanical")
 - NO fantasy vocabulary ("enchanted", "magical", "mystical", "ethereal", "fairy")
-- NO bioluminescent fungi / glowworms / phosphorescent anything (those leaked into legacy from a separate bot)
+- NO bioluminescent fungi / glowworms / phosphorescent anything
 - NO multi-moons, NO twin-suns, NO floating-islands
-- NO impossible-physics phrasing
+- NO weather / lighting / atmospheric / phenomenon language in description
 
 ━━━ OUTPUT ━━━
 
-JSON array of ${n} strings, real Earth locations only, ONE subject per entry, 18-30 words each. No preamble, no numbering, no markdown.`,
+JSON array of ${n} OBJECTS in the exact shape shown above. No preamble, no markdown code fences, no numbering. Just a clean JSON array starting with [ and ending with ].`,
 }).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
