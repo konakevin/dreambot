@@ -67,6 +67,7 @@ Royal magic signature: butterflies orbiting around the queen's crown, soft amber
 - NO castle / built architecture / stone-throne (the court lives in a GROWN GROVE — moss-and-root throne, fern-grotto, sacred-stone-circle ONLY)
 - NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
 - NO sexualized framing — focus is regal-otherworldly beauty
+- NO bare chest, NO nipples, NO topless
 - NO modern objects, NO realistic non-magical humans
 - NO violence / NO threatening / NO weapons
 - NO crowds beyond 5 figures

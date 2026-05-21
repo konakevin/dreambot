@@ -64,5 +64,8 @@ Greg Manchess + Donato Giancola + Paul Bonner + NC Wyeth + Brian Froud + Eyvind 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 200)}
 
+━━━ HARD BANS ━━━
+NO bare chest, NO nipples, NO topless.
+
 Output ONLY the raw 70-95 word painted-prompt. Comma-separated phrases. NO preamble, NO titles, NO ━━━ markers, NO **bold labels**. The prompt should weave the dwelling + lighting + wildlife + painted-lineage closing into ONE flowing description.`;
 };

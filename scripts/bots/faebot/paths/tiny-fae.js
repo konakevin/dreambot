@@ -71,6 +71,7 @@ Visible magic at her scale: pollen-trail behind her wings, fireflies orbiting ti
 - NO oversized-head proportions (painterly-real anatomy only)
 - NO posing-for-camera / NO eye-contact-with-viewer
 - NO sexualized framing — focus is mythic-creature beauty
+- NO bare chest, NO nipples, NO topless
 - NO modern objects, NO realistic non-magical humans
 - NO violence / NO scared expressions / NO edgy moods
 - NO additional fae beyond the focal one + ONE small creature companion (beetle / hummingbird / butterfly / firefly)

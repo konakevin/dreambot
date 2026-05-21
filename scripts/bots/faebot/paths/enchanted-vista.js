@@ -68,6 +68,7 @@ Specific light play (sun-shafts / god-rays / moonbeam-pools / dappled gold / blu
 
 ━━━ 4. HARD BANS ━━━
 - NO figures of any kind (no fae, no dryad, no nymph, no human — pure forest)
+- NO bare chest, NO nipples, NO topless
 - NO "standing stones" / "stone circles" / "tomb" / "gravestone" / "cemetery" — banned grave-trigger vocabulary
 - NO cartoon / chibi / mascot rendering
 - NO photographic / digital / 3D / CGI descriptors

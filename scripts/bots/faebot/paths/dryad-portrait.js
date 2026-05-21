@@ -67,6 +67,7 @@ Visible magical signature near her: glowing pollen, sparkles, fireflies, soft ha
 - NO full-body framing / NO wide-shot / NO landscape-with-figure (this is a TIGHT PORTRAIT — head/bust scale only)
 - NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer (face turned away, eyes lowered, gaze elsewhere)
 - NO sexualized framing — focus is mythic-creature beauty
+- NO bare chest, NO nipples, NO topless
 - NO modern objects, NO realistic non-magical humans
 - NO violence / NO scared expressions / NO edgy moods
 - NO additional figures

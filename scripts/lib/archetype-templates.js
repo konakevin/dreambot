@@ -12891,6 +12891,7 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 - NO landscape with tiny figure (the creature MUST fill 40-55% of frame)
 - NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
 - NO sexualized framing — focus is mythic-creature beauty
+- NO bare chest, NO nipples, NO topless
 - NO modern objects (phones, glasses, electronics)
 - NO realistic non-magical humans
 - NO violence / NO scared expressions / NO edgy moods
@@ -12988,6 +12989,7 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 - NO landscape with tiny figure (the fairy MUST fill 40-55% of frame)
 - NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
 - NO sexualized framing — focus is mythic-fairy beauty
+- NO bare chest, NO nipples, NO topless
 - NO modern objects (phones, glasses, electronics)
 - NO realistic non-magical humans / NO human-scale fairy (she's smaller)
 - NO violence / NO scared expressions / NO edgy moods
