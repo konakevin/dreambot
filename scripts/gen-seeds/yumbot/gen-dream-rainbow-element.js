@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_rainbow_element.json',
-  total: 50,
+  total: 100,
   batch: 25,
   metaPrompt: (n) => `You are writing \${n} RAINBOW ELEMENT descriptions for YumBot rainbow-dreamscape. The literal rainbow visible in each render — pouring out of a cup, arching overhead, or cascading down. NO cup descriptions (other pool).
 

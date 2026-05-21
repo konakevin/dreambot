@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_setting.json',
-  total: 50,
+  total: 150,
   batch: 25,
   metaPrompt: (n) => `You are writing \${n} DREAMSCAPE SETTINGS for YumBot rainbow-dreamscape. The wider pastel landscape that the kawaii cup-inhabitants sit in. NO cups, NO rainbows (those come from other pools).
 

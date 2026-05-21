@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_lighting.json',
-  total: 30,
+  total: 60,
   batch: 25,
   metaPrompt: (n) => `You are writing \${n} LIGHTING descriptors for YumBot rainbow-dreamscape. Sunny pastel outdoor light.
 

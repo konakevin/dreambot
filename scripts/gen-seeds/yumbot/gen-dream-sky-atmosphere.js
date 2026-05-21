@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_sky_atmosphere.json',
-  total: 50,
+  total: 100,
   batch: 25,
   metaPrompt: (n) => `You are writing \${n} SKY-AND-ATMOSPHERE descriptions for YumBot rainbow-dreamscape. The sky overhead — sunny pastel sky with optional balloons, mountains in distance, etc.
 
