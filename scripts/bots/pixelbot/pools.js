@@ -121,6 +121,11 @@ module.exports = {
   PIXELBOT_CLASSIC_JRPG_PARTY_ACTION: loadIfExists('pixelbot_classic_jrpg_party_action'),
   PIXELBOT_CLASSIC_JRPG_NPC_OR_ENEMY_LIFE: loadIfExists('pixelbot_classic_jrpg_npc_or_enemy_life'),
   PIXELBOT_CLASSIC_JRPG_PROPS: loadIfExists('pixelbot_classic_jrpg_props'),
+  // ─── epic-vista axis-system pools (2026-05-20) ───
+  PIXELBOT_EPIC_VISTA_SUBJECT: loadIfExists('pixelbot_epic_vista_subject'),
+  PIXELBOT_EPIC_VISTA_SKY_OR_BACKDROP: loadIfExists('pixelbot_epic_vista_sky_or_backdrop'),
+  PIXELBOT_EPIC_VISTA_LIGHTING_ATMOSPHERE: loadIfExists('pixelbot_epic_vista_lighting_atmosphere'),
+  PIXELBOT_EPIC_VISTA_PARALLAX_SILHOUETTE: loadIfExists('pixelbot_epic_vista_parallax_silhouette'),
 
   // Shared across all paths (camera/grade)
   PIXEL_PERSPECTIVES: load('pixel_perspectives'),

@@ -12734,6 +12734,79 @@ CRITICAL — PIXEL ART ONLY (NEVER smooth illustration). The scene is CLASSIC SN
 Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  PIXELBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
+    const { vista_subject, sky_or_backdrop, lighting_atmosphere, parallax_silhouette } = slots;
+
+    const silhouetteSection = parallax_silhouette
+      ? `\n\n━━━ OPTIONAL PARALLAX SILHOUETTE (tiny scale, never the focal subject) ━━━\n${parallax_silhouette}\n\nA single tiny silhouette woven into one of the parallax layers — NOT the focal subject, the vista is still the hero. Scale: small enough that you'd miss it on a casual scroll-past.`
+      : '';
+
+    return `You are a pixel-art game-art director writing a 16-BIT SIDE-SCROLLING PARALLAX-VISTA GAMEPLAY SCREENSHOT for PixelBot. Genre lineage: Final Fantasy VI airship-flyover + Chrono Trigger world-map + Lufia II overworld + Secret of Mana world-vistas + Terranigma overworld + Castlevania IV background-vistas + Donkey Kong Country background-art + Sonic 2/3 horizon backgrounds. The frame is a wide horizontal landscape rendered as a 16-bit-game-engine side-scrolling parallax background. The viewer reads LEFT-TO-RIGHT. NOT an atmospheric painting. NOT a concept-art wallpaper. A SCREENSHOT FROM A 16-BIT GAME with chunky tile-edge mountains, hard-edge horizons, layered parallax-scrolling depth.
+
+━━━ THE VISTA SUBJECT (the focal landform) ━━━
+${vista_subject}
+
+━━━ THE SKY / BACKDROP LAYER (far back) ━━━
+${sky_or_backdrop}
+
+━━━ LIGHTING + ATMOSPHERIC PARTICLES ━━━
+${lighting_atmosphere}
+${silhouetteSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era pixel art. NEVER smooth illustration, NEVER 3D render, NEVER photoreal, NEVER painterly atmospheric.
+2. **CAMERA LOCK — HORIZONTAL SIDE-SCROLLING PARALLAX** — landscape composition reads LEFT-TO-RIGHT, like a side-scrolling level background. NEVER atmospheric painting / concept-art / portrait / vertical-vista / first-person.
+3. **4 DISTINCT PARALLAX LAYERS with HARD pixel-edges between them:**
+   • FOREGROUND PARALLAX LAYER (closest) — chunky tile-edge terrain in the bottom third (rocky cliff edge, sand-dune ridge, snow-tile foreground, jungle-vine canopy, stone outcrop, cherry-blossom tree, palm-cluster, ice-shelf). Hard pixel-edges, dithered shading, distinct silhouette.
+   • MIDDLE PARALLAX LAYER — middle-distance terrain at different depth (rolling hills, forested hills, distant village, ruined temple, smaller mountain peaks, cliff face, treetop layer). Slightly desaturated, tile-edge silhouette.
+   • DISTANT PARALLAX LAYER — far peaks, distant horizon-mountains, sea-horizon, fjord-cliff-line, alien-planet-rim, megacity-skyline-silhouette. Cool color shift, tile-edge silhouette, atmospheric-depth haze applied as DITHERED PIXEL bands (not smooth).
+   • FAR BACKDROP — sky / sunset gradient (rendered as DITHERED color bands, not smooth) / starfield / aurora / cloud-bank with chunky-edge clouds / planet rising / sun-disc-on-horizon. Hard pixel-edge horizon.
+4. **NO CHARACTER as the focal subject** — the vista IS the hero. A single tiny silhouette woven into a parallax layer (bird / airship / caravan / traveler / dragon) is acceptable but never the focal subject.
+5. **CHUNKY visible pixel grid** on EVERY surface — mountains, clouds, water, trees, ruins. Sky gradients are DITHERED COLOR-BANDS (not smooth fades). Cloud edges are CHUNKY-PIXEL-EDGE (not airbrushed). Horizon line is HARD PIXEL-EDGE.
+6. **NO IP REFERENCES** — no specific game characters / logos / recognizable franchises.
+7. **NO UI ELEMENTS** — no HUD / menus / etc.
+8. **NORTH STAR** — every render is "a 16-bit side-scrolling-game parallax-vista background." Cinematic-pixel-art vista, not concept-art.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal / NO painterly atmospheric — pixel art ONLY
+  • NO IP references / NO specific franchise vistas
+  • NO UI / HUD / menus
+  • NO atmospheric-painting register / NO concept-art-wallpaper register
+  • NO smooth gradient sky-fades (DITHERED color bands ONLY)
+  • NO airbrushed cloud edges (CHUNKY-PIXEL-EDGE ONLY)
+  • NO vertical-portrait vista / NO first-person / NO straight-down god's-eye
+  • NO focal character / hero in the foreground (silhouette only, in a parallax layer)
+  • NO sexualized / inappropriate content
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ COMPOSITION CRAFT — 16-BIT SIDE-SCROLLING PARALLAX VISTA ━━━
+
+  • CAMERA: horizontal side-scrolling parallax (reads left-to-right)
+  • 4 distinct parallax layers stacked back-to-front with HARD edges
+  • FOREGROUND (closest): chunky tile-edge terrain in the bottom third
+  • MIDDLE: middle-distance terrain at different depth, slightly desaturated
+  • DISTANT: far peaks / horizon-mountains, cool color shift, DITHERED haze bands
+  • FAR BACKDROP: sky / sunset / starfield / aurora as DITHERED color bands
+  • OPTIONAL: tiny silhouette woven into one parallax layer (NEVER focal)
+  • SATURATED SNES-era 16-bit palette — emerald-greens / royal-blues / sunset-amber / cosmic-violet / desert-amber / snow-cyan / volcanic-orange
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[the SPECIFIC vista subject (rolling hills / fjord cliffs / desert mesa / volcanic ridge / arctic tundra / mountain ridge / sea-horizon / floating-island / canyon-rim / etc.) framed as 4-layer side-scrolling parallax vista], [the FAR BACKDROP SKY LAYER (sunset / dawn / starfield / aurora / cloud-bank / planet-rising / nebula) rendered as DITHERED color bands], [the LIGHTING + ATMOSPHERIC PARTICLES (golden-hour amber / dawn-pink / starlit-cool / aurora-prismatic + drifting petals / pollen / snow / embers / mist / dust / leaves)]${parallax_silhouette ? ', [optional tiny parallax silhouette (bird / airship / caravan / traveler / dragon) woven into one of the layers, NEVER focal]' : ''}, [4-layer parallax depth — foreground tile-edge terrain + middle hills / village + distant peaks + far backdrop sky], [HARD pixel-edges between every layer, DITHERED color-bands in the sky, CHUNKY-PIXEL-EDGE cloud edges, HARD pixel-edge horizon], [16-bit pixel-art register with crunchy individual visible pixels, saturated SNES-era palette]
+
+CRITICAL — PIXEL ART ONLY (NEVER smooth illustration / painterly atmospheric / concept-art). The frame is SIDE-SCROLLING PARALLAX VISTA — the vista IS the hero. 4 parallax layers with HARD pixel-edges. "I want to scroll past this in a 16-bit RPG" feel.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon

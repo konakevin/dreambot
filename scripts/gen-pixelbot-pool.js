@@ -2249,6 +2249,250 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE specific CLASSIC JRPG flavor prop, 20-40 words. Format: "PROP NAME CAPS — primary prop + position in scene + atmospheric detail". Vary across the 15 categories. NO IP/UI/sexual/gore/modern. Classic SNES-JRPG atmospheric prop only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── epic-vista path (2026-05-20 axis-system migration) ───
+  pixelbot_epic_vista_subject: {
+    format: 'simple',
+    theme: `VISTA SUBJECT (focal landform) for the PixelBot epic-vista path. Each entry describes ONE specific focal landform for a 4-layer side-scrolling parallax-vista — rolling hills / fjord cliffs / desert mesa / volcanic ridge / arctic tundra / mountain ridge / sea-horizon / floating-island / canyon-rim / etc. Each entry 30-60 words.
+
+⚠️ THE BAR: every entry reads as the focal landform of a 16-bit side-scrolling parallax vista (FF6 airship-flyover / Chrono Trigger world-map / Sonic 3 horizon background). Vista IS the hero — NO character, NO ship as focal subject. Just the LAND.
+
+⚠️ LANDFORM CATEGORIES — distribute the 25 entries:
+  • ~3 ROLLING HILLS / GRASSLANDS — emerald rolling hills with scattered trees, layered hill silhouettes
+  • ~3 MOUNTAIN RIDGE / PEAKS — snow-capped peaks, mountain range, alpine ridge
+  • ~3 DESERT MESA / CANYON — sandstone mesa, canyon rim, desert horizon
+  • ~3 VOLCANIC RIDGE / LAVA — volcanic ridge with lava-rivers, caldera-rim, ash-fields
+  • ~3 ARCTIC TUNDRA / ICE-SHELF — frozen tundra, ice-shelf edge, snow-mountain
+  • ~3 COASTAL / SEA-HORIZON — sea-horizon at sunset, coastal cliffs, lighthouse-coast
+  • ~3 FOREST / JUNGLE CANOPY — jungle canopy stretching to horizon, forest canopy, treetop layer
+  • ~2 FLOATING-ISLAND / SKY-VISTA — floating islands in sky, cloud-sea below
+  • ~1 ALIEN-PLANET HORIZON — alien-planet rim, multi-moon vista, cosmic horizon
+  • ~1 ANCIENT-RUIN VISTA — distant ancient ruins along a ridge, fallen-city horizon
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC LANDFORM TYPE
+  - FOREGROUND PARALLAX LAYER detail (closest tile-edge terrain)
+  - MIDDLE LAYER detail (mid-distance hills / forest / village)
+  - DISTANT LAYER detail (far peaks / horizon-mountains)
+  - HARD pixel-edges between layers implied
+
+🚫 STRICT BANS:
+  • NO character / hero as focal subject
+  • NO atmospheric-painting register
+  • NO concept-art-wallpaper register
+  • NO sky / backdrop description (separate axis)
+  • NO lighting / atmospheric particle description (separate axis)
+  • NO modern / contemporary setting
+  • NO IP / UI / sexualized content`,
+    touchpoints: [
+      'EMERALD ROLLING HILLS — 4-layer parallax vista with chunky rocky-edge foreground tile, layered emerald-green rolling hills in midground at progressive depth, distant low-blue mountain ridge silhouette, vista of FF6-overworld-style endless rolling hills',
+      'GRASSLAND WITH SCATTERED TREES — 4-layer parallax vista with grass-tile foreground bottom-edge, scattered tree-silhouettes in midground rolling-hills, distant blue-purple mountain ridge with snow-tile caps, expansive overworld feel',
+      'SAVANNA RIDGE — 4-layer parallax vista with savanna-grass foreground, acacia-tree silhouettes scattered in midground rolling-hills, distant orange-rim mountains, expansive plains feel',
+      'SNOW-CAPPED PEAKS — 4-layer parallax vista with chunky snow-tile foreground, rising snow-capped mountain ridge in midground, distant alpine peaks fading cool-blue in the far layer, classic alpine-vista',
+      'ALPINE RIDGE WITH WATERFALL — 4-layer parallax vista with rocky cliff foreground, alpine ridge cascading down with chunky waterfall in midground, distant peaks behind, dramatic alpine feel',
+      'MOUNTAIN-RANGE LAYERED — 4-layer parallax vista with chunky cliff-edge foreground, layered mountain-range silhouettes at progressive depth (sharp foreground / blue midground / purple-distant), classic side-scroller vista',
+      'SANDSTONE MESA — 4-layer parallax vista with chunky sand-dune foreground, towering sandstone-mesa in midground, distant flat desert horizon behind, sandstone-orange palette, classic desert vista',
+      'CANYON RIM VISTA — 4-layer parallax vista with chunky rocky-cliff foreground, canyon-rim dropping away in midground revealing canyon-walls, distant canyon-horizon, dramatic canyon depth',
+      'DESERT HORIZON WITH DUNES — 4-layer parallax vista with chunky sand-dune foreground tile, layered sand-dune midground stretching to horizon, distant flat-desert-rim, sandstone-amber palette',
+      'VOLCANIC RIDGE — 4-layer parallax vista with chunky lava-rock foreground, volcanic ridge with glowing-orange lava-rivers in midground, distant smoking volcano-peak in the far layer, dramatic volcanic feel',
+      'CALDERA RIM — 4-layer parallax vista with chunky obsidian-rock foreground, caldera-rim dropping into glowing-orange lava-lake in midground, distant volcanic mountain ridge behind, hellish vista',
+      'ASH-FIELD VOLCANIC — 4-layer parallax vista with chunky ash-and-rock foreground, ash-field stretching to a glowing-orange volcano in midground, distant ash-cloud rising in the far layer',
+      'ARCTIC TUNDRA — 4-layer parallax vista with chunky snow-tile foreground, frozen tundra with scattered ice-rocks in midground, distant snow-mountain ridge behind, cool-blue palette',
+      'ICE-SHELF EDGE — 4-layer parallax vista with chunky ice-shelf foreground (edge breaking off), frozen sea in midground stretching to horizon, distant ice-mountain ridge in the far layer, arctic vista',
+      'SNOW-MOUNTAIN LAYERED — 4-layer parallax vista with chunky snow-tile foreground, layered snow-mountain ridge in midground at progressive depth, distant snow-mountain horizon, classic arctic vista',
+      'SEA-HORIZON COASTAL — 4-layer parallax vista with chunky rocky-coast foreground, calm sea stretching to horizon in midground, distant island silhouettes in the far layer, coastal classic',
+      'COASTAL CLIFFS — 4-layer parallax vista with chunky cliff-edge foreground (overlooking sea), sea waves crashing on rocks in midground, distant lighthouse-and-island silhouettes in the far layer',
+      'LIGHTHOUSE COAST — 4-layer parallax vista with chunky coastal-grass foreground, lighthouse on rocky-outcrop in midground, distant sea-horizon and island silhouettes in the far layer',
+      'JUNGLE CANOPY — 4-layer parallax vista with chunky jungle-canopy foreground (treetops at viewer-level), layered jungle-canopy midground stretching to horizon, distant jungle-mountain ridge behind',
+      'FOREST CANOPY — 4-layer parallax vista with chunky forest-canopy foreground, layered forest treetops in midground at progressive depth, distant blue-purple mountain ridge in the far layer',
+      'TREETOP LAYER VISTA — 4-layer parallax vista with chunky individual tree-silhouette foreground, layered treetop canopy in midground stretching to horizon, distant treetop-and-mountain rim behind',
+      'FLOATING-ISLAND VISTA — 4-layer parallax vista with chunky floating-island-rock foreground (suspended over clouds), additional floating-islands at midground depth, distant floating-island cluster in the far layer, sky-realm feel',
+      'CLOUD-SEA BELOW VISTA — 4-layer parallax vista with chunky mountain-peak foreground (jutting above clouds), cloud-sea stretching to horizon below in midground, distant mountain-peaks jutting above clouds in the far layer',
+      'ALIEN-PLANET HORIZON — 4-layer parallax vista with chunky alien-rock foreground (purple-magenta tile), alien-rock formations in midground, distant alien-planet-rim with multi-moon silhouette in the far layer',
+      'ANCIENT-RUIN RIDGE VISTA — 4-layer parallax vista with chunky stone-rubble foreground, ancient-ruins along a ridge in midground at progressive depth, distant fallen-city silhouette in the far layer, classic explorer-vista',
+    ],
+    instructions: `Each entry is ONE specific VISTA SUBJECT (focal landform), 30-60 words. Format: "LANDFORM NAME CAPS — 4-layer parallax vista + foreground detail + midground detail + distant detail". MANDATORY — (a) landform type, (b) foreground parallax layer, (c) middle layer, (d) distant layer, (e) HARD pixel-edges between layers implied. NO character / hero. NO sky / backdrop description. NO lighting / atmospheric description. NO modern. NO IP/UI/sexual. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_epic_vista_sky_or_backdrop: {
+    format: 'simple',
+    theme: `SKY / BACKDROP LAYER (far back) for the PixelBot epic-vista path. Each entry describes ONE specific sky or backdrop layer for a 4-layer side-scrolling parallax-vista — sunset / dawn / starfield / aurora / cloud-bank / planet-rising / nebula / etc. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry establishes the FAR BACKDROP layer of a 16-bit parallax-vista. Rendered as DITHERED COLOR BANDS (not smooth gradients). Chunky-pixel-edge clouds. Hard pixel-edge horizon. SNES-era saturated palette.
+
+⚠️ BACKDROP CATEGORIES — distribute the 25 entries:
+  • ~4 SUNSET — golden-amber sunset / pink-orange sunset / blood-red sunset / soft-pastel sunset
+  • ~4 DAWN — soft-pink dawn / golden dawn / mist-and-pink dawn / cool-blue dawn
+  • ~3 STARFIELD / NIGHT — starfield with milky-way-band / starfield with crescent-moon / starfield with full-moon
+  • ~3 AURORA — green-aurora / pink-and-green aurora / multi-color aurora
+  • ~3 CLOUD-BANK — towering cumulus / wispy stratus / chunky-pixel-edge cloud-bank
+  • ~2 PLANET-RISING / MOON — single moon / multi-moon / planet rising on horizon
+  • ~2 NEBULA / COSMIC — purple-pink nebula / blue-cosmic nebula
+  • ~2 STORM / OVERCAST — chunky-edge storm clouds / overcast-grey sky
+  • ~1 MIDDAY CLEAR — clear blue midday sky
+  • ~1 ECLIPSE / RARE — eclipse-disc / sun-pillar / sun-dog
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC SKY / BACKDROP TYPE
+  - DITHERED COLOR BANDS implied (not smooth gradients)
+  - PALETTE detail
+  - CHUNKY-PIXEL-EDGE cloud / horizon detail
+
+🚫 STRICT BANS:
+  • NO smooth gradient sky-fades (DITHERED color bands ONLY)
+  • NO airbrushed cloud edges
+  • NO atmospheric-painting register
+  • NO landform / vista subject description (separate axis)
+  • NO lighting / atmospheric particle description (separate axis)`,
+    touchpoints: [
+      'GOLDEN-AMBER SUNSET — far backdrop sky with DITHERED golden-amber color-bands transitioning from warm-yellow at the horizon to deep-orange and purple-violet above, hard pixel-edge horizon, SNES-era saturated palette',
+      'PINK-ORANGE SUNSET — far backdrop sky with DITHERED pink-orange color-bands at the horizon transitioning to magenta and indigo above, hard pixel-edge horizon, soft-romantic register',
+      'BLOOD-RED SUNSET — far backdrop sky with DITHERED blood-red color-bands at the horizon transitioning to dark-purple above, dramatic ominous register, hard pixel-edge horizon',
+      'SOFT-PASTEL SUNSET — far backdrop sky with DITHERED soft-pastel color-bands (peach + lavender + cyan) at the horizon, gentle peaceful register, hard pixel-edge horizon',
+      'SOFT-PINK DAWN — far backdrop sky with DITHERED soft-pink color-bands at the horizon transitioning to lavender above, gentle peaceful register, hard pixel-edge horizon, fresh-morning feel',
+      'GOLDEN DAWN — far backdrop sky with DITHERED golden color-bands at the horizon transitioning to cool-blue above, hopeful generative register, hard pixel-edge horizon',
+      'MIST-AND-PINK DAWN — far backdrop sky with DITHERED mist-pink color-bands at the horizon (low-mist band visible), transitioning to soft-grey above, peaceful misty register',
+      'COOL-BLUE DAWN — far backdrop sky with DITHERED cool-blue color-bands at the horizon transitioning to deep-blue above, fresh-early-dawn register, hard pixel-edge horizon',
+      'STARFIELD WITH MILKY-WAY — far backdrop deep-blue-black starfield with scattered pixel-stars across the field, MILKY-WAY-BAND visible as a soft-pixel-band of denser stars crossing the sky, magical night register',
+      'STARFIELD WITH CRESCENT-MOON — far backdrop deep-blue-black starfield with scattered pixel-stars, glowing-yellow crescent-moon in the upper area, peaceful magical-night register',
+      'STARFIELD WITH FULL-MOON — far backdrop deep-blue-black starfield with scattered pixel-stars, large glowing-white full-moon prominent in the upper area, atmospheric magical-night register',
+      'GREEN-AURORA — far backdrop cool-blue-night sky with DITHERED green-aurora bands curtaining across the upper area, scattered pixel-stars behind, magical arctic-night register',
+      'PINK-AND-GREEN AURORA — far backdrop cool-blue-night sky with DITHERED pink-and-green aurora bands curtaining across the upper area, magical aurora register',
+      'MULTI-COLOR AURORA — far backdrop cool-blue-night sky with DITHERED multi-color aurora bands (green + pink + purple) curtaining across, magical magical-arctic register',
+      'TOWERING CUMULUS — far backdrop clear-blue sky with chunky-pixel-edge towering cumulus clouds dominating the upper area, hard pixel-edge horizon, dramatic atmospheric register',
+      'WISPY STRATUS — far backdrop pale-blue sky with chunky-pixel-edge wispy stratus clouds streaking horizontally, hard pixel-edge horizon, gentle peaceful register',
+      'CHUNKY-CLOUD BANK — far backdrop sky with massive chunky-pixel-edge cloud-bank dominating the upper area, breaks of clear-blue between, dramatic atmospheric register',
+      'SINGLE MOON RISING — far backdrop deep-blue-twilight sky with single glowing-yellow moon rising on the horizon, scattered pixel-stars in the upper area, atmospheric peaceful-night register',
+      'MULTI-MOON VISTA — far backdrop deep-purple-twilight sky with two-or-three moons (varying sizes) in the upper area, scattered pixel-stars, magical alien-night register',
+      'PLANET RISING ON HORIZON — far backdrop deep-purple-twilight sky with massive ringed-planet rising on the horizon (taking up significant upper-area), scattered pixel-stars, alien-vista register',
+      'PURPLE-PINK NEBULA — far backdrop deep-blue-black space with DITHERED purple-pink nebula clouds in the upper area, scattered pixel-stars overlaying, cosmic register',
+      'BLUE-COSMIC NEBULA — far backdrop deep-blue-black space with DITHERED blue-cosmic nebula clouds in the upper area, scattered pixel-stars, cosmic register',
+      'CHUNKY STORM CLOUDS — far backdrop dark-grey sky with massive chunky-pixel-edge storm clouds dominating the upper area, occasional pixel-lightning-bolt, dramatic ominous register',
+      'CLEAR BLUE MIDDAY — far backdrop clear-blue midday sky with scattered chunky-pixel-edge white-cloud-puffs, hard pixel-edge horizon, bright-cheerful register',
+      'ECLIPSE-DISC — far backdrop dark-purple sky with eclipse-disc (black-circle with bright-corona-ring) prominent in the upper area, scattered pixel-stars revealed, dramatic rare register',
+    ],
+    instructions: `Each entry is ONE specific SKY / BACKDROP layer, 25-50 words. Format: "BACKDROP NAME CAPS — far backdrop type + DITHERED color bands + palette detail + chunky-pixel-edge implied". MANDATORY — (a) sky/backdrop type, (b) DITHERED color bands, (c) palette detail, (d) chunky-pixel-edge clouds/horizon. NO smooth gradients. NO airbrushed cloud edges. NO atmospheric-painting. NO landform description. NO lighting / atmospheric description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_epic_vista_lighting_atmosphere: {
+    format: 'simple',
+    theme: `LIGHTING + ATMOSPHERIC PARTICLES for the PixelBot epic-vista path. Each entry describes ONE specific combination of time-of-day lighting + atmospheric particles drifting through the parallax vista. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry establishes the LIGHTING REGISTER (palette + time-of-day quality) + ATMOSPHERIC PARTICLES (drifting petals / pollen / snow / embers / mist / dust / leaves) for the parallax-vista. 16-bit pixel-art register only.
+
+⚠️ LIGHTING CATEGORIES — distribute the 25 entries:
+  • ~5 GOLDEN-HOUR — warm golden amber light, long pixel-shadows
+  • ~4 BLUE-HOUR / TWILIGHT — cool-blue twilight, transitioning palette
+  • ~3 STARLIT — cool-blue night ambient
+  • ~3 MIDDAY — bright golden midday light
+  • ~3 DAWN — soft cool-warm dawn light
+  • ~3 STORM-LIT / DRAMATIC — pixel-lightning illumination
+  • ~2 AURORA-LIT — multi-color aurora ambient
+  • ~2 VOLCANIC-LIT — glowing-orange volcanic ambient
+
+⚠️ ATMOSPHERIC PARTICLE CATEGORIES — distribute across the entries:
+  • Drifting cherry-blossom petals
+  • Drifting wildflower petals
+  • Drifting dandelion-seed fluff
+  • Drifting pollen-motes
+  • Falling snow-flurries
+  • Drifting embers / ash
+  • Drifting mist-bands
+  • Drifting dust-motes
+  • Falling autumn-leaves
+  • Drifting firefly-points
+  • Drifting cloud-puffs
+  • Drifting fog-bands
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC LIGHTING TIME-OF-DAY
+  - SPECIFIC ATMOSPHERIC PARTICLES
+  - PALETTE detail
+  - PIXEL register implied (chunky pixel-shadows, dithered ambient)
+
+🚫 STRICT BANS:
+  • NO landform / vista subject description (separate axis)
+  • NO sky / backdrop description (separate axis)
+  • NO smooth gradients / airbrushed effects
+  • NO IP / UI / sexualized content`,
+    touchpoints: [
+      'GOLDEN-HOUR WITH PETAL-DRIFT — warm-golden-amber lighting with long pixel-shadows on the vista, drifting cherry-blossom pink petals filling the foreground/midground parallax depth, magical golden-hour register',
+      'GOLDEN-HOUR WITH POLLEN — warm-golden-amber lighting with long pixel-shadows on the vista, drifting pollen-motes glowing in the warm light filling the parallax depth, peaceful summer register',
+      'GOLDEN-HOUR WITH DANDELION-FLUFF — warm-golden-amber lighting with long pixel-shadows on the vista, drifting dandelion-seed-fluff catching the warm light filling the parallax depth',
+      'GOLDEN-HOUR WITH MIST-BANDS — warm-golden-amber lighting with long pixel-shadows on the vista, drifting mist-bands in the distant parallax layer, peaceful magical register',
+      'GOLDEN-HOUR WITH LEAVES — warm-golden-amber lighting with long pixel-shadows on the vista, drifting autumn-leaves filling the foreground parallax, magical autumn register',
+      'BLUE-HOUR WITH FIREFLY-POINTS — cool-blue twilight ambient with warm-yellow lit-window-pixels in the distant village layer, drifting warm-yellow firefly-points in the midground parallax, magical twilight register',
+      'BLUE-HOUR WITH MIST — cool-blue twilight ambient transitioning to warm-yellow at the horizon, drifting mist-bands in the distant parallax layer, peaceful twilight register',
+      'BLUE-HOUR WITH SNOW-FLURRIES — cool-blue twilight ambient with falling snow-flurries filling the parallax depth, magical winter-twilight register',
+      'BLUE-HOUR WITH CLOUD-PUFFS — cool-blue twilight ambient with chunky-pixel-edge cloud-puffs drifting in the midground parallax, peaceful magical-twilight register',
+      'STARLIT WITH FIREFLIES — cool-blue starlit night ambient with drifting warm-yellow firefly-points in the foreground/midground parallax, magical night register',
+      'STARLIT WITH MIST — cool-blue starlit night ambient with drifting mist-bands in the distant parallax layer, peaceful magical-night register',
+      'STARLIT WITH FALLING-SNOW — cool-blue starlit night ambient with falling snow-flurries filling the parallax depth, magical winter-night register',
+      'MIDDAY WITH POLLEN — bright golden midday lighting on the vista with sharp pixel-shadows, drifting pollen-motes catching the bright light filling the parallax depth',
+      'MIDDAY WITH CLOUD-PUFFS — bright golden midday lighting on the vista with sharp pixel-shadows, chunky-pixel-edge cloud-puffs drifting in the midground parallax, classic bright-day register',
+      'MIDDAY WITH BIRD-SILHOUETTES — bright golden midday lighting on the vista with sharp pixel-shadows, scattered tiny bird-silhouettes drifting through the upper-midground parallax, classic vista register',
+      'DAWN WITH MIST-BANDS — soft cool-warm dawn lighting with drifting mist-bands in the midground/distant parallax layer, magical fresh-morning register',
+      'DAWN WITH DEW-GLINTS — soft cool-warm dawn lighting with drifting pollen-and-dew glints catching the morning light, magical fresh-dawn register',
+      'DAWN WITH PETAL-DRIFT — soft cool-warm dawn lighting with drifting cherry-blossom pink petals filling the foreground parallax, magical fresh-spring-dawn register',
+      'STORM-LIT WITH LIGHTNING — dramatic dark-grey-blue lighting with pixel-lightning-bolt illuminating the vista, drifting storm-clouds in the upper parallax, dramatic ominous register',
+      'STORM-LIT WITH RAIN — dark-grey-blue lighting with falling rain-pixels filling the parallax depth, drifting storm-clouds in the upper parallax, dramatic atmospheric register',
+      'STORM-LIT WITH MIST — dark-grey-blue lighting with drifting mist-and-fog-bands filling the parallax depth, atmospheric stormy register',
+      'AURORA-LIT WITH SNOW — magical aurora ambient (pink-and-green-and-purple) illuminating the snowy vista, falling snow-flurries filling the parallax depth, magical arctic register',
+      'AURORA-LIT WITH MIST — magical aurora ambient illuminating the vista, drifting mist-bands in the distant parallax layer, magical arctic-aurora register',
+      'VOLCANIC-LIT WITH EMBERS — dramatic glowing-orange volcanic ambient illuminating the vista, drifting embers and ash filling the parallax depth, dramatic hellish register',
+      'VOLCANIC-LIT WITH ASH-FALL — dramatic glowing-orange volcanic ambient illuminating the vista, falling ash-particles filling the parallax depth, dramatic ominous-volcanic register',
+    ],
+    instructions: `Each entry is ONE specific LIGHTING + ATMOSPHERIC PARTICLES combination, 25-50 words. Format: "LIGHTING + PARTICLES CAPS — time-of-day lighting + specific atmospheric particles + palette + pixel register". MANDATORY — (a) lighting time-of-day, (b) atmospheric particles, (c) palette, (d) pixel register implied. NO landform description. NO sky / backdrop description. NO smooth gradients. NO IP/UI/sexual. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  pixelbot_epic_vista_parallax_silhouette: {
+    format: 'simple',
+    theme: `40%-GATED PARALLAX SILHOUETTE for the PixelBot epic-vista path. Each entry describes ONE specific tiny optional silhouette woven into a parallax layer of the vista — bird / airship / caravan / traveler / dragon / boat / etc. NEVER the focal subject. Each entry 20-40 words.
+
+⚠️ THE BAR: every entry is a TINY scale silhouette in one of the parallax layers (foreground edge / middle / distant) that adds story-flavor WITHOUT competing with the vista. Scale: small enough that you'd miss it on a casual scroll-past.
+
+🚫 STRICT BANS: NO IP / UI / sexualized / focal-subject (the silhouette must be SMALL and woven into a parallax layer, never the hero).
+
+✓ SILHOUETTE CATEGORIES:
+  A. BIRDS — single bird / flock of birds / eagle / hawk
+  B. AIRSHIPS — FF6-style airship / dirigible / hot-air balloon
+  C. CARAVAN — caravan crossing the midground / travelers
+  D. SOLO TRAVELER — lone-traveler silhouette / monk / pilgrim
+  E. DRAGON — distant dragon in flight / sea-serpent
+  F. SAILING BOAT — distant boat on sea / fishing vessel
+  G. WAGON / CART — wagon crossing midground
+  H. DISTANT VILLAGE — tiny village silhouette in midground
+  I. ANIMAL — distant herd / wild beast
+  J. WIZARD-TOWER / RUIN — tiny ruin silhouette in distant`,
+    touchpoints: [
+      'SINGLE BIRD SILHOUETTE — single tiny bird-silhouette flying through the midground parallax layer, wings mid-flap, classic SNES-vista silhouette',
+      'FLOCK OF BIRDS — small flock of 5-8 tiny bird-silhouettes in V-formation flying through the upper-midground parallax layer, atmospheric vista detail',
+      'EAGLE SOARING — single tiny eagle-silhouette soaring through the upper-midground parallax with wings spread, classic vista detail',
+      'HAWK CIRCLING — single tiny hawk-silhouette circling in the upper-midground parallax above the vista, atmospheric detail',
+      'FF6-STYLE AIRSHIP — tiny airship-silhouette (FF6-style with twin-propellers) cruising through the middle parallax layer, atmospheric story-flavor',
+      'DIRIGIBLE PASSING — tiny dirigible-silhouette with gondola passing through the middle parallax layer, classic SNES-airship register',
+      'HOT-AIR BALLOON — tiny hot-air-balloon-silhouette drifting through the middle parallax layer, atmospheric peaceful detail',
+      'CARAVAN CROSSING — tiny caravan-of-3-4-wagons crossing through the middle parallax layer along a road, atmospheric travel-story register',
+      'TRAVELERS ON PATH — tiny silhouettes of 2-3 travelers walking along a path in the middle parallax layer, atmospheric story-detail',
+      'LONE TRAVELER WITH PACK — tiny lone-traveler-silhouette with backpack walking along the foreground parallax-edge path, atmospheric story-detail',
+      'MONK ON PILGRIMAGE — tiny robed monk-silhouette walking along a path in the middle parallax layer, atmospheric pilgrim register',
+      'PILGRIM AT VANTAGE — tiny pilgrim-silhouette standing at a vantage in the middle parallax layer looking out, atmospheric story moment',
+      'DISTANT DRAGON IN FLIGHT — tiny dragon-silhouette in flight through the upper parallax layer with wings spread, atmospheric mythic register',
+      'SEA-SERPENT — tiny sea-serpent-silhouette emerging from the sea in the middle parallax layer, atmospheric mythic register',
+      'SAILING BOAT ON SEA — tiny sailing-boat-silhouette on the distant sea in the middle parallax layer, classic vista detail',
+      'FISHING VESSEL — tiny fishing-vessel-silhouette with rigging on the sea in the middle parallax layer, atmospheric coastal register',
+      'WAGON CROSSING BRIDGE — tiny wagon-silhouette crossing a bridge in the middle parallax layer, atmospheric travel-story register',
+      'CART ON ROAD — tiny cart-silhouette with traveler on a road in the middle parallax layer, atmospheric travel-story detail',
+      'DISTANT VILLAGE — tiny village-silhouette with rooftops and smoke-curling visible in the distant parallax layer, atmospheric world-detail',
+      'DISTANT CASTLE — tiny castle-silhouette with spires visible in the distant parallax layer, atmospheric fantasy-world detail',
+      'DISTANT HERD — tiny herd-of-creatures (deer / horse / etc.) in the middle parallax layer, atmospheric wildlife-detail',
+      'WILD BEAST AT EDGE — tiny wild-beast-silhouette (wolf / lion / bear) at the foreground parallax-edge looking out, atmospheric wildlife-detail',
+      'WIZARDS TOWER DISTANT — tiny wizards-tower-silhouette on a distant peak in the distant parallax layer, atmospheric fantasy register',
+      'ANCIENT RUIN — tiny ancient-ruin-silhouette (crumbled tower / fallen-arch) in the distant parallax layer, atmospheric explorer register',
+      'LIGHTHOUSE BLINKING — tiny lighthouse-silhouette with blinking-light on a distant coastal point in the middle parallax layer, atmospheric coastal detail',
+    ],
+    instructions: `Each entry is ONE specific TINY PARALLAX SILHOUETTE, 20-40 words. Format: "SILHOUETTE NAME CAPS — silhouette type + which parallax layer + size + atmospheric flavor". MANDATORY — (a) silhouette type, (b) parallax layer placement, (c) TINY scale, (d) atmospheric story-flavor. NO focal-subject. NO IP/UI/sexual. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // PixelBot recipes go here — one entry per bespoke pool.
   // Each entry: { format: 'simple', theme: '...', touchpoints: [...], instructions: '...' }
   // See BOT_SCENE_QUALITY_PLAYBOOK.md "How to seed pools" section.
