@@ -13201,6 +13201,105 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE DRYAD — preserve her stacked exotic features unmistakably. Then expression. Then gesture. Then composition framing. Then adornment. Then forest backdrop softly behind. Then lighting + weather. Then magical flavor close to her face.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_FAIRY_COURT: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      court_subject,
+      ceremonial_moment,
+      composition,
+      regalia,
+      forest_backdrop,
+      lighting,
+      weather,
+      magical_flavor,
+      foreground_anchor,
+      sacred_companion,
+    } = slots;
+
+    const companionSection = sacred_companion
+      ? `\n\n━━━ SACRED COMPANION (a single sacred animal attending the court) ━━━\n${sacred_companion}\n\nA sacred forest creature (white stag / raven / owl / fox / hare) attending the court — knelt before the queen, perched on her shoulder, sitting at her feet. Woven into the scene at NORMAL scale (the queen is adult-sized, the animal is its natural size — NOT a tiny-fae scale companion).`
+      : '';
+
+    return `You are writing ONE Flux prompt for a FAIRY COURT painting in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt.
+
+1. THE COURT IS THE SUBJECT — either a SOLITARY REGAL QUEEN (full-body or three-quarter-body framing, body fills 40-65% of frame) OR a SMALL COURT of 2-5 figures with the queen at center fanning into attendants. NEVER a tight close-up portrait (that's dryad-portrait). NEVER tiny-fairy scale (that's tiny-fae). NEVER a wide landscape with tiny figure.
+
+2. The queen wears EVERY feature listed (the skin, the hair, the gown, the crown/diadem, the magical signature). Mythic regal beauty, NOT human-model beauty. 5+ stacked features must visibly land.
+
+3. THE THRONE / SETTING IS GROWN, NEVER BUILT. Moss-and-root throne, sacred-stone-circle, fern-grotto, wisteria-archway. NO carved stone thrones, NO castle architecture, NO masonry.
+
+4. CEREMONIAL STILLNESS — solemn, dignified, blessing, processional moment. NEVER posing for camera, NEVER eye-contact-with-viewer.
+
+Open your prompt with the court description. The court opens; everything else is THEIR SACRED GROVE.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE COURT (queen + attendants) ━━━
+${court_subject}
+
+Preserve every regal feature unmistakably. Mythic noble beauty. NEVER posing, NEVER looking at the viewer. The court is composed and ancient.
+
+━━━ 2. CEREMONIAL MOMENT (what's happening) ━━━
+${ceremonial_moment}
+
+The captured moment — blessing, slow procession, extending hand to a sacred creature, receiving an offering, silent watching. Solemn, dignified, ceremonial register.
+
+━━━ 3. COMPOSITION (3/4 to full-body framing) ━━━
+${composition}
+
+The court occupies 40-65% of the frame at body-scale. The grove wraps around them as natural backdrop.
+
+━━━ 4. REGALIA (crown / accessories / staff) ━━━
+${regalia}
+
+A specific regal accessory or held object — antler-crown / gold-leaf circlet / diadem / orb-of-light / staff / cup. Painted with mythic detail.
+
+━━━ 5. FOREST BACKDROP (sacred grove around them) ━━━
+${forest_backdrop}
+
+A specific sacred-grove enchanted-forest backdrop wrapping the court — ancient oak / wisteria-cascade / standing-stone-circle / fern-grotto / yew-grove. Atmospheric depth fading to soft painted distance.
+
+━━━ 6. LIGHTING (court-light register) ━━━
+${lighting}
+
+━━━ 7. WEATHER (air condition + drifting accents) ━━━
+${weather}
+
+━━━ 8. MAGICAL FLAVOR (royal magic signature) ━━━
+${magical_flavor}
+
+Royal magic visible: butterflies orbiting the crown, soft amber halo at her shoulders, drifting petals, glowing pollen, will-o-wisps trailing the procession.
+
+━━━ 9. FOREGROUND ANCHOR (closest depth element) ━━━
+${foreground_anchor}
+
+A specific tactile element near the camera bringing 3-tier depth — hanging vine, fern-cluster, hanging-moss curtain, drifting petals close to camera.
+${companionSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
+
+━━━ HARD BANS ━━━
+- NO castle / built architecture / stone-throne (the court lives in a GROWN GROVE — moss-and-root throne, fern-grotto, sacred-stone-circle ONLY)
+- NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
+- NO sexualized framing — focus is regal-otherworldly beauty
+- NO bare chest, NO nipples, NO topless
+- NO modern objects, NO realistic non-magical humans
+- NO violence / NO threatening / NO weapons
+- NO crowds beyond 5 figures
+- NO tight head-and-shoulders portrait (this path is body-scale, not face-close)
+- NO tiny-fairy scale (that's tiny-fae path)
+- NO cartoon / chibi / mascot rendering
+- NO storm / lightning / dark-grey-blue (peaceful enchanted register only)
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE COURT — preserve queen's regal features and attendant arrangement unmistakably. Then ceremonial moment. Then composition framing. Then regalia. Then sacred-grove backdrop. Then lighting + weather. Then royal magic flavor. Then foreground anchor.${sacred_companion ? ' Then sacred companion woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon

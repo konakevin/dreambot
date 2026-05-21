@@ -1905,6 +1905,30 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_FAIRY_COURT: {
+    description:
+      'PATH-BESPOKE — FaeBot fairy-court (2026-05-21 axis-system migration). Regal noble fae court — solo queen OR small group (1-5 figures) caught in candid ceremonial moments. Three-quarter to full-body framing (40-65% of frame). Sacred-grove THRONE (moss-and-root, NEVER built architecture). Royal register: ancient, ceremonial, regal-still. Same painterly enchanted forest as dryad-portrait. 10 axes (9 always-on + 1 gated sacred_companion): court_subject / ceremonial_moment / composition / regalia / forest_backdrop / lighting / weather / magical_flavor / foreground_anchor + sacred_companion (40%-gated white stag / raven / owl / fox).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'court_subject',
+        'ceremonial_moment',
+        'composition',
+        'regalia',
+        'forest_backdrop',
+        'lighting',
+        'weather',
+        'magical_flavor',
+        'foreground_anchor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'sacred_companion', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_EPIC_VISTA: {
     description:
       'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Nat-Geo-best-of-best caliber real-Earth landscape: the SUBJECT IS THE WOW. Larger than life via geology + lighting + weather amplification, never AI-fake / sci-fi / fantasy. R2 (2026-05-20) pivoted from R1 3-tier (subject + foreground prop) to SCENE-AS-HERO — subject dominates 60-70%+ of frame, no competing foreground props. R1 lessons retained: PEAK LIGHT MOMENT + MOMENT IN MOTION template blocks, phenomenon-lighting compatibility, biome-tagged subject pool. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. R1 foreground_anchor axis + matchTagsFromSlot composer extension preserved as infrastructure for future paths that need them. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
@@ -2009,6 +2033,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  YUMBOT_MINI_CHEF: {
+    description:
+      'PATH-BESPOKE — YumBot mini-chef (2026-05-21 12-axis). Kawaii kitchen scenes — 5 kawaii food-characters wearing tiny chef outfits (mini chef hats, aprons) gathered in a kawaii kitchen preparing a kawaii dish. Natural family-portrait cluster with slight pose variation. Full 12-axis architecture: scene_type (composed pose-varied cluster + activity), kitchen_backdrop (cottage / patisserie / sushi-bar / Italian trattoria / French country / mochi-pounding / etc.), 2 signature kitchen props, terrain (counter / floor surface), sky (kitchen ceiling / hanging utensils / chandeliers), camera, lighting, time_of_day, atmosphere (flour dust / steam / sparkle), food_inhabitants (5 from FOOD_CATALOG tagged BAKERY), companion (1 — sugar-mouse / dough-spirit / spice-fairy / etc.), dish_being_prepared (1 — centerpiece dish in progress).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['scene_type', 'kitchen_backdrop', 'signature', 'terrain', 'sky', 'camera', 'lighting', 'time_of_day', 'atmosphere', 'food_inhabitants', 'companion', 'dish_being_prepared'],
+    },
+    pickN: { signature: 2, food_inhabitants: 5 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   YUMBOT_CHECKERED_TABLETOP: {
     description:
       'PATH-BESPOKE — YumBot checkered-tabletop (2026-05-20). bex.ai-modeled. Kawaii food/drink hero on a pastel gingham/checkered tablecloth, cluster of smiling mini-food-friends piled around AND ON TOP. 3/4 tabletop or overhead-flatlay. Pop-Mart-collectible-grid/sticker-card feel. 7 path-bespoke axes.',
@@ -2030,6 +2068,34 @@ const ARCHETYPES = {
       universal: [],
       bot: [],
       path: ['subject', 'flowers', 'lighting', 'atmosphere', 'hero_feature', 'sky_layer'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  EARTHBOT_REEF_PARADISE: {
+    description:
+      'PATH-BESPOKE — EarthBot reef-paradise (2026-05-21 R2 PIVOT — name kept but content retargeted from underwater-coral to ISLAND-BAY). Kevin hearted a half-and-half waterline shot of a dramatic island bay and confirmed the coral identity was dead. New identity: PRETTY ISLAND-BAY / COASTAL VIEW with crystal-turquoise water + dramatic shoreline + sun-burst sky. Half-and-half waterline shots dominate compositional mode (~50%), with pure above-water bay views (~35%) and underwater-looking-up at shore silhouettes (~15%). NO coral cathedrals, NO fish density, NO reef-interior swim-throughs. 5 always-on path-bespoke axes (bay_setting, shoreline_drama, water_quality, sky_drama, composition) + 1 conditional 30%-gated foreground_element. Generic morphological descriptions ONLY across all pools — NO named places anywhere (LESSON 7).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['bay_setting', 'shoreline_drama', 'water_quality', 'sky_drama', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'foreground_element', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  EARTHBOT_GEOLOGICAL_WONDER: {
+    description:
+      'PATH-BESPOKE — EarthBot geological-wonder (2026-05-21 axis-system migration). Earths raw geological architecture as art — covers BOTH scales: intimate cave interiors (crystal caves / amethyst geodes / lava tubes / ice caves / slot canyons) AND epic outdoor vistas (hoodoos / salt flats / basalt cliffs / sandstone waves / travertine terraces / fresh lava flows). 6 path-bespoke axes — 5 always-on (subject, lighting, atmosphere, mineral_color, focal_anchor) + 1 conditional 30%-gated phenomenon (aurora through skylight / rainbow over salt flat / snow dust on hoodoos / eruption plume backlight). All pools bespoke because EPIC_VISTA pools are outdoor-only and cannot handle cave-interior lighting/atmosphere. The subject pool is scale-tagged (intimate / epic) so the template knows which compositional register to use. NO sci-fi, NO fantasy bioluminescence beyond real species (fungi / minerals are real), NO humans, NO floating-anything.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['subject', 'lighting', 'atmosphere', 'mineral_color', 'focal_anchor'],
     },
     pickN: {},
     conditionalLayer: { slot: 'phenomenon', gate: 0.3 },

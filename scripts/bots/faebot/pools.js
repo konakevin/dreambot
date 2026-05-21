@@ -88,5 +88,16 @@ module.exports = {
   FAEBOT_DRYAD_PORTRAIT_WEATHER: loadIfExists('faebot_dryad_portrait_weather'),
   FAEBOT_DRYAD_PORTRAIT_MAGICAL_FLAVOR: loadIfExists('faebot_dryad_portrait_magical_flavor'),
   FAEBOT_DRYAD_PORTRAIT_FOREGROUND_ANCHOR: loadIfExists('faebot_dryad_portrait_foreground_anchor'),
+  // ─── fairy-court axis-system pools (2026-05-21) ───
+  FAEBOT_FAIRY_COURT_SUBJECT: loadIfExists('faebot_fairy_court_subject'),
+  FAEBOT_FAIRY_COURT_CEREMONIAL_MOMENT: loadIfExists('faebot_fairy_court_ceremonial_moment'),
+  FAEBOT_FAIRY_COURT_COMPOSITION: loadIfExists('faebot_fairy_court_composition'),
+  FAEBOT_FAIRY_COURT_REGALIA: loadIfExists('faebot_fairy_court_regalia'),
+  FAEBOT_FAIRY_COURT_FOREST_BACKDROP: loadIfExists('faebot_fairy_court_forest_backdrop'),
+  FAEBOT_FAIRY_COURT_LIGHTING: loadIfExists('faebot_fairy_court_lighting'),
+  FAEBOT_FAIRY_COURT_WEATHER: loadIfExists('faebot_fairy_court_weather'),
+  FAEBOT_FAIRY_COURT_MAGICAL_FLAVOR: loadIfExists('faebot_fairy_court_magical_flavor'),
+  FAEBOT_FAIRY_COURT_FOREGROUND_ANCHOR: loadIfExists('faebot_fairy_court_foreground_anchor'),
+  FAEBOT_FAIRY_COURT_SACRED_COMPANION: loadIfExists('faebot_fairy_court_sacred_companion'),
   VIBE_COLOR,
 };

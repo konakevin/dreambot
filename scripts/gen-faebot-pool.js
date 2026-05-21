@@ -4791,6 +4791,569 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   },
 
 
+  // ─── fairy-court path (2026-05-21 axis-system migration, 10 axes) ───
+  faebot_fairy_court_subject: {
+    format: 'simple',
+    theme: `COURT SUBJECT (queen + optional attendants) for FaeBot's fairy-court path. Each entry describes ONE specific composition of the fae court — either a SOLITARY REGAL QUEEN or a SMALL COURT of 2-5 figures with the queen at center. Each entry 50-90 words. The queen has 5+ stacked exotic regal features.
+
+⚠️ THE BAR: each entry reads as a single COURT composition. Solo queen OR small group (1-5 figures). 5+ stacked exotic features on the queen (species + skin + plant-merged hair + regal gown + crown/diadem + magical signature). NEVER posing for camera. NEVER eye-contact.
+
+⚠️ COURT-SIZE DISTRIBUTION (across 25 entries):
+  • ~12 SOLO QUEEN — alone on her throne / standing alone in sacred circle / walking through grove
+  • ~6 QUEEN + 1 ATTENDANT — lady-in-waiting holding her train / 1 attendant kneeling at her feet
+  • ~5 QUEEN + 2-3 ATTENDANTS — processional / small court arrangement
+  • ~2 QUEEN + 4 ATTENDANTS — fuller small court (max 5 total figures)
+
+⚠️ EVERY ENTRY MUST include AT LEAST 5 stacked exotic features on the queen:
+  - SPECIES LINEAGE — fae queen / sidhe / Tylwyth Teg / forest queen / dryad-queen / hamadryad-queen / oak-queen / autumn-queen / moon-queen
+  - SKIN TREATMENT — luminous pearl / porcelain-pale with bioluminescent freckles / translucent constellation-glow / moss-tinted gold-olive / silver-bark patches
+  - PLANT-MERGED HAIR — living vines woven with hundreds of tiny flowers / cascading silver hair threaded with gold-leaf / dark moss with violet wisteria / silver birch-bark strands with autumn leaves
+  - REGAL GOWN — flowing gown of woven petals with long trailing leaf-train / layered robe of overlapping willow-leaves / ceremonial robes of woven oak-leaves with embroidered vine-cord / regal cloak of fern-fronds / floor-length gown of moss and dew-spider-silk
+  - CROWN/DIADEM (one) — living antler-crown sprouting tiny leaves / diadem of woven vines with a single luminous stone / gold-leaf circlet of branching laurel / coronet of tiny living butterflies / ivy-and-moss diadem
+  - ANATOMICAL EXTRAS — tall sapphire-veined antlers / pointed ears / luminescent freckles / glowing third eye / regal stature
+  - MAGICAL SIGNATURE — soft amber halo / glowing-pearl skin / pollen-glow at her shoulders / will-o-wisp orbit / butterflies orbiting her crown
+
+⚠️ ATTENDANT DETAIL (when present):
+  - Attendants are also fae — slender, otherworldly, ceremonial register
+  - "Lady-in-waiting holding her train" / "2 attendants fanning behind her" / "1 sidhe kneeling at her feet" / "3 attendants in slow procession"
+  - Attendants are SMALLER than the queen in visual weight / less elaborate adornment
+
+🚫 STRICT BANS:
+  • NO castle / built architecture (separate axis handles setting)
+  • NO eye-contact-with-viewer
+  • NO posing-for-camera / NO model-poses
+  • NO sexualized framing
+  • NO bare chest, NO nipples, NO topless
+  • NO violence / NO weapons / NO threatening register
+  • NO crowds beyond 5 total figures`,
+    touchpoints: [
+      'A fae queen seated upon a moss-throne grown into ancient oak roots, skin like luminous pearl with subtle vine-pattern marks, floor-length hair of living vines woven with hundreds of tiny white flowers, flowing gown of woven petals with a long trailing leaf-train, living antler-crown sprouting tiny leaves, soft amber halo at her shoulders, gaze cast gently downward',
+      'Three Tylwyth Teg sidhe in slow procession through a moonlit wisteria-archway, the queen at center with cascading silver hair threaded with gold-leaf and dewdrop-pearls, layered robe of overlapping willow-leaves with vine-belted waist and floor-length skirt, diadem of woven vines with a single luminous stone, two attendants flanking',
+      'The fae queen standing alone in a sacred-stone-circle at twilight, porcelain-pale skin with bioluminescent freckles tracing her collarbone, elaborate braided hair of dark moss with violet wisteria flowing past her waist, regal cloak of fern-fronds over a leaf-bodice and floor-sweeping skirt, ivy-and-moss diadem',
+      'A queen on her moss-throne extending one luminous hand outward, translucent skin with constellation-glow beneath, long pearl-white hair with a coronet of tiny living butterflies, ceremonial robes of woven oak-leaves with embroidered vine-cord, tall sapphire-veined antlers, eyes lowered in gentle blessing',
+      'A fae queen walking slowly through her court in a fern-grotto, a lady-in-waiting holding the train of her gown, moss-tinted gold-olive skin, floor-length hair of silver birch-bark strands woven with autumn leaves, long elegant gown of moss and dew-spider-silk, gold-leaf circlet of branching laurel',
+      'A solo autumn-queen seated upon a moss-and-root throne, smooth golden-amber skin, hair of cascading orange-and-red maple-leaves threaded with bronze-vine, regal autumn-leaf cloak over a leaf-bodice and floor-length skirt, branching antlers crowned with autumn-leaves, soft amber halo',
+      'A moon-queen standing alone in a moonlit clearing, translucent silver-blue skin with constellation-freckles, waist-long silver hair threaded with white moonflowers, flowing gown of moonlit silk-petal with a silver-vine train, diadem of woven moonflowers with a single pearl, gentle pearl-glow',
+      'Four sidhe in a small court — queen at center with two ladies-in-waiting behind and one sidhe kneeling at her feet, queen has cascading dark-moss hair with violet wisteria, regal cloak of fern-fronds, antler-crown woven with honeysuckle, eyes lowered in ceremonial blessing',
+      'A solo oak-queen on an ancient moss-and-root throne, bark-textured shoulders fading to smooth moss-tinted skin, floor-length hair of living vines woven with tiny yellow blossoms, ceremonial leaf-petal gown with a long trailing fern-train, living antler-crown branching with fresh oak-leaves',
+      'A solo dryad-queen standing in a sacred clearing with hands lifted in blessing, porcelain-pale skin with constellation freckles, waist-long hair of pale willow-fronds threaded with white moonflowers, layered robe of overlapping willow-leaves with vine-belted waist, third eye glowing softly on her forehead',
+      'A queen seated cross-legged on a moss-cushion before her court, two ladies-in-waiting standing behind her in ceremonial robes, queen with luminous pearl skin and hair of dark moss with violet wisteria, regal cloak of fern-fronds, antler-crown woven with honeysuckle',
+      'A solo hamadryad-queen on her throne grown into ancient yew-roots, mottled silver-and-green skin, dark yew-needle hair threaded with crimson yew-berries, ceremonial robes of yew-bough with woven-vine belt, dark-vine diadem with a single luminous stone',
+      'Three sidhe walking in slow procession through an oak-cathedral grove, queen at center holding a glowing-orb in her painted cupped palms, two attendants flanking, queen with cascading silver hair and a coronet of butterflies, layered robe of willow-leaves',
+      'A solo flower-queen standing alone in a meadow-clearing within the forest, porcelain skin with faint pink undertones, waist-long hair of cherry-blossom branches with white moonflowers, draped bodice of overlapping rose-petals over a floor-length petal-skirt, antler-crown crowned with foxglove-bells',
+      'A queen seated on her moss-throne with one painted hand raised in painted blessing-gesture, luminous skin radiating soft warm light, painted antler-crown of branching deer-antlers wrapped with painted ivy, painted regal robe of layered painted oak-leaves, painted soft amber halo',
+      'A solo fae-queen walking through a wisteria-cascade arbor alone, porcelain-glowing skin, painted waist-long silver hair threaded with painted gold-leaf, painted layered painted robe of painted willow-leaves with painted floor-length train, painted diadem of painted woven-vine',
+      'A queen with one attendant kneeling at her painted feet offering a painted floating-orb of painted magical-light, queen with painted moss-tinted gold-olive skin and painted floor-length hair of painted silver birch-bark, painted regal robe of painted leaf-and-fern',
+      'A solo Tylwyth Teg queen standing painted alone at the center of a painted sacred-stone-circle at painted twilight, painted porcelain skin with painted constellation-freckles, painted braided painted dark-moss hair, painted ceremonial robe of painted woven-petal',
+      'Four sidhe in a small painted court — painted queen at center painted seated, painted three attendants painted standing behind her in painted ceremonial half-circle, painted queen with painted floor-length hair of painted living-vines',
+      'A solo autumn-court queen with her painted leaf-cloak trailing behind her painted form, painted golden-amber skin, painted hair of painted cascading autumn-leaves, painted regal painted leaf-cloak over a painted floor-length painted leaf-gown, painted antler-crown of painted autumn-leaves',
+      'A queen on her painted throne with painted two attendants behind her each painted holding a single painted glowing-orb, painted queen with painted luminous pearl-skin and painted floor-length painted dark-moss hair, painted regal painted petal-gown',
+      'A solo winter-queen painted standing alone in a painted snow-clearing within the painted forest, painted translucent pearl-skin, painted waist-long painted silver-frost hair, painted regal painted icicle-petal cloak, painted diadem of painted frosted-leaves',
+      'A solo painted spring-queen painted standing alone in a painted blossoming clearing, painted porcelain-pink-glowing skin, painted hair of painted cherry-blossom branches, painted regal painted petal-cloak over a painted floor-length painted blossom-gown, painted antler-crown of painted cherry-blossom buds',
+      'A painted summer-court queen on her painted moss-throne with painted three attendants painted standing behind her in painted ceremonial half-circle, painted queen with painted golden-bronze skin and painted floor-length painted golden-leaf hair, painted regal painted sunflower-petal gown',
+      'A solo painted moonlit-court queen painted walking slowly through a painted moonlit grove painted alone, painted silver-blue painted skin, painted waist-long painted silver-moon hair, painted regal painted moonflower-petal cloak, painted diadem of painted moonflowers',
+    ],
+    instructions: `Each entry is ONE unified COURT SUBJECT description, 50-90 words. Format: prose, comma-separated phrases. MANDATORY — (a) court size (solo / queen+1 / queen+2-3 / queen+4 attendants), (b) 5+ stacked exotic features on queen (species + skin + plant-hair + gown + crown + magical signature), (c) attendant arrangement if present. NO castle / built architecture. NO eye-contact. NO posing. NO sexualized. NO bare chest. NO violence. NO crowds beyond 5. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_ceremonial_moment: {
+    format: 'simple',
+    theme: `CEREMONIAL MOMENT for FaeBot's fairy-court path. Each entry describes ONE specific solemn / ceremonial moment captured in the painted court scene. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC ceremonial / dignified moment — blessing, procession, extending hand, receiving offering, silent watching. NEVER tense, NEVER violent, NEVER posing.
+
+⚠️ MOMENT CATEGORIES (across 25 entries):
+  • ~5 BLESSING — palms raised in blessing / hands lifted in benediction / casting a sacred-spell
+  • ~4 PROCESSION — walking in slow procession / passing through arch / following a path
+  • ~4 EXTENDING HAND — extending hand toward sacred animal / offering an open palm / reaching for a floating orb
+  • ~3 RECEIVING — accepting an offering from a kneeling attendant / receiving a flower / accepting a glowing-orb
+  • ~3 SILENT WATCHING — gazing into a sacred pool / watching a distant point / contemplating the grove
+  • ~3 SEATED CEREMONY — seated on throne in audience / consulting with attendant / holding court
+  • ~3 STANDING STILL — standing alone in stone-circle / motionless watching / quiet vigil
+  • ~1 RARE — kneeling herself in painted reverence / offering blessing to the grove
+
+🚫 STRICT BANS:
+  • NO posed-for-camera moments
+  • NO eye-contact with viewer
+  • NO violence / weapons / aggression
+  • NO creature description (separate axis)`,
+    touchpoints: [
+      'Palms raised in gentle blessing over a small offering of moss and wildflowers at her painted feet, eyes lowered in painted serene focus',
+      'Hands lifted in benediction-gesture toward a painted glowing-light at chest level, painted soft-amber halo at her shoulders',
+      'Casting a sacred-spell with painted fingertips trailing painted pollen-light, painted eyes half-closed in concentration',
+      'Walking in slow painted procession through her painted court, painted gown trailing behind, painted soft step',
+      'Passing through a painted wisteria-arch with painted attendants flanking, painted ceremonial register, painted slow gait',
+      'Following a painted moss-path through a painted ancient grove with painted slow ceremonial step, painted hands resting at her painted sides',
+      'Painted three figures in painted slow procession through a painted moonlit clearing, painted dignified register, painted equal step',
+      'Extending one painted hand toward a painted small white-stag knelt before her painted throne, painted gentle gesture of painted recognition',
+      'Offering an painted open painted palm toward a painted floating-orb at painted chest level, painted soft amber halo at her painted shoulders',
+      'Reaching for a painted will-o-wisp painted floating before her painted face, painted gentle painted curiosity register',
+      'Painted accepting a painted offering of painted flowers from a painted kneeling attendant, painted gentle painted reception register',
+      'Painted receiving a painted single glowing-bloom from a painted attendant in painted ceremonial moment',
+      'Painted accepting a painted glowing-orb-of-magic from a painted kneeling sidhe, painted painted reverent painted moment',
+      'Painted gazing painted into a painted sacred pool at her painted feet with painted eyes half-closed in painted contemplation',
+      'Painted watching a painted distant painted point through painted the painted canopy, painted serene painted silent vigil',
+      'Painted contemplating the painted painted ancient grove around her with painted lowered painted gaze, painted quiet painted reverence',
+      'Painted seated on her painted moss-throne in painted painted audience, painted hands painted resting on the painted throne-arms, painted ceremonial painted register',
+      'Painted consulting painted gently with a painted kneeling attendant at her painted side, painted gentle painted gesture of painted hand near painted attendant',
+      'Painted holding court painted with painted three painted attendants in painted half-circle painted before her painted throne, painted ceremonial register',
+      'Painted standing alone painted in a painted sacred painted stone-circle, painted hands painted clasped softly painted before her, painted dignified painted register',
+      'Painted motionless painted watching painted from the painted edge of a painted clearing, painted ceremonial painted vigil register',
+      'Painted quiet painted vigil with painted eyes painted closed, painted hands painted at her painted sides, painted serene painted register',
+      'Painted kneeling painted herself in painted reverence at the painted base of an painted ancient tree, painted offering painted painted blessing register',
+      'Painted offering painted blessing to the painted grove itself with painted painted hands painted raised upward, painted serene painted register',
+      'Painted painted both painted hands cupped painted at painted chest painted cradling a painted glowing-painted orb of painted magic, painted serene painted moment',
+    ],
+    instructions: `Each entry is ONE specific CEREMONIAL MOMENT, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific solemn/ceremonial action, (b) NEVER eye-contact, (c) dignified register. NO posing. NO violence. NO creature description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_composition: {
+    format: 'simple',
+    theme: `COURT COMPOSITION (3/4 to full-body framing) for FaeBot's fairy-court path. Each entry describes ONE specific framing spec for the court. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC composition spec — 3/4-body / full-figure / wide-medium-with-attendants / mid-shot with attendant. Court occupies 40-65% of frame at body-scale. NEVER tight close-up. NEVER tiny-scale.
+
+⚠️ COMPOSITION CATEGORIES (across 25 entries):
+  • ~6 THREE-QUARTER BODY — 3/4 body framing of queen on throne or standing
+  • ~5 FULL-FIGURE — full-body standing queen / processional
+  • ~4 PROCESSIONAL — wide-medium framing of queen + attendants walking
+  • ~3 QUEEN + KNEELING ATTENDANT — queen with one figure kneeling in foreground
+  • ~3 LOW-ANGLE LOOKING UP — slight low-angle at throne / standing queen
+  • ~2 OVER-SHOULDER — viewer behind attendant, queen visible across the frame
+  • ~2 SACRED-CIRCLE WIDE — queen alone in stone-circle with full-figure framing
+
+⚠️ EVERY entry MUST include:
+  - FRAMING SPEC (3/4-body / full-figure / wide-medium / etc.)
+  - COURT OCCUPATION PERCENTAGE (40-65% of frame)
+  - POSE ORIENTATION
+
+🚫 STRICT BANS:
+  • NO tight close-up / portrait scale
+  • NO tiny-fairy scale
+  • NO landscape-with-figure (figure must dominate)
+  • NO creature description (separate axis)`,
+    touchpoints: [
+      'Three-quarter-body framing of the queen on her moss-throne, queen fills 50% of frame, ancient grove framing the throne',
+      'Full-figure shot of the queen standing in a sacred-stone-circle at twilight, queen fills 55% of frame, ancient stones around her',
+      'Wide-medium framing of a small processional (queen + 2 attendants) walking through a wisteria-archway, group fills 55% of frame',
+      'Medium shot of queen seated, one attendant kneeling at her feet, queen fills 50% of frame, the kneeling figure smaller in foreground',
+      'Three-quarter shot from a slight low-angle (looking up at the throne), queen fills 60% of frame, antler-crown framing the canopy',
+      'Mid-shot of queen extending a hand toward a sacred animal knelt or perched before her, both fill 60% of frame together',
+      'Wide processional shot, queen at center with 2-4 fae fanning around her, all turned in the same direction, group fills 55% of frame',
+      'Full-body portrait of a solo regal fae walking slowly through her grove, body fills 55% of frame, hair and gown trailing behind',
+      'Three-quarter-body framing of solo queen on throne, hands resting on throne-arms, body fills 50% of frame, painted ceremonial register',
+      'Full-figure shot of queen alone in a fern-grotto, body fills 55% of frame, painted moss-floor at her painted feet',
+      'Wide-medium framing of queen + 1 lady-in-waiting (holding train), group fills 55% of frame, painted processional register',
+      'Three-quarter-body of queen seated with attendant kneeling beside her painted offering a glowing-orb, both fill 60% of frame',
+      'Full-figure of solo queen painted standing alone in a sacred clearing, body fills 50% of frame, painted dignified register',
+      'Wide processional shot with painted queen + 3 attendants walking in painted slow line, all fill 55% of frame',
+      'Mid-shot of painted queen seated with one painted attendant standing painted behind her, both fill 55% of frame',
+      'Slight low-angle full-figure of painted queen, painted antler-crown reaching into the painted canopy, body fills 60% of frame',
+      'Painted three-quarter-body framing of painted queen extending painted painted hand toward a painted floating-orb at painted chest level, painted body fills 50% of frame',
+      'Painted full-figure of painted queen at painted center of painted sacred-stone-circle, painted body fills 55% of frame, painted stones around her',
+      'Painted wide-medium framing of painted queen + painted 4 attendants in painted half-circle, painted group fills 55% of frame',
+      'Painted mid-shot of painted queen + painted 2 attendants painted seated together painted on painted moss-clearing, painted group fills 55% of frame',
+      'Painted over-shoulder framing from painted behind a painted attendant, painted queen visible across the painted frame, painted attendant in painted foreground',
+      'Painted over-shoulder painted framing painted past a painted kneeling sidhe, painted queen painted visible on her painted throne, painted attendant in painted foreground',
+      'Painted slight painted low-angle painted three-quarter-body of painted queen on her painted moss-throne, painted body fills 60% of frame, painted antlers reaching into painted canopy',
+      'Painted full-figure painted of painted solo painted queen painted standing alone in a painted painted moonlit painted clearing, painted body fills 55% of frame',
+      'Painted wide-medium painted framing of painted queen + painted 3 painted attendants painted in painted procession painted through painted oak-cathedral, painted group fills 55% of frame',
+    ],
+    instructions: `Each entry is ONE specific COURT COMPOSITION, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) framing spec, (b) court occupation %, (c) pose orientation. NO tight close-up. NO tiny-scale. NO landscape-with-figure. NO creature description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_regalia: {
+    format: 'simple',
+    theme: `REGALIA (crown / accessory / held object) for FaeBot's fairy-court path. Each entry describes ONE specific regal accessory or held object. Each entry 15-30 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC mythic regalia — natural materials, never metal-cast jewelry, never modern accessories. Antler-crowns / woven-vine diadems / gold-leaf circlets / orb-of-light / staff / cup. Painted with mythic detail.
+
+⚠️ REGALIA CATEGORIES (across 25 entries):
+  • ~6 CROWNS — antler-crown / woven-vine diadem / circlet / coronet
+  • ~5 STAVES / WANDS — gnarled-wood staff / vine-wound wand / branch-staff
+  • ~4 HELD ORBS — orb-of-light cradled in palms / single floating-orb at chest
+  • ~3 CUP / CHALICE — painted-leaf chalice / dewdrop-cup / moss-bowl
+  • ~3 SACRED OBJECT — single blooming staff / glowing-seed cradled / fern-frond
+  • ~2 SIGNATURE PENDANT — single pearl pendant / moonstone at her throat / glowing-amber pendant
+  • ~2 TRAIN / CAPE detail — cape clasp of leaf-and-vine / floor-length leaf-train
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC REGALIA TYPE (crown / staff / orb / etc.)
+  - MATERIAL (natural — moss / vine / leaf / wood / pearl / dewdrop / glowing-light)
+  - POSITION (on her head / held in hands / at her throat / etc.)
+
+🚫 STRICT BANS:
+  • NO metal jewelry / NO modern jewelry / NO gemstone-set crowns
+  • NO weapons / NO violence
+  • NO creature description (separate axis)
+  • NO oversized cartoon detail`,
+    touchpoints: [
+      'Painted living antler-crown sprouting tiny fresh oak-leaves and tiny blooms, painted natural mythic regalia detail',
+      'Painted diadem of woven dark-vines with a single luminous pearl-stone at the brow, painted mythic regal detail',
+      'Painted gold-leaf circlet of branching laurel-leaves crowning her painted hair, painted ceremonial register',
+      'Painted coronet of tiny living butterflies orbiting her painted brow, painted magical mythic register',
+      'Painted antler-crown of branching deer-antlers wrapped with painted ivy and painted small white-blooms, painted natural regalia',
+      'Painted woven-flower-crown of foxgloves and bluebells circling her painted head, painted spring-court register',
+      'Painted gnarled-wood staff held in her painted hand, painted weathered bark-detail with painted glowing-rune at the tip',
+      'Painted vine-wound wand held softly in her painted painted fingertips, painted woven-vine detail with painted glowing-seed at the tip',
+      'Painted branch-staff with painted blooming bloom at the tip, painted held lightly in her painted painted hand',
+      'Painted gnarled-staff with painted glowing-amber-stone at the top, painted ceremonial register',
+      'Painted simple painted wooden staff with painted ivy spiraling around it, painted natural mythic register',
+      'Painted orb-of-light cradled in her painted painted cupped palms, painted soft pearl-glow radiating outward',
+      'Painted single painted floating-orb at her painted painted chest level, painted soft pearl-light radiating outward',
+      'Painted glowing-orb of painted gentle pearl-light painted held in her painted painted open palm, painted painted magical register',
+      'Painted small painted glowing-globe painted floating at her painted painted brow, painted soft warm-amber-glow',
+      'Painted painted leaf-chalice held in her painted painted cupped hand, painted natural painted ceremonial register',
+      'Painted dewdrop-cup of painted painted hollow-leaf, painted reflective-clarity detail',
+      'Painted moss-bowl of painted hollow-stone, painted held in her painted painted painted hand',
+      'Painted single painted blooming-staff with painted painted lily blooming at the painted tip, painted held lightly',
+      'Painted painted glowing-seed cradled gently in her painted painted painted cupped palms, painted soft pearl-glow',
+      'Painted painted single painted fern-frond held painted softly in her painted painted hand, painted natural register',
+      'Painted painted single painted pearl-pendant at her painted painted throat on a painted painted woven-silk-cord',
+      'Painted painted moonstone painted pendant at her painted painted throat, painted painted pale luminous-glow',
+      'Painted painted single painted glowing-amber-pendant painted at her painted painted throat on a painted painted vine-cord',
+      'Painted painted floor-length painted leaf-train trailing painted behind her painted gown, painted painted leaf-cluster detail',
+    ],
+    instructions: `Each entry is ONE specific REGALIA, 15-30 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific regalia type, (b) natural material, (c) position. NO metal jewelry. NO weapons. NO creature description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_forest_backdrop: {
+    format: 'simple',
+    theme: `SACRED FOREST BACKDROP for FaeBot's fairy-court path. Each entry describes ONE specific sacred-grove enchanted-forest setting wrapping the court. Each entry 25-50 words.
+
+⚠️ THE BAR: each backdrop is an enchanted sacred-grove setting wrapping the court — ancient oak grove / wisteria-cascade arbor / standing-stone-circle / fern-grotto throne / yew-grove. Atmospheric depth fading to painted distance. NEVER built architecture.
+
+⚠️ BACKDROP CATEGORIES (across 25 entries):
+  • ~5 ANCIENT OAK CATHEDRAL — soaring oak-cathedral with dappled god-rays
+  • ~4 WISTERIA-CASCADE ARBOR — violet wisteria draping overhead like cathedral ceiling
+  • ~4 SACRED-STONE-CIRCLE — ancient standing-stones surrounding the queen
+  • ~3 FERN-GROTTO — moss-covered boulders cradling the court
+  • ~3 YEW-GROVE — twisted dark-green yew-trees ringing the clearing
+  • ~3 BIRCH-GLADE — pale slender birch-trunks framing the scene
+  • ~2 SACRED CLEARING — mossy-clearing in deep forest
+  • ~1 RARE — ancient mushroom-grove ring / bioluminescent glen
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC FOREST TYPE (named tree species + structural feature)
+  - 2+ SIGNATURE FEATURES (moss-covered roots / ancient stones / hanging vines)
+  - MULTI-TIER DEPTH
+
+🚫 STRICT BANS:
+  • NO castle / built architecture / stone-masonry / carved stones (standing-stones OK)
+  • NO modern setting
+  • NO creature description / regalia (separate axes)
+  • NO lighting / weather (separate axes)`,
+    touchpoints: [
+      'Ancient oak-cathedral grove with painted massive twisted gnarled trunks, painted moss-covered roots crossing the forest-floor, painted hanging-vines from above, painted dappled god-rays piercing canopy, painted multi-tier depth',
+      'Wisteria-cascade arbor with painted violet-wisteria racemes draping from above like a painted natural cathedral ceiling, painted moss-grown path through, painted gallery-tier ceremonial register',
+      'Sacred standing-stone-circle in painted moonlit clearing, painted ancient weathered stones ringing the queen, painted moss-floor at the painted stone-bases, painted atmospheric mist',
+      'Hidden fern-grotto cradled by painted moss-covered boulders, painted tall lacy fern-fronds towering, painted ancient bark-textured stones surrounding, painted ceremonial register',
+      'Ancient yew-grove with painted twisted dark-green yew-trees ringing the painted sacred clearing, painted weathered standing-stones half-buried in painted moss, painted deep blue-green mystery',
+      'Birch-glade with painted pale slender birch-trunks rising tall and graceful around the painted court, painted scattered moss-floor with painted mushroom-rings, painted ethereal painted register',
+      'Sacred clearing in deep painted ancient forest, painted moss-floor surrounded by painted massive ancient tree-trunks, painted dappled light filtering through, painted multi-tier depth',
+      'Ancient mushroom-ring grove with painted massive ancient mushroom-spires ringing the painted forest clearing, painted soft pearl-glow emanating from gills, painted moss-carpet, painted magical register',
+      'Bioluminescent glen with painted softly glowing-moss carpeting the forest-floor in painted soft cyan-and-violet, painted glowing-mushrooms surrounding the painted clearing, painted magical ceremonial register',
+      'Ancient oak-cathedral with painted soaring trunks rising into a painted vaulted canopy, painted hanging-moss curtains from above, painted moss-and-fern floor, painted gallery-tier sacred register',
+      'Painted oak-cathedral with painted vast twisted ancient trunks like painted columns, painted moss-and-root throne grown from the painted floor, painted dappled god-rays piercing the painted canopy',
+      'Painted hidden fern-grotto cradled by painted ancient stones, painted lacy painted fern-fronds soaring overhead, painted dripping painted moss-cliffs, painted ceremonial register',
+      'Painted wisteria-cathedral with painted cascading violet-wisteria draping from painted ancient oak-branches overhead, painted moss-grown path through, painted ethereal painted register',
+      'Painted wisteria-arbor over a painted winding moss-path, painted violet-cluster draping from above, painted scattered fallen wisteria-petals on the path below, painted gallery-tier register',
+      'Painted sacred-stone-circle painted at painted twilight, painted ancient weathered stones painted half-buried in moss, painted distant treeline painted silhouette, painted atmospheric register',
+      'Painted ancient ring of painted standing-stones, painted moss-covered painted bases, painted single tall painted dolmen at the center, painted twilight-blue painted atmosphere',
+      'Painted moss-and-boulder fern-grotto, painted dripping painted ferns from painted cliff-walls, painted hidden painted grotto-floor of painted moss-and-stone, painted ceremonial register',
+      'Painted yew-grove painted clearing with painted twisted dark-green painted yew-trees painted ringing painted ancient standing-stones, painted deep blue-green painted painted mystery',
+      'Painted painted ancient painted yew-cathedral with painted twisted painted dark trunks painted forming painted natural columns, painted deep painted shadowy painted register',
+      'Painted birch-glade clearing with painted slender painted pale-bark birch-trunks painted in painted close formation, painted dappled painted light, painted ethereal painted register',
+      'Painted sacred painted clearing in painted ancient painted oak-forest, painted moss-floor painted carpet, painted painted hanging-moss painted curtains painted draping from painted above',
+      'Painted hidden painted grove painted of painted ancient painted mossy painted oak-trees, painted painted moss-and-root painted throne painted grown painted from painted the painted floor',
+      'Painted painted ancient painted painted forest painted clearing painted at painted painted twilight, painted painted moss-floor painted with painted painted scattered painted painted mushroom-rings',
+      'Painted painted bioluminescent painted painted glen painted with painted painted softly painted glowing-moss painted carpeting painted the painted painted forest-floor, painted painted magical painted painted register',
+      'Painted painted ancient painted painted painted oak-grove painted painted with painted painted scattered painted painted moss-and-vine painted painted thrones painted painted grown painted painted from painted painted roots',
+    ],
+    instructions: `Each entry is ONE specific SACRED FOREST BACKDROP, 25-50 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific forest type, (b) 2+ signature features, (c) multi-tier depth. NO castle / built architecture. NO modern. NO creature/regalia. NO lighting/weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_lighting: {
+    format: 'simple',
+    theme: `COURT LIGHTING for FaeBot's fairy-court path. Each entry describes ONE specific lighting register tuned for ceremonial court scenes. Each entry 25-45 words.
+
+⚠️ THE BAR: each lighting entry is tuned for CEREMONIAL COURT register — moonlit silver / twilight violet / golden-hour-through-trees / bioluminescent ambient / dawn-pink. The light is dignified, atmospheric, never harsh.
+
+⚠️ LIGHTING CATEGORIES (across 25 entries):
+  • ~6 GOLDEN-HOUR — warm-amber through ancient trees / golden-glow on queen's gown
+  • ~4 MOONLIT — silver moonlight on the clearing / blue-moon ambient
+  • ~4 TWILIGHT — magical violet twilight / blue-hour with warm-yellow accents
+  • ~3 DAWN — soft-pink dawn / pearl-mist dawn through the grove
+  • ~3 BIOLUMINESCENT — soft pollen-glow / glowing-moss ambient
+  • ~3 DAPPLED — dappled canopy-light through the grove on the queen
+  • ~2 SOFT-CANDLELIT — soft warm-amber from will-o-wisps / glowing crown
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TIME-OF-DAY
+  - SPECIFIC LIGHT QUALITY (shafts / ambient / sidelight / underlight)
+  - HOW IT CATCHES THE QUEEN (gilding her gown / haloing her crown / catching her hair)
+  - PALETTE CUE
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO weather (separate axis)
+  • NO storm / lightning / dark-grey-blue (peaceful ceremonial register only)`,
+    touchpoints: [
+      'Painted golden-hour warm-amber light filtering through the painted ancient grove in painted shafts, painted gilding her painted gown and painted antler-crown',
+      'Painted late-afternoon warm sidelight raking across her painted form, painted long shadows defining her painted ceremonial silhouette, warm-gold palette',
+      'Painted magic-hour golden light painting her painted gown with painted warm-amber and golden palette, painted-storybook softness',
+      'Painted golden warm sidelight gilding her painted hair and her painted antler-crown, painted soft warm-amber halo at her painted shoulders',
+      'Painted late-afternoon backlight haloing her painted silhouette in painted warm-gold rim-light, painted ceremonial register',
+      'Painted golden-hour through canopy creating painted dappled warm-light patterns on her painted shoulders and gown, painted intimate ceremonial register',
+      'Painted silver moonlight on the painted clearing, painted cool-blue ambient with painted silver edge-light catching her painted crown',
+      'Painted blue-moon ambient flooding the painted scene with painted cool silver-blue painted light, painted soft white-glow on her painted shoulders',
+      'Painted moonlit silver-and-violet ambient with painted distant moon visible through the canopy gap, painted deep-blue saturating the scene',
+      'Painted bright moonlight painted illuminating the painted sacred-stone-circle, painted long painted moon-shadows from the painted stones, painted cool-blue palette',
+      'Painted cool-blue twilight with painted warm-yellow accents from painted will-o-wisps at her painted shoulders, painted ceremonial register',
+      'Painted blue-hour twilight with painted last painted warm-orange of painted sunset bleeding through painted distant trunks, painted soft warm catching her painted gown',
+      'Painted magical violet-twilight glow saturating the painted scene in painted soft lavender-and-blue, painted faint pollen-light particles in the painted air',
+      'Painted twilight with painted deepening blue-and-violet sky, painted soft warm light on her painted face from below, painted ceremonial intimate register',
+      'Painted soft-pink dawn light gilding her painted face with painted rose-gold-and-lavender palette, painted gentle peaceful ceremonial register',
+      'Painted golden dawn beams angling through the painted canopy from a painted low east angle catching her painted painted painted painted face in painted warm-gold side-light',
+      'Painted pearl-mist dawn beams angling low through the painted grove in painted shafts of painted soft white-gold, painted drifting mist catching the beams',
+      'Painted soft pollen-glow at her painted painted painted shoulders in painted warm-gold soft-light, painted bioluminescent ceremonial register',
+      'Painted bioluminescent ambient with painted softly-glowing fungi painted behind her painted casting painted soft pearl-cyan light on her painted shoulders',
+      'Painted soft cyan-glow ambient from painted bioluminescent moss painted carpeting the painted forest-floor, painted gentle teal-and-violet painted illumination',
+      'Painted dappled canopy-light through painted forest hitting her painted painted painted painted painted face in painted soft warm-amber spots',
+      'Painted dappled god-rays piercing the canopy in painted shafts of painted warm-amber light reaching her painted shoulder, painted gallery-tier ceremonial light',
+      'Painted soft dappled gold patches catching her painted painted painted painted painted painted face in painted warm-amber spots, painted intimate ceremonial register',
+      'Painted soft warm-amber light from painted multiple painted will-o-wisps painted orbiting her painted crown, painted ceremonial register',
+      'Painted soft candlelit warm-glow from painted glowing-amber crown painted illuminating her painted face from above, painted ceremonial register',
+    ],
+    instructions: `Each entry is ONE specific LIGHTING moment, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) time-of-day, (b) light quality, (c) how it catches the queen, (d) palette cue. NO creature. NO biome. NO weather. NO storm/lightning. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_weather: {
+    format: 'simple',
+    theme: `WEATHER (air condition + drifting accents) for FaeBot's fairy-court path. Each entry describes ONE specific atmospheric air condition + drifting accents tuned for court scenes. Each entry 20-40 words.
+
+⚠️ THE BAR: each weather entry establishes a SPECIFIC atmospheric air condition with drifting accents adding painted-ceremonial depth. Particles tuned for court scenes — drifting petals through the grove, mist softening the painted backdrop, pollen-haze at her shoulders.
+
+⚠️ WEATHER CATEGORIES (across 25 entries):
+  • ~5 PETAL-DRIFT — drifting petals through the grove / petal cascade past her gown
+  • ~4 MIST / FOG — soft mist drifting through the grove / mist softening backdrop
+  • ~4 DEW-GLINTS — dewdrops on her gown / dew on her hair-strands / morning dew on stones
+  • ~3 POLLEN-HAZE — drifting golden pollen-motes through the painted air / pollen-shimmer
+  • ~3 GENTLE-BREEZE — gentle breeze moving her painted gown-train / soft wind in her hair
+  • ~3 DRIFTING-LEAVES — autumn-leaves drifting through the grove / single falling leaf
+  • ~2 CLEAR / STILL — clear painted-still air with crisp grove visibility
+  • ~1 SNOW-DUST — winter petal-snow / first-frost on her gown
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC AIR CONDITION
+  - DRIFTING ACCENT (at court scale)
+  - PALETTE / TEMPERATURE CUE
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO lighting (separate axis)
+  • NO catastrophic weather
+  • NO storm / lightning`,
+    touchpoints: [
+      'Drifting cherry-blossom petals through the painted grove in painted soft pink-snow, gentle motion captured, magical painted-spring ceremonial register',
+      'Painted falling petal-snow drifting past her painted gown in painted pearl-pink drift, magical painted register',
+      'Painted wisteria petals drifting in painted violet-clusters from overhead through the painted grove, painted soft pearl-violet palette',
+      'Painted drifting rose-petals past her painted gown in painted soft crimson-and-cream cascade, magical painted register',
+      'Painted drifting magnolia-petals in painted large pearl-cream petals through the painted grove, painted gallery-tier register',
+      'Painted soft dawn mist drifting through the painted grove in painted pearl-grey wisps, painted atmospheric depth softening backdrop',
+      'Painted low pearl-mist drifting at painted knee-height through the painted clearing, painted depth softening painted distant trunks',
+      'Painted soft forest-mist drifting through painted depth in painted soft cool-grey wisps, painted gallery-tier ethereal ceremonial register',
+      'Painted soft drifting mist threading through the painted grove in painted whisps, painted atmospheric depth, magical hushed register',
+      'Painted glistening dewdrops on her painted gown-train in painted reflective droplet detail, painted fresh-morning register',
+      'Painted pearl-dew droplets on her painted hair-strands catching the painted light in painted pearl-glints, painted fresh-morning crystal register',
+      'Painted morning dew on the painted ancient stones around her in painted shimmering droplet detail, painted fresh peaceful register',
+      'Painted shimmering dew on the painted moss-floor around her in painted pearl-glints, painted gallery-tier register',
+      'Painted drifting golden pollen-motes through the painted air around her in painted soft warm-light specks, painted magical register',
+      'Painted floating pollen-clouds drifting through the painted grove in painted soft warm-glow, painted magical ceremonial register',
+      'Painted pollen-shimmer at her painted shoulders in painted golden-warm motes, painted ceremonial register',
+      'Painted gentle breeze moving her painted gown-train in painted soft synchronized motion, painted magical alive register',
+      'Painted soft wind moving her painted hair in painted gentle motion, painted magical alive-grove register',
+      'Painted petals stirring on a painted gentle breeze drifting past her painted painted form in painted soft-motion drift, painted magical register',
+      'Painted autumn-leaves drifting through the painted grove in painted red-orange-gold flakes, painted seasonal register',
+      'Painted single falling autumn-leaf past her painted shoulder in painted gentle painted-motion, painted seasonal register',
+      'Painted settled autumn-leaf carpet stirring softly painted around her painted feet, painted soft seasonal register',
+      'Painted clear painted-still air with painted crisp painted visibility into the painted grove depth, painted gallery-tier intimate clarity',
+      'Painted motionless painted grove hush with painted crystalline clear air, painted every detail sharp, painted intimate stillness register',
+      'Painted first-frost dusting her painted painted painted gown-train in painted soft pearl-white, painted gentle winter-petal-snow drifting through painted air',
+    ],
+    instructions: `Each entry is ONE specific WEATHER condition, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) air condition, (b) drifting accent, (c) palette/temperature cue. NO creature. NO biome. NO lighting. NO catastrophic weather. NO storm/lightning. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_magical_flavor: {
+    format: 'simple',
+    theme: `ROYAL MAGICAL FLAVOR for FaeBot's fairy-court path. Each entry describes ONE specific royal magic signature visible in the painted court scene. Each entry 15-30 words.
+
+⚠️ THE BAR: each magical entry is a SPECIFIC luminous detail painted as royal/ceremonial — butterflies orbiting her crown / pollen-halo at her shoulders / will-o-wisps trailing the procession / glowing crown.
+
+⚠️ MAGIC CATEGORIES (across 25 entries):
+  • ~5 BUTTERFLIES ORBITING — butterfly cluster orbiting her painted crown
+  • ~5 POLLEN-HALO — soft pollen-halo at her shoulders / pollen-cloud
+  • ~4 WILL-O-WISPS — will-o-wisps trailing the procession / single wisp at her hand
+  • ~4 GLOWING-CROWN — antler-crown glowing softly / coronet-of-light
+  • ~3 GLOWING-AURA — soft pearl-aura around her painted form / golden halo
+  • ~2 FAIRY-DUST — fairy-dust trailing from her painted fingertips / glittering trail
+  • ~2 FIREFLIES — fireflies orbiting at her painted gown
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC MAGIC TYPE
+  - POSITION (around her crown / at her shoulders / trailing her form / etc.)
+  - LIGHT QUALITY (luminous / glowing / sparkling)
+
+🚫 STRICT BANS:
+  • NO crude particle-effect language
+  • NO modern-CGI references
+  • NO creature description
+  • NO violence`,
+    touchpoints: [
+      'Painted cluster of butterflies orbiting her painted antler-crown in painted soft-color clusters, painted magical royal register',
+      'Painted monarch-butterflies orbiting her painted painted crown in painted orange-and-black cluster, painted magical register',
+      'Painted gold-and-silver butterflies orbiting her painted hair in painted soft cluster, painted ceremonial magic register',
+      'Painted single luna-moth painted perched on her painted antler-tip with painted iridescent green wings spread, painted magical register',
+      'Painted butterfly-cluster orbiting her painted painted gown-train in painted gentle motion, painted ceremonial register',
+      'Painted soft pollen-halo at her painted shoulders in painted warm-gold soft-light, painted magical ceremonial register',
+      'Painted pollen-cloud at her painted painted form in painted soft warm-glow, painted magical register',
+      'Painted golden pollen-mist around her painted crown in painted soft warm-light, painted ceremonial royal register',
+      'Painted silver pollen-motes drifting around her painted painted form in painted soft pearl-light, painted magical register',
+      'Painted painted drifting pollen-light around her painted shoulders in painted soft warm-glow, painted magical ceremonial register',
+      'Painted will-o-wisps trailing the painted procession in painted soft warm-yellow points, painted magical procession register',
+      'Painted single painted will-o-wisp painted floating at her painted painted painted painted shoulder in painted soft pearl-glow, painted intimate ceremonial register',
+      'Painted three painted will-o-wisps orbiting her painted painted painted form in painted soft pearl-glow, painted magical register',
+      'Painted painted wisps trailing her painted painted gown-train in painted soft warm-glow, painted ceremonial register',
+      'Painted antler-crown painted glowing softly in painted soft pearl-light, painted magical royal register',
+      'Painted painted coronet-of-light around her painted painted brow in painted soft warm-glow, painted ceremonial register',
+      'Painted painted diadem painted glowing softly with painted soft pearl-light at her painted brow, painted royal magical register',
+      'Painted painted gold-leaf-circlet painted glowing softly in painted warm-amber light, painted magical register',
+      'Painted soft pearl-aura around her painted painted painted form in painted gentle painted warm-glow, painted magical ambient register',
+      'Painted soft golden halo around her painted painted painted form in painted painted luminous warm-light, painted sacred register',
+      'Painted painted gentle painted pearl-aura at her painted shoulders in painted soft warm-glow, painted magical register',
+      'Painted painted fairy-dust trailing painted from her painted painted painted painted fingertips in painted soft golden sparkle, painted magical register',
+      'Painted painted glittering painted painted painted fairy-dust painted trail painted drifting from her painted painted painted hand into the painted painted painted air, painted magical register',
+      'Painted painted cluster of painted fireflies orbiting her painted painted painted painted gown-train in painted soft warm-yellow points, painted magical evening register',
+      'Painted painted firefly-cluster painted around her painted painted painted painted shoulder in painted soft warm-glow at painted painted dusk, painted ceremonial register',
+    ],
+    instructions: `Each entry is ONE specific MAGICAL FLAVOR accent, 15-30 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific magic type, (b) position around her, (c) light quality. NO crude particle-effect. NO modern-CGI. NO creature description. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHOR for FaeBot's fairy-court path. Each entry describes ONE specific tactile foreground element bringing 3-tier depth. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC tactile element close to the camera bringing 3-tier court depth — hanging vine, hanging-moss curtain, fern-frond cluster, drifting petal-cluster, painted standing-stone-edge.
+
+⚠️ FOREGROUND CATEGORIES (across 25 entries):
+  • ~5 HANGING VINE / WILLOW — hanging-vine curtain / weeping willow draping
+  • ~4 HANGING MOSS / LICHEN — hanging spanish-moss curtain / lichen-cluster
+  • ~4 FERN-CLUSTER — fern-frond cascading / fern-tip cluster
+  • ~3 STANDING-STONE EDGE — painted ancient stone edge / weathered stone foreground
+  • ~3 BLOOM CLUSTER — foxglove-spires foreground / wisteria-cluster
+  • ~3 DRIFTING PETAL-CLUSTER — drifting petals close to camera
+  • ~3 ROOT / BRANCH — gnarled root crossing foreground / mossy branch tip
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TYPE
+  - POSITION IN FRAME
+  - TACTILE DETAIL
+
+🚫 STRICT BANS:
+  • NO creature description
+  • NO biome / setting (separate axis)
+  • NO weather (separate axis)
+  • NO modern objects
+  • NO blocking the court`,
+    touchpoints: [
+      'Hanging vine-curtain in painted foreground-left with painted bloom-laden tendrils cascading from above, painted intimate ceremonial framing',
+      'Weeping willow branches draping softly out-of-focus in painted foreground-right, framing the court without blocking',
+      'Hanging ivy-vines threading across the painted upper-left foreground, painted leaf-veining detail',
+      'Bloom-laden hanging vine-cluster in painted foreground-right with painted foxglove-bells, painted gentle framing',
+      'Wisteria-cascade hanging in painted foreground-left with painted violet petals, painted ceremonial framing',
+      'Hanging spanish-moss curtain in painted foreground softly out-of-focus from upper-left, painted dripping detail',
+      'Lichen-cluster in painted foreground-right with painted pale-grey-green texture, painted close-up tactile detail',
+      'Hanging moss-cascade in painted foreground softly out-of-focus, painted gentle framing register',
+      'Painted lichen-rune patterns on painted moss in painted foreground softly out-of-focus, painted ancient register',
+      'Tall fern-cluster arching across the painted bottom of the frame, painted lacy fronds, painted tactile foreground detail',
+      'Painted fern-fronds in painted foreground-left softly out-of-focus with painted leaf-veining, painted soft cool-green palette',
+      'Painted unfurling fern-fronds in painted foreground-right with painted spiral-detail, painted ethereal register',
+      'Painted tall fern-grass cluster across the painted lower painted depth with painted delicate leaf-edge detail',
+      'Painted ancient standing-stone edge sweeping across painted foreground-left with painted moss-and-lichen texture, painted intimate framing',
+      'Painted weathered stone edge in painted foreground-right with painted ancient rune-detail softly out-of-focus, painted ceremonial register',
+      'Painted moss-covered stone foreground sweeping across the painted lower frame, painted gallery-tier tactile detail',
+      'Painted foxglove-spires in painted foreground-left in painted pink-and-purple bell-clusters, painted intimate framing',
+      'Painted wisteria-cluster in painted foreground-right softly out-of-focus with painted violet racemes, painted ethereal framing',
+      'Painted bluebell-cluster in painted foreground softly out-of-focus with painted soft-violet bells, painted intimate framing',
+      'Painted drifting cherry-blossom petal-cluster filling the painted foreground in painted pink-snow, painted soft motion captured',
+      'Painted drifting petal-cluster across the painted foreground in painted pearl-pink, painted magical register',
+      'Painted autumn-leaf drift in painted foreground with painted red-orange-gold leaves cascading, painted seasonal register',
+      'Painted gnarled ancient root crossing the painted foreground earth, painted twisted bark-detail, painted depth anchor',
+      'Painted moss-covered fallen log across the painted foreground, painted weathered bark-detail, painted depth anchor',
+      'Painted mossy branch tip in painted foreground softly out-of-focus, painted velvety green-moss texture, painted intimate framing',
+    ],
+    instructions: `Each entry is ONE specific FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific type, (b) position in frame, (c) tactile detail. NO creature. NO biome. NO weather. NO modern. NO blocking. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_sacred_companion: {
+    format: 'simple',
+    theme: `40%-GATED SACRED COMPANION for FaeBot's fairy-court path. Each entry describes ONE specific sacred animal attending the court at NORMAL scale (queen is adult-sized, animal at its natural size). Each entry 20-40 words.
+
+⚠️ THE BAR: each companion is a SACRED forest creature attending the court at NORMAL scale — white stag / raven / owl / fox / hare / wolf (gentle) / butterfly cluster. Knelt before the queen, perched on her shoulder, sitting at her feet. NOT a tiny-fae dwarfing-scale companion.
+
+⚠️ COMPANION CATEGORIES (across 25 entries):
+  • ~5 WHITE-STAG — white stag knelt before her / standing in profile / approaching gently
+  • ~4 RAVEN / CORVID — raven on her shoulder / raven perched on her staff / two ravens
+  • ~4 OWL — great-horned-owl on a branch behind her / owl perched on her arm
+  • ~3 FOX — silver-fox at her feet / red-fox sitting beside her
+  • ~3 HARE — hare-doe sitting at her feet / hare watching from nearby
+  • ~3 WOLF (GENTLE) — wolf-pack lying at her feet (gentle) / single wolf curled
+  • ~2 BUTTERFLY CLUSTER — butterfly cluster orbiting her painted head and shoulders
+  • ~1 RARE — small bear cub / kitsune / mythical creature
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC SACRED ANIMAL
+  - HOW IT INTERACTS (knelt before her / perched on shoulder / sitting at her feet)
+  - PAINTED TACTILE DETAIL (white fur / iridescent feathers / soft fur)
+
+🚫 STRICT BANS:
+  • NO predatory aggressive postures (creature is gentle / sacred / dignified)
+  • NO scaling against the queen (this is NOT a tiny-fae dwarfing companion — queen is adult-sized)
+  • NO creature description of queen (separate axis)
+  • NO violence`,
+    touchpoints: [
+      'A pure white stag knelt before the queens painted throne, painted antlers branching with painted small blooms, painted serene gaze',
+      'A large painted white stag standing in painted profile beside the queen, painted long antlers reaching upward, painted gentle stance',
+      'A painted young white stag painted approaching gently with painted lowered antlers, painted ceremonial register',
+      'A painted raven perched on the queens painted painted shoulder with painted iridescent black plumage, painted ceremonial register',
+      'A painted raven painted perched on the painted top of the queens painted painted staff, painted dignified register',
+      'Painted two painted ravens painted flanking the painted queen on either painted shoulder, painted iridescent black plumage',
+      'A painted great-horned-owl perched on a painted branch behind the queen, painted tufted ears and painted large yellow eyes',
+      'A painted owl painted perched on the painted queens painted painted painted arm with painted painted soft brown plumage',
+      'A painted snowy-owl painted painted perched on a painted painted branch above the queen, painted painted white plumage and painted dark eyes',
+      'A painted silver-fox sitting at the painted queens painted painted feet, painted soft silver-grey fur, painted gentle painted ceremonial register',
+      'A painted red-fox sitting beside the painted queen on her painted moss-throne, painted soft russet fur, painted curious painted gaze',
+      'A painted snow-fox painted painted curled at the painted queens painted painted feet, painted soft white fur, painted gentle register',
+      'A painted hare-doe painted sitting motionless at the painted queens painted painted feet, painted soft brown-and-grey fur, painted tall ears upright',
+      'A painted snow-hare painted painted curled nearby on the painted moss, painted soft white fur, painted gentle painted register',
+      'A painted hare painted watching from painted painted nearby ferns, painted gentle painted register',
+      'A painted wolf-pack of painted two painted wolves painted lying at the painted queens painted painted feet, painted soft grey fur, painted gentle dignified register',
+      'A painted single painted wolf painted curled painted at the painted queens painted painted feet, painted soft white-and-grey fur, painted gentle painted register',
+      'A painted lone painted painted wolf painted painted standing beside the painted queen, painted painted painted soft brown fur, painted dignified gaze',
+      'Painted cluster of painted painted butterflies painted orbiting the painted queens painted painted head and painted painted shoulders, painted soft-color clusters',
+      'Painted cluster of painted painted monarch-butterflies painted orbiting the painted queen in painted orange-and-black cluster, painted ceremonial register',
+      'Painted painted cluster of painted painted painted silver-butterflies painted painted orbiting the painted painted queens painted painted form, painted soft pearl register',
+      'A painted small painted bear-cub painted painted sitting beside the painted queens painted painted throne with painted soft brown fur, painted gentle register',
+      'A painted small painted painted bear-cub painted painted curled at the painted queens painted painted painted feet, painted soft brown fur, painted painted gentle painted register',
+      'A painted kitsune-spirit painted with painted multiple painted painted soft white tails painted sitting beside the painted queen, painted painted ceremonial register',
+      'A painted painted painted painted three-tailed painted painted painted fox-spirit painted painted painted sitting at the painted painted painted painted queens painted painted feet, painted painted painted painted painted painted soft russet painted painted fur, painted painted gentle painted painted register',
+    ],
+    instructions: `Each entry is ONE specific SACRED COMPANION, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific sacred animal, (b) how it interacts (knelt / perched / sitting), (c) painted tactile detail. NO predatory. NO dwarfing-scale. NO creature description of queen. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+
 };
 
 const recipe = POOL_RECIPES[POOL];
