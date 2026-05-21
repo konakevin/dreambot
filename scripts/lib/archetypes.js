@@ -1857,6 +1857,30 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_TINY_FAE: {
+    description:
+      'PATH-BESPOKE — FaeBot tiny-fae (2026-05-21 axis-system migration). Palm-sized winged fae (3-8 inches tall) at MACRO perspective in the enchanted forest. THE PATH IDENTITY is the scale_anchor_companion — every render includes a normal-sized forest creature (fox / deer / fawn / robin / squirrel / hedgehog / owl / etc.) that DRAMATICALLY DWARFS her. Without this scale-proof, Flux defaults to regular-sized fairy. Painterly-real (Brian Froud + Charles Vess lineage). 10 axes (9 always-on + 1 gated botanical_accent). IMPORTANT: tiny-fae is in twoPassPolish.skipPaths because Haiku polish strips dwarfing language. Pool entries use strong dwarfing positions (perched on a single feature / under looming face / fits inside a paw).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'creature',
+        'scale_anchor_companion',
+        'macro_perch',
+        'forest_micro_biome',
+        'lighting',
+        'weather',
+        'fae_action',
+        'magical_flavor',
+        'foreground_anchor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'botanical_accent', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_EPIC_VISTA: {
     description:
       'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Nat-Geo-best-of-best caliber real-Earth landscape: the SUBJECT IS THE WOW. Larger than life via geology + lighting + weather amplification, never AI-fake / sci-fi / fantasy. R2 (2026-05-20) pivoted from R1 3-tier (subject + foreground prop) to SCENE-AS-HERO — subject dominates 60-70%+ of frame, no competing foreground props. R1 lessons retained: PEAK LIGHT MOMENT + MOMENT IN MOTION template blocks, phenomenon-lighting compatibility, biome-tagged subject pool. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. R1 foreground_anchor axis + matchTagsFromSlot composer extension preserved as infrastructure for future paths that need them. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',

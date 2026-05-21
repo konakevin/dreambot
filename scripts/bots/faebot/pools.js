@@ -66,5 +66,16 @@ module.exports = {
   FAEBOT_FLOWER_FAIRY_MAGICAL_FLAVOR: loadIfExists('faebot_flower_fairy_magical_flavor'),
   FAEBOT_FLOWER_FAIRY_SCALE_PROVER: loadIfExists('faebot_flower_fairy_scale_prover'),
   FAEBOT_FLOWER_FAIRY_COMPANION: loadIfExists('faebot_flower_fairy_companion'),
+  // ─── tiny-fae axis-system pools (2026-05-21) ───
+  FAEBOT_TINY_FAE_CREATURE: loadIfExists('faebot_tiny_fae_creature'),
+  FAEBOT_TINY_FAE_SCALE_ANCHOR_COMPANION: loadIfExists('faebot_tiny_fae_scale_anchor_companion'),
+  FAEBOT_TINY_FAE_MACRO_PERCH: loadIfExists('faebot_tiny_fae_macro_perch'),
+  FAEBOT_TINY_FAE_FOREST_MICRO_BIOME: loadIfExists('faebot_tiny_fae_forest_micro_biome'),
+  FAEBOT_TINY_FAE_LIGHTING: loadIfExists('faebot_tiny_fae_lighting'),
+  FAEBOT_TINY_FAE_WEATHER: loadIfExists('faebot_tiny_fae_weather'),
+  FAEBOT_TINY_FAE_ACTION: loadIfExists('faebot_tiny_fae_action'),
+  FAEBOT_TINY_FAE_MAGICAL_FLAVOR: loadIfExists('faebot_tiny_fae_magical_flavor'),
+  FAEBOT_TINY_FAE_FOREGROUND_ANCHOR: loadIfExists('faebot_tiny_fae_foreground_anchor'),
+  FAEBOT_TINY_FAE_BOTANICAL_ACCENT: loadIfExists('faebot_tiny_fae_botanical_accent'),
   VIBE_COLOR,
 };

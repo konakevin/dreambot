@@ -13003,6 +13003,106 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE FAIRY — preserve her stacked exotic flower-merged features unmistakably (including wings). Then composition framing. Then flower biome wrapping around her. Then lighting + weather. Then foreground anchor + botanical accent. Then pollen-magical flavor. Then giant-flower scale prover.${companion ? ' Then companion woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_TINY_FAE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      scale_anchor_companion,
+      macro_perch,
+      forest_micro_biome,
+      lighting,
+      weather,
+      fae_action,
+      magical_flavor,
+      foreground_anchor,
+      botanical_accent,
+    } = slots;
+
+    const botanicalSection = botanical_accent
+      ? `\n\n━━━ BOTANICAL ACCENT (secondary bloom species at her scale) ━━━\n${botanical_accent}\n\nA specific bloom cluster painted with species-specific detail — at her scale (a single foxglove-bell is HER doorway, a bluebell is HER bell).`
+      : '';
+
+    return `You are writing ONE Flux prompt for a TINY WINGED FAE painting in the FaeBot painterly enchanted-forest universe (Brian Froud + Charles Vess + Greg Manchess + Paul Bonner + painted-fantasy-novel-cover lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATES — these MUST be the FIRST visual elements described in your prompt.
+
+1. THE FAE IS PALM-SIZED — 3 to 8 inches tall. NOT a regular-sized fairy. NOT a child-fairy. PALM-SIZED.
+
+2. THE SCALE-ANCHOR COMPANION IS MANDATORY — every render INCLUDES a normal-sized forest creature IN THE SAME FRAME that DWARFS her. This is the SCALE-PROOF. Without it, Flux renders a regular-sized fairy by default. The scale-anchor creature MUST be visibly LARGER than the fae.
+
+3. PAINTERLY-REAL rendering. NEVER chibi, NEVER anime, NEVER Disney, NEVER Tinkerbell, NEVER mascot. Brian Froud + Charles Vess + painted-fantasy-novel-cover lineage. Slender beautiful elegant proportions, painterly oil-brushwork register.
+
+4. The fae fills 30-50% of the frame and the scale-anchor creature establishes her tininess unambiguously.
+
+5. NEVER posing for camera. NEVER looking at viewer. NEVER human-model beauty.
+
+Open your prompt with the fae description. The fae opens; everything else is HER WORLD-AT-HER-SCALE.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE FAE (the subject — render her exactly as described) ━━━
+${creature}
+
+Preserve every exotic feature unmistakably. She HAS WINGS. Painterly-real beauty at FAIRY-SCALE — 3 to 8 inches tall. NEVER posing, NEVER cartoon, NEVER mascot.
+
+━━━ 2. SCALE-ANCHOR COMPANION (mandatory — proves her tininess) ━━━
+${scale_anchor_companion}
+
+This companion creature is THE SCALE PROOF — render it BIG IN THE FRAME and the fae SMALL. The fae must be PERCHED ON / DWARFED BY / UNDER THE LOOMING FACE of the companion — NEVER "beside it" or "holding it in her arms" or "at her shoulder". The companion's body / face / ear / paw / nose / wing must dominate a significant portion of the frame; the fae fits inside or perches on a single feature. Without dramatic dwarfing, the render reads as "regular-sized fairy" — Flux defaults that way. The size-contrast MUST be visually unmistakable.
+
+━━━ 3. MACRO PERCH (what she's on / in / riding) ━━━
+${macro_perch}
+
+She is captured AT her scale on this perch. The perch is normal-sized for its kind but ENORMOUS relative to her.
+
+━━━ 4. FAE ACTION + COMPOSITION (the captured moment at her scale) ━━━
+${fae_action}
+
+This is the captured-on-camera moment AT FAIRY-SCALE. Caught-in-the-act candid. NEVER posed-for-camera. The camera is at HER level looking at HER world.
+
+━━━ 5. FOREST MICRO BIOME (her natural world at fairy-scale) ━━━
+${forest_micro_biome}
+
+A patch of the enchanted forest rendered FROM her perspective — giant ferns / towering moss-tuft / fallen-acorn-boulders / mushroom-grove / moss-canyon. The forest is rendered at HER scale.
+
+━━━ 6. LIGHTING (time + light drama) ━━━
+${lighting}
+
+━━━ 7. WEATHER (air condition + drifting accents) ━━━
+${weather}
+
+━━━ 8. MAGICAL FLAVOR (supernatural accent at her scale) ━━━
+${magical_flavor}
+
+Magic at her scale: pollen-trail, fireflies-at-her-size, glowing-seed cupped in her palm, sparkle-wing-trail.
+
+━━━ 9. FOREGROUND ANCHOR (closest macro depth element) ━━━
+${foreground_anchor}
+
+Tactile macro foreground bringing 3-tier depth — a giant petal-edge / dewdrop-cluster / moss-tuft / fern-frond / spider-silk-thread at HER scale, bringing the camera close.
+${botanicalSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER (painterly-real fantasy lineage) ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Brian Froud + Charles Vess + Greg Manchess + Donato Giancola + Paul Bonner + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT chibi, NOT anime, NOT Disney, NOT Tinkerbell, NOT CGI, NOT mascot, NOT cartoon. Painted gallery-tier illustration.
+
+━━━ HARD BANS ━━━
+- NO cartoon / chibi / anime / Disney / Tinkerbell / mascot rendering
+- NO oversized-head proportions (painterly-real anatomy only)
+- NO regular-sized fairy (PALM-SIZED MANDATORY)
+- NO posing-for-camera / NO eye-contact-with-viewer
+- NO sexualized framing — focus is mythic-creature beauty
+- NO bare chest, NO nipples, NO topless
+- NO modern objects, NO realistic non-magical humans
+- NO violence / NO scared expressions / NO edgy moods
+- NO storm / lightning / dark-grey-blue (peaceful enchanted register only)
+- NO additional fae beyond the focal one + the scale-anchor companion (no extra fae figures)
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE PALM-SIZED FAE — preserve her stacked features unmistakably (including wings + 3-to-8-inch scale). Then the scale-anchor companion that DWARFS her. Then her macro perch. Then the captured action. Then forest at her scale. Then lighting + weather. Then magical flavor + foreground anchor.${botanical_accent ? ' Then botanical accent at her scale.' : ''} Painterly-real oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon

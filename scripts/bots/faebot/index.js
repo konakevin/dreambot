@@ -93,9 +93,10 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    // R11 reset: flower-fairy is now function-form (cloned from
-    // forest-fairy-scene) — uses two-pass polish like the parent path.
-    skipPaths: [],
+    // tiny-fae: scale-anchor companion is the path identity — Haiku
+    // compression strips the dwarfing language and the render reads
+    // as regular-sized fairy. Skip polish to preserve full mandate.
+    skipPaths: ['tiny-fae'],
   },
 
   // Bot-level pool defaults for declarative composer (flower-fairy path)
