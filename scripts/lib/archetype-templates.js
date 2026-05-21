@@ -12367,6 +12367,271 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
   },
 
 
+  YUMBOT_FLORAL_GARDEN_CUP: ({ slots, sharedDNA, vibeDirective }) => {
+    const { vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting } = slots;
+    const floraList = Array.isArray(overflowing_flora) ? overflowing_flora : [overflowing_flora];
+    const floraBlock = floraList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const scatterList = Array.isArray(tabletop_scatter) ? tabletop_scatter : [tabletop_scatter];
+    const scatterBlock = scatterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing FLORAL-GARDEN-CUP renders for YumBot — bex.ai's signature look. A kawaii-faced VESSEL (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical garden of flowers. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: KAWAII VESSEL OVERFLOWING WITH MAGICAL FLORA ━━━
+
+The hero is a kawaii-faced vessel (cup / mug / bowl / takeout-cup with a smiling face printed on it — dimpled-blush, closed-arc eyes). Out of the TOP of the vessel BURSTS an oversized magical bouquet of flowers — like a giant flower-arrangement spilling out impossibly. The flora is OVERSIZED relative to the vessel — the bouquet is bigger than the cup itself. This is the wow-moment: a kawaii drink that's also a flower-vase.
+
+━━━ ⚠ HARD RULE #2: NO CREATURES — FOOD/VESSEL IS THE CAST ━━━
+
+NO chibi creatures, NO humans, NO animals — just the kawaii-faced vessel with its overflowing magical bouquet. Cherry-blossom branches and tabletop-scatter can include florals but never living animals or characters.
+
+━━━ ⚠ HARD RULE #3: PAINTERLY-ILLUSTRATION FUSION ━━━
+
+This is NOT a flat product-shot. The render fuses Pop-Mart designer-vinyl glossy 3D-CGI with painterly-illustration warmth (Studio Ghibli + bex.ai + Disney-Tangled storybook texture). Glossy pearlescent vessel + painterly-textured flowers + dreamy soft-focus background. Imagine the flowers were hand-painted in oil/gouache while the vessel was CGI-rendered.
+
+━━━ THE KAWAII VESSEL (with smiling face) ━━━
+${vessel}
+
+━━━ FOUR OVERFLOWING FLORA ELEMENTS (spilling out of vessel — multi-bloom bouquet) ━━━
+${floraBlock}
+
+━━━ FRAMING CHERRY-BLOSSOM BRANCHES (arching from upper-corner(s) into the frame) ━━━
+${frame_branches}
+
+━━━ THREE TABLETOP SCATTER (pearls / berries / petals / pastel-balls around the vessel base) ━━━
+${scatterBlock}
+
+━━━ COLOR PALETTE (dominant 3-4 pastel colors for this render) ━━━
+${palette}
+
+━━━ BACKGROUND MOOD (dreamy pastel garden bokeh — NOT a recognizable setting) ━━━
+${background}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ SPARKLE STACK — FLORAL-GARDEN-CUP ━━━
+
+Layer ALL on EVERY render:
+- Glossy pearlescent finish on the kawaii vessel
+- Painterly-textured flowers with hand-painted oil/gouache strokes visible
+- Cherry-blossom-petal-rain drifting through the air
+- Dewdrops on petals catching warm-pastel light
+- Soft pastel-bokeh background fading to dreamy haze
+- Floating sparkle-dust + magical pollen-motes around the bouquet
+- Translucent glow within some of the petals (subsurface scattering)
+- Tiny butterflies or floating pearl-orbs hovering optionally
+- Iridescent shimmer on dewy petals
+- Warm-pastel rim-light catching the vessel's edges
+- Soft volumetric pastel-light pouring down from above
+- Painterly background brushstroke-texture (not perfectly smooth — slight visible painterliness)
+
+━━━ MOVIE POSTER MOMENT ━━━
+
+The viewer's reaction: "WAIT, the cup is OVERFLOWING with flowers — that's so magical." This is wallpaper-poster bex.ai signature work. Single frame quality.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD BANS ━━━
+- NO real chibi creatures / characters / humans / animals
+- NO flat product-shot composition — must have OVERFLOWING bouquet bigger than the vessel
+- NO modern decor / phones / tech
+- NO scary / dark / moody
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[kawaii-faced vessel description — cup/mug/bowl with smiling face + decorative pattern detail], OVERFLOWING with [bouquet description naming the specific flora pieces from above], cherry-blossom branches [arching in], pastel pearls + [tabletop scatter] scattered at the base, dreamy pastel-bokeh background, painterly Pop-Mart-illustration-fusion rendering..."
+
+Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The bouquet's painterly-flower texture and impossible overflow must read CLEARLY.`;
+  },
+
+  YUMBOT_RAINBOW_DREAMSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { food_inhabitants, dreamscape_setting, rainbow_element, sky_atmosphere, environment, decor, camera, lighting } = slots;
+    const decorList = Array.isArray(decor) ? decor : [decor];
+    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const envList = Array.isArray(environment) ? environment : [environment];
+    const envBlock = envList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. 3-7 MIXED kawaii food-creatures (cups + desserts + savory) inhabiting a lush pastel dreamscape with streams / ponds / trails / rocks / trees + rainbows. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: 3-7 MIXED KAWAII FOOD-CREATURES LIVING IN THE LANDSCAPE ━━━
+
+The kawaii smiling foods (3-7 of them, MIXED types — boba-cups + cupcakes + donuts + cake-pops + macarons + sundaes + pancakes + mochi + onigiri + crepes + parfaits + waffles + croissants + cinnamon-rolls + fruit-tarts + cheesecake + churros + taiyaki + dango + cream-puffs + popsicles + etc.) are SITTING IN a pastel outdoor environment — like creature-inhabitants of a dream-world. NOT on a tabletop. NOT a flat product-shot. They are nestled IN grass / on rocks / beside streams / on trails / under trees — like little food-creatures who LIVE there.
+
+⚠ VARIETY — never repeat the same food. Mix DRINKS + DESSERTS + occasionally SAVORY. Mix HEIGHTS (tall cups + short donuts + medium cupcakes). The variety is the signature.
+
+━━━ ⚠ HARD RULE #2: RAINBOW IS A CENTRAL VISUAL ELEMENT ━━━
+
+A RAINBOW must be visible. Either (a) pouring out of a cup like spillover, OR (b) arching across the sky, OR (c) cascading down from a cup onto the ground. The rainbow is part of the magic — a literal visible rainbow.
+
+━━━ ⚠ HARD RULE #3: LUSH OUTDOOR ENVIRONMENT — VISIBLE ENVIRONMENTAL FEATURES MANDATORY ━━━
+
+The dreamscape MUST have SUBSTANTIAL environmental features VISIBLY RENDERED: winding pastel streams, glassy pastel ponds, mossy trails, pastel-rocks/boulders, pastel-trees, footbridges, hills. The 3 environmental_features below MUST be CLEARLY VISIBLE — water reflecting, trees with foliage, rocks with moss, paths winding. NOT abstract or implied — concretely rendered.
+
+⚠ The landscape feels INHABITED — like the kawaii foods live in a real outdoor place with water and trees and rocks and paths, NOT floating on a flat surface or sitting on a table.
+
+⚠ HARD BAN — TABLETOP RENDERING: NO tabletop / table / counter / flat-surface composition. NO bokeh-only-background without environmental features. The foods are sitting in NATURE — on grass / on rocks / beside a stream / on a trail / among trees / on moss / on a hillside. If the scene reads as a "tabletop product-shot," it has FAILED.
+
+━━━ ⚠ HARD RULE #4: WIDER LUSH SCENIC COMPOSITION ━━━
+
+Pull the camera back to show the dreamscape landscape with rich environmental detail. The kawaii food-creatures occupy 30-45% of the frame; the lush landscape + environmental features + sky fill the rest. Cherry-blossom mountains in distance + hot-air-balloons + sunny pastel sky framing above. The viewer's reaction: "they LIVE in this lush dreamy world with streams and trees and rainbows."
+
+━━━ THE KAWAII FOOD INHABITANTS (3-7 mixed kawaii foods sitting in the scene) ━━━
+${food_inhabitants}
+
+━━━ THE DREAMSCAPE SETTING ━━━
+${dreamscape_setting}
+
+━━━ THE RAINBOW ELEMENT (specific to this render) ━━━
+${rainbow_element}
+
+━━━ THE SKY + ATMOSPHERE ━━━
+${sky_atmosphere}
+
+━━━ THREE ENVIRONMENTAL FEATURES (streams / ponds / trails / rocks / trees / bridges — MUST appear in the render) ━━━
+${envBlock}
+
+━━━ THREE DECOR ELEMENTS (cherry-blossom branches / butterflies / mushrooms / wildflowers / dewdrops) ━━━
+${decorBlock}
+
+━━━ CAMERA COMPOSITION ━━━
+${camera}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ SPARKLE STACK — RAINBOW-DREAMSCAPE ━━━
+
+Layer ALL on EVERY render:
+- Glossy pearlescent finish on the kawaii cups
+- Vivid rainbow gradient (literal rainbow band)
+- Painterly grass / meadow / hillside with hand-painted texture
+- Cherry-blossom-petal-rain drifting
+- Hot-air-balloons or pastel-balloons floating in deep sky
+- Pastel cherry-blossom-mountains in distance
+- Sunny pastel sky — pink-and-blue gradient
+- Butterflies fluttering optionally
+- Dewdrops on grass + floating pearl-orbs
+- Tiny scattered pastel flowers throughout the meadow
+- Soft volumetric pastel sunlight pouring across the scene
+- Painterly-illustration-fusion register (NOT flat product-shot)
+
+━━━ MOVIE POSTER MOMENT ━━━
+
+The viewer's reaction: "OMG those kawaii cups are LIVING IN A RAINBOW-MEADOW — they're like meadow-creatures." Wallpaper-poster bex.ai signature work.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD BANS ━━━
+- NO chibi creatures / characters / humans / animals (only kawaii FOOD as inhabitants)
+- NO solo / single food (must be 3+ MIXED kawaii foods)
+- NO repetitive same-food groups (variety is mandatory)
+- NO tabletop / indoor product-shot composition
+- NO dark / moody / scary scenes
+- NO industrial / modern setting
+- NO empty / sparse meadow (must have streams / trees / rocks visible)
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD WITH THE LANDSCAPE FIRST so Flux locks onto the outdoor setting before composing foods. Open with the landscape + environmental features, THEN drop in the kawaii foods as inhabitants, THEN sky + rainbow + decor.
+
+Open with: "Wider scenic outdoor shot of a pastel [dreamscape setting] with [environmental feature 1 — stream/pond/trail/etc.] winding through and [environmental feature 2 — trees/rocks/etc.] alongside, [environmental feature 3] in midground — and nestled in the meadow, [3-7 mixed kawaii foods named specifically], [rainbow element], pastel-mountains and [sky element] in distance, cherry-blossom branches arching, [decor scattered], painterly Pop-Mart-illustration-fusion rendering, sunny pastel light..."
+
+⚠ The first 30 words MUST establish the outdoor landscape with concrete environmental features before mentioning the foods. Locks Flux on the dreamscape.
+
+Output ONLY the raw 110-160 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The lush outdoor landscape + 3-7 mixed kawaii foods + visible environmental features + literal rainbow must ALL read CLEARLY.`;
+  },
+
+  YUMBOT_CHECKERED_TABLETOP: ({ slots, sharedDNA, vibeDirective }) => {
+    const { vessel_hero, mini_creature_pile, tablecloth, scattered_minis, decor_clusters, camera, lighting } = slots;
+    const minisList = Array.isArray(scattered_minis) ? scattered_minis : [scattered_minis];
+    const minisBlock = minisList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const clusterList = Array.isArray(decor_clusters) ? decor_clusters : [decor_clusters];
+    const clusterBlock = clusterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing CHECKERED-TABLETOP renders for YumBot — bex.ai's signature pastel-gingham tabletop look. Kawaii food/drink hero on a pastel-pink-blue (or pink-cream / pink-yellow) GINGHAM/CHECKERED/PLAID tablecloth, with a cluster of smiling mini-food-friends piled around (and often ON TOP of) the hero. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: PASTEL CHECKERED/GINGHAM TABLECLOTH ━━━
+
+The surface is a PASTEL CHECKERED / GINGHAM / PLAID tablecloth — pastel pink + soft blue is most common, but variations include pink + yellow / pink + cream / pink + mint. The checker pattern is CLEARLY visible across the surface. This is the signature backdrop.
+
+━━━ ⚠ HARD RULE #2: KAWAII VESSEL HERO + MINI-FRIEND PILE ON TOP ━━━
+
+The hero is a kawaii-faced food/drink (boba-cup / hot-cocoa-mug / teapot / sundae) — with its own smiling face. AND piled ON TOP of the hero (sitting in the foam / on the rim / inside the cup poking out) is a cluster of mini smiling-creature-food-friends — mini-mochi-balls / mini-smiling-strawberry / smiling-cookie / mini-cream-puffs / smiling-marshmallow-balls. The cluster ON TOP is the signature wow.
+
+━━━ ⚠ HARD RULE #3: SCATTERED MINI-FRIENDS ON THE TABLECLOTH ━━━
+
+Across the gingham tablecloth around the hero, scatter 5 specific kawaii mini-foods/treats (smiling cookies, smiling stars, smiling fruits, hearts, candies, mini-cubes). The render reads like a kawaii-sticker-card or Pop-Mart-collectible-tableau.
+
+━━━ THE KAWAII VESSEL HERO (smiling-face drink/food centerpiece) ━━━
+${vessel_hero}
+
+━━━ MINI-CREATURE PILE ON TOP OF HERO (smiling-food-friends sitting on/in the hero) ━━━
+${mini_creature_pile}
+
+━━━ TABLECLOTH PATTERN ━━━
+${tablecloth}
+
+━━━ FIVE SCATTERED MINIS (across the tablecloth around the hero) ━━━
+${minisBlock}
+
+━━━ TWO DECOR CLUSTERS (mini-macaron stack / mini-marshmallow pile / sugar-pieces / chocolate-clusters) ━━━
+${clusterBlock}
+
+━━━ CAMERA COMPOSITION ━━━
+${camera}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ SPARKLE STACK — CHECKERED-TABLETOP ━━━
+
+Layer ALL on EVERY render:
+- Glossy pearlescent finish on every kawaii food
+- Pastel gingham/checkered tablecloth clearly visible
+- Hero vessel centered with multi-smiling-creature pile on top
+- 5 scattered mini-smiling-foods on the tablecloth around the hero
+- Mini-macaron / mini-marshmallow decor clusters
+- Soft cherry-blossom petals occasionally drifting in
+- Cream-and-glaze drips on the hero food
+- Tiny pearl-beads or sugar-glitter scattered
+- Soft pastel ambient daylight
+- Painterly Pop-Mart designer-vinyl glossy surfaces
+- Slight floating-air sparkle around the cluster
+- Pastel sticker-card or collectible-tableau register
+
+━━━ MOVIE POSTER MOMENT ━━━
+
+The viewer's reaction: "this looks like a kawaii Pop-Mart sticker-card or designer collectible photo." Wallpaper-poster bex.ai signature work.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD BANS ━━━
+- NO chibi creatures / humans / real animals (only smiling food-creatures and food-friends)
+- NO dark / moody / scary
+- NO outdoor scenic (that's rainbow-dreamscape)
+- NO overflowing-flora-from-cup (that's floral-garden-cup)
+- NO solid-pastel backdrop without checker pattern — pattern MUST be visible
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "Pastel [pink/blue/cream/yellow] gingham/checkered tablecloth fills the surface, [kawaii vessel hero centerpiece with its smiling face], with [mini-creature pile on top — naming specific mini-faces], [scattered minis named across the tablecloth], [decor clusters], painterly Pop-Mart designer-vinyl pearlescent rendering, soft pastel daylight..."
+
+Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The gingham/checkered pattern + mini-friend-pile-on-top must read CLEARLY.`;
+  },
+
+
 };
 
 module.exports = TEMPLATES;

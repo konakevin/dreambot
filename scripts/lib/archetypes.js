@@ -1725,6 +1725,49 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  YUMBOT_FLORAL_GARDEN_CUP: {
+    description:
+      'PATH-BESPOKE — YumBot floral-garden-cup (2026-05-20). bex.ai-modeled. Kawaii-faced vessel (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical bouquet of pastel flowers, cherry-blossom sprigs, sphere-flowers, pearls. Cherry-blossom branches arching from corners. Painterly-illustration-fusion. 7 path-bespoke axes.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['vessel', 'overflowing_flora', 'tabletop_scatter', 'frame_branches', 'palette', 'background', 'lighting'],
+    },
+    pickN: { overflowing_flora: 4, tabletop_scatter: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_RAINBOW_DREAMSCAPE: {
+    description:
+      'PATH-BESPOKE — YumBot rainbow-dreamscape (2026-05-20 v2). bex.ai-modeled. 3-7 MIXED kawaii food-creatures (cups + desserts + savory) inhabiting a lush pastel dreamscape landscape with 3 substantial environmental features (streams / ponds / trails / rocks / trees / bridges). Rainbow pouring or arching. Cherry-blossom mountains + hot-air-balloons + sunny pastel sky. Wider lush scenic composition. 8 path-bespoke axes.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['food_inhabitants', 'dreamscape_setting', 'rainbow_element', 'sky_atmosphere', 'environment', 'decor', 'camera', 'lighting'],
+    },
+    pickN: { decor: 3, environment: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_CHECKERED_TABLETOP: {
+    description:
+      'PATH-BESPOKE — YumBot checkered-tabletop (2026-05-20). bex.ai-modeled. Kawaii food/drink hero on a pastel gingham/checkered tablecloth, cluster of smiling mini-food-friends piled around AND ON TOP. 3/4 tabletop or overhead-flatlay. Pop-Mart-collectible-grid/sticker-card feel. 7 path-bespoke axes.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['vessel_hero', 'mini_creature_pile', 'tablecloth', 'scattered_minis', 'decor_clusters', 'camera', 'lighting'],
+    },
+    pickN: { scattered_minis: 5, decor_clusters: 2 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
 };
 
 module.exports = { ARCHETYPES };
