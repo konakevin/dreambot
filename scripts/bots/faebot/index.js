@@ -93,10 +93,11 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    // tiny-fae: scale-anchor companion is the path identity — Haiku
-    // compression strips the dwarfing language and the render reads
-    // as regular-sized fairy. Skip polish to preserve full mandate.
-    skipPaths: ['tiny-fae'],
+    // Axis-system paths skip polish — Haiku compression strips
+    // load-bearing axis language (scale-anchor / court-infrastructure /
+    // throne / boundary-markers). tiny-fae: dwarfing-companion mandate.
+    // fairy-court: throne + audience-seating + chamber-boundary mandate.
+    skipPaths: ['tiny-fae', 'fairy-court'],
   },
 
   // Bot-level pool defaults for declarative composer (flower-fairy path)

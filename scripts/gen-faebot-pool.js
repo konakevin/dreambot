@@ -4794,66 +4794,63 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   // ─── fairy-court path (2026-05-21 axis-system migration, 10 axes) ───
   faebot_fairy_court_subject: {
     format: 'simple',
-    theme: `COURT SUBJECT (queen + optional attendants) for FaeBot's fairy-court path. Each entry describes ONE specific composition of the fae court — either a SOLITARY REGAL QUEEN or a SMALL COURT of 2-5 figures with the queen at center. Each entry 50-90 words. The queen has 5+ stacked exotic regal features.
+    theme: `ATOMIC COURT-FIGURE FEATURE-STACK (ONE fae woman) for FaeBot's fairy-court path. Each entry describes ONE individual fae woman — her unique feature stack. The composer rolls 5 entries per render and RNG picks 1-5 of them as queen + attendants. Each entry 30-60 words.
 
-⚠️ THE BAR: each entry reads as a single COURT composition. Solo queen OR small group (1-5 figures). 5+ stacked exotic features on the queen (species + skin + plant-merged hair + regal gown + crown/diadem + magical signature). NEVER posing for camera. NEVER eye-contact.
+⚠️ THE BAR: each entry is a SELF-CONTAINED FEATURE-STACK for ONE woman. 5+ stacked exotic features. NO scene language, NO pose, NO setting, NO action — just the woman's portrait DNA. The composer assembles 1-5 of these into a court scene; each entry must read clearly as ONE distinct figure that could be placed anywhere in a composition.
 
-⚠️ COURT-SIZE DISTRIBUTION (across 25 entries):
-  • ~12 SOLO QUEEN — alone on her throne / standing alone in sacred circle / walking through grove
-  • ~6 QUEEN + 1 ATTENDANT — lady-in-waiting holding her train / 1 attendant kneeling at her feet
-  • ~5 QUEEN + 2-3 ATTENDANTS — processional / small court arrangement
-  • ~2 QUEEN + 4 ATTENDANTS — fuller small court (max 5 total figures)
+⚠️ EVERY ENTRY MUST include AT LEAST 5 stacked exotic features:
+  - SPECIES LINEAGE — fae sidhe / Tylwyth Teg / dryad-queen / hamadryad-noblewoman / oak-priestess / autumn-noblewoman / moon-handmaiden / snow-sidhe / cherry-blossom-fae / fern-priestess / yew-lady / hawthorn-noblewoman / etc. (vary widely across entries)
+  - SKIN TREATMENT — luminous pearl / porcelain-pale with bioluminescent freckles / translucent constellation-glow / moss-tinted gold-olive / silver-bark patches at temples / honey-gold with vine-pattern marks / mottled silver-and-green / golden-amber / silver-blue / pale-pink / etc.
+  - PLANT-MERGED HAIR — living-vine hair woven with hundreds of tiny flowers / cascading silver hair threaded with gold-leaf / dark moss-hair with violet wisteria / silver birch-bark strands with autumn leaves / cherry-blossom-branch hair / yew-needle hair with crimson berries / pale willow-frond hair / etc.
+  - REGAL GOWN — flowing petal-gown with trailing leaf-train / layered willow-leaf robe / woven oak-leaf ceremonial robes / regal fern-frond cloak / floor-length moss-and-dew-spider-silk gown / autumn-leaf cloak over leaf-bodice / icicle-petal cloak / sunflower-petal gown / etc.
+  - CROWN/DIADEM (one) — living antler-crown sprouting leaves / diadem of woven vines with luminous stone / gold-leaf circlet of branching laurel / coronet of tiny living butterflies / ivy-and-moss diadem / dark-vine diadem / floral-crown / icicle-coronet / cherry-blossom-bud crown / etc.
+  - OPTIONAL ANATOMICAL EXTRAS — tall sapphire-veined antlers / pointed elf-ears / luminescent freckles / glowing third eye / regal posture (~50% of entries)
+  - MAGICAL SIGNATURE — soft amber halo / glowing-pearl skin / pollen-glow at her shoulders / will-o-wisp orbit / butterflies orbiting her crown / pearl-glow / golden halo / silver-mist aura / etc.
 
-⚠️ EVERY ENTRY MUST include AT LEAST 5 stacked exotic features on the queen:
-  - SPECIES LINEAGE — fae queen / sidhe / Tylwyth Teg / forest queen / dryad-queen / hamadryad-queen / oak-queen / autumn-queen / moon-queen
-  - SKIN TREATMENT — luminous pearl / porcelain-pale with bioluminescent freckles / translucent constellation-glow / moss-tinted gold-olive / silver-bark patches
-  - PLANT-MERGED HAIR — living vines woven with hundreds of tiny flowers / cascading silver hair threaded with gold-leaf / dark moss with violet wisteria / silver birch-bark strands with autumn leaves
-  - REGAL GOWN — flowing gown of woven petals with long trailing leaf-train / layered robe of overlapping willow-leaves / ceremonial robes of woven oak-leaves with embroidered vine-cord / regal cloak of fern-fronds / floor-length gown of moss and dew-spider-silk
-  - CROWN/DIADEM (one) — living antler-crown sprouting tiny leaves / diadem of woven vines with a single luminous stone / gold-leaf circlet of branching laurel / coronet of tiny living butterflies / ivy-and-moss diadem
-  - ANATOMICAL EXTRAS — tall sapphire-veined antlers / pointed ears / luminescent freckles / glowing third eye / regal stature
-  - MAGICAL SIGNATURE — soft amber halo / glowing-pearl skin / pollen-glow at her shoulders / will-o-wisp orbit / butterflies orbiting her crown
-
-⚠️ ATTENDANT DETAIL (when present):
-  - Attendants are also fae — slender, otherworldly, ceremonial register
-  - "Lady-in-waiting holding her train" / "2 attendants fanning behind her" / "1 sidhe kneeling at her feet" / "3 attendants in slow procession"
-  - Attendants are SMALLER than the queen in visual weight / less elaborate adornment
+⚠️ VARIETY MANDATE (across 25 entries):
+  - At least 18 distinct SPECIES-LINEAGE types across the pool (don't repeat "fae sidhe queen" all 25 times — vary widely)
+  - Vary palette across the pool: warm-amber, cool-silver, pale-pink, white-pearl, green-moss, deep-violet, autumn-bronze, snow-white, etc.
+  - Some entries should describe LESSER FAE NOBLEWOMEN (attendant-tier) and some should describe REGAL QUEENS — composer/template handles assignment, so just write variety
+  - Each entry must be VISUALLY DISTINCT from its neighbors — no two should share both palette AND species
 
 🚫 STRICT BANS:
-  • NO castle / built architecture (separate axis handles setting)
-  • NO eye-contact-with-viewer
-  • NO posing-for-camera / NO model-poses
-  • NO sexualized framing
+  • NO scene / setting / location description (separate axes)
+  • NO action / pose / gesture (separate axes)
+  • NO castle / architecture
+  • NO eye-contact-with-viewer language
+  • NO sexualized language
   • NO bare chest, NO nipples, NO topless
-  • NO violence / NO weapons / NO threatening register
-  • NO crowds beyond 5 total figures`,
+  • NO references to "the queen" / "the throne" / "her court" — just describe HER (the figure stands on her own)
+  • NO references to other figures / attendants — each entry is ONE woman
+  • NO violence / NO weapons`,
     touchpoints: [
-      'A fae queen seated upon a moss-throne grown into ancient oak roots, skin like luminous pearl with subtle vine-pattern marks, floor-length hair of living vines woven with hundreds of tiny white flowers, flowing gown of woven petals with a long trailing leaf-train, living antler-crown sprouting tiny leaves, soft amber halo at her shoulders, gaze cast gently downward',
-      'Three Tylwyth Teg sidhe in slow procession through a moonlit wisteria-archway, the queen at center with cascading silver hair threaded with gold-leaf and dewdrop-pearls, layered robe of overlapping willow-leaves with vine-belted waist and floor-length skirt, diadem of woven vines with a single luminous stone, two attendants flanking',
-      'The fae queen standing alone in a sacred-stone-circle at twilight, porcelain-pale skin with bioluminescent freckles tracing her collarbone, elaborate braided hair of dark moss with violet wisteria flowing past her waist, regal cloak of fern-fronds over a leaf-bodice and floor-sweeping skirt, ivy-and-moss diadem',
-      'A queen on her moss-throne extending one luminous hand outward, translucent skin with constellation-glow beneath, long pearl-white hair with a coronet of tiny living butterflies, ceremonial robes of woven oak-leaves with embroidered vine-cord, tall sapphire-veined antlers, eyes lowered in gentle blessing',
-      'A fae queen walking slowly through her court in a fern-grotto, a lady-in-waiting holding the train of her gown, moss-tinted gold-olive skin, floor-length hair of silver birch-bark strands woven with autumn leaves, long elegant gown of moss and dew-spider-silk, gold-leaf circlet of branching laurel',
-      'A solo autumn-queen seated upon a moss-and-root throne, smooth golden-amber skin, hair of cascading orange-and-red maple-leaves threaded with bronze-vine, regal autumn-leaf cloak over a leaf-bodice and floor-length skirt, branching antlers crowned with autumn-leaves, soft amber halo',
-      'A moon-queen standing alone in a moonlit clearing, translucent silver-blue skin with constellation-freckles, waist-long silver hair threaded with white moonflowers, flowing gown of moonlit silk-petal with a silver-vine train, diadem of woven moonflowers with a single pearl, gentle pearl-glow',
-      'Four sidhe in a small court — queen at center with two ladies-in-waiting behind and one sidhe kneeling at her feet, queen has cascading dark-moss hair with violet wisteria, regal cloak of fern-fronds, antler-crown woven with honeysuckle, eyes lowered in ceremonial blessing',
-      'A solo oak-queen on an ancient moss-and-root throne, bark-textured shoulders fading to smooth moss-tinted skin, floor-length hair of living vines woven with tiny yellow blossoms, ceremonial leaf-petal gown with a long trailing fern-train, living antler-crown branching with fresh oak-leaves',
-      'A solo dryad-queen standing in a sacred clearing with hands lifted in blessing, porcelain-pale skin with constellation freckles, waist-long hair of pale willow-fronds threaded with white moonflowers, layered robe of overlapping willow-leaves with vine-belted waist, third eye glowing softly on her forehead',
-      'A queen seated cross-legged on a moss-cushion before her court, two ladies-in-waiting standing behind her in ceremonial robes, queen with luminous pearl skin and hair of dark moss with violet wisteria, regal cloak of fern-fronds, antler-crown woven with honeysuckle',
-      'A solo hamadryad-queen on her throne grown into ancient yew-roots, mottled silver-and-green skin, dark yew-needle hair threaded with crimson yew-berries, ceremonial robes of yew-bough with woven-vine belt, dark-vine diadem with a single luminous stone',
-      'Three sidhe walking in slow procession through an oak-cathedral grove, queen at center holding a glowing-orb in her painted cupped palms, two attendants flanking, queen with cascading silver hair and a coronet of butterflies, layered robe of willow-leaves',
-      'A solo flower-queen standing alone in a meadow-clearing within the forest, porcelain skin with faint pink undertones, waist-long hair of cherry-blossom branches with white moonflowers, draped bodice of overlapping rose-petals over a floor-length petal-skirt, antler-crown crowned with foxglove-bells',
-      'A queen seated on her moss-throne with one painted hand raised in painted blessing-gesture, luminous skin radiating soft warm light, painted antler-crown of branching deer-antlers wrapped with painted ivy, painted regal robe of layered painted oak-leaves, painted soft amber halo',
-      'A solo fae-queen walking through a wisteria-cascade arbor alone, porcelain-glowing skin, painted waist-long silver hair threaded with painted gold-leaf, painted layered painted robe of painted willow-leaves with painted floor-length train, painted diadem of painted woven-vine',
-      'A queen with one attendant kneeling at her painted feet offering a painted floating-orb of painted magical-light, queen with painted moss-tinted gold-olive skin and painted floor-length hair of painted silver birch-bark, painted regal robe of painted leaf-and-fern',
-      'A solo Tylwyth Teg queen standing painted alone at the center of a painted sacred-stone-circle at painted twilight, painted porcelain skin with painted constellation-freckles, painted braided painted dark-moss hair, painted ceremonial robe of painted woven-petal',
-      'Four sidhe in a small painted court — painted queen at center painted seated, painted three attendants painted standing behind her in painted ceremonial half-circle, painted queen with painted floor-length hair of painted living-vines',
-      'A solo autumn-court queen with her painted leaf-cloak trailing behind her painted form, painted golden-amber skin, painted hair of painted cascading autumn-leaves, painted regal painted leaf-cloak over a painted floor-length painted leaf-gown, painted antler-crown of painted autumn-leaves',
-      'A queen on her painted throne with painted two attendants behind her each painted holding a single painted glowing-orb, painted queen with painted luminous pearl-skin and painted floor-length painted dark-moss hair, painted regal painted petal-gown',
-      'A solo winter-queen painted standing alone in a painted snow-clearing within the painted forest, painted translucent pearl-skin, painted waist-long painted silver-frost hair, painted regal painted icicle-petal cloak, painted diadem of painted frosted-leaves',
-      'A solo painted spring-queen painted standing alone in a painted blossoming clearing, painted porcelain-pink-glowing skin, painted hair of painted cherry-blossom branches, painted regal painted petal-cloak over a painted floor-length painted blossom-gown, painted antler-crown of painted cherry-blossom buds',
-      'A painted summer-court queen on her painted moss-throne with painted three attendants painted standing behind her in painted ceremonial half-circle, painted queen with painted golden-bronze skin and painted floor-length painted golden-leaf hair, painted regal painted sunflower-petal gown',
-      'A solo painted moonlit-court queen painted walking slowly through a painted moonlit grove painted alone, painted silver-blue painted skin, painted waist-long painted silver-moon hair, painted regal painted moonflower-petal cloak, painted diadem of painted moonflowers',
+      'Fae sidhe-queen: luminous pearl skin with subtle vine-pattern marks across her cheekbones, floor-length hair of living-vine threaded with hundreds of tiny white flowers, flowing gown of woven petals with a long trailing leaf-train, living antler-crown sprouting tiny leaves, soft amber halo at her shoulders, pointed elf-ears',
+      'Tylwyth Teg noblewoman: porcelain-pale skin with bioluminescent freckles tracing her collarbone, cascading silver hair threaded with gold-leaf and dewdrop-pearls, layered robe of overlapping willow-leaves with vine-belted waist and floor-length skirt, diadem of woven vines with a single luminous stone, pearl-glow',
+      'Dryad-queen: bark-textured shoulders fading to smooth moss-tinted gold-olive skin, floor-length living-vine hair woven with tiny yellow blossoms, ceremonial leaf-petal gown with a long trailing fern-train, living antler-crown branching with fresh oak-leaves, sapphire-veined antlers, soft pollen-glow',
+      'Hamadryad-noblewoman: mottled silver-and-green skin patterned like ancient bark, dark yew-needle hair threaded with crimson yew-berries, ceremonial robes of yew-bough with woven-vine belt and floor-length skirt, dark-vine diadem with a single luminous stone at the brow, deep emerald aura',
+      'Autumn-court noblewoman: smooth golden-amber skin with bronze-vine pattern marks, hair of cascading orange-and-red maple-leaves threaded with bronze-vine, regal autumn-leaf cloak over a leaf-bodice and floor-length skirt, branching antlers crowned with autumn-leaves, soft amber halo',
+      'Moon-sidhe: translucent silver-blue skin with constellation-freckles, waist-long silver hair threaded with white moonflowers, flowing gown of moonlit silk-petal with a silver-vine train, diadem of woven moonflowers with a single pearl at the center, gentle pearl-glow at her shoulders',
+      'Oak-priestess: smooth moss-tinted skin with subtle bark-pattern at temples, floor-length hair of living-vine woven with hundreds of tiny yellow blossoms, ceremonial oak-leaf robes with embroidered vine-cord belt and floor-sweeping skirt, gold-leaf circlet of branching laurel, soft golden halo',
+      'Cherry-blossom fae: porcelain skin with faint pink undertones, waist-long cherry-blossom-branch hair threaded with white moonflowers, draped bodice of overlapping rose-petals over a floor-length petal-skirt, antler-crown crowned with foxglove-bells and cherry-blossom-buds, soft rose-pink halo',
+      'Fern-priestess: pale moss-tinted skin with subtle silver-bark patches at her temples, waist-long pale willow-frond hair threaded with white moonflowers, layered robe of overlapping willow-leaves with vine-belted waist and floor-length skirt, third eye glowing softly on her forehead, ivy-and-moss diadem',
+      'Winter-queen: translucent pearl-skin with frost-pattern marks at her cheekbones, waist-long silver-frost hair threaded with tiny ice-crystals, regal icicle-petal cloak over a frost-bodice and floor-length crystal-skirt, diadem of frosted-leaves with a single moonstone, soft silver halo',
+      'Spring-blossom noblewoman: porcelain-pink-glowing skin with faint floral marks, hair of cherry-blossom branches threaded with delicate pink petals, regal petal-cloak over a floor-length blossom-gown, antler-crown of cherry-blossom-buds and tiny pink flowers, soft rose halo at her shoulders',
+      'Summer-court noblewoman: golden-bronze skin with subtle sun-pattern marks, floor-length golden-leaf hair threaded with sunflower-petals, regal sunflower-petal gown with woven-vine belt and trailing leaf-train, gold-leaf circlet of branching laurel and sunflowers, warm amber halo',
+      'Yew-lady: mottled emerald-and-silver skin patterned like ancient yew-bark, dark yew-needle hair threaded with crimson yew-berries and tiny black flowers, regal yew-bough cloak over a leaf-bodice and floor-length dark-skirt, dark-vine diadem, deep-emerald aura',
+      'Hawthorn-noblewoman: pale honey-gold skin with subtle vine-pattern marks at temples, waist-long copper-brown hair threaded with hawthorn-blossoms and tiny red berries, regal hawthorn-leaf cloak over a leaf-bodice and floor-length skirt, antler-crown of hawthorn-branches, soft warm halo',
+      'Silver-birch sidhe: pale silver-bark skin with subtle white-pattern marks at temples, waist-long silver birch-bark strand hair threaded with autumn leaves, regal birch-leaf cloak over a moss-and-dew-spider-silk gown, gold-leaf circlet of branching laurel and birch-leaves, soft silver halo',
+      'Bluebell-fae: pale lavender-tinted skin with subtle indigo-pattern marks at cheekbones, waist-long deep-blue hair threaded with tiny indigo bluebells, regal bluebell-petal gown with floor-length skirt of overlapping bluebell-petals, antler-crown of woven bluebells, soft violet aura',
+      'Foxglove-noblewoman: pale rose-tinted skin with subtle pink-pattern marks at temples, waist-long pink hair threaded with foxglove-bells and tiny pink berries, regal foxglove-petal cloak over a leaf-bodice and floor-length skirt, antler-crown of foxglove-spires, soft pink halo',
+      'Marigold-court noblewoman: golden-amber skin with subtle floral pattern marks, hair of cascading orange marigold-petals threaded with bronze-vine, regal marigold-petal cloak over a leaf-bodice and floor-length skirt, gold-leaf circlet of branching marigold-buds, soft golden halo',
+      'Snow-sidhe: porcelain-glowing skin with subtle frost-pattern marks at temples, waist-long silver-white hair threaded with tiny ice-crystals and white moonflowers, regal icicle-petal cloak over a frost-bodice and floor-length crystal-skirt, diadem of frosted-leaves, soft pearl halo',
+      'Mossy oak-noblewoman: moss-tinted gold-olive skin with subtle bark-pattern marks at temples, floor-length dark-moss hair threaded with violet wisteria, regal fern-frond cloak over a leaf-bodice and floor-sweeping skirt, antler-crown woven with honeysuckle, soft amber halo',
+      'Constellation-fae: translucent skin with subtle constellation-glow beneath, long pearl-white hair threaded with tiny silver-points like stars, ceremonial robes of woven oak-leaves with embroidered silver-thread vine-cord, tall sapphire-veined antlers with coronet of tiny living butterflies, soft pearl-glow',
+      'Willow-noblewoman: pale silver-green skin with subtle vine-pattern marks at temples, waist-long pale willow-frond hair threaded with white moonflowers and silver-leaves, layered robe of overlapping willow-leaves with vine-belted waist and floor-length skirt, diadem of woven willow-fronds, soft pearl halo',
+      'Honey-vine queen: warm honey-gold skin with subtle vine-pattern marks across cheekbones and shoulders, floor-length amber-vine hair threaded with tiny golden bell-flowers, regal honey-leaf cloak over a leaf-bodice and floor-length amber-skirt, gold-leaf circlet of branching laurel, warm golden halo',
+      'Pearl-court attendant: porcelain-pale skin with luminescent freckles tracing her cheekbones, waist-long white-silver hair threaded with pearl-strings, regal pearl-petal cloak over a leaf-bodice and floor-length silver-skirt, simple ivy-and-moss diadem, gentle pearl-glow at her shoulders',
+      'Twilight-violet noblewoman: pale lavender-blue skin with subtle constellation-freckles, waist-long deep-violet hair threaded with tiny blue moonflowers, regal violet-petal cloak over a leaf-bodice and floor-length twilight-skirt, dark-vine diadem with a single luminous moonstone, soft violet aura',
     ],
-    instructions: `Each entry is ONE unified COURT SUBJECT description, 50-90 words. Format: prose, comma-separated phrases. MANDATORY — (a) court size (solo / queen+1 / queen+2-3 / queen+4 attendants), (b) 5+ stacked exotic features on queen (species + skin + plant-hair + gown + crown + magical signature), (c) attendant arrangement if present. NO castle / built architecture. NO eye-contact. NO posing. NO sexualized. NO bare chest. NO violence. NO crowds beyond 5. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+    instructions: `Each entry is ONE ATOMIC FEATURE-STACK for ONE woman, 30-60 words. Format: "<SPECIES-LINEAGE>: <skin>, <hair>, <gown>, <crown/diadem>, <optional anatomical extras>, <magical signature>". MANDATORY — (a) species lineage opener, (b) skin treatment, (c) plant-merged hair, (d) regal gown, (e) crown/diadem, (f) magical signature. Vary widely across the 25 entries — at least 18 distinct species-lineage types, palette variety. NO scene/setting/pose/action. NO references to "queen" / "throne" / "court" / "attendants" / "other figures" — just describe THIS individual woman. NO eye-contact. NO sexualized. NO bare chest. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
 
   faebot_fairy_court_ceremonial_moment: {
@@ -5019,58 +5016,87 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
 
   faebot_fairy_court_forest_backdrop: {
     format: 'simple',
-    theme: `SACRED FOREST BACKDROP for FaeBot's fairy-court path. Each entry describes ONE specific sacred-grove enchanted-forest setting wrapping the court. Each entry 25-50 words.
+    theme: `FORMAL FAIRY-COURT SETTING (court infrastructure GROWN from the forest) for FaeBot's fairy-court path. Each entry describes ONE specific sacred-grove that reads as a FORMAL COURT SPACE — not just a forest clearing, but a fae-constructed ceremonial chamber where every "court furnishing" is grown from living wood / moss / stone / mushroom / petal. Each entry 35-60 words.
 
-⚠️ THE BAR: each backdrop is an enchanted sacred-grove setting wrapping the court — ancient oak grove / wisteria-cascade arbor / standing-stone-circle / fern-grotto throne / yew-grove. Atmospheric depth fading to painted distance. NEVER built architecture.
+⚠️ THE BAR: Kevin's note — "right now these scenes sort of just look like any other forest setting." Each backdrop must read as A FORMAL FAE COURT — there must be visible, specific, fae-grown COURT INFRASTRUCTURE that signals "this is a ceremonial chamber the fae have shaped from the forest." Not built (no masonry / no carved stone) — GROWN.
 
-⚠️ BACKDROP CATEGORIES (across 25 entries):
-  • ~5 ANCIENT OAK CATHEDRAL — soaring oak-cathedral with dappled god-rays
-  • ~4 WISTERIA-CASCADE ARBOR — violet wisteria draping overhead like cathedral ceiling
-  • ~4 SACRED-STONE-CIRCLE — ancient standing-stones surrounding the queen
-  • ~3 FERN-GROTTO — moss-covered boulders cradling the court
-  • ~3 YEW-GROVE — twisted dark-green yew-trees ringing the clearing
-  • ~3 BIRCH-GLADE — pale slender birch-trunks framing the scene
-  • ~2 SACRED CLEARING — mossy-clearing in deep forest
-  • ~1 RARE — ancient mushroom-grove ring / bioluminescent glen
+⚠️ EVERY entry MUST include AT LEAST ONE COURT-INFRASTRUCTURE element from this menu (preferably TWO). Vary which infrastructure leads across the 25 entries — DO NOT default every entry to "the throne." Distribute load across the menu so variety is naturally preserved:
+  1. THRONE — moss-and-root throne grown from an ancient tree-base, fern-and-bark throne, single tall standing-stone wrapped in moss as a back-rest. ~7 of 25 entries should also include CHAIR-FORM SPECIFICITY: explicit "carved root-arms forming the armrests" / "high gnarled-root throne-back rising behind the queen" / "throne with curved seat-back and woven-vine armrests" — so the throne reads clearly as a CHAIR, not a moss-mound. The OTHER ~18 entries lead with different infrastructure (dais / chandeliers / approach / benches / canopy) and the throne stays implicit or absent.
+  2. AUDIENCE SEATING — ring of mossy boulder-pedestals / fallen-log benches arranged in a circle / bent-low branches grown flat into natural benches around the clearing
+  3. COURT FLOOR — concentric mushroom-rings (SMALL floor pattern only, NEVER dominant) as audience tiers / petal-strewn ceremonial floor / patterned moss-mosaic underfoot / a raised circular moss-mound as the queen's dais
+  4. COURT BOUNDARY — ring of ancient trunks with woven-vine garlands strung between / pale birch-trunks forming the chamber colonnade / twin gnarled tree-pillars flanking the chamber center
+  5. COURT LIGHTING — pollen-orb chandeliers hanging warm-golden from branches as natural chandeliers / hanging-lantern flowers (wisteria, foxglove-bell, datura) draping like court chandeliers / will-o-wisp orbs orbiting overhead
+  6. CEREMONIAL APPROACH — root-archway entrance / corridor of bent-branch-arches leading IN to the court / petal-carpeted ceremonial path / gnarled-root processional walkway / moss-stair stone-path approach
+  7. COURT CANOPY — woven-vine canopy stretched over the court center / interlocked overhead branches forming a vaulted ceiling / wisteria-curtain ceiling over the clearing
+
+⚠️ COURT TYPES (across 25 entries — every entry has infrastructure, this is just biome flavor):
+  • ~5 BIRCH-GLADE COURT (PRIORITY — Kevin's hearted reference) — slender pale birch-pillars as colonnade, raised moss-dais center, HANGING POLLEN-ORB CHANDELIERS draping from canopy, moss-stair processional approach
+  • ~5 ANCIENT OAK COURT — soaring oak-cathedral with moss-and-root throne flanked by tree-archway chamber walls, hanging-lantern-orbs from branches, moss-stair stone-path approach (Kevin's 2nd hearted reference DNA)
+  • ~4 WISTERIA-CHAMBER COURT — gentle violet wisteria-cathedral ceiling, hanging-bell-flower lanterns, petal-strewn floor, moss-and-root throne
+  • ~3 GIANT-MUSHROOM-CANOPY COURT (Kevin's 4th hearted reference) — ONE COLOSSAL CHAMBER-CENTER MUSHROOM at tree-height scale (mushroom-cap soaring 20-40 feet above the queen as a living canopy / landmark / chamber-roof) with the queen standing UNDER IT or IN FRONT OF IT at full human scale. Surrounded by detailed enchanted forest (ancient oak / birch trunks, lush moss carpet, drifting flowers, hanging vines). Sometimes a moss-stair stone-path approach leads up to the mushroom-canopy chamber. The mushroom is ARCHITECTURE / LANDMARK, NOT a throne. Smaller toadstools and fairy-ring clusters dress the floor around it. Soft warm-amber or pearl-glow ambient register.
+  • ~2 HERO-TREE COURT — ONE SINGLE BREATHTAKING ANCIENT TREE as the chamber-landmark (colossal world-tree / mythic mother-oak / cascading-blossom hero-tree with vast sprawling buttress-roots forming a natural alcove at its base, twisted gnarled trunk soaring impossibly tall, sprawling canopy of leaves and hanging-vines overhead like a vaulted ceiling). Queen stands IN the root-alcove / IN FRONT OF the trunk at human scale. Moss-stair stone-path approach leads up to the tree-base. Lush moss carpet with drifting flowers and ferns. The TREE ITSELF is the cathedral. Awe-inspiring soft-amber register.
+  • ~3 FERN-GROTTO COURT — moss-boulder pedestals as attendants' seats, lacy fern-canopy chamber walls, root-archway entrance, glowing-pollen-orb chandeliers
+  • ~2 YEW-GROVE COURT (less frequent — yew is darker register) — twisted dark-yew columns ringing the chamber, fern-and-bark throne; pollen-orb chandeliers ONLY (NO glowing-mushroom-spire boundary)
+  • ~2 SACRED CLEARING COURT — moss-dais in deep oak-grove, fallen-log benches in half-circle, hanging-lantern flowers (foxglove-bells / wisteria-clusters) as chandeliers
+
+⚠️ EXPLICITLY BANNED CATEGORIES (Kevin: "mushrooms jammed into the scene because that's what fairies do" = corny):
+  • ❌ NO MUSHROOM-CAP THRONE — queen sitting ON TOP of a mushroom-cap as a throne (looks like she's perched on fungus — corny). The mushroom-canopy category above is DIFFERENT: queen stands UNDER / IN FRONT OF the giant mushroom at human scale, NEVER sitting on it.
+  • ❌ NO RING-OF-MUSHROOM-SPIRE CHAMBER PILLARS — luminous mushroom-spires marking the chamber boundary like court pillars (replaces the trees with mushrooms — corny).
+  • ❌ NO CONCENTRIC-FAIRY-RING AUDIENCE TIERS as the dominant floor pattern (stair-of-mushrooms vibe — corny).
+  • ❌ NO STANDING-STONE COURT with prominent megaliths (too druid/heavy for fae soft-ethereal register)
+  • Small SCATTERED MUSHROOMS / TOADSTOOLS as floor-pattern accents around the moss are ALWAYS allowed — they enrich the lush forest detail. The bans only apply to mushroom-AS-THRONE, mushroom-AS-CHAMBER-PILLARS, and concentric-mushroom-amphitheater layouts.
+
+⚠️ CRITICAL DISTINCTION for the GIANT-MUSHROOM-CANOPY category:
+  • The single colossal mushroom is a LIVING CHAMBER-LANDMARK at tree-scale (20-40 ft tall, mushroom-cap canopy soaring overhead)
+  • Queen is at HUMAN SCALE — standing UNDER the cap / IN FRONT of the stem / on the moss-stair approach
+  • The mushroom is integrated into the forest, surrounded by ancient TREES + moss carpet + drifting flowers + ferns (the FOREST is still visible and detailed around the mushroom)
+  • NOT a stylized cartoon mushroom — painted-fantasy realistic mushroom textures, pearl-glow or warm-amber undercap
+  • NEVER the queen sitting on top of the mushroom (that's the banned throne pattern)
 
 ⚠️ EVERY entry MUST include:
-  - SPECIFIC FOREST TYPE (named tree species + structural feature)
-  - 2+ SIGNATURE FEATURES (moss-covered roots / ancient stones / hanging vines)
-  - MULTI-TIER DEPTH
+  - (a) the biome / forest type (oak / wisteria / stone-circle / fern-grotto / yew / birch / mushroom / bioluminescent)
+  - (b) AT LEAST ONE court-infrastructure element from the menu above (preferably TWO)
+  - (c) multi-tier depth (foreground court element / mid-tier audience or chamber walls / background distance)
 
 🚫 STRICT BANS:
-  • NO castle / built architecture / stone-masonry / carved stones (standing-stones OK)
+  • NO castle / NO built architecture / NO masonry / NO carved stone / NO furniture-as-furniture (every "court furnishing" is GROWN — moss-and-root, log, living-branch, standing-stone wrapped in moss, etc.)
+  • NO mushroom-as-throne, NO mushroom-spire boundary, NO mushroom-as-dominant-element (small floor-pattern accents only)
   • NO modern setting
   • NO creature description / regalia (separate axes)
-  • NO lighting / weather (separate axes)`,
+  • NO lighting / weather (separate axes — lantern-orbs are OK as infrastructure but don't describe the LIGHTING register itself)
+  • NO description of the queen / attendants — backdrop only
+  • SOFT ETHEREAL ENCHANTED-FOREST REGISTER — every entry must read as a soft, dreamy, painted-fantasy court chamber. NOT druid-heavy, NOT mushroom-forward, NOT dark-mystical. The bar: pretty + forestry + enchanted, like the hearted birch-glade and oak-cathedral references`,
     touchpoints: [
-      'Ancient oak-cathedral grove with painted massive twisted gnarled trunks, painted moss-covered roots crossing the forest-floor, painted hanging-vines from above, painted dappled god-rays piercing canopy, painted multi-tier depth',
-      'Wisteria-cascade arbor with painted violet-wisteria racemes draping from above like a painted natural cathedral ceiling, painted moss-grown path through, painted gallery-tier ceremonial register',
-      'Sacred standing-stone-circle in painted moonlit clearing, painted ancient weathered stones ringing the queen, painted moss-floor at the painted stone-bases, painted atmospheric mist',
-      'Hidden fern-grotto cradled by painted moss-covered boulders, painted tall lacy fern-fronds towering, painted ancient bark-textured stones surrounding, painted ceremonial register',
-      'Ancient yew-grove with painted twisted dark-green yew-trees ringing the painted sacred clearing, painted weathered standing-stones half-buried in painted moss, painted deep blue-green mystery',
-      'Birch-glade with painted pale slender birch-trunks rising tall and graceful around the painted court, painted scattered moss-floor with painted mushroom-rings, painted ethereal painted register',
-      'Sacred clearing in deep painted ancient forest, painted moss-floor surrounded by painted massive ancient tree-trunks, painted dappled light filtering through, painted multi-tier depth',
-      'Ancient mushroom-ring grove with painted massive ancient mushroom-spires ringing the painted forest clearing, painted soft pearl-glow emanating from gills, painted moss-carpet, painted magical register',
-      'Bioluminescent glen with painted softly glowing-moss carpeting the forest-floor in painted soft cyan-and-violet, painted glowing-mushrooms surrounding the painted clearing, painted magical ceremonial register',
-      'Ancient oak-cathedral with painted soaring trunks rising into a painted vaulted canopy, painted hanging-moss curtains from above, painted moss-and-fern floor, painted gallery-tier sacred register',
-      'Painted oak-cathedral with painted vast twisted ancient trunks like painted columns, painted moss-and-root throne grown from the painted floor, painted dappled god-rays piercing the painted canopy',
-      'Painted hidden fern-grotto cradled by painted ancient stones, painted lacy painted fern-fronds soaring overhead, painted dripping painted moss-cliffs, painted ceremonial register',
-      'Painted wisteria-cathedral with painted cascading violet-wisteria draping from painted ancient oak-branches overhead, painted moss-grown path through, painted ethereal painted register',
-      'Painted wisteria-arbor over a painted winding moss-path, painted violet-cluster draping from above, painted scattered fallen wisteria-petals on the path below, painted gallery-tier register',
-      'Painted sacred-stone-circle painted at painted twilight, painted ancient weathered stones painted half-buried in moss, painted distant treeline painted silhouette, painted atmospheric register',
-      'Painted ancient ring of painted standing-stones, painted moss-covered painted bases, painted single tall painted dolmen at the center, painted twilight-blue painted atmosphere',
-      'Painted moss-and-boulder fern-grotto, painted dripping painted ferns from painted cliff-walls, painted hidden painted grotto-floor of painted moss-and-stone, painted ceremonial register',
-      'Painted yew-grove painted clearing with painted twisted dark-green painted yew-trees painted ringing painted ancient standing-stones, painted deep blue-green painted painted mystery',
-      'Painted painted ancient painted yew-cathedral with painted twisted painted dark trunks painted forming painted natural columns, painted deep painted shadowy painted register',
-      'Painted birch-glade clearing with painted slender painted pale-bark birch-trunks painted in painted close formation, painted dappled painted light, painted ethereal painted register',
-      'Painted sacred painted clearing in painted ancient painted oak-forest, painted moss-floor painted carpet, painted painted hanging-moss painted curtains painted draping from painted above',
-      'Painted hidden painted grove painted of painted ancient painted mossy painted oak-trees, painted painted moss-and-root painted throne painted grown painted from painted the painted floor',
-      'Painted painted ancient painted painted forest painted clearing painted at painted painted twilight, painted painted moss-floor painted with painted painted scattered painted painted mushroom-rings',
-      'Painted painted bioluminescent painted painted glen painted with painted painted softly painted glowing-moss painted carpeting painted the painted painted forest-floor, painted painted magical painted painted register',
-      'Painted painted ancient painted painted painted oak-grove painted painted with painted painted scattered painted painted moss-and-vine painted painted thrones painted painted grown painted painted from painted painted roots',
+      'RAISED MOSS-DAIS at the chamber center as the queen-platform, HANGING POLLEN-ORB CHANDELIERS draping yellow-golden from overhead birch-branches, GNARLED-ROOT PROCESSIONAL WALKWAY leading inward from the foreground as the ceremonial approach, fairy-ring mushroom-clusters scattered as soft audience-floor pattern, set in a soft birch-glade court with slender pale-bark trunks standing as a graceful chamber colonnade, ethereal golden-green register',
+      'GNARLED-ROOT THRONE grown from massive ancient oak-roots at the chamber center with HIGH WOVEN-BRANCH THRONE-BACK rising behind and CARVED ROOT-ARMS forming armrests, flanked by twin tree-archway chamber-walls, HANGING GLOWING-POLLEN-ORB CHANDELIERS draping from canopy on either side, MOSS-STAIR STONE-PATH APPROACH leading up to the throne from the foreground, set in an ancient oak-cathedral court with soft green-amber depth',
+      'HANGING WISTERIA-CLUSTER LANTERNS draping like soft court chandeliers from overhead branches, PETAL-STREWN CEREMONIAL FLOOR carpeted with fallen violet wisteria, MOSS-AND-ROOT THRONE nestled against the host-oak at the chamber rear, set in a soft wisteria-cathedral chamber with cascading violet curtains forming the living ceiling, gentle ethereal register',
+      'MOSS-COVERED BOULDER AUDIENCE-PEDESTALS arranged in a ring at the chamber edge, MOSS-AND-STONE DAIS raised at the center as the queen-platform, ROOT-ARCHWAY ENTRANCE at the foreground, GLOWING-POLLEN-ORB CHANDELIERS hanging from arching fronds above, set in a hidden fern-grotto cradled by tall lacy fern-fronds as living chamber-walls, soft green register',
+      'PAIR OF TREE-PILLAR CHAMBER WALLS flanking the central MOSS-AND-ROOT THRONE, HANGING POLLEN-ORB CHANDELIERS draping from overhead branches as soft warm-amber lanterns, MOSS-STAIR STONE-PATH APPROACH leading up to the throne from the foreground, set in an ancient oak-cathedral court with vaulted interlocked-branch canopy overhead, soft golden-green ethereal register',
+      'RAISED MOSS-DAIS at the chamber center as the queen-platform, HANGING POLLEN-ORB CHANDELIERS draping yellow-golden from pale birch-branch colonnade, GNARLED-ROOT PROCESSIONAL WALKWAY leading inward, fairy-ring mushroom-clusters subtle on the audience-floor, set in a soft birch-glade court with slender pale-bark trunks framing the chamber, ethereal warm-amber register',
+      'MOSS-AND-ROOT THRONE between two ancient host-trees at the chamber rear, FALLEN-LOG BENCHES arranged in a soft half-circle facing the throne, CORRIDOR OF BENT-BRANCH-ARCHES leading inward from the foreground as the ceremonial approach, HANGING POLLEN-ORB CHANDELIERS draping from canopy, set in a soft oak-cathedral court, gallery-tier ethereal depth',
+      'PETAL-CARPETED CEREMONIAL PATH leading inward from the foreground root-arch entrance, MOSS-AND-ROOT THRONE grown from an ancient stump at the clearing center, FALLEN-LOG BENCHES arranged in a half-circle around the throne, HANGING POLLEN-ORB CHANDELIERS draping yellow-warm from overhead, set in a soft oak-cathedral court with vaulted canopy, ethereal warm-amber register',
+      'PAIR OF MOSS-AND-FERN THRONES (queen and consort) grown at the clearing center as the seat-of-court, HANGING POLLEN-ORB CHANDELIERS draping from overhead branches, MOSS-STAIR STONE-PATH APPROACH leading up to the thrones, scattered fairy-ring mushroom-clusters on the audience floor, set in a soft yew-grove court with twisted dark-trunks forming the living colonnade, soft green-amber register',
+      'WISTERIA-CASCADE CEILING draping violet-soft from interlocked overhead branches, RING OF MOSS-BOULDER PEDESTALS encircling the central queen-dais as audience-seats, PETAL-CARPETED CEREMONIAL PATH leading inward from the foreground, HANGING BELL-FLOWER LANTERNS as soft chandeliers, set in a soft wisteria-chamber court, ethereal violet-cream register',
+      'GNARLED-WOOD THRONE grown from ancient oak-base at the chamber rear with HIGH ROOT-ARM ARMRESTS and a CURVED LIVING-BRANCH BACK rising behind the queen seat, HANGING POLLEN-ORB CHANDELIERS draping warm-golden from canopy on either side, MOSS-STAIR APPROACH leading up to the throne, scattered ferns and toadstools soft on the floor, set in an ancient oak-cathedral court with twin pillar-trunks framing the chamber, soft ethereal register',
+      'LACY FERN-CANOPY arching overhead as a living vaulted ceiling, MOSS-BOULDER AUDIENCE-PEDESTALS arranged in a ring at the chamber edge, ROOT-ARCH ENTRANCE at the foreground, GLOWING-POLLEN-ORB CHANDELIERS hanging soft-yellow from fern-fronds above, MOSS-AND-ROOT THRONE at center, set in a soft fern-grotto court, ethereal green register',
+      'RAISED MOSS-MOUND DAIS at the chamber center as the queen-platform, CIRCLE OF SEVEN GNARLED-LOG BENCHES arranged around the dais as audience-seats, HANGING-LANTERN FLOWERS (foxglove-bells and wisteria-clusters) draping from overhead branches as natural chandeliers, set in a soft sacred clearing within ancient oak-grove, woven-vine canopy overhead, ethereal warm register',
+      'MOSS-STAIR STONE-PATH APPROACH leading up to the queen-platform from the foreground, MOSS-AND-ROOT THRONE at the chamber center flanked by gnarled tree-pillars, HANGING POLLEN-ORB CHANDELIERS draping warm-amber from overhead branches, set in a soft oak-cathedral court with ferns and soft-mushroom floor accents, ethereal golden-green register',
+      'HANGING WISTERIA-CASCADE CEILING soft-violet draping from interlocked branches, MOSS-AND-ROOT THRONE nestled against the host-oak at the rear of the chamber, MOSS-STAIR STONE-PATH APPROACH leading up to the throne, PETAL-STREWN FLOOR carpeted with fallen wisteria, set in a soft wisteria-cathedral court, ethereal violet-cream register',
+      'BIRCH-GLADE COLONNADE with slender pale-bark trunks framing the chamber boundary, RAISED MOSS-DAIS at the ring-center as the queen-platform, HANGING POLLEN-ORB CHANDELIERS draping yellow-golden from overhead birch-branches, GNARLED-ROOT PROCESSIONAL WALKWAY leading inward from the foreground, soft ethereal warm-amber register',
+      'MOSS-AND-ROOT THRONE woven from living branches at the chamber rear, ROOT-ARCH ENTRANCE framing a living fern-canopy vaulted chamber, GLOWING-POLLEN-ORB CHANDELIERS hanging from arching fronds above, MOSS-BOULDER AUDIENCE-PEDESTALS arranged in a ceremonial ring, set in a soft fern-grotto court with hidden moss-and-stone floor, ethereal green register',
+      'HANGING POLLEN-ORB CHANDELIERS draping warm-golden from overhead canopy at the chamber center, MOSS-AND-ROOT THRONE flanked by twin gnarled tree-pillars, MOSS-STAIR STONE-PATH APPROACH leading up to the throne, set in a soft ancient oak-cathedral court with painted distance fading into ethereal forest, golden-green register',
+      'PETAL-CARPETED CEREMONIAL FLOOR strewn with cherry-blossom and rose petals, MOSS-AND-ROOT THRONE at the chamber rear flanked by host-trees, HANGING POLLEN-ORB CHANDELIERS as soft warm lanterns, ROOT-ARCH ENTRANCE at the foreground, set in a soft sacred clearing within ancient oak-grove, ethereal warm-amber register',
+      'CONCENTRIC RING OF SOFT WHITE TOADSTOOLS forming the audience-floor tier around the central MOSS-AND-FERN THRONE, HANGING-CATKIN CHANDELIERS draping from overhead birch-branches, MOSS-STAIR APPROACH leading up to the throne, set in a soft birch-glade court with slender pale-bark trunks standing in close formation as chamber-pillars, ethereal soft-amber register',
+      'MOSS-AND-ROOT THRONE grown from ancient gnarled oak at the chamber rear, FALLEN-LOG BENCHES in a soft half-circle, HANGING POLLEN-ORB CHANDELIERS draping warm-amber from canopy, MOSS-STAIR STONE-PATH APPROACH from the foreground, scattered ferns soft on the floor, set in a soft oak-cathedral court, ethereal warm-golden register',
+      'WISTERIA-CASCADE CHAMBER WALLS draping violet from overhead branches as living curtains, MOSS-AND-ROOT THRONE at the chamber center flanked by gnarled wisteria-pillars, RING OF MOSS-BOULDER PEDESTALS as audience-seats, HANGING WISTERIA-CLUSTER LANTERNS as chandeliers, set in a soft wisteria-cathedral court, ethereal violet-cream register',
+      'TREE-PILLAR CHAMBER WALLS flanking the central MOSS-AND-ROOT THRONE, MOSS-STAIR STONE-PATH APPROACH leading up from the foreground, HANGING POLLEN-ORB CHANDELIERS draping warm from overhead, soft fern-floor accents, set in an ancient oak-cathedral court with gnarled twin host-trees as the chamber-frame, ethereal golden-green register',
+      'RAISED MOSS-DAIS at the center as the queen-platform, HANGING POLLEN-ORB CHANDELIERS warm-yellow draping from overhead pale birch-branches, GNARLED-ROOT PROCESSIONAL WALKWAY from the foreground, FAIRY-RING FLOOR-PATTERN soft accents, set in a soft birch-glade court with pale-bark colonnade framing the chamber, ethereal soft register',
+      'MOSS-AND-ROOT THRONE between twin tree-pillars at the chamber rear, MOSS-STAIR APPROACH leading up to the throne, HANGING POLLEN-ORB CHANDELIERS warm-amber from overhead canopy, set in an ancient oak-cathedral court with twin gnarled host-trees as chamber-frame, soft ferns and ground-flowers on the floor, ethereal warm register',
+      'COLOSSAL GIANT-MUSHROOM CANOPY at chamber center soaring tree-height (cap 25 feet across forming a living overhead roof), pearl-glow ambient bleeding from beneath its cap, MOSS-STAIR STONE-PATH APPROACH leading up to the mushroom-stem center with the queen standing UNDER the cap at full human scale, surrounded by ancient oak-and-birch trunks fading into soft forest depth, lush moss carpet with drifting wildflowers and ferns, scattered smaller toadstools dressing the floor, soft warm-amber ethereal register (mushroom is ARCHITECTURE not throne)',
+      'GIANT-MUSHROOM CHAMBER-LANDMARK at the clearing center (single colossal mushroom-cap soaring 30 feet overhead as a natural canopy-roof), queen standing IN FRONT OF the stem at human scale, surrounded by towering ancient trees with cascading hanging-vines, lush ferns and ground-flowers carpeting the moss-floor, drifting pollen-light around the cap-edge, soft pearl-glow undercap, ethereal warm enchanted-forest register (mushroom is the chamber, NEVER the throne)',
+      'A SINGLE BREATHTAKING ANCIENT HERO-TREE as the chamber-landmark (colossal world-tree / mythic mother-oak with sprawling buttress-roots forming a natural alcove at its base, twisted gnarled trunk soaring impossibly tall, vast cascading canopy of leaves and hanging-vines spreading overhead like a vaulted ceiling, glowing pollen-orbs drifting through the branches), queen standing IN THE ROOT-ALCOVE / IN FRONT OF the trunk at full human scale, MOSS-STAIR STONE-PATH APPROACH leading up to the tree-base, surrounded by lush moss carpet with wildflowers and ferns, soft warm-amber light pouring through the canopy from above, ethereal awe-inspiring register (the tree itself is the cathedral)',
     ],
-    instructions: `Each entry is ONE specific SACRED FOREST BACKDROP, 25-50 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific forest type, (b) 2+ signature features, (c) multi-tier depth. NO castle / built architecture. NO modern. NO creature/regalia. NO lighting/weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+    instructions: `Each entry is ONE FORMAL FAIRY-COURT SETTING, 35-60 words. Format: prose, comma-separated phrases. ABSOLUTE MANDATE — every entry MUST OPEN with court-infrastructure (lead with the throne / audience benches / mushroom-ring tiers / lantern-orbs / standing-stone boundary / ceremonial approach), THEN describe the biome wrapping it. Court infrastructure leads, biome follows. The chamber must feel "this is a FORMAL FAE COURT, not just a clearing." NO masonry / NO carved stone / NO modern furniture — all infrastructure is GROWN from moss, root, log, mushroom, living branch, standing-stone, glowing pollen. NO creature/regalia/lighting/weather descriptions — backdrop only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
 
   faebot_fairy_court_lighting: {
@@ -5295,6 +5321,65 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
       'Painted mossy branch tip in painted foreground softly out-of-focus, painted velvety green-moss texture, painted intimate framing',
     ],
     instructions: `Each entry is ONE specific FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific type, (b) position in frame, (c) tactile detail. NO creature. NO biome. NO weather. NO modern. NO blocking. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fairy_court_chamber_life: {
+    format: 'simple',
+    theme: `CHAMBER LIFE (ambient set-dressing) for FaeBot's fairy-court path. Each entry describes a layered CLUSTER of small ambient elements populating the court chamber — small critters, wildflower clusters, butterflies, fireflies, lush forest texture details. Each entry 35-60 words.
+
+⚠️ THE BAR: each entry adds 3-5 ambient set-dressing elements that make the chamber feel inhabited and ALIVE without crowding the queen. Floor-detail + mid-tier accents + air-motion drift. NOT magical aura (that's magical_flavor). NOT the queen's gown / hair / face / regalia. NOT a single sacred companion (that's sacred_companion). Just ambient woodland LIFE populating the chamber edges and floor.
+
+⚠️ ELEMENT MENU (mix 3-5 per entry across categories):
+  • SMALL CRITTERS — frogs / mice / lizards / dragonflies / ladybugs / snails / hedgehogs / squirrels / chipmunks / fawns peeking / robin / sparrow / wren / blue tit / mouse-deer / fae-songbird / small bunny / vole tucked among ferns
+  • WILDFLOWER CLUSTERS — patches of bluebells / foxglove-spires / lily-of-the-valley / forget-me-nots / wild-rose / cowslip / primrose / violets / wild iris / harebells / fairy-thimbles / wood-anemones blooming around chamber edges
+  • BUTTERFLIES + AIR DRIFT — drifting butterflies in soft pastel colors (lemon / lavender / iridescent blue / silvery white / amber) / fireflies in clusters / drifting dandelion-seeds / floating thistledown / drifting pollen-motes / silver moths
+  • LUSH FOLIAGE TEXTURE — lichen-and-moss crust on every root and stone / scattered hanging-mosses / small mushroom-floor-clusters (NOT throne / NOT pillars — small floor-pattern accents only) / clover patches / fiddlehead-fern tufts / sphagnum-moss humps / dewdrops beading on petals
+  • SCATTERED DETAIL — fallen leaves / acorns / pinecones / small seed-pods / dewdrops / floating spores / a single pearl-snail-trail on moss
+
+⚠️ DISTRIBUTION VARIETY (across 25 entries) — vary which categories lead. Some entries lead with critters + flowers, others with butterflies + foliage, others with mixed full ambient layering. Each entry should feel distinct.
+
+⚠️ EVERY entry MUST:
+  - Mix 3-5 elements from the menu (not just one type)
+  - Position each element specifically (left side / right side / foreground floor / mid-tier / air around the queen / chamber-edge)
+  - Stay AMBIENT — these elements DRESS the chamber, they don't dominate
+  - Use soft painted detail, not photoreal hyper-realism
+
+🚫 STRICT BANS:
+  • NO description of the queen / attendants / regalia / throne (separate axes)
+  • NO description of court-infrastructure (separate axis)
+  • NO description of weather / lighting / magical flavor (separate axes)
+  • NO predatory or violent creatures (gentle ambient life only)
+  • NO mushrooms as chamber-pillars or thrones (small floor accents only)
+  • NO modern objects
+  • NO crowds of dozens of critters — 3-5 specific elements layered cleanly`,
+    touchpoints: [
+      'Small woodland critters dressing the chamber: a curious green frog at the throne-base, two tiny field-mice peeking from a fern-cluster at the left, a dragonfly hovering near the queen\'s left shoulder, scattered ladybugs across the moss-floor, a single brown hedgehog tucked at the chamber-edge under a fern-frond',
+      'Drifts of wildflower clusters blooming around the chamber boundary: foxglove-spires in pink-and-purple lining the left side, bluebell carpets in soft indigo at the floor, white lily-of-the-valley strands at the right, a few primroses scattered at the foreground, soft painted detail',
+      'Soft air-drift and butterflies populating the chamber air: pale lemon-yellow butterflies drifting around the queen\'s gown, iridescent blue butterflies orbiting the chamber-mid-tier, golden fireflies clustering near the floor, drifting dandelion-seeds floating across the ceremonial path',
+      'Lush foliage texture filling the chamber edges: lichen-and-moss crust on every root and stone, scattered hanging-mosses from the canopy in soft green drapes, small clover patches at the throne-base, dewdrops beading on the moss-floor, fiddlehead-fern tufts in the foreground-left',
+      'Layered ambient life across the chamber: a sparrow perched on a low branch at right, soft violet butterflies drifting around the queen\'s shoulders, foxglove-bells in pink lining the left side, scattered ladybugs on the moss-floor, fallen golden leaves at the foreground',
+      'Tiny woodland inhabitants and wildflowers: a chipmunk peeking from a hollow-log at the right, drifting silver moths around the lantern-orbs, lily-of-the-valley clusters at the throne-base, scattered forget-me-nots in soft blue, dewdrops on every petal',
+      'Air-detail and floor-texture: drifting amber butterflies in clusters around the chamber-mid-tier, fireflies in warm-yellow points near the floor, lush hanging-mosses draping from the canopy, small mushroom-floor-clusters at the chamber edge as soft accents, scattered pinecones',
+      'Wildflowers + critters layered: wild-rose and violet patches blooming at the floor edges, two robins perched on a low branch, dragonflies hovering near the chamber-mid-tier, soft floating thistledown drifting across the air, lichen-crust on the foreground stones',
+      'Soft full-ambient layering: a curious fawn peeking from behind a tree-pillar at the right, butterflies in pale lavender drifting near the queen, harebells and primroses clustering at the floor, scattered dewdrops, drifting pollen-motes catching warm light',
+      'Tiny critters and air-drift: a green frog tucked under a fern in the foreground, two field-mice at the throne-base, drifting silver moths around the chandeliers above, soft floating dandelion-seeds, wild iris in deep blue blooming at the right chamber-edge',
+      'Wildflower drifts and butterflies: bluebell carpet beneath the throne fading into wild-rose clusters at the chamber edge, pale lemon butterflies drifting across the air, a single red ladybug climbing a fern-frond at foreground, dewdrops on every leaf',
+      'Lush textural detail: lichen-and-moss crust on every root, scattered hanging-mosses in soft green from the canopy, small mushroom-floor-clusters (gentle floor accents only) at the chamber edges, sphagnum-moss humps, fiddlehead-ferns in the foreground',
+      'Ambient air-life around the chamber: fireflies in warm-yellow points clustering near the floor, drifting iridescent butterflies around the queen, silver moths near the lantern-orbs, soft floating thistledown drifting through the chamber, drifting pollen-motes',
+      'Critters + wildflower clusters: a small wren perched on the throne\'s root-armrest at right, a curious frog at the floor, lily-of-the-valley strands at the throne-base, forget-me-nots clustering at the chamber edge, dewdrops beading on every petal',
+      'Floor-detail layering: foxglove-spires in pink-purple lining the left chamber-edge, wood-anemones scattered in white at the floor, scattered acorns and pinecones near the throne, a single brown hedgehog tucked among ferns, soft clover patches',
+      'Multi-tier ambient life: two robins at the chamber mid-tier perched on a low branch, drifting amber butterflies in air, harebells and bluebells clustering at the floor, small mushroom-floor-cluster accents at the chamber edge, lichen-crust on stones',
+      'Soft creature ensemble: a small bunny tucked at the chamber edge under a fern, a tiny field-mouse at the throne-base, a robin perched on a low branch at right, drifting butterflies in pale yellow, scattered wildflowers in soft pastels',
+      'Painterly air-drift: drifting dandelion-seeds floating across the chamber air, drifting pollen-motes catching warm light, soft silver moths near the chandeliers, fireflies in warm-yellow points clustering at the floor, soft painted detail throughout',
+      'Wildflower meadow at chamber edges: cowslips and primroses in soft yellow clustering at the right, violets in deep purple at the left, wild iris in blue at the foreground, dewdrops beading on every petal, soft painted floral detail',
+      'Layered scattered detail: fallen golden leaves and acorns near the throne, small mushroom-floor-clusters at the chamber edge, lichen-and-moss crust on every root, dewdrops on the moss-floor, drifting pollen catching warm light',
+      'Critters + butterflies mix: a green frog at the foreground floor, dragonflies hovering near the queen\'s shoulders, drifting pale-blue butterflies in clusters across the chamber, scattered ladybugs on the moss, a single field-mouse peeking from a fern',
+      'Lush forest texture detail: hanging-moss curtains draping in soft green from the canopy, lichen-and-moss crust on every root and stone, sphagnum-moss humps at the chamber edge, fiddlehead-fern tufts in the foreground, scattered tiny mushroom accents',
+      'Gentle multi-layer ambient: a fawn peeking from behind a tree-pillar at the right, butterflies in soft pastel pink drifting near the queen, foxglove-spires lining the left chamber-edge, bluebells at the floor, drifting pollen-motes in warm light',
+      'Detailed floor-and-air layering: bluebell carpet at the throne-base fading into wild-rose at the edges, drifting amber butterflies in clusters across the chamber air, scattered acorns and pinecones near the throne, lichen-crust on the foreground stones',
+      'Soft critter ensemble: a small wren perched on a fern-frond at right, a curious fawn peeking from behind a tree-pillar at left, drifting silver moths near the chandeliers, a green frog tucked in the foreground, scattered wildflowers in soft colors',
+    ],
+    instructions: `Each entry is ONE CHAMBER-LIFE cluster, 35-60 words. Format: prose, comma-separated phrases listing 3-5 ambient elements (small critters / wildflower clusters / butterflies / fireflies / lush foliage texture / scattered detail). Each element positioned specifically (left / right / floor / mid-tier / air around queen / chamber-edge / foreground). Stay AMBIENT — dressing the chamber, never dominating. NO queen / attendants / throne / regalia / lighting / weather / magical aura (separate axes). NO mushroom-pillars / mushroom-throne (small floor accents only). NO predatory creatures. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
 
   faebot_fairy_court_sacred_companion: {

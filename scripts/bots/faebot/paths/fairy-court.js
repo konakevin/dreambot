@@ -39,6 +39,7 @@ module.exports = {
     lighting: 'FAEBOT_FAIRY_COURT_LIGHTING',
     weather: 'FAEBOT_FAIRY_COURT_WEATHER',
     magical_flavor: 'FAEBOT_FAIRY_COURT_MAGICAL_FLAVOR',
+    chamber_life: 'FAEBOT_FAIRY_COURT_CHAMBER_LIFE',
     foreground_anchor: 'FAEBOT_FAIRY_COURT_FOREGROUND_ANCHOR',
     sacred_companion: 'FAEBOT_FAIRY_COURT_SACRED_COMPANION',
   },

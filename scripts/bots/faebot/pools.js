@@ -97,6 +97,7 @@ module.exports = {
   FAEBOT_FAIRY_COURT_LIGHTING: loadIfExists('faebot_fairy_court_lighting'),
   FAEBOT_FAIRY_COURT_WEATHER: loadIfExists('faebot_fairy_court_weather'),
   FAEBOT_FAIRY_COURT_MAGICAL_FLAVOR: loadIfExists('faebot_fairy_court_magical_flavor'),
+  FAEBOT_FAIRY_COURT_CHAMBER_LIFE: loadIfExists('faebot_fairy_court_chamber_life'),
   FAEBOT_FAIRY_COURT_FOREGROUND_ANCHOR: loadIfExists('faebot_fairy_court_foreground_anchor'),
   FAEBOT_FAIRY_COURT_SACRED_COMPANION: loadIfExists('faebot_fairy_court_sacred_companion'),
   VIBE_COLOR,
