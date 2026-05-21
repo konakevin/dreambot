@@ -12807,6 +12807,101 @@ CRITICAL — PIXEL ART ONLY (NEVER smooth illustration / painterly atmospheric /
 Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  FAEBOT_FOREST_FAIRY_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      forest_biome,
+      lighting,
+      weather,
+      foreground_anchor,
+      botanical_accent,
+      candid_action,
+      magical_flavor,
+      scale_prover,
+      companion,
+    } = slots;
+
+    const companionSection = companion
+      ? `\n\n━━━ COMPANION (a single small woodland presence sharing the moment with her) ━━━\n${companion}\n\nWoven naturally into the scene at her scale or smaller — NEVER a competing focal subject. The eye still lands on the creature first; the companion adds story-warmth and scale-prover.`
+      : '';
+
+    return `You are writing ONE Flux prompt for an enchanted-forest creature painting in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt, BEFORE setting / lighting / anything else.
+
+1. THE CREATURE IS THE SUBJECT. Not the landscape. The creature fills 40-55% of the frame and is the eye's first landing place. NEVER write a "wide landscape with tiny figure". NEVER write "small figure in distance".
+
+2. The creature description below is THE creature — render her with EVERY stacked exotic feature listed (skin-treatment, plant-merged hair, plant-merged garment, anatomical extras like antlers/wings/glowing marks, the magical signature, the candid posture). 5+ stacked exotic features must visibly land in the painting.
+
+3. NEVER posing for camera. NEVER looking at viewer. NEVER human-model beauty — she is mythic-creature beauty, otherworldly, at-home-in-her-wildness.
+
+Open your prompt with the creature description. The creature opens; everything else is HER FRAME.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE CREATURE (the subject — render her exactly as described) ━━━
+${creature}
+
+Preserve every exotic feature unmistakably. She is otherworldly-beautiful — mythic-creature beauty, NOT human-model beauty. Confident at-home-in-her-wildness. NEVER posing, NEVER looking at the viewer.
+
+━━━ 2. THE FOREST BIOME (her natural home — wraps around her) ━━━
+${forest_biome}
+
+This biome is HER FRAME, not the subject. Atmospheric depth: foreground tactile detail / midground holding her / background fading into painted mist or canopy.
+
+━━━ 3. CANDID ACTION + COMPOSITION (the captured moment — frames her in the scene) ━━━
+${candid_action}
+
+This is the captured-on-camera moment. Caught-in-the-act candid, off-center via rule-of-thirds, the forest wrapping around her like a frame. NEVER a centered hero portrait, NEVER a pose-for-camera shot.
+
+━━━ 4. LIGHTING (time-of-day + light drama) ━━━
+${lighting}
+
+━━━ 5. WEATHER (air condition + particle motion) ━━━
+${weather}
+
+━━━ 6. FOREGROUND ANCHOR (closest depth element — bringing 3-tier depth) ━━━
+${foreground_anchor}
+
+Tactile foreground detail bringing true depth between camera and creature. The painting reads in three tiers: this foreground close + her in midground + the deep wild forest fading behind.
+
+━━━ 7. BOTANICAL ACCENT (signature bloom cluster near her) ━━━
+${botanical_accent}
+
+Specific bloom cluster painted with species-specific detail — painted-storybook chromatic pop. Not generic "wildflowers" — this exact named species cluster.
+
+━━━ 8. MAGICAL FLAVOR (supernatural atmospheric accent) ━━━
+${magical_flavor}
+
+The magical signature visible in the scene. Painted as luminous detail, never crude particle-effect.
+
+━━━ 9. SCALE PROVER (environmental element establishing her scale) ━━━
+${scale_prover}
+
+A specific environmental feature that establishes her scale and the soaring or intimate quality of the space — playbook component for poster-worthy depth.
+${companionSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
+
+━━━ HARD BANS ━━━
+- NO landscape with tiny figure (the creature MUST fill 40-55% of frame)
+- NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
+- NO sexualized framing — focus is mythic-creature beauty
+- NO modern objects (phones, glasses, electronics)
+- NO realistic non-magical humans
+- NO violence / NO scared expressions / NO edgy moods
+- NO photographic / digital / 3D / CGI descriptors at the technique level
+- NO additional figures beyond the focal creature${companion ? ' + the small companion' : ''}
+- NO smooth illustration / NO airbrushed / NO modern-anime / NO Pixar-3D
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE CREATURE — preserve her stacked exotic features unmistakably. Then composition framing. Then forest biome wrapping around her. Then lighting + weather. Then foreground anchor + botanical accent. Then magical flavor. Then scale prover.${companion ? ' Then companion woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon
@@ -12986,104 +13081,90 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_RAINBOW_DREAMSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { food_inhabitants, dreamscape_setting, rainbow_element, sky_atmosphere, environment, decor, camera, lighting } = slots;
+    const { food_inhabitants, dreamscape_setting, rainbow_element, sky_atmosphere, environment, decor, companions, camera, lighting } = slots;
+    // food_inhabitants is now an array of 5 (pickN:5 from FOOD_CATALOG)
+    const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
+    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
     const decorList = Array.isArray(decor) ? decor : [decor];
     const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
     const envList = Array.isArray(environment) ? environment : [environment];
     const envBlock = envList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const compList = Array.isArray(companions) ? companions : [companions];
+    const compBlock = compList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
-    return `You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. 3-7 MIXED kawaii food-creatures (cups + desserts + savory) inhabiting a lush pastel dreamscape with streams / ponds / trails / rocks / trees + rainbows. Output wraps with style prefix + suffix.
+    return `You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape with rainbows. Output wraps with style prefix + suffix.
 
-━━━ ⚠ HARD RULE #1: 3-7 MIXED KAWAII FOOD-CREATURES LIVING IN THE LANDSCAPE ━━━
+━━━ ⚠ HARD RULE #1: NAME ALL 5 FOODS EXPLICITLY — COUNT THEM ━━━
 
-The kawaii smiling foods (3-7 of them, MIXED types — boba-cups + cupcakes + donuts + cake-pops + macarons + sundaes + pancakes + mochi + onigiri + crepes + parfaits + waffles + croissants + cinnamon-rolls + fruit-tarts + cheesecake + churros + taiyaki + dango + cream-puffs + popsicles + etc.) are SITTING IN a pastel outdoor environment — like creature-inhabitants of a dream-world. NOT on a tabletop. NOT a flat product-shot. They are nestled IN grass / on rocks / beside streams / on trails / under trees — like little food-creatures who LIVE there.
+The 5 foods below MUST appear in the output by name. Count them: 1, 2, 3, 4, 5. Each visible in the scene as a creature-inhabitant of the meadow. Each has its own kawaii smiling face. Group them in the scene like little friends gathered together. NEVER drop a food. NEVER abbreviate to "and others." Name each one specifically.
 
-⚠ VARIETY — never repeat the same food. Mix DRINKS + DESSERTS + occasionally SAVORY. Mix HEIGHTS (tall cups + short donuts + medium cupcakes). The variety is the signature.
+⚠ FAILURE: rendering 1, 2, or 3 foods. PASS: 5 distinct kawaii foods visible.
 
-━━━ ⚠ HARD RULE #2: RAINBOW IS A CENTRAL VISUAL ELEMENT ━━━
+━━━ ⚠ HARD RULE #2: 2+ VISIBLE RAINBOWS IN THE SCENE ━━━
 
-A RAINBOW must be visible. Either (a) pouring out of a cup like spillover, OR (b) arching across the sky, OR (c) cascading down from a cup onto the ground. The rainbow is part of the magic — a literal visible rainbow.
+Rainbows are the signature. EVERY render must show at least 2 distinct rainbow visual elements simultaneously — examples:
+- A rainbow ARCHING across the sky overhead
+- A rainbow CASCADING out of one of the foods like spillover
+- A rainbow-STREAM flowing across the meadow
+- A rainbow-WATERFALL off a rock
+- Rainbow-CONFETTI drifting through the air
+- Rainbow-PRISM light scattered on the grass
 
-━━━ ⚠ HARD RULE #3: LUSH OUTDOOR ENVIRONMENT — VISIBLE ENVIRONMENTAL FEATURES MANDATORY ━━━
+The rainbow_element below names the SPECIFIC rainbow density for this render — render it as described. The rainbows are LITERAL bands of vivid color, NOT just pastel-rainbow lighting tint.
 
-The dreamscape MUST have SUBSTANTIAL environmental features VISIBLY RENDERED: winding pastel streams, glassy pastel ponds, mossy trails, pastel-rocks/boulders, pastel-trees, footbridges, hills. The 3 environmental_features below MUST be CLEARLY VISIBLE — water reflecting, trees with foliage, rocks with moss, paths winding. NOT abstract or implied — concretely rendered.
+⚠ FAILURE: zero rainbows visible. PASS: rainbow band(s) clearly in the rendered image.
 
-⚠ The landscape feels INHABITED — like the kawaii foods live in a real outdoor place with water and trees and rocks and paths, NOT floating on a flat surface or sitting on a table.
+━━━ ⚠ HARD RULE #3: OUTDOOR LANDSCAPE WITH VISIBLE FEATURES ━━━
 
-⚠ HARD BAN — TABLETOP RENDERING: NO tabletop / table / counter / flat-surface composition. NO bokeh-only-background without environmental features. The foods are sitting in NATURE — on grass / on rocks / beside a stream / on a trail / among trees / on moss / on a hillside. If the scene reads as a "tabletop product-shot," it has FAILED.
+The 3 landscape features below MUST be visibly rendered in the scene — water reflecting, trees with foliage, rocks with moss, paths winding. The foods are nestled IN this landscape — on grass / on rocks / beside streams / under trees — like meadow-creatures living there.
 
-━━━ ⚠ HARD RULE #4: WIDER LUSH SCENIC COMPOSITION ━━━
+⚠ HARD BAN: tabletop / counter / flat-surface composition. NO bokeh-only backdrop. The scene is OUTDOOR NATURE.
 
-Pull the camera back to show the dreamscape landscape with rich environmental detail. The kawaii food-creatures occupy 30-45% of the frame; the lush landscape + environmental features + sky fill the rest. Cherry-blossom mountains in distance + hot-air-balloons + sunny pastel sky framing above. The viewer's reaction: "they LIVE in this lush dreamy world with streams and trees and rainbows."
+━━━ THE 5 KAWAII FOOD INHABITANTS (each MUST appear by name in the output) ━━━
+${foodBlock}
 
-━━━ THE KAWAII FOOD INHABITANTS (3-7 mixed kawaii foods sitting in the scene) ━━━
-${food_inhabitants}
-
-━━━ THE DREAMSCAPE SETTING ━━━
+━━━ DREAMSCAPE SETTING ━━━
 ${dreamscape_setting}
 
-━━━ THE RAINBOW ELEMENT (specific to this render) ━━━
+━━━ RAINBOW ELEMENT (this render's rainbow density — RENDER IT) ━━━
 ${rainbow_element}
 
-━━━ THE SKY + ATMOSPHERE ━━━
+━━━ SKY + ATMOSPHERE ━━━
 ${sky_atmosphere}
 
-━━━ THREE ENVIRONMENTAL FEATURES (streams / ponds / trails / rocks / trees / bridges — MUST appear in the render) ━━━
+━━━ 3 LANDSCAPE FEATURES (visibly rendered) ━━━
 ${envBlock}
 
-━━━ THREE DECOR ELEMENTS (cherry-blossom branches / butterflies / mushrooms / wildflowers / dewdrops) ━━━
+━━━ 3 DECOR ELEMENTS (scattered through scene) ━━━
 ${decorBlock}
 
-━━━ CAMERA COMPOSITION ━━━
+━━━ 2 TINY COMPANIONS (peripheral cuties) ━━━
+${compBlock}
+
+━━━ CAMERA ━━━
 ${camera}
 
 ━━━ LIGHTING ━━━
 ${lighting}
 
-━━━ SPARKLE STACK — RAINBOW-DREAMSCAPE ━━━
-
-Layer ALL on EVERY render:
-- Glossy pearlescent finish on the kawaii cups
-- Vivid rainbow gradient (literal rainbow band)
-- Painterly grass / meadow / hillside with hand-painted texture
-- Cherry-blossom-petal-rain drifting
-- Hot-air-balloons or pastel-balloons floating in deep sky
-- Pastel cherry-blossom-mountains in distance
-- Sunny pastel sky — pink-and-blue gradient
-- Butterflies fluttering optionally
-- Dewdrops on grass + floating pearl-orbs
-- Tiny scattered pastel flowers throughout the meadow
-- Soft volumetric pastel sunlight pouring across the scene
-- Painterly-illustration-fusion register (NOT flat product-shot)
-
-━━━ MOVIE POSTER MOMENT ━━━
-
-The viewer's reaction: "OMG those kawaii cups are LIVING IN A RAINBOW-MEADOW — they're like meadow-creatures." Wallpaper-poster bex.ai signature work.
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
+━━━ SCENE PALETTE ━━━
 ${sharedDNA.scenePalette}
 
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ HARD BANS ━━━
-- NO chibi creatures / characters / humans / animals (only kawaii FOOD as inhabitants)
-- NO solo / single food (must be 3+ MIXED kawaii foods)
-- NO repetitive same-food groups (variety is mandatory)
-- NO tabletop / indoor product-shot composition
-- NO dark / moody / scary scenes
-- NO industrial / modern setting
-- NO empty / sparse meadow (must have streams / trees / rocks visible)
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
-LEAD WITH THE LANDSCAPE FIRST so Flux locks onto the outdoor setting before composing foods. Open with the landscape + environmental features, THEN drop in the kawaii foods as inhabitants, THEN sky + rainbow + decor.
+Lead with the outdoor landscape, then NAME ALL 5 FOODS, then rainbows + sky + decor.
 
-Open with: "Wider scenic outdoor shot of a pastel [dreamscape setting] with [environmental feature 1 — stream/pond/trail/etc.] winding through and [environmental feature 2 — trees/rocks/etc.] alongside, [environmental feature 3] in midground — and nestled in the meadow, [3-7 mixed kawaii foods named specifically], [rainbow element], pastel-mountains and [sky element] in distance, cherry-blossom branches arching, [decor scattered], painterly Pop-Mart-illustration-fusion rendering, sunny pastel light..."
+Template:
+"Wider scenic outdoor shot of [dreamscape setting] with [landscape feature 1], [landscape feature 2], [landscape feature 3] visible — five kawaii food-creatures gathered: (1) [food 1 named in 6-10 words], (2) [food 2 named], (3) [food 3 named], (4) [food 4 named], (5) [food 5 named] — [rainbow element], [sky element], [decor 1, 2, 3 scattered], [companion 1 + 2 fluttering], painterly Pop-Mart pearlescent rendering, sunny pastel light."
 
-⚠ The first 30 words MUST establish the outdoor landscape with concrete environmental features before mentioning the foods. Locks Flux on the dreamscape.
+⚠ Count the (1) (2) (3) (4) (5) explicitly in the output to ensure all 5 foods appear. The numbered list is required.
 
-Output ONLY the raw 110-160 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The lush outdoor landscape + 3-7 mixed kawaii foods + visible environmental features + literal rainbow must ALL read CLEARLY.`;
+⚠ Rainbow(s) appear as literal visible bands in the rendered image — not implied.
+
+Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. All 5 foods + rainbow(s) + landscape features + companions read clearly.`;
   },
 
   YUMBOT_CHECKERED_TABLETOP: ({ slots, sharedDNA, vibeDirective }) => {

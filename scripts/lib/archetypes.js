@@ -1851,7 +1851,7 @@ const ARCHETYPES = {
       bot: [],
       path: ['food_inhabitants', 'dreamscape_setting', 'rainbow_element', 'sky_atmosphere', 'environment', 'decor', 'companions', 'camera', 'lighting'],
     },
-    pickN: { food_inhabitants: 3, environment: 3, decor: 3, companions: 2 },
+    pickN: { food_inhabitants: 5, environment: 3, decor: 3, companions: 2 },
     conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,

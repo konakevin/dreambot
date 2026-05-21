@@ -51,6 +51,7 @@ module.exports = {
 
   defaultPools: {},
 
+
   poolByName(name) {
     const pools = require('./pools');
     if (!(name in pools)) {

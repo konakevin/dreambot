@@ -4,52 +4,69 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_inhabitants.json',
   total: 80,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} KAWAII FOOD-CREATURE GROUP descriptions for YumBot rainbow-dreamscape. Each entry describes 3-7 mixed-type anthropomorphized kawaii smiling-face foods/drinks sitting together in a pastel meadow like creature-inhabitants of a dream-world.
+  metaPrompt: (n) => `You are writing ${n} KAWAII FOOD-CREATURE GROUP descriptions for YumBot rainbow-dreamscape. Each entry describes 4-7 mixed-type anthropomorphized kawaii smiling-face foods/drinks/desserts sitting together in a pastel meadow.
 
-Each entry: 25-45 words. Describes ONE scene's group of food-creatures.
+Each entry: 35-60 words. Describes ONE scene's group with named specific foods.
 
-━━━ REFERENCE — bex.ai expanded food catalog ━━━
+━━━ ⚠ CRITICAL: VARIETY MANDATE — STRICT CATEGORY DISTRIBUTION ━━━
 
-The kawaii food-creatures are NOT just cups. The catalog spans drinks AND desserts AND savory:
+Previous generations were BIASED toward boba-cups + sundaes + mochi. THIS POOL MUST BE BALANCED.
 
-DRINKS / VESSELS: boba milk-tea cup / hot-cocoa mug / iced-coffee glass / matcha latte / smoothie tumbler / parfait glass / sundae glass / shaved-ice cup (kakigori) / bingsu bowl / yogurt-parfait bowl / jelly cup / pudding cup / ramen bowl
+Each entry's LEAD food (first named) must rotate through 7 distinct CATEGORIES. Distribute the ${n} entries roughly equally across:
 
-DESSERTS / PASTRIES: strawberry shortcake / macarons / donuts / mochi donuts / crepes / soufflé pancakes / waffles / cupcakes / cheesecake / cinnamon rolls / cookies / cream puffs / mochi / dango / taiyaki / soft-serve ice cream / popsicles / croissants / fruit tarts / chocolate-covered strawberries / brownies / pudding/flan / churros / mini cakes / pocky sticks / cotton candy / gummy candies / fruit sando / egg tarts / banana pudding / mille-feuille / eclairs / scones / honey toast / mini pancakes / cake pops / marshmallows / choco cornet / melon pan
+  - CATEGORY A — PASTRY/CAKE LEAD (cupcake / shortcake / cheesecake / mille-feuille / cake-pop / fruit-tart / egg-tart / mini-cake / cinnamon-roll / scone / cream-puff / eclair / choco-cornet / melon-pan / banana-pudding)
+  - CATEGORY B — PANCAKE/WAFFLE/CREPE LEAD (soufflé pancake / mini pancake stack / waffle / crepe / honey-toast)
+  - CATEGORY C — COOKIE/SWEET-TREAT LEAD (smiling cookie / pocky stick / marshmallow / gummy / brownie / chocolate-covered strawberry / churro / macaron)
+  - CATEGORY D — MOCHI/JAPANESE-DESSERT LEAD (mochi / dango / taiyaki / mochi-donut / fruit-sando / strawberry-daifuku)
+  - CATEGORY E — DRINK/CUP LEAD (boba / hot-cocoa / iced-coffee / matcha-latte / smoothie / parfait-glass / sundae-glass) — CAP at 20% of pool
+  - CATEGORY F — ICE-CREAM/POPSICLE/COLD LEAD (sundae / soft-serve / popsicle / kakigori shaved-ice / bingsu) — CAP at 12% of pool
+  - CATEGORY G — SAVORY-KAWAII LEAD (onigiri / sushi roll / ramen bowl / fried-chicken bites / french fries / mini pizza / dumpling)
 
-SAVORY-KAWAII: onigiri / sushi rolls / fried chicken bites / french fries / mini pizza / dumplings
+⚠ HARD RULE: drinks (E) + ice-cream (F) combined MUST stay below 30% of total entries. Pastries/cookies/mochi must DOMINATE.
 
-You may also include any similar kawaii-style food/drink fitting the bex.ai aesthetic — sweet or savory, any culture, anything that can be anthropomorphized cute.
+⚠ Each group of 4-7 foods must include AT LEAST 3 DIFFERENT category types. Never a group that's "3 cups + 1 sundae" — must mix categories.
 
-━━━ FORMAT — MIXED GROUP OF 3-7 KAWAII FOOD-CREATURES ━━━
+━━━ FORMAT EXAMPLES (showing variety the pool MUST hit) ━━━
 
-Each entry describes a GROUP of 3-7 different food-creatures (mixed types, not all the same) sitting together in the meadow. Each has a kawaii smiling face. Mix drinks AND desserts AND occasionally savory. Vary the heights — some tall (cups / boba / sundaes), some short (donuts / cookies / mochi / mini-pancakes), some medium (cupcakes / parfaits / shortcakes).
+✓ "A smiling strawberry shortcake with cream-swirl face, three pastel macarons in pink/mint/lavender stacked, a smiling pocky-stick standing upright, a smiling cake-pop, and a smiling cinnamon-roll with icing-drip — clustered in a wildflower meadow"
 
-Examples:
-✓ "A cluster of kawaii smiling foods nestled in the grass: a tall pastel boba-cup, a strawberry shortcake with whipped-cream-face, a mini stack of soufflé pancakes, three mochi-balls in pastel pink/mint/yellow, and a smiling taiyaki — all with closed-arc eyes and blush cheeks"
-✓ "Five smiling pastel cake-pops on stick-legs standing in the meadow, a cluster of three smiling macarons (pink + mint + lavender), a smiling cinnamon-roll with cream-swirl-face, a tall smiling iced-matcha-glass"
-✓ "A trio of smiling pastel-donuts (chocolate / strawberry / vanilla), a smiling cream-puff with sprinkle-eyes, a pastel parfait-glass with smiling-face, two smiling mochi-balls, all clustered in the flower-meadow"
-✓ "A pastel onigiri with smiling-face, three smiling fried-chicken-bites with little legs and kawaii eyes, a smiling french-fry-pile, a tall ramen-bowl with smiling-face and floating egg-with-face, in a sunny meadow"
-✓ "Four smiling pastel macarons in different colors stacked + leaning, a smiling fruit-tart with strawberry-on-top, a tall boba-cup smiling, a single smiling donut, all in a cherry-blossom meadow"
-✓ "A tall sundae-glass with smiling face, a smiling chocolate-covered-strawberry, three smiling mini-pancakes stacked, a smiling churro with kawaii face, and a smiling popsicle on a stick"
+✓ "A smiling soufflé pancake stack with cherry-on-top, a smiling crepe folded with strawberry-filling visible, two smiling waffle-faces, a smiling brownie-square, and a smiling honey-toast with cube-cuts"
+
+✓ "A smiling pastel cupcake with rainbow sprinkles, a smiling chocolate-cake-pop on a stick, three smiling pastel-cookies in heart/star/circle shapes, a smiling macaron-tower of four, and a smiling cream-puff"
+
+✓ "A smiling onigiri with seaweed-belt face, three smiling fried-chicken-bites with little legs, a smiling french-fry-trio, a smiling sushi-roll with avocado-face, and a smiling pastel boba-cup"
+
+✓ "A smiling melon-pan with checker-top face, a smiling choco-cornet with cream-drip, two smiling eclairs side by side, a smiling fruit-tart with strawberry-on-top, a smiling mini egg-tart, and a smiling pastel cream-puff"
+
+✓ "A smiling pastel mochi-trio in pink/mint/yellow, a smiling dango-skewer with three-balls, a smiling taiyaki with red-bean-drip, a smiling mochi-donut twin, and a smiling kakigori shaved-ice with rainbow-syrup"
+
+✓ "A smiling pastel-popsicle on a stick-with-face, a smiling soft-serve cone with cherry-on-top, a smiling kakigori-bowl with rainbow-syrup, a smiling cake-pop, and a smiling banana-pudding cup"
+
+✓ "A smiling tall boba-cup (just one!), a smiling cinnamon-roll, a smiling fruit-tart, a smiling pastel-macaron-trio leaning together, a smiling soufflé-pancake stack, a smiling pocky-stick — diverse picnic group"
 
 ━━━ HARD MANDATES ━━━
 
-- 3-7 DIFFERENT food-creatures (NOT all the same type) — variety is the signature
-- Each food-creature has a clear KAWAII SMILING FACE (closed-arc eyes / dimpled blush cheeks / tiny mouth)
-- Mix heights/shapes for visual interest
-- Each is GLOSSY PEARLESCENT Pop-Mart designer-vinyl finish
-- Pastel palette throughout
-- Foods can have tiny features (legs / leaf-hats / cherry-toppers) to feel more creature-like
+- 4-7 DIFFERENT foods per group — variety is everything
+- Each food has a clear KAWAII SMILING FACE (closed-arc eyes / dimpled blush cheeks / tiny mouth)
+- Mix HEIGHTS (tall + medium + short)
+- Mix CATEGORIES (at least 3 different food-types per group)
+- Glossy pearlescent Pop-Mart designer-vinyl finish
+- Pastel palette
+- Foods can have tiny anthropomorphic features (legs / leaf-hats / cherry-toppers)
 
 ━━━ HARD BANS ━━━
 
-- NO actual chibi real creatures / animals / humans (the FOOD is the cast)
-- NO single solo food (must be a GROUP)
-- NO repetitive same-food groups (must mix types)
-- NO dark / scary / weird food
-- NO indoor / tabletop setting language (other pool handles setting)
+- NO real creatures / animals / humans
+- NO single solo food
+- NO "boba + sundae + mochi + cupcake" lazy default groups
+- ⚠ Drinks (boba/coffee/latte/tea) appear at MOST in 20% of entries
+- ⚠ Ice-cream/sundaes appear at MOST in 12% of entries
+- ⚠ Mochi/dango appears at MOST in 30% of entries
+- Cookies, cake-pops, macarons, cupcakes, pastries MUST appear MORE OFTEN than drinks
+- NO scary / dark / weird food
+- NO indoor / tabletop setting language
 
 ━━━ OUTPUT ━━━
 
-JSON array of \${n} strings. No preamble, no numbering. Each entry describes ONE scene's group with named specific foods.`,
+JSON array of \${n} strings. Each entry covers ONE scene's diverse-group (4-7 mixed kawaii foods, drawn from different categories). No preamble, no numbering. Push variety hard — every entry should feel category-fresh.`,
 }).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });

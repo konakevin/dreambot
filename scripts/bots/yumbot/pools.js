@@ -30,6 +30,16 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ============ SHARED FOUNDATIONAL CATALOGS ============
+  // Tagged kawaii food catalog — used by ALL paths via { name: 'FOOD_CATALOG', tags: [...] }
+  FOOD_CATALOG: load('food_catalog'),
+  // Tagged tiny companion creatures (peripheral cuties — never the hero)
+  TINY_COMPANIONS: load('tiny_companions'),
+  // Tagged small decor items (lanterns / flowers / ribbons / bunting / etc.)
+  DECOR_ITEMS: load('decor_items'),
+  // Tagged substantial landscape features (streams / ponds / trees / rocks / bridges)
+  LANDSCAPE_FEATURES: load('landscape_features'),
+
   // ============ FLORAL-GARDEN-CUP path pools ============
   FLORAL_VESSEL: load('floral_vessel'),
   FLORAL_OVERFLOWING_FLORA: load('floral_overflowing_flora'),
