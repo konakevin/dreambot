@@ -1907,7 +1907,7 @@ const ARCHETYPES = {
 
   FAEBOT_FAIRY_COURT: {
     description:
-      'PATH-BESPOKE — FaeBot fairy-court (2026-05-21 axis-system migration). Regal noble fae court — solo queen OR small group (1-5 figures) caught in candid ceremonial moments. Three-quarter to full-body framing (40-65% of frame). Sacred-grove THRONE (moss-and-root, NEVER built architecture). Royal register: ancient, ceremonial, regal-still. Same painterly enchanted forest as dryad-portrait. 10 axes (9 always-on + 1 gated sacred_companion): court_subject / ceremonial_moment / composition / regalia / forest_backdrop / lighting / weather / magical_flavor / foreground_anchor + sacred_companion (40%-gated white stag / raven / owl / fox).',
+      'PATH-BESPOKE — FaeBot fairy-court (2026-05-21 R6 chamber-life axis). Soft ethereal enchanted-forest fairy court — atomic feature-stack candidates (pickN:5), template uses RNG to roll 1-4 figures with explicit positional labels for multi-figure Flux compliance. Court-infrastructure mandate (throne / benches / lantern-orbs / moss-stair approach / giant-mushroom canopy / hero-tree landmark) leads the Flux prompt. NEW chamber_life axis adds ambient set-dressing (critters / flowers / butterflies / fireflies / lush foliage texture) to populate the chamber. Categories: birch-glade / oak-cathedral / wisteria-cathedral / giant-mushroom-canopy / hero-tree / fern-grotto / yew-grove / sacred-clearing. ABSOLUTELY NO mushroom-AS-THRONE / mushroom-spire-pillars / bioluminescent-glen. 11 axes: court_subject pickN:5 / ceremonial_moment / composition / regalia / forest_backdrop / lighting / weather / magical_flavor / chamber_life / foreground_anchor + sacred_companion (40%-gated).',
     slots: {
       universal: [],
       bot: [],
@@ -1920,10 +1920,11 @@ const ARCHETYPES = {
         'lighting',
         'weather',
         'magical_flavor',
+        'chamber_life',
         'foreground_anchor',
       ],
     },
-    pickN: {},
+    pickN: { court_subject: 5 },
     conditionalLayer: { slot: 'sacred_companion', gate: 0.4 },
     framingModes: null,
     anchorScaleRange: null,
@@ -2040,6 +2041,20 @@ const ARCHETYPES = {
       universal: [],
       bot: [],
       path: ['scene_type', 'kitchen_backdrop', 'signature', 'terrain', 'sky', 'camera', 'lighting', 'time_of_day', 'atmosphere', 'food_inhabitants', 'companion', 'dish_being_prepared'],
+    },
+    pickN: { signature: 2, food_inhabitants: 5 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_COTTAGECORE_NATURE: {
+    description:
+      'PATH-BESPOKE — YumBot cottagecore-nature (2026-05-21 12-axis + 200-pool). Kawaii cottagecore countryside-nature scenes — 5 kawaii food-characters gathered in cottagecore settings (wildflower meadow / cottage garden / woodland clearing / orchard / picnic in nature / etc.) with natural family-portrait cluster, slight pose variation. Full 12-axis architecture: scene_type, backdrop, 2 signatures, terrain, sky, camera, lighting, time_of_day, atmosphere, foods (5 from FOOD_CATALOG tagged COTTAGECORE), companion (1), nature_element (1 featured natural detail). All 11 pools at 200 entries.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['scene_type', 'backdrop', 'signature', 'terrain', 'sky', 'camera', 'lighting', 'time_of_day', 'atmosphere', 'food_inhabitants', 'companion', 'nature_element'],
     },
     pickN: { signature: 2, food_inhabitants: 5 },
     conditionalLayer: null,

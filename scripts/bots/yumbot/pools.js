@@ -51,6 +51,19 @@ module.exports = {
   CANDY_FANTASY_TIME_OF_DAY: load('candy_fantasy_time_of_day'),
   CANDY_FANTASY_WEATHER: load('candy_fantasy_weather'),
 
+  // ============ COTTAGECORE-NATURE path pools (12-axis) ============
+  COTTAGE_SCENE_TYPE: load('cottage_scene_type'),
+  COTTAGE_BACKDROP: load('cottage_backdrop'),
+  COTTAGE_SIGNATURE: load('cottage_signature'),
+  COTTAGE_TERRAIN: load('cottage_terrain'),
+  COTTAGE_SKY: load('cottage_sky'),
+  COTTAGE_CAMERA: load('cottage_camera'),
+  COTTAGE_LIGHTING: load('cottage_lighting'),
+  COTTAGE_TIME_OF_DAY: load('cottage_time_of_day'),
+  COTTAGE_ATMOSPHERE: load('cottage_atmosphere'),
+  COTTAGE_NATURE_ELEMENT: load('cottage_nature_element'),
+  COTTAGE_COMPANION: load('cottage_companion'),
+
   // ============ MINI-CHEF path pools (12-axis) ============
   CHEF_SCENE_TYPE: load('chef_scene_type'),
   CHEF_KITCHEN_BACKDROP: load('chef_kitchen_backdrop'),

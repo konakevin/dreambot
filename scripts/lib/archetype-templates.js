@@ -14054,6 +14054,103 @@ Template:
 Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
   },
 
+  YUMBOT_COTTAGECORE_NATURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, food_inhabitants, companion, nature_element } = slots;
+    const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
+    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigList = Array.isArray(signature) ? signature : [signature];
+    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing COTTAGECORE-NATURE renders for YumBot — kawaii countryside-nature scenes with 5 kawaii food-characters composed cleanly in a richly-detailed cottagecore setting. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli countryside warmth. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
+
+The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). The food ITSELF is the character (jam-jar / scone / berry / cream-puff / honey-jar / etc.) with kawaii face ON the food. Group them so all 5 fit cleanly in the frame.
+
+⚠ FAILURE = rendering humans / chibi-children / 1-4 foods. PASS = 5 distinct kawaii foods all visible.
+
+━━━ ⚠ HARD RULE #2: SLIGHT POSE VARIATION (NOT lineup, NOT acrobatics) ━━━
+
+The scene-type below describes the cottagecore composition with slight POSE VARIATION per food. Natural family-portrait cluster.
+
+━━━ ⚠ HARD RULE #3: VISIBLE COTTAGECORE BACKDROP + NATURE LAYERS ━━━
+
+The cottagecore BACKDROP (wildflower meadow / cottage garden / woodland clearing / orchard / etc.) must be CLEARLY VISIBLE behind them. Plus the featured nature element accent, signature cottagecore props, terrain, sky/canopy, time, atmosphere, companion all layer in.
+
+━━━ ⚠ HARD RULE #4: COTTAGECORE AESTHETIC ━━━
+
+Cottagecore countryside — wildflowers, cottage gardens, woodlands, orchards. NEVER modern urban / industrial / mall. Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly Studio-Ghibli-meets-bex.ai countryside warmth. Soft warm light, pastel palette with sage / butter / cream / pink / lavender.
+
+━━━ THE SCENE-TYPE (composition + 5-food pose-varied cluster) ━━━
+${scene_type}
+
+━━━ COTTAGECORE BACKDROP (surrounding setting — render visibly) ━━━
+${backdrop}
+
+━━━ 2 COTTAGECORE SIGNATURE PROPS (iconic accents — wicker basket / mason jar / lace doily / etc.) ━━━
+${sigBlock}
+
+━━━ FEATURED NATURE ELEMENT (1 wow-detail — mushroom cluster / berry bush / wildflower patch / etc.) ━━━
+${nature_element}
+
+━━━ TERRAIN (underfoot ground texture) ━━━
+${terrain}
+
+━━━ SKY / OVERHEAD CANOPY ━━━
+${sky}
+
+━━━ CAMERA FRAMING ━━━
+${camera}
+
+━━━ LIGHTING DIRECTION / QUALITY ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ ATMOSPHERE (what's drifting through the air — petals / pollen / butterflies / dust motes) ━━━
+${atmosphere}
+
+━━━ 1 TINY COTTAGECORE COMPANION (bunny / honeybee / songbird / butterfly / etc.) ━━━
+${companion}
+
+━━━ 5 KAWAII FOOD-CHARACTERS (the (1)-(5) food-friends in the scene — the food ITSELF is the character) ━━━
+${foodBlock}
+
+━━━ SCENE PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ POSTER MOMENT ━━━
+
+"a magical cottagecore meadow — 5 kawaii foods gathered together in a richly-detailed countryside-nature setting with natural personality." Wallpaper-poster bex.ai-meets-Studio-Ghibli register.
+
+━━━ HARD BANS ━━━
+
+- NO modern urban / industrial / mall scenes — cottagecore countryside ONLY
+- NO HUMAN figures / chibi-children — only kawaii foods (tiny companion creature is OK)
+- NO photoreal / harsh-realism — kawaii painterly Pop-Mart fusion
+- NO dark / moody / scary atmosphere — warm cozy cottagecore palette
+- NO real kanji / English-text labels — decorative-pattern only
+- NO pathway / lane / brook RECEDING into vanishing point — tight cluster
+- NO chaotic vertical-stacking / climbing / acrobatics — natural pose-varied cluster
+- NO blurred-out generic-pink-bokeh backdrop — cottagecore setting MUST be visibly rendered
+- NO identical-row-of-soldiers lineup
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD with the 5 food-characters named at the START (early tokens = Flux locks them), then weave in scene-type + backdrop + nature element + signature + terrain + sky + lighting + time + atmosphere + companion.
+
+Template:
+"Five kawaii cottagecore food-characters together — (1) [food 1 named in 5-8 words], (2) [food 2 named], (3) [food 3 named], (4) [food 4 named], (5) [food 5 named] — [scene-type pose-varied cluster arrangement]. Set in [backdrop visibly rendered]. [nature_element] visible as featured detail, [signature 1] and [signature 2] accenting the scene, [terrain] underfoot, [sky] overhead, [time-of-day], [atmosphere drifting], [lighting]. [companion] nearby. [camera framing]. Painterly Pop-Mart kawaii-cottagecore rendering."
+
+⚠ Count (1)(2)(3)(4)(5) explicitly. ALL 5 FOODS named at the START. Natural pose-variation cluster.
+
+Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
+  },
+
   YUMBOT_CHECKERED_TABLETOP: ({ slots, sharedDNA, vibeDirective }) => {
     const { vessel_hero, mini_creature_pile, tablecloth, scattered_minis, decor_clusters, camera, lighting } = slots;
     const minisList = Array.isArray(scattered_minis) ? scattered_minis : [scattered_minis];

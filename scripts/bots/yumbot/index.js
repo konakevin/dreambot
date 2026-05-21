@@ -20,6 +20,7 @@ const pathBuilders = {
   'candy-fantasy': require('./paths/candy-fantasy'),
   'japanese-festival': require('./paths/japanese-festival'),
   'mini-chef': require('./paths/mini-chef'),
+  'cottagecore-nature': require('./paths/cottagecore-nature'),
 };
 
 module.exports = {
@@ -43,7 +44,7 @@ module.exports = {
     'cinematic', 'surreal',
   ],
 
-  paths: ['floral-garden-cup', 'floral-garden-scene', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy', 'japanese-festival', 'mini-chef'],
+  paths: ['floral-garden-cup', 'floral-garden-scene', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy', 'japanese-festival', 'mini-chef', 'cottagecore-nature'],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
   // their combined weight equals 1 (the same total weight floral-garden-cup
@@ -56,6 +57,7 @@ module.exports = {
     'candy-fantasy': 1,
     'japanese-festival': 1,
     'mini-chef': 1,
+    'cottagecore-nature': 1,
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },
