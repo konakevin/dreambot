@@ -13103,6 +13103,104 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Brian Froud +
 Write 80-110 words, comma-separated phrases. LEAD WITH THE PALM-SIZED FAE — preserve her stacked features unmistakably (including wings + 3-to-8-inch scale). Then the scale-anchor companion that DWARFS her. Then her macro perch. Then the captured action. Then forest at her scale. Then lighting + weather. Then magical flavor + foreground anchor.${botanical_accent ? ' Then botanical accent at her scale.' : ''} Painterly-real oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_DRYAD_PORTRAIT: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      expression_moment,
+      gesture_pose,
+      portrait_composition,
+      adornment,
+      forest_backdrop,
+      lighting,
+      weather,
+      magical_flavor,
+      foreground_anchor,
+    } = slots;
+
+    const foregroundSection = foreground_anchor
+      ? `\n\n━━━ FOREGROUND ANCHOR (closest depth element bringing 3-tier portrait depth) ━━━\n${foreground_anchor}\n\nA tactile element close to the camera that brings true depth — hanging vine, fern-frond, drifting petal-cluster — softly out-of-focus, framing her without blocking.`
+      : '';
+
+    return `You are writing ONE Flux prompt for a TIGHT CLOSE-UP DRYAD PORTRAIT in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt.
+
+1. THIS IS A TIGHT PORTRAIT. Head and shoulders / bust framing only. The CREATURE'S FACE AND UPPER BODY fill 50-80% of the frame. NEVER write full-body, NEVER write wide-shot, NEVER write a "figure in landscape". This is portrait scale — close enough to read eyelashes, lichen-detail on cheekbones, individual vine-strands in hair.
+
+2. The dryad description below is THE creature — render her with EVERY exotic feature listed (the moss-tinted skin, the vine-hair, the leaf-garment, the antlers/wings/glowing-marks, the magical signature). 5+ stacked exotic features must visibly land in the painting.
+
+3. INTIMATE STILLNESS — face turned 3/4 or in soft profile, eyes lowered or looking away, NEVER eye-contact with viewer, NEVER posing-for-camera. Caught in a quiet candid moment.
+
+4. Adult-scale dryad — NOT palm-sized, NOT child-fairy.
+
+Open your prompt with the dryad description. The dryad opens; everything else is HER FRAME.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE DRYAD (the subject — render her exactly as described) ━━━
+${creature}
+
+Preserve every exotic feature unmistakably. She is mythic-creature beauty, NOT human-model beauty. Confident at-home-in-her-wildness. NEVER posing, NEVER looking at the viewer.
+
+━━━ 2. EXPRESSION MOMENT (face + eyes — the intimate stillness) ━━━
+${expression_moment}
+
+This is the captured intimate moment of her face. Caught-on-camera, eyes lowered or looking away, NEVER toward viewer. Soft contemplation, listening, blessing, communion.
+
+━━━ 3. GESTURE / POSE (hand and shoulder posture) ━━━
+${gesture_pose}
+
+A specific hand/shoulder/posture moment that anchors her stillness — never tense, never posed, always candid intimate.
+
+━━━ 4. PORTRAIT COMPOSITION (tight framing spec) ━━━
+${portrait_composition}
+
+The frame is intimate close. Face / shoulders / bust dominate. The forest is softly out-of-focus depth behind.
+
+━━━ 5. ADORNMENT (what's woven into her hair / face / shoulders) ━━━
+${adornment}
+
+A specific natural adornment painted into her hair, antlers, or shoulders — flower-crown, berry-cluster, leaf-veil, dewdrops on temple. Painted with species-specific detail.
+
+━━━ 6. FOREST BACKDROP (her natural frame — softly out-of-focus behind her) ━━━
+${forest_backdrop}
+
+A specific enchanted-forest setting softly behind her — atmospheric haze sells the depth. Never let the backdrop compete with her presence. Tactile foreground / midground holds her / background fades into soft painted mist.
+
+━━━ 7. LIGHTING (close-portrait light drama) ━━━
+${lighting}
+
+━━━ 8. WEATHER (air condition close to her — drifting accents) ━━━
+${weather}
+
+━━━ 9. MAGICAL FLAVOR (visible magic at her face / shoulders) ━━━
+${magical_flavor}
+
+A specific magical signature visible near her face or shoulders — glowing veins, pollen-shimmer at her temples, fireflies near her cheek, soft halo.
+${foregroundSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier portrait illustration.
+
+━━━ HARD BANS ━━━
+- NO full-body framing / NO wide-shot / NO landscape-with-figure (this is a TIGHT PORTRAIT — head/bust scale only)
+- NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer (face turned away, eyes lowered, gaze elsewhere)
+- NO sexualized framing — focus is mythic-creature beauty
+- NO bare chest, NO nipples, NO topless
+- NO modern objects, NO realistic non-magical humans
+- NO violence / NO scared expressions / NO edgy moods
+- NO additional figures
+- NO palm-sized fairy / NO tiny-pixie scale (this path is adult-scale only)
+- NO smooth illustration / NO airbrushed / NO modern-anime / NO Pixar-3D
+- NO storm / lightning / dark-grey-blue (peaceful enchanted register only)
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE DRYAD — preserve her stacked exotic features unmistakably. Then expression. Then gesture. Then composition framing. Then adornment. Then forest backdrop softly behind. Then lighting + weather. Then magical flavor close to her face.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon

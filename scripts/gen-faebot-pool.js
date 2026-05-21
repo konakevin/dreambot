@@ -4234,6 +4234,563 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   },
 
 
+  // ─── dryad-portrait path (2026-05-21 axis-system migration, 10 axes) ───
+  faebot_dryad_portrait_creature: {
+    format: 'simple',
+    theme: `DRYAD CREATURE (features-only, NO posture) for FaeBot's dryad-portrait path. Each entry is ONE unified description of a single adult-scale tree-bound mythic dryad — species + skin treatment + plant-merged hair + plant-garment + anatomical extras + magical signature. NO posture / action / expression (those are separate axes). Each entry 40-70 words.
+
+⚠️ THE BAR: each dryad reads as a SINGLE coherent adult-scale mythic plant-merged feminine spirit. Mythic-creature beauty, NEVER human-model beauty. 5+ stacked exotic features per dryad. Painterly-real (Manchess + Giancola + Bonner + Froud lineage).
+
+⚠️ EVERY ENTRY MUST include AT LEAST 5 of these stacked exotic feature categories (and OMIT posture/action — those are separate):
+  - SPECIES LINEAGE — dryad / hamadryad / naiad / meliae / moss-maiden / Leshy-spirit / Forest Queen / sidhe / Tylwyth Teg / fox-spirit / swan-maiden / vine-nymph / hellebore-nymph / etc.
+  - SKIN TREATMENT — translucent with constellations / bark-textured / moss-tinted olive / bioluminescent-freckled / mottled green-flecked / luminous porcelain / silver-bark patches / lichen-detail / pale-jade
+  - PLANT-MERGED HAIR — living vines woven with blooms / river-water flowing / pale willow-fronds / wisteria-petals cascading / moss tendrils with asphodel / dark pine-needles crowned with antlers / silver-leaf cascade / autumn-leaf flowing / cherry-blossom braided
+  - PLANT-MERGED GARMENT — petal-shawl / leaf-bodice woven of ferns / vine-skirt / silk-petal wrap / overlapping rose-petals / moss-skirt with woven ivy / cape of willow-leaves / draped garland of clematis / birch-bark tunic / overlapping calla-lily
+  - ANATOMICAL EXTRAS — small antlers branching with leaves / luna-moth wings / dragonfly wings veined with sap / multiple delicate gills / third eye glowing / pointed feathered ears / vertical-slit pupils / branching deer-antlers / bird-spine / lichen patches on temples
+  - MAGICAL SIGNATURE — glowing pearl-iris eyes / glowing vein-patterns under skin / soft halo of pollen-light / luminescent freckles / glowing-amber eyes / pale luminous-aura / fingertips trailing sparkles / softly glowing third eye
+
+⚠️ SPECIES DISTRIBUTION (across 25 entries):
+  • ~5 TREE-DRYADS (oak / birch / rowan / willow / ash / pine / cherry-blossom / yew / maple)
+  • ~3 WATER-DRYADS (naiad / river-naiad / pond-nymph / waterfall-naiad)
+  • ~3 NYMPHS (moonlight / vine / flower / forest)
+  • ~3 ANIMAL-MERGED (fox-spirit / owl-fae / deer-spirit / swan-maiden / hare-spirit)
+  • ~3 PIXIE / FAE-COURT (queen / sidhe / Tylwyth Teg)
+  • ~2 LESHY / GREEN-MAN (forest-spirit elders, masculine register OK)
+  • ~2 INSECT-FAE (glow-moth / dragonfly-fae / firefly-fae)
+  • ~2 RARE / OTHERWORLDLY (Meliae / hamadryad / banshee-spirit / hellebore-nymph)
+  • ~2 KODAMA / WOODLAND-SPRITE (smaller mythic beings still adult-scale)
+
+🚫 STRICT BANS:
+  • NO posture / action / expression (separate axes — creature is features ONLY)
+  • NO human-model beauty / NO pin-up / NO sexualized framing
+  • NO modern attire / NO contemporary references
+  • NO scared / angry / edgy / dark moods
+  • NO bare chest, NO nipples, NO topless`,
+    touchpoints: [
+      'A rowan-dryad with bark-textured shoulders fading to smooth moss-tinted skin, hair of living vines woven with tiny crimson rowan berries, draped garland of ivy across collarbone, small antlers branching with autumn leaves, softly glowing amber eyes radiating gentle light, lichen-detail on her temples',
+      'A birch-hamadryad with mottled green-flecked skin like dappled forest light, waist-long hair of pale willow-fronds threaded with white moonflowers, thin wrap of pale silk-petal across her chest, a third eye glowing softly on her forehead, bioluminescent freckles tracing her collarbone',
+      'A naiad with translucent skin showing faint glowing vein-patterns, hair of slowly-flowing river-water woven with silver water-lily petals, shoulder-strap of woven vine, delicate gills along her neck, luminous pearl-iris eyes, dewdrops crowning her hairline like jewels',
+      'An ash-tree Meliae with lichen-detail on her cheekbones, fern-frond hair fanning behind her shoulders, cape of overlapping willow-leaves baring one shoulder, softly glowing vertical-slit pupils, tiny bioluminescent freckles tracing her collarbone, silver-bark patches on her wrists',
+      'A moss-maiden with skin of deep moss-tinted gold-olive, hair of moss tendrils with white asphodel buds cascading past her waist, petal-shawl over a band of folded leaves, tall pointed ears feathered with down, softly glowing amber eyes, lichen-patches across her shoulders',
+      'An oak-dryad with bark-textured shoulders fading to smooth moss-tinted skin, long hair of living vines woven with tiny yellow blossoms, leaf-petal bodice and moss-skirt of woven ferns, small antlers branching with fresh oak-leaves, glowing-amber eyes, bark-rune patterns down her arms',
+      'A willow-dryad with silver-bark patches on her arms, hair of pale willow-fronds cascading past her waist, draped cape of overlapping willow-leaves, glowing-amber eyes, weeping-willow tendrils framing her face like a curtain, faint constellation-freckles on her cheekbones',
+      'A cherry-blossom dryad with porcelain-pale skin showing the faintest pink undertones, hair of dark moss threaded with pink cherry-blossom branches, draped bodice of overlapping silk-petals, small antlers crowned with cherry-blossom buds, soft pearl-iris eyes',
+      'A pine-dryad with bark-textured shoulders, hair of dark pine-needles woven with pine-cones, draped cape of pine-bough, weathered amber eyes, small antlers branching with fresh pine-sprouts, weathered hands resting at her sides, soft bioluminescent freckles',
+      'A yew-dryad with mottled green-and-grey skin, waist-long hair of dark yew-needles threaded with crimson yew-berries, draped cape of yew-bough with weathered bark-textured shoulders, glowing-violet eyes, dark vine-runes inked along her collarbone',
+      'A maple-dryad with smooth golden-amber skin, hair of cascading orange-and-red maple-leaves threaded with bronze-vine, draped autumn-leaf cape, small antlers branching with autumn-leaves, soft amber eyes, lichen-patches at her temples',
+      'A river-naiad with translucent silver-blue skin, hair of slowly-flowing river-water woven with white lotus-petals, draped silk-petal shawl over a shoulder, delicate translucent gills along her neck, luminous pearl-iris eyes, dewdrop-pearls scattered across her shoulders',
+      'A pond-nymph with translucent pale-jade skin, hair of cascading lily-leaves threaded with floating-bloom buds, draped petal-shawl of overlapping water-lily petals, delicate gills along her painted neck, soft glowing-blue eyes',
+      'A waterfall-naiad with translucent skin showing tiny constellations beneath, hair of cascading silver-mist threaded with tiny water-droplets, draped silk-petal shawl woven with silver-thread, luminous pearl-iris eyes, soft mist-aura at her shoulders',
+      'A moonlight nymph with bioluminescent freckles tracing her collarbone, hair of moss tendrils with white asphodel buds, shoulder-strap of woven vine and skirt of overlapping calla-lily petals, a third eye glowing softly on her forehead, soft pearl-skin aura',
+      'A vine-nymph with lichen-detail on cheekbones, moss-tinted gold-olive skin, hair of living vines woven with tiny purple clematis blooms, draped garland of ivy across her torso with low vine-skirt, tall pointed ears feathered with down, glowing-amber eyes',
+      'A flower-nymph with porcelain skin showing faint pink undertones, hair of cherry-blossom branches with white moonflowers woven through, draped bodice of overlapping rose-petals, small antlers crowned with foxglove-bells, soft pollen-light haloing her face',
+      'A fox-spirit dryad with mottled green-flecked skin, hair of pale willow-fronds threaded with foxglove blooms, thin wrap of silk-petal across chest with vine-skirt, luminous amber eyes with vertical-slit pupils, three small fox-tails tipped in silver visible at her shoulder',
+      'An owl-fae with mottled bark-textured skin, feathered hair of pale willow-fronds with single white moonflowers, owl-feather cape draped across shoulders, large pearl-iris eyes with horizontal-slit pupils, soft bioluminescent freckles on her temples',
+      'A deer-spirit dryad with mottled green-flecked skin, hair of dark moss threaded with autumn-leaves, draped cape of overlapping willow-leaves, large branching deer-antlers crowning her head, soft fawn-marks dotting her shoulders, glowing amber eyes',
+      'A swan-maiden with translucent skin showing tiny constellations, hair of pale willow-fronds woven with single white moonflowers, cape of overlapping willow-leaves draped across shoulders, delicate gills along her graceful neck, luminous pearl-iris eyes, soft white-feather aura',
+      'A fae queen with skin like luminous pearl and subtle vine-pattern marks, floor-length hair of living vines woven with hundreds of tiny white flowers, flowing gown of woven petals at her shoulders, regal antler-crown woven with honeysuckle, soft glowing-violet eyes',
+      'A Tylwyth Teg sidhe with cascading silver hair threaded with gold-leaf and dewdrop-pearls, layered robe of overlapping willow-leaves at her shoulders, porcelain skin with faint constellation freckles, delicate pointed ears, soft glowing-violet eyes',
+      'A Leshy-spirit with bark-textured skin showing faint glowing vein-patterns, hair of dark pine-needles crowned with branching antlers sprouting tiny oak-leaves, loose tunic of birch-bark strips at his shoulders, eyes like deep forest amber, weathered face',
+      'A hellebore-nymph with translucent pale-cream skin showing faint green undertones, hair of cascading nodding hellebore-blooms threaded with green leaves, draped petal-shawl of overlapping hellebore-blooms with green-leaf bodice, glowing-violet eyes, soft bioluminescent collarbone freckles',
+    ],
+    instructions: `Each entry is ONE unified mythic adult-scale dryad description (features ONLY), 40-70 words. Format: prose, comma-separated phrases. MANDATORY — 5+ stacked exotic features (species + skin + plant-merged hair + plant-garment + anatomical extras + magical signature). NO posture / action / expression. NO human-model beauty. NO modern attire. NO scared/edgy moods. NO bare chest. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_expression_moment: {
+    format: 'simple',
+    theme: `EXPRESSION MOMENT (face + eyes state) for FaeBot's dryad-portrait path. Each entry describes ONE specific face/eye intimate moment. Each entry 15-30 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC captured intimate facial moment — NEVER posing, NEVER eye-contact with viewer. Eyes lowered, closed, looking off-frame, or focused on something else in the scene. Soft contemplation, listening, blessing, communion.
+
+⚠️ EXPRESSION CATEGORIES (across 25 entries):
+  • ~5 EYES LOWERED / DOWNWARD GAZE — eyes lowered to her cupped palm / looking down at moss / gazing at a single bloom
+  • ~4 EYES CLOSED — eyes closed in soft contemplation / cheek pressed to bark with eyes closed / eyes closed in blessing
+  • ~3 SIDE PROFILE — face in soft profile / single eye visible in side-profile / cheek-and-jaw in profile
+  • ~3 LOOKING OFF-FRAME — eyes following a drifting petal / watching a distant creature / gaze off into deep forest
+  • ~3 LIPS PARTED LISTENING — lips slightly parted as she listens / face tilted listening / mouth softly open in wonder
+  • ~3 SOFT EMOTION — tears catching light at lash-line / soft smile / wonder / contentment / quiet sorrow
+  • ~2 CHEEK-PRESSED — cheek pressed against ancient bark / cheek on a flower / cheek nuzzled against tree
+  • ~2 HEAD-BOWED — head bowed in reverence / blessing / quiet awe
+
+🚫 STRICT BANS:
+  • NO eye-contact with viewer / NO direct gaze at camera
+  • NO posed expression / NO model-poses
+  • NO violence / NO scared / NO edgy moods
+  • NO creature description (separate axis)
+  • NO gesture / hand language (separate axis)`,
+    touchpoints: [
+      'Eyes lowered to her cupped palms, soft glowing-amber gaze fixed downward in quiet contemplation, lashes painted long over her cheek',
+      'Eyes closed in soft contemplation, lips slightly parted, painted serene expression with faint pollen-light at her temples',
+      'Side profile, single luminous pearl-iris eye visible in painted candid stillness, lashes long against cheek',
+      'Looking off-frame to follow a drifting petal, soft glowing-violet eyes fixed on something just outside the painted frame',
+      'Lips slightly parted as she listens, face tilted in soft attention, painted intimate hush register',
+      'Tears catching the painted light at her lash-line, soft glowing-amber eyes lowered in quiet sorrow-and-beauty',
+      'Cheek pressed against ancient bark with eyes half-closed, painted serene communion expression',
+      'Head bowed in painted reverence, soft glowing pearl-iris eyes lowered, hair veiling her face partially',
+      'Eyes closed in painted blessing-pose, faint smile at her lips, soft pollen-light at her temples',
+      'Side profile, eyes lowered, painted gentle contemplation, hair falling forward across one cheek',
+      'Eyes lowered watching her own fingertips, painted intimate moment of self-attention, soft glowing eyes',
+      'Three-quarter profile gazing softly at a single drifting firefly, painted candid moment of attention',
+      'Eyes closed with cheek nuzzled against a glowing-bloom near her face, painted blissful contemplation',
+      'Lips softly open in wonder at something off-frame, painted gentle awe register, eyes glowing softly',
+      'Head bowed deeply in blessing, painted serene expression, faint pollen-light dusting her face',
+      'Side profile with eyes following an invisible breeze, painted candid moment, lashes long',
+      'Soft painted smile at her lips, eyes lowered to a small bloom she cradles near her face, gentle joy',
+      'Cheek pressed gently against a moss-clad tree-trunk, eyes closed in painted intimate communion register',
+      'Looking down at her own shoulder where a small creature has perched, painted candid attention',
+      'Painted quiet sorrow expression — eyes lowered, single tear at lash, soft warm-light catching the tear-glint',
+      'Lips slightly parted in painted whispered-blessing-pose, eyes closed, hand softly raised near her face',
+      'Painted face turned away from viewer in three-quarter rear angle, just a slice of cheek and ear visible',
+      'Eyes following a drifting will-o-wisp off-frame, painted gentle attentive expression',
+      'Painted serene contentment expression with eyes closed and a soft sigh at her lips, faint magical aura',
+      'Head tilted in painted listening-pose, eyes half-closed, lips softly closed, intimate hush register',
+    ],
+    instructions: `Each entry is ONE specific EXPRESSION MOMENT, 15-30 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific face/eye state, (b) NEVER eye-contact with viewer, (c) intimate candid register. NO creature description. NO gesture/hand. NO posing. NO edgy moods. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_gesture_pose: {
+    format: 'simple',
+    theme: `GESTURE / POSE (hand + shoulder posture) for FaeBot's dryad-portrait path. Each entry describes ONE specific hand or shoulder posture. Each entry 15-30 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC captured intimate gesture — hands at her cheek, cupping magic, brushing hair, pressed to chest, etc. Never tense, never posed, always candid intimate stillness.
+
+⚠️ GESTURE CATEGORIES (across 25 entries):
+  • ~5 HANDS CUPPED — cupping a glowing seed / cupping a tiny bloom / cupping pollen-light / cupping a dewdrop
+  • ~4 HANDS AT FACE — fingertips at her cheek / hand brushing hair back / palm pressed to her own jaw / fingertips at her lips
+  • ~3 HANDS AT CHEST — hands clasped at chest / one palm pressed to heart / arms crossed softly over chest
+  • ~3 ONE SHOULDER FORWARD — three-quarter turn with one shoulder forward / shoulder-roll in candid stillness
+  • ~3 HANDS RESTING — arms loose at her sides / one hand lifted slightly / hands resting on a branch
+  • ~3 INTERACTION — fingertips brushing bark / palm pressed to tree-trunk / hand reaching toward a falling petal
+  • ~2 BLESSING — one palm raised gently in blessing / two hands lifted in offering
+  • ~2 GENTLE STILLNESS — both hands clasped softly / hands folded in her lap / hands at her sides relaxed
+
+🚫 STRICT BANS:
+  • NO posed gesture / NO model-pose
+  • NO tense / aggressive hand language
+  • NO eye-contact-with-viewer-via-gesture (no waving)
+  • NO creature description (separate axis)
+  • NO expression / face state (separate axis)`,
+    touchpoints: [
+      'Both hands cupped at chest level cradling a softly glowing seed, fingers curled gently around the painted light',
+      'One hand lifted to her face fingertips brushing hair back from her painted cheek',
+      'Both hands clasped softly at her chest in painted gentle gesture of contemplation',
+      'Three-quarter turn with one shoulder forward, painted hair cascading over the back of her painted shoulder',
+      'Arms loose at her painted sides in candid stillness, one painted hand slightly lifted',
+      'Fingertips brushing ancient bark in painted reverent contact, palm flat against the painted tree-trunk',
+      'One palm raised gently at her painted shoulder in blessing-gesture, fingers curled softly',
+      'Both painted hands folded softly in her painted lap, candid stillness',
+      'One painted hand lifted to softly touch a hanging vine near her face',
+      'Painted both hands cupped near her face cradling a tiny bloom, painted intimate close gesture',
+      'One painted palm pressed to her own heart, the other resting at her painted hip',
+      'Two painted hands lifted in offering toward a painted will-o-wisp at chest level',
+      'Painted fingertips at her own lips in soft thoughtful gesture, candid stillness',
+      'One painted shoulder bare and forward, the other draped with falling hair, painted intimate three-quarter',
+      'Painted both hands clasped softly together at chest, fingers interlaced in candid gentle stillness',
+      'Painted one hand lifted to a flower-crown adornment in her hair, gentle gesture',
+      'Painted hand reaching toward a falling petal that hovers just at her painted shoulder',
+      'Painted palm pressed gently against a moss-clad tree-trunk beside her, painted communion gesture',
+      'Painted both hands cradling a glowing pollen-cloud at chest level, fingers curled around the painted light',
+      'Painted one hand lifted with palm-up at painted shoulder height holding a glowing-magic spark',
+      'Painted arms crossed softly at her chest, painted hands resting on opposite painted shoulders',
+      'Painted fingertips at the corner of her painted jaw in soft self-touch, candid intimate gesture',
+      'Painted both hands gathered together in her painted lap holding a single fallen leaf',
+      'Painted one shoulder rolled forward, painted hand lifted to brush a strand of vine-hair from her cheek',
+      'Painted both painted hands held cupped to release a single butterfly drifting upward from her painted palms',
+    ],
+    instructions: `Each entry is ONE specific GESTURE/POSE, 15-30 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific hand or shoulder posture, (b) candid intimate stillness, (c) never tense. NO creature description. NO expression. NO posed. NO aggressive. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_composition: {
+    format: 'simple',
+    theme: `PORTRAIT COMPOSITION (tight framing spec) for FaeBot's dryad-portrait path. Each entry describes ONE specific tight-portrait framing. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC tight-portrait framing — head/shoulders/bust scale only. NEVER full-body, NEVER wide-shot, NEVER landscape-with-figure. Face/shoulders fill 50-80% of the frame.
+
+⚠️ COMPOSITION CATEGORIES (across 25 entries):
+  • ~5 TIGHT CLOSE-UP — face fills 35-50% of frame, head and shoulders only
+  • ~5 BUST FRAMING — chest-up framing, head + shoulders + collarbone fill 60-80% of frame
+  • ~4 3/4 PROFILE — face turned in 3/4 profile, eyes/lashes/cheek-detail readable
+  • ~3 SIDE PROFILE — full side profile, single eye visible, hair-vine detail
+  • ~3 OVER-SHOULDER — viewer behind her, profile of cheek + ear-tip + flower-crown visible
+  • ~2 EXTREME CLOSE-UP — face fills 50-60% of frame, eyelashes / lichen-cheek readable
+  • ~2 INTIMATE-HANDS — head + shoulders + cupped hands fill 70% of frame, hands close to face
+  • ~1 RARE — half-turned-back angle / chin-up bust / cross-collarbone
+
+⚠️ EVERY entry MUST include:
+  - FRAMING SPEC (face fills X% / bust framing / head and shoulders)
+  - POSE ORIENTATION (3/4 profile / side profile / over-shoulder / front-3-quarter)
+  - WHAT'S VISIBLE (eyelashes / collarbone / flower-crown / cheek-detail / etc.)
+
+🚫 STRICT BANS:
+  • NO full-body / NO wide-shot / NO landscape-with-figure
+  • NO eye-contact-with-viewer framing
+  • NO creature description (separate axis)
+  • NO expression / pose detail (separate axes)`,
+    touchpoints: [
+      'Tight close-up portrait, head and shoulders only, face fills 40% of frame, head turned in candid 3/4 profile',
+      'Bust framing chest-up, dryad off-center via rule-of-thirds, head + shoulders + collarbone fill 70% of frame, hair cascading',
+      'Close portrait, face in soft profile, single eye visible, hair-vines and flower-crown clearly readable, head fills 45% of frame',
+      'Three-quarter close portrait, dryad half-turned away — back of one shoulder + side of face visible — face turned toward something off-frame',
+      'Intimate close-up, hands in foreground cupping a glowing magic element, dryad face above looking down at it, head + shoulders + cupped hands fill 70% of frame',
+      'Tight side-profile bust portrait, dryad in stillness, soft backlight rimming her silhouette, head + neck + shoulder fill 65% of frame',
+      'Extreme close-up of face turned in 3/4 profile, eyelashes / lichen-cheek-detail / vine-hair-strands all readable, face fills 55% of frame',
+      'Over-the-shoulder portrait, viewer behind her, profile of her cheek + jaw + ear-tip + flower-crown visible, hair flowing forward',
+      'Bust framing centered, face turned in soft profile, painted hair cascading past her shoulder, head + shoulders + chest fill 75% of frame',
+      'Tight head-and-shoulders close-up, face in 3/4 profile, eyes lowered, painted lashes long across cheek, face fills 40% of frame',
+      'Close portrait with shoulder-roll three-quarter angle, painted collarbone-detail and flower-crown both readable, face fills 38% of frame',
+      'Bust framing centered with face in soft profile turned away from viewer, painted hair cascading behind her, head + shoulders fill 70% of frame',
+      'Intimate close-up with one painted hand at her face, fingertips at temple, painted cupped-hand and face-detail both readable',
+      'Tight side-profile portrait, painted face turned fully sideways, painted antler-crown silhouette against the backdrop',
+      'Three-quarter front-of-shoulder portrait, painted face turned slightly toward camera but eyes off-frame, head + shoulders fill 65% of frame',
+      'Painted half-turned-back angle, painted shoulder-blade visible on far side, painted face profile turned away',
+      'Close portrait with painted soft backlight rimming her silhouette, painted face in 3/4 profile, painted hair-detail clearly readable',
+      'Tight head-and-collarbone close-up, painted face turned down to her painted cupped hands, head + collarbone fill 60% of frame',
+      'Bust framing with painted chin-up tilt, painted face turned slightly upward looking off-frame, painted neck and collarbone detail',
+      'Cross-collarbone angle close-up, painted dryad with painted arm crossed over her chest, painted face in 3/4 profile',
+      'Painted three-quarter rear angle, painted ear-tip and painted cheek visible, painted hair flowing forward, painted shoulder-blade in foreground',
+      'Painted intimate close-up with painted face filling 50% of frame, painted bioluminescent freckles and painted lichen-detail clearly readable',
+      'Painted bust framing with painted face turned in soft profile away from viewer, painted antlers extending up past the top of the frame',
+      'Painted side-profile portrait with painted single eye visible in candid stillness, painted hair veiling far side of face',
+      'Painted close-up with painted face partially veiled by a fall of painted hair-vines, painted intimate hidden-but-revealed register',
+    ],
+    instructions: `Each entry is ONE specific PORTRAIT COMPOSITION, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) framing spec, (b) pose orientation, (c) what's visible. NO full-body. NO eye-contact-with-viewer. NO creature description. NO expression/pose detail. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_adornment: {
+    format: 'simple',
+    theme: `ADORNMENT (woven into hair / face / shoulders) for FaeBot's dryad-portrait path. Each entry describes ONE specific natural adornment painted with species-specific detail. Each entry 15-30 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC natural adornment — flower-crown, berry-cluster, leaf-veil, dewdrops on temple, lichen-pattern, antler-decor. Painted with species-specific detail at painted gallery-tier register.
+
+⚠️ ADORNMENT CATEGORIES (across 25 entries):
+  • ~5 FLOWER CROWN — bluebell crown / foxglove crown / wild-rose crown / wisteria crown / dogwood crown
+  • ~4 BERRY CLUSTER — rowan berries woven in hair / blackthorn berry / red-currant cluster
+  • ~3 LEAF VEIL — autumn-leaf veil / fern-frond veil / cascading-vine veil
+  • ~3 DEWDROP / GLINT — dewdrops crowning hair like jewels / dewdrops at lash / pearl-shimmer at temple
+  • ~3 LICHEN / MOSS PATCH — silver-lichen patch on cheekbone / moss-tuft at temple
+  • ~2 ANTLER DECOR — antler-tips wrapped with leaves / flowers blooming from antler-base
+  • ~2 BUTTERFLY / FIREFLY — butterfly perched on her painted antler-tip / firefly at her shoulder
+  • ~2 PETAL / FLORAL CASCADE — cascading petal-veil / drifting petal-crown
+  • ~1 RARE / UNIQUE — single moonflower at her temple / glowing-rune at her brow
+
+🚫 STRICT BANS:
+  • NO modern jewelry / NO metal jewelry / NO contemporary accessories
+  • NO creature description (separate axis)
+  • NO expression / gesture (separate axes)
+  • NO oversized cartoon decor`,
+    touchpoints: [
+      'Painted bluebell crown woven through her hair in soft pearl-violet bell-shapes, painted intimate adornment register',
+      'Painted foxglove crown of pink-and-purple bell-shaped clusters circling her painted brow, painted gallery-tier register',
+      'Painted wild-rose crown with painted pink-and-cream blooms threaded through her painted hair, painted soft register',
+      'Painted wisteria-cluster crown of cascading violet racemes draping past her painted ears, painted ethereal adornment',
+      'Painted dogwood-blossom crown with painted white-and-pink four-petal blooms woven across her painted brow',
+      'Painted rowan-berries woven through her painted hair in painted crimson-and-gold clusters, painted autumn register',
+      'Painted blackthorn-berry cluster threaded through her painted hair in painted deep-purple-and-black detail, painted gallery-tier',
+      'Painted red-currant cluster at her painted temple in painted small bright-red beads, painted natural-adornment register',
+      'Painted autumn-leaf veil cascading from her painted hair in painted red-orange-gold layered leaves, painted seasonal register',
+      'Painted fern-frond veil cascading at her painted shoulder in painted lacy green-leaf-detail, painted ethereal adornment',
+      'Painted cascading-vine veil with painted small white-blooms threaded down past her painted ear, painted gentle adornment',
+      'Painted dewdrops crowning her painted hairline like painted jewels in painted refractive-clarity glints, painted gallery-tier adornment',
+      'Painted dewdrop-pearls scattered across her painted shoulders in painted glistening detail, painted shimmer register',
+      'Painted pearl-shimmer at her painted temple where painted skin meets painted hair, painted soft glowing detail',
+      'Painted silver-lichen patch on her painted cheekbone in painted soft pale-grey-green detail, painted intimate texture',
+      'Painted moss-tuft at her painted temple woven through her painted hair, painted velvety green texture',
+      'Painted lichen-rune pattern inked along her painted jaw in painted soft silver-grey, painted ancient-tree register',
+      'Painted antler-tips wrapped with painted ivy-and-blooms in painted natural decoration register',
+      'Painted small flowers blooming directly from her painted antler-base in painted soft pearl-violet clusters',
+      'Painted small monarch butterfly perched on her painted antler-tip, painted intimate companion-adornment',
+      'Painted firefly hovering at her painted shoulder in painted soft warm-yellow glow, painted intimate magical detail',
+      'Painted cascading petal-veil of painted pink-cherry-blossom petals drifting from her painted hair down past her painted shoulder',
+      'Painted drifting petal-crown of painted soft pearl-white petals haloing her painted head, painted ethereal register',
+      'Painted single moonflower at her painted temple in painted luminous white-and-pearl detail, painted soft glow',
+      'Painted glowing-rune at her painted brow in painted soft cyan light, painted ancient-magical adornment register',
+    ],
+    instructions: `Each entry is ONE specific ADORNMENT, 15-30 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific natural adornment type, (b) species-specific or texture detail, (c) position (in hair / on shoulder / at temple / etc.). NO modern jewelry. NO creature description. NO expression/gesture. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_forest_backdrop: {
+    format: 'simple',
+    theme: `FOREST BACKDROP (soft-focus behind her) for FaeBot's dryad-portrait path. Each entry describes ONE specific enchanted-forest setting painted softly out-of-focus behind her. Each entry 25-45 words.
+
+⚠️ THE BAR: each backdrop is an enchanted-forest setting painted SOFTLY behind her at portrait depth-of-field — never competing with her presence. Tactile foreground / midground holds her / background fades into soft painted mist. Atmospheric haze sells the depth.
+
+⚠️ BACKDROP CATEGORIES (across 25 entries):
+  • ~4 ANCIENT OAK GROVE — softly-blurred oak trunks and dappled god-rays behind her
+  • ~3 FERN GROTTO — soft fern-fronds blurred at midground depth
+  • ~3 BIRCH GLADE — pale birch trunks softly out-of-focus behind her
+  • ~3 WILLOW THICKET — cascading willow-branches blurred behind her
+  • ~3 WISTERIA-CASCADE — violet wisteria draping softly out-of-focus
+  • ~3 SAKURA GROVE — pink-blossom canopy softly behind her
+  • ~2 AUTUMN-BLAZE — autumn-leaf canopy softly behind
+  • ~2 MOSS-CANYON — moss-cliff walls softly blurred at depth
+  • ~2 BIOLUMINESCENT GLEN — softly-glowing fungi or moss behind her at depth
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC FOREST TYPE
+  - SOFTLY OUT-OF-FOCUS / atmospheric haze cue
+  - MULTI-TIER DEPTH (foreground tactile / midground her / background fading)
+
+🚫 STRICT BANS:
+  • NO open meadow / NO landscape-with-figure
+  • NO creature description (separate axis)
+  • NO lighting / weather (separate axes)
+  • NO competing focal element behind her`,
+    touchpoints: [
+      'Ancient oak grove softly out-of-focus behind her in painted warm-amber and emerald tones, painted dappled god-rays piercing the canopy, painted atmospheric haze sells the depth',
+      'Soft fern-grotto behind her with painted lacy fern-fronds blurred at midground depth, painted moss-tones receding into atmospheric pearl-mist',
+      'Birch-glade behind her with painted pale slender birch-trunks softly out-of-focus, painted dappled light filtering through pale-bark silhouettes',
+      'Willow-thicket behind her with painted cascading weeping-willow branches blurred at depth, painted soft-green and silver receding into pearl-mist',
+      'Wisteria-cascade behind her with painted violet-purple racemes draping softly out-of-focus, painted dappled twilight filtering through',
+      'Sakura-grove behind her with painted pink-blossom canopy softly out-of-focus, painted drifting petals through dappled light',
+      'Autumn-blaze maple grove behind her with painted brilliant orange-red-gold canopy softly out-of-focus, painted dappled warm light',
+      'Moss-canyon behind her with painted moss-covered cliff walls softly out-of-focus at depth, painted vertical green-tones receding',
+      'Bioluminescent glen behind her with painted softly-glowing moss and mushroom-clusters out-of-focus at depth, painted magical pearl-cyan ambient',
+      'Ancient oak sun-cathedral behind her with painted massive twisted gnarled trunks softly out-of-focus, painted dappled god-rays piercing canopy',
+      'Hidden fern-grotto behind her with painted moss-covered boulders and giant fern-fronds blurred at depth, painted atmospheric haze',
+      'Pale-bark birch-glade behind her with painted scattered moss-floor and tiny mushroom-rings softly out-of-focus, painted dappled light',
+      'Willow-thicket along stream behind her with painted weeping-willow branches creating natural curtains softly out-of-focus, painted reflective light',
+      'Wisteria-cascade woodland behind her with painted ancient oak trunks supporting violet wisteria draping softly out-of-focus, painted twilight register',
+      'Sakura-grove forest behind her with painted pink cherry-blossom canopy and ancient lichen-rich trunks softly out-of-focus, painted ethereal register',
+      'Autumn-blaze oak grove behind her with painted russet-and-gold canopy softly out-of-focus, painted dappled warm-amber light',
+      'Moss-canyon enchanted glen behind her with painted moss-cliff walls softly out-of-focus, painted hanging-vine-blooms cascading from above',
+      'Bioluminescent fairy-circle behind her with painted glowing mushroom-cluster ringing a mossy hollow softly out-of-focus, painted magical pearl-glow',
+      'Redwood cathedral behind her with painted massive ridged ancient trunks rising into a soaring canopy softly out-of-focus, painted cinnamon-red ambient',
+      'Cherry-blossom grove behind her with painted pink-blossom canopy and ancient trunks softly out-of-focus, painted ethereal pearl-pink mist',
+      'Yew-grove behind her with painted twisted dark-green yew-trees softly out-of-focus at depth, painted deep blue-green mystery',
+      'Hemlock cathedral behind her with painted towering ancient hemlock trees and hanging-moss curtains softly out-of-focus, painted deep emerald shadow',
+      'Magnolia grove behind her with painted large white magnolia-blossoms suspended like lanterns softly out-of-focus, painted ethereal spring register',
+      'Fern-and-vine grove behind her with painted unfurling fern-fronds and cascading-vine-blooms softly out-of-focus, painted dappled register',
+      'Painted hidden moss-and-mushroom grove behind her with painted ancient mossy stumps and clustered mushrooms softly out-of-focus, painted enchanted register',
+    ],
+    instructions: `Each entry is ONE specific FOREST BACKDROP, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific forest type, (b) softly out-of-focus / atmospheric haze cue, (c) multi-tier depth implied. NO open meadow. NO creature description. NO lighting/weather. NO competing focal element. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_lighting: {
+    format: 'simple',
+    theme: `CLOSE-PORTRAIT LIGHTING for FaeBot's dryad-portrait path. Each entry describes ONE specific lighting register tuned for tight portraits. Each entry 25-45 words.
+
+⚠️ THE BAR: each lighting entry is tuned for INTIMATE PORTRAIT register — rim-light silhouetting her, dappled light through canopy onto her face, soft-warm side-light gilding her features, moonlit silver on her hair. Light catches HER, not the landscape.
+
+⚠️ LIGHTING CATEGORIES (across 25 entries):
+  • ~6 GOLDEN-HOUR — warm-amber sidelight gilding her face / golden backlight haloing her hair
+  • ~4 DAPPLED — dappled canopy-light through forest hitting her face / dappled god-rays
+  • ~4 RIM-LIGHT — soft backlight rimming her silhouette / glowing wing-edges
+  • ~3 BLUE-HOUR / TWILIGHT — cool-blue twilight with warm-yellow accent on her face
+  • ~3 MOONLIT — silver moonlight on her hair / blue-moon ambient on her shoulders
+  • ~3 BIOLUMINESCENT — soft pollen-glow at her temples / firefly-light on her cheek
+  • ~2 DAWN — soft-pink dawn light gilding her features
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TIME-OF-DAY
+  - SPECIFIC LIGHT QUALITY (rim / dappled / sidelight / underlight)
+  - HOW IT CATCHES HER (gilding her hair / haloing her silhouette / catching her cheekbone / rim-lighting her wings)
+  - PALETTE CUE
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO weather (separate axis)
+  • NO storm / lightning / dark-grey-blue (peaceful enchanted register only)`,
+    touchpoints: [
+      'Golden-hour warm-amber sidelight raking across her painted face from a low angle, painted long shadows defining her cheekbones, warm-gold and cool-blue contrast',
+      'Late-afternoon golden backlight haloing her painted hair from behind, painted warm rim-light tracing the silhouette of every painted strand',
+      'Magic-hour golden light gilding her painted face with warm-amber-and-gold palette, painted-storybook softness',
+      'Golden-hour through canopy creating painted dappled warm-light patterns across her painted shoulders and face',
+      'Late-afternoon warm light filtering through painted overlapping leaves creating painted golden-pink dappled patterns on her painted face',
+      'Golden warm sidelight from a low angle creating painted long shadows, painted warm halo-glow around her painted hair',
+      'Dappled canopy-light through forest hitting her painted cheekbone in painted soft warm-amber spots, painted intimate close-portrait register',
+      'Dappled god-rays piercing the canopy in painted shafts of warm-amber light reaching her painted shoulder, painted gallery-tier portrait light',
+      'Soft dappled gold patches catching her painted face in painted warm-amber spots, painted intimate forest light at her scale',
+      'Painted dappled green-gold canopy-light filtering through painted leaves onto her painted face, painted ethereal portrait register',
+      'Soft backlight rimming her painted silhouette in painted warm-gold edge-light, painted intimate close-up rim-light register',
+      'Painted glowing wing-edges with painted soft golden-warm light tracing the silhouette of her painted wings, painted magical rim-light',
+      'Painted soft backlight rimming her painted hair in painted halo-glow, painted intimate close-portrait register',
+      'Painted rim-light from below silhouetting her painted face in painted warm-glow against a darker painted backdrop',
+      'Painted cool-blue twilight with painted warm-yellow accent from a nearby will-o-wisp illuminating her painted face from below',
+      'Painted blue-hour twilight with painted last warm-orange of sunset bleeding through painted distant trunks, painted soft warm catching her painted cheekbone',
+      'Painted magical violet-twilight glow saturating the scene in painted soft lavender-and-blue, painted faint pollen-light at her painted temple',
+      'Painted silver moonlight catching her painted hair in painted cool-blue-and-silver edge-light, painted hushed magical register',
+      'Painted blue-moon ambient flooding the scene with painted cool silver-blue painted light, painted soft white-glow on her painted shoulders',
+      'Painted moonlit silver-and-violet ambient with painted distant moon visible through the canopy gap, painted deep-blue saturating her painted hair',
+      'Painted soft pollen-glow at her painted temples in painted warm-gold soft-light, painted bioluminescent register',
+      'Painted firefly-light on her painted cheek in painted soft warm-yellow glow, painted intimate magical register',
+      'Painted bioluminescent ambient with painted softly-glowing fungi behind her casting painted soft pearl-cyan light on her painted shoulder',
+      'Painted soft-pink dawn light gilding her painted face with painted rose-gold-and-lavender palette, painted gentle peaceful register',
+      'Painted golden dawn beams angling through the canopy from a low east angle catching her painted face in painted warm-gold side-light',
+    ],
+    instructions: `Each entry is ONE specific LIGHTING moment, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) time-of-day, (b) light quality, (c) how it catches her, (d) palette cue. NO creature. NO biome. NO weather. NO storm/lightning. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_weather: {
+    format: 'simple',
+    theme: `WEATHER (air condition + drifting accents) for FaeBot's dryad-portrait path. Each entry describes ONE specific atmospheric air condition tuned for close-portrait. Each entry 20-40 words.
+
+⚠️ THE BAR: each weather entry establishes a SPECIFIC air condition with drifting accents that adds painted-storybook depth NEAR HER FACE / SHOULDERS — drifting petals past her cheek, dew on her shoulders, pollen-shimmer at her temple, gentle mist in her hair. Weather is intimate at portrait scale.
+
+⚠️ WEATHER CATEGORIES (across 25 entries):
+  • ~5 PETAL-DRIFT — drifting petals past her face / petal cascade by her shoulder
+  • ~4 MIST / FOG — soft mist drifting through her hair / mist softening backdrop
+  • ~4 DEW-GLINTS — dewdrops on her shoulders / dew on her hair-strands
+  • ~3 POLLEN-HAZE — drifting golden pollen-motes near her temples / pollen shimmer at her shoulders
+  • ~3 GENTLE-BREEZE — gentle breeze moving her hair / soft wind in her vine-strands
+  • ~3 DRIFTING-LEAVES — autumn-leaves drifting past her shoulder / single falling leaf
+  • ~2 CLEAR / STILL — clear painted-still air with crisp portrait visibility
+  • ~1 SNOW-DUST — winter petal-snow / first-frost on her shoulder
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC AIR CONDITION
+  - DRIFTING ACCENT (at portrait scale: petals past her face / dew on shoulder / pollen at temple)
+  - PALETTE / TEMPERATURE CUE
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO lighting (separate axis)
+  • NO catastrophic weather
+  • NO storm / lightning`,
+    touchpoints: [
+      'Drifting cherry-blossom petals past her painted face in painted soft pink-snow, gentle motion captured in painted portrait register',
+      'Painted falling petal-snow drifting past her painted shoulder in painted pearl-pink drift, magical painted spring register',
+      'Painted wisteria petals drifting in painted violet-clusters past her painted ear from overhead, painted soft pearl-violet palette',
+      'Painted drifting rose-petals past her painted cheek in painted soft crimson-and-cream cascade, magical painted register',
+      'Painted drifting magnolia-petals in painted large pearl-cream petals past her painted shoulder, painted gallery-tier register',
+      'Painted soft dawn mist drifting through her painted hair in painted pearl-grey wisps, painted depth softening backdrop, painted fresh painted-morning hush',
+      'Painted low pearl-mist drifting past her painted shoulder, painted depth softening her painted silhouette, painted ethereal register',
+      'Painted soft forest-mist drifting through painted depth around her painted face in painted soft cool-grey wisps, painted gallery-tier register',
+      'Painted soft drifting mist threading through her painted vine-hair-strands in painted whisps, painted atmospheric depth, magical hushed register',
+      'Painted glistening dewdrops on her painted shoulders in painted reflective droplet detail, painted fresh-morning register',
+      'Painted pearl-dew droplets on her painted hair-strands catching the painted light in painted pearl-glints, painted fresh-morning crystal register',
+      'Painted dew-soaked painted shoulders and painted hair with painted shimmering droplets, painted fresh peaceful register',
+      'Painted shimmering dew at her painted lash-line and painted collarbone in painted pearl-glints, painted gallery-tier intimate detail',
+      'Painted drifting golden pollen-motes near her painted temples in painted soft warm-light specks, painted magical register',
+      'Painted floating pollen-clouds drifting past her painted shoulder in painted soft warm-glow, painted magical register',
+      'Painted pollen-shimmer at her painted shoulders in painted golden-warm motes, painted magical register',
+      'Painted gentle breeze moving her painted hair in painted soft synchronized motion, painted magical painted-life register',
+      'Painted petals stirring on a painted gentle breeze drifting past her painted face in painted soft-motion drift, painted magical register',
+      'Painted soft wind in her painted vine-strands moving softly across her painted shoulder, painted magical alive register',
+      'Painted autumn-leaves drifting past her painted shoulder in painted red-orange-gold flakes, painted seasonal register',
+      'Painted single falling autumn-leaf past her painted cheek in painted gentle painted-motion, painted seasonal register',
+      'Painted settled autumn-leaf carpet stirring softly visible behind her painted shoulder, painted soft seasonal register',
+      'Painted clear painted-still air with crisp painted visibility into the painted forest depth behind her, painted gallery-tier intimate clarity',
+      'Painted motionless painted forest hush with painted crystalline clear air, every painted detail of her painted face sharp, painted intimate stillness register',
+      'Painted first-frost dusting her painted shoulders in painted soft pearl-white, painted gentle winter-petal-snow drifting past her painted face',
+    ],
+    instructions: `Each entry is ONE specific WEATHER condition, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) air condition, (b) drifting accent at portrait scale, (c) palette/temperature cue. NO creature. NO biome. NO lighting. NO catastrophic weather. NO storm/lightning. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_magical_flavor: {
+    format: 'simple',
+    theme: `MAGICAL FLAVOR (visible magic at her face / shoulders) for FaeBot's dryad-portrait path. Each entry describes ONE specific magical signature painted near her face or shoulders. Each entry 15-30 words.
+
+⚠️ THE BAR: each magical entry is a SPECIFIC luminous detail painted near her face / shoulders at intimate portrait scale — glowing veins under skin / pollen-shimmer at her temples / fireflies near her cheek / soft halo. Magic intimately close to her, never crude particle-effect.
+
+⚠️ MAGIC CATEGORIES (across 25 entries):
+  • ~6 GLOWING VEINS — glowing-blue veins under skin / amber veins on her wrists
+  • ~5 POLLEN / SHIMMER — pollen-shimmer at her temples / golden pollen-halo / silver pollen-motes
+  • ~4 FIREFLY / WISP — fireflies near her cheek / single will-o-wisp at her shoulder
+  • ~3 SOFT HALO — soft golden halo around her head / gentle pearl-aura
+  • ~3 GLOWING EYES — softly glowing amber eyes / pearl-iris glow / luminous-pupil light
+  • ~2 FINGERTIP-SPARKS — fairy-dust trailing from her fingertips / sparkle at her hands
+  • ~2 INNER GLOW — soft inner light radiating from her skin / luminescent freckles glowing
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC MAGIC TYPE
+  - POSITION (at her temple / on her cheek / under her skin / around her head / etc.)
+  - LIGHT QUALITY (luminous / glowing / sparkling / soft)
+
+🚫 STRICT BANS:
+  • NO crude particle-effect language
+  • NO modern-CGI references
+  • NO creature description (separate axis)
+  • NO violence`,
+    touchpoints: [
+      'Painted glowing-blue veins visible under her painted skin pulsing faintly with painted magical light',
+      'Painted amber veins on her painted wrists glowing softly in painted gentle warm-light, painted magical register',
+      'Painted glowing vein-patterns traced down her painted collarbone in painted soft cyan light, painted intimate magical register',
+      'Painted soft inner-glow radiating from her painted skin in painted warm-golden ambient, painted gentle magical register',
+      'Painted luminous freckles tracing her painted collarbone in painted pearl-glow points, painted intimate detail',
+      'Painted glowing rune-patterns visible at her painted temple in painted soft cyan ambient, painted ancient-magical register',
+      'Painted golden pollen-shimmer at her painted temples in painted soft warm-light haze, painted intimate magical register',
+      'Painted golden pollen-halo around her painted head in painted soft warm-gold ring, painted sacred register',
+      'Painted silver pollen-motes drifting around her painted face in painted soft pearl-light specks',
+      'Painted soft pollen-light around her painted shoulders in painted warm-gold ambient, painted gentle register',
+      'Painted drifting pollen-motes painted glowing at her painted brow in painted golden-warm light',
+      'Painted cluster of painted fireflies near her painted cheek in painted soft warm-yellow points, painted magical register',
+      'Painted single firefly hovering near her painted painted ear in painted soft warm-glow, painted intimate register',
+      'Painted firefly-cluster orbiting her painted face in painted soft warm-yellow points, painted evening register',
+      'Painted single will-o-wisp at her painted shoulder in painted soft pearl-glow, painted intimate magical register',
+      'Painted soft golden halo around her painted head in painted luminous warm-light, painted sacred register',
+      'Painted gentle pearl-aura surrounding her painted form in painted soft warm-glow, painted magical ambient register',
+      'Painted faint magical aura around her painted painted silhouette in painted soft white-light, painted gentle register',
+      'Painted softly glowing amber eyes radiating painted gentle warm-light, painted magical register',
+      'Painted pearl-iris glow in her painted lowered eyes, painted soft luminous register',
+      'Painted luminous-pupil light at her painted eyes in painted gentle pearl-glow, painted intimate magical register',
+      'Painted fairy-dust trailing from her painted fingertips in painted soft golden sparkle, painted magical register',
+      'Painted sparkle at her painted hands in painted golden-warm light, painted gentle magical-cast register',
+      'Painted bioluminescent freckles glowing on her painted shoulders in painted soft pearl-glow points',
+      'Painted soft luminous-aura at her painted hands in painted gentle warm-glow, painted magical register',
+    ],
+    instructions: `Each entry is ONE specific MAGICAL FLAVOR accent, 15-30 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific magic type, (b) position near her face/shoulders, (c) light quality. NO crude particle-effect. NO modern-CGI. NO creature description. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_dryad_portrait_foreground_anchor: {
+    format: 'simple',
+    theme: `40%-GATED FOREGROUND ANCHOR (closest depth element bringing 3-tier portrait depth) for FaeBot's dryad-portrait path. Each entry describes ONE specific tactile foreground element close to the camera. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC tactile element close to the camera (NOT blocking her face) that brings 3-tier portrait depth — hanging vine, fern-frond, drifting petal-cluster softly out-of-focus near the camera, framing her without obscuring her.
+
+⚠️ FOREGROUND CATEGORIES (across 25 entries):
+  • ~5 HANGING VINE / WILLOW — hanging-vine curtain in foreground corner / weeping willow
+  • ~4 FERN FRONDS — fern-frond arching in foreground / fern-tip near camera
+  • ~3 DRIFTING PETALS — drifting petal-cluster in foreground / cascade of petals close to camera
+  • ~3 HANGING MOSS / LICHEN — hanging moss-curtain / lichen-cluster
+  • ~3 BLOOM CLUSTER — foxglove-bell at foreground corner / cherry-blossom branch / wisteria
+  • ~3 BUTTERFLY / FIREFLY — butterfly-wing-edge / firefly-cluster
+  • ~2 DEWDROP / WATER — dewdrop-cluster on leaf / pearl-droplet
+  • ~2 BRANCH / TWIG — mossy branch tip / twig-cluster
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TYPE
+  - POSITION IN FRAME (foreground-left / lower-right / arching across / etc.)
+  - TACTILE DETAIL (softly out-of-focus)
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome / setting (separate axis)
+  • NO weather (separate axis)
+  • NO modern objects
+  • NO blocking her face`,
+    touchpoints: [
+      'Hanging vine-curtain in painted foreground-left with painted bloom-laden tendrils softly out-of-focus cascading from above, painted intimate framing',
+      'Weeping willow branches draping softly out-of-focus in painted foreground-right with painted delicate willow-leaves, framing her face without blocking',
+      'Hanging ivy-vines threading across the painted upper-left foreground softly out-of-focus, painted leaf-veining detail',
+      'Bloom-laden hanging vine-cluster in painted foreground-right with painted foxglove-bells softly out-of-focus, painted gentle framing',
+      'Wisteria-cascade hanging in painted foreground-left with painted violet petals softly out-of-focus, painted spring framing',
+      'Tall fern-cluster arching across the painted bottom of the frame softly out-of-focus with painted lacy fronds, painted tactile foreground detail',
+      'Painted fern-fronds in painted foreground-left softly out-of-focus with painted leaf-veining, painted soft cool-green palette',
+      'Painted unfurling fern-fronds in painted foreground-right with painted spiral-detail softly out-of-focus, painted ethereal register',
+      'Painted tall fern-grass cluster across the painted lower painted depth softly out-of-focus with painted delicate leaf-edge detail',
+      'Painted drifting cherry-blossom petal-cluster filling the painted foreground softly out-of-focus in painted pink-snow, painted soft motion captured',
+      'Painted autumn-leaf drift in painted foreground softly out-of-focus with painted red-orange-gold leaves cascading',
+      'Painted drifting petal-cluster across the painted foreground softly out-of-focus in painted pearl-pink, painted magical register',
+      'Painted hanging moss-curtain in painted foreground-left softly out-of-focus with painted velvety green strands, painted intimate framing',
+      'Painted lichen-cluster in painted foreground-right softly out-of-focus with painted pale-grey-green texture, painted close-up tactile detail',
+      'Painted hanging moss-cascade in painted foreground softly out-of-focus from upper-left, painted dripping spanish-moss register',
+      'Painted foxglove-bell at painted foreground corner softly out-of-focus with painted pink-and-purple mottled-throat detail, painted intimate framing',
+      'Painted cherry-blossom branch at painted foreground-left softly out-of-focus with painted pink petals, painted intimate framing',
+      'Painted wisteria-cluster at painted foreground-right softly out-of-focus with painted violet racemes, painted ethereal framing',
+      'Painted butterfly-wing edge at painted foreground-right softly out-of-focus with painted iridescent-pattern detail, painted intimate framing',
+      'Painted firefly-cluster in painted foreground softly out-of-focus with painted soft warm-yellow points, painted magical evening register',
+      'Painted dragonfly-wing edge sweeping across the painted foreground softly out-of-focus with painted veined-iridescent detail',
+      'Painted dewdrop-cluster on a painted leaf in painted foreground softly out-of-focus with painted refractive-clarity glints',
+      'Painted pearl-droplet on a painted petal-edge in painted foreground softly out-of-focus, painted gallery-tier intimate detail',
+      'Painted mossy branch tip in painted foreground softly out-of-focus with painted velvety green-moss texture, painted intimate framing',
+      'Painted twig-cluster in painted foreground softly out-of-focus with painted brown bark-detail, painted gallery-tier intimate framing',
+    ],
+    instructions: `Each entry is ONE specific FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific type, (b) position in frame, (c) softly out-of-focus tactile detail. NO creature. NO biome. NO weather. NO modern. NO blocking her face. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+
 };
 
 const recipe = POOL_RECIPES[POOL];

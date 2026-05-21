@@ -77,5 +77,16 @@ module.exports = {
   FAEBOT_TINY_FAE_MAGICAL_FLAVOR: loadIfExists('faebot_tiny_fae_magical_flavor'),
   FAEBOT_TINY_FAE_FOREGROUND_ANCHOR: loadIfExists('faebot_tiny_fae_foreground_anchor'),
   FAEBOT_TINY_FAE_BOTANICAL_ACCENT: loadIfExists('faebot_tiny_fae_botanical_accent'),
+  // ─── dryad-portrait axis-system pools (2026-05-21) ───
+  FAEBOT_DRYAD_PORTRAIT_CREATURE: loadIfExists('faebot_dryad_portrait_creature'),
+  FAEBOT_DRYAD_PORTRAIT_EXPRESSION_MOMENT: loadIfExists('faebot_dryad_portrait_expression_moment'),
+  FAEBOT_DRYAD_PORTRAIT_GESTURE_POSE: loadIfExists('faebot_dryad_portrait_gesture_pose'),
+  FAEBOT_DRYAD_PORTRAIT_COMPOSITION: loadIfExists('faebot_dryad_portrait_composition'),
+  FAEBOT_DRYAD_PORTRAIT_ADORNMENT: loadIfExists('faebot_dryad_portrait_adornment'),
+  FAEBOT_DRYAD_PORTRAIT_FOREST_BACKDROP: loadIfExists('faebot_dryad_portrait_forest_backdrop'),
+  FAEBOT_DRYAD_PORTRAIT_LIGHTING: loadIfExists('faebot_dryad_portrait_lighting'),
+  FAEBOT_DRYAD_PORTRAIT_WEATHER: loadIfExists('faebot_dryad_portrait_weather'),
+  FAEBOT_DRYAD_PORTRAIT_MAGICAL_FLAVOR: loadIfExists('faebot_dryad_portrait_magical_flavor'),
+  FAEBOT_DRYAD_PORTRAIT_FOREGROUND_ANCHOR: loadIfExists('faebot_dryad_portrait_foreground_anchor'),
   VIBE_COLOR,
 };

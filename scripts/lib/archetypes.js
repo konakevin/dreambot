@@ -1881,6 +1881,30 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_DRYAD_PORTRAIT: {
+    description:
+      'PATH-BESPOKE — FaeBot dryad-portrait (2026-05-21 axis-system migration). TIGHT close-up portrait (face 35-60% of frame) of an adult-scale tree-bound dryad / hamadryad / naiad / meliae / moss-maiden / Leshy. Intimate STILLNESS register — face turned 3/4 or profile, eyes lowered, NEVER eye-contact. Painted-fantasy register (Manchess + Giancola + Bonner + Froud). 10 axes (9 always-on + 1 gated foreground_anchor): creature / expression_moment / gesture_pose / portrait_composition / adornment / forest_backdrop / lighting / weather / magical_flavor + foreground_anchor (40%-gated). Decomposed creature pool to features-only (no posture), with expression / gesture / adornment broken out as separate axes for ~10^9 combinations.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'creature',
+        'expression_moment',
+        'gesture_pose',
+        'portrait_composition',
+        'adornment',
+        'forest_backdrop',
+        'lighting',
+        'weather',
+        'magical_flavor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'foreground_anchor', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_EPIC_VISTA: {
     description:
       'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Nat-Geo-best-of-best caliber real-Earth landscape: the SUBJECT IS THE WOW. Larger than life via geology + lighting + weather amplification, never AI-fake / sci-fi / fantasy. R2 (2026-05-20) pivoted from R1 3-tier (subject + foreground prop) to SCENE-AS-HERO — subject dominates 60-70%+ of frame, no competing foreground props. R1 lessons retained: PEAK LIGHT MOMENT + MOMENT IN MOTION template blocks, phenomenon-lighting compatibility, biome-tagged subject pool. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. R1 foreground_anchor axis + matchTagsFromSlot composer extension preserved as infrastructure for future paths that need them. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
@@ -1952,6 +1976,20 @@ const ARCHETYPES = {
       path: ['candy_scene_type', 'candy_world_signature', 'candy_terrain', 'candy_sky', 'food_inhabitants', 'companions', 'decor_accents', 'candy_camera', 'candy_lighting', 'candy_time_of_day', 'candy_weather'],
     },
     pickN: { candy_world_signature: 1, food_inhabitants: 5, companions: 1, decor_accents: 1 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_JAPANESE_FESTIVAL: {
+    description:
+      'PATH-BESPOKE — YumBot japanese-festival (2026-05-21 R6 11-axis). Kawaii matsuri scenes — 5 kawaii Japanese festival foods composed cleanly in matsuri/market settings. Full 11-axis architecture matching candy-fantasy pattern: scene_type (composed-lineup), market_backdrop (yatai-lane / shrine courtyard / fish market / Edo street / hanami grove / etc.), signature (2 picks — chochin lantern / torii / yatai / taiko drum / etc.), terrain (cobblestone / wooden boardwalk / tatami / etc.), sky (lantern canopy / fireworks / starry / sakura overhead), camera (overhead / eye-level / 3/4 / low-angle), lighting (rim-light / volumetric / pool-light), time_of_day (twilight / dusk / blue hour / golden hour), weather (sakura rain / firefly drift / sparkle mist), food_inhabitants (5 from FOOD_CATALOG tagged FESTIVAL), companion (1 — firefly / goldfish / maneki-neko / etc.).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['scene_type', 'market_backdrop', 'signature', 'terrain', 'sky', 'camera', 'lighting', 'time_of_day', 'weather', 'food_inhabitants', 'companion'],
+    },
+    pickN: { signature: 2, food_inhabitants: 5 },
     conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
