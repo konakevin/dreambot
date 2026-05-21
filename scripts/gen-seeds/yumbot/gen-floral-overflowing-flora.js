@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/floral_overflowing_flora.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} OVERFLOWING FLORA elements for YumBot floral-garden-cup. Each is one specific oversized flower / sprig / floral piece that BURSTS UP AND OUT of the kawaii vessel as a magical bouquet. Template picks 4 per render to form the multi-bloom bouquet.
 
 Each entry: 12-22 words. ONE specific flora piece.

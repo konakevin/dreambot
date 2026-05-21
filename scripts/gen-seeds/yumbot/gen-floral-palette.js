@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/floral_palette.json',
-  total: 30,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} COLOR-PALETTE prompts for YumBot floral-garden-cup. Each is the 3-4 dominant pastel colors for this render.
 
 Each entry: 8-12 words. ONE specific palette.

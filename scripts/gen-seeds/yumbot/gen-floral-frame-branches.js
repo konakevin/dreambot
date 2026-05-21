@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/floral_frame_branches.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} FRAME-BRANCH descriptions for YumBot floral-garden-cup. A cherry-blossom or floral branch arching from an upper corner into the frame, providing the magical floral-fantasy framing.
 
 Each entry: 10-18 words. ONE specific framing branch.

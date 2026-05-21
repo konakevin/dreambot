@@ -1,17 +1,20 @@
 /**
  * YumBot — kawaii food specialist (bex.ai-modeled).
  *
- * Launched 2026-05-20. Three paths each tightly modeled on a distinct
+ * Launched 2026-05-20. Paths each tightly modeled on a distinct
  * bex.ai reference look:
- *   floral-garden-cup   — vessel overflowing with magical flora
- *   rainbow-dreamscape  — kawaii food-creatures in a wider pastel meadow
- *   checkered-tabletop  — kawaii food on pastel-gingham with mini-friend pile
+ *   floral-garden-cup    — SINGLE-vessel-hero closeup with overflowing flora
+ *   floral-garden-scene  — MULTI-planter garden scene (indoor or outdoor) — sister of floral-garden-cup
+ *   rainbow-dreamscape   — kawaii food-creatures in a wider pastel meadow
+ *   checkered-tabletop   — kawaii food on pastel-gingham with mini-friend pile
+ *   candy-fantasy        — composition-locked candy-world scenes
  */
 
 const blocks = require('./shared-blocks');
 
 const pathBuilders = {
   'floral-garden-cup': require('./paths/floral-garden-cup'),
+  'floral-garden-scene': require('./paths/floral-garden-scene'),
   'rainbow-dreamscape': require('./paths/rainbow-dreamscape'),
   'checkered-tabletop': require('./paths/checkered-tabletop'),
   'candy-fantasy': require('./paths/candy-fantasy'),
@@ -38,10 +41,14 @@ module.exports = {
     'cinematic', 'surreal',
   ],
 
-  paths: ['floral-garden-cup', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy'],
+  paths: ['floral-garden-cup', 'floral-garden-scene', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy'],
 
+  // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
+  // their combined weight equals 1 (the same total weight floral-garden-cup
+  // had before the split), so the existing-3-path frequencies are preserved.
   pathWeights: {
-    'floral-garden-cup': 1,
+    'floral-garden-cup': 0.5,
+    'floral-garden-scene': 0.5,
     'rainbow-dreamscape': 1,
     'checkered-tabletop': 1,
     'candy-fantasy': 1,

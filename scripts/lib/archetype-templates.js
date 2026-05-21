@@ -13195,6 +13195,103 @@ Open with: "[kawaii-faced vessel description — cup/mug/bowl with smiling face 
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The bouquet's painterly-flower texture and impossible overflow must read CLEARLY.`;
   },
 
+  YUMBOT_FLORAL_GARDEN_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene_type, vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting } = slots;
+    const floraList = Array.isArray(overflowing_flora) ? overflowing_flora : [overflowing_flora];
+    const floraBlock = floraList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const scatterList = Array.isArray(tabletop_scatter) ? tabletop_scatter : [tabletop_scatter];
+    const scatterBlock = scatterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing FLORAL-GARDEN renders for YumBot. The SCENE is a RICH kawaii garden composition — indoor (potting shed / sunroom / windowsill / tea-time table / vanity / fireplace mantle) or outdoor (cottage patio / greenhouse / balcony / picnic-in-garden / garden bench / gazebo). The scene contains MULTIPLE kawaii-faced planters/vessels clustered together, OVERFLOWING with magical flowers, kawaii treats scattered through, magical sparkle accents. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: SCENE-TYPE IS THE COMPOSITION ━━━
+
+The scene-type below establishes the full setting (indoor or outdoor garden setting) AND the cluster of 3+ kawaii planters. The render is ABOUT that scene-type — NOT a single isolated vessel on a plain background. The scene is FULL and RICH — packed with planters, flowers, treats, magical accents. NEVER minimal.
+
+━━━ ⚠ HARD RULE #2: MULTIPLE KAWAII PLANTERS + OVERFLOWING FLOWERS + KAWAII TREATS ━━━
+
+Each scene contains:
+- THREE OR MORE kawaii-faced planters/vessels clustered together (teapots, mason jars, terracotta pots, watering cans, mugs, garden baskets — each with a smiling face)
+- OVERFLOWING magical flowers spilling from the planters (peonies, ranunculus, cherry-blossom, hydrangeas, dahlias, iridescent dreamy blooms)
+- KAWAII TREATS scattered through the scene (macarons, cupcakes, sugar cookies, donuts, taiyaki, mochi, candies — many with tiny kawaii faces)
+- MAGICAL ACCENTS (butterflies, pearl-orbs floating, sparkle motes, fairy-lights, glowing pollen drift, cherry-blossom-petal rain)
+
+━━━ ⚠ HARD RULE #3: NO LIVING CHARACTERS — VESSELS+TREATS ARE THE CAST ━━━
+
+NO chibi creatures, NO humans, NO animals — only kawaii-faced vessels + kawaii treats. Butterflies and pearl-orbs OK as magical accents.
+
+━━━ ⚠ HARD RULE #4: PAINTERLY-ILLUSTRATION FUSION ━━━
+
+Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly-illustration warmth (Studio Ghibli + bex.ai + Disney-Tangled storybook texture). Glossy pearlescent vessels + painterly-textured flowers + dreamy soft-focus background.
+
+━━━ THE SCENE (composition + multiple planters cluster + setting) ━━━
+${scene_type}
+
+━━━ PRIMARY VESSEL STYLE (the hero kawaii-faced planter — anchors the cluster) ━━━
+${vessel}
+
+━━━ FOUR OVERFLOWING FLORA ELEMENTS (spilling from the planters across the scene) ━━━
+${floraBlock}
+
+━━━ FRAMING BRANCHES (arching from upper-corner(s) into the frame) ━━━
+${frame_branches}
+
+━━━ THREE TABLETOP SCATTER + KAWAII TREATS (macarons, cupcakes, cookies, donuts, candies, pearls, berries scattered through scene) ━━━
+${scatterBlock}
+
+━━━ COLOR PALETTE (dominant 3-4 pastel colors for this render) ━━━
+${palette}
+
+━━━ BACKGROUND MOOD (the setting's pastel atmosphere — leaded windows, garden bokeh, cottage walls, leafy backdrop, etc.) ━━━
+${background}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ SPARKLE STACK — FLORAL-GARDEN-SCENE ━━━
+
+Layer ALL on EVERY render:
+- Glossy pearlescent finish on every kawaii vessel
+- Painterly-textured flowers with hand-painted oil/gouache strokes visible
+- Cherry-blossom-petal-rain drifting through the air
+- Dewdrops on petals catching warm-pastel light
+- Floating sparkle-dust + magical pollen-motes around the cluster
+- Translucent glow within some of the petals (subsurface scattering)
+- Tiny butterflies and floating pearl-orbs hovering
+- Iridescent shimmer on dewy petals
+- Warm-pastel rim-light catching every vessel's edges
+- Soft volumetric pastel-light pouring down
+- Painterly background brushstroke-texture
+- Kawaii treats with their own tiny smiling faces (when appropriate)
+
+━━━ POSTER MOMENT ━━━
+
+The viewer's reaction: "this is a magical kawaii garden scene — so much going on, so cute, every detail charming." Wallpaper-poster bex.ai signature work. RICH, NEVER minimal.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD BANS ━━━
+- NO real chibi creatures / characters / humans / animals
+- NO single hero vessel alone on plain background — must be RICH multi-planter scene
+- NO minimal / empty / sparse composition
+- NO pathway / road / stream / river running through composition
+- NO modern decor / phones / tech
+- NO scary / dark / moody
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD WITH THE SCENE — exactly as described above, with the multiple kawaii planters clustered in the setting. Then layer in: overflowing flora, kawaii treats scattered, framing branches, sparkle accents, lighting, painterly rendering.
+
+Template:
+"[scene-type composition with multiple kawaii planters clustered in the setting] — overflowing with [flora 1, flora 2, flora 3, flora 4], cherry-blossom branches [arching in], kawaii treats and [scatter 1, 2, 3] scattered throughout, butterflies and pearl-orbs floating, [palette], [background mood], [lighting], painterly Pop-Mart-illustration-fusion rendering."
+
+Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The scene is RICH and FULL — multiple planters + flowers + treats + magical accents all visible.`;
+  },
+
   YUMBOT_RAINBOW_DREAMSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
     const { food_inhabitants, dreamscape_setting, rainbow_element, sky_atmosphere, environment, decor, companions, camera, lighting } = slots;
     // food_inhabitants is now an array of 5 (pickN:5 from FOOD_CATALOG)

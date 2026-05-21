@@ -1879,11 +1879,25 @@ const ARCHETYPES = {
 
   YUMBOT_FLORAL_GARDEN_CUP: {
     description:
-      'PATH-BESPOKE — YumBot floral-garden-cup (2026-05-20). bex.ai-modeled. Kawaii-faced vessel (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical bouquet of pastel flowers, cherry-blossom sprigs, sphere-flowers, pearls. Cherry-blossom branches arching from corners. Painterly-illustration-fusion. 7 path-bespoke axes.',
+      'PATH-BESPOKE — YumBot floral-garden-cup (2026-05-20). bex.ai-modeled. Kawaii-faced vessel (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical bouquet of pastel flowers, cherry-blossom sprigs, sphere-flowers, pearls. Cherry-blossom branches arching from corners. Painterly-illustration-fusion. 7 path-bespoke axes. SISTER PATH: floral-garden-scene (multi-planter garden composition).',
     slots: {
       universal: [],
       bot: [],
       path: ['vessel', 'overflowing_flora', 'tabletop_scatter', 'frame_branches', 'palette', 'background', 'lighting'],
+    },
+    pickN: { overflowing_flora: 4, tabletop_scatter: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_FLORAL_GARDEN_SCENE: {
+    description:
+      'PATH-BESPOKE — YumBot floral-garden-scene (2026-05-21). Rich kawaii multi-planter garden scene — 3+ kawaii-faced planters/vessels clustered together in an indoor (potting shed / sunroom / windowsill / tea-time table / fireplace mantle / bookshelf) or outdoor (cottage patio / greenhouse / balcony / picnic-in-garden / garden bench / gazebo) setting, overflowing flowers, scattered kawaii treats, magical accents (butterflies, pearl-orbs, sparkle motes, fairy lights). 8 path-bespoke axes. SISTER PATH: floral-garden-cup (single-vessel-hero composition).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['scene_type', 'vessel', 'overflowing_flora', 'tabletop_scatter', 'frame_branches', 'palette', 'background', 'lighting'],
     },
     pickN: { overflowing_flora: 4, tabletop_scatter: 3 },
     conditionalLayer: null,

@@ -52,6 +52,7 @@ module.exports = {
   CANDY_FANTASY_WEATHER: load('candy_fantasy_weather'),
 
   // ============ FLORAL-GARDEN-CUP path pools ============
+  FLORAL_GARDEN_SCENE_TYPE: load('floral_garden_scene_type'),
   FLORAL_VESSEL: load('floral_vessel'),
   FLORAL_OVERFLOWING_FLORA: load('floral_overflowing_flora'),
   FLORAL_TABLETOP_SCATTER: load('floral_tabletop_scatter'),

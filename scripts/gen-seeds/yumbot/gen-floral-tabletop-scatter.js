@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/floral_tabletop_scatter.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} TABLETOP-SCATTER elements for YumBot floral-garden-cup. Small details scattered on the surface around the base of the vessel. Template picks 3 per render.
 
 Each entry: 8-15 words. ONE specific tabletop scatter piece.

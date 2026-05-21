@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/floral_vessel.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} KAWAII-FACED VESSELS for YumBot floral-garden-cup. Each is a cup / mug / teacup / takeout-cup / bowl with a literal smiling face printed on it and decorative painted detail. NO contents (those come from another pool). Just the vessel.
 
 Each entry: 18-30 words. ONE specific kawaii vessel.

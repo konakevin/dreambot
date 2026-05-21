@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/floral_background.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} BACKGROUND MOODS for YumBot floral-garden-cup. Dreamy soft-bokeh that supports the floral-fantasy vessel — NOT a recognizable setting.
 
 Each entry: 12-22 words.

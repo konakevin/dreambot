@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/floral_lighting.json',
-  total: 30,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} LIGHTING descriptors for YumBot floral-garden-cup. Soft, warm, pastel, magical.
 
 Each entry: 10-18 words.
