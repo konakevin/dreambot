@@ -105,26 +105,26 @@ module.exports = {
   anchorScaleRange: null
 },
 
-  FAEBOT_FAIRY_COURT: {
-  description: 'PATH-BESPOKE — FaeBot fairy-court (2026-05-21 R6 chamber-life axis). Soft ethereal enchanted-forest fairy court — atomic feature-stack candidates (pickN:5), template uses RNG to roll 1-4 figures with explicit positional labels for multi-figure Flux compliance. Court-infrastructure mandate (throne / benches / lantern-orbs / moss-stair approach / giant-mushroom canopy / hero-tree landmark) leads the Flux prompt. NEW chamber_life axis adds ambient set-dressing (critters / flowers / butterflies / fireflies / lush foliage texture) to populate the chamber. Categories: birch-glade / oak-cathedral / wisteria-cathedral / giant-mushroom-canopy / hero-tree / fern-grotto / yew-grove / sacred-clearing. ABSOLUTELY NO mushroom-AS-THRONE / mushroom-spire-pillars / bioluminescent-glen. 11 axes: court_subject pickN:5 / ceremonial_moment / composition / regalia / forest_backdrop / lighting / weather / magical_flavor / chamber_life / foreground_anchor + sacred_companion (40%-gated).',
+  FAEBOT_QUEEN_OF_THE_FOREST: {
+  description: 'PATH-BESPOKE — FaeBot queen-of-the-forest (2026-05-21 pivot from fairy-court). ONE ornate magic fae queen POSED beautifully in a stunning natural forest setting (gnarled-root throne in clearing / posed on tree-branch over stream / standing in wildflower meadow / sitting on mossy boulder by waterfall / framed in tree-archway / wading in forest stream / leaning against hero-tree). She is the Queen of the Forest — woodland critters FLOCK to her and pay respects (foxes, robins, fawns, butterflies, frogs, hares at her feet and around her). Sometimes lesser fae also gather (60%-gated). Painted-fantasy register. 11 axes: queen_features / posed_setting / forest_biome / regalia / forest_critters / lighting / weather / magical_flavor / ambient_detail / foreground_anchor + lesser_fae (60%-gated). MULTI-FIGURE / formal-court framing removed — this is the queen alone (or with lesser fae paying respects), posed in her natural domain.',
   slots: {
     universal: [],
     bot: [],
     path: [
-      'court_subject',
-      'ceremonial_moment',
-      'composition',
+      'queen_features',
+      'posed_setting',
+      'forest_biome',
       'regalia',
-      'forest_backdrop',
+      'forest_critters',
       'lighting',
       'weather',
       'magical_flavor',
-      'chamber_life',
+      'ambient_detail',
       'foreground_anchor'
     ]
   },
-  pickN: { court_subject: 5 },
-  conditionalLayer: { slot: 'sacred_companion', gate: 0.4 },
+  pickN: {},
+  conditionalLayer: { slot: 'lesser_fae', gate: 0.6 },
   framingModes: null,
   anchorScaleRange: null
 },

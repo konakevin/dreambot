@@ -4792,6 +4792,272 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
 
 
   // ─── fairy-court path (2026-05-21 axis-system migration, 10 axes) ───
+  faebot_queen_of_forest_posed_setting: {
+    format: 'simple',
+    theme: `POSED SETTING (LOAD-BEARING) for FaeBot's queen-of-the-forest path. Each entry describes ONE specific BEAUTIFUL NATURAL FOREST SPOT with the queen's POSE embedded within it. Each entry 35-60 words.
+
+⚠️ THE BAR: each entry is a STUNNING natural forest LOCATION with the queen POSED beautifully within it — like an editorial portrait shoot but in a real wild setting. NOT a constructed court chamber. NOT a formal throne grown by attendants. A real wild forest spot the queen has made her own.
+
+⚠️ SETTING + POSE PAIRINGS (across 25 entries — vary widely):
+  • SEATED ON GNARLED-ROOT THRONE in a sunny glade (the throne is a natural tree-root formation, not built)
+  • POSED ON A LOW TREE-BRANCH above a forest stream, one leg dangling
+  • STANDING REGALLY in a wildflower meadow with arms slightly raised
+  • SITTING ON A MOSSY BOULDER beside a small waterfall
+  • FRAMED IN A NATURAL TREE-ARCHWAY of arching branches
+  • WADING ANKLE-DEEP in a clear forest stream, gown trailing in the water
+  • LEANING AGAINST AN ANCIENT HERO-TREE with one hand resting on the bark
+  • SEATED ON A FALLEN MOSS-LOG across a glade
+  • STANDING ON A WOVEN-ROOT BRIDGE over a stream
+  • POSED IN A SUN-SHAFT CLEARING with light streaming down on her
+  • SEATED ON A NATURAL STONE BENCH at the base of a giant tree
+  • STANDING IN A FERN-GROTTO with hanging moss curtains framing her
+  • POSED AT THE EDGE OF A LILY-COVERED POND with her reflection visible
+  • SITTING CROSS-LEGGED ON A RAISED MOSS-MOUND in a mushroom-dotted glade (small mushrooms FLOOR-ACCENT only — not throne)
+  • STANDING UNDER A WISTERIA-CASCADE arbor
+  • POSED ON A LOW-GROWING TREE-LIMB extending horizontally across a moss-floor
+  • SEATED ON A MOSS-COVERED ANCIENT TREE STUMP
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC NATURAL FOREST SPOT (gnarled-root throne / tree-branch / wildflower meadow / mossy boulder / waterfall / tree-archway / stream / fallen log / etc.)
+  - (b) QUEEN'S POSE EMBEDDED within the setting (seated / standing / posed on / wading / leaning / framed in)
+  - (c) The wild forest CONTEXT (sunny glade, beside a waterfall, ankle-deep in stream, under an arbor, etc.)
+  - (d) She is POSED for the viewer — eye-contact OK, model-pose OK, regal-pose OK
+
+🚫 STRICT BANS:
+  • NO constructed court chamber (no benches arranged in a circle, no hanging lantern-orb chandeliers as architecture, no formal audience seating, no throne grown by attendants)
+  • NO mushroom-as-throne / mushroom-spire boundary
+  • NO modern / built architecture / castle / masonry
+  • NO description of the queen's features / regalia / clothing (separate axes)
+  • NO description of critters / lesser fae (separate axes)
+  • NO lighting / weather descriptors (separate axes)
+  • NO multiple figures (this is a SOLO queen pose-and-setting axis)`,
+    touchpoints: [
+      'Seated on a gnarled-root throne formed by the upturned roots of an ancient oak, in a sun-dappled clearing carpeted with moss and bluebells, one hand resting on the root-arm, the other in her lap, regal posture, body-scale 40-55% of frame',
+      'Posed on a low tree-branch extending across a clear forest stream, one leg dangling toward the water, the other tucked beneath her, hand braced on the branch, gown cascading down toward the stream below, sunny glade lighting',
+      'Standing regally in a wildflower meadow of bluebells and foxglove-spires, arms slightly raised at her sides, body in a graceful S-curve, gown trailing into the flowers around her ankles, soft warm meadow light',
+      'Sitting on a large mossy boulder beside a small waterfall, one knee tucked up, the other extended, gown spilling down the boulder face, hand resting on the moss, gentle waterfall mist drifting',
+      'Framed in a natural tree-archway of two ancient trees whose upper branches arch overhead and intertwine, standing centered, hands clasped before her, dappled light through the arch, deep forest depth beyond',
+      'Wading ankle-deep in a clear forest stream, gown trailing in the water and floating around her, head turned slightly aside, mossy stream-bank framing her, soft golden light filtering through canopy',
+      'Leaning against an ancient hero-tree with one shoulder resting on the bark, one hand on the trunk, the other holding her staff, body angled slightly toward the viewer, mossy roots at her feet',
+      'Seated on a fallen moss-log across a glade, knees together, hands folded in her lap, looking off into the distance, body-scale fills mid-frame, soft forest light',
+      'Standing on a woven-root bridge that crosses a forest stream, one hand on a vine-railing, the other extended, body in regal posture, sunny glade light glinting on the water below',
+      'Posed in a sun-shaft clearing where golden light streams straight down from above, standing at the center, head tilted slightly back to receive the light, arms extended outward at her sides, body-scale 45% of frame',
+      'Seated on a natural stone bench at the base of a giant oak, the tree-trunk soaring up behind her, body in graceful seated pose, hands resting on her knees, regal stillness',
+      'Standing in a fern-grotto with tall lacy fern-fronds arching overhead and dripping moss curtains framing her, body centered, head turned three-quarters toward viewer, dappled green light',
+      'Posed at the edge of a lily-covered pond, knee bent in a regal kneeling pose with the other foot planted, hand reaching toward the water-lilies, her reflection visible in the still water below',
+      'Sitting cross-legged on a raised moss-mound in a sun-dappled glade dotted with small floor-mushrooms, hands resting on her knees, palm-up, head tilted slightly back, soft warm light',
+      'Standing under a wisteria-cascade arbor with violet wisteria draping overhead, body centered beneath the arch, hands clasped at her chest, fallen petals carpeting the moss-floor around her',
+      'Posed on a low-growing tree-limb extending horizontally a few feet above the moss-floor, seated sideways with feet dangling, hand braced on the branch behind her, gown spilling down to the moss',
+      'Seated on a moss-covered ancient tree stump in a clearing surrounded by birch-trunks, hands folded in her lap, body in regal seated pose, head turned three-quarters, dappled birch light',
+      'Standing in a soft-mist clearing within an ancient oak grove, body centered, gown trailing into the mist around her feet, head turned slightly aside, hands extended outward with palms up',
+      'Posed beside an ancient hollow tree-trunk that arches over her like a natural alcove, one hand on the bark, the other holding her crown-of-flowers, regal three-quarter stance, soft warm light through the hollow',
+      'Seated on a mossy boulder at the edge of a forest pool, gown trailing into the water, one hand dipping in the pool, head turned toward the water, gentle ripples spreading',
+      'Standing at the foot of a small forest waterfall, body angled slightly toward the falling water, hand reaching up to catch droplets, gown shimmering in the mist, mossy stones framing the scene',
+      'Posed on a low rock outcrop in a wildflower meadow, one foot raised onto a higher stone, the other planted, body in a powerful regal stance, gown trailing into the wildflowers',
+      'Seated on a throne grown from twisted gnarled roots at the base of an ancient yew-grove, hands gripping the natural root-armrests, body centered, head tilted slightly upward in regal pose',
+      'Standing in a glade of golden-leaf autumn-trees with fallen amber leaves carpeting the floor, body centered, gown swirling around her in a slight breeze, head turned three-quarters toward viewer',
+      'Posed at the entrance of a hidden forest grotto, framed by mossy stone walls and hanging vines, body in three-quarter stance, hand resting on the stone, head tilted slightly aside, soft warm light from within',
+    ],
+    instructions: `Each entry is ONE POSED SETTING, 35-60 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific natural forest spot, (b) queen's pose embedded, (c) wild forest context, (d) regal posed register. NO court chamber / constructed throne / lantern-orb chandeliers as architecture. NO queen features / regalia / clothing. NO critters / lesser fae. NO lighting / weather. NO multi-figure. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_queen_of_forest_biome: {
+    format: 'simple',
+    theme: `FOREST BIOME (the type of forest around her) for FaeBot's queen-of-the-forest path. Each entry describes ONE specific forest type wrapping the scene as atmospheric backdrop — supports the posed_setting axis without dominating it. Each entry 25-45 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC enchanted-forest BIOME flavor that wraps the scene. Ancient oak / pale birch / wisteria-cascade / waterfall-glade / autumn-grove / fern-grotto / mossy stream-clearing / wildflower meadow / hero-tree alcove / etc. Painted atmospheric depth fading to soft distance.
+
+⚠️ BIOME CATEGORIES (across 25 entries):
+  • ~5 ANCIENT OAK GROVE — soaring twisted oaks, dappled god-rays, moss-carpet
+  • ~4 PALE BIRCH GLADE — slender white-barked birches in close formation, ethereal light
+  • ~4 WISTERIA-CASCADE ARBOR — violet wisteria draping from overhead branches
+  • ~3 WATERFALL-GLADE — small forest waterfall, mossy stones, mist drift
+  • ~3 WILDFLOWER MEADOW — open meadow within forest, bluebells / foxgloves / wildflower carpet
+  • ~2 AUTUMN-GROVE — golden-amber leaves, fallen leaf-carpet, warm autumn palette
+  • ~2 FERN-GROTTO — tall lacy ferns, dripping moss-walls, hidden green register
+  • ~2 STREAM-CLEARING — clear forest stream winding through mossy clearing
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC BIOME TYPE (named tree species or forest feature)
+  - (b) 2+ SIGNATURE TEXTURE DETAILS (moss-covered roots, scattered wildflowers, hanging-mosses, etc.)
+  - (c) MULTI-TIER DEPTH (foreground / mid-tier / atmospheric distance)
+
+🚫 STRICT BANS:
+  • NO court chamber / constructed throne / hanging-orb chandeliers (separate axis)
+  • NO queen / critters / lesser fae descriptions
+  • NO lighting / weather (separate axes)
+  • NO mushroom-AS-throne / mushroom-spire pillars (small floor accents OK)`,
+    touchpoints: [
+      'Ancient oak grove with massive twisted gnarled trunks rising as natural columns, deep moss carpet at the floor scattered with bluebells, hanging-vines draping from above, painted multi-tier depth fading into ancient forest distance',
+      'Pale birch glade with slender white-barked birches standing in close graceful formation, scattered moss-floor with fairy-ring mushroom-cluster accents, ethereal soft-amber light, painted depth fading into pale-birch distance',
+      'Wisteria-cascade arbor with violet wisteria-racemes draping in dense curtains from interlocked overhead oak-branches, petal-strewn moss-floor below, painted multi-tier depth into soft violet-cream haze',
+      'Small forest waterfall-glade with mossy boulders cradling the cascade, lush fern-fronds at the water-edge, drifting mist catching warm light, painted depth fading into soft water-veil distance',
+      'Wildflower meadow within a deep oak-clearing, dense carpet of bluebells and foxglove-spires, scattered wild-roses, encircling oak-trunks beyond, painted soft warm meadow light',
+      'Autumn-grove with twisted ancient trees crowned in golden-amber and crimson leaves, fallen leaf-carpet of warm bronze and red blanketing the moss-floor, drifting leaves through soft warm light, painted depth into amber distance',
+      'Hidden fern-grotto cradled by ancient moss-covered boulders, tall lacy fern-fronds arching overhead, dripping moss-walls surrounding, hidden moss-and-stone floor, painted depth into deep-green grotto shadow',
+      'Forest stream-clearing with clear water winding through mossy banks, scattered river-stones and water-lilies, encircling birch and oak-trunks beyond, painted soft golden light filtering through canopy',
+      'Ancient oak-cathedral grove with painted soaring trunks rising into a painted vaulted canopy of interlocked branches, hanging-moss curtains, moss-and-fern carpet at the floor, gallery-tier depth',
+      'Pale birch glade with painted slender pale-bark trunks in close formation, scattered moss-and-leaf-litter floor, painted catkin-veils overhead, painted ethereal pearl-light depth',
+      'Wisteria-cathedral arbor with painted cascading violet wisteria forming a painted living ceiling, painted gnarled host-oak trunks wrapped in vines, painted petal-strewn floor, painted ethereal register',
+      'Small painted waterfall-glade with painted mossy boulders cradling the cascade water, painted lush fern-fronds at the water-edge, painted drifting water-mist catching warm light, soft painted depth',
+      'Wildflower meadow with painted carpet of mingled bluebell-and-foxglove blooms, painted scattered wild-rose clusters, painted encircling ancient oak trunks at the meadow boundary, painted warm light',
+      'Painted autumn-grove with painted golden-amber and crimson-leaved trees, painted fallen leaf-carpet, painted drifting leaves through painted warm late-light, painted bronze-and-amber palette',
+      'Painted hidden fern-grotto with painted lacy fern-canopy arching overhead, painted moss-covered ancient boulders surrounding, painted hidden grotto-floor of moss-and-stone, painted deep-green register',
+      'Painted forest stream-clearing with painted clear water winding through painted mossy banks, painted scattered river-stones and water-lilies, painted encircling birch-trunks, painted soft golden register',
+      'Painted ancient oak grove with painted massive gnarled trunks, painted moss-and-fern carpet at the painted forest-floor, painted dappled god-rays piercing painted canopy, painted multi-tier depth',
+      'Painted pale birch glade with painted slender white-barked birches, painted scattered fairy-ring mushroom-clusters on painted moss-floor, painted soft ethereal pearl-light, painted depth into birch distance',
+      'Painted wisteria-arbor with painted violet wisteria draping painted overhead, painted moss-grown winding path through, painted scattered fallen petals on painted floor, painted gallery-tier ceremonial register',
+      'Painted small waterfall-glade with painted cascade tumbling over painted mossy boulders, painted lush fern-fronds at painted water-edge, painted drifting water-mist, painted soft warm register',
+      'Painted wildflower meadow with painted bluebell carpet and painted scattered foxglove-spires, painted encircling oak-trunks at painted meadow boundary, painted warm meadow light',
+      'Painted autumn-grove with painted golden-amber leaves on painted twisted trees, painted fallen leaf-carpet, painted drifting leaves through painted warm late-afternoon light, painted bronze depth',
+      'Painted hidden fern-grotto with painted moss-covered boulders cradling painted clearing, painted lacy fern-canopy overhead, painted dripping moss-walls, painted deep green grotto register',
+      'Painted forest stream-clearing with painted clear water through painted mossy banks, painted river-stones and water-lilies, painted encircling birch-trunks, painted soft warm light',
+      'Painted ancient hero-tree alcove with painted single colossal world-tree forming the painted clearing-center, painted soaring trunk and painted sprawling root-base, painted ancillary oak-trunks beyond, painted awe-inspiring depth',
+    ],
+    instructions: `Each entry is ONE FOREST BIOME, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific biome type, (b) 2+ signature texture details, (c) multi-tier depth. NO court chamber / throne / chandeliers. NO queen / critters / lesser fae. NO lighting / weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_queen_of_forest_critters: {
+    format: 'simple',
+    theme: `WOODLAND CRITTERS PAYING RESPECTS (always-on, LOAD-BEARING) for FaeBot's queen-of-the-forest path. Each entry describes 3-8 SPECIFIC small forest creatures FLOCKING TO THE QUEEN and PAYING RESPECTS — at her feet, perched on her, looking up at her, approaching reverently. Each entry 40-70 words.
+
+⚠️ THE BAR: each entry is a CLUSTER of woodland critters visibly gathering around the queen, paying respects, treating her as the queen of the forest. They look UP at her, PERCH on her shoulders, sit AT HER FEET, APPROACH her reverently, OFFER her things. This is the LOAD-BEARING visual element that makes her the QUEEN OF THE FOREST — the wild things obey her.
+
+⚠️ CRITTER MENU (mix 3-8 per entry across categories — vary widely):
+  • SMALL MAMMALS — fox (curled at her feet / sitting / looking up) / hare (sitting beside her / nose twitching) / fawn or small deer (approaching reverently / kneeling / nuzzling her hand) / rabbit / squirrel / chipmunk / hedgehog / dormouse / mouse-deer / stoat / weasel / small bear cub
+  • BIRDS — robin (perched on her shoulder / on her wrist) / sparrow / wren / blue tit / nightingale / songbird / owl (perched on a branch behind her) / raven / dove / kingfisher / chickadee / fae-songbird
+  • REPTILES / AMPHIBIANS — green frog (at her feet / on a moss-stone beside her) / tree-frog / small lizard / salamander on a moss-log / newt
+  • INSECTS / AIR — butterflies (orbiting her crown / drifting around her shoulders, soft pastel colors) / fireflies (in warm-yellow points around her) / dragonflies (hovering near her shoulders) / silver moths / bees softly orbiting her flowers
+  • RARE / MYTHIC — small white stag (knelt before her — usually only one per entry) / faun (small) / will-o-wisp following / a tiny silver fox-spirit
+
+⚠️ RESPECT-PAYING BEHAVIOR (every critter has a SPECIFIC behavior — they are PAYING RESPECTS, not just standing around):
+  • Sitting / kneeling at her feet
+  • Perched on her shoulder / forearm / outstretched hand
+  • Looking UP at her in reverence
+  • Approaching her slowly with head bowed
+  • Offering her something (small mushroom, berry, flower)
+  • Curled at her hem / on her gown-train
+  • Orbiting her crown / shoulders / form (butterflies, fireflies)
+  • Bowing or kneeling before her throne / her foot
+  • Watching her from a respectful distance
+
+⚠️ DISTRIBUTION VARIETY (across 25 entries): vary which critter types lead. Some entries lean mammal-heavy + birds, some lean butterfly-and-firefly air-cluster, some lean amphibian + small mammal, some mix wide. Each entry should feel distinct.
+
+⚠️ EVERY entry MUST:
+  - List 3-8 SPECIFIC critters (named species, not "small animals")
+  - Specify EACH critter's POSITION (at her feet / on her shoulder / behind her / in the foreground / orbiting her crown / at the chamber-edge)
+  - Specify EACH critter's RESPECT-PAYING BEHAVIOR (looking up at her / perched / kneeling / approaching)
+
+🚫 STRICT BANS:
+  • NO description of the queen (her features / pose / regalia — separate axes)
+  • NO description of biome / setting (separate axes)
+  • NO description of lesser fae (separate axis — fae are humanoid, this is animals)
+  • NO predatory aggressive postures — every critter is gentle, reverent, paying respects
+  • NO unicorn / dragon / phoenix / wyrm (too iconic — keep to woodland realism with mild fae touch)
+  • NO ambient floral / weather (separate axes)
+  • NO modern animals (no cats / dogs / chickens)`,
+    touchpoints: [
+      'A red fox curled at her feet looking up at her in reverence, a robin perched on her left shoulder with head tilted, a small fawn approaching from the right with head lowered, two grey rabbits sitting motionless at her hem, three pale-yellow butterflies orbiting her crown, fireflies in warm-yellow points clustering around her gown',
+      'A small white stag knelt before her with head bowed and antlers grazing the moss, two robins perched on her outstretched forearm, a hare sitting at her right foot looking up, a green tree-frog on a moss-stone beside her left foot, drifting iridescent blue butterflies in the air around her shoulders',
+      'A silver-grey fox sitting at her feet with eyes fixed on her, a barn owl perched on a branch directly behind her watching, a fawn nuzzling her extended hand, two field-mice peeking from her gown-hem, a cluster of pale-violet butterflies drifting around her crown',
+      'A snow-fox curled at her feet, a wren perched on her left shoulder, two grey hares sitting at her right side with noses twitching, a small hedgehog at her hem, a small dormouse in her cupped hand, dragonflies hovering near her shoulders in jewel-tones',
+      'A young white-tailed deer approaching her slowly with head bowed, a robin on her shoulder, a green frog on a moss-stone at her right foot, three field-mice at her gown-hem, a curled brown hedgehog on a moss-cushion to her left, pale lemon-yellow butterflies orbiting her crown',
+      'A red squirrel perched on a low branch at her right looking down at her, a small grey fox sitting at her feet, two robins on her outstretched arm, a fawn standing reverently to her left with head lowered, drifting silver moths around her gown, a single green tree-frog on her left palm',
+      'A silver fox kneeling at her feet with chin lowered, an owl perched on a branch directly above her with watching eyes, a small hare sitting at her right foot, two pale dormice peeking from her gown-hem, fireflies orbiting her crown in warm-yellow points, drifting amber butterflies in air',
+      'A small bear-cub seated reverently at her feet looking up at her, two robins perched on her right shoulder, a green tree-frog at her hem, drifting pale-blue butterflies around her gown, a single barn owl on a branch behind her, fireflies in clusters at her feet',
+      'A red fox sitting at her left side with head tilted up, a fawn nuzzling her extended hand on the right, a small grey field-mouse on her outstretched palm, two robins perched on her shoulder, drifting white moonflower-butterflies around her crown, a green frog at her foot',
+      'A snow-hare curled at her feet, a small white stag standing at her right side with head bowed, a chickadee on her left shoulder, a small kingfisher perched on a moss-stone in the foreground, drifting amber-and-violet butterflies around her gown, a curled hedgehog at her hem',
+      'A silver fox at her feet looking up, two robins on her outstretched forearm, a small fawn kneeling on the moss at her left, a green tree-frog on a moss-log beside her, a cluster of fireflies in warm-yellow points orbiting her crown, drifting butterflies in pale rose-pink',
+      'A young deer approaching reverently from the right with head lowered, a barn owl perched on a branch above her watching, a small grey hare sitting at her left foot, two field-mice peeking from her gown-train, drifting silver butterflies around her shoulders, a green frog on a moss-stone',
+      'A grey wolf-cub curled gently at her feet (NOT predatory — gentle and reverent), a robin on her shoulder, three small field-mice at her hem, a hare sitting at her right side, drifting golden butterflies in clusters around her crown, fireflies orbiting her form',
+      'A silver fox kneeling before her with paw extended in offering, a small white owl perched on her outstretched arm, two grey hares at her feet, a green frog on a moss-stone, drifting pale-blue butterflies around her shoulders, fireflies in clusters at her hem',
+      'A fawn approaching her slowly from the right with head lowered, a robin perched on her left shoulder, a small chipmunk on a moss-stone at her right foot, two pale dormice in the foreground grass, drifting golden-yellow butterflies around her crown, fireflies orbiting her form',
+      'A red fox curled at her feet, a wren on her outstretched fingertip, a small hare sitting at her right side, a green tree-frog on a moss-cushion at her hem, drifting iridescent butterflies in pale violet around her shoulders, fireflies in clusters at her form',
+      'A small bear-cub kneeling reverently to her right, two robins on her outstretched forearm, a fawn nuzzling her left hand, a green frog on a moss-stone in the foreground, drifting amber butterflies orbiting her crown, fireflies in warm-yellow points at her hem',
+      'A snow-fox curled gently at her feet, a barn owl perched on a branch above her watching, a small grey hare sitting at her right foot, two field-mice at her gown-hem, drifting silver butterflies around her shoulders, a small dragonfly hovering near her left ear',
+      'A small white stag knelt before her with antlers grazing the moss, two robins on her outstretched arm, a hare at her left foot, a green frog at her right hem, drifting violet butterflies orbiting her crown, fireflies in warm-yellow points at her gown-train',
+      'A red squirrel perched on a low branch at her right, a small fox at her feet, two field-mice at her gown-hem, a hare sitting at her left, drifting pale-pink butterflies around her crown, a single dragonfly hovering near her shoulder, fireflies in clusters at her form',
+      'A fawn nuzzling her outstretched hand, a robin on her left shoulder, a small grey rabbit sitting at her right foot, a green tree-frog on a moss-log beside her, drifting amber butterflies around her gown, fireflies orbiting her shoulders in soft warm points',
+      'A silver fox kneeling before her, a small white owl perched on her outstretched arm, a hare at her left foot, two pale dormice at her gown-hem, drifting cream-and-rose butterflies around her crown, a small dragonfly hovering near her shoulder',
+      'A small bear-cub seated reverently at her feet looking up, two robins on her outstretched forearm, a fawn at her left side with head bowed, drifting golden-amber butterflies orbiting her crown, fireflies in clusters at her gown-hem, a small frog at her right foot',
+      'A red fox curled at her feet looking up, a barn owl perched on a branch directly behind her watching, a small grey hare sitting at her right side, a chickadee on her left shoulder, drifting iridescent butterflies around her crown, fireflies orbiting her form',
+      'A snow-hare curled at her feet, a small white stag standing reverently to her right with head bowed, two robins on her left shoulder, a green frog at her right hem, drifting silver moonflower-butterflies orbiting her crown, fireflies in warm-yellow clusters',
+    ],
+    instructions: `Each entry is ONE WOODLAND-CRITTER cluster, 40-70 words. Format: prose, comma-separated phrases listing 3-8 specific critters. MANDATORY for each critter — (a) named species (fox / robin / fawn / etc.), (b) specific position (at her feet / on her shoulder / orbiting her crown / etc.), (c) respect-paying behavior (looking up / perched / kneeling / approaching reverently). Critters PAY RESPECTS — gentle, reverent, treating her as the queen. NO predatory postures. NO unicorn / dragon / phoenix. NO modern animals. NO queen / setting / biome / regalia / lesser fae descriptions. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_queen_of_forest_lesser_fae: {
+    format: 'simple',
+    theme: `60%-GATED LESSER FAE PAYING RESPECTS for FaeBot's queen-of-the-forest path. Each entry describes 1-3 SMALLER, less-ornate fae creatures GATHERED NEAR the queen paying respects — kneeling at her feet, offering a flower, bowing nearby, attending her with quiet reverence. Each entry 30-55 words.
+
+⚠️ THE BAR: each entry features 1-3 LESSER FAE (smaller and less ornate than the queen) who have come to pay respects. They are visibly SECONDARY to the queen — smaller scale, simpler clothing, kneeling/bowing postures, offering gifts. They make her visibly the QUEEN by their reverence.
+
+⚠️ LESSER FAE TYPES (mix across entries — vary widely):
+  • Small wood-sprite kneeling at her feet
+  • Pixie hovering on small dragonfly-wings offering a flower
+  • Forest-pixie bowing nearby with head lowered
+  • Small fae-attendant in plain moss-leaf robes
+  • Wood-nymph kneeling on the moss before her
+  • Acorn-fae (tiny, with acorn-cap) gathered at her hem
+  • Mushroom-fae (small, with toadstool-cap or skirt) bowed at her side
+  • Petal-fae (tiny, made of flower-petals) hovering near her hand
+  • Stream-fae (small, water-fae) seated at the stream-edge bowing
+  • Moss-sprite (tiny, made of moss-and-leaves) at her feet
+  • Forest-shepherd-fae (small, with leaf-staff) standing back at a respectful distance
+  • Bramble-pixie hovering at her shoulder with eyes lowered
+
+⚠️ POSITION + BEHAVIOR (every fae has a specific position + behavior):
+  • Kneeling at her feet (most common — central reverence)
+  • Hovering nearby with eyes lowered
+  • Offering her a flower / small bloom / acorn / pebble
+  • Bowing low with head touching the moss
+  • Seated on a moss-stone at a respectful distance
+  • At her hem, looking up adoringly
+  • Floating beside her with hands clasped
+
+⚠️ EVERY entry MUST:
+  - 1-3 specific lesser fae (named type — wood-sprite / pixie / nymph / acorn-fae / etc.)
+  - Each fae's POSITION (kneeling at her feet / hovering at her shoulder / bowing at a distance)
+  - Each fae's RESPECT-PAYING BEHAVIOR (offering / bowing / kneeling / hovering with eyes lowered)
+  - Each fae is VISIBLY SMALLER and SIMPLER than the queen (less ornate, plainer adornment)
+
+🚫 STRICT BANS:
+  • NO description of the queen / her features / her setting (separate axes)
+  • NO description of woodland critters (separate axis — that's animals)
+  • NO fae rivals (the lesser fae are devotees, NOT competing for status)
+  • NO sexualized depictions of lesser fae
+  • NO more than 3 lesser fae per entry (queen stays the focus)
+  • NO ornate elaborate lesser fae (they must be SIMPLER than the queen)`,
+    touchpoints: [
+      'A small wood-sprite in plain moss-leaf robes kneeling on the moss at her feet with head bowed and palms upturned in offering, a tiny acorn-fae with an acorn-cap seated at her hem looking up adoringly',
+      'A pixie with translucent dragonfly-wings hovering at her right shoulder, eyes lowered, offering her a single white moonflower in cupped palms, a small wood-nymph in fern-frond robes kneeling on the moss beside her left foot',
+      'A petal-fae made entirely of overlapping rose-petals hovering near her cheek with eyes closed in reverence, a moss-sprite (tiny, covered in moss and small leaves) curled at her hem on the moss-floor',
+      'Two acorn-fae (tiny, with acorn-caps and leaf-cloaks) kneeling side by side at her feet with heads bowed, a small stream-fae seated on a moss-stone to her right with head lowered in respect',
+      'A small mushroom-fae with a tiny toadstool-cap bowed at her left side on the moss, a bramble-pixie hovering at her right shoulder with hands clasped and eyes lowered, a tiny petal-fae floating near her crown',
+      'A small wood-shepherd-fae with a slender leaf-staff standing back at a respectful distance with head bowed, a tiny pixie hovering at her hem offering her a sprig of berries',
+      'A wood-nymph in plain moss-leaf garments kneeling on the moss at her feet with palms upturned, a small acorn-fae seated at her right hem, a tiny petal-fae hovering near her crown with eyes closed in reverence',
+      'Three tiny pixies hovering on dragonfly-wings at her right side in a small cluster, each with head bowed and hands clasped, each offering a tiny gift (flower, berry, pebble)',
+      'A small fern-nymph kneeling on the moss-floor at her left foot with head bowed, a tiny acorn-fae perched on her gown-train looking up adoringly, a moss-sprite curled at her right hem',
+      'A small stream-fae seated cross-legged at the edge of a moss-bank to her right with head bowed and hands resting on the moss, a tiny dragonfly-pixie hovering at her left shoulder with eyes lowered',
+      'A wood-sprite in plain leaf-bound robes kneeling on the moss at her feet, a tiny mushroom-fae perched on a small toadstool at her right hem, a petal-fae hovering near her cheek in soft reverence',
+      'A small moss-nymph (covered in soft moss and tiny leaves) curled at her left foot looking up at her, two acorn-fae (each with an acorn-cap) seated side by side at her right hem with heads bowed',
+      'A pixie hovering at her right shoulder offering a single golden-amber leaf in her cupped palms, a small wood-sprite kneeling on the moss at her left foot with palms upturned in receiving',
+      'A wood-nymph kneeling on the moss at her feet with a small white-flower offering in her hands, a tiny petal-fae floating near her crown with eyes closed, a moss-sprite at her right hem',
+      'Two small mushroom-fae (each with a tiny toadstool-cap) bowed at her left side, a pixie hovering at her right shoulder with hands clasped and head lowered',
+      'A small stream-fae seated at the moss-bank to her right with head bowed, a tiny petal-fae floating near her shoulder, a wood-sprite kneeling at her feet offering a small acorn',
+      'A wood-shepherd-fae with a slender leaf-staff standing back at a respectful distance with head bowed, a small bramble-pixie hovering at her left shoulder with eyes lowered in reverence',
+      'A small acorn-fae perched on her outstretched palm with head bowed, a tiny petal-fae hovering near her right cheek with eyes closed, a moss-sprite curled at her hem',
+      'A wood-nymph in fern-frond robes kneeling on the moss at her feet with palms upturned in offering, a small mushroom-fae bowed at her right hem, a pixie hovering at her left shoulder',
+      'A pixie hovering at her crown with hands clasped in reverence, a small wood-sprite kneeling at her left foot with head bowed, an acorn-fae seated at her right hem',
+      'A small stream-fae seated on a moss-stone at her right side with head bowed, a tiny dragonfly-pixie hovering at her shoulder offering a single dewdrop in cupped palms',
+      'A wood-nymph kneeling at her feet with a small golden-leaf offering, a moss-sprite curled at her right hem, a tiny petal-fae floating near her cheek with eyes lowered in reverence',
+      'Three tiny acorn-fae (each with acorn-caps and leaf-cloaks) kneeling side by side at her feet with heads bowed in unison, palms upturned',
+      'A small mushroom-fae bowed at her left side, a pixie hovering at her right shoulder offering a single foxglove-bell in her cupped palms, a moss-sprite at her hem',
+      'A wood-sprite kneeling on the moss at her feet with head bowed, a tiny petal-fae floating near her crown with eyes closed, a small stream-fae seated at the moss-bank in respectful distance',
+    ],
+    instructions: `Each entry is ONE LESSER-FAE cluster (1-3 fae), 30-55 words. Format: prose, comma-separated phrases listing each fae specifically. MANDATORY — (a) specific fae type (wood-sprite / pixie / nymph / acorn-fae / etc.), (b) specific position (kneeling at her feet / hovering at her shoulder / at her hem), (c) respect-paying behavior (offering / bowing / kneeling / hovering with eyes lowered), (d) each lesser fae is SMALLER and SIMPLER than the queen. NO queen / setting / biome / regalia / critter descriptions. NO ornate elaborate lesser fae. NO more than 3 per entry. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
   faebot_fairy_court_subject: {
     format: 'simple',
     theme: `ATOMIC COURT-FIGURE FEATURE-STACK (ONE fae woman) for FaeBot's fairy-court path. Each entry describes ONE individual fae woman — her unique feature stack. The composer rolls 5 entries per render and RNG picks 1-5 of them as queen + attendants. Each entry 30-60 words.
@@ -5439,6 +5705,399 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   },
 
 
+
+  faebot_queen_of_forest_features: {
+    format: 'simple',
+    theme: `ATOMIC COURT-FIGURE FEATURE-STACK (ONE fae woman) for FaeBot's fairy-court path. Each entry describes ONE individual fae woman — her unique feature stack. The composer rolls 5 entries per render and RNG picks 1-5 of them as queen + attendants. Each entry 30-60 words.
+
+⚠️ THE BAR: each entry is a SELF-CONTAINED FEATURE-STACK for ONE woman. 5+ stacked exotic features. NO scene language, NO pose, NO setting, NO action — just the woman's portrait DNA. The composer assembles 1-5 of these into a court scene; each entry must read clearly as ONE distinct figure that could be placed anywhere in a composition.
+
+⚠️ EVERY ENTRY MUST include AT LEAST 5 stacked exotic features:
+  - SPECIES LINEAGE — fae sidhe / Tylwyth Teg / dryad-queen / hamadryad-noblewoman / oak-priestess / autumn-noblewoman / moon-handmaiden / snow-sidhe / cherry-blossom-fae / fern-priestess / yew-lady / hawthorn-noblewoman / etc. (vary widely across entries)
+  - SKIN TREATMENT — luminous pearl / porcelain-pale with bioluminescent freckles / translucent constellation-glow / moss-tinted gold-olive / silver-bark patches at temples / honey-gold with vine-pattern marks / mottled silver-and-green / golden-amber / silver-blue / pale-pink / etc.
+  - PLANT-MERGED HAIR — living-vine hair woven with hundreds of tiny flowers / cascading silver hair threaded with gold-leaf / dark moss-hair with violet wisteria / silver birch-bark strands with autumn leaves / cherry-blossom-branch hair / yew-needle hair with crimson berries / pale willow-frond hair / etc.
+  - REGAL GOWN — flowing petal-gown with trailing leaf-train / layered willow-leaf robe / woven oak-leaf ceremonial robes / regal fern-frond cloak / floor-length moss-and-dew-spider-silk gown / autumn-leaf cloak over leaf-bodice / icicle-petal cloak / sunflower-petal gown / etc.
+  - CROWN/DIADEM (one) — living antler-crown sprouting leaves / diadem of woven vines with luminous stone / gold-leaf circlet of branching laurel / coronet of tiny living butterflies / ivy-and-moss diadem / dark-vine diadem / floral-crown / icicle-coronet / cherry-blossom-bud crown / etc.
+  - OPTIONAL ANATOMICAL EXTRAS — tall sapphire-veined antlers / pointed elf-ears / luminescent freckles / glowing third eye / regal posture (~50% of entries)
+  - MAGICAL SIGNATURE — soft amber halo / glowing-pearl skin / pollen-glow at her shoulders / will-o-wisp orbit / butterflies orbiting her crown / pearl-glow / golden halo / silver-mist aura / etc.
+
+⚠️ VARIETY MANDATE (across 25 entries):
+  - At least 18 distinct SPECIES-LINEAGE types across the pool (don't repeat "fae sidhe queen" all 25 times — vary widely)
+  - Vary palette across the pool: warm-amber, cool-silver, pale-pink, white-pearl, green-moss, deep-violet, autumn-bronze, snow-white, etc.
+  - Some entries should describe LESSER FAE NOBLEWOMEN (attendant-tier) and some should describe REGAL QUEENS — composer/template handles assignment, so just write variety
+  - Each entry must be VISUALLY DISTINCT from its neighbors — no two should share both palette AND species
+
+🚫 STRICT BANS:
+  • NO scene / setting / location description (separate axes)
+  • NO action / pose / gesture (separate axes)
+  • NO castle / architecture
+  • NO eye-contact-with-viewer language
+  • NO sexualized language
+  • NO bare chest, NO nipples, NO topless
+  • NO references to "the queen" / "the throne" / "her court" — just describe HER (the figure stands on her own)
+  • NO references to other figures / attendants — each entry is ONE woman
+  • NO violence / NO weapons`,
+    touchpoints: [
+      'Fae sidhe-queen: luminous pearl skin with subtle vine-pattern marks across her cheekbones, floor-length hair of living-vine threaded with hundreds of tiny white flowers, flowing gown of woven petals with a long trailing leaf-train, living antler-crown sprouting tiny leaves, soft amber halo at her shoulders, pointed elf-ears',
+      'Tylwyth Teg noblewoman: porcelain-pale skin with bioluminescent freckles tracing her collarbone, cascading silver hair threaded with gold-leaf and dewdrop-pearls, layered robe of overlapping willow-leaves with vine-belted waist and floor-length skirt, diadem of woven vines with a single luminous stone, pearl-glow',
+      'Dryad-queen: bark-textured shoulders fading to smooth moss-tinted gold-olive skin, floor-length living-vine hair woven with tiny yellow blossoms, ceremonial leaf-petal gown with a long trailing fern-train, living antler-crown branching with fresh oak-leaves, sapphire-veined antlers, soft pollen-glow',
+      'Hamadryad-noblewoman: mottled silver-and-green skin patterned like ancient bark, dark yew-needle hair threaded with crimson yew-berries, ceremonial robes of yew-bough with woven-vine belt and floor-length skirt, dark-vine diadem with a single luminous stone at the brow, deep emerald aura',
+      'Autumn-court noblewoman: smooth golden-amber skin with bronze-vine pattern marks, hair of cascading orange-and-red maple-leaves threaded with bronze-vine, regal autumn-leaf cloak over a leaf-bodice and floor-length skirt, branching antlers crowned with autumn-leaves, soft amber halo',
+      'Moon-sidhe: translucent silver-blue skin with constellation-freckles, waist-long silver hair threaded with white moonflowers, flowing gown of moonlit silk-petal with a silver-vine train, diadem of woven moonflowers with a single pearl at the center, gentle pearl-glow at her shoulders',
+      'Oak-priestess: smooth moss-tinted skin with subtle bark-pattern at temples, floor-length hair of living-vine woven with hundreds of tiny yellow blossoms, ceremonial oak-leaf robes with embroidered vine-cord belt and floor-sweeping skirt, gold-leaf circlet of branching laurel, soft golden halo',
+      'Cherry-blossom fae: porcelain skin with faint pink undertones, waist-long cherry-blossom-branch hair threaded with white moonflowers, draped bodice of overlapping rose-petals over a floor-length petal-skirt, antler-crown crowned with foxglove-bells and cherry-blossom-buds, soft rose-pink halo',
+      'Fern-priestess: pale moss-tinted skin with subtle silver-bark patches at her temples, waist-long pale willow-frond hair threaded with white moonflowers, layered robe of overlapping willow-leaves with vine-belted waist and floor-length skirt, third eye glowing softly on her forehead, ivy-and-moss diadem',
+      'Winter-queen: translucent pearl-skin with frost-pattern marks at her cheekbones, waist-long silver-frost hair threaded with tiny ice-crystals, regal icicle-petal cloak over a frost-bodice and floor-length crystal-skirt, diadem of frosted-leaves with a single moonstone, soft silver halo',
+      'Spring-blossom noblewoman: porcelain-pink-glowing skin with faint floral marks, hair of cherry-blossom branches threaded with delicate pink petals, regal petal-cloak over a floor-length blossom-gown, antler-crown of cherry-blossom-buds and tiny pink flowers, soft rose halo at her shoulders',
+      'Summer-court noblewoman: golden-bronze skin with subtle sun-pattern marks, floor-length golden-leaf hair threaded with sunflower-petals, regal sunflower-petal gown with woven-vine belt and trailing leaf-train, gold-leaf circlet of branching laurel and sunflowers, warm amber halo',
+      'Yew-lady: mottled emerald-and-silver skin patterned like ancient yew-bark, dark yew-needle hair threaded with crimson yew-berries and tiny black flowers, regal yew-bough cloak over a leaf-bodice and floor-length dark-skirt, dark-vine diadem, deep-emerald aura',
+      'Hawthorn-noblewoman: pale honey-gold skin with subtle vine-pattern marks at temples, waist-long copper-brown hair threaded with hawthorn-blossoms and tiny red berries, regal hawthorn-leaf cloak over a leaf-bodice and floor-length skirt, antler-crown of hawthorn-branches, soft warm halo',
+      'Silver-birch sidhe: pale silver-bark skin with subtle white-pattern marks at temples, waist-long silver birch-bark strand hair threaded with autumn leaves, regal birch-leaf cloak over a moss-and-dew-spider-silk gown, gold-leaf circlet of branching laurel and birch-leaves, soft silver halo',
+      'Bluebell-fae: pale lavender-tinted skin with subtle indigo-pattern marks at cheekbones, waist-long deep-blue hair threaded with tiny indigo bluebells, regal bluebell-petal gown with floor-length skirt of overlapping bluebell-petals, antler-crown of woven bluebells, soft violet aura',
+      'Foxglove-noblewoman: pale rose-tinted skin with subtle pink-pattern marks at temples, waist-long pink hair threaded with foxglove-bells and tiny pink berries, regal foxglove-petal cloak over a leaf-bodice and floor-length skirt, antler-crown of foxglove-spires, soft pink halo',
+      'Marigold-court noblewoman: golden-amber skin with subtle floral pattern marks, hair of cascading orange marigold-petals threaded with bronze-vine, regal marigold-petal cloak over a leaf-bodice and floor-length skirt, gold-leaf circlet of branching marigold-buds, soft golden halo',
+      'Snow-sidhe: porcelain-glowing skin with subtle frost-pattern marks at temples, waist-long silver-white hair threaded with tiny ice-crystals and white moonflowers, regal icicle-petal cloak over a frost-bodice and floor-length crystal-skirt, diadem of frosted-leaves, soft pearl halo',
+      'Mossy oak-noblewoman: moss-tinted gold-olive skin with subtle bark-pattern marks at temples, floor-length dark-moss hair threaded with violet wisteria, regal fern-frond cloak over a leaf-bodice and floor-sweeping skirt, antler-crown woven with honeysuckle, soft amber halo',
+      'Constellation-fae: translucent skin with subtle constellation-glow beneath, long pearl-white hair threaded with tiny silver-points like stars, ceremonial robes of woven oak-leaves with embroidered silver-thread vine-cord, tall sapphire-veined antlers with coronet of tiny living butterflies, soft pearl-glow',
+      'Willow-noblewoman: pale silver-green skin with subtle vine-pattern marks at temples, waist-long pale willow-frond hair threaded with white moonflowers and silver-leaves, layered robe of overlapping willow-leaves with vine-belted waist and floor-length skirt, diadem of woven willow-fronds, soft pearl halo',
+      'Honey-vine queen: warm honey-gold skin with subtle vine-pattern marks across cheekbones and shoulders, floor-length amber-vine hair threaded with tiny golden bell-flowers, regal honey-leaf cloak over a leaf-bodice and floor-length amber-skirt, gold-leaf circlet of branching laurel, warm golden halo',
+      'Pearl-court attendant: porcelain-pale skin with luminescent freckles tracing her cheekbones, waist-long white-silver hair threaded with pearl-strings, regal pearl-petal cloak over a leaf-bodice and floor-length silver-skirt, simple ivy-and-moss diadem, gentle pearl-glow at her shoulders',
+      'Twilight-violet noblewoman: pale lavender-blue skin with subtle constellation-freckles, waist-long deep-violet hair threaded with tiny blue moonflowers, regal violet-petal cloak over a leaf-bodice and floor-length twilight-skirt, dark-vine diadem with a single luminous moonstone, soft violet aura',
+    ],
+    instructions: `Each entry is ONE ATOMIC FEATURE-STACK for ONE woman, 30-60 words. Format: "<SPECIES-LINEAGE>: <skin>, <hair>, <gown>, <crown/diadem>, <optional anatomical extras>, <magical signature>". MANDATORY — (a) species lineage opener, (b) skin treatment, (c) plant-merged hair, (d) regal gown, (e) crown/diadem, (f) magical signature. Vary widely across the 25 entries — at least 18 distinct species-lineage types, palette variety. NO scene/setting/pose/action. NO references to "queen" / "throne" / "court" / "attendants" / "other figures" — just describe THIS individual woman. NO eye-contact. NO sexualized. NO bare chest. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+  faebot_queen_of_forest_regalia: {
+    format: 'simple',
+    theme: `REGALIA (crown / accessory / held object) for FaeBot's fairy-court path. Each entry describes ONE specific regal accessory or held object. Each entry 15-30 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC mythic regalia — natural materials, never metal-cast jewelry, never modern accessories. Antler-crowns / woven-vine diadems / gold-leaf circlets / orb-of-light / staff / cup. Painted with mythic detail.
+
+⚠️ REGALIA CATEGORIES (across 25 entries):
+  • ~6 CROWNS — antler-crown / woven-vine diadem / circlet / coronet
+  • ~5 STAVES / WANDS — gnarled-wood staff / vine-wound wand / branch-staff
+  • ~4 HELD ORBS — orb-of-light cradled in palms / single floating-orb at chest
+  • ~3 CUP / CHALICE — painted-leaf chalice / dewdrop-cup / moss-bowl
+  • ~3 SACRED OBJECT — single blooming staff / glowing-seed cradled / fern-frond
+  • ~2 SIGNATURE PENDANT — single pearl pendant / moonstone at her throat / glowing-amber pendant
+  • ~2 TRAIN / CAPE detail — cape clasp of leaf-and-vine / floor-length leaf-train
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC REGALIA TYPE (crown / staff / orb / etc.)
+  - MATERIAL (natural — moss / vine / leaf / wood / pearl / dewdrop / glowing-light)
+  - POSITION (on her head / held in hands / at her throat / etc.)
+
+🚫 STRICT BANS:
+  • NO metal jewelry / NO modern jewelry / NO gemstone-set crowns
+  • NO weapons / NO violence
+  • NO creature description (separate axis)
+  • NO oversized cartoon detail`,
+    touchpoints: [
+      'Painted living antler-crown sprouting tiny fresh oak-leaves and tiny blooms, painted natural mythic regalia detail',
+      'Painted diadem of woven dark-vines with a single luminous pearl-stone at the brow, painted mythic regal detail',
+      'Painted gold-leaf circlet of branching laurel-leaves crowning her painted hair, painted ceremonial register',
+      'Painted coronet of tiny living butterflies orbiting her painted brow, painted magical mythic register',
+      'Painted antler-crown of branching deer-antlers wrapped with painted ivy and painted small white-blooms, painted natural regalia',
+      'Painted woven-flower-crown of foxgloves and bluebells circling her painted head, painted spring-court register',
+      'Painted gnarled-wood staff held in her painted hand, painted weathered bark-detail with painted glowing-rune at the tip',
+      'Painted vine-wound wand held softly in her painted painted fingertips, painted woven-vine detail with painted glowing-seed at the tip',
+      'Painted branch-staff with painted blooming bloom at the tip, painted held lightly in her painted painted hand',
+      'Painted gnarled-staff with painted glowing-amber-stone at the top, painted ceremonial register',
+      'Painted simple painted wooden staff with painted ivy spiraling around it, painted natural mythic register',
+      'Painted orb-of-light cradled in her painted painted cupped palms, painted soft pearl-glow radiating outward',
+      'Painted single painted floating-orb at her painted painted chest level, painted soft pearl-light radiating outward',
+      'Painted glowing-orb of painted gentle pearl-light painted held in her painted painted open palm, painted painted magical register',
+      'Painted small painted glowing-globe painted floating at her painted painted brow, painted soft warm-amber-glow',
+      'Painted painted leaf-chalice held in her painted painted cupped hand, painted natural painted ceremonial register',
+      'Painted dewdrop-cup of painted painted hollow-leaf, painted reflective-clarity detail',
+      'Painted moss-bowl of painted hollow-stone, painted held in her painted painted painted hand',
+      'Painted single painted blooming-staff with painted painted lily blooming at the painted tip, painted held lightly',
+      'Painted painted glowing-seed cradled gently in her painted painted painted cupped palms, painted soft pearl-glow',
+      'Painted painted single painted fern-frond held painted softly in her painted painted hand, painted natural register',
+      'Painted painted single painted pearl-pendant at her painted painted throat on a painted painted woven-silk-cord',
+      'Painted painted moonstone painted pendant at her painted painted throat, painted painted pale luminous-glow',
+      'Painted painted single painted glowing-amber-pendant painted at her painted painted throat on a painted painted vine-cord',
+      'Painted painted floor-length painted leaf-train trailing painted behind her painted gown, painted painted leaf-cluster detail',
+    ],
+    instructions: `Each entry is ONE specific REGALIA, 15-30 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific regalia type, (b) natural material, (c) position. NO metal jewelry. NO weapons. NO creature description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+  faebot_queen_of_forest_lighting: {
+    format: 'simple',
+    theme: `COURT LIGHTING for FaeBot's fairy-court path. Each entry describes ONE specific lighting register tuned for ceremonial court scenes. Each entry 25-45 words.
+
+⚠️ THE BAR: each lighting entry is tuned for CEREMONIAL COURT register — moonlit silver / twilight violet / golden-hour-through-trees / bioluminescent ambient / dawn-pink. The light is dignified, atmospheric, never harsh.
+
+⚠️ LIGHTING CATEGORIES (across 25 entries):
+  • ~6 GOLDEN-HOUR — warm-amber through ancient trees / golden-glow on queen's gown
+  • ~4 MOONLIT — silver moonlight on the clearing / blue-moon ambient
+  • ~4 TWILIGHT — magical violet twilight / blue-hour with warm-yellow accents
+  • ~3 DAWN — soft-pink dawn / pearl-mist dawn through the grove
+  • ~3 BIOLUMINESCENT — soft pollen-glow / glowing-moss ambient
+  • ~3 DAPPLED — dappled canopy-light through the grove on the queen
+  • ~2 SOFT-CANDLELIT — soft warm-amber from will-o-wisps / glowing crown
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TIME-OF-DAY
+  - SPECIFIC LIGHT QUALITY (shafts / ambient / sidelight / underlight)
+  - HOW IT CATCHES THE QUEEN (gilding her gown / haloing her crown / catching her hair)
+  - PALETTE CUE
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO weather (separate axis)
+  • NO storm / lightning / dark-grey-blue (peaceful ceremonial register only)`,
+    touchpoints: [
+      'Painted golden-hour warm-amber light filtering through the painted ancient grove in painted shafts, painted gilding her painted gown and painted antler-crown',
+      'Painted late-afternoon warm sidelight raking across her painted form, painted long shadows defining her painted ceremonial silhouette, warm-gold palette',
+      'Painted magic-hour golden light painting her painted gown with painted warm-amber and golden palette, painted-storybook softness',
+      'Painted golden warm sidelight gilding her painted hair and her painted antler-crown, painted soft warm-amber halo at her painted shoulders',
+      'Painted late-afternoon backlight haloing her painted silhouette in painted warm-gold rim-light, painted ceremonial register',
+      'Painted golden-hour through canopy creating painted dappled warm-light patterns on her painted shoulders and gown, painted intimate ceremonial register',
+      'Painted silver moonlight on the painted clearing, painted cool-blue ambient with painted silver edge-light catching her painted crown',
+      'Painted blue-moon ambient flooding the painted scene with painted cool silver-blue painted light, painted soft white-glow on her painted shoulders',
+      'Painted moonlit silver-and-violet ambient with painted distant moon visible through the canopy gap, painted deep-blue saturating the scene',
+      'Painted bright moonlight painted illuminating the painted sacred-stone-circle, painted long painted moon-shadows from the painted stones, painted cool-blue palette',
+      'Painted cool-blue twilight with painted warm-yellow accents from painted will-o-wisps at her painted shoulders, painted ceremonial register',
+      'Painted blue-hour twilight with painted last painted warm-orange of painted sunset bleeding through painted distant trunks, painted soft warm catching her painted gown',
+      'Painted magical violet-twilight glow saturating the painted scene in painted soft lavender-and-blue, painted faint pollen-light particles in the painted air',
+      'Painted twilight with painted deepening blue-and-violet sky, painted soft warm light on her painted face from below, painted ceremonial intimate register',
+      'Painted soft-pink dawn light gilding her painted face with painted rose-gold-and-lavender palette, painted gentle peaceful ceremonial register',
+      'Painted golden dawn beams angling through the painted canopy from a painted low east angle catching her painted painted painted painted face in painted warm-gold side-light',
+      'Painted pearl-mist dawn beams angling low through the painted grove in painted shafts of painted soft white-gold, painted drifting mist catching the beams',
+      'Painted soft pollen-glow at her painted painted painted shoulders in painted warm-gold soft-light, painted bioluminescent ceremonial register',
+      'Painted bioluminescent ambient with painted softly-glowing fungi painted behind her painted casting painted soft pearl-cyan light on her painted shoulders',
+      'Painted soft cyan-glow ambient from painted bioluminescent moss painted carpeting the painted forest-floor, painted gentle teal-and-violet painted illumination',
+      'Painted dappled canopy-light through painted forest hitting her painted painted painted painted painted face in painted soft warm-amber spots',
+      'Painted dappled god-rays piercing the canopy in painted shafts of painted warm-amber light reaching her painted shoulder, painted gallery-tier ceremonial light',
+      'Painted soft dappled gold patches catching her painted painted painted painted painted painted face in painted warm-amber spots, painted intimate ceremonial register',
+      'Painted soft warm-amber light from painted multiple painted will-o-wisps painted orbiting her painted crown, painted ceremonial register',
+      'Painted soft candlelit warm-glow from painted glowing-amber crown painted illuminating her painted face from above, painted ceremonial register',
+    ],
+    instructions: `Each entry is ONE specific LIGHTING moment, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) time-of-day, (b) light quality, (c) how it catches the queen, (d) palette cue. NO creature. NO biome. NO weather. NO storm/lightning. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+  faebot_queen_of_forest_weather: {
+    format: 'simple',
+    theme: `WEATHER (air condition + drifting accents) for FaeBot's fairy-court path. Each entry describes ONE specific atmospheric air condition + drifting accents tuned for court scenes. Each entry 20-40 words.
+
+⚠️ THE BAR: each weather entry establishes a SPECIFIC atmospheric air condition with drifting accents adding painted-ceremonial depth. Particles tuned for court scenes — drifting petals through the grove, mist softening the painted backdrop, pollen-haze at her shoulders.
+
+⚠️ WEATHER CATEGORIES (across 25 entries):
+  • ~5 PETAL-DRIFT — drifting petals through the grove / petal cascade past her gown
+  • ~4 MIST / FOG — soft mist drifting through the grove / mist softening backdrop
+  • ~4 DEW-GLINTS — dewdrops on her gown / dew on her hair-strands / morning dew on stones
+  • ~3 POLLEN-HAZE — drifting golden pollen-motes through the painted air / pollen-shimmer
+  • ~3 GENTLE-BREEZE — gentle breeze moving her painted gown-train / soft wind in her hair
+  • ~3 DRIFTING-LEAVES — autumn-leaves drifting through the grove / single falling leaf
+  • ~2 CLEAR / STILL — clear painted-still air with crisp grove visibility
+  • ~1 SNOW-DUST — winter petal-snow / first-frost on her gown
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC AIR CONDITION
+  - DRIFTING ACCENT (at court scale)
+  - PALETTE / TEMPERATURE CUE
+
+🚫 STRICT BANS:
+  • NO creature description (separate axis)
+  • NO biome description (separate axis)
+  • NO lighting (separate axis)
+  • NO catastrophic weather
+  • NO storm / lightning`,
+    touchpoints: [
+      'Drifting cherry-blossom petals through the painted grove in painted soft pink-snow, gentle motion captured, magical painted-spring ceremonial register',
+      'Painted falling petal-snow drifting past her painted gown in painted pearl-pink drift, magical painted register',
+      'Painted wisteria petals drifting in painted violet-clusters from overhead through the painted grove, painted soft pearl-violet palette',
+      'Painted drifting rose-petals past her painted gown in painted soft crimson-and-cream cascade, magical painted register',
+      'Painted drifting magnolia-petals in painted large pearl-cream petals through the painted grove, painted gallery-tier register',
+      'Painted soft dawn mist drifting through the painted grove in painted pearl-grey wisps, painted atmospheric depth softening backdrop',
+      'Painted low pearl-mist drifting at painted knee-height through the painted clearing, painted depth softening painted distant trunks',
+      'Painted soft forest-mist drifting through painted depth in painted soft cool-grey wisps, painted gallery-tier ethereal ceremonial register',
+      'Painted soft drifting mist threading through the painted grove in painted whisps, painted atmospheric depth, magical hushed register',
+      'Painted glistening dewdrops on her painted gown-train in painted reflective droplet detail, painted fresh-morning register',
+      'Painted pearl-dew droplets on her painted hair-strands catching the painted light in painted pearl-glints, painted fresh-morning crystal register',
+      'Painted morning dew on the painted ancient stones around her in painted shimmering droplet detail, painted fresh peaceful register',
+      'Painted shimmering dew on the painted moss-floor around her in painted pearl-glints, painted gallery-tier register',
+      'Painted drifting golden pollen-motes through the painted air around her in painted soft warm-light specks, painted magical register',
+      'Painted floating pollen-clouds drifting through the painted grove in painted soft warm-glow, painted magical ceremonial register',
+      'Painted pollen-shimmer at her painted shoulders in painted golden-warm motes, painted ceremonial register',
+      'Painted gentle breeze moving her painted gown-train in painted soft synchronized motion, painted magical alive register',
+      'Painted soft wind moving her painted hair in painted gentle motion, painted magical alive-grove register',
+      'Painted petals stirring on a painted gentle breeze drifting past her painted painted form in painted soft-motion drift, painted magical register',
+      'Painted autumn-leaves drifting through the painted grove in painted red-orange-gold flakes, painted seasonal register',
+      'Painted single falling autumn-leaf past her painted shoulder in painted gentle painted-motion, painted seasonal register',
+      'Painted settled autumn-leaf carpet stirring softly painted around her painted feet, painted soft seasonal register',
+      'Painted clear painted-still air with painted crisp painted visibility into the painted grove depth, painted gallery-tier intimate clarity',
+      'Painted motionless painted grove hush with painted crystalline clear air, painted every detail sharp, painted intimate stillness register',
+      'Painted first-frost dusting her painted painted painted gown-train in painted soft pearl-white, painted gentle winter-petal-snow drifting through painted air',
+    ],
+    instructions: `Each entry is ONE specific WEATHER condition, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) air condition, (b) drifting accent, (c) palette/temperature cue. NO creature. NO biome. NO lighting. NO catastrophic weather. NO storm/lightning. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+  faebot_queen_of_forest_magical_flavor: {
+    format: 'simple',
+    theme: `ROYAL MAGICAL FLAVOR for FaeBot's fairy-court path. Each entry describes ONE specific royal magic signature visible in the painted court scene. Each entry 15-30 words.
+
+⚠️ THE BAR: each magical entry is a SPECIFIC luminous detail painted as royal/ceremonial — butterflies orbiting her crown / pollen-halo at her shoulders / will-o-wisps trailing the procession / glowing crown.
+
+⚠️ MAGIC CATEGORIES (across 25 entries):
+  • ~5 BUTTERFLIES ORBITING — butterfly cluster orbiting her painted crown
+  • ~5 POLLEN-HALO — soft pollen-halo at her shoulders / pollen-cloud
+  • ~4 WILL-O-WISPS — will-o-wisps trailing the procession / single wisp at her hand
+  • ~4 GLOWING-CROWN — antler-crown glowing softly / coronet-of-light
+  • ~3 GLOWING-AURA — soft pearl-aura around her painted form / golden halo
+  • ~2 FAIRY-DUST — fairy-dust trailing from her painted fingertips / glittering trail
+  • ~2 FIREFLIES — fireflies orbiting at her painted gown
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC MAGIC TYPE
+  - POSITION (around her crown / at her shoulders / trailing her form / etc.)
+  - LIGHT QUALITY (luminous / glowing / sparkling)
+
+🚫 STRICT BANS:
+  • NO crude particle-effect language
+  • NO modern-CGI references
+  • NO creature description
+  • NO violence`,
+    touchpoints: [
+      'Painted cluster of butterflies orbiting her painted antler-crown in painted soft-color clusters, painted magical royal register',
+      'Painted monarch-butterflies orbiting her painted painted crown in painted orange-and-black cluster, painted magical register',
+      'Painted gold-and-silver butterflies orbiting her painted hair in painted soft cluster, painted ceremonial magic register',
+      'Painted single luna-moth painted perched on her painted antler-tip with painted iridescent green wings spread, painted magical register',
+      'Painted butterfly-cluster orbiting her painted painted gown-train in painted gentle motion, painted ceremonial register',
+      'Painted soft pollen-halo at her painted shoulders in painted warm-gold soft-light, painted magical ceremonial register',
+      'Painted pollen-cloud at her painted painted form in painted soft warm-glow, painted magical register',
+      'Painted golden pollen-mist around her painted crown in painted soft warm-light, painted ceremonial royal register',
+      'Painted silver pollen-motes drifting around her painted painted form in painted soft pearl-light, painted magical register',
+      'Painted painted drifting pollen-light around her painted shoulders in painted soft warm-glow, painted magical ceremonial register',
+      'Painted will-o-wisps trailing the painted procession in painted soft warm-yellow points, painted magical procession register',
+      'Painted single painted will-o-wisp painted floating at her painted painted painted painted shoulder in painted soft pearl-glow, painted intimate ceremonial register',
+      'Painted three painted will-o-wisps orbiting her painted painted painted form in painted soft pearl-glow, painted magical register',
+      'Painted painted wisps trailing her painted painted gown-train in painted soft warm-glow, painted ceremonial register',
+      'Painted antler-crown painted glowing softly in painted soft pearl-light, painted magical royal register',
+      'Painted painted coronet-of-light around her painted painted brow in painted soft warm-glow, painted ceremonial register',
+      'Painted painted diadem painted glowing softly with painted soft pearl-light at her painted brow, painted royal magical register',
+      'Painted painted gold-leaf-circlet painted glowing softly in painted warm-amber light, painted magical register',
+      'Painted soft pearl-aura around her painted painted painted form in painted gentle painted warm-glow, painted magical ambient register',
+      'Painted soft golden halo around her painted painted painted form in painted painted luminous warm-light, painted sacred register',
+      'Painted painted gentle painted pearl-aura at her painted shoulders in painted soft warm-glow, painted magical register',
+      'Painted painted fairy-dust trailing painted from her painted painted painted painted fingertips in painted soft golden sparkle, painted magical register',
+      'Painted painted glittering painted painted painted fairy-dust painted trail painted drifting from her painted painted painted hand into the painted painted painted air, painted magical register',
+      'Painted painted cluster of painted fireflies orbiting her painted painted painted painted gown-train in painted soft warm-yellow points, painted magical evening register',
+      'Painted painted firefly-cluster painted around her painted painted painted painted shoulder in painted soft warm-glow at painted painted dusk, painted ceremonial register',
+    ],
+    instructions: `Each entry is ONE specific MAGICAL FLAVOR accent, 15-30 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific magic type, (b) position around her, (c) light quality. NO crude particle-effect. NO modern-CGI. NO creature description. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+  faebot_queen_of_forest_ambient_detail: {
+    format: 'simple',
+    theme: `CHAMBER LIFE (ambient set-dressing) for FaeBot's fairy-court path. Each entry describes a layered CLUSTER of small ambient elements populating the court chamber — small critters, wildflower clusters, butterflies, fireflies, lush forest texture details. Each entry 35-60 words.
+
+⚠️ THE BAR: each entry adds 3-5 ambient set-dressing elements that make the chamber feel inhabited and ALIVE without crowding the queen. Floor-detail + mid-tier accents + air-motion drift. NOT magical aura (that's magical_flavor). NOT the queen's gown / hair / face / regalia. NOT a single sacred companion (that's sacred_companion). Just ambient woodland LIFE populating the chamber edges and floor.
+
+⚠️ ELEMENT MENU (mix 3-5 per entry across categories):
+  • SMALL CRITTERS — frogs / mice / lizards / dragonflies / ladybugs / snails / hedgehogs / squirrels / chipmunks / fawns peeking / robin / sparrow / wren / blue tit / mouse-deer / fae-songbird / small bunny / vole tucked among ferns
+  • WILDFLOWER CLUSTERS — patches of bluebells / foxglove-spires / lily-of-the-valley / forget-me-nots / wild-rose / cowslip / primrose / violets / wild iris / harebells / fairy-thimbles / wood-anemones blooming around chamber edges
+  • BUTTERFLIES + AIR DRIFT — drifting butterflies in soft pastel colors (lemon / lavender / iridescent blue / silvery white / amber) / fireflies in clusters / drifting dandelion-seeds / floating thistledown / drifting pollen-motes / silver moths
+  • LUSH FOLIAGE TEXTURE — lichen-and-moss crust on every root and stone / scattered hanging-mosses / small mushroom-floor-clusters (NOT throne / NOT pillars — small floor-pattern accents only) / clover patches / fiddlehead-fern tufts / sphagnum-moss humps / dewdrops beading on petals
+  • SCATTERED DETAIL — fallen leaves / acorns / pinecones / small seed-pods / dewdrops / floating spores / a single pearl-snail-trail on moss
+
+⚠️ DISTRIBUTION VARIETY (across 25 entries) — vary which categories lead. Some entries lead with critters + flowers, others with butterflies + foliage, others with mixed full ambient layering. Each entry should feel distinct.
+
+⚠️ EVERY entry MUST:
+  - Mix 3-5 elements from the menu (not just one type)
+  - Position each element specifically (left side / right side / foreground floor / mid-tier / air around the queen / chamber-edge)
+  - Stay AMBIENT — these elements DRESS the chamber, they don't dominate
+  - Use soft painted detail, not photoreal hyper-realism
+
+🚫 STRICT BANS:
+  • NO description of the queen / attendants / regalia / throne (separate axes)
+  • NO description of court-infrastructure (separate axis)
+  • NO description of weather / lighting / magical flavor (separate axes)
+  • NO predatory or violent creatures (gentle ambient life only)
+  • NO mushrooms as chamber-pillars or thrones (small floor accents only)
+  • NO modern objects
+  • NO crowds of dozens of critters — 3-5 specific elements layered cleanly`,
+    touchpoints: [
+      'Small woodland critters dressing the chamber: a curious green frog at the throne-base, two tiny field-mice peeking from a fern-cluster at the left, a dragonfly hovering near the queen\'s left shoulder, scattered ladybugs across the moss-floor, a single brown hedgehog tucked at the chamber-edge under a fern-frond',
+      'Drifts of wildflower clusters blooming around the chamber boundary: foxglove-spires in pink-and-purple lining the left side, bluebell carpets in soft indigo at the floor, white lily-of-the-valley strands at the right, a few primroses scattered at the foreground, soft painted detail',
+      'Soft air-drift and butterflies populating the chamber air: pale lemon-yellow butterflies drifting around the queen\'s gown, iridescent blue butterflies orbiting the chamber-mid-tier, golden fireflies clustering near the floor, drifting dandelion-seeds floating across the ceremonial path',
+      'Lush foliage texture filling the chamber edges: lichen-and-moss crust on every root and stone, scattered hanging-mosses from the canopy in soft green drapes, small clover patches at the throne-base, dewdrops beading on the moss-floor, fiddlehead-fern tufts in the foreground-left',
+      'Layered ambient life across the chamber: a sparrow perched on a low branch at right, soft violet butterflies drifting around the queen\'s shoulders, foxglove-bells in pink lining the left side, scattered ladybugs on the moss-floor, fallen golden leaves at the foreground',
+      'Tiny woodland inhabitants and wildflowers: a chipmunk peeking from a hollow-log at the right, drifting silver moths around the lantern-orbs, lily-of-the-valley clusters at the throne-base, scattered forget-me-nots in soft blue, dewdrops on every petal',
+      'Air-detail and floor-texture: drifting amber butterflies in clusters around the chamber-mid-tier, fireflies in warm-yellow points near the floor, lush hanging-mosses draping from the canopy, small mushroom-floor-clusters at the chamber edge as soft accents, scattered pinecones',
+      'Wildflowers + critters layered: wild-rose and violet patches blooming at the floor edges, two robins perched on a low branch, dragonflies hovering near the chamber-mid-tier, soft floating thistledown drifting across the air, lichen-crust on the foreground stones',
+      'Soft full-ambient layering: a curious fawn peeking from behind a tree-pillar at the right, butterflies in pale lavender drifting near the queen, harebells and primroses clustering at the floor, scattered dewdrops, drifting pollen-motes catching warm light',
+      'Tiny critters and air-drift: a green frog tucked under a fern in the foreground, two field-mice at the throne-base, drifting silver moths around the chandeliers above, soft floating dandelion-seeds, wild iris in deep blue blooming at the right chamber-edge',
+      'Wildflower drifts and butterflies: bluebell carpet beneath the throne fading into wild-rose clusters at the chamber edge, pale lemon butterflies drifting across the air, a single red ladybug climbing a fern-frond at foreground, dewdrops on every leaf',
+      'Lush textural detail: lichen-and-moss crust on every root, scattered hanging-mosses in soft green from the canopy, small mushroom-floor-clusters (gentle floor accents only) at the chamber edges, sphagnum-moss humps, fiddlehead-ferns in the foreground',
+      'Ambient air-life around the chamber: fireflies in warm-yellow points clustering near the floor, drifting iridescent butterflies around the queen, silver moths near the lantern-orbs, soft floating thistledown drifting through the chamber, drifting pollen-motes',
+      'Critters + wildflower clusters: a small wren perched on the throne\'s root-armrest at right, a curious frog at the floor, lily-of-the-valley strands at the throne-base, forget-me-nots clustering at the chamber edge, dewdrops beading on every petal',
+      'Floor-detail layering: foxglove-spires in pink-purple lining the left chamber-edge, wood-anemones scattered in white at the floor, scattered acorns and pinecones near the throne, a single brown hedgehog tucked among ferns, soft clover patches',
+      'Multi-tier ambient life: two robins at the chamber mid-tier perched on a low branch, drifting amber butterflies in air, harebells and bluebells clustering at the floor, small mushroom-floor-cluster accents at the chamber edge, lichen-crust on stones',
+      'Soft creature ensemble: a small bunny tucked at the chamber edge under a fern, a tiny field-mouse at the throne-base, a robin perched on a low branch at right, drifting butterflies in pale yellow, scattered wildflowers in soft pastels',
+      'Painterly air-drift: drifting dandelion-seeds floating across the chamber air, drifting pollen-motes catching warm light, soft silver moths near the chandeliers, fireflies in warm-yellow points clustering at the floor, soft painted detail throughout',
+      'Wildflower meadow at chamber edges: cowslips and primroses in soft yellow clustering at the right, violets in deep purple at the left, wild iris in blue at the foreground, dewdrops beading on every petal, soft painted floral detail',
+      'Layered scattered detail: fallen golden leaves and acorns near the throne, small mushroom-floor-clusters at the chamber edge, lichen-and-moss crust on every root, dewdrops on the moss-floor, drifting pollen catching warm light',
+      'Critters + butterflies mix: a green frog at the foreground floor, dragonflies hovering near the queen\'s shoulders, drifting pale-blue butterflies in clusters across the chamber, scattered ladybugs on the moss, a single field-mouse peeking from a fern',
+      'Lush forest texture detail: hanging-moss curtains draping in soft green from the canopy, lichen-and-moss crust on every root and stone, sphagnum-moss humps at the chamber edge, fiddlehead-fern tufts in the foreground, scattered tiny mushroom accents',
+      'Gentle multi-layer ambient: a fawn peeking from behind a tree-pillar at the right, butterflies in soft pastel pink drifting near the queen, foxglove-spires lining the left chamber-edge, bluebells at the floor, drifting pollen-motes in warm light',
+      'Detailed floor-and-air layering: bluebell carpet at the throne-base fading into wild-rose at the edges, drifting amber butterflies in clusters across the chamber air, scattered acorns and pinecones near the throne, lichen-crust on the foreground stones',
+      'Soft critter ensemble: a small wren perched on a fern-frond at right, a curious fawn peeking from behind a tree-pillar at left, drifting silver moths near the chandeliers, a green frog tucked in the foreground, scattered wildflowers in soft colors',
+    ],
+    instructions: `Each entry is ONE CHAMBER-LIFE cluster, 35-60 words. Format: prose, comma-separated phrases listing 3-5 ambient elements (small critters / wildflower clusters / butterflies / fireflies / lush foliage texture / scattered detail). Each element positioned specifically (left / right / floor / mid-tier / air around queen / chamber-edge / foreground). Stay AMBIENT — dressing the chamber, never dominating. NO queen / attendants / throne / regalia / lighting / weather / magical aura (separate axes). NO mushroom-pillars / mushroom-throne (small floor accents only). NO predatory creatures. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+  faebot_queen_of_forest_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHOR for FaeBot's fairy-court path. Each entry describes ONE specific tactile foreground element bringing 3-tier depth. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC tactile element close to the camera bringing 3-tier court depth — hanging vine, hanging-moss curtain, fern-frond cluster, drifting petal-cluster, painted standing-stone-edge.
+
+⚠️ FOREGROUND CATEGORIES (across 25 entries):
+  • ~5 HANGING VINE / WILLOW — hanging-vine curtain / weeping willow draping
+  • ~4 HANGING MOSS / LICHEN — hanging spanish-moss curtain / lichen-cluster
+  • ~4 FERN-CLUSTER — fern-frond cascading / fern-tip cluster
+  • ~3 STANDING-STONE EDGE — painted ancient stone edge / weathered stone foreground
+  • ~3 BLOOM CLUSTER — foxglove-spires foreground / wisteria-cluster
+  • ~3 DRIFTING PETAL-CLUSTER — drifting petals close to camera
+  • ~3 ROOT / BRANCH — gnarled root crossing foreground / mossy branch tip
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC TYPE
+  - POSITION IN FRAME
+  - TACTILE DETAIL
+
+🚫 STRICT BANS:
+  • NO creature description
+  • NO biome / setting (separate axis)
+  • NO weather (separate axis)
+  • NO modern objects
+  • NO blocking the court`,
+    touchpoints: [
+      'Hanging vine-curtain in painted foreground-left with painted bloom-laden tendrils cascading from above, painted intimate ceremonial framing',
+      'Weeping willow branches draping softly out-of-focus in painted foreground-right, framing the court without blocking',
+      'Hanging ivy-vines threading across the painted upper-left foreground, painted leaf-veining detail',
+      'Bloom-laden hanging vine-cluster in painted foreground-right with painted foxglove-bells, painted gentle framing',
+      'Wisteria-cascade hanging in painted foreground-left with painted violet petals, painted ceremonial framing',
+      'Hanging spanish-moss curtain in painted foreground softly out-of-focus from upper-left, painted dripping detail',
+      'Lichen-cluster in painted foreground-right with painted pale-grey-green texture, painted close-up tactile detail',
+      'Hanging moss-cascade in painted foreground softly out-of-focus, painted gentle framing register',
+      'Painted lichen-rune patterns on painted moss in painted foreground softly out-of-focus, painted ancient register',
+      'Tall fern-cluster arching across the painted bottom of the frame, painted lacy fronds, painted tactile foreground detail',
+      'Painted fern-fronds in painted foreground-left softly out-of-focus with painted leaf-veining, painted soft cool-green palette',
+      'Painted unfurling fern-fronds in painted foreground-right with painted spiral-detail, painted ethereal register',
+      'Painted tall fern-grass cluster across the painted lower painted depth with painted delicate leaf-edge detail',
+      'Painted ancient standing-stone edge sweeping across painted foreground-left with painted moss-and-lichen texture, painted intimate framing',
+      'Painted weathered stone edge in painted foreground-right with painted ancient rune-detail softly out-of-focus, painted ceremonial register',
+      'Painted moss-covered stone foreground sweeping across the painted lower frame, painted gallery-tier tactile detail',
+      'Painted foxglove-spires in painted foreground-left in painted pink-and-purple bell-clusters, painted intimate framing',
+      'Painted wisteria-cluster in painted foreground-right softly out-of-focus with painted violet racemes, painted ethereal framing',
+      'Painted bluebell-cluster in painted foreground softly out-of-focus with painted soft-violet bells, painted intimate framing',
+      'Painted drifting cherry-blossom petal-cluster filling the painted foreground in painted pink-snow, painted soft motion captured',
+      'Painted drifting petal-cluster across the painted foreground in painted pearl-pink, painted magical register',
+      'Painted autumn-leaf drift in painted foreground with painted red-orange-gold leaves cascading, painted seasonal register',
+      'Painted gnarled ancient root crossing the painted foreground earth, painted twisted bark-detail, painted depth anchor',
+      'Painted moss-covered fallen log across the painted foreground, painted weathered bark-detail, painted depth anchor',
+      'Painted mossy branch tip in painted foreground softly out-of-focus, painted velvety green-moss texture, painted intimate framing',
+    ],
+    instructions: `Each entry is ONE specific FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific type, (b) position in frame, (c) tactile detail. NO creature. NO biome. NO weather. NO modern. NO blocking. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

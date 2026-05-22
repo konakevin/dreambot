@@ -15,7 +15,7 @@ const pathBuilders = {
   'forest-fairy-scene': require('./paths/forest-fairy-scene'),
   'dryad-portrait': require('./paths/dryad-portrait'),
   'tiny-fae': require('./paths/tiny-fae'),
-  'fairy-court': require('./paths/fairy-court'),
+  'queen-of-the-forest': require('./paths/queen-of-the-forest'),
   'enchanted-vista': require('./paths/enchanted-vista'),
   'fae-village': require('./paths/fae-village'),
   'flower-fairy': require('./paths/flower-fairy'),
@@ -58,12 +58,12 @@ module.exports = {
   // (from dream_vibes DB) which Sonnet uses for mood context.
   vibes: ['peaceful', 'enchanted', 'ethereal', 'nostalgic', 'whimsical'],
 
-  paths: ['forest-fairy-scene', 'dryad-portrait', 'tiny-fae', 'fairy-court', 'enchanted-vista', 'fae-village', 'flower-fairy'],
+  paths: ['forest-fairy-scene', 'dryad-portrait', 'tiny-fae', 'queen-of-the-forest', 'enchanted-vista', 'fae-village', 'flower-fairy'],
   pathWeights: {
     'forest-fairy-scene': 1,
     'dryad-portrait': 1,
     'tiny-fae': 1,
-    'fairy-court': 1,
+    'queen-of-the-forest': 1,
     'enchanted-vista': 1,
     'fae-village': 1,
     'flower-fairy': 2,
@@ -76,7 +76,7 @@ module.exports = {
     'forest-fairy-scene': 'black-forest-labs/flux-1.1-pro',
     'dryad-portrait': 'black-forest-labs/flux-1.1-pro',
     'tiny-fae': 'black-forest-labs/flux-1.1-pro',
-    'fairy-court': 'black-forest-labs/flux-1.1-pro',
+    'queen-of-the-forest': 'black-forest-labs/flux-1.1-pro',
     'enchanted-vista': 'black-forest-labs/flux-1.1-pro',
     'fae-village': 'black-forest-labs/flux-1.1-pro',
     'flower-fairy': 'black-forest-labs/flux-1.1-pro',
@@ -94,10 +94,9 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     // Axis-system paths skip polish — Haiku compression strips
-    // load-bearing axis language (scale-anchor / court-infrastructure /
-    // throne / boundary-markers). tiny-fae: dwarfing-companion mandate.
-    // fairy-court: throne + audience-seating + chamber-boundary mandate.
-    skipPaths: ['tiny-fae', 'fairy-court'],
+    // load-bearing axis language. tiny-fae: dwarfing-companion mandate.
+    // queen-of-the-forest: posed-setting + critters-paying-respects mandates.
+    skipPaths: ['tiny-fae', 'queen-of-the-forest'],
   },
 
   // Bot-level pool defaults for declarative composer (flower-fairy path)

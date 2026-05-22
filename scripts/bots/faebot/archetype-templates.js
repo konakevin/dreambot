@@ -405,104 +405,87 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE DRYAD — preserve her stacked exotic features unmistakably. Then expression. Then gesture. Then composition framing. Then adornment. Then forest backdrop softly behind. Then lighting + weather. Then magical flavor close to her face.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
-  FAEBOT_FAIRY_COURT: ({ slots, sharedDNA, vibeDirective }) => {
+  FAEBOT_QUEEN_OF_THE_FOREST: ({ slots, sharedDNA, vibeDirective }) => {
     const {
-      court_subject,
-      ceremonial_moment,
-      composition,
+      queen_features,
+      posed_setting,
+      forest_biome,
       regalia,
-      forest_backdrop,
+      forest_critters,
       lighting,
       weather,
       magical_flavor,
-      chamber_life,
+      ambient_detail,
       foreground_anchor,
-      sacred_companion,
+      lesser_fae,
     } = slots;
 
-    const candidates = Array.isArray(court_subject) ? court_subject : [court_subject];
-    const _r = Math.random();
-    const figureCount = _r < 0.20 ? 1 : _r < 0.50 ? 2 : _r < 0.80 ? 3 : 4;
-    const chosen = candidates.slice(0, Math.min(figureCount, candidates.length));
-    const queenStack = chosen[0];
-    const attendantStacks = chosen.slice(1);
-
-    let positionLabels;
-    if (chosen.length === 2) positionLabels = ['CENTER', 'RIGHT-OF-QUEEN'];
-    else if (chosen.length === 3) positionLabels = ['CENTER', 'LEFT-OF-QUEEN', 'RIGHT-OF-QUEEN'];
-    else if (chosen.length === 4) positionLabels = ['CENTER', 'LEFT-OF-QUEEN', 'RIGHT-OF-QUEEN', 'OUTER-LEFT'];
-    else positionLabels = ['CENTER'];
-
-    const courtSection = chosen.length === 1
-      ? `THE QUEEN — SOLITARY (body fills 40-65% of frame):\n${queenStack}\n\nSolo regal queen. She is the ONLY figure in the scene.`
-      : `THE COURT — ${chosen.length} VISIBLE FAE FIGURES (MULTI-FIGURE composition — EVERY figure listed MUST be rendered visibly in the final image; do NOT collapse to fewer):\n\nFigures arranged horizontally across the chamber, each at full body-scale, each clearly distinct, all ${chosen.length} present and recognizable in the frame:\n\n${chosen.map((stack, i) => `${positionLabels[i]} — ${i === 0 ? 'THE QUEEN (largest, most elaborate, on the throne / central dais)' : `ATTENDANT (slightly smaller than queen, less elaborate adornment, ${positionLabels[i].toLowerCase().replace(/-/g, ' ')})`}: ${stack}`).join('\n\n')}\n\nMANDATORY: render EXACTLY ${chosen.length} distinct fae women visible in the frame — ${positionLabels.slice(0, chosen.length).join(' + ')}. Each at full body-scale. Each VISUALLY DISTINCT (different species lineage / palette / crown). Do NOT drop attendants. The court arrangement IS the subject.`;
-
-    const companionSection = sacred_companion
-      ? `\n\n━━━ SACRED COMPANION (a single sacred animal attending the court) ━━━\n${sacred_companion}\n\nA sacred forest creature (white stag / raven / owl / fox / hare) attending the court — knelt before the queen, perched on her shoulder, sitting at her feet. Woven into the scene at NORMAL scale (the queen is adult-sized, the animal is its natural size — NOT a tiny-fae scale companion).`
+    const lesserFaeSection = lesser_fae
+      ? `\n\n━━━ LESSER FAE PAYING RESPECTS (1-3 smaller fae gathered near the queen) ━━━\n${lesser_fae}\n\nWoven into the scene as 1-3 smaller, less-ornate fae paying respects to the queen — kneeling at her feet, offering a flower, bowing nearby, gathered at her hem. Visibly smaller and simpler than the queen. They do NOT compete with her as the focal subject.`
       : '';
 
-    return `You are writing ONE Flux prompt for a FORMAL FAIRY COURT painting in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+    return `You are writing ONE Flux prompt for a QUEEN OF THE FOREST painting in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt.
 
-1. VISIBLE FORMAL COURT-INFRASTRUCTURE — this is a FORMAL FAE COURT CHAMBER shaped from living forest. The render MUST visibly show at least ONE explicit court-infrastructure element from the rolled forest_backdrop axis: MOSS-AND-ROOT THRONE (sometimes with carved root-arms + woven-branch back) / FALLEN-LOG BENCHES / RAISED MOSS-DAIS / HANGING POLLEN-ORB CHANDELIERS / MOSS-STAIR STONE-PATH APPROACH / ROOT-ARCHWAY ENTRANCE / TWIN TREE-PILLAR CHAMBER WALLS / WISTERIA-CASCADE CEILING / GIANT-MUSHROOM CANOPY (architectural landmark — queen stands UNDER it at human scale, NEVER on top) / BREATHTAKING HERO-TREE (chamber cathedral with root-alcove). The chamber must read as a formal fae court, not "queen in a generic forest."
+1. ONE SOLO ORNATE MAGIC FAE QUEEN, POSED BEAUTIFULLY in a STUNNING NATURAL FOREST SETTING (body fills 35-55% of frame). She is undeniably a QUEEN — ornate regalia, magical aura, pretty-fairy-nature register. She is POSED for the viewer like an editorial portrait shoot but the LOCATION is a real wild forest spot, NOT a constructed court chamber. Eye-contact and model-pose are OK and encouraged.
 
-2. ${chosen.length === 1 ? 'A SOLITARY REGAL QUEEN (body fills 40-65% of frame).' : `${chosen.length} FAE FIGURES total — queen at center plus ${attendantStacks.length} attendant${attendantStacks.length > 1 ? 's' : ''} flanking. Court arrangement: queen larger and more elaborate at center, attendants smaller, fanning in a half-circle behind or beside her.`} NEVER a tight close-up portrait (that's dryad-portrait). NEVER tiny-fairy scale (that's tiny-fae). NEVER a wide landscape with tiny figure.
+2. THE SETTING — a SPECIFIC BEAUTIFUL NATURAL FOREST SPOT (gnarled-root throne in a sunny clearing / posed on a tree-branch over a stream / standing in a wildflower meadow / sitting on a mossy boulder by a waterfall / framed in a natural tree-archway / wading in a forest stream / leaning against an ancient hero-tree / seated on a fallen moss-log). The setting is WILD, not constructed by attendants. OPEN your Flux prompt with the setting + her pose embedded within it.
 
-3. The queen wears EVERY feature listed in HER stack (species + skin + hair + gown + crown + magical signature). 5+ stacked features must visibly land on her.
+3. WOODLAND CRITTERS FLOCK TO HER and PAY RESPECTS — every render MUST show 3-8 specific small forest creatures gathered around her, paying respects, looking up at her, perched on her, at her feet, approaching reverently. She is the QUEEN OF THE FOREST and the wild things obey her. This is a LOAD-BEARING visual element — don't hide it in the background.
 
-4. THE THRONE + ALL COURT FURNISHINGS ARE GROWN, NEVER BUILT. Moss-and-root throne, fallen-log benches, hanging lantern-orbs. NO carved stone thrones, NO castle masonry, NO mushroom-AS-THRONE (mushroom-canopy is architecture/landmark only — queen never sits on top), NO mushroom-spire chamber-pillars.
+4. ORNATE FAE QUEEN — 5+ stacked exotic features from her stack (species + skin + hair + gown + crown + magical signature) all visibly landing on her. Mythic regal beauty, very fairy / very pretty / very nature, NOT human-model beauty.
 
-5. CEREMONIAL STILLNESS — solemn, dignified, blessing, processional. NEVER posing for camera, NEVER eye-contact-with-viewer.
-
-6. SOFT ETHEREAL ENCHANTED-FOREST REGISTER — pretty, forestry, enchanted, painted-fantasy oil-brushwork.
+5. PAINTED-FANTASY REGISTER — visible oil-brushwork, painted-fantasy concept-art lineage. NOT photoreal, NOT CGI, NOT cartoon.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-━━━ 1. THE ${chosen.length === 1 ? 'QUEEN (solo)' : `${chosen.length} FIGURES (queen + ${attendantStacks.length} attendant${attendantStacks.length > 1 ? 's' : ''})`} ━━━
-${courtSection}
+━━━ 1. POSED SETTING (load-bearing — open the Flux prompt with this) ━━━
+${posed_setting}
 
-━━━ 2. CEREMONIAL MOMENT (what's happening) ━━━
-${ceremonial_moment}
+This is the LOAD-BEARING backdrop element. The specific natural forest spot + her pose embedded within it must be the first thing rendered in the prompt. The wild forest IS the setting; she is posed within it.
 
-The captured moment — blessing, slow procession, extending hand to a sacred creature, receiving an offering, silent watching. Solemn, dignified, ceremonial register.
+━━━ 2. THE QUEEN (solo, ornate, magic fae queen — 5+ stacked features) ━━━
+${queen_features}
 
-━━━ 3. COMPOSITION (3/4 to full-body framing) ━━━
-${composition}
+Preserve every feature unmistakably. Mythic regal fae beauty. She IS undeniably a QUEEN — ornate, magical, pretty / nature / fairy register.
 
-The court occupies 40-65% of the frame at body-scale. The chamber wraps around them as the formal fae-court setting.
+━━━ 3. WOODLAND CRITTERS PAYING RESPECTS (always-on — load-bearing) ━━━
+${forest_critters}
 
-━━━ 4. REGALIA (crown / accessories / staff carried by the queen) ━━━
+3-8 specific small forest creatures gathered around her, paying respects, looking up at her, perched on her, at her feet, approaching reverently. She is QUEEN OF THE FOREST — the wild things flock to her. VISIBLE in the render, not hidden.
+
+━━━ 4. FOREST BIOME (the type of forest around her) ━━━
+${forest_biome}
+
+The specific forest type wrapping the scene — ancient oak grove / pale birch glade / wisteria-cascade arbor / waterfall-glade / wildflower meadow / autumn-grove / fern-grotto / mossy stream-clearing. Painted atmospheric depth.
+
+━━━ 5. REGALIA (crown / scepter / staff / orb carried by the queen) ━━━
 ${regalia}
 
-A specific regal accessory or held object — antler-crown / gold-leaf circlet / diadem / orb-of-light / staff / cup. Painted with mythic detail.
+A specific regal accessory or held object. Painted with mythic detail.
 
-━━━ 5. FORMAL COURT CHAMBER (the backdrop IS court infrastructure — lead with this in your Flux prompt) ━━━
-${forest_backdrop}
-
-This is the MANDATORY court-infrastructure for this render. The throne / benches / mushroom-ring tiers / lantern-orbs / standing-stone boundary / ceremonial approach must be visible as the load-bearing backdrop element. The court infrastructure leads in the Flux prompt; the biome wraps it.
-
-━━━ 6. LIGHTING (court-light register) ━━━
+━━━ 6. LIGHTING (warm, ethereal register) ━━━
 ${lighting}
 
 ━━━ 7. WEATHER (air condition + drifting accents) ━━━
 ${weather}
 
-━━━ 8. MAGICAL FLAVOR (royal magic signature — the queen's aura) ━━━
+━━━ 8. MAGICAL FLAVOR (the queen's aura) ━━━
 ${magical_flavor}
 
-Royal magic visible: butterflies orbiting the crown, soft amber halo at her shoulders, drifting petals, glowing pollen, will-o-wisps trailing the procession.
+Her magical signature visible: butterflies orbiting the crown, soft amber halo at her shoulders, drifting petals, glowing pollen, will-o-wisps trailing.
 
-━━━ 9. CHAMBER LIFE (ambient set-dressing — small critters / wildflowers / butterflies / fireflies / lush forest texture populating the chamber) ━━━
-${chamber_life}
+━━━ 9. AMBIENT DETAIL (lush wild texture — wildflowers / butterflies / dewdrops / hanging moss / forest texture) ━━━
+${ambient_detail}
 
-Weave these ambient elements naturally into the scene — they make the chamber feel inhabited and alive WITHOUT crowding the queen. Floor-detail, mid-tier accents, air-motion drift.
+Weave these ambient elements naturally into the scene — they make the setting feel ALIVE without crowding the queen. Floor-detail, mid-tier accents, air-motion drift.
 
 ━━━ 10. FOREGROUND ANCHOR (closest depth element) ━━━
 ${foreground_anchor}
 
 A specific tactile element near the camera bringing 3-tier depth — hanging vine, fern-cluster, hanging-moss curtain, drifting petals close to camera.
-${companionSection}
+${lesserFaeSection}
 
 ━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
 ${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
@@ -511,20 +494,20 @@ ${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
 Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
 
 ━━━ HARD BANS ━━━
-- NO castle / built architecture / stone-masonry / carved-stone throne (all court furnishings are GROWN)
-- NO mushroom-AS-THRONE (queen sitting on a mushroom-cap), NO mushroom-spire chamber-pillars, NO bioluminescent-glen register
-- NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
-- NO sexualized framing — focus is regal-otherworldly beauty
+- NO castle / built architecture / stone-masonry / human-built furniture (the setting is WILD natural forest)
+- NO formal court chamber / no constructed throne by attendants / no hanging chandeliers-of-orbs strung up (this is a NATURAL forest spot, not a court chamber)
+- NO mushroom-AS-THRONE (queen never sits on top of a mushroom-cap), NO mushroom-spire chamber-pillars
+- NO multi-queen-court composition (this is SOLO queen + lesser fae paying respects when gated, NOT a multi-queen court)
+- NO sexualized framing
 - NO bare chest, NO nipples, NO topless
 - NO modern objects, NO realistic non-magical humans
 - NO violence / NO threatening / NO weapons
-- NO crowds beyond ${chosen.length} figures
-- NO tight head-and-shoulders portrait (this path is body-scale)
+- NO tight head-and-shoulders portrait (this is body-scale within a setting, that's dryad-portrait)
 - NO tiny-fairy scale (that's tiny-fae)
 - NO cartoon / chibi / mascot rendering
 - NO storm / lightning / dark-grey-blue (peaceful enchanted register only)
 
 ━━━ OUTPUT ━━━
-Write 80-110 words, comma-separated phrases. ${chosen.length === 1 ? 'OPEN WITH THE COURT-INFRASTRUCTURE element (throne / chandeliers / dais / approach / mushroom-canopy / hero-tree) from the backdrop axis — load-bearing first 25-35 words. Then describe the queen with stacked features unmistakable.' : `OPEN WITH AN EXPLICIT FIGURE COUNT: "${chosen.length} fae figures arranged across the chamber: ${positionLabels.slice(0, chosen.length).join(', ')}" — name the count in your first 10 words to bias Flux toward rendering all ${chosen.length}. Then describe each figure in turn with her position label + stacked features (give roughly equal word-weight to each). Then the court-infrastructure backdrop wrapping them.`} Then ceremonial moment + composition + regalia + lighting + weather + magical flavor + chamber-life ambient detail + foreground anchor.${sacred_companion ? ' Then sacred companion woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+Write 80-110 words, comma-separated phrases. OPEN WITH THE POSED SETTING (the specific wild forest spot + her pose embedded) — load-bearing first 25-35 words. Then describe the queen with stacked features unmistakable. Then the woodland critters paying respects around her. Then forest biome wrapping + regalia + lighting + weather + magical flavor + ambient detail + foreground anchor.${lesser_fae ? ' Then lesser fae paying respects woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 };
