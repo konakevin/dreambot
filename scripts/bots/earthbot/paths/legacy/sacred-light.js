@@ -4,8 +4,8 @@
  * The light IS the moment. Intimate, hushed, reverent.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../earth/pools');
+const blocks = require('../../earth/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const moment = picker.pickWithRecency(pools.SACRED_LIGHT_MOMENTS, 'sacred_light');

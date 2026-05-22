@@ -74,4 +74,9 @@ module.exports = {
   GEOLOGICAL_WONDER_MINERAL_COLOR: load('geological_wonder_mineral_color'),
   GEOLOGICAL_WONDER_FOCAL_ANCHOR: load('geological_wonder_focal_anchor'),
   GEOLOGICAL_WONDER_PHENOMENON: load('geological_wonder_phenomenon'),
+  // sacred-light (2026-05-21) — 6-axis path. Bespoke: subject + lighting
+  // (light-as-hero register). Reuses EPIC_VISTA pools for atmosphere /
+  // hero_feature / sky_layer / phenomenon.
+  SACRED_LIGHT_SUBJECT: load('sacred_light_subject'),
+  SACRED_LIGHT_LIGHTING: load('sacred_light_lighting'),
 };

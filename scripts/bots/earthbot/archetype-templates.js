@@ -356,4 +356,84 @@ The geological subject dominates 60-70% of the frame. Hyperreal photographic —
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
+
+  EARTHBOT_SACRED_LIGHT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one signature optical/weather event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or subject, DROP IT.`
+      : '';
+
+    return `You are a fine-art landscape photographer writing ONE SACRED-LIGHT MOMENT scene for EarthBot. Transcendent natural-light moments in nature — the LIGHT itself is the hero. Dawn first-light burning a single ridge while valleys remain in cool shadow, raking shafts plural through old-growth canopy, alpenglow on a snow-capped peak, storm-break broad spotlight across a meadow, crepuscular rays through cypress over a misty lake, sun-halo over winter forest. Mid to tight framing — NOT wide panorama. The light moment fills the emotional center; the landscape supports it. Marc Adamus / Peter Lik / Galen Rowell caliber gallery-print sacred-light photography. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL NATURAL LIGHT, NEVER SCI-FI / FANTASY ━━━
+
+This is REAL Earth light — alpenglow on a real peak, golden-hour raking through a real forest, storm-break sun blasting through real clouds, sun-halo from real ice-crystal refraction. NEVER alien planet light, NEVER bioluminescent glow, NEVER phosphorescent fungi, NEVER glowing portals, NEVER magical-fantasy luminescence. Real Earth, real light, real sky.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+
+NEVER a person, NEVER a silhouette, NEVER a hiker, NEVER a tiny figure for scale. Empty wilderness, light alone.
+
+━━━ ZERO HUMAN-BUILT FEATURES — NEVER, EVEN AS BACKGROUND DECORATION ━━━
+
+NEVER ruins, NEVER cathedrals, NEVER chapels, NEVER monasteries, NEVER abbeys, NEVER altars, NEVER stained glass, NEVER lighthouses, NEVER any architecture. Sacred-light traditionally evokes religious-architecture imagery in training data — OVERRIDE THAT BIAS HARD. Pure natural-light moments in nature only. NEVER railings / walkways / bridges / cabins / fences / buildings / lampposts / vehicles / signs.
+
+━━━ ABSOLUTELY BANNED OUTPUT WORDS ━━━
+
+The path identity demands real-natural-light language. NEVER write:
+- "bioluminescent" / "luminescent" / "luminescence" / "phosphorescent"
+- "glowing" (when describing rock/water/mineral — they REFLECT light, never glow)
+- "single beam" / "single shaft" / "single column of light" (Flux laser-beam trigger — use "shafts plural" or "broad spotlight")
+- "cathedral" / "chapel" / "altar" / "ruins" / "monastery" (architecture)
+- "stained glass" / "lighthouse beam"
+- "firefly pillar" / "vertical column of fireflies" (alien-coded)
+- "portal" / "doorway" / "mystical" / "ethereal" / "otherworldly" / "magical"
+- "fluorescent" anything
+- "lit from within" / "radiating" / "pulsing"
+
+USE INSTEAD: "shafts plural fanning", "broad spotlight breaking through", "raking sidelight", "warm crown of light", "alpenglow rim", "golden-hour saturation", "soft scattered illumination".
+
+━━━ THE SACRED-LIGHT SUBJECT (the where + what — natural setting primed for light drama) ━━━
+${subject}
+
+━━━ THE LIGHTING (the SPECIFIC sacred-light event — this is the hero) ━━━
+${lighting}
+
+Light is the EMOTIONAL CENTER. Render the named lighting LITERALLY — alpenglow IS rose-pink-to-magenta on snow, golden-hour raking IS warm copper-amber sidelight, crepuscular rays IS multiple shafts plural fanning through cloud-gap, dawn first-light IS warm rose-gold on the highest crown.
+
+━━━ ATMOSPHERE (the medium that makes the light visible) ━━━
+${atmosphere}
+
+Mist, dust beams in light, faint haze layering, crystal-clear air. The atmosphere makes the light visible — without it, light is invisible.
+
+━━━ HERO FEATURE (deep distance scale-prover, never competing with the light) ━━━
+${hero_feature}
+
+A small element in the deep distance providing depth + scale-prover. Render small (comma-speck / postage-stamp scale) — the LIGHT is the hero, not this.
+
+━━━ SKY LAYER (what the sky is doing above) ━━━
+${sky_layer}${phenomenonBlock}
+
+━━━ HARD RULE — LIGHT IS THE EMOTIONAL CENTER ━━━
+
+The viewer's eye lands on the LIGHT first. The landscape provides the stage; the light provides the drama. Mid to tight framing (NOT wide panorama). Surrounding shadow / cool tones / shaded landscape contrasts with the bright light moment. A held-breath, quietly miraculous moment.
+
+━━━ MOMENT IN MOTION — every render captures one beat of physical motion ━━━
+
+Catch a SECOND in time. Dust beams shifting in raking light, drifting mist swirling through shafts, scattered pollen suspended mid-air in golden light, a single petal floating mid-fall through a light-shaft, snow-dust glittering in alpenglow, sun-halo ring catching ice-crystals in upper air.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'sacred-light register — warm golden / rose-pink alpenglow / amber raking / cool shadow contrast'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE — LIGHT-AS-HERO ━━━
+
+The light moment fills the emotional center of the frame. Mid to tight framing — NOT wide panorama. Surrounding landscape sits in cool shadow / cool tones, the lit area glows with warm contrasting saturation. Hyperreal photographic — Galen Rowell / Marc Adamus caliber gallery-print sacred-light photography.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
+  },
 };

@@ -56,4 +56,13 @@ module.exports = {
   framingModes: null,
   anchorScaleRange: null
 },
+
+  EARTHBOT_SACRED_LIGHT: {
+    description: 'PATH-BESPOKE — EarthBot sacred-light (2026-05-21 axis-system migration). Transcendent natural-light moments in nature — the LIGHT itself is the hero, not the landscape. Mid/tight framing (not wide panorama like epic-vista). Dawn first-light burning a single ridge while valleys remain in cool shadow, raking shafts plural through old-growth canopy, alpenglow on a snow-capped peak, storm-break spotlight across a meadow, crepuscular rays through cypress over a misty lake, sun-halo over a winter forest. 6 path-bespoke axes — 5 always-on (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. Bespoke pools: subject + lighting (sacred-light register). Reused pools: atmosphere + hero_feature + sky_layer + phenomenon from EPIC_VISTA. NO sci-fi (no bioluminescent / phosphorescent / glowing-magic), NO architecture / ruins / cathedrals / chapels (transcendent natural-only — Flux pigeonholes on man-made structures), NO single beam / single shaft (Flux laser-beam trigger — use shafts plural / broad spotlight instead), NO humans, NO floating-anything.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'lighting', 'atmosphere', 'hero_feature', 'sky_layer' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
 };
