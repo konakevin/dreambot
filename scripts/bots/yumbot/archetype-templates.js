@@ -746,4 +746,113 @@ Open with: "Pastel [pink/blue/cream/yellow] gingham/checkered tablecloth fills t
 
 Output ONLY the raw 120-170 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The gingham/checkered pattern + mini-friend-pile-on-top must read CLEARLY, and the backdrop must be SOFT-FOCUS behind.`;
   },
+
+  YUMBOT_COQUETTE_FOOD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, dessert_motif, palette_variant, bow_motif, scattered_items, companion, food_inhabitants } = slots;
+    const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
+    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigList = Array.isArray(signature) ? signature : [signature];
+    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const scatterList = Array.isArray(scattered_items) ? scattered_items : [scattered_items];
+    const scatterBlock = scatterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing COQUETTE-FOOD renders for YumBot — the FLAGSHIP OMG-cute coquette kawaii food-party path. Hyper-feminine ultra-pink ultra-coquette palette. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: PALETTE LOCKED — PINKS / LAVENDERS / WHITES / SOFT PURPLES ONLY ━━━
+
+The ENTIRE render's color palette is restricted to pinks (blush / dusty-rose / coral-pink / bubblegum / hot-pink), lavenders, whites, and soft purples (lilac / mauve / periwinkle). ABSOLUTELY NO yellows, blues outside soft-purple, greens, oranges, reds outside soft-pink, browns, blacks, neons. If a food is normally another color (e.g. yellow lemon), re-tint it into the pink/lavender palette range.
+
+━━━ ⚠ HARD RULE #2: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
+
+The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). The food ITSELF is the character with kawaii face. Group them so all 5 fit cleanly in the frame.
+
+⚠ FAILURE = rendering humans / chibi-children / 1-4 foods. PASS = 5 distinct kawaii foods all visible.
+
+━━━ ⚠ HARD RULE #3: PACKED OMG-CUTE COQUETTE DENSITY ━━━
+
+Beyond the 5 foods, the scene contains 3 signature props + 2 scattered girly items + 1 companion + 1 centerpiece dessert + 1 hero bow-motif. That's 8 additional decorative cast elements. Pack the scene RICH with cute coquette items — bows, ribbons, pearls, hearts, charms, scattered girly accessories. The render should feel OVERFLOWING with cute. NEVER minimal.
+
+━━━ ⚠ HARD RULE #4: COQUETTE AESTHETIC ━━━
+
+Hyper-feminine ultra-coquette: ribbons, bows, lace, pearls, hearts, strawberries, cherries. Marie-Antoinette tea party + ballerina dressing-room + pastel kawaii bakery. Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly Studio-Ghibli storybook warmth. NEVER masculine / dark / grungy.
+
+━━━ THE SCENE-TYPE (composition + 5-food pose-varied cluster) ━━━
+${scene_type}
+
+━━━ THE CENTERPIECE DESSERT MOTIF (the hero treat) ━━━
+${dessert_motif}
+
+━━━ THE BOW MOTIF (featured ribbon/bow arrangement) ━━━
+${bow_motif}
+
+━━━ COQUETTE BACKDROP (surrounding setting — render visibly) ━━━
+${backdrop}
+
+━━━ 3 SIGNATURE COQUETTE PROPS ━━━
+${sigBlock}
+
+━━━ 2 SCATTERED GIRLY ITEMS (lipsticks / perfume / hair-clips / mini-figurines / etc.) ━━━
+${scatterBlock}
+
+━━━ TERRAIN (surface foods sit on) ━━━
+${terrain}
+
+━━━ SKY / OVERHEAD ━━━
+${sky}
+
+━━━ CAMERA FRAMING ━━━
+${camera}
+
+━━━ LIGHTING DIRECTION / QUALITY ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ ATMOSPHERE (what's drifting in the air) ━━━
+${atmosphere}
+
+━━━ PALETTE VARIANT (dominant shade combination from the locked range) ━━━
+${palette_variant}
+
+━━━ 1 TINY COMPANION ━━━
+${companion}
+
+━━━ 5 KAWAII FOOD-CHARACTERS (the (1)-(5) food-friends — the food ITSELF is the character) ━━━
+${foodBlock}
+
+━━━ SCENE PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ POSTER MOMENT ━━━
+
+"the OMG-cutest coquette kawaii food-party — 5 kawaii foods amid a riot of pink ribbons, pearls, hearts, bows, girly accessories. Every viewer says 'this is so cute it hurts.'" Wallpaper-poster flagship work.
+
+━━━ HARD BANS ━━━
+
+- ⚠ NO COLORS OUTSIDE pinks / lavenders / whites / soft purples — ZERO exceptions. NO mint, NO green, NO blue (except soft-lavender), NO yellow, NO orange, NO red outside soft-pink, NO brown, NO chocolate, NO black, NO gray
+- NO HUMAN figures / chibi-children — only kawaii foods (tiny companion creature is OK)
+- NO photoreal / harsh-realism — kawaii painterly Pop-Mart fusion
+- NO dark / moody / scary / grungy / masculine
+- NO real kanji / English-text labels — decorative-pattern only
+- NO pathway / lane RECEDING into vanishing point — tight cluster
+- NO chaotic vertical-stacking / climbing / acrobatics
+- NO blurred-out generic backdrop — coquette setting MUST be visibly rendered
+- NO identical-row-of-soldiers lineup
+- NO minimal / sparse composition — the scene is OVERFLOWING with cute items
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD with the 5 food-characters named at the START, then layer in scene-type + dessert + bow + backdrop + signatures + scattered items + terrain + sky + camera + lighting + time + atmosphere + palette + companion as one integrated description.
+
+Template:
+"Five kawaii coquette food-characters together — (1) [food 1 named in 5-8 words], (2) [food 2 named], (3) [food 3 named], (4) [food 4 named], (5) [food 5 named] — [scene-type pose-varied cluster] around [dessert_motif centerpiece] decorated with [bow_motif]. Set in [backdrop visibly rendered]. [signature 1], [signature 2], [signature 3] accenting the scene. [scattered_item 1] and [scattered_item 2] scattered nearby. [terrain] underfoot, [sky] overhead, [time-of-day], [atmosphere drifting], [lighting]. [companion] nearby. Palette: [palette_variant]. [camera framing]. Painterly Pop-Mart ultra-coquette kawaii rendering, pinks + lavenders + whites + soft purples ONLY."
+
+⚠ Count (1)(2)(3)(4)(5) explicitly. ALL 5 FOODS named at the START. Pack the scene RICH with cute coquette items.
+
+Output ONLY the raw 170-240 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
+  },
 };

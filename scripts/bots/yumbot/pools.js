@@ -51,6 +51,22 @@ module.exports = {
   CANDY_FANTASY_TIME_OF_DAY: load('candy_fantasy_time_of_day'),
   CANDY_FANTASY_WEATHER: load('candy_fantasy_weather'),
 
+  // ============ COQUETTE-FOOD path pools (15-axis flagship) ============
+  COQUETTE_SCENE_TYPE: load('coquette_scene_type'),
+  COQUETTE_BACKDROP: load('coquette_backdrop'),
+  COQUETTE_SIGNATURE: load('coquette_signature'),
+  COQUETTE_TERRAIN: load('coquette_terrain'),
+  COQUETTE_SKY: load('coquette_sky'),
+  COQUETTE_CAMERA: load('coquette_camera'),
+  COQUETTE_LIGHTING: load('coquette_lighting'),
+  COQUETTE_TIME_OF_DAY: load('coquette_time_of_day'),
+  COQUETTE_ATMOSPHERE: load('coquette_atmosphere'),
+  COQUETTE_DESSERT_MOTIF: load('coquette_dessert_motif'),
+  COQUETTE_PALETTE_VARIANT: load('coquette_palette_variant'),
+  COQUETTE_BOW_MOTIF: load('coquette_bow_motif'),
+  COQUETTE_SCATTERED_ITEMS: load('coquette_scattered_items'),
+  COQUETTE_COMPANION: load('coquette_companion'),
+
   // ============ COTTAGECORE-NATURE path pools (12-axis) ============
   COTTAGE_SCENE_TYPE: load('cottage_scene_type'),
   COTTAGE_BACKDROP: load('cottage_backdrop'),

@@ -21,6 +21,7 @@ const pathBuilders = {
   'japanese-festival': require('./paths/japanese-festival'),
   'mini-chef': require('./paths/mini-chef'),
   'cottagecore-nature': require('./paths/cottagecore-nature'),
+  'coquette-food': require('./paths/coquette-food'),
 };
 
 module.exports = {
@@ -44,7 +45,7 @@ module.exports = {
     'cinematic', 'surreal',
   ],
 
-  paths: ['floral-garden-cup', 'floral-garden-scene', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy', 'japanese-festival', 'mini-chef', 'cottagecore-nature'],
+  paths: ['floral-garden-cup', 'floral-garden-scene', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy', 'japanese-festival', 'mini-chef', 'cottagecore-nature', 'coquette-food'],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
   // their combined weight equals 1 (the same total weight floral-garden-cup
@@ -58,6 +59,7 @@ module.exports = {
     'japanese-festival': 1,
     'mini-chef': 1,
     'cottagecore-nature': 1,
+    'coquette-food': 1,
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },
@@ -72,6 +74,7 @@ module.exports = {
   promptPrefixByPath: {
     'candy-fantasy':
       'Kawaii candy-fantasy scene — composition follows the scene description below (NOT a default candy meadow). The scene sits inside a RICH KAWAII CANDY-FANTASY WORLD with a lush layered candy-world backdrop visible BEHIND the foreground scene — frosted-cake mountains, oversized lollipop-trees, marshmallow drifts, sprinkle-grass, cotton-candy clouds, sugar-glitter air, gumdrop bushes, candy-cane accents — every surface confectionary, NEVER real wood/grass/stone/metal/fabric. The candy-world backdrop is RICH AND DETAILED but never overrides the foreground composition the scene description establishes.',
+
   },
 
 

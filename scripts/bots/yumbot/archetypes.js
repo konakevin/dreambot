@@ -206,4 +206,34 @@ module.exports = {
   framingModes: null,
   anchorScaleRange: null
 },
+
+  YUMBOT_COQUETTE_FOOD: {
+    description:
+      'PATH-BESPOKE — YumBot coquette-food (2026-05-21 FLAGSHIP 15-axis R1 state). Hyper-feminine ultra-coquette kawaii food-party scene. Palette pinks + lavenders + whites + soft purples. 15 axes: scene_type, backdrop, signature (3 picks), terrain, sky, camera, lighting, time_of_day, atmosphere, dessert_motif, palette_variant, bow_motif, scattered_items (2 picks), companion, foods (5 from FOOD_CATALOG tagged BAKERY). Total 11 cast items per render.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'backdrop',
+        'signature',
+        'terrain',
+        'sky',
+        'camera',
+        'lighting',
+        'time_of_day',
+        'atmosphere',
+        'dessert_motif',
+        'palette_variant',
+        'bow_motif',
+        'scattered_items',
+        'companion',
+        'food_inhabitants'
+      ]
+    },
+    pickN: { signature: 3, scattered_items: 2, food_inhabitants: 5 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null
+  },
 };
