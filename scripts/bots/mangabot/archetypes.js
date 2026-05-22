@@ -13,6 +13,36 @@
  */
 
 module.exports = {
+  MANGABOT_NEO_TOKYO: {
+    description:
+      'PATH-BESPOKE — MangaBot neo-tokyo (2026-05-22 axis-system migration). Cyberpunk Japan future — Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo / Edgerunners / Bubblegum Crisis. Vertical density, wet-street neon, kanji-signage saturation, tech-artifact clutter. Each render is a frame from a cyberpunk anime keyframe with NEON palette (pink/cyan/magenta) NOT pastels. 15 path-bespoke axes — denser than samurai-era because the aesthetic demands more layered content.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'district',
+        'landmark_anchor',
+        'signage_density',
+        'tech_artifacts',
+        'vertical_density',
+        'character_role',
+        'action_moment',
+        'weather_air',
+        'light_signature',
+        'time_of_day',
+        'emotional_dna',
+        'camera_framing',
+        'story_prop',
+        'background_detail',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MANGABOT_SAMURAI_ERA: {
     description:
       'PATH-BESPOKE — MangaBot samurai-era (2026-05-22 axis-system migration). Historical Japan / jidaigeki — Mononoke / Demon-Slayer / Rurouni-Kenshin / Vagabond aesthetic. Decouples the legacy SAMURAI_SCENES baked-scene pool into 10 composable axes so renders get true multi-tier depth + monumental anchors + scale provers + variety. Every render is a keyframe still: composition lead + monumental architectural anchor + figure mid-action + atmospheric motion + cinematic light.',
