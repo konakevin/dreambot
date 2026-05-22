@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/tabletop_vessel_hero.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} KAWAII VESSEL HEROES for YumBot checkered-tabletop. Each is a kawaii-faced food/drink centerpiece sitting on the tablecloth. NO mini-friends pile (separate pool), NO tablecloth.
 
 Each entry: 15-25 words.

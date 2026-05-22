@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/tabletop_mini_creature_pile.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} MINI-CREATURE PILE descriptions for YumBot checkered-tabletop. A cluster of smiling-food-friend mini-creatures sitting ON TOP / IN / ON THE RIM of the hero vessel — like a small kawaii audience. Each entry describes the pile for ONE render.
 
 Each entry: 18-28 words.

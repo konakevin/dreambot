@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/tabletop_camera.json',
-  total: 30,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} CAMERA COMPOSITIONS for YumBot checkered-tabletop.
 
 Each entry: 12-22 words.

@@ -182,7 +182,7 @@ module.exports = {
 },
 
   YUMBOT_CHECKERED_TABLETOP: {
-  description: 'PATH-BESPOKE — YumBot checkered-tabletop (2026-05-20). bex.ai-modeled. Kawaii food/drink hero on a pastel gingham/checkered tablecloth, cluster of smiling mini-food-friends piled around AND ON TOP. 3/4 tabletop or overhead-flatlay. Pop-Mart-collectible-grid/sticker-card feel. 7 path-bespoke axes.',
+  description: 'PATH-BESPOKE — YumBot checkered-tabletop (2026-05-21 12-axis refactor). bex.ai-modeled. Kawaii food/drink hero on a pastel gingham/checkered tablecloth, cluster of smiling mini-food-friends piled around AND ON TOP. 3/4 tabletop or overhead-flatlay. Pop-Mart-collectible-grid/sticker-card feel. Was 7-axis; added 5 more for playbook parity: backdrop (soft-focus surrounding setting), signature (2 picks — kawaii props), atmosphere, time_of_day, companion (1 tiny accent). 12 path-bespoke axes.',
   slots: {
     universal: [],
     bot: [],
@@ -192,11 +192,16 @@ module.exports = {
       'tablecloth',
       'scattered_minis',
       'decor_clusters',
+      'backdrop',
+      'signature',
+      'atmosphere',
+      'time_of_day',
+      'companion',
       'camera',
       'lighting'
     ]
   },
-  pickN: { scattered_minis: 5, decor_clusters: 2 },
+  pickN: { scattered_minis: 5, decor_clusters: 2, signature: 2 },
   conditionalLayer: null,
   framingModes: null,
   anchorScaleRange: null

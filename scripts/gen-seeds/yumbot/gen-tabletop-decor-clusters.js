@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/tabletop_decor_clusters.json',
-  total: 30,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} DECOR CLUSTER descriptions for YumBot checkered-tabletop. Slightly larger decor clusters on the tablecloth — mini-macaron-stacks, mini-marshmallow-piles, chocolate-piece-piles, scattered-pieces. Template picks 2 per render.
 
 Each entry: 8-15 words.

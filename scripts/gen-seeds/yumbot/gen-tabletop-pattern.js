@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/tabletop_pattern.json',
-  total: 30,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} PASTEL CHECKERED/GINGHAM/PLAID TABLECLOTH descriptions for YumBot checkered-tabletop. The signature pattern.
 
 Each entry: 10-18 words.

@@ -649,11 +649,13 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_CHECKERED_TABLETOP: ({ slots, sharedDNA, vibeDirective }) => {
-    const { vessel_hero, mini_creature_pile, tablecloth, scattered_minis, decor_clusters, camera, lighting } = slots;
+    const { vessel_hero, mini_creature_pile, tablecloth, scattered_minis, decor_clusters, backdrop, signature, atmosphere, time_of_day, companion, camera, lighting } = slots;
     const minisList = Array.isArray(scattered_minis) ? scattered_minis : [scattered_minis];
     const minisBlock = minisList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
     const clusterList = Array.isArray(decor_clusters) ? decor_clusters : [decor_clusters];
     const clusterBlock = clusterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigList = Array.isArray(signature) ? signature : [signature];
+    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
     return `You are writing CHECKERED-TABLETOP renders for YumBot — bex.ai's signature pastel-gingham tabletop look. Kawaii food/drink hero on a pastel-pink-blue (or pink-cream / pink-yellow) GINGHAM/CHECKERED/PLAID tablecloth, with a cluster of smiling mini-food-friends piled around (and often ON TOP of) the hero. Output wraps with style prefix + suffix.
 
@@ -683,6 +685,21 @@ ${minisBlock}
 
 ━━━ TWO DECOR CLUSTERS (mini-macaron stack / mini-marshmallow pile / sugar-pieces / chocolate-clusters) ━━━
 ${clusterBlock}
+
+━━━ SOFT-FOCUS BACKDROP (what's visible BEHIND the tabletop — soft-focus bokeh, NEVER sharp landscape) ━━━
+${backdrop}
+
+━━━ 2 KAWAII SIGNATURE PROPS (linen napkin / ceramic spoon / sugar-cube dish / vintage creamer / floral saucer / ribbon-bow / etc.) ━━━
+${sigBlock}
+
+━━━ ATMOSPHERE (what's drifting through the air — sparkle / petals / heart-bokeh / bubble-orbs) ━━━
+${atmosphere}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ 1 TINY COMPANION (sugar-mouse / butterfly / honeybee / origami-crane / etc.) ━━━
+${companion}
 
 ━━━ CAMERA COMPOSITION ━━━
 ${camera}
@@ -725,8 +742,8 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
-Open with: "Pastel [pink/blue/cream/yellow] gingham/checkered tablecloth fills the surface, [kawaii vessel hero centerpiece with its smiling face], with [mini-creature pile on top — naming specific mini-faces], [scattered minis named across the tablecloth], [decor clusters], painterly Pop-Mart designer-vinyl pearlescent rendering, soft pastel daylight..."
+Open with: "Pastel [pink/blue/cream/yellow] gingham/checkered tablecloth fills the surface, [kawaii vessel hero centerpiece with its smiling face], with [mini-creature pile on top — naming specific mini-faces], [scattered minis named across the tablecloth], [decor clusters], [signature 1] and [signature 2] accenting beside the hero, [backdrop softly out of focus behind], [time-of-day], [atmosphere drifting], [companion] nearby, [lighting], [camera framing], painterly Pop-Mart designer-vinyl pearlescent rendering."
 
-Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The gingham/checkered pattern + mini-friend-pile-on-top must read CLEARLY.`;
+Output ONLY the raw 120-170 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The gingham/checkered pattern + mini-friend-pile-on-top must read CLEARLY, and the backdrop must be SOFT-FOCUS behind.`;
   },
 };

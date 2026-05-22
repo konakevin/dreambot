@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/tabletop_scattered_minis.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  append: true,
   metaPrompt: (n) => `You are writing \${n} SCATTERED MINI-FRIEND descriptions for YumBot checkered-tabletop. Small kawaii mini-foods scattered across the tablecloth around the hero. Template picks 5 per render to form the sticker-card-tableau feel.
 
 Each entry: 8-15 words. ONE specific scattered mini-friend.

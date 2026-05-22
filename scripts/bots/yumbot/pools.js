@@ -109,7 +109,7 @@ module.exports = {
   DREAM_CAMERA: load('dream_camera'),
   DREAM_LIGHTING: load('dream_lighting'),
 
-  // ============ CHECKERED-TABLETOP path pools ============
+  // ============ CHECKERED-TABLETOP path pools (12-axis) ============
   TABLETOP_VESSEL_HERO: load('tabletop_vessel_hero'),
   TABLETOP_MINI_CREATURE_PILE: load('tabletop_mini_creature_pile'),
   TABLETOP_PATTERN: load('tabletop_pattern'),
@@ -117,6 +117,11 @@ module.exports = {
   TABLETOP_DECOR_CLUSTERS: load('tabletop_decor_clusters'),
   TABLETOP_CAMERA: load('tabletop_camera'),
   TABLETOP_LIGHTING: load('tabletop_lighting'),
+  TABLETOP_BACKDROP: load('tabletop_backdrop'),
+  TABLETOP_SIGNATURE: load('tabletop_signature'),
+  TABLETOP_ATMOSPHERE: load('tabletop_atmosphere'),
+  TABLETOP_TIME_OF_DAY: load('tabletop_time_of_day'),
+  TABLETOP_COMPANION: load('tabletop_companion'),
 
   VIBE_COLOR,
 };
