@@ -22,9 +22,9 @@
  * AXIS-SYSTEM MIGRATION ROADMAP (2026-05-22 final — consolidation complete)
  * ═══════════════════════════════════════════════════════════════════════
  *
- * Final inventory: 18 paths (was 25 — 7 dropped via consolidation).
+ * Final inventory: 17 paths (was 25 — 8 dropped via consolidation / kills).
  *
- * MIGRATED (14 of 18 — 4 legacy paths remaining):
+ * MIGRATED (15 of 17 — 2 legacy paths remaining):
  *   ✓ epic-vista — canonical reference (BOT_SCENE_QUALITY_PLAYBOOK.md)
  *   ✓ national-parks (US National Parks amplified)
  *   ✓ deep-forest (old-growth temperate forest cathedrals)
@@ -39,20 +39,22 @@
  *   ✓ beach-night (magical tropical beach at night)
  *   ✓ waves (MERGE of legacy wave + big-wave)
  *   ✓ cozy-beach (intimate cozy beach moments — v2 pivot)
+ *   ✓ seasonal-shift (autumn density + spring superbloom, 6 bespoke
+ *     season-tagged axes + 3 reused EPIC_VISTA — 2026-05-22)
  *
- * REMAINING TO MIGRATE (4 legacy paths):
+ * REMAINING TO MIGRATE (2 legacy paths):
  *   - hidden-corner (intimate small-scene nature)
- *   - seasonal-shift (autumn fire / first snow / cherry blossom / etc)
- *   - micro-nature (extreme macro close-ups)
  *   - tide-pool (macro biological coastal detail)
  *
- * DROPPED (7 paths fully subsumed or killed, no migration):
+ * DROPPED (8 paths fully subsumed or killed, no migration):
  *   ✗ luminous-landscape (subsumed by sacred-light — 2026-05-22)
  *   ✗ beach-landscape (subsumed by coastal-vista + tropical-paradise — 2026-05-22)
  *   ✗ wave + big-wave (MERGED into waves — 2026-05-22)
  *   ✗ beach-moment + seashell (subsumed by cozy-beach v2 — 2026-05-22)
  *   ✗ dramatic-sky + weather-drama (sky-drama merge attempted + killed
  *     2026-05-22; legacy paths also dropped since they had heavy triggers)
+ *   ✗ micro-nature (killed 2026-05-22 — extreme-macro path off-brand for
+ *     EarthBot wide-cinematic identity, no aesthetic fit)
  */
 
 const earthPools = require('./earth/pools');
@@ -72,7 +74,6 @@ const pathBuilders = {
   'national-parks': require('./paths/national-parks'), // axis-system (2026-05-20)
   'seasonal-shift': require('./paths/seasonal-shift'), // axis-system (2026-05-22)
   'geological-wonder': require('./paths/geological-wonder'), // axis-system (2026-05-21)
-  'micro-nature': require('./earth/paths/micro-nature'),
   'deep-forest': require('./paths/deep-forest'), // axis-system (2026-05-20)
   'lush-jungle': require('./paths/lush-jungle'), // axis-system (2026-05-20)
   // Beach paths
@@ -94,7 +95,6 @@ const EARTH_PATHS = [
   'national-parks',
   'seasonal-shift',
   'geological-wonder',
-  'micro-nature',
   'deep-forest',
   'lush-jungle',
 ];
