@@ -206,10 +206,32 @@ module.exports = {
     };
   },
 
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`MangaBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`MangaBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    // Axis-system path — declarative { archetype, pools }
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    // Legacy inline-builder path
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    throw new Error(`MangaBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {

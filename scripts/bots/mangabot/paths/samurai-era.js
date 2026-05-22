@@ -1,52 +1,30 @@
 /**
- * MangaBot samurai-era path — historical Japan / jidaigeki / bamboo-and-shrine.
- * Mononoke / Demon-Slayer / Rurouni-Kenshin / Vagabond aesthetic.
+ * MangaBot samurai-era path — axis-system migration 2026-05-22.
+ *
+ * Historical Japan / jidaigeki — Mononoke / Demon-Slayer / Rurouni-Kenshin /
+ * Vagabond aesthetic. 12 path-bespoke axes (10 R0 + 2 R1 narrative-richness:
+ * story_prop + background_detail) decompose the legacy SAMURAI_SCENES baked-scene
+ * pool into composable parts so every render lands all 8 components of a
+ * memorable scene (monumental anchor, multi-tier depth, scale provers,
+ * narrative beat, readable focus, material truth, light drama, emotional DNA).
+ *
+ * See archetypes.js for the slot list + archetype-templates.js for the brief.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.SAMURAI_SCENES, 'se_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are an anime concept-art painter writing a SAMURAI-ERA keyframe for MangaBot. Historical Japan / jidaigeki — bamboo forests, shrines, lanterns, snowy mountains, katana-warriors. Output wraps with style prefix + suffix.
-
-${blocks.ANIME_ILLUSTRATION_BLOCK}
-
-${blocks.KEYFRAME_COMPOSITION_BLOCK}
-
-${blocks.DENSITY_BLOCK}
-
-${blocks.STORY_MOMENT_BLOCK}
-
-${blocks.NO_NAMED_CHARACTERS_BLOCK}
-
-${blocks.NO_GENERIC_POSE_BLOCK}
-
-${blocks.CULTURAL_RESPECT_BLOCK}
-
-━━━ THE SAMURAI-ERA SCENE ━━━
-${scene}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION CLOSER ━━━
-Falling leaves / drifting petals / snow / mist atmospheric effects mandatory. Bamboo / shrine / lantern / wooden-architecture density. If a samurai or ronin appears, they are mid-step / mid-draw / mid-breath, never head-on-modeling. Mononoke / Demon-Slayer painterly quality.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'MANGABOT_SAMURAI_ERA',
+  pools: {
+    scene_type: 'SAMURAI_SCENE_TYPE',
+    landscape_setting: 'SAMURAI_LANDSCAPE_SETTING',
+    architectural_anchor: 'SAMURAI_ARCHITECTURAL_ANCHOR',
+    character_role: 'SAMURAI_CHARACTER_ROLE',
+    action_moment: 'SAMURAI_ACTION_MOMENT',
+    atmospheric_element: 'SAMURAI_ATMOSPHERIC_ELEMENT',
+    light_drama: 'SAMURAI_LIGHT_DRAMA',
+    time_of_day: 'SAMURAI_TIME_OF_DAY',
+    emotional_dna: 'SAMURAI_EMOTIONAL_DNA',
+    camera_framing: 'SAMURAI_CAMERA_FRAMING',
+    story_prop: 'SAMURAI_STORY_PROP',
+    background_detail: 'SAMURAI_BACKGROUND_DETAIL',
+  },
 };
