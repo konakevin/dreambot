@@ -23,6 +23,7 @@ const pathBuilders = {
   'cottagecore-nature': require('./paths/cottagecore-nature'),
   'coquette-food': require('./paths/coquette-food'),
   'kawaii-koi-pond': require('./paths/kawaii-koi-pond'),
+  'kawaii-koi-pond-ultra': require('./paths/kawaii-koi-pond-ultra'),
 };
 
 module.exports = {
@@ -46,7 +47,7 @@ module.exports = {
     'cinematic', 'surreal',
   ],
 
-  paths: ['floral-garden-cup', 'floral-garden-scene', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy', 'japanese-festival', 'mini-chef', 'cottagecore-nature', 'coquette-food', 'kawaii-koi-pond'],
+  paths: ['floral-garden-cup', 'floral-garden-scene', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy', 'japanese-festival', 'mini-chef', 'cottagecore-nature', 'coquette-food', 'kawaii-koi-pond', 'kawaii-koi-pond-ultra'],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
   // their combined weight equals 1 (the same total weight floral-garden-cup
@@ -62,6 +63,15 @@ module.exports = {
     'cottagecore-nature': 1,
     'coquette-food': 1,
     'kawaii-koi-pond': 1,
+    'kawaii-koi-pond-ultra': 1,
+  },
+
+  // Per-path model override — bot.modelByPath HARDCODES a specific model for
+  // a specific path, overriding useModelPicker + allowedModels. Used here to
+  // lock kawaii-koi-pond-ultra to flux-1.1-pro-ultra (sister path
+  // kawaii-koi-pond keeps the default flux-dev from allowedModels).
+  modelByPath: {
+    'kawaii-koi-pond-ultra': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },
