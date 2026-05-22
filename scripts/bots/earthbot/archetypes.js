@@ -83,4 +83,13 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null
   },
+
+  EARTHBOT_COZY_BEACH: {
+    description: 'PATH-BESPOKE — EarthBot cozy-beach (2026-05-22 v2 PIVOT). PIVOTED away from village/architecture identity (v1) to INTIMATE COZY BEACH MOMENTS — golden-hour atmosphere, soft palm shadows raked across warm sand, driftwood-strewn cove, scattered shells in damp sand, hammock-shaped palm-frond silhouette over sand, fallen tropical flowers on the sand, calm tide pools reflecting sunset, palm-shadowed pocket cove. ATMOSPHERE IS THE HERO. Mid-tight intimate framings, NEVER wide panorama. 6 path-bespoke axes — 5 always-on (subject_setting, foreground_element, water_state, sky_layer, light_condition) + 1 conditional 30%-gated phenomenon. NO HUMANS, NO architecture / cottages / lighthouses / villages (v1 identity is dead), NO dramatic surf / storms (cozy is gentle warm always), NO sci-fi / bioluminescent / fantasy.',
+    slots: { universal: [], bot: [], path: [ 'subject_setting', 'foreground_element', 'water_state', 'sky_layer', 'light_condition' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
 };

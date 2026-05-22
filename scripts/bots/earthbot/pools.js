@@ -96,4 +96,13 @@ module.exports = {
   WAVES_SKY_LAYER: load('waves_sky_layer'),
   WAVES_LIGHT_CONDITION: load('waves_light_condition'),
   WAVES_PHENOMENON: load('waves_phenomenon'),
+  // cozy-beach (2026-05-22 v2 PIVOT) — intimate cozy beach moments.
+  // Pivoted from village/architecture identity to atmosphere-as-hero
+  // intimate-beach with golden-hour mood + cozy foreground elements.
+  COZY_BEACH_SUBJECT_SETTING: load('cozy_beach_subject_setting'),
+  COZY_BEACH_FOREGROUND_ELEMENT: load('cozy_beach_foreground_element'),
+  COZY_BEACH_WATER_STATE: load('cozy_beach_water_state'),
+  COZY_BEACH_SKY_LAYER: load('cozy_beach_sky_layer'),
+  COZY_BEACH_LIGHT_CONDITION: load('cozy_beach_light_condition'),
+  COZY_BEACH_PHENOMENON: load('cozy_beach_phenomenon'),
 };

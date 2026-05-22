@@ -596,4 +596,78 @@ The wave fills 50-70% of the frame. Coastal context + tropical setting fill the 
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
+
+  EARTHBOT_COZY_BEACH: ({ slots, sharedDNA, vibeDirective }) => {
+    const { subject_setting, foreground_element, water_state, sky_layer, light_condition, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the cozy mood (storm / lightning), DROP IT.`
+      : '';
+
+    return `You are a tropical-beach photographer writing ONE INTIMATE COZY BEACH MOMENT for EarthBot. ATMOSPHERE IS THE HERO — not architecture, not a wide vista. A quiet warm pocket of a tropical beach at golden hour. Soft palm shadows raked across warm sand, scattered driftwood, a few shells in damp foreground sand, palm-shadowed pocket cove, fallen tropical petals on the sand, a hammock-shaped palm-frond silhouette over a quiet sand patch. The feel is "I want to lie down here forever." Mid-tight intimate framing. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — INTIMATE WARM TROPICAL MOMENT, NOT VILLAGE / NOT VISTA ━━━
+
+This is NOT a coastal village. NOT a wide-vista panorama. NOT a dramatic surf shot. This is an INTIMATE quiet cozy moment on a tropical beach — golden-hour atmosphere with intimate foreground details. The viewer should feel the warm sand and the soft breeze. Real tropical Earth — palm shadows, driftwood, soft sand textures, calm shorebreak.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+
+NEVER a person, NEVER a sunbather, NEVER a footprint trail, NEVER an empty beach chair, NEVER any human or implied-human-presence element. Empty cozy paradise.
+
+━━━ ABSOLUTELY BANNED ━━━
+
+- NO architecture / villages / cottages / lighthouses / huts / cabanas (cozy-beach IS NOT about architecture anymore — pivot 2026-05-22)
+- NO boats / docks / piers / kayaks / surfboards
+- NO beach umbrellas / lounge chairs / beach towels / coolers / beach bags (human-presence implications)
+- NO bonfire / fire pit (human implications)
+- NO tiki torches / lanterns / paper lights
+- NO humans / footprints / sandcastles
+- NO wide-vista panorama (this is INTIMATE / mid-tight framing only)
+- NO bioluminescent / glowing waves / sci-fi
+- NO dramatic surf / crashing waves / storm waves
+- NO named places
+- NO single beam / single shaft (laser trigger)
+- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+
+━━━ THE INTIMATE BEACH SETTING (where this cozy moment happens) ━━━
+${subject_setting}
+
+━━━ FOREGROUND ELEMENT (the cozy accent in close foreground) ━━━
+${foreground_element}
+
+Driftwood / scattered shells / palm shadows / fallen tropical petals / sand patterns / sea-grass / lone tropical flower. One natural cozy element in the foreground that adds warmth and intimacy.
+
+━━━ WATER STATE (calm soft tropical water at the shore) ━━━
+${water_state}
+
+Gentle shorebreak ripples / mirror-glass tropical lagoon / wet-sand reflection / soft tide pool. Calm and reflective — never dramatic surf.
+
+━━━ SKY LAYER (warm cozy sky) ━━━
+${sky_layer}
+
+━━━ LIGHT CONDITION (golden-hour DOMINANT — cozy is warm always) ━━━
+${light_condition}${phenomenonBlock}
+
+━━━ HARD RULE — COZY WARM INTIMATE MOOD ━━━
+
+Golden hour dominant. Warm amber-rose tones throughout. Soft inviting light raking across warm sand. The viewer should feel the warmth of the sand on bare feet and the soft breeze through palms. Mid to tight intimate framing — close enough to see individual shells in damp sand, palm-shadow patterns on warm-light sand, driftwood texture. Travel-postcard caliber.
+
+━━━ MOMENT IN MOTION ━━━
+
+Catch a SECOND in time. A single petal drifting on a soft trade-wind breeze, gentle shorebreak ripples curling at the foreground sand, a palm frond shifting overhead casting moving shadows, sand grains glittering in low warm light, a wave's foam edge spilling slowly into the sand.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'warm cozy tropical beach — golden-hour amber sand + soft palm shadows + intimate foreground detail'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE — INTIMATE COZY BEACH MOMENT ━━━
+
+Mid to tight intimate framing. The intimate beach moment fills the entire frame — foreground details (driftwood / shells / palm shadows / petals) at close-camera, soft tropical water at midground, palm silhouettes / soft sky in upper frame. NEVER wide-vista panorama. Hyperreal photographic — gallery-print intimate-beach photography. Always golden-hour or soft warm light.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
+  },
 };
