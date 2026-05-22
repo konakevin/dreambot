@@ -52,4 +52,26 @@ module.exports = {
   // pool copied from beach/seeds/.
   HAWAII_FLOWERS_SUBJECT: load('hawaii_flowers_subject'),
   HAWAII_FLOWERS_ARRANGEMENTS: load('hawaii_flowers_arrangements'),
+  // reef-paradise (2026-05-21 R2 PIVOT) — name kept but content retargeted.
+  // PIVOTED away from underwater-coral identity to pretty ISLAND-BAY /
+  // half-and-half waterline view (Kevin hearted that aesthetic). 6 axes:
+  // 5 always-on (bay_setting, shoreline_drama, water_quality, sky_drama,
+  // composition) + 1 conditional 30%-gated foreground_element.
+  // GENERIC MORPHOLOGICAL DESCRIPTIONS ONLY (no named places — LESSON 7).
+  REEF_PARADISE_BAY_SETTING: load('reef_paradise_bay_setting'),
+  REEF_PARADISE_SHORELINE_DRAMA: load('reef_paradise_shoreline_drama'),
+  REEF_PARADISE_WATER_QUALITY: load('reef_paradise_water_quality'),
+  REEF_PARADISE_SKY_DRAMA: load('reef_paradise_sky_drama'),
+  REEF_PARADISE_COMPOSITION: load('reef_paradise_composition'),
+  REEF_PARADISE_FOREGROUND_ELEMENT: load('reef_paradise_foreground_element'),
+  // geological-wonder (2026-05-21) — 6-axis path covering BOTH intimate
+  // cave interiors AND epic outdoor vistas. All pools bespoke. 5 always-on
+  // (subject + lighting + atmosphere + mineral_color + focal_anchor) +
+  // 1 conditional 30%-gated phenomenon.
+  GEOLOGICAL_WONDER_SUBJECT: load('geological_wonder_subject'),
+  GEOLOGICAL_WONDER_LIGHTING: load('geological_wonder_lighting'),
+  GEOLOGICAL_WONDER_ATMOSPHERE: load('geological_wonder_atmosphere'),
+  GEOLOGICAL_WONDER_MINERAL_COLOR: load('geological_wonder_mineral_color'),
+  GEOLOGICAL_WONDER_FOCAL_ANCHOR: load('geological_wonder_focal_anchor'),
+  GEOLOGICAL_WONDER_PHENOMENON: load('geological_wonder_phenomenon'),
 };

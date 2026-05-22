@@ -4,8 +4,8 @@
  * Crystal-clear shallow water, beach visible, sun filtering through.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../beach/pools');
+const blocks = require('../../beach/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.REEF_PARADISE_SCENES, 'reef_paradise_scene');
