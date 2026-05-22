@@ -6098,6 +6098,661 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     ],
     instructions: `Each entry is ONE specific FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific type, (b) position in frame, (c) tactile detail. NO creature. NO biome. NO weather. NO modern. NO blocking. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
+
+  faebot_enchanted_vista_biome: {
+    format: 'simple',
+    theme: `BIOME (overall flavor + canopy character) for FaeBot's enchanted-vista path. Each entry describes ONE specific enchanted-forest biome with a SPECIFIC CANOPY CHARACTER + overall macro-flavor. Each entry 35-55 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC enchanted-forest biome type with a clear canopy character — the macro-foundation of the painting. NOT just "a forest" — a distinctive enchanted-forest TYPE with painterly atmospheric depth.
+
+⚠️ BIOME TYPES (vary widely across 25 entries):
+  • ANCIENT OAK CATHEDRAL — soaring twisted oak-cathedral with vaulted interlocked branch-canopy overhead
+  • PALE BIRCH GLADE — slender white-barked birches in close formation, ethereal pearl-light canopy
+  • WISTERIA-CASCADE ARBOR — violet wisteria-curtains draping from interlocked branches overhead
+  • FERN-GROTTO HOLLOW — lacy fern-fronds arching overhead forming a living vaulted ceiling
+  • AUTUMN-GROVE — golden-amber and crimson leaves blanketing a twisted ancient grove
+  • CHERRY-BLOSSOM CANOPY — pink-and-white cherry-blossom branches arching overhead, petal-drift in air
+  • HANGING-MOSS GROVE — dripping hanging-mosses cascading from ancient branches in soft green curtains
+  • HONEYSUCKLE-AND-VINE ARBOR — climbing flowering vines weaving through ancient trunks
+  • REDWOOD GIANT-TREE GROVE — colossal red-bark giants soaring impossibly tall, deep shadow-forest
+  • MIXED ANCIENT WOODLAND — oak + birch + yew + maple intermingled in a sprawling old-growth grove
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC BIOME TYPE (named tree species + structural feature)
+  - (b) CANOPY CHARACTER (overhead structure — vaulted / interlocked / hanging / draping / arching)
+  - (c) ATMOSPHERIC MACRO-FEEL (cathedral-like / hidden-grotto / ethereal / autumn-bronze / etc.)
+
+🚫 STRICT BANS:
+  • NO "standing stones" / "stone circles" / "weathered stones" / "tomb" / "gravestone" — banned grave-trigger vocabulary
+  • NO figures / creatures / fae / dryad
+  • NO hero feature (separate axis — that's the central landmark)
+  • NO floor carpet detail (separate axis)
+  • NO water (separate axis)
+  • NO lighting / weather (separate axes)
+  • NO modern / built architecture`,
+    touchpoints: [
+      'Ancient oak cathedral grove with massive twisted gnarled trunks rising as natural columns, vaulted interlocked oak-branch canopy soaring overhead like a green-and-gold ceiling, deep painted forest distance fading into atmospheric haze',
+      'Pale birch glade with slender white-barked birch trunks standing in close graceful formation, ethereal pearl-light filtering through the gauzy canopy of small bright-green leaves, soft luminous depth',
+      'Wisteria-cascade arbor with violet wisteria-curtains draping in dense ropes from interlocked ancient oak-branches overhead, painted multi-tier depth fading into soft violet-cream haze',
+      'Hidden fern-grotto hollow with tall lacy fern-fronds arching overhead forming a living vaulted ceiling, dripping moss-walls and ancient stone-faces surrounding the chamber',
+      'Ancient autumn-grove with twisted trees crowned in golden-amber and crimson leaves, fallen leaf-carpet of warm bronze and red, drifting leaves through soft warm late-light',
+      'Cherry-blossom canopy with pink-and-white blossom-branches arching overhead in dense painted layers, soft petal-drift filling the air, ethereal painted register',
+      'Hanging-moss grove with cascading dripping hanging-mosses draping from ancient gnarled branches in soft green curtains, deep painted shadow-and-light interplay',
+      'Honeysuckle-and-vine arbor with climbing flowering vines weaving through ancient gnarled trunks, painted pollen-air, soft golden register',
+      'Redwood giant-tree grove with colossal red-bark giants soaring impossibly tall, deep shadow-forest with rare god-rays piercing the upper canopy',
+      'Mixed ancient woodland with oak and birch and maple intermingled in a sprawling old-growth grove, painted atmospheric depth, dappled multi-tier canopy',
+      'Soaring oak-cathedral grove with painted massive twisted trunks, painted hanging-moss curtains from above, painted vaulted canopy overhead, gallery-tier depth',
+      'Painted ethereal birch-glade with painted slender pale-bark trunks, painted soft pearl-light canopy overhead, painted depth fading into birch distance',
+      'Painted wisteria-cathedral arbor with painted cascading violet wisteria from painted overhead branches, painted multi-tier depth into painted violet-cream haze',
+      'Painted fern-grotto hollow cradled by painted ancient moss-cliffs, painted lacy fern-canopy arching overhead as living vaulted ceiling, painted deep green register',
+      'Painted autumn-grove with painted golden-amber and crimson-leaved trees, painted fallen leaf-carpet, painted drifting leaves, painted bronze-and-amber depth',
+      'Painted cherry-blossom canopy with painted pink-and-white blossom-branches arching overhead, painted soft petal-drift in air, painted ethereal register',
+      'Painted hanging-moss grove with painted cascading hanging-mosses in soft green curtains, painted dappled light, painted multi-tier depth',
+      'Painted honeysuckle-and-vine arbor with painted climbing flowering vines, painted golden pollen-air, painted warm register',
+      'Painted redwood giant-tree grove with painted colossal red-bark giants soaring impossibly tall, painted deep shadow-and-god-ray depth',
+      'Painted mixed ancient woodland with painted oak-and-birch-and-yew intermingled in painted sprawling grove, painted dappled canopy, painted atmospheric multi-tier',
+      'Soaring painted hero-tree grove with painted single colossal world-tree forming the painted clearing-center, painted ancillary trees beyond, painted awe-inspiring depth',
+      'Painted oak-and-yew sacred grove with painted ancient twisted trunks mingling, painted interlocked dark-and-green canopy overhead, painted deep blue-green register',
+      'Painted soft-mist enchanted grove with painted ancient ghostly trunks rising through soft white mist, painted ethereal soft register',
+      'Painted twisted ancient willow-and-birch grove with painted weeping willow-fronds draping from above, painted soft golden register',
+      'Painted dense lush rainforest enchanted-grove with painted layered tropical-fae canopy, painted hanging vines and large leaves, painted humid green depth',
+    ],
+    instructions: `Each entry is ONE BIOME, 35-55 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific biome type, (b) canopy character, (c) atmospheric macro-feel. NO grave-trigger vocabulary (standing stones / tombs / etc.). NO figures / creatures. NO hero feature / floor / water / lighting / weather. NO modern architecture. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_hero_feature: {
+    format: 'simple',
+    theme: `HERO FEATURE (a graceful, unexpected gift woven INTO the lushness) for FaeBot's enchanted-vista path. Each entry describes ONE specific large landmark element — but framed as a GRACEFUL UNEXPECTED GIFT discovered within the dense enchanted-forest lushness, NOT a dominant centerpiece that crowds out the soft botanical density. Each entry 35-55 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC large painted-fantasy landmark that adds wow — but it sits WITHIN the lush dense forest, not as the sole subject. Imagine walking through a flower-blanketed enchanted grove and discovering a soaring hero-tree or a hidden waterfall — that "graceful discovery" feel. The hero is a JEWEL within the lushness, not a stage-front centerpiece that pushes flowers aside.
+
+⚠️ HERO TYPES (vary widely across 25 entries):
+  • COLOSSAL HERO-TREE — single massive world-tree at the center with vast sprawling root-base, gnarled trunk soaring impossibly tall
+  • CASCADING WATERFALL — multi-tier waterfall plunging into a moss-rimmed pool, mist rising
+  • FOREST ARCH — pair of arching tree-trunks meeting overhead like a natural cathedral entrance
+  • GLOWING TREE-HOLLOW — ancient tree with a hollow at its base glowing with warm magical light from within
+  • MOSSY-BOULDER CATHEDRAL — pile of ancient massive moss-covered boulders forming a natural alcove
+  • SUN-SHAFT PILLAR — single colossal column of god-ray light piercing the canopy and pooling on the floor
+  • RAINBOW STREAM-CASCADE — multi-tier stream with light catching the water in rainbow refractions
+  • FALLEN HERO-LOG BRIDGE — colossal fallen ancient log crossing a deep ravine or stream, moss-covered
+  • MUSHROOM-CIRCLE GLADE — large fairy-ring of glowing mushrooms forming a perfect circle in a clearing (the FAIRY-RING is the hero, not the trees)
+  • GIANT-FLOWER CLUSTER — colossal bell-flowers or moonflowers blooming at human-scale, the flowers are the landmark
+  • ANCIENT VINE-WOVEN ARCH — natural archway of ancient woven vines and ivy framing a deep grove beyond
+  • HOLLOW HERO-TREE INTERIOR — view INTO a massive hollow tree-trunk, the interior is a glowing-pollen-orb-lit chamber
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC LANDMARK TYPE (named feature, not "a tree" — "a colossal ancient oak with sprawling root-base")
+  - (b) SCALE INDICATOR (massive / colossal / soaring / multi-tier / hero-scale)
+  - (c) PAINTERLY TEXTURE DETAIL (gnarled bark / moss-crusted / glowing-from-within / cascading)
+  - (d) POSITION IN FRAME (centered / mid-foreground / dominant in composition)
+
+🚫 STRICT BANS:
+  • NO "standing stones" / "stone circles" / "tomb" / "gravestone" / "weathered stones" — banned grave-trigger vocabulary
+  • NO figures / creatures
+  • NO biome description (separate axis)
+  • NO floor carpet (separate axis)
+  • NO lighting / weather (separate axes)
+  • NO modern / built architecture`,
+    touchpoints: [
+      'A colossal ancient hero-tree at the clearing center with vast sprawling buttress-roots forming a natural alcove at its base, twisted gnarled trunk soaring impossibly tall, vast cascading canopy of leaves spreading overhead, mossy bark-texture in lush painted detail',
+      'A cascading multi-tier waterfall at the grove center plunging over moss-covered ancient stones into a clear pool below, mist rising in painted curls, lush moss-rimmed banks',
+      'A natural forest-arch of two ancient trees whose upper branches meet and intertwine overhead forming a cathedral entrance, deep grove visible beyond through the arch',
+      'An ancient hero-tree with a deep glowing tree-hollow at its base, warm magical pollen-orb light pouring out from within, gnarled bark surrounding the opening',
+      'A natural cathedral of ancient massive moss-covered boulders forming a hollow alcove at the grove center, dripping moss curtains and ferns growing from the stone-faces',
+      'A single colossal sun-shaft pillar of golden god-ray light piercing the deep grove canopy and pooling brilliantly on the moss-floor, dust-motes glittering in the beam',
+      'A multi-tier rainbow stream-cascade tumbling through painted mossy stones with sunlight catching the spray in painted rainbow refractions, lush fern-banks',
+      'A colossal fallen hero-log bridge crossing a deep moss-banked stream, ancient bark thick with moss and toadstool-clusters, painted moss-curtains hanging beneath',
+      'A large fairy-ring of glowing pearl-cap mushrooms forming a perfect ring in a sunny clearing, soft pearl-light pulsing from the mushroom-caps, painted mossy ground inside the ring',
+      'A cluster of colossal bell-flowers blooming at human-scale at the clearing center, painted pink-and-violet bells nodding in soft air, golden pollen drifting',
+      'An ancient natural vine-woven arch framing a deep enchanted grove beyond, painted ivy and climbing roses wreathing the arch, dappled light filtering through',
+      'A view INTO the interior of a hollow hero-tree trunk, the chamber glowing with warm pollen-orb light, moss-and-fern carpet on the interior floor, painted intimate magic',
+      'Painted colossal world-tree at painted clearing center, painted sprawling root-base, painted twisted trunk soaring impossibly tall, painted vast canopy, painted awe-inspiring scale',
+      'Painted multi-tier cascading waterfall over painted moss-covered ancient stones, painted mist rising, painted lush fern-banks at painted water-edge',
+      'Painted natural forest-arch of painted two ancient trees painted meeting overhead, painted deep grove visible beyond, painted cathedral register',
+      'Painted glowing tree-hollow at painted base of painted ancient hero-tree, painted warm pollen-orb light pouring out, painted gnarled bark surrounding',
+      'Painted moss-covered boulder cathedral painted forming painted hollow alcove at painted grove center, painted dripping moss-curtains and ferns',
+      'Painted colossal sun-shaft pillar of painted golden god-ray light painted piercing painted deep canopy painted pooling on painted moss-floor, painted dust-motes glittering',
+      'Painted multi-tier rainbow stream-cascade painted tumbling through painted mossy stones, painted spray catching painted rainbow refractions, painted lush fern-banks',
+      'Painted colossal fallen hero-log bridge crossing painted deep moss-banked stream, painted ancient bark thick with painted moss-and-toadstools, painted moss-curtains beneath',
+      'Painted large fairy-ring of painted glowing pearl-cap mushrooms in painted perfect ring, painted soft pearl-light pulsing, painted mossy ground inside',
+      'Painted cluster of painted colossal bell-flowers at painted human-scale at clearing center, painted pink-and-violet bells, painted golden pollen drifting',
+      'Painted ancient natural vine-woven arch painted framing painted deep grove beyond, painted ivy and roses wreathing painted arch, painted dappled light',
+      'Painted view INTO painted hollow hero-tree trunk interior, painted chamber glowing with painted warm pollen-orb light, painted moss-and-fern interior carpet',
+      'A colossal ancient hero-tree at the clearing center with a HUGE GLOWING TREE-HOLLOW carved into its trunk by natural growth, warm pollen-orb light spilling from within, sprawling root-base, painted gallery-tier wow',
+    ],
+    instructions: `Each entry is ONE HERO FEATURE, 35-55 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific landmark type, (b) scale indicator (massive / colossal / soaring), (c) painterly texture detail, (d) position in frame (centered / dominant). NO grave-trigger vocabulary. NO figures / creatures. NO biome / floor / lighting / weather / modern descriptions. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_floor_carpet: {
+    format: 'simple',
+    theme: `FLOOR CARPET (LUSH BLANKET of overlapping wildflowers + ground covers + accents) for FaeBot's enchanted-vista path. Each entry is a BLANKET-DENSITY floor — 5-7 named wildflower species overlapping in dense carpet, multiple ground-covers, scattered accents. Each entry 45-70 words.
+
+⚠️ THE BAR: BLANKET CARPET of overlapping wildflowers covering the floor wall-to-wall. NOT "scattered" — DENSE OVERLAPPING BLANKET like an English-cottage-garden meets enchanted-forest. Painterly density everywhere — every inch alive with botanical detail. This is the LUSH softness Kevin wants.
+
+⚠️ FLOOR COMPOSITION (each entry MUST contain 5-7 named wildflower species blanket-overlapping):
+  • MOSS BASE — emerald moss / silver-green moss / golden moss / dewdrop-jeweled moss / sphagnum-moss humps / mossy-clover-base
+  • WILDFLOWER BLANKET (5-7 NAMED species per entry, overlapping in dense carpet) — bluebells / foxglove-spires / lily-of-the-valley / forget-me-nots / cowslips / primroses / wild-iris / harebells / wood-anemones / wild-rose / violets / wood-sorrel / sweet-woodruff / jasmine / heather / wild-strawberry / wild-orchid / fairy-thimble / star-flower / windflower / celandine / bracken / bluebottle / forget-me-not
+  • GROUND-COVER PLANTS — fern-fronds / clover patches / fiddleheads / bracken / wild-strawberry-runners
+  • SCATTERED ACCENTS — small toadstool-clusters / fallen leaves / acorns / pinecones / dewdrops on every leaf / tiny mushroom-rings
+  • TEXTURE — lichen-crust on roots / hanging-mosses brushing the floor / drifting petals settled / pollen-dust on every leaf
+
+⚠️ EVERY entry MUST include:
+  - (a) MOSS BASE type
+  - (b) 5-7 NAMED WILDFLOWER SPECIES overlapping in blanket carpet (NEVER fewer than 5 — count as you write)
+  - (c) 1-2 ground-cover plants (ferns / fiddleheads / clover / wild-strawberry-runners)
+  - (d) 2-3 scattered accents (mushroom-rings / fallen leaves / dewdrops / etc.)
+  - (e) BLANKET density language ("dense blanket / overlapping carpet / wall-to-wall blanket / lush dense overlapping / impossibly-blooming carpet")
+
+🚫 STRICT BANS:
+  • NO grave-trigger vocabulary
+  • NO figures / creatures
+  • NO biome / canopy (separate axis)
+  • NO hero feature (separate axis)
+  • NO water (separate axis)
+  • NO lighting / weather (separate axes)`,
+    touchpoints: [
+      'Deep emerald moss carpet blanketing the floor scattered with dense bluebell clusters and foxglove-spires in pink-and-purple, fern-fronds at the edges, small white toadstool-rings dotted across, dewdrops jeweling every leaf',
+      'Silver-green moss base sprinkled with lily-of-the-valley strands in soft white, scattered wood-anemones, fiddlehead-fern tufts, clover patches at the foreground, fallen golden leaves',
+      'Lush golden-emerald moss carpet with wild-iris in deep blue at the floor-edges, primroses in soft yellow at center, sweet-woodruff and clover patches, scattered acorns and pinecones',
+      'Mossy floor with dense forget-me-nots in soft blue covering the foreground, harebells nodding at the floor-edges, fern-fronds and wood-sorrel, scattered tiny mushroom-clusters in pearl-white',
+      'Sphagnum-moss humps with dense wild-strawberry trailing across, foxglove-spires at the floor-edges in pink-and-purple, scattered cowslips in soft yellow, lichen-crust on every root',
+      'Dewdrop-jeweled emerald moss with scattered bluebell carpets in indigo, primroses in cream-yellow, fern-clusters at the foreground, tiny toadstool-rings and fallen acorns',
+      'Lush silver-green moss carpet with violets clustering at the floor-edges, lily-of-the-valley strands woven through, fern-fronds and fiddleheads, scattered dewdrops on every leaf',
+      'Deep painted emerald moss with dense wildflower meadow of bluebells and foxgloves, scattered wood-anemones, hanging-moss brushing the floor, small mushroom-clusters in soft white',
+      'Mossy floor blanketed in pink wild-rose petals fallen from above, fern-fronds and wood-sorrel, scattered fallen leaves in bronze and amber, painted dense lush register',
+      'Silver-moss base with dense clover patches and wild-strawberry, harebells in soft blue nodding at the edges, scattered tiny mushroom-rings and pinecones, painted lush density',
+      'Painted emerald-moss carpet with painted bluebell clusters in painted indigo, painted foxglove-spires at painted edges, painted fern-fronds, painted scattered white toadstools',
+      'Painted silver-green moss with painted lily-of-the-valley in painted soft white, painted wood-anemones scattered, painted clover patches at painted foreground, painted dewdrops on every leaf',
+      'Painted lush golden-emerald moss with painted wild-iris in painted deep blue, painted primroses in painted soft yellow, painted sweet-woodruff and painted clover, painted scattered acorns',
+      'Painted mossy floor with painted dense forget-me-nots in painted soft blue, painted harebells nodding, painted fern-fronds and painted wood-sorrel, painted tiny mushroom-clusters',
+      'Painted sphagnum-moss humps with painted wild-strawberry trailing, painted foxglove-spires at painted edges, painted cowslips, painted lichen-crust on every root',
+      'Painted dewdrop-jeweled emerald moss with painted bluebell carpets, painted primroses, painted fern-clusters at painted foreground, painted toadstool-rings and painted fallen acorns',
+      'Painted lush silver-green moss with painted violets clustering, painted lily-of-the-valley strands, painted fern-fronds and painted fiddleheads, painted dewdrops on every leaf',
+      'Painted deep emerald moss with painted dense wildflower meadow of painted bluebells and painted foxgloves, painted wood-anemones, painted hanging-moss brushing floor, painted soft white mushrooms',
+      'Painted mossy floor blanketed in painted pink wild-rose petals, painted fern-fronds and painted wood-sorrel, painted fallen leaves in painted bronze and amber',
+      'Painted silver-moss base with painted clover patches and painted wild-strawberry, painted harebells nodding, painted tiny mushroom-rings and painted pinecones',
+      'Painted lush emerald moss with painted dense bluebells and painted foxgloves and painted lily-of-the-valley layered, painted scattered tiny mushroom-clusters and painted dewdrops',
+      'Painted golden moss base with painted dense primroses and painted cowslips in painted soft yellow, painted fern-fronds, painted scattered acorns and painted fallen golden leaves',
+      'Painted mossy carpet with painted iris and painted bluebell carpets in painted blue, painted wood-anemones in painted white, painted hanging-moss brushing the painted floor',
+      'Painted lush emerald moss blanketed in painted painted wild-rose-and-violet floor-flowers, painted scattered fiddleheads and painted clover, painted painted dense lush register',
+      'Painted dewdrop-jeweled emerald moss with painted bluebell-and-foxglove painted dense meadow, painted scattered toadstool-rings, painted hanging-moss painted brushing the floor',
+    ],
+    instructions: `Each entry is ONE BLANKET-DENSITY FLOOR CARPET, 45-70 words. Format: prose, comma-separated phrases. MANDATORY — (a) moss base, (b) 5-7 NAMED wildflower species overlapping in blanket carpet (count as you write — NEVER fewer than 5), (c) 1-2 ground-cover plants, (d) 2-3 scattered accents, (e) BLANKET density language. NO grave-trigger vocabulary. NO figures / creatures. NO biome / hero / water / lighting / weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_water_element: {
+    format: 'simple',
+    theme: `WATER ELEMENT for FaeBot's enchanted-vista path. Each entry describes ONE specific water feature woven into the scene — a stream / pond / waterfall / mist-pool / dew-pool / cascade / lily-pond / spring. Each entry 25-45 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC water feature that adds life and depth to the painting. Painted with detail (water-catching-light / mossy banks / lily-pads / mist-rising / etc.).
+
+⚠️ WATER TYPES (vary across 25 entries):
+  • CLEAR FOREST STREAM — winding through mossy banks
+  • LILY-COVERED POND — still water with lily-pads + reflections
+  • SMALL WATERFALL — multi-tier cascade with moss-rimmed pool
+  • MIST-POOL — soft mist-veiled hidden water-clearing
+  • DEW-POOL — single still pool catching morning dew + reflections
+  • CASCADING BROOK — bubbling brook tumbling over small mossy stones
+  • HIDDEN SPRING — small mossy spring at the base of a tree
+  • CRYSTAL POOL — clear deep pool with painted water-clarity
+  • MARSHY WATER-MEADOW — shallow water flooding a wildflower meadow
+  • ICY CASCADE — soft pale cascade with sparkle on the water (for winter-flavor)
+  • RAINBOW-MIST POOL — small pool with rainbow-mist catching light
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC WATER TYPE (named feature)
+  - (b) PAINTERLY DETAIL (mossy banks / lily-pads / mist-rising / reflections / sparkle)
+  - (c) POSITION/INTEGRATION (winding through scene / at the foreground / pooled at the base of / etc.)
+
+🚫 STRICT BANS:
+  • NO figures / creatures
+  • NO biome / canopy (separate axis)
+  • NO hero feature (separate axis — though water can be a hero IF this rolled with a non-water hero)
+  • NO floor / wildflower (separate axis)
+  • NO lighting / weather (separate axes)
+  • NO grave vocabulary`,
+    touchpoints: [
+      'A clear forest stream winding through mossy banks across the mid-tier of the painting, scattered river-stones and water-lilies along its course, painted water-clarity catching light',
+      'A still lily-covered pond at the foreground with painted lily-pads and white lily-blooms floating across, ripple-reflections of the trees mirrored in the water',
+      'A small multi-tier waterfall plunging from a rocky shelf into a moss-rimmed pool below, painted mist rising in soft curls, lush fern-banks',
+      'A soft mist-pool veiled in painted thin white mist drifting across the water-surface, hidden in a small clearing, painted ethereal register',
+      'A still dew-pool at the foreground catching morning reflections of the canopy above, painted dewdrops beading every leaf at the water-edge',
+      'A cascading brook bubbling over small painted mossy stones in the mid-tier, painted lush fern-banks, painted water-clarity',
+      'A hidden mossy spring at the base of an ancient tree with painted water bubbling up between roots, painted moss-clad stones surrounding',
+      'A crystal-clear deep pool at the foreground with painted water-clarity revealing painted mossy stones at the bottom, painted reflections of the canopy',
+      'A marshy water-meadow with painted shallow water flooding across a painted wildflower meadow, painted lily-and-iris emerging, painted reflections',
+      'A soft painted icy cascade with painted pale water catching sparkle on the surface, painted moss-and-frost banks, painted winter-ethereal register',
+      'A small painted rainbow-mist pool with painted sunlight catching painted mist in painted rainbow refractions, painted lush mossy banks',
+      'Painted clear forest stream winding through painted mossy banks, painted scattered river-stones and painted water-lilies, painted water-clarity catching light',
+      'Painted still lily-covered pond at painted foreground with painted lily-pads and painted white blooms floating, painted ripple-reflections',
+      'Painted multi-tier waterfall painted plunging into painted moss-rimmed pool, painted mist rising in soft curls, painted lush fern-banks',
+      'Painted soft mist-pool veiled in painted white mist, painted hidden in painted small clearing, painted ethereal register',
+      'Painted still dew-pool at painted foreground catching painted morning reflections of painted canopy above',
+      'Painted cascading brook painted bubbling over painted mossy stones, painted lush fern-banks, painted water-clarity',
+      'Painted hidden mossy spring at painted base of painted ancient tree with painted water bubbling up between painted roots',
+      'Painted crystal-clear deep pool with painted reflections of painted canopy, painted mossy stones visible at painted bottom',
+      'Painted marshy water-meadow with painted shallow water painted flooding across painted wildflower meadow, painted iris-and-lily emerging',
+      'Painted soft icy cascade with painted pale water painted catching sparkle, painted moss-and-frost banks, painted ethereal winter register',
+      'Painted small rainbow-mist pool with painted sunlight catching painted mist in painted rainbow refractions, painted lush mossy banks',
+      'Painted gentle stream meandering across painted mid-tier with painted moss-cushioned stepping-stones, painted water-lilies, painted reflections of trees',
+      'Painted hidden grotto pool veiled in painted soft mist with painted dripping moss-walls surrounding, painted ethereal deep-green register',
+      'Painted soft cascade tumbling down painted mossy steps in painted multi-tier descent, painted white-water-and-foam, painted lush surrounding fern-clusters',
+    ],
+    instructions: `Each entry is ONE WATER ELEMENT, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific water type, (b) painterly detail (mossy banks / lily-pads / mist / reflections), (c) position in scene. NO figures / creatures. NO biome / hero / floor / lighting / weather. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_magical_ambient: {
+    format: 'simple',
+    theme: `MAGICAL AMBIENT (RICH layered fairy magic everywhere — particles + small accents + opalescent softness) for FaeBot's enchanted-vista path. Each entry describes 5-7 magical-atmosphere elements layered through the scene. Each entry 45-70 words.
+
+⚠️ THE BAR: each entry is a RICH STACK of magical-atmosphere elements making the forest feel pervasively ENCHANTED. Soft-opalescent throughout — pearl-mist + dewdrop-shimmer + drifting pollen + fireflies + foxfire-bark + will-o-wisps + glowing-mushrooms LAYERED together. The forest is magic-soaked in soft painted register, not magic-touched.
+
+⚠️ MAGICAL ELEMENT MENU (each entry MUST mix 5-7 from the list — count as you write):
+  • DRIFTING FIREFLIES — warm-yellow points clustering midground or background, drifting lazily
+  • GLOWING POLLEN — soft golden / pearl / lavender pollen drifting thick through god-rays
+  • PHOSPHORESCENT MUSHROOMS — pearl-glow mushroom-clusters dotting the floor or roots
+  • WILL-O-WISPS — distant blue-or-amber orbs floating deep in the grove
+  • FOXFIRE — soft cyan-glow lichen tracing bark of distant trees
+  • SPARKLE-TRAILS — faint light-trails threading the shimmer-haze, suggesting unseen fae passage
+  • LUMINOUS WILDFLOWERS — glowing-flower accents (moonflower / starflower / fairy-cup) scattered in the floor
+  • HOVERING MOONFLOWER-ORBS — floating bell-flower lanterns at mid-tier
+  • SHIMMERING DEW — rainbow-flecked dewdrop-shimmer on every leaf and petal catching painted light
+  • DRIFTING SOFT-LIGHT MOTES — golden dust-motes catching god-rays
+  • RUNES OF PAINTED LIGHT — faint glowing rune-traces softly etched on bark
+  • LUMINOUS PALE BUTTERFLIES — soft glowing butterfly-clusters drifting through blossoms or air
+  • OPALESCENT PAINTED SOFTNESS — pearl-white shimmer-haze pervading shadows, dreaming luminosity
+
+⚠️ SOFT-OPALESCENT REGISTER MANDATORY in every entry — include at least one of: "pearl-white morning mist" / "opalescent painted softness" / "rainbow-flecked dewdrop-shimmer" / "dreaming luminosity" / "shimmer-haze". This is the soft-painted bedrock register Kevin wants.
+
+⚠️ EVERY entry MUST:
+  - Mix 5-7 specific magical elements from the menu (NEVER fewer than 5 — count as you write)
+  - Position each (in the air / on the floor / on bark / in the distance / at mid-tier)
+  - Include at least one SOFT-OPALESCENT REGISTER phrase
+  - Use soft painted register
+
+🚫 STRICT BANS:
+  • NO figures / creatures
+  • NO biome / hero / floor / water / lighting / weather (separate axes)
+  • NO grave vocabulary
+  • NO overwhelming magic effects (the magic is SUBTLE)
+  • NO modern objects`,
+    touchpoints: [
+      'Drifting warm-yellow fireflies clustering at the mid-tier of the grove, golden pollen catching the god-rays in soft dust-motes, scattered small pearl-glow mushroom-clusters on the moss-floor, distant blue will-o-wisps deep in the grove',
+      'Soft pearl-pollen drifting through the air, hovering moonflower-orb lanterns at mid-tier glowing soft white, foxfire cyan-glow on the bark of distant ancient trees, shimmering dewdrops on every leaf',
+      'Phosphorescent pale-green mushroom-clusters dotting the moss-floor and roots, drifting warm-yellow fireflies in the background, faint sparkle-trails through the air, glowing starflower accents scattered',
+      'Distant amber will-o-wisps floating deep in the grove between trunks, drifting golden pollen catching mid-day light, scattered luminous fairy-cup wildflowers glowing soft pink, painted ethereal register',
+      'Drifting silver pollen-motes through the air, hovering bell-flower-lantern orbs at mid-tier in soft amber, phosphorescent moss-glow on stones, distant warm will-o-wisps',
+      'Soft golden god-ray light particles in the air, drifting warm-yellow fireflies in clusters, foxfire-cyan on distant bark, painted soft shimmer on every leaf, small glowing moonflowers',
+      'Pearl-cap mushroom-clusters glowing soft white on the forest-floor, drifting pollen-orbs in warm amber at mid-tier, distant will-o-wisps in soft blue, painted shimmer-dewdrops',
+      'Hovering glowing moonflower-orbs at mid-tier in soft pearl, scattered phosphorescent mushroom-clusters on roots, drifting warm fireflies, faint rune-traces softly etched on ancient bark',
+      'Drifting cyan firefly-clusters in the deep grove, painted soft pollen-motes in golden light, glowing pearl-cap mushrooms scattered, shimmering dewdrops on every fern-frond',
+      'Soft pink-glow fairy-cup wildflowers scattered through the moss, drifting silver pollen, foxfire-cyan on distant tree-bark, faint sparkle-trails through air, hovering moonflower-orb lanterns',
+      'Painted drifting warm-yellow fireflies clustering at painted mid-tier, painted golden pollen catching painted god-rays, painted scattered pearl-glow mushroom-clusters, painted distant blue will-o-wisps',
+      'Painted soft pearl-pollen drifting through air, painted hovering moonflower-orb lanterns, painted foxfire cyan-glow on painted distant bark, painted shimmering dewdrops',
+      'Painted phosphorescent mushroom-clusters on painted moss-floor, painted drifting warm fireflies, painted sparkle-trails through air, painted glowing starflower accents',
+      'Painted distant amber will-o-wisps painted floating deep in grove, painted drifting golden pollen, painted scattered luminous fairy-cup wildflowers, painted ethereal register',
+      'Painted drifting silver pollen-motes, painted hovering bell-flower-lantern orbs in painted soft amber, painted phosphorescent moss-glow on painted stones, painted distant warm will-o-wisps',
+      'Painted soft golden god-ray particles, painted drifting warm fireflies, painted foxfire-cyan on painted distant bark, painted soft shimmer on every leaf, painted small glowing moonflowers',
+      'Painted pearl-cap mushroom-clusters painted glowing soft white on painted floor, painted drifting pollen-orbs in painted warm amber, painted distant will-o-wisps in painted soft blue',
+      'Painted hovering glowing moonflower-orbs at painted mid-tier in painted soft pearl, painted scattered phosphorescent mushroom-clusters, painted drifting warm fireflies, painted rune-traces',
+      'Painted drifting cyan firefly-clusters in painted deep grove, painted soft pollen-motes in painted golden light, painted glowing pearl-cap mushrooms scattered, painted shimmering dewdrops',
+      'Painted soft pink-glow fairy-cup wildflowers, painted drifting silver pollen, painted foxfire-cyan on painted bark, painted sparkle-trails through air, painted hovering moonflower-orbs',
+      'Painted drifting warm-amber pollen, painted hovering pearl-orb lanterns, painted phosphorescent mushroom-rings on painted floor, painted distant pale will-o-wisps, painted shimmer',
+      'Painted soft golden firefly clusters at painted mid-tier, painted moonflower-orb lanterns hovering, painted pearl-pollen drifting, painted foxfire-cyan painted on distant bark',
+      'Painted scattered phosphorescent fairy-cup wildflowers in painted soft pink-glow, painted drifting warm pollen, painted distant cyan will-o-wisps, painted shimmer-dewdrops on every leaf',
+      'Painted hovering pearl-orb lanterns in painted mid-tier, painted drifting warm fireflies, painted soft pollen-motes catching painted god-rays, painted phosphorescent moss-glow on painted roots',
+      'Painted distant amber will-o-wisps painted floating deep in grove, painted drifting golden pollen-motes, painted scattered pearl-glow mushroom-clusters, painted sparkle-trails through air',
+    ],
+    instructions: `Each entry is ONE RICH MAGICAL AMBIENT stack, 45-70 words. Format: prose, comma-separated phrases listing 5-7 magical elements (NEVER fewer than 5 — count as you write). MANDATORY — (a) 5-7 specific magical elements, (b) position each, (c) at least one SOFT-OPALESCENT REGISTER phrase ("pearl-white morning mist" / "opalescent painted softness" / "rainbow-flecked dewdrop-shimmer" / "dreaming luminosity" / "shimmer-haze"). NO figures / creatures. NO biome / hero / floor / water / lighting / weather. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_composition: {
+    format: 'simple',
+    theme: `COMPOSITION (framing technique) for FaeBot's enchanted-vista path. Each entry describes ONE specific framing/composition approach for the painting. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC framing approach that creates multi-tier depth and draws the viewer's eye through the painting. Cinematic, painterly, painterly-illustration grade.
+
+⚠️ COMPOSITION TYPES (vary across 25 entries):
+  • WIDE CINEMATIC LANDSCAPE — full sweeping grove view with deep atmospheric depth
+  • LOW-ANGLE THROUGH CANOPY — looking up from forest-floor at canopy with light cutting down
+  • THREE-QUARTER ELEVATED — slightly elevated vantage looking down into a grove or clearing
+  • CATHEDRAL UPSHOT — looking up at ancient trees as natural columns
+  • DEEP GROVE TUNNEL — leading line (path / stream / fallen log) drawing the eye INTO the grove
+  • CLOSE-MID HERO DETAIL — closer composition centered on the hero feature with surrounding scene
+  • OVER-THE-SHOULDER FOREGROUND — large foreground element framing a mid-and-deep grove
+  • SYMMETRICAL CHAMBER — symmetrical framing centered on hero (great for arches, hollows, waterfalls)
+  • ASYMMETRIC LEADING LINE — diagonal compositional line drawing the eye through the painting
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC FRAMING TYPE
+  - (b) MULTI-TIER DEPTH CALLOUT (foreground / midground / background)
+  - (c) EYE-MOVEMENT DESCRIPTION (the eye is drawn through the painting)
+
+🚫 STRICT BANS:
+  • NO figures / creatures
+  • NO biome / hero / floor / water / lighting / weather (separate axes)
+  • NO grave vocabulary`,
+    touchpoints: [
+      'Wide cinematic landscape framing of the grove with deep foreground-to-background atmospheric depth, layered tree-planes fading to mist, eye drawn through the painted distance',
+      'Low-angle composition looking up through the canopy with god-rays cutting down dramatically, forest-floor at lower edge, painted multi-tier depth',
+      'Three-quarter elevated vantage looking down into the grove from a slightly raised position, leading line drawing the eye into the deep grove distance',
+      'Cathedral upshot composition looking up at ancient trees as natural columns soaring overhead, vaulted canopy above, eye traveling upward',
+      'Deep grove tunnel composition with a path or stream as leading line drawing the eye straight into the deep painted distance',
+      'Close-mid composition centered on the hero feature with surrounding lush grove in soft focus, painterly intimate framing',
+      'Over-the-shoulder foreground composition with a large tactile foreground element framing the mid-and-deep grove beyond',
+      'Symmetrical chamber composition centered on the hero feature with the surrounding scene mirroring around it, classical cathedral framing',
+      'Asymmetric leading-line composition with a diagonal element (fallen log / stream / vine) drawing the eye through the painting',
+      'Painted wide cinematic landscape with painted layered tree-planes fading into painted distance, painted multi-tier depth',
+      'Painted low-angle composition painted looking up through painted canopy, painted god-rays cutting down, painted forest-floor at painted lower edge',
+      'Painted three-quarter elevated vantage painted looking down into painted grove, painted leading line into painted deep distance',
+      'Painted cathedral upshot painted looking up at painted ancient trees as painted natural columns, painted vaulted canopy above',
+      'Painted deep grove tunnel composition with painted path or painted stream as painted leading line into painted distance',
+      'Painted close-mid composition centered on painted hero feature, painted surrounding lush grove in painted soft focus',
+      'Painted over-the-shoulder foreground composition with painted large tactile foreground element framing painted mid-and-deep grove',
+      'Painted symmetrical chamber composition centered on painted hero feature, painted classical cathedral framing',
+      'Painted asymmetric leading-line composition with painted diagonal element drawing painted eye through painted painting',
+      'Painted wide grove panorama composition with painted foreground tactile detail, painted midground hero, painted background dissolving into painted painted haze',
+      'Painted intimate close-grove composition with painted hero feature filling painted center, painted surrounding lush detail at painted edges',
+      'Painted upward-tilted composition painted looking up through painted dense canopy at painted patches of painted sky beyond',
+      'Painted horizon-level grove composition with painted clear midground hero and painted painted multi-tier atmospheric depth',
+      'Painted slightly tilted-up composition with painted ancient trees painted soaring beyond painted hero feature, painted painted grove depth',
+      'Painted layered painterly composition with painted four distinct depth planes — painted foreground tactile / painted midground hero / painted deep grove / painted painted painted misted distance',
+      'Painted classical painterly landscape composition with painted hero feature at painted golden-ratio focal point, painted multi-tier atmospheric depth around it',
+    ],
+    instructions: `Each entry is ONE COMPOSITION, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific framing type, (b) multi-tier depth, (c) eye-movement description. NO figures / creatures. NO biome / hero / floor / water / lighting / weather. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_lighting: {
+    format: 'simple',
+    theme: `LIGHTING (time-of-day + palette) for FaeBot's enchanted-vista path. Each entry describes ONE specific lighting register — time-of-day + light quality + palette. Each entry 25-45 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC lighting register that defines the painting's mood — warm golden / cool moonlit / soft dawn / blue-hour twilight / midday dappled / autumn warm-amber. Painterly atmospheric.
+
+⚠️ LIGHTING CATEGORIES (across 25 entries):
+  • GOLDEN-HOUR — warm-amber late-afternoon / sunrise light streaming through trees
+  • DAWN PEARL-LIGHT — soft pale rose-gold dawn breaking through canopy
+  • TWILIGHT BLUE-HOUR — magical violet-blue twilight with warm-amber accent points
+  • MOONLIT SILVER — silver moonlight on the grove with deep blue shadows
+  • MIDDAY DAPPLED — bright dappled patches of canopy-light scattered across the floor
+  • AUTUMN WARM-AMBER — warm bronze-and-gold autumn lighting through colored leaves
+  • SOFT-MIST DAWN — pearl-light filtering through morning mist
+  • SUNSET WARM-ROSE — warm rose-and-gold sunset light raking through grove
+  • OVERCAST SOFT-DIFFUSE — soft diffuse light without strong shadows, painterly muted
+  • MAGICAL TWILIGHT-VIOLET — magical purple-violet twilight with faint magical glow accents
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC TIME-OF-DAY
+  - (b) LIGHT QUALITY (shafts / dappled / ambient / sidelight / diffuse)
+  - (c) PALETTE (warm-amber / cool-silver / rose-gold / blue-violet / etc.)
+
+🚫 STRICT BANS:
+  • NO figures / creatures
+  • NO biome / hero / floor / water / weather (separate axes)
+  • NO atmospheric depth (separate axis — this is just the time-of-day + palette)
+  • NO grave vocabulary
+  • NO storm / lightning / dark-grey-blue (peaceful enchanted register only)`,
+    touchpoints: [
+      'Golden-hour warm-amber light streaming through the ancient grove in soft slanting shafts, late-afternoon palette of warm-amber and burnished bronze with cool deep-blue shadows in the grove',
+      'Soft pearl-light dawn breaking gently through the canopy, palette of pale rose-gold and soft cream, painterly soft-misted register',
+      'Magical twilight blue-hour with deep violet-and-blue grove tones and faint warm-amber accent points glowing through the trees',
+      'Silver moonlight pouring through the canopy onto the moss-floor, deep blue shadows in the grove, cool-silver palette with warm-amber accent glints',
+      'Bright midday dappled canopy-light scattered in patches across the moss-floor, bright-yellow patches against deep-emerald shadows, painterly contrast',
+      'Autumn warm-amber late-light raking through bronze-and-gold leaves, warm palette of amber-and-rust with deep grove shadows',
+      'Soft pearl-mist dawn filtering through morning mist drifting through the grove, palette of pale cream and silver-green',
+      'Sunset warm-rose light raking through the grove at low angle, palette of rose-gold and burnished amber with cool blue-shadow grove distance',
+      'Overcast soft-diffuse light with no strong shadows, painterly muted register, palette of soft-cream-and-grey-green with painterly contrast',
+      'Magical twilight-violet light pervading the grove with faint magical pearl-glow accents, palette of deep violet-and-blue with soft amber points',
+      'Painted golden-hour warm-amber light painted streaming through painted grove in painted slanting shafts, painted warm palette',
+      'Painted soft pearl-light dawn painted breaking gently through painted canopy, painted pale rose-gold palette',
+      'Painted magical twilight blue-hour with painted deep violet-and-blue grove tones, painted faint warm-amber accents',
+      'Painted silver moonlight painted pouring through painted canopy onto painted moss-floor, painted cool-silver palette with painted warm glints',
+      'Painted bright midday dappled canopy-light painted scattered across painted moss-floor, painted bright-yellow patches against painted emerald shadows',
+      'Painted autumn warm-amber late-light painted raking through painted bronze-and-gold leaves, painted warm amber-and-rust palette',
+      'Painted soft pearl-mist dawn painted filtering through painted morning mist, painted pale cream-and-silver-green palette',
+      'Painted sunset warm-rose light painted raking through painted grove at painted low angle, painted rose-gold palette',
+      'Painted overcast soft-diffuse light painted with no strong shadows, painted muted register, painted soft cream-and-grey-green palette',
+      'Painted magical twilight-violet light painted pervading painted grove with painted pearl-glow accents, painted deep violet palette',
+      'Painted warm late-afternoon sidelight painted gilding painted bark and painted leaves with painted warm-amber-and-bronze, painted long deep painted shadows',
+      'Painted soft morning sun-shafts painted piercing painted grove in painted clear columns of painted golden light, painted dust-motes',
+      'Painted soft blue-hour grove with painted cool blue-and-violet palette, painted faint amber accent glows from painted distant magical particles',
+      'Painted warm midday glow with painted soft golden light painted suffusing painted canopy and floor in painted ethereal register',
+      'Painted soft cool-morning palette of painted pale-blue-and-pearl with painted gentle warm-yellow accent points, painted painterly soft register',
+    ],
+    instructions: `Each entry is ONE LIGHTING register, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific time-of-day, (b) light quality, (c) palette. NO figures / creatures. NO biome / hero / floor / water / weather / atmospheric depth. NO grave vocabulary. NO storm / lightning / dark-grey-blue. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_atmospheric_depth: {
+    format: 'simple',
+    theme: `ATMOSPHERIC DEPTH (depth technique — distinct from lighting) for FaeBot's enchanted-vista path. Each entry describes ONE specific atmospheric depth technique that creates spatial layering in the painting. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC depth/atmosphere technique — separate from time-of-day lighting. This is the SPATIAL technique: god-ray columns / multi-layer mist-fade / dappled patches / fog-veiled distance / atmospheric perspective.
+
+⚠️ DEPTH TECHNIQUE CATEGORIES (across 25 entries):
+  • GOD-RAY COLUMNS — visible columns of light cutting through the grove with dust-motes
+  • MULTI-LAYER MIST-FADE — successive tree-planes fading to soft mist in the distance
+  • DAPPLED-CANOPY PATCHWORK — bright dappled patches scattered across the floor through canopy gaps
+  • SUN-PILLAR SHAFTS — single dramatic pillar of light piercing the canopy
+  • FOG-VEILED BACKGROUND — soft thick fog veiling the deep-grove distance
+  • ATMOSPHERIC PERSPECTIVE — tree-planes cooling and softening with distance
+  • DUST-MOTE AIR — visible golden dust-motes catching light, defining the air
+  • SOFT-HAZE GROVE — soft gauze-haze across the entire grove, painterly soft
+  • DEEP-SHADOW POCKETS — alternating bright and shadow zones creating depth pockets
+  • LAYERED LEAF-SHADOWS — overlapping leaf-shadow patterns adding depth texture
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC DEPTH TECHNIQUE
+  - (b) WHERE IT APPEARS IN THE FRAME (foreground / mid-tier / background / through the grove)
+  - (c) HOW IT CREATES DEPTH (separating planes / softening distance / etc.)
+
+🚫 STRICT BANS:
+  • NO figures / creatures
+  • NO biome / hero / floor / water / lighting / weather (separate axes — this is just the spatial depth technique)
+  • NO grave vocabulary`,
+    touchpoints: [
+      'Visible god-ray columns cutting through the grove from canopy gaps with golden dust-motes glittering inside them, defining the depth between foreground and background planes',
+      'Multi-layer mist-fade with successive tree-planes softening and cooling as they recede into the deep-grove distance, classical atmospheric perspective',
+      'Dappled-canopy patchwork of bright sun-patches scattered across the moss-floor through canopy gaps, alternating bright and shadow zones creating depth',
+      'Single dramatic sun-pillar shaft piercing the canopy and pooling brilliantly on the floor, defining a clear bright-light column against the surrounding grove',
+      'Soft thick fog veiling the deep-grove background, gently dissolving the distant tree-planes into pale-cream haze',
+      'Classical atmospheric perspective with tree-planes cooling and softening with distance, painterly multi-layer depth',
+      'Visible golden dust-motes catching light through the grove, defining the air between the tree-planes',
+      'Soft gauze-haze across the entire grove softening the painterly register, painted dreamy soft atmosphere',
+      'Alternating deep-shadow pockets and bright-light patches creating depth contrast through the grove, painterly contrast',
+      'Layered leaf-shadow patterns from the canopy adding intricate depth-texture across the floor and trunks',
+      'Painted visible god-ray columns painted cutting through painted grove with painted golden dust-motes, painted depth between planes',
+      'Painted multi-layer mist-fade with painted successive tree-planes painted softening into painted distance',
+      'Painted dappled-canopy patchwork of painted bright sun-patches painted scattered across painted moss-floor',
+      'Painted single dramatic sun-pillar shaft painted piercing canopy painted pooling on painted floor',
+      'Painted soft thick fog painted veiling painted deep-grove background, painted dissolving distant planes',
+      'Painted classical atmospheric perspective with painted tree-planes painted softening with painted distance',
+      'Painted visible golden dust-motes painted catching light through painted grove, painted defining air between planes',
+      'Painted soft gauze-haze across painted entire grove, painted dreamy soft painterly atmosphere',
+      'Painted alternating deep-shadow pockets and painted bright-light patches creating painted depth contrast',
+      'Painted layered leaf-shadow patterns painted across painted floor and trunks, painted intricate depth-texture',
+      'Painted dramatic multi-column god-ray light painted piercing painted dense canopy, painted dust-motes glittering',
+      'Painted soft pearl-mist painted hanging in painted mid-tier grove, painted veiling painted deeper trees',
+      'Painted gentle painterly atmospheric perspective with painted cooler-and-softer tones in painted painted distance',
+      'Painted dappled patchwork of painted sun-and-shadow across painted moss-floor and painted bark in painted painted painted contrast',
+      'Painted layered painterly depth with painted distinct foreground-midground-background planes, painted softening painted into haze',
+    ],
+    instructions: `Each entry is ONE ATMOSPHERIC DEPTH technique, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific depth technique, (b) where it appears in frame, (c) how it creates depth. NO figures / creatures. NO biome / hero / floor / water / lighting / weather. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_weather: {
+    format: 'simple',
+    theme: `WEATHER (air condition + drifting accents) for FaeBot's enchanted-vista path. Each entry describes ONE specific air condition with drifting accent elements. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC air condition with specific drifting accents that add motion and atmosphere to the painting. NOT a storm — peaceful enchanted register only.
+
+⚠️ WEATHER CATEGORIES (across 25 entries):
+  • CLEAR STILL AIR — clear painted air with painterly crisp grove depth
+  • SOFT MORNING MIST — soft thin mist drifting low through the grove
+  • DRIFTING PETALS — pink-and-white blossom-petals drifting through air
+  • FALLING LEAVES — autumn leaves drifting down in soft slow descent
+  • POLLEN-DRIFT — golden pollen drifting through god-rays
+  • FIRST-FROST DUST — soft pale frost-dust dusting every leaf and moss
+  • THISTLEDOWN DRIFT — soft drifting thistledown floating through the air
+  • DRIFTING DANDELION-SEEDS — floating dandelion-seeds catching light
+  • LIGHT BREEZE THROUGH CANOPY — gentle wind-stir on canopy leaves
+  • POST-RAIN DEW — fresh dewdrops beading every leaf, just-after-rain freshness
+  • DRIFTING SOFT-LIGHT MOTES — drifting bright dust-motes catching light
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC AIR CONDITION
+  - (b) DRIFTING ACCENT ELEMENT (what's moving through the air)
+  - (c) SOFT PEACEFUL REGISTER
+
+🚫 STRICT BANS:
+  • NO figures / creatures
+  • NO biome / hero / floor / water / lighting / depth (separate axes)
+  • NO grave vocabulary
+  • NO storm / lightning / harsh wind / dramatic weather (peaceful enchanted only)`,
+    touchpoints: [
+      'Clear still painted air with painterly crisp grove depth and gentle drifting golden dust-motes catching the soft light',
+      'Soft thin morning mist drifting low through the grove in painted curls, dewdrops beading every leaf at the floor-edge',
+      'Drifting pink-and-white blossom-petals in soft slow descent through the air, scattered fallen petals on the moss-floor',
+      'Autumn leaves drifting down in soft slow descent through warm light, fallen amber-and-bronze leaves carpeting the floor',
+      'Drifting golden pollen catching the god-rays in painted slow swirls, soft warm atmospheric register',
+      'Soft pale first-frost dust dusting every leaf and moss-cluster in delicate sparkle, painted winter-ethereal register',
+      'Drifting soft thistledown floating through the air in slow soft descent, soft sun-catching white tufts',
+      'Drifting dandelion-seeds floating across the grove catching the soft light, painted ethereal softness',
+      'Gentle light breeze stirring the canopy leaves in painted soft movement, scattered drifting leaves in the air',
+      'Fresh post-rain dewdrops beading every leaf and frond in painted sparkle, just-after-rain freshness register',
+      'Drifting bright golden soft-light dust-motes catching the god-rays in painted slow swirls',
+      'Painted clear still air with painted painterly grove depth, painted drifting golden dust-motes',
+      'Painted soft thin morning mist painted drifting through painted grove, painted dewdrops beading',
+      'Painted drifting pink-and-white blossom-petals in painted slow soft descent, painted fallen petals on painted moss-floor',
+      'Painted autumn leaves painted drifting down in painted slow descent, painted fallen amber-leaves carpeting painted floor',
+      'Painted drifting golden pollen painted catching god-rays in painted slow swirls, painted warm register',
+      'Painted soft pale first-frost dust painted dusting every leaf, painted delicate sparkle, painted winter-ethereal',
+      'Painted drifting soft thistledown painted floating through air in painted slow soft descent',
+      'Painted drifting dandelion-seeds painted floating across painted grove catching painted soft light',
+      'Painted gentle light breeze painted stirring painted canopy leaves, painted scattered drifting leaves in air',
+      'Painted fresh post-rain dewdrops painted beading every leaf, painted just-after-rain freshness',
+      'Painted drifting bright golden soft-light motes painted catching god-rays, painted slow swirls',
+      'Painted gentle drift of painted soft pollen and painted tiny petals across painted grove, painted peaceful soft register',
+      'Painted soft floating dandelion-seeds and painted thistledown drifting through painted air, painted ethereal soft motion',
+      'Painted gentle morning mist painted softening painted deeper grove, painted dewdrops on every leaf, painted soft register',
+    ],
+    instructions: `Each entry is ONE WEATHER condition, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific air condition, (b) drifting accent element, (c) soft peaceful register. NO figures / creatures. NO biome / hero / floor / water / lighting / depth. NO grave vocabulary. NO storms / lightning / harsh weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHOR (closest tactile depth element) for FaeBot's enchanted-vista path. Each entry describes ONE specific tactile foreground element bringing 3-tier depth without blocking the scene. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC tactile element close to the camera — hanging vine / fern-frond / mushroom-cluster / moss-covered branch — that frames the scene and brings true depth. Softly out-of-focus, painterly.
+
+⚠️ FOREGROUND TYPES (vary across 25 entries):
+  • HANGING VINE — vine draping into upper-frame from above
+  • FERN-FRONDS — lacy fern-fronds at lower-left or lower-right
+  • MUSHROOM-CIRCLE — small mushroom-ring at the closest foreground floor
+  • MOSS-COVERED BRANCH — branch crossing the lower frame with moss-detail
+  • DRIFTING PETALS — close drifting petal-cluster in the immediate foreground
+  • DRIFTING POLLEN — close drifting golden pollen catching light
+  • TANGLED ROOT — gnarled root crossing the foreground earth
+  • HANGING-MOSS CURTAIN — hanging-moss draping at the edge of the frame
+  • WILDFLOWER-CLUSTER — close foreground wildflower cluster
+  • DEW-COVERED LEAVES — close dew-covered leaves catching painted light
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC TACTILE TYPE
+  - (b) POSITION IN FRAME (lower-left / lower-right / draping from above / crossing the floor)
+  - (c) TACTILE DETAIL (moss-coverage / dewdrops / pollen-dust / etc.)
+
+🚫 STRICT BANS:
+  • NO figures / creatures
+  • NO biome / hero / floor (full carpet) / water / lighting / weather / depth
+  • NO grave vocabulary
+  • NO blocking the scene`,
+    touchpoints: [
+      'Hanging vine draping into the upper-left frame from above with painted leaves and tendrils, softly out-of-focus, painted tactile detail',
+      'Lacy fern-fronds at the lower-left of the frame in painted soft focus with painted leaf-vein detail, painted intimate framing',
+      'Small mushroom-circle at the closest foreground floor with painted pearl-cap toadstools, painted moss-bedding detail',
+      'Moss-covered branch crossing the lower frame in painted soft focus, painted velvety green-moss texture, painted depth anchor',
+      'Close drifting petal-cluster in the immediate foreground in painted soft focus, painted pink-and-white blossom-petals',
+      'Close drifting golden pollen in the foreground catching painted light, painted soft warm sparkle',
+      'Gnarled root crossing the foreground earth in painted soft focus with painted twisted bark-detail',
+      'Hanging-moss curtain draping at the edge of the frame in painted soft green strands, painted ethereal framing',
+      'Close foreground wildflower-cluster of painted bluebells and foxglove-spires in painted soft focus',
+      'Close dew-covered painted fern-leaves in foreground-right catching painted soft sparkle, painted tactile detail',
+      'Painted hanging vine draping into painted upper-frame from above, painted softly out-of-focus, painted tactile',
+      'Painted lacy fern-fronds at painted lower-left of frame in painted soft focus, painted leaf-vein detail',
+      'Painted small mushroom-circle at painted closest foreground floor with painted pearl-cap toadstools',
+      'Painted moss-covered branch painted crossing painted lower frame in painted soft focus, painted velvety green-moss texture',
+      'Painted close drifting petal-cluster in painted immediate foreground in painted soft focus',
+      'Painted close drifting golden pollen in painted foreground catching painted light, painted soft warm sparkle',
+      'Painted gnarled root painted crossing painted foreground earth in painted soft focus, painted bark-detail',
+      'Painted hanging-moss curtain painted draping at painted edge of frame in painted soft green strands',
+      'Painted close foreground wildflower-cluster of painted bluebells and painted foxglove-spires',
+      'Painted close dew-covered painted fern-leaves in painted foreground-right, painted soft sparkle',
+      'Painted tangled vine-and-leaf foreground in painted soft focus, painted tactile detail',
+      'Painted moss-cushion in painted immediate foreground with painted painted scattered tiny mushrooms, painted painted detail',
+      'Painted drifting cluster of painted small ferns at painted lower-frame corner, painted soft texture',
+      'Painted tactile painted foreground hanging-vine with painted leaves and painted small flowers, painted soft focus',
+      'Painted close foreground painted moss-bed with painted scattered painted toadstools and painted dewdrops, painted painted detail',
+    ],
+    instructions: `Each entry is ONE FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific tactile type, (b) position in frame, (c) tactile detail. NO figures / creatures. NO biome / hero / floor / water / lighting / weather / depth. NO grave vocabulary. NO blocking. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_enchanted_vista_wildlife_distant: {
+    format: 'simple',
+    theme: `40%-GATED DISTANT WILDLIFE for FaeBot's enchanted-vista path. Each entry describes ONE distant, ambient creature woven into the deep grove as a story-whisper — NEVER focal, just a silhouette glimpsed through the trunks. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SINGLE distant wildlife silhouette barely visible deep in the grove — adds life-whisper to the painting without becoming the subject. SUBTLE, FAR, AMBIENT.
+
+⚠️ WILDLIFE TYPES (vary across 25 entries):
+  • DISTANT FAWN — far fawn silhouette glimpsed through trunks
+  • DEER GRAZING — distant deer in a far clearing
+  • FOX SILHOUETTE — distant fox crossing a sun-shaft
+  • SMALL BIRD GLIDING — small bird gliding past at mid-tier
+  • OWL SILHOUETTE — owl silhouette perched on a distant branch
+  • BUTTERFLY CLOUD — distant cloud of small butterflies in a far sun-shaft
+  • HARE IN DISTANT MEADOW — distant hare in a far wildflower-clearing
+  • DISTANT WHITE STAG — far white stag silhouette deep in the grove (rare)
+  • DISTANT RAVEN — distant raven silhouette in flight
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC ANIMAL TYPE
+  - (b) DISTANT POSITION (deep in the grove / through far trunks / in a far clearing / at mid-tier flying past)
+  - (c) SILHOUETTE / AMBIENT register (NOT detailed focal subject)
+
+🚫 STRICT BANS:
+  • NO close-up creatures (these are all FAR, ambient, story-whisper)
+  • NO multiple creatures per entry (just one)
+  • NO description of biome / hero / floor / water / lighting / weather / depth / foreground
+  • NO predatory aggressive postures
+  • NO grave vocabulary`,
+    touchpoints: [
+      'A distant fawn silhouette barely visible deep in the grove between far trunks, painted soft ambient register, life-whisper not focal',
+      'Distant deer grazing in a far sun-dappled clearing visible through the trees, painted soft ambient register',
+      'A distant fox silhouette crossing a sun-shaft deep in the grove, painted soft ambient register',
+      'A small distant bird gliding past at mid-tier between the canopy and the floor, painted soft ambient register',
+      'A distant owl silhouette perched on a far branch barely visible in the canopy shadow, painted soft ambient register',
+      'A distant cloud of small butterflies catching light in a far sun-shaft deep in the grove, painted soft ambient register',
+      'A distant hare in a far wildflower-clearing barely visible through the trees, painted soft ambient register',
+      'A distant white stag silhouette deep in the grove between far trunks, painted soft ambient register, rare and rare',
+      'A distant raven silhouette in flight at mid-tier across the grove, painted soft ambient register',
+      'A distant cluster of grazing deer in a far meadow visible through the trees, painted soft ambient register',
+      'Painted distant fawn silhouette painted barely visible deep in painted grove between painted far trunks, painted soft ambient',
+      'Painted distant deer painted grazing in painted far sun-dappled clearing, painted soft ambient',
+      'Painted distant fox silhouette painted crossing painted sun-shaft deep in painted grove, painted soft ambient',
+      'Painted small distant bird painted gliding past at painted mid-tier between painted canopy and painted floor, painted soft ambient',
+      'Painted distant owl silhouette painted perched on painted far branch, painted soft ambient',
+      'Painted distant cloud of painted small butterflies painted catching light in painted far sun-shaft, painted soft ambient',
+      'Painted distant hare in painted far wildflower-clearing painted barely visible, painted soft ambient',
+      'Painted distant white stag silhouette painted deep in painted grove between painted far trunks, painted soft ambient register',
+      'Painted distant raven silhouette in painted flight at painted mid-tier across painted grove, painted soft ambient',
+      'Painted distant cluster of painted grazing deer in painted far meadow, painted soft ambient register',
+      'Painted distant pair of painted rabbits painted barely visible in painted far floor-meadow, painted soft ambient',
+      'Painted distant kingfisher painted perched on painted far branch by painted water-edge, painted soft ambient',
+      'Painted distant single swan painted gliding across painted far pond visible through painted trees, painted soft ambient',
+      'Painted distant heron painted standing motionless in painted far stream, painted silhouette in painted soft mist',
+      'Painted distant single butterfly painted catching painted sun-shaft mid-grove, painted ambient register',
+    ],
+    instructions: `Each entry is ONE DISTANT WILDLIFE silhouette, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific animal type, (b) distant position (deep in grove / far clearing / through far trunks), (c) silhouette / ambient register (NEVER focal). NO close-up. NO multiple creatures. NO biome / hero / floor / water / lighting / weather / depth / foreground. NO predatory. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
 };
 
 const recipe = POOL_RECIPES[POOL];

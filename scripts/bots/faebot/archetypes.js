@@ -105,6 +105,30 @@ module.exports = {
   anchorScaleRange: null
 },
 
+  FAEBOT_ENCHANTED_VISTA: {
+  description: 'PATH-BESPOKE — FaeBot enchanted-vista (2026-05-21 axis-system migration from legacy function-form). PURE FOREST LANDSCAPE — no figures, no creatures as focal subjects. The lush enchanted forest itself is the subject, the magical land where the other FaeBot creatures live and thrive. Multi-layer painterly richness (canopy + hero feature + floor + water + magic + light + depth + air + foreground). 11 axes: biome / hero_feature / floor_carpet / water_element / magical_ambient / composition / lighting / atmospheric_depth / weather / foreground_anchor + wildlife_distant (40%-gated). HARD BAN: never include "standing stones / stone circles / tomb / gravestone" (Flux renders these as cemetery imagery).',
+  slots: {
+    universal: [],
+    bot: [],
+    path: [
+      'biome',
+      'hero_feature',
+      'floor_carpet',
+      'water_element',
+      'magical_ambient',
+      'composition',
+      'lighting',
+      'atmospheric_depth',
+      'weather',
+      'foreground_anchor'
+    ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'wildlife_distant', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
   FAEBOT_QUEEN_OF_THE_FOREST: {
   description: 'PATH-BESPOKE — FaeBot queen-of-the-forest (2026-05-21 pivot from fairy-court). ONE ornate magic fae queen POSED beautifully in a stunning natural forest setting (gnarled-root throne in clearing / posed on tree-branch over stream / standing in wildflower meadow / sitting on mossy boulder by waterfall / framed in tree-archway / wading in forest stream / leaning against hero-tree). She is the Queen of the Forest — woodland critters FLOCK to her and pay respects (foxes, robins, fawns, butterflies, frogs, hares at her feet and around her). Sometimes lesser fae also gather (60%-gated). Painted-fantasy register. 11 axes: queen_features / posed_setting / forest_biome / regalia / forest_critters / lighting / weather / magical_flavor / ambient_detail / foreground_anchor + lesser_fae (60%-gated). MULTI-FIGURE / formal-court framing removed — this is the queen alone (or with lesser fae paying respects), posed in her natural domain.',
   slots: {

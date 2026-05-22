@@ -96,7 +96,8 @@ module.exports = {
     // Axis-system paths skip polish — Haiku compression strips
     // load-bearing axis language. tiny-fae: dwarfing-companion mandate.
     // queen-of-the-forest: posed-setting + critters-paying-respects mandates.
-    skipPaths: ['tiny-fae', 'queen-of-the-forest'],
+    // enchanted-vista: multi-layer richness (canopy + hero + floor + water + magic + depth).
+    skipPaths: ['tiny-fae', 'queen-of-the-forest', 'enchanted-vista'],
   },
 
   // Bot-level pool defaults for declarative composer (flower-fairy path)

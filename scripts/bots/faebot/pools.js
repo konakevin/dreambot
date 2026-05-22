@@ -88,6 +88,18 @@ module.exports = {
   FAEBOT_DRYAD_PORTRAIT_WEATHER: loadIfExists('faebot_dryad_portrait_weather'),
   FAEBOT_DRYAD_PORTRAIT_MAGICAL_FLAVOR: loadIfExists('faebot_dryad_portrait_magical_flavor'),
   FAEBOT_DRYAD_PORTRAIT_FOREGROUND_ANCHOR: loadIfExists('faebot_dryad_portrait_foreground_anchor'),
+  // ─── enchanted-vista axis-system pools (2026-05-21 migration from legacy) ───
+  FAEBOT_ENCHANTED_VISTA_BIOME: loadIfExists('faebot_enchanted_vista_biome'),
+  FAEBOT_ENCHANTED_VISTA_HERO_FEATURE: loadIfExists('faebot_enchanted_vista_hero_feature'),
+  FAEBOT_ENCHANTED_VISTA_FLOOR_CARPET: loadIfExists('faebot_enchanted_vista_floor_carpet'),
+  FAEBOT_ENCHANTED_VISTA_WATER_ELEMENT: loadIfExists('faebot_enchanted_vista_water_element'),
+  FAEBOT_ENCHANTED_VISTA_MAGICAL_AMBIENT: loadIfExists('faebot_enchanted_vista_magical_ambient'),
+  FAEBOT_ENCHANTED_VISTA_COMPOSITION: loadIfExists('faebot_enchanted_vista_composition'),
+  FAEBOT_ENCHANTED_VISTA_LIGHTING: loadIfExists('faebot_enchanted_vista_lighting'),
+  FAEBOT_ENCHANTED_VISTA_ATMOSPHERIC_DEPTH: loadIfExists('faebot_enchanted_vista_atmospheric_depth'),
+  FAEBOT_ENCHANTED_VISTA_WEATHER: loadIfExists('faebot_enchanted_vista_weather'),
+  FAEBOT_ENCHANTED_VISTA_FOREGROUND_ANCHOR: loadIfExists('faebot_enchanted_vista_foreground_anchor'),
+  FAEBOT_ENCHANTED_VISTA_WILDLIFE_DISTANT: loadIfExists('faebot_enchanted_vista_wildlife_distant'),
   // ─── queen-of-the-forest axis-system pools (2026-05-21, pivot from fairy-court) ───
   FAEBOT_QUEEN_OF_FOREST_FEATURES: loadIfExists('faebot_queen_of_forest_features'),
   FAEBOT_QUEEN_OF_FOREST_POSED_SETTING: loadIfExists('faebot_queen_of_forest_posed_setting'),

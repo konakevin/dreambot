@@ -405,6 +405,107 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE DRYAD — preserve her stacked exotic features unmistakably. Then expression. Then gesture. Then composition framing. Then adornment. Then forest backdrop softly behind. Then lighting + weather. Then magical flavor close to her face.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_ENCHANTED_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      biome,
+      hero_feature,
+      floor_carpet,
+      water_element,
+      magical_ambient,
+      composition,
+      lighting,
+      atmospheric_depth,
+      weather,
+      foreground_anchor,
+      wildlife_distant,
+    } = slots;
+
+    const wildlifeSection = wildlife_distant
+      ? `\n\n━━━ 11. DISTANT WILDLIFE HINT (a far ambient creature woven into the deep grove) ━━━\n${wildlife_distant}\n\nA far-off, ambient hint of life — a distant silhouette glimpsed through the trunks, NOT a focal subject. The forest stays the subject. The creature is a STORY-WHISPER, not the show.`
+      : '';
+
+    return `You are writing ONE Flux prompt for a LUSH ENCHANTED FOREST VISTA painting in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Edmund Dulac + Brian Froud + Greg Rutkowski painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt.
+
+1. NATURE-FIRST PANNED-OUT VISTA — the lush enchanted FOREST itself is the primary subject filling 85-95% of frame. Small distant figures (a small fae / a tiny far figure standing at a clearing edge / a small distant creature) OR small ambient creatures are PERMITTED as soft story-whisper accents — small in frame, panned-out, NEVER close-up, NEVER focal, NEVER dominant. The pretty details (wildflowers, moss, water, magical particles, painterly depth) lead and dominate. A figure or creature is a quiet grace-note, not the show.
+
+2. MAX LAYERED LUSHNESS — every render is a STOP-AND-STARE painted masterpiece with MULTIPLE visible layers: a HERO landmark (woven INTO the scene as a graceful unexpected gift, not a dominant centerpiece), a BLANKET-DENSITY floor of 5-7 overlapping wildflower species, a WATER element, RICH STACKED magical ambient (5-7 elements: fireflies + glowing pollen + phosphorescent mushrooms + will-o-wisps + foxfire + sparkle-trails + luminous butterflies), MULTI-TIER DEPTH, SPECIFIC LIGHTING + ATMOSPHERIC depth.
+
+2b. SOFT OPALESCENT REGISTER (MANDATORY) — every render is suffused with PEARL-WHITE MORNING MIST and OPALESCENT PAINTED SOFTNESS and RAINBOW-FLECKED DEWDROP-SHIMMER and DREAMING LUMINOSITY. Soft glow on every shadow. Painterly soft-haze pervading. This is the bedrock soft-painted register — never absent, always present.
+
+3. PAINTERLY-LUSH register — Greg Manchess / Edmund Dulac / Brian Froud / Greg Rutkowski fantasy concept-art at its peak. NOT photoreal. NOT CGI. NOT cartoon. Visible oil-brushwork, painted edges, romantic painted atmosphere.
+
+4. SUBTLE FAIRY-MAGIC WOVEN THROUGH — magic is AMBIENT and SUBTLE (drifting particles, distant will-o-wisps, glowing wildflower accents, foxfire on bark), NEVER a focal effect that dominates.
+
+5. BANNED VOCABULARY — NEVER write "standing stones / stone circle / weathered stones / sacred stones / tomb / gravestone / cemetery". Flux trains these as grave imagery and renders headstones. AVOID ALL grave-trigger words.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. BIOME (overall flavor + canopy character) ━━━
+${biome}
+
+The macro-biome wrapping the scene — ancient oak / pale birch / wisteria-cascade / fern-grotto / autumn-grove / cherry-blossom canopy / etc. Painted atmospheric foundation.
+
+━━━ 2. HERO FEATURE (the central WOW landmark — load-bearing) ━━━
+${hero_feature}
+
+The central wow-element of the painting — a colossal hero-tree / cascading waterfall / forest-arch of arching branches / glowing tree-hollow alcove / mossy-boulder cathedral / sun-shaft pillar / etc. This is the EYE-ANCHOR. Render it large and central.
+
+━━━ 3. FLOOR CARPET (floor texture + wildflower density) ━━━
+${floor_carpet}
+
+The forest floor as a lush, painterly textile — moss carpet with bluebells / fern-bed with foxglove-spires / clover-and-daisy meadow / petal-strewn moss / leaf-and-pinecone carpet. Specific plant density, painted with detail.
+
+━━━ 4. WATER ELEMENT (water somewhere in the scene) ━━━
+${water_element}
+
+A water feature woven into the scene — clear forest stream / lily-covered pond / small waterfall / mist-pool / dew-pool / cascade. Visible water adds life and depth.
+
+━━━ 5. MAGICAL AMBIENT (fairy magic particles + small magical accents) ━━━
+${magical_ambient}
+
+Subtle fairy magic woven through the scene — drifting fireflies / glowing pollen-orbs / phosphorescent mushroom-clusters / will-o-wisps in the distance / foxfire on bark / sparkle-trails / luminous wildflower accents / hovering moonflower-bells. AMBIENT, never dominant.
+
+━━━ 6. COMPOSITION (framing technique) ━━━
+${composition}
+
+━━━ 7. LIGHTING (time-of-day + palette) ━━━
+${lighting}
+
+━━━ 8. ATMOSPHERIC DEPTH (depth technique — god-rays / mist-layers / dappled patches) ━━━
+${atmospheric_depth}
+
+━━━ 9. WEATHER (air condition + drifting accents) ━━━
+${weather}
+
+━━━ 10. FOREGROUND ANCHOR (closest tactile element bringing 3-tier depth) ━━━
+${foreground_anchor}
+
+A specific tactile element near the camera — hanging vine / fern-cluster / mushroom-circle / moss-covered branch / drifting pollen close. Softly out-of-focus, frames the scene without blocking.
+${wildlifeSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Edmund Dulac + Brian Froud + Greg Rutkowski painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
+
+━━━ HARD BANS ━━━
+- NO close-up or focal figures (a small distant figure or creature as ambient accent is OK — small in frame, panned-out, never close-up, never dominant)
+- NO "standing stones" / "stone circles" / "tomb" / "gravestone" / "cemetery" / "weathered stones" — banned grave-trigger vocabulary, ALL grave-words forbidden
+- NO modern objects (no fences, signs, lamps, buildings, masonry, architecture, bridges-of-architecture)
+- NO violence / NO scared / NO edgy moods
+- NO bare chest, NO nipples, NO topless (irrelevant — no figures)
+- NO overwhelming magic effects (magic is SUBTLE — particles + accents, never dominant)
+- NO cartoon / chibi / mascot rendering
+- NO photographic / digital / 3D / CGI descriptors
+- NO generic vague forest — every render must be VISUALLY SPECIFIC and LUSH
+
+━━━ OUTPUT ━━━
+Write 90-120 words, comma-separated phrases. OPEN WITH THE BIOME + HERO FEATURE woven together — load-bearing first 30-40 words establishing the painting's macro-anchor. Then floor carpet + water element + magical ambient (the multi-layer richness). Then composition + lighting + atmospheric depth + weather. Then foreground anchor.${wildlife_distant ? ' Then distant wildlife hint woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. The nature scene is the show — any small distant figure or creature is a quiet ambient grace-note, never close-up or dominant. NEVER write grave-trigger words. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   FAEBOT_QUEEN_OF_THE_FOREST: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       queen_features,
