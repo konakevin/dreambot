@@ -45,9 +45,7 @@
  *     (intimate-curl through monumental-wall, variance via subject pool)
  *   - tropical-paradise (PARADISE coast — Maldives / Bora Bora / Bali)
  *   - tide-pool (macro biological coastal detail)
- *   - beach-still-life — NEW path; subsumes legacy `beach-moment` + `seashell`
- *     (small-foreground story — shells, driftwood, sea-glass, footprints)
- *   - cozy-beach (coastal villages / lighthouses / huts)
+ *   - cozy-beach (intimate cozy beach moments — v2 pivot, 2026-05-22)
  *   - hawaii-flowers (Hawaiian coast + tropical flowers co-star)
  *   - reef-paradise (shallow tropical reefs visible from beach)
  *   - beach-night (magical tropical beaches after dark)
@@ -59,7 +57,10 @@
  *   ✗ weather-drama (merges into sky-drama)
  *   ✗ beach-landscape (covered by coastal-vista + tropical-paradise)
  *   ✗ wave + big-wave (merges into waves)
- *   ✗ beach-moment + seashell (merges into beach-still-life)
+ *   ✗ beach-moment + seashell (subsumed by cozy-beach v2 — 2026-05-22)
+ *   ✗ sky-drama / dramatic-sky / weather-drama (sky-drama merge killed
+ *     2026-05-22 — supernatural drift; dramatic-sky + weather-drama
+ *     stay as legacy paths in rotation)
  *
  * Migration policy: legacy paths stay in rotation until their replacement
  * lands. When migrating a NEW consolidated path (sky-drama / waves /
@@ -98,11 +99,9 @@ const pathBuilders = {
   'tropical-paradise': require('./paths/tropical-paradise'), // axis-system (2026-05-20)
   'beach-landscape': require('./beach/paths/beach-landscape'),
   'tide-pool': require('./beach/paths/tide-pool'),
-  'beach-moment': require('./beach/paths/beach-moment'),
   'cozy-beach': require('./paths/cozy-beach'), // axis-system (2026-05-22)
   'hawaii-flowers': require('./paths/hawaii-flowers'), // axis-system (2026-05-21)
   'reef-paradise': require('./paths/reef-paradise'), // axis-system (2026-05-21)
-  seashell: require('./beach/paths/seashell'),
   'beach-night': require('./paths/beach-night'), // axis-system (2026-05-21)
   'epic-sunset': require('./paths/epic-sunset'), // axis-system (2026-05-20)
 };
@@ -128,11 +127,9 @@ const BEACH_PATHS = [
   'tropical-paradise',
   'beach-landscape',
   'tide-pool',
-  'beach-moment',
   'cozy-beach',
   'hawaii-flowers',
   'reef-paradise',
-  'seashell',
   'beach-night',
   'epic-sunset',
 ];
@@ -230,7 +227,7 @@ module.exports = {
   chaos: {
     enabled: true,
     skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach'],
-    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise'].includes(p))],
+    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'waves', 'cozy-beach', 'beach-night'].includes(p))],
   },
 
   // Two-pass polish — both bots use identical config.
