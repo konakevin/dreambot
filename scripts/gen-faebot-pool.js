@@ -6753,6 +6753,751 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     instructions: `Each entry is ONE DISTANT WILDLIFE silhouette, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific animal type, (b) distant position (deep in grove / far clearing / through far trunks), (c) silhouette / ambient register (NEVER focal). NO close-up. NO multiple creatures. NO biome / hero / floor / water / lighting / weather / depth / foreground. NO predatory. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
 
+
+  faebot_fae_village_dwelling_type: {
+    format: 'simple',
+    theme: `DWELLING TYPE (architecture/material — LOAD-BEARING) for FaeBot's fae-village path. Each entry describes ONE specific dwelling architecture grown from forest. Each entry 35-60 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC dwelling architecture with materials + structural features. Painted-fantasy fae register, GROWN from nature. NEVER modern construction. The pool covers all legacy variety subtypes.
+
+⚠️ DWELLING TYPE CATEGORIES (vary widely — push WILD IMAGINATIVE fantasy variety across 25 entries):
+  • TREE-HOLLOW — hollow carved into ancient oak with amber-window in trunk
+  • ROOT-BURROW — burrow beneath gnarled roots, root-lattice walls, moss steps
+  • ACORN-COTTAGE — giant acorn-shell six feet tall with concentric-ring cap roof
+  • EGGSHELL-HOUSE — bird-egg / quail-egg shell cracked open at crown
+  • WALNUT-SHELL — walnut shell split horizontally, hinged-top roof
+  • SNAIL-SHELL SPIRAL — snail-shell lying on its side, entrance through aperture, spiral chambers
+  • SEASHELL DWELLING — conch or scallop-shell home
+  • MUSHROOM-COTTAGE — giant toadstool with cap-roof, carved oval door
+  • TOADSTOOL-HOUSE — crimson-and-cream cap mushroom home
+  • TRUMPET-LILY DWELLING — towering trumpet-lily bloom as dwelling, ivory petal-walls tilted on thick stem
+  • GIANT FOXGLOVE-BELL DWELLING — purple-and-white spotted foxglove-bell as dwelling
+  • PEONY-BLOSSOM COTTAGE — giant peony with layered cream-and-coral petals as walls
+  • ROSE-BLOOM COTTAGE — giant rose-bloom with pink-cream petals forming walls
+  • TULIP-BLOSSOM DWELLING — giant tulip bloom with vibrant pink-cream petals
+  • DANDELION-PUFF SEED-POD — floating dandelion-puff hovering above forest floor, tethered by living vines to nearby saplings, slowly rotating
+  • MAPLE SAMARA SEED-POD — floating maple-samara seed-pod with seed-wing forming natural awning, tethered, spinning gently
+  • THISTLE-DOWN SEED-POD — thistle-down pod suspended by vines from spreading oak, wispy filament railings
+  • LEAF-NEST HANGING — woven oak/maple-leaf nest suspended from branch by braided vines, knotted-rope ladder descending
+  • STUMP-COTTAGE — cedar/oak stump with moss roof, tiny carved windows, hewn door
+  • BRAMBLE-NEST — hidden nest woven from hazel/blackthorn, white blossom + dark thorn
+  • BUSH HIDEAWAY — twig-frame entrance concealed inside dense blackthorn or hawthorn hedge
+  • STONE-RUIN OVERGROWN — cottages built into crumbling ancient masonry, ivy-engulfed
+  • CLIFF-LEDGE DWELLING — built into mossy cliff wall, multiple ledges
+  • WATERFALL-CLIFF DWELLING — dwelling carved into cliff beside cascading waterfall
+  • SPIDER-SILK HAMMOCK — gossamer pavilion stretched between two-to-four trees, silk walls billowing
+  • CRYSTAL-GROVE HUT — woven ash-saplings with rose-quartz and river-pebbles embedded in lattice
+  • TREEHOUSE (vine-wrapped) — woven-branch walls, bark-shingle roof, small balcony, knotted-rope ladder
+  • INVERTED-MUSHROOM HANGING — mushroom hanging upside-down from branch, cap as floor
+  • GLASS-LEAF EMERALD DOME — translucent glass-leaf dome at mossy cliff base, single vine-cradle entrance
+  • PUMPKIN-COTTAGE — colossal autumn pumpkin with carved windows and door, stem-chimney
+  • PINECONE-SCALE COTTAGE — layered pinecone-scales, brown overlapping shingle texture, half-buried in moss
+  • WISTERIA-VINE COTTAGE — entirely woven from interlaced wisteria-vines and violet blossoms
+  • CRYSTAL-FLOWERED VINE COTTAGE — vine-and-bark cottage with crystal-flowered translucent gem-blossoms catching light
+  • MOON-FLOWER HANGING DWELLING — large moonflower bloom hanging upside-down from branch, white luminous petals as walls
+  • BIRD-NEST DWELLING (large) — colossal abandoned bird-nest with carved twig-archway entrance, woven inside
+  • HOLLOW GOURD HOME — colossal autumn gourd carved into dwelling, stem chimney
+  • CARVED CLIFF NICHE — niche carved into mossy cliff, root-braced lintel, small carved opening
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC DWELLING TYPE (named architecture)
+  - (b) MATERIAL DETAIL (bark / moss / shell / petal / hazel / silk / etc.)
+  - (c) STRUCTURAL FEATURE (door / window / roof / balcony / threshold / chimney)
+  - (d) NATURAL INTEGRATION (grown from / nestled in / carved into / suspended from)
+
+🚫 STRICT BANS:
+  • NO modern construction (no concrete / steel / brick / glass-pane / asphalt-shingle)
+  • NO grave-trigger vocabulary (standing-stones / tomb / gravestone / cemetery)
+  • NO village_layout description (separate axis — this is just the dwelling type)
+  • NO lived-in-signs (amber-window-glow / smoke / lanterns belong to lived-in axis)
+  • NO lighting / weather / wildlife / garden / pathway descriptions`,
+    touchpoints: [
+      'A hollow-tree home carved into a colossal ancient oak with bark-arch doorway, amber-window opening in the trunk, hewn-wood balcony at the second story, moss staircase spiraling the trunk, naturally integrated into the living tree',
+      'A root-burrow beneath the exposed roots of an ancient pine, entrance tunnel framed by root-lattice, moss walls glowing emerald, carved steps leading down, small root-windows allowing views of the forest',
+      'A giant acorn cottage six feet tall carved into a fallen acorn, domed cap-roof with visible growth-rings, round carved door, two amber-glowing windows, hollowed interior smoothed by generations',
+      'A bird-egg shell dwelling with speckled ivory shell cracked open at the crown, carved entrance on the side, interior smoothed with woven-grass bedding, the shell resting in a nest of woven vines',
+      'A walnut-shell cottage with the shell halved horizontally, hinged top forming roof, carved door in lower shell, four round windows, interior chamber with amber walls smoothed by generations',
+      'A snail-shell spiral home with the shell lying on its side, entrance through the aperture, chambers following the spiral inward, each room visible through carved windows in the shell whorl',
+      'A giant toadstool mushroom-cottage with crimson cap dotted in white, carved oval door, woven-grass mat at threshold, hollowed interior with mushroom-gill ceiling',
+      'A flower-blossom dwelling nestled inside a giant peony bloom, layered petals in cream and coral forming curved walls, carved entrance where petals overlap, interior chamber with petal-ceiling arching overhead',
+      'A flower-blossom dwelling built inside a giant trumpet-foxglove bell, petals as walls arching overhead, stamen as hanging fixtures, the bell tilted gently from a sturdy stem',
+      'A hanging leaf-nest woven from broad oak leaves suspended from a high branch by braided vines, carved entrance facing east, knotted-rope ladder descending to forest floor',
+      'A seed-pod home shaped like an enormous thistle-down suspended by living vines from a spreading oak, carved entrance facing skyward, wispy filaments forming railings',
+      'A stump-cottage fashioned from a colossal cedar stump with moss roof cascading down weathered silver bark, seven tiny windows at staggered heights, door hewn into wood grain',
+      'A hidden bramble-nest woven from hazel inside a flowering blackthorn hedge, white blossoms and dark thorns, small amber round window facing dawn, carved bramble door',
+      'An ancient stone-ruin cottage built into crumbling masonry arches, ivy and climbing roses overtaking surfaces, moss-covered archways with carved wooden doors, honeysuckle threading cracks',
+      'A waterfall-cliff dwelling built into mossy cliff wall with carved entrance behind cascading water, small ledge with carved threshold, fern-walls draping around the opening',
+      'A spider-silk hammock home stretched between two hawthorn trees, pavilion draped with gossamer silk walls billowing in the breeze, woven-branch floor suspended within',
+      'A crystal-grove hut woven from ash saplings with rose-quartz and river-smooth pebbles embedded in the lattice, dome-shaped roof, arched doorway draped with wild grape',
+      'A vine-wrapped treehouse high in an oak with woven-branch walls, bark-shingle roof, small balcony with twig railings, knotted-rope ladder descending to the forest floor',
+      'An inverted-mushroom hanging cottage suspended upside-down from a thick branch, cap forming floor, stem carved into rooms stacked vertically, entrance at the bottom of the stem',
+      'A seashell dwelling fashioned from a giant conch with spiraled interior, carved entrance at the wide opening, smooth ridged exterior wrapped in seaweed and moss',
+      'A pumpkin-cottage fashioned from a colossal autumn pumpkin with carved windows and door, stem-chimney, the cottage resting in a bed of vines and gourds',
+      'A tulip-blossom dwelling inside a giant tulip bloom, petals as walls in vibrant pink-and-cream, stamen as central support pillar, carved entrance where petals part',
+      'A pinecone-scale cottage layered from giant pinecone-scales, brown overlapping shingle texture, carved door, the cottage half-buried in moss at the base of a great pine',
+      'A wisteria-vine cottage woven entirely from interlaced wisteria-vines and violet blossoms, walls dripping with cascading flower-clusters, blossom-arch entrance',
+      'A hollow root-bole burrow carved into the massive buttress-root of a banyan-like tree, multiple openings facing different directions, moss-lined chambers visible within',
+    ],
+    instructions: `Each entry is ONE DWELLING TYPE, 35-60 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific dwelling type, (b) material detail, (c) structural feature, (d) natural integration. Vary widely across the 25 categories. NO modern construction. NO grave-trigger vocabulary. NO village_layout / lived-in-signs / lighting / weather / wildlife / garden / pathway. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_layout: {
+    format: 'simple',
+    theme: `VILLAGE LAYOUT (how the dwellings are arranged — LOAD-BEARING) for FaeBot's fae-village path. Each entry describes ONE specific spatial arrangement / composition layout. Each entry 25-50 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC layout/arrangement that describes how the dwelling(s) are spatially organized in the scene. Some are SINGLE (one dwelling), some are MULTI (cluster / network / stack / over-water / ring / etc.). Sonnet reconciles with dwelling_type axis.
+
+⚠️ LAYOUT CATEGORIES (vary widely across 25 entries):
+  • SINGLE-SOLITARY (~5 entries) — one dwelling alone in a clearing
+  • PAIR (~3 entries) — two sister-dwellings side by side, or facing across a path
+  • CLUSTER (~5 entries) — 3-6 dwellings grouped on the ground in a small village
+  • CANOPY-NETWORK (~3 entries) — multiple cottages across trees connected by vine-rope bridges + plank-walkways + knotted-ladders
+  • VERTICAL-STACK (~2 entries) — multiple cottages stacked in one tall tree at different heights, connected by spiral stairs + ladders
+  • OVER-WATER (~3 entries) — cottages on both banks of a stream/river with arch-bridges + plank-bridges crossing
+  • CLIFF-LEDGE (~2 entries) — dwellings on different cliff ledges connected by stone paths + vine-rope-bridges
+  • FAIRY-RING-COURTYARD (~1 entry) — circular arrangement of stone-dwellings around a central courtyard
+  • HANGING-INVERTED (~1 entry) — suspended cottages hanging from branches
+
+⚠️ EVERY entry MUST include:
+  - (a) LAYOUT TYPE
+  - (b) DWELLING COUNT (single / pair / 3-6 / etc.)
+  - (c) CONNECTION ELEMENT if multi (bridges / paths / stairs / etc.)
+  - (d) SPATIAL RELATIONSHIP (side by side / scattered / stacked / connected by)
+
+🚫 STRICT BANS:
+  • NO specific dwelling type / architecture (separate axis)
+  • NO lived-in-signs / lighting / weather / wildlife / garden / pathway approach
+  • NO modern construction`,
+    touchpoints: [
+      'SINGLE-SOLITARY layout — one solitary dwelling alone in a sun-dappled clearing, surrounded by lush enchanted forest, no neighbors visible',
+      'PAIR layout — two sister-dwellings side by side facing each other across a moss-grown path, mirrored in their orientation, shared stone patio between them',
+      'CLUSTER layout — five dwellings grouped on the ground in a small village arrangement, painted-pebble paths winding between them, central open area, moss carpeting gaps between',
+      'CANOPY-NETWORK layout — six dwellings across multiple trees connected by an intricate network of vine-rope bridges, knotted-rope ladders, and plank-walkways forming a suspended fae village in the canopy',
+      'VERTICAL-STACK layout — four dwellings stacked vertically in one massive ancient elm at different heights, connected by spiral wooden stairs winding the trunk and small platforms at each level',
+      'OVER-WATER layout — three dwellings on both banks of a forest stream, two on the left and one on the right, connected by a stone arch-bridge crossing the lower water and a wooden plank-bridge upstream',
+      'CLIFF-LEDGE layout — three small dwellings on different mossy cliff ledges connected by stone bridges and a vine-rope-bridge spanning the gorge below',
+      'FAIRY-RING-COURTYARD layout — six dwellings arranged in a perfect circle around a central earth-courtyard worn smooth by generations of fae feet, stepping-stones radiating outward like spokes',
+      'HANGING-INVERTED layout — three suspended dwellings hanging from thick overhead branches in a small triangle arrangement, connected by knotted-rope ladders descending to a shared platform below',
+      'SINGLE solitary dwelling alone in a fern-and-bluebell clearing, no neighbors, the cottage is the show',
+      'PAIR of sister-dwellings nestled against a single ancient tree-trunk, one slightly taller, the other lower, sharing a stone threshold',
+      'CLUSTER of four dwellings grouped in a small horseshoe arrangement opening toward the foreground, painted-pebble path winding between them',
+      'CANOPY-NETWORK of seven dwellings across a stand of oaks and maples, vine-rope bridges weaving through the canopy at multiple heights, plank-walkways spiraling trunks',
+      'VERTICAL-STACK of five dwellings ascending an ancient redwood in a continuous spiral up the trunk, each with a small balcony, knotted-rope ladders connecting platforms',
+      'OVER-WATER layout — four dwellings nestled on the banks of a winding forest stream, two arch-bridges crossing at different points, fae paths along both banks',
+      'CLIFF-LEDGE layout — five dwellings carved into a mossy cliff face at varying heights, narrow stone paths zigzagging up the rock-face, vine-rope-bridges spanning gaps',
+      'FAIRY-RING-COURTYARD of eight small dwellings in a perfect ring around an ancient stump at center, mossy stepping-stone paths radiating outward, wildflowers crowding the outer ring',
+      'CANOPY-NETWORK of five dwellings linked across three ancient trees with bridges and ladders forming a connected web, the village suspended entirely above the forest floor',
+      'CLUSTER of six dwellings scattered across a sun-dappled clearing, painted-pebble paths meandering between them, moss carpeting gaps, shared central well',
+      'SINGLE dwelling at the center of an ancient stone-circle clearing, the cottage is the only structure, deep enchanted forest beyond',
+      'OVER-WATER layout — two dwellings facing each other across a small forest pool, single arch-bridge connecting them at the midpoint',
+      'VERTICAL-STACK of three dwellings climbing the trunk of a massive ancient oak in close-stacked arrangement, balconies overlapping, ladders connecting',
+      'CLUSTER of five dwellings in a tight ring around a central fairy-mushroom-circle, paths radiating outward through wildflower meadow',
+      'SINGLE solitary dwelling alone in a fern-grotto, framed by mossy boulders, the cottage is the only structure',
+      'CANOPY-NETWORK of four dwellings in an arrangement of suspended platforms connected by interlaced vine-bridges, the village floats above the moss-floor',
+    ],
+    instructions: `Each entry is ONE VILLAGE LAYOUT, 25-50 words. Format: prose, comma-separated phrases. MANDATORY — (a) layout type, (b) dwelling count, (c) connection element if multi, (d) spatial relationship. Vary widely across the 9 layout categories. NO specific dwelling-type architecture. NO lived-in-signs / lighting / weather / wildlife / garden. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_lived_in_signs: {
+    format: 'simple',
+    theme: `LIVED-IN SIGNS (amber-window-glow + chimney smoke + lanterns + chairs + tools — LOAD-BEARING) for FaeBot's fae-village path. Each entry describes a CLUSTER of 4-7 specific "lived-in" elements that make the village feel inhabited by fae. Each entry 40-70 words.
+
+⚠️ THE BAR: each entry is a RICH STACK of "this village is INHABITED" signals. AMBER-WINDOW-GLOW is always present (the legacy signature). Plus chimney smoke + hanging lanterns + small chairs by door + cooking-fire embers + tools propped against walls + laundry on line + open door with light + small wooden bench + hanging garlic strings + pots and tools at the threshold.
+
+⚠️ LIVED-IN ELEMENT MENU (mix 4-7 per entry):
+  • AMBER-WINDOW GLOW (always include) — warm-honey amber light pouring from carved windows, glowing softly
+  • CHIMNEY SMOKE — soft smoke curling from a small chimney
+  • HANGING LANTERNS — small warm-amber paper or amber-glass lanterns hanging from porch/doorway/branches
+  • CHAIRS BY DOOR — small fae-sized wooden chairs / stools / benches by the entrance
+  • COOKING-FIRE EMBERS — small outdoor fire-pit with embers, hanging pot above
+  • TOOLS PROPPED — small wooden tools propped against walls (rake / broom / fishing rod / basket)
+  • LAUNDRY ON LINE — tiny fae clothes drying on a vine-line strung between trees
+  • OPEN DOOR WITH LIGHT — door slightly ajar, warm amber light spilling out
+  • HANGING GARLIC / HERBS — strings of dried herbs / garlic / mushroom-bundles hanging from the porch
+  • POTS AND TOOLS — small fae-sized clay pots / wooden buckets / baskets near threshold
+  • CARVED PORCH RAIL — carved wooden porch railing with small detail
+  • WELL-WORN PATH — visible foot-worn path showing daily use
+  • SMOKE CURLING THROUGH WINDOWS — wisp of smoke from chimney drifting
+
+⚠️ EVERY entry MUST include:
+  - (a) AMBER-WINDOW GLOW (always — load-bearing legacy signature)
+  - (b) 3-6 ADDITIONAL lived-in elements from the menu
+  - (c) Position each (above the door / on the porch / in the windows / above the chimney / at the threshold)
+  - (d) Warm cozy register
+
+🚫 STRICT BANS:
+  • NO dwelling type / layout descriptions (separate axes)
+  • NO wildlife / garden / lighting / weather / forest setting (separate axes)
+  • NO modern objects (no electric / no propane / no plastic — only fae-natural)
+  • NO grave-trigger vocabulary`,
+    touchpoints: [
+      'Warm amber-honey glow pouring from carved windows of every dwelling, soft chimney smoke curling from small acorn-cap chimneys, two hanging amber-paper lanterns at the porch eaves, small wooden chair beside the door, cooking-fire embers in a stone fire-pit nearby, tiny laundry-line strung between branches with fae-cloth squares drying',
+      'Amber-glow spilling from every dwelling-window like spilled honey, wisp of chimney smoke drifting upward, three hanging glass-orb lanterns suspended from the porch overhang, small fae-sized stool by the threshold, copper kettle hanging from a hook beside the door, strings of dried herbs draped along the porch rail',
+      'Warm amber light glowing from arched windows, chimney smoke curling softly into the canopy, small wooden bench beside the carved door, baskets and small clay pots arranged at the threshold, hanging lantern glowing on the porch, well-worn path showing daily use',
+      'Soft amber window-light pouring through every opening, chimney smoke rising in lazy curls, two small fae chairs by an open door with warm light spilling out, broom propped against the wall, hanging garlic strings and dried herbs over the threshold, small clay-pot herb garden by the steps',
+      'Honey-amber window-glow warming every facet of the dwelling, chimney smoke drifting, hanging glass-bell lanterns on the porch swaying gently, small fae-stool tucked beside the door, dried-mushroom strings hanging from porch beams, small wooden bucket and tools propped against the wall',
+      'Warm amber lantern-light pouring from windows, chimney smoke rising softly, fishing rod propped against the wall, vine-rope basket hanging on a hook, small open door with golden light spilling out onto the threshold, well-worn moss-path leading to the door',
+      'Amber window-glow from every dwelling, smoke curling from a tiny chimney, hanging paper-lantern over the porch, two small fae chairs by the door, cooking-pot suspended over outdoor embers, laundry-line with tiny fae-cloth squares drifting in the breeze, basket of foraged mushrooms at the threshold',
+      'Soft amber light pouring from windows, chimney smoke drifting, small carved bench beside the door, hanging garlic strings on the porch, fae-sized broom and rake propped against the wall, clay-pot herb garden by the steps, open door with warm light spilling onto the path',
+      'Warm amber-honey window-glow filling the dwelling, smoke curling from a tiny chimney, three hanging amber lanterns swaying from the porch, small fae-stool by the threshold, dried-herb bundles strung from porch beams, cooking-fire embers in a small fire-pit nearby',
+      'Amber-glowing windows in every dwelling, chimney smoke rising softly, small fae-sized chairs arranged on the porch, hanging glass-orb lantern, wooden tools propped against the wall, well-worn path to the door, baskets and pots at the threshold',
+      'Warm honey-amber glow from every window, chimney smoke curling, hanging amber lantern at the porch, small wooden bench, broom propped at the door, strings of dried mushrooms hanging from the eaves, open door spilling golden light',
+      'Amber light from windows, chimney smoke drifting upward, small fae-stool by the carved door, hanging vine-rope basket of foraged herbs, copper kettle hanging beside the door, cooking-fire embers in a small stone pit, laundry-line strung between branches',
+      'Soft amber window-glow, chimney smoke rising softly, hanging amber paper-lantern, small carved bench, fae-tools (broom + rake + small wooden ladle) propped at the door, dried-herb bundles on the porch, open door with golden light',
+      'Warm amber-honey glow pouring from every window, smoke curling from chimneys, multiple hanging lanterns swaying from beams, small fae chairs on the porch, cooking-pot over embers, laundry-line with tiny fae-cloth squares, basket of mushrooms at the threshold',
+      'Amber window-light from every dwelling, chimney smoke drifting, hanging glass-bell lantern at the porch, small wooden stool by the door, broom propped against the wall, strings of dried garlic and herbs, clay-pot herb garden by the steps',
+      'Warm amber glow filling the windows, chimney smoke curling lazily, two hanging amber lanterns swaying, small fae-chair on the porch, dried-mushroom strings hanging from beams, cooking-fire embers nearby, well-worn moss-path to the door',
+      'Soft amber-honey window-light, chimney smoke rising, hanging amber-paper lantern, small carved fae-stool, broom and rake propped at the door, basket of foraged herbs at the threshold, open door with warm light spilling',
+      'Amber-glowing windows, smoke curling from chimney, hanging amber-orb lantern, small wooden bench beside the door, fishing rod and basket propped against the wall, laundry-line with tiny fae-cloth drying, well-worn path showing daily use',
+      'Warm amber-honey glow from every window, chimney smoke drifting softly, hanging lantern at the porch, small fae chairs by the door, cooking-fire embers in a stone pit, strings of dried mushrooms and herbs hanging, basket of foraged plants at the threshold',
+      'Amber light pouring from windows, chimney smoke rising, hanging amber paper-lantern swaying gently, small fae-stool by the threshold, broom propped against the wall, cooking-pot hanging over embers, well-worn moss-path approach',
+      'Warm honey-amber glow filling the dwelling-windows, chimney smoke curling, two hanging amber lanterns at the porch eaves, small carved bench, dried-herb bundles, fae-sized broom and rake, open door with golden light spilling',
+      'Amber-glowing windows, chimney smoke drifting softly, hanging glass-orb lantern, small wooden chair beside the door, clay-pot herb garden by the steps, basket and pots at the threshold, well-worn fae path',
+      'Soft amber-honey window-light, chimney smoke rising in lazy curls, hanging amber-paper lantern, small fae-stool, broom and tools propped, cooking-fire embers, strings of dried mushrooms hanging from the porch',
+      'Warm amber glow from windows, chimney smoke drifting, hanging amber-orb lantern at the porch, small carved fae-chair, dried-herb bundles strung along the porch rail, copper kettle hanging by the door, basket of foraged mushrooms',
+      'Amber-honey window-glow in every dwelling, chimney smoke rising softly, multiple hanging amber lanterns swaying from beams, small fae chairs on the porch, cooking-pot over embers, laundry-line, well-worn path showing daily fae use',
+    ],
+    instructions: `Each entry is ONE LIVED-IN SIGNS cluster, 40-70 words. Format: prose, comma-separated phrases listing 4-7 elements. MANDATORY — (a) amber-window glow (always include — load-bearing legacy signature), (b) 3-6 additional lived-in elements, (c) position each, (d) warm cozy register. NO dwelling type / layout / wildlife / garden / lighting / weather / forest. NO modern objects. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_approach_pathway: {
+    format: 'simple',
+    theme: `APPROACH PATHWAY (the specific path/stair/bridge leading to the dwelling) for FaeBot's fae-village path. Each entry describes ONE specific approach element visible in the scene. Each entry 25-45 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC approach pathway — the visible route from foreground or mid-tier leading to the dwelling. Stone-path / plank-bridge / spiral-stair / vine-rope-bridge / knotted-ladder / fallen-log walkway / pebble-path / moss-staircase / earth-stair.
+
+⚠️ PATHWAY TYPES (vary widely):
+  • MOSSY STONE-PATH — flat moss-covered stepping-stones winding through floor
+  • WOODEN-PLANK BRIDGE — small wooden plank bridge crossing a stream or gap
+  • SPIRAL MOSS-STAIRCASE — carved moss-covered staircase spiraling up a tree-trunk
+  • PEBBLE-PATH — painted-pebble path meandering between dwellings
+  • VINE-ROPE BRIDGE — woven vine-rope bridge spanning a gap
+  • KNOTTED-ROPE LADDER — knotted rope ladder descending from a treehouse
+  • FALLEN-LOG WALKWAY — moss-covered fallen log crossing a stream
+  • EARTH-STAIR — earth-stair carved into a hillside
+  • PLANK-WALKWAY SPIRAL — plank-walkway spiraling around a tree-trunk
+  • STONE-ARCH BRIDGE — stone arch-bridge crossing water
+  • ROOT-LATTICE STAIR — stair formed by ascending root-lattice
+  • PETAL-CARPETED PATH — moss-path strewn with fallen petals
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC PATHWAY TYPE
+  - (b) WHERE IT LEADS (toward the dwelling / between dwellings / crossing water / up to a balcony)
+  - (c) MATERIAL DETAIL
+  - (d) POSITION IN SCENE (foreground / mid-tier / leading the eye)
+
+🚫 STRICT BANS:
+  • NO dwelling type / layout descriptions
+  • NO lived-in-signs / lighting / weather / wildlife / garden / forest setting
+  • NO modern construction`,
+    touchpoints: [
+      'A mossy stone-stepping-path winding from foreground through the wildflower meadow up to the dwelling entrance, weathered moss-covered stones, painted soft register',
+      'A wooden-plank bridge in mid-tier crossing a small clear stream up to the dwelling porch, mossy plank-edges, small carved wooden railings',
+      'A spiral moss-staircase carved into the trunk of the ancient tree-dwelling, ascending from the forest floor upward, dewdrop-jeweled moss steps',
+      'A painted-pebble path meandering between the dwellings of the cluster, small smooth pebbles in tones of cream and grey, wildflowers crowding the path-edges',
+      'A vine-rope bridge spanning a small gap between dwellings, woven-vine railings, knotted-vine planks underfoot, swaying gently',
+      'A knotted-rope ladder descending from the treehouse balcony to the forest floor, vine-fibers and knotted-loops, painted soft motion',
+      'A moss-covered fallen-log walkway crossing a small forest stream up to the dwelling entrance, lichen-crusted bark, painted lush detail',
+      'An earth-stair carved into the hillside leading down to the dwelling entrance, weathered earth-steps, wildflowers crowding the edges',
+      'A plank-walkway spiraling around a colossal tree-trunk ascending to the upper dwellings, wooden plank-floor, vine-rope railings',
+      'A small stone arch-bridge crossing a forest stream in the foreground, weathered moss-covered stones, painted detail',
+      'A root-lattice stair formed by ascending exposed roots leading up to the burrow-dwelling, twisted root-treads, painted bark-detail',
+      'A petal-carpeted path strewn with fallen cherry-blossom petals leading from foreground to the dwelling-porch, soft pink-and-white blossom-floor',
+      'Painted mossy stone-stepping path winding through painted wildflower carpet to painted dwelling-door, painted soft register',
+      'Painted wooden-plank bridge in painted mid-tier crossing painted clear stream, painted moss-edges, painted small railings',
+      'Painted spiral moss-staircase carved into painted tree-dwelling trunk, painted dewdrop-jeweled steps',
+      'Painted painted-pebble path meandering between painted dwellings, painted cream-and-grey pebbles, painted wildflowers',
+      'Painted vine-rope bridge spanning painted gap between painted dwellings, painted woven-vine railings, painted swaying motion',
+      'Painted knotted-rope ladder descending from painted treehouse to painted forest floor, painted vine-fibers and knots',
+      'Painted moss-covered fallen-log walkway crossing painted stream, painted lichen-crusted bark, painted lush detail',
+      'Painted earth-stair carved into painted hillside, painted weathered earth-steps, painted wildflower edges',
+      'Painted plank-walkway spiraling painted ancient tree-trunk, painted wooden plank-floor, painted vine-rope railings',
+      'Painted stone arch-bridge crossing painted stream in painted foreground, painted weathered moss-stones',
+      'Painted root-lattice stair painted ascending painted root-walls to painted burrow-dwelling, painted twisted treads',
+      'Painted petal-carpeted path painted strewn with painted cherry-blossom petals, painted soft pink-and-white floor',
+      'Painted carved-wood spiral staircase winding up painted ancient trunk to painted treehouse balcony, painted lichen-crusted wood',
+    ],
+    instructions: `Each entry is ONE APPROACH PATHWAY, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific pathway type, (b) where it leads, (c) material detail, (d) position in scene. NO dwelling type / layout / lived-in / wildlife / garden / lighting / weather / forest. NO modern construction. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_dwelling_garden: {
+    format: 'simple',
+    theme: `DWELLING GARDEN (climbing vines + flowers + moss ON the dwelling) for FaeBot's fae-village path. Each entry describes the BLANKET of overgrown lushness covering the dwelling itself — climbing wisteria + foxglove-spires + climbing-roses + herb-garden + moss-roof + ivy-engulfing-walls. Each entry 35-60 words.
+
+⚠️ THE BAR: each entry is a CLUSTER of dwelling-overgrowth elements. The dwelling is overgrown with painted lushness — moss-blanket roof, wisteria draping the walls, climbing roses tangled at the door, foxglove-spires rising beside the entrance, herb-garden by the threshold, fern-cluster on the porch. The dwelling is part of the forest.
+
+⚠️ GARDEN ELEMENT MENU (mix 4-6 per entry):
+  • CLIMBING WISTERIA — cascading violet wisteria-clusters draping the walls
+  • CLIMBING ROSES — pink/white/red rose-vines tangled around door + windows
+  • IVY-ENGULFING — climbing ivy covering walls in dense green
+  • FLOWERING CREEPERS — flowering vine-creepers across the structure
+  • HONEYSUCKLE — yellow-and-cream honeysuckle threading the masonry
+  • MOSS-BLANKET ROOF — thick moss covering the roof in painted green
+  • FERN-CLUSTER ON PORCH — lacy fern-fronds sprouting from porch beams
+  • HERB-GARDEN BY THRESHOLD — small herb-garden by the entrance (basil / rosemary / lavender / mint)
+  • FOXGLOVE-SPIRES BESIDE DOOR — tall foxglove-spires rising at the entrance
+  • CLIMBING-VINE TENDRILS — green tendrils climbing window-frames
+  • HANGING-GUTTER FERN — ferns sprouting from rain-gutters / window-boxes
+  • WINDOW-BOX FLOWERS — small wooden window-boxes overflowing with primroses or geraniums
+
+⚠️ EVERY entry MUST include:
+  - (a) 4-6 garden elements from the menu (NEVER fewer than 4)
+  - (b) Position each (on the walls / draping the porch / beside the door / on the roof / at the threshold)
+  - (c) BLANKET density (overgrown / engulfed / cascading / densely-woven)
+
+🚫 STRICT BANS:
+  • NO dwelling type / layout / lived-in-signs (separate axes)
+  • NO floral_carpet at foreground (separate axis — this is ON the dwelling)
+  • NO wildlife / lighting / weather / forest setting
+  • NO modern construction`,
+    touchpoints: [
+      'Cascading violet wisteria draping the dwelling walls in dense ropes, climbing pink-rose vines tangled around the door and windows, thick moss-blanket roof in painted emerald, fern-cluster sprouting from the porch beams, small herb-garden of basil and lavender by the threshold, foxglove-spires rising beside the entrance',
+      'Climbing ivy engulfing the dwelling walls in dense painted green, honeysuckle threading the masonry in yellow-and-cream, moss-blanket roof, climbing-rose tangle at the door, small wooden window-boxes overflowing with primroses, fern-fronds sprouting from rain-gutters',
+      'Flowering wisteria-clusters cascading from the upper eaves, climbing roses in pink wreathing the door, painted moss-roof, herb-garden of rosemary and mint by the threshold, foxglove-spires beside the entrance, climbing-vine tendrils up the window-frames',
+      'Cascading violet-wisteria draping the walls, ivy in painted green climbing the trunk, painted moss-blanket roof, climbing roses tangled at the porch, small herb-garden by the steps, lacy fern-fronds sprouting from porch beams, window-boxes overflowing with geraniums',
+      'Dense painted wisteria draping the dwelling, climbing roses tangled at the door, ivy engulfing the walls, painted moss-blanket roof, foxglove-spires rising beside the entrance, herb-garden at the threshold, window-box flowers in primrose-yellow',
+      'Climbing ivy in painted green engulfing the walls, cascading wisteria-clusters draping the porch, painted moss-roof, climbing-rose-tangle at the entrance, fern-fronds sprouting from gutters, small herb-garden by the steps',
+      'Painted cascading wisteria draping painted walls, painted climbing roses at painted door, painted moss-blanket roof, painted herb-garden by painted threshold, painted foxglove-spires beside painted entrance, painted fern-cluster on painted porch',
+      'Painted climbing ivy engulfing painted dwelling walls, painted honeysuckle threading painted masonry, painted moss-blanket roof, painted climbing-rose tangle, painted window-boxes with painted primroses, painted fern-fronds from painted gutters',
+      'Painted flowering wisteria from painted upper eaves, painted climbing roses wreathing painted door, painted moss-roof, painted herb-garden by painted threshold, painted foxglove-spires, painted vine-tendrils on painted window-frames',
+      'Painted cascading violet-wisteria draping painted walls, painted ivy climbing painted trunk, painted moss-blanket roof, painted climbing roses at painted porch, painted herb-garden by painted steps, painted lacy fern-fronds',
+      'Painted dense wisteria draping painted dwelling, painted climbing roses at painted door, painted ivy engulfing painted walls, painted moss-roof, painted foxglove-spires at painted entrance, painted herb-garden at painted threshold',
+      'Painted climbing ivy in painted green engulfing painted walls, painted cascading wisteria-clusters draping painted porch, painted moss-roof, painted climbing-rose tangle at painted entrance, painted fern-fronds from painted gutters',
+      'Cascading lavender-wisteria from the upper eaves in dense ropes, climbing pink-roses tangled at the door, thick painted moss-roof, herb-garden of basil-rosemary-lavender by threshold, foxglove-spires beside entrance',
+      'Climbing wild-grape vines engulfing the walls, cascading wisteria-clusters from the porch, moss-blanket roof, climbing-rose-tangle at the entrance, fern-fronds on porch beams, herb-garden by steps',
+      'Cascading honeysuckle in yellow-and-cream draping the walls, climbing roses at the door, painted moss-roof, foxglove-spires beside the threshold, fern-cluster on the porch, window-box flowers in primrose',
+      'Climbing wisteria in dense violet ropes, ivy engulfing the walls, climbing-rose tangle at the door, moss-roof, herb-garden by the steps, fern-fronds from gutters, window-box flowers',
+      'Cascading wisteria draping the porch, climbing roses at the door, painted ivy on the walls, painted moss-roof, herb-garden by threshold, foxglove-spires, fern-cluster on porch beams',
+      'Painted cascading violet-wisteria, painted climbing-rose tangle at painted door, painted ivy on painted walls, painted moss-roof, painted herb-garden, painted foxglove-spires, painted window-box flowers',
+      'Painted dense wisteria-clusters draping painted porch, painted climbing-rose tangle, painted ivy engulfing painted walls, painted moss-roof, painted fern-cluster, painted herb-garden by painted threshold',
+      'Cascading wisteria + climbing roses at the door + ivy on the walls + moss-blanket roof + foxglove-spires beside entrance + herb-garden by the steps + window-box overflowing with primroses',
+      'Painted climbing ivy + painted wisteria draping + painted climbing-rose tangle + painted moss-roof + painted fern-cluster + painted herb-garden + painted foxglove-spires',
+      'Painted cascading wisteria + painted climbing-rose tangle + painted ivy + painted moss-roof + painted herb-garden + painted fern-fronds + painted window-box primroses',
+      'Painted dense painted wisteria + painted climbing-rose tangle + painted ivy engulfing + painted moss-blanket roof + painted foxglove-spires + painted herb-garden + painted fern-cluster',
+      'Painted cascading violet-wisteria + painted climbing pink-roses + painted ivy on walls + painted moss-roof + painted foxglove-spires + painted herb-garden + painted window-box-flowers',
+      'Cascading wisteria + climbing roses + ivy + moss-roof + foxglove-spires + herb-garden + fern-cluster + window-box flowers — all overgrowing the dwelling in dense painted lushness',
+    ],
+    instructions: `Each entry is ONE DWELLING GARDEN cluster, 35-60 words. Format: prose, comma-separated phrases. MANDATORY — (a) 4-6 garden elements (NEVER fewer than 4), (b) position each on/around the dwelling, (c) BLANKET density. NO dwelling type / layout / lived-in / floral-carpet-foreground / wildlife / lighting / weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_forest_setting: {
+    format: 'simple',
+    theme: `FOREST SETTING (surrounding biome) for FaeBot's fae-village path. Each entry describes the SPECIFIC enchanted-forest biome wrapping the village. Each entry 25-45 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC enchanted-forest biome that wraps the village — ancient oak grove / pale birch glade / wisteria-cascade arbor / fern-grotto / autumn-grove / cherry-blossom canopy / etc. Painted atmospheric depth.
+
+⚠️ BIOME CATEGORIES (vary widely across 25 entries):
+  • ANCIENT OAK CATHEDRAL — soaring twisted oak-cathedral
+  • PALE BIRCH GLADE — slender white-barked birches
+  • WISTERIA-CASCADE ARBOR — violet wisteria draping overhead
+  • FERN-GROTTO HOLLOW — lacy fern-fronds arching overhead
+  • AUTUMN-GROVE — golden-amber + crimson leaves
+  • CHERRY-BLOSSOM CANOPY — pink-and-white blossom-branches
+  • HANGING-MOSS GROVE — dripping hanging-mosses
+  • DENSE LUSH RAINFOREST — layered tropical-fae canopy
+  • MIXED ANCIENT WOODLAND — oak + birch + maple intermingled
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC BIOME TYPE
+  - (b) 2+ TEXTURE DETAILS
+  - (c) MULTI-TIER DEPTH
+
+🚫 STRICT BANS:
+  • NO dwelling / lived-in / lighting / weather / wildlife / garden / pathway
+  • NO grave-trigger vocabulary
+  • NO modern`,
+    touchpoints: [
+      'Ancient oak cathedral grove wrapping the village with massive twisted gnarled trunks, vaulted oak-branch canopy soaring overhead, painted depth fading into atmospheric haze',
+      'Pale birch glade with slender white-barked birch-trunks framing the village in graceful colonnade, painted ethereal pearl-light depth',
+      'Wisteria-cascade arbor with violet wisteria-curtains draping in dense ropes from interlocked branches overhead, painted violet-cream haze',
+      'Hidden fern-grotto hollow with tall lacy fern-fronds arching overhead, dripping moss-walls surrounding the village clearing',
+      'Ancient autumn-grove with twisted trees crowned in golden-amber and crimson leaves, fallen leaf-carpet, drifting leaves through warm light',
+      'Cherry-blossom canopy with pink-and-white blossom-branches arching overhead in dense painted layers, soft petal-drift filling the air',
+      'Hanging-moss grove with cascading dripping hanging-mosses draping from ancient gnarled branches in soft green curtains',
+      'Mixed ancient woodland with oak and birch and maple intermingled in a sprawling old-growth grove surrounding the village',
+      'Dense lush rainforest enchanted-grove with layered tropical-fae canopy, hanging vines and large painted leaves',
+      'Soaring oak-cathedral grove wrapping the village, painted hanging-moss curtains, painted vaulted canopy overhead',
+      'Painted pale birch-glade with painted slender pale-bark trunks, painted soft pearl-light canopy',
+      'Painted wisteria-cathedral arbor with painted cascading violet wisteria, painted multi-tier depth into painted violet-cream haze',
+      'Painted fern-grotto hollow cradled by painted ancient moss-cliffs, painted lacy fern-canopy arching overhead',
+      'Painted autumn-grove with painted golden-amber leaves, painted fallen leaf-carpet, painted bronze-and-amber depth',
+      'Painted cherry-blossom canopy with painted pink-and-white blossom-branches arching overhead, painted soft petal-drift',
+      'Painted hanging-moss grove with painted cascading hanging-mosses in soft green curtains, painted dappled light',
+      'Painted mixed ancient woodland with painted oak-and-birch-and-yew intermingled, painted dappled canopy, painted atmospheric multi-tier',
+      'Painted dense lush rainforest enchanted-grove with painted layered tropical-fae canopy, painted hanging vines and large leaves',
+      'Painted soaring hero-tree grove with painted single colossal world-tree as the painted village-anchor, painted ancillary trees beyond',
+      'Painted oak-and-yew sacred grove with painted ancient twisted trunks mingling, painted interlocked dark-and-green canopy',
+      'Painted soft-mist enchanted grove with painted ancient ghostly trunks rising through soft white mist',
+      'Painted twisted ancient willow-and-birch grove with painted weeping willow-fronds draping from above',
+      'Painted misty pine-grove with painted tall ancient pines and painted soft drifting mist, painted ethereal depth',
+      'Painted enchanted hazel-grove with painted twisted hazel-trunks and painted flowering branches overhead',
+      'Painted soft golden-leaf-grove with painted shimmering golden leaves catching painted soft light, painted ethereal register',
+    ],
+    instructions: `Each entry is ONE FOREST SETTING, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific biome, (b) 2+ texture details, (c) multi-tier depth. NO dwelling / lived-in / lighting / weather / wildlife / garden / pathway. NO grave vocabulary. NO modern. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_lighting: {
+    format: 'simple',
+    theme: `LIGHTING (DRAMATIC ATMOSPHERIC EVENT — time-of-day + active weather + light register) for FaeBot's fae-village path. Each entry describes ONE specific UNIQUE atmospheric moment combining time-of-day + light quality + an active weather/light event. Each entry 35-60 words.
+
+⚠️ THE BAR: each entry is a DRAMATIC UNIQUE ATMOSPHERIC MOMENT — snowing midday with falling flakes / golden-hour drizzle with rain droplets in light shafts / midday sun-shower with active rainfall in god-rays / storm-break with charcoal clouds torn open and brilliant light flooding through / misty dawn with single sun-shaft / hot-haze midday with brutal white-gold shafts / pre-dawn cool blue with first warm sun-shaft cutting through. NEVER generic "golden hour" — every entry is a SPECIFIC weather/light EVENT.
+
+⚠️ ATMOSPHERIC EVENT CATEGORIES (vary widely across 25 entries):
+  • SNOWING MIDDAY — soft falling flakes + diffuse pearl-grey light + golden window-glow popping warm
+  • GOLDEN-HOUR DRIZZLE — warm amber shafts cutting through suspended rain droplets + rainbow shimmer
+  • MIDDAY SUN-SHOWER — active rainfall through golden god-rays, light-and-water sparkling
+  • STORM-BREAK — charcoal clouds torn open overhead + brilliant white-gold light flooding through canopy gap
+  • MISTY DAWN — pearl-light through morning mist + single warm sun-shaft raking through fog
+  • HOT-HAZE MIDDAY — brutal white-gold volumetric sun-shafts raking through dense canopy + shimmering air
+  • PRE-DAWN COOL-BLUE — first warm sun-shaft cutting cool blue ambient with amber windows glowing brightly
+  • POST-RAIN SHIMMER — fresh dewdrops beading everything + slanting amber light catching every drop
+  • FALLING-LEAVES STORM — bronze and golden leaves drifting actively through warm raking sidelight
+  • CHERRY-BLOSSOM BLIZZARD — drifting pink-and-white blossom-petals filling the air through warm light
+  • MOONLIT SILVER WITH AMBER WINDOWS — silver moonlight + deep blue grove + amber window-glow popping
+  • TWILIGHT BLUE-HOUR — deep violet-blue grove + amber lantern-glow against cool ambient
+  • DRIZZLING DAWN — soft rain streaks + pink-pearl light + god-rays struggling through dripping canopy
+  • OVERCAST SUN-SHAFT-RAKE — single dramatic sun-shaft raking through overcast diffuse onto moss
+  • POLLEN-STORM AT GOLDEN HOUR — drifting golden pollen thick in warm amber air
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC TIME-OF-DAY
+  - (b) ACTIVE WEATHER OR LIGHT EVENT (falling snow / drizzle / sun-shower / storm-break / mist / leaves / blossoms)
+  - (c) PALETTE
+  - (d) WARM AMBER WINDOW-GLOW CONTRAST with the ambient
+
+🚫 STRICT BANS:
+  • NO dwelling / lived-in / wildlife / garden / atmospheric depth (separate axes)
+  • NO bare generic "golden hour" — must be a SPECIFIC atmospheric event`,
+    touchpoints: [
+      'Golden-hour warm-amber light streaming through the grove in soft slanting shafts, palette of warm-amber and burnished bronze with cool deep-blue shadows in the grove',
+      'Dusk amber light with sky deepening into rose-and-violet, warm lantern-amber pouring from windows in stark contrast to cool blue ambient',
+      'Silver moonlight pouring through the canopy onto the moss-floor, deep blue grove shadows, warm amber window-glow pulsing softly in stark warm contrast',
+      'Soft pearl-light dawn breaking gently through the canopy, palette of pale rose-gold and soft cream, painterly soft-misted register',
+      'Bright midday dappled canopy-light scattered across the moss-floor, bright-yellow patches against deep-emerald shadows',
+      'Autumn warm-amber late-light raking through bronze-and-gold leaves, palette of amber-and-rust with deep grove shadows',
+      'Soft pearl-mist dawn filtering through morning mist, palette of pale cream and silver-green',
+      'Sunset warm-rose light raking through the grove at low angle, palette of rose-gold and burnished amber',
+      'Magical twilight-violet light pervading the grove with faint amber accent glow from village windows, palette of deep violet and amber',
+      'Overcast soft-diffuse light with no strong shadows, painterly muted register with amber window-glow popping warm',
+      'Painted golden-hour warm-amber light painted streaming through painted grove, painted warm palette',
+      'Painted dusk-amber light with painted sky deepening, painted warm lantern-amber from painted windows',
+      'Painted silver moonlight painted pouring through canopy, painted deep blue grove shadows, painted warm amber window-glow',
+      'Painted soft pearl-light dawn painted breaking gently, painted pale rose-gold palette',
+      'Painted bright midday dappled canopy-light painted scattered across painted moss-floor',
+      'Painted autumn warm-amber late-light painted raking through painted leaves, painted amber-and-rust palette',
+      'Painted soft pearl-mist dawn painted filtering through painted mist, painted pale cream palette',
+      'Painted sunset warm-rose light painted raking through painted grove, painted rose-gold palette',
+      'Painted magical twilight-violet with painted faint amber window-glow, painted deep violet-and-amber palette',
+      'Painted overcast soft-diffuse light, painted muted register with painted amber-window-glow popping',
+      'Painted warm late-afternoon sidelight gilding painted bark in painted amber-and-bronze, painted long shadows',
+      'Painted soft morning sun-shafts painted piercing painted grove in painted golden columns',
+      'Painted soft blue-hour grove with painted cool blue palette, painted warm window-glow pulsing',
+      'Painted warm midday glow with painted soft golden light painted suffusing painted scene',
+      'Painted soft cool-morning palette of painted pale-blue-and-pearl with painted gentle warm window-glow accents',
+    ],
+    instructions: `Each entry is ONE DRAMATIC ATMOSPHERIC EVENT lighting, 35-60 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific time-of-day, (b) active weather/light event (falling snow / drizzle / sun-shower / storm-break / mist / leaves / blossoms — NEVER generic "golden hour"), (c) palette, (d) amber window-glow contrast. NO dwelling / lived-in / wildlife / garden / atmospheric depth. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_atmospheric_depth: {
+    format: 'simple',
+    theme: `ATMOSPHERIC DEPTH (POETIC PEARLESCENT HAZE — distinct from lighting) for FaeBot's fae-village path. Each entry describes ONE specific atmospheric haze/depth phenomenon using POETIC color-specific language. Each entry 25-45 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC POETIC atmospheric phenomenon — "blue-violet pearlescent atmospheric haze" / "seafoam-green layered atmospheric haze" / "milky atmosphere veiling depth" / "rainbow shimmer through dripping canopy" / "pearl-warm opalescent softness pervading shadows" / "lavender-mist multi-layer fade" / "saffron-and-rose dusk haze layering tree-planes" / "gauzy verdant softness" / "blue-violet evening fog veiling village".
+
+⚠️ POETIC DEPTH CATEGORIES (across 25 entries — emphasize SPECIFIC COLOR-CODED hazes):
+  • PEARLESCENT BLUE-VIOLET HAZE — layered tree-planes fading into pale blue-violet
+  • SEAFOAM-GREEN LAYERED HAZE — pale green-cream haze multi-layer
+  • OPALESCENT PEARL-WARM HAZE — pearl-warm shimmer pervading the village
+  • MILKY ATMOSPHERIC FADE — milky white-cream atmosphere veiling distance
+  • RAINBOW-SHIMMER THROUGH DRIPPING CANOPY — sun-shafts catching mist-droplets in rainbow refractions
+  • LAVENDER-MIST MULTI-LAYER FADE — lavender mist softening receding tree-planes
+  • SAFFRON-AND-ROSE DUSK HAZE — warm dusk-haze layering the grove in saffron and rose tones
+  • GAUZY VERDANT SOFTNESS — soft green gauze-haze pervading the grove
+  • BLUE-VIOLET EVENING FOG — deep blue-violet fog veiling village at twilight
+  • GOLDEN GOD-RAY COLUMNS — visible columns of golden light cutting through with dust-motes
+  • PINK-PEARL DAWN HAZE — soft pink-pearl haze in dawn fade
+  • FOOTLIGHT-MIST WHITE-CURL — white mist pooling at the village floor in painted curls
+  • SMOKE-DRIFT AMBER HAZE — soft chimney smoke + amber haze layering
+  • DEWDROP-SHIMMER ATMOSPHERIC SPARKLE — every drop catching light in painted sparkle
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC POETIC HAZE TYPE (color-coded — blue-violet / seafoam-green / pearl-warm / saffron-rose / lavender / milky / etc.)
+  - (b) HOW IT LAYERS THE SCENE (multi-layer fade / veiling background / pervading shadows / pooling at floor)
+  - (c) PAINTERLY SOFT-ATMOSPHERIC register
+
+🚫 STRICT BANS:
+  • NO dwelling / lived-in / wildlife / garden / lighting / weather
+  • NO grave vocabulary`,
+    touchpoints: [
+      'Visible god-ray columns cutting through the grove from canopy gaps with golden dust-motes, defining depth between foreground and background',
+      'Multi-layer mist-fade with successive tree-planes softening into the deep-grove distance, classical atmospheric perspective',
+      'Dappled-canopy patchwork of bright sun-patches across the village floor through canopy gaps, alternating bright and shadow zones',
+      'Soft fog veiling the deep-grove background, gently dissolving distant tree-planes into pale-cream haze',
+      'Visible golden dust-motes catching light through the village, defining air between tree-planes',
+      'Soft gauze-haze across the entire grove softening the painterly register',
+      'Soft chimney smoke drifting from village chimneys adding a mid-tier depth layer of warm haze',
+      'Soft footlight-mist pooling at the village-floor in painted curls, dewdrops beading everything',
+      'Painted visible god-ray columns painted cutting through painted grove with painted dust-motes',
+      'Painted multi-layer mist-fade with painted tree-planes painted softening into painted distance',
+      'Painted dappled-canopy patchwork of painted bright sun-patches across painted village-floor',
+      'Painted soft fog painted veiling painted deep-grove background',
+      'Painted visible golden dust-motes painted catching light through painted village',
+      'Painted soft gauze-haze across painted entire grove, painted dreamy soft atmosphere',
+      'Painted soft chimney smoke painted drifting from painted village chimneys adding painted warm haze',
+      'Painted soft footlight-mist painted pooling at painted village-floor in painted curls',
+      'Painted dramatic god-ray light painted piercing painted dense canopy with painted dust-motes glittering',
+      'Painted soft pearl-mist painted hanging in painted mid-tier village, painted veiling painted deeper trees',
+      'Painted gentle atmospheric perspective with painted cooler tones in painted distance',
+      'Painted dappled patchwork of painted sun-and-shadow across painted village-floor, painted contrast',
+      'Painted layered depth with painted distinct foreground-midground-background planes',
+      'Painted soft mist painted pooling at painted village-floor and painted curling around painted dwellings',
+      'Painted golden god-ray columns painted with painted dust-motes glittering, painted defining depth',
+      'Painted soft mist-fade painted softening painted distant village-dwellings into painted painted pale haze',
+      'Painted gentle soft-haze painted across painted entire grove painted with painted layered tree-planes',
+    ],
+    instructions: `Each entry is ONE POETIC ATMOSPHERIC HAZE, 25-45 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific COLOR-CODED poetic haze (blue-violet pearlescent / seafoam-green / pearl-warm / saffron-rose / lavender / milky / rainbow-shimmer / etc.), (b) how it layers the scene, (c) painterly soft-atmospheric register. NO dwelling / lived-in / wildlife / garden / lighting / weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_wildlife_lived_in: {
+    format: 'simple',
+    theme: `WILDLIFE LIVED-IN (3-5 critters animating the village) for FaeBot's fae-village path. Each entry describes 3-5 specific critters bringing the village to life. Each entry 35-65 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC cluster of critters that animates the village — squirrels balancing on rails, butterflies on flowers, songbirds on porch-beams, chipmunks scampering, hummingbirds at blossoms, a hedgehog at the threshold, a small fawn at forest-edge. STUDIO GHIBLI density, Cinderella's woodland helpers.
+
+⚠️ CRITTER MENU (mix 3-5 per entry — include 1 RARE MAGICAL CREATURE in ~40% of entries to add WONDER):
+  • SQUIRREL — chasing along a railing / leaping between branches
+  • CHIPMUNK — scampering on a stone path / perched on a windowsill
+  • RABBIT/BUNNY — hopping in clover / sitting at the doorstep
+  • HEDGEHOG — snuffling at the threshold / curled on a moss-cushion
+  • HUMMINGBIRD — hovering at honeysuckle / at a flower-cluster
+  • SONGBIRD — robin / wren / sparrow / blue tit / chickadee perched on porch-beam
+  • OWL — on a branch above watching
+  • BUTTERFLIES — on wildflowers / in god-rays / cluster on blossoms (painted-lady / monarch / morpho / luna-moth)
+  • BUMBLEBEES — on lavender / on flowers
+  • DRAGONFLIES — skimming a pond / hovering near water
+  • FROG — on a lily-pad / at the water-edge
+  • SMALL FAWN — at the forest edge in distance
+  • WHITE STAG — at the forest edge, rare
+  • FIREFLIES — drifting through the air
+  • RAVEN — on a stone chimney
+  • MOUSE — peeking from a root / under a doorstep
+  • RARE MAGICAL CREATURES (~40% of entries should include ONE of these for WONDER):
+    - GLOWING-EYED FOX SPIRIT silhouette at clearing edge
+    - TRANSLUCENT SPIRIT WOLF PUP curled at entrance, eyes half-closed
+    - THREE-TAILED FOX SPIRIT crossing the clearing
+    - LUMINOUS DEER SPIRIT in middle distance with antlers glowing soft
+    - SHIMMERING FAE-HOUND pale and ethereal at forest edge
+    - WHITE STAG with painted moss-covered antlers and faint glow
+
+⚠️ EVERY entry MUST include:
+  - (a) 3-5 SPECIFIC critters (NEVER fewer than 3)
+  - (b) Each critter's POSITION (on the porch / in the foreground / at the door / on a branch above)
+  - (c) Each critter's ACTIVITY (perched / scampering / hovering / drifting / sitting)
+
+🚫 STRICT BANS:
+  • NO dwelling / lived-in-signs / garden / lighting / weather / forest setting / pathway
+  • NO predatory aggressive postures
+  • NO unicorn / dragon / phoenix
+  • NO grave vocabulary`,
+    touchpoints: [
+      'A grey squirrel balancing on a vine-rope railing in mid-tier, two ruby-throated hummingbirds hovering at the foreground honeysuckle, painted-lady butterflies clustered on porch-beam wildflowers, a small chipmunk on a stone step, a robin perched on the eaves',
+      'A painted bumblebee on lavender by the door, three monarch butterflies on the porch wildflowers, a grey squirrel leaping between branches above, a small rabbit sitting motionless in foreground clover, a wren on the chimney',
+      'A small grey rabbit hopping through foreground clover, a chipmunk on the windowsill, two hummingbirds at the foxglove-spires, drifting fireflies through the air, a robin perched on the porch railing',
+      'A small white stag standing in middle distance at the forest-edge, ruby-throated hummingbird at foreground honeysuckle, chipmunks chasing along a stone wall, painted-lady butterflies in god-rays, smoke curling from a small chimney',
+      'A grey squirrel on the porch railing, two robins perched on the eaves, painted butterflies clustered on the wildflowers, a small hedgehog snuffling at the threshold, drifting fireflies through the air',
+      'A small fawn at the forest edge in middle distance, chipmunks chasing along the stone path, two hummingbirds hovering at foreground blossoms, painted-lady butterflies in sunbeams, a wren on a porch-beam',
+      'A painted small bumblebee on the wildflowers by the door, dragonflies hovering near the foreground stream, a chipmunk on a moss-stone, a robin on the chimney, drifting fireflies through the air',
+      'A grey squirrel leaping from branch to porch railing, three monarch butterflies clustered on the foxglove-spires, a small frog on a lily-pad in the foreground, a hummingbird at the honeysuckle, drifting fireflies',
+      'A small white-tailed deer fawn approaching from the forest edge, painted-lady butterflies in god-rays at mid-tier, a chipmunk on the porch step, a robin perched on the eaves, drifting fireflies near the windows',
+      'A grey squirrel on a vine-rope bridge, two hummingbirds at foreground wildflowers, painted butterflies on the porch blossoms, a small hedgehog curled on a moss-cushion, drifting fireflies through the air',
+      'A painted small fox at the forest edge in middle distance (gentle, watching not predatory), painted-lady butterflies in sunbeams, a chipmunk on the windowsill, drifting fireflies, a robin on the chimney',
+      'Painted grey squirrel painted balancing on painted vine-rope railing, painted ruby-throated hummingbirds painted hovering at painted foreground honeysuckle, painted painted-lady butterflies painted clustered on painted porch wildflowers',
+      'Painted bumblebee on painted lavender, painted monarch butterflies on painted porch wildflowers, painted squirrel painted leaping painted between branches, painted rabbit in painted foreground clover',
+      'Painted small rabbit painted hopping through painted clover, painted chipmunk on painted windowsill, painted hummingbirds at painted foxglove-spires, painted drifting fireflies through painted air',
+      'Painted small white stag painted standing in painted distance at painted forest-edge, painted hummingbird at painted foreground honeysuckle, painted chipmunks painted chasing along painted stone wall, painted butterflies in painted god-rays',
+      'Painted grey squirrel on painted porch railing, painted robins on painted eaves, painted butterflies on painted wildflowers, painted hedgehog at painted threshold, painted drifting fireflies',
+      'Painted small fawn at painted forest edge in painted distance, painted chipmunks painted chasing along painted stone path, painted hummingbirds at painted foreground blossoms, painted butterflies in painted sunbeams',
+      'Painted small bumblebee on painted wildflowers, painted dragonflies hovering near painted foreground stream, painted chipmunk on painted moss-stone, painted robin on painted chimney',
+      'Painted grey squirrel painted leaping from painted branch, painted monarch butterflies on painted foxglove-spires, painted small frog on painted lily-pad, painted hummingbird at painted honeysuckle',
+      'Painted white-tailed deer fawn painted approaching from painted forest edge, painted butterflies in painted god-rays, painted chipmunk on painted porch step, painted robin on painted eaves, painted drifting fireflies',
+      'A grey squirrel on a vine-rope railing in mid-tier, two hummingbirds at foreground wildflowers, painted butterflies on the porch blossoms, a small hedgehog at the threshold, drifting fireflies through the air',
+      'Three songbirds perched on porch beams (wren + robin + chickadee), a chipmunk on the windowsill, two butterflies on the wildflowers, drifting fireflies, a small frog at the foreground stream',
+      'A small fawn at the forest edge, painted butterflies in god-rays, a chipmunk on a moss-stone, a robin on the chimney, drifting fireflies through the village',
+      'A grey squirrel on a porch railing, two hummingbirds at honeysuckle, painted butterflies on wildflowers, a small bunny at the doorstep, a hedgehog snuffling roots',
+      'A small white stag at the forest edge catching warm window-light, painted butterflies on the porch wildflowers, a chipmunk on a stone path, drifting fireflies through the air, a robin on the chimney',
+    ],
+    instructions: `Each entry is ONE WILDLIFE cluster, 35-65 words. Format: prose, comma-separated phrases listing 3-5 critters. MANDATORY — (a) 3-5 specific critters (named species), (b) position each, (c) activity each. NO dwelling / lived-in-signs / garden / lighting / weather / forest / pathway. NO predatory. NO unicorn/dragon/phoenix. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_floral_carpet: {
+    format: 'simple',
+    theme: `FLORAL CARPET (lush wildflower carpet at foreground/borders, separate from dwelling-garden) for FaeBot's fae-village path. Each entry describes a BLANKET-DENSITY wildflower carpet at the foreground edges and paths. Each entry 35-60 words.
+
+⚠️ THE BAR: each entry is a BLANKET of overlapping wildflower species blanketing the foreground and path-edges of the village. 5-7 named species per entry overlapping in dense carpet.
+
+⚠️ FLORAL ELEMENT MENU (each entry MUST contain 5-7 named species blanket-overlapping, with EXOTIC SPECIFIC COLOR COMBINATIONS — vary the palettes widely):
+  • Base species: bluebells / foxglove-spires / lily-of-the-valley / forget-me-nots / primroses / cowslips / wild-iris / harebells / wood-anemones / wild-rose / violets / wood-sorrel / sweet-woodruff / jasmine / heather / wild-strawberry / fairy-thimble / star-flower / windflower / celandine / wild-orchid / buttercups / poppies / daisies / valerian / speedwell / vinca / trillium / lupines / snowdrops / asters / wood-hyacinths / marigolds / peonies / cherry-blossoms / borage
+  • EXOTIC COLOR COMBO EXAMPLES (each entry should be a DISTINCT exotic combination — vary widely):
+    - cerise-pink wild roses + periwinkle speedwell + crimson honeysuckle
+    - tangerine marigolds + periwinkle vinca + white-and-yellow daisies
+    - sulfur cowslips + indigo wood-hyacinths + cream wood-anemones
+    - sapphire borage + apricot poppies + blush valerian
+    - white trillium + purple lupines + crimson valerian
+    - pink peonies + blue flax + drifting snowdrops
+    - white snowdrops + violet asters + ochre buttercups
+    - cerise wild-rose blush + violet primrose + indigo bluebells
+
+⚠️ EVERY entry MUST include:
+  - (a) 5-7 NAMED wildflower species blanket-overlapping (NEVER fewer than 5)
+  - (b) EXOTIC SPECIFIC COLOR COMBINATION (cerise-pink / periwinkle / tangerine / sulfur / sapphire / apricot / crimson / etc. — NEVER generic "pink + blue + yellow")
+  - (c) Position (foreground / path-edges / mid-tier borders)
+  - (d) BLANKET density language
+
+🚫 STRICT BANS:
+  • NO dwelling / lived-in / garden-on-dwelling / wildlife / lighting / weather / forest / pathway
+  • NO grave vocabulary`,
+    touchpoints: [
+      'Dense blanket of bluebells in indigo and primroses in cream-yellow carpeting the foreground, foxglove-spires in pink-and-purple rising at path-edges, lily-of-the-valley strands woven through, forget-me-nots pooling at center, wood-anemones scattered in white',
+      'Lush blanket of foxglove-spires in pink-and-purple at the borders, bluebells in indigo carpeting the floor, wild-rose tangles, cowslips in butter-yellow, primroses, violets in deep purple scattered through',
+      'Dense overlapping carpet of bluebells, foxglove-spires, lily-of-the-valley, forget-me-nots, primroses, wood-anemones, and wild-iris at the foreground edges and path-borders',
+      'Blanket of wildflowers carpeting the foreground in painted dense overlap — bluebells, foxgloves, primroses, harebells, cowslips, violets, wild-orchids — every inch alive with botanical detail',
+      'Dense painted wildflower blanket overlapping wall-to-wall — bluebells in indigo, foxglove-spires in pink, primroses in cream-yellow, lily-of-the-valley in white, wild-rose tangles, sweet-woodruff, fairy-thimble',
+      'Painted blanket of bluebells, foxgloves, lily-of-the-valley, forget-me-nots, primroses, wood-anemones, and wild-iris at painted foreground edges',
+      'Painted lush blanket of painted wildflowers — painted bluebells, painted foxgloves, painted primroses, painted harebells, painted cowslips, painted violets, painted wild-orchids',
+      'Painted dense overlapping carpet of painted bluebells, painted foxglove-spires, painted lily-of-the-valley, painted forget-me-nots, painted primroses, painted wood-anemones',
+      'Painted blanket of painted wildflowers carpeting painted foreground in painted dense overlap — painted bluebells, painted foxgloves, painted primroses, painted harebells, painted cowslips',
+      'Painted dense painted wildflower blanket painted overlapping painted floor — painted bluebells in painted indigo, painted foxglove-spires in painted pink, painted primroses, painted lily-of-the-valley, painted wild-rose',
+      'Painted blanket of painted bluebells, painted foxgloves, painted lily-of-the-valley, painted forget-me-nots, painted primroses, painted wood-anemones, painted wild-iris',
+      'Painted lush blanket of painted wildflowers — painted bluebells, painted foxgloves, painted primroses, painted harebells, painted cowslips, painted violets, painted wild-orchids',
+      'Painted dense overlapping carpet of painted bluebells, painted foxglove-spires, painted lily-of-the-valley, painted forget-me-nots, painted primroses, painted wood-anemones',
+      'Painted blanket of painted wildflowers carpeting painted foreground in painted dense overlap — painted bluebells, painted foxgloves, painted primroses, painted harebells, painted cowslips',
+      'Painted dense painted wildflower blanket painted overlapping painted floor — painted bluebells, painted foxgloves, painted primroses, painted lily-of-the-valley, painted wild-rose',
+      'Painted blanket of painted bluebells, painted foxgloves, painted lily-of-the-valley, painted forget-me-nots, painted primroses, painted wood-anemones, painted wild-iris',
+      'Painted lush blanket of painted wildflowers — painted bluebells, painted foxgloves, painted primroses, painted harebells, painted cowslips, painted violets',
+      'Painted dense overlapping carpet of painted bluebells, painted foxglove-spires, painted lily-of-the-valley, painted forget-me-nots, painted primroses',
+      'Painted blanket of painted wildflowers carpeting painted foreground — painted bluebells, painted foxgloves, painted primroses, painted harebells, painted cowslips',
+      'Painted dense painted wildflower blanket painted overlapping painted floor — painted bluebells, painted foxgloves, painted primroses, painted lily-of-the-valley, painted wild-rose',
+      'Painted blanket of painted bluebells, painted foxgloves, painted lily-of-the-valley, painted forget-me-nots, painted primroses, painted wood-anemones',
+      'Painted lush blanket of painted wildflowers — painted bluebells, painted foxgloves, painted primroses, painted harebells, painted cowslips, painted violets',
+      'Painted dense overlapping carpet of painted bluebells, painted foxglove-spires, painted lily-of-the-valley, painted forget-me-nots',
+      'Painted blanket of painted wildflowers carpeting painted foreground — painted bluebells, painted foxgloves, painted primroses, painted harebells, painted cowslips',
+      'Painted dense painted wildflower blanket painted overlapping — painted bluebells, painted foxgloves, painted primroses, painted lily-of-the-valley, painted wild-rose',
+    ],
+    instructions: `Each entry is ONE FLORAL CARPET, 35-60 words. Format: prose, comma-separated phrases. MANDATORY — (a) 5-7 NAMED wildflower species blanket-overlapping (NEVER fewer than 5), (b) position, (c) BLANKET density language. NO dwelling / lived-in / garden-on-dwelling / wildlife / lighting / weather / forest / pathway. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHOR (closest tactile depth element) for FaeBot's fae-village path. Each entry describes ONE specific tactile foreground element bringing 3-tier depth. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC tactile element close to the camera — overhanging branch / fern-cluster / blossom-cluster / hanging-moss curtain / drifting petals / overhanging vine.
+
+⚠️ FOREGROUND TYPES:
+  • OVERHANGING BRANCH — drooping into the upper frame
+  • FERN-CLUSTER — lacy fern-fronds at lower-left or lower-right
+  • BLOSSOM-CLUSTER — wildflower cluster in immediate foreground
+  • HANGING-MOSS CURTAIN — moss draping at the frame edge
+  • DRIFTING PETALS — close drifting petal-cluster
+  • HANGING WISTERIA — wisteria draping from above
+  • MUSHROOM-CLUSTER — small mushroom-ring at the closest floor
+  • MOSS-COVERED ROOT — gnarled root crossing the foreground
+  • DEW-COVERED LEAVES — close dew-covered leaves catching light
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC TACTILE TYPE
+  - (b) POSITION IN FRAME
+  - (c) TACTILE DETAIL
+
+🚫 STRICT BANS:
+  • NO dwelling / lived-in / garden / wildlife / lighting / weather / forest / pathway
+  • NO blocking the scene`,
+    touchpoints: [
+      'Overhanging branch with painted leaves drooping from the upper frame, softly out-of-focus, painted tactile detail',
+      'Lacy fern-fronds at the lower-left of the frame in painted soft focus with painted leaf-vein detail',
+      'Blossom-cluster of painted bluebells and foxglove-spires in the immediate foreground in painted soft focus',
+      'Hanging-moss curtain draping at the edge of the frame in painted soft green strands',
+      'Close drifting cherry-blossom petal-cluster in the immediate foreground in painted soft focus',
+      'Hanging wisteria draping from above into the upper-left frame in painted violet strands',
+      'Small mushroom-cluster at the closest foreground floor with painted pearl-cap toadstools',
+      'Gnarled moss-covered root crossing the foreground earth in painted soft focus with painted bark-detail',
+      'Close dew-covered painted fern-leaves in foreground-right catching painted soft sparkle',
+      'Painted overhanging branch painted drooping into painted upper frame, painted softly out-of-focus',
+      'Painted lacy fern-fronds at painted lower-left, painted soft focus, painted leaf-vein detail',
+      'Painted blossom-cluster of painted bluebells and painted foxglove-spires in painted foreground',
+      'Painted hanging-moss curtain painted draping at painted edge of frame',
+      'Painted close drifting petal-cluster in painted immediate foreground',
+      'Painted hanging wisteria painted draping from painted above into painted upper frame',
+      'Painted small mushroom-cluster at painted closest foreground floor',
+      'Painted gnarled moss-covered root painted crossing painted foreground, painted soft focus',
+      'Painted close dew-covered painted fern-leaves in painted foreground-right',
+      'Painted tactile painted foreground vine-and-leaf, painted soft focus',
+      'Painted moss-cushion in painted immediate foreground with painted scattered tiny mushrooms',
+      'Painted drifting cluster of painted small ferns at painted lower-frame corner',
+      'Painted tactile painted foreground hanging-vine with painted leaves and painted small flowers',
+      'Painted close foreground painted moss-bed with painted scattered painted toadstools and painted dewdrops',
+      'Painted overhanging painted oak-branch with painted leaves and painted acorns at painted upper frame',
+      'Painted hanging-moss curtain painted in painted soft green strands at painted edge of frame',
+    ],
+    instructions: `Each entry is ONE FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific tactile type, (b) position, (c) tactile detail. NO dwelling / lived-in / garden / wildlife / lighting / weather / forest / pathway. NO blocking. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
+  faebot_fae_village_water_or_feature: {
+    format: 'simple',
+    theme: `40%-GATED WATER OR SPECIAL FEATURE for FaeBot's fae-village path. Each entry describes ONE additional water feature OR special element added to the scene. Each entry 20-40 words.
+
+⚠️ THE BAR: each entry is a SPECIFIC additional water/feature element — pond / well / fountain / small waterfall / mushroom-circle / koi-pond / lily-pad-pool / forest-spring / small reflecting-pool / hanging well-rope.
+
+⚠️ ELEMENT MENU:
+  • SMALL FOREST POND with lily-pads + ripples
+  • STONE WELL with hanging rope-bucket
+  • SMALL WOODLAND FOUNTAIN bubbling
+  • MOSS-RIMMED REFLECTING-POOL
+  • TINY WATERFALL cascading from a nearby ledge
+  • KOI-POND with painted koi and lily-pads
+  • MUSHROOM-CIRCLE in the foreground floor
+  • SMALL FOREST-SPRING bubbling at base of tree
+  • DEW-POOL at the foreground
+  • HANGING WELL-ROPE descending from above
+
+⚠️ EVERY entry MUST include:
+  - (a) SPECIFIC FEATURE TYPE
+  - (b) POSITION (foreground / mid-tier / beside the dwelling)
+  - (c) PAINTERLY DETAIL
+
+🚫 STRICT BANS:
+  • NO dwelling / lived-in / garden / wildlife / lighting / weather / forest / pathway
+  • NO modern construction
+  • NO grave vocabulary`,
+    touchpoints: [
+      'A small forest pond at the foreground with painted lily-pads and white lily-blooms floating, painted ripple-reflections of the dwelling',
+      'A stone well in mid-tier beside the dwelling with hanging rope-bucket and small wooden cover, painted moss-crusted stones',
+      'A small woodland fountain bubbling in the central courtyard with painted water-spray catching light',
+      'A moss-rimmed reflecting-pool at the foreground catching painted reflections of the canopy above',
+      'A tiny waterfall cascading from a nearby ledge into a small painted moss-rimmed pool',
+      'A painted koi-pond at the foreground with painted golden koi swimming beneath painted lily-pads',
+      'A small mushroom-circle of painted pearl-cap toadstools in the foreground floor, painted fairy-ring',
+      'A small forest-spring painted bubbling at the base of an ancient tree-trunk in the mid-tier',
+      'A painted dew-pool at the foreground catching painted morning reflections',
+      'A hanging well-rope descending from a painted overhead branch with painted wooden-bucket',
+      'Painted small forest pond at painted foreground with painted lily-pads, painted ripple-reflections',
+      'Painted stone well in painted mid-tier beside painted dwelling with painted hanging bucket',
+      'Painted small woodland fountain painted bubbling in painted central courtyard',
+      'Painted moss-rimmed reflecting-pool at painted foreground catching painted reflections',
+      'Painted tiny waterfall painted cascading from painted nearby ledge',
+      'Painted koi-pond at painted foreground with painted golden koi and painted lily-pads',
+      'Painted small mushroom-circle of painted pearl-cap toadstools in painted foreground',
+      'Painted small forest-spring painted bubbling at painted base of painted tree-trunk',
+      'Painted dew-pool at painted foreground catching painted morning reflections',
+      'Painted hanging well-rope painted descending from painted branch with painted wooden-bucket',
+      'Painted small painted forest pond with painted lily-pads floating, painted reflections of painted dwelling',
+      'Painted moss-crusted stone well painted beside painted dwelling, painted hanging rope-bucket',
+      'Painted small painted woodland fountain painted bubbling in painted village center',
+      'Painted painted moss-rimmed reflecting-pool with painted painted lily-pads and painted painted reflections',
+      'Painted painted koi-pond at painted painted foreground with painted golden koi swimming beneath painted lily-pads',
+    ],
+    instructions: `Each entry is ONE WATER OR SPECIAL FEATURE, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific feature type, (b) position, (c) painterly detail. NO dwelling / lived-in / garden / wildlife / lighting / weather / forest / pathway. NO modern. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+  },
+
 };
 
 const recipe = POOL_RECIPES[POOL];
@@ -6776,19 +7521,28 @@ Output ${count} numbered list entries (1. ... 2. ... 3. ...). Each entry on its 
 }
 
 async function callSonnet(prompt) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15 * 60 * 1000);
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'x-api-key': ANTHROPIC, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: SONNET, max_tokens: 16000, messages: [{ role: 'user', content: prompt }] }),
-      signal: controller.signal,
-    });
-    if (!res.ok) throw new Error(`Sonnet ${res.status}: ${(await res.text()).slice(0, 300)}`);
-    const data = await res.json();
-    return (data.content?.[0]?.text || '').trim();
-  } finally { clearTimeout(timeoutId); }
+  const delays = [5000, 15000, 30000, 60000, 90000];
+  for (let i = 0; i <= delays.length; i++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15 * 60 * 1000);
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'x-api-key': ANTHROPIC, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: SONNET, max_tokens: 16000, messages: [{ role: 'user', content: prompt }] }),
+        signal: controller.signal,
+      });
+      if (res.ok) { const data = await res.json(); return (data.content?.[0]?.text || '').trim(); }
+      const text = (await res.text()).slice(0, 300);
+      if ((res.status === 529 || res.status === 429 || res.status >= 500) && i < delays.length) {
+        console.log(`  ⏳ Sonnet ${res.status} — retry ${i + 1}/${delays.length} in ${delays[i] / 1000}s`);
+        await new Promise((r) => setTimeout(r, delays[i]));
+        continue;
+      }
+      throw new Error(`Sonnet ${res.status}: ${text}`);
+    } finally { clearTimeout(timeoutId); }
+  }
+  throw new Error('Sonnet: retry exhausted');
 }
 
 function parseArray(text) {

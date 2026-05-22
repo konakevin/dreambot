@@ -105,6 +105,31 @@ module.exports = {
   anchorScaleRange: null
 },
 
+  FAEBOT_FAE_VILLAGE_AXIS: {
+  description: 'PATH-BESPOKE — FaeBot fae-village (2026-05-21 axis-system migration). One of FaeBot most popular paths. Enchanted fae dwellings grown from forest (acorn / eggshell / mushroom / treehouse / hollow-trunk / bramble-nest / stone-ruin-overgrown / cliff-ledge / spider-silk-hammock / etc.) as primary subject (40-55% of frame). Amber-glowing windows + chimney smoke + lanterns + lush wildflower carpet + critters bring scene to life. 12 axes (11 always-on + 1 gated water_or_feature): dwelling_type / village_layout / lived_in_signs / approach_pathway / dwelling_garden / forest_setting / lighting / atmospheric_depth / wildlife_lived_in / floral_carpet / foreground_anchor + water_or_feature (40%-gated). village_layout covers 9 legacy layout types (SINGLE / PAIR / CLUSTER / CANOPY-NETWORK / VERTICAL-STACK / OVER-WATER / CLIFF-LEDGE / FAIRY-RING-COURTYARD / HANGING-INVERTED) and reconciles with dwelling_type via Sonnet composition.',
+  slots: {
+    universal: [],
+    bot: [],
+    path: [
+      'dwelling_type',
+      'village_layout',
+      'lived_in_signs',
+      'approach_pathway',
+      'dwelling_garden',
+      'forest_setting',
+      'lighting',
+      'atmospheric_depth',
+      'wildlife_lived_in',
+      'floral_carpet',
+      'foreground_anchor'
+    ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'water_or_feature', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
   FAEBOT_ENCHANTED_VISTA: {
   description: 'PATH-BESPOKE — FaeBot enchanted-vista (2026-05-21 axis-system migration from legacy function-form). PURE FOREST LANDSCAPE — no figures, no creatures as focal subjects. The lush enchanted forest itself is the subject, the magical land where the other FaeBot creatures live and thrive. Multi-layer painterly richness (canopy + hero feature + floor + water + magic + light + depth + air + foreground). 11 axes: biome / hero_feature / floor_carpet / water_element / magical_ambient / composition / lighting / atmospheric_depth / weather / foreground_anchor + wildlife_distant (40%-gated). HARD BAN: never include "standing stones / stone circles / tomb / gravestone" (Flux renders these as cemetery imagery).',
   slots: {

@@ -18,6 +18,7 @@ const pathBuilders = {
   'queen-of-the-forest': require('./paths/queen-of-the-forest'),
   'enchanted-vista': require('./paths/enchanted-vista'),
   'fae-village': require('./paths/fae-village'),
+  'fae-village-axis': require('./paths/fae-village-axis'),
   'flower-fairy': require('./paths/flower-fairy'),
 };
 
@@ -58,7 +59,7 @@ module.exports = {
   // (from dream_vibes DB) which Sonnet uses for mood context.
   vibes: ['peaceful', 'enchanted', 'ethereal', 'nostalgic', 'whimsical'],
 
-  paths: ['forest-fairy-scene', 'dryad-portrait', 'tiny-fae', 'queen-of-the-forest', 'enchanted-vista', 'fae-village', 'flower-fairy'],
+  paths: ['forest-fairy-scene', 'dryad-portrait', 'tiny-fae', 'queen-of-the-forest', 'enchanted-vista', 'fae-village', 'fae-village-axis', 'flower-fairy'],
   pathWeights: {
     'forest-fairy-scene': 1,
     'dryad-portrait': 1,
@@ -66,6 +67,7 @@ module.exports = {
     'queen-of-the-forest': 1,
     'enchanted-vista': 1,
     'fae-village': 1,
+    'fae-village-axis': 1,
     'flower-fairy': 2,
   },
 
@@ -79,6 +81,7 @@ module.exports = {
     'queen-of-the-forest': 'black-forest-labs/flux-1.1-pro',
     'enchanted-vista': 'black-forest-labs/flux-1.1-pro',
     'fae-village': 'black-forest-labs/flux-1.1-pro',
+    'fae-village-axis': 'black-forest-labs/flux-1.1-pro',
     'flower-fairy': 'black-forest-labs/flux-1.1-pro',
   },
 
@@ -97,7 +100,9 @@ module.exports = {
     // load-bearing axis language. tiny-fae: dwarfing-companion mandate.
     // queen-of-the-forest: posed-setting + critters-paying-respects mandates.
     // enchanted-vista: multi-layer richness (canopy + hero + floor + water + magic + depth).
-    skipPaths: ['tiny-fae', 'queen-of-the-forest', 'enchanted-vista'],
+    // fae-village + fae-village-axis: both skip polish — Kevin's legacy comparison
+    // batches were polish-skipped, that's the look he approved for both paths.
+    skipPaths: ['tiny-fae', 'queen-of-the-forest', 'enchanted-vista', 'fae-village', 'fae-village-axis'],
   },
 
   // Bot-level pool defaults for declarative composer (flower-fairy path)

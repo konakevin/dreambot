@@ -405,6 +405,118 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE DRYAD — preserve her stacked exotic features unmistakably. Then expression. Then gesture. Then composition framing. Then adornment. Then forest backdrop softly behind. Then lighting + weather. Then magical flavor close to her face.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_FAE_VILLAGE_AXIS: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      dwelling_type,
+      village_layout,
+      lived_in_signs,
+      approach_pathway,
+      dwelling_garden,
+      forest_setting,
+      lighting,
+      atmospheric_depth,
+      wildlife_lived_in,
+      floral_carpet,
+      foreground_anchor,
+      water_or_feature,
+    } = slots;
+
+    const waterSection = water_or_feature
+      ? `\n\n━━━ 12. WATER OR SPECIAL FEATURE (40%-gated extra layer) ━━━\n${water_or_feature}\n\nWoven into the scene as an additional life-element — water glints, well draws the eye, mushroom-circle dots the foreground. NOT a competing focal subject — the dwelling stays the show.`
+      : '';
+
+    return `You are writing ONE Flux prompt for an enchanted FAE VILLAGE painting in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + NC Wyeth + Brian Froud + Eyvind Earle painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 100-130 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt.
+
+1. THE DWELLING (AND ITS LAYOUT) IS THE SUBJECT. The fae dwelling(s) fill 40-55% of the frame as the eye's first landing place. NEVER a "wide landscape with tiny structure". NEVER "small house in distance". The architecture and layout are RENDERED EXACTLY as described in axes 1 and 2 below — do NOT substitute a different dwelling type or layout.
+
+2. WEAVE DWELLING_TYPE + VILLAGE_LAYOUT NATURALLY — the dwelling_type axis below gives the architecture (acorn / eggshell / mushroom / treehouse / etc.); the village_layout axis gives the arrangement (single / pair / cluster / canopy-network / over-water / cliff-ledge / fairy-ring / etc.). Reconcile them into one coherent composition. For example: spider-silk-hammock + pair = "pavilion stretched between two trees"; acorn-cottage + cluster = "5 acorn cottages scattered across clearing"; treehouse + canopy-network = "6 treehouses connected by vine-bridges across oaks"; stone-cottage + fairy-ring = "stone-cottages arranged in perfect ring around courtyard". If the rolled combination is awkward (e.g., spider-silk-hammock + cluster), bias toward the dwelling_type and adapt the layout naturally.
+
+3. AMBER-WINDOW GLOW BAKED IN — every render MUST show amber-glowing windows (warm-honey light pouring from carved windows of every dwelling). This is the consistent "lived-in" signature across legacy renders.
+
+4. BUZZING WITH LIFE — every render includes 3-5 specific critters from the wildlife axis (squirrels / rabbits / songbirds / butterflies / chipmunks / frogs / hummingbirds / a small fawn / drifting fireflies). The village must FEEL inhabited — Studio Ghibli forest density, Cinderella's woodland helpers, Snow White's animal companions.
+
+5. GROWN FROM NATURE — every dwelling is GROWN from forest materials (bark walls / mossy thatch / vine-bound timber / woven willow / hewn-wood / carved-shell / petal-walls). NEVER modern construction. NO concrete / steel / brick / glass-pane / shingle (use bark-shingle instead).
+
+6. SOFT OPALESCENT REGISTER (baked-in atmospheric bedrock) — every render suffused with pearl-warm golden glow + opalescent painted softness + rainbow-flecked dewdrop-shimmer. Painterly soft-haze pervading.
+
+7. EMOTIONAL MOOD BEDROCK (mandatory closing register) — every render carries one of these emotional moods baked in via Sonnet's prose: "fondly remembered" / "softer and warmer than memory" / "absolute dawn stillness and quiet reverence" / "gauzy-warm storybook softness" / "painted memory of a sacred morning" / "everything gauzy-warm and fondly remembered". This soft nostalgic emotional bedrock is what makes the village feel SACRED and BELOVED, not just rendered.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. DWELLING TYPE (the architecture/material — LOAD-BEARING) ━━━
+${dwelling_type}
+
+This is the specific dwelling architecture for this render. Preserve every architectural feature, every material, every natural-feature integration. Render exactly as described — do NOT substitute.
+
+━━━ 2. VILLAGE LAYOUT (how the dwellings are arranged — LOAD-BEARING) ━━━
+${village_layout}
+
+This is the layout/arrangement. Reconcile with dwelling_type above naturally (see mandate #2 for guidance). If single dwelling, layout = solo composition. If multiple, the layout describes how they're spatially arranged.
+
+━━━ 3. LIVED-IN SIGNS (amber windows + smoke + lanterns + chairs + tools — load-bearing) ━━━
+${lived_in_signs}
+
+The signs that fae live here — amber-glowing windows, chimney smoke curling, hanging lanterns, small chairs by the door, cooking-fire embers, tools propped against walls, laundry on a line. NON-NEGOTIABLE — every element MUST appear visibly in the render. The village is INHABITED.
+
+━━━ 4. APPROACH PATHWAY (path/stair/bridge leading to dwelling) ━━━
+${approach_pathway}
+
+The specific approach element — mossy stone-path / wooden-plank bridge / spiral-moss-stair / pebble-path / vine-rope-bridge / knotted-ladder / fallen-log walkway. Visible in the foreground or mid-tier, leading the eye to the dwelling.
+
+━━━ 5. DWELLING GARDEN (climbing vines + flowers + moss ON the dwelling) ━━━
+${dwelling_garden}
+
+Climbing wisteria + foxglove-spires beside the door + climbing-roses + herb-garden + moss-blanket roof + fern-cluster on porch + ivy-engulfing-walls. The dwelling is OVERGROWN with painted lushness.
+
+━━━ 6. FOREST SETTING (surrounding biome) ━━━
+${forest_setting}
+
+The painted atmospheric forest wrapping the scene. Multi-tier depth.
+
+━━━ 7. LIGHTING (time-of-day + register) ━━━
+${lighting}
+
+━━━ 8. ATMOSPHERIC DEPTH (god-rays / mist / dust-motes) ━━━
+${atmospheric_depth}
+
+━━━ 9. WILDLIFE LIVED-IN (3-5 critters bringing the village to life — load-bearing) ━━━
+${wildlife_lived_in}
+
+NON-NEGOTIABLE. Every critter listed MUST appear visibly. Do NOT compress or drop critters. Preserve specific species + actions exactly. Studio Ghibli forest density, Cinderella's woodland helpers.
+
+━━━ 10. FLORAL CARPET (lush wildflower carpet at foreground/borders) ━━━
+${floral_carpet}
+
+BLANKET-DENSITY wildflowers at the foreground and borders — bluebells / foxglove-spires / lily-of-the-valley / forget-me-nots / primroses / violets / wild-roses overlapping in dense carpet.
+
+━━━ 11. FOREGROUND ANCHOR (closest tactile element) ━━━
+${foreground_anchor}
+
+A specific tactile element near the camera bringing 3-tier depth — overhanging branch / fern-cluster / blossom-cluster / hanging-moss curtain / drifting petals close to camera. Softly out-of-focus.
+${waterSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
+Visible thick oil-brushwork on every surface — bark, foliage, rocks, water, dwelling walls, thatched roofs. Painted edges (one color stops, another begins, with a soft painted seam). Greg Manchess + Donato Giancola + Paul Bonner + NC Wyeth + Brian Froud + Eyvind Earle painted-fantasy lineage. Saturated deep forest greens + warm umber bark-tones + mossy roof greens + glowing amber window-light + muted blue-grey atmospheric distance. NEVER black ink outlines, NEVER vector borders, NEVER animation-cel, NEVER 3D-CGI plastic, NEVER photoreal.
+
+━━━ HARD BANS ━━━
+- NO modern construction (no concrete / steel / brick / glass-pane / asphalt-shingle — bark-shingle/moss-thatch only)
+- NO "standing stones" / "stone circles" / "tomb" / "gravestone" / "cemetery" — banned grave-trigger vocabulary (standing-stones context only OK when explicitly described as fairy-ring courtyard architecture)
+- NO close-up or focal figures (small distant fae figure as ambient accent is OK — small in frame, never close-up)
+- NO sexualized framing
+- NO bare chest, NO nipples, NO topless
+- NO violence / NO scared / NO edgy moods
+- NO cartoon / chibi / mascot rendering
+- NO photographic / digital / 3D / CGI descriptors
+
+━━━ OUTPUT ━━━
+Write 100-130 words, comma-separated phrases. OPEN WITH THE DWELLING + LAYOUT WOVEN TOGETHER — load-bearing first 30-45 words establishing the dwelling architecture AND its arrangement. Then lived-in signs (amber windows + smoke + lanterns). Then approach pathway + dwelling garden + forest setting. Then lighting + atmospheric depth. Then wildlife (the 3-5 specific critters listed). Then floral carpet + foreground anchor.${water_or_feature ? ' Then water/special feature woven in naturally.' : ''} Painted-fantasy thick-brushwork register throughout. NEVER modern construction. NEVER grave-trigger words. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   FAEBOT_ENCHANTED_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       biome,
