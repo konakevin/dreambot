@@ -74,4 +74,13 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null
   },
+
+  EARTHBOT_WAVES: {
+    description: 'PATH-BESPOKE — EarthBot waves (2026-05-22 axis-system migration). MERGES legacy wave + big-wave paths. Ocean wave drama at surf-magazine caliber. FOUR framing modes driven by composition axis: (1) side-view-of-barrel Clark-Little, (2) pulled-out wide showing wave + following sets in deep ocean, (3) inside-barrel POV looking out from inside the tube, (4) panned-out with tropical-island landscape behind. 7 path-bespoke axes — 6 always-on (wave_subject, composition, coastal_context, water_color, sky_layer, light_condition) + 1 conditional 30%-gated phenomenon (rainbow / spray-prism / sun-pillar / crepuscular ray). NO surfers / humans (the wave is the subject, no one rides it), NO sci-fi / bioluminescent / fantasy tubes, NO architecture / piers / lighthouses, NO named places (no "Pipeline" / "Teahupo‘o" / "Jaws Maui" — describe morphologically), NO single-shaft / single-beam (laser trigger), NO impossible-physics flat-sand walls.',
+    slots: { universal: [], bot: [], path: [ 'wave_subject', 'composition', 'coastal_context', 'water_color', 'sky_layer', 'light_condition' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
 };

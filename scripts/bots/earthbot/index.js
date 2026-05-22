@@ -92,9 +92,9 @@ const pathBuilders = {
   'micro-nature': require('./earth/paths/micro-nature'),
   'deep-forest': require('./paths/deep-forest'), // axis-system (2026-05-20)
   'lush-jungle': require('./paths/lush-jungle'), // axis-system (2026-05-20)
-  // Beach paths (13)
+  // Beach paths (12 after wave+big-wave merge → waves)
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
-  wave: require('./beach/paths/wave'),
+  waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
   'tropical-paradise': require('./paths/tropical-paradise'), // axis-system (2026-05-20)
   'beach-landscape': require('./beach/paths/beach-landscape'),
   'tide-pool': require('./beach/paths/tide-pool'),
@@ -102,7 +102,6 @@ const pathBuilders = {
   'cozy-beach': require('./beach/paths/cozy-beach'),
   'hawaii-flowers': require('./paths/hawaii-flowers'), // axis-system (2026-05-21)
   'reef-paradise': require('./paths/reef-paradise'), // axis-system (2026-05-21)
-  'big-wave': require('./beach/paths/big-wave'),
   seashell: require('./beach/paths/seashell'),
   'beach-night': require('./paths/beach-night'), // axis-system (2026-05-21)
   'epic-sunset': require('./paths/epic-sunset'), // axis-system (2026-05-20)
@@ -125,7 +124,7 @@ const EARTH_PATHS = [
 
 const BEACH_PATHS = [
   'coastal-vista',
-  'wave',
+  'waves', // MERGED from legacy wave + big-wave (2026-05-22)
   'tropical-paradise',
   'beach-landscape',
   'tide-pool',
@@ -133,7 +132,6 @@ const BEACH_PATHS = [
   'cozy-beach',
   'hawaii-flowers',
   'reef-paradise',
-  'big-wave',
   'seashell',
   'beach-night',
   'epic-sunset',
@@ -231,7 +229,7 @@ module.exports = {
   // add it here.
   chaos: {
     enabled: true,
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves'],
     allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise'].includes(p))],
   },
 
@@ -245,7 +243,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves'],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their

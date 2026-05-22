@@ -513,4 +513,87 @@ Mid to tight framing. The light source (moon, stars, or Milky Way) fills the upp
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
+
+  EARTHBOT_WAVES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { wave_subject, composition, coastal_context, water_color, sky_layer, light_condition, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or subject, DROP IT.`
+      : '';
+
+    return `You are an ocean photographer writing ONE WAVE scene for EarthBot. Real ocean wave drama — Clark-Little intimate translucent-barrel through monumental big-wave breaking on tropical reef. The wave IS the hero. Real ocean physics: waves come from the open ocean and break TOWARD shore on shallow reefs, cliffs, points — never walls of water sitting on flat sand. Tropical paradise setting. Gallery-print surf-photography caliber. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL OCEAN PHYSICS, NEVER FANTASY ━━━
+
+This is REAL Earth ocean. Waves break where the bottom shallows abruptly — on coral reefs, against volcanic cliffs, over rocky points. NEVER 50-foot walls on flat sand. NEVER a "wave from inland." NEVER tsunamis. NEVER fantasy water-physics. Real swell rolling in from horizon, cresting on reef, exploding white on rock.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+
+NEVER a surfer, NEVER a swimmer, NEVER a kayaker, NEVER a photographer-figure, NEVER any human silhouette in the frame. Surf photography training data is HEAVILY contaminated with surfer-in-barrel shots — OVERRIDE THAT BIAS HARD. The wave is the subject; no one rides it.
+
+━━━ ZERO HUMAN-BUILT FEATURES — NEVER, EVEN AS BACKGROUND DECORATION ━━━
+
+NEVER piers, NEVER docks, NEVER lighthouses, NEVER beach umbrellas, NEVER cabanas, NEVER huts, NEVER overwater bungalows, NEVER tiki bars, NEVER buildings, NEVER railings. Pure natural tropical coast only.
+
+━━━ ABSOLUTELY BANNED ━━━
+
+- NO surfers / surfboards / boards / fins / wetsuits / surfers-in-barrel (zero humans, zero surf gear)
+- NO bioluminescent / phosphorescent / glowing waves (sci-fi trigger)
+- NO sci-fi / fantasy tube interiors / magical water
+- NO named places (no "Pipeline" / "Teahupoʻo" / "Jaws Maui" / "Mavericks" — describe morphologically: "shallow coral reef break" / "deep-water reef break" / "volcanic cliff break")
+- NO architecture / piers / lighthouses / huts / buildings
+- NO single beam / single shaft / single column of light (Flux laser-beam trigger — use "shafts plural fanning" / "broad spotlight")
+- NO impossible-physics walls-of-water on flat sand
+- NO tsunami / NO incoming-wall-of-water from horizon (waves break ON something, not as standalone walls)
+- NO whales / dolphins / fish in wave (subject is the wave, not wildlife)
+- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+
+━━━ THE WAVE SUBJECT (THE hero — intimate-barrel or monumental big-wave) ━━━
+${wave_subject}
+
+CRITICAL — render the named wave LITERALLY. Translucent emerald barrel IS hollow tube with spray off the lip. Massive wall is a 40-60 foot face breaking on the reef. Real ocean physics, real water motion, captured at the peak instant.
+
+━━━ COMPOSITION / CAMERA FRAMING (THIS DRIVES THE WHOLE SHOT) ━━━
+${composition}
+
+CRITICAL — the composition axis dictates the WHOLE camera angle and framing. Render the composition LITERALLY. Side-view-of-barrel = profile shot from beach/cliff side. Pulled-out-wide = aerial-low or distant shot showing wave + following sets in deep ocean. Aerial-overhead = drone-style top-down shot of the breaking wave. Panned-out-island-context = wave foreground with tropical-island landscape silhouetted in the deep background. The framing is the most-important variety lever. NEVER inside-barrel-POV (Flux renders as water tunnels, not real wave barrels).
+
+━━━ COASTAL CONTEXT (what the wave breaks ON / against) ━━━
+${coastal_context}
+
+The coastal context EXPLAINS the wave physics. Shallow coral reef = barrel-tube formation. Volcanic cliff = explosive spray. Rocky point = wrapping break. Sand-bar = clean shoulder peel. The context anchors the wave to real-Earth geography.
+
+━━━ WATER COLOR / QUALITY (the specific water signature) ━━━
+${water_color}
+
+Translucent emerald, cobalt-deep, sapphire saturation, churning-white-foam, jade-tube-water, gold-glint, midnight-cobalt. Real ocean colors only — no fantasy hues.
+
+━━━ SKY LAYER (what's happening above the wave) ━━━
+${sky_layer}
+
+━━━ LIGHT CONDITION ━━━
+${light_condition}${phenomenonBlock}
+
+━━━ HARD RULE — WAVE IS THE HERO, PHYSICS IS REAL ━━━
+
+The wave fills 50-70% of the frame. Coastal context + water color + sky support the wave drama. Real ocean physics throughout — waves coming from open ocean, breaking on shallow obstacles, spray and foam realistic. Gallery-print surf-photography caliber.
+
+━━━ MOMENT IN MOTION — every render captures one beat of physical motion ━━━
+
+Catch a SECOND in time. Spray rocketing off the wave's lip mid-explosion, water curling mid-barrel-formation, foam churning at the reef-break, a single droplet caught mid-flight, the wave at the precise peak of crest before collapse.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'real-ocean wave color, tropical paradise context, dramatic spray + light interaction'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE — SURF PHOTOGRAPHY POSTCARD ━━━
+
+The wave fills 50-70% of the frame. Coastal context + tropical setting fill the surrounding 30-50%. Sky drama above. Hyperreal photographic — gallery-print surf photography caliber.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
+  },
 };

@@ -4,8 +4,8 @@
  * Stormy and sunny, always dramatic.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../beach/pools');
+const blocks = require('../../beach/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.BIG_WAVE_SCENES, 'big_wave_scene');

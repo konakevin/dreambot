@@ -87,4 +87,13 @@ module.exports = {
   BEACH_NIGHT_WATER_STATE: load('beach_night_water_state'),
   BEACH_NIGHT_SHORELINE_ELEMENT: load('beach_night_shoreline_element'),
   BEACH_NIGHT_PHENOMENON: load('beach_night_phenomenon'),
+  // waves (2026-05-22) — MERGE of legacy wave + big-wave. Clark-Little
+  // intimate-barrel + monumental big-wave registers in single subject pool.
+  WAVES_SUBJECT: load('waves_subject'),
+  WAVES_COMPOSITION: load('waves_composition'),
+  WAVES_COASTAL_CONTEXT: load('waves_coastal_context'),
+  WAVES_WATER_COLOR: load('waves_water_color'),
+  WAVES_SKY_LAYER: load('waves_sky_layer'),
+  WAVES_LIGHT_CONDITION: load('waves_light_condition'),
+  WAVES_PHENOMENON: load('waves_phenomenon'),
 };
