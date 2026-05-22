@@ -67,6 +67,627 @@ if (!POOL) {
 
 const POOL_RECIPES = {
 
+  // ════════════════════════════════════════════════════════
+  // SPACE PATH (2026-05-22 — second BrickBot axis migration)
+  // ════════════════════════════════════════════════════════
+
+  // ─── scene_type — narrative stage ───
+  brickbot_space_scene_type: {
+    format: 'simple',
+    theme: `LEGO MOC SPACE DIORAMA SCENE STAGES — narrative-stage descriptions for the BrickBot space axis system. Each entry is ONE narrative stage (the WHAT — what category of space moment is this diorama?). Each entry 30-55 words.
+
+⚠️ CRITICAL — entries describe the STAGE / SETTING / NARRATIVE CATEGORY only. NO camera framing language. NO minifig action verbs (those belong to a separate axis). NO build technique vocab. NO cosmic phenomena. Just: where are we, what kind of moment.
+
+VARIETY MANDATE — distribute across these categories (~5-10% each):
+  • SHIP-TO-SHIP COMBAT — dogfight in nebula / capital-ship broadside / fighter intercept / boarding action
+  • DOCKING / LAUNCH — shuttle approach / hangar departure / orbital ring berth / Mars-lander touchdown
+  • EVA / SPACEWALK — hull repair / rescue tether / debris-field nav / between-ships transfer
+  • ASTEROID / RESOURCE MINING — ore extraction rig / claim dispute / cargo loading / hauler launch
+  • FIRST CONTACT / ALIEN ENCOUNTER — diplomatic landing / monolith approach / artifact reveal / hostile drone encounter
+  • CRASH / SURVIVAL — crashed-lander reef / hull-breach drama / lost-in-asteroid-belt / emergency-airlock
+  • COMMAND BRIDGE / MISSION CONTROL — captain on the bridge / Apollo-era control room / war-room briefing / scope-readout moment
+  • HABITAT / COLONY LIFE — Mars greenhouse / lunar dorm-cluster / station mess hall / hydroponics bay
+  • EXPLORATION / DISCOVERY — derelict-ship investigation / cave-entry on alien world / ruined-station boarding / probe-recovery
+  • REFIT / REPAIR — engine swap mid-deck / hull-plating retrofit / drydock overhaul / hardpoint upgrade
+  • LANDING ON PLANET — first-foot ceremony / dust-cloud touchdown / atmospheric re-entry burn / crater settlement
+  • CARGO / FREIGHT — hauler convoy / smuggler hold transfer / customs inspection / black-market exchange
+  • SPACE CITY LIFE — Coruscant-coded planet-city streetscape / orbital megacolony concourse / Citadel-coded multi-species market / O'Neill cylinder daily life / asteroid mining city tram-station / lunar capital plaza / Mos-Eisley spaceport cantina / Babylon-5 diplomatic concourse
+  • SPACE CITY SCALE — wide aerial vistas of layered ecumenopolis / orbital-ring metropolis / asteroid-hollowed city / glass-dome capital cluster — the city itself is the subject, scale-prover crowds + flying-vehicle traffic
+  • INTERIOR DAILY LIFE — mess hall meal / observation deck quiet moment / corridor commute / cargo bay manifest-check / med bay routine exam / engineering shift change / laboratory routine analysis / briefing room everyday
+
+⚠️ NEW MANDATE — at LEAST 20% of generated entries must center on SPACE CITY or NON-COMBAT INTERIOR DAILY LIFE (Kevin's R1 feedback — too ship-heavy in R0). Lead these entries with the city/interior as the dominant subject — NOT "ship at city" / "ship at interior."
+
+Each entry must:
+• Name the narrative category in first 6-10 words
+• Establish the diorama STAGE (bridge / hangar / surface / open vacuum / station-interior / cargo-hold / docking-ring)
+• Suggest the TENSION or STAKES of the moment (without prescribing the action verb)
+• NEVER name a specific minifig action ("captain pulling lever" — that's the action axis)
+• NEVER name a specific phenomenon ("supernova breaks the sky" — that's the cosmic_phenomenon axis)`,
+    touchpoints: [
+      'ASTEROID MINING RIG EXTRACTION SITE — massive brick-built drill-platform anchored to a heavy dark-bley asteroid surface, cargo-hauler shuttle nearby with bay doors open, scattered ore-chunks (1×1 round-plates in trans-purple and trans-amber) drifting around the rig, the open vacuum behind dotted with asteroid silhouettes, tense ownership-dispute pre-launch beat',
+      'CAPITAL-SHIP BROADSIDE COMBAT — two fleet capital-ships positioned at close-range across an open-vacuum gap, hull-plating scarred from prior salvos, multiple gun-batteries glowing trans-orange mid-discharge, the larger ship in receding perspective, debris-field of hull-fragments hanging between them, the moment before the next volley lands',
+      "EVA HULL-REPAIR EMERGENCY — exterior hull surface of a damaged frigate spanning the diorama base, breach-point exposed to vacuum with venting trans-cyan atmospheric-element streamers, a tethered EVA-suited crew member working at the breach, secondary minifig at a portable repair-pod with brick-built tool-rack, the moment of damage-control under time-pressure",
+      "FIRST-CONTACT MONOLITH APPROACH — alien planet surface of dark-red and tan slope bricks, a colossal brick-built monolith of black tiles rising from the terrain, three EVA-suited explorers approaching cautiously, a parked lander nearby, scale-prover micro-figure in deep distance, the awe-and-tension reveal beat",
+      "COMMAND BRIDGE BATTLE-STATIONS — interior cutaway of a frigate's command bridge with brick-built console banks in concentric arcs, captain's chair on a raised platform, brick-built viewscreen showing the open-vacuum threat, multiple bridge officers at stations, klaxon-red trans-red 1×1 round-plate alert-lights along the bulkheads, mid-engagement coordination beat",
+      "MARS COLONY GREENHOUSE INTERIOR — pressurized dome built from trans-clear panels and white-frame Technic-beam supports, rows of brick-built hydroponic planters with trans-green plant-elements, colonist minifigs in light EVA-undersuits tending the rows, the rust-tan Mars surface visible through the dome panels, daily-life pre-crisis beat",
+      "DERELICT-SHIP INVESTIGATION — exterior or interior of a long-abandoned frigate, hull plating warped and patinaed, drifting debris-field around the cargo bay entry, three EVA-suited investigators with brick-built flashlight-elements, traces of forgotten cargo (1×1 round-plate stacks) on the deck, the eerie cold-storage discovery beat",
+      "HANGAR-BAY LAUNCH PREP — interior of a fleet hangar with multiple fighter-craft on cradles in two receding rows, deck crew swarming around the lead fighter with refuel-hoses and ordnance-trolleys, pilot minifig approaching the cockpit ladder, the imminent-sortie scramble beat",
+      "ORBITAL RING DOCKING APPROACH — exterior view of a vast brick-built orbital station ring, a docking shuttle on final approach to a berth-port, the planet below visible as a curved blue-and-tan baseplate horizon, station running-lights in trans-blue and trans-yellow strips along the rim, the precision-maneuver beat",
+      "CRASHED LANDER REEF — alien-planet surface with a half-buried lander wreckage canted at 30 degrees in the rocky terrain, hull-breach exposed, three survivor minifigs working salvage from the wreck-base, scattered emergency-supplies (trans-orange 1×1 round-plate signal-flares) marking a perimeter, the survival-improvise beat",
+      "SMUGGLER CARGO TRANSFER — interior of a low-deck cargo hold with shipping containers stacked in a back-channel arrangement, two crews exchanging crates between an inner ship and an outer dock, lookout at the gantry door, a bribed customs officer at a desk with a datapad, the illicit-transaction tension beat",
+      "MISSION CONTROL APOLLO-ERA ROOM — wall-sized brick-built mission-board with grid of lit trans-element status indicators, rows of brick-built console banks with minifig flight-controllers, viewing gallery above with executive observers, vintage-bley palette with USA-coded flag tile, the historic-launch coordination beat",
+      "DEEP-SPACE PROBE RECOVERY — open vacuum diorama with a derelict-probe (brick-built 1970s-style probe with dish-antenna) drifting at scene-center, a recovery-cradle on a recovery-shuttle reaching toward it, EVA-tethered crew member guiding it home, scattered solar-panel fragments around the probe, the careful-grasp beat",
+      'ALIEN ARTIFACT REVEAL ON CAVE FLOOR — interior of an underground cave on an alien world with bioluminescent trans-cyan growth on the cavern walls, the artifact (brick-built crystalline shape on a plinth) at the cavern center, three explorers with EVA helmets cautiously approaching, scale-prover micro-figure at the cavern mouth in deep distance',
+      "PIRATE / SCAVENGER ENCOUNTER — frontier-station dock between a respectable trading vessel and an off-the-books raider-craft with hull-plating cobbled from scavenged parts, two crews facing off on a narrow dock-walkway, lookouts at each end, brick-built lantern-lights in trans-orange overhead, the tense-standoff beat",
+      "FUEL-DEPOT REFUELING — exterior of a fleet ship at a fuel-depot platform, brick-built fuel-arm extended from depot to ship, deck-crew at the connection-point, depot supervisor at a control-station, distant stars in 1×1 white round-plates scattered across the dark-bley sky-baseplate, the routine-procedure-with-tension beat",
+      "ESCAPE-POD JETTISON MOMENT — exterior of a damaged ship at the moment an escape-pod cluster jettisons from the side, pods (brick-built tear-drop shapes) trailing trans-orange flame elements, the parent-ship leaning at an angle implying severe damage, the abandonment-of-ship climax",
+      "LUNAR-BASE CONSTRUCTION SITE — surface of the moon (light-bley slope bricks with crater-tile insets) with a half-assembled base structure, Technic-articulated brick-built crane lifting a habitat-module into position, EVA-suited construction crew at multiple work-points, the building-the-future beat",
+      "MEDICAL BAY EMERGENCY — interior of a ship's medical bay with brick-built medical-bunk and instrument-arrays, a casualty minifig on the bunk under examination by a doctor minifig, secondary medical-tech at a diagnostic console, trans-red 1×1 alert-light overhead, the urgent-treatment beat",
+      "DOOMED-MISSION FAREWELL — interior of a small interior space (cockpit / airlock / shuttle-cabin) with one minifig in EVA-suit at the airlock ready to depart, another minifig in undersuit at the bulkhead, brick-built personal-effects (datapad / photo-tile / wedding-ring on a plate) between them, the sacrifice-moment quiet beat",
+    ],
+    instructions: `Each entry is ONE space narrative stage, 30-55 words. Format: "STAGE NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines. STRICT BANS: never include camera framing language ("WIDE / MEDIUM / CLOSE / aerial"), never include minifig action verbs ("astronaut leaping / crew firing"), never include phenomenon names ("supernova / aurora / black hole"), never include lighting descriptors ("golden hour / nebula-glow"). Those belong to other axes. Stage + tension only.`,
+  },
+
+  // ─── minifig_action — verb-led story beats ───
+  brickbot_space_minifig_action: {
+    format: 'simple',
+    theme: `LEGO MINIFIG ACTION BEATS — verb-led story moments for the BrickBot space path. Each entry is a freeze-frame of minifigs IN MID-ACTION (the story beat), NOT minifigs posing in a setting. Each entry 25-45 words.
+
+⚠️ HARD MANDATE — STORY BEAT MANDATE per the playbook. Every entry MUST start with an ACTIVE VERB and describe a moment with CAUSE + EFFECT in the same frame. Space-specific verbs: mid-tether-arrest, mid-airlock-cycle, mid-blast-deflect, mid-canopy-eject, mid-drill-bite, mid-spacewalk-tether-snap, mid-lever-pull, mid-pad-launch, mid-deflector-up, mid-airlock-pressurize, mid-vacuum-suction, mid-grasp-of-artifact.
+
+⚠️ HARD BANS:
+  • NEVER "minifigs standing around"
+  • NEVER "astronaut posing on landing pad"
+  • NEVER "crew watching / looking at / gazing at / wide-eyed at"
+  • NEVER "characters arranged in semicircle"
+  • NEVER passive states (sitting, resting, waiting, observing)
+
+✓ Body-position variety:
+  • Mid-spacewalk / mid-tether (~20%)
+  • Mid-fire / mid-blast / mid-fire-blaster (~15%)
+  • Mid-lever-pull / mid-console-stab / mid-system-emergency (~15%)
+  • Mid-airlock-cycle / mid-hatch-vault (~10%)
+  • Multi-figure interaction (rescue, hand-off, repair-team, defense-line) (~20%)
+  • Mid-leap / mid-fall in low-gravity (~10%)
+  • Mid-pilot in cockpit (~10%)
+
+Each entry must:
+• Start with an ACTIVE VERB
+• Name 1-3 specific minifigs (commander, pilot, engineer, scientist, marine, alien, etc.) with brief identifier (EVA-helmet visor / blaster-rifle / engineer-overall)
+• Describe the SHARED OBJECT or EVENT they're interacting with (alien artifact / tether-line / breach-panel / control-console / drifting debris / blast-impact)
+• Imply the moment-before and moment-after
+• PLASTIC SCALE — minifig anatomy (C-shaped hands / two-stud arms / printed visor)`,
+    touchpoints: [
+      'Mid-tether-arrest of a drifting EVA-suited engineer (orange-stripe visor) caught by a second EVA-tethered crew member at the airlock with C-grip clamped on the engineer\'s wrist, the tether line trailing back into open vacuum, hull-breach venting trans-cyan atmosphere visible',
+      'Mid-blast of a heavy plasma cannon on a Blacktron fighter, trans-orange + trans-yellow cone of flame elements bursting from the muzzle, pilot minifig at the controls in helmeted-visor with one C-hand on a control-stick, target enemy fighter in the deep distance already breaking formation',
+      'Mid-lever-pull of an emergency-jettison handle by a commander minifig (red-trim EVA-suit) on the bridge, a second officer mid-shout-warning behind them, the brick-built viewscreen showing escape-pods already separating from the parent-ship',
+      'Mid-airlock-cycle with three EVA-suited explorers stacked in the airlock chamber, the first minifig\'s C-grip on the outer-hatch lever pulled forward, the chamber atmosphere visualized by trans-cyan plate elements receding, the alien-world surface visible through the open outer port',
+      'Mid-canopy-eject of a Galaxy Squad pilot minifig (orange-cyan flightsuit) firing upward from a stricken fighter, ejection-seat trailing trans-yellow thrust elements, the doomed fighter mid-spiral below, a wingman fighter banking in the distance to circle the eject-site',
+      "Mid-grasp of an alien artifact (trans-purple crystalline brick-element on a stand) by an EVA-suited science officer, the artifact starting to glow trans-magenta around the contact-point, second crew member behind the lead reaching to pull them back, the moment-before-the-power-surge",
+      "Mid-drill-bite of an asteroid-mining rig by the engineer-operator at the drill-station, drill-head (gear + cone parts) sinking into the asteroid surface with debris-1×1-round-plates flying outward, second crew at the ore-collector mid-catch of the falling chunks",
+      "Mid-leap in lunar-gravity by a Classic LEGO Space astronaut (yellow torso) over a low crater rim, both feet off the surface, lunar-rover in the deep distance, scale-prover micro-figure at the rover, the iconic-low-gravity-bound moment",
+      'Mid-system-failure as a chief engineer minifig (greasy-overall print) yanks an exposed power-cell free from a panel while sparks (trans-yellow 1×1 round-plates) burst from the bay, second engineer behind mid-shout with C-grip on a fire-extinguisher accessory',
+      "Mid-blaster-fire-exchange in a station corridor with three security minifigs (Space Police white-blue) in cover positions firing at two raider minifigs at the corridor's other end, trans-red bolt-elements crossing the gap mid-flight",
+      "Mid-spacewalk-tether-snap as an EVA crew member's tether parts mid-frame (severed end whipping back toward camera), the spacewalker mid-recoil reaching for a hull-handhold, fellow crewmate at the airlock mid-throw of a second backup-tether",
+      "Mid-deflector-up as the bridge officer minifig at the defensive-systems console slams a C-hand down on an activator-stud, the brick-built deflector-array on a viewscreen tile lighting trans-cyan, a second officer at navigation mid-evasive-spin of the helm",
+      "Mid-hatch-vault of a marine minifig (Galaxy Squad orange-cyan) through a sliced-open bulkhead into the next compartment, smoke (cotton-batting 1×1 white plates) curling from the breach, second marine behind mid-charge to follow through the gap",
+      "Mid-pad-launch as a Tintin-retro 1960s lander ignites engines (trans-orange + trans-yellow cone), bystander minifigs at the launch-pad fence mid-recoil from the heat, the lander beginning to lift off the brick-built launch-cradle",
+      "Mid-rescue-pull of a casualty (limp minifig with damage-marks-print) from the rubble of a collapsed habitat-module, two rescue-crew with C-grips on the casualty's shoulders, third rescue minifig mid-stabilizing-pole at the ceiling-beam",
+      "Mid-reactor-emergency-cycle by a Mass-Effect-coded engineer (gunmetal hardsuit) at a primary reactor console, trans-cyan coolant elements venting from a side-pipe, secondary engineer mid-call on a comm-piece warning the bridge",
+      "Mid-cargo-transfer of a stolen contraband-crate between a Blacktron smuggler at a ship's cargo door and a shore-side fence at a dock-platform, the crate suspended mid-pass between them, lookout at a corner mid-warning-wave",
+      "Mid-hostile-drone-defense as two scout minifigs in EVA-suits with mining tools-as-improvised-weapons swing at an incoming drone (brick-built 1×1 round-plate fuselage with antenna-wings) hovering over the dig-site",
+      "Mid-zero-G-recoil of a marine after firing a heavy blaster braced against a corridor bulkhead, the recoil-force pushing them backwards-in-vacuum into a teammate behind, trans-red bolt-element trailing from the muzzle",
+      "Mid-distress-flare launch as a stranded survivor minifig on an alien-world peak fires a flare-pistol skyward, trans-orange flame element arcing up, a second survivor at the camp mid-wave to draw the rescue-shuttle visible in deep distance",
+    ],
+    instructions: `Each entry is ONE space minifig action beat, 25-45 words. Format: free-form prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO "minifigs standing", NO "astronaut posing", NO "watching" / "looking at" / "gazing", NO passive states. Story beat + verb + cause/effect always.`,
+  },
+
+  // ─── build_technique — space-MOC distinguisher ───
+  brickbot_space_build_technique: {
+    format: 'simple',
+    theme: `LEGO SPACE MOC BUILD TECHNIQUE — AFOL-distinguishing brick-construction technique notes for the BrickBot space path. Each entry is ONE specific MOC technique that makes a space diorama read as "Bricklink AFOL convention build" instead of "official LEGO Space set photo." Each entry 25-45 words.
+
+VARIETY MANDATE — distribute across:
+  • SNOT construction for rounded sci-fi hulls (Classic Space dome curves / Blacktron wedge curves / M-Tron magnet-coupling curves)
+  • Trans-piece engine flares (trans-orange + trans-red flame elements stacked at thruster cones, trans-yellow ion-blast cores)
+  • Trans-piece nebula construction (trans-magenta + trans-cyan + trans-purple layered plates as cosmic dust clouds)
+  • Technic articulation (landing gear unfolding / robotic arms / cargo-loader cranes / blast-doors)
+  • Hard-SF panel-line detail (greebles / hull-plating staggered tile-offset / texture from 1×1 cheese slopes)
+  • Illegal techniques (bent flex-tubes / clip-and-bar non-canon joints / brick-bending / clutch-on-tile)
+  • Microscale tricks (minifig-accessory repurposed: lightsaber as engine-glow rod, croissant as alien-tail, dragon-wing as solar-sail)
+  • Studded-vs-tile texture contrast (studded deck-plating for interior decks / tiled smooth panels for exterior hull-plating)
+  • Glow / accent lighting techniques (trans-pieces as backlit panels, illegal LED-brick alternatives, fiber-optic-style stacks)
+  • Cross-section / cutaway construction (revealing interior detail through brick-by-brick framing)
+
+Each entry must:
+• Name the technique TYPE in first 5-8 words
+• Specify WHICH SPACE BUILD ELEMENT it applies to (hull / engine / nebula / landing-gear / station-interior / etc.)
+• Specify the SPECIFIC BRICK PARTS used (named: 2×2 round-dish / Technic axle-pin / trans-orange flame element / 1×1 cheese slope)
+• Imply the visual IMPACT`,
+    touchpoints: [
+      'SNOT-built Classic-Space dome curvature — vintage Classic Space cockpit dome built with SNOT bracket-plates turning curved-slope bricks sideways for a continuous hemispheric profile, using 4×4 inverted-dome elements with bley-frame border tiles for the iconic 6970-Beta-1 Command Base silhouette',
+      'Trans-piece engine-flare stack — thruster cone built from trans-orange 1×1 round-plates clustered at the throat, transitioning to trans-yellow flame elements at mid-cone, with a trans-clear bar-element extending the heat-shimmer plume aft of the nozzle, suggesting active burn',
+      'SNOT-curved Classic LEGO Space hull — Cosmic Fleet Voyager-style hull built with sideways-stud bracket plates turning curved-slope bricks parallel to the keel-axis, yellow + light-bley tile cladding offset half-stud for panel-line texture, trans-blue cockpit canopy at the bow',
+      'Trans-magenta + trans-cyan nebula stack — distant nebula built as a layered cloud of trans-magenta plates underneath trans-cyan tiles offset half-stud, scattered trans-purple 1×1 round-plates as denser cores, with cotton-batting white 1×1 round-plates for nebular haze across the field',
+      'Technic-articulated landing gear — three-strut landing gear built with Technic axle-pin joints at the hip and knee, allowing real deploy-retract motion, hydraulic-cylinder detail via stacked 1×1 round-bricks, foot-pad built from inverted slope-bricks for proper ground-contact',
+      "Greebled hard-SF hull plating — exterior surface of a frigate built with 1×1 cheese slopes, 1×2 jumper plates, brackets, and exposed-rod technic-pin details staggered in pseudo-random pattern, creating maximum panel-line + venting + access-hatch visual density",
+      "Illegal flex-tube cabling — Blacktron-style power-conduit cabling built from black flex-tube pieces (technically illegal in pure-LEGO purist build) routed across an exposed bulkhead between brick-built junction-boxes, suggesting realistic ship-engineering",
+      "Microscale lightsaber engine-glow — repurposed minifig lightsaber-blade pieces in trans-blue + trans-green inserted into thruster-cones as the visible plasma-stream, the hilt portion hidden inside the nozzle structure, suggesting a coherent plasma-jet beam",
+      "Microscale solar-sail dragon-wing — repurposed minifig dragon-wing pieces in trans-clear or trans-white attached via clip-and-bar connection to a solar-sail mast on a deep-space probe, fanned out to suggest light-pressure sails, creative non-canon part-usage",
+      "Tile-vs-stud texture split on station-deck — interior corridor of a space station with tiled smooth-grey floor panels for the central walking-path and exposed-stud deck-grating panels along the bulkhead-edges, the visual contrast separating the spaces",
+      "Trans-clear cockpit canopy with internal greeble — cockpit canopy built from trans-clear curved-slope pieces over an internal greebled instrument-panel of 1×1 round-tiles in alert-colors (red/amber/green), with pilot minifig visible inside, the canopy reflecting hangar lights",
+      "Cross-section frigate cutaway — frigate hull built as a half-cutaway with the starboard hull-plating intact and the port-side completely exposed showing brick-built rib-frames + decks + corridors + engine-rooms layered across multiple levels, the AFOL-cutaway display piece",
+      'Trans-piece ion-engine core — main engine nozzle built around a trans-cyan 4×4 round-dome at the core surrounded by exposed Technic-axle structure with brick-built coolant-piping, the trans-cyan visible through gaps suggesting cold-plasma drive',
+      "Studded-stud Classic-Space launch-pad — launch pad built from solid studded yellow plates with surface-detail in light-bley tile insets, the studded surface celebrating the iconic Classic-Space yellow-grey identity rather than tile-smoothing it for realism",
+      "Macrocanon Blacktron-II wedge silhouette — Blacktron II Aerial Intruder distinctive wedge built using SNOT bracket-plates running diagonally from the bow vertex, black + neon-yellow + trans-yellow wedge-plates layered with greeble-tile underbelly, instantly clocking as Blacktron canon",
+      "M-Tron magnet-cruiser red-and-black palette discipline — vehicle built strictly with M-Tron heritage palette (M-Tron-red + black + lime-green + trans-fluorescent accents), magnet-elements deliberately exposed at coupling-points, the 1990-1991 M-Tron set 6989-Mega-Core lineage",
+      "Blacktron stealth-fighter wedge — Blacktron-I or II palette discipline (black + neon-yellow + trans-yellow + Blacktron-orange), wedge-silhouette with hidden gun-port reveals at deploy, the iconic 1987-1993 Blacktron antagonist canon, every brick black except neon-trim",
+      "Insectoids organic-hive curvature — alien-hive structure built using illegal flex-tube spines + bend-bricks for organic curvature, trans-purple + trans-green for translucent dome-sections, scattered 1×1 round-plates in trans-violet as bioluminescent residue, the 1998-1999 Insectoids canon",
+      "Ice-Planet 2002 white-orange palette — ice-themed vehicle in pure-white + neon-orange trim with trans-clear ice-crystal accents, ice-saw-blade-elements as signature, the 1993 Ice Planet 2002 set 6973-Deep-Freeze-Defender lineage motif",
+      "Galaxy Squad split-ship modular — fighter built as two detachable halves connected by a Technic-axle-pin trigger-coupling so the ship visibly splits-apart in-build, orange-cyan palette discipline with bug-alien-encounter motifs, the 2013 Galaxy Squad set 70705 lineage",
+    ],
+    instructions: `Each entry is ONE MOC space-build technique, 25-45 words. Format: "TECHNIQUE NAME CAPS — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: no real-world construction language (no "3D-print / paint / glue"); LEGO bricks only. Name SPECIFIC part types (1×2 slope / trans-orange flame / Technic axle pin).`,
+  },
+
+  // ─── camera_framing — space-specific framings ───
+  brickbot_space_camera_framing: {
+    format: 'simple',
+    theme: `SPACE-SPECIFIC CAMERA FRAMING — LEGO MOC photography angles for the space path. Each entry is ONE camera position + framing rule specific to SPACE diorama subject matter. Each entry 15-30 words.
+
+⚠️ Bespoke — leverage space-specific scenery (hangar-vault / cockpit-canopy / EVA-tether / nebula-vista / planet-horizon / airlock-corridor / docking-bay) rather than generic photography terms.
+
+VARIETY MANDATE — distribute across:
+  • Vertigo angles (worm's-eye up a thruster / under a docking ring / from EVA looking up at hull)
+  • Cockpit POV (from-pilot-seat through canopy / over-shoulder of captain on bridge)
+  • EVA POV (tether's-eye view back at hull / drifting-debris perspective)
+  • Wide planet-horizon establishing (ship over curved planet / station on lunar horizon / Mars expanse)
+  • Hangar-vault perspectives (camera at deck-end looking down vault of receding fighter-cradles)
+  • Nebula / cosmic vista (ship silhouetted against vast nebula cloud)
+  • Cross-section cutaway POV (camera at the cutaway face of a half-built ship)
+  • Mission-control wide (camera at back of room looking past consoles toward wall-board)
+  • Asteroid-belt POV (camera embedded in asteroid debris / under-asteroid up at ship)
+  • Cargo-bay loading (camera at the gantry overhead looking down at loading)
+  • Air-lock POV (camera inside the airlock as outer door opens)
+
+Each entry must:
+• Specify camera POSITION (height / location / orientation)
+• Specify the framing's PURPOSE — what story-element this angle DRAMATIZES
+• Reference space-specific scenery elements`,
+    touchpoints: [
+      "HANGAR-BAY VAULT WIDE — camera at the deck-end of a fleet hangar looking down the receding rows of fighter-cradles, the hero-fighter in the foreground filling the lower-third, the vault arches receding toward a vanishing-point, hangar lighting in trans-amber strips along the bulkheads",
+      "EVA-TETHER POV — camera looking BACK from the perspective of an EVA-suited crew member at the end of a tether, the parent-ship hull receding in the upper frame, the tether-line connecting back to the airlock, scale-prover hand visible in foreground",
+      "COCKPIT-CANOPY OUT — camera from the pilot-seat looking out through the curved trans-clear canopy at the open-vacuum starfield, instrument-greeble visible in the lower-frame around the canopy-edge, pilot's helmeted reflection partially in the canopy glass",
+      "NEBULA-VISTA-FROM-BRIDGE — camera positioned on the bridge looking out the brick-built viewscreen at a vast nebula filling the deep distance, the bridge consoles + officer minifigs framing the lower-third silhouetted against the bright nebula light",
+      "PLANETSIDE WIDE-ESTABLISHING — camera at low-angle on an alien-planet surface looking toward the deep distance where a lander rests against a vast curved planet-horizon, scattered terrain features receding into perspective, the SKY-baseplate dominating the upper-half",
+      "UNDER-THE-THRUSTER VERTIGO — camera flat on the launch-pad surface looking STRAIGHT UP at the underside of a launching ship's thruster array, four engine-bells receding in perspective overhead, trans-orange flame elements bursting from the nozzles toward the camera",
+      "AIRLOCK-INTERIOR POV — camera positioned inside an airlock chamber looking at the outer-door as it cycles open, the door retracting upward into the bulkhead-frame, the alien-world or open-vacuum visible through the widening gap, atmospheric-element streamers venting",
+      "DOCKING-RING ORBITAL APPROACH — camera positioned on the side of a vast orbital ring station looking back along the rim, a shuttle on final-approach to a docking berth in the foreground, the curved station-horizon disappearing into deep distance with running-lights",
+      "CROSS-SECTION CUTAWAY WIDE — camera at the cutaway face of a half-built frigate looking INTO the cutaway revealing rib-frames + decks + corridors layered through the ship, AFOL display-cutaway angle showing the build's interior complexity",
+      "BRIDGE-OVER-SHOULDER — camera positioned just behind the right shoulder of the bridge captain in their command-chair, looking past their shoulder toward the viewscreen mounted on the bridge-front wall, secondary officers at consoles in the mid-frame",
+      "ASTEROID-DEBRIS POV — camera embedded in an asteroid debris-field looking out at a ship navigating through the field, asteroid-fragments framing the foreground as silhouetted obstacles, the ship visible through gaps in the debris-cloud",
+      "MISSION-CONTROL VAULT — camera at the back of a Tintin-retro 1960s mission-control room looking past rows of console-banks toward a wall-sized mission-board in the deep-distance, executive observers in the viewing-gallery above, vintage palette throughout",
+      "WORM'S-EYE UP DOCKING-PYLON — camera at deck-level looking up the side of a vertical docking-pylon mast, the docking-clamps and observation-deck visible higher up the mast, a docked ship's hull partially visible at the top edge, severe upward perspective",
+      "OVER-THE-RIM CRATER — camera positioned on the rim of a lunar crater looking down into the crater interior where a lander rests against the crater-floor, scattered terrain features at the crater-floor, lunar-rover and scale-prover minifig visible mid-frame",
+      "EVA-DRIFTING-DEBRIS POV — camera at the perspective of debris drifting past an EVA-repair scene, the crew member tethered to the hull-breach in the mid-frame, scattered hull-fragments framing the foreground as silhouettes, the parent-ship as background",
+      "CARGO-BAY-GANTRY DOWNSHOT — camera at the top of a cargo-bay gantry looking straight down at the loading-floor below, crew swarming around stacked cargo-containers, brick-built cranes and lifting-arms framing the upper portion of the frame",
+      "LANDING-SHUTTLE THROUGH-WINDOW — camera positioned at a passenger-cabin window of a descending landing-shuttle looking out at the planet-surface approaching, the cabin window-frame framing the view, brick-built shuttle-interior elements at the cabin edge",
+      "ALIEN-CAVE BIOLUMINESCENT WIDE — camera positioned at the mouth of an alien cave looking deep into the cavern interior where bioluminescent trans-cyan growth illuminates the cave walls, explorers in the mid-distance approaching an artifact at the cavern center",
+      "ESCAPE-POD JETTISON SIDE-VIEW — camera positioned alongside the parent-ship as a cluster of escape-pods jettisons from the side, pods trailing trans-orange flame, the parent-ship leaning at a damaged angle, the moment captured side-on",
+      "REFIT DRYDOCK OVERHEAD — camera positioned at the overhead crane-rail looking down at a ship in drydock, drydock supports framing the ship below, refit-crew swarming on multiple decks of the ship, the AFOL-display dock with maximum visible detail",
+    ],
+    instructions: `Each entry is ONE space-specific camera framing, 15-30 words. Format: "FRAMING NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: no generic camera terms ("medium shot / wide shot") without space-specific anchoring — every entry must reference space scenery (hangar / cockpit / EVA / nebula / planet / docking / airlock).`,
+  },
+
+  // ─── vehicle_class — silhouette anchor (REWEIGHTED R1 — 50% no-vehicle variants) ───
+  brickbot_space_vehicle_class: {
+    format: 'simple',
+    theme: `SPACE SUBJECT-CLASS ANCHOR — for the space path. This pool controls whether the diorama centers on a SHIP, an INTERIOR scene, a LANDSCAPE-with-character, or a SPACE-CITY. Each entry 12-30 words.
+
+⚠️ WEIGHTED DISTRIBUTION — critical for path variety. Generate the output as:
+  • ~40-45% NO-VEHICLE variants (the diorama is an INTERIOR scene, a LANDSCAPE-with-character, or a SPACE-CITY — ZERO ship rendering in frame)
+  • ~55-60% SHIP / VEHICLE variants (the diorama centers on a specific ship/vehicle silhouette)
+  Ships should be the slight majority — the brand-center of the path is space-vehicles, but interior/city/landscape variety is the bending advantage.
+
+⚠️ HARD RULE FOR NO-VEHICLE ENTRIES — when ANY entry begins with "no-vehicle (...)" the cross-axis template clause enforces ZERO ships in the rendered frame. The bracketed descriptor specifies what IS the subject.
+
+⚠️ STORY-TENSION MANDATE FOR NO-VEHICLE ENTRIES — every no-vehicle entry MUST embed an action-tension descriptor in the bracketed phrase or the body. Examples:
+  ❌ Weak: "no-vehicle (bridge interior) — console-banks, captain's chair, viewscreen"
+  ✓ Strong: "no-vehicle (bridge mid-engagement) — alert-klaxon trans-red strobing overhead, multiple officers MID-ACTION at stations, captain leaning forward shouting orders, viewscreen showing the enemy fleet"
+  ❌ Weak: "no-vehicle (mess hall) — crew dining, tables, port-window"
+  ✓ Strong: "no-vehicle (mess hall mid-evacuation) — half-finished meals abandoned, crew mid-rush toward the corridor, klaxon overhead, the port-window showing the threat outside"
+  ❌ Weak: "no-vehicle (Coruscant-coded planet-city) — sky-towers, mass-transit, urban density"
+  ✓ Strong: "no-vehicle (Coruscant-coded planet-city mid-chase) — sky-towers receding in deep distance, transit-lanes streaking with traffic, two minifig pedestrians on a ledge mid-pursuit, scale-prover crowd below"
+
+The TENSION DESCRIPTOR can be: mid-engagement / mid-emergency / mid-evacuation / mid-cycle / mid-launch / mid-arrival / mid-discovery / mid-rescue / mid-system-failure / mid-pursuit / mid-arrest / mid-investigation / mid-trade-dispute / mid-celebration / mid-rush / pre-launch tension / aftermath-of-fight / quiet-before-storm / discovery-moment.
+
+VARIETY MANDATE — distribute across these subject categories:
+
+═══ NO-VEHICLE INTERIORS (~25% of pool) ═══
+  • no-vehicle (bridge interior, command stations, viewscreen) — generic-LEGO-Space command bridge
+  • no-vehicle (hangar bay, fighters on cradles, deck crew, gantries) — busy fleet hangar
+  • no-vehicle (airlock chamber, mid-cycle, EVA prep) — pressure-cycle moment
+  • no-vehicle (cargo bay, stacked containers, loading-crane) — freight-hold scene
+  • no-vehicle (mess hall, crew dining, port-window) — daily-life space
+  • no-vehicle (med bay, casualty on bunk, medical-tech) — emergency-treatment
+  • no-vehicle (engine room, reactor-core, engineer at console) — system-failure moment
+  • no-vehicle (corridor, ship's spine, crew commuting) — between-stations transition
+  • no-vehicle (observation deck, viewing window, planet beyond) — contemplative moment
+  • no-vehicle (briefing room, holo-table, officers gathered) — pre-mission planning
+  • no-vehicle (laboratory, alien-artifact under analysis, science crew) — discovery
+  • no-vehicle (escape pod interior, crammed crew, ejection-sequence) — emergency
+  • no-vehicle (mission control room, console operators, wall-board) — ground-side Apollo-era
+
+═══ NO-VEHICLE LANDSCAPES + CHARACTERS (~12% of pool) ═══
+  • no-vehicle (alien planet vista, character party exploring, deep-distance terrain features) — exploration
+  • no-vehicle (lunar landscape, astronaut walking, planet-rise on horizon) — Apollo-coded moment
+  • no-vehicle (Mars colony surface, colonist tending equipment, base in distance) — daily-frontier-life
+  • no-vehicle (asteroid surface, mining crew at work, deep-vacuum overhead) — extraction-site
+  • no-vehicle (alien jungle / cave / ice-shelf, EVA scientists, biome-coded terrain) — biome-exploration
+
+═══ NO-VEHICLE SPACE CITIES (~13% of pool) ═══
+  • no-vehicle (Coruscant-coded planet-city, layered urban density, sky-tower forest, mass-transit) — ecumenopolis
+  • no-vehicle (orbital megacolony, vast ring structure interior, populated levels) — O'Neill-cylinder canon
+  • no-vehicle (asteroid mining city, hollowed asteroid interior, layered habitat-decks) — LEGO mining-city iconic-LEGO heritage
+  • no-vehicle (Citadel-coded station-city, multi-arm habitat, hub-and-spoke megastructure) — Mass-Effect Citadel
+  • no-vehicle (lunar capital, glass-dome cluster, brick-built spires, lunar-surface visible beyond) — colony-city
+  • no-vehicle (spaceport hub, multi-ship docking, customs, traders, multi-species crowds) — Mos-Eisley-coded
+  • no-vehicle (Babylon-5-coded torus station, multi-level concourse, multi-species shoppers) — diplomatic-station
+
+═══ SHIPS / VEHICLES (~50% of pool) ═══
+  • Classic LEGO Space silhouettes (lunar-rover / Classic Space cruiser / Cosmic Fleet Voyager / Beta-1)
+  • Blacktron wedge silhouettes (Blacktron-I Mission Commander / Blacktron-II Aerial Intruder)
+  • M-Tron cruiser silhouettes (Mega Core Magnetizer)
+  • Space Police cruiser / Ice Planet defender / Unitron / Mars Mission / Insectoids variants
+  • Galaxy Squad split-ships (modular dual-half fighter)
+  • Additional LEGO Space variants (Space Police III pursuit cruiser / Insectoids hive-ship / Mars Mission lander / Galaxy Squad bug-fighter)
+  • Additional iconic LEGO Space ships (Galaxy Explorer 497 / Space Police peace-keeper 6886 / Insectoids Hive Crawler 6907 / Mars Mission MX-91 walker 5969 / M-Tron Stardefender 6932 / Classic Space modular rover)
+  • Retro-future (Tintin Destination Moon lander / 2001 ASO Discovery One / Apollo CSM / Soyuz)
+  • Asteroid-mining hauler / refueling tanker / smuggler-runner
+  • EVA suit silhouettes (Classic Space yellow / Blacktron black / M-Tron red / Ice Planet white-orange / Mars Mission orange / Apollo NASA white / Tintin bubble-helmet)
+
+⚠️ "FRIGATE / CRUISER / CORVETTE / DREADNOUGHT" DRIFT GUARD — when an entry names a class that has a naval-surface counterpart (frigate / cruiser / corvette / dreadnought), ALWAYS include the explicit qualifier "STARSHIP frigate" / "interstellar cruiser" / "STARSHIP corvette" — never just "frigate" alone. Lesson: R0b #1 rendered as a naval surface frigate when the word "frigate" wasn't sci-fi-anchored.
+
+Each entry must:
+• Begin with either "no-vehicle (...)" or the explicit ship-class name
+• For SHIP entries: name the class + hull-profile + thruster arrangement + crew capacity
+• For NO-VEHICLE entries: specify what IS the dominant subject (interior type / landscape / city) + key environmental detail
+• ZERO mixing — a no-vehicle entry NEVER mentions any ship/vehicle silhouette`,
+    touchpoints: [
+      'no-vehicle (bridge mid-engagement) — Mass-Effect-coded command bridge with klaxon trans-red strobing overhead, console-banks in concentric arcs, captain leaning forward MID-SHOUT of orders, three officers MID-ACTION at stations, viewscreen showing the enemy fleet bearing down, alert-pattern chaos',
+      'no-vehicle (hangar bay mid-launch-scramble) — fleet hangar with multiple fighters on cradles, lead fighter mid-engine-test with trans-orange flame elements bursting, pilot mid-sprint toward the cockpit ladder, deck-crew mid-evac of the launch-pad, ordnance-trolleys mid-roll',
+      'no-vehicle (airlock mid-cycle) — pressure-cycle chamber mid-decompression with trans-cyan venting streamers receding, three EVA-suited crew tense at the outer hatch, lead crew member mid-grip on the cycle-lever, the alien-world or open-vacuum visible through the widening door-gap',
+      'no-vehicle (cargo bay mid-loading-emergency) — interior cargo hold with stacked containers mid-shift, brick-built loading-crane gantry overhead with a crate mid-swing, deck-crew mid-dive away from the falling cargo, trans-yellow alert-strips strobing',
+      'no-vehicle (mess hall mid-evacuation) — crew dining commons with half-finished meals abandoned, ration-trays mid-spill across tables, four crew mid-rush toward the corridor exit, klaxon trans-red overhead, the port-window showing the threat-event outside',
+      'no-vehicle (med bay mid-trauma) — interior medical bay with casualty minifig on the bunk bloodied (red-print torso), doctor MID-ACTION over the patient with instrument, medical-tech mid-shout into a comm-piece, trans-red alert-light overhead pulsing',
+      'no-vehicle (engine room mid-system-failure) — reactor-core chamber with the central reactor stack venting trans-cyan coolant streamers, engineer MID-LEVER-PULL on emergency-shutdown, second engineer mid-shield with arm raised, sparks (trans-yellow round-plates) bursting from a side-pipe',
+      'no-vehicle (corridor mid-pursuit) — ship\'s spine-corridor with receding bulkhead frames, lead minifig MID-SPRINT toward the camera, pursuer minifig mid-charge behind with weapon drawn, trans-amber strip-lighting strobing alert-pattern, the chase compressed into the long perspective',
+      'no-vehicle (observation deck mid-realization) — large brick-built viewing-window dominating one wall, two crew minifigs at the window MID-RECOIL as they realize what they\'re seeing outside, the threat (alien fleet / supernova / black hole) visible through the glass',
+      'no-vehicle (briefing room mid-revelation) — brick-built holo-table at center projecting a trans-blue tactical layout, officers gathered around in tense planning posture, lead officer MID-POINT at a critical detail on the holo, the mood shifting from routine to alarm',
+      'no-vehicle (laboratory mid-discovery) — science-bay interior with alien-artifact (trans-purple crystalline element) suddenly GLOWING under analysis, lead scientist MID-RECOIL with hands raised, secondary scientist mid-shout warning into a comm, instruments mid-overload (sparks)',
+      'no-vehicle (escape pod interior mid-ejection) — cramped pod with three minifigs strapped into bench seats mid-launch-G with bodies pressed back into seats, trans-yellow alert overhead, the parent-ship debris visible through the porthole behind receding, the moment of separation',
+      'no-vehicle (mission control room mid-crisis) — Apollo-era ground-control room with wall-board flashing red status, console-operators MID-ACTION at their stations, flight-director MID-SHOUT of orders, executive-gallery above watching in tense silence, mid-anomaly-response moment',
+      'no-vehicle (alien planet vista mid-discovery) — wide alien-planet surface with three EVA explorers cresting a ridge to suddenly see what\'s in the valley below, lead explorer MID-FREEZE pointing toward the discovery, vast curved planet-horizon receding behind',
+      'no-vehicle (lunar landscape mid-rescue) — light-bley lunar surface with one Classic Space astronaut MID-SPRINT toward a fallen second astronaut, lunar-rover damaged in mid-distance, Earth-rise on the horizon, mid-emergency moment',
+      'no-vehicle (Mars colony surface mid-dust-storm) — rust-red Mars surface with colonists MID-RUSH for shelter, equipment-modules being abandoned mid-procedure, dust-particle trans-orange elements obscuring the deep-distance, mid-storm-arrival',
+      'no-vehicle (asteroid surface mid-claim-dispute) — dark-bley asteroid surface with two mining-crews MID-CONFRONTATION at a shared extraction-site, drills mid-stop, lead figures from each crew mid-shout-distance with weapons holstered, deep-vacuum overhead',
+      'no-vehicle (alien jungle mid-encounter) — biome-coded alien jungle with trans-green + trans-purple alien-flora, EVA scientists MID-FREEZE as they see something move in the foliage, bioluminescent trans-cyan accents pulsing in alarm-pattern, hidden-threat tension',
+      'no-vehicle (Coruscant-coded planet-city mid-chase) — vast ecumenopolis with sky-towers receding, two minifig pedestrians MID-SPRINT across a sky-bridge with pursuer minifig mid-leap behind, transit-lanes streaking trans-yellow below, urban-chase scale',
+      'no-vehicle (orbital megacolony O\'Neill cylinder mid-festival) — vast cylindrical habitat interior with curved-floor cities on the opposite-arc, plaza filled with celebrating minifigs MID-DANCE, trans-color confetti elements drifting, mid-celebration packed-crowd energy',
+      'no-vehicle (asteroid mining city mid-shift-change) — hollowed-asteroid interior with multi-deck habitats, tram-station packed with miner-minifigs MID-COMMUTE between shifts, lead miner MID-WAVE to a coworker, working-class daily-life-with-energy moment',
+      'no-vehicle (Citadel-coded station-city mid-diplomatic-tension) — multi-arm hub interior with multi-species crowds on the concourse, two opposing diplomats MID-CONFRONTATION at the atrium center, surrounding crowd MID-RECOIL, the political-incident-moment',
+      'no-vehicle (lunar capital mid-arrival-parade) — glass-dome capital with welcome-celebration in the plaza, minifig crowds MID-WAVE up at an arrived-shuttle landing-trail still visible overhead, banners + confetti elements, Earth-rise behind',
+      'no-vehicle (spaceport hub mid-arrest) — multi-species spaceport concourse with security-officers MID-PURSUIT of a fleeing smuggler-minifig, customs-agent at a desk mid-call for backup, multi-species crowds MID-SCATTER, Mos-Eisley criminal-incident',
+      'no-vehicle (Babylon-5-coded torus mid-trade-dispute) — toroidal station-interior with multi-level concourse, two trader-minifigs MID-SHOUT at each other across a brick-built trade-table, surrounding multi-species shoppers MID-STARE, the public-dispute moment',
+      "Classic LEGO Space lunar-rover (1978-1987 lineage, 6970 Beta-1) — open-cockpit yellow-and-grey rover, six fat trans-blue wheels, single rear-mounted antenna, 1-2 crew capacity, the iconic LEGO Space surface-vehicle profile",
+      "Classic LEGO Space Cosmic Fleet Voyager (6985 lineage) — long cigar-shaped main hull with two engine-pods, trans-blue cockpit canopy at the bow, vintage Classic-Space yellow-grey palette, 4-6 crew capacity",
+      "Blacktron I Mission Commander (6986 lineage) — angular wedge-shaped fighter in black with neon-yellow trim, twin trans-yellow cockpit canopies, deltawing-style profile, 2 crew capacity",
+      "M-Tron Mega Core Magnetizer (6989 lineage) — red-and-black hauler with prominent dorsal magnet-coupling, exposed magnet-elements on the hull-sides, lime-green trim, 3-4 crew capacity",
+      "Ice Planet 2002 Deep Freeze Defender (6973 lineage) — white-orange Ice-Planet vehicle with twin trans-orange cockpit canopies, ice-saw-blade-element on the bow, 2 crew capacity",
+      "Galaxy Squad split-ship Vermin Vaporizer (70704 lineage) — modular fighter that physically splits into two halves at a Technic-pin coupling, orange-cyan palette, 2 crew capacity",
+      "Insectoids hive-ship (1998 lineage) — organic curved hull-form in purple-and-lime-green with trans-purple wing-panels, alien-bug aesthetic, 4-6 crew capacity",
+      "Mars Mission lander (2007 lineage) — white-orange Earth-astronaut craft with quad-thruster lander legs, trans-orange engine glow, 3 crew capacity",
+      'Space Police III pursuit cruiser (5974 lineage) — sleek white-and-blue pursuit cruiser with twin pursuit-engines and trans-blue forward shield, 2 crew capacity',
+      "Classic LEGO Space Galaxy Explorer (497 lineage) — long cigar-shaped trans-blue cockpit hull with twin rear-engine pods and folding solar-panel arms, the original 1979 LEGO Space flagship, 4 crew",
+      "Space Police I Galactic Peace Keeper (6886 lineage) — blue-and-white pursuit cruiser with twin trans-blue cockpit canopies and bow-mounted comm-dish, 1989 LEGO law-enforcement heritage, 2-3 crew",
+      "Tintin Destination Moon lander — red-and-white checkered classic 1950s tintin space-rocket silhouette, tail-fins stabilizing the base, retro-future fictional space-craft canon",
+      "2001 ASO Discovery One — central pod-shaped command sphere + long spinal truss + spherical fuel-tanks at the tail, no-wings hard-SF spacecraft, 5 crew capacity",
+      "Asteroid-mining hauler STARSHIP — boxy industrial interstellar cargo-vessel with prominent claw-arms + ore-bay aft, multiple fuel-tanks externally mounted, working-class space-craft profile",
+      "Apollo CSM-style command module — bell-shaped capsule + cylindrical service-module + nozzle, 3 crew capacity, the iconic 1960s NASA Apollo Command-Service Module silhouette",
+    ],
+    instructions: `Each entry is ONE subject-class anchor, 12-30 words. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. WEIGHTED OUTPUT: ~50% no-vehicle variants (interiors + landscapes + space-cities) + ~50% ship/vehicle variants. STRICT BANS: never mention BOTH a ship AND an interior in the same entry; never use bare "frigate / cruiser / corvette" without "STARSHIP" or "interstellar" qualifier. NO-VEHICLE entries must specify what IS the dominant subject.`,
+  },
+
+  // ─── register — era+faction bender ───
+  brickbot_space_register: {
+    format: 'simple',
+    theme: `SPACE REGISTER — era + faction lock for each render. Each entry is ONE specific LEGO-Space-canon or sci-fi-canon register that controls the crew attire + build motifs + props. Each entry 20-40 words.
+
+⚠️ WEIGHTED DISTRIBUTION — Kevin's 10-heart calibration 2026-05-22 showed iconic LEGO Space heritage > hard-SF realism. Pool weights:
+  • ~80% ICONIC LEGO SPACE HERITAGE — Classic Space 1978-87 / Blacktron I+II / M-Tron / Space Police I-III / Ice Planet 2002 / Galaxy Squad / Insectoids / Mars Mission / Unitron
+  • ~15% RETRO-FANTASY NON-LICENSED — Tintin Destination Moon / Foundation Genetic Dynasty (Asimov-Apple) / Apollo-era NASA historical / 2001 ASO
+  • ~5% SPECIALTY — Foundation imperial palace + Classic LEGO Space rare variants
+
+NEVER LEGO Star Wars (X-wings / TIEs / Falcon / Star Destroyer / stormtroopers / Mandalorian / Beskar / Imperial / Rebels / Jedi) — that IP is OUT of scope for BrickBot.
+
+NEVER hard-SF realism registers (Mass Effect / Normandy / N7 / Expanse / Rocinante / Martian Marine / cyberpunk-space / solarpunk-space) — they photoreal-drift away from the LEGO MOC signal.
+
+REGISTER CATEGORIES — distribute as:
+  • ~12% CLASSIC LEGO SPACE (1978-1987) — yellow-and-grey astronaut suits, trans-blue cockpit-canopies, fictional friendly-explorer Earth-fleet
+  • ~7% SPACE POLICE (I-III) — white-and-blue sci-fi cop force, the 1989+ LEGO law-enforcement-in-space variant
+  • ~7% ICE PLANET 2002 — white-and-orange ice-themed explorer faction with ice-saw equipment, the 1993 LEGO arctic-space theme
+  • ~5% UNITRON (1994) — blue-and-white friendly explorer variant of Classic Space
+  • ~5% MARS MISSION (2007) — astronauts vs aliens, white-orange-grey palette
+  • ~5% INSECTOIDS (1998) — purple-and-green organic alien faction
+  • ~10% BLACKTRON I + II — black-and-neon-yellow antagonist faction, the iconic 1987-1993 LEGO Space rivals
+  • ~7% M-TRON (1990-1991) — red-and-black magnet-themed faction
+  • ~5% GALAXY SQUAD (2013) — orange-and-cyan bug-fighters with split-ship motif
+  • ~7% APOLLO-ERA NASA HISTORICAL — pure-white Apollo-era spacesuits, gold-foil heat-shielding, Saturn-V launch-team gear
+  • ~5% FOUNDATION IMPERIAL GENETIC DYNASTY — Empire-purple imperial officer + ornate-galactic uniform / Cleon dynasty / Asimov-Foundation canon
+  • ~5% STAR CITIZEN MERCENARY CREW — mercenary multi-faction-coded crew in earth-tones with hacked-tech accessories, multi-species crew composition
+  • ~3% CLASSIC LEGO SPACE LUNAR BASE (1979-83) — yellow-and-grey moonbase variants with trans-blue dome cluster
+  • ~3% CLASSIC LEGO SPACE SPACE-STATION — additional Classic Space space-station crew variant
+  • ~3% TINTIN DESTINATION MOON RETRO — red-and-white checkered tintin-rocket aesthetic, 1950s comic canon
+  • ~2% 2001 A SPACE ODYSSEY — minimalist all-white spacesuits, Discovery-One aesthetic, Kubrick canon
+  • ~2% FOUNDATION (Apple/Asimov) — Empire-purple imperial aesthetic, Foundation-cream rebellious aesthetic
+  • ~2% CLASSIC LEGO SPACE DEEP-PATROL — additional Classic Space variant with deep-space patrol motif
+  • ~2% TINTIN DESTINATION MOON VARIANT — additional retro Tintin-coded variant
+  • ~2% APOLLO 1960s NASA REAL-HISTORICAL — historically-accurate Apollo astronauts + Saturn-V launch teams
+
+Each entry must:
+• Name the register in first 4-8 words
+• Specify CREW ATTIRE characteristics (suit color / helmet style / weapon-type)
+• Specify BUILD MOTIFS (signature elements / faction marker)
+• Specify any restrictions (when register fires, vehicle_class auto-aligns)`,
+    touchpoints: [
+      "CLASSIC LEGO SPACE (1978-1987) — yellow-torso astronaut suits with white air-tank backpacks, trans-blue cockpit canopies, fictional friendly-explorer Earth-fleet, the path's brand-center register",
+      "SPACE POLICE I (1989-1991) — white-and-blue sci-fi cop force with trans-blue visors, anti-grav cruiser variants, prisoner-transport equipment, the LEGO law-enforcement-in-space heritage",
+      "SPACE POLICE III (2009-2010) — refresh of Space Police with chrome-blue + neon highlights, more aggressive antagonist-pursuit hardware, the LEGO 2009 reboot canon",
+      "ICE PLANET 2002 (1993) — white-and-neon-orange ice-themed explorer faction with ice-saw-blade equipment + ice-crystal trans-pieces, the iconic 1993 LEGO arctic-space theme",
+      "UNITRON (1994) — blue-and-white friendly explorer faction with mecha-and-cruiser variants, the lesser-known but heritage-coded Classic-Space cousin",
+      "MARS MISSION (2007) — Earth-astronaut white-orange-grey suits vs Martian-alien grey-with-glowing-trans-orange-orbs, dueling-faction motif, the 2007 LEGO theme",
+      "INSECTOIDS (1998) — purple-and-green organic-alien faction with bug-themed vehicles, trans-purple wings, alien-flora props, the LEGO 1998 alien-faction canon",
+      "BLACKTRON I (1987-1990) — black-with-neon-yellow antagonist faction, wedge-shape ship silhouettes, the iconic 1987 LEGO Space rival force; vehicle_class becomes Blacktron variant",
+      "BLACKTRON II (1991-1993) — refresh of Blacktron with more aggressive wedge profile + extending wing motif, the 1991 LEGO Blacktron successor canon; vehicle_class becomes Blacktron II variant",
+      "M-TRON (1990-1991) — red-and-black faction with magnet-coupling motif on every vehicle, lime-green accent trim, the iconic magnet-themed 1990 LEGO Space variant; vehicle_class becomes M-Tron magnet-cruiser variant",
+      "GALAXY SQUAD (2013) — orange-and-cyan modular-fighter faction with bug-alien rivals, ship-split-in-half mechanic, the 2013 LEGO theme; vehicle_class becomes Galaxy Squad split-ship variant",
+      "APOLLO-ERA NASA HISTORICAL — pure-white Apollo-era spacesuits with gold-foil reflective heat-shielding, Saturn-V launch-team in flight-overall white shirts + skinny ties, the 1960s NASA program heritage",
+      "FOUNDATION IMPERIAL GENETIC DYNASTY — Empire-purple imperial-officer attire, ornate-galactic-imperial uniforms with gold trim, the Asimov-Foundation Cleon dynasty canon",
+      "CLASSIC LEGO SPACE SPACE-STATION — yellow-and-grey crew at an iconic Classic LEGO Space space-station with trans-blue dome cluster and rotating habitat-arms, 1980s heritage motif",
+      'CLASSIC LEGO SPACE LUNAR BASE COMMAND — yellow-torso astronaut crew at a Classic-Space-era moonbase command post, trans-blue dome cluster, light-bley lunar terrain, the 1979-1983 LEGO Space moonbase heritage',
+      "CLASSIC LEGO SPACE DEEP PATROL — yellow-torso patrol crew variants with deep-space patrol motif, longer-mission gear, exploration-style equipment, the 1980s LEGO Space exploration heritage",
+      "TINTIN DESTINATION MOON — red-and-white checkered classic 1950s tintin-rocket astronauts with retro-bubble-helmets, the 1953 Hergé comic canon; vehicle_class becomes Tintin retro-lander",
+      "2001 A SPACE ODYSSEY — minimalist all-white spacesuits with mirror-visor helmets, Discovery-One aesthetic, sterile Kubrick-canon palette; vehicle_class aligns to Discovery One",
+      "FOUNDATION (Apple/Asimov) GENETIC DYNASTY — Empire-purple imperial-officer attire, ornate-galactic-imperial uniforms; vehicle_class becomes Imperial Foundation-cruiser variant",
+      "TINTIN DESTINATION MOON HERGÉ — red-and-white checkered retro-rocket astronauts in bubble-helmet bone-white spacesuits, 1953 Hergé comic-canon, vehicle_class aligns to Tintin retro-lander",
+    ],
+    instructions: `Each entry is ONE space register lock, 20-40 words. Format: "REGISTER NAME CAPS — attire + motif + restrictions". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. WEIGHTED OUTPUT (per Kevin's 10-heart calibration 2026-05-22): ~80% iconic LEGO Space heritage (Classic Space variants / Blacktron I+II / M-Tron / Space Police I-III / Ice Planet 2002 / Galaxy Squad / Insectoids / Mars Mission / Unitron) + ~15% retro-fantasy non-licensed (Tintin Destination Moon / Foundation Genetic Dynasty / Apollo NASA / 2001 ASO) + ~5% specialty. STRICT BANS: (1) NEVER include LEGO Star Wars references (no X-wings / TIEs / Falcon / Star Destroyers / stormtroopers / Mandalorian / Beskar / Jedi / Rebels / Imperial — that IP is OUT of scope for BrickBot); (2) NEVER hard-SF realism (no Mass Effect / Normandy / Expanse / Rocinante / Star Citizen / cyberpunk / solarpunk — they photoreal-drift); (3) no register-mixing within a single entry.`,
+  },
+
+  // ─── scene_props — diorama fill (pickN:2) ───
+  brickbot_space_scene_props: {
+    format: 'simple',
+    theme: `SPACE DIORAMA STORYTELLING PROPS — small brick-built details that fill the corners of a space scene and add narrative depth. Each entry is ONE specific prop with a story implied. Each entry 12-30 words.
+
+⚠️ Picked TWO PER RENDER (pickN:2), so each entry must be SMALL enough to coexist with another.
+
+VARIETY MANDATE — distribute across:
+  • EQUIPMENT (astronaut helmet on rack / EVA tool-belt / datapad / repair-drone / scanner / portable-airlock)
+  • CARGO / SUPPLIES (ration packs / oxygen tank / fuel-cell / water-container / med-kit / crate-with-warning-label)
+  • ALIEN ARTIFACTS (crystalline object in trans-piece / glowing orb / monolith fragment / alien-script tile)
+  • DEBRIS / WRECKAGE (drifting hull-fragment / shattered solar-panel / spent fuel-rod / damaged escape-pod / floating glove)
+  • PERSONAL / EMOTIONAL (photo-tile / wedding-ring on plate / mission-patch tile / dog-tag / pet-cat-in-canister)
+  • TROPHIES / FLAGS (planted flag-element / mission-banner / first-foot plaque / mounted artifact)
+  • LIVING COMPANIONS (alien-pet-creature / ship's-cat in zero-G / micro-robot / lab-rat-in-cage)
+  • COMMUNICATION (comm-console / radio-receiver / hologram-emitter with trans-pieces / message-tile)
+  • NAVIGATION (sextant / compass-tile / star-chart on table / orbital-map display)
+  • WEAPONS-LITTER (dropped blaster / spent ammo-clip / charge-pack / disabled-drone fragment)
+  • SCALE-PROVER MICRO-FIGS (lone explorer at edge of frame / scientist with notebook / engineer with cable-reel)
+  • STATION / SHIP DETAIL (port-window with view / hand-rail / hatch / vent-grating / fire-extinguisher in red)
+
+Each entry must:
+• Name the prop in first 3-6 words
+• Specify the SPECIFIC LEGO BRICK PARTS where applicable
+• Imply a STORYTELLING CONTEXT`,
+    touchpoints: [
+      "Astronaut helmet on a brass-hook — minifig spacesuit-helmet accessory hanging on a clip-and-bar bracket-mounted to a bulkhead, the crew-member's-quarters detail, recently removed after shift",
+      "Datapad on the console — printed 2×2 datapad-tile lying on a flat brick-built console surface, a minifig stylus accessory beside, mid-shift recordings paused",
+      "Open ration-pack on a tray — 1×2 trans-clear tray with 1×1 round tile food-pieces scattered, a half-empty rations-pack-tile, the crew-mess-hall detail",
+      "Spent fuel-cell on the deck — dark-bley cylinder-element with trans-orange spark-emission residue at the top, lying on its side on the deck-plating, post-emergency-jettison evidence",
+      "Pet cat in zero-G canister — a brick-built micro-pet-cat suspended in mid-air inside a trans-clear cylinder-canister with a clip-on lid, the ship's mascot detail",
+      "First-foot mission patch tile — printed mission-patch-tile mounted on a 1×2 plate as a bulkhead-wall trophy, the crew's-pride-of-mission marker",
+      'Planted flag-element on lunar surface — minifig flag-accessory in a 1×1 round-plate base on a light-bley slope brick lunar-surface, the iconic Apollo-era first-foot moment',
+      "Trans-purple alien crystal on a stand — 1×1 trans-purple round-stud jewel-piece on a gold round-plate cradle, glowing-faint-emission implied, the recently-discovered artifact",
+      "Drifting EVA glove — single minifig spacesuit-glove accessory drifting in mid-air slightly off-vertical, evidence of a recent EVA accident or theft",
+      "Hologram-emitter with trans-blue projection — brick-built emitter-pedestal with a trans-blue 1×2 plate angled upward representing a projected-message, a captain mid-recording-playback prop",
+      "Repair-drone on standby — brick-built micro-drone (1×1 round body + 2 antenna-piece arms + light-up trans-element eye) hovering or perched on a service-rack, the ship's-maintenance helper",
+      "Med-kit case open on the floor — 2×3 case-element open with 1×1 trans-red round-plate medical-marker visible inside, scattered medical-supplies, a recent-injury evidence detail",
+      "Dog-tags on a chain — minifig chain-piece with 1×1 round-tile dog-tags hanging off a bunk-bedrail, the absent-crew-member memorial detail",
+      "Spent blaster bolt-element on the deck — single trans-red 1×1 bar element lying on the deck where the bolt-strike landed, smoking-faint-emission detail, the post-combat aftermath",
+      "Disabled drone fragment — broken brick-built drone-segment lying on the deck with sparking trans-yellow elements at the breakage-point, the recent-defense-engagement evidence",
+      "Ration-pack stash in a wall-niche — 1×2 niche built into a bulkhead with stacked ration-pack-tiles, hidden-emergency-supplies the crew's-private-cache detail",
+      "Hand-painted mission patch on a flightsuit — printed minifig-torso with custom mission-patch detail visible, the personalized-veteran-pilot detail visible up-close",
+      "Trans-yellow warning-light strip overhead — 1×4 trans-yellow round-tile strip mounted on a ceiling-beam glowing alert-pattern, the system-emergency ambient detail",
+      "Personal photo-tile on a bunk — printed family-photo-tile mounted on a 1×2 plate above a crew-bunk, the homesick-crew-member detail",
+      "Cup-of-coffee-in-zero-G — 1×1 trans-clear cylinder with trans-brown 1×1 round-plate liquid floating in a globule above the cup-rim, zero-G physics joke detail",
+    ],
+    instructions: `Each entry is ONE space diorama prop, 12-30 words. Format: "PROP NAME — brick-parts + story-context". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO real-world materials without naming brick parts; NO centerpiece-sized props; small storytelling-detail props only.`,
+  },
+
+  // ─── lighting — axis-clean ───
+  brickbot_space_lighting: {
+    format: 'simple',
+    theme: `LEGO MOC SPACE LIGHTING — axis-clean light SOURCE + DIRECTION + COLOR-QUALITY entries for the space path. Each entry is ONE specific lighting setup. Each entry 15-30 words.
+
+⚠️ AXIS-CLEAN MANDATE. Lighting pool owns ONE conceptual lane: light source + direction + color quality.
+
+⚠️ HARD BANS:
+  • NO cosmic phenomena: nebula clouds / supernova flash / aurora-belt / black-hole-event (those belong to cosmic_phenomenon axis)
+  • NO scene elements: hangar / bridge / hull / cockpit / cargo-bay (those belong to scene_type / camera_framing axes)
+  • NO minifig action language ("light catching astronaut's face")
+  • NO color-cast OVERRIDE language
+
+✓ VARIETY MANDATE — distribute across (with COOL/VIOLET weighting to counter Flux's warm bias):
+  • DEEP SPACE COOL (binary-star backlight blue-and-amber / distant-sun raking cool-white / starlight-only blueblack)
+  • PRACTICAL SHIP LIGHTS (cockpit instrument trans-amber underlit / corridor cool-fluorescent overhead / bridge trans-cyan console-glow)
+  • PLANETSIDE NATURAL (alien-sun cool-violet overhead / red-dwarf rust-orange raking / ice-planet diffuse cool-blue)
+  • ENGINE / THRUSTER FLARE (trans-orange thruster glow up-back / trans-blue ion-engine pulse / trans-yellow burn-flash)
+  • EMERGENCY / ALERT (klaxon trans-red strobe / amber-alert pulsing / dim-emergency-only cool-blue)
+  • EVA / SUIT-LIGHT (helmet-mounted spotlight tight cone / suit-shoulder-light wide cool-white)
+  • CHIAROSCURO DEEP-SHADOW (single-source dramatic chiaroscuro in interior / cool-source-against-deep-shadow)
+  • CONSOLE / SCREEN LIGHT (trans-blue console-uplight on operator-face / trans-green radar-screen tint)
+  • PLANET-REFLECTED (cool-blue Earth-glow lighting one side / warm Mars-rust reflected onto craft hull)
+  • DRYDOCK / FLOOD-LIGHTS (harsh cool-white refit-pad floods / warm-yellow gantry-light pools)`,
+    touchpoints: [
+      "BINARY-STAR BACKLIGHT COOL-AMBER — two distant suns from opposite sides of the deep distance casting overlapping cool-blue + warm-amber shadows, the warm-cool split lighting creating dramatic dual-tone illumination, sharp-edged shadows",
+      "DEEP-SPACE STARLIGHT-ONLY BLUEBLACK — no proximate light source, only faint blue-black starfield ambient, very dim cool-blue color quality, surfaces barely defined, the lonely-vacuum register",
+      "COCKPIT TRANS-AMBER UNDERLIT — interior light from cockpit instrument panels glowing warm-amber upward onto the pilot's helmeted-face, dramatic underlit chiaroscuro, deep-shadow on the upper half of the canopy",
+      "ENGINE THRUSTER GLOW UP-BACK — bright trans-orange + trans-yellow thruster-flare from behind the subject ship, warm hot color quality on the ship's stern, cool-deep-shadow on the bow, dramatic backlit silhouette",
+      "ALIEN-SUN COOL-VIOLET OVERHEAD — distant cool-violet sun directly overhead casting cool-violet color quality on all upward surfaces, sharp short shadows, the iconic-alien-world signature lighting",
+      "KLAXON TRANS-RED STROBE — red emergency-alert light from overhead trans-red elements pulsing across the scene, harsh saturated-red color cast on all lit surfaces, deep-black shadows, the system-emergency register",
+      "EVA HELMET SPOTLIGHT CONE — tight cool-white spotlight cone from a helmet-mounted lamp directed forward, hard-edged light-shaft, surrounding darkness on the unlit portions, deep-vacuum register",
+      "RED-DWARF SUN RAKING RUST — small red-dwarf sun low-angle from one side casting rust-orange + saturated-amber color quality on the lit side, long deep-purple shadows opposite, the alien-cool-star register",
+      "ICE-PLANET DIFFUSE COOL-BLUE — overhead overcast bright-but-diffuse cool-blue color quality on all surfaces, soft shadows, the ice-planet bouncing-light register, slightly desaturated",
+      "MARS-RUST REFLECTED HULL — close to Mars-surface with the planet's rust-orange-and-tan glow reflected upward onto a hovering craft's underside, warm-rust color quality on the underside, cool-deep-shadow on the upper",
+      "EARTH-GLOW BLUE FROM-BELOW — close to Earth-orbit with the planet's cool-blue glow filling the underside of a craft from below, soft-blue color quality on undersides, the iconic-orbit register",
+      "CHIAROSCURO INTERIOR SINGLE-SOURCE — interior scene with a single window or porthole as the only light source, warm color quality on the lit edge of the subject, deep-black void on the other 80% of frame",
+      "DRYDOCK FLOOD-LIGHTS COOL-WHITE — harsh cool-white industrial flood-lighting from multiple gantry-mounted lamps, hard-edged shadows from each light direction, the refit-pad register",
+      "MISSION-CONTROL FLUORESCENT FLAT — overhead fluorescent-strip lighting casting cool-fluorescent-blue flat illumination across the room, no directional shadows, the 1960s-NASA mission-control register",
+      "BLUE-CONSOLE UPLIT OPERATOR — trans-blue console-glow lighting the operator's face from below, cool-cyan color quality, the bridge-screen-uplight register, dramatic underlit chiaroscuro",
+      "AMBER-ALERT PULSE LOW — soft pulsing amber-alert lighting from waist-height alert-strips, warm color quality on the lower-half of objects, cool darker shadow on the upper-half, the secondary-alert register",
+      "WARP-DRIVE TRANS-BLUE PULSE — trans-blue saturated pulse light from a warp-drive event near the subject ship, cool electric-blue color cast across the entire scene, the FTL-jump register",
+      "LANDING-PAD FLOOD-LIGHTS WARM — yellow-amber landing-pad flood-lights from multiple bases at the pad corners, warm color quality on the descending craft underside, the pad-arrival register",
+      "TWILIGHT-PLANET BLUE-PURPLE COOL — alien-planet twilight transitioning from cool-blue to cool-purple gradient, no direct light source, very low ambient, the world-ending-day register",
+      "EVA-SUIT SHOULDER LIGHT WIDE — cool-white wide-beam light from a suit-shoulder-mounted lamp, less harsh than helmet-spotlight, wider falloff, the working-EVA register",
+    ],
+    instructions: `Each entry is ONE space-scene lighting setup, 15-30 words. Format: "SOURCE+DIRECTION CAPS — color quality + signature". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO cosmic phenomena (nebula / supernova / aurora — those belong to cosmic_phenomenon); NO scene elements (hangar / bridge / hull / cockpit). SOURCE + DIRECTION + COLOR only.`,
+  },
+
+  // ─── palette — axis-clean color combos ───
+  brickbot_space_palette: {
+    format: 'simple',
+    theme: `LEGO MOC SPACE PALETTE — axis-clean color-combination entries for the space path. Each entry is ONE specific multi-color palette for a space diorama. Each entry 12-25 words.
+
+✓ VARIETY MANDATE — distribute across space-coded palettes:
+  • CLASSIC LEGO SPACE (yellow + medium-grey + trans-blue + white)
+  • SPACE POLICE (white + sky-blue + chrome + trans-blue)
+  • BLACKTRON I+II (black + neon-yellow + trans-yellow)
+  • M-TRON (black + red + lime-green + brushed-steel)
+  • ICE PLANET 2002 (white + neon-orange + trans-clear-blue + black)
+  • UNITRON (blue + white + chrome + trans-clear)
+  • MARS MISSION (white + orange + grey + trans-orange + tan)
+  • INSECTOIDS (purple + lime-green + trans-purple + black)
+  • GALAXY SQUAD (orange + cyan + black + trans-orange)
+  • HARD-SF GUNMETAL (gunmetal + Alliance-blue + chrome + warning-stripe + matte-black)
+  • FOUNDATION IMPERIAL (royal-purple + ornate-gold + cream-marble + dark-violet)
+  • APOLLO-ERA NASA (pure-white + American-red + American-blue + chrome + gold-foil)
+  • CLASSIC LEGO SPACE DEEP-PATROL (deep-grey + Classic-yellow + trans-blue + chrome-silver)
+  • TINTIN RED-AND-WHITE (red + white + checker + chrome + tan)
+  • 2001 ASO STERILE (clean-white + chrome + black + trans-clear)
+  • FOUNDATION IMPERIAL PURPLE (royal-purple + gold + cream + dark-violet)
+  • CLASSIC LEGO SPACE LUNAR (yellow + light-bley + trans-blue + cream-white + grey)
+  • TINTIN DESTINATION MOON (red + cream-white + checker-pattern + chrome + tan)
+  • APOLLO ERA NASA (pure-white + American-red + American-blue + chrome + gold-foil)
+  • NEBULA COSMIC (deep-magenta + cosmic-cyan + violet + indigo + starfield-black)
+  • DEEP-SPACE BLACK (matte-black + chrome + occasional-trans-blue + cool-grey)
+  • EMERGENCY ALERT (klaxon-red + warning-yellow + matte-black + chrome-steel)
+  • BIOLUMINESCENT ALIEN-CAVE (trans-cyan + trans-green + black + dark-purple)
+
+Each entry must:
+• Name 3-5 specific colors with anchor-nouns
+• Use specific color-modifier vocabulary (chrome / matte / weathered / saturated / cool / brushed)
+• End with a brief register tag (Classic-Space / Blacktron / Mars-Mission / Mass-Effect)
+• NEVER drift into lighting language (no "thruster-glow orange") — describe colors as MATERIAL colors`,
+    touchpoints: [
+      "Yellow + medium-grey + trans-blue + white, Classic-LEGO-Space",
+      "White + sky-blue + chrome + trans-blue + LED-cyan, Space-Police-I",
+      "Black + neon-yellow + trans-yellow + matte-grey, Blacktron-I",
+      "Black + red + lime-green + brushed-steel + magnet-coupling-yellow, M-Tron",
+      "White + neon-orange + trans-clear-blue + black + ice-crystal-cyan, Ice-Planet-2002",
+      "Blue + white + chrome + trans-clear-blue + medium-grey, Unitron",
+      "White + Mars-orange + grey + trans-orange + tan, Mars-Mission",
+      "Purple + lime-green + trans-purple + black + alien-bone-white, Insectoids",
+      "Orange + cyan + black + trans-orange + bug-alien-green, Galaxy-Squad",
+      "Orange + cream-white + brown + tan + olive-drab + rebel-red-trim, LEGO-Star-Wars-Rebels",
+      "Black + dark-grey + cream-white + chrome + Imperial-red-trim, LEGO-Star-Wars-Imperial",
+      "Royal-purple + ornate-gold + cream-marble + dark-violet + Imperial-trim-gold, Foundation-Imperial-palace",
+      "Gunmetal + Alliance-blue + chrome + warning-yellow-stripe + matte-black, Mass-Effect",
+      "White + neon-orange + trans-clear-cyan + bone-cream + ice-crystal-blue, Ice-Planet-2002-additional",
+      "Bright-red + cream-white + checker-pattern + chrome + tan, Tintin-Destination-Moon",
+      "Clean-white + chrome + matte-black + trans-clear-blue, 2001-ASO-Discovery",
+      "Royal-purple + ornate-gold + cream + dark-violet + Empire-trim-gold, Foundation-Imperial",
+      "Neon-magenta + cyber-yellow + matte-black + chrome + acid-green, Cyberpunk-space",
+      "Warm-amber + leaf-green + cream + sky-blue + terracotta-clay, Solarpunk-space",
+      "Pure-white + American-red + American-blue + chrome-silver + gold-foil, Apollo-NASA",
+      "Deep-magenta + cosmic-cyan + violet + indigo + starfield-black, Nebula-cosmic",
+      "Matte-black + chrome + cool-grey + occasional-trans-blue, Deep-space-void",
+      "Klaxon-red + warning-yellow + matte-black + chrome-steel, Emergency-alert",
+      "Trans-cyan-glow + trans-green-fungus + matte-black + dark-purple + cave-stone-grey, Bioluminescent-alien-cave",
+      "Worn-chrome + dirty-yellow + grease-black + rust-orange, Working-class-hauler",
+      "Sterile-white + chrome + medical-blue + trans-clear, Med-bay-clinical",
+      "Tan-canvas + brown-leather + brass-rivets + faded-blue, Mars-colony-rustic",
+      "Hot-red + amber + heat-blackened-steel + smoke-grey, Reactor-overheating",
+      "Lavender + pink + powder-blue + cream + chrome, Pastel-utopian-station",
+      "Polished-marble + gold-trim + cream-white + obsidian-black, Foundation-imperial-palace",
+    ],
+    instructions: `Each entry is ONE space palette, 12-25 words. Format: comma-separated colors then comma + register-tag. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO lighting language ("thruster-glow"); NO scene elements; NO weather/phenomenon words. Material colors with anchors + register-tag.`,
+  },
+
+  // ─── cosmic_phenomenon — environmental drama (50%-gated) ───
+  brickbot_space_cosmic_phenomenon: {
+    format: 'simple',
+    theme: `SPACE COSMIC PHENOMENON — atmospheric/cosmic event that AMPLIFIES the scene. Each entry is ONE specific cosmic event that can fire on a space diorama (50%-gated conditional). Each entry 20-40 words.
+
+⚠️ DECOUPLED FROM scene_type AND lighting — bending axis. Lets us roll "asteroid mining + supernova flash" or "EVA + black-hole event-horizon-pull" — combinations unreachable in legacy.
+
+VARIETY MANDATE — distribute across:
+  • NEBULA EVENTS (towering nebula cloud / nebula-bloom expansion / nebula-eddy-current)
+  • SUPERNOVA / STELLAR DEATH (supernova flash on horizon / dying-star coronal-event / pulsar-pulse-strobe)
+  • BLACK HOLE / GRAVITY (event-horizon pull / gravity-wave distortion / accretion-disc visible / time-dilation lensing)
+  • METEOR / DEBRIS (meteor shower streaks / asteroid-belt density-spike / hull-impact debris-cloud)
+  • AURORA / ATMOSPHERIC (planetary aurora-belt / ionosphere-glow / magnetic-storm visualizer)
+  • PLANET SHADOW (eclipse / planet-shadow falling across the scene / dual-eclipse on alien sun)
+  • SOLAR EVENT (coronal mass ejection / solar-flare-glow / sunspot grouping)
+  • ICE / CRYSTAL FIELDS (ice-crystal cloud / crystal-debris field / shattering-ice-shelf in low-G)
+  • BIOLUMINESCENT (alien-bioluminescent surface bloom / phosphorescent-fog drift)
+  • COSMIC DUST (interstellar dust cloud / scattered-dust haze / particle-stream nebula)
+  • PLANETARY RING (Saturnine ring slice / ring-shadow crossing scene / ring-fragment cloud)
+  • RIFT / PORTAL (visible space-time rift / dimensional-tear in vacuum / wormhole-entry distortion)
+  • ALIEN FLEET APPROACH (silhouettes of incoming alien fleet on horizon / massive shape approaching from below)
+
+Each entry must:
+• Name the event in first 4-8 words
+• Specify WHICH BRICK PARTS render it
+• Specify the VISUAL IMPACT (focal point shift, color cast, motion)
+• NEVER override lighting axis directly`,
+    touchpoints: [
+      "NEBULA TOWERING CLOUD — vast trans-magenta + trans-cyan + trans-purple layered plate-stack nebula cloud filling the entire upper-half of the frame as the deep-distance background, scattered 1×1 white round-plates as nebular haze, the cosmic-scale signature event",
+      "SUPERNOVA FLASH ON HORIZON — blinding-white 4×4 round-tile flash with trans-yellow + trans-orange shockwave ring expanding outward across the deep-distance background, the moment-of-stellar-death captured mid-expansion",
+      "BLACK HOLE EVENT-HORIZON PULL — circular trans-black + dark-bley disc at scene-center with trans-blue accretion-ring of plates wrapping outward, distorted starfield around the edges using lens-bending implied by tile-stretch, the gravitational-pull signature",
+      "METEOR SHOWER STREAKS — multiple trans-orange + trans-yellow bar-elements + trans-red elements streaking diagonally across the brick-built sky-baseplate, each streak with a 1×1 round-plate impact-head, the cosmic-rain signature event",
+      "PLANETARY AURORA-BELT — horizontal trans-green + trans-cyan + trans-magenta plate strips arranged in undulating curtains across the upper-frame above the planet horizon, the iconic-magnetic-pole signature",
+      "PLANET-SHADOW ECLIPSE — large dark-bley 4×4 round-tile planet silhouette eclipsing a bright trans-yellow sun-disc in the deep-distance, with a thin trans-orange + trans-red diffraction-ring around the eclipse-edge, the iconic-orbital signature",
+      "ASTEROID-BELT DENSITY-SPIKE — dense field of dark-bley round-bricks + crater-tile fragments + trans-grey 1×1 round-plates scattered across the foreground and mid-frame as a thick asteroid-belt, the navigation-hazard signature",
+      "PULSAR-PULSE STROBE — cylindrical trans-yellow + trans-cyan beam-element emerging from a small distant pulsar-star at the rim of the frame, pulse-frequency visualized by repeating beam-segments, the navigation-beacon-of-doom signature",
+      "RING-FRAGMENT CROSS — horizontal ring-of-fragments (1×2 + 1×4 dark-bley tile-fragments) crossing the frame at a steep angle, the planet-source visible in the deep-distance, the orbital-debris signature",
+      "DIMENSIONAL RIFT TEAR — vertical trans-cyan + trans-magenta jagged-edge cone in the deep-distance representing a space-time rift with starfield bending toward the rift-mouth, the wormhole-tear signature",
+      "ALIEN FLEET SILHOUETTE APPROACH — massive dark-bley silhouettes of multiple alien-ships looming on the deep-distance horizon, each silhouette built from black + dark-bley bricks against the bright cosmic background, the impending-doom signature",
+      "ICE-CRYSTAL FIELD — field of trans-clear + trans-cyan 1×1 round + 1×2 tile pieces suspended at varying heights drifting through the vacuum around a ship, refracting the surrounding light, the cold-debris signature",
+      "BIOLUMINESCENT ALIEN-SURFACE BLOOM — alien-planet surface glowing with scattered trans-cyan + trans-green 1×1 round-plates representing bioluminescent growth, the entire surface-bloom signature, the alien-world-life signature",
+      "INTERSTELLAR DUST CLOUD — sparse field of 1×1 round-plates and 1×2 tile-fragments scattered across the entire scene as cosmic dust haze, trans-amber and trans-clear elements suggesting particles, navigation-hazard signature",
+      "WARP-DRIVE ENTRY DISTORTION — trans-blue + trans-cyan light-cone exit from a hyperspace-jump in the mid-distance, stretched-light implied by elongated tile-strips, the FTL-arrival signature",
+      "DUAL-SUN ECLIPSE — both suns of a binary-star system aligned with one eclipsing the other, the trans-yellow + trans-orange corona-ring visible around the eclipse-edge, dramatic dual-shadows on the foreground subjects, the binary-system signature",
+      "SUNSPOT GROUPING — visible cluster of trans-black sunspots on the surface of a distant sun-disc in the deep-distance, the sun rendered as a 4×4 trans-yellow round-tile with dark-bley spot-clusters, the solar-activity signature",
+      "ACCRETION DISC GLOW — wide trans-orange + trans-red glowing disc visible around a central black-hole or neutron-star, the disc rendered as flat plate-stack with bright trans-pieces toward the center, the cosmic-power-source signature",
+      "METEOR IMPACT ON HULL — single large trans-orange flame-element + 1×1 white round-plate debris-cloud at the impact-site on a ship's hull, the moment-of-collision captured, the unexpected-strike signature",
+      "PHOSPHORESCENT FOG DRIFT — drifting cloud of trans-green + trans-cyan 1×1 round-plates suspended at varying heights across the mid-frame, glowing-supernatural haze, the alien-atmosphere-anomaly signature",
+    ],
+    instructions: `Each entry is ONE space cosmic phenomenon, 20-40 words. Format: "EVENT NAME CAPS — brick-parts + visual-impact". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NEVER specify lighting color cast directly; NEVER lock crew/scene reaction language; environmental EVENT only.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // PIRATES PATH (2026-05-22 — first BrickBot axis migration)
+  // ════════════════════════════════════════════════════════
+
   // ─── scene_type — narrative stage (the WHAT) ───
   brickbot_pirates_scene_type: {
     format: 'simple',
@@ -336,7 +957,7 @@ REGISTER CATEGORIES — distribute as:
   • ~5% MIDDLE-EASTERN / BARBARY COAST — turbans + scimitars + dhow-rigging + Salee / Algiers raiders / silk-and-leather attire
   • ~5% CURSED / GHOST CREW — skeleton-torso variants + tattered-cape + phosphorescent-eyes + green-glow + Davy Jones lineage
   • ~5% FANTASY (One Piece / Sea of Thieves / Sea Beast) — exaggerated-anime style / fantasy-creature crews / impossibly-shaped ships / treasure-hunt fantasy
-  • ~5% SPACE-PIRATE (Treasure Planet / Star Wars-pirate / Outlaw Star) — Caribbean attire + retro-futurist mods / plasma-cutlasses / solar-sails / nebula-backdrops
+  • ~5% SPACE-PIRATE (Treasure Planet / Outlaw Star / Cowboy Bebop) — Caribbean attire + retro-futurist mods / plasma-cutlasses / solar-sails / nebula-backdrops
   • ~5% ROYAL NAVY / IMPERIAL FORCE — red-coat marines + tricorn officers + Union-Jack / Spanish-galleon Imperial / French-corsair / Dutch East-India-Company
   • ~5% STEAMPUNK PIRATE — Victorian-era + brass-gear + dirigible-skyship + steam-mechanical-prosthesis / monocle / pith-helmet
   • ~5% MODERN-SOMALI / RIVER-RAIDER — small fast skiffs + AK-coded weapons (LEGO-stylized) + improvised crew kit (rare register — use sparingly)

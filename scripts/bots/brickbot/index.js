@@ -61,6 +61,8 @@ module.exports = {
   promptPrefixByPath: {
     pirates:
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
+    space:
+      'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
   },
 
   vibes: ['cinematic'],
@@ -83,7 +85,7 @@ module.exports = {
     // `feedback_axis_system_skip_polish` — Haiku polish strips
     // curated axis language (build_technique vocab, register-locks,
     // scene-prop detail) when compressing 150 → 70-100 words.
-    skipPaths: ['pirates'],
+    skipPaths: ['pirates', 'space'],
   },
 
   // No sensoryAnchors — universal LEGO MOC photography mood is captured

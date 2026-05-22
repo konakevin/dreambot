@@ -1945,3 +1945,213 @@ Plus template blocks: SCENE-AS-HERO, GEOLOGY WOW FACTOR, STACKED LIGHT DRAMA, AT
 Plus bot config: chaos.skipPaths includes the path, twoPassPolish.skipPaths includes the path, promptPrefixByPath kept short (photography style locks only, not stuffed).
 
 This is the canonical template for "real Earth larger than life" landscape paths. Clone it for every future EarthBot path (weather-drama / hidden-corner / dramatic-sky / luminous-landscape / sacred-light / national-parks / seasonal-shift / geological-wonder / micro-nature / deep-forest / lush-jungle + 13 beach paths).
+
+---
+
+## CANONICAL REFERENCE — BrickBot LEGO MOC diorama path migration (2026-05-22)
+
+First two BrickBot paths migrated: pirates + space. **This is the canonical reference for ANY BrickBot path migration.** The lessons here are LEGO-MOC-photography-specific and generalize across every BrickBot path (macro-display, girly, lego-masters, western, fantasy, aquatic, winter, mech, theme-park, forest, landscape — and any future BrickBot paths).
+
+**Result:** space path converged at R4+R4b ~4.75/5 average across 10 renders. Kevin: "FANTASTIC, this is the best one you've done yet." Pirates converged at R0 ~4.5/5 first try. The combined lessons from both migrations are below.
+
+### CRITICAL LESSON 1 — Tilt-shift IS Flux's structural signal that "everything in frame is LEGO"
+
+The biggest discovery of the BrickBot migration. Flux's "LEGO MOC photography" training prior reads tilt-shift miniature-photography as the marker that "every element in the frame is the model." When you fight tilt-shift (e.g., adding `promptPrefixByPath` with "cinematic widescreen deep focus front-to-back"), you GAIN cinematic readability + wider establishing shots, but you LOSE the LEGO-ness signal — backgrounds drift photoreal (real rock cliffs, real-water harbors, real-sky atmospheres around brick-built subjects).
+
+**The trade-off Kevin chose for pirates + space:** keep the deep-focus `promptPrefixByPath` (`cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot`) despite the ~10-15% rate of not-LEGO-background drift. The cinematic feel + wider establishing shots are worth it. Flag this as a known tradeoff for future BrickBot paths.
+
+**Apply this to:** every BrickBot path. If a path is more intimate-tabletop-feel (e.g., macro-display, girly, lego-masters convention table) it may want the OPPOSITE — embrace tilt-shift, drop the deep-focus prefix. Path-by-path call.
+
+### CRITICAL LESSON 2 — BrickBot rule: NEVER LEGO Star Wars
+
+Per `feedback_no_star_wars_brickbot.md` memory: Kevin explicitly rejected LEGO Star Wars register/vehicle classes from BrickBot. Strip ALL Star Wars references (X-wings / TIEs / Falcon / Star Destroyers / stormtroopers / Mandalorian / Beskar / Jedi / Rebels / Imperial) from pools, recipes, and templates. Use original LEGO Space themes instead (Classic Space / Blacktron / M-Tron / Galaxy Squad etc.) + non-licensed retro-fantasy (Tintin / Foundation / Apollo).
+
+**Apply this to:** every BrickBot path migration. Audit pools BEFORE first render — strip Star Wars references upfront, not after the fact.
+
+### CRITICAL LESSON 3 — Iconic LEGO heritage register > generic hard-SF realism
+
+Per `feedback_brickbot_iconic_lego_taste.md` memory: Kevin's 10-heart calibration on space showed **ZERO hard-SF realism hearts** (no Mass Effect Normandy, no Expanse Rocinante, no Star Citizen, no cyberpunk-space, no solarpunk-space). All 10 hearts were iconic LEGO Space heritage registers (Classic Space 3 / Tintin 3 / Ice Planet 2 / Blacktron 2 / Galaxy Squad 1 / M-Tron 1 / Foundation 1).
+
+**Why:** hard-SF realism (Mass Effect / Expanse / Star Citizen) registers in pool entries push Flux toward photoreal frigate hull-plating + realistic spacesuits + ambient haze — which loses the "everything is brick" LEGO-MOC signal. Iconic LEGO Space themes have distinct color palettes (yellow-grey + trans-blue / black + neon-yellow / red + black + lime-green / white + orange / orange + cyan) that Flux locks onto, producing instantly-recognizable LEGO MOC renders.
+
+**Register pool weighting for ANY BrickBot path:**
+- **~80% iconic LEGO theme heritage** — for space: Classic Space / Blacktron I+II / M-Tron / Space Police I-III / Ice Planet 2002 / Galaxy Squad / Insectoids / Mars Mission / Unitron. For pirates: Caribbean golden-age (which is the iconic LEGO Pirates theme) + Imperial Royal Navy (the LEGO Pirates antagonist). For winter: Holiday Village / Winter Toy Shop / Winter Cabin. For mech: Bionicle / Hero Factory / Exo-Force. Adapt per path.
+- **~15% retro-fantasy non-licensed** — Tintin Destination Moon (1953 Hergé) / Foundation Genetic Dynasty (Asimov-via-Apple) / Apollo-era NASA historical / 2001 ASO Discovery One. Adds variety without drifting hard-SF photoreal.
+- **~5% optional bot-coded variants** — leave room for path-specific specialty registers.
+
+**AVOID** for ALL BrickBot paths: Mass Effect / Expanse / Star Citizen / cyberpunk / solarpunk / generic-hard-SF / modern-photoreal. They photoreal-drift.
+
+**Apply this to:** the register pool for EVERY BrickBot path. Audit + purge hard-SF realism BEFORE first render. Cross-reference Kevin's hearts after R0 to calibrate further.
+
+### CRITICAL LESSON 4 — Vehicle_class no-vehicle balance & story-tension mandate
+
+BrickBot space introduced the **`vehicle_class` axis as a subject-class anchor** that controls whether the diorama centers on a SHIP or a NO-VEHICLE scene (interior / landscape / city). This is BrickBot-specific because BrickBot paths often have both ship-as-subject AND scene-as-subject content.
+
+**Distribution sweet spot:** ~50-55% ships / ~45-50% no-vehicle variants. Started at 95% ships / 5% no-vehicle (too ship-heavy), overcorrected to 42% ships / 58% no-vehicle (Kevin: "i liked it better before"), landed at 54/46 ships/no-vehicle which Kevin called "FANTASTIC." Slight ship-lean preserves the bot's "subject is a ship" brand-center while allowing interior + landscape + city variety.
+
+**No-vehicle entries MUST embed story-tension descriptors** in the bracketed phrase or body. R1 showed bare "no-vehicle (bridge interior)" entries produced hard-to-read "scattered minifigs in establishing scene" renders. R2 fix: every no-vehicle entry now includes mid-X action-tension:
+```
+✗ Weak: "no-vehicle (bridge interior) — console-banks, captain's chair, viewscreen"
+✓ Strong: "no-vehicle (bridge mid-engagement) — klaxon trans-red strobing, multiple officers MID-ACTION at stations, captain MID-SHOUT, viewscreen showing the enemy fleet"
+```
+
+**Tension descriptors:** mid-engagement / mid-emergency / mid-evacuation / mid-cycle / mid-launch / mid-arrival / mid-discovery / mid-rescue / mid-system-failure / mid-pursuit / mid-arrest / mid-investigation / mid-revelation / mid-trauma. NEVER bare scene-establishing language.
+
+**Apply this to:** EVERY BrickBot path where the path covers both ship-as-subject and scene-as-subject content (most of them). Pirates uses `ship_class` axis without no-vehicle entries — pirates renders are nearly always ship-centered or character-centered with ship-context. Space uses `vehicle_class` with 50-55% ships + 45-50% no-vehicle (interior/landscape/city). Other paths may want similar splits (e.g., winter: 50/50 no-vehicle landscapes/villages vs. vehicles).
+
+### CRITICAL LESSON 5 — Camera_framing as MANDATORY DRIVING AXIS + minifig pose variety mandates
+
+Flux's "LEGO MOC photography" training prior has a STRONG default: "centered minifig facing camera at center frame, tilt-shift miniature aesthetic." Camera_framing pool entries like "OVER-SHOULDER COMMAND" or "WORM'S-EYE VERTIGO" get IGNORED by Flux unless the template flags the axis as MANDATORY.
+
+R2/R2b showed "front-shot character in helmet + top-down ship" churn across 5+ renders because the template treated camera_framing as a "variety knob" rather than a NON-NEGOTIABLE driving axis. R3 fix:
+
+```
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ THIS IS NON-NEGOTIABLE — the rolled camera angle DRIVES the composition. Apply the exact camera position + orientation described, even if Flux's "LEGO MOC photography" training prior wants to center the minifig front-facing. Override that bias hard.
+
+⚠️ MINIFIG POSE & ORIENTATION VARIETY MANDATE — fight Flux's "minifig facing camera at center frame" default:
+  • If camera_framing is OVER-SHOULDER — render the focal minifig from BEHIND
+  • If WORM'S-EYE / UPSHOT — minifigs viewed from below, foreshortened
+  • If OVERHEAD / DOWNSHOT / CRANE-RAIL — top-down or steep-down, minifigs from above
+  • If SIDE-ON / BROADSIDE / PROFILE — figure in side-profile silhouette, NOT front-facing
+  • If POV / FIRST-PERSON — over-the-shoulder or hand-in-foreground, NOT facing-you-figure
+  • If WIDE / VAULT / ESTABLISHING — ensemble of multiple minifigs at varied positions, NOT one centered
+  • If RECEDING / DEEP-PERSPECTIVE — figure(s) at midground or deep, NOT close-up dominant
+
+Minifig orientation rotation: vary across side-profile / three-quarter-back / from-behind / multi-figure ensemble / partial-frame crop / silhouette-at-distance. NOT every render is "minifig face visible center frame."
+```
+
+R3 result: 5/5 renders showed distinct non-default camera angles. Front-facing-center pattern dropped to ~10% across R3+R4+R4b (one regression in R4b #5).
+
+**Apply this to:** EVERY BrickBot path. Camera_framing axis must be flagged MANDATORY DRIVING AXIS in the template + paired with minifig pose variety rules tied to camera angle keywords.
+
+### CRITICAL LESSON 6 — "ONE clear focal-figure" template language CAUSES front-facing churn
+
+Counter-intuitive but verified: telling Sonnet "ONE clear focal-figure mid-action that the eye lands on first" in the template produces "single centered minifig facing camera" Flux output across nearly every render. This was my R1b fix that addressed "hard-to-read scattered scenes" — but the cure created the next problem.
+
+**Better wording (R3 fix):**
+```
+The CAMERA FRAMING axis below DRIVES composition — apply that angle precisely, NOT a default "minifig facing camera at center"
+A focal subject must be readable, but its POSITION + ORIENTATION come from the rolled camera angle
+Multiple supporting minifigs contribute to the beat where the action implies a team / crowd
+```
+
+**Apply this to:** every template across ALL bots, not just BrickBot. The lesson generalizes: "focal figure" language without camera-angle anchoring produces centered-front-facing renders. Always tie focal-figure mandates to the rolled camera axis.
+
+### CRITICAL LESSON 7 — "FRIGATE / CRUISER / CORVETTE" without "STARSHIP" qualifier drifts to naval surface ship
+
+R0b #1 verified: when vehicle_class rolled "Mass Effect Normandy-class frigate" (without sci-fi-anchored qualifier), Flux rendered it as a literal Royal Navy frigate on water with an astronaut on deck. The word "frigate" alone triggers Flux's naval-warship training prior; the surrounding sci-fi vocabulary doesn't override.
+
+**Fix:** in every vehicle_class entry that names a ship-class with naval counterparts (frigate / cruiser / corvette / dreadnought / carrier / destroyer), ALWAYS include the explicit qualifier "STARSHIP frigate" / "interstellar cruiser" / "STARSHIP corvette" — never bare. Add to pool gen recipe as a strict ban.
+
+**Apply this to:** any axis-system migration that names ship-classes. Generalizes beyond BrickBot — any sci-fi-coded path on any bot.
+
+### CRITICAL LESSON 8 — Heart-calibration is the gold-standard signal, beyond my own grading
+
+I graded space R3 at 4.7/5 average with strong framing variety. Kevin's response: "i'm starting to see a repeated pattern/framing... we seem to be churning. go pull the last batch and look at the prompts." My grading missed that even with framing variety, the underlying register-bias was still too hard-SF-heavy — Kevin's actual heart data showed 10/10 iconic-LEGO-Space hearts, ZERO hard-SF.
+
+**The lesson:** my grading is calibrated to "is the render technically good?" but Kevin's hearts are calibrated to "does this match the path's identity?" These can diverge significantly. After R0-R3 of any path migration, pull Kevin's hearts via DB query + analyze which registers/scenes/framings made the cut. The hearts are the ground truth for path identity.
+
+**Query pattern:**
+```js
+const KEVIN = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
+const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+const { data } = await supa.from('likes')
+  .select('upload_id, created_at, uploads(image_url, ai_prompt, caption)')
+  .eq('user_id', KEVIN)
+  .gte('created_at', fiveMinAgo);
+```
+
+Then read each hearted JPG + map URL signatures to local batch files + correlate with prompt registers/scenes. The pattern that emerges is the calibration.
+
+**Apply this to:** every path migration after R0-R3. When Kevin says "go look at the posts I hearted" — pull them + study them + adjust pools toward what hearted.
+
+### CRITICAL LESSON 9 — Surgical pool edits beat regen for ratio rebalancing
+
+When the pool ratio needs adjustment (e.g., shift 58/42 no-vehicle/ships → 54/46 ships/no-vehicle), surgical Node-script drops are 100x faster than regenerating the whole pool with a reweighted recipe. Drop 5-10 entries matching a regex pattern, write back. ~10 seconds vs. ~2 minutes of Sonnet calls.
+
+**When to surgical-edit vs. regen:**
+- **Surgical drop** — shifting ratio by 5-20% by removing a known sub-category (no-vehicle entries / hard-SF entries / cheesecake entries / etc.)
+- **Regen with new recipe** — when the recipe's distribution mandate or touchpoint examples need to change for future entries, not just the current pool
+
+**Apply this to:** any pool ratio adjustment across any bot. Especially useful when iterating fast on a render-fire pattern Kevin's flagging — surgical-edit + render + check + iterate.
+
+### CRITICAL LESSON 10 — Pool conceptual ceilings on iconic-IP-anchor axes are SMALL
+
+Space vehicle_class capped at ~26 entries (50 target). Pirates ship_class capped at ~50 entries. Space register capped at ~40 entries (50 target). These pools are bounded by the FINITE conceptual space of iconic LEGO heritage themes — there are only so many distinct LEGO Space sub-themes, only so many ship-classes that read as canon.
+
+**Don't push past natural caps.** When Sonnet's `--target N` loop stops adding new unique entries, accept the cap. Adding more synthetic variants dilutes the iconic-feel of the pool.
+
+**Apply this to:** any axis where the conceptual space is finite (registers / vehicle_classes / iconic-figure-anchors / ship-classes). Plan production targets accordingly — register pools usually settle at 30-50, not 100-200 like scene_type or minifig_action.
+
+### File-by-file checklist for BrickBot path migration
+
+Cloning the pirates + space migration pattern:
+
+1. **Read the legacy path file** + 200-entry legacy pool (scenes / lighting / palette). Note the bot-specific aesthetic vocabulary.
+2. **Design 8-10 bespoke axes**, NEVER cloned from prior paths (per `feedback_each_path_bespoke_not_cloned`):
+   - `scene_type` — narrative stage (200)
+   - `minifig_action` — verb-led story beat (200)
+   - `build_technique` — AFOL MOC distinguisher (100-150)
+   - `camera_framing` — path-specific framings (50)
+   - `vehicle_class` or `ship_class` or `subject_class` — silhouette anchor (50, with 40-50% no-vehicle if applicable)
+   - `register` — era+faction lock weighted ~80% iconic LEGO heritage / ~15% retro / ~5% specialty (40-50)
+   - `scene_props` (pickN:2) — diorama fill (150)
+   - `lighting` — axis-clean source/dir/color (100)
+   - `palette` — axis-clean color combos (100)
+   - `weather_drama` or `cosmic_phenomenon` (50%-gated) — conditional environmental drama (50)
+3. **Bespoke recipes per pool** — anchored on path-specific iconic canon (LEGO Pirates / LEGO Space / LEGO Castle / LEGO Western / etc.). NEVER use Star Wars. NEVER use Mass Effect / Expanse / Star Citizen. Always include "STARSHIP" qualifier on naval-overlap ship-class names.
+4. **Template structure** — clone BRICKBOT_PIRATES or BRICKBOT_SPACE template with bespoke vocabulary swap. Camera_framing flagged as MANDATORY DRIVING AXIS. Minifig pose variety mandates tied to camera keywords. No-vehicle hard-bifurcation block (if vehicle_class is no-vehicle, ZERO ships rendered). AFOL convention-tier mandate (NOT Lego.com hero shot). Hoisted ZERO REAL HANDS block.
+5. **promptPrefixByPath** — add `cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot` if path benefits from establishing-shot composition. Omit if path is intimate-tabletop (macro-display, lego-masters).
+6. **twoPassPolish.skipPaths** — always add the new path (axis-system default).
+7. **MVP gen + render 5** — `node scripts/iter-bot.js --bot brickbot --mode <path> --count 5 --label "auto-qa: <path> R0" --post`.
+8. **Heart-calibration** — after R0, query Kevin's hearts. Identify which registers/scenes/framings hearted. Audit pool to bias toward hearted patterns.
+9. **Iterate one variable per round** — typically: (a) reweight register pool toward iconic LEGO themes if hard-SF drift, (b) reweight vehicle_class ratio if ship-heavy or no-vehicle-heavy, (c) strengthen story-tension in no-vehicle entries if scenes hard-to-read, (d) template fix if framing-churn pattern emerges.
+10. **Stop at 3 consecutive 4.5+/5 rounds** + Kevin sign-off + heart-calibration match. Then scale to production-200 pool sizes.
+11. **Commit** — files: archetype + template + path file + legacy backup + pools.js + 10 seed JSONs + gen-bot-pool.js recipes.
+
+### Common BrickBot failure modes (compounded across pirates + space)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Front-facing centered minifig 5/5 renders | "ONE focal-figure" template language + Flux LEGO-MOC training default | Mark camera_framing as MANDATORY DRIVING AXIS + tie minifig orientation to camera keywords |
+| Background drifts to photoreal (real-rock cliffs around brick subjects) | promptPrefixByPath deep-focus prefix removes tilt-shift = removes Flux's "everything is LEGO" signal | Accept the tradeoff (cinematic > occasional photoreal) OR drop the deep-focus prefix per-path |
+| "Frigate" rendered as Royal Navy surface ship | Bare ship-class name with naval counterpart, no sci-fi qualifier | Always "STARSHIP frigate" / "interstellar corvette" qualifier |
+| Hard-SF photoreal drift (no LEGO feel) | Mass Effect / Expanse / Star Citizen register or vehicle_class entries | Purge those entries from pools, regen recipes without hard-SF references |
+| Naval-pirate frigate when no-vehicle was supposed to fire | "no-vehicle (...)" entry without strong scene anchor in description body | Add tension-descriptor + specific scene detail to every no-vehicle entry |
+| Boring "scene establishing" no-vehicle renders | Bare "no-vehicle (bridge interior)" entries describe SETTING but not ACTION | Embed mid-X action-tension into every no-vehicle entry's bracketed phrase + body |
+| 5/5 ships heavy or 5/5 no-vehicle heavy | Pool ratio off (>70% one or the other) | Surgical-drop entries to rebalance to 50-55% ships / 45-50% no-vehicle |
+| Star Wars LEGO renders (X-wing / TIE / stormtrooper) | Pool has Star Wars register/vehicle_class entries | PURGE — Star Wars is OUT of scope for BrickBot |
+
+### Hard rules for BrickBot path migrations
+
+- **NEVER LEGO Star Wars.** Strip every Star Wars reference from pools, recipes, templates BEFORE first render.
+- **NEVER hard-SF realism registers** (Mass Effect / Expanse / Star Citizen / cyberpunk-space / solarpunk-space). They photoreal-drift.
+- **ALWAYS** include "STARSHIP" or "interstellar" qualifier when an entry names a ship-class with naval counterparts.
+- **ALWAYS** flag camera_framing as MANDATORY DRIVING AXIS in the template + pair with minifig pose variety mandates.
+- **ALWAYS** embed mid-X action-tension into no-vehicle entries — never bare scene-establishing.
+- **ALWAYS** heart-calibrate after R0-R3 — Kevin's hearts tell you which registers to bias toward.
+- **NEVER** push past natural pool conceptual ceilings (~26-50 entries on vehicle_class / register / ship_class).
+- **PREFER** surgical pool edits over full regens for ratio rebalancing.
+
+### BrickBot per-path notes
+
+| Path | Status | Key axis decisions |
+|---|---|---|
+| pirates | Migrated 2026-05-22 ✓ | `ship_class` (no "no-vehicle" — pirates is always ship-centered or character-centered); `register` weighted 60% Caribbean-golden-age / 40% non-default (Norse / Greek / Asian-junk / cursed / space-pirate / Royal Navy / steampunk); `weather_drama` 50%-gated |
+| space | Migrated 2026-05-22 ✓ | `vehicle_class` 54% ships / 46% no-vehicle; `register` 80% iconic LEGO Space heritage / 15% retro-fantasy / 5% specialty; `cosmic_phenomenon` 50%-gated; deep-focus promptPrefixByPath retained despite occasional photoreal-background drift |
+| macro-display | Pending | Likely embrace tilt-shift (intimate tabletop), no deep-focus prefix, focus on brick-construction detail as subject |
+| girly | Pending | Friends-style palette, lifestyle scenes, no ship-class axis needed |
+| lego-masters | Pending | Competition-table feel, panel of builds, judging-context register |
+| western | Pending | Old-west register lock (Dawson City / saloon / mining-town / locomotive) |
+| fantasy | Pending | LEGO Castle heritage (King's Knights / Forestmen / Dragon Knights / Crown / Black Falcons) + LEGO Elves / LEGO Friends fantasy |
+| aquatic | Pending | Beach + reef + lighthouse + lagoon + sea-life vehicles |
+| winter | Pending | Holiday Village heritage + winter-cabin + ice-skating + sledding + Aurora |
+| mech | Pending | Bionicle / Hero Factory / Exo-Force registers; Technic-articulation focus |
+| theme-park | Pending | LEGOLAND theme-park heritage + carnival vibes |
+| forest | Pending | LEGO Forestmen / Robin Hood heritage + treehouse + woodland critters |
+| landscape | Pending | Wide-cinematic vistas, scale-prover minifig figures |
+
+Each path is bespoke per `feedback_each_path_bespoke_not_cloned`. Don't clone axes from pirates or space to a new path without reconsidering — the axis content must match what THAT path renders.
