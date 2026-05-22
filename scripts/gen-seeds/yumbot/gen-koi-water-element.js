@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_water_element.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} FEATURED WATER ELEMENT descriptions for a kawaii Japanese koi-pond scene. Each entry is ONE specific wow-detail centered in/on the pond water.
 
 Each entry: 12-22 words. ONE specific water element.

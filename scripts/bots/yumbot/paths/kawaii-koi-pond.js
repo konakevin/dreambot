@@ -33,5 +33,6 @@ module.exports = {
     water_element: 'KOI_WATER_ELEMENT',
     companion: 'KOI_COMPANION',
     creatures: 'KOI_CREATURES',
+    night_mode: 'KAWAII_NIGHT_AUGMENT',
   },
 };

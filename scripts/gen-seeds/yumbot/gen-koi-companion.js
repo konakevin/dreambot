@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_companion.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} TINY KAWAII COMPANION accents for a kawaii Japanese koi-pond scene. Each entry is ONE small peripheral cute creature or accent near the pond — DIFFERENT from the main pond-creature cast.
 
 Each entry: 10-18 words. ONE specific tiny accent.

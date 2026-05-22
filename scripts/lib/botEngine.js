@@ -1070,7 +1070,17 @@ async function runBot(opts) {
     // Bot.modelByPath HARDCODES a specific model for a specific path, overriding
     // the medium pool — use this when a path's aesthetic needs a specific model.
     let renderInputOverrides = {};
-    if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
+    // Conditional-layer override: when the brief composer's night_mode (or
+    // future similar signal) fired, swap to a model that handles dark scenes
+    // better than the default. flux-dev locks into bright kawaii-pastel
+    // daytime lighting regardless of prompt content; flux-1.1-pro-ultra
+    // honors night/dark scene language. Takes priority over modelByPath +
+    // useModelPicker (a fired conditional layer wins).
+    if (briefMeta && briefMeta.nightModeFired) {
+      renderModel = 'black-forest-labs/flux-1.1-pro-ultra';
+      renderInputOverrides = {};
+      console.log(`  🌙 model=${renderModel} (night_mode fired — flux-1.1-pro-ultra override)`);
+    } else if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
       const modelVal = bot.modelByPath[resolvedPath];
       // Support three formats:
       //   string: 'flux-dev' — locked to one model

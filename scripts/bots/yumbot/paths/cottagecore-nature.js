@@ -29,5 +29,6 @@ module.exports = {
     nature_element: 'COTTAGE_NATURE_ELEMENT',
     companion: 'COTTAGE_COMPANION',
     food_inhabitants: { name: 'FOOD_CATALOG', tags: ['COTTAGECORE'] },
+    night_mode: 'KAWAII_NIGHT_AUGMENT',
   },
 };

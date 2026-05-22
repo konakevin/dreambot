@@ -39,6 +39,10 @@ module.exports = {
   DECOR_ITEMS: load('decor_items'),
   // Tagged substantial landscape features (streams / ponds / trees / rocks / bridges)
   LANDSCAPE_FEATURES: load('landscape_features'),
+  // Universal nighttime override — gated via conditionalLayer (20%) on outdoor paths.
+  // When fired, an entry OVERRIDES that path's time_of_day + lighting + atmosphere.
+  // Kawaii bioluminescence + paper-lantern glow + moonlit pastels register.
+  KAWAII_NIGHT_AUGMENT: load('kawaii_night_augment'),
 
   // ============ CANDY-FANTASY path pools (Wreck-It-Ralph Sugar Rush) ============
   CANDY_FANTASY_LANDSCAPE: load('candy_fantasy_landscape'),

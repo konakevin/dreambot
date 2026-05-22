@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_scene_type.json',
-  total: 50,
+  total: 200,
   batch: 15,
+  append: true,
   metaPrompt: (n) => `Write ${n} kawaii Japanese koi-pond scene-types for 5 kawaii pond creatures composed cleanly in/around a tranquil Japanese garden pond. Each entry is a CLEAN CLUSTER with SLIGHT NATURAL POSE VARIATION per creature (one peeking out of water, one tilted, one nestled at the edge, one tallest at the back, one floating between lily pads).
 
 The aesthetic is painterly Studio-Ghibli kawaii — half-submerged kawaii blob-creatures + koi-fish + axolotls + cloud-mochi-spirits with smiling faces, gathered in a Japanese pond with floating lotus-flowers and stepping-stones.

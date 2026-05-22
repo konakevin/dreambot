@@ -20,5 +20,6 @@ module.exports = {
     palette: 'FLORAL_PALETTE',
     background: 'FLORAL_BACKGROUND',
     lighting: 'FLORAL_LIGHTING',
+    night_mode: 'KAWAII_NIGHT_AUGMENT',
   },
 };

@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_time_of_day.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} TIME-OF-DAY descriptors for a kawaii Japanese koi-pond scene. PURE time of day. Heavy emphasis on twilight / dusk / evening — the bex.ai reference aesthetic register.
 
 Each entry: 10-16 words. NAMES the time + brief color-temperature note.

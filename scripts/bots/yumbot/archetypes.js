@@ -29,7 +29,7 @@ module.exports = {
     ]
   },
   pickN: { overflowing_flora: 4, tabletop_scatter: 3 },
-  conditionalLayer: null,
+  conditionalLayer: { slot: 'night_mode', gate: 0.2 },
   framingModes: null,
   anchorScaleRange: null
 },
@@ -51,7 +51,7 @@ module.exports = {
     ]
   },
   pickN: { overflowing_flora: 4, tabletop_scatter: 3 },
-  conditionalLayer: null,
+  conditionalLayer: { slot: 'night_mode', gate: 0.2 },
   framingModes: null,
   anchorScaleRange: null
 },
@@ -74,7 +74,7 @@ module.exports = {
     ]
   },
   pickN: { food_inhabitants: 5, environment: 3, decor: 3, companions: 2 },
-  conditionalLayer: null,
+  conditionalLayer: { slot: 'night_mode', gate: 0.2 },
   framingModes: null,
   anchorScaleRange: null
 },
@@ -99,7 +99,7 @@ module.exports = {
     ]
   },
   pickN: { candy_world_signature: 1, food_inhabitants: 5, companions: 1, decor_accents: 1 },
-  conditionalLayer: null,
+  conditionalLayer: { slot: 'night_mode', gate: 0.2 },
   framingModes: null,
   anchorScaleRange: null
 },
@@ -176,7 +176,7 @@ module.exports = {
     ]
   },
   pickN: { signature: 2, food_inhabitants: 5 },
-  conditionalLayer: null,
+  conditionalLayer: { slot: 'night_mode', gate: 0.2 },
   framingModes: null,
   anchorScaleRange: null
 },
@@ -259,7 +259,7 @@ module.exports = {
       ]
     },
     pickN: { signature: 2, creatures: 5 },
-    conditionalLayer: null,
+    conditionalLayer: { slot: 'night_mode', gate: 0.2 },
     framingModes: null,
     anchorScaleRange: null
   },

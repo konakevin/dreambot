@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_lighting.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} LIGHTING DIRECTION / QUALITY descriptors for a kawaii Japanese koi-pond scene. ONLY how light falls. NOT time-of-day.
 
 Each entry: 12-20 words. ONE specific lighting direction/quality.

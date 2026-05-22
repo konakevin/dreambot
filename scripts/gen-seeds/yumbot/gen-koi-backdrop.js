@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_backdrop.json',
-  total: 50,
+  total: 200,
   batch: 15,
+  append: true,
   metaPrompt: (n) => `Write ${n} JAPANESE GARDEN BACKDROP descriptions for a kawaii koi-pond scene. The pond is the foreground; this is the SURROUNDING garden setting that frames it.
 
 Each entry: 18-30 words. ONE specific Japanese garden setting.

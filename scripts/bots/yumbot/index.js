@@ -67,11 +67,24 @@ module.exports = {
   },
 
   // Per-path model override — bot.modelByPath HARDCODES a specific model for
-  // a specific path, overriding useModelPicker + allowedModels. Used here to
-  // lock kawaii-koi-pond-ultra to flux-1.1-pro-ultra (sister path
-  // kawaii-koi-pond keeps the default flux-dev from allowedModels).
+  // a specific path, overriding useModelPicker + allowedModels. Supports
+  // weighted objects: { 'model-a': 70, 'model-b': 30 }.
+  //
+  // kawaii-koi-pond-ultra: locked 100% to ultra (its purpose as the
+  // ultra-only sister path of kawaii-koi-pond).
+  //
+  // Other 6 outdoor paths: 70/30 dev/ultra mix per Kevin 2026-05-22 —
+  // both renders look good and the mix adds variety. Note: night_mode
+  // conditional layer (when fired) FORCES ultra regardless of this
+  // weighting, since flux-dev can't render night convincingly.
   modelByPath: {
     'kawaii-koi-pond-ultra': 'black-forest-labs/flux-1.1-pro-ultra',
+    'kawaii-koi-pond': { 'black-forest-labs/flux-dev': 70, 'black-forest-labs/flux-1.1-pro-ultra': 30 },
+    'candy-fantasy': { 'black-forest-labs/flux-dev': 70, 'black-forest-labs/flux-1.1-pro-ultra': 30 },
+    'cottagecore-nature': { 'black-forest-labs/flux-dev': 70, 'black-forest-labs/flux-1.1-pro-ultra': 30 },
+    'rainbow-dreamscape': { 'black-forest-labs/flux-dev': 70, 'black-forest-labs/flux-1.1-pro-ultra': 30 },
+    'floral-garden-cup': { 'black-forest-labs/flux-dev': 70, 'black-forest-labs/flux-1.1-pro-ultra': 30 },
+    'floral-garden-scene': { 'black-forest-labs/flux-dev': 70, 'black-forest-labs/flux-1.1-pro-ultra': 30 },
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },

@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_atmosphere.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} ATMOSPHERIC descriptors for a kawaii Japanese koi-pond scene. What's drifting / floating through the AIR.
 
 Each entry: 12-20 words. ONE specific atmospheric condition.

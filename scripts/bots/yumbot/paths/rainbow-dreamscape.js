@@ -27,5 +27,6 @@ module.exports = {
     sky_atmosphere: 'DREAM_SKY_ATMOSPHERE',
     camera: 'DREAM_CAMERA',
     lighting: 'DREAM_LIGHTING',
+    night_mode: 'KAWAII_NIGHT_AUGMENT',
   },
 };

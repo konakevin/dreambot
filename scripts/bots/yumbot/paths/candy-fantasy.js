@@ -25,5 +25,6 @@ module.exports = {
     food_inhabitants: { name: 'FOOD_CATALOG', tags: ['CANDY_FANTASY'] },
     companions: { name: 'TINY_COMPANIONS', tags: ['CANDY_FANTASY'] },
     decor_accents: { name: 'DECOR_ITEMS', tags: ['CANDY_FANTASY'] },
+    night_mode: 'KAWAII_NIGHT_AUGMENT',
   },
 };

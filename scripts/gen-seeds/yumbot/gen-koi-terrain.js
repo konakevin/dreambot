@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_terrain.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} POND-SURFACE / WATER textures for a kawaii koi-pond scene. The creatures are half-submerged in or floating on this surface.
 
 Each entry: 10-18 words. ONE specific water/pond surface.

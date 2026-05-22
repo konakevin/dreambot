@@ -143,7 +143,16 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
   }
 
   // 6. Hand off to archetype template for brief assembly
-  return TEMPLATES[pathConfig.archetype]({ slots, sharedDNA, vibeDirective });
+  const brief = TEMPLATES[pathConfig.archetype]({ slots, sharedDNA, vibeDirective });
+  // Expose conditionalLayer fire signal so botEngine can react (e.g. swap
+  // render model to one that handles night/dark scenes better than the
+  // bot's default). Currently used for YumBot's night_mode override —
+  // flux-dev/kawaii-pastel can't break out of bright-daytime lighting,
+  // so night-fired renders flip to flux-1.1-pro-ultra.
+  if (slots.night_mode) {
+    return { brief, briefMeta: { nightModeFired: true } };
+  }
+  return brief;
 }
 
 /**

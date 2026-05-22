@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_sky.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} OVERHEAD/CANOPY descriptions for a kawaii Japanese koi-pond scene — what's directly above the pond.
 
 Each entry: 12-22 words. ONE specific overhead.

@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_signature.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} ICONIC JAPANESE-POND SIGNATURE elements for a kawaii koi-pond scene. Each entry is ONE specific pond/garden prop that anchors the aesthetic.
 
 Each entry: 10-18 words. ONE specific element.

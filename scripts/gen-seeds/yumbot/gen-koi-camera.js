@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/koi_camera.json',
-  total: 50,
+  total: 200,
   batch: 18,
+  append: true,
   metaPrompt: (n) => `Write ${n} CAMERA FRAMING descriptions for a kawaii Japanese koi-pond scene with 5 kawaii creatures. Diverse framings.
 
 Each entry: 14-22 words.

@@ -12,14 +12,26 @@
 
 module.exports = {
   YUMBOT_FLORAL_GARDEN_CUP: ({ slots, sharedDNA, vibeDirective }) => {
-    const { vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting } = slots;
+    const { vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting, night_mode } = slots;
     const floraList = Array.isArray(overflowing_flora) ? overflowing_flora : [overflowing_flora];
     const floraBlock = floraList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
     const scatterList = Array.isArray(tabletop_scatter) ? tabletop_scatter : [tabletop_scatter];
     const scatterBlock = scatterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
     return `You are writing FLORAL-GARDEN-CUP renders for YumBot — bex.ai's signature look. A kawaii-faced VESSEL (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical garden of flowers. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
+${night_mode ? `
 
+⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
+
+${night_mode}
+
+NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
+- The vessel + bouquet are at NIGHT, on a tabletop in a moonlit garden / candlelit interior. Background is DARK indigo / midnight / inky — NOT 'dreamy pastel bokeh' bright.
+- Palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep-indigo background — NOT bright kawaii pastels in the background. The vessel + flowers can stay soft-pearlescent, but the AIR + BACKDROP are dark.
+- Lighting = moon + paper-lanterns + candle-glow + fairy-light strings catching dewdrops. NO 'soft volumetric pastel-light pouring down', NO 'warm-pastel rim-light' on a daytime backdrop.
+- If any phrase below says 'soft volumetric pastel-light' / 'warm-pastel rim-light' on bright background / 'dreamy pastel bokeh' — REPLACE with night equivalent (moonlit dewdrop sparkle, candle-glow halos, lantern-bokeh dark backdrop).
+
+` : ''}
 ━━━ ⚠ HARD RULE #1: KAWAII VESSEL OVERFLOWING WITH MAGICAL FLORA ━━━
 
 The hero is a kawaii-faced vessel (cup / mug / bowl / takeout-cup with a smiling face printed on it — dimpled-blush, closed-arc eyes). Out of the TOP of the vessel BURSTS an oversized magical bouquet of flowers — like a giant flower-arrangement spilling out impossibly. The flora is OVERSIZED relative to the vessel — the bouquet is bigger than the cup itself. This is the wow-moment: a kawaii drink that's also a flower-vase.
@@ -50,8 +62,9 @@ ${palette}
 ━━━ BACKGROUND MOOD (dreamy pastel garden bokeh — NOT a recognizable setting) ━━━
 ${background}
 
-━━━ LIGHTING ━━━
-${lighting}
+${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting) ━━━
+${night_mode}` : `━━━ LIGHTING ━━━
+${lighting}`}
 
 ━━━ SPARKLE STACK — FLORAL-GARDEN-CUP ━━━
 
@@ -93,14 +106,27 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_FLORAL_GARDEN_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting } = slots;
+    const { scene_type, vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting, night_mode } = slots;
     const floraList = Array.isArray(overflowing_flora) ? overflowing_flora : [overflowing_flora];
     const floraBlock = floraList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
     const scatterList = Array.isArray(tabletop_scatter) ? tabletop_scatter : [tabletop_scatter];
     const scatterBlock = scatterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
     return `You are writing FLORAL-GARDEN renders for YumBot. The SCENE is a RICH kawaii garden composition — indoor (potting shed / sunroom / windowsill / tea-time table / vanity / fireplace mantle) or outdoor (cottage patio / greenhouse / balcony / picnic-in-garden / garden bench / gazebo). The scene contains MULTIPLE kawaii-faced planters/vessels clustered together, OVERFLOWING with magical flowers, kawaii treats scattered through, magical sparkle accents. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
+${night_mode ? `
 
+⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
+
+${night_mode}
+
+NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
+- The garden scene is at NIGHT. Whether indoor (candlelit potting shed / moonlit windowsill / nighttime sunroom) or outdoor (moonlit patio / greenhouse-at-night / nighttime balcony) — the AIR + BACKDROP are DARK.
+- Sky / setting background = indigo / navy / midnight / inky (outdoor) OR deep-shadowed-interior (indoor). NOT 'pastel atmosphere' bright, NOT 'leaded windows' showing sunny day.
+- Palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep-indigo backdrop — NOT bright kawaii pastels in the background.
+- Lighting = moon + paper-lanterns + candle-glow + fairy-light strings + firefly drift. NO 'soft volumetric pastel-light pouring down', NO 'warm-pastel rim-light' on a bright daytime backdrop.
+- If any phrase below says 'soft volumetric pastel-light' / 'warm-pastel rim-light' / 'pastel atmosphere' / 'leaded windows' — REPLACE with night equivalent. The render must read as full NIGHT garden scene.
+
+` : ''}
 ━━━ ⚠ HARD RULE #1: SCENE-TYPE IS THE COMPOSITION ━━━
 
 The scene-type below establishes the full setting (indoor or outdoor garden setting) AND the cluster of 3+ kawaii planters. The render is ABOUT that scene-type — NOT a single isolated vessel on a plain background. The scene is FULL and RICH — packed with planters, flowers, treats, magical accents. NEVER minimal.
@@ -142,8 +168,9 @@ ${palette}
 ━━━ BACKGROUND MOOD (the setting's pastel atmosphere — leaded windows, garden bokeh, cottage walls, leafy backdrop, etc.) ━━━
 ${background}
 
-━━━ LIGHTING ━━━
-${lighting}
+${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting) ━━━
+${night_mode}` : `━━━ LIGHTING ━━━
+${lighting}`}
 
 ━━━ SPARKLE STACK — FLORAL-GARDEN-SCENE ━━━
 
@@ -190,7 +217,7 @@ Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_RAINBOW_DREAMSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { food_inhabitants, dreamscape_setting, rainbow_element, sky_atmosphere, environment, decor, companions, camera, lighting } = slots;
+    const { food_inhabitants, dreamscape_setting, rainbow_element, sky_atmosphere, environment, decor, companions, camera, lighting, night_mode } = slots;
     // food_inhabitants is now an array of 5 (pickN:5 from FOOD_CATALOG)
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
     const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
@@ -202,7 +229,19 @@ Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO 
     const compBlock = compList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
     return `You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape, COLORFUL and VIBRANT pastel palette throughout (the "rainbow-" in the path name is a reminder that the palette is colorful pastels — it does NOT mean the render must be rainbow-themed). Output wraps with style prefix + suffix.
+${night_mode ? `
 
+⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
+
+${night_mode}
+
+NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
+- The dreamscape is at NIGHT. Sky is DARK indigo / navy / midnight / inky — NOT 'sunny vibrant pastel light', NOT bright-pastel-sky.
+- Palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep-indigo — NOT 'saturated pinks, mints, lavenders, peaches, baby-blues, creams' bright daytime palette.
+- Lighting = moon + paper-lanterns + fairy-light strings + glowing-balloon-orbs + creature-bioluminescence. NO 'sunny vibrant pastel light', NO bright sunny landscape.
+- If any phrase below says 'sunny vibrant pastel' / 'colorful palette SINGS' / 'sunny meadow' — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT dreamscape, not bright-pastel-meadow-with-a-moon.
+
+` : ''}
 ━━━ ⚠ HARD RULE #1: NAME ALL 5 FOODS EXPLICITLY — COUNT THEM ━━━
 
 The 5 foods below MUST appear in the output by name. Count them: 1, 2, 3, 4, 5. Each visible in the scene as a creature-inhabitant of the meadow. Each has its own kawaii smiling face. Group them in the scene like little friends gathered together. NEVER drop a food. NEVER abbreviate to "and others." Name each one specifically.
@@ -243,8 +282,9 @@ ${compBlock}
 ━━━ CAMERA ━━━
 ${camera}
 
-━━━ LIGHTING ━━━
-${lighting}
+${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + sky_atmosphere) ━━━
+${night_mode}` : `━━━ LIGHTING ━━━
+${lighting}`}
 
 ━━━ SCENE PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -267,7 +307,7 @@ Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_CANDY_FANTASY: ({ slots, sharedDNA, vibeDirective }) => {
-    const { candy_scene_type, candy_world_signature, candy_terrain, candy_sky, food_inhabitants, companions, decor_accents, candy_camera, candy_lighting, candy_time_of_day, candy_weather } = slots;
+    const { candy_scene_type, candy_world_signature, candy_terrain, candy_sky, food_inhabitants, companions, decor_accents, candy_camera, candy_lighting, candy_time_of_day, candy_weather, night_mode } = slots;
     const sigList = Array.isArray(candy_world_signature) ? candy_world_signature : [candy_world_signature];
     const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
@@ -276,7 +316,19 @@ Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO 
     const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
 
     return `You are writing CANDY-FANTASY renders for YumBot. The SCENE-TYPE is the WHOLE point — it dictates where the 5 food-characters are placed and how the composition is framed. Atmosphere, lighting, time-of-day, weather wrap around the scene-type. Output wraps with style prefix + suffix.
+${night_mode ? `
 
+⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
+
+${night_mode}
+
+NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
+- The candy-world is at NIGHT. Sky is DARK indigo / navy / midnight / inky — NOT twilight, NOT dusk.
+- Candy-world palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream — NOT bright Disney-CGI sunny pastels. Candy surfaces glossy but DEEP-toned at night.
+- Lighting = moon + candy-paper-lanterns + glowing-gumdrop-fairy-lights + bioluminescent-frosting. NO daytime sun, NO bright pastel sunny light.
+- If any phrase below says 'sunny pastel' / 'warm Disney-CGI' / 'bright lush saturated pastel' — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT, not bright-candy-with-a-moon.
+
+` : ''}
 ━━━ ⚠ HARD RULE #1: SCENE-TYPE IS THE COMPOSITION ━━━
 
 The scene-type below is a COMPOSITION-LOCKED scene with explicit character placement (perched on a railing / seated around a campfire / clinging to a pinwheel / inside a glass jar / atop a cake mountain / on a roller-coaster crest / etc.). The 5 kawaii food-characters take the EXACT positions described in the scene-type. The render is ABOUT the scene-type — atmosphere is decoration around it.
@@ -300,14 +352,15 @@ ${foodBlock}
 ━━━ 1 BACKGROUND SIGNATURE ELEMENT (subtle accent, NOT a competing landmark) ━━━
 ${sigBlock}
 
-━━━ TIME OF DAY ━━━
+${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides time + weather + lighting) ━━━
+${night_mode}` : `━━━ TIME OF DAY ━━━
 ${candy_time_of_day}
 
 ━━━ WEATHER / ATMOSPHERE ━━━
 ${candy_weather}
 
 ━━━ LIGHTING DIRECTION / QUALITY ━━━
-${candy_lighting}
+${candy_lighting}`}
 
 ━━━ CAMERA FRAMING ━━━
 ${candy_camera}
@@ -552,14 +605,26 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_COTTAGECORE_NATURE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, food_inhabitants, companion, nature_element } = slots;
+    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, food_inhabitants, companion, nature_element, night_mode } = slots;
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
     const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
     const sigList = Array.isArray(signature) ? signature : [signature];
     const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
     return `You are writing COTTAGECORE-NATURE renders for YumBot — kawaii countryside-nature scenes with 5 kawaii food-characters composed cleanly in a richly-detailed cottagecore setting. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli countryside warmth. Output wraps with style prefix + suffix.
+${night_mode ? `
 
+⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
+
+${night_mode}
+
+NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
+- The cottagecore countryside is at NIGHT. Sky is DARK indigo / navy / midnight / inky — NOT twilight, NOT dusk, NOT warm-amber-sunset.
+- Palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep sage shadows — NOT 'sage / butter / cream / pink / lavender' bright daytime palette.
+- Lighting = moon + cottage-window-glow + paper-lanterns + fairy-light strings + firefly drift. NO daytime sun, NO 'soft warm light' afternoon glow.
+- If any phrase below says 'soft warm light' / 'warm cozy palette' / 'sage/butter/cream' bright daytime — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT, not bright-cottage-with-a-moon.
+
+` : ''}
 ━━━ ⚠ HARD RULE #1: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
 
 The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). The food ITSELF is the character (jam-jar / scone / berry / cream-puff / honey-jar / etc.) with kawaii face ON the food. Group them so all 5 fit cleanly in the frame.
@@ -599,14 +664,16 @@ ${sky}
 ━━━ CAMERA FRAMING ━━━
 ${camera}
 
-━━━ LIGHTING DIRECTION / QUALITY ━━━
+${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + time + atmosphere) ━━━
+${night_mode}
+` : `━━━ LIGHTING DIRECTION / QUALITY ━━━
 ${lighting}
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
 
 ━━━ ATMOSPHERE (what's drifting through the air — petals / pollen / butterflies / dust motes) ━━━
-${atmosphere}
+${atmosphere}`}
 
 ━━━ 1 TINY COTTAGECORE COMPANION (bunny / honeybee / songbird / butterfly / etc.) ━━━
 ${companion}
@@ -857,14 +924,27 @@ Output ONLY the raw 170-240 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_KAWAII_KOI_POND: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, water_element, companion, creatures } = slots;
+    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, water_element, companion, creatures, night_mode } = slots;
     const creatureList = Array.isArray(creatures) ? creatures : [creatures];
     const creatureBlock = creatureList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
     const sigList = Array.isArray(signature) ? signature : [signature];
     const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
     return `You are writing KAWAII-KOI-POND renders for YumBot — a tranquil Japanese koi-pond scene with 5 kawaii pond-creatures (smiling koi-fish, axolotls, cloud-mochi-spirits, lily-frogs, pearl-blobs) half-submerged in/around the pond. Painterly Studio-Ghibli meets bex.ai Pop-Mart kawaii register. Output wraps with style prefix + suffix.
+${night_mode ? `
 
+⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
+
+${night_mode}
+
+NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
+- The sky is DARK indigo / navy / midnight / inky — NOT twilight, NOT dusk, NOT magic-hour.
+- Scene palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep-indigo. NOT bright kawaii pastels.
+- Lighting = moon + paper-lanterns + lotus-lanterns + creature-bioluminescence + firefly-drift. NO daytime sun, NO bright pastel sunny light.
+- The kawaii cast itself can keep soft cream-pink-blush faces, but the WORLD around them is DARK.
+- If any phrase below says 'twilight register' / 'warm sunny' / 'pink magic-hour' / 'bright pastel sky' / 'rose-silver moonlight on bright pastels' — REPLACE it with the unambiguously-night equivalent. The render must read as full NIGHT, not twilight-with-a-moon.
+
+` : ''}
 ━━━ ⚠ HARD RULE #1: 5 KAWAII POND-CREATURES NAMED FIRST — ALL VISIBLE ━━━
 
 The 5 kawaii creatures MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). Each is a kawaii pond-creature with kawaii face (closed-arc-eyes, blush cheeks, tiny mouth) — NOT a food. Half-submerged or floating in the pond water.
@@ -904,14 +984,16 @@ ${sky}
 ━━━ CAMERA FRAMING ━━━
 ${camera}
 
-━━━ LIGHTING DIRECTION / QUALITY ━━━
+${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + time + atmosphere) ━━━
+${night_mode}
+` : `━━━ LIGHTING DIRECTION / QUALITY ━━━
 ${lighting}
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
 
 ━━━ ATMOSPHERE (what's drifting through the air — petals / fireflies / mist) ━━━
-${atmosphere}
+${atmosphere}`}
 
 ━━━ 1 TINY COMPANION (dragonfly / origami-crane / butterfly / etc.) ━━━
 ${companion}
