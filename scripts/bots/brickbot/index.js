@@ -67,11 +67,27 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '70-100',
+    // Axis-system paths default to polish OFF per the hard memory
+    // `feedback_axis_system_skip_polish` — Haiku polish strips
+    // curated axis language (build_technique vocab, register-locks,
+    // scene-prop detail) when compressing 150 → 70-100 words.
+    skipPaths: ['pirates'],
   },
 
   // No sensoryAnchors — universal LEGO MOC photography mood is captured
   // in shared blocks + per-path lighting/palette already provides plenty
   // of sensory color. Adding a sensory pool would dilute the path identity.
+
+  // Per-path bespoke pools live on `pools.PER_PATH[<path>]` (legacy) and as
+  // top-level pool names on the bot for axis-system paths (e.g. pirates →
+  // `BRICKBOT_PIRATES_SCENE_TYPE`, `BRICKBOT_PIRATES_MINIFIG_ACTION`, etc.).
+  // Composer resolves path-bespoke slots via `pathConfig.pools` → `bot.poolByName`.
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`BrickBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
 
   rollSharedDNA({ picker }) {
     return {
@@ -82,7 +98,20 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`BrickBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, picker, pools });
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, picker, pools });
+    }
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    throw new Error(`BrickBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {

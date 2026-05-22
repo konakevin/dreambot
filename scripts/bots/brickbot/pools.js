@@ -43,8 +43,30 @@ for (const p of PATHS) {
   };
 }
 
+// ─────────────────────────────────────────────────────────────
+// Axis-system pools — bespoke per migrated path (2026-05-22 onward).
+// Each migrated path owns `brickbot_<path>_<axis>.json` seed files.
+// Top-level pool names are UPPER_SNAKE_CASE and resolved via
+// `bot.poolByName(name)` from the brief-composer.
+// ─────────────────────────────────────────────────────────────
+
+const AXIS_POOLS = {
+  // pirates path — first BrickBot axis migration (2026-05-22)
+  BRICKBOT_PIRATES_SCENE_TYPE: load('brickbot_pirates_scene_type'),
+  BRICKBOT_PIRATES_MINIFIG_ACTION: load('brickbot_pirates_minifig_action'),
+  BRICKBOT_PIRATES_BUILD_TECHNIQUE: load('brickbot_pirates_build_technique'),
+  BRICKBOT_PIRATES_CAMERA_FRAMING: load('brickbot_pirates_camera_framing'),
+  BRICKBOT_PIRATES_SHIP_CLASS: load('brickbot_pirates_ship_class'),
+  BRICKBOT_PIRATES_REGISTER: load('brickbot_pirates_register'),
+  BRICKBOT_PIRATES_SCENE_PROPS: load('brickbot_pirates_scene_props'),
+  BRICKBOT_PIRATES_LIGHTING: load('brickbot_pirates_lighting'),
+  BRICKBOT_PIRATES_PALETTE: load('brickbot_pirates_palette'),
+  BRICKBOT_PIRATES_WEATHER_DRAMA: load('brickbot_pirates_weather_drama'),
+};
+
 module.exports = {
   CAMERA_AXIS: load('camera_axis'),
   PER_PATH,
   PATHS,
+  ...AXIS_POOLS,
 };
