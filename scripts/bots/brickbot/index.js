@@ -51,6 +51,18 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
+  // Per-path prompt-prefix overrides — prepended BEFORE bot.promptPrefix.
+  // Pirates: pushes cinematic deep-focus film-still framing to counter
+  // Flux's "diorama / MOC showcase photography / natural bokeh" tilt-shift
+  // bias. Tradeoff (noted 2026-05-22): tilt-shift was Flux's structural
+  // signal that "everything in frame is LEGO" — without it some renders
+  // treat backgrounds as photoreal. Net win in readability + establishing
+  // shots; watch for not-LEGO backgrounds on future iterations.
+  promptPrefixByPath: {
+    pirates:
+      'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
+  },
+
   vibes: ['cinematic'],
 
   paths: pools.PATHS,
