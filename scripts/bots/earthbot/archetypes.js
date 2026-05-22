@@ -93,6 +93,15 @@ module.exports = {
     anchorScaleRange: null
   },
 
+  EARTHBOT_HIDDEN_CORNER: {
+    description: 'PATH-BESPOKE — EarthBot hidden-corner (2026-05-22). OFF-THE-BEATEN-PATH discovered nature pockets — the secret magical place you stumble into. Hidden creek bends with mossy stones, fern grottos in old-growth, forest clearings filled with wildflowers, tide pools no one visits, mossy waterfall pools, sun-shaft glades. INTIMATE mid-tight framing, NEVER wide panorama. CRITICAL — intimate ≠ minimal: every render is LUSH with packed detail and multi-tier layers. Wall-to-wall texture (moss / dew / lichen / wet stones / ferns / mushrooms / fallen petals). Multi-tier depth (foreground close-detail + midground subject + soft atmospheric background). Dappled or shaft-filtered light. Tiny scale-prover wildlife (frog / dragonfly / butterfly / single mushroom). The viewer should feel they stumbled into a secret pocket where every surface is alive with texture. 7 path-bespoke axes — 7 always-on + 1 conditional 25%-gated phenomenon. NO bioluminescent / aurora / nacreous / sun-dogs / fire-rainbow / iridescent / lava (all legacy fantasy triggers that drifted hidden-corner sci-fi). NO architecture / paths / fences. NO humans. NO wide panorama. NO sparse / empty / minimal compositions.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'water_feature', 'micro_detail', 'scale_prover', 'lighting', 'atmosphere' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
   EARTHBOT_COZY_BEACH: {
     description: 'PATH-BESPOKE — EarthBot cozy-beach (2026-05-22 v2 PIVOT). PIVOTED away from village/architecture identity (v1) to INTIMATE COZY BEACH MOMENTS — golden-hour atmosphere, soft palm shadows raked across warm sand, driftwood-strewn cove, scattered shells in damp sand, hammock-shaped palm-frond silhouette over sand, fallen tropical flowers on the sand, calm tide pools reflecting sunset, palm-shadowed pocket cove. ATMOSPHERE IS THE HERO. Mid-tight intimate framings, NEVER wide panorama. 6 path-bespoke axes — 5 always-on (subject_setting, foreground_element, water_state, sky_layer, light_condition) + 1 conditional 30%-gated phenomenon. NO HUMANS, NO architecture / cottages / lighthouses / villages (v1 identity is dead), NO dramatic surf / storms (cozy is gentle warm always), NO sci-fi / bioluminescent / fantasy.',
     slots: { universal: [], bot: [], path: [ 'subject_setting', 'foreground_element', 'water_state', 'sky_layer', 'light_condition' ] },

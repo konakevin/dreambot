@@ -110,6 +110,18 @@ module.exports = {
   SEASONAL_SHIFT_SEASONAL_MOTION: load('seasonal_shift_seasonal_motion'),
   SEASONAL_SHIFT_HERO_FEATURE: load('seasonal_shift_hero_feature'),
   SEASONAL_SHIFT_PHENOMENON: load('seasonal_shift_phenomenon'),
+  // hidden-corner (2026-05-22). Off-the-beaten-path intimate nature pockets.
+  // 7 axes + 1 conditional 25%-gated phenomenon. All bespoke — intimate
+  // scale and supernatural-drift hard-ban require different content than
+  // any other EarthBot path. NO biome tagging (v1 — could add later).
+  HIDDEN_CORNER_SUBJECT: load('hidden_corner_subject'),
+  HIDDEN_CORNER_FOREGROUND_ANCHOR: load('hidden_corner_foreground_anchor'),
+  HIDDEN_CORNER_WATER_FEATURE: load('hidden_corner_water_feature'),
+  HIDDEN_CORNER_MICRO_DETAIL: load('hidden_corner_micro_detail'),
+  HIDDEN_CORNER_SCALE_PROVER: load('hidden_corner_scale_prover'),
+  HIDDEN_CORNER_LIGHTING: load('hidden_corner_lighting'),
+  HIDDEN_CORNER_ATMOSPHERE: load('hidden_corner_atmosphere'),
+  HIDDEN_CORNER_PHENOMENON: load('hidden_corner_phenomenon'),
   // cozy-beach (2026-05-22 v2 PIVOT) — intimate cozy beach moments.
   // Pivoted from village/architecture identity to atmosphere-as-hero
   // intimate-beach with golden-hour mood + cozy foreground elements.

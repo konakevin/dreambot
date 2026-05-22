@@ -24,7 +24,7 @@
  *
  * Final inventory: 17 paths (was 25 — 8 dropped via consolidation / kills).
  *
- * MIGRATED (15 of 17 — 2 legacy paths remaining):
+ * MIGRATED (16 of 17 — 1 legacy path remaining):
  *   ✓ epic-vista — canonical reference (BOT_SCENE_QUALITY_PLAYBOOK.md)
  *   ✓ national-parks (US National Parks amplified)
  *   ✓ deep-forest (old-growth temperate forest cathedrals)
@@ -41,9 +41,11 @@
  *   ✓ cozy-beach (intimate cozy beach moments — v2 pivot)
  *   ✓ seasonal-shift (autumn density + spring superbloom, 6 bespoke
  *     season-tagged axes + 3 reused EPIC_VISTA — 2026-05-22)
+ *   ✓ hidden-corner (off-the-beaten-path intimate nature pockets, 7
+ *     bespoke axes + 1 conditional phenomenon, supernatural-drift hard-
+ *     ban — 2026-05-22)
  *
- * REMAINING TO MIGRATE (2 legacy paths):
- *   - hidden-corner (intimate small-scene nature)
+ * REMAINING TO MIGRATE (1 legacy path):
  *   - tide-pool (macro biological coastal detail)
  *
  * DROPPED (8 paths fully subsumed or killed, no migration):
@@ -69,7 +71,7 @@ const axisPools = require('./pools');
 const pathBuilders = {
   // Earth paths
   'epic-vista': require('./paths/epic-vista'), // axis-system (2026-05-20)
-  'hidden-corner': require('./earth/paths/hidden-corner'),
+  'hidden-corner': require('./paths/hidden-corner'), // axis-system (2026-05-22)
   'sacred-light': require('./paths/sacred-light'), // axis-system (2026-05-21)
   'national-parks': require('./paths/national-parks'), // axis-system (2026-05-20)
   'seasonal-shift': require('./paths/seasonal-shift'), // axis-system (2026-05-22)
@@ -203,8 +205,8 @@ module.exports = {
   // add it here.
   chaos: {
     enabled: true,
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift'],
-    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'waves', 'cozy-beach', 'seasonal-shift', 'beach-night'].includes(p))],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner'],
+    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner', 'beach-night'].includes(p))],
   },
 
   // Two-pass polish — both bots use identical config.
@@ -217,7 +219,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner'],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their

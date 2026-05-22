@@ -719,6 +719,104 @@ DO NOT default to close-camera / intimate / foreground-focused framing unless th
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places, NO "fire" as a noun, NO "shrubs" / "scrub" as dominant element.`;
   },
 
+  EARTHBOT_HIDDEN_CORNER: ({ slots, sharedDNA, vibeDirective }) => {
+    const { subject, foreground_anchor, water_feature, micro_detail, scale_prover, lighting, atmosphere, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or feels supernatural, DROP IT. Real-Earth ONLY — no bioluminescent / aurora / nacreous / sun-dogs / fire-rainbow / iridescent.`
+      : '';
+
+    return `You are a fine-art nature photographer writing ONE HIDDEN CORNER scene for EarthBot. The OFF-THE-BEATEN-PATH discovered pocket of nature — the secret magical place you stumble into where the whole little scene is visible to you. Real-Earth ONLY. STAND-IN-THE-POCKET mid-wide framing — NOT macro close-up of a single element, NOT wide panoramic vista. The viewer is standing IN the secret pocket and can see the whole 10-15 foot intimate scene around them. CRITICAL: intimate scale does NOT mean minimal OR macro — every render must show the WHOLE little pocket of nature PACKED LUSH with multi-tier detail. Marc Adamus / Peter Lik / Daniel Kordan caliber intimate-nature photography (NOT macro close-up). Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — OFF-THE-BEATEN-PATH SECRET POCKET (NOT MACRO) ━━━
+
+This is the secluded clearing / glade / grotto / creek-pocket you'd find on a long hike, miles from any trail. The viewer is STANDING IN the pocket, seeing the whole 10-15 foot scene unfold around them. The feel is "I can't believe I found this place." Quiet, untouched, magical, intimate.
+
+⚠️ NOT MACRO — do NOT render this as an extreme close-up of one mossy stone, one mushroom, one leaf. The viewer sees the WHOLE little pocket: the clearing or pond or grotto opening, the trees surrounding it, the ground details at the edge, the canopy above filtering the light. Show 8-15 feet of scene around the viewer.
+
+⚠️ NOT WIDE VISTA — do NOT render this as a distant landscape view. Stay INSIDE the pocket — the trees / walls / canopy frame the scene.
+
+━━━ LUSH-DETAIL MANDATE — TURN IT TO 11 ━━━
+
+⚠️ Intimate scale ≠ minimalistic. The frame must be PACKED with rich texture and layered detail at every depth tier. Multi-tier composition mandatory: FOREGROUND close-detail anchor + MIDGROUND subject + BACKGROUND soft atmospheric depth. Every surface ALIVE with texture — moss carpeting every rock, dew on every leaf, lichen patches on every trunk, fern fiddleheads unfurling, mushroom clusters at the base, wet stones, water droplets clinging. NO sparse / empty / minimal / negative-space compositions.
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT FEATURES ━━━
+
+NEVER a person, NEVER a hiker, NEVER cabins, NEVER fences, NEVER cars, NEVER roads, NEVER footpaths, NEVER stone-steps, NEVER any constructed element. Pure raw secluded nature only.
+
+━━━ ABSOLUTELY BANNED ━━━
+
+- NO bioluminescent / phosphorescent / foxfire / glowing-fungi (legacy fantasy trigger that drifted hidden-corner sci-fi)
+- NO aurora / nacreous / iridescent clouds / sun-dogs / fire-rainbow / double-rainbow (supernatural drift triggers)
+- NO sci-fi / fantasy / portal / mystical / cyan-wash / impossible-reflection / impossible-angle
+- NO architecture / cabin / bridge / fence / path / stone-steps / signage
+- NO humans / footprints / clothing / belongings
+- NO wide panorama / epic vista / mountain ridges as dominant frame (this is INTIMATE)
+- NO sparse / empty / minimal / negative-space compositions (LUSH packed detail mandatory)
+- NO named places
+- NO single beam / single shaft of light as ONLY light source (use "shafts plural fanning" if multiple)
+- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+- NO "fire" as a noun (renders literal flames — use "blazing color" as adjective only)
+
+━━━ THE HIDDEN-CORNER SUBJECT (the off-the-beaten-path secret pocket — fills the SCENE, not the frame edge to edge) ━━━
+${subject}
+
+Render the subject as the whole little 8-15 foot pocket — the clearing, pond, grotto, glade — visible from where the viewer is standing in it.
+
+━━━ FOREGROUND DETAIL (eye-entry detail at the near edge — NOT macro close-up) ━━━
+${foreground_anchor}
+
+Render the foreground detail at the NEAR EDGE of the visible pocket — within a few feet of the viewer, but NOT extreme macro close-up. Just close enough to anchor the eye, not so close that it dominates. Visible alongside the subject and surrounding context.
+
+━━━ WATER FEATURE (water content woven into the scene) ━━━
+${water_feature}
+
+━━━ MICRO DETAIL (the rich texture that makes every surface alive) ━━━
+${micro_detail}
+
+Render the micro-detail LITERALLY — dew, lichen, moss, water droplets, wet-stone gleam. This is the "alive with texture" mandate; never collapse into "rich detail" — name specifics.
+
+━━━ SCALE PROVER (tiny wildlife / micro element that grounds the human scale) ━━━
+${scale_prover}
+
+Render small — postage-stamp scale in the frame. Proves the intimate pocket is alive.
+
+━━━ LIGHTING (intimate diffused / dappled / shaft-filtered — NEVER flat) ━━━
+${lighting}
+
+━━━ ATMOSPHERE (mood + air quality) ━━━
+${atmosphere}${phenomenonBlock}
+
+━━━ HARD RULE — STAND-IN-THE-POCKET MID-WIDE + LUSH MULTI-TIER + SECRET-POCKET FEEL ━━━
+
+⚠️ STAND-IN-THE-POCKET MID-WIDE FRAMING. The viewer stands inside the secret pocket and sees the WHOLE 10-15 foot scene around them — the clearing or pond or grotto opening (fills 50-60% of frame), trees / walls / canopy surrounding it (15-25% on the sides), ground details at the near edge (10-15% at the bottom), canopy or sky-filtering above (10-15% at the top). MULTI-TIER COMPOSITION visible:
+  • NEAR EDGE — ground details (moss, ferns, stones, fallen leaves) within 1-3 feet
+  • MIDGROUND — the hidden-corner subject itself (the clearing, the pond, the waterfall pool) 4-10 feet away
+  • BACKGROUND — surrounding trees / walls / canopy, fading into soft atmospheric depth, 10+ feet
+
+⚠️ NOT MACRO — never extreme close-up of a single element. The whole pocket must be VISIBLE.
+⚠️ NOT WIDE VISTA — never distant landscape. The pocket is enclosed by trees / walls / canopy.
+
+EVERY surface visibly textured — moss / dew / lichen / wet stones / fern fronds / mushroom clusters / fallen petals. The feel is "I stumbled into a magical secret pocket and the whole place is alive with texture."
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'damp emerald moss + wet-stone slate + soft amber light + cool atmospheric depth'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE — STAND-IN-THE-POCKET MID-WIDE ━━━
+
+Mid-wide framing showing the WHOLE 10-15 foot pocket of nature. The viewer is standing inside the secret pocket. NOT macro close-up, NOT wide panoramic vista. Multi-tier depth (NEAR EDGE ground details + MIDGROUND subject + BACKGROUND surrounding trees / walls / canopy). EVERY surface alive with texture. Dappled or shaft-filtered light catching dew + wet stones + leaf edges throughout the scene. Hyperreal photographic — gallery-print intimate-nature fine-art photography (Marc Adamus / Peter Lik / Daniel Kordan), National Geographic intimate-nature feature quality.
+
+⚠️ DO NOT render as macro close-up of one element. The whole pocket must be visible.
+⚠️ DO NOT render as wide panoramic landscape. Stay inside the pocket.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places, NO bioluminescent / aurora / fantasy triggers, NO "fire" as a noun, NO macro close-ups, NO wide panoramic vistas.`;
+  },
+
   EARTHBOT_COZY_BEACH: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject_setting, foreground_element, water_state, sky_layer, light_condition, phenomenon } = slots;
     const phenomenonBlock = phenomenon
