@@ -96,6 +96,20 @@ module.exports = {
   WAVES_SKY_LAYER: load('waves_sky_layer'),
   WAVES_LIGHT_CONDITION: load('waves_light_condition'),
   WAVES_PHENOMENON: load('waves_phenomenon'),
+  // seasonal-shift (2026-05-22 R2 → R11 — rich multi-axis decomposition).
+  // 9 axes — 6 bespoke season-tagged (subject + color_palette + depth_layers +
+  // seasonal_motion + hero_feature + phenomenon) + 3 reused EPIC_VISTA pools
+  // for season-agnostic physics (lighting + atmosphere + sky_layer).
+  // Subject sets the season tag, downstream season-tagged axes filter via
+  // matchTagsFromSlot=subject — prevents cross-season bleed (e.g. autumn
+  // hawk on spring scene). Built 2026-05-22 R11 after spring-prompt rendered
+  // autumn-colored trees due to season-agnostic hero+phenomenon bleed.
+  SEASONAL_SHIFT_SUBJECT: load('seasonal_shift_subject'),
+  SEASONAL_SHIFT_COLOR_PALETTE: load('seasonal_shift_color_palette'),
+  SEASONAL_SHIFT_DEPTH_LAYERS: load('seasonal_shift_depth_layers'),
+  SEASONAL_SHIFT_SEASONAL_MOTION: load('seasonal_shift_seasonal_motion'),
+  SEASONAL_SHIFT_HERO_FEATURE: load('seasonal_shift_hero_feature'),
+  SEASONAL_SHIFT_PHENOMENON: load('seasonal_shift_phenomenon'),
   // cozy-beach (2026-05-22 v2 PIVOT) — intimate cozy beach moments.
   // Pivoted from village/architecture identity to atmosphere-as-hero
   // intimate-beach with golden-hour mood + cozy foreground elements.

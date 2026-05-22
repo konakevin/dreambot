@@ -597,6 +597,128 @@ The wave fills 50-70% of the frame. Coastal context + tropical setting fill the 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
 
+  EARTHBOT_SEASONAL_SHIFT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { subject, color_palette, depth_layers, seasonal_motion, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one signature optical event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled season or lighting, DROP IT.`
+      : '';
+
+    return `You are a fine-art nature photographer writing ONE SEASONAL-SHIFT scene for EarthBot. Real-Earth landscape captured at the peak dramatic moment of a season — wall-to-wall multi-color autumn density across mixed forests, first snow with lingering color on alpine valleys, cherry-blossom + wildflower spring superbloom richness, golden summer evenings. THE SEASON IS THE SUBJECT, MULTI-COLOR RICHNESS is mandatory, and DENSITY IS TURNED TO 11 — every branch, every meadow, every slope packed with peak color edge-to-edge. Marc Adamus / Peter Lik / Daniel Kordan / Galen Rowell caliber gallery-print seasonal photography — National Geographic cover quality, the kind of frame people print and hang. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL EARTH SEASONAL DRAMA, NEVER SCI-FI / FANTASY ━━━
+
+This is REAL Earth at the peak dramatic moment of a season. Mixed multi-color forests (NOT mono-toned). Generic morphological descriptors only — NO named places (no "Colorado" / "Vermont" / "Kyoto" — describe morphologically).
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT FEATURES ━━━
+
+NEVER a person, NEVER a hiker, NEVER cabins, NEVER fences, NEVER cars, NEVER roads, NEVER footpaths, NEVER stone-steps, NEVER any constructed element. Pure raw nature only.
+
+━━━ ABSOLUTELY BANNED ━━━
+
+- NO bioluminescent / phosphorescent / foxfire (sci-fi triggers, legacy had these)
+- NO named places
+- NO single beam / single shaft / single column of light (laser-beam trigger — use "shafts plural fanning")
+- NO sci-fi / fantasy / portal / mystical
+- NO architecture / stone-steps / garden-paths / cabin
+- NO humans
+- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+- NO mono-color scenes (the color_palette axis MANDATES multi-color variety — render ALL the named colors)
+
+━━━ THE SEASONAL SUBJECT (the landscape composition at peak seasonal drama) ━━━
+${subject}
+
+━━━ COLOR PALETTE (multi-color seasonal saturation — RENDER ALL OF THESE) ━━━
+${color_palette}
+
+⚠️ ABSOLUTE NON-NEGOTIABLE — MULTI-COLOR MANDATE ⚠️
+
+This is the SINGLE most important axis for this path. The named multi-color palette MUST visibly land in the rendered painting — ALL 3-5 contrasting colors VISIBLE in distinct portions of the scene.
+
+If the palette names "yellow birch + scarlet maple + crimson oak + lingering hemlock green + violet aster" → the render MUST show all five: yellow birch sections + scarlet maple sections + crimson oak sections + lingering green spruce sections + violet aster blooms. NEVER let one color dominate. NEVER mono-tone.
+
+YOUR OUTPUT PROMPT MUST EXPLICITLY ENUMERATE EACH NAMED COLOR in distinct phrases. Example: "patches of yellow birch foliage across the left slope, scarlet maple groves dominating the midground, crimson oak clusters on the right ridge, lingering emerald hemlock among the bare trunks, scattered violet aster blooms in the understory." — NEVER collapse them into "fall colors."
+
+If the rendered scene is mono-toned (all-red, all-pink, all-white), the render FAILED the path identity.
+
+━━━ DEPTH LAYERS (foreground / midground / distant — multi-tier composition) ━━━
+${depth_layers}
+
+Render the named depth layers LITERALLY — foreground element + midground element + distant element. Multi-tier depth is required for 10/10 frames.
+
+━━━ SEASONAL MOTION (the moment-in-motion accent — catch a second in time) ━━━
+${seasonal_motion}
+
+The frame is a captured moment — leaves spinning in a breeze, blossoms drifting, snow-dust glittering, wildflower petals rippling. Render the named motion LITERALLY.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ HERO FEATURE (deep distance scale-prover, never competing) ━━━
+${hero_feature}
+
+Render small (postage-stamp / comma-speck scale) — the SEASONAL DRAMA is the hero, not this.
+
+━━━ SKY LAYER ━━━
+${sky_layer}${phenomenonBlock}
+
+━━━ HARD RULE — THE SEASON IS THE EMOTIONAL CENTER, MULTI-COLOR RICHNESS MANDATORY ━━━
+
+The viewer should feel the season in their bones. ALL named colors from the color_palette must be visible in the render — NEVER mono-tone. Multi-tier depth (FG/MG/distant) per the depth_layers axis. One captured moment per the seasonal_motion axis. Marc Adamus / Peter Lik / Daniel Kordan caliber gallery-print seasonal photography.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'peak-saturation seasonal multi-color, dramatic light, atmospheric depth'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ TOWERING TREES / NAMED SPECIES MANDATE ━━━
+
+⚠️ The autumn rendered scene must show ACTUAL DECIDUOUS FOREST — towering / mature trees with visible trunks rising into the canopy, NOT orange shrubs on rocks, NOT scrub on cliffs. Use phrases like: "towering mixed deciduous canopy", "mature sugar-maple + scarlet-oak + yellow-birch + paperbark-birch trunks rising", "tall trunks anchoring the midground", "dense mature canopy".
+
+⚠️ NAME SPECIFIC TREE / FLOWER SPECIES — never generic "mixed forest" alone. Autumn output must name 3-5 species visible as distinct groves: e.g. "golden-yellow paperbark birch sections + scarlet sugar-maple groves + crimson red-oak clusters + amber quaking-aspen stands + lingering dark hemlock columns". Spring output must name 3-5 species: e.g. "pink cherry-blossom canopy + white flowering-dogwood + magenta redbud + cream magnolia + understory of trillium + Virginia bluebell + dame's-rocket".
+
+━━━ DENSITY MANDATE — TURN IT TO 11 ━━━
+
+⚠️ DENSITY IS THE PATH'S SIGNATURE. NO sparse / open / scattered / minimal / patchy / empty / negative-space language. Use density-positive phrasing: "packed wall-to-wall", "every branch carrying peak color", "edge-to-edge", "no gaps in the canopy", "carpet-thick", "shoulder-to-shoulder bloom", "saturated mass", "dense unbroken canopy", "drenched in color".
+
+⚠️ BANNED WORD — "fire" as a NOUN (renders literal flames on mountainsides). Forbidden: "on fire", "fall fire", "peak fire", "fire color", "fire-mosaic", "fire-blanket", "trees on fire". Use SAFE high-energy alternatives: "peak color saturation", "drenched in color", "blazing color" (adj OK), "saturated peak foliage", "color explosion", "ABLAZE with color" (adj OK), "riot of color".
+
+⚠️ BANNED — orange-shrubs-on-rocks rendering. Never use "low shrubs" / "scrub" / "low autumn vegetation" / "rocky cliffs as dominant frame element" / "canyon walls" as the dominant frame. The frame is FOREST-dominant.
+
+━━━ CINEMATIC LIGHT + COLOR GRADE — MANDATORY ━━━
+
+Every render MUST land cinematic light drama, not flat overcast lighting. Required elements:
+
+• HARD DIRECTIONAL LIGHT — low-angle golden-hour or sunset rake catching every trunk-edge and leaf-mass, hard punched shadows beneath every trunk at peak chromatic saturation, NOT flat overcast.
+• ATMOSPHERIC HAZE — teal-cooled depth in the far distance, atmospheric perspective separating midground from distant ridge, mist + light interaction in valleys.
+• TEAL-AND-ORANGE CINEMATIC SPLIT — warm orange-amber-crimson saturation in foreground/midground + teal-cooled atmospheric depth in the far distance. Hollywood color-grade.
+• SCALE PROVER — one tiny element in the distance proves the scale: a hawk hovering as a comma-speck silhouette, a tiny lake reflecting the canopy, a small clearing, a distant ridge tooth catching alpenglow. Render small (postage-stamp scale) to make the forest feel VAST.
+
+━━━ COMPOSITION DIRECTIVE — WIDE FORESTED LANDSCAPE (DEFAULT) ━━━
+
+⚠️ THIS PATH IS WIDE-VISTA-FIRST AND FOREST-DOMINANT. Unless the subject explicitly says "intimate close-up" / "forest interior" / "looking up" / "close-camera", render this as a WIDE PANORAMIC LANDSCAPE dominated by MATURE FOREST — towering canopy filling 60-75% of the frame, sky 15-25%, foreground anchor 10-15%.
+
+For AUTUMN: the rendered output MUST read as "a mature forested hillside drenched edge-to-edge in peak color, every species at maximum saturation, named groves visible across the wide frame." Render every named species in the palette as a distinct dense grove: yellow birch sections, scarlet maple sections, crimson oak sections, amber aspen sections, lingering green conifer columns. NOT orange shrubs on rocks.
+
+For SPRING: the rendered output MUST read as "a mature flowering forest hillside + wildflower SUPERBLOOM understory, named groves visible across the wide frame." Render every named flower species as a distinct dense patch/carpet.
+
+━━━ WOW FACTOR — GALLERY-PRINT BANGER ━━━
+
+This must be a render people frame and hang. National Geographic cover. Marc Adamus / Peter Lik / Daniel Kordan / Galen Rowell caliber gallery-print fine-art photography. Every frame is a poster-worthy banger with hard cinematic light, atmospheric depth, teal-and-orange grade, scale-prover, named species.
+
+Multi-tier depth (foreground anchor + midground forest + distant peaks/horizon) is mandatory. Hyperreal photographic. ALL named colors visible across the wide scene.
+
+DO NOT default to close-camera / intimate / foreground-focused framing unless the subject explicitly demands it. Wide forest-dominant vista is the default.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places, NO "fire" as a noun, NO "shrubs" / "scrub" as dominant element.`;
+  },
+
   EARTHBOT_COZY_BEACH: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject_setting, foreground_element, water_state, sky_layer, light_condition, phenomenon } = slots;
     const phenomenonBlock = phenomenon

@@ -84,6 +84,15 @@ module.exports = {
     anchorScaleRange: null
   },
 
+  EARTHBOT_SEASONAL_SHIFT: {
+    description: 'PATH-BESPOKE — EarthBot seasonal-shift (2026-05-22 R2 — multi-axis rich rendering). Dramatic seasonal landscape scenes — autumn fire (mixed multi-color forests, NOT mono-toned), first snow (winter peaks + frozen lakes), cherry blossom storms + wildflower superblooms (spring), golden summer meadows. THE SEASON IS THE SUBJECT and multi-color richness is mandatory. 9 path-bespoke axes — 8 always-on + 1 conditional 30%-gated phenomenon. Order matters: subject rolls FIRST (sets season tag), then color_palette + depth_layers + seasonal_motion all roll with matchTagsFromSlot=subject so all season-tagged content stays coherent. Bespoke: subject + color_palette + depth_layers + seasonal_motion (all season-tagged). Reused: EPIC_VISTA lighting / atmosphere / hero_feature / sky_layer / phenomenon. NO named places, NO bioluminescent (legacy trigger), NO sci-fi / fantasy, NO architecture, NO humans.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'color_palette', 'depth_layers', 'seasonal_motion', 'lighting', 'atmosphere', 'hero_feature', 'sky_layer' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
   EARTHBOT_COZY_BEACH: {
     description: 'PATH-BESPOKE — EarthBot cozy-beach (2026-05-22 v2 PIVOT). PIVOTED away from village/architecture identity (v1) to INTIMATE COZY BEACH MOMENTS — golden-hour atmosphere, soft palm shadows raked across warm sand, driftwood-strewn cove, scattered shells in damp sand, hammock-shaped palm-frond silhouette over sand, fallen tropical flowers on the sand, calm tide pools reflecting sunset, palm-shadowed pocket cove. ATMOSPHERE IS THE HERO. Mid-tight intimate framings, NEVER wide panorama. 6 path-bespoke axes — 5 always-on (subject_setting, foreground_element, water_state, sky_layer, light_condition) + 1 conditional 30%-gated phenomenon. NO HUMANS, NO architecture / cottages / lighthouses / villages (v1 identity is dead), NO dramatic surf / storms (cozy is gentle warm always), NO sci-fi / bioluminescent / fantasy.',
     slots: { universal: [], bot: [], path: [ 'subject_setting', 'foreground_element', 'water_state', 'sky_layer', 'light_condition' ] },

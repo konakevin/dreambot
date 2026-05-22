@@ -125,13 +125,16 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
         }
       }
     } else {
-      // Single-pool conditional (legacy shape) — also supports tagged-pool spec
+      // Single-pool conditional (legacy shape) — also supports tagged-pool spec.
+      // Pass rolledMeta so matchTagsFromSlot works (e.g. SEASONAL_SHIFT_PHENOMENON
+      // filtering by subject's autumn/spring tag).
       const slot = arch.conditionalLayer.slot;
       const spec = pathConfig.pools?.[slot];
       if (spec) {
-        const pool = resolveSpecPool(spec, bot);
-        if (pool && pool.length > 0) {
-          slots[slot] = picker.pickWithRecency(pool, slot);
+        const rawPool = resolveSpecPoolRaw(spec, bot, rolledMeta);
+        if (rawPool && rawPool.length > 0) {
+          const stringPool = rawPool.map((e) => (typeof e === 'string' ? e : e.description));
+          slots[slot] = picker.pickWithRecency(stringPool, slot);
         }
       }
     }

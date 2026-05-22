@@ -141,20 +141,57 @@ async function generatePool({
         anthropicKey
       );
       const raw = (data.content[0]?.text || '').trim();
+      // Try JSON array first
       const match = raw.match(/\[[\s\S]*\]/);
-      if (!match) {
-        console.warn(`  ⚠ batch ${batchN} attempt ${parseAttempt + 1}: no JSON array found, retrying...`);
-        continue;
+      if (match) {
+        try {
+          newEntries = JSON.parse(match[0]);
+        } catch (err) {
+          console.warn(`  ⚠ batch ${batchN} attempt ${parseAttempt + 1}: JSON.parse failed (${err.message.slice(0, 80)})`);
+        }
       }
-      try {
-        newEntries = JSON.parse(match[0]);
-      } catch (err) {
-        console.warn(`  ⚠ batch ${batchN} attempt ${parseAttempt + 1}: JSON.parse failed (${err.message.slice(0, 80)}), retrying...`);
+      // Fallback: numbered-list parse
+      if (!newEntries) {
+        const body = raw.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
+        const lines = body.split('\n');
+        const entries = [];
+        let current = null;
+        for (const line of lines) {
+          const m = line.match(/^\s*(\d+)\.\s*(.*)$/);
+          if (m) {
+            if (current) entries.push(current.trim());
+            current = m[2];
+          } else if (current !== null && line.trim()) {
+            current += ' ' + line.trim();
+          }
+        }
+        if (current) entries.push(current.trim());
+        const cleaned = entries
+          .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+          .filter((e) => e.length > 10);
+        if (cleaned.length > 0) {
+          newEntries = cleaned;
+        } else {
+          console.warn(`  ⚠ batch ${batchN} attempt ${parseAttempt + 1}: neither JSON nor numbered-list parsed, retrying...`);
+        }
       }
     }
     if (!newEntries) {
       throw new Error(`batch ${batchN} failed parsing after 3 attempts`);
     }
+    // Normalize: if Sonnet returned objects (id/description/text/composition), extract string field.
+    // EXCEPTION: preserve full object when it has a non-empty `tags` array — needed for season/biome-tagged
+    // pools that filter by matchTagsFromSlot at runtime (seasonal-shift, biome-specific paths, etc.).
+    newEntries = newEntries.map((e) => {
+      if (typeof e === 'string') return e;
+      if (e && typeof e === 'object') {
+        if (Array.isArray(e.tags) && e.tags.length > 0 && typeof e.description === 'string') {
+          return e;
+        }
+        return e.description || e.text || e.composition || e.entry || e.content || JSON.stringify(e);
+      }
+      return String(e);
+    });
     // Trim if Sonnet over-delivered (sometimes returns more than asked)
     if (all.length + newEntries.length > total) {
       newEntries = newEntries.slice(0, total - all.length);
