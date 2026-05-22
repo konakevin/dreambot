@@ -13,6 +13,34 @@
  */
 
 module.exports = {
+  MANGABOT_GHIBLI_COUNTRYSIDE: {
+    description:
+      'PATH-BESPOKE — MangaBot ghibli-countryside (2026-05-22 axis-system migration). Studio Ghibli pastoral wonder — Totoro / Kiki / Mononoke / Spirited-Away / Whisper of the Heart aesthetic. Soft warm pastel palette (sage/butter/sky-blue/cream/wildflower-pink) and HAND-PAINTED oil-watercolor brush texture. Rural Japan only — no cities, no neon, no armor. 14 path-bespoke axes (13 always-on + spirit_element conditionally gated at 40%) — Ghibli sometimes has magic visible, sometimes pure pastoral.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'landscape_setting',
+        'architectural_anchor',
+        'character_role',
+        'action_moment',
+        'wildflower_garden',
+        'weather_air',
+        'light_quality',
+        'time_of_day',
+        'emotional_dna',
+        'camera_framing',
+        'story_prop',
+        'background_detail',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'spirit_element', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MANGABOT_NEO_TOKYO: {
     description:
       'PATH-BESPOKE — MangaBot neo-tokyo (2026-05-22 axis-system migration). Cyberpunk Japan future — Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo / Edgerunners / Bubblegum Crisis. Vertical density, wet-street neon, kanji-signage saturation, tech-artifact clutter. Each render is a frame from a cyberpunk anime keyframe with NEON palette (pink/cyan/magenta) NOT pastels. 15 path-bespoke axes — denser than samurai-era because the aesthetic demands more layered content.',

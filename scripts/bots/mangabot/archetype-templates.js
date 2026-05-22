@@ -13,6 +13,165 @@
 const blocks = require('./shared-blocks');
 
 module.exports = {
+  MANGABOT_GHIBLI_COUNTRYSIDE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene_type,
+      landscape_setting,
+      architectural_anchor,
+      character_role,
+      action_moment,
+      wildflower_garden,
+      weather_air,
+      light_quality,
+      time_of_day,
+      emotional_dna,
+      camera_framing,
+      story_prop,
+      background_detail,
+      spirit_element,
+    } = slots;
+
+    return `You are an anime concept-art painter writing a GHIBLI-COUNTRYSIDE keyframe for MangaBot. Studio Ghibli pastoral wonder — Totoro / Kiki / Mononoke / Spirited-Away / Whisper of the Heart aesthetic. HAND-PAINTED oil-watercolor brushwork, soft warm pastoral palette. Output wraps with style prefix + suffix.
+
+${blocks.ANIME_ILLUSTRATION_BLOCK}
+
+${blocks.KEYFRAME_COMPOSITION_BLOCK}
+
+${blocks.DENSITY_BLOCK}
+
+${blocks.STORY_MOMENT_BLOCK}
+
+${blocks.NO_NAMED_CHARACTERS_BLOCK}
+
+${blocks.NO_GENERIC_POSE_BLOCK}
+
+${blocks.CULTURAL_RESPECT_BLOCK}
+
+━━━ ⚠ HARD RULE #1: SOFT WARM PASTORAL PALETTE (NON-NEGOTIABLE) ━━━
+
+Color palette is SOFT, WARM, PASTORAL — sage-green, butter-yellow, sky-blue, cream, wildflower-pink, dusty-rose, soft-lavender, terracotta. NO neon, NO saturated cyberpunk pinks, NO armor-grey-and-black, NO dramatic oversaturation. Ghibli's signature is HARMONY of pastel-warmth — every color sits naturally alongside the others.
+
+━━━ ⚠ HARD RULE #2: HAND-PAINTED OIL/WATERCOLOR TEXTURE ━━━
+
+Render quality is HAND-PAINTED — visible brushstrokes in skies and clouds, painterly grass and trees, soft watercolor edges, NOT slick CGI, NOT photoreal. Skies have visible cloud-brushwork (Kazuo Oga signature), foliage has dappled-impressionist texture. The image LOOKS like a Studio Ghibli background painting.
+
+━━━ ⚠ HARD RULE #3: RURAL JAPAN — NO MODERN URBAN ━━━
+
+This is RURAL Japan — thatched cottages, wooden shrines, terraced rice-paddies, forest-edges, mountain foothills, coastal countryside. NO cities, NO skyscrapers, NO neon signs, NO modern infrastructure, NO power-lines, NO cars, NO tech. The world is pre-modern pastoral — Edo-era to early-Showa countryside.
+
+━━━ ⚠ HARD RULE #4: NATURE DENSITY MANDATE ━━━
+
+The wildflower_garden axis below specifies the SIGNATURE NATURE LAYER for this render — wildflower patches, vegetable gardens, orchards, herb-beds, cherry-blossom rain. Render it visibly across the foreground/midground. Ghibli's countryside is NEVER bare — nature blooms everywhere.
+
+━━━ ⚠ HARD RULE #5: QUIET MAGICAL REALISM ━━━
+
+If the spirit_element axis fires (40% of renders), magic is IMPLIED — a small kodama peeking from a tree-hollow, a firefly-cluster drifting, a glowing-mushroom patch, a distant spirit-orb. Subtle, never explicit. The world feels alive without being a fantasy-render. If the spirit_element doesn't fire, the scene is pure pastoral and that's OK — Ghibli has both registers.
+
+━━━ ⚠ HARD RULE #6: STORY PROP — FOREGROUND NARRATIVE ━━━
+
+A story-implying foreground prop (woven basket of vegetables, bicycle leaning on fence, picnic tea-set, laundry on line, wooden bucket of well-water) MUST be visible in the foreground/midground. Tells the viewer "someone lives here, someone was just here, someone is about to return."
+
+━━━ ⚠ HARD RULE #7: BACKGROUND DETAIL — DEEP DISTANCE ━━━
+
+A deep-distance secondary detail (a farmer in a distant field, cattle grazing far off, village rooftops at horizon, smoke from a far chimney, distant flying bird) proves the world extends beyond the frame.
+
+━━━ ⚠ HARD RULE #8: 4-TIER DEPTH ━━━
+
+(1) foreground prop + flora + character, (2) midground architectural anchor + wildflower-garden, (3) deep-distance landscape (hills/mountains/valley/sea) + background-detail, (4) sky with time-of-day register + weather motion. NO flat single-tier compositions.
+
+━━━ ⚠ HARD RULE #9: CANDID ACTION — RURAL TASK ━━━
+
+The character below is CAUGHT mid-rural-task — hanging laundry, picking flowers, drinking tea, sketching, cycling, walking through grass. Never posing. Never eye-contact with viewer. The eye finds them inside their pastoral moment.
+
+━━━ ⚠ HARD RULE #10: COMPOSITION VARIETY ━━━
+
+The scene_type and camera_framing axes specify TODAY'S composition. Honor them — do NOT default to "wandering girl on hilltop with windswept tree." That's ONE composition out of many. Mix doorstep-cottage / through-grass / over-shoulder / inside-a-room / bridge-crossing / well-tending / boat-on-stream.
+
+━━━ ⚠ HARD RULE #11: DRAMATIC POSTER MOMENT — WOW FACTOR ━━━
+
+This render is a STORYBOOK POSTER, not a neutral pastoral background. Lean into the WOW:
+- The light source from the light_quality axis should HIT DRAMATICALLY — long honey-shadows from golden-hour, defined god-rays piercing canopy, dappled-warm patches dancing across surfaces.
+- The wildflower/garden density should READ AS ABUNDANT — overflowing baskets, packed foliage, gardens bursting with multiple specific bloomed plants, not single sparse stems.
+- The story-prop should be cluster-rich — multiple lived-in objects together telling a richer story.
+- The sky should have DEFINED CHARACTER — towering cumulus, color gradient horizon, drifting cherry-blossom rain, low rising mist — not flat blank blue.
+- The architectural anchor should feel MATERIAL — moss-grown stone, weathered thatch, kettle-steam visible from chimney — not sketched in.
+- The viewer's reaction: "I want to walk into this picture and live there for a while."
+This is what distinguishes Studio Ghibli from generic painterly anime — every frame is a poster moment. Reject any composition that reads as "fine but bland."
+
+━━━ THE SCENE TYPE (composition lead) ━━━
+${scene_type}
+
+━━━ LANDSCAPE SETTING (the rural-Japan biome) ━━━
+${landscape_setting}
+
+━━━ ARCHITECTURAL ANCHOR (pastoral structure — thatched cottage / wooden bridge / shrine / etc.) ━━━
+${architectural_anchor}
+
+━━━ CHARACTER(S) IN FRAME (rural archetype — never named) ━━━
+${character_role}
+
+━━━ ACTION MOMENT (candid rural mid-task) ━━━
+${action_moment}
+
+━━━ WILDFLOWER + GARDEN DENSITY (Ghibli nature signature — render visibly) ━━━
+${wildflower_garden}
+
+━━━ WEATHER + AIR (pastoral motion — grass-wave / petal-rain / mist / etc.) ━━━
+${weather_air}
+
+━━━ LIGHT QUALITY (Ghibli light — golden / dappled / overcast-soft / etc.) ━━━
+${light_quality}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ EMOTIONAL DNA (Ghibli mood lock) ━━━
+${emotional_dna}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY (HARD RULE #6) ━━━
+${story_prop}
+
+━━━ ⚠ BACKGROUND DETAIL — MUST APPEAR IN DEEP DISTANCE (HARD RULE #7) ━━━
+${background_detail}
+${spirit_element ? `
+
+━━━ ⚠ SPIRIT ELEMENT — render subtly (Ghibli magical-realism) ━━━
+${spirit_element}` : ''}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION CLOSER ━━━
+
+Studio Ghibli hand-painted pastoral keyframe. Kazuo Oga sky brushwork. Soft warm pastel palette throughout. Visible oil-watercolor brushstrokes on grass, foliage, clouds. Quiet magical-realism — the world feels alive even when no magic is explicitly shown. Cumulus clouds, dappled light, wildflowers, drifting summer haze. Wonder + serenity + nostalgia.
+
+━━━ HARD BANS ━━━
+
+- NO neon / cyberpunk palette / saturated electric colors
+- NO cities / skyscrapers / modern infrastructure
+- NO armor / weapons / military / cybernetics
+- NO photoreal — hand-painted oil-watercolor only
+- NO posed model character — caught mid-task
+- NO English text / modern signage / kanji storefronts
+- NO dramatic apocalyptic skies (no red-orb suns / no lightning-storm hero-shots)
+- NO empty composition — nature density mandate applies
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with the scene-type + camera framing, then weave landscape + anchor + character mid-task + wildflower density + weather motion + light quality + time-of-day + emotional register + story-prop + background-detail (+ spirit-element if applicable).
+
+Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
+  },
+
   MANGABOT_NEO_TOKYO: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       scene_type,
