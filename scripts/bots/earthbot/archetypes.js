@@ -65,4 +65,13 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null
   },
+
+  EARTHBOT_BEACH_NIGHT: {
+    description: 'PATH-BESPOKE — EarthBot beach-night (2026-05-21 axis-system migration). Magical tropical beach scenes at night. NATURAL light sources ONLY (moonlight, starlight, Milky Way) — NEVER tiki torches, lanterns, paper lights, lighthouse beams, bonfires (legacy had these; they trigger humans + man-made bias). NEVER bioluminescent waves (Flux sci-fi trigger). The light source is the HERO; reflective tropical water + palm silhouettes + warm tropical mood support it. 6 path-bespoke axes — 5 always-on (subject, light_source, night_sky, water_state, shoreline_element) + 1 conditional 30%-gated phenomenon (shooting star / moonbow / distant lightning over horizon / passing meteor). NO humans, NO sci-fi / fantasy, NO human-built objects, NO architecture.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'light_source', 'night_sky', 'water_state', 'shoreline_element' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
 };

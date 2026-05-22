@@ -436,4 +436,81 @@ The light moment fills the emotional center of the frame. Mid to tight framing �
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
+
+  EARTHBOT_BEACH_NIGHT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { subject, light_source, night_sky, water_state, shoreline_element, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one signature night-sky event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled light_source (moonbow needs moisture, etc), DROP IT.`
+      : '';
+
+    return `You are a night-sky photographer writing ONE TROPICAL BEACH NIGHT scene for EarthBot. Magical warm tropical beach scenes at night — moonlit water, silver Milky Way overhead, calm reflective tropical surf, palm silhouettes. The NATURAL light source (moon / stars / Milky Way) is the hero. Awe-inspiring, warm, intimate — NEVER cold ominous night. Marc Adamus / Galen Rowell caliber gallery-print tropical-night photography. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL TROPICAL BEACH AT NIGHT, NEVER SCI-FI ━━━
+
+This is REAL tropical-beach geography at REAL Earth night. Natural light only — moonlight, starlight, Milky Way. NEVER alien glow. NEVER bioluminescent waves. NEVER glowing-fantasy.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+
+NEVER a person, NEVER a silhouette, NEVER a hiker, NEVER a swimmer, NEVER any human figure anywhere in the frame.
+
+━━━ ZERO HUMAN-BUILT FEATURES — NEVER, EVEN AS BACKGROUND DECORATION ━━━
+
+NEVER tiki torches, NEVER lanterns, NEVER paper lanterns, NEVER hurricane lanterns, NEVER lighthouse beams, NEVER bonfires, NEVER fire pits, NEVER dock posts, NEVER piers, NEVER boardwalks, NEVER tiki bars, NEVER overwater bungalows, NEVER thatched huts, NEVER ANY man-made object. The legacy beach-night relied on tiki/lantern/bonfire light — OVERRIDE THAT BIAS. Pure NATURAL night beach.
+
+━━━ ABSOLUTELY BANNED ━━━
+
+- NO bioluminescent / phosphorescent / luminescent / glowing waves / electric-blue surf (sci-fi trigger)
+- NO tiki torches / lanterns / paper lights / dock lights / bonfires / fire pits (human-built)
+- NO architecture / overwater bungalows / huts / docks / piers
+- NO sci-fi / fantasy / magical glow / portal moon / alien stars
+- NO sun / sunset / sunrise / daylight (it is fully NIGHT)
+- NO single column / single beam / single shaft (use natural diffuse light)
+- NO place names
+- NO darkness-without-light (Milky Way / moon / stars MUST be the light source)
+- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+
+━━━ THE TROPICAL BEACH NIGHT SETTING ━━━
+${subject}
+
+━━━ THE NATURAL LIGHT SOURCE (the hero — moon / starlight / Milky Way) ━━━
+${light_source}
+
+Render the named light source LITERALLY. Moonlight is silver-white. Starlight is faint cool. Milky Way is a dense band of stars across the sky. The light is the HERO.
+
+━━━ THE NIGHT SKY ━━━
+${night_sky}
+
+━━━ THE WATER STATE (calm, reflective, night) ━━━
+${water_state}
+
+The tropical water is calm + reflective. Night water reflects the moon, stars, sky. Subtle silver / cool reflections, NOT sci-fi glow.
+
+━━━ THE SHORELINE ELEMENT (natural foreground — palms / rocks / driftwood) ━━━
+${shoreline_element}
+
+ONE natural foreground element. Palm silhouettes against the night sky, weathered driftwood on sand, smooth lava rocks at the surf line, calm sand patterns — natural shore details only.${phenomenonBlock}
+
+━━━ HARD RULE — WARM TROPICAL NIGHT, NEVER COLD OMINOUS ━━━
+
+This is a MAGICAL warm tropical night — the kind of beach scene that feels like vacation paradise after dark. NOT a horror beach. NOT a stormy beach. NOT a cold beach. The warmth of trade-winds, the calm of tropical surf, the awe of a Milky Way overhead. Gallery-print travel-photography at night caliber.
+
+━━━ MOMENT IN MOTION — every render captures one beat of physical motion ━━━
+
+Catch a SECOND in time. Gentle surf rippling at the foreground sand, palm fronds shifting in trade-wind breeze, a thin band of silver light on the water surface, a faint shimmer in the wet sand from moonlight, a single small wave breaking softly.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'silver moonlit tropical night, cool blue + silver tones, warm tropical mood'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE — TROPICAL BEACH NIGHT POSTCARD ━━━
+
+Mid to tight framing. The light source (moon, stars, or Milky Way) fills the upper third / half. The tropical beach extends below. Reflective water carries the light source. Hyperreal photographic — gallery-print tropical-night travel photography.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
+  },
 };

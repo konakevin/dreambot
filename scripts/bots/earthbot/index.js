@@ -104,7 +104,7 @@ const pathBuilders = {
   'reef-paradise': require('./paths/reef-paradise'), // axis-system (2026-05-21)
   'big-wave': require('./beach/paths/big-wave'),
   seashell: require('./beach/paths/seashell'),
-  'beach-night': require('./beach/paths/beach-night'),
+  'beach-night': require('./paths/beach-night'), // axis-system (2026-05-21)
   'epic-sunset': require('./paths/epic-sunset'), // axis-system (2026-05-20)
 };
 
@@ -231,7 +231,7 @@ module.exports = {
   // add it here.
   chaos: {
     enabled: true,
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night'],
     allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise'].includes(p))],
   },
 
@@ -245,7 +245,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night'],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their

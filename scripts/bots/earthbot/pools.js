@@ -79,4 +79,12 @@ module.exports = {
   // hero_feature / sky_layer / phenomenon.
   SACRED_LIGHT_SUBJECT: load('sacred_light_subject'),
   SACRED_LIGHT_LIGHTING: load('sacred_light_lighting'),
+  // beach-night (2026-05-21) — 6-axis path. Natural night light only
+  // (moon / stars / Milky Way), no human-built lights, no bioluminescent.
+  BEACH_NIGHT_SUBJECT: load('beach_night_subject'),
+  BEACH_NIGHT_LIGHT_SOURCE: load('beach_night_light_source'),
+  BEACH_NIGHT_SKY: load('beach_night_sky'),
+  BEACH_NIGHT_WATER_STATE: load('beach_night_water_state'),
+  BEACH_NIGHT_SHORELINE_ELEMENT: load('beach_night_shoreline_element'),
+  BEACH_NIGHT_PHENOMENON: load('beach_night_phenomenon'),
 };

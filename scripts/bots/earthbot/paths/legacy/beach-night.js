@@ -3,8 +3,8 @@
  * Moonlit, starlit, firelit, bioluminescent. Warm, magical, awe-inspiring.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const pools = require('../../beach/pools');
+const blocks = require('../../beach/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.BEACH_NIGHT_SCENES, 'beach_night_scene');
