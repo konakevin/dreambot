@@ -25,7 +25,6 @@ module.exports = {
   COASTAL_VISTAS: load('coastal_vistas'),
   WAVE_MOMENTS: load('wave_moments'),
   TROPICAL_PARADISE_SCENES: load('tropical_paradise_scenes'),
-  BEACH_LANDSCAPE_SCENES: load('beach_landscape_scenes'),
   TIDE_POOL_SCENES: load('tide_pool_scenes'),
   COZY_COAST_SCENES: load('cozy_coast_scenes'),
   SEA_COLORS: load('sea_colors'),

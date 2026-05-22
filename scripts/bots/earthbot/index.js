@@ -19,55 +19,40 @@
  * across all paths (photography/canvas/watercolor/illustration/pencil).
  *
  * ═══════════════════════════════════════════════════════════════════════
- * AXIS-SYSTEM MIGRATION ROADMAP (2026-05-20 — conservative consolidation)
+ * AXIS-SYSTEM MIGRATION ROADMAP (2026-05-22 final — consolidation complete)
  * ═══════════════════════════════════════════════════════════════════════
  *
- * Final inventory after migration = 20 paths (was 25, dropped 5 via consolidation).
+ * Final inventory: 18 paths (was 25 — 7 dropped via consolidation).
  *
- * MIGRATED (1 of 20):
+ * MIGRATED (14 of 18 — 4 legacy paths remaining):
  *   ✓ epic-vista — canonical reference (BOT_SCENE_QUALITY_PLAYBOOK.md)
+ *   ✓ national-parks (US National Parks amplified)
+ *   ✓ deep-forest (old-growth temperate forest cathedrals)
+ *   ✓ lush-jungle (tropical rainforest)
+ *   ✓ coastal-vista (dramatic craggy coast)
+ *   ✓ tropical-paradise (palm-fringed paradise coast)
+ *   ✓ epic-sunset (once-in-a-lifetime tropical sunsets)
+ *   ✓ hawaii-flowers (Hawaiian coast + tropical flowers)
+ *   ✓ geological-wonder (cave / hoodoo / salt-flat / etc)
+ *   ✓ reef-paradise (island-bay aesthetic — pivoted from underwater coral)
+ *   ✓ sacred-light (transcendent natural-light moments)
+ *   ✓ beach-night (magical tropical beach at night)
+ *   ✓ waves (MERGE of legacy wave + big-wave)
+ *   ✓ cozy-beach (intimate cozy beach moments — v2 pivot)
  *
- * EARTH — 9 paths remaining to migrate:
- *   - sky-drama — NEW path; subsumes legacy `dramatic-sky` + `weather-drama`
- *     (extreme atmospheric/weather phenomena as primary subject)
+ * REMAINING TO MIGRATE (4 legacy paths):
  *   - hidden-corner (intimate small-scene nature)
- *   - sacred-light (single intimate divine light moment)
- *   - national-parks (US National Parks amplified — closest sibling to epic-vista)
- *   - seasonal-shift (autumn fire / first snow / cherry blossom / etc.)
- *   - geological-wonder (crystal caves / basalt columns / slot canyons / geysers)
+ *   - seasonal-shift (autumn fire / first snow / cherry blossom / etc)
  *   - micro-nature (extreme macro close-ups)
- *   - deep-forest (old-growth temperate forest cathedrals)
- *   - lush-jungle (Amazon / Borneo / Daintree tropical rainforest)
- *
- * BEACH — 10 paths remaining to migrate:
- *   - coastal-vista (DRAMATIC craggy coast — Iceland / Big Sur / 12 Apostles)
- *   - waves — NEW path; subsumes legacy `wave` + `big-wave`
- *     (intimate-curl through monumental-wall, variance via subject pool)
- *   - tropical-paradise (PARADISE coast — Maldives / Bora Bora / Bali)
  *   - tide-pool (macro biological coastal detail)
- *   - cozy-beach (intimate cozy beach moments — v2 pivot, 2026-05-22)
- *   - hawaii-flowers (Hawaiian coast + tropical flowers co-star)
- *   - reef-paradise (shallow tropical reefs visible from beach)
- *   - beach-night (magical tropical beaches after dark)
- *   - epic-sunset (once-in-a-lifetime tropical sunsets)
  *
- * DROPPED (5 paths fully subsumed, no migration):
- *   ✗ luminous-landscape (subsumed by epic-vista's STACKED LIGHT DRAMA)
- *   ✗ dramatic-sky (merges into sky-drama)
- *   ✗ weather-drama (merges into sky-drama)
- *   ✗ beach-landscape (covered by coastal-vista + tropical-paradise)
- *   ✗ wave + big-wave (merges into waves)
+ * DROPPED (7 paths fully subsumed or killed, no migration):
+ *   ✗ luminous-landscape (subsumed by sacred-light — 2026-05-22)
+ *   ✗ beach-landscape (subsumed by coastal-vista + tropical-paradise — 2026-05-22)
+ *   ✗ wave + big-wave (MERGED into waves — 2026-05-22)
  *   ✗ beach-moment + seashell (subsumed by cozy-beach v2 — 2026-05-22)
- *   ✗ sky-drama / dramatic-sky / weather-drama (sky-drama merge killed
- *     2026-05-22 — supernatural drift; dramatic-sky + weather-drama
- *     stay as legacy paths in rotation)
- *
- * Migration policy: legacy paths stay in rotation until their replacement
- * lands. When migrating a NEW consolidated path (sky-drama / waves /
- * beach-still-life), delete BOTH legacy ancestors AND remove from index.js
- * after the new path proves out. When dropping a path entirely
- * (luminous-landscape / beach-landscape), delete after epic-vista or its
- * coastal replacement is confirmed handling that aesthetic.
+ *   ✗ dramatic-sky + weather-drama (sky-drama merge attempted + killed
+ *     2026-05-22; legacy paths also dropped since they had heavy triggers)
  */
 
 const earthPools = require('./earth/pools');
@@ -82,10 +67,7 @@ const axisPools = require('./pools');
 const pathBuilders = {
   // Earth paths
   'epic-vista': require('./paths/epic-vista'), // axis-system (2026-05-20)
-  'weather-drama': require('./earth/paths/weather-drama'),
   'hidden-corner': require('./earth/paths/hidden-corner'),
-  'dramatic-sky': require('./earth/paths/dramatic-sky'),
-  'luminous-landscape': require('./earth/paths/luminous-landscape'),
   'sacred-light': require('./paths/sacred-light'), // axis-system (2026-05-21)
   'national-parks': require('./paths/national-parks'), // axis-system (2026-05-20)
   'seasonal-shift': require('./earth/paths/seasonal-shift'),
@@ -93,11 +75,10 @@ const pathBuilders = {
   'micro-nature': require('./earth/paths/micro-nature'),
   'deep-forest': require('./paths/deep-forest'), // axis-system (2026-05-20)
   'lush-jungle': require('./paths/lush-jungle'), // axis-system (2026-05-20)
-  // Beach paths (12 after wave+big-wave merge → waves)
+  // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
   'tropical-paradise': require('./paths/tropical-paradise'), // axis-system (2026-05-20)
-  'beach-landscape': require('./beach/paths/beach-landscape'),
   'tide-pool': require('./beach/paths/tide-pool'),
   'cozy-beach': require('./paths/cozy-beach'), // axis-system (2026-05-22)
   'hawaii-flowers': require('./paths/hawaii-flowers'), // axis-system (2026-05-21)
@@ -108,10 +89,7 @@ const pathBuilders = {
 
 const EARTH_PATHS = [
   'epic-vista',
-  'weather-drama',
   'hidden-corner',
-  'dramatic-sky',
-  'luminous-landscape',
   'sacred-light',
   'national-parks',
   'seasonal-shift',
@@ -125,7 +103,6 @@ const BEACH_PATHS = [
   'coastal-vista',
   'waves', // MERGED from legacy wave + big-wave (2026-05-22)
   'tropical-paradise',
-  'beach-landscape',
   'tide-pool',
   'cozy-beach',
   'hawaii-flowers',

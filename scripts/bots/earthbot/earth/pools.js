@@ -23,10 +23,7 @@ const VIBE_COLOR = {
 
 module.exports = {
   EPIC_VISTAS: load('epic_vistas'),
-  WEATHER_PHENOMENA: load('weather_phenomena'),
   HIDDEN_CORNERS: load('hidden_corners'),
-  SKY_PHENOMENA: load('sky_phenomena'),
-  LUMINOUS_SCENES: load('luminous_scenes'),
   SACRED_LIGHT_MOMENTS: load('sacred_light_moments'),
   SEASONAL_SCENES: load('seasonal_scenes'),
   GEOLOGICAL_SCENES: load('geological_scenes'),
