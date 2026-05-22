@@ -855,4 +855,102 @@ Template:
 
 Output ONLY the raw 170-240 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
   },
+
+  YUMBOT_KAWAII_KOI_POND: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, water_element, companion, creatures } = slots;
+    const creatureList = Array.isArray(creatures) ? creatures : [creatures];
+    const creatureBlock = creatureList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigList = Array.isArray(signature) ? signature : [signature];
+    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing KAWAII-KOI-POND renders for YumBot — a tranquil Japanese koi-pond scene with 5 kawaii pond-creatures (smiling koi-fish, axolotls, cloud-mochi-spirits, lily-frogs, pearl-blobs) half-submerged in/around the pond. Painterly Studio-Ghibli meets bex.ai Pop-Mart kawaii register. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: 5 KAWAII POND-CREATURES NAMED FIRST — ALL VISIBLE ━━━
+
+The 5 kawaii creatures MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). Each is a kawaii pond-creature with kawaii face (closed-arc-eyes, blush cheeks, tiny mouth) — NOT a food. Half-submerged or floating in the pond water.
+
+⚠ FAILURE = rendering humans / chibi-children / 1-4 creatures. PASS = 5 distinct kawaii pond-creatures all visible.
+
+━━━ ⚠ HARD RULE #2: SLIGHT POSE VARIATION ━━━
+
+The scene-type below describes the pond composition with slight POSE VARIATION per creature (one peeking from water, one tilted, one nestled close, one tallest at the back, one floating). Natural family-portrait cluster.
+
+━━━ ⚠ HARD RULE #3: JAPANESE GARDEN BACKDROP + WATER-ELEMENT CENTERPIECE ━━━
+
+The Japanese garden BACKDROP (pagoda / wisteria-grove / temple-courtyard / teahouse / zen-rock-garden / etc.) must be CLEARLY VISIBLE behind the pond. The featured WATER-ELEMENT centerpiece (lotus-lantern / glowing-lily / floating-paper-crane / etc.) anchors the pond.
+
+━━━ ⚠ HARD RULE #4: TWILIGHT / DUSK CINEMATIC PAINTERLY REGISTER ━━━
+
+bex.ai reference register: painterly Studio-Ghibli warmth, twilight/dusk-heavy, glowing lotus-lanterns, soft mist, cherry-blossom + wisteria petals drifting. Cinematic and atmospheric.
+
+━━━ THE SCENE-TYPE (composition + 5-creature pose-varied cluster in pond) ━━━
+${scene_type}
+
+━━━ THE FEATURED WATER ELEMENT (centerpiece on the pond) ━━━
+${water_element}
+
+━━━ JAPANESE GARDEN BACKDROP (surrounding setting — render visibly) ━━━
+${backdrop}
+
+━━━ 2 SIGNATURE POND ELEMENTS (lotus-lantern / stepping-stone / paper-crane / etc.) ━━━
+${sigBlock}
+
+━━━ POND-WATER SURFACE TEXTURE ━━━
+${terrain}
+
+━━━ OVERHEAD CANOPY (wisteria / pagoda eave / twilight sky / etc.) ━━━
+${sky}
+
+━━━ CAMERA FRAMING ━━━
+${camera}
+
+━━━ LIGHTING DIRECTION / QUALITY ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ ATMOSPHERE (what's drifting through the air — petals / fireflies / mist) ━━━
+${atmosphere}
+
+━━━ 1 TINY COMPANION (dragonfly / origami-crane / butterfly / etc.) ━━━
+${companion}
+
+━━━ 5 KAWAII POND-CREATURES (the (1)-(5) cast — kawaii faces, half-submerged or floating) ━━━
+${creatureBlock}
+
+━━━ SCENE PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ POSTER MOMENT ━━━
+
+"a tranquil kawaii Japanese koi-pond at twilight — 5 kawaii pond-creatures gathered around a glowing lotus-lantern under wisteria canopy with cherry-blossom petals drifting." Wallpaper-poster bex.ai-meets-Studio-Ghibli register.
+
+━━━ HARD BANS ━━━
+
+- NO foods as cast — this path uses kawaii POND-CREATURES (koi / axolotl / mochi-spirit / etc.)
+- NO HUMAN figures / chibi-children — kawaii pond-creatures only
+- NO photoreal / harsh-realism — kawaii painterly Studio-Ghibli fusion
+- NO dark / scary / moody atmosphere — peaceful twilight register
+- NO modern urban / industrial / mall scenes — traditional Japanese garden ONLY
+- NO real kanji / Japanese-text characters — decorative-pattern only
+- NO pathway / lane RECEDING into vanishing point — pond composition is clustered/wide
+- NO chaotic vertical-stacking / climbing / acrobatics — natural pose-varied cluster
+- NO blurred-out generic backdrop — Japanese garden MUST be visibly rendered
+- NO identical-row-of-soldiers lineup
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+LEAD with the 5 kawaii pond-creatures named at the START, then weave in scene-type + water-element + backdrop + signatures + terrain + sky + camera + lighting + time + atmosphere + companion.
+
+Template:
+"Five kawaii pond-creatures together in a Japanese koi-pond — (1) [creature 1 named in 5-8 words], (2) [creature 2 named], (3) [creature 3 named], (4) [creature 4 named], (5) [creature 5 named] — [scene-type pose-varied cluster in pond] around [water_element centerpiece]. Set in [backdrop Japanese garden visibly rendered]. [signature 1] and [signature 2] accenting the pond. [terrain pond-water surface], [sky overhead], [time-of-day], [atmosphere drifting], [lighting]. [companion] nearby. [camera framing]. Painterly Pop-Mart-meets-Studio-Ghibli kawaii koi-pond rendering."
+
+⚠ Count (1)(2)(3)(4)(5) explicitly. ALL 5 CREATURES named at the START.
+
+Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
+  },
 };

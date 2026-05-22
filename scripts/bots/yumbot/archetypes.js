@@ -236,4 +236,31 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null
   },
+
+  YUMBOT_KAWAII_KOI_POND: {
+    description:
+      'PATH-BESPOKE — YumBot kawaii-koi-pond (2026-05-21 12-axis). Kawaii Japanese koi-pond scenes — 5 kawaii pond-creatures (smiling koi-fish, axolotls, cloud-mochi-spirits, lily-frogs, pearl-blobs) half-submerged in/around a tranquil Japanese garden pond with floating lotus-lanterns and lily-pads. Painterly Studio-Ghibli-meets-bex.ai kawaii Pop-Mart register. Twilight/dusk-heavy time-of-day. NOT food-cast — pond-creatures (yumbot expanded scope per Kevin 2026-05-21). 12 axes: scene_type, backdrop (Japanese garden variety), 2 signatures (lotus-lanterns / stepping-stones / paper-lanterns / etc.), terrain (pond-water surface), sky (wisteria-canopy / pagoda-eave / twilight sky), camera, lighting, time_of_day, atmosphere (cherry-blossom drift / firefly-glow / wisteria-petal-rain), water_element (1 — featured centerpiece lotus-lantern / glowing-lily / etc.), companion (1 — dragonfly / origami-crane / etc.), creatures (5 from KOI_CREATURES — koi / axolotl / mochi-spirit / lily-frog / etc.).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'backdrop',
+        'signature',
+        'terrain',
+        'sky',
+        'camera',
+        'lighting',
+        'time_of_day',
+        'atmosphere',
+        'water_element',
+        'companion',
+        'creatures'
+      ]
+    },
+    pickN: { signature: 2, creatures: 5 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null
+  },
 };

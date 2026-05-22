@@ -51,6 +51,20 @@ module.exports = {
   CANDY_FANTASY_TIME_OF_DAY: load('candy_fantasy_time_of_day'),
   CANDY_FANTASY_WEATHER: load('candy_fantasy_weather'),
 
+  // ============ KAWAII-KOI-POND path pools (12-axis) ============
+  KOI_SCENE_TYPE: load('koi_scene_type'),
+  KOI_CREATURES: load('koi_creatures'),
+  KOI_BACKDROP: load('koi_backdrop'),
+  KOI_SIGNATURE: load('koi_signature'),
+  KOI_TERRAIN: load('koi_terrain'),
+  KOI_SKY: load('koi_sky'),
+  KOI_CAMERA: load('koi_camera'),
+  KOI_LIGHTING: load('koi_lighting'),
+  KOI_TIME_OF_DAY: load('koi_time_of_day'),
+  KOI_ATMOSPHERE: load('koi_atmosphere'),
+  KOI_WATER_ELEMENT: load('koi_water_element'),
+  KOI_COMPANION: load('koi_companion'),
+
   // ============ COQUETTE-FOOD path pools (15-axis flagship) ============
   COQUETTE_SCENE_TYPE: load('coquette_scene_type'),
   COQUETTE_BACKDROP: load('coquette_backdrop'),
