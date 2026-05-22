@@ -22,9 +22,11 @@
  * AXIS-SYSTEM MIGRATION ROADMAP (2026-05-22 final — consolidation complete)
  * ═══════════════════════════════════════════════════════════════════════
  *
- * Final inventory: 17 paths (was 25 — 8 dropped via consolidation / kills).
+ * Final inventory: 16 paths in rotation (was 25 — 9 dropped via consolidation / kills).
  *
- * MIGRATED (16 of 17 — 1 legacy path remaining):
+ * EARTHBOT MIGRATION COMPLETE 2026-05-22.
+ *
+ * MIGRATED (16 of 16 in rotation):
  *   ✓ epic-vista — canonical reference (BOT_SCENE_QUALITY_PLAYBOOK.md)
  *   ✓ national-parks (US National Parks amplified)
  *   ✓ deep-forest (old-growth temperate forest cathedrals)
@@ -45,9 +47,6 @@
  *     bespoke axes + 1 conditional phenomenon, supernatural-drift hard-
  *     ban — 2026-05-22)
  *
- * REMAINING TO MIGRATE (1 legacy path):
- *   - tide-pool (macro biological coastal detail)
- *
  * DROPPED (8 paths fully subsumed or killed, no migration):
  *   ✗ luminous-landscape (subsumed by sacred-light — 2026-05-22)
  *   ✗ beach-landscape (subsumed by coastal-vista + tropical-paradise — 2026-05-22)
@@ -57,6 +56,13 @@
  *     2026-05-22; legacy paths also dropped since they had heavy triggers)
  *   ✗ micro-nature (killed 2026-05-22 — extreme-macro path off-brand for
  *     EarthBot wide-cinematic identity, no aesthetic fit)
+ *   ✗ tide-pool (axis-system migration attempted + killed 2026-05-22 —
+ *     Flux refused to render named inhabitants; "no humans" / "no
+ *     bioluminescent" negative-prompt language in the brief LEAKED
+ *     forbidden content into renders (Flux tokenizer ignores negation,
+ *     attends to the word). Path-specific medium would be required to
+ *     hard-lock the inhabitants render, similar to what was attempted
+ *     for seasonal-shift. Not worth iterating further — Kevin called it.)
  */
 
 const earthPools = require('./earth/pools');
@@ -82,7 +88,6 @@ const pathBuilders = {
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
   'tropical-paradise': require('./paths/tropical-paradise'), // axis-system (2026-05-20)
-  'tide-pool': require('./beach/paths/tide-pool'),
   'cozy-beach': require('./paths/cozy-beach'), // axis-system (2026-05-22)
   'hawaii-flowers': require('./paths/hawaii-flowers'), // axis-system (2026-05-21)
   'reef-paradise': require('./paths/reef-paradise'), // axis-system (2026-05-21)
@@ -105,7 +110,6 @@ const BEACH_PATHS = [
   'coastal-vista',
   'waves', // MERGED from legacy wave + big-wave (2026-05-22)
   'tropical-paradise',
-  'tide-pool',
   'cozy-beach',
   'hawaii-flowers',
   'reef-paradise',
