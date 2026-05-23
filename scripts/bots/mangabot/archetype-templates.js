@@ -13,6 +13,130 @@
 const blocks = require('./shared-blocks');
 
 module.exports = {
+  MANGABOT_ISEKAI_FANTASY: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene_type,
+      fantasy_world_setting,
+      architectural_anchor,
+      character_role,
+      action_moment,
+      magic_effect,
+      fantasy_creature,
+      atmospheric_air,
+      light_quality,
+      time_of_day,
+      emotional_dna,
+      camera_framing,
+      story_prop,
+      background_detail,
+    } = slots;
+
+    return `You are an anime concept-art painter writing an ISEKAI-FANTASY keyframe for MangaBot. STRICT ANIME ISEKAI CANON — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei / Slime / Restaurant of Another World / Log Horizon / Tate no Yuusha. Painterly hand-drawn anime cel-shaded register. Output wraps with style prefix + suffix.
+
+${blocks.ANIME_ILLUSTRATION_BLOCK}
+
+${blocks.KEYFRAME_COMPOSITION_BLOCK}
+
+${blocks.DENSITY_BLOCK}
+
+${blocks.STORY_MOMENT_BLOCK}
+
+${blocks.NO_NAMED_CHARACTERS_BLOCK}
+
+${blocks.NO_GENERIC_POSE_BLOCK}
+
+━━━ ⚠ HARD RULE #1: ANIME ISEKAI AESTHETIC — NOT WESTERN MEDIEVAL FANTASY ━━━
+
+This is JAPANESE ANIME ISEKAI — painterly cel-shaded anime keyframe register. NOT Western photoreal fantasy (Witcher / Skyrim / D&D / Pathfinder / Game of Thrones / Lord of the Rings / Dragon Age / Baldur's Gate).
+
+Anime isekai signatures:
+- Painterly anime backgrounds (Frieren-style Studio Madhouse, Bones, A-1)
+- Saturated anime palette (sky-blues / sunset-pinks / Konosuba-vivid)
+- Cel-shaded character armor / outfits
+- RPG-game-coded elements (floating status-windows, level-up effects, mana-glow)
+- Anime-coded fantasy creatures (slimes / fairy companions / cute dragons)
+- Modern protagonist often in fantasy world (school uniform / hoodie / jersey)
+- Heroine archetypes (sword-girl / mage-girl / cleric / dragon-girl / slime-girl)
+
+BANNED:
+- Western photoreal medieval (gritty / desaturated / Witcher-style)
+- Bearded gritty Western-fantasy protagonist
+- Game of Thrones grim register
+- D&D illustration register
+- Photoreal CGI
+
+━━━ ⚠ HARD RULE #2: COMPLETE SCENE COHERENCE ━━━
+
+All axes below combine into ONE coherent anime-isekai moment. Character + setting + magic + creature + atmosphere + story-prop all weave together as a single scene from an anime episode. Render the COMPLETE scene, not disconnected elements.
+
+━━━ THE SCENE TYPE (composition lead) ━━━
+${scene_type}
+
+━━━ FANTASY WORLD SETTING (anime-isekai location) ━━━
+${fantasy_world_setting}
+
+━━━ ARCHITECTURAL ANCHOR (fantasy structure) ━━━
+${architectural_anchor}
+
+━━━ CHARACTER(S) IN FRAME (anime isekai archetype) ━━━
+${character_role}
+
+━━━ ACTION MOMENT (candid mid-beat) ━━━
+${action_moment}
+
+━━━ MAGIC EFFECT (isekai-bespoke signature — runes / status-windows / mana-glow / summon-circles) ━━━
+${magic_effect}
+
+━━━ FANTASY CREATURE (slime / dragon / fairy / familiar / beast-folk) ━━━
+${fantasy_creature}
+
+━━━ ATMOSPHERIC AIR (Frieren-style anime atmosphere) ━━━
+${atmospheric_air}
+
+━━━ LIGHT QUALITY (anime fantasy palette) ━━━
+${light_quality}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ EMOTIONAL DNA (anime isekai mood) ━━━
+${emotional_dna}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+━━━ STORY PROP (fantasy item — sword / map / potion / coin-pouch / scroll) ━━━
+${story_prop}
+
+━━━ BACKGROUND DETAIL (deep-distance fantasy element) ━━━
+${background_detail}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION CLOSER ━━━
+
+Studio Madhouse / Studio Bones / A-1 Pictures painterly anime-isekai keyframe. Saturated cel-shaded palette. RPG-coded mid-moment. Character + creature + setting + magic + atmosphere ALL combined into one coherent anime scene.
+
+━━━ HARD BANS ━━━
+
+- NO Western photoreal medieval (Witcher / Skyrim / D&D / GoT / LotR)
+- NO bearded gritty Western-fantasy protagonist
+- NO photoreal CGI
+- NO eye-contact with viewer
+- NO gore
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with the scene-type + character + setting, then weave magic + creature + action + atmospheric + light + story-prop. Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
+  },
+
   MANGABOT_GHIBLI_COUNTRYSIDE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       scene_type,

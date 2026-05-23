@@ -13,6 +13,35 @@
  */
 
 module.exports = {
+  MANGABOT_ISEKAI_FANTASY: {
+    description:
+      'PATH-BESPOKE — MangaBot isekai-fantasy (2026-05-22 axis-system migration). Anime isekai canon — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei / Slime / Restaurant of Another World / Log Horizon / Tate no Yuusha. Painterly anime cel-shaded register with anime-isekai-coded settings, characters, magic, creatures. NOT Western Witcher / Skyrim / D&D. 14 path-bespoke axes designed around anime-isekai-specific content.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'fantasy_world_setting',
+        'architectural_anchor',
+        'character_role',
+        'action_moment',
+        'magic_effect',
+        'fantasy_creature',
+        'atmospheric_air',
+        'light_quality',
+        'time_of_day',
+        'emotional_dna',
+        'camera_framing',
+        'story_prop',
+        'background_detail',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MANGABOT_GHIBLI_COUNTRYSIDE: {
     description:
       'PATH-BESPOKE — MangaBot ghibli-countryside (2026-05-22 axis-system migration). Studio Ghibli pastoral wonder — Totoro / Kiki / Mononoke / Spirited-Away / Whisper of the Heart aesthetic. Soft warm pastel palette (sage/butter/sky-blue/cream/wildflower-pink) and HAND-PAINTED oil-watercolor brush texture. Rural Japan only — no cities, no neon, no armor. 14 path-bespoke axes (13 always-on + spirit_element conditionally gated at 40%) — Ghibli sometimes has magic visible, sometimes pure pastoral.',
