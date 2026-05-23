@@ -3,8 +3,10 @@
  * dispatch-bots.js — fleet dispatcher for DB-driven bot scheduling.
  *
  * Reads bot_schedules, finds every active bot whose next_due_at <= now(),
- * runs each sequentially via run-bot.js (own process for failure isolation),
- * marks last_posted_at on success (DB trigger advances next_due_at).
+ * runs each (own process for failure isolation) staggered evenly across the
+ * 15-min tick window so the feed doesn't get a 3-bot burst, and marks
+ * last_posted_at on success (DB trigger advances next_due_at to next slot,
+ * which has ±15 min jitter so the same trio doesn't cluster every cycle).
  *
  * Usage:
  *   node scripts/dispatch-bots.js            # real run
@@ -16,21 +18,24 @@
  * Exit code 1 = dispatcher itself crashed (env missing, DB unreachable, etc.).
  *
  * Failure handling:
- *   - Individual bot run failure → logged + skipped, last_posted_at unchanged
- *     → bot stays due → retries next tick (no cost beyond one Replicate call).
- *   - Bot that has never posted AND was created >6h ago → auto-deactivate with
- *     a note. Protects against newly-seeded broken bots burning Replicate forever.
+ *   - Bot run failure → consecutive_failures++. After MAX_CONSECUTIVE_FAILURES
+ *     (5) auto-deactivate with last_failure_reason note. Cost cap per broken
+ *     bot: 5 × Replicate render ≈ $0.25.
+ *   - Bot run success → consecutive_failures resets to 0.
+ *   - Never-posted bot >6h old → auto-deactivate immediately (covers a brand-new
+ *     bot wired wrong before it even gets to its 5-failure budget).
  */
 
 const fs = require('fs');
-const path = require('path');
 const { spawn } = require('child_process');
 const { createClient } = require('@supabase/supabase-js');
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const NEVER_POSTED_TIMEOUT_HOURS = 6;
+const MAX_CONSECUTIVE_FAILURES = 5;
+const TICK_WINDOW_MS = 15 * 60 * 1000;          // dispatcher fires every 15 min
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
-const BOT_RUN_TIMEOUT_MS = 10 * 60 * 1000; // 10 min per bot
+const BOT_RUN_TIMEOUT_MS = 10 * 60 * 1000;      // 10 min per bot
 
 function loadEnv() {
   const env = {};
@@ -48,24 +53,35 @@ function loadEnv() {
 const ENV = loadEnv();
 const getKey = (n) => process.env[n] || ENV[n];
 
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 function runBotProcess(botName) {
   return new Promise((resolve) => {
+    let stderrTail = '';
     const proc = spawn(process.execPath, ['scripts/run-bot.js', '--bot', botName], {
-      stdio: 'inherit',
+      stdio: ['ignore', 'inherit', 'pipe'],
       env: process.env,
     });
+    proc.stderr.on('data', (chunk) => {
+      const s = chunk.toString();
+      process.stderr.write(s);
+      stderrTail = (stderrTail + s).slice(-500);
+    });
     const timer = setTimeout(() => {
-      console.error(`⏱  ${botName}: timeout after ${BOT_RUN_TIMEOUT_MS / 60000}min, killing`);
+      stderrTail = `timeout after ${BOT_RUN_TIMEOUT_MS / 60000}min`;
+      console.error(`⏱  ${botName}: ${stderrTail}, killing`);
       proc.kill('SIGKILL');
     }, BOT_RUN_TIMEOUT_MS);
     proc.on('exit', (code) => {
       clearTimeout(timer);
-      resolve(code === 0);
+      resolve({ ok: code === 0, errTail: stderrTail.trim() });
     });
     proc.on('error', (err) => {
       clearTimeout(timer);
       console.error(`💥 ${botName}: spawn error ${err.message}`);
-      resolve(false);
+      resolve({ ok: false, errTail: `spawn error: ${err.message}` });
     });
   });
 }
@@ -78,10 +94,11 @@ function runBotProcess(botName) {
   }
   const sb = createClient(SUPABASE_URL, supabaseKey);
 
-  const nowIso = new Date().toISOString();
+  const dispatchStart = Date.now();
+  const nowIso = new Date(dispatchStart).toISOString();
   const { data: dueBots, error } = await sb
     .from('bot_schedules')
-    .select('bot_name, posts_per_day, last_posted_at, next_due_at, created_at, notes')
+    .select('bot_name, posts_per_day, last_posted_at, next_due_at, created_at, consecutive_failures, notes')
     .eq('active', true)
     .lte('next_due_at', nowIso)
     .order('next_due_at', { ascending: true });
@@ -98,8 +115,10 @@ function runBotProcess(botName) {
 
   console.log(`📋 ${nowIso} — ${dueBots.length} due bot(s):`);
   for (const b of dueBots) {
-    const overdueMin = Math.round((Date.now() - new Date(b.next_due_at).getTime()) / 60000);
-    console.log(`   • ${b.bot_name} (overdue by ${overdueMin}min, posts_per_day=${b.posts_per_day})`);
+    const overdueMin = Math.round((dispatchStart - new Date(b.next_due_at).getTime()) / 60000);
+    console.log(
+      `   • ${b.bot_name} (overdue ${overdueMin}min, pd=${b.posts_per_day}, fails=${b.consecutive_failures})`,
+    );
   }
 
   if (DRY_RUN) {
@@ -107,12 +126,21 @@ function runBotProcess(botName) {
     process.exit(0);
   }
 
+  // Stagger N bots across the 15-min tick window so the feed sees one post
+  // every ~(15/N) min instead of all back-to-back. Slot 0 starts immediately;
+  // slot i targets dispatchStart + (i/N) * TICK_WINDOW_MS. If a prior bot's
+  // render ran long past the target, we proceed immediately (no negative sleep).
+  const slotSpacingMs = Math.floor(TICK_WINDOW_MS / dueBots.length);
+
   let okCount = 0;
   let failCount = 0;
   let deactivatedCount = 0;
 
-  for (const bot of dueBots) {
-    // Failsafe: never-posted bot older than 6h → auto-deactivate.
+  for (let i = 0; i < dueBots.length; i++) {
+    const bot = dueBots[i];
+
+    // Never-posted-and-stale failsafe: catches newly-seeded broken bots
+    // before they even hit their 5-attempt budget.
     if (bot.last_posted_at === null) {
       const ageHours = (Date.now() - new Date(bot.created_at).getTime()) / 3.6e6;
       if (ageHours > NEVER_POSTED_TIMEOUT_HOURS) {
@@ -128,22 +156,69 @@ function runBotProcess(botName) {
       }
     }
 
-    console.log(`\n━━━ ${bot.bot_name} ━━━`);
-    const ok = await runBotProcess(bot.bot_name);
+    if (i > 0) {
+      const targetStartMs = dispatchStart + i * slotSpacingMs;
+      const waitMs = targetStartMs - Date.now();
+      if (waitMs > 0) {
+        console.log(`⏳ ${bot.bot_name}: sleeping ${Math.round(waitMs / 1000)}s for stagger`);
+        await sleep(waitMs);
+      }
+    }
+
+    console.log(`\n━━━ ${bot.bot_name} (${i + 1}/${dueBots.length}) ━━━`);
+    const { ok, errTail } = await runBotProcess(bot.bot_name);
 
     if (ok) {
       const { error: updErr } = await sb
         .from('bot_schedules')
-        .update({ last_posted_at: new Date().toISOString() })
+        .update({
+          last_posted_at: new Date().toISOString(),
+          consecutive_failures: 0,
+          last_failure_reason: null,
+        })
         .eq('bot_name', bot.bot_name);
       if (updErr) {
-        console.error(`⚠️  ${bot.bot_name}: post succeeded but last_posted_at update failed: ${updErr.message}`);
+        console.error(`⚠️  ${bot.bot_name}: post ok but DB update failed: ${updErr.message}`);
         failCount++;
       } else {
         okCount++;
       }
+      continue;
+    }
+
+    // Failure path — increment counter; auto-deactivate on 5th consecutive.
+    const newFailures = (bot.consecutive_failures || 0) + 1;
+    const reason = errTail.slice(-300) || 'run-bot.js exited non-zero (no stderr captured)';
+
+    if (newFailures >= MAX_CONSECUTIVE_FAILURES) {
+      const note = `auto-deactivated after ${newFailures} consecutive failures. Last error: ${reason}`;
+      console.error(`🛑 ${bot.bot_name}: ${note}`);
+      const { error: updErr } = await sb
+        .from('bot_schedules')
+        .update({
+          active: false,
+          consecutive_failures: newFailures,
+          last_failure_at: new Date().toISOString(),
+          last_failure_reason: reason,
+          notes: note,
+        })
+        .eq('bot_name', bot.bot_name);
+      if (updErr) console.error(`   ↳ failed to deactivate: ${updErr.message}`);
+      deactivatedCount++;
+      failCount++;
     } else {
-      console.error(`❌ ${bot.bot_name}: run-bot exited non-zero, leaving last_posted_at unchanged (retry next tick)`);
+      console.error(
+        `❌ ${bot.bot_name}: failure ${newFailures}/${MAX_CONSECUTIVE_FAILURES} (retry next tick): ${reason.slice(0, 120)}`,
+      );
+      const { error: updErr } = await sb
+        .from('bot_schedules')
+        .update({
+          consecutive_failures: newFailures,
+          last_failure_at: new Date().toISOString(),
+          last_failure_reason: reason,
+        })
+        .eq('bot_name', bot.bot_name);
+      if (updErr) console.error(`   ↳ failure-count update failed: ${updErr.message}`);
       failCount++;
     }
   }
