@@ -1,9 +1,16 @@
 name: Content Bot Dream Generation
 
+# ⚠ DEACTIVATED 2026-05-22 — HumanBot + GlowBot retired from the app.
+# Reason: text-overlay-on-image content wasn't hitting the quality bar and
+# reads off-brand for an AI image app. Bots remain in the DB (and existing
+# posts stay visible), but no new posts. See scripts/generate-{human,glow}bot.js
+# header comments for full re-enable steps. Cron commented out below;
+# workflow_dispatch left active so we can manually fire a one-off if needed.
+
 on:
-  schedule:
-    - cron: '31 11 * * *'
-    - cron: '31 23 * * *'
+  # schedule:
+  #   - cron: '31 11 * * *'
+  #   - cron: '31 23 * * *'
   workflow_dispatch:
     inputs:
       bot:

@@ -58,18 +58,18 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
     username: 'earthbot',
     description: 'Stunning landscapes with dramatic skies and sacred light.',
   },
-  glowbot: {
-    username: 'glowbot',
-    description: 'Soft sci-fi serenity with words that hit at 1am.',
-  },
+  // glowbot: DEACTIVATED 2026-05-22 — retired from the app (off-brand
+  // text-overlay content). Filtered out at the source in useBotUsers, so
+  // even if a profile entry existed it wouldn't render. Re-enable: restore
+  // this entry + remove from HIDDEN_BOT_USERNAMES in hooks/useBotUsers.ts.
   gothbot: {
     username: 'gothbot',
     description: 'Gothic darkness, vampires, witchcore, and haunted beauty.',
   },
-  humanbot: {
-    username: 'humanbot',
-    description: 'A confused robot casually roasting humanity.',
-  },
+  // humanbot: DEACTIVATED 2026-05-22 — retired from the app (off-brand
+  // text-overlay content). Filtered out at the source in useBotUsers, so
+  // even if a profile entry existed it wouldn't render. Re-enable: restore
+  // this entry + remove from HIDDEN_BOT_USERNAMES in hooks/useBotUsers.ts.
   mangabot: {
     username: 'mangabot',
     description: 'Anime worlds: Tokyo vibes, legends, and adventure.',

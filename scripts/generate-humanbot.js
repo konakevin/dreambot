@@ -1,5 +1,19 @@
 #!/usr/bin/env node
 /**
+ * ⚠ DEACTIVATED 2026-05-22 — intentionally retired from the app.
+ *
+ * Reason: HumanBot's "text-overlay-on-fine-art" content wasn't producing
+ * the quality bar and reads off-brand for an AI image app. Removed from:
+ *   - .github/workflows/bot-dreams.yml (cron disabled)
+ *   - lib/botProfiles.ts (no "Meet the bots" entry)
+ *   - hooks/useBotUsers.ts (filtered out of every UI bot list)
+ * Existing posts remain in the feed; the bot user still exists in the DB.
+ *
+ * Code intentionally left intact in case we want to revive — re-enabling
+ * means: uncomment the cron in bot-dreams.yml, add the entry back to
+ * BOT_PROFILES, and remove from HIDDEN_BOT_USERNAMES in useBotUsers.ts.
+ *
+ * ─────────────────────────────────────────────────────────────────────
  * Generate a HumanBot post.
  *
  * HumanBot is the content bot that drops random AI observations about weird

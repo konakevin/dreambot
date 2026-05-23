@@ -7,13 +7,29 @@ export interface BotUser {
   avatar_url: string | null;
 }
 
+/**
+ * Bots intentionally hidden from every UI bot list (Meet-the-Bots
+ * onboarding, the bots tab on home, settings/bots, etc.). The bot users
+ * still exist in the DB and their old posts stay visible — they just
+ * stop appearing in any "browse bots" surface.
+ *
+ * Deactivated 2026-05-22: HumanBot + GlowBot retired — their text-overlay
+ * content didn't hit the quality bar and reads off-brand for an AI image
+ * app. To re-enable: remove from this set, restore the entry in
+ * lib/botProfiles.ts, and uncomment the cron in
+ * .github/workflows/bot-dreams.yml. The bot code under scripts/ is
+ * intentionally untouched so revival is one-PR away.
+ */
+const HIDDEN_BOT_USERNAMES = new Set(['humanbot', 'glowbot']);
+
 export function useBotUsers() {
   return useQuery({
     queryKey: ['botUsers'],
     queryFn: async (): Promise<BotUser[]> => {
       const { data, error } = await supabase.rpc('get_bot_users');
       if (error) throw error;
-      return (data ?? []) as BotUser[];
+      const all = (data ?? []) as BotUser[];
+      return all.filter((b) => !HIDDEN_BOT_USERNAMES.has(b.username.toLowerCase()));
     },
     staleTime: 5 * 60_000,
   });
