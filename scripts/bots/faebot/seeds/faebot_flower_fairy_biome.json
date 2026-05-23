@@ -1,28 +1,152 @@
 [
   {
-    "description": "A vast wildflower meadow at chest-height with painted overlapping clusters of bluebells, foxgloves, cow-parsley, and ragged-robin stretching to a soft bloom-horizon, scattered tall foxglove-spires creating natural painted punctuation above the mid-tier bloom-carpet, painted depth fading into a gentle bloom-mist of mingled violet-and-white.",
+    "description": "An ancient oak grove with a thick carpet of indigo bluebells blanketing the moss-floor between gnarled roots, wild-rose-bramble climbing the furrowed bark in pale-cream clusters, scattered fern-fronds at the foreground, mossy boulders nestled between trunks, canopy woven overhead, painted depth dissolving into bloom-mist beyond.",
     "tags": [
       "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden fern-grotto with a giant peony-cluster blazing deep-crimson at the moss-boulder center, soaring fern-fronds arching overhead, ancient bark-textured stone walls dripping with wet moss, layers of fern-shadow in the foreground dissolving into soft bloom-haze in the grotto depths, enchanted hidden-hollow register.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with pale slender trunks rising in close formation, foxglove-spires columning upward in pink-and-violet between the trunks, lily-of-the-valley carpet threading across the moss-floor, soft pearl-mist receding between the birches into luminous background bloom-haze, dappled canopy overhead, ethereal painted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade woodland with violet wisteria racemes draping from ancient oak-limbs like a natural cathedral ceiling, moss-grown forest-path winding below, fern-fronds crowding the foreground path-edges, heavy lichen-covered trunks flanking, cascading bloom-curtains dissolving into the misty canopy depth beyond.",
+    "tags": [
       "COOL",
       "WARM"
     ]
   },
   {
-    "description": "A rolling wildflower meadow with painted overlapping clusters of cornflowers, ox-eye daisies, and meadow-cranesbill covering the painted ground in dense blue-and-white, foreground tactile petal-and-stem detail at intimate scale, painted mid-tier bloom-mass fading into a soft painted horizon of mingled wildflower haze.",
+    "description": "A sakura-grove forest with a pink cherry-blossom canopy arching overhead forming a natural vaulted ceiling, ancient lichen-rich trunks weathered and mossy, fallen-petal carpet on the moss-floor below, drifting petals filling the mid-air depth, background trunks dissolving into pearl-pink bloom-mist, ethereal painted-spring register.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden lotus-pond grotto deep in the forest with blush-pink lotus-blooms floating on still dark water, ancient ferns draping the moss-covered stone banks, willow-branches dipping to the surface, fern-frond foreground framing the pool, background tree-mass dissolving into soft cyan-tinted mist, painted reflective enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading willow-curtains parting to reveal a hidden iris-bank below, wild violet-and-gold iris-blooms crowding the mossy stream-stones, dense willow-canopy overhead, mossy boulders at the water-edge in the foreground, distant willow-trunks dissolving into pale pearl-mist, painted dappled register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon with vertical moss-carpeted cliff walls rising steeply on both sides, foxgloves clinging in pink-purple clusters to the cliff faces, hanging-honeysuckle-vine cascading from the rim above, hidden grotto-floor of dense fern-fronds below, painted towering vertical scale, deep enchanted-canyon register.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A redwood cathedral with massive ridged ancient trunks soaring into a canopy far overhead, soft carpet of wood-anemones and forget-me-nots woven across the cinnamon needle-floor below, foreground root-buttresses mossy and vast, midground bloom-carpet, background trunks fading into amber-tinted forest-depth, painted gallery-tier scale.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted mushroom-grove clearing ringed by ancient yew-trees, glowing pearl-fungus fairy-circle at the moss-hollow center, indigo bluebell-cluster blooming at the inner ring-edge, fern-fronds at the clearing margins, twisted yew-bark framing the foreground, soft pearl-glow ambient emanating from the hollow, magical forest-register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with wild-rose-bramble wound up the deeply furrowed trunks in cascading pink-and-cream clusters, gnarled root-systems crossing the mossy foreground earth, bluebell carpet threading between the roots, mid-canopy woven thick overhead, background oak-trunks fading into dappled bloom-mist, painted enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A fern-grotto with a hidden giant magnolia at the grotto-center, large cream-and-white blooms suspended like lanterns from arching branches, soaring fern-fronds dripping from moss-cliff walls, layered fern-shadow foreground, magnolia canopy midground, background grotto-walls dissolving into soft green-tinted bloom-haze, ethereal painted register.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with a scattered colony of cornflowers and harebells in blue-and-violet dotting the moss-floor between pale slender trunks, soft pearl-mist threading between the birches into the background, lichen-patched bark catching filtered canopy-light, foreground moss-stones half-buried, painted dappled enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-draped ancient-oak grove with violet wisteria racemes hanging dense from gnarled oak-limbs in painted cathedral arches, moss-grown forest-path threading the foreground below, fern-fronds at the path-margins, lichen-encrusted trunk columns flanking the midground, background receding into violet bloom-mist, painted enchanted-forest register.",
     "tags": [
       "ANY",
       "COOL"
     ]
   },
   {
-    "description": "A wildflower meadow with painted overlapping clusters of lupines, wild-asters, and harebells rising to chest-height, distant painted treeline silhouette dissolving behind a warm bloom-haze, foreground scattered seed-heads and painted stem-detail visible at intimate scale alongside the bloom-carpet.",
+    "description": "A sakura-grove forest with pink-blossom branches weaving an arched canopy overhead, a mossy ancient-trunk in the foreground draped with lichen, fallen-petal carpet on the forest-floor mid-depth, background cherry-trunks dissolving into pearl-pink bloom-mist, soft dappled enchanted register, painted layered spring-forest depth.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden lotus-pool in a deep fern-grotto with pale-pink lotus-blooms on black-mirror water, dripping moss-cliffs rising on three sides, ancient fern-fronds arching over the pool-edge, willow-branches trailing the water surface, foreground mossy stone lip of the pool, background cliff-walls fading into soft teal-mist, enchanted reflective register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket over a hidden stream-bank colony of wild iris and forget-me-nots in violet-and-blue, cascading willow-branches forming curtained walls, mossy rounded stones at the foreground bank-edge, willow-trunk columns at mid-depth, background willow-mass dissolving into soft pearl-green mist, painted dappled register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon enchanted glen with foxgloves and hanging-vine-blooms cascading from the vertical moss-cliff walls above, hidden grotto-floor of fern-fronds and mossy stones below, canyon-walls converging in the background into soft bloom-mist depth, foreground fern-fronds damp and curled, painted vertical-scale enchanted register.",
     "tags": [
       "ANY",
       "WARM"
     ]
   },
   {
-    "description": "A sea of wildflowers with painted overlapping clusters of wild-iris, red campion, and yarrow forming a chest-high painted bloom-mass, painted gentle breeze implied in the bloom-tops, mid-tier wildflower density fading into a painted soft lavender-and-cream bloom-horizon of extraordinary gallery-tier richness.",
+    "description": "A redwood-cathedral forest interior with massive ancient ridged trunks rising into a soaring canopy far above, a painted carpet of trillium and bleeding-heart blooms across the mossy forest-floor below, foreground root-buttresses vast and bark-textured, midground bloom-carpet, background trunks dissolving into soft amber forest-haze, gallery-tier register.",
     "tags": [
       "ANY",
       "COOL",
@@ -31,84 +155,7 @@
     ]
   },
   {
-    "description": "A giant peony-cluster forming a painted natural hollow with overlapping ruffled blush-pink and cream peony-blooms dominating the entire painted frame at architectural scale, painted nested petal-layers at intimate foreground detail, soft painted bloom-mist of scattered peony-petals dissolving into a gentle depth beyond the cluster.",
-    "tags": [
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A grove of giant magnolia-blooms suspended like painted lanterns overhead, creamy-white and rose-flushed magnolia-cups at dramatic scale filling the painted canopy, foreground fallen magnolia-petals carpeting the painted ground, painted mid-tier bloom-cluster giving way to a distant magnolia-grove dissolving into ethereal pearl mist.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A cluster of giant tulip-bells in painted pearl-pink and ivory forming natural painted rooms at human scale, painted dramatic interior petal-walls with visible stamen-detail, foreground scattered tulip-petals on the painted ground, soft painted bloom-mist of distant tulip-field fading beyond the giant-bloom cluster.",
-    "tags": [
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sunflower field with towering painted golden sunflowers forming a natural painted forest of giant disk-blooms rising far overhead, painted tactile seed-spiral and petal-fringe detail at intimate foreground scale, distant sunflower-column rows dissolving into a warm painted amber bloom-haze at the painted horizon.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast sunflower field with sun-gold painted disks dominating every tier of the painted depth, scattered fallen painted sunflower-petals across the painted ground in the foreground, painted mid-tier dense sunflower-columns giving way to a warm golden bloom-haze at gallery-tier scale.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower meadow with painted golden disk-blooms filling the painted frame at chest-and-overhead scale, painted foreground stem-and-leaf texture at intimate detail, painted mid-tier sunflower-mass transitioning into a soft painted gold-and-green bloom-mist dissolving at the painted depth horizon.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade arbor with violet-wisteria racemes draping overhead in painted cathedral layers, painted dense hanging bloom-clusters at intimate scale above, a moss-grown painted stone path threading through the painted mid-tier corridor, scattered painted fallen wisteria-petals carpeting the path below in soft lavender drifts.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade with painted violet-purple racemes hanging in overlapping painted layers from above, foreground individual bloom-florets at painted tactile scale, painted mid-tier curtain of hanging racemes giving way to a painted soft purple bloom-mist dissolving the background depth in ethereal painted register.",
-    "tags": [
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wisteria-arbor over a painted winding garden path with violet-cluster racemes draping from painted overhead beams, painted scattered fallen wisteria-petals covering the path in a soft painted carpet, painted mid-tier hanging bloom-curtain fading into a deep painted violet-mist depth beyond the arbor corridor.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A lotus pond with painted floating lotus-blooms and water-lilies dotting the painted reflective surface in overlapping tiers, foreground lotus-bloom at intimate scale with visible stamen-detail, painted mid-tier bloom-scatter across the water, distant painted tree-canopy mirrored on the still painted water surface in gallery-tier richness.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A still lotus-pond with painted floating lotus-blooms and water-lilies in layered painted depth, foreground bloom-and-pad detail at intimate scale, painted mid-tier bloom-island of clustered lotus, painted distant reed-bank and reflected canopy dissolving into soft bloom-mist on the painted water horizon.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A floating lotus-meadow on a painted reflective pond with overlapping lotus-blooms creating a painted island of pink-and-white bloom-density, foreground painted petal-and-pad texture at intimate scale, soft painted bloom-mist of distant lotus-blossoms dissolving beyond the painted mid-tier bloom-cluster.",
+    "description": "An enchanted yew-grove clearing with a fairy-circle of pearl-glowing mushrooms ringing a small mossy hollow, painted indigo bluebell-cluster at the hollow-center, ancient twisted yew-trunks framing the clearing foreground and midground, dense yew-canopy above, background dissolving into deep forest-shadow with pearl-glow traces, magical register.",
     "tags": [
       "ANY",
       "COOL",
@@ -116,29 +163,23 @@
     ]
   },
   {
-    "description": "A sakura grove with painted dense pink-and-white blossom canopy forming a natural ceiling overhead, painted drifting petals filling the painted air at every depth, foreground fallen petal-carpet on the painted ground, painted mid-tier grove-columns dissolving into a soft pearl-pink painted mist beyond.",
+    "description": "An ancient mossy oak-grove with hanging-ivy draped from heavy limbs and a cluster of giant peony-blooms in deep-pink emerging from a moss-packed hollow at the trunk base, gnarled root-foreground mossy and textured, mid-depth peony-cluster glowing, background canopy dissolving into dappled bloom-mist, painted enchanted register.",
     "tags": [
       "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove at peak bloom with painted dense canopy of cherry-blossom overhead and a painted ground-carpet of fallen petals below, foreground individual bloom-cluster at intimate scale, painted mid-tier blossom-columns fading into an ethereal painted white-and-pink bloom-haze of gallery-tier richness.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A vast scarlet poppy field with painted overlapping crimson-poppy blooms stretching to a painted horizon in dense bloom-carpet, foreground painted seed-pod and crinkled-petal detail at intimate scale, painted mid-tier scarlet bloom-mass fading into a soft painted crimson-and-green bloom-haze at depth.",
-    "tags": [
       "WARM"
     ]
   },
   {
-    "description": "A poppy meadow with painted scarlet blooms dominating the painted frame in dense foreground petal-cluster, painted scattered cornflowers and wild-grasses adding mid-tier texture, painted multi-tier bloom-depth fading into a painted warm scarlet-and-blue horizon of extraordinary gallery-tier painted richness.",
+    "description": "A birch-glade with a foxglove-spire-cluster rising tall from the mossy floor, pale-violet harebells scattered at the base around mossy stones, slender white birch-trunks columning through the mid-depth, birch-canopy dappled overhead, background trunks fading into soft pearl-bloom-haze, painted ethereal forest register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade canopy draping violet racemes from ancient lichen-rich trunks above a winding moss-grown forest-path, fallen wisteria-petals scattered across the mossy path below, fern-fronds at the foreground path-margin, heavy trunk columns flanking the mid-depth, background canopy dissolving into violet bloom-mist, painted gallery-tier register.",
     "tags": [
       "ANY",
       "COOL",
@@ -146,14 +187,53 @@
     ]
   },
   {
-    "description": "An iris-meadow with painted tall purple-iris spires rising above a painted lower wildflower carpet of forget-me-nots and buttercups, foreground painted iris-petal and falls detail at intimate scale, painted mid-tier iris-spire density dissolving into a soft painted violet bloom-haze at the painted depth horizon.",
+    "description": "A sakura-grove forest with a hidden moss-covered stump in the mid-depth, pink-blossom canopy arching from surrounding ancient trunks above, fallen-petal carpet on the mossy floor, drifting petals suspended in the mid-air depth, background cherry-trunks fading into soft pearl-pink bloom-mist, ethereal painted enchanted register.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted hidden glen within an ancient yew-grove with a mossy hollow ringed by giant white-magnolia blooms suspended like lanterns from low arching branches overhead, lily-of-the-valley carpet across the hollow-floor below, twisted yew-bark foreground, magnolia-bloom midground, background yew-trunks dissolving into soft pearl-glow ambient, magical register.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a deep carpet of indigo bluebells flooding the moss-floor between gnarled roots, wild-rose-bramble climbing the furrowed trunks in cream-and-pink clusters, scattered fern-fronds at the foreground, mossy boulders nestled between trunks, canopy arching overhead, painted enchanted-forest depth receding into soft bloom-mist.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A hidden fern-grotto with a giant peony-cluster blazing deep-crimson at the center between moss-covered boulders, soaring fern-fronds dripping overhead in the foreground, ancient bark-textured stone walls surrounding, lichen-crusted surfaces receding into dappled background depth, multi-tier enchanted-register richness.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with pale slender trunks rising from a mossy floor carpeted in lily-of-the-valley, foxglove-spires in blush-pink and violet rising between the trunks in the midground, soft bloom-mist dissolving the background birch-stand into pearl, dappled canopy light filtering through.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade woodland with violet wisteria racemes draping from ancient oak-limbs like a living cathedral ceiling, moss-grown forest-path winding through the midground, fern-fronds at the foreground edge, lichen-encrusted trunks flanking, fallen violet petals dusting the mossy path below, enchanted-cathedral register.",
     "tags": [
       "ANY",
       "COOL"
     ]
   },
   {
-    "description": "A daffodil meadow with painted golden-yellow daffodil clusters and white narcissus blooms covering the painted ground in dense overlapping tiers, foreground painted trumpet-and-corona detail at intimate scale, painted mid-tier daffodil-mass fading into a warm painted gold bloom-mist dissolving at the painted depth horizon.",
+    "description": "A sakura-grove forest with arching pink cherry-blossom canopy forming a natural ceiling overhead, ancient lichen-rich trunks weathered with moss at the foreground, mossy forest-floor carpeted in fallen blush petals at the midground, drifting petals dissolving into pearl-pink mist deep in the background, ethereal painted-spring register.",
     "tags": [
       "ANY",
       "WARM",
@@ -161,19 +241,58 @@
     ]
   },
   {
-    "description": "A rose-bramble garden with painted climbing rose-vines forming natural painted curtains of crimson and blush blooms, foreground painted individual rose-bloom with visible petal-layer detail, painted mid-tier vine-and-bloom curtain giving way to a deeper painted rose-mist of layered depth in gallery-tier register.",
+    "description": "A hidden lotus-pond grotto deep in the forest with blush-pink lotus blooms floating on still dark water, ancient fern-fronds arching over the pool-edge at the foreground, moss-covered stones ringing the water, willow-branches dipping to the surface in the midground, deep forest-shadow receding behind, reflective enchanted register.",
     "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading willow-curtains hanging above a hidden iris-stand of deep violet and gold at the stream-bank, mossy stones lining the water-edge at the foreground, willow-trunks receding into pearl-mist in the background, soft dappled canopy filtering through the fronds, painted hidden-glen register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon with towering vertical moss-covered cliff walls on either side, foxgloves clinging to the cliff faces in dense pink-purple clusters at mid-height, hanging-vine-blooms cascading from the canyon rim above, fern-fronds covering the hidden grotto-floor below, painted vertical-scale enchanted depth.",
+    "tags": [
+      "ANY",
       "WARM"
     ]
   },
   {
-    "description": "A rose-garden with painted overlapping rose-blooms in varying pinks, creams, and deep crimsons covering every painted surface, foreground painted rose-bloom and thorn-detail at intimate scale, painted vine-tendrils crossing the mid-tier painted depth, background painted bloom-mass dissolving into a soft rose-petal haze.",
+    "description": "A redwood cathedral with massive ridged ancient trunks soaring into a canopy far overhead, deep forest-floor woven through with wood-anemones and forget-me-nots at the foreground, lichen-patched bark rising in the midground, painted floral carpet receding between the trunks, soft amber god-rays implied in the gallery-tier soaring scale.",
     "tags": [
-      "WARM"
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
     ]
   },
   {
-    "description": "A tropical garden with painted vivid coral-and-fuchsia hibiscus blooms dominating the painted frame alongside bird-of-paradise and painted orchid-clusters at dramatic scale, foreground painted stamen-and-petal detail at intimate scale, painted mid-tier exotic foliage-and-bloom canopy dissolving into a rich painted tropical bloom-depth beyond.",
+    "description": "An enchanted mushroom-grove forest clearing ringed by ancient yew-trees, glowing pearl-white fungus fairy-circle in the midground moss, indigo bluebell-cluster blooming at the hollow center, fern-fronds at the clearing edge in the foreground, twisted yew-bark framing, soft pearl-glow magical register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a wild-rose-bramble in painted pink-and-cream cascading up the gnarled trunks, mossy ground at the foreground threaded with exposed roots, dense bluebell-carpet flooding the midground between the trunks, canopy closing overhead, dappled god-rays piercing through, enchanted-forest depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A fern-grotto with a giant magnolia-tree at the center, cream-and-white magnolia blooms suspended like lanterns from the branches overhead, dripping fern-fronds at the foreground edges, moss-cliff walls surrounding in the midground, multi-tier depth receding into soft filtered background shadow, ethereal painted register.",
     "tags": [
       "ANY",
       "WARM",
@@ -181,7 +300,15 @@
     ]
   },
   {
-    "description": "A vast wildflower meadow at chest-height with painted overlapping clusters of bluebells, foxgloves, wood-anemones, and cow-parsley, scattered tall foxglove-spires creating natural painted punctuation above the bloom-carpet, painted depth fading into a soft blue-violet bloom-mist on the horizon",
+    "description": "A birch-glade with pale trunks rising from a mossy floor dotted with cornflowers in deep-blue and harebells in pale-violet, wildflower-clusters threading between the trunks at the midground, soft pearl-mist dissolving the background stand, dappled canopy overhead, painted enchanted-glade register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-draped ancient-oak grove with violet wisteria racemes hanging from gnarled limbs overhead like a painted natural ceiling, moss-grown forest-path winding into the midground, scattered fern-fronds at the foreground, lichen-patched oak-bark rising on either side, painted enchanted-cathedral depth.",
     "tags": [
       "ANY",
       "COOL",
@@ -189,36 +316,302 @@
     ]
   },
   {
-    "description": "A rolling wildflower meadow with painted overlapping clusters of cornflowers, ox-eye daisies, and red campion stretching to a soft painted bloom-horizon, foreground tactile bloom-cluster detail in painted gallery-tier richness, painted mid-distance bloom-swell fading into pale haze",
+    "description": "A sakura-grove forest with pink-blossom branches arching into a canopy overhead, mossy forest-floor in the foreground carpeted with fallen petals, ancient lichen-rich trunks at the midground dissolving into pearl-pink blossom-mist in the background, painted soft-spring enchanted register.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden lotus-pool in a fern-grotto with pink and ivory lotus-blooms on still water at the midground, ancient fern-fronds arching over the water-edge at the foreground, dripping moss-cliffs surrounding, willow-branches trailing to the surface, soft cyan-tinted enchanted reflective depth.",
     "tags": [
       "ANY",
       "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading branches forming natural curtains above a hidden wild-iris stand in deep-purple and blue at the bank, mossy stones at the stream-edge in the foreground, iris-stems threading the midground, distant willow-trunks dissolving into soft pearl-mist background, painted enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon enchanted glen with foxgloves clinging to vertical moss-covered cliff faces in pink-purple clusters, hanging-honeysuckle-vine blooms cascading from the canyon rim above, fern-frond floor in the foreground, hidden grotto-depth receding between the mossy walls, painted vertical-scale richness.",
+    "tags": [
+      "ANY",
       "WARM"
     ]
   },
   {
-    "description": "A sea of wildflowers at chest-height with painted overlapping clusters of wild-iris, harebells, and meadowsweet, painted bloom-tops creating a rippling painted canopy, painted multi-tier depth from foreground petal-detail through mid-bloom swell to distant bloom-haze",
+    "description": "A redwood cathedral interior with massive cinnamon-ridged ancient trunks rising into a soaring canopy, trillium-blooms and bleeding-heart clusters carpeting the forest-floor at the foreground, lichen-patched bark at the midground trunks, painted floral-carpet receding into deep forest-shadow, gallery-tier scale enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted yew-grove clearing with a fairy-circle of glowing pearl mushrooms ringing a mossy hollow at the midground, indigo bluebell-cluster blooming at the center, ancient twisted yew-trunks framing the clearing at the background edge, fern-fronds at the foreground, soft pearl-glow magical register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a giant peony-bloom cluster emerging from a hollow at the base of a mossy trunk, hanging-ivy draping the bark above, gnarled roots crossing the foreground moss, fern-fronds at the foreground edge, canopy arching overhead, multi-tier enchanted-forest depth receding into bloom-mist.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with a foxglove-spire-cluster rising in blush-pink and violet from the mossy floor at the midground between pale trunks, scattered harebells in pale-violet dotting the foreground moss, soft dappled light through the birch-canopy overhead, background trunks dissolving into soft pearl, ethereal enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade canopy with violet racemes draped from ancient lichen-encrusted trunks overhead, moss-grown forest-path winding through the midground with fallen wisteria-petals dusting the surface, fern-fronds at the foreground, trunks receding into purple-tinted bloom-mist in the background, gallery-tier enchanted register.",
     "tags": [
       "ANY",
       "COOL"
     ]
   },
   {
-    "description": "A wildflower meadow with painted overlapping clusters of lupines, asters, and yarrow stretching to a painted treeline silhouette, tall lupine-spires punctuating the painted mid-ground, painted bloom-depth fading into a soft lavender-blue painted horizon-haze",
+    "description": "A sakura-grove forest with a hidden mossy stump in the midground depth, pink-blossom canopy arching overhead in the foreground and midground, drifting cherry-petals filling the enchanted air, ancient moss-covered bark at the trunks, soft pearl-pink blossom-mist dissolving the background, ethereal painted register.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted hidden glen with a small mossy hollow at the center ringed by giant white-magnolia blooms suspended from low branches like painted lanterns overhead, lily-of-the-valley carpet covering the floor at the foreground, ancient oak-trunks framing the midground, background receding into soft pearl-glow bloom-mist, magical ambient register.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a thick carpet of indigo bluebells blanketing the moss-floor between gnarled roots, wild-rose-bramble climbing the furrowed trunks in cream-and-pink clusters, fern-fronds curling at the foreground stones, woven oak-canopy overhead, dappled god-rays piercing into bloom-misted enchanted depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with mossy boulders half-buried among gnarled root-tangles, a dense bluebell carpet flooding the forest-floor in violet-indigo, ivy-draped trunks receding into soft bloom-haze, scattered fern-fronds at the edge, painted canopy filtering into layered enchanted depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with wild-rose-bramble arching between ancient trunks in cascading pink-and-cream clusters, moss-upholstered root-ridges crossing the foreground earth, a bluebell-sea flooding the mid-floor, lichen-rich bark dissolving rearward into enchanted bloom-mist below the woven canopy.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a peony-cluster erupting from a hollow at the base of a massive gnarled trunk, deep-pink blooms surrounded by moss-covered stones, fern-fronds at the foreground, oak-branch canopy overhead closing into dappled enchanted depth behind.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A hidden fern-grotto with a giant peony-cluster blooming at the moss-boulder center, soaring fern-fronds dripping from every crevice, ancient bark-textured stone walls enclosing the space, soft bloom-mist hovering overhead, painted multi-tier depth receding into ferned enchanted shadow.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A deep fern-grotto with moss-cliff walls studded in pink-and-coral foxgloves, giant fern-fronds arching overhead as a living canopy, mossy boulders at the foreground, a hidden hollow of hellebore-blooms at the center, soft filtered enchantment dissolving into the grotto's misty depth.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A hidden fern-grotto with a solitary magnolia-tree at the center, white-and-cream blooms suspended overhead like lanterns among dripping fern-fronds, moss-covered stone walls rising on each side, lichen-dappled bark at the midground, painted grotto-depth receding into pearl-misted enchanted shadow.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with pale slender trunks rising in columned rows, foxglove-spires blooming in deep-pink and violet between the trunks, lily-of-the-valley carpet spreading across the moss-floor below, soft pearl-mist threading rearward between birch-columns into layered enchanted glade-depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with scattered cornflower-clusters and harebells dotting the mossy floor between pale trunks, foxglove-spires rising at the midground, birch-bark peeling in papery layers overhead, soft dappled filtered canopy-light, pearl-bloom-mist fading the rearmost trunks into enchanted pale-gray distance.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with a foxglove-spire-cluster rising from moss-covered root-mounds, pale-violet harebells scattered around the foreground floor, slender birch-trunks framing a hidden mossy hollow beyond, papery bark catching filtered canopy-light, painted enchanted depth softening into distant glade-mist.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade woodland with violet-wisteria racemes draping from ancient oak-limbs like a flowering cathedral ceiling, moss-grown forest-path winding through below, fern-fronds at the foreground edge, lichen-covered trunks flanking, fallen wisteria-petals scattered across the mossy path into enchanted bloom-hazed depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A wisteria-draped ancient-oak grove with heavy violet racemes hanging from gnarled limbs overhead, moss-upholstered path threading below, scattered fern-fronds at the foreground, ancient bark split by age, soft wisteria-bloom-mist veiling the rearmost trunks in layered enchanted depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade canopy arching over a winding moss-path between ancient lichen-rich trunks, scattered fallen wisteria-petals pooling in the mossy foreground, dense violet raceme-curtains overhead closing like a nave, enchanted bloom-haze softening the background into distant purple-misted forest-depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with pink-blossom branches forming a low arching canopy overhead, mossy forest-floor carpeted in drifting fallen petals, ancient lichen-covered trunks weathered and wide, scattered fern-fronds at the foreground, pearl-pink bloom-mist dissolving the rearmost grove into ethereal enchanted distance.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with a mossy stump at the midground hidden under drifting blossom-petals, pink-cherry canopy arching overhead in woven bloom, ancient bark thick with lichen, fern-fronds at the foreground stones, soft pearl-pink mist drawing the painted depth into enchanted bloom-haze behind.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with ancient trunks forming a mossy colonnade, pink-blossom canopy overhead dense and woven, drifting petals filling the layered forest-air, lily-of-the-valley dotting the moss-floor below, background trunks fading into soft cherry-blossom-mist in painted enchanted grotto-depth.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden lotus-pond grotto deep in fern-forest, pink lotus-blooms floating on still dark water, ancient fern-fronds draping the mossy stone banks, willow-branches dipping to the surface, moss-covered boulders at the foreground, painted reflective enchanted depth fading into fern-and-bloom shadow.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden lotus-pool grotto with white-and-pink lotuses on glassy still water, surrounded by moss-draped ancient stone walls and towering fern-fronds, willow-branches trailing low overhead, mossy foreground stones, soft cyan-pearl bloom-mist dissolving the grotto's rearmost depth into enchanted mirror-light.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading willow-branches forming curtained walls above a hidden iris-and-forget-me-not bank, mossy stones lining the stream-edge in the foreground, pale willow-trunks receding rearward, soft pearl-mist threading between branch-curtains into layered enchanted willow-depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A willow-thicket with weeping branches draping overhead above a hidden floor of wild-iris in deep violet and cream, mossy stones at the stream-bank foreground, lichen-dappled willow-trunks at the midground, distant trunks dissolving into soft bloom-misted enchanted thicket-depth.",
     "tags": [
       "ANY",
       "COOL"
     ]
   },
   {
-    "description": "A giant peony-cluster forming a painted natural hollow of ruffled blush-pink and cream peony-petals dominating the painted frame, painted layered petal-texture at intimate foreground scale, soft bloom-mist dissolving the painted background into petal-pale haze",
+    "description": "A moss-canyon with vertical moss-covered cliff walls rising on either side, foxgloves clinging to the cliff-faces in pink-and-purple spired clusters, hanging-honeysuckle cascading from above, fern-fronds carpeting the hidden grotto-floor below, painted vertical-scale enchanted canyon-depth receding into bloom-shadow.",
     "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A moss-canyon enchanted glen with towering moss-cliffs draped in hanging wisteria and foxglove-clusters, fern-fronds at the canyon-floor foreground, mossy boulders in the midground, vine-bloom cascades above, soft bloom-mist veiling the rearmost canyon-depth in layered enchanted scale.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A redwood cathedral with massive ridged ancient trunks soaring into a dim canopy high above, a carpet of wood-anemones and bleeding-heart blooms weaving across the cinnamon-red needle-floor, fern-fronds at the foreground roots, trunks receding into enchanted amber-misted forest-depth.",
+    "tags": [
+      "ANY",
+      "COOL",
       "WARM",
       "WHITE"
     ]
   },
   {
-    "description": "A grove of giant magnolia-blooms suspended like painted lanterns overhead, painted creamy-white and rose-blush petals at dramatic scale in the painted foreground, painted mid-ground magnolia-trunks receding into a distant painted grove dissolving into soft bloom-mist",
+    "description": "A redwood-cathedral forest interior with soaring ancient trunks rising into woven canopy far overhead, trillium and forget-me-nots carpeting the moss-and-needle floor, bark ridged and ancient, fern-fronds curling at the foreground, painted gallery-tier scale dissolving rearward into enchanted forest-mist.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted yew-grove clearing with a fairy-circle of glowing pearl-mushrooms ringing a mossy hollow, an indigo bluebell-cluster blooming at the center, ancient twisted yew-trunks framing the edges, fern-fronds at the foreground, soft pearl-glow ambient-mist hovering above the magical circle-floor.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a thick indigo-blue bluebell carpet pooling at the gnarled root-mass of centuries-old trunks, mossy boulders nestled between them, scattered fern-fronds at the foreground, wild-rose-bramble spiraling up the bark, painted canopy filtering into soft bloom-mist beyond.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A hidden fern-grotto with a giant peony-cluster erupting in crimson-and-cream from between moss-covered boulders at the center, soaring fern-fronds arching overhead, ancient bark-textured stone walls dripping with moss, multi-tier painted depth receding into enchanted green shadow.",
     "tags": [
       "ANY",
       "WARM",
@@ -226,76 +619,22 @@
     ]
   },
   {
-    "description": "A cluster of giant tulip-bells in painted pearl-pink and ivory forming painted natural rooms at dramatic scale, painted foreground petal-curve detail, painted mid-ground tulip-forest, soft bloom-mist fading the painted background into pearl-pale haze",
+    "description": "A birch-glade with slender pale birch-trunks rising in close columns, foxglove-spires blooming pink-and-violet between them, lily-of-the-valley carpet spread across the moss-floor, soft pearl-mist dissolving the background birch-trunks into luminous painted haze, dappled filtered canopy above.",
     "tags": [
+      "ANY",
+      "COOL",
       "WARM",
       "WHITE"
     ]
   },
   {
-    "description": "A sunflower field with towering golden sunflowers forming a painted natural forest of giant disk-blooms, painted foreground petal-and-seed-disk texture at intimate scale, painted mid-ground sunflower-columns receding into a warm painted amber bloom-haze",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast sunflower field with painted sun-gold disk-blooms dominating every painted tier, scattered fallen sunflower-petals carpeting the painted foreground ground, painted mid-distance field-swell fading into a deep-gold painted bloom-mist at the horizon",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower meadow with painted golden disks rising at towering scale above a painted wildflower understory of chamomile and black-eyed susans, painted multi-tier depth from foreground bloom-detail through mid-ground sunflower-columns into soft warm painted haze",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade arbor with cascading violet-wisteria racemes draping overhead like a painted cathedral ceiling, fallen wisteria-petals carpeting the painted moss-grown path below, painted multi-tier depth from foreground raceme-cluster through mid-ground arbor-columns into soft violet bloom-mist",
+    "description": "A wisteria-cascade woodland with violet wisteria racemes draping in heavy curtains from ancient oak-limbs, forming a painted natural cathedral overhead, moss-grown forest-path winding through below, fern-fronds brushing the foreground stones, lichen-crusted trunks flanking, bloom-mist softening the deep background.",
     "tags": [
       "COOL"
     ]
   },
   {
-    "description": "A wisteria-cascade with painted violet-purple and pale-lilac racemes hanging in painted overlapping layers from a painted overhead canopy, painted foreground raceme-texture at intimate scale, painted depth dissolving into an ethereal soft-purple painted bloom-mist beyond",
-    "tags": [
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wisteria-arbor over a winding stone path with painted dense violet-cluster draping from above, scattered fallen wisteria-petals on the painted path in the foreground, painted mid-ground arbor-tunnel receding into a pale violet painted bloom-haze",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A lotus pond with painted floating lotus-blooms and water-lily pads dotting a still painted reflective surface, painted foreground lotus-bloom detail at intimate scale, painted mid-ground bloom-scattered water, distant painted reed-fringe and canopy mirrored on the water",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A still lotus-pond with painted floating pink-and-white lotus-blooms in painted overlapping layers, painted water-lily rosettes covering the painted surface, painted distant treeline mirrored on the still painted water, magical painted gallery-tier register",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A floating lotus-meadow on a painted reflective pond, painted overlapping lotus-blooms and emergent lotus-buds creating a painted island of bloom, painted foreground petal-and-stamen detail, soft bloom-mist dissolving the painted background shoreline into pale haze",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove with painted dense pink-and-white blossom canopy overhead creating a painted natural ceiling, painted drifting petals filling the painted mid-ground air, painted petal-carpeted ground in the foreground, painted depth fading into soft pearl-pink painted bloom-mist",
+    "description": "A sakura-grove forest with arching cherry-blossom canopy creating a pink ceiling overhead, mossy ancient trunks weathered with lichen at the midground, fallen-petal carpet blanketing the forest-floor in the foreground, drifting petals suspended in the painted enchanted air, pearl-pink mist beyond.",
     "tags": [
       "ANY",
       "WARM",
@@ -303,7 +642,49 @@
     ]
   },
   {
-    "description": "A sakura grove at peak bloom with painted overlapping cherry-blossom branches forming a painted tunnel, painted dense pink-and-white canopy above, painted fallen-petal carpet below, painted gallery-tier ethereal register fading into pale blossom-mist at the painted depth",
+    "description": "A hidden lotus-pond grotto in deep forest with pink-and-ivory lotus-blooms floating on still dark water, ancient fern-fronds crowding the mossy stone banks, willow-branches dipping low to the surface, towering bark-ridged trunks receding into reflective bloom-mist in the background.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading willow-curtains overhead, a hidden iris-meadow of deep-violet and blue iris blooming at the mossy stream-bank below, foreground stones draped in velvet moss, painted midground willow-trunks, distant thicket dissolving into soft pearl-mist, enchanted hidden-glen register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A redwood cathedral with massive cinnamon-ridged ancient trunks soaring into a vaulted canopy a hundred feet above, painted carpet of wood-anemones and forget-me-nots woven through the needle-floor at the foreground, mossy boulder-forms in the midground, soaring painted gallery-scale depth beyond.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted mushroom-grove clearing ringed by ancient twisted yew-trees, glowing pearl-fungus fairy-circle framing a mossy hollow, indigo bluebell-cluster blooming at the center, fern-fronds edging the foreground, soft pearl-glow suffusing the painted magical register, deep yew-shadow beyond.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with wild-rose-bramble climbing the gnarled trunks in painted pink-and-cream clusters, twisted root-mass crossing the mossy foreground earth, bluebell carpet at the root-bases, dappled god-rays piercing the dense canopy, painted enchanted forest-depth receding into bloom-mist.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A fern-grotto with a hidden giant magnolia at its center, white-and-cream magnolia blooms suspended like painted lanterns overhead, dripping fern-fronds arching from mossy cliff-walls, bark-textured ancient stone in the foreground, multi-tier painted ethereal depth rising into soft canopy-glow above.",
     "tags": [
       "ANY",
       "WARM",
@@ -311,13 +692,16 @@
     ]
   },
   {
-    "description": "A vast scarlet poppy field with painted overlapping crimson poppy-blooms stretching to a painted horizon, painted seed-pod and crinkled-petal detail visible at intimate foreground scale, painted bloom-depth haze dissolving the painted horizon into warm red-scarlet mist",
+    "description": "A birch-glade with cornflower-blue and soft-violet harebell clusters dotting the mossy floor between pale slender birch-trunks, lichen-flecked bark catching filtered light, foreground fern-fronds low at the base, painted soft pearl-mist receding between distant trunks, dappled enchanted register throughout.",
     "tags": [
-      "WARM"
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
     ]
   },
   {
-    "description": "A poppy meadow with painted scarlet blooms dominating the painted frame in overlapping painted layers, painted scattered cornflowers and wild-grasses threading through the painted mid-ground, painted multi-tier depth fading into a warm painted bloom-horizon haze",
+    "description": "A wisteria-draped ancient-oak grove with heavy violet racemes hanging from gnarled oak-limbs in painted cascades, lichen-crusted bark in the foreground, moss-grown path winding into midground shadow, scattered fern-fronds at the edges, painted enchanted-cathedral depth deepening beyond the canopy-veil.",
     "tags": [
       "ANY",
       "COOL",
@@ -325,145 +709,37 @@
     ]
   },
   {
-    "description": "An iris-meadow with painted tall purple and violet iris-spires rising above a painted lower carpet of forget-me-nots and wild-thyme, painted foreground iris-bloom detail, painted mid-ground spire-forest, painted depth fading into soft iris-violet bloom-haze",
+    "description": "A sakura-grove forest with pink-blossom branches arching low, mossy forest-floor carpeted with fallen petals in the foreground, lichen-rich ancient trunks mid-depth, a hidden mossy stump emerging from petal-mist in the background, ethereal pearl-pink bloom-haze filling the painted enchanted air.",
     "tags": [
       "ANY",
-      "COOL"
+      "WARM",
+      "WHITE"
     ]
   },
   {
-    "description": "A daffodil meadow with painted golden-yellow daffodil clusters covering every painted ground-tier, painted trumpet-bloom detail at intimate foreground scale, painted mid-ground daffodil-swell, painted depth fading into a warm gold bloom-mist at the painted horizon",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-bramble garden with painted climbing rose-vines in deep crimson and blush forming painted natural curtains across every painted depth-tier, painted scattered rose-blooms and trailing rose-tendrils in the painted foreground, painted gallery-tier richness dissolving into soft bloom-mist beyond",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-garden with painted overlapping rose-blooms in painted varying pinks, creams, and blush-reds, painted vine-tendrils arching across every painted depth-tier, painted foreground petal-and-thorn texture, painted mid-ground bloom-wall receding into a soft painted rose-mist",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A tropical garden with painted hibiscus blooms in vivid coral, scarlet, and deep-pink dominating every painted tier, painted bird-of-paradise spires and painted exotic broad-leaf foliage forming a painted multi-tier canopy, painted gallery-tier richness dissolving into lush painted tropical bloom-depth",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast wildflower meadow at chest-height with painted overlapping clusters of bluebells, foxgloves, wood-anemones, and cow-parsley, scattered tall foxglove-spires creating natural punctuation through the painted mid-ground, painted bloom-depth fading into a soft violet-blue mist on the horizon.",
+    "description": "A hidden lotus-pool in a fern-grotto with blush-pink lotus-blooms resting on still water, ancient fern-fronds arching over the mossy stone banks, bark-ridged willow-limbs reaching to the surface, dripping moss-cliff walls surrounding, soft cyan-tinted magical reflective depth in the background water.",
     "tags": [
       "ANY",
       "COOL",
-      "WARM"
+      "WHITE"
     ]
   },
   {
-    "description": "A rolling wildflower meadow with painted overlapping clusters of cornflowers, ox-eye daisies, and wild-scabious stretching to a soft painted bloom-horizon, foreground tactile petal-cluster detail in painted gallery-tier richness, painted wildflower-canopy fading into pale cornflower haze.",
-    "tags": [
-      "ANY",
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wildflower meadow with painted overlapping clusters of asters, lupines, and harebells, scattered painted tall-lupine spires rising above the bloom-carpet, painted multi-tier depth fading into a soft lavender-bloom mist at the painted treeline.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sea of wildflowers at chest-height with painted overlapping clusters of wild-iris, ragged-robin, and meadowsweet, painted breeze-implied movement across the bloom-tops, painted foreground tactile detail giving way to painted mid-ground bloom-mass fading into pale blossom-mist.",
+    "description": "A weeping-willow thicket with cascading branch-curtains forming natural walls, wild-iris and forget-me-nots blooming in violet-and-indigo masses at the mossy stream-bank below, foreground stones moss-upholstered, painted mid-depth willow-trunks, distant thicket dissolved in dappled enchanted bloom-mist.",
     "tags": [
       "ANY",
       "COOL"
     ]
   },
   {
-    "description": "A giant peony-cluster forming a painted natural hollow of ruffled blush-and-crimson petals, overlapping painted peony-heads dominating the painted foreground in gallery-tier scale-richness, soft painted bloom-mist dissolving the painted background into rose-cream haze.",
-    "tags": [
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A grove of giant magnolia-blooms suspended like painted lanterns overhead, painted foreground magnolia-cup detail at intimate scale, painted mid-ground grove of ivory-and-blush blooms, distant painted magnolia-canopy dissolving into pearl-white mist.",
-    "tags": [
-      "ANY",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A cluster of giant tulip-bells in painted pearl-pink-and-cream forming natural rooms of arching painted petals, painted foreground petal-texture richness, painted mid-ground tulip-hollow, soft painted bloom-mist dissolving the background in gallery-tier painted register.",
-    "tags": [
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sunflower field with towering golden sunflowers forming a painted natural forest of giant disk-blooms above, painted foreground scattered fallen sunflower-petals on dark soil, painted mid-ground sunflower-trunks receding into a warm-amber painted depth.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast sunflower field with painted golden disks dominating every painted tier, painted foreground seed-head detail at intimate tactile scale, painted mid-ground dense sunflower-wall, painted distant field dissolving into warm sun-gold bloom-haze.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower meadow with painted towering golden-disk blooms turned uniformly outward, painted foreground tactile petal-and-seed detail, painted mid-ground sunflower-forest of repeating golden heads, soft painted warm-amber haze consuming the painted horizon.",
+    "description": "A moss-canyon enchanted glen with towering moss-cliff walls on either side, foxgloves massed in painted pink-purple tiers up the cliff-faces, hanging-vine-blooms cascading from the overhang above, fern-carpet on the hidden grotto-floor, painted vertical enchanted scale deepening into canyon shadow.",
     "tags": [
       "ANY",
       "WARM"
     ]
   },
   {
-    "description": "A wisteria-cascade arbor with violet-wisteria racemes draping overhead in painted layered curtains forming a painted natural cathedral ceiling, scattered painted fallen wisteria-florets on the moss-grown path below, painted depth receding into purple-bloom shadow.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade with painted hanging violet-and-lilac racemes in overlapping painted layers from above, painted foreground dangling raceme-tips brushing painted ground-level, painted mid-ground bloom-curtain, painted background dissolving into deep violet mist.",
-    "tags": [
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wisteria-arbor with painted violet raceme-clusters draping from overhead beams of living vine, painted scattered wisteria-petals carpeting the painted path, painted multi-tier depth from dangling foreground blooms to painted deep-purple bloom-tunnel beyond.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A lotus pond with painted floating lotus-blooms and water-lilies dotting the still painted surface in gallery-tier richness, painted foreground lotus-cup detail reflected in the painted water, painted mid-ground bloom-scatter dissolving into distant reed-and-mist.",
-    "tags": [
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A still lotus-pond with painted floating pink-lotus and white-water-lily blooms in overlapping painted layers, painted perfect reflections of the bloom-canopy mirrored on the painted water-surface, soft bloom-mist dissolving the painted background.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A floating lotus-meadow on a painted reflective pond, painted overlapping lotus-blooms creating a painted island of rose-pink and ivory, painted foreground open lotus-cup detail, soft painted bloom-mist consuming the painted distant shoreline.",
+    "description": "A redwood-cathedral forest interior with massive ancient bark-ridged trunks rising into painted soaring canopy, trillium and bleeding-heart blooms carpeting the forest-floor in the foreground, mossy stone-mounds at the midground, painted gallery-tier depth fading into amber-green canopy-haze far above.",
     "tags": [
       "ANY",
       "COOL",
@@ -472,29 +748,53 @@
     ]
   },
   {
-    "description": "A sakura grove with painted dense pink-blossom canopy forming a painted natural ceiling overhead, painted foreground drifting sakura-petals suspended in the painted air, painted carpeted ground of fallen blossoms, painted background fading into soft pearl-pink blossom-mist.",
+    "description": "An enchanted yew-grove clearing with ancient twisted yew-trunks framing a mossy hollow, pearl-glow mushroom fairy-ring at the center, painted indigo bluebell-cluster at the hollow's edge, fern-fronds at the foreground perimeter, soft magical pearl-ambient deepening to shadow beneath the yew-boughs.",
     "tags": [
       "ANY",
-      "WARM",
+      "COOL",
       "WHITE"
     ]
   },
   {
-    "description": "A sakura grove at peak bloom with painted white-and-blush blossom-canopy pressing close above, painted foreground branch-cluster with individual blossom-detail, painted ground-level petal-carpet, painted gallery-tier ethereal depth dissolving into rose-white haze.",
+    "description": "An ancient mossy oak-grove with hanging-ivy draping the bark-textured trunks, a cluster of giant peony-blooms in painted rose-and-blush emerging from a hollow at a trunk-base, gnarled roots crossing the foreground, mossy boulder-forms in the midground, dappled canopy receding into enchanted bloom-mist.",
     "tags": [
       "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A vast scarlet poppy field with painted overlapping crimson-poppy blooms stretching to a painted horizon in gallery-tier richness, painted foreground seed-pod and crinkled-petal detail at intimate scale, painted bloom-depth dissolving into red-scarlet haze.",
-    "tags": [
       "WARM"
     ]
   },
   {
-    "description": "A poppy meadow with painted scarlet blooms dominating every painted tier, painted foreground individual poppy-cup detail, scattered painted cornflowers and wild-grasses punctuating the painted mid-ground, painted background bloom-mass dissolving into deep crimson mist.",
+    "description": "A birch-glade with painted foxglove-spire-clusters rising from the mossy floor in pink-and-cream tiers, scattered pale-violet harebells at the base, slender pale birch-trunks rising in the midground, lichen-flecked bark detail, soft dappled birch-canopy above, painted enchanted ethereal depth beyond.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade canopy above a moss-grown winding forest-path, fallen violet wisteria-petals scattered across the path-stones, ancient lichen-crusted trunks flanking the midground, foreground fern-fronds edging the path, painted gallery-tier canopy of racemes overhead, soft bloom-mist dissolving the deep background.",
+    "tags": [
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest interior with pink-blossom canopy arching overhead, a hidden mossy log-form in the painted mid-depth, foreground fern-fronds rising through the petal-carpet, ancient lichen-textured trunks at the sides, drifting petals filling the enchanted painted air, soft pearl-pink mist beyond.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted hidden glen with a mossy hollow ringed by ancient hornbeam-trunks, giant white-magnolia blooms suspended overhead like painted lanterns from low arching boughs, lily-of-the-valley carpet blanketing the hollow-floor, fern-fronds at the foreground edges, soft pearl-glow suffusing the magical painted register.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a thick indigo-blue bluebell carpet spreading wall-to-wall across the moss-floor at gnarled root-bases, wild-rose-bramble climbing the furrowed trunks in painted cream-and-pink clusters, mossy boulder nestled between roots in the foreground, fern-fronds edging the depth, dappled god-rays piercing the canopy into soft bloom-mist beyond.",
     "tags": [
       "ANY",
       "COOL",
@@ -502,33 +802,30 @@
     ]
   },
   {
-    "description": "An iris-meadow with painted tall purple-and-violet iris-spires rising above a painted lower carpet of wild-thyme and clover, painted foreground iris-falls detail, painted mid-ground spire-forest, painted background dissolving into soft iris-violet bloom-haze.",
+    "description": "A hidden fern-grotto with a giant peony-cluster blooming deep-crimson at the center between moss-covered boulders, soaring fern-fronds arching overhead in the foreground, ancient bark-textured stone walls dripping with moss surrounding, painted multi-tier enchanted depth receding into soft floral haze behind the bloom-mass.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with pale slender birch-trunks rising tall from a lily-of-the-valley carpet across the moss-floor, foxglove-spires in pink-and-violet clustered between trunks at the midground, soft pearl-mist dissolving the background birches into luminous bloom-haze, dappled canopy-light filtering through.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade woodland with violet wisteria racemes draping in heavy curtains from ancient oak-limbs overhead like a living floral cathedral, moss-grown forest-path winding into painted depth below, fern-fronds curling at the foreground edges, lichen-crusted trunks flanking, painted enchanted-cathedral register.",
     "tags": [
       "ANY",
       "COOL"
     ]
   },
   {
-    "description": "A daffodil meadow with painted golden-yellow daffodil-trumpets covering every painted tier, painted foreground individual bloom-cup detail, painted mid-ground dense daffodil-mass, painted background dissolving into warm-gold bloom-mist at the painted treeline.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-bramble garden with painted climbing rose-vines forming painted natural curtains of layered crimson-and-blush blooms, painted foreground open rose-face detail, painted mid-ground vine-curtain crossing the depth, painted background dissolving into rose-petal mist.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-garden with painted overlapping blooms in varying painted pinks, creams, and deep-carmine, painted vine-tendrils and thorned-canes crossing every painted tier, painted foreground petal-layer detail, painted background dissolving into soft rose-bloom haze.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A tropical-garden with painted hibiscus blooms in vivid coral-and-magenta dominating every painted tier, painted foreground open hibiscus-stamen detail, painted mid-ground exotic-foliage canopy threaded with painted bird-of-paradise and orchid-clusters, painted background dissolving into lush green-and-bloom depth.",
+    "description": "A sakura-grove forest with a full pink cherry-blossom canopy arching overhead as a natural ceiling, mossy forest-floor carpeted with drifting fallen petals, ancient lichen-weathered trunks rising in the midground, soft pearl-pink bloom-mist dissolving distant trunks, ethereal painted-spring enchanted register.",
     "tags": [
       "ANY",
       "WARM",
@@ -536,7 +833,72 @@
     ]
   },
   {
-    "description": "A vast wildflower meadow at chest-height with painted overlapping clusters of bluebells, foxgloves, yarrow, and wild-clover stretching to a soft bloom-horizon, scattered tall foxglove-spires creating natural vertical punctuation, foreground tactile bloom-cluster detail fading into layered bloom-mist at the painted depth.",
+    "description": "A hidden lotus-pond grotto in deep forest with pale-pink lotus-blooms and closed buds floating on still dark water, ancient ferns and moss-covered boulders pressing close at the banks, hanging willow-branches dipping toward the surface, painted reflective depth dissolving into fern-shadowed background.",
+    "tags": [
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading willow-branches forming natural curtains above a hidden iris-bed of violet and gold at the stream-bank, mossy rounded stones along the water-edge in the foreground, distant willow-trunks dissolving into soft pearl-mist beyond the hidden bank.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon with towering vertical moss-covered cliff walls rising on both sides, foxgloves in pink-purple clusters clinging to the cliff faces at every ledge, hanging-honeysuckle-vine blooms cascading from the canyon rim above, a hidden grotto-floor of packed fern-fronds below, painted vertical-scale enchanted register.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A redwood cathedral with massive ridged ancient trunks soaring into a canopy far overhead, deep forest-floor carpeted with wood-anemones and forget-me-nots woven through cinnamon-red needle-duff, mossy boulder in the foreground, painted gallery-tier scale dissolving into amber-toned bloom-mist beyond the great trunks.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted yew-grove clearing with a fairy-circle of glowing pearl-white mushrooms ringing a small mossy hollow, a painted indigo bluebell-cluster blooming at the circle's edge, ancient twisted yew-trunks framing the clearing on all sides, soft pearl-glow magical register, fern-fronds pressing at the foreground.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with wild-rose-bramble climbing gnarled trunks in cascading painted pink-and-cream bloom-clusters, twisted surface-roots crossing the moss-and-earth foreground, bluebell scatter dotting the root-moss below, dappled afternoon god-rays painting vertical shafts through the dense oak canopy into hazy mid-depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A fern-grotto with a hidden giant magnolia at the center, white-and-cream magnolia blooms suspended like painted lanterns overhead against the dark canopy, soaring dripping fern-fronds enclosing the sides, moss-cliff walls with deep-green texture surrounding, ethereal multi-tier painted depth.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with painted cornflower-blue and harebell-violet blooms dotting the mossy floor between pale slender birch-trunks, soft pearl-mist receding between trunks into glowing background depth, dappled canopy-light filtering through, fern-tufts at the foreground base of nearest trunk.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-draped ancient-oak grove with violet wisteria racemes hanging from gnarled massive oak-limbs overhead, moss-grown forest-path winding beneath in the midground, scattered ferns curling at the foreground, lichen-rich bark on the flanking trunks, painted enchanted-cathedral bloom-depth beyond.",
     "tags": [
       "ANY",
       "COOL",
@@ -544,14 +906,194 @@
     ]
   },
   {
-    "description": "A rolling wildflower meadow with painted overlapping clusters of cornflowers, ox-eye daisies, and ragged-robin covering the ground in dense tapestry, distant hedgerow silhouette framing the painted horizon, painted multi-tier bloom-depth fading into a soft periwinkle haze.",
+    "description": "A sakura-grove forest with painted pink-blossom branches arching from ancient lichen-rich trunks overhead, mossy carpet across the forest-floor thick with fallen petals, a hidden mossy stump in the painted mid-depth, pearl-pink bloom-mist dissolving the background into soft enchanted haze.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden lotus-pool in a fern-grotto with soft-pink lotus-blooms open on still water, dripping moss-cliffs enclosing on three sides, ancient ferns cascading into the foreground, willow-branches reaching down to skim the water surface, painted soft-cyan reflective magical register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A willow-thicket with weeping-willow curtains above a hidden wild-iris bed of purple-and-cream at the mossy stream-bank, rounded moss-stones at the water-edge in the foreground, ancient willow-trunks wrapped with ivy dissolving into pearl-mist beyond the mid-depth bank.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon enchanted glen with foxgloves and campanula clinging in painted clusters to vertical moss-cliff walls, hanging-vine-blooms cascading from the canyon-rim above, a hidden grotto-floor of packed fern-fronds and scattered bluebell at the base, painted vertical-scale enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A redwood-cathedral forest interior with massive deeply-furrowed ancient trunks rising in the midground, a painted carpet of trillium and bleeding-heart blooms across the dark forest-floor in the foreground, soaring canopy overhead dissolving into soft amber bloom-haze, gallery-tier scale enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted mushroom-grove clearing with glowing fairy-circle fungus ringing a mossy hollow in an ancient yew-grove, a bluebell carpet blooming at the hollow center, fern-fronds pressing at the foreground edge, twisted yew-trunks framing with dark bark, soft pearl-glow magical register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient mossy oak grove with a cluster of giant peony-blooms in deep rose and cream emerging from a hollow at the base of a massive trunk, hanging ivy draping the trunk above, gnarled roots in the foreground, dappled god-rays reaching into soft floral bloom-mist beyond.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with a foxglove-spire-cluster rising tall from the mossy floor between pale birch-trunks, scattered pale-violet harebells dotting the moss around, dappled canopy-light filtering through slender birch-branches overhead, fern-tufts at the foreground, soft luminous bloom-mist receding into background depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade canopy above a winding moss-grown ancient-oak forest-path with fallen violet wisteria-petals scattered across the path below, lichen-rich gnarled trunks flanking the mid-depth path, fern-fronds curling at the foreground, painted gallery-tier receding bloom-cathedral register.",
+    "tags": [
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with a hidden mossy hollow at the base of an ancient lichen-crusted trunk in the painted depth, full pink-blossom canopy arching overhead, drifting petals filling the enchanted air at every depth tier, pearl-pink bloom-mist fading the background into ethereal haze.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted hidden glen within an ancient beech-grove with a small mossy hollow ringed by giant white-magnolia blooms suspended like lanterns from low branches overhead, a lily-of-the-valley carpet covering the mossy floor below, ancient smooth-barked beech-trunks framing the depth, soft pearl-glow ambient enchanted register.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a deep carpet of indigo bluebells blanketing the moss-floor between gnarled roots, wild-rose-bramble threading pink-and-cream clusters up the ridged bark of ancient trunks, scattered fern-fronds at the foreground, mossy boulders nestled between trunks, canopy closing overhead into dappled god-rays, painted enchanted-forest depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden fern-grotto with a giant peony-cluster erupting in soft crimson and blush at the center between moss-covered boulders, soaring fern-fronds arching overhead in the foreground, ancient bark-textured stone walls dripping with moss-curtains surrounding, filtered light from the grotto-mouth above, painted multi-tier ethereal register.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with pale slender birch-trunks rising in columns, foxglove-spires blooming in deep pink-and-violet between the trunks, lily-of-the-valley carpet spreading white across the moss-floor, soft bloom-mist receding through the birch-trunks into the background, painted dappled ethereal register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade woodland with violet wisteria racemes hanging in dense curtains from ancient oak-limbs overhead forming a natural cathedral ceiling, moss-grown forest-path winding through below, fern-fronds at the foreground path-edge, lichen-encrusted trunks flanking, painted enchanted-cathedral register.",
     "tags": [
       "ANY",
       "COOL"
     ]
   },
   {
-    "description": "A sea of wildflowers at chest-height with painted overlapping clusters of wild-iris, harebells, and meadow-cranesbill, foreground bloom-cluster showing individual petal detail, painted mid-distance carpeting into layered violet-and-blue bloom-mist dissolving toward a painted horizon.",
+    "description": "A hidden lotus-pond grotto in the deep forest with floating pink lotus-blooms on still dark water, surrounded by ancient ferns and moss-covered stones at the foreground bank, willow-branches dipping low to the surface, mossy cliff-walls rising behind, painted reflective enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading willow-branches forming natural curtains above a hidden iris-bank at a shallow stream, wild violet-and-gold iris-clusters at the mossy stones of the water-edge, distant willow-trunks dissolving into pale pearl-mist, painted dappled stream-bank register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon with vertical moss-covered cliff walls towering on either side of a hidden grotto-floor, foxgloves clinging in pink-purple clusters to the cliff faces at every ledge, hanging-vine-blooms cascading from the canyon-rim above, fern-fronds carpeting the floor below, painted vertical-scale enchanted register.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A redwood cathedral with massive ridged ancient trunks rising into a soaring canopy far above, deep cinnamon forest-floor woven through with wood-anemone-clusters and forget-me-nots in the foreground, bark-textured trunks dissolving into canopy-mist in the painted background, gallery-tier soaring scale.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted mushroom-grove clearing ringed by ancient twisted yew-trees, a fairy-circle of glowing pearl-fungus in the mossy hollow, indigo bluebell-cluster blooming at the center, fern-fronds edging the foreground, ancient yew-bark framing the scene in darkness, soft pearl-glow magical register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with wild-rose-bramble climbing gnarled trunks in trailing pink-and-cream bloom, twisted roots crossing the moss-and-earth foreground, a bluebell-carpet pooling indigo between the root-hollows, mossy boulders midground, canopy filtering dappled god-rays from above, painted enchanted depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A fern-grotto with a hidden magnolia at the grotto-center, white-and-cream magnolia-blooms suspended overhead like lanterns among dripping fern-fronds, moss-cliff walls surrounding, ancient bark-textured stone at the foreground, soft bloom-mist rising from the grotto-floor, painted multi-tier ethereal register.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with pale trunks rising from a mossy floor clustered with cornflowers and harebells in painted blue-and-violet, soft pearl-mist receding between trunks into the background distance, fern-fronds at the foreground base, dappled light filtering through pale birch-canopy, painted soft enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-draped ancient-oak grove with violet wisteria racemes hanging from gnarled oak-limbs in dense pendulous clusters, moss-grown forest-path winding through the midground, scattered fern-fronds at the foreground path-edge, lichen-encrusted bark flanking, painted enchanted-cathedral depth and register.",
     "tags": [
       "ANY",
       "COOL",
@@ -559,14 +1101,7 @@
     ]
   },
   {
-    "description": "A wildflower meadow dense with painted overlapping asters, lupines, and toadflax rising in vertical waves, scattered tall mullein-spires as natural painted landmarks, painted foreground tactile richness fading through mid-bloom carpet into a soft watercolor bloom-horizon at depth.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A giant peony-cluster forming a natural hollow, painted overlapping ruffled blush-pink and cream peony-blooms dominating the frame in gallery-tier richness, individual petal-ruffles visible in the painted foreground, soft layered bloom-mist dissolving the grove edges at painted depth.",
+    "description": "A sakura-grove forest with painted pink-blossom branches arching and interlocking overhead, ancient lichen-rich trunks at the foreground, mossy carpet of fallen petals below, midground trunks dissolving into pearl-pink bloom-mist, drifting petals filling the enchanted painted air in depth.",
     "tags": [
       "ANY",
       "WARM",
@@ -574,7 +1109,61 @@
     ]
   },
   {
-    "description": "A cluster of giant tulip-bells in painted pearl-pink and ivory forming natural room-like chambers, dramatic petal-scale richness filling the foreground, scattered fallen petal-segments across the painted midground, soft bloom-mist dissolving the tulip-grove into distance.",
+    "description": "A hidden lotus-pool in a deep fern-grotto with pale-pink lotus-blooms floating on still water, ancient ferns and dripping moss-cliffs enclosing the grotto-walls, mossy stones at the foreground pool-edge, willow-branches reaching to the surface midground, soft-cyan magical reflective register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with long cascading branches hanging as curtains above a hidden stream-bank where wild-iris and forget-me-nots grow dense at the mossy foreground stones, ancient willow-trunks in the midground, distant trunks dissolving into pearl-mist, painted dappled enchanted register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon enchanted glen with mossy cliff-walls rising steeply on both sides, foxgloves clinging to cliff-ledges in pink-purple spires, hanging honeysuckle-vine-blooms cascading from the rim above, fern-frond carpet across the grotto-floor below, painted vertical-scale enchanted depth register.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "An enchanted yew-grove clearing with ancient twisted yew-trunks framing a small mossy hollow, glowing pearl-mushrooms in a fairy-ring at the center, painted indigo bluebell-cluster at one edge of the hollow, fern-fronds edging the foreground, magical pearl-glow ambient register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient mossy oak-grove with a cluster of giant peony-blooms in blush and deep rose erupting from a hollow at the base of a gnarled trunk, hanging-ivy draping the bark above, mossy root-crossed foreground, fern-fronds at the edges, dappled god-rays from the canopy, painted enchanted register.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with foxglove-spires rising tall in painted deep-pink clusters from the mossy floor between pale birch-trunks, scattered pale-violet harebells dotting the foreground moss, dappled forest-light filtering through the birch-canopy overhead, soft bloom-mist receding into the background, painted ethereal register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade canopy above a winding moss-grown ancient-oak forest-path, violet wisteria-racemes hanging overhead from lichen-rich oak-limbs, scattered fallen wisteria-petals lying on the mossy path in the foreground, bark-textured trunks flanking midground, painted gallery-tier enchanted-cathedral register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with a hidden moss-covered ancient stump at the foreground, pink-blossom canopy overhead arching between old trunks, drifting petals filling the painted enchanted air in the midground, soft pearl-pink bloom-mist dissolving the background trunks, ethereal painted depth register.",
     "tags": [
       "ANY",
       "WARM",
@@ -582,81 +1171,44 @@
     ]
   },
   {
-    "description": "A grove of giant magnolia-blooms suspended like painted lanterns overhead, cream-and-blush petals dominating the painted upper frame, fallen magnolia-petals carpeting the painted midground path, ethereal bloom-mist dissolving the distant magnolia-canopy into soft painted depth.",
+    "description": "An enchanted hidden glen with ancient oak-trunks framing a mossy hollow, giant white-magnolia-blooms suspended overhead from low gnarled limbs like pale lanterns, lily-of-the-valley carpet blanketing the hollow-floor in the foreground, fern-fronds at the edges, soft pearl-glow ambient enchanted register.",
     "tags": [
       "ANY",
       "WHITE"
     ]
   },
   {
-    "description": "A giant-bloom cluster of oversized garden peonies in deep crimson and burgundy, ruffled multi-layered petals filling the painted foreground in gallery-tier detail, mid-distance bloom-cluster fading through layered petal-shadow into a soft crimson bloom-mist at depth.",
+    "description": "An ancient oak grove with a thick indigo-blue bluebell carpet blanketing the moss-floor between gnarled root-tangles, wild-rose-bramble climbing the deeply-furrowed trunks in cream-and-pink clusters, scattered fern-fronds at the foreground, mossy boulder-masses nestled between bark-ridged trunks, painted bloom-mist dissolving the background into enchanted depth.",
     "tags": [
+      "ANY",
+      "COOL",
       "WARM"
     ]
   },
   {
-    "description": "A sunflower field with towering golden sunflowers forming a painted natural forest of giant disk-blooms, rough-textured stems and serrated leaves visible in the painted foreground, golden painted canopy of turning disks overhead, warm haze dissolving the distant field at depth.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast sunflower field with sun-gold blooms dominating painted depth in every direction, scattered fallen sunflower-petals and seed-heads in painted foreground tactile detail, towering disk-bloom canopy forming the midground, soft warm-golden bloom-mist at the painted horizon.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower meadow with painted golden disks rising on thick columnar stems, foreground showing individual floret and seed-pattern detail on the painted disk-face, mid-distance sunflower-forest, painted bloom-mist softening the rearmost golden canopy into warm amber depth.",
+    "description": "A hidden fern-grotto with a giant peony-cluster blooming deep-crimson and blush-pink at the center between moss-covered boulders, soaring fern-fronds arching overhead from the grotto walls, ancient bark-textured stone dripping with liverwort, multi-tier depth fading into soft bloom-mist beyond the fern-canopy.",
     "tags": [
       "ANY",
       "WARM"
     ]
   },
   {
-    "description": "A wisteria-cascade arbor with violet-wisteria racemes draping overhead like a painted cathedral ceiling, individual floret clusters visible in the painted foreground canopy, mid-distance moss-grown path receding through hanging bloom-curtains, soft violet bloom-mist at painted depth.",
+    "description": "A birch-glade with pale slender trunks rising in close vertical columns, foxglove-spires of deep-pink and violet blooming between the trunks, lily-of-the-valley carpet across the moss-floor foreground, soft pearl-mist threading between the birches, dappled filtered canopy-light above.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade woodland with violet wisteria racemes draping in dense curtains from ancient oak-limbs overhead like a natural cathedral ceiling, moss-grown forest-path winding through the foreground, fern-fronds at the path-edges, lichen-crusted oak-trunks receding into bloom-mist.",
     "tags": [
       "COOL"
     ]
   },
   {
-    "description": "A wisteria-cascade with violet-purple racemes hanging in painted layers from above, fallen wisteria-florets carpeting the painted ground in soft purple snow, painted mid-distance columns of hanging bloom dissolving into an ethereal spring bloom-mist at depth.",
-    "tags": [
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wisteria-arbor over a winding garden path with painted violet-cluster racemes draping from trained overhead beams, individual floret detail in the painted foreground canopy, scattered fallen petals across the midground path, painted depth dissolving into soft lilac bloom-haze.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A lotus pond with painted floating lotus-blooms and water-lilies dotting a still reflective surface in gallery-tier richness, foreground lotus-pads showing individual vein-detail, midground bloom-clusters floating in arranged layers, painted canopy reflection dissolving in the depth.",
-    "tags": [
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A still lotus-pond with painted floating pink lotus-blooms and white water-lily pads in layered arrangement, individual stamen and petal-edge detail in foreground blooms, mid-distance bloom-carpet across the water surface, reflected sky dissolving at painted depth.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A floating lotus-meadow on a reflective pond surface, painted overlapping lotus-blooms and giant lily-pads creating a near-solid bloom-island, foreground lotus showing seed-pod and petal-cup detail, soft bloom-mist dissolving the far pond-edge into painted distance.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove with painted dense pink-and-white blossom canopy forming a natural ceiling overhead, drifting painted petals filling the mid-air layer, fallen-petal carpet covering the painted ground, pearl-pink bloom-mist dissolving the far grove into soft ethereal depth.",
+    "description": "A sakura-grove forest with arching cherry-blossom canopy forming a natural painted ceiling above, mossy forest-floor carpeted with fallen pink petals, ancient lichen-encrusted trunks weathered and gnarled, drifting petals layering the mid-depth, soft pearl-pink mist dissolving the background grove into ethereal distance.",
     "tags": [
       "ANY",
       "WARM",
@@ -664,161 +1216,7 @@
     ]
   },
   {
-    "description": "A sakura grove at peak bloom with painted overlapping cherry-blossom clusters on arching branches, individual five-petal blossom detail in the foreground canopy layer, painted petal-drift in the midground air, painted grove depth fading into a soft blush-white blossom-mist.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A vast scarlet poppy field with painted overlapping crimson blooms stretching to a painted horizon, foreground showing individual crepe-paper petal-texture and black-stamened centers, mid-distance poppy-carpet, painted bloom-depth haze softening the horizon into scarlet-mist.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A poppy meadow with painted scarlet blooms dominating the foreground in dense overlapping clusters, scattered cornflowers and wild-grasses threading through the painted mid-distance bloom-carpet, poppy-heads and seed-pods at varying heights dissolving into soft painted depth.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "An iris-meadow with painted tall purple-iris spires rising above a lower wildflower carpet of yellow-flag and wild-pansy, individual iris-fall and beard-detail visible in the foreground blooms, mid-distance spire-forest, painted violet-haze dissolving at depth.",
-    "tags": [
-      "ANY",
-      "COOL"
-    ]
-  },
-  {
-    "description": "A daffodil meadow with painted golden-yellow daffodil clusters covering the ground in dense overlapping rings, individual trumpet-and-corona petal detail in the foreground blooms, mid-distance daffodil-carpet rolling into depth, warm gold bloom-mist at the painted horizon.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-bramble garden with painted climbing rose-vines forming natural curtains of bloom across the depth, foreground crimson and blush rose-blooms showing individual petal-layer detail, mid-distance vine-curtains receding, scattered petals on the ground fading into soft painted depth.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A tropical garden with painted hibiscus blooms in vivid coral, scarlet, and magenta dominating the frame, oversized bird-of-paradise and heliconia spires forming a mid-distance painted canopy, exotic broad-leaf foliage threading between bloom-layers dissolving into lush painted depth.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast wildflower meadow at chest-height with painted overlapping clusters of bluebells, foxgloves, wood-anemones, and yarrow, scattered tall foxglove-spires creating natural punctuation across the painted midground, painted depth fading into a soft bloom-mist on the distant horizon.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rolling wildflower meadow with painted overlapping clusters of cornflowers, ox-eye daisies, and meadow-cranesbill stretching to a soft painted bloom-horizon, foreground tactile petal-detail, painted midground bloom-drift, painted gallery-tier richness fading into haze.",
-    "tags": [
-      "ANY",
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wildflower meadow with painted overlapping clusters of wild-iris, harebells, and dog-roses, gentle painted bloom-tops creating a textured canopy at midground scale, painted multi-tier depth dissolving into a soft violet-rose bloom-mist at the painted horizon.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sea of wildflowers at chest-height with painted overlapping clusters of asters, lupines, and ragged-robin, tall lupine-spires rising above the painted midground, painted foreground tactile bloom-cluster detail fading into warm bloom-haze at the painted edges.",
-    "tags": [
-      "ANY"
-    ]
-  },
-  {
-    "description": "A giant peony-cluster forming a natural hollow with painted overlapping ruffled cerise-and-cream peony-petals dominating the painted frame, painted interior petal-cavern detail in foreground, painted soft bloom-mist dissolving beyond the outer painted petal-wall into distant peony-grove.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A grove of giant magnolia-blooms suspended like painted lanterns, painted cream-and-blush petals at intimate foreground scale, painted multi-tier depth between near bloom-cluster and receding magnolia-canopy, soft painted ethereal bloom-mist dissolving the painted background grove.",
-    "tags": [
-      "ANY",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A cluster of giant tulip-bells in painted pearl-pink-and-ivory forming natural rooms at painted dramatic scale, painted foreground petal-wall detail, painted midground bloom-corridor depth, soft painted bloom-mist filling the painted background beyond the tulip-cluster.",
-    "tags": [
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sunflower field with towering golden sunflowers forming a painted natural forest of giant disk-blooms, painted tactile seed-disk detail at intimate foreground scale, painted midground column-depth, distant field fading into warm painted amber bloom-haze.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast sunflower field with sun-gold painted blooms dominating the painted depth in every register, painted scattered fallen sunflower-petals carpeting the painted foreground, painted gallery-tier scale-richness dissolving into warm golden painted bloom-mist at the horizon.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower meadow with painted golden disks densely packed across the painted midground, painted foreground disk-face detail showing painted ray-petals and seed-spirals, painted background column-depth fading into soft warm-gold painted bloom-haze.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade arbor with cascading violet-wisteria racemes draping overhead like a painted cathedral ceiling, painted moss-grown path receding through the midground, painted fallen wisteria-petals scattered across the foreground, painted gallery-tier depth dissolving into soft violet bloom-mist.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade with violet-purple racemes painted hanging in dense painted layers from overhead, painted foreground cluster-detail showing individual floret-bunches, painted midground tunnel-depth, painted soft amethyst bloom-mist filling the receding painted background.",
-    "tags": [
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wisteria-arbor over a winding garden path with painted violet-cluster draping from above, painted scattered fallen petals on the painted stone-path foreground, painted midground arch-depth, soft painted lavender-mist dissolving the painted background.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A lotus pond with painted floating lotus-blooms and water-lilies dotting the still painted surface in gallery-tier richness, painted foreground petal-and-pad detail, painted midground bloom-cluster island, painted reflections of bloom-canopy shimmering across the painted water-depth.",
-    "tags": [
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A still lotus-pond with painted floating lotus-blooms and water-lilies layered across the painted surface, painted foreground open-bloom detail, painted distant tree-line mirrored on the painted water, magical painted depth dissolving into soft bloom-mist at the painted horizon.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A floating lotus-meadow on a painted reflective pond, painted overlapping lotus-blooms creating a painted island of rose-and-white petals, painted foreground pad-and-blossom detail, soft painted bloom-mist dissolving the painted background into ethereal distance.",
+    "description": "A hidden lotus-pond grotto deep in the forest with pale-pink and ivory lotus-blooms floating on still water, ancient ferns crowding the mossy stone banks in the foreground, willow-branches dipping low to the surface, lichen-covered boulders half-submerged, reflective bloom-mist hovering in the background grotto-depth.",
     "tags": [
       "ANY",
       "COOL",
@@ -827,527 +1225,7 @@
     ]
   },
   {
-    "description": "A sakura grove at peak bloom with painted dense pink-and-white blossom-canopy overhead, painted drifting petals filling the painted midground air, painted ground carpeted with fallen painted petals, painted gallery-tier depth dissolving into soft pearl-pink blossom-mist.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove with painted pink-blossom canopy forming a painted natural ceiling, painted foreground branch-cluster blossom-detail, painted midground petal-drift, painted background fading into soft painted rose-pearl mist beyond the grove's painted interior depth.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A vast scarlet poppy field with painted overlapping crimson-poppy blooms stretching to a painted horizon, painted foreground seed-pod and crinkled-petal detail at intimate scale, painted midground bloom-density, painted bloom-depth haze dissolving at the painted horizon.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A poppy meadow with painted scarlet blooms dominating the painted frame at every depth, painted scattered cornflowers and wild-grasses threading through the painted midground, painted foreground tactile petal-detail, painted multi-tier bloom-depth fading into crimson haze.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "An iris-meadow with painted tall purple-iris spires rising above a painted lower wildflower carpet of painted forget-me-nots and painted buttercups, painted foreground iris-bloom detail, painted multi-tier depth dissolving into soft painted iris-violet bloom-haze at the horizon.",
-    "tags": [
-      "ANY",
-      "COOL"
-    ]
-  },
-  {
-    "description": "A daffodil meadow with painted golden-yellow daffodil-clusters covering the painted ground in overlapping painted rings, painted foreground trumpet-bloom detail, painted midground bloom-mass depth, painted background dissolving into warm painted gold bloom-mist at the painted horizon.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-bramble garden with painted climbing rose-vines forming painted natural curtains of deep crimson and blush, painted foreground bloom-and-thorn detail, painted midground vine-archway depth, painted gallery-tier richness dissolving into soft painted rose-mist beyond the painted bramble-walls.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-garden with painted overlapping blooms in painted varying pinks, creams, and damask-reds, painted vine-tendrils crossing the painted foreground depth, painted midground bloom-cluster density, painted soft rose-petal mist dissolving the painted background into gallery-tier romantic haze.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A tropical garden with painted hibiscus blooms in vivid coral-and-magenta dominating every painted depth register, painted bird-of-paradise and painted orchid-clusters threading through the painted exotic foliage, painted multi-tier canopy overhead, painted gallery-tier richness dissolving into lush painted green-and-bloom haze.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A vast wildflower meadow at chest-height with painted overlapping clusters of bluebells, foxgloves, red campion, and cow-parsley, scattered tall foxglove-spires creating natural punctuation above the bloom-carpet, painted multi-tier depth fading into a soft lavender-blue bloom-mist on the horizon.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rolling wildflower meadow with painted overlapping clusters of cornflowers, ox-eye daisies, and yellow-rattle stretching to a soft painted bloom-horizon, foreground tactile petal-and-stem detail dissolving into a hazy painted middle-distance of nodding bloom-tops, gallery-tier painted richness throughout.",
-    "tags": [
-      "ANY",
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wildflower meadow with painted overlapping clusters of wild-iris, harebells, and meadow-cranesbill rising at varying heights, scattered taller knapweed-spires creating painted vertical rhythm, painted bloom-depth fading into a soft violet-grey haze at the far painted horizon.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sea of wildflowers with painted overlapping clusters of lupines, asters, and white-yarrow at chest-height, painted foreground tactile bloom-cluster detail giving way to a painted mid-distance sweep of color, soft painted bloom-mist dissolving the far painted treeline.",
-    "tags": [
-      "ANY"
-    ]
-  },
-  {
-    "description": "A giant peony-cluster forming a painted natural hollow, painted overlapping ruffled blush-and-crimson peony-blooms dominating the painted frame in gallery-tier richness, painted layered petal-texture visible at intimate foreground scale, soft bloom-mist of smaller peonies fading through the painted background depth.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A grove of giant magnolia-blooms suspended like painted lanterns overhead, painted creamy-white-and-rose chalice-petals at dramatic scale in the foreground, painted mid-distance columns of magnolia-trunks hung with blooms, distant grove fading into a pearl-white painted mist.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A cluster of giant tulip-bells in painted pearl-pink-and-ivory forming natural rooms one could enter, painted dramatic petal-interior detail at intimate foreground scale, painted mid-distance tulip-forest of overlapping stems and bells, soft painted bloom-mist dissolving the background.",
-    "tags": [
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sunflower field with towering golden sunflowers forming a painted natural forest of giant disk-blooms, painted tactile seed-head and petal-fringe detail at intimate foreground scale, painted mid-distance corridor of golden disks, distant field fading into a warm-amber painted haze.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast sunflower field with painted sun-gold blooms dominating every tier of painted depth, scattered fallen sunflower-petals carpeting the painted foreground ground, painted mid-distance wall of golden disks, soft warm-gold painted bloom-mist closing the background.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower meadow with painted golden disks turned outward at varying heights, painted foreground tactile detail of broad-veined leaves and rough-textured stems, painted mid-distance sunflower-corridor, painted multi-tier depth fading into a soft amber-bloom haze at the far painted horizon.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade arbor with cascading violet-wisteria racemes draping overhead like a painted cathedral ceiling, painted foreground scattered fallen blossoms on moss-grown stone, painted mid-distance tunnel of hanging raceme-clusters, painted depth dissolving into a soft violet-mist beyond.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade with violet-purple racemes painted hanging in dense painted layers from gnarled overhead branches, painted foreground petal-cluster detail at intimate scale, painted mid-distance curtain of draping racemes, painted background dissolving into a soft lilac bloom-mist.",
-    "tags": [
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wisteria-arbor over a winding garden path with painted violet-cluster draping from above and painted scattered fallen wisteria-petals covering the path below, painted foreground petal-carpet detail, painted mid-distance arching raceme-canopy, soft painted depth beyond.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A lotus pond with painted floating lotus-blooms and water-lilies dotting a still painted surface in gallery-tier richness, painted foreground lotus-bloom at intimate petal-detail scale, painted mid-distance bloom-dotted water, painted reflections of an overhead canopy mirrored on the far painted water.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A still lotus-pond with painted floating lotus-blooms in layered pink-and-white across the painted surface, painted foreground lily-pad and open-bloom detail at intimate scale, painted mid-distance scatter of blooms, painted distant tree-reflection dissolving into the painted water's depth.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A floating lotus-meadow on a painted reflective pond, painted overlapping lotus-blooms creating a near-solid painted island of bloom, painted foreground petal-and-stamen detail, painted mid-distance bloom-carpet, soft painted bloom-mist dissolving the far painted shore.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove with painted pink-blossom canopy overhead creating a dense painted natural ceiling, painted foreground drifting petals suspended in the painted air, painted mid-distance blossom-laden branch-architecture, painted depth fading into a soft pearl-pink mist beyond.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove at peak bloom with painted dense pink-and-white canopy and painted carpeted ground of fallen petals, painted foreground petal-carpet texture at intimate scale, painted mid-distance blossom-column trunks, painted background dissolving into a pearl-blossom painted haze.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A vast scarlet poppy field with painted overlapping crimson-poppy blooms stretching to a painted bloom-horizon, painted foreground seed-pod and crumpled-petal detail at intimate scale, painted mid-distance sweep of scarlet, painted bloom-depth haze closing the far painted distance.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A poppy meadow with painted scarlet blooms dominating the painted frame at every depth, painted foreground cornflowers and wild-grasses punctuating the crimson bloom-carpet, painted mid-distance wave of poppy-heads, soft painted bloom-mist dissolving the far painted horizon.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "An iris-meadow with painted tall purple-iris spires rising above a painted lower carpet of wild-thyme and forget-me-not, painted foreground iris-bloom at intimate petal-detail scale, painted mid-distance spire-forest of violet and gold-throated blooms, soft painted iris-violet haze at the far depth.",
-    "tags": [
-      "ANY",
-      "COOL"
-    ]
-  },
-  {
-    "description": "A daffodil meadow with painted golden-yellow daffodil-clusters covering the painted ground in overlapping waves, painted foreground trumpet-and-petal detail at intimate scale, painted mid-distance sea of nodding yellow heads, soft warm-gold painted bloom-mist dissolving the background.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-bramble garden with painted climbing rose-vines forming natural painted curtains across every depth, painted foreground crimson-and-blush bloom-cluster detail at intimate scale, painted mid-distance arching bramble-arches hung with roses, painted gallery-tier richness fading into a soft rose-mist beyond.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-garden with painted overlapping blooms in varying painted pinks, creams, and deep-mauves, painted foreground open-rose at intimate petal-and-stamen detail, painted mid-distance vine-tendrils and bloom-clusters crossing the depth, painted background dissolving into a soft blush bloom-mist.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A tropical orchid-grove with painted vivid magenta-and-ivory dendrobium-orchid clusters and painted bird-of-paradise blooms dominating every painted tier, painted foreground exotic bloom at intimate petal-detail scale, painted mid-distance exotic-foliage canopy hung with orchid-sprays, painted background fading into a lush painted tropical bloom-mist.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A rolling wildflower meadow with painted overlapping clusters of cornflowers, ox-eye daisies, and meadow-cranesbill stretching to a soft painted bloom-horizon, foreground tactile bloom-cluster detail in vivid cobalt-and-white, painted depth fading into a hazy wildflower distance",
-    "tags": [
-      "ANY",
-      "COOL"
-    ]
-  },
-  {
-    "description": "A sea of wildflowers at chest-height with painted overlapping clusters of wild-iris, harebells, and wood-sorrel, painted bloom-tops swaying in a gentle painted breeze, scattered tall angelica-stems rising above the painted canopy, painted multi-tier depth into soft violet haze",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wildflower meadow with painted overlapping clusters of lupines, asters, and clover-blooms in layered violet-and-cream, distant painted treeline silhouette behind, foreground tactile petal-and-stem detail, painted bloom-depth fading into warm amber haze at the far painted horizon",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A giant peony-cluster forming a painted natural hollow, overlapping ruffled blush-pink and ivory peony-petals dominating the painted frame at intimate scale, scattered fallen petal-drifts across the painted foreground, soft painted bloom-mist dissolving the background into cream-and-rose",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A grove of giant magnolia-blooms suspended like painted lanterns overhead, creamy-white and blush petals open wide at dramatic scale, painted multi-tier depth between foreground petal-cluster and distant magnolia-grove silhouette, ethereal pale-bloom mist dissolving the far background",
-    "tags": [
-      "ANY",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A cluster of giant tulip-bells in painted pearl-pink and cream forming natural rooms, painted dramatic scale with petal-walls rising overhead, scattered fallen petal-fragments in painted foreground, soft painted bloom-mist fading the background into pastel haze",
-    "tags": [
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A towering sunflower field with golden sunflower-disks forming a painted natural forest of giant blooms, painted tactile seed-head detail at intimate foreground scale, distant field of warm-gold crowns fading into amber bloom-haze behind",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast sunflower field with sun-gold blooms dominating painted multi-tier depth, scattered fallen sunflower-petals carpeting the painted foreground, mid-ground rows of towering disk-heads receding into a warm-golden painted mist at the far horizon",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower meadow with painted golden disks at towering scale, mid-ground sunflower-stems forming painted natural columns, scattered wild-phacelia at the base in painted foreground detail, painted soft warm-gold bloom-mist dissolving the background depth",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade arbor with violet-wisteria racemes draping overhead like a painted cathedral ceiling, moss-grown stone path winding into painted mid-ground depth, scattered fallen wisteria-florets carpeting the painted foreground, painted gallery-tier register",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade with violet-purple racemes hanging in painted layers from gnarled overhead branches, foreground detail of individual floret-clusters, painted mid-ground curtain of bloom-drapes, background dissolving into soft lavender bloom-mist, painted spring-ethereal register",
-    "tags": [
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wisteria-arbor over a winding garden path with painted violet-cluster canopy draping from above, scattered fallen wisteria-petals covering the painted path below, painted multi-tier depth fading into a soft purple bloom-haze at the far end",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A lotus pond with painted floating sacred-lotus blooms and giant water-lilies dotting a reflective painted surface, mid-ground bloom-carpet of overlapping pads and open flowers, background of painted soft bloom-mist rising from the still water, magical painted register",
-    "tags": [
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A still lotus-pond with painted floating pink lotus-blooms and white water-lilies layered across the surface, painted reflections of distant canopy mirrored below, foreground tactile petal-and-stamen detail, background fading into a soft painted aqueous bloom-mist",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A floating lotus-meadow on a painted reflective pond, overlapping lotus-blooms creating a painted island of bloom, foreground open-flower detail with painted stamen texture, soft bloom-mist dissolving the far background into pearl-and-green haze",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove with a painted dense pink-and-white blossom canopy overhead forming a natural ceiling, painted drifting petals filling the painted mid-air layer, ground carpeted in fallen sakura-bloom, painted depth fading into soft pearl-pink mist",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove at peak bloom with painted creamy-pink Yoshino-cherry canopy and a painted ground-carpet of fallen petals, foreground petal-cluster detail, painted multi-tier depth dissolving into ethereal white-pink blossom haze behind",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A vast scarlet poppy field with painted overlapping crimson Papaver-rhoeas blooms stretching to a painted horizon, foreground painted seed-pod and petal detail at intimate scale, painted bloom-depth haze dissolving into red-and-green distance",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A poppy meadow with painted scarlet blooms dominating the painted frame, scattered painted cornflowers and wild-grasses threading between crimson heads, foreground tactile crinkled-petal detail, painted multi-tier depth fading into soft red bloom-mist",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "An iris-meadow with painted tall bearded-iris spires rising in violet and purple above a lower painted wildflower carpet of forget-me-nots, foreground painted petal-fall detail, painted multi-tier depth fading into soft iris-violet bloom-haze",
-    "tags": [
-      "ANY",
-      "COOL"
-    ]
-  },
-  {
-    "description": "A daffodil meadow with painted golden-yellow Narcissus-cluster covering the painted ground in overlapping trumpet-blooms, foreground painted petal-and-cup detail, mid-ground rolling daffodil carpet, painted depth fading into warm gold bloom-mist at the horizon",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-bramble garden with painted climbing rose-vines forming natural curtains of bloom in cascading crimson and blush, painted scattered fallen rose-petals across the foreground, painted vine-tendrils crossing mid-ground depth, painted gallery-tier richness",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rose-garden with painted overlapping rose-blooms in varying painted pinks, creams, and deep-carmine, painted arching vine-tendrils crossing the painted depth, foreground open-bloom petal detail, background dissolving into a soft painted rose-bloom mist",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A tropical garden with painted coral-and-crimson hibiscus blooms dominating the painted depth, painted bird-of-paradise and heliconia spires rising through mid-ground, painted exotic broad-leaf canopy forming a multi-tier painted overhead, painted gallery-tier richness",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast wildflower meadow at chest-height with painted overlapping clusters of bluebells, foxgloves, wood-anemones, and red campion, scattered tall foxglove-spires creating natural painted punctuation across the midground, painted bloom-depth fading into a soft lavender-blue mist on the horizon.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A rolling wildflower meadow with painted overlapping clusters of cornflowers, ox-eye daisies, and buttercups stretching to a soft painted bloom-horizon, foreground tactile petal-and-stem detail giving way to a painted mid-distance carpet of color fading into pale gold bloom-haze.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wildflower meadow with painted overlapping clusters of wild asters, lupines, and harebells rising to shoulder-height, distant treeline silhouette barely visible through a painted bloom-depth haze, foreground bloom-cluster detail painted in gallery-tier richness.",
-    "tags": [
-      "ANY"
-    ]
-  },
-  {
-    "description": "A sea of wildflowers with painted overlapping clusters of wild-iris, Queen Anne's lace, and yarrow at chest-height, a painted gentle breeze visibly moving the bloom-tops in the midground, painted multi-tier depth dissolving into a soft pearl-white bloom-mist at the horizon.",
-    "tags": [
-      "ANY",
-      "COOL",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A giant peony-cluster forming a natural painted hollow of ruffled blush-pink and ivory peony-blooms large enough to nestle inside, painted layered petals dominating the painted foreground, painted soft bloom-mist dissolving the background into pale-rose haze, gallery-tier painted richness.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A grove of giant magnolia-blooms suspended like painted lanterns overhead on dark painted boughs, foreground magnolia-petal detail in painted cream and blush, midground tree-trunks receding into painted depth, distant magnolia-grove dissolving into an ethereal white-blossom mist.",
-    "tags": [
-      "ANY",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A cluster of giant tulip-bells in painted pearl-pink and cream forming natural painted rooms with curving petal-walls, painted dramatic scale filling the painted frame, foreground petal-texture detail, soft painted bloom-mist beyond the midground tulip-cluster.",
-    "tags": [
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A giant peony-hollow in deep crimson and magenta, painted ruffled peony-petals arching overhead to form a painted natural canopy, layered foreground petal-mass giving way to a painted midground of more blooms, background dissolving into a deep-rose painted mist.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower field with towering golden sunflowers forming a painted natural forest of giant disk-blooms taller than a doorway, painted foreground petal-and-seed-head detail, painted midground column of stems receding into warm painted depth, distant field fading into amber-gold haze.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A vast sunflower field with painted golden disks dominating every tier of the painted frame, painted scattered fallen sunflower-petals across the foreground ground, painted gallery-tier scale richness receding through the midground into a soft warm-gold bloom-mist.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A sunflower meadow with painted sun-gold blooms turned in a single direction, foreground disk-bloom texture painted in intimate detail, painted midground stem-columns creating natural painted lanes, soft golden bloom-mist swallowing the painted background horizon.",
-    "tags": [
-      "ANY",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade arbor with violet-purple wisteria racemes draping overhead like a painted cathedral ceiling, foreground fallen wisteria-petals carpeting the moss-grown path, painted midground of hanging raceme-curtains, painted background dissolving into layered violet bloom-haze.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A wisteria-cascade with painted hanging violet racemes falling in painted layers from an overhead trellis, foreground individual floret-cluster detail, painted midground of draping bloom-curtains, ethereal painted background of receding wisteria-purple mist.",
-    "tags": [
-      "COOL"
-    ]
-  },
-  {
-    "description": "A wisteria-arbor over a winding stone path with painted deep-purple and pale-lavender racemes cascading from above, scattered fallen wisteria-petals painting the path below, painted multi-tier depth receding through the arbor into a luminous bloom-violet distance.",
-    "tags": [
-      "COOL",
-      "WARM"
-    ]
-  },
-  {
-    "description": "A lotus pond with painted floating pink-and-white lotus-blooms and broad lily-pads dotting a still painted surface, foreground lotus-bloom detail with painted stamen-crown, painted midground of clustered floating blooms, painted background of lotus-bud silhouettes in soft bloom-mist.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A still lotus-pond with painted floating Sacred lotus and yellow water-lilies layered across the painted surface, painted reflections of distant reed-banks mirrored on the water below, foreground petal-detail, painted background of soft reed-and-mist.",
-    "tags": [
-      "COOL",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A floating lotus-meadow on a painted reflective pond with overlapping Nelumbo lotus-blooms creating a painted island of bloom, foreground open-bloom detail, painted midground of tightly clustered lotus-pads and buds, soft pale bloom-mist dissolving the background shore.",
+    "description": "A weeping-willow thicket with cascading willow-curtains hanging low above a hidden iris-cluster of violet and gold blooming at the stream-bank, mossy stones along the water-edge in the foreground, pale willow-trunks receding into pearl-mist, soft fern-fronds at the bank.",
     "tags": [
       "ANY",
       "COOL",
@@ -1356,43 +1234,64 @@
     ]
   },
   {
-    "description": "A sakura grove with painted dense cherry-blossom canopy overhead in pale-pink and white, painted foreground fallen-petal carpet on the ground, midground tree-trunks rising into the bloom-canopy, painted background dissolving into a soft pearl-pink blossom-mist.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A sakura grove at peak bloom with painted overlapping Yoshino cherry branches forming a solid painted canopy, foreground individual blossom-cluster detail, painted ground carpeted in drifting petals, background receding through layered blossom-pink into ethereal pale haze.",
-    "tags": [
-      "ANY",
-      "WARM",
-      "WHITE"
-    ]
-  },
-  {
-    "description": "A vast scarlet poppy field with painted overlapping Oriental poppy and corn-poppy blooms stretching to a painted horizon, foreground seed-pod and crepe-petal texture painted in intimate detail, painted bloom-depth haze of red deepening toward the far distance.",
-    "tags": [
-      "WARM"
-    ]
-  },
-  {
-    "description": "A poppy meadow with painted scarlet blooms dominating the painted frame, painted scattered bachelor's buttons and wild grasses threading through the foreground bloom-mass, painted multi-tier depth of crimson receding into a soft red-bloom horizon-haze.",
+    "description": "A moss-canyon with towering vertical moss-covered cliff walls on either side, foxgloves clinging in pink-purple spires to the cliff-faces, hanging honeysuckle-vine cascading from the canyon-rim above, hidden grotto-floor thick with fern-fronds, painted vertical-scale enchanted depth.",
     "tags": [
       "ANY",
       "WARM"
     ]
   },
   {
-    "description": "An iris-meadow with painted tall Siberian iris and bearded iris spires rising above a painted lower carpet of wild-viola and forget-me-not, foreground iris-fall petal-detail, painted midground spire-columns, painted background dissolving into a soft iris-violet bloom-haze.",
+    "description": "A redwood cathedral with massive ridged ancient trunks soaring into a canopy far above, cinnamon-red bark deeply furrowed in the foreground, painted carpet of wood-anemones and blue forget-me-nots woven across the needle-floor, soaring gallery-scale depth dissolving into amber-mist between the giant trunks.",
     "tags": [
       "ANY",
-      "COOL"
+      "COOL",
+      "WARM",
+      "WHITE"
     ]
   },
   {
-    "description": "A daffodil meadow with painted golden-yellow Narcissus and white pheasant's-eye daffodils covering the painted ground in overlapping bloom-clusters, foreground trumpet-detail, painted midground bloom-carpet receding to the horizon, background dissolving into warm-gold daffodil-mist.",
+    "description": "An enchanted mushroom-grove clearing ringed by ancient yew-trees, a fairy-circle of glowing pearl-fungus in the moss foreground, indigo bluebell-cluster blooming at the hollow-center, fern-fronds at the clearing-edge, twisted yew-branches framing overhead, soft pearl-glow magical register receding into forest-dark beyond.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with wild-rose-bramble in painted pink-and-cream clusters spiraling up the deeply-furrowed bark of old trunks, gnarled surface-roots crossing the moss-floor foreground, bluebell-drift at the root-bases, mossy boulders in the mid-depth, canopy-god-rays piercing the leafy vault above.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden fern-grotto with a giant magnolia-tree at the grotto-center, white-and-blush magnolia-blooms suspended overhead like lanterns among the dark branches, dripping fern-walls of moss-cliff surrounding on three sides, multi-tier ethereal depth building from foreground fern-fronds to the magnolia-crown above.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with painted cornflower-clusters and pale-violet harebell drifts dotting the mossy floor between slender pale-barked birch-trunks, soft pearl-mist threading through the background trunks, dappled filtered birch-canopy above, scattered foreground fern-fronds grounding the scene.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-draped ancient-oak grove with violet wisteria racemes hanging in dense cascades from gnarled oak-limbs, moss-grown forest-path winding through the foreground, scattered fern-fronds at path-edges, lichen-rich oak-bark in the mid-depth, bloom-mist beyond dissolving into enchanted cathedral distance.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with pink-blossom branches arching and interlocking overhead, mossy carpet of fallen petals blanketing the ancient forest-floor, lichen-rich trunks dissolving into pearl-pink mist in the background, drifting petals filling the mid-depth with soft painted motion.",
     "tags": [
       "ANY",
       "WARM",
@@ -1400,14 +1299,116 @@
     ]
   },
   {
-    "description": "A rose-bramble garden with painted climbing Rosa gallica and rambler-rose vines forming painted natural curtains across every tier, foreground open-bloom and thorn-tendril detail, midground vine-archways, painted background of cascading crimson-and-cream rose-bloom depth.",
+    "description": "A hidden lotus-pool in a deep fern-grotto with pink lotus-blooms on still reflective water, dripping moss-cliffs on three sides with ancient fern-fronds cascading, willow-branches reaching to the water-surface, soft-cyan magical glow in the still-water reflection, background mist in the grotto-depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with long cascading willow-branches forming natural curtains above a hidden wild-iris and forget-me-not cluster at the hidden stream-bank, mossy stones at the water-edge foreground, mid-depth willow-trunks, distant trunks dissolving into pearl-mist, painted dappled register.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon enchanted glen with vertical moss-covered cliff-walls crowding close, foxgloves in deep-pink spires clinging to the cliff-faces, hanging-vine-blooms cascading from above, grotto-floor thick with fern-fronds and creeping moss in the foreground, painted vertical-scale depth, enchanted hidden register.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A redwood-cathedral forest interior with massive ancient trunks rising in the foreground and mid-depth, carpets of trillium in white and deep-rose and bleeding-heart in crimson-pink woven across the forest-floor, gallery-tier soaring canopy-scale above, soft amber bloom-mist between distant trunks.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted yew-grove clearing with a fairy-circle of glowing pearl-mushrooms ringing the mossy hollow foreground, painted indigo bluebell-cluster at the hollow-center, ancient twisted yew-branches framing overhead, soft magical pearl-glow ambient, deep yew-forest dark receding in the background.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient mossy oak-grove with hanging-ivy draping from canopy-limbs, a cluster of giant dusty-rose peony-blooms emerging from a hollow at the base of a massive bark-ridged trunk, moss-covered roots crossing the foreground, dappled canopy-light above, bloom-mist receding through mid-depth.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with a foxglove-spire-cluster of deep-violet and rose rising from the mossy foreground floor, scattered pale-violet harebells ringing the base, pale-barked birch-trunks framing mid-depth, dappled filtered birch-canopy above, soft ethereal forest-mist dissolving the background glade.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade ancient-oak path with violet wisteria racemes hanging overhead in continuous curtains from lichen-rich oak-limbs, fallen wisteria-petals scattered pale-violet across the moss-grown forest-path foreground, ancient flanking trunks receding in mid-depth, bloom-mist fading the background into gallery-tier enchanted distance.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with a hidden moss-covered ancient stump in the mid-depth, pink cherry-blossom canopy arching overhead, soft carpeted moss-floor with fallen-petal drift in the foreground, drifting petals filling the painted air, pearl-pink mist dissolving the background grove into ethereal softness.",
     "tags": [
       "WARM",
       "WHITE"
     ]
   },
   {
-    "description": "A tropical garden with painted vivid coral-and-magenta hibiscus blooms and white moth-orchid clusters dominating every painted tier, foreground hibiscus-stamen detail, painted midground of bird-of-paradise spikes and broad exotic foliage, painted background dissolving into lush deep-green bloom-canopy depth.",
+    "description": "A hidden enchanted glen ringed by ancient hornbeam-trees with smooth grey bark, giant white-magnolia blooms suspended overhead like painted lanterns on dark branches, lily-of-the-valley carpet blanketing the moss-floor foreground, deep fern-fronds at the glen-edge, soft pearl-glow ambient, forest-dark receding beyond.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a deep indigo-bluebell carpet smothering the moss-floor between gnarled roots, wild-rose-bramble spiraling up furrowed bark in cream-and-pink clusters, scattered fern-fronds at the foreground, mossy boulders nestled between trunks, the canopy closing overhead into dappled enchanted depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A fern-grotto with dripping soaring fern-fronds rising from moss-covered boulders, a giant peony-cluster blazing pink-and-crimson at the grotto center, ancient bark-textured stone walls surrounding, soft bloom-mist settling at the floor, multi-tier painted depth receding into shadowed fern-curtains.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with pale slender birch-trunks rising in columns, foxglove-spires of deep pink and violet blooming between trunks, lily-of-the-valley carpet spreading across the mossy floor, soft pearl-mist drifting between the trunks in the distance, dappled filtered light from the pale birch-canopy overhead.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade woodland with violet wisteria racemes draping from ancient oak-boughs like a living cathedral ceiling, moss-grown forest-path winding through below, scattered fern-fronds at the foreground, fallen wisteria-petals dusting the mossy path, lichen-crusted trunks flanking into painted enchanted depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with a pink-blossom canopy forming a natural vaulted ceiling overhead, mossy forest-floor carpeted with drifting fallen petals, ancient lichen-rich trunks weathered and gnarled at the foreground, soft pearl-pink bloom-mist dissolving the background trunks into painted ethereal depth.",
     "tags": [
       "ANY",
       "WARM",
@@ -1415,10 +1416,187 @@
     ]
   },
   {
-    "description": "A vast wildflower meadow at chest-height with painted overlapping clusters of harebells, oxeye daisies, meadow cranesbill, and tall purple-loosestrife spires creating natural punctuation throughout, foreground tactile bloom-cluster detail in painted gallery-tier richness, painted depth fading into a soft lavender bloom-mist on the horizon.",
+    "description": "A hidden lotus-pond grotto deep in the forest, floating pink-and-white lotus-blooms on still dark water, ancient ferns and dripping moss-covered stones ringing the pool, willow-branches dipping to the surface, soft reflective bloom-mist rising from the water into the fern-curtained depth above.",
+    "tags": [
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading willow-branches forming curtained walls above a hidden iris-meadow at the mossy stream-bank, deep-violet and cobalt iris-spires rising through the parted curtains, moss-covered stones along the water-edge, distant willow-trunks dissolving into pale pearl-mist.",
     "tags": [
       "ANY",
-      "COOL"
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon with towering vertical moss-clad cliff walls rising on either side, foxgloves clinging in pink-purple clusters to the cliff-faces, hanging-vine-blooms cascading from the rim above, fern-fronds blanketing the hidden grotto-floor below, painted vertical-scale enchanted depth narrowing into shadow.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A redwood cathedral with massive ridged ancient trunks soaring into a canopy a hundred feet overhead, a painted carpet of wood-anemones and forget-me-nots woven through the deep cinnamon needle-floor below, fern-fronds at the foreground, the background dissolving into soaring bark-pillars and soft canopy-filtered depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with wild-rose-bramble climbing the gnarled trunks in painted pink-and-cream cascades, twisted exposed roots crossing the mossy foreground earth, a bluebell carpet pooling at the root-hollows in deep violet-blue, dappled god-rays piercing the dense oak-canopy, the background dissolving into moss-shrouded trunk-depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A fern-grotto with a hidden ancient magnolia-tree at the center, white-and-cream magnolia-blooms suspended like lanterns among the branches overhead, dripping fern-fronds from moss-cliff walls surrounding, mossy boulder foreground, the background receding into a curtain of fern and soft bloom-mist above the still grotto-floor.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A birch-glade with painted cornflower-blue and harebell-violet clusters dotting the mossy floor between pale slender birch-trunks, lichen-patched bark at the foreground trunks, soft pearl-mist fading between the receding trunks in the background, dappled filtered birch-canopy light above the hushed glade interior.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-draped ancient-oak grove with heavy violet wisteria racemes hanging from gnarled oak-limbs forming a fragrant painted ceiling, moss-grown forest-path winding through at the midground, scattered fern-fronds and mossy stones at the foreground, the background canopy dissolving into cascading violet-bloom depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with pink cherry-blossom branches arching and interweaving overhead into a vaulted blossom-ceiling, mossy forest-floor rich with fallen petal-drifts, ancient lichen-encrusted trunks at the foreground, the background dissolving into pearl-pink blossom-mist and drifting petals through deep grove-shadow.",
+    "tags": [
+      "ANY",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden lotus-pool in a deep fern-grotto, pale-pink and white lotus-blooms floating on still dark water, dripping moss-cliff walls surrounding on three sides, ancient fern-fronds arching over the pool-surface, willow-branches reaching down from above, the grotto-depth fading into soft cyan-tinted bloom-mist.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A weeping-willow thicket with cascading willow-curtains parting above a hidden stream-bank iris-meadow, wild iris in deep violet and gold rising at the midground, mossy stones and tangled willow-roots at the foreground bank, the background willow-trunks dissolving into soft dappled pearl-mist above still water.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A moss-canyon enchanted glen with foxgloves blazing pink-purple on the vertical moss-covered cliff-faces, hanging-honeysuckle cascading from the canyon rim in cream-and-gold clusters, a hidden grotto-floor of dense fern-fronds below, painted vertical-scale depth with the canyon walls narrowing into shadow and bloom-mist above.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A redwood cathedral interior with massive ancient cinnamon-barked trunks rising as painted pillars into a vast soaring canopy, a carpet of trillium and bleeding-heart blooms threading through the needle-floor at the midground, fern-fronds at the foreground, the painted background dissolving into pillar-depth and canopy-shadow above.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An enchanted yew-grove clearing with ancient twisted yew-trunks and gnarled branches framing a mossy hollow, a pearl-mushroom fairy-circle at the forest-floor midground, a deep indigo bluebell-cluster pooling at one hollow edge, fern-fronds at the clearing perimeter, soft pearl-glow rising from the mossy hollow center.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with hanging-ivy draping the trunks and a cluster of giant peony-blooms emerging from a root-hollow at the base, deep-pink petals spilling across the moss, gnarled foreground roots framing the bloom, dappled god-rays from the oak-canopy above, the background softening into ivy-hung trunk-depth.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with foxglove-spires rising tall in deep-pink and cream from the mossy floor, scattered pale-violet harebells dotting between the foreground roots, lichen-pale birch-trunks at the midground, soft dappled light filtering through the pale birch-canopy, the background fading into misty glade-depth and receding trunk-columns.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade canopy above a winding ancient moss-grown forest-path, scattered fallen violet wisteria-petals dusting the path-surface, lichen-rich oak-trunks flanking the path at the midground, dense wisteria-raceme ceiling hanging low overhead, the background path dissolving into soft violet-bloom-mist and deep canopy-shadow beyond.",
+    "tags": [
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A sakura-grove forest with a hidden moss-covered ancient stump at the midground depth, pink blossom-branches arching from living trunks overhead, petals drifting through the painted grove-air, lichen-textured foreground trunks, the background softening into layered pearl-pink blossom-mist and receding grove-shadow beyond the stump.",
+    "tags": [
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A hidden enchanted glen within an ancient mixed-oak grove, a mossy hollow ringed by giant white magnolia-blooms suspended from low branches like pale lanterns, lily-of-the-valley carpet blanketing the hollow floor, draping ivy and fern-fronds at the edges, soft pearl-glow ambient rising from the bloom-ringed mossy center.",
+    "tags": [
+      "ANY",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "An ancient oak grove with a thick indigo-bluebell carpet spreading wall-to-wall between the gnarled moss-draped roots, wild-rose-bramble climbing the furrowed trunks in cream-and-blush clusters, scattered fern-fronds at the foreground, mossy boulders half-buried between root-arches, canopy weaving overhead into dappled enchanted depth.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A hidden fern-grotto with a giant peony-cluster blazing deep-crimson at the center between moss-covered boulders, soaring fern-fronds cascading from the grotto-walls, ancient bark-textured stone enclosing the hollow, dripping lichen from the overhang above, soft bloom-mist receding into the grotto's painted inner depth.",
+    "tags": [
+      "ANY",
+      "WARM"
+    ]
+  },
+  {
+    "description": "A birch-glade with pale slender birch-trunks rising in close columns, foxglove-spires clustering pink-and-violet between the trunks, lily-of-the-valley carpet threading through the mossy floor below, soft pearl-mist dissolving the background trunks into enchanted blur, dappled light filtering through the pale canopy overhead.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM",
+      "WHITE"
+    ]
+  },
+  {
+    "description": "A wisteria-cascade woodland with violet wisteria racemes draping in thick curtains from ancient oak-limbs forming a natural cathedral overhead, moss-grown forest-path winding through the foreground, scattered fern-fronds at the path-edge, lichen-rich oak-bark visible through the bloom-veil, painted enchanted depth receding into violet bloom-mist.",
+    "tags": [
+      "ANY",
+      "COOL",
+      "WARM"
     ]
   }
 ]
