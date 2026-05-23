@@ -7,10 +7,8 @@ name: Bots Dispatcher (DB-driven)
 # See BOTS.md "Scheduling" section for details.
 
 on:
-  # CRON IS DISABLED FOR COMMIT #1 — re-enable in commit #2 (cutover) after
-  # verifying dry-run workflow_dispatch lists due bots correctly.
-  # schedule:
-  #   - cron: '*/15 * * * *'
+  schedule:
+    - cron: '*/15 * * * *'   # every 15 min, UTC
   workflow_dispatch:
     inputs:
       dry_run:
