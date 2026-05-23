@@ -388,6 +388,8 @@ For EVERY character path: **`promptPrefixByPath[path] = ''`**. Empty. Do NOT add
 - "curves emphasized" / "bust-accentuating" / "low-cut"
 - NO artist names (Frazetta / Brom / Vallejo / Boris / Hildebrandt / Whelan)
 
+> **⚠️ AMENDED 2026-05-23 (female-adventurer, Kevin's call) — the blanket "covered" bans over-corrected into fully-covered drapey silhouettes.** The new bar is a COVERAGE MIX: ~35% fully-covered ornate / ~30% fitted-mid / ~35% tastefully skin-showing (bare arms / bare shoulders / toned midriff / short combat skirt + bare legs — Red-Sonja-but-tasteful / Xena / Nilfgaardian-fitted register). The **cheesecake line that still holds**: chainmail-bikini / battle-bra / string-strap-as-outfit / **cleavage-AS-the-focus** / plunging neckline / sultry-seductive language / bondage-harness / **bare-thigh pin-up seated pose**. At a 56%-skin pool ratio one tavern render tipped past tasteful (cleavage + bare thighs + sexy seated pose) — **~35% skin-showing is the safer ratio**. Artist-name ban still stands.
+
 **Male bans (in pool recipes + template) — DIFFERENT failure mode:**
 - "shirtless" / "bare-chested" / "oiled-pecs" / "loincloth"
 - "sleeveless" — triggers Flux's bare-arms-and-implied-bare-torso default when combined with orc race + war-action
@@ -401,6 +403,16 @@ For EVERY character path: **`promptPrefixByPath[path] = ''`**. Empty. Do NOT add
 **Male outfit MUST mandate:** every entry explicitly names a chest-covering item (tunic / cuirass / breastplate / gambeson / scale-armor / robe / coat / surcoat / mail hauberk / brigandine / chest-plate / chest-piece).
 
 **Male skin MUST stay FACE-FOCUSED:** describe cheekbones / forehead / jaw / temples / brow ONLY. NEVER describe torso / chest / shoulders / arms / muscular-body.
+
+### 2026-05-23 female-adventurer iteration — birds, poses, coverage (commit `a7f695e`)
+
+Three lessons from hardening the path's output (pools held at MVP 45, checkpointed — NOT scaled). All generalize to any character path:
+
+**1. Bird-companion entries COMPOUND across pools → "girl with a bird."** Birds sat at ~25% of the action pool (hawk-launch / raven-on-shoulder), ~24% of accessory (live hawk-on-glove / raven-on-shoulder — these render LARGE, as a co-subject), and ~21% of surprise_element. Rolling all three independently → only ~45% chance of NO bird; Kevin saw 3/5 renders as "a girl with a bird." **Fix at the SOURCE pools, not the brief** — strip companion-bird beats from action, cut live-bird familiars from accessory (an engraved hawk *crest* or feathers-on-a-totem are fine; a live perched bird is not), and keep only tiny-distant flock/circling birds in surprise_element (those are legit scale-provers). A familiar/companion-animal axis on ANY bot needs a hard cap per animal or it dominates.
+
+**2. Candid TRAVEL/OBSTACLE/REST registers beat camp-chore/ritual registers.** The old action pool was heavy on squeeze-through-fissure (×22), rope/bridge-REPAIR (×17), hoof-tending (×11), fire-kindling, and kneeling-to-scratch-a-sigil — these render as goofy, hunched, ungainly scrambles. Kevin's wanted feel (verbatim): "climbing over a boulder, on a bridge, walking down a path, sneaking up on something with their sword drawn, sitting in a tavern, relaxing at the side of a creek, reading a map, sharpening a weapon by campfire." Register split that landed: traveling-the-path ~22% / navigating-an-obstacle ~22% / stealth-sword-drawn ~12% / mounted ~12% / rest-downtime (creek/map/campfire/tavern) ~22% / discovery ~10% / light-magic-standing ~6%. **Crossing a bridge = good; repairing one = goofy.**
+
+**3. A venue-bearing action needs a PERMISSIVE template, and so does a coverage mix.** Two template fixes were load-bearing: (a) the combat-clean ban was relaxed to allow a DRAWN weapon in stealth/wary advance (no enemy, no strike) — needed for "sneaking with sword drawn"; (b) the landscape line now says an action's own venue (tavern / camp / creek) OVERRIDES the rolled wild-biome, so a "tavern" action + "alpine pass" landscape resolves to "tavern window showing peaks beyond" instead of a conflict. Likewise the outfit section said "covered" 3× and listed full armor pieces — that **forced drapey full-coverage regardless of the pool**, even on sleeveless entries. Changing it to "render the OUTFIT SLOT's coverage EXACTLY (covered OR tastefully skin-showing per the slot)" is what let the coverage mix actually show. **Template mandates silently override pool variety — audit the template, not just the pool, when every render looks the same.**
 
 ### Race-anatomy rendering — let action variety do the work
 
