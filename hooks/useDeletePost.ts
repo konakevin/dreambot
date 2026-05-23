@@ -34,10 +34,12 @@ export function useDeletePost() {
 
   return useMutation({
     mutationFn: async (uploadId: string) => {
-      // Grab image URL before deleting (needed for storage cleanup)
+      // Grab BOTH image URLs before deleting (base + HQ Pro variant) so we
+      // can clean both from storage. Previously only image_url was cleaned,
+      // leaking every Pro HQ file on post deletion.
       const { data: row } = await supabase
         .from('uploads')
-        .select('image_url')
+        .select('image_url, image_url_hq')
         .eq('id', uploadId)
         .single();
 
@@ -52,12 +54,15 @@ export function useDeletePost() {
         if (error) throw error;
       }
 
-      // Clean up storage (fire-and-forget)
-      if (row?.image_url) {
-        const match = row.image_url.match(/\/uploads\/(.+)$/);
-        if (match?.[1]) {
-          supabase.storage.from('uploads').remove([decodeURIComponent(match[1])]);
-        }
+      // Clean up storage (fire-and-forget). Both base + HQ paths.
+      const paths: string[] = [];
+      for (const url of [row?.image_url, row?.image_url_hq]) {
+        if (!url) continue;
+        const match = url.match(/\/uploads\/(.+)$/);
+        if (match?.[1]) paths.push(decodeURIComponent(match[1]));
+      }
+      if (paths.length > 0) {
+        supabase.storage.from('uploads').remove(paths);
       }
     },
     onMutate: async (uploadId: string) => {
