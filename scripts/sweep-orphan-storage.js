@@ -45,9 +45,18 @@ const sb = createClient(
 
 const args = process.argv.slice(2);
 const DELETE = args.includes('--delete');
+const AGGRESSIVE = args.includes('--aggressive');
 const SAMPLE_N = parseInt((args.find((a) => a.startsWith('--sample=')) || '--sample=10').slice(9), 10);
 const BUCKET_FILTER = (args.find((a) => a.startsWith('--bucket=')) || '').slice(9) || null;
 const MIN_AGE_MS = 24 * 60 * 60 * 1000; // skip files younger than 24h
+
+// SAFETY: by default, only consider files in folders whose owner has been
+// deleted from `users`. Files in live-account folders (Kevin's, bots,
+// active users) are NEVER touched without --aggressive even if they look
+// orphaned — they might be early-feature artifacts, in-flight test
+// renders, or files referenced from columns/tables this sweep doesn't
+// query. --aggressive removes this guard and treats the global
+// referenced-paths set as the only protection.
 
 const BUCKETS = ['uploads', 'avatars'].filter((b) => !BUCKET_FILTER || b === BUCKET_FILTER);
 
@@ -180,11 +189,29 @@ async function loadReferencedPaths() {
 // 3. Main.
 (async () => {
   console.log(`Mode: ${DELETE ? 'DELETE' : 'DRY-RUN (pass --delete to actually remove)'}`);
+  console.log(`Safety: ${AGGRESSIVE ? 'AGGRESSIVE (touches live-account folders too — risky)' : 'CONSERVATIVE (deleted-account folders only)'}`);
   console.log(`Buckets: ${BUCKETS.join(', ')}`);
   console.log(`Min-age guard: ${MIN_AGE_MS / 3600000}h (younger files skipped as in-flight)\n`);
 
   console.log('Loading DB references...');
   const referenced = await loadReferencedPaths();
+
+  // Load live user IDs — folders not owned by a live user are safe-mode targets
+  console.log('  loading live user IDs (for folder ownership check)...');
+  const liveUserIds = new Set();
+  {
+    let off = 0;
+    const STEP = 1000;
+    for (;;) {
+      const { data, error } = await sb.from('users').select('id').range(off, off + STEP - 1);
+      if (error) throw new Error(`users query: ${error.message}`);
+      if (!data || data.length === 0) break;
+      for (const r of data) liveUserIds.add(r.id);
+      if (data.length < STEP) break;
+      off += STEP;
+    }
+  }
+  console.log(`    live user accounts: ${liveUserIds.size}`);
 
   console.log('\nListing storage buckets...');
   const cutoff = Date.now() - MIN_AGE_MS;
@@ -198,6 +225,13 @@ async function loadReferencedPaths() {
     const orphans = files.filter((f) => {
       if (refSet.has(f.path)) return false;
       if (f.created_at && new Date(f.created_at).getTime() > cutoff) return false;
+      // CONSERVATIVE-MODE GUARD: skip files whose folder belongs to a live
+      // user. Folder name = user_id (storage convention used everywhere
+      // in this app). Only --aggressive deletes orphans inside live folders.
+      if (!AGGRESSIVE) {
+        const folderOwner = f.path.split('/')[0];
+        if (liveUserIds.has(folderOwner)) return false;
+      }
       return true;
     });
     const totalBytes = '?'; // we'd need .info() per file for size — skip for now
