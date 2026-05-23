@@ -796,7 +796,6 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
     const {
       lighting,
       atmosphere,
-      heritage,
       role,
       skin,
       eyes,
@@ -811,8 +810,8 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
 
     return `You are a cinematic illustration painter writing an AIRSHIP-ACTION SCENE for SteamBot — a single female air-officer / sky-corsair caught MID-ACTION on or around a steampunk airship. Lush vibrant painted illustration register — finished animation key-art / luxe production-painting feel (Treasure-Planet / Last-Exile / Howl's-Moving-Castle / Mortal-Engines Anna-Fang / Skies-of-Arcadia lineage). She is DOING SOMETHING — never posing, never stationary. Combat allowed. Solo hero with background figures permitted in mid-distance.
 
-━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
-The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "captain", "officer", "navigator", "pirate", "engineer" or any gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [heritage-coded] WOMAN [doing exact action] on [airship setting]..." — "woman" comes BEFORE her role. Use she/her throughout.
+━━━ GENDER + ETHNICITY LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a WOMAN of a SPECIFIC ETHNICITY locked by the skin pool entry below. The opening MUST literally start with the ethnicity-noun-phrase from the skin pool — e.g. "a Japanese woman", "a Nigerian woman", "a Persian woman", "a Comanche woman", "a mixed-heritage Brazilian woman" — followed immediately by her action and setting. Do NOT substitute "captain", "officer", "navigator", "pirate" for the ethnicity-noun. Do NOT generalize to "a young woman" or "a beautiful woman". The skin pool entry locks the ethnicity — render it. Use she/her throughout.
 
 ━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
 The female air-officer is the MAIN SUBJECT. Her face, outfit, accessory, and MID-ACTION pose are the draw. She occupies 40-60% of the frame vertically — FULL BODY or three-quarter-body visible, head no larger than 12% of frame. NOT a tiny silhouette. NOT a wide vista with character as afterthought. Telephoto compression keeps her crisp; airship deck / rigging / brass hardware in MIDGROUND; sky / city / terrain in DISTANT background with atmospheric haze. The frame is composed like a movie poster — her in the strike of action, world rushing past behind.
@@ -830,16 +829,13 @@ ${backdrop}
 
 This is BEYOND the airship — sky, clouds, distant terrain, distant city, sister-airships in formation, etc. Render with depth-on-depth haze. NEVER lets the backdrop steal focus from her — the backdrop reads as the world rushing past, not as the subject.
 
-━━━ HER HERITAGE (informs her face, complexion, costume vocabulary) ━━━
-${heritage}
-
 ━━━ HER ROLE (her rank / archetype — informs how she carries herself + what she's commanding) ━━━
 ${role}
 
 ━━━ HER COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
-A ${skin.split(',')[0]}, with ${eyes.split(',')[0]} eyes, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, equipped with ${accessory}.
+${skin.split(',')[0]}, with ${eyes.split(',')[0]} eyes, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, equipped with ${accessory}.
 
-(All eight DNA elements should be discernible in the render. Face fully visible.)
+The ethnicity-noun-phrase at the head of the skin entry IS the opening of your prompt — copy it verbatim. (All seven DNA elements should be discernible in the render. Face fully visible.)
 
 ━━━ THE OUTFIT IS A MAJOR SHOW — NON-NEGOTIABLE ━━━
 Render the OUTFIT with OBSESSIVE craftsmanship detail. Period-correct steampunk-airship-officer fashion — corseted leather flight jacket, brass-pauldron flight suit, fitted tailored greatcoat with brass epaulets, riding-skirt over knee-high boots, Persian sky-corsair silk caftan belted with brass kris-handle, Tokyo airship-academy fitted dress-uniform with gear-embroidered collar — whatever silhouette the wardrobe pool rolls, render it as TAILORED, LAYERED, FUNCTIONAL, BEAUTIFUL. Every brass clasp, every copper button, every leather strap, every embroidered cuff, every goggle-strap, every ammunition-bandolier rendered explicitly. The outfit reads as combat-capable AND beautiful at the same time.
@@ -902,9 +898,9 @@ captivating, fierce, intent, capable, kinetic, mid-leap, mid-strike, mid-fire, r
 - NO ground-level setting (she is on / around an AIRSHIP — never on solid ground unless the airship is visibly docked at an aerie / sky-platform)
 
 ━━━ STRUCTURE (write the prompt in this exact order) ━━━
-[OPENING: "a [heritage-coded] WOMAN [doing exact action] on/aboard [airship setting]" — woman comes before role], [her tailored airship outfit with OBSESSIVE LAYERED detail — every brass clasp / leather strap / goggle-harness / embroidered cuff], [her signature equipment visible], [her face: skin + eyes + hair from DNA slots], [her hair carrying the motion of the action], [the airship deck / rigging / brass hardware around her in midground], [the distant backdrop sky/city/terrain with atmospheric haze], [any background figures in midground (small, faceless)], [drama event if rolled], [lighting + atmosphere], [color palette + mood]
+[OPENING: the literal ethnicity-noun-phrase from the skin entry ("a Japanese woman" / "a Nigerian woman" / "a Persian woman" / etc.) followed by [doing exact action] on/aboard [airship setting]], [her tailored airship outfit with OBSESSIVE LAYERED detail — every brass clasp / leather strap / goggle-harness / embroidered cuff], [her signature equipment visible], [the rest of her face: eyes + hair from DNA slots + skin-tone detail beyond the ethnicity-noun], [her hair carrying the motion of the action], [the airship deck / rigging / brass hardware around her in midground], [the distant backdrop sky/city/terrain with atmospheric haze], [any background figures in midground (small, faceless)], [drama event if rolled], [lighting + atmosphere], [color palette + mood]
 
-CRITICAL — the OPENING tokens are "[heritage-coded woman] [DOING ACTION] on/aboard [airship setting]". She fills 40-60% of frame, MID-ACTION. The ACTION gets significant word-budget alongside the outfit.
+CRITICAL — the OPENING tokens MUST be the ethnicity-noun-phrase from the skin pool entry, copied verbatim. Flux locks the ethnicity from the first 5-8 tokens. If the skin entry says "Japanese woman", Flux must see "a Japanese woman" in the opening, not "a young woman" or "a captain". She fills 40-60% of frame, MID-ACTION. The ACTION gets significant word-budget alongside the outfit.
 
 Output ONLY the raw 110-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },

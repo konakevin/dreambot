@@ -26,8 +26,8 @@ module.exports = {
     // Path-bespoke
     action: 'AIRSHIP_FEMALE_ACTION',
     backdrop: 'AIRSHIP_BACKDROP',
-    // Character DNA — 8 axes
-    heritage: 'AIRSHIP_HERITAGE',
+    // Character DNA — 7 axes (R1: dropped separate heritage axis;
+    // diversity now baked into skin via "[Ethnicity] woman with..." format)
     role: 'AIRSHIP_ROLE',
     skin: 'AIRSHIP_FEMALE_SKIN',
     eyes: 'AIRSHIP_EYES',

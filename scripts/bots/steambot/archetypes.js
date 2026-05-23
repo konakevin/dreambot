@@ -108,11 +108,11 @@ module.exports = {
 },
 
   STEAMBOT_AIRSHIP_FEMALE: {
-  description: 'PATH-BESPOKE — SteamBot airship-female path (2026-05-23). ACTION-FOCUSED sister to STEAMBOT_STEAMPUNK_WOMAN. Solo female air-officer / sky-corsair / crew-member caught MID-ACTION on or around a steampunk airship. Combat allowed (cannon-fire, pistol-duels, repelling boarders, dogfight maneuvers). Background figures permitted (crew in distance, enemy boarders mid-leap on parallel ship) but NEVER co-protagonists. Character occupies 40-60% of frame — outfit/face/action all clearly readable. Telephoto compression with airship deck/rigging in midground, environment (sky/landscape/city) as DISTANT background. NEVER static portrait pose. Steampunk-globe heritage (Victorian, Prussian, Persian sky-corsair, Tokyo airship academy, Hindustani, Yoruba sky-noble, etc.). 8 character DNA + 3 path-bespoke (action / backdrop / accessory shared with male sister) + 1 conditional 40%-gated (drama) + 2 universal.',
+  description: 'PATH-BESPOKE — SteamBot airship-female path (2026-05-23, R1 architecture revision). ACTION-FOCUSED sister to STEAMBOT_STEAMPUNK_WOMAN. Solo female air-officer / sky-corsair caught MID-ACTION on/around a steampunk airship. Combat allowed. Background figures permitted in mid-distance but never co-protagonists. Character 40-60% of frame, telephoto compression with airship deck in midground. NEVER static portrait. R0→R1 fix: dropped separate heritage axis — diversity now baked into SKIN pool ("[Ethnicity] woman with..." format mirroring sexy-steampunk-woman). R0 defaulted to Euro-brunette because heritage was a separate semantic-only axis without an ethnic noun for Flux to anchor on. 7 character DNA + 2 path-bespoke (action / backdrop) + 1 conditional 40%-gated (drama) + 2 universal.',
   slots: {
     universal: [ 'lighting', 'atmosphere' ],
     bot: [],
-    characterDnaAxes: [ 'heritage', 'role', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
+    characterDnaAxes: [ 'role', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
     path: [ 'action', 'backdrop' ]
   },
   pickN: {},

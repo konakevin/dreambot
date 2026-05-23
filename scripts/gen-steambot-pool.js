@@ -165,26 +165,47 @@ Lineage to channel: cinematic steampunk world-building (Treasure-Planet's divers
 
   airship_female_skin: {
     format: 'simple',
-    theme: `FACE-FOCUSED skin descriptions for airship-female. Each entry 10-20 words: skin tone + ethnic-coded undertone + FACE-AREA detail (cheekbones / jawline / brow / temple / nose / forehead) + steampunk-coded surface texture (soot-streak across cheek, brass-dust on temple, oil-smudge on jaw, salt-spray sheen, wind-burn flush, kohl-smear from rubbing eye, cannon-flash glow on cheekbone).
+    theme: `ETHNICITY-NOUN-ANCHORED skin descriptions for airship-female. THIS IS THE PRIMARY DIVERSITY-DRIVING AXIS. Each entry 18-30 words and MUST follow the strict format: "[Ethnicity-adjective] woman with [skin tone description] and [undertone], [steampunk-coded face-area detail], [optional face-area scar/feature]."
+
+⚠️ FORMAT IS NON-NEGOTIABLE — every entry literally STARTS with "[Nationality/Ethnicity] woman with..." so the template can pull the first comma-segment ("Japanese woman with cool ivory skin") and drop it verbatim into the opening tokens of the Flux prompt. Flux locks ethnicity from the first 5-8 tokens — if the opening says only "a woman" Flux defaults to Euro-brunette. The ethnicity-noun anchor is load-bearing.
+
+✓ DIVERSITY MANDATE — distribute across as many ethnicities as possible. In 50 entries, target each major world region appearing 4-8 times:
+  • East Asian: Japanese, Chinese, Korean, Vietnamese, Mongolian, Tibetan, Thai
+  • South Asian: Indian, Pakistani, Sri Lankan, Bangladeshi, Nepalese, Tamil
+  • Southeast Asian: Filipina, Indonesian, Malay
+  • Pacific Islander: Samoan, Maori, Hawaiian, Tongan, Fijian
+  • Indigenous American: Navajo, Comanche, Lakota, Cherokee, Aztec, Mayan
+  • African / African Diaspora: Nigerian, Ethiopian, Kenyan, Yoruba, Zulu, Senegalese, Ghanaian, Sudanese, Somali, Eritrean
+  • Middle Eastern / Levantine / Persian: Persian, Lebanese, Turkish, Egyptian, Moroccan, Syrian, Iraqi, Israeli, Palestinian
+  • Latin American: Brazilian, Mexican, Cuban, Colombian, Argentinian, Peruvian, Venezuelan, Dominican
+  • Caribbean: Jamaican, Haitian, Trinidadian, Cuban-American
+  • European (use sparingly — keep to ~20% of pool to balance against Euro-default bias): Irish, Scottish, English, French, Italian, Greek, Polish, Russian, Norwegian, Spanish, Portuguese, Welsh
+  • Mixed-heritage entries (optional, 2-3 in 50): "Mixed-heritage woman of [Group A] and [Group B] descent, with..."
 
 ⚠️ STRICT BANS:
   - NEVER describe torso, chest, breasts, shoulders, arms, abdomen, hips, neckline, décolletage, collarbones
   - NEVER use moisture-on-skin / wet / glistening / dewy / beaded language
   - NEVER use "voluptuous" / "curvy" / body-shape descriptors
-  - ONLY face-area words: cheek, jaw, brow, temple, nose, forehead, lip, lash, eyelid
+  - NEVER "exotic" / "oriental" / othering language — same dignity-of-description across all ethnicities
+  - ONLY face-area words for the detail clause: cheek, jaw, brow, temple, nose, forehead, lip, lash, eyelid
+  - NEVER skip the opening "[Ethnicity] woman with..." format — even one entry without it dilutes the pool
 
-✓ DIVERSITY MANDATE — distribute across heritage-spectrum (~10 per zone in a 50-entry pool, scale to ~100): Northern-European pale / Mediterranean olive / Persian-Arab warm-olive / South-Asian wheat-to-deep / East-Asian porcelain-warm / Southeast-Asian honey-amber / African deep-mahogany-to-ebony / Indigenous-American copper-bronze / mixed-heritage in-between tones.`,
+✓ STEAMPUNK-CODED FACE DETAIL examples (use one per entry): soot-streak across cheek, brass-dust on temple, oil-smudge on jaw, salt-spray sheen, wind-burn flush, kohl-smear from rubbing eye, cannon-flash glow on cheekbone, goggle-tan-line, copper-amber light bronzing her brow, lantern-glow warming her temple, gas-light catching dust along jawline.
+
+Lineage to channel: cinematic global cast of Last-Exile / Mortal-Engines / Treasure-Planet sky-crews — every face distinct, every ethnicity rendered with dignity, the steampunk grit a costume not a substitute for identity.`,
     touchpoints: [
-      'pale Northern-European complexion with wind-flushed cheeks, fine soot-streak across the bridge of her nose',
-      'sun-bronzed Mediterranean skin with high cheekbones, salt-spray sheen on her forehead',
-      'warm Persian olive skin with golden undertones, brass-dust faintly glinting on her temple',
-      'deep Yoruba mahogany complexion with strong cheekbones, cannon-flash glow caught on her jawline',
-      'porcelain East-Asian complexion with warm undertones, kohl-smear at the outer corner of her eye',
-      'rich Comanche copper-bronze skin with broad cheekbones, wind-burn flush along her brow',
-      'warm South-Asian wheat-toned skin with golden undertones, oil-smudge on her jaw from a recent repair',
-      'caramel-brown Caribbean complexion, faint cordite-soot streak from temple to ear',
+      'Japanese woman with cool ivory skin and subtle pink undertone, brass lamplight warming temple, fine translucent hairs along jawline.',
+      'Nigerian woman with rich mahogany skin and warm undertone, cannon-flash bronzing high cheekbones, delicate scar near left eye.',
+      'Brazilian woman with golden-tan skin and olive undertone, amber gaslamp catching bridge of nose, constellation of freckles across forehead.',
+      'Lebanese woman with warm sand-beige skin, verdigris light casting green across cheekbone, healed scar bisecting right eyebrow.',
+      'Comanche woman with sun-warmed copper-bronze skin and warm undertone, wind-burn flush along her broad cheekbones, fine soot-streak from temple to ear.',
+      'Filipina woman with warm honey-amber skin and golden undertone, lantern-glow caught at her jawline, kohl-smear at the outer corner of her eye.',
+      'Persian woman with warm olive complexion and golden-honey undertone, brass-dust faintly glinting on her temple, sharp angle of nose lit by morning sun.',
+      'Mixed-heritage woman of Korean and Senegalese descent, warm caramel skin with rose undertone, salt-spray sheen along her cheekbone, single freckle at the corner of her mouth.',
+      'Maori woman with deep olive-brown skin and warm undertone, faint traditional moko-style ink along the chin, cannon-flash glow at her temple.',
+      'Irish woman with cream-pale skin and warm rose undertones, light freckles across the bridge of her nose, wind-burn flush across both cheeks.',
     ],
-    instructions: `Each entry 10-20 words. FACE-ONLY descriptors. Output as a NUMBERED list. NO internal newlines.`,
+    instructions: `Each entry 18-30 words. STRICT FORMAT: "[Ethnicity-adjective] woman with [tone and undertone], [steampunk-coded face detail], [optional face feature]." The ethnicity-noun-phrase is non-negotiable — it's the first 3-4 words. Output as a NUMBERED list. NO internal newlines.`,
   },
 
   airship_female_hairstyle: {
