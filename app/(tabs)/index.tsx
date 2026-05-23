@@ -15,11 +15,8 @@ import { supabase } from '@/lib/supabase';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
-import { BotsHorizontalPager } from '@/components/BotsHorizontalPager';
 import { NewPostsPill } from '@/components/NewPostsPill';
 import { OverlayPill } from '@/components/OverlayPill';
-import { Image as ExpoImage } from 'expo-image';
-import { BotPillRow } from '@/components/BotPillRow';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import type { DreamPostItem } from '@/components/DreamCard';
 
@@ -27,7 +24,7 @@ import type { DreamPostItem } from '@/components/DreamCard';
 import { applyDiversity } from '@/lib/feedDiversity';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-type FeedTab = 'forYou' | 'following' | 'bots';
+type FeedTab = 'forYou' | 'following';
 const PAGE_SIZE = 20;
 
 interface FeedCursor {
@@ -38,12 +35,12 @@ interface FeedCursor {
 type FeedRow = DreamPostItem & { feed_score?: number };
 type FeedPage = { rows: FeedRow[]; nextCursor: FeedCursor | null };
 
-function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
+function useDreamFeed(tab: FeedTab) {
   const user = useAuthStore((s) => s.user);
   const feedSeed = useFeedStore((s) => s.feedSeed);
 
   return useInfiniteQuery({
-    queryKey: ['dreamFeed', tab, user?.id, feedSeed, botUserId ?? null],
+    queryKey: ['dreamFeed', tab, user?.id, feedSeed],
     queryFn: async ({ pageParam }): Promise<FeedPage> => {
       const { data, error } = await supabase.rpc('get_feed', {
         p_user_id: user!.id,
@@ -51,7 +48,6 @@ function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
         p_seed: feedSeed,
         p_tab: tab,
         ...(pageParam ? { p_cursor_score: pageParam.score, p_cursor_id: pageParam.id } : {}),
-        ...(tab === 'bots' && botUserId ? { p_bot_user_id: botUserId } : {}),
       });
       if (error) throw error;
       const rawRows = castRows(data).map((row) => ({
@@ -63,7 +59,7 @@ function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
       // "wrong post pops in mid-scroll at the page boundary" bug. Trade-off:
       // streak detection is within-page only, so cross-page-boundary streaks
       // are possible (acceptable at PAGE_SIZE=20).
-      const rows: FeedRow[] = tab === 'bots' ? rawRows : (applyDiversity(rawRows) as FeedRow[]);
+      const rows: FeedRow[] = applyDiversity(rawRows) as FeedRow[];
       // Compute cursor at FETCH time from raw RPC result, NOT from current
       // cached row count. Otherwise optimistic deletes shrink lastPage.length
       // below PAGE_SIZE → getNextPageParam returns undefined → pagination
@@ -89,7 +85,6 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
   const tabs: { key: FeedTab; label: string }[] = [
     { key: 'following', label: 'Following' },
     { key: 'forYou', label: 'Explore' },
-    { key: 'bots', label: 'Bots' },
   ];
 
   return (
@@ -118,11 +113,6 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
       title: 'Nobody yet',
       sub: 'Follow some people (or bots) and their dreams show up here. The Bots tab is a great place to start.',
     },
-    bots: {
-      icon: 'sparkles-outline',
-      title: 'Pick a bot above',
-      sub: 'Each bot has its own style. Tap one to see what it dreams.',
-    },
   };
   const m = msgs[tab];
   return (
@@ -144,10 +134,9 @@ export default function HomeScreen() {
   const queryClient = useQueryClient();
   const feedSeed = useFeedStore((s) => s.feedSeed);
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
-  const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
   const { data: botUsers } = useBotUsers();
 
-  // Prebuffer the three top-level feeds on mount: warms the TanStack
+  // Prebuffer the two home-screen feeds on mount: warms the TanStack
   // cache for tab-switch latency, then prefetches the first 5 image bytes
   // of each via expo-image so the cards render shimmer-free. Fire-and-
   // forget — best-effort, silent on failure.
@@ -155,16 +144,30 @@ export default function HomeScreen() {
     if (!user) return;
     prefetchDreamFeed(queryClient, 'following', user.id, feedSeed);
     prefetchDreamFeed(queryClient, 'forYou', user.id, feedSeed);
-    prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
   }, [user, feedSeed, queryClient]);
+
+  // Also prebuffer the Bots tab on app load — both the "All bots" mixed
+  // feed and each individual bot's first page (with first 5 image bytes
+  // prefetched). Tapping the Bots footer icon then loads instantly, and
+  // swiping between bots is warm because each bot's query cache + first
+  // images are already resident.
+  useEffect(() => {
+    if (!user || !botUsers?.length) return;
+    // "All bots" mixed feed (selectedBotId = null)
+    prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
+    // Each individual bot's first page + first 5 images
+    for (const bot of botUsers) {
+      prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, bot.id);
+    }
+  }, [user, feedSeed, queryClient, botUsers]);
+
   // activeTab updates synchronously for the pill highlight (instant tap
   // feedback); useDreamFeed reads the deferred copy so the (expensive)
   // feed refetch + remount lags behind the pill animation by a frame or
   // two instead of blocking it. Pill highlight feels snappy.
   const deferredTab = useDeferredValue(activeTab);
-  const deferredBotId = useDeferredValue(selectedBotId);
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch, isRefetching } =
-    useDreamFeed(deferredTab, deferredTab === 'bots' ? deferredBotId : undefined);
+    useDreamFeed(deferredTab);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
   const pendingPostId = useFeedStore((s) => s.pendingPostId);
@@ -232,27 +235,8 @@ export default function HomeScreen() {
     }
   }, [pinnedPost]);
 
-  // Prefetch first image for each bot when entering Bots tab
-  useEffect(() => {
-    if (activeTab !== 'bots' || !botUsers?.length || !user) return;
-    Promise.allSettled(
-      botUsers.map(async (bot) => {
-        const { data: rows } = await supabase.rpc('get_feed', {
-          p_user_id: user.id,
-          p_limit: 1,
-          p_seed: 0,
-          p_tab: 'bots',
-          p_bot_user_id: bot.id,
-        });
-        const url = (rows as { image_url?: string }[] | null)?.[0]?.image_url;
-        if (url) ExpoImage.prefetch([url]);
-      })
-    );
-  }, [activeTab, botUsers, user]);
-
   function handleTabChange(tab: FeedTab) {
     setActiveTab(tab);
-    if (tab !== 'bots') setSelectedBotId(null);
     listRef.current?.scrollToOffset({ offset: 0, animated: false });
     if (pinnedPost) setPinnedPost(null);
   }
@@ -296,40 +280,22 @@ export default function HomeScreen() {
     if (currentVisibleIndex === 0 && hasNewPosts) setHasNewPosts(false);
   }, [currentVisibleIndex, hasNewPosts]);
 
-  function handleBotSelect(botId: string | null) {
-    // Pill tap → updates state; the BotsHorizontalPager observes
-    // selectedBotId and animates to the matching page.
-    setSelectedBotId(botId);
-  }
-
-  const inBotsMode = activeTab === 'bots' && botUsers != null && botUsers.length > 0;
-
   return (
     <View style={s.root}>
-      {inBotsMode ? (
-        <BotsHorizontalPager
-          bots={botUsers!}
-          selectedBotId={selectedBotId}
-          onSelectedBotChange={setSelectedBotId}
-          onHudToggle={handleHudToggle}
-          emptyComponent={<EmptyFeed tab="bots" />}
-        />
-      ) : (
-        <FullScreenFeed
-          key={activeTab}
-          posts={posts}
-          isLoading={isLoading}
-          onRefresh={() => refetch()}
-          listRef={listRef}
-          onEndReached={() => {
-            if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-          }}
-          ListEmptyComponent={<EmptyFeed tab={activeTab} />}
-          onHudToggle={handleHudToggle}
-          scrollToTopToken={homeFeedResetToken}
-          onIndexChange={setCurrentVisibleIndex}
-        />
-      )}
+      <FullScreenFeed
+        key={activeTab}
+        posts={posts}
+        isLoading={isLoading}
+        onRefresh={() => refetch()}
+        listRef={listRef}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+        }}
+        ListEmptyComponent={<EmptyFeed tab={activeTab} />}
+        onHudToggle={handleHudToggle}
+        scrollToTopToken={homeFeedResetToken}
+        onIndexChange={setCurrentVisibleIndex}
+      />
 
       <NewPostsPill
         visible={hasNewPosts && activeTab === 'forYou'}
@@ -340,10 +306,7 @@ export default function HomeScreen() {
       <Animated.View style={[s.topOverlayWrap, overlayStyle]}>
         <LinearGradient
           colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'transparent']}
-          style={[
-            s.topOverlay,
-            { paddingTop: insets.top, paddingBottom: activeTab === 'bots' ? 28 : 20 },
-          ]}
+          style={[s.topOverlay, { paddingTop: insets.top, paddingBottom: 20 }]}
           pointerEvents="box-none"
         >
           <View style={s.topRow}>
@@ -351,9 +314,6 @@ export default function HomeScreen() {
             <FeedTabs active={activeTab} onChange={handleTabChange} />
             <View style={{ flex: 1, minWidth: 42 }} />
           </View>
-          {activeTab === 'bots' && botUsers && botUsers.length > 0 && (
-            <BotPillRow bots={botUsers} selectedBotId={selectedBotId} onSelect={handleBotSelect} />
-          )}
         </LinearGradient>
       </Animated.View>
     </View>

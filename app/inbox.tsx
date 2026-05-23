@@ -437,6 +437,14 @@ export default function InboxScreen() {
           </>
         ) : (
           <>
+            <TouchableOpacity
+              onPress={() => nav.back()}
+              activeOpacity={0.7}
+              hitSlop={12}
+              style={styles.headerBack}
+            >
+              <Ionicons name="chevron-back" size={26} color={colors.textPrimary} />
+            </TouchableOpacity>
             <Text style={styles.headerTitle}>Inbox</Text>
             <View style={styles.headerActions}>
               {hasAny && (
@@ -508,6 +516,11 @@ export default function InboxScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  headerBack: {
+    width: 36,
+    marginLeft: -8,
+    alignItems: 'flex-start',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',

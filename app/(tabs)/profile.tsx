@@ -22,6 +22,8 @@ import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
+import { useUnreadCount } from '@/hooks/useUnreadCount';
+import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
@@ -37,6 +39,18 @@ export default function ProfileScreen() {
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
   const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
+  const { data: unreadCount = 0 } = useUnreadCount();
+  const markAllSeen = useMarkAllSeen();
+
+  // Tapping the inbox bubble pushes to /inbox AND optimistically marks
+  // every notification as seen — the badge clears instantly. The
+  // useMarkAllSeen mutation also clears the in-cache inbox query data
+  // so re-entering inbox shows everything as already-seen.
+  const handleInboxPress = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (unreadCount > 0) markAllSeen.mutate();
+    nav.push('/inbox');
+  }, [unreadCount, markAllSeen]);
 
   // Reset to posts tab only when profile tab icon is re-tapped
   useEffect(() => {
@@ -102,9 +116,27 @@ export default function ProfileScreen() {
               avatarSize={32}
             />
           </View>
-          <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
-            <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
+              <View style={styles.inboxBubbleWrap}>
+                <Ionicons
+                  name={unreadCount > 0 ? 'chatbubble' : 'chatbubble-outline'}
+                  size={26}
+                  color={unreadCount > 0 ? colors.accent : colors.textSecondary}
+                />
+                {unreadCount > 0 && (
+                  <View style={styles.inboxBubbleCountWrap} pointerEvents="none">
+                    <Text style={styles.inboxBubbleCount}>
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
+              <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <ProfileStatsRow
@@ -257,6 +289,42 @@ const styles = StyleSheet.create({
   },
   username: { color: colors.textPrimary, fontSize: 20, fontWeight: '800' },
   email: { color: colors.textSecondary, fontSize: 13, marginTop: 2 },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  // Outer wrap matches the icon size so the count overlay can use
+  // flexbox-center over the bubble. The Ionicons chatbubble icon has a
+  // tail extending down + slightly out of the lower-left, so we shift
+  // the count up + right of geometric center to land on the bubble's
+  // visual body. Fits "1" through "9+" comfortably.
+  inboxBubbleWrap: {
+    width: 26,
+    height: 26,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inboxBubbleCountWrap: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // Push the count up + slightly right to compensate for the tail
+    paddingBottom: 5,
+    paddingLeft: 1,
+  },
+  inboxBubbleCount: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '800',
+    lineHeight: 12,
+    textAlign: 'center',
+    includeFontPadding: false,
+  },
   tabRow: {
     flexDirection: 'row',
     borderBottomWidth: 0.5,

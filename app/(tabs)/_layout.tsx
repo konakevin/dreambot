@@ -1,13 +1,33 @@
 import { useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import { Tabs, Redirect } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { useQueryClient } from '@tanstack/react-query';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { useExploreStore } from '@/store/explore';
-import { ANIM } from '@/constants/theme';
+import { ANIM, colors } from '@/constants/theme';
 import { useUnreadCount } from '@/hooks/useUnreadCount';
+
+// Pure render — receives unreadCount as a prop. The subscription lives at
+// TabLayout level so parent re-renders propagate new options to RN's tab
+// bar (RN doesn't re-call tabBarIcon unless options change or focus
+// switches — child-internal state changes aren't observed by the bar).
+function ProfileTabIcon({
+  color,
+  size,
+  unreadCount,
+}: {
+  color: string;
+  size: number;
+  unreadCount: number;
+}) {
+  return (
+    <View>
+      <Ionicons name="person-outline" size={size} color={color} />
+      {unreadCount > 0 && <View style={tabStyles.dot} />}
+    </View>
+  );
+}
 
 export default function TabLayout() {
   const { session, initialized } = useAuthStore();
@@ -16,6 +36,12 @@ export default function TabLayout() {
   const activeTab = useFeedStore((s) => s.activeTab);
   const setActiveTab = useFeedStore((s) => s.setActiveTab);
   const hudVisible = useFeedStore((s) => s.hudVisible);
+  // Subscribe to unread count at the layout level — when the count
+  // changes, TabLayout re-renders and passes new options to <Tabs.Screen>,
+  // which makes React Navigation re-render the bottom-bar icon. Without
+  // this, child-component-internal subscriptions don't propagate to the
+  // tab bar (RN's BottomTabBar memoizes options).
+  const { data: unreadCount = 0 } = useUnreadCount();
   const tabBarOpacity = useRef(new Animated.Value(1)).current;
   useEffect(() => {
     Animated.timing(tabBarOpacity, {
@@ -24,8 +50,6 @@ export default function TabLayout() {
       useNativeDriver: true,
     }).start();
   }, [hudVisible]);
-  const queryClient = useQueryClient();
-  const { data: unreadCount = 0 } = useUnreadCount();
 
   if (initialized && !session) {
     return <Redirect href="/(auth)" />;
@@ -77,6 +101,36 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="bots"
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? 'robot' : 'robot-outline'}
+              size={size + 2}
+              color={color}
+            />
+          ),
+        }}
+        listeners={{
+          tabPress: () => {
+            setActiveTab('bots');
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="create"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add-circle-outline" size={size} color={color} />
+          ),
+        }}
+        listeners={{
+          tabPress: () => {
+            setActiveTab('create');
+          },
+        }}
+      />
+      <Tabs.Screen
         name="top"
         options={{
           tabBarIcon: ({ color, size }) => <Ionicons name="search" size={size} color={color} />,
@@ -96,46 +150,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="create"
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle-outline" size={size} color={color} />
-          ),
-        }}
-        listeners={{
-          tabPress: () => {
-            setActiveTab('create');
-          },
-        }}
-      />
-      <Tabs.Screen
-        name="inbox"
-        options={{
-          tabBarStyle: {
-            backgroundColor: '#000000',
-            borderTopColor: 'rgba(255,255,255,0.08)',
-            borderTopWidth: StyleSheet.hairlineWidth,
-            position: 'absolute',
-            paddingTop: 8,
-          },
-          tabBarIcon: ({ color, size }) => (
-            <View>
-              <Ionicons name="chatbubble-outline" size={size} color={color} />
-              {unreadCount > 0 && (
-                <View style={tabStyles.badge}>
-                  <Text style={tabStyles.badgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
-                </View>
-              )}
-            </View>
-          ),
-        }}
-        listeners={{
-          tabPress: () => {
-            setActiveTab('inbox');
-          },
-        }}
-      />
-      <Tabs.Screen
         name="profile"
         options={{
           tabBarStyle: {
@@ -146,7 +160,7 @@ export default function TabLayout() {
             paddingTop: 8,
           },
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+            <ProfileTabIcon color={color} size={size} unreadCount={unreadCount} />
           ),
         }}
         listeners={{
@@ -161,21 +175,17 @@ export default function TabLayout() {
 }
 
 const tabStyles = StyleSheet.create({
-  badge: {
+  dot: {
     position: 'absolute',
-    top: -4,
-    right: -8,
-    backgroundColor: '#E8485F',
-    borderRadius: 8,
-    minWidth: 16,
-    height: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 4,
-  },
-  badgeText: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '800',
+    top: -2,
+    right: -4,
+    width: 9,
+    height: 9,
+    borderRadius: 5,
+    backgroundColor: colors.accent,
+    // Subtle dark ring keeps the dot readable when the tab bar
+    // background lightens (active tint state)
+    borderWidth: 1,
+    borderColor: '#000000',
   },
 });
