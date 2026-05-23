@@ -33,6 +33,13 @@ interface Props {
   onSelectedBotChange: (botId: string | null) => void;
   onHudToggle?: (visible: boolean) => void;
   emptyComponent?: React.ReactElement;
+  /**
+   * Session-scoped per-bot scroll memory. Owned by the parent screen so
+   * the screen can clear it on tab blur via useFocusEffect — when the
+   * user leaves the Bots tab and returns, every bot starts at index 0
+   * again. Keyed by botId (or '__all__' for the mixed All-bots feed).
+   */
+  indexMapRef: React.RefObject<Map<string, number>>;
 }
 
 interface PageDescriptor {
@@ -46,6 +53,7 @@ export function BotsHorizontalPager({
   onSelectedBotChange,
   onHudToggle,
   emptyComponent,
+  indexMapRef,
 }: Props) {
   // Page list: [All, bot0, bot1, ...]
   const pages = useMemo<PageDescriptor[]>(
@@ -118,13 +126,27 @@ export function BotsHorizontalPager({
     onSelectedBotChangeRef.current(targetBotId);
   }, []);
 
+  // Per-bot scroll-position memory — keyed by botId (or '__all__' for
+  // the mixed feed). The Map is owned by the parent screen so it can
+  // be cleared on tab blur via useFocusEffect — leaving + returning to
+  // the Bots tab resets every bot to index 0. Within a single tab visit,
+  // swiping between bots preserves each bot's last visible CARD INDEX
+  // (FullScreenFeed is paging-enabled, 1 card per screen).
+  const keyForBot = (botId: string | null) => botId ?? '__all__';
+
   const renderItem = useCallback(
     ({ item }: { item: PageDescriptor }) => (
       <View style={styles.page}>
-        <BotFeedPage botId={item.botId} onHudToggle={onHudToggle} emptyComponent={emptyComponent} />
+        <BotFeedPage
+          botId={item.botId}
+          initialIndex={indexMapRef.current?.get(keyForBot(item.botId)) ?? 0}
+          onIndexChange={(idx) => indexMapRef.current?.set(keyForBot(item.botId), idx)}
+          onHudToggle={onHudToggle}
+          emptyComponent={emptyComponent}
+        />
       </View>
     ),
-    [onHudToggle, emptyComponent]
+    [onHudToggle, emptyComponent, indexMapRef]
   );
 
   const getItemLayout = useCallback(
@@ -167,10 +189,14 @@ export function BotsHorizontalPager({
  */
 function BotFeedPage({
   botId,
+  initialIndex,
+  onIndexChange,
   onHudToggle,
   emptyComponent,
 }: {
   botId: string | null;
+  initialIndex: number;
+  onIndexChange: (index: number) => void;
   onHudToggle?: (visible: boolean) => void;
   emptyComponent?: React.ReactElement;
 }) {
@@ -194,6 +220,12 @@ function BotFeedPage({
     <FullScreenFeed
       posts={posts}
       isLoading={isLoading}
+      // Clamp initialIndex to the loaded post range so a stale
+      // saved index can't out-of-bounds the FlatList. posts.length
+      // can drop on refetch (e.g., feed dedup) or grow as pages
+      // arrive; saved index from a prior visit might exceed both.
+      initialIndex={Math.min(initialIndex, Math.max(0, posts.length - 1))}
+      onIndexChange={onIndexChange}
       onRefresh={() => refetch()}
       onEndReached={() => {
         if (hasNextPage && !isFetchingNextPage) fetchNextPage();

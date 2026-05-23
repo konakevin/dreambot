@@ -10,13 +10,14 @@
  *   • Body: BotsHorizontalPager (stories-style swipeable per-bot feed)
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useQueryClient } from '@tanstack/react-query';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
@@ -45,6 +46,20 @@ export default function BotsScreen() {
 
   // Default: "All" view (null botId — mixed bot feed).
   const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
+
+  // Per-bot scroll-memory Map — within a single tab visit, scrolling
+  // around between bots preserves each one's last visible card index.
+  // On tab blur, the cleanup below clears the Map so leaving + coming
+  // back to the Bots tab resets every bot to index 0. Lives in a ref
+  // (not state) so updates don't trigger re-renders of this screen.
+  const indexMapRef = useRef<Map<string, number>>(new Map());
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        indexMapRef.current.clear();
+      };
+    }, [])
+  );
 
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({
@@ -85,6 +100,7 @@ export default function BotsScreen() {
           onSelectedBotChange={setSelectedBotId}
           onHudToggle={handleHudToggle}
           emptyComponent={<EmptyBots />}
+          indexMapRef={indexMapRef}
         />
       ) : (
         <EmptyBots />
