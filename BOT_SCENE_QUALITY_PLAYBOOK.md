@@ -2155,3 +2155,43 @@ Cloning the pirates + space migration pattern:
 | landscape | Pending | Wide-cinematic vistas, scale-prover minifig figures |
 
 Each path is bespoke per `feedback_each_path_bespoke_not_cloned`. Don't clone axes from pirates or space to a new path without reconsidering — the axis content must match what THAT path renders.
+
+---
+
+## CANONICAL REFERENCE — MangaBot per-path migration (2026-05-22)
+
+### Cross-bot lesson: culture-coded bots need culture-coded pool entries from gen #1
+
+MangaBot identity IS the anime/Japanese-culture constraint. Every pool entry must reference culture-canon (SAO / Frieren / Konosuba / Re:Zero / Mushoku Tensei / Slime / Ghibli / etc.) from the FIRST gen — never default to generic-genre vocabulary (`muzzle-flash / ruined-city / carrier-deck`). Cross-references:
+- `feedback_culture-coded_bots_culture-coded_pools.md`
+- `feedback_each_path_bespoke_not_cloned.md`
+
+### MangaBot per-path status
+
+| Path | Status | Notes |
+|---|---|---|
+| samurai-era | Migrated 2026-05-22 (R0 4.6/5) ✓ | 12-axis bespoke jidaigeki — samurai/ronin/geisha/shrine/feudal-Japan |
+| neo-tokyo | Migrated 2026-05-22 (R0 4.4/5) ✓ | 15-axis bespoke Akira/Ghost-in-the-Shell-coded cyberpunk-Tokyo |
+| ghibli-countryside | Migrated 2026-05-22 (R0 4.8/5) ✓ | 14 axes (13 always-on + `spirit_element` 40%-gated). Totoro/Mononoke/Kiki/Spirited-Away pastoral. Soft pastel palette + hand-painted oil-watercolor brush. No cities/neon/armor. |
+| isekai-fantasy | Migrated 2026-05-22 (R0 5/5 — first-try bangers) ✓ | 14-axis bespoke SAO/Re:Zero/Konosuba/Overlord/Frieren/Mushoku-Tensei canon. Status-windows, mana-glow, summon-circles, painterly cel-shaded. **Strict ban on Western Witcher/Skyrim/D&D/GoT/LotR vocabulary in every pool recipe — this is what unlocked R0 5/5.** All 200-entry production pools. |
+| mecha-hangars / mecha-anime | KEPT LEGACY (2026-05-22) ✗ | 9-round migration failed. Flux's training-data gravity pulls "anime mech standing arms-out with weapon" archetype regardless of prompt specificity; Mt-Fuji landscapes rendered WITHOUT the mech when Japanese cultural anchoring was over-applied. See `project_mecha-hangars_kept_legacy.md`. |
+| shonen-action / cherry-blossom-romance / rooftop-sunsets / artsy / female-warrior / others | Pending | Re-read this playbook + isekai migration commit (a028eaa) before authoring axes. |
+
+### Isekai R0 5/5 recipe (what unlocked first-try bangers)
+
+1. **Hard anime-isekai-canon mandate at the meta-prompt level** — every gen recipe opens with "STRICT ANIME ISEKAI CANON — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei / Slime / Restaurant of Another World / Log Horizon / Tate no Yuusha. NOT Western Witcher / Skyrim / D&D / Game of Thrones."
+2. **Anime-canon-named entries in pool examples** — `"Frieren-style cobblestone fantasy town"` / `"Konosuba-style Axel-town market square"` / `"SAO-style status window"` — not abstract "fantasy town / market / status window."
+3. **Anime-isekai SIGNATURE visuals as their own axis** — `ISEKAI_MAGIC_EFFECT` axis specifically for status-windows, mana-glow, summon-circles, level-up-bursts, Megumin-explosion-spells — the visuals that SAY "anime isekai" the moment you see them.
+4. **Painterly cel-shaded register enforced via `ISEKAI_LIGHT_QUALITY`** — anime amber-orange / cozy tavern amber / mana-light glow — not Western photoreal palette.
+5. **Hard bans on Witcher/Skyrim/D&D/GoT/LotR/desaturated-gritty** repeated in template + every gen recipe.
+6. **Template HARD RULES #1+#2** — "ANIME ISEKAI AESTHETIC — NOT WESTERN MEDIEVAL FANTASY" + "COMPLETE SCENE COHERENCE" at the top of the brief template.
+
+R0 batch label: `isekai-axis-R0`. All 5 renders converged on anime aesthetic. One render (r0-2) showed a bearded fantasy-shopkeeper that read slightly Western — borderline, but Kevin signed off "those are all bangers."
+
+### Hard rules for MangaBot path migrations
+
+- **NEVER use generic-genre vocabulary in pool entries** (muzzle-flash / ruined-city / carrier-deck / temple-ruins / fantasy-warrior). Always anchor in named anime canon.
+- **NEVER reuse pools across paths.** Samurai-era / neo-tokyo / ghibli-countryside / isekai-fantasy each have wholly separate 200-entry pool sets; the culture-canon language is path-specific (Frieren ≠ Akira ≠ Mononoke ≠ Kurosawa).
+- **ALWAYS hard-ban Western photoreal medieval fantasy in every isekai/fantasy-adjacent pool recipe.** Flux's gravity well there is strong.
+- **ALWAYS add migrated paths to `twoPassPolish.skipPaths`** — Haiku polish strips curated culture-canon language (per `feedback_axis_system_skip_polish`).
+- **DON'T re-attempt mecha-hangars/mecha-anime migration** without first solving (a) Flux's anime-mech-arms-out gravity, (b) Mt-Fuji-without-mech drift, (c) Western sci-fi vocabulary leakage. See `project_mecha-hangars_kept_legacy`.
