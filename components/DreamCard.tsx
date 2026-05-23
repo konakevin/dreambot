@@ -87,6 +87,8 @@ interface Props {
   onToggleSave?: () => void;
   disableSwipeToProfile?: boolean;
   onDelete?: () => void;
+  /** Admin-only one-tap delete (no confirm). Rendered as a red X above the heart. */
+  onAdminDeleteImmediate?: () => void;
   onFuse?: () => void;
   onFamily?: () => void;
   onLikesPress?: () => void;
@@ -220,6 +222,7 @@ export const DreamCard = memo(function DreamCard({
   onToggleSave,
   disableSwipeToProfile,
   onDelete,
+  onAdminDeleteImmediate,
   onFuse,
   onFamily,
   onLikesPress,
@@ -504,6 +507,18 @@ export const DreamCard = memo(function DreamCard({
                   )}
                 </TouchableOpacity>
               )}
+              {onAdminDeleteImmediate && (
+                <TouchableOpacity
+                  style={ui.sideButton}
+                  onPress={onAdminDeleteImmediate}
+                  activeOpacity={0.7}
+                  accessibilityLabel="Admin: delete this post immediately"
+                >
+                  <View style={s.adminDeleteCircle}>
+                    <Ionicons name="close" size={22} color="#FFFFFF" />
+                  </View>
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
                 style={ui.sideButton}
                 onPress={onToggleLike}
@@ -611,6 +626,16 @@ const s = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   heartBurst: { position: 'absolute', top: '50%', left: '50%', marginTop: -40, marginLeft: -40 },
+  adminDeleteCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#E53935',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: '#FFFFFF',
+  },
   sideActions: { position: 'absolute', right: 12, alignItems: 'center', gap: 16 },
   visibilityCircle: {
     width: 36,

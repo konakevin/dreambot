@@ -345,6 +345,7 @@ export function FullScreenFeed({
             onDelete={
               item.user_id === user?.id || isAdmin ? () => handleDelete(item.id) : undefined
             }
+            onAdminDeleteImmediate={isAdmin ? () => deletePost(item.id) : undefined}
             onFamily={() => {
               const params = new URLSearchParams({
                 postId: item.id,
