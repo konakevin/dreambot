@@ -32,6 +32,7 @@ import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { useLikeIds } from '@/hooks/useLikeIds';
 import { useToggleLike } from '@/hooks/useToggleLike';
 import { useDeletePost } from '@/hooks/useDeletePost';
+import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 import { useAuthStore } from '@/store/auth';
 import { LikesSheet } from '@/components/LikesSheet';
 import { colors } from '@/constants/theme';
@@ -204,6 +205,7 @@ export function FullScreenFeed({
 
   const user = useAuthStore((s) => s.user);
   const isAdmin = useAuthStore((s) => s.isAdmin);
+  const [showAdminDelete] = useAdminShowDeleteButton();
   const { data: favoriteIds = new Set<string>() } = useFavoriteIds();
   const { mutate: toggleFavorite } = useToggleFavorite();
   const { data: likeIds = new Set<string>() } = useLikeIds();
@@ -345,7 +347,9 @@ export function FullScreenFeed({
             onDelete={
               item.user_id === user?.id || isAdmin ? () => handleDelete(item.id) : undefined
             }
-            onAdminDeleteImmediate={isAdmin ? () => deletePost(item.id) : undefined}
+            onAdminDeleteImmediate={
+              isAdmin && showAdminDelete ? () => deletePost(item.id) : undefined
+            }
             onFamily={() => {
               const params = new URLSearchParams({
                 postId: item.id,

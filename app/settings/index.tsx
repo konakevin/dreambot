@@ -31,6 +31,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { moderateText } from '@/lib/moderation';
+import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 
 function SettingsRow({
   icon,
@@ -76,6 +77,7 @@ export default function SettingsScreen() {
   const proTrialEndsAt = useAuthStore((s) => s.proTrialEndsAt);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+  const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
   useEffect(() => {
     if (!user) return;
     supabase
@@ -312,6 +314,25 @@ export default function SettingsScreen() {
                 style: 'destructive',
                 onPress: async () => {
                   try {
+                    // Clean up storage BEFORE the DB cascade nukes the
+                    // uploads rows — otherwise the image files orphan in
+                    // the bucket forever. RPC returns both base and HQ
+                    // (Pro variant) paths for every upload the user owns.
+                    // Cast to `never` because the generated types are
+                    // stale until codegen runs against the live schema
+                    // (same pattern useDeletePost uses for admin_delete_upload).
+                    const { data: pathsRaw } = await supabase.rpc('list_my_upload_paths' as never);
+                    const paths = (pathsRaw as string[] | null) ?? [];
+                    if (paths.length > 0) {
+                      // Batch by 100 to stay well under Storage API limits.
+                      for (let i = 0; i < paths.length; i += 100) {
+                        await supabase.storage
+                          .from('uploads')
+                          .remove(paths.slice(i, i + 100))
+                          .catch(() => {});
+                      }
+                    }
+
                     const { error } = await supabase.rpc('delete_own_account');
                     if (error) throw error;
                     await signOut();
@@ -494,6 +515,34 @@ export default function SettingsScreen() {
             onPress={() => nav.push('/settings/advanced-mode')}
           />
         </View>
+
+        {isAdmin && (
+          <>
+            <Text style={styles.sectionHeader}>ADMIN</Text>
+            <View style={styles.section}>
+              <View style={styles.row}>
+                <Ionicons name="close-circle-outline" size={20} color={colors.accent} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.rowLabel}>One-tap delete button</Text>
+                  <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
+                    {showAdminDelete
+                      ? 'Red X visible above heart — single tap deletes (no confirm)'
+                      : 'Hidden — enable for bulk cleanup'}
+                  </Text>
+                </View>
+                <Switch
+                  value={showAdminDelete}
+                  onValueChange={(val) => {
+                    setShowAdminDelete(val);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }}
+                  trackColor={{ false: colors.border, true: colors.accent }}
+                  thumbColor="#FFFFFF"
+                />
+              </View>
+            </View>
+          </>
+        )}
 
         <View style={styles.section}>
           {isAdmin && (
