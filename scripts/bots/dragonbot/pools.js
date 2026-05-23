@@ -37,6 +37,8 @@ module.exports = {
   // — no artist callouts, no cheesecake language. Sleek adventuring gear
   // across all D&D × LOTR fantasy classes + races).
   FEMALE_ADVENTURER_RACE: load('female_adventurer_race'),
+  FEMALE_ADVENTURER_EYES: load('female_adventurer_eyes'),
+  FEMALE_ADVENTURER_HAIR_COLOR: load('female_adventurer_hair_color'),
   FEMALE_ADVENTURER_CLASS: load('female_adventurer_class'),
   // ─── female-action-scenes path (2026-05-14 — clone of female-adventurer
   // massaged into pure-action energy: mages mid-spell with explosions,

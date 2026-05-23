@@ -1466,11 +1466,181 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE peak-action cinematic moment, 30-55 words. Format: "ACTION-HEADLINE — body position AT THE LOADED INSTANT + specific magical/mechanical EFFECT IN MOTION + specific cinematic CONTEXT". Mid-cast / mid-loose / mid-strike / mid-leap / mid-summon — the LOADED INSTANT before the next frame changes everything. EFFECTS visible (flame-orb-just-released, arrow-streaking, divine-light-blooming, motion-blur, debris kicked up, hair-and-cloak whipping, magical-wind). NO candid quiet moments. NO gore. NO posing for camera. NO real-world ethnic codes. Variety mandate: distribute across spellcaster / martial / ranged / rogue / divine-shaman / travel-escape / dragon-rider action types. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
 
-  // ─── DRAGONBOT female-adventurer path-bespoke pools (2026-05-14) ────────
-  // 12-axis split system per the new playbook. NSFW-clean rebuild — no
-  // artist callouts (Frazetta/Brom/Vallejo were cheesecake-DNA + NSFW
-  // triggers); no "minimal coverage" / "bare midriff" outfit language.
-  // Reuses bot-level race/skin/eyes/hair_color pools.
+  // ─── DRAGONBOT female-adventurer path-bespoke pools (2026-05-14 → 2026-05-23 R2) ────────
+  // Full bespoke migration 2026-05-23 — forked race/eyes/hair_color into
+  // path-bespoke pools (was sharing WARRIOR_* which were warm-skewed and
+  // not gender-coded). Skin axis DROPPED — race entry now carries skin
+  // (drow=obsidian, dragonborn=scaled, tiefling=crimson, etc.; for humans,
+  // race entry encodes ethnic heritage with skin baked in). 12-axis (race /
+  // eyes / hair_color / hairstyle / class / outfit / accessory / action /
+  // landscape / lighting + drama-40% + surprise_element).
+
+  female_adventurer_race: {
+    format: 'simple',
+    theme: `RACE LINEAGE for a female adventurer — STRICTLY HIGH FANTASY, focused on aesthetically striking races. Each entry 25-50 words. Format: "[Race]: [defining anatomy / skin / scale / ear / horn / feature description] + [feminine-anatomy lock: feminine jawline / waist narrower than shoulders / beardless / no facial hair]". Skin/scale/hide tone is BAKED INTO this axis — there is no separate skin axis.
+
+🎯 ATTRACTIVE-RACES ONLY — Kevin-curated 2026-05-23. Cover these and ONLY these:
+
+ELVES (rich variety — ~30% of pool):
+  • High elf · wood elf · sea elf · moon elf · sun elf · wild elf · drow / dark elf · snow elf · half-elf
+  • Eladrin (fey court) · blood elf · night elf · Sindar · Noldor · Dunmer · Bosmer · Altmer
+
+FEY / CELESTIAL / TOUCHED (~20%):
+  • Aasimar (celestial-touched) · tiefling (infernal) · firbolg (tall fey) · satyr · centaur
+  • Genasi (water / earth / fire / air variants) · shifter · changeling · feytouched
+
+STRIKING HUMANOIDS (~15%):
+  • Half-orc (lean Tauriel-style, NOT brutish) · dragonborn (scaled, elegant) · goliath (tall striking)
+  • Half-giant
+
+SMALL FOLK + AQUATIC + KENKU + DWARVEN (~10%):
+  • Halfling (sturdy Tauriel-build, not infantile) · gnome (forest / rock / deep, adult-build)
+  • Dwarven women — BEARDLESS, shieldmaiden build (Tauriel meets Brienne; Dragon Age dwarven women)
+  • Triton (aquatic, blue-pearl skin, finned ears, elegant) · kenku (raven-headed, slim build, exotic)
+  • Tabaxi (feline humanoid, kemonomimi-adjacent) · shifter
+
+HUMAN ETHNIC HERITAGES (~25%) — Use FANTASY-CANON names to avoid real-world ethnic codes. Distribute across:
+  • LOTR: Rohirric · Gondorian · Dúnedain · Númenórean · Haradrim · Easterling
+  • GoT: Northerner · Dornish · Ironborn · Free-Folk
+  • Skyrim: Nord · Imperial · Redguard (Hammerfell-coded warm umber) · Breton
+  • Witcher: Nilfgaardian · Skellige · Cintra · Toussaint · Aen Seidhe-blood
+  • D&D Forgotten Realms: Cormyrean · Waterdhavian · Calishite (walnut-bronze) · Mulan · Tethyrian · Chultan · Shou · Tashalan · Touv
+  • Warcraft: Stormwind · Stranglethorn · Ironforge-human
+  • Generic fantasy: Cimmerian · Shemite · Hyperborean · Zingaran · Zamoran · Stygian · Khitan
+
+🚫 STRICT BANS:
+• NO unattractive races — NO aarakocra / loxodon / minotaur / warforged / lizardfolk / yuan-ti / tortle / hobgoblin / bugbear / grung / owlin
+• NO real-world ethnic codes that aren't fantasy-fictionalized (no "Indian" / "Chinese" / "Japanese" — use the fantasy analogues above)
+• NO beard on dwarven women (this is a hard exception to traditional dwarven canon — Dragon Age / Tauriel-shieldmaiden style)
+• NO masculine-coded anatomy on any race (every entry must end with "feminine jawline" / "waist narrower than shoulders" / "beardless")
+• NO race-anatomy that contradicts feminine human-readable form (no fully alien bug-headed / squid-faced races)
+
+⚠️ FEMININE ANATOMY LOCK — every entry MUST close with explicit feminine cue. Sample lock-phrases:
+  "feminine jawline · narrow waist · beardless"
+  "soft-featured feminine face · slender build · no facial hair"
+  "elegant feminine bone structure · waist defined · clean-shaven"`,
+    touchpoints: [
+      'High elf: sharply pointed ears, almond-shaped luminous gold eyes, alabaster skin, regal aristocratic features with high cheekbones, slender willowy build, feminine jawline narrow waist beardless',
+      'Drow: obsidian-grey skin, white-silver platinum hair, glowing violet eyes, sharp angular Underdark features, athletic-elegant slender build, elegant feminine bone structure waist defined clean-shaven',
+      'Wood elf: tawny olive-fair skin, deep forest-green almond eyes, finely pointed ears, fine moss-tattoo at one temple, lithe agile woodland build, soft-featured feminine face slender build no facial hair',
+      'Tiefling: crimson skin with faint infernal vein-patterns at the temples, ridged horns curling back from her brow, slit-pupiled amber eyes, vestigial spaded tail behind her, feminine jawline narrow waist beardless',
+      'Dragonborn: bronze-scaled face with iridescent shifts between bronze and obsidian along the brow, slit-pupiled molten-gold eyes, draconic snout proportioned for human-readable beauty, feminine waist defined beardless',
+      'Aasimar: pale gold-warm skin with faint internal luminescence under the cheekbones, hair shimmering with a halo, silver-white iris with no pupil — celestial-touched, soft-featured feminine face slender build no facial hair',
+      'Half-orc: lean Tauriel-style green-grey skin, prominent lower tusks but neat, almond-shaped amber eyes, scarred jaw still feminine, athletic build, elegant feminine bone structure waist defined clean-shaven',
+      'Sea elf: pearl-blue skin with faint scale-shimmer along the temple line, finned ears, sea-glass-green eyes, lithe athletic swimmer build, feminine jawline narrow waist beardless',
+      'Eladrin (fey court): seasonally-shifting skin (silver-pale in winter aspect, rose-gold in summer aspect), almond eyes that match the season, ethereal grace, elegant feminine bone structure waist defined clean-shaven',
+      'Satyr: warm olive skin with delicate ram-horns curling back from her brow, soft fawn-like hooves (legs covered by gear), forest-green eyes, slender feminine build above the hooves, feminine jawline beardless',
+      "Centaur: rich auburn human upper half with cream-and-russet horse lower half, soft-featured human face, finely braided dark mane flowing into the equine mane, feminine jawline narrow waist (human half) beardless",
+      'Air genasi: pale silver-blue skin with cloud-wisp markings at her temples, hair lifting subtly without wind, silver-grey eyes, slender ethereal build, soft-featured feminine face slender build no facial hair',
+      'Water genasi: pearl-blue translucent skin with faint scale-flecks along the cheekbones, hair flowing as if underwater, sea-glass-green eyes, elegant feminine bone structure waist defined clean-shaven',
+      'Shifter (wolfkin variant): tawny human skin with the faint feral cast of her bloodline at the cheekbones, amber-gold eyes catching firelight, slightly pointed canines, fitted feminine build, feminine jawline narrow waist beardless',
+      'Halfling: sturdy Tauriel-build small adventurer, warm sun-tan complexion, curly auburn hair, hazel eyes, adult-proportioned (not infantile), feminine jawline narrow waist beardless',
+      'Forest gnome: light tan skin with a freckle-scatter across her nose, large violet-and-amber eyes, copper curls, slender forest-build (adult-proportioned, NOT child-like), soft-featured feminine face slender build no facial hair',
+      'Mountain dwarf (BEARDLESS shieldmaiden): ruddy weather-beaten skin, deep-set steely-grey eyes, broad-powerful build but feminine jawline, hair long and braided (NEVER bearded), elegant feminine bone structure waist defined clean-shaven',
+      "Triton: pearl-and-azure skin with finned ears and gill-slits at the throat (faintly visible), sea-glass-blue eyes, willowy aquatic build, feminine jawline narrow waist beardless",
+      'Kenku (raven-headed): black raven-feathered head and shoulders blending into human-toned skin at the throat, dark intelligent eyes, slim feminine build below the feathered crown, elegant feminine bone structure waist defined clean-shaven',
+      'Tabaxi (feline): tawny-spotted fur dappling her cheeks and forearms, vertical-slit amber eyes, retractable claws and faintly-feline ears, lithe athletic build, soft-featured feminine face slender build no facial hair',
+      // HUMAN HERITAGES — ethnic diversity baked in
+      'Human, Hammerfell-Redguard heritage: deep umber skin, warm-brown almond eyes, dark hair often in many fine braids, athletic sword-singer build, feminine jawline narrow waist beardless',
+      'Human, Calishite heritage: walnut-bronze skin, dark almond eyes, raven-black hair, elegant Eastern-fantasy bone structure, slender feminine build, soft-featured feminine face slender build no facial hair',
+      'Human, Touv-tropical heritage: deep cocoa skin with faint tribal-tattoo at one shoulder, warm dark eyes, dense black tight-curl hair, athletic explorer build, elegant feminine bone structure waist defined clean-shaven',
+      'Human, Nord heritage: pale-Northern complexion with sun-burn across the nose-bridge, ice-blue eyes, flax-blonde or copper-red hair, lean Nordic build, feminine jawline narrow waist beardless',
+      'Human, Cormyrean heritage: warm-fair complexion, hazel eyes, chestnut hair often in a half-pinned style, elegant courtly build, soft-featured feminine face slender build no facial hair',
+      'Human, Khitan heritage: golden-warm skin tone, dark almond eyes, raven-straight black hair, slim graceful build, elegant feminine bone structure waist defined clean-shaven',
+      'Human, Dornish heritage: warm-olive complexion, dark-amber eyes, dark hair often braided with copper-thread, athletic desert-rider build, feminine jawline narrow waist beardless',
+      'Human, Chultan heritage: rich umber-brown skin, dark-warm eyes, dense black tight-coiled hair, jungle-ranger build, soft-featured feminine face slender build no facial hair',
+      'Human, Mulan heritage: warm dusky complexion, dark-bronze eyes, raven-black hair often pinned with bone-pins, graceful slender build, elegant feminine bone structure waist defined clean-shaven',
+      'Human, Tashalan heritage: deep cocoa skin with faint clan-pattern at her temple, warm-brown eyes, dense black-curled hair, athletic adventurer build, feminine jawline narrow waist beardless',
+    ],
+    instructions: `Each entry is ONE race lineage description, 25-50 words. SKIN is baked into the race entry (no separate skin axis). Format: "[Race]: [anatomy + skin + race-features] + [feminine-anatomy lock-phrase]". Cover the attractive-races list above; mix elf-heavy variety, fey/celestial, striking humanoids, small-folk, and ~30% human ethnic heritages. NEVER aarakocra/loxodon/minotaur/warforged/lizardfolk/yuan-ti/tortle/hobgoblin/bugbear/grung/owlin. NEVER bearded dwarven women. EVERY entry ends with the feminine-anatomy lock. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  female_adventurer_eyes: {
+    format: 'simple',
+    theme: `EYE DESCRIPTIONS for a female adventurer — color + intensity + how they catch light + a weathering / character detail. Each entry 15-25 words. Format: "[eye color] catching [light source] to [secondary color], with [scar / crow's-feet / squint-lines / battle-narrowed expression / weather-creased detail]".
+
+⚠️ DIVERSITY MANDATE — distribute across the full spectrum, NOT skewed:
+  • Cool tones: ice-blue, slate-grey, storm-grey, glacier-pale, gunmetal, frost-silver, midnight-violet, sea-glass
+  • Warm tones: amber, whiskey, copper, sienna, russet, burnt-orange, dragon-flame, brass-gold
+  • Earth tones: forest-green, hunter-emerald, moss-green, walnut-brown, hazel, sable, chocolate
+  • Exotic: heterochromatic, slit-pupiled, glowing-fey, glowing-violet (drow), molten-gold, glowing-silver (night elf)
+  • Pale / unusual: silver, pearl-white, void-black, gold-leaf, milk-pale (blind-coded sage)
+
+No cheesecake. No "smoldering" / "bedroom eyes" / "piercing gaze" stock-romance language. WEATHERED, ALERT, CAPABLE — that's the register.`,
+    touchpoints: [
+      "Deep amber eyes catching torchlight to liquid gold, with copper rings tightening around the pupil, crow's-feet at the corners from years of wind",
+      'Forest-green so vivid they seem lit from within, darkening to hunter-emerald when battle-focus sharpens, fine scar-line through one eyebrow',
+      "Northern ice-blue burning cold under torchlight, ringed with frost-silver that intensifies when she's hunting, weather-narrowed at the corners",
+      'Storm-grey eyes with darker rims, catching cloud-light to slate-blue, alert and squint-lined from years of sun and snow',
+      'Whiskey-amber eyes with tiger-eye bands reflecting firelight, half-closed in concentration, an old scar splitting the left brow',
+      'Glowing violet Drow eyes burning cold against obsidian skin, slit-narrowed in shadow, intelligent and predatory',
+      'Pale fel-green Blood-elf eyes glowing faintly with arcane hunger, scholar-keen and sharp',
+      'Slit-pupiled molten-gold dragonborn eyes set into scaled face, predatory and unblinking',
+      'Glowing silver night-elf eyes burning like starlight through dawn-mist, druidic tattoos framing the cheekbones',
+      'Heterochromatic: one molten amber, one storm-grey, both gleaming sharp under moonlight',
+      'Sea-glass green Triton eyes with darker rims, catching lantern-warmth to gold-rimmed, calm and ancient',
+      'Pure void-black eyes from her warlock pact, the iris ringed with faint violet-pact-glow only when she casts',
+      'Pearl-white blind-sage eyes catching no light, milky and luminous, with a small jade dot tattooed between her brows for inner vision',
+      'Walnut-brown eyes flecked with copper at the iris-edge, calm and weathered, deep-creased at the temples',
+      'Chocolate-brown eyes with rich depths, lit copper by torchlight, weather-creased and watchful',
+      'Glacier-pale grey eyes with darker rims, flushed scarlet at the lower lid from cold and exhaustion, full of hard-won wisdom',
+      'Hazel eyes with green and gold flecks shifting with her mood, road-weathered at the corners',
+      'Bright cobalt-blue eyes lit by sea-glow, the Triton variant, with darker rims',
+      'Slate-grey eyes with iron flecks, hunter-narrowed and unflinching, fine scar through one brow',
+      'Burnt-orange eyes with amber veins radiating from the pupils, weather-creased and bandit-wary',
+      'Glowing fey-gold Eladrin eyes with seasonal shift (silver in winter aspect, rose in summer)',
+      'Soft moss-green eyes lit lantern-amber, calm and forest-keen, fine crow\'s-feet from the open road',
+      'Honey-amber eyes with darker rim, half-closed in spell-focus, faint silver pact-mark at the iris-edge',
+      'Pale gunmetal-grey eyes flushed lavender at the lower rim, glowing violet briefly when divine power channels through',
+      'Midnight-violet eyes with darker outer rim, lit faintly indigo by ambient moonlight, half-elven and ancient-feeling',
+    ],
+    instructions: `Each entry is ONE female-adventurer eye description, 15-25 words. Format: "[color + light interaction + secondary color + character detail]". DIVERSITY: distribute across cool/warm/earth/exotic/pale tones — NOT skewed warm. No cheesecake / romance-stock language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  female_adventurer_hair_color: {
+    format: 'simple',
+    theme: `HAIR COLOR DESCRIPTIONS for a female adventurer — applies to head hair only (no facial hair). Each entry 12-25 words. Format: "[color] with [secondary tone or interaction with light] + [weathering / grey-streaks / sun-bleach / road-grime detail]".
+
+⚠️ ABSOLUTE ANTI-WARM-BIAS MANDATE — the prior warrior_hair_color pool was 80%+ copper/auburn/dragon-flame even on "raven" entries. THIS POOL must distribute evenly across:
+  • COOL DARK (~25%): jet-black with indigo / midnight-black / pure raven (NO copper sheen, NO warm undertones) / blue-black / forest-green-tinted black (Sindar)
+  • SILVER / WHITE (~15%): platinum-blond / silver-white elven / moon-pale / ash-white / pure-white braids / steel-silver
+  • COOL BLONDE (~15%): wheat-blonde sun-bleached / ash-blonde / cream-blonde / pale-honey-blonde (NOT warm-coppery)
+  • TRUE BROWN (~15%): walnut-brown / chocolate / dark-cocoa / sable / chestnut WITHOUT warm copper undertones
+  • EXOTIC / FANTASY (~10%): purple drow-streak / starlight-silver / luminous-fey-gold / void-black / pact-touched-white-streak
+  • GREY / STREAKED (~10%): salt-and-pepper / iron-grey / wolf-grey / silver-streaked through black
+  • WARM (~10% — KEEP CAPPED, do NOT exceed): auburn / copper-red / chestnut-with-copper / dragon-flame / rust-orange
+
+No shampoo-commercial language. WEATHERED, LIVED-IN, road-dusted hair.`,
+    touchpoints: [
+      'jet-black with indigo depths braided into a warrior-tail, no warm undertones, ink-black throughout',
+      'pure raven-black to the ends, catching no copper or warm sheen, cool and dark',
+      'midnight-black with blue undertones in moonlight, lustrous and cool',
+      'forest-green-tinted black (Sindar Elf), elegant and ethereal',
+      'platinum-blond Northern, sun-bleached at the tips, ice-cold tone',
+      'silver-white elven hair catching every ambient gleam, pure cold-silver',
+      'pure white Aasimar hair flowing without warmth, silver-glow at the roots',
+      'moon-pale silver braided down the spine, steel-cold and luminous',
+      'ash-white hair from a near-death encounter, threaded with a single black streak',
+      'wheat-blonde sun-bleached at the tips, ash-blonde at the root, no warm undertones',
+      'cream-blonde tied in a low knot, pale honey at the root, sun-pale at the tips',
+      'pale-honey-blonde shading to ash at the tips, road-windblown and dust-pale',
+      'walnut-brown shading to chestnut at the ends, true brown WITHOUT warm copper',
+      'dark chocolate-brown braided practical, cool sable tone, no copper-warmth',
+      'deep-cocoa hair with mahogany depths, no warm undertones, road-dusty at the tips',
+      'sable-brown braided tight, near-black at the root, cool brown register throughout',
+      'glowing-fey silver-gold Eladrin hair shifting with the season-cast',
+      'starlight-silver hair with faint violet undertone in moonlight, ethereal fae',
+      'void-black with no shine whatsoever, the warlock\'s pact-mark color',
+      'pact-touched white streak through otherwise cool-black hair, the bargain visible',
+      'salt-and-pepper hair tied back, dark at the root and silver at the temples',
+      'iron-grey hair shot through with darker strands, hard-won veteran palette',
+      'wolf-grey hair lightening to bone-white at the temples, sage-old',
+      'silver-streaked through coal-black hair, lightning-streak from a near-death magic event',
+      'fiery auburn lit perpetually as if by dragon-flame from within (USE SPARINGLY)',
+      'copper-red sun-warmed at the tips, road-windblown (USE SPARINGLY)',
+    ],
+    instructions: `Each entry is ONE hair color description, 12-25 words. STRICT ANTI-WARM-BIAS — distribute per the percentages above. NO defaulting to "with copper sheen" or "with warm dragon-flame undertones" on every entry. Cool dark / silver / cool blonde / true brown / exotic-fey / grey-streaked must DOMINATE; warm-auburn-copper is capped at 10%. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
 
   female_adventurer_class: {
     format: 'simple',
@@ -1499,7 +1669,66 @@ const POOL_RECIPES = {
 
   female_adventurer_outfit: {
     format: 'simple',
-    theme: `SLEEK ADVENTURING GEAR for a female adventurer in **STRICTLY HIGH-FANTASY tradition** — LOTR / GoT / Elden Ring / Skyrim / Witcher / Warcraft / D&D Forgotten Realms. Practical, agile, functional, road-tested. Painterly fantasy concept-art tradition WITHOUT artist callouts. Each entry 20-50 words.\n\n🚫 **ABSOLUTE BAN — NO real-world ethnic costume codes.** This is Western HIGH FANTASY, not historical cosplay. Specifically forbidden:\n  • NO Bedouin / Arabic / Middle-Eastern-coded\n  • NO Persian / Ottoman-coded\n  • NO Mongol / Steppe-nomad-coded\n  • NO Aztec / Mayan / Andean / Inca-coded\n  • NO Polynesian / Pacific-Islander-coded\n  • NO Indian / Indian-subcontinent / sari-coded\n  • NO Samurai / Japanese / hakama / kimono-coded (NO Eastern)\n  • NO Egyptian / Roman / Greek / Byzantine-coded\n  • NO Norse Viking (the racial template "Nord" is fine; "Norse-coded barbarian" is fine; but don't drift into real-world Viking historical-costume reference)\n\nThe high fantasy world has its OWN climate-and-culture variety vocabulary — use IT:\n\n⚠️ CLIMATE DISTRIBUTION IS CRITICAL — DO NOT default to "leather coat over wool inner over trousers and boots with hood". Target distribution:\n\n  A. **WARM-CLIMATE / LIGHT** (~35% of pool — use HIGH FANTASY analogues):\n    • Dornish (GoT) / Hammerfell-Redguard (Skyrim) / Haradrim (LOTR) / Khanduras (Diablo) / South Reach\n    • Chult (FR) / Stranglethorn (WoW) / Sothoryos (GoT) jungle outfits\n    • Anauroch (FR) / Athasian (Dark Sun) desert-fantasy explorers\n    • Light fitted single-layer tunic + breeches\n    • Sleeveless gambeson with bracered forearms\n    • Sun-cloak + light leathers\n    • Lightweight scale over a thin under-layer\n    • Sorceress in a fitted travel-robe, NOT bundled\n  B. **TEMPERATE / MID** (~35% of pool):\n    • Rohirrim / Gondorian / Dúnedain / Cyrodiil-Imperial / Witcher-school / Eriador-ranger / Bretons-Highgarden\n    • Fitted ranger leathers / hooded scout coat that ends at the hip\n    • Civilian bardic doublet\n    • Paladin half-plate over surcoat\n    • Mage's traveling robes (not full winter cloak)\n    • Cuirass over thin gambeson\n  C. **COLD-CLIMATE / LAYERED** (~30% of pool, NOT MORE):\n    • Skyrim Nords / Witcher's Northern Realms / Forodwaith / The North (GoT) / Stormcloak\n    • Bearskin / hide-and-fur / arctic shaman / Eriador winter-cloak\n    • These belong but DO NOT dominate.\n\n⚠️ SILHOUETTE VARIETY IS CRITICAL — DO NOT default to "long coat over trouser-and-boot". Distribute across:\n\n  A. ROBES / DRESSES-AS-ARMOR — mage cassock / cleric vestments / monk wrap (Western monastic, not Eastern) / sorceress flowing travel-robe / druidic moss-robe — flowing, NOT coat-over-trouser\n  B. CUIRASS / BREASTPLATE FOCUS — steel breastplate + skirt-of-chain-and-leather / scale cuirass over fitted under-coat — the armor is THE statement\n  C. SINGLE-LAYER FITTED — light tunic + breeches with NO coat / sleeveless gambeson / fitted linen riding outfit\n  D. HOODED COAT — the historic bias, legitimate but ONE option, not default\n  E. PLATE / HEAVY ARMOR — full half-plate / engraved cuirass + greaves\n\nSTRUCTURAL VARIETY in entry shape (mix all):\n  A. SILHOUETTE-LED — leads with the shape\n  B. MATERIAL-LED — leads with the dominant fabric/metal\n  C. SINGLE-PIECE FOCUS — leads with one iconic garment\n  D. WHAT-SHE-IS-NOT-WEARING — "No armor at all..." / "No cloak..." / "Sleeveless..."\n  E. LIVED-IN DETAIL — leads with wear/damage story\n  F. COLOR-PALETTE-LED — leads with chromatic identity\n\nDO NOT use a rigid "CULTURE-NAME — [garments list]" headline format. Mix openings, capitalization, lengths.\n\nABSOLUTE BANS (NSFW triggers):\n• NO "minimal coverage" / "battle bikini" / "battle bra" / "bare midriff" / "exposed cleavage" / "exposed thighs"\n• NO "form-fitting" / "skin-tight" / "second-skin"\n• NO "harness across torso" / "bondage-coded"\n• NO "sultry" / "sensual" / "alluring" / "seductive" / "provocative" / "curves emphasized" / "bust-accentuating" / "low-cut"\n• NO artist names (Frazetta / Brom / Vallejo / Boris / Hildebrandt / Whelan)\n\nMUST READ AS: functional + covered + road-tested + class-coded + HIGH FANTASY ONLY.\n\nCONTENT VARIETY MANDATE — every entry MUST differ in:\n• OUTFIT ARCHETYPE\n• MATERIAL PALETTE — oxblood / forest-green / charcoal / cobalt / verdigris-bronze / pewter / bone-white / wine-red / dark teal / saffron / russet / steel-grey / cream / sand-tan / indigo / olive / amber / coral-pink / jade / amethyst-purple\n• FANTASY-CANON CULTURE FLAVOR (one of):\n    • LOTR: Rohirrim / Gondorian / Dúnedain / Númenórean / Sindar / Noldor / Galadhrim / Haradrim / Easterling\n    • GoT: Northerner / Dornish / Highgarden / Ironborn / Free-Folk\n    • Skyrim: Nord / Imperial / Redguard / Bosmer / Altmer / Dunmer / Breton\n    • Witcher: Nilfgaardian / Skellige / School-of-Wolf / Aen Seidhe / Mahakaman\n    • D&D Forgotten Realms: Cormyrean / Waterdhavian / Thayan / Chultan / Calishite (avoid the strongest real-world coding; lean on fantasy-original names)\n    • Warcraft: Stormwind / Stranglethorn / Quel'Thalas / Ironforge / Hyjal\n    • Elden Ring / Dark Souls: Carian / Leyndell / Liurnia / Catarina\n    • Generic D&D: Drow / Elf / Dwarf / Halfling-Shire / Half-orc / Tiefling / Dragonborn\n• CLASS REGISTER — heavy-armored / mid-armored / lightly armored / robed / hide-and-fur / civilian\n• CLIMATE (per distribution above)`,
+    theme: `ORNATE FITTED ADVENTURING GEAR for a female adventurer in **STRICTLY HIGH-FANTASY tradition** — LOTR / GoT / Elden Ring / Skyrim / Witcher / Warcraft / D&D Forgotten Realms. Painterly fantasy concept-art tradition WITHOUT artist callouts. Each entry 20-50 words.
+
+🎯 NEW DIRECTIVE 2026-05-23 — ORNATE FITTED + FEMININE-CODED. Per Kevin's call, the previous "no form-fitting / no curves" bans have been REMOVED. Replaced with positive language:
+
+✓ FEMININE-CODED FIT: every entry describes gear SHAPED TO A WOMAN'S FORM
+  • "fitted to her feminine silhouette"
+  • "cuirass articulated for female anatomy" (NOT a flat masculine breastplate)
+  • "shaped breastplate panels"
+  • "ornate corseted bodice over fitted gambeson"
+  • "shieldmaiden plate with feminine chest articulation"
+  • "lady's traveling gown of fitted brocade"
+  • "fitted bodice with skirt-to-mid-calf"
+  • "tailored to follow the curve of her waist"
+  • "form-following ranger leathers"
+  • Belted at the waist to define her silhouette
+  • Tucked / cinched / tailored — never draped formless
+
+✓ ORNATE HIGH-FANTASY DETAIL:
+  • Embroidered runic patterns at the hem / collar / cuffs
+  • Hand-engraved bracers, tooled belt buckles, brass-pinned cloak fastenings
+  • Layered leather + mail + silk + brocade
+  • Visible armor articulation (pauldrons, vambraces, gorget, greaves, gambeson)
+  • Iconic high-fantasy references: Éowyn shieldmaiden plate / Tauriel elven scout leathers / Yennefer witch-court robes / Triss adventuring layers / Aloy tribal armor / Brienne plate / Dragon Age Inquisitor / Galadriel's road-cloak
+  • Tooled / engraved / brass-pinned / silver-thread / runic-embroidered details
+
+🎯 COVERAGE MIX 2026-05-23 (Kevin: "ease up on the covered-up look — we don't want sluts in armor but these are all very fullbody/drapey — get a mix of both"). The pool must MIX coverage levels. Target distribution:
+  • ~35% FULLY-COVERED ORNATE — robes / full plate / layered hooded coats / winter gear (the current default — keep some, NOT all)
+  • ~30% FITTED MID — fitted tunic / cuirass over a thin under-layer / hip-length fitted coat / sleeveless gambeson with bare arms
+  • ~35% FITTED + TASTEFULLY SKIN-SHOWING — gear that reveals an athletic, capable body without being cheesecake:
+      - sleeveless fitted leather with BARE ARMS + BARE SHOULDERS
+      - a fitted leather jerkin cut to show a TONED MIDRIFF over high-waisted trousers
+      - a SHORT COMBAT SKIRT or leather battle-kilt with BARE LEGS + high laced boots
+      - an off-shoulder fitted bodice / asymmetric one-shoulder top under armor
+      - a fitted bustier-cut cuirass (REAL armor, sculpted to her form — NOT a bikini) over bare midriff or thin under-layer
+      - a halter or sleeveless fitted top under an open jacket/cloak
+    Think Red-Sonja-but-tasteful / Xena / Nilfgaardian-fitted / Conan-warrior-woman done CLASSY. Athletic, capable, NEVER sexualized.
+
+🚫 STILL BANNED (the cheesecake line we DON'T cross):
+• NO chainmail bikini / battle-bra / string-strap-as-outfit / underwear-as-armor
+• NO exposed-cleavage-AS-THE-FOCUS / NO plunging low-cut neckline (a fitted top is fine; cleavage as the selling point is not)
+• NO "sultry" / "seductive" / "alluring" / "provocative" stock-cheesecake language
+• NO harness-as-outfit (bondage-coded)
+• NO artist names (Frazetta / Brom / Vallejo / Boris / Hildebrandt / Whelan)
+
+The register: fitted + ORNATE + LOTR/Witcher/GoT/Elden caliber, coverage RANGING from fully-covered to tastefully skin-showing. NEVER loose drapes that erase her form, NEVER cheesecake exposure.
+
+🚫 **ABSOLUTE BAN — NO real-world ethnic costume codes.** This is Western HIGH FANTASY, not historical cosplay. Specifically forbidden:
+  • NO Bedouin / Arabic / Middle-Eastern-coded
+  • NO Persian / Ottoman-coded
+  • NO Mongol / Steppe-nomad-coded
+  • NO Aztec / Mayan / Andean / Inca-coded
+  • NO Polynesian / Pacific-Islander-coded
+  • NO Indian / Indian-subcontinent / sari-coded
+  • NO Samurai / Japanese / hakama / kimono-coded (NO Eastern)
+  • NO Egyptian / Roman / Greek / Byzantine-coded
+  • NO Norse Viking (the racial template "Nord" is fine; "Norse-coded barbarian" is fine; but don't drift into real-world Viking historical-costume reference)
+
+The high fantasy world has its OWN climate-and-culture variety vocabulary — use IT:
+
+⚠️ ORIGINAL HEADER NOTES PRESERVED (sleek adventuring gear, Painterly fantasy concept-art tradition WITHOUT artist callouts, 20-50 words per entry).\n\n🚫 **ABSOLUTE BAN — NO real-world ethnic costume codes.** This is Western HIGH FANTASY, not historical cosplay. Specifically forbidden:\n  • NO Bedouin / Arabic / Middle-Eastern-coded\n  • NO Persian / Ottoman-coded\n  • NO Mongol / Steppe-nomad-coded\n  • NO Aztec / Mayan / Andean / Inca-coded\n  • NO Polynesian / Pacific-Islander-coded\n  • NO Indian / Indian-subcontinent / sari-coded\n  • NO Samurai / Japanese / hakama / kimono-coded (NO Eastern)\n  • NO Egyptian / Roman / Greek / Byzantine-coded\n  • NO Norse Viking (the racial template "Nord" is fine; "Norse-coded barbarian" is fine; but don't drift into real-world Viking historical-costume reference)\n\nThe high fantasy world has its OWN climate-and-culture variety vocabulary — use IT:\n\n⚠️ CLIMATE DISTRIBUTION IS CRITICAL — DO NOT default to "leather coat over wool inner over trousers and boots with hood". Target distribution:\n\n  A. **WARM-CLIMATE / LIGHT** (~35% of pool — use HIGH FANTASY analogues):\n    • Dornish (GoT) / Hammerfell-Redguard (Skyrim) / Haradrim (LOTR) / Khanduras (Diablo) / South Reach\n    • Chult (FR) / Stranglethorn (WoW) / Sothoryos (GoT) jungle outfits\n    • Anauroch (FR) / Athasian (Dark Sun) desert-fantasy explorers\n    • Light fitted single-layer tunic + breeches\n    • Sleeveless gambeson with bracered forearms\n    • Sun-cloak + light leathers\n    • Lightweight scale over a thin under-layer\n    • Sorceress in a fitted travel-robe, NOT bundled\n  B. **TEMPERATE / MID** (~35% of pool):\n    • Rohirrim / Gondorian / Dúnedain / Cyrodiil-Imperial / Witcher-school / Eriador-ranger / Bretons-Highgarden\n    • Fitted ranger leathers / hooded scout coat that ends at the hip\n    • Civilian bardic doublet\n    • Paladin half-plate over surcoat\n    • Mage's traveling robes (not full winter cloak)\n    • Cuirass over thin gambeson\n  C. **COLD-CLIMATE / LAYERED** (~30% of pool, NOT MORE):\n    • Skyrim Nords / Witcher's Northern Realms / Forodwaith / The North (GoT) / Stormcloak\n    • Bearskin / hide-and-fur / arctic shaman / Eriador winter-cloak\n    • These belong but DO NOT dominate.\n\n⚠️ SILHOUETTE VARIETY IS CRITICAL — DO NOT default to "long coat over trouser-and-boot". Distribute across:\n\n  A. ROBES / DRESSES-AS-ARMOR — mage cassock / cleric vestments / monk wrap (Western monastic, not Eastern) / sorceress flowing travel-robe / druidic moss-robe — flowing, NOT coat-over-trouser\n  B. CUIRASS / BREASTPLATE FOCUS — steel breastplate + skirt-of-chain-and-leather / scale cuirass over fitted under-coat — the armor is THE statement\n  C. SINGLE-LAYER FITTED — light tunic + breeches with NO coat / sleeveless gambeson / fitted linen riding outfit\n  D. HOODED COAT — the historic bias, legitimate but ONE option, not default\n  E. PLATE / HEAVY ARMOR — full half-plate / engraved cuirass + greaves\n\nSTRUCTURAL VARIETY in entry shape (mix all):\n  A. SILHOUETTE-LED — leads with the shape\n  B. MATERIAL-LED — leads with the dominant fabric/metal\n  C. SINGLE-PIECE FOCUS — leads with one iconic garment\n  D. WHAT-SHE-IS-NOT-WEARING — "No armor at all..." / "No cloak..." / "Sleeveless..."\n  E. LIVED-IN DETAIL — leads with wear/damage story\n  F. COLOR-PALETTE-LED — leads with chromatic identity\n\nDO NOT use a rigid "CULTURE-NAME — [garments list]" headline format. Mix openings, capitalization, lengths.\n\nABSOLUTE BANS (the cheesecake line — these stay banned):\n• NO "chainmail bikini" / "battle bikini" / "battle bra" / "string-strap outfit" / "underwear as armor"\n• NO "exposed cleavage as the focus" / "plunging low-cut neckline"\n• NO "harness across torso as outfit" / "bondage-coded"\n• NO "sultry" / "sensual" / "alluring" / "seductive" / "provocative"\n• NO artist names (Frazetta / Brom / Vallejo / Boris / Hildebrandt / Whelan)\n\nALLOWED + ENCOURAGED (per 2026-05-23 coverage-mix directive):\n• Form-fitting / fitted / tailored to her silhouette / shaped to female anatomy\n• Cuirass / breastplate with feminine chest articulation; fitted bustier-cut REAL armor\n• Corseted or off-shoulder bodice (under armor or as part of fitted gown)\n• Bare arms / bare shoulders / toned midriff / short combat skirt with bare legs — TASTEFULLY, on ~35% of entries\n• Belted at waist to define silhouette\n• ORNATE details — embroidery / engraving / brass pins / silver-thread runes / tooled leather\n\nMUST READ AS: ornate + fitted + feminine-coded + class-coded + HIGH FANTASY, coverage RANGING from fully-covered to tastefully skin-showing.\n\nCONTENT VARIETY MANDATE — every entry MUST differ in:\n• OUTFIT ARCHETYPE\n• MATERIAL PALETTE — oxblood / forest-green / charcoal / cobalt / verdigris-bronze / pewter / bone-white / wine-red / dark teal / saffron / russet / steel-grey / cream / sand-tan / indigo / olive / amber / coral-pink / jade / amethyst-purple\n• FANTASY-CANON CULTURE FLAVOR (one of):\n    • LOTR: Rohirrim / Gondorian / Dúnedain / Númenórean / Sindar / Noldor / Galadhrim / Haradrim / Easterling\n    • GoT: Northerner / Dornish / Highgarden / Ironborn / Free-Folk\n    • Skyrim: Nord / Imperial / Redguard / Bosmer / Altmer / Dunmer / Breton\n    • Witcher: Nilfgaardian / Skellige / School-of-Wolf / Aen Seidhe / Mahakaman\n    • D&D Forgotten Realms: Cormyrean / Waterdhavian / Thayan / Chultan / Calishite (avoid the strongest real-world coding; lean on fantasy-original names)\n    • Warcraft: Stormwind / Stranglethorn / Quel'Thalas / Ironforge / Hyjal\n    • Elden Ring / Dark Souls: Carian / Leyndell / Liurnia / Catarina\n    • Generic D&D: Drow / Elf / Dwarf / Halfling-Shire / Half-orc / Tiefling / Dragonborn\n• CLASS REGISTER — heavy-armored / mid-armored / lightly armored / robed / hide-and-fur / civilian\n• CLIMATE (per distribution above)`,
     touchpoints: [
       // WARM-CLIMATE / LIGHT — HIGH FANTASY ONLY (target ~35%)
       'A Dornish scout in a sleeveless saffron-and-copper riding leathers, fitted linen breeches, low travel boots, hair tied back in a single dark braid — built for the desert sun',
@@ -1529,13 +1758,22 @@ const POOL_RECIPES = {
       'A patched dark leather Witcher coat with mismatched horn buttons, elbows re-hided in darker leather, the original color long faded — a decade of monster-hunting visible',
       'A Forodwaith arctic mantle of bear-fur over layered linen, bone-fetish belt at the waist, fur-topped boots, breath visible — high-tundra cold gear',
       'A Stormcloak heavy gambeson in dark blue and bronze, mail underneath, fur-trimmed collar, Skyrim winter trousers — Eastmarch winter kit',
+      // FITTED + TASTEFULLY SKIN-SHOWING (target ~35% — athletic & capable, NEVER cheesecake)
+      'A Dornish duelist in a fitted oxblood leather jerkin cut to bare a toned midriff, high-waisted dark breeches, bare arms wrapped at the forearms in tooled bracers, low boots — built for heat and speed',
+      'A Stranglethorn huntress in a short layered-leather battle-skirt and a fitted sleeveless scale top, bare legs above high laced boots, copper arm-rings — wiry and sun-darkened',
+      'A Quel\'Thalas blade-dancer in a fitted bustier-cut bronze cuirass (sculpted real armor) over a bare midriff, a knee-length skirt of leather strips, engraved vambraces on bare arms',
+      'An Ashen wildling fighter, bare-shouldered in a one-shoulder fitted hide top with a slung fur half-cloak off the other shoulder, fitted breeches, bone-bead belt — rugged, not delicate',
+      'A Free Folk spearmaiden in a fitted sleeveless leather harness-vest over a thin band-top, bare arms and shoulders, hide skirt over leggings, painted clan-marks down one arm',
+      'A Calishite court-mage in an off-shoulder fitted travel-gown of saffron silk, the bodice tailored close, skirt slit to mid-thigh for riding over fitted leggings, gold sigils at the hem',
+      'A Hammerfell sword-singer in a fitted teal halter-cut top under an open sleeveless coat, a wrapped sash at a bare midriff, loose trousers cinched at the ankle — light and fast',
+      'A Bosmer scout in fitted moss-green leathers, sleeveless with bare arms, a cropped jerkin over a high-waisted skirt-and-legging combo, leaf-tooled bracers',
     ],
-    instructions: `Each entry is ONE sleek adventuring outfit, 20-50 words. STRUCTURAL VARIETY IS CRITICAL — mix silhouette-led, material-led, single-piece-focus, what-she-is-NOT-wearing, lived-in-detail, and color-palette-led forms across the pool. DO NOT use a "CULTURE — garment list" rigid headline format. Vary openings, capitalization, lengths. Some entries can be a single descriptive sentence; others can be 2-3 sentences. Some entries lead with what she's NOT wearing. Some name no class at all. NSFW-CLEAN — never minimal-coverage, never bare-midriff, never harness/sultry/sensual. Functional + covered + road-tested. NO TWO entries share archetype/material/culture. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+    instructions: `Each entry is ONE adventuring outfit, 20-50 words. COVERAGE MIX is the point — ~35% fully-covered ornate / ~30% fitted-mid / ~35% fitted + tastefully skin-showing (bare arms / shoulders / toned midriff / short combat skirt with bare legs). STRUCTURAL VARIETY — mix silhouette-led, material-led, single-piece-focus, what-she-is-NOT-wearing, lived-in-detail, color-palette-led forms. DO NOT use a "CULTURE — garment list" rigid headline. Vary openings, lengths. CHEESECAKE LINE: never chainmail-bikini / battle-bra / string-strap / cleavage-as-focus / sultry-sensual / bondage-harness — athletic & capable, never sexualized. NO TWO entries share archetype/material/culture. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
 
   female_adventurer_accessory: {
     format: 'simple',
-    theme: `SIGNATURE CARRIED ITEM or WEAPON for a female adventurer — class-flavored, the kind of object she's known for. Each entry 15-30 words. Format: "[OBJECT-NAME] — [where carried] + [signature visual detail]".\n\nVARIETY MANDATE across the pool:\n• WEAPONS: longbow + arrow-quiver / recurve bow / longsword / scimitar / dual daggers / paired shortswords / war-staff / quarterstaff / shillelagh / mace / morningstar / war-hammer / spear / glaive / halberd / crossbow / hand-crossbow / sling-and-pouch / throwing-axes / kukri / katana / sabre\n• CASTER FOCI: gem-topped staff / orb-staff / focus-crystal pendant / leather-bound spellbook / scroll-case / spirit-totem fetish / holy symbol / sun-emblem amulet / moon-disc / pact-sigil ring\n• UTILITY: lockpick roll / climbing hooks / harvester\'s pouch / herbalist\'s satchel / cartographer\'s tube / hunter\'s horn / signal-mirror / lantern / smoking censer / shaman\'s drum / tinkerer\'s tool-belt\n• ICONIC: family signet ring / lineage banner-pole / clan-banner cloak-pin / oath-relic / familiar (raven on shoulder / hawk on glove / cat at hip) / heirloom locket\n\nNO weapons in active combat use. All sheathed, holstered, slung, or being carried — never mid-swing.`,
+    theme: `SIGNATURE CARRIED ITEM or WEAPON for a female adventurer — class-flavored, the kind of object she's known for. Each entry 15-30 words. Format: "[OBJECT-NAME] — [where carried] + [signature visual detail]".\n\nVARIETY MANDATE across the pool:\n• WEAPONS: longbow + arrow-quiver / recurve bow / longsword / scimitar / dual daggers / paired shortswords / war-staff / quarterstaff / shillelagh / mace / morningstar / war-hammer / spear / glaive / halberd / crossbow / hand-crossbow / sling-and-pouch / throwing-axes / kukri / katana / sabre\n• CASTER FOCI: gem-topped staff / orb-staff / focus-crystal pendant / leather-bound spellbook / scroll-case / spirit-totem fetish / holy symbol / sun-emblem amulet / moon-disc / pact-sigil ring\n• UTILITY: lockpick roll / climbing hooks / harvester\'s pouch / herbalist\'s satchel / cartographer\'s tube / hunter\'s horn / signal-mirror / lantern / smoking censer / shaman\'s drum / tinkerer\'s tool-belt\n• ICONIC: family signet ring / lineage banner-pole / clan-banner cloak-pin / oath-relic / heirloom locket / engraved war-horn / battle-standard\n\nNO LIVE COMPANION BIRDS — NO raven on shoulder, NO hawk on glove, NO falconry. (Birds are over-used on this path — leave live birds out. A hawk engraved on a signet crest or feathers woven into a totem are fine; a live perched bird is NOT.)\n\nNO weapons in active combat use. All sheathed, holstered, slung, or being carried — never mid-swing.`,
     touchpoints: [
       'longbow slung across her back with arrow-quiver at her hip, fletching dyed in clan colors',
       'twin parrying daggers crossed in lower-back sheaths, hilts wrapped in dark leather',
@@ -1543,14 +1781,14 @@ const POOL_RECIPES = {
       'leather-bound spellbook clipped at her belt with brass fittings, page-edges gilded',
       'longsword strapped at her left hip in a tooled leather scabbard, family crest on the pommel',
       'recurve bow carried in one hand with a leather wrist-guard on her draw-arm',
-      'hooded raven familiar perched on her left shoulder, alert and silent',
+      'engraved brass war-horn slung on a baldric across her chest, mouthpiece worn bright from use',
       'pact-sigil ring on her index finger glowing faintly when her gaze flickers elsewhere',
       "shaman's hand-drum slung over one shoulder, painted with bone-rune patterns",
       "cartographer's tube on her belt with rolled maps poking from the open end",
       'pair of throwing-axes in cross-back harness, blades carbon-blacked to suppress glare',
       'wolf-headed walking staff with iron-shod tip, her hand resting at the carved grip',
       'silver holy symbol on a chain at her throat, palm-sized, faintly luminous in dim light',
-      "falconer's glove on her left hand with a hooded hawk standing alert on it",
+      'iron-banded oak buckler strapped to her left forearm, face scarred with old blade-marks',
       'leather lockpick roll tucked into her belt, picks held in place by oiled loops',
       'crossbow slung across her back with bolt-quiver clipped to her hip belt',
       'hand-crossbow holstered on each thigh, dark-stained wood with iron fittings',
@@ -1596,45 +1834,37 @@ const POOL_RECIPES = {
 
   female_adventurer_action: {
     format: 'simple',
-    theme: `STORY-RICH adventuring moments for a female adventurer in the wild — a candid mid-action beat from her travels. NOT mundane camp chores. NOT combat. Each moment is the kind of thing that opens a chapter — something is happening. Each entry 25-45 words. Format: "ACTION-CAP — body position + specific prop or object + specific location detail + cinematic tension".\n\nABSOLUTE BANS:\n• NO combat / mid-strike / weapon-aimed-at-foe / enemy in frame / fallen body / wounded character / blood-fight\n• NO chores ("sharpening blade / polishing sword / lacing boots / drinking from waterskin / eating by campfire")\n• NO stock poses ("scanning horizon hand-to-brow / kneeling at shrine")\n• NO sultry / sensual / posing-for-camera language\n\nMANDATORY in every entry:\n• A STORYTELLING HOOK — something is happening, why it matters or what's at stake\n• A SPECIFIC PROP / OBJECT she's interacting with\n• A SPECIFIC LOCATION beat (forest path / cliff trail / cave mouth / clearing / stream-bank / etc.)\n• CINEMATIC TENSION — held breath, mid-motion, charged stillness, half-drawn focus\n\n⚠️ BODY-POSITION VARIETY IS CRITICAL — DO NOT default to "kneeling / crouching / seated / hunched at fire". Across the pool, distribute body positions roughly evenly across these registers:\n\n  A. **MOUNTED / WITH COMPANION ANIMAL** (~20% of pool): atop her horse cresting a ridge / leading her mount across a rope bridge / dismounting at a stream / her hawk launching from her glove / her wolf padding alongside her / her raven on shoulder mid-stride / kneeling beside her wounded mount\n  B. **DYNAMIC TRAVEL / IN MOTION** (~20% of pool): mid-stride across a moor / striding down a forest path with bow drawn-but-relaxed / wading thigh-deep through a river / walking a cliff trail / running between cover / sliding down a scree slope on her heels / vaulting a fallen log\n  C. **CLIMBING / VERTICAL** (~10% of pool): caught mid-grip on a cliff face / pulling herself onto a ledge / descending hand-over-hand on a rope / squeezing through a narrow passage / climbing a rope bridge after it collapsed mid-span\n  D. **STANDING / SURVEYING / READING THE WORLD** (~15% of pool): standing on a high outcrop reading the wind / drawing bowstring back at a distant target / studying the sky through a sextant / arm half-extended casting a glowing focus / pausing mid-step listening / pressing palm to a tree-trunk gone still\n  E. **KNEELING / CROUCHING / WORKING** (~20% of pool): tracking a print / brushing dust from a sigil / casting a ward-circle / kindling fire under rain-tarp — these belong but DO NOT dominate\n  F. **REACHING UP / LIFTING / STRAINING** (~10% of pool): lifting a collapsed beam aside / pulling back the cover of a crypt door / unsealing a casket / lifting a reliquary above flood-water / striking a flint over kindling held in cupped hands\n  G. **SEATED / RESTING / CRAFTING** (~5% of pool): fletching arrows on a flat rock / writing in a journal at camp / repairing tear in a cloak — minor share\n\nKevin's R2 favorite was "leading mount across rope bridge" — a dynamic traveling pose with a companion animal. The pool should produce more of THAT energy, not more "kneeling at sigil".\n\nVariety thematic spectrum (cover all):\n• TRACKING / SCOUTING (often crouching but vary with standing-and-reading-the-wind too)\n• EXPLORATION (rappelling, wading, climbing, squeezing through, lifting beams)\n• MAGIC / RITUAL (casting standing arm-extended, mid-spell with focus, channeling at standing stone — vary BODY POSITION even within ritual)\n• DISCOVERY (brushing sigil, lifting cloth from cache, unrolling map, opening casket)\n• TRAVEL (mounted, leading mount, fording river, crossing bridge, striding through biome, mid-step listening)\n• SHELTER (kindling fire, stringing hammock, setting snares)\n• CRAFT / WORK (fletching, repairing, writing in journal)`,
+    theme: `STORY-RICH ADVENTURING moments for a female adventurer ON THE JOURNEY — a candid travel beat from the road. The unifying feel: she is a TRAVELER LIVING THE QUEST — covering ground, navigating an obstacle, or resting between legs of the journey. These are the candid in-between moments of a long road, NOT a posed hero shot, NOT a fussy camp chore that looks awkward. Each entry 25-45 words. Format: "ACTION-CAP — body position + specific prop/interaction + setting cue + cinematic tension or ease".\n\n⚠️ THE FEEL WE WANT (Kevin 2026-05-23, verbatim): "climbing over a boulder, on a bridge, walking down a path, sneaking up on something with their sword drawn, sitting in a tavern, relaxing at the side of a creek/stream/river, reading a map, sharpening a weapon by campfire." ADVENTUROUS + IN-MOTION or AT-REST-IN-THE-WORLD. Every entry should feel like a moment you'd want to follow into the next page.\n\nABSOLUTE BANS:\n• NO active combat / mid-strike / enemy in frame / fallen body / blood. BUT a DRAWN weapon held ready in stealth or wary advance IS allowed and encouraged (no visible foe, no strike — pure tension).\n• NO goofy / fussy / awkward poses — specifically NO squeezing sideways through a fissure or narrow gap, NO repairing a rope or bridge, NO tending a horse's hoof, NO hunched fiddling with gear. These render as ungainly scrambles.\n• NO COMPANION BIRDS — NO hawk launching from her glove, NO raven perched on her shoulder, NO falconry of any kind. (Birds are badly over-used elsewhere — leave them out entirely here.)\n• NO defaulting to kneeling-to-scratch-a-sigil — vary body position hard.\n• NO sultry / sensual / posing-for-camera language.\n\nMANDATORY in every entry:\n• THE JOURNEY is the throughline — she is traveling, overcoming terrain, or resting on the road\n• A SPECIFIC PROP / INTERACTION (unfolded map, waterskin, whetstone + blade, walking staff, lantern, ale-tankard, the boulder/bridge/ledge/creek itself)\n• A SETTING CUE that layers onto a wild landscape (forest trail / cliff-ledge / creek-bank / ridge-line / cave-mouth / camp at dusk / tavern window)\n• CINEMATIC TENSION or genuine EASE — mid-stride, mid-climb, charged stillness, or a real breath of rest\n\nBODY-POSITION / REGISTER DISTRIBUTION across the pool (cover all):\n  A. TRAVELING THE PATH (~22%) — striding a switchback / walking a forest trail with staff in hand / cresting a ridge-line / descending a scree slope, pack settled, eyes on the road ahead\n  B. NAVIGATING AN OBSTACLE (~22%) — climbing over a moss-slick boulder blocking the trail / scrambling up a rock step / crossing a rope-or-stone bridge with one hand on the guide-rope / fording a stream on stepping-stones / edging along a narrow cliff ledge / ducking beneath a fallen trunk across the path\n  C. STEALTH / WARY ADVANCE (~12%) — creeping forward in a low crouch with sword or dagger DRAWN and held ready, stalking something just out of frame / pressing flat to a tree-trunk peering ahead — pure tension, NO enemy shown\n  D. MOUNTED TRAVEL (~12%) — atop her horse cresting a ridge / leading her mount across a bridge by the bridle / riding a forest trail at golden hour / dismounting at a stream (NO bird, NO falconry)\n  E. REST / DOWNTIME ON THE ROAD (~22%) — crouched at a creek-bank refilling a waterskin or trailing fingers in the current / seated on a rock studying an unfolded map, tracing the route / sharpening her blade with a whetstone beside a small campfire at dusk / leaning against a boulder eating travel-bread / warming her hands at a night camp / nursing an ale at a worn tavern table by a leaded-glass window\n  F. DISCOVERY / READING THE WORLD (~10%) — cresting a rise to a hidden vista / lifting a lantern into a dark passage mouth / pushing aside hanging vines from a ruined doorway / reading a weathered trail-marker at a crossroads\n  G. LIGHT MAGIC, STANDING (~6%) — pausing on the trail with a glowing focus-crystal lighting the way / casting palm-light into a cave mouth — minor share, always STANDING`,
     touchpoints: [
-      // MOUNTED / WITH-COMPANION (Kevin loved the rope-bridge mount entry — more like this)
-      'LEADING MOUNT ACROSS ROPE BRIDGE — one hand on the bridle, the other gripping the rope-rail, mid-span over a gorge with mist rolling beneath the planks',
-      'ATOP A CRESTING HORSE — leaning forward in the saddle on a rising trail at golden hour, her cloak streaming back, a distant valley opening below',
-      'DISMOUNTING AT A STREAM — one boot already on the ground, the other still in the stirrup, reins held loose as her mount lowers its head to drink',
-      'HER HAWK LAUNCHING FROM HER GLOVE — arm extended sharp toward a rising horizon, raptor breaking forward into flight, jess-cord trailing for a heartbeat',
-      'HER WOLF PADDING ALONGSIDE — striding through a quiet forest at dusk, the wolf shoulder-high beside her keeping her exact pace, both alert to the same distant sound',
-      'PULLING REIN AT CROSSROADS — atop her dark mount in low evening light, gloved hand on the pommel, head tipped reading a weather-worn signpost',
-      // DYNAMIC TRAVEL / IN MOTION
-      'STRIDING DOWN A FOREST PATH — bow held in her draw-hand but relaxed, mid-step over a fallen branch, dappled light cutting horizontal bands across her path',
-      'WADING THIGH-DEEP THROUGH RAPIDS — staff planted hard against the current, her free hand braced low for balance, water white-foam breaking against her knees',
-      'VAULTING A FALLEN LOG — mid-leap with one foot pushing off the trunk, the other already extended toward the trail beyond, pack-straps caught mid-bounce',
-      'RUNNING BETWEEN COVER — caught at full stride between two trees on a moonlit hillside, the next stand of pines three meters off, breath visible in the cold',
-      'SLIDING DOWN A SCREE SLOPE — heels dug in, body angled back, dust and small stones cascading around her boots, the trail-end visible far below',
-      'STRIDING ACROSS A WIND-WHIPPED MOOR — cloak streaming sideways in a horizontal gust, hair tearing free of its braid, the path threading toward distant standing stones',
-      // CLIMBING / VERTICAL
-      'CAUGHT MID-GRIP ON A CLIFF FACE — three meters above the trail, both hands and one boot on rough sandstone, the next handhold already chalked',
-      'PULLING ONTO A LEDGE — both forearms over the lip, body straining as she heaves herself up, the long drop visible beneath her',
-      'DESCENDING HAND-OVER-HAND — rope twisted around her wrist, boots braced against a slick stone wall, lantern swinging from her belt as she rappels',
-      // STANDING / SURVEYING / READING THE WORLD
-      'DRAWING THE BOWSTRING — feet planted shoulder-width, arrow-shaft brushing her cheek, eye on a distant target the viewer cannot quite see',
-      'CASTING FROM FOCUS — standing tall with one arm half-extended, glowing crystal in her open palm, a glyph of light blooming above it, hair lifting in magical wind',
-      'STUDYING NIGHT SKY THROUGH SEXTANT — standing on a high outcrop, brass instrument raised to one eye, the Milky Way arching overhead',
-      'PRESSING PALM TO TREE — pausing mid-stride against a great trunk, eyes shut, listening to something on the wind her companion has not yet heard',
-      'STANDING AT THE BRIDGE-EDGE — one boot on the first plank, hand resting on the rope-rail, looking into the gorge before committing weight to the span',
-      // KNEELING / CROUCHING / WORKING (kept but minority share)
-      'TRACKING THROUGH FERN — kneeling at a half-print in damp loam, fingertip brushing its edge, eyes already following the trail into the deep ferns',
-      'BRUSHING DUST FROM A SIGIL — kneeling at a half-buried stone slab in a clearing, gloved fingertip clearing moss from a rune that has begun to glow under her touch',
-      'CASTING WARD-CIRCLE — kneeling in a chalk-drawn ring on flat stone, scattering bone-runes one by one, breath ghosting white in suddenly-cold air',
-      // REACHING UP / LIFTING / STRAINING
-      'LIFTING A COLLAPSED BEAM — both arms straining against a half-fallen rafter in a ruined hall, dust falling through a shaft of light from the broken roof',
-      'LIFTING A RELIQUARY ABOVE FLOOD-WATER — waist-deep in a sunken temple, both hands raising a stone reliquary high above her head, careful step by step toward the stair',
-      'PULLING BACK A CRYPT DOOR — body angled into the effort, both palms flat against the stone slab, neck-veins straining as the door grinds open inch by inch',
-      // SEATED / RESTING / CRAFTING (minor share — Kevin says these dominate, keep small)
-      'WRITING IN JOURNAL AT CAMP — seated cross-legged in firelight, leather book open on one knee, her mount grazing in the background',
-      'FLETCHING ARROW AT REST — seated cross-legged on a flat rock, a half-fletched shaft braced between her knees, feather-vane held in steady fingers',
+      // TRAVELING THE PATH
+      'WALKING THE FOREST TRAIL — mid-stride down a root-laced path with her walking staff in one hand, pack settled across her shoulders, dappled light cutting horizontal bands ahead of her boots',
+      'CRESTING THE RIDGE-LINE — climbing the last few steps to a wind-scoured crest, one hand steadying on rock, a vast valley opening below as she pauses to take it in',
+      'DESCENDING THE SCREE — heels dug into loose shale, body angled back, dust cascading around her boots, the switchback trail threading far below',
+      // NAVIGATING AN OBSTACLE
+      'CLIMBING OVER THE BOULDER — one boot wedged in a crack and both hands gripping the top of a moss-slick boulder blocking the trail, hauling herself up and over mid-effort',
+      'CROSSING THE ROPE BRIDGE — mid-span over a misty gorge, one hand white-knuckled on the fraying guide-rope, planks swaying beneath her careful step',
+      'FORDING ON STEPPING-STONES — arms out for balance, one boot reaching for the next wet stone across a clear creek, staff planted in the current for support',
+      'EDGING THE CLIFF LEDGE — back pressed to the rock wall, side-stepping along a ledge barely wider than her boots, the drop falling away to one side',
+      'DUCKING THE FALLEN TRUNK — bent low under a great moss-furred log fallen across the path, one hand braced on the bark, pack scraping as she passes beneath',
+      // STEALTH / WARY ADVANCE (drawn weapon allowed — no enemy shown)
+      'STALKING THROUGH THE UNDERGROWTH — crouched low and moving silent, sword drawn and held level at her side, eyes fixed on something just beyond the frame, every muscle coiled',
+      'PRESSED TO THE TREE-TRUNK — flattened against a great trunk, dagger drawn close to her chest, peering one-eyed around the bark at the trail ahead, breath held',
+      // MOUNTED TRAVEL
+      'LEADING MOUNT ACROSS THE BRIDGE — one hand on the bridle, the other on the rope-rail, mid-span over a gorge with mist rolling beneath the planks, her horse stepping carefully behind',
+      'RIDING THE FOREST TRAIL — relaxed in the saddle at golden hour, reins loose in one gloved hand, her mount walking a leaf-strewn path as low sun rakes between the trunks',
+      // REST / DOWNTIME
+      'READING THE MAP ON A ROCK — seated on a flat boulder with an unfolded map across her knees, one finger tracing the route, her staff and pack leaned beside her',
+      'RESTING AT THE CREEK-BANK — crouched at the water\'s edge refilling a waterskin, her free hand trailing in the cold current, boots planted on smooth wet stones',
+      'SHARPENING BY THE CAMPFIRE — seated on a log at a small dusk camp, drawing a whetstone slow along her blade, firelight throwing warm orange up her face, bedroll behind her',
+      'NURSING AN ALE IN THE TAVERN — seated at a worn timber table by a leaded-glass window, both hands around a pewter tankard, lantern-light catching the rim, a quiet moment off the road',
+      'LEANING ON THE BOULDER — back against sun-warmed stone with one knee up, tearing a piece of travel-bread, her pack and staff at her feet, eyes on the horizon',
+      // DISCOVERY / READING THE WORLD
+      'LIFTING THE LANTERN INTO THE DARK — raising a guttering lantern into the black mouth of a passage, free hand on the cold doorframe, light pushing back the dark inch by inch',
+      'READING THE TRAIL-MARKER — standing at a crossroads, one hand resting on a weathered stone way-marker carved with faded glyphs, head tipped weighing which fork to take',
+      // LIGHT MAGIC, STANDING
+      'LIGHTING THE WAY WITH A FOCUS — pausing on a dark trail, a glowing focus-crystal cupped in her raised palm casting cool light across the path, the forest swallowed in shadow beyond',
     ],
-    instructions: `Each entry is ONE story-rich non-combat adventuring moment, 25-45 words. Format: "ACTION-CAP — body position + specific prop + specific location + cinematic tension". NO combat. NO chores. NO stock poses. NO sultry/sensual posing-for-camera. Variety: tracking / exploration / magic-ritual / discovery / travel / listening / shelter / craft. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+    instructions: `Each entry is ONE candid ON-THE-JOURNEY adventuring moment, 25-45 words. Format: "ACTION-CAP — body position + specific prop + setting cue + tension or ease". NO active combat (but DRAWN weapon in stealth is OK). NO goofy squeeze/repair/hoof-tending poses. NO companion birds. NO sultry posing. Cover all registers: traveling-the-path / navigating-an-obstacle / stealth-sword-drawn / mounted / rest-downtime (creek, map, campfire, tavern) / discovery / light-magic. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
 
   female_adventurer_landscape: {

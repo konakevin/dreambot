@@ -14,11 +14,11 @@
 
 module.exports = {
   FEMALE_ADVENTURER: {
-  description: 'PATH-BESPOKE — DragonBot female-adventurer path (2026-05-14 rebuild from female-warrior). Gender-locked WOMAN of any D&D × LOTR fantasy race, any class (rogue / ranger / sorceress / warlock / mage / paladin / warrior / monk / druid / bard / cleric / barbarian / artificer / etc.), in the wild doing her adventurer thing. SLEEK adventuring gear — no bulky/massive armor, no cheesecake, no artist-name lineage callouts. NSFW-clean rebuild. Character at 25-40% frame in a candid mid-action moment. Painterly fantasy concept art aesthetic. Full character DNA stack (8 axes incl. class) + 4 path-bespoke (action / landscape / drama 40%-gated / surprise_element).',
+  description: 'PATH-BESPOKE — DragonBot female-adventurer path (2026-05-23 flagship rebuild). Gender-locked WOMAN of any attractive fantasy race (elves / fey-celestial / striking-humanoid / small-folk / triton-kenku-tabaxi / human-ethnic-heritages), any class. ORNATE FITTED feminine-coded gear (LOTR/Witcher/GoT/Elden register), NSFW-clean (no bare-midriff / bondage / battle-bikini), no artist-name lineage callouts. Character at 25-40% frame in a candid mid-action moment. Painterly fantasy concept art aesthetic. Skin axis DROPPED — race entry carries skin/scale/hide (drow=obsidian, dragonborn=scaled, humans=ethnic heritage). 11 axes (race / class / eyes / hair_color / hairstyle / outfit / accessory / landscape / action / surprise_element / drama-40%-gate).',
   slots: {
     universal: [ 'lighting', 'atmosphere' ],
     bot: [],
-    characterDnaAxes: [ 'race', 'class', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
+    characterDnaAxes: [ 'race', 'class', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
     path: [ 'landscape', 'action', 'surprise_element' ]
   },
   pickN: {},

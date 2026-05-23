@@ -17,7 +17,6 @@ module.exports = {
       atmosphere,
       race,
       class: charClass,
-      skin,
       eyes,
       hair_color,
       hairstyle,
@@ -44,18 +43,30 @@ An atmospheric event happening in the world around her — render as a visible s
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
 The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "adventurer", "rogue", "ranger", "mage", "paladin", "warrior" or any other gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [race-coded] WOMAN [doing action] in [landscape]..." — "woman" comes BEFORE any class noun. Use she/her/hers throughout. The class slot describes her ROLE, not her gendered noun — append role AFTER "woman" appears.
 
-━━━ ABSOLUTE BANS — NSFW-CLEAN, COMBAT-CLEAN ━━━
-• NO combat, NO mid-strike, NO weapon-aimed-at-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood-fight
-• Weapons stay holstered / sheathed / slung / carried — NEVER in active combat use
-• NO cheesecake: NO "minimal coverage" / "bare midriff" / "exposed cleavage" / "form-fitting" / "skin-tight" / "harness across torso" / "sultry" / "sensual" / "alluring" / "low-cut" / "seductive" / "curves emphasized"
-• Her outfit reads FUNCTIONAL + COVERED — sleek adventuring gear, not sexualized
+━━━ ABSOLUTE BANS — COMBAT-CLEAN ━━━
+• NO active combat, NO mid-strike, NO weapon-aimed-at-a-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood-fight
+• A DRAWN weapon held ready in stealth or wary advance IS allowed (creeping low with sword/dagger drawn, stalking something just out of frame) — but NEVER mid-swing, NEVER a visible enemy, NEVER an actual strike. Otherwise weapons stay holstered / sheathed / slung / carried.
 • NO posing for the camera. NEVER staged. Candid moment, body in motion or charged stillness
+• Coverage RANGES — from fully-covered ornate gear to FITTED + tastefully skin-showing (bare arms, bare shoulders, a toned midriff, a shorter combat skirt with bare legs). Render the OUTFIT SLOT's coverage EXACTLY as written. STILL banned: chainmail bikini / battle-bra / string-strap-as-outfit / exposed-cleavage-as-the-focus / bondage-harness. Athletic and capable, NEVER cheesecake or sexualized posing.
+
+━━━ HER OUTFIT — RENDER THE SLOT EXACTLY (coverage varies) ━━━
+Her outfit reads ORNATE + FITTED + functional — LOTR / Witcher / GoT / Elden Ring / Dragon Age caliber adventuring gear, tailored to allow movement, with a waist-defining belt and lovingly-crafted detail (hand-engraved bracers, tooled buckles, runic embroidery).
+COVERAGE IS DICTATED BY THE OUTFIT SLOT — it varies deliberately. SOME outfits are fully-covered ornate layers (robes, plate, hooded coats); OTHERS are fitted and tastefully skin-showing (sleeveless with bare arms / bare shoulders / a toned midriff / a shorter combat skirt with bare legs and high boots). Render whatever the slot specifies — do NOT add coverage the slot doesn't call for (do NOT bundle a sleeveless top in a cloak, do NOT lengthen a short skirt). She always looks athletic, capable, and put-together — NEVER lingerie-armor, NEVER cheesecake.
+Reference range: Éowyn shieldmaiden plate / Tauriel bare-armed scout leathers / Yennefer fitted witch-court bodice / Red Sonja-but-tasteful warrior gear / Xena fitted leather-and-skirt / Aloy tribal armor with bare arms. Fitted to flatter the form, NOT loose drapes that erase her silhouette.
 
 ━━━ SOLO CHARACTER ONLY ━━━
 ONE character. No companions, no enemies, no crowds. She is ALONE in her moment.
 
 ━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
 The adventurer is the MAIN SUBJECT. Her face, gear, race, action, and pose are the DRAW. She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
+
+⚠️ FRAMING BANS — NEVER:
+• "back to viewer" / "from behind" / "rear view" — her FACE must be visible (three-quarter or side profile)
+• "tiny silhouette in distance" / "small in distant landscape" / "dwarfed by"
+• "hooded figure" with face not visible — even with hood, face must show
+• "lone figure on horizon" / "distant figure approaching"
+
+⚠️ FEMININE ANATOMY LOCK — render her UNMISTAKABLY as a woman regardless of class. Classes like BARBARIAN / WARRIOR / MONK / RANGER / PALADIN have a strong Flux bias toward male defaults. Counter that with explicit feminine cues: visible breast contour beneath functional armor / tunic / robes, narrower waist than shoulders, feminine jawline, female facial structure. Render the outfit slot's coverage exactly (covered OR tastefully skin-showing per the slot) — ALWAYS unmistakably female anatomy, NEVER cheesecake or sexualized posing. No bare-chested, no battle-bikini. No moustache or beard EVEN on dwarven women (dwarven-women in this lineage are beardless).
 
 ━━━ HER RACE (LOCKED — render her unmistakably as THIS lineage) ━━━
 ${race}
@@ -66,19 +77,21 @@ Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, d
 ${charClass}
 
 ━━━ HER COMPACT BIO (one-line block — DO NOT expand) ━━━
-A ${race.split(':')[0]} woman with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
+A ${race.split(':')[0]} woman with ${eyes.split(',')[0]} eyes and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
 
-All eight DNA elements (race / class / skin / eyes / hair color / hairstyle / outfit / accessory) should be discernible in the render. Face fully visible (this is fantasy, not sci-fi — no sealed helmet).
+All seven DNA elements (race / class / eyes / hair color / hairstyle / outfit / accessory) should be discernible in the render. Skin / scale / hide tone is encoded in the RACE entry itself — no separate skin axis. Face fully visible (this is fantasy, not sci-fi — no sealed helmet).
 
 ━━━ THE ACTION — what she is doing RIGHT NOW (CANDID, NEVER COMBAT) ━━━
 ${action}
 
 GROUNDED — feet on the ground or interacting with terrain. The action defines body position. Render it EXACTLY — body weight visible, captured at a loaded instant. Purposeful, capable, mid-motion — never staged.
 
-━━━ THE LANDSCAPE (the wild stage — fantasy biome) ━━━
+━━━ THE LANDSCAPE (the stage) ━━━
 ${landscape}
 
-Depth on depth — FOREGROUND tactile detail (rocks / vegetation / camp gear / cliff-edge) → MIDGROUND landscape body + her → DEEP DISTANCE atmospheric layers stacked. Never flat backdrop. The landscape sets the stage but never competes with her for focus.
+USUALLY a wild fantasy biome. BUT if THE ACTION above places her in a specific VENUE — a tavern interior, a road-side campfire, a creek-bank rest — then HONOR THAT VENUE as the stage and let this landscape inform what's visible beyond it (peaks framed in the tavern window, the forest ringing the camp, the valley past the creek). The action's venue always wins over a conflicting wild-biome.
+
+Depth on depth — FOREGROUND tactile detail (rocks / vegetation / camp gear / tavern table / cliff-edge) → MIDGROUND stage body + her → DEEP DISTANCE atmospheric layers stacked. Never flat backdrop. The stage never competes with her for focus.
 ${dramaSection}
 ━━━ SURPRISE ELEMENT — secondary subject adding story ━━━
 ${surprise_element}
