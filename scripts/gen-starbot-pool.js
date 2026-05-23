@@ -59,6 +59,414 @@ if (!POOL) {
 // Per-pool recipe — what kind of scenes this pool authors + aesthetic
 // touchpoints Sonnet should draw from. Same format the playbook uses.
 const POOL_RECIPES = {
+
+  // ════════════════════════════════════════════════════════
+  // SPACE-FEMME PATH (2026-05-23 — new StarBot path)
+  // Push-to-11 ornate female-figure poster art.
+  // Anchored on Kevin's 15-heart female-explorer calibration.
+  // ════════════════════════════════════════════════════════
+
+  space_femme_subject_dna: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME SUBJECT DNA — ornate multi-trait female-figure descriptions for poster-worthy painted-oil sci-fi cover art. Each entry is ONE stacked-trait female-figure description (skin + anatomy + hair + eye + tattoo/scar + cybernetic). Each entry 30-55 words.
+
+⚠️ WEIGHTED DISTRIBUTION:
+  • ~70% NON-BASELINE — alien (head-tendrils / pointed ears / colored skin / bone-plate ridges / cat-slit eyes / segmented neck-plates), augmented (chrome limbs / neural ports / cybernetic eye), mutant (cat-slit-eyed / scaled / bioluminescent veined)
+  • ~30% BASELINE-HUMAN-WITH-ORNATE-FEATURES — exotic eye colors, dramatic hair, tribal tattoos, ritual scarification, gene-modded coloring, ornate face markings. NEVER plain or vanilla.
+
+⚠️ HARD MANDATES:
+  • EVERY entry is gender-locked FEMALE — "woman" or "she" must appear
+  • Stack 3+ DNA traits per entry (skin + hair + eye + at least one of tattoo/cybernetic/anatomy)
+  • Specific colors + materials (chrome / mahogany / blood-red / mint-glass / dragon-gold / etc.)
+  • NEVER cheesecake-coded ("sultry" / "sensual" / "alluring" / "low-cut" / "bare-midriff")
+
+VARIETY MANDATE — distribute across:
+  • Twi'lek-coded with head-tendrils (vibrant blue / teal / orange / yellow-green)
+  • Pointed-ear elven-coded aliens (ash-grey / purple-pale / moon-pale / ivory)
+  • Yellow-green/teal/violet alien skin with geometric facial tattoos
+  • Cybernetic chrome-limbed mutants with neural ports + glowing implants
+  • Bone-plate-ridged hunter species
+  • Cat-slit-eyed mutants
+  • Scaled draconic-coded humanoids
+  • Low-gravity evolved (elongated / Spanish-olive)
+  • Bioluminescent-veined translucent-skinned aliens
+  • Ash-grey hunter species with scarification
+  • Augmented frontier-colonist baselines (red gene-modded hair, UV-tan, exotic eyes)
+  • Tribal-tattooed warrior-monks (shaved head + face markings)
+
+Each entry must:
+• Open with the species/category in first 3-6 words
+• Specify SKIN (color + texture quality)
+• Specify ANATOMICAL SIGNATURE (tendrils / pointed ears / ridges / etc.) if applicable
+• Specify HAIR (color + style)
+• Specify EYE color/quality (often with light catching it)
+• Add ONE distinctive marking / scar / tattoo / cybernetic
+• ALWAYS use "she" or "woman"`,
+    touchpoints: [],
+    instructions: `Each entry is ONE ornate stacked-DNA female-figure description, 30-55 words. Format: free-form descriptive prose. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: no cheesecake language; no plain/vanilla baseline humans; no male pronouns; always "woman" or "she". ALWAYS stack 3+ DNA traits (skin + hair + eye + at least one extra: tattoo / cybernetic / anatomy / scar).
+
+EXAMPLES (12 — generate new entries that read like these):
+1. Vibrant blue-skinned Twi'lek-coded woman, twin curving head-tendrils cresting past her shoulders, mint-glass green eyes with gold flecks, walnut-brown hair with amber streaks in low knot, intricate black geometric facial tattoos mapping her cheekbones, glowing bio-monitor implant pulsing at temple.
+2. Ash-grey pointed-eared woman, blood-red irises catching amber backlight, blue-black hair with steel highlights bound by chrome ring, tribal scarification across her cheekbones, faint silver scar-line crossing one brow, biometric cuff glowing on inner wrist.
+3. Chrome-limbed cybernetic woman, deep cherry-mahogany hair in tight ponytail with shaved temple, one eye mint-glass green with gold flecks the other cybernetic chrome-silver reflecting targeting data, subdermal geometric tattoos tracing her neck, neural ports at temple pulsing cyan.
+4. Yellow-green skinned humanoid woman, shaved head gleaming with black geometric monk-warrior tattoos, dragon-gold eyes igniting flame-orange, faint silver bio-port glinting behind her ear, ascetic warrior bearing evident in still posture.
+5. Bioluminescent-veined translucent-skinned alien woman, glowing cobalt veins tracing her throat and jaw, white-silver hair floating slightly, six-fingered hands with violet polish, eyes pure cobalt with no iris.
+6. Low-gravity evolved woman, elongated limbs and pale station-born skin warming to Spanish-olive at her temples, ice-blue eyes, midnight-black hair in a crown bun with pulsing green comm implant, subtle clan face-tattoos on one cheekbone.
+7. Scaled draconic-coded humanoid woman, mother-of-pearl scales along her jaw fading to smooth skin at her throat, dragon-gold slit-pupil eyes, blood-red hair coiled in a heavy braid wound with chrome ring.
+8. Augmented frontier-colonist woman, gene-modded red hair in a tight battle-ponytail bound with chrome ring, UV-tanned pioneer skin etched with sun-scars, deep moss-green eyes catching the painted nebula glow, biometric scanner glowing on her forearm.
+9. Crystalline-skinned alien woman with faceted opal-iridescent flesh, no visible iris in her pure-violet eyes, hair like spun white silver, runic tattoos carved into the crystalline surface of her shoulder.
+10. Twin-bunned space-rogue woman, copper-tan skin with sun-scar across her cheekbone, dragon-gold slit-pupil eyes, mahogany hair in twin asymmetric buns with neural-link wires laced through, faint chrome bio-port at her temple.
+11. Quad-eyed insectoid-evolved woman with smooth obsidian-black skin, four amber compound eyes in a vertical row, no visible hair under her sealed headcrest, faint bioluminescent markings tracing her cheekbones.
+12. Cybernetic ex-soldier woman, half her face replaced with chrome plating revealing the LED-array eye, biological half olive-skinned with one mint-green eye, dark hair shaved on the chrome side, runic tattoo down her exposed neck.`,
+  },
+
+  space_femme_outfit: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME OUTFITS — broad spectrum of poster-worthy female space-coded outfits with ornate detail. Each entry 25-45 words.
+
+⚠️ WEIGHTED DISTRIBUTION (per Kevin 2026-05-23):
+  • ~25% SLEEK FORM-FITTING SPACE SUITS — asymmetric panel-line bodysuits, chrome-piped EVA undersuits, mag-boot bodysuits with statement gauntlet, energy-seam catsuits
+  • ~25% ROGUE / BOUNTY-HUNTER / SCAVENGER — battered duster + holstered carbine + grimy goggles, patched cloak + utility harness + ammo bandolier, scavenger jacket with expedition patches + rusted iron gauntlets, smuggler getup
+  • ~25% MAXIMALIST ORNATE CEREMONIAL — gilded ceremonial plating + statement shoulders + draped capes, ritual brand-scar armor, cultic priestess regalia, Frazetta-cover oil-painted maximalism
+  • ~25% MIXED PRACTICAL — tactical recon segmented plating, heavy radiation armor, lighter explorer field gear, pilot flightsuit with neural-link helmet, lab-coat-with-EVA-undersuit, cargo-runner mechanic look
+
+⚠️ HARD MANDATES (all buckets):
+  • NEVER bare-midriff, low-cut, battle-bikini, sultry, alluring, sensual, exposed cleavage, exposed thighs, minimal coverage, form-fitting-cheesecake-coded
+  • ALL outfits include POSTER-WORTHY DETAIL — energy seams / panel lines / utility hardpoints / statement piece / ornate trim
+  • Specific colors + materials always named
+
+Each entry must:
+• Open with the bucket-type adjective (form-fit / scavenger / ornate / tactical)
+• Name 2-3 specific garments or pieces
+• Add at least 1 ornate detail (energy seam / chrome trim / brass rivets / glowing accent / gilded clasp / weathered patches / panel detail)
+• Name material + color quality`,
+    touchpoints: [],
+    instructions: `Each entry is ONE space-femme outfit, 25-45 words. Output as a NUMBERED list. ~25% form-fit / ~25% rogue+bounty-hunter / ~25% maximalist ornate / ~25% mixed practical distribution. STRICT BANS: NEVER bare-midriff / battle-bikini / sultry / alluring / sensual / exposed cleavage / minimal-coverage / cheesecake. Always 1+ ornate detail anchor.
+
+EXAMPLES (16):
+1. Sleek form-fitting white-and-copper EVA bodysuit with asymmetric chrome-piped panel lines, statement-shoulder gauntlet on the right arm, mag-boot soles, soft-tint visor pushed back, compact life-support pack glowing with status-lights at her lower back.
+2. Battered scavenger duster in oil-stained leather over patched bodysuit, ammo bandolier across her chest, rusted iron gauntlets, expedition patches from seven star-systems sewn at the shoulder, goggled half-mask with cracked left lens.
+3. Maximalist ornate ceremonial gilded armor with statement-pauldron pieces, draped crimson cape clasped at one shoulder with a sun-emblem brooch, segmented carapace etched with ritual scripture, gilded ceremonial sash crossing her chest.
+4. Tactical recon forest-green zero-gravity coveralls with segmented tactical plating, climbing harness across the shoulders, sealed helmet with magnification-loupe visor flipped up, utility harness repurposed for recon, nav-compass on chrome chain at her sternum.
+5. Form-fitting matte-black segmented zero-g combat armor with thruster-pod clusters along the arms and hips, sealed magnetic grapple-gloves, reinforced torso carapace with spine-mounted maneuvering pack, mag-lock boots, panel-line energy-seams glowing soft cyan along the seams.
+6. Rogue bounty-hunter dieselpunk mining-rig jacket with brass rivets and rust patina, oversized shoulder-guards, goggled helmet with flip-down magnification loupes, bandolier heavy with tool-pouches and sample-containers, oil-stained black gloves, holstered carbine at her hip.
+7. Ornate cultic priestess regalia in ivory ceremonial robes over segmented chrome breastplate, statement gilded headpiece trailing chains of charm-medallions, layered draping with celestial-coordinate embroidery, ritual mask hanging from a chrome belt-loop.
+8. Pilot flightsuit in deep-violet weave with copper-bronze piping along the seams, neural-link helmet tucked under her arm, gauntlets rolled to the elbows revealing wrist-mounted bio-monitor, compact life-support pack glowing with status-lights at her hip.
+9. Scavenger ochre-leather jacket with weathered duster coat trailing past her hips, expedition patches from seven star-systems, chrome prosthetic legs in reconnaissance stance, goggled half-mask, multitool scanner glowing in her augmented left hand.
+10. Maximalist ornate hunter armor in lead-lined tungsten segmented plating, massive shoulder guards bristling with radiation badge arrays, sealed gauntlets glowing with contamination sensor readouts, utility belt hung with Geiger counter and decontamination spray canisters.
+11. Tactical heat-reflective volcanic survey armor with silver segmented plating, angular shoulder guards bristling with temperature sensors, reinforced torso carapace with cooling vents, insulated lava-resistant boots, retractable grapple-launcher humming at her forearm.
+12. Sleek white ceremonial ceramic armor with glowing gold circuit-patterns, light-fabric cape billowing in toxic wind, ornate helmet under her left arm, gauntlets with prayer-wheel mechanisms gripping a handheld scanner illuminated in cool blue light.
+13. Rogue smuggler kit in sun-bleached canvas vest over black mesh armor bodysuit, brown leather gloves, tool-belt with climbing gear and specimen-containers, pilot's gauntlet glowing softly during neural-link, small holstered sidearm at her thigh.
+14. Maximalist ornate Mandalorian-coded beskar-style armor in earth-tones with brass-trim helmet, weathered crimson cape clasped at one shoulder, segmented carapace etched with clan-runes, jet-pack with chrome thruster nozzles, bounty-puck dangling from her belt.
+15. Lab-coat-over-EVA-undersuit hybrid in ivory and chrome with statement pocket-array along the chest, soft-tint goggles pushed up onto her forehead, gauntlets with embedded data-cuff readouts, multitool array clipped along her thigh-strap.
+16. Tactical arctic recon suit with white-gray segmented plating, thermal-gel layers visible at the joints, angular shoulder guards, forearm ice-piton launchers, reinforced hip-thigh armor, heated knee joints glowing soft orange, spiked boots.`,
+  },
+
+  space_femme_action_poster: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME POSTER ACTION — mid-verb cinematic poster poses for the female-figure. Each entry 25-40 words.
+
+⚠️ HARD MANDATES:
+  • EVERY entry starts with an ACTIVE VERB describing her mid-action
+  • Pose must read as a POSTER COMPOSITION — heroic, dramatic, frame-worthy
+  • NEVER sitting / lying / passive / contemplative-still
+  • NEVER posing-for-camera / front-facing-centered (Flux default — fight it)
+
+VARIETY MANDATE — distribute across:
+  • Heroic low-angle stand with weapon visible
+  • Mid-scanning at alien artifact / glowing object
+  • Cease-fire hand-signal raised mid-aim
+  • Climbing / vaulting through canopy or ridge
+  • Mid-incantation / channeling / ritual gesture
+  • Mid-extraction from hovering pickup ship
+  • Mid-leap between rock formations
+  • Crouched-braced with rifle on cover
+  • Walking-into-portal / dimensional rift
+  • Examining captured specimen / artifact
+  • Mid-defiance stare-down at distant threat
+  • Mid-arrest of falling specimen
+  • Recalibrating spectrometer with focused expression
+  • Mid-deploy of grapple-launcher
+  • Mid-rescue of fallen companion (her hand reaching)
+  • Mid-firing weapon (muzzle flash + recoil)
+  • Mid-emergence from cave / portal mouth
+  • Mid-salute or mid-vow ceremony pose
+  • Mid-staring-down kaiju silhouette
+  • Mid-shielding face from supernova flash
+
+Each entry must:
+• Start with active verb ("Crouched", "Leaping", "Scanning", "Mid-incantation", etc.)
+• Specify body language (low stance / extended arm / raised hand / etc.)
+• Specify what she's interacting with (weapon / artifact / horizon / etc.)
+• Imply moment-before + moment-after`,
+    touchpoints: [],
+    instructions: `Each entry is ONE space-femme mid-verb poster pose, 25-40 words. Format: free-form prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list. STRICT BANS: NO sitting / lying / passive / contemplative-still / posing-for-camera / front-facing-centered. Always mid-action with body language readable in 2 seconds.
+
+EXAMPLES (16):
+1. Crouched low-angle braced behind a corroded bronze railing, rifle aimed downrange, hand raised in cease-fire signal, intricate gauntlet glowing with bio-monitor readout, her free knee on the floor steadying the long shot.
+2. Mid-scanning at a floating alien artifact, scanner extended in her outstretched gauntleted hand, deep teal light from the artifact catching the curve of her cheekbone, her other hand resting on her holstered sidearm.
+3. Heroic low-angle stand on a basalt outcrop, compact plasma carbine slung across her chest, free hand raised palm-out in a salute or vow gesture, cape billowing behind her in the electric wind.
+4. Mid-leap between two rock formations, both feet airborne, rifle in one hand at low-ready, free arm extended for balance, eyes locked on the landing point, body angled mid-flight.
+5. Climbing through bioluminescent kelp cathedral, one hand gripping a kelp trunk, multitool scanner glowing in the other, neural-port at her temple pulsing cyan, body braced in vertical reconnaissance stance.
+6. Crouched behind acid-resistant ferns, telescope pressed to her eye scanning a distant facility across a sulfuric lake, free hand braced on the ground, observation log glowing soft blue on her biometric scanner cuff.
+7. Mid-incantation gesture with both hands raised, palms outward channeling violet ritual energy, head tilted back, ceremonial mask hovering above her brow, ornate sash whipping in the cosmic wind.
+8. Mid-extraction from a hovering pickup craft, one boot planted on the extended ramp, the other foot leaving the ground, sealed helmet catching the sulfurous yellow light, retractable grapple-cable humming at her forearm.
+9. Walking through a trans-cyan magical-portal disc, one boot already on the other side, her body bisected mid-traversal, free hand still gripping her staff on this side, cape billowing through the rift.
+10. Examining a glowing alien specimen suspended in a shimmering containment field, scanner deployed in her outstretched hand, predatory curiosity reading on her face, tethered native creature visible in midground.
+11. Mid-defiance stare-down at a distant kaiju silhouette across the horizon, weapon lowered but ready at her side, free hand clenched into a fist, cape whipping behind her, fel-violet sidelight catching her stare.
+12. Crouched at the edge of a cliff scanning the valley below through a wrist-mounted optic, free hand braced on the rim, body coiled low and motionless, observation log glowing soft blue at her wrist.
+13. Mid-deploy of a wrist-mounted grapple-launcher, cable humming as it shoots up toward an overhead beam, her body coiled to be pulled airborne in the next second, free hand braced on her thigh.
+14. Mid-fire of a compact plasma carbine, muzzle-flash trans-orange burst freezing her recoil step backward, neural-link gauntlet glowing at her fingertips, sealed helmet visor catching the flash.
+15. Mid-emergence from the mouth of a glowing cave-portal, one foot still in shadow the other in the light, weapon at low-ready, eyes adjusting, body silhouetted against the cool-cyan glow.
+16. Mid-salute on a ceremonial dais, fist over her heart, cape trailing past her boots, ceremonial blade in her free hand pointed downward to the ground, ornate sash catching gilded ceremonial light.`,
+  },
+
+  space_femme_biome: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME BIOME — exotic perilous environments serving as the painted stage for the poster composition. Each entry 25-45 words.
+
+VARIETY MANDATE — distribute across:
+  • Bioluminescent kelp forest cathedral (cathedral-pillar trunks)
+  • Suspended volcanic boulders with electrical coronas
+  • Acid lake archipelago with dissolving stone islands
+  • Sulfur-haze chlorine coastline / frozen chlorine shelf
+  • Lava-vent thermophile gardens (orange / white / green thermophiles)
+  • Bioluminescent tide pools carved in black volcanic glass
+  • Crystalline ice cathedral cave with refracted light
+  • Hexagonal basalt columns with glowing alien artifact
+  • Methane sea with rust islands rising through teal algae
+  • Underwater alien temple half-submerged
+  • Nebula-cloud sky planet with floating-isle landmasses
+  • Glass-storm cathedral (storm of glass shards mid-flight)
+  • Liquid mercury lake with mirror reflections
+  • Deep canyon with painted aurora ceiling overhead
+  • Toxic chlorine-jungle with bioluminescent flora
+  • Frozen alien geyser field with crystal spires
+  • Mining drilling platform churning through asteroid debris
+  • Crystalline horned alien creature's grazing field
+  • Salt arches spanning three hundred meters in pink mineral layers
+  • Ringworld atmospheric friction zone (low-orbit perspective)
+
+Each entry must:
+• Establish the BIOME identity in first 5-8 words
+• Specify multi-tier depth (foreground tactile + midground biome + deep-distance horizon)
+• Include at least 2 specific environmental details
+• Specify ATMOSPHERIC quality (haze / fog / dust / vapor / electric crackle)
+• NEVER name a specific real-world Earth location`,
+    touchpoints: [],
+    instructions: `Each entry is ONE space-femme biome, 25-45 words. Format: free-form prose. Output as a NUMBERED list. STRICT BANS: NO Earth real-world locations; NO generic surface; always EXOTIC + PERILOUS + multi-tier depth.
+
+EXAMPLES (12):
+1. Bioluminescent kelp forest cathedral on a deep-ocean alien world, kelp trunks scaling from two meters to cathedral pillars receding into blue distance, forest pulsing coordinated cobalt bioluminescence, seafloor vents streaming teal-and-orange cinematic light.
+2. Suspended volcanic basalt boulders twenty to forty meters overhead, blue electrical coronas sparking between levitated stones, scorched basalt foreground fragments littering the ground, distant alien ridge visible through electric haze.
+3. Acid lake archipelago of dissolving stone islands rising from pH 0.5 sulfuric water, towering organic formations along the far shore, dissolving stone bridges connecting the closer islands, acid fog drifting between foreground and archipelago.
+4. Frozen chlorine coastline with yellow-green translucent ice shelves, pressure cracks revealing liquid chlorine pools beneath, alien beings in single file across the ice in the mid-distance, amber dust streaming horizontally through frigid air.
+5. Lava-vent thermophile gardens of orange white and green organisms rising in stacked colonies, sampling station on cooled lava flow in the midground, heat-shimmer and steam plumes catching warm-copper light, Milky Way arch above sulfur-yellow haze.
+6. Crystalline ice cathedral cave with translucent walls refracting cool-cyan and trans-violet light, jagged ice-spires rising from the cavern floor, painted aurora visible through a crack in the ceiling far overhead.
+7. Methane sea stretching to a deep horizon, rust-red islands rising through teal algae blooms, orange emergency platform lights, sulfuric yellow fog clinging to the water surface, purple plasma lightning arcing overhead.
+8. Nebula-cloud sky planet with floating-isle landmasses tethered together by chain-bridges, painted nebula filling the entire upper-frame in trans-magenta and trans-cyan, cathedral-pillar mountains rising from the sea of clouds.
+9. Glass-storm cathedral with a frozen-mid-flight blizzard of trans-glass shards suspended throughout the cavern, painted-light refracting through every facet, alien obsidian columns rising in receding perspective.
+10. Liquid mercury lake reflecting twin moons overhead, mirror-glass surface broken by ripples around her boots, distant binary stars on the horizon, painted indigo-and-gold atmospheric haze.
+11. Toxic chlorine-jungle with bioluminescent trans-green flora rising in dense canopy columns, scattered trans-cyan glowing residue plates at stem joints, painted yellow-green air thick with spores.
+12. Frontier outpost on the rim of a volcanic crater, towering plumes of trans-orange and ember light rising from the caldera, scattered alien research domes in the midground, painted Bonestell sun-amber backlight.`,
+  },
+
+  space_femme_background_drama: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME BACKGROUND DRAMA — always-on secondary mid/deep-distance focal point that the eye drifts to after landing on the femme. Each entry 20-40 words.
+
+VARIETY MANDATE — distribute across:
+  • Alien fleet of dozens-of-warships looming on the horizon
+  • Leviathan / colossal alien creature rising from sea or sky
+  • Orbital ring station hanging in the upper sky
+  • Dimensional rift opening / wormhole entry
+  • Colossal alien statue / monolith on the deep horizon
+  • Kaiju silhouette emerging from clouds
+  • Descending transport ship breaking atmosphere
+  • Distant snipers / armored patrol unaware in mid-distance
+  • Massive Saturn-like planet with ring-shadow overhead
+  • Ringworld curve visible through atmospheric friction zone
+  • Floating obelisk emerging from the clouds
+  • Crystalline bioluminescent alien creature towering nearby
+  • Distant orbital strike laser carving down through cloud-deck
+  • Multi-mooned night sky with twin moons through haze
+  • Black hole accretion disc on the horizon
+  • Phantom space-station drifting partially submerged in a planet's atmosphere
+  • Mega-walker mecha silhouette on the distant ridge
+  • Bridge of approaching airship visible in the midground
+  • Sun-disc burning binary-eclipse corona overhead
+  • Distant volcanic eruption painting the horizon
+
+Each entry must:
+• Establish the drama element + position (mid-distance / deep distance / overhead)
+• Specify SCALE relative to the femme (always dwarfing)
+• Specify visual quality (silhouetted / glowing / partially-veiled / etc.)
+• NEVER eclipse the femme — always SECONDARY focal point`,
+    touchpoints: [],
+    instructions: `Each entry is ONE space-femme background drama, 20-40 words. Format: free-form prose. Output as a NUMBERED list. STRICT BANS: NEVER eclipse the femme; ALWAYS secondary focal point at mid/deep distance.
+
+EXAMPLES (10):
+1. Alien fleet of dozens-of-warships looming on the deep horizon in trans-blue silhouette, their running lights pulsing in coordinated formation, atmospheric haze making them ghostly behind the sulfur-yellow sky.
+2. Colossal leviathan creature rising from the methane sea in the deep distance, its skin glowing trans-magenta along bioluminescent ridges, scale-of-the-leviathan dwarfing the alien research domes near its base.
+3. Orbital ring station hanging in the upper sky overhead, running-lights pulsing in trans-blue and trans-amber strips along the rim, scale prover ships glinting near its docking ports.
+4. Dimensional rift opening in the deep-distance, vertical trans-cyan + trans-magenta jagged-edge cone tearing through reality, starfield bending toward the rift mouth, alien debris drifting toward it.
+5. Colossal weathered alien statue looming on the deep horizon, partially veiled in dust-haze, its head taller than the surrounding mountains, geometric runes carved into its surface barely legible from this distance.
+6. Kaiju silhouette emerging from cloud-deck on the deep horizon, its head and forelimbs visible above the cloud-line, lit from beneath by city-light, scale-prover skyline buildings tiny near its feet.
+7. Descending transport ship breaking atmosphere in the midground, retro-rockets firing trans-orange flame elements, ash drift through hyperspace-streaked violet star-lines following its trajectory.
+8. Massive Saturn-like planet hanging low with ring-shadow casting a band across the sky, the rings catching scattered cosmic ice catching sunlight, binary moons through particulate haze.
+9. Mega-walker mecha silhouette on the distant ridge, its head and shoulders visible above the ridge-line, mid-stride frozen by the painted-light moment, scale-prover ridge-buildings tiny near its feet.
+10. Distant volcanic eruption painting the horizon in trans-orange and ember-light, the eruption plume rising into the cloud-deck, scale-prover surface features tiny near its base, ash drift visible mid-distance.`,
+  },
+
+  space_femme_prop: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME ACCESSORIES — ornate stacked accessories the femme carries, holds, or wears. Each entry 12-25 words.
+
+⚠️ Picked TWO PER RENDER (pickN:2), so each entry must be SMALL enough to coexist with another.
+
+VARIETY MANDATE — distribute across:
+  • Bio-monitor cuff pulsing soft cyan / violet
+  • Nav-compass on chrome chain at her sternum
+  • Glowing alien artifact in her free C-grip hand
+  • Ritual mask hanging from belt or held in her free hand
+  • Ceremonial blade in chrome scabbard across her back
+  • Drone-companion floating at her shoulder
+  • Familiar creature on her shoulder (alien bird / lizard / small mammal)
+  • Multitool scanner clipped to her thigh
+  • Holographic projector orb hovering above her wrist
+  • Cargo / specimen-container slung from her belt
+  • Energy-orb captured in trans-clear vial at her hip
+  • Pulse-pistol holstered at her thigh
+  • Ammo bandolier across her chest
+  • Holo-map projection floating above her gauntlet
+  • Photo-locket on a chain (chrome-metal photo of family)
+  • Talisman / amulet glowing on a chain
+  • Tribal beads woven into her hair with chrome charms
+  • Tactical visor flipped up onto her brow
+  • Specimen jar floating beside her on a hover-disc
+  • Spirit-stone bound to her wrist with chrome wire
+
+Each entry must:
+• Open with the accessory type in first 3-6 words
+• Specify color/material (chrome / brass / trans-violet / etc.)
+• Specify how she's wearing/holding it`,
+    touchpoints: [],
+    instructions: `Each entry is ONE space-femme accessory, 12-25 words. Format: free-form prose. Output as a NUMBERED list. STRICT BANS: NO real-world brand names; small ornate detail props only (coexist with another accessory in the same render).
+
+EXAMPLES (15):
+1. Bio-monitor cuff pulsing soft violet on her inner wrist, chrome bracelet with embedded LED readouts.
+2. Nav-compass on a chrome chain at her sternum, brushed-steel needle visible through a small crystal cover.
+3. Glowing trans-purple alien artifact in her free C-grip hand, faint magenta light radiating around the contact-point.
+4. Ritual mask hanging from her chrome belt-loop, carved alien-bone with embedded trans-cyan crystal eye-slits.
+5. Ceremonial blade in a chrome scabbard slung across her back, gilded hilt catching painted backlight.
+6. Drone-companion floating at her shoulder, small chrome orb with a single trans-yellow optical sensor.
+7. Multitool scanner clipped to her thigh, polished chrome surface reflecting the painted backlight.
+8. Holographic projector orb hovering above her wrist, projecting a 3D star-chart in soft trans-cyan.
+9. Specimen-container clipped to her utility belt, trans-clear cylinder containing a glowing alien biological.
+10. Pulse-pistol holstered at her thigh, chrome barrel catching the painted Bonestell amber rim-light.
+11. Ammo bandolier across her chest with brass cartridges, each cartridge tip glowing soft amber.
+12. Photo-locket on a chrome chain at her throat, the locket open showing a tiny family portrait.
+13. Talisman on a chrome chain, the talisman a glowing trans-cyan crystal embedded in a gold setting.
+14. Falcon-coded alien bird perched on her shoulder, its plumage iridescent green-cyan, claws gripping her armored shoulder-plate.
+15. Spirit-stone bound to her wrist with chrome wire, the stone a polished trans-violet sphere glowing softly.`,
+  },
+
+  space_femme_camera_poster: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME POSTER FRAMING — cinematic poster-composition camera angles. Each entry 15-30 words.
+
+VARIETY MANDATE — distribute across:
+  • Heroic low-angle stand (camera at her feet looking up at her against the sky)
+  • Silhouette against alien-vista backdrop (her body in dark contrast)
+  • Three-quarter back-view over her shoulder at the threat
+  • Framed through an archway / portal / opening
+  • Dutch-tilt climbing or vaulting through canopy
+  • Mirrored-reflection in a liquid mercury surface
+  • Crouched on rocky outcrop overlooking the deep landscape
+  • Through-canopy down-shot from above
+  • Side-profile silhouette against twin-moon horizon
+  • Low-angle three-quarter front with her face partially turned away
+  • Reflected in her sealed-helmet visor
+  • Ground-level looking up past her boots at her face
+  • Over-shoulder past her hair at the dramatic horizon
+  • Framed by foreground alien flora / kelp / pillars
+  • Mid-frame slot between two foreground rock pillars
+  • Low-angle behind her as she walks into the scene
+  • Wide low-angle on a cliff edge with planet rising behind her
+  • Through-portal cone framing her mid-traversal
+  • From-floor-up looking past her crouched figure
+  • Side-on with cape billowing into the frame
+
+Each entry must:
+• Specify CAMERA POSITION (height / angle / distance)
+• Specify her POSITION within the frame
+• Specify what FILLS the remaining frame (sky / biome / drama element)`,
+    touchpoints: [],
+    instructions: `Each entry is ONE space-femme poster camera framing, 15-30 words. Format: free-form prose. Output as a NUMBERED list. STRICT BANS: NO centered-front-facing portrait (Flux default — fight it).
+
+EXAMPLES (12):
+1. Heroic low-angle stand with the camera at her boots looking up past her body to her face against the painted nebula sky, her silhouette dominating the upper two-thirds of the frame.
+2. Silhouette against an alien-vista backdrop, her body in dark contrast against a trans-magenta nebula horizon, deep-distance ringworld curve visible behind her.
+3. Three-quarter back-view over her shoulder at a distant kaiju silhouette, her free hand resting on her holstered sidearm, sealed helmet catching faint rim-glow.
+4. Framed through an archway of crystalline ice, her body centered in the archway opening, deep-distance biome visible past her, painted aurora overhead.
+5. Dutch-tilt climbing through bioluminescent kelp canopy, her body angled diagonally across the frame as she pulls up a vertical kelp-trunk, biome receding behind her.
+6. Mirrored-reflection in a liquid mercury lake, her standing figure in the upper-frame reflected perfectly in the mirror-glass below, twin moons visible in both.
+7. Crouched on a rocky outcrop overlooking a deep alien landscape, the camera at mid-distance behind her catching her three-quarter back, the landscape sprawling to the deep horizon.
+8. Side-profile silhouette against twin-moon horizon, her body in pure silhouette walking right-to-left across the frame, painted moon-light catching her contour.
+9. Reflected in her sealed-helmet visor — the camera catches her face inside the helmet plus the reflection of the alien horizon on the curved visor glass.
+10. Over-shoulder past her hair at the dramatic horizon — distant alien fleet visible across her shoulder, painted sky filling the upper-frame.
+11. Wide low-angle on a cliff edge, her body standing on the rim with the planet rising behind her, the cliff dropping into deep painted depth.
+12. Side-on with cape billowing into the frame, her body in profile mid-stride, the cape sweeping back into the wind, deep-distance biome visible past her.`,
+  },
+
+  space_femme_phenomenon: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME COSMIC PHENOMENON — environmental drama events that fire on 70% of renders. Each entry 20-40 words.
+
+⚠️ Decoupled from biome and background_drama — independent roll for an environmental EVENT.
+
+VARIETY MANDATE — distribute across:
+  • Supernova flash on the horizon
+  • Aurora-cyclone overhead curtains
+  • Falling-stars streaking diagonally
+  • Dimensional-tear / rift opening
+  • Dragon-fire-in-cosmos (cosmic conflagration)
+  • Black-hole event-horizon-pull warping the sky
+  • Solar-flare arcing over the deep horizon
+  • Nebula-bloom expanding in real-time
+  • Meteor shower hammering the deep landscape
+  • Lightning-storm of trans-violet bolts arcing across the sky
+  • Hyperspace-streaked star-lines (ship in transit nearby)
+  • Glowing ion-storm ripping through the atmosphere
+  • Painted aurora over polar zone in trans-green and trans-magenta curtains
+  • Phosphorescent-fog drifting in glowing-supernatural haze
+  • Acid-rain shimmer with bright-amber droplets catching painted-light
+  • Ring-shadow eclipse passing across the planet
+  • Cosmic-dust-cloud particulate streaming horizontally
+  • Time-dilation lensing distortion warping the horizon
+  • Magnetic-storm visualized by lightning between distant peaks
+  • Plasma-pillar erupting from the planet's surface in the mid-distance
+
+Each entry must:
+• Name the phenomenon in first 4-6 words
+• Specify VISUAL IMPACT (color cast / motion / focal-point shift)
+• NEVER override lighting axis directly`,
+    touchpoints: [],
+    instructions: `Each entry is ONE space-femme cosmic phenomenon, 20-40 words. Format: free-form prose. Output as a NUMBERED list. STRICT BANS: NO direct lighting-color overrides (those belong to template-baked lighting).
+
+EXAMPLES (10):
+1. Supernova flash burning on the horizon, blinding-white burst with trans-yellow + trans-orange shockwave ring expanding across the deep distance, painted-light blowback hitting her armor.
+2. Aurora-cyclone overhead curtains spiraling in trans-green and trans-magenta, the painted-light curtain swirling in a slow rotation overhead, casting otherworldly green glow on her shoulder.
+3. Falling-stars streaking diagonally across the painted upper-frame, multiple trans-yellow + trans-white bar-element streaks each with a bright impact-head trailing soft particles.
+4. Dimensional-tear / rift opening in the mid-distance, vertical trans-cyan and trans-magenta jagged-edge cone tearing through reality with starfield bending toward its mouth.
+5. Black-hole event-horizon-pull warping the deep horizon, circular trans-black disc with a glowing trans-blue accretion ring around the edges, distorting the starfield around it.
+6. Hyperspace-streaked star-lines streaming across the upper-frame as a ship transits nearby at FTL, the stars elongated into trans-cyan painted streaks.
+7. Glowing ion-storm ripping through the atmosphere, trans-cyan electric arcs visibly cracking the air, micro-discharge ionizing around her silhouette.
+8. Painted aurora over polar zone in trans-green and trans-magenta curtains undulating slowly overhead, casting unearthly painted-light on her armor and the foreground biome.
+9. Ring-shadow eclipse passing across the planet, the rings' shadow visible as a band of darkness sweeping across the deep horizon, her foreground catching the edge.
+10. Plasma-pillar erupting from the planet's surface in the mid-distance, vertical trans-orange and trans-cyan column rising from the horizon into the upper-atmosphere.`,
+  },
+
   alien_cities: {
     theme: 'vast alien CITY scenes — multi-tier megacity density, planet-scale ecumenopolis, layered urban verticality, atmospheric depth. NOT a single hero building — DENSE cities with hundreds of supporting structures.',
     touchpoints: [

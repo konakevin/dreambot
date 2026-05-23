@@ -198,6 +198,20 @@ module.exports = {
   EXPLORER_ALIEN_LOCATIONS: load('explorer_alien_locations'),
   EXPLORER_SHIP_LOCATIONS: load('explorer_ship_locations'),
   EXPLORER_COZY_LOCATIONS: load('explorer_cozy_locations'),
+  // Path-bespoke pools for space-femme (2026-05-23 — new path) — 8 axes
+  // (7 always-on + 1 conditional cosmic phenomenon at 70% gate). Pushed-to-11
+  // ornate female-figure poster art in the Frazetta / Whelan / Vallejo /
+  // Bonestell painted-oil cover-art tradition. Anchored on Kevin's 15-heart
+  // female-explorer calibration; designed bespoke from R0 (NOT cloned from FE).
+  SPACE_FEMME_SUBJECT_DNA: load('space_femme_subject_dna'),
+  SPACE_FEMME_OUTFIT: load('space_femme_outfit'),
+  SPACE_FEMME_ACTION_POSTER: load('space_femme_action_poster'),
+  SPACE_FEMME_BIOME: load('space_femme_biome'),
+  SPACE_FEMME_BACKGROUND_DRAMA: load('space_femme_background_drama'),
+  SPACE_FEMME_PROP: load('space_femme_prop'),
+  SPACE_FEMME_CAMERA_POSTER: load('space_femme_camera_poster'),
+  SPACE_FEMME_PHENOMENON: load('space_femme_phenomenon'),
+
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
   CAMERA_ANGLES: load('camera_angles'),

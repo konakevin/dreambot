@@ -11,6 +11,96 @@
  */
 
 module.exports = {
+  STARBOT_SPACE_FEMME: ({ slots, vibeDirective }) => {
+    const {
+      subject_dna,
+      outfit,
+      action_poster,
+      biome,
+      background_drama,
+      prop,
+      camera_poster,
+      phenomenon,
+    } = slots;
+
+    const props = Array.isArray(prop) ? prop : [prop];
+    const propLines = props.map((p, i) => `  ${i + 1}. ${p}`).join('\n');
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ COSMIC PHENOMENON (this render's environmental drama) ━━━
+${phenomenon}
+
+The phenomenon AMPLIFIES the scene — render it visibly as a secondary focal point that the eye lands on AFTER the figure. Saturated trans-color elements, dramatic atmospheric light, multi-tier depth.
+
+`
+      : '';
+
+    return `You are a sci-fi cover artist writing a FUN, SEXY, VIVID SPACE FEMME render for StarBot — a single sassy larger-than-life space heroine caught in a candid heroic moment. The render is bold, eye-popping, high-energy, and unmistakably sci-fi. Output is a 130-180 word comma-separated phrase string for Flux, wrapped with StarBot's vivid sci-fi-cover prefix + medium suffix. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — FUN, SEXY, VIVID SCI-FI ━━━
+Every render is a FUN, electric sci-fi cover blast: bold saturated color, glossy chrome-and-neon space gear, a sassy confident sexy heroine, high-energy spectacle. The kind of render you grin at and want to pin to a wall. Think a vibrant modern sci-fi paperback / comic / pin-up cover — playful, punchy, a little over-the-top, gloriously sci-fi. Keep it MUTED-free and SERIOUS-free: vivid and bold, NOT a washed-out classic oil painting, NOT a screenshot, NOT a snapshot.
+
+━━━ PUSH-TO-11 MANDATORY STACK ━━━
+Every render combines AT LEAST 3 of these visual layers simultaneously:
+  • Ornate character DNA — multi-trait stack (skin + anatomy + hair + eye + tattoo/scar + cybernetic)
+  • Maximalist outfit + gear — sealed/ornate/sleek/scavenger; stacked utility props
+  • Cinematic mid-verb pose — heroic low-angle / climbing / scanning / cease-fire / mid-incantation
+  • Exotic perilous biome — bioluminescent / volcanic / acidic / crystalline / nebula-coast
+  • Secondary background drama — fleet / leviathan / station / rift / kaiju silhouette
+  • Multi-source dramatic lighting — fel-violet sidelight + ion-blue key + polar-aurora rim + interstellar-white shaft
+
+NO QUIET CORNERS. Every quadrant carries detail. Maximalist density throughout.
+
+━━━ THE FEMME (gender-locked she/her/woman) ━━━
+${subject_dna}
+
+A SINGLE female figure — she / her / woman / female — anatomy as described. Could be alien (head-tendrils / pointed ears / colored skin / bone-plate ridges / cat-slit eyes), augmented (chrome limbs / neural ports / cybernetic eyes), mutant, or ornate-baseline human. NEVER vanilla / generic. NEVER multi-figure. ONE woman is the whole show.
+
+━━━ THE OUTFIT ━━━
+${outfit}
+
+She wears real, cool SCI-FI SPACE GEAR — sleek form-fitting space suits, shiny armor, scavenger rigs, ornate ceremonial tech. SEXY, form-fitting, and confident is great — show off the gear with attitude. The one rule: she always wears actual space gear with visible tech — a suit, armor, or rig packed with statement details / glowing energy-seams / chrome panel-lines / utility hardpoints / neon trim.
+
+━━━ THE POSE / ACTION ━━━
+${action_poster}
+
+Mid-verb cinematic POSTER moment — body language reads in 2 seconds. Heroic stance, mid-action freeze, dramatic posture. NEVER sitting, NEVER quiet, NEVER passive.
+
+━━━ THE BIOME ━━━
+${biome}
+
+Exotic perilous environment — bioluminescent / volcanic / acidic / crystalline / electrical / nebula-saturated. Multi-tier depth (foreground tactile detail + midground biome + deep-distance horizon).
+
+━━━ BACKGROUND DRAMA (mid/deep-distance — always-on) ━━━
+${background_drama}
+
+A secondary mid/deep-distance focal point — alien fleet / leviathan / orbital ring / dimensional rift / kaiju shadow / colossal alien statue / cosmic phenomenon. The viewer's eye lands on the femme first, then drifts to the drama, then back. Multi-anchor poster composition.
+
+━━━ STACKED ACCESSORIES (×2 — visible on her body or surrounding) ━━━
+${propLines}
+
+These are ORNATE detail anchors — pulsing bio-monitor / nav-compass on chrome chain / glowing alien artifact in C-grip / ritual mask hanging from belt / drone-companion / familiar creature on shoulder. Stack them; they make the figure feel lived-in.
+
+━━━ POSTER FRAMING ━━━
+${camera_poster}
+
+Apply this camera framing precisely — it's the poster composition. Override default centered-portrait Flux bias.
+${phenomenonSection}
+━━━ LIGHTING — MULTI-SOURCE DRAMATIC ━━━
+Bold vivid lighting with multiple punchy sources stacked: hot-neon sidelight on the lit edge / electric-blue key flood / polar-aurora green-magenta rim / interstellar-white shaft cutting across her shoulder / saturated teal-and-orange cinematic grade. Punchy neon-and-rim lighting IS the fun sci-fi-cover signature — high-contrast, glossy, eye-popping.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OUTPUT SPEC ━━━
+Write 130-180 words. Single paragraph. Comma-separated phrase string.
+
+⚠️ FRAMING LOCK — THE SINGLE MOST IMPORTANT RULE. The figure is the LARGE, DOMINANT hero of the frame and is ALWAYS unmistakably wearing her sci-fi outfit. OPEN the Flux string with the clothed figure framed as a medium-to-full shot — head-to-hips at minimum, up to full head-to-boots — her body and outfit filling most of the frame, e.g. "[race] woman in [her sealed/ornate sci-fi outfit], [pose], figure large and dominant in frame". She is NEVER nude or unclothed, and NEVER a tiny distant silhouette swallowed by the scenery. A bold head-shoulders-and-chest framing against a cosmic vista is permitted ONLY when her outfit is clearly visible AND a background story element is present — but FAVOR medium and full-figure poses (heroic standing, crouched with gear, climbing). This clothed-figure clause comes FIRST, before DNA detail, biome, or drama.
+
+Then weave in, in this order: her ornate DNA detail, her outfit detail, her mid-action pose, the biome, background drama, props, lighting, phenomenon (if fired), and the camera framing. End with one phrase reinforcing vivid, fun, eye-popping gallery-grade sci-fi cover spectacle. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+  },
+
   PURE_COSMOS: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

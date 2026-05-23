@@ -13,6 +13,39 @@
  */
 
 module.exports = {
+  STARBOT_SPACE_FEMME: {
+    description: `PATH-BESPOKE — StarBot space-femme path (2026-05-23 migration; new path). Poster-worthy ornate space-female renders pushed to 11 across every dimension: style / fashion / gear / detail / background. Single female-figure cinematic POSTER COMPOSITION in the Frazetta / Whelan / Vallejo / Bonestell / Syd-Mead Analog-SF magazine-cover tradition — the kind of render you'd pin to a wall.
+
+7 always-on path-bespoke slots + 1 conditional cosmic phenomenon (70%-gated):
+  • subject_dna       — multi-trait female figure stack (skin / anatomy / hair / eye / scars-or-tattoos / cybernetics). ~70% non-baseline (alien / augmented / mutant / cybernetic), ~30% baseline-human-with-ornate-features. NO hard gender lock — she/her/woman language only.
+  • outfit            — broad 4-bucket spectrum: ~25% sleek form-fit space suits / ~25% rogue+bounty-hunter+scavenger / ~25% maximalist ornate ceremonial / ~25% mixed practical (tactical / pilot / mechanic / lab). Cheesecake banned per cross-bot rule.
+  • action_poster     — mid-verb POSTER pose (heroic low-angle stand / mid-incantation / mid-scan-at-artifact / mid-defiance / cease-fire signal / climbing through canopy). Not portrait, not sitting.
+  • biome             — exotic perilous biome (bioluminescent kelp cathedral / floating volcanic boulders / acid-lake archipelago / glass storm / underwater alien temple / chlorine coast / methane sea / nebula-cloud planet).
+  • background_drama  — always-on secondary mid/deep-distance event (alien fleet looming / leviathan rising / orbital station / dimensional rift / colossal alien statue / kaiju-shadow / dragon-fire in cosmos).
+  • prop pickN:2       — stacked accessories (bio-monitor cuff / nav-compass on chain / glowing alien artifact / ritual mask / ceremonial blade / drone-companion / familiar creature on shoulder).
+  • camera_poster     — poster-style framing (heroic low-angle / silhouette-against-vista / framed-through-archway / dutch-tilt climbing / mirrored-reflection / over-shoulder spying).
+  • phenomenon (70% gated) — cosmic event (supernova flash / aurora-cyclone / falling-stars / dimensional-tear / dragon-fire-in-cosmos / black-hole-event-horizon).
+
+PUSH-TO-11 MANDATE — every render stacks 3+ ornate elements simultaneously. Maximalist dense visual storytelling — packed-with-detail in the Frazetta cover-art tradition. Inherits the painted-oil-cover-art bot prefix from StarBot (the Bonestell/Whelan/Vallejo lineage that produces Kevin's 15-heart calibration set).`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'subject_dna',
+        'outfit',
+        'action_poster',
+        'biome',
+        'background_drama',
+        'prop',
+        'camera_poster',
+      ],
+    },
+    pickN: { prop: 2 },
+    conditionalLayer: { slot: 'phenomenon', gate: 0.7 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   PURE_COSMOS: {
   description: 'Astronomical phenomenon as subject. No figure.',
   slots: {

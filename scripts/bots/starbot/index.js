@@ -24,6 +24,7 @@ const pathBuilders = {
   'female-explorer': require('./paths/female-explorer'),
   'male-explorer': require('./paths/male-explorer'),
   'megastructure': require('./paths/megastructure'),
+  'space-femme': require('./paths/space-femme'),
 };
 
 module.exports = {
@@ -44,6 +45,10 @@ module.exports = {
     // portraits). Tested 2026-05-11 in R6 of female-explorer iteration.
     'female-explorer': 'canvas',
     'male-explorer': 'canvas',
+    // space-femme: bespoke FUN/SEXY/VIVID sci-fi cover look on its OWN medium —
+    // NO artist names (Kevin 2026-05-23: artist refs read muted/serious + killed
+    // the fun). Own medium so canvas (female/male-explorer) stays untouched.
+    'space-femme': 'starbot_space_femme',
     // megastructure: reverted to default starbot_hyperreal medium
     // (Kevin 2026-05-14 — align with all other scene paths)
   },
@@ -66,6 +71,8 @@ module.exports = {
     'female-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
     'male-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
     'megastructure': { 'black-forest-labs/flux-1.1-pro-ultra': 100 },
+    // space-femme: match FE painted-cover lineage (flux-1.1-pro on canvas).
+    'space-femme': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   // Per-medium prompt prefix/suffix overrides. The star_oil_cosmos medium
@@ -108,6 +115,12 @@ module.exports = {
       'late-80s / early-90s retrofuturism — Syd-Mead + Moebius painted chrome-and-neon-pink-cyan palette, gridded-horizon vanishing-point perspective, synthwave-cosmos sunset, tropical-palm-silhouette against gradient-sky, VHS-glitch scanlines, Miami-Vice-in-space mood, Blade-Runner-original-era neon-signage, pastel-gradient nebula backdrop',
     canvas:
       'painted sci-fi-paperback-cover oil-on-canvas — Chesley-Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Bruce-Pennington / Frank-Kelly-Freas Analog-SF-magazine tradition, heavy-impasto painted brushwork, painterly atmospheric cosmic depth, dramatic painted-chiaroscuro with nebula-hued ambient shadow, pulp-sci-fi paperback polish, museum-painted masterwork quality',
+    // space-femme bespoke medium (2026-05-23) — FUN / SEXY / VIVID sci-fi cover
+    // look. NO artist names (Kevin: artist refs read muted + serious). Describes
+    // the LOOK directly: bold saturated color, glossy, neon-and-chrome space gear,
+    // sassy confident heroine, high-energy spectacle.
+    starbot_space_femme:
+      'vibrant retro-futurist sci-fi cover illustration, bold saturated punchy comic-cover color, glossy slick painterly digital rendering, sleek shiny chrome-and-neon space gear with glowing energy seams, sassy confident sexy heroine, dynamic playful pin-up-cover energy, high-contrast dramatic rim-and-neon lighting, eye-popping vivid electric palette, fun bold a-little-over-the-top sci-fi spectacle, polished gallery-grade sci-fi poster art, crisp clean detail — NOT muted, NOT dull, NOT classic oil-painting, NOT washed-out',
     // Hyperreal sci-fi concept-art mediumStyle — formalized as the bot-only
     // medium `starbot_hyperreal` in migration 145. Mirrors the DB row's
     // flux_fragment so the override is explicit rather than implicit.
@@ -153,6 +166,7 @@ module.exports = {
     'female-explorer',
     'male-explorer',
     'megastructure',
+    'space-femme',
     // 8 franchise paths (aliens / dune / guardians / halo / mass-effect /
     // star-trek / starcraft / starwars) all DELETED 2026-05-14. Multiple
     // migration attempts produced "hallway" renders that Kevin rejected;
@@ -169,6 +183,7 @@ module.exports = {
     'cosmic-oracle': 8,
     'female-explorer': 8,
     'male-explorer': 8,
+    'space-femme': 8,
   },
 
   // Chaos layer — allow subject chaos on scenery + megastructure paths
@@ -186,6 +201,11 @@ module.exports = {
   // Two-pass Sonnet→Haiku polish.
   twoPassPolish: {
     enabled: true,
+    // space-femme is a declarative axis-system path — Haiku polish strips its
+    // load-bearing curated language (push-to-11 stack, biome, background drama,
+    // props, poster framing). Axis-system paths default to polish OFF.
+    // (feedback_axis_system_skip_polish)
+    skipPaths: ['space-femme'],
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
@@ -226,6 +246,7 @@ module.exports = {
       'real-space': 'scene',
       'cosmic-oracle': 'scene',
       'megastructure': 'scene',
+      'space-femme': 'explorer-female',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
