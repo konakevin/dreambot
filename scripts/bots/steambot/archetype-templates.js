@@ -791,4 +791,121 @@ CRITICAL — the OPENING tokens establish the LANDSCAPE as the canvas with the c
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
+  STEAMBOT_AIRSHIP_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      heritage,
+      role,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      action,
+      backdrop,
+      drama,
+    } = slots;
+
+    return `You are a cinematic illustration painter writing an AIRSHIP-ACTION SCENE for SteamBot — a single female air-officer / sky-corsair caught MID-ACTION on or around a steampunk airship. Lush vibrant painted illustration register — finished animation key-art / luxe production-painting feel (Treasure-Planet / Last-Exile / Howl's-Moving-Castle / Mortal-Engines Anna-Fang / Skies-of-Arcadia lineage). She is DOING SOMETHING — never posing, never stationary. Combat allowed. Solo hero with background figures permitted in mid-distance.
+
+━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "captain", "officer", "navigator", "pirate", "engineer" or any gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [heritage-coded] WOMAN [doing exact action] on [airship setting]..." — "woman" comes BEFORE her role. Use she/her throughout.
+
+━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
+The female air-officer is the MAIN SUBJECT. Her face, outfit, accessory, and MID-ACTION pose are the draw. She occupies 40-60% of the frame vertically — FULL BODY or three-quarter-body visible, head no larger than 12% of frame. NOT a tiny silhouette. NOT a wide vista with character as afterthought. Telephoto compression keeps her crisp; airship deck / rigging / brass hardware in MIDGROUND; sky / city / terrain in DISTANT background with atmospheric haze. The frame is composed like a movie poster — her in the strike of action, world rushing past behind.
+
+━━━ THE ACTION — what she is DOING RIGHT NOW (the headline of the render) ━━━
+${action}
+
+She is CAUGHT MID-MOTION — body weight engaged, muscles working, hair whipping, coat swirling, brass clasps catching light. NEVER posed-for-camera. NEVER stationary-portrait. The viewer should be able to SEE the next frame of the action in their imagination. If the action involves combat (cannon-fire / pistol-duel / boarding / repelling boarders), render the kinetic specifics: muzzle-flash, cannon-smoke, sparks from a parried sword, recoil in her shoulder, the enemy mid-leap.
+
+━━━ THE AIRSHIP DECK + SETTING — HER STAGE ━━━
+She is on or around a steampunk airship. Render the deck / rigging / brass-railing / cannon-port / chart-table / speaking-tube / signal-lanterns / wheel / spotter-platform / dirigible-spine / rope-rigging — whatever IMMEDIATE airship feature anchors the action. The ship is LIVED IN, FUNCTIONAL, real — never decorative-clutter framing. Brass + leather + canvas + oiled-mahogany + glass + copper material vocabulary.
+
+━━━ THE BACKDROP — secondary, distant, atmospheric ━━━
+${backdrop}
+
+This is BEYOND the airship — sky, clouds, distant terrain, distant city, sister-airships in formation, etc. Render with depth-on-depth haze. NEVER lets the backdrop steal focus from her — the backdrop reads as the world rushing past, not as the subject.
+
+━━━ HER HERITAGE (informs her face, complexion, costume vocabulary) ━━━
+${heritage}
+
+━━━ HER ROLE (her rank / archetype — informs how she carries herself + what she's commanding) ━━━
+${role}
+
+━━━ HER COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
+A ${skin.split(',')[0]}, with ${eyes.split(',')[0]} eyes, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, equipped with ${accessory}.
+
+(All eight DNA elements should be discernible in the render. Face fully visible.)
+
+━━━ THE OUTFIT IS A MAJOR SHOW — NON-NEGOTIABLE ━━━
+Render the OUTFIT with OBSESSIVE craftsmanship detail. Period-correct steampunk-airship-officer fashion — corseted leather flight jacket, brass-pauldron flight suit, fitted tailored greatcoat with brass epaulets, riding-skirt over knee-high boots, Persian sky-corsair silk caftan belted with brass kris-handle, Tokyo airship-academy fitted dress-uniform with gear-embroidered collar — whatever silhouette the wardrobe pool rolls, render it as TAILORED, LAYERED, FUNCTIONAL, BEAUTIFUL. Every brass clasp, every copper button, every leather strap, every embroidered cuff, every goggle-strap, every ammunition-bandolier rendered explicitly. The outfit reads as combat-capable AND beautiful at the same time.
+
+━━━ HAIR IS A FEATURE ━━━
+Render her hair as ALIVE in the moment — whipping in storm-wind, escaping its braid in mid-action, billowing under flight goggles, tendrils torn loose by cannon-recoil. NEVER flat / styled / static. The hair carries the motion of the action.
+
+━━━ ACCESSORY MANDATE — DETAILED + STEAMPUNK-CODED ━━━
+The equipment she carries / wears must be rendered with OBSESSIVE mechanical detail and steampunk specificity. Brass + copper + leather + gemstone + clockwork. Every gear visible, every rivet shown, every patina rendered. Combat-capable equipment preferred over decorative jewelry — brass-pistol, mechanical-arm prosthetic, spyglass, sky-compass, signal-flare-launcher, bandolier of brass shells, etc.
+
+━━━ BACKGROUND FIGURES — ALLOWED, NEVER CO-PROTAGONIST ━━━
+You MAY render background figures in MID-DISTANCE if the action calls for it — crew working the rigging behind her, enemy boarders mid-leap on a parallel ship, a wounded crewman being dragged to safety, a tiny silhouette of a fellow officer at the wheel. But they MUST stay small (under 15% of frame each), MUST be in midground or further, MUST NOT have detailed faces. SHE is the single focal point.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+${
+  drama
+    ? `
+━━━ DRAMATIC ENVIRONMENTAL EVENT (fires this render) ━━━
+${drama}
+
+Weave this event into the scene — lightning forking nearby, sparks from a damaged engine, a sister-ship's broadside blooming smoke, a vortex pulling at the sails. The event ESCALATES the action but does NOT replace her as the focal point.
+`
+    : ''
+}
+━━━ COMPOSITION ━━━
+Three-quarter angle or dynamic side profile so we see her face, body, and outfit AS SHE ACTS. Telephoto compression — character crisp, background atmospherically hazed. Movie-poster cinematic framing. FOREGROUND: tactile airship hardware near her (railing, brass-cannon-breech, rope-rigging, brass-instrument she's gripping). MIDGROUND: HER, full-body or three-quarter, mid-action, 40-60% of frame. BACKGROUND: distant sky / clouds / city / terrain with haze. NEVER a wide vista where she shrinks. NEVER a tight head-portrait crop.
+
+━━━ ALLOWED VOCABULARY (use often) ━━━
+captivating, fierce, intent, capable, kinetic, mid-leap, mid-strike, mid-fire, recoil, muzzle-flash, sparks, smoke-bloom, whipping hair, wind-torn, brass-clasped, leather-bound, gear-embroidered, brass-pauldroned, ammunition-bandolier, goggles-up, goggles-down, brass-monocle, cannon-port, rigging, spotter-platform, sky-corsair, dirigible-spine, oil-soaked.
+
+━━━ FORBIDDEN VOCABULARY — these specific words trigger Replicate's NSFW filter ━━━
+- sexy, erotic, sensual, seductive, provocative, temptress, lingerie, pinup, pin-up
+- voyeuristic, voyeur, bedroom, boudoir, sultry
+- "strategic cutouts", "see-through", "sheer panels", "exposure"
+- body-focus terms: hips, thighs, rear, bare midriff, underboob, cleavage
+- moisture/heat-on-skin imagery: wet lips, beads of sweat, moisture on skin, humidity beading
+- battle-bikini, chainmail-bikini, harness-across-bare-torso
+- bodice-ripper, heaving, pouting, parted-lips
+
+━━━ HARD BANS — COMPOSITION ━━━
+- NO multiple primary characters — she is the SOLE focal point (background figures OK but must stay small + mid-distance + faceless)
+- NO tight head-portrait crop — full body or three-quarter, 40-60% frame
+- NO posing-for-camera, NO modeling shot, NO trading-card art, NO stationary-portrait
+- NO wide-vista-with-tiny-character framing
+- NO substituting your own descriptions for the pool entries — render what's locked
+- NO decorative clutter framing (gears / clocks pasted around the edges)
+- NO ground-level setting (she is on / around an AIRSHIP — never on solid ground unless the airship is visibly docked at an aerie / sky-platform)
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING: "a [heritage-coded] WOMAN [doing exact action] on/aboard [airship setting]" — woman comes before role], [her tailored airship outfit with OBSESSIVE LAYERED detail — every brass clasp / leather strap / goggle-harness / embroidered cuff], [her signature equipment visible], [her face: skin + eyes + hair from DNA slots], [her hair carrying the motion of the action], [the airship deck / rigging / brass hardware around her in midground], [the distant backdrop sky/city/terrain with atmospheric haze], [any background figures in midground (small, faceless)], [drama event if rolled], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens are "[heritage-coded woman] [DOING ACTION] on/aboard [airship setting]". She fills 40-60% of frame, MID-ACTION. The ACTION gets significant word-budget alongside the outfit.
+
+Output ONLY the raw 110-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
 };

@@ -18,6 +18,7 @@ const blocks = require('./shared-blocks');
 const pathBuilders = {
   'steampunk-scene': require('./paths/steampunk-scene'),
   'airship-skies': require('./paths/airship-skies'),
+  'airship-female': require('./paths/airship-female'),
   'steampunk-curio': require('./paths/steampunk-curio'),
   'sexy-steampunk-woman': require('./paths/sexy-steampunk-woman'),
   'steampunk-man': require('./paths/steampunk-man'),
@@ -81,6 +82,7 @@ module.exports = {
     // matches the rest of the bot.
     'sexy-steampunk-woman':  { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-man':         { 'black-forest-labs/flux-1.1-pro': 100 },
+    'airship-female':        { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-spectacle':   { 'black-forest-labs/flux-1.1-pro': 100 },
     'steam-transport':       { 'black-forest-labs/flux-1.1-pro': 100 },
     'cozy-steampunk':        { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -95,6 +97,7 @@ module.exports = {
   mediumByPath: {
     'sexy-steampunk-woman': 'steambot-painted-woman',
     'steampunk-man': 'steambot-painted-man',
+    'airship-female': 'steambot-painted-woman',
     'cozy-steampunk': 'steambot-painted-interior',
     // steampunk-labs uses default hyperreal medium — painted-interior medium
     // drowned the sci-fi mad-science energy with lush atmospheric-Victorian
@@ -136,6 +139,13 @@ module.exports = {
       'ethereal', 'arcane', 'ancient', 'enchanted', 'fierce',
       'voltage', 'nightshade', 'macabre', 'shimmer', 'surreal',
     ],
+    // airship-female: action-leaning subset (drop peaceful/cozy/nostalgic
+    // vibes that conflict with combat / mid-action register; keep dark /
+    // epic / fierce / cinematic / voltage that amplify).
+    'airship-female': [
+      'cinematic', 'dark', 'epic', 'fierce', 'voltage',
+      'arcane', 'ancient', 'macabre', 'nightshade', 'shimmer', 'surreal',
+    ],
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -152,6 +162,7 @@ module.exports = {
   paths: [
     'steampunk-scene',
     'airship-skies',
+    'airship-female',
     'steampunk-curio',
     'sexy-steampunk-woman',
     'steampunk-man',
@@ -164,6 +175,7 @@ module.exports = {
   pathWeights: {
     'steampunk-scene': 2,
     'airship-skies': 2,
+    'airship-female': 2,
     'steampunk-curio': 2,
     'sexy-steampunk-woman': 2,
     'steampunk-man': 2,
@@ -182,8 +194,8 @@ module.exports = {
     // was stripping skin/eyes/makeup/hair DNA, leaving only the ethnicity
     // noun. Single-pass Sonnet preserves the full DNA stack. Per playbook
     // 2026-05-15 lesson: two-pass polish OFF for all new-axis paths.
-    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport', 'cozy-steampunk', 'steampunk-labs'],
-    polishedWordsByPath: { 'sexy-steampunk-woman': '80-110', 'steampunk-man': '80-110' },
+    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-female', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport', 'cozy-steampunk', 'steampunk-labs'],
+    polishedWordsByPath: { 'sexy-steampunk-woman': '80-110', 'steampunk-man': '80-110', 'airship-female': '80-110' },
     preservePhrasesByPath: {
       'steampunk-man': [
         'Black', 'Mahogany', 'Sepia', 'Persian', 'Indian', 'Asian', 'Mediterranean', 'Greek', 'Italian', 'Egyptian', 'Moroccan', 'Caribbean',
@@ -224,6 +236,10 @@ module.exports = {
       // steampunk-man also routed to 'scene' 2026-05-15 to avoid body-coded
       // male-touch sensory anchors potentially feeding NSFW filter triggers.
       'steampunk-man': 'scene',
+      // airship-female routed to 'scene' (same NSFW-filter reasoning as
+      // sexy-steampunk-woman/steampunk-man — body-coded sensory anchors
+      // were tripping Replicate on ~40% of female renders).
+      'airship-female': 'scene',
       'steampunk-scene': 'scene',
       'airship-skies': 'scene', 'steampunk-curio': 'scene',
       'steampunk-spectacle': 'scene', 'steam-transport': 'scene',

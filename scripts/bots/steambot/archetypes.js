@@ -107,6 +107,20 @@ module.exports = {
   anchorScaleRange: null
 },
 
+  STEAMBOT_AIRSHIP_FEMALE: {
+  description: 'PATH-BESPOKE — SteamBot airship-female path (2026-05-23). ACTION-FOCUSED sister to STEAMBOT_STEAMPUNK_WOMAN. Solo female air-officer / sky-corsair / crew-member caught MID-ACTION on or around a steampunk airship. Combat allowed (cannon-fire, pistol-duels, repelling boarders, dogfight maneuvers). Background figures permitted (crew in distance, enemy boarders mid-leap on parallel ship) but NEVER co-protagonists. Character occupies 40-60% of frame — outfit/face/action all clearly readable. Telephoto compression with airship deck/rigging in midground, environment (sky/landscape/city) as DISTANT background. NEVER static portrait pose. Steampunk-globe heritage (Victorian, Prussian, Persian sky-corsair, Tokyo airship academy, Hindustani, Yoruba sky-noble, etc.). 8 character DNA + 3 path-bespoke (action / backdrop / accessory shared with male sister) + 1 conditional 40%-gated (drama) + 2 universal.',
+  slots: {
+    universal: [ 'lighting', 'atmosphere' ],
+    bot: [],
+    characterDnaAxes: [ 'heritage', 'role', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
+    path: [ 'action', 'backdrop' ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'drama', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
   STEAMBOT_STEAMPUNK_SCENE: {
   description: 'PATH-BESPOKE — SteamBot steampunk-scene path (2026-05-15 migration). CHARACTER INTEGRATED INTO EPIC STEAMPUNK SCENE — a role-based steampunk figure (clockwork magistrate / sky-nomad / weather-prognosticator / etc. — gender-agnostic, persona-driven) AT MEDIUM scale (15-25% frame) standing inside a wildly imaginative steampunk landscape (Big-Ben-clockwork-opened / gear-waterfall / floating-metropolis / mechanical-jungle / brass-cathedral / etc.). The LANDSCAPE is the co-hero. Cinematic feature-film concept render with photoreal physical light. 3 path-bespoke axes (character / landscape / surprise_element) + conditional event 40%-gated + universal lighting + atmosphere.',
   slots: { universal: [ 'lighting', 'atmosphere' ], bot: [], path: [ 'character', 'landscape', 'surprise_element' ] },

@@ -94,6 +94,22 @@ module.exports = {
   STEAMPUNK_MEN_OUTDOOR_MOMENTS: load('steampunk_men_outdoor_moments'),
   STEAMPUNK_MEN_SETTINGS: load('steampunk_men_settings'),
   STEAMPUNK_MEN_WARDROBE_AMPLIFIED: load('steampunk_men_wardrobe_amplified'),
+
+  // airship-female path — solo female air-officer mid-action on a steampunk
+  // airship. 4 female-bespoke pools + 7 shared (heritage / role / eyes /
+  // hair_color / accessory / backdrop / drama — ready for future male sister).
+  AIRSHIP_HERITAGE: load('airship_heritage'),
+  AIRSHIP_ROLE: load('airship_role'),
+  AIRSHIP_EYES: load('airship_eyes'),
+  AIRSHIP_HAIR_COLOR: load('airship_hair_color'),
+  AIRSHIP_ACCESSORY: load('airship_accessory'),
+  AIRSHIP_BACKDROP: load('airship_backdrop'),
+  AIRSHIP_DRAMA: load('airship_drama'),
+  AIRSHIP_FEMALE_SKIN: load('airship_female_skin'),
+  AIRSHIP_FEMALE_HAIRSTYLE: load('airship_female_hairstyle'),
+  AIRSHIP_FEMALE_OUTFIT: load('airship_female_outfit'),
+  AIRSHIP_FEMALE_ACTION: load('airship_female_action'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {
