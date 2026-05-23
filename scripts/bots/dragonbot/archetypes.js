@@ -14,7 +14,24 @@
 
 module.exports = {
   FEMALE_ADVENTURER: {
-  description: 'PATH-BESPOKE — DragonBot female-adventurer path (2026-05-23 flagship rebuild). Gender-locked WOMAN of any attractive fantasy race (elves / fey-celestial / striking-humanoid / small-folk / triton-kenku-tabaxi / human-ethnic-heritages), any class. ORNATE FITTED feminine-coded gear (LOTR/Witcher/GoT/Elden register), NSFW-clean (no bare-midriff / bondage / battle-bikini), no artist-name lineage callouts. Character at 25-40% frame in a candid mid-action moment. Painterly fantasy concept art aesthetic. Skin axis DROPPED — race entry carries skin/scale/hide (drow=obsidian, dragonborn=scaled, humans=ethnic heritage). 11 axes (race / class / eyes / hair_color / hairstyle / outfit / accessory / landscape / action / surprise_element / drama-40%-gate).',
+  description: 'PATH-BESPOKE — DragonBot female-adventurer path (2026-05-14 rebuild from female-warrior). Gender-locked WOMAN of any D&D × LOTR fantasy race, any class (rogue / ranger / sorceress / warlock / mage / paladin / warrior / monk / druid / bard / cleric / barbarian / artificer / etc.), in the wild doing her adventurer thing. SLEEK adventuring gear — no bulky/massive armor, no cheesecake, no artist-name lineage callouts. NSFW-clean rebuild. Character at 25-40% frame in a candid mid-action moment. Painterly fantasy concept art aesthetic. Full character DNA stack (8 axes incl. class) + 4 path-bespoke (action / landscape / drama 40%-gated / surprise_element).',
+  slots: {
+    universal: [ 'lighting', 'atmosphere' ],
+    bot: [],
+    characterDnaAxes: [ 'race', 'class', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
+    path: [ 'landscape', 'action', 'surprise_element' ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'drama', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
+  // 2026-05-23 — carbon copy of FEMALE_ADVENTURER's cool-armor state. Same
+  // 11-axis split. female-adventurer was reverted to its 2026-05-14 baseline;
+  // FEMALE_EXPLORER carries the perfected cool-armor + adventurous-scene look.
+  DRAGON_FEMALE_EXPLORER: {
+  description: 'PATH-BESPOKE — DragonBot female-explorer path (2026-05-23 carbon copy of the cool-armor female-adventurer state). Gender-locked WOMAN of any attractive fantasy race, any class. COOL FITTED ORNATE ARMOR (plate / cuirass / scale / chitin / battle-leather — Witcher/Elden/Dragon-Age caliber), NSFW-clean (no cheesecake / no frumpy drapes), no artist-name callouts. Candid traveling-adventurer scenes (climbing / bridges / paths / drawn-blade stealth / creek-rest / campfire / map). Character at 25-40% frame. Skin axis encoded in race. 11 axes (race / class / eyes / hair_color / hairstyle / outfit / accessory / landscape / action / surprise_element / drama-40%-gate).',
   slots: {
     universal: [ 'lighting', 'atmosphere' ],
     bot: [],

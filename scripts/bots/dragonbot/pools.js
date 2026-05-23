@@ -37,8 +37,6 @@ module.exports = {
   // — no artist callouts, no cheesecake language. Sleek adventuring gear
   // across all D&D × LOTR fantasy classes + races).
   FEMALE_ADVENTURER_RACE: load('female_adventurer_race'),
-  FEMALE_ADVENTURER_EYES: load('female_adventurer_eyes'),
-  FEMALE_ADVENTURER_HAIR_COLOR: load('female_adventurer_hair_color'),
   FEMALE_ADVENTURER_CLASS: load('female_adventurer_class'),
   // ─── female-action-scenes path (2026-05-14 — clone of female-adventurer
   // massaged into pure-action energy: mages mid-spell with explosions,
@@ -109,6 +107,19 @@ module.exports = {
   FEMALE_ADVENTURER_LANDSCAPE: load('female_adventurer_landscape'),
   FEMALE_ADVENTURER_DRAMA: load('female_adventurer_drama'),
   FEMALE_ADVENTURER_SURPRISE_ELEMENT: load('female_adventurer_surprise_element'),
+  // ─── female-explorer path (2026-05-23 — carbon copy of the cool-armor
+  // female-adventurer state; independent pools so the two paths can diverge).
+  FEMALE_EXPLORER_RACE: load('female_explorer_race'),
+  FEMALE_EXPLORER_EYES: load('female_explorer_eyes'),
+  FEMALE_EXPLORER_HAIR_COLOR: load('female_explorer_hair_color'),
+  FEMALE_EXPLORER_CLASS: load('female_explorer_class'),
+  FEMALE_EXPLORER_OUTFIT: load('female_explorer_outfit'),
+  FEMALE_EXPLORER_ACCESSORY: load('female_explorer_accessory'),
+  FEMALE_EXPLORER_HAIRSTYLE: load('female_explorer_hairstyle'),
+  FEMALE_EXPLORER_ACTION: load('female_explorer_action'),
+  FEMALE_EXPLORER_LANDSCAPE: load('female_explorer_landscape'),
+  FEMALE_EXPLORER_DRAMA: load('female_explorer_drama'),
+  FEMALE_EXPLORER_SURPRISE_ELEMENT: load('female_explorer_surprise_element'),
   // Path-bespoke pools for female-warrior (LEGACY — kept for any orphan
   // refs; female-warrior path was deleted 2026-05-14 in favor of
   // female-adventurer rebuild. Pools retained to keep artsy-girl side

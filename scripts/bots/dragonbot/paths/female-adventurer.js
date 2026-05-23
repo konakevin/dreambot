@@ -1,38 +1,38 @@
 /**
- * DragonBot female-adventurer path — flagship rebuild 2026-05-23.
+ * DragonBot female-adventurer path — full rebuild 2026-05-14.
  *
- * Replaces 2026-05-14 version. ALL identity DNA now path-bespoke (forked
- * out of shared WARRIOR_*). Skin axis DROPPED — race entry carries skin
- * (drow=obsidian, dragonborn=scaled, tiefling=crimson; for humans, race
- * encodes ethnic heritage). Race pool curated to attractive races only
- * (Kevin 2026-05-23): elves, fey/celestial, striking humanoids, small-folk
- * (halfling/gnome/dwarf/kenku/tabaxi/shifter/triton allowed), and ~30%
- * human ethnic heritages with fantasy-canon names.
+ * Replaces female-warrior (deleted). 12-axis split system per the new
+ * playbook. NSFW-clean rebuild — no artist callouts (Frazetta/Brom/Vallejo
+ * were cheesecake-DNA + NSFW triggers), no "minimal coverage" / "bare
+ * midriff" outfit language.
  *
- * Outfit recipe rewritten 2026-05-23: ornate fitted + feminine-coded
- * (replacing the prior "no form-fitting" bans that produced draped
- * silhouettes). LOTR/Witcher/GoT/Elden register.
+ * Content target: a single fantasy WOMAN of any D&D × LOTR race, any class
+ * (rogue / ranger / sorceress / warlock / mage / paladin / warrior / monk /
+ * druid / bard / cleric / barbarian / artificer / etc.), out in the wild
+ * doing her adventurer thing in SLEEK functional gear — not bulky/massive
+ * armor, never cheesecake.
  *
- * Path-bespoke pools (12 axes — 10 always-on + 2 conditional):
- *   - race: FEMALE_ADVENTURER_RACE (skin baked in, attractive races only)
- *   - eyes: FEMALE_ADVENTURER_EYES (cool/warm/earth/exotic distribution)
- *   - hair_color: FEMALE_ADVENTURER_HAIR_COLOR (anti-warm-bias)
- *   - hairstyle: FEMALE_ADVENTURER_HAIRSTYLE (practical adventuring)
+ * Path-bespoke pools (8 × 25 MVP entries):
  *   - class: FEMALE_ADVENTURER_CLASS
- *   - outfit: FEMALE_ADVENTURER_OUTFIT (ornate fitted, feminine-coded)
+ *   - outfit: FEMALE_ADVENTURER_OUTFIT (NSFW-clean, sleek + functional)
  *   - accessory: FEMALE_ADVENTURER_ACCESSORY
- *   - action: FEMALE_ADVENTURER_ACTION
- *   - landscape: FEMALE_ADVENTURER_LANDSCAPE
- *   - drama: FEMALE_ADVENTURER_DRAMA (40% gated)
+ *   - hairstyle: FEMALE_ADVENTURER_HAIRSTYLE (practical adventuring)
+ *   - action: FEMALE_ADVENTURER_ACTION (story-rich, non-combat)
+ *   - landscape: FEMALE_ADVENTURER_LANDSCAPE (wild fantasy biomes)
+ *   - drama: FEMALE_ADVENTURER_DRAMA (40% gated atmospheric event)
  *   - surprise_element: FEMALE_ADVENTURER_SURPRISE_ELEMENT
  *
- * Bot-level shared (kept for now; flag for future fork):
- *   - lighting / atmosphere
+ * Reused bot-level character DNA pools (already production-sized, clean):
+ *   - race: FANTASY_RACE
+ *   - skin: WARRIOR_SKIN
+ *   - eyes: WARRIOR_EYES
+ *   - hair_color: WARRIOR_HAIR_COLOR
  */
 
 module.exports = {
   archetype: 'FEMALE_ADVENTURER',
   pools: {
+    // Path-bespoke
     class: 'FEMALE_ADVENTURER_CLASS',
     outfit: 'FEMALE_ADVENTURER_OUTFIT',
     accessory: 'FEMALE_ADVENTURER_ACCESSORY',
@@ -41,8 +41,13 @@ module.exports = {
     landscape: 'FEMALE_ADVENTURER_LANDSCAPE',
     drama: 'FEMALE_ADVENTURER_DRAMA',
     surprise_element: 'FEMALE_ADVENTURER_SURPRISE_ELEMENT',
+    // Forked race pool (2026-05-14 R2): female-anatomy-clean version of
+    // FANTASY_RACE. Beards stripped from dwarven entries, neutral build
+    // language on orcs. Fixes R1 gender-slip on Mahakaman dwarf render.
     race: 'FEMALE_ADVENTURER_RACE',
-    eyes: 'FEMALE_ADVENTURER_EYES',
-    hair_color: 'FEMALE_ADVENTURER_HAIR_COLOR',
+    // Reused bot-level DNA (gender-neutral; no beards in these)
+    skin: 'WARRIOR_SKIN',
+    eyes: 'WARRIOR_EYES',
+    hair_color: 'WARRIOR_HAIR_COLOR',
   },
 };

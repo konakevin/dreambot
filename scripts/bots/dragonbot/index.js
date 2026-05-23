@@ -18,6 +18,10 @@ const pathBuilders = {
   castle: require('./paths/castle'),
   'dragon-scene': require('./paths/dragon-scene'),
   'female-adventurer': require('./paths/female-adventurer'),
+  // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
+  // female-adventurer was reverted to its 2026-05-14 baseline; this path
+  // carries the perfected cool-armor + adventurous-scene look forward.
+  'female-explorer': require('./paths/female-explorer'),
   'female-action-scenes': require('./paths/female-action-scenes'),
   'artsy-girl': require('./paths/artsy-girl'),
   'male-adventurer': require('./paths/male-adventurer'),
@@ -72,6 +76,8 @@ module.exports = {
     // tokens Flux reads. The 120-token stuffed prefix I added gridlocked
     // every render onto generic-fantasy-heroine. Match historic: empty.
     'female-adventurer': '',
+    // EMPTY by design — carbon copy of female-adventurer's wrapper-strip lesson.
+    'female-explorer': '',
     // EMPTY by design — same lesson as female-adventurer. Sonnet's peak-
     // action body is what Flux needs to read first, not a stuffed wrapper.
     'female-action-scenes': '',
@@ -126,6 +132,7 @@ module.exports = {
     castle: 'black-forest-labs/flux-1.1-pro',
     'dragon-scene': 'black-forest-labs/flux-1.1-pro',
     'female-adventurer': 'black-forest-labs/flux-1.1-pro',
+    'female-explorer': 'black-forest-labs/flux-1.1-pro',
     'female-action-scenes': 'black-forest-labs/flux-1.1-pro',
     'artsy-girl': 'black-forest-labs/flux-1.1-pro',
     'male-adventurer': 'black-forest-labs/flux-1.1-pro',
@@ -339,6 +346,7 @@ module.exports = {
     'castle',
     'dragon-scene',
     'female-adventurer',
+    'female-explorer',
     'female-action-scenes',
     'artsy-girl',
     'male-adventurer',
@@ -365,6 +373,7 @@ module.exports = {
     castle: 4,
     'dragon-scene': 4,
     'female-adventurer': 5,
+    'female-explorer': 5,
     'female-action-scenes': 5,
     'artsy-girl': 4,
     'male-adventurer': 5,
@@ -414,6 +423,7 @@ module.exports = {
     skipPaths: [
       'artsy-girl',
       'female-adventurer',
+      'female-explorer',
       'female-action-scenes',
       'male-adventurer',
       'male-action-scenes',
@@ -431,6 +441,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {
       'female-adventurer': '80-110',
+      'female-explorer': '80-110',
       'female-action-scenes': '100-130',
       'artsy-girl': '80-110',
       'male-adventurer': '80-110',
@@ -448,6 +459,7 @@ module.exports = {
     requiredChannels: ['lightcolor'],
     pathContext: {
       'female-adventurer': 'female',
+      'female-explorer': 'female',
       'female-action-scenes': 'female',
       'artsy-girl': 'female',
       'male-adventurer': 'male',
