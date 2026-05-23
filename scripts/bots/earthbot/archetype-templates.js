@@ -719,6 +719,94 @@ DO NOT default to close-camera / intimate / foreground-focused framing unless th
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places, NO "fire" as a noun, NO "shrubs" / "scrub" as dominant element.`;
   },
 
+  EARTHBOT_DESERT_SOUTHWEST: ({ slots, sharedDNA, vibeDirective }) => {
+    const { subject, foreground_anchor, surprise_element, light_condition, atmosphere, sky_layer, scale_prover, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one real-Earth event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or feels supernatural, DROP IT. Real-Earth ONLY — no aurora, no nacreous, no bioluminescent, no sun-dogs, no fire-rainbow.`
+      : '';
+
+    return `You are a fine-art landscape photographer writing ONE DESERT SOUTHWEST scene for EarthBot. American SW iconic raw geology — Monument Valley sandstone towers, Antelope Canyon slot beams, Bryce hoodoo amphitheaters, Zion narrows, Arches, Sedona red rock, Painted Desert, Canyonlands. Marc Adamus / Peter Lik / Galen Rowell caliber gallery-print SW landscape photography. Warm-terracotta on cobalt cinematic. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — RAW EARTH SW GEOLOGY ━━━
+
+This is the real American Southwest — Utah / Arizona / New Mexico iconic raw landforms. Wide-vista panorama or stand-at-the-rim mid-wide framing. The geology is the hero. Multi-tier depth mandatory (foreground anchor + midground hero geology + distant horizon).
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT FEATURES / ZERO CULTURAL ━━━
+
+The entire frame is uninhabited landscape. NEVER a figure, NEVER a vehicle, NEVER a road, NEVER buildings, NEVER fences, NEVER petroglyphs (cultural heritage), NEVER ladders, NEVER signage. Pure raw landform only.
+
+━━━ STYLE GUARDS ━━━
+
+- Avoid aurora / nacreous / sun-dogs / fire-rainbow / iridescent / bioluminescent vocabulary (fantasy triggers)
+- Avoid sci-fi / portal / mystical / impossible-reflection
+- Avoid stylized / 3D-render / cartoony — HYPERREAL photographic only
+- Avoid "fire" as a noun (renders literal flames per seasonal-shift lesson); use "blazing color" only as adjective
+- Avoid molten / lava (American SW geology is cold sandstone / basalt, NOT active volcanic)
+- Avoid opal-iridescent / shifting / glowing mineral vocabulary (fantasy-mineral drift)
+
+━━━ THE SUBJECT (the iconic SW landform composition) ━━━
+${subject}
+
+━━━ FOREGROUND ANCHOR (close-edge detail) ━━━
+${foreground_anchor}
+
+━━━ SURPRISE ELEMENT (one extra scene-richening element woven naturally) ━━━
+${surprise_element}
+
+Render this surprise element clearly visible in the scene — it adds the spice that makes the frame feel rich and alive. Bloom on a cactus, dramatic banner cloud above, distant additional rock formation, single weathered tree, etc.
+
+━━━ LIGHT CONDITION ━━━
+${light_condition}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ SKY LAYER ━━━
+${sky_layer}
+
+━━━ SCALE PROVER (tiny element, postage-stamp scale) ━━━
+${scale_prover}
+
+Render small — proves the landform is VAST.${phenomenonBlock}
+
+━━━ HARD RULE — TERRACOTTA-ON-COBALT CINEMATIC ━━━
+
+Multi-tier depth (foreground anchor + midground hero geology + distant horizon). Warm terracotta / amber / rust / sienna saturation in foreground + midground; teal-cooled cobalt atmospheric depth in the far distance. Hard sun-light catching every sandstone facet. The viewer should feel the dry warm air and the impossible scale of the rock.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'warm terracotta sandstone + cobalt sky + amber-rim rock-edges + cool atmospheric depth'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE — WIDE-VISTA OR STAND-AT-THE-RIM ━━━
+
+Wide-vista panoramic landscape OR stand-at-the-rim mid-wide framing. The iconic landform fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Hyperreal photographic — gallery-print SW fine-art landscape (Marc Adamus / Peter Lik / Galen Rowell caliber).
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places (describe morphologically). Describe positive content only — no negation language like "no humans" or "no architecture" (Flux tokenizer leaks those words).`;
+  },
+
+  // Placeholder templates for 6 region-bespoke paths scaffolded 2026-05-23.
+  // Built out fully when each path is activated; signature matches the
+  // composer contract so pools can load + brief-composer doesn't crash if
+  // accidentally invoked. NOT in EARTH_PATHS rotation until full template
+  // authored + R0 validated.
+  EARTHBOT_AFRICAN_SAVANNA: ({ slots }) =>
+    `// PLACEHOLDER — EARTHBOT_AFRICAN_SAVANNA template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_ASIA_LANDSCAPE: ({ slots }) =>
+    `// PLACEHOLDER — EARTHBOT_ASIA_LANDSCAPE template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_ANDES_PATAGONIA: ({ slots }) =>
+    `// PLACEHOLDER — EARTHBOT_ANDES_PATAGONIA template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_AUSTRALIAN_OUTBACK: ({ slots }) =>
+    `// PLACEHOLDER — EARTHBOT_AUSTRALIAN_OUTBACK template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_ICELAND_RAW: ({ slots }) =>
+    `// PLACEHOLDER — EARTHBOT_ICELAND_RAW template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_EUROPEAN_WILDERNESS: ({ slots }) =>
+    `// PLACEHOLDER — EARTHBOT_EUROPEAN_WILDERNESS template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+
   EARTHBOT_HIDDEN_CORNER: ({ slots, sharedDNA, vibeDirective }) => {
     const { subject, foreground_anchor, water_feature, micro_detail, scale_prover, lighting, atmosphere, phenomenon } = slots;
     const phenomenonBlock = phenomenon

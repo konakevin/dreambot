@@ -76,6 +76,7 @@ const axisPools = require('./pools');
 // { archetype, pools } object for axis-system migrated paths.
 const pathBuilders = {
   // Earth paths
+  'desert-southwest': require('./paths/desert-southwest'), // axis-system (2026-05-23)
   'epic-vista': require('./paths/epic-vista'), // axis-system (2026-05-20)
   'hidden-corner': require('./paths/hidden-corner'), // axis-system (2026-05-22)
   'sacred-light': require('./paths/sacred-light'), // axis-system (2026-05-21)
@@ -102,6 +103,7 @@ const EARTH_PATHS = [
   'national-parks',
   'seasonal-shift',
   'geological-wonder',
+  'desert-southwest',
   'deep-forest',
   'lush-jungle',
 ];
@@ -230,8 +232,8 @@ module.exports = {
   // add it here.
   chaos: {
     enabled: true,
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner'],
-    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner', 'beach-night'].includes(p))],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner', 'desert-southwest'],
+    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner', 'desert-southwest', 'beach-night'].includes(p))],
   },
 
   // Two-pass polish — both bots use identical config.
@@ -244,7 +246,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner'],
+    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner', 'desert-southwest'],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their

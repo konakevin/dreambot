@@ -93,6 +93,77 @@ module.exports = {
     anchorScaleRange: null
   },
 
+  // ═══════════════════════════════════════════════════════════════════════
+  // 7 region-bespoke EarthBot paths (2026-05-23 — coverage expansion).
+  // All raw-Earth + no-civilization + earth-and-reality-coded phenomena
+  // (NO aurora drift outside iceland-raw, NO bioluminescent, NO sun-dogs,
+  // NO nacreous, NO fire-rainbow). Scaffolded together; built-out one at
+  // a time. Activated in EARTH_PATHS per-path as pools fill.
+  // ═══════════════════════════════════════════════════════════════════════
+
+  EARTHBOT_DESERT_SOUTHWEST: {
+    description: 'PATH-BESPOKE — EarthBot desert-southwest (2026-05-23 R2). American SW + Sonoran + Mojave + Joshua tree + salt flats. Iconic raw geology AND iconic raw flora — Monument Valley sandstone towers, Antelope Canyon slot beams, Bryce hoodoos, Zion narrows, Arches, Sedona red rock, Saguaro National Park forests, Joshua Tree forests, Badwater salt flats. Warm-terracotta on cobalt. R2 adds surprise_element axis (always-on) injecting one extra scene-richening element (blooming saguaro crown, dramatic sunset banner, ocotillo in bloom, distant balanced rock, cottonwood snag silhouette, etc.) so frames don\'t feel sparse. NO humans, NO architecture, NO petroglyphs (cultural). Phenomena strictly real Earth (monsoon lightning, virga, dust devils, alpenglow, sun pillars, fog inversions). 8 path-bespoke axes — 7 always-on + 1 conditional 25%-gated phenomenon.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'surprise_element', 'light_condition', 'atmosphere', 'sky_layer', 'scale_prover' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
+  EARTHBOT_AFRICAN_SAVANNA: {
+    description: 'PATH-BESPOKE — EarthBot african-savanna (2026-05-23 scaffold). African savanna raw nature — baobab + acacia + Serengeti golden grass + Kilimanjaro silhouette + salt flats (Etosha, Makgadikgadi) + wildlife scale-prover silhouettes (elephant / zebra / giraffe / wildebeest). Dust-haze sunsets, golden savanna light. NO humans, NO vehicles, NO buildings. Phenomena strictly real Earth (dust storm, virga, distant thunderstorm, mirage shimmer). 7 path-bespoke axes — 6 always-on + 1 conditional 25%-gated phenomenon.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'light_condition', 'atmosphere', 'sky_layer', 'scale_prover' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
+  EARTHBOT_ASIA_LANDSCAPE: {
+    description: 'PATH-BESPOKE — EarthBot asia-landscape (2026-05-23 scaffold). Pan-Asian raw nature — Japan (Mt. Fuji vistas, sakura groves, bamboo, autumn ginkgo, Hokkaido boreal), China (Huangshan granite + sea-of-clouds, Guilin / Zhangjiajie karst, Tibetan plateau), Taiwan (Taroko marble gorge), Vietnam (Halong Bay karst), Korea (Seoraksan granite, Jeju volcanic), Mongolia (Gobi dunes, Altai steppe). NO humans, NO torii, NO temples, NO villages, NO rice terraces. Phenomena strictly real Earth (sea of clouds, mist inversion, monsoon lightning, fog drift). 7 path-bespoke axes — 6 always-on + 1 conditional 25%-gated phenomenon.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'light_condition', 'atmosphere', 'sky_layer', 'scale_prover' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
+  EARTHBOT_ANDES_PATAGONIA: {
+    description: 'PATH-BESPOKE — EarthBot andes-patagonia (2026-05-23 scaffold). South American raw nature — Torres del Paine granite spires, Perito Moreno glacier face, Atacama salt + altiplano + llama silhouettes, Amazon basin canopy, Andean peaks, Cotopaxi volcano, Iguazu falls. NO humans, NO Machu Picchu ruins (cultural), NO civilization. Phenomena strictly real Earth (lenticular cloud over Patagonian peaks, alpenglow, sea of clouds, mist drift). 7 path-bespoke axes — 6 always-on + 1 conditional 25%-gated phenomenon.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'light_condition', 'atmosphere', 'sky_layer', 'scale_prover' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
+  EARTHBOT_AUSTRALIAN_OUTBACK: {
+    description: 'PATH-BESPOKE — EarthBot australian-outback (2026-05-23 scaffold). Australian raw geology — Uluru, Kata Tjuta, Bungle Bungle beehive domes, Pinnacles desert, Karijini gorge, Lake Eyre salt, MacDonnell ranges, red-dust eucalyptus woodlands. Red-iron-oxide palette distinct from American SW. NO humans, NO buildings, NO aboriginal art (cultural heritage). Phenomena strictly real Earth (dust storms, virga, lightning, stars at Uluru, fog inversions). 7 path-bespoke axes — 6 always-on + 1 conditional 25%-gated phenomenon.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'light_condition', 'atmosphere', 'sky_layer', 'scale_prover' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
+  EARTHBOT_ICELAND_RAW: {
+    description: 'PATH-BESPOKE — EarthBot iceland-raw (2026-05-23 scaffold). Iceland\'s unique raw geology — geothermal vents + geysers, glacier tongues (Vatnajökull, Sólheimajökull), black-sand beaches (Reynisfjara), basalt columns (Reynisdrangar, Stuðlagil), ice caves, moss-on-lava fields, waterfalls (Skógafoss, Gullfoss, Seljalandsfoss), Diamond Beach iceberg shards. NO humans, NO buildings. Phenomena strictly real Earth — aurora ALLOWED here (Iceland is one of the few paths where it\'s an actual real-Earth optical phenomenon) but rendered grounded-photographic, NEVER fantasy-cosmic. Fog inversions, volcanic vapor, ice-cave light shafts, snow squall. 7 path-bespoke axes — 6 always-on + 1 conditional 25%-gated phenomenon.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'light_condition', 'atmosphere', 'sky_layer', 'scale_prover' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
+  EARTHBOT_EUROPEAN_WILDERNESS: {
+    description: 'PATH-BESPOKE — EarthBot european-wilderness (2026-05-23 scaffold). British Isles + Alpine European + Scandinavian fjord-coast raw nature. British Isles: Scottish Highlands (Glen Coe, Quiraing, Old Man of Storr), Welsh Snowdonia, Irish Cliffs of Moher + Connemara, Lake District. Alpine: Dolomites, Matterhorn, Slovenian Julian Alps, Bavarian Alps + Königssee, Polish Tatras, French Vanoise. Scandinavian fjords + Faroe Islands (overlap-aware with existing coverage). NO humans, NO sheep-with-fence, NO villages, NO castles, NO standing stones (megalithic culture). Phenomena strictly real Earth (sea of clouds, alpenglow, mist drift, snow squall, lenticular over peaks). 7 path-bespoke axes — 6 always-on + 1 conditional 25%-gated phenomenon.',
+    slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'light_condition', 'atmosphere', 'sky_layer', 'scale_prover' ] },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null
+  },
+
   EARTHBOT_HIDDEN_CORNER: {
     description: 'PATH-BESPOKE — EarthBot hidden-corner (2026-05-22). OFF-THE-BEATEN-PATH discovered nature pockets — the secret magical place you stumble into. Hidden creek bends with mossy stones, fern grottos in old-growth, forest clearings filled with wildflowers, tide pools no one visits, mossy waterfall pools, sun-shaft glades. INTIMATE mid-tight framing, NEVER wide panorama. CRITICAL — intimate ≠ minimal: every render is LUSH with packed detail and multi-tier layers. Wall-to-wall texture (moss / dew / lichen / wet stones / ferns / mushrooms / fallen petals). Multi-tier depth (foreground close-detail + midground subject + soft atmospheric background). Dappled or shaft-filtered light. Tiny scale-prover wildlife (frog / dragonfly / butterfly / single mushroom). The viewer should feel they stumbled into a secret pocket where every surface is alive with texture. 7 path-bespoke axes — 7 always-on + 1 conditional 25%-gated phenomenon. NO bioluminescent / aurora / nacreous / sun-dogs / fire-rainbow / iridescent / lava (all legacy fantasy triggers that drifted hidden-corner sci-fi). NO architecture / paths / fences. NO humans. NO wide panorama. NO sparse / empty / minimal compositions.',
     slots: { universal: [], bot: [], path: [ 'subject', 'foreground_anchor', 'water_feature', 'micro_detail', 'scale_prover', 'lighting', 'atmosphere' ] },
