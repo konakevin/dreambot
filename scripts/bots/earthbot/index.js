@@ -211,6 +211,12 @@ module.exports = {
   // Locked to flux-1.1-pro only — highest-fidelity Flux model for the
   // hyperreal look. Picker semantics retained but with a single allowed
   // model so every render is the same quality.
+  // 2026-05-23 — model bake-off complete. Stayed on flux-1.1-pro (winner).
+  // flux-2-pro = ugly. flux-1.1-pro-ultra = fantasy-leaks (flaming trees /
+  // molten-lava cliffs). flux-1.1-pro wins for the cinematic teal-and-orange
+  // hyperreal landscape register Kevin wants. People-leak now mitigated via
+  // EARTH_SUFFIX scrub (no more "no humans, no people" negative-prompt
+  // tokens) — see [[feedback_negative_prompt_leak]].
   useModelPicker: true,
   allowedModels: ['black-forest-labs/flux-1.1-pro'],
 
