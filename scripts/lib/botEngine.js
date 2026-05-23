@@ -465,20 +465,61 @@ function resolvePath({ bot, recentPaths }) {
   return weightedPick(bot.paths, bot.pathWeights);
 }
 
+// Cycle size = total slots per cycle. With pathWeights, each path occupies
+// (weight) slots per cycle (default 1). Without weights, every path gets 1 slot
+// and cycle size = bot.paths.length (legacy behavior).
+function computeCycleSize(bot) {
+  if (!bot.pathWeights) return bot.paths.length;
+  return bot.paths.reduce((sum, p) => sum + (bot.pathWeights[p] ?? 1), 0);
+}
+
+// Count occurrences of each path in the cycle-history array.
+function countOccurrences(arr) {
+  const counts = {};
+  for (const p of arr || []) {
+    counts[p] = (counts[p] || 0) + 1;
+  }
+  return counts;
+}
+
+// Paths with remaining slots in the current cycle (used count < weight).
+function getRemainingSlots(bot, usedCounts) {
+  return bot.paths.filter((p) => {
+    const w = bot.pathWeights ? (bot.pathWeights[p] ?? 1) : 1;
+    return (usedCounts[p] || 0) < w;
+  });
+}
+
+// Pick from remaining paths, weighting by REMAINING slots (paths with more
+// slots left get picked more often — this keeps category ratios roughly
+// balanced throughout the cycle rather than back-loading the heavy category).
+function pickFromRemaining(bot, remaining, usedCounts) {
+  if (!bot.pathWeights) {
+    return remaining[Math.floor(Math.random() * remaining.length)];
+  }
+  const slotWeights = {};
+  for (const p of remaining) {
+    const total = bot.pathWeights[p] ?? 1;
+    slotWeights[p] = total - (usedCounts[p] || 0);
+  }
+  return weightedPick(remaining, slotWeights);
+}
+
 // Shuffle-bag path selection: cycle through ALL paths before any repeats.
-// Opt in via `cycleAllPaths: true` in bot config.
+// Opt in via `cycleAllPaths: true` in bot config. Respects `pathWeights` —
+// each path occupies (weight) slots per cycle.
 function resolvePathCycled({ bot, recentPaths }) {
   if (!Array.isArray(bot.paths) || bot.paths.length === 0) {
     throw new Error(`Bot ${bot.username} has no paths configured`);
   }
-  const used = new Set(recentPaths || []);
-  const remaining = bot.paths.filter((p) => !used.has(p));
+  const usedCounts = countOccurrences(recentPaths);
+  const remaining = getRemainingSlots(bot, usedCounts);
 
   if (remaining.length === 0) {
     return weightedPick(bot.paths, bot.pathWeights);
   }
 
-  return weightedPick(remaining, bot.pathWeights);
+  return pickFromRemaining(bot, remaining, usedCounts);
 }
 
 // In-memory batch path window — shared across renders in a single batch run.
@@ -503,14 +544,14 @@ async function getRecentPaths(sb, botName, limit = 5) {
   return (data || []).map((r) => r.path);
 }
 
-async function getCycledUsedPaths(sb, botName, pathCount) {
+async function getCycledUsedPaths(sb, botName, cycleSize) {
   const { count, error } = await sb
     .from('bot_run_log')
     .select('*', { count: 'exact', head: true })
     .eq('bot_name', botName)
     .eq('status', 'ok');
   if (error || !count) return [];
-  const position = count % pathCount;
+  const position = count % cycleSize;
   if (position === 0) return [];
   const { data } = await sb
     .from('bot_run_log')
@@ -723,17 +764,17 @@ async function runBot(opts) {
   let resolvedPath;
   if (pathArg === 'random') {
     if (bot.cycleAllPaths) {
-      const pathCount = bot.paths.length;
+      const cycleSize = computeCycleSize(bot);
       if (!_batchCycleTracker[bot.username]) {
-        _batchCycleTracker[bot.username] = await getCycledUsedPaths(sb, bot.username, pathCount);
+        _batchCycleTracker[bot.username] = await getCycledUsedPaths(sb, bot.username, cycleSize);
       }
-      const used = new Set(_batchCycleTracker[bot.username]);
-      const remaining = bot.paths.filter((p) => !used.has(p));
+      const usedCounts = countOccurrences(_batchCycleTracker[bot.username]);
+      const remaining = getRemainingSlots(bot, usedCounts);
       if (remaining.length === 0) {
         _batchCycleTracker[bot.username] = [];
         resolvedPath = weightedPick(bot.paths, bot.pathWeights);
       } else {
-        resolvedPath = weightedPick(remaining, bot.pathWeights);
+        resolvedPath = pickFromRemaining(bot, remaining, usedCounts);
       }
       _batchCycleTracker[bot.username].push(resolvedPath);
     } else {

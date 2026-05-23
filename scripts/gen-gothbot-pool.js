@@ -1709,6 +1709,760 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE gothic twilight sky, 15-30 words. SATURATED + THEATRICAL + GOTHIC. NEVER cheerful blue / NEVER clean daylight. STRICT GothBot dark-fantasy. NO sci-fi / cosmic / LOTR vocabulary. Use blood-moon sparingly. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
 
+  // ─── GOTHBOT vampire-hunter-in-action path (2026-05-22 migration).
+  // SOLO hunter on-the-prowl, vampire OFF-CAMERA. Belmont / Witcher /
+  // Van Helsing / Cossack / Wallachian / etc. — period 1500s-1800s.
+  // Face-readable mandate (hood-down ~40%), masculine build, NO bishonen.
+  // ──────────────────────────────────────────────────────────────────
+
+  gothbot_vhia_hunter_archetype: {
+    format: 'simple',
+    theme: `HUNTER ARCHETYPES for GothBot's vampire-hunter-in-action path — period vampire-hunter identity / lineage / role / vibe. Each entry 18-30 words.
+
+⚠️ Each entry weaves into ONE prose sentence: archetype name with lineage (Belmont-descendant / Witcher-trained / Van Helsing / older priest-hunter / Cossack vampire-rider / Borgia-purged exorcist / Wallachian boyar / etc.), ONE core trait (battle-scarred / haunted / methodical / cold predator / weary veteran), ONE masculine build cue (broad shoulders / heavy frame / weathered — never bishonen/pretty-boy), and ONE distinctive visual signature (specific hair color+style, OR specific facial detail like scar/eye-patch/tattoo, OR specific head-style like HOOD-DOWN / bare-headed / wide-brim hat / leather skullcap). Every hunter must be VISUALLY DISTINCT, not interchangeable.
+
+⚠️ FACE-READABLE MANDATE — the hunter's face is rendered (not "shadowy" / not "hooded silhouette"). ~40% of entries explicitly state HOOD DOWN or BARE-HEADED. ~60% can have hood/hat but face still lit and readable.
+
+VARIETY MANDATE — distribute the batch across these lineages so no two entries share one:
+  • Belmont-descendant — blooded whip-hunter from cursed Belmont line
+  • Witcher-trained mutant — silver-haired killer with cat-slit eyes, School of Wolf / Cat / Viper / Manticore / Griffin / Bear trade-hunter
+  • Van Helsing professor-warrior — Dutch occult-academic gone field-hunter, kit-laden
+  • Older priest-hunter — gaunt Tridentine padre with stake-rosary, weathered cassock
+  • Cossack vampire-rider — saber-and-pistol hetman in fur-trimmed coat
+  • Wallachian boyar — disinherited noble turned vampire-killer, fur-edged longcoat
+  • Borgia-purged exorcist — defrocked Italian inquisitor with engraved silver
+  • Caribbean tropical-port hunter — sun-scarred privateer turned vampire-killer
+  • Irish brawler-priest — fist-and-stake hunter from a Galway monastery
+  • Welsh moor-tracker — silent killer who reads spoor like a script, longbow + crossbow
+  • Romani caravan-hunter — clan-elder with bone-knife and salt-pouch
+  • Spanish flamenco-blade — duelist with rapier and crucifix, weathered olive skin
+  • Bohemian alchemist-hunter — silver-mercury alchemist with dark goggles
+  • Carpathian woodsman — taciturn forest-tracker with axe and silver-tipped pike
+  • Black Forest dragoon — Imperial cavalryman seconded to vampire-hunt detail
+  • Anatolian dervish-hunter — twin-saber whirling-style hunter from a heretic order
+  • Cathar wandering-hunter — last of a purged heresy, blade and grimoire
+  • Hessian deserter-hunter — heavy-built cuirassier turned freelance hunter
+  • Greek klepht — mountain-bandit-turned-hunter, silver pistol and yataghan
+  • Mexican vaquero-hunter — sun-weathered cattle-driver turned vampire-killer with silver bolas
+  • Scottish highlands rievier — kilted clansman-hunter with claymore and dirk
+
+ABSOLUTELY BANNED:
+  - NO bishonen / NO femboy / NO pretty-boy / NO androgynous / NO K-pop-idol / NO smooth baby-face
+  - NO modern-uniform descriptions
+  - NO blood / gore
+  - NO LOTR / Skyrim / Witcher-game-canon-only vocabulary mixed in — GothBot is period-grounded gothic`,
+    touchpoints: [
+      'Cursed Belmont bloodline carrier, broad-shouldered and battle-scarred, long copper hair tied back, cheek-scar permanent, whip coiled at hip, hood down.',
+      'Wolf School Witcher mutant, heavy-framed silver-haired killer with cat-slit amber eyes, blade-nicked brow, trades monster contracts for vampire heads.',
+      'Dutch occult-academic turned field-hunter, weathered and methodical, iron-grey hair, silver-streaked beard, kit-pouches buckled across leather chest-piece.',
+      'Gaunt Tridentine padre, weary veteran of thirty exorcisms, close-cropped steel-grey hair, hollow-eyed, stake-rosary wrapped around knuckled fist, bare-head.',
+      'Saber-and-pistol Cossack hetman, heavy-framed and haunted, shaved skull with long oseledets topknot, iron-grey drooping mustache, fur-trimmed coat.',
+      'Disinherited Wallachian boyar turned vampire-killer, broad-shouldered cold predator, long dark-brown hair tied back, nose-bridge scar, fur-edged longcoat.',
+      'Defrocked Italian inquisitor purged by the Borgias, slicked black hair silvering at temples, pepper-grey beard, jaw burn-scar, hood down.',
+      'Sun-scarred Caribbean privateer turned vampire-killer, broad-shouldered with red-brown dreadlocks, lip-scar, cutlass at hip, tricorn knocked back on shoulders.',
+      'Irish brawler-priest, broken nose, calloused fists, close-cropped chestnut hair, full red-brown beard, leather skullcap snug, lapsed-cleric vestments.',
+      'Welsh moor-tracker, silent and gaunt, long iron-grey hair in a single braid down his back, weathered tan, longbow strapped across body, wide-brim hat.',
+      'Romani caravan-elder turned hunter, leathery sun-creased face, salt-and-pepper beard threaded with bone beads, dark eyes, rust-red cloth-wrap over hair.',
+      'Spanish flamenco-blade duelist, weathered olive skin, slicked black hair in a low tail, neat black mustache and short beard, crucifix at chest, bare-head.',
+      'Bohemian alchemist-hunter, gaunt with shaved temples and long top-knotted black hair, mercury-stained fingertips, dark smoked-glass goggles on his brow.',
+      'Carpathian woodsman, taciturn and broad, full ash-blond beard and shoulder-length tied-back hair, deep crow-foot wrinkles, leather skullcap, axe on hip.',
+      'Black Forest Imperial dragoon seconded to the vampire-hunt detail, broad-shouldered, neat blond mustache, fully bare-head with cropped sides, scarred jaw.',
+      'Anatolian dervish-hunter from a heretic order, lean and coiled, long jet-black hair under a tightly wound dark turban, kohl-rim eyes, twin sabers crossed.',
+      'Hessian deserter cuirassier turned freelance hunter, heavy-built and stoic, close-cropped iron-grey hair, mutton-chop sideburns, domed steel helm under arm.',
+      'Greek klepht mountain-bandit-turned-hunter, weathered olive skin with sun-creased smile-lines, long curly black hair bound back, silver-streaked beard, bare-head.',
+      'Mexican vaquero-hunter, sun-darkened skin with twin scars at the temple, long black braided hair under wide-brim sombrero pushed back, silver bolas at belt.',
+      'Scottish highlands rievier, broad-built and freckled, fiery red hair in a thick braid, full red beard, claymore strapped across back, bare-head in the cold.',
+      'Cathar wandering-hunter, last of a purged heresy, gaunt and ascetic, shaved head with a single dark cross-tattoo at the brow, grimoire chained to his belt.',
+      'Eastern-Orthodox staritz-hunter, ancient priest with waist-long white beard and white hair, sunken cheeks, leather-bound icon hanging at neck, hood down.',
+      'Ottoman janissary-deserter turned vampire-hunter, lean and dangerous, deep olive skin, slicked-back black hair, neat goatee, white turban-cloth wrapped low.',
+      'Portuguese cartographer-hunter, weathered tan, long pepper-grey hair tied loose, full grey beard, eye-patch over one socket, wide-brim leather field-hat.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 18-30 words. Weaves archetype-name + masculine build + visual signature into one flowing description — NEVER a JSON object, NEVER bullet-pointed sub-fields. ~40% explicitly state HOOD DOWN or BARE-HEAD. Strict gothic-period (1500s-1800s lineage). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_vhia_outfit_silhouette: {
+    format: 'simple',
+    theme: `HUNTER OUTFIT / SILHOUETTE descriptions for GothBot's vampire-hunter-in-action path — field-worn gothic-hunter kit. Each entry 18-30 words.
+
+⚠️ Each entry is ONE flowing prose sentence describing the outfit + silhouette + head-style — NOT a JSON object, NOT prefixed with a bracketed category header like [HOOD DOWN].
+
+⚠️ CHEST FULLY COVERED MANDATE — every outfit covers the chest fully (heavy armor / longcoat / chainmail / robes / cassock / brigandine / cuirass / gambeson). NEVER bare chest, NEVER shirtless, NEVER ripped-shirt-with-abs, NEVER open-coat-to-navel, NEVER sleeveless tank.
+
+⚠️ HEAD-STYLE VARIETY — across the batch, distribute roughly:
+  • ~32% HOOD DOWN — face fully visible, hair readable
+  • ~20% BARE-HEAD — specific hair-style stated (long silver / iron braid / cropped black / red-brown shoulder-length / etc.)
+  • ~16% WIDE-BRIM HAT — Tridentine priest-hat / cowboy-style / Witcher-broad-brim / leather field-hat / sombrero
+  • ~12% CLOTH-WRAP / SCARF / TURBAN over hair, leaving face visible
+  • ~12% LEATHER SKULLCAP / DOMED HELMET / METAL HELM
+  • ~8% HOOD UP but face lit and readable (kohl-rim eyes / jaw / mouth visible)
+
+OUTFIT LINEAGES (rotate widely across the batch):
+  • Belmont leather longcoat with brass-buckle chest-plate, garlic-braid bandolier, knee-high field-boots
+  • Witcher armored leather double-jerkin, steel pauldrons, dark fingerless gloves, sword-harness across back
+  • Van Helsing kit-laden duster, brass-buckle holsters, holster-belt with stakes + flasks, leather chest-piece
+  • Tridentine cassock with mail underlayer, leather pectoral cross, dark wide-brim hat, stake-rosary at belt
+  • Cossack fur-trimmed greatcoat, leather knee-boots, silver-cross sash, saber + pistols cross-belt
+  • Wallachian boyar fur-edged longcoat, embroidered chest-plate underneath, dark riding-boots, sword-belt
+  • Borgia exorcist black robes with silver-embroidered hem, fingerless leather gloves, hooded cowl
+  • Privateer-turned-hunter tropical longcoat with brass buttons, leather chest-plate, cross-belt of silver bullets
+  • Irish brawler-priest leather jerkin over chainmail shirt, leather greaves, holy-rune wrap-bracers
+  • Welsh moor-tracker oilskin longcoat with hood, leather hunting-vest, knee-boots, longbow + crossbow
+  • Romani caravan-hunter waxed-canvas coat with scrap-leather chest-piece, scarf + amulets, ankle-boots
+  • Spanish flamenco-blade dark-velvet doublet, silver-thread embroidery, knee-boots, cross-pendant at chest
+  • Bohemian alchemist long dust-grey duster over chemical-stained leather apron, brass goggles at brow
+  • Carpathian woodsman heavy fur-lined leather greatcoat, mail-shirt visible at collar, hatchet-belt
+  • Hessian dragoon cuirass over dark wool tunic, brass-buttoned greatcoat, riding-boots, sabretache at hip
+  • Anatolian dervish dark-indigo robes with leather chest-piece beneath, twin-saber cross-belt
+  • Greek klepht embroidered black wool coat over mail-shirt, embroidered waistcoat, calf-laced boots
+  • Mexican vaquero long brown leather duster, silver-conchoed chest-strap, riding-boots, sun-faded poncho
+  • Scottish rievier wool-tartan plaid wrapped across mail-shirt chest, leather doublet, knee-boots
+  • Cathar simple grey monk-robe over mail-shirt, leather cord-belt, leather sandals over knee-wraps
+  • Portuguese cartographer canvas longcoat over leather chest-piece, brass-instrument satchel, riding-boots
+
+EVERY outfit MUST:
+  - Cover the chest fully (heavy armor / longcoat / chainmail / robes / cassock)
+  - Have field-worn detail (dirt-streaked / dented / scuffed boots / scratched gauntlets / mud-caked / blood-faded)
+  - Define silhouette (longcoat billow / hood / sword-harness / cross-belt)
+  - State the head-style explicitly (HOOD DOWN / bare-head / wide-brim / cloth-wrap / leather skullcap / metal helm / hood up)
+
+ABSOLUTELY BANNED:
+  - NO bare chest / NO shirtless / NO ripped-shirt / NO open-to-navel / NO sleeveless tank-top
+  - NO modern clothing / NO jeans / NO sneakers / NO trench coat (no buttons through cocktail-coat)
+  - NO bishonen-pretty outfits / NO K-pop-idol stage costume
+  - NO bracketed category headers like [HOOD DOWN] — weave the head-style into the prose`,
+    touchpoints: [
+      'Belmont leather longcoat, brass-buckle chest-plate dented from claws, garlic-braid bandolier, knee-high scuffed boots, hood down revealing close-cropped hair.',
+      'Van Helsing kit-laden duster over leather chest-piece, holster-belt heavy with stakes and flasks, brass-buckle holsters, wide-brim leather hat pulled low.',
+      'Witcher armored double-jerkin with steel pauldrons scratched silver-bright, sword-harness across fully covered back, dark fingerless gloves, bare-head with silver hair.',
+      'Irish brawler-priest leather jerkin over chainmail shirt, holy-rune wrap-bracers, leather greaves mud-caked, leather skullcap tight over close-cropped chestnut hair.',
+      'Tridentine cassock with mail underlayer, leather pectoral cross, stake-rosary at belt, dark wide-brim hat tipped back, knuckled rosary visible.',
+      'Romani caravan-hunter waxed-canvas coat over scrap-leather chest-piece, amulets layered at collar, ankle-boots scuffed raw, rust-red cloth-wrap over salt-and-pepper hair.',
+      'Cossack fur-trimmed greatcoat buttoned tight over chest, silver-cross sash diagonal, saber and pistols on cross-belt, fur-edged shapka pulled low over shaved temples.',
+      'Borgia exorcist black robes with silver-embroidered hem, fingerless leather gloves, deep hood up but candle-light catches jaw, mouth, and kohl-rim eyes.',
+      'Wallachian boyar fur-edged longcoat over embroidered brigandine, dark riding-boots scuffed to grey, sword-belt heavy with sabre, bare-head with long dark-brown tied-back hair.',
+      'Spanish flamenco-blade dark-velvet doublet over chainmail, silver-thread embroidery, knee-boots dust-streaked, cross-pendant at chest, bare-head with slicked black hair.',
+      'Welsh moor-tracker oilskin longcoat with hood pushed back, leather hunting-vest over wool tunic, knee-boots mud-caked, longbow strapped across back, iron-grey braid.',
+      'Bohemian alchemist long dust-grey duster over chemical-stained leather apron, brass goggles at brow, hood-up cowl shadows half the face but candle-light catches kohl eyes.',
+      'Carpathian woodsman heavy fur-lined leather greatcoat over mail-shirt, leather skullcap snug over ash-blond braid, hatchet-belt at waist, knee-boots laced tight.',
+      'Hessian dragoon cuirass over dark wool tunic, brass-buttoned greatcoat slung open at the sides, riding-boots, domed steel helm under one arm, bare-head with cropped grey hair.',
+      'Anatolian dervish dark-indigo robes with leather chest-piece beneath, twin-saber cross-belt, dark turban wrapped tight low over the brow leaving kohl-rim eyes visible.',
+      'Greek klepht embroidered black wool coat over mail-shirt, embroidered waistcoat, calf-laced boots, silver-streaked beard, bare-head with long curly bound-back hair.',
+      'Mexican vaquero long brown leather duster, silver-conchoed chest-strap over a faded poncho, riding-boots dusty, wide-brim sombrero pushed back on the cord behind the neck.',
+      'Scottish rievier wool-tartan plaid wrapped across mail-shirt chest, leather doublet beneath, knee-boots laced, claymore on back, bare-head with red braid down the spine.',
+      'Cathar simple grey monk-robe over mail-shirt, leather cord-belt knotted, leather sandals over knee-wraps, hood down revealing shaved head and dark brow-cross tattoo.',
+      'Portuguese cartographer canvas longcoat over leather chest-piece, brass-instrument satchel diagonal, riding-boots scuffed, wide-brim leather field-hat pushed back, eye-patch visible.',
+      'Ottoman janissary-deserter dark-indigo kaftan over chainmail shirt, silver-buttoned closure, leather sword-belt with yataghan, white turban-cloth wrapped low over slicked-back hair.',
+      'Eastern-Orthodox staritz-hunter heavy black wool cassock over chainmail, leather-bound icon hanging at neck, knotted prayer-rope at belt, hood down revealing waist-long white beard.',
+      'Caribbean privateer-turned-hunter long red coat over leather chest-piece, brass-buttoned closure, cross-belt of silver-shot, knee-boots salt-stained, tricorn knocked back on shoulders.',
+      'Belmont leather longcoat short-cut over chain-vest, leather bracers etched with crosses, knee-high field-boots, whip coiled at hip, leather skullcap snug over close-cropped copper hair.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 18-30 words. Weaves outfit + silhouette + head-style into one flowing description — NEVER a JSON object, NEVER bracketed-headed like [HOOD DOWN]. Every entry covers the chest fully. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT goth-male-full-body-axis path (2026-05-22 R2 RESET).
+  // Elite VAMPIRE HUNTER full-body cinematic poster moment. John Wick of
+  // vampire hunters — Belmont / Witcher / Van Helsing / Blade / Hellsing /
+  // Underworld Death-Dealer / Castlevania Trevor / Constantine.
+  // STRAPPED with multiple visible weapons. Cool / mysterious / forboding.
+  // NEVER vampires/warlocks/mages/liches/demonologists.
+  // ──────────────────────────────────────────────────────────────────
+
+  gothbot_gmfb_character_archetype: {
+    format: 'simple',
+    theme: `ELITE VAMPIRE HUNTER ARCHETYPES for GothBot's goth-male-full-body-axis path. Each entry is ONE 18-28 word prose sentence describing a CLASSIC-LORE vampire hunter — the John Wick of vampire hunters. Cool, mysterious, forboding, badass. Strong masculine build, ANY ADULT AGE.
+
+⚠️ AGE DISTRIBUTION MANDATE (critical — pool was over-clustering at "old grizzled veteran"):
+  • ~30% YOUNG (20s to early 30s) — sharp, lean, dangerous, fresh, hungry, prodigy, dark-haired, clean-shaven or light stubble
+  • ~45% PRIME (mid-30s to mid-40s) — peak professional, methodical, focused, full-color hair, clean-shaven or short trimmed beard
+  • ~25% VETERAN (45+) — weathered, scarred, weary, salt-and-pepper or silver-streaked hair, full beard OK
+  Do NOT default every entry to "weathered veteran" / "battle-scarred elder" / "weary hunter." Mix the age register across the batch.
+
+⚠️ ONLY vampire HUNTERS — NEVER vampires, NEVER warlocks, NEVER mages, NEVER liches, NEVER demonologists, NEVER cultists, NEVER necromancers. He is the GUY WHO KILLS vampires.
+
+⚠️ Each sentence weaves: hunter lineage / archetype name + masculine build cue + identity vibe (forboding / cool / methodical / focused / elite-professional / hungry / lethal). Output ONLY a JSON array of plain strings.
+
+REFERENCE LINEAGES (vary widely):
+  • Belmont-line whip-hunter (Castlevania-canonical)
+  • Witcher of the School of Wolf / School of Cat / School of Viper (vampire-contract trade)
+  • Van Helsing tradition occult-professor-warrior
+  • Blade-coded dhampir vampire-killer
+  • Hellsing-style elite Vatican-occult vampire-hunter
+  • Castlevania Trevor / Richter / Soma-coded combat hunter
+  • Underworld Death-Dealer (male, post-vampire mortal)
+  • Constantine occult-investigator
+  • Tridentine inquisitor-hunter with stake-rosary
+  • Wallachian boyar turned vampire-killer
+  • Cossack vampire-rider in fur-coat
+  • Carpathian-mountain woodsman tracker
+  • Spanish flamenco rapier-hunter
+  • Borgia-purged exorcist
+  • Pre-WWII London occult investigator with revolver
+  • Ottoman janissary-deserter hunter
+  • Edwardian period-amateur vampire-hunter
+  • Romani caravan-elder bone-knife hunter
+  • Welsh-moor longbow tracker
+  • Irish brawler-priest with stakes
+  • Hessian-deserter heavy-cuirassier hunter
+  • Hungarian honved-hussar hunter
+  • Greek-klepht silver-pistol hunter
+  • Mexican-vaquero silver-bola hunter
+  • Caribbean-privateer hunter
+  • Eastern-Orthodox staritz hunter
+  • Norse-skald axe-and-rune hunter
+  • Scottish-highland claymore hunter
+  • Bohemian alchemist-hunter
+  • Cathar last-of-purged-heresy hunter
+
+ABSOLUTELY BANNED:
+  - NO vampires / NO warlocks / NO mages / NO liches / NO demonologists
+  - NO bishonen / NO femboy / NO pretty-boy / NO androgynous / NO K-pop-idol
+  - NO emo / NO smudgy-eyeliner / NO bangs-over-eyes
+  - NO modern-tactical-only descriptions (period-grounded preferred)
+  - NO blood / NO gore`,
+    touchpoints: [
+      // YOUNG (~30%) — sharp, lean, dangerous, fresh, hungry, dark-haired, clean-shaven or light stubble
+      'Young Belmont-line whip-prodigy in his late twenties, sharp lean build with cropped black hair, clean-shaven jaw and hungry predator gaze.',
+      'Fresh-promoted Hellsing operative in his late twenties, lean dangerous build in black leather, jet-black slicked-back hair, clean-shaven sharp jaw.',
+      'Witcher School of Cat trainee in his early thirties, lean wiry build with cropped dark hair and faint stubble, cat-slit amber eyes burning hungry.',
+      'Young Constantine-coded London occult-investigator in his early thirties, lean cynical build in dark coat, dark messy hair and clean-shaven jaw.',
+      'Underworld Death-Dealer rookie in his late twenties, lean broad-shouldered post-vampire mortal with cropped black hair, clean-shaven, twin pistols at thighs.',
+      'Young Blade-coded dhampir in his late twenties, lean cold-cut professional with shaved scalp, clean-shaven jaw, dark glasses pushed up on forehead.',
+      'Sharp-jawed prodigy vampire-hunter in his late twenties, lean dangerous build, dark close-cropped hair and faint stubble, intense focused gaze.',
+      'Young Spanish flamenco-blade duelist in his early thirties, lean lithe build with slicked black hair tied in a low tail, clean-shaven jaw, sharp dark eyes.',
+      'Young Tridentine inquisitor-novice in his late twenties, lean ascetic build in dark cassock, cropped chestnut hair, clean-shaven sharp jaw, burning eyes.',
+      'Young Wallachian boyar-heir turned vampire-killer in his early thirties, broad-shouldered cold focus with dark shoulder-length hair, neat short beard.',
+      'Young Hessian dragoon-deserter in his late twenties, lean lethal vampire-hunter with neat cropped blond hair, clean-shaven, mutton-chop sideburns.',
+      'Fresh Edwardian-period amateur vampire-hunter in his early thirties, gentleman in tweed coat with dark side-parted oil-slicked hair, neat moustache.',
+      'Sharp-eyed Ottoman janissary-deserter in his late twenties, lean dangerous build with deep olive skin and slicked-back jet-black hair, clean-shaven.',
+      'Young Carpathian woodsman-tracker in his early thirties, broad-built reader of spoor with chestnut shoulder-length hair, neat short beard, focused.',
+      // PRIME (~45%) — peak professional, methodical, focused, full-color hair, clean-shaven or short trimmed beard
+      'Belmont-line whip-hunter at peak in his late thirties, broad-shouldered cursed-bloodline professional with shoulder-length dark hair, neat short beard.',
+      'Van Helsing tradition Dutch occult-professor-warrior at peak, mid-thirties methodical scholar with neat dark beard and kit-laden hunter gravitas.',
+      'School of Wolf Witcher mutant at peak, late thirties killer with shoulder-length ash-blond hair tied back, neat short beard, cat-slit amber eyes.',
+      'Hellsing Vatican-occult elite hunter at peak, late thirties focused predator in long black coat with neat dark hair and clean-shaven sharp jaw.',
+      'Underworld Death-Dealer veteran at peak, early forties broad-shouldered with cropped black hair, faint stubble, twin large pistols at thighs.',
+      'Castlevania Trevor-Belmont combat hunter at peak, late thirties scarred professional with brushed-back dark hair, neat short beard, focused intense gaze.',
+      'Wallachian boyar turned vampire-killer at peak, early forties cold predator in fur-edged longcoat, shoulder-length dark hair tied at nape, short beard.',
+      'Constantine-coded occult investigator at peak, late thirties London cynic in dark coat with messy dark hair, clean-shaven, cigarette-burn fingertips.',
+      'Cossack vampire-rider hetman at peak, late thirties broad-built warrior with oseledets topknot and neat dark drooping moustache, shaved temples.',
+      'Hungarian honved-hussar hunter at peak, early forties cavalry-vet in decorated dolman with brushed-back dark hair and neat dark moustache.',
+      'Castlevania Alucard-coded dhampir hunter at peak, late thirties professional with long shoulder-length brushed-back dark-silver hair, clean-shaven.',
+      'Pre-WWII London occult investigator at peak, early forties Edwardian gentleman in trenchcoat with side-parted dark hair, neat short beard.',
+      'Romani caravan-hunter at peak, late thirties weathered killer with shoulder-length dark hair tied back, neat short black beard, bone-knife at belt.',
+      'Borgia-purged Italian exorcist at peak, early forties defrocked inquisitor with slicked black hair, neat short beard, engraved silver at his belt.',
+      'Mexican vaquero vampire-hunter at peak, late thirties sun-darkened killer with dark shoulder-length hair under sombrero, neat dark beard, silver bolas at belt.',
+      'Norse-skald axe-and-rune hunter at peak, early forties broad warrior with chestnut shoulder-length braid and full chestnut beard, rune-tattoo at temple.',
+      'Caribbean privateer-turned-hunter at peak, late thirties sun-scarred broad-shouldered killer with red-brown dreadlocks tied back, neat short beard.',
+      'Scottish-highland claymore hunter at peak, early forties broad-built clansman with fiery red beard cleanly trimmed, dark red hair tied back.',
+      // VETERAN (~25%) — weathered, scarred, weary, salt-and-pepper or silver-streaked hair, full beard OK
+      'Veteran Belmont-line whip-hunter in his fifties, weathered scarred professional with silver-streaked dark hair and full silver-shot beard, cursed-bloodline gravity.',
+      'Van Helsing tradition Dutch occult-professor-warrior veteran, late fifties methodical with iron-grey hair and full pepper-grey beard, kit-laden gravitas.',
+      'Veteran Tridentine inquisitor-hunter, fifties gaunt padre with close-cropped steel-grey hair, full silver-streaked beard, hollow-eyed from thirty exorcisms.',
+      'Eastern-Orthodox staritz-hunter veteran, ancient priest in his sixties with waist-long white beard and white hair, leather-bound icon at neck.',
+      'Veteran Welsh-moor longbow tracker, fifties silent gaunt killer with iron-grey braid down his back and full silver-streaked beard, weathered tan skin.',
+      'Veteran Cossack vampire-rider hetman, late fifties broad-built haunted warrior with oseledets topknot and iron-grey drooping moustache, weathered.',
+      'Veteran Irish brawler-priest, fifties broken-nosed hardened hunter with close-cropped silver-grey hair and full silver-streaked beard, calloused fists.',
+      'Veteran Bohemian alchemist-hunter, sixties gaunt with shaved temples and iron-grey top-knotted hair, mercury-stained fingertips, full silver beard.',
+      'Veteran Cathar last-of-purged-heresy hunter, fifties gaunt ascetic with shaved silver scalp and dark cross-tattoo at brow, full silver-grey beard.',
+      'Veteran Hessian dragoon-deserter cuirassier, fifties heavy-built stoic vampire-hunter with close-cropped iron-grey hair and mutton-chop silver sideburns.',
+      'Veteran Castlevania Trevor-Belmont elder, fifties scarred professional with brushed-back silver-shot dark hair and full pepper-grey beard, weary gravity.',
+      'Veteran Carpathian woodsman-tracker, sixties broad-built reader of spoor with iron-grey braid and full silver beard threaded with bone beads.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 18-28 words. ONE elite vampire HUNTER archetype + masculine build + identity vibe woven into flowing description. NEVER a vampire/warlock/mage/lich/demonologist — only HUNTERS. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_gmfb_body_pose: {
+    format: 'simple',
+    theme: `COOL POSTER POSES for GothBot's goth-male-full-body-axis elite vampire-hunter path. Each entry is ONE 18-28 word prose sentence describing a FULL-BODY cinematic poster-moment pose — the John Wick of vampire hunters mid-prep / loaded readiness / forboding stillness.
+
+⚠️ MOVIE-POSTER MOMENT, not action mid-strike. Cool, mysterious, forboding. He is BETWEEN actions, or about to act. Body language reads as deadly stillness or loaded readiness.
+
+⚠️ Output ONLY a JSON array of plain strings. No JSON objects, no bracketed prefixes.
+
+POSE CATEGORIES (rotate widely):
+  • Standing tall against gothic backdrop, weight on one leg, weapons visibly strapped
+  • Leaning shoulder against pillar / archway / wall, weapon at low ready
+  • Half-turned glancing back over shoulder, coat billowing, weapons visible
+  • Descending stone stairs into shadow, silhouette cut against light source
+  • Standing in doorway backlit, weapons cross-belted, face partially in shadow
+  • Mid-load of crossbow, body still, eyes focused on the weapon
+  • Tightening cross-belt strap mid-prep, weapons visibly strapped
+  • Stepping out of gothic shadow into moonlight, mid-stride
+  • Slowly drawing pistol or blade mid-step, deliberate calm
+  • Sharpening blade on whetstone, focused work (cool hunter pose, NOT contemplative-emo)
+  • Cocking flintlock or revolver mid-stride
+  • Standing on a stone bridge or rooftop edge, looking out, weapons strapped
+  • Holstering pistol after a clean draw, calm pose
+  • One foot up on a stone step, surveying the scene, weapon resting on raised knee
+  • Striking flint to light a torch, face lit by new flame
+  • Reading a tattered note or wanted-poster, weapons visibly strapped
+  • Wiping blade clean with a black cloth (NO blood — calm post-action pose)
+  • Standing over a stone gravestone, head bowed slightly, weapons strapped
+  • Stepping over a fallen banner / overturned cart, half-turn
+  • Pulling hood down to reveal face, mid-step into the scene
+  • Tying a leather cord at wrist, mid-prep
+  • Stowing a silver coin or pendant in a pouch, mid-pose
+
+EVERY pose tells a story: he IS doing something — but it's the cool moment, not the strike. Weapons VISIBLE in the pose.
+
+⚠️ ABSOLUTELY BANNED:
+  - NO just-standing-still / NO hands-on-hips / NO heroic-weapon-aloft / NO modeling-pose
+  - NO emo slumped / NO leaning-against-wall-melancholy / NO eyes-closed-meditating
+  - NO mid-combat-strike / NO mid-firing / NO blood / NO gore
+  - NO seated-on-throne / NO seated-cross-legged-meditative / NO contemplative-aristocrat
+  - NO pouring-chalice / NO scrying-mirror / NO ritual-sigil-drawing (he is a HUNTER, not a warlock)`,
+    touchpoints: [
+      'Standing tall against a fog-bound cobblestone alley, weight on one leg, coat billowing, crossbow on back and twin pistols cross-belted, gaze locked off-frame.',
+      'Half-turned glancing back over his shoulder mid-step, longcoat snapping behind him, sword at hip, daggers cross-belted, eyes catching lantern-light.',
+      'Descending stone cathedral steps into shadow, silhouette cut against torchlight from below, weapons visibly strapped, coat caught mid-step.',
+      'Standing in a crypt-gate doorway backlit by moonlight, twin large pistols holstered at thighs, sword across back, face half in shadow.',
+      'Mid-load of an iron-stirrup crossbow, body still and focused, fingers placing a silver-tipped bolt, twin pistols holstered at his hip.',
+      'Tightening the strap of a leather cross-belt over his coat, mid-prep, daggers and stake-bandolier visibly arrayed across his chest.',
+      'Stepping out of gothic shadow into a pool of gas-lamp light, mid-stride, longcoat flowing, crossbow on back and revolver in shoulder-holster.',
+      'Slowly drawing a silver dagger from a thigh-sheath mid-step, deliberate calm, twin pistols visible at his belt, focused gaze off-frame.',
+      'Sharpening a curved blade on a whetstone balanced on his knee, focused work-pose, weapons visibly strapped across body, calm intensity.',
+      'Cocking a long-barrel revolver mid-stride down a cobblestone alley, twin holsters at thighs, sword at hip, eyes locked forward.',
+      'Standing on a rooftop edge surveying the gothic city below, weapons strapped across body, coat billowing in the night wind, silent watch.',
+      'Holstering a flintlock pistol after a clean draw, calm post-draw pose, the second pistol still cross-belted, blade at hip.',
+      'One foot raised on a stone step, surveying the village square ahead, repeating crossbow resting on the raised knee, twin pistols on cross-belt.',
+      'Striking flint to a pitch-tipped torch, face suddenly lit by new flame, twin pistols visible at his belt, sword strapped across back.',
+      'Reading a tattered wanted-poster pinned to a gothic post, weapons visibly strapped across body, gas-lamp glow catching his weathered face.',
+      'Wiping a curved silver blade clean with a black cloth, calm post-action pose, NO blood visible, twin pistols still cross-belted, focused.',
+      'Standing over a moss-grown gravestone, head bowed slightly to read the inscription, weapons visibly strapped, lantern in left hand.',
+      'Stepping over a fallen banner in a cobblestone square, mid-step, twin pistols cross-belted and crossbow on back, half-turn back to camera.',
+      'Pulling his hood down to reveal weathered scarred face, mid-step into a moonlit cathedral square, weapons visibly strapped at body.',
+      'Tying a leather cord at his wrist mid-prep, weapons cross-belted across torso, calm focused pose, gothic alleyway behind him.',
+      'Loading a silver-tipped bolt into a hand-cocked crossbow, focused calm, twin pistols cross-belted at hip, blade across back.',
+      'Lighting a hand-rolled cigarette with a struck match, face lit by flame, twin holsters at thighs and silver dagger at hip.',
+      'Adjusting a stake-bandolier across his chest mid-prep, mid-step into a fog-bound street, twin pistols visible, focused gaze.',
+      'Standing on a stone bridge over fog-filled chasm, mid-stride, crossbow on back and twin pistols cross-belted, coat billowing.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 18-28 words. ONE cool POSTER-MOMENT pose with WEAPONS VISIBLY STRAPPED. Movie-poster gravity. Never just-standing-still / never modeling-pose / never emo / never contemplative-aristocrat / never mid-strike. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_gmfb_scene_context: {
+    format: 'simple',
+    theme: `GOTHIC URBAN SCENE CONTEXTS for GothBot's goth-male-full-body-axis elite vampire-hunter path. Each entry is ONE 18-28 word prose sentence describing the GOTHIC URBAN / CATHEDRAL / CRYPT / CASTLE-GATE / CHURCHYARD scene around the hunter.
+
+⚠️ Setting is GOTHIC URBAN — cobblestone streets / cathedral steps / crypt entrances / castle gates / village squares / rooftops / alleys / churchyards / fog-bound bridges. NEVER throne-room / NEVER ritual-sigil-floor / NEVER scrying-mirror / NEVER altar-with-tome (that's warlock register, not hunter register).
+
+⚠️ Output ONLY a JSON array of plain strings.
+
+CATEGORIES (rotate widely):
+  • Cobblestone alleyway with oil-lamp at far end and leaning gothic houses
+  • Cathedral steps under colossal arched doorway with carved gargoyles
+  • Crypt-gate iron grille ajar, mossy stone steps descending into dark
+  • Castle gate with portcullis half-raised, weathered stone gatehouse
+  • Village square at midnight with shuttered timber-and-plaster houses
+  • Cobblestone bridge over fog-filled chasm or moat
+  • Rooftop overlook of slate tiles with chimney-stacks
+  • Churchyard with leaning tombstones and iron-fence rim
+  • Crossroads with rusted gibbet and weathered stone signpost
+  • Wattle-and-daub gothic inn with shuttered windows and hanging sign
+  • Cobblestone street at night with gas-lamp pools of light
+  • Cathedral nave interior with fractured stained glass and candle-stand
+  • Catacomb stairs with sconces in carved alcoves
+  • Stone bridge over moon-silvered black water
+  • Plague-village abandoned square with chalk-marks on doors
+  • Wallachian-castle inner-courtyard with weathered stone wall
+  • Cliff-edge gothic chapel under stormy sky
+  • Stone watchtower stairs winding up
+
+ABSOLUTELY BANNED:
+  - NO throne / NO altar-with-tome / NO ritual-sigil-floor / NO scrying-mirror (warlock register)
+  - NO modern setting (no gas station / no street with cars)
+  - NO bright daylight (this is gothic-night register)
+  - NO interior boudoir / NO interior bedchamber (he's a hunter, not a lord)`,
+    touchpoints: [
+      'Narrow cobblestone alleyway between leaning gothic houses, single oil-lamp at the far end, gutter-iron grates underfoot, fog rolling at boot-height.',
+      'Cathedral steps under colossal arched doorway, carved gargoyles flanking the entrance, candlelight pouring through stained glass behind him.',
+      'Crypt-gate iron grille hanging ajar on rusted hinges, mossy stone steps descending into darkness, weathered stone arch above.',
+      'Castle gate with portcullis half-raised, weathered stone gatehouse with arrow-slits, courtyard beyond visible only as shadow.',
+      'Cobblestone village square at midnight, shuttered timber-and-plaster houses ringed around, central well with iron crank.',
+      'Stone bridge over a fog-filled chasm, weathered parapet, far end disappearing into mist, single lantern marking the crossing.',
+      'Slate-tile rooftop overlook of a gothic city, chimney-stacks and gabled gables silhouetted against a moonlit sky.',
+      'Churchyard with leaning tombstones at varied angles, iron-fence rim, scattered fallen offerings, cathedral spire rising behind.',
+      'Crossroads with rusted gibbet swaying, weathered stone signpost pointing four directions, gnarled tree at the verge.',
+      'Cobblestone street at night, brass gas-lamps casting overlapping pools of warm light on wet cobbles, gothic timber houses leaning in.',
+      'Cathedral nave interior with fractured stained glass at the apex, candle-stand ranks burning low, fallen pews scattered.',
+      'Catacomb stairs winding down, sconces in carved alcoves casting orange light on wet stone walls, skull-niches at the bends.',
+      'Stone bridge over moon-silvered black water, weathered parapets carved with worn gothic figures, mist rising from the surface.',
+      'Plague-village abandoned square with white chalk-marks on every door, weathered shutters closed tight, single weathercock turning.',
+      'Wallachian-castle inner-courtyard with weathered stone walls, broken statuary, single torch-bracket burning, dark archway beyond.',
+      'Cliff-edge gothic chapel under stormy sky, weathered stone walls, single cross-window lit from within, jagged rocks below.',
+      'Stone watchtower interior, winding stairs spiraling up around a central pillar, arrow-slit windows letting in shafts of moonlight.',
+      'Cobblestone harbor street at night, gothic warehouses on one side, dark water beyond a stone quay, gas-lamps reflecting.',
+      'Ruined monastery half-collapsed gothic arches, scattered stone-rubble, fallen-cross over a weathered altar in the deeper space.',
+      'Wattle-and-daub gothic inn with iron-banded door, hanging sign creaking, shuttered upper windows, lantern by the door.',
+      'Gas-lit Edwardian London street, foggy cobbles, hansom cab silhouette in the mist far behind him, gothic-revival storefront.',
+      'Cemetery iron-gate with weathered brass lock, gravestones extending behind, gnarled oak at the gate, moonlight breaking through.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 18-28 words. ONE gothic urban / cathedral / crypt / churchyard / castle-gate scene context. NEVER throne / altar / ritual-sigil / scrying-mirror (warlock register banned). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_gmfb_outfit_silhouette: {
+    format: 'simple',
+    theme: `HUNTER OUTFIT + STRAPPED WEAPON-HARNESS for GothBot's goth-male-full-body-axis elite vampire-hunter path. Each entry is ONE 18-30 word prose sentence describing the full-body hunter outfit + at least 2-3 weapons visibly strapped on the silhouette.
+
+⚠️ CHEST FULLY COVERED — leather longcoat / brigandine / chainmail / wool greatcoat / trenchcoat / tactical-mythic black leather. NEVER bare chest, NEVER shirtless, NEVER cleavage-of-pecs.
+
+⚠️ MULTI-WEAPON STRAPPED — every outfit explicitly mentions 2-3 weapons strapped on the silhouette: crossbow on back / twin pistols cross-belt / sword on back or hip / daggers at thighs / stake-bandolier / silver-cross sash / holy-water flasks on belt. He looks LOADED.
+
+⚠️ Output ONLY a JSON array of plain strings.
+
+LINEAGE EXAMPLES (period-mythic blend OK, 1500s-modern-mythic):
+  • Belmont-style brass-buckle leather longcoat, vampire-killer whip + daggers + holy symbol
+  • Witcher armored leather double-jerkin, twin-sword harness on back (silver + steel) + daggers at thighs
+  • Van Helsing kit-laden duster, brass-buckle holsters with twin pistols + stakes-and-flasks belt + crossbow on back
+  • Black tactical leather longcoat (Hellsing-coded), twin large pistols holstered + sword across back + silver dagger
+  • Edwardian Norfolk-jacket with cross-belts of stakes + revolver in shoulder-holster + blessed kukri on belt
+  • London-occult-investigator long black trenchcoat with double-barrel shotgun strapped + silver knife at hip
+  • Cossack fur-trimmed greatcoat, sabre at hip + twin flintlocks cross-belted + silver-cross sash
+  • Wallachian fur-trimmed kontush over chainmail, twin pistols + sabre + silver-chain at neck
+  • Tridentine cassock with hidden mail underlayer, stake-rosary + hidden dagger at sleeve + repeating crossbow
+  • Hessian dragoon greatcoat with brass buttons, sabre + twin pistols + stake-bandolier
+  • Underworld-Death-Dealer long black leather coat over brigandine, twin large pistols at thighs + sword on back
+  • Spanish flamenco-blade dark-velvet doublet over chainmail, rapier at hip + twin pistols + holy-water flask
+
+EVERY outfit MUST:
+  - Cover the chest fully (no bare-pecs)
+  - Have 2-3 weapons visibly STRAPPED on the silhouette (named in the entry)
+  - Define silhouette (longcoat billow / coat / brigandine / weapon-harness)
+  - Look field-worn but ELITE-PROFESSIONAL (not scuffed-shabby — dirty-but-deadly)
+
+ABSOLUTELY BANNED:
+  - NO bare chest / NO shirtless / NO ripped-shirt / NO cleavage-of-pecs
+  - NO modern clothing (no jeans / no sneakers / no hoodies)
+  - NO bishonen-pretty outfits / NO K-pop-idol stage costume / NO emo styling
+  - NO unarmored softness (he is LOADED, not pretty)`,
+    touchpoints: [
+      'Belmont brass-buckle leather longcoat over chain-vest, vampire-killer whip coiled at hip, silver dagger cross-belted, holy-symbol pendant at his throat.',
+      'Witcher armored leather double-jerkin with steel pauldrons, twin-sword harness on back (silver + steel blades), daggers sheathed at both thighs.',
+      'Van Helsing kit-laden brown duster, brass-buckle holsters with twin flintlock pistols, stake-and-flask belt diagonal, hand-cocked crossbow on back.',
+      'Black tactical leather longcoat (Hellsing-coded), twin large engraved pistols holstered at thighs, sword across back in matte sheath.',
+      'Edwardian tweed Norfolk-jacket over chest-piece, twin cross-belts of wooden stakes, revolver in shoulder-holster, blessed kukri on hip-belt.',
+      'London-occult-investigator long black trenchcoat over wool shirt, double-barrel shotgun strapped under coat, silver bowie-knife at hip, holy-water flask.',
+      'Cossack fur-trimmed greatcoat buttoned tight, sabre at hip, twin flintlocks cross-belted, silver-cross sash diagonal across chest.',
+      'Wallachian fur-trimmed kontush over chainmail shirt, twin pistols at hip, sabre on cross-belt, silver chain at neck with cross pendant.',
+      'Tridentine cassock with hidden mail underlayer, stake-rosary wrapped at belt, hidden silver dagger at sleeve, repeating crossbow slung diagonal.',
+      'Hessian dragoon brass-buttoned greatcoat over wool tunic, sabre at hip, twin pistols cross-belted, stake-bandolier across chest.',
+      'Underworld-Death-Dealer long black leather coat over brigandine, twin large pistols holstered at thighs, sword on back, silver-tipped knife at hip.',
+      'Spanish flamenco-blade dark-velvet doublet over chainmail, rapier at hip, twin small pistols cross-belted, holy-water flask at his throat.',
+      'Constantine-coded long black coat over dark waistcoat, revolver in shoulder-holster, holy-water flask at belt, silver dagger at hip.',
+      'Carpathian woodsman fur-lined leather greatcoat over mail, hand-axe at belt, twin pistols cross-belted, silver-tipped pike slung over shoulder.',
+      'Welsh-moor oilskin longcoat over leather hunting-vest, longbow across back, twin daggers at thighs, hand-crossbow holstered at hip.',
+      'Irish brawler-priest leather jerkin over chainmail, holy-rune wrap-bracers, twin stakes cross-belted, silver dagger at hip, repeater pistol holstered.',
+      'Mexican vaquero long brown leather duster over chest-piece, silver-conchoed cross-belt of bolas, twin silver-shot revolvers at hip, blessed bowie-knife.',
+      'Ottoman janissary-deserter dark-indigo kaftan over chainmail, twin yataghans crossed at hip, silver-flintlock pistol holstered, prayer-rope at belt.',
+      'Norse-skald wool-and-fur coat over mail, rune-etched hand-axe at hip, silver-tipped pike across back, twin daggers cross-belted at chest.',
+      'Scottish wool-tartan plaid wrapped over mail-shirt, claymore strapped across back, twin flintlocks at hip, dirk in boot-sheath, silver-cross.',
+      'Edwardian period-amateur tweed coat over silk waistcoat, twin cross-belts of wooden stakes, revolver in shoulder-holster, silver kukri at hip.',
+      'Castlevania Trevor-coded leather longcoat over brigandine, vampire-killer whip coiled at hip, twin daggers cross-belted, silver dagger at thigh.',
+      'Bohemian alchemist long dust-grey duster over chemical-stained leather apron, brass-goggles at brow, twin flintlocks at hip, silver-tipped bolts in side-quiver.',
+      'Pre-WWII London occult-investigator long black trenchcoat over tweed waistcoat, twin pistols in twin shoulder-holsters, silver knife at hip, stakes cross-belted.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 18-30 words. ONE hunter outfit + 2-3 STRAPPED weapons named in the silhouette. NEVER bare chest. NEVER modern clothing. NEVER emo or pretty. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_gmfb_weapon_or_object: {
+    format: 'simple',
+    theme: `MULTI-WEAPON ARSENAL for GothBot's goth-male-full-body-axis elite vampire-hunter path. Each entry is ONE 18-28 word prose sentence describing the FULL weapon-loadout he carries — at least 2-3 classic vampire-hunter weapons explicitly named with how they're carried in the frame.
+
+⚠️ MULTIPLE WEAPONS VISIBLE — he is LOADED. Examples: twin pistols cross-belted + sword at hip + dagger at thigh / crossbow on back + twin daggers + holy-water flask / sabre on cross-belt + revolver in shoulder-holster + silver kukri at hip.
+
+⚠️ Output ONLY a JSON array of plain strings.
+
+WEAPON LIBRARY (classic vampire-hunter arsenal — period-mythic blend, 1500s-modern):
+  • Castlevania Vampire-Killer whip (silver-linked leather lash, gold-cross pommel)
+  • Hand-cocked iron-stirrup crossbow with silver-tipped bolts
+  • Repeating crossbow with bolt-magazine top-mounted
+  • Twin flintlock dueling pistols with engraved walnut grips
+  • Twin wheellock short-pistols
+  • Long-barrel period revolvers (1850s-style, silver-engraved)
+  • Twin large pistols (Hellsing/Underworld-coded mythic-modern)
+  • Cross-pommel sword / cruciform-hilted bastard sword
+  • Silver-bladed scythe with rune-etched curve
+  • Silver dagger pair (cross-pommel hilts)
+  • Twin silver-blessed daggers
+  • Silver-tipped quarterstaff
+  • Stake-bandolier with wooden stakes
+  • Holy-water flasks at belt
+  • Silver-shot blunderbuss
+  • Double-barrel shotgun (Victorian/Edwardian-period)
+  • Cossack sabre + dueling pistol pair
+  • Wallachian sabre
+  • Spanish rapier
+  • Hungarian honved-hussar sabre
+  • Norse rune-etched hand-axe
+  • Scottish claymore
+  • Yataghan twin set
+  • Bolas with silver weights (Mexican vaquero)
+
+EVERY entry: 2-3 specific named weapons + how each is carried (across back / cross-belted / holstered / sheathed / at hip).
+
+ABSOLUTELY BANNED:
+  - NO modern firearms beyond what fits gothic-mythic register (no AR-15, no Glock — period or mythic-elite-modern only)
+  - NO grimoire / NO staff / NO chalice / NO hourglass / NO scrying-mirror — he is a HUNTER, not a warlock
+  - NO single weapon only — must be MULTI-WEAPON arsenal`,
+    touchpoints: [
+      'Castlevania Vampire-Killer whip coiled at his hip with gold-cross pommel, silver dagger cross-belted at chest, holy-symbol pendant at throat.',
+      'Hand-cocked iron-stirrup crossbow slung diagonal across back with silver-tipped bolts in side-quiver, twin flintlock pistols cross-belted, dagger at thigh.',
+      'Twin engraved flintlock dueling pistols in brass-buckle holsters at hip, cross-pommel saber sheathed at back, holy-water flask on belt.',
+      'Repeating crossbow with top-mounted bolt-magazine slung on his back, twin daggers cross-belted at chest, blessed silver kukri at hip.',
+      'Twin large engraved long-barrel revolvers holstered at his thighs (Hellsing-coded), cross-pommel sword strapped across back, silver-tipped knife at hip.',
+      'Cossack sabre at hip with engraved hilt, twin wheellock pistols cross-belted in worn leather holsters, silver-cross sash diagonal.',
+      'Twin silver-blessed daggers with cross-pommel hilts at his hips, hand-crossbow holstered at lower back, stake-bandolier diagonal across chest.',
+      'Silver-bladed scythe with rune-etched curve slung on back, twin flintlock pistols at hip, holy-water flask at belt, silver dagger at thigh.',
+      'Edwardian-period revolver in shoulder-holster, blessed kukri at hip, double-barrel shotgun strapped under his long trenchcoat at hip.',
+      'Cruciform-hilted bastard sword in leather scabbard at back, twin pistols cross-belted, repeating crossbow holstered at the side of his hip.',
+      'Wallachian sabre at hip with worn leather grip, twin flintlock pistols cross-belted, stake-bandolier diagonal across chest, dagger at thigh.',
+      'Spanish rapier at hip with cross-hilt, twin small wheellock pistols cross-belted, holy-water flask at chest, silver-blessed dagger at sleeve.',
+      'Twin yataghans crossed at hip in worn leather sheaths, single silver-flintlock pistol holstered, prayer-rope knotted at belt with stakes.',
+      'Castlevania Trevor-coded vampire-killer whip at hip, twin cross-pommel daggers cross-belted at chest, silver-tipped dagger sheathed at thigh.',
+      'Hand-axe at his hip with rune-etched bit, silver-tipped pike slung diagonally across back, twin daggers cross-belted, silver-cross sash.',
+      'Scottish claymore strapped across his back in oiled-leather scabbard, twin flintlocks at hip, dirk in boot-sheath, silver-cross at throat.',
+      'Holy-longsword (rune-etched cruciform-hilt) at his back, twin engraved pistols cross-belted, silver-blessed dagger at thigh, holy-water flask.',
+      'Twin silver-shot pistols at hip, blessed bowie-knife at sleeve, silver-conchoed bolas cross-belted with silver weights, blessed-cross at chest.',
+      'Hellsing-coded twin large pistols at thigh-holsters, blessed silver knife at hip, hand-crossbow holstered at the small of his back.',
+      'Constantine-coded revolver in worn shoulder-holster, silver dagger at hip, holy-water flask on belt, stake-bandolier diagonal across chest.',
+      'Double-barrel sawn-off shotgun cross-belted under his coat, twin period-revolvers in shoulder-holsters, blessed silver knife at his hip.',
+      'Repeating crossbow on his back with silver-tipped bolts, twin daggers cross-belted at chest, stake-bandolier diagonal, holy-water flask at hip.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 18-28 words. 2-3 SPECIFIC vampire-hunter weapons named with how each is carried in the frame. NEVER single-weapon-only. NEVER grimoire/staff/chalice/scrying-mirror. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_gmfb_atmospheric_backdrop: {
+    format: 'simple',
+    theme: `GOTHIC URBAN ATMOSPHERIC BACKDROPS for GothBot's goth-male-full-body-axis elite vampire-hunter path. Each entry is ONE 18-26 word prose sentence describing the moody gothic-urban atmosphere AROUND the hunter — fog / lantern-glow / moonlight / gas-lamp / candlelight / rain — NEVER architecture-as-subject.
+
+⚠️ Atmospheric mood, not focal architecture. The hunter is the subject; the backdrop is moody-support.
+
+⚠️ Output ONLY a JSON array of plain strings.
+
+CATEGORIES (rotate widely):
+  • Rolling fog at boot-height with gas-lamp pools
+  • Gothic moonlight cutting through cloud-bank
+  • Cobblestone street wet with rain, reflecting lantern-glow
+  • Gothic timber-and-plaster houses leaning in at the edges, shutters closed
+  • Cathedral spires silhouetted in the distance against moonlit sky
+  • Drifting embers from a distant fire / forge / torch
+  • Gas-lamp light pooling on wet cobblestones, fog rolling
+  • Crypt-mouth shadow with candlelight pooling
+  • Gothic alleyway with single torch-bracket burning, fog in air
+  • Castle silhouette in the far distance against stormy sky
+  • Churchyard fog with leaning tombstones receding into mist
+  • Stained-glass-light spilling onto wet cobbles from cathedral doorway
+  • Moonlit gothic harbor with masts and rigging silhouetted
+  • Plague-village abandoned-street atmosphere with chalk-marks half-visible
+  • Lantern-glow in his off-hand catching scattered fog motes
+  • Snow-dusted cobblestones with gothic spires far behind
+  • Rain-streaked gothic windows behind him with single lit candle
+
+ABSOLUTELY BANNED:
+  - NO bright daylight (this is gothic-night register)
+  - NO architecture-as-subject (cathedral filling the frame as the hero — backdrop only)
+  - NO modern setting (no neon / no electric streetlight)
+  - NO clean-CGI atmosphere (painted gothic fog/mist register)`,
+    touchpoints: [
+      'Rolling fog at boot-height with brass gas-lamp pools casting overlapping circles of warm light on wet cobbles.',
+      'Gothic moonlight cutting through a bank of bruised violet clouds, silvering the wet cobblestones at his boots.',
+      'Cobblestone street wet with cold rain, every stone reflecting lantern-glow, fog drifting at knee-height.',
+      'Gothic timber-and-plaster houses leaning in at the edges of the frame, shutters closed, single window lit far behind him.',
+      'Cathedral spires silhouetted in the far distance against a moonlit cloud-bank, the immediate scene dim and intimate.',
+      'Drifting embers from a distant torch or chimney rising through cold air, faint orange points against the gothic-blue dark.',
+      'Brass gas-lamp light pooling on wet cobblestones at his boots, fog rolling past his calves, breath visible in the cold.',
+      'Crypt-mouth shadow yawning behind him, candlelight pooling from somewhere deep within, fog drifting at his shoulders.',
+      'Gothic alleyway with a single torch-bracket burning on a far wall, fog hanging dense in the still air, his breath visible.',
+      'Castle silhouette in the far distance against a stormy sky, jagged lightning fork visible behind a single dark spire.',
+      'Churchyard fog with leaning tombstones receding into mist behind him, faint moonlight cutting through bare branches.',
+      'Stained-glass light spilling onto wet cobblestones from a cathedral doorway behind him, blue-violet shadow at his feet.',
+      'Moonlit gothic harbor far behind him, masts and rigging silhouetted, fog rolling in off the dark water.',
+      'Plague-village abandoned-street atmosphere with white chalk-marks half-visible on shuttered doors, single lit window.',
+      'Lantern in his off-hand catching scattered fog motes in its warm glow, the rest of the scene falling into gothic dark.',
+      'Snow-dusted cobblestones at his boots, gothic spires silhouetted far behind against a slate-grey winter sky, breath visible.',
+      'Rain-streaked gothic windows behind him with a single lit candle visible, raindrops catching lantern-light on the panes.',
+      'Wallachian-mountain pass dropping away behind him, castle silhouette far down-valley, stormy sky overhead.',
+      'Gothic crossroads with the rusted gibbet swinging slowly in the wind behind him, fog at boot-height, single lantern.',
+      'Catacomb shadow yawning behind him, sconce-light from deeper in pooling on wet stone walls, dust motes drifting.',
+      'Edwardian London foggy alleyway, gas-lamp glow at the far end, faint hansom-cab silhouette in the mist behind him.',
+      'Cathedral steps behind him with carved gargoyles silhouetted, candlelight pouring through massive doors half-open.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 18-26 words. ONE moody gothic-urban atmospheric backdrop — fog / lantern / moonlight / gas-lamp / candlelight / rain. NEVER architecture-as-subject. NEVER bright daylight. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_gmfb_hairstyle: {
+    format: 'simple',
+    theme: `COOL HUNTER HAIRSTYLES for GothBot's goth-male-full-body-axis elite vampire-hunter path. Each entry is ONE 14-22 word prose sentence describing one cool, period-or-modern-mythic, masculine hunter hairstyle + head-style. ANY ADULT AGE — pool was over-defaulting to "iron-grey / silver" elder hair.
+
+⚠️ AGE DISTRIBUTION MANDATE:
+  • ~40% YOUNG/PRIME hair color — jet-black / dark-brown / chestnut / ash-blond / red-brown / sandy / copper — NO grey/silver/iron mentions
+  • ~30% MIXED — mostly dark with hints of grey at temples, or pepper-grey shorter beard with darker hair
+  • ~30% VETERAN — silver-streaked / iron-grey / salt-and-pepper / full-silver
+  Do NOT default the majority to silver/iron-grey. Mix the age signals across the batch.
+
+⚠️ FACIAL-HAIR DISTRIBUTION MANDATE:
+  • ~40% CLEAN-SHAVEN with sharp jaw / faint stubble
+  • ~30% SHORT TRIMMED beard or goatee
+  • ~30% FULL beard (any age)
+
+⚠️ NEVER emo bangs / NEVER smudgy-coverage / NEVER long-thin-bishonen-fringe / NEVER K-pop-idol-cut / NEVER pretty-boy styling.
+
+⚠️ Output ONLY a JSON array of plain strings.
+
+STYLE CATEGORIES (rotate widely):
+  • Long shoulder-length brushed-back hair tied at nape (Geralt/Witcher-coded)
+  • Short-cropped soldier's cut with stubble
+  • Tied-back queue with sideburns
+  • Half-up tied at crown, lower hair loose past shoulders
+  • Wallachian topknot with shaved temples
+  • Modern-tactical short cut + clean-shave
+  • Edwardian-period side-parted oil-slicked hair
+  • Long dark hair pulled into a low ponytail, full beard
+  • Buzzed sides + longer tied-back top (modern-mythic)
+  • Loose wavy shoulder-length hair (Geralt-coded)
+  • Cossack oseledets topknot with shaved skull
+  • Tightly braided long hair down spine
+  • Hood-down revealing close-cropped hair
+  • Hood-down revealing long iron-grey braid
+  • Wide-brim hat over long tied-back hair
+  • Tridentine priest-hat tipped back over close-cropped hair
+  • Bare-head with shaved scalp and full beard
+  • Bare-head with full silver-streaked hair tied at nape
+
+ABSOLUTELY BANNED:
+  - NO emo bangs / NO bangs-over-eyes / NO thin-fringe-covering-half-face
+  - NO bishonen / NO K-pop / NO pretty-boy
+  - NO modern-trendy-haircut (no fades, no top-knot-man-bun-trend)`,
+    touchpoints: [
+      // YOUNG / PRIME — dark / chestnut / blond / red-brown — clean-shaven or short beard
+      'Long jet-black hair tied tight in a single braid down his back, clean-shaven sharp jaw, focused intense gaze.',
+      'Close-cropped jet-black soldier\'s cut, clean-shaven jaw with faint stubble, single scar across his cheekbone, intense focus.',
+      'Long shoulder-length chestnut hair brushed back loose, clean-shaven sharp jaw, focused gaze, no grey.',
+      'Slicked-back jet-black hair with neat short sideburns, clean-shaven jaw, focused dark-eyed predator stillness.',
+      'Modern-tactical short cut in dark-brown, clean-shaven jaw with faint stubble, single temple-scar, hardened focused gaze.',
+      'Long ash-blond hair tied at the nape with a leather cord, clean-shaven sharp jaw, Witcher-coded gravity, intense.',
+      'Shoulder-length dark-brown hair pulled into a low ponytail, neat short black beard, sharp jaw, focused gaze.',
+      'Edwardian period side-parted oil-slicked dark hair, neat short dark moustache, clean-shaven cheek, sharp gentleman gravity.',
+      'Long red-brown hair brushed loose past his shoulders, full red beard cleanly trimmed, sharp focused dark eyes.',
+      'Buzzed sides with longer tied-back jet-black top, clean-shaven sharp jaw with faint stubble, modern-mythic gravity.',
+      'Tactical short brush-cut in dark-brown, clean-shaven jaw, neat sideburns, hardened focused predator gaze.',
+      'Long jet-black hair half-up tied at the crown with lower hair loose past shoulders, clean-shaven sharp jaw, focused gaze.',
+      'Wallachian topknot of jet-black hair at the crown with shaved temples, clean-shaven jaw, neat short dark moustache.',
+      'Cossack oseledets topknot of dark-brown hair at a shaved skull, neat short dark moustache, clean-shaven jaw.',
+      'Long curly red-brown hair bound back loose, full red beard cleanly trimmed, freckled sharp cheekbones, focused gaze.',
+      'Slicked-back ash-blond hair with neat sideburns, clean-shaven sharp jaw, focused pale-blue predator eyes.',
+      'Long copper-red hair tied at the nape with a leather cord, neat short red beard, sharp jaw, focused intense eyes.',
+      'Shaved scalp with a dark cross-tattoo at the brow, full neat black beard, sharp jaw, focused intense gaze.',
+      // MIXED — mostly dark with hints of grey at temples, or pepper-grey beard with darker hair
+      'Long dark-brown hair brushed back with faint grey at temples, tied at nape, neat short pepper-grey beard, focused gaze.',
+      'Close-cropped dark hair greying lightly at temples, neat short pepper-grey beard, sharp jaw, focused intense eyes.',
+      'Shoulder-length jet-black hair tied at nape with two strands of silver at the temple, full neat black beard, sharp jaw.',
+      'Slicked-back dark hair silvering at temples, neat dark moustache and short beard with grey threads, sharp jaw.',
+      'Modern-tactical short cut in dark-brown going pepper-grey at temples, clean-shaven jaw, focused hardened gaze.',
+      'Long chestnut hair pulled into a low ponytail, single silver streak at the temple, neat short pepper-grey beard.',
+      // VETERAN — silver-streaked / iron-grey / salt-and-pepper / full-silver — full beard OK
+      'Long silver-streaked dark hair tied at the nape with a leather cord, full silver-streaked beard, weathered pale skin, severe gaze.',
+      'Loose wavy shoulder-length silver hair brushed back, full silvered beard, weathered tan skin, Geralt-coded killer gravity.',
+      'Tightly braided long iron-grey hair down his spine, full silver beard, weathered face, prayer-rope at his shoulder.',
+      'Cossack oseledets topknot of iron-grey hair at a shaved skull, long silver drooping moustache, weathered olive complexion.',
+      'Close-cropped iron-grey soldier\'s cut, weathered scalp, full silver-shot beard, scarred temple, hardened veteran gravity.',
+      'Edwardian period side-parted iron-grey hair, full silver-streaked moustache and short beard, weathered cheek, stern gravity.',
+      'Tridentine priest-hat tipped back on a cord, close-cropped steel-grey hair revealed, gaunt weathered face, hollow-eyed.',
+      'Wide-brim leather field-hat tipped low over long tied-back iron-grey hair, full pepper-grey beard, scarred cheekbone.',
+      'Hood pushed down revealing long silver-grey braid down his back, full silver beard, weathered pale skin, severe gaze.',
+      'Shoulder-length salt-and-pepper hair tied at nape, full salt-and-pepper beard, weathered scarred cheek, intense focus.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 14-22 words. ONE cool masculine hunter hairstyle + head-style. NEVER emo / NEVER bishonen / NEVER pretty-boy / NEVER trendy-modern-fade. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_gmfb_face_detail: {
+    format: 'simple',
+    theme: `STERN HUNTER FACE DETAILS for GothBot's goth-male-full-body-axis elite vampire-hunter path. Each entry is ONE 14-22 word prose sentence describing focused-hunter facial detail — sharp jaw / scars / beards / piercing eyes. ANY ADULT AGE — pool was over-defaulting to "weathered elder with full beard."
+
+⚠️ AGE DISTRIBUTION MANDATE:
+  • ~30% YOUNG (20s-early-30s) — sharp clean-shaven jaw / faint stubble / unscarred or minimal scar / piercing eyes, NO weather-lines NO grey
+  • ~45% PRIME (mid-30s to mid-40s) — sharp jaw with stubble or short beard, single scar OK, focused gaze, full-color
+  • ~25% VETERAN (45+) — weathered scars, full or silver-streaked beard, hollow weathered cheeks
+
+⚠️ FACIAL-HAIR DISTRIBUTION MANDATE:
+  • ~40% CLEAN-SHAVEN — sharp jaw, faint stubble OK
+  • ~30% SHORT BEARD / GOATEE / VANDYKE / TIGHT STUBBLE
+  • ~30% FULL BEARD — any age (clean-color OR silver-streaked)
+
+⚠️ NEVER emo / NEVER smudgy eyeliner / NEVER smooth bishonen / NEVER pretty-boy. Stern focused adult man.
+
+⚠️ Output ONLY a JSON array of plain strings.
+
+DETAIL CATEGORIES (rotate widely):
+  • Cheekbone-scar from a vampire's claw
+  • Vandyke beard meticulously trimmed
+  • Full pepper-grey beard
+  • Eye-patch over one socket
+  • Hollow weathered cheeks from sleepless nights
+  • Silver-streaked goatee
+  • Three parallel scars across cheek (claw-marks)
+  • Scar tracing from cheekbone to jawline
+  • Lip-scar from an old fight
+  • Brow-scar bisecting eyebrow
+  • Clean-shaven sharp jaw with single temple-scar
+  • Full red-brown beard with iron threading
+  • Burn-scar across one side of the face
+  • Faint kohl-rim around the eyes (Witcher-mutagen-coded)
+  • Sharp cheekbones gaunt from years of hunting
+  • Crow-foot wrinkles around watchful eyes
+  • Weathered tan skin with map of old battle-scars
+  • Cross-tattoo at the brow (Cathar-coded)
+  • Cigarette-burn fingertips visible on a raised hand (Constantine-coded)
+
+ABSOLUTELY BANNED:
+  - NO smudgy eyeliner / NO mascara / NO emo-coded styling
+  - NO smooth baby-face / NO bishonen-soft / NO pretty-boy
+  - NO blood / NO gore`,
+    touchpoints: [
+      // YOUNG (~30%) — clean-shaven or faint stubble, minimal/no weather lines, piercing eyes
+      'Sharp clean-shaven jaw with smooth unscarred cheek, faint stubble at the chin, piercing focused dark eyes.',
+      'Sharp jaw with faint stubble and a single thin temple-scar, smooth youthful cheek, intense focused gaze.',
+      'Clean-shaven sharp jaw, faint dark stubble, smooth unmarked cheek, piercing focused pale-blue eyes.',
+      'Sharp clean-shaven jaw with a single faint claw-mark across the cheekbone, focused intense dark gaze.',
+      'Sharp clean-shaven jaw with kohl-rim eyes (Witcher-mutagen-coded), smooth cheek, intense amber focused gaze.',
+      'Sharp clean-shaven jaw with cold predator stillness, smooth cheek, intense focused grey eyes, lethal calm.',
+      'Sharp jaw with neat dark stubble and a thin lip-scar, smooth cheek, focused intense dark eyes.',
+      'Sharp clean-shaven jaw with smooth deep-olive cheek, neat dark eyebrows, intense focused dark eyes.',
+      'Sharp clean-shaven jaw with smooth tan cheek and freckled bridge of nose, focused intense pale-blue eyes.',
+      'Sharp clean-shaven jaw with smooth pale cheek and a thin scar tracing from temple to cheekbone, intense gaze.',
+      // PRIME (~45%) — sharp jaw with stubble/short beard, single scar OK, focused full-color hair-line
+      'Sharp jaw with neat black goatee on a smooth dark cheek, single thin scar across the cheekbone, focused.',
+      'Vandyke beard meticulously trimmed, smooth olive cheek, sharp brow-scar bisecting one eyebrow, focused gaze.',
+      'Neat short dark beard on a sharp jaw, smooth pale cheek, single thin scar at temple, focused intense gaze.',
+      'Sharp jaw with neat dark moustache and clean-shaven cheek, single scar across the cheekbone, intense focus.',
+      'Neat short pepper-flecked beard on a sharp jaw, smooth cheek with a single scar, focused dark gaze.',
+      'Sharp jaw with neat short red-brown beard, freckled tan cheek, single faint scar at the brow, focused.',
+      'Clean-shaven sharp jaw with neat short sideburns, single scar tracing temple to ear, intense dark eyes.',
+      'Sharp jaw with neat black goatee and slim moustache, smooth olive cheek, focused intense dark eyes.',
+      'Neat short ash-blond beard on a sharp jaw, pale cheek, faint stubble at the temple, focused pale-blue gaze.',
+      'Sharp clean-shaven jaw with a vertical scar from cheekbone to jawline, focused intense dark eyes.',
+      'Cross-tattoo at the brow (Cathar-coded), neat short dark beard, sharp olive cheek, intense focused gaze.',
+      'Sharp jaw with neat Vandyke beard, smooth pale cheek, single thin lip-scar, focused intense dark eyes.',
+      'Sharp jaw with neat black moustache (Hungarian-pulled), clean-shaven cheek, scarred temple, intense focus.',
+      'Faint kohl-rim around piercing amber eyes (Witcher-mutagen-coded), sharp jaw with faint stubble, focused.',
+      'Three parallel thin claw-marks across one cheekbone, sharp jaw with faint stubble, intense focused gaze.',
+      // VETERAN (~25%) — weathered, scars, full or silver-streaked beard, hollow cheeks
+      'Full silver-streaked beard with iron-grey threads, weathered tan cheek, hollow watchful pale-grey eyes.',
+      'Eye-patch over one socket with thin leather strap, gaunt weathered cheek, full silver-shot beard on a sharp jaw.',
+      'Hollow weathered cheeks from sleepless decades, full silver beard, scar tracing from temple to cheekbone.',
+      'Burn-scar across one side of the face from temple to jaw, full silver-streaked beard, intense remaining eye.',
+      'Sharp cheekbones gaunt from forty years of hunting, hollow weathered eyes, full pepper-grey beard.',
+      'Crow-foot wrinkles around watchful pale-blue eyes, full silver beard, weathered tan cheek, severe gaze.',
+      'Weathered tan skin with a map of old battle-scars across one cheek, full pepper-grey beard, intense focus.',
+      'Full white beard on a deeply lined face, hollow ascetic cheeks, leather-bound icon faintly visible at the neck.',
+      'Full silver-streaked dark beard on a weathered pale jaw, single deep scar from cheekbone to ear, intense focus.',
+      'Stoic gaunt face with weathered olive skin, full silver beard, deep frown-line between intense weathered brows.',
+      'Norse-rune-tattoo across one cheekbone, full silver-streaked red beard, weathered freckled cheek, focused.',
+      'Cigarette-burn fingertips visible on a raised hand (Constantine-coded), weathered London cynic\'s gaunt cheek, pepper-grey stubble.',
+    ],
+    instructions: `Each entry is ONE prose sentence, 14-22 words. ONE stern weathered hunter face detail. NEVER smudgy / NEVER emo / NEVER smooth bishonen / NEVER pretty-boy. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
 };
 
 const recipe = POOL_RECIPES[POOL];

@@ -116,6 +116,56 @@ module.exports = {
   anchorScaleRange: null
 },
 
+  GOTHBOT_GOTH_MALE_FULL_BODY_AXIS: {
+  description: 'PATH-BESPOKE — GothBot goth-male-full-body-axis (2026-05-22 R2 RESET — uprooted emo-vampire-aristocrat aesthetic). Elite VAMPIRE HUNTER full-body cinematic poster moment — John Wick of vampire hunters. Classic-lore hunters only (Belmont / Witcher of the School of Wolf / Van Helsing / Blade / Hellsing / Underworld Death-Dealer / Castlevania Trevor / Constantine / Tridentine inquisitor-hunter / Wallachian boyar turned vampire-killer / etc.) — NEVER vampires/warlocks/mages/liches/demonologists. STRAPPED with multiple visible weapons (crossbow + pistols + sword + dagger + stakes). Cool, mysterious, forboding, badass. Differentiator from vampire-hunter-in-action: this is POSTER MOMENT (standing/leaning/mid-load/loaded readiness) vs vhia\'s ACTION MID-MOTION mid-stalk.',
+  slots: {
+    universal: [],
+    bot: [],
+    path: [
+      'character_archetype',
+      'body_pose',
+      'scene_context',
+      'skin',
+      'eyes',
+      'hair_color',
+      'hairstyle',
+      'face_detail',
+      'outfit_silhouette',
+      'weapon_or_signature_object',
+      'atmospheric_backdrop',
+      'composition_framing'
+    ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'foreground_anchor', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
+  GOTHBOT_VAMPIRE_HUNTER_IN_ACTION: {
+  description: 'PATH-BESPOKE — GothBot vampire-hunter-in-action (2026-05-22 R4 RESTART — solo on-the-prowl pre-encounter). SOLO hunter mid-stalk through specific gothic scene (city street / cathedral / courtyard / crypt-yard / rooftop). Quarry is IMPLIED OFF-CAMERA — never visible in frame. Hunter is in active motion (aiming crossbow forward / drawing pistols mid-stride / sword drawn approaching off-frame target / sneaking through alley / leaning around corner). Like a stealth-game screenshot / film-still mid-hunt. Medium-close composition (hunter 50-65% of vertical frame). 11 axes (10 always-on + 1 gated spoor): prowl_action / setting_location / hunter_archetype / weapon_signature / outfit_silhouette / environmental_detail / lighting / atmospheric_depth / composition_framing / foreground_anchor + spoor (40%-gated, subtle hint of past quarry presence).',
+  slots: {
+    universal: [],
+    bot: [],
+    path: [
+      'prowl_action',
+      'setting_location',
+      'hunter_archetype',
+      'weapon_signature',
+      'outfit_silhouette',
+      'environmental_detail',
+      'lighting',
+      'atmospheric_depth',
+      'composition_framing',
+      'foreground_anchor'
+    ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'spoor', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
   GOTHBOT_DARK_LANDSCAPE: {
   description: 'PATH-BESPOKE — GothBot dark-landscape path (2026-05-15 migration from legacy function-based form). Pure gothic landscape — NO CHARACTERS. Castlevania / Bloodborne / Crimson-Peak / Berserk / Tim-Burton visual lineage (NEVER LOTR / Skyrim / Witcher). Movie-poster wide-vista compositions: vampire castles / cemeteries / abbey ruins / coastal cliffs / haunted forests / cursed villages. 5 path-bespoke axes (biome / architecture / phenomenon 80%-gated / surprise_element / sky_layer) + universal lighting + atmosphere.',
   slots: {

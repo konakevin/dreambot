@@ -15,15 +15,14 @@ const pathBuilders = {
   'gothic-architecture': require('./paths/gothic-architecture'),
   'goth-closeup': require('./paths/goth-closeup'),
   'goth-full-body': require('./paths/goth-full-body'),
-  'goth-male-closeup': require('./paths/goth-male-closeup'),
-  'goth-male-full-body': require('./paths/goth-male-full-body'),
   'castlevania-scene': require('./paths/castlevania-scene'),
   'cozy-goth': require('./paths/cozy-goth'),
   'vampire-girls-2': require('./paths/vampire-girls-2'),
   'gothic-vista': require('./paths/gothic-vista'),
   'vampire-assassin-female': require('./paths/vampire-assassin-female'),
   'vampire-from-a-distance': require('./paths/vampire-from-a-distance'),
-  'vampire-assassin-male': require('./paths/vampire-assassin-male'),
+  'vampire-hunter-in-action': require('./paths/vampire-hunter-in-action'),
+  'goth-male-full-body-axis': require('./paths/goth-male-full-body-axis'),
   'vampire-assassin-combat': require('./paths/vampire-assassin-combat'),
   'monster-prowl': require('./paths/monster-prowl'),
 };
@@ -62,13 +61,12 @@ module.exports = {
     // Character paths
     'goth-closeup': 'black-forest-labs/flux-1.1-pro',
     'goth-full-body': 'black-forest-labs/flux-1.1-pro',
-    'goth-male-closeup': 'black-forest-labs/flux-1.1-pro',
-    'goth-male-full-body': 'black-forest-labs/flux-1.1-pro',
     // Vampire paths
     'vampire-girls-2': 'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro',
     'vampire-from-a-distance': 'black-forest-labs/flux-1.1-pro',
-    'vampire-assassin-male': 'black-forest-labs/flux-1.1-pro',
+    'vampire-hunter-in-action': 'black-forest-labs/flux-1.1-pro',
+    'goth-male-full-body-axis': 'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro',
     'monster-prowl': 'black-forest-labs/flux-1.1-pro',
   },
@@ -80,8 +78,6 @@ module.exports = {
     // Character paths consolidated to the dark/nightshade/macabre triad.
     'goth-closeup': ['dark', 'nightshade', 'macabre'],
     'goth-full-body': ['dark', 'nightshade', 'macabre'],
-    'goth-male-closeup': ['dark', 'nightshade', 'macabre'],
-    'goth-male-full-body': ['dark', 'nightshade', 'macabre'],
     'vampire-girls-2': ['dark', 'nightshade', 'macabre'],
     // Scene paths locked to the dark / nightshade / macabre triad for the trial.
     'dark-landscape': ['dark', 'nightshade', 'macabre'],
@@ -92,7 +88,8 @@ module.exports = {
     // Vampire-assassin paths locked to the dark triad.
     'vampire-assassin-female': ['dark', 'nightshade', 'macabre'],
     'vampire-from-a-distance': ['dark', 'nightshade', 'macabre'],
-    'vampire-assassin-male': ['dark', 'nightshade', 'macabre'],
+    'vampire-hunter-in-action': ['dark', 'nightshade', 'macabre'],
+    'goth-male-full-body-axis': ['dark', 'nightshade', 'macabre'],
     'vampire-assassin-combat': ['dark', 'nightshade', 'macabre'],
     'monster-prowl': ['dark', 'nightshade', 'macabre'],
   },
@@ -101,8 +98,6 @@ module.exports = {
     // Character paths consolidated to anime medium (matches scene paths).
     'goth-closeup': 'anime',
     'goth-full-body': 'anime',
-    'goth-male-closeup': 'anime',
-    'goth-male-full-body': 'anime',
     'vampire-girls-2': 'anime',
     // Scene/landscape paths hardcoded to anime medium for the trial.
     'dark-landscape': 'anime',
@@ -113,7 +108,8 @@ module.exports = {
     // Vampire-assassin paths locked to anime medium for the trial.
     'vampire-assassin-female': 'anime',
     'vampire-from-a-distance': 'anime',
-    'vampire-assassin-male': 'anime',
+    'vampire-hunter-in-action': 'anime',
+    'goth-male-full-body-axis': 'anime',
     'vampire-assassin-combat': 'anime',
     'monster-prowl': 'anime',
   },
@@ -207,8 +203,8 @@ module.exports = {
   // also benefit (figure becomes optional landmark).
   chaos: {
     enabled: true,
-    skipPaths: ['goth-closeup', 'goth-male-closeup'],
-    allowSubjectChaosPaths: ['goth-full-body', 'goth-male-full-body'],
+    skipPaths: ['goth-closeup'],
+    allowSubjectChaosPaths: ['goth-full-body', 'goth-male-full-body-axis'],
   },
 
   // Sensory anchors (V4/nightly Step 3 enhancement port).
@@ -240,8 +236,8 @@ module.exports = {
       'vampire-girls-2': 'female',
       'goth-closeup': 'female',
       'goth-full-body': 'female',
-      'goth-male-closeup': 'male',
-      'goth-male-full-body': 'male',
+      'goth-male-full-body-axis': 'male',
+      'vampire-hunter-in-action': 'male',
       'dark-landscape': 'scene',
       'gothic-architecture': 'scene',
       'gothic-vista': 'scene',
@@ -286,7 +282,9 @@ module.exports = {
       ],
     },
     // Optional: skip two-pass on specific paths
-    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture', 'castlevania-scene', 'cozy-goth', 'monster-prowl'],
+    // vampire-hunter-in-action: axis-system path with load-bearing hunt-scene mandate.
+    // goth-male-full-body-axis: rich pools need full Sonnet brief.
+    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture', 'castlevania-scene', 'cozy-goth', 'monster-prowl', 'vampire-hunter-in-action', 'goth-male-full-body-axis'],
   },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
@@ -321,18 +319,41 @@ module.exports = {
     'gothic-architecture',
     'goth-closeup',
     'goth-full-body',
-    'goth-male-closeup',
-    'goth-male-full-body',
     'castlevania-scene',
     'cozy-goth',
     'vampire-girls-2',
     'gothic-vista',
     'vampire-assassin-female',
     'vampire-from-a-distance',
-    'vampire-assassin-male',
+    'vampire-hunter-in-action',
+    'goth-male-full-body-axis',
     'vampire-assassin-combat',
     'monster-prowl',
   ],
+
+  // pathWeights: slots-per-cycle per path. Balances scene:character roughly
+  // 50/50 — scenes (6 paths × 4 slots = 24) match characters (8 paths × 3 slots = 24).
+  // Cycle length = 48 slots ≈ 24 days at 2 posts/day. Each scene path posts every
+  // ~6 days; each character path every ~8 days. Consumed by resolvePathCycled
+  // in scripts/lib/botEngine.js.
+  pathWeights: {
+    // Scenes (6 paths × 4)
+    'dark-landscape': 4,
+    'gothic-architecture': 4,
+    'gothic-vista': 4,
+    'castlevania-scene': 4,
+    'cozy-goth': 4,
+    'monster-prowl': 4,
+    // Characters (8 paths × 3)
+    'goth-closeup': 3,
+    'goth-full-body': 3,
+    'goth-male-full-body-axis': 3,
+    'vampire-girls-2': 3,
+    'vampire-assassin-female': 3,
+    'vampire-from-a-distance': 3,
+    'vampire-assassin-combat': 3,
+    'vampire-hunter-in-action': 3,
+  },
 
   cycleAllPaths: true,
 

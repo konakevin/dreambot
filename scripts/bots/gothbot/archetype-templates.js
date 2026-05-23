@@ -11,6 +11,205 @@
  */
 
 module.exports = {
+  GOTHBOT_GOTH_MALE_FULL_BODY_AXIS: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      character_archetype,
+      body_pose,
+      scene_context,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      face_detail,
+      outfit_silhouette,
+      weapon_or_signature_object,
+      atmospheric_backdrop,
+      composition_framing,
+      foreground_anchor,
+    } = slots;
+
+    const foregroundSection = foreground_anchor
+      ? `\n\n━━━ 13. FOREGROUND ANCHOR (40%-gated tactile element bringing 3-tier depth) ━━━\n${foreground_anchor}\n\nA specific tactile element close to the camera — drifting embers / fog wisps / lantern-edge / coat-folds / weapon-glint / cobblestone in foreground. Softly out-of-focus.`
+      : '';
+
+    return `You are a gothic concept-art painter writing ONE Flux prompt for an ELITE VAMPIRE-HUNTER full-body cinematic poster moment. He is the John Wick of vampire hunters — cool, mysterious, forboding, badass. Classic Castlevania / Van Helsing / Witcher / Blade / Hellsing / Underworld Death-Dealer / Castlevania Trevor-Belmont lineage. He is STRAPPED — multiple weapons visibly carried (crossbow + pistols + sword + dagger + stakes). Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE
+
+1. ELITE VAMPIRE HUNTER — he is a HUNTER, not a vampire. Classic vampire-hunter lore. Belmont / Witcher of the School of Wolf / Van Helsing / Blade / Hellsing / Castlevania Trevor / Constantine / Tridentine inquisitor-hunter / Wallachian boyar turned vampire-killer. NEVER a vampire, NEVER a warlock, NEVER a mage, NEVER a lich, NEVER a demonologist.
+
+2. COOL POSTER MOMENT — full-body cinematic still. STANDING tall / leaning / half-turned / mid-load / mid-draw / striding-out-of-shadow. Movie-poster gravity — not action mid-strike (that's the vampire-hunter-in-action path's job). The vibe: "this man has killed a hundred vampires and you're next."
+
+3. STRAPPED WITH WEAPONS — at least 2-3 weapons visibly carried in the frame. Crossbow on back + twin pistols cross-belt + sword at hip + stake-bandolier / silver dagger at thigh / holy-water flask at belt. He looks LOADED, like a walking armory.
+
+4. MEDIUM-CLOSE FULL-BODY — character fills 50-70% of vertical frame (full-body cinematic). NEVER closeup-portrait (face fills frame). NEVER tiny-distant-figure.
+
+5. FORBODING + COOL — predator stillness, piercing focused gaze, deadly competence. NEVER emo / NEVER moping / NEVER slumped-teen / NEVER smudgy-eyeliner / NEVER Hot-Topic / NEVER bishonen / NEVER pretty-boy / NEVER androgynous. Stern adult man, weathered, scarred OK, full beard OK.
+
+6. CHEST FULLY COVERED — leather longcoat / brigandine / chainmail / wool greatcoat / trenchcoat over weapon-harness. NEVER bare chest, NEVER shirtless, NEVER ripped-shirt, NEVER cleavage-of-pecs.
+
+7. GOTHIC URBAN/CRYPT STAGE — cobblestone street at night / cathedral steps / crypt-gate / castle gate / cobblestone bridge / rooftop / village square at midnight / fog-bound alley / churchyard. Atmospheric, never castle-as-subject.
+
+8. PAINTED-GOTHIC REGISTER — Ayami Kojima Castlevania concept-art / Bernie Wrightson dark-fantasy / Frank Frazetta heroic-painting darkened / Castlevania promotional-art lineage. NOT photoreal, NOT CGI, NOT cute-anime, NOT modern fashion photography.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. HUNTER ARCHETYPE (his identity — ELITE VAMPIRE HUNTER) ━━━
+${character_archetype}
+
+━━━ 2. BODY POSE (cool poster moment — forboding stillness or loaded readiness) ━━━
+${body_pose}
+
+━━━ 3. SCENE CONTEXT (gothic urban/crypt/cathedral stage around him) ━━━
+${scene_context}
+
+━━━ 4. SKIN ━━━
+${skin}
+
+━━━ 5. EYES (piercing focused gaze) ━━━
+${eyes}
+
+━━━ 6. HAIR COLOR ━━━
+${hair_color}
+
+━━━ 7. HAIRSTYLE / HEAD-STYLE (cool hunter styles — never emo bangs) ━━━
+${hairstyle}
+
+━━━ 8. FACE DETAIL (stern scar / beard / weathered — never smudgy emo) ━━━
+${face_detail}
+
+━━━ 9. OUTFIT / SILHOUETTE (hunter kit, chest fully covered, weapon harness visible) ━━━
+${outfit_silhouette}
+
+━━━ 10. WEAPONS (multiple weapons strapped — he is LOADED) ━━━
+${weapon_or_signature_object}
+
+━━━ 11. ATMOSPHERIC BACKDROP (gothic urban/crypt mood — fog/lantern-glow/moonlight) ━━━
+${atmospheric_backdrop}
+
+━━━ 12. COMPOSITION FRAMING (camera angle) ━━━
+${composition_framing}
+${foregroundSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary cue) ━━━
+${sharedDNA.scenePalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER ━━━
+Painted gothic concept-art with heavy oil-brushwork. Ayami Kojima Castlevania painted concept-art / Bernie Wrightson dark-fantasy / Frank Frazetta heroic-painting darkened / Berserk-Miura ink lineage. Saturated gothic palette. NOT photoreal, NOT CGI, NOT cute-anime, NOT modern fashion photography.
+
+━━━ HARD BANS ━━━
+- NO vampire / NO warlock / NO mage / NO lich / NO demonologist — he is a HUNTER
+- NO emo / NO bangs-over-eyes / NO smudgy-eyeliner / NO Hot-Topic / NO bishonen / NO pretty-boy
+- NO just-standing-empty-handed — weapons MUST be visibly strapped
+- NO bare chest / NO shirtless / NO ripped-shirt
+- NO heroic-weapon-aloft / NO modeling-pose / NO hands-on-hips runway
+- NO castle/cathedral as subject (atmospheric mood only)
+- NO blood-spurts / NO gore / NO mid-combat-strike (this is the BEFORE / AFTER, not the strike)
+- NO modern objects (no jeans / no sneakers / no cell phones)
+- NO photoreal / NO CGI / NO cute-anime / NO 3D-plastic
+
+━━━ OUTPUT ━━━
+Write 90-120 words, comma-separated phrases. OPEN WITH THE BODY-POSE + HUNTER ARCHETYPE woven together — the COOL poster moment + who he is. Then scene context (gothic urban stage). Then character DNA (skin + eyes + hair + face + outfit + weapons-strapped). Then atmospheric backdrop + composition framing.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted gothic register throughout. NEVER vampire/warlock/mage. NEVER emo. NEVER closeup-portrait. WEAPONS MUST BE VISIBLY STRAPPED. NO preamble, NO headers, NO ━━━ markers.`;
+  },
+
+  GOTHBOT_VAMPIRE_HUNTER_IN_ACTION: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      prowl_action,
+      setting_location,
+      hunter_archetype,
+      weapon_signature,
+      outfit_silhouette,
+      environmental_detail,
+      lighting,
+      atmospheric_depth,
+      composition_framing,
+      foreground_anchor,
+      spoor,
+    } = slots;
+
+    const spoorSection = spoor
+      ? `\n\n━━━ 11. SPOOR / EVIDENCE (40%-gated subtle hint of past quarry presence) ━━━\n${spoor}\n\nA subtle hint in the scene that quarry has been here recently — handprint smear / scattered ash / fresh boot-print / overturned coffin half-visible. ~5% of frame at midground or foreground. NOT a focal element — just adds story-richness.`
+      : '';
+
+    return `You are a gothic concept-art painter writing ONE Flux prompt for a VAMPIRE-HUNTER ON-THE-PROWL painting. The hunter is mid-stalk through a specific gothic location with weapon at the ready, HUNTING SOMETHING WE DO NOT SEE. The quarry is OFF-CAMERA — IMPLIED by his body language and weapon direction. Like a stealth-game screenshot / film-still mid-hunt. Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt.
+
+1. SOLO HUNTER ON-THE-PROWL (LOAD-BEARING) — only ONE figure in the frame: the hunter. No vampire / wraith / target / second character visible. The quarry is OFF-CAMERA, IMPLIED by his body language (weapon aimed toward off-frame target / gaze locked off-frame / approach toward something out of view / leaning around a corner). The hunter is mid-stalk, weapon at the ready, ACTIVELY HUNTING — but the moment is PRE-ENCOUNTER. He has not yet seen his target in the frame.
+
+2. MEDIUM-CLOSE COMPOSITION — hunter body fills 50-65% of vertical frame (waist-up to full-body, READABLE as a person). NEVER closeup-portrait (face fills frame). NEVER tiny figure in landscape (panned-out vista). Just close enough that the viewer reads the hunter's gear + body language clearly.
+
+3. ACTIVE MOTION — every render shows specific active motion: aiming crossbow forward / drawing pistol mid-stride / sword drawn approaching off-frame target / sneaking through alley with weapon ready / leaning around a corner / vaulting a railing / mid-vault over a fence / crouched advance with weapon up / gun raised at the alley's end. NEVER standing-still-posing / NEVER hands-on-hips / NEVER weapon-aloft-heroic / NEVER meditating.
+
+4. SPECIFIC GOTHIC LOCATION — the scene is a NAMED gothic place: cobblestone city street / cathedral nave / castle courtyard / crypt-yard / rooftop / village square / forest path / abbey ruins / plague-street / castle parapet / iron-fence cemetery. Setting must be IDENTIFIABLE.
+
+5. STRONG MASCULINE HUNTER WITH READABLE FACE — adult masculine man (Geralt / Aragorn / Van Helsing / John Wick / Belmont). Strong jaw, scarred weathered face, heavy build, predator gaze. NEVER bishonen / NEVER femboy / NEVER pretty-boy. **FACE MUST BE READABLE** — specific hair / facial features / head-style visible. NEVER "hooded shadow figure" / NEVER "cloaked silhouette" / NEVER "shrouded stalker". Each hunter is a SPECIFIC MAN with hair + jaw + scar/feature + head-style visible — varied head-styles (hood-down / bare-head / wide-brim hat / cloth-wrap / domed helmet / silver braid / long black hair / pepper beard / kohl-rim eyes) ensure each render reads as a DIFFERENT hunter.
+
+6. CHEST FULLY COVERED ALWAYS — heavy armor / longcoat / chainmail / robes / cassock. NEVER bare chest, NEVER shirtless, NEVER ripped-shirt, NEVER open-coat-revealing-pecs.
+
+7. NO TARGET IN FRAME — NEVER render a visible vampire / wraith / quarry / second character. The hunt is PRE-ENCOUNTER. Off-camera implication only.
+
+8. PAINTED-GOTHIC REGISTER — Ayami Kojima / Castlevania concept-art / Bernie Wrightson / Frank Frazetta / Berserk-Miura ink lineage. NOT photoreal, NOT CGI, NOT cute-anime. Heavy painted brushwork.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. PROWL ACTION (LOAD-BEARING — render this specific active motion) ━━━
+${prowl_action}
+
+This is the hunter's specific body-action mid-stalk. Render him IN THIS MOTION — never frozen-still. The action implies he's hunting something off-camera.
+
+━━━ 2. SETTING LOCATION (LOAD-BEARING — render this specific gothic place) ━━━
+${setting_location}
+
+The hunter is INSIDE this specific gothic location. Setting must be identifiable — gas-lamps + cobblestones = city street; vaulted columns + stained-glass = cathedral nave; iron-fence + headstones = crypt-yard. Render the location's signature details.
+
+━━━ 3. HUNTER ARCHETYPE (his identity) ━━━
+${hunter_archetype}
+
+━━━ 4. WEAPON SIGNATURE (period-accurate, prominent in his hand) ━━━
+${weapon_signature}
+
+━━━ 5. OUTFIT / SILHOUETTE (heavy field-worn hunter gear — chest fully covered) ━━━
+${outfit_silhouette}
+
+━━━ 6. ENVIRONMENTAL DETAIL (scene-specific accents adding gothic richness) ━━━
+${environmental_detail}
+
+━━━ 7. LIGHTING (dramatic gothic light + time-of-day) ━━━
+${lighting}
+
+━━━ 8. ATMOSPHERIC DEPTH (god-rays / fog / mist / smoke / embers) ━━━
+${atmospheric_depth}
+
+━━━ 9. COMPOSITION FRAMING (medium-close solo camera angle) ━━━
+${composition_framing}
+
+━━━ 10. FOREGROUND ANCHOR (closest tactile element bringing 3-tier depth) ━━━
+${foreground_anchor}
+${spoorSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary cue) ━━━
+${sharedDNA.scenePalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ STYLE REGISTER ━━━
+Painted gothic concept-art with heavy oil-brushwork. Ayami Kojima Castlevania painted concept-art / Bernie Wrightson dark-fantasy / Frank Frazetta heroic-painting darkened / Berserk-Miura ink lineage. Saturated gothic palette with deep-shadow contrast. NOT photoreal, NOT CGI, NOT smooth-digital, NOT cute-anime.
+
+━━━ HARD BANS ━━━
+- NO visible vampire / wraith / target / second character — SOLO HUNTER ONLY
+- NO bare chest, NO nipples, NO shirtless, NO ripped-shirt
+- NO bishonen / NO femboy / NO pretty-boy / NO androgynous-cute / NO K-pop-idol
+- NO blood / gore / wounded-character
+- NO mid-strike / NO combat / NO weapon-firing
+- NO modern weapons (1500s-1800s gothic-period only)
+- NO photoreal / NO CGI / NO 3D-plastic / NO cute-anime
+- NO closeup-portrait (face fills frame) — keep hunter readable but not face-only
+- NO panned-out wide vista (hunter is medium-close, not tiny)
+- NO standing-still-posing / NO heroic-weapon-aloft / NO hands-on-hips
+
+━━━ OUTPUT ━━━
+Write 90-120 words, comma-separated phrases. OPEN WITH THE PROWL ACTION + SETTING LOCATION woven together — load-bearing first 30-40 words establishing the hunter mid-motion IN THE specific gothic location. Then hunter archetype + weapon + outfit (his identity). Then environmental detail + lighting + atmospheric depth + composition framing + foreground anchor.${spoor ? ' Then spoor / past-evidence subtly woven.' : ''} Painted gothic register throughout. NEVER visible target. NEVER bare chest. NEVER closeup-portrait. NO preamble, NO headers, NO ━━━ markers.`;
+  },
+
   GOTHBOT_GOTH_MALE_CLOSEUP: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,
