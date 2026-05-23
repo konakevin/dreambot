@@ -163,28 +163,6 @@ module.exports = {
   anchorScaleRange: null
 },
 
-  CHIBIBOT_MINIATURE_FEAST: {
-  description: 'PATH-BESPOKE — ChibiBot miniature-feast path (2026-05-19 full-bespoke). KAWAII POP-MART CUTE-MAXX FEAST with TONS of chibis (3-4 in group mode) + TONS of smiling-face kawaii food in OUTDOOR-VARIETY settings (picnic / beach / camping / treehouse / garden / boat / hot-air-balloon / mountain / snow / fairytale-forest — ~90% outdoor). Sister to cute-food (which is food-only) — this is CHIBIS + FOOD + SETTING all packed together. chibibot_render Pop-Mart glossy lock. 11 axes: 3 universal + 8 path-bespoke (food_hero + scene_setting + creature_group pickN:4 + chibi_food_activity + food_decoration pickN:3 + kawaii_atmosphere + time_of_day + camera_angle).',
-  slots: {
-    universal: [ 'lighting', 'atmosphere', 'weather' ],
-    bot: [],
-    path: [
-      'food_hero',
-      'scene_setting',
-      'creature_group',
-      'chibi_food_activity',
-      'food_decoration',
-      'kawaii_atmosphere',
-      'time_of_day',
-      'camera_angle'
-    ]
-  },
-  pickN: { creature_group: 4, food_decoration: 3 },
-  conditionalLayer: null,
-  framingModes: null,
-  anchorScaleRange: null
-},
-
   CHIBIBOT_OUTDOOR_ADVENTURE: {
   description: 'PATH-BESPOKE — ChibiBot outdoor-adventure (2026-05-20 full-bespoke). CREATURE IN THE WILD/OPEN WORLD — pure wilderness scene with NO village/architecture. Forest / mountain / cave / canyon / river / cliff / lake / hill / desert / coastline / canyon / glacier / jungle-floor / etc. Creature mid-adventure-pose (climbing / wading / hiking / mid-leap / discovering / cresting-ridge). Studio Ghibli / Spirited-Away wilderness / Pokemon-overworld / Pixar-adventure painterly storybook. 10 axes: 3 universal + 7 path-bespoke (creature + adventure_activity + wilderness_setting + wilderness_detail pickN:3 + adventure_prop + time_of_day + surprise_element).',
   slots: {
@@ -224,27 +202,6 @@ module.exports = {
     ]
   },
   pickN: { portrait_feature: 2, set_decoration: 3 },
-  conditionalLayer: null,
-  framingModes: null,
-  anchorScaleRange: null
-},
-
-  CHIBIBOT_CUTE_FOOD_FULLBESPOKE: {
-  description: 'PATH-BESPOKE — ChibiBot cute-food (2026-05-20 full-bespoke). FOOD-AS-CAST kawaii smiling-face food/drink centerpiece — Pop-Mart bex.ai aesthetic. NO creatures, NO chibis. Smiling food IS the cast. Glossy pearlescent designer-vinyl rendering. chibibot_food medium-locked. 10 axes: 3 universal + 7 path-bespoke (food_hero + food_pose + food_setting + scattered_accent pickN:3 + kawaii_atmosphere + time_of_day + camera_angle).',
-  slots: {
-    universal: [ 'lighting', 'atmosphere', 'weather' ],
-    bot: [],
-    path: [
-      'food_hero',
-      'food_pose',
-      'food_setting',
-      'scattered_accent',
-      'kawaii_atmosphere',
-      'time_of_day',
-      'camera_angle'
-    ]
-  },
-  pickN: { scattered_accent: 3 },
   conditionalLayer: null,
   framingModes: null,
   anchorScaleRange: null

@@ -34,14 +34,11 @@ module.exports = {
 
   // Scene pools — heart of each path
   HEARTWARMING_ACTIVITIES: load('heartwarming_activities'),
-  // cute-food path (2026-05-17, bex.ai-inspired kawaii pop-mart food)
-  CUTE_FOOD_SCENES: (() => { try { return load('cute_food_scenes'); } catch { return []; } })(),
   COZY_MINIATURE_WORLDS: load('cozy_miniature_worlds'),
   PLUSHIE_SCENES: load('plushie_scenes'),
   PORTRAIT_FEATURES: load('portrait_features'),
   SLEEPY_NAP_SPOTS: load('sleepy_nap_spots'),
   RAINY_DAY_SCENES: load('rainy_day_scenes'),
-  MINIATURE_FEAST_SCENES: load('miniature_feast_scenes'),
   BATH_TIME_SCENES: load('bath_time_scenes'),
   COTTAGECORE_SCENES: load('cottagecore_scenes'),
   OUTDOOR_ADVENTURES: load('outdoor_adventures'),
@@ -172,15 +169,6 @@ module.exports = {
   CREATURE_PORTRAIT_OUTFITS: load('creature_portrait_outfits'),
   CREATURE_PORTRAIT_SET_DECORATIONS: load('creature_portrait_set_decorations'),
 
-  // Cute-food path-bespoke axes (2026-05-20 full-bespoke migration)
-  CUTE_FOOD_HERO: load('cute_food_hero'),
-  CUTE_FOOD_POSES: load('cute_food_poses'),
-  CUTE_FOOD_SETTINGS: load('cute_food_settings'),
-  CUTE_FOOD_SCATTERED_ACCENTS: load('cute_food_scattered_accents'),
-  CUTE_FOOD_ATMOSPHERE: load('cute_food_atmosphere'),
-  CUTE_FOOD_TIME_OF_DAY: load('cute_food_time_of_day'),
-  CUTE_FOOD_CAMERA_ANGLE: load('cute_food_camera_angle'),
-
   // Aquatic-village path-bespoke axes (2026-05-19 full-bespoke migration)
   AQUATIC_VILLAGE_ACTIVITIES: load('aquatic_village_activities'),
   AQUATIC_VILLAGE_SETTINGS: load('aquatic_village_settings'),
@@ -220,15 +208,6 @@ module.exports = {
   ARCTIC_VILLAGE_TIME_OF_DAY: load('arctic_village_time_of_day'),
   ARCTIC_VILLAGE_SURPRISE: load('arctic_village_surprise'),
   ARCTIC_VILLAGE_PHENOMENA: load('arctic_village_phenomena'),
-
-  // Miniature-feast path-bespoke axes (2026-05-19 full-bespoke migration)
-  MINIATURE_FEAST_FOOD_HERO: load('miniature_feast_food_hero'),
-  MINIATURE_FEAST_SCENE_SETTING: load('miniature_feast_scene_setting'),
-  MINIATURE_FEAST_CHIBI_ACTIVITY: load('miniature_feast_chibi_activity'),
-  MINIATURE_FEAST_FOOD_DECORATION: load('miniature_feast_food_decoration'),
-  MINIATURE_FEAST_KAWAII_ATMOSPHERE: load('miniature_feast_kawaii_atmosphere'),
-  MINIATURE_FEAST_TIME_OF_DAY: load('miniature_feast_time_of_day'),
-  MINIATURE_FEAST_CAMERA_ANGLE: load('miniature_feast_camera_angle'),
 
   VIBE_COLOR,
 

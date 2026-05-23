@@ -41,7 +41,6 @@ module.exports = {
   VINYL_LANDSCAPES: load('vinyl_landscapes'),
   SACKBOY_SCENES: load('sackboy_scenes'),
   SACKBOY_LANDSCAPES: load('sackboy_landscapes'),
-  TOY_LANDSCAPES: load('toy_landscapes'),
   SHORTCAKE_SCENES: load('shortcake_scenes'),
   SHORTCAKE_LANDSCAPES: load('shortcake_landscapes'),
   BARBIE_SCENES: load('barbie_scenes'),

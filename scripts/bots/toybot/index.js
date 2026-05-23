@@ -19,7 +19,6 @@ const pathBuilders = {
   claymation: require('./paths/claymation'),
   vinyl: require('./paths/vinyl'),
   sackboy: require('./paths/sackboy'),
-  'toy-landscape': require('./paths/toy-landscape'),
   'shortcake-scene': require('./paths/shortcake-scene'),
   'barbie-scene': require('./paths/barbie-scene'),
   // renamed (2026-05) — scene-oriented names
@@ -52,7 +51,6 @@ module.exports = {
     claymation: 'claymation',
     vinyl: 'vinyl',
     sackboy: 'stitched',
-    'toy-landscape': ['claymation', 'vinyl'],
     'shortcake-scene': 'shortcake_figures',
     'barbie-scene': 'barbie_storytelling_mixed',
     'gi-joe-missions': 'gi_joe_figures',
@@ -224,7 +222,6 @@ module.exports = {
     claymation: ['cozy', 'whimsical', 'peaceful', 'nostalgic', 'enchanted', 'ethereal', 'ancient', 'nightshade'],
     vinyl: ['cinematic', 'cozy', 'whimsical', 'nostalgic', 'voltage', 'coquette', 'shimmer', 'peaceful', 'nightshade'],
     sackboy: ['cozy', 'whimsical', 'peaceful', 'enchanted', 'coquette', 'shimmer', 'ethereal', 'nostalgic'],
-    'toy-landscape': ['cinematic', 'cozy', 'epic', 'peaceful', 'ethereal', 'ancient', 'enchanted', 'nostalgic', 'nightshade', 'shimmer', 'voltage'],
     'shortcake-scene': ['cozy', 'whimsical', 'coquette', 'shimmer', 'peaceful', 'enchanted', 'ethereal'],
     'barbie-scene': ['cozy', 'whimsical', 'coquette', 'shimmer', 'peaceful', 'ethereal', 'nostalgic'],
     'gi-joe-missions': ['cinematic', 'epic', 'voltage', 'nostalgic', 'ancient', 'nightshade'],
@@ -246,7 +243,6 @@ module.exports = {
     'claymation',
     'vinyl',
     'sackboy',
-    'toy-landscape',
     'shortcake-scene',
     'barbie-scene',
     'gi-joe-missions',
@@ -268,7 +264,6 @@ module.exports = {
     claymation: 1,
     vinyl: 1,
     sackboy: 1,
-    'toy-landscape': 2,
     'shortcake-scene': 1,
     'barbie-scene': 1,
     'gi-joe-missions': 1,
@@ -294,7 +289,7 @@ module.exports = {
     enabled: true,
     skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene'],
     allowSubjectChaosPaths: [
-      'claymation', 'vinyl', 'sackboy', 'toy-landscape',
+      'claymation', 'vinyl', 'sackboy',
       'shortcake-scene', 'gi-joe-missions',
       'green-army-warzone', 'miniature-dungeon', 'collector-shelf-epic',
       'epic-hero-bucket', 'dollhouse-life', 'hotwheels-city',
@@ -319,7 +314,7 @@ module.exports = {
 
   // Sensory anchors — lightcolor required, additional channels rolled.
   // pathContext: 'figure' for paths where toys are the subject, 'scene' for
-  // pure-scenery paths (toy-landscape, model-train-world).
+  // pure-scenery paths (model-train-world).
   // model-train-world skips: scene-sensory pools contain tilt-shift /
   // lichen-tree / studio-strobe / cabinet-LED tokens that directly
   // contradict the path's warm-daylight playtime-scene DNA. R6 audit.
@@ -332,7 +327,6 @@ module.exports = {
       claymation: 'figure',
       vinyl: 'figure',
       sackboy: 'figure',
-      'toy-landscape': 'scene',
       'shortcake-scene': 'figure',
       'barbie-scene': 'figure',
       'gi-joe-missions': 'figure',

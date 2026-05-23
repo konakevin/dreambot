@@ -12,12 +12,13 @@
  *
  * 2026-05-06 — CuddleBot merged into ChibiBot.
  *
- * Path inventory (19):
+ * 2026-05-22 — Food paths (miniature-feast, cute-food) moved to YumBot.
+ *
+ * Path inventory (17):
  *   Indoor: rainy-interior / cozy-interior
  *   Creature-focused: heartwarming-scene / creature-portrait / sleepy-naptime /
  *                     bath-time / cuddly-aquatic
  *   Outdoor-scene: cozy-landscape / rainy-day-cozy / night-meadow / outdoor-adventure
- *   Food: miniature-feast / cute-food
  *   Villages (6): aquatic-village / arctic-village / cottagecore-village /
  *                 jungle-village / sunny-village / twilight-village
  */
@@ -34,14 +35,11 @@ const pathBuilders = {
   'creature-portrait': require('./paths/creature-portrait'),
   'sleepy-naptime': require('./paths/sleepy-naptime'),
   'rainy-day-cozy': require('./paths/rainy-day-cozy'),
-  'miniature-feast': require('./paths/miniature-feast'),
   'bath-time': require('./paths/bath-time'),
   'cuddly-aquatic': require('./paths/cuddly-aquatic'),
   'night-meadow': require('./paths/night-meadow'),
   'outdoor-adventure': require('./paths/outdoor-adventure'),
   'cozy-interior': require('./paths/cozy-interior'),
-  // cute-food (2026-05-17, bex.ai-inspired kawaii pop-mart food)
-  'cute-food': require('./paths/cute-food'),
   // 6 village paths
   'cottagecore-village': require('./paths/cottagecore-village'),
   'aquatic-village': require('./paths/aquatic-village'),
@@ -64,17 +62,11 @@ module.exports = {
   mediumStyles: {
     chibibot_render: blocks.CHIBI_RENDER_MEDIUM,
     chibibot_pixar: blocks.CHIBI_PIXAR_MEDIUM,
-    chibibot_food: blocks.CHIBI_FOOD_MEDIUM,
   },
 
-  // Per-path medium lock — cute-food gets its own bespoke medium directive
-  // (chibibot_food) where the FOOD is the cast (smiling faces ON the food
-  // itself, no human/chibi/creature characters in the frame). Same Pop-Mart
-  // glossy-pearlescent rendering as chibibot_render but food-centric, not
-  // character-centric — matches the bex.ai Instagram aesthetic.
-  // Other paths fall through to the bot.mediums 60/40 rotation above.
+  // Per-path medium lock — falls through to bot.mediums 50/50 rotation
+  // when path not listed.
   mediumByPath: {
-    'cute-food': 'chibibot_food',
     // cozy-landscape — locked to pixar medium (storybook painterly rendering
     // works better for setting-as-hero than the Pop-Mart vinyl register)
     'cozy-landscape': 'chibibot_pixar',
@@ -86,8 +78,6 @@ module.exports = {
     'sleepy-naptime': 'chibibot_pixar',
     'jungle-village': 'chibibot_pixar',
     'cozy-interior': 'chibibot_pixar',
-    // miniature-feast — locked to Pop-Mart glossy chibi register (NOT pixar)
-    'miniature-feast': 'chibibot_render',
     'arctic-village': 'chibibot_pixar',
     'aquatic-village': 'chibibot_pixar',
     'cottagecore-village': 'chibibot_pixar',
@@ -139,14 +129,11 @@ module.exports = {
     'creature-portrait',
     'sleepy-naptime',
     'rainy-day-cozy',
-    'miniature-feast',
     'bath-time',
     'cuddly-aquatic',
     'night-meadow',
     'outdoor-adventure',
     'cozy-interior',
-    // cute-food
-    'cute-food',
     // 6 village
     'cottagecore-village',
     'aquatic-village',
@@ -164,13 +151,11 @@ module.exports = {
     'creature-portrait': 1,
     'sleepy-naptime': 1,
     'rainy-day-cozy': 1,
-    'miniature-feast': 1,
     'bath-time': 1,
     'cuddly-aquatic': 1,
     'night-meadow': 1,
     'outdoor-adventure': 1,
     'cozy-interior': 1,
-    'cute-food': 2,
     'cottagecore-village': 1,
     'aquatic-village': 1,
     'arctic-village': 1,
@@ -208,7 +193,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'miniature-feast', 'arctic-village', 'aquatic-village', 'cottagecore-village', 'sunny-village', 'twilight-village', 'outdoor-adventure', 'creature-portrait', 'cute-food'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'arctic-village', 'aquatic-village', 'cottagecore-village', 'sunny-village', 'twilight-village', 'outdoor-adventure', 'creature-portrait'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;
@@ -220,7 +205,6 @@ module.exports = {
       'creature-portrait': 'creature',
       'sleepy-naptime': 'creature',
       'bath-time': 'creature',
-      'miniature-feast': 'creature',
       'cuddly-aquatic': 'creature',
       'heartwarming-scene': 'scene',
       'cozy-landscape': 'scene',
@@ -235,7 +219,6 @@ module.exports = {
       'cozy-interior': 'scene',
       'cottagecore-village': 'scene',
       'rainy-interior': 'scene',
-      'cute-food': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
@@ -286,9 +269,7 @@ module.exports = {
     }
     // chibibot_render: append the 1–3 character-count rule so renders
     // aren't all solo portraits. Pixar renders skip this entirely.
-    // EXCEPTION: cute-food path has "food IS the cast, no characters" —
-    // appending the character-count block would override that mandate.
-    if (medium === 'chibibot_render' && path !== 'cute-food') {
+    if (medium === 'chibibot_render') {
       const append = (str) => str + '\n\n' + blocks.CHIBI_CHARACTER_COUNT_BLOCK;
       if (typeof result === 'string') return append(result);
       if (result && typeof result.brief === 'string') return { ...result, brief: append(result.brief) };

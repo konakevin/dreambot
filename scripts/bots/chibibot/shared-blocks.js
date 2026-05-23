@@ -109,13 +109,6 @@ Cuteness is the canvas, not the ceiling. Stack cute-elements: big dewy eyes + fl
 const CHIBI_PIXAR_MEDIUM =
   'modern Pixar Disney DreamWorks 3D animated feature-film polish, current-decade animation movie still quality, soft subsurface scattering on every fluffy texture, volumetric warm god-rays cutting through magical atmosphere, shallow depth of field with creamy painterly bokeh, saturated jewel-tone palette (warm amber + emerald + teal + peach + magenta), lush magical detail in every corner, frame-worthy wallpaper-poster composition, NOT 2005-era CGI NOT plasticky NOT photoreal';
 
-// CHIBI_FOOD_MEDIUM — kawaii pop-mart-style FOOD as the cast (bex.ai
-// Instagram aesthetic). Same glossy-pearlescent Pop-Mart designer-vinyl
-// rendering quality as CHIBI_RENDER_MEDIUM but the FOOD ITEM has the
-// smiling face, NOT characters. Used by cute-food path only.
-const CHIBI_FOOD_MEDIUM =
-  'hyper-detailed 3D CGI render, Octane / Redshift quality, Pop Mart / Be@rbrick designer-vinyl glossy-pearlescent finish applied to FOOD AND DRINK ITEMS (the food IS the character), kawaii smiling faces ON the food/drink itself (boba cups, sundaes, cereal bowls, donuts, taiyaki, mochi, cupcakes — each has its own kawaii face with dimpled-cheek blush, closed-arc eyes, tiny printed mouth), ABSOLUTELY NO human characters, NO chibi-figures, NO creature-mascots holding or eating the food — the food/drink is the entire cast, scattered tiny decorations (mini smiling fruit, sugar pearls, sprinkles, rainbow confetti, cherry-blossom petals) around the hero food, glossy dewy material treatment with subsurface scattering on every glazed surface, pastel-rainbow palette (blush pink, lavender, mint, peach, cream, baby-blue) with cherry-blossom or pastel-floral accents, soft-blur pastel-bokeh background, dreamy kawaii pop-mart food-photography aesthetic — frame-worthy single-product hero shot with adorable scattered confetti. NOT painted NOT 2D illustration NOT Pixar-soft NOT photoreal NOT plasticky. NOT a character holding food. NOT a creature eating food. ONLY the food/drink AS the smiling character.';
-
 // CHIBI_CHARACTER_COUNT_BLOCK — only injected for chibibot_render renders
 // (via the buildBrief dispatcher). Tells Sonnet to vary character count 1–3
 // per render so the Pop-Mart-vinyl renders aren't all solo portraits. Pixar
@@ -144,7 +137,6 @@ module.exports = {
   IMPOSSIBLE_BEAUTY_BLOCK,
   BLOW_IT_UP_BLOCK,
   CHIBI_RENDER_MEDIUM,
-  CHIBI_FOOD_MEDIUM,
   COZY_INDOOR_CLUTTER_BLOCK,
   COZY_VILLAGE_CLUTTER_BLOCK,
   // Pixar aliases
