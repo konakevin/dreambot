@@ -187,7 +187,15 @@ module.exports = {
   vibes: TRAVEL_VIBES,
 
   paths: ALL_PATHS,
-  pathWeights: byPath(ALL_PATHS, 1),
+  // Per-path weights produce a 70/30 earth/beach split across the shuffle-bag
+  // cycle (2026-05-22). Each earth path gets 7 slots per cycle, each beach
+  // path gets 3 → total 8×7 + 8×3 = 80 slots per cycle, 56/24 = 70/30 share.
+  // Shuffle-bag still visits all paths within each cycle; weights only
+  // change how many slots each path occupies.
+  pathWeights: {
+    ...byPath(EARTH_PATHS, 7),
+    ...byPath(BEACH_PATHS, 3),
+  },
 
   // Both source bots used flux-dev + flux-1.1-pro via the model picker.
   // Earth used useModelPicker:true + allowedModels at bot level; Beach
