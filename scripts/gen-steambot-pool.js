@@ -69,44 +69,6 @@ const POOL_RECIPES = {
   // accessory/backdrop/drama).
   // ═══════════════════════════════════════════════════════════
 
-  airship_heritage: {
-    format: 'simple',
-    theme: `STEAMPUNK-GLOBE HERITAGE descriptors for airship-female's heritage axis. Each entry is ONE specific cultural/regional heritage that locks the woman's ethnicity, skin coloring, and visual heritage register. Each entry 12-25 words. Steampunk-globe (NOT Victorian-British-only) — the airship era spans cultures.
-
-⚠️ MANDATORY — every entry must combine a real ethnic/regional heritage with a STEAMPUNK CULTURAL FRAMING (sky-corsair clan / airship academy / aerial navy / dirigible-engineer guild / etc.). The reader should be able to picture a SPECIFIC heritage-coded face + WHAT KIND of airship culture she comes from. The cultural framing is the steampunk overlay on top of the real-world ethnicity.
-
-✓ VARIETY MANDATE — distribute across regions. In a 50-entry pool, target ~5 per region:
-  A. Victorian European (English, Scottish, Welsh, Irish — Royal Aerial Navy / sky-merchant guild / dirigible-prospector)
-  B. Continental European (Prussian, French, Italian, Spanish — Prussian Sky-Hussars / French aerostatic-corps / Italian cloud-pirate)
-  C. Eastern European / Slavic (Russian, Ukrainian, Romanian, Polish — Romanov sky-lancer / Carpathian dirigible-clan)
-  D. Mediterranean / Levantine (Greek, Sicilian, Turkish, Lebanese, Egyptian — Aegean cloud-corsair / Constantinople airship-academy)
-  E. Persian / Central Asian (Persian, Afghan, Uzbek, Mongol — Esfahan sky-corsair / Samarkand caravan-airship clan)
-  F. South Asian (Hindustani, Punjabi, Bengali, Sri Lankan, Tamil — Mughal-rajput airship-noble / Rajasthan sky-corsair)
-  G. East Asian (Han Chinese, Japanese, Korean, Mongolian — Qing imperial airship-corps / Tokyo airship-academy / Joseon sky-bureaucracy)
-  H. Southeast Asian (Vietnamese, Filipino, Indonesian, Thai, Malay — Sulu sky-pirate clan / Malacca airship-merchant)
-  I. African (Yoruba, Zulu, Ethiopian, Berber, Mali, Egyptian — Yoruba sky-noble / Ethiopian highland-airship / Berber dune-airship)
-  J. Indigenous American (Comanche, Navajo, Lakota, Cherokee, Aztec — Comanche sky-scout / Andean condor-airship clan)
-
-🚫 STRICT BANS:
-  - NO fantasy races (no elven / dwarven / half-orc / dragonborn)
-  - NO "exotic" / "oriental" / "ethnic" coded as othering — describe the heritage with the same dignity as European entries
-  - NO body descriptors (no "voluptuous", "curvy", "thin", "petite", "buxom")
-  - NO fashion mentions (those go in outfit pool)
-
-Lineage to channel: cinematic steampunk world-building (Treasure-Planet's diverse crew / Last-Exile's multi-culture sky-fleets / Mortal-Engines' London Airhaven / Skies-of-Arcadia's multinational pirates).`,
-    touchpoints: [
-      'PRUSSIAN SKY-HUSSAR — pale Northern-European complexion, ash-blonde or copper-red hair, ice-grey or pale-blue eyes, military-aristocrat bearing, descended from the Brandenburg Aerostatic Corps',
-      'PERSIAN SKY-CORSAIR — warm olive skin with golden undertones, jet-black or deep-mahogany hair, dark amber or hazel eyes, Esfahan sky-merchant clan with Caspian airship-trader bloodline',
-      'YORUBA SKY-NOBLE — rich deep-mahogany complexion, jet-black hair, dark-brown or near-black eyes, descendant of the Oyo Imperial Airship-Council with ancestral dirigible-fleet command',
-      'TOKYO AIRSHIP-ACADEMY GRADUATE — porcelain skin with warm undertones, jet-black hair, dark-coal eyes, Meiji-era aristocratic family with airship-engineering pedigree',
-      'COMANCHE SKY-SCOUT — sun-warmed copper-brown skin, jet-black hair, dark-brown eyes, descended from Plains airship-clans that mapped the Great Plains sky-routes',
-      'CARIBBEAN CLOUD-CORSAIR — warm caramel-brown skin, dark-chocolate or auburn hair, hazel or amber eyes, descendant of free-Black Tortuga sky-pirate clan',
-      'RAJASTHAN SKY-CORSAIR — warm wheat-toned skin with golden undertones, jet-black hair, dark-honey or near-black eyes, Mughal-rajput noble lineage with dirigible-fortress heritage',
-      'AEGEAN CLOUD-CORSAIR — sun-bronzed Mediterranean skin, dark-chestnut or jet-black hair, sea-grey or hazel eyes, Cretan free-airship clan with millennium of sky-piracy',
-    ],
-    instructions: `Each entry follows the format: "NAME-CAPS — heritage descriptor with skin tone + hair color + eyes + cultural-airship-framing in 12-25 words". Output as a NUMBERED list. NO internal newlines.`,
-  },
-
   airship_role: {
     format: 'simple',
     theme: `STEAMPUNK AIRSHIP-CREW ROLE / RANK descriptors. Each entry is ONE specific role or rank that informs how she carries herself + what she's commanding/doing on the ship. Each entry 10-20 words.
@@ -135,17 +97,22 @@ Lineage to channel: cinematic steampunk world-building (Treasure-Planet's divers
 
   airship_eyes: {
     format: 'simple',
-    theme: `EYE descriptions for airship-female. Each entry 8-15 words: ONE specific eye color + intensity + steampunk-coded detail (goggle-tan-line, soot-streaked-lid, brass-flecked-iris, kohl-rimmed, etc.). Distribute across colors: blue/grey (~25), brown/amber (~30), green/hazel (~25), violet/exotic (~10), dark/near-black (~10). NEVER mention body / breast / lips — eyes only.`,
+    theme: `EYE descriptions for airship-female. Each entry 8-15 words: ONE specific eye color + steampunk-coded detail (goggle-tan-line, soot-streak, brass-flecked iris, kohl-rimmed, etc.).
+
+⚠️ COLOR DIVERSITY IS THE WHOLE POINT — most of the world has BROWN or DARK eyes. The "weathered pale-grey/blue aviator" look is the FAILURE MODE; do NOT default to it. Brown/dark eyes MUST DOMINATE. In 25 entries: ~10 brown (deep-brown / dark-brown / near-black / coffee / chestnut / mahogany), ~5 amber/honey/hazel, ~5 green/jade/sea-green, only ~5 grey/blue/steel. Pale eyes are the MINORITY here.
+
+ONLY eyes — NEVER mention body / breast / lips.`,
     touchpoints: [
-      'sharp pale-grey eyes with a goggle-tan-line and soot-streak across the bridge of her nose',
-      'dark amber-honey eyes flecked with brass, kohl-rimmed and smudged from cannon-smoke',
-      'cold ice-blue eyes under thick dark lashes, with a fine scar bisecting the right brow',
-      'deep mahogany-brown eyes with copper-flecks, brass-rimmed flight goggles pushed up onto her forehead',
-      'sea-green eyes with a hint of gold near the pupil, intent and unblinking in the cannon-flash',
+      'deep dark-brown eyes, kohl-rimmed and smudged from cannon-smoke, brass-flecked near the pupil',
+      'near-black coffee eyes under thick lashes, a soot-streak across the lower lid',
+      'warm amber-honey eyes flecked with gold, goggle-tan-line pressed pale at the temple',
+      'rich mahogany-brown eyes catching lantern-light, a fine scar bisecting the right brow',
+      'dark chestnut eyes with copper-flecks, brass-rimmed flight goggles pushed up onto her forehead',
       'jade-green eyes ringed with kohl, lashes thick with brass-dust',
-      'antique-bronze eyes catching the lantern-light, smoke-smudged shadow across the lower lid',
+      'sea-green eyes with a hint of gold near the pupil, intent in the cannon-flash',
+      'sharp pale-grey eyes with a goggle-tan-line and soot-streak across the bridge of her nose',
     ],
-    instructions: `Each entry 8-15 words. Output as a NUMBERED list. NO internal newlines.`,
+    instructions: `Each entry 8-15 words. Brown/dark eyes MUST DOMINATE the list (at least half). Output as a NUMBERED list. NO internal newlines.`,
   },
 
   airship_hair_color: {
@@ -169,18 +136,15 @@ Lineage to channel: cinematic steampunk world-building (Treasure-Planet's divers
 
 ⚠️ FORMAT IS NON-NEGOTIABLE — every entry literally STARTS with "[Nationality/Ethnicity] woman with..." so the template can pull the first comma-segment ("Japanese woman with cool ivory skin") and drop it verbatim into the opening tokens of the Flux prompt. Flux locks ethnicity from the first 5-8 tokens — if the opening says only "a woman" Flux defaults to Euro-brunette. The ethnicity-noun anchor is load-bearing.
 
-✓ DIVERSITY MANDATE — distribute across as many ethnicities as possible. In 50 entries, target each major world region appearing 4-8 times:
-  • East Asian: Japanese, Chinese, Korean, Vietnamese, Mongolian, Tibetan, Thai
-  • South Asian: Indian, Pakistani, Sri Lankan, Bangladeshi, Nepalese, Tamil
-  • Southeast Asian: Filipina, Indonesian, Malay
-  • Pacific Islander: Samoan, Maori, Hawaiian, Tongan, Fijian
-  • Indigenous American: Navajo, Comanche, Lakota, Cherokee, Aztec, Mayan
-  • African / African Diaspora: Nigerian, Ethiopian, Kenyan, Yoruba, Zulu, Senegalese, Ghanaian, Sudanese, Somali, Eritrean
-  • Middle Eastern / Levantine / Persian: Persian, Lebanese, Turkish, Egyptian, Moroccan, Syrian, Iraqi, Israeli, Palestinian
-  • Latin American: Brazilian, Mexican, Cuban, Colombian, Argentinian, Peruvian, Venezuelan, Dominican
-  • Caribbean: Jamaican, Haitian, Trinidadian, Cuban-American
-  • European (use sparingly — keep to ~20% of pool to balance against Euro-default bias): Irish, Scottish, English, French, Italian, Greek, Polish, Russian, Norwegian, Spanish, Portuguese, Welsh
-  • Mixed-heritage entries (optional, 2-3 in 50): "Mixed-heritage woman of [Group A] and [Group B] descent, with..."
+✓ DIVERSITY MANDATE — TWO equally-important goals: (1) diverse SKIN TONES across a global cast, AND (2) enough LIGHT-HAIR-FRIENDLY heritages that blonde / red / auburn / strawberry / silver hair actually appears in renders. The render template derives hair color from the heritage, so a pool that is all non-European heritages = every woman a dark brunette (the exact failure we are fixing). Distribute roughly per ~25 entries:
+  • Northern & Eastern European LIGHT-HAIR heritages (~30% — THE SOURCE of blonde/red/auburn/ginger/strawberry/silver hair; without these, hair never varies): Norwegian, Swedish, Finnish, Icelandic, Danish, Irish, Scottish, English, German, Polish, Russian, Ukrainian. Fair / rose / cool-pale / freckled / wind-burnt skin.
+  • African / African Diaspora (~16%): Nigerian, Ethiopian, Kenyan, Yoruba, Zulu, Senegalese, Somali, Eritrean
+  • East Asian (~10%): Japanese, Chinese, Korean, Vietnamese, Mongolian, Tibetan, Thai
+  • South & Southeast Asian (~12%): Indian, Pakistani, Tamil, Sri Lankan, Filipina, Indonesian
+  • Middle Eastern / Levantine / Persian / Mediterranean (~12%): Persian, Lebanese, Turkish, Egyptian, Moroccan, Syrian, Greek, Italian, Spanish
+  • Indigenous American (~8%): Navajo, Comanche, Lakota, Cherokee
+  • Pacific Islander / Latin American / Caribbean (~10%): Samoan, Maori, Fijian, Brazilian, Mexican, Colombian, Peruvian, Haitian
+  • Mixed-heritage entries (~2): "Mixed-heritage woman of [Group A] and [Group B] descent, with..."
 
 ⚠️ STRICT BANS:
   - NEVER describe torso, chest, breasts, shoulders, arms, abdomen, hips, neckline, décolletage, collarbones
@@ -196,13 +160,13 @@ Lineage to channel: cinematic global cast of Last-Exile / Mortal-Engines / Treas
     touchpoints: [
       'Japanese woman with cool ivory skin and subtle pink undertone, brass lamplight warming temple, fine translucent hairs along jawline.',
       'Nigerian woman with rich mahogany skin and warm undertone, cannon-flash bronzing high cheekbones, delicate scar near left eye.',
-      'Brazilian woman with golden-tan skin and olive undertone, amber gaslamp catching bridge of nose, constellation of freckles across forehead.',
-      'Lebanese woman with warm sand-beige skin, verdigris light casting green across cheekbone, healed scar bisecting right eyebrow.',
+      'Norwegian woman with fair wind-burnt skin and cool rose undertone, pale freckles scattered high on her cheekbones, frost-flush across the bridge of her nose.',
+      'Scottish woman with cream-pale freckled skin and neutral undertone, ruddy wind-chap across both cheeks, fine soot-streak along her jaw.',
+      'Russian woman with cool porcelain skin and faint blue undertone, sharp high cheekbones catching gas-light, a healed scar through her left brow.',
       'Comanche woman with sun-warmed copper-bronze skin and warm undertone, wind-burn flush along her broad cheekbones, fine soot-streak from temple to ear.',
-      'Filipina woman with warm honey-amber skin and golden undertone, lantern-glow caught at her jawline, kohl-smear at the outer corner of her eye.',
       'Persian woman with warm olive complexion and golden-honey undertone, brass-dust faintly glinting on her temple, sharp angle of nose lit by morning sun.',
       'Mixed-heritage woman of Korean and Senegalese descent, warm caramel skin with rose undertone, salt-spray sheen along her cheekbone, single freckle at the corner of her mouth.',
-      'Maori woman with deep olive-brown skin and warm undertone, faint traditional moko-style ink along the chin, cannon-flash glow at her temple.',
+      'German woman with fair ruddy skin and warm peach undertone, light sun-freckling across her forehead, lantern-glow warming her temple.',
       'Irish woman with cream-pale skin and warm rose undertones, light freckles across the bridge of her nose, wind-burn flush across both cheeks.',
     ],
     instructions: `Each entry 18-30 words. STRICT FORMAT: "[Ethnicity-adjective] woman with [tone and undertone], [steampunk-coded face detail], [optional face feature]." The ethnicity-noun-phrase is non-negotiable — it's the first 3-4 words. Output as a NUMBERED list. NO internal newlines.`,

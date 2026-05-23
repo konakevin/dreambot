@@ -96,9 +96,9 @@ module.exports = {
   STEAMPUNK_MEN_WARDROBE_AMPLIFIED: load('steampunk_men_wardrobe_amplified'),
 
   // airship-female path — solo female air-officer mid-action on a steampunk
-  // airship. 4 female-bespoke pools + 7 shared (heritage / role / eyes /
-  // hair_color / accessory / backdrop / drama — ready for future male sister).
-  AIRSHIP_HERITAGE: load('airship_heritage'),
+  // airship. Diversity is baked into the SKIN pool via pure visual descriptors
+  // (no ethnicity labels — Flux collapses category words to stereotype
+  // centroids). The old ethnicity-noun `heritage` axis was dropped (R2).
   AIRSHIP_ROLE: load('airship_role'),
   AIRSHIP_EYES: load('airship_eyes'),
   AIRSHIP_HAIR_COLOR: load('airship_hair_color'),
