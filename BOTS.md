@@ -2,10 +2,13 @@
 
 > **V2 Bot Engine — Production (2026-04-25)**
 >
-> All 19 image bots run on the standalone V2 engine (`scripts/lib/botEngine.js`).
-> Each bot is a pure-data Node module in `scripts/bots/<name>/` with its own
-> per-bot GitHub Actions cron. Two content bots (HumanBot, GlowBot) use custom
-> standalone scripts with Sharp text overlays — see [Content Bots](#content-bots-humanbot--glowbot).
+> All 17 image bots run on the standalone V2 engine (`scripts/lib/botEngine.js`).
+> Each bot is a pure-data Node module in `scripts/bots/<name>/`. All 17 are
+> scheduled by a single DB-driven dispatcher (`.github/workflows/bots-dispatcher.yml`,
+> fires every 15 min, reads `bot_schedules`) — see [Production Cron](#production-cron)
+> for the dispatcher + scheduling-knob details. Two content bots (HumanBot,
+> GlowBot) use custom standalone scripts with Sharp text overlays on a separate
+> workflow — see [Content Bots](#content-bots-humanbot--glowbot).
 >
 > **Key files:**
 > - `scripts/lib/botEngine.js` — shared render engine (Sonnet + Flux + Supabase)
@@ -1276,64 +1279,68 @@ Every gen script's `metaPrompt` follows this pattern:
 
 ## Production Cron
 
-### Per-Bot Workflows
+### Single DB-Driven Dispatcher
 
-Each migrated bot has its own `.github/workflows/<name>.yml`:
+All 17 image bots are scheduled by `.github/workflows/bots-dispatcher.yml`:
 
 ```yaml
-name: StarBot Dream Generation
-
 on:
   schedule:
-    - cron: '0 21 * * *'   # 2 posts/day, staggered times
-    - cron: '0 9 * * *'
-  workflow_dispatch:        # manual trigger with optional overrides
+    - cron: '*/15 * * * *'   # every 15 min, UTC
+  workflow_dispatch:
     inputs:
-      path:
-        description: 'Specific path (default: random)'
-        required: false
-        default: 'random'
-      vibe:
-        description: 'Specific vibe (default: random)'
-        required: false
-        default: 'random'
+      dry_run:
+        description: 'List due bots without running them'
+        type: choice
+        options: ['false', 'true']
+
+concurrency:
+  group: bots-dispatcher
+  cancel-in-progress: false  # queue overlapping ticks instead of dropping
 
 jobs:
-  generate:
+  dispatch:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-      - name: Random delay (0-4 hours)
-        if: github.event_name == 'schedule'
-        run: sleep $((RANDOM % 14400))
-      - name: Generate dream
-        env:
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          node scripts/run-bot.js \
-            --bot starbot \
-            --path "${{ inputs.path || 'random' }}" \
-            --vibe "${{ inputs.vibe || 'random' }}"
+    timeout-minutes: 60        # worst case: 17 bots × ~3min sequential
+    # ... checkout + Node 22 + npm ci ...
+    - run: node scripts/dispatch-bots.js
 ```
 
-### Key Cron Details
+The dispatcher (`scripts/dispatch-bots.js`) does:
 
-- Each bot runs 2x/day at staggered times + 0-4 hour random delay
-- `run-bot.js` renders 1 dream, posts it, fails loud on error
-- `workflow_dispatch` allows manual triggering with path/vibe overrides from the GitHub UI
-- GitHub Actions secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`
+1. `SELECT bot_name FROM bot_schedules WHERE active AND next_due_at <= now() ORDER BY next_due_at`
+2. For each due bot: spawns `node scripts/run-bot.js --bot <name>` (own process for failure isolation)
+3. On success: `UPDATE bot_schedules SET last_posted_at = now()` — DB trigger advances `next_due_at` to next slot
+4. On failure: logs + skips → bot retries next tick (no `last_posted_at` change)
+5. Failsafe: a bot that was created >6h ago with `last_posted_at IS NULL` is auto-deactivated (`active = false`, note added)
 
-### Creating a New Workflow
+### Scheduling Knob — `bot_schedules` table
 
-Copy an existing workflow, change the bot name and cron times. Stagger cron times by 15-30 minutes from existing bots to spread API load.
+Change any bot's cadence via SQL — server-side, no code commit:
+
+```sql
+-- Bump YumBot to 4×/day
+UPDATE bot_schedules SET posts_per_day = 4 WHERE bot_name = 'yumbot';
+
+-- Pause MechBot
+UPDATE bot_schedules SET active = false WHERE bot_name = 'mechbot';
+
+-- Audit fleet cadence
+SELECT bot_name, posts_per_day, active, next_due_at FROM bot_schedules ORDER BY next_due_at;
+
+-- Reactivate a bot the failsafe auto-deactivated
+UPDATE bot_schedules SET active = true, notes = NULL WHERE bot_name = 'x';
+```
+
+How slots work: each bot's `phase_seed` (0..1439, deterministic from md5(bot_name)) anchors its `posts_per_day` slots evenly across 24h UTC. Slot algorithm lives in `compute_bot_next_due()` (migration `177_bot_schedules.sql`). Two BEFORE-UPDATE triggers keep `next_due_at` in sync: one on `last_posted_at` change (post happened), one on `posts_per_day` / `active` / `phase_seed` change (config edit). Collisions are tolerated — if two bots' slots land within the same 15-min dispatcher tick, the dispatcher runs them sequentially.
+
+### Workflow secrets
+
+`SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY` — same as the per-bot workflows that this dispatcher replaced (removed in the cutover commit).
+
+### Manual single-bot trigger
+
+The dispatcher has no per-bot override input — to render one specific bot ad-hoc, run `node scripts/run-bot.js --bot <name>` locally. `run-bot.js` still accepts `--path` and `--vibe` overrides for manual testing.
 
 ---
 
@@ -1597,11 +1604,11 @@ node scripts/iter-bot.js --bot <name> --count 10 --post
 
 Iterate per "The Iteration Workflow with Kevin" section.
 
-### Step 6: Create Workflow + Deploy
+### Step 6: Register in `bot_schedules` + Deploy
 
-1. Create `.github/workflows/<name>.yml` (copy from existing — adjust bot name + cron times)
-2. Commit everything (per `feedback_commit_on_approval.md` — commit IMMEDIATELY when Kevin approves)
-3. Push to main — cron activates on next scheduled run
+1. `INSERT INTO bot_schedules (bot_name, posts_per_day, active, phase_seed) VALUES ('<name>', 2, true, <hash_mod_1440>);` — pick `phase_seed` deterministically from md5(bot_name) so the bot returns to the same time-of-day after temp deactivation
+2. Commit the bot module files (per `feedback_commit_on_approval.md` — commit IMMEDIATELY when Kevin approves)
+3. Push to main — the dispatcher will pick the new bot up on its next tick (≤15 min). Dispatcher's 6h failsafe will auto-deactivate it if the first render fails repeatedly
 
 ### Step 7: Verify in App
 
@@ -1613,7 +1620,7 @@ Search for the bot in the app, check their profile shows posts. Review renders o
 
 ### Active Image Bots (V2 Engine)
 
-All 18 bots below are on per-bot crons via the V2 engine.
+All 17 image bots below are scheduled by the DB-driven dispatcher (see [Production Cron](#production-cron)).
 
 | Bot | Directory | Content | Paths | Architecture status |
 |---|---|---|---|---|

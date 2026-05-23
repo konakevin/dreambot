@@ -1,0 +1,58 @@
+name: Bots Dispatcher (DB-driven)
+
+# Reads bot_schedules every 15 minutes, runs every bot whose next_due_at has
+# passed. Replaces the 16 per-bot workflows with one schedule-driven dispatcher.
+# Server-side cadence config:
+#   UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = '<name>';
+# See BOTS.md "Scheduling" section for details.
+
+on:
+  # CRON IS DISABLED FOR COMMIT #1 — re-enable in commit #2 (cutover) after
+  # verifying dry-run workflow_dispatch lists due bots correctly.
+  # schedule:
+  #   - cron: '*/15 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'List due bots without running them'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+concurrency:
+  group: bots-dispatcher
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    # Sequential worst case: 17 bots × ~3min = 51min. Steady state: 0-2 bots
+    # per tick = 3-6min. Initial cutover surge avoided via 15-min lead clamp
+    # in rebalance_bot_schedules(900).
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Dispatch due bots
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            node scripts/dispatch-bots.js --dry-run
+          else
+            node scripts/dispatch-bots.js
+          fi

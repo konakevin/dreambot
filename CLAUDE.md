@@ -88,7 +88,7 @@ Each nightly dream gets a short whimsical message from DreamBot via a dedicated 
 
 > **STOP — read this before any bot work.** ANY task that touches bot config, path files, pools, seeds, brief composition, archetypes, render quality, or even just *answers a question* about how a specific bot works (DragonBot, GothBot, StarBot, SteamBot, MechBot, DinoBot, BrickBot, BloomBot, ChibiBot, FaeBot, MangaBot, PixelBot, RetroBot, TinyBot, ToyBot, EarthBot) REQUIRES re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` in full first. The playbook is the canonical brain for the bot pipeline — its bar (every render = 10/10 poster-worthy frame), its 8 components of memorable scenes, its per-bot Round-N iteration logs, its cross-bot lessons table, and its failure-mode catalog are how this system stays coherent across 16 bots and dozens of paths. Skipping it produces one-off fixes that contradict prior lessons. **And: UPDATE the playbook with every new lesson learned the moment you learn it — don't wait to be asked.**
 
-Bots post 2× daily via GitHub Actions cron through `scripts/generate-bot-dreams.js`. Each bot is a self-contained module under `scripts/bots/<botname>/`:
+Bots post via a single DB-driven dispatcher (`.github/workflows/bots-dispatcher.yml`, every 15 min) that reads `bot_schedules` for due bots and shells out to `scripts/run-bot.js` per bot. Cadence is owned per-bot in the DB: `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = '<name>';` (no code commit, no app deploy). Each bot is a self-contained module under `scripts/bots/<botname>/`:
 
 - **`index.js`** — bot config (username, mediums, vibes, allowedModels, modelByPath, vibesByPath, mediumByPath, mediumStyles, enhancement layer toggles, `rollSharedDNA()` + `buildBrief()` entry points).
 - **`paths/*.js`** — one file per creative path (e.g., `dark-landscape.js`, `goth-closeup.js`). Each path declares either an inline brief or an archetype (`builder.archetype`) consumed by `scripts/lib/brief-composer.js`.
@@ -112,8 +112,8 @@ EarthBot is a stub. All others have full path/pool/seed implementations.
 **Bot iteration entry points:**
 
 - `scripts/iter-bot.js` — dev iteration. `--bot, --count, --mode random|mixed|<path>, --vibe, --label, --post, --dry-run`. Default count = **5** and you must `--post` for renders to land in Kevin's feed (`/tmp` only is useless).
-- `scripts/run-bot.js` — single-bot run; fails loud (no swallowed errors, unlike iter-bot).
-- `scripts/generate-bot-dreams.js` — production cron entry; picks unused `bot_seeds`, auto-regenerates when exhausted.
+- `scripts/run-bot.js` — single-bot production entry; fails loud (no swallowed errors, unlike iter-bot). Called by the dispatcher per due-bot row.
+- `scripts/dispatch-bots.js` — fleet dispatcher; reads `bot_schedules`, runs each due bot via `run-bot.js`, marks `last_posted_at` on success (DB trigger advances `next_due_at`). Auto-deactivates a new bot that never posts within 6h.
 - `scripts/gen-<bot>-pool.js` — regenerates seed pools for a specific bot.
 
 ### Bot scene quality — CRITICAL workflow
@@ -225,9 +225,9 @@ supabase/
                      persistence, face swap, prompt compiler, etc.)
 
 scripts/
-  bots/<botname>/    16 self-contained bots (index.js, paths/, pools.js, seeds/)
+  bots/<botname>/    17 self-contained bots (index.js, paths/, pools.js, seeds/)
   lib/               Shared bot infra (botEngine, brief-composer, chaos, etc.)
-  generate-bot-dreams.js, iter-bot.js, run-bot.js, nightly-dreams.js (cron)
+  dispatch-bots.js, run-bot.js, iter-bot.js, nightly-dreams.js (cron)
   gen-*.js, test-*.js, qa-*.js  pool gen + testing scripts
 
 __tests__/           24 jest test files (~3.8K LOC) — engine, bots, hooks, utils
@@ -463,6 +463,7 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 
 **CI** (`.github/workflows/ci.yml`): tsc, lint, prettier, jest on every push.
 **Nightly cron** (`.github/workflows/nightly-dreams.yml`): 1am MST + jitter. Secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
+**Bot dispatcher** (`.github/workflows/bots-dispatcher.yml`): every 15 min. Reads `bot_schedules`, runs each due bot via `scripts/run-bot.js`. Change cadence via `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = 'x';`. Same secrets as nightly. Audit: `SELECT bot_name, posts_per_day, active, next_due_at FROM bot_schedules ORDER BY next_due_at;`.
 
 ---
 
@@ -514,7 +515,7 @@ April 2026 audit found 14 silently-broken issues. Pattern: a step needed elsewhe
 
 ### Seed tables — `bot_seeds` and `nightly_seeds` (SEPARATE; never cross-contaminate)
 
-- **`bot_seeds`** — bot-specific, `used_at` lifecycle. Used by `scripts/generate-bot-dreams.js`. Auto-regenerates when exhausted.
+- **`bot_seeds`** — bot-specific, `used_at` lifecycle. Used by `scripts/run-bot.js` (via the picker in `botEngine.js`). Auto-regenerates when exhausted.
 - **`nightly_seeds`** — 8 pools of slotted templates for user dreams. Used by Edge Function nightly path. Permanent, random pick.
 - **`dream_templates`** — LEGACY, no readers, will be dropped.
 
