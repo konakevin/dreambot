@@ -247,6 +247,16 @@ export function DreamCastStep({ onNext, onBack }: Props) {
           console.warn(
             `[DreamCast] removing incomplete cast (${m.role}): desc=${m.description?.length ?? 0} gender=${m.gender ?? 'none'} age=${m.age ?? 'none'}`
           );
+        // Also clean the orphaned storage file if one exists.
+        if (m.thumb_url) {
+          const match = m.thumb_url.match(/\/avatars\/(.+?)(\?|$)/);
+          if (match?.[1]) {
+            supabase.storage
+              .from('avatars')
+              .remove([decodeURIComponent(match[1])])
+              .catch(() => {});
+          }
+        }
         removeCastMember(m.role);
         removedAny = true;
       }
@@ -280,6 +290,12 @@ export function DreamCastStep({ onNext, onBack }: Props) {
     const asset = result.assets[0];
     setUploading(role);
 
+    // Capture the existing thumb_url BEFORE upload so we can clean up the
+    // old storage file after the new one lands. Each upload uses a fresh
+    // timestamped path, so without this cleanup every cast photo
+    // replacement orphans the prior file in the avatars bucket.
+    const previousThumb = getMember(role)?.thumb_url;
+
     try {
       // Upload to Supabase Storage — need a public URL for describe-photo + Kontext
       const path = `${user.id}/cast-${role}-${Date.now()}.jpg`;
@@ -298,6 +314,18 @@ export function DreamCastStep({ onNext, onBack }: Props) {
       const {
         data: { publicUrl },
       } = supabase.storage.from('avatars').getPublicUrl(path);
+
+      // Clean up the prior cast photo (replacement flow). Fire-and-forget —
+      // a failed cleanup just leaves one orphaned file; the new file is
+      // already up and the user-facing flow proceeds.
+      if (previousThumb) {
+        const m = previousThumb.match(/\/avatars\/(.+?)(\?|$)/);
+        if (m?.[1])
+          supabase.storage
+            .from('avatars')
+            .remove([decodeURIComponent(m[1])])
+            .catch(() => {});
+      }
 
       // Show the photo immediately (spinner stays on until describe completes)
       const existing = getMember(role);
@@ -388,7 +416,22 @@ export function DreamCastStep({ onNext, onBack }: Props) {
     }
   }
 
+  // Pulls the storage path out of a cast thumb_url and deletes the file
+  // (fire-and-forget). thumb_url shape:
+  //   https://<project>.supabase.co/storage/v1/object/public/avatars/<path>[?cache-bust]
+  function cleanupCastStorage(thumbUrl: string | undefined) {
+    if (!thumbUrl) return;
+    const m = thumbUrl.match(/\/avatars\/(.+?)(\?|$)/);
+    if (m?.[1]) {
+      supabase.storage
+        .from('avatars')
+        .remove([decodeURIComponent(m[1])])
+        .catch(() => {});
+    }
+  }
+
   function handleRemove(role: CastRole) {
+    cleanupCastStorage(getMember(role)?.thumb_url);
     removeCastMember(role);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }

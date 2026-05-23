@@ -192,6 +192,13 @@ export default function SettingsScreen() {
                     text: 'Delete',
                     style: 'destructive',
                     onPress: async () => {
+                      // Clean up the avatar file in storage too — otherwise
+                      // every "Delete Photo" leaves the JPEG orphaned in
+                      // the avatars bucket. Path is fixed: <userId>/avatar.jpg.
+                      supabase.storage
+                        .from('avatars')
+                        .remove([`${user!.id}/avatar.jpg`])
+                        .catch(() => {});
                       await supabase.from('users').update({ avatar_url: null }).eq('id', user!.id);
                       await supabase.auth.updateUser({ data: { avatar_url: null } });
                       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
@@ -331,6 +338,26 @@ export default function SettingsScreen() {
                           .remove(paths.slice(i, i + 100))
                           .catch(() => {});
                       }
+                    }
+
+                    // Also clean the avatars bucket: avatar + cast photos
+                    // (separate bucket, not covered by list_my_upload_paths).
+                    // Build from in-memory state — no extra RPC needed.
+                    const avatarPaths: string[] = [];
+                    if (profile?.avatar_url) {
+                      const m = profile.avatar_url.match(/\/avatars\/(.+?)(\?|$)/);
+                      if (m?.[1]) avatarPaths.push(decodeURIComponent(m[1]));
+                    }
+                    for (const cm of vibeProfile.dream_cast ?? []) {
+                      if (!cm.thumb_url) continue;
+                      const m = cm.thumb_url.match(/\/avatars\/(.+?)(\?|$)/);
+                      if (m?.[1]) avatarPaths.push(decodeURIComponent(m[1]));
+                    }
+                    if (avatarPaths.length > 0) {
+                      await supabase.storage
+                        .from('avatars')
+                        .remove(avatarPaths)
+                        .catch(() => {});
                     }
 
                     const { error } = await supabase.rpc('delete_own_account');
