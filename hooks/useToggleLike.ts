@@ -46,16 +46,30 @@ export function useToggleLike() {
           .eq('upload_id', uploadId);
         if (error) throw error;
       } else {
+        // Idempotent insert — if a like row already exists for this (user, upload),
+        // upsert is a no-op instead of throwing on the UNIQUE constraint. Fixes the
+        // stale-likeIds-after-app-reload bug where the client thought currentlyLiked=false
+        // but the server already had the like, the insert blew up, optimistic state
+        // partially rolled back, and the like_count was left drifted by +1.
         const { error } = await supabase
           .from('likes')
-          .insert({ user_id: user!.id, upload_id: uploadId });
+          .upsert(
+            { user_id: user!.id, upload_id: uploadId },
+            { onConflict: 'user_id,upload_id', ignoreDuplicates: true }
+          );
         if (error) throw error;
       }
     },
     onMutate: async ({ uploadId, currentlyLiked }) => {
+      // Snapshot every cache slice we're about to mutate so onError can restore
+      // ALL of them. Previously only the likeIds set was snapshotted — the
+      // like_count bumps across feed queries leaked on error and counts drifted.
+      const snapshots: Array<{ key: readonly unknown[]; data: unknown }> = [];
+
       // Toggle likeIds set
       await qc.cancelQueries({ queryKey: key });
-      const previous = qc.getQueryData<Set<string>>(key);
+      const previousLikeIds = qc.getQueryData<Set<string>>(key);
+      snapshots.push({ key, data: previousLikeIds });
       qc.setQueryData<Set<string>>(key, (old = new Set()) => {
         const next = new Set(old);
         if (currentlyLiked) next.delete(uploadId);
@@ -80,27 +94,47 @@ export function useToggleLike() {
       for (const root of infiniteKeys) {
         const queries = qc.getQueryCache().findAll({ queryKey: [root] });
         for (const query of queries) {
-          qc.setQueryData<InfiniteData<AnyPage<DreamPostItem>>>(query.queryKey, (prev) => {
-            if (!prev) return prev;
-            return { ...prev, pages: bumpLikeCount(prev.pages, uploadId, delta) };
-          });
+          const prev = qc.getQueryData<InfiniteData<AnyPage<DreamPostItem>>>(query.queryKey);
+          if (prev) {
+            snapshots.push({ key: query.queryKey, data: prev });
+            qc.setQueryData<InfiniteData<AnyPage<DreamPostItem>>>(query.queryKey, {
+              ...prev,
+              pages: bumpLikeCount(prev.pages, uploadId, delta),
+            });
+          }
         }
       }
       // Also bump in album posts (flat-array shape)
       const albumKeys = qc.getQueryCache().findAll({ queryKey: ['albumPosts'] });
       for (const query of albumKeys) {
-        qc.setQueryData<DreamPostItem[]>(query.queryKey, (prev) => {
-          if (!prev) return prev;
-          return prev.map((p) =>
-            p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p
+        const prev = qc.getQueryData<DreamPostItem[]>(query.queryKey);
+        if (prev) {
+          snapshots.push({ key: query.queryKey, data: prev });
+          qc.setQueryData<DreamPostItem[]>(
+            query.queryKey,
+            prev.map((p) =>
+              p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p
+            )
           );
-        });
+        }
       }
 
-      return { previous };
+      return { snapshots };
     },
     onError: (_err, _vars, ctx) => {
-      qc.setQueryData(key, ctx?.previous);
+      // Restore ALL snapshotted caches (likeIds + every feed query whose
+      // like_count we bumped). Prevents count-drift on mutation failure.
+      if (ctx?.snapshots) {
+        for (const { key: queryKey, data } of ctx.snapshots) {
+          qc.setQueryData(queryKey, data);
+        }
+      }
     },
+    // NOTE: deliberately no onSettled invalidate of likeIds. Trying to refetch
+    // immediately after mutation hit a read-after-write race (the refetch
+    // returned a Set without the just-inserted upload_id and clobbered the
+    // optimistic update, clearing the heart while leaving the count bumped).
+    // Optimistic state is trusted; reconcile cross-session by fixing useLikeIds
+    // to always refetch on mount instead.
   });
 }
