@@ -160,6 +160,9 @@ Deno.serve(async (req) => {
   // pets stay on the legacy freeform path). Inner block-scoped flags
   // (isDualFaceSwap, isSingleCharacter) are computed in the outer try.
   let isFaceSwapCharacterOuter = false;
+  // Hoisted so the post-try image-gen step (line ~1289) can branch on it
+  // when picking JPEG vs PNG for the dual-face-swap pipeline.
+  let isDualFaceSwap = false;
   // Pre-decided model for the face-swap-character path (rolled inside the
   // try block so we can override the medium fragment for flux-1.1-pro before
   // the slot pipeline runs). Hoisted so the post-try image-gen step uses
@@ -532,7 +535,7 @@ Deno.serve(async (req) => {
       composition === 'pure_scene' ? 'none' : nightlyMedium.characterRenderMode;
     const faceSwapEligible =
       isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
-    const isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
+    isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
     // Single human face swap = single cast, face-swap-eligible medium, and the
     // cast member is a human (not a pet — pets stay on the legacy freeform
     // brief because the slot pipeline assumes human gender/age/build).
