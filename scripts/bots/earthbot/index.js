@@ -124,8 +124,15 @@ const ALL_PATHS = [...EARTH_PATHS, ...BEACH_PATHS];
 // it did in its source bot.
 const EARTH_PREFIX =
   'cinematic photography, sharp detail, rich saturated color, hyperreal rendering, gallery-quality, masterpiece';
+// Suffix scrubbed of "no humans / no people" (2026-05-23) — Flux's CLIP/T5
+// tokenizer attends to the words "humans" / "people" regardless of the
+// preceding "no" and was rendering people silhouettes into landscape
+// renders. Per [[feedback_negative_prompt_leak]] — bans go in the
+// template/system, never in the literal output prompt. Templates enforce
+// no-humans via positive composition mandates ("the entire frame is
+// uninhabited landscape").
 const EARTH_SUFFIX =
-  'no humans, no people, no text, no words, no watermarks, hyper detailed, masterpiece quality';
+  'uninhabited landscape, no text, no words, no watermarks, hyper detailed, masterpiece quality';
 const BEACH_PREFIX =
   'travel photography, sharp detail, dramatic saturated color, hyperreal rendering, wallpaper-worthy, masterpiece';
 const BEACH_SUFFIX =
