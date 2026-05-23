@@ -68,6 +68,603 @@ if (!POOL) {
 const POOL_RECIPES = {
 
   // ════════════════════════════════════════════════════════
+  // FANTASY PATH (2026-05-22 — third BrickBot axis migration)
+  // ════════════════════════════════════════════════════════
+
+  brickbot_fantasy_scene_type: {
+    format: 'simple',
+    theme: `LEGO MOC FANTASY DIORAMA SCENE STAGES — narrative-stage descriptions for the BrickBot fantasy axis system. Each entry is ONE narrative stage (the WHAT — what category of medieval-fantasy moment is this diorama?). Each entry 30-55 words.
+
+⚠️ STAGE / SETTING / NARRATIVE CATEGORY only. NO camera framing language. NO minifig action verbs. NO build technique vocab. NO magical phenomena. Stage + tension only.
+
+VARIETY MANDATE — distribute across these categories (~5-8% each):
+  • CASTLE SIEGE — defenders on battlements / trebuchet bombardment / battering ram at gate / scaling-ladder assault / wall-breach moment
+  • DRAGON ATTACK — dragon-besieging-castle / dragon-fire raining down on village / village evacuation / refugee column fleeing
+  • DRAGON LAIR — sleeping dragon on hoard of gold (Smaug-coded) / dragon hatchling in nest / lair-entrance confrontation / dragon-rider mounting
+  • MOUNTED COMBAT — jousting tournament lists / cavalry charge across battlefield / mounted-knight melee / wargs-vs-horses skirmish
+  • TOURNAMENT / FESTIVAL — joust pavilion + crowd / archery contest / sword-tournament / royal feast / harvest festival in medieval village
+  • CORONATION / ROYAL CEREMONY — throne-room coronation / royal wedding in cathedral / knighting ceremony at altar / sword-in-stone moment / royal-procession through woods
+  • WIZARD TOWER — alchemist laboratory / wizard's library / mage-tower observatory / scrying-chamber / arcane-experiment-in-progress
+  • MAGE DUEL — two mages mid-spell-collision / wizards' council in war-room / necromancer summoning / cleric-vs-undead exorcism
+  • ELVEN TREETOP — elven city in canopy / Rivendell-coded sanctuary / Mirkwood feast / forest-shrine encounter
+  • DWARVEN MINE — Khazad-dûm / Erebor underground hall / dwarf-forge / mining-cart procession / dragon-flooded ruins
+  • RANGER / ADVENTURER PARTY — D&D 4-figure party at campsite / forest-glade druid encounter / hidden-shrine discovery / bandit ambush on path
+  • TAVERN INTERIOR — bard performing / drunken-brawl / quest-hire meeting / hooded-stranger in corner / wedding-night-cheer
+  • DUNGEON / CRYPT — torture-chamber / treasure-vault discovery / cursed-tomb opening / prisoner-rescue / lich-throne approach
+  • SKELETON UPRISING — graveyard skeletons emerging / necromancer raising dead / skeleton army marching / lich tower siege
+  • COASTAL / BRIDGE DEFENSE — coastal watchtower beacon / hold-the-bridge against horde / cliff-castle attack / lighthouse warning
+  • WITCH HUT / SWAMP — witch's hut on chicken-legs in poisoned marsh / coven gathered around bonfire / cauldron-brewing
+  • MOUNTAIN PASS AMBUSH — orc/goblin ambush on travelers / troll-bridge confrontation / cave-troll emerging / mountain-pass skirmish
+  • THRONE ROOM — kingly audience / hooded-emissary delivers ill news / coronation / banquet-feast / war-council
+  • TOWN MARKET — medieval market-square / harvest festival / royal proclamation in plaza / pickpocket-vs-guard chase
+  • NORTHERN-REALM / VOLCANIC — Skyrim-coded frozen realm with northern-warriors / Mordor-coded volcanic-wastes / Helm's Deep walled fortress / Minas Tirith white-city
+  • STONE-CIRCLE / SUMMONING — Stonehenge-coded ritual circle / faerie-circle gathering / fey-court / underworld-portal opening
+  • RUINS / SUNKEN — sunken temple in jungle / ancient-elven ruins / lost-city of dwarves / overgrown abbey
+  • REFUGEE COLUMN — village evacuating dragon-attack / peasants fleeing battle / wagon-train mid-flight / camping-with-dragon-on-horizon
+  • LIBRARY / SCRIPTORIUM — monastery library / scribe at parchment / wizard archivist / hidden-codex discovery
+
+Each entry must:
+• Name the narrative category in first 6-10 words
+• Establish the diorama STAGE (architecture / biome / interior)
+• Suggest TENSION or STAKES of the moment (without prescribing the action verb)
+• NEVER name a specific minifig action ("knight swinging sword" — that's minifig_action axis)
+• NEVER name a magical phenomenon ("fire raining down" if isolated — that's magical_phenomenon axis)`,
+    touchpoints: [
+      'CASTLE SIEGE WALL-BREACH — multi-tier brick-built stone castle wall taking direct trebuchet impact, splintered crenellations and dust-plates erupting outward, defenders in heraldic-tabard surcoats scrambling along the battlement rim, attackers swarming the breach from below, the moment-of-collapse',
+      'DRAGON BESIEGING CASTLE — colossal brick-built dragon mid-attack on a tall castle keep, knights firing crossbows from battlements as dragon-claw grips a tower turret and wing-section dominates the upper-frame, banners torn, the dragon-vs-castle iconic moment',
+      "SLEEPING DRAGON ON GOLD HOARD — vast underground lair with massive brick-built dragon coiled on a mountain of 1×1 gold round-plates and trans-purple/trans-red jewel pieces, scattered crown + chalice + weapon props across the hoard, lone hooded thief approaching the edge, Smaug-coded scene",
+      "JOUSTING TOURNAMENT LISTS — wooden tournament-lists with painted heraldic banners, two armored knights on caparisoned warhorses bearing lances at full gallop down opposite sides, central tilt-rail of brick-built timber, royal pavilion with crowd in colored tunics, the moment-before-impact",
+      "ELVEN TREETOP CITY — multi-level brick-built city built across three interconnected giant trees, leaf-element canopy in olive-green and dark-green, rope-bridges with rail-pieces connecting platforms, lantern-lit pavilions, elven minifigs in long-hair variants on multiple levels, Rivendell-coded sanctuary feel",
+      "DWARVEN FORGE HALL — vast underground hall built from dark-bley pillars with mithril-blue accent veins, massive brick-built forge at center with trans-orange flame elements and stacked weapon-racks, dwarven minifigs in plate-armor with bearded heads working anvils, dragon-flooded-Erebor-coded heritage",
+      "WIZARD'S TOWER LIBRARY — interior of a wizard's tower with brick-built bookshelves walls floor-to-ceiling, scattered scrolls + alchemical-glassware + crystal-orbs on tables, wizard minifig at a central lectern with grimoire open, trans-purple magical-residue elements drifting around the room",
+      "THRONE ROOM CORONATION — vaulted throne-hall with stained-glass-pattern tile windows, central throne on raised dais with crown-bearer at the base, court attendants in heraldic livery flanking the central aisle, archbishop minifig with mitre lifting the crown, the moment-of-coronation",
+      'D&D ADVENTURER PARTY CAMPSITE — forest-glade clearing with brick-built campfire (trans-orange flame cluster), four-minifig adventuring party in distinct archetypes (plate-armor fighter / hooded rogue / robed wizard with staff / cleric with mace), surrounding ancient oak trees in canopy, the night-before-the-quest beat',
+      "CRYPT TREASURE VAULT — underground crypt with stone-block walls + sarcophagus-tiles around the perimeter, central altar bearing a glowing trans-purple artifact, hooded thief minifig approaching the altar from foreground, skeleton-warriors emerging from sarcophagi at frame-edges, the trap-springs moment",
+      "TAVERN BARD PERFORMANCE — interior medieval tavern with timber-beam ceiling and brick-built fireplace, central bard minifig with lute on tabletop performing for crowd, drinking patrons at scattered tables with chalice + tankard props, hooded stranger in shadowy corner watching, lively festival-night feel",
+      "FROZEN NORTHERN REALM HOLD — snow-covered stone hold of a Skyrim-coded northern-realm, mead-hall structure with wolf-banner heraldry, Viking-coded warrior minifigs in fur-cloaks gathered outside, brick-built standing stones at hold-perimeter, the moment-of-jarl-return-from-raid",
+      'MORDOR VOLCANIC WASTES — black + dark-red volcanic landscape with brick-built basalt formations and trans-orange lava-rivers, Barad-dûr-coded tower silhouette in the deep distance with trans-red eye-of-Sauron summit, uruk-hai minifig column marching toward camera in receding perspective, LotR-Mordor-coded heritage scene',
+      "HELM'S DEEP WALL DEFENSE — fortified curtain-wall of stone-fortress (Helm's Deep-coded) with parapeted battlement, defending Rohirrim minifigs along the wall with bows + spears, brick-built siege-ladders pushing up at multiple points, dramatic-fortress-defense moment, LotR heritage",
+      'ROYAL WEDDING IN CATHEDRAL — vaulted gothic-cathedral interior with stained-glass-window tile-panels casting cool-blue + trans-red light onto the central aisle, royal couple at altar with archbishop officiating, court attendants flanking the aisle in heraldic livery, the vow-exchange moment',
+      "MOUNTAIN PASS GOBLIN AMBUSH — narrow rocky pass between two steep cliff-walls in light-bley slope-bricks, traveler-minifigs (D&D party-coded) caught mid-stride as goblin-minifig ambushers emerge from boulder-cover with curved-blades, the moment-of-discovery",
+      "WITCH'S HUT ON CHICKEN-LEGS — Baba-Yaga-coded witch's hut perched on giant brick-built chicken-legs in a poisoned-purple marsh baseplate, skull-fence perimeter around the hut, witch minifig with broom at the doorway, bubbling trans-green cauldron outside, cursed-marshland feel",
+      "STONE CIRCLE RITUAL — Stonehenge-coded ring of vertical light-bley stone-monoliths on a moonlit moor baseplate, druid-coded minifigs in dark-green robes gathered around a central altar-stone, trans-magenta magical-light emerging from the altar, ritual-summoning moment",
+      "FOREST GLADE DRUID ENCOUNTER — sun-dappled glade between giant oaks with brick-built moss-covered shrine-stone at center, druid-minifig in dark-green robes with antler-headdress at the shrine, deer-minifig and forest-creatures approaching peacefully, sacred-nature moment",
+      "RANGERS' WATCHTOWER — wooden Forestmen-coded watchtower built into the canopy of a giant oak with leaf-element foliage, Forestmen-green-hood ranger minifigs at the platform with bows drawn, the lookout-spotting-orcs-on-horizon moment",
+      "REFUGEE COLUMN FLEEING DRAGON — narrow road through hillside with wagons + peasants + livestock mid-flight, lookout-pointing-back at a brick-built dragon silhouette appearing over the deep-distance mountain ridge with smoke-column from a burning village behind, the moment-of-realization",
+      "DUNGEON PRISONER RESCUE — torch-lit stone-dungeon corridor with iron-bar cell at frame-edge, prisoner-minifig inside reaching out as rogue-minifig at the cell-door works the lock with thieves-tools, guard-minifig slumped unconscious at the corridor end, the rescue-moment",
+      'NECROMANCER SUMMONING — interior of a black-stone necromancer-tower with central pentagram-floor in trans-purple tiles, necromancer-minifig with skull-staff at the pentagram, skeletons rising from the floor pattern, dark-arts ritual moment',
+      "FAERIE COURT — LEGO Elves-coded enchanted glade with brick-built mushroom-pavilions in bright-pinks + trans-purple + trans-green, faerie-minifigs (Elves-line-coded) gathered around a crystal-throne, the welcoming-quest-givers moment in pastels",
+      'COASTAL CLIFF WATCHTOWER — coastal-cliff fortress on edge of high cliff-face, crashing trans-blue wave-elements against rocks below, beacon-fire trans-orange flame at watchtower peak, garrison minifigs in heraldic-livery on the walls, the warning-signal moment',
+      "HORSEMEN COURIER PURSUIT — riders on caparisoned warhorses mid-gallop across an open field, courier-minifig in front with scroll-tube clutched in C-hand, two pursuing knight-minifigs behind in heavy plate-armor with lances couched, the chase-mid-pursuit moment",
+      "BANDIT AMBUSH ON CARRIAGE — wooded roadside with brick-built royal-carriage caught mid-stop, bandit-minifigs leaping from the foliage with raised weapons, driver-minifig mid-reach for crossbow, the highway-robbery moment",
+      "GOLEM AWAKENING — brick-built stone-golem on an altar-platform in an ancient ruin, alchemist-minifig at the activation-runes side-panel, faint trans-cyan magical-light emerging from the golem's chest-cavity, the awakening-moment",
+      "MEDIEVAL MARKET SQUARE — bustling town-square with brick-built stalls + vendors in heraldic livery, royal-proclamation tile being read aloud at a central pillar, pickpocket-minifig mid-grab on a noble's coin-purse, guard-minifig mid-turn toward the disturbance, daily-life-with-crime moment",
+      "ROYAL HUNT IN FOREST — forest-floor with royal-hunting-party on caparisoned warhorses, lead horseman with bugle-horn raised, hunting-hounds mid-bound after a deer-minifig fleeing into the deep-distance trees, the hunt-mid-chase moment",
+    ],
+    instructions: `Each entry is ONE fantasy narrative stage, 30-55 words. Format: "STAGE NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines. STRICT BANS: never include camera framing language; never include minifig action verbs ("knight swinging sword" — that's the minifig_action axis); never include isolated magical phenomena ("fire raining down by itself" — that belongs to magical_phenomenon axis); never include lighting descriptors. Stage + tension only. NEVER LEGO Star Wars references. NEVER LEGO Harry Potter references (out of scope for BrickBot fantasy).`,
+  },
+
+  brickbot_fantasy_minifig_action: {
+    format: 'simple',
+    theme: `LEGO MINIFIG ACTION BEATS — verb-led story moments for the BrickBot fantasy path. Each entry is a freeze-frame of minifigs IN MID-ACTION. Each entry 25-45 words.
+
+⚠️ STORY BEAT MANDATE per the playbook. Every entry MUST start with an ACTIVE VERB and describe a moment with CAUSE + EFFECT in the same frame. Fantasy-specific verbs: mid-charge, mid-cast, mid-archery-loose, mid-lance-impact, mid-shield-bash, mid-spell-blast, mid-coronation-bow, mid-banquet-toast, mid-skeleton-rise, mid-rescue-of-prisoner, mid-dragon-strike, mid-leap-from-saddle, mid-fall-from-battlement, mid-dive-into-treasure-pile, mid-ritual-incantation, mid-bow-from-elven-platform, mid-hammer-strike-at-forge.
+
+⚠️ HARD BANS:
+  • NEVER "knights standing around"
+  • NEVER "wizard posing in tower"
+  • NEVER "characters watching / gazing at"
+  • NEVER passive states
+
+Body-position variety:
+  • Mid-charge / mid-lance / mid-melee (~20%)
+  • Mid-cast / mid-spell-blast (~15%)
+  • Mid-archery / mid-crossbow-fire (~10%)
+  • Mid-mount-leap / mid-fall-from-horse (~10%)
+  • Multi-figure interaction (rescue, duel, party-gathering, brawl) (~20%)
+  • Mid-discovery / mid-treasure-grab (~10%)
+  • Mid-ceremony (coronation / wedding / knighting / vow) (~10%)
+  • Mid-skeleton-rise / mid-undead-emergence (~5%)
+
+Each entry:
+• Start with an ACTIVE VERB
+• Name 1-3 specific minifigs (knight, wizard, ranger, dragon-rider, princess, bard, dwarf, elf, orc, skeleton, etc.) with brief identifier (heraldic surcoat / robed / hooded / armored)
+• Describe SHARED OBJECT or EVENT (lance / spell-vortex / treasure-chest / dragon-claw / spell-bolt / portcullis-falling / etc.)
+• Imply moment-before and moment-after
+• PLASTIC SCALE — minifig anatomy (C-shaped hands / two-stud arms / printed visor)`,
+    touchpoints: [
+      "Mid-lance-impact between two armored knights on caparisoned warhorses at tournament lists, leading knight's lance shattering trans-clear bar-element splinters spraying outward, opponent rocking back in saddle, the freeze-moment of impact",
+      "Mid-cast of a fireball spell by a robed wizard minifig with C-grip on twisted-staff, trans-orange + trans-red flame elements erupting from staff-tip, foreground orc-minifig mid-recoil with raised shield, the moment-of-impact",
+      "Mid-archery-loose of an arrow by a Forestmen-green-hood ranger minifig with bow drawn from cover behind a tree-trunk, target orc-minifig on path ahead mid-step, arrow trans-clear bar-element trailing mid-flight",
+      "Mid-charge of armored cavalry across a battlefield, lead knight on caparisoned warhorse with banner-bearer beside, lances couched forward, second-rank riders behind with raised swords, the moment-of-impact-on-enemy-line",
+      "Mid-leap from rampart of an armored knight onto an attacker's siege-ladder, sword raised overhead in C-grip, attackers below mid-recoil, the dramatic-counter-attack moment",
+      "Mid-skeleton-rise from a moonlit graveyard, lead skeleton-minifig with bone-torso and skull-head emerging from broken-tombstone, second skeleton behind clawing up from earth, gravedigger-minifig at frame-edge mid-flee-in-terror",
+      "Mid-coronation-bow as the kingly minifig kneels at the altar dais with crown-bearer mid-lift of golden crown overhead, archbishop-minifig in mitre with C-hands held out in blessing, court attendants flanking in heraldic-livery mid-bow",
+      "Mid-rescue of a chained prisoner-minifig by a rogue-minifig in hooded cloak working the cell-lock with thieves-tool, prisoner reaching out through bars in C-grip, unconscious guard-minifig slumped at corridor end",
+      "Mid-spell-blast collision between two mages mid-duel, robes flying as one mage's trans-purple spell-bolt meets the other's trans-cyan counter-spell with sparks of trans-yellow at the collision-point, both mages mid-recoil",
+      "Mid-dragon-strike as colossal brick-built dragon's claw grips a tower turret crumbling brick-fragments mid-fall, defending knight minifig at the window mid-lance-thrust into the dragon's wrist, the iconic knight-vs-dragon moment",
+      "Mid-hammer-strike at the dwarven forge by a bearded dwarf-minifig in plate-armor, hammer mid-arc descending toward glowing trans-orange weapon on the anvil, sparks (trans-yellow 1×1 round-plates) bursting at impact",
+      "Mid-dive-into-treasure-pile by hooded thief-minifig with arms outstretched onto a hoard of 1×1 gold round-plates and trans-purple jewel-pieces, sleeping dragon's eye opening in the deep-distance behind the pile, the moment-before-discovery",
+      "Mid-bow-from-elven-platform as an elven-archer minifig with long-hair-piece releases an arrow from a high treetop platform, target orc-minifig on the forest-floor below mid-fall, second elf at frame-edge mid-nock of another arrow",
+      "Mid-banquet-toast in a royal hall, kingly minifig at the head of long-table mid-raise of chalice C-grip, court attendants at the table mid-cheer, bard-minifig with lute mid-strum in the background, festive-feast moment",
+      "Mid-ritual-incantation at a Stonehenge-coded stone-circle, druid-minifigs in dark-green-robes with antler-headdress C-grips raised overhead, central altar-stone mid-glow trans-magenta, fey-mist elements drifting from the stones",
+      "Mid-charge of orc-horde across a battlefield with brandished weapons, lead orc-minifig with curved-blade overhead mid-roar, surrounding orcs in fur-and-leather attire mid-stride, distant brick-built siege-tower in receding perspective behind",
+      "Mid-shield-bash by a paladin-minifig in gold-trim-armor against a hellhound-creature, shield mid-impact against the beast's snout, sword in other C-hand mid-thrust forward, the divine-combat moment",
+      "Mid-portcullis-fall as the iron-gate descends from the brick-built castle gatehouse cutting off two attacker-minifigs from the inner courtyard, gate-keeper-minifig at the chain-mechanism mid-pull, the moment-of-cutoff",
+      "Mid-leap-from-saddle by a knight-minifig dismounting at full gallop, warhorse continuing past as the knight lands mid-stride sword raised, target enemy-knight in armored opponent mid-react-to-incoming-attack",
+      "Mid-coin-throw by a bard-minifig finishing a tavern performance, tossed 1×1 gold round-plates arcing through the air toward an outstretched hat at the foot of the tabletop-stage, drunken patrons mid-applaud around tables",
+      "Mid-portal-step by a wizard-minifig stepping through a trans-cyan + trans-violet magical-portal disc, one C-hand still on this side gripping a staff, the other C-hand emerging on the other side reaching forward, half-vanished mid-traversal",
+      "Mid-staff-block as a hooded druid-minifig parries an attacking orc's blade with a quarterstaff held cross-grip, second druid behind mid-charge of a healing-spell trans-green hands-glow overhead, defending-the-shrine moment",
+      "Mid-throw of a torch by a fleeing peasant-minifig into a haystack-pile to set warning-fire as dragon-shadow looms over the village in deep-distance, trans-orange flames bursting from the strike-point, the village-warning moment",
+      "Mid-falling-from-battlement of an arrow-struck attacker-minifig from the top of a brick-built castle wall, body mid-arc downward, trans-clear bar-arrow still protruding from chest-print, defender at the battlement mid-nock of next arrow",
+      "Mid-hostage-rescue as a paladin-minifig sweeps a captured-princess-minifig into one C-hand mid-stride away from a collapsing dungeon corridor, pursuing skeleton-minifigs mid-fall behind from the collapse, the dramatic-rescue moment",
+      "Mid-troll-uppercut by a giant brick-built cave-troll's massive C-hand sending a knight-minifig mid-air arcing back, knight's shield mid-spin away from grip, distressed companion knight on the ground mid-shout warning",
+      "Mid-dragon-mount-takeoff as a dragon-rider minifig in saddled brick-built dragon at the cliff-edge, dragon's wings mid-down-beat trans-orange wing-tip embers, ground falling away in deep-distance, the moment-of-launch",
+      "Mid-sword-pull-from-stone by a young squire-minifig with both C-hands on the hilt of a sword embedded in a moss-covered altar-stone, surrounding court mid-gasp as the blade mid-emerge, the King-Arthur-coded moment",
+      'Mid-mage-summoning of a winged-creature in the central pentagram of a wizard\'s tower, mage-minifig C-hands held wide in incantation gesture, trans-purple magical-bird emerging from the pentagram center, the calling-the-familiar moment',
+      "Mid-toss of a trans-purple magical-orb between two D&D-party-minifigs mid-combat, fighter-minifig in front mid-receive of the orb with both C-hands raised, wizard-minifig behind mid-launch with sleeves-trailing, party-coordination beat",
+    ],
+    instructions: `Each entry is ONE fantasy minifig action beat, 25-45 words. Format: free-form prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO "knights standing", NO "wizard posing", NO "watching / looking at", NO passive states. Story beat + verb + cause/effect always. NEVER Star Wars / Harry Potter references.`,
+  },
+
+  brickbot_fantasy_build_technique: {
+    format: 'simple',
+    theme: `LEGO FANTASY MOC BUILD TECHNIQUE — AFOL-distinguishing brick-construction technique notes for the BrickBot fantasy path. Each entry is ONE specific MOC technique that makes a fantasy diorama read as "Bricklink AFOL champion build" instead of "official LEGO Castle set photo." Each entry 25-45 words.
+
+VARIETY MANDATE — distribute across:
+  • SNOT castle-wall curvature (cylindrical-tower curves / arched-gate spans / vaulted-ceiling SNOT)
+  • Brick-built dragon construction (articulated wings via Technic / scaled-hull with cheese-slope detailing / poseable neck via ball-joints)
+  • Tree-canopy + foliage techniques (Bricklink Forestmen tree / leaf-element saturation / brick-built bark texture)
+  • Trans-piece magical effects (trans-purple spell-vortex stacked plates / trans-cyan magic-portal disc / trans-orange dragon-fire cluster)
+  • Technic articulation (drawbridge mechanism / portcullis chain / siege-engine arm / dragon-wing fold)
+  • Illegal techniques (brick-bending for organic curves / clutch-power-on-tile / 1×2 mod for irregular stone)
+  • Microscale tricks (minifig-accessory repurposed as macro-detail: lightsaber-hilt as banner-pole, croissant as decorative-flourish, dragon-wing piece as cathedral-corbel)
+  • Printed-tile signature pieces (heraldic banner-tiles / printed map-tile / stained-glass window-tile)
+  • Studded-vs-tile texture contrast (studded wood-floor / tiled smooth-stone)
+  • Cathedral / arch construction (Gothic vault-bricks / flying-buttress brackets / stained-glass window-tiles)
+  • Brick-built creatures (cave-troll / giant-spider / griffin / unicorn / direwolf / goblin-army)
+  • Forest-floor texture (moss-element coverage / fallen-log brick-pieces / mushroom-element clusters)
+  • Stone-circle / ruin texture (worn-monolith stack-and-shift / collapsed-pillar at angle)
+
+Each entry must:
+• Name the technique TYPE in first 5-8 words
+• Specify WHICH FANTASY BUILD ELEMENT it applies to (castle wall / dragon body / tree canopy / spell-effect / etc.)
+• Specify SPECIFIC BRICK PARTS used (named: 1×2 cheese slope / Technic axle-pin / trans-orange flame element / leaf-element-piece)
+• Imply the visual IMPACT`,
+    touchpoints: [
+      'SNOT-curved castle tower wall — cylindrical castle-tower built with sideways-stud bracket-plates turning 2×4 curved-slope bricks in concentric horizontal rings, mortar-line tile-offset every third ring for masonry-realism, the AFOL Bricklink-MOC cylindrical-tower signature',
+      "Brick-built articulated dragon wings — dragon wings constructed from Technic axle-pin spine + clip-and-bar membrane supports, large trans-clear or trans-blue 1×4 wing-panel pieces fanned outward, ball-joint at shoulder allowing pose-variation, AFOL-dragon canon",
+      "Bricklink Forestmen tree canopy — giant-oak tree-canopy built from clip-and-bar branches with dense leaf-element-piece coverage in olive-green + dark-green + autumn-orange leaf-clusters, exposed trunk built from brown round-bricks with brick-edge cracks for bark-texture",
+      "Trans-purple spell-vortex stack — magical-spell-vortex built from trans-purple + trans-magenta + trans-clear 1×2 + 1×4 plate-strips stacked at progressive angles in spiral pattern, with 1×1 round-plate trans-violet spark-elements drifting at the edges, the AFOL spell-fx signature",
+      "Trans-orange dragon-fire cluster — dragon-fire breath built from clustered trans-orange + trans-red + trans-yellow 1×1 flame-elements at dragon-muzzle with progressively-spaced cluster cone trailing outward into the air, trans-clear smoke-shimmer at outer edge",
+      "Technic-articulated drawbridge — castle gatehouse drawbridge mounted on Technic axle-pin pivot at the inner-wall hinge, brick-built chain mechanism extending up to a winch-housing built into the gatehouse, allowing real-articulation up-and-down motion",
+      'Illegal brick-bending stone — organic-curving stone-wall section built using illegal brick-bending technique (1×2 plates pressure-stacked into a gentle arc) for natural worn-stone irregularity, AFOL-purist illegal MOC pride',
+      "Microscale lightsaber banner-pole — repurposed minifig lightsaber-blade pieces (technically Star Wars accessory, used as generic LEGO part here) inserted as flagpoles holding printed heraldic-banner tiles overhead castle ramparts",
+      "Studded floor + tiled stone contrast — castle great-hall floor built with exposed-stud studded wooden-plank palette (brown 2×2 plates) for the central hearth-zone and tiled smooth-grey 2×2 tiles for the marble-flagstone walking-zones, visual contrast separating ceremonial vs daily-use",
+      "Gothic vault-rib construction — cathedral or grand-hall vaulted ceiling built using SNOT bracket-plates turning curved-slope bricks downward to form intersecting vault-ribs, stained-glass-pattern tile-windows mounted in the upper-clerestory level",
+      "Brick-built cave-troll body — colossal cave-troll figure built from large dark-bley + dark-tan slope-bricks for a hunched-bipedal form, Technic ball-joints at shoulders + elbows for poseable arms, single 2×2 round-eye element in trans-yellow on the head",
+      "Brick-built giant-spider — giant arachnid built from a central dark-bley dome-body with eight Technic-articulated legs in 1×1 hinge-plates with claw-tip dark-brown 1×1 cones, trans-red 1×1 round-plate eyes clustered at the head",
+      "Heraldic banner-tile signature — printed heraldic-banner tile (Crusaders red+white / Forestmen green+brown / Black Knights black / Dragon Knights red-with-dragon / Royal Knights gold+blue) mounted on antenna-pole flagstaff above the castle ramparts, faction-identity anchor",
+      "Stained-glass window-tile cathedral — Gothic cathedral interior with floor-to-ceiling stained-glass window built from 1×2 + 1×4 trans-clear + trans-red + trans-yellow + trans-violet + trans-cyan plate-strips arranged in geometric rosette pattern, cool-tinted light streaming inward",
+      "Mushroom-element forest-floor cluster — woodland-floor scene built with scattered red-and-white mushroom-element pieces, brown 1×1 round-plates as fallen-leaves, scattered olive-green moss-coverage and 1×1 cone-bricks as pebbles, AFOL forest-detail signature",
+      "Brick-built portcullis chain mechanism — castle-gate portcullis built from vertical Technic-rod bars in dark-bley with horizontal supports, two-link chain pieces running from the top of the gate up through the gatehouse to a winch-mechanism, AFOL functional-gate signature",
+      "Bricklink-AFOL siege-engine — trebuchet built from Technic-beam frame with a counterweight-arm balanced on a Technic-axle pivot, leather-cup at the end built from clip-and-bar with hide-element pouch, AFOL siege-engine canon",
+      'SNOT-curved arched gateway — castle gatehouse arch built with SNOT bracket-plates turning curved-slope bricks at the apex, sandstone-coded tan slope-brick mosaic in the arch-stones, masonry-realism technique',
+      "Brick-built unicorn — bone-white pearl-finish unicorn figure built from large white slope-bricks for the body, trans-pearl-white horn element on the head, articulated Technic-joints in the legs, LEGO Elves-coded mount",
+      "Stone-circle worn-monolith stack — Stonehenge-style monolith built from stack-and-shifted light-bley + dark-bley slope-bricks for worn-weathered texture, irregular shape achieved by 1×2 jumper-plate offsets, AFOL ruins-canon",
+    ],
+    instructions: `Each entry is ONE MOC fantasy-build technique, 25-45 words. Format: "TECHNIQUE NAME CAPS — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: no real-world construction language (no "3D-print / paint / glue"); LEGO bricks only. Name SPECIFIC part types.`,
+  },
+
+  brickbot_fantasy_camera_framing: {
+    format: 'simple',
+    theme: `FANTASY-SPECIFIC CAMERA FRAMING — LEGO MOC photography angles for the fantasy path. Each entry is ONE camera position + framing rule specific to medieval-fantasy diorama subject matter. Each entry 15-30 words.
+
+VARIETY MANDATE — distribute across:
+  • Battlement-down (looking down from castle wall at attackers below)
+  • Throne-room-establishing (down the central aisle toward the throne)
+  • Dragon-POV (looking from dragon's eye toward defending knights)
+  • Forest-glade-through-trees (camera among tree-trunks looking into clearing)
+  • Cliff-castle-aerial (high-angle overlooking castle complex)
+  • Under-archway-discovery (camera at gateway looking inward at scene)
+  • Portcullis-low (camera ground-level looking up at gate / drawbridge)
+  • Chapel-altar-down-aisle (cathedral aisle toward altar with stained-glass behind)
+  • Dragon-lair-vertigo (camera looking down into vast cavern from height)
+  • Jousting-lists-broadside (camera between two charging knights at impact-point)
+  • Forest-canopy-down (camera looking down from treetop city to forest floor)
+  • Mountain-pass-narrows (camera in narrow pass looking outward at framed party)
+  • Crypt-passage-receding (camera in crypt corridor looking down receding passage)
+  • Tavern-corner-establishing (camera in tavern corner looking across the room)
+  • Stone-circle-aerial (overhead aerial at the ring of stones from above)
+  • Witch-hut-low-skewed (camera tilted to match chicken-legs-leaning hut)
+
+Each entry must:
+• Specify camera POSITION (height / location / orientation)
+• Specify the framing's PURPOSE — what story-element this angle DRAMATIZES
+• Reference fantasy-specific scenery elements (battlement / throne / dragon / archway / forest-canopy / etc.)`,
+    touchpoints: [
+      'BATTLEMENT-DOWN OVERLOOK — camera at the top of a castle wall looking straight down at attackers swarming the base, attackers in receding perspective, defenders mid-action at the parapet rim foreground, the wall-dominates-attackers viewpoint',
+      "THRONE-ROOM ESTABLISHING DOWN-AISLE — camera at the far end of the throne-hall looking down the central aisle toward the throne at the deep-distance, court attendants flanking in heraldic-livery, throne-bearer mid-action at the dais",
+      "DRAGON'S-EYE POV — camera positioned at the dragon's head-level looking outward at defending knights, knight-minifigs small in mid-distance with raised weapons, the predator-perspective viewpoint",
+      "FOREST-GLADE THROUGH-TREES — camera positioned among foreground tree-trunks looking into a sun-dappled forest-glade where a druid encounter or party-camp is centered, trunk-frames the action on left and right",
+      "CLIFF-CASTLE AERIAL ESTABLISHING — high-angle aerial looking down at a castle complex perched on cliff-edge, the castle-walls and courtyard visible from above, ocean or valley dropping away in deep-distance",
+      "UNDER-ARCHWAY DISCOVERY — camera positioned at a gateway-arch looking inward at a courtyard or great-hall scene, the arch frames the interior like a vignette, depth into the courtyard receding",
+      "PORTCULLIS-LOW UP-GATE — camera at ground-level just outside the castle gate looking up at the iron portcullis and gatehouse arch overhead, the gate dominating the upper-frame, looming-castle viewpoint",
+      "CHAPEL-ALTAR DOWN-AISLE — cathedral interior with camera at the back of the nave looking down the long aisle toward the altar, stained-glass-window panels casting cool-tinted light, ceremony in foreground silhouettes",
+      "DRAGON-LAIR VERTIGO DOWN-INTO-CAVERN — camera at a high cavern-ledge looking down into a vast underground lair below, sleeping dragon and treasure-hoard visible at the cavern-floor center, vertigo-inducing scale",
+      "JOUSTING-LISTS BROADSIDE — camera in the open space between two charging knights at the moment-before-impact, both knights visible in profile silhouette left and right with lances couched, tournament-tilt-rail in deep-distance",
+      "FOREST-CANOPY DOWN-TO-FLOOR — camera at a high treetop platform looking straight down through the canopy to the forest-floor below, scattered figures and shrine-stone visible far below through the leaf-element gaps",
+      "MOUNTAIN-PASS NARROWS — camera in a narrow rocky pass between two steep cliff-walls looking outward, the pass framing a small party of travelers in the mid-distance approaching, claustrophobic-pass viewpoint",
+      "CRYPT-PASSAGE RECEDING — camera at the entrance of a torch-lit crypt corridor looking down its receding length, sarcophagi flanking the corridor at intervals, action at the far end in deep-distance",
+      "TAVERN-CORNER ESTABLISHING — camera positioned in one corner of a tavern looking diagonally across the room, foreground table with patrons, central bard-performance space, far-corner shadowy hooded-stranger",
+      "STONE-CIRCLE AERIAL OVERHEAD — high overhead aerial looking straight down at a ring of standing stones on a moonlit moor, druid-circle inside the ring, the ring-pattern visible from above, ritual-overhead viewpoint",
+      "WITCH-HUT LOW-SKEWED DUTCH-TILT — camera tilted to match the chicken-legs lean of a Baba-Yaga witch-hut, the canted-hut silhouette dominates the upper-frame, swamp-foreground at low-camera, off-kilter unsettled feel",
+      "GREAT-HALL FEAST-LONG-TABLE — camera at one end of a long banquet-table looking down its length, kingly-minifig at the far-end head-of-table, court attendants flanking the table in heraldic-livery, the feast-extending viewpoint",
+      "DUNGEON-CELL FROM-INSIDE — camera positioned inside a cell looking out through iron-bars at the corridor, rescuing rogue-minifig at the cell-door with prisoner-minifig in foreground silhouette",
+      "WIZARD-TOWER-STAIRWELL SPIRAL-UP — camera at the bottom of a spiraling-stairwell looking up the inside of a wizard's tower, stairs spiraling up through multiple levels, the height-of-the-tower viewpoint",
+      "MOUNTED-CAVALRY-CHARGE LOW-FRONTAL — camera ground-level in the path of a charging cavalry unit, lead horseman with lance couched bearing down on camera, second-rank riders behind in receding perspective, the impact-imminent viewpoint",
+      "DWARVEN-FORGE-HALL CENTRAL-FIRE-PIT — camera at the great forge-fire center of a dwarven hall looking outward at the surrounding columns and anvil-stations, dwarven-minifigs at multiple anvils, the heart-of-the-hall viewpoint",
+      "BRIDGE-DEFENSE LOW-ANGLE — camera at one end of a narrow bridge looking down its length toward defenders holding the far-end against a horde of attackers approaching, the choke-point viewpoint",
+      "REFUGEE-COLUMN OVERHEAD-FROM-RIDGE — camera on a high ridge looking down at a refugee-column on the road below, wagons + livestock + peasants visible in receding perspective, the dragon-shadow looming on the horizon viewpoint",
+      "ELVEN-TREETOP-PLATFORM EDGE — camera at the edge of an elven treetop platform looking outward over the forest canopy, elven-archer minifig in foreground looking out into deep-distance forest below, the sentinel viewpoint",
+      "NECROMANCER-PENTAGRAM OVERHEAD-DOWN — camera directly overhead a trans-purple pentagram-floor with skeletons rising from the pattern, necromancer-minifig at the pentagram center, the ritual-overhead viewpoint",
+    ],
+    instructions: `Each entry is ONE fantasy-specific camera framing, 15-30 words. Format: "FRAMING NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: no generic camera terms without fantasy-specific anchoring — every entry must reference fantasy scenery (battlement / throne / dragon / archway / canopy / portcullis / etc.).`,
+  },
+
+  brickbot_fantasy_subject_focus: {
+    format: 'simple',
+    theme: `FANTASY SUBJECT-FOCUS — silhouette anchor for the fantasy path. Each entry is ONE specific subject category: MOUNT (with rider) OR STRUCTURE (castle/tower/lair) OR NO-VEHICLE INTERIOR (throne-room/tavern/dungeon) OR NO-VEHICLE LANDSCAPE (forest/mountain/wasteland). Each entry 12-30 words.
+
+⚠️ STORY-TENSION MANDATE — every entry MUST embed action-tension in the bracketed phrase or body (mid-charge / mid-discovery / mid-confrontation / mid-arrival / mid-coronation etc.). No bare scene-establishing.
+
+VARIETY MANDATE — distribute as:
+  • ~30% MOUNTS — warhorse + rider / dragon-rider on dragon / griffin-rider / unicorn / pegasus / wolf-rider (Forestmen) / direwolf-mount / war-elephant / mammoth / hippogriff
+  • ~25% STRUCTURES — castle keep / wizard-tower / dragon-lair / cathedral / dwarven-hold / elven-treetop-city / coastal-fortress / Helm's-Deep-coded fortress / Minas-Tirith-coded white-city / Mordor-coded Barad-dûr tower / witch's hut
+  • ~25% NO-VEHICLE INTERIORS — throne-room / tavern / wizard-library / dungeon / cathedral nave / dwarven-forge-hall / treasury / crypt / chapel / royal-court
+  • ~20% NO-VEHICLE LANDSCAPES — forest-glade / mountain-pass / cursed-marsh / snowy-northern-realm / volcanic-wastes / Stonehenge-circle / coastal-cliff / desert-mesa
+
+Each entry must:
+• Begin with either "mount (...)" / "structure (...)" / "no-vehicle interior (...)" / "no-vehicle landscape (...)"
+• Embed action-tension descriptor in the bracketed phrase
+• Specify what fills the foreground / midground / deep-distance`,
+    touchpoints: [
+      'mount (warhorse mid-cavalry-charge) — caparisoned brick-built warhorse with armored knight-minifig in saddle, lance couched mid-charge across battlefield, banner-bearer warhorse pacing alongside, distant siege-fortress in deep-distance',
+      'mount (dragon-rider mid-takeoff) — dragon-rider minifig in saddle on a colossal brick-built articulated-wing dragon at the cliff-edge, dragon-wings mid-down-beat trans-orange wing-embers, ground falling away in deep-distance',
+      'mount (griffin-rider mid-dive) — griffin (fused eagle-front + lion-back brick-built) with elven-archer minifig in saddle mid-dive over a deep-valley, target far below in mid-distance, the bird-of-prey-mid-attack moment',
+      'mount (wolf-rider mid-ambush) — Forestmen wolf-rider (green-hood ranger minifig on direwolf-mount) mid-leap from forest-undergrowth onto a road-traveler, second wolf-rider mid-charge behind, the ambush-springs moment',
+      'mount (unicorn mid-wood-encounter) — LEGO Elves-coded bone-white unicorn with elven-rider minifig in pastel-robes pausing at a forest-shrine, faerie-creatures clustered at the unicorn-hooves, the welcome-the-questgivers moment',
+      'mount (war-elephant mid-siege-arrival) — armored war-elephant (Indian-elephant-coded with howdah-tower on back) mid-stride toward enemy lines, elephant-driver minifig at the neck, archer-minifigs in the howdah-tower mid-fire, the siege-machine arrival',
+      'mount (mammoth mid-northern-realm-charge) — fur-clad mammoth (Skyrim/LotR-coded) with northern-warrior-minifig in saddle mid-charge across snowy expanse, trampling snow-particle white-round-plates, the Frostmaul-coded arrival',
+      'mount (skeleton-warhorse mid-undead-ride) — skeleton-warhorse (white-bone construction) with skeleton-knight-minifig in tattered cloak mid-gallop across a moonlit moor, second skeleton-rider behind, the unholy-procession moment',
+      'mount (hippogriff mid-rescue) — hippogriff (eagle-front + horse-back brick-built) with ranger-minifig in saddle mid-swoop to grab a falling traveler-minifig from a cliff-edge mid-air, dramatic rescue moment',
+      "structure (castle keep mid-siege) — multi-tier brick-built stone castle keep dominating 60% of frame, defenders in heraldic-tabard at battlements, trebuchet-bombardment trans-orange impact erupting from one section, mid-engagement",
+      "structure (wizard-tower mid-thunderstorm) — tall narrow brick-built wizard's tower dominating frame, conical roof + crow-step gables + crystal-orb finial, lightning trans-white striking the tower-top, lone wizard at the highest window casting back, dramatic-night",
+      "structure (dragon-lair mid-discovery) — vast underground cavern lair with massive brick-built dragon coiled on a hoard of gold-piles dominating frame, lone hooded-thief minifig approaching from foreground, the moment-before-the-dragon-wakes",
+      "structure (cathedral mid-coronation) — vaulted Gothic cathedral exterior with stained-glass windows dominating frame, sun-shafts streaming through, royal-procession arriving at the great doors, banner-bearers and trumpeters mid-arrival, the coronation-day moment",
+      "structure (dwarven-hold mid-feast) — colossal brick-built dwarven-hold facade carved into a mountain-face dominating frame, great-doors thrown open with trans-orange forge-glow spilling outward, dwarven-minifigs at the gates mid-welcome, Erebor-coded heritage",
+      "structure (elven-treetop-city mid-festival) — interconnected elven treetop city across three giant oaks dominating frame, leaf-canopy + rope-bridges + lantern-lit pavilions, elven-minifigs gathered on platforms mid-festival, Rivendell-coded sanctuary mid-celebration",
+      "structure (coastal-fortress mid-beacon-light) — coastal cliff-fortress dominating frame with crashing trans-blue wave-elements against rocks below, trans-orange beacon-fire at watchtower peak mid-burn, warning-signal mid-relay",
+      "structure (witch's hut mid-cauldron-brew) — Baba-Yaga witch's hut on giant brick-built chicken-legs dominating frame in a poisoned-purple marsh, skull-fence perimeter, witch-minifig at doorway mid-stir of bubbling trans-green cauldron",
+      "structure (Mordor-Barad-dûr mid-rise) — colossal black volcanic-stone tower dominating frame with trans-red eye-of-Sauron at the summit, dark mountain ridge framing left and right, the LotR-Mordor mid-tower-active moment",
+      'no-vehicle interior (throne-room mid-coronation) — vaulted throne-hall interior with central throne on raised dais, court attendants flanking the aisle in heraldic-livery, archbishop-minifig in mitre mid-lifting of golden crown, the coronation-moment',
+      'no-vehicle interior (tavern mid-bardic-performance) — medieval tavern interior with timber-beam ceiling + brick-fireplace, central bard-minifig with lute on tabletop performing for crowd, drunken patrons at scattered tables, lively-night-mid-song moment',
+      'no-vehicle interior (dungeon mid-rescue) — torch-lit stone-dungeon corridor with iron-bar cells flanking the path, prisoner-minifig inside one cell reaching out, rogue-minifig at the cell-door working the lock, unconscious guard slumped at corridor end, mid-escape',
+      'no-vehicle interior (wizard-library mid-discovery) — wizard tower library with floor-to-ceiling brick-built bookshelves, wizard-minifig at a central lectern with grimoire open, trans-purple magical-residue elements drifting, the moment-of-arcane-revelation',
+      'no-vehicle interior (dwarven-forge-hall mid-hammer-strike) — massive underground dwarven forge-hall with central anvil-stations + trans-orange flame elements, lead dwarf-minifig mid-hammer-strike on glowing weapon, sparks bursting outward, working-forge mid-strike',
+      'no-vehicle interior (royal-treasury mid-thievery) — torch-lit treasury vault filled with stacks of 1×1 gold round-plates + trans-purple/trans-red jewel-pieces, hooded thief-minifig mid-treasure-grab, alarm-trigger trans-yellow lights mid-flash, the heist-mid-discovery',
+      "no-vehicle interior (crypt mid-skeleton-rise) — stone crypt with sarcophagus-tiles around the perimeter, central altar with glowing trans-purple artifact, skeleton-warriors mid-rise from sarcophagi, hooded thief-minifig at the altar mid-recoil, the trap-springs moment",
+      'no-vehicle landscape (forest-glade mid-druid-encounter) — sun-dappled forest-glade between giant oaks with moss-covered shrine-stone at center, druid-minifig in dark-green-robes at the shrine, deer-minifig approaching, sacred-nature moment',
+      'no-vehicle landscape (mountain-pass mid-goblin-ambush) — narrow rocky pass between steep cliff-walls in light-bley slope-bricks, traveler-minifigs caught mid-stride as goblin-minifig ambushers emerge from boulder-cover, mid-discovery moment',
+      'no-vehicle landscape (cursed-marsh mid-witch-cackle) — poisoned-purple marsh baseplate with bone-fence-posts dotting the foreground, witch-minifig with broom mid-cackle at the foreground, trans-green will-o-the-wisp elements drifting, swamp-bog moment',
+      'no-vehicle landscape (snowy-northern-realm mid-Viking-return) — snow-covered hills with brick-built standing stones on the ridge, Viking-coded warrior-minifigs in fur-cloaks mid-stride along the road toward a distant mead-hall, the jarl-returning-from-raid moment',
+      'no-vehicle landscape (volcanic-wastes mid-uruk-march) — Mordor-coded volcanic landscape with black + dark-red basalt formations and trans-orange lava-rivers, uruk-hai-minifig column marching toward camera in receding perspective, distant Barad-dûr tower silhouette, LotR-Mordor heritage',
+      'no-vehicle landscape (Stonehenge-circle mid-ritual) — ring of vertical light-bley stone-monoliths on a moonlit moor baseplate, druid-coded minifigs in dark-green-robes gathered around a central altar-stone, trans-magenta magical-light at the altar-center, ritual-mid-incantation',
+    ],
+    instructions: `Each entry is ONE fantasy subject-focus anchor, 12-30 words. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. WEIGHTED OUTPUT: ~30% mounts / ~25% structures / ~25% no-vehicle interiors / ~20% no-vehicle landscapes. STRICT BANS: never mix subject-types within an entry; never include camera-framing language; always embed action-tension. NEVER LEGO Star Wars / Harry Potter references.`,
+  },
+
+  brickbot_fantasy_register: {
+    format: 'simple',
+    theme: `FANTASY REGISTER — high-fantasy archetype lock for each render. Each entry is ONE high-fantasy faction/aesthetic described by VISUAL SIGNATURE (colors / emblems / attire / weapons), NOT by movie/book/video-game/LEGO-set name. Each entry 20-40 words.
+
+⚠️ HIGH-FANTASY STORYTELLING ARCHETYPES — described by VISUAL SIGNATURE, NEVER by movie/book/video-game/LEGO-set name. Distribute across iconic high-fantasy factions/aesthetics:
+
+  • ~12% RED-CROSS WHITE-TABARD knights — chivalric crusader-style order with white surcoats over chain mail, red-cross emblem on chest and shields, gold-trim helmets, lance + sword cavalry
+  • ~12% GREEN-HOOD FOREST OUTLAWS — Robin-Hood-coded archers with green hooded cloaks, brown leather tunics, longbow + quiver, oak-leaf or bow-and-arrow heraldry, fugitive-rebel feel
+  • ~10% BLACK-ARMOR KNIGHTS WITH FALCON SHIELDS — antagonist knights in black plate-armor, dark-grey tabards, black + grey + dim-iron palette, falcon or skull-and-crossbones heraldry, mercenary-coded
+  • ~10% GOLD-TRIM PURPLE-VELVET ROYAL KNIGHTS — high-chivalric king's knights in royal-purple velvet surcoats with gold-braid trim, gold-eagle or crown heraldry, ceremonial bearings, palace-guard feel
+  • ~10% RED-AND-GOLD DRAGON-AFFILIATED KNIGHTS — knights of a dragon-house in red surcoats with gold dragon-emblem heraldry, dragon-themed shield prints, dragon-crest helmet ornaments, fire-aspect order
+  • ~8% BLUE-AND-GOLD LION-EMBLEM KNIGHTS — royal-blue tabard knights with gold lion-rampant heraldry, gold-trim plate-armor, justice-order feel
+  • ~8% DARK-RED + BLACK DRAGON-ARMY — antagonist knights in dark-red + black with dragon-banner heraldry, bronze trim, raiding-faction feel
+  • ~6% SKELETON UNDEAD ARMY — skeleton-torso minifig variants in tattered cloaks, red-and-black palette, undead-warhorses, grim/macabre necromantic faction
+  • ~6% LONG-HAIR ELVEN ARCHERS of a forest realm — long-hair-piece elven minifigs in silver-and-leaf-cream attire, longbow + curved-blade, treetop city or forest sanctuary, ethereal feel
+  • ~6% BRIGHT-PASTEL FAERIE-COURT elves — sky-blue + sea-blue + peach-pink + fire-red + earth-green long-hair minifigs in pastel robes, faerie-creatures + unicorns + dragon-friends, whimsical feel
+  • ~5% BEARDED DWARVEN SMITHS of a mountain hold — bearded-head minifigs in plate-armor with bronze-and-steel + mithril-blue palette, hammer + battleaxe weapons, forge-hall + mountain-hold heritage
+  • ~5% ADVENTURER PARTY — four-figure ensemble of fighter (plate-armor + sword) + rogue (hooded-cloak + daggers) + wizard (robed + twisted staff) + cleric (mace + holy-symbol), questing-coded
+  • ~5% ROBED WIZARDS' CIRCLE — robed-figure minifigs with pointed-hats + twisted-staffs + crystal-orbs, wizard-tower or arcane-academy, purple + black + gold-trim
+  • ~5% FROZEN-NORTH WARRIOR clan — fur-cloaked Viking-coded warriors in northern realm, horned-or-antlered helmets, axe + round-shield, snowy mead-hall heritage
+  • ~3% CURSED-MARSH WITCH coven — dark-cloaked witch-minifigs with broomsticks + cauldrons + cursed-amulets, poisoned-marsh feel, sickly-green + bone-white + dark-purple palette
+  • ~3% CUSTOM AFOL FANTASY MOC — original Bricklink-AFOL-community custom fantasy register with creative-liberty heraldry/colors
+
+STRICT BAN — NEVER include any of these in entries: specific movie/book/TV/video-game titles or character names (LotR / Hobbit / Tolkien / Smaug / Mordor / Helm's Deep / Rivendell / Witcher / Skyrim / Elder Scrolls / Game of Thrones / Harry Potter / Hogwarts / Warhammer / Frazetta / Vallejo / Brom / Star Wars / Dungeons & Dragons / specific D&D names like Forgotten Realms / Faerûn / Eberron); specific LEGO faction NAMES (Crusaders / Forestmen / Black Knights / Royal Knights / Dragon Knights / Lion Kingdom / Dragon Kingdom / Skeleton King / LEGO Elves); specific LEGO set numbers. Describe by VISUAL SIGNATURE only.
+
+Each entry must:
+• Name the register in first 4-8 words
+• Specify CHARACTER ATTIRE (faction colors / heraldic symbol / armor-type / hairstyle)
+• Specify BUILD MOTIFS (signature elements / faction-banner / weapons-type)
+• Specify any cross-axis restrictions (when register fires, subject_focus / palette auto-aligns)`,
+    touchpoints: [
+      "RED-CROSS WHITE-TABARD CHIVALRIC ORDER — knights in white surcoats over chain-mail with bold red-cross emblem on chest and round shields, gold-trim helmets with nasal-guard, lance + cross-hilt sword, lion-or-eagle pommel accents, the heroic crusading order",
+      "GREEN-HOOD FOREST OUTLAWS — Robin-Hood-coded archers in deep-green hooded cloaks and dim-olive tunics with brown-leather belts and quivers, longbow + arrow accessories, oak-leaf or bow-and-arrow heraldry, fugitive-rebel-of-the-greenwood feel",
+      "BLACK-ARMOR FALCON-SHIELD KNIGHTS — antagonist knights in obsidian-black plate-armor and dark-grey tabards, falcon emblem on shields, helmet visors down, mace and longsword weapons, mercenary-coded grim-house",
+      "GOLD-TRIM PURPLE-VELVET ROYAL CHIVALRY — high-ceremonial king's-knights in royal-purple velvet surcoats over gold-trim plate-armor, gold-eagle or crown heraldry shields, palace-guard ceremonial spears, the royal-throne-defenders",
+      "RED-AND-GOLD DRAGON HOUSE KNIGHTS — order of knights affiliated with a fire-aspect dragon-house, red surcoats with gold dragon-emblem heraldry, dragon-crest helmet ornaments, dragon-themed shield prints, fire-aspect order feel",
+      "BLUE-AND-GOLD LION-EMBLEM CHIVALRY — royal-blue tabard knights with gold lion-rampant heraldry, gold-trim plate-armor + matching ceremonial banner-poles, lion-pommel sword and lion-mantle cape, justice-order feel",
+      "DARK-RED BLACK DRAGON-BANNER RAIDERS — antagonist knights in dark-red + obsidian-black tabards with dragon-banner heraldry, bronze-trim plate, mounted-on-warhorses, raiding-faction feel",
+      "SKELETON UNDEAD WARRIOR ARMY — skeleton-torso minifig variants in tattered black-and-red capes, bone-white-and-grey palette, hollow-eye-socket helmets, two-handed swords + rusted shields, skeleton-warhorse mounts, necromantic faction",
+      "SILVER-AND-LEAF FOREST ELVEN ARCHERS — long-hair-piece elven minifigs in silver-and-leaf-cream attire with curved-blade and longbow accessories, intricate-leaf-pattern tile heraldry, ethereal forest-realm feel, treetop-city or sanctuary-grove",
+      "BRIGHT-PASTEL FAERIE-COURT ELVES — sky-blue + sea-blue + peach-pink + fire-red long-hair minifigs in pastel robes with curved-saber + crystal-staff accessories, faerie-creatures + unicorns + dragon-friends companions, whimsical feel",
+      "BEARDED DWARVEN MOUNTAIN-HOLD SMITHS — bearded-head dwarf minifigs in plate-armor with bronze-and-steel + mithril-blue palette, hammer + battleaxe + crossbow weapons, anvil + forge accessories, mountain-hold heritage",
+      "FIGHTER-ROGUE-WIZARD-CLERIC ADVENTURER PARTY — four-figure ensemble: plate-armored fighter with longsword + kite-shield / hooded rogue with daggers + lockpicks / robed wizard with twisted staff + spell-effect / cleric with mace + holy-symbol, questing-quartet",
+      "ROBED WIZARD'S COUNCIL — robed wizards in purple + midnight-blue + gold-trim ceremonial robes with twisted-staffs + crystal-orbs + spellbooks, pointed-hat or cowled-hood variants, council-of-mages convened",
+      "FROZEN-NORTH BARBARIAN CLAN — fur-cloaked Viking-coded warriors in northern realm, horned-or-antlered helmets, two-handed-axe + round-shield-with-runic-emblem, ice-blue + grey-wool + iron-trim palette, mead-hall warriors",
+      "CURSED-MARSH WITCH COVEN — dark-cloaked witch minifigs with broomsticks + cauldrons + skull-staffs + cursed-amulets, sickly-green + bone-white + dark-purple palette, poisoned-marsh-with-hut-on-chicken-legs feel",
+      "ORC RAIDER HORDE — green-skin orc minifig variants in fur-and-leather tattered attire, jagged curved-blade weapons + bone-shields, scarred-face print, raider-band feel, cursed-banner of skull-on-stake",
+      "GOBLIN AMBUSH BAND — small green-skin goblin minifigs in patchwork armor, curved-daggers and crude crossbows, sneaky-ambusher feel, cave-or-pass-dweller register",
+      "SILVER-PEARL ELVEN HIGH KING'S COURT — ceremonial silver-pearl + cool-blue + intricate-pattern attire for high-elven minifig court, curved-saber royal-elven blade, ornamental high-king regalia",
+      "WHITE-STONE CITY SILVER KNIGHTS — knights of a white-stone realm in silver-armor and white-stone tabards with sun-and-star or white-tree silver heraldry, ceremonial-defender feel",
+      "CURSED-TOWER NECROMANCER — solo necromancer-minifig in dark robes with skull-staff and bone-jewelry, dark-purple + abyss-black palette, summoning-pentagram surrounding, dark-arts-coded",
+      "PALADIN HOLY ORDER — gold-trim plate-armored paladin minifigs with sun-emblem heraldry and shining-sword + warhammer, divine-light + holy-symbol motif, righteous-crusader feel",
+      "SWAMP-FOLK FROG-PEOPLE — green-skin frog-or-lizard-people minifig variants in algae-and-moss attire with bone-spears and shell-shields, marsh-dweller feel, mysterious-marsh-realm register",
+      "DARK-WOODS BANDITS — dim-cloaked highway-bandits in dark-grey + black + faded-red attire with short-swords and crossbows, wolf-pack heraldry, lurking-roadside feel",
+      "DESERT-SULTAN NOBILITY — desert-realm minifigs in flowing robes and turbans with curved scimitars + jeweled-trim, sand-tone + gold + jewel-blue palette, oasis-and-mosque architectural register",
+      "CUSTOM AFOL FANTASY HERALDRY — Bricklink AFOL community original custom-faction heraldry with creative-liberty colors and emblems, not from any specific known register, AFOL competition-build feel",
+    ],
+    instructions: `Each entry is ONE high-fantasy register lock described by VISUAL SIGNATURE, 20-40 words. Format: "REGISTER NAME CAPS — attire + motif + restrictions". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NEVER include movie/book/TV/video-game titles or character names (Tolkien / LotR / Hobbit / Smaug / Mordor / Helm's Deep / Rivendell / Witcher / Skyrim / Elder Scrolls / Game of Thrones / Harry Potter / Hogwarts / Warhammer / Frazetta / Vallejo / Brom / Game of Thrones / specific D&D campaign names like Forgotten Realms); NEVER specific LEGO faction NAMES (Crusaders / Forestmen / Black Knights / Royal Knights / Dragon Knights / Lion Kingdom / Dragon Kingdom / Skeleton King / LEGO Elves); NEVER LEGO set numbers; NEVER LEGO Star Wars. Describe by VISUAL SIGNATURE only (color + emblem + attire + weapon-type + heraldry).`,
+  },
+
+  brickbot_fantasy_scene_props: {
+    format: 'simple',
+    theme: `FANTASY DIORAMA STORYTELLING PROPS — small brick-built details that fill the corners of a fantasy scene. Each entry is ONE specific prop with a story implied. Each entry 12-30 words.
+
+⚠️ Picked TWO PER RENDER (pickN:2), so each entry must be SMALL.
+
+VARIETY MANDATE — distribute across:
+  • HERALDIC (banner / heraldic-shield / falcon-perch / battle-standard / herald-trumpet)
+  • TREASURE (chest of gold / jeweled-goblet / crown-on-stand / artifact-on-pedestal / map-tile)
+  • WEAPONS-LITTER (dropped sword / arrow-quiver / spear-rack / shield-stack / crossbow-on-rack)
+  • MAGIC (wizard-staff / spell-book / crystal-orb / potion-bottle / pentagram-tile / scroll-rolled)
+  • CHURCH / RELIGIOUS (altar-cross / chalice / candle-stand / prayer-book / icon-tile)
+  • DRAGON / CREATURE (dragon-egg / skull-on-pike / dragon-scale-pile / claw-trophy)
+  • PEASANT / LIFE (loaf-of-bread / cabbage / barrel-of-ale / hay-bale / sack-of-grain / wheel-and-axle)
+  • TAVERN / FEAST (tankard / chalice / roasted-bird / bread-basket / lute / dice-on-table)
+  • LIVING COMPANIONS (raven on shoulder / cat by hearth / dog asleep / falcon on perch / monkey)
+  • PERSONAL (dagger-in-belt / signet-ring / locket / mission-scroll / family-crest)
+  • SKELETON / UNDEAD (bone-pile / skull / chained-skeleton / cursed-amulet)
+  • WIZARD-LIBRARY (open-grimoire / quill + ink / candle / star-chart / hourglass)
+  • SIEGE EQUIPMENT (cannonball-stack / catapult-stone / siege-ladder / battering-ram)
+
+Each entry must:
+• Name the prop type in first 3-6 words
+• Specify SPECIFIC LEGO BRICK PARTS or accessories where applicable
+• Imply STORYTELLING CONTEXT`,
+    touchpoints: [
+      "Heraldic banner-tile on staff — printed flag-element (Crusader red-cross / Lion-Kingdom gold-lion / Dragon-Kingdom red-dragon / Black-Falcons falcon) mounted on antenna-staff piece overhead castle ramparts, faction-identity anchor",
+      "Treasure chest open with gold spill — 2×3 brown chest-element open on stone-floor with 1×1 gold round-plates spilling onto the floor and trans-purple + trans-red jewel-elements scattered, the recent-plunder-evidence",
+      "Wizard staff leaning on wall — minifig wizard-staff accessory with twisted-grip leaning against a brick-built bookshelf, blue crystal-orb tile-element at the staff-tip, the wizard's-quarters detail",
+      "Dragon egg on pedestal — 1×1 trans-orange round-stud dragon-egg balanced on a brass round-plate cradle pedestal, faint trans-red glow-emission implied, the lair-newborn evidence",
+      "Spell-book open on lectern — printed grimoire-tile open on a brick-built wood-lectern with minifig-quill accessory beside, 1×1 trans-purple jewel-element marking a critical page, the arcane-research detail",
+      "Crystal-orb on stand — 1×1 trans-clear round-stud crystal-orb on a gold-trim cradle pedestal, faint trans-cyan magical-light emerging from the orb, the wizard's-scrying-tool detail",
+      "Crown on velvet stand — minifig gold crown-piece on a brick-built dark-red velvet-tile cushion, the royal-regalia ceremonial detail",
+      "Dropped sword in foreground — minifig sword-piece lying on the deck-tile flat, blade pointed away from a fallen knight-minifig at frame-edge, suggesting a recent combat",
+      "Loaded crossbow on barrel — minifig crossbow-piece propped on a brown barrel-element, cocked and ready, set down between shots in a duel-pause",
+      "Tankard of ale on table — 1×1 trans-amber round-stud filled tankard-element on a brick-built tavern-tabletop, ale-foam-tile detail at the top, the abandoned-mid-drink moment",
+      "Loaf of bread + cabbage on table — brown 1×2 loaf-tile and green 1×1 round-cabbage-element on a tavern-table, the peasant-meal detail",
+      "Roasted bird on platter — brown 1×2 brick-bird-element on a 2×3 gold-trim platter-tile, the festive-feast centerpiece detail",
+      "Lute leaning on tavern-stool — minifig lute-accessory leaning against a brick-built tavern-stool, the bard's-pause-between-songs detail",
+      "Dice + coin pile on table — 1×1 round-plates (1 white as dice, 3 gold as coins) on a tavern-tabletop, the game-of-chance detail",
+      "Raven on the throne-back — minifig black-raven-piece perched on the carved-stone back of a throne with one black-claw gripping, the dark-omen detail",
+      "Falcon on the gauntlet-perch — minifig brown-falcon-piece perched on a brick-built brass-trim falconry-perch, the noble-hunter's prized-bird detail",
+      "Cat by the hearth — minifig orange-tabby cat-accessory curled on a brick-built fireplace-hearth-stone, the cozy-tavern-life detail",
+      "Loyal-dog at master's feet — minifig brown-dog-piece asleep at the foot of a minifig's throne or hearth, the loyalty-of-the-pack detail",
+      "Open grimoire on table — printed spell-book tile open on a brick-built study-table with a 1×1 jewel-element bookmark, trans-purple residue at the page-margin, the active-research detail",
+      "Quill + inkpot on parchment — minifig quill-accessory standing in a 1×1 black-round-tile inkpot beside a printed-parchment-tile, the scriptorium-scribe detail",
+      "Candle on holder — minifig brass candle-stand piece with 1×1 trans-yellow round-tile flame at the top, the moody-interior detail",
+      "Skull on pike — minifig white-skull piece mounted on a black antenna-pole staked into the ground, the grim-warning trophy",
+      "Cursed-amulet on chain — 1×1 trans-purple round-stud amulet hanging from a minifig-chain piece, the dark-artifact detail",
+      "Bone pile in corner — scattered minifig-bone pieces (femurs / skull / ribs) clustered in a dungeon-corner, the macabre detail",
+      "Chained skeleton at wall — skeleton-minifig with chain-link pieces locking wrists to a dungeon-wall, the long-imprisoned warning",
+      "Cannonball stack at siege — pile of brown 1×1 round-plate cannonballs stacked pyramid-form beside a siege-weapon, the artillery-supply detail",
+      "Siege-ladder propped — wooden brick-built siege-ladder propped against a castle-wall, the assault-equipment detail",
+      "Hourglass on study-table — brick-built hourglass with sand-detail in clear-yellow 1×1 round-plates running through, the time-pressure detail",
+      "Star-chart on wall — printed celestial-map tile mounted on a brick-built wood-frame, the astrologer's-tool detail",
+      "Brick-built parrot on pirate's shoulder — minifig parrot in red-blue-yellow on a minifig shoulder-stud (used in fantasy contexts too — bard's-companion or wizard's-familiar)",
+    ],
+    instructions: `Each entry is ONE fantasy diorama prop, 12-30 words. Format: "PROP NAME — brick-parts + story-context". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO real-world materials without naming brick parts; NO centerpiece-sized props; small storytelling-detail props only.`,
+  },
+
+  brickbot_fantasy_lighting: {
+    format: 'simple',
+    theme: `LEGO MOC FANTASY LIGHTING — axis-clean light SOURCE + DIRECTION + COLOR-QUALITY entries for the fantasy path. Each entry is ONE specific lighting setup. Each entry 15-30 words.
+
+⚠️ AXIS-CLEAN MANDATE. Lighting owns ONE lane: light source + direction + color.
+
+⚠️ HARD BANS:
+  • NO magical phenomena (spell-vortex / portal / blizzard-conjured — those belong to magical_phenomenon axis)
+  • NO scene elements (castle / throne / forest / dungeon — those belong to scene_type / camera_framing axes)
+  • NO minifig action
+
+VARIETY MANDATE — distribute across:
+  • TORCH / FIRE (single torch warm-amber from below / torch-procession warm-orange / fireplace warm-uplight / forge-trans-orange uplit)
+  • CANDLE (single-candle warm-amber pool / candelabra warm-cluster / chapel-altar warm-row)
+  • SUNLIGHT (sun-through-arrowslit shaft / cathedral-stained-glass jewel-tones / forest-canopy-dapple cool-green / sunset-orange-warm-side)
+  • MOONLIGHT (full-moon cool-silver-blue / crescent-moon side / moonlit-fog soft-diffuse / blood-moon cursed-red)
+  • LIGHTNING (instant-flash white-violet / storm-distant pulsing / mage-bolt trans-yellow strobe)
+  • DRAGON-FIRE (trans-orange + trans-red glowing scene / dragon-breath warm-side / lair-glow ember-warm)
+  • OVERCAST / DIFFUSE (cool-grey overcast / misty-dawn diffuse / cathedral-dim cool / fog-bounce blue-grey)
+  • CHIAROSCURO (Caravaggio single-source dramatic / single-source-dark-surround / spotlight-pool)
+  • UNHOLY / CURSED GLOW (sickly green-glow / phosphorescent-purple uplight / aurora-violet cool)
+  • NIGHT WITH SINGLE SOURCE (lone-candle in pure-black / single-torch in dungeon / brazier-flicker)`,
+    touchpoints: [
+      'SINGLE-TORCH WARM-AMBER UPLIT — single torch held overhead as the only light source, warm-amber orange-glow falling off rapidly to darkness within 2-brick-lengths, deep-amber color quality at the source fading to pitch-black at edges',
+      "CATHEDRAL STAINED-GLASS JEWEL-TONES — sunlight streaming through stained-glass windows casting jewel-tone color patches (trans-red + trans-blue + trans-yellow + trans-violet) on the interior floor and surrounding figures, cool ambient between the colored shafts",
+      "FULL-MOON COOL SILVER-BLUE — directly overhead full moon casting cool silver-blue color quality on all upward surfaces, deep-blue undersides, vertical shadows underfoot, the moonlit-realm register",
+      "CANDLELIT CHAPEL ROW WARM-AMBER — row of candelabra along chapel altar casting warm-amber pools of light up onto the wall above each, cool deep-shadow between the pools, the sacred-ceremony register",
+      "DRAGON-FIRE GLOWING WARM-SIDE — trans-orange + trans-red dragon-breath glow casting hot warm-amber color quality on the side of the scene facing the dragon, deep purple-shadow on the off-side, the dragon-attack register",
+      "STORM-LIGHTNING WHITE-VIOLET FLASH — instant lightning flash freezing the entire scene in white-violet color quality, hard-edged shadows from the directional flash, the dramatic-storm register",
+      "FORGE GLOWING TRANS-ORANGE UPLIT — dwarven-forge fire as light source from below, hot trans-orange color quality on the upper-surfaces of the forge-chamber, deep-cool shadow on the far side of the chamber",
+      "FOREST-CANOPY DAPPLE COOL-GREEN — sun filtering through dense leaf-element canopy casting dappled cool-green color quality on the forest-floor, sun-shaft beams visible through gaps, the woodland register",
+      "BLOOD-MOON CURSED-RED — full moon directly overhead in trans-red color quality, sickly-red color cast on all upward surfaces, deep-burgundy shadows, the supernatural-event register",
+      "TAVERN FIREPLACE WARM-AMBER UPLIT — central tavern fireplace as the only light source, warm-amber orange-glow flickering on the gathered tables and patrons closest to the hearth, cool-deep-shadow in the far corners",
+      "AURORA-VIOLET COOL OVERHEAD — magical aurora-belt overhead casting trans-violet + trans-cyan cool color quality on all upward surfaces, the otherworldly-realm register",
+      "TWILIGHT-PURPLE DUSK BLUE-COOL — post-blue-hour deep-twilight, rich purple-and-indigo overhead, no direct light source, very low ambient, the world-ending-day register",
+      "SUNSET ORANGE-WARM SIDELIT — late-afternoon sun low on horizon raking horizontally, warm amber color quality on lit surfaces, long deep-violet shadows opposite, the iconic golden-hour register",
+      "MOONLIT FOG SOFT-DIFFUSE — diffused moonlight through fog casting pale-blue soft-diffuse color quality, no hard shadows, lanterns blooming as soft halos, the mysterious-night register",
+      "CARAVAGGIO DEEP-SHADOW SINGLE-SOURCE — chiaroscuro interior from one off-frame source (could be window / lantern), warm color quality on the lit edge of subject, deep-black void on 80% of frame, dramatic high-contrast",
+      "BRAZIER-FLICKER WARM-OLIVE-UPLIT — large brazier as light source from below, warm-olive-orange flickering color quality on undersides of objects above, cool-darkness above the brazier, the dungeon-cell register",
+      "ICE-CRYSTAL CAVE TRANS-CYAN UPLIT — bioluminescent fungi + ice-crystal accents lighting an underground cave from below, cool trans-cyan + trans-green color quality, eerie ethereal feel",
+      "UNHOLY-GLOW SICKLY-GREEN UPLIT — necromantic ritual circle or summoning altar emitting sickly trans-green glow from below, sickly-green color quality on underside-of-objects above, cool-darkness above, the dark-arts register",
+      "ARROWSLIT-SHAFT BRIGHT-YELLOW VERTICAL — single sun-shaft piercing through an arrowslit window casting a bright-yellow vertical light-beam down into a dim castle-chamber, surrounding darkness on the unlit areas, the lone-light-shaft register",
+      "TORCH-PROCESSION WARM-ORANGE — line of torches carried in procession casting warm-orange flickering color quality down a corridor or path, the ceremonial-arrival register",
+      "DAWN-PINK COOL-COOL-HORIZON — pre-sunrise pink-and-cool-blue gradient lighting, soft-diffuse color quality, barely-defined shadows, the gentle-awakening register",
+      "FIRELIGHT FLICKERING WARM-SIDELIT — fire-pit or bonfire from one side casting warm flickering orange-yellow on the lit side, deep purple-black on the off-side, dramatic warm-cool split lighting, the campsite register",
+      "WIZARD-ORB COOL-CYAN-UPLIT — wizard's crystal-orb on a stand as the only light source, cool trans-cyan glow uplighting the wizard's face from below, dramatic chiaroscuro, the arcane-study register",
+      "MAGE-BOLT TRANS-YELLOW STROBE — instant magical spell-bolt as the dominant light source, trans-yellow color quality bleaching the strike-side, hard-edged shadows on the off-side, the spell-impact register",
+      "WITCH-CAULDRON TRANS-GREEN UPLIT — bubbling green-glow cauldron as the only light source, trans-green uplit color quality on the witch's face from below, cool darkness above, the swamp-hut register",
+      "OVERCAST GREY-COOL DIFFUSE — heavily overcast sky bouncing flat cool-grey light, no directional shadows, even illumination across the frame, the bleak-day register",
+      "ICE-PLANET-BLUE COOL-OVERHEAD — frozen-realm twilight with cool-blue overhead sky, soft-diffuse color quality on snow surfaces, the polar register",
+      "NEEDLE-OF-LIGHT THROUGH-CEILING SUN-SHAFT — vertical shaft of warm sunlight piercing downward through a hole or opening overhead, sharp-edged light-shaft, surrounding darkness on the unlit areas, the revelation register",
+      "STAR-FIELD MOONLESS COOL-NEAR-BLACK — no moon, only faint silver-blue starlight, very dim cool-blue color quality, barely-readable shadow definition, near-pitch-black darkness with only highlights catching, the wild-realm register",
+      "MULTIPLE-CANDELABRA ROOM-WARM — several candelabra positioned around a chamber casting warm-amber pools that overlap into a complete warm-warmth illumination, the cozy-hall register",
+    ],
+    instructions: `Each entry is ONE fantasy-scene lighting setup, 15-30 words. Format: "SOURCE+DIRECTION CAPS — color quality + signature". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO magical phenomena (spell-vortex / portal — that's magical_phenomenon); NO scene elements (castle / throne / forest — that's scene_type / camera_framing); NO minifig action. SOURCE + DIRECTION + COLOR only.`,
+  },
+
+  brickbot_fantasy_palette: {
+    format: 'simple',
+    theme: `LEGO MOC FANTASY PALETTE — axis-clean color-combination entries for the fantasy path. Each entry is ONE specific multi-color palette for a fantasy diorama. Each entry 12-25 words.
+
+✓ VARIETY MANDATE — distribute across fantasy-coded palettes:
+  • CRUSADERS WHITE+RED (white-tabard + red-cross + gold + steel-grey)
+  • FORESTMEN GREEN+BROWN (forest-green hood + leather-brown + bone-white + bow-string-tan)
+  • BLACK KNIGHTS DARK (black-armor + grey-tabard + falcon-grey + dragon-red trim)
+  • ROYAL KNIGHTS PURPLE+GOLD (royal-purple velvet + gold-braid + cream-ivory + crimson)
+  • DRAGON KNIGHTS RED+BLACK (dragon-red + dragon-black + gold + bronze)
+  • LION KINGDOM BLUE+GOLD (royal-blue + gold + cream-white + lion-emblem)
+  • DRAGON KINGDOM DARK-RED (dark-red + black + dragon-banner + bronze)
+  • SKELETON-KING RED+BLACK+BONE (skeleton-red + black + bone-white + dim-grey)
+  • CASTLE 2013 CHROME+CROWN (chrome-silver + king's-blue + crown-gold + ivory)
+  • LEGO ELVES PASTEL (sky-blue + sea-blue + peach-pink + fire-red + earth-green + faerie-cream)
+  • LOTR ROHAN (Rohan-green + leather-tan + horse-banner-cream + bronze-trim)
+  • LOTR GONDOR/MINAS TIRITH (white-stone + silver + white-tree-emblem + cool-grey)
+  • LOTR MORDOR (black + dark-red + ember-orange + ash-grey + tarred-black)
+  • LOTR RIVENDELL (silver-pearl + leaf-cream + cool-blue + intricate-design-trim)
+  • LOTR SHIRE (earth-green + tan + cream-white + sunset-orange + warm-brown)
+  • HOBBIT EREBOR DWARVEN (bronze + steel + dark-bley + mithril-blue + gold-trim)
+  • D&D ADVENTURER PARTY (mixed-leather + steel + spell-purple + holy-yellow)
+  • SUNSET TWILIGHT FANTASY (saffron + crimson + deep-purple + ember-orange + amber-glow)
+  • CURSED DARK FANTASY (sickly-green + abyss-black + bone-white + verdigris + necromancer-purple)
+  • TAVERN FIRESIDE WARM (warm-amber + tobacco-brown + cream + aged-oak + brass)
+  • CATHEDRAL STAINED-GLASS JEWEL-TONES (cool-stone + trans-red + trans-blue + trans-yellow + trans-violet)
+  • SNOWY-REALM ICE-WHITE (snow-white + ice-cyan + dim-blue + bone-grey + dim-silver)
+  • VOLCANIC-WASTES EMBER (ember-orange + ash-grey + soot-black + dying-coal-red + brimstone)
+
+Each entry must:
+• Name 3-5 specific colors with anchor-nouns
+• Use specific color-modifier vocabulary (weathered / tarnished / bleached / saturated / cool / warm / molten)
+• End with a brief register tag
+• NEVER drift into lighting language — describe colors as MATERIAL colors`,
+    touchpoints: [
+      "White-tabard + red-cross + gold-trim + steel-grey-armor, Crusaders",
+      "Forest-green-hood + leather-brown + bone-white + bow-string-tan + dim-olive, Forestmen",
+      "Black-armor + grey-tabard + falcon-emblem + bone-white + dim-iron, Black-Falcons",
+      "Black-armor + grey + dragon-red-trim + dim-steel + bone, Black-Knights",
+      "Royal-purple-velvet + gold-braid + cream-ivory + crimson-sash + ebony, Royal-Knights",
+      "Dragon-red + dragon-black + tarnished-gold + bronze + dim-brown, Dragon-Knights",
+      "Royal-blue + lion-gold + cream-white + bronze-trim + sky-banner, Lion-Kingdom",
+      "Dark-red + obsidian-black + bronze + dragon-banner + scorched-brown, Dragon-Kingdom",
+      "Skeleton-red + tar-black + bone-white + dim-grey + decay-green, Skeleton-King",
+      "Chrome-silver + king's-blue + crown-gold + cream-ivory + heritage-steel, Castle-2013",
+      "Sky-blue + sea-blue + peach-pink + fire-red + earth-green, LEGO-Elves",
+      "Rohan-green + leather-tan + horse-banner-cream + bronze-trim + dim-iron, LotR-Rohan",
+      "White-stone + silver + white-tree-emblem + cool-grey + ebony, LotR-Gondor",
+      "Black + dark-red + ember-orange + ash-grey + tarred-black, LotR-Mordor",
+      "Silver-pearl + leaf-cream + cool-blue + intricate-design + jade-trim, LotR-Rivendell",
+      "Earth-green + tan + cream-white + sunset-orange + warm-brown, LotR-Shire",
+      "Bronze + steel + dark-bley + mithril-blue + gold-trim, Hobbit-Erebor",
+      "Plate-steel + leather + spell-purple + holy-yellow + cleric-cream, D&D-adventurer",
+      "Saffron-sunset + crimson + deep-purple + ember-orange + amber-glow, Sunset-twilight",
+      "Sickly-green + abyss-black + bone-white + verdigris + necromancer-purple, Cursed-dark",
+      "Warm-amber + tobacco-brown + cream + aged-oak + brass, Tavern-fireside",
+      "Cool-stone + trans-red + trans-blue + trans-yellow + trans-violet, Cathedral-stained-glass",
+      "Snow-white + ice-cyan + dim-blue + bone-grey + dim-silver, Snowy-realm",
+      "Ember-orange + ash-grey + soot-black + dying-coal-red + brimstone, Volcanic-wastes",
+      "Spell-violet + trans-cyan + arcane-gold + parchment-cream + grimoire-black, Wizard-tower",
+      "Hay-cream + cabbage-green + bread-brown + pewter-grey + barrel-tan, Peasant-village",
+      "Battle-red + ash-grey + scorched-black + war-banner-gold + iron-dim, Battlefield-aftermath",
+      "Cathedral-cool-stone + altar-gold + chalice-silver + crimson-velvet + ivory, Royal-chapel",
+      "Dragon-egg-pearl + nest-tan + cave-grey + spark-red + amber-light, Dragon-lair-newborn",
+      "Moss-green + mushroom-red + log-brown + forest-shadow + olive-glow, Forest-glade",
+      "Northern-fur-brown + Viking-iron + war-banner-red + ash-snow + mead-amber, Northern-realm",
+    ],
+    instructions: `Each entry is ONE fantasy palette, 12-25 words. Format: comma-separated colors then comma + register-tag. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO lighting language; NO scene elements; NO magical phenomena. Material colors with anchors + register-tag. NEVER Star Wars / Harry Potter references.`,
+  },
+
+  brickbot_fantasy_magical_phenomenon: {
+    format: 'simple',
+    theme: `FANTASY MAGICAL PHENOMENON — atmospheric/supernatural event that AMPLIFIES the scene. Each entry is ONE specific magical event (50%-gated conditional). Each entry 20-40 words.
+
+⚠️ DECOUPLED FROM scene_type AND lighting — bending axis. Lets us roll "castle siege + dragon-fire-rain + LotR Mordor register" or "tavern interior + faerie-mist + LEGO Elves register."
+
+VARIETY MANDATE — distribute across:
+  • DRAGON / FIRE (dragon-fire-rain on village / dragon-breath blast / lair-fire-pit erupting)
+  • SPELL / VORTEX (mage-spell-vortex collision / portal-disc opening / lightning-bolt-cast / fireball-explosion)
+  • UNDEAD / NECROMANTIC (skeleton-rising-from-ground / lich-aura unholy-pulse / curse-mist-drift / wight-emergence)
+  • FAERIE / NATURE (fey-mist drifting through glade / forest-spirits illuminating trees / bioluminescent-flora bloom / aurora-blessing)
+  • WEATHER / ELEMENTAL (blizzard-conjured ice-storm / unnatural-thunderstorm / earthquake-ground-crack / fire-rain from sky)
+  • PORTAL / SUMMONING (magical-portal disc opening / summoning-pentagram glowing / arcane-circle activating / banishment-vortex)
+  • SHADOW / CURSE (shadow-curse spreading / unholy-pulse-from-altar / dark-energy-tendrils / cursed-fog with faces)
+  • DIVINE / HOLY (divine-light from above / healing-aura golden glow / paladin-blessing radiance / saint's-halo manifestation)
+  • CREATURE EMERGENCE (giant-spider-from-hole / cave-troll-rising / hydra-emerging-from-swamp / golem-awakening)
+  • CELESTIAL (falling-stars across sky / blood-moon eclipse / comet-trail / nebula-overhead-fantastical)
+
+Each entry must:
+• Name the event in first 4-8 words
+• Specify WHICH BRICK PARTS render it (trans-pieces / flex-tubes / specific elements)
+• Specify the VISUAL IMPACT (focal point shift, color cast, motion)
+• NEVER override lighting axis directly`,
+    touchpoints: [
+      'DRAGON-FIRE RAIN ON VILLAGE — colossal brick-built dragon overhead with trans-orange + trans-red flame elements raining down on the village below, scattered fire-impact-craters as trans-yellow round-plates on rooftops, the iconic dragon-attack signature',
+      "MAGE SPELL-VORTEX COLLISION — two trans-color spell-vortexes (one trans-purple + trans-magenta, one trans-cyan + trans-yellow) meeting at frame-center with sparks of trans-yellow at the collision-point, dueling-mages signature",
+      'SKELETON-RISING FROM GROUND — multiple skeleton-minifigs mid-emergence from cracked-earth tiles in a moonlit graveyard, trans-purple unholy-glow seeping up from each emergence-point, the necromantic-uprising signature',
+      "FEY-MIST IN FOREST GLADE — drifting trans-magenta + trans-cyan + trans-green mist-particles (1×1 round-plates) hovering at varying heights through a forest glade, glowing faintly, the otherworldly-fey-presence signature",
+      'BLIZZARD-CONJURED ICE-STORM — vertical trans-white + trans-cyan icicle-element streamers cascading from the upper-frame at an angle across the scene, blanketing surfaces in white-foam-crests, the elemental-spell signature',
+      'MAGICAL-PORTAL DISC OPENING — vertical trans-cyan + trans-magenta + trans-violet disc at frame-center with jagged-edge-cone, faint mist swirling at the rim, the dimensional-portal opening signature',
+      'PENTAGRAM-FLOOR GLOWING — necromantic pentagram built from trans-purple + trans-magenta tiles glowing on a stone-floor in a wizard\'s tower or crypt, the trans-elements rising as smoke-streamers, the summoning signature',
+      'SHADOW-CURSE TENDRILS — black + dark-bley trans-clear-shadow tendrils emerging from a cursed-altar and spreading along the floor toward foreground figures, the dark-magic-spreading signature',
+      'DIVINE-LIGHT FROM ABOVE — vertical trans-yellow + trans-clear light-shaft descending from above onto a focal-figure (paladin / chosen-one), surrounding darkness on the unlit areas, the divine-intervention signature',
+      'BLOOD-MOON ECLIPSE — large dark-bley round-tile lunar-disc eclipsing a bright trans-red moon, with thin trans-orange + trans-red diffraction-ring around the eclipse-edge, sickly-red color cast across the scene, the supernatural-event signature',
+      "FALLING-STARS ACROSS SKY — multiple trans-yellow + trans-white bar-elements arcing diagonally across the brick-built sky-baseplate, each streak with a 1×1 round-plate impact-head trailing trans-amber sparks, the celestial-event signature",
+      'AURORA-BLESSING OVERHEAD — horizontal trans-green + trans-cyan + trans-magenta plate strips arranged in undulating curtains overhead, casting unearthly-green glow on the scene, the elven-magic signature',
+      'CAVE-TROLL EMERGING — massive brick-built cave-troll figure mid-emergence from a cavern-floor with rubble and debris (1×1 round-plates) erupting at its rise-point, the giant-creature reveal signature',
+      'GIANT-SPIDER FROM HOLE — colossal black-and-dark-bley spider-figure with eight Technic-articulated legs emerging from a hole in the cave-wall, trans-red eye-cluster, the arachnid-ambush signature',
+      'HYDRA EMERGING FROM SWAMP — multi-headed hydra-figure with brick-built necks rising from a swamp-baseplate (multiple heads at different elevations), trans-green poison-particles dripping from each maw, the iconic-hydra signature',
+      'GOLEM AWAKENING — brick-built stone-golem mid-activation on an altar-platform, faint trans-cyan magical-light emerging from chest-cavity, the construct-coming-to-life signature',
+      'UNHOLY-PULSE-FROM-ALTAR — bursts of trans-violet + trans-purple light pulsing outward from a black-altar in concentric expanding rings, the dark-power-activating signature',
+      "FIRE-RAIN FROM SKY — multiple small trans-orange + trans-red flame elements falling from the upper-frame at various positions, impact-craters trans-yellow at the strike-points, the apocalyptic-fall signature",
+      'CURSED-FOG WITH FACES — drifting white-grey cotton-batting fog elements with faint trans-clear face-shapes embedded in the curls, ghostly-presence signature',
+      "PALADIN-BLESSING RADIANCE — paladin-minifig with C-hands held up generating trans-yellow + trans-clear divine-radiance plate-elements emanating outward, the holy-magic signature",
+      'FOREST-SPIRITS BLOOM — multiple trans-green + trans-cyan + trans-white 1×1 round-plate spirit-orbs hovering at varying heights through a forest, glowing faintly, the woodland-magic signature',
+      'EARTHQUAKE GROUND-CRACK — dark-tan cracked-earth tiles spreading across the foreground floor with deep-cracks (1×2 dark-bley tile-strips), trans-orange lava-glow at the crack-edges, the elemental-disturbance signature',
+      "WIGHT EMERGENCE FROM CRYPT — multiple wight-minifig variants (skeleton-torso with tattered-cape) emerging from a torch-lit crypt corridor with cold trans-cyan undead-mist drifting around their feet, the undead-procession signature",
+      "BANISHMENT-VORTEX SPIRAL — trans-purple + trans-magenta spell-spiral mid-formation drawing a captured-demon-figure into the vortex-center, the moment-of-exorcism signature",
+      'COMET-TRAIL OVERHEAD — single bright comet-element with elongated trans-white + trans-yellow tail trailing across the upper-frame, the celestial-omen signature',
+    ],
+    instructions: `Each entry is ONE fantasy magical phenomenon, 20-40 words. Format: "EVENT NAME CAPS — brick-parts + visual-impact". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NEVER specify lighting color cast directly; NEVER lock minifig reaction language; magical EVENT only. NEVER Star Wars / Harry Potter references.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // SPACE PATH (2026-05-22 — second BrickBot axis migration)
   // ════════════════════════════════════════════════════════
 

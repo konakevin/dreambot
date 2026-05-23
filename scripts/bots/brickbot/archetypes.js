@@ -8,6 +8,43 @@
  */
 
 module.exports = {
+  BRICKBOT_FANTASY: {
+    description: `PATH-BESPOKE — BrickBot fantasy path (2026-05-22 migration; third BrickBot axis-system path). LEGO Castle MOC diorama photography across the iconic LEGO Castle lineage (Crusaders / Forestmen / Black Knights / Royal Knights / Dragon Knights / Black Falcons / Wolfpack / Crown / Lion Kingdom / Dragon Kingdom / Skeleton King / Castle 2013 / LEGO Elves) + LotR/Hobbit heritage (Helm's Deep / Minas Tirith / Rivendell / Mordor / Shire) + LEGO D&D (2024+ adventurer party / Red Dragon's Tale) + Bricklink AFOL Castle MOC community.
+
+9 path-bespoke slots + 1 conditional:
+  • scene_type         — narrative stage (castle siege / dragon-lair / elven-treetop / dwarven-mine / wizard-tower / ranger-camp / tournament / witch-hut / dungeon / market / throne-room / coronation / jousting / mage-duel / refugee-column / hidden-shrine)
+  • minifig_action     — verb-led story beat (mid-charge / mid-cast / mid-archery-loose / mid-dragon-strike / mid-lance-impact / mid-rescue / mid-banquet-toast / mid-skeleton-rise / mid-spell-blast)
+  • build_technique    — MOC distinguisher (SNOT castle wall curvature / Technic-articulated drawbridge / trans-piece magic effect / illegal-stone-curve / Bricklink Forestmen tree-canopy / dragon-wing-articulation)
+  • camera_framing     — fantasy-specific framing (battlement-down / throne-room-establishing / dragon-POV / forest-glade-through-trees / cliff-castle-aerial / under-archway-discovery / portcullis-low / chapel-altar-down-aisle)
+  • subject_focus      — silhouette anchor (REPLACES vehicle_class) — mount (warhorse/dragon-mount/griffin/wolf-rider/unicorn) OR structure (castle/wizard-tower/dragon-lair/coastal-fortress) OR no-vehicle interior (throne-room/tavern/dungeon/wizard-library) OR no-vehicle landscape (forest-glade/mountain-pass/cursed-marsh/snowy-realm)
+  • register           — era+faction lock weighted ~80% iconic LEGO Castle heritage + ~15% retro-fantasy (LotR/Hobbit/D&D) + ~5% specialty
+  • scene_props pickN:2 — diorama fill (banner / chalice / scroll / wizard staff / treasure chest / cauldron / chained door / bone pile / barrel / falconry-perch / weapon-rack / candle-stand)
+  • lighting           — axis-clean (torch / candle / arrowslit-shaft / lightning / dragon-fire / moonlight / dawn-pink / fireplace / cathedral-stained-glass)
+  • palette            — axis-clean (Royal-purple+gold / Forestmen-green+brown / Skeleton-King-red+black / Lion-Kingdom-blue / Dragon-Kingdom-red / wizard-violet-gold / dwarven-bronze+steel / elven-silver+leaf / LotR-Mordor-black+red)
+  • magical_phenomenon (50%-gated) — environmental drama (dragon-fire-rain / spell-vortex / magical-portal / blizzard-conjured / lightning-storm / shadow-curse / fey-mist / unholy-glow-rising / aurora-blessing / falling-stars)
+
+Bending advantage: subject_focus + register + magical_phenomenon decoupled, so unique permutations like "castle siege + dragon-fire-rain + LotR Mordor register" or "tavern interior + bard-mid-performance + LEGO Elves register" are rollable. Legacy 4-axis (scene+camera+lighting+palette) couldn't reach these.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'minifig_action',
+        'build_technique',
+        'camera_framing',
+        'subject_focus',
+        'register',
+        'scene_props',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: { scene_props: 2 },
+    conditionalLayer: { slot: 'magical_phenomenon', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BRICKBOT_SPACE: {
     description: `PATH-BESPOKE — BrickBot space path (2026-05-22 migration; second BrickBot axis-system path). LEGO Space MOC diorama photography across the iconic LEGO Space lineage (Classic Space 1978-87 / Blacktron / M-Tron / Space Police / Ice Planet / Insectoids / Mars Mission / Galaxy Squad / LEGO Star Wars) + hard-SF canon (Expanse / Mass Effect / Interstellar / Foundation / 2001 ASO / Star Citizen / Tintin retro / cyberpunk space).
 

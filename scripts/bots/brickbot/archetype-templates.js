@@ -10,6 +10,144 @@
  */
 
 module.exports = {
+  BRICKBOT_FANTASY: ({ slots, vibeDirective }) => {
+    const {
+      scene_type,
+      minifig_action,
+      build_technique,
+      camera_framing,
+      subject_focus,
+      register,
+      scene_props,
+      lighting,
+      palette,
+      magical_phenomenon,
+    } = slots;
+
+    const props = Array.isArray(scene_props) ? scene_props : [scene_props];
+    const propLines = props.map((p, i) => `  ${i + 1}. ${p}`).join('\n');
+
+    const phenomenonSection = magical_phenomenon
+      ? `
+━━━ MAGICAL PHENOMENON (this render's environmental beat) ━━━
+${magical_phenomenon}
+
+Weave this into the diorama as a SECONDARY focal point — render it visibly (brick-built trans-orange dragon-fire flame elements / trans-purple spell-vortex layered plates / trans-cyan magical-portal disc / trans-white blizzard-particles / trans-green unholy-glow). Do NOT let it eclipse the scene + minifig action — it AMPLIFIES the moment.
+
+`
+      : '';
+
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a FANTASY diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION TIER HIGH-FANTASY STORYTELLING IN LEGO BRICKS ━━━
+This is a Bricklink AFOL champion's HIGH-FANTASY diorama, photographed at a LEGO World convention. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset arrangement. NOT a movie still. The build is OBSESSIVELY detailed — every brick is intentional, every minifig is mid-action, every prop tells a story. The fantasy story is the SUBJECT — the LEGO is the medium.
+
+The fantasy archetypes the build celebrates:
+  • Armored knights in heraldic-tabard surcoats (red-cross / black-and-falcon / blue-and-lion / red-and-dragon / gold-and-purple / green-and-oak — describe by COLOR + EMBLEM)
+  • Dragons (horned reptilian winged beasts on hoards / dragon-riders aloft / dragon-fire raining on villages)
+  • Wizards (robed staff-bearing spellcasters / mage-duels with spell-vortexes / wizard-tower libraries)
+  • Elves (long-hair archers in green-or-silver attire / elven treetop cities / faerie-courts in pastels)
+  • Dwarves (bearded plate-armored smiths / mountain-holds / forge-halls with trans-orange fire)
+  • Skeletons & undead (skeleton-warrior columns / necromancer summoners / cursed-tomb risings)
+  • Trolls / orcs / monsters (cave-troll uppercut / orc-horde charge / goblin-ambush in pass)
+  • Witches & dark magic (witch-hut in poisoned marsh / coven around bonfire / cursed-amulet ritual)
+  • Adventurer parties (fighter+rogue+wizard+cleric ensemble at campsite / dungeon-delve / quest-hire tavern)
+  • Tournament & ceremony (jousting lists / coronation / royal wedding / knighting / sword-in-stone)
+
+NEVER name specific movies, books, TV shows, video games, or specific LEGO set numbers. NEVER LotR / Hobbit / Tolkien / Smaug / Mordor / Helm's Deep / Rivendell / Witcher / Skyrim / Elder Scrolls / Game of Thrones / Harry Potter / Hogwarts / Warhammer / Frazetta / Vallejo / Brom / specific D&D campaign names. NEVER specific LEGO faction names (Crusaders / Forestmen / Black Knights / Royal Knights / Dragon Knights / Lion Kingdom / Dragon Kingdom / Skeleton King / LEGO Elves) — describe by VISUAL SIGNATURE (knight-color-and-emblem-and-attire) instead. Goal: high-fantasy storytelling that reads as a Bricklink AFOL custom MOC, not a movie still or a Lego.com hero shot.
+
+━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
+NEVER a real human hand placing a brick. NEVER real human fingers in frame. NEVER real human skin, photoreal faces, or hybrid claymation-faces. Flux's "LEGO photo" training data is HEAVILY contaminated with hand-placing-brick stock shots and Lego.com hero shots with claymation-blend. OVERRIDE THAT BIAS HARD. Every character is a LEGO minifigure with C-shaped hands, printed plastic face, standard minifig torso/legs articulation. Knight / wizard / elf / dwarf / skeleton / faerie / orc minifig variants — described by VISUAL SIGNATURE (heraldic-tabard-color + emblem / robe-color + staff / long-hair-piece + bow / bearded-head + plate-armor / skeleton-torso + tattered-cape) — are LEGO minifigure variants with C-shaped hands, printed plastic faces, helmet molded plastic visors. NEVER a real human face inside. NEVER name specific characters from movies / books / video games.
+
+━━━ EVERYTHING IS BRICK — INCLUDING DRAGON-FIRE, MAGIC, FOLIAGE, STONE, WATER, TERRAIN, SKY ━━━
+EVERY element is built from real LEGO bricks. NO photoreal rock, NO photoreal water, NO photoreal sky, NO photoreal foliage. Studs CLEARLY VISIBLE on flat surfaces. Authentic plastic texture. Molded seams. The diorama sits on a tabletop convention display.
+
+⚠️ EXTRA-STRONG LEGO MANDATE FOR OUTDOOR / NATURE-HEAVY SCENES — Flux's "fantasy castle on cliff" + "battlefield landscape" + "ruined castle in jungle" + "forest scene" training priors are HEAVILY Hollywood-photoreal contaminated. OVERRIDE THAT BIAS HARD:
+  • Cliffs / mountains = light-bley + dark-bley slope-bricks with visible brick-edges, NEVER photoreal rock-strata
+  • Water = trans-blue + trans-light-blue layered plates with white-stud foam crests, NEVER photoreal ocean waves
+  • Sky = brick-built sky-baseplate behind with scattered 1×1 white round-plates as cloud-elements, NEVER photoreal cloudscape
+  • Grass / ground = green plates or olive-green textured plates for grass, dark-tan plates for dirt — NEVER photoreal grass texture
+  • Forest foliage = brick-built tree-trunks (brown round-bricks) + leaf-elements in olive/dark-green/autumn-orange, NEVER photoreal leaves
+  • Battlefield terrain = mix of grass-green + dark-tan + light-bley slope-bricks, NEVER photoreal mud or grass
+  • Castle stone walls = light-bley + dark-bley slope-bricks with brick-edge cracks, NEVER photoreal masonry
+  • Banner cloth = printed flag-element tiles, NEVER photoreal fabric
+
+Build materials cheat-sheet:
+  • Castle towers = SNOT-bracket-curved cylindrical sections with crenellated battlement plates
+  • Dragon-fire = trans-orange + trans-red + trans-yellow flame elements clustered at draconic muzzle
+  • Magical effects = trans-purple + trans-cyan + trans-magenta + trans-clear bar/rod/plate elements stacked in vortex patterns
+  • Fire-pit = trans-orange flame cluster on light-bley hearth-stones
+
+━━━ THE SCENE STAGE ━━━
+${scene_type}
+
+━━━ THE MINIFIG ACTION — STORY BEAT MANDATE (no posing) ━━━
+${minifig_action}
+
+This is a freeze-frame of a STORY HAPPENING — verbs, consequences, reactions. Minifigs mid-charge, mid-lance-impact, mid-spell-cast, mid-rescue, mid-skeleton-rise, mid-coronation-bow, mid-archery-loose. NEVER minifigs standing around in a setting. Render WHAT IS HAPPENING — the cause, the action, the reaction in the same frame.
+
+━━━ THE MOC BUILD TECHNIQUE — AFOL DISTINGUISHER (render the technique visibly) ━━━
+${build_technique}
+
+This is the technique that makes the build read as AFOL champion, NOT official-set. Render it visibly: viewers should clock the SNOT-construction / illegal-technique / parts-usage cleverness from across the room. Specify brick types used (slopes / tiles / plates / Technic beams / trans-pieces / minifig accessories repurposed as micro-details).
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ THIS IS NON-NEGOTIABLE — the rolled camera angle DRIVES the composition. Apply the exact camera position + orientation described, even if Flux's "LEGO MOC photography" training prior wants to center the minifig front-facing. Override that bias hard.
+
+⚠️ MINIFIG POSE & ORIENTATION VARIETY MANDATE — fight Flux's "minifig facing camera at center frame" default:
+  • If camera_framing is OVER-SHOULDER — render the focal minifig from BEHIND, looking past them
+  • If WORM'S-EYE / UPSHOT / FROM-BELOW — minifigs viewed from below, foreshortened
+  • If OVERHEAD / DOWNSHOT / AERIAL / BATTLEMENT-DOWN — top-down or steep-down, minifigs from above
+  • If SIDE-ON / BROADSIDE / PROFILE — figure in side-profile silhouette, NOT front-facing
+  • If POV / FIRST-PERSON / DRAGON-POV — over-the-shoulder or hand-in-foreground, NOT a figure facing you
+  • If WIDE / VAULT / ESTABLISHING / AERIAL — ensemble of multiple minifigs at varied positions, NOT one centered figure
+  • If RECEDING / DEEP-PERSPECTIVE / THROUGH-ARCHWAY — figure(s) at midground or deep, NOT close-up dominant
+  • Avoid centered eye-level minifig front-facing framing as the default — that's the Flux-bias trap.
+
+Minifig orientation rotation: vary across side-profile / three-quarter-back / from-behind / multi-figure ensemble / partial-frame crop / silhouette-at-distance. NOT every render is "knight face visible center frame."
+
+━━━ THE SUBJECT-FOCUS (silhouette anchor OR no-mount/structure scene-focus) ━━━
+${subject_focus}
+
+⚠️ HARD BIFURCATION — read this carefully:
+• If the entry above is a MOUNT (warhorse / dragon-mount / griffin / wolf-rider / unicorn / war-elephant / direwolf) — render the mount + rider as the DOMINANT subject. Render the mount accurately (4-legged warhorse with caparison / brick-built dragon with articulated wings / griffin with fused eagle-front + lion-back / etc.). Rider minifig in saddle/howdah/back-position.
+• If the entry above is a STRUCTURE (castle / wizard-tower / dragon-lair / coastal-fortress / dwarven-hold) — render the structure as the DOMINANT subject. Architecture fills 60%+ of frame. Minifig action happens AT the structure (on battlements / at the gate / in the courtyard).
+• If the entry above is NO-VEHICLE INTERIOR (throne-room / tavern / dungeon / wizard-library / chapel / treasury) — render the interior as the SETTING. The brick-built environment is the STAGE — but the MINIFIG ACTION is the SUBJECT. Camera framing dictates figure position (NOT default centered-front-facing). Story-beat must be 2-second readable through ensemble action / side-profile / from-behind / partial-figure.
+• If the entry above is NO-VEHICLE LANDSCAPE (forest-glade / mountain-pass / cursed-marsh / snowy-realm) — render the landscape as the SETTING with minifig action as the focal beat. Multi-tier depth: foreground figures + midground terrain + deep-distance landmark.
+
+━━━ THE REGISTER (era + faction lock for this render) ━━━
+${register}
+
+This is the historical/canon lock. Costume colors, build motifs, weapon types, and props ALL align with this register — never mix anachronistically (no Crusader knight in LEGO Elves elven dress, no Forestmen Robin-Hood-coded green-hood on a Black Knights heavy-armor build).
+
+━━━ DIORAMA STORYTELLING DETAILS — fill the negative space ━━━
+${propLines}
+
+These small builds populate the diorama corners. Render them as deliberate brick-built details — never decorative-only. Each prop should imply a backstory.
+${phenomenonSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+
+━━━ CROSS-AXIS COMPATIBILITY (drop the lesser axis when archetype-incompatible) ━━━
+• If register names BRIGHT-FAERIE / PASTEL-ELVEN aesthetic — palette becomes bright fantasy pastels + jewel-tones; subject_focus mounts become unicorns / pegasus / dragon-friends; mood whimsical not grim.
+• If register names UNDEAD / SKELETON aesthetic — palette becomes red+black+bone-white; subject_focus mounts become skeleton-warhorses; minifigs become skeleton-torso variants; mood grim/macabre.
+• If register names DARK-VOLCANIC / SHADOW-REALM aesthetic — palette becomes black+red+ember-orange; subject_focus mounts become wargs/fell-beasts; minifigs become orc/goblin variants.
+• If register names SILVER-ELVEN / FOREST-REALM aesthetic — palette leans silver+leaf+pearl; minifigs become long-hair elven variants with bow/curved-sword accessories.
+• If register mentions DRAGON-AFFILIATED knights or houses — heraldic dragon-banner motifs; dragon-themed shield prints; mounts may include dragon variants.
+• If register names ADVENTURER PARTY archetype — four-figure ensemble of fighter (plate-armor) + rogue (hooded cloak) + wizard (robed staff) + cleric (mace + holy-symbol) with diverse weapons + spell-effect props.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OUTPUT SPEC ━━━
+Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + magical phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+  },
+
   BRICKBOT_SPACE: ({ slots, vibeDirective }) => {
     const {
       scene_type,

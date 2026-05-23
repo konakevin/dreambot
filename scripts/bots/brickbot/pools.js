@@ -51,6 +51,18 @@ for (const p of PATHS) {
 // ─────────────────────────────────────────────────────────────
 
 const AXIS_POOLS = {
+  // fantasy path — third BrickBot axis migration (2026-05-22)
+  BRICKBOT_FANTASY_SCENE_TYPE: load('brickbot_fantasy_scene_type'),
+  BRICKBOT_FANTASY_MINIFIG_ACTION: load('brickbot_fantasy_minifig_action'),
+  BRICKBOT_FANTASY_BUILD_TECHNIQUE: load('brickbot_fantasy_build_technique'),
+  BRICKBOT_FANTASY_CAMERA_FRAMING: load('brickbot_fantasy_camera_framing'),
+  BRICKBOT_FANTASY_SUBJECT_FOCUS: load('brickbot_fantasy_subject_focus'),
+  BRICKBOT_FANTASY_REGISTER: load('brickbot_fantasy_register'),
+  BRICKBOT_FANTASY_SCENE_PROPS: load('brickbot_fantasy_scene_props'),
+  BRICKBOT_FANTASY_LIGHTING: load('brickbot_fantasy_lighting'),
+  BRICKBOT_FANTASY_PALETTE: load('brickbot_fantasy_palette'),
+  BRICKBOT_FANTASY_MAGICAL_PHENOMENON: load('brickbot_fantasy_magical_phenomenon'),
+
   // space path — second BrickBot axis migration (2026-05-22)
   BRICKBOT_SPACE_SCENE_TYPE: load('brickbot_space_scene_type'),
   BRICKBOT_SPACE_MINIFIG_ACTION: load('brickbot_space_minifig_action'),

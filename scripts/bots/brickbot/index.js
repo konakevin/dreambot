@@ -63,6 +63,9 @@ module.exports = {
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
     space:
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
+    // fantasy: NO deep-focus prefix — tilt-shift retained per playbook lesson 1
+    // (Flux's "fantasy" training prior is heavily Hollywood-photoreal; tilt-shift
+    // is the structural signal that "everything in frame is the LEGO model").
   },
 
   vibes: ['cinematic'],
@@ -85,7 +88,7 @@ module.exports = {
     // `feedback_axis_system_skip_polish` — Haiku polish strips
     // curated axis language (build_technique vocab, register-locks,
     // scene-prop detail) when compressing 150 → 70-100 words.
-    skipPaths: ['pirates', 'space'],
+    skipPaths: ['pirates', 'space', 'fantasy'],
   },
 
   // No sensoryAnchors — universal LEGO MOC photography mood is captured
