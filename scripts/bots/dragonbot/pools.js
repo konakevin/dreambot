@@ -67,6 +67,21 @@ module.exports = {
   MALE_ADVENTURER_LANDSCAPE: load('male_adventurer_landscape'),
   MALE_ADVENTURER_DRAMA: load('male_adventurer_drama'),
   MALE_ADVENTURER_SURPRISE_ELEMENT: load('male_adventurer_surprise_element'),
+  // ─── male-explorer path (2026-05-23 — male counterpart of female-explorer:
+  // cool gritty masculine armor + candid adventurous scenes; reuses male DNA
+  // pools, bespoke cool-armor outfit + adventurous action, de-birded).
+  MALE_EXPLORER_RACE: load('male_explorer_race'),
+  MALE_EXPLORER_CLASS: load('male_explorer_class'),
+  MALE_EXPLORER_SKIN: load('male_explorer_skin'),
+  MALE_EXPLORER_EYES: load('male_explorer_eyes'),
+  MALE_EXPLORER_HAIR_COLOR: load('male_explorer_hair_color'),
+  MALE_EXPLORER_HAIRSTYLE: load('male_explorer_hairstyle'),
+  MALE_EXPLORER_OUTFIT: load('male_explorer_outfit'),
+  MALE_EXPLORER_ACCESSORY: load('male_explorer_accessory'),
+  MALE_EXPLORER_ACTION: load('male_explorer_action'),
+  MALE_EXPLORER_LANDSCAPE: load('male_explorer_landscape'),
+  MALE_EXPLORER_DRAMA: load('male_explorer_drama'),
+  MALE_EXPLORER_SURPRISE_ELEMENT: load('male_explorer_surprise_element'),
   // ─── male-action-scenes path (2026-05-14, clone of male-adventurer with
   // action rewritten for peak-action multi-effect)
   MALE_ACTION_SCENES_RACE: load('male_action_scenes_race'),

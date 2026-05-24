@@ -441,6 +441,124 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute ge
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  // 2026-05-23 — male counterpart of DRAGON_FEMALE_EXPLORER. Same cool-armor +
+  // candid-adventurer framing, slanted MASCULINE + GRITTY, with the male NSFW
+  // mandates (chest always covered, face-focused skin, no shirtless).
+  DRAGON_MALE_EXPLORER: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      race,
+      class: charClass,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      landscape,
+      action,
+      surprise_element,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ENVIRONMENTAL DRAMA — render this visibly in the scene ━━━
+${drama}
+
+An atmospheric event happening in the world around him — render as a visible secondary focal point (NOT eclipsing him). Adds awe / story to the frame. NEVER combat or enemies.
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a CANDID ADVENTURING scene for DragonBot — a single MAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, doing his adventurer thing out in the wild. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. He is ALIVE, CAPABLE, sure-handed, road-tested, in a story-rich candid moment. His AGE varies naturally (young, prime, or seasoned per the race slot) — do NOT default to an old grey-bearded elder.
+
+━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "adventurer", "rogue", "ranger", "mage", "paladin", "warrior" or any other gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [race-coded] MAN [doing action] in [landscape]..." — "man" comes BEFORE any class noun. Use he/him/his throughout. The class slot describes his ROLE, not his gendered noun — append role AFTER "man" appears.
+
+━━━ ABSOLUTE BANS — NSFW-CLEAN, COMBAT-CLEAN ━━━
+• NO active combat, NO mid-strike, NO weapon-aimed-at-a-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood-fight
+• A DRAWN weapon held ready in stealth or wary advance IS allowed (creeping low with sword/axe/dagger drawn, stalking something just out of frame) — but NEVER mid-swing, NEVER a visible enemy, NEVER an actual strike. Otherwise weapons stay holstered / sheathed / slung / carried.
+• NO male-cheesecake: NEVER "shirtless" / "bare-chested" / "oiled pecs" / "exposed torso" / "open shirt revealing chest" / "strategically torn" / "loincloth". His CHEST is ALWAYS covered by armor or layers.
+• NO "rugged hero pose" / "smoldering" / posing for the camera. Candid moment, body in motion or charged stillness.
+
+━━━ HIS OUTFIT — COOL GRITTY MASCULINE ARMOR (render the slot exactly) ━━━
+His gear is BADASS FITTED GRITTY ARMOR — Witcher / Elden Ring / Dragon Age / GoT-cover caliber: articulated plate / cuirass with pauldrons + vambraces + greaves, scale or chitin-and-hide, or reinforced battle-leather with a shoulder-harness. Weathered, battle-worn, brass-riveted, runic-etched, blackened-steel, road-grimed. His CHEST is ALWAYS covered (cuirass / breastplate / gambeson / hauberk / brigandine / scale / coat). A cloak or half-cape only as an ACCENT over the armor.
+Render whatever the OUTFIT SLOT specifies exactly. AVOID frumpy drapes (loose flowing robes / shapeless hooded coats / billowing) AND any cheesecake (no shirtless, no exposed torso, no skin-tight bodysuit). He looks rugged, capable, and battle-hardened — NEVER glamour, NEVER bare-chested.
+Reference: Geralt's weathered Witcher armor / Aragorn's road-worn plate-and-leather / an Elden Ring tarnished knight / a gritty Dragon-Age warrior. Fitted and functional, NEVER loose drapes.
+
+━━━ SOLO CHARACTER ONLY ━━━
+ONE character. No companions, no enemies, no crowds. He is ALONE in his moment.
+
+━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
+The adventurer is the MAIN SUBJECT. His face, gear, race, action, and pose are the DRAW. He occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
+
+⚠️ FRAMING BANS — NEVER:
+• "back to viewer" / "from behind" / "rear view" — his FACE must be visible (three-quarter or side profile)
+• "tiny silhouette in distance" / "small in distant landscape" / "dwarfed by"
+• "lone figure on horizon" / "distant figure approaching"
+
+⚠️ MASCULINE ANATOMY — render him UNMISTAKABLY as a man: broad shoulders wider than waist, masculine jawline, male facial structure, facial hair + AGE exactly per the race slot (clean-shaven / stubble / short or full beard / beardless; young, prime, or seasoned). Render the outfit slot's coverage exactly — chest ALWAYS covered, NEVER bare-chested, NEVER cheesecake.
+
+━━━ HIS RACE (LOCKED — render him unmistakably as THIS lineage) ━━━
+${race}
+
+Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Drow = obsidian-grey skin and white-silver hair, beardless. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout, beardless. Half-orc = green-grey skin and tusks. Mountain dwarf = heavily-braided beard with iron clan-rings. Facial hair VARIES per the race entry — clean-shaven / light stubble / short trimmed beard / full beard / beardless (elves, dragonborn, drow). Render EXACTLY what the race entry specifies; do NOT add a full grey beard unless the entry calls for it. Race is the HERO of identity.
+
+━━━ HIS CLASS (his role / energy — informs how he carries himself) ━━━
+${charClass}
+
+━━━ HIS COMPACT BIO (one-line block — DO NOT expand) ━━━
+A ${race.split(':')[0]} man with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
+
+All eight DNA elements (race / class / skin / eyes / hair color / hairstyle / outfit / accessory) should be discernible in the render. Skin stays FACE-FOCUSED (cheekbones / jaw / brow) — NEVER a bare torso. Face fully visible (this is fantasy, not sci-fi — no sealed helmet).
+
+━━━ THE ACTION — what he is doing RIGHT NOW (CANDID, NEVER COMBAT) ━━━
+${action}
+
+GROUNDED — feet on the ground or interacting with terrain. The action defines body position. Render it EXACTLY — body weight visible, captured at a loaded instant. Purposeful, capable, mid-motion — never staged.
+
+━━━ THE LANDSCAPE (the stage) ━━━
+${landscape}
+
+USUALLY a wild fantasy biome. BUT if THE ACTION above places him in a specific VENUE — a tavern interior, a road-side campfire, a creek-bank rest — then HONOR THAT VENUE as the stage and let this landscape inform what's visible beyond it. The action's venue always wins over a conflicting wild-biome.
+
+Depth on depth — FOREGROUND tactile detail (rocks / vegetation / camp gear / tavern table / cliff-edge) → MIDGROUND stage body + him → DEEP DISTANCE atmospheric layers stacked. Never flat backdrop. The stage never competes with him for focus.
+${dramaSection}
+━━━ SURPRISE ELEMENT — secondary subject adding story ━━━
+${surprise_element}
+
+Place at midground or deep midground — a small detail implying the wider world. NEVER foreground or competing with him for attention.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Three-quarter angle or side profile so we see his face and race clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near his feet (gear, rocks, vegetation, trail-edge). MIDGROUND: HIM, full body, mid-action, 25-40% of frame. BACKGROUND: the landscape receding into atmospheric haze.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: "a [race-coded] MAN [doing exact action] in [landscape]" — race-noun "man" leads], [he wears [outfit] with full material detail — chest covered], [his skin + eyes + hair + beard locked from DNA slots], [signature accessory visible], [the fantasy landscape wrapping around him — depth + atmospheric layers], [lighting + atmosphere particles], [color palette + mood]
+
+CRITICAL — the OPENING tokens are "[race-coded man] [DOING ACTION]" — man comes BEFORE rogue / ranger / mage / paladin / etc. He fills 25-40% of frame, FULL-BODY, captured at the loaded candid instant.
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   MALE_ACTION_SCENES: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,

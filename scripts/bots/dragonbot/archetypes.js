@@ -86,6 +86,24 @@ module.exports = {
   anchorScaleRange: null
 },
 
+  // 2026-05-23 — male counterpart of DRAGON_FEMALE_EXPLORER. Mirrors
+  // MALE_ADVENTURER's 12-axis split (keeps the face-focused skin axis for
+  // male bare-chest safety); cool-gritty-armor + adventurous look via the
+  // outfit/action pools + DRAGON_MALE_EXPLORER template.
+  DRAGON_MALE_EXPLORER: {
+  description: 'PATH-BESPOKE — DragonBot male-explorer path (2026-05-23 male counterpart of DRAGON_FEMALE_EXPLORER). Gender-locked MAN of any fantasy race, any class. COOL GRITTY MASCULINE ARMOR (fitted plate / cuirass / scale / chitin / battle-leather — Witcher/Elden/Dragon-Age caliber, weathered + battle-worn), NSFW-clean MALE (chest ALWAYS covered, no shirtless/oiled, face-focused skin), no artist callouts. Candid traveling-adventurer scenes (climbing / bridges / paths / drawn-blade stealth / creek-rest / campfire / map). Character at 25-40% frame. 12 axes incl. face-focused skin + drama-40%-gate.',
+  slots: {
+    universal: [ 'lighting', 'atmosphere' ],
+    bot: [],
+    characterDnaAxes: [ 'race', 'class', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
+    path: [ 'landscape', 'action', 'surprise_element' ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'drama', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
   DRAGONBOT_DARK_REALM: {
   description: 'PATH-BESPOKE — DragonBot dark-realm path (2026-05-14 migration). Corrupted wastelands / necromancer kingdoms / fallen empires / cursed lands. Mordor / Shadowfell / Dark Souls / Bloodborne / Diablo energy. Beautiful but MENACING. The land itself feels hostile, wrong, corrupted. Optional tiny figures (hooded wanderers / cursed knights / pilgrims) permitted as scale-provers. 5 path-bespoke axes (scene / architecture / phenomenon 80%-gated / surprise_element / sky_layer) + universal lighting + atmosphere.',
   slots: {

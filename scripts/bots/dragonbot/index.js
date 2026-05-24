@@ -25,6 +25,9 @@ const pathBuilders = {
   'female-action-scenes': require('./paths/female-action-scenes'),
   'artsy-girl': require('./paths/artsy-girl'),
   'male-adventurer': require('./paths/male-adventurer'),
+  // 2026-05-23: male counterpart of female-explorer (cool gritty armor +
+  // candid adventurous scenes).
+  'male-explorer': require('./paths/male-explorer'),
   'male-action-scenes': require('./paths/male-action-scenes'),
   'cozy-arcane': require('./paths/cozy-arcane'),
   'arcane-halls': require('./paths/arcane-halls'),
@@ -83,6 +86,8 @@ module.exports = {
     'female-action-scenes': '',
     // EMPTY by design — male mirror of female-adventurer.
     'male-adventurer': '',
+    // EMPTY by design — male-explorer mirror of female-explorer.
+    'male-explorer': '',
     // EMPTY by design — male mirror of female-action-scenes (cranked multi-effect)
     'male-action-scenes': '',
     // EMPTY by design — flagship landscape path. Per wrapper-gridlock lesson,
@@ -136,6 +141,7 @@ module.exports = {
     'female-action-scenes': 'black-forest-labs/flux-1.1-pro',
     'artsy-girl': 'black-forest-labs/flux-1.1-pro',
     'male-adventurer': 'black-forest-labs/flux-1.1-pro',
+    'male-explorer': 'black-forest-labs/flux-1.1-pro',
     'male-action-scenes': 'black-forest-labs/flux-1.1-pro',
     'cozy-arcane': 'black-forest-labs/flux-1.1-pro',
     'arcane-halls': 'black-forest-labs/flux-1.1-pro',
@@ -350,6 +356,7 @@ module.exports = {
     'female-action-scenes',
     'artsy-girl',
     'male-adventurer',
+    'male-explorer',
     'male-action-scenes',
     'cozy-arcane',
     'arcane-halls',
@@ -377,6 +384,7 @@ module.exports = {
     'female-action-scenes': 5,
     'artsy-girl': 4,
     'male-adventurer': 5,
+    'male-explorer': 5,
     'male-action-scenes': 5,
     'cozy-arcane': 3,
     'arcane-halls': 3,
@@ -426,6 +434,7 @@ module.exports = {
       'female-explorer',
       'female-action-scenes',
       'male-adventurer',
+      'male-explorer',
       'male-action-scenes',
       'landscape',
       'dragon-lore',
@@ -445,6 +454,7 @@ module.exports = {
       'female-action-scenes': '100-130',
       'artsy-girl': '80-110',
       'male-adventurer': '80-110',
+      'male-explorer': '80-110',
       'male-action-scenes': '100-130',
       'dragon-scene': '80-110',
     },
@@ -463,6 +473,7 @@ module.exports = {
       'female-action-scenes': 'female',
       'artsy-girl': 'female',
       'male-adventurer': 'male',
+      'male-explorer': 'male',
       'male-action-scenes': 'male',
       'dragon-scene': 'creature',
       landscape: 'scene',
