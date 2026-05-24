@@ -119,7 +119,18 @@ function rollChaos({ path, botChaos, allowSubjectChaos }) {
     return { intensity: 0, injections: [], channelKey: null };
   }
 
-  const bias = typeof botChaos.intensityBias === 'number' ? botChaos.intensityBias : 0;
+  // Per-path bias override (bot.chaos.intensityBiasByPath[path]) wins over the
+  // bot-wide intensityBias — lets one path crank chaos without affecting others.
+  const perPathBias =
+    botChaos.intensityBiasByPath && typeof botChaos.intensityBiasByPath[path] === 'number'
+      ? botChaos.intensityBiasByPath[path]
+      : null;
+  const bias =
+    perPathBias !== null
+      ? perPathBias
+      : typeof botChaos.intensityBias === 'number'
+        ? botChaos.intensityBias
+        : 0;
   let intensity = Math.max(0, Math.min(1, Math.random() + bias));
 
   // No chaos below threshold (matches V4 behavior — ~30% of renders are chaos-free)

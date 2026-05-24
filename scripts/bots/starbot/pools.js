@@ -203,6 +203,7 @@ module.exports = {
   // ornate female-figure poster art in the Frazetta / Whelan / Vallejo /
   // Bonestell painted-oil cover-art tradition. Anchored on Kevin's 15-heart
   // female-explorer calibration; designed bespoke from R0 (NOT cloned from FE).
+  SPACE_FEMME_RENDER_STYLE: load('space_femme_render_style'),
   SPACE_FEMME_SUBJECT_DNA: load('space_femme_subject_dna'),
   SPACE_FEMME_OUTFIT: load('space_femme_outfit'),
   SPACE_FEMME_ACTION_POSTER: load('space_femme_action_poster'),

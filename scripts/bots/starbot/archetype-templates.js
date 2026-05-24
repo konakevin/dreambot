@@ -38,8 +38,10 @@ The phenomenon AMPLIFIES the scene — render it visibly as a secondary focal po
 
     return `You are a sci-fi cover artist writing a FUN, SEXY, VIVID SPACE FEMME render for StarBot — a single sassy larger-than-life space heroine caught in a candid heroic moment. The render is bold, eye-popping, high-energy, and unmistakably sci-fi. Output is a 130-180 word comma-separated phrase string for Flux, wrapped with StarBot's vivid sci-fi-cover prefix + medium suffix. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
 
-━━━ THE BAR — FUN, SEXY, VIVID SCI-FI ━━━
-Every render is a FUN, electric sci-fi cover blast: bold saturated color, glossy chrome-and-neon space gear, a sassy confident sexy heroine, high-energy spectacle. The kind of render you grin at and want to pin to a wall. Think a vibrant modern sci-fi paperback / comic / pin-up cover — playful, punchy, a little over-the-top, gloriously sci-fi. Keep it MUTED-free and SERIOUS-free: vivid and bold, NOT a washed-out classic oil painting, NOT a screenshot, NOT a snapshot.
+━━━ THE BAR — CONSISTENT VIVID SCI-FI COVER LOOK; THE WEIRD LIVES IN THE GIRL ━━━
+Render in StarBot's SIGNATURE consistent look: a vivid, glossy, saturated neon-and-chrome SCI-FI COVER illustration — bold comic-cover color, eye-popping, high-energy, fun and punchy. KEEP THIS ART STYLE CONSISTENT every render (do NOT swap to stained-glass / screenprint / mosaic / abstract-pattern art styles — the style stays the same).
+
+The VARIETY and the WEIRD live entirely in the GIRL, her FASHION, and the scene — NOT in the art style. Lean HARD into: strange, wildly varied ALIEN faces and morphology (a different species every render), and wildly different cool sci-fi OUTFITS (armor / bodysuit / layered gear / exo-frame / ornate plating — a different fashion every render), varied poses, varied alien settings. Every render = a DIFFERENT weird woman in DIFFERENT fashion, all in the SAME vivid sci-fi-cover style. NOT muted, NOT a screenshot, NOT abstract-art-style.
 
 ━━━ PUSH-TO-11 MANDATORY STACK ━━━
 Every render combines AT LEAST 3 of these visual layers simultaneously:
@@ -57,15 +59,17 @@ ${subject_dna}
 
 A SINGLE female figure — she / her / woman / female — anatomy as described. Could be alien (head-tendrils / pointed ears / colored skin / bone-plate ridges / cat-slit eyes), augmented (chrome limbs / neural ports / cybernetic eyes), mutant, or ornate-baseline human. NEVER vanilla / generic. NEVER multi-figure. ONE woman is the whole show.
 
-━━━ THE OUTFIT ━━━
+━━━ THE OUTFIT — SPACE-WORTHY (hard requirement) ━━━
 ${outfit}
 
-She wears real, cool SCI-FI SPACE GEAR — sleek form-fitting space suits, shiny armor, scavenger rigs, ornate ceremonial tech. SEXY, form-fitting, and confident is great — show off the gear with attitude. The one rule: she always wears actual space gear with visible tech — a suit, armor, or rig packed with statement details / glowing energy-seams / chrome panel-lines / utility hardpoints / neon trim.
+⚠️ SPACE-WORTHY MANDATE: everything she wears must be FUNCTIONAL gear that could keep her alive in an extreme space / hostile-alien environment — a sealed pressure suit, EVA hardsuit, powered armor, or sealed rig with visible LIFE-SUPPORT (air lines, O2 / life-support pack, rebreather hoses, sealed seams, pressure collar). She almost always wears HEAD GEAR — a helmet, sealed faceplate, breathing mask, ventilator, or respirator — but render it CLEAR/transparent, flipped-up, or open-framed so her weird alien face still reads. Sealed and protective: covered torso, sealed limbs, gloves, boots — a bit MORE covered than a bare bodysuit (but sleek, cool, and stylish — NEVER frumpy, NEVER bulky-ugly).
+
+WILDLY VARY THE OUTFIT within that space-worthy frame — a DIFFERENT sealed silhouette every render: bulky powered exo-armor / heavy EVA hardsuit / sleek sealed pressure-suit / tactical sealed recon rig / armored hardsuit with rebreather mask / sealed environment-suit under a rugged coat / ornate sealed ceremonial hardsuit. VARY bulk, layers, color, and helmet style HARD. The hard rules: always SEALED + life-support + head gear; covered (no bare midriff, no leotard, no exposed skin that would die in vacuum); never a flimsy cloth outfit that couldn't survive space.
 
 ━━━ THE POSE / ACTION ━━━
 ${action_poster}
 
-Mid-verb cinematic POSTER moment — body language reads in 2 seconds. Heroic stance, mid-action freeze, dramatic posture. NEVER sitting, NEVER quiet, NEVER passive.
+Render her in THIS pose — body language reads in 2 seconds. It may be heroic action OR a confident sassy pose (crouching, sitting, leaning, perched) — whatever the pose says. Always confident with attitude; never limp, slumped, or lifeless.
 
 ━━━ THE BIOME ━━━
 ${biome}
@@ -87,8 +91,8 @@ ${camera_poster}
 
 Apply this camera framing precisely — it's the poster composition. Override default centered-portrait Flux bias.
 ${phenomenonSection}
-━━━ LIGHTING — MULTI-SOURCE DRAMATIC ━━━
-Bold vivid lighting with multiple punchy sources stacked: hot-neon sidelight on the lit edge / electric-blue key flood / polar-aurora green-magenta rim / interstellar-white shaft cutting across her shoulder / saturated teal-and-orange cinematic grade. Punchy neon-and-rim lighting IS the fun sci-fi-cover signature — high-contrast, glossy, eye-popping.
+━━━ LIGHTING ━━━
+Bold vivid high-impact lighting — punchy neon-and-rim, saturated, high-contrast, glossy — suited to the scene and biome. The vivid neon-cover lighting is part of StarBot's signature look.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 200)}
@@ -96,9 +100,11 @@ ${vibeDirective.slice(0, 200)}
 ━━━ OUTPUT SPEC ━━━
 Write 130-180 words. Single paragraph. Comma-separated phrase string.
 
-⚠️ FRAMING LOCK — THE SINGLE MOST IMPORTANT RULE. The figure is the LARGE, DOMINANT hero of the frame and is ALWAYS unmistakably wearing her sci-fi outfit. OPEN the Flux string with the clothed figure framed as a medium-to-full shot — head-to-hips at minimum, up to full head-to-boots — her body and outfit filling most of the frame, e.g. "[race] woman in [her sealed/ornate sci-fi outfit], [pose], figure large and dominant in frame". She is NEVER nude or unclothed, and NEVER a tiny distant silhouette swallowed by the scenery. A bold head-shoulders-and-chest framing against a cosmic vista is permitted ONLY when her outfit is clearly visible AND a background story element is present — but FAVOR medium and full-figure poses (heroic standing, crouched with gear, climbing). This clothed-figure clause comes FIRST, before DNA detail, biome, or drama.
+⚠️ FIGURE RULE — SEALED IN SPACE GEAR (non-negotiable, describe it FIRST). She is ALWAYS sealed in functional space-survival gear: a form-fitting sealed space suit, OR an outfit clearly paired with a helmet / visor / breathing-mask / ventilator + life-support. This MUST be the FIRST thing described about her — before any alien features. Her weird ALIEN traits (skin color, eyes, head shape, horns/tendrils, facial markings) show ONLY at her FACE, through a clear / open / flip-up visor; the rest of her body is fully sealed in the suit. NO flimsy cloth, NO bare midriff, NO near-naked, NO outfit that couldn't survive vacuum, NO missing helmet/visor.
 
-Then weave in, in this order: her ornate DNA detail, her outfit detail, her mid-action pose, the biome, background drama, props, lighting, phenomenon (if fired), and the camera framing. End with one phrase reinforcing vivid, fun, eye-popping gallery-grade sci-fi cover spectacle. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Render her IN THE EXACT POSE from THE POSE / ACTION section (crouch / sit / lean / perch / over-shoulder / stand — don't default to standing) and VARY THE SHOT (wide / medium / close / over-shoulder / low-angle). She is a clear readable focal point, never a tiny speck, never a face-only bust.
+
+OUTPUT ORDER — lead with: "[alien] woman SEALED in [her space-worthy suit] with [helmet / visor / breathing-mask], [pose]"; THEN her alien face showing through the visor, then biome, background drama, props, lighting, phenomenon (if fired). End reinforcing the vivid glossy sci-fi-cover look. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   PURE_COSMOS: ({ slots, sharedDNA, vibeDirective }) => {

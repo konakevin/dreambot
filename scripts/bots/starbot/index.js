@@ -90,6 +90,9 @@ module.exports = {
     // context with ship-as-subject. NO landscape/world bias. Added 2026-05-11.
     starbot_cosmic_void:
       'epic cosmic space scene set in pure vacuum, deep void of space, kilometer-class capital spaceships dominating the frame, starfield and nebula backdrop only, NOT planetary surface, NOT canyon, NOT ground-level, NOT atmospheric, hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting in vacuum, ship-as-subject composition',
+    // space-femme: minimal neutral prefix so the rolled render_style axis (not a
+    // fixed style) sets the look. Overrides the heavier bot-wide PROMPT_PREFIX.
+    starbot_space_femme: 'bold vivid imaginative science-fiction cover art',
   },
   promptSuffixByMedium: {
     star_oil_cosmos:
@@ -119,8 +122,11 @@ module.exports = {
     // look. NO artist names (Kevin: artist refs read muted + serious). Describes
     // the LOOK directly: bold saturated color, glossy, neon-and-chrome space gear,
     // sassy confident heroine, high-energy spectacle.
+    // CONSISTENT signature style (Kevin 2026-05-23: art style stays the same;
+    // the variety/weird lives in the GIRL + FASHION + scene, not the art style).
+    // Vivid glossy neon-chrome sci-fi cover — the kept-posts look.
     starbot_space_femme:
-      'vibrant retro-futurist sci-fi cover illustration, bold saturated punchy comic-cover color, glossy slick painterly digital rendering, sleek shiny chrome-and-neon space gear with glowing energy seams, sassy confident sexy heroine, dynamic playful pin-up-cover energy, high-contrast dramatic rim-and-neon lighting, eye-popping vivid electric palette, fun bold a-little-over-the-top sci-fi spectacle, polished gallery-grade sci-fi poster art, crisp clean detail — NOT muted, NOT dull, NOT classic oil-painting, NOT washed-out',
+      'vibrant glossy science-fiction cover illustration, bold saturated comic-cover color, slick chrome-and-neon rendering, eye-popping vivid electric palette, high-contrast dramatic neon-and-rim lighting, fun bold high-energy over-the-top sci-fi poster art, polished and crisp — NOT muted, NOT dull, NOT drab, NOT abstract-art-style',
     // Hyperreal sci-fi concept-art mediumStyle — formalized as the bot-only
     // medium `starbot_hyperreal` in migration 145. Mirrors the DB row's
     // flux_fragment so the override is explicit rather than implicit.
@@ -195,7 +201,16 @@ module.exports = {
       'cosmic-vista', 'alien-landscape', 'space-opera', 'sci-fi-interior',
       'cozy-sci-fi-interior', 'alien-city', 'real-space', 'cosmic-oracle',
       'megastructure',
+      // space-femme = the "crazy" path — subject chaos ON for weird LOOKS
+      // (Kevin 2026-05-23: "increase the chaos threshold for weird looks/scenes").
+      'space-femme',
     ],
+    // Per-path chaos intensity bias — space-femme cranked high for weird/wild
+    // renders; other StarBot paths keep default (no bias). +0.3 ≈ chaos almost
+    // always fires and frequently stacks a 2nd distortion.
+    intensityBiasByPath: {
+      'space-femme': 0.3,
+    },
   },
 
   // Two-pass Sonnet→Haiku polish.

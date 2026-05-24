@@ -66,143 +66,196 @@ const POOL_RECIPES = {
   // Anchored on Kevin's 15-heart female-explorer calibration.
   // ════════════════════════════════════════════════════════
 
-  space_femme_subject_dna: {
+  space_femme_render_style: {
     format: 'simple',
-    theme: `STARBOT SPACE-FEMME SUBJECT DNA — ornate multi-trait female-figure descriptions for poster-worthy painted-oil sci-fi cover art. Each entry is ONE stacked-trait female-figure description (skin + anatomy + hair + eye + tattoo/scar + cybernetic). Each entry 30-55 words.
+    theme: `STARBOT SPACE-FEMME RENDER STYLE — the overall VISUAL TREATMENT for a render. This axis exists to make every render look DIFFERENT — it is the #1 anti-homogeneity lever. Each entry 15-30 words: a complete, distinct rendering style (technique + color approach + finish). Each entry must be a DRAMATICALLY different look from the others.
 
-⚠️ WEIGHTED DISTRIBUTION:
-  • ~70% NON-BASELINE — alien (head-tendrils / pointed ears / colored skin / bone-plate ridges / cat-slit eyes / segmented neck-plates), augmented (chrome limbs / neural ports / cybernetic eye), mutant (cat-slit-eyed / scaled / bioluminescent veined)
-  • ~30% BASELINE-HUMAN-WITH-ORNATE-FEATURES — exotic eye colors, dramatic hair, tribal tattoos, ritual scarification, gene-modded coloring, ornate face markings. NEVER plain or vanilla.
+⚠️ ALL styles stay VIVID, BOLD, FUN, and unmistakably SCI-FI — NEVER muted, washed-out, drab, or boring. The VARIETY is in the TECHNIQUE/treatment, not in the energy level. Keep neon/chrome/saturated energy available but don't make every style neon.
 
-⚠️ HARD MANDATES:
-  • EVERY entry is gender-locked FEMALE — "woman" or "she" must appear
-  • Stack 3+ DNA traits per entry (skin + hair + eye + at least one of tattoo/cybernetic/anatomy)
-  • Specific colors + materials (chrome / mahogany / blood-red / mint-glass / dragon-gold / etc.)
-  • NEVER cheesecake-coded ("sultry" / "sensual" / "alluring" / "low-cut" / "bare-midriff")
+⭐ LEAN GRAPHIC / STYLIZED / ILLUSTRATIVE (Kevin's hearted favorites 2026-05-23: stained-glass mosaic, neon-sign wireframe, plasma-hologram projection, maximalist psychedelic fractal-pattern, bold flat-comic). Favor BOLD GRAPHIC + ABSTRACT + ILLUSTRATIVE art treatments — distinctive "cool art" looks. AVOID photoreal 3D-renders and plain photoreal digital-painting (those are the un-hearted ones). Still wildly varied — just within the bold-graphic family.
 
-VARIETY MANDATE — distribute across:
-  • Twi'lek-coded with head-tendrils (vibrant blue / teal / orange / yellow-green)
-  • Pointed-ear elven-coded aliens (ash-grey / purple-pale / moon-pale / ivory)
-  • Yellow-green/teal/violet alien skin with geometric facial tattoos
-  • Cybernetic chrome-limbed mutants with neural ports + glowing implants
-  • Bone-plate-ridged hunter species
-  • Cat-slit-eyed mutants
-  • Scaled draconic-coded humanoids
-  • Low-gravity evolved (elongated / Spanish-olive)
-  • Bioluminescent-veined translucent-skinned aliens
-  • Ash-grey hunter species with scarification
-  • Augmented frontier-colonist baselines (red gene-modded hair, UV-tan, exotic eyes)
-  • Tribal-tattooed warrior-monks (shaved head + face markings)
+VARIETY MANDATE — invent ~20 wildly different BOLD-GRAPHIC vivid sci-fi treatments. Span across (don't limit to these):
+  • Stained-glass mosaic — hard lead-line divisions, jewel-saturated backlit fills
+  • Neon-sign wireframe — glowing tube-light outlines on deep black
+  • Plasma-hologram projection — translucent layered color fields, interference bands
+  • Maximalist psychedelic fractal-pattern — recursive kaleidoscopic shapes, rainbow
+  • Bold flat-comic / cel-shaded ink, thick linework, saturated flat color
+  • Hard-edged screenprint / risograph poster, limited punchy palette, halftone
+  • High-contrast anime/manga cover ink, dynamic speedlines + cel color
+  • Chrome-and-holographic vaporwave, iridescent pastel-neon, gridded glow
+  • Bold retro-futurist flat poster, geometric shapes, vibrant blocked color
+  • Luminous bioluminescent glow-art, dark field with neon-saturated subject
+  • Art-nouveau / decorative line-art with ornate flowing borders, jewel color
+  • Crisp vector-art poster, clean bold fills, dramatic spot-color
+  • Holo-foil trading-card finish, prismatic shimmer, rainbow refraction
+  • Woodcut / linocut block-print look, bold carved lines, vivid limited ink
+  • Comic halftone / Ben-Day-dot pop-art, bold outlines, primary-saturated color
+  • Geometric low-poly / faceted crystalline render, vivid flat facets
+  • Graffiti / spray-stencil street-art treatment, bold electric color, drips
+  • Punchy gouache pulp-cover, thick confident graphic strokes, electric palette
+  • Lush detailed digital painting, glowing volumetrics, saturated cinematic grade
 
 Each entry must:
-• Open with the species/category in first 3-6 words
-• Specify SKIN (color + texture quality)
-• Specify ANATOMICAL SIGNATURE (tendrils / pointed ears / ridges / etc.) if applicable
-• Specify HAIR (color + style)
-• Specify EYE color/quality (often with light catching it)
-• Add ONE distinctive marking / scar / tattoo / cybernetic
-• ALWAYS use "she" or "woman"`,
+• Name the rendering TECHNIQUE/medium-look (cel-shaded ink / 3D render / airbrush / screenprint / vector / gouache / holo-foil / etc.)
+• Name the COLOR approach (saturated flat / prismatic gradient / limited punchy palette / iridescent neon / electric / etc.)
+• Stay VIVID + FUN + SCI-FI`,
     touchpoints: [],
-    instructions: `Each entry is ONE ornate stacked-DNA female-figure description, 30-55 words. Format: free-form descriptive prose. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: no cheesecake language; no plain/vanilla baseline humans; no male pronouns; always "woman" or "she". ALWAYS stack 3+ DNA traits (skin + hair + eye + at least one extra: tattoo / cybernetic / anatomy / scar).
+    instructions: `Each entry is ONE distinct vivid sci-fi render style, 15-30 words. Format: free-form prose naming technique + color + finish. Output as a NUMBERED list. Each must be a DRAMATICALLY different visual treatment from the others. STRICT BANS: nothing muted / drab / washed-out / boring / monochrome-dull. Stay vivid + bold + fun + sci-fi; vary the TECHNIQUE hard.
 
-EXAMPLES (12 — generate new entries that read like these):
-1. Vibrant blue-skinned Twi'lek-coded woman, twin curving head-tendrils cresting past her shoulders, mint-glass green eyes with gold flecks, walnut-brown hair with amber streaks in low knot, intricate black geometric facial tattoos mapping her cheekbones, glowing bio-monitor implant pulsing at temple.
-2. Ash-grey pointed-eared woman, blood-red irises catching amber backlight, blue-black hair with steel highlights bound by chrome ring, tribal scarification across her cheekbones, faint silver scar-line crossing one brow, biometric cuff glowing on inner wrist.
-3. Chrome-limbed cybernetic woman, deep cherry-mahogany hair in tight ponytail with shaved temple, one eye mint-glass green with gold flecks the other cybernetic chrome-silver reflecting targeting data, subdermal geometric tattoos tracing her neck, neural ports at temple pulsing cyan.
-4. Yellow-green skinned humanoid woman, shaved head gleaming with black geometric monk-warrior tattoos, dragon-gold eyes igniting flame-orange, faint silver bio-port glinting behind her ear, ascetic warrior bearing evident in still posture.
-5. Bioluminescent-veined translucent-skinned alien woman, glowing cobalt veins tracing her throat and jaw, white-silver hair floating slightly, six-fingered hands with violet polish, eyes pure cobalt with no iris.
-6. Low-gravity evolved woman, elongated limbs and pale station-born skin warming to Spanish-olive at her temples, ice-blue eyes, midnight-black hair in a crown bun with pulsing green comm implant, subtle clan face-tattoos on one cheekbone.
-7. Scaled draconic-coded humanoid woman, mother-of-pearl scales along her jaw fading to smooth skin at her throat, dragon-gold slit-pupil eyes, blood-red hair coiled in a heavy braid wound with chrome ring.
-8. Augmented frontier-colonist woman, gene-modded red hair in a tight battle-ponytail bound with chrome ring, UV-tanned pioneer skin etched with sun-scars, deep moss-green eyes catching the painted nebula glow, biometric scanner glowing on her forearm.
-9. Crystalline-skinned alien woman with faceted opal-iridescent flesh, no visible iris in her pure-violet eyes, hair like spun white silver, runic tattoos carved into the crystalline surface of her shoulder.
-10. Twin-bunned space-rogue woman, copper-tan skin with sun-scar across her cheekbone, dragon-gold slit-pupil eyes, mahogany hair in twin asymmetric buns with neural-link wires laced through, faint chrome bio-port at her temple.
-11. Quad-eyed insectoid-evolved woman with smooth obsidian-black skin, four amber compound eyes in a vertical row, no visible hair under her sealed headcrest, faint bioluminescent markings tracing her cheekbones.
-12. Cybernetic ex-soldier woman, half her face replaced with chrome plating revealing the LED-array eye, biological half olive-skinned with one mint-green eye, dark hair shaved on the chrome side, runic tattoo down her exposed neck.`,
+EXAMPLES (16 — bold GRAPHIC/illustrative looks, each different; NO photoreal 3D-render, NO plain photoreal digital-painting):
+1. Stained-glass mosaic treatment, hard geometric lead-line divisions across the whole frame, jewel-saturated cobalt-amber-emerald fills, brilliant backlit glow, bold graphic finish.
+2. Neon-sign wireframe illustration, glowing open-line tube-light forms on deep black, vivid single-hue color per zone, electric outlined sci-fi-poster finish.
+3. Plasma-hologram projection look, translucent layered color fields, electric blue-violet-green interference bands, ghosted edge glow, futuristic projected finish.
+4. Maximalist psychedelic fractal-pattern art packed edge-to-edge with recursive kaleidoscopic shapes, ultra-saturated cosmic rainbow palette, dense ornamental finish.
+5. Glossy neon comic-book cover, bold cel-shaded inking with thick confident linework, saturated flat color blocks, high-gloss electric magenta-and-cyan finish.
+6. Hard-edged screenprint / risograph poster, bold black outlines, limited 3-color punchy palette, visible halftone, flat blocked high-contrast finish.
+7. High-contrast anime cover illustration, crisp cel-shaded color with dynamic speedlines, saturated complementary palette, glossy shonen sci-fi finish.
+8. Chrome-and-holographic vaporwave, iridescent pastel-neon, gridded horizon glow, soft chromatic shimmer, dreamy synthwave-sci-fi finish.
+9. Bold retro-futurist flat poster, geometric shapes and clean blocked color, vibrant orange-teal-purple palette, mid-century graphic finish.
+10. Luminous bioluminescent glow-art, near-black field with the neon-saturated subject blazing from within, deep electric color, high-contrast glow finish.
+11. Art-nouveau decorative line-art, ornate flowing whiplash borders framing the figure, jewel-saturated fills, gold-line graphic finish.
+12. Crisp vector-art poster, clean bold fills with dramatic spot-color, sharp geometric edges, vivid two-tone-plus-accent finish.
+13. Holo-foil trading-card finish, prismatic rainbow refraction across the surface, ultra-glossy, saturated jewel-tone shimmering premium-card look.
+14. Woodcut / linocut block-print look, bold carved black lines, vivid limited-ink palette, high-contrast graphic relief finish.
+15. Comic halftone Ben-Day-dot pop-art, bold outlines, primary-saturated color, retro print-dot sci-fi finish.
+16. Geometric low-poly faceted treatment, vivid flat crystalline facets catching electric color, sharp angular graphic finish.`,
+  },
+
+  space_femme_subject_dna: {
+    format: 'simple',
+    theme: `STARBOT SPACE-FEMME SUBJECT DNA — the alien FACE + HEAD ONLY. Her body is fully sealed in a space suit; only her FACE shows through a clear / open / flip-up visor. So describe ONLY her head and face. Each entry 20-40 words.
+
+⚠️ DESCRIBE ONLY THE FACE/HEAD — face-skin color+texture, eyes, head shape, head features (tendrils / horns / antennae / crests / ridges / pointed-ears / fin-ears), and facial markings/implants. DO NOT describe torso, chest, body, anatomy, hands, legs, or any below-the-neck skin — she is SEALED IN A SUIT, none of that is visible.
+
+⚠️ WEIGHTED DISTRIBUTION (push ALIEN + WEIRD — the "crazy" path):
+  • ~90% NON-BASELINE — genuinely WEIRD, never-before-seen alien FACES: head-tendrils / asymmetric horn-crowns / sweeping antennae / clustered or vertical-row eyes / compound or faceted eyes / iridescent or translucent or chitinous FACE skin / fin-frill ears / gill-slits at the jaw / bioluminescent face-markings / facial neural-bloom implants / a chrome cybernetic eye / unusual face colors + textures. Combine unexpectedly — invent strange new species.
+  • FAVOR ASYMMETRY + ONE-OFF SURPRISES on the face — a SINGLE horn from one temple, ONE cybernetic eye, split two-tone face coloring, one oversized fin-ear, an off-center facial implant or scar. Asymmetry reads as "never seen before."
+  • ~10% BASELINE-HUMAN FACE — exotic eye colors, ornate face markings, ritual facial scarification, gene-modded face coloring. NEVER plain.
+
+⚠️ HARD MANDATES:
+  • FACE + HEAD ONLY — no torso, body, anatomy, hands, legs, or below-the-neck skin.
+  • Gender-locked FEMALE — "woman" or "she" must appear.
+  • Stack 3+ FACE traits (face-skin + eyes + head-feature + marking).
+  • Specific colors; NEVER cheesecake ("sultry" / "sensual" / "alluring" / "low-cut" / body language).
+
+VARIETY MANDATE — distribute across (as FACES): Twi'lek head-tendrils (blue/teal/orange/yellow-green) / pointed-ear elven (ash-grey/moon-pale/ivory) / geometric-facial-tattooed alien (yellow-green/violet) / cybernetic chrome-implant face with one LED eye / bone-plate-ridged hunter brow / cat-slit-eyed mutant / scaled draconic jaw + slit eyes / compound or vertical-row insectoid eyes / bioluminescent-veined translucent face / antennaed face / horned crown / tribal-scarified shaved head.
+
+Each entry must:
+• Open with the species/category (first 3-6 words)
+• Face SKIN color + texture
+• Head FEATURE (tendrils / horns / antennae / ridges / pointed-ears / crest)
+• EYE color/type (light catching it)
+• ONE facial marking / scar / implant
+• Use "she" or "woman"; FACE/HEAD ONLY`,
+    touchpoints: [],
+    instructions: `Each entry is ONE alien FACE/HEAD description, 20-40 words. Format: free-form prose. Output as a NUMBERED list. FACE + HEAD ONLY — no torso, body, anatomy, hands, legs, or below-the-neck skin (she is sealed in a space suit). STRICT BANS: no body/below-neck description; no cheesecake; no male pronouns; always "woman" or "she". Stack 3+ face traits (face-skin + eyes + head-feature + marking).
+
+EXAMPLES (12 — FACE/HEAD only, weird + varied + asymmetric):
+1. Vibrant blue-skinned Twi'lek-coded woman, twin curving head-tendrils, mint-glass green eyes with gold flecks, intricate black geometric tattoos mapping her cheekbones, a bio-monitor implant pulsing at one temple.
+2. Ash-grey pointed-eared woman, smooth matte face, blood-red irises catching the light, tribal scarification across both cheekbones, a faint silver scar crossing one brow.
+3. Cybernetic woman, one eye mint-glass green the other a chrome LED-array implant, subdermal circuit-tattoos tracing her jaw, neural ports glowing cyan at her temple, shaved on the chrome side.
+4. Yellow-green-skinned woman, shaved head with black geometric monk-warrior tattoos, dragon-gold eyes igniting flame-orange, a silver bio-port glinting behind one ear.
+5. Bioluminescent-veined translucent-skinned alien woman, glowing cobalt veins tracing her jaw, pure-cobalt eyes with no iris, faint white facial markings.
+6. Bone-plate-ridged hunter-species woman, slate-blue stone-textured face, a pronounced orbital brow-ridge, storm-grey eyes, a SINGLE curved bone horn at one temple, a ritual scar across one cheek.
+7. Scaled draconic-coded woman, mother-of-pearl scales along her jaw and brow, dragon-gold slit-pupil eyes, a small crest of fine spines above her brow.
+8. Antennaed insectoid-evolved woman, smooth obsidian-black face, two slender segmented antennae rising in a wide V, four amber compound eyes in a vertical pair, faint bioluminescent cheek-markings.
+9. Crystalline-faced alien woman, faceted opal-iridescent facial planes, pure-violet eyes with no iris, runic etchings carved across one cheekbone.
+10. Fin-eared aquatic-evolved woman, turquoise-teal iridescent face, broad translucent fin-frills where ears would be, gill-slits at her jaw, large dark glossy eyes.
+11. Cat-slit-eyed mutant woman, deep indigo-violet velvet-textured face, vertical-slit pupils in pale-gold irises, a split of bright magenta coloring across one half of her face.
+12. Tribal-scarified woman, raw-sienna face, a shaved head ringed with deep ritual ladder-scars, amber eyes, an off-center chrome implant at her left jaw.`,
   },
 
   space_femme_outfit: {
     format: 'simple',
     theme: `STARBOT SPACE-FEMME OUTFITS — broad spectrum of poster-worthy female space-coded outfits with ornate detail. Each entry 25-45 words.
 
-⚠️ WEIGHTED DISTRIBUTION (per Kevin 2026-05-23):
-  • ~25% SLEEK FORM-FITTING SPACE SUITS — asymmetric panel-line bodysuits, chrome-piped EVA undersuits, mag-boot bodysuits with statement gauntlet, energy-seam catsuits
-  • ~25% ROGUE / BOUNTY-HUNTER / SCAVENGER — battered duster + holstered carbine + grimy goggles, patched cloak + utility harness + ammo bandolier, scavenger jacket with expedition patches + rusted iron gauntlets, smuggler getup
-  • ~25% MAXIMALIST ORNATE CEREMONIAL — gilded ceremonial plating + statement shoulders + draped capes, ritual brand-scar armor, cultic priestess regalia, Frazetta-cover oil-painted maximalism
-  • ~25% MIXED PRACTICAL — tactical recon segmented plating, heavy radiation armor, lighter explorer field gear, pilot flightsuit with neural-link helmet, lab-coat-with-EVA-undersuit, cargo-runner mechanic look
+⚠️ SPACE-WORTHY MANDATE (hard rule, EVERY entry): the outfit must be FUNCTIONAL gear that keeps her alive in extreme space / hostile-alien environments — SEALED, with visible LIFE-SUPPORT (air lines, O2 / life-support pack, rebreather hoses, sealed seams, pressure collar), sealed gloves + boots, and HEAD GEAR (helmet / sealed faceplate / breathing mask / ventilator / respirator — often clear, dome, flip-up, or open-framed so her face still reads). Covered torso and limbs — a bit MORE covered than a bare bodysuit, but sleek / cool / stylish, NEVER frumpy or bulky-ugly. NO exposed skin that would die in vacuum, NO flimsy cloth, NO open robes that couldn't survive space.
+
+⚠️ VARY HARD across SPACE-WORTHY CHARACTER ARCHETYPES — a DIFFERENT archetype + silhouette + color every entry. NEVER homogenous; bounty-hunter ≠ astronaut ≠ explorer ≠ diver. Distribute across:
+  • ASTRONAUT / COSMONAUT — classic or retro-future sealed pressure suit, dome/bubble helmet, dorsal life-support pack, mag-boots
+  • BOUNTY HUNTER — sealed armored suit, visored combat helmet, weapon rig, jet-pack, rugged sealed plating, trophies
+  • EXPLORER / RANGER — sealed environment-suit under a rugged expedition coat/harness, rebreather + goggle-visor, survey gear
+  • PILOT / ACE — sealed flightsuit with seam-piping, neural-link helmet with clear visor, chest life-support regulator
+  • DEEP-SPACE DIVER — heavy sealed dive-style hardsuit, round porthole helmet, air hoses, weighted boots
+  • EXO-TROOPER — powered exo-armor with hydraulics, sealed visored helmet, glowing energy seams
+  • SCAVENGER / SMUGGLER — sealed mesh undersuit + rebreather mask under salvaged armor plates and a cropped sealed jacket
+  • SEALED CEREMONIAL — ornate sealed hardsuit with pressure collar + clear faceplate (sparingly)
+Make each a DISTINCT character look — vary form-fitting sleek suits AND bulkier armored rigs.
 
 ⚠️ HARD MANDATES (all buckets):
-  • NEVER bare-midriff, low-cut, battle-bikini, sultry, alluring, sensual, exposed cleavage, exposed thighs, minimal coverage, form-fitting-cheesecake-coded
-  • ALL outfits include POSTER-WORTHY DETAIL — energy seams / panel lines / utility hardpoints / statement piece / ornate trim
-  • Specific colors + materials always named
+  • EVERY entry SEALED + visible life-support + head gear (helmet / visor / mask / respirator).
+  • VARY bulk, layers, color, and helmet style every entry — wildly different sealed silhouette each time.
+  • Covered — NO bare midriff, NO exposed cleavage/thighs, NO minimal coverage. (Space-worthy = covered by definition.)
+  • Specific colors + materials always named; include 1+ poster-worthy detail (energy seam / panel line / hardpoint / glowing accent).
 
 Each entry must:
-• Open with the bucket-type adjective (form-fit / scavenger / ornate / tactical)
-• Name 2-3 specific garments or pieces
-• Add at least 1 ornate detail (energy seam / chrome trim / brass rivets / glowing accent / gilded clasp / weathered patches / panel detail)
-• Name material + color quality`,
+• Name the sealed-suit TYPE (EVA hardsuit / exo-armor / sealed recon rig / sealed ceremonial hardsuit)
+• Name the LIFE-SUPPORT element (O2 pack / rebreather / sealed collar / air lines)
+• Name the HEAD GEAR (dome helmet / flip-up visor / rebreather mask / clear faceplate)
+• Name material + color + 1 poster-worthy detail`,
     touchpoints: [],
-    instructions: `Each entry is ONE space-femme outfit, 25-45 words. Output as a NUMBERED list. ~25% form-fit / ~25% rogue+bounty-hunter / ~25% maximalist ornate / ~25% mixed practical distribution. STRICT BANS: NEVER bare-midriff / battle-bikini / sultry / alluring / sensual / exposed cleavage / minimal-coverage / cheesecake. Always 1+ ornate detail anchor.
+    instructions: `Each entry is ONE space-femme SPACE-WORTHY outfit, 25-45 words. Output as a NUMBERED list. EVERY entry must be SEALED with visible life-support + head gear (helmet/visor/rebreather/faceplate) — functional gear that survives vacuum. Distribution ~30% EVA-pressure-hardsuit / ~30% powered-exo-armor / ~25% sealed-tactical-recon / ~15% sealed-ornate. STRICT BANS: NEVER bare-midriff / exposed cleavage or thighs / minimal-coverage / cheesecake / flimsy cloth / open robe / no-helmet. Sleek and cool, never frumpy. VARY the silhouette + helmet style hard.
 
-EXAMPLES (16):
-1. Sleek form-fitting white-and-copper EVA bodysuit with asymmetric chrome-piped panel lines, statement-shoulder gauntlet on the right arm, mag-boot soles, soft-tint visor pushed back, compact life-support pack glowing with status-lights at her lower back.
-2. Battered scavenger duster in oil-stained leather over patched bodysuit, ammo bandolier across her chest, rusted iron gauntlets, expedition patches from seven star-systems sewn at the shoulder, goggled half-mask with cracked left lens.
-3. Maximalist ornate ceremonial gilded armor with statement-pauldron pieces, draped crimson cape clasped at one shoulder with a sun-emblem brooch, segmented carapace etched with ritual scripture, gilded ceremonial sash crossing her chest.
-4. Tactical recon forest-green zero-gravity coveralls with segmented tactical plating, climbing harness across the shoulders, sealed helmet with magnification-loupe visor flipped up, utility harness repurposed for recon, nav-compass on chrome chain at her sternum.
-5. Form-fitting matte-black segmented zero-g combat armor with thruster-pod clusters along the arms and hips, sealed magnetic grapple-gloves, reinforced torso carapace with spine-mounted maneuvering pack, mag-lock boots, panel-line energy-seams glowing soft cyan along the seams.
-6. Rogue bounty-hunter dieselpunk mining-rig jacket with brass rivets and rust patina, oversized shoulder-guards, goggled helmet with flip-down magnification loupes, bandolier heavy with tool-pouches and sample-containers, oil-stained black gloves, holstered carbine at her hip.
-7. Ornate cultic priestess regalia in ivory ceremonial robes over segmented chrome breastplate, statement gilded headpiece trailing chains of charm-medallions, layered draping with celestial-coordinate embroidery, ritual mask hanging from a chrome belt-loop.
-8. Pilot flightsuit in deep-violet weave with copper-bronze piping along the seams, neural-link helmet tucked under her arm, gauntlets rolled to the elbows revealing wrist-mounted bio-monitor, compact life-support pack glowing with status-lights at her hip.
-9. Scavenger ochre-leather jacket with weathered duster coat trailing past her hips, expedition patches from seven star-systems, chrome prosthetic legs in reconnaissance stance, goggled half-mask, multitool scanner glowing in her augmented left hand.
-10. Maximalist ornate hunter armor in lead-lined tungsten segmented plating, massive shoulder guards bristling with radiation badge arrays, sealed gauntlets glowing with contamination sensor readouts, utility belt hung with Geiger counter and decontamination spray canisters.
-11. Tactical heat-reflective volcanic survey armor with silver segmented plating, angular shoulder guards bristling with temperature sensors, reinforced torso carapace with cooling vents, insulated lava-resistant boots, retractable grapple-launcher humming at her forearm.
-12. Sleek white ceremonial ceramic armor with glowing gold circuit-patterns, light-fabric cape billowing in toxic wind, ornate helmet under her left arm, gauntlets with prayer-wheel mechanisms gripping a handheld scanner illuminated in cool blue light.
-13. Rogue smuggler kit in sun-bleached canvas vest over black mesh armor bodysuit, brown leather gloves, tool-belt with climbing gear and specimen-containers, pilot's gauntlet glowing softly during neural-link, small holstered sidearm at her thigh.
-14. Maximalist ornate Mandalorian-coded beskar-style armor in earth-tones with brass-trim helmet, weathered crimson cape clasped at one shoulder, segmented carapace etched with clan-runes, jet-pack with chrome thruster nozzles, bounty-puck dangling from her belt.
-15. Lab-coat-over-EVA-undersuit hybrid in ivory and chrome with statement pocket-array along the chest, soft-tint goggles pushed up onto her forehead, gauntlets with embedded data-cuff readouts, multitool array clipped along her thigh-strap.
-16. Tactical arctic recon suit with white-gray segmented plating, thermal-gel layers visible at the joints, angular shoulder guards, forearm ice-piton launchers, reinforced hip-thigh armor, heated knee joints glowing soft orange, spiked boots.`,
+EXAMPLES (16 — all sealed + life-support + head gear):
+1. Sleek white-and-copper EVA pressure-hardsuit, asymmetric chrome-piped panel lines, sealed pressure collar, dome helmet with soft-tint visor flipped up, compact O2 life-support pack glowing with status-lights at her lower back, mag-boots.
+2. Bulky burnt-orange exploration pressure-suit, ribbed sealed joints, twin rebreather hoses running to a chest regulator, fishbowl dome helmet, heavy sealed gauntlets, expedition patches on the shoulder, glowing status-strip down one arm.
+3. Powered cobalt exo-armor with visible hydraulic pistons at the joints, sealed segmented plate, spine-mounted life-support pack, sealed visored combat helmet with glowing cyan eye-slit, mag-lock boots, energy-seams pulsing along the limbs.
+4. Sealed forest-green recon hardsuit under a rugged armored coat, rebreather half-mask with goggle-visor, sealed pressure collar, utility harness with tool-pouches, sealed gloves and boots, nav-cuff glowing at her wrist.
+5. Matte-black segmented zero-g combat hardsuit, sealed seams, thruster-pod clusters on arms and hips, spine-mounted maneuvering + life-support pack, sealed grapple-gloves, dome helmet with mirrored visor, cyan panel-line seams.
+6. Rugged rust-and-brass mining hardsuit, sealed reinforced torso, heavy rebreather mask with flip-down magnification loupes, sealed shoulder-guards, oxygen line coiling to a hip regulator, sealed gloves, weathered status-panels glowing amber.
+7. Sealed ornate ivory ceremonial hardsuit over segmented chrome breastplate, gilded pressure collar, clear domed ceremonial faceplate revealing her face, celestial-etched plating, integrated life-support at the small of her back.
+8. Deep-violet pilot pressure-suit with copper-bronze seam piping, sealed neural-link helmet with clear visor, chest-mounted life-support regulator, sealed gauntlets with wrist bio-monitor, mag-boots, status-lights glowing along the ribs.
+9. Sleek teal scout hardsuit, sealed chrome pressure collar, slim rebreather mask over the lower face, compact dorsal O2 pack, sealed segmented gloves, multitool scanner glowing in her hand, panel-line seams tracing the torso.
+10. Heavy lead-grey radiation hardsuit, thick sealed plating, massive shoulder guards with contamination sensors, sealed full-dome helmet with amber-tint visor, back-mounted life-support, sealed gauntlets glowing with readouts.
+11. Silver heat-reflective volcanic survey hardsuit, sealed cooling-vented torso carapace, sealed visored helmet with thermal HUD glow, rebreather line to a hip regulator, insulated sealed boots, retractable grapple at her forearm.
+12. Sleek white ceramic ceremonial hardsuit with glowing gold circuit-patterns, sealed pressure collar, ornate clear faceplate helmet, sealed gauntlets, integrated life-support glowing cool-blue at her spine.
+13. Sealed charcoal mesh-armor scout suit under a cropped sealed jacket, rebreather half-mask, sealed pressure collar, compact O2 pack, sealed gloves and boots, small status-array glowing at the chest.
+14. Earth-tone sealed beskar-style hardsuit, sealed segmented carapace with clan-runes, brass-trim sealed helmet with T-visor, integrated jet-pack + life-support with chrome thruster nozzles, sealed gauntlets, pressure-sealed collar.
+15. Ivory-and-chrome EVA labwork hardsuit, sealed pressure seams, dome helmet with soft-tint visor flipped up, chest pocket-array of sensors, dorsal life-support pack, sealed data-cuff gauntlets, mag-boots.
+16. White-grey arctic recon hardsuit, sealed thermal-gel joints, sealed dome helmet with heated visor, dorsal life-support pack, forearm ice-piton launchers, sealed insulated gloves and boots, soft-orange joint glow.`,
   },
 
   space_femme_action_poster: {
     format: 'simple',
     theme: `STARBOT SPACE-FEMME POSTER ACTION — mid-verb cinematic poster poses for the female-figure. Each entry 25-40 words.
 
-⚠️ HARD MANDATES:
-  • EVERY entry starts with an ACTIVE VERB describing her mid-action
-  • Pose must read as a POSTER COMPOSITION — heroic, dramatic, frame-worthy
-  • NEVER sitting / lying / passive / contemplative-still
-  • NEVER posing-for-camera / front-facing-centered (Flux default — fight it)
+A MIX of dynamic ACTION poses AND sassy GLAMOUR poses — fun and varied, always with confident attitude.
 
-VARIETY MANDATE — distribute across:
+⚠️ MANDATES:
+  • Pose reads as a confident, frame-worthy POSTER moment — dynamic OR sassy, always strong body language with attitude
+  • Mix combat-action, exploration-action, AND relaxed sassy posing (crouching, sitting, leaning, perching)
+  • Even seated/leaning poses are CONFIDENT and posed with attitude — never limp, slumped, sad, or lifeless
+
+VARIETY MANDATE — mix HEAVILY across BOTH groups:
+  ACTION:
   • Heroic low-angle stand with weapon visible
-  • Mid-scanning at alien artifact / glowing object
-  • Cease-fire hand-signal raised mid-aim
-  • Climbing / vaulting through canopy or ridge
-  • Mid-incantation / channeling / ritual gesture
-  • Mid-extraction from hovering pickup ship
-  • Mid-leap between rock formations
+  • Mid-leap / vaulting between rock formations
   • Crouched-braced with rifle on cover
-  • Walking-into-portal / dimensional rift
-  • Examining captured specimen / artifact
-  • Mid-defiance stare-down at distant threat
-  • Mid-arrest of falling specimen
-  • Recalibrating spectrometer with focused expression
-  • Mid-deploy of grapple-launcher
-  • Mid-rescue of fallen companion (her hand reaching)
+  • Climbing / vaulting through canopy or ridge
   • Mid-firing weapon (muzzle flash + recoil)
-  • Mid-emergence from cave / portal mouth
-  • Mid-salute or mid-vow ceremony pose
-  • Mid-staring-down kaiju silhouette
-  • Mid-shielding face from supernova flash
+  • Mid-scanning at alien artifact / glowing object
+  • Mid-incantation / channeling / ritual gesture
+  • Walking-into-portal / mid-emergence from cave mouth
+  • Mid-defiance stare-down at distant threat
+  SASSY / GLAMOUR (mix these in heavily — the fun ones):
+  • Crouched low holding a big gun, barrel resting on her shoulder or pointed back over her shoulder toward the camera
+  • Sitting on a rock / ledge / crate with legs crossed, weapon across her lap, glancing at the camera
+  • Leaning back against a boulder / console / her parked ship, one hip cocked, confident smirk
+  • Over-the-shoulder glance back at the camera, gun resting on her shoulder
+  • Perched on a high ledge, one leg dangling, weapon loose in hand
+  • Kneeling on one knee, gun planted barrel-down, looking off-frame
+  • Reclining against her gear / a fallen pillar, relaxed and confident
+  • Crouched and looking back over her shoulder, pistol pointed off-camera
+  • Standing with weapon slung, hand on cocked hip, sassy attitude
 
 Each entry must:
-• Start with active verb ("Crouched", "Leaping", "Scanning", "Mid-incantation", etc.)
-• Specify body language (low stance / extended arm / raised hand / etc.)
-• Specify what she's interacting with (weapon / artifact / horizon / etc.)
-• Imply moment-before + moment-after`,
+• Specify body language (stance / hip / shoulder / where she's looking / what she holds)
+• Specify what she's interacting with (weapon / prop / artifact / her ship / horizon)
+• Read as confident with attitude — action OR sassy posing`,
     touchpoints: [],
-    instructions: `Each entry is ONE space-femme mid-verb poster pose, 25-40 words. Format: free-form prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list. STRICT BANS: NO sitting / lying / passive / contemplative-still / posing-for-camera / front-facing-centered. Always mid-action with body language readable in 2 seconds.
+    instructions: `Each entry is ONE space-femme pose, 25-40 words. Format: free-form prose. Output as a NUMBERED list. Mix ACTION poses AND sassy GLAMOUR poses (crouching/sitting/leaning/perching/posing-toward-camera are all GREAT). STRICT BANS: NO limp / slumped / sad / lifeless / fully-passive. Always confident body language with attitude, readable in 2 seconds. Aim ~50/50 action vs sassy-glamour across the set.
 
-EXAMPLES (16):
+EXAMPLES (22 — mix of action + sassy glamour):
 1. Crouched low-angle braced behind a corroded bronze railing, rifle aimed downrange, hand raised in cease-fire signal, intricate gauntlet glowing with bio-monitor readout, her free knee on the floor steadying the long shot.
 2. Mid-scanning at a floating alien artifact, scanner extended in her outstretched gauntleted hand, deep teal light from the artifact catching the curve of her cheekbone, her other hand resting on her holstered sidearm.
 3. Heroic low-angle stand on a basalt outcrop, compact plasma carbine slung across her chest, free hand raised palm-out in a salute or vow gesture, cape billowing behind her in the electric wind.
@@ -218,12 +271,18 @@ EXAMPLES (16):
 13. Mid-deploy of a wrist-mounted grapple-launcher, cable humming as it shoots up toward an overhead beam, her body coiled to be pulled airborne in the next second, free hand braced on her thigh.
 14. Mid-fire of a compact plasma carbine, muzzle-flash trans-orange burst freezing her recoil step backward, neural-link gauntlet glowing at her fingertips, sealed helmet visor catching the flash.
 15. Mid-emergence from the mouth of a glowing cave-portal, one foot still in shadow the other in the light, weapon at low-ready, eyes adjusting, body silhouetted against the cool-cyan glow.
-16. Mid-salute on a ceremonial dais, fist over her heart, cape trailing past her boots, ceremonial blade in her free hand pointed downward to the ground, ornate sash catching gilded ceremonial light.`,
+16. Mid-salute on a ceremonial dais, fist over her heart, cape trailing past her boots, ceremonial blade in her free hand pointed downward to the ground, ornate sash catching gilded ceremonial light.
+17. Crouched low on a rocky outcrop, a big plasma rifle resting back over her shoulder with the barrel angled toward the camera, free hand braced on her knee, glancing back with a confident smirk.
+18. Sitting on a weathered supply crate with her legs crossed, a compact carbine laid across her lap, one elbow on her knee, chin tilted, looking straight at the camera with sassy attitude.
+19. Leaning back against her parked one-seater spacecraft, hip cocked, ankles crossed, ray-pistol loose in one hand, the other resting on the hull, casual and confident.
+20. Glancing back over her shoulder at the camera, a glowing energy blade resting on her shoulder, weight on one hip, body turned three-quarters away into the neon vista.
+21. Perched on the lip of a high ledge with one leg dangling, an ion-rifle balanced across her thighs, leaning back on one braced arm, surveying the alien valley below.
+22. Kneeling on one knee with a heavy rail-pistol planted barrel-down like a sword, both hands resting on the grip, looking off-frame toward an unseen threat, cape pooling behind her.`,
   },
 
   space_femme_biome: {
     format: 'simple',
-    theme: `STARBOT SPACE-FEMME BIOME — exotic perilous environments serving as the painted stage for the poster composition. Each entry 25-45 words.
+    theme: `STARBOT SPACE-FEMME BIOME — surreal, weird, never-before-seen alien environments serving as the painted stage for the poster composition. Each entry 25-45 words. Go FAR-OUT and dreamlike — invent strange impossible worlds nobody has seen: gravity-defying formations, living architecture, impossible color, alien physics. Strange but coherent and striking.
 
 VARIETY MANDATE — distribute across:
   • Bioluminescent kelp forest cathedral (cathedral-pillar trunks)
@@ -345,15 +404,26 @@ VARIETY MANDATE — distribute across:
   • Tactical visor flipped up onto her brow
   • Specimen jar floating beside her on a hover-disc
   • Spirit-stone bound to her wrist with chrome wire
+  FUN SCI-FI GADGETS (lean into these — tilt the sci-fi harder):
+  • Cool ray-gun / blaster pistol / plasma sidearm with a glowing barrel
+  • Jetpack / thruster-pack with chrome nozzles on her back
+  • Hoverboard / grav-board hovering under her boots
+  • Cute spherical droid / robot sidekick hovering at her side
+  • Glowing energy blade / plasma sword hilt clipped at her hip
+  • Holographic pet / shimmering holo-creature at her shoulder
+  • Floating sentry-orb / shield-drone with a glowing optical eye
+  • Grappling gauntlet with a glowing energy-hook
+  • Retro fishbowl space-helmet held under one arm
+  • Wrist-mounted holo-display projecting a glowing UI
 
 Each entry must:
 • Open with the accessory type in first 3-6 words
 • Specify color/material (chrome / brass / trans-violet / etc.)
 • Specify how she's wearing/holding it`,
     touchpoints: [],
-    instructions: `Each entry is ONE space-femme accessory, 12-25 words. Format: free-form prose. Output as a NUMBERED list. STRICT BANS: NO real-world brand names; small ornate detail props only (coexist with another accessory in the same render).
+    instructions: `Each entry is ONE space-femme accessory, 12-25 words. Format: free-form prose. Output as a NUMBERED list. STRICT BANS: NO real-world brand names; small detail props only (coexist with another accessory in the same render). Mix ornate detail props AND fun sci-fi gadgets (ray-guns / jetpacks / droids / energy blades / hoverboards / holo-gear).
 
-EXAMPLES (15):
+EXAMPLES (20):
 1. Bio-monitor cuff pulsing soft violet on her inner wrist, chrome bracelet with embedded LED readouts.
 2. Nav-compass on a chrome chain at her sternum, brushed-steel needle visible through a small crystal cover.
 3. Glowing trans-purple alien artifact in her free C-grip hand, faint magenta light radiating around the contact-point.
@@ -363,46 +433,45 @@ EXAMPLES (15):
 7. Multitool scanner clipped to her thigh, polished chrome surface reflecting the painted backlight.
 8. Holographic projector orb hovering above her wrist, projecting a 3D star-chart in soft trans-cyan.
 9. Specimen-container clipped to her utility belt, trans-clear cylinder containing a glowing alien biological.
-10. Pulse-pistol holstered at her thigh, chrome barrel catching the painted Bonestell amber rim-light.
+10. Glowing-barrel ray-gun blaster holstered at her thigh, chrome body with a trans-cyan energy chamber pulsing along the slide.
 11. Ammo bandolier across her chest with brass cartridges, each cartridge tip glowing soft amber.
 12. Photo-locket on a chrome chain at her throat, the locket open showing a tiny family portrait.
-13. Talisman on a chrome chain, the talisman a glowing trans-cyan crystal embedded in a gold setting.
-14. Falcon-coded alien bird perched on her shoulder, its plumage iridescent green-cyan, claws gripping her armored shoulder-plate.
-15. Spirit-stone bound to her wrist with chrome wire, the stone a polished trans-violet sphere glowing softly.`,
+13. Chrome jetpack with twin thruster-nozzles on her back, soft trans-blue pilot-flame idling at the vents.
+14. Cute spherical droid sidekick hovering at her shoulder, glossy white shell with a single big trans-cyan optical eye.
+15. Glowing plasma-blade hilt clipped at her hip, a short trans-magenta energy edge humming from the chrome grip.
+16. Hoverboard hovering under her boots, sleek neon-trimmed grav-board with glowing repulsor-vents.
+17. Holographic holo-pet shimmering at her shoulder, a translucent trans-cyan alien creature flickering in projected light.
+18. Falcon-coded alien bird perched on her shoulder, its plumage iridescent green-cyan, claws gripping her armored shoulder-plate.
+19. Wrist-mounted holo-display projecting a glowing trans-cyan UI panel above her gauntlet.
+20. Spirit-stone bound to her wrist with chrome wire, the stone a polished trans-violet sphere glowing softly.`,
   },
 
   space_femme_camera_poster: {
     format: 'simple',
-    theme: `STARBOT SPACE-FEMME POSTER FRAMING — cinematic poster-composition camera angles. Each entry 15-30 words.
+    theme: `STARBOT SPACE-FEMME POSTER FRAMING — DYNAMIC, IMMERSIVE camera angles where the camera is IN the scene with her and the strange environment wraps around her. Each entry 15-30 words.
 
-VARIETY MANDATE — distribute across:
-  • Heroic low-angle stand (camera at her feet looking up at her against the sky)
-  • Silhouette against alien-vista backdrop (her body in dark contrast)
-  • Three-quarter back-view over her shoulder at the threat
-  • Framed through an archway / portal / opening
-  • Dutch-tilt climbing or vaulting through canopy
-  • Mirrored-reflection in a liquid mercury surface
-  • Crouched on rocky outcrop overlooking the deep landscape
-  • Through-canopy down-shot from above
-  • Side-profile silhouette against twin-moon horizon
-  • Low-angle three-quarter front with her face partially turned away
-  • Reflected in her sealed-helmet visor
-  • Ground-level looking up past her boots at her face
-  • Over-shoulder past her hair at the dramatic horizon
-  • Framed by foreground alien flora / kelp / pillars
-  • Mid-frame slot between two foreground rock pillars
-  • Low-angle behind her as she walks into the scene
-  • Wide low-angle on a cliff edge with planet rising behind her
-  • Through-portal cone framing her mid-traversal
-  • From-floor-up looking past her crouched figure
-  • Side-on with cape billowing into the frame
+⚠️ FAVOR HEAVILY (these are the standout frames): low dramatic angles looking up at her, over-the-shoulder twists looking back toward the camera, crouched/coiled figures shot from low and close, the camera tucked into the environment (between rocks / through debris / down a canyon) so foreground elements frame her and depth tiers stack behind. The figure is large and dominant AND embedded in a richly detailed world — not a flat centered front view, not a plain standing hero shot floating in empty space.
+
+VARIETY MANDATE — distribute across (lean toward the dynamic/immersive ones):
+  • Low-angle close on a crouched/coiled figure, camera near the ground looking up and in
+  • Over-the-shoulder twist — she looks back toward camera, weapon leveled off-frame
+  • Camera tucked between foreground rocks / debris / pillars framing her mid-frame
+  • Dutch-tilt on a vaulting / climbing / leaping figure
+  • Three-quarter back-view over her shoulder at a distant threat
+  • Ground-level looking up past her boots / planted weapon to her face
+  • Down-canyon depth-stack — foreground debris, her mid-ground, drama deep behind
+  • Through an archway / portal / opening framing her in the gap
+  • Reflected / refracted in a strange surface (mercury / crystal / visor)
+  • Wide low-angle on a ledge with a planet or kaiju rising behind her
+  • Heroic low-angle stand (use sparingly — only when the pose is a stand)
+  • Side-on with cape / hair sweeping into the frame
 
 Each entry must:
-• Specify CAMERA POSITION (height / angle / distance)
+• Specify CAMERA POSITION (height / angle / distance — favor LOW and CLOSE)
 • Specify her POSITION within the frame
-• Specify what FILLS the remaining frame (sky / biome / drama element)`,
+• Specify the FOREGROUND framing element + what FILLS the depth behind (biome / drama)`,
     touchpoints: [],
-    instructions: `Each entry is ONE space-femme poster camera framing, 15-30 words. Format: free-form prose. Output as a NUMBERED list. STRICT BANS: NO centered-front-facing portrait (Flux default — fight it).
+    instructions: `Each entry is ONE space-femme DYNAMIC camera framing, 15-30 words. Format: free-form prose. Output as a NUMBERED list. FAVOR low/close/over-shoulder/immersive angles with foreground framing + depth stacking. STRICT BANS: NO centered-front-facing portrait, NO plain standing-hero-in-empty-space (Flux defaults — fight them).
 
 EXAMPLES (12):
 1. Heroic low-angle stand with the camera at her boots looking up past her body to her face against the painted nebula sky, her silhouette dominating the upper two-thirds of the frame.
