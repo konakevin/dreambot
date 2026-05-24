@@ -22,7 +22,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
-import { MediumVibeBadge } from '@/components/MediumVibeBadge';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { saveDream, pinToFeed } from '@/lib/dreamSave';
@@ -38,8 +37,6 @@ export default function DreamRevealScreen() {
   const clearResult = useDreamStore((s) => s.clearResult);
   const reset = useDreamStore((s) => s.reset);
 
-  const mediumKey = result?.resolvedMedium ?? config.selectedMedium;
-  const vibeKey = result?.resolvedVibe ?? config.selectedVibe;
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const [saving, setSaving] = useState(false);
@@ -142,11 +139,6 @@ export default function DreamRevealScreen() {
         pointerEvents="none"
       />
 
-      {/* Medium + Vibe labels */}
-      <View style={[s.labels, { paddingBottom: insets.bottom + 16 }]}>
-        <MediumVibeBadge mediumKey={mediumKey} vibeKey={vibeKey} />
-      </View>
-
       {/* Bottom actions */}
       <View style={[s.actions, { paddingBottom: insets.bottom + 16 }]}>
         {saving ? (
@@ -200,13 +192,6 @@ const s = StyleSheet.create({
     left: 0,
     right: 0,
     height: SCREEN_HEIGHT * 0.4,
-  },
-  labels: {
-    position: 'absolute',
-    bottom: 0,
-    left: 20,
-    gap: 2,
-    marginBottom: vs(160),
   },
   actions: {
     position: 'absolute',

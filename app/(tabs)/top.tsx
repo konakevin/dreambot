@@ -5,7 +5,7 @@
  * SEARCH MODE (tap search bar): grid hidden, search results shown.
  *
  * Filter chips appear below the search bar ONLY when a medium or vibe filter
- * is active (e.g., after tapping a MediumVibeBadge on a card). Each chip is
+ * is active. Each chip is
  * tappable to open a picker sheet and change the filter value. Each has a ✕
  * to dismiss that individual filter. Search results respect active filters.
  */

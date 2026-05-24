@@ -36,10 +36,7 @@ import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
-import { MediumVibeBadge } from '@/components/MediumVibeBadge';
 import { avatarUrl } from '@/lib/imageUrl';
-import { useExploreStore } from '@/store/explore';
-import { useFeedStore } from '@/store/feed';
 import { useAuthStore } from '@/store/auth';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -436,17 +433,6 @@ export const DreamCard = memo(function DreamCard({
           {/* HUD — post info + side actions, toggled by single tap */}
           <Animated.View style={[StyleSheet.absoluteFill, hudStyle]} pointerEvents="box-none">
             <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
-              <MediumVibeBadge
-                mediumKey={item.dream_medium}
-                vibeKey={item.dream_vibe}
-                onPress={() => {
-                  useExploreStore
-                    .getState()
-                    .setFilters(item.dream_medium ?? null, item.dream_vibe ?? null);
-                  useFeedStore.getState().setActiveTab('top');
-                  nav.navigate('/(tabs)/top');
-                }}
-              />
               <TouchableOpacity
                 style={s.usernameRow}
                 onPress={() =>
