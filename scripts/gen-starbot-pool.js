@@ -180,23 +180,25 @@ EXAMPLES (12 — FACE/HEAD only, weird + varied + asymmetric):
   • EXO-TROOPER — powered exo-armor with hydraulics, sealed visored helmet, glowing energy seams
   • SCAVENGER / SMUGGLER — sealed mesh undersuit + rebreather mask under salvaged armor plates and a cropped sealed jacket
   • SEALED CEREMONIAL — ornate sealed hardsuit with pressure collar + clear faceplate (sparingly)
-Make each a DISTINCT character look — vary form-fitting sleek suits AND bulkier armored rigs.
+  • ROGUE / BOUNTY-HUNTRESS (helmet-free) — cool sci-fi jacket / armored harness / holsters / utility belt / gauntlets / boots, hair and face out, confident — NO helmet
+  • HOODED / MASKED — a hood or cowl + a rebreather mask / ventilator / faceguard / wrapped scarf-mask, mysterious and cool
+Make each a DISTINCT, CRAZY-STYLIZED, COOL, HOT character look — fun and gorgeous, NEVER clinical or drab. Vary form-fitting sleek suits, bulkier armored rigs, AND helmet-free rogue/hooded looks.
 
 ⚠️ HARD MANDATES (all buckets):
-  • EVERY entry SEALED + visible life-support + head gear (helmet / visor / mask / respirator).
-  • VARY bulk, layers, color, and helmet style every entry — wildly different sealed silhouette each time.
-  • Covered — NO bare midriff, NO exposed cleavage/thighs, NO minimal coverage. (Space-worthy = covered by definition.)
-  • Specific colors + materials always named; include 1+ poster-worthy detail (energy seam / panel line / hardpoint / glowing accent).
+  • Functional, stylized sci-fi space-adventure gear. SUITED looks (astronaut/EVA/diver/trooper) are sealed with helmet/visor/mask + life-support; ROGUE/BOUNTY-HUNTRESS/EXPLORER/HOODED looks may skip the helmet (a mask / ventilator / goggles is a nice touch, not required).
+  • VARY bulk, layers, color, silhouette, and headgear every entry — wildly different look each time. ~half helmeted, ~half helmet-free.
+  • Covered enough to read COOL — NO bare midriff, NO exposed cleavage/thighs, NO near-naked bikini. Form-fitting + hot is great.
+  • Specific colors + materials; 1+ poster-worthy stylized detail (energy seam / panel line / hardpoint / glowing accent).
 
 Each entry must:
-• Name the sealed-suit TYPE (EVA hardsuit / exo-armor / sealed recon rig / sealed ceremonial hardsuit)
-• Name the LIFE-SUPPORT element (O2 pack / rebreather / sealed collar / air lines)
-• Name the HEAD GEAR (dome helmet / flip-up visor / rebreather mask / clear faceplate)
-• Name material + color + 1 poster-worthy detail`,
+• Name the outfit TYPE + archetype (EVA hardsuit / exo-armor / bounty-huntress rig / hooded rogue / recon / pilot)
+• Name materials + color
+• Name the headgear IF it has one (helmet / visor / rebreather / hood+mask), or "no helmet, hair out" for rogue looks
+• Add 1 cool stylized detail`,
     touchpoints: [],
-    instructions: `Each entry is ONE space-femme SPACE-WORTHY outfit, 25-45 words. Output as a NUMBERED list. EVERY entry must be SEALED with visible life-support + head gear (helmet/visor/rebreather/faceplate) — functional gear that survives vacuum. Distribution ~30% EVA-pressure-hardsuit / ~30% powered-exo-armor / ~25% sealed-tactical-recon / ~15% sealed-ornate. STRICT BANS: NEVER bare-midriff / exposed cleavage or thighs / minimal-coverage / cheesecake / flimsy cloth / open robe / no-helmet. Sleek and cool, never frumpy. VARY the silhouette + helmet style hard.
+    instructions: `Each entry is ONE space-femme COOL, STYLIZED sci-fi space-adventure outfit, 25-45 words. Output as a NUMBERED list. ~half are sealed suits WITH helmet/visor/mask + life-support (astronaut / EVA / diver / exo-trooper / pilot); ~half are helmet-FREE rogue / bounty-huntress / explorer / hooded-masked looks (cool jacket, harness, gear, hair out). VARY archetype + silhouette + color + headgear HARD — a different cool look every entry. STRICT BANS: bare-midriff / exposed cleavage or thighs / near-naked bikini / drab-frumpy. Hot, stylized, and cool — the outfit is the star.
 
-EXAMPLES (16 — all sealed + life-support + head gear):
+EXAMPLES (16 — cool stylized looks; ~half helmeted suits, ~half helmet-free rogue/hooded):
 1. Sleek white-and-copper EVA pressure-hardsuit, asymmetric chrome-piped panel lines, sealed pressure collar, dome helmet with soft-tint visor flipped up, compact O2 life-support pack glowing with status-lights at her lower back, mag-boots.
 2. Bulky burnt-orange exploration pressure-suit, ribbed sealed joints, twin rebreather hoses running to a chest regulator, fishbowl dome helmet, heavy sealed gauntlets, expedition patches on the shoulder, glowing status-strip down one arm.
 3. Powered cobalt exo-armor with visible hydraulic pistons at the joints, sealed segmented plate, spine-mounted life-support pack, sealed visored combat helmet with glowing cyan eye-slit, mag-lock boots, energy-seams pulsing along the limbs.
@@ -207,11 +209,11 @@ EXAMPLES (16 — all sealed + life-support + head gear):
 8. Deep-violet pilot pressure-suit with copper-bronze seam piping, sealed neural-link helmet with clear visor, chest-mounted life-support regulator, sealed gauntlets with wrist bio-monitor, mag-boots, status-lights glowing along the ribs.
 9. Sleek teal scout hardsuit, sealed chrome pressure collar, slim rebreather mask over the lower face, compact dorsal O2 pack, sealed segmented gloves, multitool scanner glowing in her hand, panel-line seams tracing the torso.
 10. Heavy lead-grey radiation hardsuit, thick sealed plating, massive shoulder guards with contamination sensors, sealed full-dome helmet with amber-tint visor, back-mounted life-support, sealed gauntlets glowing with readouts.
-11. Silver heat-reflective volcanic survey hardsuit, sealed cooling-vented torso carapace, sealed visored helmet with thermal HUD glow, rebreather line to a hip regulator, insulated sealed boots, retractable grapple at her forearm.
-12. Sleek white ceramic ceremonial hardsuit with glowing gold circuit-patterns, sealed pressure collar, ornate clear faceplate helmet, sealed gauntlets, integrated life-support glowing cool-blue at her spine.
-13. Sealed charcoal mesh-armor scout suit under a cropped sealed jacket, rebreather half-mask, sealed pressure collar, compact O2 pack, sealed gloves and boots, small status-array glowing at the chest.
-14. Earth-tone sealed beskar-style hardsuit, sealed segmented carapace with clan-runes, brass-trim sealed helmet with T-visor, integrated jet-pack + life-support with chrome thruster nozzles, sealed gauntlets, pressure-sealed collar.
-15. Ivory-and-chrome EVA labwork hardsuit, sealed pressure seams, dome helmet with soft-tint visor flipped up, chest pocket-array of sensors, dorsal life-support pack, sealed data-cuff gauntlets, mag-boots.
+11. Rogue bounty-huntress in a cropped oxblood flight-jacket over a fitted charcoal flightsuit, bandolier and twin thigh-holsters, armored gauntlets and knee-high boots, chrome trim, hair loose — no helmet, confident and cool.
+12. Hooded scavenger-rogue in a deep-teal cowl over a fitted sealed underlayer, a chrome rebreather mask over her nose and mouth with glowing filter-lights, utility harness with tool-pouches, fingerless gauntlets, weathered cloak.
+13. Helmet-free explorer in a rugged amber expedition coat over a fitted recon suit, goggle-visor pushed up on her brow, a bandolier of sample-vials, sealed gloves and boots, nav-cuff glowing, hair windblown, face out.
+14. Sleek magenta-and-chrome bounty-huntress bodysuit with armored shoulder and hip plates, holstered pulse-pistols, a slim ventilator over the lower face, fingerless gloves, energy-seams glowing down the legs, no helmet.
+15. Hooded ranger in a graphite layered cloak over segmented light-armor, a faceguard mask with a single glowing optic, utility belt, armored boots, a glowing energy-bow across her back, mysterious silhouette.
 16. White-grey arctic recon hardsuit, sealed thermal-gel joints, sealed dome helmet with heated visor, dorsal life-support pack, forearm ice-piton launchers, sealed insulated gloves and boots, soft-orange joint glow.`,
   },
 

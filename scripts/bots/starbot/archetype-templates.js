@@ -59,12 +59,18 @@ ${subject_dna}
 
 A SINGLE female figure — she / her / woman / female — anatomy as described. Could be alien (head-tendrils / pointed ears / colored skin / bone-plate ridges / cat-slit eyes), augmented (chrome limbs / neural ports / cybernetic eyes), mutant, or ornate-baseline human. NEVER vanilla / generic. NEVER multi-figure. ONE woman is the whole show.
 
-━━━ THE OUTFIT — SPACE-WORTHY (hard requirement) ━━━
+━━━ THE OUTFIT — CRAZY, STYLIZED, COOL SCI-FI SPACE-ADVENTURE FASHION ━━━
 ${outfit}
 
-⚠️ SPACE-WORTHY MANDATE: everything she wears must be FUNCTIONAL gear that could keep her alive in an extreme space / hostile-alien environment — a sealed pressure suit, EVA hardsuit, powered armor, or sealed rig with visible LIFE-SUPPORT (air lines, O2 / life-support pack, rebreather hoses, sealed seams, pressure collar). She almost always wears HEAD GEAR — a helmet, sealed faceplate, breathing mask, ventilator, or respirator — but render it CLEAR/transparent, flipped-up, or open-framed so her weird alien face still reads. Sealed and protective: covered torso, sealed limbs, gloves, boots — a bit MORE covered than a bare bodysuit (but sleek, cool, and stylish — NEVER frumpy, NEVER bulky-ugly).
+The HEART of this path: a HOT heroine in a CRAZY, highly-stylized, COOL sci-fi outfit built for space exploration and action. It must look functional for space-adventure AND be really cool to look at — playful, stylish, hot, fun. NEVER clinical, drab, frumpy, or boring. The outfit is the STAR — make it gorgeous.
 
-WILDLY VARY THE OUTFIT within that space-worthy frame — a DIFFERENT sealed silhouette every render: bulky powered exo-armor / heavy EVA hardsuit / sleek sealed pressure-suit / tactical sealed recon rig / armored hardsuit with rebreather mask / sealed environment-suit under a rugged coat / ornate sealed ceremonial hardsuit. VARY bulk, layers, color, and helmet style HARD. The hard rules: always SEALED + life-support + head gear; covered (no bare midriff, no leotard, no exposed skin that would die in vacuum); never a flimsy cloth outfit that couldn't survive space.
+VARY HARD across these flavors — a DIFFERENT look every render:
+  • SEALED / SUITED — form-fitting sexy space suit / EVA / diver / astronaut / exo-armor WITH a helmet, visor, or rebreather (clear / flip-up so her face reads).
+  • ROGUE / BOUNTY-HUNTRESS — cool sci-fi jacket / armored harness / holsters / utility belt / gauntlets / boots — NO helmet, hair and face out, confident and cool.
+  • HOODED / MASKED — a hood or cowl + a rebreather mask / ventilator / faceguard / wrapped scarf-mask — mysterious and cool.
+  • Plus explorer, pilot, ranger, scavenger, sealed-ceremonial looks.
+
+Hot and form-fitting is great; covered enough to read cool (not near-naked, no bare-midriff-bikini). A helmet/visor/mask is great but NOT required on the rogue/explorer looks. Always a SINGLE woman, gender-locked she/her.
 
 ━━━ THE POSE / ACTION ━━━
 ${action_poster}
@@ -100,11 +106,11 @@ ${vibeDirective.slice(0, 200)}
 ━━━ OUTPUT SPEC ━━━
 Write 130-180 words. Single paragraph. Comma-separated phrase string.
 
-⚠️ FIGURE RULE — SEALED IN SPACE GEAR (non-negotiable, describe it FIRST). She is ALWAYS sealed in functional space-survival gear: a form-fitting sealed space suit, OR an outfit clearly paired with a helmet / visor / breathing-mask / ventilator + life-support. This MUST be the FIRST thing described about her — before any alien features. Her weird ALIEN traits (skin color, eyes, head shape, horns/tendrils, facial markings) show ONLY at her FACE, through a clear / open / flip-up visor; the rest of her body is fully sealed in the suit. NO flimsy cloth, NO bare midriff, NO near-naked, NO outfit that couldn't survive vacuum, NO missing helmet/visor.
+⚠️ FIGURE RULE — COOL SCI-FI OUTFIT FIRST. Describe her cool, stylized sci-fi space-adventure outfit FIRST (before alien features) — either a sealed suit WITH helmet/visor/mask, OR a helmet-free rogue/explorer look (cool jacket, harness, gear). Her body is dressed in cool functional gear, never bare. Her weird ALIEN traits (face-skin color, eyes, head shape, horns/tendrils, markings) show at her FACE — through a clear/flip-up visor if helmeted, or just her striking bare face if not. NO bare midriff, NO near-naked, NO flimsy non-sci-fi cloth.
 
 Render her IN THE EXACT POSE from THE POSE / ACTION section (crouch / sit / lean / perch / over-shoulder / stand — don't default to standing) and VARY THE SHOT (wide / medium / close / over-shoulder / low-angle). She is a clear readable focal point, never a tiny speck, never a face-only bust.
 
-OUTPUT ORDER — lead with: "[alien] woman SEALED in [her space-worthy suit] with [helmet / visor / breathing-mask], [pose]"; THEN her alien face showing through the visor, then biome, background drama, props, lighting, phenomenon (if fired). End reinforcing the vivid glossy sci-fi-cover look. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+OUTPUT ORDER — lead with: "[alien] woman in [her cool stylized sci-fi outfit + any helmet/visor/mask], [pose]"; THEN her alien face, then biome, background drama, props, lighting, phenomenon (if fired). End reinforcing the vivid glossy sci-fi-cover look. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   PURE_COSMOS: ({ slots, sharedDNA, vibeDirective }) => {
