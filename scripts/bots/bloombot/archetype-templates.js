@@ -94,7 +94,7 @@ OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVER
   2. **BRILLIANT FOREGROUND BLOOM-POP** — closest flowers to the camera are vivid saturated bright with VIVID glowing cores — the foreground feels alive with light
   3. **CHANDELIER + SCONCE + CANDLE DISTRIBUTION** — hanging chandelier-cluster midway down + wall-sconce flower-clusters at intervals + floor-candle-cluster blooms along the path edges
   4. **CONSTELLATION-DEPTH RECESSION** — flower-cores get smaller and dimmer toward the deep distance, creating multi-tier vertical depth from packed-foreground to fading-distance
-  5. **ATMOSPHERIC TEXTURE** — drifting petal-fall / soft mist / mossy path / wet-stone reflection / lateral petal-drift / subtle atmospheric haze adding visual richness without competing with the flower-cores
+  5. **ATMOSPHERIC TEXTURE** — drifting petal-fall / soft mist / mossy path / wet-stone reflection / lateral petal-drift / subtle depth-softening adding visual richness without competing with the flower-cores
 
 THINK: Studio Ghibli Howl's-Moving-Castle-garden-establishing-frame / Spirited-Away-spirit-realm-corridor / Princess-Mononoke-forest-path / Tim-Burton Alice-in-Wonderland enchanted-garden-tunnel / Brian-Froud faerie-realm-passage / Pinterest 'most-beautiful-flower-tunnel-Pinterest-board' / Magic-the-Gathering 'Cocoon of Avacyn' art / Disney-Princess secret-garden discovery / Tolkien-illustrated edition fairytale-passage.
 
@@ -446,8 +446,8 @@ THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical +
 - ONE hero SURREAL FLOWER-FORM dominating the frame (giant flower-mushroom / forest of flower-trees / river of petals / hillside of bloom-mountains / etc.)
 - Naturalistic LANDSCAPE context — meadow, forest, valley, glade, riverbed, hillside, mountainside — but with the SCALE INVERSION as the wow-moment
 - SUPPORTING FLOOR-CARPET — meadow of smaller flowers carpeting the ground around the hero form, providing the supporting bloom-mass
-- DREAMY MISTY DEPTH — softly hazy background fading into pastel mist, often with smaller versions of the hero form visible in the deep distance (implying a whole world of these surreal flower-forms)
-- SOFT MAGICAL LIGHT — pretty pastel ambient, warm golden-hour or soft mist-light, surreal-dreamy register
+- DREAMY PASTEL DEPTH — soft pastel background with gentle depth-falloff, often with smaller versions of the hero form visible in the deep distance (implying a whole world of these surreal flower-forms)
+- SOFT MAGICAL LIGHT — pretty pastel ambient, warm golden-hour or soft pastel light, surreal-dreamy register
 
 ━━━ HARD MANDATES (every render) ━━━
 
@@ -462,11 +462,11 @@ THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical +
 
 4. **SUPPORTING FLOOR-CARPET OF SMALLER FLOWERS** — the ground around the hero form is carpeted with smaller flowers (wildflowers, mixed meadow blooms, cosmos / daisies / forget-me-nots / poppies / etc.) — providing the "flowers everywhere" foundation that supports the surreal scale-inversion.
 
-5. **DREAMY MISTY DEPTH** — softly hazy background fading into pastel mist. Smaller versions of the hero form often visible in the deep distance (e.g., 3-4 smaller flower-mushrooms hazy on the horizon implying a whole forest of them) — this reinforces the surreal-magical-realism that this is a WORLD of these flower-forms, not just one anomaly.
+5. **DREAMY PASTEL DEPTH** — soft pastel background with gentle depth-falloff. Smaller versions of the hero form often visible in the deep distance (e.g., 3-4 smaller flower-mushrooms soft on the horizon implying a whole forest of them) — this reinforces the surreal-magical-realism that this is a WORLD of these flower-forms, not just one anomaly.
 
 6. **NO ANIMALS / NO HUMANS / NO MANMADE OBJECTS** — natural landscape forms only (trees, mushrooms, hills, mountains, rivers, waterfalls, valleys, glades, meadows). NEVER include animals (no flower-deer, no flower-rabbit), humans, or manmade objects (no flower-houses, no flower-clocks, no flower-cathedrals).
 
-7. **SOFT SURREAL-DREAMY LIGHT** — warm pastel ambient, soft mist-light, golden-hour glow, surreal-magical-realism register. NOT harsh / dramatic / moody.
+7. **SOFT SURREAL-DREAMY LIGHT** — warm pastel ambient, soft pastel light, golden-hour glow, surreal-magical-realism register. NOT harsh / dramatic / moody.
 
 🚫 ABSOLUTE BANS:
   • 🚫 NO ANIMALS in any form — no flower-deer / flower-rabbit / flower-fox / flower-bear / NO wildlife (no real animals either)
@@ -494,14 +494,14 @@ ${atmosphereSection}━━━ COMPOSITION CRAFT — SURREAL NATURAL LANDSCAPE WI
   • SCALE — the hero form fills meaningful frame real-estate so the inversion reads instantly (NOT a tiny dot in the distance — but ALSO NOT macro close-up; landscape scale)
   • FOREGROUND: floor-carpet of smaller wildflowers + supporting bloom-mass
   • MIDGROUND: the hero surreal flower-form rising dominantly from the carpet
-  • BACKGROUND: dreamy misty pastel haze with smaller versions of the hero form visible in the deep distance, fading away
-  • DEPTH: clear foreground (sharp wildflower carpet) → midground (sharp hero form) → soft dreamy misty background
+  • BACKGROUND: soft pastel depth with smaller versions of the hero form visible in the deep distance, fading away
+  • DEPTH: clear foreground (sharp wildflower carpet) → midground (sharp hero form) → soft dreamy pastel background
   • MOOD: surreal-magical-realism — naturalistic but with a wow-moment of scale-inversion
 
 ━━━ AMBIENT LIGHTING ━━━
 ${lighting}
 
-Reinterpret the rolled lighting as SOFT SURREAL-MAGICAL-REALISM light — warm pastel ambient, soft mist-light, golden-hour glow with dreamy depth. Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape register.
+Reinterpret the rolled lighting as SOFT SURREAL-MAGICAL-REALISM light — warm pastel ambient, soft pastel light, golden-hour glow with dreamy depth. Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape register.
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -525,7 +525,7 @@ Pick 2-4 species from the roster — ONE primary species that makes up the hero 
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[the HERO SURREAL FLOWER-FORM dominating the frame — explicit scale-inversion or flower-construction (giant flower-mushroom / forest-of-flower-trees / river-of-petals / etc.) + made-from-flowers detail], [the natural-world landscape context (forest / valley / meadow / glade / riverbed / hillside) the form lives in], [the floor-carpet of smaller wildflowers carpeting the ground around it], [dreamy misty pastel background with smaller versions of the hero form fading into the haze, implying a whole world of these surreal flower-forms]${atmospheric_magic ? ', [atmospheric magic detail amplifying the surreal mood]' : ''}, [soft surreal-magical-realism pastel ambient light], [Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape aesthetic register]
+[the HERO SURREAL FLOWER-FORM dominating the frame — explicit scale-inversion or flower-construction (giant flower-mushroom / forest-of-flower-trees / river-of-petals / etc.) + made-from-flowers detail], [the natural-world landscape context (forest / valley / meadow / glade / riverbed / hillside) the form lives in], [the floor-carpet of smaller wildflowers carpeting the ground around it], [soft dreamy pastel background with smaller versions of the hero form fading into soft depth, implying a whole world of these surreal flower-forms]${atmospheric_magic ? ', [atmospheric magic detail amplifying the surreal mood]' : ''}, [soft surreal-magical-realism pastel ambient light], [Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape aesthetic register]
 
 CRITICAL — ONE surreal scale-inverted FLOWER-FORM is the hero. Natural landscape context. Floor-carpet of smaller flowers. NO animals / NO humans / NO manmade objects. Soft surreal-magical-realism mood.
 
@@ -556,7 +556,7 @@ THE LOOK — Sonoran-superbloom / Arizona-after-spring-rain / IG-magical-desert-
 - A DRAMATIC EXPLOSION OF WILDFLOWERS carpeting the desert floor + rocky crevices + climbing around cactus bases — vivid saturated jewel-tone colors (red / orange / coral / magenta / vivid pink / yellow-gold / sapphire / royal-purple)
 - SOUTHWEST PALETTE — terracotta red-rock + golden-amber sand + deep cobalt desert sky + warm tan + vivid wildflower jewel-tones — NOT soft pastel
 - DRY-DESERT TEXTURE — visible saguaro ribs, agave-spike detail, sand-grain dunes, weathered red-rock surface (the desert reads as REAL desert)
-- MULTI-TIER DEPTH — sharp foreground bloom-explosion + midground desert anchors + deep distance with mesa / mountain silhouettes + atmospheric haze
+- MULTI-TIER DEPTH — sharp foreground bloom-explosion + midground desert anchors + deep distance with mesa / mountain silhouettes receding in soft depth
 - VIVID NATURAL LIGHT — bright southwest sun, golden-hour or strong midday-amber, vivid saturated color story
 
 ━━━ HARD MANDATES (every render) ━━━
@@ -569,7 +569,7 @@ THE LOOK — Sonoran-superbloom / Arizona-after-spring-rain / IG-magical-desert-
 
 4. **DRY-DESERT TEXTURE PRESERVED** — the desert anchors retain their desert nature — visible saguaro ribs, weathered red-rock striations, sand-grain dunes, agave bayonet-spikes, dusty texture. The wildflowers EXPLODE AROUND the dry desert, they don't transform it into a lush meadow.
 
-5. **MULTI-TIER DEPTH** — clear foreground (sharp bloom-explosion) + midground (desert anchors) + deep distance (mesa silhouettes / atmospheric haze).
+5. **MULTI-TIER DEPTH** — clear foreground (sharp bloom-explosion) + midground (desert anchors) + deep distance (mesa silhouettes receding in soft depth).
 
 6. **VIVID NATURAL LIGHT** — bright southwest sun, golden-hour amber, or warm midday. NOT moody / dark / soft-pastel.
 
@@ -597,7 +597,7 @@ ${magicSection}━━━ COMPOSITION CRAFT — SOUTHWEST DESERT + WILDFLOWER EXP
 
   • FOREGROUND: dense bloom-explosion of vivid desert wildflowers carpeting the ground, climbing the rocks, blooming around the cactus bases
   • MIDGROUND: the desert anchor (saguaro / joshua-tree / agave / red-rock / mesa) — recognizable, sharp, vivid
-  • BACKGROUND: distant mesa silhouettes / mountain ridges / sand dunes fading into atmospheric haze with deep cobalt sky above
+  • BACKGROUND: distant mesa silhouettes / mountain ridges / sand dunes receding in soft depth with deep cobalt sky above
   • DEPTH: sharp bloom-foreground + sharp desert-midground + soft distant atmospheric depth
   • COLOR: vivid saturated southwest palette — bold reds + corals + magentas + jewel-yellows + sapphire-blues against terracotta + golden desert
   • MOOD: vibrant, dramatic, surprising — the joy of desert SUPERBLOOM after spring rain
@@ -629,7 +629,7 @@ Pick 3-5 species from the roster — vivid saturated colors. Combine roster spec
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[the RECOGNIZABLE southwest desert anchor (saguaro / joshua-tree / agave / red-rock / mesa / dunes) dominating the midground — explicit dry-desert texture + species + features], [the DRAMATIC WILDFLOWER EXPLOSION carpeting the foreground around / between / through the desert anchor — specific desert-bloom species in vivid saturated jewel-tone colors], [multi-tier depth with distant mesa silhouettes / mountain ridges fading into atmospheric haze, deep cobalt desert sky above]${atmospheric_magic ? ', [atmospheric magic detail amplifying the southwest mood]' : ''}, [vivid bright southwest natural light bathing the scene — bright sun / golden-hour amber / warm desert glow], [vibrant Sonoran-superbloom / Arizona-magical-desert aesthetic — bold saturated southwest palette]
+[the RECOGNIZABLE southwest desert anchor (saguaro / joshua-tree / agave / red-rock / mesa / dunes) dominating the midground — explicit dry-desert texture + species + features], [the DRAMATIC WILDFLOWER EXPLOSION carpeting the foreground around / between / through the desert anchor — specific desert-bloom species in vivid saturated jewel-tone colors], [multi-tier depth with distant mesa silhouettes / mountain ridges receding in soft depth, deep cobalt desert sky above]${atmospheric_magic ? ', [atmospheric magic detail amplifying the southwest mood]' : ''}, [vivid bright southwest natural light bathing the scene — bright sun / golden-hour amber / warm desert glow], [vibrant Sonoran-superbloom / Arizona-magical-desert aesthetic — bold saturated southwest palette]
 
 CRITICAL — RECOGNIZABLE SOUTHWEST DESERT (cacti / red-rock / sand) + DRAMATIC WILDFLOWER EXPLOSION. Vivid saturated SOUTHWEST palette (NOT soft-pastel). ABSOLUTE HARD BAN ON HUMANS.
 
@@ -668,7 +668,7 @@ The upper 30-45% of every render is a pretty golden-hour / sunset sky — warm, 
 RIGHT register:
   - Soft warm cloud-bands (warm amber / soft pink / peach / coral / pale lavender / cream)
   - Gentle cumulus or cirrus catching the warm light
-  - The sun-disc visibly present but SOFT — glowing through atmospheric haze, not a sharp burning sphere
+  - The sun-disc visibly present but SOFT — glowing soft, not a sharp burning sphere
   - Subtle warm golden-hour rays + lens-flare are nice, not blazing god-rays
   - Pretty, calm, atmospheric, "actual sunset photograph" feel
   - The light WRAPS the scene in warm-gold ambient — petals glow softly, everything bathed in warm light
@@ -691,7 +691,7 @@ Think: pretty golden-hour photograph from a hike / Instagram nature-feed soft-su
 
 3. **EPIC LANDSCAPE BACKDROP** — a wide gorgeous natural setting recedes behind (mountains / hills / forest / lake / coast / valley / canyon / cliffs / wildflower-meadow). Multi-tier depth: foreground flowers + midground terrain + receding distance. NEVER a flat or featureless backdrop.
 
-4. **PRETTY GOLDEN-HOUR SKY — 30-45% OF THE FRAME** — the upper 30-45% of the frame is filled with a soft pretty golden-hour / sunset sky in warm naturalistic tones (warm amber / soft pink / peach / coral / pale lavender / cream). Gentle cumulus or cirrus clouds catching the warm light, sun-disc visibly present but soft (glowing through atmospheric haze, NOT a sharp burning sphere). The sky SUPPORTS the flowers — it's the warm light source, not the hero. NEVER burning-fiery / storm-dramatic / hot-pink-saturated / cinematic-apocalyptic. NEVER plain blue / overcast / clear noon either. Aim for "pretty golden-hour photograph" not "competition-grade sunset banger."
+4. **PRETTY GOLDEN-HOUR SKY — 30-45% OF THE FRAME** — the upper 30-45% of the frame is filled with a soft pretty golden-hour / sunset sky in warm naturalistic tones (warm amber / soft pink / peach / coral / pale lavender / cream). Gentle cumulus or cirrus clouds catching the warm light, sun-disc visibly present but soft (glowing gently, NOT a sharp burning sphere). The sky SUPPORTS the flowers — it's the warm light source, not the hero. NEVER burning-fiery / storm-dramatic / hot-pink-saturated / cinematic-apocalyptic. NEVER plain blue / overcast / clear noon either. Aim for "pretty golden-hour photograph" not "competition-grade sunset banger."
 
 5. **NATURALISTIC REAL-WORLD REGISTER** — this is naturalistic nature-photography aesthetic, NOT surreal / magical-portal / sci-fi / cartoony. National Geographic golden-hour landscape photography meets Pinterest-magical-hour Instagram. Real flowers, real mountains, real sun.
 
@@ -730,12 +730,12 @@ ${phenomenonSection}━━━ COMPOSITION CRAFT — HERO-FLOWER + EPIC-LANDSCAPE
   • UPPER FRAME: dramatic sunset sky filling 30-50% — orange / pink / gold cloud-bands
   • SUN POSITION: visible in mid-to-upper frame — cresting ridge / setting behind hill / bursting through trees / peeking over hills / sitting low on horizon
   • SUN-LIGHT TRANSMISSION: explicitly describe the sun-light SHINING THROUGH the foreground flowers — backlight, rim-light, petal-translucency, golden-hour glow on every visible bloom
-  • DEPTH: clear foreground/midground/background separation — multi-tier depth, atmospheric haze in the distance
+  • DEPTH: clear foreground/midground/background separation — multi-tier depth with soft distance recession
 
 ━━━ AMBIENT LIGHTING ━━━
 ${lighting}
 
-Reinterpret the rolled lighting to support GOLDEN-HOUR / SUNSET / MAGIC-HOUR — strong warm directional light from the visible sun POURING into the scene. The ENTIRE foreground/midground should be bathed in warm golden-amber sun-light — every petal-edge, every grass-blade, every leaf glowing with caught warmth. Pronounced lens-flare, warm haze, light-pouring-through-the-air. The sun is the primary light story; ambient amplifies it (warm haze / lens-flare / ray-streaks / soft cloud-filtered warmth flooding the whole frame).
+Reinterpret the rolled lighting to support GOLDEN-HOUR / SUNSET / MAGIC-HOUR — strong warm directional light from the visible sun POURING into the scene. The ENTIRE foreground/midground should be bathed in warm golden-amber sun-light — every petal-edge, every grass-blade, every leaf glowing with caught warmth. Pronounced lens-flare, warm light pouring through the air. The sun is the primary light story; ambient amplifies it (warm light / lens-flare / ray-streaks / soft cloud-filtered warmth flooding the whole frame).
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -763,7 +763,7 @@ Pick 1-2 species from the roster for the hero foreground — describe each with 
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[the hero foreground flower-cluster + PETAL EDGES CATCHING WARM SUN-RIM-LIGHT from the visible sun behind/beside — naturalistic photographic backlight, NOT internally-glowing bulb petals], [the wide gorgeous landscape recession behind — mountains / hills / forest / lake / coast], [the visible sun-disc position in frame — soft glowing through atmospheric haze], [soft pretty golden-hour sky in upper 30-45% — gentle cumulus / cirrus in warm-amber / soft-pink / peach / coral / pale-lavender], [warm golden-hour ambient wrapping the entire scene]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the soft-golden-hour aesthetic]' : ''}, [naturalistic real-world register — pretty golden-hour photograph, NOT cinematic-apocalyptic-burning-sunset, NOT bulb-glowing-flowers]
+[the hero foreground flower-cluster + PETAL EDGES CATCHING WARM SUN-RIM-LIGHT from the visible sun behind/beside — naturalistic photographic backlight, NOT internally-glowing bulb petals], [the wide gorgeous landscape recession behind — mountains / hills / forest / lake / coast], [the visible sun-disc position in frame — soft and gently glowing], [soft pretty golden-hour sky in upper 30-45% — gentle cumulus / cirrus in warm-amber / soft-pink / peach / coral / pale-lavender], [warm golden-hour ambient wrapping the entire scene]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the soft-golden-hour aesthetic]' : ''}, [naturalistic real-world register — pretty golden-hour photograph, NOT cinematic-apocalyptic-burning-sunset, NOT bulb-glowing-flowers]
 
 CRITICAL — the SUN is VISIBLE IN FRAME and NATURALLY RIM-LIGHTING THE FLOWER PETAL EDGES (NOT internally-glowing bulbs). Wide gorgeous landscape behind. Soft pretty sunset sky above. ABSOLUTE HARD BAN ON HUMANS.
 
@@ -915,7 +915,7 @@ The creature is SMALL relative to the scene — never the primary subject. Place
 NO humans, NO figures, NO silhouettes, NO shadows of people, NO travelers, NO explorers. The jungle is the subject. (Small wildlife — toucan / butterfly / poison-frog / monkey / iguana — only when the surprise_creature slot calls for it.)
 
 ━━━ TROPICAL PARADISE — NON-NEGOTIABLE ━━━
-This is a TROPICAL PARADISE scene — beach + lagoon + coastal cove + waterfall pool + atoll + rainforest + cloud-forest are ALL valid registers. RENDER WHATEVER THE SETTING SLOT BELOW NAMES — if the setting is a palm-fringed white-sand beach, that's the scene; if it's a turquoise lagoon, that's the scene; if it's a rainforest understory, that's the scene. The setting is identifiably tropical — palms / coconut grove / hibiscus / plumeria / frangipani / banana / banyan / heliconia / sea-grass / mangrove / ferns / moss / vines, plus open water / coastal sand / atoll edge when called for. Wide cinematic shot showing DEPTH: foreground saturated and crisp, midground softening, deep distance hazed (humid jungle haze OR salt-haze over open water OR mist around waterfalls). This is NEVER a temperate meadow, NEVER an alpine landscape, NEVER a desert, NEVER an urban scene.
+This is a TROPICAL PARADISE scene — beach + lagoon + coastal cove + waterfall pool + atoll + rainforest + cloud-forest are ALL valid registers. RENDER WHATEVER THE SETTING SLOT BELOW NAMES — if the setting is a palm-fringed white-sand beach, that's the scene; if it's a turquoise lagoon, that's the scene; if it's a rainforest understory, that's the scene. The setting is identifiably tropical — palms / coconut grove / hibiscus / plumeria / frangipani / banana / banyan / heliconia / sea-grass / mangrove / ferns / moss / vines, plus open water / coastal sand / atoll edge when called for. Wide cinematic shot showing DEPTH: foreground saturated and crisp, midground softening, deep distance softening with natural depth (humid-jungle air / salt-haze / waterfall-spray ONLY when the specific scene genuinely calls for it). This is NEVER a temperate meadow, NEVER an alpine landscape, NEVER a desert, NEVER an urban scene.
 
 ━━━ MASSIVE SHOWY TROPICAL FLOWERS — THE HERO ━━━
 The flowers are MASSIVE and SHOWY at tropical-paradise scale — torch ginger, heliconia, plumeria, jade vine cascades, cattleya orchid, bird-of-paradise (strelitzia), passion-flower, anthurium, hibiscus, frangipani, ylang-ylang, bougainvillea, plumeria cascade, lotus, water-lily. Use the roster's named species — never generic "tropical flowers". The blooms dominate the foreground at saturated, vivid scale; supporting blooms thread through the vegetation behind or carpet the coastal sand or ring the lagoon edge.
@@ -928,7 +928,7 @@ ${vegetation_anchor}
 
 The vegetation scaffolds the bloom hero — palms / banana / banyan / philodendron / ferns / vines / hibiscus / plumeria / sea-grape / mangrove — never replacing the blooms as the subject, but giving the paradise its identifiable structure.
 ${creatureSection}━━━ TROPICAL ATMOSPHERIC PERSPECTIVE ━━━
-Foreground saturated and crisp, midground progressively softening, deep distance hazed. The TYPE of atmospheric haze MATCHES the setting: jungle scenes have humid green mist with beaded condensation on broad leaves; beach/coast/lagoon scenes have warm salt-haze over open water + turquoise-blue depth-recession; waterfall scenes have spray-mist clouding the lower frame. NEVER dry / NEVER clear-air / NEVER alpine.
+Foreground saturated and crisp, midground progressively softening, deep distance receding with natural depth. Crisp clear tropical air is the default; add atmosphere ONLY when the scene genuinely calls for it, matched to the setting (humid-jungle air with beaded condensation on broad leaves / warm salt-haze over open water / waterfall spray-mist). NEVER alpine.
 
 ━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
 Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE the way a fine-art print or magazine cover does. NEVER a flat eye-level center-of-frame snapshot. The viewer should GASP / stop mid-scroll / want to save the image / want to print and frame it.
@@ -950,10 +950,10 @@ Pick ONE deliberate framing mode per render (vary across them — match the fram
 DELIBERATE COMPOSITION CRAFT:
 - Rule-of-thirds: hero element at a rule-of-thirds intersection, not centered (unless intentional symmetry like a path leading dead-center)
 - Lead-lines: path / stream / palm-trunk / wave-line / vine-curtain pulling the eye INTO the deep frame
-- Multi-tier depth: tactile foreground detail (bloom cluster / wet sand / petal-strewn path / dew-beaded leaf) → midground scene → deep distance hazed
+- Multi-tier depth: tactile foreground detail (bloom cluster / wet sand / petal-strewn path / dew-beaded leaf) → midground scene → deep distance softening with depth
 - Intentional negative space: one quadrant has bokeh-quiet / salt-haze / sky-glow breathing room as counterweight to the bloom-dense quadrant
 - Light hierarchy: warm hero blooms in golden / amber / rim light, cooler ambient / blue shadow in the deep distance
-- Depth recession: foreground saturated and crisp, midground softening, deep distance progressively hazed
+- Depth recession: foreground saturated and crisp, midground softening, deep distance receding with natural depth
 
 THINK Hawaiian / Tahitian / Bali / Maldivian / Polynesian fine-art tropical photography + Avatar Way-of-Water establishing shots + Planet Earth tropical-coast slow-zoom-out + Endless Summer cinematography (without surfers) + Princess Mononoke ocean + Roger Deakins tropical wides + National Geographic cover shots + travel-magazine fine-art prints. Every render = the COVER SHOT, not a snapshot. The kind of image someone would print poster-size and hang on a wall.
 
@@ -975,15 +975,15 @@ ${sharedDNA.lighting}
 - Do NOT default to "soft pastels" / "cottagecore" / "english garden" — this is JUNGLE.
 - Do NOT show people, hands, figures, silhouettes.
 - Do NOT use temperate / alpine / desert / arctic vocabulary.
-- Do NOT skip the humid-haze depth recession — it's the tropical signature.
+- Let depth recede naturally; humid haze only when the specific scene genuinely calls for it (NOT a default).
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[wide cinematic framing mode (canopy-shafts / pool-reflection / vine-archway / banyan-tunnel / cliff-lagoon / waterfall / mangrove / broad-leaf-overhead)], [the tropical setting + vegetation anchor establishing the dense jungle], [3-4 named tropical species in the palette colors with HERO + SUPPORTING distribution], [humid atmospheric perspective with foreground saturated and deep distance hazed]${surprise_creature ? ', [surprise creature at peripheral scale]' : ''}, [lighting bringing the canopy + bloom-mass to life]
+[wide cinematic framing mode (canopy-shafts / pool-reflection / vine-archway / banyan-tunnel / cliff-lagoon / waterfall / mangrove / broad-leaf-overhead)], [the tropical setting + vegetation anchor establishing the dense jungle], [3-4 named tropical species in the palette colors with HERO + SUPPORTING distribution], [natural depth perspective with foreground saturated and deep distance softening]${surprise_creature ? ', [surprise creature at peripheral scale]' : ''}, [lighting bringing the canopy + bloom-mass to life]
 
-CRITICAL — every render reads as TROPICAL JUNGLE — palms / banana / banyan / ferns visible, humid haze depth-recession, massive showy named tropical blooms. NEVER temperate, NEVER alpine, NEVER desert.
+CRITICAL — every render reads as TROPICAL JUNGLE — palms / banana / banyan / ferns visible, lush natural depth-recession, massive showy named tropical blooms. NEVER temperate, NEVER alpine, NEVER desert.
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the framing + setting.`;
   },
@@ -1120,7 +1120,7 @@ Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quad
 DELIBERATE COMPOSITION CRAFT:
 - Symmetric / centered for Magritte-style frames, off-center rule-of-thirds for Dali-style frames — match the impossibility's nature
 - The impossibility is the EYE'S DESTINATION — the composition draws the eye to it
-- Multi-tier depth: tactile foreground bloom-detail (still real) → midground impossibility (the world-element being broken) → deep distance receding into atmospheric haze or surreal-glow
+- Multi-tier depth: tactile foreground bloom-detail (still real) → midground impossibility (the world-element being broken) → deep distance receding into soft depth or surreal-glow
 - Light hierarchy: warm hero blooms / cooler ambient or surreal-shadow
 - Frame-within-frame welcomed (Magritte-style windows / portals / doorways into other realities)
 
@@ -1200,7 +1200,7 @@ The path is VISIBLE from the bottom-center of the frame, leading through the arc
 ━━━ THE DESTINATION GLIMPSE (what lies beyond the archway) ━━━
 ${destination_glimpse}
 
-The destination is glimpsed through the arch's opening, lit WARMER than the foreground, glowing like a doorway to somewhere magical. NEVER a blank backdrop. Always implies a wider bloom-world receding into atmospheric haze.
+The destination is glimpsed through the arch's opening, lit WARMER than the foreground, glowing like a doorway to somewhere magical. NEVER a blank backdrop. Always implies a wider bloom-world receding into soft depth.
 
 ━━━ HERO BLOOM AMONGST MANY — NON-NEGOTIABLE ━━━
 ONE specific HERO species dominates the foreground bloom-mass at its OWN natural form and scale — broad face, deep cup, pompom dome, hanging raceme, umbel, trumpet, ruffled rosette, daisy-face, or tall spike. Let the rolled species choose. The other 2-3 species act as SUPPORTING CAST cascading from the archway, threading through the foreground mass, drifting in midground.
@@ -1215,7 +1215,7 @@ Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quad
 DELIBERATE COMPOSITION CRAFT:
 - Strict symmetric portrait — archway centered, path dead-center, balanced bloom-mass left/right
 - Lead-lines: the path itself is THE lead-line, pulling the eye through the arch into the glowing distance
-- Multi-tier depth: tactile foreground bloom-mass + path stones → midground archway + climbing blooms → deep distance hazed warm destination
+- Multi-tier depth: tactile foreground bloom-mass + path stones → midground archway + climbing blooms → deep distance warm destination glow
 - Light hierarchy: warm destination glow through the arch, foreground in cooler ambient
 - Frame-within-frame: the archway IS the frame-within-frame, creating two depths of "frame"
 
@@ -1304,8 +1304,8 @@ The STRUCTURAL HERO of the conservatory is the ARCHITECTURE (the glass dome + ir
 
 ⚠️ DO NOT render a single oversized bloom centered in the frame. DO NOT render only one type of bloom dominating. Each of the 3-4 species appears in MULTIPLE locations across the frame — climbing, draping, cascading, carpeting — distributed in every quadrant.
 
-━━━ VOLUMETRIC GOD-RAYS THROUGH THE GLASS ━━━
-Diagonal sun-shafts pour through the glass dome at a dramatic angle, hitting the bloom-clouds in volumetric god-rays. The shafts are visible in the air through suspended pollen-dust / dust-motes / fine humidity. The hero blooms catch the warm light; the rest of the conservatory sits in cooler ambient glass-filtered light.
+━━━ WARM SUN-SHAFTS THROUGH THE GLASS ━━━
+Diagonal sun-shafts pour through the glass dome at a dramatic angle, hitting the bloom-clouds in warm sun-shafts. The shafts catch suspended pollen-dust / dust-motes. The hero blooms catch the warm light; the rest of the conservatory sits in cooler ambient glass-filtered light.
 ${phenomenonSection}━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
 Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP / want to step INTO the conservatory / want to print and frame the image.
 
@@ -1320,7 +1320,7 @@ Pick ONE wide-interior composition per render (vary):
   H. **THROUGH-FERN-CURTAIN** — wide shot through a cascade of fern-fronds + climbing-vine curtains, deep conservatory visible behind
 
 ━━━ MATERIAL POETRY — GLASS / IRON / BLOOM ━━━
-"Wrought-iron with rust-patina under climbing-rose vines", "leaded-glass panes scattering sun in geometric patterns onto the flagstones", "moss-and-lichen accumulating in the iron joints", "petals fallen on the tile floor", "humid air with visible vapor in the god-rays", "weathered terracotta planters overflowing with bloom-mass".
+"Wrought-iron with rust-patina under climbing-rose vines", "leaded-glass panes scattering sun in geometric patterns onto the flagstones", "moss-and-lichen accumulating in the iron joints", "petals fallen on the tile floor", "soft warm air catching the sun-shafts", "weathered terracotta planters overflowing with bloom-mass".
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -1345,9 +1345,9 @@ ${sharedDNA.lighting}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[wide-interior composition mode], [Victorian glass-and-iron conservatory architecture established — dome / framework / leaded-glass / flagstone floor barely visible THROUGH the bloom-curtain], [conservatory-type detail + structural anchor at the focal point], [OBSESSIVE distributed bloom-mass — 3-4 named species massed in EQUAL WEIGHT across every iron column, every arch, every rafter, every flagstone, every planter — NOT a single hero, a FLORAL EXPLOSION], [petal-carpet covering the floor wall-to-wall / pendant cascades from rafters to head-height / climbing-bloom spirals wrapping every column], [volumetric god-rays diagonal through the glass]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — rust-patina iron glints through the bloom-curtain, leaded-glass scattering geometric light onto the petal-carpet, weathered terracotta overflowing]
+[wide-interior composition mode], [Victorian glass-and-iron conservatory architecture established — dome / framework / leaded-glass / flagstone floor barely visible THROUGH the bloom-curtain], [conservatory-type detail + structural anchor at the focal point], [OBSESSIVE distributed bloom-mass — 3-4 named species massed in EQUAL WEIGHT across every iron column, every arch, every rafter, every flagstone, every planter — NOT a single hero, a FLORAL EXPLOSION], [petal-carpet covering the floor wall-to-wall / pendant cascades from rafters to head-height / climbing-bloom spirals wrapping every column], [warm sun-shafts diagonal through the glass]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — rust-patina iron glints through the bloom-curtain, leaded-glass scattering geometric light onto the petal-carpet, weathered terracotta overflowing]
 
-CRITICAL — Victorian glass-and-iron architecture is NON-NEGOTIABLE. Wide-angle interior with visible glass-dome and iron-framework. Volumetric god-rays through glass. HALF-architectural / HALF-jungle balance.
+CRITICAL — Victorian glass-and-iron architecture is NON-NEGOTIABLE. Wide-angle interior with visible glass-dome and iron-framework. Warm sun-shafts through glass. HALF-architectural / HALF-jungle balance.
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the conservatory.`;
   },
@@ -1467,8 +1467,8 @@ Every render is a JAW-DROPPING EPIC CINEMATIC MOVIE-POSTER / GALLERY-PIECE FRAME
   1. **THE FANTASY BLOOM-CITY** as the dominant hero — impossible architecture overgrown / consumed / formed BY flowers
   2. **OVERWHELMING BLOOM-MASS** — building-scale cascades, sky-filling petal-storms, vine-bridges, flower-cathedrals
   3. **DRAMATIC FANTASY SKY** — aurora / sunset / dawn / cloud-layers / impossible double-sun / starfield / floating moon
-  4. **MAGICAL ATMOSPHERIC LAYER** — drifting petal-snow / glowing pollen-motes / bioluminescent spores / magical mist / golden god-rays
-  5. **SENSE OF VAST SCALE** — multi-tier vertical depth from foreground bloom-cascade to deep-distance fantasy spires receding into atmospheric haze
+  4. **MAGICAL ATMOSPHERIC LAYER** — drifting petal-snow / glowing pollen-motes / bioluminescent spores / golden sun-shafts
+  5. **SENSE OF VAST SCALE** — multi-tier vertical depth from foreground bloom-cascade to deep-distance fantasy spires receding into soft depth
 
 THINK: Tolkien-illustrated-edition / Pre-Raphaelite painted-bloom-fields / Studio-Ghibli cherry-blossom-canopy / Lothlorien-from-Fellowship (the FLOWERS, not the architecture) / Brian-Froud-faerie-realm painted-flower-density / classical-painted "Garden of Earthly Delights" flower-mass / Monet-water-lily-immersive panels (BUT fantasy scale).
 
@@ -1489,7 +1489,7 @@ Pick ONE composition per render (FLOWER-DOMINATED, vary):
 DELIBERATE COMPOSITION CRAFT — FLOWER-DOMINATED CINEMATIC SHOT:
 - Strong LEAD-LINES into flower-depth (bloom-canyon recede / cherry-canopy verticality / flower-cliff horizon-line)
 - CINEMATIC POV — fantasy scale, NOT pedestrian
-- Multi-tier depth: foreground tactile bloom-detail → midground bloom-mass → deep-distance fantasy spires barely visible through atmospheric bloom-haze
+- Multi-tier depth: foreground tactile bloom-detail → midground bloom-mass → deep-distance fantasy spires barely visible in soft depth
 - NATURAL CINEMATIC LIGHT ONLY — golden-hour sun / dawn / dusk / soft daylight / gentle backlight. NEVER magical glow / bioluminescence / sci-fi god-rays.
 - Sky is small or implied — the FLOWERS fill the frame, not a dramatic sky
 
@@ -1587,7 +1587,7 @@ ${decay_anchor}
 
 The decay anchor is rendered with hyperreal precision — the specific way time has marked the structure (the cracked column / collapsed dome / fallen statue / shattered window / etc.). The bloom-mass converges around the decay-anchor as the visual focal point.
 ${phenomenonSection}━━━ SUN-SHAFTS THROUGH BROKEN ARCHITECTURE ━━━
-Sun-shafts pour through the BROKEN parts of the structure — through the collapsed roof / shattered windows / cracked dome / fallen wall section. The shafts are visible volumetrically in the air through suspended pollen / dust / mist. The hero light catches the bloom-mass where it pools; the rest sits in cooler shadow.
+Sun-shafts pour through the BROKEN parts of the structure — through the collapsed roof / shattered windows / cracked dome / fallen wall section. The shafts catch suspended pollen / dust. The hero light catches the bloom-mass where it pools; the rest sits in cooler shadow.
 
 ━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
 Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP at the beauty of nature's reclamation / want to print and frame the image.
@@ -1605,7 +1605,7 @@ Pick ONE wide cinematic composition per render (vary):
   J. **OVERGROWN INTERIOR** — interior view of the ruin's main hall fully reclaimed, blooms cascading from every rafter, fallen stones carpeted in bloom
 
 DELIBERATE COMPOSITION CRAFT:
-- Multi-tier depth: tactile foreground bloom-detail + crumbled stone → midground ruin → deep distance hazed warm
+- Multi-tier depth: tactile foreground bloom-detail + crumbled stone → midground ruin → deep distance warm depth
 - Strong leading-lines (column-colonnade / staircase / path / fallen wall)
 - Light hierarchy: warm sun-shafts pour through broken architecture, cool ambient shadow elsewhere
 - Architecture frames the shot (broken arch / collapsed dome / column-row framing)
@@ -1638,7 +1638,7 @@ ${sharedDNA.lighting}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[wide cinematic composition mode], [specific ruin type + decay anchor rendered with hyperreal time-worn precision — the structure is recognizable but in deep disrepair], [bloom-mass DISTRIBUTED across every column / fallen stone / broken arch — 3-4 species in equal weight consuming the ruin], [sun-shafts pouring through broken roof / wall / window in volumetric god-rays]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — moss-patina, weathered stone, vine-cracked masonry, petal-carpet], [AWE + MELANCHOLY + TRIUMPHANT-NATURE mood — reverent not ominous]
+[wide cinematic composition mode], [specific ruin type + decay anchor rendered with hyperreal time-worn precision — the structure is recognizable but in deep disrepair], [bloom-mass DISTRIBUTED across every column / fallen stone / broken arch — 3-4 species in equal weight consuming the ruin], [sun-shafts pouring through broken roof / wall / window]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — moss-patina, weathered stone, vine-cracked masonry, petal-carpet], [AWE + MELANCHOLY + TRIUMPHANT-NATURE mood — reverent not ominous]
 
 CRITICAL — Architecture-as-structural-hero + bloom-as-distributed-mass + AWE-NOT-HORROR mood. NEVER horror / ominous / spooky. NEVER a single hero bloom dominating.
 

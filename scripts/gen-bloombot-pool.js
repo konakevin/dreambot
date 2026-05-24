@@ -114,25 +114,20 @@ const POOL_RECIPES = {
 Lineage to channel: National Geographic landscape photography + Planet Earth establishing shots + Roger Deakins location work + Annie Leibovitz outdoor portraiture (just the BACKDROPS) + Ansel Adams scale. Saturated jewel-tone cinematic register.`,
     touchpoints: [
       'ALPINE MEADOW VALLEY BELOW JAGGED SNOW PEAKS — wide U-shaped glacial valley floor blanketed in spring bloom, jagged granite snow-peaks rising abruptly behind, foreground tier of carpet-blooms / midground tier of clustered bloom-massing / horizon receding to blue snow-line',
-      'COASTAL CLIFF ABOVE CRASHING OCEAN — wave-battered headland edge with bloom-turf sweeping to a sheer drop, white surf detonating against black-rock base far below, salt-spray haze softening the deep distance, multi-tier bloom-carpet across the rounded cliff-top',
-      'DESERT CANYON SUPERBLOOM — wide red-rock canyon floor in once-a-decade superbloom, vertical sandstone walls glowing burnt-orange in the upper frame, river meandering through the bloom-saturated floor, distant mesas blue with atmospheric haze',
       'ROLLING HILLS RECEDING TO BLUE DISTANCE — patchwork quilt of bloom-fields tumbling across rounded downs in tier after tier, hedgerows zigzagging between, distant blue ridges fading into atmospheric perspective, lone tree-clump silhouetted on a far ridge',
       'GLACIAL CIRQUE BOWL — semi-circular alpine amphitheatre rimmed by sheer rock walls, snow-meltwater stream wandering through the bloom-carpeted floor, cirque tarn reflecting the rock-walls, scree-slopes rising to the rim',
       'VOLCANIC CALDERA SUPERBLOOM — vast circular caldera floor carpeted in pioneer blooms after spring rain, black-rock crater rim ringing the horizon, steam-vents puffing in midground, ash-cone visible at one edge',
       'LAKE-SHORE BLOOM-BELT — long crescent of bloom-blanketed lake-shore curving into the deep distance, glassy mountain lake reflecting peaks and blooms equally, scattered conifer-clusters punctuating the bloom-carpet, mountain backdrop',
-      'ROLLING CHALK DOWNS IN SPRING SUPERBLOOM — undulating chalk downland bloom-carpet, ancient hill-fort earthwork visible on a distant rise, dewpond catching sky, sheep-track threading the bloom, English atmospheric haze at the horizon',
       'BASALT HEADLAND BLOOM-SHOULDER — Faroe-style stepped basalt cliffs draped in turf-bloom, North Atlantic surf battering the rock-base, sea-stacks rising from a heaving steel sea, low cloud catching on the cliff-top',
       'TIBETAN HIGH-PLATEAU BLOOM-BELT — vast high-altitude bloom-plain stretching to horizon, snow-capped 7000m peaks rising in deep distance, prayer-flag string fluttering in midground for scale, yak-herd tiny on the bloom-meadow',
       'TUNDRA FELLFIELD IN MIDNIGHT-SUN BLOOM — low-Arctic tundra slope in midnight-sun summer bloom, cushion-plants and dwarf-bloom turf, distant glacier-tongue descending from white peaks, sun grazing the horizon, long warm shadows',
       'BADLANDS WASH SUPERBLOOM — striped-strata badland gulches with bloom-carpet between, dry stream-bed snaking through the foreground, eroded buttes rising in pink-and-amber midground, sky filling upper third with weather',
-      'OXBOW RIVER BEND BLOOM-BANKS — meandering oxbow lake with reflective water curving through bloom-laden banks, tall reed-clusters along the water-line, distant hills, golden sandbar accenting the bend, atmospheric haze',
       'MOUNTAIN PASS HANGING VALLEY — high pass between two peaks with a hanging valley below, bloom-carpet covering the valley floor, scree-cones descending from the walls, glacier-toe visible in deep upper background',
       'ANCIENT FOREST CLEARING — large bloom-meadow ringed by old-growth fir-and-cedar, sunbeams filtering through forest edge, mossy boulders studding the clearing, stag tiny in the deep background for scale',
       'PATAGONIAN ESTANCIA WIDE PLAIN — vast Andean foreland plain in spring bloom, gauchos-and-horses tiny silhouettes in deep midground for scale, granite spires of distant Andes piercing storm-cloud, wind-bent grass',
       'MEDITERRANEAN TERRACED HILL-BLOOM — ancient stone-terraced hillside cascading in bloom from ridge to coast, distant azure sea filling the lower frame, cypress-clusters punctuating the terraces, low golden Mediterranean light',
       'TIDAL WATER-MEADOW FLOODPLAIN — broad flooded river floodplain with islands of bloom-tussocks rising from shallow water, distant cathedral-tower or hill in deep horizon, low water-mirror reflecting the bloom and sky equally',
       'ANDEAN ALTIPLANO BLOOM-PLAIN — vast high-altitude altiplano in seasonal bloom, distant snow-capped volcanoes rising from the plain, llama-herd tiny in midground for scale, salt-pan glinting on one horizon',
-      'SAVANNA-GRASSLAND BLOOM-MOSAIC — broad grassland in seasonal bloom dotted with flat-crowned acacias, distant escarpment receding to blue haze, scattered termite-mounds catching late light, sky filling upper half',
     ],
     instructions: `Each entry is ONE specific dramatic LANDFORM CANVAS for a bloom-blanket scene, 30-60 words. Format: "LANDFORM NAME CAPS — primary terrain features + multi-tier bloom description + horizon/depth note". Vary across the 10 landform categories above. NEVER use generic "wildflower meadow" — name the LANDFORM specifically. NO people, NO interiors, NO archways, NO ruins, NO urban, NO macro framing. NO pink/cottagecore/feminine palette references. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -264,7 +259,6 @@ Channel: Spielberg's "small magic moment in the wide shot" framing + Studio Ghib
   G. **TWILIGHT GRADIENT** — post-sunset deep-blue-to-purple gradient with first stars / Venus / moon-rise
   H. **NIGHT WITH MOON** — moonlit landscape with full / crescent / blood / supermoon, soft silver wash on the bloom-carpet
   I. **AURORA** — green-and-violet aurora curtains rippling across an upper-latitude bloom-tundra
-  J. **MIST / FOG / VOLUMETRIC** — low ground-fog hugging the bloom-carpet with clear sky above / mountain-mist hugging peaks / cloud-inversion above bloom-valley
 
 Channel: Roger Deakins atmospheric work + Storm Thorgerson album-cover skies + Ansel Adams cloud studies + National Geographic golden-hour wides + Studio Ghibli sky-poetry.`,
     touchpoints: [
@@ -274,20 +268,16 @@ Channel: Roger Deakins atmospheric work + Storm Thorgerson album-cover skies + A
       'HIGH-NOON SCULPTED CUMULUS — deep cerulean sky filled with sculpted white cumulus-castles, hard mid-day sun creating crisp shadow-undersides on the clouds, classic-photo blue, every cumulus reading three-dimensional',
       'AURORA CURTAINS OVER TUNDRA-BLOOM — green-and-violet aurora curtains rippling across an upper-latitude night sky, magnetic-field bands stretching from horizon to horizon, soft glow on the snow-rimmed bloom-tundra below',
       'TWILIGHT BLUE WITH FIRST STARS — post-sunset upper-frame in deep-blue-to-purple gradient, Venus bright at the edge of the gradient, first stars just visible at zenith, bloom-meadow below in cooling shadow',
-      'OVERCAST WITH GOD-RAY BREAK — silver overcast sheet covering most of the upper frame, single break of brilliant sun piercing through, volumetric god-rays beaming down onto a specific patch of bloom-meadow in midground',
       'BLOOD-MOON RISING — full crimson lunar disk rising above a distant ridge, twilit purple sky filling the upper frame, moonlight tinting the bloom-carpet rose-amber',
       'PURPLE THUNDERHEAD DOMINATING — vast deep-purple thunderhead occupying half the upper frame, lightning-flash internal pulse just visible, edge lit by sun escaping under, theatrical contrast',
-      'AMBER DAWN MIST WITH PEAKS — golden-amber dawn sky filling the upper frame, first sun-rays just touching the highest snow-peaks, low mist coiling above the bloom-meadow at peak-elevation, alpenglow drama',
       'LENTICULAR CLOUD STACK — stack of UFO-shaped lenticular clouds glowing apricot at sunset, lined up above a distant mountain ridge, otherworldly atmospheric phenomenon',
       'MOON HALO COMPLETE RING — full lunar halo ring around the moon in a thin-cirrus night sky, soft silver light on the bloom-meadow below, atmospheric ice-crystal magic',
       'MAMMATUS-CLOUD DUSK CEILING — rare mammatus-cloud underside (bubbled grey-pink pendulous cloud-bottoms) filling the upper frame at dusk, eerie textural beauty, storm just-passed',
-      'GROUND-FOG WITH SUNRISE TOPS — low ground-fog hugging the bloom-carpet to knee-height with clear amber-dawn sky above, distant ridges rising above the fog, bloom-tops poking through the mist',
       'PINK-CIRRUS HAIR — high pink-cirrus streaks combed across the dusk sky, no other clouds, gradient gold-to-magenta-to-violet from horizon to zenith, atmospheric perfection',
       'SUPERMOON OVER MOUNTAIN-PASS — oversized full moon rising in the saddle between two peaks, bloom-pass in the foreground softly lit, twilight blue around the moon',
       'ALPENGLOW ON HIGH PEAKS — last-light alpenglow making the highest snow-peaks blaze magenta-rose against a cooling deep-blue sky, valley below the bloom-meadow in twilight blue shadow',
       'COTTON-CANDY CIRROCUMULUS — high cirrocumulus mackerel-sky filling the upper frame at sunset, individual cells lit pink-and-gold, full horizon-spanning textural marvel',
       'CRIMSON-DUSK ON STORM-EDGE — sky split in half: storm-cell on left with rain-curtain and dark shoulder, clear crimson dusk on right, the boundary itself a sharp wall, dramatic',
-      'MIDNIGHT-SUN ARCTIC HAZE — Arctic midnight-sun glow filling the upper frame in soft pink-and-amber, never setting below horizon, bloom-tundra in eternal golden hour',
     ],
     instructions: `Each entry is ONE specific cinematic sky / atmospheric upper-frame, 20-40 words. Format: "SKY MODE NAME CAPS — primary sky condition + color/light note + how it interacts with the bloom-landscape below". Vary across the 10 categories above. NEVER blank-blue or featureless. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -439,7 +429,6 @@ Channel: macro-photography sensibility + David Attenborough close-up reverence +
       'INDIVIDUAL STAMEN AND POLLEN — single bloom in foreground with stamens prominently extended, pollen-mass visible on the anther-tips, filament shadows crossing the petals',
       'BUD HALF-BURSTING OPEN — solitary bloom-bud mid-burst in foreground, half-open showing the layered inner petals just unfurling, anticipation moment captured',
       'HEART-SHAPED DEWDROP — single dew-drop hanging from a foreground leaf-tip, naturally shaped exactly like a heart, sun catching it from behind, jewel-perfect detail',
-      'POLLEN-MOTE CLOUD IN SUNBEAM — visible suspended pollen-motes drifting in a side-lit sunbeam crossing the foreground, hundreds of tiny golden points caught in the volumetric beam',
       'BEE BACK COVERED IN POLLEN — solitary honeybee on a foreground stamen, golden pollen-dust thick on its back and legs, individual pollen-grains visible at macro scale',
       'TINY HIDDEN NEST WITH EGGS — small cup-nest of woven grass tucked low in the foreground bloom-mass, three speckled eggs visible inside, intimate reward for the looking eye',
       'COCOON ATTACHED TO STEM — solitary moth-cocoon attached to a foreground bloom-stem, silk-fibers catching light, transformation-in-progress detail',
@@ -754,7 +743,6 @@ Channel: Burnett "The Secret Garden" path + Studio Ghibli garden paths + Tasha T
 
 Channel: Burnett "Secret Garden" reveal + Studio Ghibli secret-place reveals + Tasha Tudor secret-cottage glimpse + fairy-tale-illustrated path-destinations.`,
     touchpoints: [
-      'SUN-DRENCHED BLOOM-MEADOW — sun-drenched wildflower meadow stretching beyond the arch, golden-hour light pouring across the blooms, atmospheric haze in deep distance softening into glow',
       'SUNLIT FOREST CLEARING — sunlit forest clearing visible beyond the arch with vertical sun-shafts through tall trees, ferns and bluebells carpeting the clearing floor, soft warm glow',
       'POND WITH LILY-PADS — small reflective pond with lily-pads visible beyond the arch, water mirroring the canopy above, bloom-edged banks softly visible at the pond rim',
       'DISTANT STONE COTTAGE — distant stone cottage with a smoking chimney visible beyond the arch, glowing windows lit warm, surrounded by garden-mass softly visible',
@@ -796,7 +784,6 @@ Channel: Burnett "Secret Garden" reveal + Studio Ghibli secret-place reveals + T
   A. **LIGHT-SHAFT** — vertical sun-shaft falling through the arch onto the path / volumetric god-ray through the opening
   B. **FALLING PETALS** — petal-fall drifting from the arch / petals mid-air through the opening
   C. **FIREFLY CLOUD** — firefly-cloud at dusk in the archway / glow-cloud of tiny lights
-  D. **MIST / VAPOR** — low ground-mist hugging the path / vapor coiling around the arch / pollen-haze in light
   E. **BUTTERFLY CLUSTER** — butterfly cluster in the arch opening / monarch wave passing through
   F. **HUMMINGBIRD** — solitary hummingbird hovering at a bloom on the arch
   G. **BIRD AT ARCH** — songbird perched on the arch top / robin/wren at the bloom-mass
@@ -808,20 +795,16 @@ Channel: Burnett "Secret Garden" reveal + Studio Ghibli secret-place reveals + T
 
 Channel: Princess Mononoke kodama-spirits + Studio Ghibli light-shaft moments + Burnett "Secret Garden" robin / magic-bird reveal + Disney Sleeping-Beauty fairy-dust + Tasha Tudor candle-in-cottage warm moments.`,
     touchpoints: [
-      'VERTICAL SUN-SHAFT THROUGH ARCH — single vertical sun-shaft falling through the archway opening onto the path stones at the center, vapor and dust-motes suspended in the volumetric beam',
       'FALLING PETALS THROUGH THE ARCH — drifting petal-fall caught mid-air through the archway opening, petals from the climbing-bloom canopy above slowly descending toward the path',
       'FIREFLY CLOUD AT DUSK — soft cloud of fireflies suspended in the archway opening at dusk, hundreds of green-pulse lights stereo-arranged through the depth',
-      'LOW GROUND-MIST HUGGING PATH — low ground-mist coiling along the path through the archway, vaporous and luminous in the destination glow, foreground crisp and the mist softening backward',
       'BUTTERFLY CLUSTER IN ARCH — small cluster of butterflies suspended in the archway opening mid-passage, wings catching the back-light through the arch, jewel-iridescent',
       'HUMMINGBIRD AT ARCH BLOOM — solitary jewel-iridescent hummingbird hovering at a bloom on the archway frame, wings a transparent blur, beak just touching the flower',
       'SONGBIRD ON ARCH TOP — solitary songbird (robin / wren / nightingale) perched on the top of the archway, head tilted toward the viewer, the empty path inviting beyond',
       'DEWDROP CASCADE ON ARCHWAY — fine dewdrop beads on every petal of the climbing-bloom mass around the archway, the archway scintillating with reflected light',
-      'POLLEN-CLOUD GOLDEN DUST — golden pollen-cloud dispersing in side-light through the archway, the entire passage hazy with suspended dust-motes catching gold',
       'CANDLE LANTERN HANGING AT ARCH — single candle-lit lantern hanging from the top of the archway, soft amber glow pooling on the foreground bloom-mass and the path-stones',
       'PAIRED SUN-SHAFTS THROUGH ARCH — two paired vertical sun-shafts falling symmetrically through the archway opening, creating a halo-of-light at the path-center',
       'DOUBLE-RAINBOW DEW-WEB — perfect spider-web spanning the archway frame, hundreds of dewdrops on the silk catching light like double-beaded pearls',
       'PETAL-SPIRAL MID-AIR — single petal caught mid-air in a slow upward spiral through the archway, frozen in side-light, magic-moment frame',
-      'GLOWING POLLEN-MIST — golden pollen-mist suspended in the entire archway passage, dust-motes individually visible in the slanting destination light',
       'WHITE-MOTH MIGRATION — small cluster of white moths passing through the archway opening in soft fluttering motion, individual wings translucent in the back-light',
       'FROST-SHIMMER ON ARCH BLOOMS — early-morning frost shimmer on the climbing-bloom mass around the archway, sun catching individual ice-crystals in pinpoints of light',
       'DRAGONFLY HOVERING — solitary jewel-iridescent dragonfly hovering in the foreground bloom-mass beside the path, body back-lit translucent amber',
@@ -977,7 +960,6 @@ Channel: Magritte sky-and-cloud paintings + Dali "Sleep" desaturated dreamscapes
       'BLOOM-GALAXY IN DEEP SPACE — bloom-petals arranged in a galactic-spiral pattern across the sky, individual blooms forming the spiral arms, vast cosmic scale',
       'PETALS RISING FROM EARTH — petals rising upward from the ground in slow-motion against gravity, hundreds visible at every depth, no source visible',
       'WARM-LIGHT WITHIN A SHADOW — a shadow zone that contains its OWN sun-glow, the shadow-area paradoxically lit warmer than the sun-area outside it',
-      'SOFT MIST WITH NO SOURCE — soft pearl-mist hovering in still air with no source visible, the mist softening the impossibility into dream-haze',
       'TEMPORAL DOUBLE-EXPOSURE — the entire dreamscape rendered as if two moments are visible simultaneously, ghost-edge on every element, doubled position by slight shift',
       'MAGRITTE-CLOUD WITH HOLE — a Magritte-style cloud with a perfectly circular hole cut through it, the sky beyond visible through the cloud-hole, surreal architectural quality',
       'REFLECTION-WITHOUT-WATER — a perfect reflection of the upper dreamscape on a non-existent surface at the foreground bottom, no water actually visible',
@@ -1028,7 +1010,6 @@ Lineage to channel: Kew Gardens Palm House + Royal Greenhouse of Laeken + Crysta
       'COUNTRY-HOUSE ANNEX CONSERVATORY — small annex-conservatory attached to a brick country-house mansion, asymmetric shape with curved glass roof on one side, single-pane Victorian glazing',
       'GLASS-DOME TOWER — tower-shaped glass-dome conservatory with circular base, conical peak overhead, spiral wrought-iron staircase ascending to a mezzanine walkway',
       'HALF-DOME LEAN-TO — half-dome glass-and-iron wall attached to a brick country-mansion wall, like an attached observatory, curved glass dominating the upper register',
-      'TROPICAL HUMID PAVILION — Victorian tropical-pavilion with visible humidity-haze, central fountain spraying mist, palm-and-fern jungle below the soaring glass dome, banana-leaves arching overhead',
       'ROTUNDA GLASS-HOUSE — circular rotunda glass-house with central reflecting pool, sundial statue, glass-dome above, peripheral wrought-iron walkway encircling the central space',
       'PROMENADE GLASS-CORRIDOR — long Victorian glass-corridor with iron-arched ceiling, climbing-bloom cascades from every iron-rib, depth receding into deep humid glow at the far end',
       'GLASS PEACH-HOUSE — Victorian wall-attached peach-house with sloped glass roof, espaliered fruit-trees on the back wall, central bloom-bed beneath, sun-warmed atmosphere',
@@ -1126,11 +1107,8 @@ Channel: Kew Gardens interior props + Royal Greenhouse central fountains + Victo
 
 Channel: Kew Gardens interior atmospheric moments + estate-conservatory golden-hour scenes + Vermeer-light-through-leaded-glass + Singer Sargent botanical-greenhouse paintings.`,
     touchpoints: [
-      'VOLUMETRIC GOD-RAYS THROUGH DOME — multiple volumetric god-ray sun-shafts diagonally piercing the glass dome at dramatic angles, vapor-laden beams visible in the humid air, pooling onto specific bloom-patches below',
-      'HUMIDITY-MIST NEAR THE DOME — visible humidity-mist coiling near the upper rafters of the glass dome, soft vapor obscuring the iron-framework slightly, creating atmospheric depth',
       'HUMMINGBIRD AT A BLOOM — solitary jewel-iridescent hummingbird hovering at a specific bloom-cluster in the conservatory, wings a transparent blur, beak just grazing the bloom',
       'PEACOCK ON THE FLAGSTONE — solitary peacock standing on the flagstone floor near the central fountain, tail-feathers spread in display, iridescent blue-and-green catching the glass-filtered light',
-      'POLLEN-CLOUD IN GOD-RAYS — golden pollen-cloud dispersing in the god-ray sun-shafts, individual pollen-motes visible in the volumetric beams, the dust catching the warm light',
       'PETAL-FALL FROM UPPER CASCADES — drifting petal-fall from the upper climbing-bloom cascades toward the flagstone floor, petals suspended at every depth, falling in slow-motion through the still air',
       'WATER-DROP RIPPLES IN POOL — concentric ripples expanding from a single water-drop in the central reflecting pool, lily-pad edges briefly disturbed, the rest of the surface mirror-still',
       'LEADED-GLASS LIGHT-PATTERN — leaded-glass panes scattering sun in geometric stained-glass pattern onto the flagstones, the iron grid casting precise shadow-lines on the floor',
@@ -1270,9 +1248,7 @@ Channel: Studio-Ghibli Castle-in-the-Sky architectural details / Lothlorien fant
       'PETAL-STORM EAVE — fantasy spire-eave with continuous cascade of falling petals (rose-and-violet), cresting wave of bloom-cascade pouring off the edge into a sky-chasm below',
       'VINE-GROWN RAMPART — fantasy rampart entirely composed of intertwining bloom-vines and woven petals, fortified curtain wall of LIVING vegetation, glowing bioluminescent-blooms at intervals',
       'FAERIE-STONE WITH EMBEDDED BLOOMS — fantasy carved-stone with embedded crystal-blooms in its surface, glowing soft-violet, will-o-wisps drifting around it, mossy fantasy-cobble around',
-      'BIOLUMINESCENT MOSS-CLUSTER — fantasy moss-cluster on a vine-bridge railing, glowing electric-cyan from within, surrounding bloom-cascade catching its light, atmospheric mist softening',
       'SKY-FLOATING LILY-PAD PLATFORM — fantasy giant lily-pad-platform suspended in sky on glowing tendrils, fantasy-city spire-cluster rising from its center, mirror-water held in its concave',
-      'WATERFALL-PETAL EAVE — fantasy spire-eave with cascading waterfall AND bloom-cascade pouring off it simultaneously, mist-and-petal rising from below, painted-gold light',
       'GLOWING-ROOT BRIDGE — fantasy bridge of glowing roots arching between two sky-spires, bioluminescent blue from within the root-fibers, fantasy floating-island moss below',
       'COLOSSAL CHERRY-BLOOM CANOPY — fantasy canopy-roof entirely of giant cherry-blossom trees grown laterally, ten thousand pink-and-white blossoms, sun-shafts piercing through',
       'FAERIE BLOOM-CHANDELIER — fantasy chandelier (city-block sized) of cascading bioluminescent orchids hanging from the underside of a sky-floating bloom-island, glowing soft-violet',
@@ -1299,7 +1275,6 @@ Channel: Studio-Ghibli Castle-in-the-Sky architectural details / Lothlorien fant
   C. **PETAL-STORM** — falling petal-snow drifting horizontally / cascading rose-petal cascade / petal-curtain rippling like rain / pollen-cloud caught in sun-shaft
   D. **FANTASY WEATHER** — fantasy aurora-curtain rippling overhead / impossible double-sun sky / starflower-night-sky / drifting cloud-layer hanging between spires
   E. **FAERIE CREATURES (scale-prover)** — distant tiny faerie-spirit flying / tiny pixie-flock swirling around a spire / butterfly-drift / luminescent moth-cluster
-  F. **MAGIC-MIST** — drifting iridescent mist / volumetric god-rays through bloom-fog / mirror-pool with rising magical vapor / golden-hour mist parting around fantasy spires
   G. **GLOWING-PHENOMENA** — bioluminescent blooms pulsing soft-violet / glowing core-light radiating from a fantasy spire / luminescent root-glow from below / will-o-wisp swarm
   H. **REFLECTION-MAGIC** — mirror-lake reflecting the entire bloom-megacity / crystal-floor reflection doubling the bloom-cascades / fantasy water mirror with parallel sky
   I. **RAINBOW / PRISMATIC** — prismatic refraction through crystal-bloom facades / rainbow-light arcing between two fantasy spires / spectrum-shift across the scene
@@ -1309,12 +1284,8 @@ Channel: Studio-Ghibli Castle-in-the-Sky architectural details / Lothlorien fant
 
 Channel: Studio-Ghibli Castle-in-the-Sky atmospheric moments / Mononoke forest-spirit magic / Avatar-Pandora bioluminescent night / Cocoon-of-Avacyn MtG ambient magic / Lothlorien-Fellowship Lothlorien-atmosphere.`,
     touchpoints: [
-      'GOLDEN GOD-RAYS THROUGH CATHEDRAL-CANOPY — dramatic golden god-rays piercing down through a fantasy bloom-cathedral-canopy, individual sun-shafts visible in the volumetric haze, bloom-cascades catching the warm glow',
-      'DRIFTING BIOLUMINESCENT POLLEN — glowing soft-violet pollen-motes drifting through the air at fantasy-spire midheight, magical-mist around them, distant fantasy-spires softened by atmospheric depth',
       'HORIZONTAL PETAL-STORM — pink-and-white petal-snow drifting horizontally across the fantasy-bloom-city, sky-filling petal-fall blanketing every visible quadrant, soft golden-hour backlight',
       'AURORA-CURTAIN OVERHEAD — fantasy aurora-curtain rippling magenta-violet-green across the night sky above the bloom-megacity, fantasy-spires silhouetted against the curtain',
-      'DISTANT PIXIE-FLOCK SWIRLING — tiny luminescent pixie-flock swarming around the tip of a kilometer-tall fantasy bloom-spire, individual pixies as glowing dots, magical mist softening',
-      'IRIDESCENT MIST PARTING — fantasy iridescent mist (rainbow-shimmering) parting around a fantasy bloom-spire to reveal its full silhouette, golden-hour light pouring through the gap',
       'BIOLUMINESCENT BLOOM-CORE PULSE — fantasy bloom-spire core pulsing soft-violet bioluminescence from within, the glow radiating outward through translucent crystal-bloom facets',
       'MIRROR-LAKE BLOOM-CITY REFLECTION — still mirror-lake at the foot of the fantasy bloom-megacity perfectly reflecting the entire vertical composition, doubling the visual impact',
       'PRISMATIC RAINBOW ARC — prismatic rainbow arcing between two fantasy crystal-bloom spires, spectrum visible across the sky, light refracting through crystal-bloom facets',
@@ -1323,9 +1294,7 @@ Channel: Studio-Ghibli Castle-in-the-Sky atmospheric moments / Mononoke forest-s
       'PETAL-CASCADE DEFYING GRAVITY — fantasy petal-cascade pouring UPWARD from a sky-island bloom-megacity into a hovering bloom-cloud overhead, breath-taking impossible motion',
       'WILL-O-WISP SWARM BETWEEN SPIRES — swarm of will-o-wisps drifting between two fantasy bloom-spires, individual wisps as soft-glowing orbs, faerie-realm Brian-Froud atmosphere',
       'GLOWING TINY FISH SCHOOL — fantasy luminescent tiny-fish school drifting between coral-bloom underwater-city spires, glowing soft-cyan in the deep-blue water',
-      'SUN-SHAFT REFRACTING CRYSTAL — single golden sun-shaft cutting through the volumetric mist and refracting prismatic light through a fantasy crystal-bloom facade',
       'DUAL-MOON FANTASY SKY — twin moons low on the fantasy horizon (one silver, one crimson) silhouetting the bloom-megacity spires, painted-violet sky behind',
-      'FANTASY WATERFALL-CASCADE — fantasy waterfall cascading down through bloom-curtains of a sky-spire, mist plume rising hundreds of meters, light refracting through the spray',
       'STARFLOWER NIGHT-SKY — fantasy night sky filled with luminous starflower-blossoms instead of stars, sky-filling soft-glow, fantasy-spires silhouetted dramatically',
       'PHOENIX WHEELING BETWEEN SPIRES — distant silhouetted fantasy phoenix wheeling between two fantasy bloom-spires, fire-feathers trailing soft light, scale-prover for the megacity',
       'FAIRY-DUST CASCADE — fantasy fairy-dust cascade drifting from a sky-floating bloom-island, luminous golden particles falling in a glittering vertical curtain, magic-hour glow',
@@ -1490,7 +1459,6 @@ For EVERY color, the GLOW inside stays WARM-AMBER (a blue agapanthus has a warm-
 ✓ TUNNEL-PHENOMENON CATEGORIES:
   A. **PETAL-FALL** — drifting petal-snow filling the tunnel air / cherry-blossom-fall through the canopy / drifting wisteria-petals
   B. **WATER ELEMENTS** — stream winding through the tunnel floor / mirror-pool at the deep end / dripping water from ceiling vines
-  C. **MIST / FOG DRIFT** — soft mist drifting through the tunnel deep-end / morning fog parting around the flower-walls / drifting smoke
   D. **NON-HUMAN SCALE-PROVER (WILDLIFE ONLY)** — lone deer crossing the path / single white stag at far end / solitary fox / lone owl perched / NEVER a human figure
   E. **WARM LIGHT-GLOW BEYOND** — warm exit-glow at the deep end of the tunnel / sunset glow visible through the far opening / fire-warmth from beyond
   F. **FALLEN-PETAL CARPET** — fallen petals carpeting the tunnel floor / petal-strewn cobblestones / blossom-thick path
@@ -1503,7 +1471,6 @@ For EVERY color, the GLOW inside stays WARM-AMBER (a blue agapanthus has a warm-
     touchpoints: [
       'CHERRY-BLOSSOM PETAL-FALL — soft pink-and-white cherry-blossom petals drifting through the entire tunnel air, individual petals catching the ambient flower-light, dense petal-fall filling every quadrant',
       'STREAM WINDING THROUGH FLOOR — narrow silver stream winding through the center of the tunnel floor, water reflecting the bloom-canopy overhead, gentle current carrying fallen petals',
-      'MORNING MIST AT TUNNEL DEEP-END — soft white morning mist drifting through the deep-end of the tunnel, atmospheric depth softening the bloom-walls toward the vanishing-point',
       'LONE FOX AT VANISHING-POINT — single small fox standing at the tunnel deep-end, the fox-silhouette barely visible against the warm bloom-glow, providing scale without any human presence',
       'WARM SUNSET EXIT-GLOW — warm orange-and-gold sunset glow visible at the deep end of the tunnel, the warm light backlighting the bloom-walls at the vanishing-point',
       'FALLEN-PETAL CARPET — thick carpet of fallen pink-and-white petals covering the tunnel floor, individual petals visible at the viewer feet, blossom-thick path receding into the deep distance',
@@ -1707,7 +1674,6 @@ The other 2-4+ supporting cast members are smaller / further back / hovering in 
   D. **DEWDROPS ON PETALS** — fresh dew droplets clinging to petals catching ambient light as prismatic flares
   E. **FALLING PETALS** — soft petals drifting horizontally through the scene (pink / white / cherry-blossom)
   F. **IRIDESCENT SHIMMER** — soft iridescent shimmer in the air (rainbow-pearlescent gentle wash)
-  G. **MIST HAZE** — soft warm haze softening the bokeh background, atmospheric depth
   H. **BUBBLE DRIFT** — soft translucent bubbles drifting (rare, magical-pretty register)
   I. **FLOATING LEAVES** — small soft leaves drifting horizontally through the scene
   J. **WATER-SPRAY MIST** — soft fine water-mist droplets catching ambient light
@@ -1719,10 +1685,8 @@ The other 2-4+ supporting cast members are smaller / further back / hovering in 
       'DEWDROPS ON PETALS WITH FLARES — fresh dew droplets clinging to the hero flower petals catching the warm ambient light as tiny prismatic flares, naturalistic wet shimmer',
       'PINK CHERRY-BLOSSOM PETAL-FALL — soft pink cherry-blossom petals drifting horizontally through the scene around the hero flower and pollinator, gentle motion-blur',
       'IRIDESCENT RAINBOW SHIMMER — soft iridescent rainbow-pearlescent shimmer in the air around the scene, gentle wash of magic-pretty color',
-      'WARM ATMOSPHERIC HAZE — soft warm-amber atmospheric haze softening the bokeh background, deep dreamy depth, magical-pretty ambient',
       'TRANSLUCENT BUBBLE DRIFT — soft translucent bubbles drifting through the scene catching the warm ambient light as rainbow prismatic flares, charming magical-pretty',
       'SOFT FALLING LEAVES — small soft green and golden leaves drifting horizontally through the scene around the hero flower and pollinator, gentle autumn touch',
-      'WATER-SPRAY MIST SHIMMER — soft fine water-mist droplets catching the warm ambient light around the scene, gentle atmospheric magic-pretty shimmer',
       'SOFT SUN-RAY STREAMERS — soft warm golden sun-ray streamers slanting gently through the scene from the upper-frame edge, magical-pretty atmospheric',
       'WHITE-ROSE PETAL-FALL — soft white rose petals drifting horizontally through the scene, gentle motion-blur, romantic magical-pretty',
       'BUMBLEBEE-DUST POLLEN — golden pollen-dust drifting around the hero pollinator, catching warm ambient light, atmospheric pollinator-magic register',
@@ -1731,7 +1695,6 @@ The other 2-4+ supporting cast members are smaller / further back / hovering in 
       'SOFT WARM-PINK BOKEH-ORBS — large soft warm-pink fairy-light bokeh-orbs floating in the deep bokeh background, magical-pretty atmospheric',
       'GENTLE GOLDEN-DUST CASCADE — gentle golden-dust cascade drifting downward through the scene around the hero flower, warm magical-pretty atmospheric',
       'PINK-AND-WHITE PETAL DRIFT — soft pink-and-white petals drifting through the air around the hero flower and pollinator, gentle motion, romantic magical-pretty',
-      'PEARL-SHEEN MIST — soft pearl-iridescent mist drifting through the deep bokeh background, magical-pretty atmospheric depth',
       'GOLDEN-AMBER POLLEN — golden-amber pollen-dust drifting around the hero flower and pollinator, catching warm light, atmospheric pollinator-magic',
       'SOFT BLUE-AND-GOLD BOKEH — soft cobalt-blue and golden bokeh-orbs floating in the bokeh background, magical-pretty atmospheric',
       'FRESH MORNING DEW — fresh morning dewdrops clinging to every petal, leaf, and the pollinator wings, catching ambient light as prismatic shimmer, naturalistic wet-magic',
@@ -1950,7 +1913,6 @@ The other 1-3 supporting hummingbirds are smaller / further back / hovering at o
   D. **DEWDROPS ON PETALS** — fresh dew droplets clinging to petals catching ambient light as prismatic flares
   E. **FALLING PETALS** — soft petals drifting horizontally through the scene
   F. **IRIDESCENT SHIMMER** — soft iridescent shimmer in the air supporting the hummingbird iridescence
-  G. **WARM ATMOSPHERIC HAZE** — soft warm haze softening the bokeh background
   H. **SUN-RAY STREAMERS** — soft warm sun-ray streamers slanting through the scene
   I. **NECTAR DROPLETS** — tiny nectar droplets glistening at flower-mouths
   J. **WING-IRIDESCENCE SHIMMER** — subtle iridescent dust around hummingbird wings
@@ -1962,7 +1924,6 @@ The other 1-3 supporting hummingbirds are smaller / further back / hovering at o
       'DEWDROPS ON PETALS WITH FLARES — fresh dew droplets clinging to the flower petals catching warm ambient light as tiny prismatic flares, naturalistic wet shimmer',
       'PINK PETAL-FALL — soft pink petals drifting horizontally through the scene around the hummingbirds and flowers, gentle motion-blur',
       'IRIDESCENT RAINBOW SHIMMER — soft iridescent rainbow-pearlescent shimmer in the air around the scene supporting the hummingbird iridescence',
-      'WARM ATMOSPHERIC HAZE — soft warm-amber atmospheric haze softening the bokeh background, deep dreamy depth, magical-pretty ambient',
       'GOLDEN SUN-RAY STREAMERS — soft warm golden sun-ray streamers slanting gently through the scene from the upper-frame edge, magical-pretty atmospheric',
       'NECTAR DROPLETS GLISTENING — tiny nectar droplets glistening at the mouths of tubular blooms catching warm ambient light, naturalistic magical-pretty',
       'WING-IRIDESCENCE DUST — subtle iridescent emerald-and-violet dust drifting around the hummingbird wings as they hover, supporting the iridescent plumage shimmer',
@@ -1971,16 +1932,13 @@ The other 1-3 supporting hummingbirds are smaller / further back / hovering at o
       'PRISMATIC DEW-FLARES — fresh dewdrops on every visible petal and leaf catching ambient light as prismatic rainbow flares, naturalistic wet shimmer',
       'WARM-PINK BOKEH-ORBS — soft warm-pink fairy-light bokeh-orbs floating in the deep bokeh background, magical-pretty atmospheric',
       'RED-AND-ORANGE PETAL DRIFT — soft red-and-orange petals drifting horizontally through the scene around the hummingbirds, gentle motion-blur',
-      'PEARL-SHEEN MIST — soft pearl-iridescent mist drifting through the deep bokeh background, magical-pretty atmospheric depth',
       'GOLDEN-AMBER POLLEN — golden-amber pollen-dust drifting around the flowers, catching warm light, atmospheric pollinator-magic',
       'SOFT VIOLET-AND-GOLD BOKEH — soft violet and golden bokeh-orbs floating in the bokeh background, magical-pretty atmospheric',
       'FRESH MORNING DEW — fresh morning dewdrops clinging to every petal, leaf, and the hummingbird feathers, catching ambient light as prismatic shimmer',
-      'GENTLE GOLDEN HAZE — gentle warm-golden haze wrapping the entire scene, soft pretty golden-hour bath supporting the vibrant flowers',
       'IRIDESCENT WING-TRAIL DUST — fine iridescent emerald wing-trail dust drifting in the air behind the hovering hummingbirds, subtle magic-pretty',
       'WARM PEACH PETAL-FALL — soft peach petals drifting through the air around the hummingbirds and flowers, gentle motion, romantic magical-pretty',
       'SAPPHIRE-AND-GOLD SHIMMER — soft sapphire-and-gold iridescent shimmer in the air around the scene, magical-pretty atmospheric',
       'GLISTENING NECTAR-DROPS — tiny nectar droplets glistening at tubular flower-mouths and beak-tips, catching warm light as prismatic flares, naturalistic magical',
-      'WARM CINEMATIC HAZE — warm cinematic atmospheric haze softening every distant element, golden-hour glow infusing the deep distance',
     ],
     instructions: `Each entry is ONE specific MAGICAL PARTICLE effect for the hummingbird path, 20-40 words. Format: "PARTICLE NAME CAPS — primary effect + position in scene + how it catches light / interacts with the ambient". Vary across the 11 categories. NO sci-fi / electric / neon. NO scary / dark. NO humans / hands. NO additional creatures (no insects). Subtle magical-pretty atmospheric only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -2058,29 +2016,20 @@ For RIVER OF PETALS entries: the river is ENTIRELY petals from bank to bank, NO 
 ✓ MOOD — surreal-magical-realism, dreamy, naturalistic-but-impossible. Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape.`,
     touchpoints: [
       'GIANT PINK FLOWER-MUSHROOM — 40-foot tall flower-mushroom standing alone in a pastel meadow, cap made of densely packed coral peony and pink rose blooms forming the rounded dome silhouette, stem made of cascading pale-pink roses spiraling down the column, surreal-magical-realism register',
-      'WHITE PEONY MUSHROOM FOREST — three giant flower-mushrooms 30-50 feet tall scattered across a misty meadow, caps made of dense ivory peony blooms, stems made of cascading pale-cream roses, smaller flower-mushrooms hazy in the distance',
-      'CORAL DAHLIA MUSHROOM — single oversized flower-mushroom 35 feet tall in a pastel valley glade, cap made of densely packed coral and peach dahlia blooms forming the rounded silhouette, stem made of stacked cream peonies, dreamy soft misty light',
       'GIANT FUCHSIA-BLOOM MUSHROOM — surreal 40-foot flower-mushroom in a pastel meadow, cap made of dense hot-pink fuchsia bells cascading downward to form the dome, stem made of stacked magenta roses, soft surreal-magical-realism light',
-      'LAVENDER PHLOX MUSHROOM CLUSTER — five flower-mushrooms 20-35 feet tall clustered across a misty meadow, caps made of dense pale-lavender phlox blooms forming dome silhouettes, stems of stacked pale-lilac sweet-peas, dreamy haze',
       'LUPINE-TREE FOREST — surreal forest where every tree is a 50-foot tall oversized lupine, towering purple-and-white floret-spires standing like pine trees, thousands of individual lupine florets stacked along each spire, supporting meadow carpet below',
-      'HOLLYHOCK-TREE FOREST — surreal forest of oversized hollyhocks grown to 45-foot trees, towering spires of pink-and-coral hollyhock blooms stacked up the trunks, smaller hollyhock-trees hazy in distance, dreamy meadow forest setting',
       'SUNFLOWER-TREE FOREST — towering 60-foot oversized sunflowers as forest trees, massive disc-heads facing the sun at tree-canopy level, golden-yellow ray-petals as canopy foliage, supporting meadow of smaller wildflowers below, surreal scale',
-      'DELPHINIUM-TREE FOREST — forest of 50-foot oversized delphiniums as forest trees, towering blue-violet spires of stacked delphinium florets, smaller delphinium-trees fading into misty distance, dreamy pastel light',
       'FOXGLOVE-TREE FOREST — surreal forest of oversized foxgloves grown to 40-foot trees, towering pink-and-white bell-spires acting as forest trunks, dreamy meadow forest with supporting smaller wildflowers below',
       'GIANT CHERRY-BLOSSOM TREE OF FLOWERS — single oversized tree 60 feet tall whose entire trunk is made of hundreds of stacked tiny pink cherry-blossoms, and canopy spreading wide with thousands more cherry-blossoms forming the leafy mass, standing alone in a pastel meadow',
       'OAK TREE OF FLOWERS — single oversized oak-shaped tree where the trunk is made of stacked stems of small white daisies, and canopy is thousands of tiny daisies forming the leafy oak silhouette, surreal-magical-realism meadow setting',
-      'WILLOW TREE OF FLOWERS — single weeping-willow-shaped tree whose cascading branches are entirely strands of pale-lavender wisteria blooms, trunk made of stacked violet phlox, smaller wisteria-willows in misty distance, soft pastel light',
       'RIVER OF PINK-AND-WHITE PETALS — winding river of flowing pink-and-white cherry-blossom petals replacing water through a pastel meadow glade, banks of supporting pale wildflowers on each side, surreal-magical-realism',
       'RIVER OF CORAL ROSE PETALS — winding ribbon of flowing coral-and-blush rose petals replacing water through a forest glade, banks of supporting small wildflowers on each side, dreamy soft pastel light, smaller petal-rivers visible in distance',
       'RIVER OF MULTI-COLOR PETALS — gentle stream of flowing multi-color pastel petals (pink, blue, yellow, white, lavender) through a meadow valley, replacing water, banks of supporting wildflowers, surreal-magical-realism register',
       'HILLSIDE OF DENSE BLOOM-MASS — rolling hills of dense pale-pink and lavender bloom-mass at impossibly steep slopes, every inch of the hillside covered in tightly-packed flowers forming the rolling topography, surreal scale inversion',
       'MOUNTAIN OF TULIP-BLOOMS — distant mountain whose entire mass is constructed from densely packed pastel tulip blooms in pink, yellow, white forming the peaks and slopes, supporting meadow of smaller wildflowers in foreground, surreal-magical-realism',
-      'TULIP-MOUNTAIN RANGE — far-off mountain range made of densely packed pastel tulip blooms forming peaks in pink-yellow-white-purple, supporting foreground meadow of smaller wildflowers, dreamy misty haze, surreal scale-inversion',
       'GIANT SINGLE DAHLIA OVERSIZED — a single 60-foot tall coral dahlia standing alone in a meadow, every petal scaled up to landscape size, the entire flower magnified to tree-form scale, supporting carpet of smaller wildflowers below, surreal-magical-realism scale-inversion',
       'GIANT SINGLE PEONY OVERSIZED — a single massive pale-pink peony scaled to landscape size, 70 feet tall standing alone in a glade, every layered petal individually visible at landscape scale, supporting wildflower meadow carpeting the ground below',
       'GIANT SINGLE HIBISCUS OVERSIZED — a single 50-foot vivid hibiscus blossom scaled to landscape size standing alone in a tropical meadow, every petal visible at tree-form scale, stamens like tree-branches, supporting carpet of smaller tropical wildflowers below',
-      'LAVENDER-PINE FOREST — surreal forest where every tree is shaped like a tall conifer but the needles are entirely tiny pale-lavender flowers, towering lavender-pines forming the forest canopy, supporting wildflower meadow below, dreamy haze',
-      'COSMOS-PINE FOREST — surreal forest of conifer-shaped trees whose needles are entirely tiny pale-pink cosmos blooms, towering cosmos-pines forming the forest, smaller cosmos-pines fading into misty distance, surreal-magical-realism',
       'WISTERIA-PINE FOREST — surreal forest of cascading conifer-shaped trees made entirely of hanging pale-violet wisteria strands, towering wisteria-pines with vines hanging from every branch, soft pastel dreamy light, supporting meadow',
     ],
     instructions: `Each entry is ONE specific SURREAL SCALE-INVERSION FLOWER-FORM, 35-65 words. Format: "FORM NAME CAPS — explicit description of the surreal flower-construction or scale-inverted flower-element + specific flower species making it up + scale + landscape context implied + surreal-magical-realism register". MANDATORY — (a) scale-inversion or flower-construction explicit, (b) specific flower species making up the form, (c) scale at landscape level (NOT macro), (d) natural landscape context. NO animals, NO humans, NO manmade objects. NO macro / closeup. NO floor-carpet description (separate axis). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -2143,7 +2092,7 @@ For RIVER OF PETALS entries: the river is ENTIRELY petals from bank to bank, NO 
 
   bloombot_flower_fantasy_atmospheric_magic: {
     format: 'simple',
-    theme: `40%-GATED ATMOSPHERIC MAGIC for the BloomBot flower-fantasy path. Each entry describes ONE specific atmospheric magic-pretty detail amplifying the surreal-magical-realism mood — mist drift / drifting petals / golden-hour rays / dewdrops / fallen petals on water / pollen-dust / dappled sunlight. Each entry 20-40 words.
+    theme: `40%-GATED ATMOSPHERIC MAGIC for the BloomBot flower-fantasy path. Each entry describes ONE specific atmospheric magic-pretty detail amplifying the surreal-magical-realism mood — drifting petals / golden-hour rays / dewdrops / fallen petals on water / pollen-dust / dappled sunlight. Each entry 20-40 words.
 
 ⚠️ MANDATORY — every effect AMPLIFIES the dreamy surreal-magical-realism mood. Does NOT compete with the hero form.
 
@@ -2155,38 +2104,29 @@ For RIVER OF PETALS entries: the river is ENTIRELY petals from bank to bank, NO 
   • NO additional flower-forms (separate axis handles hero)
 
 ✓ ATMOSPHERIC CATEGORIES:
-  A. **MIST DRIFT** — soft pastel mist drifting through the scene, especially in the deep distance
   B. **DRIFTING PETAL-FALL** — petals drifting horizontally through the air around the hero form
   C. **GOLDEN-HOUR RAYS** — soft warm sun-rays slanting through the canopy / forest gaps
   D. **DEWDROPS** — fresh dew clinging to every visible bloom catching ambient light
   E. **FALLEN PETALS ON WATER / PATH** — petals carpeting the ground or floating on a surface
   F. **POLLEN-DUST** — soft pollen-motes drifting through the warm ambient light
   G. **DAPPLED SUNLIGHT** — dappled warm light through a flower-tree canopy onto the ground
-  H. **SOFT WARM HAZE** — warm atmospheric haze softening the bokeh background
   I. **PETAL CASCADE** — petals cascading down from the hero form like gentle snow
   J. **BACKLIT FLOWERS** — soft warm backlight catching the hero form from behind`,
     touchpoints: [
-      'SOFT PASTEL MIST DRIFT — gentle pastel pink-and-cream mist drifting through the deep-distance background of the scene, smaller flower-forms barely visible through the haze, surreal-magical-realism atmospheric',
       'PINK PETAL-FALL DRIFT — soft pink cherry-blossom petals drifting horizontally through the entire scene around the hero form, gentle motion, dreamy magical-realism atmospheric',
       'GOLDEN-HOUR SUN-RAYS THROUGH CANOPY — soft warm golden sun-rays slanting through the upper-frame canopy of the hero flower-tree-form, dappled warm light on the foreground meadow carpet',
       'FRESH DEWDROPS ON BLOOMS — fresh dew droplets clinging to every visible bloom on the hero form and the carpet, catching warm ambient light as tiny prismatic flares, naturalistic wet shimmer',
       'FALLEN-PETAL FOREGROUND — fallen pale-pink petals carpeting the foreground meadow floor around the hero form, mixed with the wildflower carpet, drifting more petals through the air',
       'GOLDEN POLLEN-DUST — soft golden-yellow pollen-motes drifting through the warm ambient light around the hero form, atmospheric pollinator-magic supporting the surreal-magical-realism',
       'DAPPLED WARM CANOPY LIGHT — dappled warm golden light filtering through the upper canopy of the hero flower-tree-form onto the foreground meadow carpet, soft sunbeam pools',
-      'WARM PASTEL ATMOSPHERIC HAZE — soft warm-amber pastel atmospheric haze softening the deep-distance background, smaller flower-forms fading dreamily into the haze',
       'PETAL CASCADE FROM HERO — soft pale-pink petals cascading down from the hero flower-form like gentle snow, drifting gracefully through the air around it',
       'SOFT BACKLIT HERO — soft warm sunset light catching the hero form from behind, creating a warm backlit silhouette with golden-hour ambient',
       'WHITE PETAL-FALL DRIFT — soft white cherry-blossom petals drifting horizontally through the scene around the hero form, gentle slow motion, dreamy soft pastel atmospheric',
       'IRIDESCENT MORNING-DEW — fresh morning dewdrops on every visible bloom catching soft pastel light as iridescent rainbow flares, naturalistic magical wet-shimmer',
-      'SOFT MIST IN VALLEY-DEPTH — soft pastel pink-cream mist filling the deep-distance valley behind the hero form, smaller flower-forms barely visible through the haze',
-      'GOLDEN-HOUR HAZE ENVELOPING — warm golden-amber haze enveloping the entire scene, soft warm pastel atmospheric bath, smaller flower-forms warmly hazy in distance',
       'COSMOS-PETAL DRIFT — soft pale-pink-and-white cosmos petals drifting through the entire air around the hero form, gentle slow motion, dreamy surreal',
       'CHERRY-BLOSSOM FOREGROUND CARPET — dense carpet of fallen pale-pink cherry-blossom petals covering the foreground meadow floor around the hero form, drifting more petals through the air',
-      'DAYBREAK SOFT MIST — soft pearlescent morning mist filling the deep-distance background of the scene, smaller flower-forms fading into the haze, dreamy daybreak atmospheric',
       'DRIFTING POLLEN-AND-PETALS — both golden pollen-motes and soft white-and-pink petals drifting through the warm ambient light around the hero form, dense atmospheric magic-pretty',
-      'BACKLIT WARM-AMBER HAZE — soft warm-amber backlight from the upper-frame edge catching the hero form outline, gentle pastel haze softening the bokeh distance',
       'WET-PATH-PETAL REFLECTION — soft wet meadow floor reflecting the bloom-canopy of the hero form above, fallen petals scattered, dreamy soft reflection',
-      'PEARL-MORNING-HAZE — pearl-iridescent morning haze softening the deep-distance background, smaller flower-forms warmly silhouetted in the haze',
       'WARM-PINK BOKEH-WASH — soft warm-pink fairy-light bokeh-wash filling the deep-distance background, dreamy magical-realism atmospheric supporting depth',
       'DRIFTING WISTERIA-PETALS — soft pale-violet wisteria petals drifting through the air around the hero form, gentle slow motion, dreamy soft pastel atmospheric',
       'GOLDEN-HOUR SOFT-BATH — warm soft golden-hour ambient light enveloping the entire scene from above, warm pastel atmospheric bath softening every element',
@@ -2246,14 +2186,12 @@ For RIVER OF PETALS entries: the river is ENTIRELY petals from bank to bank, NO 
       'MONUMENT-VALLEY-STYLE — distant Monument-Valley-style red-rock buttes scattered across an expansive desert plain, towering vertical sandstone cliffs, dry weathered foreground desert',
       'SAND DUNE WAVES — undulating sand dunes with wind-rippled crests stretching toward the deep distance, golden-amber dune-mass, sparse desert vegetation at the foreground edge, distant mountain silhouettes',
       'WHITE SAND DUNES — bright white gypsum sand dunes (White Sands New Mexico style) stretching to distant San Andres mountain backdrop, sparse desert vegetation peeking through, deep cobalt sky',
-      'GOLDEN-DUNE LANDSCAPE — golden desert dunes stretching across the midground with wind-rippled texture, sparse desert vegetation along the dune-edges, distant mountain silhouettes in atmospheric haze',
       'BARREL-CACTI CLUSTER — cluster of barrel-cacti 3-5 ft tall with vivid red-orange spines covering rounded barrel-shapes, weathered Sonoran desert floor, distant mountain backdrop',
       'OCOTILLO SPIRE FIELD — Sonoran ocotillo plant with multiple thin whip-branches reaching upward 15 ft, scattered across desert plain, distant mountain ridges, dry weathered ground',
       'OCOTILLO-AND-SAGUARO MIX — mixed desert with tall ocotillo whip-branches + scattered saguaro cacti standing across a Sonoran plain, distant red-rock backdrop',
       'AGAVE-AND-OCOTILLO DESERT — agave rosettes with bayonet leaves + ocotillo spires + scattered yucca across a Mojave-style desert plain, weathered desert floor',
       'CHOLLA-AND-PRICKLY-PEAR DESERT — mixed cholla spiky thickets + prickly-pear pad-clusters across a rocky desert hillside, dry weathered Sonoran texture',
       'YUCCA-AND-JOSHUA-TREE MIX — scattered yucca spires + joshua-tree silhouettes across a Mojave plain, sparse desert vegetation, distant mountain backdrop',
-      'DESERT VALLEY OVERLOOK — wide desert valley overlook with scattered saguaro / agave / yucca + winding dry-wash creek-bed + distant mesa silhouettes in atmospheric haze',
     ],
     instructions: `Each entry is ONE specific RECOGNIZABLE SOUTHWEST DESERT ANCHOR, 30-55 words. Format: "DESERT NAME CAPS — specific southwest desert anchor with explicit species + count / scale + dry-desert texture + southwest geographic context". MANDATORY — (a) specific southwest species (saguaro / joshua-tree / agave / etc.), (b) dry-desert texture detail, (c) scale indication, (d) southwest context (Sonoran / Mojave / Utah / Arizona). NO wildflower description (separate axis). NO lush meadow. NO interior / urban. NO macro. NO humans / animals. NO soft-pastel — bold southwest colors. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -2344,8 +2282,6 @@ For RIVER OF PETALS entries: the river is ENTIRELY petals from bank to bank, NO 
   J. **PETAL DRIFT** — vivid wildflower petals drifting through the desert air
   K. **DESERT VARNISH SHEEN** — sun catching the natural mineral varnish on red-rock surfaces`,
     touchpoints: [
-      'GOLDEN-HOUR DESERT RAYS — soft warm golden-hour slanting rays through the desert air illuminating the cactus arms and bloom carpet, warm amber haze in the deep distance',
-      'WARM DUST MOTES — fine golden dust motes drifting in warm desert light around the saguaro cacti and bloom-explosion, atmospheric Sonoran haze',
       'SUN-FLARE STAR-BURST — bright sun-flare star-burst in the upper frame with hex-flare ghosts scattered, warm desert light filling the scene',
       'HEAT-SHIMMER FLOOR — atmospheric heat-shimmer rising from the desert floor blurring the deep distance, vivid bloom-foreground stays sharp',
       'GOLDEN POLLEN-DRIFT — golden pollen-motes drifting around the desert wildflowers catching warm sunset light, atmospheric Sonoran magic',
@@ -2356,17 +2292,13 @@ For RIVER OF PETALS entries: the river is ENTIRELY petals from bank to bank, NO 
       'CACTUS-SHADOW PATTERN — long warm cactus-shadows stretching across the desert floor from the saguaros, golden-hour amber casting dramatic shadow-stripes',
       'VIVID PETAL DRIFT — vivid magenta and scarlet wildflower petals drifting through the warm desert air, gentle wind motion, southwest atmospheric magic',
       'RED-ROCK MINERAL SHEEN — sun catching the natural mineral varnish on red-rock surfaces creating warm bronze-and-amber glints, atmospheric southwest detail',
-      'GOLDEN MIDDAY HAZE — warm golden midday atmospheric haze softening the deep-distance mesa silhouettes, vivid sharp foreground',
-      'DUSTY GROUND-LEVEL HAZE — fine warm-amber dust drifting at ground level around the desert anchor, atmospheric Sonoran dust',
       'WARM CACTUS-BACKLIGHT — soft warm backlight catching the saguaro cacti from behind, creating glowing translucent halos on the cactus arms and edges',
       'DESERT SUNDOWN GLOW — soft warm sundown glow filling the deep distance behind the mesa silhouettes, vivid bloom-foreground stays bright',
       'COTTONWOOD-FLUFF DRIFT — drifting white cottonwood-fluff seed-fluff through the warm desert air, atmospheric southwest detail',
-      'SOFT WARM EVENING HAZE — soft warm evening atmospheric haze enveloping the entire scene, golden-amber bath softening the deep distance',
       'AMBER POLLEN-DRIFT — amber pollen-motes drifting through the warm desert air around the saguaro arms and wildflowers, gentle Sonoran magic',
       'DISTANT VULTURE SOARING — single distant vulture silhouetted against the cobalt desert sky soaring slow, southwest atmospheric scale',
       'GOLDEN-HOUR DESERT GLOW — entire scene bathed in warm golden-hour amber glow, vivid wildflowers and saguaros equally warmed, atmospheric Sonoran magic',
       'SOFT WARM CIRRUS — soft warm-pink cirrus catching late-afternoon light across the upper-frame cobalt sky, vivid foreground bloom-carpet',
-      'WARM-AMBER MIST RIBBON — gentle warm-amber atmospheric mist ribbon drifting through the deep-distance valley behind the desert anchor',
       'SOFT WIND-BLOWN PETAL CASCADE — gentle warm wind blowing vivid wildflower petals through the air around the desert anchor in soft cascade motion',
       'COBALT-SKY DEEP — vivid deep-cobalt desert sky filling the upper frame with no clouds, intense saturated color contrast against the warm desert floor',
     ],
@@ -2491,30 +2423,20 @@ The petals are not internally-lit lamps glowing from inside their own structure.
 
 Lineage to channel: National Geographic golden-hour landscape photography + Ansel Adams scale + Roger Deakins location work + IG-magical-hour landscape feeds.`,
     touchpoints: [
-      'ALPINE PEAK RIDGE AT SUNSET — jagged snow-capped alpine peak ridge spanning the midground-to-background, atmospheric haze in the deep valleys between ridges, forested foothills below at midground, the sunset glowing behind the highest peaks',
-      'ROLLING TUSCAN HILLS — patchwork rolling Tuscan-style hills with cypress-rows receding to the deep distance, golden meadow midground, blue-haze horizon at sunset',
-      'PINE-FOREST MEADOW EDGE — wide pine-forest line at midground edge, the forest spanning back into deep distance with atmospheric haze, grass-meadow opening at the foreground, mountains rising behind the forest line',
       'CALM ALPINE LAKE — mirror-still alpine lake at midground stretching toward distant mountain backdrop, lake reflecting the sunset sky perfectly, pine-trees framing the lake-shore, snow-capped peaks rising behind',
-      'COASTAL CLIFF PROMONTORY — sea-cliff promontory falling to crashing surf below, the ocean spreading to a calm sunset horizon, distant headlands silhouetted in atmospheric haze',
       'WIDE ALPINE VALLEY WITH STREAM — wide green alpine valley with a silver stream winding through the midground, towering snow-capped mountains rising on both sides, the valley opening toward the deep distance',
       'WILDFLOWER MEADOW + MOUNTAIN RIDGE — wide wildflower meadow rolling toward a distant mountain ridge at sunset, midground forest line breaking the meadow-to-mountain transition, sky filling the upper frame',
       'DESERT MESA-AND-CANYON — wide desert spread with mesas and canyon walls receding to deep distance, badlands hoodoos catching the golden-hour light, the sky glowing at the horizon',
-      'HEATHER MOORLAND GLEN — heather moorland spreading toward a distant Scottish glen, low rolling hills with patches of purple heather, atmospheric haze in the deep distance, sunset over the far ridge',
       'VOLCANIC CRATER RIM — wide volcanic crater rim with caldera lake visible below at midground, snow-capped volcanic peak rising in the deep distance, sunset glow filling the basin',
       'TROPICAL ISLAND ARCHIPELAGO — distant tropical island silhouettes scattered across a calm sunset sea, palm-fringed beach at midground, sunset glow on the water spanning to the islands',
-      'NORTHERN TUNDRA — northern tundra spreading toward a low ridge at midground, midnight-sun glow filling the sky, distant mountains in deep haze',
-      'REDWOOD GROVE EDGE — wide grass-meadow at foreground opening to towering redwood grove edge at midground, the grove spanning back into deep distance with atmospheric haze, sunset light filtering through trunks',
       'WIDE LAVENDER VALLEY — wide Provençal lavender valley with rows receding to the deep distance, low rolling hills with farmhouse silhouettes at midground, sunset sky filling the upper frame',
       'OCEAN CLIFF + DISTANT ISLAND — ocean cliff falling to surf below with a distant island silhouetted on the horizon, the calm sea stretching between, golden-hour sun on the water',
       'PRAIRIE GRASSLAND + RIDGE — wide prairie grassland spreading toward a distant low ridge, scattered cottonwood trees at midground, golden-hour light raking across the grasses',
       'MOUNTAIN LAKE WITH DOUBLE-PEAK — mountain lake at midground reflecting a double-peak mountain backdrop, conifer forest framing the lake-shore, sunset glowing between the peaks',
-      'FJORD CLIFF WITH WATERFALL — towering fjord cliff at midground with a thin waterfall ribboning down, dark water below stretching to a distant fjord-mouth, atmospheric haze',
-      'SAVANNA WITH ACACIA TREES — wide African savanna with scattered acacia tree silhouettes at midground, golden-hour light raking across the grass, distant mountains in deep haze',
       'CANYON RIM AT SUNSET — wide canyon rim at midground with the canyon falling into deep shadow, distant canyon walls glowing in golden-hour light, sky filling the upper frame',
       'CORNFIELD + STORM-CLOUD DISTANCE — wide cornfield spreading toward a distant horizon, dramatic storm-clouds catching the sunset in the deep distance, atmospheric depth',
       'FOREST CLEARING + MOUNTAIN — large forest clearing opening toward a distant mountain, the surrounding forest framing the view, sunset glowing between the trees',
       'COASTAL DUNE-MEADOW — wide coastal dune-meadow at midground spreading toward an ocean horizon, distant sea catching the sunset light, dune-grass swaying',
-      'TERRACED HILLSIDE FARMLAND — terraced agricultural hillside receding into the deep distance, every terrace catching warm-gold sunset light, distant mountain ridge in the haze',
       'GLACIAL VALLEY MORAINE — glacial valley with moraine boulders at midground, retreating glacier visible in the deep distance, snow-capped peaks rising above, golden-hour light',
     ],
     instructions: `Each entry is ONE specific EPIC LANDSCAPE BACKDROP, 30-55 words. Format: "LANDSCAPE NAME CAPS — explicit description of multi-tier landscape with midground feature + receding distance + atmospheric depth, implied foreground for the hero flowers". MANDATORY — multi-tier depth. NO closeup / macro. NO urban / interior / ruins / archways / humans. The landscape SPANS BEHIND the hero flower. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -2560,25 +2482,20 @@ Lineage to channel: National Geographic golden-hour landscape photography + Anse
       'GOLDEN-CREAM WITH SOFT CIRRUS — upper sky golden-cream gradient with gentle cirrus streaks high up, warm soft naturalistic golden-hour glow',
       'PALE LAVENDER-AND-PEACH TWILIGHT — upper sky transitioning from soft peach near horizon up to pale lavender at the zenith, gentle stratocumulus catching the warm light, pretty soft twilight',
       'CORAL CIRRUS ON PALE WARM SKY — pale warm sky with gentle coral cirrus wisps streaking across the upper third, soft naturalistic golden-hour, pretty atmospheric',
-      'WARM AMBER HAZE — upper sky wrapped in soft warm-amber atmospheric haze, gentle scattered cumulus barely visible through the haze, pretty soft golden-hour bath',
       'SOFT PINK AFTERGLOW — upper sky in pale pink afterglow with very gentle cirrus wisps, atmospheric soft pretty-photograph feel, warm gentle bath',
       'GOLDEN-HOUR AMBER WITH CIRRUS-WISPS — upper sky soft golden-amber with high gentle cirrus wisps catching warm light, naturalistic pretty-photograph register',
       'WARM PEACH WITH SCATTERED CUMULUS — upper sky warm-peach gradient with gentle scattered cumulus catching the soft warm light, naturalistic pretty golden-hour',
-      'PALE GOLDEN WITH SOFT HAZE — pale golden sky softened by atmospheric haze, gentle cumulus barely defined through the warm haze, pretty soft photograph feel',
       'SOFT CORAL-AND-CREAM — upper sky soft coral-and-cream gradient with gentle cumulus catching the warm sunset light, naturalistic pretty atmospheric',
       'WARM-AMBER WITH GENTLE WARM RAYS — upper sky soft warm-amber with subtle warm rays radiating gently through the gentle cumulus, NOT blazing god-rays, soft pretty',
       'SOFT PINK-CREAM PASTEL — upper sky pale pink-cream pastel tones with very gentle cirrus, pretty soft golden-hour photograph register',
-      'GOLDEN HAZE WITH SOFT WISPS — upper sky bathed in soft golden haze with very gentle cirrus wisps, pretty atmospheric soft warm bath',
       'PEACH-AMBER GRADIENT — upper sky peach-amber gradient softening toward zenith, gentle scattered cumulus catching warm soft light, naturalistic pretty',
       'WARM LAVENDER-PEACH TRANSITION — upper sky soft transition from warm peach near horizon to pale lavender at zenith, gentle scattered clouds, pretty soft twilight',
       'SOFT CREAM WITH GENTLE CIRRUS — upper sky soft cream-and-pale-gold gradient with gentle cirrus catching warm light, naturalistic pretty-photograph register',
       'PALE WARM AMBER — upper sky simply pale warm amber gradient with sparse gentle cirrus wisps, soft naturalistic pretty golden-hour atmospheric',
       'PINK-AND-PEACH WITH SCATTERED CUMULUS — upper sky soft pink-and-peach with scattered gentle cumulus catching warm light from below, pretty atmospheric soft',
-      'GOLDEN-CREAM WITH WARM HAZE — upper sky golden-cream gradient softened by warm atmospheric haze, gentle scattered cumulus, pretty soft golden-hour photograph',
       'SOFT CORAL WISPS — upper sky soft pale warm with gentle coral cirrus wisps streaking across the upper third, pretty atmospheric naturalistic',
       'WARM PASTEL PINK — upper sky warm pastel pink gradient with very gentle cumulus, pretty soft afterglow feel, naturalistic atmospheric',
       'AMBER-PEACH GRADIENT — upper sky amber-peach gradient with gentle scattered cumulus catching the warm sunset light, naturalistic pretty soft golden-hour',
-      'SOFT GOLDEN WITH ATMOSPHERIC HAZE — upper sky soft golden gradient wrapped in atmospheric warm haze, gentle clouds barely defined, pretty soft photograph register',
       'PALE PINK-CREAM AFTERGLOW — upper sky pale pink-cream afterglow gradient with very gentle cirrus wisps, soft pretty atmospheric after-sunset glow',
     ],
     instructions: `Each entry is ONE specific SOFT GOLDEN-HOUR SKY (gentle clouds + soft warm color), 25-50 words. Format: "SKY NAME + SOFT WARM-COLOR CAPS — explicit description of GENTLE CLOUDS (cumulus / cirrus / stratus / wisps / scattered) + SOFT WARM COLOR (warm amber / soft pink / peach / coral / pale lavender / golden cream / warm haze) + naturalistic pretty-photograph feel". MANDATORY — both cloud-formation AND soft warm color must be explicit. NEVER vivid-saturated / fiery / burning / dramatic. NO sun-disc description (that comes from sun_position). NO ground-level detail. NO plain blue / overcast. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -2618,31 +2535,19 @@ Lineage to channel: National Geographic golden-hour landscape photography + Anse
 
 ✓ THIS POOL DESCRIBES THE SUN. The sky-color is a SEPARATE axis. Focus on (a) sun-disc position + (b) SOFT WARM glow / subtle warm halo.`,
     touchpoints: [
-      'SOFT SUN CRESTING JAGGED PEAK — soft glowing sun-disc just cresting a distant jagged mountain peak, softened by atmospheric haze, gentle warm halo radiating subtly across the surrounding sky',
-      'SOFT SUN ON HORIZON — soft warm sun-disc sitting directly on a distant flat horizon line, glowing through atmospheric haze, gentle warm halo around the disc',
       'SOFT SUN THROUGH PINE-CANOPY — soft glowing sun-disc visible through a gap in a distant pine-forest line, gentle warm rays filtering through the trees, atmospheric softness',
-      'SOFT SUN LOW ON MEADOW HORIZON — soft warm sun-disc sitting just above a flat meadow horizon, gently glowing through warm atmospheric haze, subtle warm halo',
-      'SOFT SUN PEEKING OVER ALPINE RIDGE — soft glowing sun-disc just peeking over a distant alpine ridge, gentle warm rays radiating subtly across the surrounding sky, warm haze',
       'SOFT SUN REFLECTED ON ALPINE LAKE — soft sun-disc sitting low on the lake-horizon with a gentle warm reflection-path on the still water leading to the foreground, atmospheric',
-      'SOFT SUN HALOED BY HAZE — soft glowing sun-disc softened by warm atmospheric haze with gentle warm halo radiating outward, naturalistic soft golden-hour',
-      'SOFT SUN TOUCHING OCEAN HORIZON — soft warm sun-disc touching the distant ocean horizon, glowing through atmospheric haze, gentle golden reflection-path on the water',
       'SOFT SUN CRESTING SNOW-PEAK — soft glowing sun-disc just cresting a distant snow-capped peak, gentle warm rays radiating subtly, soft warm rim-light on the snow',
       'SOFT SUN THROUGH STORM-GAP — soft glowing sun-disc visible through a gap between gentle clouds, subtle warm rays filtering downward, atmospheric softness',
-      'SOFT SUN ABOVE FOREST-LINE — soft glowing sun-disc sitting just above a distant forest-line at the midground, gentle warm halo, atmospheric haze, warm glow-aura',
       'SOFT SUN PEEKING OVER ROLLING HILL — soft glowing sun-disc just peeking over a distant rolling hill, gentle warm rays subtly fanning across the landscape, warm halo',
-      'SOFT SUN ON DESERT HORIZON — soft warm sun-disc sitting on a flat desert horizon, glowing through atmospheric warm haze, gentle warm halo around the disc',
       'SOFT SUN CRESTING CANYON RIM — soft glowing sun-disc just cresting a distant canyon rim, gentle warm rays subtly fanning across the canyon walls, warm rim-light',
       'SOFT SUN BEHIND CIRRUS — soft glowing sun-disc behind feathery cirrus clouds with gentle warm halo, golden-amber glow-aura subtly surrounding',
-      'SOFT SUN REFLECTED ON SEA — soft sun-disc setting toward the distant ocean horizon with a gentle warm reflection-path on the calm sea, atmospheric haze, soft warm halo',
       'SOFT SUN THROUGH AUTUMN-TREES — soft glowing sun-disc visible through a stand of distant autumn-color trees, gentle warm rays filtering through, soft warm halo',
-      'SOFT SUN BEHIND DISTANT RIDGE — soft warm sun-disc setting behind a distant ridge silhouette, glowing softly through atmospheric haze, gentle warm halo',
       'SOFT SUN LOW ON PRAIRIE — soft warm sun-disc sitting just above a flat prairie horizon, glowing gently, soft warm rays raking subtly across the grasses, warm halo',
       'SOFT SUN CRESTING WATERFALL TOP — soft glowing sun-disc just cresting the top of a distant waterfall ridge, gentle warm rays subtly fanning across the cliffs, warm halo',
       'SOFT SUN BEHIND SINGLE-CLOUD — soft glowing sun-disc behind a single gentle cloud with subtle warm halo radiating outward, the cloud-edge gently backlit warm-amber',
       'SOFT SUN SETTING INTO LAKE — soft sun-disc sitting low on the lake-horizon, gentle warm reflection-path on the water, soft halo, warm afterglow',
-      'SOFT SUN ABOVE ARCTIC RIDGE — soft midnight-sun sun-disc sitting just above the arctic ridge horizon, glowing gently through cool atmospheric haze, soft warm halo',
       'SOFT SUN THROUGH JUNGLE — soft glowing sun-disc visible through a jungle-canopy gap, gentle warm rays filtering down through the tropical foliage, atmospheric',
-      'SOFT SUN ON SAVANNA HORIZON — soft warm sun-disc sitting low on the savanna horizon, glowing gently through warm atmospheric haze, soft warm halo, last gentle rays raking',
     ],
     instructions: `Each entry is ONE specific SOFT VISIBLE SUN POSITION, 20-40 words. Format: "SOFT SUN POSITION CAPS — explicit description of the soft sun-disc's position in frame + atmospheric haze softening + GENTLE warm halo or subtle warm rays". MANDATORY — sun-disc is SOFT and SOFTENED BY ATMOSPHERIC HAZE, NOT blazing god-rays. NO "dramatic" / "intense" / "fiery" / "prominent". NO sky-color description. NO ground-level detail. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -2664,30 +2569,24 @@ Lineage to channel: National Geographic golden-hour landscape photography + Anse
   B. **WILDLIFE (NON-HUMAN)** — bee / butterfly / hummingbird / dragonfly / deer / fox / songbird at the flower or in the scene
   C. **GOLDEN-HOUR DUST / POLLEN** — dust-motes / pollen catching sun-rays in air
   D. **LENS-FLARE / GOD-RAYS** — sun-flare bursting from the visible sun
-  E. **MIST / FOG DRIFT** — soft mist drifting in valley / clinging to hills
   F. **WET ELEMENTS** — dew on petals / fresh rain droplets / mist on grass
   G. **DISTANT WILDLIFE** — flock of birds / single deer silhouette / cattle on hillside
   H. **REFLECTION** — flowers reflected in dewdrop / lake / wet rock
   I. **BREEZE-MOTION** — gentle wind moving the flowers / grass-blades swaying
   J. **DRIFTING SEEDS / SPORES** — dandelion-seed drift / pollen-cloud / cottonwood fluff
   K. **DISTANT WATER** — distant waterfall / stream / river catching sunset light
-  L. **MIST IN VALLEY** — soft mist filling the valley below
   M. **CLOUD-SHADOW** — cloud-shadow moving across the landscape`,
     touchpoints: [
       'CHERRY-BLOSSOM PETAL-FALL — soft pink cherry-blossom petals drifting through the golden-hour light around the hero flowers, every petal rim-lit gold by the visible sun',
       'BUMBLEBEE AT HERO FLOWER — single bumblebee hovering at the hero flower cluster in foreground, sun-backlit body glowing golden, fuzzy outline catching warm rim-light',
       'POLLEN-DUST IN GOLDEN RAYS — pollen-dust and gentle dust-motes drifting through the golden-hour rays around the hero flowers, every particle catching warm sunset light',
-      'PROMINENT LENS-FLARE — prominent lens-flare star-burst radiating from the visible sun-disc, hex-flare ghosts scattered across the frame, atmospheric warm haze',
-      'SOFT VALLEY MIST — soft golden-hour mist drifting in the deep valley behind the hero flowers, mist catching warm sunset light, atmospheric depth',
       'DEW ON HERO PETALS — fresh dew droplets clinging to the hero flower petals, every droplet catching the setting sun as tiny prismatic flares, golden-hour wet shimmer',
       'FLOCK OF DISTANT BIRDS — flock of small distant birds silhouetted against the sunset sky in the upper frame, motion-blur on their wings, golden-hour silhouettes',
       'FLOWERS REFLECTED IN DEW — single large dewdrop on a leaf reflecting the hero flowers and the sun behind them upside-down, prismatic golden flare',
       'GENTLE BREEZE-MOTION — gentle breeze moving the hero flowers, motion-blur on the petals, grass-blades around the flowers leaning with the wind',
       'DANDELION-SEED DRIFT — drifting dandelion-seeds and gossamer fluff floating through the golden-hour light around the hero flowers, every seed rim-lit warm-gold',
-      'DISTANT WATERFALL — distant waterfall ribbon falling between mountain ridges in the deep background, catching sunset light, atmospheric haze',
       'CLOUD-SHADOW SWEEPING — large cloud-shadow sweeping across the midground landscape, contrast between shadowed terrain and warm-lit hero flowers',
       'HUMMINGBIRD AT FLOWER — single iridescent hummingbird hovering at the hero flower, wings a motion-blur of jewel-color catching the sunset rim-light',
-      'GOLDEN-HOUR HAZE — atmospheric golden-hour haze softening the deep landscape, every distant element wrapped in warm soft-focus glow',
       'BUTTERFLY DRIFTING — single Monarch butterfly drifting through the foreground near the hero flower, sun-backlit wings glowing translucent orange-amber',
       'GRASS-BLADES BACKLIT — every grass-blade around the hero flower backlit by the setting sun, glowing translucent green-gold, sea of caught light',
       'DRAGONFLY HOVERING — single iridescent dragonfly hovering near the hero flower, transparent wings catching sun-rim-light as prismatic flares',
@@ -2696,8 +2595,6 @@ Lineage to channel: National Geographic golden-hour landscape photography + Anse
       'STORM-CLOUD ON HORIZON — dramatic storm-cloud building on the horizon catching last sunset light, contrast between bright sunset foreground and dark distant storm',
       'WIDE PETAL-FALL — wide soft petal-fall drifting horizontally through the entire scene, every petal catching warm sunset light',
       'BIRDS BURSTING FROM TREE — small flock of songbirds bursting from a midground tree silhouette, motion-blur against the sunset sky',
-      'WARM ATMOSPHERIC HAZE — warm atmospheric haze softening every distant mountain ridge, golden-hour glow infusing the entire deep distance',
-      'SOFT RAINBOW IN HAZE — soft pastel rainbow arcing across the deep distance after rain, hero flowers in golden-hour light in foreground',
       'CRICKET-MEADOW STILLNESS — implied evening cricket-stillness in the meadow, gentle breeze motion on the hero flowers, atmospheric quiet golden-hour',
     ],
     instructions: `Each entry is ONE specific SUNSET-FLOWERS atmospheric magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in scene + light/sensory detail". Vary across the 13 categories. NO sci-fi glow. NO actual lamps. NO night phenomena. ABSOLUTE HARD BAN ON HUMANS — no people / no figures / no silhouettes / no pedestrians anywhere (wildlife OK). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -2749,7 +2646,6 @@ Lineage to channel: Studio Ghibli "Castle in the Sky" reveal + Ta Prohm jungle t
       'FORGOTTEN LIBRARY WITH COLLAPSED WALLS — forgotten library with two walls collapsed, books still on the shelves visible through bloom-cascades, fallen books on the floor, climbing-vines on the remaining shelves',
       'ABANDONED CAROUSEL — abandoned amusement-park carousel with the horses still on it but rust-streaked, the canopy fabric tattered, climbing-bloom vines wrapping every horse, bloom-mass at the base',
       'WRECKED OCEAN LINER ON BEACH — wrecked early-20th-century ocean liner half-sunk in beach-sand, hull rust-streaked and barnacle-encrusted, climbing-bloom vines on the upper decks, dune-grass at the base',
-      'ABANDONED LIGHTHOUSE ON CLIFF — abandoned stone lighthouse on a cliff-edge, the upper structure cracked, climbing-bloom vines spiraling up the tower, sea-mist around the base, gulls overhead',
       'ROMAN AQUEDUCT IN BLOOM-MEADOW — section of Roman aqueduct stretching across a sunlit bloom-meadow, several arches collapsed, climbing-bloom vines on the standing arches, sun-shafts through the gaps',
       'MOSS-COVERED CASTLE RUIN — moss-covered medieval castle ruin with one tower still standing tall, walls partially collapsed, climbing-bloom vines on the stone, drawbridge gone',
       'ROOFLESS ABANDONED ABBEY — abandoned abbey with the roof completely gone but the nave-columns still standing, climbing-bloom vines on the columns, sky visible above, fallen stones on the floor',
@@ -2758,7 +2654,6 @@ Lineage to channel: Studio Ghibli "Castle in the Sky" reveal + Ta Prohm jungle t
       'FORGOTTEN PALACE INTERIOR — forgotten palace interior with collapsed ceiling, bloom-mass cascading from above, chandelier still hanging twisted, ornate floor-tiles visible through petal-carpet',
       'OVERGROWN WATCHTOWER — abandoned medieval stone watchtower with the upper crenellations crumbled, climbing-bloom vines spiraling up the tower-walls, sky visible through arrow-slits',
       'ABANDONED MEDIEVAL VILLAGE — abandoned medieval stone-village with several houses still standing in disrepair, cobblestone street overgrown, climbing-bloom vines on every house',
-      'SHIPWRECK ON ROCKS — wooden-hulled shipwreck on rocks with sea-mist around the hull, climbing-vines on the deck visible above the waterline, sun-shafts through broken sails-rigging',
       'KHMER VINE-CURTAINED TEMPLE — Khmer-style stone temple with vine-curtains entirely covering the carvings, strangler-fig roots embracing the structure, jungle-mass closing in',
       'OVERGROWN VICTORIAN MANSION — abandoned Victorian mansion with the roof partially collapsed, climbing-bloom vines on the ornate facade, broken windows with bloom-cascades spilling out',
     ],
@@ -2835,7 +2730,6 @@ Channel: Piranesi etchings of Roman ruins + Caspar David Friedrich romantic-ruin
 
 ✓ PHENOMENON CATEGORIES:
   A. **GOD-RAYS THROUGH BROKEN ROOF** — volumetric sun-shafts pouring through the collapsed dome / broken roof onto specific bloom-patches
-  B. **MIST / VAPOR** — soft morning mist in the ruin interior / vapor rising from the bloom-mass / atmospheric haze
   C. **PEACEFUL WILDLIFE** — single deer grazing in the ruin / fox sleeping in a sun-patch / owl in a broken window / butterfly on a fallen statue
   D. **POLLINATOR** — hummingbird hovering at a column-bloom / bee-cluster at a fallen stone / butterfly migration through the broken arch
   E. **FIREFLY-CLOUD** — soft cloud of fireflies at dusk in the ruin interior / glow-cloud
@@ -2850,20 +2744,17 @@ Channel: Piranesi etchings of Roman ruins + Caspar David Friedrich romantic-ruin
 Channel: Studio Ghibli "Castle in the Sky" ruin-reveal moments + Caspar David Friedrich romantic-ruin painting atmosphere + Tarkovsky "Stalker" wonder-not-dread + David Attenborough nature-reclamation footage.`,
     touchpoints: [
       'VERTICAL GOD-RAYS THROUGH COLLAPSED ROOF — multiple vertical sun-shafts pouring through the collapsed roof of the ruin onto specific bloom-patches below, vapor-laden beams visible in the still air',
-      'MORNING MIST IN RUIN INTERIOR — soft morning mist coiling through the ruin interior in still air, vapor softening the depth, sun starting to break through the broken roof',
       'SINGLE DEER GRAZING IN RUIN — single solitary deer grazing in the ruins nave / interior, head down on the bloom-meadow floor, peaceful, the only living motion in the frame',
       'OWL IN BROKEN WINDOW — solitary owl perched in a broken arched window of the ruin, eyes facing the viewer, head tilted, blooms cascading around the window-frame',
       'FIREFLY CLOUD AT DUSK — soft cloud of fireflies suspended at dusk within the ruin interior, hundreds of green-pulse lights at every depth between the columns',
       'GOLDEN-HOUR FIRE-LIGHT — late-afternoon golden-hour light setting the ruins remaining walls ablaze with warm-amber glow, every weathered stone catching gold',
       'FULL MOON THROUGH BROKEN ROOF — full silver moon visible through the broken roof of the ruin, soft moonlight bathing the bloom-mass below, the rest in cool blue-shadow',
       'PETAL-FALL DRIFTING INSIDE — drifting petal-fall from the upper climbing-bloom cascades into the ruins interior, petals suspended at every depth in the still air',
-      'POLLEN-CLOUD IN GOD-RAYS — golden pollen-cloud dispersing in the volumetric god-ray sun-shafts, individual pollen-motes visible in the warm light',
       'WATER-POOL REFLECTION INTERIOR — small water-pool in the ruins interior reflecting the bloom-laden architecture above, mirror-still surface broken by a single drop',
       'DEW-CASCADE EVERYWHERE — fine dewdrops on every petal of the climbing-bloom cascades wrapping the ruin, the entire structure scintillating with reflected morning light',
       'SEED-DOWN DRIFT — cottonwood / dandelion seed-down drifting through the ruin in slow-motion, hundreds of seed-fluff suspended in the air',
       'HUMMINGBIRD AT COLUMN-BLOOM — solitary jewel-iridescent hummingbird hovering at a bloom-cluster on a ruined column, wings a transparent blur',
       'BUTTERFLY ON FALLEN STATUE — solitary butterfly perched on the cheek of a fallen marble statue half-buried in bloom, wings catching the sun',
-      'SOFT-VAPOR FROM POOL — soft vapor rising from a small reflecting pool in the ruin interior, the steam curling through the volumetric light',
       'FOX ASLEEP IN SUN-PATCH — solitary red fox curled asleep in a sun-warmed patch on the ruins floor, surrounded by bloom-mass, ears relaxed',
       'TWILIGHT FIRST-STAR — first star of evening visible through the open broken dome of the ruin, twilight sky filling the opening, blooms below in cool shadow',
       'BUTTERFLY CLOUD THROUGH ARCH — cloud of butterflies passing through a broken arch of the ruin in soft fluttering motion, wings catching the back-light',
@@ -2903,26 +2794,17 @@ Channel: Studio Ghibli "Castle in the Sky" ruin-reveal moments + Caspar David Fr
 
 Lineage to channel: Hawaiian / Tahitian / Maldivian / Bali / Caribbean / Polynesian / Costa Rican paradise photography + Planet Earth tropical-coast scenes + Avatar Pandora establishing shots + Studio Ghibli ocean-and-jungle magic + National Geographic tropical-paradise features + James Cameron's Avatar Way of Water + Endless Summer surf-cinematography (without the surfers).`,
     touchpoints: [
-      'RAINFOREST UNDERSTORY WITH CANOPY SHAFTS — dense rainforest floor under towering buttress-root tree canopy, vertical sun-shafts piercing the green gloom and pooling on specific bloom-patches below, ferns and moss carpeting the floor, atmospheric haze in the deep distance',
       'JUNGLE POOL WITH HANGING VINES — freshwater jungle pool surrounded by hanging vines and giant philodendron leaves, water-lilies covering the surface, bloom-laden vegetation crowding the edges, reflection of canopy above',
-      'VOLCANIC-ISLAND CLIFF ABOVE LAGOON — basalt sea-cliff descending to turquoise lagoon below, bloom-laden cliff-edge with frangipani and bird-of-paradise, palms tilting from the rim, distant volcanic peak in deep haze',
       'BANYAN-ROOT CLEARING — old banyan clearing with massive aerial-root columns descending from the canopy to the floor, strangler-fig curtains, dappled understory light through high canopy openings, bloom-mass between the root pillars',
-      'MANGROVE TIDAL SWAMP — mangrove forest in tidal salt water with stilt-roots descending into the shallows, floating blooms drifting on the brackish water, low tropical haze, mud-flats glistening at edge',
-      'CLOUD-FOREST WATERFALL WITH MOSSY BOULDERS — high-elevation cloud-forest waterfall cascading over moss-covered boulders, mist-saturated air, hanging orchids on the cliff-walls, foreground ferns soaked in spray',
       'BANANA-GROVE PATH — banana-grove with massive broad-green banana-leaves arching overhead into a leaf-tunnel, bloom-clusters between the smooth banana-trunks, dappled canopy-light filtering through the broad foliage',
       'HELICONIA THICKET AT VIEWER LEVEL — dense heliconia and torch-ginger thicket at viewer eye-level, jungle wall receding into deep humid blur, fern-fronds and broad leaves overlapping foreground, sun catching the petal-edges',
-      'STREAM-EDGE TROPICAL — clear jungle stream flowing over mossy rocks with tropical blooms massing on both banks, dappled canopy-light above, ferns and palms framing the water-corridor, atmospheric haze in deep distance',
       'CENOTE TROPICAL SPRING — natural cenote / tropical hot-spring with steam rising from turquoise water, tropical bloom-edges, hanging vines descending from the rim, light shafts piercing the steam',
-      'EPIPHYTE-LADEN OLD-GROWTH TREE — single massive old-growth tropical tree trunk in foreground, covered with epiphytes / bromeliads / hanging orchids / mosses / lichens, jungle receding behind into humid haze',
       'JUNGLE-RUIN BLOOM-RECLAIM — moss-covered Mayan / Khmer / Angkor-style stone block partially visible at the jungle floor in midground, blooms and vines reclaiming the carved surface, dense tropical canopy above',
       'OPEN-CANOPY SUNBEAM CATHEDRAL — large break in the rainforest canopy where vertical sun-shafts bloom down onto a bloom-rich forest-floor opening, vapor-laden beams visible in the humid air, ferns and orchids in the gold',
       'PHILODENDRON-COVERED CLIFF — vertical cliff-wall draped in massive philodendron + monstera + climbing-vine mass, hanging orchids and bromeliads on the rock, jungle floor below in soft humid blur',
-      'CLOUD-FOREST RIDGE — cloud-forest ridge in early morning with low mist drifting through the canopy, orchid-laden epiphytes on every branch, blooms catching first light at the ridge-top, valley below disappearing into mist',
-      'WATERLILY-LAGOON — wide tropical lagoon completely covered in giant water-lilies and lotus, tropical bloom-edge on the banks, palms tilted at the water-line, distant rainforest receding into haze',
       'SUNLIT JUNGLE CLEARING — bright sunlit clearing in the rainforest with grass + flowering shrubs at ground level, towering rainforest wall surrounding the clearing on all sides, butterflies in the warm air, broad-leaf canopy framing above',
       'PALMS-AND-PASSION-VINE — palm grove with passion-flower vines spiraling up the trunks, broad ferns at the base, dappled canopy light, distant rainforest wall in deep humid blur',
       'BROMELIAD-CHANDELIER OLD GROWTH — old-growth rainforest tree with bromeliads forming chandelier-clusters at branch joints, hanging orchids cascading, epiphyte-mass at every fork, jungle floor below in shadow',
-      'TROPICAL-RIVER BEND — tropical river bend with sand-bank in midground, dense rainforest descending to the water on both banks, blooms massing at the water-edge, low river-mist hugging the surface',
     ],
     instructions: `Each entry is ONE specific TROPICAL PARADISE SETTING, 30-60 words. Format: "SETTING NAME CAPS — primary paradise biome features + identifiable tropical vegetation OR coastal/water features + atmospheric depth-recession (humid haze OR salt-haze OR mist)". REBALANCE — ~30% beach/coast, ~25% lagoon/water, ~20% waterfall/pool, ~15% jungle/rainforest, ~10% mangrove/mixed. ALWAYS identifiably tropical (palms / hibiscus / plumeria / frangipani / banana / sea-grass / coconut-grove / mangrove / etc.). NEVER temperate / alpine / desert / arctic. NO people, NO boats with sailors, NO huts with hands. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -2960,7 +2842,6 @@ Channel: Hawaiian / Tahitian / Bali / Caribbean / Polynesian tropical-paradise p
       'EPIPHYTE-LADEN OLD BRANCH — single massive horizontal branch in foreground covered with bromeliads / hanging orchids / mosses / staghorn ferns at every fork, jungle below in soft shadow',
       'BROMELIAD-CHANDELIERS — bromeliad-cluster chandeliers at every branch joint of an old-growth rainforest tree, water pools visible in some bromeliad rosettes, hanging orchids cascading from the same fork',
       'BAMBOO GROVE — dense bamboo grove with tall green canes filling the frame, gentle bamboo-rustle in tropical breeze implied, dappled canopy light filtering through the cane-tops',
-      'MANGROVE STILT-ROOTS — mangrove stilt-roots descending into shallow tidal water, mud-flats glistening between the roots, mangrove canopy above in soft humid haze',
       'GIANT KAPOK TREE — towering jungle kapok / ceiba / silk-cotton tree with massive buttress-roots, the trunk continuing upward beyond the upper frame, smaller jungle vegetation at the buttress-base',
       'CYCAD-AND-BROMELIAD GARDEN — primordial cycad-and-bromeliad garden floor, leathery cycad fronds and rosette-bromeliads massing at ground level, larger jungle vegetation looming above in shallow blur',
       'PANDANUS SCREW-PINE — pandanus / screw-pine cluster with spiral leaves and stilted prop-roots, distinctively tropical silhouette, jungle wall behind in soft humid blur',
@@ -2998,7 +2879,6 @@ Channel: Hawaiian / Tahitian / Bali / Caribbean / Polynesian tropical-paradise p
 Channel: Planet Earth tropical close-ups + David Attenborough macro reverence + nature-photography hero shots.`,
     touchpoints: [
       'HUMMINGBIRD HOVERING AT HELICONIA — solitary jewel-throated tropical hummingbird hovering mid-air at a foreground heliconia bloom, wings a transparent blur, beak just grazing the bract, body iridescent emerald and ruby',
-      'BLUE MORPHO BUTTERFLY MID-FLIGHT — solitary blue morpho butterfly caught mid-flight in midground, wings electric-cobalt with translucent edges, body in motion-blur, jungle backdrop in soft humid haze',
       'POISON-DART FROG ON LEAF — solitary neon-blue poison-dart frog on the underside of a broad foreground leaf, body crisp at macro scale, fluorescent skin catching dappled light',
       'TOUCAN PERCHED ON BRANCH — solitary keel-billed toucan perched on a midground branch, oversized rainbow beak crisp, body in soft shallow-DOF, jungle canopy behind in humid blur',
       'RED-EYED TREE-FROG — solitary red-eyed tree-frog clinging to a foreground stem, green body with red eyes and orange feet, sticky toe-pads visible, leaf-edge catching light',
@@ -3049,7 +2929,6 @@ Channel: Planet Earth tropical close-ups + David Attenborough macro reverence + 
 
 Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natural-event captures + Roger Deakins atmospheric setpieces.`,
     touchpoints: [
-      'FIRE-RAY GOD-RAYS PIERCING STORM-EDGE — volumetric warm-amber god-rays piercing through a storm-cloud break onto a specific patch of bloom-meadow in midground, the patch glowing hot-gold while the rest is in storm-shadow',
       'BIRD-FLOCK MASS TAKE-OFF — vast flock of birds (starlings / grackles / waxwings) lifting off the bloom-carpet en masse, hundreds of wings beating, a shadow-cloud rising into the sky',
       'WILD-HORSE STAMPEDE CROSSING — small wild-horse herd at full gallop crossing the midground bloom-meadow from left to right, dust-and-petal trail behind them catching the light, mane-and-tail in motion',
       'DISTANT VOLCANIC ERUPTION — distant volcano in deep background mid-eruption, ash-column rising vertically into the upper sky, lava-glow on the cone, bloom-meadow in foreground under amber ash-light',
@@ -3062,9 +2941,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
       'WHALE-BREACH OFFSHORE — humpback whale breach visible offshore from a coastal bloom-cliff, full-body launch from the swell, splash-explosion in deep midground, scale-moment for the cliff',
       'METEOR-SHOWER MULTIPLE STREAKS — multiple shooting-stars streaking simultaneously across the night sky over the bloom-meadow, persistent trails marking each path, dark-sky magic',
       'POLLEN-CLOUD EXPLOSION — visible dense cloud of golden pollen-dust erupting from a bloom-cluster mid-frame in a gust of wind, the air thick with floating pollen catching the side-light',
-      'FROZEN-FOG RIME ON MEADOW — meadow coated in white frozen-fog rime crystals on every blade and stem, the entire bloom-carpet glittering white, sun catching it in a million sparkle-points',
       'GEYSER ERUPTION IN MEADOW — natural geyser eruption from the bloom-meadow itself in midground, vertical steam-and-water column rising 30 metres, hot springs in the surrounding ground',
-      'WATERFALL ROAR WITH SPRAY-CROWN — major waterfall in deep midground in full-flow, spray-cloud crowning above it catching a rainbow in the sun-mist, bloom-meadow in foreground misted by the spray',
       'CIRCUMZENITHAL ARC — rare upside-down rainbow (circumzenithal arc) high in the upper sky above the bloom-meadow, vivid spectrum arc, atmospheric ice-crystal magic',
       'WOLF-PACK CROSSING MEADOW — small wolf-pack crossing the bloom-meadow in line in midground, alpha leading, ears-forward, scale-prover plus dramatic predator-moment',
       'DISTANT WATERSPOUT — single waterspout twisting from a coastal storm-cloud down to the offshore swell in deep midground, mariner-spectacle, the bloom-cliff in foreground under stormlight',
