@@ -372,29 +372,26 @@ module.exports = {
     // 'eldenring-architecture' — scrapped 2026-05-02 (Kevin)
   ],
 
-  // dragon-scene + landscape co-flagship; warriors heavy; new wow paths weight 4 each.
+  // 2026-05-23: flattened — all paths equal weight 1 (Kevin's call).
   pathWeights: {
-    landscape: 5,
-    'fantasy-scene': 3,
-    'epic-moment': 3,
-    castle: 4,
-    'dragon-scene': 4,
-    'female-adventurer': 5,
-    'female-explorer': 5,
-    'female-action-scenes': 5,
-    'artsy-girl': 4,
-    'male-adventurer': 5,
-    'male-explorer': 5,
-    'male-action-scenes': 5,
-    'cozy-arcane': 3,
-    'arcane-halls': 3,
-    'arcane-spaces': 3,
-    'dark-realm': 4,
-    'dragon-lore': 4,
-    'iconic-landscape': 5, // merged weight (was wow 4 + lotr 4)
-    // 'wow-architecture': 4,  // scrapped
-    // 'eldenring-landscape': 4,  // scrapped
-    // 'eldenring-architecture': 4,  // scrapped
+    landscape: 1,
+    'fantasy-scene': 1,
+    'epic-moment': 1,
+    castle: 1,
+    'dragon-scene': 1,
+    'female-adventurer': 1,
+    'female-explorer': 1,
+    'female-action-scenes': 1,
+    'artsy-girl': 1,
+    'male-adventurer': 1,
+    'male-explorer': 1,
+    'male-action-scenes': 1,
+    'cozy-arcane': 1,
+    'arcane-halls': 1,
+    'arcane-spaces': 1,
+    'dark-realm': 1,
+    'dragon-lore': 1,
+    'iconic-landscape': 1,
   },
 
   // Chaos layer (V4 perception-distortion port). Skip face-dominant character
