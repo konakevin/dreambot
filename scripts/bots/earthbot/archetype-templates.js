@@ -403,7 +403,7 @@ Light is the EMOTIONAL CENTER. Render the named lighting LITERALLY — alpenglow
 ━━━ ATMOSPHERE (the medium that makes the light visible) ━━━
 ${atmosphere}
 
-Mist, dust beams in light, faint haze layering, crystal-clear air. The atmosphere makes the light visible — without it, light is invisible.
+Dust-beams catching the light, otherwise crisp clear air. The atmosphere makes the light visible — without it, light is invisible.
 
 ━━━ HERO FEATURE (deep distance scale-prover, never competing with the light) ━━━
 ${hero_feature}
@@ -696,7 +696,7 @@ ${vibeDirective.slice(0, 250)}
 Every render MUST land cinematic light drama, not flat overcast lighting. Required elements:
 
 • HARD DIRECTIONAL LIGHT — low-angle golden-hour or sunset rake catching every trunk-edge and leaf-mass, hard punched shadows beneath every trunk at peak chromatic saturation, NOT flat overcast.
-• ATMOSPHERIC HAZE — teal-cooled depth in the far distance, atmospheric perspective separating midground from distant ridge, mist + light interaction in valleys.
+• ATMOSPHERIC DEPTH — teal-cooled depth in the far distance, atmospheric perspective separating midground from distant ridge.
 • TEAL-AND-ORANGE CINEMATIC SPLIT — warm orange-amber-crimson saturation in foreground/midground + teal-cooled atmospheric depth in the far distance. Hollywood color-grade.
 • SCALE PROVER — one tiny element in the distance proves the scale: a hawk hovering as a comma-speck silhouette, a tiny lake reflecting the canopy, a small clearing, a distant ridge tooth catching alpenglow. Render small (postage-stamp scale) to make the forest feel VAST.
 
