@@ -180,16 +180,18 @@ module.exports = {
   ],
 
   // Path weights.
+  // Flattened to EQUAL distribution — all active paths weight 1 (Kevin 2026-05-23).
   pathWeights: {
-    'alien-landscape': 5,
-    'cozy-sci-fi-interior': 5,
-    'alien-city': 5,
-    'real-space': 5,
-    'megastructure': 5,
-    'cosmic-oracle': 8,
-    'female-explorer': 8,
-    'male-explorer': 8,
-    'space-femme': 8,
+    'cosmic-vista': 1,
+    'alien-landscape': 1,
+    'cozy-sci-fi-interior': 1,
+    'alien-city': 1,
+    'real-space': 1,
+    'cosmic-oracle': 1,
+    'female-explorer': 1,
+    'male-explorer': 1,
+    'megastructure': 1,
+    'space-femme': 1,
   },
 
   // Chaos layer — allow subject chaos on scenery + megastructure paths
