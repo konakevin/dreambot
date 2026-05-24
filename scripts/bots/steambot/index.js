@@ -19,6 +19,7 @@ const pathBuilders = {
   'steampunk-scene': require('./paths/steampunk-scene'),
   'airship-skies': require('./paths/airship-skies'),
   'airship-female': require('./paths/airship-female'),
+  'airship-male': require('./paths/airship-male'),
   'steampunk-curio': require('./paths/steampunk-curio'),
   'sexy-steampunk-woman': require('./paths/sexy-steampunk-woman'),
   'steampunk-man': require('./paths/steampunk-man'),
@@ -83,6 +84,7 @@ module.exports = {
     'sexy-steampunk-woman':  { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-man':         { 'black-forest-labs/flux-1.1-pro': 100 },
     'airship-female':        { 'black-forest-labs/flux-1.1-pro': 100 },
+    'airship-male':          { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-spectacle':   { 'black-forest-labs/flux-1.1-pro': 100 },
     'steam-transport':       { 'black-forest-labs/flux-1.1-pro': 100 },
     'cozy-steampunk':        { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -98,6 +100,7 @@ module.exports = {
     'sexy-steampunk-woman': 'steambot-painted-woman',
     'steampunk-man': 'steambot-painted-man',
     'airship-female': 'steambot-painted-woman',
+    'airship-male': 'steambot-painted-man',
     'cozy-steampunk': 'steambot-painted-interior',
     // steampunk-labs uses default hyperreal medium — painted-interior medium
     // drowned the sci-fi mad-science energy with lush atmospheric-Victorian
@@ -146,6 +149,11 @@ module.exports = {
       'cinematic', 'dark', 'epic', 'fierce', 'voltage',
       'arcane', 'ancient', 'macabre', 'nightshade', 'shimmer', 'surreal',
     ],
+    // airship-male: same action-leaning subset as airship-female.
+    'airship-male': [
+      'cinematic', 'dark', 'epic', 'fierce', 'voltage',
+      'arcane', 'ancient', 'macabre', 'nightshade', 'shimmer', 'surreal',
+    ],
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -163,6 +171,7 @@ module.exports = {
     'steampunk-scene',
     'airship-skies',
     'airship-female',
+    'airship-male',
     'steampunk-curio',
     'sexy-steampunk-woman',
     'steampunk-man',
@@ -176,6 +185,7 @@ module.exports = {
     'steampunk-scene': 2,
     'airship-skies': 2,
     'airship-female': 2,
+    'airship-male': 2,
     'steampunk-curio': 2,
     'sexy-steampunk-woman': 2,
     'steampunk-man': 2,
@@ -194,7 +204,7 @@ module.exports = {
     // was stripping skin/eyes/makeup/hair DNA, leaving only the ethnicity
     // noun. Single-pass Sonnet preserves the full DNA stack. Per playbook
     // 2026-05-15 lesson: two-pass polish OFF for all new-axis paths.
-    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-female', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport', 'cozy-steampunk', 'steampunk-labs'],
+    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-female', 'airship-male', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport', 'cozy-steampunk', 'steampunk-labs'],
     polishedWordsByPath: { 'sexy-steampunk-woman': '80-110', 'steampunk-man': '80-110', 'airship-female': '80-110' },
     preservePhrasesByPath: {
       'steampunk-man': [
@@ -240,6 +250,7 @@ module.exports = {
       // sexy-steampunk-woman/steampunk-man — body-coded sensory anchors
       // were tripping Replicate on ~40% of female renders).
       'airship-female': 'scene',
+      'airship-male': 'scene',
       'steampunk-scene': 'scene',
       'airship-skies': 'scene', 'steampunk-curio': 'scene',
       'steampunk-spectacle': 'scene', 'steam-transport': 'scene',

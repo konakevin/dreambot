@@ -904,4 +904,122 @@ CRITICAL — the OPENING tokens MUST be the ethnicity-noun-phrase from the skin 
 
 Output ONLY the raw 110-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
+  STEAMBOT_AIRSHIP_MALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      role,
+      skin,
+      eyes,
+      facial_hair,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      action,
+      backdrop,
+      drama,
+    } = slots;
+
+    return `You are a cinematic illustration painter writing an AIRSHIP-ACTION SCENE for SteamBot — a single MALE air-officer / sky-corsair caught MID-ACTION on or around a steampunk airship. Lush vibrant painted illustration register — finished animation key-art / luxe production-painting feel (Treasure-Planet / Last-Exile / Mortal-Engines / Skies-of-Arcadia / Sinbad-the-Sailor lineage). He is DOING SOMETHING — never posing, never stationary. Combat allowed. Solo hero with background figures permitted in mid-distance.
+
+━━━ GENDER + ETHNICITY LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a MAN of a SPECIFIC ETHNICITY locked by the skin pool entry below. The opening MUST literally start with the ethnicity-noun-phrase from the skin pool — e.g. "a Japanese man", "a Nigerian man", "a Persian man", "a Norwegian man", "a mixed-heritage Brazilian man" — followed immediately by his action and setting. Do NOT substitute "captain", "officer", "navigator", "pirate" for the ethnicity-noun. Do NOT generalize to "a young man" or "a handsome man". The skin pool entry locks the ethnicity — render it. Use he/him/his throughout.
+
+━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
+The male air-officer is the MAIN SUBJECT. His face, facial hair, outfit, accessory, and MID-ACTION pose are the draw. He occupies 40-60% of the frame vertically — FULL BODY or three-quarter-body visible, head no larger than 12% of frame. NOT a tiny silhouette. NOT a wide vista with character as afterthought. Telephoto compression keeps him crisp; airship deck / rigging / brass hardware in MIDGROUND; sky / city / terrain in DISTANT background with atmospheric haze. The frame is composed like a movie poster — him in the strike of action, world rushing past behind.
+
+━━━ HANDSOME THROUGH ACTION — NEVER SEDUCTIVE, NEVER SHIRTLESS ━━━
+He is HANDSOME, DASHING, RUGGED, INTENT, CAPABLE, WEATHERED, COMMANDING — the appeal reads through his action, his weathered features, his craftsmanship, his confident stance. NEVER through pose-for-camera, NEVER through seductive/smoldering/come-hither energy. NEVER bare-chested. NEVER shirtless. NEVER open-shirt-for-sex-appeal. He is FULLY DRESSED at all times (rolled sleeves while hauling a rope are fine — that's work, not undressing). Think Errol Flynn / Cary Grant / Robert Downey Jr's Sherlock / Mortal-Engines Tom Natsworthy grown rugged / Treasure-Planet's sky-crew / Sinbad sky-captain.
+
+━━━ THE ACTION — what he is DOING RIGHT NOW (the headline of the render) ━━━
+${action}
+
+He is CAUGHT MID-MOTION — body weight engaged, muscles working, hair and coat-tails whipping, brass clasps catching light. NEVER posed-for-camera. NEVER stationary-portrait. The viewer should be able to SEE the next frame of the action in their imagination. If the action involves combat (cannon-fire / pistol-duel / boarding / repelling boarders), render the kinetic specifics: muzzle-flash, cannon-smoke, sparks from a parried sword, recoil in his shoulder, the enemy mid-leap.
+
+━━━ THE AIRSHIP DECK + SETTING — HIS STAGE ━━━
+He is on or around a steampunk airship. Render the deck / rigging / brass-railing / cannon-port / chart-table / speaking-tube / signal-lanterns / wheel / spotter-platform / dirigible-spine / rope-rigging — whatever IMMEDIATE airship feature anchors the action. The ship is LIVED IN, FUNCTIONAL, real — never decorative-clutter framing. Brass + leather + canvas + oiled-mahogany + glass + copper material vocabulary.
+
+━━━ THE BACKDROP — secondary, distant, atmospheric ━━━
+${backdrop}
+
+This is BEYOND the airship — sky, clouds, distant terrain, distant city, sister-airships in formation, etc. Render with depth-on-depth haze. NEVER lets the backdrop steal focus from him — the backdrop reads as the world rushing past, not as the subject.
+
+━━━ HIS ROLE (his rank / archetype — informs how he carries himself + what he's commanding) ━━━
+${role}
+
+━━━ HIS COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
+${skin}, with ${eyes.split(',')[0]} eyes, ${facial_hair.split(',')[0]}, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, equipped with ${accessory}.
+
+The ethnicity-noun-phrase at the head of the skin entry IS the opening of your prompt — copy it verbatim, IMMEDIATELY followed by his HAIR COLOR ("a Norwegian man with windswept sandy-blond hair…"). (All DNA elements — ethnicity/skin / eyes / facial hair / hair color / hairstyle / outfit / accessory / role — should be discernible in the render. Face fully visible.)
+
+━━━ FACIAL HAIR MANDATE — DETAILED + PERIOD-ACCURATE ━━━
+Render his facial hair with OBSESSIVE specificity and period-Victorian vocabulary, exactly as the facial-hair slot dictates — waxed handlebar mustache / full mutton-chop sideburns / Van Dyke goatee / clean-shaven sharp jaw / three-day stubble / iron-grey full beard / Imperial mustache / soot-flecked stubble / sailor's beard. Whatever the slot says, render it visibly. It MUST be natural for his heritage and age.
+
+━━━ HAIR COLOR IS MANDATORY + MUST VARY — STATE IT IN THE OPENING ━━━
+ALWAYS name his hair COLOR explicitly, placed in the OPENING right after the ethnicity-noun ("a Yoruba man with close-cropped black hair…", "an Irish man with wind-torn copper-red hair…"). NEVER omit hair color. The color MUST be natural for his heritage: blond / sandy / red / ginger / auburn / ash / light-brown / silver-grey for Northern & Eastern European heritages (Norwegian, Swedish, Finnish, Icelandic, Irish, Scottish, English, German, Polish, Russian, Ukrainian); black / dark-brown for most other heritages (with natural grey/silver for older men of any heritage). If the DNA hair-color slot conflicts with his heritage, OVERRIDE it to a natural shade — and for fair-skinned European heritages lean into the LIGHTER end (blond / red / auburn), because the failure mode we are fixing is EVERY man rendering as a dark brunet. Hair color should visibly differ from render to render. Then render the hair as ALIVE in the moment — wind-tossed, escaping under flight goggles, torn loose in the slipstream. NEVER flat / static.
+
+━━━ THE OUTFIT IS A MAJOR SHOW — NON-NEGOTIABLE ━━━
+Render the OUTFIT with OBSESSIVE craftsmanship detail. Period-correct steampunk-airship-officer menswear — leather flight greatcoat with brass epaulets, brass-pauldron flight suit, double-breasted naval frock coat, riding-coat over waistcoat and breeches tucked into knee-high boots, sky-corsair longcoat over a linen shirt and leather baldric, fitted dress-uniform tunic with gear-embroidered collar — whatever silhouette the wardrobe pool rolls, render it as TAILORED, LAYERED, FUNCTIONAL, HANDSOME. Every brass clasp, every copper button, every leather strap, every embroidered cuff, every goggle-strap, every ammunition-bandolier rendered explicitly. Combat-capable AND striking at once. FULLY DRESSED — never shirtless, never open to the navel.
+
+━━━ ACCESSORY MANDATE — DETAILED + STEAMPUNK-CODED ━━━
+The equipment he carries / wears must be rendered with OBSESSIVE mechanical detail and steampunk specificity. Brass + copper + leather + gemstone + clockwork. Every gear visible, every rivet shown, every patina rendered. Combat-capable equipment preferred over decorative jewelry — brass-pistol, mechanical-arm prosthetic, spyglass, sky-compass, signal-flare-launcher, bandolier of brass shells, cutlass, boarding-axe, etc.
+
+━━━ BACKGROUND FIGURES — ALLOWED, NEVER CO-PROTAGONIST ━━━
+You MAY render background figures in MID-DISTANCE if the action calls for it — crew working the rigging behind him, enemy boarders mid-leap on a parallel ship, a wounded crewman dragged to safety, a tiny silhouette at the wheel. But they MUST stay small (under 15% of frame each), MUST be in midground or further, MUST NOT have detailed faces. HE is the single focal point.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+${
+  drama
+    ? `
+━━━ DRAMATIC ENVIRONMENTAL EVENT (fires this render) ━━━
+${drama}
+
+Weave this event into the scene — lightning forking nearby, sparks from a damaged engine, a sister-ship's broadside blooming smoke, a vortex pulling at the sails. The event ESCALATES the action but does NOT replace him as the focal point.
+`
+    : ''
+}
+━━━ COMPOSITION ━━━
+Three-quarter angle or dynamic side profile so we see his face, body, and outfit AS HE ACTS. Telephoto compression — character crisp, background atmospherically hazed. Movie-poster cinematic framing. FOREGROUND: tactile airship hardware near him (railing, brass-cannon-breech, rope-rigging, brass-instrument he's gripping). MIDGROUND: HIM, full-body or three-quarter, mid-action, 40-60% of frame. BACKGROUND: distant sky / clouds / city / terrain with haze. NEVER a wide vista where he shrinks. NEVER a tight head-portrait crop.
+
+━━━ ALLOWED VOCABULARY (use often) ━━━
+commanding, fierce, intent, capable, kinetic, rugged, weathered, mid-leap, mid-strike, mid-fire, recoil, muzzle-flash, sparks, smoke-bloom, wind-tossed hair, wind-torn, brass-clasped, leather-bound, gear-embroidered, brass-pauldroned, ammunition-bandolier, goggles-up, goggles-down, brass-monocle, cannon-port, rigging, spotter-platform, sky-corsair, dirigible-spine, oil-soaked, weathered hands.
+
+━━━ FORBIDDEN VOCABULARY — these trigger Replicate's NSFW filter / break the male brief ━━━
+- sexy, erotic, sensual, seductive, smoldering, come-hither, provocative
+- shirtless, bare-chested, bare torso, open shirt, unbuttoned to the navel, exposed chest, glistening pecs
+- moisture/heat-on-skin imagery: wet skin, beads of sweat, oiled torso
+- bulging muscles fetish framing, beefcake, pin-up
+
+━━━ HARD BANS — COMPOSITION ━━━
+- NO multiple primary characters — he is the SOLE focal point (background figures OK but must stay small + mid-distance + faceless)
+- NO tight head-portrait crop — full body or three-quarter, 40-60% frame
+- NO posing-for-camera, NO modeling shot, NO trading-card art, NO stationary-portrait
+- NO wide-vista-with-tiny-character framing
+- NO substituting your own descriptions for the pool entries — render what's locked
+- NO decorative clutter framing (gears / clocks pasted around the edges)
+- NO ground-level setting (he is on / around an AIRSHIP — never on solid ground unless the airship is visibly docked at an aerie / sky-platform)
+- NO women, NO second figures as co-protagonist
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING: the literal ethnicity-noun-phrase from the skin entry ("a Japanese man" / "a Nigerian man" / "a Norwegian man" / etc.) + his HAIR COLOR natural to that heritage ("…with windswept sandy-blond hair") — BOTH in the first ~8 tokens — followed by [doing exact action] on/aboard [airship setting]], [his tailored airship outfit with OBSESSIVE LAYERED detail — every brass clasp / leather strap / goggle-harness / embroidered cuff], [his signature equipment visible], [the rest of his face: eyes + facial hair + skin-tone detail beyond the ethnicity-noun], [his hair carrying the motion of the action], [the airship deck / rigging / brass hardware around him in midground], [the distant backdrop sky/city/terrain with atmospheric haze], [any background figures in midground (small, faceless)], [drama event if rolled], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens MUST be the ethnicity-noun-phrase ("a Japanese MAN") + hair color, copied/derived from the skin entry. Flux locks ethnicity + hair from the first 8 tokens. The word MAN must be unmistakable — never "young man" or "captain" as a substitute for the ethnicity-noun. He fills 40-60% of frame, MID-ACTION. The ACTION gets significant word-budget alongside the outfit. He is FULLY DRESSED.
+
+Output ONLY the raw 110-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
 };

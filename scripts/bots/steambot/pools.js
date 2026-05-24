@@ -110,6 +110,16 @@ module.exports = {
   AIRSHIP_FEMALE_OUTFIT: load('airship_female_outfit'),
   AIRSHIP_FEMALE_ACTION: load('airship_female_action'),
 
+  // airship-male path — male sister; shares role/accessory/backdrop/drama
+  // above, male-bespoke for the gendered axes (facial_hair is male-only).
+  AIRSHIP_MALE_SKIN: load('airship_male_skin'),
+  AIRSHIP_MALE_EYES: load('airship_male_eyes'),
+  AIRSHIP_MALE_FACIAL_HAIR: load('airship_male_facial_hair'),
+  AIRSHIP_MALE_HAIR_COLOR: load('airship_male_hair_color'),
+  AIRSHIP_MALE_HAIRSTYLE: load('airship_male_hairstyle'),
+  AIRSHIP_MALE_OUTFIT: load('airship_male_outfit'),
+  AIRSHIP_MALE_ACTION: load('airship_male_action'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {

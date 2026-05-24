@@ -121,6 +121,20 @@ module.exports = {
   anchorScaleRange: null
 },
 
+  STEAMBOT_AIRSHIP_MALE: {
+  description: 'PATH-BESPOKE — SteamBot airship-male path (2026-05-23). MALE sister to STEAMBOT_AIRSHIP_FEMALE: same steampunk airship-action scenes, male actors. Solo handsome/rugged/weathered male air-officer / sky-corsair caught MID-ACTION on/around a steampunk airship. Combat allowed. Appeal reads through action + craftsmanship, NEVER seductive, NEVER shirtless. Background figures permitted mid-distance but never co-protagonists. Character 40-60% of frame, telephoto compression with airship deck in midground. NEVER static portrait. Carries the female-path wins: ethnicity-noun opening + FRONT-LOADED hair color (so hair varies, not default-dark) + heritage-reconcile + Frazetta painted-MAN anchor (steambot-painted-man medium). 8 character DNA (adds facial_hair) + 2 path-bespoke (action / backdrop) + 1 conditional 40%-gated (drama) + 2 universal.',
+  slots: {
+    universal: [ 'lighting', 'atmosphere' ],
+    bot: [],
+    characterDnaAxes: [ 'role', 'skin', 'eyes', 'facial_hair', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
+    path: [ 'action', 'backdrop' ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'drama', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
   STEAMBOT_STEAMPUNK_SCENE: {
   description: 'PATH-BESPOKE — SteamBot steampunk-scene path (2026-05-15 migration). CHARACTER INTEGRATED INTO EPIC STEAMPUNK SCENE — a role-based steampunk figure (clockwork magistrate / sky-nomad / weather-prognosticator / etc. — gender-agnostic, persona-driven) AT MEDIUM scale (15-25% frame) standing inside a wildly imaginative steampunk landscape (Big-Ben-clockwork-opened / gear-waterfall / floating-metropolis / mechanical-jungle / brass-cathedral / etc.). The LANDSCAPE is the co-hero. Cinematic feature-film concept render with photoreal physical light. 3 path-bespoke axes (character / landscape / surprise_element) + conditional event 40%-gated + universal lighting + atmosphere.',
   slots: { universal: [ 'lighting', 'atmosphere' ], bot: [], path: [ 'character', 'landscape', 'surprise_element' ] },

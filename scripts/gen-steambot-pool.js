@@ -362,6 +362,169 @@ Lineage to channel: Mortal-Engines Anna-Fang in the engine-room mid-fight / Last
     instructions: `Each entry 30-60 words. Format: "ACTION-NAME-CAPS — full mid-motion description with body position + airship location + action verb + kinetic detail + implied next-second". Output as a NUMBERED list. NO internal newlines (each entry on ONE single line).`,
   },
 
+  // ═══════════════════════════════════════════════════════════
+  // AIRSHIP-MALE path (2026-05-23) — male sister to airship-female.
+  // Same airship-action scenes, male actors. 7 male-bespoke pools;
+  // role/accessory/backdrop/drama shared from airship-female above.
+  // ═══════════════════════════════════════════════════════════
+
+  airship_male_skin: {
+    format: 'simple',
+    theme: `ETHNICITY-NOUN-ANCHORED skin descriptions for airship-MALE. THE PRIMARY DIVERSITY AXIS. Each entry 18-30 words, strict format: "[Ethnicity-adjective] man with [skin tone] and [undertone], [steampunk-coded male face detail], [optional weathered feature]."
+
+⚠️ FORMAT NON-NEGOTIABLE — every entry STARTS with "[Nationality/Ethnicity] man with..." so the template drops the noun verbatim into the opening tokens. Flux locks ethnicity from the first 5-8 tokens.
+
+✓ DIVERSITY MANDATE — two goals: (1) diverse skin tones, (2) ~30% Northern/Eastern European LIGHT-HAIR heritages (Norwegian, Swedish, Finnish, Icelandic, Danish, Irish, Scottish, English, German, Polish, Russian, Ukrainian — the SOURCE of blond/red/auburn hair). Rest globally diverse: African ~16%, East Asian ~10%, South+SE Asian ~12%, MENA+Mediterranean ~12%, Indigenous American ~8%, Pacific+Latin+Caribbean ~10%, mixed ~2.
+
+⚠️ MALE FACE DETAIL — ONLY face-area words, MALE-coded: strong jaw, square jaw, stubble-shadow, heavy brow, broad cheekbones, sun-creased temple, weathered crease, sharp nose, scar. NEVER torso/chest/shoulders/arms. NEVER kohl/makeup/lipstick. NEVER "voluptuous/curvy". NEVER "exotic/oriental".
+
+✓ STEAMPUNK FACE DETAIL: soot-streak across cheek, brass-dust on temple, oil-smudge on jaw, salt-spray sheen, wind-burn flush, cannon-flash glow on cheekbone, goggle-tan-line, lantern-glow warming his brow, gas-light catching stubble along the jaw.`,
+    touchpoints: [
+      'Norwegian man with fair wind-burnt skin and cool rose undertone, heavy brow over deep-set eyes, frost-flush across a sharp nose, faint scar through one eyebrow.',
+      'Nigerian man with deep mahogany skin and warm undertone, strong square jaw, cannon-flash bronzing his broad cheekbones, soot-streak from temple to jaw.',
+      'Japanese man with cool ivory skin and subtle warm undertone, sharp jaw shadowed with stubble, brass lamplight warming his temple.',
+      'Scottish man with cream-pale freckled skin and neutral undertone, ruddy wind-chap across both cheeks, weathered crease at the eye, oil-smudge along the jaw.',
+      'Persian man with warm olive complexion and golden undertone, heavy dark brow, sharp aquiline nose lit by morning sun, brass-dust on his temple.',
+      'Yoruba man with rich deep-ebony skin and cool undertone, broad noble nose, lantern-glow on a strong cheekbone, fine ritual scar at the temple.',
+      'Russian man with cool porcelain skin and faint blue undertone, hard-set jaw, gas-light catching dust along the cheekbone, healed scar through the left brow.',
+      'Samoan man with deep warm-brown skin and amber undertone, broad heavy jaw, cannon-flash glow on his forehead, salt-spray sheen across the brow.',
+      'German man with fair ruddy skin and warm peach undertone, square jaw with three-day stubble, sun-creased temple, lantern-glow warming his brow.',
+      'Tamil man with rich dark-brown skin and warm amber undertone, sharp cheekbones, brass-dust glinting along his jaw, deep-set intent eyes.',
+    ],
+    instructions: `Each entry 18-30 words. STRICT FORMAT: "[Ethnicity] man with [tone and undertone], [male steampunk face detail], [optional weathered feature]." Ethnicity-noun is the first 3-4 words. Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  airship_male_eyes: {
+    format: 'simple',
+    theme: `EYE descriptions for airship-MALE. Each entry 8-15 words: ONE eye color + a MALE steampunk detail (goggle-tan-line, soot-streak, brass-flecked iris, weathered squint, scar-through-brow). NO kohl / NO makeup / NO eyeliner (male).
+
+⚠️ COLOR DIVERSITY — most of the world has BROWN/DARK eyes; do NOT default to pale-grey "aviator" eyes. In 25 entries: ~10 brown (deep-brown/dark-brown/near-black/coffee/chestnut), ~5 amber/honey/hazel, ~5 green/sea-green, only ~5 grey/blue/steel.
+
+ONLY eyes — NEVER torso/chest/lips.`,
+    touchpoints: [
+      'deep dark-brown eyes narrowed against the slipstream, brass-flecked near the pupil',
+      'near-black coffee eyes under a heavy brow, soot-streak across the cheekbone below',
+      'warm amber eyes flecked with gold, goggle-tan-line pressed pale at the temple',
+      'rich mahogany-brown eyes catching lantern-light, a scar through the right brow',
+      'dark chestnut eyes with a weathered squint, brass goggles pushed up on his forehead',
+      'sea-green eyes sharp and intent in the cannon-flash, wind-reddened at the corners',
+      'steel-grey eyes hard as a compass needle, a deep goggle-crease at each temple',
+      'hazel eyes shifting green-to-gold, soot dusting the lower lid',
+    ],
+    instructions: `Each entry 8-15 words. Brown/dark eyes MUST dominate. NO kohl/makeup. Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  airship_male_facial_hair: {
+    format: 'simple',
+    theme: `FACIAL HAIR descriptions for airship-MALE — period-Victorian/steampunk, each 6-15 words. ONE specific style + a steampunk/weathered texture detail.
+
+✓ VARIETY in 25 entries: clean-shaven sharp jaw (~5), short/3-day stubble (~5), full beard (~5: iron-grey / black / sailor / soot-flecked), mustache styles (~5: waxed handlebar / Imperial / pencil), mutton-chops & Van Dyke & goatee (~5).
+
+✓ Tie to weathering: salt-stiffened beard, soot-flecked stubble, wax-curled mustache, wind-roughened jaw. Greys for older men.
+
+🚫 NO modern styles (no "fade", no "soul patch"). NO fantasy. Face only.`,
+    touchpoints: [
+      'a neatly waxed handlebar mustache, tips curled and brass-bright with pomade',
+      'a full salt-and-pepper beard, wind-roughened and salt-stiffened',
+      'a sharp clean-shaven jaw shadowed faintly blue, soot-flecked along the cheek',
+      'a Van Dyke goatee, precise and oil-darkened at the chin',
+      'thick mutton-chop sideburns framing a strong jaw, brass-dust caught in them',
+      'three-day stubble across a square jaw, soot-flecked from the engine room',
+      'an iron-grey full beard cropped short, weathered and wind-tossed',
+      'a trimmed Imperial mustache over a clean chin, wax-curled at the ends',
+    ],
+    instructions: `Each entry 6-15 words. ONE facial-hair style + weathered/steampunk texture. Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  airship_male_hair_color: {
+    format: 'simple',
+    theme: `HAIR COLOR descriptions for airship-MALE. Each entry 6-15 words: ONE specific hair color + period/weathered material descriptor (wind-tossed / oil-streaked / salt-stiffened / smoke-stained). SOURCE OF HAIR-COLOR VARIETY — the template pairs it with heritage.
+
+✓ DISTRIBUTE: black/jet (~20%), brown/chestnut (~22%), red/auburn/ginger (~16%), blond/sandy/flax (~16%), silver/grey/salt-pepper (~14%), copper/mahogany (~12%). NEVER fantasy colors (no pink/blue/purple).`,
+    touchpoints: [
+      'jet-black hair cropped close at the sides, oil-streaked from the engine housing',
+      'sandy-blond hair sun-bleached and wind-tossed across his brow',
+      'deep auburn hair raked back, salt-stiffened from sky-spray',
+      'iron-grey at the temples fading to dark, wind-roughened',
+      'wind-tossed chestnut-brown hair with a streak of premature silver',
+      'ginger hair cropped short, smoke-stained at the edges',
+      'salt-and-pepper hair swept back, salt-stiff from the slipstream',
+      'copper-red hair tied in a short queue, oil-darkened at the nape',
+    ],
+    instructions: `Each entry 6-15 words. ONE hair color + weathered descriptor. Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  airship_male_hairstyle: {
+    format: 'simple',
+    theme: `HAIRSTYLE descriptions for airship-MALE — period-correct steampunk-airship menswear styles that READ MID-ACTION (wind-tossed / escaping / slipstream-torn). Each entry 10-18 words.
+
+✓ VARIETY in 25: short military crop (~6), slicked/raked back (~5), short queue/ponytail tied at nape (~5), windswept loose medium (~5), tucked under flight-cap / leather helmet (~4). MALE styles only.
+
+🚫 NO modern cuts (no fade / man-bun / undercut-as-fashion). NO long flowing romance-cover hair. Hair conveys ACTION not stationary portrait.`,
+    touchpoints: [
+      'short military crop wind-flattened against his scalp in the slipstream',
+      'dark hair raked back with oil, a few strands torn loose by the wind',
+      'a short queue tied at the nape with a leather cord, wind-whipped',
+      'windswept medium hair shoved back off his brow, flight-goggles pushed up into it',
+      'close-cropped sides with the top tossed wild by the storm-wind',
+      'hair tucked under a leather flight-cap, only the wind-burnt edges showing',
+      'slicked-back hair coming loose mid-action, strands across his weathered brow',
+      'a short sailor queue under a battered tricorn, salt-stiff and wind-torn',
+    ],
+    instructions: `Each entry 10-18 words. Male period style + motion. Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  airship_male_outfit: {
+    format: 'simple',
+    theme: `OUTFIT descriptions for airship-MALE — period-correct steampunk airship-officer/crew MENSWEAR, OBSESSIVELY layered + detailed. Each entry 30-55 words. FULLY DRESSED always (never shirtless / open-chest). The outfit is a major show.
+
+✓ SILHOUETTE VARIETY in 25: naval frock coat + breeches + boots; leather flight greatcoat + brass pauldron + flight suit; sky-corsair longcoat + linen shirt + leather baldric + sash; riding-coat + waistcoat + cravat; canvas flight suit + harness + bandolier; dress-uniform tunic + gear-embroidered collar; weathered pirate-captain layered coat + boarding gear. Heritage-coded variants welcome (Persian sky-corsair caftan-coat over trousers, Mughal sky-officer achkan, Tokyo airship-academy tunic).
+
+✓ MANDATORY per entry: the coat/jacket layer + what is under it (shirt/waistcoat/tunic) + trousers/breeches + boots + at least 2 brass/leather hardware details (epaulets / clasps / buckles / bandolier / goggle-harness / baldric).
+
+🚫 NO bare chest, NO open-to-navel shirt, NO sleeveless, NO modern clothing. Brass + leather + wool + canvas + linen + copper material vocabulary.`,
+    touchpoints: [
+      'a double-breasted midnight-blue naval frock coat with two rows of brass anchor-buttons and gold-braid epaulets, over a white high-collar linen shirt and grey waistcoat, charcoal breeches tucked into knee-high black-leather boots, a wide brass-buckled belt with a holstered brass revolver, leather flight-goggles pushed up onto his brow',
+      'an oxblood-leather flight greatcoat with five copper turn-buckle clasps and a hammered-brass pauldron at one shoulder, over a cream cotton shirt and leather waistcoat, dark trousers tucked into laced flight-boots, an ammunition-bandolier of brass shells across his chest, an articulated brass gauntlet on one hand',
+      'a sky-corsair scarred longcoat of dark-brown leather over a loose linen shirt and a leather baldric, a brass-buckled sash at the waist with a cutlass through it, canvas trousers tucked into mismatched boots, fingerless leather gauntlets, a battered tricorn with a tarnished brass cockade',
+      'a fitted gunmetal-grey wool officer tunic with a high gear-embroidered collar and brass toggle-buttons, over a white shirt, dark breeches and polished knee-boots, a leather cross-belt bearing a brass spyglass and a holstered pistol, brass-rimmed goggles on a copper chain',
+      'a deep-crimson Mughal-cut sky-officer achkan with gold-zardozi cuffs and brass-and-ruby buttons over a fine cotton shirt, a leather waistcoat, churidar trousers tucked into embroidered ankle-boots, a broad brass-and-enamel belt with a scimitar in a jeweled scabbard',
+      'a waxed-canvas hip-length flight jacket with brass turn-buckles over a grey high-collar shirt and a leather chest-harness, heavy twill trousers tucked into cuffed boots, a map-satchel on a brass-buckled strap, leather elbow-patches riveted in brass',
+    ],
+    instructions: `Each entry 30-55 words. FULLY DRESSED menswear: coat + under-layer + trousers + boots + 2+ brass/leather details. Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  airship_male_action: {
+    format: 'simple',
+    theme: `AIRSHIP-MALE MID-ACTION descriptors — the headline of every render. Each entry 30-60 words: ONE specific MID-MOTION moment combining his body position + what he is doing + airship location + kinetic specifics + an implied next-second. Combat allowed and encouraged. He is CAUGHT mid-frame, never posed.
+
+✓ ACTION CATEGORIES — distribute in 25 entries (don't default to one):
+  A. COMBAT cannon/boarding (~6): manning the starboard cannon mid-recoil, firing a brass pistol at boarders mid-leap, parrying a sky-cutlass blow, lighting a cannon-fuse with a brass match
+  B. COMBAT pursuit/boarding-leap (~4): leaping from the gunwale onto an enemy deck, swinging on a rigging-line between two ships, sprinting the spar with a cutlass raised
+  C. COMMAND (~4): shouting orders through a brass speaking-tube over the chart-table, gripping the wheel with a spyglass in the other hand, signaling another ship with a brass signal-lantern
+  D. NAVIGATION (~3): plotting a course with a brass quill as gauges glow, sweeping the horizon with a spyglass from the spotter-platform, reading an astrolabe against the cloud-cover
+  E. ENGINEERING mid-crisis (~4): climbing the rigging mid-storm to repair a torn fin, hauling a rope to right the listing ship, wrenching a misfiring engine valve
+  F. RIDING THE EXTREME (~2): clinging to the prow as the ship dives, standing on the bow mid-vortex with coat streaming
+  G. SIGNALING/RECON (~2): firing a signal-flare from a brass pistol, releasing a clockwork messenger-bird
+
+✓ MANDATORY per entry: his body position/pose + the specific airship feature/location + the action verb + a kinetic detail (smoke / muzzle-flash / sparks / recoil / wind-tear / coat-swirl) + the implied next-second.
+
+🚫 NO stationary poses, NO cheesecake/beefcake-coded action, NO ground-based action, NO modern combat, NO solo-repelling-an-army.
+
+Lineage: Mortal-Engines engine-room fight / Last-Exile bridge mid-broadside / Treasure-Planet sky-crew in the storm / Sinbad on the rigging.`,
+    touchpoints: [
+      'manning the starboard sky-cannon as it recoils, the brass breech kicking back against his shoulder, smoke blossoming from the muzzle, a spent brass shell ejecting at his feet, coat-tails caught in the recoil-wind, an enemy ship looming in the smoke beyond',
+      'leaping from the gunwale onto a parallel enemy deck mid-dogfight, a brass pistol in one hand and a cutlass in the other, coat streaming, the gap between the two ships visible below, cannon-flash lighting him from beneath',
+      'shouting course-corrections through a brass speaking-tube while braced over the chart-table on the bridge, a brass divider still in his free hand, gas-lit gauges glowing amber behind him',
+      'climbing the dirigible-rigging mid-storm to repair a torn fin, a brass wrench gripped in his teeth, rope wound around his gauntleted hand, lightning forking past the dirigible-spine behind him',
+      'sweeping the horizon with a brass spyglass from the spotter-platform high in the rigging, leaning into the slipstream, coat-tails fully horizontal in the wind, the deck small below him',
+      'parrying a sky-cutlass blow on the gunwale, sparks flying where the blades meet, his free hand braced on the brass railing, an enemy boarder swinging in for a second strike',
+      'hauling hand-over-hand on a braided hawser to right the listing ship, body thrown back against the cant of the deck, boots braced on oil-dark planking, rain sheeting past',
+      'firing a signal-flare from a brass-handled pistol at the gunwale, arm raised, the flare corkscrewing skyward trailing red smoke, his coat snapping in the wind',
+    ],
+    instructions: `Each entry 30-60 words. Format: "ACTION-NAME-CAPS — full mid-motion description with body position + airship location + action verb + kinetic detail + implied next-second". Output as a NUMBERED list. NO internal newlines (each entry on ONE single line).`,
+  },
+
 };
 
 if (!POOL_RECIPES[POOL]) {
