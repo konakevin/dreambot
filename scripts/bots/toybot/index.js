@@ -46,6 +46,28 @@ module.exports = {
   username: 'toybot',
   displayName: 'ToyBot',
 
+  // 2026-05-24 — model rotation. DEFAULT (every path): 50/50 flux-dev /
+  // flux-1.1-pro via the bot whitelist below. modelByPath OVERRIDES the two
+  // paths that render great on flux-2 (toybox-chaos + dino-diorama) to rotate
+  // all 4 Flux models (~1/4 each). modelByPath + this whitelist constrain the
+  // BOT only — user-facing mediums (claymation/vinyl) are untouched.
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  modelByPath: {
+    'toybox-chaos': [
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-2-dev',
+      'black-forest-labs/flux-2-pro',
+    ],
+    'dino-diorama': [
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-2-dev',
+      'black-forest-labs/flux-2-pro',
+    ],
+  },
+
   // mediumByPath — each path locks to its medium.
   // toybox-chaos rotates across an array per render to deliberately mix
   // the visual signature.

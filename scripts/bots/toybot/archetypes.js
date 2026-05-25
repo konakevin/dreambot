@@ -65,4 +65,17 @@ module.exports = {
   framingModes: null,
   anchorScaleRange: null
 },
+
+  TOYBOT_TOYBOX_CHAOS: {
+  description: 'PATH-BESPOKE — ToyBot toybox-chaos path (2026-05-24 bucket+pickN refactor). MIXED-TOY CHAOS — a big de-branded TOY BUCKET (trolls / ponies / barbarians / robots / heroes / army-men / plush / dinos / die-cast / dolls / gnomes…) pickN:4-composited into ONE interacting mini-vignette on a real surface, mid-chaos (rescue / battle / heist / race / monster-attack / tea-party-gone-wrong). The INTERACTION MANDATE is load-bearing — the picked toys must react to each other (chasing / rescuing / battling / fleeing), NOT a static lineup, with a clear focal beat. Each toy renders in its OWN native material (plastic / vinyl / plush / die-cast / tin). Replaces the old 6-slot baked-scene pool (combinatorial ceiling) — adding a toy is now a one-line bucket append. TOYBOX_TOY_BUCKET is a SHARED asset. Skips chaos / two-pass polish / sensory.',
+  slots: {
+    universal: [ 'camera_angle' ],
+    bot: [],
+    path: [ 'toy_cast', 'surface', 'scenario', 'lighting', 'atmosphere' ]
+  },
+  pickN: { toy_cast: 4 },
+  conditionalLayer: { slot: 'surprise', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
 };

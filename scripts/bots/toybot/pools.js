@@ -72,8 +72,16 @@ module.exports = {
   MECH_TOY_SCENES: load('mech_toy_scenes'),
   MECH_TOY_LANDSCAPES: load('mech_toy_landscapes'),
   TOYBOX_CHAOS_SCENES: load('toybox_chaos_scenes'), // legacy — kept for backref, no longer wired
-  TOYBOT_TOYBOX_STORYTELLING_SCENES: load('toybox_storytelling'),
+  TOYBOT_TOYBOX_STORYTELLING_SCENES: load('toybox_storytelling'), // legacy 6-slot — superseded by bucket
   TOYBOT_TOYBOX_STORYTELLING_CAMERAS: load('toybox_storytelling_cameras'),
+
+  // toybox-chaos bucket refactor (2026-05-24) — de-branded toy archetypes,
+  // pickN-composited into one interacting chaos vignette. TOYBOX_TOY_BUCKET is
+  // a SHARED asset (collector-shelf / epic-hero-bucket / dino surprise can reuse it).
+  TOYBOX_TOY_BUCKET: load('toybox_toy_bucket'),
+  TOYBOX_SURFACE: load('toybox_surface'),
+  TOYBOX_SCENARIO: load('toybox_scenario'),
+  TOYBOX_SURPRISE: load('toybox_surprise'),
   TOYBOT_PLUSH_STORYTELLING_SCENES: load('plush_storytelling'),
   TOYBOT_PLUSH_STORYTELLING_CAMERAS: load('plush_storytelling_cameras'),
   TOYBOT_BARBIE_STORYTELLING_SCENES: load('barbie_storytelling'),

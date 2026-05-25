@@ -1,32 +1,36 @@
 /**
- * ToyBot toybox-chaos path — declarative axis-system (2026-05-19 rewrite).
+ * ToyBot toybox-chaos path — bucket + pickN refactor (2026-05-24).
  *
- * MIXED-MEDIUM TOY-MISCHIEF STORYTELLING — every render is a single-frame
- * comedy moment from a longer absurd toy-story. 4-6+ different toy mediums
- * coexist in one packed scene on a real-world surface.
+ * Replaces the old 6-slot baked-scene pool (combinatorial ceiling) with a
+ * decomposed axis system: a big de-branded TOY BUCKET, pickN:4 (set in the
+ * archetype), composited by the template into ONE INTERACTING chaos vignette
+ * on a real surface. Adding a toy is now a one-line append to TOYBOX_TOY_BUCKET
+ * that instantly appears across millions of combos.
  *
- * Axes:
- *   - Universal: camera_angle (bot.defaultPools)
- *   - Path-bespoke:
- *       scene — 6-slot DNA seed (real surface + story setup; protagonist +
- *               dramatic absurd action; 3-5 supporting cast across brand
- *               families; absurd visual gag; warm play light; overhead
- *               chaos element)
+ * See TOYBOX_CHAOS_BUCKET_REFACTOR.md. The interaction mandate lives in the
+ * TOYBOT_TOYBOX_CHAOS template — that's the load-bearing piece.
  *
- * Locked medium: toybox_chaos_mixed (multi-medium ensemble directive).
- * Template inlines all mandate content. Self-contained. Skips chaos /
- * twoPassPolish / sensoryAnchors — the 6-slot seed is the source of truth.
+ * Axes: toy_cast (TOYBOX_TOY_BUCKET, pickN:4) + surface + scenario +
+ * universal camera/lighting/atmosphere + 40%-gated surprise.
+ *
+ * Locked medium: toybox_chaos_mixed (each toy in its own native material).
+ * camera_angle reuses the bespoke WIDE ensemble pool (the bot default leans
+ * macro / single-hero and crops the multi-toy cast). Skips chaos / polish /
+ * sensory (the composited brief is the source of truth).
  */
 
 module.exports = {
-  archetype: 'TOYBOT_TOYBOX_STORYTELLING',
+  archetype: 'TOYBOT_TOYBOX_CHAOS',
   pools: {
-    scene: 'TOYBOT_TOYBOX_STORYTELLING_SCENES',
-    // Path-bespoke camera pool — wide / deep-focus / ensemble framings only.
-    // The bot's default TOYBOT_CAMERA_ANGLES leans macro / shallow-DOF /
-    // single-hero-focus, which crops most cast out of frame. Toybox-chaos
-    // needs WIDE establishing shots so the full ensemble + story plays
-    // out edge-to-edge. R0 audit 2026-05-19.
+    // Wide ensemble framing — NOT the macro-leaning bot default.
     camera_angle: 'TOYBOT_TOYBOX_STORYTELLING_CAMERAS',
+    // The de-branded toy bucket — pickN:4 per render (archetype sets pickN).
+    toy_cast: 'TOYBOX_TOY_BUCKET',
+    surface: 'TOYBOX_SURFACE',
+    scenario: 'TOYBOX_SCENARIO',
+    lighting: 'LIGHTING',
+    atmosphere: 'ATMOSPHERES',
+    // conditional (40% gate)
+    surprise: 'TOYBOX_SURPRISE',
   },
 };

@@ -552,4 +552,58 @@ Weave this in as a delightful surprise — a stray non-dino toy or unexpected wh
 
 Output ONLY the raw 90-130 word scene description. Comma-separated phrases. Lead with the toy-dino action + clay world, not a cast list. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels.`;
   },
+
+  TOYBOT_TOYBOX_CHAOS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { camera_angle, toy_cast, surface, scenario, lighting, atmosphere, surprise } = slots;
+    const toys = Array.isArray(toy_cast) ? toy_cast.join(', ') : toy_cast;
+
+    return `You are a toy-photographer capturing a CHAOTIC TOYBOX SCENE for ToyBot — a handful of mismatched real toys composited into ONE interacting mini-vignette on a real surface. Fun, funny, packed with motion, everything reacting to everything.
+
+━━━ THE SURFACE — where the chaos happens ━━━
+${surface}
+
+━━━ THE TOYS — composite THESE into ONE interacting scene ━━━
+${toys}
+
+━━━ INTERACTION MANDATE — THE WHOLE GAME, NON-NEGOTIABLE ━━━
+Weave these toys into ONE chaotic mini-vignette where they are REACTING TO EACH OTHER — chasing, rescuing, battling, fleeing, teaming up, colliding — mid-action. This is NOT a static lineup, NOT toys sitting near each other, NOT a collection/shelf photo. Give it a CLEAR FOCAL BEAT: the ONE toy the eye lands on first (caught mid-action), with the others in motion around it, reacting. Something is HAPPENING — the viewer reads the little story in 2 seconds.
+
+━━━ THE CHAOS SCENARIO (what's going down) ━━━
+${scenario}
+
+━━━ TOY-MATERIAL REALISM — each toy in its OWN material ━━━
+Render every toy as a REAL PHYSICAL TOY at believable toy scale, each in its OWN distinct native material — hard plastic / soft vinyl / fuzzy plush / die-cast metal / tin wind-up / flocked / wood — NOT a unified art style. Real toys on a real surface: toy photography / practical-diorama realism, visible toy materials (mold-seams, plush-fur, chrome, scuffed factory paint). NOT digital characters, NOT CGI, NOT illustration.
+${
+  surprise
+    ? `
+━━━ SURPRISE TOY (fires this render) ━━━
+${surprise}
+
+Drop this one extra unexpected toy / whimsy into the chaos as a background gag — it should make the viewer grin, never steal the focal beat.
+`
+    : ''
+}
+━━━ CAMERA / FRAMING ━━━
+${camera_angle}
+
+Frame WIDE enough that all the toys and their interactions read in one shot — never crop the ensemble. A populated multi-toy scene with the surface and a hint of the surrounding room visible.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ HARD BANS ━━━
+- NO static lineup / collection-shelf / toys-posed-in-a-row — they MUST interact
+- NO licensed / branded / IP characters, names or logos — generic toy archetypes only
+- NO unified art style — each toy keeps its own toy material
+- NO digital characters, NO CGI, NO 2D illustration — real physical toys
+- NO text, NO UI, NO captions
+
+Output ONLY the raw 80-120 word scene description. Comma-separated phrases. Lead with the surface + the focal toy's action, then the reacting toys. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels.`;
+  },
 };

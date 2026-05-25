@@ -593,6 +593,98 @@ Channel: Barbie movie set photography + Pinterest aesthetic doll diorama photogr
     ],
     instructions: `Each entry 18-35 words. ONE dense cluster of 3-5 varied CLAY flora / set-dressing types layered at different scales (trees, ferns, mushrooms, vines, flowers, logs, boulders, reeds, alien-plants). Always handmade clay. NO dinos, NO real plants, NO modern objects. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // TOYBOX-CHAOS bucket refactor (2026-05-24). toy_bucket is a SHARED,
+  // de-branded toy-archetype pool, pickN-composited into one interacting
+  // chaos vignette. See TOYBOX_CHAOS_BUCKET_REFACTOR.md.
+  // ═══════════════════════════════════════════════════════════
+
+  toybox_toy_bucket: {
+    format: 'simple',
+    theme: `INDIVIDUAL DE-BRANDED TOY archetypes for the shared TOYBOX_TOY_BUCKET. Each entry is ONE single toy as a short noun phrase (8-16 words) — the template pickN-grabs several and composites them into a chaos scene, so each entry is just ONE toy, NOT a scene.
+
+✓ HUGE VARIETY across toy families — action figures (barbarian-hero / armored warrior / skull villain / caped crusader / commando / cobra-soldier / patriot / speedster), troll dolls, toy ponies & unicorns, robots (tin wind-up / chrome android / space-explorer / robot-dog), plush (teddy / bunny / puppy / dragon / care-bear-style / amigurumi), green army-men, gnomes, fairies, knights, wizards, ninjas, pirates, astronauts, divers, fashion dolls, dinos (T-rex / raptor / sauropod / stego / triceratops), die-cast vehicles (race car / monster truck / fire engine / bus / dump truck), wind-up novelties (chattering teeth / hopping frog / jack-in-the-box), rubber ducks, anthro cartoon animals (turtle-warrior / hedgehog / mouse / dog).
+
+⚠️ NAME THE MATERIAL/look where natural (plastic / vinyl / plush / die-cast / tin / flocked / wood) so the toy reads as a TOY.
+
+🚫 ABSOLUTELY NO BRAND / IP NAMES (no He-Man, Smurf, My Little Pony, TMNT, Mickey, Sonic, Barbie, Transformers, LEGO-as-brand, Star Wars, Marvel, DC, Funko, etc.) — generic de-branded archetypes ONLY. NO scenes, NO multiple toys per entry, NO surfaces.`,
+    touchpoints: [
+      'neon-haired troll doll with a wild jewel-tone updo',
+      'muscular barbarian-hero action figure with a plastic sword',
+      'blocky retro tin wind-up robot, silver',
+      'pastel toy pony with a brushable rainbow mane',
+      'green plastic army-man with a bazooka',
+      'worn velveteen teddy bear, one button eye',
+      'die-cast fire engine with a tiny ladder',
+      'horned triceratops toy',
+      'caped midnight crusader figure',
+      'rubber duck with a tiny sailor hat',
+      'little blue gnome figurine in a white cap',
+      'fashion doll in adventure-explorer khakis',
+    ],
+    instructions: `Each entry 8-16 words. ONE single de-branded toy as a noun phrase, with its material/look. NO brand names, NO scenes, NO surfaces, NO multiple toys. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  toybox_surface: {
+    format: 'simple',
+    theme: `REAL EVERYDAY SURFACE descriptors for toybox-chaos — where the toy chaos happens. Each entry is ONE real-world surface/setting (8-18 words), the kind of place a kid dumps a bin of toys.
+
+✓ VARIETY — kitchen counter, hardwood floor, bedroom rug / carpet, sandbox, bathtub edge + soapy tiles, bookshelf, picnic blanket on grass, wooden desk, garage floor, garden path / patio, coffee table, windowsill, staircase steps, kitchen table, toy-chest lid, bathroom sink, back-porch deck, dashboard, office desk, dollhouse floor.
+
+🚫 ONE surface per entry. NO toys, NO scenario, NO digital/abstract settings — real physical surfaces only.`,
+    touchpoints: [
+      'a warm hardwood living-room floor with a fringe of patterned area-rug at the edge',
+      'a cluttered kitchen counter beside a toaster and a ceramic fruit bowl',
+      'a plush bedroom shag-carpet with a dropped sock and a book corner',
+      'a backyard sandbox with a plastic shovel half-buried in the sand',
+      'the soapy white-tile edge of a bathtub with bubbles and a washcloth',
+      'a wooden bookshelf ledge between leaning hardcover spines',
+      'a checkered picnic blanket spread on summer grass with crumbs scattered',
+      'a paper-strewn wooden desk beside a coffee mug and a stapler',
+    ],
+    instructions: `Each entry 8-18 words. ONE real everyday surface/setting. NO toys, NO scenario. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  toybox_scenario: {
+    format: 'simple',
+    theme: `CHAOTIC TOYBOX SCENARIO descriptors for toybox-chaos — the absurd EVENT the mismatched toys are caught mid-action in. Each entry is ONE short scenario (6-14 words) that implies INTERACTION + motion (the toys react to each other).
+
+✓ VARIETY — daring rescue mission, all-out battle / melee, sneaky heist, downhill race, monster-attack / kaiju rampage, tea-party-gone-wrong, prison break, talent-show meltdown, wedding crashed, dance-off, treasure hunt, alien invasion, bank robbery, fire-drill panic, parade gone sideways, food fight, science-experiment explosion, courtroom drama, campfire ghost-story scare, tug-of-war, stampede, surprise birthday ambush, hot-air-balloon launch, pillow-fort siege.
+
+🚫 ONE scenario per entry. Must imply toys REACTING to each other / mid-action — never a calm static moment. NO specific toys (the bucket supplies those), NO surfaces.`,
+    touchpoints: [
+      'a frantic rescue as one toy dangles and the others scramble to save it',
+      'an all-out melee battle, factions charging from both sides mid-clash',
+      'a sneaky midnight heist, toys tiptoeing off with a stolen prize',
+      'a downhill race, racers neck-and-neck and one wiping out spectacularly',
+      'a monster-attack panic, a big toy rampaging as the rest flee screaming',
+      'a tea party gone wrong, the table flipping mid-argument',
+      'a prison break, toys scaling a wall as an alarm-toy blares',
+      'a talent-show meltdown, the act collapsing as judges react in horror',
+    ],
+    instructions: `Each entry 6-14 words. ONE chaotic scenario implying toys reacting / mid-action. NO specific toys, NO surfaces. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  toybox_surprise: {
+    format: 'simple',
+    theme: `SURPRISE-TOY descriptors for toybox-chaos — ONE extra unexpected toy / whimsy that crashes the scene as a background gag (fires ~40% of renders). Each entry is ONE small surprise element (8-18 words) that makes the viewer grin without stealing the focal beat.
+
+✓ VARIETY — a rogue rubber duck bobbing through, a wind-up robot trundling in obliviously, a lone googly-eyed sock puppet, a toy UFO hovering on a thread, a jack-in-the-box mid-pop, a remote-control car careening through, a slinky mid-bounce down a step, a glow-stick-waving party figure, a windup hopping frog crossing the scene, a spinning top wobbling, a nesting-doll spilling its insides, a bendy stretch-figure tangled in the action.
+
+🚫 ONE small surprise per entry. Brand-free. NO scenes, NO surfaces — just the one toy/whimsy.`,
+    touchpoints: [
+      'a rogue yellow rubber duck bobbing obliviously through the middle of the chaos',
+      'a wind-up tin robot trundling in from the side, key still turning, ignoring everyone',
+      'a toy UFO hovering on a near-invisible thread, beaming a tiny light down',
+      'a jack-in-the-box mid-pop, clown head sprung up wide-eyed at the mayhem',
+      'a remote-control car careening through the scene scattering the cast',
+      'a metal slinky caught mid-bounce tumbling down a step into the fray',
+      'a googly-eyed sock puppet flopped over a ledge watching the chaos',
+      'a windup hopping frog mid-leap right across the focal action',
+    ],
+    instructions: `Each entry 8-18 words. ONE small unexpected surprise toy / whimsy (brand-free). NO scenes, NO surfaces. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];
