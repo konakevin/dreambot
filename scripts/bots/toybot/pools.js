@@ -16,21 +16,29 @@ function load(name) {
 // Distinct palette per vibe — deliberately NOT warm-and-cool variants.
 // Every vibe should push Flux to a DIFFERENT corner of the color spectrum.
 const VIBE_COLOR = {
-  cinematic: 'high-contrast noir palette, hard black shadows, single white key light, no color cast',
+  cinematic:
+    'high-contrast noir palette, hard black shadows, single white key light, no color cast',
   cozy: 'overall-warm monochrome scene, all cream-and-honey tones, NO cool fill, flat even glow',
   epic: 'hard white high-noon daylight, short sharp shadows, washed-clean saturation',
   nostalgic: 'faded-Polaroid color grade, yellowed-paper tint, green-shifted shadows, no blue',
   peaceful: 'overcast-soft flat daylight, pale-grey sky, zero shadow contrast, muted desaturation',
-  whimsical: 'primary-color saturation pop (red / yellow / blue on white set), flat catalog lighting, NO chiaroscuro',
-  ethereal: 'all-white high-key floating light, milk-fog atmosphere, everything dissolves into pale',
-  arcane: 'monochrome deep-violet ONLY palette, NO warm tones anywhere, purple-on-purple, crystal-glow rim',
+  whimsical:
+    'primary-color saturation pop (red / yellow / blue on white set), flat catalog lighting, NO chiaroscuro',
+  ethereal:
+    'all-white high-key floating light, milk-fog atmosphere, everything dissolves into pale',
+  arcane:
+    'monochrome deep-violet ONLY palette, NO warm tones anywhere, purple-on-purple, crystal-glow rim',
   ancient: 'sepia-monochrome faded-desert palette, bronze-and-dust, no blue channel, sun-bleached',
   enchanted: 'bioluminescent cyan-green glow on all surfaces, NO warm counter-light, aquarium-feel',
-  coquette: 'pastel-pink monochrome — rose / bubblegum / cream ONLY, NO orange NO blue, soft-box flat',
-  voltage: 'electric-magenta-and-cyan neon-only palette, pitch-black negative space, NO warm highlights',
-  nightshade: 'deep-indigo nocturnal monochrome, silver moon-rim, ultraviolet accents, NO warm glow',
+  coquette:
+    'pastel-pink monochrome — rose / bubblegum / cream ONLY, NO orange NO blue, soft-box flat',
+  voltage:
+    'electric-magenta-and-cyan neon-only palette, pitch-black negative space, NO warm highlights',
+  nightshade:
+    'deep-indigo nocturnal monochrome, silver moon-rim, ultraviolet accents, NO warm glow',
   shimmer: 'iridescent pearl-holographic palette, shifting rainbow-oil-slick sheen, hard white key',
-  surreal: 'clashing impossible color pairings (e.g. lime-green sky + hot-pink ground + purple shadows), saturated-flat',
+  surreal:
+    'clashing impossible color pairings (e.g. lime-green sky + hot-pink ground + purple shadows), saturated-flat',
 };
 
 module.exports = {
@@ -82,6 +90,13 @@ module.exports = {
   TOYBOX_SURFACE: load('toybox_surface'),
   TOYBOX_SCENARIO: load('toybox_scenario'),
   TOYBOX_SURPRISE: load('toybox_surprise'),
+
+  // toy-blockbuster (2026-05-25) — movie-poster epic scenes in one rolled toy
+  // universe. Universe-agnostic scenarios (any toy line in any epic scene).
+  BLOCKBUSTER_SCENARIO: load('blockbuster_scenario'),
+  BLOCKBUSTER_CENTERPIECE: load('blockbuster_centerpiece'),
+  BLOCKBUSTER_SETTING: load('blockbuster_setting'),
+  BLOCKBUSTER_CAMERA: load('blockbuster_camera'),
   TOYBOT_PLUSH_STORYTELLING_SCENES: load('plush_storytelling'),
   TOYBOT_PLUSH_STORYTELLING_CAMERAS: load('plush_storytelling_cameras'),
   TOYBOT_BARBIE_STORYTELLING_SCENES: load('barbie_storytelling'),
@@ -139,38 +154,38 @@ module.exports = {
     },
   },
   // ─── model-train-world (R0 axis-system migration, 2026-05-17) ───
-    // Top-level pool refs for the declarative composer. Reuses existing
-    // seed JSONs; renamed with TOYBOT_ prefix for archetype slot resolution.
-    TOYBOT_MODEL_TRAIN_SCENE: load('toybot_model_train_scene'),
-    TOYBOT_TRAIN_CONSISTS: load('train_consists'),
-    TOYBOT_TRAIN_WEATHER: load('train_weather'),
-    // Drama-moment pool: fires in diorama mode. The "what's happening?"
-    // beat. 50 seeds at v1.
-    TOYBOT_TRAIN_DRAMA_MOMENT: load('train_drama_moments'),
-    // Unusual-cargo pool: conditional-layer (~35% of renders). Surprise
-    // cargo wow-factor. 50 seeds at v1.
-    TOYBOT_TRAIN_UNUSUAL_CARGO: load('train_unusual_cargo'),
-    // Real-world settings: toy train running through ACTUAL real
-    // environments (kitchen table, sandbox, sleeping cat, forest moss).
-    // Fires in world-mode ~65% of the time. The "scale-tension wow."
-    TOYBOT_TRAIN_WORLD_REAL: load('train_world_real'),
-    // Cinematic themed worlds: train as hero in genre-coded settings
-    // (Western / fantasy / sci-fi / cyberpunk / Polar Express / etc.).
-    // Fires in world-mode ~35% of the time. Movie-still vibe.
-    TOYBOT_TRAIN_WORLD_THEMED: load('train_world_themed'),
-    TOYBOT_CAMERA_ANGLES: load('camera_angles'),
-    TOYBOT_TOY_SCENARIOS: load('toy_scenarios'),
-    TOYBOT_STAGING_AXIS: load('staging_axis'),
+  // Top-level pool refs for the declarative composer. Reuses existing
+  // seed JSONs; renamed with TOYBOT_ prefix for archetype slot resolution.
+  TOYBOT_MODEL_TRAIN_SCENE: load('toybot_model_train_scene'),
+  TOYBOT_TRAIN_CONSISTS: load('train_consists'),
+  TOYBOT_TRAIN_WEATHER: load('train_weather'),
+  // Drama-moment pool: fires in diorama mode. The "what's happening?"
+  // beat. 50 seeds at v1.
+  TOYBOT_TRAIN_DRAMA_MOMENT: load('train_drama_moments'),
+  // Unusual-cargo pool: conditional-layer (~35% of renders). Surprise
+  // cargo wow-factor. 50 seeds at v1.
+  TOYBOT_TRAIN_UNUSUAL_CARGO: load('train_unusual_cargo'),
+  // Real-world settings: toy train running through ACTUAL real
+  // environments (kitchen table, sandbox, sleeping cat, forest moss).
+  // Fires in world-mode ~65% of the time. The "scale-tension wow."
+  TOYBOT_TRAIN_WORLD_REAL: load('train_world_real'),
+  // Cinematic themed worlds: train as hero in genre-coded settings
+  // (Western / fantasy / sci-fi / cyberpunk / Polar Express / etc.).
+  // Fires in world-mode ~35% of the time. Movie-still vibe.
+  TOYBOT_TRAIN_WORLD_THEMED: load('train_world_themed'),
+  TOYBOT_CAMERA_ANGLES: load('camera_angles'),
+  TOYBOT_TOY_SCENARIOS: load('toy_scenarios'),
+  TOYBOT_STAGING_AXIS: load('staging_axis'),
 
-    // dino-diorama (2026-05-24) — real toy dinosaurs in a claymation prehistoric
-    // world. DINO_TOY_CAST is SHARED with the future dino-mischief sister path.
-    DINO_DIORAMA_CAMERA: load('dino_diorama_camera'),
-    DINO_TOY_CAST: load('dino_toy_cast'),
-    DINO_DIORAMA_SCENARIO: load('dino_diorama_scenario'),
-    DINO_DIORAMA_BIOME: load('dino_diorama_biome'),
-    DINO_DIORAMA_FLORA: load('dino_diorama_flora'),
-    DINO_DIORAMA_ANCHOR: load('dino_diorama_anchor'),
-    DINO_DIORAMA_CRAFT: load('dino_diorama_craft'),
-    DINO_DIORAMA_CRITTERS: load('dino_diorama_critters'),
-    DINO_DIORAMA_SURPRISE: load('dino_diorama_surprise'),
+  // dino-diorama (2026-05-24) — real toy dinosaurs in a claymation prehistoric
+  // world. DINO_TOY_CAST is SHARED with the future dino-mischief sister path.
+  DINO_DIORAMA_CAMERA: load('dino_diorama_camera'),
+  DINO_TOY_CAST: load('dino_toy_cast'),
+  DINO_DIORAMA_SCENARIO: load('dino_diorama_scenario'),
+  DINO_DIORAMA_BIOME: load('dino_diorama_biome'),
+  DINO_DIORAMA_FLORA: load('dino_diorama_flora'),
+  DINO_DIORAMA_ANCHOR: load('dino_diorama_anchor'),
+  DINO_DIORAMA_CRAFT: load('dino_diorama_craft'),
+  DINO_DIORAMA_CRITTERS: load('dino_diorama_critters'),
+  DINO_DIORAMA_SURPRISE: load('dino_diorama_surprise'),
 };

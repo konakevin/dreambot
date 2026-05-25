@@ -606,4 +606,66 @@ ${vibeDirective.slice(0, 200)}
 
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. Lead with the surface + the focal toy's action, then the reacting toys. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels.`;
   },
+
+  TOYBOT_TOY_BLOCKBUSTER: ({ slots, sharedDNA, vibeDirective }) => {
+    const { camera_angle, scenario, centerpiece, setting, lighting, atmosphere } = slots;
+
+    return `You are a Hollywood movie-poster director shooting an EPIC TOY-MOVIE action scene for ToyBot. Every render is a poster-worthy, blockbuster-cinematic frame — dramatic, packed, beautifully staged and lit — but it is unmistakably made of REAL PHYSICAL TOYS at toy scale (toy photography / practical-set realism), NOT CGI, NOT digital characters.
+
+━━━ ONE TOY UNIVERSE — TOTAL COHESION (load-bearing) ━━━
+The ENTIRE scene is a SINGLE toy line — EVERY figure, the cast, AND the giant centerpiece are all the exact same toy universe established by the medium style above (all Funko-vinyl, OR all green-army-men, OR all claymation, OR all plush, OR all fashion-dolls, OR all Sackboy, etc.). It must read as one cohesive toy world — never a mix of toy types. Whatever that toy line is, render the WHOLE epic in it.
+
+⚠️ EMBRACE THE MISMATCH — the toy line and the scene do NOT need to "match." Cute lines land in epic combat scenes on purpose (Strawberry-Shortcake-style figures holding the line in a warzone, fashion dolls storming a fortress, plushies vs a kaiju). The contrast is the FUN — commit to it fully and play it straight, epic and dramatic, never winking.
+
+━━━ THE EPIC SCENE — what is happening (the headline) ━━━
+${scenario}
+
+Stage it as a CLIMACTIC movie moment — caught mid-action, freeze-frame energy (charging, firing, leaping, bracing, casting, fleeing, rallying). Clear cause-and-effect. The viewer reads the epic story in 2 seconds.
+
+━━━ THE CAST — a heroic ensemble (all this one toy line) ━━━
+A cast of 3-6 figures of THIS toy universe — a clear hero figure caught mid-action + supporting characters reacting around them (allies charging, a few foes, background figures). Believable toy-scale figures, real toy materials (visible plastic / vinyl / plush / clay / die-cast). NOT a static lineup — everyone is mid-motion in the scene.
+
+━━━ THE BIG STATEMENT CENTERPIECE — the "wow" (also this toy line) ━━━
+${centerpiece}
+
+This dominates the frame — render it MASSIVE via forced perspective, the cast tiny and heroic against it. It is ALSO a toy of the same universe (a giant boss figure / colossal toy vehicle / towering toy monster of that line). This is the movie-poster centerpiece — make it jaw-dropping.
+
+━━━ THE STAGE — real-world setting dressed as an epic location ━━━
+${setting}
+
+A real-world surface/place transformed by set-decoration + forced perspective into an epic battlefield / city / arena / wilderness at toy scale. Practical props, layered set dressing, depth-on-depth. Lived-in and real — the toys live in our world at their scale. Honor the SPECIFIC location named above — do NOT collapse it into a generic rocky canyon, ravine, or rock-walled corridor (that default is banned); render the distinct place described.
+
+━━━ CINEMATIC CAMERA / FRAMING (movie poster) ━━━
+${camera_angle}
+
+Compose like a blockbuster movie poster: wide-to-medium epic frame, dramatic angle (low hero up-angle, sweeping aerial, dutch tilt), forced-perspective scale contrast between the cast and the giant centerpiece. The whole ensemble + centerpiece read in frame. Cinematic depth.
+
+━━━ DRAMATIC LIGHTING (makes toys look epic) ━━━
+${lighting}
+
+Big, theatrical, motivated light — rim-light, god-rays, fire-glow, energy-blast glow, storm light. This is what sells "cheap toys" as a Hollywood frame.
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+Smoke, haze, dust, embers, sparks, debris mid-air — practical atmospheric drama.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 220)}
+
+━━━ HARD BANS ━━━
+- NO mixing toy lines — every figure + the centerpiece are the SAME toy universe
+- NO CGI, NO digital characters, NO 2D illustration, NO real (non-toy) humans/creatures — real physical toys only
+- NO static lineup / collection-shelf — it's a mid-action epic scene
+- NO licensed brand names or logos in the output
+- NO text, NO UI, NO captions
+
+Output ONLY the raw 90-130 word scene description. Comma-separated phrases. Lead with the epic action + the cast, then the giant centerpiece + setting. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels.`;
+  },
 };
