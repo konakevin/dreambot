@@ -20,6 +20,7 @@ import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
+import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
 import { generateSceneDescription } from '../_shared/sceneDescription.ts';
 import { resolveCastForPrompt } from '../_shared/castResolver.ts';
@@ -323,6 +324,14 @@ Deno.serve(async (req) => {
     // Resolve medium and vibe to real curated entries — never store placeholders
     let medium = await resolveMediumFromDb(medium_key, vibeProfile?.art_styles);
     const vibe = await resolveVibeFromDb(vibe_key, vibeProfile?.aesthetics);
+
+    // DLT: bot mediums carry scene/cast directives that would replace the
+    // user's subject. Swap in the STYLE-ONLY cleaned medium (dlt_clean_mediums)
+    // so the user's subject survives. No-op (raw bot medium) when no clean row
+    // exists. Only bot-only mediums reach here with a clean row — user-facing
+    // mediums have none, so this is inert for the normal Create flow.
+    const cleanRow = await fetchCleanMedium(supabase, medium.key);
+    medium = applyCleanMedium(medium, cleanRow);
 
     // DLT recipe-replay: if the source post used a bot-internal medium that
     // isn't registered in dream_mediums (e.g. plush_fabric, dollhouse_figures,

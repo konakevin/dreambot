@@ -32,6 +32,21 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 
 ---
 
+## ⚠️ ADDING A BOT MEDIUM? You MUST also add a "cleaned medium" for DLT (2026-05-25)
+
+When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` row), you **must also create a corresponding row in `dlt_clean_mediums`**. This is not optional — skipping it silently breaks "Dream Like This."
+
+**Why.** Bot mediums are authored for the *bot scene engine*, which generates an entire scene. So their `directive`/`flux_fragment` routinely **dictate content** — a cast ("mixed-medium toy cast captured mid-story-beat with action playing out"), creatures, story beats, diorama setups, framing, counts, and `NOT a ___` negations. That's correct for the bot. But "Dream Like This" lets a **user** apply a bot post's *look* to **their own subject**. The DLT prompt compiler force-feeds the medium's directive as the prompt opener — so a content-dictating bot directive **overrides the user's subject**. (Real bug, 2026-05-24: a user asked for "a cat on a roof hiding from dogs" in `toybox_chaos_mixed` and got a toy diorama of kids — the bot directive's "toy cast mid-story-beat" + a `character: 0` word budget erased the cat.)
+
+**The fix architecture (don't relitigate it):**
+- `dream_mediums` bot rows are **canonical and NEVER mutated** — the bot keeps rendering with them via its bot-local `mediumStyles` (botEngine overrides the DB `flux_fragment` with `bot.mediumStyles[medium]`, so the bot never even reads the cleaned copy).
+- `dlt_clean_mediums` (`medium_key` → `clean_flux_fragment`, `clean_directive`) holds a **STYLE-ONLY, subject-stripped** distillation of each bot medium (palette / lighting / technique / materials / named aesthetics — no cast, no scene, no action, no framing).
+- `generate-dream` resolves the medium, then `applyCleanMedium()` swaps in the cleaned style for DLT. **Fallback contract:** no clean row → the raw bot medium is used unchanged (so a missing entry degrades to the old behavior, it doesn't crash — but it WILL mis-render the user's subject, which is why you must add the row).
+
+**How to add it:** run `node scripts/distill-clean-mediums.js --missing` (distills any bot medium lacking a clean row via Haiku and upserts), or `--key <medium_key>` for one. It auto-strips scene/cast/subject language. Eyeball the output (it's a 25–45 word style phrase) before relying on it. Resolution logic + fallback edge cases are covered by `__tests__/lib/cleanMedium.test.ts`.
+
+---
+
 ## North Star — the actual goal
 
 **Every render must be a 10/10 poster-worthy frame.**
