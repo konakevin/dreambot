@@ -1445,7 +1445,7 @@ An atmospheric event happening in the world around her — render as a visible s
 `
       : '';
 
-    return `You are a fantasy concept-art painter writing a CANDID PEACEFUL ADVENTURING scene for DragonBot — a single heroic WOMAN of a SPECIFIC fantasy lineage caught between battles, never IN one. Frank Frazetta / Brom / Boris Vallejo / Greg Hildebrandt / Michael Whelan painted-fantasy-novel-cover tradition. LOTR / GoT / Elden Ring / Skyrim / Witcher energy. She is ALIVE, CAPABLE, weathered by adventure, in a quiet candid moment.
+    return `You are a fantasy concept-art painter writing a CANDID PEACEFUL ADVENTURING scene for DragonBot — a single heroic WOMAN of a SPECIFIC fantasy lineage caught between battles, never IN one. Classic painted fantasy-novel-cover oil-illustration tradition — hand-painted oil-on-canvas, painterly brushwork, romantic-realist sword-and-sorcery cover art. LOTR / GoT / Elden Ring / Skyrim / Witcher energy. She is ALIVE, CAPABLE, weathered by adventure, in a quiet candid moment.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
 The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "warrior", "fighter", "hero", "adventurer", "scout", "paladin", "ranger", or any other gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [race-coded] WOMAN [doing action] in [landscape]..." — "woman" comes BEFORE any other noun. Use she/her/hers throughout. The warrior archetype slot (paladin / ranger / barbarian / etc.) describes her ROLE, not her gendered noun — append role descriptor AFTER "woman" appears.
@@ -1511,8 +1511,8 @@ ${lighting}
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
 
-━━━ COLOR — LUSH, FULL, RICHLY SATURATED (load-bearing, 2026-05-25) ━━━
-Render in RICH, LUSH, FULL COLOR — a vivid, deeply saturated jewel-tone palette with glowing color depth and vibrant painterly hues across the ENTIRE frame. Lean the SATURATED, luminous end of the painted-fantasy-cover tradition (Boris Vallejo's glossy richness, Michael Whelan's luminous color, Greg Hildebrandt's vivid storybook color). Skin, outfit, foliage, sky, magic, and metal all read in full vivid color with clean saturated hues and bright chroma. Keep deep saturated color even in moody or low-light scenes — jewel-tone shadows and glowing colored accents keep the chroma rich and alive throughout. Color is GORGEOUS, vibrant, and ALIVE.
+━━━ COLOR — LUSH, RICH, FULL (load-bearing, 2026-05-25) ━━━
+Render in RICH, LUSH, FULL COLOR — a deep, full-bodied painterly palette with saturated oil-pigment hues and natural color depth across the ENTIRE frame. The rich, saturated color of classic hand-painted fantasy-novel covers (oil-on-canvas illustration). Skin, outfit, foliage, sky, magic, and metal all read in full, rich, naturalistic color — deep and saturated with believable painterly color harmony, like fine oil painting. Keep the color lush and full-bodied even in moody scenes, with rich jewel-tone depth in the shadows. Color is GORGEOUS and ALIVE — saturated and rich, with natural, believable color relationships and the grounded warmth of oil pigment.
 
 ━━━ MOOD CONTEXT (tone only — keep the color lush + saturated regardless) ━━━
 ${vibeDirective.slice(0, 200)}
