@@ -1,0 +1,36 @@
+name: Upscale Stuck-Job Sweep
+
+# Reliability backstop for on-demand HD upscales. If a request-upscale isolate
+# dies mid-run, this re-runs the stuck job and notifies the requester so a Pro
+# user who asked for an HD download always gets it. See UPSCALE_QUEUE_PLAN.md.
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # every 10 minutes
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Sweep stuck upscale jobs
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+        run: node scripts/sweep-stuck-upscales.js

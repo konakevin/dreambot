@@ -690,25 +690,12 @@ async function postAsBot({
     console.warn(`  ⚠️ style_summary distill failed: ${err.message}`);
   }
 
-  // 4K pre-upscale via Clarity Upscaler. Bot posts dominate the feed
-  // and rack up the most saves by Pro users — pre-upscaling means every
-  // Pro long-press is instant (cache hit) rather than paying the ~30s
-  // upscale wait on first save. ~$0.008/render × 32 bot posts/day ≈
-  // $5-6/month. Failure here is non-fatal — the on-demand upscale-image
-  // Edge Function remains as a fallback for Pro long-presses.
-  try {
-    const replicateToken = getKey('REPLICATE_API_TOKEN');
-    const hqStart = Date.now();
-    const hqUrl = await upscaleAndCache(sb, replicateToken, uploadId, publicUrl, userId);
-    if (hqUrl) {
-      console.log(`  ✨ 4K HQ cached in ${((Date.now() - hqStart) / 1000).toFixed(1)}s`);
-    } else {
-      console.warn(`  ⚠️ 4K upscale skipped/failed (on-demand path will kick in)`);
-    }
-  } catch (err) {
-    console.warn(`  ⚠️ 4K upscale threw: ${err.message}`);
-  }
-
+  // No pre-upscale (2026-05-25). Nothing is auto-upscaled; the HD upscale runs
+  // ON DEMAND the first time a Pro user downloads a post (request-upscale /
+  // upscale-image Edge Function), then caches on uploads.image_url_hq so every
+  // later download is instant. Bots post with image_url_hq=NULL. Inline
+  // upscaling here used to block the bot render ~17-70s for no reason (bots are
+  // cron-dispatched, nobody waiting). See UPSCALE_QUEUE_PLAN.md.
   return publicUrl;
 }
 

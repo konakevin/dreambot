@@ -30,7 +30,6 @@ import { dispatchDualFaceSwap } from '../../_shared/dualSwapDispatch.ts';
 import { persistToStorage } from '../../_shared/persistence.ts';
 import { insertGenerationLog } from '../../_shared/logging.ts';
 import { FIRST_DREAM_BANNED_PHRASES, FirstDreamPersona } from '../../_shared/firstDream.ts';
-import { upscaleAndCache } from '../../_shared/upscaleClarity.ts';
 import { getCostCents } from '../../_shared/modelPricing.ts';
 
 interface FirstDreamPayload {
@@ -210,35 +209,8 @@ export async function processFirstDreamJob(args: FirstDreamDispatcherArgs): Prom
     status: 'completed',
   });
 
-  // Pre-upscale for Pro users. First-dream is a one-time event so the
-  // pre-upscale almost always wins the race against the user's first
-  // long-press. Async via waitUntil so the queue worker can return
-  // immediately and pick up the next job.
-  try {
-    const { data: callerProfile } = await supabase
-      .from('users')
-      .select('pro_subscription')
-      .eq('id', userId)
-      .maybeSingle();
-    if (callerProfile?.pro_subscription) {
-      const upscaleTask = upscaleAndCache(
-        supabase,
-        replicateToken,
-        uploadRow.id,
-        persistedUrl,
-        userId
-      );
-      // deno-lint-ignore no-explicit-any
-      const er = (globalThis as any).EdgeRuntime;
-      if (er?.waitUntil) {
-        er.waitUntil(upscaleTask);
-      } else {
-        upscaleTask.catch(() => {});
-      }
-    }
-  } catch (err) {
-    console.warn('[firstDream] pro upscale gate failed:', (err as Error).message);
-  }
+  // NO auto-upscale (2026-05-25) — HD upscale is on-demand only via
+  // request-upscale, cached on first download. See UPSCALE_QUEUE_PLAN.md.
 
   return uploadRow.id;
 }

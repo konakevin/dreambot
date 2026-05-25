@@ -19,7 +19,8 @@ export interface NotificationItem {
     | 'post_like'
     | 'post_fuse'
     | 'follow_request'
-    | 'follow_accepted';
+    | 'follow_accepted'
+    | 'download_ready';
   uploadId: string | null;
   commentId: string | null;
   body: string | null;

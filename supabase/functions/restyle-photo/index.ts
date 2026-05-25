@@ -23,7 +23,6 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
-import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
 import { getCostCents } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
@@ -377,35 +376,8 @@ Deno.serve(async (req) => {
       console.error('[restyle-photo] Failed to create draft upload:', uploadResult.error.message);
     }
 
-    // Pre-upscale for Pro users — background via waitUntil so the
-    // user's photo restyle response isn't delayed by the ~30s upscale.
-    if (uploadId && imageUrl) {
-      try {
-        const { data: callerProfile } = await supabase
-          .from('users')
-          .select('pro_subscription')
-          .eq('id', userId)
-          .maybeSingle();
-        if (callerProfile?.pro_subscription) {
-          const upscaleTask = upscaleAndCache(
-            supabase,
-            REPLICATE_TOKEN,
-            uploadId,
-            imageUrl,
-            userId
-          );
-          // deno-lint-ignore no-explicit-any
-          const er = (globalThis as any).EdgeRuntime;
-          if (er?.waitUntil) {
-            er.waitUntil(upscaleTask);
-          } else {
-            upscaleTask.catch(() => {});
-          }
-        }
-      } catch (err) {
-        console.warn('[restyle-photo] pro upscale gate failed:', (err as Error).message);
-      }
-    }
+    // NO auto-upscale (2026-05-25) — HD upscale is on-demand only via
+    // request-upscale, cached on first download. See UPSCALE_QUEUE_PLAN.md.
 
     // ── Job update + notification in parallel ─────────────────────────
     const notifBody = hint

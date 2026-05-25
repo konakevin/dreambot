@@ -1,48 +1,52 @@
 /**
- * Fullscreen overlay shown during the ~15-25s Real-ESRGAN upscale pass
- * triggered by a Pro user's long-press save. Mirrors the Toast pattern:
- * mount once in _layout.tsx, call UpscaleOverlay.show()/hide() from
- * anywhere (no provider needed).
+ * UpscaleModal — dismissable status modal for an on-demand HD upscale.
  *
- * Why a fullscreen overlay instead of a toast: 20 seconds is too long
- * for an ephemeral toast — users need persistent feedback that the wait
- * is intentional + progressing.
+ * Nothing is auto-upscaled anymore; the first download of a post triggers the
+ * upscale (request-upscale Edge Function) which runs ~17s server-side. This
+ * modal is shown while we wait: it is DISMISSABLE (the upscale keeps running +
+ * the user gets a `download_ready` push when done), and if left open it POLLS
+ * the upload row and AUTO-SAVES the moment the HD image lands. See
+ * UPSCALE_QUEUE_PLAN.md.
+ *
+ * Imperative API like Toast — mount UpscaleModalHost once in _layout, call
+ * UpscaleModal.show(uploadId) from anywhere.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
+import { supabase } from '@/lib/supabase';
+import { saveUrlToPhotos } from '@/lib/savePhoto';
 
-interface OverlayState {
+type Phase = 'processing' | 'saving' | 'done' | 'timeout';
+interface State {
   visible: boolean;
-  message: string;
-  subMessage?: string;
+  uploadId: string | null;
 }
-
-type Listener = (state: OverlayState) => void;
+type Listener = (s: State) => void;
 let listener: Listener | null = null;
 
-export const UpscaleOverlay = {
-  show(message = 'Upscaling to 4K…', subMessage = 'This usually takes 25-35 seconds.') {
-    listener?.({ visible: true, message, subMessage });
+export const UpscaleModal = {
+  /** Show the modal for an in-flight on-demand upscale of `uploadId`. */
+  show(uploadId: string) {
+    listener?.({ visible: true, uploadId });
   },
   hide() {
-    listener?.({ visible: false, message: '', subMessage: '' });
+    listener?.({ visible: false, uploadId: null });
   },
 };
 
-const SECONDARY_TIPS = [
-  'This usually takes 25-35 seconds.',
-  'Sharpening every pixel…',
-  'Refining textures…',
-  'Almost there…',
-];
+const POLL_MS = 4000;
+const MAX_POLLS = 30; // ~2 min
 
-export function UpscaleOverlayHost() {
-  const [state, setState] = useState<OverlayState>({ visible: false, message: '', subMessage: '' });
-  const [tipIdx, setTipIdx] = useState(0);
+export function UpscaleModalHost() {
+  const [state, setState] = useState<State>({ visible: false, uploadId: null });
+  const [phase, setPhase] = useState<Phase>('processing');
   const opacity = useSharedValue(0);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const savingRef = useRef(false);
 
   useEffect(() => {
     listener = (next) => setState(next);
@@ -51,37 +55,104 @@ export function UpscaleOverlayHost() {
     };
   }, []);
 
+  // Animate in/out.
   useEffect(() => {
-    if (!state.visible) return;
-    opacity.value = withTiming(1, { duration: 200 });
-    // Rotate tip text every 5s while the overlay is up.
-    setTipIdx(0);
-    const timer = setInterval(() => {
-      setTipIdx((i) => (i + 1) % SECONDARY_TIPS.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    opacity.value = withTiming(state.visible ? 1 : 0, { duration: 200 });
   }, [state.visible, opacity]);
 
+  // Poll for the HD result while open; auto-save when it lands.
   useEffect(() => {
-    if (state.visible) return;
-    opacity.value = withTiming(0, { duration: 200 });
-  }, [state.visible, opacity]);
+    if (!state.visible || !state.uploadId) return;
+    const uploadId = state.uploadId;
+    setPhase('processing');
+    savingRef.current = false;
+    let polls = 0;
+
+    const stop = () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+      pollRef.current = null;
+    };
+
+    const tick = async () => {
+      polls += 1;
+      if (savingRef.current) return;
+      const { data } = await supabase
+        .from('uploads')
+        .select('image_url_hq')
+        .eq('id', uploadId)
+        .maybeSingle();
+      const hq = (data as { image_url_hq?: string | null } | null)?.image_url_hq;
+      if (hq) {
+        savingRef.current = true;
+        stop();
+        setPhase('saving');
+        await saveUrlToPhotos(uploadId, hq, true);
+        setPhase('done');
+        setTimeout(() => UpscaleModal.hide(), 1200);
+        return;
+      }
+      if (polls >= MAX_POLLS) {
+        stop();
+        setPhase('timeout');
+        setTimeout(() => UpscaleModal.hide(), 3000);
+      }
+    };
+
+    pollRef.current = setInterval(tick, POLL_MS);
+    return stop;
+  }, [state.visible, state.uploadId]);
 
   const animStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
-
   if (!state.visible) return null;
+
+  const copy = {
+    processing: {
+      icon: 'sparkles' as const,
+      title: 'Preparing your HD download',
+      sub: "This takes about a minute. You can keep browsing — we'll notify you when it's ready.",
+      showSpinner: true,
+      showDismiss: true,
+    },
+    saving: {
+      icon: 'download' as const,
+      title: 'Saving in HD…',
+      sub: 'Almost done.',
+      showSpinner: true,
+      showDismiss: false,
+    },
+    done: {
+      icon: 'checkmark-circle' as const,
+      title: 'Saved in HD ✓',
+      sub: 'Find it in your Photos.',
+      showSpinner: false,
+      showDismiss: false,
+    },
+    timeout: {
+      icon: 'time' as const,
+      title: 'Still preparing…',
+      sub: "It's taking a little longer — we'll send you a notification the moment it's ready.",
+      showSpinner: false,
+      showDismiss: true,
+    },
+  }[phase];
 
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.backdrop, animStyle]}>
-      {/* Pressable absorbs taps so user can't dismiss + interact with the screen behind. */}
       <Pressable style={StyleSheet.absoluteFill} onPress={() => {}}>
         <View style={styles.center}>
           <View style={styles.card}>
-            <ActivityIndicator size="large" color={colors.accent} />
-            <Text style={styles.title}>{state.message}</Text>
-            <Text style={styles.subtitle}>
-              {state.subMessage ?? SECONDARY_TIPS[tipIdx % SECONDARY_TIPS.length]}
-            </Text>
+            {copy.showSpinner ? (
+              <ActivityIndicator size="large" color={colors.accent} />
+            ) : (
+              <Ionicons name={copy.icon} size={40} color={colors.accent} />
+            )}
+            <Text style={styles.title}>{copy.title}</Text>
+            <Text style={styles.subtitle}>{copy.sub}</Text>
+            {copy.showDismiss && (
+              <Pressable style={styles.dismissBtn} onPress={() => UpscaleModal.hide()} hitSlop={8}>
+                <Text style={styles.dismissText}>Dismiss</Text>
+              </Pressable>
+            )}
           </View>
         </View>
       </Pressable>
@@ -90,15 +161,8 @@ export function UpscaleOverlayHost() {
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    backgroundColor: 'rgba(0, 0, 0, 0.78)',
-    zIndex: 9999,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  backdrop: { backgroundColor: 'rgba(0, 0, 0, 0.78)', zIndex: 9999 },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   card: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -124,4 +188,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
   },
+  dismissBtn: {
+    marginTop: 18,
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  dismissText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
 });

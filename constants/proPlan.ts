@@ -47,18 +47,20 @@ export const PRO_TRIAL_DAYS = 14;
  *  the prior 3-day window. */
 export const PRO_NIGHTLY_DREAMS_PER_MONTH = 30;
 
-/** HQ download monthly cap — "unlimited" in marketing copy, capped server-
- *  side at this number to block bot/scraper abuse without affecting any
- *  real user (a 500/mo cap = ~17 unique posts/day every single day). */
-export const PRO_HQ_DOWNLOADS_PER_MONTH = 500;
+/** HD download monthly cap. Each unique post is upscaled once on demand (then
+ *  cached + free forever), so this bounds a single user's first-downloader
+ *  upscales per month — ~100 ≈ 3/day, plenty for real use, and caps worst-case
+ *  cost at ~$2-3/user/mo at 2x HD. (Was 500/4K — far too expensive per maxed
+ *  user.) Keep in sync with HQ_CAP_PER_MONTH in upscale-image. */
+export const PRO_HQ_DOWNLOADS_PER_MONTH = 100;
 
 /** Pro perk list — surface in the Get Pro screen + any "what is Pro?" copy.
  *  Ordered by what users care about most. */
 export const PRO_PERKS = [
   {
     icon: 'download-outline',
-    title: 'Unlimited 4K downloads',
-    sub: 'Save any dream — yours, bots, or other creators — to your photos in 4K.',
+    title: '100 HD downloads a month',
+    sub: 'Save any dream — yours, bots, or other creators — to your photos in crisp HD.',
   },
   {
     icon: 'sparkles',

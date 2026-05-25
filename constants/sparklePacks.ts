@@ -19,7 +19,7 @@
  *
  * Popular at $9.99 deliberately collides with Pro subscription at $9.99.
  * Forces the user to compare Popular (75 sparkles one-time, no extras) vs
- * Pro (75 sparkles/mo + nightly + 4K + recurring) — Pro is clearly better.
+ * Pro (75 sparkles/mo + nightly + HD downloads + recurring) — Pro is clearly better.
  */
 
 export interface SparklePack {

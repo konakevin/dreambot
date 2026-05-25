@@ -17,7 +17,7 @@ import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
 import { ToastHost } from '@/components/Toast';
-import { UpscaleOverlayHost } from '@/components/UpscaleOverlay';
+import { UpscaleModalHost } from '@/components/UpscaleOverlay';
 
 import { queryClient } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
@@ -395,7 +395,7 @@ export default function RootLayout() {
             </Stack>
             <StatusBar style="light" />
             <ToastHost />
-            <UpscaleOverlayHost />
+            <UpscaleModalHost />
           </AlertProvider>
         </AppErrorBoundary>
       </QueryClientProvider>

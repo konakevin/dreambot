@@ -70,6 +70,8 @@ function getNotificationContent(type: string, actorName: string, body: string | 
         title: pickDreamPushTitle(),
         body: body ?? pickDreamPushBody(),
       };
+    case 'download_ready':
+      return { title: 'Your HD download is ready ✨', body: 'Tap to save it to your photos.' };
     default:
       return { title: 'New notification', body: '' };
   }

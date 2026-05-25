@@ -41,7 +41,6 @@ import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
-import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
 import { getCostCents } from '../_shared/modelPricing.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
@@ -1240,44 +1239,11 @@ Output ONLY the prompt.`;
         /* swallow — style_summary stays NULL, DLT falls back gracefully */
       });
 
-    // Pre-upscale for Pro users — runs in background after we respond.
-    // Caches 4K version on uploads.image_url_hq so the user's first
-    // long-press is instant. Non-Pro users get on-demand upscale via
-    // the upscale-image Edge Function (also caches, but pays a 25-35s
-    // wait on first save). Failure here is non-fatal — the on-demand
-    // path remains as a fallback.
-    if (uploadId && imageUrl) {
-      try {
-        const { data: callerProfile } = await supabase
-          .from('users')
-          .select('pro_subscription')
-          .eq('id', userId)
-          .maybeSingle();
-        if (callerProfile?.pro_subscription) {
-          const upscaleTask = upscaleAndCache(
-            supabase,
-            REPLICATE_TOKEN,
-            uploadId,
-            imageUrl,
-            userId
-          );
-          // EdgeRuntime.waitUntil keeps the isolate alive past the
-          // response so the ~30s upscale can finish in the background.
-          // Falls back gracefully if EdgeRuntime is undefined.
-          // deno-lint-ignore no-explicit-any
-          const er = (globalThis as any).EdgeRuntime;
-          if (er?.waitUntil) {
-            er.waitUntil(upscaleTask);
-          } else {
-            // Best-effort: leave the promise dangling. The Supabase
-            // runtime gives unawaited promises a grace period.
-            upscaleTask.catch(() => {});
-          }
-        }
-      } catch (err) {
-        console.warn('[generate-dream] pro upscale gate failed:', (err as Error).message);
-      }
-    }
+    // NO auto-upscale (2026-05-25). The HD upscale is on-demand only — it runs
+    // the first time someone actually downloads this post (request-upscale Edge
+    // Function), then caches on uploads.image_url_hq so every later download is
+    // instant. Auto-upscaling every render wasted ~$500-780/mo on posts nobody
+    // downloads. See UPSCALE_QUEUE_PLAN.md.
 
     // Job update + notification in parallel (both need uploadId but not each other)
     const notifBody = hint

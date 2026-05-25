@@ -86,6 +86,8 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
       return { action: 'liked your dream', preview: null };
     case 'post_fuse':
       return { action: 'fused with your dream', preview: null };
+    case 'download_ready':
+      return { action: 'Your HD download is ready', preview: 'Tap to save it to your photos' };
     default:
       return { action: '', preview: null };
   }
@@ -113,6 +115,8 @@ function getNotificationIcon(type: NotificationItem['type']): string {
       return 'person-add';
     case 'follow_accepted':
       return 'person-add';
+    case 'download_ready':
+      return 'download';
     default:
       return 'notifications';
   }

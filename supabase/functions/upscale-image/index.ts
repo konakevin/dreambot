@@ -1,26 +1,31 @@
 /**
- * Edge Function: upscale-image — 4× HD upscale of a posted dream via
- * Clarity Upscaler (philz1337x/clarity-upscaler). Pro-gated. Caches
- * the result onto uploads.image_url_hq so subsequent requests skip
- * the upscale.
+ * Edge Function: upscale-image — ASYNC on-demand HD upscale of a posted dream
+ * via Clarity Upscaler (philz1337x/clarity-upscaler). Pro-gated. Nothing is
+ * auto-upscaled; this runs the first time someone downloads a post, caches onto
+ * uploads.image_url_hq, and notifies the requester(s) when ready. Every later
+ * download is an instant cache hit. See UPSCALE_QUEUE_PLAN.md.
  *
  * POST /functions/v1/upscale-image
  * Auth: Bearer <user JWT>
  * Body: { upload_id: string }
- * Response 200: { image_url_hq: string, cached: boolean }
+ * Response:
+ *   200 { status: 'done', image_url_hq }   — already cached, save now
+ *   202 { status: 'processing' }           — kicked (or joined) an upscale;
+ *                                            client shows a dismissable modal,
+ *                                            gets a `download_ready` notification
+ *   403 Pro required | 429 monthly cap | 404 not found | 401 unauth
  *
- * Why Clarity (not Real-ESRGAN): Real-ESRGAN's general model is
- * trained primarily on photographs — tiny illustrated features (e.g.
- * 10-15px character eyes in TinyBot/ChibiBot/BloomBot renders) get
- * rebuilt with photo-realistic priors and mangled. Clarity is an
- * SDXL-based diffusion upscaler that respects the source style
- * across both photoreal and illustrated content. With low creativity
- * (0.2) + high resemblance (1.5) it adds detail without reimagining.
+ * Dedup: claim_upscale_job() guarantees ONE Replicate run per upload even with
+ * concurrent requesters; all requesters are notified when it lands. Reliability:
+ * the kick runs via EdgeRuntime.waitUntil; a stuck-job sweep (sweep-stuck-
+ * upscales) re-runs any upload whose isolate died.
  *
- * Output: 3072×5376 (4× of 768×1344 source) — ~16 MP poster-quality.
+ * Why Clarity (not Real-ESRGAN): Real-ESRGAN is trained on photos and mangles
+ * tiny illustrated features (TinyBot/ChibiBot eyes); Clarity is an SDXL
+ * diffusion upscaler faithful to both photoreal and illustrated content.
  *
- * Latency: ~25-35s. Client shows a fullscreen overlay during wait.
- * Cost: ~$0.008 per upscale on Replicate.
+ * Output: 2× → 1536×2688 (~4 MP HD), ~17s, ~$0.02/run. (Was 4×/16 MP/~64s — too
+ * slow + ~4× the cost for a phone download.)
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -93,16 +98,27 @@ Deno.serve(async (req) => {
     return json({ error: 'Upload not found' }, 404);
   }
 
-  // Cache hit — skip upscale, return existing HQ URL.
-  // Don't count cache hits against the monthly cap (the upscale already
-  // happened; we're just serving the URL).
+  // Cache hit — already upscaled (a prior downloader did the work). Instant.
   if (uploadRow.image_url_hq) {
-    return json({ image_url_hq: uploadRow.image_url_hq, cached: true }, 200);
+    return json({ status: 'done', image_url_hq: uploadRow.image_url_hq }, 200);
   }
 
-  // Monthly HQ download abuse cap (500/month per Pro user — matches
-  // PRO_HQ_DOWNLOADS_PER_MONTH constant). Only counts cache MISSES (i.e.
-  // unique posts the user has triggered an upscale for this month).
+  // Dedup double-taps: if this user already has a pending (un-notified) request
+  // for this upload, don't re-charge or re-enqueue — just say it's coming.
+  const { data: existingReq } = await supabase
+    .from('upscale_requests')
+    .select('id')
+    .eq('upload_id', body.upload_id)
+    .eq('user_id', user.id)
+    .is('notified_at', null)
+    .maybeSingle();
+  if (existingReq) {
+    return json({ status: 'processing' }, 202);
+  }
+
+  // Monthly HD download cap (per Pro user). Counts the unique posts a user has
+  // triggered an upscale for this month; re-downloads of an already-cached post
+  // hit the cache branch above and are free.
   const monthStart = new Date();
   monthStart.setUTCDate(1);
   monthStart.setUTCHours(0, 0, 0, 0);
@@ -112,49 +128,90 @@ Deno.serve(async (req) => {
     .eq('user_id', user.id)
     .gte('created_at', monthStart.toISOString());
 
-  const HQ_CAP_PER_MONTH = 500;
+  const HQ_CAP_PER_MONTH = 100;
   if ((downloadsThisMonth ?? 0) >= HQ_CAP_PER_MONTH) {
     console.warn(
-      `[upscale-image] user=${user.id.slice(0, 8)} hit ${HQ_CAP_PER_MONTH}/mo HQ cap (count=${downloadsThisMonth})`
+      `[upscale-image] user=${user.id.slice(0, 8)} hit ${HQ_CAP_PER_MONTH}/mo HD cap (count=${downloadsThisMonth})`
     );
     return json(
       {
         error: 'monthly_cap_reached',
-        message: `You've hit the ${HQ_CAP_PER_MONTH}/month HQ download limit. Resets the 1st of next month.`,
+        message: `You've hit the ${HQ_CAP_PER_MONTH}/month HD download limit. Resets the 1st of next month.`,
       },
       429
     );
   }
 
-  // ── Run Clarity Upscaler 4× via shared helper ─────────────────────────
-  console.log(
-    `[upscale-image] user=${user.id.slice(0, 8)} upload=${body.upload_id.slice(0, 8)} starting upscale`
-  );
-
-  const persistedUrl = await upscaleAndCache(
-    supabase,
-    replicateToken,
-    body.upload_id,
-    uploadRow.image_url,
-    user.id
-  );
-  if (!persistedUrl) {
-    return json({ error: 'Upscale failed' }, 502);
-  }
-
-  // Log this successful upscale against the user's monthly count.
-  // Non-fatal: if logging fails the user still gets their HQ render —
-  // they just won't count toward the cap (acceptable for now).
+  // Record this requester (the notify list) + charge a cap slot.
+  await supabase.from('upscale_requests').insert({ upload_id: body.upload_id, user_id: user.id });
   await supabase
     .from('pro_hq_downloads_log')
     .insert({ user_id: user.id, upload_id: body.upload_id })
     .then(
       () => {},
       (err: { message?: string }) =>
-        console.warn(`[upscale-image] log insert failed: ${err?.message ?? 'unknown'}`)
+        console.warn(`[upscale-image] cap log failed: ${err?.message ?? 'unknown'}`)
     );
 
-  return json({ image_url_hq: persistedUrl, cached: false }, 200);
+  // Atomically claim the work. Only the caller that gets the upload_id back
+  // KICKS the upscale (one Replicate run per upload, even with concurrent
+  // requesters + stale-job recovery). Everyone else just waits to be notified.
+  const { data: claim } = await supabase.rpc('claim_upscale_job', {
+    p_upload_id: body.upload_id,
+  });
+  const shouldKick = Array.isArray(claim) ? claim.length > 0 : !!claim;
+
+  if (shouldKick) {
+    const sourceUrl = uploadRow.image_url as string;
+    const uploadId = body.upload_id as string;
+    console.log(`[upscale-image] kicking on-demand upscale upload=${uploadId.slice(0, 8)}`);
+    const task = (async () => {
+      const hqUrl = await upscaleAndCache(supabase, replicateToken, uploadId, sourceUrl, user.id);
+      if (hqUrl) {
+        await supabase
+          .from('upscale_jobs')
+          .update({ status: 'completed', updated_at: new Date().toISOString() })
+          .eq('upload_id', uploadId);
+        // Notify every requester not yet told (inserting a notification fires
+        // the push via the notifications webhook). Multiple users → each pinged.
+        const { data: pending } = await supabase
+          .from('upscale_requests')
+          .select('user_id')
+          .eq('upload_id', uploadId)
+          .is('notified_at', null);
+        for (const r of pending ?? []) {
+          await supabase.from('notifications').insert({
+            recipient_id: r.user_id,
+            actor_id: r.user_id,
+            type: 'download_ready',
+            upload_id: uploadId,
+            body: 'download:Your HD download is ready ✨',
+          });
+        }
+        await supabase
+          .from('upscale_requests')
+          .update({ notified_at: new Date().toISOString() })
+          .eq('upload_id', uploadId)
+          .is('notified_at', null);
+      } else {
+        await supabase
+          .from('upscale_jobs')
+          .update({
+            status: 'failed',
+            last_error: 'upscaleAndCache returned null',
+            updated_at: new Date().toISOString(),
+          })
+          .eq('upload_id', uploadId);
+        // The stuck-sweep retries; if it ultimately gives up it notifies failure.
+      }
+    })().catch((e) => console.error('[upscale-image] upscale task threw:', (e as Error).message));
+
+    // deno-lint-ignore no-explicit-any
+    const er = (globalThis as any).EdgeRuntime;
+    if (er?.waitUntil) er.waitUntil(task);
+  }
+
+  return json({ status: 'processing' }, 202);
 });
 
 function json(payload: unknown, status: number): Response {
