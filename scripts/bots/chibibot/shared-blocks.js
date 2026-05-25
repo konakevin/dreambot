@@ -48,6 +48,28 @@ Cuteness is the canvas, not the ceiling. Stack cute-elements appropriate to the 
 const CHIBI_RENDER_MEDIUM =
   'hyper-detailed 3D CGI render, Octane / Redshift quality, Pop Mart / Be@rbrick designer-vinyl WORLD aesthetic (a whole magical diorama set rendered as collectible-figurine display, NOT a single hero figurine — environments, villages, interiors, multi-character scenes all sit naturally in this register), glossy dewy material treatment with subsurface scattering on every organic surface, ultra-clean form language with crisp surface definition and graphic-design crisp pattern work, framing varies — sometimes shallow-DOF hero portrait, OFTEN medium-wide group composition with all characters equally prominent at equal sharpness, lush magical detail in every corner, volumetric warm god-rays cutting through magical atmosphere, saturated jewel-tone palette (warm amber + emerald + teal + peach + magenta), frame-worthy wallpaper-poster composition. When characters appear, render each with chibi proportions — oversized head, massive glassy reflective multi-catchlight eyes, tiny stubby body. WHEN MULTIPLE CHARACTERS ARE PRESENT (pair or trio), frame as a GROUP COMPOSITION — medium-wide shot, ALL figures equally prominent in the foreground, NOT hero-with-secondary-behind-bokeh, all characters in sharp focus interacting relationally. NOT painted NOT 2D illustration NOT Pixar-soft NOT photoreal NOT plasticky';
 
+// CHIBI_CREATURE_MEDIUM — the EXACT medium text (verbatim from the recipe of
+// Kevin's hearted 2026-05-07 reference renders, recovered from the DB since
+// it predates the dream_mediums rewrite). This is the pre-drift version that
+// produced the ornate, jewel-eyed, single-hero creatures: it says the
+// designer-vinyl register is "applied to whatever the scene is" and
+// explicitly "When a creature/character IS the subject, render with chibi
+// proportions — oversized head, massive glassy reflective multi-catchlight
+// eyes" — i.e. it PERMITS a single ornate hero creature, unlike the current
+// CHIBI_RENDER_MEDIUM which forces "NOT a single hero figurine / group
+// composition". Used ONLY by the creature-world path (mediumStyles override).
+// Material + rendering "secret sauce" ONLY (per Kevin's style-layer spec) —
+// deliberately NO locked environment / weather / palette / time-of-day, so the
+// path's environment + weather + lighting axes drive scene VARIETY (the
+// references had varied detailed scenes, not all warm flower gardens).
+// CHIBI_CREATURE_MEDIUM — the EXACT medium from the approved cw-clean batch
+// ("wow you've actually done it"), recovered verbatim from a posted render's
+// frozen prompt. Ornate luxury-collectible creature + lush glowing dreamworld
+// environment. This is the locked, approved version — do not re-edit without
+// rendering against the references first.
+const CHIBI_CREATURE_MEDIUM =
+  'ultra-detailed designer-toy aesthetic, a SINGLE luxury collectible-figurine creature, ornate fantasy craftsmanship with intricate embossed surface detailing, delicate gold filigree and gemstone inlays, premium resin-vinyl texture, highly stylized chibi proportions, ENORMOUS glossy liquid-glass eyes with multi-layer translucent irises, reflective wet-eye shader, glowing inner refractions and cinematic catchlights, soft subsurface scattering, ultra-fine micro-engraved skin and feathered fur microtextures, porcelain-resin ornamental finish, whimsical fantasy realism, nestled in a lush richly-layered magical environment — abundant jewel-tone flowers and flora crowding the foreground, a deep atmospheric background receding into dreamy bokeh strung with glowing fairy-lights and floating luminous particles, rich saturated jewel-tone color grading (teal, magenta, gold, violet, rose), volumetric god-rays and dreamy ambient bloom, cinematic depth with creamy layered bokeh, octane / Unreal Engine 5 cinematic render, high-end collectible-toy photography, hyper-detailed stylized realism, the creature in crisp focus inside its glowing lush dreamworld, immersive magical atmosphere, premium pop-designer collectible vibe, masterpiece quality';
+
 // COZY_INDOOR_CLUTTER_BLOCK — borrowed from DragonBot's cozy-arcane "OPULENT
 // MAGICAL CLUTTER" forcing function. The "STACK AT LEAST 6 categories" mandate
 // is the secret weapon that makes DragonBot cozy-arcane renders feel
@@ -137,6 +159,7 @@ module.exports = {
   IMPOSSIBLE_BEAUTY_BLOCK,
   BLOW_IT_UP_BLOCK,
   CHIBI_RENDER_MEDIUM,
+  CHIBI_CREATURE_MEDIUM,
   COZY_INDOOR_CLUTTER_BLOCK,
   COZY_VILLAGE_CLUTTER_BLOCK,
   // Pixar aliases

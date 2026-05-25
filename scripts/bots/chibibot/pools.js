@@ -169,6 +169,12 @@ module.exports = {
   CREATURE_PORTRAIT_OUTFITS: load('creature_portrait_outfits'),
   CREATURE_PORTRAIT_SET_DECORATIONS: load('creature_portrait_set_decorations'),
 
+  // Creature-world path: dense, varied, structured magical environments
+  // (reverse-engineered from Kevin's hearted 2026-05-07 references). The other
+  // creature-world axes use shared pools (CUTE_CREATURES + PORTRAIT_FEATURES +
+  // SCENE_WEATHER + LIGHTING).
+  CREATURE_WORLD_ENVIRONMENT: load('creature_world_environment'),
+
   // Aquatic-village path-bespoke axes (2026-05-19 full-bespoke migration)
   AQUATIC_VILLAGE_ACTIVITIES: load('aquatic_village_activities'),
   AQUATIC_VILLAGE_SETTINGS: load('aquatic_village_settings'),

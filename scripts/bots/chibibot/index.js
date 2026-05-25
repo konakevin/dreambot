@@ -33,6 +33,7 @@ const pathBuilders = {
   'heartwarming-scene': require('./paths/heartwarming-scene'),
   'cozy-landscape': require('./paths/cozy-landscape'),
   'creature-portrait': require('./paths/creature-portrait'),
+  'creature-world': require('./paths/creature-world'),
   'sleepy-naptime': require('./paths/sleepy-naptime'),
   'rainy-day-cozy': require('./paths/rainy-day-cozy'),
   'bath-time': require('./paths/bath-time'),
@@ -62,6 +63,11 @@ module.exports = {
   mediumStyles: {
     chibibot_render: blocks.CHIBI_RENDER_MEDIUM,
     chibibot_pixar: blocks.CHIBI_PIXAR_MEDIUM,
+    // creature-world only — the verbatim 05-07 medium that produced Kevin's
+    // hearted ornate single-hero creatures (recovered from render recipes;
+    // see CHIBI_CREATURE_MEDIUM). bot.mediumStyles overrides the DB
+    // flux_fragment, so this fully controls creature-world's style prefix.
+    chibibot_creature: blocks.CHIBI_CREATURE_MEDIUM,
   },
 
   // Per-path medium lock — falls through to bot.mediums 50/50 rotation
@@ -85,6 +91,11 @@ module.exports = {
     'twilight-village': 'chibibot_pixar',
     'outdoor-adventure': 'chibibot_pixar',
     // creature-portrait: no medium lock — both chibibot_render + chibibot_pixar work
+    // creature-world — locked to the chibibot_creature medium (the verbatim
+    // 05-07 "lineage applied to whatever / creature IS the subject" text that
+    // produced Kevin's hearted ornate single-hero creatures). NOT chibibot_render
+    // (whose current text forces "NOT a single hero figurine / group composition").
+    'creature-world': 'chibibot_creature',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -127,6 +138,7 @@ module.exports = {
     'heartwarming-scene',
     'cozy-landscape',
     'creature-portrait',
+    'creature-world',
     'sleepy-naptime',
     'rainy-day-cozy',
     'bath-time',
@@ -149,6 +161,9 @@ module.exports = {
     'heartwarming-scene': 1,
     'cozy-landscape': 1,
     'creature-portrait': 1,
+    // creature-world — weight 4.5 ≈ 20% of rotation (4.5 / 22.5 total). The
+    // "Pop Mart" diorama path Kevin wants surfaced ~1-in-5 renders.
+    'creature-world': 4.5,
     'sleepy-naptime': 1,
     'rainy-day-cozy': 1,
     'bath-time': 1,
@@ -166,6 +181,18 @@ module.exports = {
 
   useModelPicker: true,
   allowedModels: ['black-forest-labs/flux-dev'],
+
+  // Per-path model lock. creature-world → flux-dev. CONFIRMED from the DB:
+  // the ornate reference renders Kevin hearted (2026-05-07, paths
+  // aquatic-village/outdoor-adventure/etc.) were ALL flux-dev. flux-1.1-pro
+  // renders the medium's literal "Be@rbrick designer-vinyl" as glass/metallic
+  // figurines — the wrong look. flux-dev gives the soft, ornate, jewel-eyed
+  // creatures. (Locked per-path so it survives even if chibibot.allowedModels
+  // changes again — the f5ad51a drift that lost flux-1.1-pro is irrelevant
+  // here because flux-dev is exactly what we want.)
+  modelByPath: {
+    'creature-world': 'black-forest-labs/flux-dev',
+  },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
   // distort the cute silhouette). Village + scenery + storybook +
@@ -193,7 +220,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'arctic-village', 'aquatic-village', 'cottagecore-village', 'sunny-village', 'twilight-village', 'outdoor-adventure', 'creature-portrait'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'arctic-village', 'aquatic-village', 'cottagecore-village', 'sunny-village', 'twilight-village', 'outdoor-adventure', 'creature-portrait', 'creature-world'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;
@@ -203,6 +230,7 @@ module.exports = {
     requiredChannels: ['lightcolor'],
     pathContext: {
       'creature-portrait': 'creature',
+      'creature-world': 'creature',
       'sleepy-naptime': 'creature',
       'bath-time': 'creature',
       'cuddly-aquatic': 'creature',
@@ -269,7 +297,9 @@ module.exports = {
     }
     // chibibot_render: append the 1–3 character-count rule so renders
     // aren't all solo portraits. Pixar renders skip this entirely.
-    if (medium === 'chibibot_render') {
+    // EXEMPT creature-world — its identity is a SOLO hero figure (the
+    // count-block's pair/trio would break the "Pop Mart" collectible look).
+    if (medium === 'chibibot_render' && path !== 'creature-world') {
       const append = (str) => str + '\n\n' + blocks.CHIBI_CHARACTER_COUNT_BLOCK;
       if (typeof result === 'string') return append(result);
       if (result && typeof result.brief === 'string') return { ...result, brief: append(result.brief) };
