@@ -784,6 +784,220 @@ Channel: Barbie movie set photography + Pinterest aesthetic doll diorama photogr
     ],
     instructions: `Each entry 12-26 words. ONE cinematic movie-poster framing with forced-perspective scale contrast (ensemble + giant centerpiece in frame). NO macro single-figure close-ups. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // GIANT-TOYS path (2026-05-24) — photoreal SURREAL renders of a single
+  // COLOSSAL toy scaled to monumental/architectural size, dropped into a REAL
+  // real-world setting. Scale dissonance is the whole point. Inverse of the
+  // tiny-toy paths. Ref: a five-story rubber duck in an empty blimp hangar.
+  // Broad mood — liminal-weirdcore quiet AND lively/absurd real-world scenes.
+  // ═══════════════════════════════════════════════════════════
+
+  giant_toy_subject: {
+    format: 'simple',
+    theme: `COLOSSAL-TOY SUBJECT descriptors for the giant-toys path — the ONE monumental toy. Each entry (10-20 words) names a SPECIFIC CHARACTER / CREATURE / FIGURE toy + its obvious toy material at IMPOSSIBLE architectural scale (building-sized / skyscraper-tall). POSE-NEUTRAL — describe WHAT the toy is and its material/scale ONLY; a separate SITUATION axis supplies the goofy action, so do NOT bake in a pose or verb here.
+
+⭐ THE GOLDEN RULE — the subject MUST be UNMISTAKABLY IDENTIFIABLE AS A HUGE TOY even at giant scale. Use only "animated / could-move" CHARACTER toys — creatures, figures, dolls, robots, animals, a kid would play with them — made of OBVIOUS toy materials (soft plush fabric, glossy molded plastic/vinyl, painted tin, lacquered wood) with stitched / molded / painted-on features. These have NO real full-size equivalent, so giant = obviously a TOY.
+
+✓ TOY VARIETY (spread widely; all character/figure toys): classic glossy rubber duck, plush teddy bear, plush bunny, plush stuffed elephant, plush puppy / kitten / frog / dragon / dinosaur, sock monkey, wind-up tin robot, boxy retro toy robot, posable action figure (muscle-hero / sci-fi commando), fashion doll, baby doll, painted wooden nesting doll, glossy plastic toy dinosaur, balloon-animal dog, jack-in-the-box clown, lacquered-wood rocking horse, hobby-horse, matte-plastic green toy soldier, wind-up walking penguin, bobblehead figure, rubber bath duck / octopus / frog, toy monkey with cymbals, plush teddy in a knit sweater, squeaky rubber toy animal, googly-eyed plush monster, vinyl bobble figure.
+
+✓ SCALE + MATERIAL LANGUAGE (every entry): colossal / monumental / building-sized / skyscraper-tall, real soft plush fabric with stitched seams / real glossy molded plastic with mold-seams / real lacquered rubber / real painted tin — a believable real object, just impossibly huge, and obviously a TOY.
+
+🚫 ABSOLUTELY NO vehicles or objects that look real at scale — NO Hot Wheels / die-cast cars, NO model trains, NO toy boats / planes, NO trucks. NO abstract object-toys — NO building blocks / bricks, NO marbles, NO balls, NO slinky, NO spinning tops, NO yo-yos, NO drums, NO kites, NO Etch-A-Sketch / View-Master. ONLY character/creature/figure toys.
+🚫 NO pose or action verb (the situation axis owns that), NO settings, NO tiny people, NO "miniature/diorama" language. Just the character toy + obvious toy material + monumental scale.`,
+    touchpoints: [
+      'a colossal glossy yellow rubber duck the size of a four-story building, smooth lacquered vinyl skin and a flat painted eye',
+      'a monumental plush teddy bear tall as an office block, real matted fur fabric and a stitched nose the size of a car',
+      'a skyscraper-tall wind-up tin robot, riveted painted-enamel panels and a giant key on its back',
+      'a building-sized boxy retro toy robot, glossy molded plastic in primary colors with printed dials and antennae',
+      'a monumental plush bunny the height of a tower block, floppy felt ears and dull button eyes',
+      'a colossal posable action figure, glossy molded plastic with visible joint-seams and painted-on armor',
+      'a skyscraper-scale fashion doll, glossy molded plastic limbs and painted eyes the size of windows',
+      'a giant lacquered-wood rocking horse the scale of a parking garage, a real yarn mane thick as cables',
+      'a monumental jack-in-the-box, painted tin crank-box and a spring-mounted grinning clown head',
+      'an enormous matte-plastic green toy soldier, a vertical mold-seam taller than a man',
+      'a colossal plush stuffed elephant, soft grey fabric, oversized stitched ears and a floppy fabric trunk',
+      'a colossal knitted sock monkey, brown-and-cream fabric and a floppy red-felt mouth, building-tall',
+    ],
+    instructions: `Each entry 10-20 words. ONE specific CHARACTER/creature/figure toy + obvious toy material at IMPOSSIBLE monumental scale, unmistakably a TOY. NO vehicles (cars/trains/boats), NO abstract objects (blocks/balls/marbles). POSE-NEUTRAL — no verbs, no setting, no tiny people. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  giant_toy_engagement: {
+    format: 'simple',
+    theme: `BOSS-BATTLE ENGAGEMENT descriptors for the giant-toys path — the combat action between the GIANT BOSS TOY and the band of SMALLER toys it is fighting. Each entry (14-28 words) is ONE dynamic engagement: what the giant boss is DOING to the little toys AND how they react. This is the HEADLINE — a goofy epic toy-vs-toy battle. GO CRAZY, full slapstick + action.
+
+⚡ THE BOSS IS ACTIVELY ATTACKING — caught MID-STRIKE (mid-stomp, mid-swing, mid-lunge, mid-grab, mid-throw, mid-roar). NEVER merely looming, standing, watching, or posing. Both sides are in violent (cartoonish) MOTION — the boss attacking, the little toys fighting back or scrambling. Every entry must read as an action freeze-frame.
+
+✓ ROLL BOTH SCALES — some entries are KAIJU-EPIC (the towering boss stomping/smashing down while the little toys swarm and fight back from below); some are GROUND-BRAWL (a close, scrappy scuffle — the bigger boss kicking/throwing/grabbing the little toys at close range). Mix freely — but always mid-action.
+
+✓ BOSS ACTIONS — stomping down, swatting a wave of them aside, grabbing one in a fist, hurling one across the scene, kicking a cluster like soccer balls, roaring/lunging, swinging an arm, body-slamming, pinning one underfoot, swiping its tail/limb through their ranks, chasing the fleeing band.
+✓ CAST REACTIONS (the little toys) — charging in firing tiny weapons, scattering and fleeing, dogpiling one of its legs, lassoing it with a rope, launching a tiny toy vehicle at it, one flung comically through the air mid-somersault, regrouping behind cover, one tiny hero standing defiant out front, a few playing dead.
+
+🚫 ALL TOYS, NO PEOPLE / NO HUMANS — only the boss toy and the smaller toys fight; never people. Keep it GOOFY + harmless + cartoonish (no gore, no real injury). Describe the ENGAGEMENT only — do NOT name the specific boss toy or the specific little toys (refer to "the giant boss toy" / "it" and "the little toys" / "the smaller toys"), do NOT name the setting.`,
+    touchpoints: [
+      'the giant boss toy stomping a huge foot down as the little toys scatter and fire tiny pop-gun shots up at it',
+      'the giant boss toy swatting a whole wave of the smaller toys aside with one arm, several tumbling comically through the air',
+      'the giant boss toy grabbing one little toy in its fist and dangling it while the others charge its ankles',
+      'the little toys dogpiling one of the boss toy’s legs, swarming up it like ants as it tries to shake them off',
+      'the giant boss toy hurling a captured little toy clear across the scene, the rest ducking for cover',
+      'a close ground-level brawl, the bigger boss toy booting a cluster of little toys like soccer balls',
+      'the little toys lassoing the towering boss toy with a long rope, heaving together to topple it',
+      'the giant boss toy mid-roar and lunge as one tiny hero toy stands defiant out front, arms raised',
+      'the giant boss toy chasing the fleeing band of little toys, who sprint away in a panicked scatter',
+      'the giant boss toy pinning one little toy flat underfoot while the others tug at its leg to free their friend',
+      'the little toys launching a tiny toy car like a missile at the boss toy as it shields its face',
+      'a few little toys playing dead while the rest regroup behind cover from the looming boss toy',
+    ],
+    instructions: `Each entry 14-28 words. ONE goofy boss-vs-cast combat engagement (boss action + little-toys reaction), rolling between kaiju-epic and ground-brawl. ALL TOYS, NO people. Refer to "the giant boss toy"/"it" and "the little toys" (NO specific toy names), NO setting name. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  giant_toy_setting: {
+    format: 'simple',
+    theme: `REAL-WORLD BATTLE-ARENA SETTING descriptors for the giant-toys boss-battle path — the actual real, ORDINARY place that serves as the arena for a toy-vs-toy fight. Each entry (12-26 words) names a believable REAL environment, photoreal, where the toys are battling (at toy scale, on/among the real ground and features). MAXIMIZE location variety so renders don't all read the same.
+
+✓ FAVOR OPEN GROUND-LEVEL ARENAS (toys battle on a real surface): a grassy park lawn with a path and benches, a sandy beach with surf behind, a city street / downtown intersection, a suburban backyard lawn, a kids' playground with slide and swings, a sandbox, a baseball diamond infield, a parking lot, a concrete driveway, a skate park bowl, a soccer field, a riverbank, a rooftop, a forest-floor clearing, a poolside patio, a garden bed among huge flowers.
+✓ ALSO real urban / mundane backdrops: a gas-station forecourt, a strip-mall lot, a town square with a fountain, a flooded street, a harbor quay, a desert flat, a snowy field.
+✓ Sprinkle EERIE / LIMINAL: an empty blimp hangar, a drained swimming pool, an abandoned mall atrium, a foggy warehouse.
+
+✓ Always PHOTOREAL and REAL-WORLD (real grass / sand / pavement / buildings / sky). The real ground + features are the arena. Light time/weather only if it helps the place read.
+
+🚫 NO PEOPLE — describe each place UNPOPULATED (its ground, structures, signage, vehicles — never crowds or pedestrians). NO toys (separate axes), NO fantasy/sci-fi worlds — ordinary real places only. Spread widely; do NOT default to downtown city.`,
+    touchpoints: [
+      'a grassy park lawn dotted with benches and a winding path, tall trees framing the open green battlefield',
+      'a sandy beach at low tide, wet packed sand and scattered shells, gentle surf rolling in behind',
+      'a suburban backyard lawn, a chain-link fence, a garden hose coiled nearby and a plastic slide at the edge',
+      "a kids' playground, rubberized ground, a bright slide and swing-set looming like girders overhead",
+      'a downtown intersection at midday, crosswalks, traffic lights and parked cars, glass office towers above',
+      'a baseball-diamond infield, red clay and chalked baselines, a chain-link backstop and empty outfield beyond',
+      'a sun-baked parking lot, faded line markings and a lone shopping cart, a big-box store sign on a pole',
+      'a sandbox rimmed with wooden edging, raked sand dunes and a forgotten plastic bucket and shovel',
+      'a concrete skate-park bowl, smooth grey curves and graffiti, coping edges catching the light',
+      'a flooded city street, shallow water mirroring the shopfronts, a stalled bus half-submerged',
+      'a forest-floor clearing, towering tree trunks, ferns and fallen logs ringing a patch of dappled ground',
+      'a vast empty blimp hangar, long arched skylight ceiling, polished concrete floor wet enough to mirror everything',
+    ],
+    instructions: `Each entry 12-26 words. ONE believable ORDINARY REAL-WORLD battle-arena place (favor open ground-level: park / beach / backyard / playground / street / sandbox), photoreal, depicted UNPOPULATED (no people). SPREAD widely; do NOT default to downtown. NO toys, NO fantasy worlds. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  giant_toy_scale_prover: {
+    format: 'simple',
+    theme: `SCALE-PROVER descriptors for the giant-toys path — the small REAL NON-HUMAN things that make the colossal toy's size unmistakable. Each entry (8-18 words) is a TINY real-world element dwarfed by the toy. These are load-bearing — they prove the scale. NO PEOPLE — scale is proven by vehicles, architecture, street furniture, and the odd animal ONLY.
+
+✓ VARIETY — parked cars like toys themselves, a city bus dwarfed beside it, a fire truck tiny at its foot, streetlamps reaching only its base, a doorway it could never fit through, a news helicopter circling its head, a flock of pigeons wheeling around it, a construction crane reaching only halfway up, traffic lights, a row of houses up to its knee, scaffolding clinging to one side, a tiny barking dog, a stop sign, a fire hydrant, a mailbox, a delivery van, power-line poles, a billboard dwarfed beside it, a flock of startled seagulls.
+
+🚫 NO PEOPLE / NO HUMANS (no pedestrians, no figures, no crowds, no onlookers). NO toys (separate axis), NO settings (separate axis). ONLY tiny non-human elements (cars / buses / buildings / aircraft / street furniture / animals) clearly dwarfed. Keep them SMALL.`,
+    touchpoints: [
+      'parked cars lined along the curb, each smaller than the toy’s foot',
+      'a city bus halted beside it, reaching barely past its ankle',
+      'a fire truck tiny at its base, lights flashing uselessly',
+      'streetlamps and traffic lights coming up only to its base',
+      'a news helicopter circling tiny around its head',
+      'a flock of startled pigeons wheeling around its silhouette',
+      'a construction crane stretching up but reaching only halfway',
+      'a fire hydrant and a mailbox like specks at the foot of it',
+      'a delivery van parked beside it, dwarfed to a matchbox',
+      'a small dog mid-bark below it, the only thing moving',
+      'scaffolding clinging to one side, ladders absurdly short against it',
+      'a row of houses behind it that come up only to its knees',
+    ],
+    instructions: `Each entry 8-18 words. ONE tiny NON-HUMAN element clearly dwarfed by the giant toy (cars / buses / buildings / aircraft / street furniture / animals). NO people, NO toys, NO settings. Keep them small. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  giant_toy_light: {
+    format: 'simple',
+    theme: `ENVIRONMENTAL LIGHTING descriptors for the giant-toys path — real-world natural/architectural light on the colossal toy. Each entry (8-18 words) is ONE photoreal lighting condition. Spread from EERIE-LIMINAL to bright/lively.
+
+✓ VARIETY — flat overcast liminal daylight, warm golden-hour rim-light, cool blue-hour dusk, dawn mist diffusion, harsh white high-noon, god-rays through skylight windows, sodium-orange streetlight glow at night, stormy slate-grey light, fluorescent indoor hum, moonlit silver, neon city wash, low-angle sunset backlight throwing a vast shadow, grey foggy diffusion, headlight beams sweeping up its side.
+
+🚫 NO toy-commercial / studio-strobe / spotlight language (this is REAL-WORLD light). NO settings, NO toys. Output the light only.`,
+    touchpoints: [
+      'flat grey overcast daylight, soft shadowless and quietly eerie',
+      'warm golden-hour sun raking across it, long shadow thrown across the city',
+      'cool blue-hour dusk, the sky deep indigo and the toy half in shadow',
+      'pale dawn mist diffusing the light to a soft milky glow',
+      'hard white high-noon sun, crisp black shadow pooled beneath it',
+      'god-rays slanting through tall skylight windows onto its surface',
+      'sodium-orange streetlights glowing up at it against the night',
+      'stormy slate-grey light, the air heavy before rain',
+      'flickering fluorescent tubes humming a sickly green over everything',
+      'silver moonlight rimming its edge against a star-dusted sky',
+      'a neon-pink-and-cyan city wash bouncing off its glossy surface',
+      'low sunset backlight, the toy a vast silhouette with a glowing rim',
+    ],
+    instructions: `Each entry 8-18 words. ONE real-world environmental lighting condition (natural / architectural / street). NO studio or toy-commercial lighting. NO settings, NO toys. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  giant_toy_atmosphere: {
+    format: 'simple',
+    theme: `ATMOSPHERE descriptors for the giant-toys path — the air, ground, and weather mood around the colossal toy. Each entry (8-16 words) is ONE photoreal atmospheric condition that adds surreal/uncanny depth.
+
+✓ VARIETY — wet mirror-reflective ground, drifting low fog, fine dust haze, light drizzle beading on glossy surface, rolling sea-mist, soft snow flurries settling on it, summer heat-shimmer, hazy smog, dead-still silent air, scattered leaves tumbling past, deep puddles mirroring it, a thin veil of fog hiding everything but its silhouette, steam rising from street grates, pollen drifting in shafts of light.
+
+🚫 NO toys, NO settings, NO lighting (separate axes). Air / ground / weather mood only. Keep it real-world and photoreal.`,
+    touchpoints: [
+      'a wet mirror-smooth floor doubling it in a perfect reflection',
+      'low fog drifting around its base, the top floating clear above',
+      'fine dust haze softening the deep distance behind it',
+      'light drizzle beading and running down its glossy surface',
+      'rolling sea-mist curling between it and the buildings',
+      'soft snow flurries settling on its shoulders and the ground',
+      'summer heat-shimmer warping the air at its feet',
+      'a dead-still silence, the air heavy and unnaturally calm',
+      'deep rain-puddles on the pavement mirroring it upside down',
+      'a thin veil of fog hiding all but its looming silhouette',
+      'scattered dry leaves tumbling across the empty ground',
+      'steam curling up from street grates around its feet',
+    ],
+    instructions: `Each entry 8-16 words. ONE real-world atmospheric / ground / weather condition adding surreal depth. NO toys, NO settings, NO lighting. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  giant_toy_camera: {
+    format: 'simple',
+    theme: `DYNAMIC BATTLE CAMERA / FRAMING for the giant-toys boss-battle path. Each entry (10-22 words) is ONE photoreal action framing of the toy-vs-toy fight. ROLL BOTH SCALES — some KAIJU-EPIC (wide, low, looking UP at the towering boss as the little toys swarm below), some GROUND-BRAWL (low, close, down among the little toys at ground level). Mix angles aggressively; capture the COMBAT.
+
+✓ VARIETY — low hero up-angle gazing up the towering boss with little toys charging in foreground, sweeping wide establishing of the whole battlefield, drone top-down on the melee, ground-level worm's-eye among the little toys looking up, over-the-shoulder from behind one little toy facing the boss, dynamic Dutch-tilt action angle, a tight ground-brawl two-shot of boss + a little toy mid-grapple, long-lens compression flattening the clash, a low tracking shot rushing through the charging little toys, action caught mid-motion with motion blur.
+
+✓ MANDATORY — frame the ENGAGEMENT (the fight), show BOTH the boss and at least some little toys, keep the size gap readable, photoreal lens feel. Vary placement and scale-register.
+
+🚫 NO PEOPLE in the framing. NO macro toy-product close-up that loses the battle, NO tilt-shift fake-miniature, NO static centered portrait. Capture the action + the scale gap.`,
+    touchpoints: [
+      'a low hero up-angle gazing up the towering boss toy as little toys charge in across the foreground',
+      'a sweeping wide establishing shot of the whole battlefield, boss on one side, the little toys massed opposite',
+      'a drone top-down looking straight down on the swirling melee of boss and little toys',
+      "a ground-level worm's-eye among the little toys, the boss toy looming huge above them",
+      'an over-the-shoulder framing from behind one little toy as it faces the towering boss',
+      'a dynamic Dutch-tilt action angle, the boss mid-swing and little toys tumbling across the canted frame',
+      'a tight ground-brawl two-shot, the boss toy and a little toy locked mid-grapple at close range',
+      'a long-lens telephoto shot compressing the clash, boss and scattering little toys stacked in the frame',
+      'a low tracking shot rushing through the charging little toys toward the looming boss ahead',
+      'an action freeze caught mid-motion with a hint of motion blur, little toys flung outward from the boss',
+    ],
+    instructions: `Each entry 10-22 words. ONE dynamic photoreal battle framing showing BOTH the boss toy and little toys + the size gap, rolling between kaiju-epic and ground-brawl. NO people, NO tilt-shift, NO macro close-up, NO static portrait. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  giant_toy_twist: {
+    format: 'simple',
+    theme: `GOOFY COMBAT BONUS-GAG descriptors for the giant-toys boss-battle path — a conditional (~40%) EXTRA dumb little detail in the toy fight to crank the comedy. Each entry (8-18 words) is ONE small slapstick gag involving the little toys or the boss. This compounds the joke; keep it cartoonish + harmless.
+
+✓ VARIETY (toys + the odd animal only) — one little toy flung comically through the air mid-somersault, a little toy waving a tiny white flag of surrender, one playing dead with X-eyes, a little toy clinging to the boss's nose, two little toys high-fiving mid-battle, a little toy face-planted in the dirt, the boss with a tiny toy stuck to its forehead, a little toy ramping a toy car off a curb, one little toy frozen in a dramatic kung-fu pose, a little toy retreating on a tiny tricycle, a confused pigeon landing on the boss's head mid-fight, a little toy tangled in its own lasso, a tiny toy parachute drifting down.
+
+🚫 NO people / NO humans. Do NOT name the specific boss toy or little toys (refer to "the boss" / "a little toy"). NO settings. ONE goofy combat gag only. Keep it dumb + lighthearted + harmless, never grim.`,
+    touchpoints: [
+      'one little toy flung comically through the air, mid-somersault, limbs splayed',
+      'a little toy waving a tiny white flag of surrender from behind cover',
+      'one little toy flat on its back playing dead, X-eyes painted on',
+      'a little toy clinging desperately to the tip of the boss toy’s nose',
+      'two little toys pausing to high-five each other mid-battle',
+      'a little toy face-planted in the dirt, legs still running in the air',
+      'a tiny toy stuck flat to the boss toy’s forehead like a sticker',
+      'one little toy frozen in an over-dramatic kung-fu ready pose',
+      'a little toy beating a retreat aboard a tiny toy tricycle',
+      'a confused pigeon landing on the boss toy’s head right in the middle of the fight',
+      'a little toy hopelessly tangled up in its own lasso',
+      'a tiny toy parachute drifting gently down into the chaos',
+    ],
+    instructions: `Each entry 8-18 words. ONE goofy slapstick combat gag involving the little toys or the boss (NO people). Refer to "the boss"/"a little toy" (NO specific names), NO settings. Keep it lighthearted + harmless. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

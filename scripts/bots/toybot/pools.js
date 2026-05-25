@@ -188,4 +188,15 @@ module.exports = {
   DINO_DIORAMA_CRAFT: load('dino_diorama_craft'),
   DINO_DIORAMA_CRITTERS: load('dino_diorama_critters'),
   DINO_DIORAMA_SURPRISE: load('dino_diorama_surprise'),
+
+  // giant-toys (2026-05-24, boss-battle redesign) — a GIANT boss/enemy toy
+  // fighting a band of SMALLER toys (cast_toys = SHARED TOYBOX_TOY_BUCKET) in a
+  // real-world arena. Epic-cinematic, goofy, toys-only (no humans).
+  GIANT_TOY_SUBJECT: load('giant_toy_subject'), // the giant boss/enemy toy
+  GIANT_TOY_ENGAGEMENT: load('giant_toy_engagement'), // boss-vs-cast combat action
+  GIANT_TOY_SETTING: load('giant_toy_setting'), // real-world battle arena
+  GIANT_TOY_LIGHT: load('giant_toy_light'),
+  GIANT_TOY_ATMOSPHERE: load('giant_toy_atmosphere'),
+  GIANT_TOY_CAMERA: load('giant_toy_camera'),
+  GIANT_TOY_TWIST: load('giant_toy_twist'), // 40%-gated goofy combat gag
 };

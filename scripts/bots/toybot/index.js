@@ -42,6 +42,8 @@ const pathBuilders = {
   'dino-diorama': require('./paths/dino-diorama'),
   // new (2026-05-25) — flagship epic toy-movie scenes in one rolled toy universe
   'toy-blockbuster': require('./paths/toy-blockbuster'),
+  // new (2026-05-24) — photoreal SURREAL colossal toys in real-world settings
+  'giant-toys': require('./paths/giant-toys'),
 };
 
 module.exports = {
@@ -123,10 +125,24 @@ module.exports = {
       'dollhouse_figures',
       'calico_figures',
     ],
+    // giant-toys — single bespoke PHOTOREAL medium (the colossal toy in its
+    // true material at giant scale). One medium; toy variety lives in the
+    // giant_toy_subject pool, not in medium rotation.
+    'giant-toys': 'giant_toy_surreal',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
+
+  // Per-path suffix override (REPLACES promptSuffix for this path). giant-toys
+  // bans humans — these negatives sit in the FINAL trailing Flux slot, the same
+  // slot where "no text, no words, no watermarks" reliably suppresses (renders
+  // never show text), so "no people / no humans" suppresses here too without the
+  // Sonnet-sentence negative-prompt-leak. R4 diagnosis 2026-05-24.
+  promptSuffixByPath: {
+    'giant-toys':
+      'no people, no humans, no pedestrians, no crowds, no figures, no text, no words, no watermarks, hyper detailed, masterpiece quality',
+  },
 
   // Per-path prompt prefix override — Funko Pop visual identity is front-loaded
   // for the vinyl path so Flux's early-token weighting locks the look. Without
@@ -161,6 +177,13 @@ module.exports = {
     // to Barbie-movie promotional posters / red-carpet glamour shots.
     barbie_storytelling_mixed:
       'cinematic kid-playroom-diorama film still — Mattel-style 11.5-inch articulated fashion-dolls (Barbie / Ken / sisters / Bratz-style — glossy plastic, molded hair, painted-glossy-makeup faces, fashion-doll proportions) acting out the scene below in a multilayered real-prop kid-playroom set built from kid-found household objects (real coffee mugs, real Post-it notes, real wooden blocks, real coins, real cardboard, real tape, real fabric scraps), fashion-doll cast captured mid-story-beat — NOT a Barbie movie poster, NOT a red-carpet glamour shot, NOT a static product display, NOT a posed lineup, NEVER real women NEVER CGI',
+    // 2026-05-24 giant-toys — SHORT anchor (replaces the tiny-product "toy
+    // photography / toy-ness elevated" bot prefix, which front-loaded a
+    // product-shot framing). Keep it brief so Flux's attention reaches the
+    // Sonnet-written goofy SITUATION rather than collapsing to a generic
+    // "giant toy standing in a city." R1 diagnosis 2026-05-24.
+    giant_toy_surreal:
+      'epic cinematic action film-still of a goofy TOY BOSS BATTLE — a giant boss toy fighting a band of smaller toys in an ordinary real-world place, real physical toys mid-fight, dramatic cinematic lighting, photoreal',
   },
 
   // Per-medium prompt injection — ToyBot's dialect for each toy medium.
@@ -247,6 +270,19 @@ module.exports = {
     // bot-only DB flux_fragment.
     dino_diorama:
       'REAL plastic toy dinosaurs as the cast — glossy injection-molded plastic / soft-vinyl dinosaur figures with visible mold-seams, hard-plastic sheen and slightly-scuffed factory paint at toy scale — staged inside a HANDMADE STOP-MOTION CLAYMATION PREHISTORIC WORLD where the environment is sculpted Plasticine clay: a clay volcano and clay terrain with visible thumbprints and sculpting-tool marks, matte-clay rocks, glossy-clay rivers, hand-rolled clay ferns and clay clouds (Aardman / Laika / Coraline miniature-set craft). The DINOSAURS are real hard-plastic toys; the WORLD around them is sculpted clay — a deliberate mixed-media contrast. Practical tabletop diorama photography in DEEP FOCUS — the entire handmade set crisp and sharp from foreground to background (large depth of field, everything in focus, photographed straight-on like a real life-size set), warm practical set-lighting — NOT a tilt-shift fake-miniature look, NOT background-blur, NOT clay dinosaurs (the dinos are plastic toys), NOT digital-render, NOT illustration',
+    // 2026-05-24 giant-toys — photoreal SURREAL: ONE ordinary toy scaled to
+    // COLOSSAL architectural size in a REAL real-world place. The toy's true
+    // material is supplied by the giant_toy_subject pool; this medium locks the
+    // hyperreal-photograph + monumental-scale + weirdcore framing. Inverse of
+    // the tiny-toy mediums — the toy is HUGE and the world is full-size.
+    // 2026-05-24 giant-toys — SHORT look-lock (~45 words). The earlier ~280-word
+    // version front-loaded "standing in a real place / dwarfing tiny people" and
+    // a long material + NOT list, which steamrolled the Sonnet-written goofy
+    // SITUATION (Flux rendered a generic giant toy standing in a city instead).
+    // Keep this minimal; the subject pool names the material, the situation pool
+    // supplies the action. R1 diagnosis 2026-05-24.
+    giant_toy_surreal:
+      'an EPIC CINEMATIC film-still of a TOY BOSS BATTLE — a giant boss toy fighting a band of smaller toys, all real physical toys (plush / molded plastic / painted tin / vinyl) mid-fight at toy scale, staged in a real-world location, shot like a blockbuster movie: dramatic cinematic lighting, bold dynamic composition, shallow cinematic depth of field, atmospheric haze, lens flare, high production value, photoreal real-world light and shadows, the boss clearly bigger than the little toys — real physical toys, NOT CGI cartoon, NOT illustration, NOT tilt-shift fake-miniature',
   },
 
   // Bot-wide fallback. Per-path filtering happens in `vibesByPath` below.
@@ -434,6 +470,17 @@ module.exports = {
       'surreal',
       'enchanted',
     ],
+    // surreal / liminal / weirdcore — broad mood (quiet AND lively)
+    'giant-toys': [
+      'surreal',
+      'cinematic',
+      'ethereal',
+      'nightshade',
+      'nostalgic',
+      'peaceful',
+      'voltage',
+      'shimmer',
+    ],
   },
 
   paths: [
@@ -457,11 +504,12 @@ module.exports = {
     'monster-boss-battle',
     'dino-diorama',
     'toy-blockbuster',
+    'giant-toys',
   ],
 
   // toy-blockbuster is the flagship — weighted to exactly 25% of all renders.
-  // The other 19 paths split the remaining 75% equally (3 each):
-  //   19 / (19 + 19*3) = 19/76 = 25.0%.
+  // The other 20 paths split the remaining 75% equally (3 each):
+  //   20 / (20 + 20*3) = 20/80 = 25.0%.
   pathWeights: {
     claymation: 3,
     vinyl: 3,
@@ -482,7 +530,8 @@ module.exports = {
     'space-saga-figures': 3,
     'monster-boss-battle': 3,
     'dino-diorama': 3,
-    'toy-blockbuster': 19,
+    'giant-toys': 3,
+    'toy-blockbuster': 20,
   },
 
   // Chaos layer — subject-level distortions (silhouette/echo) ON for ALL paths.
@@ -498,6 +547,7 @@ module.exports = {
       'barbie-scene',
       'dino-diorama',
       'toy-blockbuster',
+      'giant-toys',
     ],
     allowSubjectChaosPaths: [
       'claymation',
@@ -534,6 +584,7 @@ module.exports = {
       'barbie-scene',
       'dino-diorama',
       'toy-blockbuster',
+      'giant-toys',
     ],
   },
 
@@ -552,6 +603,7 @@ module.exports = {
       'barbie-scene',
       'dino-diorama',
       'toy-blockbuster',
+      'giant-toys',
     ],
     requiredChannels: ['lightcolor'],
     pathContext: {
@@ -575,6 +627,7 @@ module.exports = {
       'space-saga-figures': 'figure',
       'dino-diorama': 'figure',
       'toy-blockbuster': 'figure',
+      'giant-toys': 'scene', // the giant toy IS the subject; no character figures
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

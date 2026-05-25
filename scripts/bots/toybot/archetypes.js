@@ -115,4 +115,18 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  TOYBOT_GIANT_TOYS: {
+    description:
+      'PATH-BESPOKE — ToyBot giant-toys path (2026-05-24, boss-battle redesign). TOY BOSS BATTLE — ONE GIANT boss/enemy toy fighting a band of SMALLER regular toys (the heroes/victims) in a real-world setting (park / beach / city / backyard / playground). Kaiju-vs-heroes energy but the entire cast is TOYS — NO humans. Scale rolls per render between KAIJU-EPIC (towering boss, little toys swarm below) and GROUND-BRAWL (close scrappy scuffle). Goofy + slapstick + photoreal. Boss = giant_toy (character-toy pool); cast = cast_toys (SHARED 91-entry TOYBOX_TOY_BUCKET, pickN 3); engagement = the combat action; setting = real-world arena. 40%-gated combat bonus-gag. Bespoke photoreal medium giant_toy_surreal. Skips chaos / two-pass polish / sensory.',
+    slots: {
+      universal: ['camera_angle'],
+      bot: [],
+      path: ['giant_toy', 'cast_toys', 'engagement', 'setting', 'lighting', 'atmosphere'],
+    },
+    pickN: { cast_toys: 4 },
+    conditionalLayer: { slot: 'surreal_twist', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

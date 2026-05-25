@@ -668,4 +668,75 @@ ${vibeDirective.slice(0, 220)}
 
 Output ONLY the raw 90-130 word scene description. Comma-separated phrases. Lead with the epic action + the cast, then the giant centerpiece + setting. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels.`;
   },
+
+  TOYBOT_GIANT_TOYS: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      camera_angle,
+      giant_toy,
+      cast_toys,
+      engagement,
+      setting,
+      lighting,
+      atmosphere,
+      surreal_twist,
+    } = slots;
+    const castList = Array.isArray(cast_toys) ? cast_toys.join(', ') : cast_toys;
+
+    return `You are an action photographer who has captured a STUPID, GOOFY, epic TOY BOSS BATTLE: ONE GIANT boss/enemy toy fighting a band of SMALLER regular toys (the little heroes), staged in a real-world place. Think kaiju-movie monster-vs-heroes — but EVERY character is a TOY. This is ToyBot's ONE deliberately WEIRD path. GO CRAZY — full slapstick + epic action. Play it straight (deadpan, photoreal) so the dumb toy battle is the joke — it should make you laugh, chuckle, or go "huh, that's unexpected."
+
+⚠️ THE CAST IS TOYS ONLY — NO humans anywhere. The only "characters" are the giant boss toy and the smaller toys. Populate the rest of the scene with the real-world environment (ground, structures, the odd parked car or animal). Simply never include or describe a person, a figure, a crowd, or an onlooker.
+
+━━━ THE GIANT BOSS TOY — the towering enemy ━━━
+${giant_toy}
+
+This is the BOSS / monster of the scene — much bigger than the little toys, the threat they are fighting. Render it in its TRUE toy material (real plush fabric and stitched seams, glossy molded plastic with mold-seams, painted tin, lacquered wood) — unmistakably a TOY, just a giant one.
+
+━━━ THE LITTLE TOYS — the band fighting it ━━━
+${castList}
+
+A scrappy band of SMALLER regular-sized toys — the heroes/victims swarming, charging, or fleeing the boss. Each in its OWN native toy material. They are much smaller than the boss; their size sells the scale.
+
+━━━ THE ENGAGEMENT — the combat (the headline) ━━━
+${engagement}
+
+THIS is what the photo is ABOUT — the giant boss toy and the little toys mid-FIGHT. Caught in the action: stomping, swatting, grabbing, hurling, chasing, while the little toys charge, scatter, dogpile, or stand defiant. Roll the scale to match: a KAIJU-EPIC clash (towering boss, little toys swarming below) OR a close GROUND-BRAWL scuffle. The battle reads instantly.
+
+━━━ THE REAL-WORLD ARENA ━━━
+${setting}
+
+A real, ordinary, photoreal place — real grass / sand / pavement / structures / sky — as the battlefield, depicted EMPTY OF PEOPLE. The toys fight at toy scale on/among the real environment. Multi-tier depth: the brawling toys, the real midground, the deep distance.
+
+━━━ ENVIRONMENTAL LIGHT ━━━
+${lighting}
+
+Real-world natural / architectural / street light — motivated and believable, raking across the toys, casting real shadows. This sells the photoreal illusion.
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+${surreal_twist ? `\n━━━ BONUS GAG — crank the dumb comedy ━━━\n${surreal_twist}\n` : ''}
+━━━ CAMERA / FRAMING ━━━
+${camera_angle}
+
+Shoot it like an EPIC CINEMATIC blockbuster movie still — dramatic hero angle, bold dynamic composition, strong directional key light + rim light, atmospheric haze, a touch of lens flare, shallow cinematic depth of field, high production value. Photoreal lens feel (NEVER tilt-shift fake-miniature blur, NEVER a macro single-toy close-up that loses the battle). Frame the FIGHT so both the boss and the little toys + the size gap read. Vary the angle and the scale-register.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 220)}
+
+━━━ HARD BANS ━━━
+- A BATTLE is HAPPENING — the boss toy and little toys are mid-fight, never just standing or posing
+- The cast is TOYS ONLY — real physical toys (plush / plastic / tin / vinyl); NO humans, NO real animals as combatants
+- It is a real PHOTOGRAPH — NO CGI, NO 3D-render look, NO illustration, NO cartoon, NO tilt-shift fake-miniature
+- The boss is clearly BIGGER than the little toys; keep the size gap readable
+- The setting is an ORDINARY real place; keep the fight goofy + harmless + cartoonish (no gore, no real injury)
+- NO brand names or logos, NO text, NO UI, NO captions
+- OMIT all negation words from your output — never write "not", "no", or name anything you are avoiding; describe only what IS in the frame
+
+Output ONLY the raw 80-120 word photo description. Comma-separated phrases. Lead with the ENGAGEMENT (the fight) + the giant boss toy + the little toys, then the real arena + light. The scene contains NO people — describe only the toys, the real environment, and any animals. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels.`;
+  },
 };
