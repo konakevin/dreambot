@@ -87,22 +87,33 @@ describe('compilePrompt', () => {
     expect(output.sonnetBrief).not.toContain('CHARACTER');
   });
 
-  it('style_transfer: brief contains REFERENCE STYLE section with styleReference', () => {
+  it('DLT (styleReference present): brief leads with RENDER FORMAT section and recasts subject into the format', () => {
     const input = makeInput({
       inputType: 'style_transfer',
       scene: {
         userPrompt: 'a dragon on a cliff',
-        styleReference: 'dark moody oil painting with dramatic chiaroscuro lighting',
+        styleReference:
+          'macro photo of a small painted tabletop miniature on a flocked base, shallow DOF',
       },
     });
 
     const output = compilePrompt(input);
-    expect(output.sonnetBrief).toContain('REFERENCE STYLE');
-    expect(output.sonnetBrief).toContain('dark moody oil painting');
-    // Plan C: tightened wording to forbid subject leakage explicitly
-    expect(output.sonnetBrief).toContain(
-      'Do NOT introduce any subjects, characters, body parts, places'
-    );
+    // FORMAT-first capture (replaces the old "REFERENCE STYLE = texture only" wording)
+    expect(output.sonnetBrief).toContain('RENDER FORMAT (HIGHEST PRIORITY');
+    expect(output.sonnetBrief).toContain('macro photo of a small painted tabletop miniature');
+    expect(output.sonnetBrief).toContain('Recast the user');
+    // Subject-leak guard preserved
+    expect(output.sonnetBrief).toContain('do NOT borrow subjects, characters, places');
+    // DLT must NOT force the wide-environmental/stacked-depth defaults
+    expect(output.sonnetBrief).not.toContain('wide environmental framing, show the full scene');
+    expect(output.postProcess.skipDepthTags).toBe(true);
+  });
+
+  it('non-DLT (no styleReference): no RENDER FORMAT section, keeps wide framing + depth tags', () => {
+    const output = compilePrompt(makeInput());
+    expect(output.sonnetBrief).not.toContain('RENDER FORMAT');
+    expect(output.sonnetBrief).toContain('wide environmental framing, show the full scene');
+    expect(output.postProcess.skipDepthTags).toBe(false);
   });
 
   it('includes NEVER INCLUDE section when avoid list is provided', () => {
@@ -190,6 +201,16 @@ describe('postProcessPrompt', () => {
     });
     expect(result).toContain('foreground midground background stacked top to bottom');
     expect(result).toContain('layered depth');
+  });
+
+  it('skipDepthTags suppresses the forced depth append (DLT replica mode)', () => {
+    const result = postProcessPrompt('macro photo of a tiny figurine on a base', {
+      appendFaceLock: false,
+      appendPortraitTags: true,
+      dualFaceSwap: false,
+      skipDepthTags: true,
+    });
+    expect(result).not.toContain('foreground midground background stacked top to bottom');
   });
 
   it('does not duplicate portrait tags if already present', () => {

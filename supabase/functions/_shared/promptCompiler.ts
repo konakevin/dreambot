@@ -71,6 +71,12 @@ export interface CompilerOutput {
     appendPortraitTags: boolean;
     dualFaceSwap: boolean;
     /**
+     * DLT replica mode — skip the forced "foreground midground background stacked
+     * top to bottom" depth append, which would re-impose a wide multi-tier scene
+     * on a close/macro/single-object format reference.
+     */
+    skipDepthTags?: boolean;
+    /**
      * Prepend string applied at the very front of the Flux prompt by
      * postProcessPrompt. Currently populated only by the dual brief builder
      * for two-cast face-swap renders (composition path: candid/portrait/etc.)
@@ -130,15 +136,11 @@ function buildSceneBlock(scene: CompilerInput['scene']): string {
   if (scene.sceneExpansion) {
     parts.push(scene.sceneExpansion);
   }
-  if (scene.styleReference) {
-    // The styleReference is pre-distilled (subject-stripped) by
-    // _shared/styleDistiller.ts when sourced from uploads.style_summary.
-    // Older posts that don't have a distilled summary fall back to raw
-    // ai_prompt — the wording below holds the line in both cases.
-    parts.push(
-      `REFERENCE STYLE (apply ONLY these style descriptors — palette, lighting, technique, mood, atmosphere, texture):\n"${scene.styleReference.slice(0, 400)}"\nApply these directly to the SUBJECT defined in SCENE above. Do NOT introduce any subjects, characters, body parts, places, named entities, named IP, or specific objects from this reference. This describes HOW the image looks, not WHAT it shows.`
-    );
-  }
+  // NOTE: scene.styleReference (DLT) is NOT pushed here anymore. It used to be
+  // demoted to "apply ONLY palette/lighting/technique/texture" — which dropped
+  // the source's FORMAT / SCALE / FRAMING (the thing that actually makes a look
+  // recognizable). It's now handled by the top-priority RENDER FORMAT section in
+  // compilePrompt(), which reproduces the format and recasts the subject INTO it.
   if (scene.photoDescription) {
     parts.push(`PHOTO SUBJECT: ${scene.photoDescription}`);
   }
@@ -234,7 +236,11 @@ function buildCharacterBlock(
   return parts.join('\n');
 }
 
-function buildCameraBlock(composition: CompilerInput['composition'], castCount: number): string {
+function buildCameraBlock(
+  composition: CompilerInput['composition'],
+  castCount: number,
+  isReplica = false
+): string {
   const parts: string[] = [];
   parts.push(composition.shotDirection);
 
@@ -253,9 +259,17 @@ function buildCameraBlock(composition: CompilerInput['composition'], castCount: 
     );
   }
 
-  parts.push(
-    'Portrait 9:16 vertical — wide environmental framing, show the full scene. Subject in context, NOT a tight headshot. Depth stacked top to bottom.'
-  );
+  if (isReplica) {
+    // DLT: the RENDER FORMAT section owns framing/scale/composition. Do NOT
+    // force a wide environmental scene onto a close/macro/single-object format.
+    parts.push(
+      'Portrait 9:16 vertical. Framing, scale, and composition MUST match the RENDER FORMAT above — if the reference reads as a close/macro/product/portrait/single-object format, do NOT impose a wide environmental scene or top-to-bottom stacked depth.'
+    );
+  } else {
+    parts.push(
+      'Portrait 9:16 vertical — wide environmental framing, show the full scene. Subject in context, NOT a tight headshot. Depth stacked top to bottom.'
+    );
+  }
   return parts.join('\n');
 }
 
@@ -313,11 +327,29 @@ export function compilePrompt(input: CompilerInput): CompilerOutput {
       : null;
   const vibeDirective = applyVibeGenderModifier(vibe.key, vibe.directive, castGender);
 
+  // DLT "style replica" mode — styleReference is only ever set on a Dream Like
+  // This render (the source post's distilled style_summary). In this mode the
+  // source render's FORMAT is the identity and must dominate composition.
+  const isReplica = !!scene.styleReference;
+
   const budget = getWordBudget(composition.type, composition.faceSwapEligible);
   const sceneBlock = buildSceneBlock(scene);
   const characterBlock = hasCast ? buildCharacterBlock(cast, medium, composition) : '';
-  const cameraBlock = buildCameraBlock(composition, cast.length);
+  const cameraBlock = buildCameraBlock(composition, cast.length, isReplica);
   const mediumSummary = summarizeMediumDirective(medium.directive);
+
+  // Top-priority FORMAT section for DLT. Reproduces the source render's format /
+  // medium / scale / framing and recasts the user's subject INTO it — instead of
+  // the old behavior that demoted the reference to surface texture on a fresh
+  // wide scene (which lost miniatures / LEGO / claymation / pixel formats).
+  const renderFormatBlock = isReplica
+    ? `═══ RENDER FORMAT (HIGHEST PRIORITY — defines what KIND of image this is) ═══
+This dream must look like it came out of the SAME render as a reference the user loved. Reproduce its FORMAT, MEDIUM, SCALE, FRAMING, lighting, palette, and texture EXACTLY:
+"${scene.styleReference!.slice(0, 400)}"
+Recast the user's subject INTO this exact format and scale. If the reference reads as a macro photo of a small physical object, a product / figurine shot, a painting, a sculpture, a pixel sprite, a claymation still, a diorama, etc. — the OUTPUT must read as THAT kind of image, NOT as a realistic wide cinematic scene. This format OVERRIDES any "wide environmental framing / full scene / stacked depth" instruction below wherever they conflict. Use ONLY the look — do NOT borrow subjects, characters, places, body parts, or named objects from the reference.
+
+`
+    : '';
 
   // Engine-specific output format instructions
   // Anime uses danbooru tag format — Flux handles tags well via T5 encoder
@@ -347,7 +379,7 @@ OUTPUT STRUCTURE:
 
   const brief = `${formatHeader}
 
-═══ SCENE (SACRED — must appear) ═══
+${renderFormatBlock}═══ SCENE (SACRED — must appear) ═══
 ${sceneBlock}
 
 ═══ FOCAL ANCHOR (MANDATORY) ═══
@@ -371,7 +403,11 @@ Add vivid concrete details the user didn't mention. Things a camera can see — 
 
 ${profile && profile.avoid && profile.avoid.length > 0 ? `═══ NEVER INCLUDE ═══\n${profile.avoid.join(', ')}\n\n` : ''}RULES:
 - Every word must be something a camera can see. No feelings, no metaphors.
-- Depth: foreground, midground, background stacked top to bottom.
+- ${
+    isReplica
+      ? 'Composition and depth must match the RENDER FORMAT above — do NOT impose a wide multi-tier scene on a close / macro / single-object reference.'
+      : 'Depth: foreground, midground, background stacked top to bottom.'
+  }
 Output ONLY the prompt.`;
 
   // Fallback
@@ -419,6 +455,7 @@ Output ONLY the prompt.`;
       appendFaceLock: composition.faceSwapEligible,
       appendPortraitTags: true,
       dualFaceSwap: isDualFaceSwap,
+      skipDepthTags: isReplica,
     },
     faceSwapSource,
     faceSwapSources,
@@ -447,7 +484,7 @@ export function postProcessPrompt(prompt: string, rules: CompilerOutput['postPro
     }
   }
 
-  if (rules.appendPortraitTags) {
+  if (rules.appendPortraitTags && !rules.skipDepthTags) {
     if (!result.includes('foreground midground background')) {
       result += ', foreground midground background stacked top to bottom, layered depth';
     }

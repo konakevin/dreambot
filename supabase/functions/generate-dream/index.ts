@@ -217,6 +217,14 @@ Deno.serve(async (req) => {
     }
   }
 
+  // DLT (Dream Like This) render? True when replaying a frozen recipe OR a
+  // distilled style reference is present. In DLT the SOURCE render's format +
+  // composition is the authority, so we suppress the fresh multi-tier scene
+  // expansion (and the chaos baked into it) below — it was overpowering the
+  // source's look (e.g. a tabletop-miniature DLT rendered as a wide painterly
+  // cityscape). See DLT_FIDELITY_PLAN.md.
+  const isDLT = dltReplayActive || !!style_prompt;
+
   // Optional user-supplied description for this dream. If absent, a Haiku
   // call generates one from finalPrompt before insert.
   const userDescription =
@@ -432,7 +440,7 @@ Deno.serve(async (req) => {
           vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
             userPrompt: userSubject || undefined,
-            sceneExpansion: finalExpansion || undefined,
+            sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
             styleReference: style_prompt || undefined,
           },
           cast: [],
@@ -551,7 +559,7 @@ Deno.serve(async (req) => {
           vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
             userPrompt: hint || undefined,
-            sceneExpansion: finalExpansion || undefined,
+            sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
             styleReference: style_prompt || undefined,
           },
           cast: resolvedCast,
@@ -770,7 +778,7 @@ Output ONLY the prompt.`;
           vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
             userPrompt: cleanedPrompt || undefined,
-            sceneExpansion: finalExpansion || undefined,
+            sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
             styleReference: style_prompt || undefined,
           },
           cast: resolvedCast,
@@ -910,7 +918,7 @@ Output ONLY the prompt.`;
           vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
             userPrompt: sanitizedPrompt || undefined,
-            sceneExpansion: finalExpansion || undefined,
+            sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
             styleReference: style_prompt || undefined,
           },
           cast: [],
