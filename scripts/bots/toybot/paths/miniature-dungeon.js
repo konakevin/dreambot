@@ -1,7 +1,10 @@
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
+const buildImmersiveScene = require('./miniature-scene');
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
+// Display-object register — the classic "photo of a painted mini on a base /
+// tabletop diorama" look.
+function buildDisplay({ sharedDNA, vibeDirective, picker }) {
   const useLandscape = Math.random() < 0.3;
   const scene = useLandscape
     ? picker.pickWithRecency(pools.MINIATURE_DUNGEON_LANDSCAPES, 'miniature_dungeon_landscape')
@@ -53,4 +56,11 @@ Mid-close terrain-diorama frame. Painted miniatures mid-battle-or-narrative on h
 - "dense layered composition filling foreground midground and background, no empty space"
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
-};
+}
+
+// miniature-dungeon 50/50s between two registers under ONE path (Kevin approved
+// both 2026-05-25 and asked to merge them):
+//   • display-object — buildDisplay above (a painted mini photographed on a base)
+//   • off-diorama    — buildImmersiveScene (the painted mini living INSIDE an
+//                      immersive fantasy scene; see paths/miniature-scene.js)
+module.exports = (args) => (Math.random() < 0.5 ? buildDisplay(args) : buildImmersiveScene(args));

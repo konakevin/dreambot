@@ -61,6 +61,12 @@ module.exports = {
   GREEN_ARMY_WARZONE_LANDSCAPES: load('green_army_warzone_landscapes'),
   MINIATURE_DUNGEON_SCENES: load('miniature_dungeon_scenes'),
   MINIATURE_DUNGEON_LANDSCAPES: load('miniature_dungeon_landscapes'),
+  // miniature-scene (2026-05-25) — "off-diorama" register: painted-miniature
+  // material truth but composed as an IMMERSIVE in-world fantasy scene (figures
+  // living in a real location that fills + recedes), NOT a figure mounted on a
+  // base / tabletop diorama display. Pool deliberately omits base/flocking/
+  // tabletop/terrain-kit vocabulary so Flux doesn't render a display object.
+  MINIATURE_SCENE_LOCATIONS: load('miniature_scene_locations'),
   COLLECTOR_SHELF_SCENES: load('collector_shelf_scenes'),
   COLLECTOR_SHELF_LANDSCAPES: load('collector_shelf_landscapes'),
   EPIC_HERO_BUCKET_SCENES: load('epic_hero_bucket_scenes'),

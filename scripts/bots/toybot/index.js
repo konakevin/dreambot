@@ -184,6 +184,15 @@ module.exports = {
     // "giant toy standing in a city." R1 diagnosis 2026-05-24.
     giant_toy_surreal:
       'epic cinematic action film-still of a goofy TOY BOSS BATTLE — a giant boss toy fighting a band of smaller toys in an ordinary real-world place, real physical toys mid-fight, dramatic cinematic lighting, photoreal',
+    // tabletop_minis is exclusive to the merged miniature-dungeon path, which
+    // 50/50s between a display-object register and an off-diorama immersive
+    // register. REPLACE the bot-wide "toy-ness elevated as the subject" prefix
+    // (it pulled the immersive register toward a base/product shot) with
+    // register-NEUTRAL painted-miniature material truth. Each register's template
+    // then adds its own framing (display = base/diorama; immersive = in-world
+    // scene). No base/diorama/tabletop words here (negative-prompt-leak).
+    tabletop_minis:
+      'hand-painted tabletop-miniature figures, Games-Workshop / Reaper / WizKids collector paint quality, visible brush-strokes and drybrushed metallic highlights, macro miniature photography, shallow depth of field',
   },
 
   // Per-medium prompt injection — ToyBot's dialect for each toy medium.
@@ -585,6 +594,10 @@ module.exports = {
       'dino-diorama',
       'toy-blockbuster',
       'giant-toys',
+      // miniature-dungeon now 50/50s into the off-diorama register, whose
+      // identity IS the immersive location — Haiku polish strips setting language
+      // first (setting-as-co-hero). Skip polish for the whole merged path.
+      'miniature-dungeon',
     ],
   },
 
