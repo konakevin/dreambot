@@ -1511,13 +1511,10 @@ ${lighting}
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
 
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
+━━━ COLOR — LUSH, FULL, RICHLY SATURATED (load-bearing, 2026-05-25) ━━━
+Render in RICH, LUSH, FULL COLOR — a vivid, deeply saturated jewel-tone palette with glowing color depth and vibrant painterly hues across the ENTIRE frame. Lean the SATURATED, luminous end of the painted-fantasy-cover tradition (Boris Vallejo's glossy richness, Michael Whelan's luminous color, Greg Hildebrandt's vivid storybook color). Skin, outfit, foliage, sky, magic, and metal all read in full vivid color with clean saturated hues and bright chroma. Keep deep saturated color even in moody or low-light scenes — jewel-tone shadows and glowing colored accents keep the chroma rich and alive throughout. Color is GORGEOUS, vibrant, and ALIVE.
 
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
+━━━ MOOD CONTEXT (tone only — keep the color lush + saturated regardless) ━━━
 ${vibeDirective.slice(0, 200)}
 
 ━━━ COMPOSITION ━━━
