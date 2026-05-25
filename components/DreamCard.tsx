@@ -94,11 +94,15 @@ interface Props {
   onTogglePosted?: () => void;
   /** Called when the HUD is toggled (single tap) */
   onHudToggle?: (visible: boolean) => void;
-  /** Bumped by FullScreenFeed on every viewable-card change. Forces the
-   *  in-card HUD-reset effect to refire — defends against FlatList
-   *  recycling a previously-tapped instance back into view with stale
-   *  hudOpacity = 0. */
-  hudResetToken?: number;
+  /** True when this is the currently-visible card in FullScreenFeed. The
+   *  in-card HUD-reset effect refires when this flips — resetting chrome to
+   *  visible as a card becomes active. Replaces the old global hudResetToken:
+   *  a per-card boolean only re-renders the two cards involved in a swipe
+   *  (outgoing + incoming) instead of every windowed card. Also defends
+   *  against FlatList recycling a previously-tapped instance back into view
+   *  with stale hudOpacity = 0 (when it becomes active again, isActive flips
+   *  true → effect refires). Optional; non-feed callers omit it. */
+  isActive?: boolean;
 }
 
 /** A single sparkle particle that floats along the border edge */
@@ -226,7 +230,7 @@ export const DreamCard = memo(function DreamCard({
   showVisibilityToggle,
   onTogglePosted,
   onHudToggle,
-  hudResetToken,
+  isActive,
 }: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnPost = currentUser?.id === item.user_id;
@@ -258,8 +262,9 @@ export const DreamCard = memo(function DreamCard({
   const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Reset HUD when scrolling to a different card. Watches BOTH item.id
-  // (handles new mounts) AND hudResetToken (handles FlatList recycling
-  // an existing instance back into view with stale hudOpacity = 0).
+  // (handles new mounts) AND isActive (handles FlatList recycling an existing
+  // instance back into view with stale hudOpacity = 0 — when it becomes the
+  // active card again, isActive flips true and this refires).
   useEffect(() => {
     if (singleTapTimer.current) {
       clearTimeout(singleTapTimer.current);
@@ -267,7 +272,7 @@ export const DreamCard = memo(function DreamCard({
     }
     hudHidden.current = false;
     hudOpacity.value = 1;
-  }, [item.id, hudResetToken, hudOpacity]);
+  }, [item.id, isActive, hudOpacity]);
 
   const hudStyle = useAnimatedStyle(() => ({
     opacity: hudOpacity.value,

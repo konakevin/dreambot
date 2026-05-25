@@ -6,7 +6,7 @@
  * end-reached loading. Cards are rendered via DreamCard.
  */
 
-import { useCallback, useRef, useState, useEffect } from 'react';
+import { memo, useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import {
   View,
@@ -80,6 +80,106 @@ interface Props {
   scrollToTopToken?: number;
 }
 
+/**
+ * Memoized per-card wrapper (perf fix 2026-05-25). DreamCard is memo()'d, but
+ * the old inline renderItem rebuilt ~10 callback closures for EVERY card on
+ * every FullScreenFeed render (like / save / comment / swipe), defeating the
+ * memo and re-rendering all ~7 windowed full-screen cards at once (multi-second
+ * jank + the VirtualizedList "slow to update" warning).
+ *
+ * FeedCard receives only stable refs (react-query mutators, state setters,
+ * useCallback'd handlers, module nav) + primitive per-item flags
+ * (isActive / isLiked / isSaved). The per-item closures it builds live INSIDE
+ * the memo boundary, so rebuilding them only re-renders THIS card. Net: a like
+ * re-renders one card; a swipe re-renders two (outgoing + incoming) instead of
+ * the whole window.
+ */
+type FeedCardProps = {
+  item: DreamPostItem;
+  isActive: boolean;
+  isLiked: boolean;
+  isSaved: boolean;
+  bottomPadding: number;
+  cardHeight: number;
+  disableSwipeToProfile?: boolean;
+  userId?: string;
+  isAdmin: boolean;
+  showAdminDelete: boolean;
+  showVisibilityToggle?: boolean;
+  toggleLike: (vars: { uploadId: string; currentlyLiked: boolean }) => void;
+  toggleFavorite: (vars: { uploadId: string; currentlyFavorited: boolean }) => void;
+  onComment: (post: DreamPostItem) => void;
+  onLikesPress: (id: string) => void;
+  onDelete: (id: string) => void;
+  onAdminDelete: (id: string) => void;
+  onTogglePosted?: (id: string) => void;
+  onHudToggle?: (visible: boolean) => void;
+};
+
+const FeedCard = memo(function FeedCard({
+  item,
+  isActive,
+  isLiked,
+  isSaved,
+  bottomPadding,
+  cardHeight,
+  disableSwipeToProfile,
+  userId,
+  isAdmin,
+  showAdminDelete,
+  showVisibilityToggle,
+  toggleLike,
+  toggleFavorite,
+  onComment,
+  onLikesPress,
+  onDelete,
+  onAdminDelete,
+  onTogglePosted,
+  onHudToggle,
+}: FeedCardProps) {
+  const canDelete = item.user_id === userId || isAdmin;
+  return (
+    <DreamCard
+      item={item}
+      bottomPadding={bottomPadding}
+      cardHeight={cardHeight}
+      isLiked={isLiked}
+      onLike={() => toggleLike({ uploadId: item.id, currentlyLiked: false })}
+      onToggleLike={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        toggleLike({ uploadId: item.id, currentlyLiked: isLiked });
+      }}
+      onComment={() => onComment(item)}
+      isSaved={isSaved}
+      onToggleSave={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        toggleFavorite({ uploadId: item.id, currentlyFavorited: isSaved });
+      }}
+      disableSwipeToProfile={disableSwipeToProfile}
+      onDelete={canDelete ? () => onDelete(item.id) : undefined}
+      onAdminDeleteImmediate={isAdmin && showAdminDelete ? () => onAdminDelete(item.id) : undefined}
+      onFamily={() => {
+        const params = new URLSearchParams({
+          postId: item.id,
+          imageUrl: item.image_url,
+          username: item.username,
+          userId: item.user_id,
+          ...(item.ai_prompt ? { prompt: item.ai_prompt } : {}),
+        });
+        nav.push(`/dreamLikeThis?${params.toString()}`);
+      }}
+      onLikesPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        onLikesPress(item.id);
+      }}
+      showVisibilityToggle={!!showVisibilityToggle && item.user_id === userId}
+      onTogglePosted={onTogglePosted ? () => onTogglePosted(item.id) : undefined}
+      onHudToggle={onHudToggle}
+      isActive={isActive}
+    />
+  );
+});
+
 export function FullScreenFeed({
   posts,
   isLoading,
@@ -109,12 +209,13 @@ export function FullScreenFeed({
   const recordedImpressions = useRef<Set<string>>(new Set());
   const isFocused = useIsFocused();
 
-  // Bumped every time the viewable card changes. Passed into DreamCard so
-  // its HUD-reset effect refires on swipe even when the same component
-  // instance is recycled by FlatList (per-item.id reset alone misses that
-  // case — leaving a previously-tapped card's chrome stuck at opacity 0
-  // when it scrolls back into view).
-  const [hudResetToken, setHudResetToken] = useState(0);
+  // Id of the currently-viewable card. Passed down so each card knows if it's
+  // active (item.id === activeId) and resets its HUD when it becomes active —
+  // including when FlatList recycles a previously-tapped instance back into
+  // view. A per-card boolean (vs the old global token) means a swipe only
+  // re-renders the two cards involved (outgoing + incoming), not every
+  // windowed card. (Perf fix 2026-05-25.)
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   // Measure the actual container height — this is the true page size
   const [containerHeight, setContainerHeight] = useState(FALLBACK_HEIGHT);
@@ -243,9 +344,10 @@ export function FullScreenFeed({
         onIndexChange?.(idx);
         // Reset HUD to visible when scrolling to a new card
         onHudToggle?.(true);
-        // Force in-card HUD reset on every visible-card change. setHudResetToken
-        // re-renders + bumps the prop on DreamCard so its reset effect refires.
-        setHudResetToken((t) => t + 1);
+        // Mark the new card active. Its `isActive` flips true (and the prior
+        // card's flips false), refiring each one's in-card HUD-reset effect —
+        // only those two cards re-render, not the whole window.
+        setActiveId(posts[idx]?.id ?? null);
         // Prefetch next 3 images
         const upcoming = posts.slice(idx + 1, idx + 4);
         if (upcoming.length > 0) {
@@ -278,6 +380,54 @@ export function FullScreenFeed({
       }
     },
     [posts, onIndexChange, user]
+  );
+
+  const bottomPadding = hideTabBar ? 16 + insets.bottom : 60 + insets.bottom;
+
+  // Stable renderItem. Per-item closures live inside the memoized FeedCard, so
+  // only cards whose own flags (isActive / isLiked / isSaved) changed re-render.
+  const renderItem = useCallback(
+    ({ item }: { item: DreamPostItem }) => (
+      <FeedCard
+        item={item}
+        isActive={item.id === activeId}
+        isLiked={likeIds.has(item.id)}
+        isSaved={favoriteIds.has(item.id)}
+        bottomPadding={bottomPadding}
+        cardHeight={pageHeight}
+        disableSwipeToProfile={disableSwipeToProfile}
+        userId={user?.id}
+        isAdmin={isAdmin}
+        showAdminDelete={showAdminDelete}
+        showVisibilityToggle={showVisibilityToggle}
+        toggleLike={toggleLike}
+        toggleFavorite={toggleFavorite}
+        onComment={setCommentPost}
+        onLikesPress={setLikesPostId}
+        onDelete={handleDelete}
+        onAdminDelete={deletePost}
+        onTogglePosted={onTogglePosted}
+        onHudToggle={onHudToggle}
+      />
+    ),
+    [
+      activeId,
+      likeIds,
+      favoriteIds,
+      bottomPadding,
+      pageHeight,
+      disableSwipeToProfile,
+      user?.id,
+      isAdmin,
+      showAdminDelete,
+      showVisibilityToggle,
+      toggleLike,
+      toggleFavorite,
+      handleDelete,
+      deletePost,
+      onTogglePosted,
+      onHudToggle,
+    ]
   );
 
   if (isLoading) {
@@ -326,50 +476,7 @@ export function FullScreenFeed({
             />
           ) : undefined
         }
-        renderItem={({ item }) => (
-          <DreamCard
-            item={item}
-            bottomPadding={hideTabBar ? 16 + insets.bottom : 60 + insets.bottom}
-            cardHeight={pageHeight}
-            isLiked={likeIds.has(item.id)}
-            onLike={() => toggleLike({ uploadId: item.id, currentlyLiked: false })}
-            onToggleLike={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              toggleLike({ uploadId: item.id, currentlyLiked: likeIds.has(item.id) });
-            }}
-            onComment={() => setCommentPost(item)}
-            isSaved={favoriteIds.has(item.id)}
-            onToggleSave={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              toggleFavorite({ uploadId: item.id, currentlyFavorited: favoriteIds.has(item.id) });
-            }}
-            disableSwipeToProfile={disableSwipeToProfile}
-            onDelete={
-              item.user_id === user?.id || isAdmin ? () => handleDelete(item.id) : undefined
-            }
-            onAdminDeleteImmediate={
-              isAdmin && showAdminDelete ? () => deletePost(item.id) : undefined
-            }
-            onFamily={() => {
-              const params = new URLSearchParams({
-                postId: item.id,
-                imageUrl: item.image_url,
-                username: item.username,
-                userId: item.user_id,
-                ...(item.ai_prompt ? { prompt: item.ai_prompt } : {}),
-              });
-              nav.push(`/dreamLikeThis?${params.toString()}`);
-            }}
-            onLikesPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              setLikesPostId(item.id);
-            }}
-            showVisibilityToggle={showVisibilityToggle && item.user_id === user?.id}
-            onTogglePosted={onTogglePosted ? () => onTogglePosted(item.id) : undefined}
-            onHudToggle={onHudToggle}
-            hudResetToken={hudResetToken}
-          />
-        )}
+        renderItem={renderItem}
       />
       {commentPost && (
         <CommentOverlay
