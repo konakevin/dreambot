@@ -108,8 +108,8 @@ export function UpscaleModalHost() {
   const copy = {
     processing: {
       icon: 'sparkles' as const,
-      title: 'Preparing your HD download',
-      sub: "This takes about a minute. You can keep browsing — we'll notify you when it's ready.",
+      title: "You're first to grab this in HD!",
+      sub: "Nobody's saved this dream in HD yet — we're hand-polishing it just for you. Hang tight a sec, or keep browsing and we'll ping you the moment it's ready.",
       showSpinner: true,
       showDismiss: true,
     },
@@ -122,15 +122,15 @@ export function UpscaleModalHost() {
     },
     done: {
       icon: 'checkmark-circle' as const,
-      title: 'Saved in HD ✓',
-      sub: 'Find it in your Photos.',
+      title: 'Saved in HD',
+      sub: 'Straight to your Photos.',
       showSpinner: false,
       showDismiss: false,
     },
     timeout: {
       icon: 'time' as const,
-      title: 'Still preparing…',
-      sub: "It's taking a little longer — we'll send you a notification the moment it's ready.",
+      title: 'Still polishing your HD copy…',
+      sub: "This one's taking a tick longer — we'll send a notification the moment it's ready to grab.",
       showSpinner: false,
       showDismiss: true,
     },
