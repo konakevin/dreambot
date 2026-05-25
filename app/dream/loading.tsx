@@ -125,7 +125,18 @@ export default function DreamLoadingScreen() {
     // Clear the active job so the stale guard in useDreamCreate discards the result
     useDreamStore.getState().setActiveJobId(null);
     Toast.show("We'll notify you when it's ready", 'checkmark-circle');
-    router.replace('/(tabs)/create');
+    // Return to where the dream started. DLT dreams were pushed from the
+    // Dream-Like-This screen, so pop back to it instead of dumping the user on
+    // the Create tab (with the prompt lingering). loading is always reached via
+    // push, so back() lands on the origin. stylePrompt/dltRecipe are set only
+    // by the DLT flow, never by Create.
+    const { config } = useDreamStore.getState();
+    const fromDlt = config.dltRecipe !== null || config.stylePrompt !== null;
+    if (fromDlt) {
+      router.back();
+    } else {
+      router.replace('/(tabs)/create');
+    }
   }
 
   return (
