@@ -33,7 +33,7 @@ import { supabase } from '@/lib/supabase';
 import * as nav from '@/lib/navigate';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
-import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
+import { useDreamMediums } from '@/hooks/useDreamStyles';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -51,7 +51,6 @@ export default function DreamLikeThisScreen() {
   const user = useAuthStore((s) => s.user);
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const { data: dbMediums = [] } = useDreamMediums();
-  const { data: dbVibes = [] } = useDreamVibes();
   const reset = useDreamStore((s) => s.reset);
 
   // Clean up dream store when leaving DLT so it doesn't leak into Create screen
@@ -104,23 +103,30 @@ export default function DreamLikeThisScreen() {
   // Fetch the reference post's medium and vibe
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('uploads')
-        .select('dream_medium, dream_vibe, ai_prompt, style_summary, recipe, model_used')
+        .select('dream_medium, dream_vibe, ai_prompt, style_summary, recipe')
         .eq('id', params.postId)
         .single();
+      // Surface fetch failures — a silently-ignored error here (a nonexistent
+      // selected column) left refMedium null and dead-buttoned the whole screen.
+      if (error) console.warn('[DLT] reference post fetch failed:', error.message);
       const row = data as unknown as Record<string, unknown> | null;
       if (row) {
         const mk = (row.dream_medium as string) ?? null;
         setRefMedium(mk);
         setRefVibe((row.dream_vibe as string) ?? null);
-        setRefModelUsed((row.model_used as string | null) ?? null);
         // Phase 2.2b: prefer the frozen recipe (rolled values verbatim) over
         // style_summary (Haiku interpretation) over ai_prompt (raw). Recipe
         // is the strongest fidelity signal — locks medium/vibe/model from the
         // source on the server. Falls back gracefully when null.
         const recipe = (row.recipe as Record<string, unknown> | null) ?? null;
         setRefRecipe(recipe);
+        // Inherit the source post's Flux model from the frozen recipe. (uploads
+        // has NO model_used column — the model lives in recipe.model; selecting
+        // the nonexistent column previously errored the entire query and broke
+        // the screen.) Null on legacy/recipe-less posts → engine picks a model.
+        setRefModelUsed((recipe && (recipe.model as string | null)) ?? null);
         const styleRef =
           (row.style_summary as string | null) ??
           (row.ai_prompt as string | null) ??
@@ -170,11 +176,10 @@ export default function DreamLikeThisScreen() {
     };
   }, []);
 
+  // Medium/vibe are no longer shown to users — kept only for the face-swap
+  // likeness hint below (mediumFaceSwaps). For bot-only mediums the
+  // useDreamMediums list excludes them, so fall back to the direct-fetched row.
   const refMediumRow = dbMediums.find((m) => m.key === refMedium);
-  // For bot-only mediums the useDreamMediums list doesn't include them —
-  // fall back to the direct-fetched row so label + face_swaps are correct.
-  const mediumLabel = refMediumRow?.label ?? refMediumRowDirect?.label ?? refMedium ?? 'Unknown';
-  const vibeLabel = dbVibes.find((v) => v.key === refVibe)?.label ?? refVibe ?? 'Unknown';
   const hasPhoto = !!photoUri;
   const hasPrompt = userPrompt.trim().length > 0;
   const mediumFaceSwaps = refMediumRow?.face_swaps ?? refMediumRowDirect?.face_swaps ?? true;
@@ -216,7 +221,12 @@ export default function DreamLikeThisScreen() {
   }
 
   function handleDream() {
-    if (!refMedium) return;
+    if (!refMedium) {
+      // The reference style failed to load — never leave the button silently
+      // dead (this is exactly how the model_used fetch bug hid for so long).
+      Toast.show('Style still loading — try again in a moment', 'close-circle');
+      return;
+    }
     Keyboard.dismiss();
 
     // DLT with style reference = always reimagine (flux-dev + face swap) so style actually transfers
@@ -329,8 +339,6 @@ export default function DreamLikeThisScreen() {
           <View style={s.styleInfo}>
             <Text style={s.styleInfoTitle}>Dream in this style</Text>
             <Text style={s.styleInfoSubtext}>Style only — your prompt sets the subject.</Text>
-            <Text style={s.styleInfoLine}>Medium: {mediumLabel}</Text>
-            <Text style={s.styleInfoLine}>Vibe: {vibeLabel}</Text>
           </View>
 
           {/* Prompt input — always visible */}
@@ -499,10 +507,6 @@ const s = StyleSheet.create({
     color: colors.textMuted,
     fontSize: 12,
     marginBottom: 4,
-  },
-  styleInfoLine: {
-    color: colors.textSecondary,
-    fontSize: 14,
   },
 
   promptHint: {

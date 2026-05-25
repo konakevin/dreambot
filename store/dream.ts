@@ -37,11 +37,11 @@ interface DreamConfig {
    *  Sonnet expansion, NO chaos layer, NO medium/vibe directive merging.
    *  Power-user mode for people pasting fully polished prompts. */
   useExactPrompt: boolean;
-  /** DLT only — the source post's `uploads.model_used`. Threaded through to
-   *  the Edge Function as `force_model` so a render that landed perfectly on
-   *  e.g. flux-1.1-pro doesn't get re-rolled on flux-dev. The recipe path
-   *  already locks model when present; this covers legacy posts that have
-   *  `model_used` but no recipe. Null for non-DLT flows. */
+  /** DLT only — the source post's Flux model, read from `recipe.model`
+   *  (uploads has no model_used column). Threaded through to the Edge Function
+   *  as `force_model` so a render that landed perfectly on e.g. flux-1.1-pro
+   *  doesn't get re-rolled on flux-dev. Null for non-DLT flows or recipe-less
+   *  posts (engine then picks a model). */
   forceModel: string | null;
 }
 
