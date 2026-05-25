@@ -367,6 +367,232 @@ Channel: Barbie movie set photography + Pinterest aesthetic doll diorama photogr
     ],
     instructions: `Each entry is ONE storytelling scene, 80-110 words, semicolon-separated 6 slots. Format: "Real <surface> — <story setup>; <protagonist + action>; <3-5 supporting cast each with distinct actions>; <5-7 girly-lifestyle props>; <warm light>; <overhead element>." Mix venues per the variety mandate (~25% DreamHouse, ~75% varied venues across the A-G categories). Mix story themes widely from the list above. Mix doll cast across Barbies + Kens + Skipper-style sisters + Bratz-style friends per entry. Each prop list mixes 4+ categories from A-J. CURATED PINTEREST-BARBIE TABLEAU vibe — NOT spills / chaos / debris. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry. NO preamble, NO commentary, NO markdown fences.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // DINO-DIORAMA path (2026-05-24) — real plastic TOY DINOSAURS in a
+  // handmade CLAYMATION prehistoric world. dino_toy_cast is SHARED with
+  // the future dino-mischief sister path.
+  // ═══════════════════════════════════════════════════════════
+
+  dino_toy_cast: {
+    format: 'simple',
+    theme: `REAL TOY DINOSAUR cast descriptions — the heroes of both dino paths (SHARED pool). Each entry is a small CAST of 2-4 plastic/vinyl TOY dinosaurs of varied species, materials, colors and sizes. They MUST read unmistakably as TOYS — glossy injection-molded plastic or soft rubber/vinyl, visible mold-seams, hard-plastic sheen, slightly-scuffed factory paint, toy proportions. NEVER real living dinosaurs, NEVER clay/sculpted dinosaurs (these are store-bought plastic toys).
+
+✓ SPECIES VARIETY across the pool — T-rex, triceratops, stegosaurus, brontosaurus/apatosaurus, velociraptor, spinosaurus, ankylosaurus, parasaurolophus, pteranodon, dilophosaurus, brachiosaurus, allosaurus, dimetrodon. Mix a clear HERO dino + 1-3 supporting dinos of different species per entry.
+✓ MATERIAL/FINISH VARIETY — glossy hard plastic, matte rubber, translucent jelly-plastic, flocked-velvet, glow-in-the-dark plastic, metallic-painted, two-tone factory paint, single-color mono-molded (like army-men but dino).
+✓ COLOR VARIETY — emerald green, teal blue, olive drab, blaze orange, mustard yellow, brick red, grey, purple, sand-tan, mottled two-tone.
+
+🚫 NO real dinosaurs, NO clay dinosaurs, NO CGI, NO humans, NO scene/setting (cast ONLY — the world comes from other axes).`,
+    touchpoints: [
+      'a glossy emerald-green plastic T-rex toy with a wide-open red-painted mouth and tiny scuffed teeth as the hero, flanked by a stout teal-blue rubber stegosaurus toy with cream-painted plates and two small olive-green plastic raptor toys — all visible mold-seams and hard-plastic sheen',
+      'a big mustard-yellow plastic brontosaurus toy with a long curving neck, a brick-red triceratops toy with chipped horn-paint, and a translucent-orange jelly-plastic pteranodon toy — store-bought dinosaur figures, glossy and toy-scale',
+      'a mono-molded army-green plastic spinosaurus toy (single solid color, like a green-army-man dino) leading a trio of identical smaller green plastic raptors, plus one odd flocked-velvet purple triceratops that clearly came from a different toy set',
+      'a glow-in-the-dark pale-green plastic stegosaurus, a metallic-bronze-painted ankylosaurus toy with a club tail, and a tiny grey rubber dimetrodon — mismatched dinosaur toys from different bins, varied finishes',
+      'a two-tone green-and-tan plastic T-rex toy mid-roar as hero, a small blue parasaurolophus toy, a sand-colored matte-rubber velociraptor, and a chunky brick-red ankylosaurus — visible factory paint slop and mold-lines',
+      'a sleek teal vinyl velociraptor toy with a glossy sheen, a stubby orange rubber triceratops, and a long purple brachiosaurus toy towering over them — clearly plastic toys with scuffed edges',
+      'a hero olive-drab plastic allosaurus with a red-painted gash detail, a pair of tiny yellow plastic compsognathus toys, and a grey dilophosaurus toy with a translucent frill — hard injection-molded plastic, toy proportions',
+      'a chunky cobalt-blue plastic ankylosaurus, a flocked-green stegosaurus, and a tall mustard brachiosaurus toy whose neck bends at a visible joint-seam — a mixed handful of dinosaur toys',
+      'a fierce orange-and-black striped plastic T-rex toy, a small white rubber pteranodon, and a squat grey triceratops with worn nubs of paint on the horns — glossy toy plastic with mold-seams down each side',
+      'a translucent-blue jelly-plastic spinosaurus toy that catches the light, a matte sand velociraptor, and a tiny green brontosaurus — soft-rubber and hard-plastic dinos mixed, all unmistakably toys',
+    ],
+    instructions: `Each entry 25-50 words. A CAST of 2-4 real plastic/vinyl/rubber TOY dinosaurs — name a clear hero dino + supporting dinos of varied species + colors + finishes. Always read as TOYS (mold-seams, plastic sheen, scuffed paint). NO setting, NO clay dinos, NO real dinos. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  dino_diorama_scenario: {
+    format: 'simple',
+    theme: `PREHISTORIC SCENARIO + DINO ACTION descriptors for dino-diorama — the headline story beat. Each entry is ONE fun mid-action prehistoric situation the toy dinosaurs are CAUGHT IN. Combines what's happening + what the dinos are DOING. Mid-motion, story-readable, playful peril/adventure.
+
+✓ VARIETY — distribute across: volcanic peril (fleeing an eruption, dodging lava-bombs, crossing a smoking lava-crack), tar-pit drama (a dino half-sunk while others form a rescue chain, peering at a stuck toy), watering-hole tension (rival dinos facing off across a clay pool, a sneaky raptor stalking), river crossing (wading a clay river, leaping stepping-stones), nest/hatchling beats (defending a clay nest of eggs, hatchlings emerging, a parent shielding babies), meteor moment (dinos craning up at a meteor streaking overhead), herd migration (a line of dinos trekking past the anchor), standoff/chase (a T-rex chasing raptors, a triceratops charging), discovery (dinos gathered around something odd).
+
+🚫 NO modern weapons, NO gore, NO humans (unless a surprise axis adds one), NO static lineup. Keep it FUN and toy-playful, not grim.`,
+    touchpoints: [
+      'the hero T-rex toy frozen mid-roar at the edge of a smoking lava-crack while two raptor toys scramble back from spattering clay lava-bombs, tails mid-swing',
+      'a pack of raptor toys stalking low through dense clay ferns toward an unaware brontosaurus toy grazing in a sunlit clearing, bodies tensed mid-creep',
+      'two rival dinosaur toys facing off nose-to-nose on an open clay ridge, a third raptor toy creeping low through the clay ferns behind them, dust kicked up',
+      'a parade of dinosaur toys mid-trek along a winding clay ridge, the hero brachiosaurus toy at the front craning its long neck, smaller dinos strung out behind into the distance',
+      'a triceratops toy charging head-down at a startled allosaurus toy that rears back mid-stumble, kicked-up clay dust frozen mid-air between them',
+      'a parent stegosaurus toy arched protectively over a clay nest of pale eggs while a sneaky raptor toy peeks over a clay boulder, one egg visibly cracking open',
+      'the whole dino cast craning their heads skyward, mouths open, as a meteor streaks overhead trailing a clay-smoke tail toward the horizon',
+      'a raptor toy scrambling up a steep clay rock-face after a fleeing smaller dino, loose clay scree tumbling down the slope behind them',
+      'a T-rex toy mid-chase after a fleeing pack of tiny raptor toys weaving between clay cycad-trunks, everyone caught at full sprint',
+      'the dino cast gathered in a curious half-circle peering down at something glinting in the clay mud, the hero dino nudging it with its snout',
+    ],
+    instructions: `Each entry 25-45 words. ONE fun mid-action prehistoric story beat: what's happening + what the toy dinos are DOING (mid-motion). Playful, story-readable. NO static lineups, NO gore, NO modern objects. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  dino_diorama_biome: {
+    format: 'simple',
+    theme: `CLAY PREHISTORIC BIOME descriptors for dino-diorama — the sculpted environment + terrain the toy dinos inhabit. Each entry is ONE rich prehistoric WORLD-TYPE rendered entirely as HANDMADE SCULPTED CLAY (matte Plasticine, thumbprinted, tool-marked), with built-in terrain features (rock, elevation, vegetation — and standing water for only about HALF of them). This is the stage — make it VARIED and visually distinct from entry to entry.
+
+⚠️ WATER BALANCE — AT MOST HALF the entries may feature standing water (lake / river / swamp / pool / surf / spring). The OTHER HALF must be DRY land with NO water feature at all (deep forest, flowering meadow, desert dunes, rock badlands, mossy grove, plateau, cave). We are fixing a "river in every scene" problem — do NOT default to water.
+
+✓ HUGE VARIETY MANDATE — spread WIDE across world-types; do NOT default to volcanic. Include: lush emerald fern-jungle, broad mirror LAKE / lagoon ringed by clay shore, a rushing RIVER valley with clay rapids + waterfalls, glowing MUSHROOM forest, towering REDWOOD / sequoia grove, bioluminescent night SWAMP, crystal CAVERN with clay geodes, desert OASIS with clay palms + pool, rainbow geothermal hot-springs, frozen LAKE + clay icebergs, deep CANYON river-delta, misty cloud-forest plateau, flowering MEADOW + clay wildflowers, coastal CLIFFS + clay surf + tide-pools, mangrove wetland, layered badlands hoodoos, amber-pine forest, terraced clay-pool cascades, volcanic rock field (ONE option among many — keep it to ~1 in 8 entries, NOT the default).
+
+🚫 The environment is ALWAYS clay (never real nature, never CGI). NO dinosaurs here (they come from cast), NO modern objects. Vary terrain, water, color and elevation widely.`,
+    touchpoints: [
+      'DRY: a lush emerald clay fern-jungle — dense hand-rolled clay tree-ferns and cycads, mossy clay boulders, thick dappled clay-leaf undergrowth carpeting the forest floor, no water',
+      'DRY: a glowing clay mushroom forest — giant pink, teal and orange clay toadstools of every size, springy clay moss floor, soft bioluminescent clay glow, no water',
+      'DRY: a towering clay redwood grove, massive ridged clay trunks receding into misty distance, a soft carpet of clay needles and clay ferns below, no water',
+      'DRY: a flowering clay meadow rolling to the horizon — clay wildflowers in yellow, violet and coral, tufted clay grass and clay shrubs, soft clay hills behind, no water',
+      'DRY: a golden clay desert of sculpted dune-ridges and wind-rippled clay sand, scattered dry clay rock-spires and bleached clay bones under a low clay sun, no water',
+      'DRY: jagged volcanic clay badlands of black-and-rust-red sculpted clay rock, drifts of grey clay ash, cracked clay ground and angular clay boulders, no water',
+      'DRY: a misty clay cloud-forest plateau, gnarled moss-draped clay trees, clay tree-ferns and clay orchids, layered clay ridges fading into haze, no water',
+      'DRY: a clay boulder-field of mossy rounded clay rocks and lichen-clay patches, scrubby clay bushes between them, dry cracked clay earth, no water',
+      'DRY: an amber-pine clay forest of tall conifer clay trees, a thick carpet of clay needles and clay pinecones, golden clay light filtering through, no water',
+      'WATER: a broad mirror-flat clay lake ringed by a thumbprinted clay shore, tiny clay islands dotting the water, soft clay hills rolling back behind it',
+      'WATER: a rushing clay river valley with sculpted white clay rapids and a small clay waterfall, smooth clay boulders splitting the current, ferny clay banks',
+      'WATER: rugged clay coastal cliffs with clay sea-stacks and frothy white clay surf frozen mid-crash, scattered clay tide-pools along the rocks',
+    ],
+    instructions: `Each entry 20-42 words. ONE distinct prehistoric WORLD-TYPE rendered as HANDMADE SCULPTED CLAY (terrain + elevation + vegetation). ⚠️ AT LEAST 7 of every 10 entries are BONE-DRY land with NO water of any kind (forest / meadow / dunes / rock / plateau / boulder-field / pine-forest). ONLY ~2-3 in 10 may have water (lake / river / surf). We are fixing a "river in every scene" problem — heavily favor DRY land. Volcanic is only ~1 in 10. NO dinosaurs, NO modern objects, NO real nature. Drop the leading "DRY:"/"WATER:" tag from the actual output. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  dino_diorama_anchor: {
+    format: 'simple',
+    theme: `MONUMENTAL CLAY ANCHOR descriptors for dino-diorama — the ONE impossibly-big hero element that dominates the background and dwarfs the toy dinos (playbook component #1). Each entry is a single show-stopping sculpted-clay landmark, rendered LARGE and dramatic.
+
+✓ VARIETY — an erupting clay volcano (lava fountain + billowing grey clay mushroom-cloud against the sky, like the reference), a giant meteor streaking down trailing clay-smoke / a fresh glowing crater, a towering clay waterfall thundering into a misty clay gorge, a colossal sky-high clay cliff/mesa, a massive glacier wall of blue clay ice, a giant geyser erupting a column of clay water + steam, a colossal amber-resin clay tree oozing golden clay sap, a vast tar-lake with a sunken clay skeleton, a huge clay storm-wall with clay lightning, an enormous fallen clay log spanning the frame.
+
+⚠️ VARIETY OVER VOLCANO — the erupting volcano is only ONE option; use it AT MOST ~1 in 6 entries. Lead hard with the OTHERS (waterfalls, crystal spires, colossal trees, geysers, glaciers, rock-arches, giant skeletons, storm-walls, meteors, terraced cascade-falls, sky-high mesas).
+
+🚫 Render it BIG and background-dominating. ALWAYS clay. NO modern structures.`,
+    touchpoints: [
+      'a towering erupting clay volcano dominating the background — a bright orange-and-yellow clay lava fountain spewing upward into a huge billowing grey clay mushroom-cloud of smoke against the sky',
+      'a giant meteor streaking down across the whole sky, a fireball head of glowing orange clay trailing a long smoking clay tail toward the horizon, lighting the scene from above',
+      'a colossal clay waterfall thundering down a sheer clay cliff into a churning misty clay plunge-pool, white clay spray frozen mid-fall, rainbow haze implied',
+      'a massive wall of blue-white clay glacier ice rising across the entire background, deep clay crevasses and icicle-spikes, a calving chunk frozen mid-tumble',
+      'an enormous geyser erupting a tall column of glossy clay water and cotton-wool steam high into the sky, dwarfing the toy dinos clustered at its base',
+      'a colossal ancient clay tree oozing rivers of golden amber-resin clay down its trunk, a tiny dino toy half-trapped in a glob of the glossy sap',
+      'a vast black tar-lake stretching to the horizon with the half-sunken clay ribcage of a giant prehistoric skeleton arching out of the glossy surface',
+      'a giant clay storm-wall of bruised purple-grey thunderheads filling the background, a jagged bolt of yellow clay lightning frozen striking the ridge',
+      'an immense fallen clay log, mossy and cracked, spanning the entire frame like a bridge, the toy dinos crossing along its top dwarfed by its girth',
+      'a sky-high red-clay mesa spire striped with layered strata towering over the diorama, its shadow falling long across the clay flats below',
+    ],
+    instructions: `Each entry 20-40 words. ONE monumental sculpted-CLAY hero landmark, rendered LARGE + background-dominating so the toy dinos read tiny against it. ALWAYS clay. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  dino_diorama_craft: {
+    format: 'simple',
+    theme: `HANDMADE CLAYMATION CRAFT-DETAIL descriptors for dino-diorama — the little handcrafted touches that sell the stop-motion-diorama charm (material truth, playbook component #6). Each entry is a short cluster of tactile clay-craft details.
+
+✓ VARIETY — visible thumbprints + sculpting-tool grooves in the clay, fingerprint-dimpled clay rocks, glossy-lacquered clay water with sculpted ripples, hand-rolled fluffy clay clouds, cotton-wool smoke/steam, pipe-cleaner-and-felt foliage, tiny seed-bead pebbles, toothpick-and-clay trees, visible armature wire peeking from a clay cliff, matte-vs-glossy clay contrast, slightly-squashed asymmetric hand-shaped forms, a stray real-world texture (corduroy hills, sponge moss).
+
+🚫 Detail touches ONLY — NO dinosaurs, NO full scene, NO modern objects.`,
+    touchpoints: [
+      'visible thumbprints and sculpting-tool grooves pressed all across the matte clay terrain, fingerprint-dimpled clay boulders catching the light',
+      'matte sculpted clay rocks with deep tool-gouges beside softly-rounded thumb-pressed clay mounds, dry and richly tactile',
+      'hand-rolled fluffy clay clouds and puffs of real cotton-wool smoke drifting across the sky, slightly squashed and asymmetric',
+      'pipe-cleaner-and-felt clay ferns, toothpick-trunked clay trees, tiny seed-bead clay pebbles scattered across the ground',
+      'a hairline crack and a wisp of stray armature wire peeking from the base of a clay cliff, betraying the handmade puppet-set craft',
+      'matte clay boulders dusted with fine clay-powder, fine hairline shrinkage-cracks crazing across a dried clay slope',
+      'tiny tool-carved striations in the clay strata, a thumb-smoothed clay ridge, a scatter of fingerprints left in the soft clay ground',
+      'cotton-ball steam tufts on hidden toothpicks, hand-pinched clay flames with a glossy highlight, sculpted clay ash flecks',
+      'corduroy-textured clay hills and sponge-textured clay moss, a felt-strip clay meadow, charmingly imperfect hand-shaped forms',
+      'soft asymmetric hand-squashed clay forms throughout, a slightly-melty clay rock, visible palm-smear marks across the diorama base',
+    ],
+    instructions: `Each entry 15-30 words. A short cluster of tactile HANDMADE CLAY craft details (thumbprints, tool-marks, dry clay texture, cotton-wool smoke, felt/pipe-cleaner foliage, cracks, moss). Detail ONLY — NO dinos, NO modern objects. ⚠️ NO water / puddle / river / pond / stream / winding-path (water comes from the biome only). Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  dino_diorama_critters: {
+    format: 'simple',
+    theme: `SECONDARY CRITTER + SCALE-PROVER descriptors for dino-diorama — small background life and tiny details at multiple depths that fill the world and prove the scale of the anchor (playbook components #2/#3). Each entry is a small cluster of mid/far-distance life.
+
+✓ VARIETY — tiny clay pterosaurs wheeling overhead, a baby toy dino peeking from behind a rock, clay dragonflies/bugs near the water, little clay fish in a clay stream, a clay nest of eggs in the distance, a far-off tiny herd silhouette near the anchor, clay frogs on a lily-pad, a clay snail on a fern, tadpoles in a clay puddle, a tiny scuttling clay lizard.
+
+🚫 SMALL + mid/far distance ONLY (never bigger than the hero dinos). NO modern objects, NO humans.`,
+    touchpoints: [
+      'three tiny clay pterodactyls wheeling high overhead in a loose V, silhouetted against the sky near the anchor',
+      'a baby green plastic dino toy peeking wide-eyed from behind a clay boulder in the midground, half-hidden',
+      'a fat clay bumblebee and an iridescent clay beetle crawling over a broad clay fern frond in the foreground',
+      'a little clay armadillo-creature and a long clay millipede trundling across the clay ground between the rocks',
+      'a far-off tiny silhouetted herd of dino toys strung along the distant ridge beneath the towering anchor, proving its scale',
+      'a clay nest of pale speckled eggs tucked in the mid-distance ferns, one egg with a tiny crack and a beak poking out',
+      'a clay snail inching up a fern stalk and a tiny clay lizard sunning itself on a warm clay rock nearby',
+      'a tiny scuttling clay lizard on a sun-warmed clay rock and a line of clay ants crossing the clay ground',
+      'a pair of fuzzy cotton-wool clay clouds with a tiny clay pteranodon gliding between them in the far sky',
+      'a scatter of tiny clay beetles in the foreground and a small furry clay mammal peeking from a burrow in the clay bank',
+    ],
+    instructions: `Each entry 15-30 words. A small cluster of SMALL mid/far-distance prehistoric life / scale-provers (clay pterosaurs, baby dinos, beetles, lizards, distant herd, burrowing critters). Always small, never bigger than the heroes. ⚠️ Keep critters LAND + AIR — NO fish / frogs / tadpoles / lily-pads / water-bugs (no water unless the biome has it). Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  dino_diorama_surprise: {
+    format: 'simple',
+    theme: `SURPRISE-ELEMENT descriptors for dino-diorama — a fun UNEXPECTED twist that crashes the prehistoric clay world (fires ~55% of renders). Each entry is ONE delightful out-of-place toy or whimsical surprise that makes the viewer grin. It should be small-to-medium and NOT steal focus from the toy dinosaurs.
+
+✓ VARIETY — a stray NON-DINO toy wandering in: a tiny plastic astronaut planting a flag on the volcano, a green plastic army-man scout radioing for backup, a Hot Wheels car stuck in the clay mud, a LEGO-brick boulder among the clay rocks, a wind-up tin robot trundling through the ferns, a rubber duck floating in the tar pit, a toy UFO hovering over the eruption, a plastic knight figure facing off with the T-rex, a tiny dollhouse teacup in the clay, a googly-eyed clay caveman peeking out, a plush dino tucked among the plastic ones, a toy submarine in the clay river.
+
+🚫 Keep it FUN + small. NO gore, NO modern tech beyond toys, NO text.`,
+    touchpoints: [
+      'a tiny white plastic toy astronaut has planted a little flag on a clay outcrop and stands saluting as the dinos ignore him',
+      'a single green plastic army-man scout crouches behind a clay fern, binoculars raised, radioing for backup',
+      'a die-cast Hot Wheels car is nose-down and stuck in the glossy clay mud, tiny wheels still spinning, a raptor toy sniffing its bumper',
+      'one out-of-place LEGO brick sits among the clay boulders as a perfectly rectangular red \'rock,\' utterly wrong and delightful',
+      'a wind-up tin robot trundles obliviously through the clay ferns, key still turning on its back, as a triceratops watches',
+      'a yellow rubber duck floats serenely in the black clay tar-pit while a brontosaurus toy eyes it warily',
+      'a small silver toy UFO hovers on a near-invisible thread above the erupting clay volcano, beaming a tiny light down',
+      'a plastic toy knight in silver armor stands sword-raised facing off against the towering T-rex toy, comically outmatched',
+      'a tiny porcelain dollhouse teacup sits incongruously on a clay rock with a clay-pebble \'cookie\' beside it',
+      'a soft plush dino is tucked in among the hard plastic ones, fuzzy and oversized, blending in like it belongs',
+      'a googly-eyed little clay caveman peeks out from behind the monumental anchor, club in hand, eyes wobbling',
+      'a green plastic toy submarine is beached on the clay riverbank, periscope up, as raptor toys investigate',
+    ],
+    instructions: `Each entry 15-30 words. ONE fun out-of-place toy / whimsical surprise crashing the prehistoric clay world (astronaut, army-man, Hot Wheels, LEGO, robot, rubber duck, UFO, knight, etc.). Small, grin-worthy, never steals focus. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  dino_diorama_camera: {
+    format: 'simple',
+    theme: `VARIED WIDE-SCENE DEEP-FOCUS CAMERA / FRAMING for dino-diorama. The #1 GOAL is COMPOSITIONAL VARIETY — every render must feel like a DIFFERENT shot of a DIFFERENT corner of the world. THE FAILURE MODE WE ARE FIXING: every render looks identical — a wide vista with a winding river-or-lava CHANNEL splitting the middle, shot from the same angle. BREAK that hard.
+
+✓ Each entry is ONE distinct framing. Spread WIDE across shot-types — rotate through:
+  - TOP-DOWN bird's-eye flat-lay looking straight down on the whole world (no horizon)
+  - HIGH hilltop 3/4 overlook across the sprawling world
+  - LOW ground-level eye-line down among the dinos, the world rising behind
+  - OFF-CENTER asymmetric composition (anchor shoved to one side, action in a corner)
+  - looking UP at a towering anchor from below
+  - sweeping PANORAMIC ridge-line across the world
+  - over-a-foreground-rise reveal of the world beyond
+  - diagonal / corner composition where the eye travels from one corner to the opposite
+
+✓ ALWAYS DEEP FOCUS (large depth of field, whole scene crisp). Mostly wide/full-world (dinos small-to-medium), but vary the scale a little so not every shot is identical.
+
+🚫 DO NOT run a river / lava / path / channel down the CENTER of the shot — that is the exact repetition we are killing. Most compositions have NO central waterway and NO central leading-line. Vary WHERE the eye enters and what fills the foreground. NO shallow DOF, NO macro, NO tilt-shift.`,
+    touchpoints: [
+      'top-down bird\'s-eye flat-lay looking straight down on the whole clay world, dinos scattered like a herd across the terrain, deep focus, no horizon line, no central channel',
+      'high hilltop 3/4 overlook gazing across the sprawling diorama, the anchor off to one side, many small dinos dotted below, everything tack-sharp',
+      'low ground-level eye-line right down among the toy dinos, their lush world rising up behind them into the distance, deep focus front-to-back',
+      'off-center asymmetric wide shot — the monumental anchor pushed to the left third, the dino action clustered lower-right, open landscape filling the rest',
+      'a steep low up-angle looking UP past a few foreground dinos at the towering anchor, sky filling the top third, deep focus',
+      'a sweeping panoramic ridge-line vista, the world stretching side to side, dinos strung along ridges and hollows, crisp throughout, no central feature',
+      'a corner-in diagonal composition, the landscape sweeping from near foreground bottom-left up to a far anchor top-right, dinos along the diagonal',
+      'a high-angle reveal over a foreground rise looking down on the busy world beyond — many dinos, lush flora, the anchor set to one side, all in focus',
+    ],
+    instructions: `Each entry 14-30 words. ONE distinct WIDE-ish full-world framing, ALWAYS DEEP FOCUS. VARY the angle/composition HARD across top-down / hilltop / ground-level / off-center / up-angle / panoramic / diagonal. NEVER a river / lava / path running down the CENTER. NO macro / shallow DOF / tilt-shift. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  dino_diorama_flora: {
+    format: 'simple',
+    theme: `LUSH CLAY FLORA + SET-DECORATION descriptors for dino-diorama — the dense decorative plant-life and set-dressing that CRAMS the prehistoric clay world full of life ("crazy clay trees everywhere"). Each entry is a CLUSTER of 3-5 varied clay flora / props, layered at different scales for a lush, overgrown, richly-decorated diorama. ALWAYS handmade sculpted clay.
+
+✓ VARIETY across the pool — towering clay palms, giant clay tree-ferns, gnarled twisted clay trees, clay cycads, drooping clay willows, towering clay redwood trunks, clay bamboo groves, hanging clay vines + moss, giant clay mushrooms + toadstools, clay flowering plants + blossoms, clay reeds + cattails + lily-pads, clay bushes + shrubs, fallen mossy clay logs, clay stumps, clay boulders + natural rock-arches, and BIZARRE alien-looking clay plants (bulbous polka-dot pods, curly spiral fronds, balloon-blossoms, glowing bioluminescent flowers).
+
+✓ Each entry layers 3-5 DIFFERENT flora/decor types at different sizes so the world feels packed and varied.
+
+🚫 ALWAYS clay (sculpted, matte, thumbprinted). NO real plants, NO dinosaurs, NO modern objects.`,
+    touchpoints: [
+      'towering clay palm trees and giant emerald tree-ferns crowding the banks, twisted clay vines slung between them, clusters of red-capped clay toadstools sprouting at their roots',
+      'gnarled twisted clay trees with curling branches, drooping clay willow-fronds, hanging clay moss, a fallen mossy clay log bridging a gully',
+      'a grove of tall clay cycads and spiky clay bushes, fat clay mushrooms in pink and orange, little clay flowering plants dotting the clay ground',
+      'dense clay bamboo and spiky clay shrubs, broad-leaf clay plants, a vine-draped mossy clay boulder, tufts of clay grass between them',
+      'enormous clay redwood-style trunks receding into the distance, ferny clay undergrowth, glowing bioluminescent clay flowers, scattered weathered clay stumps',
+      'bizarre alien clay plants crammed between boulders — bulbous polka-dot pods, curly spiral fronds, balloon-shaped clay blossoms in candy colors',
+      'a jungle wall of overlapping broad-leaf clay plants and clay fronds, hanging clay vines, clusters of clay berries, a rotting clay log sprouting tiny clay mushrooms',
+      'spindly clay conifers and clay tree-ferns along a ridge, tufts of clay grass, clay wildflowers in yellow and violet, a natural clay rock-arch framing the view',
+      'a tangle of gnarled clay roots and broad clay fronds, hanging clay moss, clusters of clay berries, a rotting clay log sprouting tiny clay mushrooms',
+      'oversized clay flowers and toadstools taller than the toy dinos, curling clay ferns underfoot, a twisted clay tree heavy with hanging clay fruit, clay boulders everywhere',
+      'a fern-choked clay gorge wall dripping with hanging clay vines and clay orchids, clay mushroom-shelves climbing a clay trunk, mossy clay steps',
+      'clay horsetails and tall clay grasses clustered around mossy clay boulders, a gnarled clay root-tangle arching overhead, scattered clay wildflowers',
+    ],
+    instructions: `Each entry 18-35 words. ONE dense cluster of 3-5 varied CLAY flora / set-dressing types layered at different scales (trees, ferns, mushrooms, vines, flowers, logs, boulders, reeds, alien-plants). Always handmade clay. NO dinos, NO real plants, NO modern objects. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

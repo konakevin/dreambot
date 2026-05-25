@@ -461,4 +461,95 @@ ${vibeDirective.slice(0, 250)}
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
   },
+
+  TOYBOT_DINO_DIORAMA: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      camera_angle,
+      cast,
+      scenario,
+      biome,
+      flora,
+      anchor,
+      craft,
+      critters,
+      lighting,
+      atmosphere,
+      surprise,
+    } = slots;
+
+    return `You are a stop-motion diorama photographer shooting a TOY-DINOSAUR PREHISTORIC DIORAMA in DEEP FOCUS for ToyBot — a handmade little world where REAL plastic toy dinosaurs adventure through a sculpted CLAYMATION landscape. Fun, charming, story-driven, packed with detail. Think a kid's dinosaur-toy diorama brought to cinematic life — Aardman / Laika miniature-set craft meets a tub of plastic dino toys.
+
+━━━ THE MIXED-MEDIA RULE — ABSOLUTE, NON-NEGOTIABLE ━━━
+The DINOSAURS are REAL PLASTIC TOYS — glossy injection-molded plastic / soft-vinyl dinosaur figures with visible mold-seams, hard-plastic sheen, slightly-scuffed factory paint, toy-scale. The WORLD around them is HANDMADE SCULPTED CLAY — clay terrain, clay foliage, clay rocks, clay water, clay sky-elements with visible thumbprints and sculpting-tool marks. NEVER clay dinosaurs. NEVER real (living) dinosaurs. NEVER CGI. The contrast of shiny plastic toy dinos inside a soft matte clay world is the whole charm — render BOTH materials distinctly.
+
+━━━ THE TOY-DINO CAST (the heroes — real plastic toys) ━━━
+${cast}
+
+Render each as an unmistakable PLASTIC TOY. These are the FEATURED dinosaurs — but they are part of a POPULATED WORLD: scatter MANY more toy dinosaurs of varied species across the whole scene at every distance (aim for roughly 8-15 dinosaurs total), from a hero in the foreground down to tiny dinos near the distant anchor. A busy, lived-in prehistoric world — never just a few dinos.
+
+━━━ THE SCENARIO — what's happening + what the dinos are DOING (the headline) ━━━
+${scenario}
+
+Something is HAPPENING — the dinos are caught mid-action in a fun prehistoric story beat. Not a static lineup. The viewer should read the story in 2 seconds.
+
+━━━ THE CLAY BIOME — the sculpted prehistoric environment ━━━
+${biome}
+
+Render the whole environment as handmade CLAY — sculpted, matte, thumbprinted. This is the stage the toy dinos act on.
+
+━━━ LUSH CLAY FLORA + SET DECORATION — CRAM THE WORLD WITH IT ━━━
+${flora}
+
+Pack the diorama with clay flora and set-dressing at EVERY depth — crazy clay trees, towering tree-ferns, twisted vines, giant mushrooms, fallen logs, boulders, reeds, flowering plants — across the foreground, midground AND distance. The world should feel LUSH, overgrown, busy and richly decorated — never sparse, never empty. Layer different plant types so no two zones look the same.
+
+━━━ THE MONUMENTAL CLAY ANCHOR — one impossibly-big hero element ━━━
+${anchor}
+
+This dominates the background and frames everything — render it LARGE and dramatic (the toy dinos read tiny against it). It's the "wow" of the diorama.
+
+━━━ HANDMADE CLAYMATION CRAFT DETAIL ━━━
+${craft}
+
+These handcrafted touches sell the stop-motion-diorama charm — visible fingerprints in the clay, sculpting-tool grooves, tiny imperfections, glossy-clay water, hand-rolled clay clouds.
+
+━━━ SECONDARY CRITTERS + SCALE-PROVERS (multi-tier depth) ━━━
+${critters}
+
+Small background life and tiny details at multiple depths — they prove the scale of the anchor and fill the world with life. Keep them small and in the mid/far distance.
+
+━━━ CAMERA / FRAMING ━━━
+${camera_angle}
+
+This is a WIDE ESTABLISHING SHOT of the ENTIRE sprawling diorama WORLD — NOT a close-up on a few dinos. Show the whole landscape in one frame: multiple zones at once — the monumental anchor, varied clay terrain (hills, ridges, valleys, plateaus, forest, dunes — whatever the BIOME calls for), and a richly-detailed foreground — populated with MANY dinosaurs at every distance. Only include water (a river, lake or pool) when the biome actually has it — do NOT add a river to every scene. Pull the camera WAY back into an EXPANSIVE wide vista — the lush world should sprawl past all four edges of the frame, with far more landscape than any single dino. The dinosaurs are SMALL inhabitants scattered like a herd across the world (tiny-to-medium), NEVER dominating or filling the frame. Depth-on-depth: foreground clay terrain + dinos, midground biome + more dinos, background the monumental clay anchor + sky. Shoot it wide-angle with a LARGE depth of field so the entire diorama is crisp and sharp from the nearest pebble to the farthest peak — everything in focus, like a real life-size set photographed straight-on. Follow the rolled camera framing's EXACT angle — every render must be a DIFFERENT composition (top-down, hilltop, ground-level, off-center, up-angle, panoramic, diagonal); NEVER default to a winding river or path running down the center of the frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 220)}
+${
+  surprise
+    ? `
+━━━ SURPRISE ELEMENT (fires this render — a fun unexpected twist) ━━━
+${surprise}
+
+Weave this in as a delightful surprise — a stray non-dino toy or unexpected whimsy crashing the prehistoric world. It should make the viewer grin, NOT steal focus from the toy dinosaurs.
+`
+    : ''
+}
+━━━ HARD BANS ━━━
+- NO clay/Plasticine dinosaurs — the dinosaurs are REAL PLASTIC TOYS (the WORLD is clay)
+- NO real living dinosaurs, NO photoreal nature documentary, NO CGI, NO 2D illustration
+- NO single static toy on a plain backdrop — this is a POPULATED multi-tier diorama with a story
+- NO modern human-world objects unless they are the rolled surprise element
+- NO text, NO UI, NO captions
+
+━━━ STRUCTURE (write the prompt in this order) ━━━
+[OPENING: "a handmade claymation diorama of real plastic toy dinosaurs" + the hero dino + what it's DOING], [the other toy dinos at varied distances], [the clay biome around them], [the monumental clay anchor dominating the background], [handmade clay-craft texture detail], [secondary critters / scale-provers in the mid-far distance], [surprise element if rolled], [camera framing + multi-tier depth], [lighting + atmosphere], [color + mood]
+
+Output ONLY the raw 90-130 word scene description. Comma-separated phrases. Lead with the toy-dino action + clay world, not a cast list. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels.`;
+  },
 };

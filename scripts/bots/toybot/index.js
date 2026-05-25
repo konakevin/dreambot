@@ -38,6 +38,8 @@ const pathBuilders = {
   'space-saga-figures': require('./paths/space-saga-figures'),
   // new (2026-05-08) — flagship boss-clash path using shared FINAL_BOSSES pool
   'monster-boss-battle': require('./paths/monster-boss-battle'),
+  // new (2026-05-24) — real toy dinosaurs in a claymation prehistoric world
+  'dino-diorama': require('./paths/dino-diorama'),
 };
 
 module.exports = {
@@ -76,6 +78,7 @@ module.exports = {
       'space_saga_figures',
       'plush_fabric',
     ],
+    'dino-diorama': 'dino_diorama',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -193,6 +196,13 @@ module.exports = {
     // Archetype-only — bans IP names (no Star Wars / Lucasfilm).
     space_saga_figures:
       'authentic vintage Kenner 1977-1985 Star Wars 3.75-inch action-figures — hand-painted plastic, bubble-card-mint paint quality, swivel-waist or limited-articulation, signature gear molded as part of body (lightsabers, blasters, jetpacks, helmets, capes, robes, droid-tools), real-physical-toys on handcrafted playset dioramas, named characters allowed (Luke / Leia / Han / Vader / Yoda / Boba Fett / Stormtroopers / R2-D2 / C-3PO / Chewbacca / Obi-Wan / Greedo / Ewoks / Tusken Raiders / Wampa / etc.), iconic Star Wars locations and ships (Tatooine / Hoth / Endor / Dagobah / Bespin / Death Star / Mos Eisley cantina / X-wings / TIE Fighters / Millennium Falcon / AT-ATs / Sandcrawlers), NEVER CGI, NEVER illustration',
+    // 2026-05-24 dino-diorama — mixed media: REAL plastic toy dinosaurs (cast)
+    // staged inside a HANDMADE CLAYMATION prehistoric WORLD (clay environment).
+    // Front-loads "real plastic toy dinosaurs" so Flux renders the dinos as
+    // toys, then locks the surrounding world to sculpted clay. Overrides the
+    // bot-only DB flux_fragment.
+    dino_diorama:
+      'REAL plastic toy dinosaurs as the cast — glossy injection-molded plastic / soft-vinyl dinosaur figures with visible mold-seams, hard-plastic sheen and slightly-scuffed factory paint at toy scale — staged inside a HANDMADE STOP-MOTION CLAYMATION PREHISTORIC WORLD where the environment is sculpted Plasticine clay: a clay volcano and clay terrain with visible thumbprints and sculpting-tool marks, matte-clay rocks, glossy-clay rivers, hand-rolled clay ferns and clay clouds (Aardman / Laika / Coraline miniature-set craft). The DINOSAURS are real hard-plastic toys; the WORLD around them is sculpted clay — a deliberate mixed-media contrast. Practical tabletop diorama photography in DEEP FOCUS — the entire handmade set crisp and sharp from foreground to background (large depth of field, everything in focus, photographed straight-on like a real life-size set), warm practical set-lighting — NOT a tilt-shift fake-miniature look, NOT background-blur, NOT clay dinosaurs (the dinos are plastic toys), NOT digital-render, NOT illustration',
   },
 
   // Bot-wide fallback. Per-path filtering happens in `vibesByPath` below.
@@ -237,6 +247,8 @@ module.exports = {
     'toybox-chaos': ['cinematic', 'cozy', 'epic', 'nostalgic', 'peaceful', 'whimsical', 'ethereal', 'arcane', 'ancient', 'enchanted', 'coquette', 'voltage', 'nightshade', 'shimmer', 'surreal'],
     'space-saga-figures': ['cinematic', 'epic', 'voltage', 'nostalgic', 'ancient', 'nightshade', 'ethereal', 'surreal'],
     'monster-boss-battle': ['cinematic', 'epic', 'voltage', 'nightshade', 'arcane', 'ancient', 'surreal'],
+    // prehistoric drama + whimsy tone
+    'dino-diorama': ['cinematic', 'epic', 'whimsical', 'ancient', 'nostalgic', 'nightshade', 'surreal', 'voltage', 'enchanted'],
   },
 
   paths: [
@@ -258,6 +270,7 @@ module.exports = {
     'toybox-chaos',
     'space-saga-figures',
     'monster-boss-battle',
+    'dino-diorama',
   ],
 
   pathWeights: {
@@ -279,6 +292,7 @@ module.exports = {
     'toybox-chaos': 2,
     'space-saga-figures': 1,
     'monster-boss-battle': 1,
+    'dino-diorama': 1,
   },
 
   // Chaos layer — subject-level distortions (silhouette/echo) ON for ALL paths.
@@ -287,7 +301,7 @@ module.exports = {
   // whiteout winter) that scramble the populated-scene intent. R6+R8 audits.
   chaos: {
     enabled: true,
-    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene'],
+    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene', 'dino-diorama'],
     allowSubjectChaosPaths: [
       'claymation', 'vinyl', 'sackboy',
       'shortcake-scene', 'gi-joe-missions',
@@ -309,7 +323,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene'],
+    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene', 'dino-diorama'],
   },
 
   // Sensory anchors — lightcolor required, additional channels rolled.
@@ -320,7 +334,7 @@ module.exports = {
   // contradict the path's warm-daylight playtime-scene DNA. R6 audit.
   sensoryAnchors: {
     enabled: true,
-    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene'],
+    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene', 'dino-diorama'],
     requiredChannels: ['lightcolor'],
     pathContext: {
       // Figure-centric (toys are the subject)
@@ -341,6 +355,7 @@ module.exports = {
       'mech-toy-rampage': 'figure',
       'toybox-chaos': 'figure',
       'space-saga-figures': 'figure',
+      'dino-diorama': 'figure',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

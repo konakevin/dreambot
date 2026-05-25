@@ -153,4 +153,16 @@ module.exports = {
     TOYBOT_CAMERA_ANGLES: load('camera_angles'),
     TOYBOT_TOY_SCENARIOS: load('toy_scenarios'),
     TOYBOT_STAGING_AXIS: load('staging_axis'),
+
+    // dino-diorama (2026-05-24) — real toy dinosaurs in a claymation prehistoric
+    // world. DINO_TOY_CAST is SHARED with the future dino-mischief sister path.
+    DINO_DIORAMA_CAMERA: load('dino_diorama_camera'),
+    DINO_TOY_CAST: load('dino_toy_cast'),
+    DINO_DIORAMA_SCENARIO: load('dino_diorama_scenario'),
+    DINO_DIORAMA_BIOME: load('dino_diorama_biome'),
+    DINO_DIORAMA_FLORA: load('dino_diorama_flora'),
+    DINO_DIORAMA_ANCHOR: load('dino_diorama_anchor'),
+    DINO_DIORAMA_CRAFT: load('dino_diorama_craft'),
+    DINO_DIORAMA_CRITTERS: load('dino_diorama_critters'),
+    DINO_DIORAMA_SURPRISE: load('dino_diorama_surprise'),
 };

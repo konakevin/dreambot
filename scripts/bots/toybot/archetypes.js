@@ -52,4 +52,17 @@ module.exports = {
   framingModes: null,
   anchorScaleRange: null
 },
+
+  TOYBOT_DINO_DIORAMA: {
+  description: 'PATH-BESPOKE — ToyBot dino-diorama path (2026-05-24). REAL plastic/vinyl TOY DINOSAURS staged in a HANDMADE CLAYMATION prehistoric WORLD (clay-sculpted volcano / terrain / foliage / rivers; Aardman / Laika miniature-set craft). The dinos are REAL TOYS; the world around them is sculpted clay — mixed-media charm. Fun, story-driven prehistoric scenes (eruptions, tar pits, meteor watches, river crossings, nest defense) with a 55%-gated SURPRISE (a stray other-toy / unexpected whimsy). Rich multi-axis: cast (SHARED toy-dino pool) + scenario + clay biome + monumental clay anchor + handmade craft detail + secondary critters/scale-provers + universal camera / lighting / atmosphere. Medium dino_diorama. Skips chaos / two-pass polish / sensory so the tightly-composed brief flows straight to Flux.',
+  slots: {
+    universal: [ 'camera_angle' ],
+    bot: [],
+    path: [ 'cast', 'scenario', 'biome', 'flora', 'anchor', 'craft', 'critters', 'lighting', 'atmosphere' ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'surprise', gate: 0.55 },
+  framingModes: null,
+  anchorScaleRange: null
+},
 };
