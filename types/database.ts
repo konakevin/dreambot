@@ -1517,6 +1517,7 @@ export type Database = {
       sparkle_transactions: {
         Row: {
           amount: number;
+          balance_after: number | null;
           created_at: string;
           id: string;
           reason: string;
@@ -1525,6 +1526,7 @@ export type Database = {
         };
         Insert: {
           amount: number;
+          balance_after?: number | null;
           created_at?: string;
           id?: string;
           reason: string;
@@ -1533,6 +1535,7 @@ export type Database = {
         };
         Update: {
           amount?: number;
+          balance_after?: number | null;
           created_at?: string;
           id?: string;
           reason?: string;
@@ -2170,6 +2173,17 @@ export type Database = {
       rebalance_bot_schedules: {
         Args: { p_min_lead_seconds?: number };
         Returns: undefined;
+      };
+      reconcile_sparkles: {
+        Args: { p_user_id: string };
+        Returns: {
+          current_balance: number;
+          drift: number;
+          last_recorded_balance: number;
+          last_tx_at: string;
+          ledger_sum: number;
+          tx_count: number;
+        }[];
       };
       record_impression: {
         Args: { p_upload_id: string; p_user_id: string };

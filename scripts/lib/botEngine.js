@@ -456,13 +456,16 @@ function resolvePath({ bot, recentPaths }) {
     throw new Error(`Bot ${bot.username} has no paths configured`);
   }
   const window = recentPaths || [];
-  const maxAttempts = 20;
-  for (let i = 0; i < maxAttempts; i++) {
-    const pick = weightedPick(bot.paths, bot.pathWeights);
-    if (!window.includes(pick)) return pick;
-  }
-  console.warn('  ⚠️ path dedup exhausted after 20 attempts — using last pick');
-  return weightedPick(bot.paths, bot.pathWeights);
+  // Deterministically exclude recent paths when alternatives exist; fall back
+  // to the full set ONLY when every path is in the window. The previous
+  // approach rejection-sampled (pick-from-all, retry if recent, 20× cap) and
+  // its fallback could return a recent path ~(recent/total)^20 of the time —
+  // a rare repeat in prod and the source of the flaky test. Filtering first is
+  // equivalent in distribution (weighting preserved) but never repeats a
+  // recent path while a fresh one is available.
+  const available = bot.paths.filter((p) => !window.includes(p));
+  const candidates = available.length > 0 ? available : bot.paths;
+  return weightedPick(candidates, bot.pathWeights);
 }
 
 // Cycle size = total slots per cycle. With pathWeights, each path occupies
