@@ -401,7 +401,7 @@ export default function CreateScreen() {
                 className="flex-1 text-xs"
                 style={{ color: colors.textSecondary, lineHeight: 16 }}
               >
-                Photo dreams use the regular engine — Advanced Mode applies to text-only dreams.
+                Photo dreams use the DreamBot engine — Direct mode is for text-only dreams.
               </Text>
             </View>
           )}
@@ -519,65 +519,82 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Advanced Mode toggle — always visible when there's no photo
-              (toggle state is sticky per-user via AsyncStorage, see
-              USE_EXACT_PROMPT_KEY above). When ON: prompt goes verbatim
-              to the user's chosen Flux model, skipping Sonnet expansion,
-              chaos, medium/vibe directives, AND face swap. Slim row:
-              "Advanced Mode" label + (i) info icon (tap to open the info
-              modal) + switch on the right. Face-swap warning still
-              surfaces in the footer contextHint to stay above the
-              keyboard. Photo path shows the inline override note above
-              instead (Advanced Mode is text-only). */}
+          {/* Engine selector — two named engines (no photo attached):
+              • DreamBot (config.useExactPrompt = false) — our engine: custom
+                mediums/vibes, prompt polish, and cast-photo face swap.
+              • Direct (config.useExactPrompt = true) — prompt goes verbatim to
+                the user's chosen AI model, skipping styling + face swap.
+              State is sticky per-user via AsyncStorage (USE_EXACT_PROMPT_KEY).
+              Photo path hides this and shows the inline note above (Direct is
+              text-only). */}
           {!hasPhoto && (
-            <View
-              className="rounded-xl mb-4"
-              style={{
-                backgroundColor: config.useExactPrompt ? colors.accent + '22' : colors.surface,
-                borderWidth: 1,
-                borderColor: config.useExactPrompt ? colors.accent : colors.border,
-              }}
-            >
-              <View className="flex-row items-center px-4 py-3">
+            <View className="mb-4">
+              <View
+                className="flex-row rounded-xl p-1"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
                 <TouchableOpacity
-                  onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
+                  className="flex-row items-center justify-center py-2 rounded-lg"
+                  style={{
+                    flex: 1,
+                    backgroundColor: !config.useExactPrompt ? colors.accent : 'transparent',
+                  }}
+                  onPress={() => {
+                    Haptics.selectionAsync();
+                    toggleUseExactPrompt(false);
+                  }}
                   activeOpacity={0.7}
-                  className="flex-row items-center"
-                  hitSlop={6}
                 >
-                  <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                    Advanced Mode
+                  <Text
+                    className="text-sm font-semibold"
+                    style={{ color: !config.useExactPrompt ? '#fff' : colors.textSecondary }}
+                  >
+                    DreamBot
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => setShowProModeInfo((v) => !v)}
+                  className="flex-row items-center justify-center py-2 rounded-lg"
+                  style={{
+                    flex: 1,
+                    backgroundColor: config.useExactPrompt ? colors.accent : 'transparent',
+                  }}
+                  onPress={() => {
+                    Haptics.selectionAsync();
+                    toggleUseExactPrompt(true);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    className="text-sm font-semibold"
+                    style={{ color: config.useExactPrompt ? '#fff' : colors.textSecondary }}
+                  >
+                    Direct
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View className="flex-row items-start mt-1.5 px-1">
+                <Text
+                  className="flex-1 text-xs"
+                  style={{ color: colors.textSecondary, opacity: 0.7, lineHeight: 16 }}
+                >
+                  {config.useExactPrompt
+                    ? 'Your exact prompt goes straight to the AI model you pick — no DreamBot styling, polish, or face swap.'
+                    : 'Custom mediums & vibes, prompt polish, and your cast photos swapped into the scene.'}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => setShowProModeInfo(true)}
                   activeOpacity={0.6}
                   hitSlop={10}
-                  style={{ marginLeft: 6 }}
+                  style={{ marginLeft: 8, marginTop: 1 }}
                 >
                   <Ionicons
                     name="information-circle-outline"
-                    size={18}
+                    size={16}
                     color={colors.textSecondary}
-                  />
-                </TouchableOpacity>
-                <View style={{ flex: 1 }} />
-                <TouchableOpacity
-                  onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
-                  activeOpacity={0.7}
-                  hitSlop={6}
-                  className="w-12 h-7 rounded-full justify-center"
-                  style={{
-                    backgroundColor: config.useExactPrompt ? colors.accent : colors.border,
-                    paddingHorizontal: 2,
-                  }}
-                >
-                  <View
-                    className="w-6 h-6 rounded-full"
-                    style={{
-                      backgroundColor: '#fff',
-                      transform: [{ translateX: config.useExactPrompt ? 20 : 0 }],
-                    }}
                   />
                 </TouchableOpacity>
               </View>
@@ -758,10 +775,10 @@ export default function CreateScreen() {
         </TouchableOpacity>
       </Modal>
 
-      {/* Advanced Mode info modal — centered card explaining what Advanced
-          Mode does and pointing the user to Settings → Advanced Mode to
-          choose Flux model. Modal floats above the keyboard so the user can
-          read it without dismissing input. */}
+      {/* Engine info modal — centered card explaining the two engines
+          (DreamBot vs Direct), opened from the (i) next to the engine
+          selector. Floats above the keyboard so the user can read it without
+          dismissing input. */}
       <Modal
         visible={showProModeInfo}
         transparent
@@ -787,33 +804,52 @@ export default function CreateScreen() {
               maxWidth: 360,
             }}
           >
-            <View className="flex-row items-center mb-3">
-              <Ionicons name="flash-outline" size={20} color={colors.accent} />
+            <Text
+              style={{
+                color: colors.textPrimary,
+                fontSize: 17,
+                fontWeight: '700',
+                marginBottom: 14,
+              }}
+            >
+              Two ways to dream
+            </Text>
+
+            <View className="flex-row items-center mb-1.5">
+              <Ionicons name="sparkles" size={16} color={colors.accent} />
               <Text
                 style={{
                   color: colors.textPrimary,
-                  fontSize: 17,
+                  fontSize: 15,
                   fontWeight: '700',
-                  marginLeft: 8,
+                  marginLeft: 7,
                 }}
               >
-                Advanced Mode
+                DreamBot
               </Text>
             </View>
             <Text style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 21 }}>
-              Sends your prompt directly to the AI model. Skips AI enhancement and face swap — best
-              for fully-polished prompts you want rendered exactly as written.
+              Our engine. Renders your custom mediums & vibes, polishes your prompt for the best
+              result, and swaps your cast photos into the scene so you and your +1 appear in the
+              dream. 1 sparkle per dream.
             </Text>
-            <Text
-              style={{
-                color: colors.textSecondary,
-                fontSize: 14,
-                lineHeight: 21,
-                marginTop: 12,
-              }}
-            >
-              Pick the AI model from the selector below — it applies to your next dream right away.
-              Standard models cost 1 sparkle; Mid and Premium models cost more per render.
+
+            <View className="flex-row items-center mb-1.5" style={{ marginTop: 16 }}>
+              <Ionicons name="flash" size={16} color={colors.accent} />
+              <Text
+                style={{
+                  color: colors.textPrimary,
+                  fontSize: 15,
+                  fontWeight: '700',
+                  marginLeft: 7,
+                }}
+              >
+                Direct
+              </Text>
+            </View>
+            <Text style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 21 }}>
+              Sends your exact prompt straight to the AI model you choose — no styling, polish, or
+              face swap. Each model shows its own sparkle cost in the picker.
             </Text>
             <TouchableOpacity
               onPress={() => setShowProModeInfo(false)}
