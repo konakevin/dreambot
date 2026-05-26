@@ -289,7 +289,9 @@ async function processDream(user) {
 
 (async () => {
   console.log(`\n🌙 Nightly Dream Generation`);
-  console.log(`   Budget: ${MAX_BUDGET_CENTS}¢ | Batch: ${BATCH_SIZE} | Dry run: ${DRY_RUN}\n`);
+  console.log(
+    `   Budget: ${MAX_BUDGET_OVERRIDE != null ? MAX_BUDGET_OVERRIDE + '¢ (override)' : 'scales with eligible cohort'} | Batch: ${BATCH_SIZE} | Dry run: ${DRY_RUN}\n`
+  );
 
   const today = new Date().toISOString().slice(0, 10);
 
@@ -303,7 +305,10 @@ async function processDream(user) {
        users!inner(email, last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at)`
     )
     .eq('onboarding_completed', true)
-    .eq('ai_enabled', true);
+    .eq('ai_enabled', true)
+    // Exclude bot accounts — they post curated content via the dispatcher, not
+    // personal nightly user-dreams. (is_bot is false for all real users.)
+    .eq('users.is_bot', false);
 
   if (error) {
     console.error('DB error:', error.message);
@@ -374,6 +379,7 @@ async function processDream(user) {
   // with --max-budget.
   const MAX_BUDGET_CENTS =
     MAX_BUDGET_OVERRIDE ?? Math.max(500, eligible.length * COST_PER_IMAGE_CENTS * 2);
+  console.log(`   Budget cap: ${MAX_BUDGET_CENTS}¢ for ${eligible.length} eligible\n`);
 
   if (DRY_RUN) {
     eligible.forEach((u) =>
