@@ -1928,6 +1928,7 @@ export type Database = {
         Args: { p_requester_id: string };
         Returns: undefined;
       };
+      block_exists: { Args: { a: string; b: string }; Returns: boolean };
       block_user: { Args: { p_blocked_id: string }; Returns: undefined };
       charge_sparkles: {
         Args: {
@@ -1992,6 +1993,15 @@ export type Database = {
           p_upload_id: string;
         };
         Returns: undefined;
+      };
+      get_blocked_users: {
+        Args: never;
+        Returns: {
+          avatar_url: string;
+          blocked_at: string;
+          user_id: string;
+          username: string;
+        }[];
       };
       get_bot_thumbnails: {
         Args: { p_per_bot?: number };

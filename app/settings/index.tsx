@@ -614,6 +614,11 @@ export default function SettingsScreen() {
             onPress={handleChangePassword}
           />
           <SettingsRow
+            icon="ban-outline"
+            label="Blocked Users"
+            onPress={() => nav.push('/settings/blocked-users')}
+          />
+          <SettingsRow
             icon="log-out-outline"
             label="Sign out"
             onPress={handleSignOut}
