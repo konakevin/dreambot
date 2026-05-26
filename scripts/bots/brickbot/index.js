@@ -72,7 +72,9 @@ module.exports = {
 
   paths: pools.PATHS,
 
-  pathWeights: Object.fromEntries(pools.PATHS.map((p) => [p, 1])),
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   chaos: {
     enabled: true,

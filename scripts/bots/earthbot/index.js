@@ -137,8 +137,7 @@ const EARTH_SUFFIX =
   'uninhabited landscape, no text, no words, no watermarks, hyper detailed, masterpiece quality';
 const BEACH_PREFIX =
   'travel photography, sharp detail, dramatic saturated color, hyperreal rendering, wallpaper-worthy, masterpiece';
-const BEACH_SUFFIX =
-  'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+const BEACH_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
 // Locked to cinematic only — Kevin's preferred single-vibe lock for
 // EarthBot 2026-05-05. Combined with the locked earthbot_hyperreal medium
@@ -201,10 +200,6 @@ module.exports = {
   // path gets 3 → total 8×7 + 8×3 = 80 slots per cycle, 56/24 = 70/30 share.
   // Shuffle-bag still visits all paths within each cycle; weights only
   // change how many slots each path occupies.
-  pathWeights: {
-    ...byPath(EARTH_PATHS, 7),
-    ...byPath(BEACH_PATHS, 3),
-  },
 
   // Both source bots used flux-dev + flux-1.1-pro via the model picker.
   // Earth used useModelPicker:true + allowedModels at bot level; Beach
@@ -232,8 +227,43 @@ module.exports = {
   // add it here.
   chaos: {
     enabled: true,
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner', 'desert-southwest'],
-    allowSubjectChaosPaths: [...BEACH_PATHS.filter((p) => !['coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner', 'desert-southwest', 'beach-night'].includes(p))],
+    skipPaths: [
+      'epic-vista',
+      'national-parks',
+      'deep-forest',
+      'lush-jungle',
+      'coastal-vista',
+      'tropical-paradise',
+      'epic-sunset',
+      'hawaii-flowers',
+      'reef-paradise',
+      'geological-wonder',
+      'sacred-light',
+      'beach-night',
+      'waves',
+      'cozy-beach',
+      'seasonal-shift',
+      'hidden-corner',
+      'desert-southwest',
+    ],
+    allowSubjectChaosPaths: [
+      ...BEACH_PATHS.filter(
+        (p) =>
+          ![
+            'coastal-vista',
+            'tropical-paradise',
+            'epic-sunset',
+            'hawaii-flowers',
+            'reef-paradise',
+            'waves',
+            'cozy-beach',
+            'seasonal-shift',
+            'hidden-corner',
+            'desert-southwest',
+            'beach-night',
+          ].includes(p)
+      ),
+    ],
   },
 
   // Two-pass polish — both bots use identical config.
@@ -246,7 +276,25 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['epic-vista', 'national-parks', 'deep-forest', 'lush-jungle', 'coastal-vista', 'tropical-paradise', 'epic-sunset', 'hawaii-flowers', 'reef-paradise', 'geological-wonder', 'sacred-light', 'beach-night', 'waves', 'cozy-beach', 'seasonal-shift', 'hidden-corner', 'desert-southwest'],
+    skipPaths: [
+      'epic-vista',
+      'national-parks',
+      'deep-forest',
+      'lush-jungle',
+      'coastal-vista',
+      'tropical-paradise',
+      'epic-sunset',
+      'hawaii-flowers',
+      'reef-paradise',
+      'geological-wonder',
+      'sacred-light',
+      'beach-night',
+      'waves',
+      'cozy-beach',
+      'seasonal-shift',
+      'hidden-corner',
+      'desert-southwest',
+    ],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their

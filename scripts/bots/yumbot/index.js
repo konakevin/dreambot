@@ -42,29 +42,38 @@ module.exports = {
   promptSuffix: blocks.PROMPT_SUFFIX,
 
   vibes: [
-    'cozy', 'peaceful', 'whimsical', 'enchanted',
-    'coquette', 'shimmer', 'nostalgic', 'ethereal',
-    'cinematic', 'surreal',
+    'cozy',
+    'peaceful',
+    'whimsical',
+    'enchanted',
+    'coquette',
+    'shimmer',
+    'nostalgic',
+    'ethereal',
+    'cinematic',
+    'surreal',
   ],
 
-  paths: ['floral-garden-cup', 'floral-garden-scene', 'rainbow-dreamscape', 'checkered-tabletop', 'candy-fantasy', 'japanese-festival', 'mini-chef', 'cottagecore-nature', 'coquette-food', 'kawaii-koi-pond', 'kawaii-koi-pond-ultra'],
+  paths: [
+    'floral-garden-cup',
+    'floral-garden-scene',
+    'rainbow-dreamscape',
+    'checkered-tabletop',
+    'candy-fantasy',
+    'japanese-festival',
+    'mini-chef',
+    'cottagecore-nature',
+    'coquette-food',
+    'kawaii-koi-pond',
+    'kawaii-koi-pond-ultra',
+  ],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
   // their combined weight equals 1 (the same total weight floral-garden-cup
   // had before the split), so the existing-3-path frequencies are preserved.
-  pathWeights: {
-    'floral-garden-cup': 0.5,
-    'floral-garden-scene': 0.5,
-    'rainbow-dreamscape': 1,
-    'checkered-tabletop': 1,
-    'candy-fantasy': 1,
-    'japanese-festival': 1,
-    'mini-chef': 1,
-    'cottagecore-nature': 1,
-    'coquette-food': 1,
-    'kawaii-koi-pond': 1,
-    'kawaii-koi-pond-ultra': 1,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   // Per-path model override — bot.modelByPath HARDCODES a specific model for
   // a specific path, overriding useModelPicker + allowedModels.
@@ -80,7 +89,13 @@ module.exports = {
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },
-  twoPassPolish: { enabled: false, conceptWords: 0, polishedWords: '0', preservePhrasesByPath: {}, skipPaths: [] },
+  twoPassPolish: {
+    enabled: false,
+    conceptWords: 0,
+    polishedWords: '0',
+    preservePhrasesByPath: {},
+    skipPaths: [],
+  },
   sensoryAnchors: { enabled: false },
 
   defaultPools: {},
@@ -91,9 +106,7 @@ module.exports = {
   promptPrefixByPath: {
     'candy-fantasy':
       'Kawaii candy-fantasy scene — composition follows the scene description below (NOT a default candy meadow). The scene sits inside a RICH KAWAII CANDY-FANTASY WORLD with a lush layered candy-world backdrop visible BEHIND the foreground scene — frosted-cake mountains, oversized lollipop-trees, marshmallow drifts, sprinkle-grass, cotton-candy clouds, sugar-glitter air, gumdrop bushes, candy-cane accents — every surface confectionary, NEVER real wood/grass/stone/metal/fabric. The candy-world backdrop is RICH AND DETAILED but never overrides the foreground composition the scene description establishes.',
-
   },
-
 
   poolByName(name) {
     const pools = require('./pools');

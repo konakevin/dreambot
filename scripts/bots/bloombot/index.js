@@ -91,30 +91,28 @@ module.exports = {
     'reclaim',
   ],
 
-  pathWeights: {
-    landscape: 2,
-    closeup: 1,
-    cozy: 1,
-    'garden-walk': 2,
-    dreamscape: 1,
-    conservatory: 2,
-    'tropical-paradise': 2,
-    'city-flowers': 1,
-    'flower-tunnels': 2,
-    'sunset-flowers': 2,
-    'flower-friends': 2,
-    'flower-humming-birds': 2,
-    'flower-fantasy': 2,
-    'desert-bloom': 2,
-    reclaim: 1,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   chaos: {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'landscape', 'cozy', 'garden-walk', 'dreamscape',
-      'conservatory', 'tropical-paradise', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'flower-fantasy', 'desert-bloom', 'reclaim',
+      'landscape',
+      'cozy',
+      'garden-walk',
+      'dreamscape',
+      'conservatory',
+      'tropical-paradise',
+      'city-flowers',
+      'flower-tunnels',
+      'sunset-flowers',
+      'flower-friends',
+      'flower-humming-birds',
+      'flower-fantasy',
+      'desert-bloom',
+      'reclaim',
     ],
   },
 
@@ -128,17 +126,44 @@ module.exports = {
     // Per playbook (2026-05-15 + 2026-05-16): two-pass polish OFF for all
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
-    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'flower-fantasy', 'desert-bloom', 'reclaim'],
+    skipPaths: [
+      'landscape',
+      'closeup',
+      'tropical-paradise',
+      'cozy',
+      'garden-walk',
+      'dreamscape',
+      'conservatory',
+      'city-flowers',
+      'flower-tunnels',
+      'sunset-flowers',
+      'flower-friends',
+      'flower-humming-birds',
+      'flower-fantasy',
+      'desert-bloom',
+      'reclaim',
+    ],
   },
 
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {
-      landscape: 'scene', closeup: 'scene', cozy: 'scene',
-      'garden-walk': 'scene', dreamscape: 'scene',
-      conservatory: 'scene', 'tropical-paradise': 'scene',
-      'city-flowers': 'scene', 'flower-tunnels': 'scene', 'sunset-flowers': 'scene', 'flower-friends': 'scene', 'flower-humming-birds': 'scene', 'flower-fantasy': 'scene', 'desert-bloom': 'scene', reclaim: 'scene',
+      landscape: 'scene',
+      closeup: 'scene',
+      cozy: 'scene',
+      'garden-walk': 'scene',
+      dreamscape: 'scene',
+      conservatory: 'scene',
+      'tropical-paradise': 'scene',
+      'city-flowers': 'scene',
+      'flower-tunnels': 'scene',
+      'sunset-flowers': 'scene',
+      'flower-friends': 'scene',
+      'flower-humming-birds': 'scene',
+      'flower-fantasy': 'scene',
+      'desert-bloom': 'scene',
+      reclaim: 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
@@ -163,9 +188,10 @@ module.exports = {
     // from the general region rotation. Migration-in-progress: legacy paths
     // also read sharedDNA.region via compose.js, so this keeps both shapes
     // working.
-    const region = path === 'tropical-paradise'
-      ? 'tropical'
-      : picker.pickWithRecency(REGION_KEYS_GENERAL, 'region');
+    const region =
+      path === 'tropical-paradise'
+        ? 'tropical'
+        : picker.pickWithRecency(REGION_KEYS_GENERAL, 'region');
     return {
       palette: picker.pickWithRecency(pools.PALETTES, 'palette'),
       lighting: picker.pickWithRecency(pools.LIGHTING, 'lighting'),

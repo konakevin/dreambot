@@ -59,17 +59,19 @@ module.exports = {
   // (from dream_vibes DB) which Sonnet uses for mood context.
   vibes: ['peaceful', 'enchanted', 'ethereal', 'nostalgic', 'whimsical'],
 
-  paths: ['forest-fairy-scene', 'dryad-portrait', 'tiny-fae', 'queen-of-the-forest', 'enchanted-vista', 'fae-village', 'fae-village-axis', 'flower-fairy'],
-  pathWeights: {
-    'forest-fairy-scene': 1,
-    'dryad-portrait': 1,
-    'tiny-fae': 1,
-    'queen-of-the-forest': 1,
-    'enchanted-vista': 1,
-    'fae-village': 1,
-    'fae-village-axis': 1,
-    'flower-fairy': 2,
-  },
+  paths: [
+    'forest-fairy-scene',
+    'dryad-portrait',
+    'tiny-fae',
+    'queen-of-the-forest',
+    'enchanted-vista',
+    'fae-village',
+    'fae-village-axis',
+    'flower-fairy',
+  ],
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   // Use flux-dev for painterly / illustrative looks (better than 1.1-pro
   // for stylized non-photoreal). Lock to flux-dev for POC.
@@ -102,7 +104,13 @@ module.exports = {
     // enchanted-vista: multi-layer richness (canopy + hero + floor + water + magic + depth).
     // fae-village + fae-village-axis: both skip polish — Kevin's legacy comparison
     // batches were polish-skipped, that's the look he approved for both paths.
-    skipPaths: ['tiny-fae', 'queen-of-the-forest', 'enchanted-vista', 'fae-village', 'fae-village-axis'],
+    skipPaths: [
+      'tiny-fae',
+      'queen-of-the-forest',
+      'enchanted-vista',
+      'fae-village',
+      'fae-village-axis',
+    ],
   },
 
   // Bot-level pool defaults for declarative composer (flower-fairy path)

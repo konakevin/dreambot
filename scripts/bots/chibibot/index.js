@@ -156,28 +156,9 @@ module.exports = {
   ],
 
   // Path weights — 2× indoor boost; everything else 1×.
-  pathWeights: {
-    'rainy-interior': 2,
-    'heartwarming-scene': 1,
-    'cozy-landscape': 1,
-    'creature-portrait': 1,
-    // creature-world — weight 4.5 ≈ 20% of rotation (4.5 / 22.5 total). The
-    // "Pop Mart" diorama path Kevin wants surfaced ~1-in-5 renders.
-    'creature-world': 4.5,
-    'sleepy-naptime': 1,
-    'rainy-day-cozy': 1,
-    'bath-time': 1,
-    'cuddly-aquatic': 1,
-    'night-meadow': 1,
-    'outdoor-adventure': 1,
-    'cozy-interior': 1,
-    'cottagecore-village': 1,
-    'aquatic-village': 1,
-    'arctic-village': 1,
-    'jungle-village': 1,
-    'twilight-village': 1,
-    'sunny-village': 1,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   useModelPicker: true,
   allowedModels: ['black-forest-labs/flux-dev'],
@@ -220,7 +201,25 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'arctic-village', 'aquatic-village', 'cottagecore-village', 'sunny-village', 'twilight-village', 'outdoor-adventure', 'creature-portrait', 'creature-world'],
+    skipPaths: [
+      'bath-time',
+      'cuddly-aquatic',
+      'night-meadow',
+      'cozy-landscape',
+      'rainy-interior',
+      'rainy-day-cozy',
+      'sleepy-naptime',
+      'jungle-village',
+      'cozy-interior',
+      'arctic-village',
+      'aquatic-village',
+      'cottagecore-village',
+      'sunny-village',
+      'twilight-village',
+      'outdoor-adventure',
+      'creature-portrait',
+      'creature-world',
+    ],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;
@@ -302,7 +301,8 @@ module.exports = {
     if (medium === 'chibibot_render' && path !== 'creature-world') {
       const append = (str) => str + '\n\n' + blocks.CHIBI_CHARACTER_COUNT_BLOCK;
       if (typeof result === 'string') return append(result);
-      if (result && typeof result.brief === 'string') return { ...result, brief: append(result.brief) };
+      if (result && typeof result.brief === 'string')
+        return { ...result, brief: append(result.brief) };
       return result;
     }
     // chibibot_pixar: swap the new render-style shared blocks for their
@@ -316,7 +316,8 @@ module.exports = {
           .split(blocks.BLOW_IT_UP_BLOCK)
           .join(blocks.BLOW_IT_UP_BLOCK_PIXAR);
       if (typeof result === 'string') return swap(result);
-      if (result && typeof result.brief === 'string') return { ...result, brief: swap(result.brief) };
+      if (result && typeof result.brief === 'string')
+        return { ...result, brief: swap(result.brief) };
       return result;
     }
     return result;

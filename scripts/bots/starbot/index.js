@@ -23,7 +23,7 @@ const pathBuilders = {
   'cosmic-oracle': require('./paths/cosmic-oracle'),
   'female-explorer': require('./paths/female-explorer'),
   'male-explorer': require('./paths/male-explorer'),
-  'megastructure': require('./paths/megastructure'),
+  megastructure: require('./paths/megastructure'),
   'space-femme': require('./paths/space-femme'),
 };
 
@@ -55,7 +55,17 @@ module.exports = {
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
   vibesByPath: {
-    'cozy-sci-fi-interior': ['nostalgic', 'ethereal', 'enchanted', 'shimmer', 'dark', 'voltage', 'arcane', 'surreal', 'cinematic'],
+    'cozy-sci-fi-interior': [
+      'nostalgic',
+      'ethereal',
+      'enchanted',
+      'shimmer',
+      'dark',
+      'voltage',
+      'arcane',
+      'surreal',
+      'cinematic',
+    ],
   },
 
   // all paths use flux-dev / flux-1.1-pro 50/50 rotation
@@ -70,7 +80,7 @@ module.exports = {
     'cosmic-oracle': { 'black-forest-labs/flux-1.1-pro': 100 },
     'female-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
     'male-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'megastructure': { 'black-forest-labs/flux-1.1-pro-ultra': 100 },
+    megastructure: { 'black-forest-labs/flux-1.1-pro-ultra': 100 },
     // space-femme: match FE painted-cover lineage (flux-1.1-pro on canvas).
     'space-femme': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
@@ -95,8 +105,7 @@ module.exports = {
     starbot_space_femme: 'bold vivid imaginative science-fiction cover art',
   },
   promptSuffixByMedium: {
-    star_oil_cosmos:
-      'oil-on-canvas finish, impasto brushwork, no text no words no watermarks',
+    star_oil_cosmos: 'oil-on-canvas finish, impasto brushwork, no text no words no watermarks',
     real_astro:
       'astrophotography finish cranked to wallpaper saturation, deep black space contrast, pinpoint stars with diffraction spikes, multi-wavelength false-color composite, dramatic mid-event detail (jets / shockwaves / accretion disks / lensing) visible in frame, the celestial object is the MAIN SUBJECT (occupies the bulk of the frame), spaceships permitted only as small silhouette / scale-reference elements at the frame edge, no text, no words, no watermarks, NO monitors NO screens NO viewports NO characters NO industrial scene framing',
     // Hyperreal sci-fi concept-art suffix for starbot_hyperreal medium (migration 145).
@@ -155,9 +164,7 @@ module.exports = {
   promptSuffix: blocks.PROMPT_SUFFIX,
 
   // Inverts old excludeVibes (minimal/whimsical/cozy).
-  vibes: [
-    'cinematic',
-  ],
+  vibes: ['cinematic'],
 
   paths: [
     'cosmic-vista',
@@ -181,18 +188,9 @@ module.exports = {
 
   // Path weights.
   // Flattened to EQUAL distribution — all active paths weight 1 (Kevin 2026-05-23).
-  pathWeights: {
-    'cosmic-vista': 1,
-    'alien-landscape': 1,
-    'cozy-sci-fi-interior': 1,
-    'alien-city': 1,
-    'real-space': 1,
-    'cosmic-oracle': 1,
-    'female-explorer': 1,
-    'male-explorer': 1,
-    'megastructure': 1,
-    'space-femme': 1,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   // Chaos layer — allow subject chaos on scenery + megastructure paths
   // (silhouette/echo distortions).
@@ -200,8 +198,14 @@ module.exports = {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'cosmic-vista', 'alien-landscape', 'space-opera', 'sci-fi-interior',
-      'cozy-sci-fi-interior', 'alien-city', 'real-space', 'cosmic-oracle',
+      'cosmic-vista',
+      'alien-landscape',
+      'space-opera',
+      'sci-fi-interior',
+      'cozy-sci-fi-interior',
+      'alien-city',
+      'real-space',
+      'cosmic-oracle',
       'megastructure',
       // space-femme = the "crazy" path — subject chaos ON for weird LOOKS
       // (Kevin 2026-05-23: "increase the chaos threshold for weird looks/scenes").
@@ -234,14 +238,31 @@ module.exports = {
     // despite 100% helmet pool). Force Haiku to preserve them.
     preservePhrasesByPath: {
       'female-explorer': [
-        'woman', 'she', 'her',
-        'helmet', 'visor', 'faceplate', 'bubble helm', 'breathing apparatus',
-        'form-fit', 'pressure suit', 'EVA',
+        'woman',
+        'she',
+        'her',
+        'helmet',
+        'visor',
+        'faceplate',
+        'bubble helm',
+        'breathing apparatus',
+        'form-fit',
+        'pressure suit',
+        'EVA',
       ],
       'male-explorer': [
-        'man', 'he', 'his',
-        'helmet', 'visor', 'faceplate', 'sealed', 'full-coverage helm',
-        'tactical armor', 'armored coat', 'cloak', 'ballistic harness',
+        'man',
+        'he',
+        'his',
+        'helmet',
+        'visor',
+        'faceplate',
+        'sealed',
+        'full-coverage helm',
+        'tactical armor',
+        'armored coat',
+        'cloak',
+        'ballistic harness',
       ],
     },
   },
@@ -262,7 +283,7 @@ module.exports = {
       'alien-city': 'scene',
       'real-space': 'scene',
       'cosmic-oracle': 'scene',
-      'megastructure': 'scene',
+      megastructure: 'scene',
       'space-femme': 'explorer-female',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,

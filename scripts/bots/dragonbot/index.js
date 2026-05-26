@@ -375,26 +375,9 @@ module.exports = {
   ],
 
   // 2026-05-23: flattened — all paths equal weight 1 (Kevin's call).
-  pathWeights: {
-    landscape: 1,
-    'fantasy-scene': 1,
-    'epic-moment': 1,
-    castle: 1,
-    'dragon-scene': 1,
-    'female-adventurer': 1,
-    'female-explorer': 1,
-    'female-action-scenes': 1,
-    'artsy-girl': 1,
-    'male-adventurer': 1,
-    'male-explorer': 1,
-    'male-action-scenes': 1,
-    'cozy-arcane': 1,
-    'arcane-halls': 1,
-    'arcane-spaces': 1,
-    'dark-realm': 1,
-    'dragon-lore': 1,
-    'iconic-landscape': 1,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   // Chaos layer (V4 perception-distortion port). Skip face-dominant character
   // closeups (none here — both warrior paths are full-body). Allow subject

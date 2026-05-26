@@ -32,16 +32,16 @@ const pathBuilders = {
 // Per-path vibe lock — each genre prefers a tight subset of vibes for
 // scene-cohesion. Engine respects this when rolling vibe per render.
 const vibesByPath = {
-  'cozy-rpg-town':         ['nostalgic', 'whimsical', 'enchanted'],
-  'dungeon-depth':         ['dark', 'arcane', 'fierce'],
-  'side-scroller-world':   ['cinematic', 'epic', 'voltage'],
-  'boss-arena':            ['epic', 'fierce', 'cinematic'],
-  'jrpg-combat':           ['epic', 'fierce', 'arcane', 'cinematic'],
-  'pixel-horror':          ['fierce', 'arcane', 'dark', 'epic'],
+  'cozy-rpg-town': ['nostalgic', 'whimsical', 'enchanted'],
+  'dungeon-depth': ['dark', 'arcane', 'fierce'],
+  'side-scroller-world': ['cinematic', 'epic', 'voltage'],
+  'boss-arena': ['epic', 'fierce', 'cinematic'],
+  'jrpg-combat': ['epic', 'fierce', 'arcane', 'cinematic'],
+  'pixel-horror': ['fierce', 'arcane', 'dark', 'epic'],
   'cozy-farming-life-sim': ['nostalgic', 'whimsical', 'coquette'],
-  'pixel-sci-fi-action':   ['epic', 'fierce', 'voltage', 'cinematic'],
-  'classic-jrpg':          ['nostalgic', 'enchanted', 'whimsical', 'epic'],
-  'epic-vista':            ['epic', 'ethereal', 'cinematic', 'nostalgic'],
+  'pixel-sci-fi-action': ['epic', 'fierce', 'voltage', 'cinematic'],
+  'classic-jrpg': ['nostalgic', 'enchanted', 'whimsical', 'epic'],
+  'epic-vista': ['epic', 'ethereal', 'cinematic', 'nostalgic'],
 };
 
 const allVibes = Array.from(new Set(Object.values(vibesByPath).flat()));
@@ -80,18 +80,9 @@ module.exports = {
     'epic-vista',
   ],
 
-  pathWeights: {
-    'cozy-rpg-town': 1,
-    'dungeon-depth': 1,
-    'side-scroller-world': 1,
-    'boss-arena': 1,
-    'jrpg-combat': 1,
-    'pixel-horror': 1,
-    'cozy-farming-life-sim': 1,
-    'pixel-sci-fi-action': 1,
-    'classic-jrpg': 1,
-    'epic-vista': 1,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   chaos: {
     enabled: true,

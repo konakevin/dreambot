@@ -12,7 +12,7 @@ const blocks = require('./shared-blocks');
 const pathBuilders = {
   // Existing (11 retained, all rewritten 2026-05-08 for keyframe framework):
   'mythological-creature': require('./paths/mythological-creature'),
-  'kawaii': require('./paths/kawaii'),
+  kawaii: require('./paths/kawaii'),
   'slice-of-life': require('./paths/slice-of-life'),
   'neo-tokyo': require('./paths/neo-tokyo'),
   'shonen-action': require('./paths/shonen-action'),
@@ -33,7 +33,7 @@ const pathBuilders = {
   'rooftop-sunsets': require('./paths/rooftop-sunsets'),
   'cherry-blossom-romance': require('./paths/cherry-blossom-romance'),
   'space-opera': require('./paths/space-opera'),
-  'underwater': require('./paths/underwater'),
+  underwater: require('./paths/underwater'),
 };
 
 module.exports = {
@@ -100,42 +100,27 @@ module.exports = {
     'underwater',
   ],
 
-  pathWeights: {
-    // Big-genre canon — flagship anime categories that fans recognize instantly
-    'neo-tokyo': 2,
-    'samurai-era': 2,
-    'shonen-action': 2,
-    'isekai-fantasy': 2,
-    'mecha-hangars': 2,
-    // Character-forward (Kevin's recent likes)
-    'anime-character-female': 2,
-    'anime-character-male': 2,
-    // Pretty / poster-coded
-    'cherry-blossom-romance': 2,
-    'rooftop-sunsets': 2,
-    'festival-nights': 2,
-    // Standard weight (still core)
-    'slice-of-life': 1,
-    'kawaii': 1,
-    'food-anime': 1,
-    'anime-village': 1,
-    'mythological-creature': 1,
-    'magical-girl': 1,
-    'ghibli-countryside': 1,
-    'occult-tokyo': 1,
-    'post-apocalyptic': 1,
-    'beach-episode': 1,
-    'space-opera': 1,
-    'underwater': 1,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   chaos: {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'neo-tokyo', 'isekai-fantasy', 'food-anime', 'anime-village', 'mythological-creature',
-      'mecha-hangars', 'occult-tokyo', 'post-apocalyptic', 'space-opera', 'underwater',
-      'ghibli-countryside', 'festival-nights', 'rooftop-sunsets',
+      'neo-tokyo',
+      'isekai-fantasy',
+      'food-anime',
+      'anime-village',
+      'mythological-creature',
+      'mecha-hangars',
+      'occult-tokyo',
+      'post-apocalyptic',
+      'space-opera',
+      'underwater',
+      'ghibli-countryside',
+      'festival-nights',
+      'rooftop-sunsets',
     ],
   },
 
@@ -148,15 +133,22 @@ module.exports = {
       'anime-character-female': '90-130',
       'anime-character-male': '90-130',
       // Density-mandated paths — extra room for 8+ micro-details + 2+ atmosphere + 2+ lighting
-      kawaii: '80-110', 'slice-of-life': '80-110',
-      'shonen-action': '80-110', 'samurai-era': '80-110',
+      kawaii: '80-110',
+      'slice-of-life': '80-110',
+      'shonen-action': '80-110',
+      'samurai-era': '80-110',
       'mythological-creature': '80-110',
-      'mecha-hangars': '80-110', 'festival-nights': '80-110',
-      'magical-girl': '80-110', 'ghibli-countryside': '80-110',
-      'occult-tokyo': '80-110', 'post-apocalyptic': '80-110',
-      'beach-episode': '80-110', 'rooftop-sunsets': '80-110',
-      'cherry-blossom-romance': '80-110', 'space-opera': '80-110',
-      'underwater': '80-110',
+      'mecha-hangars': '80-110',
+      'festival-nights': '80-110',
+      'magical-girl': '80-110',
+      'ghibli-countryside': '80-110',
+      'occult-tokyo': '80-110',
+      'post-apocalyptic': '80-110',
+      'beach-episode': '80-110',
+      'rooftop-sunsets': '80-110',
+      'cherry-blossom-romance': '80-110',
+      'space-opera': '80-110',
+      underwater: '80-110',
     },
     preservePhrasesByPath: {},
   },
@@ -190,7 +182,7 @@ module.exports = {
       'beach-episode': 'scene',
       'rooftop-sunsets': 'scene',
       'space-opera': 'scene',
-      'underwater': 'scene',
+      underwater: 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

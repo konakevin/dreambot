@@ -519,29 +519,9 @@ module.exports = {
   // toy-blockbuster is the flagship — weighted to exactly 25% of all renders.
   // The other 20 paths split the remaining 75% equally (3 each):
   //   20 / (20 + 20*3) = 20/80 = 25.0%.
-  pathWeights: {
-    claymation: 3,
-    vinyl: 3,
-    sackboy: 3,
-    'shortcake-scene': 3,
-    'barbie-scene': 3,
-    'gi-joe-missions': 3,
-    'green-army-warzone': 3,
-    'miniature-dungeon': 3,
-    'collector-shelf-epic': 3,
-    'epic-hero-bucket': 3,
-    'dollhouse-life': 3,
-    'hotwheels-city': 3,
-    'model-train-world': 3,
-    'plush-world': 3,
-    'mech-toy-rampage': 3,
-    'toybox-chaos': 3,
-    'space-saga-figures': 3,
-    'monster-boss-battle': 3,
-    'dino-diorama': 3,
-    'giant-toys': 3,
-    'toy-blockbuster': 20,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   // Chaos layer — subject-level distortions (silhouette/echo) ON for ALL paths.
   // model-train-world + toybox-chaos skip: 6-slot seed DNA is precisely tuned
