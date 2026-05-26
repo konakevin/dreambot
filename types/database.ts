@@ -893,52 +893,6 @@ export type Database = {
           },
         ];
       };
-      friendships: {
-        Row: {
-          created_at: string;
-          requester: string;
-          status: string;
-          user_a: string;
-          user_b: string;
-        };
-        Insert: {
-          created_at?: string;
-          requester: string;
-          status?: string;
-          user_a: string;
-          user_b: string;
-        };
-        Update: {
-          created_at?: string;
-          requester?: string;
-          status?: string;
-          user_a?: string;
-          user_b?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'friendships_requester_fkey';
-            columns: ['requester'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'friendships_user_a_fkey';
-            columns: ['user_a'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'friendships_user_b_fkey';
-            columns: ['user_b'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
       image_models: {
         Row: {
           cost_cents: number;
