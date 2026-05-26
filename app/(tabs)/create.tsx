@@ -45,6 +45,8 @@ import { isVibeProfile } from '@/types/vibeProfile';
 import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
+import { FluxModelPicker } from '@/components/FluxModelPicker';
+import { getSparkleCost, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import type { VibeProfile } from '@/types/vibeProfile';
 
 // One-time toast: "1 sparkle = 1 dream" surfaces the first time a user
@@ -70,6 +72,10 @@ export default function CreateScreen() {
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const [showProModeInfo, setShowProModeInfo] = useState(false);
+  // Advanced Mode AI model — synced from <FluxModelPicker> (which persists it to
+  // users.pro_mode_flux_model). Tracked here so the dream button can show the
+  // selected model's sparkle cost.
+  const [advancedModelId, setAdvancedModelId] = useState(DEFAULT_MODEL_ID);
   const promptRef = useRef<TextInput>(null);
 
   // Load user's art_styles/aesthetics for filtering
@@ -569,14 +575,14 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Style pills — disabled when "use my exact prompt" is on, since
-              that mode bypasses medium/vibe directives entirely. */}
-          {
-            <View
-              className="flex-row gap-3 mb-4"
-              style={{ opacity: config.useExactPrompt ? 0.35 : 1 }}
-              pointerEvents={config.useExactPrompt ? 'none' : 'auto'}
-            >
+          {/* Advanced Mode ON → the AI model picker replaces Medium/Vibe (those
+              directives are bypassed in this mode). OFF → the Medium/Vibe pills. */}
+          {config.useExactPrompt ? (
+            <View className="mb-4">
+              <FluxModelPicker variant="pill" onChange={setAdvancedModelId} />
+            </View>
+          ) : (
+            <View className="flex-row gap-3 mb-4">
               <View className="flex-1">
                 <Text
                   className="text-xs font-medium mb-1.5 ml-1"
@@ -667,7 +673,7 @@ export default function CreateScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-          }
+          )}
         </ScrollView>
 
         {/* Fixed footer — always visible above keyboard */}
@@ -695,7 +701,9 @@ export default function CreateScreen() {
             activeOpacity={0.7}
           >
             <View className="flex-row items-center gap-2">
-              <Text className="text-white text-base font-bold">Dream</Text>
+              <Text className="text-white text-base font-bold">
+                Dream{config.useExactPrompt ? ` · ${getSparkleCost(advancedModelId)}` : ''}
+              </Text>
               <Ionicons name="sparkles" size={16} color="#FFFFFF" />
             </View>
           </TouchableOpacity>
@@ -784,9 +792,8 @@ export default function CreateScreen() {
               </Text>
             </View>
             <Text style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 21 }}>
-              Sends your prompt directly to Flux. Skips AI enhancement and face swap — best for
-              fully-polished prompts you want rendered exactly as written. Costs one sparkle per
-              render, same as a normal dream.
+              Sends your prompt directly to the AI model. Skips AI enhancement and face swap — best
+              for fully-polished prompts you want rendered exactly as written.
             </Text>
             <Text
               style={{
@@ -796,17 +803,8 @@ export default function CreateScreen() {
                 marginTop: 12,
               }}
             >
-              Pick which Flux model handles your Advanced Mode renders in{' '}
-              <Text
-                style={{ color: colors.accent, fontWeight: '600' }}
-                onPress={() => {
-                  setShowProModeInfo(false);
-                  nav.push('/settings/advanced-mode');
-                }}
-              >
-                Settings → Advanced Mode
-              </Text>
-              .
+              Pick the AI model from the selector below — it applies to your next dream right away.
+              Standard models cost 1 sparkle; Mid and Premium models cost more per render.
             </Text>
             <TouchableOpacity
               onPress={() => setShowProModeInfo(false)}

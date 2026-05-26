@@ -97,11 +97,11 @@ export const IMAGE_MODELS: ImageModel[] = [
   },
   {
     id: 'google/gemini-2-image',
-    label: 'Nano Banana 2',
+    label: 'Nano Banana',
     provider: 'gemini',
     sparkleCost: 2,
     tier: 'mid',
-    description: 'Google Gemini 2.5 Flash — fast, high-quality.',
+    description: 'Google Gemini 2.5 Flash Image — fast, vivid.',
   },
 
   // ── Tier 3: Premium (3 sparkles) — flagships of every provider ────────
@@ -127,7 +127,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'openai',
     sparkleCost: 3,
     tier: 'premium',
-    description: 'OpenAI flagship — high-fidelity creative.',
+    description: 'OpenAI gpt-image-1 — high-fidelity, photoreal.',
   },
   {
     id: 'google/gemini-3-image-preview',
