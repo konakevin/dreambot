@@ -6,14 +6,17 @@
  *     cents, used for logging (ai_generation_log.cost_cents) so we can
  *     reconcile against provider invoices and reprice tiers if needed
  *
- * Three-tier sparkle system (1-2-3):
- *   1 sparkle — Flux 1 family (Schnell, Dev, 1.1 Pro), Kontext Pro
- *   2 sparkles — Flux 2 family (Flex, Dev, Pro), Krea, Kontext Max,
- *                GPT Image 2, Nano Banana 2
- *   3 sparkles — Flux 1.1 Pro Ultra, Flux 2 Max, GPT Image 1, Nano Banana Pro
+ * Four-level cost tiers (1-2-3-5, re-tiered 2026-05-25 after a provider price
+ * audit — values are actual per-image cost at the sizes/qualities we render):
+ *   1 sparkle (Basic)    — ≤ ~$0.025: Flux Schnell/Dev/2-Dev/Krea, Kontext Pro
+ *   2 sparkles (Standard)— ~$0.03–0.045: Flux 1.1 Pro, Flux 2 Pro, Nano Banana,
+ *                          Kontext Max
+ *   3 sparkles (Pro)     — ~$0.05–0.08: Flux 1.1 Pro Ultra, Flux 2 Flex/Max,
+ *                          GPT Image 1 & 2
+ *   5 sparkles (Max)     — ~$0.13+: Nano Banana Pro (gemini-3-pro-image, alone)
  *
- * The 1-2-3 spread is cost-aligned (each tier ≈ 2× the previous in API
- * cost) and competitive with OpenArt Basic at $9.99/mo. See
+ * Prior 3-tier system mis-placed Flux Krea (cheapest, was 2), Flux 2 Flex
+ * (~$0.063, was 2), and Nano Banana Pro (~$0.134, was 3). See
  * `PRO_SUBSCRIPTION_SETUP.md` for the full economic analysis.
  *
  * Keep in sync with:
@@ -33,27 +36,29 @@ const DEFAULT_SPARKLE_COST = 1;
 const DEFAULT_COST_CENTS = 5;
 
 export const MODEL_SPARKLE_COSTS: Record<string, number> = {
-  // ── Tier 1: Standard (1 sparkle) — Flux 1 family ──────────────────────
+  // ── Basic (1 sparkle) — ≤ ~$0.025/img ─────────────────────────────────
   'black-forest-labs/flux-schnell': 1,
   'black-forest-labs/flux-dev': 1,
-  'black-forest-labs/flux-1.1-pro': 1,
+  'black-forest-labs/flux-2-dev': 1,
+  'black-forest-labs/flux-krea-dev': 1, // ~$0.004 — was mis-tiered at 2
   'black-forest-labs/flux-kontext-pro': 1,
   sdxl: 1,
 
-  // ── Tier 2: Mid (2 sparkles) — Flux 2 mid + non-flagship providers ────
-  'black-forest-labs/flux-2-flex': 2,
-  'black-forest-labs/flux-2-dev': 2,
-  'black-forest-labs/flux-2-pro': 2,
-  'black-forest-labs/flux-krea-dev': 2,
+  // ── Standard (2 sparkles) — ~$0.03–0.045/img ──────────────────────────
+  'black-forest-labs/flux-1.1-pro': 2, // ~$0.040 — was 1, but ≈ Nano Banana
+  'black-forest-labs/flux-2-pro': 2, // ~$0.031
   'black-forest-labs/flux-kontext-max': 2,
-  'openai/gpt-image-2': 2,
-  'google/gemini-2-image': 2,
+  'google/gemini-2-image': 2, // Nano Banana ~$0.039
 
-  // ── Tier 3: Premium (3 sparkles) — flagships of every provider ────────
-  'black-forest-labs/flux-1.1-pro-ultra': 3,
-  'black-forest-labs/flux-2-max': 3,
-  'openai/gpt-image-1': 3,
-  'google/gemini-3-image-preview': 3,
+  // ── Pro (3 sparkles) — ~$0.05–0.08/img ────────────────────────────────
+  'black-forest-labs/flux-1.1-pro-ultra': 3, // ~$0.060
+  'black-forest-labs/flux-2-flex': 3, // ~$0.063 — was mis-tiered at 2
+  'black-forest-labs/flux-2-max': 3, // ~$0.073
+  'openai/gpt-image-2': 3, // ~$0.05–0.08 — was 2
+  'openai/gpt-image-1': 3, // ~$0.05–0.08
+
+  // ── Max (5 sparkles) — ~$0.13+/img (priciest by far) ──────────────────
+  'google/gemini-3-image-preview': 5, // Nano Banana Pro ~$0.134 — was 3
 };
 
 /**
@@ -73,35 +78,28 @@ export const MODEL_SPARKLE_COSTS: Record<string, number> = {
  * adjust if any model's actuals diverge >20% from these estimates.
  */
 export const MODEL_COST_CENTS: Record<string, number> = {
-  // ── Replicate (Flux family) — Replicate dashboard estimates ───────────
+  // ── Replicate (Flux) — per-image, normalized 1024² (pricepertoken, 2026-05-25)
   'black-forest-labs/flux-schnell': 1, // ~$0.003
   'black-forest-labs/flux-dev': 3, // ~$0.025
   'black-forest-labs/flux-1.1-pro': 4, // ~$0.040
   'black-forest-labs/flux-kontext-pro': 4, // ~$0.040
   sdxl: 2, // ~$0.020
-  'black-forest-labs/flux-2-flex': 3, // ~$0.030
-  'black-forest-labs/flux-2-dev': 4, // ~$0.040
-  'black-forest-labs/flux-2-pro': 6, // ~$0.055
-  'black-forest-labs/flux-krea-dev': 4, // ~$0.040
+  'black-forest-labs/flux-2-dev': 3, // ~$0.025 (was 4)
+  'black-forest-labs/flux-krea-dev': 1, // ~$0.004 (was 4 — big over-estimate)
+  'black-forest-labs/flux-2-pro': 3, // ~$0.031 (was 6)
   'black-forest-labs/flux-kontext-max': 5, // ~$0.050
-  'black-forest-labs/flux-1.1-pro-ultra': 6, // ~$0.055
-  'black-forest-labs/flux-2-max': 8, // ~$0.080
+  'black-forest-labs/flux-1.1-pro-ultra': 6, // ~$0.060
+  'black-forest-labs/flux-2-flex': 6, // ~$0.063 (was 3 — under-estimate)
+  'black-forest-labs/flux-2-max': 7, // ~$0.073 (was 8)
 
-  // ── OpenAI ────────────────────────────────────────────────────────────
-  // gpt-image-1: $0.08 at standard quality, portrait 1024x1792
-  // (HD quality would jump to $0.19-0.25 — we use standard only)
-  'openai/gpt-image-1': 9, // ~$0.09
-  // gpt-image-2 announced as ~$0.04-0.06 (cheaper than gpt-image-1)
+  // ── OpenAI — gpt-image medium quality, portrait (~$0.05–0.08) ──────────
+  'openai/gpt-image-1': 7, // ~$0.07 (deprecating Oct 2026)
   'openai/gpt-image-2': 6, // ~$0.06
 
-  // ── Google Gemini (verified) ──────────────────────────────────────────
-  // Nano Banana 2 (gemini-2.5-flash-image): $0.039 at 1024x1024
-  'google/gemini-2-image': 4, // ~$0.04
-  // Nano Banana Pro (gemini-3-image-preview):
-  //   1K: $0.067, 2K: $0.101, 4K: $0.151
-  //   We pass no explicit size → defaults to 1K typically. Worst case
-  //   if Google defaults to higher resolution: ~$0.10
-  'google/gemini-3-image-preview': 9, // ~$0.09 (conservative middle)
+  // ── Google Gemini (ai.google.dev/pricing, 2026-05-25) ─────────────────
+  'google/gemini-2-image': 4, // Nano Banana (gemini-2.5-flash-image) ~$0.039
+  // Nano Banana Pro (gemini-3-pro-image) — 1120 tokens ≈ $0.134 at 1K/2K.
+  'google/gemini-3-image-preview': 13, // ~$0.134 (was 9 — under-estimate)
 };
 
 export function getSparkleCost(modelId: string): number {
@@ -116,11 +114,12 @@ export function getCostCents(modelId: string): number {
 /**
  * Tier classification for UI display ("Standard / Mid / Premium").
  */
-export type ModelTier = 'standard' | 'mid' | 'premium';
+export type ModelTier = 'basic' | 'standard' | 'pro' | 'max';
 
 export function getModelTier(modelId: string): ModelTier {
   const cost = getSparkleCost(modelId);
-  if (cost >= 3) return 'premium';
-  if (cost >= 2) return 'mid';
-  return 'standard';
+  if (cost >= 5) return 'max';
+  if (cost >= 3) return 'pro';
+  if (cost >= 2) return 'standard';
+  return 'basic';
 }

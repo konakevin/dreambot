@@ -39,18 +39,13 @@ import {
 } from '@/constants/imageModels';
 
 const TIER_LABELS: Record<ImageModel['tier'], string> = {
+  basic: 'Basic',
   standard: 'Standard',
-  mid: 'Mid',
-  premium: 'Premium',
+  pro: 'Pro',
+  max: 'Max',
 };
 
-const PROVIDER_LABELS: Record<ImageModel['provider'], string> = {
-  replicate: 'Replicate',
-  openai: 'OpenAI',
-  gemini: 'Google',
-};
-
-const TIER_ORDER: ImageModel['tier'][] = ['standard', 'mid', 'premium'];
+const TIER_ORDER: ImageModel['tier'][] = ['basic', 'standard', 'pro', 'max'];
 
 interface Props {
   /** 'list' = full inline tiered list; 'pill' = dropdown pill + modal. */
@@ -145,16 +140,11 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
                       <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
                         {opt.label}
                       </Text>
-                      <View
-                        style={[
-                          styles.providerBadge,
-                          { borderColor: colors.border, backgroundColor: colors.background },
-                        ]}
-                      >
-                        <Text style={[styles.providerBadgeText, { color: colors.textSecondary }]}>
-                          {PROVIDER_LABELS[opt.provider]}
-                        </Text>
-                      </View>
+                      {opt.id === DEFAULT_MODEL_ID && (
+                        <View style={[styles.defaultBadge, { backgroundColor: colors.accent }]}>
+                          <Text style={styles.defaultBadgeText}>DEFAULT</Text>
+                        </View>
+                      )}
                     </View>
                     <Text
                       style={{
@@ -302,13 +292,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   optionTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  providerBadge: {
-    paddingHorizontal: 6,
+  defaultBadge: {
+    paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 4,
-    borderWidth: 1,
   },
-  providerBadgeText: { fontSize: 10, fontWeight: '600', letterSpacing: 0.3 },
+  defaultBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    color: '#FFFFFF',
+  },
   // pill variant
   pillLabel: { fontSize: 12, fontWeight: '500', marginBottom: 6, marginLeft: 4 },
   pill: {

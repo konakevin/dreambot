@@ -62,6 +62,7 @@ export default function CreateScreen() {
   const setPrompt = useDreamStore((s) => s.setPrompt);
   const setPhotoStyle = useDreamStore((s) => s.setPhotoStyle);
   const setUseExactPrompt = useDreamStore((s) => s.setUseExactPrompt);
+  const setForceModel = useDreamStore((s) => s.setForceModel);
 
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const user = useAuthStore((s) => s.user);
@@ -77,6 +78,14 @@ export default function CreateScreen() {
   // selected model's sparkle cost.
   const [advancedModelId, setAdvancedModelId] = useState(DEFAULT_MODEL_ID);
   const promptRef = useRef<TextInput>(null);
+
+  // Keep config.forceModel in sync with Advanced Mode: ON → charge + render the
+  // picked model; OFF → null (standard dream, 1 sparkle, engine picks the model).
+  // Without this the charge defaulted to 1 sparkle for ALL advanced dreams
+  // regardless of model (config.forceModel was only ever set by the DLT screen).
+  useEffect(() => {
+    setForceModel(config.useExactPrompt ? advancedModelId : null);
+  }, [config.useExactPrompt, advancedModelId, setForceModel]);
 
   // Load user's art_styles/aesthetics for filtering
   const [userArtStyles, setUserArtStyles] = useState<string[] | undefined>();
