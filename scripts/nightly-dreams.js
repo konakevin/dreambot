@@ -20,6 +20,7 @@ const { HAIKU } = require('./lib/models');
 
 const { createClient } = require('@supabase/supabase-js');
 const Anthropic = require('@anthropic-ai/sdk');
+const { isProActive, nightlyDreamedUserIds } = require('./lib/nightlyEligibility');
 
 // ── Config ──────────────────────────────────────────────────────────────────
 
@@ -330,32 +331,15 @@ async function processDream(user) {
     .select('user_id, rolled_axes')
     .eq('status', 'completed')
     .gte('created_at', todayStart);
-  const alreadyDreamed = new Set(
-    (todayLogs ?? [])
-      .filter((r) => {
-        const engine = r.rolled_axes && r.rolled_axes.engine;
-        return typeof engine === 'string' && engine.startsWith('nightly-');
-      })
-      .map((r) => r.user_id)
-  );
+  const alreadyDreamed = nightlyDreamedUserIds(todayLogs);
   let pool = users.filter((u) => !alreadyDreamed.has(u.user_id));
 
   // ── Cohort gating ──────────────────────────────────────────────────────
   // Nightly dreams are a PRO feature. Only Pro users (paid OR within the
   // 14-day trial) get an auto-dream each night. Free users (post-trial) get
   // none — they can still generate dreams manually with sparkles.
-  const now = Date.now();
-  const fourteenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
-
-  function isProActive(u) {
-    const paid =
-      u.pro_subscription === true &&
-      (!u.pro_subscription_expires_at || new Date(u.pro_subscription_expires_at).getTime() > now);
-    const trial =
-      u.pro_trial_started_at && new Date(u.pro_trial_started_at).getTime() > fourteenDaysAgo;
-    return paid || trial;
-  }
-
+  // isProActive lives in scripts/lib/nightlyEligibility.js (unit-tested,
+  // mirrors lib/proStatus.ts + the is_pro_active() Postgres function).
   let proKept = 0;
   let freeFiltered = 0;
 

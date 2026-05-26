@@ -3,6 +3,7 @@ import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { useFeedStore } from '@/store/feed';
 import { queryClient } from '@/lib/queryClient';
+import { isProActive, isPaidProActive, trialEndsAt } from '@/lib/proStatus';
 
 interface AuthState {
   session: Session | null;
@@ -38,35 +39,10 @@ interface EntitlementRow {
   pro_trial_started_at?: string | null;
 }
 
-const TRIAL_DURATION_DAYS = 14;
-
-/** Has an active PAID subscription right now? */
-function isPaidProActive(row: EntitlementRow | null): boolean {
-  if (!row?.pro_subscription) return false;
-  const expiresAt = row.pro_subscription_expires_at;
-  if (!expiresAt) return true;
-  return new Date(expiresAt).getTime() > Date.now();
-}
-
-/** When the user's 14-day trial ends, or null if no trial. Doesn't care
- *  whether the trial is still active — just returns the absolute moment. */
-function trialEndsAt(row: EntitlementRow | null): string | null {
-  if (!row?.pro_trial_started_at) return null;
-  const end =
-    new Date(row.pro_trial_started_at).getTime() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000;
-  return new Date(end).toISOString();
-}
-
-/** Resolve the effective Pro state from a DB row. Three paths:
- *   1. Active paid subscription (pro_subscription=true + not expired)
- *   2. Within 14-day Pro-features trial (pro_trial_started_at within window)
- *  Mirrors the server-side is_pro_active() Postgres function. */
-function isProActive(row: EntitlementRow | null): boolean {
-  if (isPaidProActive(row)) return true;
-  const trialEndIso = trialEndsAt(row);
-  if (trialEndIso && new Date(trialEndIso).getTime() > Date.now()) return true;
-  return false;
-}
+// Pro-state logic (isPaidProActive / trialEndsAt / isProActive) lives in
+// @/lib/proStatus — a pure, unit-tested module that is the single source of
+// truth, mirrored by the nightly cron + the is_pro_active() Postgres function.
+// Imported above.
 
 const ENTITLEMENT_COLUMNS =
   'is_admin, pro_subscription, pro_subscription_expires_at, pro_trial_started_at';

@@ -155,9 +155,13 @@ describe('store/auth.ts: isPro respects pro_subscription_expires_at', () => {
     expect(src).toMatch(/is_admin,\s*pro_subscription,\s*pro_subscription_expires_at/);
   });
 
-  it('has an isProActive helper that gates on the timestamp', () => {
-    expect(src).toContain('function isProActive');
-    expect(src).toMatch(/new Date\([^)]*expires[^)]*\)\.getTime\(\)\s*>\s*Date\.now\(\)/);
+  it('delegates Pro-state logic to the shared, unit-tested @/lib/proStatus module', () => {
+    expect(src).toContain("from '@/lib/proStatus'");
+    expect(src).toContain('isProActive');
+    // The timestamp-gating logic now lives (and is behaviorally unit-tested in
+    // proStatus.test.ts) in lib/proStatus.ts — the single source of truth.
+    const pro = read('lib/proStatus.ts');
+    expect(pro).toMatch(/new Date\([^)]*expiresAt[^)]*\)\.getTime\(\)\s*>\s*now/);
   });
 
   it('all three entitlement read sites use isProActive', () => {
