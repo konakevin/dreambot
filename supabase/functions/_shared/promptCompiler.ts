@@ -97,6 +97,14 @@ export function deriveFocalAnchor(
   if (cast.length === 1) return 'the main character';
   if (cast.length > 1) return 'the interaction between the characters';
   if (scene.objectDirective) return 'the scene object';
+  // When the user typed a prompt, PIN it as the literal focal subject so the
+  // brief protects it under compression. Previously this returned a generic
+  // string ("a single dominant visual subject...") which let Sonnet pick the
+  // injected environment as the subject and drop the user's actual subject
+  // (e.g. "a cat on a roof holding a piña colada" → a generic village, no cat).
+  if (scene.userPrompt && scene.userPrompt.trim()) {
+    return `EXACTLY what the user described — "${scene.userPrompt.trim()}" — rendered literally and prominently as the unmistakable main subject`;
+  }
   return 'a single dominant visual subject that defines the scene';
 }
 
@@ -122,7 +130,10 @@ function getWordBudget(
       ? { character: 20, environment: 45, finishing: 15 }
       : { character: 20, environment: 45, finishing: 15 };
   }
-  return { character: 0, environment: 60, finishing: 15 };
+  // Pure scene: previously reserved 0 words for the subject and 60 for
+  // environment, which let the injected atmosphere crowd out a specific subject
+  // (the "cat on a roof → empty village" failure). Reserve real subject budget.
+  return { character: 25, environment: 35, finishing: 15 };
 }
 
 // ── Section Builders ──
@@ -131,10 +142,14 @@ function buildSceneBlock(scene: CompilerInput['scene']): string {
   const parts: string[] = [];
 
   if (scene.userPrompt) {
-    parts.push(scene.userPrompt);
+    parts.push(
+      `THE SUBJECT — render this LITERALLY and prominently; it is the entire point of the image, never omit it, never swap it for something else, never demote it to a background detail: ${scene.userPrompt}`
+    );
   }
   if (scene.sceneExpansion) {
-    parts.push(scene.sceneExpansion);
+    parts.push(
+      `SUPPORTING ATMOSPHERE (background mood + light only — apply LIGHTLY and ONLY where it frames the subject above; do NOT let it replace, relocate, or compete with the subject, and DISCARD any of it that conflicts with the subject or its stated setting): ${scene.sceneExpansion}`
+    );
   }
   // NOTE: scene.styleReference (DLT) is NOT pushed here anymore. It used to be
   // demoted to "apply ONLY palette/lighting/technique/texture" — which dropped

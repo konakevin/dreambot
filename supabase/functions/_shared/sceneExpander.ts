@@ -179,14 +179,26 @@ export function expandScene(input: {
 
   const additions: string[] = [];
 
-  // Fill gaps only — don't override what user specified
+  // Fill gaps only — don't override what user specified. TIME / ATMOSPHERE /
+  // LIGHTING are subject-AGNOSTIC mood + light seasoning, safe on any scene.
   if (!hasTimeOfDay(lower)) additions.push(pickWithMemory(V2_TIME, rand, userId).text);
   if (!hasAtmosphere(lower)) additions.push(pickWithMemory(V2_ATMOSPHERE, rand, userId).text);
   if (!hasLighting(lower)) additions.push(pickWithMemory(V2_LIGHTING, rand, userId).text);
-  if (!hasMaterial(lower)) additions.push(pickWithMemory(V2_MATERIAL, rand, userId).text);
 
-  // Depth: 80% chance (absence creates freshness)
-  if (rand() < 0.8) additions.push(pickWithMemory(V2_DEPTH, rand, userId).text);
+  // MATERIAL injects competing surfaces / architecture (wet cobblestone street,
+  // brick, marble floor) — appropriate when a person stands IN an environment,
+  // but for a self-contained subject ("a cat holding a piña colada") it imports
+  // a whole generic village and crowds the subject out. Character scenes only.
+  if (hasCharacter && !hasMaterial(lower)) {
+    additions.push(pickWithMemory(V2_MATERIAL, rand, userId).text);
+  }
+
+  // Depth: full for character scenes (person-in-world wants layered depth);
+  // lighter for subject-only scenes so the expansion stays atmospheric seasoning
+  // rather than a competing multi-tier environment that buries the subject.
+  if (rand() < (hasCharacter ? 0.8 : 0.4)) {
+    additions.push(pickWithMemory(V2_DEPTH, rand, userId).text);
+  }
 
   // Action: only for character scenes
   if (hasCharacter) additions.push(pickWithMemory(V2_ACTION, rand, userId).text);
