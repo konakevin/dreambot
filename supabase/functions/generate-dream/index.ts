@@ -730,8 +730,15 @@ Output ONLY the prompt.`;
         castMembers = self && plusOne ? [self, plusOne] : [self ?? castMembers[0]];
       }
 
+      // Direct mode (use_exact_prompt) must win over cast/self-insert detection.
+      // Otherwise a Direct prompt with self-referential language ("me and my
+      // wife...") trips self-insert detection here and runs the full DreamBot
+      // cast pipeline — including face swap — even though the user chose Direct
+      // and the client already warned "your face won't appear". use_exact_prompt
+      // routes to the direct pass-thru branch below (no cast, no face swap).
       const hasCastInjection =
-        castMembers.length > 0 || (force_cast_role && describedCast.length > 0);
+        !body.use_exact_prompt &&
+        (castMembers.length > 0 || (force_cast_role && describedCast.length > 0));
 
       if (hasCastInjection) {
         // ── CAST INJECTION: one or more cast members + scene expansion + chaos + compiler ──
