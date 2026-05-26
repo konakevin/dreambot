@@ -80,7 +80,9 @@ module.exports = {
   GOTHBOT_GOTH_MALE_CLOSEUP_WARDROBE: loadOptional('gothbot_goth_male_closeup_wardrobe'),
   GOTHBOT_GOTH_MALE_CLOSEUP_ACCESSORY: loadOptional('gothbot_goth_male_closeup_accessory'),
   GOTHBOT_GOTH_MALE_CLOSEUP_CANDID_MOMENT: loadOptional('gothbot_goth_male_closeup_candid_moment'),
-  GOTHBOT_GOTH_MALE_CLOSEUP_CAMERA_PERSPECTIVE: loadOptional('gothbot_goth_male_closeup_camera_perspective'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_CAMERA_PERSPECTIVE: loadOptional(
+    'gothbot_goth_male_closeup_camera_perspective'
+  ),
   // ─── goth-closeup path (2026-05-15 migration — female dark-seductress closeup, bespoke pools)
   GOTHBOT_GOTH_CLOSEUP_ARCHETYPE: loadOptional('gothbot_goth_closeup_archetype'),
   GOTHBOT_GOTH_CLOSEUP_SKIN: loadOptional('gothbot_goth_closeup_skin'),
@@ -102,7 +104,9 @@ module.exports = {
   GOTHBOT_CASTLEVANIA_SCENE_STRUCTURE: loadOptional('gothbot_castlevania_scene_structure'),
   GOTHBOT_CASTLEVANIA_SCENE_DETAIL: loadOptional('gothbot_castlevania_scene_detail'),
   GOTHBOT_CASTLEVANIA_SCENE_INNER_LIGHT: loadOptional('gothbot_castlevania_scene_inner_light'),
-  GOTHBOT_CASTLEVANIA_SCENE_ACCENT_CREATURE: loadOptional('gothbot_castlevania_scene_accent_creature'),
+  GOTHBOT_CASTLEVANIA_SCENE_ACCENT_CREATURE: loadOptional(
+    'gothbot_castlevania_scene_accent_creature'
+  ),
   GOTHBOT_CASTLEVANIA_SCENE_SPICE: loadOptional('gothbot_castlevania_scene_spice'),
   GOTHBOT_CASTLEVANIA_SCENE_SKY: loadOptional('gothbot_castlevania_scene_sky'),
   // ─── gothic-architecture path (2026-05-15, bespoke axis migration with STRUCTURE-IS-HERO)
@@ -149,6 +153,32 @@ module.exports = {
   ASSASSIN_OUTFITS_MALE: load('assassin_outfits_male'),
   ASSASSIN_HAIRSTYLES_MALE: load('assassin_hairstyles_male'),
   ASSASSIN_ACCESSORIES_MALE: load('assassin_accessories_male'),
+  // Hunt-interaction + target/spoor for male vampire-hunter paths (2026-05-22).
+  VAMPIRE_HUNT_INTERACTION: loadOptional('vampire_hunt_interaction'),
+  VAMPIRE_TARGET_OR_SPOOR: loadOptional('vampire_target_or_spoor'),
+  // goth-male-full-body-axis pools (2026-05-22 migration from function-form).
+  GOTHBOT_GMFB_CHARACTER_ARCHETYPE: loadOptional('gothbot_gmfb_character_archetype'),
+  GOTHBOT_GMFB_BODY_POSE: loadOptional('gothbot_gmfb_body_pose'),
+  GOTHBOT_GMFB_SCENE_CONTEXT: loadOptional('gothbot_gmfb_scene_context'),
+  GOTHBOT_GMFB_HAIRSTYLE: loadOptional('gothbot_gmfb_hairstyle'),
+  GOTHBOT_GMFB_FACE_DETAIL: loadOptional('gothbot_gmfb_face_detail'),
+  GOTHBOT_GMFB_OUTFIT_SILHOUETTE: loadOptional('gothbot_gmfb_outfit_silhouette'),
+  GOTHBOT_GMFB_WEAPON_OR_OBJECT: loadOptional('gothbot_gmfb_weapon_or_object'),
+  GOTHBOT_GMFB_ATMOSPHERIC_BACKDROP: loadOptional('gothbot_gmfb_atmospheric_backdrop'),
+  GOTHBOT_GMFB_COMPOSITION_FRAMING: loadOptional('gothbot_gmfb_composition_framing'),
+  GOTHBOT_GMFB_FOREGROUND_ANCHOR: loadOptional('gothbot_gmfb_foreground_anchor'),
+  // vampire-hunter-in-action axis-system pools (2026-05-22 R4 RESTART — solo on-the-prowl).
+  GOTHBOT_VHIA_PROWL_ACTION: loadOptional('gothbot_vhia_prowl_action'),
+  GOTHBOT_VHIA_SETTING_LOCATION: loadOptional('gothbot_vhia_setting_location'),
+  GOTHBOT_VHIA_HUNTER_ARCHETYPE: loadOptional('gothbot_vhia_hunter_archetype'),
+  GOTHBOT_VHIA_WEAPON_SIGNATURE: loadOptional('gothbot_vhia_weapon_signature'),
+  GOTHBOT_VHIA_OUTFIT_SILHOUETTE: loadOptional('gothbot_vhia_outfit_silhouette'),
+  GOTHBOT_VHIA_ENVIRONMENTAL_DETAIL: loadOptional('gothbot_vhia_environmental_detail'),
+  GOTHBOT_VHIA_LIGHTING: loadOptional('gothbot_vhia_lighting'),
+  GOTHBOT_VHIA_ATMOSPHERIC_DEPTH: loadOptional('gothbot_vhia_atmospheric_depth'),
+  GOTHBOT_VHIA_COMPOSITION_FRAMING: loadOptional('gothbot_vhia_composition_framing'),
+  GOTHBOT_VHIA_FOREGROUND_ANCHOR: loadOptional('gothbot_vhia_foreground_anchor'),
+  GOTHBOT_VHIA_SPOOR: loadOptional('gothbot_vhia_spoor'),
   // Combat path pools (added 2026-05-08).
   COMBAT_FOE: load('combat_foe'),
   COMBAT_MOMENT: load('combat_moment'),

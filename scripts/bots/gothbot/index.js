@@ -127,7 +127,7 @@ module.exports = {
     // monster-prowl-victorian stays the FROZEN classical-oil branch.
     'monster-prowl-victorian': 'canvas_victorian',
     'monster-prowl-inked': 'inked_spectrum',
-    'monster-prowl-weta': 'weta_render',
+    'monster-prowl-weta': 'gargoyle_anime',
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
@@ -179,6 +179,8 @@ module.exports = {
     // monster-prowl-weta — combined hyperreal + Weta-Workshop realistic render.
     weta_render:
       'ultra-high-definition hyperreal cinematic 3D render, Weta-Workshop + Unreal Engine 5 lifelike realism, RICH FULL-SPECTRUM SATURATED color against deep ominous shadow, dark dramatic and cinematic',
+    gargoyle_anime:
+      'richly-detailed dark-anime gothic-horror illustration, hand-drawn and cel-shaded, vivid, dramatic and cinematic',
   },
   promptSuffixByMedium: {
     vampire_portrait:
@@ -231,6 +233,9 @@ module.exports = {
     // monster-prowl-weta — COMBINED hyperreal (UE5) + Weta-Workshop realistic render (Kevin 2026-05-25).
     weta_render:
       'hyperreal cinematic 3D render, Weta-Workshop practical-effects realism fused with Unreal Engine 5 + Octane physically-based rendering, ultra-high-definition lifelike textures (believable skin, scales, fur, wet membrane, sinew, weathered stone), ray-traced cinematic lighting in RICH FULL-SPECTRUM SATURATED color — bold colored light and glow in vivid emerald, blood-crimson, electric teal, gold-amber, royal violet, hot magenta — against deep ominous inky-black shadow, ultra-detailed 8K materials, sharp focus, dark dramatic cinematic depth',
+    // gargoyle anime comparison medium (illustrative dark-anime, hand-drawn cel-shaded).
+    gargoyle_anime:
+      'richly-detailed dark-anime gothic-horror illustration, clean confident bold anime linework, flat cel-shaded with rich vivid saturated color, hand-drawn illustrated 2D style, dramatic and ornate, intricate detail',
     watercolor:
       'gothic watercolor horror illustration, blood-ink wash bleed, wet-on-wet dark fantasy tradition, atmospheric watercolor with ink-line overlay, gothic sumi-e inkwash',
     // FaeBot-pattern tiny medium tag — small enough not to hijack early-
@@ -337,7 +342,19 @@ module.exports = {
     // Optional: skip two-pass on specific paths
     // vampire-hunter-in-action: axis-system path with load-bearing hunt-scene mandate.
     // goth-male-full-body-axis: rich pools need full Sonnet brief.
-    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture', 'castlevania-scene', 'cozy-goth', 'monster-prowl', 'monster-prowl-victorian', 'monster-prowl-inked', 'monster-prowl-weta', 'vampire-hunter-in-action', 'goth-male-full-body-axis'],
+    skipPaths: [
+      'dark-landscape',
+      'gothic-vista',
+      'gothic-architecture',
+      'castlevania-scene',
+      'cozy-goth',
+      'monster-prowl',
+      'monster-prowl-victorian',
+      'monster-prowl-inked',
+      'monster-prowl-weta',
+      'vampire-hunter-in-action',
+      'goth-male-full-body-axis',
+    ],
   },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
@@ -383,37 +400,16 @@ module.exports = {
     'vampire-assassin-combat',
     'monster-prowl',
     'monster-prowl-victorian',
-    'monster-prowl-inked',
-    'monster-prowl-weta',
+    // Built + working, intentionally NOT live yet — Kevin may activate later (2026-05-26).
+    // Builder / medium / pools / seeds all wired below; re-enable by uncommenting.
+    // 'monster-prowl-inked',
+    // 'monster-prowl-weta',
   ],
 
-  // pathWeights: slots-per-cycle per path. Balances scene:character roughly
-  // 50/50 — scenes (6 paths × 4 slots = 24) match characters (8 paths × 3 slots = 24).
-  // Cycle length = 48 slots ≈ 24 days at 2 posts/day. Each scene path posts every
-  // ~6 days; each character path every ~8 days. Consumed by resolvePathCycled
-  // in scripts/lib/botEngine.js.
-  pathWeights: {
-    // Scenes (6 paths × 4)
-    'dark-landscape': 4,
-    'gothic-architecture': 4,
-    'gothic-vista': 4,
-    'castlevania-scene': 4,
-    'cozy-goth': 4,
-    'monster-prowl': 4,
-    'monster-prowl-victorian': 4,
-    'monster-prowl-inked': 4,
-    'monster-prowl-weta': 4,
-    // Characters (8 paths × 3)
-    'goth-closeup': 3,
-    'goth-full-body': 3,
-    'goth-male-full-body-axis': 3,
-    'vampire-girls-2': 3,
-    'vampire-assassin-female': 3,
-    'vampire-from-a-distance': 3,
-    'vampire-assassin-combat': 3,
-    'vampire-hunter-in-action': 3,
-  },
-
+  // Flat rotation (2026-05-26 fleet-wide flatten): no pathWeights — every active
+  // path gets an equal 1 slot/cycle via the cycleAllPaths shuffle-bag below, so
+  // the bot posts each path once per cycle in randomized order, then reshuffles.
+  // (Replaced the old scene:character 4:3 weighting.)
   cycleAllPaths: true,
 
   rollSharedDNA({ vibeKey, picker }) {

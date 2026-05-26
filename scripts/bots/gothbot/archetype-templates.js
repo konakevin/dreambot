@@ -896,7 +896,8 @@ Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO p
   },
 
   GOTHBOT_MONSTER_PROWL_WETA: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, creature, action, eye_glow, feature, scene_color, stage, drama } = slots;
+    const { lighting, atmosphere, creature, action, eye_glow, feature, scene_color, stage, drama } =
+      slots;
     const dramaSection = drama
       ? `
 ━━━ DRAMATIC BACKGROUND EVENT (layer into the sky / deep distance behind the gargoyle) ━━━
@@ -905,7 +906,7 @@ Weave this dramatic event into the deep background — it transforms the sky and
 
 `
       : '';
-    return `You are a master creature-effects artist creating an EPIC, ULTRA-HIGH-DEFINITION HYPERREAL RENDER of a SOLO EPIC GARGOYLE for GothBot — an animated carved-STONE gargoyle (granite / sandstone / blackened basalt / verdigris-bronze / obsidian) come to terrible life: the MOST gnarly, mean, ferocious gargoyle imaginable, dialed to 11, yet ORNATELY and intricately carved — terrifying AND mesmerizing to look at. Rendered with WETA-WORKSHOP practical-effects realism fused with Unreal Engine 5 / Octane CGI — lifelike, tactile, ultra-detailed, realistic yet unmistakably a crafted RENDER. The GARGOYLE is unmistakably the star — scroll-stopping.
+    return `You are a master gothic-horror artist creating an EPIC HERO-SHOT of a SOLO EPIC GARGOYLE for GothBot — an animated carved-STONE gargoyle (granite / sandstone / blackened basalt / verdigris-bronze / obsidian) come to terrible life: the MOST gnarly, mean, ferocious gargoyle imaginable, dialed to 11, yet ORNATELY and intricately carved — terrifying AND mesmerizing to look at. The GARGOYLE is unmistakably the star — scroll-stopping. (Render it fully in the specified ART MEDIUM/STYLE — commit completely to that medium.)
 
 ━━━ COMPOSITION — FULL-BODY HERO SHOT OF THE WHOLE GARGOYLE (NON-NEGOTIABLE) ━━━
 This is a THEATRICAL ONE-SHEET FILM POSTER for a gothic-horror epic. Show the ENTIRE GARGOYLE — its FULL BODY, or at minimum a clear 3/4 view — HEAD-TO-TALON, with its WINGS, BODY, LIMBS, and TALONS all clearly visible in the frame. The gargoyle fills the frame as the hero (roughly 55-70%) but is always shown WHOLE, in its full pose.
@@ -914,7 +915,7 @@ Camera: a dynamic three-quarter angle, OR a low-angle looking UP at the towering
 
 ━━━ THE GARGOYLE (the hero — gnarly, mean, AND ornately carved, in full ultra-detailed glory) ━━━
 ${creature}
-Render the FULL gargoyle — head, body, wings, limbs, and talons ALL visible in frame — large and central, with hyperreal tactile detail: weathered carved stone, cracked granite / basalt / bronze, lichen and grime in the deep-cut grooves, every ornamental carving and grotesque sub-face physically convincing. A masterful Weta-Workshop stone-creature brought to life as a crafted CGI render. The MOST gnarly, mean, scroll-stopping gargoyle imaginable — terrifying yet mesmerizing.
+Render the FULL gargoyle — head, body, wings, limbs, and talons ALL visible in frame — large and central, with rich detail: weathered carved stone, cracked granite / basalt / bronze, lichen and grime in the deep-cut grooves, every ornamental carving and grotesque sub-face crisp and clear. The MOST gnarly, mean, scroll-stopping gargoyle imaginable — terrifying yet mesmerizing.
 SIGNATURE FEATURE — dial this detail to 11: ${feature}
 GLOWING EYES — the one living spark in the rock: ${eye_glow}
 RECOGNIZABILITY IS MANDATORY: a SOLID carved-STONE gargoyle with clear readable anatomy — a grotesque head, fanged maw, horns, limbs, wings, defined silhouette, unmistakably LIVING ROCK. A SOLID, DISTINCT creature standing IN the scene, clearly separate from its surroundings — NEVER fused into the background, NEVER a formless blob. A viewer must instantly see a GARGOYLE.
@@ -949,7 +950,7 @@ ${vibeDirective.slice(0, 200)}
 ✓ an ULTRA-HIGH-DEFINITION HYPERREAL WETA-WORKSHOP CREATURE RENDER of a recognizable classic monster in a LUSH full gothic world — lifelike tactile realism + Unreal Engine 5 CGI craft, rich natural cinematic color, a crafted render
 
 ━━━ STRUCTURE — write the prompt in this order ━━━
-[OPENING: the FULL gargoyle head-to-talon — wings, body, limbs, talons all visible — large and ultra-detailed, mid-action, the cinematic hero, shown WHOLE not cropped], [its dramatic theatrical lighting + carved silhouette], [the LUSH, FULL, richly-detailed gothic setting layered behind it], [the dramatic background event if any], [atmospheric depth], [full-spectrum saturated color held against ominous shadow + hyperreal Weta-Workshop + UE5 rendered finish]
+[OPENING: the FULL gargoyle head-to-talon — wings, body, limbs, talons all visible — large and ultra-detailed, mid-action, the cinematic hero, shown WHOLE not cropped], [its dramatic theatrical lighting + carved silhouette], [the LUSH, FULL, richly-detailed gothic setting layered behind it], [the dramatic background event if any], [atmospheric depth], [full-spectrum saturated color held against ominous shadow, rendered fully in the specified art medium]
 
 Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
