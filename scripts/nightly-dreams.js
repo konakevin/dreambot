@@ -47,10 +47,8 @@ const ANTHROPIC_KEY = getKey('ANTHROPIC_API_KEY');
 const COST_PER_IMAGE_CENTS = 3;
 
 const args = process.argv.slice(2);
-const MAX_BUDGET_CENTS = parseInt(
-  args.find((_, i, a) => a[i - 1] === '--max-budget') ?? '500',
-  10
-);
+const MAX_BUDGET_ARG = args.find((_, i, a) => a[i - 1] === '--max-budget');
+const MAX_BUDGET_OVERRIDE = MAX_BUDGET_ARG != null ? parseInt(MAX_BUDGET_ARG, 10) : null;
 const BATCH_SIZE = parseInt(args.find((_, i, a) => a[i - 1] === '--batch-size') ?? '5', 10);
 const DRY_RUN = args.includes('--dry-run');
 
@@ -74,7 +72,8 @@ async function getJwtForUser(email) {
     token_hash: linkData.properties.hashed_token,
     type: 'magiclink',
   });
-  if (otpErr || !otpData.session) throw new Error(`OTP verify failed for ${email}: ${otpErr?.message}`);
+  if (otpErr || !otpData.session)
+    throw new Error(`OTP verify failed for ${email}: ${otpErr?.message}`);
   return otpData.session.access_token;
 }
 
@@ -312,77 +311,69 @@ async function processDream(user) {
   }
   console.log(`Found ${users.length} onboarded users`);
 
-  // Filter already-dreamed today.
-  const { data: todayBudgets } = await sb
-    .from('ai_generation_budget')
-    .select('user_id')
-    .eq('date', today);
-  const alreadyDreamed = new Set((todayBudgets ?? []).map((b) => b.user_id));
+  // Filter users who already got a NIGHTLY dream today. IMPORTANT: key on a
+  // nightly-engine generation-log row, NOT ai_generation_budget — the manual
+  // Create path writes the same budget row, so the old guard skipped any user
+  // who generated manually earlier that day. A Pro power-user who creates daily
+  // would then NEVER receive their nightly dream (root cause of the "my nightly
+  // dreams stopped" bug). We only skip users with a today-dated COMPLETED
+  // ai_generation_log row whose engine is 'nightly-*' — a failed attempt
+  // (engine 'nightly-failed', status 'failed') stays retryable on a re-run.
+  const todayStart = today + 'T00:00:00Z';
+  const { data: todayLogs } = await sb
+    .from('ai_generation_log')
+    .select('user_id, rolled_axes')
+    .eq('status', 'completed')
+    .gte('created_at', todayStart);
+  const alreadyDreamed = new Set(
+    (todayLogs ?? [])
+      .filter((r) => {
+        const engine = r.rolled_axes && r.rolled_axes.engine;
+        return typeof engine === 'string' && engine.startsWith('nightly-');
+      })
+      .map((r) => r.user_id)
+  );
   let pool = users.filter((u) => !alreadyDreamed.has(u.user_id));
 
   // ── Cohort gating ──────────────────────────────────────────────────────
-  // Pro users (paid OR within 14-day trial) → eligible every night.
-  // Free users → eligible if (a) active in last 3 days AND (b) fewer than
-  // 2 nightly dreams in the prior 7-day rolling window.
+  // Nightly dreams are a PRO feature. Only Pro users (paid OR within the
+  // 14-day trial) get an auto-dream each night. Free users (post-trial) get
+  // none — they can still generate dreams manually with sparkles.
   const now = Date.now();
-  const threeDaysAgo = now - 3 * 24 * 60 * 60 * 1000;
   const fourteenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
-  const sevenDaysAgo = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
 
   function isProActive(u) {
     const paid =
       u.pro_subscription === true &&
-      (!u.pro_subscription_expires_at ||
-        new Date(u.pro_subscription_expires_at).getTime() > now);
+      (!u.pro_subscription_expires_at || new Date(u.pro_subscription_expires_at).getTime() > now);
     const trial =
-      u.pro_trial_started_at &&
-      new Date(u.pro_trial_started_at).getTime() > fourteenDaysAgo;
+      u.pro_trial_started_at && new Date(u.pro_trial_started_at).getTime() > fourteenDaysAgo;
     return paid || trial;
   }
 
-  // Count nightly dreams in the prior 7 days per user. One query, grouped.
-  const userIds = pool.map((u) => u.user_id);
-  const { data: weeklyCounts } = await sb
-    .from('uploads')
-    .select('user_id')
-    .in('user_id', userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000'])
-    .gte('created_at', sevenDaysAgo);
-  const weeklyCountByUser = new Map();
-  for (const row of weeklyCounts ?? []) {
-    weeklyCountByUser.set(row.user_id, (weeklyCountByUser.get(row.user_id) ?? 0) + 1);
-  }
-
   let proKept = 0;
-  let freeKept = 0;
-  let freeInactive = 0;
-  let freeQuotaHit = 0;
+  let freeFiltered = 0;
 
   pool = pool.filter((u) => {
-    const user = u.users;
-    if (isProActive(user)) {
+    if (isProActive(u.users)) {
       proKept++;
       return true;
     }
-    // Free path: must be active in last 3 days
-    const lastActive = user.last_active_at ? new Date(user.last_active_at).getTime() : 0;
-    if (lastActive < threeDaysAgo) {
-      freeInactive++;
-      return false;
-    }
-    // Free path: max 2 in prior 7 days
-    const count = weeklyCountByUser.get(u.user_id) ?? 0;
-    if (count >= 2) {
-      freeQuotaHit++;
-      return false;
-    }
-    freeKept++;
-    return true;
+    freeFiltered++;
+    return false;
   });
 
   console.log(
-    `${pool.length} eligible: ${proKept} Pro/trial + ${freeKept} active-free | filtered: ${freeInactive} inactive, ${freeQuotaHit} hit weekly cap\n`
+    `${pool.length} eligible: ${proKept} Pro/trial | filtered: ${freeFiltered} free (post-trial, no nightly)\n`
   );
   const eligible = pool;
+
+  // Budget scales with the eligible cohort so a run never silently strands
+  // users past a fixed ceiling as the Pro base grows. 2x per-image cost gives
+  // headroom for face-swap retries / pricier models. Floor 500c. Override
+  // with --max-budget.
+  const MAX_BUDGET_CENTS =
+    MAX_BUDGET_OVERRIDE ?? Math.max(500, eligible.length * COST_PER_IMAGE_CENTS * 2);
 
   if (DRY_RUN) {
     eligible.forEach((u) =>
@@ -428,4 +419,22 @@ async function processDream(user) {
   }
 
   console.log(`\n✨ Done! Generated: ${generated} | Failed: ${failed} | Cost: ${totalCost}¢`);
+
+  // Loud failure detection — without this the GitHub Actions job exits 0 even
+  // if every render failed, hiding a silent cohort-wide outage behind a green
+  // check. Fail the job when we had eligible users but produced nothing, or
+  // when the failure ratio is high, so it surfaces as a red ✗.
+  const attempted = generated + failed;
+  if (eligible.length > 0 && generated === 0) {
+    console.error(
+      `\n❌ NIGHTLY FAILURE: 0 dreams generated for ${eligible.length} eligible users — something is broken.`
+    );
+    process.exit(1);
+  }
+  if (attempted >= 5 && failed / attempted > 0.5) {
+    console.error(
+      `\n❌ NIGHTLY DEGRADED: ${failed}/${attempted} renders failed (>50%) — investigate.`
+    );
+    process.exit(1);
+  }
 })();

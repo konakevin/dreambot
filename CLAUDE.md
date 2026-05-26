@@ -57,7 +57,7 @@ The dream engine has evolved beyond the legacy two-pass `vibeEngine.ts`. Current
 
 **Photo restyle path** (`restyle-photo` Edge Function) — separate Kontext-based transformation for "upload photo + pick medium" flow. Uses per-medium `MEDIUM_CONFIGS` in `_shared/photoPrompts.ts`.
 
-**Nightly dreams** (`nightly-dreams` Edge Function, GitHub Actions cron 1am MST + jitter) — same scene engine, runs once per active user. Three composition paths roll 40/30/30: cast+anchor, anchor-only, cast-in-random-scene.
+**Nightly dreams** (`nightly-dreams` Edge Function, GitHub Actions cron `0 8 * * *` = 08:00 UTC daily, no jitter; `scripts/nightly-dreams.js` selects users + invokes the Edge Function per user) — same scene engine, runs once per **Pro-or-in-trial** user per night (free users post-trial get none). Personalizes from `user_recipes.recipe` JSONB (places/things/cast/moods), NOT the `dream_seeds`/`dream_cast` tables. Three composition paths roll 40/30/30: cast+anchor, anchor-only, cast-in-random-scene.
 
 **First dream** (`generate-first-dream` Edge Function) — persona-locked medium/vibe picking for guaranteed-banger first-render quality. See `FIRST_DREAM_BANGER_SPEC.md`.
 
@@ -86,7 +86,7 @@ Each nightly dream gets a short whimsical message from DreamBot via a dedicated 
 
 ## Bot System (16 image-generation bots)
 
-> **STOP — read this before any bot work.** ANY task that touches bot config, path files, pools, seeds, brief composition, archetypes, render quality, or even just *answers a question* about how a specific bot works (DragonBot, GothBot, StarBot, SteamBot, MechBot, DinoBot, BrickBot, BloomBot, ChibiBot, FaeBot, MangaBot, PixelBot, RetroBot, TinyBot, ToyBot, EarthBot) REQUIRES re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` in full first. The playbook is the canonical brain for the bot pipeline — its bar (every render = 10/10 poster-worthy frame), its 8 components of memorable scenes, its per-bot Round-N iteration logs, its cross-bot lessons table, and its failure-mode catalog are how this system stays coherent across 16 bots and dozens of paths. Skipping it produces one-off fixes that contradict prior lessons. **And: UPDATE the playbook with every new lesson learned the moment you learn it — don't wait to be asked.**
+> **STOP — read this before any bot work.** ANY task that touches bot config, path files, pools, seeds, brief composition, archetypes, render quality, or even just _answers a question_ about how a specific bot works (DragonBot, GothBot, StarBot, SteamBot, MechBot, DinoBot, BrickBot, BloomBot, ChibiBot, FaeBot, MangaBot, PixelBot, RetroBot, TinyBot, ToyBot, EarthBot) REQUIRES re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` in full first. The playbook is the canonical brain for the bot pipeline — its bar (every render = 10/10 poster-worthy frame), its 8 components of memorable scenes, its per-bot Round-N iteration logs, its cross-bot lessons table, and its failure-mode catalog are how this system stays coherent across 16 bots and dozens of paths. Skipping it produces one-off fixes that contradict prior lessons. **And: UPDATE the playbook with every new lesson learned the moment you learn it — don't wait to be asked.**
 
 Bots post via a single DB-driven dispatcher (`.github/workflows/bots-dispatcher.yml`, every 15 min) that reads `bot_schedules` for due bots and shells out to `scripts/run-bot.js` per bot. Cadence is owned per-bot in the DB: `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = '<name>';` (no code commit, no app deploy). Each bot is a self-contained module under `scripts/bots/<botname>/`:
 
@@ -136,7 +136,7 @@ EarthBot is a stub. All others have full path/pool/seed implementations.
 
 - **1 sparkle** per dream (Dream Me, photo, twin, re-dream, custom prompt)
 - **3 sparkles** per fusion
-- **Free:** nightly dreams (server-side), first-dream banger (server-side)
+- **Free:** first-dream banger (server-side). Nightly dreams are **Pro/trial-only** (free users post-trial get none — gated in `scripts/nightly-dreams.js`)
 - **25 sparkles** welcome bonus on onboarding completion
 
 ### IAP Packs
@@ -266,12 +266,12 @@ INSERT INTO public.dream_mediums (
 
 **Active classification flags:**
 
-| Flag | Effect |
-|---|---|
-| `is_active` | Visible in user picker. `false` hides but engine can still resolve. |
-| `is_bot_only` | Pair with `is_active=false` so picker hides but resolver finds it. |
-| `is_character_only` | Always uses character composition path (LEGO, Claymation, Vinyl). |
-| `face_swaps` | Photo path will face-swap from user's cast thumb. |
+| Flag                    | Effect                                                                                        |
+| ----------------------- | --------------------------------------------------------------------------------------------- |
+| `is_active`             | Visible in user picker. `false` hides but engine can still resolve.                           |
+| `is_bot_only`           | Pair with `is_active=false` so picker hides but resolver finds it.                            |
+| `is_character_only`     | Always uses character composition path (LEGO, Claymation, Vinyl).                             |
+| `face_swaps`            | Photo path will face-swap from user's cast thumb.                                             |
 | `character_render_mode` | `'natural'` = swap onto stylized rendering. `'embodied'` = medium IS the body (LEGO Minifig). |
 
 **Flags that don't exist (despite older docs):** `is_scene_only`, `nightly_skip`. The only hardcoded medium classification today is `NIGHTLY_BANNED_MEDIUMS = new Set(['photography'])` at `nightly-dreams/index.ts:216`. To ban another medium from nightly, add it there OR ship the `nightly_skip` column refactor in `memory/project_medium_flags_audit.md`.
@@ -323,6 +323,7 @@ WHERE is_active = true AND key != lower(replace(label, ' ', '_'));
 ```
 
 **Smoke test all 5 user paths:**
+
 1. Create + medium + no hint + no photo → renders a scene that showcases the medium
 2. Create + medium + text prompt → user's subject in this medium
 3. Create + medium + self-reference text ("put me in...") → user appears with correct gender
@@ -341,9 +342,9 @@ UI tiles (`MediumVibeSelector` queries `get_dream_mediums` RPC), `ArtStyle` type
 
 ```typescript
 // BAD — BOOT_ERROR:
-export const X = arr.filter(m => m.foo?.length);
+export const X = arr.filter((m) => m.foo?.length);
 // GOOD:
-export const X = arr.filter(m => m.foo && m.foo.length > 0);
+export const X = arr.filter((m) => m.foo && m.foo.length > 0);
 ```
 
 ---
@@ -353,6 +354,7 @@ export const X = arr.filter(m => m.foo && m.foo.length > 0);
 When a user has both self + plus_one cast photos, the engine renders both in a single scene with both faces swapped. **7-layer system — every layer must align or the render breaks.** Full QA history in commit log.
 
 **The 7 layers:**
+
 1. **Composition path** — 6 camera presets (candid, portrait, cinematic, environmental, editorial; `intimate` was removed) controlling framing/angle. Prepended to the Flux prompt.
 2. **Action pool** — Sonnet-seeded poses describing BOTH characters' body language. Rules: side-by-side, stationary, body-only, scene-neutral.
 3. **Flux fragment override** (`_shared/faceSwapFluxOverrides.ts`) — runtime override of medium's art-style prefix ONLY when face swap is active. Strips stylized character design language, adds face realism.
@@ -362,6 +364,7 @@ When a user has both self + plus_one cast photos, the engine renders both in a s
 7. **Face swap execution** (`dualFaceSwap()` via `dualSwapDispatch` → `face-swap-dual` Edge Function) — crop left 55% → crop right 55% → swap each in parallel → stitch at midpoint. Retries 3× before fallback.
 
 **Recipe for great dual renders:**
+
 - Front-load face realism in flux fragment BEFORE any style language (Flux early-token weighting).
 - **Style separation:** apply style modifiers to the WORLD, not the characters. "Illustration set in a fairy tale world" NOT "fairy tale animation style." Single most important insight.
 - Explicit negatives ("NOT cartoon eyes, NOT anime eyes") — weak alone, useful as reinforcement.
@@ -445,6 +448,7 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 - **Accent (purple):** `colors.accent` | **Like (red):** `colors.like`
 
 **Rules:**
+
 1. NativeWind `className` preferred for new components; existing `StyleSheet.create` (53+ files) is fine — match the file's existing style. Don't bulk-migrate.
 2. Never `any`.
 3. Always handle loading and error states in UI.
@@ -462,7 +466,7 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 **Workflow:** all agents (Claude included) commit directly to `main`. No feature branches. Kevin keeps concurrent agents on different areas of the code so collisions are rare; when they happen, resolve conflicts in real time. The one rule that still holds: **don't edit files outside your task's scope** — if another agent has WIP staged or unstaged in the working tree, leave their files alone (edit in place if you must touch the same file, never stash or revert their work).
 
 **CI** (`.github/workflows/ci.yml`): tsc, lint, prettier, jest on every push.
-**Nightly cron** (`.github/workflows/nightly-dreams.yml`): 1am MST + jitter. Secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
+**Nightly cron** (`.github/workflows/nightly-dreams.yml`): `0 8 * * *` (08:00 UTC daily, no jitter). Fails loud (exit 1) on a zero-output or >50%-failure run. Secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
 **Bot dispatcher** (`.github/workflows/bots-dispatcher.yml`): every 15 min. Reads `bot_schedules`, runs each due bot via `scripts/run-bot.js`. Change cadence via `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = 'x';`. Same secrets as nightly. Audit: `SELECT bot_name, posts_per_day, active, next_due_at FROM bot_schedules ORDER BY next_due_at;`.
 
 ---
@@ -522,6 +526,7 @@ April 2026 audit found 14 silently-broken issues. Pattern: a step needed elsewhe
 **The April 2026 incident:** unscoped delete on the old shared `dream_templates` wiped ALL bot seeds + ALL nightly templates in one command. Bot seeds partially recovered from backup; nightly templates redesigned from scratch. This is why the tables were split.
 
 **Hard rules:**
+
 - NEVER unscoped deletes on either seed table.
 - Bot seed cleanup: `.delete().like('category', 'botname_%')` — scoped to one bot.
 - Nightly seed refresh: `node scripts/generate-nightly-seeds.js` — regenerates all 8 pools.
@@ -596,6 +601,7 @@ Kevin is the sole human developer. Claude is the other dev. No PR review — fea
 The dual face-swap pipeline previously hit HTTP **546 (`WORKER_LIMIT_EXCEEDED`)** during open-prompt dual-cast renders — Supabase Pro per-invocation budget is ~150 MB memory / ~2 s CPU / 150 s wall. Three things stacked: longer Sonnet briefs, variable Replicate latency (15–43s), rapid test cadence.
 
 **Phase 1 (shipped) — memory hygiene in `_shared/faceSwap.ts`** — three load-bearing fixes:
+
 1. `perturbSourceImage` uploads to temp storage instead of returning a 5–7 MB base64 URI; caller cleans up in `finally`.
 2. Sequential post-swap downloads (was `Promise.all`) — costs ~500ms wall, halves the memory window.
 3. Eagerly null buffers after last use (`imgData`, `leftPixels`/`rightPixels`, `leftSwapData`/`rightSwapData`).
@@ -614,14 +620,16 @@ Single-cast face swap is NOT split — light enough to stay in-process.
 **Async queue + workers (shipped earlier in 2026):** `dream_queue` table + `dream-queue-worker` Edge Function (cron every 15s, atomic claim via SELECT FOR UPDATE SKIP LOCKED, exponential backoff, dead_letter after 5 attempts). Per-source dispatch (first_dream / nightly / create / dlt). `refund-stuck-jobs` sweeps orphans. Full plan: `QUEUE_WORKERS_REFACTOR.md` and `DREAM_QUEUE_PLAN.md`.
 
 **Signals to escalate further** (Replicate enterprise tier, Anthropic higher tier, or full async UI):
+
 - Replicate queue >30s consistently
 - Anthropic 429s in `ai_generation_log.fallback_reasons`
 - `generate-dream` invocation queue depth grows
-- >200 concurrent users / >10 dreams/sec sustained
+- > 200 concurrent users / >10 dreams/sec sustained
 - Compute errors return despite Phase 2
 - Daily renders >5,000
 
 **Hard rules:**
+
 - Don't disable Phase 1 memory hygiene "as just optimization." Each fix is load-bearing.
 - Don't add new pixel work to `dualFaceSwap` in-process. New steps go in a separate Edge Function in the fanout path.
 - Don't introduce another base64 data URI in the swap pipeline. Always upload to temp storage and pass URLs.

@@ -32,10 +32,12 @@ const POLL_INTERVAL_MS = 1000;
 //   - Input parameter names
 //   - Output shape
 //
-// We try them in order. Primary is cdingram (existing production model).
-// Fallbacks are tried single-shot when primary exhausts retries on a
-// transient Replicate error. Order chosen by 2026-04-30 benchmark:
-// yan-ops has 200x cdingram's run count (more likely to stay warm globally).
+// We try them in order. Primary is yan-ops — it has ~200x cdingram's run
+// count on Replicate, so it's the least likely to cold-start. (Cold starts
+// across all three models caused the 2026-05-26 face-swap timeout window that
+// hit multiple users.) cdingram + pikachupichu25 are single-shot fallbacks
+// tried when the primary exhausts retries on a transient Replicate error.
+// Outputs are visually indistinguishable across all three (2026-04-30 benchmark).
 //
 // To swap primary: reorder the array. The first entry is always primary.
 
@@ -57,12 +59,6 @@ function parseUrlOrFirst(out: unknown): string | null {
 
 const FACE_SWAP_MODELS: FaceSwapModel[] = [
   {
-    name: 'cdingram',
-    version: 'd1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111',
-    buildInput: (source, target) => ({ swap_image: source, input_image: target }),
-    parseOutput: parseUrlOrFirst,
-  },
-  {
     name: 'yan-ops',
     version: 'd5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3899cfe23bab',
     buildInput: (source, target) => ({
@@ -81,6 +77,12 @@ const FACE_SWAP_MODELS: FaceSwapModel[] = [
       }
       return parseUrlOrFirst(out);
     },
+  },
+  {
+    name: 'cdingram',
+    version: 'd1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111',
+    buildInput: (source, target) => ({ swap_image: source, input_image: target }),
+    parseOutput: parseUrlOrFirst,
   },
   {
     name: 'pikachupichu25',

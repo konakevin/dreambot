@@ -1634,6 +1634,26 @@ Output ONLY the prompt.`;
     const errMsg = (err as Error).message;
     console.error(`[nightly-dreams] Error for user ${userId}:`, errMsg);
 
+    // Record the failure so a silent cohort-wide outage is queryable. The
+    // success path logs to ai_generation_log; without this, failures left no
+    // DB trace at all (nightly audit 2026-05-26). engine='nightly-failed' +
+    // status='failed' so the cron's idempotency guard (completed-only) keeps
+    // this user retryable. insertGenerationLog never throws.
+    await insertGenerationLog(supabase, {
+      user_id: userId,
+      recipe_snapshot: {},
+      rolled_axes: { engine: 'nightly-failed' },
+      enhanced_prompt: '',
+      model_used: '',
+      cost_cents: 0,
+      status: 'failed',
+      sonnet_brief: null,
+      sonnet_raw_response: null,
+      vision_description: null,
+      fallback_reasons: [`nightly_error:${errMsg.slice(0, 200)}`],
+      replicate_prediction_id: null,
+    });
+
     return new Response(JSON.stringify({ error: errMsg }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },

@@ -41,10 +41,10 @@ export const PRO_YEARLY_SPARKLE_BUNDLE = PRO_SPARKLE_BUNDLE * 12;
  *  Mirrored in is_pro_active() Postgres function + store/auth.ts. */
 export const PRO_TRIAL_DAYS = 14;
 
-/** Nightly-dreams included in Pro. Used by the nightly-dreams Edge Function
- *  to gate the auto-render frequency for free vs pro users.
- *  Pro = 1 nightly dream per night (~30/month). Free = 2/week if active in
- *  the prior 3-day window. */
+/** Nightly dreams are a PRO feature. Pro users (paid OR within the 14-day
+ *  trial) get one auto-rendered dream per night (~30/month). Free users
+ *  (post-trial) get NONE — they generate manually with sparkles instead.
+ *  Cohort gating lives in scripts/nightly-dreams.js (the cron entry). */
 export const PRO_NIGHTLY_DREAMS_PER_MONTH = 30;
 
 /** HD download monthly cap. Each unique post is upscaled once on demand (then

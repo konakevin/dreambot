@@ -1,12 +1,25 @@
 # Nightly Dream Engine — Architecture & Expansion Guide
 
+> **⚠️ STATUS (2026-05-26): parts of this doc are stale — corrections inline below.**
+> The live engine is **procedural** (`_shared/dreamAlgorithm.ts` `rollDream()` +
+> `sceneEngine.ts` `assembleScene()` + `biomeAxes.ts`), NOT a `dream_templates`
+> template-fill (that table was deleted). The only live trigger is **GitHub
+> Actions cron `0 8 * * *` (08:00 UTC, no jitter)** running
+> `scripts/nightly-dreams.js`, which invokes the `nightly-dreams` Edge Function
+> per user — there is **no pg_cron** trigger. Nightly is **Pro/trial-only**
+> (gated in `scripts/nightly-dreams.js`; free users post-trial get none). It
+> personalizes from the `user_recipes.recipe` JSONB (places/things/cast/moods),
+> **not** the `dream_seeds`/`dream_cast` tables. The cron skips users who already
+> got a _completed nightly_ dream today (not anyone who generated manually) and
+> exits 1 on a zero-output / high-failure run.
+
 ## Overview
 
 The nightly dream engine generates one personalized dream per user per night. It runs through three implementations that all share the same pipeline:
 
 1. **`supabase/functions/generate-dream/index.ts`** — the Edge Function called by the app (onboarding reveal + "My Mediums"/"My Vibes" on Create screen)
-2. **`supabase/functions/nightly-dreams/index.ts`** — the Edge Function triggered by pg_cron at 3am UTC
-3. **`scripts/nightly-dreams.js`** — the Node.js script triggered by GitHub Actions cron at 1am MST
+2. **`supabase/functions/nightly-dreams/index.ts`** — the per-user render Edge Function (invoked by the script below, once per eligible user)
+3. **`scripts/nightly-dreams.js`** — the GitHub Actions cron entry (`0 8 * * *`, 08:00 UTC); selects Pro/trial users and invokes the Edge Function per user
 
 **This path is intentionally isolated from the Create/DLT dream paths.** Changes here do not affect the V2 text, restyle, or reimagine paths, and vice versa.
 
@@ -81,17 +94,17 @@ User's VibeProfile
 
 ## Source of Truth — Where Things Live
 
-| What | File | Notes |
-|---|---|---|
-| Medium definitions (key, label, directive, fluxFragment) | `constants/dreamEngine.ts` → `DREAM_MEDIUMS` | 21 curated + 2 meta (My Mediums, Surprise Me) |
-| Vibe definitions (key, label, directive) | `constants/dreamEngine.ts` → `DREAM_VIBES` | 11 curated + 2 meta |
-| Key arrays for TypeScript types | `constants/dreamEngine.ts` → `MEDIUM_KEYS`, `VIBE_KEYS` | `as const` arrays |
-| `ArtStyle` / `Aesthetic` union types | `types/vibeProfile.ts` | Derived from `MEDIUM_KEYS` / `VIBE_KEYS` |
-| Onboarding tile lists | `constants/onboarding.ts` | Derived from `CURATED_MEDIUMS` / `CURATED_VIBES` |
-| Edge Function type copies | `supabase/functions/_shared/vibeProfile.ts` | Manual sync — must match |
-| Node script medium/vibe subsets | `scripts/nightly-dreams.js` | Manual sync — compact subset |
-| Dream scene templates | `dream_templates` DB table | 5,910 templates across 31 categories |
-| Template generation script | `scripts/generate-dream-templates.js` | One-time backfill, 31 categories × 200 |
+| What                                                     | File                                                    | Notes                                            |
+| -------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------ |
+| Medium definitions (key, label, directive, fluxFragment) | `constants/dreamEngine.ts` → `DREAM_MEDIUMS`            | 21 curated + 2 meta (My Mediums, Surprise Me)    |
+| Vibe definitions (key, label, directive)                 | `constants/dreamEngine.ts` → `DREAM_VIBES`              | 11 curated + 2 meta                              |
+| Key arrays for TypeScript types                          | `constants/dreamEngine.ts` → `MEDIUM_KEYS`, `VIBE_KEYS` | `as const` arrays                                |
+| `ArtStyle` / `Aesthetic` union types                     | `types/vibeProfile.ts`                                  | Derived from `MEDIUM_KEYS` / `VIBE_KEYS`         |
+| Onboarding tile lists                                    | `constants/onboarding.ts`                               | Derived from `CURATED_MEDIUMS` / `CURATED_VIBES` |
+| Edge Function type copies                                | `supabase/functions/_shared/vibeProfile.ts`             | Manual sync — must match                         |
+| Node script medium/vibe subsets                          | `scripts/nightly-dreams.js`                             | Manual sync — compact subset                     |
+| Dream scene templates                                    | `dream_templates` DB table                              | 5,910 templates across 31 categories             |
+| Template generation script                               | `scripts/generate-dream-templates.js`                   | One-time backfill, 31 categories × 200           |
 
 ---
 
@@ -157,6 +170,7 @@ supabase functions deploy nightly-dreams --no-verify-jwt
 ```
 
 ### What happens automatically:
+
 - Onboarding shows the new medium as a pill option (derived from `CURATED_MEDIUMS`)
 - Create screen shows it in the medium selector (reads `DREAM_MEDIUMS`)
 - Nightly engine can resolve it when a user selects it in their profile
@@ -190,16 +204,17 @@ Same pattern but simpler (no fluxFragment, no photo config, no SDXL routing):
 
 The user's 4 mood sliders (0.0–1.0) bias which template categories are picked:
 
-| Slider | Low (0.0) | High (1.0) |
-|---|---|---|
-| `peaceful_chaotic` | peaceful_absurdity, beautiful_melancholy, eerie_stillness, bioluminescence | joyful_chaos, broken_gravity, machines |
-| `cute_terrifying` | peaceful_absurdity, childhood, bioluminescence, joyful_chaos | cosmic_horror, eerie_stillness, decay_beauty |
-| `minimal_maximal` | microscopic, beautiful_melancholy, reflections, transparency | giant_objects, impossible_architecture, collections, dreams_within_dreams, machines |
-| `realistic_surreal` | (base weight 1.0 for all) | cosmic, wrong_materials, time_distortion, dreams_within_dreams, memory_distortion, broken_gravity, doors_portals |
+| Slider              | Low (0.0)                                                                  | High (1.0)                                                                                                       |
+| ------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `peaceful_chaotic`  | peaceful_absurdity, beautiful_melancholy, eerie_stillness, bioluminescence | joyful_chaos, broken_gravity, machines                                                                           |
+| `cute_terrifying`   | peaceful_absurdity, childhood, bioluminescence, joyful_chaos               | cosmic_horror, eerie_stillness, decay_beauty                                                                     |
+| `minimal_maximal`   | microscopic, beautiful_melancholy, reflections, transparency               | giant_objects, impossible_architecture, collections, dreams_within_dreams, machines                              |
+| `realistic_surreal` | (base weight 1.0 for all)                                                  | cosmic, wrong_materials, time_distortion, dreams_within_dreams, memory_distortion, broken_gravity, doors_portals |
 
 Every category has a base weight of 1.0 plus bonuses from 0.0–0.8 based on slider values. No category is ever excluded — just more or less likely.
 
 The weighting function `pickWeightedCategory(moods)` lives in:
+
 - `generate-dream/index.ts` (inline)
 - `nightly-dreams/index.ts` (standalone function)
 - `scripts/nightly-dreams.js` (standalone function)
@@ -208,39 +223,39 @@ The weighting function `pickWeightedCategory(moods)` lives in:
 
 ## Template Categories (31)
 
-| Category | Key | Theme |
-|---|---|---|
-| Cosmic/Astronomical | `cosmic` | Stars, planets, galaxies, nebulae |
-| Microscopic/Tiny | `microscopic` | Worlds in dewdrops, cities on coins |
-| Impossible Architecture | `impossible_architecture` | Physics-defying buildings |
-| Giant Objects | `giant_objects` | Everyday things at mountain scale |
-| Peaceful Absurdity | `peaceful_absurdity` | Calm scenes that make no sense |
-| Beautiful Melancholy | `beautiful_melancholy` | Gorgeous sadness, bittersweet |
-| Cosmic Horror (lite) | `cosmic_horror` | Vast unknowable things, awe + dread |
-| Joyful Chaos | `joyful_chaos` | Explosive color, celebration |
-| Eerie Stillness | `eerie_stillness` | Frozen moments, quiet wrongness |
-| Broken Gravity | `broken_gravity` | Falling sideways, floating worlds |
-| Wrong Materials | `wrong_materials` | Oceans of glass, clouds of fabric |
-| Time Distortion | `time_distortion` | Multiple seasons, clocks melting |
-| Merged Worlds | `merged_worlds` | Two realities overlapping |
-| Living Objects | `living_objects` | Furniture with feelings |
-| Impossible Weather | `impossible_weather` | Raining objects, snow made of light |
-| Overgrown/Reclaimed | `overgrown` | Nature eating civilization |
-| Bioluminescence & Light | `bioluminescence` | Everything glows from inside |
-| Dreams Within Dreams | `dreams_within_dreams` | Recursive worlds, mise en abyme |
-| Memory Distortion | `memory_distortion` | Familiar places remembered wrong |
-| Abandoned & Running | `abandoned_running` | Empty places still operating |
-| Transformation | `transformation` | Things becoming other things |
-| Reflections & Doubles | `reflections` | Mirror worlds that don't match |
-| Machines & Mechanisms | `machines` | Clockwork landscapes |
-| Music & Sound | `music_sound` | Visible sound waves |
-| Underwater & Deep | `underwater` | Sunken civilizations |
-| Doors & Portals | `doors_portals` | Doors to nowhere, thresholds |
-| Collections & Multitudes | `collections` | Thousands of the same thing |
-| Decay & Beauty | `decay_beauty` | Rust that is gorgeous |
-| Childhood & Scale Shift | `childhood` | Adult world from child's height |
-| Transparency & Layers | `transparency` | See-through everything |
-| Cinematic Moments | `cinematic` | Frame from a film that doesn't exist |
+| Category                 | Key                       | Theme                                |
+| ------------------------ | ------------------------- | ------------------------------------ |
+| Cosmic/Astronomical      | `cosmic`                  | Stars, planets, galaxies, nebulae    |
+| Microscopic/Tiny         | `microscopic`             | Worlds in dewdrops, cities on coins  |
+| Impossible Architecture  | `impossible_architecture` | Physics-defying buildings            |
+| Giant Objects            | `giant_objects`           | Everyday things at mountain scale    |
+| Peaceful Absurdity       | `peaceful_absurdity`      | Calm scenes that make no sense       |
+| Beautiful Melancholy     | `beautiful_melancholy`    | Gorgeous sadness, bittersweet        |
+| Cosmic Horror (lite)     | `cosmic_horror`           | Vast unknowable things, awe + dread  |
+| Joyful Chaos             | `joyful_chaos`            | Explosive color, celebration         |
+| Eerie Stillness          | `eerie_stillness`         | Frozen moments, quiet wrongness      |
+| Broken Gravity           | `broken_gravity`          | Falling sideways, floating worlds    |
+| Wrong Materials          | `wrong_materials`         | Oceans of glass, clouds of fabric    |
+| Time Distortion          | `time_distortion`         | Multiple seasons, clocks melting     |
+| Merged Worlds            | `merged_worlds`           | Two realities overlapping            |
+| Living Objects           | `living_objects`          | Furniture with feelings              |
+| Impossible Weather       | `impossible_weather`      | Raining objects, snow made of light  |
+| Overgrown/Reclaimed      | `overgrown`               | Nature eating civilization           |
+| Bioluminescence & Light  | `bioluminescence`         | Everything glows from inside         |
+| Dreams Within Dreams     | `dreams_within_dreams`    | Recursive worlds, mise en abyme      |
+| Memory Distortion        | `memory_distortion`       | Familiar places remembered wrong     |
+| Abandoned & Running      | `abandoned_running`       | Empty places still operating         |
+| Transformation           | `transformation`          | Things becoming other things         |
+| Reflections & Doubles    | `reflections`             | Mirror worlds that don't match       |
+| Machines & Mechanisms    | `machines`                | Clockwork landscapes                 |
+| Music & Sound            | `music_sound`             | Visible sound waves                  |
+| Underwater & Deep        | `underwater`              | Sunken civilizations                 |
+| Doors & Portals          | `doors_portals`           | Doors to nowhere, thresholds         |
+| Collections & Multitudes | `collections`             | Thousands of the same thing          |
+| Decay & Beauty           | `decay_beauty`            | Rust that is gorgeous                |
+| Childhood & Scale Shift  | `childhood`               | Adult world from child's height      |
+| Transparency & Layers    | `transparency`            | See-through everything               |
+| Cinematic Moments        | `cinematic`               | Frame from a film that doesn't exist |
 
 ---
 
@@ -260,9 +275,9 @@ The Edge Function copies in `_shared/` are NOT auto-synced from `constants/` or 
 
 ## Cost Per Dream
 
-| API Call | Model | Cost |
-|---|---|---|
-| Sonnet prompt writer | claude-sonnet-4 | ~$0.003 |
-| Flux image generation | flux-dev | ~$0.025 |
-| Haiku bot message | claude-haiku-4.5 | ~$0.001 |
-| **Total per dream** | | **~$0.029** |
+| API Call              | Model            | Cost        |
+| --------------------- | ---------------- | ----------- |
+| Sonnet prompt writer  | claude-sonnet-4  | ~$0.003     |
+| Flux image generation | flux-dev         | ~$0.025     |
+| Haiku bot message     | claude-haiku-4.5 | ~$0.001     |
+| **Total per dream**   |                  | **~$0.029** |
