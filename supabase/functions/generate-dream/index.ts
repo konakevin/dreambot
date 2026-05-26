@@ -290,7 +290,9 @@ Deno.serve(async (req) => {
   }
 
   // ── Build prompt ──────────────────────────────────────────────────────────
-  let finalPrompt: string;
+  // Initialized to '' (not just declared) so the failure-logging path in the
+  // outer catch can safely read it even if the throw happened before assignment.
+  let finalPrompt = '';
 
   let logAxes: Record<string, unknown> = {};
   let conceptJson: Record<string, unknown> | null = null;
@@ -1362,6 +1364,9 @@ Output ONLY the prompt.`;
     let sparkleRefunded = false;
     if (jobId) {
       try {
+        // p_amount is only a FALLBACK — refund_sparkles refunds the actual
+        // amount debited under this jobId (migration 183), so an advanced-model
+        // dream charged 2/3/5 sparkles gets the full amount back, not a flat 1.
         const { data: refunded } = await supabase.rpc('refund_sparkles', {
           p_user_id: userId,
           p_amount: 1,
@@ -1389,6 +1394,29 @@ Output ONLY the prompt.`;
       } catch (refundErr) {
         console.error('[generate-dream] Legacy NSFW refund FAILED:', (refundErr as Error).message);
       }
+    }
+
+    // Log the failure to ai_generation_log so failed dreams are auditable —
+    // previously the throw bypassed all logging, so failures were invisible in
+    // the audit trail (status='failed', best-effort). pickedModel is block-
+    // scoped to the try, so use force_model when available.
+    try {
+      await insertGenerationLog(supabase, {
+        user_id: userId,
+        recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
+        rolled_axes: { ...logAxes, error: errMsg, refundClass, sparkleRefunded },
+        enhanced_prompt: finalPrompt,
+        model_used: force_model || 'unknown',
+        cost_cents: 0,
+        status: 'failed',
+        sonnet_brief: sonnetBrief,
+        sonnet_raw_response: sonnetRawResponse,
+        vision_description: visionDescription,
+        fallback_reasons: [...fallbackReasons, `hard_fail:${refundClass}`],
+        replicate_prediction_id: replicatePredictionId,
+      });
+    } catch {
+      /* logging is best-effort */
     }
 
     // Update dream_jobs status (best-effort)
