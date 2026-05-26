@@ -37,18 +37,17 @@ Already done (verified in repo):
 - [x] **(2026-05-26)** Removed unused Face ID permission (`expo-secure-store faceIDPermission:false`)
 - [x] **(2026-05-26)** Made auth-screen Terms/Privacy tappable links
 
+- [x] **(2026-05-26)** Removed unused Microphone permission — `expo-camera` (autolinked)
+      was injecting `NSMicrophoneUsageDescription`; configured `microphonePermission:false`.
+      Verified the resolved Info.plist via `expo config --type introspect` (no mic/FaceID
+      keys, camera string preserved).
+- [x] **(2026-05-26)** Privacy + Terms pages verified live —
+      `https://dreambotapp.com/privacy` + `/terms` (real content, updated 2026-04-06).
+
 Remaining code/verification items:
 
-- [ ] **Verify Microphone permission on a fresh prebuild.** The local (gitignored)
-      `ios/` Info.plist shows `NSMicrophoneUsageDescription`, but no plugin in
-      `app.config.js` injects it and nothing in-app uses the mic — it's likely a
-      stale artifact. After `npx expo prebuild --clean`, check the generated
-      Info.plist; if the key is still there, trace the source plugin and disable it
-      (e.g. `expo-camera`/`expo-image-picker` `microphonePermission: false`).
-- [ ] **Confirm the live legal + support pages resolve:**
-      `https://dreambotapp.com/privacy`, `https://dreambotapp.com/terms`, and a
-      support URL/email. (App + `app.config.js` associatedDomains use
-      `dreambotapp.com`.) These MUST be live before submission.
+- [ ] **Set up a support URL or support email** (e.g. a support page on dreambotapp.com
+      or `support@…`) — required for the App Store Connect listing.
 
 ---
 

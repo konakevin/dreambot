@@ -73,6 +73,18 @@ module.exports = {
           photosPermission: 'Allow DreamBot to save photos to your library.',
         },
       ],
+      // expo-camera is autolinked; list it explicitly to pass options.
+      // microphonePermission:false omits NSMicrophoneUsageDescription (DreamBot
+      // captures photos only, never audio/video) — keeps the custom camera string.
+      [
+        'expo-camera',
+        {
+          cameraPermission:
+            'DreamBot uses your camera to capture photos for AI dream generation.',
+          microphonePermission: false,
+          recordAudioAndroid: false,
+        },
+      ],
       [
         'expo-splash-screen',
         {
