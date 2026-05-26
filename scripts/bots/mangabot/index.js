@@ -34,7 +34,6 @@ const pathBuilders = {
   'cherry-blossom-romance': require('./paths/cherry-blossom-romance'),
   'space-opera': require('./paths/space-opera'),
   'underwater': require('./paths/underwater'),
-  'noir': require('./paths/noir'),
 };
 
 module.exports = {
@@ -99,7 +98,6 @@ module.exports = {
     'cherry-blossom-romance',
     'space-opera',
     'underwater',
-    'noir',
   ],
 
   pathWeights: {
@@ -129,7 +127,6 @@ module.exports = {
     'beach-episode': 1,
     'space-opera': 1,
     'underwater': 1,
-    'noir': 1,
   },
 
   chaos: {
@@ -138,7 +135,7 @@ module.exports = {
     allowSubjectChaosPaths: [
       'neo-tokyo', 'isekai-fantasy', 'food-anime', 'anime-village', 'mythological-creature',
       'mecha-hangars', 'occult-tokyo', 'post-apocalyptic', 'space-opera', 'underwater',
-      'ghibli-countryside', 'festival-nights', 'rooftop-sunsets', 'noir',
+      'ghibli-countryside', 'festival-nights', 'rooftop-sunsets',
     ],
   },
 
@@ -159,7 +156,7 @@ module.exports = {
       'occult-tokyo': '80-110', 'post-apocalyptic': '80-110',
       'beach-episode': '80-110', 'rooftop-sunsets': '80-110',
       'cherry-blossom-romance': '80-110', 'space-opera': '80-110',
-      'underwater': '80-110', 'noir': '80-110',
+      'underwater': '80-110',
     },
     preservePhrasesByPath: {},
   },
@@ -177,7 +174,6 @@ module.exports = {
       // Male-coded paths
       'shonen-action': 'male',
       'samurai-era': 'male',
-      'noir': 'male',
       'anime-character-male': 'male',
       // Creature-coded
       'mythological-creature': 'creature',

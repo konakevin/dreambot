@@ -119,7 +119,6 @@ module.exports = {
   CHERRY_BLOSSOM_SCENES: load('cherry_blossom_scenes'),
   SPACE_OPERA_SCENES: load('space_opera_scenes'),
   UNDERWATER_SCENES: load('underwater_scenes'),
-  NOIR_SCENES: load('noir_scenes'),
   // Anime-character (male / female) path pools (added 2026-05-08).
   ANIME_SETTING: load('anime_setting'),
   ANIME_VISTA: load('anime_vista'),
