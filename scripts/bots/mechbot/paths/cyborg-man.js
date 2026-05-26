@@ -1,36 +1,41 @@
 /**
- * MechBot cyborg-man path — declarative form (2026-05-17).
+ * MechBot cyborg-man path — "android-man" rebuild (2026-05-26, Kevin).
  *
- * Mirrors cyborg-woman migration pattern but male-coded: RUGGED, HANDSOME,
- * CAPABLE, MYSTERIOUS, BADASS. NOT sexy. Half-human half-machine male
- * cyborg with cinematic atmospheric presence — Solid Snake / Adam Jensen /
- * Geralt-as-cyborg / Marcus Fenix / Cyberpunk 2077 male V energy.
+ * Full rich axis-system conversion. Replaces BOTH the bust-portrait
+ * cyborg-male-legacy function-form AND the disabled, face-obsessed
+ * MECHBOT_CYBORG_MAN axis attempt.
  *
- * DNA flows from bot.rollSharedDNA() (existing 'cyborg-man' branch already
- * populates male characterBase/skin/bodyType/eyes/hair/internal/glowColor).
+ * Register: a MOSTLY-MACHINE male android-BEING — synthetic chassis dominates
+ * the silhouette, organic shows ONLY at the eyes / a small face-panel — a
+ * human ghost inside an engineered body (Alita / Ghost in the Shell Major /
+ * Nier Automata / battle-android / Cyberpunk full-borg). RUGGED, weathered,
+ * lethal. FULL-FIGURE in a sci-fi scene, NEVER a bust. Solves the two prior
+ * failures: (1) bust-shot-of-a-head and (2) handsome organic head pasted onto
+ * a chrome body.
  *
- * Pools:
- *   - cyborg_feature: CYBORG_FEATURES (shared)
- *   - cyborg_material: CYBORG_WOMAN_MATERIAL (shared — gender-neutral
- *     material/finish descriptions)
- *   - action: CYBORG_MALE_ACTIONS (existing male action pool)
- *   - landscape: CHARACTER_INTERIOR (shared sci-fi architecture pool)
- *   - composition: NEW CYBORG_MAN_COMPOSITION (50% closeup + 50% full-body
- *     action, male-coded — scarred jaw / chrome temple / weathered eye /
- *     wide-stance / mid-vault / over-shoulder mid-fire)
- *   - drama: CYBORG_WOMAN_DRAMA (shared — atmospheric flourishes, 40% gated)
+ * Fully composer-driven — 8 bespoke path axes + 1 conditional drama +
+ * 2 universal. Does NOT read the pretty-boy cyborg-man sharedDNA character
+ * fields; only sharedDNA.glowColor / scenePalette / colorPalette (set by the
+ * 'cyborg-man' branch of bot.rollSharedDNA()).
  *
- * Pre-migration function-form brief preserved at paths/legacy/cyborg-man.js.
+ * Composition pool is ~85% full-figure to kill the bust-shot failure mode.
+ *
+ * Pre-rebuild function-form brief preserved at paths/legacy/cyborg-man.js.
  */
 
 module.exports = {
-  archetype: 'MECHBOT_CYBORG_MAN',
+  archetype: 'MECHBOT_ANDROID_MAN',
   pools: {
-    cyborg_feature: 'CYBORG_FEATURES',
-    cyborg_material: 'CYBORG_WOMAN_MATERIAL',
-    action: 'CYBORG_MALE_ACTIONS',
-    landscape: 'CHARACTER_INTERIOR',
-    composition: 'CYBORG_MAN_COMPOSITION',
-    drama: 'CYBORG_WOMAN_DRAMA',
+    identity: 'ANDROID_MAN_IDENTITY',
+    chassis: 'ANDROID_MAN_CHASSIS',
+    material: 'ANDROID_MAN_MATERIAL',
+    head: 'ANDROID_MAN_HEAD',
+    eye: 'ANDROID_MAN_EYE',
+    augment: 'ANDROID_MAN_AUGMENT',
+    action: 'ANDROID_MAN_ACTION',
+    setting: 'ANDROID_MAN_SETTING',
+    composition: 'ANDROID_MAN_COMPOSITION',
+    surprise: 'ANDROID_MAN_SURPRISE',
+    drama: 'ANDROID_MAN_DRAMA', // 40% gated conditional
   },
 };

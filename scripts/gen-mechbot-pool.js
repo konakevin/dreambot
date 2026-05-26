@@ -57,6 +57,422 @@ if (!POOL) {
 // ─────────────────────────────────────────────────────────────
 
 const POOL_RECIPES = {
+  // ════════════════════════════════════════════════════════════════
+  // cyborg-man REBUILD → "android-man" register (2026-05-26)
+  // MOSTLY-MACHINE male android-BEING. Synthetic chassis dominates the
+  // silhouette; organic shows ONLY at eyes / a partial face-panel. A human
+  // GHOST inside an engineered machine body — Alita / Ghost in the Shell
+  // Major / Nier Automata / battle-android / Cyberpunk full-borg. RUGGED,
+  // weathered, lethal — NEVER pretty-boy, NEVER a model, NEVER a handsome
+  // organic head pasted onto a chrome torso. FULL-FIGURE in a sci-fi scene,
+  // NOT a bust portrait. The body is a UNIFIED engineered form — no flesh /
+  // chrome "seam" where a human head meets a robot body.
+  // ════════════════════════════════════════════════════════════════
+
+  // ─── android-man: chassis class (identity anchor — model / role / silhouette) ───
+  android_man_chassis: {
+    format: 'simple',
+    theme: `BODY / BUILD types for a CYBORG MAN (a MAN who became a cyborg — human ghost, human-shaped body, heavily augmented). Each entry 30-50 words. This is the IDENTITY ANCHOR — it sets his whole silhouette and purpose. Deus Ex Adam Jensen / Cyberpunk Edgerunners David / Alita / Ghost in the Shell Major / Nier lineage.
+
+⚠️ CRITICAL — HUMAN-PROPORTIONED, NOT A BULKY ROBOT. The biggest failure is a HULKING POWER-ARMOR / MECH-SUIT body with a small human head sticking out the top — that reads as a robot, NOT a cyborg man. KILL IT: his body has HUMAN MALE PROPORTIONS — lean to athletic, normal human shoulder-width and limb-thickness (NOT a bulky tank, NOT oversized power-armor, NOT a mech). And ORGANIC HUMAN SKIN is visibly interwoven across his body (a flesh forearm, an organic chest-section or shoulder, scarred skin showing between sleek plates) so he reads as a MAN fused with machine — not a suit of armor with a head.
+
+⚠️ THE BAR — a sleek, human-proportioned cyborg MAN: athletic build, sleek integrated augmentation over a human frame, organic skin showing, masculine. He looks like a person who was rebuilt, NOT a manufactured robot.
+
+🚫 BANS:
+• NO bulky / hulking / oversized / heavy power-armor / mech-suit / siege / tank bodies (those = robot-with-a-head)
+• NO oversized shoulder-mounts, NO massively thick torso-block, NO huge load-bearing limbs
+• NO "the synthetic body IS his body" with zero organic — organic skin MUST be visibly interwoven
+• NO female / femme framing (Flux defaults cyborg to female — fight with lean MASCULINE male build language)
+• NO flowing hair / ponytails / long locks
+
+✓ DISTRIBUTION (all LEAN-TO-ATHLETIC, human-proportioned, organic-interwoven):
+  • ~5 RECON / INFILTRATION — lean lithe stealth build, sleek low-profile augments, organic skin showing at forearms/neck
+  • ~5 OPERATIVE / SOLDIER — athletic tactical build, sleek combat augments over a human frame, organic chest/arm patches
+  • ~4 MERCENARY / VETERAN — wiry battle-worn build, field-augmented, scarred organic skin between plates
+  • ~3 EX-PILOT / SPACER — slim augmented build, neural-jack ports, organic skin with synth-graft sections
+  • ~3 ENFORCER / DETECTIVE — athletic disciplined build, sleek concealed augments, organic face/hands
+  • ~3 ASCETIC / OLD-MODEL — lean weathered build, antique sleek augments, organic skin gone leathery with age
+  • ~2 DUELIST / ARENA — athletic combatant build, sleek augments, scarred organic skin
+
+Each entry names the ROLE + the LEAN/ATHLETIC human-proportioned silhouette + sleek augmentation + where organic skin shows + purpose.`,
+    touchpoints: [
+      'RECON-INFILTRATOR — a lean, lithe cyborg man built for shadow-work, athletic human proportions, sleek low-profile matte-black augments tracing his arms and spine, organic scarred skin showing at the forearms and the side of the neck, every surface quiet, built to vanish',
+      'TACTICAL OPERATIVE — an athletic cyborg man, normal human build, sleek black-and-steel combat augments integrated over a human frame, an organic chest-section and one organic arm showing between the plating, scarred and disciplined, built to hunt',
+      'BATTLE-WORN MERCENARY — a wiry, weathered cyborg man, lean human proportions, field-fitted augments mismatched from years of repair, scarred organic skin showing across the torso and forearms between sleek plates, a survivor rebuilt piece by piece',
+      'EX-PILOT SPACER — a slim augmented cyborg man, human proportions, neural-jack ports along the spine and nape, sleek grafted augments over organic skin, synth-graft patches blending into weathered flesh on the arms, built for the long dark',
+      'ENFORCER DETECTIVE — an athletic cyborg man in a worn long coat over a sleek-augmented human frame, concealed integrated augments, organic face and hands and neck still flesh, lean and watchful, built to track and detain',
+      'OLD-MODEL ASCETIC — a lean, weathered cyborg man, human proportions, antique sleek augments with worn engraving, organic skin gone leathery and lined with age showing at the face and forearms, quiet gravity, an obsolete model still carrying its ghost',
+      'ARENA DUELIST — an athletic cyborg man built for the pits, lean-muscular human proportions, sleek augments scarred with trophy-damage, organic skin showing across a marked torso and arms, kinetic and dangerous',
+      'FRONTIER RANGER — a rangy cyborg man, athletic human build, dust-worn sleek augments over a human frame, organic sun-weathered skin on the arms and neck between the plating, a long-rifle slung, built for the wastes',
+    ],
+    instructions: `Each entry is ONE cyborg-MAN body type, 30-50 words. Format: "ROLE CAPS — lean/athletic human-proportioned silhouette + sleek augmentation + where organic skin shows + purpose". HUMAN PROPORTIONS, sleek not bulky, organic skin interwoven, masculine. NEVER a bulky power-armor/mech body with a head on top. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: material / finish ───
+  android_man_material: {
+    format: 'simple',
+    theme: `BODY MATERIAL + FINISH for a male android-being's synthetic chassis. Each entry 25-45 words. The material story of his engineered body — surface, treatment, wear. RUGGED, lived-in, real — NOT showroom-clean.
+
+⚠️ THE BAR — material truth. Surfaces have texture, weight, wear, manufacture-marks. Hyper-real cinematic 3D / VFX-quality. The finish reinforces "this is a real machine that has been through things," never glossy-toy plastic.
+
+🚫 BANS:
+• NO pristine glossy-plastic / toy-shiny finishes
+• NO "smooth chrome" as the only descriptor — name the texture, the wear, the manufacture
+• NO fabric / cloth as the primary body material (this is the chassis, not clothing)
+
+✓ VARIETY (mix material families AND wear-states):
+  • carbon-fiber weave / woven-composite with visible warp
+  • brushed titanium / anodized aluminum / cold gunmetal
+  • matte-black tactical composite / radar-absorbent coating
+  • black-chrome / oil-slick iridescent plating
+  • ceramic-white medical-grade panels / bone-composite
+  • oxidized bronze / verdigris-patina / aged brass
+  • weathered field-steel / scratched ablative armor
+  • exposed cabled synthetic-muscle / kevlar-mesh underweave
+  • hex-pattern armor plating / segmented overlapping scales
+  • Wear: battle-scarring, scorch-marks, weld-seams, grime in the seams, paint-chipping, dents, dust-matte`,
+    touchpoints: [
+      'WOVEN CARBON-FIBER — body-panels of woven carbon-fiber with a visible diagonal warp catching the light, matte black with a faint blue sheen at the edges, fine grime settled into the weave, manufactured and purposeful',
+      'BRUSHED TITANIUM — cold brushed-titanium plating with a grey directional grain, scuffed bright along the high-wear edges, faint heat-discoloration blooming blue-gold near the joint-vents, industrial and weighty',
+      'MATTE TACTICAL COMPOSITE — radar-absorbent matte-black composite plating that swallows light, edges scuffed to grey, a stenciled serial-code half-worn on one panel, scorch-streak across the flank',
+      'BLACK-CHROME OIL-SLICK — black-chrome plating with an oil-slick iridescence shifting violet-to-cyan across the curves, fingerprint-smudges and a hairline crack webbing one panel, sleek and sinister',
+      'CERAMIC-WHITE MEDICAL — bone-white ceramic-composite panels with fine hairline crazing, a yellowed age-stain creeping along the seams, one panel cracked to reveal the dark substructure beneath',
+      'OXIDIZED BRONZE — aged bronze plating gone green with verdigris in the recesses, worn bright on the raised edges where hands and impacts have rubbed it, an antique machine carrying its years',
+      'WEATHERED FIELD-STEEL — scratched grey field-steel armor with rust blooming around the rivets, hasty weld-seams crossing old battle-damage, grime packed into every recess, a body kept running by force of will',
+      'EXPOSED SYNTH-MUSCLE — cabled synthetic-muscle bundles visible between armor segments, dark glistening polymer fibers bundled like sinew over a titanium skeleton, kevlar-mesh underweave showing at the flex-points',
+    ],
+    instructions: `Each entry is ONE material/finish story, 25-45 words. Format: "MATERIAL CAPS — surface + treatment + wear-state". Mix material families and wear. RUGGED + real, never toy-glossy. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: head/face — HEAVY INTEGRATION carbon-copied from Kevin's 2 SAVED refs (2026-05-26 R13) ───
+  android_man_head: {
+    format: 'simple',
+    theme: `HEAD / FACE for a cyborg MAN — built to MATCH Kevin's two saved reference renders, which are HEAVILY integrated cyborg heads (NOT a clean human face with a bolt-on ear-piece). Each entry 35-55 words. Carbon-copy the reference register: a HALF-CONVERSION face (one vertical side of the face — brow→cheek→jaw — replaced by beveled metal plating with a recessed cyber-optic, flowing down a chrome cervical column onto the chest/pauldron) OR a scarred human face loaded with a mechanical iris + a servo-driven jaw-hinge + implant-studs flickering at the temple + a synth-larynx resonance band at the throat + a chrome cervical column from jawline into the chest-block + dense exposed cable-bundles. The OTHER half / rest stays a scarred weathered HUMAN face. The cranium KEEPS its hair (short crop / shaved sides).
+
+⚠️ THE BAR — match the saved refs: LOTS of visible cyborg hardware on the head — half-conversion plating, mechanical iris/optic, servo-jaw, implant-studs, synth-larynx band, chrome cervical column, dense cabling. The head must read as a true cyborg head fused into the body, NEVER a pretty clean human face with one little cyber-ear.
+
+🚫 BANS (ENFORCE HARD):
+• NO clean / plain / barely-augmented human face with just a small cyber-ear or a couple bits — THAT is the pretty-boy-pasted-on failure. The head is HEAVILY integrated.
+• NO SKULL-CAP / cranium-helmet / metal plating over the TOP of the head — the cranium keeps hair. (Heavy plating goes on one VERTICAL half of the face + jaw + temple + neck, NOT a horizontal cap.)
+• NO faceless full helmet
+• NO age or heritage (the IDENTITY axis sets those)
+
+✓ DISTRIBUTION (all HEAVY integration):
+  • ~10 HALF-CONVERSION — one vertical side of the face (brow→cheek→jaw) beveled metal plating + a recessed cyber-optic, flowing down a chrome cervical column onto the chest/pauldron; other side scarred weathered human
+  • ~8 SERVO-JAW + IMPLANTS — scarred human face + mechanical iris + servo-driven jaw-hinge + implant-studs flickering at the temple + synth-larynx band at the throat + chrome cervical column into the chest
+  • ~4 WIRED-DENSE — scarred human face wrapped in dense exposed cable-bundles from temple/jaw/nape + glowing circuit-traces + a cyber-optic + chrome cervical column
+  • ~3 OPTIC-RIG — both eyes mechanical iris-optics burning + heavy temple-array + implant-studs + cabling + scarred human lower-face
+
+Every entry: HEAVY cyborg integration (half-conversion plating OR servo-jaw+implants+synth-larynx) + chrome cervical column from jaw into chest + dense cabling + a scarred human element. Cranium keeps hair. NO skull-cap.`,
+    touchpoints: [
+      'HALF-CONVERSION SEAFOAM — scarred weathered organic right side of the face, the left brow-cheek-jaw replaced by beveled black-silver plating continuous down a chrome cervical column onto the pauldron, a recessed seafoam optic burning, short cropped hair on the intact cranium',
+      'SERVO-JAW VETERAN — a scarred flat-nosed human face, one mechanical iris burning dull red, the jaw hinged on a visible servo, implant-studs flickering plasma-cyan at his shaved temple, a synth-larynx resonance band at the throat, a chrome cervical column continuous from jawline into the chest-block',
+      'HALF-CONVERSION AMBER — scarred organic left side, the right brow-temple-jaw beveled gunmetal plating with a recessed amber optic, fine wiring fanning from the plate into a chrome cervical column flowing onto the shoulder, the human eye hard and weathered',
+      'IMPLANT-TEMPLE HARD-CASE — a weathered human face, a glowing iris-ring cyber-optic in one eye, a cluster of implant-studs and short antennae flickering at the shaved temple, dense cable-bundles from behind the ear down a chrome cervical column into the chest',
+      'WIRED-DENSE OPERATOR — a scarred human face wrapped in thick exposed cable-bundles running from temple and jaw down into a chrome cervical column, glowing circuit-traces creeping across the cheek, one mechanical iris, the cranium short-cropped and human',
+      'SYNTH-LARYNX ENFORCER — a hard scarred human face, a servo-driven jaw-hinge clicking at the mandible, a chrome synth-larynx resonance band ringing the throat, a recessed crimson optic, a chrome cervical column threaded with amber-lit conduits into the pauldron',
+      'HALF-CONVERSION CYAN — scarred organic right side, the left half of the face a sleek beveled ceramic-and-chrome conversion plate with a recessed cyan optic and a servo jaw-hinge, flowing unbroken down the chrome cervical column into the chest aperture',
+      'OPTIC-RIG HUNTER — both eyes mechanical iris-optics burning cold blue, a heavy temple-array of ports and implant-studs at one side, exposed cable-bundles at the nape feeding a chrome cervical column, the lower face scarred weathered human skin and stubble',
+    ],
+    instructions: `Each entry is ONE HEAVILY-INTEGRATED cyborg-man head, 35-55 words. Carbon-copy the saved-reference register. Format: "HEAD-TYPE CAPS — the heavy integration (half-conversion beveled plating OR mechanical-iris + servo-jaw + implant-studs + synth-larynx) + chrome cervical column from jaw into chest + dense cabling + the scarred human element". LOTS of cyborg hardware on the head — NEVER a clean human face with one cyber-ear. NO skull-cap over the cranium (keeps hair). Do NOT specify age or heritage (the IDENTITY axis sets those). Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: IDENTITY (ethnicity + age + hair — diversity axis, 2026-05-26 R9) ───
+  android_man_identity: {
+    format: 'simple',
+    theme: `IDENTITY of a cyborg MAN — his European heritage, age, and hair. Each entry 15-30 words. This axis exists to make every cyborg man a DIFFERENT PERSON so we never render the same grizzled middle-aged guy twice — but ALL of them are EUROPEAN-HERITAGE / WHITE men. Variety comes from European SUB-REGION + age + hair, NOT from broad ethnic diversity.
+
+⚠️ THE BAR — a specific, distinct EUROPEAN man built from a heritage-NOUN + an age + a hairstyle. Use a European heritage NOUN ("a Nordic man", "a Sicilian man", "an Irish man") — heritage nouns render more reliably and give face/coloring variety while staying European. Spread ages from 20s to 50s (NOT all middle-aged). All clearly masculine white/European men.
+
+🚫 BANS:
+• EUROPEAN HERITAGE ONLY — no non-European ethnicities (these are white European men)
+• NO defaulting to "middle-aged grizzled" — include PLENTY of younger men (20s-30s)
+• NO repeating a heritage/age/hair combo — maximize the spread within European looks
+• NO anti-women words of any kind
+
+✓ DISTRIBUTION (spread WIDE across the 25 — all European):
+  HERITAGE (vary every entry): Nordic / Scandinavian (Swedish, Norwegian, Icelandic), Slavic / Eastern European (Russian, Polish, Ukrainian, Czech), Germanic (German, Austrian, Dutch), Mediterranean (Italian, Sicilian, Greek, Spanish, Portuguese), Celtic (Irish, Scottish, Welsh), Anglo / British, French, Balkan (Serbian, Croatian), Baltic (Lithuanian, Estonian).
+  AGE: ~40% in their 20s-early-30s (young), ~35% late-30s to 40s, ~25% in their 50s.
+  COLORING (within European range): pale-blond, ginger / auburn, light-brown, dark-brown, jet-black, grey, salt-and-pepper; fair / ruddy / olive-Mediterranean skin.
+  HAIR: shaved bald, buzzcut, short crop, undercut, slicked-back, tousled, top-knot fade, crew-cut — plus varied facial hair (clean-shaven, light stubble, full beard, goatee, mustache). VARY it widely.`,
+    touchpoints: [
+      'NORDIC — a young Swedish man, late 20s, pale-blond, sharp clean-shaven features, short tousled hair',
+      'SLAVIC — a wiry Russian man, early 30s, pale eyes, light-brown buzzcut, heavy stubble',
+      'SICILIAN — a striking Sicilian man, early 30s, olive skin, dark slicked-back hair, short dark beard',
+      'IRISH — a ruddy Irish man, late 30s, auburn hair, freckled, close-cropped, light ginger stubble',
+      'GERMANIC — a square-jawed German man, 40s, dark-blond undercut, clean-shaven, hard features',
+      'GREEK — a broad Greek man, 30s, olive skin, black curls, full dark beard',
+      'SCOTTISH — a grizzled Scottish man, 50s, grey crew-cut, weathered ruddy skin, salt-and-pepper beard',
+      'POLISH — a lean Polish man, mid-20s, light-brown swept-back hair, sharp jaw, clean-shaven',
+    ],
+    instructions: `Each entry is ONE cyborg-man identity, 15-30 words. Format: "HERITAGE CAPS — a [age] [European-heritage] man, [coloring + face character], [hair + facial hair]". European heritage ONLY (white European men). Spread heritage / age / hair / coloring WIDE; include many young men. All masculine. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: glowing EYE color + optic style (2026-05-26 R7) ───
+  android_man_eye: {
+    format: 'simple',
+    theme: `GLOWING EYE color + optic style for a cyborg MAN. Each entry 15-35 words. Sets the sci-fi glow of his eyes — the most striking high-tech tell on his face. Cyberpunk 2077 / Edgerunners / Deus Ex / Ghost in the Shell optics.
+
+⚠️ THE BAR — a vivid SCI-FI glowing eye: a specific saturated glow color + an optic character (iris-ring / concentric lens / pinpoint / full-glow socket / slit). High-tech and luminous. It can be one cyber-eye + one organic, or both glowing — the entry sets the COLOR and STYLE; the scene decides how machine-heavy.
+
+🚫 BANS:
+• NO dull / no-glow eyes (this axis is the GLOW)
+• NO soft romantic / dreamy glow — these are machine optics, cold and precise
+• NO rainbow / multi-color in one eye — ONE saturated color per entry
+
+✓ COLOR VARIETY (one saturated color each, spread across the 25):
+  cyan / ice-blue, electric amber / gold, crimson / blood-red, violet / magenta, electric green / acid-green, white / silver, sodium-orange, teal / aqua, deep-blue, hot-pink. Mix the optic STYLE too: single iris-ring / concentric multi-lens / pinpoint pupil-glow / full-glowing socket / slit-pupil / scanning bar.`,
+    touchpoints: [
+      'CYAN IRIS-RINGS — eyes glowing a cold ice-cyan, concentric machine iris-rings contracting around a dark pupil, a precise sci-fi optic glow',
+      'MOLTEN AMBER — eyes burning a hot electric-amber, a full warm glow filling the socket, the high-tech ember of an active optic',
+      'CRIMSON OPTIC — a single crimson-red glowing cyber-eye (the other organic and tired), a thin targeting-glow at the pupil, dangerous',
+      'VIOLET LENS-ARRAY — eyes glowing electric-violet through a concentric multi-lens optic, faint magenta bloom around the rim, precise and cold',
+      'ACID-GREEN SCAN — eyes glowing acid-green, a thin scanning-bar of light sweeping across the optic, machine-cold and alert',
+      'SILVER-WHITE GLOW — eyes glowing a pale silver-white, pinpoint pupils blazing bright, an almost blank luminous machine stare',
+      'SODIUM-ORANGE — eyes glowing a warm sodium-orange, a single iris-ring optic, the other eye a faintly-glowing organic, weathered and human-still',
+      'TEAL APERTURE — eyes glowing teal-aqua, mechanical aperture-petals visible contracting around the glow, a clean high-tech optic',
+    ],
+    instructions: `Each entry is ONE glowing-eye spec, 15-35 words. Format: "COLOR-OPTIC CAPS — saturated glow color + optic style + cold/precise character". ONE saturated color per entry, vivid sci-fi glow. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: dominant augmentation feature ───
+  android_man_augment: {
+    format: 'simple',
+    theme: `DOMINANT AUGMENTATION feature for a cyborg MAN — the standout cyber detail on his human-proportioned body. Each entry 30-50 words. These are BODY/limb augments that SIT ON A HUMAN FRAME — sleek and integrated, never bulky power-armor.
+
+⚠️ THE BAR — one bold, sleek cyber subsystem integrated into a human-shaped body, with organic skin visible around it. Hyper-detailed, functional, SLEEK. It augments a man — it does NOT turn him into a bulky robot.
+
+🚫 BANS (these add the bulky-robot look — avoid):
+• NO oversized shoulder-mounts, NO mounts that "double his width", NO bulky pauldrons, NO heat-sink stacks fanning off the back, NO huge piston legs / load-bearing limbs
+• NO feature that makes him a hulking tank / power-armor / mech (he stays human-proportioned)
+• NO face-only / temple-only features (this axis is the BODY)
+• NO body-horror gore — sleek precision engineering
+
+✓ VARIETY (each entry one sleek body-augment on a human frame):
+  • a full cybernetic arm (sleek, human-scaled) with organic skin at the shoulder-join
+  • a slim segmented spinal line / nape-port running down the back under the skin
+  • a chest power-core glowing through a neat torso aperture, organic skin around it
+  • sleek synth-muscle visible at a forearm / calf where a skin-panel is open
+  • a cybernetic forearm/hand with fine articulated digits
+  • subdermal circuit-tracing glowing under the organic skin of the torso/arms
+  • a sleek cybernetic leg (human-scaled) with organic skin at the thigh
+  • neural-jack ports + slim cable-runs at the nape/spine
+  • a sleek integrated back-line / dermal plating following the human spine`,
+    touchpoints: [
+      'FULL CYBERNETIC ARM — one arm a sleek human-scaled cybernetic prosthetic of matte-black and steel, fine segmented plating and articulated digits, organic scarred skin at the shoulder-join where flesh meets the augment, glowing conduit-line along the forearm',
+      'SUBDERMAL CHEST CORE — a compact power-core glowing his energy-color through a neat circular aperture in his chest, organic skin around the rim, slim cooling-vents, the quiet engine under a human-shaped torso',
+      'SPINAL NAPE-PORT LINE — a slim segmented cyber-line running down his spine under the skin, neural-jack ports at the nape, glowing inter-segment conduits, organic skin of his back showing on either side, sleek not bulky',
+      'OPEN FOREARM SYNTH-MUSCLE — a skin-panel open along one forearm revealing sleek cabled synth-muscle and a glowing conduit over a slim alloy bone, the surrounding organic skin scarred and weathered, precise engineered anatomy at human scale',
+      'CYBERNETIC HAND + FOREARM — a sleek cybernetic forearm and hand with fine articulated finger-joints and a thin glowing seam, organic skin at the elbow where the augment integrates, lethal and precise',
+      'SUBDERMAL CIRCUIT-TRACING — fine glowing circuit-traces threading beneath the organic skin of his torso and arms in his energy-color, pulsing faintly, the machine visible UNDER the human skin rather than replacing it',
+      'CYBERNETIC LEG — one sleek human-scaled cybernetic leg of matte composite with a slim articulated knee and glowing shin-conduit, organic skin at the thigh-join, athletic not bulky, built for speed',
+      'NEURAL-JACK NAPE — a cluster of neural-jack ports and slim cable-runs at the nape feeding under the skin into the spine, organic skin around them, a discreet sleek interface on a human neck',
+    ],
+    instructions: `Each entry is ONE sleek body-augmentation on a HUMAN-PROPORTIONED frame, 30-50 words. Format: "AUGMENT CAPS — the sleek system + where on the body + organic skin around it + glow detail". SLEEK + human-scaled, organic skin visible nearby, NEVER bulky/power-armor. BODY features only (never face). Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: action (FULL-BODY engaged sci-fi action) ───
+  android_man_action: {
+    format: 'simple',
+    theme: `DYNAMIC FULL-BODY ACTION for a cyborg MAN. Each entry 35-60 words. He is caught mid-explosive-beat, his WHOLE BODY in KINETIC MOTION — full-figure, never static, never a bust. These must be ENERGETIC, cinematic, sci-fi action stills (Edgerunners / Cyberpunk 2077 / Ghost in the Shell / John Wick-meets-cyberpunk). The old pool was too STATIC (guys just standing) — fix that: every entry has real motion, energy, and stakes.
+
+⚠️ KEEP HIS FACE TOWARD CAMERA. Dynamic, but his head stays UP and his face TURNED TOWARD (or three-quarter toward) the camera — the motion comes toward/across the viewer, never fleeing away (away-motion hides the face). Think "exploding toward the camera," not "running away."
+
+⚠️ THE BAR — kinetic energy + a clear action beat + stakes (an enemy, a threat, an effect) + his face readable. Stack motion cues: motion-blur, debris, sparks, muzzle-flash, energy-arc, kicked-up dust, trailing coat/cables.
+
+🚫 BANS:
+• NO static standing / posing / "surveying" / "holding still" — these are ACTION beats with motion
+• NO running / leaping AWAY from camera, NO back-to-camera, NO face hidden
+• NO bust / portrait — full body head-to-foot or head-to-thigh
+• NO mid-air freeze with zero ground contact (keep a foot / hand / surface anchoring him)
+
+✓ DYNAMIC BEAT DISTRIBUTION (all kinetic, all face-toward-camera):
+  • ~25% gunplay — sliding into cover firing toward camera, spinning to fire, dual-wielding mid-stride toward us, muzzle-flash + casings + recoil
+  • ~25% close-combat — mid melee-strike toward an off-frame threat near the viewer, blade/fist swing with energy-trail, parry-and-counter, kinetic torque
+  • ~20% explosive traversal toward camera — sprinting toward us through chaos, vaulting a barrier toward camera (hand planted), wall-kick landing facing us, skidding to a hard stop
+  • ~15% power-up / ability — his cybernetic arm/eyes flaring with energy, an EMP/overcharge surging, a holo-HUD snapping up, charging a strike, electricity arcing across his body
+  • ~15% hard landing / arrival — slamming down from a height in a three-point landing facing camera (shockwave + debris), bursting through a door toward us, rising fast from a crouch into motion`,
+    touchpoints: [
+      'SLIDING INTO COVER FIRING — sliding low across a wet floor toward camera behind a sidearm blazing past the lens, muzzle-flash lighting his face, spent casings and water-spray trailing, his cybernetic arm braced, full body kinetic and committed, neon scene streaking behind',
+      'SPIN-TO-FIRE — caught mid-spin pivoting toward the viewer to fire, coat and cables whipping out with the motion, muzzle-flash strobing across his face and chassis, one boot planted hard, debris flung outward, full-figure and explosive',
+      'MELEE STRIKE TOWARD CAMERA — driving a powered fist or blade toward an off-frame threat near the viewer, body torqued and committed, an energy-trail arcing off the strike, face snarling forward and readable, sparks bursting at the impact, kinetic and lethal',
+      'VAULT TOWARD CAMERA — clearing a smashed barrier toward the viewer, one cybernetic hand planted on its edge, legs swinging through, face up and forward, debris kicking off the ledge, motion-blur on the background, full body airborne but hand-anchored',
+      'SPRINT THROUGH CHAOS — sprinting toward camera down a collapsing corridor, fire and sparks raining, his body driven forward at a hard lean, face set and forward, coat-tails and cable-bundles streaming, the corridor blurring with speed behind him',
+      'ARM-FLARE POWER-UP — skidding to a planted stance facing camera as his cybernetic arm and eyes flare bright with surging energy, electricity arcing across his chassis, a holo-HUD snapping up around his hand, face lit hard from below, charged and dangerous',
+      'THREE-POINT SLAM-LANDING — slamming down from a height in a three-point landing facing camera, one fist and knee driven into cracked pavement, a shockwave-ring and debris bursting outward, head rising and face turning up to the viewer, coiled to spring',
+      'DUAL-WIELD ADVANCE — striding fast toward camera dual-wielding, both weapons firing past the lens, twin muzzle-flashes lighting his face and the rain, casings raining, full body head-to-foot in kinetic forward motion',
+      'BURST THROUGH A DOOR — bursting through a blast-door toward the viewer mid-stride, the door flung wide and light flooding past him, weapon raised, face forward and lit, smoke and debris churning around his planted lead foot',
+      'PARRY-AND-COUNTER — caught mid parry-and-counter, his cybernetic forearm deflecting an off-frame strike as he drives a counter toward the viewer, energy sparking at the block, body coiled and torqued, face forward and intense, full-figure',
+      'OVERCHARGE BURST — planted wide facing camera as an overcharge surges through him, his power-core and eyes blazing, an EMP-ring of light expanding outward, hair and cables lifting in the energy-wash, debris suspended, face lit and forward',
+      'SLIDE-HALT FACING US — skidding to a hard halt facing the viewer at the end of a run, one hand down on the ground, dust and sparks spraying forward, weapon coming up, face snapping toward camera, full body low and kinetic',
+    ],
+    instructions: `Each entry is ONE DYNAMIC full-body sci-fi action, 35-60 words. ALWAYS kinetic (real motion + energy + stakes) AND his FACE turned toward camera and readable (head up), the WHOLE BODY engaged head-to-foot with a ground/surface anchor. NO static standing/surveying, NO away-from-camera motion, NO bust. Stack motion cues (blur, debris, sparks, muzzle-flash, energy-arc). Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: setting (sci-fi environment) ───
+  android_man_setting: {
+    format: 'simple',
+    theme: `SCI-FI ENVIRONMENTS / SETTINGS for a male android-being to inhabit at FULL-FIGURE scale. Each entry 30-55 words. The stage — multi-tier depth (foreground / midground / deep distance / sky-or-ceiling), each layer carrying information. Blade Runner / Ghost in the Shell / Alita: Iron City / Edgerunners / Nier / Cyberpunk lineage.
+
+⚠️ THE BAR — a rich, lush, layered sci-fi environment that gives him somewhere to BE, with scale-provers and atmospheric depth. Never a flat void / empty backdrop. The setting should let a full-body figure read against it.
+
+🚫 BANS:
+• NO blank studio void / plain gradient backdrop
+• NO present-day Earth / modern-military / contemporary-city realism — this is FUTURE sci-fi
+• NO requirement for the setting to dominate the figure — it FRAMES him
+
+✓ VARIETY (mix biomes — each entry one distinct place):
+  • derelict orbital station interior / failing space-hab
+  • neon megacity alley / rain-soaked lower-level street
+  • industrial foundry / reactor-core chamber / power-plant floor
+  • desert wasteland strewn with ruined tech / crashed hulks
+  • frozen research outpost / ice-bound facility
+  • jungle-reclaimed ruins / overgrown machine-temple
+  • corporate tower interior / sterile lab / data-cathedral
+  • spaceport hangar / dropship bay / launch gantry
+  • underground tunnel network / maintenance undercity
+  • war-torn battlefield / shelled urban ruin
+  • cargo bay / container-yard / dock at night
+  • cliffside antenna-array / windswept comms-station`,
+    touchpoints: [
+      'DERELICT ORBITAL-HAB INTERIOR — a long failing space-station corridor, emergency strips guttering, a cracked viewport showing the curve of a planet, frost on the dead consoles, cables drooping from a torn ceiling, deep zero-pressure dark beyond a sealed bulkhead',
+      'NEON LOWER-LEVEL ALLEY — a rain-soaked megacity alley walled in stacked neon signage and dripping ducting, steam pouring from street-vents, holographic ads rippling in puddles, the canyon of towers vanishing up into smog overhead',
+      'REACTOR-CORE CHAMBER — a cavernous industrial reactor hall, a colossal glowing core suspended in a lattice of catwalks and coolant-pipes, heat-shimmer and steam, gantries receding into orange-lit haze, immense machinery dwarfing the foreground floor',
+      'TECH-STREWN WASTELAND — a sun-scorched desert of crashed hulks and half-buried machinery, a dead war-walker rusting on the dune-crest, dust devils crossing the flats, a bruised storm-sky pressing low over the wreck-field',
+      'FROZEN RESEARCH OUTPOST — a wind-scoured ice facility half-buried in drift, fractured antenna-masts, a frozen-over airlock, blue twilight and blowing snow, the dark shapes of further structures lost in the whiteout beyond',
+      'JUNGLE-RECLAIMED RUINS — an overgrown machine-temple swallowed by jungle, roots prying apart ancient alloy walls, shafts of green light through the canopy, glowing fungus on dead consoles, mist pooling between the toppled pillars',
+      'SPACEPORT HANGAR — a vast dropship hangar, a heavy lander squatting under work-lights, fuel-lines and gantry-arms reaching across the deck, sparks raining from an overhead welding rig, the open blast-door framing a dusk runway beyond',
+      'MAINTENANCE UNDERCITY — a claustrophobic tunnel of pipework and conduit beneath the city, leaking steam and dripping condensate, a single caged work-light, graffiti-tagged bulkheads, the tunnel forking into deeper dark',
+      'SHELLED URBAN RUIN — a war-torn future city block, a collapsed skyway, fires guttering in gutted towers, smoke columns against a sodium-orange sky, debris and rebar in the foreground, distant artillery-flashes on the horizon',
+      'CONTAINER-YARD AT NIGHT — a sprawling dock stacked with cargo-containers under sodium floods, gantry-cranes silhouetted against a starless sky, puddles doubling the lights, a freighter hull looming at the quay-edge',
+      'DATA-CATHEDRAL — a vast sterile server-cathedral, towering racks of glowing data-cores in receding aisles, a cold blue glow, cable-trunks arching overhead like buttresses, a hush of humming machinery',
+      'CLIFFSIDE COMMS-STATION — a windswept clifftop antenna-array over a churning sea, dishes and masts straining in the gale, warning-beacons pulsing, storm-clouds stacking on the horizon, spray rising off the rocks below',
+    ],
+    instructions: `Each entry is ONE sci-fi setting, 30-55 words. Format: "SETTING CAPS — foreground + midground + deep distance + atmosphere/sky". Multi-tier depth, scale-provers, never a flat void. FUTURE sci-fi, never present-day. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: composition (FULL-FIGURE framing — anti-bust) ───
+  android_man_composition: {
+    format: 'simple',
+    theme: `CINEMATIC FRAMINGS for a CYBORG MAN. Each entry 25-50 words. ⚠️ TWO failures to balance: (1) the old path rendered endless BUST PORTRAITS of a head — avoid that; (2) when framed too wide, his face shrinks and Flux renders a FACELESS ROBOT instead of a cyborg man — avoid that too. The sweet spot is the MEDIUM HERO SHOT: close enough that his RUGGED HUMAN/CYBORG FACE is clearly readable, wide enough that we see his integrated cyborg BODY and the sci-fi scene around him.
+
+⚠️ THE BAR — every framing keeps his HUMAN CYBORG FACE clearly readable AND shows enough of his integrated body + environment that he reads as a cyborg MAN in a sci-fi world. Never a tiny figure lost in a vista (→ robot); never a tight face-only bust (→ portrait).
+
+🚫 ABSOLUTE BANS:
+• NO face-only / head-only / chest-up bust / tight portrait framings
+• NO tiny-figure-in-a-vista framings where the face can't be read (those render as faceless robots)
+• NO high-angle-looking-down-at-a-small-figure, NO "him at 30% of frame height"
+• NO head-on modeling / facing-camera glamour, NO sexy / pinup
+
+⚠️ MIX FULL-BODY AND MEDIUM-HERO roughly 50/50 (this mix is what landed well — uniform medium-hero is too repetitive). Medium-hero = his heavy cyborg-head integration reads sharpest; full-body = scene + scale + dynamism. BUT ⚠️ THE #1 JOB is to VARY THE CAMERA ANGLE every entry. The repetitive failures are (a) a tight frontal chest-up portrait and (b) a man walking dead-on toward camera. KILL both: each entry is a DISTINCT camera angle (low / high-3-4 / side-profile / three-quarter / over-shoulder / dutch-tilt / off-center / rear-turn). Almost NONE flat-frontal.
+
+⚠️ Face uncovered + readable (NO helmet/visor), cyborg-head integration legible.
+
+✓ DISTRIBUTION (~50% FULL-BODY at varied angles / ~45% MEDIUM-HERO at varied angles / ~5% dynamic):
+  FULL-BODY (head-to-foot, varied angle — NOT a frontal walk): low-angle hero / side-profile stride / 3-4 perched / over-an-element / threshold / high-3-4 looking down.
+  MEDIUM-HERO (thigh-up to waist-up, varied angle, head-integration sharp): low-angle / side-profile / 3-4 from the flank / over-the-shoulder / dutch-tilt / rear-turn.
+  🚫 AVOID: flat frontal chest-up portrait, and the dead-on walk-toward-camera — the repetitive failures.`,
+    touchpoints: [
+      'FULL-BODY LOW-ANGLE — head-to-foot from a low hero angle (NOT a frontal walk), the cyborg figure towering against a backlit sci-fi backdrop, face readable, the integrated body, stance, and one dominant augment legible',
+      'FULL-BODY SIDE-PROFILE STRIDE — head-to-foot pure 90-degree side profile mid-stride across frame, the cyborg silhouette and head-integration reading sharp in profile, motion-blur environment behind',
+      'FULL-BODY 3/4 PERCHED — head-to-foot at a 3/4 angle, crouched or perched on rubble / a ledge, face angled toward the lens and readable, integrated body coiled against the sky, scene depth below',
+      'FULL-BODY OVER-AN-ELEMENT — head-to-foot beyond a foreground element (railing / console / wreck) at a 3/4 angle, his full integrated cyborg body and readable face legible past it, layered sci-fi depth',
+      'FULL-BODY THRESHOLD — head-to-foot framed in a doorway / hatch / breach at a slight angle, backlight from the space beyond, the full cyborg silhouette and uncovered face both legible',
+      'LOW-ANGLE MEDIUM-HERO — camera low looking up at him thigh-up, the cyborg figure imposing, his half-conversion head and chest-augments sharp, uncovered face readable at the top of frame',
+      'SIDE-PROFILE MEDIUM — pure 90-degree side profile, waist-up, his cyborg head razor-sharp in profile (half-conversion plate, cyber-optic, chrome cervical column reading clearly), shoulder-augment and wired neck legible',
+      'THREE-QUARTER FLANK MEDIUM — 3/4 camera from his side, thigh-up, face turned back toward the lens, the integrated chassis and one dominant augment catching rim-light, sci-fi depth behind',
+      'OVER-THE-SHOULDER MEDIUM — camera behind and beside his shoulder, he angles into the scene, face in a 3/4 turn toward the lens, his wired nape and cervical column dominant in foreground',
+      'DUTCH-TILT MEDIUM — a canted dutch-angle waist-up frame, his cyborg head and torso-augments sharp, energy / sparks in the air, an off-kilter kinetic sci-fi composition, face readable',
+    ],
+    instructions: `Each entry is ONE cinematic framing, 25-50 words. ⚠️ LEAD with the CAMERA ANGLE (low / side-profile / 3-4 / high / over-shoulder / dutch-tilt / over-element / threshold) — VARY it every entry. ~50% FULL-BODY head-to-foot (varied angles, NOT a frontal walk) / ~45% MEDIUM-HERO (thigh/waist-up, head-integration sharp) / ~5% dynamic. Face uncovered + readable. AVOID flat frontal portraits and walk-toward-camera. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: surprise element (secondary sci-fi actor / world-builder) ───
+  android_man_surprise: {
+    format: 'simple',
+    theme: `SECONDARY SCI-FI ELEMENTS that imply a wider world around the android-man. Each entry 25-45 words. A tiny secondary subject / object that adds narrative depth and proves the scene is part of a bigger world — a scale-prover and world-builder, NEVER a co-subject competing with him.
+
+⚠️ THE BAR — adds story and depth WITHOUT stealing focus. He remains THE figure; this is in the midground / deep distance / periphery. Blade Runner / Ghost in the Shell / Edgerunners world-density.
+
+🚫 BANS:
+• NO second human-scale figure that becomes a co-subject (a DISTANT silhouette / unit is fine; a close companion is not)
+• NO element so large it dominates the frame over him
+• NO romance / partner framing
+
+✓ VARIETY (each entry one peripheral element):
+  • a hovering recon-drone with a single glowing optic
+  • a parked / passing dropship or transport
+  • a distant mech / walker on the horizon
+  • a fellow android unit far off (silhouette, no interaction)
+  • a flickering holographic billboard / sign / propaganda screen
+  • a wrecked vehicle / downed aircraft / dead machine
+  • a small mechanical creature / synth-animal at the periphery
+  • a passing transit-train / cargo-hauler / sky-lane traffic
+  • surveillance cameras / sensor-turrets tracking
+  • a swarm of micro-drones / data-motes
+  • a holographic waypoint / objective-marker hovering
+  • a caged work-light / flare / beacon punctuating the dark`,
+    touchpoints: [
+      'RECON-DRONE WATCHING — a small recon-drone hovering in the deep background, a single glowing optic-eye fixed on him, rotors humming, surveillance-tension without interaction',
+      'PASSING DROPSHIP — a heavy dropship banking across the deep sky behind him, running-lights blinking, engine-wash kicking up dust at the distant ground, a sense of an operation in motion',
+      'DISTANT WALKER — a colossal mech-walker silhouetted on the far horizon, dwarfed by distance yet clearly enormous, legs mid-stride, a reminder of the scale of the war beyond him',
+      'FELLOW UNIT FAR OFF — another android unit far down the corridor / across the plaza, a distant silhouette moving on its own purpose, no interaction, implying he is one of many',
+      'FLICKERING BILLBOARD — a vast holographic billboard flickering on a tower-face in the midground, a corporate face or propaganda glyph rippling and glitching, washing colored light across the scene',
+      'WRECKED VEHICLE — a downed gunship / burnt-out hovercar / dead loader-mech in the midground, smoke still curling from it, a frozen aftermath he moves past',
+      'SYNTH-CREATURE — a small mechanical creature (a wiry synth-dog / drone-bird / scavenger-bot) skittering at the periphery, catching the light, a flicker of life in the machine-world',
+      'SKY-LANE TRAFFIC — streams of distant aircars / cargo-haulers tracing light-trails through the deep sky-lanes high above, the pulse of a living future city behind him',
+      'SENSOR-TURRETS TRACKING — wall-mounted sensor-turrets in the midground swiveling to track him, targeting-lasers ghosting through the haze, a hostile-environment tension',
+      'MICRO-DRONE SWARM — a loose swarm of micro-drones / data-motes drifting through the air around the deep scene, each a pinprick of light, a cloud of machine-presence',
+      'OBJECTIVE-WAYPOINT — a holographic waypoint / objective-marker hovering in the midground air, rotating glyph and distance-readout, suggesting his mission, a HUD-element made physical',
+      'BEACON IN THE DARK — a caged work-light / signal-flare / pulsing beacon punctuating the deep darkness behind him, a lonely point of orientation in a vast dim space',
+    ],
+    instructions: `Each entry is ONE peripheral world-building element, 25-45 words. Format: "ELEMENT CAPS — what it is + where (midground/deep/periphery) + how it adds story without stealing focus". He stays THE figure. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
+  // ─── android-man: drama (40%-gated atmospheric sci-fi flourish) ───
+  android_man_drama: {
+    format: 'simple',
+    theme: `40%-GATED ATMOSPHERIC FLOURISHES for the android-man path. Each entry 25-45 words. A subtle sci-fi environmental or tech flourish that amplifies the moment WITHOUT cluttering him as the focal subject.
+
+⚠️ MANDATORY — every flourish supports HIM as the focal figure and reinforces the cold-machine + cinematic mood. Never competes for attention.
+
+🚫 BANS:
+• NO additional human-scale figures
+• NO body-horror gore
+• NO romance / soft / pretty register
+
+✓ FLOURISH CATEGORIES (vary across):
+  • coolant-vapor venting from a joint / cooling-fin shimmer
+  • power-core pulse-glow through a torso aperture
+  • holographic HUD / data-stream floating near him
+  • sparks showering from a severed cable / grinding metal
+  • EMP-flash / arc-discharge crackling across his chassis
+  • rain beading and running off his plating / wet-chrome reflection
+  • neon color-bleed washing across his frame from off-frame
+  • dust-motes / embers / ash in a dramatic light-shaft
+  • drifting particulate (snow / spores / data-fragments)
+  • heat-shimmer / smoke / steam-column in the scene
+  • glitch-artifacts flickering at his edges
+  • his reflection doubled in wet floor / cracked glass / chrome
+  • spent shell-casings / debris frozen mid-tumble
+  • a light-ripple / chromatic halo from his energy-field`,
+    touchpoints: [
+      'COOLANT-VENT PLUME — a sharp plume of white coolant-vapor venting from a shoulder / spine / knee joint, briefly silhouetting against his chassis, the heat-shimmer distorting the air around the vent',
+      'CORE PULSE-GLOW — his chest power-core pulsing slow through its torso-aperture in his energy-color, the glow spilling out across the surrounding plating and faintly lighting the air in front of him',
+      'FLOATING HUD — a translucent holographic HUD / data-stream hanging in the air near him, rotating glyphs and target-readouts in his energy-color, atmospheric haze catching the projection',
+      'SPARK-SHOWER — a shower of sparks cascading from a severed cable / grinding metal near him, the sparks bouncing off his plating and dying on the floor, hot orange against the cold scene',
+      'ARC-DISCHARGE — a crackle of electrical arc-discharge skittering across a section of his chassis, branching blue-white filaments lighting his frame for an instant, ozone-charged',
+      'RAIN ON CHROME — rain beading and running in rivulets off his plating, each drop catching the neon, his wet chassis doubling every light-source in slick reflection',
+      'NEON COLOR-BLEED — colored neon-light bleeding across his frame from an off-frame source (magenta / cyan / sodium-amber), splitting his chassis into warring color-washes',
+      'EMBERS IN LIGHT-SHAFT — embers / ash / dust-motes drifting through a single dramatic light-shaft cutting across the scene, the shaft grazing his silhouette and throwing his shadow long',
+      'GLITCH-EDGE FLICKER — micro-glitch artifacts flickering briefly at his silhouette edges (pixel-displacement / chromatic-aberration), suggesting his machine-perception bleeding into the image',
+      'WET-FLOOR REFLECTION — his full figure doubled in a sheet of standing water / wet floor beneath him, the reflection rippling and breaking, deepening the scene downward',
+      'HEAT-SHIMMER + SMOKE — a heat-shimmer haze and a slow column of smoke rising in the scene behind him, the warm distortion separating him from the deep background',
+      'DRIFTING PARTICULATE — slow drifting particulate filling the air (snow / spores / data-fragments / ash) catching the rim-light, suspended around his moving figure, atmospheric depth',
+    ],
+    instructions: `Each entry is ONE atmospheric sci-fi flourish, 25-45 words. Format: "FLOURISH CAPS — primary visual + atmospheric detail + relationship-to-him". Amplifies his presence without cluttering. Output as a NUMBERED list (1. ... 2. ...), one entry per line. NO internal newlines.`,
+  },
+
   // ─── mecha-pilots path: composition (pilot+mech vertigo angles) ───
   mecha_pilots_composition: {
     format: 'simple',

@@ -23,13 +23,13 @@ const pathBuilders = {
   // (killer / rogue / mysterious / capable / violent). Same axis system as
   // cyborg-woman, different template that pulls her into predator territory.
   'droid-assassin': require('./paths/droid-assassin'),
-  // 2026-05-17: DISABLED per Kevin — the new axis cyborg-man path consistently
-  // rendered pretty-boy models even after grit-mandate iteration. Legacy
-  // function-form is the only active male-cyborg path now. Files kept for
-  // reference (paths/cyborg-man.js, CYBORG_MAN_COMPOSITION pool,
-  // MECHBOT_CYBORG_MAN archetype + template).
-  // 'cyborg-man': require('./paths/cyborg-man'),
-  'cyborg-male-legacy': require('./paths/legacy/cyborg-man'),
+  // 2026-05-26: REBUILT to the "android-man" register (full rich axis system,
+  // MECHBOT_ANDROID_MAN archetype). Mostly-machine male android-being,
+  // full-figure, rugged — fixes the bust-portrait + organic-head-pasted-on-
+  // chrome-body failure of cyborg-male-legacy. cyborg-male-legacy now DISABLED
+  // (function-form preserved at paths/legacy/cyborg-man.js for reference).
+  'cyborg-man': require('./paths/cyborg-man'),
+  // 'cyborg-male-legacy': require('./paths/legacy/cyborg-man'),  // 2026-05-26 DISABLED — superseded by android-man rebuild
   'mecha-pilots': require('./paths/mecha-pilots'),
   'titan-war-machines': require('./paths/titan-war-machines'),
   'power-armor-infantry': require('./paths/power-armor-infantry'),
@@ -51,62 +51,177 @@ module.exports = {
   // cyborg-man the colder/fiercer set, robot-moment a broad cinematic mix.
   vibesByPath: {
     'cyborg-woman': [
-      'cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal',
-      'arcane', 'enchanted', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal',
+      'cinematic',
+      'dark',
+      'epic',
+      'nostalgic',
+      'psychedelic',
+      'ethereal',
+      'arcane',
+      'enchanted',
+      'voltage',
+      'shimmer',
+      'surreal',
+      'peaceful',
+      'minimal',
     ],
     'cyborg-female-legacy': [
-      'cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal',
-      'arcane', 'enchanted', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal',
+      'cinematic',
+      'dark',
+      'epic',
+      'nostalgic',
+      'psychedelic',
+      'ethereal',
+      'arcane',
+      'enchanted',
+      'voltage',
+      'shimmer',
+      'surreal',
+      'peaceful',
+      'minimal',
     ],
     'droid-assassin': [
       // Skewed darker / cooler / more lethal — drop the peaceful/enchanted/shimmer ones
-      'cinematic', 'dark', 'fierce', 'nightshade', 'macabre', 'voltage',
-      'nostalgic', 'arcane', 'surreal', 'epic',
+      'cinematic',
+      'dark',
+      'fierce',
+      'nightshade',
+      'macabre',
+      'voltage',
+      'nostalgic',
+      'arcane',
+      'surreal',
+      'epic',
     ],
     'cyborg-man': [
-      'cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient',
-      'fierce', 'voltage', 'nightshade', 'macabre', 'surreal',
+      'cinematic',
+      'dark',
+      'epic',
+      'nostalgic',
+      'arcane',
+      'ancient',
+      'fierce',
+      'voltage',
+      'nightshade',
+      'macabre',
+      'surreal',
     ],
     'cyborg-male-legacy': [
-      'cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient',
-      'fierce', 'voltage', 'nightshade', 'macabre', 'surreal',
+      'cinematic',
+      'dark',
+      'epic',
+      'nostalgic',
+      'arcane',
+      'ancient',
+      'fierce',
+      'voltage',
+      'nightshade',
+      'macabre',
+      'surreal',
     ],
     'robot-moment': [
-      'cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient',
-      'fierce', 'voltage', 'nightshade', 'ethereal', 'minimal', 'peaceful',
+      'cinematic',
+      'dark',
+      'epic',
+      'nostalgic',
+      'arcane',
+      'ancient',
+      'fierce',
+      'voltage',
+      'nightshade',
+      'ethereal',
+      'minimal',
+      'peaceful',
     ],
     'humanoid-robots': [
-      'cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal',
-      'arcane', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal',
-      'fierce', 'nightshade',
+      'cinematic',
+      'dark',
+      'epic',
+      'nostalgic',
+      'psychedelic',
+      'ethereal',
+      'arcane',
+      'voltage',
+      'shimmer',
+      'surreal',
+      'peaceful',
+      'minimal',
+      'fierce',
+      'nightshade',
     ],
     'mecha-pilots': [
-      'cinematic', 'dark', 'epic', 'nostalgic', 'voltage', 'fierce',
-      'shimmer', 'surreal', 'minimal',
+      'cinematic',
+      'dark',
+      'epic',
+      'nostalgic',
+      'voltage',
+      'fierce',
+      'shimmer',
+      'surreal',
+      'minimal',
     ],
     'titan-war-machines': [
-      'cinematic', 'dark', 'epic', 'fierce', 'voltage', 'macabre',
-      'nightshade', 'ancient',
+      'cinematic',
+      'dark',
+      'epic',
+      'fierce',
+      'voltage',
+      'macabre',
+      'nightshade',
+      'ancient',
     ],
     'power-armor-infantry': [
-      'cinematic', 'dark', 'epic', 'fierce', 'voltage', 'nightshade',
-      'macabre', 'minimal', 'ancient',
+      'cinematic',
+      'dark',
+      'epic',
+      'fierce',
+      'voltage',
+      'nightshade',
+      'macabre',
+      'minimal',
+      'ancient',
     ],
     'industrial-machines': [
-      'cinematic', 'dark', 'nostalgic', 'minimal', 'ancient', 'voltage',
+      'cinematic',
+      'dark',
+      'nostalgic',
+      'minimal',
+      'ancient',
+      'voltage',
       'epic',
     ],
     'post-apoc-rust-tech': [
-      'cinematic', 'dark', 'fierce', 'macabre', 'nightshade', 'ancient',
-      'voltage', 'nostalgic',
+      'cinematic',
+      'dark',
+      'fierce',
+      'macabre',
+      'nightshade',
+      'ancient',
+      'voltage',
+      'nostalgic',
     ],
     'alien-biomechs': [
-      'dark', 'macabre', 'nightshade', 'voltage', 'arcane', 'surreal',
-      'fierce', 'cinematic', 'psychedelic',
+      'dark',
+      'macabre',
+      'nightshade',
+      'voltage',
+      'arcane',
+      'surreal',
+      'fierce',
+      'cinematic',
+      'psychedelic',
     ],
     'mech-skyships': [
-      'cinematic', 'epic', 'dark', 'fierce', 'voltage', 'shimmer',
-      'ethereal', 'nightshade', 'ancient', 'surreal',
+      'cinematic',
+      'epic',
+      'dark',
+      'fierce',
+      'voltage',
+      'shimmer',
+      'ethereal',
+      'nightshade',
+      'ancient',
+      'surreal',
     ],
   },
 
@@ -129,13 +244,18 @@ module.exports = {
 
   // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
   promptPrefixByPath: {
-    'cyborg-man':
-      'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
+    // 2026-05-26: EMPTY per the playbook "stuffed-wrappers gridlock diversity"
+    // lesson — the android-man rebuild leads with the Sonnet body's mandatory
+    // full-figure opening tag, not a stuffed wrapper.
+    'cyborg-man': '',
     'cyborg-male-legacy':
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
-    'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
-    'cyborg-female-legacy': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
-    'droid-assassin': 'cool predator-droid (ninja / combat / cyber-cop / military / hunter), sleek robotic killer with cinematic poise, dramatic atmospheric rim-light',
+    'cyborg-woman':
+      'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
+    'cyborg-female-legacy':
+      'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
+    'droid-assassin':
+      'cool predator-droid (ninja / combat / cyber-cop / military / hunter), sleek robotic killer with cinematic poise, dramatic atmospheric rim-light',
     // 2026-05-15: bespoke-axis migration. Empty per playbook
     // "stuffed-wrappers gridlock diversity" lesson. Sonnet body leads.
     'titan-war-machines': '',
@@ -168,8 +288,8 @@ module.exports = {
     'cyborg-woman',
     // 'cyborg-female-legacy',  // 2026-05-17 DISABLED — see pathBuilders comment
     'droid-assassin',
-    // 'cyborg-man',  // 2026-05-17 DISABLED — see pathBuilders comment
-    'cyborg-male-legacy',
+    'cyborg-man', // 2026-05-26 android-man rebuild (full rich axis system)
+    // 'cyborg-male-legacy',  // 2026-05-26 DISABLED — superseded by android-man rebuild
     'mecha-pilots',
     'titan-war-machines',
     'power-armor-infantry',
@@ -180,30 +300,27 @@ module.exports = {
   ],
 
   // Even split — equal weights for first-pass bring-up.
-  pathWeights: {
-    'robot-moment': 1,
-    'humanoid-robots': 1,
-    'cyborg-woman': 1,
-    // 'cyborg-female-legacy': 1,  // 2026-05-17 DISABLED
-    'droid-assassin': 1,
-    // 'cyborg-man': 1,  // 2026-05-17 DISABLED
-    'cyborg-male-legacy': 1,
-    'mecha-pilots': 1,
-    'titan-war-machines': 1,
-    'power-armor-infantry': 1,
-    'industrial-machines': 1,
-    'post-apoc-rust-tech': 1,
-    'alien-biomechs': 1,
-    'mech-skyships': 1,
-  },
+  // Flat rotation (2026-05-26): equal weight per path — every path posts
+  // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
+  cycleAllPaths: true,
 
   chaos: {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'cyborg-woman', 'cyborg-female-legacy', 'droid-assassin', 'cyborg-man', 'cyborg-male-legacy', 'robot-moment', 'humanoid-robots',
-      'mecha-pilots', 'titan-war-machines', 'power-armor-infantry',
-      'industrial-machines', 'post-apoc-rust-tech', 'alien-biomechs',
+      'cyborg-woman',
+      'cyborg-female-legacy',
+      'droid-assassin',
+      'cyborg-man',
+      'cyborg-male-legacy',
+      'robot-moment',
+      'humanoid-robots',
+      'mecha-pilots',
+      'titan-war-machines',
+      'power-armor-infantry',
+      'industrial-machines',
+      'post-apoc-rust-tech',
+      'alien-biomechs',
       'mech-skyships',
     ],
   },
@@ -215,36 +332,85 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '80-110',
-    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots', 'cyborg-woman', 'droid-assassin'],
+    skipPaths: [
+      'titan-war-machines',
+      'mech-skyships',
+      'mecha-pilots',
+      'power-armor-infantry',
+      'post-apoc-rust-tech',
+      'humanoid-robots',
+      'cyborg-woman',
+      'droid-assassin',
+      'cyborg-man',
+    ],
     preservePhrasesByPath: {
       // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
       // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders
       // unless the count is HEAVILY repeated in the prompt.
       'robot-moment': [
-        'tripedal', 'tripod',
-        'three legs', 'three pneumatic legs', 'three telescoping legs', 'three strut legs', 'three hydraulic legs',
-        'quadrupedal', 'four-legged', 'four legs', 'four pneumatic legs', 'four reinforced legs', 'four strut legs',
-        'hexapod', 'six-legged', 'six legs', 'six pneumatic legs', 'six articulated legs', 'six rubber-tipped legs',
-        'octopod', 'eight legs',
-        'four mechanical arms', 'four arms', 'six arms', 'multi-armed',
+        'tripedal',
+        'tripod',
+        'three legs',
+        'three pneumatic legs',
+        'three telescoping legs',
+        'three strut legs',
+        'three hydraulic legs',
+        'quadrupedal',
+        'four-legged',
+        'four legs',
+        'four pneumatic legs',
+        'four reinforced legs',
+        'four strut legs',
+        'hexapod',
+        'six-legged',
+        'six legs',
+        'six pneumatic legs',
+        'six articulated legs',
+        'six rubber-tipped legs',
+        'octopod',
+        'eight legs',
+        'four mechanical arms',
+        'four arms',
+        'six arms',
+        'multi-armed',
       ],
       'titan-war-machines': [
-        'tripedal', 'three legs',
-        'quadrupedal', 'four-legged', 'four legs',
-        'hexapedal', 'hexapod', 'six-legged', 'six legs',
-        'serpentine', 'wormlike',
-        'centaur', 'centaur-base',
+        'tripedal',
+        'three legs',
+        'quadrupedal',
+        'four-legged',
+        'four legs',
+        'hexapedal',
+        'hexapod',
+        'six-legged',
+        'six legs',
+        'serpentine',
+        'wormlike',
+        'centaur',
+        'centaur-base',
       ],
       'industrial-machines': [
-        'quadrupedal', 'four-legged',
-        'hexapedal', 'hexapod', 'six-legged', 'six legs',
-        'multi-arm', 'six-armed', 'four-armed',
+        'quadrupedal',
+        'four-legged',
+        'hexapedal',
+        'hexapod',
+        'six-legged',
+        'six legs',
+        'multi-arm',
+        'six-armed',
+        'four-armed',
       ],
       'alien-biomechs': [
-        'arthropod', 'eight legs',
-        'six-legged', 'six legs',
-        'cephalopod', 'six tendrils', 'four tendrils', 'eight tendrils',
-        'serpentine', 'segmented',
+        'arthropod',
+        'eight legs',
+        'six-legged',
+        'six legs',
+        'cephalopod',
+        'six tendrils',
+        'four tendrils',
+        'eight tendrils',
+        'serpentine',
+        'segmented',
       ],
     },
   },
@@ -279,7 +445,10 @@ module.exports = {
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
     if (path === 'cyborg-woman' || path === 'cyborg-female-legacy') {
-      base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
+      base.characterBase = picker.pickWithRecency(
+        pools.CYBORG_FEMALE_CHARACTERS,
+        'cyborg_female_character'
+      );
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
       base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
@@ -293,21 +462,30 @@ module.exports = {
       // Eyes-as-droid energy. NO human, NO woman, NO femme — just cool ninja-
       // bots. DNA is minimal: chassis-paint + glow color. The template defines
       // everything else.
-      base.characterBase = 'Predator-droid spread — pick from 5 archetypes per render: cyber-ninja (sleek shadow-assassin) / combat-droid (heavy assault killer) / cyber-cop (police enforcer) / military-droid (uniformed soldier) / hunter-droid (lone tracker). Cool lethal robot, NO human, NO woman, NO femme.';
+      base.characterBase =
+        'Predator-droid spread — pick from 5 archetypes per render: cyber-ninja (sleek shadow-assassin) / combat-droid (heavy assault killer) / cyber-cop (police enforcer) / military-droid (uniformed soldier) / hunter-droid (lone tracker). Cool lethal robot, NO human, NO woman, NO femme.';
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
-      base.bodyType = 'Predator-droid chassis spectrum — ranges from sleek-lithe ninja chassis (Gray Fox / Genji / Sandevistan) through tactical mid-build (cyber-cop / military-soldier) to heavy combat-assault chassis (Death Trooper / ODST / Helldivers Automaton). The chassis register matches the archetype the template picks for the scene.';
+      base.bodyType =
+        'Predator-droid chassis spectrum — ranges from sleek-lithe ninja chassis (Gray Fox / Genji / Sandevistan) through tactical mid-build (cyber-cop / military-soldier) to heavy combat-assault chassis (Death Trooper / ODST / Helldivers Automaton). The chassis register matches the archetype the template picks for the scene.';
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
-      base.hair = 'No hair — fully helmeted ninja-bot head OR exposed cybernetic cranial-sensor cluster OR sleek smooth chrome skull-dome (no human face features visible)';
+      base.hair =
+        'No hair — fully helmeted ninja-bot head OR exposed cybernetic cranial-sensor cluster OR sleek smooth chrome skull-dome (no human face features visible)';
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
     if (path === 'cyborg-man' || path === 'cyborg-male-legacy') {
-      base.characterBase = picker.pickWithRecency(pools.CYBORG_MALE_CHARACTERS, 'cyborg_male_character');
+      base.characterBase = picker.pickWithRecency(
+        pools.CYBORG_MALE_CHARACTERS,
+        'cyborg_male_character'
+      );
       base.skin = picker.pickWithRecency(pools.CYBORG_MALE_SKIN_TONES, 'cyborg_male_skin');
       base.bodyType = picker.pick(pools.CYBORG_MALE_BODY_TYPES);
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
       base.hair = picker.pick(pools.CYBORG_MALE_HAIR_STYLES);
-      base.internal = picker.pickWithRecency(pools.CYBORG_MALE_INTERNAL_EXPOSURE, 'cyborg_male_internal');
+      base.internal = picker.pickWithRecency(
+        pools.CYBORG_MALE_INTERNAL_EXPOSURE,
+        'cyborg_male_internal'
+      );
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
     return base;

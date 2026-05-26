@@ -129,4 +129,17 @@ module.exports = {
   framingModes: null,
   anchorScaleRange: null
 },
+
+  MECHBOT_ANDROID_MAN: {
+  description: 'PATH-BESPOKE — MechBot cyborg-man REBUILD to the "android-man" register (2026-05-26, Kevin). Replaces the disabled face-obsessed MECHBOT_CYBORG_MAN axis path AND the active cyborg-male-legacy function-form, both of which produced bust-portraits of a handsome organic head pasted onto a chrome body. New register: a MOSTLY-MACHINE male android-BEING — synthetic chassis dominates the silhouette, organic shows ONLY at eyes / a partial face-panel — a human ghost inside an engineered body (Alita / Ghost in the Shell Major / Nier Automata / battle-android / Cyberpunk full-borg). RUGGED, weathered, lethal — never pretty-boy. FULL-FIGURE in a sci-fi scene, never a bust. Fully composer-driven (does NOT read the pretty-boy cyborg-man sharedDNA character fields — only sharedDNA.glowColor / scenePalette / colorPalette). 8 path-bespoke axes (chassis / material / head / augment / action / setting / composition / surprise) + 1 conditional drama (40%-gated) + 2 universal (lighting / atmosphere). Composition pool is ~85% full-figure to kill the bust-shot failure mode.',
+  slots: {
+    universal: [ 'lighting', 'atmosphere' ],
+    bot: [],
+    path: [ 'identity', 'chassis', 'material', 'head', 'eye', 'augment', 'action', 'setting', 'composition', 'surprise' ]
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'drama', gate: 0.4 },
+  framingModes: null,
+  anchorScaleRange: null
+},
 };

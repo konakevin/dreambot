@@ -93,6 +93,20 @@ module.exports = {
   KILLER_DROID_ACTIONS: load('killer_droid_actions'),
   // Cyborg-man path — badass male framings (50% closeup + 50% full-body action)
   CYBORG_MAN_COMPOSITION: load('cyborg_man_composition'),
+  // ─── android-man REBUILD (2026-05-26) — mostly-machine male android-being,
+  // full-figure, rugged. 8 bespoke axes + drama. Composition is ~85% full-figure
+  // to kill the bust-shot failure mode.
+  ANDROID_MAN_CHASSIS: load('android_man_chassis'),
+  ANDROID_MAN_MATERIAL: load('android_man_material'),
+  ANDROID_MAN_IDENTITY: load('android_man_identity'),
+  ANDROID_MAN_HEAD: load('android_man_head'),
+  ANDROID_MAN_EYE: load('android_man_eye'),
+  ANDROID_MAN_AUGMENT: load('android_man_augment'),
+  ANDROID_MAN_ACTION: load('android_man_action'),
+  ANDROID_MAN_SETTING: load('android_man_setting'),
+  ANDROID_MAN_COMPOSITION: load('android_man_composition'),
+  ANDROID_MAN_SURPRISE: load('android_man_surprise'),
+  ANDROID_MAN_DRAMA: load('android_man_drama'),
   // Killer-droid action-cinematic camera angles (full-body, NOT closeup portraits)
   KILLER_DROID_COMPOSITION: load('killer_droid_composition'),
   // Ninja-bot SCENES — sci-fi action context, NOT empty architecture backdrop

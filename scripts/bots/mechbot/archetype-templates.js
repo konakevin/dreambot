@@ -1074,6 +1074,155 @@ GOOD OPENING EXAMPLES:
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. MUST start with "Weathered grizzled adult male cyborg (NOT female NOT young pretty model), heavy beard or thick stubble, deeply scarred face, weathered crow's-feet, 40-55 years old, strong jawline, broad shoulders, narrow hips, ornate dense cyborg circuitry across face and chassis, glowing temple-mechanism with cable bundles, ".`;
   },
 
+  // ════════════════════════════════════════════════════════════════
+  // MECHBOT_ANDROID_MAN — cyborg-man REBUILD (2026-05-26, Kevin).
+  // Replaces the bust-portrait failure of cyborg-male-legacy + the disabled
+  // face-obsessed MECHBOT_CYBORG_MAN. Register: a MOSTLY-MACHINE male
+  // android-BEING — synthetic chassis dominates, organic only at eyes / a
+  // small face-panel — a human ghost inside an engineered body (Alita / GitS
+  // Major / Nier / battle-android). FULL-FIGURE in a sci-fi scene, RUGGED,
+  // never pretty, never a head-pasted-on-a-robot. Fully composer-driven; reads
+  // only sharedDNA.glowColor / scenePalette / colorPalette (NOT the pretty-boy
+  // cyborg-man character fields).
+  // ════════════════════════════════════════════════════════════════
+  MECHBOT_ANDROID_MAN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, identity, chassis, material, head, eye, augment, action, setting, composition, surprise, drama } = slots;
+
+    // ~40% chance: lean HARDER into the glowing-eye sci-fi MACHINE look (both
+    // eyes full glowing optics, more high-tech augmentation) — still a cyborg
+    // MAN with a readable face + human proportions.
+    const machineMode = Math.random() < 0.4;
+    const eyeSection = `
+━━━ HIS GLOWING EYES (sci-fi optic) ━━━
+${eye}
+
+${machineMode
+  ? `⚙️ MACHINE-LEAN MODE (this render) — push HARDER into the sleek glowing-eyed SCI-FI MACHINE look: BOTH eyes are full glowing mechanical optics in his eye-color (no organic eye — luminous android optics), MORE visible high-tech augmentation across the face and body, a sleeker more-android cyborg with a brighter machine sheen. He is STILL a man with a readable face and human proportions (NOT a faceless robot, NOT bulky).`
+  : `His gaze stays mostly HUMAN with a glowing accent — one organic eye + one glowing cyber-optic in his eye-color (or both eyes faintly glowing) — the human stare still present beneath the machine.`}
+`;
+
+    const dramaSection = drama
+      ? `
+━━━ ATMOSPHERIC FLOURISH (40%-gated — render subtly) ━━━
+${drama}
+
+A subtle sci-fi flourish amplifying his presence WITHOUT cluttering him as the focal figure.
+`
+      : '';
+
+    return `You are a cinematographer writing a FULL-FIGURE CYBORG-MAN scene for MechBot — a CYBORG MAN rendered in hyper-real cinematic 3D / feature-film VFX. He is a MAN: a real rugged human face and identity, heavily and SEAMLESSLY augmented into a sleek sci-fi cyborg. Deus Ex Adam Jensen / Cyberpunk Edgerunners David / Ghost in the Shell Batou / a full-conversion borg who still has a human face. Rugged, weathered, capable, lethal, mysterious — a hard-bitten masculine man.
+
+━━━ THE TWO FAILURES THIS PATH MUST AVOID (NON-NEGOTIABLE) ━━━
+1. ❌ BUST / PORTRAIT of a head. This is NOT a face shot. Render his FULL FIGURE head-to-foot (or at minimum head-to-thigh) inside the scene. The body is the subject.
+2. ❌ A handsome ORGANIC human head pasted onto a robot body (the "photoshop paste" look). His face IS human, but it is AUGMENTED and his neck is explicitly cyborg and CONTINUOUS into the body — man and machine interleave with NO clean flesh-to-metal neck-seam. There is no line where "human" stops and "robot" starts.
+
+━━━ ABSOLUTE BAR — FULL-FIGURE SCI-FI CYBORG POSTER FRAME (every render) ━━━
+Every render is a cinematic poster frame of a complete cyborg man inhabiting a sci-fi world — concept-art quality, VFX polish. Multi-tier depth (foreground / midground / deep distance). Something is HAPPENING (a readable narrative beat). He is the lethal, capable focal figure — full body, in motion or in command of the scene.
+
+SKEW HIGH-TECH SCI-FI — modern AAA-game / film cyberpunk (Cyberpunk 2077 / Edgerunners / Deus Ex: Mankind Divided): glowing optics + conduits, precise engineered augments, luminous high-tech detail. Keep all of it on a RUGGED, MASCULINE, battle-worn MAN — the high-tech glow is the sci-fi, the subject stays a hard-bitten rugged masculine man with weathered lived-in features.
+
+━━━ CYBORG MAN — human face + human-proportioned body + seamless machine (CRITICAL) ━━━
+He is a MAN who has become a cyborg: a real rugged HUMAN FACE and identity are visible, but heavily and seamlessly augmented. His body has HUMAN MALE PROPORTIONS — lean to athletic, normal human shoulder-width and limb-thickness — with sleek integrated augmentation AND patches of scarred organic skin interwoven (a partly-organic forearm, an organic chest-section or shoulder, flesh between sleek plates) so he reads as a MAN fused with a machine.
+
+⚠️ NOT A BULKY ROBOT WITH A HEAD STICKING OUT (NON-NEGOTIABLE — the #1 failure). Do NOT render a hulking power-armor / mech-suit / tank body with a small human head perched on top. NO oversized bulk, NO giant shoulder-mounts, NO massive armored torso, NO power-armor proportions. He is human-shaped and sleek — a cyborg, NOT a robot in a suit, NOT a man's head on a war-machine.
+
+CONTINUITY IS EVERYTHING: the face, the neck, and the body flow as ONE designed cyborg system. The neck is explicitly cyborg (chrome cervical column / cables / synth-throat continuing onto the chest) — never an intact organic neck holding a human head above a robot torso.
+
+━━━ HIS IDENTITY — who this specific man is (vary every render) ━━━
+${identity}
+
+Make him THIS specific man — incorporate his exact heritage, age, coloring, and hair from the rolled identity above PROMINENTLY and early, so every render is a genuinely different man (the identity pool decides who he is — follow it exactly, don't default to a generic face), never the same face twice.
+
+━━━ HIS HEAD / FACE ━━━
+${head}
+
+Render his HEAD as a HEAVILY-INTEGRATED cyborg head per the above (match Kevin's saved references): either a HALF-CONVERSION face (one vertical side — brow→cheek→jaw — beveled metal plating with a recessed cyber-optic, flowing down a chrome cervical column onto the chest/pauldron, the other side scarred weathered human) OR a scarred human face loaded with a mechanical iris + a servo-driven jaw-hinge + implant-studs flickering at the temple + a synth-larynx resonance band at the throat + a chrome cervical column from jawline into the chest + dense exposed cable-bundles. LOTS of visible cyborg hardware on the head.
+
+⚠️ THE FAILURE TO AVOID: a clean pretty-boy human face with just one little cyber-ear bolted on = WRONG (looks pasted-on, "no cyborg on the head"). The head must be HEAVILY integrated to match his cyborg body.
+
+⚠️ NO SKULL-CAP over the CRANIUM (the top of the head keeps its hair — short crop / shaved sides). The heavy plating goes on one VERTICAL half of the face + the jaw + temple + neck, NOT a horizontal helmet-cap over the skull. And NOT a faceless full helmet either — a scarred human face-element is always present.
+${eyeSection}
+━━━ SIGNATURE DETAIL — SKIN IMPERFECTIONS + ELECTRIC VEINS (every render, NON-NEGOTIABLE) ━━━
+Two signature details on EVERY render (these are the look that lands):
+1. REAL HUMAN SKIN with visible texture — pores, weathered creases, small scars and imperfections, stubble-grain, true subsurface-scatter. NOT smooth airbrushed plastic skin.
+2. ELECTRIC VEINS — fine glowing subdermal circuit-traces in his energy color threading just beneath the skin of his face / temple / neck / forearms, pulsing faintly like lit veins under the flesh, plus a few more across the organic skin of his torso.
+
+━━━ HIS CHASSIS — model / role / silhouette ━━━
+${chassis}
+
+━━━ HIS CHASSIS MATERIAL / FINISH (apply across the whole body) ━━━
+${material}
+
+Apply this material consistently across the plated sections of his cyborg body — torso, limbs, shoulders — so the machine portions read as ONE continuous designed system (with patches of organic skin interwoven between the plates), lived-in and weathered, never toy-glossy.
+
+━━━ DOMINANT BODY-AUGMENTATION (silhouette-defining, full-body) ━━━
+${augment}
+
+━━━ WHAT HE IS DOING — FULL-BODY ACTION ━━━
+${action}
+
+His WHOLE BODY is engaged in this — head-to-foot in frame, weight committed, a ground/surface anchoring him (never floating, never a static front-facing pose). This action is what forces the full-figure framing.
+
+━━━ THE SCI-FI SETTING (multi-tier depth around him) ━━━
+${setting}
+
+He is a complete figure standing/moving INSIDE this environment — foreground detail, his full body in the midground, the scene receding into atmospheric deep distance. The world frames him.
+
+━━━ FRAMING / COMPOSITION ━━━
+${composition}
+
+⚠️ Whatever the framing, we see his FULL ENGINEERED BODY in the scene — NOT a face filling the frame. If the framing is "medium," it is waist-up showing his TORSO + augments + arms as a unified machine, never a face-only bust.
+
+━━━ SECONDARY WORLD-ELEMENT (midground / deep / periphery) ━━━
+${surprise}
+
+Keep this a small distant world-builder — he remains THE figure; this adds story and scale without becoming a co-subject.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Lean cinematic — strong directional key + rim-light separating his full silhouette from an atmospheric backdrop, deep shadow, volumetric haze. Mood: noir sci-fi, war-torn, hunter-at-night.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ ENERGY / GLOW COLOR (eyes, core, conduits — all glow this ONE color) ━━━
+${sharedDNA.glowColor}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ PALETTE DISCIPLINE ━━━
+His chassis is a monochromatic material tone (matte black / gunmetal / brushed titanium / weathered steel / black-chrome / oxidized bronze per the material rolled) + ONE saturated glow color carried through eyes / core / conduits. The scene around him carries the broader palette.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ MASCULINE LOCK — describe him POSITIVELY as a MAN ━━━
+Lock his masculinity with strong POSITIVE male description, repeated naturally through the prompt: a rugged middle-aged MAN, masculine weathered face, heavy brow ridge, strong square jaw, broad chest with flat pectoral armor, thick muscular arms, broad shoulders, a tall heavy male frame. Use HE / HIS / HIM throughout. Facial hair varies render to render (clean-shaven, stubble, or a beard — all good). When a render needs more masculinity, add MORE rugged / weathered / heavy-set / hard-bitten male description.
+
+✓ USE: rugged, masculine, weathered, scarred, grizzled, battle-worn, burly, imposing, heavy-set, lethal, capable, hardened, full-figure.
+
+━━━ SOLO FOCAL FIGURE ━━━
+He is the ONLY hero figure. Secondary world-elements stay distant/peripheral. No companion, no close second person.
+
+━━━ DO NOT use "MechBot" or any bot name as his character name ━━━
+He is UNNAMED — describe him only by appearance.
+
+━━━ STRUCTURE — write 75-105 words ━━━
+Open with the MANDATORY TAG below, then the chassis/head/material, the dominant augment, the FULL-BODY action, the setting around him, the secondary element, lighting/atmosphere, glow/palette/mood. Lead with the BODY and the SCENE.
+
+⚠️ OUTPUT ONLY POSITIVE DESCRIPTION — this is critical. Describe ONLY what IS in the frame. Do NOT use negation in your output — never write "not"/"no"/"never" followed by a noun (the renderer ignores the "not" and draws the noun anyway). Convey everything by stating what IS there: a rugged masculine man, his bare uncovered face, his full head-to-foot figure, his integrated cyborg body. State his identity and features positively and concretely.
+
+⚠️ MANDATORY OPENING TAG — every entry MUST start with EXACTLY (all-positive; do NOT add negations):
+"Full-figure portrait of a rugged masculine MAN who is a cyborg, his head a HEAVILY-INTEGRATED cyborg head — a half-conversion face with one side scarred weathered human and the other side beveled metal plating holding a recessed glowing cyber-optic, a mechanical iris, a servo-driven jaw-hinge, implant-studs flickering at the temple, a synth-larynx band at the throat, and dense exposed cable-bundles, all flowing down a chrome cervical column from his jaw into the chest (NOT a clean human face with one little cyber-ear, and NO skull-cap over the cranium — the cranium keeps its hair), broad chest with flat male pectoral armor plating, thick muscular arms and broad shoulders on an athletic human-male build, his cyborg head and sleek augmented body one continuous machine shown head-to-foot, glowing conduits and exposed endoskeleton sections, battle-worn and lethal, "
+
+Output ONLY the raw 75-105 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. MUST start with that exact mandatory opening tag.`;
+  },
+
   MECHBOT_DROID_ASSASSIN: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
 
