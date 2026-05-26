@@ -9,6 +9,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "test": "jest",
+    "test:db": "supabase test db",
     "format": "prettier --write \"**/*.{ts,tsx}\" --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{ts,tsx}\" --ignore-path .gitignore",
     "typecheck": "tsc --noEmit",
