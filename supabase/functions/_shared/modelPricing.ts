@@ -6,18 +6,21 @@
  *     cents, used for logging (ai_generation_log.cost_cents) so we can
  *     reconcile against provider invoices and reprice tiers if needed
  *
- * Four-level cost tiers (1-2-3-5, re-tiered 2026-05-25 after a provider price
- * audit — values are actual per-image cost at the sizes/qualities we render):
- *   1 sparkle (Basic)    — ≤ ~$0.025: Flux Schnell/Dev/2-Dev/Krea, Kontext Pro
- *   2 sparkles (Standard)— ~$0.03–0.045: Flux 1.1 Pro, Flux 2 Pro, Nano Banana,
- *                          Kontext Max
- *   3 sparkles (Pro)     — ~$0.05–0.08: Flux 1.1 Pro Ultra, Flux 2 Flex/Max,
- *                          GPT Image 1 & 2
+ * Four-level cost tiers (1-2-3-5, re-tiered 2026-05-25 after a verified
+ * provider price audit — values are actual per-image cost at the sizes/
+ * qualities we render). The default/recommended model (Flux 1.1 Pro) anchors
+ * the floor at Basic, and the ladder is cost-monotonic from there:
+ *   1 sparkle (Basic)    — ≤ ~$0.04: Flux Schnell/Dev/2-Dev/Krea/2-Pro,
+ *                          Nano Banana, Flux 1.1 Pro (default), Kontext Pro
+ *   2 sparkles (Standard)— ~$0.05–0.065: Flux 1.1 Pro Ultra, Flux 2 Flex,
+ *                          GPT Image 2, Kontext Max
+ *   3 sparkles (Pro)     — ~$0.07–0.08: Flux 2 Max, GPT Image 1
  *   5 sparkles (Max)     — ~$0.13+: Nano Banana Pro (gemini-3-pro-image, alone)
  *
- * Prior 3-tier system mis-placed Flux Krea (cheapest, was 2), Flux 2 Flex
- * (~$0.063, was 2), and Nano Banana Pro (~$0.134, was 3). See
- * `PRO_SUBSCRIPTION_SETUP.md` for the full economic analysis.
+ * Verified Replicate prices (2026-05-25): Flux Dev $0.030, Flux 1.1 Pro $0.040,
+ * Flux 1.1 Pro Ultra $0.060. Flux Dev and Flux 1.1 Pro are only ~$0.01 apart,
+ * so they share the Basic tier — a 33% cost gap should not be a 2× price gap.
+ * See `PRO_SUBSCRIPTION_SETUP.md` for the full economic analysis.
  *
  * Keep in sync with:
  *   - `constants/imageModels.ts` (client-side UI catalog)
@@ -36,29 +39,29 @@ const DEFAULT_SPARKLE_COST = 1;
 const DEFAULT_COST_CENTS = 5;
 
 export const MODEL_SPARKLE_COSTS: Record<string, number> = {
-  // ── Basic (1 sparkle) — ≤ ~$0.025/img ─────────────────────────────────
-  'black-forest-labs/flux-schnell': 1,
-  'black-forest-labs/flux-dev': 1,
-  'black-forest-labs/flux-2-dev': 1,
-  'black-forest-labs/flux-krea-dev': 1, // ~$0.004 — was mis-tiered at 2
-  'black-forest-labs/flux-kontext-pro': 1,
-  sdxl: 1,
+  // ── 1 sparkle — ≤ ~$0.04/img (default Flux 1.1 Pro anchors the floor) ──
+  'black-forest-labs/flux-schnell': 1, // ~$0.003
+  'black-forest-labs/flux-dev': 1, // ~$0.030
+  'black-forest-labs/flux-krea-dev': 1, // ~$0.004
+  'black-forest-labs/flux-1.1-pro': 1, // ~$0.040 — DEFAULT / recommended
+  'black-forest-labs/flux-2-dev': 1, // ~$0.025
+  'black-forest-labs/flux-2-pro': 1, // ~$0.031
+  'black-forest-labs/flux-kontext-pro': 1, // ~$0.040
+  'google/gemini-2-image': 1, // Nano Banana ~$0.039
+  sdxl: 1, // ~$0.020
 
-  // ── Standard (2 sparkles) — ~$0.03–0.045/img ──────────────────────────
-  'black-forest-labs/flux-1.1-pro': 2, // ~$0.040 — was 1, but ≈ Nano Banana
-  'black-forest-labs/flux-2-pro': 2, // ~$0.031
-  'black-forest-labs/flux-kontext-max': 2,
-  'google/gemini-2-image': 2, // Nano Banana ~$0.039
+  // ── 2 sparkles — ~$0.05–0.065/img ─────────────────────────────────────
+  'black-forest-labs/flux-1.1-pro-ultra': 2, // ~$0.060
+  'black-forest-labs/flux-2-flex': 2, // ~$0.063
+  'black-forest-labs/flux-kontext-max': 2, // ~$0.050
+  'openai/gpt-image-2': 2, // ~$0.06
 
-  // ── Pro (3 sparkles) — ~$0.05–0.08/img ────────────────────────────────
-  'black-forest-labs/flux-1.1-pro-ultra': 3, // ~$0.060
-  'black-forest-labs/flux-2-flex': 3, // ~$0.063 — was mis-tiered at 2
+  // ── 3 sparkles — ~$0.07–0.08/img ──────────────────────────────────────
   'black-forest-labs/flux-2-max': 3, // ~$0.073
-  'openai/gpt-image-2': 3, // ~$0.05–0.08 — was 2
-  'openai/gpt-image-1': 3, // ~$0.05–0.08
+  'openai/gpt-image-1': 3, // ~$0.07
 
-  // ── Max (5 sparkles) — ~$0.13+/img (priciest by far) ──────────────────
-  'google/gemini-3-image-preview': 5, // Nano Banana Pro ~$0.134 — was 3
+  // ── 5 sparkles — ~$0.13+/img (priciest by far) ────────────────────────
+  'google/gemini-3-image-preview': 5, // Nano Banana Pro ~$0.134
 };
 
 /**

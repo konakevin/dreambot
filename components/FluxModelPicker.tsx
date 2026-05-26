@@ -7,9 +7,12 @@
  * so the change takes effect on the very next dream — no backend change.
  *
  * Two variants:
- *   • variant="list" — full inline tiered list (Settings → Advanced Mode).
+ *   • variant="list" — full inline grouped list (Settings → Advanced Mode).
  *   • variant="pill" — compact "AI Model" dropdown pill that opens the same
- *     tiered list in a modal (Create screen, when Advanced Mode is on).
+ *     grouped list in a bottom sheet (Create screen, when Advanced Mode is on).
+ *
+ * Models are grouped by family (Flux 1 / Flux 2 / OpenAI / Google); each row
+ * shows that model's own sparkle cost. Flux 1.1 Pro carries a DEFAULT badge.
  *
  * Fires onChange(modelId) once after the initial load AND on every selection,
  * so a parent (e.g. the Create screen) can reflect the selected model's
@@ -34,21 +37,13 @@ import { colors } from '@/constants/theme';
 import {
   IMAGE_MODELS,
   DEFAULT_MODEL_ID,
+  FAMILY_ORDER,
+  FAMILY_LABELS,
   findModel,
-  type ImageModel,
 } from '@/constants/imageModels';
 
-const TIER_LABELS: Record<ImageModel['tier'], string> = {
-  basic: 'Basic',
-  standard: 'Standard',
-  pro: 'Pro',
-  max: 'Max',
-};
-
-const TIER_ORDER: ImageModel['tier'][] = ['basic', 'standard', 'pro', 'max'];
-
 interface Props {
-  /** 'list' = full inline tiered list; 'pill' = dropdown pill + modal. */
+  /** 'list' = full inline grouped list; 'pill' = dropdown pill + bottom sheet. */
   variant?: 'list' | 'pill';
   /** Fires after initial load and on each selection. */
   onChange?: (modelId: string) => void;
@@ -103,24 +98,17 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
     setSaving(false);
   };
 
-  const renderTierList = () => (
+  const renderFamilyList = () => (
     <View>
-      {TIER_ORDER.map((tier) => {
-        const tierModels = IMAGE_MODELS.filter((m) => m.tier === tier);
-        if (tierModels.length === 0) return null;
+      {FAMILY_ORDER.map((family) => {
+        const models = IMAGE_MODELS.filter((m) => m.family === family);
+        if (models.length === 0) return null;
         return (
-          <View key={tier} style={{ marginTop: 16 }}>
-            <View style={styles.tierHeader}>
-              <Text style={[styles.tierLabel, { color: colors.textPrimary }]}>
-                {TIER_LABELS[tier]}
-              </Text>
-              <Text style={[styles.tierCost, { color: colors.textSecondary }]}>
-                {tierModels[0].sparkleCost === 1
-                  ? '1 sparkle / render'
-                  : `${tierModels[0].sparkleCost} sparkles / render`}
-              </Text>
-            </View>
-            {tierModels.map((opt) => {
+          <View key={family} style={{ marginTop: 16 }}>
+            <Text style={[styles.familyLabel, { color: colors.textSecondary }]}>
+              {FAMILY_LABELS[family]}
+            </Text>
+            {models.map((opt) => {
               const isSelected = opt.id === selected;
               return (
                 <TouchableOpacity
@@ -157,6 +145,17 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
                       {opt.description}
                     </Text>
                   </View>
+                  <View style={[styles.costBadge, { borderColor: colors.border }]}>
+                    <Text style={[styles.costBadgeText, { color: colors.textPrimary }]}>
+                      {opt.sparkleCost}
+                    </Text>
+                    <Ionicons
+                      name="sparkles"
+                      size={11}
+                      color={colors.accent}
+                      style={{ marginLeft: 3 }}
+                    />
+                  </View>
                   <View
                     style={{
                       width: 22,
@@ -188,10 +187,10 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
         </View>
       );
     }
-    return renderTierList();
+    return renderFamilyList();
   }
 
-  // ── variant: pill (Create screen dropdown → modal) ──
+  // ── variant: pill (Create screen dropdown → bottom sheet) ──
   const current = findModel(selected);
   return (
     <View>
@@ -214,9 +213,17 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
         </View>
         {current && (
           <View style={styles.pillCost}>
-            <Text style={{ color: colors.textSecondary, fontSize: 11, fontWeight: '600' }}>
-              {current.sparkleCost} ✦
+            <Text
+              style={{
+                color: colors.textSecondary,
+                fontSize: 11,
+                fontWeight: '600',
+                marginRight: 3,
+              }}
+            >
+              {current.sparkleCost}
             </Text>
+            <Ionicons name="sparkles" size={11} color={colors.accent} />
           </View>
         )}
         <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
@@ -228,16 +235,17 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
         animationType="slide"
         onRequestClose={() => setModalOpen(false)}
       >
-        <TouchableOpacity
-          style={styles.modalBackdrop}
-          activeOpacity={1}
-          onPress={() => setModalOpen(false)}
-        >
+        {/* Backdrop is the spacer ABOVE the sheet — tapping it dismisses.
+            The sheet itself is a plain View so the ScrollView inside receives
+            drag gestures anywhere (a wrapping TouchableOpacity would swallow
+            drags that start in the gaps between rows). */}
+        <View style={styles.modalRoot}>
           <TouchableOpacity
+            style={{ flex: 1 }}
             activeOpacity={1}
-            onPress={() => {}}
-            style={[styles.modalSheet, { backgroundColor: colors.background }]}
-          >
+            onPress={() => setModalOpen(false)}
+          />
+          <View style={[styles.modalSheet, { backgroundColor: colors.background }]}>
             <View style={styles.modalHandle} />
             <View style={styles.modalHeader}>
               <Text style={{ color: colors.textPrimary, fontSize: 17, fontWeight: '700' }}>
@@ -250,38 +258,31 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
             <Text
               style={{ color: colors.textSecondary, fontSize: 12, lineHeight: 17, marginBottom: 4 }}
             >
-              Your prompt is sent verbatim to this model. Premium models cost more sparkles per
-              render.
+              Your prompt is sent verbatim to this model. Some models cost more sparkles per render.
             </Text>
             <ScrollView
               style={{ maxHeight: 460 }}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 24 }}
             >
-              {renderTierList()}
+              {renderFamilyList()}
             </ScrollView>
-          </TouchableOpacity>
-        </TouchableOpacity>
+          </View>
+        </View>
       </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tierHeader: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'space-between',
-    paddingHorizontal: 4,
-    marginBottom: 8,
-  },
-  tierLabel: {
+  familyLabel: {
     fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0.4,
     textTransform: 'uppercase',
+    paddingHorizontal: 4,
+    marginBottom: 8,
   },
-  tierCost: { fontSize: 12 },
   option: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -303,6 +304,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     color: '#FFFFFF',
   },
+  costBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    borderWidth: 1,
+    marginRight: 10,
+  },
+  costBadgeText: { fontSize: 12, fontWeight: '700' },
   // pill variant
   pillLabel: { fontSize: 12, fontWeight: '500', marginBottom: 6, marginLeft: 4 },
   pill: {
@@ -314,12 +325,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   pillCost: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 6,
     marginRight: 8,
   },
-  modalBackdrop: {
+  modalRoot: {
     flex: 1,
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0,0,0,0.6)',

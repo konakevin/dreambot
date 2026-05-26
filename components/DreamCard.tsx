@@ -237,6 +237,14 @@ export const DreamCard = memo(function DreamCard({
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
+  // Image fill mode — Flux (9:16) fills edge-to-edge; off-ratio renders
+  // (GPT 2:3, etc.) flip to contain+blur on load. See the image block below.
+  const [fillMode, setFillMode] = useState<'cover' | 'contain'>('cover');
+  // Reset to cover when the image changes (card reuse) so onLoad re-measures.
+  useEffect(() => {
+    setFillMode('cover');
+  }, [item.image_url]);
+
   // Wish fairy dust — shimmering hazy border with sparkle particles
   const isWish = !!item.from_wish;
   const hazeOpacity = useSharedValue(0.3);
@@ -384,11 +392,24 @@ export const DreamCard = memo(function DreamCard({
           delayLongPress={500}
         >
           <Animated.View style={[StyleSheet.absoluteFill, imageTransformStyle]}>
+            {/* Flux renders 9:16 (~0.57) → fills the card edge-to-edge (cover).
+                Off-ratio models (GPT 2:3 ~0.67, square Gemini, etc.) would crop
+                hard, so they show fully (contain) — the letterbox shows the
+                card's black background. We read the aspect on load; default
+                cover so the common Flux case never flashes. */}
             <Image
               source={{ uri: item.image_url }}
               style={s.fullImage}
-              contentFit="cover"
+              contentFit={fillMode}
               cachePolicy="memory-disk"
+              onLoad={(e) => {
+                const w = e.source?.width ?? 0;
+                const h = e.source?.height ?? 0;
+                if (w > 0 && h > 0) {
+                  // > ~9:16 (0.6 threshold) = wider than Flux → letterbox.
+                  setFillMode(w / h > 0.6 ? 'contain' : 'cover');
+                }
+              }}
             />
           </Animated.View>
 
