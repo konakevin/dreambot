@@ -47,6 +47,47 @@ When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` r
 
 ---
 
+## Bot profile avatars — how to update (2026-05-26)
+
+Bot accounts are flagged `users.is_bot = true`. Their profile image is stored in
+the **public `avatars` storage bucket** at `<botUserId>/avatar.jpg`, and
+`users.avatar_url` points to it with a `?v=<timestamp>` cache-buster. Updating an
+avatar = upload the square image to that path (upsert) + set `avatar_url` with a
+fresh `?v=`. **No client build or Edge deploy** — it's pure storage + DB.
+
+**Tooling (`scripts/`):**
+
+- `regen-bot-avatars.js` — generate a clean, style-matched single-subject
+  close-up per bot via Flux (1:1, 1.1 Pro), smart-resize to 512², write to
+  `/tmp/bot-avatars-final/` + a `manifest.json`. **This is the keeper workflow.**
+- `crop-bot-avatars.js` — alternative: take each bot's most-recently-hearted
+  post (by Kevin) and smart-crop it to a 512² square.
+- `apply-bot-avatars.js` — read the manifest, upload each square to
+  `avatars/<botId>/avatar.jpg`, set `avatar_url` with `?v=`.
+
+**Flow:** run the generate/crop script → review the squares (Read the files, or
+`open /tmp/bot-avatars-final`) → `apply-bot-avatars.js`. Skip deactivated bots
+(GlowBot, HumanBot — see `HIDDEN_BOT_USERNAMES` in `hooks/useBotUsers.ts`).
+
+**Hard-won lessons:**
+
+- **Avatars are ICONS, not scenes.** A busy full render (mechs on a far bridge,
+  a wide market) turns to mush in a small circular crop. Use a single bold
+  subject, tight/close, simple background, high contrast — rendered in the bot's
+  own medium so it reads as that bot at a glance.
+- **Prompt-from-scratch avatars underperform** vs. real on-brand renders. Best
+  results: regenerate a *clean close-up of the bot's actual subject/style* (the
+  `regen` script), or square-crop a render Kevin hearted.
+- **The `?v=` transform gotcha (fixed 2026-05-26):** `lib/imageUrl.ts:transform()`
+  builds the resized avatar/thumbnail URL. It must capture the path with
+  `([^?]+)` (stop at the query), NOT greedy `(.+)$` — otherwise the source's
+  `?v=` is swallowed into a double-`?` URL the render endpoint can't parse, and
+  it serves a wrong-aspect crop (e.g. 512×128 for a 128×128 request) that looks
+  zoomed-in (a face → just a nose). Carry the source `v` into the new params to
+  keep cache-busting.
+
+---
+
 ## North Star — the actual goal
 
 **Every render must be a 10/10 poster-worthy frame.**
