@@ -105,12 +105,51 @@ export const MODEL_COST_CENTS: Record<string, number> = {
   'google/gemini-3-image-preview': 13, // ~$0.134 (was 9 — under-estimate)
 };
 
+// ── DB-backed cost overlay ────────────────────────────────────────────────
+// The `image_models` table is the live source of truth (migration 184) so
+// sparkle prices can change without a deploy. We cache it per-isolate with a
+// 60s TTL; the static maps above remain the fallback if the table is empty or
+// unreachable. Call loadModelCosts() once per request before getSparkleCost().
+let dbCostCache: Map<string, { sparkle: number; cents: number }> | null = null;
+let dbCacheTs = 0;
+const DB_CACHE_TTL_MS = 60_000;
+
+// deno-lint-ignore no-explicit-any
+export async function loadModelCosts(supabase: any): Promise<void> {
+  const now = Date.now();
+  if (dbCostCache && now - dbCacheTs <= DB_CACHE_TTL_MS) return;
+  try {
+    const { data, error } = await supabase
+      .from('image_models')
+      .select('id, sparkle_cost, cost_cents');
+    if (error || !data) return; // keep prior cache / fall back to static
+    const next = new Map<string, { sparkle: number; cents: number }>();
+    for (const r of data) {
+      next.set(r.id as string, {
+        sparkle: r.sparkle_cost as number,
+        cents: r.cost_cents as number,
+      });
+    }
+    dbCostCache = next;
+    dbCacheTs = now;
+  } catch (err) {
+    console.warn(
+      '[modelPricing] DB cost load failed, using static fallback:',
+      (err as Error).message
+    );
+  }
+}
+
 export function getSparkleCost(modelId: string): number {
+  const db = dbCostCache ? dbCostCache.get(modelId) : undefined;
+  if (db) return db.sparkle;
   return MODEL_SPARKLE_COSTS[modelId] ?? DEFAULT_SPARKLE_COST;
 }
 
 /** API cost estimate for the render, in cents (integer). Used for logging. */
 export function getCostCents(modelId: string): number {
+  const db = dbCostCache ? dbCostCache.get(modelId) : undefined;
+  if (db) return db.cents;
   return MODEL_COST_CENTS[modelId] ?? DEFAULT_COST_CENTS;
 }
 

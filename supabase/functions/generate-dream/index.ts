@@ -42,7 +42,7 @@ import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
-import { getCostCents } from '../_shared/modelPricing.ts';
+import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
@@ -286,6 +286,44 @@ Deno.serve(async (req) => {
       });
     } catch (err) {
       console.warn('[generate-dream] Job insert failed (non-critical):', (err as Error).message);
+    }
+  }
+
+  // ── Server-side sparkle charge (idempotent on jobId) ──────────────────────
+  // The charge lives here, not just client-side, so prices are server-driven:
+  // changing image_models.sparkle_cost takes effect with NO client build. The
+  // RPC is idempotent on jobId — an old client that already charged makes this
+  // a no-op (never a double charge), worker retries are safe, and a tampered
+  // client can't dodge it. Cost mirrors the client: getSparkleCost(force_model)
+  // (DreamBot has no force_model → 1; Direct/DLT → the picked model's cost).
+  // Skipped without a jobId (no idempotency key — legacy/test calls).
+  // generate-dream is always a paid path (nightly + first-dream are separate,
+  // free functions), so there is no free-render case to guard here.
+  if (jobId) {
+    await loadModelCosts(supabase);
+    const dreamCost = getSparkleCost(force_model || '');
+    try {
+      const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
+        p_user_id: userId,
+        p_amount: dreamCost,
+        p_reason: 'dream',
+        p_reference_id: jobId,
+      });
+      if (chargeStatus === 'insufficient') {
+        // Return (not throw) so this bypasses the refund catch — nothing was
+        // charged, so there is nothing to refund.
+        return new Response(JSON.stringify({ error: 'insufficient_sparkles', needed: dreamCost }), {
+          status: 402,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      console.log(
+        `[generate-dream] Charge: ${chargeStatus} (${dreamCost}✦, model=${force_model || 'default'})`
+      );
+    } catch (err) {
+      // Fail-open: don't block a paid dream on a transient charge error. Old
+      // clients already charged client-side; new clients are a rare miss.
+      console.warn('[generate-dream] charge_sparkles failed (continuing):', (err as Error).message);
     }
   }
 

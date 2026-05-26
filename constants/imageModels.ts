@@ -26,8 +26,10 @@ export interface ImageModel {
   id: string;
   /** Display name for the picker. */
   label: string;
-  /** Backing provider — internal only (server routing); never shown to users. */
-  provider: 'replicate' | 'openai' | 'gemini';
+  /** Backing provider — internal only (server routing); never shown to users.
+   *  Optional: the DB catalog (image_models) doesn't carry it; only the bundled
+   *  fallback list below sets it. The client never uses it for display. */
+  provider?: 'replicate' | 'openai' | 'gemini';
   /** Family bucket the picker groups under (Flux 1 / Flux 2 / OpenAI / Google). */
   family: ModelFamily;
   /** Sparkle cost for one render with this model (shown inline per model). */
@@ -160,6 +162,20 @@ export function findModel(id: string): ImageModel | undefined {
 export function getSparkleCost(id: string | null | undefined): number {
   if (!id) return 1;
   return findModel(id)?.sparkleCost ?? 1;
+}
+
+/**
+ * Cost lookup against a live catalog (the DB-driven list from useImageModels,
+ * or the bundled fallback). Mirrors the server: no id (DreamBot) → 1 sparkle.
+ * Use this everywhere the cost is shown/pre-checked so prices stay server-driven.
+ */
+export function sparkleCostFrom(
+  models: readonly { id: string; sparkleCost: number }[],
+  id: string | null | undefined
+): number {
+  if (!id) return 1;
+  const m = models.find((x) => x.id === id);
+  return m ? m.sparkleCost : 1;
 }
 
 /** Family display order + labels for the picker. */
