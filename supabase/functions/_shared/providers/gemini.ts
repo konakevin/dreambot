@@ -28,8 +28,13 @@ export interface GeminiImageResult {
 }
 
 const GEMINI_MODEL_MAP: Record<string, string> = {
-  'google/gemini-3-image-preview': 'gemini-3-image-preview',
-  'google/gemini-2-image': 'gemini-2.0-flash-exp-image-generation',
+  // Nano Banana Pro. Correct GA id is 'gemini-3-pro-image-preview' (verified
+  // against ai.google.dev 2026-05-25) — the bare 'gemini-3-image-preview' 404s.
+  'google/gemini-3-image-preview': 'gemini-3-pro-image-preview',
+  // 2026-05-25: was 'gemini-2.0-flash-exp-image-generation' — that preview id
+  // is retired (404 "not found for v1beta / generateContent"). Nano Banana 2 is
+  // the GA Gemini 2.5 Flash Image model (matches the pricing note above).
+  'google/gemini-2-image': 'gemini-2.5-flash-image',
 };
 
 export function isGeminiModel(modelId: string): boolean {
@@ -64,12 +69,14 @@ export async function generateGeminiImage(
       generationConfig: {
         responseModalities: ['IMAGE'],
         // imageConfig is the Nano Banana Pro knob for resolution + aspect.
-        // The field is only honored on gemini-3-image-preview; Gemini
-        // 2.5 Flash ignores it and renders at its baseline.
+        // The field is only honored on gemini-3-pro-image-preview; Gemini
+        // 2.5 Flash ignores it and renders at its baseline. NOTE: the size
+        // field is `imageSize` ('1K'/'2K'/'4K') — NOT `resolution`, which
+        // 400s with "Unknown name 'resolution' at ...image_config". 2026-05-25.
         ...(isNanoBananaPro && {
           imageConfig: {
             aspectRatio: '9:16',
-            resolution: '1K',
+            imageSize: '1K',
           },
         }),
       },
