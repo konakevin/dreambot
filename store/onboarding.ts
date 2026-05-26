@@ -18,6 +18,13 @@ interface OnboardingStore {
   setStep: (step: number) => void;
   isEditing: boolean;
   setIsEditing: (v: boolean) => void;
+  /** True once the store reflects a deliberate load from the DB (a returning
+   *  user editing in Settings) OR a confirmed fresh onboarding session (no
+   *  existing recipe). The auto-save refuses to write until this is set, so a
+   *  cold-mounted editing screen still holding the empty DEFAULT_VIBE_PROFILE
+   *  can never overwrite the user's real recipe. */
+  isHydrated: boolean;
+  setHydrated: (v: boolean) => void;
 
   profile: VibeProfile;
 
@@ -76,6 +83,8 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
 
   isEditing: false,
   setIsEditing: (v) => set({ isEditing: v }),
+  isHydrated: false,
+  setHydrated: (v) => set({ isHydrated: v }),
 
   profile: { ...DEFAULT_VIBE_PROFILE },
 
@@ -231,8 +240,14 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   scrollLocked: false,
   setScrollLocked: (v) => set({ scrollLocked: v }),
 
-  loadProfile: (profile) => set({ profile }),
+  loadProfile: (profile) => set({ profile, isHydrated: true }),
 
   reset: () =>
-    set({ step: 1, isEditing: false, scrollLocked: false, profile: { ...DEFAULT_VIBE_PROFILE } }),
+    set({
+      step: 1,
+      isEditing: false,
+      isHydrated: false,
+      scrollLocked: false,
+      profile: { ...DEFAULT_VIBE_PROFILE },
+    }),
 }));
