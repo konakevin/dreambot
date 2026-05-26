@@ -34,13 +34,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
-import {
-  IMAGE_MODELS,
-  DEFAULT_MODEL_ID,
-  FAMILY_ORDER,
-  FAMILY_LABELS,
-  findModel,
-} from '@/constants/imageModels';
+import { DEFAULT_MODEL_ID, FAMILY_ORDER, FAMILY_LABELS } from '@/constants/imageModels';
+import { useImageModels } from '@/hooks/useImageModels';
 
 interface Props {
   /** 'list' = full inline grouped list; 'pill' = dropdown pill + bottom sheet. */
@@ -51,6 +46,7 @@ interface Props {
 
 export function FluxModelPicker({ variant = 'list', onChange }: Props) {
   const user = useAuthStore((s) => s.user);
+  const models = useImageModels();
   const [selected, setSelected] = useState<string>(DEFAULT_MODEL_ID);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -101,14 +97,14 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
   const renderFamilyList = () => (
     <View>
       {FAMILY_ORDER.map((family) => {
-        const models = IMAGE_MODELS.filter((m) => m.family === family);
-        if (models.length === 0) return null;
+        const familyModels = models.filter((m) => m.family === family);
+        if (familyModels.length === 0) return null;
         return (
           <View key={family} style={{ marginTop: 16 }}>
             <Text style={[styles.familyLabel, { color: colors.textSecondary }]}>
               {FAMILY_LABELS[family]}
             </Text>
-            {models.map((opt) => {
+            {familyModels.map((opt) => {
               const isSelected = opt.id === selected;
               return (
                 <TouchableOpacity
@@ -191,7 +187,7 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
   }
 
   // ── variant: pill (Create screen dropdown → bottom sheet) ──
-  const current = findModel(selected);
+  const current = models.find((m) => m.id === selected);
   return (
     <View>
       <Text style={[styles.pillLabel, { color: colors.textSecondary }]}>AI Model</Text>

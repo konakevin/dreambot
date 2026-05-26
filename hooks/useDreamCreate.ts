@@ -18,8 +18,9 @@ import { supabase } from '@/lib/supabase';
 import { cropToPortrait } from '@/lib/cropPhoto';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
-import { useSparkleBalance, useSpendSparkles } from '@/hooks/useSparkles';
-import { getSparkleCost } from '@/constants/imageModels';
+import { useSparkleBalance } from '@/hooks/useSparkles';
+import { useImageModels } from '@/hooks/useImageModels';
+import { sparkleCostFrom } from '@/constants/imageModels';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 import { moderateText } from '@/lib/moderation';
@@ -48,7 +49,7 @@ export function useDreamCreate() {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
   const { data: sparkleBalance = 0 } = useSparkleBalance();
-  const { mutateAsync: spendSparkles } = useSpendSparkles();
+  const models = useImageModels();
   const setResult = useDreamStore((s) => s.setResult);
   const busy = useRef(false);
 
@@ -63,9 +64,14 @@ export function useDreamCreate() {
     return isVibeProfile(raw) ? raw : null;
   }, [user]);
 
-  const trySpendSparkle = useCallback(
-    async (jobId: string, modelId: string | null): Promise<boolean> => {
-      const cost = getSparkleCost(modelId);
+  // Pre-flight balance check only — the actual charge is server-side and
+  // idempotent on jobId (generate-dream / restyle-photo via charge_sparkles).
+  // The client no longer debits; it just gates the UX so the user sees a
+  // paywall before firing a dream they can't afford. Cost comes from the
+  // DB-driven catalog (useImageModels), so it always matches the server price.
+  const canAffordDream = useCallback(
+    (modelId: string | null): boolean => {
+      const cost = sparkleCostFrom(models, modelId);
       if (sparkleBalance < cost) {
         const sparkleWord = cost === 1 ? 'sparkle' : 'sparkles';
         showAlert(
@@ -78,21 +84,9 @@ export function useDreamCreate() {
         );
         return false;
       }
-      try {
-        // Pass jobId as referenceId so refund_sparkles can correlate the
-        // spend with any later refund for the same job (idempotent).
-        await spendSparkles({ amount: cost, reason: 'dream', referenceId: jobId });
-        return true;
-      } catch {
-        const sparkleWord = cost === 1 ? 'sparkle' : 'sparkles';
-        showAlert('Not enough sparkles', `You need ${cost} ${sparkleWord} to dream.`, [
-          { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
-          { text: 'Cancel', style: 'cancel' },
-        ]);
-        return false;
-      }
+      return true;
     },
-    [sparkleBalance, spendSparkles]
+    [sparkleBalance, models]
   );
 
   /**
@@ -166,7 +160,7 @@ export function useDreamCreate() {
       });
       useDreamStore.getState().setActiveJobId(jobId);
 
-      if (!(await trySpendSparkle(jobId, config.forceModel))) return 'error';
+      if (!canAffordDream(config.forceModel)) return 'error';
       busy.current = true;
 
       try {
@@ -264,10 +258,40 @@ export function useDreamCreate() {
           uploadId: result.upload_id ?? null,
         });
 
+        // The charge now happens server-side during generation, so refetch the
+        // balance to reflect it (the client no longer debits optimistically).
+        if (user) {
+          queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
+        }
+
         return 'done';
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Unknown error';
         if (__DEV__) console.error('[useDreamCreate] ERROR:', msg);
+
+        // Server-side charge said insufficient (402) — a balance race after the
+        // client pre-check. Nothing was charged. Surface the paywall, refresh
+        // balance, and fail cleanly (no refund needed — no debit happened).
+        if (msg.includes('insufficient_sparkles')) {
+          if (user) queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
+          showAlert(
+            'Not enough sparkles',
+            'You ran out of sparkles for this dream. Get more to keep dreaming!',
+            [
+              { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
+              { text: 'Cancel', style: 'cancel' },
+            ]
+          );
+          useDreamStore.getState().setActiveJobFailure({
+            jobId,
+            message: 'insufficient_sparkles',
+            refunded: true,
+            refundReason: null,
+            isNsfw: false,
+            isPreFlightModeration: false,
+          });
+          return 'error';
+        }
 
         // The server signals refund status via either a structured response
         // (FunctionsHttpError exposes the body) or a thrown message including
@@ -324,7 +348,7 @@ export function useDreamCreate() {
         busy.current = false;
       }
     },
-    [user, trySpendSparkle, loadProfile, setResult, queryClient]
+    [user, canAffordDream, loadProfile, setResult, queryClient]
   );
 
   return { generate, sparkleBalance };

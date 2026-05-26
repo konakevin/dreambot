@@ -23,7 +23,7 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
-import { getCostCents } from '../_shared/modelPricing.ts';
+import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 
@@ -165,6 +165,32 @@ Deno.serve(async (req) => {
       });
     } catch {
       /* non-critical — job tracking is best-effort */
+    }
+  }
+
+  // ── Server-side sparkle charge (idempotent on jobId) ──────────────────────
+  // Mirrors generate-dream: the charge is server-side so prices are DB-driven
+  // and the client no longer debits. Idempotent on jobId — an old client that
+  // already charged makes this a no-op (no double charge). Restyle has no
+  // force_model in practice → 1 sparkle; getSparkleCost handles either.
+  if (jobId) {
+    await loadModelCosts(supabase);
+    const dreamCost = getSparkleCost(force_model || '');
+    try {
+      const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
+        p_user_id: userId,
+        p_amount: dreamCost,
+        p_reason: 'dream',
+        p_reference_id: jobId,
+      });
+      if (chargeStatus === 'insufficient') {
+        return new Response(JSON.stringify({ error: 'insufficient_sparkles', needed: dreamCost }), {
+          status: 402,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    } catch (err) {
+      console.warn('[restyle-photo] charge_sparkles failed (continuing):', (err as Error).message);
     }
   }
 

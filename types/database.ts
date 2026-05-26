@@ -248,6 +248,51 @@ export type Database = {
         };
         Relationships: [];
       };
+      bot_schedules: {
+        Row: {
+          active: boolean;
+          bot_name: string;
+          consecutive_failures: number;
+          created_at: string;
+          last_failure_at: string | null;
+          last_failure_reason: string | null;
+          last_posted_at: string | null;
+          next_due_at: string | null;
+          notes: string | null;
+          phase_seed: number;
+          posts_per_day: number;
+          updated_at: string;
+        };
+        Insert: {
+          active?: boolean;
+          bot_name: string;
+          consecutive_failures?: number;
+          created_at?: string;
+          last_failure_at?: string | null;
+          last_failure_reason?: string | null;
+          last_posted_at?: string | null;
+          next_due_at?: string | null;
+          notes?: string | null;
+          phase_seed: number;
+          posts_per_day?: number;
+          updated_at?: string;
+        };
+        Update: {
+          active?: boolean;
+          bot_name?: string;
+          consecutive_failures?: number;
+          created_at?: string;
+          last_failure_at?: string | null;
+          last_failure_reason?: string | null;
+          last_posted_at?: string | null;
+          next_due_at?: string | null;
+          notes?: string | null;
+          phase_seed?: number;
+          posts_per_day?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       bot_seeds: {
         Row: {
           category: string;
@@ -366,6 +411,35 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'users';
             referencedColumns: ['id'];
+          },
+        ];
+      };
+      dlt_clean_mediums: {
+        Row: {
+          clean_directive: string;
+          clean_flux_fragment: string;
+          created_at: string;
+          medium_key: string;
+        };
+        Insert: {
+          clean_directive: string;
+          clean_flux_fragment: string;
+          created_at?: string;
+          medium_key: string;
+        };
+        Update: {
+          clean_directive?: string;
+          clean_flux_fragment?: string;
+          created_at?: string;
+          medium_key?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dlt_clean_mediums_medium_key_fkey';
+            columns: ['medium_key'];
+            isOneToOne: true;
+            referencedRelation: 'dream_mediums';
+            referencedColumns: ['key'];
           },
         ];
       };
@@ -864,6 +938,45 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      image_models: {
+        Row: {
+          cost_cents: number;
+          description: string;
+          family: string;
+          id: string;
+          is_active: boolean;
+          is_default: boolean;
+          label: string;
+          sort_order: number;
+          sparkle_cost: number;
+          updated_at: string;
+        };
+        Insert: {
+          cost_cents?: number;
+          description?: string;
+          family: string;
+          id: string;
+          is_active?: boolean;
+          is_default?: boolean;
+          label: string;
+          sort_order?: number;
+          sparkle_cost?: number;
+          updated_at?: string;
+        };
+        Update: {
+          cost_cents?: number;
+          description?: string;
+          family?: string;
+          id?: string;
+          is_active?: boolean;
+          is_default?: boolean;
+          label?: string;
+          sort_order?: number;
+          sparkle_cost?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       likes: {
         Row: {
@@ -1583,6 +1696,80 @@ export type Database = {
           },
         ];
       };
+      upscale_jobs: {
+        Row: {
+          attempts: number;
+          created_at: string;
+          last_error: string | null;
+          status: string;
+          updated_at: string;
+          upload_id: string;
+        };
+        Insert: {
+          attempts?: number;
+          created_at?: string;
+          last_error?: string | null;
+          status?: string;
+          updated_at?: string;
+          upload_id: string;
+        };
+        Update: {
+          attempts?: number;
+          created_at?: string;
+          last_error?: string | null;
+          status?: string;
+          updated_at?: string;
+          upload_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'upscale_jobs_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: true;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      upscale_requests: {
+        Row: {
+          created_at: string;
+          id: string;
+          notified_at: string | null;
+          upload_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          notified_at?: string | null;
+          upload_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          notified_at?: string | null;
+          upload_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'upscale_requests_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'upscale_requests_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       user_archetypes: {
         Row: {
           archetype_id: string;
@@ -1739,6 +1926,15 @@ export type Database = {
         Returns: undefined;
       };
       block_user: { Args: { p_blocked_id: string }; Returns: undefined };
+      charge_sparkles: {
+        Args: {
+          p_amount: number;
+          p_reason: string;
+          p_reference_id: string;
+          p_user_id: string;
+        };
+        Returns: string;
+      };
       claim_dream_queue_job: {
         Args: { p_worker_id: string };
         Returns: {
@@ -1761,6 +1957,18 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      claim_upscale_job: {
+        Args: { p_stale_minutes?: number; p_upload_id: string };
+        Returns: string;
+      };
+      compute_bot_next_due: {
+        Args: {
+          p_min_lead_seconds?: number;
+          p_phase_seed: number;
+          p_posts_per_day: number;
+        };
+        Returns: string;
       };
       delete_own_account: { Args: never; Returns: undefined };
       deny_follow_request: {
@@ -1872,6 +2080,27 @@ export type Database = {
           width: number;
         }[];
       };
+      get_image_models: {
+        Args: never;
+        Returns: {
+          cost_cents: number;
+          description: string;
+          family: string;
+          id: string;
+          is_active: boolean;
+          is_default: boolean;
+          label: string;
+          sort_order: number;
+          sparkle_cost: number;
+          updated_at: string;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'image_models';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
       get_notifications: {
         Args: { p_limit?: number; p_offset?: number; p_user_id: string };
         Returns: {
@@ -1937,6 +2166,11 @@ export type Database = {
         Returns: undefined;
       };
       is_pro_active: { Args: { p_user_id: string }; Returns: boolean };
+      list_my_upload_paths: { Args: never; Returns: string[] };
+      rebalance_bot_schedules: {
+        Args: { p_min_lead_seconds?: number };
+        Returns: undefined;
+      };
       record_impression: {
         Args: { p_upload_id: string; p_user_id: string };
         Returns: undefined;

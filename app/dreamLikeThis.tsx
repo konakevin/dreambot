@@ -34,7 +34,8 @@ import * as nav from '@/lib/navigate';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { useDreamMediums } from '@/hooks/useDreamStyles';
-import { getSparkleCost } from '@/constants/imageModels';
+import { sparkleCostFrom } from '@/constants/imageModels';
+import { useImageModels } from '@/hooks/useImageModels';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -52,6 +53,7 @@ export default function DreamLikeThisScreen() {
   const user = useAuthStore((s) => s.user);
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const { data: dbMediums = [] } = useDreamMediums();
+  const imageModels = useImageModels();
   const reset = useDreamStore((s) => s.reset);
 
   // Clean up dream store when leaving DLT so it doesn't leak into Create screen
@@ -380,7 +382,7 @@ export default function DreamLikeThisScreen() {
         <View style={[s.footer, !hasPhoto && kbOpen && { paddingBottom: 6, paddingVertical: 4 }]}>
           <TouchableOpacity style={s.dreamBtn} onPress={handleDream} activeOpacity={0.8}>
             <Ionicons name="sparkles" size={18} color="#fff" />
-            <Text style={s.dreamBtnText}>Dream · {getSparkleCost(refModelUsed)}</Text>
+            <Text style={s.dreamBtnText}>Dream · {sparkleCostFrom(imageModels, refModelUsed)}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

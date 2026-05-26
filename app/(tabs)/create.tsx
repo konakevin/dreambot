@@ -46,7 +46,8 @@ import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { FluxModelPicker } from '@/components/FluxModelPicker';
-import { getSparkleCost, DEFAULT_MODEL_ID } from '@/constants/imageModels';
+import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
+import { useImageModels } from '@/hooks/useImageModels';
 import type { VibeProfile } from '@/types/vibeProfile';
 
 // One-time toast: "1 sparkle = 1 dream" surfaces the first time a user
@@ -77,6 +78,7 @@ export default function CreateScreen() {
   // users.pro_mode_flux_model). Tracked here so the dream button can show the
   // selected model's sparkle cost.
   const [advancedModelId, setAdvancedModelId] = useState(DEFAULT_MODEL_ID);
+  const imageModels = useImageModels();
   const promptRef = useRef<TextInput>(null);
 
   // Keep config.forceModel in sync with Advanced Mode: ON → charge + render the
@@ -728,7 +730,7 @@ export default function CreateScreen() {
           >
             <View className="flex-row items-center gap-2">
               <Text className="text-white text-base font-bold">
-                Dream · {config.useExactPrompt ? getSparkleCost(advancedModelId) : 1}
+                Dream · {config.useExactPrompt ? sparkleCostFrom(imageModels, advancedModelId) : 1}
               </Text>
               <Ionicons name="sparkles" size={16} color="#FFFFFF" />
             </View>

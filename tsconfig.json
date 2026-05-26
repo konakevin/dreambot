@@ -3,18 +3,10 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "nativewind-env.d.ts"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"],
   "exclude": [
     "supabase/functions/**",
     "__tests__/lib/selfInsertDetector.test.ts",
@@ -23,6 +15,8 @@
     "__tests__/lib/modelPicker.test.ts",
     "__tests__/lib/promptCompiler.test.ts",
     "__tests__/lib/dualActionDetector.test.ts",
-    "__tests__/lib/expressionRule.test.ts"
+    "__tests__/lib/expressionRule.test.ts",
+    "__tests__/lib/modelPricing.test.ts",
+    "__tests__/lib/dualGenderRouting.test.ts"
   ]
 }
