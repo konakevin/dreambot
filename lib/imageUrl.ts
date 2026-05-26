@@ -20,13 +20,21 @@ function transform(
   // Only transform Supabase Storage URLs
   if (!url.includes(SUPABASE_URL)) return url;
 
-  // Extract the path after /storage/v1/object/public/
-  const match = url.match(/\/storage\/v1\/object\/public\/(.+)$/);
+  // Extract the path after /storage/v1/object/public/, STOPPING at any query
+  // string. Using ([^?]+) (not greedy (.+)) is load-bearing: avatar_url carries
+  // a ?v=<ts> cache-buster, and including it would produce a double-`?` URL
+  // (…/avatar.jpg?v=123?width=128…) the render endpoint can't parse — it then
+  // ignores width/height/resize and serves a zoomed default crop.
+  const match = url.match(/\/storage\/v1\/object\/public\/([^?]+)(\?.*)?$/);
   if (!match) return url;
 
   const params = new URLSearchParams({ width: String(width), resize: mode });
   if (height) params.set('height', String(height));
   if (quality) params.set('quality', String(quality));
+  // Preserve the source's ?v= cache-buster so an updated image still
+  // invalidates the transform's CDN cache.
+  const srcV = new URLSearchParams(match[2] ? match[2].slice(1) : '').get('v');
+  if (srcV) params.set('v', srcV);
 
   return `${SUPABASE_URL}/storage/v1/render/image/public/${match[1]}?${params.toString()}`;
 }
