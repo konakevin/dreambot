@@ -85,7 +85,7 @@ export interface CompilerOutput {
     dualPrepend?: string;
   };
   faceSwapSource: string | null;
-  faceSwapSources: Array<{ role: string; sourceUrl: string }> | null;
+  faceSwapSources: Array<{ role: string; sourceUrl: string; genderLock: string | null }> | null;
 }
 
 // ── Focal Anchor Derivation ──
@@ -445,7 +445,11 @@ Output ONLY the prompt.`;
   }
 
   // Face swap sources (dual — two cast members)
-  let faceSwapSources: Array<{ role: string; sourceUrl: string }> | null = null;
+  let faceSwapSources: Array<{
+    role: string;
+    sourceUrl: string;
+    genderLock: string | null;
+  }> | null = null;
   if (
     composition.faceSwapEligible &&
     cast.length === 2 &&
@@ -455,8 +459,8 @@ Output ONLY the prompt.`;
     cast[1].sourcePhotoUrl.startsWith('http')
   ) {
     faceSwapSources = [
-      { role: cast[0].role, sourceUrl: cast[0].sourcePhotoUrl },
-      { role: cast[1].role, sourceUrl: cast[1].sourcePhotoUrl },
+      { role: cast[0].role, sourceUrl: cast[0].sourcePhotoUrl, genderLock: cast[0].genderLock },
+      { role: cast[1].role, sourceUrl: cast[1].sourcePhotoUrl, genderLock: cast[1].genderLock },
     ];
   }
 

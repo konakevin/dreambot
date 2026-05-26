@@ -187,8 +187,8 @@ Output ONLY the prompt.`;
   const faceSwapSources =
     cast1.sourcePhotoUrl?.startsWith('http') && cast2.sourcePhotoUrl?.startsWith('http')
       ? [
-          { role: cast1.role, sourceUrl: cast1.sourcePhotoUrl },
-          { role: cast2.role, sourceUrl: cast2.sourcePhotoUrl },
+          { role: cast1.role, sourceUrl: cast1.sourcePhotoUrl, genderLock: cast1.genderLock },
+          { role: cast2.role, sourceUrl: cast2.sourcePhotoUrl, genderLock: cast2.genderLock },
         ]
       : null;
 

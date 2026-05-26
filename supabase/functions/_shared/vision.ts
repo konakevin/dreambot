@@ -82,6 +82,38 @@ export async function describeWithVision(
   return text.trim();
 }
 
+/**
+ * Classify the apparent gender of the LEFT and RIGHT person in a two-person
+ * render. Used by the dual face-swap pipeline to route each cast member's face
+ * onto the body of the matching gender.
+ *
+ * Why this exists: Flux frequently renders the two people on the OPPOSITE sides
+ * from the prompt, and the face-swap model pastes a face onto whatever body is
+ * in each crop. So on a mixed-gender couple, a left/right flip becomes a gender
+ * swap (self's face landing on the partner's body). We classify the rendered
+ * image and route sources by gender instead of trusting position.
+ *
+ * Returns 'male' | 'female' per side, or null for a side it can't read. The
+ * caller treats any failure as a fall-back to positional assignment.
+ */
+export async function classifyDualGenders(
+  imageInput: string,
+  replicateToken: string
+): Promise<{ left: 'male' | 'female' | null; right: 'male' | 'female' | null }> {
+  const prompt =
+    'This image shows two people positioned side by side (this is for routing a consensual face-swap of the user and their own cast photos). Identify the apparent gender of the person in the LEFT half and the person in the RIGHT half. Respond with EXACTLY two words separated by a comma — the left person first, then the right person — each either "male" or "female". No other text. Example: "female, male".';
+  const raw = await describeWithVision(imageInput, prompt, replicateToken, 20);
+  const parse = (s: string): 'male' | 'female' | null => {
+    const t = s.toLowerCase();
+    // Check 'female' first — 'female' contains the substring 'male'.
+    if (t.includes('female')) return 'female';
+    if (t.includes('male')) return 'male';
+    return null;
+  };
+  const parts = raw.split(',');
+  return { left: parse(parts[0] || ''), right: parse(parts[1] || '') };
+}
+
 /** Standard prompts for common description tasks */
 export const VISION_PROMPTS = {
   /** One-sentence summary for restyle/reimagine photo paths */

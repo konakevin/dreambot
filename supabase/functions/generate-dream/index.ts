@@ -19,6 +19,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
+import { routeDualSwapByGender, genderFromLock } from '../_shared/dualGenderRouting.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
@@ -297,7 +298,9 @@ Deno.serve(async (req) => {
   let resolvedMediumKey: string | undefined;
   let resolvedVibeKey: string | undefined;
   let faceSwapSource: string | undefined; // original photo for face swap after generation
-  let faceSwapSources: Array<{ role: string; sourceUrl: string }> | undefined;
+  let faceSwapSources:
+    | Array<{ role: string; sourceUrl: string; genderLock: string | null }>
+    | undefined;
 
   // ── Observability (Phase 1 of V4 hardening) ─────────────────────────────────
   // Capture the full LLM exchange + fallback audit trail so every generation
@@ -762,7 +765,15 @@ Output ONLY the prompt.`;
             faceSwapEligible: isFaceSwapEligible,
           }
         );
-        const finalExpansion = applyChaos(expanded.expansion, chaosProfile);
+        // Dual face-swap renders skip the chaos layer entirely. Chaos perturbs
+        // framing/geometry/scale, which (a) makes Flux likelier to flip the two
+        // subjects' left/right placement and (b) can push a subject out of their
+        // clean half — both of which break the half-crop dual swap. Clean,
+        // predictable composition matters more than chaos for couple portraits.
+        const isDualSwapRender = isFaceSwapEligible && castMembers.length === 2;
+        const finalExpansion = isDualSwapRender
+          ? expanded.expansion
+          : applyChaos(expanded.expansion, chaosProfile);
         const focalAnchor = deriveFocalAnchor(resolvedCast, { userPrompt: cleanedPrompt });
 
         const compiled = compilePrompt({
@@ -809,7 +820,7 @@ Output ONLY the prompt.`;
             engine: 'v2-compiler-self-insert',
             faceSwap: isFaceSwapEligible,
             dualFaceSwap: !!faceSwapSources,
-            chaosIntensity: chaosProfile.intensity,
+            chaosIntensity: isDualSwapRender ? 0 : chaosProfile.intensity,
           };
           console.log('[generate-dream] V2 compiler (self-insert):', finalPrompt.slice(0, 150));
           lap('self-insert-done');
@@ -1010,6 +1021,25 @@ Output ONLY the prompt.`;
     // failures (Replicate cold start, 5xx, 429). Backoff between attempts
     // gives a cold model time to boot before we hammer it again.
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
+      // ── Gender-aware source routing (see _shared/dualGenderRouting.ts) ──
+      // Flux often flips the two subjects' L/R placement vs the prompt; the swap
+      // pastes onto whatever body is in each crop, so on a mixed-gender couple a
+      // flip becomes a gender swap. Route male→male body, female→female body.
+      const { leftSource, rightSource, routing } = await routeDualSwapByGender(
+        {
+          sourceUrl: faceSwapSources[0].sourceUrl,
+          gender: genderFromLock(faceSwapSources[0].genderLock),
+        },
+        {
+          sourceUrl: faceSwapSources[1].sourceUrl,
+          gender: genderFromLock(faceSwapSources[1].genderLock),
+        },
+        tempUrl,
+        REPLICATE_TOKEN
+      );
+      logAxes.dualGenderRouting = routing;
+      console.log(`[generate-dream] Dual gender routing: ${routing}`);
+
       const FACE_SWAP_MAX_RETRIES = 3;
       const FACE_SWAP_BACKOFF_MS = [2_000, 4_000]; // before attempt 2, attempt 3
       let swapSuccess = false;
@@ -1024,8 +1054,8 @@ Output ONLY the prompt.`;
             `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
           );
           tempUrl = await dispatchDualFaceSwap(
-            faceSwapSources[0].sourceUrl,
-            faceSwapSources[1].sourceUrl,
+            leftSource,
+            rightSource,
             tempUrl,
             REPLICATE_TOKEN,
             supabase,

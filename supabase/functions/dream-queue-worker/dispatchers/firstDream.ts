@@ -27,6 +27,7 @@ import { pickModel } from '../../_shared/modelPicker.ts';
 import { generateImage } from '../../_shared/generateImage.ts';
 import { faceSwap } from '../../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../../_shared/dualSwapDispatch.ts';
+import { routeDualSwapByGender } from '../../_shared/dualGenderRouting.ts';
 import { persistToStorage } from '../../_shared/persistence.ts';
 import { insertGenerationLog } from '../../_shared/logging.ts';
 import { FIRST_DREAM_BANNED_PHRASES, FirstDreamPersona } from '../../_shared/firstDream.ts';
@@ -147,7 +148,25 @@ export async function processFirstDreamJob(args: FirstDreamDispatcherArgs): Prom
     if (!left || !right) {
       throw new Error('dual_swap_missing_source_urls');
     }
-    tempUrl = await dispatchDualFaceSwap(left, right, tempUrl, replicateToken, supabase, userId);
+    // Gender-aware source routing — see _shared/dualGenderRouting.ts. Prevents a
+    // Flux L/R flip from turning a mixed-gender couple into a gender swap.
+    const normGender = (x?: string): 'male' | 'female' | null =>
+      x === 'female' ? 'female' : x === 'male' ? 'male' : null;
+    const routed = await routeDualSwapByGender(
+      { sourceUrl: left, gender: normGender(selectedCast[0].gender) },
+      { sourceUrl: right, gender: normGender(selectedCast[1].gender) },
+      tempUrl,
+      replicateToken
+    );
+    console.log(`[firstDream] Dual gender routing: ${routed.routing}`);
+    tempUrl = await dispatchDualFaceSwap(
+      routed.leftSource,
+      routed.rightSource,
+      tempUrl,
+      replicateToken,
+      supabase,
+      userId
+    );
     faceSwapResult = 'dual-success';
   } else if (payload.face_swap_eligible && selectedCast.length === 1 && selectedCast[0].thumb_url) {
     tempUrl = await faceSwap(selectedCast[0].thumb_url, tempUrl, replicateToken, supabase, userId);

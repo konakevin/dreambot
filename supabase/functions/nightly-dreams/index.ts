@@ -32,6 +32,7 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
+import { routeDualSwapByGender } from '../_shared/dualGenderRouting.ts';
 import {
   aHashHex,
   hammingDistance,
@@ -152,7 +153,9 @@ Deno.serve(async (req) => {
   let resolvedMediumKey: string | undefined;
   let resolvedVibeKey: string | undefined;
   let faceSwapSource: string | undefined;
-  let faceSwapSources: Array<{ role: string; sourceUrl: string }> | undefined;
+  let faceSwapSources:
+    | Array<{ role: string; sourceUrl: string; gender: 'male' | 'female' | null | undefined }>
+    | undefined;
   let finalPrompt: string = '';
   // Hoisted face-swap-character flag so the post-try model picker can branch
   // on it. Set true for BOTH single and dual face-swap renders (humans only —
@@ -1205,8 +1208,8 @@ Output ONLY the prompt.`;
         p.thumb_url.startsWith('http')
       ) {
         faceSwapSources = [
-          { role: s.role, sourceUrl: s.thumb_url },
-          { role: p.role, sourceUrl: p.thumb_url },
+          { role: s.role, sourceUrl: s.thumb_url, gender: s.gender },
+          { role: p.role, sourceUrl: p.thumb_url, gender: p.gender },
         ];
         console.log(`[nightly-dreams] Dual face swap: ${s.role}+${p.role} -> ${nightlyMedium.key}`);
       }
@@ -1311,6 +1314,17 @@ Output ONLY the prompt.`;
     const FACE_SWAP_MAX_RETRIES = 3;
     const FACE_SWAP_BACKOFF_MS = [2_000, 4_000];
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
+      // Gender-aware source routing — see _shared/dualGenderRouting.ts. Prevents
+      // a Flux L/R flip from turning a mixed-gender couple into a gender swap.
+      const { leftSource, rightSource, routing } = await routeDualSwapByGender(
+        { sourceUrl: faceSwapSources[0].sourceUrl, gender: faceSwapSources[0].gender },
+        { sourceUrl: faceSwapSources[1].sourceUrl, gender: faceSwapSources[1].gender },
+        tempUrl,
+        REPLICATE_TOKEN
+      );
+      logAxes.dualGenderRouting = routing;
+      console.log(`[nightly-dreams] Dual gender routing: ${routing}`);
+
       let swapSuccess = false;
       for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
         try {
@@ -1323,8 +1337,8 @@ Output ONLY the prompt.`;
             `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
           );
           tempUrl = await dispatchDualFaceSwap(
-            faceSwapSources[0].sourceUrl,
-            faceSwapSources[1].sourceUrl,
+            leftSource,
+            rightSource,
             tempUrl,
             REPLICATE_TOKEN,
             supabase,
@@ -1441,9 +1455,17 @@ Output ONLY the prompt.`;
         if (dupAttempt > 0) await new Promise((r) => setTimeout(r, 350));
         try {
           if (faceSwapSources && faceSwapSources.length === 2) {
+            // Re-route by gender on the freshly regenerated render (it may flip
+            // L/R independently). See _shared/dualGenderRouting.ts.
+            const routed = await routeDualSwapByGender(
+              { sourceUrl: faceSwapSources[0].sourceUrl, gender: faceSwapSources[0].gender },
+              { sourceUrl: faceSwapSources[1].sourceUrl, gender: faceSwapSources[1].gender },
+              genResult.url,
+              REPLICATE_TOKEN
+            );
             tempUrl = await dispatchDualFaceSwap(
-              faceSwapSources[0].sourceUrl,
-              faceSwapSources[1].sourceUrl,
+              routed.leftSource,
+              routed.rightSource,
               genResult.url,
               REPLICATE_TOKEN,
               supabase,
