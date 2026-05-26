@@ -728,7 +728,7 @@ export default function CreateScreen() {
           >
             <View className="flex-row items-center gap-2">
               <Text className="text-white text-base font-bold">
-                Dream{config.useExactPrompt ? ` · ${getSparkleCost(advancedModelId)}` : ''}
+                Dream · {config.useExactPrompt ? getSparkleCost(advancedModelId) : 1}
               </Text>
               <Ionicons name="sparkles" size={16} color="#FFFFFF" />
             </View>

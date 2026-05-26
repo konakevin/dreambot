@@ -34,6 +34,7 @@ import * as nav from '@/lib/navigate';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { useDreamMediums } from '@/hooks/useDreamStyles';
+import { getSparkleCost } from '@/constants/imageModels';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -379,7 +380,7 @@ export default function DreamLikeThisScreen() {
         <View style={[s.footer, !hasPhoto && kbOpen && { paddingBottom: 6, paddingVertical: 4 }]}>
           <TouchableOpacity style={s.dreamBtn} onPress={handleDream} activeOpacity={0.8}>
             <Ionicons name="sparkles" size={18} color="#fff" />
-            <Text style={s.dreamBtnText}>Dream</Text>
+            <Text style={s.dreamBtnText}>Dream · {getSparkleCost(refModelUsed)}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
