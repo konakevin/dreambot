@@ -1,26 +1,24 @@
 #!/usr/bin/env node
-
-const { HAIKU } = require('./lib/models');
 /**
- * nightly-dreams.js — Generate one dream per eligible user.
+ * nightly-dreams.js — ENQUEUE one nightly dream job per eligible user.
  *
- * Thin orchestrator that calls the generate-dream Edge Function for each user.
- * The Edge Function handles all prompt construction (assembleScene, location anchoring,
- * object handling, medium/vibe resolution, Sonnet brief, Replicate calls, persistence).
- * This script handles: auth, batch orchestration, bot messages, wish handling.
+ * Scalable architecture (2026-05-26): this cron NO LONGER renders inline. It
+ * selects eligible Pro/trial users and bulk-inserts one `dream_queue` job each
+ * (source='nightly'). The `dream-queue-worker` then fans those out to the
+ * nightly-dreams render Edge Function in parallel (each render its own isolate)
+ * and finalizes them. Backfill, retry/backoff, dead-letter, and per-user-per-day
+ * idempotency all live in the queue — a missed night just drains later, and a
+ * burst of users scales by worker batch size × tick frequency.
+ *
+ * Pro-only: only Pro or in-14-day-trial users get a nightly dream (gating in
+ * scripts/lib/nightlyEligibility.js). Bot accounts excluded.
  *
  * Usage:
- *   SUPABASE_SERVICE_ROLE_KEY=xxx ANTHROPIC_API_KEY=xxx node scripts/nightly-dreams.js
- *
- * Options:
- *   --max-budget <cents>   Stop after spending this much (default: 500 = $5)
- *   --batch-size <n>       Process n users in parallel (default: 5)
- *   --dry-run              Print eligible users but don't generate
+ *   SUPABASE_SERVICE_ROLE_KEY=xxx node scripts/nightly-dreams.js [--dry-run] [--max-jobs N]
  */
 
 const { createClient } = require('@supabase/supabase-js');
-const Anthropic = require('@anthropic-ai/sdk');
-const { isProActive, nightlyDreamedUserIds } = require('./lib/nightlyEligibility');
+const { isProActive } = require('./lib/nightlyEligibility');
 
 // ── Config ──────────────────────────────────────────────────────────────────
 
@@ -44,14 +42,13 @@ function getKey(name) {
 
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const SUPABASE_KEY = getKey('SUPABASE_SERVICE_ROLE_KEY');
-const ANTHROPIC_KEY = getKey('ANTHROPIC_API_KEY');
-const COST_PER_IMAGE_CENTS = 3;
 
 const args = process.argv.slice(2);
-const MAX_BUDGET_ARG = args.find((_, i, a) => a[i - 1] === '--max-budget');
-const MAX_BUDGET_OVERRIDE = MAX_BUDGET_ARG != null ? parseInt(MAX_BUDGET_ARG, 10) : null;
-const BATCH_SIZE = parseInt(args.find((_, i, a) => a[i - 1] === '--batch-size') ?? '5', 10);
 const DRY_RUN = args.includes('--dry-run');
+const MAX_JOBS_ARG = args.find((_, i, a) => a[i - 1] === '--max-jobs');
+// Cost guardrail — cap the number of nightly jobs enqueued in one run. Generous
+// default (prelaunch); raise as the Pro base grows. Each job ≈ one render.
+const MAX_JOBS = MAX_JOBS_ARG != null ? parseInt(MAX_JOBS_ARG, 10) : 5000;
 
 if (!SUPABASE_KEY) {
   console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
@@ -59,372 +56,111 @@ if (!SUPABASE_KEY) {
 }
 
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-const anthropic = ANTHROPIC_KEY ? new Anthropic({ apiKey: ANTHROPIC_KEY }) : null;
-
-// ── Auth ─────────────────────────────────────────────────────────────────────
-
-async function getJwtForUser(email) {
-  const { data: linkData, error: linkErr } = await sb.auth.admin.generateLink({
-    type: 'magiclink',
-    email,
-  });
-  if (linkErr) throw new Error(`Auth link failed for ${email}: ${linkErr.message}`);
-  const { data: otpData, error: otpErr } = await sb.auth.verifyOtp({
-    token_hash: linkData.properties.hashed_token,
-    type: 'magiclink',
-  });
-  if (otpErr || !otpData.session)
-    throw new Error(`OTP verify failed for ${email}: ${otpErr?.message}`);
-  return otpData.session.access_token;
-}
-
-// ── Edge Function Call ───────────────────────────────────────────────────────
-
-async function callNightlyEdgeFunction(jwt, vibeProfile, dreamWish) {
-  const body = {
-    mode: 'flux-dev',
-    vibe_profile: vibeProfile,
-  };
-  if (dreamWish) body.dream_wish = dreamWish;
-
-  // Retry up to 2x on transient infrastructure errors (IDLE_TIMEOUT,
-  // WORKER_RESOURCE_LIMIT). These are platform issues, not Edge Function
-  // logic failures, and re-running typically succeeds.
-  const MAX_RETRIES = 2;
-  let lastErr = null;
-  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/nightly-dreams`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`,
-      },
-      body: JSON.stringify(body),
-    });
-    let data;
-    try {
-      data = await res.json();
-    } catch {
-      data = {};
-    }
-    if (res.ok) {
-      return {
-        upload_id: data.upload_id,
-        image_url: data.image_url,
-        prompt_used: data.prompt_used,
-        resolved_medium: data.resolved_medium,
-        resolved_vibe: data.resolved_vibe,
-      };
-    }
-    const errMsg = data.error || data.code || data.message || `HTTP ${res.status}`;
-    const isNsfw = errMsg && (errMsg.includes('NSFW') || errMsg.includes('safety'));
-    if (isNsfw) return { error: errMsg, isNsfw: true };
-    const isTransient =
-      errMsg.includes('IDLE_TIMEOUT') ||
-      errMsg.includes('WORKER_RESOURCE_LIMIT') ||
-      errMsg.includes('worker boot error') ||
-      res.status >= 500;
-    if (!isTransient || attempt === MAX_RETRIES) {
-      return { error: errMsg, isNsfw: false };
-    }
-    lastErr = errMsg;
-    const backoffMs = 5_000 * (attempt + 1);
-    console.log(
-      `  retry ${attempt + 1}/${MAX_RETRIES} after transient error (${errMsg}) — waiting ${backoffMs}ms`
-    );
-    await new Promise((r) => setTimeout(r, backoffMs));
-  }
-  return { error: lastErr || 'unknown error after retries' };
-}
-
-// ── Bot Message ──────────────────────────────────────────────────────────────
-
-async function generateBotMessage(userId, promptUsed, wish) {
-  if (!anthropic) return null;
-  try {
-    const { data: recentDreams } = await sb
-      .from('uploads')
-      .select('ai_prompt, from_wish')
-      .eq('user_id', userId)
-      .eq('is_ai_generated', true)
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    const recentContext = (recentDreams ?? [])
-      .map((d) => d.ai_prompt?.slice(0, 80))
-      .filter(Boolean);
-    const pastWishes = (recentDreams ?? []).map((d) => d.from_wish).filter(Boolean);
-
-    let memoryBlock = '';
-    if (recentContext.length > 0)
-      memoryBlock += `\nOPTIONAL CONTEXT (reference ONLY if genuinely interesting, otherwise ignore):\n- Recent dreams: ${recentContext.join(' | ')}`;
-    if (pastWishes.length > 0) memoryBlock += `\n- Past wishes: ${pastWishes.join(', ')}`;
-    if (wish) memoryBlock += `\n- Tonight's wish: "${wish}"`;
-
-    const msgRes = await anthropic.messages.create({
-      model: HAIKU,
-      max_tokens: 60,
-      messages: [
-        {
-          role: 'user',
-          content: `You are a Dream Bot — a tiny creative spirit living in someone's phone, making dreams nightly. Playful, warm, a little weird. You love your human.
-
-Tonight's dream prompt: "${promptUsed.slice(0, 200)}"
-
-Write ONE short reaction to making this dream. 8-15 words max.
-
-CRITICAL RULES:
-- NEVER start with "Okay so" or "Not gonna lie" or "Honestly"
-- NEVER use the phrases "hit different", "chef's kiss", "you're welcome", "no regrets", "trust the process"
-- Every message must have a DIFFERENT opening word/structure
-- Reference ONE specific thing from the prompt — a creature, place, color, or vibe
-- React to the creative choice, don't describe the image
-- No emojis. Max one exclamation mark.
-${memoryBlock}
-
-Output ONLY the message, nothing else.`,
-        },
-      ],
-    });
-
-    const text = msgRes.content?.[0]?.text?.trim() ?? '';
-    if (text.length >= 5 && text.length <= 200) return text;
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-// ── Per-User Dream Generation ────────────────────────────────────────────────
-
-async function processDream(user) {
-  const userId = user.user_id;
-  const email = user.users.email;
-  const recipe = user.recipe;
-  const wish = user.dream_wish;
-
-  // 1. Auth
-  const jwt = await getJwtForUser(email);
-
-  // 2. Call Edge Function
-  const result = await callNightlyEdgeFunction(jwt, recipe, wish);
-
-  // 3. NSFW + wish → notify and clear
-  if (result.error) {
-    if (result.isNsfw && wish) {
-      try {
-        await sb.from('notifications').insert({
-          recipient_id: userId,
-          actor_id: userId,
-          type: 'dream_generated',
-          body: `Your wish couldn't be dreamed — it was a bit too spicy. Try a different wish!`,
-        });
-        await sb
-          .from('user_recipes')
-          .update({ dream_wish: null, wish_modifiers: null, wish_recipient_ids: null })
-          .eq('user_id', userId);
-      } catch {}
-    }
-    throw new Error(result.error);
-  }
-
-  // 4. Bot message
-  const botMessage = await generateBotMessage(userId, result.prompt_used, wish);
-
-  // 5. Update upload with bot message + approval + wish
-  if (result.upload_id) {
-    const { error: rpcErr } = await sb.rpc('finalize_nightly_upload', {
-      p_upload_id: result.upload_id,
-      p_bot_message: botMessage,
-      p_from_wish: wish || null,
-    });
-    if (rpcErr) console.error(`  ⚠️  finalize_nightly_upload failed: ${rpcErr.message}`);
-  } else {
-    console.error(`  ⚠️  No upload_id returned from Edge Function`);
-  }
-
-  // 6. Send nightly dream notification with bot message
-  if (result.upload_id) {
-    const notifBody = (wish ? 'wish:' : 'dream:') + (botMessage || '');
-    try {
-      await sb.from('notifications').insert({
-        recipient_id: userId,
-        actor_id: userId,
-        type: 'dream_generated',
-        upload_id: result.upload_id,
-        body: notifBody,
-      });
-    } catch {}
-  }
-
-  // 7. Wish recipient notifications
-  if (wish && Array.isArray(user.wish_recipient_ids) && user.wish_recipient_ids.length > 0) {
-    const recipients = [...new Set(user.wish_recipient_ids)].filter((rid) => rid !== userId);
-    if (recipients.length > 0) {
-      try {
-        await sb.from('notifications').insert(
-          recipients.map((rid) => ({
-            recipient_id: rid,
-            actor_id: userId,
-            type: 'dream_generated',
-            upload_id: result.upload_id,
-            body: wish ? `Wished you a dream: "${wish.slice(0, 50)}"` : 'Wished you a dream',
-          }))
-        );
-      } catch {}
-    }
-  }
-
-  // 8. Clear wish
-  if (wish) {
-    await sb
-      .from('user_recipes')
-      .update({ dream_wish: null, wish_recipient_ids: null, wish_modifiers: null })
-      .eq('user_id', userId);
-  }
-
-  return { medium: result.resolved_medium, vibe: result.resolved_vibe, wish: !!wish };
-}
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 (async () => {
-  console.log(`\n🌙 Nightly Dream Generation`);
-  console.log(
-    `   Budget: ${MAX_BUDGET_OVERRIDE != null ? MAX_BUDGET_OVERRIDE + '¢ (override)' : 'scales with eligible cohort'} | Batch: ${BATCH_SIZE} | Dry run: ${DRY_RUN}\n`
-  );
+  console.log('\n🌙 Nightly Dream Enqueue');
+  console.log(`   Max jobs: ${MAX_JOBS} | Dry run: ${DRY_RUN}\n`);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date().toISOString().slice(0, 10); // UTC day
+  const now = Date.now();
 
-  // Fetch eligible users — onboarded + ai_enabled. Joins users to pull
-  // pro_subscription, pro_subscription_expires_at, pro_trial_started_at,
-  // last_active_at for the cohort gating below.
+  // Eligible: onboarded + ai_enabled, real users (no bots), Pro or in-trial.
   const { data: users, error } = await sb
     .from('user_recipes')
     .select(
-      `user_id, recipe, dream_wish, wish_modifiers, wish_recipient_ids,
-       users!inner(email, last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at)`
+      `user_id, dream_wish, wish_modifiers, wish_recipient_ids,
+       users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, is_bot)`
     )
     .eq('onboarding_completed', true)
     .eq('ai_enabled', true)
-    // Exclude bot accounts — they post curated content via the dispatcher, not
-    // personal nightly user-dreams. (is_bot is false for all real users.)
     .eq('users.is_bot', false);
 
   if (error) {
     console.error('DB error:', error.message);
     process.exit(1);
   }
-  console.log(`Found ${users.length} onboarded users`);
 
-  // Filter users who already got a NIGHTLY dream today. IMPORTANT: key on a
-  // nightly-engine generation-log row, NOT ai_generation_budget — the manual
-  // Create path writes the same budget row, so the old guard skipped any user
-  // who generated manually earlier that day. A Pro power-user who creates daily
-  // would then NEVER receive their nightly dream (root cause of the "my nightly
-  // dreams stopped" bug). We only skip users with a today-dated COMPLETED
-  // ai_generation_log row whose engine is 'nightly-*' — a failed attempt
-  // (engine 'nightly-failed', status 'failed') stays retryable on a re-run.
-  const todayStart = today + 'T00:00:00Z';
-  const { data: todayLogs } = await sb
-    .from('ai_generation_log')
-    .select('user_id, rolled_axes')
-    .eq('status', 'completed')
-    .gte('created_at', todayStart);
-  const alreadyDreamed = nightlyDreamedUserIds(todayLogs);
-  let pool = users.filter((u) => !alreadyDreamed.has(u.user_id));
-
-  // ── Cohort gating ──────────────────────────────────────────────────────
-  // Nightly dreams are a PRO feature. Only Pro users (paid OR within the
-  // 14-day trial) get an auto-dream each night. Free users (post-trial) get
-  // none — they can still generate dreams manually with sparkles.
-  // isProActive lives in scripts/lib/nightlyEligibility.js (unit-tested,
-  // mirrors lib/proStatus.ts + the is_pro_active() Postgres function).
-  let proKept = 0;
-  let freeFiltered = 0;
-
-  pool = pool.filter((u) => {
-    if (isProActive(u.users)) {
-      proKept++;
-      return true;
-    }
-    freeFiltered++;
-    return false;
-  });
-
+  let pool = (users || []).filter((u) => isProActive(u.users, now));
+  const proCount = pool.length;
+  if (pool.length > MAX_JOBS) {
+    console.warn(`⚠️  ${pool.length} eligible exceeds MAX_JOBS=${MAX_JOBS} — capping this run.`);
+    pool = pool.slice(0, MAX_JOBS);
+  }
   console.log(
-    `${pool.length} eligible: ${proKept} Pro/trial | filtered: ${freeFiltered} free (post-trial, no nightly)\n`
+    `Eligible Pro/trial users: ${proCount}${proCount !== pool.length ? ` (capped to ${pool.length})` : ''}`
   );
-  const eligible = pool;
 
-  // Budget scales with the eligible cohort so a run never silently strands
-  // users past a fixed ceiling as the Pro base grows. 2x per-image cost gives
-  // headroom for face-swap retries / pricier models. Floor 500c. Override
-  // with --max-budget.
-  const MAX_BUDGET_CENTS =
-    MAX_BUDGET_OVERRIDE ?? Math.max(500, eligible.length * COST_PER_IMAGE_CENTS * 2);
-  console.log(`   Budget cap: ${MAX_BUDGET_CENTS}¢ for ${eligible.length} eligible\n`);
-
-  if (DRY_RUN) {
-    eligible.forEach((u) =>
-      console.log(`  ${u.user_id.slice(0, 8)}... ${u.users.email} ${u.dream_wish ? '(wish)' : ''}`)
-    );
-    console.log('\n(dry run — no dreams generated)');
+  if (pool.length === 0) {
+    console.log('No eligible users — nothing to enqueue.');
     return;
   }
 
-  let totalCost = 0;
-  let generated = 0;
-  let failed = 0;
+  // One job per user. dedup_key (per-user-per-day) is the idempotency unit:
+  // its unique index makes a same-day re-run a no-op. We pre-filter against
+  // jobs already enqueued today (the index also backstops a race). The wish is
+  // snapshotted into the payload and cleared from user_recipes below, so a
+  // render retry can't re-spend or double-clear it.
+  const allRows = pool.map((u) => ({
+    source: 'nightly',
+    user_id: u.user_id,
+    status: 'queued',
+    payload: {
+      dream_wish: u.dream_wish || null,
+      wish_recipient_ids: Array.isArray(u.wish_recipient_ids) ? u.wish_recipient_ids : [],
+    },
+    dedup_key: `nightly:${u.user_id}:${today}`,
+  }));
 
-  for (let i = 0; i < eligible.length; i += BATCH_SIZE) {
-    if (totalCost >= MAX_BUDGET_CENTS) {
-      console.log(`\n⚠️  Budget limit reached (${totalCost}¢ / ${MAX_BUDGET_CENTS}¢). Stopping.`);
-      break;
-    }
-
-    const batch = eligible.slice(i, i + BATCH_SIZE);
-    const results = await Promise.allSettled(batch.map((user) => processDream(user)));
-
-    for (let j = 0; j < results.length; j++) {
-      const r = results[j];
-      const userId = batch[j].user_id.slice(0, 8);
-      if (r.status === 'fulfilled') {
-        generated++;
-        totalCost += COST_PER_IMAGE_CENTS;
-        const info = r.value;
-        console.log(
-          `  ${userId}... ✅ ${info.medium ?? ''}/${info.vibe ?? ''}${info.wish ? ' (wish)' : ''}`
-        );
-      } else {
-        failed++;
-        console.log(`  ${userId}... ❌ ${r.reason?.message?.slice(0, 100) ?? 'Unknown error'}`);
-      }
-    }
-
-    // Pause between batches
-    if (i + BATCH_SIZE < eligible.length) {
-      await new Promise((r) => setTimeout(r, 2000));
-    }
+  if (DRY_RUN) {
+    allRows.forEach((r) =>
+      console.log(
+        `  would enqueue ${r.user_id.slice(0, 8)}...${r.payload.dream_wish ? ' (wish)' : ''}`
+      )
+    );
+    console.log(`\n(dry run — ${allRows.length} jobs not enqueued)`);
+    return;
   }
 
-  console.log(`\n✨ Done! Generated: ${generated} | Failed: ${failed} | Cost: ${totalCost}¢`);
-
-  // Loud failure detection — without this the GitHub Actions job exits 0 even
-  // if every render failed, hiding a silent cohort-wide outage behind a green
-  // check. Fail the job when we had eligible users but produced nothing, or
-  // when the failure ratio is high, so it surfaces as a red ✗.
-  const attempted = generated + failed;
-  if (eligible.length > 0 && generated === 0) {
-    console.error(
-      `\n❌ NIGHTLY FAILURE: 0 dreams generated for ${eligible.length} eligible users — something is broken.`
-    );
+  // Pre-filter against today's already-enqueued jobs (idempotent re-runs).
+  const allKeys = allRows.map((r) => r.dedup_key);
+  const { data: existing, error: exErr } = await sb
+    .from('dream_queue')
+    .select('dedup_key')
+    .in('dedup_key', allKeys);
+  if (exErr) {
+    console.error('Dedup lookup failed:', exErr.message);
     process.exit(1);
   }
-  if (attempted >= 5 && failed / attempted > 0.5) {
-    console.error(
-      `\n❌ NIGHTLY DEGRADED: ${failed}/${attempted} renders failed (>50%) — investigate.`
-    );
+  const existingKeys = new Set((existing || []).map((e) => e.dedup_key));
+  const newRows = allRows.filter((r) => !existingKeys.has(r.dedup_key));
+
+  if (newRows.length === 0) {
+    console.log('✨ All eligible users already have a nightly job today — nothing new to enqueue.');
+    return;
+  }
+
+  const { data: inserted, error: insErr } = await sb
+    .from('dream_queue')
+    .insert(newRows)
+    .select('id');
+  if (insErr) {
+    console.error('Enqueue failed:', insErr.message);
     process.exit(1);
+  }
+  const enqueued = (inserted || []).length;
+  console.log(
+    `✨ Enqueued ${enqueued} nightly jobs (${allRows.length - newRows.length} already queued today).`
+  );
+
+  // Clear wishes for users we just enqueued (snapshotted in their payload).
+  const wishUserIds = newRows.filter((r) => r.payload.dream_wish).map((r) => r.user_id);
+  if (wishUserIds.length > 0) {
+    const { error: clearErr } = await sb
+      .from('user_recipes')
+      .update({ dream_wish: null, wish_recipient_ids: null, wish_modifiers: null })
+      .in('user_id', wishUserIds);
+    if (clearErr) console.warn(`⚠️  wish clear failed: ${clearErr.message}`);
   }
 })();

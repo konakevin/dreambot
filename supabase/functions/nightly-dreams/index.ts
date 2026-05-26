@@ -60,40 +60,12 @@ Deno.serve(async (req) => {
     });
   }
 
-  // ── Auth ───────────────────────────────────────────────────────────────
-  const authHeader = req.headers.get('Authorization');
-  if (!authHeader) {
-    return new Response(JSON.stringify({ error: 'Missing Authorization header' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-
-  // User-scoped client for auth only
-  const supabaseUser: SupabaseClient = createClient(
-    supabaseUrl,
-    Deno.env.get('SUPABASE_ANON_KEY')!,
-    { global: { headers: { Authorization: authHeader } } }
-  );
-
-  const {
-    data: { user },
-  } = await supabaseUser.auth.getUser();
-  if (!user) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-  const userId = user.id;
-
   // Service role client for DB operations (bypasses RLS)
   const supabase: SupabaseClient = createClient(supabaseUrl, serviceRoleKey);
 
-  // ── Parse request body ─────────────────────────────────────────────────
+  // ── Parse request body (needed by both auth paths) ──────────────────────
   let body: Record<string, unknown>;
   try {
     body = await req.json();
@@ -104,7 +76,61 @@ Deno.serve(async (req) => {
     });
   }
 
-  const vibe_profile = body.vibe_profile as VibeProfile | undefined;
+  // ── Auth — two paths ─────────────────────────────────────────────────────
+  // 1. Worker token (server-to-server, from the dream-queue-worker fan-out
+  //    dispatcher): user_id comes from the body and the recipe is loaded fresh
+  //    from the DB so profile edits always land. No per-user JWT needed — this
+  //    is what lets nightly fan out across worker-claimed jobs at scale.
+  // 2. User JWT (app / QA direct calls): derive user_id from the token; recipe
+  //    comes from body.vibe_profile.
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: 'Missing Authorization header' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const workerToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
+  const isWorkerCall = Boolean(workerToken) && authHeader === `Bearer ${workerToken}`;
+
+  let userId: string;
+  let vibe_profile: VibeProfile | undefined;
+
+  if (isWorkerCall) {
+    userId = (body.user_id as string) || '';
+    if (!userId) {
+      return new Response(JSON.stringify({ error: 'user_id is required for worker calls' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    const { data: recipeRow } = await supabase
+      .from('user_recipes')
+      .select('recipe')
+      .eq('user_id', userId)
+      .single();
+    const recipe = (recipeRow as { recipe?: unknown } | null)?.recipe;
+    vibe_profile = recipe && typeof recipe === 'object' ? (recipe as VibeProfile) : undefined;
+  } else {
+    const supabaseUser: SupabaseClient = createClient(
+      supabaseUrl,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+    const {
+      data: { user },
+    } = await supabaseUser.auth.getUser();
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    userId = user.id;
+    vibe_profile = body.vibe_profile as VibeProfile | undefined;
+  }
+
   const dream_wish = (body.dream_wish as string) || undefined;
   // Preserve explicit null — caller passes null to mean "force scene-only,
   // no cast". `||` would coerce null → undefined and break the
