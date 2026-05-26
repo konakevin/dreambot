@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Platform,
   StyleSheet,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
@@ -182,7 +183,21 @@ export default function WelcomeScreen() {
         </Link>
 
         <Text className="text-text-tertiary text-xs text-center mt-2 px-4">
-          By continuing you agree to our Terms of Service and Privacy Policy.
+          By continuing you agree to our{' '}
+          <Text
+            className="underline"
+            onPress={() => Linking.openURL('https://dreambotapp.com/terms')}
+          >
+            Terms of Service
+          </Text>{' '}
+          and{' '}
+          <Text
+            className="underline"
+            onPress={() => Linking.openURL('https://dreambotapp.com/privacy')}
+          >
+            Privacy Policy
+          </Text>
+          .
         </Text>
       </View>
     </SafeAreaView>

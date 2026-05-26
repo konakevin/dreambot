@@ -34,6 +34,9 @@ module.exports = {
       bundleIdentifier: 'com.konakevin.radorbad',
       associatedDomains: ['applinks:dreambotapp.com'],
       infoPlist: {
+        // No non-exempt encryption (standard HTTPS only) — skips the App Store
+        // export-compliance prompt on every submission.
+        ITSAppUsesNonExemptEncryption: false,
         NSCameraUsageDescription:
           'DreamBot uses your camera to capture photos for AI dream generation.',
         CFBundleURLTypes: [
@@ -82,7 +85,10 @@ module.exports = {
           },
         },
       ],
-      'expo-secure-store',
+      // faceIDPermission:false omits NSFaceIDUsageDescription — SecureStore
+      // stores tokens in the Keychain without biometric prompts, so the
+      // Face ID usage string is unused and only invites reviewer questions.
+      ['expo-secure-store', { faceIDPermission: false }],
       'expo-web-browser',
       'expo-video',
       'react-native-compressor',

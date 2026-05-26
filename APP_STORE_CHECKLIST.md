@@ -1,101 +1,128 @@
-# App Store Submission Checklist
+# DreamBot — App Store Submission Checklist
 
-## Code ✅ Done
-- [x] Sign in with Apple
-- [x] Sign in with Google
-- [x] Sign in with Facebook
-- [x] Account deletion (Settings → Delete account)
-- [x] Content moderation (Sightengine — images, videos, text)
-- [x] Report posts (flag icon on cards + detail view)
-- [x] Report users (... menu on profiles)
-- [x] Block users (... menu on profiles, filters from feed)
-- [x] Push notifications
-- [x] Privacy policy (radorbad.co/privacy)
-- [x] Terms of service (radorbad.co/terms)
-- [x] App icon (1024x1024)
+> Path to a submittable build for the iOS App Store. App: **DreamBot** — AI dream
+> image generator with a social feed, user-generated content, and in-app purchases.
+> Bundle ID `com.konakevin.radorbad` · version `1.0.0` · EAS project
+> `014926a1-297b-4abf-9184-a01979a83879`.
+>
+> (Replaced the old "Rad or Bad" checklist on 2026-05-26 — that described a
+> different app and cited SightEngine moderation that's since been removed.)
 
-## Still Needed
+---
 
-### 1. Support Email
-Set up `support@radorbad.co` (or use konakevin@gmail.com temporarily).
-Options: Wix email, Google Workspace ($6/mo), or Cloudflare Email Routing (free forwarding).
+## Status at a glance
 
-### 2. App Store Connect Setup
-Go to [appstoreconnect.apple.com](https://appstoreconnect.apple.com):
-- Create a new app
-- **Bundle ID:** com.konakevin.radorbad
-- **App name:** Rad or Bad
-- **Subtitle:** Rate anything. Get rated.
-- **Category:** Social Networking
-- **Age rating:** 17+ (user-generated content with suggestive themes)
-- **Privacy policy URL:** https://radorbad.co/privacy
-- **Support URL:** https://radorbad.co
+The **app code is essentially submission-ready.** The remaining work is mostly
+**App Store Connect configuration, IAP product setup, assets, and the build/submit
+mechanics** — not code.
 
-### 3. App Description
-Draft (edit as you like):
-```
-Post whatever you want. Others vote Rad or Bad.
+---
 
-Find your vibers — people who vote like you. Build streaks.
-Discover your weird little corner of the internet.
+## 1. Code & native config
 
-Features:
-• Swipe Rad 🔥 or Bad 👎 on photos and videos
-• Upload your own content across 12 categories
-• Find Vibers who share your taste
-• Build vote streaks with friends
-• Comment, share posts, and interact
-• Vibe Score shows your taste compatibility
-• Custom feed filtering by category
-• Push notifications for votes, comments, and milestones
-```
+Already done (verified in repo):
 
-### 4. Keywords
-```
-rate, rating, vote, photo, social, vibes, streak, rad, bad, swipe, hot or not
-```
+- [x] Sign in with Apple (+ Google + Facebook) — `lib/appleAuth.ts`, `app/(auth)/`
+- [x] In-app account deletion — Settings → Delete account → `delete_own_account` RPC
+- [x] Report content + users — `hooks/useReport.ts`, `reports` table
+- [x] Block users — `hooks/useBlockUser.ts`, `block_user` RPC, Settings → Blocked users
+- [x] Text moderation — `lib/moderation.ts` wordlist (images rely on Flux's NSFW filter; SightEngine removed)
+- [x] IAP: sparkle packs + Pro subscription via RevenueCat + **Restore Purchases** on both stores
+- [x] Push notifications — `expo-notifications`, `push_tokens`, `send-push`
+- [x] Camera + Photo Library permission strings (`app.config.js` infoPlist + plugins)
+- [x] Privacy manifest — `PrivacyInfo.xcprivacy` present
+- [x] App icon (1024) + splash
+- [x] Terms/Privacy disclosure on auth screen + links in Settings
+- [x] **(2026-05-26)** `ITSAppUsesNonExemptEncryption: false` — skips export-compliance prompt
+- [x] **(2026-05-26)** Removed unused Face ID permission (`expo-secure-store faceIDPermission:false`)
+- [x] **(2026-05-26)** Made auth-screen Terms/Privacy tappable links
 
-### 5. Screenshots
-Need minimum 3 screenshots for each required size:
-- **6.7" (iPhone 15 Pro Max)** — 1290 × 2796 px
-- **6.1" (iPhone 15 Pro)** — optional but recommended
+Remaining code/verification items:
 
-Best screens to capture:
-1. Feed with a card being voted on (shows core mechanic)
-2. Vote result with score badge
-3. Profile with vibe streaks
-4. Comments section
-5. Category filter
-6. Login screen (shows branding)
+- [ ] **Verify Microphone permission on a fresh prebuild.** The local (gitignored)
+      `ios/` Info.plist shows `NSMicrophoneUsageDescription`, but no plugin in
+      `app.config.js` injects it and nothing in-app uses the mic — it's likely a
+      stale artifact. After `npx expo prebuild --clean`, check the generated
+      Info.plist; if the key is still there, trace the source plugin and disable it
+      (e.g. `expo-camera`/`expo-image-picker` `microphonePermission: false`).
+- [ ] **Confirm the live legal + support pages resolve:**
+      `https://dreambotapp.com/privacy`, `https://dreambotapp.com/terms`, and a
+      support URL/email. (App + `app.config.js` associatedDomains use
+      `dreambotapp.com`.) These MUST be live before submission.
 
-**How to take them:**
-- Use the iPhone 15 Pro Max simulator in Xcode
-- Cmd+S to save screenshot
-- Or use a tool like Fastlane snapshot for automation
+---
 
-### 6. Build & Upload
-1. In Xcode: set scheme to **Release**
-2. Select **Any iOS Device (arm64)** as the build target (not a simulator)
-3. **Product → Archive**
-4. When archive completes, click **Distribute App**
-5. Choose **App Store Connect** → **Upload**
-6. Wait for processing in App Store Connect (~15 min)
+## 2. Apple Developer + App Store Connect account
 
-### 7. Submit for Review
-1. In App Store Connect, select the build
-2. Fill in all metadata (description, screenshots, etc.)
-3. Answer the export compliance question (No encryption beyond standard HTTPS = select No)
-4. Answer the content rights question (all content is user-generated)
-5. Submit for review
+- [ ] Apple Developer Program membership active ($99/yr).
+- [ ] Create the app record in [App Store Connect](https://appstoreconnect.apple.com):
+  - Bundle ID: `com.konakevin.radorbad`
+  - Name: **DreamBot** · Category: **Photo & Video** or **Entertainment** (pick fit)
+  - Primary language, SKU
+- [ ] Confirm signing — let EAS manage credentials, or set up distribution cert + provisioning profile.
 
-### Expected Timeline
-- Archive + upload: 15 min
-- App Store Connect processing: 15-30 min
-- Review: 24-48 hours (usually faster for first submission)
-- Common first rejection: missing screenshots, unclear content policy, or moderation concern → fix and resubmit (24h turnaround)
+---
 
-### TestFlight (Optional but Recommended)
-Same upload process, but in App Store Connect mark the build for TestFlight instead of App Store Review. This lets you:
-- Test push notifications on real devices
-- Share with beta testers via invite link
-- Verify the release build works end-to-end before going public
+## 3. In-app purchases + RevenueCat
+
+- [ ] Create the IAP products in App Store Connect matching `constants/sparklePacks.ts`
+      (prefix `com.konakevin.radorbad.sparkles.*`) — all sparkle packs.
+- [ ] Create the Pro subscription products (monthly + yearly) — see `constants/proPlan.ts`.
+- [ ] Fill IAP metadata (display name, description, screenshot) — required for review.
+- [ ] **Submit the IAPs with the first app version** (Apple requires the first IAP to
+      accompany a binary or it won't review).
+- [ ] RevenueCat: map Offerings → these products, set the **App Store shared secret**,
+      confirm the `revenuecat-webhook` Edge Function URL is configured + live.
+- [ ] Sandbox-test a purchase + **Restore Purchases** on a real device (TestFlight).
+
+---
+
+## 4. App Store Connect listing
+
+- [ ] **Description / subtitle / keywords** — written fresh for DreamBot (AI dream
+      image generator + social feed). Do NOT reuse the old "Rad or Bad" copy.
+- [ ] **Screenshots** — min 3 at **6.7" (1290×2796)** of DreamBot's real screens
+      (onboarding vibe profile, a generated dream, the feed, create modes, profile).
+- [ ] **Age rating** questionnaire — expect **17+** (user-generated content + AI image
+      generation + face-swap of personal photos).
+- [ ] **App Privacy "nutrition label"** — disclose data collected (account/email,
+      photos, usage, purchases, push token).
+- [ ] **Privacy Policy URL** + **Support URL** (from §1).
+- [ ] **Content rights** answer — content is user-generated / AI-generated.
+- [ ] **Demo account in App Review notes** — the app is login-gated, so provide working
+      test credentials (and note any IAP behavior) or it gets auto-rejected.
+
+---
+
+## 5. Build, upload, TestFlight
+
+- [ ] APNs key uploaded to Expo/EAS so production push works (you use Expo Push + `send-push`).
+- [ ] `eas.json` → `submit.production` is currently empty `{}` — add Apple submit
+      credentials for `eas submit`, or plan to upload via Xcode/Transporter.
+- [ ] Production build: `eas build --platform ios --profile production`
+      (`autoIncrement` is on, so build number bumps automatically).
+- [ ] Upload to App Store Connect; wait for processing (~15–30 min).
+- [ ] **TestFlight pass first** — verify on a real device: push notifications, IAP
+      (sandbox), face-swap/cast flow, account deletion, login providers. Don't skip this.
+
+---
+
+## 6. Submit for review
+
+- [ ] Attach the processed build to the app version.
+- [ ] All metadata + screenshots + IAPs + privacy answers complete.
+- [ ] Export compliance — already handled by `ITSAppUsesNonExemptEncryption: false`.
+- [ ] Submit. First-review turnaround is typically 24–48h.
+
+---
+
+## 7. Known review-risk areas (be ready to respond)
+
+- **AI face-swap (Dream Cast):** the most likely area Apple probes. Your terms page
+  should state users may only upload photos they have rights to, and the
+  report/block + 17+ rating cover objectionable use.
+- **Image moderation** now relies on Flux's built-in NSFW filter (no human/3rd-party
+  image scan). Combined with the report/block flow + text wordlist this is generally
+  acceptable, but be prepared to explain the moderation approach if asked (Guideline 1.2).
+- **Common first rejections:** missing demo account, screenshots not matching the app,
+  or unclear UGC moderation policy → fix and resubmit (~24h turnaround).
