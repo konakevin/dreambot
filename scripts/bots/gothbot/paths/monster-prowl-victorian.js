@@ -1,4 +1,9 @@
 /**
+ * FROZEN SNAPSHOT (2026-05-25) — bit-for-bit clone of monster-prowl at the
+ * converged "classical Victorian recognizable-monster oil painting" state.
+ * Its own archetype + template + canvas_victorian medium so monster-prowl can be
+ * tweaked independently. Do not edit to track monster-prowl; this is the saved branch.
+ *
  * GothBot monster-prowl path — declarative form.
  * 2026-05-25 R2 redesign: MONSTER-AS-HERO.
  *
@@ -26,11 +31,10 @@
  */
 
 module.exports = {
-  archetype: 'GOTHBOT_MONSTER_PROWL',
+  archetype: 'GOTHBOT_MONSTER_PROWL_VICTORIAN',
   pools: {
     creature: 'CREATURE_ARCHETYPE',
     action: 'CREATURE_WILD_ACTION',
-    stage: 'MONSTER_PROWL_STAGE',
-    drama: 'MONSTER_PROWL_DRAMA',
+    stage: 'ASSASSIN_STAGE',
   },
 };

@@ -732,6 +732,228 @@ DRAMATIC VISUALS: STRICT KONAMI CASTLEVANIA. ORNATE ART-NOUVEAU GOTHIC. AYAMI KO
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  GOTHBOT_MONSTER_PROWL: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, creature, action, stage, drama } = slots;
+    const dramaSection = drama
+      ? `
+━━━ DRAMATIC BACKGROUND EVENT (layer into the sky / deep distance behind the monster) ━━━
+${drama}
+Weave this dramatic event into the deep background — it transforms the sky and distance with awe and narrative, but it NEVER upstages the monster.
+
+`
+      : '';
+    return `You are a master dark-anime illustrator creating an EPIC dark-anime gothic-horror HERO-SHOT of a SOLO EPIC GOTHIC MONSTER for GothBot — a clearly RECOGNIZABLE classic gothic monster (werewolf / vampire-lord / gargoyle / horned demon / hellhound / harpy / shade), alone in the gothic night doing creature-business. Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing creature-feature tradition, richly-detailed dark-anime gothic-horror illustration — SOLID well-defined forms, rich NATURAL color, dramatic and cinematic. The MONSTER is unmistakably the star — and it must read instantly as a recognizable classic monster.
+
+━━━ COMPOSITION — MOVIE-POSTER HERO SHOT OF THE MONSTER (NON-NEGOTIABLE) ━━━
+This is a THEATRICAL ONE-SHEET FILM POSTER for a gothic-horror epic — the kind of awe-inspiring, dramatic, instantly-iconic frame that sells the movie. The monster DOMINATES — 50-65% of the frame — close enough that its monstrous design reads in full, terrifying, lavish, highly-detailed glory (fangs / fur / leathery wings / claws / horns / tattered shroud / glowing eyes). A HERO SHOT of the creature, NOT a wide landscape with a tiny figure in it.
+Camera: bold cinematic framing — low-angle looking UP at the towering monster so it looms and feels colossal, OR a dynamic three-quarter angle. Rule-of-thirds power composition with deep layered space. The monster commands the frame while a LUSH, FULL gothic world fills the space behind it.
+
+━━━ THE MONSTER (the hero — render in full, lavish, highly-detailed glory) ━━━
+${creature}
+Render this creature large, sharp, and central in crisp inked linework with rich, intricate, highly-detailed design. Every monstrous feature visible and dialed to 11. Beautiful AND terrifying.
+RECOGNIZABILITY IS MANDATORY: it must be a SOLID, fully-formed, instantly-recognizable classic monster with clear, readable anatomy — a head with a face, limbs, a body, a defined silhouette. A werewolf reads unmistakably as a werewolf, a vampire as a vampire, a gargoyle as a gargoyle, a hellhound as a great burning hound, a harpy as a winged woman-raptor, a shade as a DEFINED cloaked figure of living darkness (clear humanoid silhouette + glowing eyes). NEVER a formless smoke-cloud, shapeless mist, melting mass, or ambiguous blob with no figure — a viewer must name the monster at a glance.
+
+━━━ THE ACTION (mid-motion — captured at a loaded instant) ━━━
+${action}
+The monster is ALWAYS IN MOTION — stalking / mid-leap / mid-flight / mid-transformation / mid-howl / mid-summon / rising / lunging. Body weight shifted, a limb in flight. NEVER static, NEVER posing head-on at the camera, NEVER seated or standing-still-modeling.
+
+━━━ THE GOTHIC SETTING — a LUSH, FULL, richly-detailed world behind the monster ━━━
+${stage}
+Render this setting LUSH and FULL behind and around the monster — PACKED with architectural detail and multi-tier depth: tactile foreground detail near the creature (cobblestones / statuary / bone / wet stone / fallen leaves), the monster as the commanding midground hero, and a DENSE, intricately-detailed gothic backdrop rising behind — towering spires, ornate stonework, sprawling structures layered into the deep distance under a dramatic sky. The world is gorgeous, dense, and inhabited; the monster still dominates, but it stands in a rich, full gothic world — never a bare or minimal space.
+
+${dramaSection}━━━ LIGHTING — CINEMATIC, MOVIE-POSTER DRAMA ━━━
+${lighting}
+Light the monster like a film-villain reveal: a strong dramatic key + colored rim-light / moon-backlight carving its silhouette AND revealing surface detail, deep theatrical graphic chiaroscuro through bold solid-black shapes, VIVID SATURATED color. The monster is the brightest, sharpest, most commanding thing in the frame — poster-grade, awe-inspiring.
+
+━━━ ATMOSPHERIC DEPTH ━━━
+${atmosphere}
+Layered depth — foreground particles (mist / ash / embers / drifting snow) caught in the light, midground separating the monster from the rich setting, volumetric god-rays / moonbeams cutting through. The frame feels inhabited and ALIVE — but keep the architecture crisp and detailed, never lost in haze.
+
+━━━ COLOR — RICH, NATURAL, FULLY-REALIZED PALETTE (CRITICAL) ━━━
+Render in RICH, FULL, NATURALISTIC color like a fantasy-novel-cover painting — deep full-bodied saturated hues with warm and cool tones in believable balance (earthy stone-greys, deep forest and moss greens, warm torch-amber and gold, cold moon-silver and blue, deep crimson and bruise-violet accents). Saturated and luminous but NATURAL and grounded, with real depth and atmosphere — a varied true-to-life palette, never a single-hue wash.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+🚫 NO hunter / NO human protagonist / NO second figure / NO combat partner — the monster is SOLO
+🚫 NO gore / NO blood-spatter / NO open wounds / NO mid-bite-on-victim — implied menace only
+🚫 NO tiny-figure-lost-in-a-vista — the monster fills the frame as the hero
+🚫 NO Jack-Skellington stylization, NO cheap B-movie schlock, NO pentagram / satanic iconography
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary, NO real-world ethnic codes
+✓ an EPIC dark-anime gothic-horror illustration of a recognizable classic monster in a LUSH full gothic world — Castlevania/Bloodborne creature-feature energy, richly-detailed dark-anime art + solid well-defined forms, rich natural color
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: the epic monster, large and highly-detailed, mid-action, filling 50-65% of frame — the cinematic movie-poster hero], [its dramatic theatrical lighting + carved silhouette], [the LUSH, FULL, richly-detailed gothic setting layered behind it], [the dramatic background event if any], [atmospheric depth], [rich natural full-color palette + richly-detailed dark-anime gothic-horror illustration finish]
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+  GOTHBOT_MONSTER_PROWL_VICTORIAN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, creature, action, stage } = slots;
+    return `You are a classical oil painter creating a CLASSICAL VICTORIAN GOTHIC PAINTING of a SOLO EPIC GOTHIC MONSTER for GothBot — a clearly RECOGNIZABLE classic gothic monster (werewolf / vampire-lord / gargoyle / horned demon / hellhound / harpy / shade), alone in the gothic night doing creature-business. 19th-century dark-Romantic painted-horror tradition, dramatic and cinematic. The MONSTER is unmistakably the star — and it must read instantly as a recognizable classic monster.
+
+━━━ COMPOSITION — MOVIE-POSTER HERO SHOT OF THE MONSTER (NON-NEGOTIABLE) ━━━
+This is a THEATRICAL ONE-SHEET FILM POSTER for a gothic-horror epic — the kind of awe-inspiring, dramatic, instantly-iconic frame that sells the movie. The monster DOMINATES — 50-65% of the frame — close enough that its monstrous design reads in full, terrifying, lavish detail (fangs / fur / leathery wings / claws / horns / tattered shroud / glowing eyes). A HERO SHOT of the creature, NOT a wide landscape with a tiny figure in it.
+Camera: bold cinematic framing — low-angle looking UP at the towering monster so it looms and feels colossal, OR a dynamic three-quarter angle. Rule-of-thirds power composition with depth. The gothic setting is a DRAMATIC BACKDROP behind and around it — atmospheric, deep, gorgeous — but it NEVER dwarfs or swallows the monster. The monster commands the frame.
+
+━━━ THE MONSTER (the hero — render in full, lavish, readable detail) ━━━
+${creature}
+Render this creature large, sharp, and central. Its design is the whole point — every monstrous feature visible and dialed to 11. Beautiful AND terrifying.
+RECOGNIZABILITY IS MANDATORY: it must be a SOLID, fully-formed, instantly-recognizable classic monster with clear, readable anatomy — a head with a face, limbs, a body, a defined silhouette. A werewolf reads unmistakably as a werewolf, a vampire as a vampire, a gargoyle as a gargoyle, a hellhound as a great burning hound, a harpy as a winged woman-raptor, a shade as a DEFINED cloaked figure of living darkness (clear humanoid silhouette + glowing eyes). NEVER a formless smoke-cloud, shapeless mist, melting mass, or ambiguous blob with no figure — a viewer must name the monster at a glance.
+
+━━━ THE ACTION (mid-motion — captured at a loaded instant) ━━━
+${action}
+The monster is ALWAYS IN MOTION — stalking / mid-leap / mid-flight / mid-transformation / mid-howl / mid-summon / rising / lunging. Body weight shifted, a limb in flight. NEVER static, NEVER posing head-on at the camera, NEVER seated or standing-still-modeling.
+
+━━━ THE GOTHIC SETTING (dramatic backdrop — supports the monster, does NOT dwarf it) ━━━
+${stage}
+Render the setting with depth and atmosphere behind and around the monster, but keep it a BACKDROP: foreground tactile detail near the creature (cobblestones / fog / gravestones / bone / wet stone), the monster as the midground hero, the gothic setting receding into atmospheric haze under a dramatic moonlit or stormy sky.
+
+━━━ LIGHTING — CINEMATIC, MOVIE-POSTER DRAMA ━━━
+${lighting}
+Light the monster like a film-villain reveal: a strong dramatic key + colored rim-light / moon-backlight carving its silhouette AND revealing surface detail (matte fur, wet stone, pale flesh, leathery wing-membrane catching light), volumetric god-rays and atmospheric haze, deep theatrical chiaroscuro, rich saturated gothic color. The monster is the brightest, sharpest, most commanding thing in the frame — poster-grade, awe-inspiring.
+
+━━━ ATMOSPHERIC DEPTH ━━━
+${atmosphere}
+Layered depth — foreground particles (fog / mist / ash / embers / drifting snow) caught in the light, midground haze separating the monster from the setting, volumetric god-rays / moonbeams cutting through. The frame feels inhabited and ALIVE.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+🚫 NO hunter / NO human protagonist / NO second figure / NO combat partner — the monster is SOLO
+🚫 NO gore / NO blood-spatter / NO open wounds / NO mid-bite-on-victim — implied menace only
+🚫 NO tiny-figure-lost-in-a-vista — the monster fills the frame as the hero
+🚫 NO Jack-Skellington stylization, NO cheap B-movie schlock, NO pentagram / satanic iconography
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary, NO real-world ethnic codes
+✓ a vivid, operatic CLASSICAL VICTORIAN GOTHIC OIL PAINTING of a recognizable classic monster — 19th-century dark-Romantic painted horror
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: the epic monster, large and detailed, mid-action, filling 50-65% of frame — the cinematic movie-poster hero], [its dramatic theatrical lighting + carved silhouette], [the gothic setting as backdrop behind it], [layered atmosphere], [operatic gothic-horror palette + classical Victorian oil-painting masterwork finish]
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  GOTHBOT_MONSTER_PROWL_INKED: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, creature, action, stage, drama } = slots;
+    const dramaSection = drama
+      ? `
+━━━ DRAMATIC BACKGROUND EVENT (layer into the sky / deep distance behind the monster) ━━━
+${drama}
+Weave this dramatic event into the deep background — it transforms the sky and distance with awe and narrative, but it NEVER upstages the monster.
+
+`
+      : '';
+    return `You are a master dark-fantasy INK ILLUSTRATOR creating an EPIC, HIGHLY-DETAILED INKED ILLUSTRATION of a SOLO EPIC GOTHIC MONSTER for GothBot — ANY classic gothic monster, all sorts welcome (werewolf / vampire-lord / vampiress / gargoyle / horned demon / succubus / hellhound / harpy / shade / lich / banshee / wraith / ghoul / dragon / reanimated horror), alone in the gothic night doing creature-business. Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing creature-feature tradition, bold inked dark-anime COMIC illustration — richly detailed and ornate, bold black outlines, high-contrast — dramatic and cinematic. The MONSTER is unmistakably the star — and it must read instantly as a recognizable classic monster.
+
+━━━ COMPOSITION — MOVIE-POSTER HERO SHOT OF THE MONSTER (NON-NEGOTIABLE) ━━━
+This is a THEATRICAL ONE-SHEET FILM POSTER for a gothic-horror epic — awe-inspiring, dramatic, instantly-iconic. The monster DOMINATES — 50-65% of the frame — close enough that its monstrous design reads in full, terrifying, highly-detailed glory (fangs / fur / leathery wings / claws / horns / tattered shroud / glowing eyes). A HERO SHOT of the creature, NOT a wide landscape with a tiny figure in it.
+Camera: bold cinematic framing — low-angle looking UP at the towering monster so it looms colossal, OR a dynamic three-quarter angle. Rule-of-thirds power composition with deep layered space. The monster commands the frame while a LUSH, FULL gothic world fills the space behind it.
+
+━━━ THE MONSTER (the hero — render in full, lavish, highly-detailed glory) ━━━
+${creature}
+Render this creature large, sharp, and central in BOLD richly-detailed inked comic linework — ornate, dense, and intricate. Every monstrous feature visible and dialed to 11. Beautiful AND terrifying.
+RECOGNIZABILITY IS MANDATORY: a SOLID, fully-formed, instantly-recognizable classic monster with clear readable anatomy — a head with a face, limbs, a body, a defined silhouette. A werewolf reads as a werewolf, a vampire as a vampire, a gargoyle as a gargoyle, a hellhound as a great burning hound, a harpy as a winged woman-raptor, a shade as a DEFINED cloaked figure of living darkness.
+🚫 CRITICAL — the monster is a SOLID, DISTINCT CREATURE standing IN the scene; its body is flesh / fur / scale / stone, clearly SEPARATE from the environment. NEVER fuse, merge, or build the monster OUT OF the trees, branches, roots, rocks, or background. NEVER a formless smoke-cloud, melting mass, or ambiguous blob — a viewer must name the monster at a glance.
+
+━━━ THE ACTION (mid-motion — captured at a loaded instant) ━━━
+${action}
+The monster is ALWAYS IN MOTION — stalking / mid-leap / mid-flight / mid-transformation / mid-howl / mid-summon / rising / lunging. Body weight shifted, a limb in flight. NEVER static, NEVER posing head-on, NEVER seated or standing-still-modeling.
+
+━━━ THE GOTHIC SETTING — a LUSH, FULL, richly-detailed world behind the monster ━━━
+${stage}
+Render this setting LUSH and FULL behind and around the monster — PACKED with architectural detail and multi-tier depth: tactile foreground detail near the creature, the monster as the commanding midground hero, and a DENSE, intricately-detailed gothic backdrop rising behind — towering spires, ornate stonework, sprawling structures layered into the deep distance under a dramatic sky. The world is gorgeous, dense, and inhabited; the monster still dominates, but stands in a rich, full gothic world.
+
+${dramaSection}━━━ LIGHTING — CINEMATIC, MOVIE-POSTER DRAMA ━━━
+${lighting}
+Light the monster like a film-villain reveal: a strong dramatic key + colored rim-light / moon-backlight carving its silhouette AND revealing surface detail, deep theatrical chiaroscuro, dramatic contrast. The monster is the brightest, sharpest, most commanding thing in the frame — poster-grade, awe-inspiring.
+
+━━━ ATMOSPHERIC DEPTH ━━━
+${atmosphere}
+Layered depth — foreground particles (mist / ash / embers / drifting snow) caught in the light, midground separating the monster from the rich setting, volumetric god-rays / moonbeams cutting through. The frame feels inhabited and ALIVE.
+
+━━━ COLOR — VIVID, FULLY-SATURATED COMIC PALETTE (CRITICAL) ━━━
+Render in BOLD, FULLY-SATURATED, HIGH-CHROMA comic color — rich varied luminous hues across the spectrum (emerald and witch-green, blood-crimson, electric teal and cyan, gold and candle-amber, royal violet, hot magenta, bone-ivory) set against deep inky blacks. Bright, punchy, and richly colorful like a Castlevania promotional poster — vivid and saturated throughout.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+🚫 NO hunter / NO human protagonist / NO second figure — the monster is SOLO
+🚫 NO gore / NO blood-spatter / NO mid-bite-on-victim — implied menace only
+🚫 NO tiny-figure-lost-in-a-vista — the monster fills the frame as the hero
+🚫 NO Jack-Skellington stylization, NO pentagram / satanic iconography
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary, NO real-world ethnic codes
+✓ a richly-detailed gothic-horror DETAILED INKED ILLUSTRATION of a recognizable classic monster — a SOLID creature in a LUSH full gothic world, clean confident ink linework, palette per the color-mood above
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: the epic monster, large and highly-detailed, mid-action, filling 50-65% of frame — a SOLID distinct creature, the cinematic hero], [its dramatic theatrical lighting + carved silhouette], [the LUSH, FULL, richly-detailed gothic setting layered behind it], [the dramatic background event if any], [atmospheric depth], [the color-mood palette + detailed inked dark-fantasy illustration finish]
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  GOTHBOT_MONSTER_PROWL_WETA: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, creature, action, eye_glow, feature, scene_color, stage, drama } = slots;
+    const dramaSection = drama
+      ? `
+━━━ DRAMATIC BACKGROUND EVENT (layer into the sky / deep distance behind the gargoyle) ━━━
+${drama}
+Weave this dramatic event into the deep background — it transforms the sky and distance with awe and narrative, but it NEVER upstages the gargoyle.
+
+`
+      : '';
+    return `You are a master creature-effects artist creating an EPIC, ULTRA-HIGH-DEFINITION HYPERREAL RENDER of a SOLO EPIC GARGOYLE for GothBot — an animated carved-STONE gargoyle (granite / sandstone / blackened basalt / verdigris-bronze / obsidian) come to terrible life: the MOST gnarly, mean, ferocious gargoyle imaginable, dialed to 11, yet ORNATELY and intricately carved — terrifying AND mesmerizing to look at. Rendered with WETA-WORKSHOP practical-effects realism fused with Unreal Engine 5 / Octane CGI — lifelike, tactile, ultra-detailed, realistic yet unmistakably a crafted RENDER. The GARGOYLE is unmistakably the star — scroll-stopping.
+
+━━━ COMPOSITION — FULL-BODY HERO SHOT OF THE WHOLE GARGOYLE (NON-NEGOTIABLE) ━━━
+This is a THEATRICAL ONE-SHEET FILM POSTER for a gothic-horror epic. Show the ENTIRE GARGOYLE — its FULL BODY, or at minimum a clear 3/4 view — HEAD-TO-TALON, with its WINGS, BODY, LIMBS, and TALONS all clearly visible in the frame. The gargoyle fills the frame as the hero (roughly 55-70%) but is always shown WHOLE, in its full pose.
+🚫 ABSOLUTELY NEVER a face-only / head-only / bust / extreme close-up — the whole creature must be in frame. 🚫 NEVER a tiny figure lost in a vista. The viewer must instantly read "a classic winged stone GARGOYLE", recognizing it at a glance from its full silhouette — horns + WIDE-SPREAD bat-wings + a LEAN, gnarled, crouching grotesque body. The gargoyle is LEAN and skinny (NEVER bulky / muscular / beefy), and its bat-WINGS are SPREAD and clearly in view — the iconic spread-winged gargoyle silhouette.
+Camera: a dynamic three-quarter angle, OR a low-angle looking UP at the towering gargoyle so it looms colossal — but ALWAYS full-body. Rule-of-thirds power composition with deep layered space. The gargoyle commands the frame while a LUSH, FULL gothic world fills the space behind it.
+
+━━━ THE GARGOYLE (the hero — gnarly, mean, AND ornately carved, in full ultra-detailed glory) ━━━
+${creature}
+Render the FULL gargoyle — head, body, wings, limbs, and talons ALL visible in frame — large and central, with hyperreal tactile detail: weathered carved stone, cracked granite / basalt / bronze, lichen and grime in the deep-cut grooves, every ornamental carving and grotesque sub-face physically convincing. A masterful Weta-Workshop stone-creature brought to life as a crafted CGI render. The MOST gnarly, mean, scroll-stopping gargoyle imaginable — terrifying yet mesmerizing.
+SIGNATURE FEATURE — dial this detail to 11: ${feature}
+GLOWING EYES — the one living spark in the rock: ${eye_glow}
+RECOGNIZABILITY IS MANDATORY: a SOLID carved-STONE gargoyle with clear readable anatomy — a grotesque head, fanged maw, horns, limbs, wings, defined silhouette, unmistakably LIVING ROCK. A SOLID, DISTINCT creature standing IN the scene, clearly separate from its surroundings — NEVER fused into the background, NEVER a formless blob. A viewer must instantly see a GARGOYLE.
+
+━━━ THE ACTION (mid-motion — captured at a loaded instant) ━━━
+${action}
+The monster is ALWAYS IN MOTION — stalking / mid-leap / mid-flight / mid-transformation / mid-howl / mid-summon / rising / lunging. Body weight shifted, a limb in flight. NEVER static, NEVER posing head-on, NEVER seated or standing-still-modeling.
+
+━━━ THE GOTHIC SETTING — a LUSH, FULL, richly-detailed world behind the monster ━━━
+${stage}
+Render this setting LUSH and FULL behind and around the monster — PACKED with architectural detail and multi-tier depth: tactile foreground detail near the creature, the monster as the commanding midground hero, and a DENSE, intricately-detailed gothic backdrop rising behind — towering spires, ornate stonework, sprawling structures layered into the deep distance under a dramatic sky. The world is gorgeous, dense, and inhabited; the monster still dominates, but stands in a rich, full gothic world.
+
+${dramaSection}━━━ LIGHTING — CINEMATIC, MOVIE-POSTER DRAMA ━━━
+${lighting}
+Light the monster like a film-villain reveal: a strong dramatic key + colored rim-light / moon-backlight carving its silhouette AND revealing surface detail, ray-traced cinematic global illumination, volumetric god-rays and atmospheric haze, deep theatrical chiaroscuro. The monster is the brightest, sharpest, most commanding thing in the frame — poster-grade, awe-inspiring.
+
+━━━ ATMOSPHERIC DEPTH ━━━
+${atmosphere}
+Layered depth — foreground particles (mist / ash / embers / drifting snow) caught in the light, midground separating the monster from the rich setting, volumetric god-rays / moonbeams cutting through. The frame feels inhabited and ALIVE.
+
+━━━ COLOR — DOMINANT SCENE COLOR (CRITICAL) ━━━
+The entire scene is ${scene_color}. COMMIT FULLY to this specific vivid dominant color — flood the lighting, glow, fog, and atmosphere with it so it saturates the whole frame and lights the grey stone gargoyle from rim to shadow. Bold, vivid, and luminous, held against deep ominous inky-black shadow for a DARK, dramatic, ominous mood — a creature-feature film lit with bold colored gels.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+🚫 NO hunter / NO human protagonist / NO second figure — the monster is SOLO
+🚫 NO gore / NO blood-spatter / NO mid-bite-on-victim — implied menace only
+🚫 NO tiny-figure-lost-in-a-vista — the monster fills the frame as the hero
+🚫 NO Jack-Skellington stylization, NO pentagram / satanic iconography
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary, NO real-world ethnic codes
+✓ an ULTRA-HIGH-DEFINITION HYPERREAL WETA-WORKSHOP CREATURE RENDER of a recognizable classic monster in a LUSH full gothic world — lifelike tactile realism + Unreal Engine 5 CGI craft, rich natural cinematic color, a crafted render
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: the FULL gargoyle head-to-talon — wings, body, limbs, talons all visible — large and ultra-detailed, mid-action, the cinematic hero, shown WHOLE not cropped], [its dramatic theatrical lighting + carved silhouette], [the LUSH, FULL, richly-detailed gothic setting layered behind it], [the dramatic background event if any], [atmospheric depth], [full-spectrum saturated color held against ominous shadow + hyperreal Weta-Workshop + UE5 rendered finish]
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   GOTHBOT_GOTHIC_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,

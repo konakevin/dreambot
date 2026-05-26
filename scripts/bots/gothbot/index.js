@@ -25,6 +25,9 @@ const pathBuilders = {
   'goth-male-full-body-axis': require('./paths/goth-male-full-body-axis'),
   'vampire-assassin-combat': require('./paths/vampire-assassin-combat'),
   'monster-prowl': require('./paths/monster-prowl'),
+  'monster-prowl-victorian': require('./paths/monster-prowl-victorian'),
+  'monster-prowl-inked': require('./paths/monster-prowl-inked'),
+  'monster-prowl-weta': require('./paths/monster-prowl-weta'),
 };
 
 module.exports = {
@@ -69,6 +72,9 @@ module.exports = {
     'goth-male-full-body-axis': 'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro',
     'monster-prowl': 'black-forest-labs/flux-1.1-pro',
+    'monster-prowl-victorian': 'black-forest-labs/flux-1.1-pro',
+    'monster-prowl-inked': 'black-forest-labs/flux-1.1-pro',
+    'monster-prowl-weta': 'black-forest-labs/flux-1.1-pro',
   },
 
   // Per-path vibe restriction — vampire-girls-2 only renders well with
@@ -92,6 +98,9 @@ module.exports = {
     'goth-male-full-body-axis': ['dark', 'nightshade', 'macabre'],
     'vampire-assassin-combat': ['dark', 'nightshade', 'macabre'],
     'monster-prowl': ['dark', 'nightshade', 'macabre'],
+    'monster-prowl-victorian': ['dark', 'nightshade', 'macabre'],
+    'monster-prowl-inked': ['dark', 'nightshade', 'macabre'],
+    'monster-prowl-weta': ['dark', 'nightshade', 'macabre'],
   },
 
   mediumByPath: {
@@ -111,7 +120,14 @@ module.exports = {
     'vampire-hunter-in-action': 'anime',
     'goth-male-full-body-axis': 'anime',
     'vampire-assassin-combat': 'anime',
+    // monster-prowl renders in the dark-ANIME medium (Kevin 2026-05-25 — anime gives
+    // the most creative range in Flux; this is the medium that made the hearted ghoul).
+    // Spiced up with the 40%-gated drama axis (dramatic gothic background events).
     'monster-prowl': 'anime',
+    // monster-prowl-victorian stays the FROZEN classical-oil branch.
+    'monster-prowl-victorian': 'canvas_victorian',
+    'monster-prowl-inked': 'inked_spectrum',
+    'monster-prowl-weta': 'weta_render',
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
@@ -143,6 +159,26 @@ module.exports = {
     // gothic-architecture path bespoke (2026-05-15). Empty so the structure
     // description leads — style language lives in mediumStyles + suffix.
     gothbot_gothic_print: '',
+    // monster-prowl (canvas): NO override — uses the bot-wide Castlevania/
+    // Bloodborne PROMPT_PREFIX. Reverted to the hearted impasto-Castlevania state
+    // (Kevin 2026-05-25, preferred over the later Frazetta classical-Victorian tune).
+    // The classical-Victorian prefix now lives ONLY on canvas_victorian (frozen).
+    // monster-prowl-victorian — FROZEN classical-Victorian prefix (converged state).
+    canvas_victorian:
+      'a classical Victorian gothic oil painting of a single recognizable monster, dark-Romantic 19th-century painted horror, operatic and beautiful and terrifying, vivid and richly saturated',
+    // monster-prowl (inked) — REPLACES the bot-wide prefix to drop its purple-lead
+    // ("deep purples + midnight blues + velvet blacks") that was forcing a violet
+    // monochrome. Front-loads VIVID VARIED saturated comic color (Kevin 2026-05-25).
+    // monster-prowl — hyperreal cinematic prefix (Kevin 2026-05-25).
+    hyperreal:
+      'ultra-high-definition hyperreal cinematic gothic-horror creature render, Unreal Engine 5 photorealistic 3D, Castlevania + Bloodborne creature-feature energy, rich natural color, dramatic and cinematic',
+    inked_gothic:
+      'detailed dark-fantasy gothic-horror ink illustration, Castlevania + Bloodborne creature-feature energy, rich natural full color, hauntingly beautiful and operatic',
+    inked_spectrum:
+      'bold inked dark-anime gothic-horror comic illustration, Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing creature-feature energy, VIVID FULLY-SATURATED high-chroma comic color across a RICH VARIED spectrum — emerald and witch-green, blood-crimson, electric teal and cyan, gold and candle-amber, bone-ivory, with royal-violet and hot-magenta accents — bold and punchy against deep inky blacks, hauntingly beautiful and operatic',
+    // monster-prowl-weta — combined hyperreal + Weta-Workshop realistic render.
+    weta_render:
+      'ultra-high-definition hyperreal cinematic 3D render, Weta-Workshop + Unreal Engine 5 lifelike realism, RICH FULL-SPECTRUM SATURATED color against deep ominous shadow, dark dramatic and cinematic',
   },
   promptSuffixByMedium: {
     vampire_portrait:
@@ -176,8 +212,25 @@ module.exports = {
       'heavy graphite gothic-horror sketch, cross-hatched shadow, dark-fantasy concept-sketch linework, inked-over-pencil stylization, dramatic gothic illustration drawn in pencil-and-ink',
     illustration:
       'stylized gothic-horror illustration, angular ink-driven dark-fantasy concept art, heavy-black shadow rendering, dark-manga-horror cover-art stylization',
+    // monster-prowl: reverted to the HEARTED impasto-Castlevania canvas state
+    // (Kevin 2026-05-25 — preferred over the later Frazetta classical-Victorian tune).
     canvas:
       'oil-painted gothic-horror portrait, heavy impasto brushwork, chiaroscuro painterly-horror tradition (Caravaggio-meets-Castlevania), painterly dark-fantasy baroque canvas',
+    canvas_victorian:
+      'lush classical oil painting on canvas, vivid luminous dark-fantasy oil in the tradition of Frank Frazetta + Brom + Caravaggio, rich JEWEL-TONED SATURATED color, glowing radiant highlights against deep velvety shadows, dramatic chiaroscuro, fine detailed painterly brushwork, bold vibrant high-saturation gothic-horror oil painting, painterly NOT photographic, NOT anime, NOT digital-cartoon, NOT cel-shaded',
+    // monster-prowl bespoke (Kevin 2026-05-25) — inked dark-anime / comic-horror.
+    // monster-prowl — ULTRA-HIGH-DEF HYPERREAL cinematic render (Kevin 2026-05-25).
+    hyperreal:
+      'ultra-high-definition hyperreal cinematic render, Unreal Engine 5 + Octane photorealistic 3D, ray-traced global illumination, physically-based materials, ultra-detailed 8K textures (matted fur, wet scales, weathered stone, pale skin, tattered fabric), volumetric atmospheric lighting, cinematic depth of field, film-quality VFX creature render, razor-sharp focus, hyperrealistic',
+    inked_gothic:
+      'detailed dark-fantasy ink illustration, clean confident bold inking with sharp readable linework, SOLID clearly-readable forms and faces, rich NATURAL full color, dramatic chiaroscuro, gothic-horror illustration',
+    // monster-prowl-inked — BOLD RICH DETAILED COMIC (matches the hearted vivid look);
+    // palette from the color_mood spectrum axis. No Berserk (tree-fusion); solid-creature guard.
+    inked_spectrum:
+      'inked dark-anime gothic-horror illustration, bold hard black contour outlines wrapping every form, flat graphic cel-shaded color blocks, VIVID FULLY-SATURATED high-chroma color, richly detailed and intricate rendering, crisp clean drawn linework, heavy solid-black shadow shapes, Berserk-manga Kentaro-Miura ink stylization, Castlevania promotional-art lineage, Mike-Mignola-Hellboy inked-comic finish, dramatic graphic chiaroscuro, lush detailed backgrounds, mature gritty comic-horror, NOT cute-anime NOT shonen NOT moe',
+    // monster-prowl-weta — COMBINED hyperreal (UE5) + Weta-Workshop realistic render (Kevin 2026-05-25).
+    weta_render:
+      'hyperreal cinematic 3D render, Weta-Workshop practical-effects realism fused with Unreal Engine 5 + Octane physically-based rendering, ultra-high-definition lifelike textures (believable skin, scales, fur, wet membrane, sinew, weathered stone), ray-traced cinematic lighting in RICH FULL-SPECTRUM SATURATED color — bold colored light and glow in vivid emerald, blood-crimson, electric teal, gold-amber, royal violet, hot magenta — against deep ominous inky-black shadow, ultra-detailed 8K materials, sharp focus, dark dramatic cinematic depth',
     watercolor:
       'gothic watercolor horror illustration, blood-ink wash bleed, wet-on-wet dark fantasy tradition, atmospheric watercolor with ink-line overlay, gothic sumi-e inkwash',
     // FaeBot-pattern tiny medium tag — small enough not to hijack early-
@@ -284,7 +337,7 @@ module.exports = {
     // Optional: skip two-pass on specific paths
     // vampire-hunter-in-action: axis-system path with load-bearing hunt-scene mandate.
     // goth-male-full-body-axis: rich pools need full Sonnet brief.
-    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture', 'castlevania-scene', 'cozy-goth', 'monster-prowl', 'vampire-hunter-in-action', 'goth-male-full-body-axis'],
+    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture', 'castlevania-scene', 'cozy-goth', 'monster-prowl', 'monster-prowl-victorian', 'monster-prowl-inked', 'monster-prowl-weta', 'vampire-hunter-in-action', 'goth-male-full-body-axis'],
   },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
@@ -329,6 +382,9 @@ module.exports = {
     'goth-male-full-body-axis',
     'vampire-assassin-combat',
     'monster-prowl',
+    'monster-prowl-victorian',
+    'monster-prowl-inked',
+    'monster-prowl-weta',
   ],
 
   // pathWeights: slots-per-cycle per path. Balances scene:character roughly
@@ -344,6 +400,9 @@ module.exports = {
     'castlevania-scene': 4,
     'cozy-goth': 4,
     'monster-prowl': 4,
+    'monster-prowl-victorian': 4,
+    'monster-prowl-inked': 4,
+    'monster-prowl-weta': 4,
     // Characters (8 paths × 3)
     'goth-closeup': 3,
     'goth-full-body': 3,

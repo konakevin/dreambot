@@ -157,7 +157,23 @@ module.exports = {
   VAMPIRE_DUEL_MOMENT: loadOptional('vampire_duel_moment'),
   // Monster-prowl path pools (added 2026-05-08).
   CREATURE_ARCHETYPE: load('creature_archetype'),
+  // Bespoke BROAD all-sorts creature pool for monster-prowl-inked (incl. vampires,
+  // succubi, lich/undead, dragons) — the vivid inked style is distinct enough that
+  // the overlap with goth-female/vampire paths doesn't matter (Kevin 2026-05-25).
+  MONSTER_PROWL_INKED_CREATURE: loadOptional('gothbot_monster_prowl_inked_creature'),
+  // Gargoyle path (monster-prowl-weta) — bespoke gnarly+ornate gargoyle axes (2026-05-25).
+  GARGOYLE_CREATURE: loadOptional('gothbot_creature_gargoyle'),
+  GARGOYLE_ACTION: loadOptional('gothbot_weta_gargoyle_action'),
+  GARGOYLE_EYES: loadOptional('gothbot_gargoyle_eyes'),
+  GARGOYLE_FEATURES: loadOptional('gothbot_gargoyle_features'),
+  // Forces full-spectrum color variety per render (breaks the black/red/gray lock).
+  GARGOYLE_SCENE_COLOR: loadOptional('gothbot_gargoyle_scene_color'),
   CREATURE_WILD_ACTION: load('creature_wild_action'),
+  // Bespoke LUSH gothic-setting stage for monster-prowl (2026-05-25) — replaces
+  // the borrowed sparse ASSASSIN_STAGE with dense, layered, detailed backdrops.
+  MONSTER_PROWL_STAGE: loadOptional('gothbot_monster_prowl_stage'),
+  // 40%-gated dramatic background-event axis (drama) — DragonBot pattern.
+  MONSTER_PROWL_DRAMA: loadOptional('gothbot_monster_prowl_drama'),
   VIBE_COLOR,
 
   // Sensory anchor pools — 3 contexts × 7 channels × 50 entries.

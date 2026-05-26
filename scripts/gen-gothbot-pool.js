@@ -57,6 +57,251 @@ if (!POOL) {
 // Per-pool recipe — GothBot bespoke aesthetic. Castlevania / Bloodborne /
 // Crimson-Peak / Berserk / Tim-Burton — NEVER LOTR / Skyrim / Witcher.
 const POOL_RECIPES = {
+  // ─── GOTHBOT monster-prowl — DARK/EVIL VAMPIRE creatures (2026-05-25).
+  // Kevin: vampires in this path were rendering as glam "goth women / regal
+  // counts" (overlapping the goth-female paths). Regenerate the vampire sub-pool
+  // MONSTROUS + EVIL — nosferatu / feral blood-beasts / corrupted vampire-lords.
+  // Merge into seeds/creature_archetype.json (replacing the old glam vampires).
+  // ──────────────────────────────────────────────────────────────────
+  gothbot_creature_vampire: {
+    format: 'simple',
+    theme: `DARK, EVIL, MONSTROUS VAMPIRE CREATURES for GothBot's monster-prowl path — solo, in the gothic night. Each entry 40-60 words. These are NOT glamorous romantic counts, NOT pretty seductive goth-women — they are TERRIFYING, predatory, monstrous vampires. Nosferatu (Count Orlok) / feral blood-beast / ancient corrupted vampire-lord / plague-strigoi / bat-demon. Castlevania / Bloodborne / Nosferatu / 30-Days-of-Night / Bram-Stoker-bat-demon energy. DARK and EVIL.\n\n⚠️ MONSTER FIRST — render a monstrous vampire: cadaverous gaunt frame or hulking predator, corpse-pale / grey / ashen / sickly skin, sunken GLOWING eyes (crimson / sulfur-yellow / violet), ELONGATED dagger-fangs and long clawed talons, often a bald nosferatu skull, pointed bat-ears, or an elongated batlike snarling face, an aura of evil and menace.\n\n⚠️ EVIL, NOT SEXY: no glamour, no beauty, no alluring/seductive posing, no silk-gown-or-velvet-finery as the focus, no fashion-model elegance. Terrifying and predatory.\n\n⚠️ SKIN-TONE VARIETY: corpse-pale, ashen-grey, sickly grey-green, dusky-grey, deep-grey — all monstrous and unnatural.`,
+    touchpoints: [
+      'A nosferatu vampire, bald and cadaverous with grey corpse-skin stretched tight over a skull-like face, enormous bat-ears, sunken sulfur-yellow eyes burning under a heavy brow, two long rat-fangs jutting from a lipless mouth, impossibly long clawed fingers, a tattered black funerary coat hanging off an emaciated frame, predatory and silent and evil',
+      'A feral blood-beast vampire crouched low on all fours, ashen-grey skin webbed with black veins, an elongated batlike snarling face split by a fang-crowded maw, milky-white pupil-less eyes, hooked talons gouging stone, naked sinew and jutting spine, animalistic and ravenous',
+      'An ancient corrupted vampire-lord towering and gaunt, deep-grey skin like cracked marble, eyes two pits of crimson fire, a mouth of needle-fangs, long black talons, a high tattered collar framing a monstrous skeletal visage, regal in bearing but utterly inhuman and malevolent',
+      'A plague-strigoi risen from a peasant grave, hunched and emaciated with grey-blue rotting-pale skin, burning yellow eyes deep in bruised sockets, jagged broken fangs, grave-dirt matted in thin hair, tattered burial rags, long filthy claws, feral and diseased and merciless',
+      'A bat-demon vampire mid-shift, dusky-grey skin, leathery wing-membranes stretching between elongated clawed arms, an upturned bat-snout with peeled-back gums and rows of fangs, pointed ears, glowing violet eyes, a hunched menacing crouch, monstrous and predatory',
+      'A hulking elder vampire, broad and brutal with sickly grey-green hide, a heavy lantern-jaw crammed with tusked fangs, deep-set burning orange eyes, scarred bald scalp, massive clawed hands, a blood-blackened tattered cloak, slow and ancient and full of dread',
+      'A gaunt cathedral-haunting vampire, near-translucent corpse-pale skin showing dark veins, hairless and skeletal, eyes glowing cold green in hollow sockets, an unnaturally wide fanged grin, fingers ending in black needle-claws, drifting in tattered grey vestments, silent and evil',
+      'A deep-grey-skinned feral vampire-noble gone monstrous over centuries, once-fine attire rotted to rags over a starved cadaverous frame, elongated face and jaw, crimson eyes, a mane of lank black hair, claw-tipped grasping hands, a rictus of needle-fangs, terrifying and pitiless',
+    ],
+    instructions: `Each entry is ONE solo MONSTROUS, DARK, EVIL vampire, 40-60 words. Must read as a terrifying predatory monster (gaunt/feral/cadaverous, corpse/grey/sickly skin, glowing sunken eyes, elongated fangs + clawed talons, nosferatu / batlike / corrupted features) — NEVER a glamorous beautiful count or pretty seductive goth-woman, never silk-gown elegance. Vary skin tone (all unnatural/monstrous). STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher. No gore, no satanic iconography. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT gargoyle path — GLOWING EYES axis (2026-05-25).
+  gothbot_gargoyle_eyes: {
+    format: 'simple',
+    theme: `GLOWING GARGOYLE EYES for GothBot's gargoyle path — ONE description of a stone gargoyle's glowing eyes and how they burn, 12-22 words. The eyes glow with fierce inner light from deep within carved stone sockets — the one living spark in the rock, menacing and intense. Vary the COLOR and quality widely.`,
+    touchpoints: [
+      'burning ember-orange eyes glowing fierce from deep within cracked stone sockets',
+      'molten lava-red eyes pulsing with furnace-light behind the carved grotesque face',
+      'cold witchfire-green eyes glowing eerily from the weathered stone skull',
+      'searing white-hot pinpoint eyes blazing out of black basalt sockets',
+      'pulsing arcane-violet eyes radiating cold inner light through the rock',
+      'smoldering coal-red eyes flickering like dying embers deep in stone',
+      'icy spectral-blue eyes glowing pale from within ancient granite',
+      'sulfur-yellow slitted eyes burning with malice behind a carved brow',
+      'blazing molten-gold eyes like twin furnaces glowing behind the stone',
+      'deep blood-crimson eyes glowing wet and pitiless in the grotesque face',
+      'toxic acid-green eyes pulsing out of cracked obsidian sockets',
+      'hollow ghost-white eyes glowing cold and merciless from deep stone',
+    ],
+    instructions: `Each entry is ONE gargoyle eye-glow description, 12-22 words. The eyes glow with inner light from within carved stone sockets — menacing and intense. Vary the color. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT gargoyle path — SIGNATURE FEATURE axis (2026-05-25).
+  gothbot_gargoyle_features: {
+    format: 'simple',
+    theme: `SIGNATURE GARGOYLE FEATURES for GothBot's gargoyle path — ONE gnarly AND ornate standout detail of an animated stone gargoyle, 15-30 words. A feature that makes it both terrifying and fascinating to study — vicious horns, spikes, fangs, claws, wings, tail, or intricately-carved stonework.`,
+    touchpoints: [
+      'a towering crown of jagged back-swept horns, each one wound with intricate carved baroque filigree',
+      'rows of barbed stone spikes marching down the spine and along the lashing tail',
+      'a fang-crammed maw cracked in a permanent snarl, every tooth a carved stone dagger',
+      'vast ribbed stone-wings edged with carved hooks and lined with tiny grotesque sub-faces',
+      'a long serpentine barbed tail carved end-to-end with ornamental scrollwork and runes',
+      'cracked ancient stone crusted with lichen and studded with tiny carved leering grotesques',
+      'raking talons like curved daggers, each knuckle capped with an ornate carved boss',
+      'a heavy armored brow of layered ornamental stone-plates shadowing the burning eyes',
+      'a ruff of jagged stone shards bristling around the neck like a collar of blades',
+      'great curling ram-horns ribbed with deep-cut runic carving and worn filigree',
+      'a chest of interlocking carved scales — each etched with filigree — over brutal slab-muscle',
+      'wing-membranes carved with intricate stone tracery like shattered cathedral rose-windows',
+    ],
+    instructions: `Each entry is ONE gnarly + ornate signature gargoyle feature, 15-30 words — vicious AND intricately carved. STRICTLY gothic dark-fantasy. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT monster-prowl-weta — GARGOYLE ACTIONS (2026-05-25).
+  // The weta path is now gargoyles-only; this is the dedicated gargoyle action
+  // axis — flying / perched / attacking / scouting / lurking / etc.
+  // ──────────────────────────────────────────────────────────────────
+  gothbot_weta_gargoyle_action: {
+    format: 'simple',
+    theme: `GARGOYLE ACTIONS for GothBot's gargoyle path — ONE dynamic action/pose of an animated carved-stone GARGOYLE caught mid-motion in the gothic night. Each entry 25-45 words. The gargoyle is ALWAYS a stone creature in motion. Vary the action across: flying high / swooping-diving in attack / perched gripping a spire surveying below / lurking motionless in shadow / uncoiling from its stone perch / climbing a wall claws-gouging / mid-roar on a parapet / gliding silent between towers / crouched scouting from a gutter / taking flight wings unfurling / banking through the spires / clinging upside-down beneath an arch.\n\n⚠️ Describe ONLY the gargoyle's action + body posture (wings, claws, stance, head). NO human, NO second figure, NO other creature. The gargoyle is solo and made of STONE.`,
+    touchpoints: [
+      'The gargoyle soars high above the cathedral, vast stone wings spread wide and rigid, body streamlined into the wind, head sweeping the streets far below, talons tucked, a colossal carved shape against the moon',
+      'Perched gripping the tip of a soaring spire, wings folded tight, the gargoyle leans forward over the drop, glowing eyes raking the city below, utterly still — a sentinel of stone surveying its domain',
+      'The gargoyle plummets in a full attack-dive, stone wings swept hard against its back, talons thrust forward and splayed, jaw cracked wide in a silent roar, hurtling down toward the streets',
+      'Lurking motionless in deep shadow on a high ledge, the gargoyle crouches low, wings drawn close like a cloak, only its faintly-glowing eyes betraying that the stone is alive and watching',
+      'The gargoyle uncoils from its centuries-old perch, stone grinding as cramped wings unfurl to their full span, forelimbs stretching, head rising, dust and lichen sloughing off newly-waking rock',
+      'Climbing the sheer cathedral wall headfirst, the gargoyle digs blunt stone talons into the masonry, wings half-furled for balance, body pressed flat to the stone as it scales toward a high window',
+      'Mid-roar atop a crumbling parapet, the gargoyle rears back on its haunches, wings flung wide, jaws agape, chest thrown out — a stone beast bellowing its challenge into the storm',
+      'Gliding silent and low between the gothic towers, wings angled in a long banking turn, the gargoyle threads the spire-forest with predatory grace, talons skimming just above the rooftops',
+      'Crouched scouting from a gutter-mouth, the gargoyle hunches with neck craned forward and down, one clawed hand gripping the stone lip, wings tucked, head cocked as it studies something below',
+      'Clinging upside-down beneath a flying buttress, the gargoyle hangs by its hind talons, wings draped, head twisted around and alert, an inverted stone predator waiting in the vault-shadow',
+      'Landing hard on a tomb-roof, the gargoyle slams down on all fours, wings snapping closed, stone cracking beneath its weight, head low and glaring forward mid-impact',
+      'Spreading its wings on a high cliff-edge cathedral ruin, the gargoyle catches the rising wind, body coiled and leaning into the gust an instant before launching into flight',
+    ],
+    instructions: `Each entry is ONE solo gargoyle action, 25-45 words. The gargoyle is a STONE creature in motion — flying / swooping / perched / lurking / attacking / scouting / climbing / roaring / gliding / launching. Describe only its action + posture (wings / claws / stance / head). NO humans, NO second figure, NO other creatures. STRICTLY gothic dark-fantasy. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT monster-prowl — SHADE creatures (2026-05-25).
+  // The 5th classic-gothic-monster category Kevin wants (werewolf / vampire /
+  // demon-succubus / gargoyle / SHADE). A shade is a being of LIVING DARKNESS
+  // with a DEFINED, RECOGNIZABLE cloaked-humanoid silhouette — NOT a formless
+  // mist-blob (that failure mode killed earlier renders) and NOT a skeleton /
+  // rotting undead (that's the lich/undead category being CUT). Merge output
+  // into seeds/creature_archetype.json.
+  // ──────────────────────────────────────────────────────────────────
+  gothbot_creature_shade: {
+    format: 'simple',
+    theme: `GOTHIC SHADE CREATURES for GothBot's monster-prowl path — solo, in the gothic night. Each entry 40-60 words. A SHADE is a being of LIVING DARKNESS: a clearly RECOGNIZABLE humanoid figure (head, shoulders, reaching arms, a defined silhouette) whose BODY is woven from churning shadow, smoke-edged blackness, and ribboned night — terrifying and beautiful, operatic gothic horror. Castlevania / Bloodborne shadow-boss energy.\n\n⚠️ RECOGNIZABILITY IS MANDATORY: the shade must read instantly as a defined cloaked/hooded figure of darkness with a clear silhouette and burning eyes — NEVER a formless smoke-cloud, abstract mist, or shapeless blob.\n\n⚠️ A shade is made of SHADOW/DARKNESS, not flesh and not bone — do NOT write skeletons, skulls, exposed bone, rotting flesh, or decayed corpses (those are the undead/lich category, which is BANNED here).`,
+    touchpoints: [
+      'A towering shade cloaked in churning living-darkness, hooded silhouette razor-sharp against the fog, two points of cold violet light burning where eyes should be, ribbons of shadow streaming off its shoulders like tattered banners, a reaching arm dissolving into smoke at the fingertips, regal and patient and utterly silent',
+      'A shadow-figure of a robed monarch woven from black smoke, a faint crown of darker-than-black shadow above the hood, ember-red eyes, the hem of its form fraying into drifting soot across the flagstones, an aura of cold pressing the air, ancient and imperious',
+      'A lithe shade in the shape of a cloaked assassin, body a deep churning void edged in faint blue luminescence, a blade of condensed night held low, eyes like two slits of white fire, moving as if the darkness itself leans forward, predatory and quick',
+      'A broad-shouldered shade like a knight cut from living shadow, its silhouette armored in plates of denser blackness, fel-green eyes glowing beneath a shadowed brow, wisps of darkness curling from the joints, a presence that swallows the torchlight around it, grim and immovable',
+      'A serpentine shade rising tall and humanoid from a pool of spreading darkness, long shadow-tendrils for hair drifting upward against gravity, hollow silver-white eyes, the lower body trailing off into a churning column of night, sinuous and hypnotic and cold',
+      'A shade in the form of a hooded mourner, face an absolute void framed by a cowl of smoke, faint amber light leaking from within the hood, long shadow-robes pooling and dissolving at the ground, skeletal-thin arms of pure darkness reaching forward, sorrowful and menacing',
+      'A regal shade-empress woven from violet-black darkness, an hourglass silhouette in a gown of churning shadow that trails into smoke, twin crescents of pale cold light for eyes, a collar of darker shadow rising behind her head like a fan, imperious and beautiful and lethal',
+      "A hulking shade like a cloaked giant of living night, its outline blurred by streaming darkness, a single broad chest-wide band of dim ember-light where a heart would burn, eyes two coals, the fog around it pulled inward as if breathing, slow and crushing and ancient",
+    ],
+    instructions: `Each entry is ONE solo shade creature, 40-60 words. It MUST read as a recognizable cloaked/hooded humanoid figure of living darkness with a clear silhouette + glowing eyes — never a formless mist-blob, never a skeleton or rotting corpse. STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher vocabulary (no Nazgul / Ringwraith). No gore, no satanic iconography, no sexualized bodies. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT monster-prowl — SUCCUBUS creatures (2026-05-25).
+  // Dark, seductive, REVEALING demon-temptresses in the painted dark-fantasy
+  // tradition (Brom / Luis Royo / Boris Vallejo) — beautiful AND monstrous.
+  // Sensual + bare skin, but strategically covered enough (shadow / drape /
+  // wing / hair / pose) to clear Flux's NSFW filter — explicit nudity just gets
+  // the render blocked. Skin-tone variety. Merge into seeds/creature_archetype.json.
+  // ──────────────────────────────────────────────────────────────────
+  gothbot_creature_succubus: {
+    format: 'simple',
+    theme: `GOTHIC SUCCUBUS CREATURES for GothBot's monster-prowl path — solo, in the gothic night. Each entry 40-60 words. A succubus is a DARK, SEDUCTIVE, REVEALING demon-temptress who is beautiful AND terrifying — irresistible allure fused with monstrous menace. Painted dark-fantasy tradition (Brom / Luis Royo / Boris Vallejo). Dark seductive-predator energy: hypnotic heavy-lidded gaze, sinuous pose, an irresistible-but-lethal presence. Castlevania / Bloodborne / Devil-May-Cry demon-temptress.\n\n⚠️ MONSTER FIRST: she must read as a demonic creature — curved horns, leathery or feathered dark wings, taloned fingertips, a fanged smile, glowing eyes, often a barbed tail. Seductive, never merely a pretty woman.\n\n⚠️ SENSUAL + REVEALING: bare shoulders, back, midriff, and long legs; barely-there dark silk, low-cut or open gowns, leather-strap harnesses, draped gossamer, thigh-baring slits. Lean into the sensual painted-succubus register.\n\n⚠️ KEEP IT POSTABLE (so Flux's filter passes): nipples and genitals are NOT shown — kept just-covered by strategic shadow, a silk drape, a wing, falling hair, an arm, or pose. Suggestive and seductive, rendered as a PAINTED illustration — alluring, not pornographic.\n\n⚠️ SKIN-TONE VARIETY: alabaster, dusky-bronze, deep-ebony, warm-olive, ashen-grey, crimson-tinged — not all pale.`,
+    touchpoints: [
+      'A succubus with deep-ebony skin and molten-gold eyes, two backswept onyx horns, vast leathery wings half-spread, a fanged knowing smile, bare-shouldered in barely-there blackened silk that drapes low across her hips, taloned fingers trailing down her bare midriff, a wing curling forward to half-veil her, regal and hypnotic and lethal',
+      'A succubus with dusky-bronze skin and burning amber eyes heavy-lidded with cruel amusement, curved ram-horns wound with thin gold chain, feathered raven-black wings, a thin oxblood-velvet harness of crossed straps over bare skin, a barbed tail curling at her thigh, hair spilling across her chest, predatory and irresistible',
+      'A succubus with ashen-grey skin and twin violet eyes that glow like coals, slender obsidian horns, bat-leather wings folded close, a single length of midnight-blue silk draped diagonally and pooling at her bare legs, a fang dimpling her smile, taloned fingertips at a crumbling balustrade, deep shadow veiling her, cold and seductive',
+      'A succubus with warm-olive skin and crimson eyes, backward-curving horns crowned with a thin black-iron circlet, dark feathered wings rising behind her, an open charcoal gown slit to the hip baring one long leg, a leather strap across her chest, fanged smile, sinuous and dangerous and beautiful',
+      'A crimson-tinged succubus with eyes like burning embers, broad demonic horns and a serpentine barbed tail, vast dark wings arched like a cathedral vault behind her, a blackened-bronze armor-bodice over bare midriff and tattered crimson silk falling from her hips, taloned hand extended in invitation, ferocious and seductive',
+      'A succubus with alabaster skin and silver-white glowing eyes, delicate curved horns, gossamer-dark dragonfly wings catching faint light, draped in sheer plum gauze that bares her shoulders and back, a knowing fanged smile and heavy-lidded gaze, one arm drawn across her, elegant and hypnotic and cold',
+      'A statuesque succubus with deep-mahogany skin and fel-green eyes, heavy backswept horns, enormous leathery wings unfurling, a black-and-gold silk drape clasped at one shoulder and falling open down her side, a barbed tail and taloned fingers, chin lifted in imperious allure, queenly and monstrous',
+      'A lithe succubus with dusky skin and twin gold-ringed violet eyes, short curling horns, sleek bat-wings tucked behind, in a minimal black leather harness and trailing sheer chiffon baring her legs, lips parted in a fanged smile, one taloned finger raised, an aura of perfumed danger, seductive and predatory',
+    ],
+    instructions: `Each entry is ONE solo succubus creature, 40-60 words. She MUST read as a demonic monster (horns + wings + glowing eyes + fangs/talons) who is dark, seductive, and REVEALING — bare skin, barely-there silk / leather harness / open or thigh-slit gowns, sinuous pose. Vary skin tone. Keep it postable so Flux's filter passes: nipples and genitals are NOT shown — kept just-covered by shadow / drape / wing / hair / arm / pose; suggestive painted illustration, not pornographic. STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher. No gore, no satanic iconography. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT monster-prowl — WEREWOLF + GARGOYLE + HELLHOUND + HARPY
+  // (2026-05-25). Boost werewolves/gargoyles + restore hellhounds/harpies per
+  // Kevin. Merge output into seeds/creature_archetype.json.
+  // ──────────────────────────────────────────────────────────────────
+  gothbot_creature_werewolf: {
+    format: 'simple',
+    theme: `GOTHIC WEREWOLF CREATURES for GothBot's monster-prowl path — solo, in the gothic night. Each entry 40-60 words. A massive, terrifying, magnificent lycanthrope beast — Castlevania / Bloodborne / Van-Helsing / Underworld werewolf energy. The WHO, the design, signature features.\n\n⚠️ MONSTER FIRST: a clearly recognizable werewolf — towering lupine beast, dense fur, elongated snout with bared fangs, taloned claws, powerful corded musculature, glowing eyes.\n\n⚠️ VARIETY: vary fur color (charcoal-grey / midnight-black / silver / russet-brown / ash-white / grizzled), build (lean and rangy / hulking and broad / fenrir-giant), and form (full bipedal beast / mid-transformation half-human / hunched quadruped-stance).`,
+    touchpoints: [
+      'A massive bipedal werewolf eight feet tall, dense charcoal-grey fur over corded muscle, elongated snout with bared sword-length fangs, glowing fel-green eyes, taloned hands hanging long, a tattered leather war-harness with a silver-claw clasp across its chest, mid-howl with head thrown skyward, ferocious and primal',
+      'A silver-furred werewolf caught mid-leap, lean and rangy frame stretched in flight, moonlight rimming every hair in cold light, ice-blue eyes burning, fangs bared in a snarl, ribbons of torn cloak streaming behind, claws extended forward, savage and graceful',
+      'A werewolf mid-transformation, half-human torso still visible above a lengthening lupine snout, russet-brown fur erupting across stretching limbs, fingers splitting into black claws, eyes shifting from human to glowing-amber, jaw distending with new fangs, agonized and terrible',
+      'A fenrir-giant werewolf hulking and broad as a bear, midnight-black fur matted with frost, massive shoulders, glowing crimson eyes deep beneath a heavy brow, fangs like ivory daggers, a snapped iron chain still locked around one wrist, slow and crushing and ancient',
+      'An ash-white werewolf hunched in a quadruped stalking-stance, pale fur bristling along a ridged spine, lips peeled back from black gums and yellow fangs, sulfur-yellow eyes low to the ground, drool stringing from its maw, coiled and hungry and predatory',
+      'A grizzled scarred werewolf standing upright, dense grey-brown fur crossed with old battle-scars and a torn ear, one milky blind eye and one burning gold, broad clawed hands flexing, a bone-and-leather collar at its throat, weathered and lethal and unkillable',
+    ],
+    instructions: `Each entry is ONE solo werewolf, 40-60 words. Must read instantly as a recognizable werewolf (lupine snout + fangs + fur + claws + glowing eyes). Vary fur color, build, and transformation stage. STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher. No gore, no mid-bite-on-victim, no satanic iconography. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_creature_gargoyle: {
+    format: 'simple',
+    theme: `GNARLY, FEROCIOUS, ORNATE — but STRICTLY CLASSIC — GOTHIC GARGOYLE CREATURES for GothBot's gargoyle path. Each entry 40-60 words. An animated carved-STONE CLASSIC CATHEDRAL GARGOYLE come to terrible life — the iconic Van-Helsing / Castlevania / Notre-Dame winged demonic stone gargoyle: a HORNED, BAT-WINGED, FANGED-DEMON-FACED, clawed grotesque of carved stone. The MOST gnarly, mean gargoyle imaginable, dialed to 11, yet ORNATELY carved — terrifying AND mesmerizing.\n\n⚠️ CLASSIC GARGOYLE FORM (MANDATORY every entry): a LEAN, HUNCHED, gnarled demonic stone-grotesque body, a snarling FANGED demon-face, CURVED HORNS, membranous BAT-LEATHER stone-WINGS, clawed talons — the instantly-recognizable cathedral-gargoyle silhouette. LEAN, wiry, and gnarled — NOT muscular / bulky / beefy / heroic-physique; a traditional crouching grotesque, never a bodybuilder.\n⚠️ GNARLY + ORNATE: snarling fanged maw, jagged barbs and spikes, vicious horns, raking talons, scarred cracked stone — AND densely carved baroque filigree, ornamental flourishes, intricate craftsmanship.\n⚠️ STONE: weathered carved stone (granite / sandstone / blackened basalt / verdigris-bronze / obsidian), unmistakably LIVING ROCK.\n⚠️ VARY ONLY: stone type, pose, horn-style (short curved / swept-back / jagged / clustered multi-horned), wing-spread, ornamentation. The CREATURE TYPE never changes — ALWAYS the classic horned bat-winged fanged-demon stone gargoyle.\n\n🚫 BANNED — NEVER: NO lion-maned/leonine, NO bird/raptor beaks, NO skull-faced or skeletal gargoyles, NO chimera/multi-headed, NO imp, NO dragon-snouts, NO goat / ram / caprine / satyr heads, horns, or faces. The face is ALWAYS a snarling fanged DEMON-grotesque (flat brutish snout, NOT an animal muzzle). ONLY the classic winged demon-gargoyle. (Eyes kept generic — a separate axis sets the glow.)`,
+    touchpoints: [
+      'A classic cathedral gargoyle of weathered granite, a lean hunched demonic grotesque with a snarling fanged face and flat snout, two short curved horns, bat-leather stone-wings folded high, clawed talons gripping a ledge, ornate filigree across its gnarled hide',
+      'A tall lean winged stone gargoyle of blackened basalt, a fanged demon-face in a wide bared-teeth grimace, swept-back horns, vast membranous bat-wings, raking stone claws on spindly limbs, every plate carved with baroque ornament, mean and ancient',
+      'A Notre-Dame-style gargoyle of cracked sandstone, a lean hunched demonic body, swept-back horns, a fanged grimacing visage, leathery stone-wings half-spread, taloned claws, deeply ornamented weathered stone, gnarly and grand',
+      'A Castlevania-style stone gargoyle, a horned demon-grotesque with a wide fang-crammed maw, membranous bat-wings spread, a barbed tail, long clawed talons on a lean wiry frame, intricate filigree across its plates',
+      'A verdigris-bronze gargoyle, a snarling horned demon-face with pointed ears, vast bat-wings, lean clawed grasping limbs, scrollwork and tiny grotesque sub-faces carved across its corroded hide, vicious and ornate',
+      'A gaunt obsidian gargoyle, multiple short curved horns crowning a fanged demonic face, jagged spikes down its hunched back, leathery stone-wings, raking talons, dense baroque carving over angular gnarled stone, terrifying and detailed',
+      'A weathered granite gargoyle crouched low and aggressive, a snarling fanged maw, twin back-swept horns, bat-leather wings drawn like a cloak, long clawed talons, a lean sinewy stone frame, ornate filigree and lichen in the deep grooves',
+      'A grand cathedral gargoyle of grey stone, a classic horned demon-grotesque with a fanged snarl, broad membranous wings flared wide, barbed elbows and tail, raking talons on a lean angular body, lavish baroque carving across every surface',
+    ],
+    instructions: `Each entry is ONE solo CLASSIC gargoyle, 40-60 words — the iconic HORNED, BAT-WINGED, FANGED-DEMON-FACED, clawed carved-STONE cathedral gargoyle (Van-Helsing / Castlevania / Notre-Dame), gnarly + mean + ornately carved, and LEAN / hunched / gnarled (NOT muscular / bulky / beefy). Vary ONLY stone, pose, horns, wing-spread, ornamentation — the creature type is ALWAYS the classic winged demon-gargoyle. 🚫 NEVER lion-maned, bird-beaked, skull-faced/skeletal, chimera/multi-headed, imp, dragon-snouted, or goat/ram/caprine-headed. Keep eye-color generic. STRICTLY gothic dark-fantasy. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_creature_hellhound: {
+    format: 'simple',
+    theme: `GOTHIC HELLHOUND CREATURES for GothBot's monster-prowl path — solo, in the gothic night. Each entry 40-60 words. A massive demonic hound from the underworld — burning, monstrous, terrifying. Castlevania / Bloodborne / Diablo hellhound energy. The WHO, the design, signature features.\n\n⚠️ MONSTER FIRST: a clearly recognizable demonic hound — huge canine body (size of a horse or larger), obsidian / charred / ember-cracked hide, a fanged maw with smoking or fiery breath, burning eyes, claws scoring the ground.\n\n⚠️ VARIETY: vary the hide (sleek obsidian fur / charred-cracked ember-skin / matted ash-grey / spined-and-armored), the fire (ember-red / hellfire-orange / cold-blue spectral flame / sulfur-green), head-count (single / twin-headed / three-headed cerberus), and accessories (broken hell-chains / spiked collar / burning brand).`,
+    touchpoints: [
+      'A hellhound the size of a war-horse, sleek obsidian fur over slab-muscle, burning ember-red eyes like furnace-coals, a fanged maw venting curls of black smoke, broken iron hell-chains dragging from a spiked collar, claws scoring molten grooves into the cobblestones, ravenous and savage',
+      'A charred ember-skinned hellhound, hide cracked like cooling lava with hellfire-orange glow leaking from every fissure, a slavering maw rimmed in flame, eyes two points of white-hot fire, embers shedding from its hackles, lunging low with bared fangs, infernal and relentless',
+      'A three-headed cerberus hellhound, three obsidian canine heads on one massive corded neck-and-shoulders, six burning sulfur-green eyes, three sets of dripping fangs snarling in unison, a spiked black collar binding all three throats, claws braced wide on broken gravestones, monstrous and watchful',
+      'A spectral hellhound wreathed in cold-blue ghost-flame, ash-grey skeletal-lean frame (still furred, not bone) edged in flickering spirit-fire, hollow eyes burning ice-blue, a soundless snarl trailing wisps of frost-flame, padding through the fog leaving scorched pawprints, eerie and predatory',
+      'A spined-and-armored hellhound, matted black fur over a back ridged with jagged bone-spikes, a brand of glowing runes seared into its flank, burning amber eyes, jaws cracked wide showing a furnace-glow throat, a snapped chain whipping behind, brutal and unstoppable',
+      'A colossal hellhound twice horse-height, obsidian hide steaming in the cold night, a single burning-coal eye and one scarred-shut socket, a maw of blackened fangs venting hellfire, a heavy spiked war-collar half-buried in its ruff, head low and stalking, ancient and merciless',
+    ],
+    instructions: `Each entry is ONE solo hellhound, 40-60 words. Must read instantly as a demonic hound (huge canine body + fanged maw + fire/smoke + burning eyes). Vary hide, flame color, head-count, accessories. STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher. No gore, no mid-bite-on-victim, no satanic iconography. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_creature_harpy: {
+    format: 'simple',
+    theme: `GOTHIC HARPY CREATURES for GothBot's monster-prowl path — solo, in the gothic night. Each entry 40-60 words. A fierce woman-raptor hybrid monster — terrifying and beautiful. Greek-myth-by-way-of-Castlevania / Berserk harpy energy. The WHO, the design, signature features.\n\n⚠️ MONSTER FIRST: a clearly recognizable harpy — a fierce woman's face and feathered torso fused with massive raptor wings, taloned bird-legs / clawed feet, often feather-clad or armored, a wild predatory bearing. She is a MONSTER, not a pin-up — feathers and plumage cover her, fierce not sexual.\n\n⚠️ VARIETY: vary plumage (raven-black / storm-grey / blood-streaked-crimson / barn-owl mottled / iridescent-oily-green), pose (perched on a crag / mid-flight diving / wings flared in threat-display), and features (clawed hands / fully bird-taloned / a crest of feathers / a screech mid-cry).`,
+    touchpoints: [
+      'A harpy perched on a windswept crag, a fierce woman\'s face with sharp features and golden raptor-eyes, a torso clad in raven-black plumage, vast black-feathered wings half-spread, scaled taloned bird-legs gripping the wet stone, a crest of dark feathers raised, screeching mid-cry, wild and predatory',
+      'A storm-grey harpy diving mid-flight, wings swept back into a hunting-stoop, a woman\'s face contorted in a shriek, feathered arms ending in long raking claws, mottled grey plumage streaming, taloned feet thrust forward to strike, fierce and lethal',
+      'A blood-streaked crimson harpy clinging to a gargoyle\'s shoulder, a gaunt beautiful woman\'s face with burning amber eyes, dark-red-and-black plumage matted across her torso, enormous tattered wings, clawed hands gripping the stone, a low feral hiss, vicious and territorial',
+      'A barn-owl harpy on a moonlit belfry-rail, a pale heart-shaped woman\'s face ringed in mottled cream-and-brown feathers, huge silent owl-wings folded, deep-black eyes, feathered torso and taloned legs, head swiveling unnaturally far, eerie and silent and watchful',
+      'An iridescent oily-green harpy with wings flared wide in a threat-display, a fierce woman\'s face with a shrieking open mouth, glossy black-green plumage catching sickly light, long clawed fingers spread, scaled raptor-legs braced on a ruined cornice, aggressive and unnerving',
+      'A regal ash-grey harpy queen on a high crag, a proud woman\'s face crowned with a sweeping feather-crest, ornate bone-and-feather adornments at her shoulders, vast grey wings arched like a cloak, taloned feet curled around a perch of stacked skulls, imperious and monstrous',
+    ],
+    instructions: `Each entry is ONE solo harpy, 40-60 words. Must read instantly as a woman-raptor harpy (woman\'s face + feathered torso + massive raptor-wings + taloned legs). She is a fierce MONSTER, feather-clad — not a pin-up, not sexualized. Vary plumage, pose, features. STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher. No gore, no satanic iconography. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT monster-prowl — DRAMATIC BACKGROUND EVENT (2026-05-25).
+  // A 40%-gated "drama" axis (DragonBot pattern) — a dramatic gothic EVENT/
+  // phenomenon layered into the sky/distance behind the monster to make the
+  // background interesting + narrative. NOT the monster, NOT a human focus.
+  // Merge into seeds/gothbot_monster_prowl_drama.json.
+  // ──────────────────────────────────────────────────────────────────
+  gothbot_monster_prowl_drama: {
+    format: 'simple',
+    theme: `DRAMATIC GOTHIC BACKGROUND EVENTS for GothBot's monster-prowl path — ONE dramatic environmental EVENT or phenomenon layered into the sky / midground / deep distance of a gothic-horror scene, BEHIND and around a solo monster (the monster is rendered separately — do NOT describe the monster or any human). Each entry 30-50 words, opening with the EVENT NAME IN CAPS then " — " then the description. Castlevania / Bloodborne / Van-Helsing operatic drama. The event makes the background gorgeous, ominous, and narrative.\n\n⚠️ Describe ONLY the background event/phenomenon and how it transforms the sky/distance — NO monster, NO creature, NO human figure (those are added separately).\n\n⚠️ STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher, NEVER modern / sci-fi. NO satanic iconography (no pentagrams / inverted crosses).`,
+    touchpoints: [
+      'BLOOD-MOON ECLIPSE — a vast crimson eclipse swallows the night sky, the blood-red moon ringed in a corona of fire, bathing the distant spires and clouds in deep scarlet light, long red shadows stretching across the gothic landscape',
+      'DISTANT BURNING SIEGE — a far-off village and castle ablaze on the horizon, towering columns of orange firelight and black smoke climbing into the night, the glow flickering across low storm-clouds and silhouetting distant ruined towers',
+      'ERUPTING BAT-SWARM — a vast living swarm of thousands of bats explodes upward from the cathedral spires, spiralling black against the moon in a churning ribbon that darkens half the sky',
+      'WITCHFIRE AURORA — eerie green-and-violet auroral curtains ripple and pulse across the entire sky above the jagged skyline, casting shifting spectral light over the distant rooftops and fog',
+      'TEMPEST LIGHTNING — a violent black storm splits the heavens with branching forks of white lightning that flash-illuminate the distant gothic towers and sheeting rain, thunderheads boiling overhead',
+      'OMEN COMET — a blazing blue-white comet streaks low across the star-strewn night, its long burning tail arcing over the spires, an ill omen reflected in every distant window and wet rooftop',
+      'GHOST-LIGHT PROCESSION — a winding river of pale spectral lanterns and drifting will-o-wisps threads through the fog-filled valley far below, a silent funereal procession of cold blue light',
+      'TIDAL FOG-WAVE — a towering wall of luminous fog rolls in across the distant moor like a slow tidal wave, swallowing far hills and the bases of the gothic towers, its crest catching the moonlight',
+      'ASH-AND-EMBER RAIN — the sky rains glowing orange embers and grey ash drifting down over the whole scene from some distant unseen fire, motes catching the light against deep-charcoal clouds',
+      'TWIN BLOOD MOONS — two enormous moons hang side by side low over the horizon, one bone-pale and one blood-red, their combined light throwing doubled shadows across the haunted distance',
+      'COLLAPSING BELL-TOWER — far across the city a great gothic bell-tower buckles and falls mid-collapse, a billowing plume of dust and dislodged ravens rising against the moonlit sky',
+      'MASSING SHADOW-HORDE — on the distant moonlit hills a vast silent horde of shadowy silhouetted figures massses and advances, a dark tide spilling toward the spired skyline',
+    ],
+    instructions: `Each entry is ONE dramatic gothic BACKGROUND event/phenomenon, 30-50 words, opening with EVENT NAME IN CAPS + " — " + description. Describe ONLY the sky/distance phenomenon — NO monster, NO creature, NO human figure. STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher / modern / sci-fi. No satanic iconography. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  // ─── GOTHBOT monster-prowl — LUSH GOTHIC SETTING / STAGE (2026-05-25).
+  // Replaces the borrowed ASSASSIN_STAGE (sparse, ground-level, deliberately
+  // empty) with DENSE, LAYERED, richly-detailed gothic backdrops so the monster
+  // stands in a lush full world, not a minimal void. Castlevania / Bloodborne /
+  // Crimson-Peak splendor. Merge into seeds/gothbot_monster_prowl_stage.json.
+  // ──────────────────────────────────────────────────────────────────
+  gothbot_monster_prowl_stage: {
+    format: 'simple',
+    theme: `LUSH FULL GOTHIC SETTINGS for GothBot's monster-prowl path — the dramatic, richly-detailed BACKGROUND behind a solo monster hero. Each entry 40-60 words. A DENSE, layered, gorgeous gothic environment PACKED with architectural detail and multi-tier depth. Castlevania / Bloodborne / Crimson-Peak / Van-Helsing / Dark-Souls splendor.\n\n⚠️ LUSH AND FULL, never empty or minimal: every entry must read as a rich, detailed, layered world — foreground architectural detail + a commanding midground structure + deep-distance spires/towers/sky.\n\n⚠️ NAME a specific grand gothic setting (towering cathedral interior / ornate castle throne-hall / sprawling statuary graveyard / grand ruined abbey nave / vast crypt-cathedral gallery / blood-cult sanctum / gothic city rooftops of spires / moonlit cloister / candle-lit gothic library / catacomb gallery / vampire-castle courtyard) with AT LEAST 2-3 named architectural features (rose windows, ribbed vaults, flying buttresses, carved statuary, iron chandeliers, tattered banners, sweeping stairs, gargoyle-lined ledges).\n\n⚠️ This is a BACKDROP — describe the ENVIRONMENT only, NO humans, NO figures, NO creatures (a monster is added separately in the foreground). Richly atmospheric (volumetric light, drifting mist/dust/embers) but the architecture stays crisp and detailed, never lost in haze.`,
+    touchpoints: [
+      'The soaring interior of a vast gothic cathedral, towering ribbed-vault ceiling vanishing into shadow, an enormous jewel-toned stained-glass rose window flooding colored light, double rows of carved saint-statues flanking the nave, massive iron chandeliers hanging on heavy chains, moonlit dust drifting between the columns, deep multi-tier depth to a distant altar',
+      'A sprawling statuary graveyard at blood-moon rise, hundreds of weathered tombstones and weeping-angel statues receding row upon row into drifting fog, ornate mausoleums with iron doors, a towering gothic chapel spire piercing the distance, gnarled black trees framing the foreground, layered depth everywhere',
+      'An ornate castle throne-hall, black-marble floor mirroring towering fluted columns, tattered royal banners hanging the full height of the walls, a distant carved obsidian throne on a tiered dais, blazing candelabras and a vast vaulted ceiling, deep stained-glass windows leaking colored moonlight',
+      'A grand ruined abbey nave open to a stormy sky where the roof collapsed long ago, soaring broken arches and ivy-choked columns marching into the distance, scattered carved rubble and toppled statuary, a half-ruined altar far down the nave, shafts of moonlight cutting the drifting mist',
+      'A vast crypt-cathedral gallery, endless ribbed stone arches lined with carved marble sarcophagi and bone-ornamented walls, hundreds of dripping candles on iron stands, deep receding tunnels branching into darkness, a great carved ossuary screen in the midground, cold light pooling on the flagstones',
+      'The moonlit rooftops of a gothic city, an undulating sea of steep slate roofs and crooked chimneys, clustered spires and a colossal cathedral silhouette dominating the skyline, flying buttresses and gargoyle-lined ledges in the foreground, a vast full moon and layered atmospheric depth behind',
+      'The torch-lit courtyard of a multi-spire vampire castle at night, a central statuary fountain, sweeping stone stairs flanked by gargoyles, the towering ornate facade with rows of arched windows rising on every side, iron gates and skeletal topiary, the castle keep looming against a star-strewn sky',
+      'A candle-lit gothic library-sanctum, towering bookshelves rising three storeys into a vaulted ceiling, ornate iron balconies and spiral stairs, a great arched window pouring blue moonlight across a marble floor, drifting dust and gold candle-glow, deep shadowed alcoves layered into the distance',
+    ],
+    instructions: `Each entry is ONE lush, full, detailed gothic SETTING (backdrop only — NO humans, NO figures, NO creatures), 40-60 words. Name a specific grand gothic structure/place + 2-3 named architectural features + multi-tier depth (foreground / midground structure / deep distance). DENSE and richly detailed, never empty/minimal. STRICTLY gothic dark-fantasy, NEVER LOTR / Skyrim / Witcher, NEVER modern / sci-fi. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
   // ─── GOTHBOT goth-male-closeup path (2026-05-15 migration).
   // MALE-LOCKED dark-aristocrat closeups. Mysterious / ominous / deadly.
   // Tight frame, vampire-lord mandate, NSFW-clean. Solo.

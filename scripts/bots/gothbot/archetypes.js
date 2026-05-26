@@ -108,10 +108,36 @@ module.exports = {
 },
 
   GOTHBOT_MONSTER_PROWL: {
-  description: 'PATH-BESPOKE — GothBot monster-prowl path (2026-05-16 bespoke migration from legacy function-form). SOLO GOTHIC CREATURE OUT IN THE WILD doing creature-business — vampire / werewolf / gargoyle / succubus / demon / banshee / lich / harpy / wraith / etc. Wide cinematic full-body composition: creature 25-40% of frame, gothic stage + epic backdrop 60-75% (scenery and creature share costar spotlight). Castlevania-boss / Bloodborne-beast / Devil-May-Cry-demon / Van-Helsing-monster lineage. Solo only — NO hunter (assassin paths), NO combat (combat path), NO second figure. NO gore, NO mid-bite-on-victim. Reuses existing 200-entry pools: CREATURE_ARCHETYPE + CREATURE_WILD_ACTION + ASSASSIN_STAGE + ASSASSIN_EPIC_BACKDROP. 4 path-bespoke axes + universal lighting + atmosphere.',
-  slots: { universal: [ 'lighting', 'atmosphere' ], bot: [], path: [ 'creature', 'action', 'stage', 'backdrop' ] },
+  description: 'PATH-BESPOKE — GothBot monster-prowl (2026-05-25 R2 monster-as-HERO redesign). A SOLO epic gothic MONSTER is the unmistakable HERO of the frame (50-65%) — vampire-lord / werewolf / gargoyle / horned-demon / hellhound / harpy / shade (defined living-darkness figure) — NO lich, NO skeletal-undead, NO dragon, NO succubus — rendered in lavish, terrifying, fully-readable detail, mid-action, dramatically lit, in a gothic setting. Castlevania-boss / Bloodborne-beast / Devil-May-Cry-demon / Van-Helsing-monster lineage. The monster DOMINATES; the gothic stage is a dramatic backdrop, NOT a dwarfing vista (the R1/legacy version made the creature a tiny lost silhouette swallowed by an epic backdrop). Solo only — NO hunter (assassin paths), NO combat (combat path), NO second figure, NO gore / NO mid-bite-on-victim. Reuses CREATURE_ARCHETYPE + CREATURE_WILD_ACTION + ASSASSIN_STAGE (DROPPED the dwarfing ASSASSIN_EPIC_BACKDROP axis — its "dominating / swallowing the frame" pool DNA is what shrank the monster). 3 path axes + universal lighting + atmosphere.',
+  slots: { universal: [ 'lighting', 'atmosphere' ], bot: [], path: [ 'creature', 'action', 'stage' ] },
+  pickN: {},
+  conditionalLayer: { slot: "drama", gate: 0.6 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+  GOTHBOT_MONSTER_PROWL_VICTORIAN: {
+  description: 'PATH-BESPOKE — GothBot monster-prowl (2026-05-25 R2 monster-as-HERO redesign). A SOLO epic gothic MONSTER is the unmistakable HERO of the frame (50-65%) — vampire-lord / werewolf / gargoyle / horned-demon / hellhound / harpy / shade (defined living-darkness figure) — NO lich, NO skeletal-undead, NO dragon, NO succubus — rendered in lavish, terrifying, fully-readable detail, mid-action, dramatically lit, in a gothic setting. Castlevania-boss / Bloodborne-beast / Devil-May-Cry-demon / Van-Helsing-monster lineage. The monster DOMINATES; the gothic stage is a dramatic backdrop, NOT a dwarfing vista (the R1/legacy version made the creature a tiny lost silhouette swallowed by an epic backdrop). Solo only — NO hunter (assassin paths), NO combat (combat path), NO second figure, NO gore / NO mid-bite-on-victim. Reuses CREATURE_ARCHETYPE + CREATURE_WILD_ACTION + ASSASSIN_STAGE (DROPPED the dwarfing ASSASSIN_EPIC_BACKDROP axis — its "dominating / swallowing the frame" pool DNA is what shrank the monster). 3 path axes + universal lighting + atmosphere.',
+  slots: { universal: [ 'lighting', 'atmosphere' ], bot: [], path: [ 'creature', 'action', 'stage' ] },
   pickN: {},
   conditionalLayer: null,
+  framingModes: null,
+  anchorScaleRange: null
+},
+
+  GOTHBOT_MONSTER_PROWL_INKED: {
+  description: 'PATH-BESPOKE — GothBot monster-prowl-inked (2026-05-25). Clone of GOTHBOT_MONSTER_PROWL but in a CLEAN DETAILED INKED dark-fantasy illustration medium (NO Berserk/Miura — that token fused monsters into gnarled trees) with a COLOR-MOOD SPECTRUM axis that rolls from BLAZING-VIVID-SATURATED to deeply-MUTED across renders (Kevin hearted both ends + wants the spectrum between). Same monster-as-hero + lush-stage + 60%-gated drama. Mandate: the monster is a SOLID distinct creature, NOT fused into the trees/rocks/background. Path axes: creature / action / stage / color_mood + drama (60%-gated) + universal lighting/atmosphere.',
+  slots: { universal: [ 'lighting', 'atmosphere' ], bot: [], path: [ 'creature', 'action', 'stage' ] },
+  pickN: {},
+  conditionalLayer: { slot: 'drama', gate: 0.6 },
+  framingModes: null,
+  anchorScaleRange: null
+},
+
+  GOTHBOT_MONSTER_PROWL_WETA: {
+  description: 'PATH-BESPOKE — GothBot monster-prowl-weta = GARGOYLES ONLY (2026-05-25 pivot). Super high-def Weta-Workshop + Unreal Engine 5 realistic RENDER of the most GNARLY, MEAN, ferocious yet ORNATELY-CARVED gargoyles, dialed to 11 + scroll-stopping, in action (flying / perched / attacking / scouting / lurking). Bespoke gargoyle axes: creature (gnarly+ornate stone gargoyle) / action (gargoyle in motion) / eye_glow (glowing eyes) / feature (signature gnarly+ornate detail) / stage (lush gothic) + drama (60%-gated) + universal lighting/atmosphere. Full-spectrum saturated color held against deep ominous shadow.',
+  slots: { universal: [ 'lighting', 'atmosphere' ], bot: [], path: [ 'creature', 'action', 'eye_glow', 'feature', 'scene_color', 'stage' ] },
+  pickN: {},
+  conditionalLayer: { slot: 'drama', gate: 0.6 },
   framingModes: null,
   anchorScaleRange: null
 },
