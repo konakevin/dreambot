@@ -198,7 +198,16 @@ export async function upscaleAndCache(
     }
     const buf = await resp.arrayBuffer();
 
-    const hqUrl = await persistBufferToStorage(buf, userId, supabase);
+    // Deterministic cache key per upload → the write is idempotent. If a
+    // re-run ever happens (stale-reclaim or failed-retry of the on-demand
+    // upscale), it OVERWRITES this one object instead of orphaning a second
+    // timestamped copy. Exactly one cached HD object per source image.
+    const hqUrl = await persistBufferToStorage(
+      buf,
+      userId,
+      supabase,
+      `${userId}/hq/${uploadId}.png`
+    );
     const { error: updErr } = await supabase
       .from('uploads')
       .update({

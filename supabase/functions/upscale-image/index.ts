@@ -15,10 +15,14 @@
  *                                            gets a `download_ready` notification
  *   403 Pro required | 429 monthly cap | 404 not found | 401 unauth
  *
- * Dedup: claim_upscale_job() guarantees ONE Replicate run per upload even with
- * concurrent requesters; all requesters are notified when it lands. Reliability:
- * the kick runs via EdgeRuntime.waitUntil; a stuck-job sweep (sweep-stuck-
- * upscales) re-runs any upload whose isolate died.
+ * Dedup (three layers): (1) claim_upscale_job() guarantees ONE Replicate run
+ * per upload even with concurrent requesters; (2) secondary requesters return
+ * 202 and the client modal polls uploads.image_url_hq, so everyone resolves to
+ * the SAME cached image; (3) the HQ object is written to a deterministic key
+ * (`${userId}/hq/${uploadId}.png`, upsert) so the rare re-run (stale-reclaim /
+ * failed-retry) OVERWRITES rather than orphaning a second copy. All requesters
+ * are notified when it lands. Reliability: the kick runs via
+ * EdgeRuntime.waitUntil; a stuck-job sweep re-runs any upload whose isolate died.
  *
  * Why Clarity (not Real-ESRGAN): Real-ESRGAN is trained on photos and mangles
  * tiny illustrated features (TinyBot/ChibiBot eyes); Clarity is an SDXL
@@ -142,8 +146,14 @@ Deno.serve(async (req) => {
     );
   }
 
-  // Record this requester (the notify list) + charge a cap slot.
-  await supabase.from('upscale_requests').insert({ upload_id: body.upload_id, user_id: user.id });
+  // Record this requester + charge a cap slot. notified_at defaults to now()
+  // = SUPPRESSED: a requester watching the modal gets the HD auto-saved in
+  // front of them and should NOT also be pinged. The completion notify loop
+  // only pings rows where notified_at IS NULL — set back to NULL by
+  // allow_upscale_notify() when the user dismisses/times out (migration 191).
+  await supabase
+    .from('upscale_requests')
+    .insert({ upload_id: body.upload_id, user_id: user.id, notified_at: new Date().toISOString() });
   await supabase
     .from('pro_hq_downloads_log')
     .insert({ user_id: user.id, upload_id: body.upload_id })

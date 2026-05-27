@@ -27,7 +27,8 @@ export async function persistToStorage(
 export async function persistBufferToStorage(
   buf: ArrayBuffer,
   userId: string,
-  supabase: SupabaseClient
+  supabase: SupabaseClient,
+  objectKey?: string
 ): Promise<string> {
   // We force JPEG output across the pipeline (2026-05-09 revert from WebP).
   // PNG detection kept because Replicate occasionally returns PNG for
@@ -37,10 +38,18 @@ export async function persistBufferToStorage(
   const ext = isPng ? 'png' : 'jpg';
   const contentType = isPng ? 'image/png' : 'image/jpeg';
 
-  const fileName = `${userId}/${Date.now()}.${ext}`;
-  const { error } = await supabase.storage
-    .from('uploads')
-    .upload(fileName, buf, { contentType, cacheControl: '2592000' });
+  // A caller-supplied deterministic key (e.g. the HQ cache path
+  // `${userId}/hq/${uploadId}.png`) makes the write IDEMPOTENT: any re-run for
+  // the same upload (stale-reclaim / failed-retry of an on-demand upscale)
+  // OVERWRITES the single object instead of orphaning a new timestamped copy —
+  // exactly one cached object per source image. The default (no key) keeps the
+  // unique per-call name for original renders, which are genuinely distinct.
+  const fileName = objectKey ?? `${userId}/${Date.now()}.${ext}`;
+  const { error } = await supabase.storage.from('uploads').upload(fileName, buf, {
+    contentType,
+    cacheControl: '2592000',
+    upsert: objectKey !== undefined,
+  });
   if (error) throw new Error(`Storage upload failed: ${error.message}`);
 
   const { data } = supabase.storage.from('uploads').getPublicUrl(fileName);

@@ -12,13 +12,14 @@
  * UpscaleModal.show(uploadId) from anywhere.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
+import { startHqPoll } from '@/lib/upscalePoll';
 
 type Phase = 'processing' | 'saving' | 'done' | 'timeout';
 interface State {
@@ -38,15 +39,10 @@ export const UpscaleModal = {
   },
 };
 
-const POLL_MS = 4000;
-const MAX_POLLS = 30; // ~2 min
-
 export function UpscaleModalHost() {
   const [state, setState] = useState<State>({ visible: false, uploadId: null });
   const [phase, setPhase] = useState<Phase>('processing');
   const opacity = useSharedValue(0);
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const savingRef = useRef(false);
 
   useEffect(() => {
     listener = (next) => setState(next);
@@ -60,46 +56,29 @@ export function UpscaleModalHost() {
     opacity.value = withTiming(state.visible ? 1 : 0, { duration: 200 });
   }, [state.visible, opacity]);
 
-  // Poll for the HD result while open; auto-save when it lands.
+  // Poll for the HD result while open; auto-save when it lands. The resolve
+  // logic lives in startHqPoll (pure + unit-tested); this wires it to Supabase,
+  // the save action, and the modal's phase/auto-hide chrome.
   useEffect(() => {
     if (!state.visible || !state.uploadId) return;
     const uploadId = state.uploadId;
     setPhase('processing');
-    savingRef.current = false;
-    let polls = 0;
-
-    const stop = () => {
-      if (pollRef.current) clearInterval(pollRef.current);
-      pollRef.current = null;
-    };
-
-    const tick = async () => {
-      polls += 1;
-      if (savingRef.current) return;
-      const { data } = await supabase
-        .from('uploads')
-        .select('image_url_hq')
-        .eq('id', uploadId)
-        .maybeSingle();
-      const hq = (data as { image_url_hq?: string | null } | null)?.image_url_hq;
-      if (hq) {
-        savingRef.current = true;
-        stop();
-        setPhase('saving');
-        await saveUrlToPhotos(uploadId, hq, true);
-        setPhase('done');
-        setTimeout(() => UpscaleModal.hide(), 1200);
-        return;
-      }
-      if (polls >= MAX_POLLS) {
-        stop();
-        setPhase('timeout');
-        setTimeout(() => UpscaleModal.hide(), 3000);
-      }
-    };
-
-    pollRef.current = setInterval(tick, POLL_MS);
-    return stop;
+    return startHqPoll(uploadId, {
+      fetchHq: async (id) => {
+        const { data } = await supabase
+          .from('uploads')
+          .select('image_url_hq')
+          .eq('id', id)
+          .maybeSingle();
+        return (data as { image_url_hq?: string | null } | null)?.image_url_hq ?? null;
+      },
+      onSave: (hq) => saveUrlToPhotos(uploadId, hq, true),
+      onPhase: (phase) => {
+        setPhase(phase);
+        if (phase === 'done') setTimeout(() => UpscaleModal.hide(), 1200);
+        if (phase === 'timeout') setTimeout(() => UpscaleModal.hide(), 3000);
+      },
+    });
   }, [state.visible, state.uploadId]);
 
   const animStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));

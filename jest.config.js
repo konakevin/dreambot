@@ -12,9 +12,12 @@ module.exports = {
       '<rootDir>/supabase/functions/_shared/castResolver',
     '^\\./renderEntity\\.ts$':
       '<rootDir>/supabase/functions/_shared/renderEntity',
+    '^\\./persistence\\.ts$':
+      '<rootDir>/supabase/functions/_shared/persistence',
     // Map Deno URL imports to mocks
     '^https://esm\\.sh/@supabase/supabase-js@2$':
       '<rootDir>/__tests__/__mocks__/supabase-esm.js',
+    '^https://esm\\.sh/@jsquash/.*$': '<rootDir>/__tests__/__mocks__/jsquash-stub.js',
   },
   globals: {
     __DEV__: true,
