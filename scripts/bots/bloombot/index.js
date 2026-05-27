@@ -203,17 +203,23 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`BloomBot: unknown path "${path}"`);
+    // The axis-system archetype templates do NOT use the shared DENSITY/
+    // ARRANGEMENT blocks, so the "lush flower hero" bar must be injected here.
+    const LUSH_HERO_MANDATE = `━━━ BLOOMBOT BAR — LUSH FLOWER HERO (NON-NEGOTIABLE, READ FIRST) ━━━
+This MUST be a lush, beautiful FLOWER scene. Flowers are the unmistakable HERO and FILL the frame — either a monumental bloom-form or a dense, overflowing bloom-mass dominating 60%+ of the composition. Any setting (ruin / valley / wall / waterfall / architecture / landscape) is ONLY a backdrop framing the flowers — NEVER the subject. NEVER a sparse, thin, or barren scene; NEVER "a [place] with a few accent flowers"; NEVER a macro of just 2-3 blooms. Pack the frame edge-to-edge with abundant, varied, jewel-toned blooms in a deliberate, cohesive, magazine-cover composition: a clear focal hero up front, multi-tier depth behind, every quadrant earning its space. Keep the WHOLE frame crisp, clear and COLORED — build background depth from receding layers of more blooms and clearly-rendered colored scenery, the sky clean and saturated. The background must NEVER dissolve into a pale, white, milky, foggy, or washed-out haze; distant elements stay clearly rendered and colored, just smaller.`;
     // Declarative axis-system paths export an object { archetype, pools }.
     // Legacy compositional paths export a function. Dispatch on shape.
     if (builder && typeof builder === 'object' && builder.archetype) {
       const { composeBrief } = require('../../lib/brief-composer');
-      return composeBrief({
+      const composed = composeBrief({
         bot: module.exports,
         pathConfig: builder,
         sharedDNA,
         vibeDirective,
         picker,
       });
+      if (typeof composed === 'string') return `${LUSH_HERO_MANDATE}\n\n${composed}`;
+      return { ...composed, brief: `${LUSH_HERO_MANDATE}\n\n${composed.brief}` };
     }
     if (typeof builder === 'function') {
       return builder({ sharedDNA, vibeDirective, picker });

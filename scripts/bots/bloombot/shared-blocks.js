@@ -7,10 +7,10 @@
  */
 
 const PROMPT_PREFIX =
-  'breathtaking floral beauty, every petal in jewel-saturated focus, magazine-cover composition';
+  'breathtaking LUSH flower scene, abundant blooms filling the entire frame edge-to-edge as the unmistakable hero, a monumental bloom-form or dense overflowing bloom-mass dominating the composition, every petal jewel-saturated, magazine-cover composition, any setting is only a backdrop to the flowers';
 
 const PROMPT_SUFFIX =
-  'render every named species as that exact species in its named color, full-spectrum jewel-tone color across the frame, every depth layer in sharp focus through clear crisp air, distant elements small but tack-sharp and clearly defined, no text, no words, no watermarks, hyper-detailed gallery quality';
+  'render every named species as that exact species in its named color, full-spectrum jewel-tone color, the hero blooms and foreground rendered tack-sharp and jewel-saturated, the background staying clear and colored with depth built from receding layers of more blooms and clearly-rendered scenery, the sky clean and saturated, never a pale milky washed-out hazy background, no text, no words, no watermarks, hyper-detailed gallery quality';
 
 const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE — NON-NEGOTIABLE ━━━
 No humans, no faces, no figures, no silhouettes, no shadows of people anywhere in the frame. Wildlife (hummingbird, bee, butterfly, dragonfly, small lizard) is allowed only as peripheral accent — never the subject.`;
@@ -22,6 +22,7 @@ const ARRANGEMENT_BLOCK = `━━━ ARRANGEMENT — CURATED, NOT RANDOM ━━�
 3-4 species, repeated and MASSED into thick clusters. Patchwork clumps of contrasting species, not uniform fields, not random salad. The selection is INTENTIONAL — picture a high-end florist's masterpiece blown up to landscape scale. The 4-5 colors of the palette are balanced across the frame so no single color dominates more than its share.`;
 
 const ANTI_DRIFT_BLOCK = `━━━ DEFAULTS TO RESIST ━━━
+- Do NOT default to orange/marigold/amber/coral/copper as the dominant warm palette. BALANCE warm with EQUAL cool — blues, purples, violets, indigos, whites carry equal weight across the frame. Orange is one accent among many, never the scene's overall mood. (EXCEPTION: a sunset or desert scene is legitimately warm — let those stay warm; everywhere else, balance.)
 - Do NOT default to pink/rose/blush/coral as the dominant palette unless the palette explicitly names it. Pink is one accent color among many, never the scene's overall mood.
 - Do NOT default to roses, peonies, hydrangeas, or lavender unless they appear in the species roster for this render's region. Use the exact species named in the roster.
 - Do NOT default to "soft pastels", "cottagecore", "feminine", "cottage garden", "english garden" descriptors.

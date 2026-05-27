@@ -2969,11 +2969,14 @@ ${recipe.touchpoints.map((t) => '  • ' + t).join('\n')}
 
 ${recipe.instructions}
 
-━━━ DE-HAZE MANDATE — GLOBAL, NON-NEGOTIABLE (2026-05-27) ━━━
-BloomBot renders must be CRISP and clear. NEVER use any form of: haze, hazy, mist, misty, fog, foggy, vapor, smoke/smoky, overcast, sepia, "atmospheric haze", "atmospheric perspective/recession", volumetric light/haze, god-rays, sun-shafts, light-shafts, crepuscular rays, bokeh, "out-of-focus", dreamy, soft-focus, soft-blur, painterly blur, or halo/luminous/ethereal/soft/bloom "glow". The air is ALWAYS clear and crisp.
-DEPTH is conveyed the CRISP way ONLY — sharp overlapping layers + diminishing scale, every layer in sharp focus. NEVER "fading / dissolving / receding / melting into soft depth / haze / distance"; instead "receding in crisp sharp overlapping layers" or "diminishing in scale across tack-sharp layers". Distant elements stay SHARP and small, never blurred or faded.
-KEEP soft WARM / pastel / golden-hour LIGHTING and color (warm glow, gentle warm light, warm halo, pastel palette) — only the haze/blur/soft-focus is banned, never the warmth.
-NEVER write a banned word even to negate it ("no haze" leaks haze into the renderer) — always phrase positively ("crisp clear air").
+━━━ LUSH-HERO + CRISP-FOREGROUND MANDATE — GLOBAL, NON-NEGOTIABLE (2026-05-27) ━━━
+Every entry must produce a LUSH flower scene where ABUNDANT blooms fill the frame as the unmistakable HERO — either a monumental bloom-form or a dense overflowing bloom-mass. Flowers dominate 60%+ of the frame; any setting is only a backdrop. NEVER a sparse / thin / barren scene, NEVER "a [place] with a few accent flowers".
+The WHOLE frame stays CRISP, clear and COLORED — hero blooms + foreground tack-sharp, and the background sky + distance clean, colored and clearly rendered. Build depth from receding LAYERS of more blooms and clearly-rendered colored scenery (distant elements smaller but still clear), NOT from atmospheric softening. The background must NEVER dissolve into a pale / white / milky / washed-out haze. Avoid haze / mist / fog / vapor / smoke / overcast washes, god-rays / sun-shafts / volumetric-fog, and bokeh / dreamy / soft-focus / soft-blur entirely.
+KEEP soft WARM / pastel / golden-hour LIGHTING and color (warm glow, gentle warm light, warm halo, pastel palette) — that warmth is wanted.
+NEVER write a banned word even to negate it ("no haze" leaks into the renderer) — always phrase positively ("crisp clear air").
+
+━━━ COLOR-BALANCE MANDATE — GLOBAL (2026-05-27) ━━━
+BALANCE warm and cool across entries. Do NOT default to orange / marigold / amber / coral / copper as the dominant flower color — these are over-represented. Across a batch, give blues, purples, violets, indigos, and cool whites EQUAL weight to the warm tones. Orange is one accent among many, never the go-to hero bloom. (EXCEPTION: pools that are intrinsically warm by identity — sunset skies, desert blooms — stay warm; everywhere else, balance warm and cool.)
 
 Output ${count} numbered list entries (1. ... 2. ... 3. ...). Each entry on its own single line. NO preamble, NO commentary, NO markdown fences.`;
   }
