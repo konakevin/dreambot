@@ -5,7 +5,9 @@ generatePool({
   total: 400,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CUTE-CREATURE entries for ChibiBot's unified critter pool — a tagged, multi-biome roster of adorable creatures, fantasy critters, and cute human children that ALL paths across ChibiBot will pull from. Each entry has BIOME TAGS so paths can filter to creatures that fit their setting.
+  metaPrompt: (n) => `You are writing ${n} CUTE-CREATURE entries for ChibiBot's unified critter pool — a tagged, multi-biome roster of adorable real animals and fantasy critters that ALL paths across ChibiBot will pull from. Each entry has BIOME TAGS so paths can filter to creatures that fit their setting.
+
+ChibiBot is CREATURES ONLY — adorable animals and fantasy critters. NO humans of any kind (no children, no adults, no people).
 
 ━━━ OUTPUT FORMAT (JSON OBJECTS, NOT STRINGS) ━━━
 
@@ -21,9 +23,8 @@ The "tags" array uses ONE OR MORE of these exact biome tags:
 - ARCTIC  — snow / ice / polar / tundra (penguins, seals, snowy owls, polar bears, arctic fox, etc.)
 - JUNGLE  — tropical rainforest / canopy / amazon (parrots, monkeys, sloths, jaguars, frogs, etc.)
 - BIRD  — flying creatures (any bird — owls, robins, hummingbirds, finches, ducks, etc.)
-- FANTASY  — non-real creatures (dragons, unicorns, kitsune, tanuki, alebrije, faun, sprite, etc.)
-- CHILD  — cute human children (chibi kids — diverse cultures, ages 2-8, kawaii-styled, OFTEN paired with a tiny creature companion)
-- ANY  — fits ANY biome (children always get ANY; some magical-realm creatures get ANY)
+- FANTASY  — non-real creatures (dragons, fairies, unicorns, pegasi, gryphons, phoenixes, kitsune, tanuki, alebrije, faun, sprites, etc.)
+- ANY  — fits ANY biome (some magical-realm creatures get ANY)
 
 Multi-tag rules:
 - Land animals get [LAND]
@@ -33,39 +34,38 @@ Multi-tag rules:
 - Snowy owl gets [ARCTIC, BIRD]
 - Frogs get [LAND] (or [JUNGLE] if tropical)
 - Dragons get [FANTASY, LAND] (or [FANTASY, MARINE] for sea-dragons)
-- Mermaids get [FANTASY, MARINE]
-- Children get [CHILD, ANY] always (kids show up anywhere)
+- Fairies / sprites get [FANTASY, ANY] (tiny winged critters, NOT human — render as cute big-eyed fae-creatures with leaf/petal/insect-wing bodies)
+- Mermaid-creatures (sea-spirits, ningyo fish-creatures) get [FANTASY, MARINE] — fish/creature bodies, NOT human girls
 - Cloud-creatures / spirit-foxes / dreamcatcher-mice get [FANTASY, ANY]
 
 ━━━ DISTRIBUTION FOR THIS BATCH OF ${n} ━━━
 
 Aim for roughly:
-- 25% LAND temperate mammals (foxes, bunnies, hedgehogs, deer, squirrels, pandas, raccoons, otters, sloths, chipmunks, badgers, mice, kittens, puppies, hamsters)
-- 15% BIRD + REPTILE + AMPHIBIAN (owls, robins, hummingbirds, ducklings, baby parrots, songbirds, frogs, turtles, baby geckos, salamanders)
-- 15% MARINE (clownfish, dolphins, whales, sea-turtles, octopus, jellies, seahorses, sea-stars, manta-rays, crabs)
-- 10% ARCTIC (polar bear cubs, snow leopards, arctic fox, snowy owls, baby seals, baby walrus, penguin chicks, baby reindeer)
-- 10% JUNGLE (tree frogs, baby parrots, baby sloths, baby monkeys, baby capybaras, jungle birds, baby jaguars)
-- 10% FANTASY (baby dragons, mini unicorns, baby pegasi, baby kitsune with tail-tips glowing, baby tanuki, baby alebrije, faun-cubs, sprites, baby gryphons, baby phoenixes, baby selkies, baby kelpie, jorogumo cubs, yokai-kits)
-- 10% CHILD (kawaii kids — diverse cultures and skin tones: East Asian kid in yukata, South Asian kid with bindi, Black kid with afro puffs, Latin kid with braids, Nordic kid with rosy cheeks, mixed-race kid, Indigenous kid with feathers, Middle Eastern kid in scarf, etc. — chibi proportions, big dewy eyes, big head, tiny body, OFTEN with a tiny creature companion)
-- 5% MAGICAL-REALM (spirit-fox with glowing nose, cloud-bunny, dreamcatcher-mouse with woven-feather tail, star-cat with cosmic markings, moonstone-deer, paper-lantern-fairy)
+- 22% LAND temperate mammals (foxes, bunnies, hedgehogs, deer, squirrels, pandas, raccoons, otters, sloths, chipmunks, badgers, mice, kittens, puppies, hamsters)
+- 13% BIRD + REPTILE + AMPHIBIAN (owls, robins, hummingbirds, ducklings, baby parrots, songbirds, frogs, turtles, baby geckos, salamanders)
+- 13% MARINE (clownfish, dolphins, whales, sea-turtles, octopus, jellies, seahorses, sea-stars, manta-rays, crabs)
+- 9% ARCTIC (polar bear cubs, snow leopards, arctic fox, snowy owls, baby seals, baby walrus, penguin chicks, baby reindeer)
+- 9% JUNGLE (tree frogs, baby parrots, baby sloths, baby monkeys, baby capybaras, jungle birds, baby jaguars)
+- 26% FANTASY (baby dragons of every color, tiny winged FAIRIES + flower-sprites + leaf-pixies, mini unicorns, baby pegasi, baby gryphons, baby phoenixes, baby kitsune with glowing tail-tips, baby tanuki, baby alebrije, faun-cubs, baby kelpie, sea-dragons, yokai-kits, baby wyverns, mushroom-sprites, acorn-imps)
+- 8% MAGICAL-REALM (spirit-fox with glowing nose, cloud-bunny, dreamcatcher-mouse with woven-feather tail, star-cat with cosmic markings, moonstone-deer, paper-lantern-fae, will-o-wisp critter)
 
 ━━━ WHAT MAKES AN ENTRY 10/10 ━━━
 
 - ONE creature only (NOT a pair — pair-bonding happens at path level)
 - 20-35 word description of the SINGLE creature: species + signature visual features + chibi-styling cues (oversized eyes, blushing cheeks, soft fluffy textures, big head, tiny body, single pose detail)
-- For CHILD entries: chibi-styled kid (oversized head, big dewy eyes, blushing cheeks, simple outfit, ONE cultural marker, ONE signature gesture or hair detail)
+- For FAIRY / SPRITE entries: render as a CUTE non-human fae-CREATURE — tiny round body, oversized dewy eyes, insect/leaf/petal wings, antennae or blossom-crown — NOT a human child with wings. Think "big-eyed pixie-bug" not "little girl"
 - Picture-able as one mental still frame
 - Adds variety to the pool (not duplicating top species)
 
 ━━━ HARD BANS ━━━
 
+- NO HUMANS of any kind — no children, no kids, no babies (human), no adults, no people, no human faces, no human hands. ChibiBot renders CREATURES ONLY. Fairies/sprites must read as cute fae-CREATURES, never as human children with wings.
 - NO pairs / "TWO creatures" / "PAIR of" entries (pair-bonding is path-level)
 - NO scary / monstrous / threatening (no zombies, no demons, no nightmare-fuel)
 - NO realistic / documentary descriptions — everything chibi-styled
-- NO sexualized or romanticized depictions (especially with CHILD entries)
-- NO adult humans — only CHILD entries for human creatures
+- NO sexualized or romanticized depictions
 - NO predator-prey violence
-- NO western-only fantasy bias — include Asian (kitsune, tanuki, kappa, baku), Mexican (alebrije), Andean (chinchilla-spirit), Polynesian (manaia-spirit), African (anansi), Norse (huldra-kit), Slavic (domovoi-puppy) — but always rendered as cute / wholesome
+- NO western-only fantasy bias — include Asian (kitsune, tanuki, kappa, baku), Mexican (alebrije), Andean (chinchilla-spirit), Polynesian (manaia-spirit), African (anansi), Norse (huldra-kit as a fuzzy forest-CREATURE), Slavic (domovoi-puppy) — but always rendered as cute / wholesome non-human critters
 - NO repeated entries — each must add a UNIQUE creature concept
 
 ━━━ DEDUP ━━━

@@ -914,7 +914,7 @@ git push origin main
 
 6. **Two-pass polish OFF for ALL new-axis-system paths — scene AND character (2026-05-15).** Add path to `twoPassPolish.skipPaths`. Every path migrated to the new declarative composer architecture has performed BETTER without Haiku polish — both scene and character paths. Haiku compression's failure mode is dropping path-bespoke DNA / vocabulary / detail to hit the 80-110 word target; single-pass Sonnet preserves the full slot-pool richness so Flux renders the intended diversity. **Specific bug observed on SteamBot sexy-steampunk-woman (2026-05-15):** 4 of 5 polished prompts had their skin tone / eye color / makeup / hair description stripped — only the ethnicity NOUN survived ("Russian woman", "Scottish woman") with no DNA detail, causing Flux to default to a brunette portrait prior across all renders. Disabling polish restored full DNA preservation. **Two-pass polish is a legacy-bot tool — don't enable it on new-axis paths.** (Across-the-board removal pending a deliberate sweep.)
 
-7. **No human figure leak is a recurring issue.** Even with explicit "NO CHARACTERS / NO humanoid figures" bans in the brief, ~1-2 renders per 5 often slip a tiny figure into the scene. Mitigations that help: explicit examples of WHAT TO OMIT ("NEVER a hooded silhouette / NEVER tiny-figure-at-base") in the brief, hardening at template-top BEFORE bot-aesthetic blocks. Not 100% solvable — but reducing leak rate is achievable.
+7. **No human figure leak is a recurring issue.** Even with explicit "NO CHARACTERS / NO humanoid figures" bans in the brief, ~1-2 renders per 5 often slip a tiny figure into the scene. Mitigations that help: explicit examples of WHAT TO OMIT ("NEVER a hooded silhouette / NEVER tiny-figure-at-base") in the brief, hardening at template-top BEFORE bot-aesthetic blocks. Not 100% solvable — but reducing leak rate is achievable. **BUT — if humans render RELIABLY (not just leak), the cause is never the brief wording; it's a SOURCE that legitimately contains humans (a pool entry, a gen-script metaPrompt, or a template permission).** A pool/template that CONTAINS humans will render humans no matter how the rest of the brief is worded — no ban can out-vote a positive entry that names a person. Audit order when a bot renders humans it shouldn't: (a) the creature/subject pool for human entries, (b) the **gen-script metaPrompt** that produces that pool (fix it or it regenerates humans on the next backfill), (c) template "OK to render X" permissions, (d) scene/surprise/lighting pools for background humans ("distant child", "old man on a jetty", "villagers", "by the dairy farmer", "child's-eye-view", "child-sized X"). See ChibiBot human-children purge (2026-05-27) below — Kevin hearted a ChibiBot render that was just a sleeping human girl; root cause was 56 CHILD-tagged human-kid entries in the shared `cute_creatures_unified` pool (tagged `ANY`, so they leaked into every path) PLUS ~14 template lines explicitly saying "Children OK from unified pool". Brief bans were irrelevant — the pool itself was feeding kids.
 
 8. **buildBrief dispatcher + defaultPools + poolByName are one-time per bot.** Add them once when you migrate the first path on a bot. After that, every subsequent path on the same bot just drops in.
 
@@ -1652,6 +1652,29 @@ Kevin: "we still want the hairstyle/skin/eyes expansions ... if sonnet drops the
 
 ## ChibiBot
 
+### human-children purge — ChibiBot is CREATURES ONLY (2026-05-27)
+
+**Trigger:** Kevin hearted a ChibiBot `sleepy-naptime` render that was just a human "Aboriginal Australian girl curled up sleeping" — a clear failure. ChibiBot's identity is adorable CRITTERS (real animals + cute fantasy creatures) / villages / cozy scenes. NO literal humans, ever.
+
+**Root cause (NOT a brief-wording leak — a source that contained humans):**
+1. The shared `cute_creatures_unified.json` pool (400 entries, drawn by every path) had **56 `CHILD`-tagged entries that were literal human kids** ("Chibi South Asian girl, age 5", "Chibi East Asian boy, age 4"). They were tagged `["CHILD","ANY"]` — and the `ANY` tag means they matched **every** path's biome filter, so any path (including `sleepy-naptime`, which draws the pool with no filter) could pick a human child.
+2. The **gen-script metaPrompt** (`scripts/gen-seeds/chibibot/gen-cute-creatures-unified.js`) explicitly told Sonnet to make ~10% `CHILD` entries — so even after deleting them, the next backfill would regenerate kids. Had to fix the generator, not just the data.
+3. `archetype-templates.js` had ~14 lines explicitly PERMITTING children ("Children OK from unified pool — render at chibi proportions", "NO ADULT HUMANS (children OK from unified pool)", and an enabler paragraph "The creature pool may include chibi human children…"). These directly **contradicted** the render-medium block in `shared-blocks.js` which already said "No humans. All subjects are creatures." The permission won.
+4. Background humans also lurked in scene/surprise/lighting pools: "Distant child in a red raincoat", "Hunched silhouette of an old man on a jetty", "Two small villagers cross a rope-bridge", "offered… by the dairy farmer", "child's-eye-view", and many "child-sized / child's X" objects.
+
+**Fix (purge at SOURCE + harden + backfill):**
+- Removed the 56 CHILD-tagged entries + 5 human-ish fantasy entries (faun "skin below the waist", huldra "forest-girl form", ningyo "infant torso") from the pool. Kept the huldra-**calf** (rendered as an actual furry calf creature).
+- Rewrote the gen-script metaPrompt: dropped the `CHILD` tag entirely, reweighted the freed 10% into FANTASY (Kevin wanted "fairies, dragons, etc."), and added a HARD BAN: "NO HUMANS of any kind… Fairies/sprites must read as cute fae-CREATURES, never human children with wings."
+- Backfilled 339→400 via the canonical script — new entries are diverse real + fantasy critters (zhuque phoenix chick, Polynesian taniwha, huli jing nine-tailed fox, Cape hare, sea-dragons, will-o-wisp sprites, paper-lantern fairies). Cultural diversity preserved by moving it onto the *creatures* (Chinese/Polynesian/African mythic critters) instead of human kids.
+- Flipped all ~14 template permission lines to positive "NO humans of any kind — creatures only" bans + replaced the 4 human-child OUTPUT FORMAT examples ("A chibi child explorer…") with creature examples ("A chibi otter explorer…").
+- Scrubbed background humans from scene/surprise/lighting/detail pools (villagers→creatures, distant child→chibi penguin, old man→chibi tortoise, dairy farmer→dairy stall, "child-sized"→"tiny", "child's-eye-view"→"critter's-eye-view").
+
+**KEEP (false positives — do NOT purge):** animal "kids" (mountain goat kid, kid goat, marmot kid = baby goats), animal "X children" (rabbit/hedgehog/sparrow/squirrel children = creature kids), "fisherman-knit" (a knit STYLE), "fish-children" (baby fish), "muskrat-farmers" (creatures farming), "gingerbread man" (a cookie), "snowman".
+
+**Verification:** 10 renders (4 sleepy-naptime + 6 mixed round-robin) — 10/10 creatures, 0 human children. The one borderline was a pumpkin-**fairy** with a humanoid sleeping face — that's the explicitly-requested "fairy" category, not a human kid.
+
+**Cross-bot lesson (added to lesson #7 above):** when a bot RELIABLY renders something banned (vs. occasional leak), don't tune the brief — find the source pool/metaPrompt/template that legitimately contains it. And when you delete generated content, also fix the **generator** or it comes back on the next backfill.
+
 ### heartwarming-scene (ChibiBot) — parity migration regressed lighting variety; full-bespoke 10-axis + time-of-day-tinted-glow recovered it 2026-05-19
 
 First ChibiBot path migrated to declarative composer. **Production-ready in 3 rounds.**
@@ -2291,3 +2314,48 @@ R0 batch label: `isekai-axis-R0`. All 5 renders converged on anime aesthetic. On
 - **ALWAYS hard-ban Western photoreal medieval fantasy in every isekai/fantasy-adjacent pool recipe.** Flux's gravity well there is strong.
 - **ALWAYS add migrated paths to `twoPassPolish.skipPaths`** — Haiku polish strips curated culture-canon language (per `feedback_axis_system_skip_polish`).
 - **DON'T re-attempt mecha-hangars/mecha-anime migration** without first solving (a) Flux's anime-mech-arms-out gravity, (b) Mt-Fuji-without-mech drift, (c) Western sci-fi vocabulary leakage. See `project_mecha-hangars_kept_legacy`.
+
+---
+
+## TinyBot — lessons
+
+### borrowers path KILLED 2026-05-27 (Kevin)
+
+Deleted path + `borrowers_scenes.json` pool + gen script. Two compounding root causes, both worth remembering cross-bot:
+
+1. **"borrower" is a LITERARY concept, not a visual one — Flux has no reliable prior for it.** Flux renders "dragon / castle / knight" cold; it does not know "a borrower" (The Borrowers / Arrietty = tiny humans living in a human-scale world). Seeds hedged with "5cm-tall borrower figurine," so the word "borrower" carried ~zero visual weight. **Cross-bot rule: don't build a path's identity on a concept Flux can't render — describe the thing in concrete visual terms (e.g. "a thumb-sized person") instead of a culture/literary label.**
+2. **A subject that MUST be tiny-in-frame is the easiest thing for Flux to drop.** The path required the everyday object (fork/spool/thimble) to dominate for scale, with the tiny human small. Weak concept + tiny-in-frame ⇒ Flux drops the human and renders just the object ⇒ a pure **macro abstraction** (the hearted failure: a giant fork in icy powder, no figure at all). This collides with TinyBot's whole identity — **tiny WHIMSY SCENES, not "macro zoom on an object so it reads small."**
+
+### Open TinyBot diagnosis (not yet fixed — 2026-05-27)
+
+The fork-macro render also exposed bot-wide issues beyond borrowers, pending Kevin's go-ahead:
+- **Always-on macro wrapper** — `shared-blocks.js` PROMPT_PREFIX/SUFFIX + the "NON-NEGOTIABLE" tilt-shift block lead with *"extreme macro lens close-up, extreme shallow depth of field,"* which crops the world to one object + blurs the scene + drops small subjects. The fix is to lead with SCENE + diorama + scale and demote tilt-shift to a finishing touch (per the franchise-massacre lesson: the wrapper is the dominant first-tokens lever, axes are not).
+- **`render` medium** on TinyBot pushes glossy single-hero product shots — bad for whimsy.
+- **Thin single-subject seeds** — much of several pools is "figure + ONE object on a bare surface," which degrades to a macro object shot whenever the figure drops. Reseed toward multi-element constructed worlds.
+- **Axis-system conversion is NOT the fix on its own** — TinyBot is intimate/scene-centric, the category the playbook has repeatedly reverted out of the generic composer (cozy-sci-fi-interior, mecha-hangars, the franchise massacre). Treat axis decomposition as one tool for the thin-seed problem, piloted on ONE path — not a 16-path migration.
+
+---
+
+## SteamBot — lessons
+
+### steampunk-curio "animate-creature-in-habitat" redesign = Flux failure mode (2026-05-27)
+
+The 2026-05-15 redesign repointed `steampunk-curio` from **static steampunk ARTIFACT in museum-display framing** (legacy `STEAMPUNK_CURIOS` pool — Flux-safe, on-theme) to **a live clockwork animal "caught mid-motion in a lived habitat"** (`STEAMPUNK_ANIMATE_CURIOS` + `STEAMPUNK_CURIO_HABITAT`). Kevin hit a hearted render that was "a weird raccoon on a tree with fucked up arms" — a real-looking red panda with a mangled limb, no brass reading. Three baked-in causes, all cross-bot:
+
+1. **"mechanical creature mimicking a REAL living thing" → Flux renders the real animal and drops the metal.** The animal prior (red panda / fox / wolf) outweighs "copper-and-brass," so the automaton reading evaporates → off-theme.
+2. **Mandatory dynamic pose ("ALWAYS mid-motion / mid-step / articulated joints active / NEVER frozen-pose") = anatomy break.** Dynamic *animal* poses are Flux's top limb-mangling trigger. The template ordered the exact thing that breaks.
+3. **Display framing was LOAD-BEARING for the "this is a crafted curio" reading.** The legacy pool baked "on a pedestal under spotlight / in a walnut case" into every entry — that vitrine/Wunderkammer signal is what made a brass automaton read as a steampunk *artifact*. The redesign explicitly BANNED it ("NO vitrines, NO pedestals, NO 'displayed on'") and lost the signal.
+
+**Cross-bot rule:** an "object/automaton mimicking a real animal" is far Flux-safer rendered **still + clearly mechanical** (visible brass/gears/glass-eyes, posed at rest) than **alive and mid-action** — motion + animal anatomy + organic-vs-mechanical = broken real animal. (It does NOT require sterile display framing — a still mechanical automaton reads fine in a lived-in setting; see fix below.) Same family as the borrowers kill (don't bet a path on a subject/pose Flux can't render).
+
+**Fix shipped (2026-05-27, R0 ~4.7/5):** do NOT over-revert. The first instinct was a full revert to the legacy *museum/auction static-display* design — Kevin rejected it as "too serious" and noted the **steampunk SETTING was the good part** of the broken version; only two things actually broke it. The fix KEPT the lived-in `habitat` axis (steampunk room — not museum, not nature) and repaired only the failure causes:
+1. **Sanitized the `curio` pool** (`scripts/sanitize-merge-curio-pool.js`) — recast all 200 animate entries as STILL, framing-neutral, clearly-MECHANICAL automatons at rest (stripped "mimics a living thing" + every motion verb; reinforced brass/gears/glass-eyes; NO display framing + NO environment baked in, so the habitat axis supplies the setting). Written to `STEAMPUNK_CURIOS`.
+2. **Retuned the template** (`STEAMBOT_STEAMPUNK_CURIO`) — replaced "ALIVE IN MOTION — NON-NEGOTIABLE" with "A STILL, CRAFTED AUTOMATON — NOT A LIVE ANIMAL"; added bans on dynamic action + outdoor/nature; kept no-museum + lived-in-steampunk-room framing.
+
+R0: brass jellyfish / squirrel / heron / stag / fox automatons — all clearly mechanical, at rest, in steampunk rooms, anatomy intact. One drift: a `cinematic` render leaked a snowy/outdoor setting despite the nature ban (Flux nudged by vibe + temperature sensory anchor) — tighten the habitat lock if it recurs. Legacy museum function-form preserved at `paths/legacy/steampunk-curio.js`.
+
+**Cross-bot lesson (over-reverting):** when fixing a broken render, fix the SPECIFIC cause and keep the parts that worked. Don't over-revert to a "safe but lifeless" design — that trades one failure for a blander one. Here the cause was narrow (live-animal-mimic + mandatory motion) so the fix was narrow (still-mechanical pool + at-rest template), and the good idea (curio in a steampunk setting) survived.
+
+### Systemic: bots have NO quality gate
+
+Bots post 2×/day on a flat round-robin with zero human review, so any path that drifts into a Flux failure mode pumps broken/off-theme renders straight to the live feed until someone scrolls past one. When a "random shit render" surfaces, the first move is: pull `ai_prompt` → identify the path → check whether the path's pool/template is betting on a Flux-hostile subject (animate-animal-automaton, tiny-in-frame subject, literary concept Flux doesn't know).

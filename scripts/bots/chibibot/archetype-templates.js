@@ -431,9 +431,9 @@ Every render must produce: AWWW + instant smile + "I want to hug them both" inst
 
 Never photoreal. NEVER documentary-nature. Never flat illustration. Render as polished 3D CGI in the designer-collectible / Pop-Mart-vinyl register: glossy materials with subsurface scattering, ultra-clean form language with crisp surface definition, dewy highlights. Creatures render with chibi proportions — oversized head, massive glassy reflective multi-catchlight eyes catching star-glow, tiny stubby paws, round chubby bodies, blushing cheeks lit warm by lantern/firefly point-light, fluffy soft textures. Setting + props + sky render with the SAME glossy crisp CGI register. Stars are crisp pinpoints (not blurry smudges). Fireflies are jewel-bright glowing orbs.
 
-━━━ NO HUMANS (except the CHILD-tagged unified pool entries) ━━━
+━━━ NO HUMANS — CREATURES ONLY ━━━
 
-The creature pool may include chibi human children (CHILD-tagged) — kawaii kids with diverse cultures. When children are picked, render them at chibi proportions matching the other creatures (oversized head, big dewy eyes, blushing cheeks). NEVER render adult humans, NEVER render realistic-proportioned humans. Children render as kawaii-chibi-kids.
+ChibiBot renders adorable CREATURES only — real animals and cute fantasy critters (dragons, fairies, sprites, etc.). NEVER render humans of any kind: no children, no kids, no babies, no adults, no people, no human faces, no human hands. Any fae creature (fairy, sprite) is a cute big-eyed CREATURE with insect/leaf/petal wings — never a human child with wings. If a concept would normally involve a person, render the creature doing it alone or with another creature.
 
 ━━━ THE CUDDLY PAIR (both creatures ALWAYS present) ━━━
 
@@ -553,9 +553,9 @@ Every render must produce "I want to live here" longing + warm-belly contentment
 
 Polished 3D CGI in the modern Pixar / Disney / DreamWorks animated-feature register. Soft subsurface scattering, painterly bokeh, warm volumetric god-rays, jewel-bright saturation. Creatures with chibi proportions (oversized head, big dewy eyes, tiny stubby body). Architecture stylized cute. Trees and flora glossy-crisp + saturated.
 
-━━━ NO DARK / NO ABANDONED / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO ABANDONED / NO HUMANS ━━━
 
-No menace, no decrepit, no creepy. Children OK from the unified pool — render at chibi proportions.
+No menace, no decrepit, no creepy. NO humans of any kind (no children, no people) — creatures only.
 
 ━━━ TIME OF DAY (drives sky color + ambient light) ━━━
 ${time_of_day}
@@ -689,9 +689,9 @@ Every render must produce JOY at friends sharing rainy fun. ALL the friends are 
 
 Polished 3D CGI in the modern Pixar / Disney / DreamWorks / Studio Ghibli-translated-to-CGI register. Painterly subsurface scattering, soft volumetric god-rays through rain, painterly bokeh, jewel-bright cozy saturation. Creatures with chibi proportions, big dewy eyes, blushed cheeks. Friends visibly DIFFERENT species/sizes for variety.
 
-━━━ NO DARK / NO STORM-DAMAGE / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO STORM-DAMAGE / NO HUMANS ━━━
 
-No menace, no flooding-disaster, no creature-in-distress. Children OK from unified pool — render at chibi proportions, also IN the rain having group fun.
+No menace, no flooding-disaster, no creature-in-distress. NO humans of any kind (no children, no people) — creatures only, having group fun IN the rain.
 
 ━━━ TIME OF DAY (drives ambient light through rain) ━━━
 ${time_of_day}
@@ -809,7 +809,7 @@ Friends are HAPPY, intimate, warm, content. Wholesome rainy-day-friendship. NEVE
 
 Modern Pixar / Disney / DreamWorks register. Painterly subsurface scattering, warm volumetric god-rays from shelter lights, painterly bokeh. Chibi proportions. Friends visibly DIFFERENT species/sizes for variety.
 
-━━━ NO ADULT HUMANS (children OK from unified pool) ━━━
+━━━ NO HUMANS — CREATURES ONLY ━━━
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
@@ -927,9 +927,9 @@ Maximum cute = peaceful sleeping animal. The viewer melts. NEVER scary / sad / n
 
 Modern Pixar register. Painterly subsurface scattering, warm drowsy god-rays, painterly bokeh, jewel-bright cozy saturation. Chibi proportions. Closed/half-lidded eyes (NEVER big bright open eyes — this is SLEEPING).
 
-━━━ NO ADULT HUMANS (children OK from unified pool) ━━━
+━━━ NO HUMANS — CREATURES ONLY ━━━
 
-Children render asleep at chibi proportions, also in the cozy nap-spot.
+Creatures render asleep at chibi proportions in the cozy nap-spot. NO humans of any kind.
 
 ━━━ TIME OF DAY (drowsy / golden / candlelit) ━━━
 ${time_of_day}
@@ -1078,7 +1078,7 @@ Layer ALL on EVERY render:
 
 Modern Pixar register. Painterly subsurface scattering, warm volumetric god-rays, painterly bokeh. Chibi proportions.
 
-━━━ NO ADULT HUMANS (children OK from unified pool) ━━━
+━━━ NO HUMANS — CREATURES ONLY ━━━
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
@@ -1144,7 +1144,7 @@ The output MUST open with the creature + adventure-activity description IN the w
 Open examples:
 - "A chibi fox-creature mid-leap across mossy stepping-stones over a sparkling forest stream, behind them a dense fern-glade with sunbeams piercing the canopy..."
 - "A baby red panda mid-climb up a vine-draped rock-cliff with a leaf-knapsack, behind them a vast jungle canyon dropping into mist..."
-- "A chibi child explorer wading knee-deep in a glassy mountain-lake with a butterfly-net, snow-capped peaks rising in the distance..."
+- "A chibi otter explorer wading knee-deep in a glassy mountain-lake with a leaf-net, snow-capped peaks rising in the distance..."
 
 ━━━ ⚠ HARD RULE #1: WILDERNESS — NO VILLAGES, NO ARCHITECTURE ━━━
 
@@ -1205,9 +1205,9 @@ Layer ALL on EVERY render:
 
 Modern Pixar register. Painterly subsurface scattering, warm volumetric light, painterly bokeh. Chibi proportions on the creature.
 
-━━━ NO DARK / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO HUMANS ━━━
 
-Children OK from unified pool — chibi proportions, adventure-themed clothing.
+NO humans of any kind (no children, no people) — creatures only, in adventure-themed gear.
 
 ━━━ WEATHER ━━━
 ${weather}
@@ -1459,9 +1459,9 @@ Layer ALL of these:
 
 Modern Pixar register. Painterly subsurface scattering, painterly bokeh. Chibi proportions.
 
-━━━ NO DARK / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO HUMANS ━━━
 
-Children OK from unified pool — render at chibi proportions.
+NO humans of any kind (no children, no people) — creatures only.
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
@@ -1581,9 +1581,9 @@ Layer ALL of these:
 
 Modern Pixar register. Painterly subsurface scattering, painterly bokeh. Chibi proportions.
 
-━━━ NO DARK / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO HUMANS ━━━
 
-Children OK from unified pool — render at chibi proportions.
+NO humans of any kind (no children, no people) — creatures only.
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
@@ -1703,9 +1703,9 @@ Layer ALL of these:
 
 Modern Pixar register. Painterly subsurface scattering, painterly bokeh. Chibi proportions.
 
-━━━ NO DARK / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO HUMANS ━━━
 
-Children OK from unified pool — render at chibi proportions.
+NO humans of any kind (no children, no people) — creatures only.
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
@@ -1771,7 +1771,7 @@ The output MUST open with the creature + activity description, THEN describe the
 Open examples:
 - "A chibi raccoon-creature mid-walk down a lantern-lit lane with a paper-lantern dangling from a stick, behind them a Spirited-Away-style paper-lantern village spilling warm-amber against deep-violet dusk sky..."
 - "A baby owl on a stone-bridge with a glowworm-jar, a moonlit-village with paper-lanterns and rim-lit rooftops shimmering blue-cyan beyond..."
-- "A chibi child mid-skip across a firefly-meadow cottage path with a lit candle-jar, dusk-glow cottages with warm-amber windows spreading into a magenta-dusk horizon..."
+- "A chibi hedgehog mid-skip across a firefly-meadow cottage path carrying a lit candle-jar, dusk-glow cottages with warm-amber windows spreading into a magenta-dusk horizon..."
 
 ━━━ ⚠ HARD RULE #1: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
 
@@ -1825,9 +1825,9 @@ Layer ALL of these:
 
 Modern Pixar register. Painterly subsurface scattering, painterly bokeh. Chibi proportions.
 
-━━━ NO DARK / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO HUMANS ━━━
 
-Children OK from unified pool — render at chibi proportions.
+NO humans of any kind (no children, no people) — creatures only.
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
@@ -1893,7 +1893,7 @@ The output MUST open with the creature + activity description, THEN describe the
 Open examples:
 - "A chibi snow-fox kit mid-trot across a frozen-bridge with a knit-scarf trailing, behind them a snow-cottage village with warm-amber window-glow nestled in pine-trees..."
 - "A baby polar-bear cub carrying a tiny lantern through fresh snow, an igloo cluster glowing turquoise behind them under shimmering aurora..."
-- "A chibi child in a wool-coat hauling a sled stacked with firewood, a log-cabin hamlet with smoke curling from stone chimneys beyond..."
+- "A chibi fox-kit in a knitted scarf hauling a sled stacked with firewood, a log-cabin hamlet with smoke curling from stone chimneys beyond..."
 
 ━━━ HARD RULE: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
 
@@ -1944,9 +1944,9 @@ Layer ALL of these:
 
 Modern Pixar register. Painterly subsurface scattering on snow, warm volumetric light from windows + aurora shimmer overhead, painterly bokeh. Chibi proportions.
 
-━━━ NO DARK / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO HUMANS ━━━
 
-Children OK from unified pool — render at chibi proportions, bundled in wool/knit winter-wear.
+NO humans of any kind (no children, no people) — creatures only, bundled in wool/knit winter-wear.
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
@@ -2012,7 +2012,7 @@ The output MUST open with the creature + activity description, THEN describe the
 Open examples:
 - "A chibi toucan-creature mid-skip across a rope-bridge with a basket of star-fruit, behind them a treehouse village in a giant ceiba tree..."
 - "A baby capybara hauling a bundle of palm-fronds up a vine-stair, a mushroom-house cluster glowing warm behind them..."
-- "A chibi child carrying a clay pot of fresh tea across a moss-stone path, a market-plaza of leaf-roof huts beyond..."
+- "A chibi tanuki carrying a clay pot of fresh tea across a moss-stone path, a market-plaza of leaf-roof huts beyond..."
 
 ━━━ HARD RULE: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
 
@@ -2062,9 +2062,9 @@ Layer ALL of these:
 
 Modern Pixar register. Painterly subsurface scattering, warm volumetric god-rays through canopy, painterly bokeh. Chibi proportions.
 
-━━━ NO DARK / NO ADULT HUMANS ━━━
+━━━ NO DARK / NO HUMANS ━━━
 
-Children OK from unified pool — render at chibi proportions.
+NO humans of any kind (no children, no people) — creatures only.
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}

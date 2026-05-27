@@ -67,9 +67,10 @@ module.exports = {
 
   // Unified tagged creature pool (2026-05-19) — replaces CUTE_CREATURES +
   // AQUATIC_CREATURES across migrated paths. Entries are objects
-  // { tags: ['LAND'|'MARINE'|'ARCTIC'|'JUNGLE'|'BIRD'|'FANTASY'|'CHILD'|'ANY'], description: '...' }
-  // Paths filter via { name: 'CUTE_CREATURES_UNIFIED', tags: [...] }. 'ANY'-tagged
-  // entries (children + magical-realm) always match.
+  // { tags: ['LAND'|'MARINE'|'ARCTIC'|'JUNGLE'|'BIRD'|'FANTASY'|'ANY'], description: '...' }
+  // CREATURES ONLY — no humans/children (purged 2026-05-27). Paths filter via
+  // { name: 'CUTE_CREATURES_UNIFIED', tags: [...] }. 'ANY'-tagged
+  // entries (magical-realm critters) always match.
   CUTE_CREATURES_UNIFIED: load('cute_creatures_unified'),
 
   // Heartwarming-scene path-bespoke axes (2026-05-19 full-bespoke migration)
