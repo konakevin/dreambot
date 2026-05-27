@@ -8,6 +8,43 @@
  */
 
 module.exports = {
+  BRICKBOT_LEGO_MASTERS: {
+    description: `PATH-BESPOKE — BrickBot lego-masters path (2026-05-27 migration). THE COMPETITION-FINALE SHOWCASE path — a single dramatic NARRATIVE hero build of the kind featured in LEGO Masters TV finale episodes, presented with theatrical finale-reveal lighting (spotlight + atmospheric haze + base-glow) on a turntable, minifigs mid-action telling the build's story at its CLIMACTIC MOMENT. Canon: LEGO Masters TV-show finale builds + Bricklink AFOL "story-build" competition pieces + LEGO Ideas dramatic narrative dioramas.
+
+DISTINCT FROM macro-display (which is a calm complete-world overview) and from the themed paths (documentary scenes): this path is HIGH-DRAMA THEATRICAL SHOWMANSHIP — ONE showcase build frozen at a story-climax, theatrically lit, often a cross-section or a dynamic-motion build, designed to make a judge gasp. The narrative concept + dramatic beat + finale-reveal lighting are the identity.
+
+8 path-bespoke slots + 1 conditional:
+  • narrative_concept    — THE story-build premise (dragon-lands-on-mountain-village / steampunk-sub-breaches-with-a-kraken / dollhouse-cross-section-with-a-story-on-each-floor / volcano-erupts-over-a-temple / ship-caught-in-a-maelstrom / treehouse-in-a-thunderstorm / clocktower-gears-mid-reveal / castle-siege-cutaway / spaceship-crash-landing / underwater-lab-flooding / haunted-mansion-cross-section / circus-big-top-disaster / avalanche-engulfs-a-ski-lodge / genie-erupts-from-a-lamp / beanstalk-bursts-through-the-clouds / mine-collapse-cutaway / phoenix-rises-from-a-burning-tower / flood-swallows-a-village)
+  • dramatic_beat        — the exact CLIMACTIC instant frozen (the moment-of-impact / the breach / the eruption / the gears-align reveal / the collapse begins / the rescue-grab / the transformation peaks / the wave-crests / the creature-emerges / the structure-gives-way)
+  • build_technique      — showcase-MOC distinguisher (cross-section cutaway reveal / SNOT dramatic-sweep curve / trans-element effect-integration / brick-built dynamic-motion-frozen / multi-level vertical-storytelling / forced-perspective / hidden-armature gravity-defiance / integrated-lighting-rig)
+  • camera_framing       — finale-reveal framing (turntable hero three-quarter / dramatic low looking-up-at-the-build / cross-section straight-on / spotlit isolated-on-black / slow-orbit reveal / down-into-the-cutaway / dutch-angle drama)
+  • centerpiece_subject  — the dramatic focal element the build is built around (a brick dragon / a kraken / an erupting volcano / a storm-tossed ship / a collapsing tower / an emerging genie / a breaking beanstalk / a crashing spaceship / a surging flood-wave / a rampaging creature / a rising phoenix / a giant mechanism)
+  • story_figures        — the minifigs telling the story at the climax (villagers fleeing / a crew battling the beast / a family in peril on the upper floors / heroes mid-rescue / scientists evacuating / spectators recoiling / a lone hero facing the threat)
+  • lighting             — THE signature finale-reveal lighting (theater-spotlight + atmospheric-haze + base-glow / dramatic single-key with deep shadow / underlit base-glow / colored-gel reveal / storm-lightning flashes / fire-glow + smoke-haze / cool-spotlight-on-black + warm-accent)
+  • palette              — the build's dramatic color story (theme + drama appropriate, with strong contrast for the reveal)
+  • dramatic_effect (50%-gated) — the integrated brick effect amplifying the climax (trans-bolt lightning / trans-flame fire + cotton-smoke / trans-blue water-surge + foam / explosion-debris burst / trans-purple magic-vortex / collapsing-debris cascade / trans-white steam-burst / glowing trans-portal / trans-orange lava-flow)
+
+Bending advantage: narrative_concept × dramatic_beat × centerpiece_subject × lighting × dramatic_effect decoupled, so "dollhouse-cross-section + the-moment-it-floods + surging-flood-wave + storm-lightning" and "mountain-village + dragon-lands + brick-dragon + fire-glow-and-smoke" are rollable. Legacy 4-axis couldn't reach these. This path is allowed to RE-USE motifs from other paths (dragons, krakens, volcanoes) because its identity is the THEATRICAL FINALE PRESENTATION, not the theme.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'narrative_concept',
+        'dramatic_beat',
+        'build_technique',
+        'camera_framing',
+        'centerpiece_subject',
+        'story_figures',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'dramatic_effect', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BRICKBOT_GIRLY: {
     description: `PATH-BESPOKE — BrickBot girly path (2026-05-27 migration). PASTEL / ULTRA-CUTE / WHIMSICAL LEGO MOC diorama photography — candy castles, ice-cream parlors, fashion boutiques, sparkle towers, unicorn stables, fairy-ballet stages, mermaid lagoons, pony paddocks, heart gardens, cupcake cafes, jewelry ateliers. Joyful, sweet, sparkly. Canon: LEGO Friends (Heartlake City, mini-doll cast) + LEGO DOTS (craft / heart / star tiles) + LEGO Elves (Elvendale fairy-pastel) + DUPLO Princess (chunky-cute) + LEGO fairytale-castle (generic princess, NOT licensed Disney characters). Mini-doll-style figures welcome alongside regular minifigs.
 

@@ -67,6 +67,238 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // LEGO-MASTERS PATH (2026-05-27 — thirteenth BrickBot axis migration)
+  // COMPETITION-FINALE SHOWCASE — a single dramatic narrative hero build,
+  // theatrically lit, frozen at a story-climax. Bespoke narrative_concept +
+  // dramatic_beat + centerpiece_subject + finale-reveal lighting. May re-use
+  // motifs (identity = theatrical presentation). Bans photoreal/CGI. Bespoke.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_lego_masters_narrative_concept: {
+    format: 'simple',
+    theme: `LEGO MASTERS STORY-BUILD CONCEPTS — the dramatic narrative premise of a finale showcase build. Each entry is ONE story-build concept, 30-55 words. The build tells this story at its climactic moment.
+
+⚠️ CRITICAL — the STORY PREMISE + what the build depicts only. NO specific camera framing. NO lighting. NO the exact frozen-instant (separate dramatic_beat axis). Just: the dramatic concept + the brick build that embodies it.
+
+⚠️ EVERYTHING IS LEGO BRICK, including effects. BANNED: photoreal, CGI, real [material], lifelike, rendered.
+
+VARIETY MANDATE — distribute across: dragon-lands-on-mountain-village / steampunk-sub-breaches-with-a-kraken / dollhouse-cross-section-story-on-each-floor / volcano-erupts-over-a-temple / ship-in-a-maelstrom / treehouse-in-a-thunderstorm / clocktower-gears-mid-reveal / castle-siege-cutaway / spaceship-crash-landing / underwater-lab-flooding / haunted-mansion-cross-section / circus-big-top-disaster / avalanche-engulfs-a-ski-lodge / genie-erupts-from-a-lamp / beanstalk-bursts-through-clouds / mine-collapse-cutaway / phoenix-rises-from-a-burning-tower / flood-swallows-a-village / lighthouse-in-a-hurricane / dam-breaks.
+
+Each entry: name the concept in first 6-10 words; describe the dramatic brick build + its story; imply the showcase ambition; NEVER the exact frozen-instant, framing, or lighting.`,
+    touchpoints: [
+      'DRAGON LANDS ON THE MOUNTAIN VILLAGE — a brick alpine village clinging to a stacked-plate peak as a huge brick dragon descends on it, wings spread over the rooftops, villagers scattering through the lanes, a story-build of sudden catastrophe',
+      'STEAMPUNK SUB BREACHES WITH A KRAKEN — a riveted brass brick submarine bursting up from a trans-blue plate sea wrapped in the tentacles of a giant brick kraken, crew at the conning-tower, a story-build of deep-sea peril',
+      'DOLLHOUSE CROSS-SECTION, A STORY ON EACH FLOOR — a brick dollhouse cut open to reveal four furnished floors, a different little minifig drama unfolding on each level simultaneously, a story-build of interwoven vignettes',
+      'VOLCANO ERUPTS OVER THE TEMPLE — a brick jungle temple on a slope-brick mountainside as the volcano above erupts, trans-orange lava-flows snaking toward the ruins, explorers fleeing the steps, a story-build of ancient doom',
+      'SHIP IN A MAELSTROM — a brick sailing-ship tilted hard inside a swirling SNOT-built trans-blue whirlpool, masts straining, crew lashed to the rails, a story-build of the sea\'s fury frozen at its worst',
+      'TREEHOUSE IN A THUNDERSTORM — a tall brick treehouse in a giant brick tree lashed by a storm, a trans-bolt lightning-strike forking down, kids inside at the lit windows, a story-build of a sheltered night of terror',
+      'CLOCKTOWER GEARS MID-REVEAL — a brick clocktower cut open to show its great brass gear-train mid-motion, a tiny figure caught among the cogs, the mechanism the marvel, a story-build of intricate working drama',
+      'CASTLE SIEGE CUTAWAY — a brick castle sliced to show the battle on the walls AND the desperate defense inside simultaneously, siege-towers against the breach, a story-build of war on two planes at once',
+      'SPACESHIP CRASH-LANDING — a brick starship plowing into an alien slope-brick ridge, hull buckling, trans-flame + debris erupting, the crew bracing at the cockpit, a story-build of the moment everything goes wrong',
+      'UNDERWATER LAB FLOODING — a brick deep-sea research lab cut open as a hull-breach sends a trans-blue flood surging through the corridors, scientists scrambling for the airlock, a story-build of rising-water dread',
+      'HAUNTED MANSION CROSS-SECTION — a creaking brick mansion cut open to reveal a different spook on every floor — a ghost, a trap, a monster — a brave investigator climbing through, a story-build of escalating frights',
+      'GENIE ERUPTS FROM THE LAMP — a tiny brick desert scene as a colossal trans-purple brick genie billows up out of a golden lamp, a wide-eyed minifig below, a story-build of a wish unleashed',
+    ],
+    instructions: `Each entry is ONE story-build concept, 30-55 words. Format: "CONCEPT NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no exact frozen-instant (separate axis), no camera framing, no lighting, no photoreal/CGI/lifelike. Every element brick (incl. effects). The dramatic premise + brick build only.`,
+  },
+
+  brickbot_lego_masters_dramatic_beat: {
+    format: 'simple',
+    theme: `LEGO MASTERS DRAMATIC BEATS — the exact CLIMACTIC INSTANT a finale story-build is frozen at. Each entry 15-30 words. The peak-tension moment.
+
+VARIETY: the moment-of-impact / the breach / the eruption-peak / the gears-align reveal / the collapse-begins / the rescue-grab / the transformation-peaks / the wave-crests / the creature-emerges-fully / the structure-gives-way / the lightning-strikes / the door-bursts-open / the floor-caves-in / the last-second-escape.
+
+Each names the frozen instant + the tension it captures (cause mid-effect). Render as a FROZEN brick moment, never blurred.`,
+    touchpoints: [
+      'The moment of impact — frozen at the instant the threat strikes, debris just beginning to fly, the figures caught mid-recoil, maximum tension before the aftermath',
+      'The breach — frozen as the hull/wall/dam first gives way and the flood/force surges through the new gap, the rupture caught at its first explosive instant',
+      'The eruption-peak — frozen at the volcano/geyser/explosion\'s fullest violent bloom, trans-effect at maximum spread, everything lit by it',
+      'The gears-align reveal — frozen at the instant the great mechanism clicks into alignment and something opens/activates, the satisfying mechanical peak',
+      'The collapse-begins — frozen at the first instant the structure buckles, the topmost element just starting to fall, figures realizing the danger',
+      'The rescue-grab — frozen at the split-second a hero\'s hand closes on the imperiled figure at the edge of disaster, the save caught mid-reach',
+      'The wave-crests — frozen at the instant the great wave reaches its towering peak above the ship/shore, the lip just curling, before it breaks',
+      'The creature-emerges-fully — frozen as the dragon/kraken/genie reaches full terrifying extension out of its lair/sea/lamp, the reveal at its peak',
+      'The structure-gives-way — frozen as the bridge/tower/floor fails and figures + debris begin to drop, the catastrophe caught at the tipping point',
+      'The lightning-strikes — frozen at the white instant the trans-bolt connects with the build, everything flash-lit, figures flinching from the strike',
+      'The last-second escape — frozen as the figures clear the danger by a hair, the threat closing right behind them, the narrowest of margins caught',
+      'The door-bursts-open — frozen as a door/hatch/portal blasts open and what is beyond surges out, light + force spilling through the opening',
+    ],
+    instructions: `Each entry is ONE dramatic beat, 15-30 words. Format: "BEAT NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: render as a FROZEN brick instant, never blurred/motion-blur; the peak-tension moment + its cause/effect.`,
+  },
+
+  brickbot_lego_masters_build_technique: {
+    format: 'simple',
+    theme: `LEGO MASTERS SHOWCASE BUILD TECHNIQUE — the finale-winning brick-construction technique. Each entry 25-45 words. The masterful skill that wins the competition.
+
+VARIETY MANDATE — distribute across:
+  • Cross-section cutaway reveal (build sliced open showing interior story-levels)
+  • Brick-built dynamic-motion-frozen (a falling/surging/exploding moment captured)
+  • Trans-element effect-integration (fire/water/lightning/magic built INTO the structure)
+  • Gravity-defying hidden-armature (a dragon aloft, a wave overhanging, on a concealed support)
+  • Multi-level vertical-storytelling (simultaneous dramas stacked up the build)
+  • Forced-perspective scale-illusion (the build reads bigger/deeper than it is)
+  • SNOT dramatic-sweep curve (a great swooping curved form — a wave, a wing, a vortex)
+  • Integrated-lighting-rig (build-lights + trans-elements lit from within for the reveal)
+  • Microscale-to-minifig scale-contrast (a vast thing dwarfing tiny figures)
+  • Mechanical-function reveal (visible working gears/mechanism)
+
+Each entry: name the technique TYPE in first 5-8 words; specify WHAT it achieves dramatically; name SPECIFIC BRICK PARTS; imply the judge-gasp. NO real-construction. BANNED: photoreal, CGI.`,
+    touchpoints: [
+      'Cross-section cutaway reveal — the build sliced cleanly down one face to expose every interior floor/deck/level at once, each a furnished brick vignette, the AFOL story-cutaway that lets the judges see the whole drama in one look',
+      'Brick-built dynamic-motion-frozen — a falling-debris / surging-wave / exploding-moment captured by mounting brick elements on hidden clear-rods at mid-flight angles, the instant frozen as if time stopped, a technical tour-de-force',
+      'Trans-element effect-integration — fire / water / lightning / magic built directly into the structure with trans-orange flame / trans-blue plate-surge / trans-bolt / trans-purple vortex elements flowing through the build, the effect part of the architecture',
+      'Gravity-defying hidden-armature — a dragon aloft / a wave overhanging / a falling tower held mid-air on a fully-concealed Technic + clear-rod armature so the dramatic element appears to float, the how-did-they-do-that wow',
+      'Multi-level vertical-storytelling — several simultaneous minifig dramas stacked up the levels of a tall build, the eye climbing from one beat to the next, a layered narrative tower',
+      'Forced-perspective scale-illusion — the build graduated from larger foreground elements to micro-scale background so it reads as a vast deep world on a compact base, a clever depth-trick',
+      'SNOT dramatic-sweep curve — a single great swooping curved form (a cresting wave / a dragon-wing / a whirlpool / a beanstalk-spiral) built with SNOT bracket-plates into a smooth dynamic arc dominating the composition',
+      'Integrated-lighting-rig — build-lights + trans-element windows + an underlit base wired into the build so it glows for the theatrical reveal, the lit-from-within finale showpiece',
+      'Microscale-to-minifig contrast — a colossal centerpiece (a kaiju / a tidal-wave / a giant mechanism) towering over minifig-scale figures at its base, the scale-contrast hammering the drama',
+      'Mechanical-function reveal — a visible working brass gear-train / lever-mechanism / rotating-element built into the showcase so a part actually moves or reads as moving, the engineering marvel',
+      'Layered-effect depth — the dramatic effect (smoke / spray / debris) built in receding layers of trans + cotton elements from foreground to back, giving the climax atmospheric three-dimensional depth',
+      'Two-states-in-one-build — the build showing before-and-after simultaneously (intact one side, destroyed the other) so the whole story reads at a glance, a narrative split-build',
+    ],
+    instructions: `Each entry is ONE showcase build technique, 25-45 words. Format: "TECHNIQUE NAME — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-construction; no photoreal/CGI. LEGO bricks only — name SPECIFIC parts/methods (SNOT bracket / clear-rod armature / trans-element / cutaway / Technic gear).`,
+  },
+
+  brickbot_lego_masters_camera_framing: {
+    format: 'simple',
+    theme: `LEGO MASTERS FINALE-REVEAL CAMERA FRAMING — theatrical showcase framings. Each entry 15-30 words. The dramatic presentation angle.
+
+⚠️ Bespoke — finale-reveal showmanship (turntable / spotlit-on-black / cross-section / dramatic-low / orbit) rather than generic terms.
+
+VARIETY MANDATE — distribute across: turntable hero three-quarter, dramatic low looking-up-at-the-build, cross-section straight-on, spotlit isolated-on-black, slow-orbit reveal, down-into-the-cutaway, dutch-angle drama, push-in-on-the-centerpiece, rim-lit silhouette-reveal.
+
+Each: specify camera POSITION + the theatrical drama it creates; reference the showcase reveal.`,
+    touchpoints: [
+      'TURNTABLE HERO THREE-QUARTER — camera at the classic showcase three-quarter on the build proud atop its turntable display-base, the whole dramatic story-build presented in its best light, the finale reveal',
+      'DRAMATIC LOW LOOKING-UP — camera low looking steeply up at the build so the centerpiece (dragon / wave / tower) looms theatrically overhead, maximum imposing drama',
+      'CROSS-SECTION STRAIGHT-ON — camera square to the cut face of a cutaway build, every interior story-level laid bare in a single dramatic elevation, the reveal of all the simultaneous beats',
+      'SPOTLIT ISOLATED-ON-BLACK — the build floating in theatrical black, a hard spotlight raking it with deep shadow, atmospheric haze in the beam, the gallery-finale isolation',
+      'SLOW-ORBIT REVEAL — a dynamic three-quarter as if mid-orbit around the build, motion-energy in the angle, the turntable presentation caught mid-spin',
+      'DOWN-INTO-THE-CUTAWAY — camera angled down into an open cross-section / collapsed roof so the eye drops through the levels into the heart of the drama',
+      'DUTCH-ANGLE DRAMA — the camera canted to a dramatic dutch tilt amplifying the chaos + motion of the climactic beat, off-kilter tension',
+      'PUSH-IN ON-THE-CENTERPIECE — a tight-ish three-quarter pushing in on the dramatic centerpiece (the emerging creature / the breach) with the rest of the build framing it, the focal intensity',
+      'RIM-LIT SILHOUETTE-REVEAL — the build backlit to a dramatic rim-silhouette against a glowing haze, the shape reading first, the detail emerging, a moody theatrical reveal',
+      'OVERHEAD-DRAMA — a steep near-overhead capturing the full sweep of the disaster/spectacle below (the flood spreading, the village scattering), the god\'s-eye drama',
+    ],
+    instructions: `Each entry is ONE finale-reveal framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: theatrical showcase angles only; references the reveal/turntable/spotlit/cutaway. No photoreal vocabulary.`,
+  },
+
+  brickbot_lego_masters_centerpiece_subject: {
+    format: 'simple',
+    theme: `LEGO MASTERS CENTERPIECE SUBJECTS — the dramatic focal element a finale story-build is built around. Each entry 15-30 words. The thing that commands the composition.
+
+VARIETY: a brick dragon / a kraken / an erupting volcano / a storm-tossed ship / a collapsing tower / an emerging genie / a breaking beanstalk / a crashing spaceship / a surging flood-wave / a rampaging giant creature / a rising phoenix / a giant working mechanism / a toppling statue / a breaching sea-monster / a runaway train / a possessed funhouse.
+
+Each names the centerpiece + its brick build + why the eye locks on it. Brick-built (incl. creatures), NEVER photoreal.`,
+    touchpoints: [
+      'A brick dragon — a huge winged brick beast on a hidden armature, wings spread overhead, jaws agape with trans-orange fire, every scale a slope or plate, the towering focal terror',
+      'A brick kraken — a giant cephalopod of curved-slope tentacles erupting from a trans-blue sea, suckered arms wrapping the ship, a baleful printed-eye, the writhing focal menace',
+      'An erupting volcano — a slope-brick cone splitting open with trans-orange + trans-red lava-element flows and a cotton ash-plume, the molten focal catastrophe',
+      'A storm-tossed ship — a brick sailing-ship heeled hard over on a SNOT trans-blue wave, masts raking, sails straining, the imperiled focal vessel',
+      'A collapsing tower — a brick tower built mid-topple, upper courses sheared and falling on clear rods, dust bursting, the failing focal structure',
+      'An emerging genie — a colossal trans-purple + trans-blue brick genie billowing up from a golden lamp in a coil of trans-smoke, the magical focal giant',
+      'A breaking beanstalk — a giant brick beanstalk spiralling up through a cotton cloud-layer, leaves the size of roofs, a tiny climber on it, the soaring focal wonder',
+      'A surging flood-wave — a SNOT-curled wall of trans-blue + trans-light-blue plate water with white-foam crest sweeping through a build, the engulfing focal force',
+      'A rising phoenix — a brick firebird ascending from a burning tower in a spread of trans-orange + trans-yellow flame-feather elements, the rebirth focal blaze',
+      'A giant working mechanism — an enormous exposed brass brick gear-and-lever contraption mid-motion at the build\'s heart, a tiny operator among the cogs, the mechanical focal marvel',
+      'A runaway train — a brick locomotive bursting off a broken trestle mid-air on hidden rods, cars jackknifing behind, the careening focal disaster',
+      'A breaching sea-monster — a vast brick serpent arcing up out of and back into a trans-blue sea around a tiny boat, the looping focal leviathan',
+    ],
+    instructions: `Each entry is ONE centerpiece subject, 15-30 words. Format: prose naming the centerpiece + its brick build + the eye-lock. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal; brick-built (incl. creatures + effects); it commands the dramatic composition.`,
+  },
+
+  brickbot_lego_masters_story_figures: {
+    format: 'simple',
+    theme: `LEGO MASTERS STORY FIGURES — the minifigs that tell a finale story-build's drama at its climax. Each entry 15-30 words, implying the human stakes. Mid-action, never posing.
+
+VARIETY: villagers fleeing / a crew battling the beast / a family in peril on the upper floors / heroes mid-rescue / scientists evacuating / spectators recoiling / a lone hero facing the threat / a captain going down with the ship / children at a lit window / guards holding the breach / a climber reaching the top / a wizard casting against the danger.
+
+Each names the figures + their mid-action stake in the drama. LEGO minifigs (C-hands, printed faces), never photoreal. Render as frozen mid-action.`,
+    touchpoints: [
+      'Villagers fleeing — minifigs scattering down the lanes from the descending threat, arms up, one fallen, one helping another, the panic of the moment frozen across the build',
+      'A crew battling the beast — sailor minifigs on the heeling deck hacking at the tentacles + manning a cannon, one swept toward the rail, the desperate defense frozen mid-fight',
+      'A family in peril on the upper floors — a minifig family at the top windows of a flooding/burning/collapsing build, reaching out, the youngest held up, the stakes at their most human',
+      'Heroes mid-rescue — a rescuer minifig stretched to grab an imperiled figure at the disaster\'s edge, a rope-line taut, the save caught at its breathless instant',
+      'Scientists evacuating — lab-coat minifigs scrambling for the airlock as the flood/breach closes in, one slapping the door-control, samples abandoned, the frantic exit frozen',
+      'Spectators recoiling — a ring of onlooker minifigs thrown back from the eruption/explosion, hats flying, arms shielding faces, the shockwave\'s human edge',
+      'A lone hero facing the threat — a single small minifig planted defiantly before the towering centerpiece (dragon / wave / giant), sword or staff raised, the David-and-Goliath beat',
+      'A captain going down with the ship — a lone captain minifig gripping the wheel of the foundering vessel as the wave crests over, the doomed-resolve beat',
+      'Children at a lit window — small minifigs framed in a warm-lit window of the storm-lashed treehouse/mansion, faces to the glass, the cozy-fragile contrast to the danger outside',
+      'Guards holding the breach — soldier minifigs braced shoulder-to-shoulder in the castle gap against the siege, one falling, the line bending, the last-stand beat',
+      'A climber reaching the top — a minifig at the summit of the beanstalk/tower/cliff just topping the final hold, triumph + peril balanced, the goal-reached instant',
+      'A wizard casting against the danger — a robed minifig with arms thrown up channeling a trans-effect spell at the oncoming threat, the magic-counterattack beat',
+    ],
+    instructions: `Each entry is ONE set of story figures, 15-30 words. Format: prose naming the figures + their mid-action stake. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: minifigs only (never photoreal), frozen mid-action (never posing/standing), the human stakes of the climax.`,
+  },
+
+  brickbot_lego_masters_lighting: {
+    format: 'simple',
+    theme: `LEGO MASTERS FINALE-REVEAL LIGHTING — the theatrical lighting that IS the path's signature. Each entry 15-30 words. Lights a competition showcase build for maximum drama.
+
+VARIETY: theater-spotlight + atmospheric-haze + base-glow / dramatic single-key + deep shadow / underlit base-glow / colored-gel reveal / storm-lightning flashes / fire-glow + smoke-haze / cool-spotlight-on-black + warm-accent / rim-light silhouette / shaft-through-haze / pulsing-effect-glow.
+
+Each names SOURCE + DIRECTION + the theatrical drama on the brick build. NEVER photoreal-lighting language.`,
+    touchpoints: [
+      'Theater-spotlight + atmospheric-haze + base-glow — a hard top-spot raking the build through a veil of haze, with a warm glow welling up from the turntable base, the quintessential finale-reveal lighting',
+      'Dramatic single-key + deep shadow — one strong hard key from a steep angle carving the build into bold light + near-black shadow, maximal three-dimensional drama',
+      'Underlit base-glow — the build lit dramatically from below by a glowing base so it looms ominous, faces + undersides catching the eerie upward light',
+      'Colored-gel reveal — a bold colored wash (volcanic-orange / magic-violet / storm-cyan) flooding the build to key the dramatic mood, a contrasting cool fill behind',
+      'Storm-lightning flashes — the build lit by the hard white flash of its own trans-bolt lightning, deep stormy blue ambient between, the figures flash-frozen',
+      'Fire-glow + smoke-haze — a warm trans-orange fire-glow from the build\'s blaze under-lighting drifting cotton smoke-haze, embers rising, the burning-drama mood',
+      'Cool-spotlight-on-black + warm-accent — the build cool-spotlit against theatrical black with a single warm accent (a lit window, a fire) punching through, the gallery-isolation drama',
+      'Rim-light silhouette — the build backlit to a dramatic glowing rim-silhouette through haze, the dramatic shape reading first against the dark, a moody reveal',
+      'Shaft-through-haze — a single hard light-shaft cutting diagonally through atmospheric haze onto the centerpiece, the rest falling to shadow, the spotlight-of-fate drama',
+      'Pulsing-effect-glow — the build keyed by the glow of its own integrated trans-effect (the lava / the portal / the reactor) pulsing light across the scene, lit-from-its-own-drama',
+    ],
+    instructions: `Each entry is ONE finale-reveal lighting setup, 15-30 words. Format: prose naming source + direction + theatrical drama on the bricks. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal-lighting language — theatrical showcase lighting on a brick build. This lighting is the path's signature — make it bold.`,
+  },
+
+  brickbot_lego_masters_palette: {
+    format: 'simple',
+    theme: `LEGO MASTERS PALETTE — the dramatic color story of a finale showcase build, with strong reveal-contrast. Each entry 12-25 words, naming 3-5 specific brick colors + the dramatic mood.
+
+VARIETY: volcanic black+ember-orange+ash / storm-sea trans-blue+slate+white-foam / magic violet+gold+trans-cyan / fire-and-night ember+deep-blue / haunted purple+black+sickly-green / collapse-dust grey+tan+ember / phoenix gold+crimson+orange / steampunk brass+bronze+trans-amber / frozen-disaster white+ice-blue+slate / jungle-doom green+stone+lava-orange.
+
+Each names ACTUAL LEGO brick colors + the high-contrast dramatic read.`,
+    touchpoints: [
+      'Volcanic palette — black + ember-orange + ash-grey + trans-red, the molten-catastrophe drama with fiery contrast against dark rock',
+      'Storm-sea palette — trans-blue + slate-grey + white-foam + dark-navy, the maritime-peril drama, cold and violent',
+      'Magic palette — deep-violet + gold + trans-cyan + black, the supernatural-reveal drama, mystical high-contrast',
+      'Fire-and-night palette — ember-orange + deep-blue + black + trans-yellow, the burning-tower-against-darkness drama',
+      'Haunted palette — purple + black + sickly trans-green + bone-white, the spooky-mansion drama',
+      'Collapse-dust palette — grey + tan + ember + smoke-white, the disaster-aftermath drama, choking and grim',
+      'Phoenix palette — gold + crimson + orange + trans-flame, the fiery-rebirth drama, blazing and triumphant',
+      'Steampunk palette — brass + bronze + rust + trans-amber, the mechanical-marvel drama, warm industrial glow',
+      'Frozen-disaster palette — white + ice-blue + slate + trans-light-blue, the avalanche/flood-freeze drama, cold and stark',
+      'Jungle-doom palette — deep-green + stone-grey + lava-orange + black, the temple-eruption drama, lush meeting molten',
+    ],
+    instructions: `Each entry is ONE lego-masters palette, 12-25 words. Format: "NAME palette — colors + dramatic mood". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color; emphasize high-contrast dramatic reveal.`,
+  },
+
+  brickbot_lego_masters_dramatic_effect: {
+    format: 'simple',
+    theme: `LEGO MASTERS DRAMATIC EFFECT — a 50%-gated climax-amplifying effect, ALWAYS built IN BRICK + integrated into the build. Each entry 20-40 words. Supercharges the dramatic beat.
+
+VARIETY: trans-bolt lightning / trans-flame fire + cotton-smoke / trans-blue water-surge + white-foam / explosion-debris burst on rods / trans-purple magic-vortex / collapsing-debris cascade / trans-white steam-burst / glowing trans-portal / trans-orange lava-flow / trans-cyan energy-shockwave.
+
+Each names the BRICK PARTS + how it integrates + visual impact. NEVER photoreal-effect. NO motion-blur (frozen built moment).`,
+    touchpoints: [
+      'TRANS-BOLT LIGHTNING — a jagged trans-clear + trans-blue brick lightning-bolt forking down from a dark round-plate storm-cloud to strike the build, the strike-point flash-lit, a frozen built thunderclap',
+      'TRANS-FLAME FIRE + SMOKE — trans-orange + trans-yellow + trans-red flame-elements engulfing part of the build with cotton-element + grey-round-plate smoke billowing up, a frozen built inferno',
+      'TRANS-BLUE WATER-SURGE — a SNOT-built surge of trans-blue + trans-light-blue plates with white 1×1 round-plate foam crashing through the build, the flood frozen at its violent peak',
+      'EXPLOSION-DEBRIS BURST — a built explosion of scattered brick-fragments + trans-orange flame on clear rods bursting outward from an impact-point, the blast frozen mid-expansion',
+      'TRANS-PURPLE MAGIC-VORTEX — a swirling built vortex of trans-purple + trans-magenta + trans-clear plates spiralling up from a portal/lamp/spell, energy-arcs of trans-bar elements, the magic frozen mid-surge',
+      'COLLAPSING-DEBRIS CASCADE — a built cascade of falling brick-rubble + tiles on hidden clear rods tumbling down a failing structure, dust-cotton at the base, the collapse frozen mid-fall',
+      'TRANS-WHITE STEAM-BURST — a built burst of trans-white + cotton steam erupting from a breached pipe/vent/geyser across the scene, the pressure-release frozen at full bloom',
+      'GLOWING TRANS-PORTAL — a built ring-portal of trans-cyan + trans-clear + trans-purple plates blazing open in the build, light spilling through, the gateway frozen mid-activation',
+      'TRANS-ORANGE LAVA-FLOW — built lava of trans-orange + trans-red plates + 1×1 round-plate spatter snaking down through the build, the molten flow frozen with a cotton heat-plume',
+      'TRANS-CYAN ENERGY-SHOCKWAVE — a built expanding ring/dome of trans-cyan + trans-clear plates radiating from a blast/impact, smaller elements built tumbling at its edge, the pulse frozen mid-expansion',
+    ],
+    instructions: `Each entry is ONE dramatic effect, 20-40 words. Format: "EFFECT NAME — brick-parts + integration + impact". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never photoreal-effect; ALWAYS built from named brick parts integrated into the build; never motion-blur (frozen built moment).`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // GIRLY PATH (2026-05-27 — twelfth BrickBot axis migration)
   // PASTEL / ULTRA-CUTE / WHIMSICAL. LEGO Friends + DOTS + Elves + fairytale.
   // Mini-dolls welcome. Bespoke scene_type + build_technique (hearts/flowers/

@@ -103,6 +103,7 @@ module.exports = {
       'mech',
       'macro-display',
       'girly',
+      'lego-masters',
     ],
   },
 

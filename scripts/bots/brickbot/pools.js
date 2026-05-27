@@ -51,6 +51,17 @@ for (const p of PATHS) {
 // ─────────────────────────────────────────────────────────────
 
 const AXIS_POOLS = {
+  // lego-masters path — thirteenth BrickBot axis migration (2026-05-27)
+  BRICKBOT_LEGO_MASTERS_NARRATIVE_CONCEPT: load('brickbot_lego_masters_narrative_concept'),
+  BRICKBOT_LEGO_MASTERS_DRAMATIC_BEAT: load('brickbot_lego_masters_dramatic_beat'),
+  BRICKBOT_LEGO_MASTERS_BUILD_TECHNIQUE: load('brickbot_lego_masters_build_technique'),
+  BRICKBOT_LEGO_MASTERS_CAMERA_FRAMING: load('brickbot_lego_masters_camera_framing'),
+  BRICKBOT_LEGO_MASTERS_CENTERPIECE_SUBJECT: load('brickbot_lego_masters_centerpiece_subject'),
+  BRICKBOT_LEGO_MASTERS_STORY_FIGURES: load('brickbot_lego_masters_story_figures'),
+  BRICKBOT_LEGO_MASTERS_LIGHTING: load('brickbot_lego_masters_lighting'),
+  BRICKBOT_LEGO_MASTERS_PALETTE: load('brickbot_lego_masters_palette'),
+  BRICKBOT_LEGO_MASTERS_DRAMATIC_EFFECT: load('brickbot_lego_masters_dramatic_effect'),
+
   // girly path — twelfth BrickBot axis migration (2026-05-27)
   BRICKBOT_GIRLY_SCENE_TYPE: load('brickbot_girly_scene_type'),
   BRICKBOT_GIRLY_MINIFIG_ACTION: load('brickbot_girly_minifig_action'),

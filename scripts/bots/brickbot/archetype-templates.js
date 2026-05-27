@@ -10,6 +10,101 @@
  */
 
 module.exports = {
+  BRICKBOT_LEGO_MASTERS: ({ slots, vibeDirective }) => {
+    const {
+      narrative_concept,
+      dramatic_beat,
+      build_technique,
+      camera_framing,
+      centerpiece_subject,
+      story_figures,
+      lighting,
+      palette,
+      dramatic_effect,
+    } = slots;
+
+    const effectSection = dramatic_effect
+      ? `
+━━━ DRAMATIC EFFECT (the climax amplifier) ━━━
+${dramatic_effect}
+
+Render this integrated INTO the build IN BRICK (trans-bolt lightning / trans-flame fire + cotton-smoke / trans-blue water-surge + white-foam / explosion-debris on rods / trans-purple magic-vortex / trans-orange lava). It supercharges the dramatic beat.
+
+`
+      : '';
+
+    return `You are a LEGO MOC photographer + LEGO Masters finale judge writing a DRAMATIC SHOWCASE STORY-BUILD description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — LEGO MASTERS FINALE WINNER ━━━
+This is a single dramatic NARRATIVE hero build of the kind that WINS a LEGO Masters TV finale — a jaw-dropping story-build frozen at its climactic moment, presented with theatrical finale-reveal lighting on a turntable. The judges gasp. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a photoreal CGI render. ONE showcase build, high drama, masterful technique, a story told in brick at its peak moment.
+
+━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
+NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Every character is a LEGO minifigure mid-action telling the story. NEVER a real human face.
+
+━━━ EVERYTHING IS BRICK — THE WHOLE DRAMATIC BUILD IS LEGO ━━━
+EVERY element is built from real LEGO bricks — including the dramatic effects. NO photoreal anything. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. It's a competition showcase build on a turntable display-base.
+  • Structures / terrain / creatures = brick + slope + Technic + trans-element (per concept) — NEVER photoreal
+  • Fire / water / lightning / smoke / magic = trans-flame / trans-blue+foam / trans-bolt / cotton / trans-vortex elements — NEVER photoreal effects
+  • Cross-sections = honestly cut-open brick interiors with visible floors/levels
+  • Sky / backdrop = brick or studio-black for the theatrical reveal — NEVER photoreal sky
+
+━━━ BANNED VOCABULARY: "photoreal", "CGI", "real [material]", "lifelike", "rendered". A masterful BRICK build, theatrically lit — never a CGI movie still.
+
+━━━ THE NARRATIVE CONCEPT — the story-build premise ━━━
+${narrative_concept}
+
+This is the dramatic story the build tells. Build it as a single ambitious showcase centerpiece that reads the whole narrative at a glance.
+
+━━━ THE DRAMATIC BEAT — the exact climactic instant frozen ━━━
+${dramatic_beat}
+
+Freeze the build at THIS precise peak moment — the instant of maximum tension/drama. Everything in the composition serves this beat.
+
+━━━ THE MOC BUILD TECHNIQUE — FINALE-WINNING DISTINGUISHER (render visibly) ━━━
+${build_technique}
+
+The masterful technique that wins the finale — render it visibly (cross-section cutaway / dynamic-motion-frozen / trans-effect-integration / gravity-defying armature / vertical storytelling / forced-perspective). The judges should clock the skill instantly.
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — finale-reveal framing. Apply the exact angle.
+  • TURNTABLE HERO THREE-QUARTER — the classic showcase reveal angle, the build proud on its turntable
+  • DRAMATIC LOW LOOKING-UP — low angle making the build tower theatrically
+  • CROSS-SECTION STRAIGHT-ON / DOWN-INTO-THE-CUTAWAY — square to the cut face showing all the interior story-levels
+  • SPOTLIT ISOLATED-ON-BLACK — the build floating in theatrical darkness, spotlit
+  • SLOW-ORBIT / DUTCH-ANGLE — dynamic reveal energy
+
+━━━ THE CENTERPIECE SUBJECT — the dramatic focal element ━━━
+${centerpiece_subject}
+
+The build is built AROUND this brick focal element — the dragon / kraken / volcano / collapsing-tower / emerging-genie. It commands the composition.
+
+━━━ THE STORY FIGURES — minifigs telling the story at the climax ━━━
+${story_figures}
+
+Place these minifigs mid-action so the human stakes of the dramatic beat read instantly — fleeing, battling, in peril, rescuing. They make the drama land.
+
+${effectSection}━━━ LIGHTING — THE FINALE-REVEAL SIGNATURE ━━━
+${lighting}
+
+This theatrical lighting IS a core part of the path's identity — render it boldly (spotlight + atmospheric haze + base-glow / dramatic single-key + deep shadow / underlit base / storm-lightning / fire-glow + smoke). It sells the finale-reveal drama.
+
+━━━ PALETTE ━━━
+${palette}
+
+━━━ CROSS-AXIS COMPATIBILITY ━━━
+• ALL elements + effects are brick — never let the drama pull an effect photoreal; fire is trans-flame, water is trans-blue plate, lightning is a trans-bolt element.
+• The theatrical finale-reveal lighting + turntable/spotlit presentation are ALWAYS present — that's the path identity (vs the documentary lighting of the themed paths).
+• This path may re-use motifs from other paths (dragons, krakens, volcanoes) — the identity is the THEATRICAL FINALE PRESENTATION, not the theme.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OUTPUT SPEC ━━━
+Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the narrative concept + dramatic beat + centerpiece subject + camera framing, weave in the build technique + story figures + finale-reveal lighting + palette + dramatic effect (if fired). End with one phrase reinforcing a LEGO-Masters-finale-winning theatrically-lit showcase brick build. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+  },
+
   BRICKBOT_GIRLY: ({ slots, vibeDirective }) => {
     const {
       scene_type,
