@@ -51,6 +51,17 @@ for (const p of PATHS) {
 // ─────────────────────────────────────────────────────────────
 
 const AXIS_POOLS = {
+  // landscape path — seventh BrickBot axis migration (2026-05-27)
+  BRICKBOT_LANDSCAPE_BIOME_VISTA: load('brickbot_landscape_biome_vista'),
+  BRICKBOT_LANDSCAPE_TERRAIN_BUILD_TECHNIQUE: load('brickbot_landscape_terrain_build_technique'),
+  BRICKBOT_LANDSCAPE_SCALE_PROVER: load('brickbot_landscape_scale_prover'),
+  BRICKBOT_LANDSCAPE_FLORA_DETAIL: load('brickbot_landscape_flora_detail'),
+  BRICKBOT_LANDSCAPE_CAMERA_FRAMING: load('brickbot_landscape_camera_framing'),
+  BRICKBOT_LANDSCAPE_ATMOSPHERE: load('brickbot_landscape_atmosphere'),
+  BRICKBOT_LANDSCAPE_LIGHTING: load('brickbot_landscape_lighting'),
+  BRICKBOT_LANDSCAPE_PALETTE: load('brickbot_landscape_palette'),
+  BRICKBOT_LANDSCAPE_NATURAL_PHENOMENON: load('brickbot_landscape_natural_phenomenon'),
+
   // aquatic path — fifth BrickBot axis migration (2026-05-27)
   BRICKBOT_AQUATIC_SCENE_TYPE: load('brickbot_aquatic_scene_type'),
   BRICKBOT_AQUATIC_MINIFIG_ACTION: load('brickbot_aquatic_minifig_action'),

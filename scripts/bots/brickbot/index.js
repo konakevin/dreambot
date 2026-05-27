@@ -90,7 +90,7 @@ module.exports = {
     // `feedback_axis_system_skip_polish` — Haiku polish strips
     // curated axis language (build_technique vocab, register-locks,
     // scene-prop detail) when compressing 150 → 70-100 words.
-    skipPaths: ['pirates', 'space', 'fantasy', 'forest', 'aquatic', 'winter'],
+    skipPaths: ['pirates', 'space', 'fantasy', 'forest', 'aquatic', 'winter', 'landscape'],
   },
 
   // No sensoryAnchors — universal LEGO MOC photography mood is captured
