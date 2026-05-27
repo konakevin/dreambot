@@ -297,13 +297,13 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
     const { lighting, atmosphere, curio, habitat, ornate_flourish } = slots;
     const flourishes = Array.isArray(ornate_flourish) ? ornate_flourish : [ornate_flourish];
 
-    return `You are a cinematic illustration painter writing a STEAMPUNK CURIO scene for SteamBot — a single ANIMATE little steampunk robot creature in an IMMERSIVE Victorian-industrial habitat. The creature is the HERO of the frame; the habitat is its lived-in environment, NOT a museum display.
+    return `You are a cinematic illustration painter writing a STEAMPUNK CURIO scene for SteamBot — a single clockwork AUTOMATON (a brass mechanical creature) AT REST in an IMMERSIVE Victorian-industrial setting. The automaton is the HERO of the frame; the steampunk room is its lived-in environment, NOT a museum display.
 
-━━━ CREATURE IS THE HERO — NON-NEGOTIABLE ━━━
-The animate robot creature fills 40-60% of the frame as the primary subject. Composition is creature-in-environment — the camera caught it in its world. The viewer's eye lands on the ROBOT CREATURE first, with the steampunk habitat wrapping around it.
+━━━ AUTOMATON IS THE HERO — NON-NEGOTIABLE ━━━
+The brass automaton fills 40-60% of the frame as the primary subject. Composition is automaton-in-environment — the camera caught it sitting in a steampunk room. The viewer's eye lands on the AUTOMATON first, with the steampunk setting wrapping around it.
 
-━━━ ALIVE IN MOTION — NON-NEGOTIABLE ━━━
-The curio is a STEAMPUNK ROBOT — a little mechanical creature mimicking a real living thing (animal / insect / bird / sea-creature) OR a novel mechanical organism (chimera / impossible-anatomy / abstract-animate-form). ALWAYS rendered in a moment of motion / animation / alive-looking pose. Mid-stalking / mid-fluttering / mid-feeding / mid-step / mid-curl / wings half-spread / breathing visibly through chest-bellows / eyes tracking. The viewer feels it could move at any second. NEVER static-decorative, NEVER frozen-pose. Articulated joints visibly active. Internal mechanisms (gears / springs / pistons / clockwork-heart) visibly working.
+━━━ A STILL, CRAFTED AUTOMATON — NOT A LIVE ANIMAL — NON-NEGOTIABLE ━━━
+The curio is a STEAMPUNK AUTOMATON — a crafted MACHINE shaped like a creature (animal / insect / bird / sea-creature) or a novel mechanical organism. It must read UNMISTAKABLY as built metal, NOT a living animal: brass / copper / bronze plating, visible articulated joints, exposed gears / springs / clockwork-heart through a panel, glass or gemstone eyes, metal-leaf "fur" or "feathers". Posed CALMLY AT REST — sitting, perched, settled, standing quietly, head gently turned — like a wound-down automaton. A gentle naturalistic resting pose is fine, but NEVER dynamic action: NO leaping / pouncing / running / striking / hunting / mid-motion, and NO "breathing" / "alive-looking" / "could move at any second" language. Stillness + visible mechanism is what makes it read as a steampunk automaton rather than a real animal.
 
 ━━━ NEVER JEWELRY / CROWN / CLOCK / DECORATIVE-OBJECT — ABSOLUTE ━━━
 NO crowns, NO tiaras, NO jewelry / brooches / pendants / necklaces, NO Faberge eggs, NO clocks / pocket-watches / chronographs as subject, NO monocles, NO ceremonial cups / decorative vases, NO weapons, NO scrolls / books. The curio is ALWAYS a mechanical creature / organism — never an ornamental object.
@@ -317,7 +317,7 @@ NO people, NO hands, NO faces. Pure creature-in-environment portrait. The robot 
 ━━━ THE CURIO (the hero creature) ━━━
 ${curio}
 
-Render the creature with OBSESSIVE Victorian-industrial detail — every brass rivet, every gear-tooth, every articulation-joint, every glass-eye, every leather-strap, every clockwork-mechanism visible. Captured at a loaded instant of motion.
+Render the automaton with OBSESSIVE Victorian-industrial detail — every brass rivet, every gear-tooth, every articulation-joint, every glass-eye, every leather-strap, every clockwork-mechanism visible. Posed calmly at rest — clearly a crafted machine, not a live animal.
 
 ━━━ THE HABITAT (the lived-in steampunk environment) ━━━
 ${habitat}
@@ -352,18 +352,20 @@ ${vibeDirective.slice(0, 200)}
 Brass + copper + bronze + oiled-wood + glass dominant. Every visible surface is hand-tooled, hand-engraved, hand-fabricated. NEVER mass-produced-looking. NEVER plastic. NEVER modern.
 
 ━━━ COMPOSITION ━━━
-Creature-in-environment cinematic framing. The CREATURE centered or slightly offset, mid-motion. Habitat wraps around and behind — foreground tactile prop near the creature → midground surrounding environment → deep distance receding into atmospheric haze. NEVER a tight close-up that crops the creature. NEVER a wide-shot where the creature becomes small. Sweet spot: creature reads at clear scale with the lived-in steampunk world grounding it.
+Automaton-in-environment cinematic framing. The AUTOMATON centered or slightly offset, posed calmly at rest. The steampunk setting wraps around and behind — foreground tactile prop near the automaton → midground surrounding environment → deep distance receding into atmospheric haze. NEVER a tight close-up that crops it. NEVER a wide-shot where it becomes small. Sweet spot: the automaton reads at clear scale with the lived-in steampunk world grounding it.
 
 ━━━ HARD BANS ━━━
 - NO primary human figure (no people, no hands, no faces)
+- NO live / organic animal — the creature is ALWAYS a visibly mechanical brass automaton, posed still (no dynamic action)
+- NO outdoor wilderness / nature setting — the automaton is INSIDE a steampunk room (workshop / conservatory / library / observatory / atelier / airship interior)
+- NO museum-display framing (no vitrine / pedestal / velvet cushion / spotlight / catalog backdrop)
 - NO modern objects (no plastic, no LEDs, no electronics — this is 1890s impossible-engineering)
 - NO substituting your own descriptions for the pool entries — render what's locked
-- NO decorative cliché framing (gears/clocks pasted at the edges as decoration)
 
 ━━━ STRUCTURE (write the prompt in this exact order) ━━━
-[OPENING: the curio described with obsessive detail — the OBJECT first], [the three ornate flourishes worked in], [the display register / display context], [lighting], [atmospheric detail], [color palette + mood]
+[OPENING: the automaton described with obsessive detail — the AUTOMATON first, clearly mechanical + at rest], [the three ornate flourishes worked in], [the steampunk setting wrapping around it], [lighting], [atmospheric detail], [color palette + mood]
 
-CRITICAL — the OPENING tokens establish the OBJECT as the hero. The display context wraps the lower frame. The atmosphere adds Wunderkammer mood without competing with the object for attention.
+CRITICAL — the OPENING tokens establish the AUTOMATON as the hero AND as built metal (not a live animal). The steampunk setting wraps around it. The atmosphere adds lived-in mood without competing with the automaton for attention.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
@@ -507,7 +509,8 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
   },
 
   STEAMBOT_COZY_STEAMPUNK: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, room, flora, window_view, intricate_detail, quiet_moment } = slots;
+    const { lighting, atmosphere, room, flora, window_view, intricate_detail, quiet_moment } =
+      slots;
     const floraArr = Array.isArray(flora) ? flora : [flora];
     const detailArr = Array.isArray(intricate_detail) ? intricate_detail : [intricate_detail];
 
@@ -590,7 +593,8 @@ Output ONLY the raw 120-160 word scene description. Comma-separated phrases. NO 
   },
 
   STEAMBOT_STEAMPUNK_LABS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, lab_space, centerpiece, apparatus, electrical, scientist } = slots;
+    const { lighting, atmosphere, lab_space, centerpiece, apparatus, electrical, scientist } =
+      slots;
     const details = Array.isArray(apparatus) ? apparatus : [apparatus];
 
     const electricalSection = electrical

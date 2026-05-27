@@ -15,7 +15,8 @@ function load(name) {
 // homogeneity. Now only `cozy` and `nostalgic` are warm; the rest are cool /
 // monochrome / surreal / high-key to break the default.
 const VIBE_COLOR = {
-  cinematic: 'high-contrast monochrome noir, hard black shadows, single white key light, no color cast',
+  cinematic:
+    'high-contrast monochrome noir, hard black shadows, single white key light, no color cast',
   cozy: 'warm amber miniature glow, honey highlights, inviting soft, warm key only',
   nostalgic: 'faded sepia-miniature, warm copper, dollhouse storybook, yellowed-paper tint',
   peaceful: 'soft pale-blue dawn light, cool gentle calm, NO warm tones, overcast diffused',
@@ -27,7 +28,8 @@ const VIBE_COLOR = {
   surreal: 'clashing impossible color pairings (lime-green sky + hot-pink ground), saturated-flat',
   // bex.ai-coded soft-pastel aesthetic — pink/lavender/lilac/magenta/pearl
   // with warm golden window-glow as focal contrast. Cherry-blossom-coded.
-  'pastel-dream': 'soft pastel pink + lavender + lilac + magenta + pearl-white, warm golden window-glow focal contrast, cherry-blossom atmospheric tint, dreamy bokeh ambient, NO browns NO greens NO blues',
+  'pastel-dream':
+    'soft pastel pink + lavender + lilac + magenta + pearl-white, warm golden window-glow focal contrast, cherry-blossom atmospheric tint, dreamy bokeh ambient, NO browns NO greens NO blues',
 };
 
 module.exports = {
@@ -41,7 +43,6 @@ module.exports = {
   MICRO_FANTASY: load('micro_fantasy'),
   MINIATURE_INDUSTRY: load('miniature_industry'),
   COTTAGE_VILLAGE: load('cottage_village'),
-  BORROWERS_SCENES: load('borrowers_scenes'),
   MUSHROOM_VILLAGE: load('mushroom_village'),
   PASTEL_VILLAGE: load('pastel_village'),
   ENCHANTED_VILLAGE: load('enchanted_village'),
@@ -59,6 +60,14 @@ module.exports = {
   VIBE_COLOR,
 
   SENSORY_POOLS: {
-    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+    scene: {
+      smell: load('sensory_scene_smell'),
+      sound: load('sensory_scene_sound'),
+      touch: load('sensory_scene_touch'),
+      temperature: load('sensory_scene_temperature'),
+      weight: load('sensory_scene_weight'),
+      air: load('sensory_scene_air'),
+      lightcolor: load('sensory_scene_lightcolor'),
+    },
   },
 };
