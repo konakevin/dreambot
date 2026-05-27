@@ -19,6 +19,8 @@ interface RequestBody {
   rightSourceUrl: string;
   userId: string;
   deadlineMs?: number;
+  /** Skip the yan-ops primary, swap with fallback models only (dup-retry escape). */
+  skipPrimary?: boolean;
 }
 
 const CORS_HEADERS = {
@@ -59,7 +61,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  const { targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs } = body;
+  const { targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs, skipPrimary } = body;
   if (!targetUrl || !leftSourceUrl || !rightSourceUrl || !userId) {
     return new Response(JSON.stringify({ error: 'Missing required field' }), {
       status: 400,
@@ -78,7 +80,8 @@ Deno.serve(async (req) => {
       REPLICATE_TOKEN,
       supabase,
       userId,
-      deadlineMs
+      deadlineMs,
+      skipPrimary ?? false
     );
     const elapsed = Date.now() - t0;
     console.log(`[face-swap-dual] Done in ${elapsed}ms`);

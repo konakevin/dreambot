@@ -28,7 +28,11 @@ export async function dispatchDualFaceSwap(
   replicateToken: string,
   supabase: SupabaseClient,
   userId: string,
-  deadlineMs?: number
+  deadlineMs?: number,
+  // skipPrimary → swap both halves with the fallback models only (cdingram →
+  // pikachupichu25), skipping yan-ops. Used by the dup-detect retry to escape
+  // yan-ops's canned-output bug.
+  skipPrimary = false
 ): Promise<string> {
   const useFanout = Deno.env.get('DUAL_SWAP_FANOUT') === 'true';
 
@@ -40,7 +44,8 @@ export async function dispatchDualFaceSwap(
       replicateToken,
       supabase,
       userId,
-      deadlineMs
+      deadlineMs,
+      skipPrimary
     );
   }
 
@@ -60,6 +65,7 @@ export async function dispatchDualFaceSwap(
       rightSourceUrl,
       userId,
       deadlineMs,
+      skipPrimary,
     }),
   });
 

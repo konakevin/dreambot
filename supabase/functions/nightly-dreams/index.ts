@@ -1490,6 +1490,10 @@ Output ONLY the prompt.`;
               genResult.url,
               REPLICATE_TOKEN
             );
+            // skipPrimary: the dup is yan-ops's canned-output bug — retrying
+            // yan-ops returns the same canned scene, so escape to the fallback
+            // models (cdingram → pikachupichu25). Gender routing above already
+            // assigned each source to the correct-gender crop.
             tempUrl = await dispatchDualFaceSwap(
               routed.leftSource,
               routed.rightSource,
@@ -1497,15 +1501,20 @@ Output ONLY the prompt.`;
               REPLICATE_TOKEN,
               supabase,
               userId,
-              t0 + 140_000
+              t0 + 140_000,
+              true
             );
           } else if (faceSwapSource) {
+            // skipPrimary: escape yan-ops's canned output via the fallback chain.
             tempUrl = await faceSwap(
               faceSwapSource,
               genResult.url,
               REPLICATE_TOKEN,
               supabase,
-              userId
+              userId,
+              {
+                skipPrimary: true,
+              }
             );
           }
         } catch (err) {

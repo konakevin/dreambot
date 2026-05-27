@@ -94,6 +94,17 @@ const FACE_SWAP_MODELS: FaceSwapModel[] = [
 ];
 
 /**
+ * The ordered list of model NAMES faceSwap() will attempt for the given opts.
+ * Pure + exported for unit testing the model-selection logic without hitting
+ * Replicate. `skipPrimary` drops the yan-ops primary so the dup-detect retry
+ * escapes its canned-output bug via the fallbacks.
+ */
+export function faceSwapAttemptOrder(skipPrimary = false): string[] {
+  const names = FACE_SWAP_MODELS.map((m) => m.name);
+  return skipPrimary ? names.slice(1) : names;
+}
+
+/**
  * Cache-bust the source image bytes by re-encoding the JPEG with a random
  * quality and perturbing one corner pixel by a random amount. The bytes
  * differ on every call, so Replicate's input-hash cache can't lock us
@@ -215,13 +226,16 @@ async function faceSwapOnce(
  * Public face swap with retries on the primary model + fallback chain.
  *
  * Resilience strategy (in order):
- *   1. Try primary model (cdingram). Retry up to MAX_PRIMARY_ATTEMPTS times
- *      with backoff on transient Replicate errors (5xx / 429 / timeout /
- *      "no face found" empty output).
+ *   1. Try primary model (yan-ops — FACE_SWAP_MODELS[0]). Retry up to
+ *      MAX_PRIMARY_ATTEMPTS times with backoff on transient Replicate errors
+ *      (5xx / 429 / timeout / "no face found" empty output).
  *   2. If primary still fails, try each fallback model in
- *      FACE_SWAP_MODELS[1..] single-shot, in order. Skip a fallback if
- *      remaining time budget is below MIN_FALLBACK_TIME_MS.
+ *      FACE_SWAP_MODELS[1..] (cdingram, pikachupichu25) single-shot, in order.
+ *      Skip a fallback if remaining time budget is below MIN_FALLBACK_TIME_MS.
  *   3. If all models fail, throw the most-recent error.
+ *
+ * `opts.skipPrimary` skips step 1 entirely and runs only the fallback chain —
+ * the dup-detect retry uses it to escape yan-ops's canned-output bug.
  *
  * Retry-on-transient signals:
  *   - 'timed out'    → cold-start prediction polled past maxWaitMs
@@ -261,50 +275,59 @@ export async function faceSwap(
   replicateToken: string,
   supabase: SupabaseClient,
   userId: string,
-  opts?: { maxWaitMs?: number; retry?: boolean }
+  opts?: { maxWaitMs?: number; retry?: boolean; skipPrimary?: boolean }
 ): Promise<string> {
   const maxWaitMs = opts?.maxWaitMs ?? DEFAULT_MAX_WAIT_MS;
   const retry = opts?.retry ?? true;
+  // skipPrimary routes straight to the fallback models (cdingram →
+  // pikachupichu25), skipping the yan-ops primary entirely. Used by the
+  // dup-detect retry to escape yan-ops's canned-output bug — re-running
+  // yan-ops returns the same canned scene, so the only escape is a different
+  // model. See nightly-dreams dup-detect block.
+  const skipPrimary = opts?.skipPrimary ?? false;
   const startedAt = Date.now();
   const deadline = startedAt + maxWaitMs;
 
   const [primary, ...fallbacks] = FACE_SWAP_MODELS;
   const maxPrimaryAttempts = retry ? MAX_PRIMARY_ATTEMPTS : 1;
 
-  // ── Primary with retries ──
   let lastErr: Error | null = null;
-  for (let attempt = 1; attempt <= maxPrimaryAttempts; attempt++) {
-    try {
-      const remaining = deadline - Date.now();
-      if (remaining <= 0) throw new Error(`Face swap deadline exceeded (${primary.name})`);
-      const url = await faceSwapOnce(
-        sourceImageUrl,
-        targetImageUrl,
-        replicateToken,
-        supabase,
-        userId,
-        primary,
-        remaining
-      );
-      if (attempt > 1)
-        console.log(`[faceSwap] primary recovered on attempt ${attempt}/${maxPrimaryAttempts}`);
-      return url;
-    } catch (err) {
-      lastErr = err as Error;
-      const msg = lastErr.message || '';
-      if (attempt < maxPrimaryAttempts && isTransientReplicateError(msg)) {
-        const delay = BACKOFF_MS[attempt - 1] ?? BACKOFF_MS[BACKOFF_MS.length - 1];
-        console.warn(
-          `[faceSwap] primary ${primary.name} attempt ${attempt}/${maxPrimaryAttempts} failed (${msg.slice(0, 80)}) — retrying in ${delay}ms`
+
+  // ── Primary with retries (skipped when skipPrimary is set) ──
+  if (!skipPrimary) {
+    for (let attempt = 1; attempt <= maxPrimaryAttempts; attempt++) {
+      try {
+        const remaining = deadline - Date.now();
+        if (remaining <= 0) throw new Error(`Face swap deadline exceeded (${primary.name})`);
+        const url = await faceSwapOnce(
+          sourceImageUrl,
+          targetImageUrl,
+          replicateToken,
+          supabase,
+          userId,
+          primary,
+          remaining
         );
-        await new Promise((r) => setTimeout(r, delay));
-        continue;
+        if (attempt > 1)
+          console.log(`[faceSwap] primary recovered on attempt ${attempt}/${maxPrimaryAttempts}`);
+        return url;
+      } catch (err) {
+        lastErr = err as Error;
+        const msg = lastErr.message || '';
+        if (attempt < maxPrimaryAttempts && isTransientReplicateError(msg)) {
+          const delay = BACKOFF_MS[attempt - 1] ?? BACKOFF_MS[BACKOFF_MS.length - 1];
+          console.warn(
+            `[faceSwap] primary ${primary.name} attempt ${attempt}/${maxPrimaryAttempts} failed (${msg.slice(0, 80)}) — retrying in ${delay}ms`
+          );
+          await new Promise((r) => setTimeout(r, delay));
+          continue;
+        }
+        // Non-transient OR primary exhausted: break out and try fallbacks
+        console.warn(
+          `[faceSwap] primary ${primary.name} exhausted after ${attempt}/${maxPrimaryAttempts} (${msg.slice(0, 80)})`
+        );
+        break;
       }
-      // Non-transient OR primary exhausted: break out and try fallbacks
-      console.warn(
-        `[faceSwap] primary ${primary.name} exhausted after ${attempt}/${maxPrimaryAttempts} (${msg.slice(0, 80)})`
-      );
-      break;
     }
   }
 
@@ -443,7 +466,8 @@ export async function dualFaceSwap(
   replicateToken: string,
   supabase: SupabaseClient,
   userId: string,
-  deadlineMs?: number
+  deadlineMs?: number,
+  skipPrimary = false
 ): Promise<string> {
   const deadline = deadlineMs ?? Date.now() + DEFAULT_MAX_WAIT_MS + 15_000;
   console.log(`[dualFaceSwap] Starting — budget ${Math.round((deadline - Date.now()) / 1000)}s`);
@@ -501,10 +525,12 @@ export async function dualFaceSwap(
     faceSwap(leftSourceUrl, leftCropUrl, replicateToken, supabase, userId, {
       maxWaitMs: swapBudgetMs,
       retry: false,
+      skipPrimary,
     }),
     faceSwap(rightSourceUrl, rightCropUrl, replicateToken, supabase, userId, {
       maxWaitMs: swapBudgetMs,
       retry: false,
+      skipPrimary,
     }),
   ]);
   console.log('[dualFaceSwap] Both swaps complete');
