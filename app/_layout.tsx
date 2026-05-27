@@ -22,6 +22,10 @@ import { UpscaleModalHost } from '@/components/UpscaleOverlay';
 import { queryClient } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
 import { SCREEN_PRESETS } from '@/constants/navigationPresets';
+import { initSentry, Sentry } from '@/lib/sentry';
+
+// Crash reporting — must init as early as possible. No-op without a DSN.
+initSentry();
 
 SplashScreen.preventAutoHideAsync();
 
@@ -341,7 +345,7 @@ function DataPrefetcher() {
   return null;
 }
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded] = useFonts({ ...Ionicons.font });
 
   useEffect(() => {
@@ -402,3 +406,6 @@ export default function RootLayout() {
     </GestureHandlerRootView>
   );
 }
+
+// Wrap the root so Sentry can auto-instrument (no-op without a DSN).
+export default Sentry.wrap(RootLayout);

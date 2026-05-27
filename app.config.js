@@ -79,8 +79,7 @@ module.exports = {
       [
         'expo-camera',
         {
-          cameraPermission:
-            'DreamBot uses your camera to capture photos for AI dream generation.',
+          cameraPermission: 'DreamBot uses your camera to capture photos for AI dream generation.',
           microphonePermission: false,
           recordAudioAndroid: false,
         },
@@ -115,6 +114,10 @@ module.exports = {
         },
       ],
       'expo-build-properties',
+      // Sentry — sets up the native crash handler + (with SENTRY_AUTH_TOKEN +
+      // org/project at build time) symbolicated source-map upload. Runtime
+      // capture is no-op until EXPO_PUBLIC_SENTRY_DSN is set (see lib/sentry.ts).
+      '@sentry/react-native',
     ],
     experiments: {
       typedRoutes: true,

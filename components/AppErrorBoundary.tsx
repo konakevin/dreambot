@@ -3,6 +3,7 @@ import type { ReactNode, ErrorInfo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { captureException } from '@/lib/sentry';
 
 interface Props {
   children: ReactNode;
@@ -21,6 +22,8 @@ export class AppErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
+    // Report to Sentry in production (no-op without a DSN); log in dev.
+    captureException(error, { componentStack: info.componentStack });
     if (__DEV__) {
       console.error('[AppErrorBoundary] Uncaught error:', error.message);
       console.error('[AppErrorBoundary] Component stack:', info.componentStack);
