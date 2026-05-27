@@ -184,19 +184,26 @@ module.exports = {
   },
 
   rollSharedDNA({ path, picker }) {
-    // tropical-paradise locks region to 'tropical'; all other paths roll
-    // from the general region rotation. Migration-in-progress: legacy paths
-    // also read sharedDNA.region via compose.js, so this keeps both shapes
-    // working.
+    // Flower Engine (BLOOMBOT_FLOWER_ENGINE_PLAN.md): roll a color THEME + pluck
+    // a curated flower cast from the tagged pool. Emits palette + roster blocks
+    // that drop into the existing brief slots. Phase 3 will move biome/themeBias
+    // onto per-path flowerContext; for now a small biome map.
+    const flowerEngine = require('./flowerEngine');
+    const BIOME_BY_PATH = { 'tropical-paradise': 'tropical', 'desert-bloom': 'desert' };
+    const fc = flowerEngine.roll({ biome: BIOME_BY_PATH[path] || 'any', picker });
+    // region kept ONLY for legacy compose.js paths (e.g. cozy) that still build
+    // their own roster; axis paths now use fc.palette + fc.roster.
     const region =
       path === 'tropical-paradise'
         ? 'tropical'
         : picker.pickWithRecency(REGION_KEYS_GENERAL, 'region');
     return {
-      palette: picker.pickWithRecency(pools.PALETTES, 'palette'),
+      palette: fc.palette,
       lighting: picker.pickWithRecency(pools.LIGHTING, 'lighting'),
       region,
-      roster: regionRosterPrompt(region),
+      roster: fc.roster,
+      flowerTheme: fc.theme,
+      flowerRegister: fc.register,
     };
   },
 
