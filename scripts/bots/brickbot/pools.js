@@ -51,6 +51,18 @@ for (const p of PATHS) {
 // ─────────────────────────────────────────────────────────────
 
 const AXIS_POOLS = {
+  // mech path — tenth BrickBot axis migration (2026-05-27)
+  BRICKBOT_MECH_MECH_CLASS: load('brickbot_mech_mech_class'),
+  BRICKBOT_MECH_MECH_ACTION: load('brickbot_mech_mech_action'),
+  BRICKBOT_MECH_BUILD_TECHNIQUE: load('brickbot_mech_build_technique'),
+  BRICKBOT_MECH_CAMERA_FRAMING: load('brickbot_mech_camera_framing'),
+  BRICKBOT_MECH_SETTING: load('brickbot_mech_setting'),
+  BRICKBOT_MECH_REGISTER: load('brickbot_mech_register'),
+  BRICKBOT_MECH_SCENE_PROPS: load('brickbot_mech_scene_props'),
+  BRICKBOT_MECH_LIGHTING: load('brickbot_mech_lighting'),
+  BRICKBOT_MECH_PALETTE: load('brickbot_mech_palette'),
+  BRICKBOT_MECH_PHENOMENON: load('brickbot_mech_phenomenon'),
+
   // western path — ninth BrickBot axis migration (2026-05-27)
   BRICKBOT_WESTERN_SCENE_TYPE: load('brickbot_western_scene_type'),
   BRICKBOT_WESTERN_MINIFIG_ACTION: load('brickbot_western_minifig_action'),

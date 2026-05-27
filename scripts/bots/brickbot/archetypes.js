@@ -8,6 +8,45 @@
  */
 
 module.exports = {
+  BRICKBOT_MECH: {
+    description: `PATH-BESPOKE — BrickBot mech path (2026-05-27 migration). GIANT-ROBOT / MECH LEGO MOC diorama photography — towering battle-mechs, exo-suits, transformers, quadruped walkers, mech-vs-mech duels, maintenance hangars, battle-damaged salvage, with the MECH as the hero. Canon: LEGO Bionicle (bio-mechanical CCBS) + Hero Factory (hero-bots) + Exo-Force (2006-08 anime-mech blue/gold vs robots) + Ninjago mechs (elemental + titan mechs) + Creator/Technic mech-suits + Bricklink AFOL hard-suit + GBC mech MOC community. NEVER licensed-mecha IP (no Gundam model numbers / Transformers character names / Pacific-Rim named Jaegers — INSPIRED BY, never literal).
+
+The MECH is the hero subject (like a character path, the subject IS the mech). Lower photoreal-terrain risk; the main guard is keeping the mech reading as a BRICK mech (Technic-frame + ball-joints + CCBS shell) rather than a photoreal CGI war-machine.
+
+9 path-bespoke slots + 1 conditional:
+  • mech_class          — THE HERO mech (humanoid-battle-mech / quadruped-walker / transformer-mid-shift / exo-suit-power-loader / Bionicle-bio-mechanical / Hero-Factory-hero-bot / Exo-Force-anime-mech / heavy-artillery-mech / scout-recon-mech / titan-class-colossus / salvage-mech / construction-mech / aquatic-deep-mech / flight-capable-jet-mech / mech-vs-mech-duel-pair)
+  • mech_action         — verb-led beat (mid-stride-charge / mid-cannon-fire / mid-transform-shift / mid-melee-clash / mid-cockpit-eject / mid-power-up-surge / mid-shield-raise / mid-rocket-boost-launch / mid-repair-lift / mid-ground-stomp / mid-missile-salvo)
+  • build_technique     — mech-MOC distinguisher (exposed Technic-beam endoskeleton / ratchet + ball-joint articulation in a dynamic pose / Bionicle CCBS shell-armor over a Technic frame / SNOT layered armor-plating / trans-cyan power-core + light-piping / hydraulic-piston greebles / panel-line + vent detailing / posed mid-action joint-locking)
+  • camera_framing      — mech framing (worm's-eye-up-the-titan / hangar-gantry-side-elevation / cockpit-canopy-reveal / mech-vs-mech-clash-between-them / over-the-shoulder-from-behind-the-mech / aerial-battlefield-down / scale-with-tiny-pilots-below / low-three-quarter-hero-pose)
+  • setting             — where the mech is (battle-damaged junkyard / maintenance hangar with gantries / war-torn cityscape / alien battlefield / launch-bay / desert combat-zone / underwater trench / volcanic foundry / arena duel-pit / snow-front / orbital-platform / ruined-factory)
+  • register            — mech heritage lock, ~85% iconic LEGO mech (Bionicle-bio-mechanical organic-silver / Hero-Factory-hero-bot bright-armor / Exo-Force-anime-mech blue-gold-white vs robot-red / Ninjago-elemental-mech / Technic-mech-suit raw-mechanical) + ~15% hard-SF-coded (Pacific-Rim-scale-coded gunmetal / mecha-anime-coded / mil-walker-camo — INSPIRED BY, never named)
+  • scene_props pickN:2 — diorama fill (ammo + fuel-cell crates / tool-rack + welding-rig / fallen enemy-mech parts / warning-beacon / pilot minifig at the foot for scale / repair-drone / spent missile-rack / hazard-stripe barrier / spotlight-rig / cooling-vent stack / scattered shell-casings)
+  • lighting            — axis-clean: hangar floodlight / battle fire-glow / trans-cyan power-core underlight / dramatic rim-backlight / sparks-shower / dusk warzone / spotlight reveal / cold blue night-ops
+  • palette             — axis-clean LEGO-coded: gunmetal + warning-yellow + trans-cyan / Bionicle silver + gold + organic / Hero-Factory bright hero-colors / Exo-Force blue + gold + white (vs robot black + red) / mil-camo-green + rust / construction yellow + black + grey
+  • mech_phenomenon (50%-gated) — combat beat IN BRICK (cannon muzzle-flash of trans-orange + trans-yellow elements / explosion-debris of scattered tiles + trans-flame / energy-shield trans-cyan dome / rocket-boost trans-flame plume / EMP-pulse trans-ring / sparks-shower trans-yellow round-plates / smoke-plume cotton-elements / power-surge trans-light-piping blaze)
+
+Bending advantage: mech_class × setting × register × mech_phenomenon decoupled, so "quadruped-walker + war-torn-cityscape + Exo-Force register + muzzle-flash" and "titan-class + maintenance-hangar + Bionicle register" are rollable. Legacy 4-axis couldn't reach these.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'mech_class',
+        'mech_action',
+        'build_technique',
+        'camera_framing',
+        'setting',
+        'register',
+        'scene_props',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: { scene_props: 2 },
+    conditionalLayer: { slot: 'mech_phenomenon', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BRICKBOT_WESTERN: {
     description: `PATH-BESPOKE — BrickBot western path (2026-05-27 migration). WILD-WEST FRONTIER LEGO MOC diorama photography — sheriffs, outlaws, cowboys, prospectors, railroad crews; saloons, ghost towns, mining camps, forts, boom-towns; stagecoaches, steam locomotives, mine-carts; set in brick badlands, mesas, slot-canyons, and desert flats. Canon: classic LEGO Western (1996-97 — Cowboys / Fort Legoredo cavalry / Gold City Junction / Boulder Blasters / Bandit's Secret Hideout) + spaghetti-western + gold-rush-boomtown + railroad-frontier coding + Bricklink AFOL western-MOC community. RESPECTFUL frontier framing — cowboys/outlaws/sheriffs/prospectors/railroad/cavalry register only; NO dated "cowboys-vs-Indians" caricature.
 

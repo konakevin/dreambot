@@ -10,6 +10,113 @@
  */
 
 module.exports = {
+  BRICKBOT_MECH: ({ slots, vibeDirective }) => {
+    const {
+      mech_class,
+      mech_action,
+      build_technique,
+      camera_framing,
+      setting,
+      register,
+      scene_props,
+      lighting,
+      palette,
+      mech_phenomenon,
+    } = slots;
+
+    const props = Array.isArray(scene_props) ? scene_props : [scene_props];
+    const propLines = props.map((p, i) => `  ${i + 1}. ${p}`).join('\n');
+
+    const phenomenonSection = mech_phenomenon
+      ? `
+━━━ MECH PHENOMENON (this render's combat beat) ━━━
+${mech_phenomenon}
+
+Weave this in as a SECONDARY focal point, rendered IN BRICK (trans-orange + trans-yellow muzzle-flash elements / trans-cyan energy-shield dome / trans-flame rocket-boost / scattered tile + trans-flame explosion-debris). It AMPLIFIES the action — never eclipses the mech as hero.
+
+`
+      : '';
+
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a GIANT-ROBOT / MECH diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION TIER MECH IN LEGO BRICKS ━━━
+This is a Bricklink AFOL champion's mech diorama, photographed at a LEGO World convention — a posed, articulated, greebled brick titan that wins hard-suit category. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a photoreal CGI war-machine still. The mech is OBSESSIVELY detailed — ball-jointed in a dynamic pose, panel-lined, power-core lit. Visual canon: LEGO Bionicle (bio-mechanical CCBS) + Hero Factory (hero-bots) + Exo-Force (anime-mech blue/gold vs robots) + Ninjago mechs + Technic mech-suits + AFOL hard-suit MOCs. INSPIRED BY mecha-anime + Pacific-Rim-scale, but NEVER named franchises (no Gundam model-numbers / Transformers names / named Jaegers).
+
+━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
+NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Flux's "LEGO photo" data is contaminated with hand-placing-brick + claymation hero shots. OVERRIDE HARD. Any pilot/crew is a LEGO minifigure with C-shaped hands + printed plastic face (in a cockpit, or tiny at the mech's foot for scale). The MECH itself is a brick-built robot — never a real-metal CGI mech.
+
+━━━ EVERYTHING IS BRICK — THE MECH AND ITS WORLD ARE ALL LEGO ━━━
+EVERY element is built from real LEGO bricks. NO photoreal metal, NO photoreal CGI mech, NO photoreal explosions, NO photoreal sky. Studs + Technic-holes + ball-joints CLEARLY VISIBLE. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
+  • Mech body = brick + Technic-beam frame with ball-joint + ratchet articulation, SNOT armor-plating, panel-line greebles — NEVER photoreal metal
+  • Power-core / energy = trans-cyan + trans-blue + trans-orange elements + light-piping — NEVER photoreal glow
+  • Weapons-fire / explosions = trans-orange + trans-yellow flame elements + scattered tiles — NEVER photoreal pyro
+  • Terrain (battlefield / hangar floor) = brick plates + slope-bricks + Technic-panel flooring — NEVER photoreal ground
+  • Smoke = cotton-elements + grey 1×1 round-plates — NEVER photoreal smoke
+  • Sky = brick sky-baseplate — NEVER photoreal sky
+
+━━━ BANNED VOCABULARY (pull Flux to photoreal CGI — NEVER use): "photoreal", "real metal/steel", "CGI", "rendered metal", "glistening chrome", "motion-blur", "blurred". Render the mech as a posed brick MOC, never a cinematic CGI render.
+
+━━━ THE MECH — the hero subject ━━━
+${mech_class}
+
+Build the mech large and dominant — a posed, ball-jointed brick titan filling the frame, with visible Technic-frame + armor-plating + power-core detail. It is THE subject.
+
+━━━ THE MECH ACTION — STORY BEAT MANDATE (no static A-pose) ━━━
+${mech_action}
+
+A freeze-frame of the mech IN DYNAMIC ACTION — mid-stride, mid-cannon-fire, mid-transform, mid-melee-clash. Lock the ball-joints into a powerful action-pose with weight + intent. NEVER a stiff arms-out T-pose facing camera (the Flux mech-default — override it).
+
+━━━ THE MOC BUILD TECHNIQUE — AFOL DISTINGUISHER (render visibly) ━━━
+${build_technique}
+
+Makes the build read as AFOL champion + unmistakably all-brick. Render it visibly — name the brick parts (exposed Technic-beam endoskeleton / ball-joint + ratchet articulation / CCBS shell-armor / SNOT plating / trans-cyan power-core + light-piping / hydraulic-piston greebles).
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — the rolled framing DRIVES the composition. Apply the exact angle, even if Flux wants a centered front-facing T-pose. Override hard.
+  • WORM'S-EYE-UP-THE-TITAN — low looking steeply up to emphasize the mech towering, tiny pilots below for scale
+  • MECH-VS-MECH-CLASH-BETWEEN — camera between two clashing mechs, dynamic diagonal of the fight
+  • COCKPIT-CANOPY-REVEAL — close on the open cockpit with the pilot minifig inside, the mech-body around it
+  • HANGAR-GANTRY-SIDE — side-elevation with maintenance gantries + crew, the mech in profile being serviced
+  • OVER-THE-SHOULDER-FROM-BEHIND — behind the mech looking past its shoulder at the battlefield/foe ahead
+  • Avoid centered front-facing T-pose framing — that's the Flux-bias trap.
+
+━━━ THE SETTING ━━━
+${setting}
+
+Render the brick setting around the mech — the hangar / battlefield / junkyard / cityscape that grounds the scene and proves the mech's scale.
+
+━━━ THE REGISTER (mech heritage lock) ━━━
+${register}
+
+The aesthetic lock — the mech's silhouette, armor style, palette, and detailing align with this heritage (Bionicle bio-mechanical / Hero-Factory hero-bot / Exo-Force anime blue-gold / Ninjago elemental / Technic raw-mechanical). Never mix anachronistically.
+
+━━━ DIORAMA STORYTELLING DETAILS — fill the negative space ━━━
+${propLines}
+
+These brick-built details ground the mech in a working world — never decorative-only. A pilot minifig at the foot or crates at the base sells the scale + story.
+${phenomenonSection}━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+
+━━━ CROSS-AXIS COMPATIBILITY ━━━
+• If register is BIONICLE — bio-mechanical organic curves + CCBS shell-armor + a Kanohi-mask-style head + silver/gold/elemental-color palette.
+• If register is HERO-FACTORY — sleeker hero-bot armor + a bright single-hero color-scheme + a hero-core chest.
+• If register is EXO-FORCE — anime-mech blue + gold + white with an angular cockpit + a hair-piece pilot, vs robot-red drones.
+• If register is NINJAGO-ELEMENTAL — an elemental-themed mech (fire/ice/earth) with a ninja-minifig pilot.
+• The mech is ALWAYS a posed brick MOC with visible joints, never a photoreal CGI render, regardless of how cinematic the lighting feels.
+• Whatever palette rolls, the register's signature WINS if they conflict.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OUTPUT SPEC ━━━
+Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the mech-class + action + camera framing, weave in the build technique + setting + register + props + lighting + palette + mech phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC mech diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+  },
+
   BRICKBOT_WESTERN: ({ slots, vibeDirective }) => {
     const {
       scene_type,

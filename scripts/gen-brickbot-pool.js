@@ -67,6 +67,275 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // MECH PATH (2026-05-27 — tenth BrickBot axis migration)
+  // GIANT ROBOTS. The mech is the hero. Bespoke mech_class + build_technique
+  // (Technic-frame + ball-joints + CCBS, anti-photoreal-CGI lever) + setting.
+  // Every entry names LEGO PARTS, BANS photoreal-CGI/metal + T-pose +
+  // motion-blur. Bespoke.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_mech_mech_class: {
+    format: 'simple',
+    theme: `LEGO MECH CLASSES — the HERO mech for BrickBot's mech path. Each entry is ONE big brick-built mech, 30-55 words. The mech IS the centerpiece (action + setting are separate axes — name the mech + its brick form/silhouette only).
+
+⚠️ CRITICAL — the MECH / SILHOUETTE only. NO action verbs (separate axis). NO setting. NO build-technique deep-dive. NO camera. NO lighting/phenomenon. Just: which brick mech + its form.
+
+⚠️ EVERYTHING IS LEGO BRICK. Mech = Technic-frame + ball-joints + armor-plating. Power = trans-cyan. NEVER photoreal-CGI vocabulary. BANNED: photoreal, real metal/steel, CGI, glistening chrome, T-pose, motion-blur. INSPIRED-BY mecha, never named franchises.
+
+VARIETY MANDATE — distribute across: humanoid-battle-mech / quadruped-walker / transformer-mid-shift / exo-suit-power-loader / Bionicle-bio-mechanical / Hero-Factory-hero-bot / Exo-Force-anime-mech / heavy-artillery-mech / scout-recon-mech / titan-class-colossus / salvage-mech / construction-mech / aquatic-deep-mech / flight-capable-jet-mech / mech-vs-mech-duel-pair / spider-walker / siege-mech.
+
+Each entry: name the mech-class in first 5-8 words; describe its big brick SILHOUETTE + key build elements (Technic frame, ball-joints, armor, power-core, weapon-mounts); imply its scale as hero; NEVER action, setting, or phenomenon.`,
+    touchpoints: [
+      'HUMANOID BATTLE-MECH — a towering bipedal brick mech with broad SNOT-plated shoulders, ball-jointed arms ending in a cannon-arm and a clawed manipulator, a trans-cyan power-core glowing in the chest, a visored head on a ball-joint neck, the dominant titan',
+      'QUADRUPED WALKER — a four-legged brick walker with articulated Technic-beam legs splayed in a stable stance, a central armored hull-pod with a sensor-mast, twin dorsal cannons, hydraulic-piston greebles at the joints, a heavy crawling silhouette',
+      'TRANSFORMER MID-SHIFT — a brick mech caught mid-transformation between vehicle and robot, panels folding, an arm half-emerged from a chassis, Technic-hinge joints exposed in the shift, trans-cyan seams glowing, the in-between silhouette',
+      'EXO-SUIT POWER-LOADER — a chunky industrial exo-suit with an open roll-cage cockpit holding a pilot minifig, big hydraulic claw-arms, caterpillar-or-leg base, hazard-yellow + black plating, the working-loader silhouette',
+      'BIONICLE BIO-MECHANICAL — a bio-mechanical brick warrior built on a Technic-frame with CCBS shell-armor in organic curves, a Kanohi-style masked head, clawed hands + a bladed weapon, silver + gold + elemental accents, the bionic silhouette',
+      'HERO-FACTORY HERO-BOT — a sleek heroic brick robot with smooth CCBS armor in a single bright hero-color scheme, a glowing hero-core chest, a multi-tool arm, an alert posed stance, the clean-hero silhouette',
+      'EXO-FORCE ANIME-MECH — an angular anime-style brick mech in blue + gold + white with a sharp-crested head, a hair-piece pilot in an open cockpit, a beam-saber + shoulder-cannon, the classic Exo-Force-vs-robots silhouette',
+      'HEAVY ARTILLERY-MECH — a squat heavily-armored brick mech braced on splayed legs under the weight of an enormous dorsal artillery-cannon, ammo-feed greebles, blast-shield plating, the siege-platform silhouette',
+      'TITAN-CLASS COLOSSUS — an enormous brick mech dwarfing everything, multi-tier armor-plating, a city-block stance, glowing trans-cyan reactor-lines down the torso, tiny pilot-figures implied at the feet, the kaiju-scale silhouette',
+      'SCOUT-RECON MECH — a lean fast brick mech on reverse-jointed bird-legs, a low sensor-head, light arm-blasters, thruster-pods, a crouched ready-to-sprint stance, the agile-scout silhouette',
+      'SALVAGE MECH — a patchwork brick mech cobbled from mismatched armor-panels + scavenged parts, an exposed Technic-frame showing through gaps, a cutting-torch arm + a magnet-claw, the junkyard-survivor silhouette',
+      'AQUATIC DEEP-MECH — a pressure-hulled brick mech with porthole-domes, fin-stabilizers, a harpoon-arm + floodlights, barnacle-greebles, built for the trench, the deep-diver silhouette',
+    ],
+    instructions: `Each entry is ONE mech-class, 30-55 words. Format: "MECH-CLASS NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no action verbs, no setting, no phenomenon, no lighting, no photoreal-CGI/metal/T-pose vocabulary, no named franchises. Every element a NAMED LEGO BRICK PART. The hero mech + its brick silhouette only.`,
+  },
+
+  brickbot_mech_mech_action: {
+    format: 'simple',
+    theme: `LEGO MECH ACTION BEATS — verb-led dynamic poses for BrickBot's mech path. Each entry is a freeze-frame of the mech IN DYNAMIC ACTION, NOT a static T-pose. Each entry 25-45 words.
+
+⚠️ STORY BEAT MANDATE — every entry STARTS WITH AN ACTIVE VERB with weight + intent. Mech verbs: mid-stride-charge, mid-cannon-fire, mid-transform-shift, mid-melee-clash, mid-cockpit-eject, mid-power-up-surge, mid-shield-raise, mid-rocket-boost-launch, mid-repair-lift, mid-ground-stomp, mid-missile-salvo.
+
+⚠️ HARD BANS: NEVER "mech standing arms-out", NEVER "T-pose", NEVER "facing camera centered", NEVER static/posing. Ball-joints LOCKED into a powerful action pose. BANNED: photoreal, CGI, motion-blur, blurred. Render as a posed BRICK mech frozen mid-action.
+
+✓ Pose variety: mid-stride/charge (~20%), mid-fire/salvo (~20%), mid-melee-clash (~20%), mid-transform/boost (~15%), mid-defensive (shield/brace) (~15%), mid-service/repair (pilot+crew) (~10%).
+
+Each entry: start with an active verb; describe the mech's WEIGHTED action-pose (which joints, which limb) + the CAUSE/EFFECT (recoil, impact, blast); name brick joints where useful; imply scale.`,
+    touchpoints: [
+      'Charges mid-stride as the battle-mech drives one ball-jointed leg forward and the other trails, torso pitched ahead, arm-cannon swinging up to bear, the ground-plates cracking under the planted foot, full forward momentum frozen',
+      'Fires mid-salvo as the mech braces on splayed legs and unleashes its dorsal cannon, a trans-orange muzzle-flash bursting from the barrel, the whole frame rocked back in recoil on its ratchet-joints, spent-shell tiles ejecting',
+      'Clashes mid-melee as two mechs lock weapons between them, beam-blade against blade in a shower of trans-yellow spark round-plates, both leaning into the bind on bent knee-joints, the diagonal of the struggle filling the frame',
+      'Transforms mid-shift as panels fold and an arm swings out of the chassis, Technic-hinge joints caught half-open, trans-cyan seams flaring with the change, the mech neither vehicle nor robot for this instant',
+      'Boosts mid-launch as the mech fires its back-thrusters, a trans-flame plume blasting down, legs tucking as it leaves the ground-plates, arms swept back, the leap frozen at takeoff',
+      'Raises mid-shield as the mech plants and throws up a trans-cyan energy-shield dome on its forearm against an incoming blast, the other knee dropped to brace, deflected trans-bolts scattering off the dome',
+      'Stomps mid-impact as the titan brings a massive foot down, the ground-plates buckling in a ring of debris-tiles + cotton dust, tiny minifigs scattering below, the shockwave frozen at the moment of contact',
+      'Ejects mid-cockpit as the canopy blows and the pilot minifig rockets clear of a stricken mech on a trans-flame seat-thruster, the mech listing on a failing leg-joint behind, the bail-out frozen',
+      'Lifts mid-repair as a maintenance gantry-crane hoists a fresh armor-panel to the open chest of a mech in the hangar, crew minifigs on platforms guiding it, the power-core exposed and dark, mid-service',
+      'Swings mid-haymaker as a brawler-mech throws a clawed fist, weight pivoting onto one leg, the other heel lifting, the target-mech rocking from the connecting blow, brick debris flying from the impact-point',
+      'Salvos mid-missile-launch as the mech\'s shoulder-pods ripple-fire, trans-flame trails streaming from each tube on clear rods, the mech leaning into the launch, the volley frozen arcing toward an off-frame target',
+      'Braces mid-power-up as the mech crouches and its trans-cyan reactor-lines blaze to full, energy-piping flaring down every limb, fists clenched, the surge-before-the-charge frozen at peak glow',
+    ],
+    instructions: `Each entry is ONE mech action beat, 25-45 words. Format: prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: NO T-pose/arms-out/standing/centered-facing, NO motion-blur (frozen brick pose), NO photoreal/CGI. Dynamic weighted ball-jointed pose + cause/effect always.`,
+  },
+
+  brickbot_mech_build_technique: {
+    format: 'simple',
+    theme: `LEGO MECH MOC BUILD TECHNIQUE — AFOL-distinguishing brick-construction notes for BrickBot's mech path. Each entry 25-45 words. THIS AXIS keeps the mech reading as a BRICK MOC, not a photoreal CGI render.
+
+VARIETY MANDATE — distribute across:
+  • Exposed Technic-beam endoskeleton (visible frame under armor-gaps)
+  • Ball-joint + ratchet articulation (posed limbs, lockable joints)
+  • Bionicle CCBS shell-armor over a Technic frame
+  • SNOT layered armor-plating (overlapping smooth-tile + slope panels)
+  • Trans-cyan power-core + light-piping (energy routed in trans elements)
+  • Hydraulic-piston greebles (pneumatic + Technic-pin detail at joints)
+  • Panel-line + vent detailing (1×1 cheese-slopes, grille-tiles, exposed-pins)
+  • Posed action-pose joint-locking (weight + dynamism via friction joints)
+  • Weapon-mount integration (cannon-arms, beam-blades, missile-pods as brick builds)
+  • Cockpit reveal (open canopy showing a pilot minifig + instrument greebles)
+
+Each entry: name the technique TYPE in first 5-8 words; specify WHICH mech element; name SPECIFIC BRICK PARTS; imply the wow. NO real-construction (no 3D-print/paint). BANNED: photoreal, real-metal, CGI.`,
+    touchpoints: [
+      'Exposed Technic-beam endoskeleton — a mech limb built on a visible Technic-beam + liftarm frame with armor-panels clipped over it leaving the inner structure showing at the joints, the engineering legible as deliberate AFOL design',
+      'Ball-joint + ratchet articulation — the mech posed via friction ball-joints at hips + shoulders and ratchet-joints at knees + elbows, locked into a dynamic weighted action-stance that holds, the hallmark of a poseable hard-suit MOC',
+      'CCBS shell-armor over Technic — Bionicle/Hero-Factory CCBS shells snapped onto a Technic-bone frame to build smooth organic-curved armor over articulated joints, the modern constraction-build method',
+      'SNOT layered armor-plating — overlapping smooth-tile + wedge-slope armor panels built sideways with SNOT brackets to clad the mech in angled faceted plates with crisp panel-lines, the hard-edged mecha look',
+      'Trans-cyan power-core + light-piping — a glowing reactor built from trans-cyan + trans-blue round-elements in the chest with light-piping bar-elements routing the energy down the limbs through armor-gaps, the lit-mech signature',
+      'Hydraulic-piston greebles — pneumatic-cylinder + Technic-pin piston builds detailing the knees, elbows, and hip-actuators so the joints read as powered machinery, dense mechanical greeble',
+      'Panel-line + vent detailing — the armor broken up with 1×1 cheese-slopes, grille-tiles, exposed Technic-pin vents, and inset hatch-tiles for maximal hard-SF surface density, the convention-grade detailing',
+      'Cockpit-reveal canopy — an open trans-clear cockpit canopy in the mech\'s torso or head showing a pilot minifig at a greebled instrument-panel of 1×1 round-tiles, the human-scale anchor inside the titan',
+      'Weapon-arm integration — a cannon-arm built as a brick assembly of round-bricks + a trans-tipped barrel, or a beam-blade of a trans-bar in a hilt-build, mounted on a ball-joint wrist for posing',
+      'Reverse-joint bird-legs — a scout-mech\'s digitigrade legs built with reverse-bent ratchet-knees + clawed splay-feet for a crouched fast stance, the agile-walker engineering',
+      'Modular swappable armor — a mech built with clip-on armor modules over a core frame so loadouts visibly differ (artillery-pack vs jump-jets), the AFOL modular-mech design legible',
+      'Battle-damage build — intentional armor-gaps, a missing panel exposing the Technic-frame + a dark power-core, scorch-tile detailing + a bent limb on a loosened joint, the war-torn salvage read in brick',
+    ],
+    instructions: `Each entry is ONE mech MOC build technique, 25-45 words. Format: "TECHNIQUE NAME — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-construction (3D-print/paint), no real-metal/CGI/photoreal. LEGO bricks only — name SPECIFIC parts (Technic-beam / ball-joint / CCBS shell / SNOT plating / trans-cyan light-piping).`,
+  },
+
+  brickbot_mech_camera_framing: {
+    format: 'simple',
+    theme: `MECH CAMERA FRAMING — LEGO MOC photography angles for the mech path. Each entry 15-30 words, specific to giant-robot subject matter, emphasizing SCALE + dynamism.
+
+⚠️ Bespoke — leverage mech scenery (titan-scale / hangar-gantry / cockpit / mech-clash / battlefield) rather than generic terms. Favor low + dramatic angles; NEVER a flat centered T-pose.
+
+VARIETY MANDATE — distribute across: worm's-eye-up-the-titan, mech-vs-mech-clash-between, cockpit-canopy-reveal, hangar-gantry-side-elevation, over-the-shoulder-from-behind-the-mech, aerial-battlefield-down, scale-with-tiny-pilots-below, low-three-quarter-hero-pose, dutch-angle-action, foot-level-stomp.
+
+Each: specify camera POSITION + the scale/drama it captures; reference mech brick scenery.`,
+    touchpoints: [
+      "WORM'S-EYE-UP-THE-TITAN — camera at ground level looking steeply up the brick mech towering overhead, tiny pilot-minifigs at its feet for scale, the titan dominating against a brick sky, maximal scale-drama",
+      'MECH-VS-MECH-CLASH-BETWEEN — camera low between two clashing brick mechs, their locked weapons + leaning frames forming a dynamic diagonal X across the frame, spark-debris flying at the contact-point',
+      'COCKPIT-CANOPY-REVEAL — camera close on the open trans-clear cockpit of the mech, the pilot minifig at the greebled controls inside, the mech-torso armor framing the reveal, the human-scale moment',
+      'HANGAR-GANTRY-SIDE — camera at gantry-height shooting the mech in side-elevation as crew-minifigs service it from multiple platform-levels, tool-rigs + cables, the maintenance-bay scale',
+      'OVER-THE-SHOULDER-FROM-BEHIND — camera behind the mech at shoulder-height looking past its armored shoulder + weapon-arm at the battlefield or foe ahead, the mech\'s back filling the foreground',
+      'AERIAL-BATTLEFIELD-DOWN — camera high looking down at the mech striding across a brick battlefield among rubble + smaller units, the bird\'s-eye showing the carnage + the mech\'s dominance',
+      'LOW-THREE-QUARTER-HERO-POSE — camera low at a three-quarter angle catching the mech in a dynamic action-stance, weight + silhouette reading powerfully, the classic hard-suit hero-shot',
+      'FOOT-LEVEL-STOMP — camera at the ground beside the mech\'s descending foot as it stomps, debris-tiles + cotton-dust bursting up toward the lens, tiny figures fleeing, the impact angle',
+      'DUTCH-ANGLE-ACTION — camera tilted to a canted dutch-angle on the mech mid-action, the diagonal amplifying the chaos + motion of the cannon-fire or charge, dynamic energy',
+      'SCALE-WITH-TINY-PILOTS-BELOW — camera mid-height with the mech filling most of the frame and a cluster of tiny pilot/crew minifigs at the base, the contrast hammering the mech\'s enormity',
+    ],
+    instructions: `Each entry is ONE mech camera framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no flat centered T-pose framing; every entry references brick mech scenery + scale/drama. No photoreal/CGI vocabulary.`,
+  },
+
+  brickbot_mech_setting: {
+    format: 'simple',
+    theme: `MECH SETTINGS — the brick world around the hero mech for BrickBot's mech path. Each entry 20-40 words. Grounds the mech + proves its scale.
+
+⚠️ The SETTING only (the mech itself is a separate axis). NO mech-action. NO camera. Just: where the mech stands + what brick environment surrounds it.
+
+⚠️ EVERYTHING IS LEGO BRICK. Terrain/structures = plates + slopes + Technic-panels. BANNED: photoreal, real-metal/concrete, CGI.
+
+VARIETY: battle-damaged junkyard / maintenance hangar with gantries / war-torn cityscape / alien battlefield / launch-bay / desert combat-zone / underwater trench / volcanic foundry / arena duel-pit / snow-front / orbital-platform / ruined-factory / jungle-overgrown-wreck / canyon-ambush-site.
+
+Each entry: name the setting in first 5-8 words; describe the brick environment + scale-proving detail (tiny figures, smaller vehicles, rubble); name brick parts.`,
+    touchpoints: [
+      'MAINTENANCE HANGAR — a vast brick hangar with Technic-beam gantry-towers flanking the mech, catwalk-platforms with crew-minifigs, cable-bundles + tool-rigs, floodlight-rigs overhead, the bay dwarfed by the mech it services',
+      'WAR-TORN CITYSCAPE — a brick city block reduced to rubble around the mech, toppled facade-walls of slope-bricks, a crushed civilian-vehicle, scattered debris-tiles, smaller units sheltering, proving the mech city-block tall',
+      'BATTLE-DAMAGED JUNKYARD — a brick scrapyard of stacked wreck-hulls + salvaged mech-parts where a patchwork mech prowls, a magnet-crane build, oil-drum stacks, a tiny scavenger-minifig for scale',
+      'ALIEN BATTLEFIELD — a strange brick landscape of trans-purple crystal-spires + dark-bley terrain where the mech advances, alien drone-builds swarming low, a crashed lander, an otherworldly war-zone',
+      'LAUNCH-BAY — a brick launch-bay with the mech in a docking-cradle of Technic-arms, blast-doors, fuel-line gantries, trans-element status-lights, crew at a control-console, the pre-sortie scene',
+      'DESERT COMBAT-ZONE — a tan-plate desert with brick dunes + a ruined outpost where the mech strides, smaller scout-vehicles in its shadow, dust kicked up, a heat-hazed brick horizon',
+      'UNDERWATER TRENCH — a deep brick trench of dark-bley rock + trans-blue water-tint where a pressure-mech moves, bioluminescent trans-cyan accents, a sunken wreck, floodlight-cones cutting the gloom',
+      'VOLCANIC FOUNDRY — a brick industrial foundry with trans-orange lava-channels + molten-glow, gantry-cranes, a mech being forged or fighting amid the heat, ember-round-plates rising',
+      'ARENA DUEL-PIT — a brick arena with tiered spectator-stands of minifig-crowds ringing a battle-floor where two mechs face off, scoreboard-tiles + spotlights, the gladiatorial scale',
+      'SNOW-FRONT — a white-plate snow battlefield with the mech advancing through drifts past a frozen-over wreck, trans-light-blue ice, a cold trench-line of tiny troops, breath-fog cotton at the figures',
+      'RUINED FACTORY — a derelict brick factory interior with broken conveyor-builds + a collapsed roof letting light-shafts down onto the mech picking through, exposed girder-beams, a haunted-industrial scale',
+      'ORBITAL PLATFORM — a brick space-platform with a starfield-baseplate backdrop, docking-clamps holding the mech, trans-element deck-lighting, a curved planet-horizon below, the high-orbit staging scene',
+    ],
+    instructions: `Each entry is ONE mech setting, 20-40 words. Format: "SETTING NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no mech-action, no camera, no photoreal/real-metal/CGI vocabulary. Every element a NAMED LEGO BRICK PART + a scale-proving detail.`,
+  },
+
+  brickbot_mech_register: {
+    format: 'simple',
+    theme: `MECH HERITAGE REGISTER — the aesthetic lock for a mech diorama, named by its LEGO-heritage VISUAL SIGNATURE. Each entry 20-40 words, locking palette + mech-silhouette + armor-style.
+
+WEIGHTING — ~85% iconic LEGO mech heritage / ~15% hard-SF-coded:
+  • BIONICLE BIO-MECHANICAL — silver + gold + elemental-color, CCBS organic-curve armor, a Kanohi-masked head, clawed + bladed, mythic-bionic (~22%)
+  • HERO-FACTORY HERO-BOT — bright single-hero color-scheme, sleek CCBS armor, a glowing hero-core chest, a multi-tool arm, clean-heroic (~18%)
+  • EXO-FORCE ANIME-MECH — blue + gold + white (vs robot black + red), angular anime plating, a crested head + open cockpit + hair-piece pilot (~20%)
+  • NINJAGO ELEMENTAL-MECH — an elemental theme (fire-red / ice-blue / earth-green), a ninja-minifig pilot, a stylized themed mech (~14%)
+  • TECHNIC MECH-SUIT — raw exposed-mechanical, gunmetal + warning-yellow, visible Technic-frame + pistons, a functional-machine look (~12%)
+  • PACIFIC-RIM-SCALE-CODED (hard-SF) — gunmetal + hazard-stripe, a kaiju-scale titan, heavy industrial plating, INSPIRED-BY never named (~8%)
+  • MIL-WALKER-CODED (hard-SF) — camo-green + olive + rust, a utilitarian armored walker, mil-spec stenciled detailing, INSPIRED-BY never named (~6%)
+
+Each entry: name the register signature in first 5-8 words; PALETTE; MECH-SILHOUETTE/armor; a SIGNATURE detail. NEVER a named franchise. Always reads as LEGO brick.`,
+    touchpoints: [
+      'BIONICLE BIO-MECHANICAL SIGNATURE — silver + gold + elemental-color palette, CCBS organic-curve shell-armor over a Technic-frame, a Kanohi-style masked head, clawed hands + a bladed weapon, the mythic-bionic-warrior look',
+      'HERO-FACTORY HERO-BOT SIGNATURE — a bright single-hero color-scheme (crimson / azure / lime) palette, sleek smooth CCBS armor, a glowing trans hero-core chest, a multi-tool combat-arm, the clean-heroic-robot look',
+      'EXO-FORCE ANIME-MECH SIGNATURE — blue + gold + white palette (foe robots in black + red), angular faceted anime-plating, a sharp-crested head, an open cockpit with a spiky-hair-piece pilot + a beam-saber, the classic Exo-Force look',
+      'NINJAGO ELEMENTAL-MECH SIGNATURE — an elemental palette (fire-red + gold / ice-white + azure / earth-green + brown), a themed stylized mech with a ninja-minifig pilot + an elemental weapon, the Ninjago-titan look',
+      'TECHNIC MECH-SUIT SIGNATURE — gunmetal + warning-yellow + black palette, raw exposed-Technic-frame + visible pistons + panel-gaps, a utilitarian functional-machine silhouette, the engineering-first look',
+      'PACIFIC-RIM-SCALE SIGNATURE — gunmetal + hazard-stripe + trans-blue palette, a kaiju-scale heavy-industrial titan with massive layered plating + a reactor-chest, INSPIRED-BY giant-defender-mecha, never named, brick-built',
+      'MIL-WALKER SIGNATURE — camo-green + olive-drab + rust palette, a utilitarian armored walker with stenciled mil-markings + ammo-feeds + a sensor-mast, INSPIRED-BY military-mecha, never named, brick-built',
+      'BIONICLE ELEMENTAL-TITAN SIGNATURE — a single elemental palette (fire / ice / stone / jungle) with matching CCBS armor + an elemental weapon + glowing trans elemental-energy, a towering bionic boss-figure',
+      'HERO-FACTORY VILLAIN-MECH SIGNATURE — a dark menacing palette (black + acid-green / crimson + bronze), spiked asymmetric armor, multiple weapon-arms + a glaring single-eye head, the antagonist-bot look',
+      'EXO-FORCE GOLDEN-CITY SIGNATURE — gold + white + sky-blue palette, an ornate hero-mech with golden filigree-plating + dual cockpits, INSPIRED-BY the late Exo-Force golden range, the heroic-finale look',
+    ],
+    instructions: `Each entry is ONE mech heritage register, 20-40 words. Format: "REGISTER NAME SIGNATURE — palette + mech-silhouette + signature detail". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Weight ~85% iconic LEGO mech / ~15% hard-SF-coded. STRICT BANS: never a named franchise (Gundam/Transformers/Jaeger); never photoreal/CGI; everything reads as LEGO brick.`,
+  },
+
+  brickbot_mech_scene_props: {
+    format: 'simple',
+    theme: `MECH DIORAMA STORYTELLING PROPS — small brick-built details grounding a mech diorama + proving its scale. Each entry 12-25 words, implying a backstory. NEVER decorative-only.
+
+VARIETY: ammo + fuel-cell crate-stack / tool-rack + welding-rig / fallen enemy-mech head or limb / warning-beacon / pilot minifig at the foot (scale) / repair-drone / spent missile-rack / hazard-stripe barrier / spotlight-rig / cooling-vent stack / scattered shell-casing tiles / a crushed civilian-vehicle / a fuel-tanker / a fallen comrade-mech / a control-console with crew / a loose severed power-cable sparking.
+
+Each names SPECIFIC brick parts + a tiny story. BANNED: photoreal + CGI.`,
+    touchpoints: [
+      'A stack of ammo + fuel-cell crates — green + grey brick crates with hazard-tile stencils piled at the mech\'s foot, one cracked open showing trans-blue cell-elements, mid-rearm',
+      'A tool-rack + welding-rig — a brick gantry-rack hung with oversized wrench + torch builds and a trans-cyan welding-arc, a crew-minifig mid-service at the mech\'s knee-joint',
+      'A fallen enemy-mech head — a severed brick mech-head lying in the rubble with a dark dead eye-element, scorch-tiles around it, the trophy of a finished fight',
+      'A pilot minifig at the foot — a single tiny pilot-minifig standing at the base of the towering mech looking up, the stark scale-anchor that sells the titan\'s size',
+      'A warning-beacon — a brick post with a flashing trans-orange + trans-red beacon-light and a hazard-stripe base, marking the mech\'s active-zone on the deck',
+      'A repair-drone — a small hovering brick drone on a clear rod with a tool-arm + a sensor-eye, tending a damaged armor-panel near the mech\'s shoulder',
+      'A spent missile-rack — an emptied shoulder-pod build with open launch-tubes + a few unfired trans-tipped missile-elements remaining, smoke-wisps of cotton at the muzzles',
+      'A hazard-stripe barrier — a low brick barrier in yellow + black hazard-stripes cordoning the mech\'s bay, a clipboard-tile + a crew-minifig at the line',
+      'A crushed civilian-vehicle — a flattened brick car under a chunk of fallen rubble in the mech\'s wake, a poignant scale + collateral detail in the war-torn street',
+      'A control-console with crew — a brick console-bank of trans-element readout-tiles where two operator-minifigs direct the mech, a holo-map tile glowing between them',
+      'A cooling-vent stack — a cluster of brick exhaust-vents on the mech\'s back venting cotton-element heat-haze + a trans-orange inner glow, the machine running hot',
+      'A severed power-cable — a thick loose brick cable sparking trans-yellow round-plates where it tore free from the mech\'s hip, a hazard underfoot mid-battle',
+    ],
+    instructions: `Each entry is ONE mech brick-built prop, 12-25 words. Format: prose naming the prop + its brick parts + tiny story. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal/CGI; LEGO bricks only; each implies a story + many prove scale, never decorative-only.`,
+  },
+
+  brickbot_mech_lighting: {
+    format: 'simple',
+    theme: `MECH LIGHTING — light source + direction + color for a mech LEGO MOC photo. Each entry 15-30 words. Lights a TABLETOP BRICK DIORAMA — studio-macro shadows on plastic, evoking the mech mood.
+
+VARIETY: hangar floodlight / battle fire-glow / trans-cyan power-core underlight / dramatic rim-backlight / sparks-shower flicker / dusk warzone / spotlight reveal / cold blue night-ops / volcanic ember-glow / explosion-flash.
+
+Each names SOURCE + DIRECTION + COLOR + fall on the brick mech. NEVER photoreal-metal-reflection/CGI language.`,
+    touchpoints: [
+      'Hangar floodlight — banks of cool-white floods from high gantries raking down the brick mech in the bay, hard plastic shadows pooling under the armor-plates, the maintenance-bay clarity',
+      'Battle fire-glow — a warm trans-orange glow from off-frame fires washing one side of the mech against a smoke-grey backdrop, the other side in cool war-shadow, the combat mood',
+      'Trans-cyan power-core underlight — cool aquamarine light bleeding from the mech\'s reactor-chest + limb-piping up onto the underside of its armor-plates, the lit-from-within signature',
+      'Dramatic rim-backlight — a hard backlight haloing the mech\'s silhouette against a darker sky-baseplate, edge-lighting the armor outline, the heroic-reveal angle',
+      'Sparks-shower flicker — flickering trans-yellow spark-light from a welding-rig or battle-damage strobing across the brick mech + crew, dancing hot highlights, the working/wounded mood',
+      'Dusk warzone — low warm dusk-light through smoke + dust raking the mech across a battlefield, long plastic shadows, embers rising, the end-of-battle melancholy',
+      'Spotlight reveal — a single hard spotlight isolating the mech against near-black, the beam catching the armor-edges + power-core, the dramatic unveiling',
+      'Cold blue night-ops — a cool moonless-blue ambient with the mech\'s own trans-cyan core + sensor-lights as the only warm-ish accents, the stealth-mission mood',
+      'Volcanic ember-glow — an orange-red under-glow from lava-channels lighting the mech from below in the foundry, cotton-element heat-haze rising, the forge-of-war mood',
+      'Explosion-flash — a brief hard white-hot flash from a built explosion lighting the mech + scattering sharp shadows, the peak-of-combat freeze',
+    ],
+    instructions: `Each entry is ONE mech lighting setup, 15-30 words. Format: prose naming source + direction + color + fall on the brick mech. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal-metal-reflection/CGI language — it lights a plastic brick diorama. No real-metal vocabulary.`,
+  },
+
+  brickbot_mech_palette: {
+    format: 'simple',
+    theme: `MECH PALETTE — color combinations for a mech LEGO MOC diorama, locked to LEGO-heritage signatures. Each entry 12-25 words, naming 3-5 specific brick colors + the mood/heritage.
+
+VARIETY: gunmetal+warning-yellow+trans-cyan / Bionicle silver+gold+elemental / Hero-Factory bright-hero-single-color / Exo-Force blue+gold+white (vs robot black+red) / Ninjago elemental (fire/ice/earth) / mil-camo-green+olive+rust / construction yellow+black+grey / volcanic black+ember-orange / stealth black+gunmetal+trans-cyan / titan gunmetal+hazard-stripe.
+
+Each names ACTUAL LEGO brick colors (dark-bley, pearl-gold, trans-neon-green, etc.).`,
+    touchpoints: [
+      'Industrial-mech palette — gunmetal-grey + warning-yellow + trans-cyan + black, the hard-working battle-machine look',
+      'Bionicle palette — silver + pearl-gold + an elemental accent (crimson / azure / lime), bio-mechanical and mythic',
+      'Hero-Factory palette — a bright single-hero color (crimson / azure / orange) + silver + a trans hero-core, clean and heroic',
+      'Exo-Force palette — blue + gold + white for the hero-mech (with foe robots in black + red), the anime-mech contrast',
+      'Ninjago-fire palette — fire-red + gold + black + trans-orange, the elemental-fire mech look',
+      'Ninjago-ice palette — ice-white + medium-azure + silver + trans-light-blue, the elemental-ice mech look',
+      'Mil-walker palette — camo-green + olive-drab + rust + black, the utilitarian armored-walker look',
+      'Construction-mech palette — construction-yellow + black + grey + trans-orange, the industrial-loader look',
+      'Volcanic-foundry palette — black + dark-bley + ember-orange + trans-red, the forge-of-war mood',
+      'Stealth-ops palette — black + gunmetal + trans-cyan accents, the cold night-mission look',
+    ],
+    instructions: `Each entry is ONE mech palette, 12-25 words. Format: "NAME palette — colors + mood". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color/CGI language; tie each to a mech heritage. No real-metal vocabulary.`,
+  },
+
+  brickbot_mech_phenomenon: {
+    format: 'simple',
+    theme: `MECH PHENOMENON — a 50%-gated combat beat for a mech diorama, ALWAYS rendered IN BRICK. Each entry 20-40 words. AMPLIFIES the action as a secondary focal point, never eclipses the mech as hero.
+
+VARIETY: cannon muzzle-flash trans-orange / explosion-debris scattered-tiles+trans-flame / energy-shield trans-cyan dome / rocket-boost trans-flame plume / EMP-pulse trans-ring / sparks-shower trans-yellow round-plates / smoke-plume cotton / power-surge trans-light blaze / incoming-missile trans-flame streaks / shockwave debris-ring.
+
+Each names BRICK PARTS + visual impact. NEVER lighting-color-cast (separate axis). NEVER real-pyro/CGI. NO motion-blur (frozen built moment).`,
+    touchpoints: [
+      'CANNON MUZZLE-FLASH — a built burst of trans-orange + trans-yellow flame-elements + a trans-clear shockwave-ring at the mech\'s cannon-muzzle, spent-shell tiles ejecting, the firing-moment frozen',
+      'EXPLOSION-DEBRIS — a built explosion of scattered armor-tiles + trans-orange flame + cotton-smoke bursting from a struck point, fragments flung on clear rods, the impact frozen mid-blast',
+      'ENERGY-SHIELD DOME — a built trans-cyan + trans-clear hex-plate dome flaring up on the mech\'s forearm against incoming fire, deflected trans-bolt elements scattering off its surface',
+      'ROCKET-BOOST PLUME — a built downward plume of trans-orange + trans-yellow flame-elements + trans-clear heat-shimmer blasting from the mech\'s back-thrusters as it launches off the ground-plates',
+      'EMP-PULSE RING — a built expanding ring of trans-blue + trans-clear plates radiating from the mech, smaller enemy-drones built tumbling dead at its edge, the disabling-pulse frozen',
+      'SPARKS-SHOWER — a built shower of trans-yellow + trans-orange 1×1 round-plates spraying from a melee-clash or a torn power-cable on clear rods, the electric-chaos frozen',
+      'SMOKE-PLUME — a built column of grey + dark-bley cotton-elements + 1×1 round-plates rising from a damaged mech or a battlefield wreck, the smoldering-aftermath beat',
+      'POWER-SURGE BLAZE — the mech\'s trans-cyan + trans-blue light-piping built blazing to overload-brightness down every limb, energy-arcs of trans-bar elements crackling off the armor, the max-power freeze',
+      'INCOMING-MISSILE STREAKS — built trans-flame missile-trails on clear rods streaking toward the mech from off-frame, the mech mid-evade-twist, the dodge-or-die beat frozen',
+      'SHOCKWAVE DEBRIS-RING — a built ring of kicked-up debris-tiles + cotton-dust radiating from the mech\'s ground-stomp impact-point, tiny figures knocked back, the concussion frozen',
+    ],
+    instructions: `Each entry is ONE mech phenomenon, 20-40 words. Format: "PHENOMENON NAME — brick-parts + visual impact". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never lighting-color-cast (separate axis); never real-pyro/CGI language; ALWAYS built from named brick parts; never motion-blur (frozen built moment).`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // WESTERN PATH (2026-05-27 — ninth BrickBot axis migration)
   // WILD-WEST FRONTIER. Bespoke build_technique (clapboard + sandstone-strata
   // anti-photoreal) + frontier subject_focus. RESPECTFUL framing (no Native

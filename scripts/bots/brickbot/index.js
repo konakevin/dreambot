@@ -100,6 +100,7 @@ module.exports = {
       'landscape',
       'theme-park',
       'western',
+      'mech',
     ],
   },
 
