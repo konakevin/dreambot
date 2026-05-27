@@ -66,6 +66,1096 @@ if (!POOL) {
 // ─────────────────────────────────────────────────────────────
 
 const POOL_RECIPES = {
+  // ════════════════════════════════════════════════════════
+  // LANDSCAPE PATH (2026-05-27 — seventh BrickBot axis migration)
+  // SCENERY-LED epic natural vistas. The terrain IS the hero; minifigs are
+  // tiny scale-provers. Bespoke axes: biome_vista (hero) + terrain_build_
+  // technique (anti-photoreal star) + scale_prover (×2). NO register, NO
+  // minifig-action. Every entry names LEGO PARTS, BANS photoreal-terrain/
+  // rock/water/snow + fluid-motion verbs. Bespoke.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_landscape_biome_vista: {
+    format: 'simple',
+    theme: `LEGO ALL-BRICK NATURAL-VISTA BIOMES — the HERO SUBJECT for BrickBot's landscape path. Each entry is ONE monumental natural vista rendered entirely in brick, 30-55 words. The landscape IS the subject (minifigs are tiny scale-provers, handled by a separate axis — do NOT feature them here).
+
+⚠️ CRITICAL — describe the BIOME / TERRAIN / VISTA only. NO camera framing. NO scale-prover figures (separate axis). NO specific weather (separate axis). NO lighting. NO phenomenon. Just: what monumental brick landform fills the frame.
+
+⚠️ EVERYTHING IS LEGO BRICK. Rock = slope-bricks. Water = trans-blue plates. Snow = white plates. NEVER real-nature vocabulary. BANNED: photoreal, real rock/stone/water/snow, rugged/rocky/craggy texture, rushing, cascading, misty.
+
+VARIETY MANDATE — distribute across: alpine-peak-range / glacier-carved-valley / redwood-old-growth-grove / desert-slot-canyon / sea-cliff-coast / alpine-wildflower-meadow / plateau-mesa-badlands / braided-river-delta / savanna / fjord / volcanic-caldera / sequoia-grove / frozen-waterfall-cliff / canyon-river-bend / rolling-tundra / karst-spires / butte-field / coastal-dunes.
+
+Each entry: name the biome in first 6-10 words; describe the monumental brick LANDFORM + its multi-tier depth (foreground → mid → deep-distance ridge); name key brick parts; NEVER a figure, weather, or phenomenon.`,
+    touchpoints: [
+      'ALPINE PEAK RANGE — a towering range of light-bley + dark-bley slope-brick peaks with white-plate snow-caps, serrated ridge-lines receding tier after tier into the deep distance, a brick scree-field of round-plates spilling down the foreground flank',
+      'GLACIER-CARVED VALLEY — a deep U-valley of grey slope-brick walls with a trans-light-blue + white glacier-tongue of layered plates winding down its floor, hanging side-valleys, a moraine of dark-bley round-bricks at the snout',
+      'REDWOOD OLD-GROWTH GROVE — colossal brown round-brick + cylinder trunk-columns rising out of frame, a green plant-element canopy far overhead, a fern-element understory on a dark-tan plate floor, shafts of space between the giant trunks',
+      'DESERT SLOT-CANYON — narrow towering walls of stacked tan + orange + red plates showing every sedimentary band as a distinct plate-course, a sliver of brick-sky far above, a sandy tan-plate floor winding between the sculpted slope-brick walls',
+      'SEA-CLIFF COAST — sheer dark-grey + light-bley slope-brick cliffs plunging to trans-blue + trans-light-blue plate surf with white round-plate foam, sea-stack BURP-rock pillars offshore, a green-plate clifftop meadow along the rim',
+      'ALPINE WILDFLOWER MEADOW — a sweeping green + sand-green plate meadow studded with plant-element + round-plate wildflowers, rising to a backdrop of white-capped slope-brick peaks, a brick-pine belt at the meadow edge',
+      'PLATEAU MESA BADLANDS — flat-topped mesas + buttes of stacked red + tan + cream plates with stepped slope-brick flanks, a maze of brick washes between them, a foreground of round-plate scree and brush-element',
+      'BRAIDED RIVER DELTA — a wide tan-plate floodplain threaded by braided channels of trans-blue + trans-light-blue plates splitting around brick gravel-bars, framed by distant slope-brick foothills, an aerial-scale brick landform',
+      'FJORD — a deep trans-blue plate inlet flanked by sheer grey slope-brick walls plunging straight to the waterline, white-plate snow on the high rims, brick-pine clinging to the lower slopes, receding into deep-distance mist-plates',
+      'VOLCANIC CALDERA — a vast brick crater of dark-bley + black slope-bricks with a trans-orange + trans-red lava-element vent at the floor, hardened lava-flow plates fanning out, a rim of red-brown scree round-plates',
+      'SEQUOIA GROVE AT THE BASE — a cluster of immense rust-brown round-brick trunks with deeply textured cheese-slope bark rising past the frame-top, a green plant-element canopy glimpsed far above, dappled brick-floor below',
+      'CANYON RIVER-BEND — a great horseshoe bend of a trans-blue plate river carving around a towering stacked-plate rock-pinnacle, layered canyon walls in tan + orange receding, a high-overlook foreground of slope-brick rim-rock',
+    ],
+    instructions: `Each entry is ONE brick natural-vista biome, 30-55 words. Format: "BIOME NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no camera framing, no scale-prover figures, no weather/phenomenon, no lighting, no real-nature vocabulary (photoreal/real-rock-water-snow/rugged/craggy/rushing/cascading/misty). Every element a NAMED LEGO BRICK PART. The monumental brick landform only.`,
+  },
+
+  brickbot_landscape_terrain_build_technique: {
+    format: 'simple',
+    theme: `LEGO LANDSCAPE MOC BUILD TECHNIQUE — the AFOL-distinguishing brick-construction notes for BrickBot's landscape path, focused on making ROCK, WATER, SNOW, CLOUDS, and TERRAIN read as unmistakable BRICK. Each entry 25-45 words. THIS AXIS IS THE PRIMARY ANTI-PHOTOREAL-LANDSCAPE LEVER (epic-vista is Flux's strongest photoreal pull).
+
+VARIETY MANDATE — distribute across:
+  • SNOT rock-strata (sideways-stacked slope-bricks forming sedimentary layers / tilted strata)
+  • BURP/LURP cliff-faces (big rock-pieces blended with slope-bricks + cheese-slope texture)
+  • Stacked-plate canyon striations (graduated tan/orange/red plate-courses, each a visible band)
+  • Trans-blue water (layered trans-blue + trans-light-blue plates for rivers/lakes, white round-plate foam)
+  • Stepped trans-plate waterfall (trans-blue plates stepping down a slope-brick cliff, white round-plate spray)
+  • White-plate snow-cap (white slopes + plates + white-stud caps on peaks + ledges)
+  • Round-plate cloud-bank (white 1×1 round-plates + cotton-elements massed at a level for cloud-sea)
+  • Green-canopy carpet (plant-elements + green slope-bricks as forest seen from above/distance)
+  • Tan-slope dune ripple (tan slope-bricks + offset jumper-tiles for sand ripple)
+  • Scree / talus (scattered round-plates + cheese-slopes spilling down a flank)
+
+Each entry: name the technique TYPE in first 5-8 words; specify WHICH landform; name SPECIFIC BRICK PARTS; imply scale + visual impact. NO real-construction (no sculpt/paint/foam). BANNED: photoreal, real-rock/water/snow.`,
+    touchpoints: [
+      'SNOT rock-strata cliff — a cliff face built with sideways-stud bracket-plates turning slope-bricks to read as horizontal sedimentary strata, tan + orange + cream courses offset half-stud, the geology unmistakably brick-layered',
+      'BURP-rock blended peak — a mountain flank built from large BURP/LURP rock-pieces blended into stacked grey + light-bley slope-bricks, surface broken with 1×1 cheese-slopes for crag-texture, a snow-plate cap on top',
+      'Stacked-plate canyon striations — canyon walls built as graduated plate-courses in red, rust, tan, and cream, each sedimentary band a distinct horizontal plate-layer, the strata reading as deliberate brick courses',
+      'Trans-blue layered river — a river built from trans-blue + trans-light-blue plates layered at offset levels for current, white 1×1 round-plates dotting riffles, the trans-plates clearly reading as plastic water through a canyon floor',
+      'Stepped trans-plate waterfall — a waterfall built from trans-blue + trans-light-blue plates cascading down stepped slope-brick ledges, white 1×1 round-plate spray clustered at each lip, pooling into a trans-light-blue plate basin',
+      'White-plate snow-cap — a peak crowned with white slope-bricks + white plates + white-stud rounded caps following the summit geometry, the snow-line a crisp brick transition to grey slope-brick rock below',
+      'Round-plate cloud-sea — a level bank of white 1×1 round-plates + cotton-elements massed at mid-mountain height so the peaks emerge above a built sea of cloud, the cloud unmistakably brick + cotton',
+      'Green-canopy carpet — a distant forest built as a textured carpet of green + olive-green plant-elements and green slope-bricks blanketing the hills, individual brick-tree-tops near the foreground, never a photoreal treeline',
+      'Tan-slope dune field — desert dunes built from tan + dark-tan slope-bricks with crisp wind-edges, ripple-texture added via offset 1×2 jumper-tiles across the windward face, a sharp brick dune-crest line',
+      'Scree-and-talus flank — a slope flank built from scattered light-bley + dark-bley 1×1 round-plates + cheese-slopes spilling down from a rock-face, the loose-rock read achieved entirely with small brick elements',
+      'Tilted fault-block strata — a mountain built from slope-brick strata tilted at a dramatic angle as if uplifted, the diagonal plate-courses conveying geologic force, snow-plate caught in the upper folds',
+      'Reflection-lake build — a still mountain lake built from a smooth sheet of trans-blue + trans-light-blue tiles (tiled = mirror-still) at the valley floor, the brick peaks mirrored above the waterline',
+    ],
+    instructions: `Each entry is ONE landscape MOC build technique, 25-45 words. Format: "TECHNIQUE NAME — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-construction (sculpt/paint/foam), no real-rock/water/snow/photoreal vocabulary. LEGO bricks only — name SPECIFIC parts (slope-brick / BURP rock-piece / trans-blue plate / white round-plate / cheese-slope).`,
+  },
+
+  brickbot_landscape_scale_prover: {
+    format: 'simple',
+    theme: `SCALE-PROVERS FOR EPIC BRICK VISTAS — the TINY elements that prove the monumental scale of a brick landscape. Each entry is ONE small element, 12-25 words, ALWAYS dwarfed by the terrain, placed at a stated depth. These make the vista read as enormous.
+
+⚠️ EVERY entry is TINY against the landscape — a few studs tall, NEVER the focus, NEVER close-up, NEVER centered-large. Minifigs are standard LEGO (C-hands, printed face). Brick creatures/builds are micro.
+
+VARIETY: lone hiker minifig on a ridge / two roped climbers on a cliff face / a photographer minifig at an overlook / a single tent at the valley floor / a tiny canoe on the river / a micro brick-eagle riding a thermal / a micro deer-herd / a lone log-cabin / a switchback trail with a few figures / a parked micro-camper / a fire-lookout tower / a suspension-footbridge with a tiny figure / a flock of micro brick-birds / a mountain-goat micro-build on a ledge.
+
+Each: name the element + its TINY scale + a DEPTH placement (foreground ridge / mid-ground bench / deep-distance valley floor). Brick parts named where useful.`,
+    touchpoints: [
+      'A lone hiker minifig silhouetted on a foreground ridge-edge, backpack-element on, just a few studs tall against the vista beyond, the classic scale-anchor',
+      'Two roped climber minifigs mid-cliff on the mid-ground rock-face, tiny against the towering slope-brick wall, a thread-rope element linking them',
+      'A photographer minifig at a foreground overlook with a tripod-build, dwarfed by the canyon dropping away beyond, gazing into the deep distance',
+      'A single white tent-build at the distant valley floor, a speck of brightness proving how far down and away the valley stretches below the peaks',
+      'A tiny brick canoe with a single paddler minifig on the trans-blue river far below, a dot of color on the water threading the canyon',
+      'A micro brick-eagle on a clear rod riding a thermal mid-frame between the cliff walls, wings spread, tiny against the rock scale',
+      'A micro deer-herd of three or four small slope-brick builds grazing a distant meadow bench, barely-there specks proving the meadow vast',
+      'A lone log-cabin micro-build with a cotton-element smoke-wisp tucked at the forest edge in the mid-distance, dwarfed by the peaks above',
+      'A switchback trail of three tiny hiker minifigs strung up a foreground slope, each smaller as the trail climbs, the path conveying the height to come',
+      'A fire-lookout tower micro-build perched on a distant summit knob, a pinprick of structure against the sky, proving the summit remote and high',
+      'A suspension-footbridge build spanning a deep gorge with one tiny figure mid-crossing, the bridge a thread across an enormous brick chasm',
+      'A flock of micro brick-birds on clear rods wheeling in the deep distance over the valley, scattered dots conveying the open air and scale',
+    ],
+    instructions: `Each entry is ONE tiny scale-prover, 12-25 words. Format: prose naming the element + its tiny scale + a depth placement. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never large/centered/close-up/focus — ALWAYS dwarfed by the terrain. Minifigs standard LEGO; creatures micro brick-builds. No real-nature/photoreal vocabulary.`,
+  },
+
+  brickbot_landscape_flora_detail: {
+    format: 'simple',
+    theme: `BRICK FLORA DETAIL FOR VISTAS — the brick vegetation dressing a natural-landscape diorama. Each entry 12-25 words, naming the brick construction. Appropriate to varied biomes.
+
+VARIETY: brick-pine forest belt / plant-element wildflower carpet / redwood trunk-columns / desert cactus + brush builds / autumn-aspen grove / savanna acacia builds / tundra moss-plate + lichen / fern-element understory / palm cluster / alpine larch + scrub / mangrove-root build / saguaro field / heather-moor plates / bamboo-stalk build.
+
+Each names SPECIFIC brick parts. NEVER photoreal plants.`,
+    touchpoints: [
+      'A brick-pine forest belt — rows of brown round-brick trunks with dark-green plant-element + slope-brick boughs marching up a slope, snow-plate caught on the upper tiers',
+      'A wildflower carpet — green + sand-green plates studded densely with plant-element stems topped by bright round-plate petal-clusters in mixed colors, a packed brick meadow',
+      'Redwood trunk-columns — immense rust-brown round-brick + cylinder columns with cheese-slope bark-texture rising out of frame, spaced wide on a fern-element floor',
+      'Desert cactus + brush — green brick-built saguaro arms and barrel-cactus domes with brown brush-element clumps scattered across a tan-plate desert floor',
+      'An autumn-aspen grove — slender white-and-grey round-brick trunks topped with golden + orange leaf-element + round-plate canopies, a carpet of fallen autumn round-plates below',
+      'Savanna acacia builds — flat-topped brick acacia trees (brown trunk, wide green plant-element crown on a bar-armature) dotted across a tan-and-gold savanna plate-plain',
+      'Tundra moss-and-lichen — low green + olive + sand-green plates with tiny round-plate lichen-spots and scrub-element tufts hugging a rocky brick ground, hardy and sparse-but-detailed',
+      'A fern-element understory — dense green fern + plant-element fronds carpeting a shaded brick forest floor between trunk-columns, dappled brick-light across them',
+      'A palm cluster — brown round-brick trunks topped with arching green plant-element fronds, set on a tan-plate shore above trans-blue plate water',
+      'Alpine larch + scrub — gnarled short brick-conifers and low scrub-element clumps clinging to a high rocky slope near the snow-line, wind-bent slope-brick forms',
+      'A bamboo-stalk grove — tall slender green round-brick + bar stalks in a dense vertical grove with plant-element leaf-tufts, a misty brick-floor below',
+      'A heather-moor — rolling green + purple plate ground textured with countless tiny round-plate heather-blooms, a sweep of muted brick color over the hills',
+    ],
+    instructions: `Each entry is ONE brick flora detail, 12-25 words. Format: prose naming the flora + its brick parts. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal plants; LEGO bricks only (plant-element / round-brick trunk / leaf-element / slope-brick boughs). No real-nature vocabulary.`,
+  },
+
+  brickbot_landscape_camera_framing: {
+    format: 'simple',
+    theme: `LANDSCAPE-VISTA CAMERA FRAMING — LEGO MOC photography angles for the landscape path. Each entry 15-30 words, favoring wide/deep/vertical-scale compositions (the landscape is the hero).
+
+⚠️ Bespoke — leverage vista scenery (ridge-line / valley-floor / slot-canyon / lake-reflection / summit / aerial / redwood-base / cliff-edge) — NEVER a centered minifig portrait.
+
+VARIETY MANDATE — distribute across: sweeping high-aerial, valley-floor-looking-up-at-peaks, ridge-line-panorama, through-a-slot-canyon, reflection-in-a-still-lake, summit-overlook-vista, aerial-river-bend, worm's-eye-up-a-redwood, cliff-edge-vertigo-down, low-foreground-rock-to-deep-peaks.
+
+Each: specify camera POSITION + the scale-drama it creates; reference brick vista scenery.`,
+    touchpoints: [
+      'SWEEPING HIGH-AERIAL — camera high and back surveying the whole brick range receding tier after tier to a far hazed horizon, the scale of the land laid out in full',
+      'VALLEY-FLOOR-LOOKING-UP — camera low on the valley floor tilting up at the towering slope-brick peaks, foreground brick-meadow leading the eye up to the snow-capped summits',
+      'RIDGE-LINE PANORAMA — camera on a foreground ridge looking along the serrated brick crest as it marches into the distance, layered ranges fading behind, a tiny figure on the near ridge for scale',
+      'THROUGH-A-SLOT-CANYON — camera deep in a slot canyon framed by towering stacked-plate walls inches away, a sliver of brick-sky far above, the eye drawn down the sculpted brick passage',
+      'REFLECTION-IN-A-STILL-LAKE — camera low at a trans-blue tile lake-edge so the brick peaks mirror perfectly across the still water, near-symmetrical composition, foreground shore-rocks',
+      'SUMMIT-OVERLOOK VISTA — camera at a high summit looking out and down over everything below, a foreground rim of slope-brick rock, the world dropping away into deep brick distance',
+      'AERIAL-RIVER-BEND — camera high over a great horseshoe river-bend, the trans-blue plate river wrapping a stacked-plate rock-pinnacle, canyon walls receding, a god-like overview',
+      "WORM'S-EYE-UP-A-REDWOOD — camera at the forest floor craning straight up the immense brown round-brick trunk-columns to a distant green canopy, severe vertical scale",
+      'CLIFF-EDGE-VERTIGO-DOWN — camera at a cliff lip looking straight down the sheer slope-brick face to a trans-blue river or surf far below, dizzying depth, a foreground rim for grounding',
+      'LOW-FOREGROUND-ROCK-TO-DEEP-PEAKS — camera low behind a detailed foreground boulder-field of round-plates leading back across a valley to deep-distance snow-capped slope-brick peaks, full depth-stack',
+    ],
+    instructions: `Each entry is ONE landscape camera framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no centered-minifig framing — landscape is the hero; every entry references brick vista scenery + scale-drama. No real-nature vocabulary.`,
+  },
+
+  brickbot_landscape_atmosphere: {
+    format: 'simple',
+    theme: `BRICK ATMOSPHERE FOR VISTAS — the weather/atmospheric layer of a brick landscape, BUILT from brick + cotton elements. Each entry 15-30 words.
+
+VARIETY: crisp-clear deep-distance / low cloud-sea below the peaks / morning valley-mist / gathering storm-cloud bank / golden atmospheric-haze / light snow-flurry / rolling ground-fog (static cotton) / high thin cirrus-streaks / clearing-after-storm / heat-haze (built, subtle).
+
+Each names how the atmosphere is built (white round-plates / cotton-elements / trans-clear) + its mood. NEVER photoreal-air/mist. NO motion verbs (render static).`,
+    touchpoints: [
+      'Crisp-clear deep-distance — no cloud, a clean brick sky-baseplate, the far ranges rendered in lighter-grey slope-bricks to suggest atmospheric depth, every brick edge sharp, a high-altitude clarity',
+      'Low cloud-sea below the peaks — a level bank of white 1×1 round-plates + cotton-elements massed at mid-mountain height, the snow-capped summits emerging above the built cloud-sea like islands',
+      'Morning valley-mist — soft cotton-elements + white round-plates pooled along the valley floor between the slope-brick walls, the upper peaks clear above the built mist-layer',
+      'Gathering storm-cloud bank — a dark mass of dark-bley + grey 1×1 round-plates + cotton-elements built up on one side of the sky, a brick-shadow falling across the range below, ominous',
+      'Golden atmospheric-haze — a thin scatter of trans-clear + trans-yellow tiles across the deep distance softening the far ridges into warm layered silhouettes, the classic depth-haze in brick',
+      'Light snow-flurry — sparse white 1×1 round-plates on clear bar-rods scattered across the frame plus a few cotton-elements, a gentle built snowfall over the peaks',
+      'Rolling ground-fog — a low static layer of cotton-elements + white round-plates clinging to the forest floor + lake surface, trunk-columns rising out of the built fog',
+      'High cirrus-streaks — thin streaks of white plates + 1×1 round-plates built high across the sky-baseplate, fair-weather wisps lending the vista an airy ceiling',
+      'Clearing-after-storm — a torn cloud-bank of grey + white round-plates parting to let a shaft of clear brick-sky through over one part of the range, the drama lifting',
+      'Heat-haze shimmer — a subtle scatter of trans-clear tiles low over a desert plate-plain catching the light, a built suggestion of rising heat without any photoreal blur',
+    ],
+    instructions: `Each entry is ONE brick atmosphere, 15-30 words. Format: prose naming the atmosphere + how it's built + mood. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal-air/mist/cloud; built from white round-plates / cotton-elements / trans-clear only. No motion verbs (rolling/billowing) — render as a static built layer.`,
+  },
+
+  brickbot_landscape_lighting: {
+    format: 'simple',
+    theme: `LANDSCAPE-VISTA LIGHTING — light direction + quality for a brick landscape MOC photo. Each entry 15-30 words. Lights a TABLETOP BRICK DIORAMA — studio-macro shadows on plastic terrain, evoking the gallery-vista mood.
+
+VARIETY: low raking side-light (long terrain shadows) / backlit rim-light on ridges / high-noon top-light / god-rays through a cloud-gap / warm low-sun gild on peaks / cool shadowed-valley with lit summits / alpenglow rose on the snow-caps / overcast soft-even / dawn first-light catching the highest peak / dramatic single-shaft spotlight.
+
+Each names SOURCE + DIRECTION + how it rakes the brick terrain. NEVER real-sun/photoreal-atmosphere claims.`,
+    touchpoints: [
+      'Low raking side-light from one edge, skimming hard across the slope-brick terrain so every ridge and strata-course throws a long plastic shadow, maximal three-dimensional relief on the bricks',
+      'Backlit rim-light from behind the range, the ridge-lines glowing bright against a darker sky-baseplate while the near faces fall into cool shadow, dramatic silhouette depth',
+      'High-noon top-light, a strong overhead key making the snow-plate caps and trans-blue water pop in saturated contrast, short crisp shadows, the clear-day vista',
+      'God-rays through a cloud-gap — a built shaft of warm light (trans-yellow tiles + a lit zone) breaking through the round-plate cloud-bank to spotlight one part of the valley, the rest cooler',
+      'Warm low-sun gild, late-day amber light raking the peaks and gilding the upper slope-brick faces while the valley floor sinks into cool blue shadow, golden-hour grandeur',
+      'Cool shadowed-valley with lit summits — the deep valley in cool blue-grey shadow while only the highest snow-plate summits catch warm light, strong tonal separation',
+      'Alpenglow rose on the snow-caps — a soft pink-warm light on the white-plate summits against a deepening blue-hour sky, the quiet majestic moment',
+      'Overcast soft-even light, a gentle shadowless wash revealing every brick detail of the terrain evenly under a pale sky, the moody contemplative vista',
+      'Dawn first-light catching the highest peak — a single warm-lit summit against an otherwise blue pre-dawn range, the day arriving at the top first',
+      'Dramatic single-shaft spotlight — one zone of the vista lit by a hard warm beam (as if sun through a notch) while the surrounding terrain stays moody and cool, theatrical depth',
+    ],
+    instructions: `Each entry is ONE landscape lighting setup, 15-30 words. Format: prose naming source + direction + how it rakes the bricks. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-sun/photoreal-atmosphere language — it lights a plastic brick diorama. No real-nature vocabulary.`,
+  },
+
+  brickbot_landscape_palette: {
+    format: 'simple',
+    theme: `LANDSCAPE PALETTE — time-of-day + biome color combinations for a brick landscape vista, in LEGO brick colors. Each entry 12-25 words, naming 3-5 specific brick colors + the mood/biome.
+
+VARIETY: golden-hour amber+tan / blue-hour twilight+slate / high-noon saturated-green+azure / dawn-pink+lavender mist / sunset magenta+ember / overcast cool-grey+sage / desert rust+ochre+cream / alpine white+grey+pine / autumn gold+rust+olive / volcanic black+ember-orange / tropical jade+turquoise+sand / tundra sage+tan+slate.
+
+Each names ACTUAL LEGO brick colors (dark-tan, sand-green, dark-bley, trans-blue, etc.).`,
+    touchpoints: [
+      'Golden-hour palette — warm amber + tan + soft-gold + long-shadow-blue, the late-day glow gilding brick peaks',
+      'Blue-hour palette — deep twilight-blue + slate-grey + a touch of warm window-amber, the quiet dusk over the range',
+      'High-noon palette — saturated green + azure-sky + bright snow-white + grey rock, the crisp clear-day vista',
+      'Dawn-mist palette — soft pink + lavender + pale-grey + cool-white, the tender first-light over a misted valley',
+      'Sunset palette — magenta + ember-orange + violet + dark silhouette-grey, the dramatic dusk sky behind the peaks',
+      'Overcast palette — cool grey + sage-green + muted-tan + soft-white, the moody contemplative landscape',
+      'Desert palette — rust-red + ochre + cream + tan + a strip of azure sky, the sun-baked canyon-country',
+      'Alpine palette — snow-white + light-bley + dark-bley + pine-green, the high cold mountain look',
+      'Autumn palette — gold + rust + olive-green + warm-brown, the seasonal forested hills ablaze in brick color',
+      'Volcanic palette — black + dark-bley + ember-orange + ash-grey, the stark fiery caldera',
+      'Tropical-coast palette — jade-green + turquoise + ivory-sand + slope-grey cliff, the lush warm shoreline',
+      'Tundra palette — sage + tan + slate-blue + muted-white, the vast cold open expanse',
+    ],
+    instructions: `Each entry is ONE landscape palette, 12-25 words. Format: "NAME palette — colors + mood/biome". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color language. No real-nature vocabulary.`,
+  },
+
+  brickbot_landscape_natural_phenomenon: {
+    format: 'simple',
+    theme: `NATURAL PHENOMENON — a 50%-gated dramatic natural EVENT for a brick landscape, ALWAYS rendered IN BRICK. Each entry 20-40 words. AMPLIFIES the vista as a secondary focal point; the terrain stays the hero.
+
+VARIETY: waterfall-mist cloud / trans-arc rainbow / lightning-strike trans-bolt / built avalanche-cloud down a face / river-rapids white-foam / geyser-plume / aurora over the range / volcanic trans-orange lava-glow + ash / migrating brick-bird flock / rockslide / shaft of god-rays / breaking storm-wave on a sea-cliff / wildfire-glow ridge (distant) / shooting-star streak.
+
+Each names BRICK PARTS + visual impact. NEVER lighting-color-cast (separate axis). NEVER real-nature/photoreal. NO fluid-motion verbs (render as static built moment).`,
+    touchpoints: [
+      'WATERFALL-MIST CLOUD — a billow of white 1×1 round-plates + cotton-elements built at the foot of a stepped trans-blue waterfall where it strikes the basin, a built spray-cloud rising against the cliff',
+      'TRANS-ARC RAINBOW — a built arc of stacked trans-red/orange/yellow/green/blue/purple plates curving over the valley after rain, a deliberate brick rainbow spanning the vista',
+      'LIGHTNING-STRIKE — a jagged trans-clear + trans-blue bolt-element built striking from a dark round-plate storm-cloud to a far ridge, a single dramatic frozen brick flash',
+      'AVALANCHE-CLOUD — a built tumbling cloud of white slopes + round-plates + cotton-elements cascading down a snow-face below the cornice, tiny figures fleeing, the dramatic-but-distant beat',
+      'RIVER-RAPIDS FOAM — a stretch of the trans-blue river built with dense white 1×1 round-plate + cheese-slope foam over submerged brick boulders, a frozen whitewater moment',
+      'GEYSER-PLUME — a built column of trans-clear + white 1×1 round-plates erupting from a brick vent on a geothermal flat, cotton-element steam at the top, mineral-tan terrace plates around it',
+      'AURORA OVER THE RANGE — vertical built drapes of trans-green + trans-cyan + trans-purple plates hanging from the sky-baseplate over a dark snow-capped range, a shimmering brick light-curtain',
+      'VOLCANIC LAVA-GLOW — trans-orange + trans-red lava-elements glowing in a caldera vent and snaking down in hardened flow-plates, a cotton-element + dark-round-plate ash-plume rising above',
+      'MIGRATING BRICK-FLOCK — a long skein of micro brick-birds on clear rods strung across the deep sky over the vista, a V-formation conveying open scale and season',
+      'GOD-RAY SHAFTS — built shafts of trans-clear + trans-yellow tiles breaking through a round-plate cloud-gap down onto one lit part of the valley floor, the rest in cool shadow',
+    ],
+    instructions: `Each entry is ONE natural phenomenon, 20-40 words. Format: "PHENOMENON NAME — brick-parts + visual impact". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never lighting-color-cast (separate axis); never real-nature/photoreal language; ALWAYS built from named brick parts; never fluid-motion verbs (render as a static built moment).`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // AQUATIC PATH (2026-05-27 — fifth BrickBot axis migration)
+  // BEACH (surface) + UNDERWATER (submerged) duality. Bespoke axes:
+  // water_build_technique (anti-photoreal-water lever) + marine_life
+  // (creature-fill). Every entry names LEGO PARTS, BANS photoreal-water/
+  // sand/coral + fluid-motion verbs (rippling/flowing/crashing/lapping).
+  // Bespoke — NOT cloned from forest/fantasy/space.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_aquatic_scene_type: {
+    format: 'simple',
+    theme: `LEGO MOC AQUATIC DIORAMA SCENE STAGES — narrative-stage descriptions for BrickBot's aquatic axis system. Each entry is ONE stage, clearly SURFACE (beach/coast/boardwalk/tide-pool/surf) or SUBMERGED (reef/kelp/trench/shipwreck/grotto). Each entry 30-55 words.
+
+⚠️ CRITICAL — STAGE / SETTING / NARRATIVE CATEGORY only. NO camera framing. NO minifig action verbs. NO water-build-technique vocab. NO phenomena. NO lighting. NO marine-creature lists. Just: where are we (and is it SURFACE or SUBMERGED), what kind of moment.
+
+⚠️ EVERYTHING IS LEGO BRICK. Water = trans-blue plates. Coral = brick. Sand = tan plates. NEVER real-ocean vocabulary. BANNED: photoreal, real water/sand/coral/ocean, rippling, flowing, crashing, lapping, crystal-clear.
+
+VARIETY MANDATE (~50% SUBMERGED / ~50% SURFACE), distribute across:
+  SUBMERGED — coral-reef plaza / kelp-forest canyon / shipwreck reef / deep-sea trench / mermaid grotto / sunken temple / undersea research dome / blue-hole descent / anemone garden / sea-cave
+  SURFACE — tropical beach bonfire / surf shack & break / lighthouse cliff / boardwalk & pier / tide-pool shelf / sandcastle contest / dolphin cove / marina dock / snorkel lagoon / coastal market
+
+Each entry: LEAD with [SURFACE] or [SUBMERGED] tag; name the category in first 6-10 words; establish the brick-built STAGE; suggest the TENSION/charm; NEVER name a minifig action or a phenomenon.`,
+    touchpoints: [
+      '[SUBMERGED] CORAL-REEF PLAZA — a vibrant brick-built reef shelf rising across the baseplate, branching modified-plant + horn-element coral in pink/orange/purple forming arches and canyons, a trans-blue water-column tinting the whole frame, the teeming-reef stage',
+      '[SUBMERGED] KELP-FOREST CANYON — towering green plant-stem kelp columns rising on bar armatures from a tan seafloor, a narrow swim-canyon between them, drifting trans-clear bubble-strings, dim trans-blue deep-water tint, the cathedral-kelp stage',
+      '[SUBMERGED] SHIPWRECK REEF — a brick-built sunken vessel canted on the seafloor, hull-plating broken open to reveal cargo, coral reclaiming the rails, a trans-blue water-column overhead, the treasure-hunt-tension stage',
+      '[SUBMERGED] DEEP-SEA TRENCH — a steep brick rift descending into trans-dark-blue depths, bioluminescent trans-cyan accents on the walls, a research-light cone probing down, the eerie-abyss stage',
+      '[SUBMERGED] SUNKEN TEMPLE — an ancient brick-built colonnade half-buried in tan seafloor plates, gold-element treasure glinting between toppled pillars, a trans-blue water-column above, the lost-civilization stage',
+      '[SURFACE] TROPICAL BEACH BONFIRE — a tan-plate cove at dusk with a brick-built driftwood fire (trans-orange flame elements), log-bench builds, palm-tree builds, trans-blue plate shallows lapping the shore-edge held as a static plate-line, the cozy-gathering stage',
+      '[SURFACE] SURF SHACK & BREAK — a brick-built beach shack with a surfboard-tile rack and smoothie-bar window, a SNOT-curled trans-light-blue wave-curl with white-stud foam offshore, tan-plate sand, the laid-back-surf stage',
+      '[SURFACE] LIGHTHOUSE CLIFF — a tall brick-built spiral lighthouse on a grey slope-brick headland, trans-light-blue wave-curls breaking on the rocks below held as built foam, gull-builds wheeling above, the windswept-coast stage',
+      '[SURFACE] TIDE-POOL SHELF — a low rocky shelf of grey slope-bricks pocked with small trans-blue plate pools, brick starfish + anemone + hermit-crab in the pools, tan-plate sand beyond, the discovery-crouch stage',
+      '[SURFACE] BOARDWALK & PIER — a brick-plank pier on stilt-builds reaching over trans-blue shallows, vendor-kiosk builds + railing along the deck, a moored brick-rowboat below, the seaside-promenade stage',
+      '[SUBMERGED] MERMAID GROTTO — a hidden brick sea-cave with a trans-blue pool, pearl + shell + treasure builds on ledges, glowing trans-cyan accents, a brick-built mermaid tail-flick frozen mid-frame, the secret-haven stage',
+      '[SURFACE] DOLPHIN COVE — a sheltered turquoise-plate cove with a brick-built dolphin arcing above the surface held on a clear rod, a low pier and beachgoer minifigs, palm builds framing, the joyful-encounter stage',
+    ],
+    instructions: `Each entry is ONE aquatic stage, 30-55 words, LED BY a [SURFACE] or [SUBMERGED] tag. Format: "[TAG] STAGE NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. ~50/50 surface/submerged. STRICT BANS: no camera framing, no minifig action verbs, no phenomenon names, no lighting, no real-ocean vocabulary (photoreal/real-water/rippling/flowing/crashing/lapping/crystal-clear). Every element a NAMED LEGO BRICK PART. Stage + charm only.`,
+  },
+
+  brickbot_aquatic_minifig_action: {
+    format: 'simple',
+    theme: `LEGO MINIFIG ACTION BEATS — verb-led story moments for BrickBot's aquatic path. Each entry is a freeze-frame of diver/snorkeler/surfer/beachgoer/Aquanaut/mermaid minifigs IN MID-ACTION, NOT posing. Each entry 25-45 words.
+
+⚠️ STORY BEAT MANDATE — every entry STARTS WITH AN ACTIVE VERB with CAUSE + EFFECT in-frame. Aquatic verbs: mid-dive-descent, mid-snorkel-point, mid-surf-carve, mid-net-haul, mid-bonfire-light, mid-treasure-pry, mid-creature-release, mid-sandcastle-pat, mid-tide-pool-crouch, mid-airlock-flood, mid-photo-snap, mid-kelp-part.
+
+⚠️ HARD BANS: NEVER "minifigs standing/posing", NEVER "watching/looking at/gazing", NEVER passive states. Minifigs are LEGO (C-hands, printed face; scuba-helmet/flippers/wetsuit-print/Aquanaut-airtank/mermaid-tail-build). Creatures brick-built, never photoreal. BANNED: photoreal, real-water, rippling/flowing/crashing.
+
+✓ Body-position variety: mid-dive/descent (~20%), mid-reach/pry/release (~20%), multi-figure interaction (buddy-team, rescue, hand-off) (~25%), mid-surf/swim/kick (~15%), mid-crouch/build on the sand (~10%), mid-pilot/airlock in a sub (~10%).
+
+Each entry: start with an active verb; name 1-3 minifigs/creatures with a brief identifier; the SHARED OBJECT/EVENT (treasure-chest / dive-tether / net / surfboard / sandcastle / released-turtle / airlock-wheel); imply before/after; PLASTIC SCALE.`,
+    touchpoints: [
+      'Mid-dive-descent of a yellow-black Aquanaut minifig kicking down a trans-blue water-column toward a brick reef, airtank-element on the back, bubble-string trailing from the helmet, a buddy diver above mid-point toward the same target',
+      'Mid-treasure-pry as two divers lever open a brick treasure-chest wedged in shipwreck timbers, gold round-plates spilling out, one minifig braced with a crowbar-element, the other C-hands cupped to catch the coins mid-fall',
+      'Mid-creature-release of a brick-built sea-turtle by a Friends-beach minifig kneeling at the trans-blue shallows, both C-hands under the turtle as it glides off the plate-edge, a second minifig mid-clap behind',
+      'Mid-surf-carve of a wetsuit minifig crouched low on a surfboard-tile riding a SNOT-curled trans-light-blue wave-curl, spray of white round-plates kicking up, a spectator on the beach mid-cheer with arms up',
+      'Mid-bonfire-light as a beachgoer minifig touches a torch-element to a brick driftwood pile, trans-orange flame elements catching, two friends on log-benches mid-lean-in, a marshmallow on a stick-element over the flames',
+      'Mid-net-haul of a research minifig pulling a brick-built collection-net up from the reef, a captured pufferfish-build inside, a second scientist at a sample-rack mid-reach to receive it, clipboard-tile on the deck',
+      'Mid-airlock-flood inside a brick submarine moon-pool bay, a Deep-Sea diver minifig mid-step down into the trans-blue plate pool, a crewmate at the wheel-element sealing the inner hatch, gauge-tiles on the wall',
+      'Mid-snorkel-point of a Heartlake minifig at the surface pointing C-hand down toward a brick clownfish-school, mask-and-snorkel printed, a buddy beside them mid-turn to follow the point, palm builds on the shore behind',
+      'Mid-sandcastle-pat of two minifigs shaping a brick-built sandcastle on the tan-plate beach, one packing a bucket-mold, the other placing a tiny flag-element on the topmost turret, a beach-ball nearby',
+      "Mid-photo-snap of a diver minifig aiming a brick underwater-camera at a brick manta-ray gliding overhead on a clear rod, the manta's wing filling the upper frame, a buddy diver finning into the shot below",
+      'Mid-kelp-part as a diver pushes aside green plant-stem kelp to reveal a hidden brick grotto-mouth beyond, C-hand gripping a stalk, a second diver behind mid-swim into the gap, bubble-strings rising',
+      'Mid-tide-pool-crouch of a child-scaled minifig (or short-leg minifig) hunched over a trans-blue tide-pool lifting a brick starfish, a bucket-build beside them, a gull-build landing on the rocks nearby mid-flare',
+    ],
+    instructions: `Each entry is ONE aquatic minifig action beat, 25-45 words. Format: prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: NO standing/posing/watching/looking/gazing, NO passive. No real-water vocabulary (photoreal/rippling/flowing/crashing). Creatures brick-built. Story beat + verb + cause/effect always.`,
+  },
+
+  brickbot_aquatic_water_build_technique: {
+    format: 'simple',
+    theme: `LEGO AQUATIC MOC BUILD TECHNIQUE — the AFOL-distinguishing brick-construction notes for BrickBot's aquatic path, focused on the path's signature challenge: making WATER, WAVES, CORAL, KELP, SAND, and BUBBLES read as unmistakable BRICK. Each entry is ONE specific technique, 25-45 words. THIS AXIS IS THE PRIMARY ANTI-PHOTOREAL-WATER LEVER.
+
+VARIETY MANDATE — distribute across:
+  • Trans-blue water-column construction (layered trans-blue + trans-light-blue + trans-clear plates tinting a submerged scene)
+  • SNOT wave-curl (sideways-built trans-light-blue slope-curl with white 1×1 round-plate foam crest)
+  • Bubble-strings (trans-clear + white 1×1 round-plates threaded on clear bar-rods, rising)
+  • Brick coral (modified-plant elements + horn/tooth pieces + 1×4 fence + bright slopes in pink/orange/purple)
+  • Kelp / seagrass (stacked green + olive plant-stem elements on hidden bar armatures)
+  • Sand / seafloor (tan + dark-tan plates + slopes, ripple-texture from offset jumper-tiles)
+  • Caustic-light shimmer (scattered trans-clear + trans-light-blue tiles catching studio light)
+  • Brick marine-creature construction (slope-brick bodies, plate fins, printed-eye tiles, modified-element tails)
+  • Submarine / dome SNOT curvature (trans-clear viewport domes, hull-plate cladding)
+  • Shipwreck weathering (offset broken hull-plating, coral-overgrowth via modified-plant clips)
+
+Each entry: name the technique TYPE in first 5-8 words; specify WHICH aquatic element; name the SPECIFIC BRICK PARTS; imply visual impact. NO real-construction language (no resin/paint/glue/real-water). BANNED: photoreal, real-water/sand/coral.`,
+    touchpoints: [
+      'Layered trans-blue water-column — a submerged scene tinted by a back-wall and overhead canopy of layered trans-blue + trans-light-blue + trans-clear plates at staggered depths, so every brick element reads as seen THROUGH water, the unmistakable all-brick undersea signal',
+      'SNOT wave-curl with foam crest — a breaking wave built sideways with SNOT bracket-plates curling a trans-light-blue slope-stack into a tube, the lip crested with white 1×1 round-plates and white cheese-slopes for foam, frozen mid-break',
+      'Clear-rod bubble-strings — rising bubble-trails built from trans-clear + white 1×1 round-plates threaded on thin clear bar-rods at varied heights, anchored to a diver-helmet or the seafloor, the telltale brick-bubble detail',
+      'Modified-plant coral garden — a reef built from green/pink/orange modified-plant elements, horn + tooth pieces, 1×4 fence-elements, and bright cheese-slope polyps clustered into branching arches, maximal color + texture density',
+      'Plant-stem kelp columns — towering kelp built from stacked green + olive plant-stem and seaweed-elements on hidden Technic-bar armatures, rising in vertical columns with a slight taper, framing a swim-canyon',
+      'Tan ripple-texture seafloor — a seafloor built from tan + dark-tan plates with ripple-texture created by offset 1×2 jumper-plates and scattered 1×1 round-plates as pebbles + shell-debris, dune-slopes rising at the edges',
+      'Trans-clear caustic shimmer — dappled underwater light suggested by scattered trans-clear + trans-light-blue tiles laid flat across the seafloor + reef tops to catch the studio key-light as bright glints, a built caustic effect',
+      'Brick reef-fish school — a fish school built from dozens of small slope + wedge pieces in matched bright colors mounted on clear rods at a uniform drift-angle, printed-eye tiles on the leaders, reading instantly as a brick shoal',
+      'Trans-clear submarine viewport dome — a research-sub built with a SNOT-curved hull and a large trans-clear 4×4 dome viewport revealing a brick interior + pilot minifig, hull cladding in white + azure tile with lime trim',
+      'Coral-overgrown shipwreck — a sunken hull built with deliberately offset + broken hull-plating, modified-plant coral clipped along the rails and through hull-breaches, barnacle-texture from inverted 1×1 round-plates, the reclaimed-by-the-sea read',
+      'Trans-blue stepped shallows — a beach waterline built as stepped trans-blue + trans-light-blue plates descending from the tan sand, white round-plate foam along the static plate-edge, reading as clear tropical shallows without any photoreal water',
+      'Brick sea-turtle construction — a sea-turtle built from a domed green slope-brick shell with hexagonal tile-pattern, plate flippers angled mid-stroke, a printed-eye head on a short neck-build, mounted on a clear rod mid-glide',
+    ],
+    instructions: `Each entry is ONE aquatic MOC build technique, 25-45 words. Format: "TECHNIQUE NAME — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-construction (resin/paint/glue), no real-water/sand/coral/photoreal vocabulary. LEGO bricks only — name SPECIFIC parts (trans-blue plate / SNOT slope-curl / clear bar-rod / modified-plant element / plant-stem).`,
+  },
+
+  brickbot_aquatic_camera_framing: {
+    format: 'simple',
+    theme: `AQUATIC-SPECIFIC CAMERA FRAMING — LEGO MOC photography angles for the aquatic path. Each entry is ONE camera position + framing rule specific to beach/underwater diorama subject matter. Each entry 15-30 words.
+
+⚠️ Bespoke — leverage aquatic scenery (waterline / reef-wall / kelp / seafloor / surf / lighthouse-cliff / tide-pool / submarine-porthole) rather than generic terms.
+
+VARIETY MANDATE — distribute across: waterline-split (half above/half below), underwater-looking-up at the bright surface, reef-wall tracking, through-the-kelp framing, beach-low-tide wide, lighthouse-cliff aerial, tide-pool macro, submarine-porthole round, dive-descent vertical down-shot, surf-break side-on, boardwalk-pier receding, over-shoulder at a bonfire.
+
+Each entry: specify camera POSITION (height/location/orientation); the framing's PURPOSE (what it dramatizes); reference aquatic brick scenery.`,
+    touchpoints: [
+      'WATERLINE-SPLIT — camera half-submerged at the trans-blue waterline so the top frame shows the bright beach/sky and the bottom frame shows the submerged reef + divers, the bisecting plate-edge as the horizon',
+      'UNDERWATER-LOOKING-UP — camera low on the brick seafloor angled up toward the bright trans-blue surface, divers + marine-life silhouetted against the light above, bubble-strings rising past the lens',
+      'REEF-WALL-TRACKING — camera running parallel to a brick reef-wall, coral filling the near frame in sharp detail and receding along the wall into the trans-blue distance, a diver finning along it',
+      'THROUGH-THE-KELP — camera framed by foreground green plant-stem kelp columns, the scene revealed in the swim-gap between them, layered depth from near kelp to deep water',
+      'BEACH-LOW-TIDE WIDE — camera low and wide across the tan-plate beach at the waterline, an ensemble of beachgoer minifigs at varied positions, palm builds + surf-shack framing the sides',
+      'LIGHTHOUSE-CLIFF AERIAL — camera high and back looking down at the brick lighthouse on its headland, trans-light-blue wave-curls breaking on the rocks below, the coastline receding into haze',
+      'TIDE-POOL MACRO — camera inches above a trans-blue tide-pool, brick starfish + anemone + hermit-crab tack-sharp in the foreground, a crouching minifig softening behind, the tiny-world intimate angle',
+      'SUBMARINE-PORTHOLE — camera framed by a round trans-clear sub viewport, the reef + marine life seen through the porthole glass, brick interior instrument-detail at the frame edge',
+      'DIVE-DESCENT VERTICAL — camera looking straight down a trans-blue water-column at a descending diver far below, bubble-strings + a reef-shelf at the bottom of the shaft, severe vertical perspective',
+      'SURF-BREAK SIDE-ON — camera at the beach shooting a SNOT-curled wave-curl in side-profile, a surfer minifig in the tube read in clean silhouette, white round-plate foam spraying',
+      'OVER-SHOULDER AT THE BONFIRE — camera just behind a seated beachgoer looking past their shoulder at the brick driftwood fire and friends around it, trans-orange flame as the focal glow, dusk beyond',
+      'BOARDWALK-PIER RECEDING — camera low at the start of a brick-plank pier looking down its length as it recedes over the trans-blue shallows, vendor-kiosks + railing + figures lining the deck',
+    ],
+    instructions: `Each entry is ONE aquatic-specific camera framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no generic camera terms without aquatic anchoring — every entry references brick aquatic scenery (waterline/reef/kelp/seafloor/surf/lighthouse/tide-pool/sub). No real-water vocabulary.`,
+  },
+
+  brickbot_aquatic_subject_focus: {
+    format: 'simple',
+    theme: `AQUATIC SUBJECT-FOCUS / SILHOUETTE ANCHOR — the dominant subject class for an aquatic diorama. Each entry is ONE of four kinds: brick STRUCTURE, CREATURE-MOUNT, NO-VEHICLE INTERIOR, or NO-VEHICLE LANDSCAPE. Each entry 20-40 words. LEAD with the TYPE label in parens.
+
+DISTRIBUTION: ~40% STRUCTURE / ~20% CREATURE-MOUNT / ~15% NO-VEHICLE INTERIOR / ~25% NO-VEHICLE LANDSCAPE.
+
+Every entry names brick parts + bans photoreal/real-water vocabulary. Creatures are brick-built, never photoreal.`,
+    touchpoints: [
+      'STRUCTURE — a tall brick-built spiral lighthouse on a grey slope-brick headland, trans-yellow lamp-room glowing at the top, a keeper\'s-cottage build at the base, fills 50%+ of frame as the dominant subject',
+      'STRUCTURE — a brick research submarine with a SNOT-curved white-and-azure hull, a large trans-clear dome viewport showing a pilot minifig, lime-trim thruster-builds, the dominant foreground silhouette',
+      'STRUCTURE — an ancient Atlantis-style brick gate of gold-trimmed pillars and a trans-blue energy-portal, half-buried in tan seafloor, treasure-glint between the columns, the dominant submerged build',
+      'STRUCTURE — a brick surf-shack on stilt-builds at the beach edge, surfboard-tile rack, smoothie-bar window, palm builds beside it, the dominant cheerful coastal subject',
+      'STRUCTURE — a brick-plank pier reaching over trans-blue shallows on stilt-builds, vendor-kiosks + railing + a moored brick-rowboat, the dominant promenade subject',
+      'CREATURE-MOUNT — a brick-built sea-turtle with a hexagon-tiled domed shell and plate flippers mid-stroke, an Aquanaut minifig riding in a clip-saddle on the shell, the dominant gliding subject on a clear rod',
+      'CREATURE-MOUNT — a brick-built manta-ray with broad plate-wings angled mid-glide and a printed-eye head, a diver minifig holding the leading edge, the dominant winged silhouette overhead',
+      'CREATURE-MOUNT — a brick-built dolphin arcing on a clear rod with a Heartlake minifig riding its back, white-belly + grey-slope body, mid-leap above the trans-blue surface, the joyful dominant subject',
+      'CREATURE-MOUNT — a brick-built giant seahorse standing vertical with a curled tail-build and crest-plates, a mermaid minifig holding its mane, a whimsical slow-mount as the dominant subject',
+      'NO-VEHICLE INTERIOR — the brick interior of a research submarine cabin, instrument-tile consoles, a periscope-build, trans-clear viewport showing the reef, a pilot minifig at the controls; interior is the stage, the minifig the subject',
+      'NO-VEHICLE INTERIOR — a brick lighthouse lamp-room interior, the great trans-clear lens-build at center, gear-element mechanism, a round window on the dark sea, the keeper minifig winding the works',
+      'NO-VEHICLE LANDSCAPE — an open brick coral-reef shelf teeming with modified-plant coral arches and swim-canyons, a trans-blue water-column above, multi-tier depth from foreground polyps to deep reef-wall; lush submerged setting',
+      'NO-VEHICLE LANDSCAPE — a tan-plate beach cove at the waterline, trans-blue stepped shallows, palm builds + dune-slopes, a SNOT wave-curl offshore, multi-tier from foreground sand to deep-distance headland; the sunny setting',
+    ],
+    instructions: `Each entry is ONE aquatic subject-focus, 20-40 words, LED BY its TYPE label — (STRUCTURE) / (CREATURE-MOUNT) / (NO-VEHICLE INTERIOR) / (NO-VEHICLE LANDSCAPE). Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Distribution ~40/20/15/25. Every entry names brick parts; creatures brick-built. BANNED: photoreal/real-water/sand/coral + fluid-motion verbs.`,
+  },
+
+  brickbot_aquatic_register: {
+    format: 'simple',
+    theme: `AQUATIC HERITAGE REGISTER — the aesthetic + faction lock for an aquatic diorama, named by its LEGO marine-heritage VISUAL SIGNATURE. Each entry is ONE register locking palette + minifig gear + build motif. Each entry 20-40 words. A strong LEGO-theme signature pins the whole frame to "brick."
+
+WEIGHTING — ~85% iconic LEGO marine heritage / ~15% retro:
+  • ATLANTIS — gold + teal + treasure-amber, deep-sea treasure-quest divers with trident + key accessories, ancient sunken-gate + monster-guardian builds (~18%)
+  • AQUAZONE AQUANAUTS — yellow + black + trans-neon-green, classic 90s yellow-black scuba divers with airtank-elements, retro modular sub + sea-lab builds (~18%)
+  • AQUASHARKS / HYDRONAUTS — grey + orange (Aquasharks villains) or teal + black (Hydronauts), faction-rivalry sub builds (~12%)
+  • DEEP-SEA EXPLORERS — white + azure + lime, modern City research divers + ROVs + dome-labs, scientific gear (~15%)
+  • FRIENDS-HEARTLAKE BEACH — pastel turquoise + coral + sand, friendly beachgoer mini-dolls, dolphin-rescue + beach-house + juice-bar builds (~13%)
+  • CREATOR NATURAL-BEACH — natural turquoise + ivory-sand + jade-palm, realistic lighthouse + beach-house + lagoon builds (~9%)
+  • JULES-VERNE NAUTILUS (retro) — brass + bottle-green + porthole-rivets, Victorian-submarine + organ-room + dive-suit builds, strictly in brick (~8%)
+  • COUSTEAU CALYPSO (retro) — vintage red-cap + steel-blue + canary research-vessel, classic aqualung divers + film-camera builds (~7%)
+
+Each entry: name the register signature in first 5-8 words; PALETTE; MINIFIG/gear look; BUILD MOTIF. NEVER name a specific movie/set-number. Always reads as LEGO.`,
+    touchpoints: [
+      'ATLANTIS TREASURE-QUEST SIGNATURE — gold + teal + treasure-amber palette, deep-sea diver minifigs with trident + treasure-key accessories and gold-trim helmets, ancient sunken-gate + temple + monster-guardian builds with gold-element relics',
+      'AQUAZONE AQUANAUTS SIGNATURE — yellow + black + trans-neon-green palette, classic 90s yellow-black scuba minifigs with airtank-elements + clear helmets, retro modular submarine + undersea sea-lab builds with neon-green crystal-element power',
+      'AQUASHARKS RIVALRY SIGNATURE — grey + shark-orange palette, marauder-diver minifigs with shark-fin-motif subs, predatory sub silhouettes prowling a contested reef, the Aquazone-villain faction look',
+      'DEEP-SEA EXPLORERS SIGNATURE — white + azure + lime palette, modern City research-diver minifigs with sleek scuba gear, white-azure research subs + ROV drones + dome-labs + sonar-tile consoles, scientific register',
+      'FRIENDS-HEARTLAKE BEACH SIGNATURE — pastel turquoise + coral + sand palette, friendly beachgoer mini-doll characters in swimwear-prints, dolphin-rescue-center + beach-house + juice-bar + paddleboard builds, sunny-wholesome',
+      'CREATOR NATURAL-BEACH SIGNATURE — natural turquoise + ivory-sand + jade-palm palette, casual beachgoer minifigs, realistically-architected lighthouse + beach-house + lagoon-dock builds, grounded and serene',
+      'JULES-VERNE NAUTILUS SIGNATURE — brass + bottle-green + porthole-rivet palette, Victorian dive-suit minifigs with brass-helmet builds, an ornate riveted submarine + pipe-organ salon + brass-instrument builds, strictly in brick',
+      'COUSTEAU CALYPSO SIGNATURE — vintage red-cap + steel-blue + canary palette, retro aqualung diver minifigs with red watch-caps, a classic research-vessel + film-camera + sample-rack builds, 1960s expedition register',
+      'ATLANTIS GUARDIAN-RUIN SIGNATURE — gold + deep-teal + obsidian palette, treasure-diver minifigs facing a brick-built sea-monster guardian (squid / shark-statue), columned sunken-vault builds with gold-key locks',
+      'AQUAZONE HYDRONAUTS SIGNATURE — teal + black + trans-clear palette, teal-suited explorer minifigs, sleek crystal-collecting subs + underwater-base builds, the late-90s Aquazone exploration faction',
+      'DEEP-SEA SALVAGE SIGNATURE — white + azure + warning-orange palette, salvage-diver minifigs with cutting-torch + winch gear, a wreck-recovery sub + crane-barge + cargo-cage builds, working-expedition register',
+      'FRIENDS DOLPHIN-RESCUE SIGNATURE — bright turquoise + coral + white palette, mini-doll marine-vet characters, a sea-rescue-center + pool + stretcher + medical-kit builds caring for a brick dolphin, heartwarming register',
+    ],
+    instructions: `Each entry is ONE aquatic heritage register, 20-40 words. Format: "REGISTER NAME SIGNATURE — palette + minifig look + build motif". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Weight ~85% iconic LEGO marine heritage / ~15% retro. STRICT BANS: never a specific movie/set-number; never real-water/photoreal vocabulary; everything reads as LEGO brick.`,
+  },
+
+  brickbot_aquatic_marine_life: {
+    format: 'simple',
+    theme: `BRICK-BUILT MARINE LIFE — the sea creatures that populate an aquatic diorama, EVERY one built from LEGO bricks. Each entry is ONE creature, 15-30 words, naming HOW it is brick-built. This bespoke creature-fill axis adds life, scale, and story to the reef/beach.
+
+VARIETY: sea-turtle / manta-ray / clownfish-school / reef-shark / octopus / seahorse-pair / moon-jellyfish drift / dolphin-pod / starfish-cluster / moray-eel / hermit-crab / pufferfish / gull-flock (surface) / orca / sea-otter / stingray / anglerfish (deep) / crab / lobster / sea-anemone with clownfish.
+
+Each names the SPECIFIC brick construction + a pose/position. NEVER photoreal. BANNED: photoreal, real-fish, rippling/flowing.`,
+    touchpoints: [
+      'A brick sea-turtle — domed green slope-brick shell with hexagon tile-pattern, plate flippers angled mid-stroke, printed-eye head on a short neck, gliding on a clear rod across the upper frame',
+      'A brick manta-ray — broad flat plate-wings in dark-grey + white underside angled mid-glide, a tile-tail trailing, printed-eye cephalic head, suspended on a clear rod overhead casting a built shadow',
+      'A brick clownfish-school — a dozen small orange-and-white slope+wedge fish on clear rods at a matched drift-angle weaving around a modified-plant anemone, printed-eye tiles on the leaders',
+      'A brick reef-shark — a sleek grey slope-brick body with a plate dorsal fin and tile tail, printed-gill detail, cruising mid-frame on a clear rod with a slight downward menace-tilt',
+      'A brick octopus — a domed purple head-build with eight curved tentacle-bar-elements splayed across a coral ledge, printed-eye tiles, one tentacle reaching toward a shell',
+      'A brick seahorse-pair — two upright seahorses with curled tail-builds and crest-plates in yellow + coral, tails linked around a single green plant-stem, mid-bob',
+      'A brick moon-jellyfish drift — three translucent trans-clear + trans-light-blue dome bells with trailing bar-rod tentacles, suspended at staggered heights drifting up the trans-blue column',
+      'A brick dolphin-pod — three grey-slope dolphins with white bellies arcing on clear rods at the trans-blue surface, mid-leap in a staggered line, the lead one highest',
+      'A brick pufferfish — a round studded sphere-build in tan + cream bristling with tooth/cone-element spines, tiny plate fins, printed-eye tiles, hovering puffed mid-frame',
+      'A brick moray-eel — a green segmented body of stacked round-bricks emerging from a coral-hole, jaw-element open, printed-eye, the rest of the body hidden in the reef',
+      'A brick gull-flock (surface) — four white-and-grey gull-builds with angled plate-wings on clear rods wheeling above the surf, one mid-dive toward the waterline',
+      'A brick hermit-crab — a small crab-build tucked into a SNOT-spiral shell of curved slopes, claw-elements raised, scuttling across the tan-plate seafloor',
+    ],
+    instructions: `Each entry is ONE brick-built marine creature, 15-30 words. Format: prose naming the creature + its brick construction + pose/position. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never photoreal/real-fish; LEGO bricks only; name the construction (slope-brick body / plate fins / printed-eye tiles / clear rod). Surface creatures (gulls) clearly above water; sea creatures suspended on rods underwater.`,
+  },
+
+  brickbot_aquatic_scene_props: {
+    format: 'simple',
+    theme: `AQUATIC DIORAMA STORYTELLING PROPS — small brick-built details that fill an aquatic diorama's negative space. Each entry is ONE prop, 12-25 words, implying a backstory. NEVER decorative-only.
+
+VARIETY: brick treasure-chest spilling gold round-plates / message-in-a-bottle / rusted anchor / scuba-tank + regulator / surfboard rack / sandcastle with flag / beach-umbrella + towel-tile / coral-frond cluster / shipwreck-rib / mooring buoy / tide-pool starfish / ship's-wheel from a wreck / pearl-in-an-open-clam / dive-flag on a float / picnic cooler / beach bucket-and-spade / lobster-trap / sea-chart on a table.
+
+Each names SPECIFIC brick parts. BANNED: photoreal/real-water + fluid-motion verbs.`,
+    touchpoints: [
+      'A brick treasure-chest wedged in the seafloor — brown brick body sprung open, gold 1×1 round-plates spilling across the tan plates, implying a fresh discovery',
+      'A message-in-a-bottle — a trans-clear bottle-element with a rolled printed-tile note inside, half-buried in the tan-plate sand at the waterline',
+      'A rusted anchor — a brick-built anchor in reddish-brown with a chain of clip-links, fouled in coral on the reef floor, from a long-lost ship',
+      'A scuba-tank + regulator — a pair of trans-and-grey tank-elements with a hose-build and gauge-tile, propped against a rock ready for the next dive',
+      'A sandcastle with a flag — a brick-built bucket-mold castle on the tan beach with a tiny flag-element on the top turret, a spade leaning beside it',
+      'A coral-frond cluster — a bright pink + orange modified-plant coral cluster on a rock-ledge, a clownfish-build sheltering among the fronds',
+      'A mooring buoy — a red-and-white round buoy-build bobbing at a static trans-blue plate-edge, a chain dropping into the shallows below',
+      "A ship's-wheel from a wreck — a brown brick-built wheel half-buried in seafloor sand, spokes broken, a small crab-build perched on the rim",
+      'A pearl in an open clam — a brick clam-shell of two curved-slope halves sprung open on the reef, a single white pearl-element glinting inside',
+      'A beach-umbrella + towel — a bright striped umbrella-build canted in the tan sand with a printed towel-tile and a juice-cup beside it',
+      'A lobster-trap — a brick-built slatted trap-cage on the seafloor with a brick lobster inside reaching a claw-element through the bars',
+      'A dive-flag on a float — a red-and-white dive-flag tile on a brick float bobbing at the static trans-blue surface, a tether dropping to a diver below',
+    ],
+    instructions: `Each entry is ONE aquatic brick-built prop, 12-25 words. Format: prose naming the prop + its brick parts + implied backstory. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-water/photoreal; LEGO bricks only; each prop implies a story, never decorative-only.`,
+  },
+
+  brickbot_aquatic_lighting: {
+    format: 'simple',
+    theme: `AQUATIC LIGHTING — light source + direction + color for an aquatic LEGO MOC photo. Each entry 15-30 words. Lights a TABLETOP BRICK DIORAMA — realistic studio-macro shadows on plastic, evoking the aquatic mood.
+
+VARIETY: underwater caustic-blue dapple from above / bright surface-shimmer shafts piercing down through the column / golden beach-sunset rake / bonfire-amber pool / sweeping lighthouse-beam / bioluminescent trans-cyan deep-glow / bright tropical-noon / cool deep-trench blue with a single research-lamp cone / dawn-pink low-tide / overcast-soft coastal.
+
+Each names SOURCE + DIRECTION + COLOR + how it falls on the plastic bricks. NEVER real-sun-through-real-water language.`,
+    touchpoints: [
+      'Caustic-blue dapple from directly above, broken pools of cool light scattered across the brick reef and seafloor with trans-clear tiles catching bright glints, deep blue shadow between — the classic submerged key',
+      'Bright surface-shimmer shafts piercing straight down through the trans-blue water-column, hard light-pillars striking the reef with cool shadow behind, divers silhouetted where the shafts hit',
+      'Golden beach-sunset raking low across the tan-plate sand, long warm light gilding the palm builds and surf-shack, long plastic shadows stretching toward camera, warm amber key',
+      'Bonfire-amber pooling out from a brick driftwood fire, hot trans-orange glow on the seated minifigs and the sand, deep cool dusk-blue beyond the lit ring',
+      'A sweeping lighthouse-beam cutting from the trans-yellow lamp-room out across a dark sea, a hard cone of warm light through cool night-blue ambient, raking the wave-curls below',
+      'Bioluminescent trans-cyan deep-glow rising from clustered glow-elements in a dark trench, under-lighting the brick walls and a diver in cool aquamarine, near-black ambient around it',
+      'Bright tropical-noon, a strong high key making the turquoise shallows and coral pop in saturated color, crisp short plastic shadows, the cheerful postcard-beach light',
+      'Cool deep-trench blue ambient with a single warm research-lamp cone from a sub probing one direction, most of the frame in deep cold shadow, the lamp-cone the only warm light',
+      'Dawn-pink low-tide light, soft rosy ambient across wet tan-plate flats and tide-pools catching the sky-color, gentle and quiet, long soft shadows',
+      'Overcast-soft coastal light, a gentle even wash showing every brick detail of the harbor + pier without harsh shadow, the calm grey-day maritime mood',
+    ],
+    instructions: `Each entry is ONE aquatic lighting setup, 15-30 words. Format: prose naming source + direction + color + fall on the bricks. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-sun-through-real-water/photoreal-caustic language — it lights a plastic brick diorama. No real-ocean vocabulary.`,
+  },
+
+  brickbot_aquatic_palette: {
+    format: 'simple',
+    theme: `AQUATIC PALETTE — color combinations for an aquatic LEGO MOC diorama, locked to LEGO marine-heritage signatures. Each entry 12-25 words, naming 3-5 specific LEGO-brick colors + the heritage it evokes.
+
+VARIETY (align to registers): Atlantis gold+teal+treasure-amber / Aquazone yellow+black+trans-neon-green / Aquasharks grey+orange / Deep-Sea white+azure+lime / tropical-beach turquoise+coral+ivory-sand / sunset gold+magenta+violet / kelp-canyon deep-teal+green+amber / Nautilus brass+bottle-green / Cousteau red+steel-blue+canary / deep-trench midnight-blue+trans-cyan.
+
+Each names ACTUAL LEGO brick colors (dark-azure, sand-green, trans-light-blue, etc.).`,
+    touchpoints: [
+      'Atlantis treasure palette — gold + teal + treasure-amber + deep-blue, rich and adventurous, gold-element relics glinting against teal stone',
+      'Aquazone Aquanauts palette — bright yellow + black + trans-neon-green, bold retro-90s contrast, neon-green crystal-power accents',
+      'Aquasharks palette — steel-grey + shark-orange + black, aggressive and predatory, the Aquazone-villain color story',
+      'Deep-Sea Explorers palette — clean white + dark-azure + lime, modern and scientific, the City research-fleet look',
+      'Tropical-beach palette — turquoise + coral-pink + ivory-sand + jade-palm, sunny and saturated, the postcard-paradise story',
+      'Sunset-cove palette — gold + magenta + violet + warm-sand, dusk over the water, the golden-hour beach mood',
+      'Kelp-canyon palette — deep-teal + forest-green + amber-shaft, dim and cathedral-like, the towering-kelp depth',
+      'Nautilus palette — brass + bottle-green + dark-steel, Victorian-submarine richness, riveted and ornate',
+      'Cousteau-expedition palette — vintage-red + steel-blue + canary-yellow, 1960s research-vessel charm',
+      'Deep-trench palette — midnight-blue + trans-cyan + obsidian, near-black with bioluminescent glints, the abyssal mood',
+    ],
+    instructions: `Each entry is ONE aquatic palette, 12-25 words. Format: "NAME palette — colors + mood". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color language; tie each to a marine heritage. No real-ocean vocabulary.`,
+  },
+
+  brickbot_aquatic_phenomenon: {
+    format: 'simple',
+    theme: `AQUATIC PHENOMENON — a 50%-gated environmental beat for an aquatic diorama, ALWAYS rendered IN BRICK. Each entry 20-40 words. AMPLIFIES the scene as a secondary focal point, never eclipses it.
+
+VARIETY: rising bubble-stream column / sun-shaft caustic light-pillars / breaking trans-blue wave-curl with white foam / bioluminescent-bloom trans-cyan cloud / passing whale-shadow overhead / swirling clownfish bait-ball / king-tide flooding the tide-pools / message-bottle bobbing in on the surf / a school of brick-fish parting around the diver / sea-fog rolling over the cove (cotton elements).
+
+Each names the BRICK PARTS that build it + visual impact. NEVER lighting-color-cast (separate axis). NEVER real-water/photoreal language. NO fluid-motion verbs (render as static built moment).`,
+    touchpoints: [
+      'RISING BUBBLE-STREAM COLUMN — a tall column of trans-clear + white 1×1 round-plates threaded on clear bar-rods rising from a seafloor vent or a diver-helmet, a built shimmering pillar threading the frame',
+      'SUN-SHAFT CAUSTIC PILLARS — several angled pillars of trans-clear + trans-light-blue plates striking down through the water-column from the surface, built light-shafts catching the reef in bright bars',
+      'BREAKING WAVE-CURL — a single large SNOT-curled trans-light-blue wave frozen mid-break offshore, white 1×1 round-plate + cheese-slope foam crest spilling down the face, a built frozen moment',
+      'BIOLUMINESCENT BLOOM — a drifting cloud of trans-cyan + trans-clear 1×1 round-plates clustered through a dark trench, a built glowing-plankton swarm lighting the diver from below',
+      'PASSING WHALE-SHADOW — an enormous built whale silhouette (dark-grey plates) gliding across the upper frame on hidden supports, dwarfing the divers, casting a built shadow over the reef',
+      'CLOWNFISH BAIT-BALL — a dense spherical swirl of dozens of small orange-and-white fish-builds on clear rods forming a rotating ball, parting around a central diver, the mesmerizing built shoal',
+      'KING-TIDE FLOODING THE TIDE-POOLS — extra stepped trans-blue plates layered over the rocky shelf showing the tide risen high, small creatures crowded into the new pools, the built high-water moment',
+      'SEA-FOG OVER THE COVE — low white cotton-elements + 1×1 white round-plate haze rolling across the tan-plate beach and the static trans-blue shallows, softening the lighthouse base, the moody built fog',
+      'WHALE-SHARK PASS — a huge built whale-shark (spotted dark-blue plate body) cruising slowly across the deep frame on hidden supports, remora-builds clinging to its underside, the gentle-giant beat',
+      'STINGRAY GLIDE-SQUADRON — a loose formation of three or four built stingrays sweeping across the sandy flat on clear rods at a matched glide-angle, kicking up tiny tan round-plate sand-puffs',
+    ],
+    instructions: `Each entry is ONE aquatic phenomenon, 20-40 words. Format: "PHENOMENON NAME — brick-parts + visual impact". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never lighting-color-cast (separate axis); never real-water/photoreal language; ALWAYS built from named brick parts; never fluid-motion verbs (render as a static built moment).`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // WINTER PATH (2026-05-27 — sixth BrickBot axis migration)
+  // SNOW + ICE. Bespoke snow_ice_build_technique axis (anti-photoreal-
+  // snow lever). Every entry names LEGO PARTS, BANS photoreal-snow/ice +
+  // non-rigid motion verbs (drifting/swirling/billowing). Bespoke.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_winter_scene_type: {
+    format: 'simple',
+    theme: `LEGO MOC WINTER DIORAMA SCENE STAGES — narrative-stage descriptions for BrickBot's winter axis system. Each entry is ONE snow/ice stage, 30-55 words. Mood ranges cozy-festive (Winter Village) to crisp-adventurous (Arctic expedition).
+
+⚠️ CRITICAL — STAGE / SETTING / NARRATIVE CATEGORY only. NO camera framing. NO minifig action verbs. NO snow/ice-build-technique vocab. NO phenomena. NO lighting. Just: where are we, what wintry moment.
+
+⚠️ EVERYTHING IS LEGO BRICK. Snow = white slope-bricks/plates. Ice = trans-light-blue. Frozen lake = smooth tiles. NEVER real-snow vocabulary. BANNED: photoreal, real snow/ice, soft powder, glistening, sparkling, drifting, swirling.
+
+VARIETY MANDATE — distribute across: alpine-ski-village / frozen-lake / ice-castle / igloo-camp / polar-research-station / frozen-waterfall / blizzard-rescue / winter-village-square / ski-slope / ice-fishing-hut / hot-cocoa-cabin-interior / husky-sled-run / frozen-harbor / ice-rink / snowman-meadow / mountain-gondola / holiday-market / toy-workshop.
+
+Each entry: name the winter category in first 6-10 words; establish the brick-built STAGE (white-plate snow-cover everywhere); suggest the cozy/adventurous TENSION; NEVER a minifig action or phenomenon.`,
+    touchpoints: [
+      'ALPINE SKI-VILLAGE — a brick-built mountain village of timber chalets with white slope-brick snow-laden roofs, a gondola-tower, a frozen-tile pond with ice-fishing huts, white-plate drifts banking every wall, the cozy-resort stage',
+      'ICE-CASTLE FORTRESS — a soaring SNOT-curved trans-light-blue + trans-clear ice castle with crisp brick-edge turrets, a frozen-tile moat, white-plate snow on the battlements, the crystalline-palace stage',
+      'POLAR RESEARCH STATION — orange-and-white modular brick research buildings on a white-plate ice shelf, a snowcat build, satellite-dish builds, supply-crate stacks, the crisp-expedition stage',
+      'IGLOO ENCAMPMENT — a cluster of white brick-dome igloos on a white-plate snowfield, a husky-team on a tether-build, brick-kayaks and fishing-gear, the frontier-camp stage',
+      'FROZEN-WATERFALL CLIFF — a grey slope-brick cliff face hung with cascading trans-light-blue + trans-clear icicle-elements frozen mid-fall, snow-load pine builds at the base, the dramatic-ice stage',
+      'WINTER-VILLAGE SQUARE — a festive brick town square of red-and-green timber shops with white-plate snow-roofs, a brick holiday-tree strung with trans-element lights, a market-stall ring, the warm-holiday stage',
+      'HOT-COCOA CABIN INTERIOR — the warm brick interior of a log cabin, a brick hearth with trans-orange flame, mug-builds on a table, snow-frosted brick window looking out on white peaks, the snug-fireside stage',
+      'HUSKY-SLED RUN — a white-plate snow-trail winding through snow-load pine builds, a brick dog-sled with a husky-team mid-route, drift-banks on either side, the wilderness-journey stage',
+      'ICE-FISHING HUT — a small brick hut on a smooth trans-light-blue frozen lake, an auger-build and a fishing-hole, a lantern-build, white-plate snow scattered on the ice, the patient-quiet stage',
+      'MOUNTAIN GONDOLA — a brick gondola-cabin on a Technic-cable strung between snow-capped slope-brick peaks, a station-build below with white-plate drifts, the high-alpine stage',
+      'BLIZZARD-RESCUE — a wind-swept white-plate slope with a half-built emergency brick-shelter, a search-team with lantern-builds, an overturned brick-snowmobile, supply-sled, the urgent-survival stage',
+      'FROZEN-HARBOR — a brick harbor locked in smooth trans-light-blue ice, a brick icebreaker wedged at the quay, snow-load roofs on the dock-warehouses, the still-cold-port stage',
+    ],
+    instructions: `Each entry is ONE winter stage, 30-55 words. Format: "STAGE NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no camera framing, no minifig action verbs, no phenomenon names, no lighting, no real-snow vocabulary (photoreal/real-snow-ice/soft-powder/glistening/sparkling/drifting/swirling). Every element a NAMED LEGO BRICK PART. Stage + charm only.`,
+  },
+
+  brickbot_winter_minifig_action: {
+    format: 'simple',
+    theme: `LEGO MINIFIG ACTION BEATS — verb-led story moments for BrickBot's winter path. Each entry is a freeze-frame of skier/villager/Arctic-explorer/sledder minifigs IN MID-ACTION, NOT posing. Each entry 25-45 words.
+
+⚠️ STORY BEAT MANDATE — every entry STARTS WITH AN ACTIVE VERB with CAUSE + EFFECT in-frame. Winter verbs: mid-ski-carve, mid-snowball-throw, mid-cocoa-pour, mid-sled-mush, mid-ice-fish-haul, mid-snowman-roll, mid-rescue-dig, mid-skate-glide, mid-icicle-knock, mid-fire-stoke, mid-gondola-board, mid-gift-stack.
+
+⚠️ HARD BANS: NEVER "minifigs standing/posing", NEVER "watching/looking/gazing", NEVER passive states. Minifigs are LEGO (C-hands, printed face; knit-cap+scarf / parka-hood / goggles+poles / fur Arctic-hood). Creatures brick-built. BANNED: photoreal, real-snow, drifting/swirling/billowing.
+
+✓ Body-position variety: mid-ski/skate/glide (~20%), mid-throw/roll/pat (~15%), mid-haul/dig/stoke (~15%), multi-figure interaction (rescue-team, cocoa-share, snowman-build) (~25%), mid-board/mush/ride (~15%), mid-craft/decorate (~10%).
+
+Each entry: start with an active verb; name 1-3 minifigs/creatures with a brief identifier; the SHARED OBJECT/EVENT (sled / snowball / cocoa-pot / ice-hole / snowman / rescue-rope / gift); imply before/after; PLASTIC SCALE.`,
+    touchpoints: [
+      'Mid-ski-carve of a goggled skier minifig crouched low on brick-built skis spraying white 1×1 round-plate snow off the slope-edge, ski-poles angled back, a second skier mid-turn behind on the white-plate piste',
+      'Mid-snowball-throw between two bundled minifigs across a white-plate village square, one mid-hurl with arm cocked and a brick-snowball mid-air, the other mid-duck behind a white-slope drift-fort',
+      'Mid-cocoa-pour as a cabin minifig tilts a brick kettle over two mug-builds on a snow-frosted windowsill, steam suggested by a white 1×1 round-plate wisp, a friend on a bench mid-reach for a mug',
+      'Mid-sled-mush of a parka minifig braced on a brick dog-sled behind a husky-team mid-stride down a white-plate trail, one C-hand gripping the handle-bar, snow-spray plates kicking from the runners',
+      'Mid-ice-fish-haul of an Arctic minifig yanking a brick fish up through a hole in the smooth trans-light-blue lake, line taut, a thermos-build and auger beside them, a buddy mid-lean-in to see the catch',
+      'Mid-snowman-roll of two minifigs pushing a giant white-brick snowball across the meadow toward a half-built snowman, a carrot-element nose and coal-tile eyes laid ready on a sled nearby',
+      'Mid-rescue-dig of a search-team minifig shoveling a brick-shovel into a white-plate drift over a half-buried shelter, a second rescuer mid-shine of a lantern-build, a supply-sled behind on the windswept slope',
+      'Mid-skate-glide of a Friends mini-doll skater carving across the smooth trans-light-blue rink on brick skates, arms out mid-balance, a friend mid-wobble nearby reaching for the brick rail',
+      'Mid-fire-stoke as a villager minifig pokes a brick-poker into a hearth of trans-orange flame elements inside a cozy cabin, sparks suggested by trans-yellow round-plates, a kettle-build hung above',
+      'Mid-gift-stack of two Winter-Village minifigs piling wrapped brick-gifts under a brick holiday-tree strung with trans-element lights, one mid-reach to set the top box, a holiday-train build circling the base',
+      'Mid-gondola-board of a skier minifig stepping into a brick gondola-cabin at a snowy station, ski-pair over one shoulder, an operator minifig mid-lever-pull on the Technic-cable mechanism',
+      'Mid-icicle-knock of an Arctic minifig tapping a long trans-clear icicle-element off a cabin eave with a pole, the icicle mid-fall, a companion below mid-step-back from the drop',
+    ],
+    instructions: `Each entry is ONE winter minifig action beat, 25-45 words. Format: prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: NO standing/posing/watching/looking/gazing, NO passive. No real-snow vocabulary (photoreal/drifting/swirling). Creatures brick-built. Story beat + verb + cause/effect always.`,
+  },
+
+  brickbot_winter_snow_ice_build_technique: {
+    format: 'simple',
+    theme: `LEGO WINTER MOC BUILD TECHNIQUE — the AFOL-distinguishing brick-construction notes for BrickBot's winter path, focused on making SNOW, ICE, FROZEN WATER, ICICLES, and BLIZZARD read as unmistakable BRICK. Each entry 25-45 words. THIS AXIS IS THE PRIMARY ANTI-PHOTOREAL-SNOW LEVER.
+
+VARIETY MANDATE — distribute across:
+  • Snow-cover technique (white slope-bricks + plates + white-stud rounded mounds capping every roof/branch/ledge)
+  • Snow-drift technique (white slope-brick banks rising against walls, wind-sculpted with curved slopes)
+  • Ice-structure SNOT (trans-light-blue + trans-clear curved-slope ice-castle walls + turrets with crisp brick-edges)
+  • Frozen-lake technique (smooth trans-light-blue + white TILE sheet — tiled = smooth ice, with hairline trans-blue crack lines)
+  • Icicle technique (trans-clear + trans-light-blue bar/cone elements hung in graduated rows from eaves)
+  • Snow-load pine technique (brown round-brick trunk + dark-green plant-element boughs + white-plate snow-load on each tier)
+  • Blizzard / falling-snow (white 1×1 round-plates on clear bar-rods + cotton-elements for a built flurry)
+  • Frozen-waterfall (layered trans-light-blue + trans-clear plates + bar-elements cascading down a grey slope-brick cliff, frozen mid-fall)
+  • Cozy window-glow (trans-orange + trans-yellow behind brick window-frame mullions against the cold blue exterior)
+  • Igloo dome SNOT (white curved-slope + brick-block dome with a stepped entry-tunnel)
+
+Each entry: name the technique TYPE in first 5-8 words; specify WHICH winter element; name the SPECIFIC BRICK PARTS; imply visual impact. NO real-construction (no foam/paint/cotton-as-real-snow-claim). BANNED: photoreal, real-snow/ice.`,
+    touchpoints: [
+      'White-slope snow-cover — every roof, ledge, and branch capped with white slope-bricks + white plates + white-stud rounded caps, the snow built as deliberate brick geometry that follows the structure beneath, never a soft photoreal blanket',
+      'Wind-sculpted snow-drift — drift-banks built from white slope-bricks rising against a cabin wall in a curved wind-carved profile, the curve formed by stacked inverted + standard slopes, a crisp brick snow-sculpture',
+      'SNOT trans-blue ice-castle wall — an ice-fortress wall built with sideways-stud bracket-plates turning trans-light-blue + trans-clear curved-slope bricks into a glassy translucent rampart, crisp brick-edge crenellations on top',
+      'Smooth-tile frozen-lake — a frozen lake surfaced entirely with smooth trans-light-blue + white tiles (no studs = polished ice), a few hairline trans-clear crack-lines inlaid, skate-scuff suggested by lighter tile insets',
+      'Graduated icicle row — a row of icicles hung from an eave built from trans-clear + trans-light-blue bar-elements + cone-elements in graduated lengths, clipped to a bar mounted under the roof-edge',
+      'Snow-load pine — a pine tree built from a brown round-brick trunk with dark-green plant-element + slope-brick boughs in tiers, each tier weighted with white-plate + white-slope snow-load bending the branch-line',
+      'Clear-rod blizzard flurry — falling snow built from scattered white 1×1 round-plates threaded on thin clear bar-rods at varied heights + angles, with cotton-elements massed at the frame-edges for a built whiteout veil',
+      'Frozen-waterfall cascade — a waterfall frozen mid-fall built from layered trans-light-blue + trans-clear plates and bar-elements stepping down a grey slope-brick cliff, white round-plate frozen-spray at each ledge',
+      'Cozy window-glow — warm interior light built from trans-orange + trans-yellow plates set behind brick window-frame mullions, glowing against the cool white-and-blue snow exterior, the heart of a Winter-Village build',
+      'White-dome igloo SNOT — an igloo built from white curved-slope + masonry-profile brick blocks spiralling into a dome, a stepped entry-tunnel of arch-pieces, faint trans-light-blue tile insets suggesting packed ice-blocks',
+      'Packed-snow rounded mound — a smooth snow-mound built from stacked white inverted-dome + dish elements blended with slopes, used for snowman bases and drift-pillows, fully rounded brick geometry',
+      'Snow-cat tread + icebreaker hull — Arctic vehicles built with Technic-tread links (snowcat) or a SNOT-reinforced prow of stacked slopes (icebreaker) in orange + white + black, weathered with grey-tile scuff detail',
+    ],
+    instructions: `Each entry is ONE winter MOC build technique, 25-45 words. Format: "TECHNIQUE NAME — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-construction (foam/paint/real-cotton-snow), no real-snow/ice/photoreal vocabulary. LEGO bricks only — name SPECIFIC parts (white slope-brick / trans-light-blue tile / trans-clear bar-element / inverted-dome).`,
+  },
+
+  brickbot_winter_camera_framing: {
+    format: 'simple',
+    theme: `WINTER-SPECIFIC CAMERA FRAMING — LEGO MOC photography angles for the winter path. Each entry 15-30 words, specific to snow/ice diorama subject matter.
+
+⚠️ Bespoke — leverage winter scenery (ski-slope / frozen-lake / village-square / cabin-window / icicle-cave / sled-trail / summit / gondola) rather than generic terms.
+
+VARIETY MANDATE — distribute across: ski-slope downhill, frozen-lake low-across-the-ice, village-square overhead, cabin-window warm-interior-out-to-cold, icicle-cave through, sled-trail tracking, summit aerial, gondola POV, ice-rink low-glide, hearth-side over-shoulder, blizzard-whiteout into-the-wind.
+
+Each entry: specify camera POSITION (height/location/orientation); the framing's PURPOSE; reference winter brick scenery.`,
+    touchpoints: [
+      'SKI-SLOPE DOWNHILL — camera high on the piste looking down the white-plate slope, a skier minifig carving in the mid-frame spraying snow-plates, the village + frozen lake far below at the slope-foot',
+      'FROZEN-LAKE LOW-ACROSS-THE-ICE — camera at ice-level shooting across the smooth trans-light-blue lake, ice-fishing huts in profile receding, the reflection suggested in the glossy tile, a low crisp angle',
+      'VILLAGE-SQUARE OVERHEAD — camera high above the brick winter village looking down at the square, snow-roofed shops + the holiday-tree + market-stalls forming the composition, minifig crowd from above',
+      'CABIN-WINDOW WARM-OUT-TO-COLD — camera inside a cozy cabin framing the trans-orange hearth-glow foreground and a snow-frosted brick window beyond, the cold white-blue exterior visible through the panes',
+      'ICICLE-CAVE THROUGH — camera behind a fringe of foreground trans-clear icicle-elements hanging from a cave-mouth, the snowy scene revealed in the gap, layered depth from icicles to deep peaks',
+      'SLED-TRAIL TRACKING — camera low alongside a husky-sled mid-run on the white-plate trail, the team + sled in dynamic profile, snow-load pine builds streaming past, the journey angle',
+      'SUMMIT AERIAL — camera high and back over a snow-capped slope-brick peak looking down at the gondola-station + ski-runs below, the alpine expanse receding into white haze',
+      'GONDOLA POV — camera inside a brick gondola-cabin looking out the window-frame at the snowy valley passing below, the Technic-cable rising to the next tower, cabin-interior detail at the edge',
+      'ICE-RINK LOW-GLIDE — camera at rink-level skimming the smooth trans-light-blue ice, a skater carving toward camera, the warm-lit chalet + string-lights framing the background',
+      'HEARTH-SIDE OVER-SHOULDER — camera just behind a seated cabin minifig looking past their shoulder at the brick hearth-fire and friends gathered with cocoa-mugs, the trans-orange glow the focal warmth',
+      'BLIZZARD-WHITEOUT INTO-THE-WIND — camera low facing into a built cotton-element + white-round-plate flurry, a rescue-team minifig leaning into the wind in silhouette, depth swallowed by the white veil',
+      'WINTER-VILLAGE STREET-LEVEL — camera down at minifig height on a snow-plate street between festive brick shops, string-lights overhead, a villager mid-stride past a lit bakery window, immersive depth',
+    ],
+    instructions: `Each entry is ONE winter-specific camera framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no generic camera terms without winter anchoring — every entry references brick winter scenery. No real-snow vocabulary.`,
+  },
+
+  brickbot_winter_subject_focus: {
+    format: 'simple',
+    theme: `WINTER SUBJECT-FOCUS / SILHOUETTE ANCHOR — the dominant subject class for a winter diorama. Each entry is ONE of four kinds: brick STRUCTURE, CREATURE-MOUNT, NO-VEHICLE INTERIOR, or NO-VEHICLE LANDSCAPE. Each entry 20-40 words. LEAD with the TYPE label in parens.
+
+DISTRIBUTION: ~45% STRUCTURE / ~15% CREATURE-MOUNT / ~15% NO-VEHICLE INTERIOR / ~25% NO-VEHICLE LANDSCAPE.
+
+Every entry names brick parts + bans photoreal/real-snow vocabulary. Creatures brick-built, never photoreal.`,
+    touchpoints: [
+      'STRUCTURE — a brick timber ski-chalet with a white slope-brick snow-roof, glowing trans-orange windows, a wraparound deck with ski-racks, white-plate drifts banking the walls; fills 50%+ of frame',
+      'STRUCTURE — a SNOT-curved trans-light-blue + trans-clear ice castle with crisp brick-edge turrets and a frozen-tile moat, white-plate snow on the battlements, the dominant crystalline subject',
+      'STRUCTURE — a white brick-dome igloo with a stepped arch-piece entry-tunnel, faint trans-blue ice-block tile insets, a lantern-build at the door, the dominant frontier-shelter subject',
+      'STRUCTURE — an orange-and-white modular polar research station on a white-plate ice shelf, dish-builds + a snowcat, the dominant crisp-tech subject',
+      'STRUCTURE — a festive Winter-Village shop (toy-store / bakery) in red-and-green timber with a white snow-roof, glowing windows, a string-light eave, the dominant cozy-holiday subject',
+      'STRUCTURE — a brick mountain-gondola tower with a cabin on a Technic-cable, snow-capped slope-brick peak behind, a station-build below, the dominant alpine-engineering subject',
+      'CREATURE-MOUNT — a brick husky-sled team of three white-and-grey brick dogs on a tether-build pulling a brick sled with a parka minifig driver, the dominant dynamic subject mid-run',
+      'CREATURE-MOUNT — a brick-built reindeer with antler-elements and a harness, a Winter-Village minifig riding or leading it, the dominant festive subject on a snow-plate trail',
+      'CREATURE-MOUNT — a chunky brick-built polar bear with white-slope body and printed-eye head, an Arctic minifig beside or atop it, the dominant frontier subject',
+      'NO-VEHICLE INTERIOR — a hot-cocoa cabin interior, a brick hearth with trans-orange flame, mug-builds + a kettle, a woven-tile rug, a snow-frosted window; interior is the stage, minifig the subject',
+      'NO-VEHICLE INTERIOR — a ski-lodge fireside great-room, a stone brick fireplace, ski-racks, a fur-tile sofa, a chalkboard trail-map, minifigs warming up; cozy après-ski setting',
+      'NO-VEHICLE LANDSCAPE — an open powder-slope of white slope-bricks and plates studded with snow-load pine builds, deep-distance snow-capped slope-brick peaks; multi-tier lush winter setting',
+      'NO-VEHICLE LANDSCAPE — a frozen lake of smooth trans-light-blue tile ringed by snow-pine builds, a small ice-fishing hut, white peaks beyond; multi-tier serene winter setting',
+    ],
+    instructions: `Each entry is ONE winter subject-focus, 20-40 words, LED BY its TYPE label — (STRUCTURE) / (CREATURE-MOUNT) / (NO-VEHICLE INTERIOR) / (NO-VEHICLE LANDSCAPE). Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Distribution ~45/15/15/25. Every entry names brick parts; creatures brick-built. BANNED: photoreal/real-snow/ice + non-rigid motion verbs.`,
+  },
+
+  brickbot_winter_register: {
+    format: 'simple',
+    theme: `WINTER HERITAGE REGISTER — the aesthetic + faction lock for a winter diorama, named by its LEGO-heritage VISUAL SIGNATURE. Each entry 20-40 words, locking palette + minifig gear + build motif.
+
+WEIGHTING — ~85% iconic LEGO winter heritage / ~15% retro:
+  • WINTER-VILLAGE (Ideas holiday) — cozy red + green + white + gold, knit-cap-and-scarf villager minifigs, festive timber shops + holiday-train + string-lights + tree (~22%)
+  • CITY-ARCTIC-EXPLORERS — orange + white + black + tech-grey, parka-and-goggle explorer minifigs, icebreakers + snowcats + ice-saws + research-stations (~20%)
+  • FRIENDS-WINTER-RESORT — pastel-blue + pink + white, mini-doll skier characters, cute ski-chalet + ice-rink + hot-cocoa-stand + gondola (~16%)
+  • CREATOR-NATURAL-CABIN — natural log-brown + pine-green + snow-white, casual minifigs, realistic timber cabin + woodpile + frozen-pond (~14%)
+  • CLASSIC-ALPINE — muted blue + white + chalet-brown, traditional skier + mountaineer minifigs, simple chalet + ski-lift + snowy-peak builds (~13%)
+  • CURRIER-AND-IVES-CODED (retro) — soft cranberry + cream + evergreen, Victorian bundled-skater + sleigh minifigs, covered-bridge + frozen-millpond + horse-sleigh builds, strictly in brick (~8%)
+  • VINTAGE-ALPINE-POSTER-CODED (retro) — bold travel-poster red + cream + sky-blue, retro-ski-fashion minifigs, funicular + grand-lodge + 1950s-ski-resort builds, strictly in brick (~7%)
+
+Each entry: name the register signature in first 5-8 words; PALETTE; MINIFIG/gear look; BUILD MOTIF. NEVER name a specific movie/set-number. Always reads as LEGO.`,
+    touchpoints: [
+      'WINTER-VILLAGE HOLIDAY SIGNATURE — cozy red + green + white + gold palette, knit-cap-and-scarf villager minifigs, festive timber shops with snow-roofs + a holiday-train circling + brick tree strung with trans-element lights + market-stalls',
+      'CITY-ARCTIC-EXPLORERS SIGNATURE — orange + white + black + tech-grey palette, parka-and-goggle explorer minifigs with ice-core gear, icebreaker + snowcat + ice-saw + modular research-station builds, crisp-expedition register',
+      'FRIENDS-WINTER-RESORT SIGNATURE — pastel-blue + pink + white palette, mini-doll skier characters in cute snow-fashion, ski-chalet + ice-rink + hot-cocoa-stand + gondola builds with heart + snowflake tile-prints',
+      'CREATOR-NATURAL-CABIN SIGNATURE — natural log-brown + pine-green + snow-white palette, casual bundled minifigs, a realistically-architected timber cabin + woodpile + frozen-pond + snow-laden pines, grounded and serene',
+      'CLASSIC-ALPINE SIGNATURE — muted blue + white + chalet-brown palette, traditional skier + mountaineer minifigs, a simple A-frame chalet + ski-lift + snowy-peak builds, the timeless mountain look',
+      'CURRIER-AND-IVES SIGNATURE — soft cranberry + cream + evergreen palette, Victorian bundled-skater + horse-sleigh minifigs, covered-bridge + frozen-millpond + snow-village builds, nostalgic 1800s charm strictly in brick',
+      'VINTAGE-ALPINE-POSTER SIGNATURE — bold red + cream + sky-blue palette, retro-ski-fashion minifigs in 1950s gear, a funicular + grand-lodge + sun-deck builds, the golden-age-of-skiing travel-poster look in brick',
+      'WINTER-VILLAGE TOY-WORKSHOP SIGNATURE — red + green + warm-wood palette, elf-helper + toymaker minifigs, a bustling workshop interior with toy-builds on shelves, a conveyor, a wrapping-station, festive-industrious register',
+      'CITY-ARCTIC ICEBREAKER SIGNATURE — orange + white + warning-yellow palette, crew minifigs in survival-suits, a large brick icebreaker prow crushing trans-light-blue tile ice, deck-crane + helipad, working-vessel register',
+      'FRIENDS ICE-RINK SIGNATURE — bright turquoise + pink + white palette, mini-doll figure-skaters, a decorated brick ice-rink with string-lights + a warming-hut + a snack-cart, cheerful-social register',
+      'WINTER-VILLAGE FIRE-STATION SIGNATURE — red + white + gold palette, festive firefighter minifigs, a snow-roofed brick fire-station with a vintage engine-build + a decorated tree, the cozy-civic holiday register',
+      'CLASSIC-ALPINE MOUNTAINEER SIGNATURE — muted slate + white + rope-tan palette, climber minifigs with ice-axe + rope gear, a brick summit-ridge + base-camp tent + crevasse, the serious-ascent register',
+    ],
+    instructions: `Each entry is ONE winter heritage register, 20-40 words. Format: "REGISTER NAME SIGNATURE — palette + minifig look + build motif". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Weight ~85% iconic LEGO winter heritage / ~15% retro. STRICT BANS: never a specific movie/set-number; never real-snow/photoreal vocabulary; everything reads as LEGO brick.`,
+  },
+
+  brickbot_winter_scene_props: {
+    format: 'simple',
+    theme: `WINTER DIORAMA STORYTELLING PROPS — small brick-built details that fill a winter diorama's negative space. Each entry 12-25 words, implying a backstory. NEVER decorative-only.
+
+VARIETY: brick snowman with carrot-nose / wooden sled / cocoa-mug-and-kettle / ski-pair leaned on a wall / hanging lantern / pine-wreath / icicle-cluster / firewood-stack / ice-skate-pair / wrapped-gift-pile / snowball-stack ammo / brazier / string-lights / steaming-thermos / fur-blanket-on-a-bench / shovel-in-a-drift / birdfeeder-with-snow / lit-jack-o-pumpkin (no) — keep winter / brick mailbox snow-capped / carrot-and-coal on a sled.
+
+Each names SPECIFIC brick parts. BANNED: photoreal/real-snow + motion verbs.`,
+    touchpoints: [
+      'A brick snowman — stacked white inverted-dome bodies, a carrot-element nose, coal-tile eyes, a printed-scarf tile and a twig-element arm, mid-meadow',
+      'A wooden sled — a brown brick-built sled with curved runner-slopes, a coiled rope-element handle, parked against a white-plate drift',
+      'A cocoa kettle-and-mugs — a brick kettle with two mug-builds on a slope-brick tray, a white round-plate steam-wisp, left on a snowy windowsill',
+      'A leaning ski-pair — two brick-built skis and poles propped against a chalet wall, snow-plate caught in the bindings, awaiting the next run',
+      'A pine-wreath — a dark-green plant-element ring with red 1×1 round-plate berries and a printed-bow tile, hung on a glowing-window cabin door',
+      'A graduated icicle-cluster — trans-clear + trans-light-blue bar-elements clipped under an eave in descending lengths, catching the cold light',
+      'A firewood-stack — a neat brick-built cord of brown round-bricks and log-elements under a snow-plate cap, beside the cabin hearth-chimney',
+      'A wrapped-gift-pile — a stack of brick boxes in festive tile-prints with bow-elements, tucked under a string-lit brick holiday-tree',
+      'A snowball-stack — a pyramid of white 1×1 round-bricks built as ready ammunition beside a white-slope drift-fort wall',
+      'A glowing brazier — a brick fire-basket on legs with trans-orange flame elements, warming a market-square corner, a mitten-tile left on its rim',
+      'A string of festival lights — trans-yellow + trans-red 1×1 round-elements clipped along a bar-and-string line strung between snow-roofed brick shops',
+      'A snow-capped brick mailbox — a small red brick mailbox on a post with a white-plate snow-cap and a tiny flag-element raised, a letter-tile peeking out',
+    ],
+    instructions: `Each entry is ONE winter brick-built prop, 12-25 words. Format: prose naming the prop + its brick parts + implied backstory. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-snow/photoreal; LEGO bricks only; each prop implies a story, never decorative-only.`,
+  },
+
+  brickbot_winter_lighting: {
+    format: 'simple',
+    theme: `WINTER LIGHTING — light source + direction + color for a winter LEGO MOC photo. Each entry 15-30 words. Lights a TABLETOP BRICK DIORAMA — realistic studio-macro shadows on plastic, evoking the winter mood.
+
+VARIETY: warm window-glow on cool-blue snow / golden alpine-sunset / overcast flat-snow light / aurora trans-cyan-green sky / hearth-fire amber interior / blue-hour twilight-snow / bright bluebird-day / lantern-festival warm-pool / moonlit-silver-on-snow / string-light multicolor on the village square.
+
+Each names SOURCE + DIRECTION + COLOR + fall on the plastic bricks. NEVER real-snow-glisten/sparkle language.`,
+    touchpoints: [
+      'Warm window-glow spilling trans-orange light out onto cool-blue white-plate snow, hot pools at each lit cabin window against the deep blue twilight drifts, the classic cozy Winter-Village key',
+      'Golden alpine-sunset raking low across the white-plate slopes, warm amber gilding the snow-caps and chalet-roofs, long cool-blue plastic shadows stretching down the piste',
+      'Overcast flat-snow light, a soft shadowless even wash that shows every brick detail of the village + drifts under a calm pale-grey sky, the quiet-snowfall-day mood',
+      'Aurora trans-cyan-green light from a built sky-arc washing the snowfield in shifting cool green-violet, warm lantern-builds punching small warm holes in the cold, the polar-night wonder',
+      'Hearth-fire amber from a brick fireplace flickering warm across a cabin interior, the trans-orange flame casting cozy light on mug-builds and a fur-tile rug, deep cabin shadow beyond',
+      'Blue-hour twilight-snow, deep cobalt ambient over the white-plate village with the first warm window-lights just glowing, a single cool star-plate above, the magic-dusk mood',
+      'Bright bluebird-day, a strong high sun making the white snow + trans-blue ice pop in crisp saturated contrast, short sharp plastic shadows, the perfect-ski-morning light',
+      'Lantern-festival warm pools from clip-rod lanterns lining a snow-plate street, each a hot circle on the white ground, deep cozy shadow between, the holiday-night glow',
+      'Moonlit-silver wash from high and behind, cool blue-white light silvering the snow-caps + ice-castle turrets, long cool shadows, a serene frozen-night key',
+      'String-light multicolor on the village square, trans-red + trans-green + trans-yellow points reflected in the white-plate snow + smooth ice, festive and warm against the dusk',
+    ],
+    instructions: `Each entry is ONE winter lighting setup, 15-30 words. Format: prose naming source + direction + color + fall on the bricks. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-snow-glisten/sparkle/photoreal language — it lights a plastic brick diorama. No real-snow vocabulary.`,
+  },
+
+  brickbot_winter_palette: {
+    format: 'simple',
+    theme: `WINTER PALETTE — color combinations for a winter LEGO MOC diorama, locked to LEGO-heritage signatures. Each entry 12-25 words, naming 3-5 specific LEGO-brick colors + the heritage it evokes.
+
+VARIETY (align to registers): Winter-Village red+green+white+gold / Arctic orange+white+black+grey / ice-castle trans-blue+white+silver / Friends pastel-blue+pink+white / cabin red+pine+amber / classic-alpine blue+white+chalet-brown / aurora teal+violet+green+midnight / Currier-Ives cranberry+cream+evergreen / vintage-poster bold-red+cream+sky-blue / moonlit silver+blue+white.
+
+Each names ACTUAL LEGO brick colors (sand-blue, dark-green, trans-light-blue, etc.).`,
+    touchpoints: [
+      'Winter-Village holiday palette — festive red + dark-green + white + gold, cozy and nostalgic, warm gold window-glow against snow-white roofs',
+      'Arctic-explorer palette — safety-orange + white + black + tech-grey, crisp and modern, high-visibility gear on a white ice-shelf',
+      'Ice-castle palette — trans-light-blue + white + silver, glassy and crystalline, the translucent frozen-palace story',
+      'Friends-winter palette — pastel sand-blue + bright-pink + white, cute and cheerful, the friendly resort look',
+      'Cozy-cabin palette — cabin-red + pine-green + hearth-amber + snow-white, warm and snug, firelit against the cold',
+      'Classic-alpine palette — muted sand-blue + white + chalet-brown, timeless and clean, the traditional ski-mountain look',
+      'Aurora-night palette — trans-teal + trans-violet + trans-green over midnight-blue, luminous and cold, the polar-sky wonder',
+      'Currier-Ives palette — soft cranberry + cream + evergreen, nostalgic 1800s warmth in a snowy village',
+      'Vintage-poster palette — bold travel-red + cream + sky-blue, graphic and punchy, the golden-age-ski-resort look',
+      'Moonlit-frost palette — silver + sand-blue + white, cool and serene, a still moonlit snowfield',
+    ],
+    instructions: `Each entry is ONE winter palette, 12-25 words. Format: "NAME palette — colors + mood". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color language; tie each to a winter heritage. No real-snow vocabulary.`,
+  },
+
+  brickbot_winter_phenomenon: {
+    format: 'simple',
+    theme: `WINTER PHENOMENON — a 50%-gated environmental beat for a winter diorama, ALWAYS rendered IN BRICK. Each entry 20-40 words. AMPLIFIES the scene as a secondary focal point, never eclipses it.
+
+VARIETY: white-round-plate snow-flurry on rods / aurora trans-cyan-green-violet built arc / blizzard-whiteout cotton+white-plate veil / cotton-element frozen-mist / trans-clear icicle-glint cascade / fresh-snowfall dusting on every surface / trans-blue cracking-ice line across the lake / northern-lights curtain / a brick avalanche-cloud down a slope / chimney-smoke cotton-column rising from every roof.
+
+Each names the BRICK PARTS + visual impact. NEVER lighting-color-cast (separate axis). NEVER real-snow/photoreal. NO non-rigid-motion verbs (render as static built moment).`,
+    touchpoints: [
+      'SNOW-FLURRY — scattered white 1×1 round-plates threaded on thin clear bar-rods at varied heights + angles across the frame, plus cotton-elements massed at the edges, a built falling-snow moment frozen mid-air',
+      'AURORA ARC — a built sky-arc of layered trans-cyan + trans-green + trans-purple plates curving over the snowfield behind the village, a deliberate brick northern-lights backdrop element',
+      'BLIZZARD WHITEOUT — a wall of cotton-elements + white 1×1 round-plates massed across the deep frame veiling the distance, the foreground builds emerging from the built whiteout, the survival-tension beat',
+      'FROZEN-MIST POOL — low white cotton-elements + 1×1 white round-plate haze pooling over the smooth trans-blue frozen lake and between the snow-pine trunks, the still-cold-dawn beat',
+      'ICICLE-GLINT CASCADE — a dense fringe of trans-clear + trans-light-blue icicle bar-elements lining an eave or cliff catching the key-light as bright glints, a built sparkle-row',
+      'FRESH-SNOWFALL DUSTING — a fresh layer of white 1×1 round-plates + white plates newly capping every roof, branch, rail, and lamp-post across the build, the just-snowed beat',
+      'CRACKING-ICE LINE — a built hairline of trans-clear + trans-blue cracked tiles spidering across the smooth frozen-lake sheet beneath a figure, the thin-ice-tension beat',
+      'NORTHERN-LIGHTS CURTAIN — vertical built drapes of trans-green + trans-cyan plates hanging from the sky-baseplate over a dark snowfield, a shimmering brick light-curtain',
+      'CHIMNEY-SMOKE COLUMNS — cotton-element + white 1×1 round-plate smoke-columns rising in built plumes from every snow-roofed chimney in the village, the cozy-hearths-lit beat',
+      'AVALANCHE-CLOUD — a built tumbling cloud of white slopes + round-plates + cotton-elements cascading down a slope-brick mountainside behind tiny figures, the dramatic-but-distant beat',
+    ],
+    instructions: `Each entry is ONE winter phenomenon, 20-40 words. Format: "PHENOMENON NAME — brick-parts + visual impact". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never lighting-color-cast (separate axis); never real-snow/photoreal language; ALWAYS built from named brick parts; never non-rigid-motion verbs (render as a static built moment).`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // FOREST PATH (2026-05-27 — fourth BrickBot axis migration)
+  // PEACEFUL MAGICAL WOODLAND. Root-cause fix for photoreal-forest
+  // drift: EVERY entry names LEGO PARTS, BANS botanical vocab
+  // (birch/aspen/bark/leaf-litter/canopy/foxfire) + organic-motion
+  // verbs (bending/swaying/in-motion). Register locks woodland LEGO
+  // heritage. Bespoke — NOT cloned from fantasy/space recipes.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_forest_scene_type: {
+    format: 'simple',
+    theme: `LEGO MOC PEACEFUL-WOODLAND DIORAMA SCENE STAGES — narrative-stage descriptions for BrickBot's forest axis system. Each entry is ONE cozy magical-woodland stage (the WHAT — what category of gentle forest moment is this diorama?). Each entry 30-55 words. Mood: COZY, WHIMSICAL, FAIRY-TALE — NOT grim battle (that's the fantasy path).
+
+⚠️ CRITICAL — entries describe the STAGE / SETTING / NARRATIVE CATEGORY only. NO camera framing language. NO minifig action verbs (separate axis). NO build technique vocab. NO weather phenomena. NO lighting descriptors. Just: where are we, what cozy woodland moment.
+
+⚠️ EVERYTHING IS LEGO BRICK. Trees = brick-built trunks. Foliage = plant-elements + plates. Mushrooms = dish/dome caps. NEVER real-forest vocabulary. BANNED WORDS: birch, aspen, bark, leaf litter, foxfire, rotting, canopy (say "brick tree-tops"), photoreal. NEVER organic-motion verbs.
+
+VARIETY MANDATE — distribute across these categories (~6% each):
+  • FAIRY VILLAGE — mushroom-cottage hamlet / fairy-tower cluster / blossom-court
+  • TREEHOUSE VILLAGE — brick-trunk treehouse platforms linked by rope-bridges
+  • MUSHROOM HOLLOW — giant toadstool-cap dwellings around a clearing
+  • GROTTO POOL — trans-blue pool grotto with brick-arch + waterfall
+  • WOODLAND CAMPSITE — brick campfire + fabric tents in a glade
+  • HOBBIT-STYLE BURROW — round-door hillside burrow homes
+  • STREAM-BRIDGE — brick-arch bridge over a trans-blue stream
+  • WILDFLOWER GLADE — open clearing bordered with brick-bloom flowers
+  • FIREFLY CLEARING — dusk clearing dotted with trans-yellow firefly elements
+  • MOSS-RUINS — brick-built mossy ruined arch reclaimed by brick-foliage
+  • FOREST MARKET — woodland-creature market stalls on a brick path
+  • TREE-HOLLOW HOME — cozy interior inside a brick-built tree-trunk
+  • WATERFALL GROTTO — multi-tier trans-blue waterfall into a brick basin
+  • ACORN / BERRY HARVEST — gathering scene with brick basket + cart
+  • LANTERN FESTIVAL — clip-rod hanging-lantern strings over a clearing
+
+Each entry must: name the woodland category in first 6-10 words; establish the brick-built STAGE; suggest the COZY tension/charm of the moment; NEVER name a minifig action verb or a phenomenon.`,
+    touchpoints: [
+      'FAIRY MUSHROOM-COTTAGE HAMLET — a cluster of brick-built giant-toadstool cottages (red SNOT-dome caps with white round-tile spots on cream round-brick stems) ringing a small brick-paved clearing, tiny door-and-window builds in each stem, a central brick well, woven-basket details at the thresholds, the snug fairy-village stage',
+      'TREEHOUSE VILLAGE PLATFORMS — several brick-trunk treehouses at staggered heights linked by brick + clip-rod rope-bridges, ladder builds spiralling the round-brick trunks, plate-and-plant-element tree-tops sheltering the platforms, lantern accessories at the rails, the airy canopy-hamlet stage',
+      'TRANS-BLUE GROTTO POOL — a sheltered grotto with a brick-arch entrance and a trans-blue + trans-light-blue layered-plate pool fed by a small stepped waterfall, BURP rock-piece walls dotted with green moss-plate clusters, lily-pad plates floating on the surface, the hidden-fairy-pool stage',
+      'WOODLAND CAMPSITE GLADE — a cozy clearing with two fabric tents pitched beside a brick-built campfire (trans-orange flame elements on light-bley hearth-stones), a log-bench build of brown round-bricks, satchels and lantern accessories scattered, brick tree-tops enclosing the glade, the forager-camp stage',
+      'HOBBIT-STYLE BURROW HILLSIDE — a grassy green-plate hillside with three round-door burrow homes set into the slope, brick-built round door-frames with tiny window builds, a winding dark-tan plate path, brick-bloom flower borders, chimney builds with cotton-element smoke, the snug-burrow stage',
+      'BRICK-ARCH STREAM-BRIDGE — a humpbacked brick-arch bridge of light-bley slope-bricks spanning a trans-blue layered-plate stream, mossy green-plate stones beneath, a brick-built water-wheel mill downstream, brick reeds at the banks, the woodland-crossing stage',
+      'FIREFLY DUSK CLEARING — an open glade at dusk dotted with trans-yellow round-plate firefly elements on clear rods hovering at varied heights, brick-bloom wildflowers across the green-plate floor, a ring of brick tree-trunks enclosing the space, the magical-clearing stage',
+      'GIANT TOADSTOOL HOLLOW — a clearing dominated by several oversized brick-built toadstools (inverted-dish caps) with door-and-window builds in the stems, a brick spiral-stair around the largest, hanging clip-rod lanterns, brick-fern clusters at the bases, the mushroom-dwelling stage',
+      'MOSS-RECLAIMED RUINS — a small brick-built ruined stone arch and tumbled slope-brick walls reclaimed by green moss-plates and brick-foliage, a trans-blue trickle through the stones, brick-bloom flowers in the cracks, the gentle-overgrown-ruin stage',
+      'WOODLAND CREATURE MARKET — a row of brick-built market stalls along a dark-tan plate path with woven-basket goods and brick-fruit displays, banner-tile awnings, brick lanterns on posts, brick tree-tops overhead, the cozy-forest-bazaar stage',
+      'COZY TREE-HOLLOW INTERIOR — the warm interior carved inside a giant brick-built tree-trunk, round brick walls with shelf builds, a tiny brick hearth with trans-orange flame, a round window looking out on brick tree-tops, woven rugs (printed tiles), the snug-home stage',
+      'MULTI-TIER WATERFALL GROTTO — a tall brick rockface of stacked slope-bricks with a stepped trans-blue + trans-light-blue waterfall cascading into a brick basin pool, green moss-plate ledges, brick-fern fronds, a brick-arch footbridge across the basin, the cascade-grotto stage',
+    ],
+    instructions: `Each entry is ONE peaceful-woodland narrative stage, 30-55 words. Format: "STAGE NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines. STRICT BANS: never camera framing ("WIDE/MEDIUM/CLOSE/aerial"), never minifig action verbs, never phenomenon names, never lighting descriptors. Also BANNED: birch, aspen, bark, leaf litter, foxfire, rotting, photoreal, real-tree/leaf/moss/water vocabulary, organic-motion verbs (bending/swaying/in-motion/fluttering). Every element is a NAMED LEGO BRICK PART. Stage + cozy charm only.`,
+  },
+
+  brickbot_forest_minifig_action: {
+    format: 'simple',
+    theme: `LEGO MINIFIG ACTION BEATS — verb-led COZY story moments for BrickBot's forest path. Each entry is a freeze-frame of fairy/forager/woodland minifigs (and brick-built creatures) IN MID-ACTION, NOT posing. Each entry 25-45 words. Mood: gentle, whimsical, wholesome — never combat.
+
+⚠️ STORY BEAT MANDATE — every entry STARTS WITH AN ACTIVE VERB and describes a moment with CAUSE + EFFECT in the same frame. Cozy woodland verbs: mid-lantern-light, mid-mushroom-harvest, mid-stream-crossing, mid-berry-pick, mid-creature-feeding, mid-treehouse-climb, mid-flower-plant, mid-bridge-repair, mid-acorn-toss, mid-basket-carry, mid-tea-pour, mid-net-cast.
+
+⚠️ HARD BANS: NEVER "minifigs standing around", NEVER "posing", NEVER "watching/looking at/gazing at", NEVER passive states, NEVER combat/violence (this is the cozy path). Minifigs + creatures are LEGO (C-shaped hands, printed faces; creatures brick-built or LEGO animal-figures — NEVER photoreal). BANNED WORDS: birch, aspen, bark, leaf litter, foxfire, real foliage, photoreal; NO organic-motion verbs for plants.
+
+✓ Body-position variety: mid-reach/mid-pick (~20%), mid-carry/haul (~15%), mid-climb/balance (~15%), multi-figure cozy interaction (sharing, hand-off, helping a creature) (~25%), fairy mid-flit on a clear-rod (~10%), tending/crafting (~15%).
+
+Each entry must: start with an active verb; name 1-3 specific minifigs/creatures (fairy / forager / woodland-ranger / brick-built deer / owl / fox / hedgehog) with a brief identifier; describe the SHARED OBJECT/EVENT (lantern / mushroom / berry-basket / stream-stones / acorn / treehouse-ladder); imply moment-before/after; PLASTIC SCALE (C-hands, printed face).`,
+    touchpoints: [
+      'Mid-lantern-light of a clip-rod hanging lantern by a flower-crown fairy minifig perched on a brick branch, C-hand cupping the trans-yellow lantern-element as it glows to life, a second fairy below mid-reach to pass up the next unlit lantern',
+      'Mid-mushroom-harvest as a green-hood forager minifig kneels to twist a brick-built toadstool cap free, dropping it into a woven-basket build at their feet, a brick-built hedgehog beside them mid-nose-nudge at a fallen cap',
+      'Mid-stream-crossing of a forager minifig stepping between trans-blue + green moss-plate stepping-stones, C-hand out for balance with a basket on the other arm, a brick-built frog on a lily-pad plate mid-hop at the bank',
+      'Mid-berry-pick of two fairy minifigs at a brick-bloom berry-bush, the taller one mid-reach to a high cluster of 1×1 round-plate berries while the shorter steadies a tipping woven-basket already half-full below',
+      'Mid-creature-feeding as a flower-crown fairy holds out a brick-acorn to a chunky brick-built deer dipping its head to take it, a second smaller deer-figure behind mid-step toward the offered hand',
+      'Mid-treehouse-climb of a forager minifig halfway up a brick ladder rung on a round-brick trunk, satchel slung across the torso, a fairy minifig on the platform above mid-reach-down to help them up the last rung',
+      'Mid-flower-plant as a Heartlake-coded minifig presses a brick-bloom flower into a green-plate garden bed, trowel accessory in one C-hand, a brick-built rabbit beside them mid-dig in the soft dark-tan plates',
+      'Mid-bridge-repair of a forager minifig kneeling on a brick-arch stream-bridge fitting a replacement slope-brick into the rail, a small tool laid on the deck, a second figure on the far bank mid-hand-off of the next brick across the gap',
+      'Mid-acorn-toss between two woodland minifigs in a glade, one mid-throw of a brick-acorn and the other C-hands raised mid-catch, a brick-built squirrel on a low branch mid-scamper after a dropped one',
+      'Mid-tea-pour inside a cozy tree-hollow interior, a fairy minifig tilting a brick teapot over two tiny cup-builds on a brick table, a second figure on a woven-tile rug mid-lean-in, a brick hearth with trans-orange flame behind',
+      'Mid-net-cast at a trans-blue grotto pool, a forager minifig swinging a brick-built dip-net toward the water surface, a brick-built fish-element mid-arc above the trans-blue plates, a friend on the bank mid-point at where it leapt',
+      'Mid-basket-carry of two foragers hauling a laden woven-basket of brick-mushrooms between them along a dark-tan plate path, one mid-stride ahead, brick-bloom flowers lining the verge, a brick-built fox trotting alongside',
+    ],
+    instructions: `Each entry is ONE cozy woodland minifig action beat, 25-45 words. Format: free-form prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NO "standing/posing/watching/looking/gazing", NO passive states, NO combat. NO real-forest vocabulary (birch/aspen/bark/leaf-litter/photoreal). Creatures are brick-built or LEGO animal-figures. Story beat + verb + cause/effect always.`,
+  },
+
+  brickbot_forest_build_technique: {
+    format: 'simple',
+    theme: `LEGO WOODLAND MOC BUILD TECHNIQUE — AFOL-distinguishing brick-construction notes for BrickBot's forest path. Each entry is ONE specific MOC technique that makes a magical-woodland diorama read as "Bricklink AFOL convention build" instead of "official set" OR (the failure to avoid) "real-forest photo." Each entry 25-45 words. THIS AXIS IS THE PRIMARY ANTI-PHOTOREAL LEVER — every entry shows HOW an organic forest form is built from NAMED bricks.
+
+VARIETY MANDATE — distribute across:
+  • Brick-built tree trunks (stacked brown 2×2 round-bricks + cylinder-bricks, bark-texture from 1×1 cheese-slopes, SNOT root-flare)
+  • Plate-stacked + plant-element foliage canopy (layered green/olive/autumn-orange plant-elements + leaf-elements + 1×1 round-plates)
+  • SNOT mushroom caps (inverted radar-dish + dome elements on round-brick stems, round-tile spots)
+  • Trans-blue layered-plate water (stream/pool/waterfall with white-stud foam, stepped tiers)
+  • BURP/LURP rock-piece + slope-brick rock outcrops + moss from green plates/round-plates
+  • Brick-bloom flowers (flower-stem elements + round-plate petals + 1×3 plant stems)
+  • Clip-and-bar hanging-lantern rigs + rope-bridge (string + brick planks)
+  • Technic-pin branch articulation + treehouse cantilevers
+  • Trans-cyan/trans-yellow fairy-glow + firefly micro-builds (round-plates on clear rods)
+  • Microscale part-repurposing (minifig accessories as woodland micro-details: croissant as log, frog as creature, leaf-element as fairy-wing)
+
+Each entry must: name the technique TYPE in first 5-8 words; specify WHICH woodland element it applies to (trunk/canopy/mushroom/water/rock/flower/bridge); name the SPECIFIC BRICK PARTS used; imply the visual impact. NEVER real-construction language (no 3D-print/paint/glue/real-wood). BANNED: birch/aspen/bark(real)/leaf-litter/photoreal.`,
+    touchpoints: [
+      'Stacked round-brick tree-trunk with bark-texture — a forest tree-trunk built from a column of brown 2×2 round-bricks and cylinder-bricks, surface broken up with 1×1 brown cheese-slopes for bark-texture, a SNOT root-flare of angled slope-bricks splaying at the base into the green-plate ground',
+      'Plant-element + plate-stack canopy — a brick tree-top built as dense layered clusters of green and olive-green plant-elements interlaced with leaf-element pieces and 1×1 round-plates on bar-and-clip armatures, autumn-orange leaf-elements salted through for seasonal variety, fully opaque-brick (no gaps to photoreal sky)',
+      'SNOT inverted-dish mushroom cap — a giant toadstool built with a red 4×4 inverted radar-dish cap studded with white 1×1 round-tiles for spots, mounted on a cream round-brick stem with a 2×2 round-plate gill-collar underneath, the iconic fairy-toadstool silhouette',
+      'Trans-blue layered-plate stream — a woodland stream built from trans-blue + trans-light-blue plates layered at slightly offset levels for current, white 1×1 round-plates dotting the surface as foam over stepping-stones, the trans-plates clearly reading as plastic water',
+      'BURP-rock + moss-plate outcrop — a grotto wall built from large BURP/LURP rock-pieces blended with grey slope-bricks, surfaced with scattered green 1×1 round-plates and olive plates as brick-moss, brick-fern plant-elements sprouting from the crevices',
+      'Brick-bloom wildflower field — a meadow built from flower-stem elements topped with bright round-plate petal-clusters in mixed colors, set in a green-plate base with taller 1×3 plant-stem accents, dense enough to read as a packed brick flower-bed',
+      'Clip-and-bar hanging-lantern rig — a string of festival lanterns built from trans-orange/trans-yellow round-elements clipped onto a bar-and-string line strung between brick tree-trunks via clip-plates, each lantern a deliberate tiny brick build',
+      'Technic-pin treehouse cantilever — a treehouse platform cantilevered off a round-brick trunk using Technic-pin + beam joints hidden inside the trunk, brick-plank decking with a slope-brick railing, a clip-rod rope-ladder dropping to the forest floor',
+      'Trans-cyan fairy-glow micro-detail — clusters of trans-cyan and trans-clear 1×1 round-plates and short bar-rods set into a tree-hollow doorway and along a path to suggest fairy-glow, each a placed brick element catching the light, never a painted glow',
+      'Microscale creature repurposing — a brick-built woodland fox formed from brown slopes + a 2×2 jumper snout + tail-element, or an owl from a 2×2 dome body with wing-plate sides and printed-eye tiles, AFOL part-repurposing that reads instantly as the creature in brick',
+      'Stepped trans-blue waterfall — a multi-tier waterfall built from trans-blue plates cascading down stepped slope-brick ledges, white round-plate spray at each lip, pooling into a trans-light-blue basin, the whole cascade unmistakably translucent plastic',
+      'Brick-fern + toadstool groundcover — forest-floor groundcover built from green plant-element ferns, small 1×1 brick-toadstools, and a scatter of brown + autumn-orange leaf-elements over green and dark-tan plates, dense detail with zero photoreal litter',
+    ],
+    instructions: `Each entry is ONE woodland MOC build technique, 25-45 words. Format: "TECHNIQUE NAME CAPS — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ... 3. ...). One per line, NO internal newlines. STRICT BANS: no real-construction language (3D-print/paint/glue/real-wood), no real-forest vocabulary (birch/aspen/bark-as-real/leaf-litter/photoreal/moss-as-real). LEGO bricks only — name SPECIFIC part types (2×2 round-brick / inverted radar-dish / trans-blue plate / plant-element / cheese-slope).`,
+  },
+
+  brickbot_forest_camera_framing: {
+    format: 'simple',
+    theme: `WOODLAND-SPECIFIC CAMERA FRAMING — LEGO MOC photography angles for the forest path. Each entry is ONE camera position + framing rule specific to magical-woodland diorama subject matter. Each entry 15-30 words.
+
+⚠️ Bespoke — leverage woodland scenery (canopy / forest-floor / tree-trunks / treehouse-platform / grotto-pool / burrow-doorway / stream-bridge / fairy-clearing) rather than generic photography terms.
+
+VARIETY MANDATE — distribute across: canopy-down overhead, forest-floor macro, through-the-trunks framing, treehouse-aerial, grotto-pool reflection, burrow-doorway low-angle, fairy-eye-level intimate, stream-bridge side-on, firefly-clearing wide-establishing, worm's-eye up a giant-mushroom, over-shoulder at a campfire.
+
+Each entry must: specify camera POSITION (height/location/orientation); specify the framing's PURPOSE (what cozy element it dramatizes); reference woodland-specific brick scenery.`,
+    touchpoints: [
+      'CANOPY-DOWN OVERHEAD — camera high above the clearing looking straight down through gaps in the brick tree-tops at the village below, mushroom-cap roofs and winding brick paths forming the composition, minifigs read from above',
+      'FOREST-FLOOR MACRO — camera at ground level inches from the green-plate floor, brick-ferns and a toadstool filling the foreground tack-sharp, a minifig and the village softening into the mid-distance, the tiny-world intimate angle',
+      'THROUGH-THE-TRUNKS — camera behind two foreground brick tree-trunks that frame the shot like a proscenium, the village or grotto revealed in the gap between them, layered depth from foreground trunk to deep brick tree-line',
+      'TREEHOUSE-PLATFORM AERIAL — camera at platform height looking across and slightly down at the treehouse hamlet, rope-bridges spanning the gaps, minifigs on the decks, the canopy-village laid out in receding tiers',
+      'GROTTO-POOL REFLECTION — camera low at the water-edge so the brick-arch grotto and waterfall reflect in the trans-blue plate surface, lily-pad plates in the foreground, the symmetry-and-stillness angle',
+      "BURROW-DOORWAY LOW-ANGLE — camera at ground level looking up slightly at a round burrow door set in the green-plate hillside, the door-frame and chimney rising above, a minifig in the doorway foreshortened from below",
+      'FAIRY-EYE-LEVEL INTIMATE — camera down at minifig height beside a flower-crown fairy at a brick-bloom, the petals towering at scale, a shallow cozy framing that makes the viewer feel minifig-sized',
+      'STREAM-BRIDGE SIDE-ON — camera at the bank shooting the brick-arch bridge in side-profile across the trans-blue stream, its reflection below, a minifig mid-crossing read in clean silhouette',
+      'FIREFLY-CLEARING WIDE — camera pulled back for a wide establishing view of the whole dusk clearing, trans-yellow firefly elements dotting the depth at varied heights, an ensemble of minifigs + creatures across the brick-bloom floor',
+      "WORM'S-EYE UP A GIANT-MUSHROOM — camera at the base of an oversized brick toadstool looking steeply up the cream round-brick stem to the red dish-cap overhead, a doorway build in the stem, severe upward scale",
+      'OVER-SHOULDER AT THE CAMPFIRE — camera just behind a seated forager minifig looking past their shoulder at the brick campfire and the friends gathered around it, the trans-orange flame as the focal glow',
+      'CANOPY-SHAFT THROUGH-GAP — camera angled up through a gap in the brick tree-tops where a light-shaft falls, the village in the lower frame catching the beam, the magical-light-fall angle',
+    ],
+    instructions: `Each entry is ONE woodland-specific camera framing, 15-30 words. Format: "FRAMING NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ... 3. ...). One per line, NO internal newlines. STRICT BANS: no generic camera terms without woodland anchoring — every entry references brick woodland scenery (canopy/forest-floor/trunks/treehouse/grotto/burrow/stream/clearing). No real-forest vocabulary.`,
+  },
+
+  brickbot_forest_subject_focus: {
+    format: 'simple',
+    theme: `WOODLAND SUBJECT-FOCUS / SILHOUETTE ANCHOR — the dominant subject class for a forest diorama. Each entry is ONE of four kinds: a brick-built STRUCTURE, a woodland-CREATURE-MOUNT, a NO-VEHICLE INTERIOR, or a NO-VEHICLE LANDSCAPE. Each entry 20-40 words. This anchors what fills the frame.
+
+DISTRIBUTION: ~45% STRUCTURE / ~20% CREATURE-MOUNT / ~15% NO-VEHICLE INTERIOR / ~20% NO-VEHICLE LANDSCAPE. Lead each entry with its TYPE label in parentheses.
+
+Every entry names brick parts + bans real-forest vocabulary. Creatures are brick-built / LEGO animal-figures, NEVER photoreal.`,
+    touchpoints: [
+      'STRUCTURE — a brick-built giant toadstool cottage, red inverted-dish cap with white round-tile spots on a cream round-brick stem, door-and-window builds carved in, a clip-rod lantern at the threshold; fills 50%+ of frame as the dominant subject',
+      'STRUCTURE — a multi-platform treehouse on a stacked round-brick trunk, brick-plank decks, slope-brick railings, a clip-rod rope-ladder and rope-bridge, plant-element tree-top sheltering it; the dominant brick build',
+      'STRUCTURE — a humpbacked brick-arch stream-bridge of light-bley slope-bricks over trans-blue plate water, mossy green-plate stones beneath, brick lantern-posts at each end; the central architectural subject',
+      'STRUCTURE — a hobbit-style round-door burrow set into a green-plate hillside, brick door-frame and window builds, chimney with cotton-element smoke, brick-bloom flower border; the dominant cozy build',
+      'STRUCTURE — a brick-arch grotto entrance with a trans-blue + trans-light-blue plate pool and a stepped waterfall, BURP-rock walls with brick-moss, lily-pad plates floating; the grotto fills the frame',
+      'CREATURE-MOUNT — a chunky brick-built stag with a slope-brick body, antler builds from horn-elements, and a flower-crown fairy minifig riding on its back, the brick-deer as the dominant foreground silhouette',
+      'CREATURE-MOUNT — a brick-built giant owl with a 2×2-dome body, wing-plate sides and printed-eye tiles, a tiny forager minifig perched between its wings, the owl dominating the frame mid-roost',
+      'CREATURE-MOUNT — a saddled brick-built fox (brown slopes + jumper snout + tail-element) with a fairy minifig in a brick saddle, the fox as the bright foreground subject on a brick path',
+      'CREATURE-MOUNT — a giant brick-built snail with a SNOT-spiral shell of curved slopes and a stalk-eye head, a tiny minifig riding the shell, a whimsical slow-mount as the dominant subject',
+      'NO-VEHICLE INTERIOR — the cozy interior of a brick tree-hollow home, round brick walls, shelf builds with tiny jar-elements, a brick hearth with trans-orange flame, a woven-tile rug; the interior is the stage and a minifig the subject',
+      'NO-VEHICLE INTERIOR — a fairy workshop inside a mushroom-cottage, brick workbench with tool-accessories and trans-cyan glow-jars, hanging dried-herb plant-elements, a round window on brick tree-tops; cozy crafting setting',
+      'NO-VEHICLE LANDSCAPE — a wildflower glade bordered by brick tree-trunks, a dense brick-bloom flower meadow over green plates, a trans-blue trickle through it, deep-distance brick tree-line; lush multi-tier woodland setting',
+      'NO-VEHICLE LANDSCAPE — a mossy hollow at the foot of a giant brick tree, green moss-plate ground, brick-ferns and small brick-toadstools, exposed SNOT root-flares arching overhead; intimate forest-floor setting',
+    ],
+    instructions: `Each entry is ONE forest subject-focus, 20-40 words, LED BY ITS TYPE LABEL in parens — (STRUCTURE) / (CREATURE-MOUNT) / (NO-VEHICLE INTERIOR) / (NO-VEHICLE LANDSCAPE). Output as a NUMBERED list (1. ... 2. ... 3. ...). One per line, NO internal newlines. Distribution ~45/20/15/20. Every entry names brick parts; creatures are brick-built/LEGO-animal-figures. BANNED: birch/aspen/bark/leaf-litter/foxfire/photoreal + organic-motion verbs.`,
+  },
+
+  brickbot_forest_register: {
+    format: 'simple',
+    theme: `WOODLAND HERITAGE REGISTER — the aesthetic + faction lock for a forest diorama, named by its LEGO-heritage VISUAL SIGNATURE. Each entry is ONE register that locks palette + minifig costume + build motif. Each entry 20-40 words. This is the SECOND primary anti-photoreal lever (after build_technique): a strong LEGO-theme signature pins the whole frame to "brick."
+
+WEIGHTING — ~85% iconic LEGO woodland heritage / ~15% AFOL cottagecore + retro-whimsy:
+  • ELVENDALE (LEGO Elves) — teal + lavender + gold + rose, fairy/elf minifigs with translucent-wing + flower-crown pieces, ornate treetop-city builds (~18%)
+  • FORESTMEN (classic Castle forest faction) — forest-green + brown + tan, green-hood woodland-ranger minifigs, rustic timber + rope-bridge + hideout builds (~18%)
+  • FABULAND — bright primary colors, chunky rounded anthropomorphic-animal characters, playful storybook-village builds (~14%)
+  • FRIENDS-HEARTLAKE forest — pastel + sand + bright accents, cozy-cabin + flower-garden + treehouse builds (~13%)
+  • IDEAS-TREEHOUSE / BONSAI — natural-wood-brown + leaf-green, realistic-treehouse architecture, changeable seasonal leaf-elements (~12%)
+  • CLASSIC-CASTLE FOREST GLADE — muted green + grey + brown, simple knight/peasant woodland builds (~10%)
+  • AFOL COTTAGECORE-WOODLAND MOC — warm earthy + sage + cream, snug foraging-cottage + mushroom-village MOC styling (~8%)
+  • RETRO-WHIMSY (Brambly-Hedge-coded / Wind-in-the-Willows-coded) — soft autumnal, anthropomorphic woodland-folk in waistcoats, rendered STRICTLY in brick (~7%)
+
+Each entry must: name the register signature in first 5-8 words; specify its PALETTE; specify its MINIFIG/character look; specify a BUILD MOTIF. NEVER name a specific movie/book/show/set-number. Always reads as LEGO.`,
+    touchpoints: [
+      'ELVENDALE FAIRY-COURT SIGNATURE — teal + lavender + gold + rose palette, fairy/elf minifigs with translucent-wing elements + flower-crown hair-pieces + flowing printed gowns, ornate treetop-city builds with curved gold-trim arches and crystal-element accents',
+      'FORESTMEN WOODLAND-RANGER SIGNATURE — forest-green + brown + tan palette, green-hood ranger minifigs with quivers + feathered caps + leaf-emblem tunics, rustic timber-and-rope hideout builds with camouflaged tree-fort platforms',
+      'FABULAND STORYBOOK-VILLAGE SIGNATURE — bright primary palette (red/yellow/blue), chunky rounded anthropomorphic-animal characters (bear/rabbit/cat figures in little outfits), playful oversized-door cottage builds with simple cheerful shapes',
+      'FRIENDS-HEARTLAKE FOREST-CABIN SIGNATURE — pastel lavender + mint + sand with bright-pink/orange accents, friendly minifig-doll characters in casual outdoor outfits, cozy log-cabin + flower-garden + treehouse builds with heart + flower tile-prints',
+      'IDEAS-TREEHOUSE NATURAL SIGNATURE — natural wood-brown + leaf-green palette, casual modern minifigs, a realistically-architected multi-level treehouse around a stacked-round-brick trunk with changeable green + autumn-orange leaf-element foliage',
+      'CLASSIC-CASTLE FOREST-GLADE SIGNATURE — muted forest-green + grey + brown palette, simple classic knight + peasant + woodcutter minifigs, modest timber-cottage + well + cart builds in a brick woodland clearing',
+      'AFOL COTTAGECORE-WOODLAND SIGNATURE — warm earthy ochre + sage-green + cream palette, gentle forager + herbalist minifigs with satchels + baskets, snug mushroom-cottage + drying-herb + foraging-cart MOC styling',
+      'BRAMBLY-HEDGE-CODED WOODLAND-FOLK SIGNATURE — soft autumnal russet + cream + moss palette, anthropomorphic mouse/hedgehog/vole characters in tiny waistcoats + aprons (brick-built), snug root-burrow + acorn-store + harvest-cart builds, strictly in brick',
+      'ELVENDALE NATURE-GUARDIAN SIGNATURE — emerald + gold + amber palette, elf-guardian minifigs with leaf-armor prints + staff accessories, sacred-grove builds with glowing trans-green crystal-tree centerpieces',
+      'FORESTMEN HIDEOUT-CAMP SIGNATURE — green + brown + grey palette, green-hood outlaw-ranger minifigs around a brick campfire, hidden tree-stump-door + rope-bridge + lookout-platform woodland-hideout builds',
+      'FRIENDS-HEARTLAKE BLOSSOM-GARDEN SIGNATURE — bright pastel pink + mint + yellow palette, cheerful minifig-doll gardeners, a flower-stall + blossom-arch + pastel-treehouse build packed with brick-bloom flowers',
+      'WIND-IN-THE-WILLOWS-CODED RIVERBANK SIGNATURE — soft sage + tan + cornflower palette, anthropomorphic toad/badger/mole/water-rat characters in tweed (brick-built), riverbank-burrow + brick-rowboat + willow-shaded builds, strictly in brick',
+    ],
+    instructions: `Each entry is ONE woodland heritage register, 20-40 words. Format: "REGISTER NAME SIGNATURE — palette + minifig look + build motif". Output as a NUMBERED list (1. ... 2. ... 3. ...). One per line, NO internal newlines. Weight ~85% iconic LEGO woodland heritage / ~15% AFOL+retro-whimsy. STRICT BANS: never name a specific movie/book/show/set-number; never real-forest vocabulary (birch/aspen/bark/photoreal); everything reads as LEGO brick.`,
+  },
+
+  brickbot_forest_scene_props: {
+    format: 'simple',
+    theme: `WOODLAND DIORAMA STORYTELLING PROPS — small brick-built details that fill a forest diorama's negative space. Each entry is ONE prop, 12-25 words. Each implies a cozy backstory. NEVER decorative-only.
+
+VARIETY: brick-built toadstool / clip-rod hanging lantern / trans-yellow round-plate firefly cluster / brick acorn / mushroom basket / lily-pad plate / brick-built bird on a branch / trans-piece butterfly / 1×1 round-plate berry cluster / tiny treasure-chest / fairy-wing accessory / woven basket / brick teapot + cups / brick birdhouse / signpost / brick mushroom-stool / dropped brick-fruit / brick well / clothesline with printed-tile laundry / brick beehive.
+
+Each names SPECIFIC brick parts. BANNED: real-forest vocab + organic-motion verbs.`,
+    touchpoints: [
+      'A cluster of three brick-built toadstools — red inverted-dish caps with white round-tile spots on short cream stems, tucked at the base of a brick tree-trunk',
+      'A clip-rod hanging lantern — a trans-orange round-element in a brick cage clipped to a brick branch, implying the path is lit for evening',
+      'A trans-yellow round-plate firefly cluster on clear bar-rods — hovering at varied heights near a doorway, the magic of the dusk clearing',
+      'A tipped woven-basket of brick-mushrooms — round-tile caps spilling onto the green-plate floor, mid-forage abandoned',
+      'A lily-pad plate with a brick-built frog — a flat green round-plate on the trans-blue pool, a small brick frog perched mid-rest',
+      'A brick-built songbird on a branch — a tiny 1×1-and-slope bird in bright plastic, head-tilted, perched over the cottage door',
+      'A trans-clear butterfly element on a flower-stem — wings catching the light above a brick-bloom, a delicate placed detail',
+      'A brick well with a clip-rod bucket — light-bley slope-brick rim, a tiny rope-and-bucket build, at the village center',
+      'A tiny brick treasure-chest half-open — brown brick body with a gold round-plate coin spilling, hidden among brick-ferns',
+      'A brick teapot and two cup-builds on a slope-brick tray — left on a tree-stump table, implying a shared woodland tea',
+      'A brick birdhouse on a post — a gabled tiny build with a round-plate entry hole, nailed to a brick trunk',
+      'A carved brick signpost — a brown post with printed-tile direction-arrows pointing to the village and the grotto',
+    ],
+    instructions: `Each entry is ONE woodland brick-built prop, 12-25 words. Format: free-form prose naming the prop + its brick parts + implied backstory. Output as a NUMBERED list (1. ... 2. ... 3. ...). One per line, NO internal newlines. STRICT BANS: no real-forest vocabulary; LEGO bricks only; each prop must imply a cozy story, never decorative-only.`,
+  },
+
+  brickbot_forest_lighting: {
+    format: 'simple',
+    theme: `WOODLAND LIGHTING — light source + direction + color for a magical-forest LEGO MOC photo. Each entry is ONE lighting setup, 15-30 words. This lights a TABLETOP BRICK DIORAMA (not a real forest) — realistic studio-macro shadows on plastic.
+
+VARIETY: dappled green-gold shafts through brick tree-tops / warm trans-cyan fairy-glow / amber lantern-light / trans-yellow firefly-pulse / cool moonlit-blue / dawn-mist pink / low golden-hour rake / overcast-soft even / hearth-warm interior glow / trans-cyan grotto underglow.
+
+Each names the SOURCE + DIRECTION + COLOR + how it falls on the plastic brick surfaces. NEVER real-sun-through-real-leaves language; it's diorama studio lighting evoking the mood.`,
+    touchpoints: [
+      'Dappled green-gold light raking down through gaps in the brick tree-tops, casting hard-edged warm pools onto the green-plate floor with cool plastic shadow between, the classic enchanted-glade glow on the bricks',
+      'Soft trans-cyan fairy-glow rising from clustered glow-elements near the hollows, under-lighting the brick toadstool caps and minifig faces in cool aquamarine, warm key-light from the side balancing it',
+      'Warm amber lantern-light pooling outward from clip-rod lanterns, each lantern a hot point casting a soft circle on the brick path, deep cozy shadow beyond the lit ring',
+      'Trans-yellow firefly-pulse scattered through a dusk clearing, dozens of tiny warm points at varied depths, a deep blue-violet ambient base behind them on the brick scenery',
+      'Cool moonlit-blue wash over the whole diorama from high and behind, silvering the brick tree-top edges and the trans-blue stream, warm lantern accents punching small warm holes in the cool',
+      'Low golden-hour rake from one side, long warm light skimming across the green-plate meadow and gilding the brick-bloom petals, long plastic shadows stretching toward camera',
+      'Dawn-mist pink ambient with a soft low sun, gentle rosy light on the cream mushroom stems and a faint cotton-element ground-mist catching the glow, tender and quiet',
+      'Hearth-warm interior glow from a brick fireplace, trans-orange flame casting flickering warm light across the round brick walls and the woven-tile rug, cozy and enclosed',
+      'Trans-cyan grotto underglow from beneath the trans-blue pool surface, rippling cool light up the BURP-rock walls and the waterfall, a magical subterranean key',
+      'Overcast-soft even light, a gentle shadowless wash that shows off every brick detail of the village evenly, the calm-cloudy-day cottagecore mood',
+    ],
+    instructions: `Each entry is ONE woodland lighting setup, 15-30 words. Format: free-form prose naming source + direction + color + fall on the bricks. Output as a NUMBERED list (1. ... 2. ... 3. ...). One per line, NO internal newlines. STRICT BANS: no real-sun-through-real-leaves or photoreal-atmosphere language — it lights a plastic brick diorama. No botanical vocabulary.`,
+  },
+
+  brickbot_forest_palette: {
+    format: 'simple',
+    theme: `WOODLAND PALETTE — color combinations for a magical-forest LEGO MOC diorama, locked to LEGO-heritage signatures. Each entry is ONE palette, 12-25 words. Names 3-5 specific LEGO-brick colors + the heritage it evokes.
+
+VARIETY (align to registers): Elvendale teal+lavender+gold+rose / Forestmen forest-green+brown+tan / Fabuland bright-primary red+yellow+blue / Heartlake pastel-lavender+mint+pink+sand / Ideas-Treehouse natural-wood-brown+leaf-green / mushroom red+cream+spore-white / autumn orange+russet+olive+tan / fairy trans-cyan+white+pastel / sage-cottagecore sage+ochre+cream / grotto trans-blue+grey+moss-green.
+
+Each names ACTUAL LEGO brick colors (dark-bley, olive-green, sand-green, dark-tan, trans-cyan, etc.).`,
+    touchpoints: [
+      'Elvendale fairy palette — teal + lavender + warm gold + blush-rose, jewel-bright and ethereal, gold-trim accents catching the light against soft pastel builds',
+      'Forestmen ranger palette — forest-green + earth-brown + sand-tan, muted and rustic, the woodland-camouflage heritage of the green-hood outlaws',
+      'Fabuland storybook palette — bright primary red + sunny yellow + cheerful blue with white, bold and playful, the rounded-animal-village cheer',
+      'Heartlake forest palette — pastel lavender + mint-green + soft pink + sand, gentle and friendly with a few bright-coral accents, cozy-cabin warmth',
+      'Ideas-Treehouse natural palette — natural wood-brown + leaf-green + a touch of dark-tan, grounded and realistic, the changeable-foliage treehouse look',
+      'Mushroom-cottage palette — toadstool-red + cream + spore-white with brown stems, the iconic fairy-toadstool color story across the hamlet',
+      'Autumn-woodland palette — burnt-orange + russet + olive-green + dark-tan, the seasonal turn rendered in autumn leaf-elements over earthy builds',
+      'Fairy-glow palette — trans-cyan + white + soft pastel-pink, luminous and dreamy, the translucent-element magic of the dusk hollows',
+      'Sage-cottagecore palette — sage-green + warm ochre + cream + soft-brown, earthy and snug, the foraging-cottage MOC mood',
+      'Grotto palette — trans-blue + slate-grey + moss-green + a glint of trans-cyan, cool and hidden, the waterfall-pool color story',
+    ],
+    instructions: `Each entry is ONE woodland palette, 12-25 words. Format: "NAME palette — colors + mood". Output as a NUMBERED list (1. ... 2. ... 3. ...). One per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color language; tie each to a woodland heritage. No botanical real-world vocabulary.`,
+  },
+
+  brickbot_forest_woodland_phenomenon: {
+    format: 'simple',
+    theme: `WOODLAND PHENOMENON — a 50%-gated environmental beat for a forest diorama, ALWAYS rendered IN BRICK. Each entry is ONE phenomenon, 20-40 words. It AMPLIFIES the cozy scene as a secondary focal point, never eclipses it.
+
+VARIETY: firefly-swarm (trans-yellow round-plates on clear rods) / pollen-glow (trans-clear specks adrift) / drifting brick leaf-fall (autumn leaf-elements scattered mid-air on clear rods) / cotton-element ground-mist / trans-arc rainbow over the glade / mushroom-spore trans-white glow / fairy-dust trans-clear sparkle-trail / will-o-wisp trans-cyan orbs / butterfly-cloud (trans-piece wings) / first-snow (white round-plate dusting on brick tree-tops).
+
+Each names the BRICK PARTS that build it + the visual impact. NEVER lighting-color-cast (separate axis). NEVER real-weather/photoreal language.`,
+    touchpoints: [
+      'FIREFLY SWARM — dozens of trans-yellow + trans-clear 1×1 round-plates mounted on thin clear bar-rods hovering at staggered heights across the clearing, a constellation of tiny warm points threaded through the brick scenery',
+      'DRIFTING LEAF-FALL — autumn-orange + russet leaf-elements suspended on near-invisible clear rods mid-air as if drifting down, scattered across the frame at varied heights and angles, the seasonal-turn beat (static brick, never "falling/blowing")',
+      'COTTON-ELEMENT GROUND-MIST — low white cotton-batting + 1×1 white round-plate haze pooling between the brick tree-trunks and over the trans-blue stream, softening the village bases, the dawn-quiet beat',
+      'TRANS-ARC RAINBOW — a built arc of stacked trans-red/orange/yellow/green/blue/purple plates curving over the glade behind the village, a deliberate brick rainbow as a joyful backdrop element',
+      'MUSHROOM-SPORE GLOW — clusters of trans-white + trans-clear 1×1 round-plates dotting the air around the giant toadstools as glowing spores, plus a faint trans-white haze at the caps, the enchanted-fungus beat',
+      'WILL-O-WISP ORBS — three or four trans-cyan round-dome elements floating on clear rods along the path into the deep trees, each a small built orb leading the eye into the woodland, the mysterious-guide beat',
+      'FAIRY-DUST SPARKLE-TRAIL — a trail of scattered trans-clear + trans-pink 1×1 round-plates and tiny gem-elements arcing behind a flitting fairy, a built sparkle-wake frozen mid-air on clear rods',
+      'BUTTERFLY CLOUD — a loose cluster of trans-piece butterfly-elements on flower-stems and clear rods rising from the brick-bloom meadow, wings in trans-orange + trans-purple catching the light',
+      'FIRST-SNOW DUSTING — a light scatter of white 1×1 round-plates and white plates capping the brick tree-tops, mushroom caps, and rooflines, a gentle built first-snow over the autumn village',
+      'POLLEN-GLOW DRIFT — a fine scatter of trans-clear + trans-yellow 1×1 round-plates adrift between sunbeam-gaps in the brick tree-tops, a built golden-pollen haze threading the glade',
+    ],
+    instructions: `Each entry is ONE woodland phenomenon, 20-40 words. Format: "PHENOMENON NAME CAPS — brick-parts + visual impact". Output as a NUMBERED list (1. ... 2. ... 3. ...). One per line, NO internal newlines. STRICT BANS: never lighting-color-cast (separate axis); never real-weather/photoreal language; ALWAYS built from named brick parts; never organic-motion verbs (render as static brick suspended on clear rods).`,
+  },
+
+
 
   // ════════════════════════════════════════════════════════
   // FANTASY PATH (2026-05-22 — third BrickBot axis migration)

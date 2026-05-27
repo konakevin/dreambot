@@ -51,6 +51,43 @@ for (const p of PATHS) {
 // ─────────────────────────────────────────────────────────────
 
 const AXIS_POOLS = {
+  // aquatic path — fifth BrickBot axis migration (2026-05-27)
+  BRICKBOT_AQUATIC_SCENE_TYPE: load('brickbot_aquatic_scene_type'),
+  BRICKBOT_AQUATIC_MINIFIG_ACTION: load('brickbot_aquatic_minifig_action'),
+  BRICKBOT_AQUATIC_WATER_BUILD_TECHNIQUE: load('brickbot_aquatic_water_build_technique'),
+  BRICKBOT_AQUATIC_CAMERA_FRAMING: load('brickbot_aquatic_camera_framing'),
+  BRICKBOT_AQUATIC_SUBJECT_FOCUS: load('brickbot_aquatic_subject_focus'),
+  BRICKBOT_AQUATIC_REGISTER: load('brickbot_aquatic_register'),
+  BRICKBOT_AQUATIC_MARINE_LIFE: load('brickbot_aquatic_marine_life'),
+  BRICKBOT_AQUATIC_SCENE_PROPS: load('brickbot_aquatic_scene_props'),
+  BRICKBOT_AQUATIC_LIGHTING: load('brickbot_aquatic_lighting'),
+  BRICKBOT_AQUATIC_PALETTE: load('brickbot_aquatic_palette'),
+  BRICKBOT_AQUATIC_PHENOMENON: load('brickbot_aquatic_phenomenon'),
+
+  // winter path — sixth BrickBot axis migration (2026-05-27)
+  BRICKBOT_WINTER_SCENE_TYPE: load('brickbot_winter_scene_type'),
+  BRICKBOT_WINTER_MINIFIG_ACTION: load('brickbot_winter_minifig_action'),
+  BRICKBOT_WINTER_SNOW_ICE_BUILD_TECHNIQUE: load('brickbot_winter_snow_ice_build_technique'),
+  BRICKBOT_WINTER_CAMERA_FRAMING: load('brickbot_winter_camera_framing'),
+  BRICKBOT_WINTER_SUBJECT_FOCUS: load('brickbot_winter_subject_focus'),
+  BRICKBOT_WINTER_REGISTER: load('brickbot_winter_register'),
+  BRICKBOT_WINTER_SCENE_PROPS: load('brickbot_winter_scene_props'),
+  BRICKBOT_WINTER_LIGHTING: load('brickbot_winter_lighting'),
+  BRICKBOT_WINTER_PALETTE: load('brickbot_winter_palette'),
+  BRICKBOT_WINTER_PHENOMENON: load('brickbot_winter_phenomenon'),
+
+  // forest path — fourth BrickBot axis migration (2026-05-27)
+  BRICKBOT_FOREST_SCENE_TYPE: load('brickbot_forest_scene_type'),
+  BRICKBOT_FOREST_MINIFIG_ACTION: load('brickbot_forest_minifig_action'),
+  BRICKBOT_FOREST_BUILD_TECHNIQUE: load('brickbot_forest_build_technique'),
+  BRICKBOT_FOREST_CAMERA_FRAMING: load('brickbot_forest_camera_framing'),
+  BRICKBOT_FOREST_SUBJECT_FOCUS: load('brickbot_forest_subject_focus'),
+  BRICKBOT_FOREST_REGISTER: load('brickbot_forest_register'),
+  BRICKBOT_FOREST_SCENE_PROPS: load('brickbot_forest_scene_props'),
+  BRICKBOT_FOREST_LIGHTING: load('brickbot_forest_lighting'),
+  BRICKBOT_FOREST_PALETTE: load('brickbot_forest_palette'),
+  BRICKBOT_FOREST_WOODLAND_PHENOMENON: load('brickbot_forest_woodland_phenomenon'),
+
   // fantasy path — third BrickBot axis migration (2026-05-22)
   BRICKBOT_FANTASY_SCENE_TYPE: load('brickbot_fantasy_scene_type'),
   BRICKBOT_FANTASY_MINIFIG_ACTION: load('brickbot_fantasy_minifig_action'),
