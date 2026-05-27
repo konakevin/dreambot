@@ -23,7 +23,20 @@ export const posthog: PostHog | null = KEY && !__DEV__ ? new PostHog(KEY, { host
 
 // Tag every event with the build environment (local / preview / production) so
 // local test events stay out of production dashboards — same scheme as Sentry.
-if (posthog) posthog.register({ environment: APP_ENV });
+// Must register AFTER ready(): the RN SDK hydrates persisted super-properties
+// from storage asynchronously in the constructor, and that hydration clobbers a
+// register() made synchronously at module load — which silently dropped the
+// `environment` tag from every event after the first cold-start lifecycle event.
+// ready() resolves once hydration completes, so the property persists from then
+// on (the handful of pre-ready cold-start events stay untagged — acceptable).
+if (posthog) {
+  const client = posthog;
+  client
+    .ready()
+    .then(() => client.register({ environment: APP_ENV }))
+    // Best-effort tag: never crash the app or leak an unhandled rejection over it.
+    .catch(() => undefined);
+}
 
 export const analyticsEnabled = posthog != null;
 
