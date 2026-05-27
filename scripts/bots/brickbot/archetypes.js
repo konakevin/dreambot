@@ -8,6 +8,43 @@
  */
 
 module.exports = {
+  BRICKBOT_THEME_PARK: {
+    description: `PATH-BESPOKE — BrickBot theme-park path (2026-05-27 migration). AMUSEMENT-PARK + CARNIVAL LEGO MOC diorama photography — roller coasters mid-loop, ferris wheels lit at dusk, carousels mid-spin, drop-towers, swing-rides, haunted houses, log-flumes, bumper cars, midway game-rows, parade floats, food carts, water slides, monorails, all teeming with crowd minifigs in motion. Canon: LEGO Creator Expert Fairground Collection (Ferris Wheel 10247 / Carousel 10257 / Roller Coaster 10261 / Loop Coaster 10303 / Pirate-ship Fairground Mixer / Haunted House 10273 / Grand Carousel) + LEGO City amusement + Friends amusement-park + Bricklink AFOL GBC + working-fairground MOC community + vintage-carnival coding. NEVER licensed-park IP (no Disney/Universal named lands or characters).
+
+This path's identity is KINETIC SPECTACLE + CROWDS — big working brick rides as the hero structures, with masses of tiny crowd minifigs mid-motion and bright trans-element neon. Lower photoreal-drift risk than the nature paths, but the build_technique + register axes keep it reading as a Creator-fairground MOC, not a real-park photo.
+
+9 path-bespoke slots + 1 conditional:
+  • attraction          — THE HERO ride/structure (roller-coaster / ferris-wheel / carousel / drop-tower / swing-ride / haunted-house / fun-house / bumper-cars / log-flume / pirate-ship-swing / spinning-teacups / monorail-station / midway-game-row / parade-float / water-slide-tower / big-top-tent / arcade-hall / sky-wheel / fairground-mixer)
+  • crowd_action        — verb-led kinetic beat (mid-loop-scream / mid-ferris-peak-photo / mid-carousel-spin / mid-ring-toss / mid-coaster-first-drop / mid-bumper-collision / mid-parade-wave / mid-cotton-candy-handoff / mid-flume-splashdown / mid-prize-win)
+  • build_technique     — fairground-MOC distinguisher (Technic-articulated working coaster-track + rotating wheel / GBC-style motion mechanism / trans-element neon-tube signage + chase-lights / SNOT-curved coaster loop / printed-tile ride-signage / micro-crowd minifig massing / Power-Functions-implied motion)
+  • camera_framing      — theme-park-specific (coaster-POV-down-the-first-drop / ferris-wheel-looking-up / midway-down-the-game-row / aerial-park-overview / under-the-coaster-structure / carousel-from-inside / parade-route-low / dusk-skyline-of-rides)
+  • register            — fairground heritage lock, ~85% iconic LEGO (Creator-Expert-Fairground-Collection ornate-vintage / LEGO-City-modern-amusement / Friends-amusement-pastel / classic-LEGO-fair) + ~15% retro (Coney-Island-1920s-coded / county-fair-Americana-coded / European-Christmas-market-funfair-coded — strictly in brick)
+  • scene_life pickN:2  — the park's life (cotton-candy cart / popcorn stand / hot-dog cart / balloon vendor / ticket booth / ring-toss stall / duck-pond game / shooting-gallery / prize-wall of plush-builds / mascot character / churro stand / souvenir kiosk / bench with resting minifigs / string-light arch)
+  • lighting            — axis-clean: dusk neon-glow / summer-night with full ride-lights / golden-hour park / fireworks-lit sky / bright midday / haunted-house spooky trans-green / blue-hour with chase-lights
+  • palette             — axis-clean LEGO-coded: neon trans-red+blue+yellow / carnival-stripe red+white+gold / candy pink+mint+cream / summer-night navy + neon / Creator-vintage cream+teal+red / Friends pastel-fairground
+  • spectacle (50%-gated) — environmental beat IN BRICK (fireworks-burst of trans-element stars / synchronized light-show / fountain water-jet of trans-blue plates / confetti-cannon of 1×1 round-plates / passing parade / balloon-release of round-elements on rods / laser-show trans-bars)
+
+Bending advantage: attraction × build_technique × register × spectacle decoupled, so "roller-coaster + Technic-working-track + Creator-vintage register + fireworks" and "carousel + GBC-motion + Friends-pastel register" are rollable. Legacy 4-axis couldn't reach these.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'attraction',
+        'crowd_action',
+        'build_technique',
+        'camera_framing',
+        'register',
+        'scene_life',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: { scene_life: 2 },
+    conditionalLayer: { slot: 'spectacle', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BRICKBOT_LANDSCAPE: {
     description: `PATH-BESPOKE — BrickBot landscape path (2026-05-27 migration). EPIC NATURAL-VISTA LEGO MOC diorama photography — the entire NATURAL WORLD rendered in brick: mountain ranges, glacier valleys, redwood groves, desert canyons, coastal cliffs, alpine meadows, plateau mesas, river deltas, savannas, fjords, volcanic fields, badlands. Canon: AFOL "brick-built landscape" MOC tradition (the convention-tier all-brick nature dioramas) + LEGO Creator/Ideas natural builds + the EarthBot "Marc-Adamus / Peter-Lik gallery vista" aesthetic translated entirely into LEGO bricks.
 

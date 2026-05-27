@@ -10,6 +10,106 @@
  */
 
 module.exports = {
+  BRICKBOT_THEME_PARK: ({ slots, vibeDirective }) => {
+    const {
+      attraction,
+      crowd_action,
+      build_technique,
+      camera_framing,
+      register,
+      scene_life,
+      lighting,
+      palette,
+      spectacle,
+    } = slots;
+
+    const life = Array.isArray(scene_life) ? scene_life : [scene_life];
+    const lifeLines = life.map((p, i) => `  ${i + 1}. ${p}`).join('\n');
+
+    const spectacleSection = spectacle
+      ? `
+━━━ SPECTACLE (this render's environmental beat) ━━━
+${spectacle}
+
+Weave this in as a SECONDARY focal point, rendered IN BRICK (trans-element firework-stars on clear rods / trans-blue plate fountain-jet / 1×1 round-plate confetti / trans-bar laser-show). It AMPLIFIES the fun — never eclipses the ride + crowd action.
+
+`
+      : '';
+
+    return `You are a LEGO MOC photographer + AFOL convention judge writing an AMUSEMENT-PARK / CARNIVAL diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION TIER FAIRGROUND IN LEGO BRICKS ━━━
+This is a Bricklink AFOL champion's working-fairground diorama, photographed at a LEGO World convention — the kind with motorized rides and thousands of parts. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a real theme-park photo. The mood is KINETIC, BRIGHT, JOYFUL — big brick rides in motion, crowds of tiny minifigs, neon ablaze. Visual canon: LEGO Creator Expert Fairground Collection (the ornate motorized Ferris Wheel / Carousel / Roller Coaster / Loop Coaster / Haunted House / Pirate-ship Mixer) + LEGO City amusement + Friends amusement-park + AFOL Great-Ball-Contraption fairground MOCs. NEVER licensed-park IP (no Disney / Universal named lands, castles-as-trademarks, or franchise characters).
+
+━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
+NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Flux's "LEGO photo" data is contaminated with hand-placing-brick + claymation hero shots. OVERRIDE HARD. Every person is a LEGO minifigure with C-shaped hands + printed plastic face — and there are CROWDS of them (riders, families, vendors), tiny and many. NEVER a real human face.
+
+━━━ EVERYTHING IS BRICK — INCLUDING RIDES, LIGHTS, WATER, AND FIREWORKS ━━━
+EVERY element is built from real LEGO bricks. NO photoreal rides, NO photoreal lights, NO photoreal water, NO photoreal sky, NO real fairground photo. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
+  • Ride structures = brick-built with visible Technic-beam framework, SNOT curves, and connection points — NEVER photoreal steel
+  • Neon / ride-lights = trans-red + trans-blue + trans-yellow + trans-orange elements + 1×1 round-plate bulb-strings — NEVER photoreal neon-glow
+  • Coaster track = Technic / brick-built rail with cars of slope-bricks + minifig riders — NEVER photoreal track
+  • Water (flume / fountain / water-slide) = trans-blue + trans-light-blue layered plates with white round-plate foam — NEVER photoreal water
+  • Crowds = many small standard minifigs massed at varied positions — NEVER photoreal people
+  • Sky = brick sky-baseplate (or studio backdrop) — NEVER photoreal sky
+  • Fireworks = trans-element star-bursts on clear rods — NEVER photoreal fireworks
+
+━━━ BANNED VOCABULARY (pull Flux to real photography — NEVER use): "photoreal", "real steel/metal", "real neon", "glistening", "rushing water", "blurred motion / motion-blur". Render motion as a FROZEN brick moment (a coaster mid-drop is a static built car on a built track), never blurred.
+
+━━━ THE ATTRACTION — the hero ride/structure ━━━
+${attraction}
+
+Build the hero ride large and dominant, brick-built with visible framework + ride-mechanism detail. It is the centerpiece.
+
+━━━ THE CROWD ACTION — STORY BEAT MANDATE (no posing) ━━━
+${crowd_action}
+
+A freeze-frame of FUN HAPPENING — riders mid-scream, a midway game mid-toss, a flume mid-splashdown. Show the cause + the reaction. Crowds react (arms up, pointing, laughing-print faces). NEVER minifigs standing in a row.
+
+━━━ THE MOC BUILD TECHNIQUE — AFOL DISTINGUISHER (render visibly) ━━━
+${build_technique}
+
+This makes the build read as AFOL champion + unmistakably all-brick — the working-ride mechanism is the wow. Render it visibly: name the brick parts (Technic-beam framework / trans-element neon / GBC-motion / SNOT loop / slope-brick coaster-cars).
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — the rolled framing DRIVES the composition. Apply the exact angle, even if Flux wants a centered front-facing minifig. Override hard.
+  • COASTER-POV-DOWN-THE-DROP / FERRIS-WHEEL-LOOKING-UP / WATER-SLIDE-TOWER — vertical drama, the ride towering
+  • AERIAL-PARK-OVERVIEW / DUSK-SKYLINE-OF-RIDES — wide establishing, the whole park + crowds
+  • MIDWAY-DOWN-THE-ROW / PARADE-ROUTE-LOW — receding perspective down a lane of stalls/floats + crowd
+  • UNDER-THE-COASTER-STRUCTURE / CAROUSEL-FROM-INSIDE — framed by the brick ride-structure
+
+━━━ THE REGISTER (fairground heritage lock) ━━━
+${register}
+
+The aesthetic lock — ride ornamentation, palette, signage, and crowd styling align with this heritage (ornate-vintage Creator-Expert / sleek modern City / cute pastel Friends / retro Coney-Island). Never mix anachronistically.
+
+━━━ THE PARK'S LIFE — fill the midway (render both, brick-built) ━━━
+${lifeLines}
+
+These brick-built stalls/carts/vendors populate the scene with deliberate detail + tiny story (a vendor minifig handing over a brick treat, a prize-wall of plush-builds). Never decorative-only.
+${spectacleSection}━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+
+━━━ CROSS-AXIS COMPATIBILITY ━━━
+• If register is CREATOR-EXPERT-FAIRGROUND — ornate vintage detailing, cream + teal + red + gold, scalloped canopies + filigree.
+• If register is FRIENDS-AMUSEMENT — bright pastel, mini-doll crowds, heart + star signage.
+• If register is CITY-MODERN-AMUSEMENT — sleeker rides, primary colors, modern signage.
+• Neon + ride-lights are ALWAYS trans-element brick, regardless of how photoreal the lighting feels.
+• Motion (spin / drop / splash) is ALWAYS a frozen brick moment — never blurred.
+• Whatever palette rolls, the register's signature WINS if they conflict.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OUTPUT SPEC ━━━
+Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the attraction + crowd action + camera framing, weave in the build technique + register + scene-life + lighting + palette + spectacle (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC fairground photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+  },
+
   BRICKBOT_LANDSCAPE: ({ slots, vibeDirective }) => {
     const {
       biome_vista,

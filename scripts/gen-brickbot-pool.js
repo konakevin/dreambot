@@ -67,6 +67,246 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // THEME-PARK PATH (2026-05-27 — eighth BrickBot axis migration)
+  // AMUSEMENT-PARK + CARNIVAL. Kinetic spectacle + crowds + neon. Bespoke:
+  // attraction (hero ride) + build_technique (working-ride MOC) + crowd_action
+  // + scene_life. Every entry names LEGO PARTS, BANS photoreal + motion-blur
+  // (motion is a FROZEN brick moment). Bespoke.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_theme_park_attraction: {
+    format: 'simple',
+    theme: `LEGO FAIRGROUND ATTRACTIONS — the HERO ride/structure for BrickBot's theme-park path. Each entry is ONE big brick-built attraction, 30-55 words. The ride IS the centerpiece (crowds + action are separate axes — name the ride + its brick build only).
+
+⚠️ CRITICAL — the ATTRACTION / STRUCTURE only. NO crowd action verbs (separate axis). NO build-technique deep-dive (separate axis). NO camera framing. NO lighting/palette. NO spectacle. Just: which big brick ride fills the frame + its form.
+
+⚠️ EVERYTHING IS LEGO BRICK. Rides = Technic-frame brick builds. Lights = trans-elements. NEVER real-park vocabulary. BANNED: photoreal, real steel/metal/neon, glistening, motion-blur, blurred.
+
+VARIETY MANDATE — distribute across: roller-coaster / ferris-wheel / carousel / drop-tower / swing-ride (chair-swing) / haunted-house / fun-house / bumper-cars / log-flume / pirate-ship-swing / spinning-teacups / monorail-station / midway-game-row / parade-float / water-slide-tower / big-top circus-tent / arcade-hall / sky-wheel-observation / fairground-mixer / tilt-a-whirl / mini-golf-windmill / haunted-mansion.
+
+Each entry: name the attraction in first 5-8 words; describe its big brick FORM + key build elements (Technic framework, SNOT curves, trans-light strings); imply its scale as the centerpiece; NEVER crowd-action, framing, or spectacle.`,
+    touchpoints: [
+      'TOWERING ROLLER-COASTER — a big brick-built coaster with a Technic-beam support lattice, a SNOT-curved trans-clear-railed first-drop plunging from a tall lift-hill, a looping inversion, slope-brick coaster-cars on the track, the dominant centerpiece',
+      'GRAND FERRIS WHEEL — a tall brick Ferris wheel with a Technic-axle hub, radial spoke-beams, and a ring of swinging gondola-cabin builds in candy colors, trans-element bulb-strings outlining the rim, towering over the park',
+      'ORNATE CAROUSEL — a brick carousel under a scalloped peaked canopy of printed-tile + slope-bricks, a ring of brick-built horse + creature mounts on barber-pole columns, gold-trim filigree, the vintage centerpiece',
+      'DROP-TOWER — a tall brick drop-tower mast with a ring of seat-builds at the top ready to plunge, Technic-beam tower lattice, trans-element light-strips up the column, dominating the skyline',
+      'CHAIR-SWING RIDE — a brick swing-ride with a central rotating canopy-hub and radiating chains of seat-builds flung outward, ornate trans-element light-ring, the airy spinning centerpiece',
+      'HAUNTED HOUSE — a lopsided brick haunted-mansion facade with crooked towers, boarded windows, a creaky-porch build, trans-green glow behind the windows, the spooky dark centerpiece amid the bright park',
+      'LOG-FLUME — a brick log-flume with a tall lift-chute, a trans-blue + trans-light-blue plate water-channel winding through brick scenery, hollow log-cars, a big splashdown pool at the base, the watery centerpiece',
+      'BUMPER-CARS PAVILION — a brick bumper-car arena under a striped canopy with a grid floor, a fleet of round brick bumper-cars in bright colors, trans-element ceiling lights, the chaotic-fun centerpiece',
+      'PIRATE-SHIP SWING — a big brick pirate-ship swing-ride on a Technic-pivot arm, the galleon-build swinging up at a steep angle, ornate hull detail, trans-element trim, the dramatic centerpiece',
+      'SPINNING TEACUPS — a brick teacup ride with oversized pastel cup-builds on a rotating brick platform, each cup on its own spinner, a central decorated hub, the whimsical centerpiece',
+      'MIDWAY GAME-ROW — a row of brick carnival game-stalls under striped canopies (ring-toss, milk-bottle knockdown, balloon-darts), a prize-wall of plush-builds, the bustling midway centerpiece',
+      'WATER-SLIDE TOWER — a tall brick water-park slide-tower with twisting trans-blue + trans-light-blue plate flumes spiralling down to splash-pools, a Technic-frame stair-tower, the towering wet centerpiece',
+    ],
+    instructions: `Each entry is ONE fairground attraction, 30-55 words. Format: "ATTRACTION NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no crowd-action verbs, no camera framing, no spectacle, no lighting/palette, no real-park vocabulary (photoreal/real-steel-neon/motion-blur). Every element a NAMED LEGO BRICK PART. The hero ride + its brick form only.`,
+  },
+
+  brickbot_theme_park_crowd_action: {
+    format: 'simple',
+    theme: `LEGO CROWD + RIDER ACTION BEATS — verb-led FUN moments for BrickBot's theme-park path. Each entry is a freeze-frame of riders/crowd minifigs IN MID-FUN, NOT posing. Each entry 25-45 words.
+
+⚠️ STORY BEAT MANDATE — every entry STARTS WITH AN ACTIVE VERB with CAUSE + EFFECT in-frame. Theme-park verbs: mid-loop-scream, mid-ferris-peak, mid-carousel-spin, mid-ring-toss, mid-coaster-drop, mid-bumper-collision, mid-parade-wave, mid-treat-handoff, mid-flume-splashdown, mid-prize-win, mid-balloon-grab.
+
+⚠️ HARD BANS: NEVER "minifigs standing/posing", NEVER "watching/looking/gazing" as the whole beat, NEVER passive. Minifigs are LEGO (C-hands, printed faces incl. open-mouth-scream + laughing prints). BANNED: photoreal, real-people, motion-blur, blurred. Motion is a FROZEN brick moment.
+
+✓ Body-position variety: mid-ride-thrill arms-up (~25%), mid-game-play toss/aim (~20%), multi-figure family/group interaction (~25%), mid-vendor-transaction (~15%), mid-splash/collision reaction (~15%).
+
+Each entry: start with an active verb; name 1-3 minifigs (rider / kid / vendor / family) + brief identifier; the SHARED OBJECT/EVENT (coaster-car / ring / prize / treat / bumper-car); imply before/after; PLASTIC SCALE + crowd context.`,
+    touchpoints: [
+      'Screams mid-first-drop as a coaster-car of four minifigs plunges down the trans-railed track, all four arms thrown up and open-mouth-scream prints, a fifth rider gripping the lap-bar, the lift-hill receding behind',
+      'Tosses a ring mid-throw at a midway ring-toss stall, a kid minifig arm extended and a brick ring mid-air toward the peg-board, a vendor minifig behind the counter mid-gesture, a parent watching with a prize-plush',
+      'Reaches the ferris-wheel peak as a couple in a gondola-cabin lean to point a C-hand out at the park spread below, the wheel-rim lights around them, a family in the next cabin mid-wave across the gap',
+      'Collides mid-bumper-crash as two brick bumper-cars knock together, both driver minifigs jolted sideways with surprised-prints, a third car swerving in behind, sparks suggested by trans-yellow round-plates',
+      'Hands over cotton-candy mid-transaction at a brick candy-cart, the vendor minifig passing a pink cotton-candy-build to a kid minifig reaching up with both C-hands, a balloon-bunch bobbing beside the cart',
+      'Splashes down mid-flume as a log-car of minifigs hits the trans-blue plate pool, a wall of white 1×1 round-plate spray flying up, riders bracing with arms up, onlookers on the bridge mid-recoil from the splash',
+      'Spins mid-carousel as three minifigs ride brick horses frozen at different up-down points on their poles, one waving, a parent walking alongside reaching for a child rider, the canopy-lights ringing above',
+      'Wins a prize mid-celebration as a kid minifig thrusts a just-won plush-build overhead at a knockdown-game stall, the vendor mid-clap, milk-bottle-builds scattered on the counter from the winning throw',
+      'Waves mid-parade as costumed minifigs on a brick float toss streamer-elements to a crowd lining the route, kids on the curb with arms up reaching, a balloon-vendor threading the throng',
+      'Aims mid-shooting-gallery as a minifig sights a brick pop-gun at a row of moving target-builds, a target mid-tip-over, a sibling beside them bouncing on tiptoe, prize-wall behind',
+      'Grips the swing-ride chains mid-flight as a ring of seat-built minifigs are flung outward at full extension, scarves + hair-pieces streaming back (static), the central hub spinning below, the airy thrill',
+      'Pours into the haunted-house entrance as a clutch of minifigs crowd the creaky doorway, one mid-flinch-back from a spring-up skeleton-build, trans-green glow spilling out, a brave kid pulling a friend in',
+    ],
+    instructions: `Each entry is ONE theme-park crowd/rider action beat, 25-45 words. Format: prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: NO standing/posing/passive, NO motion-blur/blurred (frozen brick moment). No real-people/photoreal. Story beat + verb + cause/effect + crowd context always.`,
+  },
+
+  brickbot_theme_park_build_technique: {
+    format: 'simple',
+    theme: `LEGO FAIRGROUND MOC BUILD TECHNIQUE — AFOL-distinguishing brick-construction notes for BrickBot's theme-park path, focused on WORKING RIDES + NEON + the engineering that wins conventions. Each entry 25-45 words.
+
+VARIETY MANDATE — distribute across:
+  • Technic-articulated working coaster-track (rail built from Technic/brick with slope-brick cars)
+  • Rotating-wheel mechanism (Technic-axle hub + radial beams for Ferris wheel / carousel)
+  • GBC-style / Power-Functions-implied motion (gears, drive-belts visible suggesting the ride moves)
+  • Trans-element neon-tube signage + chase-light bulb-strings (1×1 round-plates + trans-bars)
+  • SNOT-curved coaster loop / helix
+  • Ornate Creator-Expert filigree (scalloped canopies, lattice-work, printed decorative tiles)
+  • Micro-crowd minifig massing (dozens of standard minifigs for scale + life)
+  • Trans-blue plate flume/fountain water-channels
+  • Printed-tile ride-signage + ticket-board
+  • Modular fairground footprint (interlocking stall + path baseplates)
+
+Each entry: name the technique TYPE in first 5-8 words; specify WHICH ride element; name SPECIFIC BRICK PARTS; imply the wow. NO real-construction (no motor-as-real-claim beyond LEGO Power-Functions). BANNED: photoreal, real-steel/neon.`,
+    touchpoints: [
+      'Technic-articulated coaster-track — a coaster rail built from Technic-beam spine + brick cross-ties carrying slope-brick coaster-cars, the track banking through a SNOT-curved drop and a vertical loop, the engineering legible from across the room',
+      'Technic-axle Ferris-wheel hub — a Ferris wheel built around a central Technic-axle hub with radial beam-spokes to an outer ring, gondola-cabins on free-swinging clip-pivots so they hang level, the classic working-wheel build',
+      'GBC-style carousel drive — a carousel with a visible gear-train + drive-belt mechanism under the platform suggesting Power-Functions motion, the horse-mounts on cam-driven up-down poles, an AFOL motion showpiece',
+      'Trans-element neon signage — ride signage + entry-arches built from trans-red + trans-blue + trans-yellow bar-elements + 1×1 round-plate bulb-strings outlining every edge, a brick-built blaze of fairground neon',
+      'SNOT coaster loop — a vertical coaster loop built with SNOT bracket-plates curling the track 360°, the trans-clear rail catching light, a car frozen at the loop-apex, the gravity-defying brick wow',
+      'Creator-Expert ornate filigree — a ride canopy + facade built with scalloped slope-brick edges, lattice-work bar-elements, gold printed-tile filigree, and finial-builds, the vintage-fairground luxury detailing',
+      'Micro-crowd massing — the park floor populated with dozens of standard minifigs in varied poses + colors massed along paths and ride-queues, the crowd-scale that makes the build read as a living park',
+      'Trans-blue flume channel — a water-ride channel built from trans-blue + trans-light-blue plates banked through brick scenery with white 1×1 round-plate foam at the drops, a splashdown pool of layered trans-plates',
+      'Printed-tile ride-signage — ride-name marquees + ticket-boards built from printed tiles + brick lettering on a slope-brick frame, period-correct typography for the register, the finishing-touch detail',
+      'Modular fairground footprint — the park laid out on interlocking baseplates with brick-path lanes, stall-modules, planters, and bench-builds slotting together, an AFOL modular-fairground layout',
+      'Drop-tower catch-mechanism — a drop-tower with a Technic-pin guide-rail and a seat-carriage that rides it, the lift-cable suggested by a taut bar-element, the white-knuckle plunge built legibly',
+      'Trans-element light-show rig — a ride outlined in programmable-looking trans-element light-banks (mixed trans colors in a grid) suggesting a synchronized show, the night-fairground glow built in brick',
+    ],
+    instructions: `Each entry is ONE fairground MOC build technique, 25-45 words. Format: "TECHNIQUE NAME — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-construction beyond LEGO; no real-steel/neon/photoreal. LEGO bricks only — name SPECIFIC parts (Technic-beam / SNOT bracket / trans-bar / 1×1 round-plate / slope-brick car).`,
+  },
+
+  brickbot_theme_park_camera_framing: {
+    format: 'simple',
+    theme: `THEME-PARK CAMERA FRAMING — LEGO MOC photography angles for the theme-park path. Each entry 15-30 words, specific to fairground subject matter.
+
+⚠️ Bespoke — leverage park scenery (coaster-drop / ferris-wheel / midway / aerial-park / under-the-structure / carousel / parade-route / ride-skyline) rather than generic terms.
+
+VARIETY MANDATE — distribute across: coaster-POV-down-the-first-drop, ferris-wheel-looking-up, midway-down-the-game-row, aerial-park-overview, under-the-coaster-structure, carousel-from-inside, parade-route-low, dusk-skyline-of-rides, water-slide-base-up, queue-line-eye-level.
+
+Each: specify camera POSITION + the energy it captures; reference fairground brick scenery.`,
+    touchpoints: [
+      'COASTER-POV-DOWN-THE-DROP — camera at the crest of the first drop looking down the steep trans-railed track, the coaster-car of screaming minifigs tipping over the edge, the park spread far below',
+      'FERRIS-WHEEL-LOOKING-UP — camera at the base of the Ferris wheel craning up the radial spoke-beams to the gondola-ring against the sky, the bulb-string rim blazing, severe upward scale',
+      'MIDWAY-DOWN-THE-GAME-ROW — camera low down a lane of striped game-stalls receding to a vanishing point, prize-walls + crowds + string-lights lining both sides, the bustling depth',
+      'AERIAL-PARK-OVERVIEW — camera high and back over the whole brick park, rides + midway + paths + crowds laid out as a complete living fairground, the convention-display master-shot',
+      'UNDER-THE-COASTER-STRUCTURE — camera beneath the Technic-beam support lattice looking up through the framework as a car roars across the track overhead, dramatic structural depth',
+      'CAROUSEL-FROM-INSIDE — camera within the carousel ring looking out past the brick horse-mounts and barber-pole columns to the park beyond, the canopy-lights overhead, immersive spin',
+      'PARADE-ROUTE-LOW — camera at curb-level as a brick parade-float passes, costumed minifigs above tossing streamers, crowd-arms reaching into frame, the celebratory low angle',
+      'DUSK-SKYLINE-OF-RIDES — camera back at dusk capturing the silhouette skyline of rides against a deep-blue brick sky, every ride outlined in trans-element lights, the magic-hour fairground',
+      'WATER-SLIDE-BASE-UP — camera at the splash-pool looking up the twisting trans-blue flume-tower as a log-car bursts down the final chute into a white round-plate splash, the wet thrill',
+      'QUEUE-LINE-EYE-LEVEL — camera at minifig height in a switchback ride-queue, the crowd of waiting minifigs leading the eye to the ride entrance + its trans-element marquee, immersive anticipation',
+    ],
+    instructions: `Each entry is ONE theme-park camera framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no generic camera terms without fairground anchoring — every entry references brick park scenery. No real-park/photoreal vocabulary.`,
+  },
+
+  brickbot_theme_park_register: {
+    format: 'simple',
+    theme: `FAIRGROUND HERITAGE REGISTER — the aesthetic lock for a theme-park diorama, named by its LEGO-heritage VISUAL SIGNATURE. Each entry 20-40 words, locking palette + ride-ornamentation + crowd styling.
+
+WEIGHTING — ~85% iconic LEGO fairground heritage / ~15% retro:
+  • CREATOR-EXPERT-FAIRGROUND (ornate vintage) — cream + teal + red + gold, scalloped canopies + filigree + barber-poles, the motorized-collector look (~30%)
+  • LEGO-CITY-MODERN-AMUSEMENT — bright primary, sleek modern rides + simple signage, casual minifig crowds (~22%)
+  • FRIENDS-AMUSEMENT-PARK — bright pastel pink + mint + lavender, mini-doll crowds, cute heart/star-decorated rides + juice-bars (~20%)
+  • CLASSIC-LEGO-FAIR — bold primary + white, simple cheerful rides, classic-smiley minifig crowds (~13%)
+  • CONEY-ISLAND-1920s-CODED (retro) — cream + cherry-red + gold, vintage wooden-coaster + grand-carousel + bunting, strictly in brick (~8%)
+  • COUNTY-FAIR-AMERICANA-CODED (retro) — barn-red + white + sunflower-gold, ferris-wheel + livestock-barn + funnel-cake-stand + bunting, strictly in brick (~7%)
+
+Each entry: name the register signature in first 5-8 words; PALETTE; RIDE-ORNAMENTATION; CROWD styling. NEVER name a licensed park or franchise. Always reads as LEGO.`,
+    touchpoints: [
+      'CREATOR-EXPERT ORNATE-FAIRGROUND SIGNATURE — cream + teal + red + gold palette, scalloped ride-canopies with gold filigree + barber-pole columns + finial-builds, period-dressed minifig crowds, the motorized-collector luxury look',
+      'LEGO-CITY MODERN-AMUSEMENT SIGNATURE — bright primary palette, sleek modern coaster + drop-tower + simple bold signage, casual everyday minifig crowds with phones + snacks, the contemporary city-park look',
+      'FRIENDS-AMUSEMENT SIGNATURE — bright pastel pink + mint + lavender palette, mini-doll crowds in cute outfits, heart + star + flower-decorated rides + a juice-bar + photo-booth, the cheerful-pastel park',
+      'CLASSIC-LEGO-FAIR SIGNATURE — bold primary + white palette, simple cheerful rides (basic ferris wheel + carousel + bumper cars), classic-smiley minifig crowds, the timeless toybox-fair look',
+      'CONEY-ISLAND-1920s SIGNATURE — cream + cherry-red + gold palette, a vintage wooden-lattice coaster + a grand ornate carousel + bunting-draped stalls + a boardwalk, strictly in brick, nostalgic seaside-amusement charm',
+      'COUNTY-FAIR-AMERICANA SIGNATURE — barn-red + white + sunflower-gold palette, a ferris wheel + livestock-barn + funnel-cake + pie-contest tent + bunting, strictly in brick, the heartland summer-fair look',
+      'CREATOR-EXPERT HAUNTED-FAIR SIGNATURE — deep-purple + black + trans-green palette, an ornate haunted-mansion ride + spooky-decorated carousel + cobweb-tile detailing, the vintage-spooky-fair look in brick',
+      'FRIENDS WATER-PARK SIGNATURE — turquoise + coral + white palette, mini-doll crowds in swimwear, trans-blue slide-towers + splash-pools + a lazy-river build, the bright pastel water-park',
+      'LEGO-CITY NIGHT-CARNIVAL SIGNATURE — navy + neon trans-multi palette, modern rides ablaze with trans-element lights against a dark sky, casual crowds with glow-element accessories, the night-fair look',
+      'CLASSIC-LEGO TRAVELLING-CIRCUS SIGNATURE — red + yellow + white big-top palette, a striped circus-tent + ringmaster + acrobat + animal-act builds + caravan-wagons, the classic travelling-show look in brick',
+    ],
+    instructions: `Each entry is ONE fairground heritage register, 20-40 words. Format: "REGISTER NAME SIGNATURE — palette + ride-ornamentation + crowd styling". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Weight ~85% iconic LEGO / ~15% retro. STRICT BANS: never a licensed park/franchise; never real-park/photoreal vocabulary; everything reads as LEGO brick.`,
+  },
+
+  brickbot_theme_park_scene_life: {
+    format: 'simple',
+    theme: `THEME-PARK SCENE-LIFE — the brick-built stalls, carts, and vendors that fill a fairground's midway. Each entry 12-25 words, implying a tiny story. NEVER decorative-only.
+
+VARIETY: cotton-candy cart / popcorn stand / hot-dog cart / balloon vendor / ticket booth / ring-toss stall / duck-pond game / shooting-gallery / prize-wall of plush-builds / mascot character / churro stand / souvenir kiosk / bench with resting minifigs / string-light arch / face-painting stall / lemonade stand / funnel-cake stand / lost-balloon / spilled-popcorn / photo-cutout board / fortune-teller tent.
+
+Each names SPECIFIC brick parts + a tiny story. BANNED: photoreal + motion-blur.`,
+    touchpoints: [
+      'A cotton-candy cart — a pink-canopied brick cart with a spun-sugar drum and a rack of pink + blue cotton-candy-builds, a vendor minifig handing one to a reaching kid',
+      'A popcorn stand — a red-and-white striped brick stand with a popcorn-kettle build and overflowing trans-yellow round-plate kernels, a few spilled on the path below',
+      'A balloon vendor — a minifig holding a fat bunch of round balloon-elements on bar-strings, one balloon escaping skyward, a kid pointing after it',
+      'A ring-toss stall — a brick game-counter with a peg-board of bottle-builds and a basket of brick rings, a hung row of prize-plush-builds above, vendor mid-gesture',
+      'A ticket booth — an ornate little brick kiosk with a printed-tile price-board and a window, a queue of two or three minifigs, a roll-of-tickets element on the counter',
+      'A duck-pond game — a brick trough with floating yellow duck-builds circling on a trans-blue channel, a kid minifig lifting one, a numbered prize-tile underneath',
+      'A prize-wall — a brick stall back-wall hung with rows of plush-builds (bears, stars) in bright colors, a winning kid reaching up as the vendor unhooks one',
+      'A churro / funnel-cake stand — a brick cart with a fryer-build and a stack of golden churro/funnel-cake builds dusted with white round-plate sugar, a hungry queue forming',
+      'A bench with resting minifigs — a brick park-bench under a string-light arch where two tired minifigs sit with snacks + balloons, a third slumped, mid-rest from the rides',
+      'A face-painting stall — a small brick stall with a paint-palette tile and a kid minifig in the chair getting a printed-face design, a sample-board of designs behind',
+      'A mascot character — a big brick-built fairground mascot (a smiling star or animal) waving to a clutch of delighted kid minifigs reaching up for a high-five',
+      'A souvenir kiosk — a brick kiosk hung with pennant-tiles, mini-build trinkets, and hat-elements on pegs, a minifig trying on a comedy-hat at the counter',
+    ],
+    instructions: `Each entry is ONE brick-built fairground scene-life detail, 12-25 words. Format: prose naming the stall/cart/vendor + its brick parts + a tiny story. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-park/photoreal; LEGO bricks only; each implies a tiny story, never decorative-only.`,
+  },
+
+  brickbot_theme_park_lighting: {
+    format: 'simple',
+    theme: `THEME-PARK LIGHTING — light source + direction + color for a fairground LEGO MOC photo. Each entry 15-30 words. Lights a TABLETOP BRICK DIORAMA — studio-macro shadows on plastic, evoking the fairground mood.
+
+VARIETY: dusk neon-glow / summer-night with full ride-lights / golden-hour park / fireworks-lit sky / bright midday / haunted-house spooky trans-green / blue-hour with chase-lights / sunset-silhouette ride-skyline / warm string-light pools on the midway / hard noon with crisp ride-shadows.
+
+Each names SOURCE + DIRECTION + COLOR + fall on the bricks. NEVER real-neon/photoreal-glow language.`,
+    touchpoints: [
+      'Dusk neon-glow — the rides outlined in trans-element lights beginning to dominate as the sky deepens, warm + multicolor glow pooling on the brick midway, the magic-hour fairground key',
+      'Summer-night full ride-lights — deep navy ambient with every ride blazing trans-red/blue/yellow, the lights reflected on the brick paths, the crowds lit in pools of colored glow, the night-park spectacle',
+      'Golden-hour park — warm low side-light raking across the rides and gilding the canopy-tops, long plastic shadows down the midway, the cheerful late-afternoon glow',
+      'Fireworks-lit sky — a dark sky lit by built trans-element firework-bursts casting brief multicolor light down onto the upturned crowd and the ride-tops, the celebratory flash',
+      'Bright midday — a strong high key making the candy-colored rides + bunting pop in saturated contrast, short crisp plastic shadows, the busy daytime fair',
+      'Haunted-house spooky glow — trans-green + trans-purple light spilling from the haunted-mansion windows into the surrounding dusk, eerie under-lighting on nearby minifig faces, the spooky-corner mood',
+      'Blue-hour chase-lights — deep cobalt twilight with sequenced trans-element bulb-strings on every ride suggesting motion, warm vendor-stall light pooling below, the transitional-dusk magic',
+      'Sunset-silhouette skyline — the ride-skyline backlit to silhouette against a magenta + gold sky, ride-lights just winking on, a dramatic end-of-day fairground frame',
+      'Warm string-light pools — clip-rod string-lights arching over the midway casting warm overlapping pools on the brick path + stalls, deep cozy shadow between, the intimate evening-fair glow',
+      'Hard noon ride-shadows — a strong overhead sun throwing crisp dark shadows of the coaster lattice + ferris spokes across the ground, graphic and bold, the high-energy daytime look',
+    ],
+    instructions: `Each entry is ONE theme-park lighting setup, 15-30 words. Format: prose naming source + direction + color + fall on the bricks. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-neon/photoreal-glow language — it lights a plastic brick diorama. No real-park vocabulary.`,
+  },
+
+  brickbot_theme_park_palette: {
+    format: 'simple',
+    theme: `THEME-PARK PALETTE — color combinations for a fairground LEGO MOC diorama, locked to LEGO-heritage signatures. Each entry 12-25 words, naming 3-5 specific brick colors + the mood/heritage.
+
+VARIETY (align to registers): neon trans-red+blue+yellow / carnival-stripe red+white+gold / candy pink+mint+cream / summer-night navy + neon-multi / Creator-vintage cream+teal+red+gold / Friends pastel pink+lavender+turquoise / Coney-Island cherry-red+cream+gold / county-fair barn-red+white+sunflower / haunted purple+black+trans-green / water-park turquoise+coral+white.
+
+Each names ACTUAL LEGO brick colors (trans-neon-green, bright-light-orange, medium-azure, etc.).`,
+    touchpoints: [
+      'Neon-night palette — trans-red + trans-blue + trans-yellow over navy, electric and dazzling, the rides ablaze against the dark',
+      'Carnival-stripe palette — bright red + white + gold + a pop of blue, classic big-top cheer, bunting and barber-poles',
+      'Candy palette — bubblegum-pink + mint-green + cream + buttercup-yellow, sweet and playful, the cotton-candy fair',
+      'Creator-vintage palette — cream + teal + cherry-red + gold-trim, ornate and nostalgic, the collector-fairground luxury',
+      'Friends-pastel palette — soft pink + lavender + turquoise + white, cute and bright, the friendly amusement park',
+      'Coney-Island palette — cherry-red + cream + antique-gold, seaside-amusement nostalgia, wooden-coaster warmth',
+      'County-fair palette — barn-red + white + sunflower-gold + denim-blue, wholesome heartland-summer charm',
+      'Haunted-fair palette — deep-purple + black + trans-green + bone-white, spooky-but-fun, the dark midway corner',
+      'Water-park palette — turquoise + coral + white + sky-blue, splashy and bright, the summer water-fun',
+      'Summer-sunset palette — magenta + gold + warm-orange + navy, the rides silhouetted at golden-dusk',
+    ],
+    instructions: `Each entry is ONE theme-park palette, 12-25 words. Format: "NAME palette — colors + mood". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color language; tie each to a fairground heritage. No real-park vocabulary.`,
+  },
+
+  brickbot_theme_park_spectacle: {
+    format: 'simple',
+    theme: `THEME-PARK SPECTACLE — a 50%-gated environmental beat for a fairground diorama, ALWAYS rendered IN BRICK. Each entry 20-40 words. AMPLIFIES the fun as a secondary focal point, never eclipses the ride + crowd.
+
+VARIETY: fireworks-burst of trans-element stars / synchronized ride-light-show / fountain water-jet of trans-blue plates / confetti-cannon of 1×1 round-plates / passing parade / balloon-release of round-elements on rods / laser-show trans-bars / bubble-machine cloud of trans-clear round-plates / a blimp/sky-banner overhead / a flock of released doves (micro brick-birds).
+
+Each names the BRICK PARTS + visual impact. NEVER lighting-color-cast (separate axis). NEVER real-fireworks/photoreal. NO motion-blur (frozen built moment).`,
+    touchpoints: [
+      'FIREWORKS-BURST — built firework-bursts of trans-red + trans-green + trans-yellow 1×1 round-plates + bar-elements radiating from clear-rod centers high over the rides, the upturned crowd lit below, a frozen built sky-show',
+      'SYNCHRONIZED LIGHT-SHOW — every ride outlined in built trans-element light-banks flashing in a coordinated pattern, the brick park pulsing with color, the nightly spectacle frozen mid-show',
+      'FOUNTAIN WATER-JET — a built fountain of trans-blue + trans-light-blue plates + 1×1 round-plates leaping in arcs from a brick basin in the park plaza, white round-plate spray at the tips',
+      'CONFETTI-CANNON — a built burst of multicolor 1×1 round-plates frozen mid-air over a celebrating crowd at a ride exit or stage, scattered confetti-tiles settling on the brick path below',
+      'PASSING PARADE — a line of brick parade-floats winding down the midway with costumed minifigs + banner-tiles + streamer-elements, the crowd massed along the route mid-cheer',
+      'BALLOON-RELEASE — a built cloud of dozens of round balloon-elements on clear bar-rods rising over the park in a celebratory mass, a few trailing ribbon-bars, the crowd watching them climb',
+      'LASER-SHOW — built trans-clear + trans-green bar-elements fanning out from a stage-tower across the dark park as laser-beams, the crowd silhouetted, a frozen built light-spectacle',
+      'BUBBLE-MACHINE CLOUD — a built drift of trans-clear + trans-light-blue 1×1 round-plates on fine clear rods floating over a kids-area, catching the light, a whimsical built bubble-swarm',
+      'SKY-BANNER BLIMP — a built brick blimp or banner-plane crossing high above the park trailing a printed-tile banner, a tiny novelty drawing upturned faces below',
+      'STAGE-SHOW PYRO — a stage-build with built trans-orange + trans-yellow flame-jets shooting up behind performer minifigs, the front-row crowd lit and reacting, a frozen concert-pyro moment',
+    ],
+    instructions: `Each entry is ONE theme-park spectacle, 20-40 words. Format: "SPECTACLE NAME — brick-parts + visual impact". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never lighting-color-cast (separate axis); never real-fireworks/photoreal language; ALWAYS built from named brick parts; never motion-blur (frozen built moment).`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // LANDSCAPE PATH (2026-05-27 — seventh BrickBot axis migration)
   // SCENERY-LED epic natural vistas. The terrain IS the hero; minifigs are
   // tiny scale-provers. Bespoke axes: biome_vista (hero) + terrain_build_
