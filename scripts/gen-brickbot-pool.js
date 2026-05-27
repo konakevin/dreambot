@@ -569,7 +569,7 @@ Each names BRICK PARTS + visual impact. NEVER lighting-color-cast (separate axis
   // MACRO-DISPLAY PATH (2026-05-27 — eleventh BrickBot axis migration)
   // THE COMPLETE-DIORAMA path — behold the whole build. Identity = wide
   // pulled-back framing + completeness. Bespoke diorama_theme (whole world) +
-  // signature_centerpiece + baseplate_edge (tabletop-build signal). Tilt-shift
+  // signature_centerpiece + baseplate_edge (tabletop-build signal). DEEP-FOCUS
   // is a FRIEND. Bans photoreal. Bespoke.
   // ════════════════════════════════════════════════════════
 
@@ -649,9 +649,9 @@ Each names the centerpiece + its brick build + why the eye locks on it. NO photo
 
   brickbot_macro_display_camera_framing: {
     format: 'simple',
-    theme: `MACRO-DISPLAY CAMERA FRAMING — wide complete-build framings for the macro-display path. Each entry 15-30 words. ALWAYS shows the WHOLE diorama; never zooms into a single subject. Tilt-shift welcome.
+    theme: `MACRO-DISPLAY CAMERA FRAMING — wide complete-build framings for the macro-display path. Each entry 15-30 words. ALWAYS shows the WHOLE diorama; never zooms into a single subject. DEEP-FOCUS edge-to-edge sharp — NEVER tilt-shift / miniature-blur.
 
-VARIETY MANDATE — distribute across: high-three-quarter aerial overview, eye-level along the baseplate-edge, corner-establishing showing two edges, top-down plan-view, hero three-quarter with edge-baseplate visible, dramatic low across the build, slow-establishing wide pull-back, tilt-shift miniature pop.
+VARIETY MANDATE — distribute across: high-three-quarter aerial overview, eye-level along the baseplate-edge, corner-establishing showing two edges, top-down plan-view, hero three-quarter with edge-baseplate visible, dramatic low across the build, slow-establishing wide pull-back, deep-focus wide sweep.
 
 Each: specify camera POSITION + that it captures the WHOLE build; reference the complete-diorama read.`,
     touchpoints: [
@@ -661,12 +661,12 @@ Each: specify camera POSITION + that it captures the WHOLE build; reference the 
       'TOP-DOWN PLAN-VIEW — camera straight down, the whole diorama read as a complete brick map, every district + path legible, the architect\'s plan view',
       'HERO THREE-QUARTER WITH EDGE-BASEPLATE — the classic convention-display angle, three-quarter from slightly above with the front baseplate-edge + title-brick visible, the whole build proud in frame',
       'DRAMATIC LOW ACROSS-THE-BUILD — camera very low at one edge so the foreground structures tower and the build recedes dramatically to the centerpiece, depth-charged wide shot',
-      'TILT-SHIFT MINIATURE POP — a tilt-shift focus across the wide build emphasizing its model-ness, the whole world reading as a charming complete miniature, the signature macro-display look',
+      'DEEP-FOCUS WIDE SWEEP — camera wide with the whole build tack-sharp edge-to-edge, every zone in crisp focus from foreground to deep background, the convention-display clarity, never blurred',
       'SLOW-ESTABLISHING WIDE PULL-BACK — the camera pulled fully back so the entire diorama + its display-base sit centered in frame with breathing room, the complete-masterpiece reveal',
       'GENTLE-AERIAL-SWEEP — a slightly-angled near-overhead capturing the build\'s full sprawl with just enough obliqueness to read the heights of towers + the centerpiece',
       'DIAGONAL-CORNER-DEPTH — camera at a corner shooting along the build\'s diagonal, the longest sightline through all the zones to the far centerpiece, maximal depth',
     ],
-    instructions: `Each entry is ONE macro-display framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never a single-subject close-up — every entry shows the WHOLE build. Tilt-shift welcome. No photoreal vocabulary.`,
+    instructions: `Each entry is ONE macro-display framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never a single-subject close-up — every entry shows the WHOLE build, DEEP-FOCUS edge-to-edge sharp. NEVER tilt-shift / miniature-blur / shallow-DOF. No photoreal vocabulary.`,
   },
 
   brickbot_macro_display_life_density: {
@@ -717,7 +717,7 @@ Each names the edge treatment + how it frames the build. NO photoreal.`,
     format: 'simple',
     theme: `MACRO-DISPLAY LIGHTING — light for a complete-diorama LEGO MOC photo. Each entry 15-30 words. Lights a whole TABLETOP BRICK DIORAMA — convention-display + studio macro lighting.
 
-VARIETY: convention-hall even-bright / dramatic spotlit-centerpiece / golden diorama-glow / dusk with all the build-lights ON / crisp tilt-shift miniature pop / morning soft-even / theatrical single-key / warm display-case glow.
+VARIETY: convention-hall even-bright / dramatic spotlit-centerpiece / golden diorama-glow / dusk with all the build-lights ON / crisp deep-focus display light / morning soft-even / theatrical single-key / warm display-case glow.
 
 Each names SOURCE + how it reveals the whole build. NEVER photoreal-sun/lifelike language.`,
     touchpoints: [
@@ -725,14 +725,14 @@ Each names SOURCE + how it reveals the whole build. NEVER photoreal-sun/lifelike
       'Dramatic spotlit-centerpiece, a hard key picking out the signature centerpiece while the surrounding zones fall to a softer fill, the theatrical reveal',
       'Golden diorama-glow, a warm low-angle light raking across the whole build gilding the rooftops + towers, long soft shadows, the magic-hour display shot',
       'Dusk with all the build-lights ON, the diorama in deep-blue ambient with hundreds of warm trans-element windows + ride-lights + lamps glowing across the world, the night-build spectacle',
-      'Crisp tilt-shift miniature pop, bright even light with a shallow tilt-shift focus making the whole build read as a charming finished model, the signature macro look',
+      'Crisp deep-focus display light, a bright even key making every brick detail across the whole build pop in sharp edge-to-edge clarity, the clean convention-photo look',
       'Morning soft-even light, a gentle cool-bright wash over the build with soft shadows, the fresh calm display mood',
       'Theatrical single-key from one side, raking long dramatic shadows across the whole build for maximum relief + depth, the gallery-display drama',
       'Warm display-case glow, a soft warm light as if from display-case spots above, the build glowing like a treasured museum piece on its plinth',
       'High-noon top-light, a strong even overhead making colors pop across the whole build with short crisp shadows, the bright bold daytime read',
       'Blue-hour transition, the build caught between daylight and lit-windows, cool sky-ambient with the first warm interior glows, the atmospheric dusk-display',
     ],
-    instructions: `Each entry is ONE macro-display lighting setup, 15-30 words. Format: prose naming source + how it reveals the whole build. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal-sun/lifelike — it lights a tabletop brick diorama. Tilt-shift welcome.`,
+    instructions: `Each entry is ONE macro-display lighting setup, 15-30 words. Format: prose naming source + how it reveals the whole build. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal-sun/lifelike — it lights a tabletop brick diorama. DEEP-FOCUS — no tilt-shift / shallow-DOF.`,
   },
 
   brickbot_macro_display_palette: {

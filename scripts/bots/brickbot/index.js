@@ -63,6 +63,12 @@ module.exports = {
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
     space:
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
+    // macro-display: deep-focus prefix to reduce tilt-shift (Kevin 2026-05-27).
+    // This EXACT prefix is the hearted R2 state — Kevin hearted 2 posts from this
+    // config and asked to restore it (chose it over the later negation-removal +
+    // f/22 depth-of-field iterations, which didn't beat it). Leave as-is.
+    'macro-display':
+      'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge tack-sharp, expansive establishing shot, NOT tilt-shift, NOT miniature blur, everything in crisp focus',
     // fantasy: NO deep-focus prefix — tilt-shift retained per playbook lesson 1
     // (Flux's "fantasy" training prior is heavily Hollywood-photoreal; tilt-shift
     // is the structural signal that "everything in frame is the LEGO model").
