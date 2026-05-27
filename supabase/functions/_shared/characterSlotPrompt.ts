@@ -25,6 +25,7 @@
  */
 
 import { callSonnet } from './llm.ts';
+import { resolveCastGender, genderNoun, genderLockShout, type CastGender } from './genderLock.ts';
 
 // ── Public types ─────────────────────────────────────────────────────────
 
@@ -37,6 +38,10 @@ export type CastSlotMember = {
   age?: number | null;
   /** Compact comma-separated physical traits (hair / build / eyes / skin / age) */
   physicalSummary?: string | null;
+  /** Explicit gender (from describe-photo). Authoritative — preferred over
+   * inferring gender from promptDesc. Pass it through so the body renders the
+   * correct sex and the face-swap lands a male face on a male body. */
+  gender?: 'male' | 'female' | null;
 };
 
 export type SingleSlots = {
@@ -186,18 +191,25 @@ const WARDROBE_MOODS = [
 
 type ResolvedIdentity = {
   gender: 'man' | 'woman' | 'person';
+  /** Resolved binary gender (explicit field > prose), or null if truly unknown.
+   * Drives the shouted gender lock. */
+  castGender: CastGender | null;
   age: string | null; // "38 years old" or "mid-30s"
   build: string | null;
   identity: string; // hair / facial-hair string
 };
 
-function resolveIdentity(member: CastSlotMember): ResolvedIdentity {
-  const gender = extractGender(member.promptDesc);
+export function resolveIdentity(member: CastSlotMember): ResolvedIdentity {
+  // Explicit gender (from describe-photo) is authoritative; fall back to prose.
+  const castGender = resolveCastGender(member);
+  const gender: 'man' | 'woman' | 'person' = castGender
+    ? genderNoun(castGender)
+    : extractGender(member.promptDesc);
   const age =
     typeof member.age === 'number' ? `${member.age} years old` : extractAge(member.promptDesc);
   const build = extractBuild(member.physicalSummary);
   const identity = extractHair(member.physicalSummary) || extractIdentityPhrase(member.promptDesc);
-  return { gender, age, build, identity };
+  return { gender, castGender, age, build, identity };
 }
 
 function stripIdentity(s: string): string {
@@ -450,7 +462,10 @@ function fallbackSlots(input: CharacterSlotPipelineInput): CharacterSlots {
 
 // ── Final prompt assembly (template-owned geometry) ────────────────────
 
-function assembleCharacterPrompt(slots: CharacterSlots, input: CharacterSlotPipelineInput): string {
+export function assembleCharacterPrompt(
+  slots: CharacterSlots,
+  input: CharacterSlotPipelineInput
+): string {
   const location = input.iconicAnchor || input.userPlace || '';
   const mediumSignal = (input.mediumFluxFragment || '').trim();
 
@@ -459,6 +474,11 @@ function assembleCharacterPrompt(slots: CharacterSlots, input: CharacterSlotPipe
     const m = resolveIdentity(input.cast[0]);
     const wardrobe = (slots as SingleSlots).wardrobe;
     const identityBlock = buildIdentityBlock('CHARACTER', m, wardrobe);
+
+    // Gender lock SHOUTED at position 1 — non-negotiable, mirrors the dual
+    // path. This is what stops a male cast photo from rendering on a female
+    // body (and vice-versa) on the single-cast nightly path.
+    const genderLock = m.castGender ? genderLockShout(m.castGender) : '';
 
     // Single anchor — positive phrasing, no L/R
     const singleAnchor =
@@ -472,6 +492,7 @@ function assembleCharacterPrompt(slots: CharacterSlots, input: CharacterSlotPipe
     ].join(', ');
 
     const parts = [
+      genderLock,
       mediumSignal,
       location ? `set at ${location}` : '',
       singleAnchor,

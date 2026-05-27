@@ -20,6 +20,8 @@
     "__tests__/lib/dualGenderRouting.test.ts",
     "__tests__/lib/upscaleCaching.test.ts",
     "__tests__/lib/cleanMedium.test.ts",
-    "__tests__/lib/notify.test.ts"
+    "__tests__/lib/notify.test.ts",
+    "__tests__/lib/genderLock.test.ts",
+    "__tests__/lib/faceSwapGenderLock.test.ts"
   ]
 }

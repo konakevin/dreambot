@@ -43,6 +43,7 @@ import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
+import { resolveCastGender } from '../_shared/genderLock.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { generateSceneDescription } from '../_shared/sceneDescription.ts';
@@ -545,15 +546,12 @@ Deno.serve(async (req) => {
     );
     lap('essence-cards');
 
-    // Detect gender from cast description for gender reinforcement
+    // Gender for reinforcement — single source of truth (explicit field >
+    // prose), shared with castResolver + the slot pipeline. Non-pet with no
+    // signal defaults to male (preserves prior behavior).
     let castGender: 'male' | 'female' | undefined;
     if (castPick && castPick.role !== 'pet') {
-      const desc = ((castPick as DreamCastMember).description ?? '').toLowerCase();
-      if (desc.includes('woman') || desc.includes('female') || desc.includes('girl')) {
-        castGender = 'female';
-      } else {
-        castGender = 'male';
-      }
+      castGender = resolveCastGender(castPick as DreamCastMember) ?? 'male';
     }
 
     // Determine render mode and face swap eligibility
@@ -842,6 +840,9 @@ Deno.serve(async (req) => {
               promptDesc: rc.promptDesc,
               age: (selectedCast[i] as DreamCastMember).age ?? null,
               physicalSummary: (selectedCast[i] as DreamCastMember).physical_summary ?? null,
+              // Pass the explicit gender through so the slot pipeline locks the
+              // body's sex to the cast photo (fixes male-face-on-female-body).
+              gender: (selectedCast[i] as DreamCastMember).gender ?? null,
             })),
             iconicAnchor,
             userPlace: userPlace ?? null,

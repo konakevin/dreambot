@@ -18,10 +18,14 @@ export interface DreamCastMember {
   relationship?: string;
 }
 
+import { resolveCastGender, genderLockSentence, type CastGender } from './genderLock.ts';
+
 export interface ResolvedCastMember {
   role: string;
   promptDesc: string;
   genderLock: string | null;
+  /** Resolved gender (explicit field > prose). null for pets / unknown. */
+  gender: CastGender | null;
   sourcePhotoUrl: string;
   physicalTraits: string;
 }
@@ -49,14 +53,10 @@ export function resolveCastForPrompt(
         .replace(/\*\*/g, '')
         .trim();
 
-      // Determine gender: explicit field > regex fallback
-      let gender: 'male' | 'female';
-      if (member.gender) {
-        gender = member.gender;
-      } else {
-        const isFemale = /woman|female|girl|she\b|her\b/i.test(rawDesc);
-        gender = isFemale ? 'female' : 'male';
-      }
+      // Gender — single source of truth (explicit field > prose). Non-pet
+      // members with no signal default to male (preserves prior behavior).
+      const gender: CastGender | null =
+        member.role === 'pet' ? null : (resolveCastGender(member) ?? 'male');
 
       // Full description passes to Sonnet for ALL modes (natural + embodied).
       // Sonnet + the medium's directive handle style transformation.
@@ -64,19 +64,14 @@ export function resolveCastForPrompt(
       // "full beard, athletic build" into "sculpted clay beard, stocky clay proportions."
       const promptDesc = cleanDesc;
 
-      // Gender lock (not for pets)
-      let genderLock: string | null = null;
-      if (member.role !== 'pet') {
-        genderLock =
-          gender === 'male'
-            ? 'MALE character. Masculine features, build, clothing. Do NOT feminize. Facial hair MUST be visible if described.'
-            : 'FEMALE character. Feminine features. Do NOT masculinize or add facial hair.';
-      }
+      // Gender lock (not for pets). Positive-led phrasing (see genderLock.ts).
+      const genderLock: string | null = gender ? genderLockSentence(gender) : null;
 
       return {
         role: member.role,
         promptDesc,
         genderLock,
+        gender,
         sourcePhotoUrl: member.thumb_url,
         physicalTraits: member.physical_summary || '',
       };
