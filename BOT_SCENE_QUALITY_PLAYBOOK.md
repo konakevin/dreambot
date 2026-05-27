@@ -17,6 +17,7 @@ Bot pipeline = `scripts/bots/<bot>/index.js` (config) + `scripts/bots/<bot>/path
 Prior StarBot work informed the lessons but was R&D — the proven canonical recipe is in DragonBot's character-paths reference below.
 
 **Future targets** (apply same overhaul once StarBot is locked):
+
 - DragonBot
 - GothBot
 - SteamBot
@@ -36,9 +37,10 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 
 When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` row), you **must also create a corresponding row in `dlt_clean_mediums`**. This is not optional — skipping it silently breaks "Dream Like This."
 
-**Why.** Bot mediums are authored for the *bot scene engine*, which generates an entire scene. So their `directive`/`flux_fragment` routinely **dictate content** — a cast ("mixed-medium toy cast captured mid-story-beat with action playing out"), creatures, story beats, diorama setups, framing, counts, and `NOT a ___` negations. That's correct for the bot. But "Dream Like This" lets a **user** apply a bot post's *look* to **their own subject**. The DLT prompt compiler force-feeds the medium's directive as the prompt opener — so a content-dictating bot directive **overrides the user's subject**. (Real bug, 2026-05-24: a user asked for "a cat on a roof hiding from dogs" in `toybox_chaos_mixed` and got a toy diorama of kids — the bot directive's "toy cast mid-story-beat" + a `character: 0` word budget erased the cat.)
+**Why.** Bot mediums are authored for the _bot scene engine_, which generates an entire scene. So their `directive`/`flux_fragment` routinely **dictate content** — a cast ("mixed-medium toy cast captured mid-story-beat with action playing out"), creatures, story beats, diorama setups, framing, counts, and `NOT a ___` negations. That's correct for the bot. But "Dream Like This" lets a **user** apply a bot post's _look_ to **their own subject**. The DLT prompt compiler force-feeds the medium's directive as the prompt opener — so a content-dictating bot directive **overrides the user's subject**. (Real bug, 2026-05-24: a user asked for "a cat on a roof hiding from dogs" in `toybox_chaos_mixed` and got a toy diorama of kids — the bot directive's "toy cast mid-story-beat" + a `character: 0` word budget erased the cat.)
 
 **The fix architecture (don't relitigate it):**
+
 - `dream_mediums` bot rows are **canonical and NEVER mutated** — the bot keeps rendering with them via its bot-local `mediumStyles` (botEngine overrides the DB `flux_fragment` with `bot.mediumStyles[medium]`, so the bot never even reads the cleaned copy).
 - `dlt_clean_mediums` (`medium_key` → `clean_flux_fragment`, `clean_directive`) holds a **STYLE-ONLY, subject-stripped** distillation of each bot medium (palette / lighting / technique / materials / named aesthetics — no cast, no scene, no action, no framing).
 - `generate-dream` resolves the medium, then `applyCleanMedium()` swaps in the cleaned style for DLT. **Fallback contract:** no clean row → the raw bot medium is used unchanged (so a missing entry degrades to the old behavior, it doesn't crash — but it WILL mis-render the user's subject, which is why you must add the row).
@@ -76,7 +78,7 @@ fresh `?v=`. **No client build or Edge deploy** — it's pure storage + DB.
   subject, tight/close, simple background, high contrast — rendered in the bot's
   own medium so it reads as that bot at a glance.
 - **Prompt-from-scratch avatars underperform** vs. real on-brand renders. Best
-  results: regenerate a *clean close-up of the bot's actual subject/style* (the
+  results: regenerate a _clean close-up of the bot's actual subject/style_ (the
   `regen` script), or square-crop a render Kevin hearted.
 - **The `?v=` transform gotcha (fixed 2026-05-26):** `lib/imageUrl.ts:transform()`
   builds the resized avatar/thumbnail URL. It must capture the path with
@@ -85,6 +87,41 @@ fresh `?v=`. **No client build or Edge deploy** — it's pure storage + DB.
   it serves a wrong-aspect crop (e.g. 512×128 for a 128×128 request) that looks
   zoomed-in (a face → just a nose). Carry the source `v` into the new params to
   keep cache-busting.
+
+---
+
+## Enabling / reactivating a bot — do it RIGHT or the dispatcher kills it (2026-05-27)
+
+A bot only goes live via its **`bot_schedules`** row (the DB-driven dispatcher reads it every 15 min). **`active = true` is necessary but NOT sufficient** — there's a failsafe that will silently re-deactivate it.
+
+**The trap (`scripts/dispatch-bots.js:144`):** when the dispatcher picks up a due bot whose **`last_posted_at IS NULL`** and whose row is **older than 6h** (`NEVER_POSTED_TIMEOUT_HOURS`), it **auto-deactivates the bot WITHOUT even rendering** — a "never-posted-and-stale" guard meant to kill broken newly-seeded bots. Only `dispatch-bots.js` writes `last_posted_at` (on a successful post). **`iter-bot.js` and `run-bot.js` post to the feed but do NOT touch `bot_schedules`.** So a bot you've only ever exercised via `iter-bot` keeps `last_posted_at = null` → the moment it's `active` and >6h old, the guard deactivates it on sight.
+
+**Symptom:** a bot with thousands of lifetime posts shows `active=false` + `last_posted_at=null` in `bot_schedules` while every other bot is active and posting. (GothBot, 2026-05-27 — heavily iterated via `iter-bot`, "went live" with `active=true` but `last_posted_at=null`, got auto-killed before it ever rendered through the cron.)
+
+**Correct enable/reactivate procedure:**
+
+1. **Verify the production path first** — `node scripts/run-bot.js --bot <name>` (fails loud, no swallowed errors; posts one real render). Confirms the module loads, pools are populated, and a render+upload succeeds end-to-end. (Note: this does NOT set `last_posted_at`.)
+2. **Set the `bot_schedules` row so the never-posted guard CANNOT fire** — `active=true` AND a **non-null recent `last_posted_at`**, plus a due `next_due_at` and cleared failure counters:
+
+   ```js
+   await sb
+     .from('bot_schedules')
+     .update({
+       active: true,
+       last_posted_at: new Date().toISOString(), // ← critical: non-null kills the guard
+       next_due_at: new Date().toISOString(),
+       consecutive_failures: 0,
+       last_failure_reason: null,
+       notes: 'reactivated <date> — <why>',
+     })
+     .eq('bot_name', '<name>');
+   ```
+
+   (This is DML — goes through the JS client fine; only DDL needs the SQL editor. A DB trigger advances `next_due_at` to the bot's next ppd slot when `last_posted_at` changes, so the bot may first post at that slot rather than immediately — that's fine.)
+
+3. **Confirm** — read the row back: `active=true`, `last_posted_at` non-null, `consecutive_failures=0`. From here the dispatcher renders it each cycle and maintains `last_posted_at` itself, so it self-sustains.
+
+**Other deactivation path:** 5 consecutive failed dispatcher runs also auto-deactivates (`consecutive_failures`, dispatch-bots.js:189) with `last_failure_reason` set — that one means the bot is genuinely erroring (check `bot_run_log` for the stage), not the null-guard.
 
 ---
 
@@ -101,6 +138,7 @@ Every render is a rich, lush, dynamic scene — full of detail, layers, interest
 The art bar: would you put it on your wall? Would you save it to a folder? Would you scroll back to look at it again? If yes → ship it. If no → keep iterating the pools.
 
 The hierarchy of what every render must deliver:
+
 1. **Visible story** — something is happening that the eye can read in 2 seconds
 2. **Layers and depth** — foreground / midground / deep / sky, each with its own information
 3. **An entity in the scene** — a character, creature, ship, or figure that the eye lands on and follows
@@ -139,6 +177,7 @@ If a render could fit into a Sparth concept-art portfolio, a Villeneuve film sti
 A character-path render is the most complex composition. The architecture needs:
 
 **Layer 1: Character DNA (7 axes)** — what she/he/they look like and carry
+
 - **Race / lineage** — the most identity-anchoring axis. Sci-fi race for StarBot, fantasy race for DragonBot, vampire/cursed lineage for GothBot, clockwork/automaton lineage for SteamBot.
 - **Hair color** — must be visible at full-body scale
 - **Hair style** — silhouette-shaping
@@ -148,6 +187,7 @@ A character-path render is the most complex composition. The architecture needs:
 - **Weapon / accessory / signature object** — what they carry; identity-anchoring
 
 **Layer 2: Scene (7 axes)** — where she is, what's happening
+
 - **Setting / biome** (or city / dungeon / megastructure depending on path)
 - **Sky overhead**
 - **Lighting**
@@ -178,12 +218,12 @@ Character DNA layer is OPTIONAL on scene paths (figure is just a scale prover, n
 
 Each bot keeps the same 14 / 8-9 axis structure but swaps pool sources per genre:
 
-| Bot | Race pool | Outfit pool | Action pool | Setting pool |
-|---|---|---|---|---|
-| StarBot | SCI_FI_RACE | EXPLORER_OUTFITS_FEMALE/MALE | CHARACTER_ACTION (sci-fi verbs) | ALIEN_PLANET_BIOME / ALIEN_CITIES |
-| DragonBot | FANTASY_RACE | FEMALE/MALE_OUTFITS | WARRIOR_ADVENTURE_ACTIONS | FANTASY_LANDSCAPES |
-| GothBot | (gothic lineage pool TBD) | (gothic outfits TBD) | (gothic actions TBD) | (gothic settings TBD) |
-| SteamBot | (steampunk lineage TBD) | (steampunk outfits TBD) | (steampunk actions TBD) | (steampunk settings TBD) |
+| Bot       | Race pool                 | Outfit pool                  | Action pool                     | Setting pool                      |
+| --------- | ------------------------- | ---------------------------- | ------------------------------- | --------------------------------- |
+| StarBot   | SCI_FI_RACE               | EXPLORER_OUTFITS_FEMALE/MALE | CHARACTER_ACTION (sci-fi verbs) | ALIEN_PLANET_BIOME / ALIEN_CITIES |
+| DragonBot | FANTASY_RACE              | FEMALE/MALE_OUTFITS          | WARRIOR_ADVENTURE_ACTIONS       | FANTASY_LANDSCAPES                |
+| GothBot   | (gothic lineage pool TBD) | (gothic outfits TBD)         | (gothic actions TBD)            | (gothic settings TBD)             |
+| SteamBot  | (steampunk lineage TBD)   | (steampunk outfits TBD)      | (steampunk actions TBD)         | (steampunk settings TBD)          |
 
 **Universal axis CONCEPTS are universal — content is bot-coded (locked 2026-05-12).** Every bot ships its own version of the universal pools (LIGHTING / COMPOSITION_FRAME / SCALE_PROVERS / WEATHER_PARTICULATE / EMOTIONAL_DNA / STORY_BEATS / ANCHOR_SCALE) with genre-coded language. StarBot's `lighting` describes twin-sun nebula glow; GothBot's `lighting` describes candlelight through stained-glass at dusk; SteamBot's describes gas-mantle gaslight and brass-tinted hearth. Same axis concept, genre-tailored content.
 
@@ -194,6 +234,7 @@ Each bot keeps the same 14 / 8-9 axis structure but swaps pool sources per genre
 3. **No shared lib fallback** — every bot ships every universal axis. New-bot bootstrap = clone an existing bot's universal pools and re-gen with genre-coded recipe.
 
 The work of overhauling a new bot:
+
 1. Author bot-coded versions of the 7 universal pools (genre-tailored)
 2. Author bot-level pools (anchor_entity / sky_layer / surprise_element / architecture_style)
 3. For each path: author path-bespoke pools (biome/setting/interior + conditional drama + character action if CHARACTER archetype)
@@ -211,11 +252,13 @@ The full refactor architecture and migration sequence: `BOT_AXIS_REFACTOR_PLAN.m
 Sonnet clusters within batches and across batches — same theme, slightly different wording. Without programmatic dedup, the pool ends up with many semantic duplicates (e.g., 3 "orbital ring habitat" variants in different words) and you get clustering at render time.
 
 **Every pool-gen script MUST include:**
+
 1. **Within-batch dedup** — after Sonnet returns N entries, dedupe to unique entries before writing
 2. **Cross-batch dedup** — when appending to an existing pool, dedupe new entries against existing pool's entries
 3. **Signature-based detection** — extract significant content keywords from each entry (strip title prefix, strip stopwords, sort alphabetically, take first 12), hash to a signature. Entries with matching signatures are duplicates.
 
 Reference implementation in `scripts/gen-starbot-pool.js`:
+
 - `signatureOf(entry)` — extracts content signature
 - `dedupe(entries)` — within-batch dedup
 - Cross-batch dedup against existing pool entries before write
@@ -236,13 +279,13 @@ Every bot's pool-generation script (`scripts/gen-<bot>-pool.js`) follows the sam
 node scripts/gen-<bot>-pool.js --pool <pool_name> --count 25 [--target 200] [--max-iter 15] [--dry-run]
 ```
 
-| Flag | Purpose |
-|---|---|
-| `--pool` | Required. Pool name matching a key in `POOL_RECIPES` (e.g. `bloombot_flower_fantasy_scale_form`) |
-| `--count` | Batch size per Sonnet call (default 30). Use **25 for iteration**, **50 for production scale-up** |
-| `--target` | Final pool size goal. Script iterates until reached or `--max-iter` exhausted. Without `--target`, generates exactly `--count` new entries |
-| `--max-iter` | Safety cap on iteration loop (default 15) |
-| `--dry-run` | Generates + dedups but does NOT write the JSON. Use to preview |
+| Flag         | Purpose                                                                                                                                    |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--pool`     | Required. Pool name matching a key in `POOL_RECIPES` (e.g. `bloombot_flower_fantasy_scale_form`)                                           |
+| `--count`    | Batch size per Sonnet call (default 30). Use **25 for iteration**, **50 for production scale-up**                                          |
+| `--target`   | Final pool size goal. Script iterates until reached or `--max-iter` exhausted. Without `--target`, generates exactly `--count` new entries |
+| `--max-iter` | Safety cap on iteration loop (default 15)                                                                                                  |
+| `--dry-run`  | Generates + dedups but does NOT write the JSON. Use to preview                                                                             |
 
 ### Output
 
@@ -278,7 +321,7 @@ The `theme` is the heavy lift — long, structured, includes category distributi
 2. **Call Sonnet** — `claude-sonnet-4-6`, `max_tokens: 16000`, 15-min timeout
 3. **Parse output** — split on `1. ... 2. ...` regex, strip code fences and quotes, filter entries 20-1200 chars
 4. **Dedup the batch** — two layers:
-   - **Title** — exact-match the text before ` — ` (the CAPS prefix) against existing entries → drop
+   - **Title** — exact-match the text before `—` (the CAPS prefix) against existing entries → drop
    - **Body signature** — extract first 12 unique non-stopword tokens >4 chars from the body, alphabetize, hash → drop on match
 5. **Append unique survivors** to the pool
 6. **Loop** if `--target` set and not reached — each iteration overgenerates to absorb dedup losses
@@ -312,6 +355,7 @@ If you genuinely need more variety: split the pool into multiple bespoke pools (
 ### Recipe authoring rules (from hard-earned experience)
 
 **Do:**
+
 - Distribute variety with explicit counts (`~5 of category A, ~4 of category B`)
 - Front-load the "bar" — what every entry must produce
 - Quote example phrasings Sonnet should use
@@ -320,6 +364,7 @@ If you genuinely need more variety: split the pool into multiple bespoke pools (
 - Specify entry word count + format
 
 **Don't:**
+
 - Write recipes longer than ~200 lines — Sonnet gets diluted past that
 - Write 50+ stacked constraints — the first 5-10 carry the brief; more becomes noise (feedback `feedback_dont_over_engineer_sonnet_prompts.md` in memory)
 - Mix multiple semantic axes into one recipe — split into multiple pools instead
@@ -327,13 +372,13 @@ If you genuinely need more variety: split the pool into multiple bespoke pools (
 
 ### Common failure modes + fixes
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Pool capped at 25/200 | Recipe semantic space too narrow | Split into 2+ pools by sub-category |
-| Same theme appears 5×/25 | Variety mandate too weak | Add explicit category distribution with counts |
-| Sonnet keeps generating banned content | Ban language too soft | Add explicit "NEVER X — that triggers Y in Flux" with the failure mode named |
-| Generated entries don't match touchpoint format | Instructions section too short | Make `instructions` more explicit on format + word count |
-| Apostrophes in entries break gen script | JSON-escaping bug in recipe | Strip possessive apostrophes from species names (Anna's → Anna) — don't try to escape |
+| Symptom                                         | Likely cause                     | Fix                                                                                   |
+| ----------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------- |
+| Pool capped at 25/200                           | Recipe semantic space too narrow | Split into 2+ pools by sub-category                                                   |
+| Same theme appears 5×/25                        | Variety mandate too weak         | Add explicit category distribution with counts                                        |
+| Sonnet keeps generating banned content          | Ban language too soft            | Add explicit "NEVER X — that triggers Y in Flux" with the failure mode named          |
+| Generated entries don't match touchpoint format | Instructions section too short   | Make `instructions` more explicit on format + word count                              |
+| Apostrophes in entries break gen script         | JSON-escaping bug in recipe      | Strip possessive apostrophes from species names (Anna's → Anna) — don't try to escape |
 
 ### When to wipe vs. append
 
@@ -361,13 +406,13 @@ After the 2026-05-13 franchise-path massacre (next section), the same bespoke bi
 
 **The 5-axis pool design pattern (replicate this for any character-or-subject-as-hero path):**
 
-| Axis | Purpose | Pool | Conditional |
-|---|---|---|---|
-| `subject` | Hero visual identity only (no action) | `<path>_<subject>` | always |
-| `action` | Mid-action cinematic moment | `<path>_action` | always |
-| `landscape` / `biome` / `setting` | The stage | `<path>_landscape` | always |
-| `drama` | Environmental / atmospheric event woven in | `<path>_drama` | **40% gated** |
-| `surprise_element` | Tiny secondary subject implying wider world | `<path>_surprise_element` | always |
+| Axis                              | Purpose                                     | Pool                      | Conditional   |
+| --------------------------------- | ------------------------------------------- | ------------------------- | ------------- |
+| `subject`                         | Hero visual identity only (no action)       | `<path>_<subject>`        | always        |
+| `action`                          | Mid-action cinematic moment                 | `<path>_action`           | always        |
+| `landscape` / `biome` / `setting` | The stage                                   | `<path>_landscape`        | always        |
+| `drama`                           | Environmental / atmospheric event woven in  | `<path>_drama`            | **40% gated** |
+| `surprise_element`                | Tiny secondary subject implying wider world | `<path>_surprise_element` | always        |
 
 Plus universal axes (lighting + atmosphere from bot defaults).
 
@@ -383,50 +428,50 @@ After dragon-scene proved the OUTDOOR_LANDSCAPE-adjacent reference, the next fou
 
 **Commits in order (read top-to-bottom to see iteration trail):**
 
-| Commit | Lesson |
-|---|---|
+| Commit    | Lesson                                                                          |
+| --------- | ------------------------------------------------------------------------------- |
 | `9891f15` | female-adventurer R1: rebuild + **empty promptPrefixByPath** (diversity unlock) |
-| `ecfdbdc` | R2: forked race pool, female-anatomy-clean (gender lock) |
-| `d6b4b4a` | R3: action pool body-position variety mandate |
-| `560ec47` | R4: outfit pool strict-high-fantasy + climate distribution |
-| `9e4ed9a` | female-adventurer production scale-up (200/150/50 sizes) |
-| `d7b7703` | Playbook: stuffed-wrapper gridlock lesson |
-| `70e1753` | female-action-scenes new path + R0 |
-| `5893943` | action-scenes R1: multi-effect stack mandate (cranked intensity) |
-| `b498763` | action-scenes production scale-up |
-| `77c9713` | male-adventurer + male-action-scenes full bespoke male rebuild |
-| `84a068b` | male: surgical fix to residual shirtless leakage |
-| `ca3e0e8` | male production scale-up |
+| `ecfdbdc` | R2: forked race pool, female-anatomy-clean (gender lock)                        |
+| `d6b4b4a` | R3: action pool body-position variety mandate                                   |
+| `560ec47` | R4: outfit pool strict-high-fantasy + climate distribution                      |
+| `9e4ed9a` | female-adventurer production scale-up (200/150/50 sizes)                        |
+| `d7b7703` | Playbook: stuffed-wrapper gridlock lesson                                       |
+| `70e1753` | female-action-scenes new path + R0                                              |
+| `5893943` | action-scenes R1: multi-effect stack mandate (cranked intensity)                |
+| `b498763` | action-scenes production scale-up                                               |
+| `77c9713` | male-adventurer + male-action-scenes full bespoke male rebuild                  |
+| `84a068b` | male: surgical fix to residual shirtless leakage                                |
+| `ca3e0e8` | male production scale-up                                                        |
 
 ### The 12-axis character-path split (canonical)
 
 Every character path uses the same 12-axis architecture (mirror of FEMALE_ADVENTURER / MALE_ADVENTURER archetypes):
 
-| Axis category | Slots | Pool nature |
-|---|---|---|
-| Universal (bot defaults) | `lighting`, `atmosphere` | Bot-shared (LIGHTING, ATMOSPHERES) |
-| Character DNA (8 axes) | `race`, `class`, `skin`, `eyes`, `hair_color`, `hairstyle`, `outfit`, `accessory` | All path-bespoke |
-| Path-bespoke (3 axes) | `landscape`, `action`, `surprise_element` | All path-bespoke |
-| Conditional (1 axis, 40% gate) | `drama` | Path-bespoke |
+| Axis category                  | Slots                                                                             | Pool nature                        |
+| ------------------------------ | --------------------------------------------------------------------------------- | ---------------------------------- |
+| Universal (bot defaults)       | `lighting`, `atmosphere`                                                          | Bot-shared (LIGHTING, ATMOSPHERES) |
+| Character DNA (8 axes)         | `race`, `class`, `skin`, `eyes`, `hair_color`, `hairstyle`, `outfit`, `accessory` | All path-bespoke                   |
+| Path-bespoke (3 axes)          | `landscape`, `action`, `surprise_element`                                         | All path-bespoke                   |
+| Conditional (1 axis, 40% gate) | `drama`                                                                           | Path-bespoke                       |
 
 **The action axis IS the lever that distinguishes "adventurer" (candid) from "action-scenes" (peak-action multi-effect). Every other axis can be cloned between the two paths.**
 
 ### Production target pool sizes (per path)
 
-| Pool | Target | Conceptual ceiling observed | Notes |
-|---|---|---|---|
-| race | 50 | 50 ✓ | Bot-level may share with sibling male/female path of opposite gender |
-| class | 50 | 36-38 typical cap | Sonnet exhausts unique class concepts around 36-50 |
-| skin | 100 | 100 ✓ | |
-| eyes | 100 | 100 ✓ | |
-| hair_color | 100 | 100 ✓ | |
-| hairstyle | 50 | 44-50 typical cap | Practical adventuring hairstyles cap at ~50 |
-| outfit | 200 | 200 ✓ | |
-| accessory | 150 | 49-98 typical cap | Sonnet exhausts unique accessory concepts |
-| action | 200 | 200 ✓ | |
-| landscape | 200 | 200 ✓ | |
-| drama (40% gated) | 50 | 50 ✓ | Stays small intentionally |
-| surprise_element | 150 | 150 ✓ | |
+| Pool              | Target | Conceptual ceiling observed | Notes                                                                |
+| ----------------- | ------ | --------------------------- | -------------------------------------------------------------------- |
+| race              | 50     | 50 ✓                        | Bot-level may share with sibling male/female path of opposite gender |
+| class             | 50     | 36-38 typical cap           | Sonnet exhausts unique class concepts around 36-50                   |
+| skin              | 100    | 100 ✓                       |                                                                      |
+| eyes              | 100    | 100 ✓                       |                                                                      |
+| hair_color        | 100    | 100 ✓                       |                                                                      |
+| hairstyle         | 50     | 44-50 typical cap           | Practical adventuring hairstyles cap at ~50                          |
+| outfit            | 200    | 200 ✓                       |                                                                      |
+| accessory         | 150    | 49-98 typical cap           | Sonnet exhausts unique accessory concepts                            |
+| action            | 200    | 200 ✓                       |                                                                      |
+| landscape         | 200    | 200 ✓                       |                                                                      |
+| drama (40% gated) | 50     | 50 ✓                        | Stays small intentionally                                            |
+| surprise_element  | 150    | 150 ✓                       |                                                                      |
 
 **Conceptual ceilings are real — don't push past them, just accept the cap.** Once a pool stops hitting `--target N`, you're done. The `gen-bot-pool.js --target` loop caps at 8 iterations.
 
@@ -437,6 +482,7 @@ For EVERY character path: **`promptPrefixByPath[path] = ''`**. Empty. Do NOT add
 ### NSFW-clean mandates per gender
 
 **Female bans (in pool recipes + template):**
+
 - "minimal coverage" / "battle bikini" / "bare midriff" / "exposed cleavage" / "exposed thighs"
 - "form-fitting" / "skin-tight" / "second-skin"
 - "harness across torso" / "bondage-coded"
@@ -447,6 +493,7 @@ For EVERY character path: **`promptPrefixByPath[path] = ''`**. Empty. Do NOT add
 > **⚠️ AMENDED 2026-05-23 (female-adventurer, Kevin's call) — the blanket "covered" bans over-corrected into fully-covered drapey silhouettes.** The new bar is a COVERAGE MIX: ~35% fully-covered ornate / ~30% fitted-mid / ~35% tastefully skin-showing (bare arms / bare shoulders / toned midriff / short combat skirt + bare legs — Red-Sonja-but-tasteful / Xena / Nilfgaardian-fitted register). The **cheesecake line that still holds**: chainmail-bikini / battle-bra / string-strap-as-outfit / **cleavage-AS-the-focus** / plunging neckline / sultry-seductive language / bondage-harness / **bare-thigh pin-up seated pose**. At a 56%-skin pool ratio one tavern render tipped past tasteful (cleavage + bare thighs + sexy seated pose) — **~35% skin-showing is the safer ratio**. Artist-name ban still stands.
 
 **Male bans (in pool recipes + template) — DIFFERENT failure mode:**
+
 - "shirtless" / "bare-chested" / "oiled-pecs" / "loincloth"
 - "sleeveless" — triggers Flux's bare-arms-and-implied-bare-torso default when combined with orc race + war-action
 - "leather shorts" / single-piece-only outfits without explicit chest-covering
@@ -464,7 +511,7 @@ For EVERY character path: **`promptPrefixByPath[path] = ''`**. Empty. Do NOT add
 
 Three lessons from hardening the path's output (pools held at MVP 45, checkpointed — NOT scaled). All generalize to any character path:
 
-**1. Bird-companion entries COMPOUND across pools → "girl with a bird."** Birds sat at ~25% of the action pool (hawk-launch / raven-on-shoulder), ~24% of accessory (live hawk-on-glove / raven-on-shoulder — these render LARGE, as a co-subject), and ~21% of surprise_element. Rolling all three independently → only ~45% chance of NO bird; Kevin saw 3/5 renders as "a girl with a bird." **Fix at the SOURCE pools, not the brief** — strip companion-bird beats from action, cut live-bird familiars from accessory (an engraved hawk *crest* or feathers-on-a-totem are fine; a live perched bird is not), and keep only tiny-distant flock/circling birds in surprise_element (those are legit scale-provers). A familiar/companion-animal axis on ANY bot needs a hard cap per animal or it dominates.
+**1. Bird-companion entries COMPOUND across pools → "girl with a bird."** Birds sat at ~25% of the action pool (hawk-launch / raven-on-shoulder), ~24% of accessory (live hawk-on-glove / raven-on-shoulder — these render LARGE, as a co-subject), and ~21% of surprise_element. Rolling all three independently → only ~45% chance of NO bird; Kevin saw 3/5 renders as "a girl with a bird." **Fix at the SOURCE pools, not the brief** — strip companion-bird beats from action, cut live-bird familiars from accessory (an engraved hawk _crest_ or feathers-on-a-totem are fine; a live perched bird is not), and keep only tiny-distant flock/circling birds in surprise_element (those are legit scale-provers). A familiar/companion-animal axis on ANY bot needs a hard cap per animal or it dominates.
 
 **2. Candid TRAVEL/OBSTACLE/REST registers beat camp-chore/ritual registers.** The old action pool was heavy on squeeze-through-fissure (×22), rope/bridge-REPAIR (×17), hoof-tending (×11), fire-kindling, and kneeling-to-scratch-a-sigil — these render as goofy, hunched, ungainly scrambles. Kevin's wanted feel (verbatim): "climbing over a boulder, on a bridge, walking down a path, sneaking up on something with their sword drawn, sitting in a tavern, relaxing at the side of a creek, reading a map, sharpening a weapon by campfire." Register split that landed: traveling-the-path ~22% / navigating-an-obstacle ~22% / stealth-sword-drawn ~12% / mounted ~12% / rest-downtime (creek/map/campfire/tavern) ~22% / discovery ~10% / light-magic-standing ~6%. **Crossing a bridge = good; repairing one = goofy.**
 
@@ -584,32 +631,32 @@ The DragonBot landscape / dragon-lore / dark-realm / fantasy-scene / epic-moment
 
 **Successful migrations on this recipe:**
 
-| Bot | Path | Date | Identity |
-|---|---|---|---|
-| DragonBot | landscape | 2026-05-14 | Pure scenery, movie-poster flagship |
-| DragonBot | dragon-lore | 2026-05-14 | Archaeological evidence of dragons |
-| DragonBot | dark-realm | 2026-05-14 | Corrupted wastelands / Mordor lineage |
-| DragonBot | fantasy-scene | 2026-05-14 | Character integrated in epic landscape |
-| DragonBot | epic-moment | 2026-05-14 | Epic castle scenes (50/50 castle + event) |
-| DragonBot | iconic-landscape | 2026-05-14 | Merged wow+lotr stylized biomes |
-| DragonBot | arcane-halls | 2026-05-15 | Character mid-magic in grand interior |
-| GothBot | dark-landscape | 2026-05-15 | Pure gothic landscape |
-| GothBot | gothic-vista | 2026-05-15 | Alive-and-haunted gothic landscape |
-| GothBot | gothic-architecture | 2026-05-15 | Structure-as-hero (80%+ visual weight) |
+| Bot       | Path                | Date       | Identity                                  |
+| --------- | ------------------- | ---------- | ----------------------------------------- |
+| DragonBot | landscape           | 2026-05-14 | Pure scenery, movie-poster flagship       |
+| DragonBot | dragon-lore         | 2026-05-14 | Archaeological evidence of dragons        |
+| DragonBot | dark-realm          | 2026-05-14 | Corrupted wastelands / Mordor lineage     |
+| DragonBot | fantasy-scene       | 2026-05-14 | Character integrated in epic landscape    |
+| DragonBot | epic-moment         | 2026-05-14 | Epic castle scenes (50/50 castle + event) |
+| DragonBot | iconic-landscape    | 2026-05-14 | Merged wow+lotr stylized biomes           |
+| DragonBot | arcane-halls        | 2026-05-15 | Character mid-magic in grand interior     |
+| GothBot   | dark-landscape      | 2026-05-15 | Pure gothic landscape                     |
+| GothBot   | gothic-vista        | 2026-05-15 | Alive-and-haunted gothic landscape        |
+| GothBot   | gothic-architecture | 2026-05-15 | Structure-as-hero (80%+ visual weight)    |
 
 ### Canonical 5-axis scene-path structure
 
 For a pure scenery / landscape path, the universal axis split is:
 
-| Axis | Slot | Type | Production target |
-|---|---|---|---|
-| Universal | `lighting` | bot.defaultPools | (bot pool — 100-200 entries) |
-| Universal | `atmosphere` | bot.defaultPools | (bot pool — 100-200 entries) |
-| Path-bespoke | `biome` (or `scene`) | path-pool | 200 |
-| Path-bespoke | `architecture` | path-pool | 150 |
-| Path-bespoke | `phenomenon` | path-pool, **80%-gated** | 50 |
-| Path-bespoke | `surprise_element` | path-pool | 150 |
-| Path-bespoke | `sky_layer` | path-pool | 100 |
+| Axis         | Slot                 | Type                     | Production target            |
+| ------------ | -------------------- | ------------------------ | ---------------------------- |
+| Universal    | `lighting`           | bot.defaultPools         | (bot pool — 100-200 entries) |
+| Universal    | `atmosphere`         | bot.defaultPools         | (bot pool — 100-200 entries) |
+| Path-bespoke | `biome` (or `scene`) | path-pool                | 200                          |
+| Path-bespoke | `architecture`       | path-pool                | 150                          |
+| Path-bespoke | `phenomenon`         | path-pool, **80%-gated** | 50                           |
+| Path-bespoke | `surprise_element`   | path-pool                | 150                          |
+| Path-bespoke | `sky_layer`          | path-pool                | 100                          |
 
 Total: 5 path-bespoke + 2 universal = 7 axes per render. Phenomenon at 80%-gate means it fires on ~4 of every 5 renders (atmospheric variety).
 
@@ -617,26 +664,26 @@ Total: 5 path-bespoke + 2 universal = 7 axes per render. Phenomenon at 80%-gate 
 
 When the path centers a single character integrated in a scene (NOT a portrait), the axes shift:
 
-| Axis | Slot | Type | Production target |
-|---|---|---|---|
-| Universal | `lighting` + `atmosphere` | bot.defaultPools | |
-| Path-bespoke | `character` | path-pool (often reuses bot's 200-entry FANTASY_CHARACTERS) | 200 |
-| Path-bespoke | `landscape` | path-pool (often reuses bot's existing landscapes) | 200-280 |
-| Path-bespoke | `action` | path-pool | 200 |
-| Path-bespoke | `drama` | path-pool, **80%-gated** | 100 |
+| Axis         | Slot                      | Type                                                        | Production target |
+| ------------ | ------------------------- | ----------------------------------------------------------- | ----------------- |
+| Universal    | `lighting` + `atmosphere` | bot.defaultPools                                            |                   |
+| Path-bespoke | `character`               | path-pool (often reuses bot's 200-entry FANTASY_CHARACTERS) | 200               |
+| Path-bespoke | `landscape`               | path-pool (often reuses bot's existing landscapes)          | 200-280           |
+| Path-bespoke | `action`                  | path-pool                                                   | 200               |
+| Path-bespoke | `drama`                   | path-pool, **80%-gated**                                    | 100               |
 
 ### Variant: structure-as-hero (gothic-architecture pattern)
 
 When the architecture DOMINATES (80%+ visual weight), shift axes to focus the building:
 
-| Axis | Slot | Type | Production target |
-|---|---|---|---|
-| Universal | `lighting` + `atmosphere` | bot.defaultPools | |
-| Path-bespoke | `structure` | path-pool, building+context | 200 |
-| Path-bespoke | `architectural_detail` | path-pool, **pickN: 3** | 50 |
-| Path-bespoke | `inner_light` | path-pool, glow source | 50 |
-| Path-bespoke | `accent_creature` | path-pool, **80%-gated** | 100 |
-| Path-bespoke | `sky_layer` | path-pool | 100 |
+| Axis         | Slot                      | Type                        | Production target |
+| ------------ | ------------------------- | --------------------------- | ----------------- |
+| Universal    | `lighting` + `atmosphere` | bot.defaultPools            |                   |
+| Path-bespoke | `structure`               | path-pool, building+context | 200               |
+| Path-bespoke | `architectural_detail`    | path-pool, **pickN: 3**     | 50                |
+| Path-bespoke | `inner_light`             | path-pool, glow source      | 50                |
+| Path-bespoke | `accent_creature`         | path-pool, **80%-gated**    | 100               |
+| Path-bespoke | `sky_layer`               | path-pool                   | 100               |
 
 The `pickN: 3` on architectural_detail picks 3 ornate flourishes per render (rose-window / gargoyle / spire / etc.). Forces obsessive-density on the building.
 
@@ -644,11 +691,11 @@ The `pickN: 3` on architectural_detail picks 3 ornate flourishes per render (ros
 
 When the path is 50/50 a "thing happening AT a thing" (e.g., epic-moment = castle + event):
 
-| Axis | Slot | Type | Production target |
-|---|---|---|---|
-| Universal | `lighting` + `atmosphere` | bot.defaultPools | |
-| Path-bespoke | `castle` (or hero element 1) | path-pool | 200 |
-| Path-bespoke | `event` (or hero element 2) | path-pool | 150 |
+| Axis         | Slot                         | Type             | Production target |
+| ------------ | ---------------------------- | ---------------- | ----------------- |
+| Universal    | `lighting` + `atmosphere`    | bot.defaultPools |                   |
+| Path-bespoke | `castle` (or hero element 1) | path-pool        | 200               |
+| Path-bespoke | `event` (or hero element 2)  | path-pool        | 150               |
 
 Only 2 path-bespoke axes but each pool is rich and the brief enforces the 50/50 composition.
 
@@ -656,35 +703,41 @@ Only 2 path-bespoke axes but each pool is rich and the brief enforces the 50/50 
 
 When the path is a single character casting a major spell INSIDE a grand interior:
 
-| Axis | Slot | Type | Production target |
-|---|---|---|---|
-| Universal | `lighting` + `atmosphere` | bot.defaultPools | |
-| Path-bespoke | `hall` | path-pool, the interior | 200 |
-| Path-bespoke | `caster` | path-pool, race-first spellcaster archetype | 200 |
-| Path-bespoke | `spell_moment` | path-pool, room-filling pure-magic | 100 |
-| Path-bespoke | `magic_phenomena` | path-pool, **pickN: 2** ambient room magic | 100 |
+| Axis         | Slot                      | Type                                        | Production target |
+| ------------ | ------------------------- | ------------------------------------------- | ----------------- |
+| Universal    | `lighting` + `atmosphere` | bot.defaultPools                            |                   |
+| Path-bespoke | `hall`                    | path-pool, the interior                     | 200               |
+| Path-bespoke | `caster`                  | path-pool, race-first spellcaster archetype | 200               |
+| Path-bespoke | `spell_moment`            | path-pool, room-filling pure-magic          | 100               |
+| Path-bespoke | `magic_phenomena`         | path-pool, **pickN: 2** ambient room magic  | 100               |
 
 ### Step-by-step migration recipe
 
 For ANY scene path on ANY bot, the migration flow is:
 
 #### Step 1 — Read the legacy path file
+
 ```
 scripts/bots/<bot>/paths/<path>.js
 ```
+
 Note the existing pools used, the brief structure, the bot-specific aesthetic vocabulary, the inline rolls (gender / age / etc.), the hard rules / bans.
 
 #### Step 2 — Check existing pools
+
 ```bash
 ls scripts/bots/<bot>/seeds/ | grep <relevant-prefix>
 node -e "console.log(require('./scripts/bots/<bot>/seeds/<pool>.json').length)"
 ```
+
 If the legacy pool is already production-scale (200+ entries) and well-curated, you can REUSE IT in the bespoke architecture — see DragonBot fantasy-scene which reused 200-entry FANTASY_CHARACTERS + 280-entry FANTASY_LANDSCAPES. If pools need re-doing, plan to regen bespoke pools.
 
 #### Step 3 — Pick the variant
+
 Choose from the 4 variants above (5-axis scene / character-led / structure-as-hero / castle+event / character-in-interior) or design a custom variant. The variant is determined by what DOMINATES the frame: landscape / character-in-landscape / building / two-element-50-50 / character-in-interior.
 
 #### Step 4 — Set up the bot's gen script (one-time per new bot)
+
 If the bot doesn't have a gen script yet (e.g., GothBot didn't until 2026-05-15):
 
 ```bash
@@ -699,6 +752,7 @@ sed -i 's|scripts/bots/dragonbot/seeds|scripts/bots/<bot>/seeds|g' scripts/gen-<
 The infrastructure (signatureOf / dedupe / target-loop / fetch / fallback) is universal — just keep it. The POOL_RECIPES dict is bot-specific. **Never share recipes across bots — the aesthetic vocabulary is bespoke per bot.**
 
 #### Step 5 — Bot config additions (one-time per new bot)
+
 The bot's `index.js` needs to support the declarative form. Add to `module.exports`:
 
 ```js
@@ -744,6 +798,7 @@ Without these additions, the engine errors with `builder is not a function` when
 #### Step 6 — Author archetype, template, recipes
 
 1. **Add archetype** to `scripts/lib/archetypes.js`:
+
 ```js
 <BOT>_<PATH_UPPER>: {
   description: 'PATH-BESPOKE — <Bot> <path> path (<date> migration). [...identity prose...]',
@@ -764,12 +819,14 @@ Without these additions, the engine errors with `builder is not a function` when
 3. **Add pool recipes** to `scripts/gen-<bot>-pool.js`. Each recipe needs bot-bespoke aesthetic mandate, bot-bespoke ban list, variety distribution mandate, and 20-25 touchpoint examples. The touchpoint examples ANCHOR what Sonnet generates — write them in the bot's voice.
 
 4. **Move legacy path to legacy/**:
+
 ```bash
 mkdir -p scripts/bots/<bot>/paths/legacy
 mv scripts/bots/<bot>/paths/<path>.js scripts/bots/<bot>/paths/legacy/<path>.js
 ```
 
 5. **Create new declarative path file** `scripts/bots/<bot>/paths/<path>.js`:
+
 ```js
 module.exports = {
   archetype: '<BOT>_<PATH_UPPER>',
@@ -784,6 +841,7 @@ module.exports = {
 ```
 
 6. **Register pools** in `scripts/bots/<bot>/pools.js`:
+
 ```js
 <BOT>_<PATH>_BIOME: load('<bot>_<path>_biome'),
 <BOT>_<PATH>_ARCHITECTURE: load('<bot>_<path>_architecture'),
@@ -822,6 +880,7 @@ node scripts/iter-bot.js --bot <bot> --count 5 --mode <path> --label <path>-r0 -
 ```
 
 Pull the 5 renders + their prompts. Check:
+
 - Composition holds (multi-tier depth visible)
 - Bot-aesthetic vocabulary lands (NOT cross-pollination — GothBot is gothic NOT high-fantasy)
 - Movie-poster intensity (every quadrant has something)
@@ -832,6 +891,7 @@ Pull the 5 renders + their prompts. Check:
 First batches typically come out "good but not flagship-level." If Kevin grades "not at movie-poster quality" or "needs more cranking," upgrade the template's MOVIE POSTER MANDATE section:
 
 **Lighter version** (default first attempt):
+
 ```
 ━━━ MOVIE POSTER MANDATE — STACK 3+ STRIKING ELEMENTS ━━━
 Every render is a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 3+ simultaneously-visible elements:
@@ -843,6 +903,7 @@ Every render is a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has somethin
 ```
 
 **Cranked version** (after first batch grades not-quite-flagship):
+
 ```
 ━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST HAVE SOMETHING STRIKING ━━━
 This is the FLAGSHIP <path> path. Every render is a MOVIE POSTER PROMOTIONAL FRAME with VERTIGO-INDUCING SCALE. The kind of vista that stops the viewer mid-scroll. EVERY QUADRANT of the frame has something striking — no quiet corners.
@@ -882,6 +943,7 @@ Once renders are at the bar:
 ```
 
 Production target sizes (see table at top of section for variant-specific):
+
 - biome / scene / hall / structure: 200
 - architecture: 150
 - surprise_element: 150
@@ -931,17 +993,20 @@ git push origin main
 **What was tried, in order, and why each failed:**
 
 ### Attempt 1 — composer migration with shared archetypes
+
 - Migrated 8 franchise paths to declarative composer form
 - Used 2 shared archetypes (`ALIEN_LANDSCAPE` for 5 landscapes, `ARCHITECTURE_INTERIOR` for 3 architectures)
 - Each path got 3 bespoke pools (anchor_entity / moment / deep_distance for landscapes; atmosphere / deep_distance / incident for architecture)
 - **Result:** Every path's renders looked structurally identical. Same Sonnet brief language. Same scale-prover-style framing. Franchise flavor flowed only through pool content (~30% of token budget). Kevin: "they all literally look like the same generic path."
 
 ### Attempt 2 — bespoke per-path archetypes + templates
+
 - Replaced shared archetypes with 8 unique archetypes + 8 unique templates
 - Each template embedded franchise-specific painter/director references (McQuarrie+Chiang for Star Wars / Probert+Sternbach for Star Trek / etc.)
 - **Result:** Still the same generic look. Diagnosis: the `promptPrefixByMedium` + `mediumStyles` + `promptPrefix` (bot-level) wrapper layers injected ~150-200 generic "hyperrealistic photoreal cinematic sci-fi concept art" tokens BEFORE Sonnet's franchise-specific body. Flux first-token bias locked the visual style from those layers, not from Sonnet's bespoke content downstream. **The wrapper layer was missing from "bespoke per path."**
 
 ### Attempt 3 — character-first rebuild + path-prefix override + STORY_EVENT axis
+
 - Added `promptPrefixByPath` per-path overrides (franchise vocabulary as the FIRST tokens Flux reads)
 - Pivoted 3 architecture paths from "no figures, pure architecture" to character-first (clone female-explorer structure with franchise characters)
 - Added mandatory `STORY_EVENT` axis (cinematic mid-action moments instead of static scenes)
@@ -977,6 +1042,7 @@ After tonight's collapse Kevin reverted `cozy-sci-fi-interior.js` to commit `2e1
 - **Very long FORBIDDEN section.** 25+ specific anti-patterns: NO monumental scale / NO biblical awe / NO action set-pieces / NO weird humans / NO Christ-pose / NO clinical lab / NO blanket forts / etc. Cozy is so easy to derail that the brief over-bans.
 
 **Generalization for future intimate paths:**
+
 - Keep these paths in hand-written function form. The composer architecture is for paths that share archetype structure; cozy / intimate / domestic / "deep interior corner" paths are one-off briefs that bake in too much axis-reinterpretation to fit the generic composer.
 - Drop the epic-awe shared blocks for any "non-spectacle" path.
 - Use 2-3 framing modes via inline `Math.random()` for compositional variety without needing archetype framingModes wiring.
@@ -1017,7 +1083,7 @@ The fix: emptied the wrapper to `''`. Sonnet's body became the first content tok
 3. **"NOT cheesecake" / "NOT bulky armor" guards in the wrapper don't work.** Negation in the first-tokens layer doesn't beat Flux's training-default. Solve cheesecake by stripping cheesecake-DNA from the POOL entries (outfit pool language) and from artist references (Frazetta/Brom/Vallejo) — not by wrapper negations.
 4. **When a path's renders feel homogenous, audit the wrapper FIRST.** Before changing pools, templates, or mediums. Stuffed wrappers are the most common diversity-killer. Match working-bot pattern (FaeBot / pre-migration DragonBot): `promptPrefix: ''` + minimal `mediumStyles` tag + let Sonnet's body lead.
 
-**Per Kevin's pinned memory:** *"Working bots have SHORT prompt prefixes + multi-medium rotation, not stuffed custom medium fragments."* Stuffed wrappers are the second-most-common path failure mode (after pool DNA contamination, see "Pool DNA dominates brief admonitions").
+**Per Kevin's pinned memory:** _"Working bots have SHORT prompt prefixes + multi-medium rotation, not stuffed custom medium fragments."_ Stuffed wrappers are the second-most-common path failure mode (after pool DNA contamination, see "Pool DNA dominates brief admonitions").
 
 **Diagnostic test:** count tokens in `promptPrefixByPath[path]`. If it's >20 tokens AND the path's renders feel homogenous, empty the wrapper and re-test. Single-variable change. If diversity returns → wrapper was the lock.
 
@@ -1054,6 +1120,7 @@ done
 ```
 
 **Hard rule: every path with a distinct visual identity must own its prefix/suffix/mediumStyle layer.** Mechanisms (any of these works):
+
 1. **Per-path custom medium** — define `starbot_<franchise>` with bespoke `promptPrefixByMedium`, `mediumStyles`, `promptSuffixByMedium`, and point `mediumByPath` at it
 2. **Per-path prefix override** — add a `promptPrefix` field on the path config that REPLACES (not appends) the bot-level prefix when present (requires engine support)
 3. **Per-archetype prefix** — store the prefix on the archetype definition; engine reads `archetype.promptPrefix` if present
@@ -1073,6 +1140,7 @@ The "3+ bespoke pools per path" rule is a MINIMUM, not a fixed number. Some path
 **Rule:** when migrating a path, ask "does this axis serve the path's vibe?" before wiring. Universal axes are NOT mandatory — they're available to pull from a bot-shared pool when appropriate. Cozy paths drop monumental-scale axes. Action paths drop quiet-moment axes. Photoreal-astro paths drop figure axes. Match axis count to the path's needs.
 
 **Pattern: lean axis selection by vibe.**
+
 - **Epic / cinematic** path → wire MOST universal axes (story_beat, scale_provers, weather, lighting, etc.) — many rolled elements compose the awe
 - **Character-driven** path → wire many DNA axes (race / skin / eyes / hair / outfit / accessory / action) — character identity needs many slots
 - **Intimate / cozy** path → wire FEWER axes (just narrative ones + 1-2 path-bespoke) — restraint preserves the vibe
@@ -1122,6 +1190,7 @@ When migrating a path to the new composer (declarative form), the path config MU
 Every path overhaul has TWO mandatory stages. Skipping stage 2 means the path renders well but the **subject array is too narrow** — over thousands of bot posts, users see repetition.
 
 **Stage 1: Iteration (MVP pool + brief tuning) — HARD GATE**
+
 - Author a 25-30 entry MVP path-defining pool (Sonnet, slim atomic style for canonical paths; rich-description fat-seed style is the exception)
 - Render-test 5 against the actual path/bot/archetype the pool feeds
 - Kevin sign-off required on the MVP renders before any production sizing
@@ -1130,6 +1199,7 @@ Every path overhaul has TWO mandatory stages. Skipping stage 2 means the path re
 - Outcome: locked recipe + Kevin-approved MVP
 
 **Stage 2: Production sizing (backfill the subject array) — only after Stage-1 approval**
+
 - Expand path-defining pools to project-standard 200 entries
 - Append-mode generation (don't regen — preserves the well-tested MVP entries) via `--target 200`
 - Universal modifier pools rightsized per pool nature (lighting ~200; weather ~50-200; story_beats / composition_frame / scale_provers / emotional_dna ~50; anchor_scale = 4 labels)
@@ -1172,6 +1242,7 @@ This principle holds across all bots. Every bot we overhaul should start with a 
 This is the production architecture all story-driven bots converge on. Every render is composed by rolling one entry from each axis pool; Sonnet weaves them into a single coherent scene description. Effectively infinite variety from compact pool inventories.
 
 **The mental model:**
+
 - **No scene-vs-character split.** Every render has an anchor entity (a figure, ship, creature, or genre-coded presence). The variable is SCALE: TINY (1-3% of frame, witness) → SMALL (5-10%) → MEDIUM (15-25%, character moment) → LARGE (30-40%, portrait-in-place). What used to be "scene paths" are paths with `anchorScaleRange: ['TINY', 'SMALL']`. What used to be "character paths" are `['MEDIUM', 'LARGE']`. Same pipeline, same brief template, just different scale roll.
 - **Anchor entity is bot-genre-coded.** Universal axis (ANCHOR_SCALE) + bot-specific pool (ANCHOR_ENTITY).
 - **Face-swap is an override**, not a separate pipeline. User cast member overrides ANCHOR_ENTITY; scale forced to MEDIUM/LARGE so the face is renderable.
@@ -1180,24 +1251,24 @@ This is the production architecture all story-driven bots converge on. Every ren
 
 (Architecture decision locked 2026-05-12. See "Per-bot variation" section above for the pool resolution hierarchy.)
 
-| Axis | Pool size (typical) | Purpose | Resolution |
-|---|---|---|---|
-| STORY_BEATS | 50-100 | Narrative moment (Arrival / Discovery / Awe / Ruin / etc.) | Bot default; path may override (e.g. cozy uses intimate-scale beats) |
-| ANCHOR_SCALE | 4 | TINY / SMALL / MEDIUM / LARGE — what figure/entity scale the render targets | Universal labels; per-path range constraint |
-| COMPOSITION_FRAME | 50 | Camera framing rule (wide vista / aerial sweep / low-angle hero / etc.) | Bot default; path may override |
-| LIGHTING | 200 | Light source + atmospheric quality | Bot default; path may override |
-| SCALE_PROVERS | 50 | Pickable small-things-that-prove-big-things (ships-as-dots / lit-windows-honey-grain / etc.) | Bot default; path may override |
-| WEATHER_PARTICULATE | 200 | Acid-rain fog / dust haze / vapor streams / clear-air visibility | Bot default; path may override |
-| EMOTIONAL_DNA | 50 | Awe / dread / melancholy / sacred / indifferent-megalopolis / etc. | Bot default; path may override |
+| Axis                | Pool size (typical) | Purpose                                                                                      | Resolution                                                           |
+| ------------------- | ------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| STORY_BEATS         | 50-100              | Narrative moment (Arrival / Discovery / Awe / Ruin / etc.)                                   | Bot default; path may override (e.g. cozy uses intimate-scale beats) |
+| ANCHOR_SCALE        | 4                   | TINY / SMALL / MEDIUM / LARGE — what figure/entity scale the render targets                  | Universal labels; per-path range constraint                          |
+| COMPOSITION_FRAME   | 50                  | Camera framing rule (wide vista / aerial sweep / low-angle hero / etc.)                      | Bot default; path may override                                       |
+| LIGHTING            | 200                 | Light source + atmospheric quality                                                           | Bot default; path may override                                       |
+| SCALE_PROVERS       | 50                  | Pickable small-things-that-prove-big-things (ships-as-dots / lit-windows-honey-grain / etc.) | Bot default; path may override                                       |
+| WEATHER_PARTICULATE | 200                 | Acid-rain fog / dust haze / vapor streams / clear-air visibility                             | Bot default; path may override                                       |
+| EMOTIONAL_DNA       | 50                  | Awe / dread / melancholy / sacred / indifferent-megalopolis / etc.                           | Bot default; path may override                                       |
 
 **Per-bot axes — genre-specific:**
 
-| Axis | Per-bot example |
-|---|---|
-| ANCHOR_ENTITY | StarBot: robed explorer / alien creature / sleek ship. DragonBot: dragon / knight / mage. GothBot: vampire / hunter / cloaked figure. SteamBot: Victorian engineer / airship pilot. DinoBot: dinosaur. BrickBot: minifigure. |
-| ARCHITECTURE_FAMILY | StarBot: ribbed obsidian ziggurats / Kirby-cosmic temples. DragonBot: fairy-tale castles / ancient ruins. GothBot: gothic cathedrals / vampire keeps. SteamBot: clockwork factories / brass airship hangars. |
-| BIOME / SETTING | StarBot: alien planet types. DragonBot: enchanted forest / coastal cliffs / desert kingdoms. GothBot: foggy moor / cathedral interior / cemetery. DinoBot: prehistoric jungle / volcanic plain / tar pits. |
-| SKY_LAYER | StarBot: twin moons / ring-curve / aurora. DragonBot: storm-broken light / sunset / midnight. GothBot: full moon through fog / blood-red dusk. |
+| Axis                | Per-bot example                                                                                                                                                                                                              |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ANCHOR_ENTITY       | StarBot: robed explorer / alien creature / sleek ship. DragonBot: dragon / knight / mage. GothBot: vampire / hunter / cloaked figure. SteamBot: Victorian engineer / airship pilot. DinoBot: dinosaur. BrickBot: minifigure. |
+| ARCHITECTURE_FAMILY | StarBot: ribbed obsidian ziggurats / Kirby-cosmic temples. DragonBot: fairy-tale castles / ancient ruins. GothBot: gothic cathedrals / vampire keeps. SteamBot: clockwork factories / brass airship hangars.                 |
+| BIOME / SETTING     | StarBot: alien planet types. DragonBot: enchanted forest / coastal cliffs / desert kingdoms. GothBot: foggy moor / cathedral interior / cemetery. DinoBot: prehistoric jungle / volcanic plain / tar pits.                   |
+| SKY_LAYER           | StarBot: twin moons / ring-curve / aurora. DragonBot: storm-broken light / sunset / midnight. GothBot: full moon through fog / blood-red dusk.                                                                               |
 
 **Path file structure (universal across bots):**
 
@@ -1220,8 +1291,21 @@ module.exports = {
     const biome = picker.pick(botPools.BIOME);
     const sky = picker.pick(botPools.SKY_LAYER);
 
-    return composeBrief({ scale, entity, beat, frame, lighting, provers, weather, emotion, architecture, biome, sky, vibeDirective });
-  }
+    return composeBrief({
+      scale,
+      entity,
+      beat,
+      frame,
+      lighting,
+      provers,
+      weather,
+      emotion,
+      architecture,
+      biome,
+      sky,
+      vibeDirective,
+    });
+  },
 };
 ```
 
@@ -1241,7 +1325,8 @@ Some path attributes are GREAT some of the time but would feel forced if every r
 // Inside the build function, after the always-on axes are picked:
 const isBattle = Math.random() < 0.6; // 60% gate
 const battleDynamics = isBattle ? pickN(pools.BATTLE_DYNAMICS, 3, picker, 'battle_dynamic') : [];
-const battleSection = isBattle ? `
+const battleSection = isBattle
+  ? `
 ━━━ THIS IS A BATTLE — NON-NEGOTIABLE ━━━
 The scene is an ACTIVE COMBAT ENGAGEMENT. [...]
 
@@ -1249,7 +1334,8 @@ The scene is an ACTIVE COMBAT ENGAGEMENT. [...]
 - ${battleDynamics[0]}
 - ${battleDynamics[1]}
 - ${battleDynamics[2]}
-` : '';
+`
+  : '';
 
 return `[...brief...]
 ${battleSection}
@@ -1257,17 +1343,20 @@ ${battleSection}
 ```
 
 **The architecture:**
+
 - One additional Tier-3 pool (e.g. `BATTLE_DYNAMICS`, `WEATHER_DRAMA`, `ROMANCE_MOMENTS`, `AMBIENT_CREATURE`) — entries describe one "drama beat" each
 - A probability-gated roll (50/50, 60/40, 30/70 — tune to match how often you want that drama)
 - A `${conditionalSection}` injection in the brief — empty string when off, full section when on
 - The conditional section can include: a mode-mandate paragraph, 2-3 picks from the conditional pool, and any necessary bans/reframes for that mode
 
 **When to use this pattern:**
+
 - A path attribute that you want SOMETIMES but not always
 - An attribute that fundamentally changes the scene's mood (battle vs peaceful, storm vs calm, magic vs mundane)
 - An attribute that you don't want diluting the baseline — i.e. if every render had it, the rare-occurrence drama would be lost
 
 **When NOT to use it:**
+
 - For attributes that should always be present (use a regular always-on axis)
 - For micro-variation within a single mood (use multiple entries in the regular pool)
 
@@ -1299,8 +1388,8 @@ EMOTIONAL DNA: [the feeling the scene carries — awe / dread / melancholy / won
 
 Old vs new comparison:
 
-| Old | New |
-|---|---|
+| Old                                                    | New                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | "Cyberpunk megacity at night with neon signs and rain" | "MEGACITY OF STACKED ZIGGURATS — five-kilometer-tall ribbed obsidian ziggurats arrayed in a grid, each tower a layered city of thousands, connected at seven elevations by 200-meter-wide skybridges thick with traffic. FG: hanging-garden terrace edge, vines spilling over rusted railing, two species of birds startled into flight. MG: ziggurats marching into smog, hundreds of golden window-lights per face, tiny ships threading the gaps. DEEP: the largest tower of all rising above siblings, glowing crown beacons cycling slowly. SKY: low cloud ceiling lit from below by city glow, twin moons partially visible through smog. SCALE: ships are dots, figures on bridges are pinpricks, windows are honey-grain. MATERIAL: ribbed obsidian over engineered concrete, copper-green oxide on bridge-trusses. EMOTIONAL: indifferent megalopolis, you are insignificant." |
 
 ---
@@ -1344,21 +1433,21 @@ Old vs new comparison:
 
 ### Failure modes seen (StarBot R1-R7 + earlier)
 
-| Symptom | Cause | Fix |
-|---|---|---|
-| Figure centered + foreground when brief asked for tiny-silhouette | Vague scale language ("tiny") + entity described early in prompt | Move entity to LAST in prompt structure for scene paths |
-| Figure DROPPED entirely (not in frame) | Entity moved too late in prompt structure for character path | For character paths, entity at SECOND position; never last |
-| Floating-in-empty-air figure | Action verb literal ("MID-LEAP", "AIRBORNE") | Grounded action verbs ("LANDING ON LEDGE", "WADING THROUGH LIQUID") |
-| Persistent portrait drift on character path | Medium has portrait bias (starbot_hyperreal) | Override via `mediumByPath`: 'female-explorer': 'canvas' |
-| Frazetta-paperback cheesecake | Canvas medium + "fitted" / "form-fitting" pool words | Pool entries emphasize SEALED ARMOR PLATES / equipment / helmet, not "fitted" |
-| Bare midriff bikini despite no-cheesecake brief | Pool entry has "crop-armor" or "form-fitting" | Audit pool, replace cosmetic-exposure entries — brief language cannot override pool seed |
-| Single hero building floating in haze, no city around it | Pool entry described only the hero, no supporting density | City pool entries must include supporting density |
-| "Alien city" became "lone figure in icy gorge" | Pool entry chose a remote location, brief budget ran out before city got described | Pool entry must lead with the SETTING density |
-| Same teal+orange every render | LIGHTING pool too small / vibe-lock too narrow | Refresh LIGHTING pool with explicit color directives |
-| Same "cyberpunk-spire-cylindrical" architecture every render | No architecture style axis — Flux defaults to medium's single visual bias | Add ARCHITECTURE_STYLE pool with 20+ distinct structural languages |
-| City reads as "small skyline in distant landscape" | Aerial preference + lack of "inside city alive" demand | "INSIDE the city alive with commotion" — busy metropolis filling 80%+ of frame |
-| Generic "ribbed spires + orange windows" architecture | Pool entries didn't specify architectural language | Each seed must specify a STYLE: brutalist / chitin-grown / Kirby-cosmic / etc. |
-| Sonnet pool entries bloated with FG/MG/Deep/Sky/Material/Emotional layers when only one descriptor needed | Used the Rich Scene Seed prompt template for a slot-pool entry | For slot-pool axis entries (single-purpose), use a tighter recipe; strip the FG/MG/Sky layers post-gen if generated |
+| Symptom                                                                                                   | Cause                                                                              | Fix                                                                                                                 |
+| --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Figure centered + foreground when brief asked for tiny-silhouette                                         | Vague scale language ("tiny") + entity described early in prompt                   | Move entity to LAST in prompt structure for scene paths                                                             |
+| Figure DROPPED entirely (not in frame)                                                                    | Entity moved too late in prompt structure for character path                       | For character paths, entity at SECOND position; never last                                                          |
+| Floating-in-empty-air figure                                                                              | Action verb literal ("MID-LEAP", "AIRBORNE")                                       | Grounded action verbs ("LANDING ON LEDGE", "WADING THROUGH LIQUID")                                                 |
+| Persistent portrait drift on character path                                                               | Medium has portrait bias (starbot_hyperreal)                                       | Override via `mediumByPath`: 'female-explorer': 'canvas'                                                            |
+| Frazetta-paperback cheesecake                                                                             | Canvas medium + "fitted" / "form-fitting" pool words                               | Pool entries emphasize SEALED ARMOR PLATES / equipment / helmet, not "fitted"                                       |
+| Bare midriff bikini despite no-cheesecake brief                                                           | Pool entry has "crop-armor" or "form-fitting"                                      | Audit pool, replace cosmetic-exposure entries — brief language cannot override pool seed                            |
+| Single hero building floating in haze, no city around it                                                  | Pool entry described only the hero, no supporting density                          | City pool entries must include supporting density                                                                   |
+| "Alien city" became "lone figure in icy gorge"                                                            | Pool entry chose a remote location, brief budget ran out before city got described | Pool entry must lead with the SETTING density                                                                       |
+| Same teal+orange every render                                                                             | LIGHTING pool too small / vibe-lock too narrow                                     | Refresh LIGHTING pool with explicit color directives                                                                |
+| Same "cyberpunk-spire-cylindrical" architecture every render                                              | No architecture style axis — Flux defaults to medium's single visual bias          | Add ARCHITECTURE_STYLE pool with 20+ distinct structural languages                                                  |
+| City reads as "small skyline in distant landscape"                                                        | Aerial preference + lack of "inside city alive" demand                             | "INSIDE the city alive with commotion" — busy metropolis filling 80%+ of frame                                      |
+| Generic "ribbed spires + orange windows" architecture                                                     | Pool entries didn't specify architectural language                                 | Each seed must specify a STYLE: brutalist / chitin-grown / Kirby-cosmic / etc.                                      |
+| Sonnet pool entries bloated with FG/MG/Deep/Sky/Material/Emotional layers when only one descriptor needed | Used the Rich Scene Seed prompt template for a slot-pool entry                     | For slot-pool axis entries (single-purpose), use a tighter recipe; strip the FG/MG/Sky layers post-gen if generated |
 
 ---
 
@@ -1367,6 +1456,7 @@ Old vs new comparison:
 These are reference points Sonnet should be able to draw from when authoring scene seeds. The pool generator's prompt injects relevant touchpoints per pool.
 
 ### Megacity / alien-city
+
 - Coruscant (planet-city, layered ecumenopolis)
 - Blade Runner 2049's LA (megaholograms, fog layers, atmospheric density)
 - Akira's Neo-Tokyo (vertical density, neon signage)
@@ -1379,6 +1469,7 @@ These are reference points Sonnet should be able to draw from when authoring sce
 - Syd Mead retrofuture density studies
 
 ### Alien-landscape
+
 - Dune's Arrakis (twin suns, biblical desert scale)
 - Solaris ocean (sentient world)
 - Nausicaä toxic jungle (ringed alien biome)
@@ -1388,6 +1479,7 @@ These are reference points Sonnet should be able to draw from when authoring sce
 - Beksinski's painted post-apocalyptic landscapes (skeletal dread architecture in dust)
 
 ### Megastructure
+
 - Halo ring (orbital ring world, curve visible)
 - Dyson sphere/swarm (Sun encapsulated)
 - Bishop Ring / Niven's Ringworld
@@ -1396,6 +1488,7 @@ These are reference points Sonnet should be able to draw from when authoring sce
 - Larry Niven's smoke ring habitats
 
 ### Space-opera ships
+
 - Heighliners (Dune crystalline impossibles)
 - Star Wars Star Destroyer underbelly (low-angle hero shot)
 - Mass Effect Reaper (squid-organic alien)
@@ -1405,6 +1498,7 @@ These are reference points Sonnet should be able to draw from when authoring sce
 - Pacific Rim Kaiju silhouettes (alien biological)
 
 ### Cosmic vista / real-space
+
 - Hubble Pillars of Creation (false-color majesty)
 - JWST deep-field (every pixel a galaxy)
 - Star formation regions (Carina, Orion)
@@ -1427,24 +1521,25 @@ Per-bot subsections live below. Each bot's path-by-path iteration history is her
 **The fix — change the REGISTER, not just the pools.** Kevin chose "mostly-machine android-man" (Alita / Ghost in the Shell Major / Nier / battle-android): synthetic chassis dominates the silhouette, organic shows ONLY at the eyes / a small face-panel, a human ghost inside an engineered body. This register **structurally cannot** produce the failure — there's no big organic head to paste and no flesh/chrome seam. Full rich axis migration (`MECHBOT_ANDROID_MAN`): 8 bespoke axes (chassis / material / head / augment / action / setting / composition / surprise) + 40%-drama + 2 universal. R0 (25-entry MVP pools) hit 5/5 full-figure mostly-machine androids in sci-fi scenes — zero bust shots, zero organic-head-paste, zero pretty-boy — first batch, no iteration.
 
 **The three load-bearing moves (reusable for ANY character path drifting to portrait/bust):**
-1. **Invert the composition pool to ~85% full-figure** (head-to-foot / wide / environmental), ZERO face-only-bust entries, with explicit "NO bust / portrait / face-closeup" bans IN the recipe. The composition axis is the single biggest lever against the bust-shot failure — a 70%-closeup pool *guarantees* bust shots no matter what the rest of the brief says.
+
+1. **Invert the composition pool to ~85% full-figure** (head-to-foot / wide / environmental), ZERO face-only-bust entries, with explicit "NO bust / portrait / face-closeup" bans IN the recipe. The composition axis is the single biggest lever against the bust-shot failure — a 70%-closeup pool _guarantees_ bust shots no matter what the rest of the brief says.
 2. **Author the head/face axis as MAJORITY-machine** — the organic remnant is a tiny engineered inlay (one eye / a cheek-panel), never a full organic face. This kills the "photoshop paste" look at the source (the head pool, not the template).
 3. **Template leads with BODY + SCENE, never the face.** A mandatory opening tag locks "Full-figure male android … shown head-to-foot, NOT a bust, NOT a portrait, … mostly machine … no flesh-to-metal seam". The two named failures are called out explicitly at the top of the template as NON-NEGOTIABLE.
 
-**Watch-item:** "mostly-machine" risks drifting toward MechBot's existing `humanoid-robots` / `droid-assassin` (pure robots). The distinguishing identity is the **human ghost** — keep the organic-eye / face-panel remnant readable so it stays a *cyborg* (a person who became mostly machine), not a robot. R1 lever if Kevin wants more "soul": push the visible organic remnant.
+**Watch-item:** "mostly-machine" risks drifting toward MechBot's existing `humanoid-robots` / `droid-assassin` (pure robots). The distinguishing identity is the **human ghost** — keep the organic-eye / face-panel remnant readable so it stays a _cyborg_ (a person who became mostly machine), not a robot. R1 lever if Kevin wants more "soul": push the visible organic remnant.
 
-Files: `paths/cyborg-man.js` (new MECHBOT_ANDROID_MAN archetype), `archetypes.js` + `archetype-templates.js` (mechbot-local), 10 `android_man_*` pools + recipes in `gen-mechbot-pool.js`. `cyborg-male-legacy` disabled (legacy file preserved). Pools at MVP 25 — **NOT scaled** pending Kevin's go-ahead.
+Files: `paths/cyborg-man.js` (new MECHBOT*ANDROID_MAN archetype), `archetypes.js` + `archetype-templates.js` (mechbot-local), 10 `android_man*\*`pools + recipes in`gen-mechbot-pool.js`. `cyborg-male-legacy` disabled (legacy file preserved). Pools at MVP 25 — **NOT scaled** pending Kevin's go-ahead.
 
 **R1–R12 (2026-05-26) — STILL UNRESOLVED on the head. Valid lessons + the open problem:**
 
 The R0 "mostly-machine android" got pivoted immediately, then the register oscillated for ~12 rounds and the HEAD is still NOT right. Two lessons below ARE solid; the head register is NOT solved — do not treat R11/R12 ("wired human face") as a win, it regressed to clean pretty-boy faces with a bolt-on cyber-ear.
 
-1. **⚠️ NEGATION-LEAK ON GENDER/ANATOMY (SOLID, proven).** Renders kept coming out androgynous/feminine. Cause: the prompt (esp. the verbatim mandatory opening tag — the highest-weighted tokens) was stuffed with `NOT female, NO breasts, NO bust contour, not feminine`. Per [[feedback_negative_prompt_leak]], Flux ignores the "NO/NOT" and renders the noun — so naming female/breasts/feminine *to forbid them* CAUSED the feminine drift. **Fix: strip every anti-women word, anchor masculinity purely POSITIVELY** (rugged masculine man, strong jaw, broad shoulders). Even "breastbone" → "sternum". Removing the negations fixed it (reliably male). Kevin: "those are soft leaking into the prompt." Applies to ANY gender/identity lock.
+1. **⚠️ NEGATION-LEAK ON GENDER/ANATOMY (SOLID, proven).** Renders kept coming out androgynous/feminine. Cause: the prompt (esp. the verbatim mandatory opening tag — the highest-weighted tokens) was stuffed with `NOT female, NO breasts, NO bust contour, not feminine`. Per [[feedback_negative_prompt_leak]], Flux ignores the "NO/NOT" and renders the noun — so naming female/breasts/feminine _to forbid them_ CAUSED the feminine drift. **Fix: strip every anti-women word, anchor masculinity purely POSITIVELY** (rugged masculine man, strong jaw, broad shoulders). Even "breastbone" → "sternum". Removing the negations fixed it (reliably male). Kevin: "those are soft leaking into the prompt." Applies to ANY gender/identity lock.
 2. **Don't over-correct face-forward into static (SOLID).** Making the action pool "face-toward-camera" to kill visor-on-motion flattened poses into boring standing shots. Fix: kinetic beats that come TOWARD/across camera (slide-fire, spin-to-fire, vault-toward-us, slam-landing) — dynamic AND face-readable.
 3. **❌ HEAD REGISTER — STILL BROKEN (the open problem).** The goal: a head that matches Kevin's TWO SAVED references. Their DNA (carbon-copy these, do not paraphrase per [[feedback_carbon_copy_hearted_prompt_verbatim]]):
-   - FAV white-ceramic: *"half-conversion face — scarred organic right side, left jaw replaced by beveled black-silver plating continuous down his chrome cervical column onto the pauldron, recessed seafoam optic burning"* + *"semi-transparent spinal sheath blazing data-pulse down his vertebral length"*.
-   - FAV dark: *"scarred flat-nosed face, mechanical iris burning dull red, jaw clenched around a servo-driven hinge, implant-studs catching plasma-cyan flickers at his shaved temple, synth-larynx resonance band and chrome cervical column continuous from jawline into chest-block"* + *"polished titanium endoskeleton fully exposed pelvis-to-clavicle with servo-nodes glowing at every rib-analog"*.
-   These are HEAVY integration — half-conversion jaw/face-side PLATING, mechanical iris, temple implant-studs, synth-larynx band, chrome cervical column from jaw into chest, dense cabling, exposed endoskeleton. The distinction Kevin drew: **no SKULL-CAP (cranium-helmet plating over the top of the head)** — but jaw/temple/neck plating + half-conversion + exposed endoskeleton ARE wanted. My R10 went too far (full skull-cap = robot/Terminator skull); my R11/R12 over-corrected the OPPOSITE way (banned all plating/half-conversion → clean pretty-boy face + a token cyber-ear, "no circuitry on the head at all"). **Next: rebuild the head pool by carbon-copying the two references' exact heavy-integration phrasing; cranium keeps hair, but jaw/temple/neck heavily plated+wired+optic + exposed endoskeleton on the body.** NOT YET DONE — do not claim convergence until renders match the two saved refs.
+   - FAV white-ceramic: _"half-conversion face — scarred organic right side, left jaw replaced by beveled black-silver plating continuous down his chrome cervical column onto the pauldron, recessed seafoam optic burning"_ + _"semi-transparent spinal sheath blazing data-pulse down his vertebral length"_.
+   - FAV dark: _"scarred flat-nosed face, mechanical iris burning dull red, jaw clenched around a servo-driven hinge, implant-studs catching plasma-cyan flickers at his shaved temple, synth-larynx resonance band and chrome cervical column continuous from jawline into chest-block"_ + _"polished titanium endoskeleton fully exposed pelvis-to-clavicle with servo-nodes glowing at every rib-analog"_.
+     These are HEAVY integration — half-conversion jaw/face-side PLATING, mechanical iris, temple implant-studs, synth-larynx band, chrome cervical column from jaw into chest, dense cabling, exposed endoskeleton. The distinction Kevin drew: **no SKULL-CAP (cranium-helmet plating over the top of the head)** — but jaw/temple/neck plating + half-conversion + exposed endoskeleton ARE wanted. My R10 went too far (full skull-cap = robot/Terminator skull); my R11/R12 over-corrected the OPPOSITE way (banned all plating/half-conversion → clean pretty-boy face + a token cyber-ear, "no circuitry on the head at all"). **Next: rebuild the head pool by carbon-copying the two references' exact heavy-integration phrasing; cranium keeps hair, but jaw/temple/neck heavily plated+wired+optic + exposed endoskeleton on the body.** NOT YET DONE — do not claim convergence until renders match the two saved refs.
 
 Pools at MVP-25, NOT scaled, NOT committed. Head still failing.
 
@@ -1455,18 +1550,21 @@ Second MechBot path on the declarative composer. **Production-ready in 2 rounds.
 **Key insight: for ship paths, an ALWAYS-ON engagement pool (multi-actor combat narrative beat) is what separates a movie-poster moment from a "hero ship in pretty sky" beauty shot.** R1 used the same architecture as titan-war (vertigo composition + path-bespoke lighting + 40%-gated drama) and produced 4.9/5 renders — but Kevin's feedback was "one-dimensional ... not just some ship flying ... layered dynamic action." Adding a `mech_skyships_engagement` path-bespoke pool that fires on EVERY render (not 40%-gated like drama) with multi-actor combat narratives (DOGFIGHT TANGLE / SQUADRON STRIKE / ESCORT DEFENSE / CHASE PURSUIT / ARRIVAL DESCENT / AMBUSH FROM CLOUDS / etc.) immediately solved it. R2 prompts now name 2-4 other actors per render (allied wingmen with named call-signs like CASTOR / VETH-2, enemy interceptors retreating, ground AA emplacements firing, escort formations circling) and Flux renders the inter-ship action.
 
 **Why this pattern matters cross-bot:** any path where the subject is a vehicle/ship/walker that lives in an active combat or transit world benefits from an engagement pool that forces the SCENE to include other actors. This is what makes a Star Wars X-wing trench-run feel like a movie poster instead of a beauty shot of a single X-wing. The pattern applies to:
+
 - Any spaceship/skyship/airship path
 - Any kaiju-walker path (titan-war already has this implicit in the action pool but could benefit from making it explicit)
 - Any vehicle path (mecha-pilots / mech-skyships / etc.)
 - NOT needed for character paths (the character's action verb already drives the narrative)
 
 **Pool design pattern for engagement (40-80 word entries):**
+
 - Format: `"ENGAGEMENT TYPE CAPS — hero subject + 2-4 other actors named + their interaction + scale-provers if relevant"`
 - 30-60 entries
 - Categories: dogfight / strike / escort / pursuit / arrival / ambush / bombing / drop / intercept / kill-confirmed / deep-strike / pincer / cover-fire / etc.
 - HARD BAN on solo-hero entries in the recipe (or Sonnet will default to "ship in pretty sky")
 
 **Files:**
+
 - `scripts/bots/mechbot/paths/mech-skyships.js` (declarative, 6 axes)
 - `scripts/bots/mechbot/paths/legacy/mech-skyships.js` (function-form preserved)
 - `MECHBOT_SKYSHIPS` archetype + template (vertigo + movie-poster + multi-actor narrative + "TURNED UP TO 11" + "NO modern military" preserved from legacy)
@@ -1478,6 +1576,7 @@ Second MechBot path on the declarative composer. **Production-ready in 2 rounds.
 First MechBot path migrated to the declarative composer. **Production-ready in 2 rounds.**
 
 **Key insight: vertigo-composition pool as a NEW pattern.** Most scene paths use a generic camera framing axis. For BIBLICAL-SCALE paths (titan-war-machines, kaiju-scale walkers, megastructures, any path where "the scale is the subject"), a path-bespoke composition pool of vertigo angles produces materially better renders than relying on the brief's "WIDE shots favored" admonition. The 15-entry composition pool for titan-war-machines includes:
+
 - WORM'S-EYE up the leg
 - FLY-BETWEEN-LEGS perspective
 - KAIJU-STEP-DESCENDING (foot coming at camera)
@@ -1498,9 +1597,10 @@ Each entry specifies camera-position + what-dominates-frame + scale-prover. Pool
 
 **Apply this pattern to:** any scene path where SCALE is the subject — megastructure / kaiju-walker / colossal-anomaly / city-as-hero / mountain-as-hero / cosmic-vista paths. Not needed for character paths (their composition is bounded by the figure).
 
-**Movie poster crank — template-only — works:** R1 (vertigo composition only) scored 4.9/5 avg with strong composition diversity but slightly grey atmospheric palette. R2 added the MOVIE POSTER MANDATE block to the template (no pool changes) — still 4.9/5 numerically but the renders became *qualitatively spectacular*: dramatic sky saturation (fire-orange / blood-red / electric-violet), multi-quadrant action density, multiple scale-provers in different parts of frame. Kevin: "wow, yes, scale this and commit."
+**Movie poster crank — template-only — works:** R1 (vertigo composition only) scored 4.9/5 avg with strong composition diversity but slightly grey atmospheric palette. R2 added the MOVIE POSTER MANDATE block to the template (no pool changes) — still 4.9/5 numerically but the renders became _qualitatively spectacular_: dramatic sky saturation (fire-orange / blood-red / electric-violet), multi-quadrant action density, multiple scale-provers in different parts of frame. Kevin: "wow, yes, scale this and commit."
 
 **Files:**
+
 - `scripts/bots/mechbot/paths/titan-war-machines.js` (declarative)
 - `scripts/bots/mechbot/paths/legacy/titan-war-machines.js` (function-form preserved)
 - `scripts/lib/archetypes.js` — `MECHBOT_TITAN_WAR` archetype
@@ -1531,6 +1631,7 @@ Spent ~7 rounds trying to migrate. Pivot to "pure mech creatures" lost the surre
 **Round 8 (Kevin's "all cities look similar — different architecture")** — Authored ARCHITECTURE_STYLE pool (25 distinct structural languages: brutalist mega-slabs / biomechanical chitin / crystalline lattice / cliff-built / Mayan ziggurats / Kirby-cosmic / walking megastructures / Gaudí organic / etc.). Will wire into alien-city for next round.
 
 **Config (current production):**
+
 - Path file: `scripts/bots/starbot/paths/alien-city.js`
 - Universal axes: STORY_BEATS, ANCHOR_SCALE, COMPOSITION_FRAME, SCALE_PROVERS, WEATHER_PARTICULATE, EMOTIONAL_DNA, LIGHTING
 - Bot-level axes: STARBOT_ANCHOR_ENTITY, ALIEN_SKY_LAYER, SURPRISE_ELEMENT
@@ -1561,6 +1662,7 @@ Spent ~7 rounds trying to migrate. Pivot to "pure mech creatures" lost the surre
 **Round 9 (biome-appropriate outfit override)** — Kevin clarified: cleavage is fine, biome-mismatch is not. The rule is "bikini-warriors on ice planets" — outfit must match biome hazard. Replaced "helmet always" with biome-conditional outfit override. fe1 5/5 (rust-suited explorer profile under cosmic moon). Pool still skewed white-EVA repetitive though — clustering issue.
 
 **Round 10 (pool variety mandate + post-gen dedup)** — Kevin's insight: clustering is a SEEDING issue not a brief issue. Updated the gen-starbot-pool recipe for explorer_outfits_female to demand explicit variety across color / texture / silhouette / style-family with 10 anchor examples. Pool diversity achieved (scavenger / corporate / monastic / ranger / military EVA / dieselpunk / etc.). But R10 renders REGRESSED to 3/5 because:
+
 - fe1 4.5/5 ✓ (orange explorer wading)
 - fe3 4.5/5 ✓ (green ranger spying)
 - fe2 2/5 (split composition — character bio + surprise element fought)
@@ -1572,6 +1674,7 @@ Spent ~7 rounds trying to migrate. Pivot to "pure mech creatures" lost the surre
 **Cross-bot lesson:** the more "what she LOOKS LIKE" axes you have, the more Flux drifts portrait. The more "what she's DOING" axes you have, the more Flux renders the scene. Balance: character DNA blocks should be COMPACT (one line per axis); action description should be EXPLICIT and FRONT-LOADED.
 
 **Architectural insight (R10):** each path eventually needs BESPOKE POOLS finely tuned for what THAT path is meant to output. Today many paths share Tier 3 pools (alien-landscape and female-explorer both use ALIEN_PLANET_BIOME). Future iteration may want path-specific versions:
+
 - `alien_landscape_biome` (geology+biology emphasis for landscape path)
 - `female_explorer_setting` (action-stage-ready biomes where you can climb / wade / hunt)
 - `cosmic_oracle_setting` (sacred / temple / ritual sites)
@@ -1616,6 +1719,7 @@ Kevin: "we still want the hairstyle/skin/eyes expansions ... if sonnet drops the
 - For each new path: 1) author a bespoke Tier 3 setting pool with attention to its subject matter (Sonnet generates 30+ entries with variety mandate + aesthetic touchpoints), 2) instantiate the path file using the proven scene/character template, 3) 1-2 rounds to tune any path-specific issues.
 
 **Config (current production):**
+
 - Path file: `scripts/bots/starbot/paths/female-explorer.js`
 - Universal axes: STORY_BEATS, COMPOSITION_FRAME, SCALE_PROVERS, WEATHER_PARTICULATE, EMOTIONAL_DNA, LIGHTING
 - Bot-level axes: ALIEN_SKY_LAYER, SURPRISE_ELEMENT
@@ -1625,28 +1729,36 @@ Kevin: "we still want the hairstyle/skin/eyes expansions ... if sonnet drops the
 - Brief structure: DragonBot female-warrior pattern (race-first, compact one-line bio with ALL 7 DNA slots injected, action-led, biome-conditional helmet rule)
 
 ### megastructure
-*Pending — apply alien-city lessons once locked*
+
+_Pending — apply alien-city lessons once locked_
 
 ### alien-landscape
-*Pending*
+
+_Pending_
 
 ### dune-landscape
-*Pending*
+
+_Pending_
 
 ### space-opera (ship scenes — needs cooler ships specifically)
-*Pending*
+
+_Pending_
 
 ### aliens-architecture, starwars-landscape, guardians-architecture, mass-effect-architecture, halo-landscape, star-trek-landscape, starcraft-landscape
-*Pending — universe-coded scene paths*
+
+_Pending — universe-coded scene paths_
 
 ### cozy-sci-fi-interior
-*Pending — different DNA (cozy, not awe); may need a different template*
+
+_Pending — different DNA (cozy, not awe); may need a different template_
 
 ### cosmic-oracle, female-explorer, male-explorer
-*Pending — character paths; story-template applies but figure IS the subject, not the scale prover*
+
+_Pending — character paths; story-template applies but figure IS the subject, not the scale prover_
 
 ### real-space
-*Pending — NASA-grade astrophotography; story-template doesn't apply directly; treated specially*
+
+_Pending — NASA-grade astrophotography; story-template doesn't apply directly; treated specially_
 
 ---
 
@@ -1657,15 +1769,17 @@ Kevin: "we still want the hairstyle/skin/eyes expansions ... if sonnet drops the
 **Trigger:** Kevin hearted a ChibiBot `sleepy-naptime` render that was just a human "Aboriginal Australian girl curled up sleeping" — a clear failure. ChibiBot's identity is adorable CRITTERS (real animals + cute fantasy creatures) / villages / cozy scenes. NO literal humans, ever.
 
 **Root cause (NOT a brief-wording leak — a source that contained humans):**
+
 1. The shared `cute_creatures_unified.json` pool (400 entries, drawn by every path) had **56 `CHILD`-tagged entries that were literal human kids** ("Chibi South Asian girl, age 5", "Chibi East Asian boy, age 4"). They were tagged `["CHILD","ANY"]` — and the `ANY` tag means they matched **every** path's biome filter, so any path (including `sleepy-naptime`, which draws the pool with no filter) could pick a human child.
 2. The **gen-script metaPrompt** (`scripts/gen-seeds/chibibot/gen-cute-creatures-unified.js`) explicitly told Sonnet to make ~10% `CHILD` entries — so even after deleting them, the next backfill would regenerate kids. Had to fix the generator, not just the data.
 3. `archetype-templates.js` had ~14 lines explicitly PERMITTING children ("Children OK from unified pool — render at chibi proportions", "NO ADULT HUMANS (children OK from unified pool)", and an enabler paragraph "The creature pool may include chibi human children…"). These directly **contradicted** the render-medium block in `shared-blocks.js` which already said "No humans. All subjects are creatures." The permission won.
 4. Background humans also lurked in scene/surprise/lighting pools: "Distant child in a red raincoat", "Hunched silhouette of an old man on a jetty", "Two small villagers cross a rope-bridge", "offered… by the dairy farmer", "child's-eye-view", and many "child-sized / child's X" objects.
 
 **Fix (purge at SOURCE + harden + backfill):**
+
 - Removed the 56 CHILD-tagged entries + 5 human-ish fantasy entries (faun "skin below the waist", huldra "forest-girl form", ningyo "infant torso") from the pool. Kept the huldra-**calf** (rendered as an actual furry calf creature).
 - Rewrote the gen-script metaPrompt: dropped the `CHILD` tag entirely, reweighted the freed 10% into FANTASY (Kevin wanted "fairies, dragons, etc."), and added a HARD BAN: "NO HUMANS of any kind… Fairies/sprites must read as cute fae-CREATURES, never human children with wings."
-- Backfilled 339→400 via the canonical script — new entries are diverse real + fantasy critters (zhuque phoenix chick, Polynesian taniwha, huli jing nine-tailed fox, Cape hare, sea-dragons, will-o-wisp sprites, paper-lantern fairies). Cultural diversity preserved by moving it onto the *creatures* (Chinese/Polynesian/African mythic critters) instead of human kids.
+- Backfilled 339→400 via the canonical script — new entries are diverse real + fantasy critters (zhuque phoenix chick, Polynesian taniwha, huli jing nine-tailed fox, Cape hare, sea-dragons, will-o-wisp sprites, paper-lantern fairies). Cultural diversity preserved by moving it onto the _creatures_ (Chinese/Polynesian/African mythic critters) instead of human kids.
 - Flipped all ~14 template permission lines to positive "NO humans of any kind — creatures only" bans + replaced the 4 human-child OUTPUT FORMAT examples ("A chibi child explorer…") with creature examples ("A chibi otter explorer…").
 - Scrubbed background humans from scene/surprise/lighting/detail pools (villagers→creatures, distant child→chibi penguin, old man→chibi tortoise, dairy farmer→dairy stall, "child-sized"→"tiny", "child's-eye-view"→"critter's-eye-view").
 
@@ -1682,6 +1796,7 @@ First ChibiBot path migrated to declarative composer. **Production-ready in 3 ro
 **R0 (parity migration — DON'T DO THIS):** I cloned the legacy 5-axis architecture verbatim (lighting + atmosphere + creature_1 + creature_2 70%-gated + activity). Renders were 4.8/5 — looked identical to legacy, but Kevin flagged "lighting and scenes look repetitive." **The mistake: skipping the playbook's full-bespoke mandate.** A character-led scene path needs 8-10 path-bespoke axes, not 5. Parity migrations regress on diversity even when they score well.
 
 **R1 (full-bespoke 10-axis):** Added 4 new path-bespoke pools + 1 new universal pool wire:
+
 - `setting` (HEARTWARMING_SETTINGS, 50→200) — the storybook stage (cottage interiors / forest hollows / meadows / treehouse rooms / fairy-ring clearings)
 - `time_of_day` (HEARTWARMING_TIME_OF_DAY, 50) — dawn / blue-hour / golden-hour / candlelit-night / overcast / moonlit / aurora-time
 - `surprise_element` (HEARTWARMING_SURPRISE_ELEMENTS, 50→150) — second-tier detail the eye finds AFTER the hero
@@ -1695,6 +1810,7 @@ Result: settings now NAMEABLE in every render (cottage kitchen / candlelit windo
 **Key cross-bot lesson (added to cross-bot list):** template wording with a fixed color cast ("warm volumetric glow", "soft warm light", "always golden hour") will OVERRIDE pool variety even when the pool entry says otherwise. When a path has a time-of-day axis, the template's lighting amplification phrases MUST tie to the axis ("tinted to MATCH the time-of-day" with explicit per-time examples) or the pool diversity dies. Verified for character-led scene paths; likely applies to any scene path with a time/light axis.
 
 **Config (current production):**
+
 - Path file: `scripts/bots/chibibot/paths/heartwarming-scene.js` (declarative, 10 axes)
 - Legacy: `scripts/bots/chibibot/paths/legacy/heartwarming-scene.js` (function-form preserved)
 - Universal axes: lighting + atmosphere + weather (all via `bot.defaultPools`)
@@ -1704,6 +1820,7 @@ Result: settings now NAMEABLE in every render (cottage kitchen / candlelit windo
 - 4 new pools sized: settings 200, time_of_day 50 (ceiling), surprise_elements 150, phenomena 50 (intentionally small)
 
 ### heartwarming-scene next steps
+
 - Audit LIGHTING pool for cozy-skew (sample showed heavy night/moonlit/foggy bias; midday/sun underrepresented)
 - Watch for phenomenon-fire visibility — at 60% gate it should land on ~3/5 renders
 - Pattern is ready to clone for next 23 ChibiBot paths
@@ -1731,6 +1848,7 @@ Fourth ChibiBot path migrated. **Production-ready in 4 rounds.** Introduces THRE
 4. **One-line pair guard** (`━━━ HARD RULE: BOTH CREATURES VISIBLE — NEVER SOLO ━━━` — single short paragraph). Shorter than the verbose multi-paragraph guards from cuddly-aquatic R1 (which pushed Flux to generic-chibi-toy mode), but explicit enough to lock pair-bond. Works because it's surgical: one rule, one paragraph, one mandate.
 
 **Config (current production):**
+
 - Path file: `scripts/bots/chibibot/paths/night-meadow.js` (declarative, 11 axes)
 - Legacy: `scripts/bots/chibibot/paths/legacy/night-meadow.js`
 - Universal axes: lighting + atmosphere + weather
@@ -1764,6 +1882,7 @@ Third ChibiBot path migrated. **Production-ready in 5 rounds.**
 3. **SPARKLE STACK pattern** for cuteness paths — explicitly list 10-12 atmospheric effects (caustic light, rising bubbles, plankton sparkles, eye-flares, bioluminescent halo, dewdrop highlights, lens flares, pollen particles, heart-bubbles, etc.) and demand "stack AT LEAST 6 visible per render". This is the cute-amplification version of MechBot's "TURNED UP TO 11".
 
 **Config (current production):**
+
 - Path file: `scripts/bots/chibibot/paths/cuddly-aquatic.js` (declarative, 10 axes)
 - Legacy: `scripts/bots/chibibot/paths/legacy/cuddly-aquatic.js`
 - Universal axes: lighting + atmosphere + weather (via `bot.defaultPools`)
@@ -1776,6 +1895,7 @@ Third ChibiBot path migrated. **Production-ready in 5 rounds.**
 - Also created (currently unused — kept for future option): CUDDLY_AQUATIC_CREATURES_MARINE (603 entries, AQUATIC_CREATURES filtered to exclude otter/penguin/duck/etc.)
 
 ### cuddly-aquatic next steps
+
 - Path identity loose — ~60% on-path, ~40% drift to land-creatures/non-underwater. May iterate later with tighter setting pool (purge freshwater/lily-pad) OR re-introduce a SHORT (one-sentence) pair+marine guard that doesn't stuff the prompt
 - Marine creature pool ready to deploy if Kevin wants stricter underwater identity later
 
@@ -1792,6 +1912,7 @@ Second ChibiBot path migrated. **Production-ready in 3 rounds.**
 **Cross-bot lesson (added to cross-bot list):** When a path's SETTING is a co-hero (not just intimate-moment), two-pass polish compression is net-negative — it strips location language because Sonnet's polish-pass treats setting prose as fluff. Add the path to `twoPassPolish.skipPaths`. Applies to any path where the WHERE matters as much as the WHO.
 
 **Config (current production):**
+
 - Path file: `scripts/bots/chibibot/paths/bath-time.js` (declarative, 11 axes)
 - Legacy: `scripts/bots/chibibot/paths/legacy/bath-time.js`
 - Universal axes: lighting + atmosphere + weather (via `bot.defaultPools`)
@@ -1879,6 +2000,7 @@ Skipping this audit wastes ~10 min of Sonnet calls per pool expanded into nothin
 First EarthBot path migrated to the axis system. Converged in 5 rounds. The lessons here are reusable across **any landscape-photography path on any bot** (BloomBot landscape, OceanBot coastal-vista, etc.). Read before starting another landscape migration.
 
 **Commits to read in order:**
+
 - R0 baseline (`e4b325e`): 6-axis bespoke (subject + lighting + atmosphere + hero_feature + sky_layer + phenomenon-30%-gated). Identity correction from legacy "stack 3+ phenomena per frame" mandate. Renders were clean but pedestrian — restraint too aggressive.
 - R1: foreground_anchor axis added + biome-tagged composer infrastructure (matchTagsFromSlot) + PEAK LIGHT MOMENT + MOMENT IN MOTION blocks. Renders gained 3-tier depth but the foreground prop COMPETED with the wow-factor subject.
 - R2: dropped foreground_anchor → SCENE-AS-HERO pivot + GEOLOGY WOW FACTOR mandate. Subject filled the frame but renders still pedestrian.
@@ -1903,6 +2025,7 @@ The biggest discovery of this migration. The CHAOS-vs-RESTRAINT tradeoff has a t
 Reference points encode aesthetic. **National Geographic** in a prompt pulls Flux toward documentary-photojournalism training data — competent travel snapshots, not gallery prints. Verified on EarthBot R0-R2: every render with "Nat Geo cover caliber" wording came back competent-pretty-pedestrian.
 
 **The fix:** swap to fine-art landscape photographer references. These photographers' work is labeled in Flux's training data as dramatic-art-print, not documentary:
+
 - **Marc Adamus** — peak-moment dramatic landscapes, stormy/sunrise theatrical
 - **Peter Lik** — saturated gallery prints with extreme color
 - **Max Rive** — theatrical mountain compositions with dramatic depth
@@ -1928,6 +2051,7 @@ Conventional landscape photography wisdom: NEAR foreground anchor + MID subject 
 ### CRITICAL LESSON 4 — Axis-clean discipline (vocabulary isolation)
 
 Each axis pool must own ONE conceptual lane and stay strictly off others' lanes:
+
 - **Subject axis** = location + geology + scale ONLY. No weather, no lighting, no phenomena, no atmosphere.
 - **Lighting axis** = time + direction + color + shadow dimensions ONLY. No fog, no godrays, no volumetric beams, no rainbows, no phenomena.
 - **Atmosphere axis** = what the AIR is doing (crisp clear / fog / mist / spray / dust / haze). NO light, no phenomena.
@@ -1948,6 +2072,7 @@ Physical incompatibilities can still arise even with clean axes (the same way re
 For each cross-axis physical incompatibility, add a template clause: "If [axis A] is [value] AND [axis B] is [value], DROP [the lesser/optional one]. [Physical reason]. Restrained truth beats forced impossibility."
 
 EarthBot epic-vista has two such clauses:
+
 1. **Phenomenon-lighting compatibility** (R0 fix) — if phenomenon is "total eclipse / aurora / green flash" AND lighting is "golden hour / midday / alpenglow" → drop the phenomenon. Eclipse sky is dark; aurora requires polar night; green flash is the single sunset-disc moment.
 2. **Sky-lighting compatibility** (R5 fix) — if sky is "night-sky / Milky Way / star field" AND lighting is "daytime / sunset / golden hour / alpenglow / midday / storm-break" → drop the night-sky elements, substitute lit-sky variant. Stars + sunset don't co-exist on Earth.
 
@@ -1984,6 +2109,7 @@ pools: {
 Subject pool entries are tagged with biome categories (`{ tags: ['alpine'], description: '...' }`). Foreground pool entries tagged with biomes they fit. Composer rolls subject first, then filters foreground pool to entries whose tags overlap with the rolled subject's tags before picking.
 
 **Requirements:**
+
 - Both source and filtered pools must use object format `{ tags: [...], description: '...' }`
 - Source slot MUST appear EARLIER in `archetype.slots.path` than the dependent slot (composer rolls in declaration order)
 - Tags use shared vocabulary — for landscape paths the 8 biome tags are: `alpine`, `arctic-polar`, `desert`, `coastal-temperate`, `coastal-tropical`, `temperate-forest`, `tropical-jungle`, `volcanic`
@@ -1998,14 +2124,15 @@ Root cause: the subject pool entries named recognizable tourist vantages and fam
 
 **The fix:** keep the subject pool's CONTENT identity but strip tourist-vocabulary entirely. Describe the GEOLOGY through dramatic descriptive prose; let Sonnet's beautiful prompt-writing carry the scene. Don't name famous viewpoints. Don't even name parks unless absolutely necessary as broad regional anchors. The pool curation determines which scenes appear (US Park geology); the prose describes the geology in pure drama-vocabulary; Sonnet does the rest.
 
-| ❌ Tourist-coded (pigeonholes to stock) | ✓ Drama-led (lets Sonnet + Flux render fresh) |
-|---|---|
-| "Bryce Canyon Amphitheater from Inspiration Point" | "Thousand-foot vermilion sandstone hoodoo amphitheater, cathedral-vertical procession of spires packed in tiered ranks, rust-orange labyrinth below forested rim" |
-| "Yosemite Tunnel View" | "Glacier-carved granite valley with three-thousand-foot monolithic face, cascading ribbon waterfall from hanging valley, ancient sequoia and oak filling the valley floor" |
-| "Watchman Overlook at sunset" | "Six-thousand-foot sandstone monolith of cream-and-rust banded strata dominating a canyon mouth, river winding the valley floor" |
-| "Crater Lake from Watchman Overlook" | "Two-thousand-foot-deep cobalt caldera lake of impossible clarity, cinder-cone island emerging from center, twenty-six hundred-foot pumice cliffs ringing the basin" |
+| ❌ Tourist-coded (pigeonholes to stock)            | ✓ Drama-led (lets Sonnet + Flux render fresh)                                                                                                                              |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Bryce Canyon Amphitheater from Inspiration Point" | "Thousand-foot vermilion sandstone hoodoo amphitheater, cathedral-vertical procession of spires packed in tiered ranks, rust-orange labyrinth below forested rim"          |
+| "Yosemite Tunnel View"                             | "Glacier-carved granite valley with three-thousand-foot monolithic face, cascading ribbon waterfall from hanging valley, ancient sequoia and oak filling the valley floor" |
+| "Watchman Overlook at sunset"                      | "Six-thousand-foot sandstone monolith of cream-and-rust banded strata dominating a canyon mouth, river winding the valley floor"                                           |
+| "Crater Lake from Watchman Overlook"               | "Two-thousand-foot-deep cobalt caldera lake of impossible clarity, cinder-cone island emerging from center, twenty-six hundred-foot pumice cliffs ringing the basin"       |
 
 **The general rule:** if a place name in a subject pool entry has a dominant stock-photo Wikipedia-image, strip it. Specifically banned terms in landscape-path subject pools:
+
 - Tourist vantage names: "Tunnel View" / "Mather Point" / "Inspiration Point" / "Glacier Point" / "Artist Point" / "Watchman Overlook" / "Cadillac Mountain summit" / "Tipsoo Lake" / any "X Overlook" / "X Vista" / "X Point" / "X View"
 - Famous monument names that have iconic single-shot training data: "Half Dome" / "El Capitan" / "Delicate Arch" / "Mesa Arch" / "The Watchman" / "Wizard Island"
 - Famous park names (use sparingly as broad anchor only, prefer geographic regions): "Yosemite" / "Bryce" / "Grand Canyon" / "Yellowstone" → prefer "Sierra granite valley" / "Colorado Plateau red rock" / "Northern Rockies geothermal basin"
@@ -2050,14 +2177,14 @@ Render water-edge stones as NATURAL boulders / mossy basalt / volcanic-rock outc
 
 For ANY future landscape path on EarthBot (or BloomBot landscape, OceanBot coastal-vista, etc.) targeting "Marc Adamus / Peter Lik gallery-print" tier:
 
-| Axis | Slot | Production target | Notes |
-|---|---|---|---|
-| Path-bespoke | `subject` | 200 | Real-Earth location + geology + scale only. Biome-tagged for cross-axis matching. |
-| Path-bespoke | `lighting` | 150 | Stacked-drama: time + direction + color + shadow. No atmosphere/phenomenon vocabulary. |
-| Path-bespoke | `atmosphere` | 150 | Crisp-clear-weighted (~40%), localized particulate when scene-natural. |
-| Path-bespoke | `hero_feature` | 150 | TINY scale-prover (wildlife / lone tree / distant micro-object). Never near-frame. |
-| Path-bespoke | `sky_layer` | 100 | Clean cobalt default (~30%), distinctive cloud forms (~30%), sunset/twilight (~15%), etc. |
-| Path-bespoke | `phenomenon` (30% conditional) | 50 | Rare optical/weather event. With cross-axis compatibility clauses. |
+| Axis         | Slot                           | Production target | Notes                                                                                     |
+| ------------ | ------------------------------ | ----------------- | ----------------------------------------------------------------------------------------- |
+| Path-bespoke | `subject`                      | 200               | Real-Earth location + geology + scale only. Biome-tagged for cross-axis matching.         |
+| Path-bespoke | `lighting`                     | 150               | Stacked-drama: time + direction + color + shadow. No atmosphere/phenomenon vocabulary.    |
+| Path-bespoke | `atmosphere`                   | 150               | Crisp-clear-weighted (~40%), localized particulate when scene-natural.                    |
+| Path-bespoke | `hero_feature`                 | 150               | TINY scale-prover (wildlife / lone tree / distant micro-object). Never near-frame.        |
+| Path-bespoke | `sky_layer`                    | 100               | Clean cobalt default (~30%), distinctive cloud forms (~30%), sunset/twilight (~15%), etc. |
+| Path-bespoke | `phenomenon` (30% conditional) | 50                | Rare optical/weather event. With cross-axis compatibility clauses.                        |
 
 Plus template blocks: SCENE-AS-HERO, GEOLOGY WOW FACTOR, STACKED LIGHT DRAMA, ATMOSPHERE-AS-ROLLED, MOMENT IN MOTION, SKY-LIGHTING COMPATIBILITY, PHENOMENON-LIGHTING COMPATIBILITY, ZERO HUMANS, ABSOLUTELY BANNED.
 
@@ -2094,6 +2221,7 @@ Per `feedback_brickbot_iconic_lego_taste.md` memory: Kevin's 10-heart calibratio
 **Why:** hard-SF realism (Mass Effect / Expanse / Star Citizen) registers in pool entries push Flux toward photoreal frigate hull-plating + realistic spacesuits + ambient haze — which loses the "everything is brick" LEGO-MOC signal. Iconic LEGO Space themes have distinct color palettes (yellow-grey + trans-blue / black + neon-yellow / red + black + lime-green / white + orange / orange + cyan) that Flux locks onto, producing instantly-recognizable LEGO MOC renders.
 
 **Register pool weighting for ANY BrickBot path:**
+
 - **~80% iconic LEGO theme heritage** — for space: Classic Space / Blacktron I+II / M-Tron / Space Police I-III / Ice Planet 2002 / Galaxy Squad / Insectoids / Mars Mission / Unitron. For pirates: Caribbean golden-age (which is the iconic LEGO Pirates theme) + Imperial Royal Navy (the LEGO Pirates antagonist). For winter: Holiday Village / Winter Toy Shop / Winter Cabin. For mech: Bionicle / Hero Factory / Exo-Force. Adapt per path.
 - **~15% retro-fantasy non-licensed** — Tintin Destination Moon (1953 Hergé) / Foundation Genetic Dynasty (Asimov-via-Apple) / Apollo-era NASA historical / 2001 ASO Discovery One. Adds variety without drifting hard-SF photoreal.
 - **~5% optional bot-coded variants** — leave room for path-specific specialty registers.
@@ -2109,6 +2237,7 @@ BrickBot space introduced the **`vehicle_class` axis as a subject-class anchor**
 **Distribution sweet spot:** ~50-55% ships / ~45-50% no-vehicle variants. Started at 95% ships / 5% no-vehicle (too ship-heavy), overcorrected to 42% ships / 58% no-vehicle (Kevin: "i liked it better before"), landed at 54/46 ships/no-vehicle which Kevin called "FANTASTIC." Slight ship-lean preserves the bot's "subject is a ship" brand-center while allowing interior + landscape + city variety.
 
 **No-vehicle entries MUST embed story-tension descriptors** in the bracketed phrase or body. R1 showed bare "no-vehicle (bridge interior)" entries produced hard-to-read "scattered minifigs in establishing scene" renders. R2 fix: every no-vehicle entry now includes mid-X action-tension:
+
 ```
 ✗ Weak: "no-vehicle (bridge interior) — console-banks, captain's chair, viewscreen"
 ✓ Strong: "no-vehicle (bridge mid-engagement) — klaxon trans-red strobing, multiple officers MID-ACTION at stations, captain MID-SHOUT, viewscreen showing the enemy fleet"
@@ -2151,6 +2280,7 @@ R3 result: 5/5 renders showed distinct non-default camera angles. Front-facing-c
 Counter-intuitive but verified: telling Sonnet "ONE clear focal-figure mid-action that the eye lands on first" in the template produces "single centered minifig facing camera" Flux output across nearly every render. This was my R1b fix that addressed "hard-to-read scattered scenes" — but the cure created the next problem.
 
 **Better wording (R3 fix):**
+
 ```
 The CAMERA FRAMING axis below DRIVES composition — apply that angle precisely, NOT a default "minifig facing camera at center"
 A focal subject must be readable, but its POSITION + ORIENTATION come from the rolled camera angle
@@ -2174,10 +2304,12 @@ I graded space R3 at 4.7/5 average with strong framing variety. Kevin's response
 **The lesson:** my grading is calibrated to "is the render technically good?" but Kevin's hearts are calibrated to "does this match the path's identity?" These can diverge significantly. After R0-R3 of any path migration, pull Kevin's hearts via DB query + analyze which registers/scenes/framings made the cut. The hearts are the ground truth for path identity.
 
 **Query pattern:**
+
 ```js
 const KEVIN = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-const { data } = await supa.from('likes')
+const { data } = await supa
+  .from('likes')
   .select('upload_id, created_at, uploads(image_url, ai_prompt, caption)')
   .eq('user_id', KEVIN)
   .gte('created_at', fiveMinAgo);
@@ -2192,6 +2324,7 @@ Then read each hearted JPG + map URL signatures to local batch files + correlate
 When the pool ratio needs adjustment (e.g., shift 58/42 no-vehicle/ships → 54/46 ships/no-vehicle), surgical Node-script drops are 100x faster than regenerating the whole pool with a reweighted recipe. Drop 5-10 entries matching a regex pattern, write back. ~10 seconds vs. ~2 minutes of Sonnet calls.
 
 **When to surgical-edit vs. regen:**
+
 - **Surgical drop** — shifting ratio by 5-20% by removing a known sub-category (no-vehicle entries / hard-SF entries / cheesecake entries / etc.)
 - **Regen with new recipe** — when the recipe's distribution mandate or touchpoint examples need to change for future entries, not just the current pool
 
@@ -2233,16 +2366,16 @@ Cloning the pirates + space migration pattern:
 
 ### Common BrickBot failure modes (compounded across pirates + space)
 
-| Symptom | Cause | Fix |
-|---|---|---|
-| Front-facing centered minifig 5/5 renders | "ONE focal-figure" template language + Flux LEGO-MOC training default | Mark camera_framing as MANDATORY DRIVING AXIS + tie minifig orientation to camera keywords |
+| Symptom                                                                 | Cause                                                                                                | Fix                                                                                           |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Front-facing centered minifig 5/5 renders                               | "ONE focal-figure" template language + Flux LEGO-MOC training default                                | Mark camera_framing as MANDATORY DRIVING AXIS + tie minifig orientation to camera keywords    |
 | Background drifts to photoreal (real-rock cliffs around brick subjects) | promptPrefixByPath deep-focus prefix removes tilt-shift = removes Flux's "everything is LEGO" signal | Accept the tradeoff (cinematic > occasional photoreal) OR drop the deep-focus prefix per-path |
-| "Frigate" rendered as Royal Navy surface ship | Bare ship-class name with naval counterpart, no sci-fi qualifier | Always "STARSHIP frigate" / "interstellar corvette" qualifier |
-| Hard-SF photoreal drift (no LEGO feel) | Mass Effect / Expanse / Star Citizen register or vehicle_class entries | Purge those entries from pools, regen recipes without hard-SF references |
-| Naval-pirate frigate when no-vehicle was supposed to fire | "no-vehicle (...)" entry without strong scene anchor in description body | Add tension-descriptor + specific scene detail to every no-vehicle entry |
-| Boring "scene establishing" no-vehicle renders | Bare "no-vehicle (bridge interior)" entries describe SETTING but not ACTION | Embed mid-X action-tension into every no-vehicle entry's bracketed phrase + body |
-| 5/5 ships heavy or 5/5 no-vehicle heavy | Pool ratio off (>70% one or the other) | Surgical-drop entries to rebalance to 50-55% ships / 45-50% no-vehicle |
-| Star Wars LEGO renders (X-wing / TIE / stormtrooper) | Pool has Star Wars register/vehicle_class entries | PURGE — Star Wars is OUT of scope for BrickBot |
+| "Frigate" rendered as Royal Navy surface ship                           | Bare ship-class name with naval counterpart, no sci-fi qualifier                                     | Always "STARSHIP frigate" / "interstellar corvette" qualifier                                 |
+| Hard-SF photoreal drift (no LEGO feel)                                  | Mass Effect / Expanse / Star Citizen register or vehicle_class entries                               | Purge those entries from pools, regen recipes without hard-SF references                      |
+| Naval-pirate frigate when no-vehicle was supposed to fire               | "no-vehicle (...)" entry without strong scene anchor in description body                             | Add tension-descriptor + specific scene detail to every no-vehicle entry                      |
+| Boring "scene establishing" no-vehicle renders                          | Bare "no-vehicle (bridge interior)" entries describe SETTING but not ACTION                          | Embed mid-X action-tension into every no-vehicle entry's bracketed phrase + body              |
+| 5/5 ships heavy or 5/5 no-vehicle heavy                                 | Pool ratio off (>70% one or the other)                                                               | Surgical-drop entries to rebalance to 50-55% ships / 45-50% no-vehicle                        |
+| Star Wars LEGO renders (X-wing / TIE / stormtrooper)                    | Pool has Star Wars register/vehicle_class entries                                                    | PURGE — Star Wars is OUT of scope for BrickBot                                                |
 
 ### Hard rules for BrickBot path migrations
 
@@ -2257,21 +2390,21 @@ Cloning the pirates + space migration pattern:
 
 ### BrickBot per-path notes
 
-| Path | Status | Key axis decisions |
-|---|---|---|
-| pirates | Migrated 2026-05-22 ✓ | `ship_class` (no "no-vehicle" — pirates is always ship-centered or character-centered); `register` weighted 60% Caribbean-golden-age / 40% non-default (Norse / Greek / Asian-junk / cursed / space-pirate / Royal Navy / steampunk); `weather_drama` 50%-gated |
-| space | Migrated 2026-05-22 ✓ | `vehicle_class` 54% ships / 46% no-vehicle; `register` 80% iconic LEGO Space heritage / 15% retro-fantasy / 5% specialty; `cosmic_phenomenon` 50%-gated; deep-focus promptPrefixByPath retained despite occasional photoreal-background drift |
-| macro-display | Pending | Likely embrace tilt-shift (intimate tabletop), no deep-focus prefix, focus on brick-construction detail as subject |
-| girly | Pending | Friends-style palette, lifestyle scenes, no ship-class axis needed |
-| lego-masters | Pending | Competition-table feel, panel of builds, judging-context register |
-| western | Pending | Old-west register lock (Dawson City / saloon / mining-town / locomotive) |
-| fantasy | Pending | LEGO Castle heritage (King's Knights / Forestmen / Dragon Knights / Crown / Black Falcons) + LEGO Elves / LEGO Friends fantasy |
-| aquatic | Pending | Beach + reef + lighthouse + lagoon + sea-life vehicles |
-| winter | Pending | Holiday Village heritage + winter-cabin + ice-skating + sledding + Aurora |
-| mech | Pending | Bionicle / Hero Factory / Exo-Force registers; Technic-articulation focus |
-| theme-park | Pending | LEGOLAND theme-park heritage + carnival vibes |
-| forest | Pending | LEGO Forestmen / Robin Hood heritage + treehouse + woodland critters |
-| landscape | Pending | Wide-cinematic vistas, scale-prover minifig figures |
+| Path          | Status                | Key axis decisions                                                                                                                                                                                                                                              |
+| ------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| pirates       | Migrated 2026-05-22 ✓ | `ship_class` (no "no-vehicle" — pirates is always ship-centered or character-centered); `register` weighted 60% Caribbean-golden-age / 40% non-default (Norse / Greek / Asian-junk / cursed / space-pirate / Royal Navy / steampunk); `weather_drama` 50%-gated |
+| space         | Migrated 2026-05-22 ✓ | `vehicle_class` 54% ships / 46% no-vehicle; `register` 80% iconic LEGO Space heritage / 15% retro-fantasy / 5% specialty; `cosmic_phenomenon` 50%-gated; deep-focus promptPrefixByPath retained despite occasional photoreal-background drift                   |
+| macro-display | Pending               | Likely embrace tilt-shift (intimate tabletop), no deep-focus prefix, focus on brick-construction detail as subject                                                                                                                                              |
+| girly         | Pending               | Friends-style palette, lifestyle scenes, no ship-class axis needed                                                                                                                                                                                              |
+| lego-masters  | Pending               | Competition-table feel, panel of builds, judging-context register                                                                                                                                                                                               |
+| western       | Pending               | Old-west register lock (Dawson City / saloon / mining-town / locomotive)                                                                                                                                                                                        |
+| fantasy       | Pending               | LEGO Castle heritage (King's Knights / Forestmen / Dragon Knights / Crown / Black Falcons) + LEGO Elves / LEGO Friends fantasy                                                                                                                                  |
+| aquatic       | Pending               | Beach + reef + lighthouse + lagoon + sea-life vehicles                                                                                                                                                                                                          |
+| winter        | Pending               | Holiday Village heritage + winter-cabin + ice-skating + sledding + Aurora                                                                                                                                                                                       |
+| mech          | Pending               | Bionicle / Hero Factory / Exo-Force registers; Technic-articulation focus                                                                                                                                                                                       |
+| theme-park    | Pending               | LEGOLAND theme-park heritage + carnival vibes                                                                                                                                                                                                                   |
+| forest        | Pending               | LEGO Forestmen / Robin Hood heritage + treehouse + woodland critters                                                                                                                                                                                            |
+| landscape     | Pending               | Wide-cinematic vistas, scale-prover minifig figures                                                                                                                                                                                                             |
 
 Each path is bespoke per `feedback_each_path_bespoke_not_cloned`. Don't clone axes from pirates or space to a new path without reconsidering — the axis content must match what THAT path renders.
 
@@ -2282,19 +2415,20 @@ Each path is bespoke per `feedback_each_path_bespoke_not_cloned`. Don't clone ax
 ### Cross-bot lesson: culture-coded bots need culture-coded pool entries from gen #1
 
 MangaBot identity IS the anime/Japanese-culture constraint. Every pool entry must reference culture-canon (SAO / Frieren / Konosuba / Re:Zero / Mushoku Tensei / Slime / Ghibli / etc.) from the FIRST gen — never default to generic-genre vocabulary (`muzzle-flash / ruined-city / carrier-deck`). Cross-references:
+
 - `feedback_culture-coded_bots_culture-coded_pools.md`
 - `feedback_each_path_bespoke_not_cloned.md`
 
 ### MangaBot per-path status
 
-| Path | Status | Notes |
-|---|---|---|
-| samurai-era | Migrated 2026-05-22 (R0 4.6/5) ✓ | 12-axis bespoke jidaigeki — samurai/ronin/geisha/shrine/feudal-Japan |
-| neo-tokyo | Migrated 2026-05-22 (R0 4.4/5) ✓ | 15-axis bespoke Akira/Ghost-in-the-Shell-coded cyberpunk-Tokyo |
-| ghibli-countryside | Migrated 2026-05-22 (R0 4.8/5) ✓ | 14 axes (13 always-on + `spirit_element` 40%-gated). Totoro/Mononoke/Kiki/Spirited-Away pastoral. Soft pastel palette + hand-painted oil-watercolor brush. No cities/neon/armor. |
-| isekai-fantasy | Migrated 2026-05-22 (R0 5/5 — first-try bangers) ✓ | 14-axis bespoke SAO/Re:Zero/Konosuba/Overlord/Frieren/Mushoku-Tensei canon. Status-windows, mana-glow, summon-circles, painterly cel-shaded. **Strict ban on Western Witcher/Skyrim/D&D/GoT/LotR vocabulary in every pool recipe — this is what unlocked R0 5/5.** All 200-entry production pools. |
-| mecha-hangars / mecha-anime | KEPT LEGACY (2026-05-22) ✗ | 9-round migration failed. Flux's training-data gravity pulls "anime mech standing arms-out with weapon" archetype regardless of prompt specificity; Mt-Fuji landscapes rendered WITHOUT the mech when Japanese cultural anchoring was over-applied. See `project_mecha-hangars_kept_legacy.md`. |
-| shonen-action / cherry-blossom-romance / rooftop-sunsets / artsy / female-warrior / others | Pending | Re-read this playbook + isekai migration commit (a028eaa) before authoring axes. |
+| Path                                                                                       | Status                                             | Notes                                                                                                                                                                                                                                                                                              |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| samurai-era                                                                                | Migrated 2026-05-22 (R0 4.6/5) ✓                   | 12-axis bespoke jidaigeki — samurai/ronin/geisha/shrine/feudal-Japan                                                                                                                                                                                                                               |
+| neo-tokyo                                                                                  | Migrated 2026-05-22 (R0 4.4/5) ✓                   | 15-axis bespoke Akira/Ghost-in-the-Shell-coded cyberpunk-Tokyo                                                                                                                                                                                                                                     |
+| ghibli-countryside                                                                         | Migrated 2026-05-22 (R0 4.8/5) ✓                   | 14 axes (13 always-on + `spirit_element` 40%-gated). Totoro/Mononoke/Kiki/Spirited-Away pastoral. Soft pastel palette + hand-painted oil-watercolor brush. No cities/neon/armor.                                                                                                                   |
+| isekai-fantasy                                                                             | Migrated 2026-05-22 (R0 5/5 — first-try bangers) ✓ | 14-axis bespoke SAO/Re:Zero/Konosuba/Overlord/Frieren/Mushoku-Tensei canon. Status-windows, mana-glow, summon-circles, painterly cel-shaded. **Strict ban on Western Witcher/Skyrim/D&D/GoT/LotR vocabulary in every pool recipe — this is what unlocked R0 5/5.** All 200-entry production pools. |
+| mecha-hangars / mecha-anime                                                                | KEPT LEGACY (2026-05-22) ✗                         | 9-round migration failed. Flux's training-data gravity pulls "anime mech standing arms-out with weapon" archetype regardless of prompt specificity; Mt-Fuji landscapes rendered WITHOUT the mech when Japanese cultural anchoring was over-applied. See `project_mecha-hangars_kept_legacy.md`.    |
+| shonen-action / cherry-blossom-romance / rooftop-sunsets / artsy / female-warrior / others | Pending                                            | Re-read this playbook + isekai migration commit (a028eaa) before authoring axes.                                                                                                                                                                                                                   |
 
 ### Isekai R0 5/5 recipe (what unlocked first-try bangers)
 
@@ -2329,7 +2463,8 @@ Deleted path + `borrowers_scenes.json` pool + gen script. Two compounding root c
 ### Open TinyBot diagnosis (not yet fixed — 2026-05-27)
 
 The fork-macro render also exposed bot-wide issues beyond borrowers, pending Kevin's go-ahead:
-- **Always-on macro wrapper** — `shared-blocks.js` PROMPT_PREFIX/SUFFIX + the "NON-NEGOTIABLE" tilt-shift block lead with *"extreme macro lens close-up, extreme shallow depth of field,"* which crops the world to one object + blurs the scene + drops small subjects. The fix is to lead with SCENE + diorama + scale and demote tilt-shift to a finishing touch (per the franchise-massacre lesson: the wrapper is the dominant first-tokens lever, axes are not).
+
+- **Always-on macro wrapper** — `shared-blocks.js` PROMPT_PREFIX/SUFFIX + the "NON-NEGOTIABLE" tilt-shift block lead with _"extreme macro lens close-up, extreme shallow depth of field,"_ which crops the world to one object + blurs the scene + drops small subjects. The fix is to lead with SCENE + diorama + scale and demote tilt-shift to a finishing touch (per the franchise-massacre lesson: the wrapper is the dominant first-tokens lever, axes are not).
 - **`render` medium** on TinyBot pushes glossy single-hero product shots — bad for whimsy.
 - **Thin single-subject seeds** — much of several pools is "figure + ONE object on a bare surface," which degrades to a macro object shot whenever the figure drops. Reseed toward multi-element constructed worlds.
 - **Axis-system conversion is NOT the fix on its own** — TinyBot is intimate/scene-centric, the category the playbook has repeatedly reverted out of the generic composer (cozy-sci-fi-interior, mecha-hangars, the franchise massacre). Treat axis decomposition as one tool for the thin-seed problem, piloted on ONE path — not a 16-path migration.
@@ -2343,12 +2478,13 @@ The fork-macro render also exposed bot-wide issues beyond borrowers, pending Kev
 The 2026-05-15 redesign repointed `steampunk-curio` from **static steampunk ARTIFACT in museum-display framing** (legacy `STEAMPUNK_CURIOS` pool — Flux-safe, on-theme) to **a live clockwork animal "caught mid-motion in a lived habitat"** (`STEAMPUNK_ANIMATE_CURIOS` + `STEAMPUNK_CURIO_HABITAT`). Kevin hit a hearted render that was "a weird raccoon on a tree with fucked up arms" — a real-looking red panda with a mangled limb, no brass reading. Three baked-in causes, all cross-bot:
 
 1. **"mechanical creature mimicking a REAL living thing" → Flux renders the real animal and drops the metal.** The animal prior (red panda / fox / wolf) outweighs "copper-and-brass," so the automaton reading evaporates → off-theme.
-2. **Mandatory dynamic pose ("ALWAYS mid-motion / mid-step / articulated joints active / NEVER frozen-pose") = anatomy break.** Dynamic *animal* poses are Flux's top limb-mangling trigger. The template ordered the exact thing that breaks.
-3. **Display framing was LOAD-BEARING for the "this is a crafted curio" reading.** The legacy pool baked "on a pedestal under spotlight / in a walnut case" into every entry — that vitrine/Wunderkammer signal is what made a brass automaton read as a steampunk *artifact*. The redesign explicitly BANNED it ("NO vitrines, NO pedestals, NO 'displayed on'") and lost the signal.
+2. **Mandatory dynamic pose ("ALWAYS mid-motion / mid-step / articulated joints active / NEVER frozen-pose") = anatomy break.** Dynamic _animal_ poses are Flux's top limb-mangling trigger. The template ordered the exact thing that breaks.
+3. **Display framing was LOAD-BEARING for the "this is a crafted curio" reading.** The legacy pool baked "on a pedestal under spotlight / in a walnut case" into every entry — that vitrine/Wunderkammer signal is what made a brass automaton read as a steampunk _artifact_. The redesign explicitly BANNED it ("NO vitrines, NO pedestals, NO 'displayed on'") and lost the signal.
 
 **Cross-bot rule:** an "object/automaton mimicking a real animal" is far Flux-safer rendered **still + clearly mechanical** (visible brass/gears/glass-eyes, posed at rest) than **alive and mid-action** — motion + animal anatomy + organic-vs-mechanical = broken real animal. (It does NOT require sterile display framing — a still mechanical automaton reads fine in a lived-in setting; see fix below.) Same family as the borrowers kill (don't bet a path on a subject/pose Flux can't render).
 
-**Fix shipped (2026-05-27, R0 ~4.7/5):** do NOT over-revert. The first instinct was a full revert to the legacy *museum/auction static-display* design — Kevin rejected it as "too serious" and noted the **steampunk SETTING was the good part** of the broken version; only two things actually broke it. The fix KEPT the lived-in `habitat` axis (steampunk room — not museum, not nature) and repaired only the failure causes:
+**Fix shipped (2026-05-27, R0 ~4.7/5):** do NOT over-revert. The first instinct was a full revert to the legacy _museum/auction static-display_ design — Kevin rejected it as "too serious" and noted the **steampunk SETTING was the good part** of the broken version; only two things actually broke it. The fix KEPT the lived-in `habitat` axis (steampunk room — not museum, not nature) and repaired only the failure causes:
+
 1. **Sanitized the `curio` pool** (`scripts/sanitize-merge-curio-pool.js`) — recast all 200 animate entries as STILL, framing-neutral, clearly-MECHANICAL automatons at rest (stripped "mimics a living thing" + every motion verb; reinforced brass/gears/glass-eyes; NO display framing + NO environment baked in, so the habitat axis supplies the setting). Written to `STEAMPUNK_CURIOS`.
 2. **Retuned the template** (`STEAMBOT_STEAMPUNK_CURIO`) — replaced "ALIVE IN MOTION — NON-NEGOTIABLE" with "A STILL, CRAFTED AUTOMATON — NOT A LIVE ANIMAL"; added bans on dynamic action + outdoor/nature; kept no-museum + lived-in-steampunk-room framing.
 
