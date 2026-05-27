@@ -2133,6 +2133,8 @@ export type Database = {
         Returns: undefined;
       };
       is_pro_active: { Args: { p_user_id: string }; Returns: boolean };
+      request_dream_notification: { Args: { p_job_id: string }; Returns: undefined };
+      allow_upscale_notify: { Args: { p_upload_id: string }; Returns: undefined };
       list_my_upload_paths: { Args: never; Returns: string[] };
       rebalance_bot_schedules: {
         Args: { p_min_lead_seconds?: number };

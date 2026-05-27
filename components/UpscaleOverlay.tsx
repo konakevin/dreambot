@@ -39,6 +39,21 @@ export const UpscaleModal = {
   },
 };
 
+/**
+ * Re-enable the download_ready push for this requester. Upscale requests insert
+ * `notified_at = now()` (suppressed) so a user watching the modal isn't also
+ * pinged; when they LEAVE (dismiss/timeout) we clear it so they DO get notified
+ * when the HD lands. Best-effort (migration 191).
+ */
+function reEnableUpscaleNotify(uploadId: string) {
+  supabase.rpc('allow_upscale_notify', { p_upload_id: uploadId }).then(
+    () => {},
+    (e) => {
+      if (__DEV__) console.warn('[upscale] allow_upscale_notify failed', e);
+    }
+  );
+}
+
 export function UpscaleModalHost() {
   const [state, setState] = useState<State>({ visible: false, uploadId: null });
   const [phase, setPhase] = useState<Phase>('processing');
@@ -76,7 +91,10 @@ export function UpscaleModalHost() {
       onPhase: (phase) => {
         setPhase(phase);
         if (phase === 'done') setTimeout(() => UpscaleModal.hide(), 1200);
-        if (phase === 'timeout') setTimeout(() => UpscaleModal.hide(), 3000);
+        if (phase === 'timeout') {
+          reEnableUpscaleNotify(uploadId); // still cooking — ping them when it lands
+          setTimeout(() => UpscaleModal.hide(), 3000);
+        }
       },
     });
   }, [state.visible, state.uploadId]);
@@ -128,7 +146,15 @@ export function UpscaleModalHost() {
             <Text style={styles.title}>{copy.title}</Text>
             <Text style={styles.subtitle}>{copy.sub}</Text>
             {copy.showDismiss && (
-              <Pressable style={styles.dismissBtn} onPress={() => UpscaleModal.hide()} hitSlop={8}>
+              <Pressable
+                style={styles.dismissBtn}
+                onPress={() => {
+                  // Leaving while it's still upscaling — re-enable the push.
+                  if (state.uploadId) reEnableUpscaleNotify(state.uploadId);
+                  UpscaleModal.hide();
+                }}
+                hitSlop={8}
+              >
                 <Text style={styles.dismissText}>Dismiss</Text>
               </Pressable>
             )}

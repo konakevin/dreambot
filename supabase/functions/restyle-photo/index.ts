@@ -410,6 +410,18 @@ Deno.serve(async (req) => {
       ? `dream:Your dream is ready: ${hint.slice(0, 150)}`
       : `dream:Your dream is ready: ${resolvedMediumKey}/${resolvedVibeKey}`;
 
+    // Notify ONLY if the user queued/left (loading screen "Queue This" sets
+    // notify_on_complete); a foreground wait gets no ping. See migration 191.
+    let notifyOnComplete = false;
+    if (jobId) {
+      const { data: jobRow } = await supabase
+        .from('dream_jobs')
+        .select('notify_on_complete')
+        .eq('id', jobId)
+        .maybeSingle();
+      notifyOnComplete = !!(jobRow && jobRow.notify_on_complete);
+    }
+
     await Promise.all([
       jobId
         ? supabase
@@ -429,7 +441,7 @@ Deno.serve(async (req) => {
               () => {}
             )
         : Promise.resolve(),
-      uploadId && jobId
+      uploadId && jobId && notifyOnComplete
         ? supabase
             .from('notifications')
             .insert({

@@ -1167,7 +1167,7 @@ Output ONLY the prompt.`;
           supabase.storage
             .from('uploads')
             .remove([swapFileName])
-            .catch(() => {});
+            .catch((e) => console.warn('[generate-dream] swap-temp cleanup failed:', e));
         }
         lap('face-swap-model');
         console.log('[generate-dream] ⏱ Face swap complete');
@@ -1327,6 +1327,20 @@ Output ONLY the prompt.`;
       ? `dream:Your dream is ready: ${hint.slice(0, 150)}`
       : `dream:Your dream is ready: ${resolvedMediumKey ?? 'surprise'}/${resolvedVibeKey ?? 'surprise'}`;
 
+    // Notify ONLY if the user left/queued (the loading screen's "Queue This"
+    // sets dream_jobs.notify_on_complete). A user who waited on the loading
+    // screen and got the result back should NOT be pinged. Defensive: a read
+    // error (e.g. pre-migration) leaves it false → no notification.
+    let notifyOnComplete = false;
+    if (jobId) {
+      const { data: jobRow } = await supabase
+        .from('dream_jobs')
+        .select('notify_on_complete')
+        .eq('id', jobId)
+        .maybeSingle();
+      notifyOnComplete = !!(jobRow && jobRow.notify_on_complete);
+    }
+
     await Promise.all([
       jobId
         ? supabase
@@ -1346,8 +1360,8 @@ Output ONLY the prompt.`;
               () => {}
             )
         : Promise.resolve(),
-      // Only notify if queued (jobId present) — inline generation doesn't need a notification
-      uploadId && jobId
+      // Only notify if the user queued/left — a foreground wait gets no ping.
+      uploadId && jobId && notifyOnComplete
         ? supabase
             .from('notifications')
             .insert({

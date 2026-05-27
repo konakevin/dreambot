@@ -14,6 +14,7 @@ import { colors } from '@/constants/theme';
 import { randomMascot } from '@/constants/mascots';
 import { useDreamCreate } from '@/hooks/useDreamCreate';
 import { useDreamStore } from '@/store/dream';
+import { supabase } from '@/lib/supabase';
 import { Toast } from '@/components/Toast';
 import type { PhotoClassification } from '@/lib/dreamApi';
 import { DreamFailureCard } from '@/components/DreamFailureCard';
@@ -122,6 +123,19 @@ export default function DreamLoadingScreen() {
   function handleQueue() {
     queued.current = true;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Opt this job into a completion notification. Dreams default to NO ping
+    // (migration 191) so a user who WAITS here isn't double-notified — but a
+    // user who taps "Queue This" is leaving, so they DO want it. Capture the id
+    // before we clear it below. Best-effort: a failure just means no push.
+    const jobId = useDreamStore.getState().activeJobId;
+    if (jobId) {
+      supabase.rpc('request_dream_notification', { p_job_id: jobId }).then(
+        () => {},
+        (e) => {
+          if (__DEV__) console.warn('[loading] request_dream_notification failed', e);
+        }
+      );
+    }
     // Clear the active job so the stale guard in useDreamCreate discards the result
     useDreamStore.getState().setActiveJobId(null);
     Toast.show("We'll notify you when it's ready", 'checkmark-circle');
