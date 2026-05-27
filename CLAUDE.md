@@ -232,7 +232,9 @@ scripts/
   dispatch-bots.js, run-bot.js, iter-bot.js, nightly-dreams.js (cron)
   gen-*.js, test-*.js, qa-*.js  pool gen + testing scripts
 
-__tests__/           24 jest test files (~3.8K LOC) — engine, bots, hooks, utils
+__tests__/           jest test files — engine, bots, hooks, utils, client
+  lib/, store/       fast suite (*.test.ts) — runs in husky + CI `check`
+  db/                live-DB lane (*.dbspec.ts) — real Postgres, CI `db-tests` only
 ```
 
 ---
@@ -487,6 +489,16 @@ npm run test           # jest
 ```
 
 Bypass: `git commit --no-verify`. Don't abuse — every bypass has historically broken CI.
+
+### Two test lanes
+
+1. **Fast jest suite** (`npm run test`, runs in the husky gate + the CI `check` job) — pure logic / RN-agnostic units in `__tests__/**/*.test.ts`. `_shared/*` Deno modules are importable via `@engine/*` (jest `moduleNameMapper`); their URL imports (`https://esm.sh/...`) are stubbed in `__tests__/__mocks__/`. Tests that import `@engine/*` are excluded from `tsc` (the Deno URL imports don't resolve) — add new ones to the `tsconfig.json` `exclude` list, matching the existing entries.
+
+2. **Live-DB lane** (`npm run test:dbspec`, runs ONLY in the CI `db-tests` job — a `postgres:16` service container). For invariants that live in **SQL** and can't be faked in jest: `ON CONFLICT` atomicity, `FOR UPDATE SKIP LOCKED`, triggers, security-definer functions. Convention:
+   - Files: `__tests__/db/*.dbspec.ts`. The `.dbspec.ts` suffix is deliberately OUTSIDE the default jest `testMatch`, so the fast suite + husky never touch them.
+   - **Fixture pattern (no drift):** build a MINIMAL fixture — FK-stub tables (`CREATE TABLE public.users (id uuid PRIMARY KEY)` …) + the **real DDL extracted from the migration FILE** via `__tests__/db/_support/pg.ts` (`makePool`, `migrationSql`, `extract`). Do NOT replay full migration history — vanilla PG lacks Supabase-only roles/extensions (`auth`, `vault`, `pg_cron`). Loading the live DDL means a migration shape-change fails loudly instead of testing a stale hand-copy.
+   - **Covered:** `claim_upscale_job` (182), `claim_dream_queue_jobs` SKIP LOCKED (156+192), `is_pro_active` (176 — the Pro/trial SoT third runtime), `freeze_upload_columns` trigger (108). **NOT covered: RLS** (policies span migrations 079/116 + need `auth.uid()`/role scaffolding — add later if needed).
+   - **No local Postgres** on Kevin's Mac (no Docker), so dbspec only runs in CI. Validate changes by pushing + `gh run watch` the `db-tests` job. The service container uses `POSTGRES_HOST_AUTH_METHOD=trust` + a passwordless `DATABASE_URL` — never add a password literal (GitGuardian flags it). `pg`/`@types/pg` are devDeps.
 
 ---
 
