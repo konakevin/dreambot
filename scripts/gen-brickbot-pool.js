@@ -67,6 +67,271 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // WESTERN PATH (2026-05-27 — ninth BrickBot axis migration)
+  // WILD-WEST FRONTIER. Bespoke build_technique (clapboard + sandstone-strata
+  // anti-photoreal) + frontier subject_focus. RESPECTFUL framing (no Native
+  // caricature). Every entry names LEGO PARTS, BANS photoreal-wood/sand/rock +
+  // motion-blur. Bespoke.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_western_scene_type: {
+    format: 'simple',
+    theme: `LEGO WILD-WEST DIORAMA SCENE STAGES — frontier narrative stages for BrickBot's western path. Each entry is ONE stage, 30-55 words.
+
+⚠️ CRITICAL — STAGE / SETTING / NARRATIVE CATEGORY only. NO camera framing. NO minifig action verbs. NO build-technique deep-dive. NO phenomenon. NO lighting. Just: where are we, what frontier moment.
+
+⚠️ EVERYTHING IS LEGO BRICK. Buildings = clapboard tile facades. Mesa = stacked plates. NEVER real-west vocabulary. BANNED: photoreal, real wood/sand/rock/sandstone, weathered-real, rugged texture, motion-blur. RESPECTFUL — cowboys/outlaws/sheriffs/prospectors/railroad/cavalry only, NO Native caricature.
+
+VARIETY MANDATE — distribute across: saloon-showdown / main-street-standoff / train-robbery / stagecoach-chase / gold-mine-dig / ghost-town / cavalry-fort / cattle-drive / river-ford-crossing / boom-town-street / sheriff-office / bank-heist / canyon-ambush / trading-post / campfire-night / mesa-lookout / mine-headframe / railroad-construction / assay-office / livery-stable.
+
+Each entry: name the frontier category in first 6-10 words; establish the brick-built STAGE; suggest the TENSION/mood; NEVER minifig action, framing, or phenomenon.`,
+    touchpoints: [
+      'MAIN-STREET STANDOFF — a dusty brick frontier main-street of false-front clapboard buildings (saloon, general-store, sheriff-office) lining a tan-plate dirt road, a hitching-post + water-trough, boardwalks down each side, the high-noon-tension stage',
+      'SALOON SHOWDOWN — a brick saloon with batwing-doors, a long bar-build, card-tables, an upstairs balcony, whiskey-bottle shelves, a piano-build in the corner, the tense-interior stage',
+      'TRAIN ROBBERY — a brick steam-locomotive + boxcars halted on a Technic-rail track crossing a trestle, a strongbox-car, outlaws + crew positioned along it, desert mesa backdrop, the heist stage',
+      'GOLD MINE DIG — a brick mine-headframe with a Technic hoist-rig over a shaft, ore-cart tracks, a sluice-box with trans-blue water, tailings-piles, a prospector camp, the boomtown-labor stage',
+      'GHOST TOWN — a weathered-grey brick frontier town half-collapsed, sagging clapboard facades, a broken wagon, a tumbleweed, boarded windows, a leaning water-tower, the eerie-abandoned stage',
+      'CAVALRY FORT — a log-stockade brick fort with a gate, corner watchtowers, a parade-ground flagpole, barracks-builds, a cannon, blue-kepi figures implied, the frontier-outpost stage',
+      'STAGECOACH CHASE — a brick stagecoach-and-team on a tan-plate trail through butte-country, a strongbox lashed up top, dust kicked from Technic-wheels, pursuit implied, the dynamic-trail stage',
+      'CAMPFIRE NIGHT — a brick campfire of trans-orange flames ringed by bedrolls + saddles + a coffee-pot, a picketed horse, a covered-wagon silhouette, mesa under a starry brick sky, the quiet-night stage',
+      'BANK HEIST — a brick frontier bank with a teller-cage, an open vault-door, money-bag builds, a getaway-horse at the hitching-rail outside, townsfolk scattering, the robbery-in-progress stage',
+      'RIVER-FORD CROSSING — a brick wagon fording a trans-blue + trans-light-blue plate river between canyon walls, oxen-team straining, supplies lashed high, a scout on the bank, the perilous-crossing stage',
+      'MINE-HEADFRAME RIDGE — a tall brick mine-headframe + ore-bins perched on a stacked-plate ridge with switchback ore-cart tracks descending, a boom-town below, the industrial-frontier stage',
+      'TRADING POST — a brick trading-post + general-store with goods-crates, pelts on racks, a porch with rocking-chairs, a freight-wagon at the rail, the frontier-commerce stage',
+    ],
+    instructions: `Each entry is ONE western stage, 30-55 words. Format: "STAGE NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no camera framing, no minifig action verbs, no phenomenon, no lighting, no real-west vocabulary (photoreal/real-wood-sand-rock/weathered-real/rugged/motion-blur), no Native caricature. Every element a NAMED LEGO BRICK PART. Stage + mood only.`,
+  },
+
+  brickbot_western_minifig_action: {
+    format: 'simple',
+    theme: `LEGO WESTERN ACTION BEATS — verb-led frontier moments for BrickBot's western path. Each entry is a freeze-frame of cowboy/sheriff/outlaw/prospector/railroad/cavalry minifigs IN MID-ACTION, NOT posing. Each entry 25-45 words.
+
+⚠️ STORY BEAT MANDATE — every entry STARTS WITH AN ACTIVE VERB with CAUSE + EFFECT in-frame. Western verbs: mid-quickdraw, mid-lasso-throw, mid-saloon-brawl, mid-train-car-leap, mid-gold-pan, mid-horse-rear, mid-stagecoach-rein-haul, mid-vault-crack, mid-campfire-tale, mid-poster-nail, mid-cart-push.
+
+⚠️ HARD BANS: NEVER "minifigs standing/posing", NEVER "watching/looking", NEVER passive. Minifigs are LEGO (C-hands, printed faces incl. determined/surprised prints). RESPECTFUL — no Native caricature. BANNED: photoreal, real-people, motion-blur, galloping-blur. Motion is a FROZEN brick moment.
+
+✓ Body-position variety: mid-draw/aim (~20%), mid-throw/swing (~15%), mid-ride/leap (~20%), multi-figure standoff/brawl/team (~25%), mid-labor (pan/dig/push) (~10%), mid-rein/drive (~10%).
+
+Each entry: start with an active verb; name 1-3 minifigs + brief identifier; the SHARED OBJECT/EVENT (revolver / lasso / strongbox / gold-pan / reins / vault); imply before/after; PLASTIC SCALE.`,
+    touchpoints: [
+      'Draws mid-quickdraw as two minifigs at opposite ends of a dusty brick street clear leather, one revolver-element already up, the other mid-draw, a trans-white gunsmoke-puff at the first muzzle, townsfolk diving behind a water-trough',
+      'Throws a lasso mid-cast as a mounted cowboy minifig swings a rope-element loop toward a breakaway brick steer, the loop mid-air, a second rider closing in, dust-plates kicking from the horse',
+      'Leaps mid-train-car as an outlaw minifig springs the gap between two moving brick boxcars, coat-tail back, a strongbox visible through an open car-door, a crew-minifig on the roof mid-lunge to stop them',
+      'Pans for gold mid-swirl as a prospector minifig crouches at a trans-blue creek-edge tilting a gold-pan with tiny gold round-plates, a mule-build behind with gear, a claim-stake hammered in the bank',
+      'Brawls mid-saloon-fight as two minifigs crash across a card-table scattering chip-tiles + bottle-elements, a chair-build mid-swing, the piano-player ducking, onlookers backing to the bar',
+      'Reins mid-stagecoach-haul as a driver minifig stands braced on the box hauling the team-reins hard, the brick stagecoach canting on a turn, a shotgun-guard beside aiming back, dust off the Technic-wheels',
+      'Cracks mid-vault as a bank-robber minifig works a dynamite-charge at a brick vault-door, a partner mid-watch at the window with revolver up, money-bag builds stacked ready on the teller-counter',
+      'Nails mid-poster as a sheriff minifig hammers a WANTED printed-tile to a brick post outside the jail, a deputy beside mid-point at the outlaw-face, a hitched horse waiting at the rail',
+      'Rears mid-gallop as a cowboy minifig on a brick-built horse pulls it up rearing at a canyon edge, hat in hand, the herd thundering past below on the tan-plate flat, dust rising',
+      'Pushes mid-ore-cart as two miner minifigs heave a loaded brick mine-cart along Technic-rails out of a shaft-mouth, headlamp-elements glowing, a third steadying the tipping load of ore-plates',
+      'Holds mid-standoff as a sheriff minifig levels a rifle across a saloon-bar at a cornered outlaw whose hands are half-raised, a deputy in the doorway behind, the tense frozen face-off',
+      'Defends mid-fort-gate as cavalry minifigs swing a heavy brick fort-gate shut, one mid-bar-drop, another on the parapet aiming out, the bugler mid-call, the besieged-outpost beat',
+    ],
+    instructions: `Each entry is ONE western minifig action beat, 25-45 words. Format: prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: NO standing/posing/passive, NO motion-blur (frozen brick moment), NO Native caricature. No real-people/photoreal. Story beat + verb + cause/effect always.`,
+  },
+
+  brickbot_western_build_technique: {
+    format: 'simple',
+    theme: `LEGO WESTERN MOC BUILD TECHNIQUE — AFOL-distinguishing brick-construction notes for BrickBot's western path. Each entry 25-45 words. Covers frontier architecture + the desert-terrain anti-photoreal mandate.
+
+VARIETY MANDATE — distribute across:
+  • Clapboard false-front facade (tan/brown tiles + plates building a tall flat storefront with a sign-board)
+  • SNOT sandstone-mesa strata (stacked plates + slopes in graduated tan/orange/red bands with brick-edges)
+  • Technic stagecoach + wagon wheels (working spoked-wheel builds + suspension)
+  • Technic steam-locomotive drivers + side-rods (working wheel-and-rod assembly)
+  • Spring batwing saloon-doors (hinged double swing-doors)
+  • Brick saguaro cactus + tumbleweed (green brick arms / brown plant-element ball)
+  • Boardwalk planking (tile-over-plate raised walkway with gaps)
+  • Mine-headframe Technic rig (beam-tower + pulley + cable + ore-bucket)
+  • Trans-blue river-ford / sluice (layered trans-plates with white-foam)
+  • Weathered ghost-town distress (intentionally offset/missing tiles, leaning walls, broken-wagon)
+
+Each entry: name the technique TYPE in first 5-8 words; specify WHICH western element; name SPECIFIC BRICK PARTS; imply the wow. NO real-construction (no aging/paint). BANNED: photoreal, real-wood/sand/rock.`,
+    touchpoints: [
+      'Clapboard false-front facade — a frontier storefront built with horizontal tan + brown tile clapboarding rising into a tall flat false-front parapet topped by a printed sign-board, a boardwalk-porch with slope-brick awning, the iconic western-street silhouette',
+      'SNOT sandstone-mesa strata — a mesa built with sideways-stud bracket-plates turning slope-bricks into horizontal sedimentary bands in graduated tan + orange + rust, crisp brick-edge layering, a flat tile cap on top',
+      'Technic stagecoach wheels — a stagecoach with four Technic spoked-wheel builds on axles with a suspension-strap, an ornate brick body-box, a driver-box + luggage-rack, the working-coach AFOL detail',
+      'Technic locomotive drivers — a steam-locomotive with Technic large-driver wheels linked by side-rod bars to a piston-build, a cow-catcher of slopes, a brick smokestack + boiler, the working-engine showpiece',
+      'Spring batwing saloon-doors — a saloon entry with double batwing-doors on bar-and-clip hinges that visibly swing, slatted with tiles, a worn-tile threshold, the classic frontier entrance',
+      'Brick saguaro + tumbleweed — a saguaro cactus built from green brick arms branching off a ribbed-brick trunk, a barrel-cactus dome nearby, a brown plant-element tumbleweed caught against a fence, desert dressing in pure brick',
+      'Boardwalk planking — a raised brick boardwalk built from brown tiles over a plate-and-brick substructure with visible plank-gaps and support-posts, running the length of the storefronts, the western-street walkway',
+      'Mine-headframe Technic rig — a mine-headframe of Technic beams forming a tower with a pulley-wheel + cable + ore-bucket build over a brick shaft-mouth, ore-cart rails leading off, the working-mine engineering',
+      'Trans-blue sluice-box — a gold-rush sluice built from a trans-blue + trans-light-blue plate channel on timber-brick legs with riffle-tiles, white round-plate water-froth, tailings of tan round-plates below',
+      'Weathered ghost-town distress — a building deliberately built distressed: offset + missing tiles for gaps, a leaning slope-brick wall, a sagging porch-roof, boarded windows of crossed-bar elements, the abandoned-frontier read',
+      'Log-stockade fort wall — a fort palisade built from vertical brown round-bricks + cylinder-bricks topped with pointed cone-elements, a Technic-hinged gate, a corner watchtower of stacked timber-bricks, the frontier-outpost build',
+      'Covered-wagon bonnet — a covered wagon with a SNOT-arched white-tile bonnet over a brown buckboard body on Technic wheels, barrels + crates lashed inside, a tongue-and-yoke for the team, the pioneer build',
+    ],
+    instructions: `Each entry is ONE western MOC build technique, 25-45 words. Format: "TECHNIQUE NAME — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-construction (aging/paint), no real-wood/sand/rock/photoreal. LEGO bricks only — name SPECIFIC parts (tile clapboard / SNOT slope-strata / Technic wheel / batwing-door / brick saguaro).`,
+  },
+
+  brickbot_western_camera_framing: {
+    format: 'simple',
+    theme: `WESTERN CAMERA FRAMING — LEGO MOC photography angles for the western path. Each entry 15-30 words, specific to frontier subject matter.
+
+⚠️ Bespoke — leverage frontier scenery (main-street / saloon-bar / stagecoach / canyon-rim / train-top / mesa / sheriff-porch / mine-shaft) rather than generic terms.
+
+VARIETY MANDATE — distribute across: main-street-high-noon-standoff, saloon-interior-over-the-bar, stagecoach-chase-tracking, canyon-rim-ambush-down, train-top-running, mesa-silhouette-wide, sheriff-porch-low, mine-shaft-down, boardwalk-receding, campfire-over-shoulder.
+
+Each: specify camera POSITION + the tension it captures; reference frontier brick scenery.`,
+    touchpoints: [
+      'MAIN-STREET HIGH-NOON STANDOFF — camera low down the center of the dusty brick street between two figures at opposite ends in profile, false-front buildings receding both sides, the tense gap between them dominating',
+      'SALOON-INTERIOR OVER-THE-BAR — camera behind the brick saloon bar-top looking out across bottle-shelves into the room where a standoff or brawl unfolds, the batwing-doors framing the exit',
+      'STAGECOACH-CHASE TRACKING — camera alongside a brick stagecoach mid-run, the team + coach in dynamic side-profile, dust-plates streaming from the Technic-wheels, butte-country blurring past (static brick)',
+      'CANYON-RIM AMBUSH-DOWN — camera high on a stacked-plate canyon rim looking down at a trail far below where a wagon or rider passes, foreground ambush-figures in silhouette, the trap-tension',
+      'TRAIN-TOP RUNNING — camera low on a brick boxcar roof looking along the train-top as a figure runs the cars, the locomotive smoke ahead, desert mesa streaming past, the heist-chase angle',
+      'MESA-SILHOUETTE WIDE — camera wide and low with towering stacked-plate mesas against a brick sky, a tiny rider or wagon crossing the tan-plate flat for scale, the epic frontier vista',
+      'SHERIFF-PORCH LOW — camera low at the boardwalk looking up at a sheriff minifig on the jail porch under the awning, the WANTED-board beside, the street stretching off behind, the lawman angle',
+      'MINE-SHAFT DOWN — camera at a mine-shaft mouth looking down the timbered brick descent with ore-cart rails + lantern-glow, miners working in the depths, the claustrophobic-labor angle',
+      'BOARDWALK RECEDING — camera at boardwalk-level looking down the planked walkway past storefront porches receding to a vanishing point, hitched horses + barrels lining it, immersive street depth',
+      'CAMPFIRE OVER-SHOULDER — camera just behind a seated cowboy at a brick campfire looking past their shoulder at the trans-orange flames and the figures around it, a picketed horse beyond, the warm-night angle',
+    ],
+    instructions: `Each entry is ONE western camera framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no generic camera terms without frontier anchoring — every entry references brick western scenery. No real-west/photoreal vocabulary.`,
+  },
+
+  brickbot_western_subject_focus: {
+    format: 'simple',
+    theme: `WESTERN SUBJECT-FOCUS / SILHOUETTE ANCHOR — the dominant subject class for a western diorama. Each entry is ONE of four kinds: brick STRUCTURE, MOUNT/VEHICLE, NO-VEHICLE INTERIOR, or NO-VEHICLE LANDSCAPE. Each entry 20-40 words. LEAD with the TYPE label in parens.
+
+DISTRIBUTION: ~40% STRUCTURE / ~22% MOUNT/VEHICLE / ~15% NO-VEHICLE INTERIOR / ~23% NO-VEHICLE LANDSCAPE.
+
+Every entry names brick parts + bans photoreal vocabulary. Mounts/animals brick-built, never photoreal. RESPECTFUL framing.`,
+    touchpoints: [
+      'STRUCTURE — a brick saloon with a tall clapboard false-front, batwing-doors, an upstairs balcony, a painted sign-board, hitching-rail out front; fills 50%+ of frame as the dominant subject',
+      'STRUCTURE — a log-stockade cavalry fort with a Technic-gate, corner watchtowers with cone-roofs, a parade-ground flagpole, the dominant frontier-outpost subject',
+      'STRUCTURE — a brick mine-headframe with a Technic hoist-tower + pulley over a shaft, ore-bins + cart-rails, the dominant gold-rush-industry subject',
+      'STRUCTURE — a brick frontier train-depot with a platform, a water-tower with a swing-spout, a telegraph-pole, a waiting steam-locomotive, the dominant railroad subject',
+      'STRUCTURE — a brick frontier bank with a barred teller-cage, a heavy vault-door, a board sidewalk and hitching-rail, the dominant heist-target subject',
+      'MOUNT/VEHICLE — a brick stagecoach-and-team: an ornate body-box on Technic spoked-wheels with a driver-box, luggage-rack, and a four-horse brick team in harness, the dominant chase subject',
+      'MOUNT/VEHICLE — a brick-built steam-locomotive with Technic drivers + side-rods, a cow-catcher, smokestack, and a coal-tender, the dominant railroad subject thundering down the track',
+      'MOUNT/VEHICLE — a saddled brick-built horse with a cowboy minifig rider, bedroll + saddlebags, reined up rearing or mid-stride, the dominant frontier-rider subject',
+      'MOUNT/VEHICLE — a covered wagon with a SNOT-arched white bonnet on Technic wheels, an ox or horse team, supplies lashed inside, the dominant pioneer subject on the trail',
+      'NO-VEHICLE INTERIOR — a brick saloon interior: a long bar with bottle-shelves, card-tables with chip-tiles, a piano-build, an upstairs landing, a chandelier; the setting, with a minifig beat as subject',
+      'NO-VEHICLE INTERIOR — a brick sheriff-office + jail: a desk with a WANTED-board, a rifle-rack, a barred cell, a pot-belly stove; the frontier-law setting',
+      'NO-VEHICLE LANDSCAPE — a brick mesa-badlands of stacked tan + orange plate-strata buttes across a desert-flat with saguaro + tumbleweed, a tiny rider for scale; lush-detailed frontier vista',
+      'NO-VEHICLE LANDSCAPE — a brick slot-canyon of towering layered-plate walls with a trans-blue river-ford at the floor, a wagon crossing tiny below; multi-tier frontier setting',
+    ],
+    instructions: `Each entry is ONE western subject-focus, 20-40 words, LED BY its TYPE label — (STRUCTURE) / (MOUNT/VEHICLE) / (NO-VEHICLE INTERIOR) / (NO-VEHICLE LANDSCAPE). Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Distribution ~40/22/15/23. Every entry names brick parts; animals brick-built. BANNED: photoreal/real-wood-sand-rock + motion-blur; no Native caricature.`,
+  },
+
+  brickbot_western_register: {
+    format: 'simple',
+    theme: `WESTERN HERITAGE REGISTER — the aesthetic lock for a western diorama, named by its LEGO/frontier VISUAL SIGNATURE. Each entry 20-40 words, locking palette + minifig costume + build motif. RESPECTFUL — no Native caricature.
+
+WEIGHTING — ~80% iconic LEGO Western heritage / ~20% retro-frontier:
+  • CLASSIC-LEGO-COWBOYS — rust + tan + barn-red, sheriff-star + cowboy-hat + bandana minifigs, false-front timber main-street + saloon + jail (~26%)
+  • FORT-LEGOREDO CAVALRY — cavalry-blue + tan + timber, blue-kepi soldier minifigs, log-stockade fort + flag + cannon (~20%)
+  • GOLD-CITY PROSPECTOR — amber + brown + grey, suspenders + pickaxe + gold-pan minifigs, mine-headframe + sluice + assay-office (~18%)
+  • RAILROAD-FRONTIER — black + brass + timber, engineer-cap + rail-crew minifigs, steam-locomotive + trestle + water-tower + depot (~16%)
+  • SPAGHETTI-WESTERN-CODED (retro) — sun-bleached sepia + dust-tan + poncho-stripe, lone-gunslinger + bounty-hunter minifigs, dusty ghost-town + lone-mesa, strictly in brick (~10%)
+  • GOLD-RUSH-1849-BOOMTOWN-CODED (retro) — muddy-brown + canvas-tan + gold, miner + merchant minifigs, tent-city + claim-stakes + boomtown-street, strictly in brick (~10%)
+
+Each entry: name the register signature in first 5-8 words; PALETTE; MINIFIG/costume look; BUILD MOTIF. NEVER a licensed franchise; never Native caricature. Always reads as LEGO.`,
+    touchpoints: [
+      'CLASSIC-LEGO-COWBOYS SIGNATURE — rust + tan + barn-red palette, sheriff-star-torso + cowboy-hat + bandana + revolver minifigs, a false-front timber main-street with saloon + general-store + jail, the iconic LEGO-Western look',
+      'FORT-LEGOREDO CAVALRY SIGNATURE — cavalry-blue + tan + timber palette, blue-kepi + blue-jacket soldier minifigs with sabers + rifles, a log-stockade fort with watchtowers + flagpole + cannon, the frontier-garrison look',
+      'GOLD-CITY PROSPECTOR SIGNATURE — amber + brown + grey palette, suspenders + slouch-hat + pickaxe + gold-pan minifigs, a mine-headframe + sluice + assay-office + claim-stakes, the boomtown-mining look',
+      'RAILROAD-FRONTIER SIGNATURE — black + brass + timber palette, engineer-cap + rail-crew + conductor minifigs, a steam-locomotive + trestle-bridge + water-tower + depot-platform, the transcontinental-railroad look',
+      'SPAGHETTI-WESTERN SIGNATURE — sun-bleached sepia + dust-tan + poncho-stripe palette, a lone-gunslinger + bounty-hunter minifig with serape + wide-brim hat, a dusty lone-mesa ghost-town, strictly in brick, the cinematic-loner look',
+      'GOLD-RUSH-1849 SIGNATURE — muddy-brown + canvas-tan + gold palette, miner + merchant + banker minifigs, a tent-city boomtown with claim-stakes + a muddy main-street + a gold-scales assay-office, strictly in brick, the rush-era look',
+      'GHOST-TOWN-HAUNTED SIGNATURE — weathered-grey + bone + dust palette, lone-drifter minifig, a half-collapsed clapboard ghost-town with a tumbleweed + a creaking water-tower + a broken wagon, the eerie-abandoned look in brick',
+      'CLASSIC-LEGO-OUTLAW-HIDEOUT SIGNATURE — rust + dark-brown + grey palette, masked-bandit + lookout minifigs, a hidden canyon-mouth hideout with a corral + a strongbox-cache + a lookout-perch, the bandit-camp look',
+      'CATTLE-DRIVE SIGNATURE — dust-tan + leather-brown + sage palette, drover + trail-boss minifigs with lassos, a chuck-wagon + a longhorn-herd of brick cattle + a campfire, the open-range look',
+      'FRONTIER-TRADING-POST SIGNATURE — timber-brown + canvas + rust palette, trader + trapper + traveler minifigs, a brick trading-post + general-store with pelt-racks + goods-crates + a freight-wagon, the commerce-outpost look',
+    ],
+    instructions: `Each entry is ONE western heritage register, 20-40 words. Format: "REGISTER NAME SIGNATURE — palette + minifig look + build motif". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Weight ~80% iconic LEGO Western / ~20% retro-frontier. STRICT BANS: never a licensed franchise; never Native caricature; never real-west/photoreal vocabulary; everything reads as LEGO brick.`,
+  },
+
+  brickbot_western_scene_props: {
+    format: 'simple',
+    theme: `WESTERN DIORAMA STORYTELLING PROPS — small brick-built frontier details. Each entry 12-25 words, implying a backstory. NEVER decorative-only.
+
+VARIETY: WANTED poster on a post / hitching-post + water-trough / brick saguaro cactus / tumbleweed / whiskey-barrel stack / wagon-wheel leaning / gold-pan + nuggets / sheriff-star on the boardwalk / oil-lantern / rifle-rack / brick campfire + coffee-pot / longhorn-skull / dynamite-crate / telegraph-pole / horseshoe / spittoon / saddle on a rail / hay-bale / well + bucket / cattle-brand iron.
+
+Each names SPECIFIC brick parts + a tiny story. BANNED: photoreal + motion-blur.`,
+    touchpoints: [
+      'A WANTED poster — a printed-tile poster with a bandit-face nailed to a brown brick post outside the jail, a reward-number, one corner peeling',
+      'A hitching-post + water-trough — a brick rail with a trans-blue plate water-trough beside it, a coiled rope-element looped over the rail, a horseshoe in the dust',
+      'A brick saguaro cactus — a green brick saguaro with two upraised arms beside the trail, a tiny bird-build perched on top, classic desert dressing',
+      'A whiskey-barrel stack — a pyramid of brown brick barrels outside the saloon, one tapped with a spigot-element, a spilled mug-tile on the boardwalk',
+      'A leaning wagon-wheel — a Technic spoked wagon-wheel propped against a weathered clapboard wall, half-buried in a tan-plate dust-drift, from a long-broken wagon',
+      'A gold-pan with nuggets — a grey brick pan with a few gold 1×1 round-plate nuggets glinting, set on a creek-rock beside a prospector camp',
+      'A brick campfire + coffee-pot — a ring of stones with trans-orange flame elements and a black coffee-pot on an iron tripod, a tin-mug tile beside a bedroll',
+      'A longhorn-skull — a bleached white brick steer-skull with long horn-elements half-sunk in the desert sand, a frontier memento-mori at the trailside',
+      'A dynamite-crate — an open brown brick crate stamped with a printed danger-tile, red dynamite-stick elements inside, a coiled fuse, left by the mine-mouth',
+      'A telegraph-pole — a tall brown brick pole with cross-arm insulator-tiles and a sagging wire-element, the thin thread of frontier communication',
+      'A saddle on a rail — a brown brick saddle with stirrup-elements draped over a corral rail, a coiled lariat hung beside, the cowboy gear at rest',
+      'A well + bucket — a brick stone well-ring with a timber roof + a windlass and a bucket on a rope-element, a dipper-tile on the rim, the town water-source',
+    ],
+    instructions: `Each entry is ONE western brick-built prop, 12-25 words. Format: prose naming the prop + its brick parts + tiny story. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-west/photoreal; LEGO bricks only; each implies a frontier story, never decorative-only.`,
+  },
+
+  brickbot_western_lighting: {
+    format: 'simple',
+    theme: `WESTERN LIGHTING — light source + direction + color for a frontier LEGO MOC photo. Each entry 15-30 words. Lights a TABLETOP BRICK DIORAMA — studio-macro shadows on plastic, evoking the western mood.
+
+VARIETY: high-noon harsh top-light / golden-dusk low silhouette / saloon oil-lamp warm interior / campfire-night amber / dust-haze amber-diffuse / moonlit ghost-town blue / mesa-sunrise rose / lantern-lit mine-shaft / stormy badlands grey / hard-shadow standoff.
+
+Each names SOURCE + DIRECTION + COLOR + fall on the bricks. NEVER real-sun-dust/photoreal language.`,
+    touchpoints: [
+      'High-noon harsh top-light, a strong overhead key throwing short hard shadows straight down off the false-fronts and figures, bleaching the tan-plate street, the unforgiving showdown light',
+      'Golden-dusk low silhouette, warm amber raking the length of the brick main-street, the buildings + a lone rider thrown into long silhouette, dust-warm and cinematic',
+      'Saloon oil-lamp warm, pools of trans-orange lamp-glow on the brick bar + card-tables, the corners falling into smoky shadow, the cozy-but-tense interior light',
+      'Campfire-night amber, a low trans-orange flame-glow under-lighting the faces of figures around a brick fire, the mesa + wagon in deep blue night-shadow beyond',
+      'Dust-haze amber-diffuse, a soft warm haze (built with trans-clear + tan tiles catching light) flattening the depth of the street, the heat-of-the-day frontier mood',
+      'Moonlit ghost-town blue, a cool silver wash over the weathered-grey brick buildings, long cold shadows, a single warm window the only life, the eerie-night mood',
+      'Mesa-sunrise rose, soft pink-warm first light catching the tops of the stacked-plate mesas while the desert-flat stays in cool shadow, the dawn-frontier calm',
+      'Lantern-lit mine-shaft, a warm oil-lantern glow pooling on timbered brick shaft-walls + ore-cart, deep black beyond the light, the claustrophobic-labor mood',
+      'Stormy badlands grey, a flat cool overcast over the mesas with a darker cloud-bank building, a shaft of light breaking on one butte, the brewing-trouble mood',
+      'Hard-shadow standoff, a low side-sun throwing two long figure-shadows toward each other across the brick street, the tension written in the converging shadows',
+    ],
+    instructions: `Each entry is ONE western lighting setup, 15-30 words. Format: prose naming source + direction + color + fall on the bricks. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-sun-dust/photoreal language — it lights a plastic brick diorama. No real-west vocabulary.`,
+  },
+
+  brickbot_western_palette: {
+    format: 'simple',
+    theme: `WESTERN PALETTE — color combinations for a frontier LEGO MOC diorama, locked to LEGO/frontier heritage. Each entry 12-25 words, naming 3-5 specific brick colors + the mood/heritage.
+
+VARIETY: classic-Cowboys rust+tan+barn-red / cavalry-blue+tan+timber / gold-rush amber+brown+grey / railroad black+brass+timber / spaghetti sun-bleached-sepia+dust-tan / ghost-town weathered-grey+bone / sunset rust+magenta / desert-noon ochre+tan+azure / campfire-night amber+navy / boomtown muddy-brown+canvas.
+
+Each names ACTUAL LEGO brick colors (dark-tan, reddish-brown, sand-blue, etc.).`,
+    touchpoints: [
+      'Classic-Cowboys palette — rust + sand-tan + barn-red + brown, the iconic dusty LEGO-Western main-street look',
+      'Cavalry palette — cavalry-blue + tan + timber-brown + brass, the frontier-fort garrison look',
+      'Gold-rush palette — amber + reddish-brown + grey + gold, the boomtown-mining color story',
+      'Railroad palette — black + brass + timber-brown + iron-grey, the steam-frontier railroad look',
+      'Spaghetti-western palette — sun-bleached sepia + dust-tan + poncho-stripe red, the cinematic-loner mood',
+      'Ghost-town palette — weathered-grey + bone-white + dust-tan, the eerie-abandoned frontier look',
+      'Desert-sunset palette — rust + magenta + warm-orange + deepening-navy, the dusk over the mesas',
+      'Desert-noon palette — ochre + tan + pale-azure sky + bleached-bone, the harsh high-noon flat',
+      'Campfire-night palette — amber + warm-brown + deep-navy + ember-orange, the firelit-camp mood',
+      'Boomtown palette — muddy-brown + canvas-tan + timber + gold, the busy rush-era town',
+    ],
+    instructions: `Each entry is ONE western palette, 12-25 words. Format: "NAME palette — colors + mood". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color language; tie each to a frontier heritage. No real-west vocabulary.`,
+  },
+
+  brickbot_western_phenomenon: {
+    format: 'simple',
+    theme: `WESTERN PHENOMENON — a 50%-gated environmental beat for a frontier diorama, ALWAYS rendered IN BRICK. Each entry 20-40 words. AMPLIFIES the scene as a secondary focal point, never eclipses the subject + action.
+
+VARIETY: dust-storm cotton+tan-round-plates / rolling tumbleweed / gunsmoke trans-white puffs on rods / train-steam white-round-plate plume / cattle-stampede dust-cloud / heat-shimmer trans-clear tiles / desert-sunset blaze backdrop / circling vulture micro-birds on rods / flash-flood trans-blue plates in a wash / sandstorm-wall.
+
+Each names BRICK PARTS + visual impact. NEVER lighting-color-cast (separate axis). NEVER real-dust/photoreal. NO non-rigid motion verbs (frozen built moment).`,
+    touchpoints: [
+      'DUST-STORM WALL — a built wall of cotton-elements + tan + cream 1×1 round-plates massed across the deep frame rolling over the mesa-flat, the foreground figures bracing as it approaches, a frozen built haboob',
+      'GUNSMOKE PUFFS — trans-white + white 1×1 round-plates clustered on clear rods at the muzzles of drawn revolvers + rifles, frozen mid-shot, a tang of built smoke hanging over the standoff',
+      'TRAIN-STEAM PLUME — a tall built plume of white 1×1 round-plates + cotton-elements rising and trailing back from a steam-locomotive smokestack, frozen as the engine thunders down the brick track',
+      'ROLLING TUMBLEWEED — one or two brown plant-element tumbleweeds frozen mid-bounce across the tan-plate street on near-invisible clear rods, the lonely-frontier punctuation',
+      'CATTLE-STAMPEDE DUST — a low built cloud of tan + cream round-plates + cotton kicked up behind a herd of brick longhorns thundering across the flat, riders flanking, a frozen built stampede',
+      'HEAT-SHIMMER — a subtle scatter of trans-clear tiles laid low over the desert-flat catching the key-light, a built suggestion of rising noon-heat without any photoreal blur',
+      'DESERT-SUNSET BLAZE — a built backdrop of stacked trans-orange + trans-red + trans-magenta plates behind the silhouetted mesas + town, a deliberate brick sunset amplifying the dusk drama',
+      'CIRCLING VULTURES — three or four black micro brick-birds on clear rods wheeling high over the badlands, a frozen built omen above a lone figure or a fallen wagon',
+      'FLASH-FLOOD WASH — a sudden built ribbon of trans-blue + trans-light-blue plates surging down a dry brick wash with white round-plate froth, a wagon or rider scrambling clear, the desert-danger beat',
+      'CAMPFIRE-EMBER RISE — a built drift of trans-orange + trans-yellow 1×1 round-plates on fine rods rising from a brick campfire into the night, the warm-quiet-camp punctuation',
+    ],
+    instructions: `Each entry is ONE western phenomenon, 20-40 words. Format: "PHENOMENON NAME — brick-parts + visual impact". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never lighting-color-cast (separate axis); never real-dust/photoreal language; ALWAYS built from named brick parts; never non-rigid motion verbs (frozen built moment).`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // THEME-PARK PATH (2026-05-27 — eighth BrickBot axis migration)
   // AMUSEMENT-PARK + CARNIVAL. Kinetic spectacle + crowds + neon. Bespoke:
   // attraction (hero ride) + build_technique (working-ride MOC) + crowd_action

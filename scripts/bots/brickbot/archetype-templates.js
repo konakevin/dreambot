@@ -10,6 +10,117 @@
  */
 
 module.exports = {
+  BRICKBOT_WESTERN: ({ slots, vibeDirective }) => {
+    const {
+      scene_type,
+      minifig_action,
+      build_technique,
+      camera_framing,
+      subject_focus,
+      register,
+      scene_props,
+      lighting,
+      palette,
+      western_phenomenon,
+    } = slots;
+
+    const props = Array.isArray(scene_props) ? scene_props : [scene_props];
+    const propLines = props.map((p, i) => `  ${i + 1}. ${p}`).join('\n');
+
+    const phenomenonSection = western_phenomenon
+      ? `
+━━━ WESTERN PHENOMENON (this render's environmental beat) ━━━
+${western_phenomenon}
+
+Weave this in as a SECONDARY focal point, rendered IN BRICK (cotton-element + tan round-plate dust-storm / trans-white gunsmoke-puffs on rods / white round-plate train-steam plume / trans-clear heat-shimmer tiles). It AMPLIFIES the frontier drama — never eclipses the subject + minifig action.
+
+`
+      : '';
+
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a WILD-WEST FRONTIER diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION TIER WILD-WEST IN LEGO BRICKS ━━━
+This is a Bricklink AFOL champion's wild-west frontier diorama, photographed at a LEGO World convention. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a real western-movie still. The mood is dusty, sun-baked, high-noon-tense or campfire-warm. Visual canon: classic LEGO Western (Cowboys sheriff-vs-outlaw / Fort Legoredo cavalry / Gold City Junction prospectors / Bandit's Hideout) + spaghetti-western + gold-rush boom-town + transcontinental-railroad. RESPECTFUL frontier framing — cowboys, outlaws, sheriffs, prospectors, railroad crews, cavalry; NEVER a dated "cowboys-vs-Indians" caricature or stereotyped Native characters.
+
+━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
+NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Flux's "LEGO photo" data is contaminated with hand-placing-brick + claymation hero shots. OVERRIDE HARD. Every character is a LEGO minifigure with C-shaped hands + printed plastic face. Cowboy / sheriff / outlaw / prospector / cavalry / railroad-worker minifig variants (cowboy-hat + bandana + revolver / sheriff-star-torso / poncho / suspenders-and-pickaxe / blue-cavalry-kepi / engineer-cap) are LEGO minifigure variants. NEVER a real human face.
+
+━━━ EVERYTHING IS BRICK — INCLUDING DESERT, ROCK, WOOD, WATER, AND DUST ━━━
+EVERY element is built from real LEGO bricks. NO photoreal desert, NO photoreal rock/sandstone, NO photoreal wood, NO photoreal sky, NO real western-set photo. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
+
+⚠️ EXTRA-STRONG LEGO MANDATE FOR DESERT TERRAIN (shared with the landscape path's photoreal pull) — translate EVERY natural element into NAMED BRICK PARTS:
+  • Mesa / butte / canyon = stacked tan + orange + red plates + slope-bricks showing sedimentary courses with visible brick-edges — NEVER photoreal sandstone
+  • Desert ground = tan + dark-tan plates + slopes with offset-tile ripple — NEVER photoreal sand
+  • Buildings = clapboard timber facades built from brown + tan tiles + plates with false-front profiles — NEVER photoreal weathered wood
+  • Cactus = brick-built green saguaro arms + barrel-cactus domes — NEVER photoreal cactus
+  • River-ford = trans-blue + trans-light-blue plates — NEVER photoreal water
+  • Sky = brick sky-baseplate with 1×1 white round-plate clouds — NEVER photoreal sky
+  • Dust / gunsmoke = cotton-elements + white/tan 1×1 round-plates — NEVER photoreal dust
+
+━━━ BANNED VOCABULARY (pull Flux to real photography — NEVER use): "photoreal", "real wood/sand/rock/sandstone", "weathered-real", "rugged texture", "dusty haze" as real air, "rushing water". ALSO BANNED — non-rigid motion verbs (render as static built moment): "billowing dust", "swirling", "galloping-blur". Terrain + dust are STATIC brick builds.
+
+━━━ THE SCENE STAGE ━━━
+${scene_type}
+
+━━━ THE MINIFIG ACTION — STORY BEAT MANDATE (no posing) ━━━
+${minifig_action}
+
+A freeze-frame of a STORY HAPPENING — mid-quickdraw, mid-lasso-throw, mid-train-leap, mid-gold-pan. Show cause + reaction in-frame. NEVER minifigs standing in a row at high noon — show the DRAW, the recoil, the dive for cover.
+
+━━━ THE MOC BUILD TECHNIQUE — AFOL DISTINGUISHER (render visibly) ━━━
+${build_technique}
+
+Makes the build read as AFOL champion + unmistakably all-brick. Render it visibly — name the brick parts (clapboard false-front / SNOT sandstone strata / Technic stagecoach-wheels / batwing saloon-doors / brick saguaro).
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — the rolled framing DRIVES the composition. Apply the exact angle, even if Flux wants a centered front-facing minifig. Override hard.
+  • MAIN-STREET-HIGH-NOON-STANDOFF — two figures at opposite ends of a receding brick street, profile/distance, the dusty face-off
+  • SALOON-INTERIOR-OVER-THE-BAR — framed past the brick bar-top into the room, brawl/standoff beyond
+  • STAGECOACH-CHASE-TRACKING / TRAIN-TOP-RUNNING — dynamic side/tracking angle, figures in motion-profile
+  • CANYON-RIM-AMBUSH-DOWN / MESA-SILHOUETTE-WIDE — high or wide vista angle with tiny figures for scale
+  • Avoid centered eye-level front-facing as default — that's the Flux-bias trap.
+
+━━━ THE SUBJECT-FOCUS (silhouette anchor OR no-vehicle scene-focus) ━━━
+${subject_focus}
+
+⚠️ HARD BIFURCATION:
+• STRUCTURE (saloon / fort / sheriff-office / mine-headframe / depot / bank / trading-post) — render the brick structure as DOMINANT, 50%+ of frame; minifig action AT it.
+• MOUNT/VEHICLE (saddled horse / stagecoach-and-team / steam-locomotive / mine-cart / covered-wagon) — render the brick-built mount/vehicle as DOMINANT; horses + teams are chunky brick-built or LEGO animal-elements, NEVER photoreal.
+• NO-VEHICLE INTERIOR (saloon / sheriff-office / bank-vault / mine-shaft / general-store) — the brick interior is the SETTING, the minifig action the SUBJECT; pack it with frontier brick detail.
+• NO-VEHICLE LANDSCAPE (mesa-badlands / slot-canyon / desert-flat / river-ford) — the brick frontier landscape is the SETTING with minifig action as the focal beat; multi-tier depth, tiny-figures-prove-scale.
+
+━━━ THE REGISTER (frontier heritage lock) ━━━
+${register}
+
+The aesthetic lock — costume, build motifs, palette, props align with this heritage (classic-LEGO-Cowboys / Fort-cavalry-blue / Gold-City-prospector / spaghetti-western / railroad-frontier). Never mix anachronistically.
+
+━━━ DIORAMA STORYTELLING DETAILS — fill the negative space ━━━
+${propLines}
+
+These small builds populate the diorama as deliberate brick-built details — never decorative-only. Each prop implies a frontier backstory.
+${phenomenonSection}━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+
+━━━ CROSS-AXIS COMPATIBILITY ━━━
+• If register is CLASSIC-LEGO-COWBOYS — sheriff-star + cowboy-hat minifigs, false-front timber main-street, rust + tan + barn-red palette.
+• If register is FORT-CAVALRY — blue-kepi cavalry minifigs, log-stockade fort + flag, blue + tan + timber palette.
+• If register is GOLD-CITY-PROSPECTOR — suspenders + pickaxe + gold-pan minifigs, mine-headframe + sluice + assay-office, amber + brown + grey palette.
+• If register is RAILROAD-FRONTIER — engineer + rail-crew minifigs, steam-locomotive + trestle + water-tower, black + brass + timber palette.
+• Desert terrain is ALWAYS slope-brick + plate strata, never photoreal, regardless of how cinematic the lighting feels.
+• Whatever palette rolls, the register's signature WINS if they conflict.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OUTPUT SPEC ━━━
+Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + western phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC western diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+  },
+
   BRICKBOT_THEME_PARK: ({ slots, vibeDirective }) => {
     const {
       attraction,

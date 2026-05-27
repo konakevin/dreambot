@@ -8,6 +8,45 @@
  */
 
 module.exports = {
+  BRICKBOT_WESTERN: {
+    description: `PATH-BESPOKE — BrickBot western path (2026-05-27 migration). WILD-WEST FRONTIER LEGO MOC diorama photography — sheriffs, outlaws, cowboys, prospectors, railroad crews; saloons, ghost towns, mining camps, forts, boom-towns; stagecoaches, steam locomotives, mine-carts; set in brick badlands, mesas, slot-canyons, and desert flats. Canon: classic LEGO Western (1996-97 — Cowboys / Fort Legoredo cavalry / Gold City Junction / Boulder Blasters / Bandit's Secret Hideout) + spaghetti-western + gold-rush-boomtown + railroad-frontier coding + Bricklink AFOL western-MOC community. RESPECTFUL frontier framing — cowboys/outlaws/sheriffs/prospectors/railroad/cavalry register only; NO dated "cowboys-vs-Indians" caricature.
+
+A character + setting path: frontier characters in mid-action against brick frontier towns + desert terrain. Moderate photoreal risk on the desert terrain (shared with landscape) — handled by the build_technique brick-mandate for sandstone/mesa.
+
+9 path-bespoke slots + 1 conditional:
+  • scene_type          — frontier stage (saloon-showdown / main-street-standoff / train-robbery / stagecoach-chase / gold-mine-dig / ghost-town / cavalry-fort / cattle-drive / river-ford-crossing / boom-town-street / sheriff-office / bank-heist / canyon-ambush / trading-post / campfire-night / mesa-lookout / mine-headframe / railroad-construction)
+  • minifig_action      — verb-led western beat (mid-quickdraw / mid-lasso-throw / mid-saloon-brawl / mid-train-car-leap / mid-gold-pan / mid-horse-gallop / mid-stagecoach-rein-haul / mid-bank-vault-crack / mid-campfire-tale / mid-wanted-poster-nail / mid-mine-cart-push)
+  • build_technique     — western-MOC distinguisher (clapboard-facade timber buildings with false-fronts / SNOT sandstone-mesa strata / Technic-articulated stagecoach + locomotive wheels / spring-swinging saloon batwing-doors / trans-blue river-ford plates / brick-built saguaro cactus + tumbleweed / boardwalk-planking with tile / mine-headframe Technic-rig)
+  • camera_framing      — western framing (main-street-high-noon-standoff / saloon-interior-over-the-bar / stagecoach-chase-tracking / canyon-rim-ambush-down / train-top-running / mesa-silhouette-wide / sheriff-porch-low / mine-shaft-down / boardwalk-receding)
+  • subject_focus       — silhouette anchor (REPLACES vehicle_class) — STRUCTURE (saloon / cavalry-fort / sheriff-office / mine-headframe / train-depot / bank / water-tower / trading-post) OR MOUNT/VEHICLE (saddled horse / stagecoach-and-team / steam-locomotive / handcar / mine-cart / covered-wagon / buckboard) OR no-vehicle INTERIOR (saloon-interior / sheriff-office / bank-vault / mine-shaft / general-store) OR no-vehicle LANDSCAPE (mesa-badlands / slot-canyon / desert-flat / river-ford / butte-field)
+  • register            — frontier heritage lock, ~80% iconic LEGO Western (classic-LEGO-Cowboys sheriff-vs-outlaw / Fort-Legoredo-cavalry-blue / Gold-City-prospector) + ~20% retro-frontier (spaghetti-western-coded / gold-rush-1849-boomtown-coded / transcontinental-railroad-coded / ghost-town-haunted-coded — strictly in brick)
+  • scene_props pickN:2 — diorama fill (wanted-poster / hitching-post + water-trough / brick saguaro cactus / tumbleweed / whiskey-barrel / wagon-wheel / gold-pan + nuggets / sheriff-star-on-the-boardwalk / oil-lantern / rifle-rack / brick campfire + coffee-pot / longhorn-skull / dynamite-crate / telegraph-pole)
+  • lighting            — axis-clean: high-noon harsh-shadow / golden-dusk silhouette / saloon oil-lamp warm / campfire-night amber / dust-haze amber-diffuse / moonlit ghost-town blue / mesa-sunrise rose
+  • palette             — axis-clean LEGO-coded: rust + ochre + sun-bleached-tan / dusty-leather-brown + sagebrush-green / boomtown-timber + barn-red / gold-rush amber + brown / ghost-town weathered-grey + bone / sunset rust + magenta
+  • western_phenomenon (50%-gated) — environmental beat IN BRICK (dust-storm cotton + tan round-plates / rolling tumbleweed / gunsmoke trans-white puffs on rods / train-steam plume of white round-plates / cattle-stampede dust-cloud / heat-shimmer trans-clear tiles / desert-sunset blaze backdrop / circling vulture micro-birds on rods)
+
+Bending advantage: scene_type × subject_focus × register × western_phenomenon decoupled, so "train-robbery + steam-locomotive + railroad-frontier register + gunsmoke" and "saloon-showdown + classic-LEGO-Cowboys register + dust-storm" are rollable. Legacy 4-axis couldn't reach these.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'minifig_action',
+        'build_technique',
+        'camera_framing',
+        'subject_focus',
+        'register',
+        'scene_props',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: { scene_props: 2 },
+    conditionalLayer: { slot: 'western_phenomenon', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BRICKBOT_THEME_PARK: {
     description: `PATH-BESPOKE — BrickBot theme-park path (2026-05-27 migration). AMUSEMENT-PARK + CARNIVAL LEGO MOC diorama photography — roller coasters mid-loop, ferris wheels lit at dusk, carousels mid-spin, drop-towers, swing-rides, haunted houses, log-flumes, bumper cars, midway game-rows, parade floats, food carts, water slides, monorails, all teeming with crowd minifigs in motion. Canon: LEGO Creator Expert Fairground Collection (Ferris Wheel 10247 / Carousel 10257 / Roller Coaster 10261 / Loop Coaster 10303 / Pirate-ship Fairground Mixer / Haunted House 10273 / Grand Carousel) + LEGO City amusement + Friends amusement-park + Bricklink AFOL GBC + working-fairground MOC community + vintage-carnival coding. NEVER licensed-park IP (no Disney/Universal named lands or characters).
 

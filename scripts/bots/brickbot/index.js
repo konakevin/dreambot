@@ -99,6 +99,7 @@ module.exports = {
       'winter',
       'landscape',
       'theme-park',
+      'western',
     ],
   },
 
