@@ -6,14 +6,21 @@ import Constants from 'expo-constants';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
-// Show notifications even when app is in foreground
+// handleNotification runs ONLY for pushes that arrive while the app is in the
+// FOREGROUND. Suppress the OS banner/alert/sound/badge here: the in-app
+// indicators already cover it — the profile-tab dot + inbox header count
+// (useUnreadCount, invalidated in real time by the notifications channel in
+// app/_layout.tsx) light up the instant the notification row lands. A banner on
+// top of that, while the user is actively in the app, is redundant noise.
+// When the app is BACKGROUNDED/CLOSED the OS shows the banner without consulting
+// this handler — so "your dream is ready" still pulls an away user back.
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
+    shouldShowAlert: false,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+    shouldShowBanner: false,
+    shouldShowList: false,
   }),
 });
 
