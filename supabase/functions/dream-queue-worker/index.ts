@@ -79,141 +79,153 @@ Deno.serve(async (req) => {
   const workerId = crypto.randomUUID().slice(0, 12);
   const t0 = Date.now();
 
-  // ── Stale-job recovery ─────────────────────────────────────────────────
-  // Reset in_progress jobs whose started_at is more than 5 min ago. Worker
-  // isolate likely died mid-job (Supabase 150 s wall-clock timeout).
-  const staleCutoff = new Date(Date.now() - STALE_THRESHOLD_MIN * 60 * 1000).toISOString();
-  const { data: staleRows } = await supabase
-    .from('dream_queue')
-    .update({ status: 'queued', started_at: null, worker_id: null })
-    .eq('status', 'in_progress')
-    .lt('started_at', staleCutoff)
-    .select('id');
-  if (staleRows && staleRows.length > 0) {
-    console.log(`[worker:${workerId}] Reset ${staleRows.length} stale in_progress jobs`);
-  }
+  const runTick = async () => {
+    // ── Stale-job recovery ─────────────────────────────────────────────────
+    // Reset in_progress jobs whose started_at is more than 5 min ago. Worker
+    // isolate likely died mid-job (Supabase 150 s wall-clock timeout).
+    const staleCutoff = new Date(Date.now() - STALE_THRESHOLD_MIN * 60 * 1000).toISOString();
+    const { data: staleRows } = await supabase
+      .from('dream_queue')
+      .update({ status: 'queued', started_at: null, worker_id: null })
+      .eq('status', 'in_progress')
+      .lt('started_at', staleCutoff)
+      .select('id');
+    if (staleRows && staleRows.length > 0) {
+      console.log(`[worker:${workerId}] Reset ${staleRows.length} stale in_progress jobs`);
+    }
 
-  // ── Batch claim + parallel dispatch ────────────────────────────────────
-  const { data: claimedRows, error: claimErr } = await supabase.rpc('claim_dream_queue_jobs', {
-    p_worker_id: workerId,
-    p_limit: MAX_JOBS_PER_TICK,
-  });
-  if (claimErr) {
-    console.error(`[worker:${workerId}] Batch claim error:`, claimErr.message);
-    return new Response(JSON.stringify({ worker_id: workerId, error: claimErr.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
+    // ── Batch claim + parallel dispatch ────────────────────────────────────
+    const { data: claimedRows, error: claimErr } = await supabase.rpc('claim_dream_queue_jobs', {
+      p_worker_id: workerId,
+      p_limit: MAX_JOBS_PER_TICK,
     });
-  }
-  const jobs = (claimedRows ?? []) as QueueRow[];
+    if (claimErr) {
+      console.error(`[worker:${workerId}] Batch claim error:`, claimErr.message);
+      return;
+    }
+    const jobs = (claimedRows ?? []) as QueueRow[];
 
-  const results = await Promise.all(
-    jobs.map(async (job) => {
-      const jobT0 = Date.now();
-      console.log(
-        `[worker:${workerId}] Processing job ${job.id} source=${job.source} attempt=${job.attempt_count + 1}`
-      );
-      try {
-        let uploadId: string;
-        switch (job.source) {
-          case 'first_dream':
-            uploadId = await processFirstDreamJob({
-              supabase,
-              replicateToken: REPLICATE_TOKEN,
-              anthropicKey: ANTHROPIC_KEY,
-              userId: job.user_id,
-              payload: job.payload,
-            });
-            break;
-          case 'nightly':
-            uploadId = await processNightlyJob({
-              supabase,
-              supabaseUrl,
-              workerToken: expectedToken,
-              anthropicKey: ANTHROPIC_KEY,
-              userId: job.user_id,
-              payload: job.payload,
-            });
-            break;
-          case 'create':
-          case 'dlt':
-            throw new Error(`dispatcher_not_implemented:${job.source}`);
-          default:
-            throw new Error(`unknown_source:${job.source}`);
-        }
-
-        await supabase
-          .from('dream_queue')
-          .update({
-            status: 'completed',
-            completed_at: new Date().toISOString(),
-            upload_id: uploadId,
-            last_error: null,
-          })
-          .eq('id', job.id);
-        return { id: job.id, status: 'completed', ms: Date.now() - jobT0 };
-      } catch (err) {
-        const message = ((err as Error).message ?? 'unknown').slice(0, 1000);
-        // NSFW/safety rejections are terminal — a retry re-runs a doomed (and
-        // costly) render. Dead-letter immediately.
-        const isNsfw = message.startsWith('nsfw:');
-        const nextAttempt = job.attempt_count + 1;
-        const isDead = isNsfw || nextAttempt >= MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
-
-        console.error(
-          `[worker:${workerId}] Job ${job.id} failed (attempt ${nextAttempt}/${MAX_ATTEMPTS_BEFORE_DEAD_LETTER}${isNsfw ? ', terminal:nsfw' : ''}):`,
-          message.slice(0, 200)
+    const results = await Promise.all(
+      jobs.map(async (job) => {
+        const jobT0 = Date.now();
+        console.log(
+          `[worker:${workerId}] Processing job ${job.id} source=${job.source} attempt=${job.attempt_count + 1}`
         );
+        try {
+          let uploadId: string;
+          switch (job.source) {
+            case 'first_dream':
+              uploadId = await processFirstDreamJob({
+                supabase,
+                replicateToken: REPLICATE_TOKEN,
+                anthropicKey: ANTHROPIC_KEY,
+                userId: job.user_id,
+                payload: job.payload,
+              });
+              break;
+            case 'nightly':
+              uploadId = await processNightlyJob({
+                supabase,
+                supabaseUrl,
+                workerToken: expectedToken,
+                anthropicKey: ANTHROPIC_KEY,
+                userId: job.user_id,
+                payload: job.payload,
+              });
+              break;
+            case 'create':
+            case 'dlt':
+              throw new Error(`dispatcher_not_implemented:${job.source}`);
+            default:
+              throw new Error(`unknown_source:${job.source}`);
+          }
 
-        if (isDead) {
           await supabase
             .from('dream_queue')
             .update({
-              status: 'dead_letter',
-              attempt_count: nextAttempt,
-              last_error: message,
+              status: 'completed',
               completed_at: new Date().toISOString(),
+              upload_id: uploadId,
+              last_error: null,
             })
             .eq('id', job.id);
-          return { id: job.id, status: 'dead_letter', ms: Date.now() - jobT0, error: message };
+          return { id: job.id, status: 'completed', ms: Date.now() - jobT0 };
+        } catch (err) {
+          const message = ((err as Error).message ?? 'unknown').slice(0, 1000);
+          // NSFW/safety rejections are terminal — a retry re-runs a doomed (and
+          // costly) render. Dead-letter immediately.
+          const isNsfw = message.startsWith('nsfw:');
+          const nextAttempt = job.attempt_count + 1;
+          const isDead = isNsfw || nextAttempt >= MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
+
+          console.error(
+            `[worker:${workerId}] Job ${job.id} failed (attempt ${nextAttempt}/${MAX_ATTEMPTS_BEFORE_DEAD_LETTER}${isNsfw ? ', terminal:nsfw' : ''}):`,
+            message.slice(0, 200)
+          );
+
+          if (isDead) {
+            await supabase
+              .from('dream_queue')
+              .update({
+                status: 'dead_letter',
+                attempt_count: nextAttempt,
+                last_error: message,
+                completed_at: new Date().toISOString(),
+              })
+              .eq('id', job.id);
+            return { id: job.id, status: 'dead_letter', ms: Date.now() - jobT0, error: message };
+          }
+
+          // Exponential backoff: push created_at into the future so the claim
+          // RPC's `created_at <= now()` gate holds the job until the delay elapses.
+          const backoffMs = BACKOFF_MS[Math.min(nextAttempt - 1, BACKOFF_MS.length - 1)];
+          const retryAt = new Date(Date.now() + backoffMs).toISOString();
+          await supabase
+            .from('dream_queue')
+            .update({
+              status: 'queued',
+              attempt_count: nextAttempt,
+              last_error: message,
+              started_at: null,
+              worker_id: null,
+              created_at: retryAt,
+            })
+            .eq('id', job.id);
+          return {
+            id: job.id,
+            status: `retry_in_${Math.round(backoffMs / 1000)}s`,
+            ms: Date.now() - jobT0,
+            error: message,
+          };
         }
+      })
+    );
 
-        // Exponential backoff: push created_at into the future so the claim
-        // RPC's `created_at <= now()` gate holds the job until the delay elapses.
-        const backoffMs = BACKOFF_MS[Math.min(nextAttempt - 1, BACKOFF_MS.length - 1)];
-        const retryAt = new Date(Date.now() + backoffMs).toISOString();
-        await supabase
-          .from('dream_queue')
-          .update({
-            status: 'queued',
-            attempt_count: nextAttempt,
-            last_error: message,
-            started_at: null,
-            worker_id: null,
-            created_at: retryAt,
-          })
-          .eq('id', job.id);
-        return {
-          id: job.id,
-          status: `retry_in_${Math.round(backoffMs / 1000)}s`,
-          ms: Date.now() - jobT0,
-          error: message,
-        };
-      }
-    })
-  );
+    const elapsed = Date.now() - t0;
+    console.log(
+      `[worker:${workerId}] Tick complete in ${elapsed}ms — processed ${results.length} jobs`
+    );
+  };
 
-  const elapsed = Date.now() - t0;
-  console.log(
-    `[worker:${workerId}] Tick complete in ${elapsed}ms — processed ${results.length} jobs`
-  );
+  // Run the tick as a BACKGROUND task so we ack the trigger (pg_cron's pg_net)
+  // immediately. Otherwise the worker holds the request open for the whole
+  // batch; pg_net's short timeout disconnects and the isolate is reaped at the
+  // 150s idle limit (IDLE_TIMEOUT), killing in-flight renders. waitUntil keeps
+  // the isolate alive (up to wall-clock) to finish the batch after responding.
+  // Per-job marking + stale-recovery make a reaped mid-batch isolate safe.
+  const edgeRuntime = (
+    globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } }
+  ).EdgeRuntime;
+  if (edgeRuntime?.waitUntil) {
+    edgeRuntime.waitUntil(runTick());
+  } else {
+    // No background-task API (e.g. local/test invoking and holding the
+    // connection) — run inline.
+    await runTick();
+  }
 
-  return new Response(
-    JSON.stringify({
-      worker_id: workerId,
-      elapsed_ms: elapsed,
-      processed: results,
-    }),
-    { status: 200, headers: { 'Content-Type': 'application/json' } }
-  );
+  return new Response(JSON.stringify({ accepted: true, worker_id: workerId }), {
+    status: 202,
+    headers: { 'Content-Type': 'application/json' },
+  });
 });
