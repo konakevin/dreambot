@@ -102,7 +102,10 @@ interface RequestBody {
   use_exact_prompt?: boolean;
 }
 
-Deno.serve(async (req) => {
+// The full request handler. Wrapped (below) so the render survives the client
+// disconnecting — a user who taps "Queue This" and then backgrounds/kills the
+// app must still get their dream rendered, persisted, and notified.
+async function handleRequest(req: Request): Promise<Response> {
   // CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', {
@@ -278,15 +281,21 @@ Deno.serve(async (req) => {
   const todayCount = budgetRow?.images_generated ?? 0;
 
   // ── Create dream job (queue tracking) ──────────────────────────────────
+  // Upsert (ignoreDuplicates), NOT insert: "Queue This" can pre-create this row
+  // via request_dream_notification (migration 195) with notify_on_complete=true
+  // before we get here. A plain insert would PK-conflict and a clobbering write
+  // could reset that flag. ignoreDuplicates makes this a no-op if the row
+  // already exists, so a queued dream's notify flag survives the race.
   if (jobId) {
     try {
-      await supabase.from('dream_jobs').insert({
-        id: jobId,
-        user_id: userId,
-        status: 'processing',
-      });
+      await supabase
+        .from('dream_jobs')
+        .upsert(
+          { id: jobId, user_id: userId, status: 'processing' },
+          { onConflict: 'id', ignoreDuplicates: true }
+        );
     } catch (err) {
-      console.warn('[generate-dream] Job insert failed (non-critical):', (err as Error).message);
+      console.warn('[generate-dream] Job upsert failed (non-critical):', (err as Error).message);
     }
   }
 
@@ -1374,7 +1383,14 @@ Output ONLY the prompt.`;
             })
             .then(
               () => {},
-              () => {}
+              // No longer swallowed: the inbox row is the guaranteed delivery
+              // backstop (push rides on it via migration 196), so a failed
+              // insert is a real silent-notification failure worth surfacing.
+              (e: unknown) =>
+                console.error(
+                  '[generate-dream] completion notification insert FAILED:',
+                  (e as Error).message
+                )
             )
         : Promise.resolve(),
     ]);
@@ -1499,8 +1515,13 @@ Output ONLY the prompt.`;
             ? `dream:Your dream couldn't render — sparkle refunded (${refundClass})`
             : `dream:Your dream couldn't render (${refundClass})`,
         });
-      } catch {
-        /* non-critical */
+      } catch (notifyErr) {
+        // No longer silent: this is the user's only signal their dream failed
+        // (and was refunded) if they abandoned the loading screen.
+        console.error(
+          '[generate-dream] dream_failed notification insert FAILED:',
+          (notifyErr as Error).message
+        );
       }
     }
 
@@ -1516,6 +1537,26 @@ Output ONLY the prompt.`;
       { status: 500 }
     );
   }
+}
+
+// Durability wrapper: register the in-flight request with EdgeRuntime.waitUntil
+// so the Supabase isolate keeps running the render→persist→notify work even if
+// the client disconnects (app backgrounded/killed after "Queue This"). A
+// still-connected client gets the response normally via `return task`; a
+// disconnected one just has its response discarded while the work completes in
+// the background and fires the completion notification. waitUntil/await share
+// the SAME promise — no double-run. ~24s renders fit well under the 150s/400s
+// background wall-clock. handleRequest never rejects (its outer try/catch
+// always returns a Response), so the .catch is belt-and-suspenders.
+Deno.serve((req) => {
+  const task = handleRequest(req);
+  const edgeRuntime = (
+    globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } }
+  ).EdgeRuntime;
+  if (edgeRuntime && edgeRuntime.waitUntil) {
+    edgeRuntime.waitUntil(task.catch(() => {}));
+  }
+  return task;
 });
 
 // ── Failure classification ────────────────────────────────────────────

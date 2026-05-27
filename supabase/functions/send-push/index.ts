@@ -79,6 +79,15 @@ function getNotificationContent(type: string, actorName: string, body: string | 
 
 Deno.serve(async (req) => {
   try {
+    // Caller auth: this function is invoked by the notifications-INSERT trigger
+    // (migration 196) via pg_net, which passes the shared worker token. Reject
+    // anything else so a leaked URL can't be used to spam pushes to any user.
+    // Reuses DREAM_QUEUE_WORKER_TOKEN (same secret the queue worker validates).
+    const expectedToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
+    if (!expectedToken || req.headers.get('Authorization') !== `Bearer ${expectedToken}`) {
+      return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401 });
+    }
+
     const payload: WebhookPayload = await req.json();
     const { record } = payload;
 
@@ -132,7 +141,25 @@ Deno.serve(async (req) => {
     });
 
     const pushResult = await pushResponse.json();
-    console.log('[Push] Sent:', JSON.stringify(pushResult));
+
+    // Surface failures loudly (Edge logs) so a degraded push pipeline isn't
+    // silent. Expo returns one ticket per message; status:'error' = that device
+    // failed (commonly DeviceNotRegistered for a stale token). A non-ok HTTP
+    // response = the whole batch failed (e.g. Expo outage / bad request). The
+    // in-app inbox row still delivered regardless — this logging is for
+    // operability, not user delivery. (Stale-token pruning + a fail-loud CI
+    // monitor are a tracked follow-up; a row-count monitor today would
+    // false-alarm on known stale tokens.)
+    const tickets = Array.isArray(pushResult?.data) ? pushResult.data : [];
+    const errorTickets = tickets.filter((t: { status?: string }) => t && t.status === 'error');
+    if (!pushResponse.ok || errorTickets.length > 0) {
+      console.error(
+        `[Push] FAILURES for ${record.recipient_id} (type=${record.type}): httpOk=${pushResponse.ok}, ${errorTickets.length}/${tickets.length} tickets errored:`,
+        JSON.stringify(errorTickets.length ? errorTickets : pushResult)
+      );
+    } else {
+      console.log('[Push] Sent:', JSON.stringify(pushResult));
+    }
 
     return new Response(JSON.stringify({ sent: messages.length }), { status: 200 });
   } catch (err) {

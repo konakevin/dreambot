@@ -603,6 +603,26 @@ Kevin runs the app via the `dreambot` zsh function (in his `~/.zshrc`, NOT the r
 
 Full observability picture (this + the AI-failure / dream-queue CI monitors): `memory/project_observability_setup.md`.
 
+### Product Analytics (PostHog)
+
+`posthog-react-native`, wired in `lib/posthog.ts` (gated client + `capture`/`identifyUser`/`resetAnalytics`), `lib/analytics.ts` (20 typed product-event wrappers — the ONLY explicit events; screen views + tap autocapture are automatic via `_layout.tsx` ScreenTracker + PostHogProvider). Event → call-site map: `ANALYTICS_PLAN.md`.
+
+- **Same gating as Sentry:** active only when `EXPO_PUBLIC_POSTHOG_KEY` is set AND `!__DEV__`. Debug builds send nothing — **test with `dreambot --release`**. Native module → ships with a rebuild, not OTA.
+- **Every event is tagged `environment` (`local`/`preview`/`production`)** via `posthog.register({ environment: APP_ENV })` (`EXPO_PUBLIC_APP_ENV`, default `local`) so local test events stay out of production dashboards. Caveat: `register()` persists the super-property async, so the earliest cold-start SDK lifecycle/autocapture events (`Application Installed`, first `$screen`/`$identify`) can miss the tag; custom `capture()` events fire well after launch and are reliably tagged.
+- **PENDING:** add `EXPO_PUBLIC_POSTHOG_KEY` to EAS envs (only `.env.local` has it so far) before cloud builds emit analytics.
+
+**PostHog MCP (for Claude):** project-scoped MCP server defined in `.mcp.json` (`https://mcp.posthog.com/mcp`, OAuth — `/mcp` → posthog to authenticate), pre-approved via `.claude/settings.json` `enabledMcpjsonServers`. Bound to PostHog project **DreamBot** (id 442133). Use it to validate/query events: discover with `search`/`tools`, `info <tool>` before any `call`, then `read-data-schema` (kind `events`) for the taxonomy or `execute-sql` / `query-*` for data. Quick "are events flowing" check: `execute-sql` count over `events` in the last few hours grouped by `event` + `properties.environment`.
+
+### Notifications & Push Delivery
+
+Two layers — **in-app inbox** (the `notifications` table → polled/realtime by `useInbox`, drives the tab badge) and **push banners** (`send-push` Edge Function → Expo). The inbox row is the **guaranteed delivery backstop**; push rides on top of it.
+
+- **Push is fired by a DB trigger, NOT inline code.** `trg_notify_send_push` (migration `196`) runs `AFTER INSERT ON notifications` → `net.http_post` (pg_net) to `send-push`, wrapping the row as `{type,table,record}`. Fires for **every** notification type. So to send any push, just insert a `notifications` row — never call `send-push` directly. (History: `send-push` had **zero callers for the whole app lifetime** — no push ever fired, only the inbox badge — until migration 196. Don't let this regress; it's versioned now so it can't silently vanish like the pre-193 queue cron did.)
+- **`send-push` auth:** validates `Authorization: Bearer <DREAM_QUEUE_WORKER_TOKEN>` (the token the trigger reads from Vault `dream_queue_worker_token`). Same secret the queue worker uses — keep the Vault secret and the `DREAM_QUEUE_WORKER_TOKEN` edge secret in sync or push 401s.
+- **Dream completion notifications** (`generate-dream` / `restyle-photo`) are **opt-in**: only sent when the user tapped "Queue This" (sets `dream_jobs.notify_on_complete`). A user who WAITS on the loading screen gets no ping. The flag is set by `request_dream_notification` — an **idempotent upsert** (migration `195`) so it lands even if tapped before the server inserts the job row (the original silent-failure race). Gate: `_shared/notify.ts:shouldSendCompletionNotification`.
+- **Render durability:** both functions wrap their handler in `EdgeRuntime.waitUntil(task)` (then `await` the same promise for connected clients) so a user who queues a dream and then **backgrounds/kills the app** still gets it rendered, persisted, and notified — the connection dropping no longer aborts the render. Renders (~24s) fit the 150s/400s background wall-clock; did NOT build a `dream_queue` create/dlt dispatcher (queue scale-arch is deferred — see Scaling Initiative).
+- **No silent failures:** notification-insert errors are logged (not swallowed); the client RPC retries once. **Known follow-up (not done):** `send-push` blasts ALL of a user's `push_tokens` (stale ones included) — needs Expo-receipt-based pruning on `DeviceNotRegistered`, which also unblocks a fail-loud push-failure CI monitor. Full writeup: `memory/project_notification_system_fix.md`.
+
 ### Database Migrations
 
 Files in `supabase/migrations/`. Run manually in Supabase dashboard SQL editor. `get_feed` RPC must be DROPped before recreating.

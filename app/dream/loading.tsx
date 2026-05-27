@@ -129,12 +129,25 @@ export default function DreamLoadingScreen() {
     // before we clear it below. Best-effort: a failure just means no push.
     const jobId = useDreamStore.getState().activeJobId;
     if (jobId) {
-      supabase.rpc('request_dream_notification', { p_job_id: jobId }).then(
-        () => {},
-        (e) => {
-          if (__DEV__) console.warn('[loading] request_dream_notification failed', e);
+      // Retry once: this flag drives the completion notification, so a transient
+      // network blip here would SILENTLY cost the user their "we'll notify you"
+      // ping. The RPC is an idempotent upsert (migration 195), so re-running it
+      // is safe. Fire-and-forget — we don't block the user leaving on it.
+      void (async () => {
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            const { error } = await supabase.rpc('request_dream_notification', {
+              p_job_id: jobId,
+            });
+            if (!error) return;
+            if (attempt === 1 && __DEV__)
+              console.warn('[loading] request_dream_notification failed (after retry)', error);
+          } catch (e) {
+            if (attempt === 1 && __DEV__)
+              console.warn('[loading] request_dream_notification threw (after retry)', e);
+          }
         }
-      );
+      })();
     }
     // Clear the active job so the stale guard in useDreamCreate discards the result
     useDreamStore.getState().setActiveJobId(null);

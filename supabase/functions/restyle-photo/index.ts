@@ -39,7 +39,11 @@ interface RestyleRequest {
   vibe_profile?: VibeProfile;
 }
 
-Deno.serve(async (req) => {
+// The full request handler. Wrapped (below) with EdgeRuntime.waitUntil so the
+// render survives the client disconnecting — a user who taps "Queue This" and
+// then backgrounds/kills the app must still get their photo restyled,
+// persisted, and notified.
+async function handleRequest(req: Request): Promise<Response> {
   // ── CORS preflight ──────────────────────────────────────────────────────
   if (req.method === 'OPTIONS') {
     return new Response('ok', {
@@ -157,13 +161,18 @@ Deno.serve(async (req) => {
   const todayCount = budgetRow && budgetRow.images_generated ? budgetRow.images_generated : 0;
 
   // ── Dream job tracking (best-effort) ────────────────────────────────────
+  // Upsert (ignoreDuplicates), NOT insert: "Queue This" can pre-create this row
+  // via request_dream_notification (migration 195) with notify_on_complete=true
+  // before we get here. A plain insert would PK-conflict and could reset that
+  // flag; ignoreDuplicates keeps the queued dream's notify flag intact.
   if (jobId) {
     try {
-      await supabase.from('dream_jobs').insert({
-        id: jobId,
-        user_id: userId,
-        status: 'processing',
-      });
+      await supabase
+        .from('dream_jobs')
+        .upsert(
+          { id: jobId, user_id: userId, status: 'processing' },
+          { onConflict: 'id', ignoreDuplicates: true }
+        );
     } catch {
       /* non-critical — job tracking is best-effort */
     }
@@ -455,7 +464,14 @@ Deno.serve(async (req) => {
             })
             .then(
               () => {},
-              () => {}
+              // No longer swallowed: the inbox row is the guaranteed delivery
+              // backstop (push rides on it via migration 196), so a failed
+              // insert is a real silent-notification failure worth surfacing.
+              (e: unknown) =>
+                console.error(
+                  '[restyle-photo] completion notification insert FAILED:',
+                  (e as Error).message
+                )
             )
         : Promise.resolve(),
     ]);
@@ -560,8 +576,13 @@ Deno.serve(async (req) => {
             ? `dream:Your dream couldn't render — sparkle refunded (${refundClass})`
             : `dream:Your dream couldn't render (${refundClass})`,
         });
-      } catch {
-        /* non-critical */
+      } catch (notifyErr) {
+        // No longer silent: the user's only signal their dream failed + was
+        // refunded if they left the loading screen.
+        console.error(
+          '[restyle-photo] dream_failed notification insert FAILED:',
+          (notifyErr as Error).message
+        );
       }
     }
 
@@ -577,6 +598,24 @@ Deno.serve(async (req) => {
       { status: 500 }
     );
   }
+}
+
+// Durability wrapper: register the in-flight request with EdgeRuntime.waitUntil
+// so the isolate keeps running the render→persist→notify work even if the
+// client disconnects (app backgrounded/killed after "Queue This"). Connected
+// client gets the response via `return task`; disconnected one's response is
+// discarded while the work finishes and fires the completion notification.
+// Same promise for waitUntil + return — no double-run. handleRequest never
+// rejects (outer try/catch always returns a Response).
+Deno.serve((req) => {
+  const task = handleRequest(req);
+  const edgeRuntime = (
+    globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } }
+  ).EdgeRuntime;
+  if (edgeRuntime && edgeRuntime.waitUntil) {
+    edgeRuntime.waitUntil(task.catch(() => {}));
+  }
+  return task;
 });
 
 function classifyFailure(errMsg: string): string {
