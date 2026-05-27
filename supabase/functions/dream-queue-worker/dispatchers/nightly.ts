@@ -36,7 +36,16 @@ export interface NightlyDispatcherArgs {
   payload: Record<string, unknown>;
 }
 
-const swallow = () => {};
+// Notifications here are best-effort — they must never fail the job (already
+// done or dead-lettered). But log failures to the Edge logs rather than
+// silently dropping them. Handles both a resolved `{ error }` and a thrown err.
+const swallow = (resOrErr: unknown) => {
+  const err = (resOrErr as { error?: { message?: string } | null } | null)?.error;
+  if (err) console.warn('[nightly] notification insert failed:', err.message);
+  else if (resOrErr instanceof Error) {
+    console.warn('[nightly] notification insert threw:', resOrErr.message);
+  }
+};
 
 export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<string> {
   const { supabase, supabaseUrl, workerToken, anthropicKey, userId } = args;

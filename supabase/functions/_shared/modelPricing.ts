@@ -35,6 +35,8 @@
  *   5. Mirror in `constants/imageModels.ts`
  */
 
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
 const DEFAULT_SPARKLE_COST = 1;
 const DEFAULT_COST_CENTS = 5;
 
@@ -114,8 +116,7 @@ let dbCostCache: Map<string, { sparkle: number; cents: number }> | null = null;
 let dbCacheTs = 0;
 const DB_CACHE_TTL_MS = 60_000;
 
-// deno-lint-ignore no-explicit-any
-export async function loadModelCosts(supabase: any): Promise<void> {
+export async function loadModelCosts(supabase: SupabaseClient): Promise<void> {
   const now = Date.now();
   if (dbCostCache && now - dbCacheTs <= DB_CACHE_TTL_MS) return;
   try {

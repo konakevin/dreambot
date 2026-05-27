@@ -17,6 +17,7 @@
  */
 
 // deno-lint-ignore-file no-explicit-any
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { decodeImage, encodeJpeg } from './imageCodec.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;
@@ -108,8 +109,7 @@ const FACE_SWAP_MODELS: FaceSwapModel[] = [
  */
 async function perturbSourceImage(
   sourceImageUrl: string,
-  // deno-lint-ignore no-explicit-any
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string
 ): Promise<{ url: string; path: string }> {
   const resp = await fetch(sourceImageUrl);
@@ -144,8 +144,7 @@ async function faceSwapOnce(
   sourceImageUrl: string,
   targetImageUrl: string,
   replicateToken: string,
-  // deno-lint-ignore no-explicit-any
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   model: FaceSwapModel,
   maxWaitMs: number = DEFAULT_MAX_WAIT_MS
@@ -207,7 +206,7 @@ async function faceSwapOnce(
       supabase.storage
         .from('uploads')
         .remove([perturbedPath as string])
-        .catch(() => {});
+        .catch((e) => console.warn('[faceSwap] temp-storage cleanup failed:', e));
     }
   }
 }
@@ -260,8 +259,7 @@ export async function faceSwap(
   sourceImageUrl: string,
   targetImageUrl: string,
   replicateToken: string,
-  // deno-lint-ignore no-explicit-any
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   opts?: { maxWaitMs?: number; retry?: boolean }
 ): Promise<string> {
@@ -443,7 +441,7 @@ export async function dualFaceSwap(
   rightSourceUrl: string,
   targetImageUrl: string,
   replicateToken: string,
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   deadlineMs?: number
 ): Promise<string> {

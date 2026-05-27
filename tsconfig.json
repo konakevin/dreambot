@@ -18,6 +18,7 @@
     "__tests__/lib/expressionRule.test.ts",
     "__tests__/lib/modelPricing.test.ts",
     "__tests__/lib/dualGenderRouting.test.ts",
-    "__tests__/lib/upscaleCaching.test.ts"
+    "__tests__/lib/upscaleCaching.test.ts",
+    "__tests__/lib/cleanMedium.test.ts"
   ]
 }

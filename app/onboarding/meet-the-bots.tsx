@@ -63,7 +63,9 @@ export default function MeetTheBotsScreen() {
   // Mark the screen as seen the moment we render — this is the user's
   // explicit visit, even if they bounce out without following anyone.
   useEffect(() => {
-    AsyncStorage.setItem(SEEN_BOT_INTRO_KEY, '1').catch(() => {});
+    AsyncStorage.setItem(SEEN_BOT_INTRO_KEY, '1').catch((e) => {
+      if (__DEV__) console.warn('[meet-the-bots] seen-flag persist failed', e);
+    });
   }, []);
 
   // Pull the user's aesthetics so we can sort the bot list by relevance.

@@ -27,7 +27,9 @@ const useAdminPrefsStore = create<AdminPrefsState>((set) => ({
   hydrated: false,
   setShowAdminDeleteButton: (next) => {
     set({ showAdminDeleteButton: next });
-    AsyncStorage.setItem(KEY_SHOW_ADMIN_DELETE, next ? '1' : '0').catch(() => {});
+    AsyncStorage.setItem(KEY_SHOW_ADMIN_DELETE, next ? '1' : '0').catch((e) => {
+      if (__DEV__) console.warn('[adminPrefs] persist failed', e);
+    });
   },
   hydrate: async () => {
     try {

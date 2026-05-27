@@ -117,12 +117,16 @@ export default function CreateScreen() {
       .then((val) => {
         if (val === '1') setUseExactPrompt(true);
       })
-      .catch(() => {});
+      .catch((e) => {
+        if (__DEV__) console.warn('[create] pref persist failed', e);
+      });
   }, [setUseExactPrompt]);
   const toggleUseExactPrompt = useCallback(
     (next: boolean) => {
       setUseExactPrompt(next);
-      AsyncStorage.setItem(USE_EXACT_PROMPT_KEY, next ? '1' : '0').catch(() => {});
+      AsyncStorage.setItem(USE_EXACT_PROMPT_KEY, next ? '1' : '0').catch((e) => {
+        if (__DEV__) console.warn('[create] pref persist failed', e);
+      });
     },
     [setUseExactPrompt]
   );
@@ -140,7 +144,9 @@ export default function CreateScreen() {
         setTimeout(() => {
           if (cancelled) return;
           Toast.show(`1 sparkle = 1 dream. You've got ${sparkleBalance}.`, 'sparkles');
-          AsyncStorage.setItem(SEEN_SPARKLE_HINT_KEY, '1').catch(() => {});
+          AsyncStorage.setItem(SEEN_SPARKLE_HINT_KEY, '1').catch((e) => {
+            if (__DEV__) console.warn('[create] pref persist failed', e);
+          });
         }, 700);
       } catch {
         // Toast is non-critical; silent fail

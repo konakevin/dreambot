@@ -198,7 +198,9 @@ export default function SettingsScreen() {
                       supabase.storage
                         .from('avatars')
                         .remove([`${user!.id}/avatar.jpg`])
-                        .catch(() => {});
+                        .catch((e) => {
+                          if (__DEV__) console.warn('[settings] storage cleanup failed', e);
+                        });
                       await supabase.from('users').update({ avatar_url: null }).eq('id', user!.id);
                       await supabase.auth.updateUser({ data: { avatar_url: null } });
                       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
@@ -336,7 +338,9 @@ export default function SettingsScreen() {
                         await supabase.storage
                           .from('uploads')
                           .remove(paths.slice(i, i + 100))
-                          .catch(() => {});
+                          .catch((e) => {
+                            if (__DEV__) console.warn('[settings] storage cleanup failed', e);
+                          });
                       }
                     }
 
@@ -357,7 +361,9 @@ export default function SettingsScreen() {
                       await supabase.storage
                         .from('avatars')
                         .remove(avatarPaths)
-                        .catch(() => {});
+                        .catch((e) => {
+                          if (__DEV__) console.warn('[settings] storage cleanup failed', e);
+                        });
                     }
 
                     const { error } = await supabase.rpc('delete_own_account');

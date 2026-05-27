@@ -254,7 +254,9 @@ export function DreamCastStep({ onNext, onBack }: Props) {
             supabase.storage
               .from('avatars')
               .remove([decodeURIComponent(match[1])])
-              .catch(() => {});
+              .catch((e) => {
+                if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
+              });
           }
         }
         removeCastMember(m.role);
@@ -324,7 +326,9 @@ export function DreamCastStep({ onNext, onBack }: Props) {
           supabase.storage
             .from('avatars')
             .remove([decodeURIComponent(m[1])])
-            .catch(() => {});
+            .catch((e) => {
+              if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
+            });
       }
 
       // Show the photo immediately (spinner stays on until describe completes)
@@ -368,7 +372,9 @@ export function DreamCastStep({ onNext, onBack }: Props) {
         supabase.storage
           .from('avatars')
           .remove([path])
-          .catch(() => {});
+          .catch((e) => {
+            if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
+          });
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
         showAlert(
           'Photo not recognized',
@@ -426,7 +432,9 @@ export function DreamCastStep({ onNext, onBack }: Props) {
       supabase.storage
         .from('avatars')
         .remove([decodeURIComponent(m[1])])
-        .catch(() => {});
+        .catch((e) => {
+          if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
+        });
     }
   }
 

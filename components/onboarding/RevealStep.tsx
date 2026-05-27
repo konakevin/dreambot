@@ -16,6 +16,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
+import { saveVibeProfile } from '@/lib/saveVibeProfile';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -144,17 +145,7 @@ export function RevealStep({ onBack }: Props) {
 
       // Save the profile with descriptions so they persist in the database
       if (user) {
-        await supabase.from('user_recipes').upsert(
-          {
-            user_id: user.id,
-            recipe: JSON.parse(JSON.stringify(profileWithDescriptions)),
-            onboarding_completed: true,
-            ai_enabled: true,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'user_id' }
-        );
-        await supabase.from('users').update({ has_ai_recipe: true }).eq('id', user.id);
+        await saveVibeProfile(user.id, profileWithDescriptions);
       }
 
       await bootPromise;
@@ -256,18 +247,7 @@ export function RevealStep({ onBack }: Props) {
       // otherwise fall back to raw profile. NEVER save profile with empty cast descriptions
       // over one that already has them.
       const profileToSave = describedProfile.current ?? profile;
-      await supabase.from('user_recipes').upsert(
-        {
-          user_id: user.id,
-          recipe: JSON.parse(JSON.stringify(profileToSave)),
-          onboarding_completed: true,
-          ai_enabled: true,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_id' }
-      );
-
-      await supabase.from('users').update({ has_ai_recipe: true }).eq('id', user.id);
+      await saveVibeProfile(user.id, profileToSave);
 
       const { data: insertedRow, error: uploadError } = await supabase
         .from('uploads')
@@ -363,16 +343,7 @@ export function RevealStep({ onBack }: Props) {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
               try {
                 const profileToSave = describedProfile.current ?? profile;
-                await supabase.from('user_recipes').upsert(
-                  {
-                    user_id: user.id,
-                    recipe: JSON.parse(JSON.stringify(profileToSave)),
-                    onboarding_completed: true,
-                    ai_enabled: true,
-                    updated_at: new Date().toISOString(),
-                  },
-                  { onConflict: 'user_id' }
-                );
+                await saveVibeProfile(user.id, profileToSave);
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 Toast.show('Profile saved!', 'checkmark-circle');
                 reset();

@@ -216,8 +216,8 @@ Deno.serve(async (req) => {
       }
     })().catch((e) => console.error('[upscale-image] upscale task threw:', (e as Error).message));
 
-    // deno-lint-ignore no-explicit-any
-    const er = (globalThis as any).EdgeRuntime;
+    const er = (globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } })
+      .EdgeRuntime;
     if (er?.waitUntil) er.waitUntil(task);
   }
 

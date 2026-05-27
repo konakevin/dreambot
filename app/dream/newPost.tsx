@@ -26,6 +26,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { pinToFeed } from '@/lib/dreamSave';
+import { moderateText } from '@/lib/moderation';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
 
@@ -46,12 +47,24 @@ export default function NewPostScreen() {
     if (!user || !uploadId || posting) return;
     setPosting(true);
     try {
+      // Moderate the public description — same wordlist gate every other
+      // user-facing free-text field uses (comments, wishes, prompts, username).
+      const trimmed = description.trim();
+      if (trimmed) {
+        const mod = await moderateText(trimmed);
+        if (!mod.passed) {
+          Toast.show(mod.reason ?? "This contains language we don't allow.", 'close-circle');
+          setPosting(false);
+          return;
+        }
+      }
+
       const { error } = await supabase
         .from('uploads')
         .update({
           is_public: true,
           posted_at: new Date().toISOString(),
-          description: description.trim() || null,
+          description: trimmed || null,
         })
         .eq('id', uploadId)
         .eq('user_id', user.id);

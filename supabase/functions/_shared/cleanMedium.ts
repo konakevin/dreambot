@@ -15,6 +15,8 @@
  * medium is returned UNCHANGED — DLT falls back to the raw bot medium.
  */
 
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
 export interface CleanMediumRow {
   medium_key: string;
   clean_flux_fragment: string | null;
@@ -57,8 +59,7 @@ export function applyCleanMedium<M extends CleanableMedium>(
  * what gets unit-tested.
  */
 export async function fetchCleanMedium(
-  // deno-lint-ignore no-explicit-any
-  sb: any,
+  sb: SupabaseClient,
   key: string | undefined | null
 ): Promise<CleanMediumRow | null> {
   if (!key) return null;

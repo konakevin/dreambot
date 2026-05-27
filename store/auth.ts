@@ -125,7 +125,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     supabase.auth.getSession().then(async ({ data: { session }, error }) => {
       if (error?.message?.toLowerCase().includes('refresh token')) {
-        await supabase.auth.signOut({ scope: 'local' }).catch(() => {});
+        await supabase.auth.signOut({ scope: 'local' }).catch((e) => {
+          if (__DEV__) console.warn('[auth] local signOut on stale refresh token failed', e);
+        });
         set({ session: null, user: null, initialized: true });
         return;
       }

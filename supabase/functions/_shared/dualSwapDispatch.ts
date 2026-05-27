@@ -18,6 +18,7 @@
  * auth flow transparent + debuggable.
  */
 
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dualFaceSwap } from './faceSwap.ts';
 
 export async function dispatchDualFaceSwap(
@@ -25,8 +26,7 @@ export async function dispatchDualFaceSwap(
   rightSourceUrl: string,
   targetImageUrl: string,
   replicateToken: string,
-  // deno-lint-ignore no-explicit-any
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   deadlineMs?: number
 ): Promise<string> {

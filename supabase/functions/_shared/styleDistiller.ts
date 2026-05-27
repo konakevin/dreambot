@@ -26,6 +26,7 @@
  * existing weaker filtering. Zero-regression scenario.
  */
 
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { HAIKU } from './models.ts';
 const HAIKU_MODEL = HAIKU;
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
@@ -121,8 +122,7 @@ interface DistillInput {
 export async function distillStyle(
   input: DistillInput,
   anthropicKey: string | undefined,
-  // deno-lint-ignore no-explicit-any
-  supabase: any
+  supabase: SupabaseClient
 ): Promise<string | null> {
   const { rawPrompt, mediumKey, vibeKey } = input;
   if (!anthropicKey) return null;
@@ -138,8 +138,10 @@ export async function distillStyle(
           .select('key, directive')
           .eq('key', mediumKey)
           .maybeSingle()
-          .then((r: { data: { key: string; directive: string } | null }) => r.data)
-          .catch(() => null)
+          .then(
+            (r: { data: { key: string; directive: string } | null }) => r.data,
+            () => null
+          )
       : Promise.resolve(null),
     vibeKey
       ? supabase
@@ -147,8 +149,10 @@ export async function distillStyle(
           .select('key, directive')
           .eq('key', vibeKey)
           .maybeSingle()
-          .then((r: { data: { key: string; directive: string } | null }) => r.data)
-          .catch(() => null)
+          .then(
+            (r: { data: { key: string; directive: string } | null }) => r.data,
+            () => null
+          )
       : Promise.resolve(null),
   ]);
 
