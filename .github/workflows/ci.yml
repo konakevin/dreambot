@@ -36,3 +36,36 @@ jobs:
 
       - name: Tests
         run: npx jest --ci
+
+  # Live-DB tests that need a real Postgres (ON CONFLICT / row-lock semantics
+  # can't be faked in jest). Runs the *.dbspec.ts suites against an ephemeral
+  # Postgres service container. The fixture loads the real DDL from the
+  # migration files, so no Supabase-only roles/extensions are required.
+  db-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+
+      - name: Live-DB tests (claim_upscale_job concurrency, etc.)
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: npm run test:dbspec -- --ci
