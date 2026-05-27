@@ -17,6 +17,7 @@ function load(name) {
 // Pool filenames convert to snake_case via toFile().
 const PATHS = [
   'macro-display',
+  'favorite-towns',
   'girly',
   'lego-masters',
   'western',
@@ -51,6 +52,18 @@ for (const p of PATHS) {
 // ─────────────────────────────────────────────────────────────
 
 const AXIS_POOLS = {
+  // favorite-towns path — bit-for-bit clone of macro-display (2026-05-27),
+  // forked to iterate independently. Identical pools to start.
+  BRICKBOT_FAVORITE_TOWNS_DIORAMA_THEME: load('brickbot_favorite_towns_diorama_theme'),
+  BRICKBOT_FAVORITE_TOWNS_BUILD_SCOPE: load('brickbot_favorite_towns_build_scope'),
+  BRICKBOT_FAVORITE_TOWNS_SIGNATURE_CENTERPIECE: load('brickbot_favorite_towns_signature_centerpiece'),
+  BRICKBOT_FAVORITE_TOWNS_CAMERA_FRAMING: load('brickbot_favorite_towns_camera_framing'),
+  BRICKBOT_FAVORITE_TOWNS_LIFE_DENSITY: load('brickbot_favorite_towns_life_density'),
+  BRICKBOT_FAVORITE_TOWNS_BASEPLATE_EDGE: load('brickbot_favorite_towns_baseplate_edge'),
+  BRICKBOT_FAVORITE_TOWNS_LIGHTING: load('brickbot_favorite_towns_lighting'),
+  BRICKBOT_FAVORITE_TOWNS_PALETTE: load('brickbot_favorite_towns_palette'),
+  BRICKBOT_FAVORITE_TOWNS_SURPRISE_EASTER_EGG: load('brickbot_favorite_towns_surprise_easter_egg'),
+
   // lego-masters path — thirteenth BrickBot axis migration (2026-05-27)
   BRICKBOT_LEGO_MASTERS_NARRATIVE_CONCEPT: load('brickbot_lego_masters_narrative_concept'),
   BRICKBOT_LEGO_MASTERS_DRAMATIC_BEAT: load('brickbot_lego_masters_dramatic_beat'),

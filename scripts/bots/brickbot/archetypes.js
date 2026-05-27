@@ -84,6 +84,28 @@ Bending advantage: scene_type × subject_focus × register × girly_phenomenon d
     anchorScaleRange: null,
   },
 
+  BRICKBOT_FAVORITE_TOWNS: {
+    description: `PATH-BESPOKE — BrickBot favorite-towns path (2026-05-27). BIT-FOR-BIT CLONE of BRICKBOT_MACRO_DISPLAY at its hearted deep-focus state, forked into its own path so it can be iterated independently without touching macro-display. Same 8 slots + conditional (diorama_theme / build_scope / signature_centerpiece / camera_framing / life_density / baseplate_edge / lighting / palette + surprise_easter_egg-50%). Starting point identical to macro-display; will diverge as Kevin iterates.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'diorama_theme',
+        'build_scope',
+        'signature_centerpiece',
+        'camera_framing',
+        'life_density',
+        'baseplate_edge',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'surprise_easter_egg', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BRICKBOT_MACRO_DISPLAY: {
     description: `PATH-BESPOKE — BrickBot macro-display path (2026-05-27 migration). THE COMPLETE-DIORAMA path — a pulled-back wide-camera view of an ENTIRE LEGO build sitting on a tabletop as a finished convention masterpiece, baseplate edges often visible, the whole scene a complete miniature world. Canon: Bricklink AFOL / LEGO World / Brickworld Best-of-Show convention dioramas + LEGO Ideas large display builds + modular-building streetscapes. This is the "behold the whole build" path — the OTHER paths frame a subject; this one frames a COMPLETE WORLD.
 

@@ -782,6 +782,219 @@ Each names the small hidden detail + where it hides. NO photoreal.`,
   },
 
   // ════════════════════════════════════════════════════════
+  // FAVORITE-TOWNS PATH (2026-05-27 — bit-for-bit clone of macro-display)
+  // Cloned so it can iterate independently. Identical recipes to start.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_favorite_towns_diorama_theme: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-DIORAMA THEMES — the whole world a macro-display build depicts. Each entry is ONE complete brick world, 30-55 words. The ENTIRE build is the subject (framing + centerpiece are separate axes — describe the whole world + its zones).
+
+⚠️ CRITICAL — the COMPLETE WORLD + its zones only. NO camera framing. NO single-centerpiece focus (separate axis). NO baseplate-edge. NO lighting. Just: what whole brick world fills the frame + how its zones connect.
+
+⚠️ EVERYTHING IS LEGO BRICK across the whole build. BANNED: photoreal, real [material], lifelike, realistic-miniature (say "brick-built miniature").
+
+VARIETY MANDATE — distribute across: alpine ski-village / mars-colony / ocean-port / medieval-castle-town / theme-park-layout / mountain-pass-with-cable-car / modern-city-block / space-dock / pirate-island-bay / train-yard / fantasy-realm / winter-holiday-village / desert-frontier-town / jungle-temple-complex / harbor-fishing-town / volcano-research-base / underwater-city / steampunk-metropolis / farm-valley / canal-town / arctic-research-station / fairy-forest-realm.
+
+Each entry: name the complete world in first 6-10 words; describe its CONNECTED ZONES (foreground → mid → background) as one whole brick build; imply density; NEVER framing, centerpiece, or lighting.`,
+    touchpoints: [
+      'ALPINE SKI-VILLAGE — a complete brick mountain-resort: timber chalets with white-plate snow-roofs clustered around a frozen-tile pond in the foreground, a chairlift climbing brick slopes mid-build, snow-capped slope-brick peaks at the back, all one connected world',
+      'MARS COLONY — a complete brick Mars base: trans-clear greenhouse domes + habitat-modules linked by tube-corridors on a rust-tan plate surface, a landing-pad with a rover, solar-array fields, a comms-tower, a fully-realized off-world settlement',
+      'OCEAN PORT — a complete brick harbor: stone-brick quays with moored ships in the foreground trans-blue water, warehouse + crane rows mid-build, a lighthouse on the point, a town climbing the hill behind, one bustling port world',
+      'MEDIEVAL CASTLE-TOWN — a complete brick realm: a walled town of timber-and-stone houses clustered below a great castle keep on a crag, a market square, a river with a bridge, farmland at the edges, one connected medieval world',
+      'THEME-PARK LAYOUT — a complete brick fairground: a roller-coaster looping over the whole build, a ferris-wheel + carousel + midway of stalls, paths threading crowds between rides, a parking-lot edge, one whole amusement-park world',
+      'MOUNTAIN-PASS CABLE-CAR — a complete brick alpine pass: a winding road + rail switchbacking up stacked-plate cliffs, a cable-car spanning a gorge, a hamlet at the saddle, a waterfall, snow-peaks above, one dramatic mountain world',
+      'MODERN CITY-BLOCK — a complete brick modular streetscape: multi-story facades with shops at street-level, a corner cafe, a subway-entrance, parked + moving vehicles, rooftop gardens, crowds on the sidewalks, one living city block',
+      'SPACE-DOCK — a complete brick orbital dockyard: gantry-arms cradling ships under construction, fuel-depot tanks, a control-tower, shuttle-traffic on clear rods, a starfield-baseplate backdrop, one busy space-port world',
+      'PIRATE ISLAND-BAY — a complete brick tropical bay: a moored galleon in trans-blue water, a palm-fringed beach with a fort on the headland, a hidden-cave + a treasure-dig, a shipwreck offshore, one whole pirate world',
+      'TRAIN-YARD — a complete brick rail-yard: a roundhouse + turntable with locomotives, parallel tracks of freight-cars, a station-platform with crowds, a signal-gantry, a freight-warehouse, one working railway world',
+      'FANTASY REALM — a complete brick fantasy land: an elven treetop city, a dwarven mountain-hold, a wizard-tower, a dragon-crag, linked by winding paths over a river-valley, one whole high-fantasy world',
+      'WINTER HOLIDAY-VILLAGE — a complete brick festive town: snow-roofed shops around a tree-lit square, a holiday-train circling the build, an ice-rink, a toy-workshop, string-lights everywhere, one cozy winter-village world',
+    ],
+    instructions: `Each entry is ONE complete brick world, 30-55 words. Format: "THEME NAME CAPS — body describing connected zones". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no camera framing, no single-centerpiece, no baseplate-edge, no lighting, no photoreal/lifelike vocabulary. Every element brick. The whole connected world + its zones only.`,
+  },
+
+  brickbot_favorite_towns_build_scope: {
+    format: 'simple',
+    theme: `LEGO MACRO-BUILD SCOPE — the scale + complexity signature of a complete-diorama build. Each entry 15-30 words, describing HOW the whole build is organized + how ambitious it reads.
+
+VARIETY: sprawling multi-zone modular layout / vertical-tiered tower-build / wide-landscape panorama diorama / cutaway-cross-section reveal / dense micro-scale city / GBC-functional working-build / interconnected modular-streetscape / island-on-a-baseplate / split-level upper-and-under (above + below ground) / radial-build-around-a-hub.
+
+Each names the organizing structure + a brick-scale cue (number of baseplates, zone-count, level-count). NO photoreal.`,
+    touchpoints: [
+      'A sprawling multi-zone modular layout spanning several baseplates, distinct connected districts (residential / market / waterfront) each densely built, the whole reading as a large coherent world',
+      'A vertical-tiered tower-build rising through many brick levels — street-base, mid-rise floors, rooftop — each level fully detailed and visible in a tall slender footprint',
+      'A wide-landscape panorama diorama, low and broad across several baseplates, terrain + structures receding into a deep brick distance, the epic-vista build',
+      'A cutaway-cross-section reveal — one face of the build sliced open to show interior floors / mine-shafts / decks layered behind the intact exterior, the AFOL display-cutaway',
+      'A dense micro-scale city packed onto a compact footprint, hundreds of micro-buildings + tiny vehicles, the whole metropolis legible at a glance, the obsessive micro-build',
+      'A GBC-functional working-build where parts visibly move (a turning wheel, a chain-lift, a flowing-element loop), the engineering as much the wow as the scenery',
+      'An interconnected modular-streetscape of several modular-building modules slotted side by side into a continuous brick street, each shop fully furnished inside',
+      'An island-on-a-baseplate, the whole world ringed by trans-blue water with a rockwork shore falling off the baseplate edge, a self-contained brick world',
+      'A split-level upper-and-under build, a surface world above and a cutaway cave / sewer / mine network below, two complete worlds stacked',
+      'A radial-build organized around a central hub (a plaza / a tree / a tower) with detailed districts radiating outward, the eye drawn in then out',
+    ],
+    instructions: `Each entry is ONE build-scope, 15-30 words. Format: prose naming the organizing structure + a brick-scale cue. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal; this is about how the WHOLE brick build is organized.`,
+  },
+
+  brickbot_favorite_towns_signature_centerpiece: {
+    format: 'simple',
+    theme: `LEGO MACRO-DIORAMA SIGNATURE CENTERPIECES — the dramatic focal wow that anchors a complete-diorama build. Each entry 15-30 words. The thing that makes a convention-goer stop.
+
+VARIETY: a towering castle keep / a launching rocket / a frozen crashing wave / a brick dragon mid-descent / a working ferris-wheel / a multi-tier waterfall / a train mid-bridge-cross / an erupting volcano / a grand cathedral / a colossal ancient tree / a lighthouse on a crag / a giant mech under construction / a crashed UFO / a great suspension-bridge / a tiered pagoda / a windmill.
+
+Each names the centerpiece + its brick build + why the eye locks on it. NO photoreal.`,
+    touchpoints: [
+      'A towering castle keep crowning the build on a stacked-plate crag, banner-tiles flying from its turrets, the tallest brick element drawing every sightline up to it',
+      'A launching rocket frozen mid-liftoff on the pad, a trans-orange flame-plume blasting down, gantry-arms swinging clear, the vertical drama anchoring the colony',
+      'A frozen crashing wave built in SNOT-curled trans-light-blue with white round-plate foam towering over the harbor, caught at the break, the kinetic centerpiece',
+      'A brick dragon mid-descent, wings spread on bar-armatures over the town, trans-orange fire-breath built toward a rooftop, the whole realm cowering beneath it',
+      'A working ferris-wheel turning at the build\'s heart, gondola-cabins ringed in trans-element lights, the rotating focal hub the fairground radiates from',
+      'A multi-tier waterfall of stepped trans-blue plates cascading down a stacked-plate cliff into a basin pool, white round-plate spray, the build\'s glittering centerpiece',
+      'A steam-train frozen mid-cross on a tall brick trestle-bridge spanning a gorge, smoke-plume rising, the dynamic centerpiece linking two halves of the build',
+      'An erupting volcano at the build\'s core, trans-orange + trans-red lava-element flows snaking down its slope-brick cone, a cotton ash-plume, the dramatic heart',
+      'A grand cathedral with soaring SNOT-built spires + a rose-window of trans-element plates, the sacred centerpiece towering over the medieval town around it',
+      'A colossal ancient tree built from a massive round-brick trunk with a plant-element canopy shading half the build, treehouses in its limbs, the living centerpiece',
+      'A lighthouse on a rockwork crag, its trans-yellow lamp sweeping over the harbor, the tall slender beacon anchoring the coastal world',
+      'A great brick suspension-bridge arcing across the whole diorama on cable-strung towers, traffic threading it, the engineering centerpiece spanning the build',
+    ],
+    instructions: `Each entry is ONE signature centerpiece, 15-30 words. Format: prose naming the centerpiece + its brick build + the eye-lock. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal; brick-built focal feature that anchors a complete diorama.`,
+  },
+
+  brickbot_favorite_towns_camera_framing: {
+    format: 'simple',
+    theme: `MACRO-DISPLAY CAMERA FRAMING — wide complete-build framings for the favorite-towns path. Each entry 15-30 words. ALWAYS shows the WHOLE diorama; never zooms into a single subject. DEEP-FOCUS edge-to-edge sharp — NEVER tilt-shift / miniature-blur.
+
+VARIETY MANDATE — distribute across: high-three-quarter aerial overview, eye-level along the baseplate-edge, corner-establishing showing two edges, top-down plan-view, hero three-quarter with edge-baseplate visible, dramatic low across the build, slow-establishing wide pull-back, deep-focus wide sweep.
+
+Each: specify camera POSITION + that it captures the WHOLE build; reference the complete-diorama read.`,
+    touchpoints: [
+      'HIGH-THREE-QUARTER AERIAL — camera high and angled down across the whole build, every zone laid out below from foreground to deep background, the master complete-diorama overview',
+      'EYE-LEVEL ALONG-THE-BASEPLATE — camera low at table-height raking across the build from one edge, deep front-to-back layering, the immersive walk-up-to-it convention view',
+      'CORNER-ESTABLISHING — camera at a build corner showing two baseplate edges receding, the full L-shaped extent of the world visible, the wide establishing angle',
+      'TOP-DOWN PLAN-VIEW — camera straight down, the whole diorama read as a complete brick map, every district + path legible, the architect\'s plan view',
+      'HERO THREE-QUARTER WITH EDGE-BASEPLATE — the classic convention-display angle, three-quarter from slightly above with the front baseplate-edge + title-brick visible, the whole build proud in frame',
+      'DRAMATIC LOW ACROSS-THE-BUILD — camera very low at one edge so the foreground structures tower and the build recedes dramatically to the centerpiece, depth-charged wide shot',
+      'DEEP-FOCUS WIDE SWEEP — camera wide with the whole build tack-sharp edge-to-edge, every zone in crisp focus from foreground to deep background, the convention-display clarity, never blurred',
+      'SLOW-ESTABLISHING WIDE PULL-BACK — the camera pulled fully back so the entire diorama + its display-base sit centered in frame with breathing room, the complete-masterpiece reveal',
+      'GENTLE-AERIAL-SWEEP — a slightly-angled near-overhead capturing the build\'s full sprawl with just enough obliqueness to read the heights of towers + the centerpiece',
+      'DIAGONAL-CORNER-DEPTH — camera at a corner shooting along the build\'s diagonal, the longest sightline through all the zones to the far centerpiece, maximal depth',
+    ],
+    instructions: `Each entry is ONE macro-display framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never a single-subject close-up — every entry shows the WHOLE build, DEEP-FOCUS edge-to-edge sharp. NEVER tilt-shift / miniature-blur / shallow-DOF. No photoreal vocabulary.`,
+  },
+
+  brickbot_favorite_towns_life_density: {
+    format: 'simple',
+    theme: `MACRO-DIORAMA LIFE DENSITY — how a complete-diorama world is populated + activated. Each entry 15-30 words. Makes the world read as LIVING, not an empty model.
+
+VARIETY: bustling micro-crowds + market-life / vehicles-and-trains-in-motion / quiet atmospheric few-figures / wildlife-and-nature dense / festival-or-battle massed-action / workaday street-life / harbor-and-shipping activity / tourists-and-sightseers / construction-in-progress / nighttime-few-lit-windows.
+
+Each names the population/activity + how it spreads across the build. Tiny minifigs, brick vehicles, brick creatures — never photoreal.`,
+    touchpoints: [
+      'Bustling micro-crowds + market-life — dozens of tiny minifigs massed through the streets + market-stalls, shoppers + vendors + buskers, the world humming with packed activity in every zone',
+      'Vehicles-and-trains-in-motion — brick cars threading the roads, a train mid-route, boats on the trans-blue water, the build kinetic with traffic frozen mid-movement throughout',
+      'Quiet atmospheric few-figures — only a scattered handful of minifigs (a lone walker, a fisher, a window-watcher), the world calm + contemplative, detail-rich but still',
+      'Wildlife-and-nature dense — brick birds + deer + fish + butterflies populating a nature-heavy build, animal life threaded through the landscape zones, a living ecosystem',
+      'Festival-or-battle massed-action — a huge crowd-event filling the build (a parade, a siege, a market-day), massed minifigs mid-action across the whole world, peak energy',
+      'Workaday street-life — minifigs going about ordinary business across the build (deliveries, repairs, commutes, shop-tending), the believable everyday rhythm of a real place',
+      'Harbor-and-shipping activity — dockworkers + cranes loading moored ships, carts on the quay, fishers mending nets, the working-port bustle spread along the waterfront',
+      'Tourists-and-sightseers — clusters of camera-toting minifig visitors at the build\'s landmarks + viewpoints, guides + souvenir-stalls, the destination-world read',
+      'Construction-in-progress — part of the build shown mid-construction with crane-builds + scaffold + worker-minifigs + material-stacks, the living-growing-world detail',
+      'Nighttime-few-lit-windows — a quiet night build with most of the world dark and a scattering of warm trans-element lit windows + a few late minifigs, the cozy-after-hours read',
+    ],
+    instructions: `Each entry is ONE life-density, 15-30 words. Format: prose naming the population/activity + its spread. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: minifigs + brick vehicles/creatures only, never photoreal people.`,
+  },
+
+  brickbot_favorite_towns_baseplate_edge: {
+    format: 'simple',
+    theme: `MACRO-DIORAMA BASEPLATE-EDGE TREATMENTS — the display-base edge that signals "this is a finished LEGO build on a table." Each entry 12-25 words. A deliberate charming feature of the favorite-towns path.
+
+VARIETY: visible stud-baseplate edge / finished tiled border / landscaped edge-falloff to bare studs / black display-base with a title-brick / multi-baseplate seams across the build / rockwork-cliff edge / water-edge trans-blue lip / brick-built retaining-wall edge / sloped grass-falloff edge / mirror-base reflecting the build.
+
+Each names the edge treatment + how it frames the build. NO photoreal.`,
+    touchpoints: [
+      'A visible green stud-baseplate edge running along the front of the build, the bare studs at the margin openly signalling the finished LEGO diorama on its table',
+      'A finished tiled border framing the whole build in smooth dark tiles, a clean display-edge that sets off the detailed world within like a picture-frame',
+      'A landscaped edge-falloff where the terrain tapers down to bare baseplate studs at the margins, the world dissolving naturally into the display-base',
+      'A black display-base with a printed title-brick at the front edge naming the build, the classic convention-presentation plinth under the diorama',
+      'Multi-baseplate seams visible across the build where several baseplates join, the modular construction honestly shown, a hallmark of a big AFOL diorama',
+      'A rockwork-cliff edge where the build sits on a stacked slope-brick mesa that drops sheer to the baseplate rim, the world raised on its own brick plateau',
+      'A trans-blue water-edge lip where the build\'s ocean/lake runs right to the baseplate margin and stops in a clean trans-plate edge, the water-world boundary',
+      'A brick-built retaining-wall edge ringing the diorama in a low stone-brick wall, containing the world like a raised display-bed',
+      'A sloped grass-falloff edge of green slopes tapering off the build\'s rim down to the table, a soft natural diorama boundary',
+      'A mirror-base under one side so the build\'s reflection doubles it at the edge, an AFOL display-trick extending the world downward',
+    ],
+    instructions: `Each entry is ONE baseplate-edge treatment, 12-25 words. Format: prose naming the edge treatment + how it frames the build. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal; this is the deliberate "tabletop LEGO build" display-edge signal.`,
+  },
+
+  brickbot_favorite_towns_lighting: {
+    format: 'simple',
+    theme: `MACRO-DISPLAY LIGHTING — light for a complete-diorama LEGO MOC photo. Each entry 15-30 words. Lights a whole TABLETOP BRICK DIORAMA — convention-display + studio macro lighting.
+
+VARIETY: convention-hall even-bright / dramatic spotlit-centerpiece / golden diorama-glow / dusk with all the build-lights ON / crisp deep-focus display light / morning soft-even / theatrical single-key / warm display-case glow.
+
+Each names SOURCE + how it reveals the whole build. NEVER photoreal-sun/lifelike language.`,
+    touchpoints: [
+      'Convention-hall even-bright light, a clean bright wash revealing every detail of the whole build evenly corner to corner, the honest display-photo lighting',
+      'Dramatic spotlit-centerpiece, a hard key picking out the signature centerpiece while the surrounding zones fall to a softer fill, the theatrical reveal',
+      'Golden diorama-glow, a warm low-angle light raking across the whole build gilding the rooftops + towers, long soft shadows, the magic-hour display shot',
+      'Dusk with all the build-lights ON, the diorama in deep-blue ambient with hundreds of warm trans-element windows + ride-lights + lamps glowing across the world, the night-build spectacle',
+      'Crisp deep-focus display light, a bright even key making every brick detail across the whole build pop in sharp edge-to-edge clarity, the clean convention-photo look',
+      'Morning soft-even light, a gentle cool-bright wash over the build with soft shadows, the fresh calm display mood',
+      'Theatrical single-key from one side, raking long dramatic shadows across the whole build for maximum relief + depth, the gallery-display drama',
+      'Warm display-case glow, a soft warm light as if from display-case spots above, the build glowing like a treasured museum piece on its plinth',
+      'High-noon top-light, a strong even overhead making colors pop across the whole build with short crisp shadows, the bright bold daytime read',
+      'Blue-hour transition, the build caught between daylight and lit-windows, cool sky-ambient with the first warm interior glows, the atmospheric dusk-display',
+    ],
+    instructions: `Each entry is ONE macro-display lighting setup, 15-30 words. Format: prose naming source + how it reveals the whole build. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal-sun/lifelike — it lights a tabletop brick diorama. DEEP-FOCUS — no tilt-shift / shallow-DOF.`,
+  },
+
+  brickbot_favorite_towns_palette: {
+    format: 'simple',
+    theme: `MACRO-DISPLAY PALETTE — the cohesive dominant color-story of a complete-diorama build. Each entry 12-25 words, naming 3-5 specific brick colors + the theme it suits.
+
+VARIETY (theme-cohesive): alpine white+timber+pine / mars rust+white+trans-cyan / port blue+sandstone+timber / castle grey+heraldic+timber / fairground neon+candy / city concrete-grey+glass+greenery / fantasy emerald+gold+stone / winter red+green+white+gold / desert ochre+tan+adobe / harbor navy+weathered-timber+stone / jungle green+stone+gold / steampunk brass+bronze+rust.
+
+Each names ACTUAL LEGO brick colors + a COHESIVE display read (the whole build hangs together).`,
+    touchpoints: [
+      'Alpine palette — snow-white + timber-brown + pine-green + slope-grey, a crisp cohesive mountain-resort color-story',
+      'Mars palette — rust-red + clean-white + trans-cyan + dark-bley, the off-world colony look',
+      'Port palette — harbor-blue + sandstone-tan + weathered-timber + grey, a coherent maritime color-story',
+      'Castle palette — stone-grey + heraldic red-and-gold + timber-brown, a unified medieval-realm look',
+      'Fairground palette — neon trans-multi + candy-pink + cream + navy, the cohesive amusement-park glow',
+      'City palette — concrete-grey + glass-blue + brick-red + greenery accents, a believable modern-block read',
+      'Fantasy palette — emerald + gold + ancient-stone-grey + amber, a cohesive high-fantasy realm',
+      'Winter-village palette — festive red + green + snow-white + gold, the warm cohesive holiday look',
+      'Desert palette — ochre + tan + adobe-brown + pale-azure, a unified frontier-town color-story',
+      'Steampunk palette — brass + bronze + rust + bottle-green, a cohesive retro-industrial metropolis',
+    ],
+    instructions: `Each entry is ONE macro-display palette, 12-25 words. Format: "NAME palette — colors + theme". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color; emphasize a COHESIVE whole-build read.`,
+  },
+
+  brickbot_favorite_towns_surprise_easter_egg: {
+    format: 'simple',
+    theme: `MACRO-DIORAMA EASTER-EGGS — the hidden second-look delight in a complete-diorama build. Each entry 15-30 words. SMALL — never dominates; rewards the eye that lingers.
+
+VARIETY: a brick dragon peeking from a cave / a tiny figure in comic peril (clinging to a ledge) / a hidden cat-on-a-roof / a working hidden-mechanism reveal / a sleeping giant half-buried / a message in a window / a tiny wedding / a runaway barrel / a fishing-minifig who caught a boot / a UFO behind a cloud / a sea-monster tail in the harbor / a couple kissing on a balcony / a thief mid-escape over rooftops.
+
+Each names the small hidden detail + where it hides. NO photoreal.`,
+    touchpoints: [
+      'A small brick dragon peeking from a dark cave-mouth on the back hillside, easy to miss until a second look rewards the eye',
+      'A tiny minifig in comic peril clinging by one C-hand to a clock-tower ledge high on the build, a hat fluttering below',
+      'A hidden cat-build perched on a far rooftop watching a bird, a quiet domestic touch tucked in the skyline',
+      'A runaway barrel mid-roll down a steep lane with a minifig chasing, a frozen slapstick beat hidden in the streets',
+      'A tiny wedding on a side-chapel step, a white-dress + top-hat minifig pair and a few guests, a sweet hidden moment',
+      'A sea-monster tail-coil breaking the trans-blue harbor surface behind the moored ships, a hidden hint of something below',
+      'A thief mid-escape leaping the rooftops with a swag-bag, a guard a roof behind, a hidden chase across the skyline',
+      'A sleeping giant half-buried as a grassy hillside, a brick face + hand emerging from the turf, the world built on a slumbering titan',
+      'A fishing-minifig on the quay who has hooked an old boot-element, line bent, a wry hidden gag at the water-edge',
+      'A UFO-build half-hidden behind a cotton cloud high over the build, trans-green glow, a tiny abductee-beam on a far field',
+      'A couple kissing on a high balcony lit by a single trans-element lamp, a tender hidden vignette above the busy street',
+      'A tiny band playing in an alcove with a tip-jar, music implied, a hidden pocket of life off the main square',
+    ],
+    instructions: `Each entry is ONE easter-egg, 15-30 words. Format: prose naming the small hidden detail + where it hides. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: keep it SMALL (never dominant); LEGO/brick only; no photoreal.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // MECH PATH (2026-05-27 — tenth BrickBot axis migration)
   // GIANT ROBOTS. The mech is the hero. Bespoke mech_class + build_technique
   // (Technic-frame + ball-joints + CCBS, anti-photoreal-CGI lever) + setting.
