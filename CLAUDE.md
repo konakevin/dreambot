@@ -584,6 +584,25 @@ Active functions: `generate-dream`, `generate-first-dream`, `nightly-dreams`, `d
 
 Native modules — must use dev build via Xcode, not Expo Go. After adding native packages: `cd ios && pod install && cd ..` then rebuild.
 
+### Running the app — `dreambot` shell function
+
+Kevin runs the app via the `dreambot` zsh function (in his `~/.zshrc`, NOT the repo — it auto-prebuilds when `app.config.js`/`.env.local` change, builds, installs on the iPhone 17 Pro sim, launches):
+
+- **`dreambot`** — Debug + Metro in a tab (live logs/reload). Daily-dev default.
+- **`dreambot --release`** — Release build (production JS, `__DEV__` false), no Metro. **Use this to test release-only behavior** (see Sentry below). After editing the function, `source ~/.zshrc` or open a new tab.
+- **`--clean`** forces `expo prebuild --clean`. Flags combine (`dreambot --release --clean`).
+
+### Crash Reporting (Sentry)
+
+`@sentry/react-native`, wired in `lib/sentry.ts` (`initSentry()` + `captureException()`), `app/_layout.tsx` (`Sentry.wrap(RootLayout)`), and `AppErrorBoundary`. Key facts:
+
+- **Gated on `EXPO_PUBLIC_SENTRY_DSN`** — a total no-op without it.
+- **OFF in `__DEV__`** (`enabled: !__DEV__`) — a normal `dreambot`/debug build never reports. **To test it you MUST build Release** (`dreambot --release`).
+- **Manual test event:** Settings → "Run Dream Generator" (admin row) → 🐛 bug icon top-right → fires a captured error → check sentry.io → Issues.
+- **Source maps:** local release builds set `SENTRY_DISABLE_AUTO_UPLOAD=true` (the `dreambot --release` function) because the Sentry org/project/token are EAS-only secrets — without it `sentry-cli` fails the "Bundle React Native code and images" phase. So local traces are minified; **production `eas build --profile production` uploads source maps** (via the `SENTRY_ORG`/`SENTRY_PROJECT`/`SENTRY_AUTH_TOKEN` production EAS env vars) → symbolicated traces.
+
+Full observability picture (this + the AI-failure / dream-queue CI monitors): `memory/project_observability_setup.md`.
+
 ### Database Migrations
 
 Files in `supabase/migrations/`. Run manually in Supabase dashboard SQL editor. `get_feed` RPC must be DROPped before recreating.
