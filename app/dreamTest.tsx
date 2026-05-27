@@ -34,6 +34,7 @@ import { colors } from '@/constants/theme';
 import type { VibeProfile } from '@/types/vibeProfile';
 import { Toast } from '@/components/Toast';
 import { MediumVibeSelector } from '@/components/MediumVibeSelector';
+import { Sentry } from '@/lib/sentry';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
@@ -275,7 +276,19 @@ export default function DreamTestScreen() {
         <Text className="flex-1 text-center text-lg font-extrabold text-white">
           Dream Generator Test
         </Text>
-        <View className="w-7" />
+        {/* Admin-only Sentry smoke test — fires a captured error so you can
+            confirm it lands in Sentry → Issues (release builds only; Sentry is
+            off in __DEV__). */}
+        <TouchableOpacity
+          onPress={() => {
+            Sentry.captureException(new Error('Sentry smoke test (DreamTest button)'));
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            Toast.show('Sent test event to Sentry', 'checkmark-circle');
+          }}
+          hitSlop={12}
+        >
+          <Ionicons name="bug" size={22} color={colors.textSecondary} />
+        </TouchableOpacity>
       </View>
 
       {/* Content */}
