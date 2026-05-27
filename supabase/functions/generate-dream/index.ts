@@ -19,6 +19,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
+import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { routeDualSwapByGender, genderFromLock } from '../_shared/dualGenderRouting.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
@@ -1361,7 +1362,7 @@ Output ONLY the prompt.`;
             )
         : Promise.resolve(),
       // Only notify if the user queued/left — a foreground wait gets no ping.
-      uploadId && jobId && notifyOnComplete
+      shouldSendCompletionNotification({ uploadId, jobId, notifyOnComplete })
         ? supabase
             .from('notifications')
             .insert({

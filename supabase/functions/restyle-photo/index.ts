@@ -19,6 +19,7 @@ import { getPhotoRestyleConfig } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
+import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
@@ -441,7 +442,8 @@ Deno.serve(async (req) => {
               () => {}
             )
         : Promise.resolve(),
-      uploadId && jobId && notifyOnComplete
+      // Only notify if the user queued/left — a foreground wait gets no ping.
+      shouldSendCompletionNotification({ uploadId, jobId, notifyOnComplete })
         ? supabase
             .from('notifications')
             .insert({
