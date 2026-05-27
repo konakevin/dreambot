@@ -10,7 +10,7 @@ const PROMPT_PREFIX =
   'breathtaking LUSH flower scene, abundant blooms filling the entire frame edge-to-edge as the unmistakable hero, a monumental bloom-form or dense overflowing bloom-mass dominating the composition, every petal jewel-saturated, magazine-cover composition, any setting is only a backdrop to the flowers';
 
 const PROMPT_SUFFIX =
-  'render every named species as that exact species in its named color, full-spectrum jewel-tone color, the hero blooms and foreground rendered tack-sharp and jewel-saturated, the background staying clear and colored with depth built from receding layers of more blooms and clearly-rendered scenery, the sky clean and saturated, never a pale milky washed-out hazy background, no text, no words, no watermarks, hyper-detailed gallery quality';
+  "render every named species as that exact species in its named color, saturated color STRICTLY within the scene's chosen color theme (no hues outside it), the hero blooms and foreground rendered tack-sharp and jewel-saturated, the background staying clear and colored with depth built from receding layers of more blooms and clearly-rendered scenery, the sky clean, never a pale milky washed-out hazy background, no text, no words, no watermarks, hyper-detailed gallery quality";
 
 const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE — NON-NEGOTIABLE ━━━
 No humans, no faces, no figures, no silhouettes, no shadows of people anywhere in the frame. Wildlife (hummingbird, bee, butterfly, dragonfly, small lizard) is allowed only as peripheral accent — never the subject.`;
