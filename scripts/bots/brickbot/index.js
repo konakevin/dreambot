@@ -102,6 +102,7 @@ module.exports = {
       'western',
       'mech',
       'macro-display',
+      'girly',
     ],
   },
 

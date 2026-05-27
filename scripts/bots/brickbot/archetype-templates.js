@@ -10,6 +10,114 @@
  */
 
 module.exports = {
+  BRICKBOT_GIRLY: ({ slots, vibeDirective }) => {
+    const {
+      scene_type,
+      minifig_action,
+      build_technique,
+      camera_framing,
+      subject_focus,
+      register,
+      scene_props,
+      lighting,
+      palette,
+      girly_phenomenon,
+    } = slots;
+
+    const props = Array.isArray(scene_props) ? scene_props : [scene_props];
+    const propLines = props.map((p, i) => `  ${i + 1}. ${p}`).join('\n');
+
+    const phenomenonSection = girly_phenomenon
+      ? `
+━━━ SPARKLE PHENOMENON (this render's sweet beat) ━━━
+${girly_phenomenon}
+
+Weave this in as a SECONDARY focal point, rendered IN BRICK (trans-clear sparkle round-plates on rods / a trans-arc rainbow / 1×1 round-plate heart-confetti / trans-pink fairy-dust trail). It AMPLIFIES the whimsy — never eclipses the subject + minifig action.
+
+`
+      : '';
+
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a PASTEL / ULTRA-CUTE / WHIMSICAL diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION TIER SWEET-AND-SPARKLY IN LEGO BRICKS ━━━
+This is a Bricklink AFOL champion's pastel-whimsy diorama, photographed at a LEGO World convention — a candy-bright, obsessively-cute brick build. Could win a Best-of-Show in the whimsy/Friends category. NOT a stock photo from Lego.com. NOT a kid's playset arrangement. NOT a photoreal CGI pink scene. The mood is JOYFUL, SWEET, SPARKLY, ultra-cute. Visual canon: LEGO Friends (Heartlake mini-doll cast) + LEGO DOTS (heart/star craft-tiles) + LEGO Elves (Elvendale fairy-pastel) + DUPLO Princess + generic LEGO fairytale-castle. Mini-doll-style figures welcome alongside minifigs. NEVER licensed Disney princesses/characters — generic fairytale only.
+
+━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
+NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Every character is a LEGO minifigure or a LEGO Friends mini-doll (C-shaped/curved hands + printed plastic face). NEVER a real human face. NEVER a licensed named character.
+
+━━━ EVERYTHING IS BRICK — SWEET BUT STILL ALL LEGO ━━━
+EVERY element is built from real LEGO bricks. NO photoreal frosting, NO photoreal fabric, NO photoreal fur, NO photoreal flowers, NO photoreal sky. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
+  • Castle / boutique / structures = pastel brick + SNOT-curved turrets + scalloped slope-edges — NEVER photoreal
+  • Sweets / cupcakes = brick dome + cone + round-tile builds — NEVER photoreal frosting
+  • Flowers / petals = plant-element + round-plate blooms — NEVER photoreal flowers
+  • Unicorn / pony / mermaid = brick-built or LEGO animal-element with a brick-horn / brick-tail — NEVER photoreal fur or a real animal
+  • Sparkle / fairy-dust = trans-clear + trans-pink round-plates — NEVER photoreal glitter
+  • Sky = brick sky-baseplate (often pastel) — NEVER photoreal sky
+
+━━━ BANNED VOCABULARY: "photoreal", "real fabric/fur/frosting/flowers", "glittery-real", "lifelike". Sweet + pastel, but unmistakably LEGO brick.
+
+━━━ THE SCENE STAGE ━━━
+${scene_type}
+
+━━━ THE MINIFIG / MINI-DOLL ACTION — STORY BEAT MANDATE (no posing) ━━━
+${minifig_action}
+
+A freeze-frame of a SWEET STORY HAPPENING — mid-twirl-dance, mid-cupcake-frost, mid-unicorn-feed, mid-ribbon-dance. Show cause + reaction. NEVER figures standing in a row — show the JOY of the moment.
+
+━━━ THE MOC BUILD TECHNIQUE — AFOL DISTINGUISHER (render visibly) ━━━
+${build_technique}
+
+Makes the build read as AFOL champion + unmistakably all-brick. Render it visibly — name the brick parts (heart/flower/star printed-tiles / SNOT-curved turret / trans-pink sparkle-accents / scallop slope-frills / cupcake-dome / bow-element / DOTS-mosaic).
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — the rolled framing DRIVES the composition. Apply the exact angle, even if Flux wants a centered front-facing figure. Override hard.
+  • CASTLE-TOWER-UP / SPARKLE-TOWER — vertical, the sweet structure towering
+  • BOUTIQUE-WINDOW-DISPLAY / PARLOR-COUNTER-OVER — framed through a display or over a counter
+  • GARDEN-ARCHWAY-THROUGH / DOLLHOUSE-CUTAWAY — framed by an arch / cutaway showing furnished rooms
+  • RUNWAY-DOWN-THE-AISLE / SPIRAL-STAIRCASE-DOWN — receding perspective with figures along it
+  • Avoid centered eye-level front-facing as default — that's the Flux-bias trap.
+
+━━━ THE SUBJECT-FOCUS (silhouette anchor OR no-vehicle scene-focus) ━━━
+${subject_focus}
+
+⚠️ HARD BIFURCATION:
+• STRUCTURE (candy-castle / boutique / parlor / sparkle-tower / dollhouse / gazebo) — render the pastel brick structure as DOMINANT, 50%+ of frame; figure action AT it.
+• MOUNT/CREATURE (unicorn / winged-pony / mermaid / fluffy-cat / butterfly-steed / swan) — render the brick-built creature as DOMINANT; horn/wings/tail are brick elements, fur is brick, NEVER photoreal.
+• NO-VEHICLE INTERIOR (boutique / parlor / pastel-bedroom / dance-studio / spa / tea-room) — the cute brick interior is the SETTING, the figure action the SUBJECT; pack it with sweet brick detail.
+• NO-VEHICLE LANDSCAPE (heart-garden / rainbow-meadow / candy-land / blossom-field / cloud-kingdom) — the pastel brick landscape is the SETTING with figure action as the focal beat; LUSH + densely cute, never sparse.
+
+━━━ THE REGISTER (girly heritage lock) ━━━
+${register}
+
+The aesthetic lock — figure style, build motifs, palette, props align with this heritage (Friends-Heartlake mini-doll pastel / DOTS heart-star-mosaic / Elves-Elvendale fairy / generic-fairytale gold-rose). Never mix anachronistically. NEVER a licensed Disney character.
+
+━━━ DIORAMA STORYTELLING DETAILS — fill the negative space ━━━
+${propLines}
+
+These brick-built details sweeten the scene — never decorative-only. Each implies a cute little story.
+${phenomenonSection}━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+
+━━━ CROSS-AXIS COMPATIBILITY ━━━
+• If register is FRIENDS-HEARTLAKE — mini-doll cast, pastel pink+lavender+mint, modern-cute boutiques + cafes + flower-shops.
+• If register is ELVES-ELVENDALE — fairy/elf mini-dolls with translucent-wing pieces, teal+lavender+gold, ornate treetop/crystal builds.
+• If register is DOTS-CRAFT — heavy heart/star/flower DOTS-tile mosaic detailing on every surface, bright craft-multi palette.
+• If register is GENERIC-FAIRYTALE-CASTLE — gold+rose+white, a princess-castle + a generic crown (no named character).
+• Unicorns/ponies/mermaids are ALWAYS brick-built (brick horn/tail/wings), never photoreal animals.
+• Whatever palette rolls, the register's signature WINS if they conflict.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OUTPUT SPEC ━━━
+Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig/mini-doll action + camera framing, weave in the build technique + register + props + lighting + palette + sparkle phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC pastel-whimsy diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+  },
+
   BRICKBOT_MACRO_DISPLAY: ({ slots, vibeDirective }) => {
     const {
       diorama_theme,

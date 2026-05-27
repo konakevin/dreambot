@@ -67,6 +67,273 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // GIRLY PATH (2026-05-27 — twelfth BrickBot axis migration)
+  // PASTEL / ULTRA-CUTE / WHIMSICAL. LEGO Friends + DOTS + Elves + fairytale.
+  // Mini-dolls welcome. Bespoke scene_type + build_technique (hearts/flowers/
+  // sparkle/scallops) + subject_focus (castle/boutique/unicorn). Bans photoreal
+  // + licensed-Disney characters. Bespoke.
+  // ════════════════════════════════════════════════════════
+
+  brickbot_girly_scene_type: {
+    format: 'simple',
+    theme: `LEGO PASTEL-WHIMSY SCENE STAGES — sweet girly stages for BrickBot's girly path. Each entry is ONE stage, 30-55 words. Joyful, cute, sparkly.
+
+⚠️ CRITICAL — STAGE / SETTING / NARRATIVE CATEGORY only. NO camera framing. NO minifig action verbs. NO build-technique deep-dive. NO phenomenon. NO lighting. Just: where are we, what sweet moment.
+
+⚠️ EVERYTHING IS LEGO BRICK. Castle = pastel brick + SNOT turrets. Sweets = brick domes. NEVER photoreal vocabulary. BANNED: photoreal, real fabric/frosting/fur/flowers, lifelike, licensed Disney characters.
+
+VARIETY MANDATE — distribute across: candy-castle / ice-cream-parlor / fashion-boutique / sparkle-tower / pet-store / unicorn-stable / fairy-ballet-stage / mermaid-lagoon / pony-paddock / rainbow-bridge / heart-garden / cupcake-cafe / jewelry-atelier / fairytale-throne-room / spa-day / flower-shop / dance-studio / tea-party / bakery / dollhouse.
+
+Each entry: name the girly category in first 6-10 words; establish the pastel brick STAGE; suggest the sweet/joyful mood; NEVER minifig action, framing, or phenomenon.`,
+    touchpoints: [
+      'CANDY CASTLE — a pastel brick castle with SNOT-curved cupcake-pink turrets, scalloped slope-edge battlements, heart-tile banners, a lollipop-build garden, a trans-pink drawbridge, the sweet-fairytale stage',
+      'ICE-CREAM PARLOR — a mint-and-pink brick parlor with a swirl-cone sign, a counter of brick sundae-builds in glass-domes, round stool-builds, a checker-tile floor, bunting overhead, the sugary-treat stage',
+      'FASHION BOUTIQUE — a chic pastel brick boutique with a display-window of dress-builds on mini-doll forms, a rack of outfit-tiles, a mirror, a counter with a register, the runway-glam stage',
+      'SPARKLE TOWER — a tall slender brick tower frosted in trans-clear + trans-pink sparkle-elements with a star-finial, a spiral stair, fairy-light strings, floating up into a pastel sky, the magical-tower stage',
+      'UNICORN STABLE — a pastel brick stable with heart-door stalls, a hay-build manger, a brick-built unicorn at a trough, ribbon-braided mane, a rainbow over the paddock fence, the magical-pet stage',
+      'FAIRY-BALLET STAGE — a brick theater-stage draped in trans-pink curtain-tiles, mini-doll ballerinas mid-pose, a flower-arch proscenium, footlight-bulbs, a tiny orchestra-pit, the recital stage',
+      'MERMAID LAGOON — a brick lagoon of trans-blue + trans-teal plates with a shell-throne, coral-element gardens, a brick-built mermaid on a rock, pearl-strings, a waterfall, the under-the-sea-cute stage',
+      'HEART GARDEN — a pastel brick garden of heart-topiary + flower-element beds, a white lattice-gazebo, a fountain with trans-pink water, a winding petal-path, bunting between trees, the romantic-garden stage',
+      'CUPCAKE CAFE — a cozy brick cafe with a display-case of brick cupcake-builds, marble-tile tables, a chalkboard-menu, hanging plant-builds, a pastel awning outside, the cozy-sweet stage',
+      'JEWELRY ATELIER — an ornate brick atelier with velvet-tile display-busts of brick gem-jewelry, a chandelier, gilded-filigree walls, a workbench with tiny tool-builds, the sparkly-luxe stage',
+      'RAINBOW BRIDGE — a brick arch-bridge built in stacked trans-rainbow plates spanning a cloud-element gap, fairy-light rails, a pastel cloud-kingdom beyond, the dreamy-crossing stage',
+      'PASTEL BEDROOM — a cute brick bedroom with a canopy-bed of frill-tiles, a vanity-mirror, plush-toy builds, star-tile wallpaper, a heart-rug, fairy-lights strung, the cozy-dream stage',
+    ],
+    instructions: `Each entry is ONE girly stage, 30-55 words. Format: "STAGE NAME CAPS — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no camera framing, no minifig action, no phenomenon, no lighting, no photoreal/lifelike vocabulary, no licensed Disney characters. Every element a NAMED LEGO BRICK PART. Sweet stage + mood only.`,
+  },
+
+  brickbot_girly_minifig_action: {
+    format: 'simple',
+    theme: `LEGO PASTEL-WHIMSY ACTION BEATS — verb-led sweet moments for BrickBot's girly path. Each entry is a freeze-frame of mini-doll / minifig characters IN MID-CUTE-ACTION, NOT posing. Each entry 25-45 words.
+
+⚠️ STORY BEAT MANDATE — every entry STARTS WITH AN ACTIVE VERB. Girly verbs: mid-twirl-dance, mid-cupcake-frost, mid-pony-groom, mid-fashion-pose, mid-tea-pour, mid-bouquet-arrange, mid-unicorn-feed, mid-ribbon-dance, mid-petal-toss, mid-jewelry-try-on, mid-curtsy, mid-cartwheel.
+
+⚠️ HARD BANS: NEVER "figures standing/posing in a row", NEVER "watching/looking", NEVER passive. Characters are LEGO mini-dolls or minifigs (curved/C-hands, printed faces incl. happy/delighted prints). BANNED: photoreal, real-people, lifelike, licensed characters.
+
+✓ Body-position variety: mid-dance/twirl/cartwheel (~25%), mid-craft/frost/arrange (~20%), multi-figure friends interaction (~25%), mid-creature-care (groom/feed) (~15%), mid-try-on/pose (~15%).
+
+Each entry: start with an active verb; name 1-3 mini-dolls/minifigs + brief identifier; the SHARED OBJECT/EVENT (cupcake / ribbon / unicorn / bouquet / teapot / jewelry); imply before/after; PLASTIC SCALE.`,
+    touchpoints: [
+      'Twirls mid-dance as a mini-doll ballerina spins on one toe in a trans-pink tutu-element, arms arced overhead, ribbon-element streaming, a friend mid-curtsy applauding from the wings of the brick stage',
+      'Frosts mid-swirl as a baker mini-doll pipes a brick frosting-swirl onto a cupcake-build at the cafe counter, a tray of finished cupcakes beside, a friend mid-reach to add a cherry-round-plate on top',
+      'Grooms mid-brush as a mini-doll runs a brick brush down a unicorn\'s ribbon-braided mane at the stable, the unicorn leaning into it, a second girl mid-offer of an apple-element from a basket',
+      'Poses mid-runway as a mini-doll strikes a hand-on-hip fashion-pose at the end of a brick boutique runway in a new dress-build, a friend mid-camera-snap, an audience of mini-dolls on bench-builds',
+      'Pours mid-tea as a mini-doll tips a brick teapot over a friend\'s cup at a garden tea-party table, a tiered cake-stand of brick treats between them, a third guest mid-laugh, petals on the cloth-tile',
+      'Arranges mid-bouquet as a florist mini-doll tucks a flower-element into a wrapped brick bouquet at the flower-shop counter, buckets of blooms around, a customer mid-point at a pink rose-build',
+      'Feeds mid-offer as a mini-doll holds out a star-cookie-build to a brick-built winged-pony that dips its head, wings half-spread, a rainbow over the pastel paddock, a friend mid-clap behind',
+      'Dances mid-ribbon as a gymnast mini-doll whirls a long trans-pink ribbon-element into a built spiral overhead in the dance-studio, mirror-wall behind, a friend mid-leap in sync across the floor',
+      'Tosses mid-petal as a flower-girl mini-doll flings a handful of 1×1 round-plate petals down a garden aisle, a couple mid-walk behind under a flower-arch, guests on bench-builds mid-wave',
+      'Tries-on mid-mirror as a mini-doll holds a brick tiara up to a vanity-mirror, jewelry-box open beside with gem-builds spilling, a friend mid-offer of a necklace-build, the atelier sparkling',
+      'Builds mid-sandcastle... no — Pirouettes mid-spin as two mini-doll skaters glide a synchronized turn on a trans-light-blue rink at the winter-pastel stage, scarves streaming, a friend mid-cheer at the rail',
+      'Bakes mid-decorate as friends pipe icing + place macaron-builds on a giant tiered brick cake at the cafe, one mid-reach to the top tier on a stool, sprinkle round-plates scattered',
+    ],
+    instructions: `Each entry is ONE girly action beat, 25-45 words. Format: prose STARTING WITH AN ACTIVE VERB. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: NO standing/posing-in-row/passive, no photoreal/lifelike, no licensed characters. Mini-dolls/minifigs + brick creatures only. Sweet story beat + verb + cause/effect always.`,
+  },
+
+  brickbot_girly_build_technique: {
+    format: 'simple',
+    theme: `LEGO GIRLY MOC BUILD TECHNIQUE — AFOL-distinguishing brick-construction notes for BrickBot's girly path. Each entry 25-45 words. Keeps the sweet scene reading as a charming BRICK build.
+
+VARIETY MANDATE — distribute across:
+  • Heart/flower/star printed-tile + DOTS-mosaic detailing
+  • SNOT-curved candy-castle turrets + cupcake-domes
+  • Trans-pink + trans-clear sparkle-accents + fairy-light bulb-strings
+  • Pastel color-blocking (clean blocks of pink/lavender/mint)
+  • Frill + scallop slope-brick edges (canopies, awnings, dress-hems)
+  • Lattice + filigree (gazebos, balconies, gilded walls)
+  • Brick-built sweets (cupcake-dome + cone + round-tile cake-tiers)
+  • Bow + ribbon brick-elements as decorative accents
+  • Brick-built unicorn/pony (horn from a cone-element, tail from ribbon/plant-elements)
+  • Trans-element water (lagoon/fountain) in pastel teal/pink
+
+Each entry: name the technique TYPE in first 5-8 words; specify WHICH girly element; name SPECIFIC BRICK PARTS; imply the cute wow. NO real-construction (no fabric/paint). BANNED: photoreal, real-frosting/fabric.`,
+    touchpoints: [
+      'DOTS-mosaic heart-tile detailing — a wall or floor surfaced in a mosaic of DOTS + 1×1 tiles forming heart + flower + star patterns in pastel colors, the craft-detail that screams sweet AFOL girly-build',
+      'SNOT cupcake-dome turret — a castle turret or cafe-roof built as a SNOT-curved dome with a swirl-finial + round-tile "sprinkles", reading as a giant brick cupcake, the candy-architecture signature',
+      'Trans-pink sparkle-accent — sparkle suggested with clusters of trans-clear + trans-pink 1×1 round-plates + gem-elements set along edges + spires, plus fairy-light bulb-strings, the magical-shimmer detail',
+      'Pastel color-blocking — clean blocks of bright-pink + lavender + mint + butter-yellow brick massed in cheerful panels across the facade, the bold-cute Friends color-architecture',
+      'Frill + scallop slope-edges — canopies, awnings, and dress-hems built with rows of scalloped + curved slope-bricks for a frilly ruffled edge, the soft girly silhouette',
+      'Lattice + filigree gazebo — a white garden-gazebo built with crisscross bar-element lattice walls + filigree-tile gilding + a scalloped dome-roof, the romantic-garden centerpiece build',
+      'Brick tiered-cake build — a giant celebration-cake built as stacked SNOT-domed tiers in pastel, frosting-swirls of curved-slopes, macaron + cherry round-plate decorations, the showpiece dessert',
+      'Bow + ribbon accents — oversized brick bow-elements + ribbon-tile streamers tied to gift-boxes, lampposts, and unicorn-manes, the decorative sweetness threaded through the build',
+      'Brick-built unicorn — a unicorn built from a white slope-brick body with a gold cone-element spiral-horn, a plant-element + ribbon rainbow-mane + tail, printed-eye + blush-tile cheeks, the magical mount in pure brick',
+      'Trans-pastel fountain — a fountain built with trans-pink + trans-clear plate water leaping from a scalloped brick basin, heart-spout, round-plate droplets, the sweet water-feature',
+      'Dollhouse cutaway furnishing — a cutaway bedroom/boutique with every tiny brick furnishing (canopy-bed, vanity, plush-builds, wardrobe) obsessively detailed, the furnished-interior wow',
+      'Candy-cane + lollipop garden — a garden built with red-white striped candy-cane columns + giant lollipop-disc builds on stems + gumdrop-domes, the edible-architecture whimsy',
+    ],
+    instructions: `Each entry is ONE girly MOC build technique, 25-45 words. Format: "TECHNIQUE NAME — body with specific brick parts named". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no real-construction (fabric/paint), no real-frosting/fabric/photoreal. LEGO bricks only — name SPECIFIC parts (DOTS-tile / SNOT dome / trans-pink round-plate / scallop-slope / bow-element).`,
+  },
+
+  brickbot_girly_camera_framing: {
+    format: 'simple',
+    theme: `GIRLY CAMERA FRAMING — LEGO MOC photography angles for the girly path. Each entry 15-30 words, specific to pastel-whimsy subject matter.
+
+⚠️ Bespoke — leverage girly scenery (boutique-window / castle-tower / parlor-counter / garden-archway / runway / dollhouse-cutaway / vanity-mirror) rather than generic terms.
+
+VARIETY MANDATE — distribute across: boutique-window-display, castle-tower-up, parlor-counter-over, garden-archway-through, runway-down-the-aisle, dollhouse-cutaway, fairy-eye-level, spiral-staircase-down, vanity-mirror-reflection, tea-party-overhead.
+
+Each: specify camera POSITION + the sweetness it captures; reference girly brick scenery.`,
+    touchpoints: [
+      'BOUTIQUE-WINDOW-DISPLAY — camera outside looking in through the brick boutique display-window at the dress-builds + mini-doll inside, the glass framing the glam scene, pastel street-reflection',
+      'CASTLE-TOWER-UP — camera low at the candy-castle base craning up the SNOT-curved pink turrets to the star-finial against a pastel sky, the fairytale scale',
+      'PARLOR-COUNTER-OVER — camera over the ice-cream-parlor counter looking across the sundae-builds + the scooping mini-doll to the checker-tile room beyond, the sweet-shop warmth',
+      'GARDEN-ARCHWAY-THROUGH — camera framed by a flower-element garden archway, the heart-garden + gazebo revealed beyond, layered pastel depth',
+      'RUNWAY-DOWN-THE-AISLE — camera low at the end of the boutique runway looking down its length as a mini-doll struts toward the lens, audience benches lining it, the fashion-show energy',
+      'DOLLHOUSE-CUTAWAY — camera square-on to a cutaway dollhouse/boutique showing all the furnished pastel rooms at once, each obsessively detailed, the doll\'s-eye reveal',
+      'FAIRY-EYE-LEVEL — camera down at mini-doll height beside a unicorn or flower so the sweet subject towers warmly, an immersive cute angle',
+      'SPIRAL-STAIRCASE-DOWN — camera at the top of a sparkle-tower spiral stair looking down the pastel curl, a mini-doll ascending, the magical-tower depth',
+      'VANITY-MIRROR-REFLECTION — camera catching a mini-doll trying on a tiara in the atelier vanity-mirror, the reflection doubling the sparkle + jewelry-builds, the glam intimacy',
+      'TEA-PARTY-OVERHEAD — camera looking down on a garden tea-party table laid with brick treats + teapot + petals, mini-dolls around it, the charming flat-lay of sweetness',
+    ],
+    instructions: `Each entry is ONE girly camera framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no generic camera terms without girly anchoring — every entry references pastel brick scenery. No photoreal vocabulary.`,
+  },
+
+  brickbot_girly_subject_focus: {
+    format: 'simple',
+    theme: `GIRLY SUBJECT-FOCUS / SILHOUETTE ANCHOR — the dominant subject class for a girly diorama. Each entry is ONE of four kinds: brick STRUCTURE, MOUNT/CREATURE, NO-VEHICLE INTERIOR, or NO-VEHICLE LANDSCAPE. Each entry 20-40 words. LEAD with the TYPE label in parens.
+
+DISTRIBUTION: ~40% STRUCTURE / ~20% MOUNT/CREATURE / ~18% NO-VEHICLE INTERIOR / ~22% NO-VEHICLE LANDSCAPE.
+
+Every entry names brick parts + bans photoreal. Creatures brick-built. NEVER licensed characters.`,
+    touchpoints: [
+      'STRUCTURE — a pastel candy-castle with SNOT-curved pink cupcake-turrets, scalloped battlements, heart-tile banners, a trans-pink drawbridge, a lollipop-garden; fills 50%+ of frame as the dominant subject',
+      'STRUCTURE — a chic brick fashion-boutique with a dress-build display-window, a striped awning, a flower-box, a glam interior glimpsed through the glass, the dominant subject',
+      'STRUCTURE — a mint-and-pink ice-cream-parlor with a giant swirl-cone roof-sign, a counter of sundae-domes, round stools, bunting, the dominant sweet-shop subject',
+      'STRUCTURE — a tall sparkle-tower frosted in trans-clear + trans-pink elements with a star-finial + a spiral stair + fairy-light strings, the dominant magical-tower subject',
+      'MOUNT/CREATURE — a brick-built unicorn with a gold spiral cone-horn, a ribbon-and-plant-element rainbow mane + tail, blush-cheek tiles, a mini-doll rider, the dominant magical mount',
+      'MOUNT/CREATURE — a brick-built winged-pony with plate-wings spread, a pastel body + flowing brick mane, a mini-doll on its back mid-flight over a rainbow, the dominant subject',
+      'MOUNT/CREATURE — a brick-built mermaid on a shell-throne with a trans-teal scaled tail, pearl-string hair-accents, coral-element garden around her, the dominant lagoon subject',
+      'MOUNT/CREATURE — a giant fluffy brick-built cat with round slope-body + big printed-eyes + a bow-element collar, a mini-doll cuddling it, the dominant adorable-pet subject',
+      'NO-VEHICLE INTERIOR — a pastel brick boutique interior: dress-racks, a mirror, a counter-register, a fitting-room curtain, DOTS-mosaic walls; the setting, with a mini-doll beat as subject',
+      'NO-VEHICLE INTERIOR — a cute brick bedroom: a frill-canopy bed, a vanity-mirror, plush-toy builds, star-tile wallpaper, a heart-rug, fairy-lights; the cozy-dream setting',
+      'NO-VEHICLE LANDSCAPE — a pastel heart-garden: heart-topiary, flower-element beds, a white lattice-gazebo, a trans-pink fountain, a petal-path; lush-cute multi-tier setting',
+      'NO-VEHICLE LANDSCAPE — a candy-land of gumdrop-domes, candy-cane trees, a chocolate-river of brown plates, lollipop-fields under a cotton-candy-cloud sky; lush sweet setting',
+    ],
+    instructions: `Each entry is ONE girly subject-focus, 20-40 words, LED BY its TYPE label — (STRUCTURE) / (MOUNT/CREATURE) / (NO-VEHICLE INTERIOR) / (NO-VEHICLE LANDSCAPE). Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Distribution ~40/20/18/22. Every entry names brick parts; creatures brick-built. BANNED: photoreal + licensed characters.`,
+  },
+
+  brickbot_girly_register: {
+    format: 'simple',
+    theme: `GIRLY HERITAGE REGISTER — the aesthetic lock for a girly diorama, named by its LEGO-heritage VISUAL SIGNATURE. Each entry 20-40 words, locking palette + figure-style + build motif. NEVER licensed Disney characters.
+
+WEIGHTING — ~85% iconic LEGO girly heritage / ~15% sweet-coded:
+  • FRIENDS-HEARTLAKE — pastel pink + lavender + mint + sand, mini-doll cast, modern-cute boutiques + cafes + pet-shops + flower-shops + a beach (~28%)
+  • DOTS-CRAFT — bright craft-multi, heavy heart/star/flower DOTS-tile mosaic on every surface, a DIY-decorated build (~16%)
+  • ELVES-ELVENDALE — teal + lavender + gold + rose, fairy/elf mini-dolls with translucent-wing pieces, ornate treetop + crystal builds (~18%)
+  • GENERIC-FAIRYTALE-CASTLE — gold + rose + white, a princess-castle + a generic crown + a ballgown (no named character) (~14%)
+  • DUPLO-PRINCESS — chunky bright primary-pastel, big simple cute builds, a toddler-friendly castle + carriage (~9%)
+  • CANDY-LAND-CODED (sweet) — bubblegum-pink + mint + cream, edible-architecture (gumdrop + candy-cane + lollipop), strictly in brick (~8%)
+  • KAWAII-CODED (sweet) — soft pastel-multi, big-eyed cute everything, mascot-creatures + heart-motifs, strictly in brick (~7%)
+
+Each entry: name the register signature in first 5-8 words; PALETTE; FIGURE-style; BUILD MOTIF. NEVER a licensed character. Always reads as LEGO brick.`,
+    touchpoints: [
+      'FRIENDS-HEARTLAKE SIGNATURE — pastel pink + lavender + mint + sand palette, LEGO Friends mini-doll cast in cute casual outfits, modern boutiques + cafes + a pet-shop + a flower-stand + a beach-club, the Heartlake-City look',
+      'DOTS-CRAFT SIGNATURE — bright craft-multi palette, every surface mosaicked in DOTS heart + star + flower tiles, a DIY-decorated bedroom / jewelry-box / bag-build aesthetic, the maker-craft look',
+      'ELVES-ELVENDALE SIGNATURE — teal + lavender + gold + rose palette, fairy + elf mini-dolls with translucent-wing pieces + flower-crowns, ornate treetop-city + crystal-tower builds, the Elvendale-fairy look',
+      'GENERIC-FAIRYTALE-CASTLE SIGNATURE — gold + rose + white palette, a princess mini-doll in a ballgown-build with a generic crown (no named character), a SNOT-spired castle + a throne, the storybook-castle look',
+      'DUPLO-PRINCESS SIGNATURE — chunky bright primary-pastel palette, big simple cute builds, a toddler-friendly rounded castle + a carriage + a friendly dragon, the DUPLO-cute look',
+      'CANDY-LAND SIGNATURE — bubblegum-pink + mint + cream palette, edible-architecture (gumdrop-domes + candy-cane columns + lollipop-trees + a chocolate-river), strictly in brick, the sweet-world look',
+      'KAWAII SIGNATURE — soft pastel-multi palette, big-printed-eyes cute everything, round mascot-creature builds + heart + cloud motifs, strictly in brick, the adorable-kawaii look',
+      'FRIENDS-BEACH-RESORT SIGNATURE — bright turquoise + coral + sand + white palette, mini-doll cast in swimwear, a beach-club + smoothie-bar + paddleboards + a dolphin, the sunny-Heartlake-beach look',
+      'ELVES-CRYSTAL-DRAGON SIGNATURE — jewel teal + magenta + gold palette, an elf mini-doll with a cute brick-built baby-dragon companion, a crystal-cave + magic-portal build, the Elvendale-adventure look',
+      'FRIENDS-PET-SALON SIGNATURE — pastel pink + mint + white palette, mini-doll groomers, a pet-salon + grooming-station + a row of cute brick puppies/kittens/bunnies, the adorable-pet-care look',
+      'FAIRYTALE-BALLET SIGNATURE — blush + gold + cream palette, ballerina mini-dolls in tutu-elements, a draped theater-stage + flower-arch proscenium, the recital-elegance look',
+      'WINTER-PASTEL SIGNATURE — icy-pink + lavender + white palette, mini-dolls in cute winter-wear, an ice-rink + a frosted sparkle-castle + a hot-cocoa-stand, the pastel-winter-wonderland look',
+    ],
+    instructions: `Each entry is ONE girly heritage register, 20-40 words. Format: "REGISTER NAME SIGNATURE — palette + figure-style + build motif". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. Weight ~85% iconic LEGO girly / ~15% sweet-coded. STRICT BANS: NEVER a licensed Disney character/princess; never photoreal; everything reads as LEGO brick.`,
+  },
+
+  brickbot_girly_scene_props: {
+    format: 'simple',
+    theme: `GIRLY DIORAMA STORYTELLING PROPS — small brick-built sweet details. Each entry 12-25 words, implying a cute story. NEVER decorative-only.
+
+VARIETY: cupcake-tower / flower-bouquet / perfume-bottle / jewelry-box spilling gems / teapot-set / ribbon-spool / heart-balloon-bunch / pet-in-a-basket / tiara-on-a-cushion / magic-wand / makeup-palette / flower-cart / ice-cream-sundae / music-box / macaron-stack / plush-toy / birthday-cake / shopping-bags / vanity-set / candy-jar.
+
+Each names SPECIFIC brick parts + a tiny story. BANNED: photoreal.`,
+    touchpoints: [
+      'A cupcake-tower — a tiered brick stand of pastel cupcake-builds with swirl-frosting + cherry round-plates, one missing from the bottom row, mid-party',
+      'A flower bouquet — a wrapped brick bouquet of plant-element blooms in pink + lavender tied with a bow-element, resting on the boutique counter awaiting a customer',
+      'A jewelry-box spilling gems — an open brick jewelry-box with trans-gem-elements + a tiara + necklace-builds tumbling out across a vanity, mid-try-on',
+      'A teapot-set — a brick teapot + two cups + a sugar-bowl on a doily-tile tray, steam-wisp round-plate rising, set for a garden tea-party',
+      'A heart-balloon bunch — a cluster of red + pink heart-shaped balloon-elements on bar-strings tied to a lamppost, one drifting free, festive',
+      'A pet-in-a-basket — a fluffy brick puppy/kitten curled in a woven brick basket with a bow-element collar, a name-tag tile, the adorable pet-shop centerpiece',
+      'A magic-wand — a brick wand with a trans-pink star-element tip resting on a velvet-tile cushion, a faint trans sparkle-trail, the fairy-tale prop',
+      'A makeup-palette + mirror — an open brick palette of bright round-tile colors + a brush-element beside a heart-shaped hand-mirror on the vanity',
+      'A flower-cart — a little brick cart heaped with plant-element bouquets in buckets, a striped awning + a price-tile sign, parked at the garden edge',
+      'An ice-cream sundae — a tall brick sundae-build in a glass-dome with scoops + a cherry + a wafer-tile, a long spoon-element, melting-mid-treat',
+      'A music-box — a small brick music-box, lid open, a tiny brick ballerina on a turntable inside, a wind-key on the side, a tinkling-tune implied',
+      'A stack of shopping-bags — a cluster of pastel brick shopping-bag-builds with bow-handles + boutique-logo tiles, dropped by a bench after a spree',
+    ],
+    instructions: `Each entry is ONE girly brick-built prop, 12-25 words. Format: prose naming the prop + its brick parts + tiny story. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal; LEGO bricks only; each implies a sweet story, never decorative-only.`,
+  },
+
+  brickbot_girly_lighting: {
+    format: 'simple',
+    theme: `GIRLY LIGHTING — light for a pastel-whimsy LEGO MOC photo. Each entry 15-30 words. Lights a TABLETOP BRICK DIORAMA — soft studio-macro lighting evoking sweetness.
+
+VARIETY: soft pastel-glow / sparkle-twinkle / golden fairy-light / sunrise-pink / boutique warm-spot / rainbow-prism / candle-soft / dreamy-bokeh / spotlight-stage / morning-cute-bright.
+
+Each names SOURCE + DIRECTION + COLOR + soft fall on the bricks. NEVER photoreal/glittery-real language.`,
+    touchpoints: [
+      'Soft pastel-glow, a gentle diffuse light bathing the whole build in a warm rosy wash with soft shadows, the dreamy storybook key',
+      'Sparkle-twinkle, fairy-light bulb-strings + trans-element accents casting tiny warm points of light across the pastel build, a magical glittering ambient',
+      'Golden fairy-light, a warm low-angle glow gilding the turret-tops + flower-tops, long soft pastel shadows, the enchanted golden-hour sweetness',
+      'Sunrise-pink, a soft pink dawn ambient washing the candy-castle + garden, cool lavender shadow, the fresh-morning fairytale mood',
+      'Boutique warm-spot, focused warm display-spots picking out the dress-builds + jewelry against a softer pastel fill, the glam-shop reveal',
+      'Rainbow-prism, a soft multicolor light cast as if through a prism dappling the white build with rainbow patches, the whimsical magic-light',
+      'Candle-soft, a gentle warm candle/cake-candle glow on a tea-party or bedroom scene, cozy intimate shadows, the tender sweet mood',
+      'Dreamy-bokeh, a soft-focus build with sparkle-bokeh blooming in the background from fairy-lights, the romantic dream key',
+      'Spotlight-stage, a warm theatrical spot on a ballerina mini-doll mid-pose with the rest of the stage softer, the recital drama',
+      'Morning-cute-bright, a clean bright even light making the pastel colors pop cheerfully with soft short shadows, the happy daytime read',
+    ],
+    instructions: `Each entry is ONE girly lighting setup, 15-30 words. Format: prose naming source + direction + color + soft fall on the bricks. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal/glittery-real language — it lights a plastic brick diorama. No real-material vocabulary.`,
+  },
+
+  brickbot_girly_palette: {
+    format: 'simple',
+    theme: `GIRLY PALETTE — pastel color combinations for a girly LEGO MOC diorama, locked to LEGO-heritage signatures. Each entry 12-25 words, naming 3-5 specific brick colors + the mood/heritage.
+
+VARIETY: Friends pink+lavender+mint+sand / candy bubblegum+mint+cream / fairytale gold+rose+white / unicorn pastel-rainbow+white / DOTS bright-craft-multi / Elves lavender+teal+gold / kawaii soft-pastel-multi / winter-pastel icy-pink+lavender+white / beach turquoise+coral+sand / bedroom blush+mint+gold.
+
+Each names ACTUAL LEGO brick colors (bright-pink, medium-lavender, light-aqua, etc.).`,
+    touchpoints: [
+      'Friends palette — bright-pink + medium-lavender + light-aqua + sand, the cheerful Heartlake-City look',
+      'Candy palette — bubblegum-pink + mint-green + cream + butter-yellow, the sweet-shop look',
+      'Fairytale palette — pearl-gold + rose-pink + white + lavender, the princess-castle look',
+      'Unicorn palette — pastel-rainbow (pink/lilac/mint/peach) + white + gold, the magical-pony look',
+      'DOTS palette — bright craft-multi (coral / teal / yellow / purple) + white, the craft-mosaic look',
+      'Elves palette — lavender + teal + gold + rose, the Elvendale-fairy look',
+      'Kawaii palette — soft pastel-pink + mint + sky + cream, the big-eyed adorable look',
+      'Winter-pastel palette — icy-pink + lavender + white + silver, the pastel-wonderland look',
+      'Beach-pastel palette — turquoise + coral + sand + white, the sunny-Heartlake-beach look',
+      'Bedroom palette — blush-pink + mint + soft-gold + cream, the cozy-dream look',
+    ],
+    instructions: `Each entry is ONE girly palette, 12-25 words. Format: "NAME palette — colors + mood". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color language; tie each to a girly heritage.`,
+  },
+
+  brickbot_girly_phenomenon: {
+    format: 'simple',
+    theme: `GIRLY SPARKLE PHENOMENON — a 50%-gated sweet beat for a girly diorama, ALWAYS rendered IN BRICK. Each entry 20-40 words. AMPLIFIES the whimsy, never eclipses the subject.
+
+VARIETY: sparkle-shower trans-clear round-plates / rainbow trans-arc / heart-confetti 1×1 round-plates / petal-rain on rods / soap-bubble-float trans-clear / fairy-dust trans-pink sparkle-trail / shooting-star trans-streak / butterfly-cloud trans-piece wings / floating-balloon-release / glitter-burst trans-multi.
+
+Each names BRICK PARTS + visual impact. NEVER lighting-color-cast (separate axis). NEVER photoreal-glitter. NO motion-blur (frozen built moment).`,
+    touchpoints: [
+      'SPARKLE-SHOWER — a built shower of trans-clear + trans-pink 1×1 round-plates + gem-elements on fine clear rods cascading over the scene, a frozen built shimmer-fall catching the light',
+      'RAINBOW TRANS-ARC — a built arc of stacked trans-red/orange/yellow/green/blue/pink plates curving over the pastel build, a deliberate brick rainbow spanning the candy-world',
+      'HEART-CONFETTI — a built burst of pink + red 1×1 round-plate + heart-tile confetti frozen mid-air over a celebrating mini-doll group, hearts settling on the brick floor below',
+      'PETAL-RAIN — flower-element + 1×1 round-plate petals suspended on clear rods drifting down over a garden scene, a frozen built blossom-fall, soft and romantic',
+      'SOAP-BUBBLE-FLOAT — a built drift of trans-clear + trans-pink 1×1 round-plates on fine rods as floating bubbles over a bubble-bath or spa scene, catching rainbow glints',
+      'FAIRY-DUST TRAIL — a built trail of scattered trans-pink + trans-clear 1×1 round-plates + tiny star-elements arcing behind a flitting fairy mini-doll, a frozen sparkle-wake',
+      'SHOOTING-STAR — a built shooting-star of a trans-yellow star-element with a trans-clear plate tail streaking across the pastel night-sky over a sparkle-tower, a wish-moment',
+      'BUTTERFLY-CLOUD — a loose built cluster of trans-piece butterfly-elements in pink + lavender + teal on flower-stems + clear rods rising over a heart-garden, fluttering-frozen',
+      'BALLOON-RELEASE — a built cloud of pastel + heart balloon-elements on clear bar-rods rising over the scene in a joyful mass, a few trailing ribbon-bars, the celebration beat',
+      'GLITTER-BURST — a built radial burst of trans-multi 1×1 round-plates + gem-elements frozen exploding from a magic-wand tip or a music-box, the magical-sparkle moment',
+    ],
+    instructions: `Each entry is ONE girly sparkle phenomenon, 20-40 words. Format: "PHENOMENON NAME — brick-parts + visual impact". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never lighting-color-cast (separate axis); never photoreal-glitter; ALWAYS built from named brick parts; never motion-blur (frozen built moment).`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // MACRO-DISPLAY PATH (2026-05-27 — eleventh BrickBot axis migration)
   // THE COMPLETE-DIORAMA path — behold the whole build. Identity = wide
   // pulled-back framing + completeness. Bespoke diorama_theme (whole world) +

@@ -51,6 +51,18 @@ for (const p of PATHS) {
 // ─────────────────────────────────────────────────────────────
 
 const AXIS_POOLS = {
+  // girly path — twelfth BrickBot axis migration (2026-05-27)
+  BRICKBOT_GIRLY_SCENE_TYPE: load('brickbot_girly_scene_type'),
+  BRICKBOT_GIRLY_MINIFIG_ACTION: load('brickbot_girly_minifig_action'),
+  BRICKBOT_GIRLY_BUILD_TECHNIQUE: load('brickbot_girly_build_technique'),
+  BRICKBOT_GIRLY_CAMERA_FRAMING: load('brickbot_girly_camera_framing'),
+  BRICKBOT_GIRLY_SUBJECT_FOCUS: load('brickbot_girly_subject_focus'),
+  BRICKBOT_GIRLY_REGISTER: load('brickbot_girly_register'),
+  BRICKBOT_GIRLY_SCENE_PROPS: load('brickbot_girly_scene_props'),
+  BRICKBOT_GIRLY_LIGHTING: load('brickbot_girly_lighting'),
+  BRICKBOT_GIRLY_PALETTE: load('brickbot_girly_palette'),
+  BRICKBOT_GIRLY_PHENOMENON: load('brickbot_girly_phenomenon'),
+
   // macro-display path — eleventh BrickBot axis migration (2026-05-27)
   BRICKBOT_MACRO_DISPLAY_DIORAMA_THEME: load('brickbot_macro_display_diorama_theme'),
   BRICKBOT_MACRO_DISPLAY_BUILD_SCOPE: load('brickbot_macro_display_build_scope'),

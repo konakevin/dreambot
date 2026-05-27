@@ -8,6 +8,45 @@
  */
 
 module.exports = {
+  BRICKBOT_GIRLY: {
+    description: `PATH-BESPOKE — BrickBot girly path (2026-05-27 migration). PASTEL / ULTRA-CUTE / WHIMSICAL LEGO MOC diorama photography — candy castles, ice-cream parlors, fashion boutiques, sparkle towers, unicorn stables, fairy-ballet stages, mermaid lagoons, pony paddocks, heart gardens, cupcake cafes, jewelry ateliers. Joyful, sweet, sparkly. Canon: LEGO Friends (Heartlake City, mini-doll cast) + LEGO DOTS (craft / heart / star tiles) + LEGO Elves (Elvendale fairy-pastel) + DUPLO Princess (chunky-cute) + LEGO fairytale-castle (generic princess, NOT licensed Disney characters). Mini-doll-style figures welcome alongside regular minifigs.
+
+Identity = PASTEL + CUTE + JOYFUL. Lower photoreal-drift risk; the guard is keeping it as a sweet brick build (not a photoreal pink CGI scene) via the build_technique + register.
+
+9 path-bespoke slots + 1 conditional:
+  • scene_type          — girly stage (candy-castle / ice-cream-parlor / fashion-boutique / sparkle-tower / pet-store / unicorn-stable / fairy-ballet-stage / mermaid-lagoon / pony-paddock / rainbow-bridge / heart-garden / cupcake-cafe / jewelry-atelier / fairytale-throne-room / spa-day / flower-shop / dance-studio / tea-party)
+  • minifig_action      — verb-led cute beat (mid-twirl-dance / mid-cupcake-frost / mid-pony-groom / mid-fashion-pose / mid-tea-pour / mid-bouquet-arrange / mid-unicorn-feed / mid-ribbon-dance / mid-petal-toss / mid-jewelry-try-on / mid-curtsy)
+  • build_technique     — girly-MOC distinguisher (heart + flower + star printed-tiles / SNOT-curved candy-castle turrets / trans-pink + trans-clear sparkle-accents / pastel color-blocking / frill + scallop slope-edges / lattice + filigree / cupcake-dome builds / bow + ribbon brick-elements / DOTS-mosaic detailing)
+  • camera_framing      — girly framing (boutique-window-display / castle-tower-up / parlor-counter-over / garden-archway-through / runway-down-the-aisle / dollhouse-cutaway / fairy-eye-level / spiral-staircase-down / vanity-mirror-reflection)
+  • subject_focus       — silhouette anchor (REPLACES vehicle_class) — STRUCTURE (candy-castle / boutique / ice-cream-parlor / sparkle-tower / dollhouse / garden-gazebo / cupcake-cafe) OR MOUNT/CREATURE (unicorn / winged-pony / mermaid / giant-fluffy-cat / butterfly-steed / swan) OR no-vehicle INTERIOR (boutique-interior / parlor / pastel-bedroom / dance-studio / spa / tea-room) OR no-vehicle LANDSCAPE (heart-garden / rainbow-meadow / candy-land / blossom-field / cloud-kingdom)
+  • register            — girly heritage lock, ~85% iconic LEGO (Friends-Heartlake-pastel mini-doll / DOTS-craft heart-star-mosaic / Elves-Elvendale-fairy teal-lavender-gold / DUPLO-Princess chunky-cute / generic-fairytale-castle gold-rose) + ~15% sweet-coded (candy-land-coded / kawaii-coded / cottagecore-pastel-coded — strictly in brick, NEVER licensed Disney characters)
+  • scene_props pickN:2 — diorama fill (cupcake-tower / flower-bouquet / perfume-bottle / jewelry-box / teapot-set / ribbon-spool / heart-balloon / pet-in-a-basket / tiara-crown / magic-wand / makeup-palette / flower-cart / ice-cream-sundae / music-box / pastel-macaron-stack / plush-toy)
+  • lighting            — axis-clean: soft pastel-glow / sparkle-twinkle / golden fairy-light / sunrise-pink / boutique warm-spot / rainbow-prism / candle-soft / dreamy-bokeh
+  • palette             — axis-clean LEGO-coded: Friends pink+lavender+mint+sand / candy bubblegum+mint+cream / fairytale gold+rose+white / unicorn pastel-rainbow+white / DOTS bright-craft-multi / Elves lavender+teal+gold
+  • girly_phenomenon (50%-gated) — environmental beat IN BRICK (sparkle-shower trans-clear round-plates / rainbow trans-arc / heart-confetti 1×1 round-plates / petal-rain on rods / soap-bubble-float trans-clear / fairy-dust trans-pink sparkle-trail / shooting-star trans-streak / butterfly-cloud trans-piece wings)
+
+Bending advantage: scene_type × subject_focus × register × girly_phenomenon decoupled, so "unicorn-stable + winged-pony-mount + Elves-Elvendale register + rainbow" and "fashion-boutique + Friends-Heartlake register + sparkle-shower" are rollable. Legacy 4-axis couldn't reach these.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'minifig_action',
+        'build_technique',
+        'camera_framing',
+        'subject_focus',
+        'register',
+        'scene_props',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: { scene_props: 2 },
+    conditionalLayer: { slot: 'girly_phenomenon', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BRICKBOT_MACRO_DISPLAY: {
     description: `PATH-BESPOKE — BrickBot macro-display path (2026-05-27 migration). THE COMPLETE-DIORAMA path — a pulled-back wide-camera view of an ENTIRE LEGO build sitting on a tabletop as a finished convention masterpiece, baseplate edges often visible, the whole scene a complete miniature world. Canon: Bricklink AFOL / LEGO World / Brickworld Best-of-Show convention dioramas + LEGO Ideas large display builds + modular-building streetscapes. This is the "behold the whole build" path — the OTHER paths frame a subject; this one frames a COMPLETE WORLD.
 
