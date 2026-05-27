@@ -1,0 +1,35 @@
+name: AI Failure Monitor
+
+# Loud health check for the render pipeline. Fails the run if the recent
+# ai_generation_log FAILURE RATE is high (with a min-sample floor) or the
+# absolute failed count crosses a ceiling — i.e. Replicate/Anthropic outages,
+# 429 storms, or a bad deploy silently eating sparkles. See
+# scripts/check-ai-failures.js. (Edge Function errors that don't surface via the
+# queue/nightly monitors land here.)
+
+on:
+  schedule:
+    - cron: '30 */6 * * *' # every 6 hours (rate is measured over a 24h window)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Check render failure rate
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/check-ai-failures.js
