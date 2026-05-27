@@ -101,6 +101,7 @@ module.exports = {
       'theme-park',
       'western',
       'mech',
+      'macro-display',
     ],
   },
 

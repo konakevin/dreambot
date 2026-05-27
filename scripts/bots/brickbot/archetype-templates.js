@@ -10,6 +10,102 @@
  */
 
 module.exports = {
+  BRICKBOT_MACRO_DISPLAY: ({ slots, vibeDirective }) => {
+    const {
+      diorama_theme,
+      build_scope,
+      signature_centerpiece,
+      camera_framing,
+      life_density,
+      baseplate_edge,
+      lighting,
+      palette,
+      surprise_easter_egg,
+    } = slots;
+
+    const eggSection = surprise_easter_egg
+      ? `
+━━━ HIDDEN EASTER-EGG (the second-look delight) ━━━
+${surprise_easter_egg}
+
+Tuck this in as a SMALL hidden detail the eye finds on a second look — never let it dominate the wide complete-diorama composition.
+
+`
+      : '';
+
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a COMPLETE-DIORAMA "behold the whole build" description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION BEST-OF-SHOW COMPLETE DIORAMA ━━━
+This is a Bricklink AFOL champion's COMPLETE display diorama, photographed at a LEGO World convention — the whole build in frame as a finished miniature world that wins Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a real-world photo. The defining trait: WIDE, PULLED-BACK, the ENTIRE build visible as a complete tabletop masterpiece, obsessively detailed corner to corner.
+
+━━━ THIS IS THE WHOLE-BUILD VIEW — completeness is the point ━━━
+Frame the ENTIRE diorama in one shot — foreground to background, edge to edge. The viewer should read it as a complete miniature WORLD on a tabletop, not a close-up of one subject. Tilt-shift miniature aesthetic is GOOD here — it reinforces "this is a finished model." Pack every zone with detail; no empty baseplate.
+
+━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
+NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Every figure is a tiny LEGO minifigure populating the build. NEVER a real human face.
+
+━━━ EVERYTHING IS BRICK — THE WHOLE WORLD IS LEGO ━━━
+EVERY element across the whole diorama is built from real LEGO bricks. NO photoreal anything. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. It sits on a tabletop convention display — and that's a FEATURE, not a flaw.
+  • Terrain / rock / water / snow / foliage = brick + slope + trans-plate + plant-element (per theme) — NEVER photoreal
+  • Buildings / structures = brick-built with visible studs + technique — NEVER photoreal
+  • Crowds / vehicles = many tiny minifigs + brick vehicles — NEVER photoreal
+  • Sky = brick sky-baseplate or studio backdrop — NEVER photoreal
+
+━━━ BANNED VOCABULARY: "photoreal", "real [material]", "lifelike", "realistic miniature" (it's a LEGO build, say "brick-built miniature"). Tilt-shift / miniature-model framing is welcome; photoreal realism is not.
+
+━━━ THE DIORAMA THEME — the complete world depicted ━━━
+${diorama_theme}
+
+This is what the whole build depicts. Render it as a COMPLETE, fully-realized brick world filling the frame.
+
+━━━ THE BUILD SCOPE — the scale + complexity signature ━━━
+${build_scope}
+
+This is how the build is organized + how ambitious it reads. Make the scope legible (the modular zones / the vertical tiers / the cutaway / the micro-scale density).
+
+━━━ THE SIGNATURE CENTERPIECE — the focal wow that anchors the eye ━━━
+${signature_centerpiece}
+
+A dramatic focal feature that the whole composition builds around — the thing that makes a convention-goer stop walking. Place it as the visual anchor; the rest of the world radiates from it.
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — this is a WIDE complete-build framing. Apply the exact angle. Always show the whole diorama; NEVER zoom into a single subject.
+  • HIGH-THREE-QUARTER AERIAL — looking down + across the whole build, all zones visible
+  • EYE-LEVEL ALONG THE BASEPLATE-EDGE — low, raking across the build, depth front-to-back
+  • CORNER-ESTABLISHING — from a corner showing two baseplate edges + the build's full extent
+  • TOP-DOWN PLAN — straight down, the build read as a complete map
+  • HERO THREE-QUARTER WITH EDGE-BASEPLATE VISIBLE — the classic convention-display hero angle
+
+━━━ THE LIFE DENSITY — how the world is populated ━━━
+${life_density}
+
+Fill the world with this level of minifig + vehicle + creature life so it reads as a LIVING complete diorama, not an empty model.
+
+━━━ THE BASEPLATE EDGE — the "tabletop build" signal ━━━
+${baseplate_edge}
+
+Render the display-base treatment at the build's edge — this is what tells the viewer it's a finished LEGO diorama on a table (a deliberate, charming feature of this path).
+
+${eggSection}━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+
+━━━ CROSS-AXIS COMPATIBILITY ━━━
+• Whatever the diorama_theme, ALL its elements (terrain, water, buildings, crowds) are brick — never let a theme pull a zone photoreal.
+• The framing ALWAYS shows the complete build; the signature_centerpiece anchors but never crops out the rest of the world.
+• Tilt-shift miniature look reinforces the path identity — lean into it.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OUTPUT SPEC ━━━
+Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the diorama-theme + build-scope + signature centerpiece + camera framing, weave in the life-density + baseplate-edge + lighting + palette + easter-egg (if fired). End with one phrase reinforcing AFOL convention-Best-of-Show complete-diorama LEGO MOC photography (tilt-shift miniature welcome). NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+  },
+
   BRICKBOT_MECH: ({ slots, vibeDirective }) => {
     const {
       mech_class,

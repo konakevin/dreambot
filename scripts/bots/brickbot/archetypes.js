@@ -8,6 +8,43 @@
  */
 
 module.exports = {
+  BRICKBOT_MACRO_DISPLAY: {
+    description: `PATH-BESPOKE — BrickBot macro-display path (2026-05-27 migration). THE COMPLETE-DIORAMA path — a pulled-back wide-camera view of an ENTIRE LEGO build sitting on a tabletop as a finished convention masterpiece, baseplate edges often visible, the whole scene a complete miniature world. Canon: Bricklink AFOL / LEGO World / Brickworld Best-of-Show convention dioramas + LEGO Ideas large display builds + modular-building streetscapes. This is the "behold the whole build" path — the OTHER paths frame a subject; this one frames a COMPLETE WORLD.
+
+IDENTITY = FRAMING + COMPLETENESS, not a single theme. The diorama_theme can be anything (the other paths' worlds + more), but the constant is: WIDE, pulled-back, the whole build in frame, read as a tabletop miniature masterpiece. Tilt-shift miniature aesthetic is a FRIEND here (it reads as "complete model"). The bespoke baseplate_edge axis sells the "it's a build on a table" signal.
+
+8 path-bespoke slots + 1 conditional:
+  • diorama_theme        — THE complete world depicted (ski-village / mars-colony / ocean-port / medieval-castle-siege / theme-park-layout / mountain-pass-cable-car / modern-city-block / space-dock / pirate-island-bay / train-yard / fantasy-realm / winter-village / desert-frontier-town / jungle-temple-complex / harbor-town / volcano-research-base / underwater-city / steampunk-metropolis / farm-valley / canal-town)
+  • build_scope          — the scale/complexity signature (sprawling multi-zone modular layout / vertical-tiered tower-build / wide-landscape panorama diorama / cutaway-cross-section reveal / dense micro-scale city / GBC-functional working-build / interconnected-modular-streetscape / island-on-a-baseplate)
+  • signature_centerpiece — the dramatic focal wow that anchors the eye (a towering castle keep / a launching rocket / a frozen crashing wave / a brick dragon mid-descent / a working ferris-wheel / a multi-tier waterfall / a train mid-bridge-cross / an erupting volcano / a grand cathedral / a colossal tree)
+  • camera_framing       — wide-display framing (high-three-quarter aerial overview / eye-level along the baseplate-edge / corner-establishing showing two edges / top-down plan-view / hero three-quarter with edge-baseplate visible / dramatic low across the build / slow-establishing wide)
+  • life_density         — the population + activity filling the world (bustling micro-crowds + market-life / vehicles-and-trains-in-motion / quiet atmospheric few-figures / wildlife-and-nature dense / festival-or-battle massed-action / workaday street-life)
+  • baseplate_edge       — bespoke: the display-base treatment that signals "tabletop build" (visible stud-baseplate edge / finished tiled border / landscaped edge-falloff to bare studs / black display-base with a title-brick / multi-baseplate seams across the build / rockwork-cliff edge / water-edge trans-blue lip)
+  • lighting             — display lighting (convention-hall even-bright / dramatic spotlit-centerpiece / golden diorama-glow / dusk with all the build-lights ON / crisp tilt-shift miniature pop / morning soft-even)
+  • palette              — the build's cohesive dominant color-story (theme-appropriate: alpine white+timber / mars rust+white / port blue+stone / castle grey+heraldic / etc., always a COHESIVE display palette)
+  • surprise_easter_egg (50%-gated) — a hidden delight the eye finds on a second look (a brick dragon peeking from a cave / a tiny figure in comic peril / a hidden cat-on-a-roof / a working hidden-mechanism reveal / a sleeping giant / a message in a window / a tiny wedding / a runaway barrel)
+
+Bending advantage: diorama_theme × build_scope × signature_centerpiece × baseplate_edge × surprise_easter_egg decoupled, so "mars-colony + cutaway-cross-section + launching-rocket + black-display-base + hidden-figure-in-peril" and "medieval-town + modular-streetscape + grand-cathedral + tiled-border + tiny-wedding" are rollable. Legacy 4-axis couldn't reach these.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'diorama_theme',
+        'build_scope',
+        'signature_centerpiece',
+        'camera_framing',
+        'life_density',
+        'baseplate_edge',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'surprise_easter_egg', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BRICKBOT_MECH: {
     description: `PATH-BESPOKE — BrickBot mech path (2026-05-27 migration). GIANT-ROBOT / MECH LEGO MOC diorama photography — towering battle-mechs, exo-suits, transformers, quadruped walkers, mech-vs-mech duels, maintenance hangars, battle-damaged salvage, with the MECH as the hero. Canon: LEGO Bionicle (bio-mechanical CCBS) + Hero Factory (hero-bots) + Exo-Force (2006-08 anime-mech blue/gold vs robots) + Ninjago mechs (elemental + titan mechs) + Creator/Technic mech-suits + Bricklink AFOL hard-suit + GBC mech MOC community. NEVER licensed-mecha IP (no Gundam model numbers / Transformers character names / Pacific-Rim named Jaegers — INSPIRED BY, never literal).
 

@@ -51,6 +51,17 @@ for (const p of PATHS) {
 // ─────────────────────────────────────────────────────────────
 
 const AXIS_POOLS = {
+  // macro-display path — eleventh BrickBot axis migration (2026-05-27)
+  BRICKBOT_MACRO_DISPLAY_DIORAMA_THEME: load('brickbot_macro_display_diorama_theme'),
+  BRICKBOT_MACRO_DISPLAY_BUILD_SCOPE: load('brickbot_macro_display_build_scope'),
+  BRICKBOT_MACRO_DISPLAY_SIGNATURE_CENTERPIECE: load('brickbot_macro_display_signature_centerpiece'),
+  BRICKBOT_MACRO_DISPLAY_CAMERA_FRAMING: load('brickbot_macro_display_camera_framing'),
+  BRICKBOT_MACRO_DISPLAY_LIFE_DENSITY: load('brickbot_macro_display_life_density'),
+  BRICKBOT_MACRO_DISPLAY_BASEPLATE_EDGE: load('brickbot_macro_display_baseplate_edge'),
+  BRICKBOT_MACRO_DISPLAY_LIGHTING: load('brickbot_macro_display_lighting'),
+  BRICKBOT_MACRO_DISPLAY_PALETTE: load('brickbot_macro_display_palette'),
+  BRICKBOT_MACRO_DISPLAY_SURPRISE_EASTER_EGG: load('brickbot_macro_display_surprise_easter_egg'),
+
   // mech path — tenth BrickBot axis migration (2026-05-27)
   BRICKBOT_MECH_MECH_CLASS: load('brickbot_mech_mech_class'),
   BRICKBOT_MECH_MECH_ACTION: load('brickbot_mech_mech_action'),
