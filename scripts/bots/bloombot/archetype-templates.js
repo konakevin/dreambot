@@ -94,7 +94,7 @@ OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVER
   2. **BRILLIANT FOREGROUND BLOOM-POP** — closest flowers to the camera are vivid saturated bright with VIVID glowing cores — the foreground feels alive with light
   3. **CHANDELIER + SCONCE + CANDLE DISTRIBUTION** — hanging chandelier-cluster midway down + wall-sconce flower-clusters at intervals + floor-candle-cluster blooms along the path edges
   4. **CONSTELLATION-DEPTH RECESSION** — flower-cores get smaller and dimmer toward the deep distance, creating multi-tier vertical depth from packed-foreground to fading-distance
-  5. **ATMOSPHERIC TEXTURE** — drifting petal-fall / soft mist / mossy path / wet-stone reflection / lateral petal-drift / subtle depth-softening adding visual richness without competing with the flower-cores
+  5. **ATMOSPHERIC TEXTURE** — drifting petal-fall / mossy path / wet-stone reflection / lateral petal-drift / crisp depth-layering adding visual richness without competing with the flower-cores
 
 THINK: Studio Ghibli Howl's-Moving-Castle-garden-establishing-frame / Spirited-Away-spirit-realm-corridor / Princess-Mononoke-forest-path / Tim-Burton Alice-in-Wonderland enchanted-garden-tunnel / Brian-Froud faerie-realm-passage / Pinterest 'most-beautiful-flower-tunnel-Pinterest-board' / Magic-the-Gathering 'Cocoon of Avacyn' art / Disney-Princess secret-garden discovery / Tolkien-illustrated edition fairytale-passage.
 
@@ -173,13 +173,13 @@ A specific atmospheric detail adding magic-pretty texture (NOT competing with th
 
 The unifying mandate: a WHIMSICAL ENCHANTED garden vignette with MULTIPLE pretty hero flowers + MULTIPLE cute pleasant pollinators (3-6+ insects across the scene). PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro close-up of a single bloom. Multiple flower species blooming together; multiple butterflies / bumblebees / dragonflies / ladybugs / fireflies / moths flying / landed / hovering throughout. Happy enchanted fairytale storybook energy.
 
-THE LOOK — Studio Ghibli enchanted garden / Disney secret-garden discovery / Beatrix Potter watercolor / IG dreamy-pollinator-cast / Pinterest enchanted-flower-meadow:
+THE LOOK — Studio Ghibli enchanted garden / Disney secret-garden discovery / Beatrix Potter watercolor / IG vivid-pollinator-cast / Pinterest enchanted-flower-meadow:
 - MULTIPLE HERO FLOWERS (3-5+ different species blooming together as co-hero) — SOFT PASTEL color register (varied across the FULL color spectrum, not biased toward pinks/purples/reds), varied shapes, fills the scene with floral abundance
 - A CAST OF 3-6+ CUTE PLEASANT POLLINATORS — flying / landed / hovering THROUGHOUT the scene at different positions, different species, multiple sizes
 - CUTE-RENDERED INSECTS — friendly, charming, slightly storybook-charming-cute (NOT scary, NOT menacing, NOT realistic-creepy-detailed) — bigger soft eyes, fuzzier rounder bodies, friendly poses
 - PULLED-BACK GARDEN VIGNETTE — a wider intimate-garden view (NOT macro single-flower close-up — that's the closeup path)
-- WHIMSICAL ENCHANTED AMBIENT — dreamy soft pastel light, magical-pretty atmosphere, optional particles, fairytale storybook feel
-- DREAMY BOKEH BACKGROUND — more blooms / soft sky / pastel wash in soft out-of-focus painterly blur
+- WHIMSICAL ENCHANTED AMBIENT — vivid soft pastel light, magical-pretty atmosphere, optional particles, fairytale storybook feel
+- CRISP SHARP-LAYERED BACKGROUND — more blooms / soft sky / pastel wash in crisp tack-sharp detail
 
 ━━━ COLOR REGISTER — SOFT WATERCOLOR PASTEL (MANDATORY) ━━━
 
@@ -193,7 +193,7 @@ Every visible flower is rendered in a SOFT PASTEL color register — soft waterc
   - SOFT IVORY / OFFWHITE / CREAM
   - DUSTY ROSE / PALE MAUVE / BLUSH
 
-The whole image reads as a soft watercolor painting / pastel-color-palette / IG dreamy-magical-hour register. NEVER vivid saturated jewel-tone / electric / neon.
+The whole image reads as a soft watercolor painting / pastel-color-palette / IG vivid-magical-hour register. NEVER vivid saturated jewel-tone / electric / neon.
 
 ⚠️ COLOR DISTRIBUTION MANDATE — across the pool of 25, the dominant flower colors must distribute evenly:
   - ~4 BLUE-DOMINANT (soft baby-blue / periwinkle / pale-cornflower / pale-turquoise)
@@ -210,7 +210,7 @@ NEVER bias toward pink/purple/red. The full spectrum is in play, soft-pastel reg
 
 1. **MULTIPLE HERO FLOWERS** — 3-5+ different flower species blooming together as co-hero. Mix shapes (dahlias / cosmos / peonies / daisies / tulips / lupines / etc.) and colors for whimsical floral abundance. NEVER a single hero — the scene is FULL OF FLOWERS.
 
-2. **A CAST OF 3-6+ CUTE POLLINATORS WITH A FOCAL HERO** — describe MULTIPLE pleasant insects at different positions and actions. CRITICAL — ONE of the cast is the FOCAL POLLINATOR rendered FRONT-AND-CENTER, larger and more prominent (sharp focus + vivid color contrasting against the soft pastel background + crisp wing-pattern / fuzzy-body detail), so the viewer's eye lands on it first. The supporting 2-4+ insects fill the scene with life — smaller, in midground, hovering in the bokeh, perched on leaves — without competing with the focal hero.
+2. **A CAST OF 3-6+ CUTE POLLINATORS WITH A FOCAL HERO** — describe MULTIPLE pleasant insects at different positions and actions. CRITICAL — ONE of the cast is the FOCAL POLLINATOR rendered FRONT-AND-CENTER, larger and more prominent (sharp focus + vivid color contrasting against the soft pastel background + crisp wing-pattern / fuzzy-body detail), so the viewer's eye lands on it first. The supporting 2-4+ insects fill the scene with life — smaller, in midground, hovering in the background, perched on leaves — without competing with the focal hero.
 
 3. **CUTE-RENDERED, NOT MENACING** — every insect rendered in a charming storybook-cute way. Soft fuzzy bodies, friendly proportions, slightly-stylized cute eyes, friendly poses (drinking nectar peacefully, gently hovering, sleepy-cozy landed). NEVER detailed-realistic-creepy / menacing / scary / oversized / aggressive. Think Disney secret-garden cute, not nature-documentary realistic.
 
@@ -218,7 +218,7 @@ NEVER bias toward pink/purple/red. The full spectrum is in play, soft-pastel reg
 
 5. **PULLED-BACK GARDEN VIGNETTE — NOT MACRO** — the framing is a wider intimate-garden view where you can see multiple flower clusters and multiple insects all in the same scene. NOT extreme macro (that's closeup's territory) — pulled back enough to see a full whimsical multi-flower multi-insect tableau.
 
-6. **DREAMY BOKEH BACKGROUND** — soft out-of-focus floral mass / sky / pastel wash behind, painterly soft blur.
+6. **CRISP SHARP-LAYERED BACKGROUND** — crisp floral mass / sky / pastel wash behind, tack-sharp detail.
 
 7. **ENCHANTED HAPPY MOOD** — fairytale storybook joy. Soft pastel magical light bathing everything. Happy, peaceful, welcoming, magical-pretty. NEVER moody / dark / dramatic / harsh / scary.
 
@@ -246,16 +246,16 @@ ${particlesSection}━━━ COMPOSITION CRAFT — WHIMSICAL ENCHANTED GARDEN VI
 
   • PULLED-BACK GARDEN VIEW — wider intimate-garden vignette, NOT a tight macro close-up
   • FOREGROUND: 3-5+ different flower species clustered together as co-hero, filling the lower 50-65% of frame
-  • MIDDLE/AROUND: 3-6+ cute pollinators positioned at different spots in the scene (some on flowers, some hovering, some flying in the bokeh space)
-  • BACKGROUND: dreamy bokeh of more blooms / soft sky / pastel wash in painterly blur
-  • DEPTH: foreground-sharp flowers + sharp insects in middle / soft dreamy bokeh background
-  • COLOR: rich saturated multi-color foreground (mix flower colors freely), dreamy soft pastel bokeh
+  • MIDDLE/AROUND: 3-6+ cute pollinators positioned at different spots in the scene (some on flowers, some hovering, some flying in the background space)
+  • BACKGROUND: crisp sharp layers of more blooms / soft sky / pastel wash in tack-sharp detail
+  • DEPTH: foreground-sharp flowers + sharp insects in middle / crisp sharp-layered background
+  • COLOR: rich saturated multi-color foreground (mix flower colors freely), crisp sharp-layered pastel background
   • MOOD: enchanted happy fairytale storybook — whimsical, peaceful, welcoming, magical-pretty
 
 ━━━ AMBIENT LIGHTING ━━━
 ${lighting}
 
-Reinterpret the rolled lighting as SOFT ENCHANTED MAGICAL light bathing the scene — warm pastel ambient, gentle warm-pink or warm-amber or soft-cream or pale-lavender wash. The light is whimsical and fairytale-pretty, NOT harsh / dramatic / moody / dark. Think Studio Ghibli enchanted garden + Disney secret-garden discovery + IG dreamy-magical-hour.
+Reinterpret the rolled lighting as SOFT ENCHANTED MAGICAL light bathing the scene — warm pastel ambient, gentle warm-pink or warm-amber or soft-cream or pale-lavender wash. The light is whimsical and fairytale-pretty, NOT harsh / dramatic / moody / dark. Think Studio Ghibli enchanted garden + Disney secret-garden discovery + IG vivid-magical-hour.
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -282,7 +282,7 @@ Pick 3-5 species from the roster as multi-hero blooming together. Mix shapes (la
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[WHIMSICAL ENCHANTED garden vignette PULLED-BACK composition with 3-5+ multi-species flowers blooming together filling lower 50-65% of frame], [the 3-6+ cute pollinator cast at different positions throughout the scene — landed / hovering / flying / perched — explicit species + positions], [supporting dreamy bokeh background of more soft blooms / pastel sky-wash]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft enchanted magical pastel ambient light bathing the scene], [storybook-cute insect rendering — friendly charming NOT realistic-creepy], [shallow DOF, painterly soft-blur, fairytale-storybook aesthetic — Studio Ghibli / Disney secret-garden / IG dreamy-magical-hour]
+[WHIMSICAL ENCHANTED garden vignette PULLED-BACK composition with 3-5+ multi-species flowers blooming together filling lower 50-65% of frame], [the 3-6+ cute pollinator cast at different positions throughout the scene — landed / hovering / flying / perched — explicit species + positions], [supporting crisp sharp-layered background of more soft blooms / pastel sky-wash]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft enchanted magical pastel ambient light bathing the scene], [storybook-cute insect rendering — friendly charming NOT realistic-creepy], [shallow DOF, tack-sharp detail, fairytale-storybook aesthetic — Studio Ghibli / Disney secret-garden / IG vivid-magical-hour]
 
 CRITICAL — MULTIPLE pretty flowers + MULTIPLE cute storybook insects in a PULLED-BACK enchanted-garden VIGNETTE. Happy welcoming whimsical mood. CUTE not menacing insects. ABSOLUTE HARD BAN ON HUMANS.
 
@@ -308,20 +308,20 @@ A specific atmospheric detail adding magic-pretty texture (NOT competing with th
 
 The unifying mandate: a VIBRANT ENCHANTED garden vignette with MULTIPLE hummingbird-attracting flowers (trumpet vine, fuchsia, salvia, hibiscus, bee balm, columbine, butterfly bush, cardinal flower, lupine, foxglove, petunia, lantana, agastache, penstemon, etc.) + 2-4+ iridescent jewel-tone HUMMINGBIRDS positioned dynamically throughout the scene. PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro. Vibrant saturated jewel-tone color register — the flowers and birds wear their natural bold colors.
 
-THE LOOK — Audubon-meets-Studio-Ghibli enchanted garden / National-Geographic hummingbird-magazine spread / IG dreamy-hummingbird-feeder / vibrant tropical-garden energy:
+THE LOOK — Audubon-meets-Studio-Ghibli enchanted garden / National-Geographic hummingbird-magazine spread / IG vivid-hummingbird-feeder / vibrant tropical-garden energy:
 - MULTIPLE HERO FLOWERS (3-5+ different hummingbird-attracting species blooming together) — vibrant saturated jewel-tone colors (red trumpet vine, fuchsia, vivid magenta bee balm, scarlet salvia, hot-pink fuchsia, bright orange hibiscus, deep purple lupine)
 - A CAST OF 2-4+ IRIDESCENT HUMMINGBIRDS — hovering / sipping nectar / mid-flight throughout the scene at different positions, varied species, varied poses
 - IRIDESCENT JEWEL-TONE PLUMAGE — ruby-throated / emerald-back / blue-violet crown / fiery-orange / magenta / metallic-green / sapphire — each hummingbird with a distinctive iridescent jewel-tone color story, wings often in motion-blur showing rapid flight
 - ONE FOCAL HUMMINGBIRD — front-and-center, larger, sharply rendered with crisp iridescent detail, the viewer's eye lands here first
 - PULLED-BACK GARDEN VIGNETTE — wider intimate-garden view (NOT extreme macro close-up — that's the closeup path)
-- DREAMY BOKEH BACKGROUND — soft out-of-focus floral mass / sky / leaves in shallow DOF
+- CRISP SHARP-LAYERED BACKGROUND — crisp floral mass / sky / leaves in shallow DOF
 - VIBRANT NATURAL LIGHT — warm sunlight / dappled light / golden-hour ambient with rich saturated color story
 
 ━━━ HARD MANDATES (every render) ━━━
 
 1. **HUMMINGBIRDS ARE THE PRIMARY HERO — FLOWERS ARE SUPPORTING BACKDROP** — the hummingbirds are the focal subject of every render. The flowers are the supporting garden context they're interacting with. The viewer's eye lands on the FOCAL HUMMINGBIRD first, then notices the flowers second. NEVER make the flowers the visual subject with hummingbirds as tiny accents. Hummingbirds are FRONT-CENTER and large; flowers fill the foreground beautifully but as backdrop.
 
-2. **A CAST OF 2-4+ IRIDESCENT HUMMINGBIRDS WITH A LARGE FOCAL HERO** — describe 2-4+ hummingbirds at different positions and poses. CRITICAL — ONE is the FOCAL HUMMINGBIRD rendered FRONT-AND-CENTER, LARGE (occupying meaningful frame real estate — clearly visible and recognizable, NOT a tiny dot lost in flowers), sharply detailed with vivid iridescent jewel-tone plumage popping against the scene. Supporting hummingbirds in midground / hovering at other blooms / mid-flight in soft bokeh. The focal hummingbird is the FIRST thing the viewer sees.
+2. **A CAST OF 2-4+ IRIDESCENT HUMMINGBIRDS WITH A LARGE FOCAL HERO** — describe 2-4+ hummingbirds at different positions and poses. CRITICAL — ONE is the FOCAL HUMMINGBIRD rendered FRONT-AND-CENTER, LARGE (occupying meaningful frame real estate — clearly visible and recognizable, NOT a tiny dot lost in flowers), sharply detailed with vivid iridescent jewel-tone plumage popping against the scene. Supporting hummingbirds in midground / hovering at other blooms / mid-flight in soft sharp-layered depth. The focal hummingbird is the FIRST thing the viewer sees.
 
 3. **HUMMINGBIRD-ATTRACTING FLOWERS AS SUPPORTING BACKDROP** — 3-5+ different hummingbird-magnet species in vibrant saturated jewel-tone colors (trumpet vine / fuchsia / salvia / hibiscus / bee balm / columbine / butterfly bush / cardinal flower / lupine / foxglove / petunia / lantana / agastache / penstemon / honeysuckle / morning glory). The flowers fill the foreground/midground as gorgeous garden context but DO NOT compete with the hummingbirds — they're the stage, not the star. NO soft-pastel — vibrant saturated jewel-tone colors.
 
@@ -333,7 +333,7 @@ THE LOOK — Audubon-meets-Studio-Ghibli enchanted garden / National-Geographic 
 
 6. **VIBRANT SATURATED JEWEL-TONE COLOR REGISTER** — vivid bold saturated colors throughout, NOT soft-pastel (that's flower-friends' territory). Audubon-painting + tropical-garden + IG-vibrant-hummingbird-feeder palette.
 
-7. **DREAMY BOKEH BACKGROUND** — soft out-of-focus floral mass / sky / leaves in shallow DOF.
+7. **CRISP SHARP-LAYERED BACKGROUND** — crisp floral mass / sky / leaves in shallow DOF.
 
 8. **NATURAL VIBRANT LIGHT** — warm sunlight / dappled light / golden-hour ambient with rich saturated color. Pretty and magical but NOT soft-pastel.
 
@@ -380,9 +380,9 @@ ${particlesSection}━━━ COMPOSITION CRAFT — VIBRANT ENCHANTED HUMMINGBIRD
   • PULLED-BACK GARDEN VIEW — wider intimate-garden vignette, NOT a tight macro close-up
   • FOREGROUND: 3-5+ different hummingbird-attracting flower species in vibrant saturated jewel-tone colors filling the lower 50-65% of frame
   • MIDDLE: 2-4+ iridescent hummingbirds positioned dynamically (focal hero front-and-center + supporting cast hovering / sipping / mid-flight)
-  • BACKGROUND: dreamy bokeh of more vibrant blooms / soft sky / leaves in painterly blur
-  • DEPTH: sharp foreground flowers + sharp focal hummingbird / soft dreamy background
-  • COLOR: rich vibrant saturated jewel-tone foreground (NOT soft-pastel), dreamy bokeh background
+  • BACKGROUND: crisp sharp layers of more vibrant blooms / soft sky / leaves in tack-sharp detail
+  • DEPTH: sharp foreground flowers + sharp focal hummingbird / crisp background
+  • COLOR: rich vibrant saturated jewel-tone foreground (NOT soft-pastel), crisp sharp-layered background
   • MOOD: vibrant enchanted magical-pretty — Audubon-meets-Studio-Ghibli, lively, magical
 
 ━━━ AMBIENT LIGHTING ━━━
@@ -416,7 +416,7 @@ Pick 3-5 hummingbird-attracting species from the roster as multi-hero blooming t
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order (HUMMINGBIRDS LEAD) ━━━
-[the LARGE FOCAL HUMMINGBIRD front-and-center — primary hero of the frame — explicit species + iridescent jewel-tone plumage + dynamic pose (hovering / sipping / mid-flight) + wings in motion-blur + beak-to-flower or beak-extended detail — VIEWER'S EYE LANDS HERE FIRST], [the 1-3 supporting hummingbirds at different positions throughout the scene — hovering at other blooms / mid-flight in midground / banking sideways in bokeh — also with iridescent plumage], [the vibrant saturated jewel-tone hummingbird-attracting flowers as garden BACKDROP — 3-5+ species blooming together filling foreground/midground as supporting context (NOT competing with the hummingbirds)], [dreamy bokeh background of soft vibrant blooms / leaves]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [vibrant warm natural ambient light bathing the scene — golden-hour or dappled sunshine], [shallow DOF with hummingbirds in sharpest focus, painterly soft-blur, Audubon-meets-Studio-Ghibli aesthetic]
+[the LARGE FOCAL HUMMINGBIRD front-and-center — primary hero of the frame — explicit species + iridescent jewel-tone plumage + dynamic pose (hovering / sipping / mid-flight) + wings in motion-blur + beak-to-flower or beak-extended detail — VIEWER'S EYE LANDS HERE FIRST], [the 1-3 supporting hummingbirds at different positions throughout the scene — hovering at other blooms / mid-flight in midground / banking sideways in sharp-layered depth — also with iridescent plumage], [the vibrant saturated jewel-tone hummingbird-attracting flowers as garden BACKDROP — 3-5+ species blooming together filling foreground/midground as supporting context (NOT competing with the hummingbirds)], [crisp sharp-layered background of soft vibrant blooms / leaves]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [vibrant warm natural ambient light bathing the scene — golden-hour or dappled sunshine], [shallow DOF with hummingbirds in sharpest focus, tack-sharp detail, Audubon-meets-Studio-Ghibli aesthetic]
 
 CRITICAL — LARGE FOCAL HUMMINGBIRD primary hero (NOT a tiny dot lost in flowers) + 1-3 supporting hummingbirds + vibrant jewel-tone flowers as BACKDROP (not the hero). The hummingbird is the WHOLE POINT. Naturalistic hummingbird species — no fantasy crowns. ABSOLUTE HARD BAN ON HUMANS.
 
@@ -446,8 +446,8 @@ THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical +
 - ONE hero SURREAL FLOWER-FORM dominating the frame (giant flower-mushroom / forest of flower-trees / river of petals / hillside of bloom-mountains / etc.)
 - Naturalistic LANDSCAPE context — meadow, forest, valley, glade, riverbed, hillside, mountainside — but with the SCALE INVERSION as the wow-moment
 - SUPPORTING FLOOR-CARPET — meadow of smaller flowers carpeting the ground around the hero form, providing the supporting bloom-mass
-- DREAMY PASTEL DEPTH — soft pastel background with gentle depth-falloff, often with smaller versions of the hero form visible in the deep distance (implying a whole world of these surreal flower-forms)
-- SOFT MAGICAL LIGHT — pretty pastel ambient, warm golden-hour or soft pastel light, surreal-dreamy register
+- vivid PASTEL DEPTH — soft pastel background with gentle depth-falloff, often with smaller versions of the hero form visible in the deep distance (implying a whole world of these surreal flower-forms)
+- SOFT MAGICAL LIGHT — pretty pastel ambient, warm golden-hour or soft pastel light, surreal-vivid register
 
 ━━━ HARD MANDATES (every render) ━━━
 
@@ -462,11 +462,11 @@ THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical +
 
 4. **SUPPORTING FLOOR-CARPET OF SMALLER FLOWERS** — the ground around the hero form is carpeted with smaller flowers (wildflowers, mixed meadow blooms, cosmos / daisies / forget-me-nots / poppies / etc.) — providing the "flowers everywhere" foundation that supports the surreal scale-inversion.
 
-5. **DREAMY PASTEL DEPTH** — soft pastel background with gentle depth-falloff. Smaller versions of the hero form often visible in the deep distance (e.g., 3-4 smaller flower-mushrooms soft on the horizon implying a whole forest of them) — this reinforces the surreal-magical-realism that this is a WORLD of these flower-forms, not just one anomaly.
+5. **vivid PASTEL DEPTH** — soft pastel background with gentle depth-falloff. Smaller versions of the hero form often visible in the deep distance (e.g., 3-4 smaller flower-mushrooms soft on the horizon implying a whole forest of them) — this reinforces the surreal-magical-realism that this is a WORLD of these flower-forms, not just one anomaly.
 
 6. **NO ANIMALS / NO HUMANS / NO MANMADE OBJECTS** — natural landscape forms only (trees, mushrooms, hills, mountains, rivers, waterfalls, valleys, glades, meadows). NEVER include animals (no flower-deer, no flower-rabbit), humans, or manmade objects (no flower-houses, no flower-clocks, no flower-cathedrals).
 
-7. **SOFT SURREAL-DREAMY LIGHT** — warm pastel ambient, soft pastel light, golden-hour glow, surreal-magical-realism register. NOT harsh / dramatic / moody.
+7. **SOFT SURREAL-vivid LIGHT** — warm pastel ambient, soft pastel light, golden-hour glow, surreal-magical-realism register. NOT harsh / dramatic / moody.
 
 🚫 ABSOLUTE BANS:
   • 🚫 NO ANIMALS in any form — no flower-deer / flower-rabbit / flower-fox / flower-bear / NO wildlife (no real animals either)
@@ -475,7 +475,7 @@ THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical +
   • 🚫 NO RUINS / no archways / no urban / no interior
   • 🚫 NO macro / extreme closeup — the scale-inversion needs LANDSCAPE SCALE to read
   • 🚫 NO single-bloom-without-supporting-meadow — the floor-carpet of smaller flowers is mandatory
-  • 🚫 NO harsh / moody / dark / dramatic lighting — soft surreal-dreamy only
+  • 🚫 NO harsh / moody / dark / dramatic lighting — soft surreal-vivid only
   • 🚫 NO sci-fi / cyberpunk / electric / neon
   • 🚫 NO clearly-photorealistic register — this is surreal-magical-realism / painterly
 
@@ -495,13 +495,13 @@ ${atmosphereSection}━━━ COMPOSITION CRAFT — SURREAL NATURAL LANDSCAPE WI
   • FOREGROUND: floor-carpet of smaller wildflowers + supporting bloom-mass
   • MIDGROUND: the hero surreal flower-form rising dominantly from the carpet
   • BACKGROUND: soft pastel depth with smaller versions of the hero form visible in the deep distance, fading away
-  • DEPTH: clear foreground (sharp wildflower carpet) → midground (sharp hero form) → soft dreamy pastel background
+  • DEPTH: clear foreground (sharp wildflower carpet) → midground (sharp hero form) → crisp pastel background
   • MOOD: surreal-magical-realism — naturalistic but with a wow-moment of scale-inversion
 
 ━━━ AMBIENT LIGHTING ━━━
 ${lighting}
 
-Reinterpret the rolled lighting as SOFT SURREAL-MAGICAL-REALISM light — warm pastel ambient, soft pastel light, golden-hour glow with dreamy depth. Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape register.
+Reinterpret the rolled lighting as SOFT SURREAL-MAGICAL-REALISM light — warm pastel ambient, soft pastel light, golden-hour glow with vivid depth. Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape register.
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -525,7 +525,7 @@ Pick 2-4 species from the roster — ONE primary species that makes up the hero 
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[the HERO SURREAL FLOWER-FORM dominating the frame — explicit scale-inversion or flower-construction (giant flower-mushroom / forest-of-flower-trees / river-of-petals / etc.) + made-from-flowers detail], [the natural-world landscape context (forest / valley / meadow / glade / riverbed / hillside) the form lives in], [the floor-carpet of smaller wildflowers carpeting the ground around it], [soft dreamy pastel background with smaller versions of the hero form fading into soft depth, implying a whole world of these surreal flower-forms]${atmospheric_magic ? ', [atmospheric magic detail amplifying the surreal mood]' : ''}, [soft surreal-magical-realism pastel ambient light], [Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape aesthetic register]
+[the HERO SURREAL FLOWER-FORM dominating the frame — explicit scale-inversion or flower-construction (giant flower-mushroom / forest-of-flower-trees / river-of-petals / etc.) + made-from-flowers detail], [the natural-world landscape context (forest / valley / meadow / glade / riverbed / hillside) the form lives in], [the floor-carpet of smaller wildflowers carpeting the ground around it], [crisp pastel background with smaller versions of the hero form receding in crisp sharp overlapping layers, implying a whole world of these surreal flower-forms]${atmospheric_magic ? ', [atmospheric magic detail amplifying the surreal mood]' : ''}, [soft surreal-magical-realism pastel ambient light], [Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape aesthetic register]
 
 CRITICAL — ONE surreal scale-inverted FLOWER-FORM is the hero. Natural landscape context. Floor-carpet of smaller flowers. NO animals / NO humans / NO manmade objects. Soft surreal-magical-realism mood.
 
@@ -637,7 +637,14 @@ Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO �
   },
 
   BLOOMBOT_SUNSET_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, hero_flower, landscape_backdrop, sunset_sky, sun_position, atmospheric_phenomenon } = slots;
+    const {
+      lighting,
+      hero_flower,
+      landscape_backdrop,
+      sunset_sky,
+      sun_position,
+      atmospheric_phenomenon,
+    } = slots;
 
     const phenomenonSection = atmospheric_phenomenon
       ? `
@@ -830,7 +837,7 @@ ${macro_phenomenon}
 • humans, figures, faces, silhouettes, hands holding flowers
 
 ━━━ REQUIRED — MACRO VIEW pressing INTO living blooms GROWING IN PLACE ━━━
-A macro closeup pressing INTO a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT. Stand close enough to count petals on the front-most blooms; shallow focal plane; bloom-mass fills frame edge-to-edge receding into softly-blurred bokeh. NEVER a dark photo studio.
+A macro closeup pressing INTO a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT. Stand close enough to count petals on the front-most blooms; shallow focal plane; bloom-mass fills frame edge-to-edge receding into softly-blurred sharp-layered depth. NEVER a dark photo studio.
 
 ━━━ HERO BLOOM AMONGST MANY — NON-NEGOTIABLE COMPOSITION ━━━
 ONE specific HERO species DOMINATES the frame at its OWN natural form and scale. Hero silhouette is whatever the rolled species naturally is — broad face, deep cup, pompom dome, hanging raceme, umbel, trumpet, ruffled rosette, daisy-face, or tall spike. The hero pushes into the foreground focal plane. The other 2-3 species act as SUPPORTING CAST at SMALLER visual weight — carpeting gaps, threading through, drifting in midground softness — NEVER competing with the hero.
@@ -856,8 +863,8 @@ Pick ONE framing mode per render (vary):
   C. THROUGH-THE-ARCHWAY — natural archway from bloom-wall structure framing the opening
   D. DIAGONAL LEAD-LINE — supporting threads as diagonal lead-line to hero at rule-of-thirds
   E. RIM-LIGHT SILHOUETTE-EDGE — hero back-lit at frame edge with translucent petal-glow
-  F. SHALLOW DEPTH TUNNEL — front hero in razor focus, mass receding into deep bokeh
-  G. OFF-CENTER HERO + NEGATIVE SPACE — hero at rule-of-thirds, opposite quadrant bokeh-quiet
+  F. SHALLOW DEPTH TUNNEL — front hero in razor focus, mass receding into deep sharp-layered depth
+  G. OFF-CENTER HERO + NEGATIVE SPACE — hero at rule-of-thirds, opposite quadrant sharp-layered-quiet
   H. DAPPLED LIGHT-DRAMA — broken light through canopy, hero catching sun-spots
 
 ━━━ MATERIAL POETRY at petal-scale ━━━
@@ -928,16 +935,16 @@ ${vegetation_anchor}
 
 The vegetation scaffolds the bloom hero — palms / banana / banyan / philodendron / ferns / vines / hibiscus / plumeria / sea-grape / mangrove — never replacing the blooms as the subject, but giving the paradise its identifiable structure.
 ${creatureSection}━━━ TROPICAL ATMOSPHERIC PERSPECTIVE ━━━
-Foreground saturated and crisp, midground progressively softening, deep distance receding with natural depth. Crisp clear tropical air is the default; add atmosphere ONLY when the scene genuinely calls for it, matched to the setting (humid-jungle air with beaded condensation on broad leaves / warm salt-haze over open water / waterfall spray-mist). NEVER alpine.
+Foreground, midground and deep distance ALL stay crisp and sharp through clear bright tropical air — depth comes from overlapping layers and diminishing scale, never from softening. Beaded condensation on broad leaves and fine crisp waterfall spray are welcome as sharp physical detail; the air over the water and into the distance stays clear and crisp. NEVER alpine.
 
 ━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
 Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE the way a fine-art print or magazine cover does. NEVER a flat eye-level center-of-frame snapshot. The viewer should GASP / stop mid-scroll / want to save the image / want to print and frame it.
 
 Pick ONE deliberate framing mode per render (vary across them — match the framing to whatever the setting slot describes):
   A. **PALM-FRINGED BEACH WIDE** — palm-fringed white-sand beach in golden-hour light with bloom-laden coastal vegetation at one frame edge, turquoise water filling the open frame, distant island silhouette
-  B. **LAGOON-EDGE REFLECTION** — turquoise lagoon foreground with bloom-laden inner shore reflecting in the still water, distant coastal cliff or atoll edge in soft salt-haze
-  C. **WATERFALL-PLUNGE-POOL** — tropical waterfall plunging into a bloom-ringed pool, bloom-laden mossy boulders at viewer level, spray-mist rising
-  D. **CANOPY-LIGHT SHAFTS** — vertical sun-shafts cutting through rainforest canopy onto specific bloom patches below
+  B. **LAGOON-EDGE REFLECTION** — turquoise lagoon foreground with bloom-laden inner shore reflecting in the still water, distant coastal cliff or atoll edge crisp and sharp against clear sky
+  C. **WATERFALL-PLUNGE-POOL** — tropical waterfall plunging into a bloom-ringed pool, bloom-laden mossy boulders at viewer level, crisp spray rising
+  D. **CANOPY DAPPLED LIGHT** — crisp dappled sunlight falling through the rainforest canopy onto specific bloom patches below
   E. **POOL-EDGE REFLECTION** — jungle pool or stream foreground reflecting bloom-laden canopy above
   F. **THROUGH-THE-VINE-CURTAIN** — natural archway from hanging vines and lianas framing a clearing beyond
   G. **BANYAN-ROOT TUNNEL** — banyan / strangler-fig root-curtain in foreground framing the deep scene beyond
@@ -951,7 +958,7 @@ DELIBERATE COMPOSITION CRAFT:
 - Rule-of-thirds: hero element at a rule-of-thirds intersection, not centered (unless intentional symmetry like a path leading dead-center)
 - Lead-lines: path / stream / palm-trunk / wave-line / vine-curtain pulling the eye INTO the deep frame
 - Multi-tier depth: tactile foreground detail (bloom cluster / wet sand / petal-strewn path / dew-beaded leaf) → midground scene → deep distance softening with depth
-- Intentional negative space: one quadrant has bokeh-quiet / salt-haze / sky-glow breathing room as counterweight to the bloom-dense quadrant
+- Intentional negative space: one quadrant has sharp-layered-quiet / clear-sky / gentle sky-glow breathing room as counterweight to the bloom-dense quadrant
 - Light hierarchy: warm hero blooms in golden / amber / rim light, cooler ambient / blue shadow in the deep distance
 - Depth recession: foreground saturated and crisp, midground softening, deep distance receding with natural depth
 
@@ -1120,7 +1127,7 @@ Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quad
 DELIBERATE COMPOSITION CRAFT:
 - Symmetric / centered for Magritte-style frames, off-center rule-of-thirds for Dali-style frames — match the impossibility's nature
 - The impossibility is the EYE'S DESTINATION — the composition draws the eye to it
-- Multi-tier depth: tactile foreground bloom-detail (still real) → midground impossibility (the world-element being broken) → deep distance receding into soft depth or surreal-glow
+- Multi-tier depth: tactile foreground bloom-detail (still real) → midground impossibility (the world-element being broken) → deep distance receding in crisp sharp overlapping layers or surreal-glow
 - Light hierarchy: warm hero blooms / cooler ambient or surreal-shadow
 - Frame-within-frame welcomed (Magritte-style windows / portals / doorways into other realities)
 
@@ -1200,7 +1207,7 @@ The path is VISIBLE from the bottom-center of the frame, leading through the arc
 ━━━ THE DESTINATION GLIMPSE (what lies beyond the archway) ━━━
 ${destination_glimpse}
 
-The destination is glimpsed through the arch's opening, lit WARMER than the foreground, glowing like a doorway to somewhere magical. NEVER a blank backdrop. Always implies a wider bloom-world receding into soft depth.
+The destination is glimpsed through the arch's opening, lit WARMER than the foreground, glowing like a doorway to somewhere magical. NEVER a blank backdrop. Always implies a wider bloom-world receding in crisp sharp overlapping layers.
 
 ━━━ HERO BLOOM AMONGST MANY — NON-NEGOTIABLE ━━━
 ONE specific HERO species dominates the foreground bloom-mass at its OWN natural form and scale — broad face, deep cup, pompom dome, hanging raceme, umbel, trumpet, ruffled rosette, daisy-face, or tall spike. Let the rolled species choose. The other 2-3 species act as SUPPORTING CAST cascading from the archway, threading through the foreground mass, drifting in midground.
@@ -1304,8 +1311,8 @@ The STRUCTURAL HERO of the conservatory is the ARCHITECTURE (the glass dome + ir
 
 ⚠️ DO NOT render a single oversized bloom centered in the frame. DO NOT render only one type of bloom dominating. Each of the 3-4 species appears in MULTIPLE locations across the frame — climbing, draping, cascading, carpeting — distributed in every quadrant.
 
-━━━ WARM SUN-SHAFTS THROUGH THE GLASS ━━━
-Diagonal sun-shafts pour through the glass dome at a dramatic angle, hitting the bloom-clouds in warm sun-shafts. The shafts catch suspended pollen-dust / dust-motes. The hero blooms catch the warm light; the rest of the conservatory sits in cooler ambient glass-filtered light.
+━━━ WARM DIRECTIONAL SUN THROUGH THE GLASS ━━━
+Crisp warm directional sunlight pours through the glass dome at a dramatic angle, landing sharp and clear on the bloom-clouds and flagstones below. The hero blooms catch the warm light in tack-sharp detail; the rest of the conservatory sits in cooler glass-filtered light, the air clear and crisp throughout.
 ${phenomenonSection}━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
 Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP / want to step INTO the conservatory / want to print and frame the image.
 
@@ -1320,7 +1327,7 @@ Pick ONE wide-interior composition per render (vary):
   H. **THROUGH-FERN-CURTAIN** — wide shot through a cascade of fern-fronds + climbing-vine curtains, deep conservatory visible behind
 
 ━━━ MATERIAL POETRY — GLASS / IRON / BLOOM ━━━
-"Wrought-iron with rust-patina under climbing-rose vines", "leaded-glass panes scattering sun in geometric patterns onto the flagstones", "moss-and-lichen accumulating in the iron joints", "petals fallen on the tile floor", "soft warm air catching the sun-shafts", "weathered terracotta planters overflowing with bloom-mass".
+"Wrought-iron with rust-patina under climbing-rose vines", "leaded-glass panes scattering sun in geometric patterns onto the flagstones", "moss-and-lichen accumulating in the iron joints", "petals fallen on the tile floor", "crisp warm sunlight raking across the flagstones", "weathered terracotta planters overflowing with bloom-mass".
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -1347,7 +1354,7 @@ ${vibeDirective.slice(0, 200)}
 ━━━ STRUCTURE — write in this exact order ━━━
 [wide-interior composition mode], [Victorian glass-and-iron conservatory architecture established — dome / framework / leaded-glass / flagstone floor barely visible THROUGH the bloom-curtain], [conservatory-type detail + structural anchor at the focal point], [OBSESSIVE distributed bloom-mass — 3-4 named species massed in EQUAL WEIGHT across every iron column, every arch, every rafter, every flagstone, every planter — NOT a single hero, a FLORAL EXPLOSION], [petal-carpet covering the floor wall-to-wall / pendant cascades from rafters to head-height / climbing-bloom spirals wrapping every column], [warm sun-shafts diagonal through the glass]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — rust-patina iron glints through the bloom-curtain, leaded-glass scattering geometric light onto the petal-carpet, weathered terracotta overflowing]
 
-CRITICAL — Victorian glass-and-iron architecture is NON-NEGOTIABLE. Wide-angle interior with visible glass-dome and iron-framework. Warm sun-shafts through glass. HALF-architectural / HALF-jungle balance.
+CRITICAL — Victorian glass-and-iron architecture is NON-NEGOTIABLE. Wide-angle interior with visible glass-dome and iron-framework. Warm directional sun through glass. HALF-architectural / HALF-jungle balance.
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the conservatory.`;
   },
@@ -1412,7 +1419,7 @@ USE THE FULL LIGHTING SPECTRUM (the lighting axis rotates across these — RENDE
   • Chiaroscuro Rembrandt — directional light from one side, deep velvet shadow on the opposite, dramatic
   • Dappled canopy — leaf-shadows fragmenting light into shifting patches on bloom-carpet
   • Magic-hour painted glow — warm late-afternoon backlight (the OLD default — use SPARINGLY, 1-in-5 max)
-  • Foggy atmospheric — soft mist softening depth (the OLD default — use SPARINGLY, 1-in-5 max)
+  • Crystalline clarity — exceptionally clear sharp air, every depth layer crisp edge-to-edge, vivid saturated detail to the far distance
 
 ⚠️ Render whatever the lighting axis ROLLED. Do NOT default to atmospheric haze / painted-gold mist / soft natural light EVERY render. Use the FULL spectrum — across a batch of 5 renders we should see at least 3-4 distinct lighting/weather/time-of-day modes.
 
@@ -1467,8 +1474,8 @@ Every render is a JAW-DROPPING EPIC CINEMATIC MOVIE-POSTER / GALLERY-PIECE FRAME
   1. **THE FANTASY BLOOM-CITY** as the dominant hero — impossible architecture overgrown / consumed / formed BY flowers
   2. **OVERWHELMING BLOOM-MASS** — building-scale cascades, sky-filling petal-storms, vine-bridges, flower-cathedrals
   3. **DRAMATIC FANTASY SKY** — aurora / sunset / dawn / cloud-layers / impossible double-sun / starfield / floating moon
-  4. **MAGICAL ATMOSPHERIC LAYER** — drifting petal-snow / glowing pollen-motes / bioluminescent spores / golden sun-shafts
-  5. **SENSE OF VAST SCALE** — multi-tier vertical depth from foreground bloom-cascade to deep-distance fantasy spires receding into soft depth
+  4. **MAGICAL ATMOSPHERIC LAYER** — drifting petal-snow / crisp glinting pollen-flecks / sharp floating sparkles / clear warm directional light
+  5. **SENSE OF VAST SCALE** — multi-tier vertical depth from foreground bloom-cascade to deep-distance fantasy spires receding in crisp sharp overlapping layers
 
 THINK: Tolkien-illustrated-edition / Pre-Raphaelite painted-bloom-fields / Studio-Ghibli cherry-blossom-canopy / Lothlorien-from-Fellowship (the FLOWERS, not the architecture) / Brian-Froud-faerie-realm painted-flower-density / classical-painted "Garden of Earthly Delights" flower-mass / Monet-water-lily-immersive panels (BUT fantasy scale).
 
@@ -1586,8 +1593,8 @@ ${ruin_type}
 ${decay_anchor}
 
 The decay anchor is rendered with hyperreal precision — the specific way time has marked the structure (the cracked column / collapsed dome / fallen statue / shattered window / etc.). The bloom-mass converges around the decay-anchor as the visual focal point.
-${phenomenonSection}━━━ SUN-SHAFTS THROUGH BROKEN ARCHITECTURE ━━━
-Sun-shafts pour through the BROKEN parts of the structure — through the collapsed roof / shattered windows / cracked dome / fallen wall section. The shafts catch suspended pollen / dust. The hero light catches the bloom-mass where it pools; the rest sits in cooler shadow.
+${phenomenonSection}━━━ WARM DIRECTIONAL SUN THROUGH BROKEN ARCHITECTURE ━━━
+Crisp warm directional sunlight pours through the BROKEN parts of the structure — through the collapsed roof / shattered windows / cracked dome / fallen wall section — landing sharp and clear on the bloom-mass where it pools; the rest sits in cooler shadow, the air clear and crisp.
 
 ━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
 Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP at the beauty of nature's reclamation / want to print and frame the image.
@@ -1607,7 +1614,7 @@ Pick ONE wide cinematic composition per render (vary):
 DELIBERATE COMPOSITION CRAFT:
 - Multi-tier depth: tactile foreground bloom-detail + crumbled stone → midground ruin → deep distance warm depth
 - Strong leading-lines (column-colonnade / staircase / path / fallen wall)
-- Light hierarchy: warm sun-shafts pour through broken architecture, cool ambient shadow elsewhere
+- Light hierarchy: crisp warm directional sun pours through broken architecture, cool ambient shadow elsewhere
 - Architecture frames the shot (broken arch / collapsed dome / column-row framing)
 - Intentional negative-space (sky through broken roof / open horizon / quiet shadow quadrant)
 

@@ -10,7 +10,7 @@ const PROMPT_PREFIX =
   'breathtaking floral beauty, every petal in jewel-saturated focus, magazine-cover composition';
 
 const PROMPT_SUFFIX =
-  'render every named species as that exact species in its named color, full-spectrum jewel-tone color across the frame, no text, no words, no watermarks, hyper-detailed gallery quality';
+  'render every named species as that exact species in its named color, full-spectrum jewel-tone color across the frame, every depth layer in sharp focus through clear crisp air, distant elements small but tack-sharp and clearly defined, no text, no words, no watermarks, hyper-detailed gallery quality';
 
 const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE — NON-NEGOTIABLE ━━━
 No humans, no faces, no figures, no silhouettes, no shadows of people anywhere in the frame. Wildlife (hummingbird, bee, butterfly, dragonfly, small lizard) is allowed only as peripheral accent — never the subject.`;
