@@ -1,6 +1,6 @@
 # Queue + Workers Refactor — Plan
 
-**Status:** proposed (2026-05-09)
+**Status:** PARTIALLY SHIPPED. Async queue (`dream_queue` + `dream-queue-worker`) is live; **nightly migrated onto it 2026-05-26** (fan-out worker, batch-claim, `EdgeRuntime.waitUntil`, pg_cron trigger via migration 193, dedup + health monitor). `first_dream` dispatcher built (its onboarding enqueue path is feature-flagged off). `create`/`dlt` still pending. **Current state of record: CLAUDE.md "Scaling Initiative" + `NIGHTLY_DREAM_ENGINE.md`.** (Originally proposed 2026-05-09.)
 **Trigger:** dual face-swap WORKER_RESOURCE_LIMIT errors persist despite Phase 2 fanout
 **Goal:** rock-solid dream generation pipeline ready for launch
 
@@ -9,6 +9,7 @@
 Phase 2 (DUAL_SWAP_FANOUT) split `face-swap-dual` into its own isolate — necessary but not sufficient. Today's smoke confirmed the dual-swap pipeline still blows Supabase's 150MB/2s per-invocation ceiling on standard 1024×1664 renders (HTTP 546 `WORKER_RESOURCE_LIMIT`). Per CLAUDE.md scaling roadmap, this is the signal to refactor.
 
 The current synchronous architecture has 4 root problems:
+
 1. **Hard per-invocation budget** — pixel work busts Supabase's 2s CPU ceiling (no amount of memory hygiene fixes this)
 2. **User waits ~30-60s** with no progress signal
 3. **No retry on failure** — flaky Replicate cold starts mean transient failures land as user-visible errors
@@ -48,13 +49,13 @@ Worker runs in a separate function. Worker has no time pressure (5-min cron tick
 
 ## What this fixes
 
-| Problem today | After refactor |
-|---|---|
-| WORKER_RESOURCE_LIMIT on dual swap | Worker has no 2s budget; runs at its own pace |
-| User sees 30-60s loading screen with no signal | <500ms enqueue → realtime push when done |
-| Flaky Replicate cold starts → user-visible errors | Worker retries 3x with backoff before surfacing |
-| Concurrent burst → pool exhaustion | Workers serialize at controllable rate |
-| First dream + nightly + Create all build separate pipelines | One generic worker handles all sources |
+| Problem today                                               | After refactor                                  |
+| ----------------------------------------------------------- | ----------------------------------------------- |
+| WORKER_RESOURCE_LIMIT on dual swap                          | Worker has no 2s budget; runs at its own pace   |
+| User sees 30-60s loading screen with no signal              | <500ms enqueue → realtime push when done        |
+| Flaky Replicate cold starts → user-visible errors           | Worker retries 3x with backoff before surfacing |
+| Concurrent burst → pool exhaustion                          | Workers serialize at controllable rate          |
+| First dream + nightly + Create all build separate pipelines | One generic worker handles all sources          |
 
 ## Phases
 
@@ -63,7 +64,9 @@ Worker runs in a separate function. Worker has no time pressure (5-min cron tick
 **Goal:** infrastructure ready, no behavior change yet.
 
 Files:
+
 - `supabase/migrations/156_dream_queue.sql` — `dream_queue` table:
+
   ```sql
   CREATE TABLE public.dream_queue (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -107,6 +110,7 @@ Files:
 **Goal:** first-dream goes through queue + worker. Single source path proven before generalizing.
 
 Files:
+
 - `supabase/functions/dream-queue-worker/dispatchers/firstDream.ts` — extracted Sonnet+Flux+swap logic from current `generate-first-dream/index.ts`
 - `supabase/functions/generate-first-dream/index.ts` — gut. Becomes: persona+medium+vibe+brief construction → INSERT into dream_queue → return `{dreamId, status: 'queued'}`. ~150 lines vs current ~600.
 - `components/onboarding/RevealStep.tsx` — switch from "POST and wait for image_url" to:
@@ -158,13 +162,13 @@ Files:
 
 **~11 days focused work** = roughly 2 weeks calendar time with normal review/iteration cycles.
 
-| Phase | Days | What it delivers |
-|---|---|---|
-| 1 | 2 | DB ready, worker shell, cron tick infra |
-| 2 | 3 | First-dream end-to-end via queue, new RevealStep UX |
-| 3 | 3 | Nightly + V4 + DLT migrated |
-| 4 | 2 | Retry/backoff/stale-job/rate-limit hardening |
-| 5 | 1 | Cutover + observability |
+| Phase | Days | What it delivers                                    |
+| ----- | ---- | --------------------------------------------------- |
+| 1     | 2    | DB ready, worker shell, cron tick infra             |
+| 2     | 3    | First-dream end-to-end via queue, new RevealStep UX |
+| 3     | 3    | Nightly + V4 + DLT migrated                         |
+| 4     | 2    | Retry/backoff/stale-job/rate-limit hardening        |
+| 5     | 1    | Cutover + observability                             |
 
 Phase 1+2 alone (5 days) gets first-dream rock-solid for launch — nightlies + Create can stay on the synchronous path during early launch since their concurrent load is lower.
 

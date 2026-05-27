@@ -57,11 +57,11 @@ The dream engine has evolved beyond the legacy two-pass `vibeEngine.ts`. Current
 
 **Photo restyle path** (`restyle-photo` Edge Function) — separate Kontext-based transformation for "upload photo + pick medium" flow. Uses per-medium `MEDIUM_CONFIGS` in `_shared/photoPrompts.ts`.
 
-**Nightly dreams** (`nightly-dreams` Edge Function, GitHub Actions cron `0 8 * * *` = 08:00 UTC daily, no jitter; `scripts/nightly-dreams.js` selects users + invokes the Edge Function per user) — same scene engine, runs once per **Pro-or-in-trial** user per night (free users post-trial get none). Personalizes from `user_recipes.recipe` JSONB (places/things/cast/moods), NOT the `dream_seeds`/`dream_cast` tables. Three composition paths roll 40/30/30: cast+anchor, anchor-only, cast-in-random-scene.
+**Nightly dreams** — **async queue pipeline** (overhauled 2026-05-26; previously rendered inline). Flow: the GitHub Actions cron `0 8 * * *` (08:00 UTC, no jitter) runs `scripts/nightly-dreams.js`, which **ENQUEUES** one `dream_queue` job (`source='nightly'`) per eligible **Pro-or-in-trial** user (free post-trial get none; bots excluded; per-user-per-day idempotent via `dedup_key`). The `dream-queue-worker` (pg_cron every minute, migration 193) batch-claims jobs and fans each out to the `nightly-dreams` render Edge Function (its own isolate) + finalizes it (bot message, `finalize_nightly_upload`, notification, wish). Same scene engine: personalizes from `user_recipes.recipe` JSONB (places/things/cast/moods), NOT the (vestigial) `dream_seeds`/`dream_cast` tables. Three composition paths roll 40/30/30: cast+anchor, anchor-only, cast-in-random-scene. Full architecture: `NIGHTLY_DREAM_ENGINE.md` + Scaling Initiative below.
 
 **First dream** (`generate-first-dream` Edge Function) — persona-locked medium/vibe picking for guaranteed-banger first-render quality. See `FIRST_DREAM_BANGER_SPEC.md`.
 
-**Async queue + worker** (`dream-queue-worker`, `dream_queue` table) — see Scaling Initiative section below.
+**Async queue + fan-out workers** (`dream_queue` table + `dream-queue-worker`) — drains **nightly (live)** + first_dream jobs: pg_cron-triggered, batch-claim (SKIP LOCKED), parallel dispatch, `EdgeRuntime.waitUntil` background processing, retry/backoff/dead-letter. See Scaling Initiative section below.
 
 ### Vibe Profile (`types/vibeProfile.ts`)
 
@@ -88,7 +88,7 @@ Each nightly dream gets a short whimsical message from DreamBot via a dedicated 
 
 > **STOP — read this before any bot work.** ANY task that touches bot config, path files, pools, seeds, brief composition, archetypes, render quality, or even just _answers a question_ about how a specific bot works (DragonBot, GothBot, StarBot, SteamBot, MechBot, DinoBot, BrickBot, BloomBot, ChibiBot, FaeBot, MangaBot, PixelBot, RetroBot, TinyBot, ToyBot, EarthBot) REQUIRES re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` in full first. The playbook is the canonical brain for the bot pipeline — its bar (every render = 10/10 poster-worthy frame), its 8 components of memorable scenes, its per-bot Round-N iteration logs, its cross-bot lessons table, and its failure-mode catalog are how this system stays coherent across 16 bots and dozens of paths. Skipping it produces one-off fixes that contradict prior lessons. **And: UPDATE the playbook with every new lesson learned the moment you learn it — don't wait to be asked.**
 
-Bots post via a single DB-driven dispatcher (`.github/workflows/bots-dispatcher.yml`, every 15 min) that reads `bot_schedules` for due bots and shells out to `scripts/run-bot.js` per bot. Cadence is owned per-bot in the DB: `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = '<name>';` (no code commit, no app deploy). Each bot is a self-contained module under `scripts/bots/<botname>/`:
+Bots post via a single DB-driven dispatcher (`.github/workflows/bots-dispatcher.yml`, every 15 min) that reads `bot_schedules` for due bots and shells out to `scripts/run-bot.js` per bot. Cadence is owned per-bot in the DB: `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = '<name>';` (no code commit, no app deploy). **Path rotation is a flat round-robin shuffle-bag** — every bot sets `cycleAllPaths: true` with no `pathWeights`, so each path posts exactly once per cycle in randomized order before the bag reshuffles (fleet-wide flatten 2026-05-26; cycle state persists across dispatcher runs via `bot_run_log` count % cycle-size; `mechbot` excepted pending its in-flight WIP). Each bot is a self-contained module under `scripts/bots/<botname>/`:
 
 - **`index.js`** — bot config (username, mediums, vibes, allowedModels, modelByPath, vibesByPath, mediumByPath, mediumStyles, enhancement layer toggles, `rollSharedDNA()` + `buildBrief()` entry points).
 - **`paths/*.js`** — one file per creative path (e.g., `dark-landscape.js`, `goth-closeup.js`). Each path declares either an inline brief or an archetype (`builder.archetype`) consumed by `scripts/lib/brief-composer.js`.
@@ -145,7 +145,9 @@ EarthBot is a stub. All others have full path/pool/seed implementations.
 
 ### Pro Subscription
 
-Long-press save-to-photos for HQ downloads (and other future Pro features). Setup details in `PRO_SUBSCRIPTION_SETUP.md` and `SPARKLE_PAYMENTS_SETUP.md`. Pricing strategy in `SPARKLE_PRICING_STRATEGY.md`.
+Long-press save-to-photos for HQ downloads + **a nightly dream every night** (Pro perk — free users post-trial get none). Setup details in `PRO_SUBSCRIPTION_SETUP.md` and `SPARKLE_PAYMENTS_SETUP.md`. Pricing strategy in `SPARKLE_PRICING_STRATEGY.md`.
+
+**Pro-state — single source of truth (3 runtimes, keep in sync).** A user is Pro if they have an active PAID subscription (`pro_subscription=true` AND unexpired `pro_subscription_expires_at`) **OR** are within the 14-day trial (`pro_trial_started_at` + `PRO_TRIAL_DAYS`). It's re-validated on **every read** so a missed RevenueCat `EXPIRATION` webhook can't leave permanent Pro; trial lapse is purely time-based (no event/sweep). Implementations that must stay identical: `lib/proStatus.ts` (client; `store/auth.ts` imports it), `scripts/lib/nightlyEligibility.js` (nightly cron gate), and the `is_pro_active()` Postgres fn (migration 176, used by Pro-gated Edge Functions). Change all three together. Behavioral tests: `__tests__/lib/proStatus.test.ts` + `nightlyEligibility.test.ts`. Paid expiry → `EXPIRATION` webhook flips `pro_subscription=false` (`revenuecat-webhook`, `PRO_REVOKE_EVENTS`); `CANCELLATION` does NOT revoke (access until expiry).
 
 ### Purchase Flow
 
@@ -219,7 +221,7 @@ constants/
   onboarding.ts, gestures.ts, grid.ts, layout.ts, mascots.ts, etc.
 
 supabase/
-  migrations/        170 SQL migrations (highest prefix: 171)
+  migrations/        193 SQL migrations (highest prefix: 193)
   functions/         13 Edge Functions (full list under "Deploying Edge Functions" below)
     _shared/         37 shared modules (scene engine, casting, LLM, image,
                      persistence, face swap, prompt compiler, etc.)
@@ -397,7 +399,7 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 
 ---
 
-## Database (170 migrations, key tables)
+## Database (193 migrations, key tables)
 
 ### Core
 
@@ -424,7 +426,7 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 - **`ai_generation_log`** — audit trail (recipe_snapshot, rolled_axes, enhanced_prompt, model_used, cost_cents, status)
 - **`ai_generation_budget`** — daily per-user cost
 - **`dream_jobs`** — legacy in-flight tracking (status: processing/done/failed/nsfw)
-- **`dream_queue`** — async queue (queued → in_progress → completed/failed → dead_letter; SELECT FOR UPDATE SKIP LOCKED on pending index)
+- **`dream_queue`** — async queue (queued → in_progress → completed/failed → dead_letter; claim via `claim_dream_queue_job` / `claim_dream_queue_jobs` = SELECT FOR UPDATE SKIP LOCKED; `source` ∈ first_dream/nightly/create/dlt; `dedup_key` unique index = per-source-per-day idempotency; `attempt_count` + `created_at`-future backoff). Drained by `dream-queue-worker` (pg_cron, migration 193).
 
 ### Social
 
@@ -437,7 +439,7 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 
 ### Notable RPCs
 
-`get_feed`, `get_friends_feed`, `get_following_feed`, `get_inbox`, `get_comments`, `get_public_profile`, `spend_sparkles`, `grant_sparkles`, `refund_sparkles` (idempotent), `record_impression`, `get_dream_mediums`, `get_dream_vibes`, `get_bot_thumbnails`, `get_vibe_stats`, `approve_follow_request`, `block_user`, `finalize_nightly_upload`, `delete_own_account`, `admin_delete_upload`, `claim_dream_queue_job`.
+`get_feed`, `get_friends_feed`, `get_following_feed`, `get_inbox`, `get_comments`, `get_public_profile`, `spend_sparkles`, `grant_sparkles`, `refund_sparkles` (idempotent), `record_impression`, `get_dream_mediums`, `get_dream_vibes`, `get_bot_thumbnails`, `get_vibe_stats`, `approve_follow_request`, `block_user`, `finalize_nightly_upload`, `delete_own_account`, `admin_delete_upload`, `claim_dream_queue_job`, `claim_dream_queue_jobs` (batch), `is_pro_active` (single-source Pro/trial gate — migration 176).
 
 ---
 
@@ -617,7 +619,13 @@ Activate: `supabase secrets set DUAL_SWAP_FANOUT=true`. Roll back: unset. Zero c
 
 Single-cast face swap is NOT split — light enough to stay in-process.
 
-**Async queue + workers (shipped earlier in 2026):** `dream_queue` table + `dream-queue-worker` Edge Function (cron every 15s, atomic claim via SELECT FOR UPDATE SKIP LOCKED, exponential backoff, dead_letter after 5 attempts). Per-source dispatch (first_dream / nightly / create / dlt). `refund-stuck-jobs` sweeps orphans. Full plan: `QUEUE_WORKERS_REFACTOR.md` and `DREAM_QUEUE_PLAN.md`.
+**Async queue + fan-out workers (`dream_queue` + `dream-queue-worker`).** The worker **batch-claims** up to `MAX_JOBS_PER_TICK` (10) due jobs via `claim_dream_queue_jobs` (SELECT FOR UPDATE SKIP LOCKED) and processes them **in parallel**. Critically, it **acks the trigger immediately and runs the batch via `EdgeRuntime.waitUntil`** — the cron's `pg_net` call disconnects after a short timeout, and Edge isolates are reaped at the **150s request-idle limit** (CPU 2s excl I/O, wall-clock 150s free / 400s paid), so awaiting renders synchronously caused `IDLE_TIMEOUT` (root-caused + fixed 2026-05-26, commit `71568afa`; the render itself is fine — ~24s). Per-source dispatch:
+
+- **nightly** (LIVE 2026-05-26) — fire to the `nightly-dreams` render Edge Function via its worker-token branch (`Bearer DREAM_QUEUE_WORKER_TOKEN`, `{user_id}` in body, recipe loaded fresh from DB so edits land), each render its own isolate; then finalize. NSFW → immediate dead-letter (no costly retries). Dispatcher: `dispatchers/nightly.ts`.
+- **first_dream** — renders inline in the worker (`dispatchers/firstDream.ts`); enqueued by `generate-first-dream` (feature-flagged onboarding path `EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED`, OFF by default — onboarding currently renders directly via `generate-dream`).
+- **create / dlt** — not implemented (throw `dispatcher_not_implemented`).
+
+Retry = exponential backoff (1m/5m/30m/2h via `created_at`-in-future), dead_letter after 5 attempts; stale-recovery requeues `in_progress` jobs older than 5min. **Trigger:** pg_cron every minute (migration `193`, worker token read from Supabase Vault `dream_queue_worker_token`). **Idempotency:** `dream_queue.dedup_key` unique index (`nightly:<uid>:<UTC-date>`). **Health monitor:** `scripts/check-dream-queue.js` + `.github/workflows/dream-queue-monitor.yml` (hourly, fails loud on stuck-queued / dead-letter pileup) — this replaced the old inline cron's exit-1-on-zero signal. `refund-stuck-jobs` sweeps the legacy `dream_jobs` (paid create path), NOT the queue. **Tuning knobs:** `MAX_JOBS_PER_TICK` × pg_cron cadence × overlapping ticks (SKIP LOCKED). Plan: `QUEUE_WORKERS_REFACTOR.md` (matches reality; `DREAM_QUEUE_PLAN.md` describes an unbuilt `dream_jobs` design — ignore). **Future scale-up if a tick can't fit its batch in wall-clock:** make each render a self-marking consumer (fire-and-forget + render owns its job row) instead of the worker awaiting the batch.
 
 **Signals to escalate further** (Replicate enterprise tier, Anthropic higher tier, or full async UI):
 

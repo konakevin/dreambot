@@ -1,17 +1,26 @@
 # Nightly Dream Engine — Architecture & Expansion Guide
 
-> **⚠️ STATUS (2026-05-26): parts of this doc are stale — corrections inline below.**
-> The live engine is **procedural** (`_shared/dreamAlgorithm.ts` `rollDream()` +
-> `sceneEngine.ts` `assembleScene()` + `biomeAxes.ts`), NOT a `dream_templates`
-> template-fill (that table was deleted). The only live trigger is **GitHub
-> Actions cron `0 8 * * *` (08:00 UTC, no jitter)** running
-> `scripts/nightly-dreams.js`, which invokes the `nightly-dreams` Edge Function
-> per user — there is **no pg_cron** trigger. Nightly is **Pro/trial-only**
-> (gated in `scripts/nightly-dreams.js`; free users post-trial get none). It
-> personalizes from the `user_recipes.recipe` JSONB (places/things/cast/moods),
-> **not** the `dream_seeds`/`dream_cast` tables. The cron skips users who already
-> got a _completed nightly_ dream today (not anyone who generated manually) and
-> exits 1 on a zero-output / high-failure run.
+> **⚠️ STATUS (2026-05-26): the deeper sections below are stale — read this header + "Current Architecture" first.**
+> The live engine is **procedural** (`_shared/dreamAlgorithm.ts:rollDream()` +
+> `sceneEngine.ts:assembleScene()` + `biomeAxes.ts`), NOT a `dream_templates`
+> template-fill (that table was deleted). Nightly runs through an **async queue**
+> (not inline). It's **Pro/trial-only** and personalizes from the
+> `user_recipes.recipe` JSONB (places/things/cast/moods), **not** the (vestigial)
+> `dream_seeds`/`dream_cast` tables. Ignore older references to `dream_templates`,
+> "pg_cron at 3am", "1am MST", or inline per-user rendering.
+
+## Current Architecture (2026-05-26 — async queue + fan-out workers)
+
+Nightly is a **queue pipeline**, not inline rendering (overhauled 2026-05-26 — see CLAUDE.md "Scaling Initiative" for the queue internals):
+
+1. **Enqueue** — `scripts/nightly-dreams.js` (GitHub Actions cron `0 8 * * *`, 08:00 UTC, no jitter). Selects onboarded + `ai_enabled` + **Pro-or-in-trial** users (bots excluded), then **bulk-inserts one `dream_queue` job per user** (`source='nightly'`, payload `{dream_wish, wish_recipient_ids}`, `dedup_key='nightly:<uid>:<UTC-date>'`). Snapshots the wish into the payload + clears it from `user_recipes` so retries can't double-spend. Idempotent (dedup_key unique index + app pre-filter). **Does not render.**
+2. **Drain** — `dream-queue-worker` Edge Function, triggered by **pg_cron every minute** (migration `193`; worker token from Supabase Vault). Batch-claims up to `MAX_JOBS_PER_TICK` (10) via `claim_dream_queue_jobs` (SKIP LOCKED), processes the batch **in parallel**, and runs the whole tick via **`EdgeRuntime.waitUntil`** so it acks pg_cron instantly (the fix for the 150s `IDLE_TIMEOUT` — awaiting renders inline got the isolate reaped when pg_net disconnected). Retry backoff 1m/5m/30m/2h, dead_letter after 5 attempts; stale-recovery requeues `in_progress` jobs older than 5min.
+3. **Render** — `dispatchers/nightly.ts` invokes `nightly-dreams/index.ts` via its **worker-token branch** (`{user_id}` in body, recipe loaded fresh from DB so edits always land) — each render in its own isolate. Then **finalizes**: Haiku bot message → `finalize_nightly_upload` RPC → `dream_generated` notification → wish-recipient notifications. NSFW → immediate dead-letter (no costly retries).
+4. **Monitor** — `scripts/check-dream-queue.js` + `.github/workflows/dream-queue-monitor.yml` (hourly) fail loud on stuck-queued / dead-letter pileup (replaced the old inline cron's exit-1-on-zero signal).
+
+**Gating** = `scripts/lib/nightlyEligibility.js:isProActive` — mirrors `lib/proStatus.ts` (client) + `is_pro_active()` (migration 176). Pro/trial → a dream every night; free post-trial → none.
+
+The **render pipeline** documented below (scene DNA → Sonnet → Flux → face-swap → persist → log) is still accurate — it's exactly what the `nightly-dreams` render Edge Function runs per job. Only the _triggering/orchestration_ changed (inline → queue).
 
 ## Overview
 
@@ -19,7 +28,7 @@ The nightly dream engine generates one personalized dream per user per night. It
 
 1. **`supabase/functions/generate-dream/index.ts`** — the Edge Function called by the app (onboarding reveal + "My Mediums"/"My Vibes" on Create screen)
 2. **`supabase/functions/nightly-dreams/index.ts`** — the per-user render Edge Function (invoked by the script below, once per eligible user)
-3. **`scripts/nightly-dreams.js`** — the GitHub Actions cron entry (`0 8 * * *`, 08:00 UTC); selects Pro/trial users and invokes the Edge Function per user
+3. **`scripts/nightly-dreams.js`** — the GitHub Actions cron entry (`0 8 * * *`, 08:00 UTC); selects Pro/trial users and **enqueues** a `dream_queue` job each (the `dream-queue-worker` drains them via the render Edge Function — see "Current Architecture" above)
 
 **This path is intentionally isolated from the Create/DLT dream paths.** Changes here do not affect the V2 text, restyle, or reimagine paths, and vice versa.
 

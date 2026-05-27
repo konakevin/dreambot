@@ -1,5 +1,13 @@
 # DreamBot Async Queue + Workers Refactor — Implementation Plan
 
+> **⚠️ SUPERSEDED / DO NOT FOLLOW (2026-05-26).** This plan describes a `dream_jobs`
+> table + `enqueue_dream_job` RPC + sparkle-charge-on-enqueue + pg_net-trigger design
+> that was **never built**. What actually shipped is a different table (`dream_queue`,
+> migration 156) + `claim_dream_queue_job` / `claim_dream_queue_jobs` + a token-auth
+> `dream-queue-worker` with fan-out + `EdgeRuntime.waitUntil`. For the REAL architecture
+> see CLAUDE.md "Scaling Initiative", `NIGHTLY_DREAM_ENGINE.md`, and
+> `QUEUE_WORKERS_REFACTOR.md` (which matches reality). Kept for historical context only.
+
 > **Purpose of this doc.** Next session, you (or another Claude) should be able to read this file top to bottom and start coding. It contains everything needed to ship Phase A without re-deriving anything: context, architecture, schema, RPC signatures, file list, decision points, and verification steps.
 >
 > **Status:** plan only. Nothing has been built yet. The codebase still uses the synchronous `generate-dream` path.
@@ -35,11 +43,13 @@ This is **not a code bug.** Two earlier dual renders the same hour succeeded in 
 ### What's already been shipped (don't redo)
 
 **Phase 1 — in-place memory hygiene** (committed, in `supabase/functions/_shared/faceSwap.ts`):
+
 1. `perturbSourceImage` uploads to temp storage instead of returning base64 (was 5–7 MB heap hog × 2 swaps in parallel).
 2. Sequential post-swap downloads (was `Promise.all`, ~10 MB simultaneous).
 3. Eagerly null buffers after last use to give V8 GC hints.
 
 **Phase 2 — function split via `DUAL_SWAP_FANOUT` env flag** (committed, deployed, **flag is ON**):
+
 - New Edge Function `face-swap-dual` (`supabase/functions/face-swap-dual/index.ts`) owns the entire `dualFaceSwap` body.
 - New dispatcher `supabase/functions/_shared/dualSwapDispatch.ts` checks the env flag.
 - Both `generate-dream` and `nightly-dreams` route through the dispatcher.
@@ -91,11 +101,11 @@ This is **not a code bug.** Two earlier dual renders the same hour succeeded in 
 
 **Recommendation: HTTP-triggered Edge Function via Postgres `pg_net` trigger on `INSERT`, with a 30-second cron sweeper as backstop.**
 
-| Option | Verdict |
-|---|---|
+| Option                                                    | Verdict                                                                                                                                                   |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Edge Function HTTP-triggered by `pg_net` AFTER INSERT** | ✅ **v1.** Fresh isolate per job (same memory budget as `face-swap-dual` today). Near-zero queue latency under healthy conditions. Reuses existing infra. |
-| Edge Function on cron tick (every 30s) | ❌ Adds 30s latency floor. One isolate claims N jobs sequentially → defeats the per-job-isolate gain. |
-| External pool (Fly/Modal/Railway) | ❌ Defer. New monthly cost, new deploy story, blows the "single dev" constraint. Reconsider in Phase D+. |
+| Edge Function on cron tick (every 30s)                    | ❌ Adds 30s latency floor. One isolate claims N jobs sequentially → defeats the per-job-isolate gain.                                                     |
+| External pool (Fly/Modal/Railway)                         | ❌ Defer. New monthly cost, new deploy story, blows the "single dev" constraint. Reconsider in Phase D+.                                                  |
 
 **Backstop:** `pg_net` is async best-effort. A 30-second cron sweeper polls for `status='queued'` rows older than 30s and re-fires the trigger. Same sweeper handles lease recovery (workers that died mid-job).
 
@@ -111,17 +121,20 @@ This is **not a code bug.** Two earlier dual renders the same hour succeeded in 
 ## 3. The contract — what changes for users
 
 ### Today (sync)
+
 ```
 Tap Generate → spinner 30–150s → image OR "lost touch with the dream engine"
 ```
 
 ### After Phase B (dual-cast queued)
+
 ```
 Tap Generate → enqueue (<500ms) → loading screen with realtime status →
 image arrives in 30–90s → NEVER times out at 150s
 ```
 
 ### After Phase C (everything queued)
+
 - Median user-perceived latency: ~30–45s (same as today's happy path — no magic)
 - **p99: today is "150s timeout + retry". After: "~90s render succeeds."** That's the win.
 - Multiple dreams in flight allowed (cap 3) — tap 3 different vibes, see them stream in
@@ -135,6 +148,7 @@ image arrives in 30–90s → NEVER times out at 150s
 We **already have a `dream_jobs` table** (migration 095, expanded by 134). Today it's used as a passive log — `generate-dream` writes status updates but doesn't read it as a queue. The plan **evolves the existing table** rather than building a parallel one. **No table renames** — additive columns + helper RPCs only, so the legacy synchronous path keeps working unchanged during rollout.
 
 ### Existing columns to keep
+
 ```
 id uuid PK (client-generated)
 user_id uuid FK → users(id) ON DELETE CASCADE
@@ -273,17 +287,18 @@ Existing policies on `dream_jobs` already cover the new columns (RLS is row-leve
 
 Justification: matches today's flow (`useDreamCreate.ts:165`, `trySpendSparkle` then `generateDream`). Switching to "charge on success" would be a behavioral change unrelated to the queue refactor — out of scope, and worse UX (user enqueues 5 dreams thinking they're free, then 5 charges land at once).
 
-| Event | Code path | Sparkle |
-|---|---|---|
-| User taps Generate (paid) | client → `spend_sparkles(amount=1, ref=jobId)` | -1 immediately |
-| Network fails before enqueue lands | client catch → `refund_sparkles(ref=jobId, reason='refund:enqueue_failed')` | +1 (idempotent) |
-| Worker succeeds | worker → `complete_dream_job` | charge stands |
-| Worker fails after retries | worker → `fail_dream_job` returns terminal → worker calls `refund_sparkles(ref=jobId, reason='refund:hard_fail:<class>')` | +1 (idempotent) |
-| Lease expires (worker died), retries exhausted | sweeper → `fail_dream_job` → sweeper calls `refund_sparkles(ref=jobId, reason='refund:hard_fail:lease_expired')` | +1 (idempotent) |
-| User cancels mid-flight | client → `cancel_dream_job(jobId)` → server trigger refunds | +1 (idempotent) |
-| **Free generations** (nightly, first_dream, weekly) | `enqueue_dream_job(charge_amount=0, source='nightly')` — client/cron skips `spend_sparkles` | no charge, no refund |
+| Event                                               | Code path                                                                                                                 | Sparkle              |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| User taps Generate (paid)                           | client → `spend_sparkles(amount=1, ref=jobId)`                                                                            | -1 immediately       |
+| Network fails before enqueue lands                  | client catch → `refund_sparkles(ref=jobId, reason='refund:enqueue_failed')`                                               | +1 (idempotent)      |
+| Worker succeeds                                     | worker → `complete_dream_job`                                                                                             | charge stands        |
+| Worker fails after retries                          | worker → `fail_dream_job` returns terminal → worker calls `refund_sparkles(ref=jobId, reason='refund:hard_fail:<class>')` | +1 (idempotent)      |
+| Lease expires (worker died), retries exhausted      | sweeper → `fail_dream_job` → sweeper calls `refund_sparkles(ref=jobId, reason='refund:hard_fail:lease_expired')`          | +1 (idempotent)      |
+| User cancels mid-flight                             | client → `cancel_dream_job(jobId)` → server trigger refunds                                                               | +1 (idempotent)      |
+| **Free generations** (nightly, first_dream, weekly) | `enqueue_dream_job(charge_amount=0, source='nightly')` — client/cron skips `spend_sparkles`                               | no charge, no refund |
 
 **Edge cases:**
+
 - **Retry doesn't double-charge** because the charge happens BEFORE enqueue, keyed to jobId. Re-queuing the same jobId is free.
 - **Rapid double-tap** is protected by `busy.current` (existing) PLUS the `UNIQUE(user_id, idempotency_key)` index — even if both clicks slip through, `enqueue_dream_job` returns the existing jobId.
 - **`charge_amount=0`** on the row makes the worker's refund logic trivially correct: `IF charge_amount > 0 AND terminal_failure THEN refund(charge_amount)`.
@@ -339,6 +354,7 @@ export async function runDreamJob(
 **`onCheckpoint` lets the worker check `dream_jobs.status === 'cancelled'` between major steps and bail.**
 
 Two callers consume it:
+
 - **`generate-dream/index.ts`** (legacy sync path, kept gated by `DREAM_QUEUE_ENABLED` flag during rollout) — slim wrapper that does auth + sparkle bookkeeping + calls `runDreamJob`. **Shrinks 1416 → ~150 LOC.**
 - **`dream-worker/index.ts`** (new) — claims job, calls `runDreamJob`, completes/fails.
 
@@ -353,12 +369,21 @@ serve(async (req) => {
   const workerId = crypto.randomUUID();
 
   // Claim — silent return if race lost
-  const job = await supabase.rpc('claim_dream_job', { p_job_id: jobId, p_worker_id: workerId, p_lease_seconds: 90 });
+  const job = await supabase.rpc('claim_dream_job', {
+    p_job_id: jobId,
+    p_worker_id: workerId,
+    p_lease_seconds: 90,
+  });
   if (!job) return new Response(JSON.stringify({ status: 'race_lost' }), { status: 200 });
 
   // Heartbeat every 30s
   const heartbeat = setInterval(
-    () => supabase.rpc('heartbeat_dream_job', { p_job_id: jobId, p_worker_id: workerId, p_lease_seconds: 90 }),
+    () =>
+      supabase.rpc('heartbeat_dream_job', {
+        p_job_id: jobId,
+        p_worker_id: workerId,
+        p_lease_seconds: 90,
+      }),
     30_000
   );
 
@@ -366,26 +391,39 @@ serve(async (req) => {
     // Run with checkpoint hook
     const result = await runDreamJob(job.payload, ctx, {
       onCheckpoint: async () => {
-        const { data } = await supabase.from('dream_jobs').select('status').eq('id', jobId).single();
-        return data?.status === 'processing';  // false → cancelled, abort
+        const { data } = await supabase
+          .from('dream_jobs')
+          .select('status')
+          .eq('id', jobId)
+          .single();
+        return data?.status === 'processing'; // false → cancelled, abort
       },
     });
 
     await supabase.rpc('complete_dream_job', { ...result, p_job_id: jobId });
     return new Response(JSON.stringify({ status: 'done', uploadId: result.uploadId }));
-
   } catch (err) {
-    const errClass = classifyFailure(err);  // existing logic, lifted to _shared/classifyFailure.ts
+    const errClass = classifyFailure(err); // existing logic, lifted to _shared/classifyFailure.ts
     const shouldRetry = ['flux_gen', 'rate_limit', 'timeout'].includes(errClass);
-    const newStatus = await supabase.rpc('fail_dream_job', { p_job_id: jobId, p_error: errClass, p_should_retry: shouldRetry });
+    const newStatus = await supabase.rpc('fail_dream_job', {
+      p_job_id: jobId,
+      p_error: errClass,
+      p_should_retry: shouldRetry,
+    });
 
     if (newStatus !== 'queued' && job.charge_amount > 0) {
-      await supabase.rpc('refund_sparkles', { p_user_id: job.user_id, p_amount: job.charge_amount, p_reason: `refund:hard_fail:${errClass}`, p_reference_id: jobId });
-      await supabase.from('notifications').insert({ recipient_id: job.user_id, type: 'dream_failed', body: '...' });
+      await supabase.rpc('refund_sparkles', {
+        p_user_id: job.user_id,
+        p_amount: job.charge_amount,
+        p_reason: `refund:hard_fail:${errClass}`,
+        p_reference_id: jobId,
+      });
+      await supabase
+        .from('notifications')
+        .insert({ recipient_id: job.user_id, type: 'dream_failed', body: '...' });
     }
 
     return new Response(JSON.stringify({ status: newStatus, error: errClass }), { status: 200 });
-
   } finally {
     clearInterval(heartbeat);
   }
@@ -463,6 +501,7 @@ Runs every 30s via GitHub Actions (same pattern as existing `refund-stuck-jobs`)
 Ship together, NO behavior change for users. Fully reversible — Phase A is dormant code only.
 
 **Deliverables:**
+
 1. Migration `145_dream_jobs_queue.sql` — additive columns, indexes, all RPCs, trigger (dormant via empty `app.dream_worker_url`)
 2. New file `supabase/functions/_shared/runDreamJob.ts` — extracted from `generate-dream/index.ts`. Both callers (legacy sync `generate-dream` and new `dream-worker`) delegate to it. `generate-dream` keeps working identically — verify by re-running existing dual-cast renders.
 3. New file `supabase/functions/_shared/classifyFailure.ts` — lift inline classifier to shared module
@@ -474,6 +513,7 @@ Ship together, NO behavior change for users. Fully reversible — Phase A is dor
 **Gate:** env var `DREAM_QUEUE_ENABLED=false` (default). When `false`, the client never calls `enqueue-dream`. Until set to `true`, all jobs flow through the legacy `generate-dream` synchronous path exactly as today.
 
 **Verification commands for Phase A end:**
+
 ```bash
 # 1. Migration applied cleanly
 npx supabase db remote --help  # confirm linked
@@ -502,6 +542,7 @@ npm run check
 **This is the highest-impact, lowest-risk swap because dual-cast is already failing.**
 
 **Deliverables:**
+
 1. Client change — `lib/dreamRouting.ts` (new helper):
    ```ts
    export function shouldQueue(config: DreamGenConfig): boolean {
@@ -515,6 +556,7 @@ npm run check
 5. Server: enable `pg_net` trigger by setting `app.dream_worker_url` to the deployed worker URL; set `DREAM_QUEUE_ENABLED=true` secret
 
 **Gates (5–7 days of soak before Phase C):**
+
 - Dual-cast `done` rate ≥ 95% (vs today's ~50–75% with 546 errors)
 - p99 user-perceived latency (enqueue → result) ≤ 90s
 - Refund rate flat or DOWN (we should see the SAME or fewer refunds)
@@ -527,6 +569,7 @@ npm run check
 After Phase B has soaked clean for 5–7 days:
 
 **Deliverables:**
+
 1. `lib/dreamRouting.ts` — flip default branch: every paid generation goes via `enqueueDream`
 2. `scripts/nightly-dreams.js` — instead of looping users and calling the function, calls `enqueue_dream_job` per user with `source='nightly', charge_amount=0`. ~25s total fan-out vs ~50min today.
 3. `supabase/functions/generate-first-dream/index.ts` — same: enqueue with `source='first_dream', charge_amount=0`
@@ -549,6 +592,7 @@ Yes, nightly fans out via the queue too.
 **Today:** `scripts/nightly-dreams.js` loops eligible users, awaits each `nightly-dreams` Edge Function call sequentially with concurrency=N. ~500 users × ~30s / concurrency=5 = ~50 min wall-clock. A single hung user blocks a slot.
 
 **After Phase C:**
+
 - Cron makes one pass: for each eligible user, calls `enqueue_dream_job(charge_amount=0, source='nightly', payload={ flavor:'nightly', userId })`
 - ~500 enqueues × ~50ms = **~25s total fan-out**
 - Workers drain the queue overnight at normal isolate concurrency
@@ -560,23 +604,23 @@ Yes, nightly fans out via the queue too.
 
 ## 11. Failure modes (the full list)
 
-| Failure | Handling |
-|---|---|
-| Worker isolate dies mid-job (HTTP 546, OOM) | `lease_expires_at` passes → sweeper fires `fail_dream_job(should_retry=true)` → re-queue. After max retries → refund. |
-| `pg_net` trigger drops the POST | Cron sweeper finds `queued` row > 30s old, re-fires the POST. |
-| Replicate hard-down for hours | Worker errors → backoff escalates → after max retries `status='dead'`. Slack alert if any `dead` rows in 1-hour window. |
-| Anthropic 429s | Existing `enhanceViaHaiku` retry handles transient. If exhausted, `runDreamJob` falls through to `fallbackPrompt` (already in code). No queue-level retry. |
-| User deletes account before job completes | `dream_jobs.user_id` has `ON DELETE CASCADE`. Row vanishes. Worker's `complete_dream_job` becomes a no-op (row gone) — log warning, return. Storage upload orphaned → cleaned by sweeper's temp-cleanup pass. |
-| Same dream submitted twice rapidly | Client has one jobId. `busy.current` blocks 2nd tap. Even if it slips, `UNIQUE(user_id, idempotency_key)` returns existing jobId. |
-| Job stuck "processing" forever | Lease 90s default. Heartbeat every 30s. Hard ceiling at `created_at + 10 min` — sweeper force-fails. |
-| Database overload (table bloat) | Nightly DELETE of terminal rows older than 30 days (in sweeper). Active rows untouched. |
-| Realtime channel disconnects on client | `useDreamJob`'s 5s polling fallback covers. On reconnect, cache reconciled by next refetch. |
-| Two workers race for same jobId | `claim_dream_job` row-level lock. Loser gets "already claimed", returns 200 silently. |
-| Worker crashes AFTER `complete_dream_job` but BEFORE returning success | Idempotent — job is `done`, upload exists, realtime already broadcast, client got result. |
-| Storage upload succeeds but `uploads` insert fails | `runDreamJob` throws → `fail_dream_job` → refund. Orphaned storage object cleaned by sweeper. |
-| Client cancels but worker started face-swap | `onCheckpoint('pre-face-swap')` returns false → worker aborts + refund. Intermediate output not worth user confusion. |
-| Anthropic API key rotated mid-render | Sonnet call fails → fallback prompt path → generation completes. Existing behavior. |
-| Replicate prediction timeouts at 60s | `runDreamJob`'s deadline param. Throw → retry. |
+| Failure                                                                | Handling                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Worker isolate dies mid-job (HTTP 546, OOM)                            | `lease_expires_at` passes → sweeper fires `fail_dream_job(should_retry=true)` → re-queue. After max retries → refund.                                                                                         |
+| `pg_net` trigger drops the POST                                        | Cron sweeper finds `queued` row > 30s old, re-fires the POST.                                                                                                                                                 |
+| Replicate hard-down for hours                                          | Worker errors → backoff escalates → after max retries `status='dead'`. Slack alert if any `dead` rows in 1-hour window.                                                                                       |
+| Anthropic 429s                                                         | Existing `enhanceViaHaiku` retry handles transient. If exhausted, `runDreamJob` falls through to `fallbackPrompt` (already in code). No queue-level retry.                                                    |
+| User deletes account before job completes                              | `dream_jobs.user_id` has `ON DELETE CASCADE`. Row vanishes. Worker's `complete_dream_job` becomes a no-op (row gone) — log warning, return. Storage upload orphaned → cleaned by sweeper's temp-cleanup pass. |
+| Same dream submitted twice rapidly                                     | Client has one jobId. `busy.current` blocks 2nd tap. Even if it slips, `UNIQUE(user_id, idempotency_key)` returns existing jobId.                                                                             |
+| Job stuck "processing" forever                                         | Lease 90s default. Heartbeat every 30s. Hard ceiling at `created_at + 10 min` — sweeper force-fails.                                                                                                          |
+| Database overload (table bloat)                                        | Nightly DELETE of terminal rows older than 30 days (in sweeper). Active rows untouched.                                                                                                                       |
+| Realtime channel disconnects on client                                 | `useDreamJob`'s 5s polling fallback covers. On reconnect, cache reconciled by next refetch.                                                                                                                   |
+| Two workers race for same jobId                                        | `claim_dream_job` row-level lock. Loser gets "already claimed", returns 200 silently.                                                                                                                         |
+| Worker crashes AFTER `complete_dream_job` but BEFORE returning success | Idempotent — job is `done`, upload exists, realtime already broadcast, client got result.                                                                                                                     |
+| Storage upload succeeds but `uploads` insert fails                     | `runDreamJob` throws → `fail_dream_job` → refund. Orphaned storage object cleaned by sweeper.                                                                                                                 |
+| Client cancels but worker started face-swap                            | `onCheckpoint('pre-face-swap')` returns false → worker aborts + refund. Intermediate output not worth user confusion.                                                                                         |
+| Anthropic API key rotated mid-render                                   | Sonnet call fails → fallback prompt path → generation completes. Existing behavior.                                                                                                                           |
+| Replicate prediction timeouts at 60s                                   | `runDreamJob`'s deadline param. Throw → retry.                                                                                                                                                                |
 
 ---
 
@@ -584,36 +628,36 @@ Yes, nightly fans out via the queue too.
 
 ### New files
 
-| Path | Purpose | Est. LOC |
-|---|---|---|
-| `supabase/migrations/145_dream_jobs_queue.sql` | Schema + RPCs + trigger (dormant) | ~250 |
-| `supabase/functions/_shared/runDreamJob.ts` | Pure render function extracted from `generate-dream` | ~600 (mostly moved) |
-| `supabase/functions/_shared/classifyFailure.ts` | Lift inline classifier to shared | ~30 |
-| `supabase/functions/dream-worker/index.ts` | HTTP-triggered worker | ~150 |
-| `supabase/functions/enqueue-dream/index.ts` | Thin auth + RPC wrapper called by client | ~80 |
-| `supabase/functions/dream-queue-sweeper/index.ts` | Cron sweeper (lease recovery + missed-trigger backstop + archival) | ~200 |
-| `lib/dreamRouting.ts` | Client-side: should this go through queue? | ~40 |
-| `hooks/useDreamJob.ts` | Realtime + polling hook | ~100 |
-| `hooks/useMyInFlightDreams.ts` | Pill on home screen | ~50 |
-| `components/InFlightDreamsPill.tsx` | UI for pill | ~80 |
-| `__tests__/lib/dreamRouting.test.ts` | Unit tests for routing helper | ~80 |
-| `__tests__/lib/runDreamJob.test.ts` | Unit tests for the render function (mocked Replicate/Anthropic) | ~150 |
+| Path                                              | Purpose                                                            | Est. LOC            |
+| ------------------------------------------------- | ------------------------------------------------------------------ | ------------------- |
+| `supabase/migrations/145_dream_jobs_queue.sql`    | Schema + RPCs + trigger (dormant)                                  | ~250                |
+| `supabase/functions/_shared/runDreamJob.ts`       | Pure render function extracted from `generate-dream`               | ~600 (mostly moved) |
+| `supabase/functions/_shared/classifyFailure.ts`   | Lift inline classifier to shared                                   | ~30                 |
+| `supabase/functions/dream-worker/index.ts`        | HTTP-triggered worker                                              | ~150                |
+| `supabase/functions/enqueue-dream/index.ts`       | Thin auth + RPC wrapper called by client                           | ~80                 |
+| `supabase/functions/dream-queue-sweeper/index.ts` | Cron sweeper (lease recovery + missed-trigger backstop + archival) | ~200                |
+| `lib/dreamRouting.ts`                             | Client-side: should this go through queue?                         | ~40                 |
+| `hooks/useDreamJob.ts`                            | Realtime + polling hook                                            | ~100                |
+| `hooks/useMyInFlightDreams.ts`                    | Pill on home screen                                                | ~50                 |
+| `components/InFlightDreamsPill.tsx`               | UI for pill                                                        | ~80                 |
+| `__tests__/lib/dreamRouting.test.ts`              | Unit tests for routing helper                                      | ~80                 |
+| `__tests__/lib/runDreamJob.test.ts`               | Unit tests for the render function (mocked Replicate/Anthropic)    | ~150                |
 
 ### Modified files
 
-| Path | Change |
-|---|---|
-| `supabase/functions/generate-dream/index.ts` | Shrink 1416 → ~150 LOC; delegates to `runDreamJob`. Legacy sync path during Phase A/B/C. Phase D deletes the body. |
-| `supabase/functions/face-swap-dual/index.ts` | No change — reused as-is |
-| `supabase/functions/_shared/dualSwapDispatch.ts` | No change — `runDreamJob` calls it |
-| `supabase/functions/nightly-dreams/index.ts` | Phase C: accept `{ jobId, payload }` body |
-| `lib/dreamApi.ts` | Add `enqueueDream(opts)`, keep `generateDream(opts)` for legacy callers |
-| `hooks/useDreamCreate.ts` | Branch on `dreamRouting.shouldQueue(config)` |
-| `app/dream/loading.tsx` | When `activeJobId` set, render via `useDreamJob` |
-| `store/dream.ts` | Already has `activeJobId` and `activeJobFailure` — minor cleanup |
-| `scripts/nightly-dreams.js` | Phase C: replace `fetch(/nightly-dreams)` with `fetch(/enqueue-dream)` per user |
-| `.github/workflows/cron-*.yml` | Add `dream-queue-sweeper` cron @ 30s (or move to Supabase pg_cron — see open question 7) |
-| `tsconfig.json` | Add new `__tests__/lib/*.test.ts` files to `exclude` (matches existing pattern for `@engine/*` tests) |
+| Path                                             | Change                                                                                                             |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `supabase/functions/generate-dream/index.ts`     | Shrink 1416 → ~150 LOC; delegates to `runDreamJob`. Legacy sync path during Phase A/B/C. Phase D deletes the body. |
+| `supabase/functions/face-swap-dual/index.ts`     | No change — reused as-is                                                                                           |
+| `supabase/functions/_shared/dualSwapDispatch.ts` | No change — `runDreamJob` calls it                                                                                 |
+| `supabase/functions/nightly-dreams/index.ts`     | Phase C: accept `{ jobId, payload }` body                                                                          |
+| `lib/dreamApi.ts`                                | Add `enqueueDream(opts)`, keep `generateDream(opts)` for legacy callers                                            |
+| `hooks/useDreamCreate.ts`                        | Branch on `dreamRouting.shouldQueue(config)`                                                                       |
+| `app/dream/loading.tsx`                          | When `activeJobId` set, render via `useDreamJob`                                                                   |
+| `store/dream.ts`                                 | Already has `activeJobId` and `activeJobFailure` — minor cleanup                                                   |
+| `scripts/nightly-dreams.js`                      | Phase C: replace `fetch(/nightly-dreams)` with `fetch(/enqueue-dream)` per user                                    |
+| `.github/workflows/cron-*.yml`                   | Add `dream-queue-sweeper` cron @ 30s (or move to Supabase pg_cron — see open question 7)                           |
+| `tsconfig.json`                                  | Add new `__tests__/lib/*.test.ts` files to `exclude` (matches existing pattern for `@engine/*` tests)              |
 
 ### Migration number
 
@@ -659,12 +703,14 @@ These shape the schema and the worker code. Get answers from Kevin in the first 
 ## 14. Test coverage plan
 
 **Unit tests (Jest, mocked):**
+
 - `__tests__/lib/runDreamJob.test.ts` — verify it produces expected upload row for each branch (self-insert, dual cast, photo new-scene, text directive, surprise). Mock Replicate + Anthropic.
 - `__tests__/lib/dreamRouting.test.ts` — should-queue logic for all path combinations
 - `__tests__/lib/feedHelpers.test.ts` — already exists, no changes
 - `__tests__/lib/expressionRule.test.ts` — already exists, no changes
 
 **Manual integration (after Phase A deploy):**
+
 - Hand-craft a `dream_jobs` row, `curl` `dream-worker` directly with `{ jobId }`, verify it claims/runs/completes. `dream-test` skill can drive this.
 - Manually update `dream_jobs.lease_expires_at = now() - interval '1 minute'` on a `processing` row → verify sweeper recovers within one tick.
 - Call `refund_sparkles` with same `reference_id` twice → verify only one transaction lands. (Already covered by migration 134's behavior, but re-verify.)
@@ -672,6 +718,7 @@ These shape the schema and the worker code. Get answers from Kevin in the first 
 - Phone in airplane mode → enqueue via Edge Function curl → re-enable network → verify the home pill picks up the in-flight dream.
 
 **After Phase B deploy:**
+
 - Run 5 dual-cast renders back-to-back → all complete, sparkles correct, push notifications fire
 - Run 5 dual-cast renders simultaneously → concurrency cap honored
 - Test rapid double-tap on Generate → only one dream job created
