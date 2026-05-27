@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { trackPostLiked } from '@/lib/analytics';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 interface ToggleArgs {
@@ -58,6 +59,7 @@ export function useToggleLike() {
             { onConflict: 'user_id,upload_id', ignoreDuplicates: true }
           );
         if (error) throw error;
+        trackPostLiked();
       }
     },
     onMutate: async ({ uploadId, currentlyLiked }) => {

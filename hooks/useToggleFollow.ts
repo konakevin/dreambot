@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Haptics from 'expo-haptics';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { useBotUsers } from '@/hooks/useBotUsers';
+import { trackFollowAdded } from '@/lib/analytics';
 
 interface ToggleArgs {
   userId: string;
@@ -14,6 +16,7 @@ interface ToggleArgs {
 
 export function useToggleFollow() {
   const user = useAuthStore((s) => s.user);
+  const { data: botUsers } = useBotUsers();
   const qc = useQueryClient();
   const followKey = ['followingIds', user?.id];
   const requestKey = ['outgoingFollowRequests', user?.id];
@@ -57,6 +60,7 @@ export function useToggleFollow() {
           .from('follows')
           .insert({ follower_id: user!.id, following_id: userId });
         if (error) throw error;
+        trackFollowAdded({ target_is_bot: (botUsers ?? []).some((b) => b.id === userId) });
       }
     },
     onMutate: async ({ userId, currentlyFollowing, isPublic = true, hasRequest }) => {

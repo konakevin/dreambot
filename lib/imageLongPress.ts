@@ -6,6 +6,7 @@ import { UpscaleModal } from '@/components/UpscaleOverlay';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
+import { trackHdDownloadTapped } from '@/lib/analytics';
 
 interface UpscaleResponse {
   status?: 'done' | 'processing';
@@ -45,6 +46,7 @@ async function requestUpscale(uploadId: string): Promise<UpscaleResponse | null>
  * moment the HD lands, or the user gets a `download_ready` notification).
  */
 async function saveHd(id: string, cachedHqUrl: string | null) {
+  trackHdDownloadTapped({ cached: !!cachedHqUrl });
   if (cachedHqUrl) {
     await saveUrlToPhotos(id, cachedHqUrl, true);
     return;

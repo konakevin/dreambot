@@ -20,6 +20,7 @@ import {
   useRestorePurchases,
 } from '@/hooks/useSparkles';
 import { PACK_INFO } from '@/constants/sparklePacks';
+import { trackSparkleStoreOpened, trackSparklePurchaseTapped } from '@/lib/analytics';
 
 /** Flavor copy per sparkle pack — appears under the grid when selected.
  *  Uses the actual sparkle count so the copy never gets out of sync with
@@ -141,6 +142,9 @@ export default function SparkleStoreScreen() {
   const { data: balance = 0 } = useSparkleBalance();
   const { data: livePackages = [], isLoading: liveIsLoading } = useSparklePackages();
   const { mutate: purchase, isPending: purchasing } = usePurchaseSparkles();
+  useEffect(() => {
+    trackSparkleStoreOpened();
+  }, []);
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
 
   // Screenshot mode bypasses the live RC data so the new lineup renders
@@ -172,6 +176,7 @@ export default function SparkleStoreScreen() {
 
   function handlePurchase() {
     if (!selectedPkg) return;
+    trackSparklePurchaseTapped({ pack: selectedPkg.product.identifier });
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     purchase(selectedPkg, {
       onSuccess: () => {

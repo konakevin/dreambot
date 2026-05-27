@@ -16,6 +16,7 @@ import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
+import { trackPostViewed } from '@/lib/analytics';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { Toast } from '@/components/Toast';
 import * as Haptics from 'expo-haptics';
@@ -25,6 +26,13 @@ export default function PhotoDetailScreen() {
   const user = useAuthStore((s) => s.user);
   const albumIds = useAlbumStore((s) => s.ids);
   const queryClient = useQueryClient();
+
+  // Track the context a dream was opened from (own / dreams / saved / user /
+  // feed) → how often people view their own posts/dreams vs others'.
+  useEffect(() => {
+    const src = useAlbumStore.getState().albumSource?.type ?? 'feed';
+    trackPostViewed({ source: src, is_own: src === 'own' || src === 'dreams' });
+  }, []);
 
   // Two modes:
   //  - Album mode (albumIds populated): bounded list, single useQuery

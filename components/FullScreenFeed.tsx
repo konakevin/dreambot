@@ -23,6 +23,7 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { supabase } from '@/lib/supabase';
+import { trackDltStarted } from '@/lib/analytics';
 import { DreamCard } from '@/components/DreamCard';
 import { FeedCardSkeleton } from '@/components/Skeleton';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -166,6 +167,7 @@ const FeedCard = memo(function FeedCard({
           userId: item.user_id,
           ...(item.ai_prompt ? { prompt: item.ai_prompt } : {}),
         });
+        trackDltStarted({ source_post_id: item.id });
         nav.push(`/dreamLikeThis?${params.toString()}`);
       }}
       onLikesPress={() => {

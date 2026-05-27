@@ -27,6 +27,7 @@ import { useStandardSheetDismiss } from '@/hooks/gestures/useStandardSheetDismis
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
+import { trackPostShared } from '@/lib/analytics';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SHEET_HEIGHT = SCREEN_HEIGHT * 0.65;
@@ -104,6 +105,7 @@ export default function SharePostScreen() {
 
   function handleSend() {
     if (selected.size === 0) return;
+    trackPostShared({ recipient_count: selected.size });
 
     sendShare(
       { uploadId: uploadId!, receiverIds: Array.from(selected) },

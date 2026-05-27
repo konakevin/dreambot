@@ -26,6 +26,7 @@ import { Toast } from '@/components/Toast';
 import { moderateText } from '@/lib/moderation';
 import { isVibeProfile } from '@/types/vibeProfile';
 import type { VibeProfile } from '@/types/vibeProfile';
+import { trackDreamCreateStarted, trackDreamCreated, trackDreamFailed } from '@/lib/analytics';
 import {
   generateDream,
   generateFromVibeProfile,
@@ -162,6 +163,7 @@ export function useDreamCreate() {
 
       if (!canAffordDream(config.forceModel)) return 'error';
       busy.current = true;
+      trackDreamCreateStarted({ mode: config.mode });
 
       try {
         const vibeProfile = await loadProfile();
@@ -264,10 +266,18 @@ export function useDreamCreate() {
           queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
         }
 
+        trackDreamCreated({
+          mode: config.mode,
+          medium: resolvedMediumKey,
+          vibe: config.selectedVibe,
+          has_photo: !!config.photoBase64,
+          has_cast: (vibeProfile?.dream_cast?.length ?? 0) > 0,
+        });
         return 'done';
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Unknown error';
         if (__DEV__) console.error('[useDreamCreate] ERROR:', msg);
+        trackDreamFailed({ mode: config.mode, reason: msg });
 
         // Server-side charge said insufficient (402) — a balance race after the
         // client pre-check. Nothing was charged. Surface the paywall, refresh

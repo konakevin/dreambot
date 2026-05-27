@@ -23,6 +23,7 @@ import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
 import { useBotUsers } from '@/hooks/useBotUsers';
+import { trackBotViewed } from '@/lib/analytics';
 import { BotsHorizontalPager } from '@/components/BotsHorizontalPager';
 import { BotPillRow } from '@/components/BotPillRow';
 import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
@@ -97,7 +98,14 @@ export default function BotsScreen() {
         <BotsHorizontalPager
           bots={botUsers}
           selectedBotId={selectedBotId}
-          onSelectedBotChange={setSelectedBotId}
+          onSelectedBotChange={(id) => {
+            setSelectedBotId(id);
+            if (id)
+              trackBotViewed({
+                bot_id: id,
+                bot_name: botUsers?.find((b) => b.id === id)?.username,
+              });
+          }}
           onHudToggle={handleHudToggle}
           emptyComponent={<EmptyBots />}
           indexMapRef={indexMapRef}
@@ -113,7 +121,18 @@ export default function BotsScreen() {
           pointerEvents="box-none"
         >
           {botUsers && botUsers.length > 0 && (
-            <BotPillRow bots={botUsers} selectedBotId={selectedBotId} onSelect={setSelectedBotId} />
+            <BotPillRow
+              bots={botUsers}
+              selectedBotId={selectedBotId}
+              onSelect={(id) => {
+                setSelectedBotId(id);
+                if (id)
+                  trackBotViewed({
+                    bot_id: id,
+                    bot_name: botUsers?.find((b) => b.id === id)?.username,
+                  });
+              }}
+            />
           )}
         </LinearGradient>
       </Animated.View>

@@ -9,7 +9,7 @@
  * client state on success.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -27,6 +27,7 @@ import { colors } from '@/constants/theme';
 import { PRO_PERKS, PRO_TIERS } from '@/constants/proPlan';
 import { useProPackages, usePurchasePro, useRestorePurchases } from '@/hooks/useSparkles';
 import { useAuthStore } from '@/store/auth';
+import { trackProStoreOpened, trackProSubscribeTapped } from '@/lib/analytics';
 
 function findPackage(packages: PurchasesPackage[], packageId: string) {
   return packages.find((p) => p.identifier === packageId);
@@ -71,7 +72,12 @@ export default function ProStoreScreen() {
   const selectedPkg = findPackage(packages, selectedTier.packageId);
   const selectedPrice = selectedPkg?.product.priceString ?? selectedTier.displayPrice;
 
+  useEffect(() => {
+    trackProStoreOpened();
+  }, []);
+
   function handlePurchase(pkg: PurchasesPackage) {
+    trackProSubscribeTapped({ period: selectedTier.period });
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     purchase(pkg, {
       onSuccess: () => {

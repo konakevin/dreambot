@@ -27,6 +27,8 @@ import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
+import { useFocusEffect } from '@react-navigation/native';
+import { trackProfileViewed } from '@/lib/analytics';
 import { ProfileStatsRow, type StatsTab } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import type { FollowUser } from '@/hooks/useFollowersList';
@@ -41,6 +43,13 @@ export default function ProfileScreen() {
   const queryClient = useQueryClient();
   const { data: unreadCount = 0 } = useUnreadCount();
   const markAllSeen = useMarkAllSeen();
+
+  // Fire on each focus (tab revisit), not just first mount, so we count visits.
+  useFocusEffect(
+    useCallback(() => {
+      trackProfileViewed({ is_self: true });
+    }, [])
+  );
 
   // Tapping the inbox bubble pushes to /inbox AND optimistically marks
   // every notification as seen — the badge clears instantly. The

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { moderateText } from '@/lib/moderation';
+import { trackCommentAdded } from '@/lib/analytics';
 import type { Comment } from '@/hooks/useComments';
 import type { DreamPostItem } from '@/components/DreamCard';
 
@@ -38,6 +39,7 @@ export function useAddComment() {
       return data;
     },
     onSuccess: (data, { uploadId, body, parentId }) => {
+      trackCommentAdded({ is_reply: !!parentId });
       const username = user?.user_metadata?.username ?? 'you';
       const avatarUrl = user?.user_metadata?.avatar_url ?? null;
 

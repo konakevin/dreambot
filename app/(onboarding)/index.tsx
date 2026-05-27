@@ -6,6 +6,7 @@ import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
+import { trackOnboardingStep } from '@/lib/analytics';
 import { OnboardingHeader } from '@/components/OnboardingHeader';
 import { colors } from '@/constants/theme';
 
@@ -85,7 +86,11 @@ export default function OnboardingPager() {
     [steps.length, setStep]
   );
 
-  const goNext = useCallback(() => goTo(step), [step, goTo]);
+  const goNext = useCallback(() => {
+    const completedKey = steps[step - 1]?.key;
+    if (completedKey) trackOnboardingStep({ step: completedKey });
+    goTo(step);
+  }, [step, goTo, steps]);
 
   const goBack = useCallback(() => {
     if (step <= 1) {

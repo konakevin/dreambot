@@ -118,6 +118,9 @@ module.exports = {
       // org/project at build time) symbolicated source-map upload. Runtime
       // capture is no-op until EXPO_PUBLIC_SENTRY_DSN is set (see lib/sentry.ts).
       '@sentry/react-native',
+      // expo-localization — required peer dep of posthog-react-native (device
+      // locale for analytics context). See lib/posthog.ts.
+      'expo-localization',
     ],
     experiments: {
       typedRoutes: true,

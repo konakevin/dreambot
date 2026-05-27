@@ -1,8 +1,8 @@
 import '../global.css';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { AppState, InteractionManager } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClientProvider } from '@tanstack/react-query';
 import 'react-native-reanimated';
@@ -23,6 +23,7 @@ import { queryClient } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
 import { SCREEN_PRESETS } from '@/constants/navigationPresets';
 import { initSentry, Sentry } from '@/lib/sentry';
+import { posthog, PostHogProvider, identifyUser, resetAnalytics } from '@/lib/posthog';
 
 // Crash reporting — must init as early as possible. No-op without a DSN.
 initSentry();
@@ -345,6 +346,39 @@ function DataPrefetcher() {
   return null;
 }
 
+// ── Analytics (PostHog) ──────────────────────────────────────────────────────
+// Wraps the app so tap autocapture works. Passthrough no-op when analytics is
+// off (no key / __DEV__), so dev + un-keyed builds are unchanged.
+function Analytics({ children }: { children: ReactNode }) {
+  if (!posthog) return <>{children}</>;
+  return (
+    <PostHogProvider client={posthog} autocapture={{ captureTouches: true, captureScreens: false }}>
+      {children}
+    </PostHogProvider>
+  );
+}
+
+// Manual Expo Router screen tracking — fires a `screen` event on each route
+// change (PostHog derives most-visited + time-on-screen from these). Autocapture
+// screen tracking doesn't hook Expo Router reliably, so we do it explicitly.
+function ScreenTracker() {
+  const pathname = usePathname();
+  useEffect(() => {
+    posthog?.screen(pathname);
+  }, [pathname]);
+  return null;
+}
+
+// Ties analytics events to the signed-in user; clears the link on logout.
+function AnalyticsIdentity() {
+  const userId = useAuthStore((s) => s.user?.id);
+  useEffect(() => {
+    if (userId) identifyUser(userId);
+    else resetAnalytics();
+  }, [userId]);
+  return null;
+}
+
 function RootLayout() {
   const [fontsLoaded] = useFonts({ ...Ionicons.font });
 
@@ -356,53 +390,60 @@ function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
-        <AppErrorBoundary>
-          <AlertProvider>
-            <AuthInitializer />
-            <PushRegistrar />
-            <RevenueCatInitializer />
-            <RealtimeSubscriber />
-            <DataPrefetcher />
-            <Stack
-              screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#000000' } }}
-            >
-              <Stack.Screen name="index" />
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="(auth)" />
-              <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
-              <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-              <Stack.Screen name="photo/[id]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-              <Stack.Screen
-                name="user/[userId]"
-                options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, animation: 'simple_push' }}
-              />
-              <Stack.Screen
-                name="sharePost"
-                options={{
-                  ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
-                  contentStyle: { backgroundColor: 'transparent' },
-                }}
-              />
-              <Stack.Screen
-                name="comments"
-                options={{
-                  ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
-                  contentStyle: { backgroundColor: '#0F0F1A' },
-                }}
-              />
-              <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-              <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
-              <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
-              <Stack.Screen name="onboarding/meet-the-bots" options={SCREEN_PRESETS.MODAL_LOCKED} />
-              <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-            </Stack>
-            <StatusBar style="light" />
-            <ToastHost />
-            <UpscaleModalHost />
-          </AlertProvider>
-        </AppErrorBoundary>
-      </QueryClientProvider>
+      <Analytics>
+        <QueryClientProvider client={queryClient}>
+          <AppErrorBoundary>
+            <AlertProvider>
+              <AuthInitializer />
+              <AnalyticsIdentity />
+              <ScreenTracker />
+              <PushRegistrar />
+              <RevenueCatInitializer />
+              <RealtimeSubscriber />
+              <DataPrefetcher />
+              <Stack
+                screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#000000' } }}
+              >
+                <Stack.Screen name="index" />
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="(auth)" />
+                <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
+                <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                <Stack.Screen name="photo/[id]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                <Stack.Screen
+                  name="user/[userId]"
+                  options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, animation: 'simple_push' }}
+                />
+                <Stack.Screen
+                  name="sharePost"
+                  options={{
+                    ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
+                    contentStyle: { backgroundColor: 'transparent' },
+                  }}
+                />
+                <Stack.Screen
+                  name="comments"
+                  options={{
+                    ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
+                    contentStyle: { backgroundColor: '#0F0F1A' },
+                  }}
+                />
+                <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                <Stack.Screen
+                  name="onboarding/meet-the-bots"
+                  options={SCREEN_PRESETS.MODAL_LOCKED}
+                />
+                <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+              </Stack>
+              <StatusBar style="light" />
+              <ToastHost />
+              <UpscaleModalHost />
+            </AlertProvider>
+          </AppErrorBoundary>
+        </QueryClientProvider>
+      </Analytics>
     </GestureHandlerRootView>
   );
 }

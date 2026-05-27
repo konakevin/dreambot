@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
+import { trackFeedTabSelected } from '@/lib/analytics';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
@@ -94,7 +95,10 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
           key={tab.key}
           label={tab.label}
           active={active === tab.key}
-          onPress={() => onChange(tab.key)}
+          onPress={() => {
+            trackFeedTabSelected({ tab: tab.key === 'forYou' ? 'explore' : 'following' });
+            onChange(tab.key);
+          }}
         />
       ))}
     </View>

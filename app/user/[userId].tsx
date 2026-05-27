@@ -38,6 +38,7 @@ import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
 import { showAlert } from '@/components/CustomAlert';
+import { trackProfileViewed } from '@/lib/analytics';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
 type Tab = 'posts' | 'followers' | 'following';
@@ -57,6 +58,11 @@ export default function PublicProfileScreen() {
       useAlbumStore.getState().setCurrentPostId(null);
     }
   }, [viewedPost]);
+
+  // Profile view — fires per screen open (this route is pushed fresh each time).
+  useEffect(() => {
+    trackProfileViewed({ is_self: isOwnProfile });
+  }, [isOwnProfile]);
 
   const {
     data: profile,

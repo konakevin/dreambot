@@ -17,6 +17,7 @@ import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
+import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analytics';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -287,6 +288,8 @@ export function RevealStep({ onBack }: Props) {
         });
       }
 
+      trackFirstDreamGenerated({ medium: activeDream.medium, vibe: activeDream.vibe });
+
       // Grant 25 welcome sparkles (check balance first to avoid double-grant on retry)
       const { data: balanceCheck } = await supabase
         .from('users')
@@ -315,6 +318,7 @@ export function RevealStep({ onBack }: Props) {
       // First-time post: route to the Meet-the-bots showcase before home.
       // The screen sets the AsyncStorage flag on mount so users can't get
       // re-trapped here on subsequent runs.
+      trackOnboardingCompleted();
       router.replace('/onboarding/meet-the-bots');
     } catch (err) {
       if (__DEV__) console.warn('[Reveal] Create error:', err);
