@@ -142,21 +142,59 @@ Deno.serve(async (req) => {
 
     const pushResult = await pushResponse.json();
 
-    // Surface failures loudly (Edge logs) so a degraded push pipeline isn't
-    // silent. Expo returns one ticket per message; status:'error' = that device
-    // failed (commonly DeviceNotRegistered for a stale token). A non-ok HTTP
-    // response = the whole batch failed (e.g. Expo outage / bad request). The
-    // in-app inbox row still delivered regardless — this logging is for
-    // operability, not user delivery. (Stale-token pruning + a fail-loud CI
-    // monitor are a tracked follow-up; a row-count monitor today would
-    // false-alarm on known stale tokens.)
-    const tickets = Array.isArray(pushResult?.data) ? pushResult.data : [];
-    const errorTickets = tickets.filter((t: { status?: string }) => t && t.status === 'error');
-    if (!pushResponse.ok || errorTickets.length > 0) {
-      console.error(
-        `[Push] FAILURES for ${record.recipient_id} (type=${record.type}): httpOk=${pushResponse.ok}, ${errorTickets.length}/${tickets.length} tickets errored:`,
-        JSON.stringify(errorTickets.length ? errorTickets : pushResult)
+    // Expo returns one ticket per message, in the same order we sent them — so
+    // tickets[i] ↔ messages[i] ↔ tokens[i]. Split error tickets into:
+    //   • stale tokens (DeviceNotRegistered) → PRUNE the dead push_tokens row
+    //     (a user accumulates these as the app is reinstalled / tokens rotate).
+    //   • everything else → SYSTEMIC failure (Expo rate limit, bad payload, etc).
+    const tickets: Array<{ status?: string; message?: string; details?: { error?: string } }> =
+      Array.isArray(pushResult?.data) ? pushResult.data : [];
+    const deadTokens: string[] = [];
+    const systemicErrors: Array<{ error?: string; message?: string }> = [];
+    tickets.forEach((ticket, i) => {
+      if (!ticket || ticket.status !== 'error') return;
+      const kind = ticket.details && ticket.details.error;
+      if (kind === 'DeviceNotRegistered') {
+        const tok = tokens[i] && tokens[i].token;
+        if (tok) deadTokens.push(tok);
+      } else {
+        systemicErrors.push({ error: kind, message: ticket.message });
+      }
+    });
+
+    // Prune stale tokens (best-effort, scoped to this recipient).
+    if (deadTokens.length > 0) {
+      const { error: pruneErr } = await supabase
+        .from('push_tokens')
+        .delete()
+        .eq('user_id', record.recipient_id)
+        .in('token', deadTokens);
+      if (pruneErr) console.error('[Push] token prune FAILED:', pruneErr.message);
+      else
+        console.log(`[Push] pruned ${deadTokens.length} stale token(s) for ${record.recipient_id}`);
+    }
+
+    // Record SYSTEMIC failures (non-ok HTTP / non-stale ticket errors) so the
+    // push-failure monitor can fail loud on real problems. Routine stale tokens
+    // were pruned above and are deliberately NOT logged, keeping the signal clean.
+    // The in-app inbox row delivered regardless — this is operability, not user delivery.
+    const httpFailed = !pushResponse.ok;
+    if (httpFailed || systemicErrors.length > 0) {
+      const detail = JSON.stringify(systemicErrors.length ? systemicErrors : pushResult).slice(
+        0,
+        1000
       );
+      console.error(
+        `[Push] SYSTEMIC FAILURE for ${record.recipient_id} (type=${record.type}): httpOk=${pushResponse.ok}, ${systemicErrors.length} non-stale ticket error(s):`,
+        detail
+      );
+      const { error: logErr } = await supabase.from('push_send_failures').insert({
+        recipient_id: record.recipient_id,
+        notification_type: record.type,
+        error_kind: httpFailed ? `http_${pushResponse.status}` : 'ticket_error',
+        detail,
+      });
+      if (logErr) console.error('[Push] failure-log insert FAILED:', logErr.message);
     } else {
       console.log('[Push] Sent:', JSON.stringify(pushResult));
     }

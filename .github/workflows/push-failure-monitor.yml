@@ -1,0 +1,35 @@
+name: Push Failure Monitor
+
+# Loud health check for push delivery. Fails the run if SYSTEMIC push-send
+# failures (non-ok HTTP from Expo, non-stale ticket errors) recorded in
+# push_send_failures spike over the recent window — i.e. an Expo outage, a
+# rate-limit storm, or the notifications→send-push token guard breaking (which
+# would 401 every push). Routine stale tokens are pruned by send-push, not
+# logged, so this stays a clean signal. See scripts/check-push-failures.js.
+
+on:
+  schedule:
+    - cron: '45 */6 * * *' # every 6 hours (offset from the AI-failure monitor)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Check push-send failure count
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/check-push-failures.js
