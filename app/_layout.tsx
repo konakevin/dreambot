@@ -14,6 +14,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import { useBadgeSync } from '@/hooks/useBadgeSync';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
 import { ToastHost } from '@/components/Toast';
@@ -97,6 +98,7 @@ function AuthInitializer() {
 
 function PushRegistrar() {
   usePushNotifications();
+  useBadgeSync();
   return null;
 }
 

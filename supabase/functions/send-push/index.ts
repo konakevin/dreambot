@@ -117,6 +117,18 @@ Deno.serve(async (req) => {
     const actorName = actor?.username ?? 'Someone';
     const content = getNotificationContent(record.type, actorName, record.body);
 
+    // App-icon badge = recipient's true unread count. This trigger fires AFTER
+    // INSERT, so the just-inserted row is already counted. The client mirrors
+    // this onto the OS badge and clears it to 0 when the inbox is viewed
+    // (useBadgeSync + useMarkAllSeen); sending the real count keeps a closed app
+    // that accumulates several notifications from showing a stale "1".
+    const { count: unreadCount } = await supabase
+      .from('notifications')
+      .select('id', { count: 'exact', head: true })
+      .eq('recipient_id', record.recipient_id)
+      .is('seen_at', null);
+    const badge = unreadCount ?? 1;
+
     // Build push data for navigation on tap
     const data: Record<string, string> = {};
     if (record.upload_id) data.uploadId = record.upload_id;
@@ -131,7 +143,7 @@ Deno.serve(async (req) => {
       title: content.title,
       body: content.body,
       data,
-      badge: 1,
+      badge,
     }));
 
     const pushResponse = await fetch(EXPO_PUSH_URL, {
