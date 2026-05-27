@@ -49,24 +49,14 @@ module.exports = {
   mediums: ['bloom_hyperreal_cgi'],
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-1.1-pro'],
-  modelByPath: {
-    landscape: { 'black-forest-labs/flux-1.1-pro': 100 },
-    closeup: { 'black-forest-labs/flux-1.1-pro': 100 },
-    cozy: { 'black-forest-labs/flux-1.1-pro': 100 },
-    'garden-walk': { 'black-forest-labs/flux-1.1-pro': 100 },
-    dreamscape: { 'black-forest-labs/flux-1.1-pro': 100 },
-    conservatory: { 'black-forest-labs/flux-1.1-pro': 100 },
-    'tropical-paradise': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'city-flowers': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'flower-tunnels': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'sunset-flowers': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'flower-friends': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'flower-humming-birds': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'flower-fantasy': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'desert-bloom': { 'black-forest-labs/flux-1.1-pro': 100 },
-    reclaim: { 'black-forest-labs/flux-1.1-pro': 100 },
-  },
+  // All paths random-pick one of these four per render (2026-05-27). No
+  // modelByPath lock — the picker selects uniformly from this list each time.
+  allowedModels: [
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-2-pro',
+    'black-forest-labs/flux-2-max',
+  ],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -213,7 +203,7 @@ module.exports = {
     // The axis-system archetype templates do NOT use the shared DENSITY/
     // ARRANGEMENT blocks, so the "lush flower hero" bar must be injected here.
     const LUSH_HERO_MANDATE = `━━━ BLOOMBOT BAR — LUSH FLOWER HERO (NON-NEGOTIABLE, READ FIRST) ━━━
-This MUST be a lush, beautiful FLOWER scene. Flowers are the unmistakable HERO and FILL the frame — either a monumental bloom-form or a dense, overflowing bloom-mass dominating 60%+ of the composition. Any setting (ruin / valley / wall / waterfall / architecture / landscape) is ONLY a backdrop framing the flowers — NEVER the subject. NEVER a sparse, thin, or barren scene; NEVER "a [place] with a few accent flowers"; NEVER a macro of just 2-3 blooms. Pack the frame edge-to-edge with abundant, varied, jewel-toned blooms in a deliberate, cohesive, magazine-cover composition: a clear focal hero up front, multi-tier depth behind, every quadrant earning its space. Keep the WHOLE frame crisp, clear and COLORED — build background depth from receding layers of more blooms and clearly-rendered colored scenery, the sky clean and saturated. The background must NEVER dissolve into a pale, white, milky, foggy, or washed-out haze; distant elements stay clearly rendered and colored, just smaller.`;
+This MUST be a lush, beautiful FLOWER scene. Flowers are the unmistakable HERO and FILL the frame — either a monumental bloom-form or a dense, overflowing bloom-mass dominating 60%+ of the composition. Any setting (ruin / valley / wall / waterfall / architecture / landscape) is ONLY a backdrop framing the flowers — NEVER the subject. NEVER a sparse, thin, or barren scene; NEVER "a [place] with a few accent flowers"; NEVER a macro of just 2-3 blooms. Pack the frame edge-to-edge with abundant, varied, jewel-toned blooms in a deliberate, cohesive, magazine-cover composition: a clear focal hero up front, multi-tier depth behind, every quadrant earning its space. Keep the WHOLE frame crisp, clear and COLORED — build background depth from receding layers of more blooms and clearly-rendered colored scenery, the sky clean and saturated, distant elements clearly rendered and colored, just smaller and in sharp focus.`;
     // Declarative axis-system paths export an object { archetype, pools }.
     // Legacy compositional paths export a function. Dispatch on shape.
     if (builder && typeof builder === 'object' && builder.archetype) {

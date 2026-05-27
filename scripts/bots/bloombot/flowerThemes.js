@@ -13,16 +13,18 @@ const ALL =
     ' '
   );
 
+// Weights tuned 2026-05-27 for ~15% mono / ~45% hybrid / ~40% spectrum
+// (mixed-lush the dominant single mode). Mono is occasional striking spice.
 const THEMES = {
-  // ── monochrome ──
-  pink: { label: 'pink', colors: ['pink', 'magenta', 'coral', 'peach'], weight: 6 },
-  purple: { label: 'purple', colors: ['purple', 'violet', 'lavender'], weight: 6 },
-  blue: { label: 'blue', colors: ['blue', 'indigo'], weight: 6 },
-  yellow: { label: 'yellow', colors: ['yellow', 'cream'], weight: 5 },
-  orange: { label: 'orange', colors: ['orange', 'peach', 'bronze'], weight: 4 },
-  red: { label: 'red', colors: ['red', 'burgundy'], weight: 5 },
-  white: { label: 'white', colors: ['white', 'cream'], weight: 5 },
-  // ── hybrid ──
+  // ── monochrome (~15% total — occasional spice) ──
+  pink: { label: 'pink', colors: ['pink', 'magenta', 'coral', 'peach'], weight: 2 },
+  purple: { label: 'purple', colors: ['purple', 'violet', 'lavender'], weight: 2 },
+  blue: { label: 'blue', colors: ['blue', 'indigo'], weight: 2 },
+  yellow: { label: 'yellow', colors: ['yellow', 'cream'], weight: 1 },
+  orange: { label: 'orange', colors: ['orange', 'peach', 'bronze'], weight: 1 },
+  red: { label: 'red', colors: ['red', 'burgundy'], weight: 1 },
+  white: { label: 'white', colors: ['white', 'cream'], weight: 2 },
+  // ── hybrid (~45% total — the bulk of the "themed" variety) ──
   pinkWhite: { label: 'pink & white', colors: ['pink', 'white', 'cream', 'coral'], weight: 6 },
   purpleWhiteBlue: {
     label: 'purple, white & blue',
@@ -32,7 +34,7 @@ const THEMES = {
   sunset: {
     label: 'sunset shades (red, orange, yellow)',
     colors: ['red', 'orange', 'yellow', 'coral'],
-    weight: 5,
+    weight: 6,
   },
   bluePurple: {
     label: 'blue & purple',
@@ -42,20 +44,20 @@ const THEMES = {
   coralCreamPeach: {
     label: 'coral, cream & peach',
     colors: ['coral', 'cream', 'peach', 'pink'],
-    weight: 4,
+    weight: 5,
   },
-  magentaGold: { label: 'magenta & gold', colors: ['magenta', 'yellow', 'pink'], weight: 3 },
-  // ── spectrum ──
+  magentaGold: { label: 'magenta & gold', colors: ['magenta', 'yellow', 'pink'], weight: 5 },
+  // ── spectrum (~40% total — mixed-lush is the backbone) ──
   rainbow: {
     label: 'full rainbow spectrum (every color, equal weight)',
     colors: ALL,
-    weight: 5,
+    weight: 8,
     spectrum: true,
   },
   mixedLush: {
     label: 'mixed lush (rich balanced multi-color)',
     colors: ALL,
-    weight: 10,
+    weight: 22,
     spectrum: true,
   },
 };
