@@ -204,15 +204,38 @@ module.exports = {
       'desert-bloom': 'desert',
     };
     let biome = BIOME_BY_PATH[path] || 'any';
-    // flower-arrangement TROPICAL MODE (~35% gate, additive): most arrangements
-    // stay temperate, but ~1/3 become a lush tropical arrangement (tropical
-    // blooms + monstera/lanai/jungle backdrop). The template reads sharedDNA.tropical.
+    // flower-arrangement TROPICAL MODE (~50% gate, additive): about half the
+    // arrangements become a lush tropical arrangement (tropical blooms +
+    // monstera/lanai/jungle backdrop). The template reads sharedDNA.tropical.
     let arrangementTropical = false;
-    if (path === 'flower-arrangement' && Math.random() < 0.35) {
+    let themeBias;
+    if (path === 'flower-arrangement' && Math.random() < 0.5) {
       biome = 'tropical';
       arrangementTropical = true;
+      // Favor WARM + spectrum themes in tropical mode. Two reasons: (1) cool
+      // themes (blue/purple) have <5 tropical-pool matches and silently fall
+      // back to the temperate pool (de-tropicalizing the render); warm themes
+      // are rich in tropical species so the roster stays tropical. (2) warm =
+      // loud iconic Hawaiian (hibiscus/bird-of-paradise/heliconia hot tones).
+      themeBias = {
+        blue: 0.15,
+        purple: 0.2,
+        bluePurple: 0.2,
+        purpleWhiteBlue: 0.3,
+        white: 0.4,
+        sunset: 2.5,
+        orange: 2.5,
+        red: 1.6,
+        magentaGold: 2,
+        coralCreamPeach: 1.8,
+        yellow: 1.5,
+        pinkWhite: 1.3,
+        goldenMeadow: 1.3,
+        rainbow: 1.4,
+        mixedLush: 1.2,
+      };
     }
-    const fc = flowerEngine.roll({ biome, picker });
+    const fc = flowerEngine.roll({ biome, themeBias, picker });
     // region kept ONLY for legacy compose.js paths (e.g. cozy) that still build
     // their own roster; axis paths now use fc.palette + fc.roster.
     const region =

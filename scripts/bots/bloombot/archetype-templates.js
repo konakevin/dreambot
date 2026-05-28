@@ -696,8 +696,8 @@ Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO �
     // tropical species (biome=tropical) for the roster.
     const tropicalSection = sharedDNA.tropical
       ? `
-━━━ TROPICAL VARIANT — render this as a lush HAWAIIAN / TROPICAL arrangement ━━━
-This is a vibrant TROPICAL arrangement: big bold tropical blooms (bird-of-paradise, heliconia, hibiscus, orchid, anthurium, torch ginger, plumeria) with dramatic monstera / palm / fern FOLIAGE woven through it. Keep the rolled vessel + placement, BUT the surrounding garden is a LUSH TROPICAL garden / lanai / jungle / glasshouse bursting with tropical foliage and blooms (big green monstera + palm fronds welcome) — NOT a temperate cottage or English garden. Vivid, hot, saturated tropical color.
+━━━ TROPICAL VARIANT — render this as an UNMISTAKABLY HAWAIIAN / TROPICAL arrangement ━━━
+This MUST read as tropical AT A GLANCE. FEATURE the big, bold, iconic tropical blooms prominently as the hero — bird-of-paradise, hibiscus, heliconia, plumeria, anthurium, torch ginger (these loud Hawaiian flowers up front and unmissable) — with dramatic glossy MONSTERA + PALM + fern FOLIAGE woven through and framing it. Keep the rolled vessel + placement, but set the whole scene in a LUSH TROPICAL paradise — a lanai / jungle / glasshouse bursting with monstera, palm fronds and tropical blooms. Vivid, hot, saturated tropical color. Make it pure Hawaii.
 
 `
       : '';
