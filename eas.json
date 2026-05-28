@@ -42,6 +42,13 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleTeamId": "43VMZ5KMW4",
+        "ascApiKeyPath": "./secrets/asc-api-key.p8",
+        "ascApiKeyId": "REPLACE_ASC_API_KEY_ID",
+        "ascApiKeyIssuerId": "REPLACE_ASC_API_KEY_ISSUER_ID"
+      }
+    }
   }
 }

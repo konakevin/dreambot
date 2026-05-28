@@ -92,19 +92,20 @@ The two things that still touch the build: confirm production **EAS env vars**
 
 ## 4. App Store Connect listing
 
-- [ ] **Description / subtitle / keywords** — written fresh for DreamBot (AI dream
-      generator + social feed). Do NOT reuse old "Rad or Bad" copy.
+- [ ] **Description / subtitle / keywords** — **draft ready in `APP_STORE_LISTING.md`**
+      (copy-paste); review + tweak. Do NOT reuse old "Rad or Bad" copy.
 - [ ] **Screenshots** — min 3 at **6.7" (1290×2796)** of real DreamBot screens
       (onboarding vibe profile, a generated dream, the feed, create modes, profile).
       Recommended 6–8; 6.1" optional.
 - [ ] **Age rating** — expect **17+** (user-generated content + AI image generation +
       face-swap of personal photos).
-- [ ] **App Privacy "nutrition label"** — disclose data collected: account/email,
-      photos, usage/analytics (PostHog), purchases, push token, crash data (Sentry).
+- [ ] **App Privacy "nutrition label"** — **answers drafted in `APP_STORE_LISTING.md`**
+      (account/email, photos, usage/analytics, purchases, push token, crash data; no tracking).
 - [ ] **Privacy Policy URL** (live) + **Support URL** (from §1).
 - [ ] **Content rights** answer — content is user-generated / AI-generated.
-- [ ] **Demo account in App Review notes** — the app is login-gated, so provide working
-      test credentials + note IAP behavior, or it gets auto-rejected.
+- [ ] **Demo account in App Review notes** — the app is login-gated. **Review-notes
+      draft (incl. moderation explanation) is in `APP_STORE_LISTING.md`** — just create
+      a pre-onboarded demo account with sparkles and paste its credentials in.
 
 ---
 
@@ -134,8 +135,9 @@ The two things that still touch the build: confirm production **EAS env vars**
 - [ ] Verify Supabase edge secrets: `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`,
       `REVENUECAT_WEBHOOK_SECRET`, `DREAM_QUEUE_WORKER_TOKEN` (`supabase secrets list`).
 - [ ] APNs key uploaded to Expo/EAS (done — push verified 2026-05-27; re-confirm for prod).
-- [ ] `eas.json` → `submit.production` is currently `{}` — add Apple submit credentials
-      for `eas submit`, or plan to upload via Xcode/Transporter.
+- [~] `eas.json` → `submit.production.ios` scaffolded (real `appleTeamId 43VMZ5KMW4`).
+      Finish by adding your ASC API key — run `eas submit` (it stores the key) or drop
+      `secrets/asc-api-key.p8` + fill the key id/issuer. See `APP_STORE_LISTING.md`.
 - [ ] Build: `eas build --platform ios --profile production` (`autoIncrement` bumps the
       build number).
 - [ ] Upload to ASC; wait for processing (~15–30 min).
