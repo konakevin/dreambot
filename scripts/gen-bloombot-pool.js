@@ -135,6 +135,91 @@ Lineage to channel: National Geographic landscape photography + Planet Earth est
     instructions: `Each entry is ONE specific dramatic LANDFORM CANVAS for a bloom-blanket scene, 30-60 words. Format: "LANDFORM NAME CAPS — primary terrain features + multi-tier bloom description + horizon/depth note". Vary across the 10 landform categories above. NEVER use generic "wildflower meadow" — name the LANDFORM specifically. NO people, NO interiors, NO archways, NO ruins, NO urban, NO macro framing. NO pink/cottagecore/feminine palette references. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── flower-grove path (2026-05-27): FUN/CRAZY Lorax-Truffula flower-tree groves ───
+  bloombot_flower_grove_grove: {
+    format: 'simple',
+    theme: `LORAX-TRUFFULA FLOWER-TREE HERO FORMS for BloomBot's FUN/CRAZY flower-grove path. Each entry is ONE giant flower-tree grove OR one tree-sized single flower — described by FORM, SHAPE and SCALE only. Each entry 30-55 words.
+
+⚠️ CRITICAL — describe ONLY the FORM / SHAPE / SILHOUETTE / SCALE. Do NOT name flower species or colors — those are injected separately by the flower engine. Say "fluffy pom-pom flower-tree", "colossal single bloom", "columnar bloom-spire" — never "pink roses" or "blue delphinium".
+
+The vibe: a Dr-Seuss / Lorax forest but entirely of flowers — slender trunks crowned with giant canopies built from hundreds of individual visible blooms, blown-up whimsical scale, soft fluffy texture.
+
+✓ MANDATORY VARIETY — distribute across these SHAPE categories (mix freely):
+  A. ROUND PUFF-BALL / pom-pom Truffula trees (the beloved staple — thin trunk, huge soft round bloom-crown)
+  B. COLUMNAR / cypress-spire / tall-narrow stacked-bloom columns
+  C. CROOKED / gnarled / twisted / lopsided wind-bent trunks
+  D. BEANSTALK-TALL — impossibly high trees vanishing into clouds, dramatic look-straight-up perspective
+  E. WEEPING / drooping willow-style cascading bloom-branches
+  F. UMBRELLA / acacia-flat broad spreading bloom-parasols
+  G. SPIRAL / corkscrew / candelabra / tiered-wedding-cake / bonsai / baobab oddities
+  H. MIXED-GROVE — many wildly different silhouettes packed in one scene
+  I. TREE-SIZED SINGLE FLOWERS — ONE colossal individual bloom grown as big as a tree (hot-air-balloon-sized head on a trunk-thick stem) among NORMAL palm-sized flowers for scale-clash
+
+🚫 STRICT BANS:
+  • NO flower species names, NO color names (engine supplies those)
+  • NO candy / cotton-candy / sugary / lollipop / confectionery language — fluffy TEXTURE only
+  • NO humans / people / figures / animals / manmade objects (no houses / lampposts / arches / vehicles)
+  • NO "colored leaves / monochrome canopy" — canopies are always masses of individual visible blooms
+  • NO macro / closeup — whimsical landscape scale`,
+    touchpoints: [
+      'a grove of towering Truffula-style flower-trees — slender bare trunks 60 feet tall, each crowned with one enormous round FLUFFY POM-POM canopy built from hundreds of individual distinct blooms, bobbing at wild heights over rolling hills',
+      'tall narrow COLUMNAR flower-trees like cypress spires — dense vertical columns of stacked blooms standing in stately rows across the hills',
+      'CROOKED gnarled flower-trees with bent, twisting, lopsided trunks and shaggy off-kilter bloom-crowns, like ancient wind-bent trees made of flowers',
+      'a single flower-tree so impossibly TALL its trunk vanishes up into the clouds — dramatic jack-in-the-beanstalk perspective craning straight up the towering bloom-column',
+      'WEEPING flower-trees with long cascading drooping branches dripping blooms toward the ground like a flowering willow, curtains of petals swaying',
+      'broad flat UMBRELLA-canopy flower-trees spreading wide like acacia, their dense bloom-parasols casting dappled shade over the meadow',
+      'CANDELABRA flower-trees branching into many upraised arms, each arm tipped with its own round bloom-cluster like a flowering chandelier',
+      'a grove MIXING EVERY shape at once — columnar spires, crooked gnarled ones, sky-high beanstalk trees, weeping droopers, round puff-balls, flat umbrellas — a chaotic wonderland of wildly different flower-tree silhouettes packed together',
+      'a single COLOSSAL flower the height of an oak growing alone — one enormous bloom the size of a hot-air balloon atop a trunk-thick stem, normal wildflowers tiny at its base',
+      'a few tree-sized single flowers scattered across the meadow like trees — each an enormous individual bloom on a stalk thick as a trunk — interspersed with ordinary palm-sized flowers',
+      'a meadow where a handful of single flowers have grown to full tree height — gigantic lone blooms on towering stems rising out of an ordinary wildflower field, surreal scale-clash',
+      'fat-trunked BAOBAB-style flower-trees, swollen bottle-trunks topped with stubby explosive bursts of blooms',
+    ],
+    instructions: `Each entry is ONE flower-tree grove OR one tree-sized single flower, 30-55 words, describing FORM / SHAPE / SCALE only. Format: "FORM NAME CAPS — silhouette + scale + canopy/grove detail". Vary across all shape categories above; keep the round puff-ball Truffula trees as a recurring staple. NEVER name flower species or colors. NO candy language. NO humans / animals / manmade objects. Output a NUMBERED list, one entry per line, NO internal newlines.`,
+  },
+
+  // ─── flower-grove path: soft tufted whimsical ground ───
+  bloombot_flower_grove_ground: {
+    format: 'simple',
+    theme: `SOFT TUFTED WHIMSICAL GROUND for BloomBot's flower-grove path. Each entry is ONE description of the rolling, bouncy, cushiony bloom-covered ground beneath the giant flower-trees. Each entry 20-40 words.
+
+The vibe: Seuss-soft rolling hills furred in tiny tufted blooms — cushiony, plush, bouncy, whimsical. Describe TEXTURE / TERRAIN-FORM only — NOT species or colors (engine supplies those).
+
+🚫 BANS: NO species/color names, NO candy/sugary language, NO humans/animals/manmade, NO macro.`,
+    touchpoints: [
+      'rolling soft tufted hills carpeted in downy tiny pom-pom flowers, the whole ground cushiony and bouncy-looking like plush velvet',
+      'a meadow floor of fuzzy flower-tufts growing in dense clumps like a deep shag carpet, swelling and dipping over whimsical hummocks',
+      'spongy bloom-covered mounds rolling to the horizon, each hummock furred with thousands of tiny soft blossoms',
+      'low rolling dunes of densely-packed tiny pom-pom flowers, smooth and soft as drifted snow but in full bloom',
+      'a plush valley floor of mounded bloom-cushions with winding gaps of mossy flower-turf between them',
+      'cushiony meadow floor of densely tufted flowers broken by a winding soft path of pressed petals',
+    ],
+    instructions: `Each entry is ONE soft tufted ground/terrain description, 20-40 words, TEXTURE + FORM only. NEVER name species or colors. NO candy language. NO humans/animals/manmade. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
+  // ─── flower-grove path: weird gravity-defying whimsy (the crazy co-hero) ───
+  bloombot_flower_grove_whimsy: {
+    format: 'simple',
+    theme: `WEIRD / CRAZY / GRAVITY-DEFYING SCENARIO ELEMENTS for BloomBot's fun-crazy flower-grove path. Each entry is ONE unhinged "wait, WHAT?!" twist that becomes a prominent CO-HERO of the scene. Each entry 20-45 words.
+
+The vibe: nothing is off-limits — bend physics, flip gravity, float things, loop the trees, clash scale wildly. Genuinely surreal and delightful. Describe the weird ELEMENT/EVENT only (the flower-trees + species + colors come from elsewhere).
+
+🚫 BANS: NO species/color names, NO candy/sugary language, NO humans/animals/manmade. Lean WEIRD — tame is failure.`,
+    touchpoints: [
+      'a few flower-trees bent into complete loop-the-loop curls, their fluffy pom-pom crowns swinging upside-down through the loops',
+      'floating bloom-islands drifting in the sky above the grove, fluffy flower-trees growing on their undersides and trailing long petal-vines downward',
+      'whole flower-trees growing UPSIDE-DOWN from a floating sky-island, their pom-pom crowns hanging earthward like enormous soft chandeliers',
+      'a cascading waterfall of loose petals pouring off a high bloom-cliff into a frothy drift-pool of fallen blossoms below',
+      'oversized dewdrops the size of beach balls clinging to the pom-pom canopies, each one magnifying the blooms inside it',
+      'a grove tilted at an impossible angle defying gravity, every fluffy tree leaning the same wrong way',
+      'a flower-tree mid-bloom-burst, its canopy exploding outward in a frozen firework of individual flying blossoms',
+      'a winding ribbon-bridge woven from blooms arcing between two giant flower-tree canopies high in the air',
+      'giant bloom-pom canopies that have detached and float freely just above their trunks like tethered balloons',
+      'a flower-tree so tall its fluffy crown disappears into a low soft cloud, blooms drifting down from inside the cloud',
+    ],
+    instructions: `Each entry is ONE weird gravity-defying twist, 20-45 words, the surreal ELEMENT only. NEVER name species or colors. NO candy language. NO humans/animals/manmade. Push it genuinely unhinged. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
   // ─── landscape path: scale_prover (gives the landscape scale) ───
   bloombot_landscape_scale_prover: {
     format: 'simple',

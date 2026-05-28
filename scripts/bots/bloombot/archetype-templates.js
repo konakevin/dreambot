@@ -551,8 +551,8 @@ A Dr-Seuss / Lorax-style whimsical grove where the "trees" are giant FLUFFY POM-
 
 ━━━ HARD MANDATES (every render) ━━━
 
-1. **FLUFFY POM-POM FLOWER-TREES AS HERO** — slender trunks topped with giant ROUND fluffy/downy bloom-canopies. Truffula silhouette: thin trunk, huge soft round crown. A grove at wildly varied heights over rolling hills.
-2. **OVERSIZED / SCALE-INVERTED** — house-sized single blooms, tree-tall flowers, canopies like soft clouds. The whimsical oversized scale is the wow.
+1. **GIANT FLOWER-TREES AS HERO — A WILD MIX OF SHAPES + SIZES** — the beloved fluffy ROUND pom-pom Truffula trees (thin trunk, huge soft round crown) are a staple, but MIX IN MANY silhouettes in the same grove: tall narrow COLUMNAR spires, CROOKED gnarled twisted trunks, impossibly TALL beanstalk trees vanishing into the sky (dramatic look-straight-up perspective), WEEPING droopers, broad flat UMBRELLA canopies, CORKSCREW spirals, CANDELABRA branchers, tiered stacks, squat fat bonsai/baobab ones. Vary the heights wildly too. Every canopy — whatever its shape — is still built from hundreds of individual visible flowers.
+2. **SOME FLOWERS GROW AS BIG AS TREES — MIND-BENDING SCALE** — in this world a single flower can tower like an oak: one colossal bloom the size of a hot-air balloon on a trunk-thick stem, an individual mega-flower standing tall as a tree. CLASH the scales in one frame — monstrous tree-sized single flowers rising among NORMAL palm-sized flowers carpeting the ground for scale. Fantastical, jaw-dropping, "how is that flower that big?!"
 🚨 **INDIVIDUAL-FLOWER VISIBILITY** — the fluffy canopies must read as a DENSE MASS OF HUNDREDS OF DISTINCT INDIVIDUAL BLOOMS (petals + centers visible), NEVER monochrome fuzz or colored foliage. You can count many separate flowers in each puff.
 3. **SOFT TUFTED WHIMSICAL GROUND** — rolling, bouncy, cushiony hills carpeted in tufted blooms.
 4. **WEIRD IS THE POINT** — push HARD into odd, gravity-defying, impossible, surreal, unhinged territory: bend physics, flip gravity, float things, loop the trees, scale gone wild, full Dr-Seuss-on-a-bender. The crazier + more delightful, the better — tame = failure.
