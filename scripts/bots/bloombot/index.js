@@ -38,6 +38,7 @@ const pathBuilders = {
   'flower-friends': require('./paths/flower-friends'),
   'flower-humming-birds': require('./paths/flower-humming-birds'),
   'flower-fantasy': require('./paths/flower-fantasy'),
+  'flower-grove': require('./paths/flower-grove'),
   'desert-bloom': require('./paths/desert-bloom'),
   reclaim: require('./paths/reclaim'),
 };
@@ -77,6 +78,7 @@ module.exports = {
     'flower-friends',
     'flower-humming-birds',
     'flower-fantasy',
+    'flower-grove',
     'desert-bloom',
     'reclaim',
   ],
@@ -152,6 +154,7 @@ module.exports = {
       'flower-friends': 'scene',
       'flower-humming-birds': 'scene',
       'flower-fantasy': 'scene',
+      'flower-grove': 'scene',
       'desert-bloom': 'scene',
       reclaim: 'scene',
     },

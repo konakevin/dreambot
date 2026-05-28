@@ -532,6 +532,76 @@ CRITICAL — ONE surreal scale-inverted FLOWER-FORM is the hero. Natural landsca
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  BLOOMBOT_FLOWER_GROVE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, grove, ground, whimsy } = slots;
+    const whimsySection = whimsy
+      ? `
+━━━ WEIRD WONDER — render this odd twist visibly ━━━
+${whimsy}
+
+A gleeful "wait, WHAT?" element. LEAN INTO IT — this is the fun crazy path; make it strange and delightful, never tame.
+
+`
+      : '';
+    return `You are a whimsical surreal painter writing FLOWER-GROVE scenes for BloomBot — the FUN, CRAZY path. Output a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — A LORAX-TRUFFULA FOREST, BUT ENTIRELY OF FLOWERS ━━━
+
+A Dr-Seuss / Lorax-style whimsical grove where the "trees" are giant FLUFFY POM-POM FLOWER-TREES — slender trunks crowned with enormous round downy bloom-puff canopies — joined by house-sized oversized single flowers and gleefully weird scenarios. EVERYTHING is made of flowers. Take flower-fantasy's scale-inversion and BLOW IT UP: bigger, fluffier, weirder, more fun. Nothing is too strange. Viewer's reaction: "this is a crazy-beautiful flower-Seuss world."
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **FLUFFY POM-POM FLOWER-TREES AS HERO** — slender trunks topped with giant ROUND fluffy/downy bloom-canopies. Truffula silhouette: thin trunk, huge soft round crown. A grove at wildly varied heights over rolling hills.
+2. **OVERSIZED / SCALE-INVERTED** — house-sized single blooms, tree-tall flowers, canopies like soft clouds. The whimsical oversized scale is the wow.
+🚨 **INDIVIDUAL-FLOWER VISIBILITY** — the fluffy canopies must read as a DENSE MASS OF HUNDREDS OF DISTINCT INDIVIDUAL BLOOMS (petals + centers visible), NEVER monochrome fuzz or colored foliage. You can count many separate flowers in each puff.
+3. **SOFT TUFTED WHIMSICAL GROUND** — rolling, bouncy, cushiony hills carpeted in tufted blooms.
+4. **WEIRD IS WELCOME** — odd, gravity-defying, impossible, playful scenarios encouraged. Make it strange + delightful.
+5. **VIVID SATURATED REAL-FLOWER COLOR** — rich saturated jewel-tone flower color in the scene's chosen theme. Soft FLUFFY TEXTURE only — NOT candy / cotton-candy / sugary / confectionery. These are REAL flowers, just oversized and fluffy.
+6. **LUSH + FLOWER-FILLED** — flowers fill the whole frame, no empty space; background hills dotted with more fluffy flower-trees receding in crisp sharp layers under a clean clear sky.
+7. **NO ANIMALS / NO HUMANS / NO MANMADE OBJECTS** — a pure flower-world of trees, hills, and blooms only.
+
+🚫 ABSOLUTE BANS:
+  • 🚫🚫 NO HUMANS / people / figures / silhouettes / faces / hands anywhere (foreground, midground, OR background)
+  • 🚫 NO animals / wildlife (and no flower-animals)
+  • 🚫 NO manmade objects (houses / arches / vehicles / clocks)
+  • 🚫 NO candy / cotton-candy / sugary / lollipop color language — fluffy TEXTURE only, real-flower COLOR
+  • 🚫 NO macro / extreme closeup — whimsical LANDSCAPE scale
+  • 🚫 NO monochrome-fuzz canopy — individual flowers always visible
+  • 🚫 NO sci-fi / neon / dark / moody / hazy
+
+━━━ THE HERO FLOWER-GROVE (fluffy Truffula flower-forms) ━━━
+${grove}
+
+The visual hero — giant fluffy pom-pom flower-trees and/or oversized blooms, built from hundreds of distinct individual flowers.
+
+━━━ THE SOFT TUFTED GROUND ━━━
+${ground}
+${whimsySection}━━━ COMPOSITION ━━━
+  • HERO: the fluffy flower-tree grove (or colossal bloom) dominates the frame at whimsical landscape scale
+  • FOREGROUND: soft tufted bloom-ground + the bases of the giant stems
+  • MIDGROUND: towering fluffy flower-trees / oversized blooms rising over rolling hills
+  • BACKGROUND: more fluffy flower-trees dotting receding hills in crisp sharp layers, clean clear sky
+  • DEPTH: sharp foreground → sharp hero grove → crisp colored distance
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Render the rolled lighting as bright, clear, whimsical-cheerful storybook light — sunny and fresh, saturated and crisp.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Build the fluffy flower-tree canopies + oversized blooms FROM these exact species in these theme colors.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   BLOOMBOT_DESERT_BLOOM: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, desert_anchor, bloom_explosion, atmospheric_magic } = slots;
 
