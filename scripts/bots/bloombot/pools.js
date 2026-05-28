@@ -80,6 +80,12 @@ module.exports = {
   BLOOMBOT_FLOWER_GROVE_GROVE: loadIfExists('bloombot_flower_grove_grove'),
   BLOOMBOT_FLOWER_GROVE_GROUND: loadIfExists('bloombot_flower_grove_ground'),
   BLOOMBOT_FLOWER_GROVE_WHIMSY: loadIfExists('bloombot_flower_grove_whimsy'),
+  // ─── tropical-grove path (2026-05-27) — Hawaiian Dr-Seuss giant tropical flower wonderland ───
+  BLOOMBOT_TROPICAL_GROVE_CANOPY: loadIfExists('bloombot_tropical_grove_canopy'),
+  BLOOMBOT_TROPICAL_GROVE_SETTING: loadIfExists('bloombot_tropical_grove_setting'),
+  BLOOMBOT_TROPICAL_GROVE_FOLIAGE: loadIfExists('bloombot_tropical_grove_foliage'),
+  BLOOMBOT_TROPICAL_GROVE_ATMOSPHERE: loadIfExists('bloombot_tropical_grove_atmosphere'),
+  BLOOMBOT_TROPICAL_GROVE_WHIMSY: loadIfExists('bloombot_tropical_grove_whimsy'),
   // ─── flower-arrangement path (2026-05-27) — ornate florist arrangement hero in a lush garden ───
   BLOOMBOT_FLOWER_ARRANGEMENT_VESSEL: loadIfExists('bloombot_flower_arrangement_vessel'),
   BLOOMBOT_FLOWER_ARRANGEMENT_STYLE: loadIfExists('bloombot_flower_arrangement_style'),

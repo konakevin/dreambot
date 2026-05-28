@@ -327,6 +327,145 @@ The vibe: same playful "wait, WHAT?!" energy as the flower-grove path, but chann
     instructions: `Each entry is ONE surreal "pop" flourish, 20-45 words, the ELEMENT only — keep the arrangement gorgeous. NEVER name flower species or colors. NO candy / humans / animals. Output a NUMBERED list, one per line, NO internal newlines.`,
   },
 
+  // ─── tropical-grove path (2026-05-27): flower-grove's crazy style, tropical-coded ───
+  bloombot_tropical_grove_canopy: {
+    format: 'simple',
+    theme: `OVERSIZED TROPICAL FLOWER-FORMS for BloomBot's tropical-grove path — the FUN / CRAZY tropical cousin of flower-grove. Each entry is ONE giant tropical flower-tree, towering tropical flower-form, or colossal tropical mega-bloom — described by FORM / SHAPE / SCALE only. Each entry 30-55 words.
+
+⚠️ CRITICAL — describe ONLY the FORM / SHAPE / SILHOUETTE / SCALE. Do NOT name flower species or colors (the flower engine supplies tropical species + colors). Say "giant hibiscus-like flower-tree", "towering tropical spire-bloom", "colossal tropical mega-bloom" — never "red hibiscus".
+
+The vibe: a Dr-Seuss-meets-Hawaii JUNGLE WONDERLAND of GIANT tropical flowers — blown-up whimsical tropical scale, the same gleeful energy as flower-grove but TROPICAL. Big lush green tropical FOLIAGE (monstera, palm, banana, fern leaves) is WELCOME and part of the look.
+
+✓ MANDATORY VARIETY — distribute across these TROPICAL FORM CATEGORIES:
+  A. GIANT BROAD-BLOOM FLOWER-TREES — huge flat tropical blooms (hibiscus / plumeria-like form) crowning slender trunks
+  B. TOWERING SPIRE FORMS — tall stacked tropical spires (heliconia / torch-ginger / ginger-lily silhouette), vertical and dramatic
+  C. GIANT FAN FORMS — oversized bird-of-paradise / strelitzia-style spiky fan blooms on tall stalks
+  D. BIG-LEAF CANOPIES — monstera / palm / banana / elephant-ear FOLIAGE forming lush green tropical canopies overhead (with blooms among them)
+  E. COLOSSAL SINGLE MEGA-BLOOMS — one tropical bloom grown tree-tall (giant lotus / orchid / hibiscus form) among normal blooms for scale-clash
+  F. CASCADING / VINING — curtains of trailing tropical vine-blooms (mandevilla / passionflower form) hanging from above
+  G. MIXED TROPICAL GROVE — many wildly different tropical flower-tree silhouettes packed together
+
+🚫 STRICT BANS: NO flower species or color names; NO humans / people / animals (no birds, no monkeys); NO candy / sugary language; NO temperate trees (oaks / pines); NO macro — whimsical jungle LANDSCAPE scale.`,
+    touchpoints: [
+      'a grove of giant tropical flower-trees — slender trunks crowned with enormous flat broad tropical blooms the size of beach umbrellas, towering over a lush jungle',
+      'towering vertical spire-blooms stacked like flaming torches rising forty feet, dramatic tropical spikes lined up across the jungle',
+      'oversized spiky fan-blooms like giant birds-of-paradise on tall stalks, angular and architectural, fanning open above the canopy',
+      'colossal monstera and palm leaves forming a vast green tropical canopy overhead, giant blooms nestled among the split fronds, dappled light filtering through',
+      'one colossal single tropical mega-bloom grown tree-tall on a thick stem, its single open flower the size of a hot-air balloon, normal tropical blooms tiny at its base',
+      'curtains of trailing tropical vine-blooms cascading down from a high jungle canopy like flowering waterfalls, draping in long flowering ropes',
+      'a mixed tropical grove packing every form together — broad flower-trees, towering spires, giant fans, big-leaf canopies, vining curtains — a wild jungle of oversized blooms',
+      'a towering tropical flower-tree with a fat trunk wrapped in flowering vines and a vast crown of giant overlapping tropical blooms, monumental over the jungle floor',
+      'giant ginger-lily-style spire-blooms erupting in dense vertical clusters, statuesque tropical towers rising from broad green leaves',
+      'a beanstalk-tall tropical flower-stalk vanishing up into the canopy, dramatic look-straight-up perspective, one giant bloom shrinking to a dot far overhead',
+    ],
+    instructions: `Each entry is ONE giant tropical flower-form, 30-55 words, FORM / SHAPE / SCALE only. Format: "FORM NAME CAPS — silhouette + scale + tropical detail". Vary across all 7 categories; big green tropical foliage (monstera/palm/fern) welcome. NEVER name flower species or colors. NO humans / animals / candy. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
+  bloombot_tropical_grove_setting: {
+    format: 'simple',
+    theme: `LUSH TROPICAL LOCALE / SETTING for BloomBot's tropical-grove path. Each entry is the exotic Hawaiian/tropical place the giant flowers grow — the ground + locale that makes the scene unmistakably tropical (NOT temperate flower-fields). Each entry 25-45 words.
+
+The vibe: a lush, verdant, exotic tropical floor — rich green foliage, ferns, big leaves, water, volcanic rock, beach edge. Describe TEXTURE / TERRAIN only — NOT flower species or colors (engine supplies those). Big green tropical foliage is part of the look.
+
+✓ MANDATORY VARIETY — distribute across these TROPICAL SETTINGS:
+  A. dense rainforest understory thick with ferns, monstera and elephant-ear leaves
+  B. volcanic black-sand or dark lava-rock ground dotted with blooms
+  C. lagoon / pool / stream water-edge with floating lily-pads and reflections
+  D. white-sand tropical beach edge meeting lush jungle
+  E. mossy jungle floor with gnarled roots and dappled light
+  F. fern-carpeted clearing under a broken canopy
+
+🚫 BANS: NO flower species or color names; NO humans / people / animals; NO temperate / alpine / desert terrain.`,
+    touchpoints: [
+      'a dense rainforest understory carpeted in ferns and broad elephant-ear leaves, lush layered green growth crowding the jungle floor',
+      'glossy black volcanic sand and dark lava rock underfoot, dotted with tufts of tropical blooms pushing through the cracks',
+      'a still tropical lagoon edge with floating lily-pads and a glassy surface mirroring the giant blooms above',
+      'a white-sand beach fringe meeting lush jungle, soft sand giving way to dense tropical greenery',
+      'a mossy jungle floor tangled with gnarled buttress roots, soft green moss and dappled light pooling between them',
+      'a fern-carpeted clearing under a broken canopy, shafts of warm light spilling onto layered fronds',
+      'a shallow jungle stream winding over smooth stones, ferns and broad leaves leaning in from both banks',
+    ],
+    instructions: `Each entry is ONE tropical floor/setting, 25-45 words, TEXTURE + TERRAIN only, lush and green. NEVER name flower species or colors. NO humans / animals. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
+  bloombot_tropical_grove_whimsy: {
+    format: 'simple',
+    theme: `WEIRD GRAVITY-DEFYING TROPICAL "wait, WHAT?!" SCENARIOS for BloomBot's tropical-grove path — like flower-grove's whimsy but TROPICAL. Each entry is ONE unhinged surreal twist that becomes a prominent CO-HERO. Each entry 20-45 words.
+
+The vibe: bend physics in a jungle wonderland — floating jungle-islands, petal-and-orchid waterfalls, looping flower-vines, monstera-leaf bridges, gravity flipped, scale gone wild. Genuinely surreal and delightful. Describe the weird ELEMENT only (the tropical flowers + colors come from elsewhere).
+
+🚫 BANS: NO flower species or color names; NO candy / sugary language; NO humans / animals. Lean WEIRD — tame is failure.`,
+    touchpoints: [
+      'floating jungle-islands drifting in the sky, giant tropical flower-trees growing on their undersides with long flowering vines trailing earthward',
+      'a cascading waterfall of loose petals and orchids pouring off a high jungle cliff into a frothy bloom-pool below',
+      'giant flowering vines bent into complete loop-the-loop curls, their tropical blooms swinging upside-down through the loops',
+      'enormous monstera leaves arching between two giant flower-trees to form living bridges high in the canopy',
+      'the whole jungle tilted at an impossible gravity-defying angle, every towering tropical bloom leaning the same wrong way',
+      'oversized dewdrops the size of beach balls clinging to the giant tropical blooms, each magnifying the flower inside it',
+      'a giant tropical bloom mid-burst, its petals exploding outward in a frozen firework of flying tropical flowers',
+      'tropical flower-trees so tall their crowns vanish into a low cloud, blooms drifting down from inside the mist',
+    ],
+    instructions: `Each entry is ONE weird gravity-defying tropical twist, 20-45 words, the surreal ELEMENT only. NEVER name species or colors. NO candy / humans / animals. Push it genuinely unhinged. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
+  bloombot_tropical_grove_foliage: {
+    format: 'simple',
+    theme: `SIGNATURE TROPICAL GREENERY / FOLIAGE LAYER for BloomBot's tropical-grove path. Each entry is ONE lush, oversized, big-leaf tropical foliage element that FRAMES the scene — the verdant GREEN context around the hero flowers (this is the "Hawaiian green" signature, NOT the flowers). Each entry 20-40 words.
+
+⚠️ This is the GREEN layer — describe lush tropical FOLIAGE (leaves, fronds, vines) only. Do NOT describe flowers, flower species, or flower colors (those come from other axes). Green foliage is always palette-safe. Seuss-exaggerated oversized scale welcome.
+
+✓ MANDATORY VARIETY — distribute across these FOLIAGE TYPES:
+  A. giant split-leaf monstera walls and clusters
+  B. towering palm fronds / fan-palm canopies
+  C. broad banana-leaf and bird's-nest groves
+  D. dense fern thickets and tree-fern crowns
+  E. hanging liana / vine curtains draping from above
+  F. giant elephant-ear and philodendron leaf clumps
+  G. tall bamboo-like green stalks / cane thickets
+
+🚫 BANS: NO flowers / blooms / flower species / colors (this is the GREEN layer only); NO humans / people / animals.`,
+    touchpoints: [
+      'giant split-leaf monstera leaves the size of doors clustered in a deep glossy-green wall, fenestrated and dramatic',
+      'towering fan-palm fronds arcing overhead in a vast green canopy, fronds fanning wide and dappling the light',
+      'broad banana leaves in a dense grove, huge paddle-shaped fronds layered in lush overlapping green',
+      'a thicket of tree-ferns with great unfurling crowns, soft layered fronds crowding the midground',
+      'long hanging liana vines draping in green curtains from the canopy, trailing tendrils swaying',
+      'giant elephant-ear leaves clumped low and broad, heart-shaped and oversized, glossy deep green',
+      'tall bamboo-like cane stalks rising in a dense green palisade, slender and towering',
+      'a riot of mixed jungle foliage — monstera, palm, fern and vine — layered into a deep verdant green backdrop',
+    ],
+    instructions: `Each entry is ONE tropical foliage element, 20-40 words, GREEN leaves/fronds/vines only. Vary across the 7 types. NEVER describe flowers, flower species, or colors. NO humans / animals. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
+  bloombot_tropical_grove_atmosphere: {
+    format: 'simple',
+    theme: `TROPICAL ATMOSPHERE — WATER + AIR DRAMA for BloomBot's tropical-grove path. Each entry is ONE crisp tropical atmospheric or water feature that adds drama, depth and a paradise mood. Each entry 20-40 words.
+
+⚠️ Keep the air CRISP and CLEAR — these are sharp, vivid accents (a waterfall, a rainbow, light-shafts), NEVER a flat washed-out haze over everything. Describe the water/air ELEMENT only — NOT flower species or colors.
+
+✓ MANDATORY VARIETY — distribute across these:
+  A. a cascading jungle waterfall throwing a crisp veil of spray
+  B. a still lagoon / pool mirroring the scene in glassy reflections
+  C. ocean surf and sea-spray at a beach edge
+  D. drifting volcanic steam venting from dark rock
+  E. a vivid double rainbow arcing across the sky
+  F. crisp golden light-shafts breaking through the canopy
+  G. sparkling dew / a passing sun-shower shimmer catching the light
+
+🚫 BANS: NO flower species or color names; NO humans / animals; NO thick flattening fog/murk — keep it clear and vivid.`,
+    touchpoints: [
+      'a cascading jungle waterfall plunging down mossy rock, throwing a crisp sunlit veil of spray that catches the light',
+      'a still turquoise lagoon mirroring the giant blooms and sky above in a glassy reflection',
+      'ocean surf rolling onto a white-sand edge, sea-spray misting crisply in the bright air',
+      'plumes of volcanic steam drifting up from dark fissured lava rock, clean against the sky',
+      'a vivid double rainbow arcing across a clear tropical sky after a passing shower',
+      'crisp golden shafts of light breaking through the canopy and spotlighting the blooms below',
+      'a sudden sun-shower shimmer, raindrops sparkling crisp and bright as they catch the sunlight',
+      'sparkling dew beading on broad leaves, glittering in clear morning light',
+    ],
+    instructions: `Each entry is ONE tropical atmosphere/water feature, 20-40 words, crisp and vivid. NEVER name flower species or colors. NO humans / animals. NO flat haze. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
   // ─── landscape path: scale_prover (gives the landscape scale) ───
   bloombot_landscape_scale_prover: {
     format: 'simple',
@@ -1939,7 +2078,7 @@ The other 2-4+ supporting cast members are smaller / further back / hovering in 
       • HONEYSUCKLE CASCADE — yellow-and-red honeysuckle vines cascading down, dangling tubular blooms
       • BOUGAINVILLEA CASCADE — fuchsia-and-magenta bougainvillea papery cascade from above
       • PASSIONFLOWER VINE — exotic purple-and-white passionflower vines climbing and dangling
-  - ~3 TROPICAL-CANOPY (orchids / hibiscus / heliconia hanging in a tropical-jungle-canopy composition with hummingbirds darting through)
+  - ~3 TROPICAL-CANOPY (orchids / hibiscus / heliconia hanging in a tropical-grove-canopy composition with hummingbirds darting through)
   - ~2 BIRD-FEEDER-GARDEN (suet-feeder-style hanging-flower-feeders that hummingbirds gather at — naturalistic, no actual man-made feeder structures)
 
 For CASCADING / HANGING / TROPICAL-CANOPY entries, the FLOWERS HANG / DRIP / CASCADE from above as the dominant visual — hummingbirds dart THROUGH the cascade or hover at dangling tubular blooms.
@@ -1989,7 +2128,7 @@ For CASCADING / HANGING / TROPICAL-CANOPY entries, the FLOWERS HANG / DRIP / CAS
       'YELLOW-AND-RED HONEYSUCKLE CASCADE — yellow-and-red honeysuckle vines cascading down from above with dangling tubular blooms, hummingbirds darting at the trumpet-mouths, dreamy bokeh of warm-green leaves behind',
       'FUCHSIA BOUGAINVILLEA CASCADE — vivid fuchsia-and-magenta bougainvillea papery bracts cascading down from above into the frame, hummingbirds hovering at the dense cluster, dreamy bokeh of pink-blooms behind',
       'EXOTIC PASSIONFLOWER VINE-CURTAIN — exotic purple-and-white passionflower vines climbing and dangling in a vine-curtain, intricate passionflower blooms hanging into the frame, hummingbirds darting through, dreamy bokeh of more vines behind',
-      'TROPICAL ORCHID-CANOPY — exotic vivid orchid clusters hanging from a tropical-jungle-canopy of vines above, with bright hibiscus and heliconia spires, hummingbirds darting through the tropical canopy, dreamy bokeh of warm jungle-foliage behind',
+      'TROPICAL ORCHID-CANOPY — exotic vivid orchid clusters hanging from a tropical-grove-canopy of vines above, with bright hibiscus and heliconia spires, hummingbirds darting through the tropical canopy, dreamy bokeh of warm jungle-foliage behind',
       'CORAL HIBISCUS-CANOPY — vivid coral and red hibiscus blossoms hanging from cascading tropical branches with orange heliconia spires nearby, hummingbirds hovering at the hanging tubular flowers, dreamy bokeh of warm tropical-foliage behind',
     ],
     instructions: `Each entry is ONE specific VIBRANT MULTI-FLOWER HUMMINGBIRD-ATTRACTING GARDEN COMPOSITION (mix UPRIGHT garden-vignettes + CASCADING/HANGING vine compositions + TROPICAL-CANOPY compositions), 30-55 words. Format: "VIGNETTE NAME / JEWEL-PALETTE CAPS — 3-5+ co-hero hummingbird-attracting flower species in vibrant saturated jewel-tone colors blooming together in a pulled-back enchanted garden vignette + dreamy bokeh implied". MANDATORY — (a) AT LEAST 3 different hummingbird-magnet species, (b) pulled-back garden vignette framing, (c) VIBRANT SATURATED JEWEL-TONE color register (NEVER soft-pastel — that is flower-friends), (d) explicit vivid color words (scarlet / fuchsia / magenta / sapphire / flame-orange / amethyst / etc.), (e) dreamy bokeh implied, (f) vibrant enchanted mood. Distribute color-dominance evenly across the 25 (red, fuchsia, orange, purple, blue, yellow, rainbow). NO hummingbird description. NO macro. NO vase / interior. NO humans. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,

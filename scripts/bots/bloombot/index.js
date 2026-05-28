@@ -39,6 +39,7 @@ const pathBuilders = {
   'flower-humming-birds': require('./paths/flower-humming-birds'),
   'flower-fantasy': require('./paths/flower-fantasy'),
   'flower-grove': require('./paths/flower-grove'),
+  'tropical-grove': require('./paths/tropical-grove'),
   'flower-arrangement': require('./paths/flower-arrangement'),
   'desert-bloom': require('./paths/desert-bloom'),
   reclaim: require('./paths/reclaim'),
@@ -51,14 +52,20 @@ module.exports = {
   mediums: ['bloom_hyperreal_cgi'],
 
   useModelPicker: true,
-  // All paths random-pick one of these four per render (2026-05-27). No
-  // modelByPath lock — the picker selects uniformly from this list each time.
+  // All paths random-pick one of these four per render (2026-05-27) — EXCEPT
+  // any path locked in modelByPath below, which falls through to its lock.
   allowedModels: [
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-2-pro',
     'black-forest-labs/flux-2-max',
   ],
+  // Per-path model lock. tropical-grove → random pick between flux-1.1-pro and
+  // flux-1.1-pro-ultra only (Kevin 2026-05-27). Paths NOT listed here use the
+  // uniform allowedModels pick above.
+  modelByPath: {
+    'tropical-grove': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+  },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -80,6 +87,7 @@ module.exports = {
     'flower-humming-birds',
     'flower-fantasy',
     'flower-grove',
+    'tropical-grove',
     'flower-arrangement',
     'desert-bloom',
     'reclaim',
@@ -136,6 +144,7 @@ module.exports = {
       'flower-friends',
       'flower-humming-birds',
       'flower-fantasy',
+      'tropical-grove',
       'flower-arrangement',
       'desert-bloom',
       'reclaim',
@@ -160,6 +169,7 @@ module.exports = {
       'flower-humming-birds': 'scene',
       'flower-fantasy': 'scene',
       'flower-grove': 'scene',
+      'tropical-grove': 'scene',
       'flower-arrangement': 'scene',
       'desert-bloom': 'scene',
       reclaim: 'scene',
@@ -188,7 +198,11 @@ module.exports = {
     // that drop into the existing brief slots. Phase 3 will move biome/themeBias
     // onto per-path flowerContext; for now a small biome map.
     const flowerEngine = require('./flowerEngine');
-    const BIOME_BY_PATH = { 'tropical-paradise': 'tropical', 'desert-bloom': 'desert' };
+    const BIOME_BY_PATH = {
+      'tropical-paradise': 'tropical',
+      'tropical-grove': 'tropical',
+      'desert-bloom': 'desert',
+    };
     const fc = flowerEngine.roll({ biome: BIOME_BY_PATH[path] || 'any', picker });
     // region kept ONLY for legacy compose.js paths (e.g. cozy) that still build
     // their own roster; axis paths now use fc.palette + fc.roster.

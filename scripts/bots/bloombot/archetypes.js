@@ -63,6 +63,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_TROPICAL_GROVE: {
+    description:
+      'PATH-BESPOKE — BloomBot tropical-grove path (2026-05-27 NEW). The Hawaiian/tropical FUN/CRAZY cousin of flower-grove: a Dr-Seuss-meets-Hawaii jungle wonderland of GIANT oversized tropical flowers (hibiscus / bird-of-paradise / heliconia / plumeria / orchid scaled enormous as flower-trees + tree-sized mega-blooms), framed by lush green monstera/palm/fern foliage, set in volcanic / jungle / lagoon / waterfall / beach paradise (NOT temperate fields). Gravity-defying Hawaiian Dr-Seuss whimsy. Uses the flower engine at biome=tropical (real tropical species + hot palettes). NO humans / animals. 4 path pools (canopy / setting / foliage / atmosphere) + whimsy conditional (85%-gated) + universal lighting.',
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: ['canopy', 'setting', 'foliage', 'atmosphere'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'whimsy', gate: 0.85 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BLOOMBOT_FLOWER_ARRANGEMENT: {
     description:
       'PATH-BESPOKE — BloomBot flower-arrangement path (2026-05-27 NEW). An ORNATE, lavishly-designed flower arrangement in a vessel (classical urn / cut-crystal vase / terracotta planter / woven basket / hand-tied bouquet) as the focal HERO, set in a LUSH flower-garden backdrop bursting with blooms everywhere — placed on a table, the ground, or nestled in the garden. Museum still-life (Dutch Golden-Age van Huysum/Bosschaert) meets high-end editorial florist couture. Can dial up the same wild "pop" as flower-grove via the whimsy layer, but channeled INTO a beautiful arrangement. FORM/STYLE from pools; COLOR + species from the flower-engine theme. NO humans / animals (vessel + garden furniture OK). 3 path pools (vessel / style / setting) + whimsy conditional (50%-gated) + universal lighting.',

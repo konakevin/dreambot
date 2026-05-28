@@ -602,6 +602,80 @@ ${vibeDirective.slice(0, 200)}
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  BLOOMBOT_TROPICAL_GROVE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, canopy, setting, foliage, atmosphere, whimsy } = slots;
+    const whimsySection = whimsy
+      ? `
+━━━ HAWAIIAN DR-SEUSS WONDER — MANDATORY CO-HERO, RENDER IT BIG + OBVIOUS ━━━
+${whimsy}
+
+This is the WHOLE POINT of this path. Render it LARGE and UNMISTAKABLE — a true "wait, WHAT?!" tropical moment sharing the frame. Push to the edge of physics: gravity flipped, things floating, vines looping, scale gone wild — genuinely surreal and delightfully unhinged Hawaiian Dr-Seuss. If it wouldn't make a viewer do a double-take, it's TOO TAME — crank it further.
+
+`
+      : '';
+    return `You are a whimsical surreal painter writing TROPICAL-GROVE scenes for BloomBot — the FUN, CRAZY Hawaiian path. Output a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — A HAWAIIAN DR-SEUSS JUNGLE WONDERLAND OF GIANT TROPICAL FLOWERS ━━━
+
+A Dr-Seuss-meets-Hawaii tropical paradise where GIANT oversized tropical flowers tower like trees — blown-up whimsical scale, gleefully weird, lush and exotic. Same crazy-fun energy as the flower-grove path, but TROPICAL: hibiscus / bird-of-paradise / heliconia / plumeria / orchid blooms scaled enormous, framed by lush green monstera + palm foliage, set in a volcanic / jungle / lagoon / beach paradise. Viewer's reaction: "this is a crazy-beautiful Hawaiian flower-Seuss world."
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **GIANT TROPICAL FLOWER-FORMS AS HERO — WILD MIX OF SHAPES + SIZES** — oversized tropical blooms tower like trees: broad hibiscus/plumeria flower-trees, towering heliconia/ginger spires, giant bird-of-paradise fans, colossal mega-blooms, cascading vine-curtains. Mix silhouettes + heights wildly. Each is built from real, distinct tropical blooms (petals + centers visible), NEVER fuzz.
+2. **SOME BLOOMS GROW AS BIG AS TREES — MIND-BENDING SCALE** — a single tropical flower can tower like a palm; clash the scales — monstrous tree-sized blooms rising among normal blooms for scale.
+3. **LUSH GREEN TROPICAL FOLIAGE** — big monstera / palm / banana / fern greenery frames the scene (the Hawaiian green signature, abundant and lush).
+4. **TROPICAL PARADISE SETTING** — volcanic slopes / jungle / lagoon / waterfall / beach — never temperate fields or rolling hills.
+5. **WEIRD IS THE POINT** — push HARD into odd, gravity-defying, impossible, surreal Hawaiian Dr-Seuss territory. The crazier + more delightful, the better — tame = failure.
+6. **VIVID SATURATED TROPICAL COLOR** — rich hot saturated jewel-tone tropical color in the scene's chosen theme. Real flowers, just oversized and lush — NOT candy / cotton-candy / sugary.
+7. **LUSH + FRAME-FILLING** — flowers + foliage fill the whole frame, packed and exotic, receding in crisp sharp layers under a clean clear tropical sky.
+
+🚫 ABSOLUTE BANS:
+  • 🚫🚫 NO HUMANS / people / figures / silhouettes / faces / hands anywhere
+  • 🚫 NO animals / birds / wildlife
+  • 🚫 NO candy / cotton-candy / sugary / lollipop color language — real-flower COLOR, lush TEXTURE
+  • 🚫 NO macro / extreme closeup — whimsical jungle LANDSCAPE scale
+  • 🚫 NO monochrome-fuzz blooms — individual flowers always visible
+  • 🚫 NO temperate flower-fields / rolling pom-pom hills (that's the flower-grove path) / NO sci-fi / neon / dark / moody
+
+━━━ THE HERO GIANT TROPICAL FLOWER-FORMS ━━━
+${canopy}
+
+The visual hero — giant oversized tropical blooms + flower-trees, built from distinct individual tropical flowers.
+
+━━━ THE TROPICAL SETTING ━━━
+${setting}
+
+━━━ THE LUSH GREEN FOLIAGE FRAMING IT ━━━
+${foliage}
+
+━━━ TROPICAL ATMOSPHERE ━━━
+${atmosphere}
+${whimsySection}━━━ COMPOSITION ━━━
+  • HERO: the giant tropical flower-forms dominate the frame at whimsical landscape scale
+  • FOREGROUND: lush green foliage + the bases of the giant stems
+  • MIDGROUND: towering oversized tropical blooms rising over the paradise setting
+  • BACKGROUND: more giant tropical flowers + foliage receding in crisp layers, clean clear tropical sky
+  • DEPTH: sharp foreground → sharp hero blooms → crisp colored distance
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Render the rolled lighting as bright, clear, sunny tropical-paradise light — warm, vivid, saturated and crisp.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Build the giant tropical flower-forms FROM these exact species in these theme colors (green foliage is the framing context).
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   BLOOMBOT_FLOWER_ARRANGEMENT: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, vessel, style, setting, whimsy } = slots;
     // ADDITIVE contrast mode (~50% gate, tunable). HALF the renders keep the
