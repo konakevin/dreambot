@@ -65,6 +65,10 @@ module.exports = {
   // uniform allowedModels pick above.
   modelByPath: {
     'tropical-grove': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'flower-arrangement': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
