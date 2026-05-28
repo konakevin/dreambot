@@ -690,6 +690,17 @@ Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO �
     const bgBuildLine = contrast
       ? `Build the hero ARRANGEMENT from these exact species in these theme colors, vivid and saturated. Render the garden backdrop as LUSH GREEN foliage + greenery with only sparse muted blooms tucked in — so the arrangement stands out in strong contrast against the green.`
       : `Build BOTH the hero arrangement AND the lush garden backdrop FROM these exact species in these theme colors.`;
+    // TROPICAL MODE (~35%, set by rollSharedDNA): a lush Hawaiian/tropical
+    // arrangement variant — tropical blooms + tropical garden backdrop, overriding
+    // the temperate cottage/English-garden cues. Flower engine already supplied
+    // tropical species (biome=tropical) for the roster.
+    const tropicalSection = sharedDNA.tropical
+      ? `
+━━━ TROPICAL VARIANT — render this as a lush HAWAIIAN / TROPICAL arrangement ━━━
+This is a vibrant TROPICAL arrangement: big bold tropical blooms (bird-of-paradise, heliconia, hibiscus, orchid, anthurium, torch ginger, plumeria) with dramatic monstera / palm / fern FOLIAGE woven through it. Keep the rolled vessel + placement, BUT the surrounding garden is a LUSH TROPICAL garden / lanai / jungle / glasshouse bursting with tropical foliage and blooms (big green monstera + palm fronds welcome) — NOT a temperate cottage or English garden. Vivid, hot, saturated tropical color.
+
+`
+      : '';
     const whimsySection = whimsy
       ? `
 ━━━ A WILD "POP" — GORGEOUS SURREAL FLOURISH (render it boldly) ━━━
@@ -732,7 +743,7 @@ The arrangement is built in this design style, lush and abundant, the clear foca
 
 ━━━ THE PLACEMENT + LUSH GARDEN BACKDROP ━━━
 ${setting}
-${whimsySection}━━━ COMPOSITION ━━━
+${tropicalSection}${whimsySection}━━━ COMPOSITION ━━━
   • HERO: the ornate flower arrangement in its vessel, dominant + sharp in the foreground/center
   • MIDGROUND: the vessel base + the surface it rests on (table / steps / ground / pedestal) + the nearest garden blooms
   • BACKGROUND: the lush flower garden receding in soft layered depth, packed with blooms, clean clear sky/light above

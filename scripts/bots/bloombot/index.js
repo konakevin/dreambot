@@ -203,7 +203,16 @@ module.exports = {
       'tropical-grove': 'tropical',
       'desert-bloom': 'desert',
     };
-    const fc = flowerEngine.roll({ biome: BIOME_BY_PATH[path] || 'any', picker });
+    let biome = BIOME_BY_PATH[path] || 'any';
+    // flower-arrangement TROPICAL MODE (~35% gate, additive): most arrangements
+    // stay temperate, but ~1/3 become a lush tropical arrangement (tropical
+    // blooms + monstera/lanai/jungle backdrop). The template reads sharedDNA.tropical.
+    let arrangementTropical = false;
+    if (path === 'flower-arrangement' && Math.random() < 0.35) {
+      biome = 'tropical';
+      arrangementTropical = true;
+    }
+    const fc = flowerEngine.roll({ biome, picker });
     // region kept ONLY for legacy compose.js paths (e.g. cozy) that still build
     // their own roster; axis paths now use fc.palette + fc.roster.
     const region =
@@ -217,6 +226,7 @@ module.exports = {
       roster: fc.roster,
       flowerTheme: fc.theme,
       flowerRegister: fc.register,
+      tropical: arrangementTropical,
     };
   },
 
