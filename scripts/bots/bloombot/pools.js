@@ -80,6 +80,11 @@ module.exports = {
   BLOOMBOT_FLOWER_GROVE_GROVE: loadIfExists('bloombot_flower_grove_grove'),
   BLOOMBOT_FLOWER_GROVE_GROUND: loadIfExists('bloombot_flower_grove_ground'),
   BLOOMBOT_FLOWER_GROVE_WHIMSY: loadIfExists('bloombot_flower_grove_whimsy'),
+  // ─── flower-arrangement path (2026-05-27) — ornate florist arrangement hero in a lush garden ───
+  BLOOMBOT_FLOWER_ARRANGEMENT_VESSEL: loadIfExists('bloombot_flower_arrangement_vessel'),
+  BLOOMBOT_FLOWER_ARRANGEMENT_STYLE: loadIfExists('bloombot_flower_arrangement_style'),
+  BLOOMBOT_FLOWER_ARRANGEMENT_SETTING: loadIfExists('bloombot_flower_arrangement_setting'),
+  BLOOMBOT_FLOWER_ARRANGEMENT_WHIMSY: loadIfExists('bloombot_flower_arrangement_whimsy'),
   // ─── desert-bloom path (2026-05-19) — southwest desert + wildflower explosion ───
   BLOOMBOT_DESERT_BLOOM_DESERT_ANCHOR: loadIfExists('bloombot_desert_bloom_desert_anchor'),
   BLOOMBOT_DESERT_BLOOM_BLOOM_EXPLOSION: loadIfExists('bloombot_desert_bloom_bloom_explosion'),

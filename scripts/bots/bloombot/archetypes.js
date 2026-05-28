@@ -63,6 +63,16 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_FLOWER_ARRANGEMENT: {
+    description:
+      'PATH-BESPOKE — BloomBot flower-arrangement path (2026-05-27 NEW). An ORNATE, lavishly-designed flower arrangement in a vessel (classical urn / cut-crystal vase / terracotta planter / woven basket / hand-tied bouquet) as the focal HERO, set in a LUSH flower-garden backdrop bursting with blooms everywhere — placed on a table, the ground, or nestled in the garden. Museum still-life (Dutch Golden-Age van Huysum/Bosschaert) meets high-end editorial florist couture. Can dial up the same wild "pop" as flower-grove via the whimsy layer, but channeled INTO a beautiful arrangement. FORM/STYLE from pools; COLOR + species from the flower-engine theme. NO humans / animals (vessel + garden furniture OK). 3 path pools (vessel / style / setting) + whimsy conditional (50%-gated) + universal lighting.',
+    slots: { universal: ['lighting'], bot: [], path: ['vessel', 'style', 'setting'] },
+    pickN: {},
+    conditionalLayer: { slot: 'whimsy', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BLOOMBOT_DESERT_BLOOM: {
     description:
       'PATH-BESPOKE — BloomBot desert-bloom path (2026-05-19 NEW). SOUTHWEST DESERT LANDSCAPES juxtaposed with an EXPLOSION OF WILDFLOWERS — saguaro corridors, joshua-tree groves, agave fields, red-rock canyons, mesa silhouettes, sand dunes — paired with a vivid carpet of desert wildflowers exploding around / between / through the desert elements. Vivid saturated SOUTHWEST register (NOT soft-pastel). Inspired by Kevin-hearted bloombot post — saguaro corridor with vivid red/coral wildflower carpet. 3 path-bespoke pools (desert_anchor / bloom_explosion / atmospheric_magic-40%-gated) + universal lighting.',

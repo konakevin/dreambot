@@ -602,6 +602,87 @@ ${vibeDirective.slice(0, 200)}
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  BLOOMBOT_FLOWER_ARRANGEMENT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, vessel, style, setting, whimsy } = slots;
+    // ADDITIVE contrast mode (~50% gate, tunable). HALF the renders keep the
+    // harmonious tonal/mono look (arrangement + garden share the theme); the
+    // other half make the backdrop GREENERY-dominant + quieter so the vivid
+    // arrangement POPS against it. Preserves the existing mono scenes, adds
+    // contrast variety. Green is palette-safe (foliage is the allowed exception).
+    const contrast = Math.random() < 0.5;
+    const bgMandate = contrast
+      ? `2. **GREEN, CONTRASTING BACKDROP — MAKE THE ARRANGEMENT POP** — the garden behind is LUSH and GREEN: rich verdant foliage, leaves, ferns, hedges and climbing greenery dominate the backdrop, with only soft, sparse, muted blooms tucked among the green. It is deliberately quieter, greener and lower-key than the arrangement so the vivid, saturated arrangement LEAPS forward as the unmistakable focal hero — strong contrast between the bold colorful arrangement and the leafy green backdrop. Still lush and full, just GREEN-led.`
+      : `2. **LUSH FLOWER-GARDEN BACKDROP** — behind and around, a garden FULL of blooms (beds, borders, climbing flowers) in the same harmonious theme colors so the whole frame is packed with flowers, tonal and lush. The garden supports in softer, slightly-receding focus — it NEVER competes with or overwhelms the hero arrangement.`;
+    const bgBuildLine = contrast
+      ? `Build the hero ARRANGEMENT from these exact species in these theme colors, vivid and saturated. Render the garden backdrop as LUSH GREEN foliage + greenery with only sparse muted blooms tucked in — so the arrangement stands out in strong contrast against the green.`
+      : `Build BOTH the hero arrangement AND the lush garden backdrop FROM these exact species in these theme colors.`;
+    const whimsySection = whimsy
+      ? `
+━━━ A WILD "POP" — GORGEOUS SURREAL FLOURISH (render it boldly) ━━━
+${whimsy}
+
+Channel flower-grove's playful "wait, WHAT?!" energy INTO this arrangement — push it bold and obvious, BUT keep the arrangement exquisitely beautiful and well-designed. The pop ELEVATES the arrangement, never wrecks it.
+
+`
+      : '';
+    return `You are an ornate floral still-life painter / editorial-florist photographer writing FLOWER-ARRANGEMENT scenes for BloomBot. Output a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — A LAVISH FLORIST ARRANGEMENT AS THE HERO, IN A LUSH FLOWER GARDEN ━━━
+
+An exquisitely-designed, ornate flower arrangement in a beautiful vessel is the unmistakable FOCAL HERO, set against a lush flower-garden backdrop bursting with blooms everywhere. Dutch Golden-Age still-life (van Huysum / Bosschaert) meets high-end editorial florist couture — abundant, layered, museum-quality. The whole frame is flowers: the ornate arrangement up front, the flower-packed garden behind.
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **THE ORNATE ARRANGEMENT IS THE HERO** — a lavish, densely-packed, exquisitely-composed flower arrangement in the vessel dominates the frame (60%+), the sharp focal point. Multi-tier depth WITHIN the arrangement itself — blooms at many heights, depths and angles. Gallery still-life quality: every bloom distinct, rich, deliberate.
+${bgMandate}
+3. **THE VESSEL + PLACEMENT** — render the rolled vessel and its placement exactly; the arrangement sits IN/ON it, in the rolled garden setting.
+4. **INDIVIDUAL-FLOWER VISIBILITY** — every bloom reads as a distinct flower (petals + centers visible), in the arrangement AND the garden — never a blurry mass or colored fuzz.
+5. **VIVID SATURATED REAL-FLOWER COLOR** — rich jewel-tone color strictly in the scene's chosen theme; ornate, beautiful, full.
+6. **LUSH + FRAME-FILLING** — no empty/barren space; the arrangement overflowing and abundant, the garden dense behind, a clean clear sky/light above.
+
+🚫 ABSOLUTE BANS:
+  • 🚫🚫 NO HUMANS / people / faces / hands anywhere (foreground, midground, OR background)
+  • 🚫 NO animals / wildlife / insects
+  • 🚫 NO sparse, thin, or minimal arrangement — always lush and abundant
+  • 🚫 NO macro of just 2-3 blooms — show the WHOLE ornate arrangement in its garden setting
+  • 🚫 NO sci-fi / neon / dark / moody / hazy
+  (the vessel + a table / pedestal / bench / garden wall are REQUIRED and allowed — they are not "manmade objects" to avoid here)
+
+━━━ THE VESSEL ━━━
+${vessel}
+
+━━━ THE ARRANGEMENT DESIGN ━━━
+${style}
+
+The arrangement is built in this design style, lush and abundant, the clear focal hero.
+
+━━━ THE PLACEMENT + LUSH GARDEN BACKDROP ━━━
+${setting}
+${whimsySection}━━━ COMPOSITION ━━━
+  • HERO: the ornate flower arrangement in its vessel, dominant + sharp in the foreground/center
+  • MIDGROUND: the vessel base + the surface it rests on (table / steps / ground / pedestal) + the nearest garden blooms
+  • BACKGROUND: the lush flower garden receding in soft layered depth, packed with blooms, clean clear sky/light above
+  • DEPTH: sharp hero arrangement → softer garden layers → crisp colored distance
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Render the rolled lighting as soft, beautiful, editorial still-life light — luminous and flattering on the blooms, gently dappled garden light, saturated and crisp.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+${bgBuildLine}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   BLOOMBOT_DESERT_BLOOM: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, desert_anchor, bloom_explosion, atmospheric_magic } = slots;
 

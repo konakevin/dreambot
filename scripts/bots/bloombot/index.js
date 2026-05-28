@@ -39,6 +39,7 @@ const pathBuilders = {
   'flower-humming-birds': require('./paths/flower-humming-birds'),
   'flower-fantasy': require('./paths/flower-fantasy'),
   'flower-grove': require('./paths/flower-grove'),
+  'flower-arrangement': require('./paths/flower-arrangement'),
   'desert-bloom': require('./paths/desert-bloom'),
   reclaim: require('./paths/reclaim'),
 };
@@ -79,6 +80,7 @@ module.exports = {
     'flower-humming-birds',
     'flower-fantasy',
     'flower-grove',
+    'flower-arrangement',
     'desert-bloom',
     'reclaim',
   ],
@@ -89,7 +91,9 @@ module.exports = {
 
   chaos: {
     enabled: true,
-    skipPaths: [],
+    // flower-arrangement skips chaos — perception-distortion warps the careful
+    // ornate arrangement; its own whimsy layer supplies the controlled "pop".
+    skipPaths: ['flower-arrangement'],
     allowSubjectChaosPaths: [
       'landscape',
       'cozy',
@@ -132,6 +136,7 @@ module.exports = {
       'flower-friends',
       'flower-humming-birds',
       'flower-fantasy',
+      'flower-arrangement',
       'desert-bloom',
       'reclaim',
     ],
@@ -155,6 +160,7 @@ module.exports = {
       'flower-humming-birds': 'scene',
       'flower-fantasy': 'scene',
       'flower-grove': 'scene',
+      'flower-arrangement': 'scene',
       'desert-bloom': 'scene',
       reclaim: 'scene',
     },

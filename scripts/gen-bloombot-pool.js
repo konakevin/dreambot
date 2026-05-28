@@ -220,6 +220,113 @@ The vibe: nothing is off-limits — bend physics, flip gravity, float things, lo
     instructions: `Each entry is ONE weird gravity-defying twist, 20-45 words, the surreal ELEMENT only. NEVER name species or colors. NO candy language. NO humans/animals/manmade. Push it genuinely unhinged. Output a NUMBERED list, one per line, NO internal newlines.`,
   },
 
+  // ─── flower-arrangement path (2026-05-27): ornate florist arrangement hero in a lush garden ───
+  bloombot_flower_arrangement_vessel: {
+    format: 'simple',
+    theme: `ORNATE FLOWER-ARRANGEMENT VESSELS for BloomBot's flower-arrangement path. Each entry is ONE container/vessel that holds a lavish flower arrangement — described by FORM / MATERIAL / ORNATENESS only. Each entry 25-50 words.
+
+⚠️ CRITICAL — describe ONLY the vessel: its shape, material, texture, ornamentation, patina, scale. Do NOT name flower species or colors (the flower engine supplies those separately). The vessel is gorgeous and characterful but it is the STAGE for the flowers, not the star.
+
+✓ MANDATORY VARIETY — distribute across these VESSEL CATEGORIES:
+  A. CLASSICAL URNS — footed bronze urn, carved marble vessel, weathered stone garden urn, antique silver trophy urn, cast-iron campana urn
+  B. CERAMIC — glazed ceramic compote bowl, blue-and-white porcelain ginger jar, terracotta planter pot, stoneware crock, hand-thrown studio vase
+  C. GLASS — tall cut-crystal vase, vintage apothecary jar, bubbled-glass bowl, footed glass compote, mercury-glass vessel
+  D. RUSTIC — woven willow basket, enamel pitcher, weathered copper kettle, wooden garden trug, galvanized bucket, mossy concrete planter
+  E. ORNATE / BAROQUE — gilded baroque vase, tiered epergne, rococo porcelain tureen, ormolu-mounted urn
+  F. HAND-TIED BOUQUET — gathered hand-tied bouquet wrapped in linen / kraft paper / silk ribbon, resting in frame (no hands shown)
+
+🚫 STRICT BANS: NO flower species or color names; NO humans / hands / people / animals; the vessel must be characterful, never a plain glass cylinder.`,
+    touchpoints: [
+      'a tall footed bronze urn with a deep verdigris patina, fluted body and scrolled handles, weathered to a soft green-brown, classical and stately, the perfect ornate stage for a lavish arrangement',
+      'a weathered terracotta planter pot, sun-baked and lichen-flecked, with a rolled rim and hairline age-cracks, rustic and earthy',
+      'a tall cut-crystal vase catching the light in faceted prisms, heavy and brilliant, a luxe formal vessel',
+      'a hand-woven willow basket with a sturdy arched handle, loose rustic weave, set down to brim with a gathered garden harvest',
+      'a glazed ceramic compote bowl on a short pedestal foot, crackle-glaze finish with a soft sheen, low and wide for a sprawling arrangement',
+      'an antique silver trophy urn, tarnished and engraved, twin loop handles, heirloom and ornate',
+      'a blue-and-white porcelain ginger jar, hand-painted with chinoiserie scrollwork, lidless and brimming',
+      'a gilded baroque vase, gold leaf worn at the high points, rococo curves and embossed flourishes, opulent',
+      'a hand-tied bouquet bound in natural linen and trailing silk ribbon, gathered loose and resting on its side',
+      'a weathered copper kettle gone soft pink-brown with age, dented and characterful, repurposed as a vessel',
+      'a tiered glass epergne with stacked bowls, delicate and tall, built for an extravagant cascading display',
+      'a mossy concrete planter, rough-cast and weathered, soft green moss creeping up its square sides',
+    ],
+    instructions: `Each entry is ONE vessel, 25-50 words, FORM / MATERIAL / ORNATENESS only. Format: "VESSEL NAME CAPS — material + shape + texture/patina + character". Vary across all 6 categories. NEVER name flower species or colors. NO humans / hands / animals. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
+  bloombot_flower_arrangement_style: {
+    format: 'simple',
+    theme: `FLORAL ARRANGEMENT DESIGN STYLES for BloomBot's flower-arrangement path. Each entry is ONE arrangement silhouette / composition style — how the blooms are designed and shaped within the vessel. Each entry 20-45 words.
+
+⚠️ CRITICAL — describe ONLY the DESIGN: the silhouette, density, structure, movement of the arrangement. Do NOT name flower species or colors (engine supplies those). Every style is LUSH, ABUNDANT and exquisitely well-designed — museum still-life / high-end editorial-florist quality. Never sparse or minimal.
+
+✓ MANDATORY VARIETY — distribute across these DESIGN STYLES:
+  A. LAVISH CASCADING — overflowing, spilling abundantly down the sides of the vessel
+  B. MOUNDED DOME — a full, rounded, symmetrical pavé dome packed edge to edge
+  C. DUTCH GOLDEN-AGE STILL-LIFE — asymmetric, layered, opulent old-master arrangement (van Huysum / Bosschaert), deep and dimensional
+  D. AIRY IKEBANA / SCULPTURAL — deliberate negative space, elegant lines, asymmetric balance (still lush where it gathers)
+  E. WILD GARDEN-GATHERED — loose, natural, just-foraged, romantic and untamed, stems at varied heights
+  F. DRAMATIC LINE — towering vertical spire, sweeping Hogarth S-curve, or wide crescent arc
+  G. ENGLISH-GARDEN ROMANTIC — abundant, soft, billowing, layered garden-rose-and-mixed-bloom couture
+
+🚫 BANS: NO flower species or color names; NO sparse / minimal / single-stem arrangements; NO humans; do NOT describe the vessel (vessel is a separate axis).`,
+    touchpoints: [
+      'a lavish cascading arrangement overflowing the rim and spilling in long abundant trails down the vessel sides, dense and luxuriant, blooms tumbling toward the surface below',
+      'a full rounded pavé dome packed edge to edge in tight symmetrical abundance, every gap filled, a perfect cushion of blooms',
+      'an opulent Dutch Golden-Age still-life arrangement, asymmetric and deeply layered, blooms at many depths and angles like an old-master painting, dramatic and dimensional',
+      'an airy sculptural ikebana-inspired design with deliberate negative space and elegant asymmetric lines, lush where the blooms gather, refined and architectural',
+      'a wild garden-gathered arrangement, loose and just-foraged, stems at varied natural heights, romantic and untamed yet artfully composed',
+      'a dramatic towering vertical spire of blooms rising tall and grand from the vessel, statuesque and commanding',
+      'a sweeping crescent arc of blooms curving wide across the frame, graceful Hogarth S-curve movement, elegant and flowing',
+      'an abundant English-garden romantic arrangement, soft and billowing, layered garden-rose couture spilling in generous loose clouds',
+    ],
+    instructions: `Each entry is ONE arrangement design style, 20-45 words, SILHOUETTE / DENSITY / MOVEMENT only. Always LUSH and abundant. NEVER name flower species, colors, or the vessel. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
+  bloombot_flower_arrangement_setting: {
+    format: 'simple',
+    theme: `PLACEMENT + LUSH FLOWER-GARDEN BACKDROP for BloomBot's flower-arrangement path. Each entry is WHERE the arrangement sits AND the flower-filled garden behind it. Each entry 30-50 words.
+
+⚠️ CRITICAL — the BACKDROP is ALWAYS a lush flower garden bursting with blooms everywhere (beds, borders, climbing flowers), so the whole frame is flowers; the arrangement is the sharp focal hero in front, the garden recedes in soft layered depth behind it. Describe placement + garden TYPE only — NOT flower species or specific colors (engine supplies those).
+
+✓ MANDATORY VARIETY — combine a PLACEMENT × a GARDEN TYPE:
+  PLACEMENT: weathered wooden table · moss-covered stone steps · stone pedestal / plinth · directly on the ground among the flower beds · sun-dappled bistro table · rustic garden bench · low garden wall · flagstone path
+  GARDEN TYPE: lush cottage garden · walled English garden · formal parterre garden · romantic rose garden · wildflower meadow garden · glasshouse conservatory border · terraced hillside garden · potager kitchen garden
+
+🚫 BANS: NO flower species or color names; NO humans / people / animals; the garden behind must be DENSE and flower-packed, never empty lawn.`,
+    touchpoints: [
+      'set on a weathered wooden table in a lush cottage garden, dense flower beds and climbing blooms bursting in soft-focus layers behind, the arrangement the crisp sharp hero in front',
+      'resting on moss-covered stone steps in a walled English garden, billowing borders packed with blooms rising on either side, brick wall draped in climbers behind',
+      'on a stone pedestal in a formal parterre garden, clipped hedges and symmetrical flower-packed beds receding behind in elegant depth',
+      'placed directly on the ground nestled among overflowing flower beds, blooms crowding right up to the vessel, a romantic wildflower-garden tangle filling the frame',
+      'on a sun-dappled bistro table in a romantic rose garden, arching rose canes heavy with blooms framing the soft-focus backdrop',
+      'on a rustic garden bench under a flower-laden arch, a deep border of dense blooms behind softening into the distance',
+      'on a low weathered garden wall in a terraced hillside garden, tiers of packed flower beds cascading down behind in layered soft focus',
+      'on a flagstone path in a glasshouse conservatory, lush potted blooms and trailing greenery crowding the iron-and-glass backdrop',
+    ],
+    instructions: `Each entry is ONE placement + flower-garden backdrop, 30-50 words. The garden is ALWAYS dense and flower-packed. NEVER name flower species or colors. NO humans / animals. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
+  bloombot_flower_arrangement_whimsy: {
+    format: 'simple',
+    theme: `WILD "POP" FLOURISHES for BloomBot's flower-arrangement path — gleeful, surreal, fun twists that make the ornate arrangement do a double-take, while keeping it BEAUTIFUL and exquisitely designed. Each entry 20-45 words.
+
+The vibe: same playful "wait, WHAT?!" energy as the flower-grove path, but channeled INTO a gorgeous florist arrangement — not chaos, just one delightful impossible flourish. Describe the surreal ELEMENT only (the vessel / flowers / colors come from other axes).
+
+🚫 BANS: NO flower species or color names; NO candy / sugary language; NO humans / animals. Keep it gorgeous — the pop ENHANCES the arrangement, never wrecks it.`,
+    touchpoints: [
+      'one colossal single bloom erupting from the center of the arrangement, towering dramatically taller than everything else, oversized and magnificent',
+      'the arrangement bursting outward like a frozen firework, blooms flying out on long arcing stems in a gravity-defying spray',
+      'florals spiraling up and out of the vessel in an impossible corkscrew helix, defying gravity in an elegant curl',
+      'oversized dinner-plate blooms the size of platters dominating the arrangement, surreally scaled up among normal blooms',
+      'a lush cascade of blooms pouring out of the vessel and pooling abundantly across the surface below, an overflowing waterfall of petals',
+      'a cluster of blooms detached and floating just above the arrangement, hovering weightlessly like tethered balloons',
+      'the vessel overflowing with impossible abundance, blooms multiplying outward far beyond what it could hold, gloriously excessive',
+      'a single mega-bloom grown as large as the vessel itself perched atop the arrangement, jaw-dropping in scale',
+      'the whole arrangement arcing and leaning into a graceful impossible curve, the blooms swept as if by a gentle surreal wind',
+    ],
+    instructions: `Each entry is ONE surreal "pop" flourish, 20-45 words, the ELEMENT only — keep the arrangement gorgeous. NEVER name flower species or colors. NO candy / humans / animals. Output a NUMBERED list, one per line, NO internal newlines.`,
+  },
+
   // ─── landscape path: scale_prover (gives the landscape scale) ───
   bloombot_landscape_scale_prover: {
     format: 'simple',
