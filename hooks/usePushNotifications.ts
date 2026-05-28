@@ -88,7 +88,11 @@ export function usePushNotifications() {
     // Handle notification tapped (opens app or brought to foreground)
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
       const data = response.notification.request.content.data;
-      if (data?.uploadId) {
+      if (data?.type === 'download_ready' && data?.uploadId) {
+        // Land on the post AND auto-save the now-cached HD (fulfills the
+        // "tap to save it to your photos" copy). See app/photo/[id].tsx.
+        router.push(`/photo/${data.uploadId}?downloadReady=1`);
+      } else if (data?.uploadId) {
         router.push(`/photo/${data.uploadId}`);
       } else if (data?.userId) {
         router.push(`/user/${data.userId}`);

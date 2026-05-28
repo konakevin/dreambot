@@ -17,13 +17,15 @@ import { useMyDreams } from '@/hooks/useMyDreams';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { trackPostViewed } from '@/lib/analytics';
+import { saveReadyHdDownload } from '@/lib/imageLongPress';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { Toast } from '@/components/Toast';
 import * as Haptics from 'expo-haptics';
 
 export default function PhotoDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, downloadReady } = useLocalSearchParams<{ id: string; downloadReady?: string }>();
   const user = useAuthStore((s) => s.user);
+  const isPro = useAuthStore((s) => s.isPro);
   const albumIds = useAlbumStore((s) => s.ids);
   const queryClient = useQueryClient();
 
@@ -33,6 +35,17 @@ export default function PhotoDetailScreen() {
     const src = useAlbumStore.getState().albumSource?.type ?? 'feed';
     trackPostViewed({ source: src, is_own: src === 'own' || src === 'dreams' });
   }, []);
+
+  // Arrived from a "download_ready" notification tap → the HD is cached now;
+  // save it straight to Photos (the modal flashes 'Preparing' → 'Saved in HD').
+  // Guard with a ref so a re-render / param re-read can't double-fire it.
+  const didAutoSaveHd = useRef(false);
+  useEffect(() => {
+    if (downloadReady === '1' && isPro && id && !didAutoSaveHd.current) {
+      didAutoSaveHd.current = true;
+      saveReadyHdDownload(id);
+    }
+  }, [downloadReady, isPro, id]);
 
   // Two modes:
   //  - Album mode (albumIds populated): bounded list, single useQuery

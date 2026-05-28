@@ -51,15 +51,24 @@ async function saveHd(id: string, cachedHqUrl: string | null) {
     await saveUrlToPhotos(id, cachedHqUrl, true);
     return;
   }
+  // Open the modal IMMEDIATELY (in its 'requesting' state) so there's no dead
+  // gap while the upscale-image round-trip (~1s) resolves; the copy updates
+  // below once we know the outcome. The poll inside the modal starts now too,
+  // so a fast cache-hit still auto-saves.
+  UpscaleModal.show(id);
   const res = await requestUpscale(id);
   if (res?.status === 'done' && res.image_url_hq) {
+    // Raced a cache hit (another requester just finished it) — save + close.
     await saveUrlToPhotos(id, res.image_url_hq, true);
+    UpscaleModal.hide();
     return;
   }
   if (res?.status === 'processing') {
-    UpscaleModal.show(id);
+    UpscaleModal.setProcessing(id); // poll already running; just update the copy
     return;
   }
+  // Failure — tear down the modal and surface why.
+  UpscaleModal.hide();
   if (res?.error === 'monthly_cap_reached') {
     Toast.show(res.message ?? "You've hit your monthly HD download limit.", 'close-circle');
     return;
@@ -67,68 +76,73 @@ async function saveHd(id: string, cachedHqUrl: string | null) {
   Toast.show('Couldn’t prepare your HD download — try again.', 'close-circle');
 }
 
-/**
- * Standard long-press handler for images.
- *
- * Gates: ownership/admin (delete affordance) and Pro entitlement (HD save).
- *   - Free user, own post → original-res save.
- *   - Pro user, any post → HD save: instant if cached, else an on-demand
- *     upscale (dismissable "preparing" modal that auto-saves when ready).
- *   - Free user, not own post → Pro upsell.
- *
- * `imageUrlHq` is read from the post object — present only when a prior
- * downloader already upscaled it (then it's an instant cache hit).
- */
-export function handleImageLongPress(opts: {
+interface SaveOpts {
   id: string;
   imageUrl: string;
+  /** Cached HD url from the post object — present only when a prior downloader
+   *  already upscaled it (then HD is an instant cache hit). */
   imageUrlHq?: string | null;
+}
+interface LongPressOpts extends SaveOpts {
   onDelete?: () => void;
   onDreamLikeThis?: () => void;
-}) {
-  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+}
+type SheetButton = { text: string; style?: 'cancel' | 'destructive'; onPress?: () => void };
 
+/**
+ * The two quality options shared by the Download button and the long-press menu:
+ *   - Save to Photos — native-res, free for everyone, any post.
+ *   - Save in HD ✨   — Pro: cache hit = instant, else on-demand upscale (modal
+ *                       auto-saves when ready). Free: routes to the paywall, so
+ *                       the download moment doubles as the HD upsell.
+ */
+function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
   const { isPro } = useAuthStore.getState();
-  const canDelete = !!opts.onDelete;
   const cachedHqUrl = isPro ? (opts.imageUrlHq ?? null) : null;
-  const saveLabel = isPro ? 'Save in HD' : 'Save to Photos';
+  return [
+    { text: 'Save to Photos', onPress: () => saveUrlToPhotos(opts.id, opts.imageUrl, false) },
+    {
+      text: isPro ? 'Save in HD ✨' : 'Save in HD ✨ (Pro)',
+      onPress: () => (isPro ? saveHd(opts.id, cachedHqUrl) : router.push('/proStore')),
+    },
+  ];
+}
 
-  const doSave = () =>
-    isPro ? saveHd(opts.id, cachedHqUrl) : saveUrlToPhotos(opts.id, opts.imageUrl, false);
+/**
+ * Visible Download button → the quality sheet. Picking "Save in HD" IS the
+ * confirm (the cap-warning dialog is gone); the modal opens instantly.
+ */
+export function openDownloadSheet(opts: SaveOpts) {
+  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  showAlert('Download', '', [{ text: 'Cancel', style: 'cancel' }, ...downloadOptionButtons(opts)]);
+}
 
-  if (canDelete) {
-    // Owner or admin — Save + Delete.
-    showAlert('Options', '', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: saveLabel, onPress: doSave },
-      { text: 'Delete', style: 'destructive' as const, onPress: opts.onDelete! },
-    ]);
-    return;
+/**
+ * Long-press menu = the quality options plus context actions (Dream like this,
+ * Delete) for owners/admins. CustomAlert auto-stacks when there are ≠2 buttons
+ * and floats Cancel to the bottom.
+ */
+export function handleImageLongPress(opts: LongPressOpts) {
+  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+  const buttons: SheetButton[] = [
+    { text: 'Cancel', style: 'cancel' },
+    ...downloadOptionButtons(opts),
+  ];
+  if (opts.onDreamLikeThis) {
+    buttons.push({ text: 'Dream like this', onPress: opts.onDreamLikeThis });
   }
-
-  // Not owner/admin — Pro-only save, or upsell.
-  if (isPro) {
-    if (cachedHqUrl) {
-      // Already upscaled by someone — instant, skip the confirm.
-      saveHd(opts.id, cachedHqUrl);
-      return;
-    }
-    // No cache yet — confirm (it counts toward the monthly HD cap), then the
-    // modal handles the async wait. No "~30s" promise; it's non-blocking now.
-    showAlert('Save in HD', "We'll prepare an HD version and save it to your photos.", [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Save in HD', onPress: () => saveHd(opts.id, null) },
-    ]);
-    return;
+  if (opts.onDelete) {
+    buttons.push({ text: 'Delete', style: 'destructive', onPress: opts.onDelete });
   }
+  showAlert(opts.onDelete ? 'Options' : 'Download', '', buttons);
+}
 
-  // Free user, not own post — upsell.
-  showAlert(
-    'Pro Feature',
-    'Saving dreams from other creators is a Pro feature. Subscribe for HD downloads.',
-    [
-      { text: 'Not now', style: 'cancel' },
-      { text: 'See Pro', onPress: () => router.push('/proStore') },
-    ]
-  );
+/**
+ * Auto-save the HD copy after a `download_ready` notification tap. By now the
+ * upscale is cached, so saveHd's first server round-trip returns {done} and
+ * saves instantly (the modal flashes 'requesting' → 'Saved in HD'). Idempotent
+ * and cap-free — upscale-image's cache-hit branch returns before charging.
+ */
+export function saveReadyHdDownload(uploadId: string) {
+  return saveHd(uploadId, null);
 }

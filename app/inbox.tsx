@@ -381,6 +381,10 @@ export default function InboxScreen() {
       useAlbumStore.getState().clearAlbum();
       queryClient.invalidateQueries({ queryKey: ['dreamWish'] });
       nav.push(`/photo/${item.uploadId}`);
+    } else if (item.type === 'download_ready' && item.uploadId) {
+      // Auto-save the now-cached HD on arrival (see app/photo/[id].tsx).
+      useAlbumStore.getState().clearAlbum();
+      nav.push(`/photo/${item.uploadId}?downloadReady=1`);
     } else if (item.uploadId) {
       useAlbumStore.getState().clearAlbum();
       nav.push(`/photo/${item.uploadId}`);

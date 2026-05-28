@@ -129,8 +129,10 @@ Deno.serve(async (req) => {
       .is('seen_at', null);
     const badge = unreadCount ?? 1;
 
-    // Build push data for navigation on tap
-    const data: Record<string, string> = {};
+    // Build push data for navigation on tap. `type` lets the client route by
+    // notification kind — e.g. a download_ready tap auto-saves the cached HD
+    // rather than just opening the post.
+    const data: Record<string, string> = { type: record.type };
     if (record.upload_id) data.uploadId = record.upload_id;
     if (record.type === 'friend_request' || record.type === 'friend_accepted') {
       data.userId = record.actor_id;

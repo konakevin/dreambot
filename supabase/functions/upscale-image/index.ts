@@ -146,14 +146,16 @@ Deno.serve(async (req) => {
     );
   }
 
-  // Record this requester + charge a cap slot. notified_at defaults to now()
-  // = SUPPRESSED: a requester watching the modal gets the HD auto-saved in
-  // front of them and should NOT also be pinged. The completion notify loop
-  // only pings rows where notified_at IS NULL — set back to NULL by
-  // allow_upscale_notify() when the user dismisses/times out (migration 191).
-  await supabase
-    .from('upscale_requests')
-    .insert({ upload_id: body.upload_id, user_id: user.id, notified_at: new Date().toISOString() });
+  // Record this requester + charge a cap slot. notified_at defaults to NULL =
+  // WILL be notified on completion (the notify loop pings every notified_at IS
+  // NULL row). We notify ALL requesters — including one watching the modal —
+  // because the only client signal that a user "left" is them backgrounding,
+  // and a KILLED app sends no dismiss/timeout, so the old suppress-then-re-enable
+  // design (migration 191) silently dropped the ping for anyone who closed the
+  // app mid-upscale. The watcher isn't spammed: foreground push banners are
+  // suppressed client-side, the modal still auto-saves in front of them, and the
+  // inbox row is accurate. (allow_upscale_notify is now unused — vestigial.)
+  await supabase.from('upscale_requests').insert({ upload_id: body.upload_id, user_id: user.id });
   await supabase
     .from('pro_hq_downloads_log')
     .insert({ user_id: user.id, upload_id: body.upload_id })

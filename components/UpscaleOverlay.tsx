@@ -21,42 +21,41 @@ import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
 import { startHqPoll } from '@/lib/upscalePoll';
 
-type Phase = 'processing' | 'saving' | 'done' | 'timeout';
+type Phase = 'requesting' | 'processing' | 'saving' | 'done' | 'timeout';
 interface State {
   visible: boolean;
   uploadId: string | null;
+  phase: Phase;
 }
 type Listener = (s: State) => void;
 let listener: Listener | null = null;
 
 export const UpscaleModal = {
-  /** Show the modal for an in-flight on-demand upscale of `uploadId`. */
+  /**
+   * Open the modal IMMEDIATELY in a 'requesting' state — call this the instant
+   * the user confirms, BEFORE the upscale-image round-trip resolves, so there's
+   * no dead ~1s gap where nothing is on screen. Flip to 'processing' (different
+   * copy) with setProcessing() once the server confirms the upscale kicked.
+   */
   show(uploadId: string) {
-    listener?.({ visible: true, uploadId });
+    listener?.({ visible: true, uploadId, phase: 'requesting' });
+  },
+  /** Server confirmed the upscale is running — update the copy. */
+  setProcessing(uploadId: string) {
+    listener?.({ visible: true, uploadId, phase: 'processing' });
   },
   hide() {
-    listener?.({ visible: false, uploadId: null });
+    listener?.({ visible: false, uploadId: null, phase: 'requesting' });
   },
 };
 
-/**
- * Re-enable the download_ready push for this requester. Upscale requests insert
- * `notified_at = now()` (suppressed) so a user watching the modal isn't also
- * pinged; when they LEAVE (dismiss/timeout) we clear it so they DO get notified
- * when the HD lands. Best-effort (migration 191).
- */
-function reEnableUpscaleNotify(uploadId: string) {
-  supabase.rpc('allow_upscale_notify', { p_upload_id: uploadId }).then(
-    () => {},
-    (e) => {
-      if (__DEV__) console.warn('[upscale] allow_upscale_notify failed', e);
-    }
-  );
-}
-
 export function UpscaleModalHost() {
-  const [state, setState] = useState<State>({ visible: false, uploadId: null });
-  const [phase, setPhase] = useState<Phase>('processing');
+  const [state, setState] = useState<State>({
+    visible: false,
+    uploadId: null,
+    phase: 'requesting',
+  });
+  const [phase, setPhase] = useState<Phase>('requesting');
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -71,13 +70,20 @@ export function UpscaleModalHost() {
     opacity.value = withTiming(state.visible ? 1 : 0, { duration: 200 });
   }, [state.visible, opacity]);
 
-  // Poll for the HD result while open; auto-save when it lands. The resolve
-  // logic lives in startHqPoll (pure + unit-tested); this wires it to Supabase,
-  // the save action, and the modal's phase/auto-hide chrome.
+  // The caller drives requesting -> processing (show / setProcessing); mirror
+  // that onto the display phase. The poll below then owns saving/done/timeout.
+  // Keyed on uploadId so a fresh request resets the copy.
+  useEffect(() => {
+    setPhase(state.phase);
+  }, [state.phase, state.uploadId]);
+
+  // Poll for the HD result while open; auto-save when it lands. Starts the
+  // instant the modal opens (even during 'requesting') so a fast cache hit still
+  // saves. The resolve logic lives in startHqPoll (pure + unit-tested); this
+  // wires it to Supabase, the save action, and the modal's phase/auto-hide.
   useEffect(() => {
     if (!state.visible || !state.uploadId) return;
     const uploadId = state.uploadId;
-    setPhase('processing');
     return startHqPoll(uploadId, {
       fetchHq: async (id) => {
         const { data } = await supabase
@@ -91,10 +97,11 @@ export function UpscaleModalHost() {
       onPhase: (phase) => {
         setPhase(phase);
         if (phase === 'done') setTimeout(() => UpscaleModal.hide(), 1200);
-        if (phase === 'timeout') {
-          reEnableUpscaleNotify(uploadId); // still cooking — ping them when it lands
-          setTimeout(() => UpscaleModal.hide(), 3000);
-        }
+        // Still cooking on timeout — no action needed: every requester is
+        // notified on completion regardless of whether they stayed (server
+        // inserts the request with notified_at NULL), so the push/inbox row
+        // lands when the HD is ready.
+        if (phase === 'timeout') setTimeout(() => UpscaleModal.hide(), 3000);
       },
     });
   }, [state.visible, state.uploadId]);
@@ -103,6 +110,13 @@ export function UpscaleModalHost() {
   if (!state.visible) return null;
 
   const copy = {
+    requesting: {
+      icon: 'sparkles' as const,
+      title: 'Preparing your HD download…',
+      sub: 'Setting things up — just a sec.',
+      showSpinner: true,
+      showDismiss: false,
+    },
     processing: {
       icon: 'sparkles' as const,
       title: "You're first to grab this in HD!",
@@ -149,8 +163,8 @@ export function UpscaleModalHost() {
               <Pressable
                 style={styles.dismissBtn}
                 onPress={() => {
-                  // Leaving while it's still upscaling — re-enable the push.
-                  if (state.uploadId) reEnableUpscaleNotify(state.uploadId);
+                  // Dismiss just closes the modal — the upscale keeps running
+                  // server-side and the user is notified on completion regardless.
                   UpscaleModal.hide();
                 }}
                 hitSlop={8}

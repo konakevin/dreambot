@@ -34,7 +34,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
-import { handleImageLongPress } from '@/lib/imageLongPress';
+import { handleImageLongPress, openDownloadSheet } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import { avatarUrl } from '@/lib/imageUrl';
 import { useAuthStore } from '@/store/auth';
@@ -574,6 +574,20 @@ export const DreamCard = memo(function DreamCard({
                 activeOpacity={0.7}
               >
                 <Ionicons name="paper-plane-outline" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={ui.sideButton}
+                onPress={() =>
+                  openDownloadSheet({
+                    id: item.id,
+                    imageUrl: item.image_url,
+                    imageUrlHq: item.image_url_hq ?? null,
+                  })
+                }
+                activeOpacity={0.7}
+                accessibilityLabel="Download this dream"
+              >
+                <Ionicons name="download-outline" size={24} color="#FFFFFF" />
               </TouchableOpacity>
               {onFamily && (
                 <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
