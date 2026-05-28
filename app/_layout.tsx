@@ -380,17 +380,19 @@ function ScreenTracker() {
 }
 
 // Ties analytics events to the signed-in user; clears the link on logout.
-// Admins are opted out of ALL analytics (autocapture + screen + events) so their
-// heavy in-app testing doesn't pollute product reports. setAnalyticsOptOut runs
-// FIRST so identify() is suppressed for admins too. isAdmin resolves async after
-// login; the effect re-runs when it lands, and optOut() persists across launches.
+// Admins are opted out of ALL analytics (autocapture + screen + events + the
+// identify below) so their heavy in-app testing doesn't pollute product reports.
+// setAnalyticsOptOut() is the single admin-aware lever — it runs FIRST, then the
+// SDK suppresses everything downstream, so identify can stay unconditional.
+// isAdmin resolves async after login; the effect re-runs when it lands, and
+// optOut() persists across launches.
 function AnalyticsIdentity() {
   const userId = useAuthStore((s) => s.user?.id);
   const isAdmin = useAuthStore((s) => s.isAdmin);
   useEffect(() => {
     setAnalyticsOptOut(isAdmin);
-    if (!userId) resetAnalytics();
-    else if (!isAdmin) identifyUser(userId);
+    if (userId) identifyUser(userId);
+    else resetAnalytics();
   }, [userId, isAdmin]);
   return null;
 }
