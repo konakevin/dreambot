@@ -19,7 +19,9 @@ const PATHS = [
   'macro-display',
   'crazy-islands',
   'girly',
-  'lego-masters',
+  // 'lego-masters', // DEACTIVATED 2026-05-27 — narrow theme caps its pools at 10-40;
+  //                    parked pending a recipe rethink. Re-enable by uncommenting
+  //                    (path file + pools + recipes are intact).
   'western',
   'fantasy',
   'space',
