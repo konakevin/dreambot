@@ -115,9 +115,12 @@ function roll({ biome = 'any', themeBias, picker } = {}) {
     const fm = familyOf(c);
     if (!fams.includes(fm)) fams.push(fm);
   }
-  // spectrum (rainbow/mixed-lush) is meant to be everything — leave it random;
-  // single-family (e.g. mono purple) has nothing to spread.
-  const spread = !theme.spectrum && fams.length > 1;
+  // spread any multi-family theme. Spectrum (rainbow/mixed-lush) USED to be left
+  // random, but that let the purple-rich + white-rich pool collapse the cast to
+  // ~49% purple+white (measured) so rainbows never read as rainbows. Now spectrum
+  // spreads too, with a bigger cast so all 7 families actually appear in-frame.
+  // Single-family themes (e.g. mono purple) have nothing to spread.
+  const spread = fams.length > 1;
 
   const used = new Set();
   let heroStr, supportStrs, fillerStrs;
@@ -125,6 +128,9 @@ function roll({ biome = 'any', themeBias, picker } = {}) {
   if (spread) {
     const order = shuffle(fams); // rotate which family LEADS — kills the always-purple hero
     const slotFam = (i) => order[i % order.length];
+    // spectrum themes span all 7 families → enlarge the cast so each family lands
+    const nSupport = theme.spectrum ? 4 : 3;
+    const nFiller = theme.spectrum ? 3 : 2;
     // assign a color to a flower constrained to a target family (fallback: any theme color)
     const colorForFamily = (f, fam) => {
       const opts = f.colors.filter((c) => familyOf(c) === fam && theme.colors.includes(c));
@@ -145,13 +151,13 @@ function roll({ biome = 'any', themeBias, picker } = {}) {
     heroStr = tagWith(heroF, colorForFamily(heroF, heroFam));
 
     supportStrs = [];
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= nSupport; i++) {
       const fm = slotFam(i);
       const f = pickFam(fm, ['statement', 'spire', 'cascading']);
       if (f) supportStrs.push(tagWith(f, colorForFamily(f, fm)));
     }
     fillerStrs = [];
-    for (let i = 4; i <= 5; i++) {
+    for (let i = nSupport + 1; i <= nSupport + nFiller; i++) {
       const fm = slotFam(i);
       const f = pickFam(fm, ['filler', 'groundcover']);
       if (f) fillerStrs.push(tagWith(f, colorForFamily(f, fm)));
