@@ -56,6 +56,11 @@ const UPSCALERS: Upscaler[] = [
       scale_factor: 2,
       creativity: 0.2,
       resemblance: 1.5,
+      // 18 = Clarity's default. MEASURED 2026-05-27: steps barely affect speed
+      // (predict_time ~14.1s at 6 steps vs ~15.3s at 18) — the ~14s is fixed
+      // pipeline overhead (VAE/tiling/IO), not per-step cost. So we keep the
+      // full-quality default; tuning steps is not a speed lever. Keep in sync
+      // with scripts/lib/upscaleClarity.js.
       num_inference_steps: 18,
       output_format: 'png',
       prompt: '',
