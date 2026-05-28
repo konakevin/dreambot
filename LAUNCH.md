@@ -133,12 +133,13 @@ The two things that still touch the build: confirm production **EAS env vars**
 - [x] Supabase edge secrets verified set: `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`,
       `REVENUECAT_WEBHOOK_SECRET`, `DREAM_QUEUE_WORKER_TOKEN` (2026-05-28).
 - [ ] APNs key uploaded to Expo/EAS (done — push verified 2026-05-27; re-confirm for prod).
-- [~] `eas.json` → `submit.production.ios` scaffolded (real `appleTeamId 43VMZ5KMW4`).
-      Finish by adding your ASC API key — run `eas submit` (it stores the key) or drop
-      `secrets/asc-api-key.p8` + fill the key id/issuer. See `APP_STORE_LISTING.md`.
-- [ ] Build: `eas build --platform ios --profile production` (`autoIncrement` bumps the
-      build number).
-- [ ] Upload to ASC; wait for processing (~15–30 min).
+- [x] `eas.json` submit configured — `appleTeamId 43VMZ5KMW4`; `eas submit` generated +
+      stored an App Store Connect API key (APP_MANAGER role) on 2026-05-28.
+- [x] **First production build** — `eas build -p ios --profile production` succeeded
+      2026-05-28 (signed `.ipa`; EAS now manages the signing credentials). App version
+      source = `remote`.
+- [x] **Uploaded to App Store Connect** via `eas submit` 2026-05-28 (app ID **6761505205**)
+      → processing → TestFlight.
 - [ ] **TestFlight pass on a real device FIRST** — don't skip:
   - Sign up via each provider (email + Apple + Google + Facebook)
   - Full onboarding (vibe profile → first-dream banger)
@@ -199,6 +200,8 @@ in EAS** (see §6) and only active in release builds (`!__DEV__`). Full picture:
 | Bundle ID (iOS + Android) | `com.konakevin.radorbad` | `app.config.js` |
 | Version | `1.0.0` | `app.config.js` |
 | EAS Project ID | `014926a1-297b-4abf-9184-a01979a83879` | `app.config.js` |
+| App Store app ID | `6761505205` | App Store Connect (created 2026-05-28) |
+| Apple Team ID | `43VMZ5KMW4` | `eas.json` / AASA |
 | App scheme | `dreambot://` | `app.config.js` |
 | Associated domain | `applinks:dreambotapp.com` | `app.config.js` |
 | RevenueCat iOS key | `appl_gDwFXEmOsQLWUTUndcldpmruekW` | `lib/revenuecat.ts` |
