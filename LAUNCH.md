@@ -63,12 +63,9 @@ The two things that still touch the build: confirm production **EAS env vars**
 
 ## 2. Apple Developer + App Store Connect account
 
-- [ ] Apple Developer Program membership active ($99/yr).
-- [ ] Create the app record in [App Store Connect](https://appstoreconnect.apple.com):
-  - Bundle ID: **`com.konakevin.radorbad`** (legacy from the Rad-or-Bad era — **kept**;
-    cannot change after first submission. See `BUNDLE_ID_MIGRATION.md` for history.)
-  - Name: **DreamBot** · Category: **Photo & Video** or **Entertainment**
-  - Primary language: English (U.S.) · SKU
+- [x] Apple Developer Program membership active (confirmed 2026-05-28).
+- [x] App record created in App Store Connect (bundle `com.konakevin.radorbad`,
+      name DreamBot). Confirmed 2026-05-28.
 - [ ] Confirm signing — let EAS manage credentials (recommended), or set up the
       distribution cert + provisioning profile manually.
 
@@ -76,16 +73,18 @@ The two things that still touch the build: confirm production **EAS env vars**
 
 ## 3. In-app purchases + RevenueCat
 
-- [ ] Create the IAP products in ASC matching `constants/sparklePacks.ts`
-      (prefix `com.konakevin.radorbad.sparkles.*`) — all sparkle packs.
-- [ ] Create the **Pro subscription** products (monthly + yearly) — see `constants/proPlan.ts`.
-- [ ] Fill IAP metadata (display name, description, screenshot) — required for review.
+- [x] IAP code complete — RevenueCat fully integrated (`lib/revenuecat.ts`:
+      configure-on-login, offerings, `purchasePackage`, `restorePurchases`, customer
+      info, Pro entitlement); **Restore Purchases** in `proStore` + `sparkleStore`;
+      product IDs defined (`constants/sparklePacks.ts` + `constants/proPlan.ts`).
+- [x] Sparkle IAP products created in ASC (15/40/90/200/500_v2). Confirmed 2026-05-28.
+- [x] Pro subscription products created in ASC (monthly + yearly). Confirmed 2026-05-28.
+- [x] RevenueCat dashboard: offerings/entitlement (`pro`) mapped + **App Store shared
+      secret** set (confirmed 2026-05-28); webhook → Supabase Edge Function (confirmed).
+- [ ] Fill per-IAP metadata (display name, description, **review screenshot per product**)
+      if not already done — required for first review.
 - [ ] **Submit the IAPs with the first app version** (Apple won't review the first IAP
       without an accompanying binary).
-- [ ] RevenueCat: map Offerings → products (Pro offering id is **`pro`**, per
-      `lib/revenuecat.ts`), set the **App Store shared secret**, confirm the
-      `revenuecat-webhook` Edge Function URL is configured + live, and that
-      `REVENUECAT_WEBHOOK_SECRET` matches the Supabase edge secret.
 - [ ] Sandbox-test a purchase **and Restore Purchases** on a real device (TestFlight).
 
 ---
@@ -125,13 +124,15 @@ The two things that still touch the build: confirm production **EAS env vars**
 
 ## 6. Build, upload, TestFlight
 
-- [ ] **EAS production env vars** set at [expo.dev](https://expo.dev) → project → Environment Variables:
-  - `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`
-  - `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`, `FACEBOOK_CLIENT_TOKEN` (exact name the code reads)
-  - `EXPO_PUBLIC_POSTHOG_KEY` (analytics is a no-op without it — see §9)
-  - `EXPO_PUBLIC_SENTRY_DSN` (crash reporting is a no-op without it — see §9)
-  - `EXPO_PUBLIC_APP_ENV=production` (tags analytics/crash events as production)
-  - Sentry source-map upload secrets for `production`: `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`
+- [~] **EAS production env vars** (audited via `eas env:list production` on 2026-05-28):
+  - ✅ already set: `EXPO_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`,
+    `SENTRY_AUTH_TOKEN`, `FACEBOOK_APP_ID`, `FACEBOOK_CLIENT_TOKEN`
+  - ❌ **MISSING — must add (build is broken without the first two):**
+    - `EXPO_PUBLIC_SUPABASE_URL` — **no backend without it** (`lib/supabase.ts` reads it with `!`)
+    - `EXPO_PUBLIC_SUPABASE_ANON_KEY` — same
+    - `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` — Google sign-in breaks without it
+    - `EXPO_PUBLIC_POSTHOG_KEY` — analytics is a no-op without it
+  - `EXPO_PUBLIC_APP_ENV` is hard-set to `production` in the eas.json production profile (no dashboard var needed).
 - [ ] Verify Supabase edge secrets: `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`,
       `REVENUECAT_WEBHOOK_SECRET`, `DREAM_QUEUE_WORKER_TOKEN` (`supabase secrets list`).
 - [ ] APNs key uploaded to Expo/EAS (done — push verified 2026-05-27; re-confirm for prod).
