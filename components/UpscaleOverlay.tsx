@@ -13,9 +13,14 @@
  */
 
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
@@ -57,6 +62,7 @@ export function UpscaleModalHost() {
   });
   const [phase, setPhase] = useState<Phase>('requesting');
   const opacity = useSharedValue(0);
+  const progress = useSharedValue(0);
 
   useEffect(() => {
     listener = (next) => setState(next);
@@ -69,6 +75,23 @@ export function UpscaleModalHost() {
   useEffect(() => {
     opacity.value = withTiming(state.visible ? 1 : 0, { duration: 200 });
   }, [state.visible, opacity]);
+
+  // Progress bar: ease steadily toward ~92% over the expected upscale time
+  // (~17s) so the wait reads as "working," never a frozen spinner. The real
+  // completion (poll → saving) snaps it to 100%. Reset each time the modal opens.
+  useEffect(() => {
+    if (!state.visible) return;
+    progress.value = 0;
+    progress.value = withTiming(0.92, { duration: 17000, easing: Easing.out(Easing.quad) });
+  }, [state.visible, state.uploadId, progress]);
+
+  useEffect(() => {
+    if (phase === 'saving' || phase === 'done') {
+      progress.value = withTiming(1, { duration: 250 });
+    }
+  }, [phase, progress]);
+
+  const progressStyle = useAnimatedStyle(() => ({ width: `${progress.value * 100}%` }));
 
   // The caller drives requesting -> processing (show / setProcessing); mirror
   // that onto the display phase. The poll below then owns saving/done/timeout.
@@ -112,37 +135,37 @@ export function UpscaleModalHost() {
   const copy = {
     requesting: {
       icon: 'sparkles' as const,
-      title: 'Preparing your HD download…',
-      sub: 'Setting things up — just a sec.',
-      showSpinner: true,
+      title: 'Preparing your HD…',
+      sub: 'One sec.',
+      showProgress: true,
       showDismiss: false,
     },
     processing: {
       icon: 'sparkles' as const,
-      title: "You're first to grab this in HD!",
-      sub: "Nobody's saved this dream in HD yet — we're hand-polishing it just for you. Hang tight a sec, or keep browsing and we'll ping you the moment it's ready.",
-      showSpinner: true,
+      title: 'Polishing your HD…',
+      sub: "Takes about 15 seconds. Keep browsing — we'll save it to your Photos the moment it's ready.",
+      showProgress: true,
       showDismiss: true,
     },
     saving: {
       icon: 'download' as const,
-      title: 'Saving in HD…',
-      sub: 'Almost done.',
-      showSpinner: true,
+      title: 'Saving to your Photos…',
+      sub: 'Almost there.',
+      showProgress: true,
       showDismiss: false,
     },
     done: {
       icon: 'checkmark-circle' as const,
       title: 'Saved in HD',
       sub: 'Straight to your Photos.',
-      showSpinner: false,
+      showProgress: false,
       showDismiss: false,
     },
     timeout: {
       icon: 'time' as const,
-      title: 'Still polishing your HD copy…',
-      sub: "This one's taking a tick longer — we'll send a notification the moment it's ready to grab.",
-      showSpinner: false,
+      title: 'Still polishing your HD…',
+      sub: "Taking a little longer than usual — we'll notify you the moment it's ready to grab.",
+      showProgress: false,
       showDismiss: true,
     },
   }[phase];
@@ -152,13 +175,14 @@ export function UpscaleModalHost() {
       <Pressable style={StyleSheet.absoluteFill} onPress={() => {}}>
         <View style={styles.center}>
           <View style={styles.card}>
-            {copy.showSpinner ? (
-              <ActivityIndicator size="large" color={colors.accent} />
-            ) : (
-              <Ionicons name={copy.icon} size={40} color={colors.accent} />
-            )}
+            <Ionicons name={copy.icon} size={copy.showProgress ? 30 : 40} color={colors.accent} />
             <Text style={styles.title}>{copy.title}</Text>
             <Text style={styles.subtitle}>{copy.sub}</Text>
+            {copy.showProgress && (
+              <View style={styles.progressTrack}>
+                <Animated.View style={[styles.progressFill, progressStyle]} />
+              </View>
+            )}
             {copy.showDismiss && (
               <Pressable
                 style={styles.dismissBtn}
@@ -206,6 +230,19 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: 'center',
     lineHeight: 18,
+  },
+  progressTrack: {
+    marginTop: 20,
+    height: 6,
+    width: 210,
+    borderRadius: 3,
+    backgroundColor: colors.card,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 3,
+    backgroundColor: colors.accent,
   },
   dismissBtn: {
     marginTop: 18,

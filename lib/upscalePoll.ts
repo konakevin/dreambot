@@ -8,8 +8,8 @@
  * exactly once, and gives up gracefully (timeout) if the image never lands.
  */
 
-export const HQ_POLL_MS = 4000;
-export const HQ_MAX_POLLS = 30; // ~2 min
+export const HQ_POLL_MS = 2000; // tight cadence so the save fires ~instantly when the HD lands
+export const HQ_MAX_POLLS = 60; // ~2 min
 
 /** Phases startHqPoll emits as it resolves. */
 export type HqPollPhase = 'saving' | 'done' | 'timeout';
