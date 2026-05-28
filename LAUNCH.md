@@ -130,8 +130,8 @@ The two things that still touch the build: confirm production **EAS env vars**
       `EXPO_PUBLIC_SUPABASE_ANON_KEY` (new `sb_publishable_…` key format),
       `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`, `EXPO_PUBLIC_POSTHOG_KEY`.
       `EXPO_PUBLIC_APP_ENV` is hard-set to `production` in the eas.json production profile.
-- [ ] Verify Supabase edge secrets: `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`,
-      `REVENUECAT_WEBHOOK_SECRET`, `DREAM_QUEUE_WORKER_TOKEN` (`supabase secrets list`).
+- [x] Supabase edge secrets verified set: `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`,
+      `REVENUECAT_WEBHOOK_SECRET`, `DREAM_QUEUE_WORKER_TOKEN` (2026-05-28).
 - [ ] APNs key uploaded to Expo/EAS (done — push verified 2026-05-27; re-confirm for prod).
 - [~] `eas.json` → `submit.production.ios` scaffolded (real `appleTeamId 43VMZ5KMW4`).
       Finish by adding your ASC API key — run `eas submit` (it stores the key) or drop
