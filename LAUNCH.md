@@ -53,9 +53,8 @@ The two things that still touch the build: confirm production **EAS env vars**
 - [x] **Support email** — `support@dreambotapp.com` (ImprovMX free forwarding → Gmail;
       MX + SPF live in Wix DNS, verified 2026-05-28). Sending-as is paid on ImprovMX;
       reply from Gmail for now, or switch to Zoho free later if you want a real mailbox.
-- [ ] **Support URL (webpage)** — ASC's "Support URL" field needs a page, not just an
-      email. Make a tiny `https://dreambotapp.com/support` Wix page listing the support
-      email.
+- [x] **Support URL (webpage)** — `https://dreambotapp.com/support` shipped in the
+      `dreambot-web` repo (Next.js → Vercel), contact email + quick self-serve answers.
 - [ ] Confirm the **Facebook client token** ships via env (`EXPO_PUBLIC_FB_CLIENT_TOKEN`)
       rather than a literal in `app.config.js`.
 
@@ -112,23 +111,13 @@ The two things that still touch the build: confirm production **EAS env vars**
 
 - [x] **Privacy Policy** + **Terms** pages live (verified) — real content.
 - [x] **Support email** live — `support@dreambotapp.com` → Gmail (ImprovMX, see §1).
-- [ ] **Support page** at `https://dreambotapp.com/support` — needed for ASC's Support
-      URL field (a webpage listing the support email; the email itself is already live).
-- [ ] **Apple App Site Association** for universal links (the app declares
-      `applinks:dreambotapp.com`). Host `https://dreambotapp.com/.well-known/apple-app-site-association`,
-      served as `application/json` with **no redirect**:
-  ```json
-  {
-    "applinks": {
-      "apps": [],
-      "details": [
-        { "appID": "TEAM_ID.com.konakevin.radorbad", "paths": ["/post/*", "/user/*"] }
-      ]
-    }
-  }
-  ```
-  Replace `TEAM_ID` with your Apple Developer Team ID. (Skip only if you're not
-  shipping universal links in v1 — the custom `dreambot://` scheme works regardless.)
+- [x] **Support page** live — `https://dreambotapp.com/support` (in the `dreambot-web`
+      Next.js repo, served by Vercel).
+- [x] **Apple App Site Association** for universal links — already live at
+      `https://dreambotapp.com/.well-known/apple-app-site-association` (in `dreambot-web`:
+      `public/.well-known/...` + the `application/json` header in `next.config.ts`).
+      appID `43VMZ5KMW4.com.konakevin.radorbad`, paths `/post/*` + `/user/*`. Keep it in
+      sync if the bundle ID or deep-link routes change.
 
 ---
 
