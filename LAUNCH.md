@@ -124,15 +124,12 @@ The two things that still touch the build: confirm production **EAS env vars**
 
 ## 6. Build, upload, TestFlight
 
-- [~] **EAS production env vars** (audited via `eas env:list production` on 2026-05-28):
-  - ✅ already set: `EXPO_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`,
-    `SENTRY_AUTH_TOKEN`, `FACEBOOK_APP_ID`, `FACEBOOK_CLIENT_TOKEN`
-  - ❌ **MISSING — must add (build is broken without the first two):**
-    - `EXPO_PUBLIC_SUPABASE_URL` — **no backend without it** (`lib/supabase.ts` reads it with `!`)
-    - `EXPO_PUBLIC_SUPABASE_ANON_KEY` — same
-    - `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` — Google sign-in breaks without it
-    - `EXPO_PUBLIC_POSTHOG_KEY` — analytics is a no-op without it
-  - `EXPO_PUBLIC_APP_ENV` is hard-set to `production` in the eas.json production profile (no dashboard var needed).
+- [x] **EAS production env vars** — all set (verified `eas env:list production` 2026-05-28).
+      Sentry (DSN/org/project/token) + Facebook (app id/token) were already there; the
+      4 missing ones were created 2026-05-28: `EXPO_PUBLIC_SUPABASE_URL`,
+      `EXPO_PUBLIC_SUPABASE_ANON_KEY` (new `sb_publishable_…` key format),
+      `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`, `EXPO_PUBLIC_POSTHOG_KEY`.
+      `EXPO_PUBLIC_APP_ENV` is hard-set to `production` in the eas.json production profile.
 - [ ] Verify Supabase edge secrets: `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`,
       `REVENUECAT_WEBHOOK_SECRET`, `DREAM_QUEUE_WORKER_TOKEN` (`supabase secrets list`).
 - [ ] APNs key uploaded to Expo/EAS (done — push verified 2026-05-27; re-confirm for prod).
