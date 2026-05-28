@@ -67,7 +67,7 @@ grep -rn "OLD_NAME" --include="*.json" --include="*.ts" --include="*.tsx" \
 Should return zero hits in code (docs are fine).
 
 ### Documentation cleanup (optional)
-README.md, CLAUDE.md, SHIP_IT.md, APP_STORE_CHECKLIST.md, SPARKLE_PAYMENTS_SETUP.md, AUTH_PROVIDERS.md may have stale references. Cosmetic — won't affect runtime.
+README.md, CLAUDE.md, LAUNCH.md, SPARKLE_PAYMENTS_SETUP.md, AUTH_PROVIDERS.md may have stale references. Cosmetic — won't affect runtime.
 
 ---
 
