@@ -58,7 +58,7 @@ module.exports = {
       'PATH-BESPOKE — BloomBot flower-grove path (2026-05-27 NEW). The FUN / CRAZY path: Lorax-Truffula-style FLUFFY POM-POM FLOWER-TREE GROVES + house-sized oversized single blooms + wildly weird gravity-defying scenarios, ENTIRELY of flowers. Slender trunks crowned with giant round fluffy bloom-canopies, soft tufted whimsical rolling hills — flower-fantasy blown up further. FORM is Seuss-fluffy; COLOR comes from the flower-engine theme (real saturated flower colors — NO candy). NO animals / humans / manmade objects. 2 path pools (grove / ground) + whimsy conditional (70%-gated) + universal lighting.',
     slots: { universal: ['lighting'], bot: [], path: ['grove', 'ground'] },
     pickN: {},
-    conditionalLayer: { slot: 'whimsy', gate: 0.7 },
+    conditionalLayer: { slot: 'whimsy', gate: 0.9 },
     framingModes: null,
     anchorScaleRange: null,
   },

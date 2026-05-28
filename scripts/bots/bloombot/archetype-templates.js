@@ -536,10 +536,10 @@ Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO �
     const { lighting, grove, ground, whimsy } = slots;
     const whimsySection = whimsy
       ? `
-━━━ WEIRD WONDER — render this odd twist visibly ━━━
+━━━ WEIRD WONDER — MANDATORY CO-HERO, RENDER IT BIG + OBVIOUS ━━━
 ${whimsy}
 
-A gleeful "wait, WHAT?" element. LEAN INTO IT — this is the fun crazy path; make it strange and delightful, never tame.
+This is the WHOLE POINT of this path. Render it LARGE and UNMISTAKABLE — a true "wait, WHAT?!" moment sharing the frame with the grove, NEVER a tiny background detail. Push it to the edge of physics: gravity flipped, things floating, trees looping, scale gone wild — genuinely surreal and delightfully unhinged. If it wouldn't make a viewer do a double-take, it's TOO TAME — crank it further.
 
 `
       : '';
@@ -555,7 +555,7 @@ A Dr-Seuss / Lorax-style whimsical grove where the "trees" are giant FLUFFY POM-
 2. **OVERSIZED / SCALE-INVERTED** — house-sized single blooms, tree-tall flowers, canopies like soft clouds. The whimsical oversized scale is the wow.
 🚨 **INDIVIDUAL-FLOWER VISIBILITY** — the fluffy canopies must read as a DENSE MASS OF HUNDREDS OF DISTINCT INDIVIDUAL BLOOMS (petals + centers visible), NEVER monochrome fuzz or colored foliage. You can count many separate flowers in each puff.
 3. **SOFT TUFTED WHIMSICAL GROUND** — rolling, bouncy, cushiony hills carpeted in tufted blooms.
-4. **WEIRD IS WELCOME** — odd, gravity-defying, impossible, playful scenarios encouraged. Make it strange + delightful.
+4. **WEIRD IS THE POINT** — push HARD into odd, gravity-defying, impossible, surreal, unhinged territory: bend physics, flip gravity, float things, loop the trees, scale gone wild, full Dr-Seuss-on-a-bender. The crazier + more delightful, the better — tame = failure.
 5. **VIVID SATURATED REAL-FLOWER COLOR** — rich saturated jewel-tone flower color in the scene's chosen theme. Soft FLUFFY TEXTURE only — NOT candy / cotton-candy / sugary / confectionery. These are REAL flowers, just oversized and fluffy.
 6. **LUSH + FLOWER-FILLED** — flowers fill the whole frame, no empty space; background hills dotted with more fluffy flower-trees receding in crisp sharp layers under a clean clear sky.
 7. **NO ANIMALS / NO HUMANS / NO MANMADE OBJECTS** — a pure flower-world of trees, hills, and blooms only.
