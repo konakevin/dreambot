@@ -782,216 +782,464 @@ Each names the small hidden detail + where it hides. NO photoreal.`,
   },
 
   // ════════════════════════════════════════════════════════
-  // FAVORITE-TOWNS PATH (2026-05-27 — bit-for-bit clone of macro-display)
-  // Cloned so it can iterate independently. Identical recipes to start.
+  // FAVORITE-TOWNS PATH (2026-05-27 — town/city/village STORY path)
+  // Per-genre scene+story pools (tag-filtered) + secret-sauce axes. The
+  // scene pools are the heart: each genre gets its own deep, genre-specific,
+  // non-repeating set of complete-town-with-a-story scenes (any tone:
+  // funny/surreal/crazy/pretty). Secret-sauce axes layer on top.
   // ════════════════════════════════════════════════════════
 
-  brickbot_favorite_towns_diorama_theme: {
+  // ── crazy-islands: CARIBBEAN / MARGARITAVILLE-gone-crazy SCENE path (2026-05-27) ──
+  // Jimmy-Buffett beach-bum-paradise energy turned up to crazy: beach-bar party
+  // chaos, tourist mishaps, watersports gone sideways + serene paradise views.
+  // NO tiki statues, NO fantasy creatures. Readable single-hero scenes, all brick.
+  brickbot_islands_scene: {
     format: 'simple',
-    theme: `LEGO COMPLETE-DIORAMA THEMES — the whole world a macro-display build depicts. Each entry is ONE complete brick world, 30-55 words. The ENTIRE build is the subject (framing + centerpiece are separate axes — describe the whole world + its zones).
-
-⚠️ CRITICAL — the COMPLETE WORLD + its zones only. NO camera framing. NO single-centerpiece focus (separate axis). NO baseplate-edge. NO lighting. Just: what whole brick world fills the frame + how its zones connect.
-
-⚠️ EVERYTHING IS LEGO BRICK across the whole build. BANNED: photoreal, real [material], lifelike, realistic-miniature (say "brick-built miniature").
-
-VARIETY MANDATE — distribute across: alpine ski-village / mars-colony / ocean-port / medieval-castle-town / theme-park-layout / mountain-pass-with-cable-car / modern-city-block / space-dock / pirate-island-bay / train-yard / fantasy-realm / winter-holiday-village / desert-frontier-town / jungle-temple-complex / harbor-fishing-town / volcano-research-base / underwater-city / steampunk-metropolis / farm-valley / canal-town / arctic-research-station / fairy-forest-realm.
-
-Each entry: name the complete world in first 6-10 words; describe its CONNECTED ZONES (foreground → mid → background) as one whole brick build; imply density; NEVER framing, centerpiece, or lighting.`,
+    theme: `LEGO CRAZY-ISLANDS SCENE POOL — CARIBBEAN / JIMMY-BUFFETT / MARGARITAVILLE-GONE-CRAZY tropical scenes, all built in LEGO brick. Each entry is ONE complete, READABLE beach scene, 35-65 words. THE VIBE: a sun-soaked parrothead beach-bum paradise where something hilarious is going wrong — boat-drinks, flip-flops, Hawaiian shirts, steel drums, hammocks, pool floats, sunburned tourists, palapa beach-bars. Mine a HUGE VARIETY of fun/crazy ideas: a frozen-margarita blender exploding a slush-geyser over the bar; a conga line knocking over every umbrella + lounger in a domino cascade; an armada of giant inflatable brick flamingo pool-floats drifting out to sea with a napping tourist aboard; a pelican raiding the open-air buffet with a whole rotisserie chicken; a limbo contest bent impossibly low; a hammock snapping and catapulting a tourist into the pool-bar; a "boat-drink regatta" racing cocktail-glass boats across the lagoon; a beach-wedding cake melting in the heat; a parrot that's learned to work the blender and replaced the napping bartender; a surprise downpour cramming the whole bar under one palapa roof; a sailfish leaping clean over a tiny fishing skiff; a coconut-bowling lane down the beach. Giant friendly brick creatures (a colossal brick parrot demanding a cracker at the bar) are ONE flavor among many — NOT the default. ~65% FUN/CRAZY/FUNNY; ~35% gorgeous SERENE paradise views (a lone minifig with a boat-drink watching the sun melt into the sea, a sleepy pastel marina at dawn, a palapa bar at golden hour). EVERY scene: (1) ONE clear READABLE hero idea — the eye lands on it instantly, never cluttered; (2) an unmistakable CARIBBEAN BEACH setting (turquoise sea, white sand, palms, palapa/thatch beach-bar, dock, pastel stilt-bars, pool floats); (3) 100% LEGO BRICK — studs visible, minifigs in Hawaiian shirts, trans-blue water-plates, brick palms; any creature/wave/splash is a blocky stud-covered brick SCULPTURE, never organic CGI. NO tiki statues/idols, NO fantasy monsters. NON-REPEATING — every entry a DISTINCT gag. Lead with the hero idea + beach setting. NO photoreal, NO tilt-shift.`,
     touchpoints: [
-      'ALPINE SKI-VILLAGE — a complete brick mountain-resort: timber chalets with white-plate snow-roofs clustered around a frozen-tile pond in the foreground, a chairlift climbing brick slopes mid-build, snow-capped slope-brick peaks at the back, all one connected world',
-      'MARS COLONY — a complete brick Mars base: trans-clear greenhouse domes + habitat-modules linked by tube-corridors on a rust-tan plate surface, a landing-pad with a rover, solar-array fields, a comms-tower, a fully-realized off-world settlement',
-      'OCEAN PORT — a complete brick harbor: stone-brick quays with moored ships in the foreground trans-blue water, warehouse + crane rows mid-build, a lighthouse on the point, a town climbing the hill behind, one bustling port world',
-      'MEDIEVAL CASTLE-TOWN — a complete brick realm: a walled town of timber-and-stone houses clustered below a great castle keep on a crag, a market square, a river with a bridge, farmland at the edges, one connected medieval world',
-      'THEME-PARK LAYOUT — a complete brick fairground: a roller-coaster looping over the whole build, a ferris-wheel + carousel + midway of stalls, paths threading crowds between rides, a parking-lot edge, one whole amusement-park world',
-      'MOUNTAIN-PASS CABLE-CAR — a complete brick alpine pass: a winding road + rail switchbacking up stacked-plate cliffs, a cable-car spanning a gorge, a hamlet at the saddle, a waterfall, snow-peaks above, one dramatic mountain world',
-      'MODERN CITY-BLOCK — a complete brick modular streetscape: multi-story facades with shops at street-level, a corner cafe, a subway-entrance, parked + moving vehicles, rooftop gardens, crowds on the sidewalks, one living city block',
-      'SPACE-DOCK — a complete brick orbital dockyard: gantry-arms cradling ships under construction, fuel-depot tanks, a control-tower, shuttle-traffic on clear rods, a starfield-baseplate backdrop, one busy space-port world',
-      'PIRATE ISLAND-BAY — a complete brick tropical bay: a moored galleon in trans-blue water, a palm-fringed beach with a fort on the headland, a hidden-cave + a treasure-dig, a shipwreck offshore, one whole pirate world',
-      'TRAIN-YARD — a complete brick rail-yard: a roundhouse + turntable with locomotives, parallel tracks of freight-cars, a station-platform with crowds, a signal-gantry, a freight-warehouse, one working railway world',
-      'FANTASY REALM — a complete brick fantasy land: an elven treetop city, a dwarven mountain-hold, a wizard-tower, a dragon-crag, linked by winding paths over a river-valley, one whole high-fantasy world',
-      'WINTER HOLIDAY-VILLAGE — a complete brick festive town: snow-roofed shops around a tree-lit square, a holiday-train circling the build, an ice-rink, a toy-workshop, string-lights everywhere, one cozy winter-village world',
+      `A thatched palapa beach-bar where the frozen-margarita blender has erupted into a geyser of trans-green slush fountaining over the bar and the sunburned minifig regulars in Hawaiian shirts, the bartender holding up the empty lid in defeat, a parrot snatching a lime wedge`,
+      `A massive conga line of vacationing minifigs has snaked out of the beach bar and toppled every umbrella and lounger down the sand in a domino cascade, the steel-drum band playing on, utterly oblivious to the carnage behind them`,
+      `An armada of giant inflatable brick flamingo pool-floats has drifted off the resort beach out into the turquoise bay, one sunburned minifig still fast asleep aboard the lead flamingo, two lifeguards paddling frantically after the flotilla`,
+      `A pelican has raided the open-air beach buffet and is making off with an entire brick rotisserie chicken, the resort chef minifig mid-chase waving a spatula, gulls swarming the dropped fries, a deadpan minifig still loading his plate`,
+      `A serene palapa bar at golden hour, a lone minifig nursing a tall boat-drink at the rail watching the sun melt into the trans-orange sea, palms perfectly still, white sailboats dotting the horizon — paradise`,
+      `A beachfront limbo contest gone impossibly low, the champion minifig bent flat under a flaming brick limbo-pole inches off the sand, the whole barefoot crowd of tourists leaning in, fruity drinks frozen mid-cheer`,
+      `A colossal stud-covered brick parrot has perched on the beach-bar roof loudly demanding a cracker, the entire bar of minifig tourists offering up chips and lime-wedges, the palapa thatch sagging under its weight`,
+      `A hammock strung between two palms has snapped under one particularly large minifig, catapulting him in a trans-blue splash into the swim-up pool bar, paper umbrellas and a tray of drinks flying, fellow vacationers applauding`,
+      `A sleepy pastel Caribbean marina at dawn, candy-colored stilt-bars over clear water, a fisherman minifig coiling rope on the dock, pelicans lined along the pilings, soft pink light on the glassy lagoon — gorgeous and still`,
+      `A beach wedding where the towering tropical cake has begun slowly melting and slumping sideways in the heat, the bride and groom minifigs cracking up, guests diving to rescue the tiers, a dog making off with the cake-topper`,
     ],
-    instructions: `Each entry is ONE complete brick world, 30-55 words. Format: "THEME NAME CAPS — body describing connected zones". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no camera framing, no single-centerpiece, no baseplate-edge, no lighting, no photoreal/lifelike vocabulary. Every element brick. The whole connected world + its zones only.`,
+    instructions: `Each entry is ONE complete Caribbean/Margaritaville-crazy beach scene, 35-65 words. Format: free-flowing prose that LEADS with the single hero gag + the beach setting, then the reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT: ONE readable hero idea each (never cluttered); ALWAYS a Caribbean beach (turquoise sea, sand, palms, palapa bar, dock); ALL LEGO brick (studs, minifigs in Hawaiian shirts, trans-water, brick palms; any creature/splash = blocky brick sculpture); ~65% fun-crazy + ~35% serene-pretty; NO tiki statues, NO fantasy monsters; NON-REPEATING distinct gags. BANS: no photoreal / CGI / tilt-shift / lifelike.`,
+  },
+
+  brickbot_islands_camera: {
+    format: 'simple',
+    theme: `DEEP-FOCUS ISLAND CAMERA FRAMING for BrickBot crazy-islands — wide angles that show the island scene sharp + the hero idea readable. Each entry 15-30 words. Always deep-focus, never tilt-shift.`,
+    touchpoints: [
+      `BEACH-LEVEL WIDE — low on the sand looking across the scene to the hero idea, sea + palms framing both sides, tack-sharp to the horizon`,
+      `HIGH-THREE-QUARTER AERIAL — looking down + across the whole island, the hero idea + lagoon + reef all readable, edge-to-edge crisp`,
+      `WATER-LEVEL OFF THE DOCK — low at the trans-blue waterline looking back at the island + the hero idea reflected`,
+      `THROUGH-THE-PALMS — framed by foreground brick palm-fronds, the island scene revealed beyond in deep focus`,
+      `DOCK-RECEDING — down the length of a brick boardwalk/pier toward the hero idea at its end, sharp the whole way`,
+      `BIRD'S-EYE ATOLL — near-top-down on the whole island ringed by trans-blue water, the scene read as a complete map`,
+      `CLIFF-VISTA — from a volcanic headland across the bay to the island scene + the deep tropical distance`,
+      `LOW-HERO-ANGLE — slightly up at the big hero idea (creature/wave/volcano) with the island spreading behind it`,
+    ],
+    instructions: `Each entry ONE deep-focus island framing, 15-30 words, "NAME — body". Numbered list. ALWAYS keeps the whole island scene tack-sharp + the hero idea readable; NEVER tilt-shift/miniature-blur. No photoreal.`,
+  },
+
+  brickbot_islands_time: {
+    format: 'simple',
+    theme: `TIME-OF-DAY + SKY/WEATHER for BrickBot crazy-islands (secret sauce) — when the island scene is set + how it lights the brick, sky rendered IN BRICK. Each entry 12-22 words. Mostly bright + tropical, some dramatic.`,
+    touchpoints: [
+      `Blazing tropical midday — strong high sun, saturated turquoise water, short crisp shadows, full cheerful color`,
+      `Golden-hour sunset — a built trans-orange + trans-pink plate skyscape behind the palms, long amber light raking the sand`,
+      `Soft pink dawn-mist — cool first light, low cotton haze on the lagoon, the island just waking`,
+      `Blue-hour dusk — deep cobalt sky, the first warm tiki-torch + window lights glowing on`,
+      `Tropical-storm drama — a dark round-plate cloud-bank, a trans-clear lightning bolt over the volcano, churning trans-blue surf`,
+      `Post-storm rainbow — a built trans-element rainbow arc over a freshly-rinsed glittering island`,
+      `Starry island night — dark sky, warm trans-element torches + hut-windows + a built brick moon over the black water`,
+      `Bright breezy morning — clear blue sky, white-plate cloud puffs, sparkling trans-blue water, palms mid-sway`,
+    ],
+    instructions: `Each entry ONE time/sky, 12-22 words, naming how it lights the brick island + any sky built in named brick parts. Numbered list. No photoreal sky/weather.`,
+  },
+
+  brickbot_islands_life: {
+    format: 'simple',
+    theme: `LIFE DENSITY for BrickBot crazy-islands (secret sauce) — how populated + active the island scene is. Each entry 12-25 words. Tiny minifigs + brick critters only, never photoreal people.`,
+    touchpoints: [
+      `Packed beach-day — dozens of minifig sunbathers, snorkelers, vendors + a beach-volleyball game, the whole shore humming`,
+      `Castaway-sparse — one or two lone minifigs on an empty island, vast and quiet around them`,
+      `Everyone-reacting — the whole island caught mid-reaction to the hero event, minifigs scrambling + pointing + laughing`,
+      `Sleepy fishing-village rhythm — a scattered few minifigs at their boats + huts, calm believable daily island life`,
+      `Beach-bar bash — a big crowd-event at the palapa bar, massed minifig tourists mid-party with boat-drinks + a steel-drum band`,
+      `Critter-rich — brick crabs, parrots, monkeys, gulls + fish threaded through the scene alongside a few minifigs`,
+    ],
+    instructions: `Each entry ONE life-density, 12-25 words. Numbered list. Tiny minifigs + brick island critters only, mid-reaction to the scene. No photoreal people.`,
+  },
+
+  brickbot_islands_edge: {
+    format: 'simple',
+    theme: `SHORELINE / BASEPLATE-EDGE TREATMENTS for BrickBot crazy-islands — the display-base edge that signals a finished LEGO island diorama on a table, usually a water edge. Each entry 12-22 words.`,
+    touchpoints: [
+      `Trans-blue water-plate edge lapping the sand at the front, the island ringed in clean transparent ocean plates`,
+      `Visible baseplate-stud rim around the water, the bare blue studs openly framing the island diorama`,
+      `Tiled display-border framing the whole island in smooth dark tiles like a picture-frame`,
+      `Stepped trans-blue lagoon-shelf dropping from pale shallows to deep ocean at the baseplate margin`,
+      `Sandy beach falloff tapering to bare tan baseplate studs at the build's edge`,
+      `Black display-base with a printed title-brick at the front naming the island`,
+      `Rockwork volcanic-cliff edge, the island raised on stacked slope-brick dropping to a trans-blue rim`,
+    ],
+    instructions: `Each entry ONE shoreline/baseplate-edge treatment, 12-22 words. Numbered list. The deliberate tabletop-LEGO-island-diorama display signal. No photoreal.`,
+  },
+
+  brickbot_islands_palette: {
+    format: 'simple',
+    theme: `PALETTE for BrickBot crazy-islands — cohesive tropical LEGO-brick color story. Each entry 12-22 words, naming 3-5 actual brick colors + mood.`,
+    touchpoints: [
+      `Turquoise-lagoon — turquoise + aqua + ivory-sand + jade-palm, bright and sparkling`,
+      `Sunset-tropics — coral + magenta + amber + warm-thatch-brown + long-shadow-blue`,
+      `Pirate-cove — weathered-brown + sail-cream + gold-stud + bottle-green sea`,
+      `Volcanic-isle — black-sand + slate-grey + trans-orange lava + jungle-green`,
+      `Beach-bar-night — string-light amber + deep-teal water + hibiscus-pink + dark-palm silhouette`,
+      `Coral-reef — coral-pink + trans-cyan + sandy-tan + bright-fish accents`,
+      `Misty-dawn — soft-pink + pale-aqua + grey-green peaks + cream`,
+      `Castaway-bright — sun-yellow + sky-blue + palm-green + driftwood-tan, cheerful and clean`,
+    ],
+    instructions: `Each entry ONE palette, 12-22 words, "NAME — colors + mood", actual LEGO brick colors. Numbered list. No photoreal-color.`,
+  },
+
+  brickbot_favorite_towns_scene_fantasy_kingdom: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — FANTASY KINGDOM. Each entry is ONE complete brick FANTASY KINGDOM town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY FANTASY KINGDOM: a LOTR/D&D high-fantasy castle-town — turreted stone keep, timber-framed taverns, market stalls, banners, wizard towers, dwarven smithies, a dragon or two; minifig knights, wizards, merchants, adventurers. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE FANTASY KINGDOM buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A fantasy castle-town at market day, a brick dragon has landed in the square and is patiently waiting in line at the bakery while terrified-then-delighted townsfolk queue behind it, the baker offering it an oversized loaf`,
+      `A walled fantasy kingdom mid-festival, banners everywhere, a wizard's fireworks spell gone wrong showering the rooftops with harmless sparkles as knights and children chase the drifting lights through the streets`,
+      `A grand fantasy capital at dusk, the king's coronation procession winding up to the keep, crowds lining the timber-framed streets, a tiny pickpocket minifig working the distracted crowd in the foreground`,
+      `A fantasy market-town under siege panic that turns out to be a runaway hay-cart, a comedic chain-reaction of toppling fruit-stalls and squawking chicken-crates down the main street while a guard facepalms`,
+      `A serene fantasy mountain-kingdom at golden hour, waterfalls off the keep, dragons circling the towers, a wedding feast spilling out of the great-hall into a flower-strewn courtyard, achingly pretty`,
+      `A fantasy tavern-quarter at night, an adventuring party arguing over a treasure map at a packed inn while a barfight spills into the street and a sheepish wizard turns the brawlers into frogs`,
+    ],
+    instructions: `Each entry is ONE complete FANTASY KINGDOM town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the FANTASY KINGDOM genre.`,
+  },
+
+  brickbot_favorite_towns_scene_cyberpunk_city: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — CYBERPUNK CITY. Each entry is ONE complete brick CYBERPUNK CITY town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY CYBERPUNK CITY: a neon-drenched rain-slick megacity — towering signs in fictional glyphs, noodle stalls, holo-ads, monorails, flying-car traffic, back-alley markets; minifig hackers, street-vendors, androids, corp-suits. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE CYBERPUNK CITY buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A cyberpunk megacity alley in the rain, a noodle-stall cat has knocked over the broth and an entire crowd of neon-lit minifigs is slipping and sliding in comic chaos under glowing holo-signs`,
+      `A towering cyberpunk district at night, a rogue delivery-drone swarm has hijacked the holo-billboards to play a cat video, the whole street stopped and staring up, traffic snarled below`,
+      `A rain-slick cyberpunk market street, a street-samurai android calmly buying dumplings while a frantic foot-chase weaves through the crowd behind, vendors unbothered, neon reflecting in every puddle`,
+      `A gorgeous cyberpunk skyline at blue-hour, monorail gliding between megatowers, a quiet rooftop noodle bar where two minifigs share a meal above the glittering neon sprawl`,
+      `A cyberpunk lower-city during a power surge, every neon sign flickering wildly, a hacker minifig grinning at a terminal while confused crowds and a malfunctioning vending-mech dispense free snacks`,
+      `A surreal cyberpunk plaza where a giant holographic koi fish has escaped its billboard and is "swimming" between the towers, awestruck crowds filming on tiny brick-phones in the rain`,
+    ],
+    instructions: `Each entry is ONE complete CYBERPUNK CITY town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the CYBERPUNK CITY genre.`,
+  },
+
+  brickbot_favorite_towns_scene_cozy_modern_town: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — COZY MODERN TOWN. Each entry is ONE complete brick COZY MODERN TOWN town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY COZY MODERN TOWN: a comfort-food modern small town — coffee shops, bookstores, diners, brick apartments, a park, a bakery, fairy-lit patios, bikes; everyday minifig life, dog-walkers, baristas, students. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE COZY MODERN TOWN buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A cozy modern town main-street on a rainy morning, everyone crammed under the bakery awning sharing umbrellas, a dog shaking off water on a horrified businessman, warm light from the cafe windows`,
+      `A charming modern town square at the autumn farmers-market, stalls of brick produce, a kid's balloon escaping over the bookstore, a street musician drawing a small delighted crowd`,
+      `A cozy town at first snow, the whole street out building snowmen and slipping on the sidewalk, the diner glowing warm, a cat watching smugly from a windowsill`,
+      `A modern town block at golden hour, friends on a cafe patio under fairy-lights, a cyclist mid-wobble dodging a skateboarder, the bookshop cat asleep in the window, everyday-perfect`,
+      `A cozy town during a surprise water-main geyser in the park fountain, kids gleefully running through it while a maintenance minifig chases an out-of-control hose, deadpan dog-walkers stepping around the chaos`,
+      `A quiet modern town at blue-hour, lit apartment windows each a tiny vignette of life, a late-night diner with one lone customer and a yawning waiter, gentle and lonely-beautiful`,
+    ],
+    instructions: `Each entry is ONE complete COZY MODERN TOWN town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the COZY MODERN TOWN genre.`,
+  },
+
+  brickbot_favorite_towns_scene_fairy_forest_village: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — FAIRY FOREST VILLAGE. Each entry is ONE complete brick FAIRY FOREST VILLAGE town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY FAIRY FOREST VILLAGE: a cottagecore fairy woodland — toadstool cottages, treehouse walkways, glowing lanterns, mushroom-cap roofs, flower gardens, a brook; fairy minifigs, woodland-creature builds, tiny gnomes. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE FAIRY FOREST VILLAGE buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A fairy forest village at the lantern festival, hundreds of glowing brick-lanterns strung between toadstool cottages, fairies flitting on clear rods, a hedgehog band playing as the whole village dances`,
+      `A toadstool village in the rain, fairies sheltering under giant mushroom-caps, one tiny fairy gleefully puddle-jumping while the elders tut, dewdrops strung like beads across the flower-gardens`,
+      `A surreal fairy village where the wishing-well has overflowed with glowing bubbles, the whole hamlet chasing and popping them, a startled frog wearing a bubble-crown on the lily-pads`,
+      `A serene fairy woodland at dawn-mist, treehouse walkways spiraling up ancient brick-trunks, a fairy watering a window-box of glowing blooms, a deer drinking at the brook, breathtakingly pretty`,
+      `A fairy village mid-acorn-harvest gone comedic, a runaway giant acorn rolling down the path scattering market-stalls, squirrels in pursuit, a gnome diving out of the way with his pie`,
+      `A fairy forest hamlet at firefly-dusk, warm windows in every toadstool, a tiny wedding on a lily-pad with the whole village gathered on the banks holding lantern-lights`,
+    ],
+    instructions: `Each entry is ONE complete FAIRY FOREST VILLAGE town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the FAIRY FOREST VILLAGE genre.`,
+  },
+
+  brickbot_favorite_towns_scene_medieval_castle_town: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — MEDIEVAL CASTLE TOWN. Each entry is ONE complete brick MEDIEVAL CASTLE TOWN town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY MEDIEVAL CASTLE TOWN: a nostalgic LEGO-Castle walled town — stone keep, blacksmith, inn, cobbled rainy streets, market stalls, banners, a portcullis, a chapel; peasant + knight + merchant minifigs (NOT epic-battle — daily life + small drama). Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE MEDIEVAL CASTLE TOWN buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A medieval castle-town on market day, a knight's horse has bolted into the fish-stall and the whole cobbled square is comic chaos, a juggler losing his pins, the blacksmith laughing in his doorway`,
+      `A walled medieval town at the harvest fair, banners and bunting, a pie-eating contest at the inn drawing a roaring crowd, a pickpocket and a very alert town-guard locked in a slow chase`,
+      `A rainy medieval town at dusk, warm light from the inn, a minstrel playing under the eaves, two knights arguing over a parking spot for their horses outside the chapel`,
+      `A serene medieval town at first snow, the keep dusted white, children sledding down the castle ramp, the baker handing out warm bread, smoke from every chimney, picture-postcard pretty`,
+      `A medieval castle-town where a wizard's experiment has turned the fountain into a geyser of soup, townsfolk gleefully filling their bowls while the flustered wizard tries to reverse it`,
+      `A bustling medieval market-street at golden hour, stalls packed with brick-goods, a runaway cheese-wheel bowling through the crowd with a cheesemonger in desperate pursuit`,
+    ],
+    instructions: `Each entry is ONE complete MEDIEVAL CASTLE TOWN town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the MEDIEVAL CASTLE TOWN genre.`,
+  },
+
+  brickbot_favorite_towns_scene_pirate_harbor: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — PIRATE HARBOR. Each entry is ONE complete brick PIRATE HARBOR town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY PIRATE HARBOR: a golden-age pirate port & tropical harbor — docked galleons, a tavern, market quay, lighthouse, palm-lined waterfront, treasure-stalls; pirate + sailor + merchant minifigs, parrots, a sea-monster maybe. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE PIRATE HARBOR buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A pirate harbor at high noon, a parrot has stolen the captain's hat and the entire dock is in chaotic pursuit across the moored ships, sailors leaping rigging, a merchant's fruit-cart upended`,
+      `A bustling tropical pirate port at sunset, a treasure-laden galleon just in, the tavern overflowing, a tipsy crew singing on the quay while a pickpocket monkey works the celebration`,
+      `A pirate harbor as a giant kraken tentacle pokes curiously into the market, the townsfolk weirdly unbothered and selling it fish, one vendor haggling with the tentacle directly`,
+      `A serene tropical port at dawn, mist on the trans-blue water, fishing boats heading out, the lighthouse keeper waving, palm-fringed waterfront glowing gold, peaceful and pretty`,
+      `A pirate harbor mid-storm, ships straining at their moorings, the whole town lashing down barrels and chasing a runaway tarp, the tavern sign swinging wildly, dramatic and kinetic`,
+      `A pirate market-quay where a treasure-chest has burst open spilling gold across the dock, a comic free-for-all scramble of pirates, gulls, and a very smug cat sitting atop the loot`,
+    ],
+    instructions: `Each entry is ONE complete PIRATE HARBOR town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the PIRATE HARBOR genre.`,
+  },
+
+  brickbot_favorite_towns_scene_japanese_fantasy_village: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — JAPANESE FANTASY VILLAGE. Each entry is ONE complete brick JAPANESE FANTASY VILLAGE town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY JAPANESE FANTASY VILLAGE: a lantern-lit fantasy village — cherry-blossom trees, red torii gates, tiered pagodas, paper lanterns, arched bridges over koi streams, tea-houses; kimono minifigs, spirits/yokai, a friendly dragon. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE JAPANESE FANTASY VILLAGE buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A cherry-blossom village at the lantern festival, paper-lanterns drifting up over tiered pagodas, the whole village on the arched bridges watching, petals on the koi stream, serenely gorgeous`,
+      `A Japanese fantasy village where a mischievous tanuki-spirit has swapped everyone's sandals, comic confusion across the tea-houses as minifigs hop about, the tanuki snickering on a rooftop`,
+      `A misty mountain shrine-village at dawn, monks sweeping the torii steps, a sleepy forest-spirit dozing across the bridge that travelers tiptoe around, blossom petals everywhere, tranquil`,
+      `A festival night in a pagoda village, food-stalls and fireworks, a friendly brick-dragon weaving overhead trailing lanterns while children chase its tail through the crowded lanes`,
+      `A surreal blossom-village where the koi have begun floating up out of the stream and drifting between the lanterns, the whole village gazing up in wonder, one cat leaping for them`,
+      `A tea-house village in spring rain, oil-paper umbrellas crossing the arched bridge, a tea-master serving travelers under the eaves, blossoms stuck to wet stone, quietly beautiful`,
+    ],
+    instructions: `Each entry is ONE complete JAPANESE FANTASY VILLAGE town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the JAPANESE FANTASY VILLAGE genre.`,
+  },
+
+  brickbot_favorite_towns_scene_western_frontier_town: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — WESTERN FRONTIER TOWN. Each entry is ONE complete brick WESTERN FRONTIER TOWN town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY WESTERN FRONTIER TOWN: a dusty wild-west frontier town — false-front saloon, sheriff's office, livery, water-tower, train depot, hitching-rails, desert mesa backdrop; cowboy + sheriff + outlaw minifigs, horses, a stagecoach. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE WESTERN FRONTIER TOWN buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A western frontier town at high noon, a tumbleweed-sized armadillo has wandered into the saloon and a comic standoff has emptied the bar into the dusty street, the sheriff sighing`,
+      `A wild-west town as the noon stagecoach arrives in a cloud of dust, the whole street turning out, a comic luggage avalanche off the roof, a dog stealing a sausage from the butcher`,
+      `A frontier boom-town during a gold strike, prospectors stampeding the assay-office, a card-game spilling out of the saloon, a banker nervously eyeing the chaos from his porch`,
+      `A serene western town at desert-sunset, long shadows down the main street, a lone guitar on the saloon porch, horses dozing at the rail, mesa glowing red, cinematic and still`,
+      `A western town where a runaway mine-cart full of dynamite is comically careening down the main street, everyone diving for cover while a calm old-timer just sips his coffee on the boardwalk`,
+      `A frontier town at a dust-storm dusk, everyone scrambling to shutter windows and chase laundry off the lines, the train whistle howling, the saloon doors flapping, dramatic and gritty`,
+    ],
+    instructions: `Each entry is ONE complete WESTERN FRONTIER TOWN town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the WESTERN FRONTIER TOWN genre.`,
+  },
+
+  brickbot_favorite_towns_scene_steampunk_victorian_city: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — STEAMPUNK VICTORIAN CITY. Each entry is ONE complete brick STEAMPUNK VICTORIAN CITY town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY STEAMPUNK VICTORIAN CITY: a brass-and-fog Victorian metropolis — pipes, gears, gas-lamps, airship docks, clockwork trams, smoke-stacked factories, ornate facades; goggled inventor + top-hat + automaton minifigs. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE STEAMPUNK VICTORIAN CITY buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A steampunk Victorian city where an inventor's steam-contraption has blown its boiler, comically launching top-hats down the foggy boulevard as the crowd chases their headwear among the gas-lamps`,
+      `A brass metropolis at the airship regatta, ornate dirigibles docking over the rooftops, the whole city out waving, a comic mid-air traffic-jam of tiny airships above the clock-tower`,
+      `A foggy steampunk dock-quarter at dusk, gas-lamps glowing through the haze, a clockwork tram clanking past, an inventor wheeling a smoking invention while pigeons scatter, moodily gorgeous`,
+      `A Victorian steampunk square where a runaway clockwork automaton butler is comically serving tea to startled passersby, chased by its flustered inventor, gears spilling behind it`,
+      `A grand steampunk city at golden hour, brass spires and pipe-tangled rooftops gleaming, an airship casting a shadow over the bustling market below, intricate and beautiful`,
+      `A surreal steampunk boulevard where the city's great clock has begun running backwards, pedestrians comically walking in reverse, pigeons un-landing, the clockmaker aghast at his tower`,
+    ],
+    instructions: `Each entry is ONE complete STEAMPUNK VICTORIAN CITY town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the STEAMPUNK VICTORIAN CITY genre.`,
+  },
+
+  brickbot_favorite_towns_scene_space_colony: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — SPACE COLONY. Each entry is ONE complete brick SPACE COLONY town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY SPACE COLONY: a clean sci-fi frontier settlement — domed habitats, hydroponic greenhouses, landing pads, solar arrays, a market concourse, rovers, an alien bazaar feel; astronaut + colonist + friendly-alien minifigs. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE SPACE COLONY buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A Mars colony market-concourse where a hydroponics dome has sprung a leak and tomatoes are floating everywhere in low-G, colonists comically bouncing to catch them, an alien vendor delighted`,
+      `A domed space colony at "dawn" as the artificial sun-array boots up, colonists streaming to the greenhouse-cafes, a rover-traffic jam at the airlock, daily-life-on-another-world charm`,
+      `A surreal space-station town where a tiny escaped lab-blob has grown enormous and is gently, harmlessly bouncing colonists around the concourse like a beach-ball, everyone weirdly enjoying it`,
+      `A serene lunar settlement at earthrise, the blue planet hanging over the domes, colonists gathered at the observation-deck cafe, a quiet beautiful moment above the regolith`,
+      `An alien-bazaar space outpost, multi-species crowds haggling over glowing goods, a comic mix-up as a translator-bot mistranslates a greeting into an insult and a tiny diplomatic kerfuffle erupts`,
+      `A space colony during a meteor-shower light-show, the whole town on the dome-roofs watching the sky streak, a vendor selling glow-snacks, awe and wonder under the stars`,
+    ],
+    instructions: `Each entry is ONE complete SPACE COLONY town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the SPACE COLONY genre.`,
+  },
+
+  brickbot_favorite_towns_scene_canal_city: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — VENETIAN CANAL CITY. Each entry is ONE complete brick VENETIAN CANAL CITY town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY VENETIAN CANAL CITY: a romantic canal city — arched stone bridges, gondolas, waterfront palazzos, flower-draped balconies, a piazza, market boats; gondolier + merchant + tourist minifigs, pigeons. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE VENETIAN CANAL CITY buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A canal city where a gondola-traffic-jam has gridlocked the main waterway, gondoliers comically arguing and gesturing, a wedding boat stuck in the middle, pigeons spectating from a bridge`,
+      `A Venetian canal city at the masked carnival, the bridges packed with costumed minifigs, confetti on the water, a comic gondola-tip nearly dunking a fancy reveler, festive chaos`,
+      `A serene canal city at dawn, mist on the green water, a lone gondolier gliding past flower-draped palazzos, a baker opening shutters, golden light down the empty canal, achingly pretty`,
+      `A canal city as the piazza floods at high tide, tourists comically wading and hopping plank-bridges, a cafe still serving from a now-island table, locals unbothered in tall boots`,
+      `A surreal canal city where the water has turned mirror-still and perfectly doubles the whole town upside-down, a confused gondolier paddling through reflected clouds, dreamlike`,
+      `A canal-side market morning, produce-boats jostling at the quay, a cat stealing a fish off a stall, a comic splash as a merchant overreaches, the whole quay laughing`,
+    ],
+    instructions: `Each entry is ONE complete VENETIAN CANAL CITY town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the VENETIAN CANAL CITY genre.`,
+  },
+
+  brickbot_favorite_towns_scene_alpine_village: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — ALPINE MOUNTAIN VILLAGE. Each entry is ONE complete brick ALPINE MOUNTAIN VILLAGE town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY ALPINE MOUNTAIN VILLAGE: a snowy alpine chalet village — timber chalets, a church steeple, a cable-car, ski-slopes, a frozen pond, woodpiles, snow on every roof; skier + villager minifigs, a St-Bernard dog. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE ALPINE MOUNTAIN VILLAGE buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `An alpine ski-village where a runaway sled has comically gathered a snowball-avalanche of yelping skiers down the main slope into a soft pile at the chalet door, the St-Bernard supervising`,
+      `A snowy alpine village at the winter festival, lantern-lit chalets, an ice-rink full of wobbling skaters, a comic three-minifig pile-up, hot-cocoa stand doing brisk business`,
+      `A serene alpine village at golden-hour first-light, untouched snow, smoke from every chimney, a lone skier carving the slope above the church steeple, mountains blazing pink, gorgeous`,
+      `An alpine village mid-blizzard, everyone comically chasing laundry and a hat down the white street, the cable-car swaying, the innkeeper waving people inside to the fire`,
+      `A surreal alpine village where the snowmen have apparently rearranged themselves overnight into a conga-line down the main street, baffled villagers pointing, one snowman "winking"`,
+      `A cozy alpine village at blue-hour, warm windows, a horse-drawn sleigh of carolers, kids in a snowball fight behind the church, the frozen pond reflecting lantern-light, heartwarming`,
+    ],
+    instructions: `Each entry is ONE complete ALPINE MOUNTAIN VILLAGE town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the ALPINE MOUNTAIN VILLAGE genre.`,
+  },
+
+  brickbot_favorite_towns_scene_desert_bazaar: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — DESERT BAZAAR / OASIS TOWN. Each entry is ONE complete brick DESERT BAZAAR / OASIS TOWN town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY DESERT BAZAAR / OASIS TOWN: a sun-baked desert oasis town — domed mud-brick buildings, a palm oasis, souk market-stalls, carpet-draped alleys, a caravanserai, camels; merchant + traveler minifigs, a snake-charmer. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE DESERT BAZAAR / OASIS TOWN buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A desert bazaar where an escaped camel has comically looted a fruit-stall and is being chased through the carpet-draped souk by a furious-then-laughing merchant, shoppers scattering`,
+      `A bustling oasis-town market at midday, spice-piles and brass-lanterns, a snake-charmer whose snake has fallen asleep mid-show, the small crowd politely waiting, comic deadpan`,
+      `A serene desert oasis at dawn, palms reflected in the still pool, a caravan arriving with bells, merchants unrolling carpets, golden light on the mud-brick domes, beautiful and calm`,
+      `A surreal desert bazaar where a magic carpet has gone rogue and is giving uninvited rides, comically yanking startled shoppers up over the rooftops as the carpet-seller chases below`,
+      `A desert town during a sudden rare rain, everyone comically rushing out to dance and catch it in pots, kids splashing in the souk, the whole oasis celebrating the downpour`,
+      `A caravanserai at sunset, traders settling camels for the night, a storyteller drawing a circle of travelers around a fire, lantern-light on the arches, warm and atmospheric`,
+    ],
+    instructions: `Each entry is ONE complete DESERT BAZAAR / OASIS TOWN town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the DESERT BAZAAR / OASIS TOWN genre.`,
+  },
+
+  brickbot_favorite_towns_scene_tropical_island_town: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — TROPICAL ISLAND / BEACH TOWN. Each entry is ONE complete brick TROPICAL ISLAND / BEACH TOWN town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY TROPICAL ISLAND / BEACH TOWN: a breezy tropical beach town — stilt-houses over turquoise water, palm boardwalk, surf shacks, a tiki bar, fruit stands, a jetty; islander + tourist + surfer minifigs, a parrot, sea-turtles. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE TROPICAL ISLAND / BEACH TOWN buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A tropical beach town where a giant beach-ball has comically bounced loose down the boardwalk scattering deck-chairs and a fruit-stand, tourists diving aside, a parrot riding it gleefully`,
+      `A breezy island town at a beach luau, tiki-torches lit, the whole boardwalk dancing, a comic limbo-contest collapse, a sea-turtle photobombing the celebration from the surf`,
+      `A serene stilt-house village at golden hour, turquoise water glassy below the boardwalk, a fisherman bringing in the catch, palms swaying, a hammock nap in progress, idyllic`,
+      `A surreal beach town where the tide has gone out impossibly far revealing a treasure-strewn seabed, the whole town comically racing out with buckets before the water returns`,
+      `A tropical town during a tropical downpour, everyone crammed under the tiki-bar thatch sharing coconuts, a surfer still grinning in the rain, the parrot sheltering on someone's head`,
+      `A beach town at dawn surf, early surfers paddling out over a gentle swell, the fruit-stand opening, mist on the jungle behind the stilt-houses, peaceful and pretty`,
+    ],
+    instructions: `Each entry is ONE complete TROPICAL ISLAND / BEACH TOWN town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the TROPICAL ISLAND / BEACH TOWN genre.`,
+  },
+
+  brickbot_favorite_towns_scene_floating_sky_city: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — FLOATING SKY-CITY. Each entry is ONE complete brick FLOATING SKY-CITY town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY FLOATING SKY-CITY: a fantastical floating city in the clouds — islands tethered by bridges, waterfalls pouring off the edges into sky, windmills, airship docks, hanging gardens; winged/aviator minifigs, cloud-creatures. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE FLOATING SKY-CITY buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `A floating sky-city where a gust has comically blown everyone's hats off the edge into the clouds below, a frantic winged-courier diving after the whole flock of tumbling hats`,
+      `A cloud-city at the sky-regatta, tethered islands strung with banners, airships and winged minifigs racing between the waterfalls, a comic mid-air collision into a hanging garden`,
+      `A serene floating city at dawn above a sea of clouds, waterfalls pouring off the island-edges into pink sky, a lone windmill turning, a winged minifig watching the sunrise, breathtaking`,
+      `A surreal sky-city where a cloud-creature has drifted in and parked over the plaza, gently raining on only one very confused minifig who keeps trying to walk out from under it`,
+      `A floating market-island where a vendor's balloon-cargo has broken loose, comically lifting his entire stall up off the island as he clings on, shoppers waving him goodbye`,
+      `A cloud-city at golden hour, hanging gardens spilling vines over the edges, bridges glowing, residents dining on a terrace above the sunset clouds, romantic and grand`,
+    ],
+    instructions: `Each entry is ONE complete FLOATING SKY-CITY town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the FLOATING SKY-CITY genre.`,
+  },
+
+  brickbot_favorite_towns_scene_underwater_city: {
+    format: 'simple',
+    theme: `LEGO COMPLETE-TOWN SCENE+STORY POOL — UNDERWATER CITY. Each entry is ONE complete brick UNDERWATER CITY town/village/city WITH a story going on, 35-65 words. UNMISTAKABLY UNDERWATER CITY: a glowing undersea city in a trans-blue dome-world — bubble-domed buildings, coral towers, kelp avenues, glowing jellyfish street-lamps, submarine docks; diver + merfolk + colonist minifigs, fish schools. Each scene must (1) be deeply genre-specific — name 3-6 SIGNATURE UNDERWATER CITY buildings/elements so it could ONLY be this genre; (2) have a READABLE STORY beat — an event happening + townsfolk reacting. TONE RANGE is wide open: funny / surreal / crazy / heartwarming / dramatic / just-gorgeous — VARY it hard across entries (some hilarious, some beautiful, some weird). Everything is LEGO BRICK (studs visible, minifigs). NON-REPEATING — every entry a DISTINCT scene + DISTINCT story; never reuse a building set or a story beat. NO photoreal, NO tilt-shift.`,
+    touchpoints: [
+      `An underwater dome-city where a curious octopus has comically wrapped itself around the bubble-dome traffic-light, snarling the submarine-traffic as merfolk gesture and a diver tries to coax it off`,
+      `A glowing undersea city at the jellyfish festival, the whole town drifting through kelp-avenues lit by pulsing jelly-lamps, a comic bubble-ride mishap sending a merfolk tumbling, festive`,
+      `A serene underwater city at "dawn" as light filters down through the trans-blue water, coral towers glowing, a whale gliding silently overhead, merfolk opening shell-shops, beautiful`,
+      `A surreal undersea city where a sunken treasure-chest has burst and the gold is comically floating UP through the streets, everyone swimming after it as it drifts past the dome-windows`,
+      `An underwater market where a fish-school has stampeded through the bubble-domes scattering the stalls, comic chaos of drifting goods, a merfolk vendor calmly catching her wares`,
+      `A deep undersea city at the trench-edge, bioluminescent towers against the dark, a submarine docking, residents on the dome-balconies watching glowing creatures pass, mysterious and gorgeous`,
+    ],
+    instructions: `Each entry is ONE complete UNDERWATER CITY town-scene-with-story, 35-65 words. Format: free-flowing prose that LEADS with the genre place + names its signature buildings, then the story beat + the townsfolk reaction. Output a NUMBERED list (1. ... 2. ...), one entry per line, NO internal newlines. STRICT BANS: no photoreal / CGI / tilt-shift / lifelike; ALL brick; NON-REPEATING (distinct scene + story each); VARY the tone (mix funny, surreal, dramatic, pretty); stay 100% in the UNDERWATER CITY genre.`,
   },
 
   brickbot_favorite_towns_build_scope: {
     format: 'simple',
-    theme: `LEGO MACRO-BUILD SCOPE — the scale + complexity signature of a complete-diorama build. Each entry 15-30 words, describing HOW the whole build is organized + how ambitious it reads.
-
-VARIETY: sprawling multi-zone modular layout / vertical-tiered tower-build / wide-landscape panorama diorama / cutaway-cross-section reveal / dense micro-scale city / GBC-functional working-build / interconnected modular-streetscape / island-on-a-baseplate / split-level upper-and-under (above + below ground) / radial-build-around-a-hub.
-
-Each names the organizing structure + a brick-scale cue (number of baseplates, zone-count, level-count). NO photoreal.`,
+    theme: `TOWN LAYOUT + SCALE for BrickBot favorite-towns — how the complete brick town is organized. Each entry 12-25 words. Generic across genres.`,
     touchpoints: [
-      'A sprawling multi-zone modular layout spanning several baseplates, distinct connected districts (residential / market / waterfront) each densely built, the whole reading as a large coherent world',
-      'A vertical-tiered tower-build rising through many brick levels — street-base, mid-rise floors, rooftop — each level fully detailed and visible in a tall slender footprint',
-      'A wide-landscape panorama diorama, low and broad across several baseplates, terrain + structures receding into a deep brick distance, the epic-vista build',
-      'A cutaway-cross-section reveal — one face of the build sliced open to show interior floors / mine-shafts / decks layered behind the intact exterior, the AFOL display-cutaway',
-      'A dense micro-scale city packed onto a compact footprint, hundreds of micro-buildings + tiny vehicles, the whole metropolis legible at a glance, the obsessive micro-build',
-      'A GBC-functional working-build where parts visibly move (a turning wheel, a chain-lift, a flowing-element loop), the engineering as much the wow as the scenery',
-      'An interconnected modular-streetscape of several modular-building modules slotted side by side into a continuous brick street, each shop fully furnished inside',
-      'An island-on-a-baseplate, the whole world ringed by trans-blue water with a rockwork shore falling off the baseplate edge, a self-contained brick world',
-      'A split-level upper-and-under build, a surface world above and a cutaway cave / sewer / mine network below, two complete worlds stacked',
-      'A radial-build organized around a central hub (a plaza / a tree / a tower) with detailed districts radiating outward, the eye drawn in then out',
+      `Sprawling modular streetscape across several baseplates, distinct districts packed wall-to-wall`,
+      `Vertical-tiered hill-town, buildings stacked up a slope-brick rise, stairs + terraces linking levels`,
+      `Dense micro-metropolis, hundreds of tiny buildings + vehicles packed onto a compact footprint`,
+      `Canal/waterway network threading the town, bridges + boats linking the districts`,
+      `A single grand main-street running the length of the build, shopfronts both sides receding to a vanishing point`,
+      `Central market-square hub with streets radiating outward into detailed quarters`,
+      `Cliffside-terraced town tumbling down to a waterfront, switchback lanes + retaining walls`,
+      `Cutaway cross-section showing the street AND building interiors at once`,
     ],
-    instructions: `Each entry is ONE build-scope, 15-30 words. Format: prose naming the organizing structure + a brick-scale cue. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal; this is about how the WHOLE brick build is organized.`,
-  },
-
-  brickbot_favorite_towns_signature_centerpiece: {
-    format: 'simple',
-    theme: `LEGO MACRO-DIORAMA SIGNATURE CENTERPIECES — the dramatic focal wow that anchors a complete-diorama build. Each entry 15-30 words. The thing that makes a convention-goer stop.
-
-VARIETY: a towering castle keep / a launching rocket / a frozen crashing wave / a brick dragon mid-descent / a working ferris-wheel / a multi-tier waterfall / a train mid-bridge-cross / an erupting volcano / a grand cathedral / a colossal ancient tree / a lighthouse on a crag / a giant mech under construction / a crashed UFO / a great suspension-bridge / a tiered pagoda / a windmill.
-
-Each names the centerpiece + its brick build + why the eye locks on it. NO photoreal.`,
-    touchpoints: [
-      'A towering castle keep crowning the build on a stacked-plate crag, banner-tiles flying from its turrets, the tallest brick element drawing every sightline up to it',
-      'A launching rocket frozen mid-liftoff on the pad, a trans-orange flame-plume blasting down, gantry-arms swinging clear, the vertical drama anchoring the colony',
-      'A frozen crashing wave built in SNOT-curled trans-light-blue with white round-plate foam towering over the harbor, caught at the break, the kinetic centerpiece',
-      'A brick dragon mid-descent, wings spread on bar-armatures over the town, trans-orange fire-breath built toward a rooftop, the whole realm cowering beneath it',
-      'A working ferris-wheel turning at the build\'s heart, gondola-cabins ringed in trans-element lights, the rotating focal hub the fairground radiates from',
-      'A multi-tier waterfall of stepped trans-blue plates cascading down a stacked-plate cliff into a basin pool, white round-plate spray, the build\'s glittering centerpiece',
-      'A steam-train frozen mid-cross on a tall brick trestle-bridge spanning a gorge, smoke-plume rising, the dynamic centerpiece linking two halves of the build',
-      'An erupting volcano at the build\'s core, trans-orange + trans-red lava-element flows snaking down its slope-brick cone, a cotton ash-plume, the dramatic heart',
-      'A grand cathedral with soaring SNOT-built spires + a rose-window of trans-element plates, the sacred centerpiece towering over the medieval town around it',
-      'A colossal ancient tree built from a massive round-brick trunk with a plant-element canopy shading half the build, treehouses in its limbs, the living centerpiece',
-      'A lighthouse on a rockwork crag, its trans-yellow lamp sweeping over the harbor, the tall slender beacon anchoring the coastal world',
-      'A great brick suspension-bridge arcing across the whole diorama on cable-strung towers, traffic threading it, the engineering centerpiece spanning the build',
-    ],
-    instructions: `Each entry is ONE signature centerpiece, 15-30 words. Format: prose naming the centerpiece + its brick build + the eye-lock. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal; brick-built focal feature that anchors a complete diorama.`,
+    instructions: `Each entry ONE town-layout, 12-25 words. Numbered list. Names the organizing structure + a brick-scale cue. No photoreal.`,
   },
 
   brickbot_favorite_towns_camera_framing: {
     format: 'simple',
-    theme: `MACRO-DISPLAY CAMERA FRAMING — wide complete-build framings for the favorite-towns path. Each entry 15-30 words. ALWAYS shows the WHOLE diorama; never zooms into a single subject. DEEP-FOCUS edge-to-edge sharp — NEVER tilt-shift / miniature-blur.
-
-VARIETY MANDATE — distribute across: high-three-quarter aerial overview, eye-level along the baseplate-edge, corner-establishing showing two edges, top-down plan-view, hero three-quarter with edge-baseplate visible, dramatic low across the build, slow-establishing wide pull-back, deep-focus wide sweep.
-
-Each: specify camera POSITION + that it captures the WHOLE build; reference the complete-diorama read.`,
+    theme: `DEEP-FOCUS TOWN CAMERA FRAMING for BrickBot favorite-towns — wide angles that show the WHOLE town sharp. Each entry 15-30 words. Always deep-focus, never tilt-shift.`,
     touchpoints: [
-      'HIGH-THREE-QUARTER AERIAL — camera high and angled down across the whole build, every zone laid out below from foreground to deep background, the master complete-diorama overview',
-      'EYE-LEVEL ALONG-THE-BASEPLATE — camera low at table-height raking across the build from one edge, deep front-to-back layering, the immersive walk-up-to-it convention view',
-      'CORNER-ESTABLISHING — camera at a build corner showing two baseplate edges receding, the full L-shaped extent of the world visible, the wide establishing angle',
-      'TOP-DOWN PLAN-VIEW — camera straight down, the whole diorama read as a complete brick map, every district + path legible, the architect\'s plan view',
-      'HERO THREE-QUARTER WITH EDGE-BASEPLATE — the classic convention-display angle, three-quarter from slightly above with the front baseplate-edge + title-brick visible, the whole build proud in frame',
-      'DRAMATIC LOW ACROSS-THE-BUILD — camera very low at one edge so the foreground structures tower and the build recedes dramatically to the centerpiece, depth-charged wide shot',
-      'DEEP-FOCUS WIDE SWEEP — camera wide with the whole build tack-sharp edge-to-edge, every zone in crisp focus from foreground to deep background, the convention-display clarity, never blurred',
-      'SLOW-ESTABLISHING WIDE PULL-BACK — the camera pulled fully back so the entire diorama + its display-base sit centered in frame with breathing room, the complete-masterpiece reveal',
-      'GENTLE-AERIAL-SWEEP — a slightly-angled near-overhead capturing the build\'s full sprawl with just enough obliqueness to read the heights of towers + the centerpiece',
-      'DIAGONAL-CORNER-DEPTH — camera at a corner shooting along the build\'s diagonal, the longest sightline through all the zones to the far centerpiece, maximal depth',
+      `STREET-LEVEL DOWN-THE-MAIN-DRAG — low, receding down the main street, shops + crowds + story both sides, tack-sharp to the far end`,
+      `HIGH-THREE-QUARTER AERIAL — looking down + across the whole town, every district + the story visible, edge-to-edge crisp`,
+      `TOWN-SQUARE OVERHEAD — straight-ish down on the central plaza where the story climaxes, crowd ringed around`,
+      `BIRD'S-EYE PLAN — near-top-down, the whole town read as a complete map, all streets legible`,
+      `ROOFTOP-SKYLINE VISTA — from a high roof across the town to its landmark + the deep distance`,
+      `THROUGH-AN-ARCHWAY / GATE — framed by a foreground arch, the town revealed beyond in deep focus`,
+      `CANAL / WATER-LEVEL — low at the waterline looking down the waterway through the town`,
+      `CORNER-ESTABLISHING — from a town corner showing two baseplate edges + the full extent`,
     ],
-    instructions: `Each entry is ONE macro-display framing, 15-30 words. Format: "FRAMING NAME — body". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: never a single-subject close-up — every entry shows the WHOLE build, DEEP-FOCUS edge-to-edge sharp. NEVER tilt-shift / miniature-blur / shallow-DOF. No photoreal vocabulary.`,
+    instructions: `Each entry ONE deep-focus town framing, 15-30 words, "NAME — body". Numbered list. ALWAYS shows the whole town tack-sharp; NEVER tilt-shift/miniature-blur. No photoreal.`,
+  },
+
+  brickbot_favorite_towns_weather: {
+    format: 'simple',
+    theme: `WEATHER for BrickBot favorite-towns (secret sauce) — the atmospheric condition over the town, rendered IN BRICK. Each entry 12-22 words.`,
+    touchpoints: [
+      `Clear bright blue sky, crisp shadows, the town in full cheerful color`,
+      `Rain-slick streets, trans-blue puddle-reflections, white round-plate raindrops on clear rods, umbrellas everywhere`,
+      `Snow falling, white 1x1 round-plates drifting on rods, white-plate snow capping every roof`,
+      `Rolling fog, low cotton-element haze between the buildings softening the far district`,
+      `Golden sunset sky, a built trans-orange + trans-pink plate skyscape behind the rooftops`,
+      `Dramatic thunderstorm, dark round-plate cloud-bank, a trans-clear lightning bolt over the town`,
+      `Aurora night, built trans-green + trans-cyan plate curtains over the dark town`,
+      `Autumn leaf-fall, orange + russet leaf-elements drifting on rods across the streets`,
+      `First-snow dusting, a fresh thin white-plate layer newly capping the whole town`,
+      `Misty drizzle, fine cotton haze + scattered trans-clear specks, slick cobbles`,
+    ],
+    instructions: `Each entry ONE weather condition, 12-22 words, rendered in named brick parts. Numbered list. No photoreal-weather.`,
+  },
+
+  brickbot_favorite_towns_time_of_day: {
+    format: 'simple',
+    theme: `TIME OF DAY for BrickBot favorite-towns (secret sauce) — when the scene is set + how it lights the brick town. Each entry 12-22 words.`,
+    touchpoints: [
+      `Dawn-mist — soft pink first light, cool shadows, the town just waking`,
+      `Bright midday — strong high sun, saturated colors, short crisp shadows`,
+      `Warm golden-hour — low amber light raking the rooftops, long warm shadows`,
+      `Blue-hour dusk — deep cobalt sky, the first warm window-lights glowing on`,
+      `Night aglow — dark sky, hundreds of warm trans-element windows + lamps + signs lit across the town`,
+      `Deep midnight — quiet, most windows dark, a few late lit ones, moonlit roofs`,
+      `First-light — a single warm-lit edge of town against a cool pre-dawn sky`,
+    ],
+    instructions: `Each entry ONE time-of-day, 12-22 words, naming how it lights the brick town. Numbered list. No photoreal.`,
   },
 
   brickbot_favorite_towns_life_density: {
     format: 'simple',
-    theme: `MACRO-DIORAMA LIFE DENSITY — how a complete-diorama world is populated + activated. Each entry 15-30 words. Makes the world read as LIVING, not an empty model.
-
-VARIETY: bustling micro-crowds + market-life / vehicles-and-trains-in-motion / quiet atmospheric few-figures / wildlife-and-nature dense / festival-or-battle massed-action / workaday street-life / harbor-and-shipping activity / tourists-and-sightseers / construction-in-progress / nighttime-few-lit-windows.
-
-Each names the population/activity + how it spreads across the build. Tiny minifigs, brick vehicles, brick creatures — never photoreal.`,
+    theme: `LIFE DENSITY for BrickBot favorite-towns (secret sauce) — how populated + active the town is. Each entry 12-25 words. Minifigs only, never photoreal people.`,
     touchpoints: [
-      'Bustling micro-crowds + market-life — dozens of tiny minifigs massed through the streets + market-stalls, shoppers + vendors + buskers, the world humming with packed activity in every zone',
-      'Vehicles-and-trains-in-motion — brick cars threading the roads, a train mid-route, boats on the trans-blue water, the build kinetic with traffic frozen mid-movement throughout',
-      'Quiet atmospheric few-figures — only a scattered handful of minifigs (a lone walker, a fisher, a window-watcher), the world calm + contemplative, detail-rich but still',
-      'Wildlife-and-nature dense — brick birds + deer + fish + butterflies populating a nature-heavy build, animal life threaded through the landscape zones, a living ecosystem',
-      'Festival-or-battle massed-action — a huge crowd-event filling the build (a parade, a siege, a market-day), massed minifigs mid-action across the whole world, peak energy',
-      'Workaday street-life — minifigs going about ordinary business across the build (deliveries, repairs, commutes, shop-tending), the believable everyday rhythm of a real place',
-      'Harbor-and-shipping activity — dockworkers + cranes loading moored ships, carts on the quay, fishers mending nets, the working-port bustle spread along the waterfront',
-      'Tourists-and-sightseers — clusters of camera-toting minifig visitors at the build\'s landmarks + viewpoints, guides + souvenir-stalls, the destination-world read',
-      'Construction-in-progress — part of the build shown mid-construction with crane-builds + scaffold + worker-minifigs + material-stacks, the living-growing-world detail',
-      'Nighttime-few-lit-windows — a quiet night build with most of the world dark and a scattering of warm trans-element lit windows + a few late minifigs, the cozy-after-hours read',
+      `Bustling market-crowds — dozens of minifigs packed through the streets + stalls, the town humming`,
+      `Quiet early-morning — only a scattered few minifigs, shutters opening, calm and still`,
+      `Festival-packed — a huge crowd-event filling the streets, massed minifigs mid-celebration`,
+      `Ordinary workday rhythm — minifigs going about believable daily business, deliveries + commutes`,
+      `Nighttime-sparse — a few late minifigs + lit windows, the town mostly asleep`,
+      `Chaos-everyone-reacting — the whole town caught mid-reaction to the story event, crowds in motion`,
     ],
-    instructions: `Each entry is ONE life-density, 15-30 words. Format: prose naming the population/activity + its spread. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: minifigs + brick vehicles/creatures only, never photoreal people.`,
+    instructions: `Each entry ONE life-density, 12-25 words. Numbered list. Tiny minifigs + brick vehicles only, mid-reaction to the scene. No photoreal people.`,
   },
 
   brickbot_favorite_towns_baseplate_edge: {
     format: 'simple',
-    theme: `MACRO-DIORAMA BASEPLATE-EDGE TREATMENTS — the display-base edge that signals "this is a finished LEGO build on a table." Each entry 12-25 words. A deliberate charming feature of the favorite-towns path.
-
-VARIETY: visible stud-baseplate edge / finished tiled border / landscaped edge-falloff to bare studs / black display-base with a title-brick / multi-baseplate seams across the build / rockwork-cliff edge / water-edge trans-blue lip / brick-built retaining-wall edge / sloped grass-falloff edge / mirror-base reflecting the build.
-
-Each names the edge treatment + how it frames the build. NO photoreal.`,
+    theme: `BASEPLATE-EDGE TREATMENTS for BrickBot favorite-towns — the display-base edge that signals a finished LEGO town diorama on a table. Each entry 12-22 words.`,
     touchpoints: [
-      'A visible green stud-baseplate edge running along the front of the build, the bare studs at the margin openly signalling the finished LEGO diorama on its table',
-      'A finished tiled border framing the whole build in smooth dark tiles, a clean display-edge that sets off the detailed world within like a picture-frame',
-      'A landscaped edge-falloff where the terrain tapers down to bare baseplate studs at the margins, the world dissolving naturally into the display-base',
-      'A black display-base with a printed title-brick at the front edge naming the build, the classic convention-presentation plinth under the diorama',
-      'Multi-baseplate seams visible across the build where several baseplates join, the modular construction honestly shown, a hallmark of a big AFOL diorama',
-      'A rockwork-cliff edge where the build sits on a stacked slope-brick mesa that drops sheer to the baseplate rim, the world raised on its own brick plateau',
-      'A trans-blue water-edge lip where the build\'s ocean/lake runs right to the baseplate margin and stops in a clean trans-plate edge, the water-world boundary',
-      'A brick-built retaining-wall edge ringing the diorama in a low stone-brick wall, containing the world like a raised display-bed',
-      'A sloped grass-falloff edge of green slopes tapering off the build\'s rim down to the table, a soft natural diorama boundary',
-      'A mirror-base under one side so the build\'s reflection doubles it at the edge, an AFOL display-trick extending the world downward',
+      `Visible green stud-baseplate edge along the front, the bare studs openly framing the town`,
+      `Finished tiled border framing the whole town in smooth dark tiles like a picture-frame`,
+      `Landscaped edge-falloff where streets + terrain taper to bare baseplate studs at the margins`,
+      `Black display-base with a printed title-brick at the front naming the town`,
+      `Multi-baseplate seams visible across the build where several plates join`,
+      `Water-edge lip where the town's canal/harbor runs to the baseplate margin in a clean trans-plate edge`,
+      `Rockwork-cliff edge, the town raised on a stacked slope-brick plateau dropping to the rim`,
     ],
-    instructions: `Each entry is ONE baseplate-edge treatment, 12-25 words. Format: prose naming the edge treatment + how it frames the build. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal; this is the deliberate "tabletop LEGO build" display-edge signal.`,
-  },
-
-  brickbot_favorite_towns_lighting: {
-    format: 'simple',
-    theme: `MACRO-DISPLAY LIGHTING — light for a complete-diorama LEGO MOC photo. Each entry 15-30 words. Lights a whole TABLETOP BRICK DIORAMA — convention-display + studio macro lighting.
-
-VARIETY: convention-hall even-bright / dramatic spotlit-centerpiece / golden diorama-glow / dusk with all the build-lights ON / crisp deep-focus display light / morning soft-even / theatrical single-key / warm display-case glow.
-
-Each names SOURCE + how it reveals the whole build. NEVER photoreal-sun/lifelike language.`,
-    touchpoints: [
-      'Convention-hall even-bright light, a clean bright wash revealing every detail of the whole build evenly corner to corner, the honest display-photo lighting',
-      'Dramatic spotlit-centerpiece, a hard key picking out the signature centerpiece while the surrounding zones fall to a softer fill, the theatrical reveal',
-      'Golden diorama-glow, a warm low-angle light raking across the whole build gilding the rooftops + towers, long soft shadows, the magic-hour display shot',
-      'Dusk with all the build-lights ON, the diorama in deep-blue ambient with hundreds of warm trans-element windows + ride-lights + lamps glowing across the world, the night-build spectacle',
-      'Crisp deep-focus display light, a bright even key making every brick detail across the whole build pop in sharp edge-to-edge clarity, the clean convention-photo look',
-      'Morning soft-even light, a gentle cool-bright wash over the build with soft shadows, the fresh calm display mood',
-      'Theatrical single-key from one side, raking long dramatic shadows across the whole build for maximum relief + depth, the gallery-display drama',
-      'Warm display-case glow, a soft warm light as if from display-case spots above, the build glowing like a treasured museum piece on its plinth',
-      'High-noon top-light, a strong even overhead making colors pop across the whole build with short crisp shadows, the bright bold daytime read',
-      'Blue-hour transition, the build caught between daylight and lit-windows, cool sky-ambient with the first warm interior glows, the atmospheric dusk-display',
-    ],
-    instructions: `Each entry is ONE macro-display lighting setup, 15-30 words. Format: prose naming source + how it reveals the whole build. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: no photoreal-sun/lifelike — it lights a tabletop brick diorama. DEEP-FOCUS — no tilt-shift / shallow-DOF.`,
+    instructions: `Each entry ONE baseplate-edge treatment, 12-22 words. Numbered list. The deliberate tabletop-LEGO-diorama display signal. No photoreal.`,
   },
 
   brickbot_favorite_towns_palette: {
     format: 'simple',
-    theme: `MACRO-DISPLAY PALETTE — the cohesive dominant color-story of a complete-diorama build. Each entry 12-25 words, naming 3-5 specific brick colors + the theme it suits.
-
-VARIETY (theme-cohesive): alpine white+timber+pine / mars rust+white+trans-cyan / port blue+sandstone+timber / castle grey+heraldic+timber / fairground neon+candy / city concrete-grey+glass+greenery / fantasy emerald+gold+stone / winter red+green+white+gold / desert ochre+tan+adobe / harbor navy+weathered-timber+stone / jungle green+stone+gold / steampunk brass+bronze+rust.
-
-Each names ACTUAL LEGO brick colors + a COHESIVE display read (the whole build hangs together).`,
+    theme: `PALETTE for BrickBot favorite-towns — cohesive LEGO-brick color story, often genre-tinted. Each entry 12-22 words, naming 3-5 brick colors + mood.`,
     touchpoints: [
-      'Alpine palette — snow-white + timber-brown + pine-green + slope-grey, a crisp cohesive mountain-resort color-story',
-      'Mars palette — rust-red + clean-white + trans-cyan + dark-bley, the off-world colony look',
-      'Port palette — harbor-blue + sandstone-tan + weathered-timber + grey, a coherent maritime color-story',
-      'Castle palette — stone-grey + heraldic red-and-gold + timber-brown, a unified medieval-realm look',
-      'Fairground palette — neon trans-multi + candy-pink + cream + navy, the cohesive amusement-park glow',
-      'City palette — concrete-grey + glass-blue + brick-red + greenery accents, a believable modern-block read',
-      'Fantasy palette — emerald + gold + ancient-stone-grey + amber, a cohesive high-fantasy realm',
-      'Winter-village palette — festive red + green + snow-white + gold, the warm cohesive holiday look',
-      'Desert palette — ochre + tan + adobe-brown + pale-azure, a unified frontier-town color-story',
-      'Steampunk palette — brass + bronze + rust + bottle-green, a cohesive retro-industrial metropolis',
+      `Cyberpunk neon — trans-magenta + trans-cyan + black + wet-street reflections`,
+      `Fantasy-warm — stone-grey + timber-brown + heraldic red-and-gold`,
+      `Cozy-pastel — cream + sage + warm-brick-red + soft-blue, comfort-food charm`,
+      `Fairy-glow — lavender + teal + gold + warm-lantern-amber`,
+      `Sunset-gold — amber + magenta + warm-rooftop-terracotta + long-shadow-blue`,
+      `Snowy-cool — white + ice-blue + timber + warm-window-amber`,
+      `Desert-warm — sand + ochre + adobe-brown + turquoise-tile accents`,
+      `Tropical — turquoise + coral + ivory-sand + jade-palm`,
+      `Steampunk-brass — brass + bronze + bottle-green + foggy-grey`,
+      `Undersea-glow — trans-blue + trans-cyan + coral-pink + bioluminescent accents`,
     ],
-    instructions: `Each entry is ONE macro-display palette, 12-25 words. Format: "NAME palette — colors + theme". Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: name ACTUAL LEGO brick colors; no photoreal-color; emphasize a COHESIVE whole-build read.`,
+    instructions: `Each entry ONE palette, 12-22 words, "NAME — colors + mood", actual LEGO brick colors. Numbered list. No photoreal-color.`,
   },
 
-  brickbot_favorite_towns_surprise_easter_egg: {
+  brickbot_favorite_towns_comedic_surreal_twist: {
     format: 'simple',
-    theme: `MACRO-DIORAMA EASTER-EGGS — the hidden second-look delight in a complete-diorama build. Each entry 15-30 words. SMALL — never dominates; rewards the eye that lingers.
-
-VARIETY: a brick dragon peeking from a cave / a tiny figure in comic peril (clinging to a ledge) / a hidden cat-on-a-roof / a working hidden-mechanism reveal / a sleeping giant half-buried / a message in a window / a tiny wedding / a runaway barrel / a fishing-minifig who caught a boot / a UFO behind a cloud / a sea-monster tail in the harbor / a couple kissing on a balcony / a thief mid-escape over rooftops.
-
-Each names the small hidden detail + where it hides. NO photoreal.`,
+    theme: `COMEDIC / SURREAL TWIST for BrickBot favorite-towns (50%-gated FUN amplifier) — an extra absurd/funny/surreal layer dropped onto the town scene, all in brick. Each entry 15-30 words. Genre-agnostic (works in any town).`,
     touchpoints: [
-      'A small brick dragon peeking from a dark cave-mouth on the back hillside, easy to miss until a second look rewards the eye',
-      'A tiny minifig in comic peril clinging by one C-hand to a clock-tower ledge high on the build, a hat fluttering below',
-      'A hidden cat-build perched on a far rooftop watching a bird, a quiet domestic touch tucked in the skyline',
-      'A runaway barrel mid-roll down a steep lane with a minifig chasing, a frozen slapstick beat hidden in the streets',
-      'A tiny wedding on a side-chapel step, a white-dress + top-hat minifig pair and a few guests, a sweet hidden moment',
-      'A sea-monster tail-coil breaking the trans-blue harbor surface behind the moored ships, a hidden hint of something below',
-      'A thief mid-escape leaping the rooftops with a swag-bag, a guard a roof behind, a hidden chase across the skyline',
-      'A sleeping giant half-buried as a grassy hillside, a brick face + hand emerging from the turf, the world built on a slumbering titan',
-      'A fishing-minifig on the quay who has hooked an old boot-element, line bent, a wry hidden gag at the water-edge',
-      'A UFO-build half-hidden behind a cotton cloud high over the build, trans-green glow, a tiny abductee-beam on a far field',
-      'A couple kissing on a high balcony lit by a single trans-element lamp, a tender hidden vignette above the busy street',
-      'A tiny band playing in an alcove with a tip-jar, music implied, a hidden pocket of life off the main square',
+      `A giant friendly creature has wandered into the streets and the townsfolk are reacting (some fleeing, some selling it snacks)`,
+      `It's raining something absurd — rubber ducks / fish / cupcakes — pattering across the rooftops as people scramble with buckets`,
+      `A UFO is hovering low over the square, double-parked, a single alien sheepishly asking a townsperson for directions`,
+      `A runaway food-cart catastrophe — barrels, fruit, and a chain-reaction of pratfalls cascading down the main street`,
+      `Everything in one district has comically tipped 10 degrees and the townsfolk are gamely carrying on at an angle`,
+      `A tiny disaster (a stuck cat / a lost balloon / a toppled statue) the whole town is wildly overreacting to`,
+      `A parade of animals has escaped and is calmly walking the main street as if they own it, owners in pursuit`,
+      `A magic mishap — the fountain is now soup / the statues are dancing / everyone's hats have come alive`,
+      `One enormous everyday object (a teapot, a boot, a cat) sits inexplicably town-sized in the square, used as a landmark`,
+      `A spectacular but harmless mishap (a launched cake, a runaway wheel, a sprung awning) freezing the whole street mid-react`,
     ],
-    instructions: `Each entry is ONE easter-egg, 15-30 words. Format: prose naming the small hidden detail + where it hides. Output as a NUMBERED list (1. ... 2. ...), one per line, NO internal newlines. STRICT BANS: keep it SMALL (never dominant); LEGO/brick only; no photoreal.`,
+    instructions: `Each entry ONE comedic/surreal twist, 15-30 words, all rendered in brick + woven into the town with townsfolk reacting. Numbered list. Funny/absurd/surreal; never grim. No photoreal.`,
   },
 
   // ════════════════════════════════════════════════════════

@@ -17,7 +17,7 @@ function load(name) {
 // Pool filenames convert to snake_case via toFile().
 const PATHS = [
   'macro-display',
-  'favorite-towns',
+  'crazy-islands',
   'girly',
   'lego-masters',
   'western',
@@ -51,18 +51,20 @@ for (const p of PATHS) {
 // `bot.poolByName(name)` from the brief-composer.
 // ─────────────────────────────────────────────────────────────
 
+// ── crazy-islands: fun/crazy tropical-island SCENE path (2026-05-27) ──
+// Forked from favorite-towns (town genres dropped). One rich island_scene hero
+// pool (varied fun/crazy + ~35% serene, each a readable single-hero scene) +
+// lean secret-sauce axes. No tag-filtering — single theme.
+
 const AXIS_POOLS = {
-  // favorite-towns path — bit-for-bit clone of macro-display (2026-05-27),
-  // forked to iterate independently. Identical pools to start.
-  BRICKBOT_FAVORITE_TOWNS_DIORAMA_THEME: load('brickbot_favorite_towns_diorama_theme'),
-  BRICKBOT_FAVORITE_TOWNS_BUILD_SCOPE: load('brickbot_favorite_towns_build_scope'),
-  BRICKBOT_FAVORITE_TOWNS_SIGNATURE_CENTERPIECE: load('brickbot_favorite_towns_signature_centerpiece'),
-  BRICKBOT_FAVORITE_TOWNS_CAMERA_FRAMING: load('brickbot_favorite_towns_camera_framing'),
-  BRICKBOT_FAVORITE_TOWNS_LIFE_DENSITY: load('brickbot_favorite_towns_life_density'),
-  BRICKBOT_FAVORITE_TOWNS_BASEPLATE_EDGE: load('brickbot_favorite_towns_baseplate_edge'),
-  BRICKBOT_FAVORITE_TOWNS_LIGHTING: load('brickbot_favorite_towns_lighting'),
-  BRICKBOT_FAVORITE_TOWNS_PALETTE: load('brickbot_favorite_towns_palette'),
-  BRICKBOT_FAVORITE_TOWNS_SURPRISE_EASTER_EGG: load('brickbot_favorite_towns_surprise_easter_egg'),
+  // crazy-islands path — fun/crazy tropical-island SCENE path (2026-05-27).
+  // One varied island_scene hero pool + lean secret-sauce axes (no tag-filter).
+  BRICKBOT_CRAZY_ISLANDS_SCENE: load('brickbot_islands_scene'),
+  BRICKBOT_CRAZY_ISLANDS_CAMERA_FRAMING: load('brickbot_islands_camera'),
+  BRICKBOT_CRAZY_ISLANDS_TIME_OF_DAY: load('brickbot_islands_time'),
+  BRICKBOT_CRAZY_ISLANDS_LIFE_DENSITY: load('brickbot_islands_life'),
+  BRICKBOT_CRAZY_ISLANDS_SHORELINE_EDGE: load('brickbot_islands_edge'),
+  BRICKBOT_CRAZY_ISLANDS_PALETTE: load('brickbot_islands_palette'),
 
   // lego-masters path — thirteenth BrickBot axis migration (2026-05-27)
   BRICKBOT_LEGO_MASTERS_NARRATIVE_CONCEPT: load('brickbot_lego_masters_narrative_concept'),

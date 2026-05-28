@@ -84,24 +84,27 @@ Bending advantage: scene_type × subject_focus × register × girly_phenomenon d
     anchorScaleRange: null,
   },
 
-  BRICKBOT_FAVORITE_TOWNS: {
-    description: `PATH-BESPOKE — BrickBot favorite-towns path (2026-05-27). BIT-FOR-BIT CLONE of BRICKBOT_MACRO_DISPLAY at its hearted deep-focus state, forked into its own path so it can be iterated independently without touching macro-display. Same 8 slots + conditional (diorama_theme / build_scope / signature_centerpiece / camera_framing / life_density / baseplate_edge / lighting / palette + surprise_easter_egg-50%). Starting point identical to macro-display; will diverge as Kevin iterates.`,
+  BRICKBOT_CRAZY_ISLANDS: {
+    description: `PATH-BESPOKE — BrickBot crazy-islands path (2026-05-27; forked from favorite-towns, itself from macro-display's hearted deep-focus state). THE FUN/CRAZY TROPICAL-ISLAND SCENE path — 100% dedicated to playful island scenes, each a READABLE single-hero brick scene set in a tropical-island environment. BrickBot's most playful path: mostly FUNNY / SURREAL / CRAZY island happenings — giant brick creatures are just ONE of many ideas (also volcano hijinks, castaway contraptions, pirate/kraken mishaps, monkey heists, runaway sandcastles, seaplane splashdowns, luau chaos, surf spectacle, tiki magic, message-bottle armadas, coconut avalanches, etc.) — with ~35% gorgeous SERENE tropical views (a lone minifig fishing off a dock at golden hour, a mirror-still lagoon). Carries the hearted deep-focus look (wide, scene sharp, NOT tilt-shift) + the load-bearing 100%-LEGO-brick rule (creatures/waves/lava = blocky stud-covered brick SCULPTURES, never organic CGI). KEY: every scene READABLE — ONE clear hero idea, never cluttered or busy.
+
+Reference (Kevin's hearted examples, 2026-05-27): a giant blue brick parrot over a tropical town; a flame-crested brick parrot looming over an island tavern; a serene minifig on a brick dock over a turquoise lagoon. That mix — roughly 2 fun/crazy : 1 pretty.
+
+6 path-bespoke slots (lean, readability-first — no town_genre, no conditional twist; the crazy is baked INTO the scene so each frame stays clean + readable):
+  • island_scene    — THE STAR AXIS: one complete, readable, fun/crazy (or occasionally serene) tropical-island scene with its setting baked in. Wide variety of distinct ideas, non-repeating, ~65% crazy + ~35% pretty.
+  • camera_framing  — deep-focus island angle (beach-level-wide / high-three-quarter-aerial / water-level-off-the-dock / through-the-palms / dock-receding / bird's-eye-atoll / cliff-vista / low-hero-angle)
+  • time_of_day     — secret sauce: tropical light + sky/weather built in brick (blazing-midday / golden-sunset / dawn-mist / blue-hour / tropical-storm / post-storm-rainbow / starry-night / breezy-morning)
+  • life_density    — secret sauce: how populated (packed-beach-day / castaway-sparse / everyone-reacting / sleepy-fishing-village / festival-luau / critter-rich)
+  • shoreline_edge  — the tabletop-island-diorama signal (trans-blue water-plate edge / baseplate-stud rim / tiled border / stepped lagoon-shelf / sandy falloff / volcanic-cliff edge) — keeps the hearted diorama feel
+  • palette         — cohesive tropical LEGO-brick color story
+
+Bending advantage: island_scene × camera × time_of_day × life_density are decoupled, so one strong scene pool multiplies into endless distinct readable renders. Deep-focus look preserved (NOT tilt-shift) per Kevin's hearted state.`,
     slots: {
       universal: [],
       bot: [],
-      path: [
-        'diorama_theme',
-        'build_scope',
-        'signature_centerpiece',
-        'camera_framing',
-        'life_density',
-        'baseplate_edge',
-        'lighting',
-        'palette',
-      ],
+      path: ['island_scene', 'camera_framing', 'time_of_day', 'life_density', 'shoreline_edge', 'palette'],
     },
     pickN: {},
-    conditionalLayer: { slot: 'surprise_easter_egg', gate: 0.5 },
+    conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
   },

@@ -213,103 +213,69 @@ ${vibeDirective.slice(0, 200)}
 Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig/mini-doll action + camera framing, weave in the build technique + register + props + lighting + palette + sparkle phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC pastel-whimsy diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
-  // BRICKBOT_FAVORITE_TOWNS — bit-for-bit clone of BRICKBOT_MACRO_DISPLAY at its
-  // hearted deep-focus state (2026-05-27), forked so it can be iterated
-  // independently. Keep in sync ONLY until Kevin starts diverging it.
-  BRICKBOT_FAVORITE_TOWNS: ({ slots, vibeDirective }) => {
-    const {
-      diorama_theme,
-      build_scope,
-      signature_centerpiece,
-      camera_framing,
-      life_density,
-      baseplate_edge,
-      lighting,
-      palette,
-      surprise_easter_egg,
-    } = slots;
+  // BRICKBOT_CRAZY_ISLANDS — the fun/crazy tropical-island SCENE path (2026-05-27).
+  // Forked from favorite-towns (→ macro-display's hearted deep-focus state). A wide
+  // variety of fun/funny/surreal/crazy island happenings (giant creatures are just
+  // ONE idea) + ~35% serene tropical views. READABILITY-FIRST: ONE clear hero idea
+  // per scene, clean composition. Keeps the deep-focus diorama look + 100%-LEGO rule.
+  BRICKBOT_CRAZY_ISLANDS: ({ slots, vibeDirective }) => {
+    const { island_scene, camera_framing, time_of_day, life_density, shoreline_edge, palette } = slots;
 
-    const eggSection = surprise_easter_egg
-      ? `
-━━━ HIDDEN EASTER-EGG (the second-look delight) ━━━
-${surprise_easter_egg}
+    return `You are a LEGO MOC photographer + AFOL convention judge + a playful island storyteller, writing ONE fun, crazy tropical-ISLAND scene for BrickBot's most playful path. Output is a 110-160 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
 
-Tuck this in as a SMALL hidden detail the eye finds on a second look — never let it dominate the wide complete-diorama composition.
+━━━ THE BAR — A FUN / CRAZY TROPICAL-ISLAND SCENE, BUILT IN LEGO ━━━
+This is BrickBot's most PLAYFUL path — a Bricklink AFOL champion's tropical-ISLAND diorama with a fun, funny, surreal, or downright CRAZY thing going on (and sometimes just a gorgeous serene island view). The energy: a wild island HAPPENING that makes you grin — volcano hijinks, castaway contraptions, pirate & kraken mishaps, monkey heists, runaway sandcastles, seaplane splashdowns, luau chaos, surf spectacle, tiki magic, a giant brick creature (ONE idea among many) — OR a breathtaking calm lagoon/dock view. It is a LEGO brick model on a tabletop, full of charm. NOT a stock catalog shot, NOT a kid's playset.
 
-`
-      : '';
+━━━ #1 RULE — IT IS 100% LEGO BRICK. THIS OVERRIDES EVERYTHING ELSE ━━━
+This MUST read INSTANTLY as a LEGO build — a model made of plastic LEGO bricks, every surface clearly assembled from pieces. EVERY element (the island AND the hero idea) is built from LEGO bricks, plates, slopes, and tiles with STUDS CLEARLY VISIBLE, glossy injection-molded plastic, brick seams everywhere. If ANYTHING looks smooth, organic, or computer-rendered, the image has FAILED. When in doubt, make it MORE obviously plastic-brick — blockier, more stud-covered.
+The hard cases — these MUST be brick too, never photoreal:
+  • Giant creatures / animals / sea-monsters = blocky LEGO BRICK SCULPTURES, stepped + studded + clearly assembled — NEVER smooth organic CGI creatures
+  • Water / sea / lagoon / waves / splashes = trans-blue + trans-cyan round-plates + tiles in stepped brick layers — NEVER photoreal water
+  • Volcano lava / fire = stacked trans-orange + trans-red + trans-yellow LEGO flame pieces — NEVER photoreal fire
+  • Smoke / steam / ash / clouds = grey + white bricks, round plates, or cotton-ball puffs — NEVER photoreal vapor
+  • Palms / foliage / sand = LEGO plant-elements + tan plates + slopes — NEVER photoreal foliage
+  • Crowds = many tiny LEGO minifigures, studded torsos + cylinder heads — NEVER photoreal people, NEVER real hands or faces
+  • Sky = brick sky-baseplate or plain studio backdrop
 
-    return `You are a LEGO MOC photographer + AFOL convention judge writing a COMPLETE-DIORAMA "behold the whole build" description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+━━━ THE ISLAND SCENE — the hero idea (the heart of this path) ━━━
+${island_scene}
 
-━━━ THE BAR — AFOL CONVENTION BEST-OF-SHOW COMPLETE DIORAMA ━━━
-This is a Bricklink AFOL champion's COMPLETE display diorama, photographed at a LEGO World convention — the whole build in frame as a finished miniature world that wins Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a real-world photo. The defining trait: WIDE, PULLED-BACK, the ENTIRE build visible as a complete tabletop masterpiece, obsessively detailed corner to corner.
-
-━━━ THIS IS THE WHOLE-BUILD VIEW — completeness is the point ━━━
-Frame the ENTIRE diorama in one shot — foreground to background, edge to edge. The viewer should read it as a complete WORLD on a tabletop, not a close-up of one subject. ⚠️ DEEP FOCUS — the WHOLE build is tack-sharp edge-to-edge, front-to-back; NOT tilt-shift, NOT a shallow miniature-blur (Kevin's call for this path). Every zone crisp + detailed; no empty baseplate, no blurred foreground/background.
-
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Every figure is a tiny LEGO minifigure populating the build. NEVER a real human face.
-
-━━━ EVERYTHING IS BRICK — THE WHOLE WORLD IS LEGO ━━━
-EVERY element across the whole diorama is built from real LEGO bricks. NO photoreal anything. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. It sits on a tabletop convention display — and that's a FEATURE, not a flaw.
-  • Terrain / rock / water / snow / foliage = brick + slope + trans-plate + plant-element (per theme) — NEVER photoreal
-  • Buildings / structures = brick-built with visible studs + technique — NEVER photoreal
-  • Crowds / vehicles = many tiny minifigs + brick vehicles — NEVER photoreal
-  • Sky = brick sky-baseplate or studio backdrop — NEVER photoreal
-
-━━━ BANNED VOCABULARY: "photoreal", "real [material]", "lifelike", "realistic miniature" (it's a LEGO build, say "brick-built"). ALSO BANNED for this path: "tilt-shift", "miniature blur", "shallow depth of field", "bokeh", "selective focus" — render DEEP-FOCUS, the whole build sharp.
-
-━━━ THE DIORAMA THEME — the complete world depicted ━━━
-${diorama_theme}
-
-This is what the whole build depicts. Render it as a COMPLETE, fully-realized brick world filling the frame.
-
-━━━ THE BUILD SCOPE — the scale + complexity signature ━━━
-${build_scope}
-
-This is how the build is organized + how ambitious it reads. Make the scope legible (the modular zones / the vertical tiers / the cutaway / the micro-scale density).
-
-━━━ THE SIGNATURE CENTERPIECE — the focal wow that anchors the eye ━━━
-${signature_centerpiece}
-
-A dramatic focal feature that the whole composition builds around — the thing that makes a convention-goer stop walking. Place it as the visual anchor; the rest of the world radiates from it.
+⚠️ ONE CLEAR READABLE HERO IDEA. Stage this scene's single fun/crazy idea (or serene view) as the obvious focal point — the eye lands on it instantly. Keep the composition CLEAN and READABLE: a clear hero in a legible tropical-island setting, NOT a cluttered, busy mess of competing elements. Commit HARD to the tone — if it's funny make it genuinely funny, if crazy make it gleefully crazy, if surreal make it strange, if serene make it breathtaking. Render every specific element the scene names in brick, in its tropical-island setting (sea, palms, sand, lagoon, reef, volcanic peaks, dock).
 
 ━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
 ${camera_framing}
 
-⚠️ NON-NEGOTIABLE — this is a WIDE complete-build framing. Apply the exact angle. Always show the whole diorama; NEVER zoom into a single subject.
-  • HIGH-THREE-QUARTER AERIAL — looking down + across the whole build, all zones visible
-  • EYE-LEVEL ALONG THE BASEPLATE-EDGE — low, raking across the build, depth front-to-back
-  • CORNER-ESTABLISHING — from a corner showing two baseplate edges + the build's full extent
-  • TOP-DOWN PLAN — straight down, the build read as a complete map
-  • HERO THREE-QUARTER WITH EDGE-BASEPLATE VISIBLE — the classic convention-display hero angle
+⚠️ A WIDE island framing in DEEP FOCUS — the whole scene tack-sharp, the hero idea clearly readable. Apply the exact angle. Show the island scene, NOT an extreme close-up portrait, and NOT pulled so far back the brick detail dissolves — the hero idea fills a comfortable, readable portion of the frame.
 
-━━━ THE LIFE DENSITY — how the world is populated ━━━
+━━━ TIME OF DAY + SKY (secret sauce — render in brick) ━━━
+${time_of_day}
+
+Light the whole island to match — but keep DEEP FOCUS, the whole scene tack-sharp.
+
+━━━ LIFE DENSITY — how the island is populated (secret sauce) ━━━
 ${life_density}
 
-Fill the world with this level of minifig + vehicle + creature life so it reads as a LIVING complete diorama, not an empty model.
+Populate with this level of minifig + brick-critter life, reacting to the hero idea, so it reads as a living island.
 
-━━━ THE BASEPLATE EDGE — the "tabletop build" signal ━━━
-${baseplate_edge}
+━━━ THE SHORELINE EDGE — the tabletop-island-diorama signal ━━━
+${shoreline_edge}
 
-Render the display-base treatment at the build's edge — this is what tells the viewer it's a finished LEGO diorama on a table (a deliberate, charming feature of this path).
-
-${eggSection}━━━ LIGHTING ━━━
-${lighting}
+Render this display-base / water edge at the island's margin — the charming "finished LEGO island on a table" signal.
 
 ━━━ PALETTE ━━━
 ${palette}
 
 ━━━ CROSS-AXIS COMPATIBILITY ━━━
-• Whatever the diorama_theme, ALL its elements (terrain, water, buildings, crowds) are brick — never let a theme pull a zone photoreal.
-• The framing ALWAYS shows the complete build; the signature_centerpiece anchors but never crops out the rest of the world.
-• DEEP FOCUS always — the whole build tack-sharp edge-to-edge; NEVER tilt-shift or miniature-blur (the build should look like a crisp convention-display photograph, not a toy-photography miniature effect).
+• ALL elements (island, sea, creatures, sky, crowds) are LEGO brick — never let a zone go photoreal.
+• ONE readable hero idea; clean composition; the framing serves it.
+• DEEP FOCUS always — the whole scene tack-sharp; NEVER tilt-shift or miniature-blur (a crisp convention-display photograph).
+• Commit to the scene's TONE — mostly fun/crazy/funny, sometimes gorgeously serene. This is BrickBot's playful island path.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the diorama-theme + build-scope + signature centerpiece + camera framing, weave in the life-density + baseplate-edge + lighting + palette + easter-egg (if fired). End with one phrase reinforcing AFOL convention-Best-of-Show complete-diorama LEGO MOC photography, DEEP-FOCUS edge-to-edge sharp (NOT tilt-shift). NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 110-160 words. Single paragraph. Comma-separated phrase string. LEAD with the island scene's single hero idea + its tropical-island setting + the camera framing, THEN weave in the time-of-day/sky + life-density + shoreline-edge + palette. End with one phrase reinforcing a complete brick tropical-island diorama, ONE clear readable hero, DEEP-FOCUS edge-to-edge sharp (NOT tilt-shift). NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_MACRO_DISPLAY: ({ slots, vibeDirective }) => {

@@ -22,7 +22,7 @@ const blocks = require('./shared-blocks');
 
 const pathBuilders = {
   'macro-display': require('./paths/macro-display'),
-  'favorite-towns': require('./paths/favorite-towns'),
+  'crazy-islands': require('./paths/crazy-islands'),
   girly: require('./paths/girly'),
   'lego-masters': require('./paths/lego-masters'),
   western: require('./paths/western'),
@@ -70,9 +70,9 @@ module.exports = {
     // f/22 depth-of-field iterations, which didn't beat it). Leave as-is.
     'macro-display':
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge tack-sharp, expansive establishing shot, NOT tilt-shift, NOT miniature blur, everything in crisp focus',
-    // favorite-towns: clone of macro-display's hearted deep-focus prefix (2026-05-27).
-    // Will diverge as Kevin iterates this path.
-    'favorite-towns':
+    // crazy-islands: carries macro-display's hearted deep-focus prefix VERBATIM
+    // (2026-05-27) — Kevin's hearted island renders used exactly this style block.
+    'crazy-islands':
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge tack-sharp, expansive establishing shot, NOT tilt-shift, NOT miniature blur, everything in crisp focus',
     // fantasy: NO deep-focus prefix — tilt-shift retained per playbook lesson 1
     // (Flux's "fantasy" training prior is heavily Hollywood-photoreal; tilt-shift
@@ -113,7 +113,7 @@ module.exports = {
       'western',
       'mech',
       'macro-display',
-      'favorite-towns',
+      'crazy-islands',
       'girly',
       'lego-masters',
     ],
