@@ -55,8 +55,9 @@ The two things that still touch the build: confirm production **EAS env vars**
       reply from Gmail for now, or switch to Zoho free later if you want a real mailbox.
 - [x] **Support URL (webpage)** — `https://dreambotapp.com/support` shipped in the
       `dreambot-web` repo (Next.js → Vercel), contact email + quick self-serve answers.
-- [ ] Confirm the **Facebook client token** ships via env (`EXPO_PUBLIC_FB_CLIENT_TOKEN`)
-      rather than a literal in `app.config.js`.
+- [x] **Facebook client token** is env-driven — `app.config.js` reads
+      `process.env.FACEBOOK_CLIENT_TOKEN` (not a literal). Just ensure that env var
+      is set in EAS production (see §6).
 
 ---
 
@@ -125,7 +126,7 @@ The two things that still touch the build: confirm production **EAS env vars**
 
 - [ ] **EAS production env vars** set at [expo.dev](https://expo.dev) → project → Environment Variables:
   - `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`
-  - `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`, `EXPO_PUBLIC_FB_CLIENT_TOKEN`
+  - `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`, `FACEBOOK_CLIENT_TOKEN` (exact name the code reads)
   - `EXPO_PUBLIC_POSTHOG_KEY` (analytics is a no-op without it — see §9)
   - `EXPO_PUBLIC_SENTRY_DSN` (crash reporting is a no-op without it — see §9)
   - `EXPO_PUBLIC_APP_ENV=production` (tags analytics/crash events as production)
