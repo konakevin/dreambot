@@ -40,17 +40,42 @@ if (posthog) {
 
 export const analyticsEnabled = posthog != null;
 
+// Admin opt-out: admins do a lot of repetitive in-app testing, so their usage
+// would pollute the product reports. When the signed-in user is an admin we opt
+// them out of ALL analytics. The SDK's optOut() is the only thing that can stop
+// PostHogProvider autocapture (taps), and it also suppresses screen/capture/
+// identify + persists locally across launches. We ALSO keep a local flag and
+// guard our explicit entry points, so suppression is immediate + deterministic
+// and doesn't rely on opt-out timing. Wired from app/_layout.tsx on auth change.
+let adminOptedOut = false;
+
+/** Opt the current user in/out of analytics (admins are opted out). */
+export function setAnalyticsOptOut(optOut: boolean): void {
+  adminOptedOut = optOut;
+  if (!posthog) return;
+  if (optOut) posthog.optOut();
+  else posthog.optIn();
+}
+
 // Our event props are JSON-safe scalars; cast at this single boundary to
 // PostHog's expected property shape so call sites stay simple.
 type EventProps = Record<string, string | number | boolean> | undefined;
 
-/** Capture a product event. No-op when analytics is off. */
+/** Capture a product event. No-op when analytics is off or the user is opted out. */
 export function capture(event: string, properties?: Record<string, unknown>): void {
+  if (adminOptedOut) return;
   posthog?.capture(event, properties as EventProps);
 }
 
-/** Tie subsequent events to a user (call on login). No-op when off. */
+/** Fire a screen view. No-op when analytics is off or the user is opted out. */
+export function screen(name: string): void {
+  if (adminOptedOut) return;
+  posthog?.screen(name);
+}
+
+/** Tie subsequent events to a user (call on login). No-op when off or opted out. */
 export function identifyUser(userId: string, properties?: Record<string, unknown>): void {
+  if (adminOptedOut) return;
   posthog?.identify(userId, properties as EventProps);
 }
 

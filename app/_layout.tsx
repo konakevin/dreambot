@@ -24,7 +24,14 @@ import { queryClient } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
 import { SCREEN_PRESETS } from '@/constants/navigationPresets';
 import { initSentry, Sentry } from '@/lib/sentry';
-import { posthog, PostHogProvider, identifyUser, resetAnalytics } from '@/lib/posthog';
+import {
+  posthog,
+  PostHogProvider,
+  identifyUser,
+  resetAnalytics,
+  screen,
+  setAnalyticsOptOut,
+} from '@/lib/posthog';
 
 // Crash reporting — must init as early as possible. No-op without a DSN.
 initSentry();
@@ -363,21 +370,28 @@ function Analytics({ children }: { children: ReactNode }) {
 // Manual Expo Router screen tracking — fires a `screen` event on each route
 // change (PostHog derives most-visited + time-on-screen from these). Autocapture
 // screen tracking doesn't hook Expo Router reliably, so we do it explicitly.
+// screen() no-ops for opted-out (admin) users.
 function ScreenTracker() {
   const pathname = usePathname();
   useEffect(() => {
-    posthog?.screen(pathname);
+    screen(pathname);
   }, [pathname]);
   return null;
 }
 
 // Ties analytics events to the signed-in user; clears the link on logout.
+// Admins are opted out of ALL analytics (autocapture + screen + events) so their
+// heavy in-app testing doesn't pollute product reports. setAnalyticsOptOut runs
+// FIRST so identify() is suppressed for admins too. isAdmin resolves async after
+// login; the effect re-runs when it lands, and optOut() persists across launches.
 function AnalyticsIdentity() {
   const userId = useAuthStore((s) => s.user?.id);
+  const isAdmin = useAuthStore((s) => s.isAdmin);
   useEffect(() => {
-    if (userId) identifyUser(userId);
-    else resetAnalytics();
-  }, [userId]);
+    setAnalyticsOptOut(isAdmin);
+    if (!userId) resetAnalytics();
+    else if (!isAdmin) identifyUser(userId);
+  }, [userId, isAdmin]);
   return null;
 }
 
