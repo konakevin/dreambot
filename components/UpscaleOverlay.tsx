@@ -2,29 +2,38 @@
  * UpscaleModal — dismissable status modal for an on-demand HD upscale.
  *
  * Nothing is auto-upscaled anymore; the first download of a post triggers the
- * upscale (request-upscale Edge Function) which runs ~17s server-side. This
- * modal is shown while we wait: it is DISMISSABLE (the upscale keeps running +
- * the user gets a `download_ready` push when done), and if left open it POLLS
- * the upload row and AUTO-SAVES the moment the HD image lands. See
- * UPSCALE_QUEUE_PLAN.md.
+ * upscale (upscale-image Edge Function) which runs ~15s server-side. This modal
+ * is shown while we wait: it is DISMISSABLE (the upscale keeps running + the
+ * user gets a `download_ready` push when done), and if left open it POLLS the
+ * upload row and AUTO-SAVES the moment the HD image lands. See UPSCALE_QUEUE_PLAN.md.
+ *
+ * Honest waiting UX: a spinner + rotating flavor text — NOT a progress bar.
+ * Replicate doesn't stream per-step progress back to us (we only poll for the
+ * finished image), so any bar would be a timer-faked guess that stalls on slow
+ * runs. The rotating line keeps it feeling alive without claiming progress.
  *
  * Imperative API like Toast — mount UpscaleModalHost once in _layout, call
  * UpscaleModal.show(uploadId) from anywhere.
  */
 
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
 import { startHqPoll } from '@/lib/upscalePoll';
+
+// Rotated every few seconds while waiting (flavor, not progress — see header).
+const WAITING_MESSAGES = [
+  'Polishing every pixel…',
+  'Sharpening the dream…',
+  'Coaxing out the fine details…',
+  'Dusting on the HD sparkle…',
+  'Making it poster-worthy…',
+];
+const WAITING_SUB = "Keep browsing — we'll save it to your Photos the moment it's ready.";
 
 type Phase = 'requesting' | 'processing' | 'saving' | 'done' | 'timeout';
 interface State {
@@ -39,13 +48,13 @@ export const UpscaleModal = {
   /**
    * Open the modal IMMEDIATELY in a 'requesting' state — call this the instant
    * the user confirms, BEFORE the upscale-image round-trip resolves, so there's
-   * no dead ~1s gap where nothing is on screen. Flip to 'processing' (different
-   * copy) with setProcessing() once the server confirms the upscale kicked.
+   * no dead ~1s gap where nothing is on screen. Flip to 'processing' with
+   * setProcessing() once the server confirms the upscale kicked.
    */
   show(uploadId: string) {
     listener?.({ visible: true, uploadId, phase: 'requesting' });
   },
-  /** Server confirmed the upscale is running — update the copy. */
+  /** Server confirmed the upscale is running. */
   setProcessing(uploadId: string) {
     listener?.({ visible: true, uploadId, phase: 'processing' });
   },
@@ -61,8 +70,8 @@ export function UpscaleModalHost() {
     phase: 'requesting',
   });
   const [phase, setPhase] = useState<Phase>('requesting');
+  const [msgIdx, setMsgIdx] = useState(0);
   const opacity = useSharedValue(0);
-  const progress = useSharedValue(0);
 
   useEffect(() => {
     listener = (next) => setState(next);
@@ -76,29 +85,23 @@ export function UpscaleModalHost() {
     opacity.value = withTiming(state.visible ? 1 : 0, { duration: 200 });
   }, [state.visible, opacity]);
 
-  // Progress bar: ease steadily toward ~92% over the expected upscale time
-  // (~17s) so the wait reads as "working," never a frozen spinner. The real
-  // completion (poll → saving) snaps it to 100%. Reset each time the modal opens.
-  useEffect(() => {
-    if (!state.visible) return;
-    progress.value = 0;
-    progress.value = withTiming(0.92, { duration: 17000, easing: Easing.out(Easing.quad) });
-  }, [state.visible, state.uploadId, progress]);
-
-  useEffect(() => {
-    if (phase === 'saving' || phase === 'done') {
-      progress.value = withTiming(1, { duration: 250 });
-    }
-  }, [phase, progress]);
-
-  const progressStyle = useAnimatedStyle(() => ({ width: `${progress.value * 100}%` }));
-
   // The caller drives requesting -> processing (show / setProcessing); mirror
   // that onto the display phase. The poll below then owns saving/done/timeout.
   // Keyed on uploadId so a fresh request resets the copy.
   useEffect(() => {
     setPhase(state.phase);
   }, [state.phase, state.uploadId]);
+
+  const isActive = phase === 'requesting' || phase === 'processing';
+
+  // Rotate the witty line every few seconds while waiting so the spinner reads
+  // as alive. Resets when a new wait starts; stops once we leave the wait.
+  useEffect(() => {
+    if (!isActive) return;
+    setMsgIdx(0);
+    const id = setInterval(() => setMsgIdx((i) => (i + 1) % WAITING_MESSAGES.length), 3000);
+    return () => clearInterval(id);
+  }, [isActive]);
 
   // Poll for the HD result while open; auto-save when it lands. Starts the
   // instant the modal opens (even during 'requesting') so a fast cache hit still
@@ -117,14 +120,14 @@ export function UpscaleModalHost() {
         return (data as { image_url_hq?: string | null } | null)?.image_url_hq ?? null;
       },
       onSave: (hq) => saveUrlToPhotos(uploadId, hq, true),
-      onPhase: (phase) => {
-        setPhase(phase);
-        if (phase === 'done') setTimeout(() => UpscaleModal.hide(), 1200);
+      onPhase: (next) => {
+        setPhase(next);
+        if (next === 'done') setTimeout(() => UpscaleModal.hide(), 1200);
         // Still cooking on timeout — no action needed: every requester is
         // notified on completion regardless of whether they stayed (server
         // inserts the request with notified_at NULL), so the push/inbox row
         // lands when the HD is ready.
-        if (phase === 'timeout') setTimeout(() => UpscaleModal.hide(), 3000);
+        if (next === 'timeout') setTimeout(() => UpscaleModal.hide(), 3000);
       },
     });
   }, [state.visible, state.uploadId]);
@@ -133,56 +136,44 @@ export function UpscaleModalHost() {
   if (!state.visible) return null;
 
   const copy = {
-    requesting: {
-      icon: 'sparkles' as const,
-      title: 'Preparing your HD…',
-      sub: 'One sec.',
-      showProgress: true,
-      showDismiss: false,
-    },
-    processing: {
-      icon: 'sparkles' as const,
-      title: 'Polishing your HD…',
-      sub: "Takes about 15 seconds. Keep browsing — we'll save it to your Photos the moment it's ready.",
-      showProgress: true,
-      showDismiss: true,
-    },
+    requesting: { icon: 'sparkles' as const, title: '', sub: WAITING_SUB, showDismiss: false },
+    processing: { icon: 'sparkles' as const, title: '', sub: WAITING_SUB, showDismiss: true },
     saving: {
       icon: 'download' as const,
       title: 'Saving to your Photos…',
       sub: 'Almost there.',
-      showProgress: true,
       showDismiss: false,
     },
     done: {
       icon: 'checkmark-circle' as const,
       title: 'Saved in HD',
       sub: 'Straight to your Photos.',
-      showProgress: false,
       showDismiss: false,
     },
     timeout: {
       icon: 'time' as const,
       title: 'Still polishing your HD…',
-      sub: "Taking a little longer than usual — we'll notify you the moment it's ready to grab.",
-      showProgress: false,
+      sub: "Taking longer than usual — we'll notify you the moment it's ready to grab.",
       showDismiss: true,
     },
   }[phase];
+
+  // Active + 'saving' show a spinner; terminal states (done/timeout) show an icon.
+  const showSpinner = isActive || phase === 'saving';
+  const title = isActive ? WAITING_MESSAGES[msgIdx] : copy.title;
 
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.backdrop, animStyle]}>
       <Pressable style={StyleSheet.absoluteFill} onPress={() => {}}>
         <View style={styles.center}>
           <View style={styles.card}>
-            <Ionicons name={copy.icon} size={copy.showProgress ? 30 : 40} color={colors.accent} />
-            <Text style={styles.title}>{copy.title}</Text>
-            <Text style={styles.subtitle}>{copy.sub}</Text>
-            {copy.showProgress && (
-              <View style={styles.progressTrack}>
-                <Animated.View style={[styles.progressFill, progressStyle]} />
-              </View>
+            {showSpinner ? (
+              <ActivityIndicator size="large" color={colors.accent} />
+            ) : (
+              <Ionicons name={copy.icon} size={40} color={colors.accent} />
             )}
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.subtitle}>{copy.sub}</Text>
             {copy.showDismiss && (
               <Pressable
                 style={styles.dismissBtn}
@@ -230,19 +221,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: 'center',
     lineHeight: 18,
-  },
-  progressTrack: {
-    marginTop: 20,
-    height: 6,
-    width: 210,
-    borderRadius: 3,
-    backgroundColor: colors.card,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 3,
-    backgroundColor: colors.accent,
   },
   dismissBtn: {
     marginTop: 18,
