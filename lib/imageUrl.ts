@@ -31,6 +31,13 @@ function transform(
   const params = new URLSearchParams({ width: String(width), resize: mode });
   if (height) params.set('height', String(height));
   if (quality) params.set('quality', String(quality));
+  // Always request WebP. Without this, the transform served the resized image
+  // in the SOURCE format (PNG → still ~450KB at 400×500); WebP drops to ~75KB
+  // (6× smaller, 30× smaller than the 2MB raw). Safe here: this URL is DISPLAY
+  // only — face-swap reads image_url (still the original PNG), and
+  // imageLongPress already converts WebP→PNG before saving to Photos
+  // (commit 0a1dd0a4). Supabase transform only accepts origin/webp (no jpeg).
+  params.set('format', 'webp');
   // Preserve the source's ?v= cache-buster so an updated image still
   // invalidates the transform's CDN cache.
   const srcV = new URLSearchParams(match[2] ? match[2].slice(1) : '').get('v');
