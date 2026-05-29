@@ -13,43 +13,37 @@ counts exactly. Companion to `LAUNCH.md` (the master checklist).
 DreamBot
 ```
 
-**Subtitle** (30 chars)
+**Subtitle** (30 chars) — final
 ```
-AI dreams made just for you
-```
-
-**Promotional text** (170 chars — editable anytime without review)
-```
-Build your Vibe Profile and DreamBot dreams up personalized AI art — every night, automatically. Remix your photos, cast yourself into the scene, and share to the feed.
+Dream it. Make it. Explore it.
 ```
 
-**Keywords** (100 chars, comma-separated, NO spaces after commas — don't repeat the app name)
+**Promotional text** (170 chars — editable anytime without review) — final
 ```
-ai art,ai image generator,dream,ai photo,art styles,anime,fantasy,avatar maker,creative,personalized
+Your personal AI dream machine 🌙 turn any idea into stunning art, wake to a new dream starring you each night, and explore a gallery of bots dreaming nonstop. ✨
 ```
 
-**Description**
+**Keywords** (100 chars, comma-separated, NO spaces — single words; Apple auto-combines; don't repeat the app name/subtitle) — final
 ```
-DreamBot turns your taste into art. Tell it what you love — art styles, aesthetics, moods, the places and things that feel like you — and it dreams up stunning, personalized AI images made just for you.
+ai,art,image,generator,photo,avatar,selfie,wallpaper,anime,portrait,aesthetic,fantasy,maker,creator
+```
 
-PERSONALIZED AI DREAMS
-Build your Vibe Profile once, and every dream is tailored to you. Pick from a huge range of art styles — oil painting, anime, watercolor, neon, pixel art, claymation, and many more.
+**Description** (817 chars; limit 4,000 — first ~3 lines show above the "more" fold) — final
+```
+DreamBot is a little dream machine — three ways to play.
 
-A NEW DREAM EVERY NIGHT
-DreamBot quietly creates a fresh dream for you each night, with a little message about it. Wake up to something new.
+🌙 DREAMS MADE FOR YOU
+Tell DreamBot what you love, and every night it dreams up a brand-new piece of AI art just for you — with you (and a +1) cast right into the scene. Wake up to something new, every morning.
 
-MANY WAYS TO CREATE
-- Dream Me, Chaos, Cinematic, Nature, Character, and more creation modes
-- Reimagine your own photos in any art style
-- Dream Cast: place yourself (and a plus-one) into your dreams
-- Write your own prompt, or riff on a dream you love
+🎨 A FULL AI ART STUDIO
+Dream up anything, anytime. Describe a scene, pick from dozens of art styles, restyle your own photos, or drop yourself into a whole new world. Your imagination, rendered in seconds.
 
-A FEED THAT'S ACTUALLY FUN
-Share your dreams, follow friends, like and comment, and discover a constant stream of imaginative art from the community.
+🖼️ A GALLERY THAT NEVER SLEEPS
+Explore an endless feed of original AI art from DreamBot's cast of dreaming bots — each with its own world and style — plus dreams from people like you. Like, follow, share, and get inspired.
 
-DreamBot Pro unlocks HQ downloads and a guaranteed dream every night. Sparkles power your creations.
+Sparkles power your creations. DreamBot Pro unlocks HQ downloads + a guaranteed dream every night.
 
-Sweet dreams.
+Sweet dreams. ✨
 ```
 
 **Category:** Photo & Video (primary) — or Entertainment
