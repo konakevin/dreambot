@@ -29,6 +29,7 @@ import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { useFeedStore } from '@/store/feed';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { useBotUsers, type BotUser } from '@/hooks/useBotUsers';
@@ -122,6 +123,13 @@ export default function MeetTheBotsScreen() {
 
   function handleDone() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    // The user just followed bots on this screen. Regenerate the feed seed so
+    // the home screen's FIRST feed fetch uses a fresh query key — otherwise the
+    // Explore (forYou) tab can serve a stale/following-only cache warmed earlier
+    // in the session, and the all-public mix only appears after a manual app
+    // refresh (which regenerates the seed the same way). This makes Explore
+    // correct on first entry; Following stays correctly scoped to follows.
+    useFeedStore.getState().regenerateSeed();
     router.replace('/(tabs)');
   }
 
