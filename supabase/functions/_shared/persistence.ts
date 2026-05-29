@@ -20,6 +20,35 @@ export async function persistToStorage(
 }
 
 /**
+ * Build + persist a small JPEG "display variant" of an already-persisted image
+ * and return its public URL. The feed serves this (~150KB) while image_url stays
+ * the full-quality original (the upscale source — HD downloads unchanged). q80
+ * re-encode at native dimensions (the win is quality, not resolution). BEST-
+ * EFFORT: returns null on any failure (timeout / decode / upload) so the caller
+ * simply falls back to serving image_url — this never blocks or fails a render.
+ */
+export async function buildDisplayVariant(
+  imageUrl: string,
+  userId: string,
+  supabase: SupabaseClient
+): Promise<string | null> {
+  try {
+    const res = await fetch(imageUrl);
+    if (!res.ok) return null;
+    const decoded = await decodeImage(await res.arrayBuffer());
+    const jpeg = await encodeJpeg(decoded, 80);
+    const key = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.display.jpg`;
+    const { error } = await supabase.storage
+      .from('uploads')
+      .upload(key, jpeg, { contentType: 'image/jpeg', cacheControl: '2592000' });
+    if (error) return null;
+    return supabase.storage.from('uploads').getPublicUrl(key).data.publicUrl;
+  } catch (_e) {
+    return null;
+  }
+}
+
+/**
  * Upload an already-fetched ArrayBuffer to Supabase Storage. Used by
  * nightly-dreams which needs to fetch + hash the bytes for duplicate
  * detection before persisting — same bytes, single fetch.
@@ -83,7 +112,7 @@ export async function sha256Hex(buf: ArrayBuffer): Promise<string> {
  *   4. Each pixel: 1 if >= average, 0 otherwise
  *   5. Pack 64 bits into 16-char hex
  */
-import { decodeImage } from './imageCodec.ts';
+import { decodeImage, encodeJpeg } from './imageCodec.ts';
 
 export async function aHashHex(buf: ArrayBuffer): Promise<string> {
   const decoded = await decodeImage(new Uint8Array(buf));

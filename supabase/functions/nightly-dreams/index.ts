@@ -16,7 +16,7 @@
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
-import { getBiomeConfig } from '../_shared/biomeAxes.ts';
+import { getBiomeConfig, resolveBiomeFromTags } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
@@ -38,6 +38,7 @@ import {
   hammingDistance,
   persistBufferToStorage,
   persistToStorage,
+  buildDisplayVariant,
 } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
@@ -818,6 +819,24 @@ Deno.serve(async (req) => {
         bespokeBiome = cfg as unknown as ReturnType<typeof getBiomeConfig>;
       }
     }
+    // Backfill-at-runtime: no stored biome → derive a coherent biome from the
+    // location's tags rather than silently defaulting to tropical_coastal (the
+    // bug that gave ~89% of locations beach atmosphere). Skip when a bespoke
+    // biome_config is present. Unmapped locations are logged, not silently
+    // tropical-ized.
+    if (!biomeKey && !bespokeBiome) {
+      const tagBiome = resolveBiomeFromTags(locationCard?.tags ?? null);
+      if (tagBiome) {
+        biomeKey = tagBiome;
+      } else {
+        console.warn(
+          `[nightly-dreams] biome UNMAPPED for "${userPlace ?? 'none'}" tags=${JSON.stringify(
+            locationCard?.tags ?? []
+          )} — using neutral default`
+        );
+        fallbackReasons.push(`biome_unmapped:${userPlace ?? 'none'}`);
+      }
+    }
     const biomeConfig = bespokeBiome ?? getBiomeConfig(biomeKey);
     const pickAxis = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
     const timeAxis = pickAxis(biomeConfig.TIME);
@@ -1589,12 +1608,14 @@ Output ONLY the prompt.`;
     // Draft upload + budget upsert in parallel
     let uploadId: string | undefined;
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
+    const displayUrl = await buildDisplayVariant(imageUrl, userId, supabase);
     const [uploadResult] = await Promise.all([
       supabase
         .from('uploads')
         .insert({
           user_id: userId,
           image_url: imageUrl,
+          image_url_display: displayUrl,
           caption,
           ai_prompt: finalPrompt,
           dream_medium: resolvedMediumKey ?? null,

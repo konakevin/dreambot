@@ -40,7 +40,7 @@ import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
-import { persistToStorage } from '../_shared/persistence.ts';
+import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
@@ -1290,12 +1290,14 @@ Output ONLY the prompt.`;
       );
 
     if (persist) {
+      const displayUrl = await buildDisplayVariant(imageUrl, userId, supabase);
       const [uploadResult] = await Promise.all([
         supabase
           .from('uploads')
           .insert({
             user_id: userId,
             image_url: imageUrl,
+            image_url_display: displayUrl,
             caption,
             ai_prompt: finalPrompt,
             ai_concept: conceptJson,
