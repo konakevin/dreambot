@@ -238,7 +238,7 @@ export function RevealStep({ onBack }: Props) {
     };
   }
 
-  async function handleCreateBot() {
+  async function handleCreateBot(makePublic: boolean) {
     if (!user || !activeDream) return;
     setPhase('creating');
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -263,6 +263,11 @@ export function RevealStep({ onBack }: Props) {
           // and the home feed crashed trying to record_impression with it.
           dream_medium: activeDream.medium || null,
           dream_vibe: activeDream.vibe || null,
+          // Public → shows in the feed + to followers; private → album only.
+          // (is_public defaults false, so the old single "Post my Dream" button
+          // was silently saving private — this makes the choice explicit.)
+          is_public: makePublic,
+          ...(makePublic ? { posted_at: new Date().toISOString() } : {}),
         })
         .select('id')
         .single();
@@ -275,7 +280,9 @@ export function RevealStep({ onBack }: Props) {
       // `temp-${Date.now()}` id used to cause the home feed to crash with
       // a Postgres "invalid input syntax for type uuid" error when its
       // record_impression RPC fired with the synthetic id.
-      if (insertedRow?.id) {
+      // Pin to the home feed only when shared publicly — a private dream lives
+      // in the album, not the feed.
+      if (makePublic && insertedRow?.id) {
         setPinnedPost({
           id: insertedRow.id,
           user_id: user.id,
@@ -502,22 +509,30 @@ export function RevealStep({ onBack }: Props) {
             )}
             {revealBeat === 3 && (
               <>
-                <Text style={s.revealTitle}>Share your first dream?</Text>
+                <Text style={s.revealTitle}>Your first dream is ready</Text>
                 <Text style={s.revealBody}>
-                  Post it to your feed so people who follow you can see what your DreamBot cooked
-                  up.
+                  Share it to your feed, or just keep it in your dreams for now — you can always
+                  share it later.
                 </Text>
                 <TouchableOpacity
                   style={s.createButton}
-                  onPress={handleCreateBot}
+                  onPress={() => handleCreateBot(true)}
                   disabled={phase === 'creating'}
                   activeOpacity={0.7}
                 >
                   {phase === 'creating' ? (
                     <ActivityIndicator color="#FFFFFF" />
                   ) : (
-                    <Text style={s.createButtonText}>Post my Dream</Text>
+                    <Text style={s.createButtonText}>Share to my feed</Text>
                   )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={s.secondaryButton}
+                  onPress={() => handleCreateBot(false)}
+                  disabled={phase === 'creating'}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.secondaryButtonText}>Just save to dreams</Text>
                 </TouchableOpacity>
               </>
             )}
@@ -646,6 +661,13 @@ const s = StyleSheet.create({
     paddingVertical: 18,
   },
   createButtonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
+  secondaryButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    marginTop: 4,
+  },
+  secondaryButtonText: { color: 'rgba(255,255,255,0.7)', fontSize: 15, fontWeight: '700' },
   dreamAgainButton: {
     flex: 1,
     flexDirection: 'row',
