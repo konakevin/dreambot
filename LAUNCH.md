@@ -98,8 +98,10 @@ The two things that still touch the build: confirm production **EAS env vars**
       Recommended 6–8; 6.1" optional.
 - [ ] **Age rating** — expect **17+** (user-generated content + AI image generation +
       face-swap of personal photos).
-- [ ] **App Privacy "nutrition label"** — **answers drafted in `APP_STORE_LISTING.md`**
-      (account/email, photos, usage/analytics, purchases, push token, crash data; no tracking).
+- [x] **App Privacy "nutrition label"** filled in ASC (2026-05-28) — 10 data types,
+      all App-Functionality/Analytics + linked to identity, matches the privacy policy.
+      ⚠️ Confirm the **Tracking** answer is "No" (no ATT prompt in the app, so a
+      tracking=yes label would be an auto-reject).
 - [ ] **Privacy Policy URL** (live) + **Support URL** (from §1).
 - [ ] **Content rights** answer — content is user-generated / AI-generated.
 - [ ] **Demo account in App Review notes** — the app is login-gated. **Review-notes
