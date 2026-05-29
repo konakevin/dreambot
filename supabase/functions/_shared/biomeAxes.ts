@@ -934,3 +934,27 @@ export function getBiomeConfig(biomeKey: string | null | undefined): BiomeConfig
   if (biomeKey && BIOME_AXES[biomeKey]) return BIOME_AXES[biomeKey];
   return BIOME_AXES.tropical_coastal;
 }
+
+/**
+ * The ONE biome system, base + override (the bot path-override→default pattern):
+ *   resolved = isValidBiomeConfig(card.biome_config)  // per-location override
+ *           ?  card.biome_config
+ *           :  getBiomeConfig(card.biome)             // shared class base
+ * Every location card has a `biome` CLASS (the base + the tag-filter key) and
+ * almost always a per-location `biome_config` (the override). This validates an
+ * override's shape before use — extra fields (e.g. WARDROBE) pass through; only
+ * the required BiomeConfig axes must be present. A malformed override falls back
+ * to the shared class config rather than crashing the render.
+ */
+export function isValidBiomeConfig(cfg: unknown): cfg is BiomeConfig {
+  if (!cfg || typeof cfg !== 'object') return false;
+  const c = cfg as Record<string, unknown>;
+  return (
+    Array.isArray(c.TIME) &&
+    Array.isArray(c.WEATHER) &&
+    Array.isArray(c.CAMERA) &&
+    Array.isArray(c.PHENOMENA) &&
+    Array.isArray(c.BANS) &&
+    typeof c.SUBJECT_RULE === 'string'
+  );
+}

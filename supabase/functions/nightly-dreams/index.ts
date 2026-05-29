@@ -16,7 +16,7 @@
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
-import { getBiomeConfig, resolveBiomeFromTags } from '../_shared/biomeAxes.ts';
+import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
@@ -809,17 +809,11 @@ Deno.serve(async (req) => {
         iconicAnchor = spots[Math.floor(Math.random() * spots.length)].spot_text;
       }
       biomeKey = locCard?.biome ?? null;
-      // biome_config schema matches BiomeConfig; basic shape check before use.
-      const cfg = locCard?.biome_config as Record<string, unknown> | null | undefined;
-      if (
-        cfg &&
-        Array.isArray(cfg.TIME) &&
-        Array.isArray(cfg.WEATHER) &&
-        Array.isArray(cfg.CAMERA) &&
-        Array.isArray(cfg.PHENOMENA) &&
-        typeof cfg.SUBJECT_RULE === 'string' &&
-        Array.isArray(cfg.BANS)
-      ) {
+      // Per-location biome_config override — validated by the single shared gate
+      // (isValidBiomeConfig). Valid → used as the bespoke biome; malformed →
+      // falls back to the shared class config (getBiomeConfig) below.
+      const cfg = locCard?.biome_config;
+      if (isValidBiomeConfig(cfg)) {
         bespokeBiome = cfg as unknown as ReturnType<typeof getBiomeConfig>;
       }
     }
@@ -842,6 +836,11 @@ Deno.serve(async (req) => {
       }
     }
     const biomeConfig = bespokeBiome ?? getBiomeConfig(biomeKey);
+    // Scene scope (Phase 3) — intimate interiors must NOT be framed as "EPIC,
+    // VAST" vistas. Drives the brief framing below so a café/garden reads
+    // intimate, not as a vast landscape with a tiny figure.
+    const INTIMATE_BIOMES = new Set(['interior_intimate', 'zen_garden']);
+    const isIntimateScene = INTIMATE_BIOMES.has(biomeKey ?? '');
     const pickAxis = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
     const timeAxis = pickAxis(biomeConfig.TIME);
     const weatherAxis = pickAxis(biomeConfig.WEATHER);
@@ -1068,7 +1067,7 @@ Output ONLY the prompt.`;
         resolvedCast.length > 1
           ? `tiny ${mediumStyle}-style figures: ${resolvedCast.map((rc) => rc.promptDesc.split(',')[0]).join(' and ')}`
           : `a tiny ${mediumStyle}-style ${shortCastDesc}`;
-      nightlyBrief = `You are a cinematographer composing an EPIC, VAST scene. Write a Flux AI prompt (60-90 words, comma-separated).
+      nightlyBrief = `You are a cinematographer composing an ${isIntimateScene ? 'intimate, richly detailed' : 'EPIC, VAST'} scene. Write a Flux AI prompt (60-90 words, comma-separated).
 
 MEDIUM: ${baseMedium.fluxFragment}
 
@@ -1083,7 +1082,11 @@ SELECT AND SUBORDINATE (critical):
 - A strong single landscape with harmonious supporting details beats a busy one with everything crammed in.
 - If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
-Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
+${
+  isIntimateScene
+    ? `Within the scene, present but unobtrusive: ${tinyDesc}. The intimate setting itself is the focus.`
+    : `Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.`
+}
 ${relationshipTone && selectedCast.length >= 2 ? `\n${relationshipTone.block}\n` : ''}
 CAMERA: ${shotDirection}
 ${entropyBlock}
@@ -1124,10 +1127,10 @@ VARIATION AXES (these layer ONTO the locked subject above — they alter LIGHT, 
 - ATMOSPHERIC PHENOMENON: ${phenomenaAxis}
 
 ENHANCING LANGUAGE (mandatory):
-- DEFINED LIGHT SOURCE — name the light explicitly (direct sun, golden rim, sharp shadow play, glittering reflections, god-rays, etc.) — pick what fits the rolled WEATHER + TIME, not a default
-- LAYERED DEPTH — lush foreground anchor + dense midground + distant background
-- SATURATED COLOR — pigments cranked, sky vivid, foliage emerald, water cerulean
-- DENSE NATURAL DETAIL — every leaf, dewdrop, petal, fern, wet stone, blade catching light
+- DEFINED LIGHT SOURCE — name the light explicitly (direct sun, warm lamplight, neon glow, golden rim, sharp shadow play, glittering reflections, god-rays, etc.) — pick what fits the rolled WEATHER + TIME, not a default
+- LAYERED DEPTH — rich foreground anchor + dense midground + distant background
+- SATURATED COLOR — pigments cranked, palette vivid and true to THIS specific place (do not invent foliage/water that isn't there)
+- DENSE DETAIL — every surface, material, texture, edge and highlight catching light, true to this location
 
 ATMOSPHERIC RULE — WEATHER axis is the SOLE source of truth for atmosphere. Render exactly the conditions specified by the rolled WEATHER. Do NOT add fog, mist, haze, god-rays, or atmospheric particles unless the WEATHER axis asks for them. Do NOT strip them if it does. WEATHER decides — full stop.
 

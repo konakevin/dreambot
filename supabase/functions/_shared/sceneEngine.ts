@@ -274,6 +274,69 @@ const BIOME_SCOPES: Record<string, string[]> = {
 // behind a high surreal-mood so they never drop into a café for a calm user.
 const FANTASTICAL_BIOMES = new Set(['fantasy_imagined', 'scifi_cosmic']);
 
+// Per-biome banned KEYWORDS — a coherence guard on top of the tag filter. The
+// pool tags are coarse ('nature' lumps coral/glacier/dune/meadow), so a tag
+// match alone lets the odd cross-biome element through (coral in a desert). Any
+// scene-DNA entry whose text contains one of its biome's banned terms is dropped.
+// Terms are multi-word where a single word risks false matches ('desert dune'
+// not 'desert' → avoids "deserted street"). Exported so the QA sweep
+// (scripts/qa-nightly-coherence.ts) verifies against the same spec.
+export const BIOME_BANNED_KEYWORDS: Record<string, string[]> = {
+  interior_intimate: ['driftwood', 'canal', 'dune', 'glacier', 'skyscraper', 'coral reef'],
+  zen_garden: [
+    'driftwood',
+    'dune',
+    'glacier',
+    'canyon',
+    'skyscraper',
+    'neon',
+    'ocean wave',
+    'skyline',
+  ],
+  aquatic_underwater: ['desert dune', 'campfire', 'snowfield', 'skyscraper', 'meadow'],
+  desert_arid: [
+    'glacier',
+    'snowfield',
+    'driftwood',
+    'coral reef',
+    'rainforest',
+    'canal',
+    'jungle',
+    'ocean wave',
+    'waterfall',
+  ],
+  red_rock_canyon: [
+    'glacier',
+    'snowfield',
+    'driftwood',
+    'coral reef',
+    'rainforest',
+    'jungle',
+    'palm tree',
+  ],
+  arctic_polar: ['palm tree', 'palm frond', 'desert dune', 'jungle', 'rainforest', 'coral reef'],
+  fjord_coastal: ['palm tree', 'palm frond', 'desert dune', 'jungle'],
+  tropical_coastal: ['glacier', 'snowfield', 'desert dune'],
+  mediterranean_coastal: [
+    'palm frond',
+    'palm tree',
+    'glacier',
+    'jungle',
+    'desert dune',
+    'coral reef',
+    'snowfield',
+  ],
+  temperate_coastal: ['palm tree', 'palm frond', 'glacier', 'desert dune', 'jungle', 'coral reef'],
+  temperate_forest: ['desert dune', 'coral reef', 'glacier', 'skyscraper', 'ocean wave'],
+  wetland_jungle: ['desert dune', 'glacier', 'snowfield', 'skyscraper'],
+  alpine_mountain: ['desert dune', 'coral reef', 'palm tree'],
+  grassland_savanna: ['glacier', 'coral reef', 'skyscraper', 'driftwood', 'snowfield'],
+  volcanic_geothermal: ['coral reef', 'palm tree', 'palm frond', 'desert dune'],
+  urban_city: ['driftwood', 'coral reef', 'desert dune', 'glacier'],
+  ancient_ruins: ['skyscraper', 'neon', 'coral reef'],
+  // fantasy_imagined / scifi_cosmic / gothic_historic: permissive — no guard.
+};
+
 // ── Curated Pools (small, hand-written — not worth Sonnet generation) ─
 
 const SCALE: Entry[] = [
@@ -445,6 +508,7 @@ export function assembleScene(opts: SceneOptions): string {
   // an arctic scene can't pull a 'coastal' foreground; a café can't pull a
   // 'nature' driftwood. Deer-in-café fix, ported from the bot composer.
   const biomeScopes = opts.biome ? (BIOME_SCOPES[opts.biome] ?? null) : null;
+  const biomeBannedKw = opts.biome ? (BIOME_BANNED_KEYWORDS[opts.biome] ?? null) : null;
   const isIntimate = opts.biome === 'interior_intimate' || opts.biome === 'zen_garden';
   // Surreal hero-details belong only in fantastical biomes OR for high-surreal
   // users — never dropped into a realistic location for a calm/realistic user.
@@ -479,6 +543,10 @@ export function assembleScene(opts: SceneOptions): string {
       .map((e) => {
         const lower = e.text.toLowerCase();
         if (IDENTITY_KILLERS.some((kw) => lower.includes(kw))) return { ...e, weight: 0 };
+        // Keyword guard — catches cross-biome elements the coarse tags miss.
+        if (biomeBannedKw && biomeBannedKw.some((kw) => lower.includes(kw))) {
+          return { ...e, weight: 0 };
+        }
         if (biomeScopes) {
           const eTags = e.tags ?? [];
           if (eTags.length > 0 && !eTags.some((t) => biomeScopes.includes(t))) {
@@ -504,7 +572,7 @@ export function assembleScene(opts: SceneOptions): string {
     const wPool = applyBiomeFilter(WEATHER);
     if (wPool.length > 0) weather = filterAndPick(wPool, tags, rules, rand, allowChaotic);
   }
-  const lighting = filterAndPick(LIGHTING, tags, rules, rand, allowChaotic);
+  const lighting = filterAndPick(applyBiomeFilter(LIGHTING), tags, rules, rand, allowChaotic);
   const compMode = opts.compositionMode || 'balanced';
   const compHint = COMPOSITION_HINTS[compMode];
 

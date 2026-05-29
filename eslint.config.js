@@ -7,7 +7,9 @@ module.exports = defineConfig([
   expoConfig,
   security.configs.recommended,
   {
-    ignores: ['dist/*'],
+    // qa-nightly-coherence.ts is a Deno script (https: imports + Deno globals) —
+    // it runs under Deno, not the app toolchain, so exclude it from eslint/tsc.
+    ignores: ['dist/*', 'scripts/qa-nightly-coherence.ts'],
   },
   {
     rules: {
