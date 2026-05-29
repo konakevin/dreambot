@@ -47,14 +47,15 @@ interface Dream {
   vibe?: string;
 }
 
+// Cast options the nightly engine natively supports (force_cast_role). The
+// previous compound options ('self+pet', 'all') only existed in the old
+// generate-dream path; nightly only knows individual roles + 'dual'.
 const CAST_OPTIONS: { key: string | null; label: string }[] = [
   { key: null, label: 'None' },
   { key: 'self', label: 'Me' },
   { key: 'plus_one', label: '+1' },
   { key: 'pet', label: 'Pet' },
-  { key: 'self+plus_one', label: 'Me + Partner' },
-  { key: 'self+pet', label: 'Me + Pet' },
-  { key: 'self+plus_one+pet', label: 'All' },
+  { key: 'dual', label: 'Me + Partner' },
 ];
 
 export default function DreamTestScreen() {
@@ -178,14 +179,18 @@ export default function DreamTestScreen() {
       if (!session?.access_token) throw new Error('Not authenticated');
 
       const requestBody = {
-        mode: 'flux-dev',
-        medium_key: 'surprise_me',
-        vibe_key: 'surprise_me',
+        // Calls the NIGHTLY engine (same pipeline as the nightly cron + the
+        // onboarding first-dream). vibe_profile is read from the body for the
+        // user-JWT path. persist:false skips the album insert + budget upsert
+        // (QA dry-run). force_face_swap_eligible pins the medium to the
+        // face-swap pool whenever cast is forced, so a "Me" test actually
+        // face-swaps the user in (mirroring RevealStep's first-dream logic).
         vibe_profile: profile,
         persist: false,
         force_cast_role: forceCastRole,
         force_medium: selectedMedium !== 'surprise_me' ? selectedMedium : undefined,
         force_vibe: selectedVibe !== 'surprise_me' ? selectedVibe : undefined,
+        force_face_swap_eligible: forceCastRole !== null,
       };
       if (__DEV__)
         console.log(
@@ -194,11 +199,12 @@ export default function DreamTestScreen() {
             force_cast_role: requestBody.force_cast_role,
             force_medium: requestBody.force_medium,
             force_vibe: requestBody.force_vibe,
+            force_face_swap_eligible: requestBody.force_face_swap_eligible,
           })
         );
 
       const res = await fetch(
-        `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/generate-dream`,
+        `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/nightly-dreams`,
         {
           method: 'POST',
           headers: {

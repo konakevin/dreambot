@@ -156,6 +156,10 @@ Deno.serve(async (req) => {
   // normal nightly queue path never sets this, so its dream_eligible roll is
   // untouched. Ignored when force_medium is also set (explicit wins).
   const force_face_swap_eligible = body.force_face_swap_eligible === true;
+  // QA / dry-run flag — when false, skip the uploads insert + budget upsert so
+  // the Dream Generator Test screen can exercise the nightly pipeline without
+  // polluting the user's album. Default true (normal nightly + first-dream).
+  const persist = body.persist !== false;
 
   if (!vibe_profile) {
     return new Response(JSON.stringify({ error: 'vibe_profile is required' }), {
@@ -1586,6 +1590,27 @@ Output ONLY the prompt.`;
     ]);
     imageUrl = persistedUrl;
     lap('persist-done');
+
+    // QA dry-run (Dream Generator Test screen) — skip the uploads insert,
+    // budget upsert, recipe build, distillation and ai_generation_log so test
+    // runs don't pollute the user's album or burn budget. Returns the rendered
+    // image + final prompt so the test UI can display + show the prompt.
+    if (!persist) {
+      lap('total');
+      console.log(
+        `[nightly-dreams] Done (persist:false) in ${Date.now() - t0}ms for user ${userId}`
+      );
+      return new Response(
+        JSON.stringify({
+          image_url: imageUrl,
+          upload_id: null,
+          prompt_used: finalPrompt,
+          resolved_medium: resolvedMediumKey ?? null,
+          resolved_vibe: resolvedVibeKey ?? null,
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Wait for the parallel description gen now that image is persisted
     const description = await descPromise;
