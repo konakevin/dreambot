@@ -192,6 +192,11 @@ async function handleRequest(req: Request): Promise<Response> {
     subject_type,
     dlt_recipe,
   } = body;
+  // When false, render + return WITHOUT inserting an uploads row — the caller
+  // persists its own (onboarding RevealStep). Default true so the create flow,
+  // nightly, DLT, etc. keep auto-saving as before. Fixes the duplicate first
+  // dream (gen inserted a row AND "Post my Dream" inserted another).
+  const persist = body.persist !== false;
 
   // ── DLT recipe replay (consume-side) ────────────────────────────────────
   // When the client passes a valid frozen recipe, lock the LOOK identity
@@ -1257,52 +1262,64 @@ Output ONLY the prompt.`;
       }
     }
 
-    // Draft upload + budget upsert in parallel (both need imageUrl but not each other)
+    // Draft upload + budget upsert. The uploads row is the dream's persisted
+    // record. Skip it when the caller sends `persist: false` (onboarding's
+    // RevealStep generates the first dream, then inserts its OWN row when the
+    // user taps "Post my Dream" — if we also inserted here, the first dream got
+    // saved TWICE). Budget always counts: the image was rendered regardless.
     let uploadId: string | undefined;
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
-    const [uploadResult] = await Promise.all([
-      supabase
-        .from('uploads')
-        .insert({
+    const budgetUpsert = supabase
+      .from('ai_generation_budget')
+      .upsert(
+        {
           user_id: userId,
-          image_url: imageUrl,
-          caption,
-          ai_prompt: finalPrompt,
-          ai_concept: conceptJson,
-          dream_medium: resolvedMediumKey ?? null,
-          dream_vibe: resolvedVibeKey ?? null,
-          is_public: false,
-          width: 768,
-          height: 1664,
-          recipe: recipeForInsert,
-          flux_seed: null,
-          ...(description ? { description } : {}),
-        })
-        .select('id')
-        .single(),
-      supabase
-        .from('ai_generation_budget')
-        .upsert(
-          {
-            user_id: userId,
-            date: today,
-            images_generated: todayCount + 1,
-            total_cost_cents: (todayCount + 1) * 3,
-          },
-          { onConflict: 'user_id,date' }
-        )
-        .then(
-          () => {},
-          () => {}
-        ),
-    ]);
-    uploadId = uploadResult.data?.id;
-    if (uploadResult.error || !uploadId) {
-      // Throw so the outer catch refunds the sparkle. Previously we logged
-      // and continued, leaving the user with no visible dream AND no refund.
-      throw new Error(
-        `db_insert: uploads insert failed (${uploadResult.error?.message ?? 'no row returned'})`
+          date: today,
+          images_generated: todayCount + 1,
+          total_cost_cents: (todayCount + 1) * 3,
+        },
+        { onConflict: 'user_id,date' }
+      )
+      .then(
+        () => {},
+        () => {}
       );
+
+    if (persist) {
+      const [uploadResult] = await Promise.all([
+        supabase
+          .from('uploads')
+          .insert({
+            user_id: userId,
+            image_url: imageUrl,
+            caption,
+            ai_prompt: finalPrompt,
+            ai_concept: conceptJson,
+            dream_medium: resolvedMediumKey ?? null,
+            dream_vibe: resolvedVibeKey ?? null,
+            is_public: false,
+            width: 768,
+            height: 1664,
+            recipe: recipeForInsert,
+            flux_seed: null,
+            ...(description ? { description } : {}),
+          })
+          .select('id')
+          .single(),
+        budgetUpsert,
+      ]);
+      uploadId = uploadResult.data?.id;
+      if (uploadResult.error || !uploadId) {
+        // Throw so the outer catch refunds the sparkle. Previously we logged
+        // and continued, leaving the user with no visible dream AND no refund.
+        throw new Error(
+          `db_insert: uploads insert failed (${uploadResult.error?.message ?? 'no row returned'})`
+        );
+      }
+    } else {
+      // persist:false — no uploads row (caller persists it themselves). uploadId
+      // stays undefined; the downstream style/notify/job steps all no-op on it.
+      await budgetUpsert;
     }
 
     // Plan C — fire-and-forget: distill the unified style fingerprint
