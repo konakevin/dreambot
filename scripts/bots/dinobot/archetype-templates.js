@@ -458,7 +458,7 @@ The silhouettes MUST read as DINOSAURS, not wildebeest or bison or buffalo or ze
 If the silhouettes look like wildebeest / bison / buffalo / zebra / cattle, the render has FAILED.
 
 ⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
-The word "herd" pulls Flux toward modern mammal training data (buffalo, wildebeest, cattle). NEVER write the word "herd" anywhere in the final Flux prompt. The seed material below MAY contain "herd" — you MUST rewrite it using these dinosaur-locked phrasings:
+The words "herd", "bull"/"bulls", "cow", "calf"/"calves", "grazing", "savanna" all pull Flux toward modern mammal training data. NEVER write ANY of them in the final Flux prompt — use dinosaur-locked replacements: "adult"/"old male" (NOT bull), "juvenile" (NOT calf), "feeding"/"cropping cycad fronds" (NOT grazing), "fern-plain"/"floodplain" (NOT savanna), and species-count phrasing (NOT herd):
 
 REPLACE "herd of [species]" WITH:
 • "a hundred Triceratops moving together" / "a hundred Parasaurolophus crossing the plain"
@@ -474,7 +474,7 @@ Always anchor with the SPECIES NAME explicitly + a COUNT + a NEUTRAL group word 
 Composition:
 • HERO FOREGROUND DINOSAURS (35-55% of frame): 1-3 anatomically detailed dinosaurs leading or pausing in front, photoreal wildlife photography quality
 • 100+ SAME-SPECIES DINOSAURS (50-200 individuals): supporting backdrop behind/around the heroes, scale-staggered from midground mass to vanishing-point silhouettes through atmospheric haze
-• MESOZOIC LANDSCAPE (the stage): alien-Mesozoic biome — sauropod-trampled mud-plains / cycad savanna / volcanic floodplain / cretaceous prairie / wet alluvial fan / etc.
+• MESOZOIC LANDSCAPE (the stage): alien-Mesozoic biome — sauropod-trampled mud-plains / cycad floodplain / volcanic floodplain / cretaceous prairie / wet alluvial fan / etc.
 
 ⚠️ COMPOSITIONAL RULES:
 • HERO + 100+ SAME-SPECIES framing — eye lands first on the foreground hero dinosaur, then reads the 100+ same-species behind as supporting context
@@ -505,7 +505,7 @@ This is the FOCAL SCENE. Hero foreground dinosaurs (35-55% of frame) anchor the 
 ━━━ THE MESOZOIC BIOME (alien primordial landscape) ━━━
 ${biome}
 
-The biome is the stage for the migration. Alien-Mesozoic — sauropod-trampled mud-plains / cycad savanna / wet alluvial fan / volcanic floodplain / cretaceous prairie / etc. NEVER modern Earth landscape. Multi-tier depth into the haze.
+The biome is the stage for the migration. Alien-Mesozoic — sauropod-trampled mud-plains / cycad floodplain / wet alluvial fan / volcanic floodplain / cretaceous prairie / etc. NEVER modern Earth landscape. Multi-tier depth into the haze.
 ${phenomenonSection}━━━ SECONDARY ACCENT (small migration-moment detail) ━━━
 ${surprise_element}
 
@@ -530,7 +530,7 @@ ${vibeDirective.slice(0, 250)}
 Wildlife-documentary cinematic framing of a colossal Mesozoic dinosaur migration. Hero foreground dinosaurs (35-55% frame) + 100+ same-species dinosaurs spread behind them. Alien-Mesozoic biome around. Atmospheric haze into pale distance.
 
 ━━━ STRUCTURE (write the prompt in this order — HERO + 100+ SAME-SPECIES first) ━━━
-[OPENING: name the HERO foreground dinosaur(s) by species AND describe the migration as 100+ same-species individuals — NEVER use the word "herd" (e.g. "a Parasaurolophus matriarch and two flanking adults leading a hundred Parasaurolophus crossing the floodplain..." / "a lone Triceratops bull pausing while a thundering mass of a hundred Triceratops moves past behind him..." / "a Brachiosaurus adult with S-curve neck rising above 150 long-necked Brachiosaurus spread across the plain") — hero(es) + 100+ same-species + biome setting in the FIRST 30-40 words], [the dinosaurs' recognizable silhouette cues — necks/crests/frills/plates/spikes], [the biome mega-flora around], [the atmospheric phenomenon if rolled], [the small accent — trailing juvenile / pterosaurs above / dust-cloud / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+[OPENING: name the HERO foreground dinosaur(s) by species AND describe the migration as 100+ same-species individuals — NEVER use the word "herd" (e.g. "a Parasaurolophus matriarch and two flanking adults leading a hundred Parasaurolophus crossing the floodplain..." / "a lone Triceratops pausing while a thundering mass of a hundred Triceratops moves past behind it..." / "a Brachiosaurus adult with S-curve neck rising above 150 long-necked Brachiosaurus spread across the plain") — hero(es) + 100+ same-species + biome setting in the FIRST 30-40 words], [the dinosaurs' recognizable silhouette cues — necks/crests/frills/plates/spikes], [the biome mega-flora around], [the atmospheric phenomenon if rolled], [the small accent — trailing juvenile / pterosaurs above / dust-cloud / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
 
 CRITICAL — OPENING tokens explicitly name the species (Triceratops / Parasaurolophus / Brachiosaurus / etc.) AND count individuals ("a hundred Triceratops" / "100+ ceratopsians" / "fifty hadrosaurs" / "a vast gathering of Brachiosaurus") — NEVER use the word "herd". The species name is the strongest dinosaur anchor.
 
@@ -633,7 +633,7 @@ ${vibeDirective.slice(0, 250)}
 Wildlife-documentary cinematic framing of two Mesozoic dinosaurs in mid-confrontation. Alien-Mesozoic biome around. Atmospheric depth into golden distance. Tension without gore.
 
 ━━━ STRUCTURE (write the prompt in this order — TWO DINOSAURS + CONFRONTATION first) ━━━
-[OPENING: explicitly name TWO DINOSAURS by species (e.g. "two adult Triceratops bulls locked horn-to-horn in a dusty riverbed..." / "an Allosaurus and a Ceratosaurus mid-threat-display across a fern-prairie..." / "two Pachycephalosaurus rivals colliding domed-skull-to-domed-skull on a tundra-mountain ledge") — TWO dinosaur species + confrontation type + biome setting in the FIRST 30-40 words], [the confrontation pose — horns / heads / dust / muscle], [the biome mega-flora around], [the atmospheric phenomenon if rolled], [the small accent — broken debris / bystander / pterosaur / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+[OPENING: explicitly name TWO DINOSAURS by species (e.g. "two adult Triceratops locked horn-to-horn in a dusty riverbed..." / "an Allosaurus and a Ceratosaurus mid-threat-display across a fern-prairie..." / "two Pachycephalosaurus rivals colliding domed-skull-to-domed-skull on a tundra-mountain ledge") — TWO dinosaur species + confrontation type + biome setting in the FIRST 30-40 words], [the confrontation pose — horns / heads / dust / muscle], [the biome mega-flora around], [the atmospheric phenomenon if rolled], [the small accent — broken debris / bystander / pterosaur / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
 
 CRITICAL — OPENING tokens explicitly count "TWO" and name the species. Both dinosaurs MUST be visible and in mid-confrontation.
 
@@ -694,7 +694,7 @@ If the silhouette looks like elephant / giraffe / lion / wildebeest / cow / CROC
 🚫 NO CROCODILE SHAPES — DinoBot is DINOSAURS, not crocs. NO low-belly, NO short legs, NO long snout-with-teeth lying horizontal. If you write "Spinosaurus" make sure it's the upright theropod posture, not the crocodile-lying-on-ground pose.
 
 ⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
-The word "herd" pulls Flux toward modern mammal silhouettes (cow / wildebeest / buffalo). NEVER write "herd" anywhere. The seed material below MAY contain "herd" — REWRITE it with species-count phrasing: "a hundred Brachiosaurus" / "100+ Parasaurolophus silhouettes" / "a gathering of sauropods" / etc.
+The words "herd", "bull", "cow", "calf", "grazing", "savanna" all pull Flux toward modern mammal silhouettes. NEVER write ANY of them — use dinosaur-locked phrasing (species-count NOT herd, "adult" NOT bull, "juvenile" NOT calf, "fern-plain" NOT savanna): "a hundred Brachiosaurus" / "100+ Parasaurolophus silhouettes" / "a gathering of sauropods" / etc.
 
 ━━━ THE SCENE — DINOSAUR SILHOUETTE + DRAMATIC SKY + MESOZOIC HORIZON ━━━
 Composition:
@@ -934,7 +934,7 @@ Use UNMISTAKABLE dinosaur silhouette cues throughout the group:
 If only ONE dinosaur is visible → FAILED. If the group looks like wildebeest / bison / cattle / mammals → FAILED. Dinosaur identity MUST be unmistakable from silhouette.
 
 ⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
-The word "herd" pulls Flux toward modern mammal training data (buffalo, wildebeest, cattle). NEVER write "herd" anywhere. The seed material below MAY contain "herd" — REWRITE it using these dinosaur-locked phrasings:
+The words "herd", "bull"/"bulls", "cow", "calf"/"calves", "grazing", "savanna" all pull Flux toward modern mammal training data. NEVER write ANY of them — use dinosaur-locked replacements ("adult"/"old male" NOT bull, "juvenile" NOT calf, "feeding" NOT grazing, "fern-plain"/"floodplain" NOT savanna, species-count NOT herd):
 
 REPLACE "herd" / "group of" / "pack of" WITH:
 • "a hundred Triceratops moving together" / "a hundred Parasaurolophus crossing the plain"
@@ -998,7 +998,7 @@ This is the FOCAL SCENE. Hero foreground dinosaurs anchor the eye; 100+ same-spe
 ━━━ THE MESOZOIC BIOME (alien primordial landscape) ━━━
 ${biome}
 
-The biome is the stage. Alien-Mesozoic — mud-plains / cycad savanna / wet alluvial fan / volcanic floodplain / cretaceous prairie / etc. NEVER modern Earth landscape. Multi-tier depth into the haze.
+The biome is the stage. Alien-Mesozoic — mud-plains / cycad floodplain / wet alluvial fan / volcanic floodplain / cretaceous prairie / etc. NEVER modern Earth landscape. Multi-tier depth into the haze.
 ${phenomenonSection}━━━ SECONDARY ACCENT (small group-moment detail) ━━━
 ${surprise_element}
 
@@ -1023,7 +1023,7 @@ ${vibeDirective.slice(0, 250)}
 Wildlife-documentary cinematic framing of a massive Mesozoic dinosaur same-species group in mid-action. Hero foreground dinosaurs (30-45% frame) + 100+ same-species behind. Alien-Mesozoic biome around. Atmospheric haze into pale distance.
 
 ━━━ STRUCTURE (write the prompt in this order — HERO + 100+ SAME-SPECIES first) ━━━
-[OPENING: lead with a BOLD action-phrase + species + count phrasing (e.g. "Thundering across a volcanic floodplain, a hundred Parasaurolophus stampede in unison — three foreground bulls leading the cresting wave..." / "Mid-river-crossing, fifty Triceratops bulls flank their young as a thundering mass surges through current..." / "Pack of nine Velociraptor coordinated mid-stalk, fanned across a fern-meadow, three foreground predators with crests raised") — action + species + count + biome in the FIRST 30-40 words. NEVER use the word "herd". Always anchor with species name + count.], [the group's recognizable dinosaur silhouettes — necks/crests/frills/plates/spikes], [the biome around], [the atmospheric phenomenon if rolled], [the small accent — sentinel / dust-cloud / pterosaurs / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+[OPENING: lead with a BOLD action-phrase + species + count phrasing (e.g. "Thundering across a volcanic floodplain, a hundred Parasaurolophus stampede in unison — three foreground adults leading the cresting wave..." / "Mid-river-crossing, fifty Triceratops flank their juveniles as a thundering mass surges through current..." / "Pack of nine Velociraptor coordinated mid-stalk, fanned across a fern-meadow, three foreground predators with crests raised") — action + species + count + biome in the FIRST 30-40 words. NEVER use the word "herd". Always anchor with species name + count.], [the group's recognizable dinosaur silhouettes — necks/crests/frills/plates/spikes], [the biome around], [the atmospheric phenomenon if rolled], [the small accent — sentinel / dust-cloud / pterosaurs / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
 
 CRITICAL — OPENING tokens lead with a bold action phrase + species name + count. The species-name + count is the strongest dinosaur anchor. NEVER use the word "herd".
 
@@ -1235,7 +1235,7 @@ The hero dinosaur is photoreal — leathery scarred biological hide, weathered s
 
 ⚠️ SPECIES VARIETY MANDATE — render the EXACT species named above. Do NOT default to T-rex / Triceratops / Velociraptor / generic-theropod. The DINO_SPECIES pool has 200 entries spanning sauropods, hadrosaurs, ceratopsians, stegosaurs, ankylosaurs, theropods, ornithopods, pachycephalosaurs, dromaeosaurs, etc. Preserve the SPECIFIC species' silhouette + signature feature.
 
-⚠️ BIOME VARIETY MANDATE — do NOT default to lush green tropical jungle. The MESOZOIC BIOME pool spans alien deserts, volcanic plains, snow-capped mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, river-valleys, primordial-tundra, ash-fall plains, cycad-savanna, blue-glow caverns. Preserve the SPECIFIC biome named below — render its UNIQUE color palette and landscape elements, not generic jungle.
+⚠️ BIOME VARIETY MANDATE — do NOT default to lush green tropical jungle. The MESOZOIC BIOME pool spans alien deserts, volcanic plains, snow-capped mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, river-valleys, primordial-tundra, ash-fall plains, cycad-floodplain, blue-glow caverns. Preserve the SPECIFIC biome named below — render its UNIQUE color palette and landscape elements, not generic jungle.
 
 ━━━ THE VISUAL CUE (atmospheric character beat) ━━━
 ${visual_cue}
@@ -1272,7 +1272,7 @@ ${vibeDirective.slice(0, 250)}
 Telephoto cinematic wildlife portrait of a single Mesozoic dinosaur. Hero fills 50-70% of frame. Bokeh-soft alien-Mesozoic biome behind. Rim-light. Candid mid-existing-moment.
 
 ━━━ STRUCTURE (write the prompt in this order — SINGLE HERO + CANDID MOMENT first) ━━━
-[OPENING: explicitly name the DINOSAUR by species AND describe the candid moment in one line (e.g. "A solitary Tyrannosaurus rex pauses mid-stride at the edge of a fern-prairie, breath-steam pluming in the dawn cold..." / "An adult Brachiosaurus reaches her long S-neck up into Araucaria canopy, eye reflecting morning sun..." / "A Triceratops bull rests on a moss-rock, horned-frill catching evening light, jaw relaxed") — species + candid moment + biome in the FIRST 30-40 words. ALWAYS CANDID — never roaring at camera, never posed.], [the dinosaur's specific anatomy detail visible — hide texture / eye / scale-pattern / specific signature feature], [the biome bokeh around], [the atmospheric phenomenon if rolled], [the small portrait accent — feather / dust / breath / etc.], [foreground tactile detail — moss / mud / dust-particulate], [lighting + atmospheric layer — rim-light, golden hour], [color palette + mood]
+[OPENING: explicitly name the DINOSAUR by species AND describe the candid moment in one line (e.g. "A solitary Tyrannosaurus rex pauses mid-stride at the edge of a fern-prairie, breath-steam pluming in the dawn cold..." / "An adult Brachiosaurus reaches her long S-neck up into Araucaria canopy, eye reflecting morning sun..." / "A Triceratops rests on a moss-rock, bony neck-frill and brow-horns catching evening light, scaly reptilian hide, jaw relaxed") — species + candid moment + biome in the FIRST 30-40 words. ALWAYS CANDID — never roaring at camera, never posed.], [the dinosaur's specific anatomy detail visible — hide texture / eye / scale-pattern / specific signature feature], [the biome bokeh around], [the atmospheric phenomenon if rolled], [the small portrait accent — feather / dust / breath / etc.], [foreground tactile detail — moss / mud / dust-particulate], [lighting + atmospheric layer — rim-light, golden hour], [color palette + mood]
 
 CRITICAL — OPENING tokens explicitly name the species AND a CANDID action verb (never posing). The personality is in the BEHAVIOR captured.
 
@@ -1390,7 +1390,7 @@ This is the FOCAL ACTION. Mid-action peak moment captured cinematically. Energy,
 ━━━ THE MESOZOIC BIOME (alien primordial stage) ━━━
 ${biome}
 
-⚠️ BIOME VARIETY MANDATE — do NOT default to lush green tropical jungle. The biome pool spans alien deserts, volcanic plains, snow-capped mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, river-valleys, primordial-tundra, ash-fall plains, cycad-savanna, blue-glow caverns. Render the SPECIFIC biome named.
+⚠️ BIOME VARIETY MANDATE — do NOT default to lush green tropical jungle. The biome pool spans alien deserts, volcanic plains, snow-capped mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, river-valleys, primordial-tundra, ash-fall plains, cycad-floodplain, blue-glow caverns. Render the SPECIFIC biome named.
 ${phenomenonSection}━━━ SECONDARY ACCENT (small action-moment detail) ━━━
 ${surprise_element}
 
@@ -1467,7 +1467,7 @@ If ANY human-shaped silhouette appears at ANY scale — ANYWHERE in the frame �
 ⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern volcanic eruption, NEVER as modern wildfire, NEVER as modern wildlife. ALWAYS Late-Cretaceous primordial Earth with alien mega-flora, asteroid streak / impact aftermath / impact-winter darkness in the sky. End-of-Mesozoic-era coded.
 
 🚫 NO modern palm trees (those didn't exist yet) — cycads / Araucaria / mushroom-trees / tree-ferns / primordial conifers only
-🚫 NO modern grass (didn't dominate yet) — fern-prairie / horsetail-meadow / cycad-savanna instead
+🚫 NO modern grass (didn't dominate yet) — fern-prairie / horsetail-meadow / cycad-floodplain instead
 🚫 NO modern animal silhouettes (mammals were small nocturnal — dinosaurs and pterosaurs only)
 
 ⚠️⚠️⚠️ MANDATORY — APOCALYPTIC SKY EVENT ⚠️⚠️⚠️
@@ -1564,7 +1564,7 @@ ${vibeDirective.slice(0, 250)}
 Apocalyptic-cinematic framing of a Mesozoic dinosaur in the K-Pg extinction moment. Sky dominates (60-70%) with the apocalyptic event. Dinosaur as dignified silhouette anchor (25-35%). Alien-Mesozoic biome at horizon, atmospheric tint. Epic tragedy + beautiful devastation.
 
 ━━━ STRUCTURE (write the prompt in this order — DINOSAUR + APOCALYPTIC SKY first) ━━━
-[OPENING: explicitly name the DINOSAUR by species AND describe the apocalyptic sky moment (e.g. "A Triceratops bull stands dignified on a volcanic ridge as a blazing asteroid streak tears across the twilight sky..." / "A Parasaurolophus lifts its crested head calling into the impact-darkened sky as distant firestorms glow at the horizon..." / "A lone Tyrannosaurus silhouetted against blood-red ash-dimmed sun, head bowed, listening to the end") — species + dignified-action + apocalyptic-sky in the FIRST 30-40 words. Sky-event must be EXPLICIT in opening.], [the dinosaur's dignified posture detail — head-up / silhouetted / standing-tall], [the biome with apocalyptic tint], [the atmospheric phenomenon if rolled], [the small accent — ember / ash / pterosaur / etc.], [foreground tactile detail], [lighting — impact-flash / ash-filtered / ember-glow], [color palette + mood]
+[OPENING: explicitly name the DINOSAUR by species AND describe the apocalyptic sky moment (e.g. "A Triceratops stands dignified on a volcanic ridge as a blazing asteroid streak tears across the twilight sky..." / "A Parasaurolophus lifts its crested head calling into the impact-darkened sky as distant firestorms glow at the horizon..." / "A lone Tyrannosaurus silhouetted against blood-red ash-dimmed sun, head bowed, listening to the end") — species + dignified-action + apocalyptic-sky in the FIRST 30-40 words. Sky-event must be EXPLICIT in opening.], [the dinosaur's dignified posture detail — head-up / silhouetted / standing-tall], [the biome with apocalyptic tint], [the atmospheric phenomenon if rolled], [the small accent — ember / ash / pterosaur / etc.], [foreground tactile detail], [lighting — impact-flash / ash-filtered / ember-glow], [color palette + mood]
 
 CRITICAL — OPENING tokens explicitly name the species AND the apocalyptic sky event. The sky carries the tragedy.
 

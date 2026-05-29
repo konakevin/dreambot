@@ -2497,3 +2497,26 @@ R0: brass jellyfish / squirrel / heron / stag / fox automatons — all clearly m
 ### Systemic: bots have NO quality gate
 
 Bots post 2×/day on a flat round-robin with zero human review, so any path that drifts into a Flux failure mode pumps broken/off-theme renders straight to the live feed until someone scrolls past one. When a "random shit render" surfaces, the first move is: pull `ai_prompt` → identify the path → check whether the path's pool/template is betting on a Flux-hostile subject (animate-animal-automaton, tiny-in-frame subject, literary concept Flux doesn't know).
+
+---
+
+## DinoBot
+
+### cattle/ox/wildebeest drift — banning ONE word is a half-fix (2026-05-29)
+
+**Symptom:** intermittent renders of an ox / wildebeest-with-horns instead of a dinosaur — worst on the **herd-migration** path with horned ceratopsians (Triceratops / Styracosaurus / Centrosaurus / Carnotaurus / Pachycephalosaurus).
+
+**Root cause — the templates already banned the word "herd" (5 guards) but the cattle LEXICON was never removed:**
+
+1. **The templates' own examples TAUGHT the cattle vocabulary they meant to avoid** — opening examples said "Triceratops **bull**", "**bulls** flank **their young**", "**horned-frill**", "head **lowered**". Only "herd" was banned; **bull / calf / grazing / savanna passed straight through**, so Sonnet used them freely (even a hearted render's prompt said "a lone Agustinia **bull**").
+2. **The seed pools were saturated** — `herd_scenes.json` (~270 cattle hits): bull / calf / grazing / savanna / crossing-in-single-file, plus **acacia / baobab / termite-mound** (modern African-savanna flora that compounds the Serengeti read). `dino_species.json`: "**bull-like** brow horns", hadrosaurs "for **grazing**/browsing."
+3. **The photoreal `render` medium is the amplifier** — "photoreal living animal / REAL LIVING ANIMAL" + cattle words + a horned head → Flux fills in the nearest *real* horned herd animal. Distinctive silhouettes (sauropod necks, stegosaur plates, Agustinia spines) survive the vocab; **horned ceratopsians + "bull" tip over** → it's correlated with the species roll, which is why it feels random.
+
+**Fix (source-level — per the "fix the SOURCE pool, not the brief" lesson):**
+
+- **Scripted lexicon purge across all seed JSONs** (`/tmp/purge-dino-cattle.js`, ~966 replacements): bull→adult, bull-like→blade-like, calf→juvenile, grazing/browsing→feeding, savanna→fern-plain/floodplain, herd→gathering, acacia→araucaria, baobab→cycad-palms, hooves→clawed feet. **Left legit dino anatomy (horns/frill/plates/spikes) untouched.** Watch two regex traps: `savannahs?` requires the "h" so it MISSES American "savanna" — use `savannah?s?`; and a blanket `graze→feed` clobbers cinematography "grazing light" (scope it to feeding contexts).
+- **Templates** (`archetype-templates.js`): deleted every "bull"/"their young" teaching example; extended each "herd" ban to the full mammal lexicon (bull/cow/calf/grazing/savanna) **with positive replacements** ("adult" not bull, "juvenile" not calf, "feeding" not grazing, "fern-plain" not savanna); removed "cycad savanna" as an offered biome; added positive reptilian anatomy ("scaly hide, bony neck-frill, brow-horns") to the ceratopsian example.
+
+**Validated R0:** 5/5 herd-migration renders = dinosaurs, **0 oxen, 0 cattle words in any prompt**; worst case (Zuniceratops horned ceratopsian) rendered as frilled ceratopsians.
+
+**Cross-bot lesson:** banning a single trigger word rarely holds — **Flux re-finds the centroid through the surrounding lexicon, and a photoreal medium multiplies any lexical drift.** For any photoreal animal/creature bot, purge the entire modern-analog lexicon at the SOURCE pools (not one word in the brief) AND stop the templates from teaching that vocabulary in their own examples. Pair with positive anatomy, not just negative "don't look like a cow" (which risks [[feedback_negative_prompt_leak]]).
