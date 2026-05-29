@@ -15,7 +15,6 @@ import { supabase } from '@/lib/supabase';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
-import { NewPostsPill } from '@/components/NewPostsPill';
 import { OverlayPill } from '@/components/OverlayPill';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -175,7 +174,6 @@ export default function HomeScreen() {
   const pendingPostId = useFeedStore((s) => s.pendingPostId);
   const setPendingPostId = useFeedStore((s) => s.setPendingPostId);
   const homeFeedResetToken = useFeedStore((s) => s.homeFeedResetToken);
-  const bumpHomeFeedReset = useFeedStore((s) => s.bumpHomeFeedReset);
   // Dedup by id in case the paginated RPC's cursor boundary lets the same post
   // appear on two adjacent pages (can happen when many posts share the same
   // feed_score and the tiebreaker overlaps). Kills both data-level duplicates
@@ -245,7 +243,7 @@ export default function HomeScreen() {
 
   // ── Tap-active-tab gesture (Instagram-style) ──
   // FullScreenFeed handles the scroll-to-top via its scrollToTopToken prop.
-  // Here we just trigger the refetch + clear the new-posts pill.
+  // Here we just trigger the refetch.
   const skipFirstFeedReset = useRef(true);
   useEffect(() => {
     if (skipFirstFeedReset.current) {
@@ -253,34 +251,7 @@ export default function HomeScreen() {
       return;
     }
     refetch();
-    setHasNewPosts(false);
   }, [homeFeedResetToken, refetch]);
-
-  // ── New posts pill detection ──
-  // When the top post id changes (silent refetch from AppState resume,
-  // pull-to-refresh, or background refresh) AND the user is scrolled away
-  // from the top, raise a pill they can tap to jump up.
-  const [currentVisibleIndex, setCurrentVisibleIndex] = useState(0);
-  const [hasNewPosts, setHasNewPosts] = useState(false);
-  const lastSeenTopId = useRef<string | null>(null);
-  useEffect(() => {
-    const topId = feedPosts[0]?.id ?? null;
-    if (!topId) return;
-    if (lastSeenTopId.current === null) {
-      // First load — record without firing the pill
-      lastSeenTopId.current = topId;
-      return;
-    }
-    if (topId !== lastSeenTopId.current) {
-      lastSeenTopId.current = topId;
-      // Only surface the pill if the user is meaningfully scrolled away
-      if (currentVisibleIndex > 0) setHasNewPosts(true);
-    }
-  }, [feedPosts, currentVisibleIndex]);
-  // Clear the pill once the user organically reaches the top
-  useEffect(() => {
-    if (currentVisibleIndex === 0 && hasNewPosts) setHasNewPosts(false);
-  }, [currentVisibleIndex, hasNewPosts]);
 
   return (
     <View style={s.root}>
@@ -296,13 +267,6 @@ export default function HomeScreen() {
         ListEmptyComponent={<EmptyFeed tab={activeTab} />}
         onHudToggle={handleHudToggle}
         scrollToTopToken={homeFeedResetToken}
-        onIndexChange={setCurrentVisibleIndex}
-      />
-
-      <NewPostsPill
-        visible={hasNewPosts && activeTab === 'forYou'}
-        onPress={bumpHomeFeedReset}
-        topInset={insets.top}
       />
 
       <Animated.View style={[s.topOverlayWrap, overlayStyle]}>

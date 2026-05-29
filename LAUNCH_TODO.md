@@ -21,7 +21,7 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 - [ ] 🤖 Jumping to images in albums is **weird, janky**
 - [ ] 🤖 Images load **slow** in general — is our infra for image delivery bad?
 - [ ] 🤖 Feeds **stall out** + reach the bottom when there are obviously more posts (~30 in), after navigate/background/return. How do we recover from those stale conditions?
-- [ ] 🤖 **Remove** the "↑ new posts" pill on **all** feeds
+- [x] 🤖 **Remove** the "↑ new posts" pill on **all** feeds — shipped 2026-05-29
 - [ ] 🤖 Pulling down on any **bot feed** should refresh **all** the bots
 - [ ] **DreamBot becomes a posting bot** too — aggregates best-of from the other bots. Need an easy way to tap and repost
 - [ ] **User reposts** — implement; update feed algorithm: reinsert into followers' feeds? DB join of eligible posts? Look at how other shops do it.
