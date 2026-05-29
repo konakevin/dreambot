@@ -179,7 +179,7 @@ export default function DreamLoadingScreen() {
             )}
             {showQueue && (
               <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
-                <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
+                <Ionicons name="time-outline" size={16} color="#FFFFFF" />
                 <Text style={s.queueText}>Queue This</Text>
               </TouchableOpacity>
             )}
@@ -280,14 +280,12 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.accent,
   },
   queueText: {
-    color: colors.textSecondary,
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   modalBackdrop: {
     flex: 1,

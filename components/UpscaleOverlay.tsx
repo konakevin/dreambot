@@ -224,11 +224,10 @@ const styles = StyleSheet.create({
   },
   dismissBtn: {
     marginTop: 18,
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 24,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: 20,
+    backgroundColor: colors.accent,
   },
-  dismissText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
+  dismissText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
 });
