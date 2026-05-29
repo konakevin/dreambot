@@ -24,16 +24,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
-import { saveDream, pinToFeed } from '@/lib/dreamSave';
+import { saveDream } from '@/lib/dreamSave';
 import { Toast } from '@/components/Toast';
 
-import { vs } from '@/lib/responsive';
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export default function DreamRevealScreen() {
   const user = useAuthStore((s) => s.user);
   const result = useDreamStore((s) => s.result);
-  const config = useDreamStore((s) => s.config);
   const clearResult = useDreamStore((s) => s.clearResult);
   const reset = useDreamStore((s) => s.reset);
 

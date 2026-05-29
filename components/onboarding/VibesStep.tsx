@@ -110,7 +110,9 @@ export function VibesStep({ onNext, onBack }: Props) {
 
 const s = StyleSheet.create({
   scroll: { flex: 1 },
-  scrollContent: { paddingBottom: 100 },
+  // Clear the absolute OnboardingFooter (~126px: counter row + Back/Next +
+  // 34px home-indicator inset) so the last tile row isn't clipped behind it.
+  scrollContent: { paddingBottom: 150 },
   header: { paddingHorizontal: TILE_PADDING, paddingTop: 8, paddingBottom: 4 },
   selectAllText: { fontSize: 13, color: colors.accent, fontWeight: '600' },
 

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { useNavigation } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image as ExpoImage } from 'expo-image';
@@ -53,7 +54,29 @@ export function PostGrid({
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  // Mirror of headerHeight readable inside the onScroll callback without making
+  // it a dependency (keeps the callback identity stable).
+  const headerHeightRef = useRef(0);
   const [containerHeight, setContainerHeight] = useState(0);
+
+  // "Back to top" pill — surfaces once the user has scrolled past the album's
+  // first row, a quick jump back when they're deep in a long album. Hidden at
+  // the top (fresh navigation) and after a jump-to-top, since the scroll offset
+  // drops below the threshold. Bottom-left so it never collides with the
+  // bottom-right "Just viewed" pill.
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const handleScroll = useCallback((e: { nativeEvent: { contentOffset: { y: number } } }) => {
+    const y = e.nativeEvent.contentOffset.y;
+    const shouldShow = y > headerHeightRef.current + ROW_HEIGHT;
+    setShowBackToTop((prev) => (prev === shouldShow ? prev : shouldShow));
+  }, []);
+  const handleBackToTop = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Hide immediately rather than waiting for the scroll animation to cross
+    // the threshold.
+    setShowBackToTop(false);
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+  }, []);
 
   useEffect(() => {
     if (scrollToTopToken && scrollToTopToken > 0) {
@@ -77,9 +100,15 @@ export function PostGrid({
   // Pull-to-refresh on an infinite query refetches EVERY loaded page in
   // sequence (TanStack Query v5 removed the per-page `refetchPage` opt).
   // After scrolling deep, that's 5+ sequential round-trips. Trim the
-  // cache to the first page before refetching so the refresh is one
+  // cache to the first page before invalidating so the refresh is one
   // round-trip — the user keeps scroll position, deeper pages reload as
   // they re-scroll into view.
+  //
+  // Use invalidateQueries (not query.refetch()) — refetch() reads internal
+  // page-count state that doesn't always sync with the prior setQueryData
+  // trim and can no-op when a concurrent fetchNextPage is mid-flight
+  // (e.g. pendingAutoAnchor effect below). invalidateQueries marks the
+  // query stale + triggers refetch atomically, the documented pattern.
   const queryClient = useQueryClient();
   const authUserId = useAuthStore((s) => s.user?.id);
   const activeQueryKey = useMemo(() => {
@@ -88,12 +117,12 @@ export function PostGrid({
     if (isDreams) return ['my-dreams', authUserId];
     return ['publicProfilePosts', userId];
   }, [isOwn_, isSaved, isDreams, userId, authUserId]);
-  const handleRefresh = useCallback(() => {
+  const handleRefresh = useCallback(async () => {
     queryClient.setQueryData<InfiniteData<unknown>>(activeQueryKey, (old) =>
       old ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old
     );
-    activeQuery.refetch();
-  }, [queryClient, activeQueryKey, activeQuery]);
+    await queryClient.invalidateQueries({ queryKey: activeQueryKey, refetchType: 'active' });
+  }, [queryClient, activeQueryKey]);
 
   const posts: DreamPostItem[] = useMemo(
     () => activeQuery.data?.pages.flatMap((p) => p.rows) ?? [],
@@ -108,7 +137,7 @@ export function PostGrid({
     if (hasNextPage && !isFetchingNextPage) {
       activeQuery.fetchNextPage();
     }
-  }, [hasNextPage, isFetchingNextPage, activeQuery.fetchNextPage]);
+  }, [hasNextPage, isFetchingNextPage, activeQuery]);
 
   // Subscribe to store directly so the latest currentPostId is reflected
   // even if the parent screen's render of the prop is stale. Store value
@@ -237,13 +266,7 @@ export function PostGrid({
     if (activeQuery.hasNextPage && !activeQuery.isFetchingNextPage) {
       activeQuery.fetchNextPage();
     }
-  }, [
-    pendingAutoAnchor,
-    highlightIndex,
-    activeQuery.hasNextPage,
-    activeQuery.isFetchingNextPage,
-    activeQuery.fetchNextPage,
-  ]);
+  }, [pendingAutoAnchor, highlightIndex, activeQuery]);
 
   // Step 2: once the post is in loaded pages and the layout is measured,
   // silently scroll to it, then clear the pending flag.
@@ -265,12 +288,7 @@ export function PostGrid({
     ) {
       activeQuery.fetchNextPage();
     }
-  }, [
-    isFetchingHighlight,
-    highlightIndex,
-    activeQuery.hasNextPage,
-    activeQuery.isFetchingNextPage,
-  ]);
+  }, [isFetchingHighlight, highlightIndex, activeQuery]);
 
   const gridArea = containerHeight - headerHeight;
   const visibleRows = gridArea > 0 ? Math.floor(gridArea / ROW_HEIGHT) : 0;
@@ -292,7 +310,7 @@ export function PostGrid({
       setIsFetchingHighlight(true);
       activeQuery.fetchNextPage();
     }
-  }, [highlightIndex, activeQuery.hasNextPage, activeQuery.fetchNextPage, scrollToHighlightRow]);
+  }, [highlightIndex, activeQuery, scrollToHighlightRow]);
 
   return (
     <View
@@ -327,11 +345,19 @@ export function PostGrid({
         }
         ListHeaderComponent={
           ListHeaderComponent ? (
-            <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
+            <View
+              onLayout={(e) => {
+                const h = e.nativeEvent.layout.height;
+                setHeaderHeight(h);
+                headerHeightRef.current = h;
+              }}
+            >
               {ListHeaderComponent}
             </View>
           ) : undefined
         }
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         onEndReachedThreshold={0.5}
         onEndReached={handleEndReached}
         viewabilityConfig={viewabilityConfigRef.current}
@@ -379,6 +405,16 @@ export function PostGrid({
           <Ionicons name="chevron-down" size={14} color="rgba(255,255,255,0.7)" />
         </TouchableOpacity>
       )}
+      {showBackToTop && (
+        <TouchableOpacity
+          style={styles.backToTopButton}
+          onPress={handleBackToTop}
+          activeOpacity={0.85}
+        >
+          <Ionicons name="arrow-up" size={14} color="#FFFFFF" />
+          <Text style={styles.backToTopButtonText}>Top</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -411,6 +447,25 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.15)',
   },
   justViewedButtonText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  backToTopButton: {
+    position: 'absolute',
+    bottom: 24,
+    left: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(15,15,26,0.85)',
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
+  },
+  backToTopButtonText: {
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600',

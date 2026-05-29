@@ -149,6 +149,12 @@ Deno.serve(async (req) => {
   // Force scene cluster picking from a specific sub-pool: 'activity' or
   // 'spot'. Default (undefined) blends both.
   const force_cluster_kind = (body.force_cluster_kind as 'activity' | 'spot' | null) || undefined;
+  // First-dream onboarding render only: roll the DEFAULT medium from the
+  // face-swap-eligible pool (instead of the broad dream_eligible pool) so the
+  // user is reliably cast into the scene via face swap. Fully gated — the
+  // normal nightly queue path never sets this, so its dream_eligible roll is
+  // untouched. Ignored when force_medium is also set (explicit wins).
+  const force_face_swap_eligible = body.force_face_swap_eligible === true;
 
   if (!vibe_profile) {
     return new Response(JSON.stringify({ error: 'vibe_profile is required' }), {
@@ -266,7 +272,11 @@ Deno.serve(async (req) => {
     // as the auto-gen quality gate. The user's create-screen options stay
     // broad; nightly is curated. recentMediums/recentVibes still apply for
     // rotation across the eligible pool.
-    let nightlyMedium = await resolveMediumFromDb('dream_eligible', undefined, recentMediums);
+    let nightlyMedium = await resolveMediumFromDb(
+      force_face_swap_eligible ? 'dream_eligible_face_swap' : 'dream_eligible',
+      undefined,
+      recentMediums
+    );
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);
     }

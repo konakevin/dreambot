@@ -330,7 +330,9 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
 const s = StyleSheet.create({
   scrollContent: {
     paddingTop: 8,
-    paddingBottom: 110,
+    // Clear the absolute OnboardingFooter (~126px) so the last row isn't
+    // clipped behind it.
+    paddingBottom: 150,
     paddingHorizontal: TILE_PADDING,
   },
 

@@ -33,7 +33,6 @@ const RAIL_WIDTH = 13;
 const TILE_WIDTH = Math.floor((SCREEN_WIDTH - TILE_PADDING * 2 - RAIL_WIDTH - TILE_GAP * 2) / 3);
 const TILE_HEIGHT = 55;
 const TILES_COLLAPSED = 6;
-const MIN_REQUIRED = 0;
 const MAX_ONBOARDING = 10;
 
 interface ObjectItem {
@@ -385,7 +384,9 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
           );
         })}
 
-        <View style={{ height: 120 }} />
+        {/* Clear the absolute OnboardingFooter (~126px) so the last row isn't
+            clipped behind it. */}
+        <View style={{ height: 150 }} />
       </ScrollView>
 
       {!isEditing && (

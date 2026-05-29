@@ -27,7 +27,6 @@ const MASCOT = require('@/assets/images/icon.png');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCREEN_HEIGHT * 0.45);
-const MAX_DREAMS = Infinity;
 
 type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles';
 /**
@@ -47,6 +46,13 @@ interface Dream {
   prompt: string;
   medium?: string;
   vibe?: string;
+  /**
+   * The uploads row id the render engine already persisted (nightly-dreams
+   * inserts a PRIVATE draft and returns its id). When present, Post just flips
+   * the row public — we never insert a second row. Undefined only on the
+   * legacy/first-dream-engine path, which still inserts in handleCreateBot.
+   */
+  uploadId?: string;
 }
 
 interface Props {
@@ -71,8 +77,7 @@ export function RevealStep({ onBack }: Props) {
   const generating = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
-  const activeDream = dreams[activeIndex] ?? null;
-  const dreamsRemaining = MAX_DREAMS - dreams.length;
+  const activeDream = dreams.at(activeIndex) ?? null;
   const describedProfile = useRef(profile);
 
   async function runBootSequence() {
@@ -152,12 +157,7 @@ export function RevealStep({ onBack }: Props) {
       await bootPromise;
       setPhase('generating');
 
-      // Let the engine pick from user's selections
-      const mediumKey = 'surprise_me';
-      const vibeKey = 'surprise_me';
-
-      if (__DEV__) console.log('[Reveal] medium:', mediumKey, 'vibe:', vibeKey);
-      const result = await generateVibeProfileDream(mediumKey, vibeKey);
+      const result = await generateVibeProfileDream();
       if (__DEV__) console.log('[Reveal] Got URL:', result.url?.slice(0, 80));
 
       setDreams((prev) => {
@@ -168,6 +168,7 @@ export function RevealStep({ onBack }: Props) {
             prompt: result.prompt,
             medium: result.medium,
             vibe: result.vibe,
+            uploadId: result.uploadId,
           },
         ];
         const newIdx = next.length - 1;
@@ -188,10 +189,13 @@ export function RevealStep({ onBack }: Props) {
     }
   }
 
-  async function generateVibeProfileDream(
-    mediumKey?: string,
-    vibeKey?: string
-  ): Promise<{ url: string; prompt: string; medium?: string; vibe?: string }> {
+  async function generateVibeProfileDream(): Promise<{
+    url: string;
+    prompt: string;
+    medium?: string;
+    vibe?: string;
+    uploadId?: string;
+  }> {
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -199,32 +203,76 @@ export function RevealStep({ onBack }: Props) {
 
     // Feature flag — when enabled, route the first-dream render through the
     // dedicated generate-first-dream Edge Function (persona × location-class
-    // matrix). Spec: memory/project_first_dream_engine_spec.md.
+    // matrix). OFF by default; left untouched. Spec:
+    // memory/project_first_dream_engine_spec.md.
     const useFirstDreamEngine = process.env.EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED === 'true';
+    if (useFirstDreamEngine) {
+      const res = await fetch(
+        `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/generate-first-dream`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ vibe_profile: describedProfile.current }),
+        }
+      );
+      if (!res.ok) {
+        const errBody = await res.text();
+        if (__DEV__) console.warn('[Reveal] generate-first-dream error:', res.status, errBody);
+        throw new Error(`Generation failed: ${res.status}`);
+      }
+      const data = await res.json();
+      if (!data.image_url) throw new Error('No image URL in response');
+      return {
+        url: data.image_url,
+        prompt: data.prompt_used ?? '',
+        medium: data.resolved_medium ?? undefined,
+        vibe: data.resolved_vibe ?? undefined,
+      };
+    }
 
-    const endpoint = useFirstDreamEngine ? 'generate-first-dream' : 'generate-dream';
-    const reqBody = useFirstDreamEngine
-      ? { vibe_profile: describedProfile.current }
-      : {
-          mode: 'flux-dev',
-          medium_key: mediumKey,
-          vibe_key: vibeKey,
-          vibe_profile: describedProfile.current,
-          persist: false,
-        };
+    // Default path — route the first dream through the NIGHTLY engine. It loads
+    // the recipe we just saved (places / moods / cast) and casts the user into
+    // the scene. We FORCE a cast face swap so the very first dream is
+    // unmistakably "this is ME" in one of my places — dual when self + plus_one
+    // both exist, single otherwise. force_face_swap_eligible pins the medium to
+    // the face-swap-capable pool so the swap always lands. No usable cast →
+    // omit the force params and the engine renders a personalized scene (still
+    // anchored to the user's locations, far better than a generic roll).
+    const cast = describedProfile.current.dream_cast ?? [];
+    const usable = (role: string) =>
+      cast.find((m) => m.role === role && !!m.thumb_url && m.thumb_url.startsWith('http'));
+    const forceParams: Record<string, unknown> = {};
+    if (usable('self') && usable('plus_one')) {
+      forceParams.force_cast_role = 'dual';
+      forceParams.force_face_swap_eligible = true;
+    } else if (usable('self')) {
+      forceParams.force_cast_role = 'self';
+      forceParams.force_face_swap_eligible = true;
+    } else if (usable('plus_one')) {
+      forceParams.force_cast_role = 'plus_one';
+      forceParams.force_face_swap_eligible = true;
+    } else if (usable('pet')) {
+      forceParams.force_cast_role = 'pet';
+      forceParams.force_face_swap_eligible = true;
+    }
 
-    const res = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/${endpoint}`, {
+    if (__DEV__) console.log('[Reveal] nightly first-dream force params:', forceParams);
+
+    const res = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/nightly-dreams`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.access_token}`,
       },
-      body: JSON.stringify(reqBody),
+      body: JSON.stringify({ vibe_profile: describedProfile.current, ...forceParams }),
     });
 
     if (!res.ok) {
       const errBody = await res.text();
-      if (__DEV__) console.warn('[Reveal] Edge function error:', res.status, errBody);
+      if (__DEV__) console.warn('[Reveal] nightly-dreams error:', res.status, errBody);
       throw new Error(`Generation failed: ${res.status}`);
     }
 
@@ -235,6 +283,7 @@ export function RevealStep({ onBack }: Props) {
       prompt: data.prompt_used ?? '',
       medium: data.resolved_medium ?? undefined,
       vibe: data.resolved_vibe ?? undefined,
+      uploadId: data.upload_id ?? undefined,
     };
   }
 
@@ -250,41 +299,48 @@ export function RevealStep({ onBack }: Props) {
       const profileToSave = describedProfile.current ?? profile;
       await saveVibeProfile(user.id, profileToSave);
 
-      const { data: insertedRow, error: uploadError } = await supabase
-        .from('uploads')
-        .insert({
-          user_id: user.id,
-          image_url: activeDream.url,
-          caption: null,
-          ai_prompt: activeDream.prompt || null,
-          // Schema uses dream_medium / dream_vibe (not medium / vibe). Using
-          // the wrong names was a silent bug — every onboarding upload INSERT
-          // was failing, the fake `temp-${Date.now()}` id was getting pinned,
-          // and the home feed crashed trying to record_impression with it.
-          dream_medium: activeDream.medium || null,
-          dream_vibe: activeDream.vibe || null,
-          // Public → shows in the feed + to followers; private → album only.
-          // (is_public defaults false, so the old single "Post my Dream" button
-          // was silently saving private — this makes the choice explicit.)
-          is_public: makePublic,
-          ...(makePublic ? { posted_at: new Date().toISOString() } : {}),
-        })
-        .select('id')
-        .single();
-
-      if (uploadError) {
-        if (__DEV__) console.warn('[Reveal] Upload error:', uploadError);
+      // The render engine (nightly-dreams) already persisted the first dream as
+      // a PRIVATE uploads row and returned its id. Posting just flips that SAME
+      // row public — we never insert a second row (that was the old double-post
+      // bug). Only the legacy / first-dream-engine path (no uploadId) still
+      // inserts here as a fallback.
+      let uploadId: string | null = activeDream.uploadId ?? null;
+      if (uploadId) {
+        if (makePublic) {
+          const { error: pubError } = await supabase
+            .from('uploads')
+            // Clear the prompt-derived caption so the feed post reads clean
+            // (the engine seeds caption with the raw prompt for nightly).
+            .update({ is_public: true, posted_at: new Date().toISOString(), caption: null })
+            .eq('id', uploadId);
+          if (pubError && __DEV__) console.warn('[Reveal] Publish error:', pubError);
+        }
+      } else {
+        const { data: insertedRow, error: uploadError } = await supabase
+          .from('uploads')
+          .insert({
+            user_id: user.id,
+            image_url: activeDream.url,
+            caption: null,
+            ai_prompt: activeDream.prompt || null,
+            // Schema uses dream_medium / dream_vibe (not medium / vibe).
+            dream_medium: activeDream.medium || null,
+            dream_vibe: activeDream.vibe || null,
+            is_public: makePublic,
+            ...(makePublic ? { posted_at: new Date().toISOString() } : {}),
+          })
+          .select('id')
+          .single();
+        if (uploadError && __DEV__) console.warn('[Reveal] Upload error:', uploadError);
+        uploadId = insertedRow?.id ?? null;
       }
 
-      // Only pin the post if we got a real UUID back. Pinning a fake
-      // `temp-${Date.now()}` id used to cause the home feed to crash with
-      // a Postgres "invalid input syntax for type uuid" error when its
-      // record_impression RPC fired with the synthetic id.
       // Pin to the home feed only when shared publicly — a private dream lives
-      // in the album, not the feed.
-      if (makePublic && insertedRow?.id) {
+      // in the album, not the feed. Guard on a real UUID (pinning a synthetic
+      // id used to crash the home feed's record_impression RPC).
+      if (makePublic && uploadId) {
         setPinnedPost({
-          id: insertedRow.id,
+          id: uploadId,
           user_id: user.id,
           image_url: activeDream.url,
           caption: null,
@@ -316,7 +372,7 @@ export function RevealStep({ onBack }: Props) {
         recipient_id: user.id,
         actor_id: user.id,
         type: 'dream_generated',
-        upload_id: insertedRow?.id ?? null,
+        upload_id: uploadId,
         body: "welcome:Hey. I'm your DreamBot. I left you 25 sparkles to start dreaming. Sleep well.",
       });
 
