@@ -1,5 +1,12 @@
 import { useRef, useCallback, useEffect } from 'react';
-import { ScrollView, View, StyleSheet, LayoutChangeEvent } from 'react-native';
+import {
+  ScrollView,
+  View,
+  StyleSheet,
+  LayoutChangeEvent,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import { OverlayPill } from '@/components/OverlayPill';
 import type { BotUser } from '@/hooks/useBotUsers';
 
@@ -9,42 +16,69 @@ interface Props {
   onSelect: (botId: string | null) => void;
 }
 
+// Breathing room (px) when scrolling a pill in from an edge.
+const MARGIN = 20;
+
 export function BotPillRow({ bots, selectedBotId, onSelect }: Props) {
   const scrollRef = useRef<ScrollView>(null);
-  const pillPositions = useRef<Record<string, number>>({});
+  // Per-pill geometry in content coords, keyed by botId (or '__all__').
+  const pillGeom = useRef<Record<string, { x: number; width: number }>>({});
+  // Live scroll/layout state so we can tell what's currently visible without
+  // re-rendering (all refs).
+  const scrollXRef = useRef(0);
+  const viewportWRef = useRef(0);
+  const contentWRef = useRef(0);
 
   const handleLayout = useCallback(
     (key: string) => (e: LayoutChangeEvent) => {
-      pillPositions.current[key] = e.nativeEvent.layout.x;
+      const { x, width } = e.nativeEvent.layout;
+      pillGeom.current[key] = { x, width };
     },
     []
   );
 
-  // Scroll the active pill into view. Used by both the tap path and the
-  // external-driven path (when the BotsHorizontalPager swipes to a new bot,
-  // selectedBotId changes from outside and this effect fires the scroll).
+  // Reveal the active pill ONLY if it isn't already comfortably visible.
+  // Off the right edge → scroll just enough to bring it in with margin; off the
+  // left edge → same in reverse. The target is clamped to the content bounds,
+  // so near the end of the list the tail simply pins to the right (the active
+  // pill stays visible — we just can't drag it further left). This replaces the
+  // old always-snap-to-hard-left behavior, for both pill taps AND pager swipes.
   const scrollToActive = useCallback((botId: string | null) => {
     const key = botId ?? '__all__';
-    const x = pillPositions.current[key];
-    if (x != null) {
-      scrollRef.current?.scrollTo({ x: Math.max(0, x - 16), animated: true });
+    const pill = pillGeom.current[key];
+    const vw = viewportWRef.current;
+    if (!pill || vw <= 0) return;
+
+    const scrollX = scrollXRef.current;
+    const left = pill.x;
+    const right = pill.x + pill.width;
+    const maxOffset = Math.max(0, contentWRef.current - vw);
+
+    let target: number | null = null;
+    if (right > scrollX + vw - MARGIN) {
+      // off / near the right edge → reveal at the right with margin
+      target = right + MARGIN - vw;
+    } else if (left < scrollX + MARGIN) {
+      // off / near the left edge → reveal at the left with margin
+      target = left - MARGIN;
     }
+    if (target == null) return; // already comfortably visible — don't move
+
+    const clamped = Math.max(0, Math.min(target, maxOffset));
+    if (Math.abs(clamped - scrollX) < 1) return; // nothing meaningful to scroll
+    scrollRef.current?.scrollTo({ x: clamped, animated: true });
   }, []);
 
-  // External sync: when selectedBotId changes for any reason (including
-  // horizontal swipe in the pager), scroll the matching pill into view so
-  // the user can actually see the highlight update — not just the data.
+  // External sync: selectedBotId changes for any reason — a pill tap OR a
+  // horizontal swipe in the pager — so this single effect drives the reveal for
+  // both cases.
   useEffect(() => {
     scrollToActive(selectedBotId);
   }, [selectedBotId, scrollToActive]);
 
-  const handleSelect = useCallback(
-    (botId: string | null) => {
-      onSelect(botId);
-      scrollToActive(botId);
-    },
-    [onSelect, scrollToActive]
-  );
+  const handleScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    scrollXRef.current = e.nativeEvent.contentOffset.x;
+  }, []);
 
   return (
     <ScrollView
@@ -53,20 +87,24 @@ export function BotPillRow({ bots, selectedBotId, onSelect }: Props) {
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={s.row}
       style={s.scroll}
+      onScroll={handleScroll}
+      scrollEventThrottle={16}
+      onLayout={(e) => {
+        viewportWRef.current = e.nativeEvent.layout.width;
+      }}
+      onContentSizeChange={(w) => {
+        contentWRef.current = w;
+      }}
     >
       <View onLayout={handleLayout('__all__')}>
-        <OverlayPill
-          label="All"
-          active={selectedBotId === null}
-          onPress={() => handleSelect(null)}
-        />
+        <OverlayPill label="All" active={selectedBotId === null} onPress={() => onSelect(null)} />
       </View>
       {bots.map((bot) => (
         <View key={bot.id} onLayout={handleLayout(bot.id)}>
           <OverlayPill
             label={formatBotName(bot.username)}
             active={selectedBotId === bot.id}
-            onPress={() => handleSelect(bot.id)}
+            onPress={() => onSelect(bot.id)}
           />
         </View>
       ))}
