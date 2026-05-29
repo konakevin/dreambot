@@ -698,6 +698,10 @@ Deno.serve(async (req) => {
       locationCard: locationCard ?? undefined,
       castGender,
       moodAxis: moods,
+      // Biome CLASS drives scene-DNA scope filtering (Phase 2) — keeps the
+      // assembler's foreground/midground/weather/signature coherent with the
+      // location (no canals/driftwood/lightning-deer in a café).
+      biome: locationCard?.biome ?? undefined,
     });
 
     if (dream_wish) {

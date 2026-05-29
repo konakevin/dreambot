@@ -306,9 +306,630 @@ export const BIOME_AXES: Record<string, BiomeConfig> = {
       'NO CHEERFUL or pastel color palettes — gothic palette is deep blues, blacks, greys, dim ambers',
     ],
   },
+
+  desert_arid: {
+    TIME: [
+      'dawn over dunes — soft rose light raking long shadows across sand',
+      'golden hour — warm amber side-light sculpting every ripple and ridge',
+      'harsh midday — clear hard sun, bleached colors, short black shadows',
+      'blue hour — cool violet twilight settling over cooling sand',
+      'dramatic sunset — sky ablaze orange and crimson over the horizon',
+      'cold desert night — deep indigo sky, sharp stars over silvered sand',
+    ],
+    WEATHER: [
+      'crystal-clear shimmering air, sharp endless visibility',
+      'distant dust storm rolling across the far horizon, foreground clear',
+      'wind-rippled sand drifting low across the dunes',
+      'rare dramatic clouds throwing shadows across the desert floor',
+      'post-flash-flood clarity, air washed and luminous',
+      'heat haze blurring the far horizon, foreground crisp',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'heat-mirage shimmer pooling on the far horizon',
+      'wind-sculpted sand ripples catching low raking light',
+      'sandfall streaming off a dune crest, backlit and glowing',
+      'long sculptural shadows stretching across the dunes',
+      'lens flare from a low sun over bare rock',
+      'a distant dust devil spiraling against clear sky',
+      'crepuscular rays fanning over the arid expanse',
+      'star field wheeling over the cold night desert',
+    ],
+    SUBJECT_RULE:
+      'vast ARID DESERT landscape view of the location. Dunes, mesas, canyons, red-rock formations or the named monument rendered MASSIVE and monumental. Pure desert geography + dry atmosphere.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO WATER, OCEAN, LUSH GREENERY or jungle foliage (this is arid)',
+      'NO TROPICAL elements, NO snow, NO ice',
+      'NO INTERIORS as subject',
+      'NO FANTASY (no runes, mystical glow), NO SCI-FI (no spaceships, neon)',
+      'NO IMPOSSIBLE PHYSICS, NO modern infrastructure or tourists',
+    ],
+  },
+
+  temperate_forest: {
+    TIME: [
+      'dappled morning — soft light filtering through the canopy in shafts',
+      'golden hour — warm amber light raking between the trunks',
+      'misty dawn — cool grey-pink light through fog-wrapped trees',
+      'blue hour — deep cool twilight settling beneath the canopy',
+      'overcast soft light — even diffuse glow, saturated greens',
+      'autumn-gold afternoon — warm light through amber and crimson leaves',
+    ],
+    WEATHER: [
+      'morning mist drifting between the trunks',
+      'light rain pattering on the canopy, leaves glistening',
+      'crisp clear air with sharp depth into the trees',
+      'fog rolling low through the understory',
+      'post-rain stillness, everything dripping and luminous',
+      'shafts of clear sun cutting through a break in the canopy',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'god-rays piercing down through the canopy in defined shafts',
+      'dappled light scattering across the forest floor',
+      'mist glowing where sunbeams strike it',
+      'dewdrops on ferns catching tiny points of light',
+      'backlit translucent leaves glowing green and gold',
+      'fireflies drifting through the understory at dusk',
+      'moonlight filtering through bare branches in silver shafts',
+      'spider silk strung between branches catching the light',
+    ],
+    SUBJECT_RULE:
+      'lush FOREST landscape view of the location. Towering trees, layered canopy, mossy understory and forest depth rendered immersive and grand. Pure woodland + atmosphere.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO DESERT, NO snow-takeover, NO tropical-beach',
+      'NO INTERIORS as subject',
+      'NO FANTASY glow (no runes, fairy-light, mystical aura)',
+      'NO SCI-FI, NO IMPOSSIBLE PHYSICS',
+      'NO modern infrastructure, NO hikers or campers',
+    ],
+  },
+
+  alpine_mountain: {
+    TIME: [
+      'alpenglow dawn — peaks burning pink-orange against deep blue sky',
+      'golden hour — warm light raking across ridgelines and faces',
+      'harsh clear midday — sharp light, deep blue sky, crisp shadows',
+      'blue hour — cool cobalt twilight over silhouetted peaks',
+      'storm-break — dark sky split by a shaft of gold on a summit',
+      'sunset on the summits — last warm light on the highest peaks',
+    ],
+    WEATHER: [
+      'crystal-clear sharp air, every distant peak crisp',
+      'clouds pooling and flowing through the valleys below',
+      'breaking storm with cloud tearing off a summit',
+      'mist filling the valley, peaks floating above',
+      'lenticular clouds stacked over the highest peaks',
+      'fresh-snow-dusted ridges under a clear sky',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'alpenglow setting the snow peaks aflame pink and gold',
+      'god-rays spilling down into the valley',
+      'cloud inversion with peaks rising above a sea of cloud',
+      'sun-star bursting at the edge of a ridgeline',
+      'lens flare from a low sun over a summit',
+      'mist glowing gold where it catches the sun in the valley',
+      'crisp blue shadow of a peak cast across snow',
+      'sharp star points over the silhouetted ridgeline at night',
+    ],
+    SUBJECT_RULE:
+      'monumental MOUNTAIN landscape view of the location. Towering peaks, dramatic ridgelines, vast valleys and glaciated faces rendered MASSIVE and awe-scaled. Pure alpine geography + atmosphere.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO TROPICAL elements, NO desert dunes',
+      'NO INTERIORS as subject',
+      'NO FANTASY (no runes, mystical glow), NO SCI-FI',
+      'NO IMPOSSIBLE PHYSICS (no floating islands)',
+      'NO modern infrastructure, NO climbers or hikers',
+    ],
+  },
+
+  grassland_savanna: {
+    TIME: [
+      'golden dawn — warm low light across the grass, long shadows',
+      'golden hour — amber light, acacias backlit against the sky',
+      'harsh midday — high clear sun, bleached grass, big bright sky',
+      'blue hour — cool twilight over the plains, first stars',
+      'dramatic sunset — sky ablaze behind acacia silhouettes',
+      'pre-storm light — dark thunderheads with sun beneath',
+    ],
+    WEATHER: [
+      'heat-shimmer clear air over endless grass',
+      'towering thunderheads building dramatically over the plains',
+      'dust on the wind drifting across the savanna',
+      'post-rain green flush under a washed bright sky',
+      'wind rippling waves through the tall grass',
+      'distant storm cell with sunlit foreground, split sky',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'acacia silhouettes stark against a fiery sky',
+      'god-rays fanning through towering thunderheads',
+      'dust catching gold light in a low shaft',
+      'long shadows of lone trees raking across the grass',
+      'lens flare from a low sun over the plains',
+      'heat mirage shimmering on the far horizon',
+      'sun-star low over the grassland at golden hour',
+      'sweeping cloud shadows racing across the savanna',
+    ],
+    SUBJECT_RULE:
+      'vast SAVANNA / GRASSLAND landscape view of the location. Endless rolling grass, lone acacias, big dramatic sky rendered expansive and cinematic. Pure savanna geography + atmosphere.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO safari vehicles, NO tourists, NO modern infrastructure',
+      'NO INTERIORS as subject',
+      'NO TROPICAL-beach, NO snow, NO dense jungle',
+      'NO FANTASY, NO SCI-FI, NO IMPOSSIBLE PHYSICS',
+    ],
+  },
+
+  wetland_jungle: {
+    TIME: [
+      'misty jungle dawn — soft light through fog and dense canopy',
+      'dappled golden hour — warm light filtering through giant leaves',
+      'filtered midday — green-tinted light beneath the dense canopy',
+      'blue hour — deep cool twilight in the humid understory',
+      'storm light — dark sky breaking with a shaft over the river',
+      'sunset through the canopy — warm light igniting the upper leaves',
+    ],
+    WEATHER: [
+      'humid mist rising off the forest floor and river',
+      'monsoon rain hammering broad leaves, everything streaming',
+      'steam lifting after rain, air thick and luminous',
+      'river fog drifting between the trunks',
+      'clear heavy humid air with dense green depth',
+      'shafts of sun breaking through a gap in the dense canopy',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'god-rays piercing through the dense canopy in thick shafts',
+      'mist glowing gold over the river',
+      'backlit giant leaves glowing translucent green',
+      'waterfall spray catching light as a glowing veil',
+      'fireflies and insects drifting through the understory',
+      'dewdrops beading on broad leaves catching light',
+      'dappled jungle-floor light shifting across moss and root',
+      'iridescent sheen on wet leaves and vines',
+    ],
+    SUBJECT_RULE:
+      'dense TROPICAL JUNGLE / WETLAND landscape view of the location. Towering canopy, hanging vines, rivers, waterfalls and lush overgrowth rendered immersive and vast. Pure jungle geography + humid atmosphere.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO DESERT, NO snow, NO arid terrain',
+      'NO INTERIORS as subject',
+      'NO FANTASY glow (no runes, fairy-light), NO SCI-FI',
+      'NO IMPOSSIBLE PHYSICS, NO modern infrastructure or explorers',
+    ],
+  },
+
+  urban_city: {
+    TIME: [
+      'golden hour — warm light raking across the skyline, glass aflame',
+      'blue hour — deep twilight with city lights blinking on',
+      'dawn over the city — soft pink light, streets still and empty',
+      'neon night — saturated artificial light over dark wet streets',
+      'overcast moody — flat grey light, brooding cityscape',
+      'dramatic sunset — sky burning between the towers',
+    ],
+    WEATHER: [
+      'crystal-clear sharp air, skyline crisp to the horizon',
+      'light rain glossing the streets into mirrors of light',
+      'mist drifting between the towers, tops fading into haze',
+      'dramatic clouds massing over the skyline',
+      'post-rain neon reflections shimmering on wet asphalt',
+      'clear crisp city air with long light down the avenues',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'golden-hour light blazing off glass towers',
+      'city lights twinkling on across the skyline at blue hour',
+      'neon reflections smearing across wet streets',
+      'god-rays slicing between skyscrapers',
+      'lens flare off a wall of glass',
+      'sun flare blasting straight down a street canyon',
+      'fog-glow halos around streetlights',
+      'light trails of traffic streaking the avenues at dusk',
+    ],
+    SUBJECT_RULE:
+      'iconic CITYSCAPE view of the location. The skyline, streets, bridges or landmark architecture rendered grand, layered and atmospheric. The built city IS the hero — urban geography + light.',
+    BANS: [
+      'NO PEOPLE as the subject (distant tiny scale only, if any)',
+      'NO TROPICAL-jungle or wilderness takeover',
+      'NO INTERIORS as subject (this is the city exterior / skyline)',
+      'NO FANTASY (no runes, mystical glow), NO overt SCI-FI (no holograms, neon-grid skies) unless the location is explicitly futuristic',
+      'NO IMPOSSIBLE PHYSICS (no floating buildings)',
+    ],
+  },
+
+  interior_intimate: {
+    TIME: [
+      'warm morning light slanting in through the windows',
+      'golden afternoon light pooling across the room',
+      'cozy evening lamplight, warm pockets of glow',
+      'candle-lit night, soft flickering warmth',
+      'soft overcast daylight through the glass, gentle and even',
+      'blue-hour outside with warm interior glow within',
+    ],
+    WEATHER: [
+      'still warm interior air, calm and lived-in',
+      'rain streaking the windows, cozy and dry within',
+      'snow falling softly outside the window, warm inside',
+      'soft daylight diffusing through curtains or glass',
+      'firelit warmth filling the space',
+      'dim lamplit hush, low and intimate',
+    ],
+    CAMERA: [
+      'intimate eye-level interior, warm inviting framing',
+      'cozy close perspective, shallow depth of field, soft background',
+      'three-quarter interior view layering furnishings into depth',
+      'low warm angle catching lamplight and surface texture',
+      'window-light side angle, soft falloff into the room',
+    ],
+    PHENOMENA: [
+      'dust motes drifting slowly through a shaft of window light',
+      'warm lamplight pooling and glowing on polished surfaces',
+      'steam curling up from a cup or kettle',
+      'candle flames flickering, casting soft moving light',
+      'light through a rain-streaked window dappling the walls',
+      'firelight dancing warm across the walls and ceiling',
+      'soft bokeh of string lights or fairy lights in the background',
+      'reflections glowing on wood, glass, and brass surfaces',
+    ],
+    SUBJECT_RULE:
+      'intimate INTERIOR scene — a cozy, lived-in indoor space (café, parlor, library, cabin interior, study) rendered warm, richly detailed and inviting. Furnishings, textures, and warm light fill the frame. The interior IS the subject, at human/eye-level scale — NOT an aerial vista or outdoor landscape.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO OUTDOOR LANDSCAPE as the subject (a view THROUGH a window is fine; the scene is INSIDE)',
+      'NO VAST / MONUMENTAL / aerial scale (this is intimate and human-scaled)',
+      'NO open sky or weather as the subject',
+      'NO WILD ANIMALS or creatures indoors',
+      'NO FANTASY glow, NO SCI-FI, NO IMPOSSIBLE PHYSICS',
+    ],
+  },
+
+  aquatic_underwater: {
+    TIME: [
+      'sunlit shallows — bright caustics dancing across the seafloor',
+      'deep blue midwater — cool dim light fading into the depths',
+      'twilight surface glow filtering down from above',
+      'bioluminescent night — darkness lit by living glow',
+      'dawn light filtering down in soft shafts',
+      'dappled afternoon — shifting light columns through clear water',
+    ],
+    WEATHER: [
+      'clear blue water with sharp caustic light on every surface',
+      'marine snow drifting slowly through the water column',
+      'gentle current swaying kelp and sea fans',
+      'sunbeams piercing the surface in defined shafts',
+      'murky green depth with light fading into gloom',
+      'streams of bubbles rising through shafts of light',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'caustic light patterns rippling across the seafloor and structures',
+      'god-rays piercing down through the water column',
+      'bioluminescent glow pulsing from coral and creatures',
+      'a school of fish turning and catching the light in unison',
+      'bubbles rising and catching light in glowing strings',
+      'particulate suspended and glowing in shafts of light',
+      'the shimmering silver surface seen from below',
+      'distant jellyfish drifting, softly luminous',
+    ],
+    SUBJECT_RULE:
+      'immersive UNDERWATER scene of the location. Submerged reef, sunken city, kelp forest or open-water vista rendered with caustic light, depth and a cool teal-cyan-blue palette. Water and marine geography is the hero.',
+    BANS: [
+      'NO PEOPLE, NO DIVERS, NO FIGURES',
+      'NO DRY-LAND elements, NO warm-amber land palette',
+      'NO open sky as subject (the scene is submerged)',
+      'NO INTERIORS unless a submerged structure',
+      'NO FANTASY glow unless the location is explicitly mythic, NO SCI-FI',
+      'NO IMPOSSIBLE PHYSICS',
+    ],
+  },
+
+  red_rock_canyon: {
+    TIME: [
+      'dawn — soft rose light first striking the canyon rims',
+      'golden hour — warm amber light raking the stratified walls',
+      'harsh midday — clear hard sun deep in the canyon, sharp shadows',
+      'blue hour — cool violet twilight settling between the walls',
+      'dramatic sunset — rims ablaze orange and crimson',
+      'desert night — deep indigo sky, sharp stars over the canyon',
+    ],
+    WEATHER: [
+      'crystal-clear sharp air, distant rims razor-crisp',
+      'monsoon thunderhead building dramatically over the rim',
+      'dust haze softening the canyon depths',
+      'post-rain clarity with seasonal waterfalls streaking the walls',
+      'dramatic cloud shadows sweeping across the strata',
+      'clear cold night air over the silent canyon',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'god-rays piercing down into the canyon depths',
+      'warm reflected light bouncing glowing between the red walls',
+      'long shadows raking across the sandstone strata',
+      'a single shaft of sun striking the distant canyon floor',
+      'lens flare from a low sun over the rim',
+      'heat shimmer rising off sun-baked rock',
+      'the Milky Way arcing over the silhouetted canyon at night',
+      'glowing rim-light tracing the edge of a mesa or hoodoo',
+    ],
+    SUBJECT_RULE:
+      'monumental RED-ROCK CANYON landscape — towering stratified sandstone walls, mesas, hoodoos, natural arches and vast canyon depth rendered awe-scaled. Pure red-rock geology + light.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO ocean/sea/lush greenery (a thin river or seasonal waterfall is fine)',
+      'NO snow/ice, NO tropical foliage, NO jungle',
+      'NO INTERIORS as subject',
+      'NO FANTASY (no runes, mystical glow), NO SCI-FI',
+      'NO tourists, railings, signage or modern infrastructure',
+    ],
+  },
+
+  volcanic_geothermal: {
+    TIME: [
+      'dawn over steaming ground — soft cold light through rising vapor',
+      'golden hour raking basalt and geyser fields',
+      'overcast diffuse light, even and moody over the lava',
+      'blue hour with geothermal pools glowing in the twilight',
+      'dramatic storm-break, a shaft of gold over the craters',
+      'aurora night over the lava field, sky rippling green',
+    ],
+    WEATHER: [
+      'low cloud and drifting geothermal steam over the terrain',
+      'fine drizzle over moss-and-lava fields',
+      'crystal-clear crisp sub-arctic air, sharp distance',
+      'mist pooling in the valley between craters',
+      'a dramatic squall sweeping across the open ground',
+      'thick steam rising from vents and fissures',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'a geyser erupting in a tall backlit plume',
+      'steam catching low light as glowing drifting veils',
+      'god-rays shafting through rising geothermal steam',
+      'mineral hot-springs glowing turquoise and ochre',
+      'a rainbow forming in the mist of an erupting geyser',
+      'aurora rippling over the dark lava field',
+      'mirror reflections of sky in a still hot-spring pool',
+      'sunlight glinting off black volcanic glass and wet basalt',
+    ],
+    SUBJECT_RULE:
+      'dramatic VOLCANIC / GEOTHERMAL landscape — basalt columns, lava fields, erupting geysers, steaming hot springs, mossy craters and glacial-meets-volcanic terrain rendered vast and otherworldly. Pure geothermal geography + steam atmosphere.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO tropical elements, NO palm trees, NO desert dunes',
+      'NO INTERIORS as subject',
+      'NO FANTASY or SCI-FI — the otherworldliness is REAL geology, not magic',
+      'NO dense jungle, NO modern infrastructure or tourists',
+    ],
+  },
+
+  fjord_coastal: {
+    TIME: [
+      'misty dawn over the fjord — soft cool light on the water',
+      'golden hour raking the towering cliff walls',
+      'overcast diffuse light, deep and still',
+      'blue hour over the mirror-still fjord',
+      'dramatic storm-break, gold light tearing over the cliffs',
+      'low sun catching the snow-capped peaks above the water',
+    ],
+    WEATHER: [
+      'mist drifting between sheer cliff walls',
+      'fine drizzle over the deep green water',
+      'crystal-clear air with a mirror-still fjord surface',
+      'low cloud clinging to the cliff tops',
+      'a dramatic squall sweeping down the fjord',
+      'fresh snow dusting the peaks above the water',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'mirror reflection of the cliffs doubled in the still fjord',
+      'waterfalls streaming in white ribbons down sheer rock walls',
+      'god-rays breaking over the cliff rim into the fjord',
+      'mist glowing gold where a shaft of sun strikes it',
+      'cloud inversion with peaks floating above the fjord',
+      'low-sun rim-light tracing the cliff edges',
+      'aurora rippling over the dark fjord at night',
+    ],
+    SUBJECT_RULE:
+      'monumental FJORD landscape — sheer cliff walls plunging into deep still water, ribboning waterfalls, snow-capped peaks above, immense vertical scale rendered awe-inspiring. Pure fjord geography + cool atmosphere.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO tropical elements, NO palm trees, NO desert',
+      'NO INTERIORS as subject',
+      'NO warm-amber tropical palette — this is a cool nordic coast',
+      'NO FANTASY or SCI-FI, NO urban skyline',
+    ],
+  },
+
+  mediterranean_coastal: {
+    TIME: [
+      'dawn over the caldera — soft rose light on whitewashed walls',
+      'golden hour — warm light raking white walls and blue domes',
+      'bright clear midday — brilliant sun, deep blue Aegean',
+      'blue hour with town lights glittering above the sea',
+      'fiery Aegean sunset — sky magenta and tangerine over the water',
+      'warm dusk — last gold light on the cliffside town',
+    ],
+    WEATHER: [
+      'crystal-clear bright Aegean air, sharp endless visibility',
+      'a few bright sculpted clouds drifting over the sea',
+      'a light meltemi breeze rippling the deep-blue water',
+      'warm haze softening the distant islands',
+      'post-rain sparkling clarity, every surface luminous',
+      'a calm mirror-still sea at first light',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'sun glittering on the Aegean in countless bright points',
+      'warm light raking whitewashed walls and cobalt domes',
+      'long shadows down the cliffside steps and alleys',
+      'lens flare off the bright sea',
+      'warm glow saturating the caldera at sunset',
+      'reflections of white houses in a still harbor',
+      'crepuscular rays fanning over the islands',
+    ],
+    SUBJECT_RULE:
+      'iconic MEDITERRANEAN COASTAL view — whitewashed cliffside towns, blue domes, caldera cliffs, the deep-blue Aegean and sun-bleached stone rendered luminous and grand. Sun-drenched but distinctly Mediterranean, NOT tropical.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO tropical palms, NO jungle, NO turquoise-lagoon-with-palms look',
+      'NO snow/ice',
+      'NO INTERIORS as subject',
+      'NO FANTASY or SCI-FI, NO overcast gloom, NO modern industrial',
+    ],
+  },
+
+  temperate_coastal: {
+    TIME: [
+      'foggy dawn on the cliffs — soft cool grey-gold light',
+      'golden hour raking the headlands and surf',
+      'overcast diffuse light, moody and even',
+      'blue hour over the Pacific, deep cool tones',
+      'dramatic storm-break with sun cutting onto the water',
+      'low warm sun glowing through coastal haze',
+    ],
+    WEATHER: [
+      'marine-layer fog rolling over the sea-cliffs',
+      'fine drizzle over the headlands, surfaces glistening',
+      'crystal-clear crisp coastal air, sharp horizon',
+      'a fog bank advancing off the cold sea',
+      'dramatic surf pounding under a brooding grey sky',
+      'a clearing storm with sun breaking onto the water',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'fog glowing where the sun breaks through over the surf',
+      'god-rays fanning over crashing waves',
+      'backlit spray flung off the breaking surf',
+      'long shadows across the headland at low sun',
+      'lens flare low over the Pacific',
+      'mist clinging and curling around the cliff faces',
+      'sun-glitter scattered across the cold swell',
+    ],
+    SUBJECT_RULE:
+      'rugged TEMPERATE COASTAL landscape — towering sea-cliffs, crashing surf, fog-wrapped headlands, arched coastal bridges and wind-bent cypress rendered dramatic and moody-bright. A cool rugged coast, distinctly NOT tropical.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO tropical palms, NO calm turquoise lagoon look',
+      'NO desert, NO snow',
+      'NO INTERIORS as subject',
+      'NO FANTASY or SCI-FI, NO city skyline as subject',
+    ],
+  },
+
+  zen_garden: {
+    TIME: [
+      'soft misty morning — gentle cool light through the maples',
+      'golden afternoon — warm light slanting through maple leaves',
+      'overcast diffuse light, soft and even on the moss',
+      'blue hour with stone-lantern glow warming the dusk',
+      'dappled midday light shifting across raked gravel',
+      'quiet dusk with paper-lantern light reflecting on the pond',
+    ],
+    WEATHER: [
+      'soft mist drifting low through the garden',
+      'gentle rain beading on moss and maple leaves',
+      'still clear air, the pond perfectly calm',
+      'light fog hovering over the koi pond',
+      'fresh post-rain stillness, everything dripping and luminous',
+      'drifting maple or cherry leaves carried on a faint breeze',
+    ],
+    CAMERA: [
+      'intimate eye-level view composing the garden into balanced depth',
+      'low angle across the raked gravel toward the pond and maples',
+      'three-quarter view layering bridge, lantern and pond into depth',
+      'soft-focus close perspective on a corner vignette of the garden',
+      "gentle elevated view framing the garden's composed geometry",
+    ],
+    PHENOMENA: [
+      'dappled light scattering through maple leaves onto moss',
+      'reflections of maples and a stone lantern in the still koi pond',
+      'mist glowing softly in a shaft of morning light',
+      'dewdrops on moss and stone catching tiny points of light',
+      'backlit translucent maple leaves glowing red and gold',
+      'a stone or paper lantern glowing warm at dusk',
+      'concentric ripples spreading slowly across the pond',
+    ],
+    SUBJECT_RULE:
+      "intimate JAPANESE GARDEN scene — manicured maples, cushioned moss, raked gravel, stone lanterns, arched bridges and koi ponds rendered serene, balanced and richly detailed at human / eye-level scale. The garden's composed tranquility is the subject — NOT a wild towering forest.",
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO wild towering forest or dense jungle',
+      'NO desert, NO snow-takeover',
+      'NO vast / aerial / monumental scale — this is intimate and garden-scaled',
+      'NO INTERIORS as the subject, NO FANTASY glow, NO modern elements',
+    ],
+  },
 };
 
-/** Look up the biome config, fall back to tropical_coastal if unknown. */
+/**
+ * Normalize a location card's tag array to a flat set of bare tag tokens.
+ * The card table mixes two schemes: bare (`desert`, `interior`) and prefixed
+ * (`biome:desert`, `mood:cozy`, `theme:epic`). Strip the prefix so downstream
+ * biome resolution + coherence filters see one canonical vocabulary.
+ */
+export function normalizeTags(tags: string[] | null | undefined): Set<string> {
+  const out = new Set<string>();
+  for (const raw of tags ?? []) {
+    if (typeof raw !== 'string') continue;
+    const t = raw.includes(':') ? raw.slice(raw.indexOf(':') + 1) : raw;
+    const clean = t.trim().toLowerCase();
+    if (clean) out.add(clean);
+  }
+  return out;
+}
+
+/**
+ * Resolve a coherent biome from a location card's tags. Priority order is
+ * most-identity-defining first (a fantasy place is fantasy even if it's also
+ * a forest; an interior café is interior even though it's also urban). This
+ * is the runtime fallback when location_cards.biome is null AND the seed of
+ * the backfill mapping — the backfill applies overrides for the handful of
+ * locations the heuristic gets wrong (e.g. iconic monuments → ancient_ruins).
+ * Returns null when nothing matches (caller logs + uses a neutral default).
+ */
+export function resolveBiomeFromTags(tags: string[] | null | undefined): string | null {
+  const t = normalizeTags(tags);
+  const has = (x: string) => t.has(x);
+
+  if (has('space') || has('cyberpunk')) return 'scifi_cosmic';
+  if (has('underwater') || has('aquatic')) return 'aquatic_underwater';
+  if (has('gothic')) return 'gothic_historic';
+  if (has('fantasy') || has('surreal')) return 'fantasy_imagined';
+  if (has('ruins') || has('ancient')) return 'ancient_ruins';
+  // Cozy/small interiors — AFTER the strong-identity biomes (a cathedral or
+  // colosseum interior is caught by gothic above; an epic interior is not
+  // "intimate"). Plain interior + not-epic → cozy indoor scene.
+  if (has('interior') && !has('epic')) return 'interior_intimate';
+  // Outdoor natural biomes. desert beats mountain (arid canyons tag both);
+  // mountain beats snow (snowy ranges are alpine, not polar).
+  if (has('desert')) return 'desert_arid';
+  if (has('mountain')) return 'alpine_mountain';
+  if (has('snow')) return 'arctic_polar';
+  if (has('tropical') && (has('forest') || has('jungle'))) return 'wetland_jungle';
+  if (has('jungle')) return 'wetland_jungle';
+  if (has('tropical') || has('coastal')) return 'tropical_coastal';
+  if (has('forest')) return 'temperate_forest';
+  if (has('urban')) return 'urban_city';
+  if (has('savanna') || has('grassland')) return 'grassland_savanna';
+  if (has('nature')) return 'temperate_forest';
+  return null;
+}
+
+/**
+ * Look up the biome config. Resolution order (caller is responsible for
+ * passing the location's stored biome OR a tag-resolved one):
+ *   1. exact biome key match
+ *   2. neutral fallback (tropical_coastal) — should be rare now that
+ *      resolveBiomeFromTags() covers unmapped locations at runtime; a hit
+ *      here means a genuinely untagged/unknown location worth logging.
+ */
 export function getBiomeConfig(biomeKey: string | null | undefined): BiomeConfig {
   if (biomeKey && BIOME_AXES[biomeKey]) return BIOME_AXES[biomeKey];
   return BIOME_AXES.tropical_coastal;

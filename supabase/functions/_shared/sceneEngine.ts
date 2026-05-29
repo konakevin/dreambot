@@ -148,6 +148,9 @@ interface SceneOptions {
     minimal_maximal: number;
     realistic_surreal: number;
   };
+  /** Resolved biome CLASS (e.g. 'interior_intimate', 'desert_arid') — drives
+   *  biome-scope filtering of the scene-DNA pools. See BIOME_SCOPES. */
+  biome?: string;
 }
 
 // ── Deterministic RNG ─────────────────────────────────────────────────
@@ -234,6 +237,42 @@ const CONFLICT_RULES: ConflictRule[] = [
   { ifTags: ['interior'], notTags: ['mountains', 'skyline', 'horizon'] },
   { ifTags: ['fire'], notTags: ['underwater', 'snow'] },
 ];
+
+// ── Biome → allowed scene-DNA scope tags (Phase 2 coherence) ────────────
+// Maps a location's biome CLASS to the coarse environment tags that may appear
+// in its foreground / midground / background / weather. Scene-DNA entries whose
+// tags don't intersect (and aren't untagged) are dropped — so an arctic scene
+// can't pull a 'coastal' foreground, a café can't pull 'nature' driftwood, etc.
+// Ported from the bot composer's tag-filtering. Tag vocab present in the pools:
+// nature, interior, urban, space, mountains, fire, underwater, coastal, rain,
+// snow, skyline, desert, tropical. `fantasy_imagined` is intentionally absent
+// (no scope filter — magical worlds are permissive; biome_config bans cohere it).
+const BIOME_SCOPES: Record<string, string[]> = {
+  tropical_coastal: ['coastal', 'nature', 'tropical', 'rain'],
+  mediterranean_coastal: ['coastal', 'nature'],
+  temperate_coastal: ['coastal', 'nature', 'rain'],
+  fjord_coastal: ['coastal', 'nature', 'mountains', 'snow', 'rain'],
+  arctic_polar: ['snow', 'nature', 'mountains'],
+  desert_arid: ['nature', 'desert'],
+  red_rock_canyon: ['nature', 'desert'],
+  temperate_forest: ['nature', 'rain'],
+  wetland_jungle: ['nature', 'rain', 'tropical', 'underwater'],
+  alpine_mountain: ['mountains', 'nature', 'snow'],
+  grassland_savanna: ['nature'],
+  urban_city: ['urban', 'interior', 'skyline', 'rain'],
+  interior_intimate: ['interior'],
+  zen_garden: ['nature', 'interior', 'rain'],
+  aquatic_underwater: ['underwater', 'nature'],
+  volcanic_geothermal: ['nature', 'fire', 'mountains', 'snow'],
+  gothic_historic: ['interior', 'urban', 'nature', 'rain', 'snow'],
+  ancient_ruins: ['nature', 'desert', 'interior'],
+  scifi_cosmic: ['space', 'urban', 'interior', 'skyline', 'fire'],
+};
+
+// Biomes where surreal "signature detail" hero-elements (a deer of crystallized
+// lightning, a clock bleeding sand) belong. For realistic biomes they're gated
+// behind a high surreal-mood so they never drop into a café for a calm user.
+const FANTASTICAL_BIOMES = new Set(['fantasy_imagined', 'scifi_cosmic']);
 
 // ── Curated Pools (small, hand-written — not worth Sonnet generation) ─
 
@@ -401,23 +440,17 @@ export function assembleScene(opts: SceneOptions): string {
     : 0.25;
   const allowChaotic = rand() < boldChance * 0.3;
 
-  // When a location card exists, it IS the scene identity — skip GEN_SETTINGS entirely.
-  // Scene DNA pools provide texture within the location, not a competing setting.
-  const hasLocationAnchor = opts.includeLocation && opts.userPlace && opts.locationCard;
-  const setting = hasLocationAnchor
-    ? null
-    : filterAndPick(GEN_SETTINGS, tags, rules, rand, allowChaotic);
-  const scale = filterAndPick(SCALE, tags, rules, rand, allowChaotic);
-  const time = filterAndPick(TIME, tags, rules, rand, allowChaotic);
-  const weather = filterAndPick(WEATHER, tags, rules, rand, allowChaotic);
-  const lighting = filterAndPick(LIGHTING, tags, rules, rand, allowChaotic);
-  // Foreground/midground/background — apply composition + location-compatibility filtering
-  const compMode = opts.compositionMode || 'balanced';
-  const compHint = COMPOSITION_HINTS[compMode];
-
-  // Location-based filtering: penalize scene DNA entries that clash with the location's identity
-  const locationTags =
-    hasLocationAnchor && opts.locationCard ? new Set(opts.locationCard.tags) : null;
+  // ── Biome-scope coherence (Phase 2) ───────────────────────────────────
+  // The location's biome CLASS constrains which scene-DNA entries may appear:
+  // an arctic scene can't pull a 'coastal' foreground; a café can't pull a
+  // 'nature' driftwood. Deer-in-café fix, ported from the bot composer.
+  const biomeScopes = opts.biome ? (BIOME_SCOPES[opts.biome] ?? null) : null;
+  const isIntimate = opts.biome === 'interior_intimate' || opts.biome === 'zen_garden';
+  // Surreal hero-details belong only in fantastical biomes OR for high-surreal
+  // users — never dropped into a realistic location for a calm/realistic user.
+  const allowSignature =
+    FANTASTICAL_BIOMES.has(opts.biome ?? '') ||
+    (opts.moodAxis ? opts.moodAxis.realistic_surreal > 0.55 : true);
 
   // Identity killers — hard-ban keywords that override any location's sense of place
   const IDENTITY_KILLERS = [
@@ -439,33 +472,43 @@ export function assembleScene(opts: SceneOptions): string {
     'slaughterhouse',
   ];
 
-  function applyLocationFilter(pool: Entry[]): Entry[] {
-    if (!locationTags) return pool;
+  // Drop scene-DNA entries whose environment tags don't belong in this biome.
+  // Untagged entries pass (permissive); fantastical biomes (no scope list) skip.
+  function applyBiomeFilter(pool: Entry[]): Entry[] {
     return pool
       .map((e) => {
         const lower = e.text.toLowerCase();
-        // Hard-ban identity killers when location exists
-        if (IDENTITY_KILLERS.some((kw) => lower.includes(kw))) {
-          return { ...e, weight: 0 };
-        }
-        // Soft-penalize tag mismatches (0.1x weight)
-        const eTags = e.tags ?? [];
-        const isIndoor = eTags.includes('interior') || eTags.includes('underground');
-        const locIsOutdoor =
-          locationTags.has('tropical') ||
-          locationTags.has('coastal') ||
-          locationTags.has('nature') ||
-          locationTags.has('mountain') ||
-          locationTags.has('desert');
-        if (isIndoor && locIsOutdoor) {
-          return { ...e, weight: Math.max(1, Math.round(e.weight * 0.1)) };
+        if (IDENTITY_KILLERS.some((kw) => lower.includes(kw))) return { ...e, weight: 0 };
+        if (biomeScopes) {
+          const eTags = e.tags ?? [];
+          if (eTags.length > 0 && !eTags.some((t) => biomeScopes.includes(t))) {
+            return { ...e, weight: 0 };
+          }
         }
         return e;
       })
       .filter((e) => e.weight > 0);
   }
 
-  let fgPool = applyLocationFilter(GEN_FOREGROUND);
+  // When a location card exists, it IS the scene identity — skip GEN_SETTINGS entirely.
+  const hasLocationAnchor = opts.includeLocation && opts.userPlace && opts.locationCard;
+  const setting = hasLocationAnchor
+    ? null
+    : filterAndPick(GEN_SETTINGS, tags, rules, rand, allowChaotic);
+  const scale = filterAndPick(SCALE, tags, rules, rand, allowChaotic);
+  const time = filterAndPick(TIME, tags, rules, rand, allowChaotic);
+  // Weather: biome-filtered, and skipped entirely for intimate interior biomes
+  // (a café/garden has no outdoor weather — that was a key incoherence source).
+  let weather: Entry | null = null;
+  if (!isIntimate) {
+    const wPool = applyBiomeFilter(WEATHER);
+    if (wPool.length > 0) weather = filterAndPick(wPool, tags, rules, rand, allowChaotic);
+  }
+  const lighting = filterAndPick(LIGHTING, tags, rules, rand, allowChaotic);
+  const compMode = opts.compositionMode || 'balanced';
+  const compHint = COMPOSITION_HINTS[compMode];
+
+  let fgPool = applyBiomeFilter(GEN_FOREGROUND);
   if (compHint.banKeywords.length > 0) {
     fgPool = fgPool.map((e) => {
       const lower = e.text.toLowerCase();
@@ -474,15 +517,9 @@ export function assembleScene(opts: SceneOptions): string {
     });
   }
   const foreground = filterAndPick(fgPool, tags, rules, rand, allowChaotic);
-  const midground = filterAndPick(
-    applyLocationFilter(GEN_MIDGROUND),
-    tags,
-    rules,
-    rand,
-    allowChaotic
-  );
+  const midground = filterAndPick(applyBiomeFilter(GEN_MIDGROUND), tags, rules, rand, allowChaotic);
   const background = filterAndPick(
-    applyLocationFilter(GEN_BACKGROUND),
+    applyBiomeFilter(GEN_BACKGROUND),
     tags,
     rules,
     rand,
@@ -492,17 +529,21 @@ export function assembleScene(opts: SceneOptions): string {
   // Story hook
   const storyHook = filterAndPick(GEN_STORY_HOOKS, tags, rules, rand, allowChaotic);
 
-  // Signature detail — rarity-gated
+  // Signature detail — rarity-gated, and only when the biome/mood allows surreal
+  // hero-elements (otherwise a realistic location for a calm user gets no
+  // "deer of crystallized lightning").
   let signatureText = '';
-  const sigRoll = rand();
-  if (sigRoll < 0.03 && allowChaotic) {
-    signatureText = filterAndPick(GEN_SIGNATURE_DETAILS, tags, rules, rand, true).text;
-  } else if (sigRoll < 0.15) {
-    const boldSigs = GEN_SIGNATURE_DETAILS.filter((e) => e.rarity !== 'chaotic');
-    if (boldSigs.length > 0) signatureText = pickWeighted(boldSigs, rand).text;
-  } else if (sigRoll < 0.5) {
-    const safeSigs = GEN_SIGNATURE_DETAILS.filter((e) => !e.rarity || e.rarity === 'safe');
-    if (safeSigs.length > 0) signatureText = pickWeighted(safeSigs, rand).text;
+  if (allowSignature) {
+    const sigRoll = rand();
+    if (sigRoll < 0.03 && allowChaotic) {
+      signatureText = filterAndPick(GEN_SIGNATURE_DETAILS, tags, rules, rand, true).text;
+    } else if (sigRoll < 0.15) {
+      const boldSigs = GEN_SIGNATURE_DETAILS.filter((e) => e.rarity !== 'chaotic');
+      if (boldSigs.length > 0) signatureText = pickWeighted(boldSigs, rand).text;
+    } else if (sigRoll < 0.5) {
+      const safeSigs = GEN_SIGNATURE_DETAILS.filter((e) => !e.rarity || e.rarity === 'safe');
+      if (safeSigs.length > 0) signatureText = pickWeighted(safeSigs, rand).text;
+    }
   }
 
   // Action — different pools for face-swap vs wide
@@ -599,16 +640,12 @@ export function assembleScene(opts: SceneOptions): string {
   }
 
   // Build the scene description
-  const pieces: string[] = [
-    settingText,
-    scale.text,
-    time.text,
-    weather.text,
-    lighting.text,
-    foreground.text,
-    midground.text,
-    background.text,
-  ];
+  const pieces: string[] = [settingText];
+  // Vast SCALE descriptors fight intimate interior biomes — skip them there.
+  if (!isIntimate) pieces.push(scale.text);
+  pieces.push(time.text);
+  if (weather) pieces.push(weather.text);
+  pieces.push(lighting.text, foreground.text, midground.text, background.text);
 
   if (signatureText) pieces.push(signatureText);
   if (objectBlock) pieces.push(objectBlock);

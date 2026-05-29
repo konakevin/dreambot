@@ -21,6 +21,8 @@ export interface LocationCard {
   texture_details: string[];
   cinematic_phrases: string[];
   fusion_settings: Record<string, string[]>;
+  /** Biome CLASS (location_cards.biome) — drives scene-DNA scope filtering. */
+  biome?: string | null;
 }
 
 export interface ObjectCard {
@@ -283,6 +285,7 @@ export async function getLocationCard(
       texture_details: data.texture_details || [],
       cinematic_phrases: data.cinematic_phrases || [],
       fusion_settings: data.fusion_settings || {},
+      biome: data.biome ?? null,
     };
     locationCache.set(name, card);
     return card;
@@ -328,6 +331,7 @@ export async function getLocationCard(
           texture_details: existing.texture_details || [],
           cinematic_phrases: existing.cinematic_phrases || [],
           fusion_settings: existing.fusion_settings || {},
+          biome: existing.biome ?? null,
         };
         locationCache.set(name, fetched);
         return fetched;
