@@ -511,8 +511,8 @@ export function RevealStep({ onBack }: Props) {
               <>
                 <Text style={s.revealTitle}>Your first dream is ready</Text>
                 <Text style={s.revealBody}>
-                  Share it to your feed, or just keep it in your dreams for now — you can always
-                  share it later.
+                  Post it to your feed so people who follow you can see it — or skip. Either way,
+                  it&apos;s saved to your dreams.
                 </Text>
                 <TouchableOpacity
                   style={s.createButton}
@@ -523,7 +523,7 @@ export function RevealStep({ onBack }: Props) {
                   {phase === 'creating' ? (
                     <ActivityIndicator color="#FFFFFF" />
                   ) : (
-                    <Text style={s.createButtonText}>Share to my feed</Text>
+                    <Text style={s.createButtonText}>Post to my feed</Text>
                   )}
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -532,7 +532,7 @@ export function RevealStep({ onBack }: Props) {
                   disabled={phase === 'creating'}
                   activeOpacity={0.7}
                 >
-                  <Text style={s.secondaryButtonText}>Just save to dreams</Text>
+                  <Text style={s.secondaryButtonText}>Skip</Text>
                 </TouchableOpacity>
               </>
             )}

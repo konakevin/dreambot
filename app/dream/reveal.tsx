@@ -86,7 +86,10 @@ export default function DreamRevealScreen() {
     }
   }
 
-  async function handleSave() {
+  // "Skip" — the dream is already saved to the album (Edge Function persisted a
+  // private draft at generation, or we insert one here as a fallback). Skipping
+  // just dismisses without posting publicly; nothing is lost.
+  async function handleSkip() {
     if (!user || saving) return;
     setSaving(true);
     try {
@@ -104,21 +107,15 @@ export default function DreamRevealScreen() {
 
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      Toast.show('Saved to My Dreams', 'checkmark-circle');
+      Toast.show('Saved to your dreams', 'checkmark-circle');
 
       clearResult();
       router.back();
     } catch (err) {
-      if (__DEV__) console.error('[Reveal] Save error:', err);
+      if (__DEV__) console.error('[Reveal] Skip error:', err);
       Toast.show('Failed to save dream', 'close-circle');
       setSaving(false);
     }
-  }
-
-  function handleDiscard() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    clearResult();
-    router.back();
   }
 
   return (
@@ -145,22 +142,17 @@ export default function DreamRevealScreen() {
           <ActivityIndicator size="large" color="#fff" />
         ) : (
           <>
-            <View style={s.buttonRow}>
-              <TouchableOpacity style={s.glassPill} onPress={handlePost} activeOpacity={0.85}>
-                <Ionicons name="globe-outline" size={16} color="#fff" />
-                <Text style={s.glassPillText}>Post</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={s.glassPill} onPress={handleSave} activeOpacity={0.85}>
-                <Ionicons name="moon-outline" size={16} color="#fff" />
-                <Text style={s.glassPillText}>Save to Dreams</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={s.glassPill} onPress={handleDiscard} activeOpacity={0.85}>
-                <Ionicons name="close" size={16} color="rgba(255,255,255,0.6)" />
-                <Text style={s.discardText}>Discard</Text>
-              </TouchableOpacity>
+            <View style={s.savedRow}>
+              <Ionicons name="checkmark-circle" size={14} color="rgba(255,255,255,0.7)" />
+              <Text style={s.savedHintText}>Saved to your dreams</Text>
             </View>
+            <TouchableOpacity style={s.primaryPill} onPress={handlePost} activeOpacity={0.85}>
+              <Ionicons name="globe-outline" size={17} color="#fff" />
+              <Text style={s.primaryPillText}>Post to my feed</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={s.skipButton} onPress={handleSkip} activeOpacity={0.7}>
+              <Text style={s.skipText}>Skip</Text>
+            </TouchableOpacity>
           </>
         )}
       </View>
@@ -202,10 +194,26 @@ const s = StyleSheet.create({
     gap: 12,
     alignItems: 'center',
   },
-  buttonRow: {
+  savedRow: {
     flexDirection: 'row',
-    gap: 10,
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 4,
   },
+  savedHintText: { color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: '600' },
+  primaryPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    alignSelf: 'stretch',
+    paddingVertical: 15,
+    borderRadius: 26,
+    backgroundColor: colors.accent,
+  },
+  primaryPillText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  skipButton: { paddingVertical: 10, alignItems: 'center' },
+  skipText: { color: 'rgba(255,255,255,0.65)', fontSize: 15, fontWeight: '600' },
   glassPill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -220,11 +228,6 @@ const s = StyleSheet.create({
   },
   glassPillText: {
     color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  discardText: {
-    color: 'rgba(255,255,255,0.6)',
     fontSize: 14,
     fontWeight: '600',
   },
