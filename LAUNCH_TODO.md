@@ -20,7 +20,7 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 
 - [ ] 🤖 Jumping to images in albums is **weird, janky**
 - [ ] 🤖 Images load **slow** in general — is our infra for image delivery bad?
-- [ ] 🤖 Feeds **stall out** + reach the bottom when there are obviously more posts (~30 in), after navigate/background/return. How do we recover from those stale conditions?
+- [x] 🤖 Feeds **stall out** + reach the bottom when there are obviously more posts (~30 in), after navigate/background/return. How do we recover from those stale conditions? — shipped 2026-05-29 (cursor-termination bug; details in commit)
 - [x] 🤖 **Remove** the "↑ new posts" pill on **all** feeds — shipped 2026-05-29
 - [x] 🤖 Pulling down on any **bot feed** should refresh **all** the bots — shipped 2026-05-29
 - [ ] **DreamBot becomes a posting bot** too — aggregates best-of from the other bots. Need an easy way to tap and repost

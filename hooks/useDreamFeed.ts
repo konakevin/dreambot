@@ -58,10 +58,15 @@ async function fetchFeedPage(
   // (See HomeScreen comment for the cross-page-boundary trade-off.)
   const rows: FeedRow[] = tab === 'bots' ? rawRows : (applyDiversity(rawRows) as FeedRow[]);
   const last = rawRows[rawRows.length - 1];
+  // Terminate ONLY on a genuinely empty page. An undersized page (< PAGE_SIZE)
+  // does NOT mean we're at the end — the server-side get_feed filter (blocked
+  // users, hidden posts, dedup) can return fewer rows than requested even
+  // when more are available below. The old `rawRows.length === PAGE_SIZE`
+  // check terminated prematurely on those, stranding users at a fake bottom
+  // 30 posts in. Trade-off: one trailing empty fetch when the feed is
+  // actually exhausted.
   const nextCursor: FeedCursor | null =
-    rawRows.length === PAGE_SIZE && last?.feed_score != null
-      ? { score: last.feed_score, id: last.id }
-      : null;
+    last?.feed_score != null ? { score: last.feed_score, id: last.id } : null;
   return { rows, nextCursor };
 }
 

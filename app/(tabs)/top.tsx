@@ -86,7 +86,13 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
     },
     initialPageParam: null as ExploreCursor | null,
     getNextPageParam: (lastPage) => {
-      if (lastPage.length < FEED_PAGE_SIZE) return undefined;
+      // Terminate ONLY on a genuinely empty page. An undersized page (< limit)
+      // does NOT mean we're at the end — the server-side get_feed filter
+      // (blocked users, hidden posts, dedup) can return fewer rows than
+      // requested even when more are available. The old `< FEED_PAGE_SIZE`
+      // check stranded the Top grid at a fake bottom. Trade-off: one
+      // trailing empty fetch on the genuinely-last page.
+      if (lastPage.length === 0) return undefined;
       const last = lastPage[lastPage.length - 1];
       if (last.feed_score == null) return undefined;
       return { score: last.feed_score, id: last.id } as ExploreCursor;

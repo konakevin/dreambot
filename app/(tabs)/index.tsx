@@ -64,10 +64,14 @@ function useDreamFeed(tab: FeedTab) {
       // dies. Cursor is fixed at the moment the page lands and never changes,
       // so deletes can't break "has more pages" detection.
       const last = rawRows[rawRows.length - 1];
+      // Terminate ONLY on a genuinely empty page. An undersized page does NOT
+      // mean we're at the end — the server-side get_feed filter (blocked
+      // users, hidden posts, dedup) can return fewer rows than requested even
+      // when more are available below. The old PAGE_SIZE check stranded
+      // users at a fake bottom 30 posts in. Trade-off: one trailing empty
+      // fetch when the feed is actually exhausted.
       const nextCursor: FeedCursor | null =
-        rawRows.length === PAGE_SIZE && last?.feed_score != null
-          ? { score: last.feed_score, id: last.id }
-          : null;
+        last?.feed_score != null ? { score: last.feed_score, id: last.id } : null;
       return { rows, nextCursor };
     },
     initialPageParam: null as FeedCursor | null,
