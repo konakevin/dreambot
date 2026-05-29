@@ -104,7 +104,7 @@ export async function prefetchDreamFeed(
     const cached = queryClient.getQueryData<{ pages: FeedPage[] }>(queryKey);
     const urls = (cached?.pages?.[0]?.rows ?? [])
       .slice(0, imageCount)
-      .map((r) => r.image_url)
+      .map((r) => r.image_url_display ?? r.image_url)
       .filter((u): u is string => !!u);
     if (urls.length) ExpoImage.prefetch(urls);
   } catch {

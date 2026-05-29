@@ -49,6 +49,9 @@ export interface DreamPostItem {
    * upscale completes. Used by long-press to skip the "this will take ~30s"
    * confirm dialog when HQ is already cached. */
   image_url_hq?: string | null;
+  /** Small JPEG display variant served to the feed (~150KB). NULL until the
+   * render pipeline / backfill populates it; the card coalesces to image_url. */
+  image_url_display?: string | null;
   caption: string | null;
   username: string;
   avatar_url: string | null;
@@ -253,10 +256,10 @@ export const DreamCard = memo(function DreamCard({
     },
     []
   );
+  // Prefer the small display variant; fall back to the full image when absent.
+  const heroBase = item.image_url_display ?? item.image_url;
   const heroUrl =
-    retryNonce > 0
-      ? `${item.image_url}${item.image_url.includes('?') ? '&' : '?'}r=${retryNonce}`
-      : item.image_url;
+    retryNonce > 0 ? `${heroBase}${heroBase.includes('?') ? '&' : '?'}r=${retryNonce}` : heroBase;
   // Reset to cover when the image changes (card reuse) so onLoad re-measures.
   useEffect(() => {
     setFillMode('cover');

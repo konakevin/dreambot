@@ -635,12 +635,35 @@ async function postAsBot({
   if (up.error) throw new Error(`storage upload failed: ${up.error.message}`);
   const publicUrl = sb.storage.from('uploads').getPublicUrl(key).data.publicUrl;
 
+  // Small JPEG DISPLAY variant for the feed (~150KB vs the 1-2MB PNG). image_url
+  // above stays the full image (the upscale source — HD downloads unchanged);
+  // the feed serves image_url_display. Best-effort: any failure leaves it null
+  // and the client coalesces to image_url, so a missing encoder never blocks a post.
+  let displayUrl = null;
+  try {
+    const sharp = require('sharp');
+    const displayBuf = await sharp(bytes)
+      .resize({ width: 768, withoutEnlargement: true })
+      .jpeg({ quality: 80, mozjpeg: true })
+      .toBuffer();
+    const displayKey = `${key.replace(/\.[^.]+$/, '')}.display.jpg`;
+    const dUp = await sb.storage
+      .from('uploads')
+      .upload(displayKey, displayBuf, { contentType: 'image/jpeg', cacheControl: '2592000' });
+    if (!dUp.error) {
+      displayUrl = sb.storage.from('uploads').getPublicUrl(displayKey).data.publicUrl;
+    }
+  } catch (e) {
+    if (process.env.DEBUG) console.warn(`[botEngine] display variant skipped: ${e.message}`);
+  }
+
   // Insert uploads row + select id back so we can populate style_summary after.
   const { data: insRow, error: insErr } = await sb
     .from('uploads')
     .insert({
       user_id: userId,
       image_url: publicUrl,
+      image_url_display: displayUrl,
       thumbnail_url: null,
       ai_prompt: prompt,
       dream_medium: medium,

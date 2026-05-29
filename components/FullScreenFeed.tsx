@@ -346,7 +346,7 @@ export function FullScreenFeed({
         // Prefetch next 3 images
         const upcoming = posts.slice(idx + 1, idx + 4);
         if (upcoming.length > 0) {
-          ExpoImage.prefetch(upcoming.map((p) => p.image_url));
+          ExpoImage.prefetch(upcoming.map((p) => p.image_url_display ?? p.image_url));
         }
         // Record impression after 1 second of visibility. Defensive guard:
         // skip non-UUID ids (e.g., synthetic `temp-{ts}` ids that some

@@ -1527,6 +1527,7 @@ export type Database = {
           id: string;
           image_url: string;
           image_url_hq: string | null;
+          image_url_display: string | null;
           image_url_hq_generated_at: string | null;
           is_active: boolean;
           is_ai_generated: boolean;
@@ -1570,6 +1571,7 @@ export type Database = {
           id?: string;
           image_url: string;
           image_url_hq?: string | null;
+          image_url_display?: string | null;
           image_url_hq_generated_at?: string | null;
           is_active?: boolean;
           is_ai_generated?: boolean;
@@ -1613,6 +1615,7 @@ export type Database = {
           id?: string;
           image_url?: string;
           image_url_hq?: string | null;
+          image_url_display?: string | null;
           image_url_hq_generated_at?: string | null;
           is_active?: boolean;
           is_ai_generated?: boolean;
@@ -2040,6 +2043,7 @@ export type Database = {
           id: string;
           image_url: string;
           image_url_hq: string;
+          image_url_display: string;
           like_count: number;
           posted_at: string;
           user_id: string;
