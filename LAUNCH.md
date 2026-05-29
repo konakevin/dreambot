@@ -66,8 +66,8 @@ The two things that still touch the build: confirm production **EAS env vars**
 - [x] Apple Developer Program membership active (confirmed 2026-05-28).
 - [x] App record created in App Store Connect (bundle `com.konakevin.radorbad`,
       name DreamBot). Confirmed 2026-05-28.
-- [ ] Confirm signing — let EAS manage credentials (recommended), or set up the
-      distribution cert + provisioning profile manually.
+- [x] Signing — EAS manages the distribution credentials (set up automatically during
+      the successful production build 2026-05-28).
 
 ---
 
@@ -133,7 +133,7 @@ The two things that still touch the build: confirm production **EAS env vars**
       `EXPO_PUBLIC_APP_ENV` is hard-set to `production` in the eas.json production profile.
 - [x] Supabase edge secrets verified set: `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`,
       `REVENUECAT_WEBHOOK_SECRET`, `DREAM_QUEUE_WORKER_TOKEN` (2026-05-28).
-- [ ] APNs key uploaded to Expo/EAS (done — push verified 2026-05-27; re-confirm for prod).
+- [x] APNs configured + push verified end-to-end on-device (2026-05-27).
 - [x] `eas.json` submit configured — `appleTeamId 43VMZ5KMW4`; `eas submit` generated +
       stored an App Store Connect API key (APP_MANAGER role) on 2026-05-28.
 - [x] **First production build** — `eas build -p ios --profile production` succeeded
