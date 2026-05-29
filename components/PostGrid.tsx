@@ -163,8 +163,6 @@ export function PostGrid({
     });
   }, [navigation, highlightPostId]);
 
-  const [scrollOverlay, setScrollOverlay] = useState(false);
-
   // Auto-scroll to the highlighted post on every focus enter — fixes the
   // "lose your place after detail-view scroll" bug. PostTile sets the album
   // store's currentPostId on tap, FullScreenFeed updates it via onIndexChange
@@ -203,16 +201,19 @@ export function PostGrid({
       const centeredOffset = headerHeight + targetRow * ROW_HEIGHT - (visibleArea - ROW_HEIGHT) / 2;
       const targetOffset = Math.max(0, centeredOffset);
 
-      // Silent mode (auto-scroll on focus return): skip the dim overlay flash.
-      // The grid is already visible — a 300ms black overlay is jarring vs the
-      // badge-tap path where the user explicitly initiated the jump.
-      if (!opts?.silent) setScrollOverlay(true);
-      listRef.current.scrollToOffset({ offset: targetOffset, animated: false });
-
-      setTimeout(() => {
-        setScrollOverlay(false);
-        setBadgeTapped(true);
-      }, 300);
+      // Badge-tap (user-initiated jump) → ANIMATE the scroll. A synchronous
+      // jump-to-row across a long distance shows the virtualizer mid-rebuild,
+      // which the old code masked with a 300ms dim+spinner overlay — but that
+      // overlay sat 300ms after a 1-frame jump, reading as "loading" when
+      // nothing was loading. Animated scroll fixes both: smooth slide, no
+      // virtualizer chaos to hide, no fake loading state.
+      //
+      // Silent (background auto-anchor during the back-swipe transition):
+      // hard jump. The user is watching the detail-screen slide away — the
+      // grid is occluded, so any mid-rebuild garbage is invisible. Animating
+      // a background scroll just wastes ~300ms.
+      listRef.current.scrollToOffset({ offset: targetOffset, animated: !opts?.silent });
+      setBadgeTapped(true);
     },
     [headerHeight, containerHeight]
   );
@@ -389,11 +390,6 @@ export function PostGrid({
           />
         )}
       />
-      {scrollOverlay && (
-        <View style={styles.scrollOverlay} pointerEvents="none">
-          <ActivityIndicator size="small" color={colors.textSecondary} />
-        </View>
-      )}
       {showJustViewedButton && (
         <TouchableOpacity
           style={styles.justViewedButton}
@@ -425,13 +421,6 @@ const styles = StyleSheet.create({
   emptyText: { color: colors.textSecondary, fontSize: 15 },
   footer: { paddingVertical: 20, alignItems: 'center' },
   container: { flex: 1 },
-  scrollOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#0F0F1A',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 10,
-  },
   justViewedButton: {
     position: 'absolute',
     bottom: 24,
