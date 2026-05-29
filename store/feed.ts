@@ -22,6 +22,10 @@ export interface FeedStore {
   // Top tab (explore grid) tap-to-top reset
   topGridResetToken: number;
   bumpTopGridReset: () => void;
+  // Bots tab re-tap reset — re-tap active Bots tab → reset selection to "All"
+  // + clear per-bot scroll memory (feed refresh rides on regenerateSeed).
+  botsResetToken: number;
+  bumpBotsReset: () => void;
   // Active tab tracking (for programmatic navigation)
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -48,6 +52,8 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpHomeFeedReset: () => set((s) => ({ homeFeedResetToken: s.homeFeedResetToken + 1 })),
   topGridResetToken: 0,
   bumpTopGridReset: () => set((s) => ({ topGridResetToken: s.topGridResetToken + 1 })),
+  botsResetToken: 0,
+  bumpBotsReset: () => set((s) => ({ botsResetToken: s.botsResetToken + 1 })),
   activeTab: 'index',
   setActiveTab: (tab) => set({ activeTab: tab }),
   pendingPostId: null,

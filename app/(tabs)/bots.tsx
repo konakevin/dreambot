@@ -48,6 +48,15 @@ export default function BotsScreen() {
   // Default: "All" view (null botId — mixed bot feed).
   const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
 
+  // Re-tap active Bots tab → reset selection back to "All" + clear per-bot
+  // scroll memory so every bot starts at its latest card. The actual feed
+  // refresh rides on feedSeed (regenerateSeed in the tab listener) — that
+  // changes every bots query key, so the prefetch effect below re-warms each
+  // bot feed and each page refetches the latest. Setting selectedBotId=null
+  // makes the pager snap back to the "All" page (its external-sync effect).
+  const botsResetToken = useFeedStore((s) => s.botsResetToken);
+  const skipFirstBotsReset = useRef(true);
+
   // Per-bot scroll-memory Map — within a single tab visit, scrolling
   // around between bots preserves each one's last visible card index.
   // On tab blur, the cleanup below clears the Map so leaving + coming
@@ -61,6 +70,15 @@ export default function BotsScreen() {
       };
     }, [])
   );
+
+  useEffect(() => {
+    if (skipFirstBotsReset.current) {
+      skipFirstBotsReset.current = false;
+      return;
+    }
+    setSelectedBotId(null);
+    indexMapRef.current.clear();
+  }, [botsResetToken]);
 
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({

@@ -113,6 +113,14 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
+            // Re-tap active Bots tab → reset selection to "All" + refresh every
+            // bot feed. regenerateSeed bumps feedSeed (in every bots query key)
+            // so each bot refetches the latest; bumpBotsReset tells the screen
+            // to snap back to the All page + clear per-bot scroll memory.
+            if (activeTab === 'bots') {
+              regenerateSeed();
+              useFeedStore.getState().bumpBotsReset();
+            }
             setActiveTab('bots');
           },
         }}
