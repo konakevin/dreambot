@@ -81,8 +81,7 @@ The two things that still touch the build: confirm production **EAS env vars**
 - [x] Pro subscription products created in ASC (monthly + yearly). Confirmed 2026-05-28.
 - [x] RevenueCat dashboard: offerings/entitlement (`pro`) mapped + **App Store shared
       secret** set (confirmed 2026-05-28); webhook → Supabase Edge Function (confirmed).
-- [ ] Fill per-IAP metadata (display name, description, **review screenshot per product**)
-      if not already done — required for first review.
+- [x] Per-IAP metadata + **review screenshots** added to all packs + subscriptions (2026-05-28).
 - [ ] **Submit the IAPs with the first app version** (Apple won't review the first IAP
       without an accompanying binary).
 - [x] Sandbox-tested purchase + Restore Purchases on-device via TestFlight (2026-05-28) — IAP working.
