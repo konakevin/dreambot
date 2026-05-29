@@ -138,3 +138,60 @@ Scaffolded with the real `appleTeamId` (`43VMZ5KMW4`). To finish, EITHER:
   + `REPLACE_ASC_API_KEY_ISSUER_ID` in `eas.json`.
 - `ascAppId` (the numeric App Store app ID) can also go here once the app record exists.
 ```
+
+---
+
+## App Store Connect submission walkthrough (step-by-step)
+
+Do these in App Store Connect (appstoreconnect.apple.com → Apps → **DreamBot**).
+Order below is the sensible sequence. Screenshots should wait until the UI is
+visually final; everything else can be filled anytime.
+
+### 1. App Information (app-level — left sidebar → "App Information")
+- **Name:** DreamBot · **Subtitle:** see listing fields above
+- **Category:** Primary = Photo & Video (or Entertainment); Secondary optional
+- **Content Rights:** "Does it contain third-party content?" → No (content is
+  user-generated / AI-generated, no licensed third-party media)
+- **Age Rating → Edit:** complete the questionnaire honestly. UGC + AI-generated
+  imagery + user photo upload → lands at the **17+ tier** (Apple's newer system may
+  label it 16+/18+ — pick the highest the questionnaire produces; don't fight it).
+
+### 2. App Privacy (left sidebar → "App Privacy" → Get Started)
+- Use the **nutrition-label table above**. For each data type mark it Collected,
+  **Linked to the user**, and **NOT used for tracking**.
+- Types: Email; Photos/User Content; User ID; Usage Data (analytics); Diagnostics
+  (crash); Purchases; Push token. Tracking = **No** (no ATT prompt).
+- Must match the live privacy policy (it does).
+
+### 3. Version page (the "1.0 Prepare for Submission" section)
+- **Promotional Text · Description · Keywords** — paste from "Listing fields" above
+- **Support URL:** https://dreambotapp.com/support
+- **Copyright:** 2026 Kevin McHenry
+
+### 4. Screenshots (Version page → "App Previews and Screenshots")
+- **6.7" Display** is required: **1290 × 2796 px**, min 3 (up to 10).
+- Easiest exact-size capture: run the app in the **iOS Simulator → iPhone 16 Pro Max**,
+  then File → Save Screen (or ⌘S) — produces exact 1290×2796. (Real-device screenshots
+  from a non-Pro-Max phone are the wrong size.)
+- Suggested shots: onboarding Vibe Profile · a full-screen generated dream · the feed ·
+  a Create mode · profile.
+
+### 5. In-App Purchases + subscriptions (left sidebar → Monetization → In-App Purchases / Subscriptions)
+- Products already exist. For EACH (5 sparkle packs + Pro monthly/yearly):
+  - Fill **Display Name** + **Description**
+  - Upload a **review screenshot** (a shot of the in-app store screen showing it —
+    the Sparkle Store / Pro screen works for all)
+  - Confirm price tier
+- ⚠️ First submission: the IAPs must be **attached to the app version** so they're
+  reviewed together — on the version page there's an "In-App Purchases" section to add them.
+
+### 6. App Review Information (Version page → scroll to "App Review Information")
+- **Sign-In required:** Yes → enter the **demo account** email + password (create a
+  real account first, finish onboarding, preload sparkles).
+- **Notes:** paste the "App Review notes" block above (demo creds + moderation explanation).
+
+### 7. Build + Submit (Version page → "Build" section)
+- Click **+** / Select the processed TestFlight build (app ID 6761505205).
+- **Export compliance:** auto-handled (`ITSAppUsesNonExemptEncryption: false`) — no prompt.
+- Verify every section shows a green check, then **Add for Review → Submit for Review**.
+- ⏳ Review is typically 24–48h. ⚠️ Only do this when the app is actually code-complete.
