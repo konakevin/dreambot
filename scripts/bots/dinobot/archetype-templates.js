@@ -10,6 +10,24 @@
  * definition in ./archetypes.js.
  */
 
+// Injected into every template as a Sonnet INSTRUCTION (not a Flux fragment, not
+// a seed aside — Sonnet strips seed asides but obeys instructions). Flux only has
+// strong priors for ~15 famous dinosaurs and otherwise collapses obscure genera
+// toward a generic toothy theropod; this forces Sonnet to write a body-plan +
+// famous-relative anchor in the OUTPUT so the silhouette renders correctly.
+const SPECIES_ANCHOR = `━━━ SPECIES ANCHOR — make Flux render the RIGHT dinosaur ━━━
+Flux only reliably knows a handful of famous dinosaurs; less-famous genera collapse toward a generic toothy theropod. So UNLESS the species is one of {Tyrannosaurus, Triceratops, Velociraptor, Stegosaurus, Brachiosaurus, Spinosaurus, Ankylosaurus, Parasaurolophus, Pteranodon}, you MUST state its BODY-PLAN and a famous look-alike IN THE OUTPUT, leading with the body-plan (before the Latin name):
+• duck-billed hadrosaur (Lambeosaurus / Corythosaurus / Maiasaura / Edmontosaurus / Hypacrosaurus / Shantungosaurus) → "a duck-billed hadrosaur like Parasaurolophus, broad flat TOOTHLESS beak — never a toothy mouth"
+• horned ceratopsian (Styracosaurus / Centrosaurus / Chasmosaurus / Pachyrhinosaurus / Torosaurus / Zuniceratops) → "a horned ceratopsian like Triceratops, bony neck-frill"
+• armored ankylosaur (Saichania / Edmontonia / Euoplocephalus / Gastonia / Borealopelta) → "a low-slung armored ankylosaur like Ankylosaurus, fused-plate armor on four squat legs"
+• plated stegosaur (Kentrosaurus / Tuojiangosaurus) → "a plated stegosaur like Stegosaurus"
+• long-necked sauropod (Argentinosaurus / Camarasaurus / Amargasaurus / Saltasaurus / Diplodocus / Apatosaurus) → "a long-necked sauropod like Brachiosaurus"
+• large theropod (Tarbosaurus / Giganotosaurus / Daspletosaurus / Albertosaurus / Majungasaurus / Carnotaurus) → "a large theropod like a T-rex"
+• raptor (Deinonychus / Utahraptor) → "a feathered raptor like Velociraptor"
+• pterosaur (Quetzalcoatlus / Tupuxuara / Anhanguera / Dimorphodon) → "a pterosaur like Pteranodon, leathery wings"
+• marine reptile (Mosasaurus / Plesiosaurus / Elasmosaurus / Liopleurodon / Kronosaurus) → "a finned marine reptile like a Mosasaurus, or a long-necked Plesiosaurus"
+This anchor is REQUIRED in the output for less-famous species — it is what prevents the wrong-dinosaur collapse.`;
+
 module.exports = {
   DINOBOT_PALEO_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, biome, megaflora, surprise_element, sky_layer, phenomenon } =
@@ -135,6 +153,8 @@ CRITICAL — the OPENING ESTABLISHES DINOSAUR-IN-MESOZOIC-BIOME together. Both m
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID DINOSAUR (20-30% of frame) in a SIGNATURE ALIEN-MESOZOIC LANDSCAPE (60-70% of frame) with impossible mega-flora, saturated warm-earth Mesozoic sky, atmospheric haze. 35mm-film clarity throughout.
 
+${SPECIES_ANCHOR}
+
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
@@ -222,6 +242,8 @@ Wide cinematic establishing-shot of a Mesozoic waterway with a candid dinosaur m
 CRITICAL — the OPENING ESTABLISHES DINO-WATER-INTERACTION + MESOZOIC WATER SETTING together in the first 30-40 words. Front-load both so Flux doesn't drop either.
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID SEMI-AQUATIC DINOSAUR (25-40% of frame) mid-water-behavior in a SIGNATURE MESOZOIC WATERWAY (55-65% of frame) with Mesozoic mega-flora at the banks, atmospheric haze, 35mm-film clarity.
+
+${SPECIES_ANCHOR}
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
@@ -332,6 +354,8 @@ CRITICAL — OPENING ESTABLISHES OCEAN-DINOSAUR + OCEAN-SETTING together. Front-
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID MESOZOIC DINOSAUR (25-40% of frame) mid-ocean-behavior in a STRICT OPEN-OCEAN SETTING (55-65% of frame) — underwater / surface-break / deep abyss / coastal-surf / sea-cliff — never a river, never a swamp. Iconic recognizable DINOSAUR form, NOT marine-reptile / turtle / crocodile.
 
+${SPECIES_ANCHOR}
+
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
@@ -422,6 +446,8 @@ CRITICAL — OPENING tokens explicitly count the dinosaurs (TWO theropods / a pa
 ⚠️ FAILURE CONDITION: if the rendered image shows only ONE dinosaur, the render has FAILED. Multi-dinosaur multiplicity is mandatory for this path.
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a TENDER MESOZOIC FAMILY MOMENT with MULTIPLE DINOSAURS INTERACTING (parent + juveniles, siblings, family group), in an alien-Mesozoic biome, with atmospheric depth. National-Geographic real, never cartoon, never staged.
+
+${SPECIES_ANCHOR}
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
@@ -540,6 +566,8 @@ CRITICAL — OPENING tokens explicitly name the species (Triceratops / Parasauro
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a COLOSSAL DINOSAUR MIGRATION (1-3 hero dinosaurs in front + 100+ same-species moving behind), in an alien-Mesozoic biome, with atmospheric haze into pale distance. National-Geographic real, never cartoon, never staged, never modern-mammalian.
 
+${SPECIES_ANCHOR}
+
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
@@ -644,6 +672,8 @@ CRITICAL — OPENING tokens explicitly count "TWO" and name the species. Both di
 • If close-up portrait of single head → FAILED (the confrontation is the subject)
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — TWO MESOZOIC DINOSAURS in mid-confrontation, in an alien-Mesozoic biome, with atmospheric depth. National-Geographic real, never cartoon, never staged, never gore.
+
+${SPECIES_ANCHOR}
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
@@ -771,6 +801,8 @@ CRITICAL — OPENING tokens lead with "silhouette" / "silhouetted" / "pure black
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC FINE-ART SHOT — a PURE BLACK DINOSAUR SILHOUETTE against a dramatic prehistoric sky, in an alien-Mesozoic horizon. National-Geographic real, never cartoon, never staged, never modern. Backlit composition — sky is bright, dinosaur is BLACK.
 
+${SPECIES_ANCHOR}
+
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
@@ -896,6 +928,8 @@ CRITICAL — OPENING tokens explicitly name the species AND the cozy action. The
 • If harsh / cold / dramatic lighting → FAILED (cozy needs warm soft light)
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a TENDER MESOZOIC DINOSAUR COZY MOMENT — nesting / grooming / nursing / playing / nuzzling — in an alien-Mesozoic biome bathed in soft warm light. National-Geographic real, never cartoon, never staged, never threatening.
+
+${SPECIES_ANCHOR}
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
@@ -1037,6 +1071,8 @@ CRITICAL — OPENING tokens lead with a bold action phrase + species name + coun
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a HERO + 100+ SAME-SPECIES DINOSAUR GROUP in mid-action, in an alien-Mesozoic biome, with atmospheric haze. Poster-grade composition. National-Geographic real, never cartoon, never staged, never modern-mammalian.
 
+${SPECIES_ANCHOR}
+
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
@@ -1162,6 +1198,8 @@ CRITICAL — OPENING tokens name the pterosaur species + flight action OR the gr
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC PALEO-AERIAL SHOT — pterosaur-in-flight (Mode A) OR aerial-camera view of ground-dinosaurs (Mode B), in alien-Mesozoic sky/landscape, with atmospheric depth. Poster-grade composition. National-Geographic real, never cartoon, never dragon-coded, never modern.
 
+${SPECIES_ANCHOR}
+
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
@@ -1284,6 +1322,8 @@ CRITICAL — OPENING tokens explicitly name the species AND a CANDID action verb
 • If modern wildlife / mammal / bird → FAILED
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC TELEPHOTO WILDLIFE-PORTRAIT — a single hero Mesozoic dinosaur in a candid mid-existing-moment, in an alien-Mesozoic biome bokeh-soft, with rim-lit cinematic light. Poster-grade composition. National-Geographic real, never staged, never roaring at camera.
+
+${SPECIES_ANCHOR}
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
@@ -1431,6 +1471,8 @@ CRITICAL — OPENING tokens lead with the action verb-phrase + species. Peak-act
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC PEAK-ACTION SHOT — a single hero Mesozoic dinosaur frozen at the apex of motion, in an alien-Mesozoic biome, with atmospheric energy. Poster-grade composition. Grounded. National-Geographic real, never staged, never gore.
 
+${SPECIES_ANCHOR}
+
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
@@ -1577,6 +1619,8 @@ CRITICAL — OPENING tokens explicitly name the species AND the apocalyptic sky 
 • If dinosaur floating mid-air with no ground contact → FAILED (grounded mandate)
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC APOCALYPTIC SHOT — a single Mesozoic dinosaur in DIGNIFIED endurance under an EXPLICIT apocalyptic sky (asteroid streak / impact flash / firestorm glow / ash-winter darkness), in an alien-Mesozoic biome with apocalyptic tint. Poster-grade composition. National-Geographic real, never panicked, never gore.
+
+${SPECIES_ANCHOR}
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
