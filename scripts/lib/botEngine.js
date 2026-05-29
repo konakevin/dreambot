@@ -867,388 +867,388 @@ async function runBot(opts) {
         );
       }
 
-    // 2. Create picker (pre-loads recency window)
-    errorStage = 'picker-init';
-    picker = await createPicker({ botName: bot.username, windowDays: 5, sb });
+      // 2. Create picker (pre-loads recency window)
+      errorStage = 'picker-init';
+      picker = await createPicker({ botName: bot.username, windowDays: 5, sb });
 
-    // 3. Roll shared DNA (optional)
-    errorStage = 'roll-shared-dna';
-    sharedDNA = bot.rollSharedDNA
-      ? bot.rollSharedDNA({ vibeKey, medium, path: resolvedPath, picker })
-      : {};
-
-    // 4. Optional text content (HumanBot/GlowBot thinking-bot pattern)
-    textContent = null;
-    if (bot.generateTextContent) {
-      errorStage = 'text-content';
-      textContent = await bot.generateTextContent({
-        picker,
-        sharedDNA,
-        path: resolvedPath,
-        vibeKey,
-      });
-      sharedDNA.textContent = textContent;
-    }
-
-    // 5. Build brief (or direct prompt if path opts out of Sonnet)
-    errorStage = 'build-brief';
-    const briefResult = bot.buildBrief({
-      path: resolvedPath,
-      sharedDNA,
-      vibeDirective,
-      vibeKey,
-      medium,
-      picker,
-    });
-
-    let middle;
-    // Reset chaosProfile and sensoryProfile each NSFW retry — outer-scoped
-    // so they survive after the while loop exits.
-    chaosProfile = { intensity: 0, injections: [], channelKey: null };
-    sensoryProfile = { anchors: [], channelKeys: [], context: null };
-    const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
-
-    // briefMeta — optional path-builder-supplied recipe enrichment.
-    // Path builders may return either:
-    //   string  — the brief (legacy)
-    //   { direct: true, prompt: string, briefMeta? } — Sonnet-bypass with optional meta
-    //   { brief: string, briefMeta: {...} } — brief + recipe metadata (camera/lighting/blowItUpBlock)
-    // briefMeta fields populate the recipe's per-path look anchors so DLT
-    // can replay them. If a builder doesn't return briefMeta, those fields
-    // stay null in the recipe (ai_prompt fallback covers them).
-    const briefMeta =
-      briefResult && typeof briefResult === 'object' && briefResult.briefMeta
-        ? briefResult.briefMeta
+      // 3. Roll shared DNA (optional)
+      errorStage = 'roll-shared-dna';
+      sharedDNA = bot.rollSharedDNA
+        ? bot.rollSharedDNA({ vibeKey, medium, path: resolvedPath, picker })
         : {};
-    if (briefMeta.camera) recipeBlocks.camera = briefMeta.camera;
-    if (briefMeta.lighting) recipeBlocks.lighting = briefMeta.lighting;
-    if (briefMeta.blowItUpBlock) recipeBlocks.blowItUpBlock = briefMeta.blowItUpBlock;
 
-    if (isDirectPrompt) {
-      // Path composed the Flux prompt directly — skip Sonnet entirely
-      middle = briefResult.prompt;
-      if (!middle || middle.length < 30) {
-        throw new Error(`direct prompt too short (len=${middle?.length})`);
-      }
-      console.log('  ⚡ direct prompt (Sonnet bypassed)');
-    } else {
-      // Standard path: brief → (optional chaos block) → Sonnet → scene description
-      // Support shape { brief, briefMeta } too — brief lives at .brief.
-      let brief;
-      if (typeof briefResult === 'string') {
-        brief = briefResult;
-      } else if (briefResult && typeof briefResult.brief === 'string') {
-        brief = briefResult.brief;
-      } else {
-        brief = String(briefResult);
-      }
-      if (!brief || brief.length < 50) {
-        throw new Error(`buildBrief returned invalid brief (len=${brief.length})`);
+      // 4. Optional text content (HumanBot/GlowBot thinking-bot pattern)
+      textContent = null;
+      if (bot.generateTextContent) {
+        errorStage = 'text-content';
+        textContent = await bot.generateTextContent({
+          picker,
+          sharedDNA,
+          path: resolvedPath,
+          vibeKey,
+        });
+        sharedDNA.textContent = textContent;
       }
 
-      // 5b. Roll chaos and append distortion block to the brief.
-      // bot.chaos.allowSubjectChaosPaths controls which paths permit subject-level
-      // chaos (silhouette/echo distortions). Default: subject chaos OFF (safe for
-      // character-centric paths). Scenery paths can opt in via allowSubjectChaosPaths.
-      const allowSubjectChaos = Boolean(
-        bot.chaos &&
-        bot.chaos.allowSubjectChaosPaths &&
-        bot.chaos.allowSubjectChaosPaths.includes(resolvedPath)
-      );
-      chaosProfile = rollChaos({ path: resolvedPath, botChaos: bot.chaos, allowSubjectChaos });
-      const chaosBlock = buildChaosBriefBlock(chaosProfile);
-      if (chaosBlock) {
-        brief = brief + chaosBlock;
-        recipeBlocks.chaosBlock = chaosBlock;
-        console.log(
-          `  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`
-        );
-      }
-
-      // 5c. Roll sensory anchors and append. Layered after chaos (chaos warps
-      // perception, sensory grounds it). Opt-in via bot.sensoryAnchors — bots
-      // without the config block get nothing here.
-      sensoryProfile = rollSensoryAnchors({ path: resolvedPath, botSensory: bot.sensoryAnchors });
-      const sensoryBlock = buildSensoryBriefBlock(sensoryProfile);
-      if (sensoryBlock) {
-        brief = brief + sensoryBlock;
-        recipeBlocks.sensoryBlock = sensoryBlock;
-        console.log(
-          `  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} [${sensoryProfile.context}] (n=${sensoryProfile.anchors.length})`
-        );
-      }
-
-      // 6. Generate "middle" — either single-pass Sonnet OR two-pass Sonnet→Haiku.
-      // Two-pass is opt-in via bot.twoPassPolish — see README/docs for the contract.
-      // Reusable across bots: any bot can add the same config block to enable.
-      errorStage = 'sonnet';
-      const tp = bot.twoPassPolish;
-      const useTwoPass = Boolean(
-        tp && tp.enabled && !(tp.skipPaths && tp.skipPaths.includes(resolvedPath))
-      );
-
-      const generateMiddle = async () => {
-        if (useTwoPass) {
-          // Pass 1: Sonnet writes a vivid extended concept (no compression pressure)
-          const conceptWords = tp.conceptWords || 150;
-          const conceptBrief = extendBriefForConcept(brief, conceptWords);
-          const sonnet = await callClaude({ brief: conceptBrief, maxTokens: 600 });
-          // Pass 2: Haiku polishes to Flux-ready length, preserving anchor phrases.
-          // Per-path word range overrides global (vampire-girls-2 needs more headroom).
-          const polishedWords =
-            (tp.polishedWordsByPath && tp.polishedWordsByPath[resolvedPath]) ||
-            tp.polishedWords ||
-            '65-90';
-          // Merge bot-config preserve phrases with the sensory anchors actually
-          // rolled this turn — Haiku gets explicit instruction to keep both.
-          const basePreserve =
-            (tp.preservePhrasesByPath && tp.preservePhrasesByPath[resolvedPath]) ||
-            tp.preservePhrases ||
-            [];
-          const sensoryPreserve = (sensoryProfile.anchors || []).map((a) => a.phrase);
-          const preservePhrases = [...basePreserve, ...sensoryPreserve];
-          const polishBrief = buildPolishBrief({
-            concept: sonnet.text,
-            polishedWords,
-            preservePhrases,
-          });
-          const haiku = await callClaude({
-            brief: polishBrief,
-            maxTokens: 400,
-            primary: SECONDARY_MODEL,
-            secondary: PRIMARY_MODEL,
-          });
-          return {
-            text: haiku.text,
-            modelUsed: `${sonnet.modelUsed}+${haiku.modelUsed}`,
-            retries: sonnet.retries + haiku.retries,
-            fellBackToSecondary: sonnet.fellBackToSecondary || haiku.fellBackToSecondary,
-          };
-        }
-        // Standard single-pass
-        return callClaude({ brief, maxTokens: 400 });
-      };
-
-      const claude = await generateMiddle();
-      claudeMeta = {
-        retries: claude.retries,
-        fellBackToSecondary: claude.fellBackToSecondary,
-        modelUsed: claude.modelUsed,
-      };
-      middle = claude.text;
-      if (useTwoPass) {
-        console.log(
-          `  🔁 two-pass polish: concept→Haiku-polished (${middle.split(/\s+/).length} words)`
-        );
-      }
-
-      // 6b. Refusal detection — retry full pipeline up to 3 times
-      const REFUSAL_PATTERNS = [
-        'I cannot create',
-        "I'm not able to",
-        'I appreciate your',
-        "I'd be happy to help",
-        'violate content policies',
-        'sexually suggestive',
-        'not able to generate',
-        'alternative approaches',
-      ];
-      const isRefusal = (t) => REFUSAL_PATTERNS.some((p) => t.includes(p));
-      {
-        let refusalRetries = 0;
-        while (refusalRetries < 3 && isRefusal(middle)) {
-          refusalRetries += 1;
-          console.warn(`  ⚠️ content refusal, retrying (${refusalRetries}/3)`);
-          const retry = await generateMiddle();
-          middle = retry.text;
-        }
-        if (isRefusal(middle)) {
-          throw new Error('Content refusal after 3 retries (policy)');
-        }
-      }
-
-      // 7. Banned-phrase retry (up to 2 retries = 3 total attempts)
-      if (bot.bannedPhrases && bot.bannedPhrases.length > 0) {
-        errorStage = 'banned-phrase-check';
-        const lower = (s) => s.toLowerCase();
-        let retries = 0;
-        while (retries < 2 && bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
-          retries += 1;
-          console.warn(`  ⚠️ banned phrase detected, retrying (${retries}/2)`);
-          const retry = await generateMiddle();
-          middle = retry.text;
-        }
-        if (bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
-          throw new Error(`banned phrase still present after retries`);
-        }
-      }
-    }
-
-    // 8. Compose final prompt with bot's prefix + per-medium-style + suffix
-    errorStage = 'compose-prompt';
-    // Per-medium prefix/suffix override — if bot.promptPrefixByMedium/promptSuffixByMedium[medium]
-    // is set, use it INSTEAD of bot.promptPrefix/bot.promptSuffix. Lets a specific medium use
-    // a totally different stylistic anchor (e.g. gothic-whimsy uses Tim-Burton-whimsical prefix
-    // instead of the bot's default Castlevania-manga prefix).
-    const rawPrefix =
-      (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix || '';
-    const rawSuffix =
-      (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
-      (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
-      bot.promptSuffix ||
-      '';
-    const prefix = rawPrefix ? `${rawPrefix}, ` : '';
-    const suffix = rawSuffix ? `, ${rawSuffix}` : '';
-    // Per-path prefix — prepended BEFORE style prefix so it's the first tokens Flux sees.
-    // Use case: gender lock for cyborg-man needs to appear before "beauty" in style prefix.
-    const pathPrefix =
-      bot.promptPrefixByPath && bot.promptPrefixByPath[resolvedPath]
-        ? `${bot.promptPrefixByPath[resolvedPath]}, `
-        : '';
-    // Per-medium style injection — bot.mediumStyles overrides DB flux_fragment if set.
-    // Otherwise falls back to the DB's flux_fragment for this medium.
-    const mediumStyle =
-      bot.mediumStyles && bot.mediumStyles[medium]
-        ? `${bot.mediumStyles[medium]}, `
-        : mediumFluxFragment
-          ? `${mediumFluxFragment}, `
-          : '';
-    finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`
-      .replace(/\s+,/g, ',')
-      .trim();
-
-    // Resolve the render model BEFORE building the recipe — buildRecipe
-    // freezes recipe.model into the upload row, and DLT replay reads it
-    // back to pick the model on replay. Resolving after recipe-build
-    // (the prior order) silently stamped every recipe with the unmodified
-    // default ('flux-dev'), even on paths that modelByPath locked to
-    // flux-1.1-pro. DLT replay then re-rolled on flux-dev. See May 2026.
-    //
-    // Priority: bot.modelByPath > pickModel (medium+vibe → pool) > default.
-    // If bot.useModelPicker is true, pickModel() reads dream_mediums.allowed_models
-    // (with bot-scope, includes bot-only mediums) and random-picks a Flux/SDXL model.
-    // Bot.modelByPath HARDCODES a specific model for a specific path, overriding
-    // the medium pool — use this when a path's aesthetic needs a specific model.
-    let renderInputOverrides = {};
-    // Conditional-layer override: when the brief composer's night_mode (or
-    // future similar signal) fired, swap to a model that handles dark scenes
-    // better than the default. flux-dev locks into bright kawaii-pastel
-    // daytime lighting regardless of prompt content; flux-1.1-pro-ultra
-    // honors night/dark scene language. Takes priority over modelByPath +
-    // useModelPicker (a fired conditional layer wins).
-    if (briefMeta && briefMeta.nightModeFired) {
-      renderModel = 'black-forest-labs/flux-1.1-pro-ultra';
-      renderInputOverrides = {};
-      console.log(`  🌙 model=${renderModel} (night_mode fired — flux-1.1-pro-ultra override)`);
-    } else if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
-      const modelVal = bot.modelByPath[resolvedPath];
-      // Support three formats:
-      //   string: 'flux-dev' — locked to one model
-      //   array:  ['flux-dev', 'flux-1.1-pro'] — uniform random pick
-      //   weighted object: { 'flux-1.1-pro': 65, 'flux-dev': 35 } — weighted random
-      if (typeof modelVal === 'object' && !Array.isArray(modelVal)) {
-        const entries = Object.entries(modelVal);
-        const totalW = entries.reduce((s, [, w]) => s + w, 0);
-        let roll = Math.random() * totalW;
-        renderModel = entries[entries.length - 1][0];
-        for (const [m, w] of entries) {
-          roll -= w;
-          if (roll <= 0) {
-            renderModel = m;
-            break;
-          }
-        }
-      } else {
-        renderModel = Array.isArray(modelVal)
-          ? modelVal[Math.floor(Math.random() * modelVal.length)]
-          : modelVal;
-      }
-      // PNG output is the global Flux default (set in fluxOnce, 2026-05-15).
-      // SDXL needs explicit dimensions.
-      if (renderModel === 'sdxl')
-        renderInputOverrides = {
-          width: 768,
-          height: 1344,
-          num_inference_steps: 30,
-          guidance_scale: 7.5,
-        };
-      console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
-    } else if (bot.useModelPicker) {
-      const picked = await pickModel({
-        mediumKey: medium,
-        vibeKey: vibeKey,
-        allowedModels: bot.allowedModels,
-      });
-      renderModel = picked.model;
-      renderInputOverrides = picked.inputOverrides;
-      console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
-    }
-
-    // Build the DLT recipe — frozen LOOK anchors captured at posting time.
-    // See docs/DLT_RECIPE_PLAN.md for full architecture. Stored on the
-    // upload row as JSONB; replayed at DLT time to reproduce source's
-    // medium + look against a new user's subject/cast.
-    recipe = buildRecipe({
-      model: renderModel,
-      mediumKey: medium,
-      vibeKey,
-      aiPrompt: finalPrompt,
-      // fluxSeed left null in Phase 1 — Replicate response capture is a
-      // follow-up enrichment (see DLT_RECIPE_PLAN Phase 1.5).
-      fluxSeed: null,
-      promptPrefix: pathPrefix
-        ? `${bot.promptPrefixByPath[resolvedPath]}, ${rawPrefix}`
-        : rawPrefix,
-      mediumStyleOverride:
-        bot.mediumStyles && bot.mediumStyles[medium]
-          ? bot.mediumStyles[medium]
-          : mediumFluxFragment || '',
-      promptSuffix: rawSuffix,
-      camera: recipeBlocks.camera,
-      lighting: recipeBlocks.lighting || '',
-      scenePalette: sharedDNA?.scenePalette || '',
-      colorPalette: sharedDNA?.colorPalette || '',
-      chaosBlock: recipeBlocks.chaosBlock,
-      sensoryBlock: recipeBlocks.sensoryBlock,
-      blowItUpBlock: recipeBlocks.blowItUpBlock,
-      botUsername: bot.username,
-      path: resolvedPath,
-    });
-
-    if (dryRun) {
-      return {
-        ok: true,
-        dryRun: true,
-        finalPrompt,
-        sharedDNA,
+      // 5. Build brief (or direct prompt if path opts out of Sonnet)
+      errorStage = 'build-brief';
+      const briefResult = bot.buildBrief({
         path: resolvedPath,
+        sharedDNA,
+        vibeDirective,
         vibeKey,
         medium,
-        recipe,
-      };
-    }
-
-    // 9. Replicate render — uses the renderModel + inputOverrides resolved above.
-    // Wrapped in NSFW-recovery try/catch: on safety-filter trip (after flux's
-    // own internal same-prompt retries), re-roll picker + rebuild brief.
-    errorStage = 'flux';
-    try {
-      fluxUrl = await flux({
-        prompt: finalPrompt,
-        aspectRatio: '9:16',
-        model: renderModel,
-        inputOverrides: renderInputOverrides,
+        picker,
       });
-      break; // success — exit NSFW-recovery loop
-    } catch (err) {
-      const isNsfw =
-        err && err.message && /NSFW|sensitive|flagged|safety|E005/i.test(err.message);
-      if (isNsfw && nsfwRecoveryAttempt < MAX_NSFW_RECOVERY) {
-        nsfwRecoveryAttempt++;
-        continue; // back to top of while — re-creates picker + re-rolls
+
+      let middle;
+      // Reset chaosProfile and sensoryProfile each NSFW retry — outer-scoped
+      // so they survive after the while loop exits.
+      chaosProfile = { intensity: 0, injections: [], channelKey: null };
+      sensoryProfile = { anchors: [], channelKeys: [], context: null };
+      const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
+
+      // briefMeta — optional path-builder-supplied recipe enrichment.
+      // Path builders may return either:
+      //   string  — the brief (legacy)
+      //   { direct: true, prompt: string, briefMeta? } — Sonnet-bypass with optional meta
+      //   { brief: string, briefMeta: {...} } — brief + recipe metadata (camera/lighting/blowItUpBlock)
+      // briefMeta fields populate the recipe's per-path look anchors so DLT
+      // can replay them. If a builder doesn't return briefMeta, those fields
+      // stay null in the recipe (ai_prompt fallback covers them).
+      const briefMeta =
+        briefResult && typeof briefResult === 'object' && briefResult.briefMeta
+          ? briefResult.briefMeta
+          : {};
+      if (briefMeta.camera) recipeBlocks.camera = briefMeta.camera;
+      if (briefMeta.lighting) recipeBlocks.lighting = briefMeta.lighting;
+      if (briefMeta.blowItUpBlock) recipeBlocks.blowItUpBlock = briefMeta.blowItUpBlock;
+
+      if (isDirectPrompt) {
+        // Path composed the Flux prompt directly — skip Sonnet entirely
+        middle = briefResult.prompt;
+        if (!middle || middle.length < 30) {
+          throw new Error(`direct prompt too short (len=${middle?.length})`);
+        }
+        console.log('  ⚡ direct prompt (Sonnet bypassed)');
+      } else {
+        // Standard path: brief → (optional chaos block) → Sonnet → scene description
+        // Support shape { brief, briefMeta } too — brief lives at .brief.
+        let brief;
+        if (typeof briefResult === 'string') {
+          brief = briefResult;
+        } else if (briefResult && typeof briefResult.brief === 'string') {
+          brief = briefResult.brief;
+        } else {
+          brief = String(briefResult);
+        }
+        if (!brief || brief.length < 50) {
+          throw new Error(`buildBrief returned invalid brief (len=${brief.length})`);
+        }
+
+        // 5b. Roll chaos and append distortion block to the brief.
+        // bot.chaos.allowSubjectChaosPaths controls which paths permit subject-level
+        // chaos (silhouette/echo distortions). Default: subject chaos OFF (safe for
+        // character-centric paths). Scenery paths can opt in via allowSubjectChaosPaths.
+        const allowSubjectChaos = Boolean(
+          bot.chaos &&
+          bot.chaos.allowSubjectChaosPaths &&
+          bot.chaos.allowSubjectChaosPaths.includes(resolvedPath)
+        );
+        chaosProfile = rollChaos({ path: resolvedPath, botChaos: bot.chaos, allowSubjectChaos });
+        const chaosBlock = buildChaosBriefBlock(chaosProfile);
+        if (chaosBlock) {
+          brief = brief + chaosBlock;
+          recipeBlocks.chaosBlock = chaosBlock;
+          console.log(
+            `  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`
+          );
+        }
+
+        // 5c. Roll sensory anchors and append. Layered after chaos (chaos warps
+        // perception, sensory grounds it). Opt-in via bot.sensoryAnchors — bots
+        // without the config block get nothing here.
+        sensoryProfile = rollSensoryAnchors({ path: resolvedPath, botSensory: bot.sensoryAnchors });
+        const sensoryBlock = buildSensoryBriefBlock(sensoryProfile);
+        if (sensoryBlock) {
+          brief = brief + sensoryBlock;
+          recipeBlocks.sensoryBlock = sensoryBlock;
+          console.log(
+            `  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} [${sensoryProfile.context}] (n=${sensoryProfile.anchors.length})`
+          );
+        }
+
+        // 6. Generate "middle" — either single-pass Sonnet OR two-pass Sonnet→Haiku.
+        // Two-pass is opt-in via bot.twoPassPolish — see README/docs for the contract.
+        // Reusable across bots: any bot can add the same config block to enable.
+        errorStage = 'sonnet';
+        const tp = bot.twoPassPolish;
+        const useTwoPass = Boolean(
+          tp && tp.enabled && !(tp.skipPaths && tp.skipPaths.includes(resolvedPath))
+        );
+
+        const generateMiddle = async () => {
+          if (useTwoPass) {
+            // Pass 1: Sonnet writes a vivid extended concept (no compression pressure)
+            const conceptWords = tp.conceptWords || 150;
+            const conceptBrief = extendBriefForConcept(brief, conceptWords);
+            const sonnet = await callClaude({ brief: conceptBrief, maxTokens: 600 });
+            // Pass 2: Haiku polishes to Flux-ready length, preserving anchor phrases.
+            // Per-path word range overrides global (vampire-girls-2 needs more headroom).
+            const polishedWords =
+              (tp.polishedWordsByPath && tp.polishedWordsByPath[resolvedPath]) ||
+              tp.polishedWords ||
+              '65-90';
+            // Merge bot-config preserve phrases with the sensory anchors actually
+            // rolled this turn — Haiku gets explicit instruction to keep both.
+            const basePreserve =
+              (tp.preservePhrasesByPath && tp.preservePhrasesByPath[resolvedPath]) ||
+              tp.preservePhrases ||
+              [];
+            const sensoryPreserve = (sensoryProfile.anchors || []).map((a) => a.phrase);
+            const preservePhrases = [...basePreserve, ...sensoryPreserve];
+            const polishBrief = buildPolishBrief({
+              concept: sonnet.text,
+              polishedWords,
+              preservePhrases,
+            });
+            const haiku = await callClaude({
+              brief: polishBrief,
+              maxTokens: 400,
+              primary: SECONDARY_MODEL,
+              secondary: PRIMARY_MODEL,
+            });
+            return {
+              text: haiku.text,
+              modelUsed: `${sonnet.modelUsed}+${haiku.modelUsed}`,
+              retries: sonnet.retries + haiku.retries,
+              fellBackToSecondary: sonnet.fellBackToSecondary || haiku.fellBackToSecondary,
+            };
+          }
+          // Standard single-pass
+          return callClaude({ brief, maxTokens: 400 });
+        };
+
+        const claude = await generateMiddle();
+        claudeMeta = {
+          retries: claude.retries,
+          fellBackToSecondary: claude.fellBackToSecondary,
+          modelUsed: claude.modelUsed,
+        };
+        middle = claude.text;
+        if (useTwoPass) {
+          console.log(
+            `  🔁 two-pass polish: concept→Haiku-polished (${middle.split(/\s+/).length} words)`
+          );
+        }
+
+        // 6b. Refusal detection — retry full pipeline up to 3 times
+        const REFUSAL_PATTERNS = [
+          'I cannot create',
+          "I'm not able to",
+          'I appreciate your',
+          "I'd be happy to help",
+          'violate content policies',
+          'sexually suggestive',
+          'not able to generate',
+          'alternative approaches',
+        ];
+        const isRefusal = (t) => REFUSAL_PATTERNS.some((p) => t.includes(p));
+        {
+          let refusalRetries = 0;
+          while (refusalRetries < 3 && isRefusal(middle)) {
+            refusalRetries += 1;
+            console.warn(`  ⚠️ content refusal, retrying (${refusalRetries}/3)`);
+            const retry = await generateMiddle();
+            middle = retry.text;
+          }
+          if (isRefusal(middle)) {
+            throw new Error('Content refusal after 3 retries (policy)');
+          }
+        }
+
+        // 7. Banned-phrase retry (up to 2 retries = 3 total attempts)
+        if (bot.bannedPhrases && bot.bannedPhrases.length > 0) {
+          errorStage = 'banned-phrase-check';
+          const lower = (s) => s.toLowerCase();
+          let retries = 0;
+          while (retries < 2 && bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
+            retries += 1;
+            console.warn(`  ⚠️ banned phrase detected, retrying (${retries}/2)`);
+            const retry = await generateMiddle();
+            middle = retry.text;
+          }
+          if (bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
+            throw new Error(`banned phrase still present after retries`);
+          }
+        }
       }
-      throw err;
-    }
+
+      // 8. Compose final prompt with bot's prefix + per-medium-style + suffix
+      errorStage = 'compose-prompt';
+      // Per-medium prefix/suffix override — if bot.promptPrefixByMedium/promptSuffixByMedium[medium]
+      // is set, use it INSTEAD of bot.promptPrefix/bot.promptSuffix. Lets a specific medium use
+      // a totally different stylistic anchor (e.g. gothic-whimsy uses Tim-Burton-whimsical prefix
+      // instead of the bot's default Castlevania-manga prefix).
+      const rawPrefix =
+        (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix || '';
+      const rawSuffix =
+        (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
+        (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
+        bot.promptSuffix ||
+        '';
+      const prefix = rawPrefix ? `${rawPrefix}, ` : '';
+      const suffix = rawSuffix ? `, ${rawSuffix}` : '';
+      // Per-path prefix — prepended BEFORE style prefix so it's the first tokens Flux sees.
+      // Use case: gender lock for cyborg-man needs to appear before "beauty" in style prefix.
+      const pathPrefix =
+        bot.promptPrefixByPath && bot.promptPrefixByPath[resolvedPath]
+          ? `${bot.promptPrefixByPath[resolvedPath]}, `
+          : '';
+      // Per-medium style injection — bot.mediumStyles overrides DB flux_fragment if set.
+      // Otherwise falls back to the DB's flux_fragment for this medium.
+      const mediumStyle =
+        bot.mediumStyles && bot.mediumStyles[medium]
+          ? `${bot.mediumStyles[medium]}, `
+          : mediumFluxFragment
+            ? `${mediumFluxFragment}, `
+            : '';
+      finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`
+        .replace(/\s+,/g, ',')
+        .trim();
+
+      // Resolve the render model BEFORE building the recipe — buildRecipe
+      // freezes recipe.model into the upload row, and DLT replay reads it
+      // back to pick the model on replay. Resolving after recipe-build
+      // (the prior order) silently stamped every recipe with the unmodified
+      // default ('flux-dev'), even on paths that modelByPath locked to
+      // flux-1.1-pro. DLT replay then re-rolled on flux-dev. See May 2026.
+      //
+      // Priority: bot.modelByPath > pickModel (medium+vibe → pool) > default.
+      // If bot.useModelPicker is true, pickModel() reads dream_mediums.allowed_models
+      // (with bot-scope, includes bot-only mediums) and random-picks a Flux/SDXL model.
+      // Bot.modelByPath HARDCODES a specific model for a specific path, overriding
+      // the medium pool — use this when a path's aesthetic needs a specific model.
+      let renderInputOverrides = {};
+      // Conditional-layer override: when the brief composer's night_mode (or
+      // future similar signal) fired, swap to a model that handles dark scenes
+      // better than the default. flux-dev locks into bright kawaii-pastel
+      // daytime lighting regardless of prompt content; flux-1.1-pro-ultra
+      // honors night/dark scene language. Takes priority over modelByPath +
+      // useModelPicker (a fired conditional layer wins).
+      if (briefMeta && briefMeta.nightModeFired) {
+        renderModel = 'black-forest-labs/flux-1.1-pro-ultra';
+        renderInputOverrides = {};
+        console.log(`  🌙 model=${renderModel} (night_mode fired — flux-1.1-pro-ultra override)`);
+      } else if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
+        const modelVal = bot.modelByPath[resolvedPath];
+        // Support three formats:
+        //   string: 'flux-dev' — locked to one model
+        //   array:  ['flux-dev', 'flux-1.1-pro'] — uniform random pick
+        //   weighted object: { 'flux-1.1-pro': 65, 'flux-dev': 35 } — weighted random
+        if (typeof modelVal === 'object' && !Array.isArray(modelVal)) {
+          const entries = Object.entries(modelVal);
+          const totalW = entries.reduce((s, [, w]) => s + w, 0);
+          let roll = Math.random() * totalW;
+          renderModel = entries[entries.length - 1][0];
+          for (const [m, w] of entries) {
+            roll -= w;
+            if (roll <= 0) {
+              renderModel = m;
+              break;
+            }
+          }
+        } else {
+          renderModel = Array.isArray(modelVal)
+            ? modelVal[Math.floor(Math.random() * modelVal.length)]
+            : modelVal;
+        }
+        // PNG output is the global Flux default (set in fluxOnce, 2026-05-15).
+        // SDXL needs explicit dimensions.
+        if (renderModel === 'sdxl')
+          renderInputOverrides = {
+            width: 768,
+            height: 1344,
+            num_inference_steps: 30,
+            guidance_scale: 7.5,
+          };
+        console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
+      } else if (bot.useModelPicker) {
+        const picked = await pickModel({
+          mediumKey: medium,
+          vibeKey: vibeKey,
+          allowedModels: bot.allowedModels,
+        });
+        renderModel = picked.model;
+        renderInputOverrides = picked.inputOverrides;
+        console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
+      }
+
+      // Build the DLT recipe — frozen LOOK anchors captured at posting time.
+      // See docs/DLT_RECIPE_PLAN.md for full architecture. Stored on the
+      // upload row as JSONB; replayed at DLT time to reproduce source's
+      // medium + look against a new user's subject/cast.
+      recipe = buildRecipe({
+        model: renderModel,
+        mediumKey: medium,
+        vibeKey,
+        aiPrompt: finalPrompt,
+        // fluxSeed left null in Phase 1 — Replicate response capture is a
+        // follow-up enrichment (see DLT_RECIPE_PLAN Phase 1.5).
+        fluxSeed: null,
+        promptPrefix: pathPrefix
+          ? `${bot.promptPrefixByPath[resolvedPath]}, ${rawPrefix}`
+          : rawPrefix,
+        mediumStyleOverride:
+          bot.mediumStyles && bot.mediumStyles[medium]
+            ? bot.mediumStyles[medium]
+            : mediumFluxFragment || '',
+        promptSuffix: rawSuffix,
+        camera: recipeBlocks.camera,
+        lighting: recipeBlocks.lighting || '',
+        scenePalette: sharedDNA?.scenePalette || '',
+        colorPalette: sharedDNA?.colorPalette || '',
+        chaosBlock: recipeBlocks.chaosBlock,
+        sensoryBlock: recipeBlocks.sensoryBlock,
+        blowItUpBlock: recipeBlocks.blowItUpBlock,
+        botUsername: bot.username,
+        path: resolvedPath,
+      });
+
+      if (dryRun) {
+        return {
+          ok: true,
+          dryRun: true,
+          finalPrompt,
+          sharedDNA,
+          path: resolvedPath,
+          vibeKey,
+          medium,
+          recipe,
+        };
+      }
+
+      // 9. Replicate render — uses the renderModel + inputOverrides resolved above.
+      // Wrapped in NSFW-recovery try/catch: on safety-filter trip (after flux's
+      // own internal same-prompt retries), re-roll picker + rebuild brief.
+      errorStage = 'flux';
+      try {
+        fluxUrl = await flux({
+          prompt: finalPrompt,
+          aspectRatio: '9:16',
+          model: renderModel,
+          inputOverrides: renderInputOverrides,
+        });
+        break; // success — exit NSFW-recovery loop
+      } catch (err) {
+        const isNsfw =
+          err && err.message && /NSFW|sensitive|flagged|safety|E005/i.test(err.message);
+        if (isNsfw && nsfwRecoveryAttempt < MAX_NSFW_RECOVERY) {
+          nsfwRecoveryAttempt++;
+          continue; // back to top of while — re-creates picker + re-rolls
+        }
+        throw err;
+      }
     } // end NSFW-recovery while
 
     // 10. Download
