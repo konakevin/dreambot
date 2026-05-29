@@ -20,6 +20,7 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Dimensions, FlatList, View, StyleSheet } from 'react-native';
+import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { useDreamFeed } from '@/hooks/useDreamFeed';
 import type { BotUser } from '@/hooks/useBotUsers';
@@ -200,10 +201,11 @@ function BotFeedPage({
   onHudToggle?: (visible: boolean) => void;
   emptyComponent?: React.ReactElement;
 }) {
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useDreamFeed(
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useDreamFeed(
     'bots',
     botId
   );
+  const queryClient = useQueryClient();
 
   // Dedup posts by id (same protection HomeScreen has against cursor-boundary repeats)
   const posts = useMemo<DreamPostItem[]>(() => {
@@ -216,6 +218,17 @@ function BotFeedPage({
     });
   }, [data]);
 
+  // Pulling down on ANY bot feed should refresh the WHOLE bot section
+  // (Kevin's launch ask). Invalidate every 'bots' query: TanStack
+  // refetches the currently-mounted pages (visible bot + the two
+  // adjacent ones the pager keeps warm via windowSize=3) AND marks
+  // unmounted ones stale so they fetch fresh on next swipe-in. The
+  // awaited promise resolves once the active refetches land, so the
+  // pull-to-refresh spinner accurately waits for fresh data on screen.
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['dreamFeed', 'bots'] });
+  }, [queryClient]);
+
   return (
     <FullScreenFeed
       posts={posts}
@@ -226,7 +239,7 @@ function BotFeedPage({
       // arrive; saved index from a prior visit might exceed both.
       initialIndex={Math.min(initialIndex, Math.max(0, posts.length - 1))}
       onIndexChange={onIndexChange}
-      onRefresh={() => refetch()}
+      onRefresh={handleRefresh}
       onEndReached={() => {
         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
       }}
