@@ -83,9 +83,19 @@ export function StylePickerSheet({
     progress.value = withTiming(1, { duration: 300 });
   }
 
-  // Sync segment + sticky state when sheet opens
+  // Sync segment + sticky state when the sheet opens. Guarded so it runs ONLY
+  // on the closed→open transition — NOT when `selected` changes during the
+  // dismiss animation (handleSelect updates `selected` then closes while
+  // `visible` is briefly still true), which would re-sync the segment mid-close.
+  const didSyncOnOpen = useRef(false);
   useEffect(() => {
-    if (visible && type === 'medium') {
+    if (!visible) {
+      didSyncOnOpen.current = false;
+      return;
+    }
+    if (didSyncOnOpen.current) return;
+    didSyncOnOpen.current = true;
+    if (type === 'medium') {
       if (selected === 'surprise_me_face') {
         setMediumSegment('face');
         setLastFace('surprise_me_face');
@@ -99,31 +109,14 @@ export function StylePickerSheet({
         else setLastArt(selected);
       }
     }
-  }, [visible]);
+  }, [visible, type, selected, allAvailable]);
 
-  // Scroll to selected item when sheet opens
-  useEffect(() => {
-    if (!visible) return;
-    const displayList =
-      type === 'medium'
-        ? [
-            { key: mediumSegment === 'face' ? 'surprise_me_face' : 'surprise_me_art' },
-            ...filteredMediums,
-          ]
-        : options;
-    const isSurprise = selected === 'surprise_me_face' || selected === 'surprise_me_art';
-    const idx = isSurprise ? 0 : displayList.findIndex((o) => o.key === selected);
-    if (idx > 0) {
-      const ROW_HEIGHT = 52;
-      setTimeout(() => {
-        scrollRef.current?.scrollTo({ y: Math.max(0, (idx - 1) * ROW_HEIGHT), animated: false });
-      }, 50);
-    } else {
-      setTimeout(() => {
-        scrollRef.current?.scrollTo({ y: 0, animated: false });
-      }, 50);
-    }
-  }, [visible, mediumSegment]);
+  // Latest `selected` for the scroll-to-selected effect (defined below, after
+  // filteredMediums is in scope). Kept in a ref so that effect does NOT re-run
+  // and re-scroll when `selected` changes during the dismiss animation — only
+  // visible / segment / list changes should drive a scroll.
+  const selectedRef = useRef(selected);
+  selectedRef.current = selected;
 
   const dismiss = useCallback(() => {
     if (closing.current) return;
@@ -131,7 +124,7 @@ export function StylePickerSheet({
     progress.value = withTiming(0, { duration: 250 }, () => {
       runOnJS(onClose)();
     });
-  }, [onClose]);
+  }, [onClose, progress]);
 
   const handleSelect = useCallback(
     (key: string) => {
@@ -205,6 +198,33 @@ export function StylePickerSheet({
   }
 
   const filteredMediums = mediumSegment === 'face' ? faceSwapMediums : artisticMediums;
+
+  // Scroll to selected item when the sheet opens or the segment switches.
+  // `selected` is read from a ref (see above) so picking an item — which
+  // updates `selected` while the sheet animates closed — does not re-scroll.
+  useEffect(() => {
+    if (!visible) return;
+    const sel = selectedRef.current;
+    const displayList =
+      type === 'medium'
+        ? [
+            { key: mediumSegment === 'face' ? 'surprise_me_face' : 'surprise_me_art' },
+            ...filteredMediums,
+          ]
+        : options;
+    const isSurprise = sel === 'surprise_me_face' || sel === 'surprise_me_art';
+    const idx = isSurprise ? 0 : displayList.findIndex((o) => o.key === sel);
+    if (idx > 0) {
+      const ROW_HEIGHT = 52;
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ y: Math.max(0, (idx - 1) * ROW_HEIGHT), animated: false });
+      }, 50);
+    } else {
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ y: 0, animated: false });
+      }, 50);
+    }
+  }, [visible, mediumSegment, filteredMediums, options, type]);
 
   function renderMediumToggle() {
     const segments: { key: 'face' | 'art'; label: string }[] = [

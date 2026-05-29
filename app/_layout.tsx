@@ -205,7 +205,7 @@ function RealtimeSubscriber() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user?.id]);
+  }, [user]);
 
   return null;
 }
@@ -227,7 +227,7 @@ function DataPrefetcher() {
         if (error && __DEV__)
           console.warn('[DataPrefetcher] last_active_at update failed:', error.message);
       });
-  }, [user?.id]);
+  }, [user]);
 
   // Prefetch shareable friends after the app is fully interactive
   // so it doesn't compete with navigation, feed loading, etc.
@@ -253,7 +253,7 @@ function DataPrefetcher() {
       });
     });
     return () => handle.cancel();
-  }, [user?.id]);
+  }, [user]);
 
   // Prefetch adjacent tab data so they load instantly when tapped
   useEffect(() => {
@@ -310,7 +310,7 @@ function DataPrefetcher() {
       });
     });
     return () => handle.cancel();
-  }, [user?.id]);
+  }, [user]);
 
   // Refresh all data when app returns from background after 5+ minutes
   // Also clean up stale dream jobs that never completed
@@ -350,7 +350,7 @@ function DataPrefetcher() {
       }
     });
     return () => sub.remove();
-  }, [user?.id]);
+  }, [user]);
 
   return null;
 }

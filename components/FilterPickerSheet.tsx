@@ -63,7 +63,7 @@ export function FilterPickerSheet({
     } else {
       translateY.setValue(SHEET_HEIGHT);
     }
-  }, [visible, items, selectedKey]);
+  }, [visible, items, selectedKey, translateY]);
 
   const dismiss = useCallback(() => {
     Animated.timing(translateY, {
@@ -71,7 +71,7 @@ export function FilterPickerSheet({
       duration: 200,
       useNativeDriver: true,
     }).start(() => onClose());
-  }, [onClose]);
+  }, [onClose, translateY]);
 
   // Local PanResponder (not useStandardSheetDismiss) because this sheet is
   // visibility-controlled via a `visible` prop with a custom spring mount

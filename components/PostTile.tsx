@@ -78,7 +78,7 @@ function TileSparkle({ index, total, seed }: { index: number; total: number; see
         true
       )
     );
-  }, []);
+  }, [delay, duration, opacity, scale]);
 
   const style = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -147,7 +147,7 @@ export const PostTile = memo(function PostTile({
         true
       );
     }
-  }, [isWish]);
+  }, [isWish, hazeOpacity]);
   const hazeStyle = useAnimatedStyle(() => ({ opacity: hazeOpacity.value }));
 
   async function handlePress() {

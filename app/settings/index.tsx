@@ -1,6 +1,6 @@
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,6 @@ import Constants from 'expo-constants';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useFocusEffect } from '@react-navigation/native';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import * as ImagePicker from 'expo-image-picker';
 import * as nav from '@/lib/navigate';

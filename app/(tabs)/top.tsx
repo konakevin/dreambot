@@ -253,21 +253,19 @@ export default function SearchExploreScreen() {
   const pendingVibe = useExploreStore((s) => s.pendingVibe);
   const clearPending = useExploreStore((s) => s.clearPending);
 
-  useEffect(() => {
-    if (pendingMedium !== null || pendingVibe !== null) {
-      if (searchActive) deactivateSearch();
-      setSelectedMedium(pendingMedium);
-      if (pendingVibe !== null) setSelectedVibe(pendingVibe);
-      clearPending();
-      gridRef.current?.scrollToOffset({ offset: 0, animated: false });
-    }
-  }, [pendingMedium, pendingVibe, clearPending]);
-
   // ── Search state ──
   const [searchActive, setSearchActiveLocal] = useState(false);
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 300);
   const setSearchActiveStore = useExploreStore((s) => s.setSearchActive);
+
+  // Stable so it can be a clean dependency of the pending-filter effect below.
+  const deactivateSearch = useCallback(() => {
+    Keyboard.dismiss();
+    setQuery('');
+    setSearchActiveLocal(false);
+    setSearchActiveStore(false);
+  }, [setSearchActiveStore]);
 
   function activateSearch() {
     setSearchActiveLocal(true);
@@ -275,12 +273,18 @@ export default function SearchExploreScreen() {
     setTimeout(() => searchInputRef.current?.focus(), 100);
   }
 
-  function deactivateSearch() {
-    Keyboard.dismiss();
-    setQuery('');
-    setSearchActiveLocal(false);
-    setSearchActiveStore(false);
-  }
+  useEffect(() => {
+    if (pendingMedium !== null || pendingVibe !== null) {
+      // deactivateSearch is idempotent (no-op when search is already off), so
+      // we call it unconditionally — preserving behavior while keeping the dep
+      // array clean (no `searchActive` read needed).
+      deactivateSearch();
+      setSelectedMedium(pendingMedium);
+      if (pendingVibe !== null) setSelectedVibe(pendingVibe);
+      clearPending();
+      gridRef.current?.scrollToOffset({ offset: 0, animated: false });
+    }
+  }, [pendingMedium, pendingVibe, clearPending, deactivateSearch]);
 
   // Search hooks — pass medium/vibe filters so search results are scoped
   const hasQuery = debouncedQuery.trim().length >= 2;
@@ -366,7 +370,7 @@ export default function SearchExploreScreen() {
   const activeVibes = selectedVibe ? [selectedVibe] : [];
   const { data, isLoading, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useExploreDreams(activeMediums, activeVibes);
-  const posts = data?.pages.flat() ?? [];
+  const posts = useMemo(() => data?.pages.flat() ?? [], [data]);
 
   // ── Tap-active-tab gesture (Instagram-style) ──
   // Scroll-to-top is already handled by the feedSeed effect above (regenerateSeed

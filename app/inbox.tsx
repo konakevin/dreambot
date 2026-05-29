@@ -9,7 +9,6 @@ import {
   FlatList,
   ActivityIndicator,
   StyleSheet,
-  Alert,
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -90,35 +89,6 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
       return { action: 'Your HD download is ready', preview: 'Tap to save it to your photos' };
     default:
       return { action: '', preview: null };
-  }
-}
-
-function getNotificationIcon(type: NotificationItem['type']): string {
-  switch (type) {
-    case 'post_share':
-      return 'paper-plane';
-    case 'post_comment':
-      return 'chatbubble';
-    case 'comment_reply':
-      return 'arrow-undo';
-    case 'comment_mention':
-      return 'at';
-    case 'dream_generated':
-      return 'sparkles';
-    case 'dream_failed':
-      return 'cloud-offline-outline';
-    case 'post_like':
-      return 'heart';
-    case 'post_fuse':
-      return 'git-merge-outline';
-    case 'follow_request':
-      return 'person-add';
-    case 'follow_accepted':
-      return 'person-add';
-    case 'download_ready':
-      return 'download';
-    default:
-      return 'notifications';
   }
 }
 
@@ -314,7 +284,6 @@ export default function InboxScreen() {
   const inbox = useMemo(() => data?.pages.flatMap((p) => p.rows) ?? [], [data]);
   const hasUnread = inbox.some((item) => !item.isSeen);
   const hasAny = inbox.length > 0;
-  const allSelected = hasAny && selected.size === inbox.length;
 
   // Instagram-style auto-clear: viewing the Inbox screen IS the trigger that
   // marks all unread notifications as seen. Fires once per focus to avoid

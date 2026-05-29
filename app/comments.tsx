@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useEffect } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -26,8 +26,7 @@ import { CommentRow } from '@/components/CommentRow';
 import { useStandardSheetDismiss } from '@/hooks/gestures/useStandardSheetDismiss';
 import { colors } from '@/constants/theme';
 
-const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
-const THUMB_HEIGHT = 100;
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SHEET_HEIGHT = SCREEN_HEIGHT * 0.85;
 const MAX_COMMENT_LENGTH = 500;
 
@@ -61,7 +60,6 @@ export default function CommentsScreen() {
     setText(newText.slice(0, MAX_COMMENT_LENGTH));
 
     // Detect @mention in progress
-    const cursorPos = newText.length;
     const lastAt = newText.lastIndexOf('@');
     if (lastAt >= 0) {
       const afterAt = newText.slice(lastAt + 1);

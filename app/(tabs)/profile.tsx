@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { useAlbumStore } from '@/store/album';
-import { DreamWishBadge } from '@/components/DreamWishBadge';
 import {
   View,
   Text,
@@ -68,7 +67,7 @@ export default function ProfileScreen() {
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
     }
-  }, [profileResetToken]);
+  }, [profileResetToken, queryClient]);
 
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';

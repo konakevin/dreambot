@@ -131,15 +131,7 @@ export default function PhotoDetailScreen() {
     if (!isAlbum && contextQuery.hasNextPage && !contextQuery.isFetchingNextPage) {
       contextQuery.fetchNextPage();
     }
-  }, [
-    isAlbum,
-    sourceQuery?.hasNextPage,
-    sourceQuery?.isFetchingNextPage,
-    sourceQuery?.fetchNextPage,
-    contextQuery.hasNextPage,
-    contextQuery.isFetchingNextPage,
-    contextQuery.fetchNextPage,
-  ]);
+  }, [isAlbum, sourceQuery, contextQuery]);
 
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({
@@ -254,7 +246,7 @@ export default function PhotoDetailScreen() {
         queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
       }
     },
-    [user, posts, queryClient, albumIds, id, router]
+    [user, posts, queryClient, albumIds, id]
   );
 
   // Swipe-right-to-back handled by React Navigation's native gesture

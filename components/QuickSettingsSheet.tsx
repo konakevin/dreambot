@@ -188,7 +188,7 @@ export function QuickSettingsSheet({ visible, onClose }: Props) {
         setProfile(raw);
       }
     })();
-  }, [visible]);
+  }, [visible, user, progress]);
 
   const dismiss = useCallback(async () => {
     if (closing.current) return;
@@ -210,7 +210,7 @@ export function QuickSettingsSheet({ visible, onClose }: Props) {
     progress.value = withTiming(0, { duration: 250 }, () => {
       runOnJS(onClose)();
     });
-  }, [onClose, profile, user]);
+  }, [onClose, profile, user, progress]);
 
   // Mutations
   function setMood(axis: keyof MoodAxes, value: number) {

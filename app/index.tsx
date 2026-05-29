@@ -20,7 +20,7 @@ export default function Index() {
       .then(({ data }) => {
         setHasRecipe(data?.has_ai_recipe ?? false);
       });
-  }, [user?.id]);
+  }, [user]);
 
   if (!initialized) return null;
   if (!session) return <Redirect href="/(auth)" />;

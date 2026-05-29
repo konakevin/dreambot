@@ -25,7 +25,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   withSequence,
-  withSpring,
   withRepeat,
   withDelay,
 } from 'react-native-reanimated';
@@ -161,7 +160,7 @@ function WishSparkle({ index, total, seed }: { index: number; total: number; see
         true
       )
     );
-  }, []);
+  }, [delay, duration, opacity, scale]);
 
   const style = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -256,7 +255,7 @@ export const DreamCard = memo(function DreamCard({
         true
       );
     }
-  }, [isWish]);
+  }, [isWish, hazeOpacity]);
   const hazeStyle = useAnimatedStyle(() => ({
     opacity: hazeOpacity.value,
   }));

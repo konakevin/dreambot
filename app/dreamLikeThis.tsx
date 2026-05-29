@@ -7,7 +7,7 @@
  * Uses the exact same engine paths as the Create flow.
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -23,15 +23,13 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { vs } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
 import * as nav from '@/lib/navigate';
-import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { useDreamMediums } from '@/hooks/useDreamStyles';
 import { sparkleCostFrom } from '@/constants/imageModels';
@@ -50,7 +48,6 @@ export default function DreamLikeThisScreen() {
     prompt?: string;
   }>();
 
-  const user = useAuthStore((s) => s.user);
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const { data: dbMediums = [] } = useDreamMediums();
   const imageModels = useImageModels();
@@ -162,7 +159,7 @@ export default function DreamLikeThisScreen() {
       }
       setLoading(false);
     })();
-  }, [params.postId]);
+  }, [params.postId, params.prompt]);
 
   // Keyboard tracking — delay state update until after keyboard animation
   useEffect(() => {

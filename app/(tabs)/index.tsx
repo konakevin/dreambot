@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect, useCallback, useMemo, useDeferredValue } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuthStore } from '@/store/auth';
-import * as nav from '@/lib/navigate';
 import { trackFeedTabSelected } from '@/lib/analytics';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
@@ -24,7 +23,6 @@ import type { DreamPostItem } from '@/components/DreamCard';
 // Content diversity post-processing — extracted to lib/feedDiversity.ts for unit testing.
 import { applyDiversity } from '@/lib/feedDiversity';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 type FeedTab = 'forYou' | 'following';
 const PAGE_SIZE = 20;
 
@@ -170,7 +168,7 @@ export default function HomeScreen() {
   // feed refetch + remount lags behind the pill animation by a frame or
   // two instead of blocking it. Pill highlight feels snappy.
   const deferredTab = useDeferredValue(activeTab);
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch, isRefetching } =
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useDreamFeed(deferredTab);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
@@ -223,7 +221,7 @@ export default function HomeScreen() {
         setPinnedPost(post);
       }
     })();
-  }, [pendingPostId]);
+  }, [pendingPostId, setPendingPostId, setPinnedPost]);
 
   // Diversity is applied per-page inside useDreamFeed.queryFn (see comment
   // there). feedPosts is already-diversified at the page level — flat-merging

@@ -1,6 +1,6 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Pressable, Alert, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';

@@ -2,8 +2,7 @@
  * DreamWishSheet — fullscreen form for making a dream wish.
  */
 
-import { showAlert } from '@/components/CustomAlert';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -100,16 +99,24 @@ export function DreamWishSheet({
   } | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-  // Sync state when sheet opens
+  // Sync the form to the saved values when the sheet opens. Guarded so it runs
+  // ONLY on the closed→open transition — listing currentWish/currentModifiers/
+  // currentRecipientIds as deps without the guard would reset (wipe) the user's
+  // in-progress edits whenever a parent re-render produced new prop identities.
+  const didSyncOnOpen = useRef(false);
   useEffect(() => {
-    if (visible) {
-      setText(currentWish ?? '');
-      setModifiers(currentModifiers ?? EMPTY_MODIFIERS);
-      setRecipientIds(new Set(currentRecipientIds ?? []));
-      setPicker(null);
-      setShowClearConfirm(false);
+    if (!visible) {
+      didSyncOnOpen.current = false;
+      return;
     }
-  }, [visible]);
+    if (didSyncOnOpen.current) return;
+    didSyncOnOpen.current = true;
+    setText(currentWish ?? '');
+    setModifiers(currentModifiers ?? EMPTY_MODIFIERS);
+    setRecipientIds(new Set(currentRecipientIds ?? []));
+    setPicker(null);
+    setShowClearConfirm(false);
+  }, [visible, currentWish, currentModifiers, currentRecipientIds]);
   const { mutate: setWish, isPending } = useSetDreamWish();
   const { data: friends = [] } = useShareableVibers();
   const insets = useSafeAreaInsets();

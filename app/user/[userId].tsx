@@ -33,7 +33,7 @@ import { useAlbumStore } from '@/store/album';
 import { PostGrid } from '@/components/PostGrid';
 import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
-import { ProfileStatsRow, type StatsTab } from '@/components/ProfileStatsRow';
+import { ProfileStatsRow } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
@@ -127,7 +127,7 @@ export default function PublicProfileScreen() {
       overlayOpacity.value = withTiming(1, { duration: 250 });
       avatarProgress.value = withTiming(1, { duration: 400, easing: Easing.out(Easing.cubic) });
     }
-  }, [showAvatarPreview]);
+  }, [showAvatarPreview, avatarProgress, overlayOpacity]);
 
   function handleMoreMenu() {
     showAlert('Options', '', [

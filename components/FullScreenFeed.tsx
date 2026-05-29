@@ -8,14 +8,7 @@
 
 import { memo, useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  RefreshControl,
-  InteractionManager,
-  AppState,
-} from 'react-native';
+import { Dimensions, RefreshControl, InteractionManager, AppState } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
@@ -247,7 +240,7 @@ export function FullScreenFeed({
       });
       return () => handle.cancel();
     }
-  }, [isFocused, posts.length, pageHeight]);
+  }, [isFocused, posts.length, pageHeight, ref]);
 
   // Also re-snap when the APP returns from background. useIsFocused only tracks
   // navigation-stack focus, not app foreground/background — so on minimize+reopen,
@@ -381,7 +374,7 @@ export function FullScreenFeed({
         }
       }
     },
-    [posts, onIndexChange, user]
+    [posts, onIndexChange, user, onHudToggle]
   );
 
   const bottomPadding = hideTabBar ? 16 + insets.bottom : 60 + insets.bottom;
@@ -495,11 +488,3 @@ export function FullScreenFeed({
     </>
   );
 }
-
-const s = StyleSheet.create({
-  loading: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

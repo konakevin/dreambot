@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import { Tabs, Redirect } from 'expo-router';
+import { BottomTabBar } from '@react-navigation/bottom-tabs';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
@@ -49,7 +50,7 @@ export default function TabLayout() {
       duration: ANIM.HUD_FADE_MS,
       useNativeDriver: true,
     }).start();
-  }, [hudVisible]);
+  }, [hudVisible, tabBarOpacity]);
 
   if (initialized && !session) {
     return <Redirect href="/(auth)" />;
@@ -62,11 +63,7 @@ export default function TabLayout() {
           style={{ opacity: tabBarOpacity, pointerEvents: hudVisible ? 'auto' : 'none' }}
         >
           {/* Default bottom tab bar from Expo Router */}
-          {}
-          {(() => {
-            const { BottomTabBar } = require('@react-navigation/bottom-tabs');
-            return <BottomTabBar {...props} />;
-          })()}
+          <BottomTabBar {...props} />
         </Animated.View>
       )}
       screenOptions={{

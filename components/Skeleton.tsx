@@ -22,7 +22,7 @@ function ShimmerBlock({ style }: { style?: Record<string, unknown> }) {
 
   useEffect(() => {
     opacity.value = withRepeat(withTiming(0.7, { duration: 800 }), -1, true);
-  }, []);
+  }, [opacity]);
 
   const animStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
 

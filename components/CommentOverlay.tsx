@@ -69,7 +69,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
 
   useEffect(() => {
     progress.value = withTiming(1, { duration: ANIM_DURATION, easing: EASING });
-  }, []);
+  }, [progress]);
 
   const dismiss = useCallback(() => {
     if (closing.current) return;
@@ -77,7 +77,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
     progress.value = withTiming(0, { duration: 250, easing: EASING }, () => {
       runOnJS(onClose)();
     });
-  }, [onClose]);
+  }, [onClose, progress]);
 
   // Swipe down to dismiss
   const panGesture = Gesture.Pan()
@@ -157,15 +157,19 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
       .then(({ data: row }: { data: { username: string; avatar_url: string | null } | null }) => {
         if (row) setMyProfile({ username: row.username, avatarUrl: row.avatar_url });
       });
-  }, [currentUser?.id]);
+  }, [currentUser]);
   const [optimisticComments, setOptimisticComments] = useState<Comment[]>([]);
   // Page shape is { rows, hasMore, nextOffset } — flatMap rows
   const serverComments = useMemo(() => data?.pages.flatMap((p) => p.rows) ?? [], [data]);
   // Clear optimistic comments once server data refreshes with new entries
   const serverCount = serverComments.length;
   useEffect(() => {
-    if (optimisticComments.length > 0 && serverCount > 0) {
-      setOptimisticComments([]);
+    // Clear optimistic comments once server data refreshes (serverCount
+    // changes). Read the current optimistic length via the updater so this
+    // effect doesn't depend on optimisticComments — depending on it would
+    // clear a just-added optimistic comment the instant it's posted.
+    if (serverCount > 0) {
+      setOptimisticComments((prev) => (prev.length > 0 ? [] : prev));
     }
   }, [serverCount]);
   const comments = useMemo(
