@@ -102,6 +102,11 @@ export function useToggleFollow() {
       qc.invalidateQueries({ queryKey: ['followingList', user?.id] });
       qc.invalidateQueries({ queryKey: ['followingIds', user?.id] });
       qc.invalidateQueries({ queryKey: ['outgoingFollowRequests', user?.id] });
+      // Following a bot changes who appears in the feed — invalidate ALL feed
+      // tabs (forYou / following / bots) so the feed reflects the new following
+      // state. Without this, the feed served stale follow content (prefix-match
+      // invalidates every ['dreamFeed', tab, userId, seed, botUserId] entry).
+      qc.invalidateQueries({ queryKey: ['dreamFeed'] });
     },
   });
 }
