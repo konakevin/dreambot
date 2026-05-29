@@ -239,6 +239,24 @@ export const DreamCard = memo(function DreamCard({
   // Image fill mode — Flux (9:16) fills edge-to-edge; off-ratio renders
   // (GPT 2:3, etc.) flip to contain+blur on load. See the image block below.
   const [fillMode, setFillMode] = useState<'cover' | 'contain'>('cover');
+  // Image load resilience: a failed load (transient network / decode hiccup)
+  // used to leave a permanent BLACK card. AUTO-retry silently — cache-busted,
+  // with backoff, capped at MAX_IMG_RETRIES — no user-facing retry UI. (The
+  // small-JPEG display variant cuts the failure rate; this is the safety net.)
+  const MAX_IMG_RETRIES = 3;
+  const retryCountRef = useRef(0);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [retryNonce, setRetryNonce] = useState(0);
+  useEffect(
+    () => () => {
+      if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
+    },
+    []
+  );
+  const heroUrl =
+    retryNonce > 0
+      ? `${item.image_url}${item.image_url.includes('?') ? '&' : '?'}r=${retryNonce}`
+      : item.image_url;
   // Reset to cover when the image changes (card reuse) so onLoad re-measures.
   useEffect(() => {
     setFillMode('cover');
@@ -397,11 +415,24 @@ export const DreamCard = memo(function DreamCard({
                 card's black background. We read the aspect on load; default
                 cover so the common Flux case never flashes. */}
             <Image
-              source={{ uri: item.image_url }}
+              source={{ uri: heroUrl }}
               style={s.fullImage}
               contentFit={fillMode}
               cachePolicy="memory-disk"
+              recyclingKey={item.id}
+              transition={150}
+              onError={() => {
+                if (retryCountRef.current >= MAX_IMG_RETRIES) return; // give up silently
+                retryCountRef.current += 1;
+                if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
+                // backoff: 0.6s, 1.2s, 1.8s — refetch via cache-busted nonce
+                retryTimerRef.current = setTimeout(
+                  () => setRetryNonce((n) => n + 1),
+                  600 * retryCountRef.current
+                );
+              }}
               onLoad={(e) => {
+                retryCountRef.current = 0;
                 const w = e.source?.width ?? 0;
                 const h = e.source?.height ?? 0;
                 if (w > 0 && h > 0) {
