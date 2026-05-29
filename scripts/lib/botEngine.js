@@ -187,8 +187,14 @@ async function fluxOnce({ prompt, aspectRatio, model, replicateKey, inputOverrid
       : {
           aspect_ratio: aspectRatio,
           num_outputs: 1,
-          output_format: 'png',
-          output_quality: 100,
+          // JPEG q95 (was PNG q100 2026-05-29). Storage masters are now JPEG
+          // across the app (matches user-dream pipeline). At q95, Clarity
+          // (diffusion-based) upscales effectively identically to PNG input;
+          // the visible HD download is unchanged. Cuts bot master from ~2MB
+          // PNG to ~400KB JPEG — smaller storage AND a smaller feed-card
+          // fallback when image_url_display is ever null.
+          output_format: 'jpg',
+          output_quality: 95,
         }),
     ...inputOverrides,
   };
