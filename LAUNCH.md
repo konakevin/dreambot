@@ -91,19 +91,18 @@ The two things that still touch the build: confirm production **EAS env vars**
 
 ## 4. App Store Connect listing
 
-- [ ] **Description / subtitle / keywords** — **draft ready in `APP_STORE_LISTING.md`**
-      (copy-paste); review + tweak. Do NOT reuse old "Rad or Bad" copy.
+- [x] **Description / subtitle / keywords** entered in ASC (2026-05-28). Final copy in
+      `APP_STORE_LISTING.md` (subtitle "Dream it. Make it. Explore it.", 3-pillar description).
 - [ ] **Screenshots** — min 3 at **6.7" (1290×2796)** of real DreamBot screens
       (onboarding vibe profile, a generated dream, the feed, create modes, profile).
       Recommended 6–8; 6.1" optional.
-- [ ] **Age rating** — expect **17+** (user-generated content + AI image generation +
-      face-swap of personal photos).
+- [x] **Age rating** completed in ASC (2026-05-28) — 17+ tier.
 - [x] **App Privacy "nutrition label"** filled in ASC (2026-05-28) — 10 data types,
       all App-Functionality/Analytics + linked to identity, matches the privacy policy.
       ⚠️ Confirm the **Tracking** answer is "No" (no ATT prompt in the app, so a
       tracking=yes label would be an auto-reject).
-- [ ] **Privacy Policy URL** (live) + **Support URL** (from §1).
-- [ ] **Content rights** answer — content is user-generated / AI-generated.
+- [x] **Privacy Policy + Support URLs** entered in ASC (both live). 2026-05-28.
+- [x] **Content rights** answered — user-generated / AI-generated. 2026-05-28.
 - [ ] **Demo account in App Review notes** — the app is login-gated. **Review-notes
       draft (incl. moderation explanation) is in `APP_STORE_LISTING.md`** — just create
       a pre-onboarded demo account with sparkles and paste its credentials in.
