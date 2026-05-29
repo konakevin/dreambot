@@ -576,14 +576,28 @@ export const DreamCard = memo(function DreamCard({
                   size={28}
                   color={isLiked ? colors.like : '#FFFFFF'}
                 />
-                {(item.like_count ?? 0) > 0 && <Text style={ui.sideCount}>{item.like_count}</Text>}
+                {/* Always-rendered count slot: opacity-hide when 0 instead of
+                    conditionally mounting the Text. Adding/removing the Text
+                    expanded/collapsed the button height (~14px) and shoved
+                    every subsequent side-rail button up or down — the "janky
+                    reflow + phantom number" Kevin reported. Keeping the slot
+                    occupied at all times locks the rail's vertical rhythm. */}
+                <Text
+                  style={[ui.sideCount, !(item.like_count ?? 0) && hiddenCount]}
+                  numberOfLines={1}
+                >
+                  {item.like_count ?? 0}
+                </Text>
               </TouchableOpacity>
               {onComment && (
                 <TouchableOpacity style={ui.sideButton} onPress={onComment} activeOpacity={0.7}>
                   <Ionicons name="chatbubble-outline" size={26} color="#FFFFFF" />
-                  {(item.comment_count ?? 0) > 0 && (
-                    <Text style={ui.sideCount}>{item.comment_count}</Text>
-                  )}
+                  <Text
+                    style={[ui.sideCount, !(item.comment_count ?? 0) && hiddenCount]}
+                    numberOfLines={1}
+                  >
+                    {item.comment_count ?? 0}
+                  </Text>
                 </TouchableOpacity>
               )}
               {onToggleSave && (
@@ -625,9 +639,12 @@ export const DreamCard = memo(function DreamCard({
               {onFamily && (
                 <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
                   <Ionicons name="color-wand-outline" size={24} color="#FFFFFF" />
-                  {(item.fuse_count ?? 0) > 0 && (
-                    <Text style={ui.sideCount}>{item.fuse_count}</Text>
-                  )}
+                  <Text
+                    style={[ui.sideCount, !(item.fuse_count ?? 0) && hiddenCount]}
+                    numberOfLines={1}
+                  >
+                    {item.fuse_count ?? 0}
+                  </Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -637,6 +654,11 @@ export const DreamCard = memo(function DreamCard({
     </GestureDetector>
   );
 });
+
+// Applied to a side-rail count Text when the count is 0: keeps the element
+// in the layout (reserving its vertical space) but invisible. Crossing the
+// 0↔1 threshold then becomes a visibility flip, not a remount → no reflow.
+const hiddenCount = { opacity: 0 } as const;
 
 const s = StyleSheet.create({
   card: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: '#000' },

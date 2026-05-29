@@ -44,7 +44,7 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 - [ ] **Hearting** — sparkle / confetti burst (like Rad / BeReal). Apply to:
   - dream create screens
   - first-dream screen
-- [ ] 🤖 **Heart bug** — phantom numbers + janky reflow when the count appears
+- [x] 🤖 **Heart bug** — phantom numbers + janky reflow when the count appears — shipped 2026-05-29 (always-render the count, opacity-hide at 0, so the side rail no longer reflows)
 - [ ] **Notification icon** when lit is ugly — redesign
 - [ ] **Profile screens** — restyle more like Instagram / TikTok header-user-info layout
 - [ ] **Toast system** — review how other apps handle "post created" / "file saved"; make ours more on-brand
