@@ -85,7 +85,7 @@ The two things that still touch the build: confirm production **EAS env vars**
       if not already done — required for first review.
 - [ ] **Submit the IAPs with the first app version** (Apple won't review the first IAP
       without an accompanying binary).
-- [ ] Sandbox-test a purchase **and Restore Purchases** on a real device (TestFlight).
+- [x] Sandbox-tested purchase + Restore Purchases on-device via TestFlight (2026-05-28) — IAP working.
 
 ---
 
@@ -141,7 +141,9 @@ The two things that still touch the build: confirm production **EAS env vars**
       source = `remote`.
 - [x] **Uploaded to App Store Connect** via `eas submit` 2026-05-28 (app ID **6761505205**)
       → processing → TestFlight.
-- [ ] **TestFlight pass on a real device FIRST** — don't skip:
+- [x] **TestFlight pass on a real device** (2026-05-28) — IAP purchase, dream
+      generation, etc. confirmed working on-device. Re-run this smoke list after any
+      significant change before the final submit:
   - Sign up via each provider (email + Apple + Google + Facebook)
   - Full onboarding (vibe profile → first-dream banger)
   - Generate a dream (prompt / photo restyle / Dream Cast face-swap)
