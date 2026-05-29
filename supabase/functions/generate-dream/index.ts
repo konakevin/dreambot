@@ -100,6 +100,10 @@ interface RequestBody {
    *  the prompt verbatim to flux-1.1-pro with NO Sonnet expansion / chaos /
    *  medium / vibe directive merging. Power-user mode. */
   use_exact_prompt?: boolean;
+  /** When false, render + return WITHOUT inserting an uploads row — the caller
+   *  persists its own (onboarding RevealStep). Defaults to true. Fixes the
+   *  duplicate-first-dream (gen + "Post my Dream" both inserting a row). */
+  persist?: boolean;
 }
 
 // The full request handler. Wrapped (below) so the render survives the client
