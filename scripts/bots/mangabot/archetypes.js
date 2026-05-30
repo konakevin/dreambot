@@ -181,6 +181,34 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // PATH-BESPOKE — MangaBot magical-girl (2026-05-29 Phase 2.3).
+  // Mahou-shoujo / Sailor-Moon / Precure / Madoka-Magica tradition. Solo
+  // magical-girl mid-transformation or mid-power-moment. Sparkle-stack
+  // mandate + transformation-peak mandate. Forward-facing magical pose.
+  MANGABOT_MAGICAL_GIRL: {
+    description:
+      'PATH-BESPOKE — MangaBot magical-girl (2026-05-29 Phase 2.3). Solo mahou-shoujo / sailor-moon / precure / madoka archetype. Mid-transformation or mid-power-moment with SPARKLE STACK. Forward-facing magical-girl identity. 11-axis split, all path-bespoke.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   // PATH-BESPOKE — MangaBot anime-character-male (2026-05-29 Phase 2.2).
   // Mirror of MANGABOT_ANIME_CHARACTER_FEMALE with male-coded action +
   // outfit + ethnicity + male-specific NSFW bans (per DragonBot

@@ -7,23 +7,25 @@ illustration quality. Characters by role only (never named IP).
 
 ## 7 render paths
 
-| Path | What it is |
-|---|---|
-| `anime-scene` | Classic anime scene with character-by-role — modern/traditional/mythic mix |
-| `anime-landscape` | Pure Japanese environment — shrines, rice paddies, bamboo, torii, Edo streets |
-| `mythological-creature` | Japanese mythological being as hero — kitsune, yokai, oni, tengu, ryujin |
-| `cozy-anime` | Ghibli-warm heartwarming moments — Totoro/Ponyo/Kiki energy |
-| `kawaii` | Explicit CUTE — chibi, big-eye, magical-girl, sparkle-heavy, shoujo |
-| `slice-of-life` | Quiet daily anime — Shinkai 5cm-per-second melancholy-warmth |
-| `neo-tokyo` | Cyberpunk Japan future — Blade-Runner-meets-Akira neon-rain |
+| Path                    | What it is                                                                    |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `anime-scene`           | Classic anime scene with character-by-role — modern/traditional/mythic mix    |
+| `anime-landscape`       | Pure Japanese environment — shrines, rice paddies, bamboo, torii, Edo streets |
+| `mythological-creature` | Japanese mythological being as hero — kitsune, yokai, oni, tengu, ryujin      |
+| `cozy-anime`            | Ghibli-warm heartwarming moments — Totoro/Ponyo/Kiki energy                   |
+| `kawaii`                | Explicit CUTE — chibi, big-eye, magical-girl, sparkle-heavy, shoujo           |
+| `slice-of-life`         | Quiet daily anime — Shinkai 5cm-per-second melancholy-warmth                  |
+| `neo-tokyo`             | Cyberpunk Japan future — Blade-Runner-meets-Akira neon-rain                   |
 
 ## Axes rolled per render
 
 Shared:
+
 - `scene_palette` — anime-characteristic palette
 - `colorPalette` — secondary lighting keyed to vibe
 
 Path-specific (all 50-entry Sonnet-seeded pools):
+
 - `anime_characters` — by role only, full spectrum
 - `japanese_landscapes` — shrines/rice/bamboo/Edo/mountain
 - `mythological_beings` — specific yokai/kami/creature types

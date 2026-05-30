@@ -144,6 +144,7 @@ module.exports = {
       'samurai-era',
       'anime-character-female',
       'anime-character-male',
+      'magical-girl',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista

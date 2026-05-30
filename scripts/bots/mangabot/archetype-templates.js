@@ -574,6 +574,111 @@ Open with the scene-type composition + camera framing, then weave in the four de
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
   },
 
+  // ━━━ MANGABOT_MAGICAL_GIRL ━━━
+  // Sailor-Moon / Precure / Madoka-Magica / Cardcaptor-Sakura tradition.
+  // Sparkle-stack + transformation-peak + forward-facing-pose mandates.
+  MANGABOT_MAGICAL_GIRL: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+    const dramaSection = drama
+      ? `\n━━━ MAGICAL DRAMA — render visibly in the scene ━━━\n${drama}\n\nMagical peak-moment event in the world — visible secondary focal point, NOT eclipsing her.\n\n`
+      : '';
+    return `You are an anime concept-art painter writing a MAGICAL-GIRL keyframe for MangaBot — a single mahou-shoujo as the HERO of the frame mid-transformation OR mid-power-moment. Sailor-Moon / Precure / Madoka-Magica / Cardcaptor-Sakura tradition. She is GLOWING, ENGAGED, mid-action.
+
+━━━ GENDER LOCK ━━━
+The subject is a WOMAN (magical-girl). "Woman" or "magical-girl" MUST appear in the FIRST 8 TOKENS. Use she/her/hers throughout.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+
+Per painted-medium lesson: ethnicity-NOUN in opening tokens unlocks diverse renders. Lead with it.
+
+━━━ MAGICAL-GIRL AESTHETIC LOCK ━━━
+SPARKLE STACK MANDATORY — stack AT LEAST 6 of these visible effects: glittering hearts / falling ribbons / star-sparkle bursts / pastel-rainbow trails / floating crystal-shards / wand-aura glow / heart-shaped bubbles / glowing-rune-circle / sailor-moon-style transformation beams / pollen-light motes / chromatic-aberration halo / golden-tiara sparkle.
+
+Color palette: pastels (rose-pink / mint-green / lavender / sky-blue / butter-yellow / pearl-white) WITH saturated power-color accents (magenta blast / cyan beam / gold rays).
+
+NO grimdark. NO horror (unless Madoka-Magica register, where it's tonally controlled). NO cyberpunk neon palette. NO Western-cartoon. NO photoreal.
+
+━━━ ANIME ILLUSTRATION MEDIUM (LOCKED) ━━━
+Hand-drawn anime — Studio Ghibli / Toei (Sailor Moon) / Madhouse (Cardcaptor Sakura) / Shaft (Madoka Magica) tradition. Cel-shaded clean linework, painterly sparkle-stack, vibrant saturated pastel palette.
+
+━━━ ABSOLUTE BANS ━━━
+• NO cheesecake (minimal coverage / form-fitting / sultry / etc.) — magical-girl outfits are FRILLY-CUTE, not sexualized
+• NO STATIC POSED THUMBNAIL — she's mid-transformation, mid-cast, mid-spin, mid-leap
+• NO eyes-locked-blankly — eye direction follows the rolled camera_framing + action
+• NO combat-with-blood — magical attacks are CLEAN sparkly-energy
+
+━━━ SOLO CHARACTER ONLY ━━━
+ONE magical-girl. Familiar/wand may be at her side but is a small surprise-element, not co-character.
+
+━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
+The magical-girl is the MAIN SUBJECT at 35-50% of frame. Sparkle/transformation/setting wrap around her. NOT a tiny silhouette. NOT back-of-character. Face / outfit / wand all CLEARLY READABLE.
+
+━━━ HER ARCHETYPE (magical-girl role) ━━━
+${archetype}
+
+━━━ HER COMPACT BIO (one-line block — DO NOT expand) ━━━
+A ${ethnicity.split(/[,:]/)[0]} magical-girl woman with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, wielding ${accessory}.
+
+━━━ THE ACTION (mid-transformation OR mid-power-moment, FORWARD-FACING) ━━━
+${action}
+
+Body ENGAGED at loaded magical instant. Eye direction = camera_framing-decided. Sparkle/ribbon trails caught in motion. NEVER staring at horizon away from camera.
+
+━━━ THE SETTING (magical or earthly-with-magic stage) ━━━
+${setting}
+
+Magical realm OR earthly setting illuminated BY her magic. Depth on depth — FOREGROUND tactile detail (cobblestone / cloud-tendril / spell-circle glyph) → MIDGROUND her engaged action with sparkle-stack → DEEP DISTANCE atmospheric layers.
+
+${dramaSection}━━━ SURPRISE ELEMENT (magical secondary subject) ━━━
+${surprise_element}
+
+Midground or background — talking-cat-familiar / floating sparkle-orbs / pastel-bird / mascot-spirit. NEVER competes with hero magical-girl.
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} magical-girl WOMAN [doing exact action] in [setting]"], [her outfit with frilly magical detail], [DNA: skin + eyes + hair], [wand/accessory wielded], [magical setting wrapping with sparkle-stack], [drama if fired], [camera_framing exactly], [pastel palette + sparkle effects + mood].
+
+CRITICAL: "[ethnicity] magical-girl WOMAN [DOING ACTION]" leads. She fills 35-50% of frame, ENGAGED in magical peak. SPARKLE STACK 6+ visible. Forward-facing per camera_framing — OVERRIDE Flux's back-of-anime-girl centroid HARD.
+
+Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers.`;
+  },
+
   // ━━━ MANGABOT_ANIME_CHARACTER_MALE ━━━
   //
   // Clone-with-divergence from MANGABOT_ANIME_CHARACTER_FEMALE. Male-coded

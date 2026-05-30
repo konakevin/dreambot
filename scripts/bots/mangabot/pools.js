@@ -160,6 +160,17 @@ module.exports = {
   ANIME_CHARACTER_MALE_SURPRISE_ELEMENT: load('anime_character_male_surprise_element'),
   ANIME_CHARACTER_MALE_DRAMA: load('anime_character_male_drama'),
 
+  // magical-girl path-bespoke pools (Phase 2.3, 2026-05-29). Full-bespoke.
+  MAGICAL_GIRL_ETHNICITY: load('magical_girl_ethnicity'),
+  MAGICAL_GIRL_ARCHETYPE: load('magical_girl_archetype'),
+  MAGICAL_GIRL_OUTFIT: load('magical_girl_outfit'),
+  MAGICAL_GIRL_ACCESSORY: load('magical_girl_accessory'),
+  MAGICAL_GIRL_SETTING: load('magical_girl_setting'),
+  MAGICAL_GIRL_ACTION: load('magical_girl_action'),
+  MAGICAL_GIRL_CAMERA_FRAMING: load('magical_girl_camera_framing'),
+  MAGICAL_GIRL_SURPRISE_ELEMENT: load('magical_girl_surprise_element'),
+  MAGICAL_GIRL_DRAMA: load('magical_girl_drama'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {
