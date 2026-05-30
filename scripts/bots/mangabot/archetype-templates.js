@@ -574,6 +574,125 @@ Open with the scene-type composition + camera framing, then weave in the four de
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
   },
 
+  // ━━━ MANGABOT_CHERRY_BLOSSOM_ROMANCE ━━━
+  MANGABOT_CHERRY_BLOSSOM_ROMANCE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ PETAL DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a CHERRY-BLOSSOM-ROMANCE keyframe for MangaBot — a solo character in a tender romantic moment under sakura. 5cm-per-second / Shinkai / Toradora / Your-Lie-In-April tradition. PINK petal-cascade mandate.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+Lead with ethnicity-NOUN.
+
+━━━ AESTHETIC LOCK ━━━
+PINK PALETTE dominant — sakura-pink / rose / soft-coral / cream / warm-amber. PETAL CASCADE MANDATORY — drifting petals in 4+ visible places (foreground close + midground swirling + background settling + hair-touched).
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Shinkai / KyoAni / Mamoru-Hosoda tradition. Cel-shaded clean linework, painterly atmospheric backgrounds, soft-romantic palette.
+
+━━━ BANS ━━━
+• NO cheesecake / NO sultry / NO suggestive / NO low-cut
+• NO STATIC POSED THUMBNAIL — engaged in tender moment
+• NO back-to-camera / NO photoreal / NO sparkle-stack (cherry-blossom is its own visual signature)
+
+━━━ SOLO CHARACTER ━━━
+ONE character in tender romantic-coded mid-moment. Partner/love-interest may be implied at midground OR off-frame as referenced by accessory (love-letter / photo / locket).
+
+━━━ FRAMING ━━━
+Character at 35-50% of frame. Petals + sakura wrap around. Face clearly readable.
+
+━━━ ARCHETYPE ━━━ ${archetype}
+
+━━━ COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} character with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, with ${accessory}.
+
+━━━ ACTION (tender mid-moment, FORWARD-FACING) ━━━
+${action}
+
+━━━ SETTING ━━━
+${setting}
+Depth: FOREGROUND petal-cluster → MIDGROUND character + engaged action → DEEP DISTANCE sakura-haze + atmospheric pink-amber.
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [tender action] in [setting]"], [tender outfit], [DNA], [romantic-accessory], [setting with petal-cascade], [drama if fired], [camera_framing exactly], [pink palette + mood].
+
+CRITICAL: pink-romantic + petal-cascade + tender. Forward-facing per camera_framing. NEVER tiny silhouette under cherry tree.
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
+
+  // ━━━ MANGABOT_ROOFTOP_SUNSETS ━━━
+  MANGABOT_ROOFTOP_SUNSETS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ SUNSET DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a ROOFTOP-SUNSETS keyframe for MangaBot — character ON a rooftop at golden-hour, ENGAGED with foreground/midground (NOT looking out at vista). Shinkai / KyoAni / Tamako-Market rooftop tradition.
+
+⚠️ THIS PATH IS THE FAILURE-MODE PATH. The original audit found rooftop-sunsets ALWAYS rendered as "back-of-character looking out over sunset city." OVERRIDE THAT HARD. Character is ENGAGED with object/action AT THE ROOFTOP, NOT gazing at vista.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+
+━━━ AESTHETIC LOCK ━━━
+GOLDEN-HOUR / SUNSET palette — warm-amber / peach / rose / pumpkin-orange / sky-pink. Atmospheric rooftop dust-motes catching slanted light. Wind in hair / clothes.
+
+━━━ BANS ━━━
+• NO back-of-character looking out at city — audit-failure mode
+• NO standing at edge facing horizon
+• NO STATIC POSED THUMBNAIL — engaged with rooftop-prop
+• NO photoreal / NO cheesecake
+
+━━━ SOLO CHARACTER ━━━
+ONE character on rooftop. Friend/partner may be implied as off-frame voice / accessory.
+
+━━━ FRAMING ━━━
+Character at 35-50% of frame on rooftop. NOT a tiny silhouette against city-vista. Face clearly readable forward or 3/4. The CITY is BACKGROUND, the CHARACTER is HERO.
+
+━━━ ARCHETYPE ━━━ ${archetype}
+
+━━━ COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} character with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, with ${accessory}.
+
+━━━ ACTION (engaged with rooftop AT HAND, FORWARD-FACING) ━━━
+${action}
+
+━━━ SETTING (rooftop with character ENGAGED IN-FRAME) ━━━
+${setting}
+Depth: FOREGROUND rooftop-prop (railing/fan/water-tank/laundry-line/snack) → MIDGROUND character engaged with action → DEEP DISTANCE city-vista at sunset (city is BACKDROP).
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [rooftop action] on [rooftop setting]"], [casual evening outfit], [DNA], [rooftop accessory at hand], [rooftop with city-vista BEHIND not as focal-point], [drama if fired], [camera_framing exactly], [sunset palette + mood].
+
+CRITICAL: character is ON the rooftop ENGAGED. City-vista is BACKDROP. Forward-facing per camera_framing. OVERRIDE the back-to-character-looking-out default HARD.
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
+
   // ━━━ MANGABOT_SLICE_OF_LIFE ━━━
   MANGABOT_SLICE_OF_LIFE: ({ slots, sharedDNA, vibeDirective }) => {
     const {

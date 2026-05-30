@@ -148,6 +148,8 @@ module.exports = {
       'shonen-action',
       'kawaii',
       'slice-of-life',
+      'cherry-blossom-romance',
+      'rooftop-sunsets',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista

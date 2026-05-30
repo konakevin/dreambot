@@ -205,6 +205,28 @@ module.exports = {
   SLICE_OF_LIFE_SURPRISE_ELEMENT: load('slice_of_life_surprise_element'),
   SLICE_OF_LIFE_DRAMA: load('slice_of_life_drama'),
 
+  // cherry-blossom-romance path-bespoke pools (Phase 2.7).
+  CHERRY_BLOSSOM_ROMANCE_ETHNICITY: load('cherry_blossom_romance_ethnicity'),
+  CHERRY_BLOSSOM_ROMANCE_ARCHETYPE: load('cherry_blossom_romance_archetype'),
+  CHERRY_BLOSSOM_ROMANCE_OUTFIT: load('cherry_blossom_romance_outfit'),
+  CHERRY_BLOSSOM_ROMANCE_ACCESSORY: load('cherry_blossom_romance_accessory'),
+  CHERRY_BLOSSOM_ROMANCE_SETTING: load('cherry_blossom_romance_setting'),
+  CHERRY_BLOSSOM_ROMANCE_ACTION: load('cherry_blossom_romance_action'),
+  CHERRY_BLOSSOM_ROMANCE_CAMERA_FRAMING: load('cherry_blossom_romance_camera_framing'),
+  CHERRY_BLOSSOM_ROMANCE_SURPRISE_ELEMENT: load('cherry_blossom_romance_surprise_element'),
+  CHERRY_BLOSSOM_ROMANCE_DRAMA: load('cherry_blossom_romance_drama'),
+
+  // rooftop-sunsets path-bespoke pools (Phase 2.8).
+  ROOFTOP_SUNSETS_ETHNICITY: load('rooftop_sunsets_ethnicity'),
+  ROOFTOP_SUNSETS_ARCHETYPE: load('rooftop_sunsets_archetype'),
+  ROOFTOP_SUNSETS_OUTFIT: load('rooftop_sunsets_outfit'),
+  ROOFTOP_SUNSETS_ACCESSORY: load('rooftop_sunsets_accessory'),
+  ROOFTOP_SUNSETS_SETTING: load('rooftop_sunsets_setting'),
+  ROOFTOP_SUNSETS_ACTION: load('rooftop_sunsets_action'),
+  ROOFTOP_SUNSETS_CAMERA_FRAMING: load('rooftop_sunsets_camera_framing'),
+  ROOFTOP_SUNSETS_SURPRISE_ELEMENT: load('rooftop_sunsets_surprise_element'),
+  ROOFTOP_SUNSETS_DRAMA: load('rooftop_sunsets_drama'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {
