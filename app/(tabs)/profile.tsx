@@ -28,8 +28,6 @@ import { useUnreadGroupCount } from '@/hooks/useUnreadGroupCount';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
-import { CastPeek } from '@/components/CastPeek';
-import { useMyDreamCast } from '@/hooks/useMyDreamCast';
 import { colors } from '@/constants/theme';
 import { useFocusEffect } from '@react-navigation/native';
 import { trackProfileViewed } from '@/lib/analytics';
@@ -78,9 +76,6 @@ export default function ProfileScreen() {
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
-  // Inline Cast peek (self / plus_one / pet thumbnails). Owner-only by
-  // RLS — cross-user not exposed because cast = real face photos.
-  const { data: dreamCast } = useMyDreamCast();
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
   );
@@ -284,9 +279,7 @@ export default function ProfileScreen() {
         onStatsPress={handleStatsTabChange}
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
-      >
-        <CastPeek cast={dreamCast?.cast ?? []} onPress={() => nav.push('/settings/dream-cast')} />
-      </ProfileHeader>
+      />
 
       {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;
           hidden when the user has tapped Followers/Following on the stats

@@ -47,9 +47,11 @@ interface BaseProps {
   /** Tap on the avatar (preview / change). Optional. */
   onAvatarPress?: () => void;
   /**
-   * Slot rendered between the identity text and the action pill row. Use
-   * for DreamBot-signature inline elements like CastPeek. Optional —
-   * when null/undefined, the action pills sit directly under the bio.
+   * Optional slot rendered between the identity text and the action
+   * pill row. Reserved for future DreamBot-signature inline elements;
+   * currently unused since the CastPeek that lived here was removed
+   * 2026-05-29 (per-Kevin design call — the cat-pic peep + 'Me +
+   * Partner' label read as clutter beneath the @handle).
    */
   children?: ReactNode;
 }
