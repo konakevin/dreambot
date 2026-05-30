@@ -41,10 +41,19 @@ Output ${conceptWords} words, comma-separated phrases. NO preamble, NO headers.
 
 /**
  * Build the polish brief for the Haiku compression pass.
+ *
+ * preservePhrases note (softened 2026-05-29): used to be a hard MANDATORY
+ * "MUST appear" rule. That bit MangaBot magical-girl when sensory anchors
+ * were rolled that didn't fit the rolled concept (noir cigarette/convenience-
+ * store phrases on a magical-girl cloudscape transformation) — Haiku
+ * couldn't reconcile, refused politely with "I notice... Could you clarify?",
+ * and the refusal text shipped as the Flux prompt. The softened wording
+ * lets Haiku drop off-genre phrases instead of refusing, and the engine's
+ * REFUSAL_PATTERNS now also catches the polite-refusal style as a backstop.
  */
 function buildPolishBrief({ concept, polishedWords = '65-90', preservePhrases = [] }) {
   const preserveList = preservePhrases.length
-    ? `\n\nMANDATORY: the following phrases (or close paraphrases) MUST appear in your compressed output. Do NOT compress them away — they are the visual anchors that make the render work:\n${preservePhrases.map((p) => `   • "${p}"`).join('\n')}`
+    ? `\n\nPRESERVE WHERE THEY FIT: the following phrases (or close paraphrases) are visual anchors that strengthen the render IF they fit the concept. Weave any that align naturally; DROP any that don't fit the rolled scene rather than forcing them in. Do NOT refuse or ask for clarification — drop a mismatched phrase silently and proceed.\n${preservePhrases.map((p) => `   • "${p}"`).join('\n')}`
     : '';
 
   return `You are compressing a vivid scene concept into a Flux-ready prompt.
@@ -54,7 +63,7 @@ ${concept}
 
 TASK: rewrite this concept as a ${polishedWords}-word Flux prompt. Comma-separated phrases. Preserve every visual element from the concept — character description, makeup, glow, wardrobe, setting, lighting, mood. Drop only filler words and redundant adjectives. The compressed prompt should feel as vivid as the concept.${preserveList}
 
-Output ONLY the compressed prompt — comma-separated phrases, ${polishedWords} words, NO preamble, NO headers.`;
+Output ONLY the compressed prompt — comma-separated phrases, ${polishedWords} words, NO preamble, NO headers. NEVER respond with a question, clarification request, or meta-commentary about the task; if anything in the input feels off, drop it silently and produce the best compressed prompt you can.`;
 }
 
 module.exports = {

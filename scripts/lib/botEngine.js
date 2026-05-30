@@ -1042,8 +1042,19 @@ async function runBot(opts) {
           );
         }
 
-        // 6b. Refusal detection — retry full pipeline up to 3 times
+        // 6b. Refusal detection — retry full pipeline up to 3 times.
+        //
+        // Patterns cover BOTH content-policy refusals (the original Sonnet
+        // case) AND polite-clarification refusals from the two-pass polish
+        // step (the Haiku case). The polite ones bit MangaBot magical-girl
+        // on 2026-05-29 — Haiku was force-fed off-genre sensory anchors via
+        // preservePhrases (noir cigarette/convenience-store on a magical-girl
+        // cloudscape) and responded with "I notice... Could you clarify?"
+        // The full refusal text shipped as the Flux prompt. preservePhrases
+        // mandate also softened (see twoPassPolish.js) to prevent the
+        // mismatch upstream.
         const REFUSAL_PATTERNS = [
+          // Content-policy refusals (Sonnet primary failure mode)
           'I cannot create',
           "I'm not able to",
           'I appreciate your',
@@ -1052,6 +1063,15 @@ async function runBot(opts) {
           'sexually suggestive',
           'not able to generate',
           'alternative approaches',
+          // Polite-clarification refusals (Haiku polish failure mode)
+          'I notice the mandatory',
+          'I appreciate the detailed',
+          'Could you clarify',
+          'please confirm the correct',
+          'I want to deliver',
+          'Should I incorporate',
+          'Should I proceed',
+          'absent from the input',
         ];
         const isRefusal = (t) => REFUSAL_PATTERNS.some((p) => t.includes(p));
         {
