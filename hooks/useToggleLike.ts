@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { useAlbumStore } from '@/store/album';
+import { useFeedStore } from '@/store/feed';
 import { trackPostLiked } from '@/lib/analytics';
 import type { DreamPostItem } from '@/components/DreamCard';
 
@@ -81,8 +83,9 @@ export function useToggleLike() {
 
       // Bump like_count on the post across all feed caches.
       // Infinite queries with {rows, ...} page shape: dreamFeed, userContextFeed,
-      // searchPosts, myDreams, favoritePosts, userPosts, publicProfilePosts, inbox.
-      // Flat-array queries: albumPosts.
+      // searchPosts, myDreams, favoritePosts, userPosts, publicProfilePosts.
+      // Flat-array pages: explore (Top tab) and albumPosts. bumpLikeCount
+      // handles both shapes.
       const delta = currentlyLiked ? -1 : 1;
       const infiniteKeys = [
         'dreamFeed',
@@ -92,6 +95,12 @@ export function useToggleLike() {
         'favoritePosts',
         'userPosts',
         'publicProfilePosts',
+        // Top tab's explore feed. Grid display is PostTile (no count shown),
+        // BUT PostTile.handlePress snapshots these posts into useAlbumStore
+        // for instant photo-detail mount — so leaving the cache un-bumped
+        // here would carry a stale like_count into detail view via the
+        // snapshot path. (Audit 2026-05-29.)
+        'explore',
       ];
       for (const root of infiniteKeys) {
         const queries = qc.getQueryCache().findAll({ queryKey: [root] });
@@ -121,15 +130,56 @@ export function useToggleLike() {
         }
       }
 
-      return { snapshots };
+      // Zustand stores carrying their own snapshots of DreamPostItem —
+      // NOT in TanStack so they don't get touched by the loops above. If
+      // we skip them, photo detail / pinned-post UI keep rendering the
+      // pre-tap like_count even though every TanStack cache has flipped:
+      // heart turns red but the number freezes (the "phantom number"
+      // Kevin reported, audited 2026-05-29).
+      const rollbacks: Array<() => void> = [];
+
+      // (a) Album store: PostTile.handlePress dumps the tapped grid's
+      // posts here so photo detail can mount instantly without a cold-
+      // cache flash. Photo detail prefers this snapshot until the
+      // underlying source TanStack query grows past it (~most of a
+      // session). Bump the matching post in-place.
+      const previousAlbumPosts = useAlbumStore.getState().posts;
+      if (previousAlbumPosts.some((p) => p.id === uploadId)) {
+        rollbacks.push(() => useAlbumStore.getState().setAlbumPosts(previousAlbumPosts));
+        useAlbumStore
+          .getState()
+          .setAlbumPosts(
+            previousAlbumPosts.map((p) =>
+              p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p
+            )
+          );
+      }
+
+      // (b) Feed store's pinnedPost: a single post pinned to the top of
+      // the For-You feed (deep-link landing, post-create return). Carries
+      // its own like_count outside any TanStack cache.
+      const previousPinnedPost = useFeedStore.getState().pinnedPost;
+      if (previousPinnedPost?.id === uploadId) {
+        rollbacks.push(() => useFeedStore.getState().setPinnedPost(previousPinnedPost));
+        useFeedStore.getState().setPinnedPost({
+          ...previousPinnedPost,
+          like_count: Math.max(0, (previousPinnedPost.like_count ?? 0) + delta),
+        });
+      }
+
+      return { snapshots, rollbacks };
     },
     onError: (_err, _vars, ctx) => {
       // Restore ALL snapshotted caches (likeIds + every feed query whose
-      // like_count we bumped). Prevents count-drift on mutation failure.
+      // like_count we bumped) AND every Zustand store snapshot we mutated.
+      // Prevents count-drift on mutation failure.
       if (ctx?.snapshots) {
         for (const { key: queryKey, data } of ctx.snapshots) {
           qc.setQueryData(queryKey, data);
         }
+      }
+      if (ctx?.rollbacks) {
+        for (const rollback of ctx.rollbacks) rollback();
       }
     },
     // NOTE: deliberately no onSettled invalidate of likeIds. Trying to refetch
