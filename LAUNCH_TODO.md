@@ -73,7 +73,7 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 
 ## Sharing & shareable links
 
-- [ ] 🤖 **Image links must work for people with AND without the app** — test this thoroughly
+- [x] 🤖 **Image links must work for people with AND without the app** — test this thoroughly — shipped 2026-05-29 (deep-link chain audit: app's `associatedDomains` registered for dreambotapp.com ✓; web `/post/[id]` Server Component rendering correctly ✓; image_url public storage ✓; RLS correctly anon-gates private posts ✓. Fixed: (a) crawler-visible meta tags — Next 15's streamed `generateMetadata` was invisible to iMessage/Twitter/FB/Discord link unfurlers; inlined `<meta>`/`<title>` in the page tree so React 19 hoists them to the initial `<head>` response (34 OG/AL/twitter/apple-itunes tags now land for every crawler UA); (b) AASA route handler — a Next.js Route Handler at `app/.well-known/apple-app-site-association/route.ts` was overriding the public/ static file with the legacy `appID` singular form + only `/post/*`; rewritten to modern `appIDs` array + `/user/*` added, dead public/ dup deleted.)
 
 ## Monetization & upsells
 
