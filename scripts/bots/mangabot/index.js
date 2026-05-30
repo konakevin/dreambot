@@ -10,7 +10,7 @@ const pools = require('./pools');
 const blocks = require('./shared-blocks');
 
 const pathBuilders = {
-  // Existing (11 retained, all rewritten 2026-05-08 for keyframe framework):
+  // Bespoke axis-system paths (Wave 1-4 overhaul 2026-05-29..30):
   'mythological-creature': require('./paths/mythological-creature'),
   kawaii: require('./paths/kawaii'),
   'slice-of-life': require('./paths/slice-of-life'),
@@ -18,11 +18,9 @@ const pathBuilders = {
   'shonen-action': require('./paths/shonen-action'),
   'samurai-era': require('./paths/samurai-era'),
   'isekai-fantasy': require('./paths/isekai-fantasy'),
-  'food-anime': require('./paths/food-anime'),
   'anime-village': require('./paths/anime-village'),
   'anime-character-female': require('./paths/anime-character-female'),
   'anime-character-male': require('./paths/anime-character-male'),
-  // 12 new paths (built 2026-05-08):
   'mecha-hangars': require('./paths/mecha-hangars'),
   'festival-nights': require('./paths/festival-nights'),
   'magical-girl': require('./paths/magical-girl'),
@@ -33,7 +31,8 @@ const pathBuilders = {
   'rooftop-sunsets': require('./paths/rooftop-sunsets'),
   'cherry-blossom-romance': require('./paths/cherry-blossom-romance'),
   'space-opera': require('./paths/space-opera'),
-  underwater: require('./paths/underwater'),
+  // SDXL-aesthetic revival path (Phase 2.19, 2026-05-30):
+  'ghibli-painterly': require('./paths/ghibli-painterly'),
 };
 
 module.exports = {
@@ -74,7 +73,6 @@ module.exports = {
   ],
 
   paths: [
-    // Retained (11)
     'mythological-creature',
     'kawaii',
     'slice-of-life',
@@ -82,11 +80,9 @@ module.exports = {
     'shonen-action',
     'samurai-era',
     'isekai-fantasy',
-    'food-anime',
     'anime-village',
     'anime-character-female',
     'anime-character-male',
-    // New (12)
     'mecha-hangars',
     'festival-nights',
     'magical-girl',
@@ -97,8 +93,15 @@ module.exports = {
     'rooftop-sunsets',
     'cherry-blossom-romance',
     'space-opera',
-    'underwater',
+    'ghibli-painterly',
   ],
+
+  // ghibli-painterly: lock to flux-1.1-pro (bake-off 2026-05-30 confirmed best
+  // match to Kevin's SDXL-era hearted aesthetic — outperformed both SDXL and
+  // flux-2-pro on monumental-architecture-as-hero scene-led renders).
+  modelByPath: {
+    'ghibli-painterly': 'black-forest-labs/flux-1.1-pro',
+  },
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -110,15 +113,14 @@ module.exports = {
     allowSubjectChaosPaths: [
       'neo-tokyo',
       'isekai-fantasy',
-      'food-anime',
       'anime-village',
       'mythological-creature',
       'mecha-hangars',
       'occult-tokyo',
       'post-apocalyptic',
       'space-opera',
-      'underwater',
       'ghibli-countryside',
+      'ghibli-painterly',
       'festival-nights',
       'rooftop-sunsets',
     ],
@@ -158,6 +160,7 @@ module.exports = {
       'mecha-hangars',
       'mythological-creature',
       'space-opera',
+      'ghibli-painterly',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista

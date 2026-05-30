@@ -1574,6 +1574,82 @@ CRITICAL: yukata + engaged with festival + lantern-glow. Forward-facing per came
 Output ONLY raw 90-120 word scene description. NO preamble.`;
   },
 
+  // ━━━ MANGABOT_GHIBLI_PAINTERLY — SCENE-LED architecture-as-hero (2026-05-30) ━━━
+  // Designed from Kevin's 37-heart SDXL-era signal. Bake-off confirmed
+  // flux-1.1-pro renders this aesthetic better than original SDXL. Locked to
+  // flux-1.1-pro via bot.modelByPath.
+  MANGABOT_GHIBLI_PAINTERLY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, monumental_anchor, setting_type, scale_provers, tiny_figure_optional, lush_foreground, atmospheric_light, color_palette, cascade_motion, weather_air, camera_framing, surprise_element, drama } = slots;
+    const figureSection = (tiny_figure_optional && !/^no figure|^none|^absent/i.test(tiny_figure_optional))
+      ? `\n━━━ TINY FIGURE (scale prover, 5-10% of frame) ━━━\n${tiny_figure_optional}\n`
+      : `\n━━━ NO FIGURE ━━━\nArchitecture alone fills the frame. No human or creature.\n`;
+    const dramaSection = drama ? `\n━━━ EVENT / DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a GHIBLI-PAINTERLY keyframe for MangaBot — SCENE-LED, monumental architecture as the HERO. Castle-in-the-Sky / Spirited-Away / Princess-Mononoke / Howl's Moving Castle / Lost-Universe register. Painterly hand-drawn anime, lush layered foliage, atmospheric depth, scale-prover composition.
+
+━━━ AESTHETIC LOCK ━━━
+PAINTERLY GHIBLI-ANIME — Studio Ghibli / Makoto Shinkai / Madhouse / Production-IG painterly tradition. Hand-drawn cel-shaded characters, painterly atmospheric backgrounds, vibrant saturated palette, atmospheric perspective, god-rays, particle haze, dense layered foliage.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Ghibli / Shinkai / Madhouse painterly tradition. Cel-shaded clean architectural linework, painterly atmospheric backgrounds with depth-haze, vibrant Ghibli-saturation. NOT photoreal. NOT CGI.
+
+━━━ BANS ━━━
+• NO hero-character portrait — architecture is HERO, figure is tiny scale-prover or absent
+• NO empty bare frame — lush layered foliage MANDATORY (moss / ferns / petals / vines / mushrooms in foreground or wrapping mid-tier)
+• NO Mt-Fuji-postcard with tiny anchor — anchor fills 50-70% of frame as the dominant mass
+• NO photoreal / NO western-CGI / NO Pixar 3D-render
+• NO modern western architecture — Ghibli-coded sky-island / shrine / cathedral / pagoda / mossy-ruin register only
+• NO static empty plate — cascade_motion MANDATORY (waterfalls / petals / fireflies / lanterns drifting)
+
+━━━ ARCHITECTURE IS HERO ━━━
+The monumental anchor fills 50-70% of the frame. Scale-provers (stairs / bridges / archways) PROVE the massive scale. Optional tiny figure (5-10%) makes the scale visceral. Multi-tier depth: foreground foliage → midground scale-prover → architectural mass → atmospheric distance.
+
+━━━ FRAMING MANDATE ━━━
+LOW-ANGLE HERO looking UP at architecture, OR vanishing-point ascent through arch, OR cathedral reveal through foliage portal, OR over-foreground reveal of the anchor. NEVER tiny-architecture-in-distance. NEVER hero-character close-up.
+
+━━━ MONUMENTAL ANCHOR (the dominant architecture) ━━━
+${monumental_anchor}
+
+━━━ SETTING TYPE (the broader environment) ━━━
+${setting_type}
+
+━━━ SCALE PROVERS (stairs / bridges / archways making the architecture LOOK massive) ━━━
+${scale_provers}
+
+${figureSection}━━━ LUSH FOREGROUND (moss / petals / ferns / mushrooms wrapping the frame) ━━━
+${lush_foreground}
+
+━━━ ATMOSPHERIC LIGHT (the light signature) ━━━
+${atmospheric_light}
+
+━━━ COLOR PALETTE ━━━
+${color_palette}
+
+━━━ CASCADE MOTION (drift element — waterfalls / petals / fireflies / lanterns) ━━━
+${cascade_motion}
+
+━━━ WEATHER + AIR (atmospheric depth) ━━━
+${weather_air}
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR SECONDARY ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "[monumental_anchor] in [setting_type] with [scale_provers]"], [lush foreground wrapping], [tiny figure for scale OR absent], [atmospheric light god-rays], [color palette], [cascade motion drift], [weather + air], [drama if fired], [camera_framing exactly], [Ghibli painterly mood].
+
+CRITICAL: architecture is HERO 50-70%, scale-provers MANDATORY, lush layered foliage MANDATORY, cascade motion MANDATORY. Multi-tier depth (foreground lush → midground scale-prover → architectural mass → atmospheric distance). NEVER hero-character. NEVER empty frame. NEVER photoreal.
+
+Output ONLY raw 100-140 word scene description. NO preamble.`;
+  },
+
   // ━━━ WAVE 3 — genre templates (2026-05-29) ━━━
 
   // ━━━ MANGABOT_MYTHOLOGICAL_CREATURE — yokai is hero, human-witness for scale ━━━

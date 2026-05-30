@@ -399,6 +399,40 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // PATH-BESPOKE — MangaBot ghibli-painterly (Phase 2.19, 2026-05-30).
+  // Scene-led monumental-architecture painterly-Ghibli aesthetic — designed from
+  // Kevin's 37-heart signal on pre-Flux SDXL-era MangaBot renders. Bake-off
+  // 2026-05-30 confirmed flux-1.1-pro renders this aesthetic BETTER than the
+  // original SDXL did (and faster). Architecture is HERO at 50-70% of frame;
+  // optional tiny figure (5-10%) as scale prover. DIFFERENT from
+  // ghibli-countryside (pastoral-rural) — this one is monumental sky-island /
+  // cathedral-spire / lantern-cavern / forest-tower territory.
+  MANGABOT_GHIBLI_PAINTERLY: {
+    description:
+      'PATH-BESPOKE — MangaBot ghibli-painterly (2026-05-30 Phase 2.19). SCENE-LED monumental-architecture painterly-Ghibli. Floating castles, cathedral spires, lantern caverns, forest towers, sky-temples. Architecture is HERO at 50-70% of frame, optional tiny figure for scale. 11 bespoke axes designed from Kevin\'s 37-heart SDXL-era signal.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'monumental_anchor',
+        'setting_type',
+        'scale_provers',
+        'tiny_figure_optional',
+        'lush_foreground',
+        'atmospheric_light',
+        'color_palette',
+        'cascade_motion',
+        'weather_air',
+        'camera_framing',
+        'surprise_element',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   // ━━━ WAVE 3 — genre paths (2026-05-29) ━━━
 
   // PATH-BESPOKE — MangaBot mythological-creature (Phase 2.16). Yokai as hero.

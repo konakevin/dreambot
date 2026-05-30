@@ -312,6 +312,20 @@ module.exports = {
   SPACE_OPERA_SURPRISE_ELEMENT: load('space_opera_surprise_element'),
   SPACE_OPERA_DRAMA: load('space_opera_drama'),
 
+  // ghibli-painterly SCENE-led pools (Phase 2.19, 2026-05-30).
+  GHIBLI_PAINTERLY_MONUMENTAL_ANCHOR: load('ghibli_painterly_monumental_anchor'),
+  GHIBLI_PAINTERLY_SETTING_TYPE: load('ghibli_painterly_setting_type'),
+  GHIBLI_PAINTERLY_SCALE_PROVERS: load('ghibli_painterly_scale_provers'),
+  GHIBLI_PAINTERLY_TINY_FIGURE_OPTIONAL: load('ghibli_painterly_tiny_figure_optional'),
+  GHIBLI_PAINTERLY_LUSH_FOREGROUND: load('ghibli_painterly_lush_foreground'),
+  GHIBLI_PAINTERLY_ATMOSPHERIC_LIGHT: load('ghibli_painterly_atmospheric_light'),
+  GHIBLI_PAINTERLY_COLOR_PALETTE: load('ghibli_painterly_color_palette'),
+  GHIBLI_PAINTERLY_CASCADE_MOTION: load('ghibli_painterly_cascade_motion'),
+  GHIBLI_PAINTERLY_WEATHER_AIR: load('ghibli_painterly_weather_air'),
+  GHIBLI_PAINTERLY_CAMERA_FRAMING: load('ghibli_painterly_camera_framing'),
+  GHIBLI_PAINTERLY_SURPRISE_ELEMENT: load('ghibli_painterly_surprise_element'),
+  GHIBLI_PAINTERLY_DRAMA: load('ghibli_painterly_drama'),
+
   // mecha-hangars SCENE-led pools (Phase 2.14, second-attempt).
   MECHA_HANGARS_MECH_CLASS: load('mecha_hangars_mech_class'),
   MECHA_HANGARS_MECH_POSTURE: load('mecha_hangars_mech_posture'),
