@@ -183,6 +183,17 @@ module.exports = {
   SHONEN_ACTION_SURPRISE_ELEMENT: load('shonen_action_surprise_element'),
   SHONEN_ACTION_DRAMA: load('shonen_action_drama'),
 
+  // kawaii path-bespoke pools (Phase 2.5).
+  KAWAII_ETHNICITY: load('kawaii_ethnicity'),
+  KAWAII_ARCHETYPE: load('kawaii_archetype'),
+  KAWAII_OUTFIT: load('kawaii_outfit'),
+  KAWAII_ACCESSORY: load('kawaii_accessory'),
+  KAWAII_SETTING: load('kawaii_setting'),
+  KAWAII_ACTION: load('kawaii_action'),
+  KAWAII_CAMERA_FRAMING: load('kawaii_camera_framing'),
+  KAWAII_SURPRISE_ELEMENT: load('kawaii_surprise_element'),
+  KAWAII_DRAMA: load('kawaii_drama'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {

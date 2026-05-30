@@ -574,6 +574,102 @@ Open with the scene-type composition + camera framing, then weave in the four de
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
   },
 
+  // ━━━ MANGABOT_KAWAII ━━━
+  // Cozy cute moments. Sanrio/lolita/character-cafe register. Gentle.
+  MANGABOT_KAWAII: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+    const dramaSection = drama
+      ? `\n━━━ KAWAII DRAMA — render gently in scene ━━━\n${drama}\n\nGentle cute event in world — visible but soft, NOT eclipsing her.\n\n`
+      : '';
+    return `You are an anime concept-art painter writing a KAWAII keyframe for MangaBot — a single cute character in a cozy cute moment. Sanrio / lolita / Pop-Mart-vinyl-cute / character-cafe / Sailor-Moon-coquette tradition. Soft pastel palette + sparkle stack + forward-facing cute pose.
+
+━━━ GENDER + ETHNICITY LOCK ━━━
+Subject is a WOMAN. "Woman" or "girl" MUST be in FIRST 8 TOKENS. Use she/her/hers.
+${ethnicity}
+Per painted-medium lesson: ethnicity-NOUN unlocks diverse rendering. Lead with it.
+
+━━━ KAWAII AESTHETIC LOCK ━━━
+SPARKLE STACK MANDATORY but GENTLE — stack 4+ visible cute effects: floating hearts / star-sparkles / pastel-petals / sparkle-dust / heart-bubbles / chibi-stars / glitter / drifting flower-petals / bubble-trail / chromatic-shimmer.
+
+Color palette: PASTELS dominant (rose-pink / mint-green / lavender / sky-blue / butter-yellow / pearl-white / soft-peach). NO grimdark. NO neon-cyberpunk. NO photoreal.
+
+━━━ ANIME MEDIUM (LOCKED) ━━━
+Hand-drawn anime — Sanrio / Hello-Kitty / Cardcaptor-Sakura / Lucky-Star / K-On tradition. Cel-shaded clean linework, painterly pastel atmosphere. NEVER photoreal. NEVER 3D-render.
+
+━━━ BANS ━━━
+• NO cheesecake (low-cut / sultry / form-fitting) — kawaii is INNOCENT CUTE
+• NO STATIC POSED THUMBNAIL — she's mid-giggle / mid-twirl / mid-blush / mid-hug-plushie
+• NO eyes-locked-blankly — eye direction per camera_framing
+• NO weapons / combat / violence — kawaii is GENTLE
+• NO Western cartoon
+
+━━━ SOLO CHARACTER ━━━
+ONE cute character. Plushie/pet may be at her side but is small surprise-element.
+
+━━━ SHE IS THE SHOW ━━━
+The kawaii character fills 35-50% of frame. Cute setting wraps around her. NOT a tiny silhouette. NOT back-to-camera. Face/outfit/accessory CLEARLY READABLE.
+
+━━━ HER ARCHETYPE ━━━
+${archetype}
+
+━━━ HER COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} woman with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
+
+━━━ THE ACTION (cute mid-moment, FORWARD-FACING) ━━━
+${action}
+Body engaged in cute moment. Eye direction = camera_framing-decided.
+
+━━━ SETTING ━━━
+${setting}
+Cute setting wrapping around her — depth on depth — FOREGROUND cute-prop (charm/cupcake/heart) → MIDGROUND her engaged cute action → DEEP DISTANCE pastel atmospheric layers.
+
+${dramaSection}━━━ SURPRISE ELEMENT (cute secondary) ━━━
+${surprise_element}
+Midground or background — kawaii pet / plushie at her feet / floating sparkles / cute object. NEVER competes with hero.
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} WOMAN [doing cute action] in [setting]"], [frilly outfit detail], [DNA: skin + eyes + hair], [cute accessory in hand], [setting with sparkle-stack], [drama if fired], [camera_framing exactly], [pastel palette + mood].
+
+CRITICAL: "[ethnicity] WOMAN [CUTE ACTION]" leads. She fills 35-50% of frame, ENGAGED in cute moment. Sparkle 4+ visible. Forward-facing per camera_framing.
+
+Output ONLY raw 90-120 word scene description. Comma-separated phrases. NO preamble.`;
+  },
+
   // ━━━ MANGABOT_SHONEN_ACTION ━━━
   // Peak-action shonen hero. Multi-effect stack (3+ simultaneous).
   MANGABOT_SHONEN_ACTION: ({ slots, sharedDNA, vibeDirective }) => {

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/kawaii_moments.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} KAWAII MOMENT descriptions for MangaBot's kawaii path — explicitly CUTE anime moments. Chibi / big-eye / magical-girl / sparkle-heavy / shoujo-cover-art energy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} KAWAII MOMENT descriptions for MangaBot's kawaii path — explicitly CUTE anime moments. Chibi / big-eye / magical-girl / sparkle-heavy / shoujo-cover-art energy.
 
 Each entry: 15-30 words. One specific kawaii scene.
 
@@ -42,4 +44,7 @@ Each entry: 15-30 words. One specific kawaii scene.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

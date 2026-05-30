@@ -181,6 +181,32 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // PATH-BESPOKE — MangaBot kawaii (2026-05-29 Phase 2.5).
+  // Cozy cute moments. Sanrio / lolita / Pop-Mart-vinyl-cute / character-cafe tradition.
+  MANGABOT_KAWAII: {
+    description:
+      'PATH-BESPOKE — MangaBot kawaii (2026-05-29 Phase 2.5). Cozy cute moments — sanrio-coded, lolita-frilly, character-cafe register. Forward-facing cute pose with sparkle stack at gentle intensity. Lower drama gate (30%) for kawaii tone.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   // PATH-BESPOKE — MangaBot shonen-action (2026-05-29 Phase 2.4).
   // Peak-action shonen hero (Naruto / MHA / JJK / Bleach / Demon Slayer
   // tradition). MULTI-EFFECT STACK mandate — 3+ simultaneous dynamics
