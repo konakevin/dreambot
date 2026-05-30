@@ -143,6 +143,7 @@ module.exports = {
       'neo-tokyo',
       'samurai-era',
       'anime-character-female',
+      'anime-character-male',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista

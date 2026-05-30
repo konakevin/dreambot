@@ -574,6 +574,127 @@ Open with the scene-type composition + camera framing, then weave in the four de
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
   },
 
+  // ━━━ MANGABOT_ANIME_CHARACTER_MALE ━━━
+  //
+  // Clone-with-divergence from MANGABOT_ANIME_CHARACTER_FEMALE. Male-coded
+  // gender lock + anti-shirtless + anti-pretty-boy mandates per DragonBot
+  // male-adventurer lessons (cheesecake failure mode is DIFFERENT for males
+  // — Flux's "anime man" centroid is shirtless / oiled-pecs / loincloth,
+  // not low-cut-dress; mitigate via explicit chest-covering + rugged-jawline
+  // language). Same axis structure as female; reuses female setting +
+  // camera_framing + surprise_element + drama pools (gender-neutral).
+  MANGABOT_ANIME_CHARACTER_MALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ANIME ATMOSPHERIC DRAMA — render visibly in the scene ━━━
+${drama}
+
+A magical / atmospheric event in the world around him — visible secondary focal point, NOT eclipsing him.
+
+`
+      : '';
+
+    return `You are an anime concept-art painter writing a CHARACTER-LED keyframe for MangaBot — a single anime MAN as the HERO of the frame in a rich anime setting. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer / Studio Madhouse tradition. He is ALIVE, ENGAGED, mid-action — the eye lands on him first.
+
+━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "boy", "guy", "hero", "warrior", "samurai", "swordsman", "mage" or any other gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [ethnicity] MAN [doing action] in [setting]..." — "man" comes BEFORE any archetype noun. Use he/him/his throughout.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+
+Per the painted-medium ethnicity-noun lesson: the ethnicity-NOUN ("a Japanese man" / "a Filipino man" / "a Nigerian man") in the opening is what gets Flux to render diverse anime men. Pure visual skin descriptors get steamrolled by the Ghibli/Shinkai pale-anime-default. Lead with the noun.
+
+━━━ ANIME ILLUSTRATION MEDIUM (LOCKED) ━━━
+Hand-drawn anime illustration. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer / Akira / Madhouse tradition. Cel-shaded clean linework with painterly atmospheric backgrounds. Vibrant saturated palette. NEVER photoreal. NEVER 3D-render. NEVER Disney-Pixar.
+
+━━━ ABSOLUTE BANS — MALE-SPECIFIC NSFW-CLEAN + COMBAT-CLEAN ━━━
+• NO shirtless / NO bare-chested / NO oiled-pecs / NO loincloth / NO sleeveless-with-bare-arms-and-implied-bare-torso
+• NO leather shorts / NO single-piece-only outfits / NO "open vest revealing chest" / NO "strategically torn" / NO "tunic torn from action"
+• NO "rugged hero pose" alone (pose itself fine, but never with "gleaming like polished stone" / "sweat-gleaming" / "oiled" / "sculpted" / "chiseled" / "muscular neck" — these in the skin pool trigger bare-chest rendering even with covered outfits)
+• Outfit MUST explicitly name a chest-covering item (tunic / cuirass / breastplate / gambeson / scale-armor / robe / coat / surcoat / mail hauberk / brigandine / chest-plate / jacket / haori / kimono / hakama-top / school blazer / uniform top)
+• Skin pool stays FACE-FOCUSED — cheekbones / forehead / jaw / temples / brow. NEVER torso / chest / shoulders / arms / muscular-body
+• NO pirate-trope action (swinging from rigging / boarding-skyship-with-cutlass — Flux trains "dynamic male action" as shirtless pirate)
+• NO combat with visible enemies and blood / wounded character
+• NO pretty-boy register (avoid bishounen-only) — mix rugged jawlines / weathered character / dignified-handsome alongside softer registers; male variety MUST include lined faces, scars, beards (where culturally appropriate), age-marked features
+
+━━━ SOLO CHARACTER ONLY ━━━
+ONE man. No companions, no crowds. He is ALONE in his moment.
+
+━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
+The anime man is the MAIN SUBJECT. His face, outfit, ethnicity, action, pose are the DRAW. Occupies 35-50% of frame. NOT a tiny silhouette in distant landscape. NOT a back-of-character looking out. MEDIUM-to-LARGE scale where outfit / accessory / face all CLEARLY READABLE.
+
+━━━ HIS ARCHETYPE ━━━
+${archetype}
+
+━━━ HIS COMPACT BIO (one-line block — DO NOT expand) ━━━
+A ${ethnicity.split(/[,:]/)[0]} man with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
+
+All eight DNA elements should be discernible. Face fully visible — anime keyframes show the character's face.
+
+━━━ THE ACTION — FORWARD-FACING ENGAGED ━━━
+${action}
+
+He is ENGAGED in the action, body torqued + caught at a loaded instant. Eye direction follows the rolled camera_framing — toward viewer for forward framings, toward action target for combat / cast framings, sideways for profile framings. Body language drives composition.
+
+━━━ THE SETTING (the immediate anime stage where he's engaged) ━━━
+${setting}
+
+The anime world wraps AROUND him, not a distant vista he's looking out at. Depth on depth — FOREGROUND tactile detail → MIDGROUND setting body + his engaged action → DEEP DISTANCE atmospheric layers stacked. Never flat backdrop.
+
+${dramaSection}━━━ SURPRISE ELEMENT — anime secondary subject adding story ━━━
+${surprise_element}
+
+Place at midground or background — small anime detail implying the wider world. NEVER foreground or competing with him for attention.
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Rolled camera_framing axis DECIDES the shot. He fills 35-50% of frame; setting wraps at 50-65%. FOREGROUND: tactile detail near his action. MIDGROUND: HIM mid-action. BACKGROUND: setting + surprise + drama hints.
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} MAN [doing exact action] in [setting]"], [he wears [outfit] with chest-covering item visible], [skin + eyes + hair locked], [signature accessory], [anime setting wrapping with depth], [surprise + drama if fired], [camera_framing exactly], [lighting + atmosphere], [color + mood]
+
+CRITICAL: "[ethnicity] MAN [DOING ACTION]" leads. He fills 35-50% of frame, ENGAGED. Camera_framing dictates orientation — OVERRIDE Flux's back-of-anime-man centroid HARD. Outfit MUST visibly cover his chest. Face register MUST mix beyond pretty-boy bishounen — include rugged / weathered / aged options.
+
+Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   // ━━━ MANGABOT_ANIME_CHARACTER_FEMALE ━━━
   //
   // Mirror of DragonBot's FEMALE_ADVENTURER canonical character template,

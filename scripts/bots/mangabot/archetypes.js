@@ -180,4 +180,33 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // PATH-BESPOKE — MangaBot anime-character-male (2026-05-29 Phase 2.2).
+  // Mirror of MANGABOT_ANIME_CHARACTER_FEMALE with male-coded action +
+  // outfit + ethnicity + male-specific NSFW bans (per DragonBot
+  // male-adventurer lesson: no shirtless / no oiled-pecs / no bare-chested,
+  // explicit chest-covering mandate on every outfit). Same 12-axis split.
+  MANGABOT_ANIME_CHARACTER_MALE: {
+    description:
+      'PATH-BESPOKE — MangaBot anime-character-male (2026-05-29 Phase 2.2 clone-with-divergence from FEMALE). Anime man as HERO. Same 12-axis split. Male-coded action pool + male DNA pools. Anti-shirtless + anti-pretty-boy mandates (rugged-handsome bar; explicit chest-covering on every outfit).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

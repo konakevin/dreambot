@@ -1,82 +1,43 @@
 /**
- * MangaBot anime-character-male path — anime guy out and about in a
- * richly-rendered anime setting. Mirror of female with male pools.
+ * MangaBot anime-character-male path — declarative axis-system form
+ * (Phase 2.2, 2026-05-29). FULL BESPOKE per
+ * feedback_full_bespoke_per_path_no_shared_pools — every path axis gets
+ * its OWN male-coded pool, NO reuse from female.
+ *
+ * 12-axis split (8 DNA + 4 path + 1 conditional drama):
+ *   characterDnaAxes:
+ *     ethnicity (NEW MVP-25)       — male register cues (rugged/weathered)
+ *     archetype (REUSE 200)        — ANIME_ARCHETYPE_MALE
+ *     skin / eyes / hair_color     — shared anime DNA pools
+ *     hairstyle (REUSE 200)        — ANIME_HAIRSTYLES_MALE
+ *     outfit (REUSE 200)           — ANIME_OUTFITS_MALE
+ *     accessory (REUSE 200)        — ANIME_ACCESSORIES_MALE
+ *   path-bespoke (ALL NEW MVP-25):
+ *     setting                       — male-coded engaged contexts
+ *     action                        — forward-facing, COVERED-CHEST
+ *     camera_framing                — combat/dynamic-leaning forward-only
+ *     surprise_element              — male-coded secondary subjects
+ *   conditional (40%-gated):
+ *     drama (NEW MVP-25)            — male-coded atmospheric/combat event
+ *
+ * Legacy at paths/legacy/anime-character-male.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const archetype = picker.pickWithRecency(pools.ANIME_ARCHETYPE_MALE, 'acm_archetype');
-  const outfit = picker.pickWithRecency(pools.ANIME_OUTFITS_MALE, 'acm_outfit');
-  const skin = picker.pickWithRecency(pools.ANIME_SKIN, 'acm_skin');
-  const eyes = picker.pickWithRecency(pools.ANIME_EYES, 'acm_eyes');
-  const hairColor = picker.pickWithRecency(pools.ANIME_HAIR_COLOR, 'acm_hair_color');
-  const hairstyle = picker.pickWithRecency(pools.ANIME_HAIRSTYLES_MALE, 'acm_hairstyle');
-  const accessory = picker.pickWithRecency(pools.ANIME_ACCESSORIES_MALE, 'acm_accessory');
-  const setting = picker.pickWithRecency(pools.ANIME_SETTING, 'acm_setting');
-  const vista = picker.pickWithRecency(pools.ANIME_VISTA, 'acm_vista');
-  const activity = picker.pickWithRecency(pools.ANIME_ACTIVITY, 'acm_activity');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are an anime concept-art painter writing a CHARACTER-FOCUSED keyframe for MangaBot. An anime man caught in a candid slice-of-anime-life moment, with the rich anime world as costar. Output wraps with style prefix + suffix.
-
-${blocks.ANIME_ILLUSTRATION_BLOCK}
-
-${blocks.KEYFRAME_COMPOSITION_BLOCK}
-
-${blocks.DENSITY_BLOCK}
-
-${blocks.STORY_MOMENT_BLOCK}
-
-${blocks.NO_NAMED_CHARACTERS_BLOCK}
-
-${blocks.NO_GENERIC_POSE_BLOCK}
-
-${blocks.CULTURAL_RESPECT_BLOCK}
-
-━━━ THE CHARACTER (full identity — render exactly) ━━━
-${archetype}
-
-━━━ HIS OUTFIT (silhouette is the hero) ━━━
-${outfit}
-
-━━━ HIS PHYSICAL DNA ━━━
-- Skin: ${skin}
-- Eyes: ${eyes}
-- Hair color: ${hairColor}
-- Hairstyle: ${hairstyle}
-
-━━━ HIS SIGNATURE OBJECT ━━━
-${accessory}
-
-━━━ THE SETTING (the immediate place — costar) ━━━
-${setting}
-
-━━━ THE VISTA (scale-anchor backdrop) ━━━
-${vista}
-
-━━━ HIS BODY ACTIVITY ━━━
-${activity}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION CLOSER ━━━
-WIDE cinematic shot — character occupies 25-40% of frame, scenery 60-75%. Camera 3/4-rear or 3/4-front, never head-on. He is mid-step / mid-sip / mid-laugh / mid-reach, eyes never locked on camera. Setting + vista frame him with poster-worthy density.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'MANGABOT_ANIME_CHARACTER_MALE',
+  pools: {
+    ethnicity: 'ANIME_CHARACTER_MALE_ETHNICITY',
+    archetype: 'ANIME_ARCHETYPE_MALE',
+    skin: 'ANIME_SKIN',
+    eyes: 'ANIME_EYES',
+    hair_color: 'ANIME_HAIR_COLOR',
+    hairstyle: 'ANIME_HAIRSTYLES_MALE',
+    outfit: 'ANIME_OUTFITS_MALE',
+    accessory: 'ANIME_ACCESSORIES_MALE',
+    setting: 'ANIME_CHARACTER_MALE_SETTING',
+    action: 'ANIME_CHARACTER_MALE_ACTION',
+    camera_framing: 'ANIME_CHARACTER_MALE_CAMERA_FRAMING',
+    surprise_element: 'ANIME_CHARACTER_MALE_SURPRISE_ELEMENT',
+    drama: 'ANIME_CHARACTER_MALE_DRAMA',
+  },
 };

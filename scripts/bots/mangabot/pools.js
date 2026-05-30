@@ -147,6 +147,19 @@ module.exports = {
   ANIME_CHARACTER_FEMALE_SURPRISE_ELEMENT: load('anime_character_female_surprise_element'),
   ANIME_CHARACTER_FEMALE_DRAMA: load('anime_character_female_drama'),
 
+  // anime-character-male path-bespoke pools (Phase 2.2, 2026-05-29).
+  // FULL BESPOKE — no female pool reuse on path axes per
+  // feedback_full_bespoke_per_path_no_shared_pools mandate. Reuses only
+  // existing 200-entry character DNA pools (ANIME_ARCHETYPE_MALE /
+  // ANIME_OUTFITS_MALE / ANIME_HAIRSTYLES_MALE / ANIME_ACCESSORIES_MALE +
+  // shared ANIME_SKIN / ANIME_EYES / ANIME_HAIR_COLOR).
+  ANIME_CHARACTER_MALE_ETHNICITY: load('anime_character_male_ethnicity'),
+  ANIME_CHARACTER_MALE_SETTING: load('anime_character_male_setting'),
+  ANIME_CHARACTER_MALE_ACTION: load('anime_character_male_action'),
+  ANIME_CHARACTER_MALE_CAMERA_FRAMING: load('anime_character_male_camera_framing'),
+  ANIME_CHARACTER_MALE_SURPRISE_ELEMENT: load('anime_character_male_surprise_element'),
+  ANIME_CHARACTER_MALE_DRAMA: load('anime_character_male_drama'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {
