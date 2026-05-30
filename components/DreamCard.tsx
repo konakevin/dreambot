@@ -239,9 +239,11 @@ export const DreamCard = memo(function DreamCard({
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
-  // Image fill mode — Flux (9:16) fills edge-to-edge; off-ratio renders
-  // (GPT 2:3, etc.) flip to contain+blur on load. See the image block below.
-  const [fillMode, setFillMode] = useState<'cover' | 'contain'>('cover');
+  // Image fill mode — every render fills the card edge-to-edge regardless
+  // of the source model's aspect ratio. Off-ratio renders (GPT 2:3, square
+  // Gemini, etc.) crop instead of letterboxing — the feed reads as one
+  // consistent full-bleed stage. (Previously we measured on load and flipped
+  // wider-than-9:16 to `contain`; reverted 2026-05-30 per Kevin.)
   // Image load resilience: a failed load (transient network / decode hiccup)
   // used to leave a permanent BLACK card. AUTO-retry silently — cache-busted,
   // with backoff, capped at MAX_IMG_RETRIES — no user-facing retry UI. (The
@@ -260,10 +262,6 @@ export const DreamCard = memo(function DreamCard({
   const heroBase = item.image_url_display ?? item.image_url;
   const heroUrl =
     retryNonce > 0 ? `${heroBase}${heroBase.includes('?') ? '&' : '?'}r=${retryNonce}` : heroBase;
-  // Reset to cover when the image changes (card reuse) so onLoad re-measures.
-  useEffect(() => {
-    setFillMode('cover');
-  }, [item.image_url]);
 
   // Wish fairy dust — shimmering hazy border with sparkle particles
   const isWish = !!item.from_wish;
@@ -412,15 +410,14 @@ export const DreamCard = memo(function DreamCard({
           delayLongPress={500}
         >
           <Animated.View style={[StyleSheet.absoluteFill, imageTransformStyle]}>
-            {/* Flux renders 9:16 (~0.57) → fills the card edge-to-edge (cover).
-                Off-ratio models (GPT 2:3 ~0.67, square Gemini, etc.) would crop
-                hard, so they show fully (contain) — the letterbox shows the
-                card's black background. We read the aspect on load; default
-                cover so the common Flux case never flashes. */}
+            {/* All renders fill the card edge-to-edge regardless of source
+                aspect — Flux 9:16, GPT 2:3, square Gemini, etc. all crop to
+                fit. Keeps the feed reading as one consistent full-bleed stage
+                rather than a mix of full-bleed + letterboxed cards. */}
             <Image
               source={{ uri: heroUrl }}
               style={s.fullImage}
-              contentFit={fillMode}
+              contentFit="cover"
               cachePolicy="memory-disk"
               recyclingKey={item.id}
               transition={150}
@@ -434,14 +431,8 @@ export const DreamCard = memo(function DreamCard({
                   600 * retryCountRef.current
                 );
               }}
-              onLoad={(e) => {
+              onLoad={() => {
                 retryCountRef.current = 0;
-                const w = e.source?.width ?? 0;
-                const h = e.source?.height ?? 0;
-                if (w > 0 && h > 0) {
-                  // > ~9:16 (0.6 threshold) = wider than Flux → letterbox.
-                  setFillMode(w / h > 0.6 ? 'contain' : 'cover');
-                }
               }}
             />
           </Animated.View>
