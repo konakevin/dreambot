@@ -96,11 +96,13 @@ module.exports = {
     'ghibli-painterly',
   ],
 
-  // ghibli-painterly: lock to flux-1.1-pro (bake-off 2026-05-30 confirmed best
-  // match to Kevin's SDXL-era hearted aesthetic — outperformed both SDXL and
-  // flux-2-pro on monumental-architecture-as-hero scene-led renders).
+  // ghibli-painterly: locked to SDXL. The 2026-05-30 bake-off conclusion was
+  // wrong — flux-1.1-pro renders this aesthetic too tight / illustrated, losing
+  // the LOOSE HAND-PAINTED brushwork + storybook softness that defined Kevin's
+  // 37 hearted SDXL-era renders. SDXL R0 batch confirmed the looser feel is the
+  // whole point. Trade-off: ~3x slower (10-18s vs 5s), PNG output (heavier).
   modelByPath: {
-    'ghibli-painterly': 'black-forest-labs/flux-1.1-pro',
+    'ghibli-painterly': 'sdxl',
   },
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts

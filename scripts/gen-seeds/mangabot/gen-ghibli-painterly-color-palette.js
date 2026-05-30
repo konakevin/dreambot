@@ -4,39 +4,51 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/ghibli_painterly_color_palette.json',
   total: 25,
   batch: 25,
-  append: true,
-  metaPrompt: (n) => `Write ${n} COLOR PALETTE entries for a MangaBot ghibli-painterly keyframe. This is the signature COLOR TENSION — Ghibli-style harmonious pairings (warm-cool, complementary, monochromatic with accent).
+  append: false, // R1 rewrite — broaden the saturation range
+  metaPrompt: (n) => `Write ${n} COLOR PALETTE entries for a MangaBot ghibli-painterly keyframe. EXPLICITLY SPAN TWO REGISTERS so the path delivers RANGE across batches. Per Kevin's 37-heart spread, his hearts include both soft-pastel Whisper-of-the-Heart frames AND bold-saturated Castle-in-the-Sky / Demon-Slayer frames. EACH entry MUST open with the register name in CAPS so downstream Sonnet honors it.
 
-Each entry: 10-18 words. Name the dominant palette + 2-3 specific hex-coded or descriptive color pairs + emotional read.
+Each entry: 12-22 words. Open with `MUTED:` or `SATURATED:` or `PASTEL:` so the register is unmistakable.
 
-PALETTE VARIETY (25 bespoke entries):
-- 20% EMERALD + AMBER (forest-cathedral signature — green moss + golden god-rays)
-- 15% CYAN + ORANGE complementary (sky-island signature — pastel cyan sky + warm copper roof)
-- 15% PASTEL SUNSET (rose-pink + lavender + peach + soft gold — Howl's signature)
-- 10% LANTERN WARM (amber + persimmon + ivory + deep shadow — Spirited-Away night)
-- 10% MOSS + PETAL (sage-green + sakura-pink + cream — Mononoke gentleness)
-- 10% MONOCHROME BLUE-VIOLET (twilight register — deep indigo + violet + silver-moon)
-- 10% RAINBOW-PETAL (multi-hue cherry-blossom + auroral sky)
-- 5% MAGENTA + MINT (whimsical surreal — Spirited-Away bathhouse register)
-- 5% SEPIA-AUTUMN (rust + amber + ochre + warm-gold — late season)
+REGISTER SPLIT (25 bespoke entries — equal weight to all three):
+- 40% SATURATED VIBRANT (bold high-chroma — Castle-in-the-Sky / Spirited-Away exteriors / Mononoke firelight / Demon-Slayer-bright)
+- 30% MUTED STORYBOOK (sage / copper / cream / dust-rose — Whisper of the Heart / Mononoke quiet / Wind-Rises softness)
+- 30% PASTEL DREAMY (rose-pink / lavender / peach / soft-gold — Howl's-castle pastel / Spirited-Away interior softness)
 
-DO write:
-- Emerald moss saturating the forest with golden god-rays for amber complement, deeply harmonious
-- Pastel cyan sky against warm copper roofs and brass spires — Ghibli classic complementary tension
-- Rose-pink and lavender sunset with peach and soft-gold accents, dreamy Howl's-castle register
-- Lantern warm — amber and persimmon glow against deep blue shadows, ivory paper lanterns punctuating
-- Sage-green moss carpets, sakura-pink petals drifting, cream stone — gentle Mononoke palette
-- Deep indigo twilight with violet shadows and silver moonlight, monochrome with star punctuation
-- Multi-hue cherry-blossom petals — pink, white, magenta, salmon — against auroral mint-rose sky
-- Magenta-and-mint surreal whimsy — Spirited-Away bathhouse register with pearl accents
-- Rust amber and ochre autumn, warm-gold late-light, deep umber shadows pooling
+DO write (each entry MUST open with register tag in CAPS):
+- SATURATED: emerald moss saturated and golden god-rays blazing complementary, deep contrast Castle-in-the-Sky exterior register
+- SATURATED: scarlet-red pagoda + emerald cedar canopy + sky-cyan backdrop, bold tri-tone Demon-Slayer / Mononoke firelight
+- SATURATED: vivid magenta-pink sakura + emerald moss + cyan reflection, high-chroma Spirited-Away exterior burst
+- SATURATED: cyan sky + warm copper roof + golden sun-shaft, complementary tension Castle-in-the-Sky classic
+- SATURATED: bioluminescent magenta-cyan firefly glow + deep indigo shadows + ember-orange lanterns, vibrant night-magic
+- SATURATED: deep emerald jungle + amber temple-gold + scarlet torii, jewel-tone temple-grove burst
+- SATURATED: orange-amber autumn maple + emerald moss + scarlet pagoda, fire-burst seasonal saturation
+- SATURATED: vivid teal water + golden god-rays + emerald islands, tropical-ghibli high-saturation
+- SATURATED: rainbow petal-cascade + amber sun + emerald canopy, kaleidoscopic vivid
+- SATURATED: cobalt-blue sky + crimson pagoda + gold roof finials, complementary jewel-tone
+
+- MUTED: sage-green moss carpets, cream stone walls, soft copper sunset glow, hand-painted Whisper-of-the-Heart register
+- MUTED: dust-rose sky with copper-amber accents, sage shadows, gentle Wind-Rises softness
+- MUTED: pale cream stone, weathered sage moss, copper-leaf accents, faded-postcard Mononoke quietness
+- MUTED: soft sage forest, dusty copper roof tones, muted ivory lanterns, hand-touched storybook softness
+- MUTED: storm-grey sky with sage-cedar canopy, muted copper-trim eaves, melancholy painterly register
+- MUTED: weathered-cream architecture, dust-grey haze, faded sage moss, washed-out painterly stillness
+- MUTED: sepia autumn-amber, dust-copper roofs, soft ochre haze, vintage Wind-Rises late-light
+- MUTED: cool sage-blue dawn, washed cream stone, muted lavender shadows, soft-touch storybook morning
+
+- PASTEL: rose-pink and lavender sunset with peach and soft-gold accents, dreamy Howl's-castle register
+- PASTEL: powder-blue sky with cream-petal accents, soft mint-green canopy, weightless pastel-shoujo softness
+- PASTEL: lavender mist with blush-pink sakura petals, cream stone, soft-amber accents, ethereal dreamlike
+- PASTEL: pearl-cyan with rose-gold sun, mint-pink architecture trim, otherworldly soft pastel
+- PASTEL: powder-pink dawn sky, soft-gold light, mint-blue shadows, baby-pastel sweetness Howl's-coded
+- PASTEL: lavender-and-peach twilight, cream-and-rose architectural trim, soft pearl shimmer, fairy-tale pastel
+- PASTEL: mint-green canopy with rose-petal accents, cream architecture, soft-gold light, gentle Howl's pastel
 
 DO NOT write:
-- Desaturated / muted / grey-dominant (Ghibli is SATURATED)
-- Hex codes alone — pair with descriptors
-- Western Pixar / Disney palettes
+- Photoreal hex codes alone (always pair register tag + descriptive language)
+- Western Pixar palettes / Disney palettes
 - Single color (always a pairing or trio)
-- Photoreal color-science
+- Grey-dominant only (boring)
+- Forget the REGISTER TAG opening
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
 }).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });

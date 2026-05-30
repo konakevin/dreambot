@@ -1575,36 +1575,44 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
   },
 
   // ━━━ MANGABOT_GHIBLI_PAINTERLY — SCENE-LED architecture-as-hero (2026-05-30) ━━━
-  // Designed from Kevin's 37-heart SDXL-era signal. Bake-off confirmed
-  // flux-1.1-pro renders this aesthetic better than original SDXL. Locked to
-  // flux-1.1-pro via bot.modelByPath.
+  // R1 retune 2026-05-30: locked to SDXL via bot.modelByPath. Dropped the
+  // maximalist "lush+cascade+multi-tier MANDATORY" stack (was overcrowding the
+  // hand-painted feel). Explicit RANGE mandate — span muted-storybook AND
+  // saturated-vibrant per Kevin's 37-heart spread. Loose brushwork over tight
+  // illustration.
   MANGABOT_GHIBLI_PAINTERLY: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, monumental_anchor, setting_type, scale_provers, tiny_figure_optional, lush_foreground, atmospheric_light, color_palette, cascade_motion, weather_air, camera_framing, surprise_element, drama } = slots;
-    const figureSection = (tiny_figure_optional && !/^no figure|^none|^absent/i.test(tiny_figure_optional))
+    const figureSection = (tiny_figure_optional && !/^no figure|^none|^absent|^architecture only/i.test(tiny_figure_optional))
       ? `\n━━━ TINY FIGURE (scale prover, 5-10% of frame) ━━━\n${tiny_figure_optional}\n`
       : `\n━━━ NO FIGURE ━━━\nArchitecture alone fills the frame. No human or creature.\n`;
     const dramaSection = drama ? `\n━━━ EVENT / DRAMA — render in scene ━━━\n${drama}\n\n` : '';
-    return `You are an anime concept-art painter writing a GHIBLI-PAINTERLY keyframe for MangaBot — SCENE-LED, monumental architecture as the HERO. Castle-in-the-Sky / Spirited-Away / Princess-Mononoke / Howl's Moving Castle / Lost-Universe register. Painterly hand-drawn anime, lush layered foliage, atmospheric depth, scale-prover composition.
+    return `You are an anime concept-art painter writing a GHIBLI-PAINTERLY keyframe for MangaBot — SCENE-LED, monumental architecture as the HERO. Studio Ghibli / Mononoke / Castle-in-the-Sky / Spirited-Away / Howl's Moving Castle register. LOOSE HAND-PAINTED BRUSHWORK — Miyazaki storybook feel, NOT tight digital illustration.
 
 ━━━ AESTHETIC LOCK ━━━
-PAINTERLY GHIBLI-ANIME — Studio Ghibli / Makoto Shinkai / Madhouse / Production-IG painterly tradition. Hand-drawn cel-shaded characters, painterly atmospheric backgrounds, vibrant saturated palette, atmospheric perspective, god-rays, particle haze, dense layered foliage.
+LOOSE HAND-PAINTED GHIBLI — Miyazaki storybook brushwork, painterly atmospheric backgrounds, visible brush-stroke texture, watercolor-cel hybrid feel. NOT tight digital concept-art. NOT hyper-detailed CGI illustration. Soft architectural edges, painterly atmospheric depth.
+
+━━━ RANGE — span both registers across batch ━━━
+This path produces TWO equally valid aesthetic registers. Per render, lean into ONE of:
+1. MUTED STORYBOOK — sage / copper / cream / soft pastel, hand-painted Whisper-of-the-Heart / Mononoke softness, dreamy hand-touched quality
+2. SATURATED VIBRANT — emerald + amber / sky-cyan + copper / pink-magenta-emerald-burst, Castle-in-the-Sky / Demon-Slayer / Spirited-Away-exterior dramatic saturation
+The rolled color_palette axis below tells you which register to lean into. Honor it.
 
 ━━━ ANIME MEDIUM ━━━
-Hand-drawn anime, Ghibli / Shinkai / Madhouse painterly tradition. Cel-shaded clean architectural linework, painterly atmospheric backgrounds with depth-haze, vibrant Ghibli-saturation. NOT photoreal. NOT CGI.
+Hand-drawn anime, Ghibli / Shinkai / Mononoke painterly tradition. Cel-shaded soft architectural linework, painterly atmospheric backgrounds with brush-stroke texture, Ghibli storybook quality. NOT photoreal. NOT CGI. NOT hyper-detailed concept-art.
 
 ━━━ BANS ━━━
 • NO hero-character portrait — architecture is HERO, figure is tiny scale-prover or absent
-• NO empty bare frame — lush layered foliage MANDATORY (moss / ferns / petals / vines / mushrooms in foreground or wrapping mid-tier)
-• NO Mt-Fuji-postcard with tiny anchor — anchor fills 50-70% of frame as the dominant mass
+• NO Mt-Fuji-postcard with tiny anchor — anchor fills 50-70% of frame
 • NO photoreal / NO western-CGI / NO Pixar 3D-render
 • NO modern western architecture — Ghibli-coded sky-island / shrine / cathedral / pagoda / mossy-ruin register only
-• NO static empty plate — cascade_motion MANDATORY (waterfalls / petals / fireflies / lanterns drifting)
+• NO overcrowded maximalist concept-art — let the architecture breathe
+• NO tight digital illustration — embrace LOOSE HAND-PAINTED brushwork
 
 ━━━ ARCHITECTURE IS HERO ━━━
-The monumental anchor fills 50-70% of the frame. Scale-provers (stairs / bridges / archways) PROVE the massive scale. Optional tiny figure (5-10%) makes the scale visceral. Multi-tier depth: foreground foliage → midground scale-prover → architectural mass → atmospheric distance.
+The monumental anchor fills 50-70% of the frame. Scale-provers (stairs / bridges / archways) prove the scale. Optional tiny figure (5-10%) makes scale visceral. Depth flows naturally from foreground through architectural mass to atmospheric distance — NOT forced multi-tier maximalism.
 
 ━━━ FRAMING MANDATE ━━━
-LOW-ANGLE HERO looking UP at architecture, OR vanishing-point ascent through arch, OR cathedral reveal through foliage portal, OR over-foreground reveal of the anchor. NEVER tiny-architecture-in-distance. NEVER hero-character close-up.
+LOW-ANGLE HERO looking UP at architecture, OR vanishing-point ascent through arch, OR cathedral reveal through foliage, OR over-foreground reveal. NEVER tiny-architecture-in-distance. NEVER hero-character close-up.
 
 ━━━ MONUMENTAL ANCHOR (the dominant architecture) ━━━
 ${monumental_anchor}
@@ -1615,17 +1623,22 @@ ${setting_type}
 ━━━ SCALE PROVERS (stairs / bridges / archways making the architecture LOOK massive) ━━━
 ${scale_provers}
 
-${figureSection}━━━ LUSH FOREGROUND (moss / petals / ferns / mushrooms wrapping the frame) ━━━
+${figureSection}━━━ FOREGROUND TREATMENT ━━━
 ${lush_foreground}
+(NOTE: foreground can be sparse-and-clean OR lush-and-layered — let the rolled entry dictate. Some Ghibli frames are MINIMAL foreground; some are wall-to-wall foliage. Both valid.)
 
 ━━━ ATMOSPHERIC LIGHT (the light signature) ━━━
 ${atmospheric_light}
 
-━━━ COLOR PALETTE ━━━
+━━━ COLOR PALETTE — DETERMINES THE BATCH REGISTER ━━━
 ${color_palette}
+(If this entry names MUTED / SAGE / COPPER / PASTEL — lean soft storybook.
+If this entry names SATURATED / VIBRANT / SCARLET / EMERALD-BURST — lean bold vibrant.
+Honor the rolled register.)
 
-━━━ CASCADE MOTION (drift element — waterfalls / petals / fireflies / lanterns) ━━━
+━━━ MOTION (drift element — optional) ━━━
 ${cascade_motion}
+(NOTE: motion can be subtle or absent. Some Ghibli storybook frames are still + quiet. Don't force movement if the scene wants stillness.)
 
 ━━━ WEATHER + AIR (atmospheric depth) ━━━
 ${weather_air}
@@ -1643,11 +1656,11 @@ ${camera_framing}
 ━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE ━━━
-[OPENING: "[monumental_anchor] in [setting_type] with [scale_provers]"], [lush foreground wrapping], [tiny figure for scale OR absent], [atmospheric light god-rays], [color palette], [cascade motion drift], [weather + air], [drama if fired], [camera_framing exactly], [Ghibli painterly mood].
+[OPENING: "[monumental_anchor] in [setting_type] with [scale_provers]"], [foreground per axis], [tiny figure for scale OR absent], [atmospheric light], [color palette — match its register], [optional motion if it fits], [weather + air], [drama if fired], [camera_framing], [hand-painted Ghibli mood].
 
-CRITICAL: architecture is HERO 50-70%, scale-provers MANDATORY, lush layered foliage MANDATORY, cascade motion MANDATORY. Multi-tier depth (foreground lush → midground scale-prover → architectural mass → atmospheric distance). NEVER hero-character. NEVER empty frame. NEVER photoreal.
+CRITICAL: architecture is HERO 50-70%. LOOSE hand-painted brushwork over tight digital. MATCH the color_palette register (muted vs saturated). Let the scene BREATHE — not every frame is maximalist. NEVER hero-character. NEVER photoreal.
 
-Output ONLY raw 100-140 word scene description. NO preamble.`;
+Output ONLY raw 80-120 word scene description. NO preamble.`;
   },
 
   // ━━━ WAVE 3 — genre templates (2026-05-29) ━━━
