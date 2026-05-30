@@ -1574,6 +1574,130 @@ CRITICAL: yukata + engaged with festival + lantern-glow. Forward-facing per came
 Output ONLY raw 90-120 word scene description. NO preamble.`;
   },
 
+  // ━━━ WAVE 3 — genre templates (2026-05-29) ━━━
+
+  // ━━━ MANGABOT_MYTHOLOGICAL_CREATURE — yokai is hero, human-witness for scale ━━━
+  MANGABOT_MYTHOLOGICAL_CREATURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, creature_type, creature_pose, creature_detail, shrine_or_setting, human_witness, aura_or_magic, foreground_element, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ SUPERNATURAL DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a MYTHOLOGICAL-CREATURE keyframe for MangaBot — a YOKAI / Japanese mythological being as HERO. Mononoke / Spirited-Away / Kakuriyo / Mushishi / Hozuki-no-Reitetsu register. Kitsune / tengu / ryujin / yuki-onna / nekomata / oni / kappa.
+
+━━━ AESTHETIC LOCK ━━━
+Mystical-spirit palette. Painterly atmospheric aura. Shimenawa rope, ofuda, fox-fire, spirit-glow.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Ghibli / Studio-Bones / Madhouse yokai tradition. Cel-shaded crisp creature linework, painterly atmospheric backgrounds.
+
+━━━ BANS ━━━
+• NO western dragon / NO European fairy / NO Cthulhu
+• NO STATIC PORTRAIT — creature is at LOADED instant
+• NO hero-human-character — human is OPTIONAL tiny witness for scale only
+
+━━━ YOKAI IS HERO ━━━
+Creature fills 40-70% of frame. Optional human witness tiny (5-15%) for scale.
+
+━━━ CREATURE TYPE (Japanese mythological lineage) ━━━
+${creature_type}
+
+━━━ CREATURE POSE (loaded instant) ━━━
+${creature_pose}
+
+━━━ CREATURE SURFACE DETAIL ━━━
+${creature_detail}
+
+━━━ SHRINE / SETTING ━━━
+${shrine_or_setting}
+
+━━━ HUMAN WITNESS (tiny for scale, optional) ━━━
+${human_witness}
+
+━━━ AURA / MAGIC SIGNATURE ━━━
+${aura_or_magic}
+
+━━━ FOREGROUND ELEMENT ━━━
+${foreground_element}
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "[creature_type] [creature_pose] at [shrine/setting]"], [creature surface detail], [aura/magic], [human witness tiny for scale], [foreground], [drama if fired], [camera_framing exactly], [spirit palette + mood].
+
+CRITICAL: yokai is HERO 40-70%, Japanese mythology vocabulary (NOT western), human is OPTIONAL tiny witness, aura/magic visible. Multi-tier depth.
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
+
+  // ━━━ MANGABOT_SPACE_OPERA — starship / cosmic is hero ━━━
+  MANGABOT_SPACE_OPERA: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ship_class, cosmic_setting, scale_provers, engine_or_signal, foreground_artifact, stellar_phenomenon, lighting_signature, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ COSMIC DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a SPACE-OPERA keyframe for MangaBot — STARSHIP or COSMIC station as hero. Cowboy-Bebop / Outlaw-Star / Macross / Galactic-Heroes / Yamato / GitS-SAC register.
+
+━━━ AESTHETIC LOCK ━━━
+Saturated space-opera palette — deep blue void / nebula magenta-teal / engine-glow orange / starlight blue-white. Realistic-anime industrial detailing on ships.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Sunrise / Production-IG / Studio-Bones space-opera tradition. Cel-shaded crisp ship linework, painterly nebula atmospherics, dramatic light contrast.
+
+━━━ BANS ━━━
+• NO Star-Wars-licensed / NO Star-Trek / NO western-CGI
+• NO STATIC POSTCARD — must have engine-glow / signal / passing-ship / motion
+• NO hero-human-portrait — pilot/crew tiny for scale only
+
+━━━ SHIP IS HERO ━━━
+Ship/station fills 40-70% of frame. Cosmic backdrop wraps. Optional crew tiny for scale.
+
+━━━ SHIP CLASS ━━━
+${ship_class}
+
+━━━ COSMIC SETTING ━━━
+${cosmic_setting}
+
+━━━ SCALE PROVERS ━━━
+${scale_provers}
+
+━━━ ENGINE / SIGNAL ━━━
+${engine_or_signal}
+
+━━━ FOREGROUND ARTIFACT ━━━
+${foreground_artifact}
+
+━━━ STELLAR PHENOMENON ━━━
+${stellar_phenomenon}
+
+━━━ LIGHTING SIGNATURE ━━━
+${lighting_signature}
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "[ship_class] [engine_or_signal] in [cosmic_setting]"], [scale provers], [foreground artifact], [stellar phenomenon], [lighting signature], [drama if fired], [camera_framing exactly], [space-opera palette + mood].
+
+CRITICAL: ship is HERO 40-70%, cosmic backdrop saturated, scale-provers visible. Multi-tier depth (foreground debris/cable → ship mass → nebula/stars → deep void).
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
+
   // ━━━ MANGABOT_MECHA_HANGARS — SCENE-LED, mech is hero, second-attempt ━━━
   // Architecture explicitly built to defeat the two 2026-05-22 failure modes:
   //   1. T-pose-arms-out default → mech_posture pool seeded forward-loaded only

@@ -156,6 +156,8 @@ module.exports = {
       'festival-nights',
       'anime-village',
       'mecha-hangars',
+      'mythological-creature',
+      'space-opera',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista

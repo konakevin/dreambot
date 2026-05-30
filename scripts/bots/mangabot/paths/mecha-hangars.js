@@ -1,50 +1,23 @@
 /**
- * MangaBot mecha-hangars path — giant robots, hangars, launch bays.
- * Gundam / Eva / Macross / Patlabor / Code-Geass aesthetic.
+ * MangaBot mecha-hangars — axis-system (Phase 2.14, SECOND ATTEMPT).
+ * The 2026-05-22 attempt failed; this rebuild explicitly fights both Flux
+ * gravities: T-pose-default + Mt-Fuji-postcard-drift.
+ * SCENE-LED. Mech is HERO at 50-80% of frame with scale-provers visible.
+ * Gundam / Eva / Patlabor / Macross / Code-Geass / Big-O / GitS register.
  */
-
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.MECHA_HANGAR_SCENES, 'mh_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are an anime concept-art painter writing a MECHA HANGAR / LAUNCH BAY keyframe for MangaBot. Industrial-mechanical scale + dramatic lighting + dwarf-the-pilot proportions. Output wraps with style prefix + suffix.
-
-${blocks.ANIME_ILLUSTRATION_BLOCK}
-
-${blocks.KEYFRAME_COMPOSITION_BLOCK}
-
-${blocks.DENSITY_BLOCK}
-
-${blocks.STORY_MOMENT_BLOCK}
-
-${blocks.NO_NAMED_CHARACTERS_BLOCK}
-
-${blocks.NO_GENERIC_POSE_BLOCK}
-
-━━━ THE MECHA HANGAR SCENE ━━━
-${scene}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION CLOSER ━━━
-The MECH dwarfs everything. Pilots / engineers (if shown) are TINY figures emphasizing scale. Industrial detail at maximum density (scaffolding, klaxons, fuel-cables, painted hangar-floor markings, technical kanji signage, hanging chains). NO mech in combat — this is hangar / pre-launch / repair only.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'MANGABOT_MECHA_HANGARS',
+  pools: {
+    mech_class: 'MECHA_HANGARS_MECH_CLASS',
+    mech_posture: 'MECHA_HANGARS_MECH_POSTURE',
+    hangar_setting: 'MECHA_HANGARS_HANGAR_SETTING',
+    scale_provers: 'MECHA_HANGARS_SCALE_PROVERS',
+    mech_detail: 'MECHA_HANGARS_MECH_DETAIL',
+    mech_weaponry_or_tool: 'MECHA_HANGARS_MECH_WEAPONRY_OR_TOOL',
+    steam_or_spark: 'MECHA_HANGARS_STEAM_OR_SPARK',
+    light_signature: 'MECHA_HANGARS_LIGHT_SIGNATURE',
+    camera_framing: 'MECHA_HANGARS_CAMERA_FRAMING',
+    surprise_element: 'MECHA_HANGARS_SURPRISE_ELEMENT',
+    drama: 'MECHA_HANGARS_DRAMA',
+  },
 };

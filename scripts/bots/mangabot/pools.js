@@ -120,7 +120,6 @@ module.exports = {
   ISEKAI_STORY_PROP: load('isekai_story_prop'),
   ISEKAI_BACKGROUND_DETAIL: load('isekai_background_detail'),
   ISEKAI_SCENES: load('isekai_scenes'),
-  FOOD_ANIME: load('food_anime'),
   ANIME_VILLAGE: load('anime_village'),
   // 12 new path scene pools (rebuild 2026-05-08).
   MECHA_HANGAR_SCENES: load('mecha_hangar_scenes'),
@@ -133,7 +132,6 @@ module.exports = {
   ROOFTOP_SUNSET_SCENES: load('rooftop_sunset_scenes'),
   CHERRY_BLOSSOM_SCENES: load('cherry_blossom_scenes'),
   SPACE_OPERA_SCENES: load('space_opera_scenes'),
-  UNDERWATER_SCENES: load('underwater_scenes'),
   // Anime-character (male / female) path pools (added 2026-05-08).
   ANIME_SETTING: load('anime_setting'),
   ANIME_VISTA: load('anime_vista'),
@@ -287,6 +285,32 @@ module.exports = {
   FESTIVAL_NIGHTS_CAMERA_FRAMING: load('festival_nights_camera_framing'),
   FESTIVAL_NIGHTS_SURPRISE_ELEMENT: load('festival_nights_surprise_element'),
   FESTIVAL_NIGHTS_DRAMA: load('festival_nights_drama'),
+
+  // ━━━ WAVE 3 path-bespoke pools (2026-05-29) ━━━
+
+  // mythological-creature (Phase 2.16).
+  MYTHOLOGICAL_CREATURE_CREATURE_TYPE: load('mythological_creature_creature_type'),
+  MYTHOLOGICAL_CREATURE_CREATURE_POSE: load('mythological_creature_creature_pose'),
+  MYTHOLOGICAL_CREATURE_CREATURE_DETAIL: load('mythological_creature_creature_detail'),
+  MYTHOLOGICAL_CREATURE_SHRINE_OR_SETTING: load('mythological_creature_shrine_or_setting'),
+  MYTHOLOGICAL_CREATURE_HUMAN_WITNESS: load('mythological_creature_human_witness'),
+  MYTHOLOGICAL_CREATURE_AURA_OR_MAGIC: load('mythological_creature_aura_or_magic'),
+  MYTHOLOGICAL_CREATURE_FOREGROUND_ELEMENT: load('mythological_creature_foreground_element'),
+  MYTHOLOGICAL_CREATURE_CAMERA_FRAMING: load('mythological_creature_camera_framing'),
+  MYTHOLOGICAL_CREATURE_SURPRISE_ELEMENT: load('mythological_creature_surprise_element'),
+  MYTHOLOGICAL_CREATURE_DRAMA: load('mythological_creature_drama'),
+
+  // space-opera (Phase 2.18).
+  SPACE_OPERA_SHIP_CLASS: load('space_opera_ship_class'),
+  SPACE_OPERA_COSMIC_SETTING: load('space_opera_cosmic_setting'),
+  SPACE_OPERA_SCALE_PROVERS: load('space_opera_scale_provers'),
+  SPACE_OPERA_ENGINE_OR_SIGNAL: load('space_opera_engine_or_signal'),
+  SPACE_OPERA_FOREGROUND_ARTIFACT: load('space_opera_foreground_artifact'),
+  SPACE_OPERA_STELLAR_PHENOMENON: load('space_opera_stellar_phenomenon'),
+  SPACE_OPERA_LIGHTING_SIGNATURE: load('space_opera_lighting_signature'),
+  SPACE_OPERA_CAMERA_FRAMING: load('space_opera_camera_framing'),
+  SPACE_OPERA_SURPRISE_ELEMENT: load('space_opera_surprise_element'),
+  SPACE_OPERA_DRAMA: load('space_opera_drama'),
 
   // mecha-hangars SCENE-led pools (Phase 2.14, second-attempt).
   MECHA_HANGARS_MECH_CLASS: load('mecha_hangars_mech_class'),

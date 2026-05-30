@@ -399,6 +399,58 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // ━━━ WAVE 3 — genre paths (2026-05-29) ━━━
+
+  // PATH-BESPOKE — MangaBot mythological-creature (Phase 2.16). Yokai as hero.
+  MANGABOT_MYTHOLOGICAL_CREATURE: {
+    description:
+      'PATH-BESPOKE — MangaBot mythological-creature (2026-05-29 Phase 2.16). Japanese yokai as HERO. Mononoke / Spirited-Away / Kakuriyo / Mushishi / Hozuki-no-Reitetsu register. Kitsune / tengu / ryujin / yuki-onna / nekomata / kappa / tanuki / oni / nine-tail-fox / kappa / amabie. Creature is SCENE HERO — character may be present small for scale.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'creature_type',
+        'creature_pose',
+        'creature_detail',
+        'shrine_or_setting',
+        'human_witness',
+        'aura_or_magic',
+        'foreground_element',
+        'camera_framing',
+        'surprise_element',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  // PATH-BESPOKE — MangaBot space-opera (Phase 2.18). Anime cosmic / starship.
+  MANGABOT_SPACE_OPERA: {
+    description:
+      'PATH-BESPOKE — MangaBot space-opera (2026-05-29 Phase 2.18). Cowboy-Bebop / Outlaw-Star / Macross / Galactic-Heroes / Yamato / GitS-SAC orbital register. Starship / orbital station / nebula / asteroid-field as scene hero. Optional pilot/crew tiny for scale (cockpit/walkway). Scene-led.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'ship_class',
+        'cosmic_setting',
+        'scale_provers',
+        'engine_or_signal',
+        'foreground_artifact',
+        'stellar_phenomenon',
+        'lighting_signature',
+        'camera_framing',
+        'surprise_element',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   // PATH-BESPOKE — MangaBot mecha-hangars (Phase 2.14, second attempt).
   // The previous (2026-05-22) axis attempt failed on two Flux gravities:
   //   1. "anime mech standing arms-out T-pose" default
