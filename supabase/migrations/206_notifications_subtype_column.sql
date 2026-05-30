@@ -82,7 +82,12 @@ update public.notifications
 -- Returns the LATEST row's subtype within the group (same pattern as `body`
 -- and `type` — for aggregating types every row has the same subtype anyway;
 -- for individual types each row is its own group).
-create or replace function public.get_inbox(
+--
+-- DROP first: CREATE OR REPLACE can't change a function's RETURNS TABLE
+-- signature, and we're adding the new `subtype` column to it.
+drop function if exists public.get_inbox(uuid, integer, integer);
+
+create function public.get_inbox(
   p_user_id  uuid,
   p_limit    integer default 20,
   p_offset   integer default 0
