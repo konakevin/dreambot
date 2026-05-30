@@ -329,6 +329,7 @@ export default function PublicProfileScreen() {
         postCount={profile.postCount}
         followerCount={profile.followerCount}
         followingCount={profile.followingCount}
+        createdAt={profile.created_at ?? null}
         isFollowing={isFollowing}
         hasRequest={hasRequest}
         isPrivate={!isTargetPublic}

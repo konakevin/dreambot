@@ -276,6 +276,7 @@ export default function ProfileScreen() {
         postCount={profile?.postCount ?? 0}
         followerCount={profile?.followerCount ?? 0}
         followingCount={profile?.followingCount ?? 0}
+        createdAt={profile?.created_at ?? null}
         onStatsPress={handleStatsTabChange}
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
@@ -286,42 +287,27 @@ export default function ProfileScreen() {
           row and is looking at the user-list view. */}
       {(activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') && (
         <View style={styles.tabRow}>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'posts' && styles.tabActive]}
-            onPress={() => setActiveTab('posts')}
-            activeOpacity={0.7}
-            accessibilityLabel="Posts"
-          >
-            <Ionicons
-              name={activeTab === 'posts' ? 'grid' : 'grid-outline'}
-              size={20}
-              color={activeTab === 'posts' ? colors.textPrimary : colors.textSecondary}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'dreams' && styles.tabActive]}
-            onPress={() => setActiveTab('dreams')}
-            activeOpacity={0.7}
-            accessibilityLabel="Dreams"
-          >
-            <Ionicons
-              name={activeTab === 'dreams' ? 'moon' : 'moon-outline'}
-              size={20}
-              color={activeTab === 'dreams' ? colors.textPrimary : colors.textSecondary}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'saved' && styles.tabActive]}
-            onPress={() => setActiveTab('saved')}
-            activeOpacity={0.7}
-            accessibilityLabel="Saved"
-          >
-            <Ionicons
-              name={activeTab === 'saved' ? 'bookmark' : 'bookmark-outline'}
-              size={20}
-              color={activeTab === 'saved' ? colors.textPrimary : colors.textSecondary}
-            />
-          </TouchableOpacity>
+          {(
+            [
+              { key: 'posts', label: 'Posts' },
+              { key: 'dreams', label: 'Dreams' },
+              { key: 'saved', label: 'Saved' },
+            ] as const
+          ).map((t) => {
+            const active = activeTab === t.key;
+            return (
+              <TouchableOpacity
+                key={t.key}
+                style={styles.tab}
+                onPress={() => setActiveTab(t.key)}
+                activeOpacity={0.7}
+                accessibilityLabel={t.label}
+              >
+                <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>{t.label}</Text>
+                {active && <View style={styles.tabUnderline} />}
+              </TouchableOpacity>
+            );
+          })}
         </View>
       )}
     </>
@@ -482,6 +468,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     includeFontPadding: false,
   },
+  // Album tabs — X-style text + accent-colored underline beneath the
+  // active tab. The underline is a separate absolutely-positioned View
+  // (not borderBottom) so we can match the text's natural width with
+  // tiny padding rather than the full tab cell.
   tabRow: {
     flexDirection: 'row',
     borderTopWidth: 0.5,
@@ -494,12 +484,25 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 2,
-    borderBottomColor: 'transparent',
+    paddingVertical: 14,
+    position: 'relative',
   },
-  tabActive: {
-    borderBottomColor: colors.textPrimary,
+  tabLabel: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  tabLabelActive: {
+    color: colors.textPrimary,
+  },
+  tabUnderline: {
+    position: 'absolute',
+    left: '25%',
+    right: '25%',
+    bottom: 0,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: colors.accent,
   },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 15 },

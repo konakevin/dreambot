@@ -42,16 +42,16 @@ interface BaseProps {
   postCount: number;
   followerCount: number;
   followingCount: number;
-  /** Notify when one of the three stat columns is tapped. */
+  /** ISO timestamp of account creation — drives the 'Joined …' chip. */
+  createdAt?: string | null;
+  /** Notify when one of the three stat slots is tapped. */
   onStatsPress: (tab: StatsTab) => void;
   /** Tap on the avatar (preview / change). Optional. */
   onAvatarPress?: () => void;
   /**
-   * Optional slot rendered between the identity text and the action
-   * pill row. Reserved for future DreamBot-signature inline elements;
-   * currently unused since the CastPeek that lived here was removed
-   * 2026-05-29 (per-Kevin design call — the cat-pic peep + 'Me +
-   * Partner' label read as clutter beneath the @handle).
+   * Optional slot rendered between the meta line (joined chip + plain-
+   * text stats) and the action pill row. Reserved for future
+   * DreamBot-signature inline elements.
    */
   children?: ReactNode;
 }
@@ -73,27 +73,6 @@ interface OtherVariant extends BaseProps {
 }
 
 type Props = OwnVariant | OtherVariant;
-
-function StatColumn({
-  count,
-  label,
-  onPress,
-}: {
-  count: number;
-  label: string;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => [styles.statColumn, pressed && { opacity: 0.6 }]}
-      hitSlop={8}
-    >
-      <Text style={styles.statNumber}>{count}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
-    </Pressable>
-  );
-}
 
 function AvatarBlock({
   avatar_url,
@@ -120,6 +99,12 @@ function AvatarBlock({
   );
 }
 
+function formatJoinedDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+
 export function ProfileHeader(props: Props) {
   const {
     avatar_url,
@@ -129,6 +114,7 @@ export function ProfileHeader(props: Props) {
     postCount,
     followerCount,
     followingCount,
+    createdAt,
     onStatsPress,
     onAvatarPress,
   } = props;
@@ -138,25 +124,15 @@ export function ProfileHeader(props: Props) {
   const heroName = display_name?.trim() ? display_name : `@${username}`;
   const showHandleLine = !!display_name?.trim(); // only show @handle when display name occupied the hero line
   const hasBio = !!bio?.trim();
+  const joinedDate = createdAt ? formatJoinedDate(createdAt) : '';
 
   return (
     <View style={styles.root}>
-      {/* Row 1 — avatar (left) + stats (right, three columns) */}
+      {/* Row 1 — avatar (left-aligned, on its own). The 3-column stats
+          block that used to sit beside the avatar moved to a plain-text
+          line below the bio (X-influenced design call 2026-05-29). */}
       <View style={styles.topRow}>
         <AvatarBlock avatar_url={avatar_url} username={username} onPress={onAvatarPress} />
-        <View style={styles.statsBlock}>
-          <StatColumn count={postCount} label="POSTS" onPress={() => onStatsPress('posts')} />
-          <StatColumn
-            count={followerCount}
-            label="FOLLOWERS"
-            onPress={() => onStatsPress('followers')}
-          />
-          <StatColumn
-            count={followingCount}
-            label="FOLLOWING"
-            onPress={() => onStatsPress('following')}
-          />
-        </View>
       </View>
 
       {/* Row 2 — display name / handle / bio (left-aligned, beneath avatar) */}
@@ -172,9 +148,49 @@ export function ProfileHeader(props: Props) {
         {hasBio && <Text style={styles.bio}>{bio}</Text>}
       </View>
 
-      {/* Row 2.5 — optional DreamBot-signature peek slots (vibe + cast).
-          Renders as children passed by the parent so this component
-          doesn't take a dependency on the recipe shape. */}
+      {/* Row 2.25 — joined chip (X-style). Tiny calendar + month-year.
+          Only renders when we have an account creation date. */}
+      {joinedDate.length > 0 && (
+        <View style={styles.joinedChip}>
+          <Ionicons name="calendar-outline" size={13} color={colors.textSecondary} />
+          <Text style={styles.joinedText}>Joined {joinedDate}</Text>
+        </View>
+      )}
+
+      {/* Row 2.5 — plain-text stats line. Posts is plain; Followers +
+          Following are tappable (open the respective list views) —
+          mirrors X's interaction pattern. */}
+      <View style={styles.statsRow}>
+        <Text style={styles.statsItem}>
+          <Text style={styles.statsCount}>{postCount}</Text>{' '}
+          <Text style={styles.statsLabel}>{postCount === 1 ? 'Post' : 'Posts'}</Text>
+        </Text>
+        <Text style={styles.statsDivider}>·</Text>
+        <Pressable
+          onPress={() => onStatsPress('followers')}
+          hitSlop={4}
+          style={({ pressed }) => pressed && { opacity: 0.6 }}
+        >
+          <Text style={styles.statsItem}>
+            <Text style={styles.statsCount}>{followerCount}</Text>{' '}
+            <Text style={styles.statsLabel}>{followerCount === 1 ? 'Follower' : 'Followers'}</Text>
+          </Text>
+        </Pressable>
+        <Text style={styles.statsDivider}>·</Text>
+        <Pressable
+          onPress={() => onStatsPress('following')}
+          hitSlop={4}
+          style={({ pressed }) => pressed && { opacity: 0.6 }}
+        >
+          <Text style={styles.statsItem}>
+            <Text style={styles.statsCount}>{followingCount}</Text>{' '}
+            <Text style={styles.statsLabel}>Following</Text>
+          </Text>
+        </Pressable>
+      </View>
+
+      {/* Row 2.75 — optional inline slot for future DreamBot-signature
+          elements. Currently unused. */}
       {props.children}
 
       {/* Row 3 — action pills */}
@@ -253,27 +269,44 @@ const styles = StyleSheet.create({
     fontSize: AVATAR_SIZE * 0.4,
     fontWeight: '700',
   },
-  statsBlock: {
-    flex: 1,
+  // Joined chip — calendar icon + "Joined May 2026" beneath the bio.
+  // Sits left-aligned, dim, low visual weight; reads as a quiet
+  // metadata line, not a primary element. X-style.
+  joinedChip: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
+    gap: 5,
+    marginTop: 8,
   },
-  statColumn: {
+  joinedText: {
+    color: colors.textSecondary,
+    fontSize: 13,
+  },
+  // Plain-text stats row — replaces the 3-column block that used to
+  // live beside the avatar. Posts / Followers / Following separated by
+  // mid-dots. The two list-bearing ones (Followers, Following) are
+  // wrapped in Pressables; Posts is plain text.
+  statsRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    minWidth: 64,
+    flexWrap: 'wrap',
+    marginTop: 6,
   },
-  statNumber: {
+  statsItem: {
+    color: colors.textSecondary,
+    fontSize: 13,
+  },
+  statsCount: {
     color: colors.textPrimary,
-    fontSize: 18,
     fontWeight: '700',
   },
-  statLabel: {
+  statsLabel: {
     color: colors.textSecondary,
-    fontSize: 11,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    marginTop: 2,
+  },
+  statsDivider: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    marginHorizontal: 6,
   },
   identityBlock: {
     marginTop: 10,
