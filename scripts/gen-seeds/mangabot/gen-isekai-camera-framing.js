@@ -5,40 +5,50 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA-FRAMING entries for a MangaBot ANIME ISEKAI keyframe. Painterly anime keyframe convention.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA-FRAMING entries for a MangaBot ANIME ISEKAI keyframe. Painterly anime keyframe convention.
+
+⚠️ NEVER write "back-of-character looking out at scene" framings. The audit on 2026-05-29 found 9% of this pool was over-shoulder-party + wide-vista-with-tiny-party — that compounded into homogenous back-to-character renders. Recipe rewritten 2026-05-29 to PURGE those framings.
 
 Each entry: 8-16 words. Names framing + anime style.
 
-DISTRIBUTION:
-- 15% PARTY-WIDE SHOT (adventurer party traveling, party-in-frame)
-- 13% MEDIUM-SHOT HERO (single anime hero in fantasy setting)
-- 11% LOW-ANGLE HEROIC (camera low looking up at hero, fantasy backdrop)
-- 11% OVER-SHOULDER PARTY (camera behind party-member looking at fantasy view)
-- 10% CLOSE-UP CHARACTER (anime character emotional close-up)
-- 9% WIDE-VISTA FANTASY (anime party tiny against fantasy landscape)
-- 8% DUTCH-ANGLE COMBAT (tilted frame for battle moment)
-- 7% THROUGH-FOREGROUND (looking through foliage / fence / object)
-- 5% HIGH-ANGLE GROUP (looking down on adventurer party)
-- 5% MAGIC-CIRCLE-FRAMED (anime magic-circle wrapping the framing)
-- 4% PROFILE SIDE-ON (figure crosses frame in profile)
-- 2% COCKPIT-LIKE FROM-DRAGON (riding dragon mid-flight POV)
+DISTRIBUTION (ALL forward-facing-or-profile):
+- 18% MEDIUM-SHOT HERO (single anime hero in fantasy setting, three-quarter forward, face engaged)
+- 14% LOW-ANGLE HEROIC (camera low looking up at hero, face visible, fantasy backdrop)
+- 13% PARTY-WIDE SHOT (adventurer party traveling, facing toward viewer or three-quarter forward, body weight engaged in motion)
+- 12% CLOSE-UP CHARACTER (anime character emotional close-up, face dominant)
+- 10% PROFILE SIDE-ON (figure crosses frame in profile, mid-action, face visible in profile)
+- 9% DUTCH-ANGLE COMBAT (tilted frame for battle moment, figure angled toward viewer or mid-strike profile)
+- 8% FORWARD THREE-QUARTER (hero angled toward viewer at 3/4, sword half-drawn or mid-cast, face engaged)
+- 7% THROUGH-FOREGROUND (looking through foliage / banner / glowing rune AT the figure, not past them)
+- 5% MAGIC-CIRCLE-FRAMED (anime magic-circle wrapping the figure mid-cast, face dominant inside the circle)
+- 3% TIGHT MEDIUM-SHOT (waist-up of hero mid-cast or mid-strike, face dominant)
+- 1% COCKPIT-LIKE FROM-DRAGON (riding dragon mid-flight, rider's face visible at three-quarter forward)
 
 DO write:
-- Anime party-wide shot, adventurer team traveling together through fantasy landscape
-- Anime medium-shot of hero, character at three-quarter view in fantasy setting
-- Anime low-angle heroic framing, camera below looking up at character against painterly sky
-- Anime over-shoulder party composition, camera behind character looking at fantasy view
-- Anime close-up character framing, emotional cel-shaded face-in-foreground
-- Anime wide-vista fantasy composition, party tiny against painterly fantasy landscape
-- Anime dutch-angle combat-tension framing, tilted for battle moment
-- Anime through-foliage foreground framing, looking past plant cover at scene beyond
-- Anime high-angle group composition, looking down on adventurer party in formation
-- Anime magic-circle-framed composition with glowing rune-ring wrapping the shot
+- Anime medium-shot of hero at three-quarter forward in fantasy setting, sword half-drawn at glowing dungeon entrance
+- Anime low-angle heroic framing, camera below the warrior, face visible against painterly storm clouds
+- Anime party-wide shot, adventurer team marching toward camera through sunlit enchanted forest road
+- Anime close-up character framing, cel-shaded tears on hero's face during emotional reunion moment
+- Profile side-on composition, mage crosses frame mid-cast, staff trailing motion, face visible in profile
+- Anime dutch-angle combat-tension framing, figure angled toward viewer mid-strike
+- Forward three-quarter, hero angled toward viewer, status-window holograms flickering, face engaged
+- Through-glowing-rune foreground framing, looking past magic circle AT the mage's face mid-cast
+- Magic-circle-framed composition, hero inside glowing rune-ring mid-cast, face dominant
+- Tight medium-shot, hero chest-up mid-cast, face dominant, mana-glow lighting features
 
 DO NOT write:
+- Over-shoulder party composition "camera behind elf/knight/healer looking out at fantasy vista" — the audit flagged this as the dominant failure mode
+- Wide-vista fantasy "tiny party silhouetted against vast citadel" — party-tiny renders read as back-of-figure
+- "From behind the elf / knight / hooded healer / beastkin / hero" — any framing where the camera is BEHIND
+- "Gazing at smoldering ruins" / "gazing across desert" with character back to viewer
 - Photoreal camera specs (f-stops)
 - Multiple shots per entry
 - Cyberpunk-coded framings
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

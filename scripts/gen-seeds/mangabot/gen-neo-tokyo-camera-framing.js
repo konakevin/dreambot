@@ -5,44 +5,49 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA-FRAMING entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is the SHOT TYPE. Painterly anime keyframe.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA-FRAMING entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is the SHOT TYPE. Painterly anime keyframe.
 
-CRITICAL VARIETY MANDATE: do NOT default to vertical-pano / worm's-eye / wide-alley framings (those biased every render into the same center-vertical composition). Spread across very different framings.
+⚠️ NEVER write "back-of-character looking out at scene" framings. The audit on 2026-05-29 found 12% of this pool was over-shoulder / "figure tiny against megabuilding" / "eyes forward NOT at camera" — that compounded into homogenous back-to-camera renders. Recipe rewritten 2026-05-29 to PURGE those framings.
 
 Each entry: 8-16 words. Names the framing.
 
-FRAMING DISTRIBUTION (no single mode above 16%):
-- 16% DUTCH-ANGLE TENSION (tilted off-axis, pre-action energy)
-- 14% HIGH-ANGLE DRONE-DOWN (camera looking down on figure + street)
-- 12% PROFILE SIDE-ON (figure crosses frame in profile, NOT facing camera)
-- 11% CLOSE-UP / FACE-FILLS-FRAME (intimate detail, signage blurred behind)
-- 10% OVER-SHOULDER POV (camera behind figure, looking past at scene)
-- 10% ASYMMETRIC OFF-CENTER (figure pushed to one side, weight unbalanced)
-- 8% THROUGH-FOREGROUND-OBJECT (looking through chain-link / rain-streaks / window)
-- 6% WIDE-ALLEY (kept but minority — used sparingly)
-- 6% WORM'S-EYE LOW-ANGLE (kept but minority)
-- 5% DOLLY-TRACKING SIDEWAYS (lateral motion, figure mid-motion across frame)
-- 2% EXTREME TOP-DOWN BIRD'S-EYE (rare — overhead 90-degree-straight-down)
+FRAMING DISTRIBUTION (no single mode above 18%; ALL forward-facing-or-profile):
+- 18% DUTCH-ANGLE TENSION (tilted off-axis pre-action; figure angled toward viewer or in profile)
+- 14% HIGH-ANGLE DRONE-DOWN (camera looking down on figure; figure face turned up at something, NOT back-of-head)
+- 14% PROFILE SIDE-ON (figure crosses frame in profile, face visible in profile, body engaged mid-motion)
+- 12% CLOSE-UP / FACE-FILLS-FRAME (intimate detail, signage blurred behind)
+- 10% LOW-ANGLE HERO (camera below figure, face visible, looking up toward neon overhead or three-quarter forward)
+- 10% ASYMMETRIC OFF-CENTER (figure pushed to one side mid-action, face engaged)
+- 8% THROUGH-FOREGROUND-OBJECT (looking through chain-link / rain-streaks / window AT the figure, NOT past the figure)
+- 6% FORWARD THREE-QUARTER (figure angled toward viewer, hand at jacket or coat caught in motion)
+- 4% TIGHT MEDIUM-SHOT (waist-up of figure mid-action)
+- 2% EXTREME TOP-DOWN BIRD'S-EYE (rare — overhead 90-degree-straight-down on figure with face turned up)
 
 DO write:
-- Dutch-angle tilted-frame composition, off-axis tension before something happens
-- High-angle drone-down looking at the figure crossing a wet intersection, hovercar light-trails sweep across the frame
-- Profile side-on composition, figure crosses the frame in profile, eyes forward not at camera
+- Dutch-angle tilted-frame composition, off-axis tension, figure angled toward viewer mid-stride
+- High-angle drone-down looking at figure crossing wet intersection, face turned up at the hovercar above
+- Profile side-on composition, figure runs across frame mid-stride, face visible in profile
 - Extreme close-up framing, face fills the frame, single cyber-eye catches a neon reflection
-- Over-shoulder POV composition behind the figure, deep alley extending into vanishing point ahead
-- Asymmetric off-center composition, figure pushed to bottom-left third, anchor dominates upper-right
-- Through-rain-streaks composition, raindrops blur in foreground focus, figure soft-focus in midground
-- Wide-alley cinematic framing (USED SPARINGLY), figure in mid-frame
-- Worm's-eye low-angle (USED SPARINGLY), looking up at megabuilding face
-- Dolly-tracking sideways composition, figure mid-motion, environment streaks past
-- Bird's-eye top-down (RARE), straight-down 90-degree on figure in intersection
+- Low-angle hero, camera below the figure looking up at her face haloed by neon overhead
+- Asymmetric off-center composition, figure pushed to bottom-left third mid-leap, face engaged
+- Through-rain-streaks composition LOOKING AT the figure, raindrops blur close, face soft-focus behind
+- Forward three-quarter, figure mid-stride toward camera, coat hem caught in wind
+- Tight medium-shot, figure waist-up mid-pull-of-cyberblade, face dominant in neon backlight
+- Bird's-eye top-down (RARE), figure looks up at the camera, neon street wraps around her
 
 DO NOT write:
-- Multiple "worm's-eye looking up at vertical megabuilding" — that's ONE entry max
-- Multiple "wide cinematic alley with figure mid-frame" — ONE max
+- Over-shoulder POV "camera behind figure looking past at scene" — the audit flagged this as the dominant failure mode
+- "Eyes forward not at camera" — eye direction is decided by the action, not the framing
+- "Figure tiny against megabuilding" / wide-alley with figure swallowed by setting
+- "From behind the figure / character" — any framing where the camera is BEHIND
 - Photoreal camera specs (f/stops / mm)
 - Multiple shots per entry
 - Modern handheld shaky-cam
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
