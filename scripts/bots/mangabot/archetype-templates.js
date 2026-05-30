@@ -574,6 +574,115 @@ Open with the scene-type composition + camera framing, then weave in the four de
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
   },
 
+  // ━━━ MANGABOT_SHONEN_ACTION ━━━
+  // Peak-action shonen hero. Multi-effect stack (3+ simultaneous).
+  MANGABOT_SHONEN_ACTION: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      hero_class,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      weapon,
+      power_signature,
+      battlefield,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+    const dramaSection = drama
+      ? `\n━━━ BATTLEFIELD DRAMA — render visibly ━━━\n${drama}\n\nCombat-energy event in the world — visible secondary focal point, NOT eclipsing him.\n\n`
+      : '';
+    return `You are an anime concept-art painter writing a SHONEN-ACTION keyframe for MangaBot — a single shonen hero MAN at peak-combat-action. Naruto / MHA / JJK / Bleach / Demon Slayer (ufotable) / DragonBall tradition. He is MID-STRIKE, MID-POWER-RELEASE, MID-COUNTER — captured at loaded peak instant.
+
+━━━ GENDER LOCK ━━━
+Subject is a MAN. "Man" or "hero" MUST appear in FIRST 8 TOKENS. He/him/his throughout.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+
+━━━ MULTI-EFFECT STACK MANDATE — NON-NEGOTIABLE ━━━
+Every render STACKS 3+ SIMULTANEOUS visible dynamic elements:
+1. PRIMARY ACTION — his beat (mid-strike with weapon / mid-cast power-blast / mid-leap forward / mid-counter-stance)
+2. ENVIRONMENTAL REACTION — debris / shockwave / cracking ground / motion-blur / sparks / sand-spray / petal-burst / blood-rain-from-sky / lightning-strike
+3. ACTIVE BACKGROUND CONTEXT — battlefield silhouettes / collapsing tower / distant explosion-bloom / opposing force-shadow / arena-spectator-glow / blood-moon / cosmic-arc
+
+THE SCALE-THE-MAGIC-UP rule: not a wisp, a MAELSTROM. Not a fireball, a fireball amid arcing tendrils of secondary flame and glowing-rune wake. Not a spirit-fox, a spirit-fox CRACKING REALITY with creatures emerging.
+
+━━━ ABSOLUTE BANS — MALE-SPECIFIC ━━━
+• NO shirtless / bare-chested / oiled-pecs / loincloth / sleeveless-revealing-torso
+• Outfit MUST explicitly name a chest-covering item (gi / haori / coat / school-uniform / cuirass / robe / cape)
+• Skin pool stays FACE-FOCUSED (cheekbones / jaw / brow) — NEVER torso / chest
+• NO visible enemy blood / wounded foe — enemy is silhouette / off-frame / shadowy
+• NO posing for camera as runway thumbnail
+• NO pirate-rigging / shipboarding-with-cutlass tropes
+• NO eyes-locked-blankly — eye direction = camera_framing-decided
+
+━━━ SOLO HERO ONLY ━━━
+ONE shonen hero. Enemy may be implied as silhouette / shadow / off-frame at midground. NEVER a co-character.
+
+━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
+The hero is the MAIN SUBJECT at 35-50% of frame. Battlefield + power-blast + drama wrap AROUND him. NOT a tiny silhouette. NOT back-of-character looking at distant arena. MEDIUM-to-LARGE scale.
+
+━━━ HIS HERO CLASS ━━━
+${hero_class}
+
+━━━ HIS COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} shonen hero man with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, wielding ${weapon}.
+
+━━━ THE ACTION (peak-combat moment — FORWARD-FACING) ━━━
+${action}
+
+Body torqued, weight engaged, weapon mid-arc. Eye direction = camera_framing. NEVER staring at distant horizon away from camera.
+
+━━━ HIS POWER SIGNATURE (the visible magical / combat energy) ━━━
+${power_signature}
+
+This is the SCALE-IT-UP visual signature — fire-aura / lightning-arc / energy-blast / shadow-tendril / cursed-rune-trail. Render BIG.
+
+━━━ THE BATTLEFIELD (the active combat stage) ━━━
+${battlefield}
+
+Active arena/battle-scene — depth on depth — FOREGROUND combat-debris → MIDGROUND hero + power + opposing force silhouette → DEEP DISTANCE battlefield context with smoke/fire/destruction.
+
+${dramaSection}━━━ SURPRISE ELEMENT (combat secondary) ━━━
+${surprise_element}
+
+Midground or background — enemy-silhouette / spell-orb / debris-fragment / kanji-warp / shockwave-ring. NEVER competes with hero.
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} shonen hero MAN [doing exact peak-combat action] in [battlefield]"], [he wears [outfit] chest-covered], [DNA: skin + eyes + hair], [weapon mid-arc + power_signature], [battlefield wrapping with depth + drama + debris-shockwave-active-background], [camera_framing exactly], [lighting + atmosphere], [mood]
+
+CRITICAL: "[ethnicity] shonen hero MAN [PEAK-ACTION]" leads. He fills 35-50% of frame, ENGAGED at peak-instant. MULTI-EFFECT 3+ simultaneous. Forward-facing per camera_framing. OVERRIDE Flux's back-of-anime-hero centroid HARD.
+
+Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers.`;
+  },
+
   // ━━━ MANGABOT_MAGICAL_GIRL ━━━
   // Sailor-Moon / Precure / Madoka-Magica / Cardcaptor-Sakura tradition.
   // Sparkle-stack + transformation-peak + forward-facing-pose mandates.

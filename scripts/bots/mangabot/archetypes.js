@@ -181,6 +181,34 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // PATH-BESPOKE — MangaBot shonen-action (2026-05-29 Phase 2.4).
+  // Peak-action shonen hero (Naruto / MHA / JJK / Bleach / Demon Slayer
+  // tradition). MULTI-EFFECT STACK mandate — 3+ simultaneous dynamics
+  // per render. Higher chaos intensity. Combat-coded camera framings.
+  MANGABOT_SHONEN_ACTION: {
+    description:
+      'PATH-BESPOKE — MangaBot shonen-action (2026-05-29 Phase 2.4). Peak-action shonen hero mid-combat-move. Multi-effect stack (3+ simultaneous dynamics). Higher chaos, combat-coded framings, anti-back-to-camera, anti-shirtless. Bespoke axes for hero_class / power_signature / battlefield / etc.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'ethnicity',
+        'hero_class',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'weapon',
+      ],
+      path: ['power_signature', 'battlefield', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   // PATH-BESPOKE — MangaBot magical-girl (2026-05-29 Phase 2.3).
   // Mahou-shoujo / Sailor-Moon / Precure / Madoka-Magica tradition. Solo
   // magical-girl mid-transformation or mid-power-moment. Sparkle-stack

@@ -171,6 +171,18 @@ module.exports = {
   MAGICAL_GIRL_SURPRISE_ELEMENT: load('magical_girl_surprise_element'),
   MAGICAL_GIRL_DRAMA: load('magical_girl_drama'),
 
+  // shonen-action path-bespoke pools (Phase 2.4, 2026-05-29). Full-bespoke.
+  SHONEN_ACTION_ETHNICITY: load('shonen_action_ethnicity'),
+  SHONEN_ACTION_HERO_CLASS: load('shonen_action_hero_class'),
+  SHONEN_ACTION_OUTFIT: load('shonen_action_outfit'),
+  SHONEN_ACTION_WEAPON: load('shonen_action_weapon'),
+  SHONEN_ACTION_POWER_SIGNATURE: load('shonen_action_power_signature'),
+  SHONEN_ACTION_BATTLEFIELD: load('shonen_action_battlefield'),
+  SHONEN_ACTION_ACTION: load('shonen_action_action'),
+  SHONEN_ACTION_CAMERA_FRAMING: load('shonen_action_camera_framing'),
+  SHONEN_ACTION_SURPRISE_ELEMENT: load('shonen_action_surprise_element'),
+  SHONEN_ACTION_DRAMA: load('shonen_action_drama'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {

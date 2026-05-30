@@ -145,6 +145,7 @@ module.exports = {
       'anime-character-female',
       'anime-character-male',
       'magical-girl',
+      'shonen-action',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista
