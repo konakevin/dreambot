@@ -1130,6 +1130,7 @@ export type Database = {
           body: string | null;
           comment_id: string | null;
           created_at: string;
+          group_key: string | null;
           id: string;
           recipient_id: string;
           seen_at: string | null;
@@ -1141,6 +1142,7 @@ export type Database = {
           body?: string | null;
           comment_id?: string | null;
           created_at?: string;
+          group_key?: string | null;
           id?: string;
           recipient_id: string;
           seen_at?: string | null;
@@ -1152,6 +1154,7 @@ export type Database = {
           body?: string | null;
           comment_id?: string | null;
           created_at?: string;
+          group_key?: string | null;
           id?: string;
           recipient_id?: string;
           seen_at?: string | null;
@@ -2132,6 +2135,49 @@ export type Database = {
         Args: { p_user_id: string };
         Returns: number;
       };
+      // ─── Phase 1 grouped notifications (migration 202) ───────────────────
+      get_inbox: {
+        Args: { p_user_id: string; p_limit?: number; p_offset?: number };
+        Returns: {
+          group_key: string;
+          type: string;
+          category: string;
+          preview_actor_ids: string[] | null;
+          preview_usernames: string[] | null;
+          preview_avatars: (string | null)[] | null;
+          actor_count: number;
+          upload_id: string | null;
+          comment_id: string | null;
+          upload_image_url: string | null;
+          body: string | null;
+          last_at: string;
+          any_unseen: boolean;
+        }[];
+      };
+      get_group_actors: {
+        Args: {
+          p_user_id: string;
+          p_group_key: string;
+          p_limit?: number;
+          p_offset?: number;
+        };
+        Returns: {
+          actor_id: string;
+          username: string;
+          avatar_url: string | null;
+          latest_at: string;
+        }[];
+      };
+      mark_group_seen: {
+        Args: { p_user_id: string; p_group_key: string };
+        Returns: undefined;
+      };
+      get_unread_group_count: {
+        Args: { p_user_id: string };
+        Returns: number;
+      };
+      notification_category: { Args: { p_type: string }; Returns: string };
+      // ─── /Phase 1 grouped notifications ─────────────────────────────────
       grant_sparkles: {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
         Returns: undefined;
