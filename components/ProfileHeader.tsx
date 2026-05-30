@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 16,
   },
   avatar: {
@@ -280,11 +281,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   // Joined chip — calendar icon + "Joined May 2026" beneath the bio.
-  // Sits left-aligned, dim, low visual weight; reads as a quiet
-  // metadata line, not a primary element. X-style.
+  // Centered along with the rest of the hero block; dim, low visual
+  // weight; reads as a quiet metadata line, not a primary element.
   joinedChip: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
     marginTop: 8,
   },
@@ -299,6 +301,7 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     flexWrap: 'wrap',
     marginTop: 8,
   },
@@ -327,22 +330,26 @@ const styles = StyleSheet.create({
   identityBlock: {
     marginTop: 10,
     gap: 2,
+    alignItems: 'center',
   },
   heroName: {
     color: colors.textPrimary,
     fontSize: 17,
     fontWeight: '700',
+    textAlign: 'center',
   },
   handle: {
     color: colors.textSecondary,
     fontSize: 14,
     fontWeight: '500',
+    textAlign: 'center',
   },
   bio: {
     color: colors.textPrimary,
     fontSize: 14,
     lineHeight: 19,
     marginTop: 4,
+    textAlign: 'center',
   },
   actionRow: {
     flexDirection: 'row',
