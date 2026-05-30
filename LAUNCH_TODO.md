@@ -36,8 +36,8 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 - [ ] Make sure at least one rendered option is a **landscape they can share** (blown up, share-ready aspect)
 - [ ] **Three dreams** on first reveal — showcase different styles
 - [ ] **Create screen**: add a rotating set of background images — make it look like a little **DreamBot factory / machine**
-- [ ] **Generating screen**: make it look **magical** (it IS generating a dream!) — rotating set of really cool magic-looking backgrounds with particles overlaid. Fun moment, not a "bad to wait" moment.
-- [ ] Same magical treatment on the **first-dream generating screen**
+- [x] **Generating screen**: make it look **magical** (it IS generating a dream!) — rotating set of really cool magic-looking backgrounds with particles overlaid. Fun moment, not a "bad to wait" moment. — shipped 2026-05-30 ("Workshop" stage in `components/MagicalLoadingStage.tsx`: cosmic gradient + breathing mascot + pulsing radial glow + 14 sparkle particles drifting upward with sine-wave wobble + `Dreaming…` title with sequenced 3-dot animation + a rotating poetic subtitle that cross-fades through 7 phrases every 3.8s. All animations run on the Reanimated worklet thread. Queue This button + face-swap subtip float in a SafeAreaView overlay below it. Stage is intentionally re-usable on the first-dream screen — accepts a mascot URL prop.)
+- [ ] Same magical treatment on the **first-dream generating screen** (stage component now exists — wire it into the first-dream loading flow)
 
 ## UI / animations / micro-delight
 

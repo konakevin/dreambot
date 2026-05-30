@@ -4,17 +4,8 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  Modal,
-  AppState,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, AppState } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,6 +17,7 @@ import { supabase } from '@/lib/supabase';
 import { Toast } from '@/components/Toast';
 import type { PhotoClassification } from '@/lib/dreamApi';
 import { DreamFailureCard } from '@/components/DreamFailureCard';
+import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 
 // Self / relationship detection — kept in sync with the matching regexes
 // on the Create screen. Used once at mount to decide whether to surface
@@ -203,32 +195,40 @@ export default function DreamLoadingScreen() {
   }
 
   return (
-    <SafeAreaView style={s.container}>
-      <View style={s.content}>
-        <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
-        {!failure && (
-          <>
-            <ActivityIndicator size="large" color={colors.accent} style={s.spinner} />
-            <Text style={s.tip}>Working on it — hold tight.</Text>
-            {isFaceSwap && (
-              <Text style={s.subtip}>Face swaps take a little longer — feel free to queue it.</Text>
-            )}
-            {showQueue && (
-              <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
-                <Ionicons name="time-outline" size={16} color="#FFFFFF" />
-                <Text style={s.queueText}>Queue This</Text>
-              </TouchableOpacity>
-            )}
-          </>
-        )}
-        {failure && (
+    <View style={s.container}>
+      {!failure ? (
+        // The magical stage covers the whole screen (intentionally
+        // ignores top/bottom safe areas — the cosmic gradient + sparkle
+        // field look better edge-to-edge). The face-swap subtip + Queue
+        // This button float in a SafeAreaView below it so they don't
+        // collide with the home indicator.
+        <>
+          <MagicalLoadingStage mascotUrl={mascotUrl} />
+          <SafeAreaView style={s.bottomOverlay} edges={['bottom']} pointerEvents="box-none">
+            <View style={s.bottomStack} pointerEvents="box-none">
+              {isFaceSwap && (
+                <Text style={s.subtip}>
+                  Face swaps take a little longer — feel free to queue it.
+                </Text>
+              )}
+              {showQueue && (
+                <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
+                  <Ionicons name="time-outline" size={16} color="#FFFFFF" />
+                  <Text style={s.queueText}>Queue This</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </SafeAreaView>
+        </>
+      ) : (
+        <SafeAreaView style={s.failureWrap}>
           <DreamFailureCard
             failure={failure}
             onRetry={handleRetry}
             onDismiss={handleDismissFailure}
           />
-        )}
-      </View>
+        </SafeAreaView>
+      )}
 
       {/* Classification confirmation — fires when photo is group/unclear, BEFORE sparkle spent */}
       <Modal
@@ -272,7 +272,7 @@ export default function DreamLoadingScreen() {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -281,42 +281,45 @@ const s = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  content: {
+  // Bottom overlay: floats over the magical stage so the face-swap
+  // subtip + Queue This button sit safely above the home indicator
+  // without painting a backdrop over the sparkle field.
+  bottomOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  bottomStack: {
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingBottom: 16,
+    gap: 14,
+  },
+  failureWrap: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 32,
-    gap: 24,
-  },
-  mascot: {
-    width: 160,
-    height: 160,
-    borderRadius: 32,
-  },
-  spinner: {
-    marginTop: 8,
-  },
-  tip: {
-    color: colors.textSecondary,
-    fontSize: 16,
-    textAlign: 'center',
-    fontWeight: '600',
+    paddingHorizontal: 24,
   },
   subtip: {
-    color: colors.textMuted,
+    color: 'rgba(196,181,253,0.85)', // muted purple, matches the sparkle palette
     fontSize: 13,
     textAlign: 'center',
-    marginTop: -16,
     paddingHorizontal: 8,
   },
   queueBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 20,
+    paddingHorizontal: 18,
+    paddingVertical: 11,
+    borderRadius: 22,
     backgroundColor: colors.accent,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 0 },
   },
   queueText: {
     color: '#FFFFFF',
