@@ -7,7 +7,22 @@ const fs = require('fs');
 const path = require('path');
 
 function load(name) {
-  return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
+  // Resilient load — a missing seed file (e.g. WIP path mid-generation by a
+  // sibling agent) returns []. This lets pools.js stay loadable while another
+  // process is still writing seeds. Downstream pickers will fail loudly if
+  // the path actually being rendered has empty pools — which is the right
+  // signal for "you ran a path whose seeds aren't generated yet." Lesson:
+  // 2026-05-29 sibling-agent race during MangaBot Wave 2 parallelization.
+  try {
+    return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      // eslint-disable-next-line no-console
+      console.warn(`[mangabot/pools] seed ${name}.json missing — returning [] (likely WIP).`);
+      return [];
+    }
+    throw err;
+  }
 }
 
 const VIBE_COLOR = {
@@ -226,6 +241,77 @@ module.exports = {
   ROOFTOP_SUNSETS_CAMERA_FRAMING: load('rooftop_sunsets_camera_framing'),
   ROOFTOP_SUNSETS_SURPRISE_ELEMENT: load('rooftop_sunsets_surprise_element'),
   ROOFTOP_SUNSETS_DRAMA: load('rooftop_sunsets_drama'),
+
+  // ━━━ WAVE 2 path-bespoke pools (2026-05-29) ━━━
+
+  // occult-tokyo (Phase 2.9).
+  OCCULT_TOKYO_ETHNICITY: load('occult_tokyo_ethnicity'),
+  OCCULT_TOKYO_ARCHETYPE: load('occult_tokyo_archetype'),
+  OCCULT_TOKYO_OUTFIT: load('occult_tokyo_outfit'),
+  OCCULT_TOKYO_ACCESSORY: load('occult_tokyo_accessory'),
+  OCCULT_TOKYO_SETTING: load('occult_tokyo_setting'),
+  OCCULT_TOKYO_ACTION: load('occult_tokyo_action'),
+  OCCULT_TOKYO_CAMERA_FRAMING: load('occult_tokyo_camera_framing'),
+  OCCULT_TOKYO_SURPRISE_ELEMENT: load('occult_tokyo_surprise_element'),
+  OCCULT_TOKYO_DRAMA: load('occult_tokyo_drama'),
+
+  // post-apocalyptic (Phase 2.10).
+  POST_APOCALYPTIC_ETHNICITY: load('post_apocalyptic_ethnicity'),
+  POST_APOCALYPTIC_ARCHETYPE: load('post_apocalyptic_archetype'),
+  POST_APOCALYPTIC_OUTFIT: load('post_apocalyptic_outfit'),
+  POST_APOCALYPTIC_ACCESSORY: load('post_apocalyptic_accessory'),
+  POST_APOCALYPTIC_SETTING: load('post_apocalyptic_setting'),
+  POST_APOCALYPTIC_ACTION: load('post_apocalyptic_action'),
+  POST_APOCALYPTIC_CAMERA_FRAMING: load('post_apocalyptic_camera_framing'),
+  POST_APOCALYPTIC_SURPRISE_ELEMENT: load('post_apocalyptic_surprise_element'),
+  POST_APOCALYPTIC_DRAMA: load('post_apocalyptic_drama'),
+
+  // beach-episode (Phase 2.11).
+  BEACH_EPISODE_ETHNICITY: load('beach_episode_ethnicity'),
+  BEACH_EPISODE_ARCHETYPE: load('beach_episode_archetype'),
+  BEACH_EPISODE_OUTFIT: load('beach_episode_outfit'),
+  BEACH_EPISODE_ACCESSORY: load('beach_episode_accessory'),
+  BEACH_EPISODE_SETTING: load('beach_episode_setting'),
+  BEACH_EPISODE_ACTION: load('beach_episode_action'),
+  BEACH_EPISODE_CAMERA_FRAMING: load('beach_episode_camera_framing'),
+  BEACH_EPISODE_SURPRISE_ELEMENT: load('beach_episode_surprise_element'),
+  BEACH_EPISODE_DRAMA: load('beach_episode_drama'),
+
+  // festival-nights (Phase 2.12).
+  FESTIVAL_NIGHTS_ETHNICITY: load('festival_nights_ethnicity'),
+  FESTIVAL_NIGHTS_ARCHETYPE: load('festival_nights_archetype'),
+  FESTIVAL_NIGHTS_OUTFIT: load('festival_nights_outfit'),
+  FESTIVAL_NIGHTS_ACCESSORY: load('festival_nights_accessory'),
+  FESTIVAL_NIGHTS_SETTING: load('festival_nights_setting'),
+  FESTIVAL_NIGHTS_ACTION: load('festival_nights_action'),
+  FESTIVAL_NIGHTS_CAMERA_FRAMING: load('festival_nights_camera_framing'),
+  FESTIVAL_NIGHTS_SURPRISE_ELEMENT: load('festival_nights_surprise_element'),
+  FESTIVAL_NIGHTS_DRAMA: load('festival_nights_drama'),
+
+  // mecha-hangars SCENE-led pools (Phase 2.14, second-attempt).
+  MECHA_HANGARS_MECH_CLASS: load('mecha_hangars_mech_class'),
+  MECHA_HANGARS_MECH_POSTURE: load('mecha_hangars_mech_posture'),
+  MECHA_HANGARS_HANGAR_SETTING: load('mecha_hangars_hangar_setting'),
+  MECHA_HANGARS_SCALE_PROVERS: load('mecha_hangars_scale_provers'),
+  MECHA_HANGARS_MECH_DETAIL: load('mecha_hangars_mech_detail'),
+  MECHA_HANGARS_MECH_WEAPONRY_OR_TOOL: load('mecha_hangars_mech_weaponry_or_tool'),
+  MECHA_HANGARS_STEAM_OR_SPARK: load('mecha_hangars_steam_or_spark'),
+  MECHA_HANGARS_LIGHT_SIGNATURE: load('mecha_hangars_light_signature'),
+  MECHA_HANGARS_CAMERA_FRAMING: load('mecha_hangars_camera_framing'),
+  MECHA_HANGARS_SURPRISE_ELEMENT: load('mecha_hangars_surprise_element'),
+  MECHA_HANGARS_DRAMA: load('mecha_hangars_drama'),
+
+  // anime-village SCENE-led pools (Phase 2.13).
+  ANIME_VILLAGE_VILLAGE_ANCHOR: load('anime_village_village_anchor'),
+  ANIME_VILLAGE_ARCHITECTURE: load('anime_village_architecture'),
+  ANIME_VILLAGE_STREETSCAPE_DETAIL: load('anime_village_streetscape_detail'),
+  ANIME_VILLAGE_FOREGROUND_ELEMENT: load('anime_village_foreground_element'),
+  ANIME_VILLAGE_INHABITANT: load('anime_village_inhabitant'),
+  ANIME_VILLAGE_WILDLIFE_OR_OBJECT: load('anime_village_wildlife_or_object'),
+  ANIME_VILLAGE_WEATHER_AIR: load('anime_village_weather_air'),
+  ANIME_VILLAGE_CAMERA_FRAMING: load('anime_village_camera_framing'),
+  ANIME_VILLAGE_SURPRISE_ELEMENT: load('anime_village_surprise_element'),
+  ANIME_VILLAGE_DRAMA: load('anime_village_drama'),
 
   VIBE_COLOR,
 

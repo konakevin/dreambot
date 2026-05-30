@@ -1,52 +1,22 @@
 /**
- * MangaBot festival-nights path — Japanese matsuri / fireworks /
- * lanterns / yukata. Romance-coded summer-night anime keyframe.
+ * MangaBot festival-nights — axis-system (Phase 2.12). Full-bespoke 9 MVP-25.
+ * Japanese matsuri / yukata / yatai / lanterns / fireworks. Shinkai register.
  */
-
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.FESTIVAL_NIGHT_SCENES, 'fn_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are an anime concept-art painter writing a FESTIVAL NIGHTS keyframe for MangaBot. Japanese summer matsuri / hanami-fireworks energy. Lanterns, food stalls, fireworks, riverside-romance. Output wraps with style prefix + suffix.
-
-${blocks.ANIME_ILLUSTRATION_BLOCK}
-
-${blocks.KEYFRAME_COMPOSITION_BLOCK}
-
-${blocks.DENSITY_BLOCK}
-
-${blocks.STORY_MOMENT_BLOCK}
-
-${blocks.NO_NAMED_CHARACTERS_BLOCK}
-
-${blocks.NO_GENERIC_POSE_BLOCK}
-
-${blocks.CULTURAL_RESPECT_BLOCK}
-
-━━━ THE FESTIVAL SCENE ━━━
-${scene}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION CLOSER ━━━
-Hundreds of paper lanterns / food stall density / fireworks-burst-light dominant. Romance-coded summer-night warmth. If a character appears, they are in yukata, mid-stride or mid-glance — never centered-posing.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'MANGABOT_FESTIVAL_NIGHTS',
+  pools: {
+    ethnicity: 'FESTIVAL_NIGHTS_ETHNICITY',
+    archetype: 'FESTIVAL_NIGHTS_ARCHETYPE',
+    skin: 'ANIME_SKIN',
+    eyes: 'ANIME_EYES',
+    hair_color: 'ANIME_HAIR_COLOR',
+    hairstyle: 'ANIME_HAIRSTYLES_FEMALE',
+    outfit: 'FESTIVAL_NIGHTS_OUTFIT',
+    accessory: 'FESTIVAL_NIGHTS_ACCESSORY',
+    setting: 'FESTIVAL_NIGHTS_SETTING',
+    action: 'FESTIVAL_NIGHTS_ACTION',
+    camera_framing: 'FESTIVAL_NIGHTS_CAMERA_FRAMING',
+    surprise_element: 'FESTIVAL_NIGHTS_SURPRISE_ELEMENT',
+    drama: 'FESTIVAL_NIGHTS_DRAMA',
+  },
 };

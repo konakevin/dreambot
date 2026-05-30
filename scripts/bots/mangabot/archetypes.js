@@ -332,4 +332,130 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // ━━━ WAVE 2 — character-led genre paths (2026-05-29) ━━━
+
+  // PATH-BESPOKE — MangaBot occult-tokyo (Phase 2.9). Urban Tokyo + spirits.
+  MANGABOT_OCCULT_TOKYO: {
+    description:
+      'PATH-BESPOKE — MangaBot occult-tokyo (2026-05-29 Phase 2.9). Modern urban Japan with spirit-energy / cursed-tech / ofuda / sigils. Tokyo Ghoul / Jujutsu Kaisen / Mob Psycho / Bleach register. Character ENGAGED with the occult, NOT passive. Anti-back-to-camera.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  // PATH-BESPOKE — MangaBot post-apocalyptic (Phase 2.10). Lone wanderer + ruins.
+  MANGABOT_POST_APOCALYPTIC: {
+    description:
+      'PATH-BESPOKE — MangaBot post-apocalyptic (2026-05-29 Phase 2.10). Quiet decay + nature reclaiming civilization + lone wanderer. Trigun / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register. Character ENGAGED in ruined world (scavenging, sheltering, navigating), not silhouette-on-horizon. Anti-back-to-camera.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  // PATH-BESPOKE — MangaBot beach-episode (Phase 2.11). Anime summer-arc vacation.
+  MANGABOT_BEACH_EPISODE: {
+    description:
+      'PATH-BESPOKE — MangaBot beach-episode (2026-05-29 Phase 2.11). Anime summer-arc vacation paradise. K-On / Free / Lucky-Star / Nichijou register. Character ENGAGED in beach/poolside fun. ANTI-cheesecake (modest swimwear / cover-up / sundress register, NEVER suggestive). Anti-back-to-camera.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  // PATH-BESPOKE — MangaBot festival-nights (Phase 2.12). Yukata at matsuri.
+  MANGABOT_FESTIVAL_NIGHTS: {
+    description:
+      'PATH-BESPOKE — MangaBot festival-nights (2026-05-29 Phase 2.12). Japanese summer matsuri / hanami-fireworks / lantern-stalls. Yukata-coded character ENGAGED with festival (eating yakisoba, holding sparkler, mid-laugh under fireworks). NOT silhouette-watching. Anti-back-to-camera.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  // PATH-BESPOKE — MangaBot mecha-hangars (Phase 2.14, second attempt).
+  // The previous (2026-05-22) axis attempt failed on two Flux gravities:
+  //   1. "anime mech standing arms-out T-pose" default
+  //   2. "Mt-Fuji-without-mech postcard drift" (mech vanishes, landscape wins)
+  // This second attempt explicitly forces LOADED-POSTURE (no T-pose) +
+  // SCALE-PROVERS-IN-FRAME (catwalks/crew/vehicles at the mech's feet) +
+  // mech-fills-50-to-80%-of-frame mandate so the landscape can't eat the mech.
+  // SCENE-LED — mech is HERO, pilot/crew tiny for scale only.
+  MANGABOT_MECHA_HANGARS: {
+    description:
+      'PATH-BESPOKE — MangaBot mecha-hangars (2026-05-29 Phase 2.14 second-attempt). Giant mech is HERO. Gundam / Eva / Patlabor / Macross / Code-Geass register. Anti-T-pose (loaded posture mandate) + anti-Mt-Fuji-drift (mech fills 50-80%) + scale-provers-in-frame (crew/catwalks). SCENE-LED, no character DNA. 10 bespoke axes designed around the two prior failure modes.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'mech_class',
+        'mech_posture',
+        'hangar_setting',
+        'scale_provers',
+        'mech_detail',
+        'mech_weaponry_or_tool',
+        'steam_or_spark',
+        'light_signature',
+        'camera_framing',
+        'surprise_element',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  // PATH-BESPOKE — MangaBot anime-village (Phase 2.13). Village-streetscape SCENE-led.
+  // Different from char-led W1/W2 paths: this is a LANDSCAPE / streetscape with
+  // an optional small inhabitant figure for human scale. Anchor is the village.
+  MANGABOT_ANIME_VILLAGE: {
+    description:
+      'PATH-BESPOKE — MangaBot anime-village (2026-05-29 Phase 2.13). SCENE-LED Japanese small-town / village / mountain-edge / riverside neighborhood streetscape. Mushishi / Spice-and-Wolf / Mononoke pastoral register OR Akihabara / Asakusa modern alleyways. Optional small-scale figure for human scale, NOT hero portrait. Different shape from W1/W2 char-led — uses scene-led axes (anchor / streetscape / architecture).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'village_anchor',
+        'architecture',
+        'streetscape_detail',
+        'foreground_element',
+        'inhabitant',
+        'wildlife_or_object',
+        'weather_air',
+        'camera_framing',
+        'surprise_element',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

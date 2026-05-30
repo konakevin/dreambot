@@ -1329,4 +1329,389 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute ge
 
 Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
+
+  // ━━━ WAVE 2 — character-led genre templates (2026-05-29) ━━━
+
+  // ━━━ MANGABOT_OCCULT_TOKYO ━━━
+  MANGABOT_OCCULT_TOKYO: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ OCCULT DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing an OCCULT-TOKYO keyframe for MangaBot — a solo character engaging with supernatural energy in modern urban Japan. Tokyo Ghoul / Jujutsu Kaisen / Mob Psycho / Bleach register.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+Lead with ethnicity-NOUN.
+
+━━━ AESTHETIC LOCK ━━━
+URBAN-NIGHT + SUPERNATURAL palette — neon-pink / cyan / deep purple / blood-amber / sigil-glow. Ofuda, paper charms, glowing kanji, cursed-energy aura. Wet-pavement reflections. Tokyo alleys, shrines, subway tunnels, rooftop overlooks.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Bones / Mappa / Studio Pierrot tradition. Cel-shaded clean linework, dramatic painterly atmospheric backgrounds with high-contrast cursed-aura glow.
+
+━━━ BANS ━━━
+• NO cheesecake / NO suggestive / NO low-cut
+• NO STATIC POSED THUMBNAIL — engaged with occult moment
+• NO back-to-camera / NO photoreal / NO western-occult (pentagrams / robes — this is JAPANESE occult)
+
+━━━ SOLO CHARACTER ━━━
+ONE character interacting with supernatural energy. Spirits / shikigami / curses / wards may swirl around.
+
+━━━ FRAMING ━━━
+Character at 35-50% of frame. Cursed-aura wraps around. Face clearly readable.
+
+━━━ ARCHETYPE ━━━ ${archetype}
+
+━━━ COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} character with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, with ${accessory}.
+
+━━━ ACTION (occult mid-engagement, FORWARD-FACING) ━━━
+${action}
+
+━━━ SETTING (urban Tokyo + supernatural) ━━━
+${setting}
+Depth: FOREGROUND ofuda/sigil/cursed-prop → MIDGROUND character engaged → DEEP DISTANCE Tokyo neon-haze with spirit-glow.
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [occult action] in [Tokyo setting]"], [modern urban outfit], [DNA], [occult prop], [setting with supernatural energy], [drama if fired], [camera_framing exactly], [neon-occult palette + mood].
+
+CRITICAL: urban-Japan + supernatural-engagement. Forward-facing per camera_framing. Japanese occult vocabulary (ofuda / shimenawa / shikigami / kuji / domain) NOT western.
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
+
+  // ━━━ MANGABOT_POST_APOCALYPTIC ━━━
+  MANGABOT_POST_APOCALYPTIC: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ POST-APOCALYPTIC DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a POST-APOCALYPTIC keyframe for MangaBot — a solo wanderer engaged with the ruined world. Trigun / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register. Quiet decay + nature reclaiming.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+Lead with ethnicity-NOUN.
+
+━━━ AESTHETIC LOCK ━━━
+RUST + MOSS + DUSK palette — rust-orange / sage-moss / faded-teal / amber / dust-grey. Overgrown civilization, vines through girders, shattered glass catching light. Quiet melancholy not bleak grimdark.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Ghibli-late-period / Wit-Studio / Madhouse tradition. Cel-shaded clean linework, painterly atmospheric backgrounds with hazy-distance.
+
+━━━ BANS ━━━
+• NO cheesecake / NO grimdark-horror / NO bleak-zombie
+• NO STATIC POSED THUMBNAIL — engaged with scavenge / shelter / navigate moment
+• NO back-to-camera silhouette-on-horizon (the FAILURE-MODE for this genre)
+
+━━━ SOLO CHARACTER ━━━
+ONE lone wanderer in ruined world. Pet/companion-bot may be implied at midground.
+
+━━━ FRAMING ━━━
+Character at 35-50% of frame. Ruined-structure wraps around. Face clearly readable.
+
+━━━ ARCHETYPE ━━━ ${archetype}
+
+━━━ COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} character with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, with ${accessory}.
+
+━━━ ACTION (post-apoc engaged moment, FORWARD-FACING) ━━━
+${action}
+
+━━━ SETTING (overgrown ruined world) ━━━
+${setting}
+Depth: FOREGROUND debris / artifact → MIDGROUND character engaged → DEEP DISTANCE ruin-vista hazed with dust-light.
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} wanderer [post-apoc action] in [ruin setting]"], [scavenged outfit], [DNA], [survival accessory], [ruined setting with nature reclaiming], [drama if fired], [camera_framing exactly], [rust-moss-dusk palette + mood].
+
+CRITICAL: ENGAGED in ruin, NOT silhouette on horizon. Forward-facing per camera_framing. Quiet decay, not grimdark.
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
+
+  // ━━━ MANGABOT_BEACH_EPISODE ━━━
+  MANGABOT_BEACH_EPISODE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ BEACH DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a BEACH-EPISODE keyframe for MangaBot — anime summer-arc vacation paradise. K-On / Free / Lucky-Star / Nichijou beach-arc register. Bright joy, warm sand, ocean shimmer.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+Lead with ethnicity-NOUN.
+
+━━━ AESTHETIC LOCK ━━━
+SUMMER-PARADISE palette — sky-cyan / sun-yellow / sand-cream / ocean-teal / coral-pink. Sparkling water, palm fronds, shaved-ice colors. Bright joyful warmth.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, KyoAni / P.A. Works summer-arc tradition. Cel-shaded clean linework, painterly bright-blue ocean backgrounds, vivid warm saturation.
+
+━━━ BANS ━━━
+• NO cheesecake / NO bikini-thong / NO oiled-skin closeup / NO suggestive pose
+• Swimwear must be MODEST (rashguard / one-piece / surf-shorts + tee / sundress over swim) — never gratuitous
+• NO STATIC POSED THUMBNAIL — engaged in beach activity
+• NO back-to-camera / NO photoreal
+
+━━━ SOLO CHARACTER ━━━
+ONE character mid-beach activity. Beach-friends/family may be implied at midground (umbrella, picnic, distant swimmers).
+
+━━━ FRAMING ━━━
+Character at 35-50% of frame. Beach + ocean wrap around. Face clearly readable forward or 3/4.
+
+━━━ ARCHETYPE ━━━ ${archetype}
+
+━━━ COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} character with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, with ${accessory}.
+
+━━━ ACTION (beach mid-activity, FORWARD-FACING) ━━━
+${action}
+
+━━━ SETTING (tropical/Japanese seaside) ━━━
+${setting}
+Depth: FOREGROUND beach-prop (shell / boogie-board / shaved-ice) → MIDGROUND character engaged → DEEP DISTANCE ocean-horizon with sparkling water.
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [beach action] at [beach setting]"], [modest beachwear], [DNA], [beach-prop accessory], [seaside with ocean horizon], [drama if fired], [camera_framing exactly], [summer palette + mood].
+
+CRITICAL: bright joyful summer + modest swimwear + engaged activity. Forward-facing per camera_framing. Anti-cheesecake explicit.
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
+
+  // ━━━ MANGABOT_FESTIVAL_NIGHTS ━━━
+  MANGABOT_FESTIVAL_NIGHTS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ FIREWORK / LANTERN DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a FESTIVAL-NIGHTS keyframe for MangaBot — solo character at a Japanese summer matsuri. Yukata / lanterns / fireworks / food-stalls. Shinkai / KyoAni / Mamoru-Hosoda festival-scene register.
+
+━━━ ETHNICITY LOCK ━━━
+${ethnicity}
+Lead with ethnicity-NOUN.
+
+━━━ AESTHETIC LOCK ━━━
+MATSURI-NIGHT palette — lantern-orange / sky-violet / firework-pink / cyan / ember-gold. Paper lanterns strung overhead, stall-light pooling on cobblestone, smoke from yakisoba grill.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Shinkai / KyoAni / Mamoru-Hosoda tradition. Cel-shaded clean linework, painterly nighttime backgrounds with lantern-bloom glow.
+
+━━━ BANS ━━━
+• NO cheesecake / NO yukata-slip / NO suggestive
+• NO STATIC POSED THUMBNAIL — engaged with festival
+• NO back-to-camera silhouette-watching-fireworks (it's the EXACT failure mode the audit named)
+• NO photoreal
+
+━━━ SOLO CHARACTER ━━━
+ONE character engaged at matsuri. Festival-crowd may be implied at midground (paper lanterns, blurred figures, stall-light).
+
+━━━ FRAMING ━━━
+Character at 35-50% of frame. Stalls / lanterns wrap around. Face clearly readable.
+
+━━━ ARCHETYPE ━━━ ${archetype}
+
+━━━ COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} character with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, with ${accessory}.
+
+━━━ ACTION (matsuri mid-engagement, FORWARD-FACING) ━━━
+${action}
+
+━━━ SETTING (matsuri / hanabi / yatai) ━━━
+${setting}
+Depth: FOREGROUND food / festival-prop → MIDGROUND character engaged → DEEP DISTANCE lantern-strings + firework-bloom or stall-glow.
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [festival action] at [matsuri setting]"], [yukata or jinbei outfit], [DNA], [festival prop / food at hand], [matsuri with lanterns and stalls], [drama if fired], [camera_framing exactly], [lantern palette + mood].
+
+CRITICAL: yukata + engaged with festival + lantern-glow. Forward-facing per camera_framing. NEVER back-of-character watching fireworks.
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
+
+  // ━━━ MANGABOT_MECHA_HANGARS — SCENE-LED, mech is hero, second-attempt ━━━
+  // Architecture explicitly built to defeat the two 2026-05-22 failure modes:
+  //   1. T-pose-arms-out default → mech_posture pool seeded forward-loaded only
+  //   2. Mt-Fuji-no-mech postcard → scale_provers + 50-80%-of-frame mandate
+  MANGABOT_MECHA_HANGARS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, mech_class, mech_posture, hangar_setting, scale_provers, mech_detail, mech_weaponry_or_tool, steam_or_spark, light_signature, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ HANGAR EVENT — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing a MECHA-HANGAR keyframe for MangaBot — a SCENE-LED giant-mecha frame where the MECH is the HERO. Gundam-RX78 / Eva / Patlabor / Macross / Code-Geass / Big-O / GitS register. Industrial-scale + dramatic light + dwarf-the-pilot proportions.
+
+⚠️ TWO FAILURE-MODES THIS PATH FIGHTS:
+1. STATIC T-POSE — Flux's default "anime mech standing arms-out at the camera" is BANNED. The mech_posture axis above is the LAW. Render the EXACT loaded posture (kneeling / mid-stride / squatting at maintenance / cockpit-opening / arm-extended-mid-action). NEVER arms-out-T-pose.
+2. MT-FUJI-WITHOUT-MECH DRIFT — landscape eating the mech is BANNED. The mech FILLS 50-80% of the frame. The hangar/setting is BACKGROUND/CONTAINER for the mech, never the postcard hero.
+
+━━━ AESTHETIC LOCK ━━━
+Industrial-mechanical scale + dramatic chiaroscuro lighting + crew-scale-provers in frame. Sodium-vapor / arc-weld blue / overhead-spotlight / engine-glow. Heavy machinery feel.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Sunrise / Khara / Production-IG mecha-keyframe tradition. Cel-shaded hard linework on mechanical surfaces, painterly atmospheric depth on the hangar interior, saturated industrial palette.
+
+━━━ BANS ━━━
+• NO STATIC T-POSE — posture must be LOADED mid-action per the mech_posture axis
+• NO Mt-Fuji-postcard / NO iconic-landscape-eating-mech — mech is 50-80% of frame
+• NO tiny mech in distance / NO mech as backdrop
+• NO photoreal / NO western CGI / NO Real-Steel
+• NO close-up of pilot face — pilot is SCALE PROVER tiny in frame
+• NO hero-character portrait — the MECH is the character
+
+━━━ SCALE MANDATE ━━━
+Scale provers (catwalks / crew / vehicles / scaffolding) MUST be visible at the mech's feet, shoulders, or hands. The mech is BIG and the human-scale elements PROVE it. NEVER a mech with no scale reference.
+
+━━━ FRAMING MANDATE ━━━
+LOW-ANGLE HERO looking UP at the mech, OR 3/4 view at hangar-floor level, OR over-crew-shoulder reveal, OR through-cockpit-canopy reveal, OR between-mech-legs perspective. NEVER a top-down or wide-establishing distant mech.
+
+━━━ MECH CLASS ━━━
+${mech_class}
+
+━━━ MECH POSTURE (the LOADED instant — NEVER T-POSE) ━━━
+${mech_posture}
+
+━━━ HANGAR / SETTING (CONTAINER for the mech, not hero) ━━━
+${hangar_setting}
+
+━━━ SCALE PROVERS (visible at mech's feet / shoulders / hands) ━━━
+${scale_provers}
+
+━━━ MECH SURFACE DETAIL ━━━
+${mech_detail}
+
+━━━ WEAPONRY OR TOOL ━━━
+${mech_weaponry_or_tool}
+
+━━━ STEAM / SPARKS / VAPOR ━━━
+${steam_or_spark}
+
+━━━ LIGHT SIGNATURE ━━━
+${light_signature}
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "[mech_class] [mech_posture] in [hangar_setting], [scale_provers visible]"], [mech surface detail], [weaponry/tool at hand or holstered], [steam/spark atmospheric], [light signature], [drama if fired], [camera_framing exactly], [industrial palette + mood].
+
+CRITICAL: the mech is HERO, fills 50-80% of frame, NEVER T-pose, scale-provers MANDATORY in frame, hangar is CONTAINER not postcard. Multi-tier depth: foreground crew/catwalk → mech mass → hangar interior depth.
+
+Output ONLY raw 100-130 word scene description. NO preamble.`;
+  },
+
+  // ━━━ MANGABOT_ANIME_VILLAGE — SCENE-LED (no character DNA) ━━━
+  MANGABOT_ANIME_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, village_anchor, architecture, streetscape_detail, foreground_element, inhabitant, wildlife_or_object, weather_air, camera_framing, surprise_element, drama } = slots;
+    const dramaSection = drama ? `\n━━━ VILLAGE DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    return `You are an anime concept-art painter writing an ANIME-VILLAGE keyframe for MangaBot — a SCENE-LED village / streetscape / mountain-edge neighborhood as the HERO. Mushishi / Spice-and-Wolf / Mononoke pastoral OR Akihabara / Asakusa modern alleyways. Inhabitant figure for human scale, NOT a hero portrait.
+
+━━━ AESTHETIC LOCK ━━━
+PAINTERLY-ANIME VILLAGE palette — soft warm or cool earthy tones (wood / clay / moss / dawn-pink / dusk-amber). Architectural detail leads. Atmospheric depth haze.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, Ghibli / Kabaneri / Mushishi / Aria tradition. Cel-shaded crisp architecture, painterly atmospheric backgrounds, deep multi-tier depth.
+
+━━━ BANS ━━━
+• NO hero portrait / NO close-up face / NO cheesecake
+• NO STATIC POSTCARD — pick a LOADED instant (vendor mid-pour / lantern lighter / cat mid-leap)
+• NO photoreal / NO CGI
+
+━━━ SCENE-LED COMPOSITION ━━━
+Village / streetscape is HERO. Tiny inhabitant figure (5-15% of frame) provides scale — never close-up. Architecture and atmosphere drive the frame.
+
+━━━ FRAMING ━━━
+WIDE establishing shot or 3/4 architectural angle. Inhabitant small, not close-up.
+
+━━━ VILLAGE ANCHOR ━━━
+${village_anchor}
+
+━━━ ARCHITECTURE ━━━
+${architecture}
+
+━━━ STREETSCAPE DETAIL (midground) ━━━
+${streetscape_detail}
+
+━━━ FOREGROUND ELEMENT ━━━
+${foreground_element}
+
+━━━ INHABITANT (scale figure, small) ━━━
+${inhabitant}
+
+━━━ WILDLIFE / OBJECT ━━━
+${wildlife_or_object}
+
+━━━ WEATHER + AIR ━━━
+${weather_air}
+
+${dramaSection}━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "[village_anchor] with [architecture] under [light_quality]"], [foreground detail with depth], [midground streetscape activity], [tiny inhabitant for scale], [wildlife/object], [weather + atmospheric haze], [drama if fired], [camera_framing exactly], [village palette + mood].
+
+CRITICAL: VILLAGE is HERO. Inhabitant tiny for scale. Deep multi-tier depth (foreground → midground activity → architectural mass → atmospheric distance). NEVER a hero-portrait. NEVER a static postcard.
+
+Output ONLY raw 90-120 word scene description. NO preamble.`;
+  },
 };

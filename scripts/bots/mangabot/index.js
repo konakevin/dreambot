@@ -150,6 +150,12 @@ module.exports = {
       'slice-of-life',
       'cherry-blossom-romance',
       'rooftop-sunsets',
+      'occult-tokyo',
+      'post-apocalyptic',
+      'beach-episode',
+      'festival-nights',
+      'anime-village',
+      'mecha-hangars',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista

@@ -1,50 +1,22 @@
 /**
- * MangaBot post-apocalyptic path — overgrown civilization, quiet decay.
- * Trigun / Made-in-Abyss / Girls'-Last-Tour / Yokohama-Kaidashi aesthetic.
+ * MangaBot post-apocalyptic — axis-system (Phase 2.10). Full-bespoke 9 MVP-25.
+ * Lone wanderer + overgrown ruins. Trigun / Made-in-Abyss / Girls-Last-Tour register.
  */
-
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.POST_APOCALYPTIC_SCENES, 'pa_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are an anime concept-art painter writing a POST-APOCALYPTIC keyframe for MangaBot. Quiet decay + nature reclaiming civilization + lone-wanderer melancholy. Output wraps with style prefix + suffix.
-
-${blocks.ANIME_ILLUSTRATION_BLOCK}
-
-${blocks.KEYFRAME_COMPOSITION_BLOCK}
-
-${blocks.DENSITY_BLOCK}
-
-${blocks.STORY_MOMENT_BLOCK}
-
-${blocks.NO_NAMED_CHARACTERS_BLOCK}
-
-${blocks.NO_GENERIC_POSE_BLOCK}
-
-━━━ THE POST-APOCALYPTIC SCENE ━━━
-${scene}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION CLOSER ━━━
-Quiet, wistful, melancholic. Vines / moss / rust / faded signage as mandatory texture. Beauty in decay. NEVER horror, NEVER zombies, NEVER active war — this is AFTER, peaceful, nature-winning. Single lone wanderer or empty.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'MANGABOT_POST_APOCALYPTIC',
+  pools: {
+    ethnicity: 'POST_APOCALYPTIC_ETHNICITY',
+    archetype: 'POST_APOCALYPTIC_ARCHETYPE',
+    skin: 'ANIME_SKIN',
+    eyes: 'ANIME_EYES',
+    hair_color: 'ANIME_HAIR_COLOR',
+    hairstyle: 'ANIME_HAIRSTYLES_FEMALE',
+    outfit: 'POST_APOCALYPTIC_OUTFIT',
+    accessory: 'POST_APOCALYPTIC_ACCESSORY',
+    setting: 'POST_APOCALYPTIC_SETTING',
+    action: 'POST_APOCALYPTIC_ACTION',
+    camera_framing: 'POST_APOCALYPTIC_CAMERA_FRAMING',
+    surprise_element: 'POST_APOCALYPTIC_SURPRISE_ELEMENT',
+    drama: 'POST_APOCALYPTIC_DRAMA',
+  },
 };
