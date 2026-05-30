@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -142,6 +142,23 @@ export default function PublicProfileScreen() {
   const handleScrollProgress = (y: number) => {
     scrollY.value = y;
   };
+
+  // ── Top-bar tap-to-top ──
+  // Tap the collapsed avatar / name in the top bar to scroll the
+  // current sub-view back to the top. Bumps a token consumed by both
+  // PostGrid (scrollToTopToken) and the followers/following FlatList
+  // ref below — whichever sub-view is mounted gets the scroll.
+  const [scrollToTopBump, setScrollToTopBump] = useState(0);
+  const userListRef = useRef<FlatList<FollowUser>>(null);
+  const handleTopBarTap = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setScrollToTopBump((b) => b + 1);
+  }, []);
+  useEffect(() => {
+    if (scrollToTopBump > 0) {
+      userListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }
+  }, [scrollToTopBump]);
 
   useEffect(() => {
     if (showAvatarPreview) {
@@ -273,18 +290,29 @@ export default function PublicProfileScreen() {
       <TouchableOpacity onPress={() => router.back()} style={styles.iconButton} hitSlop={12}>
         <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
       </TouchableOpacity>
-      <Animated.View style={[styles.compactAvatarWrap, compactAvatarStyle]}>
-        {profile.avatar_url && (
-          <Image
-            source={{ uri: profile.avatar_url }}
-            style={styles.compactAvatar}
-            contentFit="cover"
-          />
-        )}
-      </Animated.View>
-      <Animated.Text style={[styles.compactName, compactNameStyle]} numberOfLines={1}>
-        {heroNameForBar}
-      </Animated.Text>
+      {/* Tap-to-top target — covers the collapsed avatar + name slot.
+          At scrollY=0 the avatar collapses to width 0 and the name is
+          opacity 0; once the user scrolls past the threshold the area
+          grows and the gesture becomes meaningfully discoverable. */}
+      <TouchableOpacity
+        onPress={handleTopBarTap}
+        style={styles.topBarIdentitySlot}
+        activeOpacity={0.7}
+        accessibilityLabel="Scroll to top"
+      >
+        <Animated.View style={[styles.compactAvatarWrap, compactAvatarStyle]}>
+          {profile.avatar_url && (
+            <Image
+              source={{ uri: profile.avatar_url }}
+              style={styles.compactAvatar}
+              contentFit="cover"
+            />
+          )}
+        </Animated.View>
+        <Animated.Text style={[styles.compactName, compactNameStyle]} numberOfLines={1}>
+          {heroNameForBar}
+        </Animated.Text>
+      </TouchableOpacity>
       <View style={{ flex: 1 }} />
       <Animated.View pointerEvents="none" style={[styles.topBarBottomBorder, topBarBorderStyle]} />
     </Animated.View>
@@ -392,6 +420,7 @@ export default function PublicProfileScreen() {
               ListHeaderComponent={header}
               highlightPostId={viewedPost}
               onScrollProgress={handleScrollProgress}
+              scrollToTopToken={scrollToTopBump}
             />
           ) : (
             <ScrollView
@@ -434,6 +463,7 @@ export default function PublicProfileScreen() {
         {stickyTopBar}
         <FlatList<FollowUser>
           key="users"
+          ref={userListRef}
           data={listData}
           keyExtractor={(item) => item.id}
           refreshControl={
@@ -493,6 +523,14 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
     backgroundColor: colors.background,
     zIndex: 10,
+  },
+  // Wraps the collapsed avatar + name as a single tap-to-top target.
+  // No flex:1 — the slot's width grows with the animated avatar/name so
+  // the tap area mirrors the visible content (tiny at scrollY=0, fills
+  // out as the user scrolls past the threshold).
+  topBarIdentitySlot: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   topBarBottomBorder: {
     position: 'absolute',

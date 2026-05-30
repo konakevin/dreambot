@@ -137,6 +137,29 @@ export default function ProfileScreen() {
     nav.push('/settings/edit-profile');
   }, []);
 
+  // ── Top-bar tap-to-top ──
+  // Tapping the avatar / @handle in the sticky top bar scrolls the
+  // current sub-view back to the top. Works in both code paths:
+  //   • Posts/Dreams/Saved → bumps PostGrid's scrollToTopToken
+  //   • Followers/Following → the userListRef + the effect below
+  // We bump a local counter rather than reusing profileResetToken
+  // (which ALSO resets the active tab + invalidates queries — too
+  // heavy for a simple scroll-to-top intent).
+  const [scrollToTopBump, setScrollToTopBump] = useState(0);
+  const userListRef = useRef<FlatList<FollowUser>>(null);
+  const handleTopBarTap = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setScrollToTopBump((b) => b + 1);
+  }, []);
+  useEffect(() => {
+    if (scrollToTopBump > 0) {
+      userListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }
+  }, [scrollToTopBump]);
+  // Combined token for PostGrid — fires for either the tab-bar re-tap
+  // (profileResetToken) OR a top-bar tap (scrollToTopBump).
+  const combinedScrollToTopToken = profileResetToken + scrollToTopBump;
+
   // ── Collapsing hero on scroll ──
   // scrollY is fed by both code paths (PostGrid via onScrollProgress, the
   // followers/following FlatList via its own onScroll) so the sticky top
@@ -186,7 +209,18 @@ export default function ProfileScreen() {
   // mark the boundary visually.
   const stickyTopBar = (
     <Animated.View style={styles.topBar}>
-      <View style={styles.topBarLeft}>
+      {/* TouchableOpacity hosts the tap-to-top gesture. Its hit area
+          tracks the visible content — at scrollY=0 the avatar collapses
+          to width 0 and the handle is opacity 0 (text still has layout
+          width but is invisible), so the tap target is effectively
+          empty. Once scrolled past the threshold the area grows and
+          the gesture becomes meaningfully discoverable. */}
+      <TouchableOpacity
+        onPress={handleTopBarTap}
+        style={styles.topBarLeft}
+        activeOpacity={0.7}
+        accessibilityLabel="Scroll to top"
+      >
         <Animated.View
           style={[
             styles.compactAvatarWrap,
@@ -207,7 +241,7 @@ export default function ProfileScreen() {
         >
           @{user?.user_metadata?.username ?? 'you'}
         </Animated.Text>
-      </View>
+      </TouchableOpacity>
       <View style={styles.topBarActions}>
         <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
           <View style={styles.inboxBubbleWrap}>
@@ -320,7 +354,7 @@ export default function ProfileScreen() {
           isOwn={activeTab === 'posts' || activeTab === 'dreams'}
           emptyText={emptyMap[activeTab]}
           ListHeaderComponent={header}
-          scrollToTopToken={profileResetToken}
+          scrollToTopToken={combinedScrollToTopToken}
           showPrivateBadge={activeTab === 'dreams'}
           highlightPostId={currentPostId ?? undefined}
           onScrollProgress={handleScrollProgress}
@@ -338,6 +372,7 @@ export default function ProfileScreen() {
       {stickyTopBar}
       <FlatList<FollowUser>
         key="users"
+        ref={userListRef}
         data={listData}
         refreshControl={
           <RefreshControl
