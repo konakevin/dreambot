@@ -2182,6 +2182,21 @@ export type Database = {
         Returns: undefined;
       };
       // ─── /Phase 1 grouped notifications ─────────────────────────────────
+      // ─── Phase 3 notification preferences (migration 205) ───────────────
+      get_notification_settings: {
+        Args: { p_user_id?: string };
+        Returns: { push_paused: boolean; prefs: Record<string, boolean> };
+      };
+      set_notification_pref: {
+        Args: { p_category: string; p_channel: string; p_enabled: boolean };
+        Returns: undefined;
+      };
+      set_push_paused: { Args: { p_paused: boolean }; Returns: undefined };
+      category_enabled_for: {
+        Args: { p_user_id: string; p_category: string; p_channel: string };
+        Returns: boolean;
+      };
+      // ─── /Phase 3 notification preferences ──────────────────────────────
       grant_sparkles: {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
         Returns: undefined;

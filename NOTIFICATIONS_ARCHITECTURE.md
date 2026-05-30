@@ -251,10 +251,13 @@ Discovery: link from Settings index ("Notifications") + a one-time prompt the fi
 8. **`send-push` extended** — when `aggregated: true`, queries the group's current unread state for `actor_count` + the second-most-recent actor's username, then `getAggregatedNotificationContent(type, latestActorName, secondActorName, actorCount, body)` builds the right copy line (`Alice liked` / `Alice and Bob liked` / `Alice and 12 others liked`). Self-events (`dream_generated`, `download_ready`) skip aggregation. Also fixed: `post_like` / `post_favorite` / `comment_like` previously fell through to `"New notification"` in the single-actor switch — now have proper titles.
 9. **Revert plan** — restore migration 196's `notify_send_push()` body (single CREATE OR REPLACE) and the trigger fires send-push directly again; `pending_push_groups` becomes a quiet unused table.
 
-### Phase 3 — Preferences
-8. `notification_preferences` + `notification_settings` migrations.
-9. `app/settings/notifications.tsx` UI + hooks.
-10. Pref checks in `get_inbox` (inbox channel) and in the push worker (push channel + `push_paused`).
+### Phase 3 — Preferences ✅ SHIPPED (migration 205 + settings screen)
+10. **Migration 205** — `notification_settings(user_id PK, push_paused, updated_at)` + `notification_preferences(user_id, category, channel, enabled, updated_at, PK(user_id, category, channel))`. Both tables RLS-enabled, owner-only select/upsert/update.
+11. **Helper `category_enabled_for(user_id, category, channel) → boolean`** — encodes D8 (`Your dreams` + inbox → always true), D10 (master `push_paused` → overrides every per-category push pref), and the sparse-default rule (missing row → enabled).
+12. **Public RPCs** — `get_notification_settings(user_id?) → jsonb` (single-shot read for the settings screen, sparse `{ push_paused, prefs: { "<cat>|<chan>": bool, ... } }`), `set_notification_pref(category, channel, enabled)` (upsert + D8 server-side reject), `set_push_paused(paused)` (upsert into notification_settings).
+13. **`drain_pending_push_groups()` patched** — before each pg_net POST, calls `category_enabled_for(recipient, notification_category(type), 'push')`. Disabled = silently drop the POST (queue row already deleted by atomic claim); inbox row landed independently.
+14. **`get_inbox` + `get_unread_group_count` patched** — both filter through `category_enabled_for(p_user_id, notification_category(n.type), 'inbox')`. Disabled inbox categories disappear from the feed AND the badge. Notification rows are NOT filtered at write time, so re-enabling instantly resurfaces past events.
+15. **Client** — `useNotificationSettings`, `useToggleNotificationPref`, `useTogglePushPaused` (all optimistic, settle-time invalidates `notificationSettings` + `inboxGrouped`/`unreadGroupCount` on inbox-channel changes). New screen `app/settings/notifications.tsx` — master "Push notifications" switch (inverted from `push_paused`) + 7×2 toggle grid with "Your dreams" inbox visually locked + footer copy. Linked from `app/settings/index.tsx`.
 
 ### Phase 4 — Cleanup
 11. Replace the body-prefix parsing hack (`wish:` / `welcome:` / `dream:` / `download:` magic strings) with a proper `subtype text` column.
@@ -281,9 +284,10 @@ Discovery: link from Settings index ("Notifications") + a one-time prompt the fi
 - `pending_push_groups` queue depth stays at 0 between bursts (drain runs cleanly). ✅ verified post-deploy.
 
 **Phase 3:**
-- Toggle "Likes / Push" off → next like still lands in inbox, no push.
-- "Push notifications" master off → nothing pushes; inbox unaffected.
-- "Your dreams / In-app" toggle is disabled in UI (forced on).
+- Toggle "Likes / Push" off → next like still lands in inbox, no push. ✅ (drain checks `category_enabled_for`).
+- "Push notifications" master off → nothing pushes; inbox unaffected. ✅ (helper short-circuits push channel).
+- "Your dreams / In-app" toggle is disabled in UI (forced on). ✅ (Switch `disabled` + lock icon; `set_notification_pref` raises on the server).
+- Disable an inbox category → groups disappear from `get_inbox` + badge drops; re-enable → instantly resurfaces. ✅ (no write-time filtering).
 
 ---
 
