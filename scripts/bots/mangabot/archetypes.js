@@ -181,6 +181,32 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // PATH-BESPOKE — MangaBot slice-of-life (2026-05-29 Phase 2.6).
+  // Everyday mundane-cozy moments. K-On / Tamako Market / Aria / late-night Tokyo register.
+  MANGABOT_SLICE_OF_LIFE: {
+    description:
+      'PATH-BESPOKE — MangaBot slice-of-life (2026-05-29 Phase 2.6). Everyday cozy mundane moments — K-On / Tamako Market / Aria / late-night Tokyo register. Different from kawaii (cute) and cherry-blossom-romance (romantic) — slice-of-life is REALISTIC everyday with subtle wonder. Forward-facing engaged with everyday objects/contexts.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   // PATH-BESPOKE — MangaBot kawaii (2026-05-29 Phase 2.5).
   // Cozy cute moments. Sanrio / lolita / Pop-Mart-vinyl-cute / character-cafe tradition.
   MANGABOT_KAWAII: {

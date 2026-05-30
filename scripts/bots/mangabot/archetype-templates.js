@@ -574,6 +574,95 @@ Open with the scene-type composition + camera framing, then weave in the four de
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
   },
 
+  // ━━━ MANGABOT_SLICE_OF_LIFE ━━━
+  MANGABOT_SLICE_OF_LIFE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+    const dramaSection = drama
+      ? `\n━━━ EVERYDAY MOMENT — quiet drama in scene ━━━\n${drama}\n\nSubtle everyday event — rain breaking / sunlight shifting / passing breeze — visible but understated.\n\n`
+      : '';
+    return `You are an anime concept-art painter writing a SLICE-OF-LIFE keyframe for MangaBot — an ANY-GENDER character in a quiet everyday moment. K-On / Tamako Market / Aria / Yotsuba / late-night Tokyo / cozy-realism tradition. Subtle warmth, mundane wonder.
+
+━━━ ETHNICITY ━━━
+${ethnicity}
+Per painted-medium lesson: ethnicity-NOUN unlocks diverse rendering. Lead with it.
+
+━━━ SLICE-OF-LIFE AESTHETIC LOCK ━━━
+Cozy-realist, NOT sparkly-magical. Naturalistic palette — soft warm or cool light, gentle atmosphere. Subtle wonder. K-On / Tamako Market / Aria-style cozy intimacy.
+
+━━━ ANIME MEDIUM ━━━
+Hand-drawn anime, KyoAni / Tamako-Market / K-On / Aria tradition. Cel-shaded clean linework, soft painterly backgrounds, naturalistic palette.
+
+━━━ BANS ━━━
+• NO sparkle-stack (kawaii territory) / NO peak-magical / NO combat / NO transformation
+• NO STATIC POSED THUMBNAIL — engaged with everyday task
+• NO back-to-camera / NO photoreal / NO cheesecake
+
+━━━ SOLO CHARACTER ━━━
+ONE character engaged in everyday moment. Cat/pet/partner may be implied at midground.
+
+━━━ CHARACTER IS THE FOCUS ━━━
+Character at 35-50% of frame. Setting wraps around engaged action. Face / everyday-object CLEARLY READABLE.
+
+━━━ ARCHETYPE ━━━
+${archetype}
+
+━━━ COMPACT BIO ━━━
+A ${ethnicity.split(/[,:]/)[0]} character with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, with ${accessory}.
+
+━━━ ACTION (everyday moment, FORWARD-FACING) ━━━
+${action}
+Engaged in everyday task. Eye direction per camera_framing.
+
+━━━ SETTING (everyday context) ━━━
+${setting}
+Depth: FOREGROUND everyday object → MIDGROUND character + action → DEEP DISTANCE everyday atmospheric.
+
+${dramaSection}━━━ SURPRISE ELEMENT (everyday detail) ━━━
+${surprise_element}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [everyday action] in [setting]"], [casual outfit], [DNA], [everyday accessory at hand], [setting wrapping with mundane warmth], [drama if fired], [camera_framing exactly], [palette + mood].
+
+CRITICAL: cozy-realism not sparkle-magic. Engaged with everyday task. Forward-facing per camera_framing.
+
+Output ONLY raw 80-120 word scene description. NO preamble.`;
+  },
+
   // ━━━ MANGABOT_KAWAII ━━━
   // Cozy cute moments. Sanrio/lolita/character-cafe register. Gentle.
   MANGABOT_KAWAII: ({ slots, sharedDNA, vibeDirective }) => {

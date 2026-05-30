@@ -147,6 +147,7 @@ module.exports = {
       'magical-girl',
       'shonen-action',
       'kawaii',
+      'slice-of-life',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista

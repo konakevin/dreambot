@@ -194,6 +194,17 @@ module.exports = {
   KAWAII_SURPRISE_ELEMENT: load('kawaii_surprise_element'),
   KAWAII_DRAMA: load('kawaii_drama'),
 
+  // slice-of-life path-bespoke pools (Phase 2.6).
+  SLICE_OF_LIFE_ETHNICITY: load('slice_of_life_ethnicity'),
+  SLICE_OF_LIFE_ARCHETYPE: load('slice_of_life_archetype'),
+  SLICE_OF_LIFE_OUTFIT: load('slice_of_life_outfit'),
+  SLICE_OF_LIFE_ACCESSORY: load('slice_of_life_accessory'),
+  SLICE_OF_LIFE_SETTING: load('slice_of_life_setting'),
+  SLICE_OF_LIFE_ACTION: load('slice_of_life_action'),
+  SLICE_OF_LIFE_CAMERA_FRAMING: load('slice_of_life_camera_framing'),
+  SLICE_OF_LIFE_SURPRISE_ELEMENT: load('slice_of_life_surprise_element'),
+  SLICE_OF_LIFE_DRAMA: load('slice_of_life_drama'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {
