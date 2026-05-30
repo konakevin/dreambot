@@ -26,6 +26,9 @@ import { useUnreadGroupCount } from '@/hooks/useUnreadGroupCount';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { VibeProfilePeek } from '@/components/VibeProfilePeek';
+import { CastPeek } from '@/components/CastPeek';
+import { useMyVibeProfile } from '@/hooks/useMyVibeProfile';
 import { colors } from '@/constants/theme';
 import { useFocusEffect } from '@react-navigation/native';
 import { trackProfileViewed } from '@/lib/analytics';
@@ -74,6 +77,9 @@ export default function ProfileScreen() {
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
+  // Inline signature peeks (aesthetics + mediums + cast). Owner-only by
+  // RLS; cross-user peek would need a sanitized RPC.
+  const { data: myVibe } = useMyVibeProfile();
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
   );
@@ -109,19 +115,16 @@ export default function ProfileScreen() {
     setActiveTab(tab as Tab);
   }
 
-  // System share-sheet handler for the [Share] button on the profile
-  // header. Web fallback at /user/<id> doesn't exist yet (registered in
-  // AASA but no Next page), so we share an App Store URL + the @handle.
-  // Anyone with the app installed → opens the app via the App Store
-  // listing's universal link; anyone without → lands on the App Store
-  // product page. Replace with /user/<id> URL once dreambot-web ships
-  // the public profile page.
+  // System share-sheet handler for the [Share] button. Universal link
+  // (`/user/<id>`) opens directly in the app for users with it installed
+  // (AASA-registered) and lands on the public web profile for everyone
+  // else — that web page itself has an "Open in DreamBot" CTA.
   const handleShareProfile = useCallback(async () => {
     if (!user) return;
     const handle = user.user_metadata?.username ?? 'someone';
     try {
       await Share.share({
-        message: `Check out @${handle} on DreamBot ✨ https://apps.apple.com/app/id6761505205`,
+        message: `Check out @${handle} on DreamBot ✨ https://dreambotapp.com/user/${user.id}`,
       });
     } catch {
       /* user cancelled — no-op */
@@ -174,7 +177,14 @@ export default function ProfileScreen() {
         onStatsPress={handleStatsTabChange}
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
-      />
+      >
+        <VibeProfilePeek
+          aesthetics={myVibe?.aesthetics ?? []}
+          art_styles={myVibe?.art_styles ?? []}
+          onPress={handleEditProfile}
+        />
+        <CastPeek cast={myVibe?.cast ?? []} onPress={() => nav.push('/settings/dream-cast')} />
+      </ProfileHeader>
 
       {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;
           hidden when the user has tapped Followers/Following on the stats

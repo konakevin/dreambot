@@ -25,6 +25,7 @@
  * switching stay owned by the parent so this component is pure layout.
  */
 
+import type { ReactNode } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -45,6 +46,13 @@ interface BaseProps {
   onStatsPress: (tab: StatsTab) => void;
   /** Tap on the avatar (preview / change). Optional. */
   onAvatarPress?: () => void;
+  /**
+   * Slot rendered between the identity text and the action pill row. Use
+   * for DreamBot-signature inline elements like VibeProfilePeek and
+   * CastPeek. Optional — when null/undefined, the action pills sit
+   * directly under the bio.
+   */
+  children?: ReactNode;
 }
 
 interface OwnVariant extends BaseProps {
@@ -162,6 +170,11 @@ export function ProfileHeader(props: Props) {
         )}
         {hasBio && <Text style={styles.bio}>{bio}</Text>}
       </View>
+
+      {/* Row 2.5 — optional DreamBot-signature peek slots (vibe + cast).
+          Renders as children passed by the parent so this component
+          doesn't take a dependency on the recipe shape. */}
+      {props.children}
 
       {/* Row 3 — action pills */}
       {props.variant === 'own' ? (
