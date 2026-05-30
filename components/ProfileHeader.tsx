@@ -157,19 +157,29 @@ export function ProfileHeader(props: Props) {
         </View>
       )}
 
-      {/* Row 2.5 — plain-text stats line. Posts is plain; Followers +
-          Following are tappable (open the respective list views) —
-          mirrors X's interaction pattern. */}
+      {/* Row 2.5 — plain-text stats line. All three items are tappable
+          and notify the parent via onStatsPress. The parent decides
+          what each does — own + public profile use 'posts' to switch
+          BACK to the posts grid (from the followers/following list
+          sub-views), and 'followers'/'following' to switch INTO those
+          lists. Each item gets its own Pressable + paddingVertical
+          for a comfortable tap target. */}
       <View style={styles.statsRow}>
-        <Text style={styles.statsItem}>
-          <Text style={styles.statsCount}>{postCount}</Text>{' '}
-          <Text style={styles.statsLabel}>{postCount === 1 ? 'Post' : 'Posts'}</Text>
-        </Text>
+        <Pressable
+          onPress={() => onStatsPress('posts')}
+          hitSlop={8}
+          style={({ pressed }) => [styles.statsTap, pressed && { opacity: 0.6 }]}
+        >
+          <Text style={styles.statsItem}>
+            <Text style={styles.statsCount}>{postCount}</Text>{' '}
+            <Text style={styles.statsLabel}>{postCount === 1 ? 'Post' : 'Posts'}</Text>
+          </Text>
+        </Pressable>
         <Text style={styles.statsDivider}>·</Text>
         <Pressable
           onPress={() => onStatsPress('followers')}
-          hitSlop={4}
-          style={({ pressed }) => pressed && { opacity: 0.6 }}
+          hitSlop={8}
+          style={({ pressed }) => [styles.statsTap, pressed && { opacity: 0.6 }]}
         >
           <Text style={styles.statsItem}>
             <Text style={styles.statsCount}>{followerCount}</Text>{' '}
@@ -179,8 +189,8 @@ export function ProfileHeader(props: Props) {
         <Text style={styles.statsDivider}>·</Text>
         <Pressable
           onPress={() => onStatsPress('following')}
-          hitSlop={4}
-          style={({ pressed }) => pressed && { opacity: 0.6 }}
+          hitSlop={8}
+          style={({ pressed }) => [styles.statsTap, pressed && { opacity: 0.6 }]}
         >
           <Text style={styles.statsItem}>
             <Text style={styles.statsCount}>{followingCount}</Text>{' '}
@@ -283,18 +293,24 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   // Plain-text stats row — replaces the 3-column block that used to
-  // live beside the avatar. Posts / Followers / Following separated by
-  // mid-dots. The two list-bearing ones (Followers, Following) are
-  // wrapped in Pressables; Posts is plain text.
+  // live beside the avatar. All three items wrap in Pressables so the
+  // parent can hook each one (Posts → switch to grid sub-view,
+  // Followers/Following → switch to their list views).
   statsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    marginTop: 6,
+    marginTop: 8,
+  },
+  // Each pressable gets a bit of vertical padding so the tap target is
+  // comfortably finger-sized (was previously the text's natural ~15px
+  // height — too small to land reliably).
+  statsTap: {
+    paddingVertical: 4,
   },
   statsItem: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: 15,
   },
   statsCount: {
     color: colors.textPrimary,
@@ -305,8 +321,8 @@ const styles = StyleSheet.create({
   },
   statsDivider: {
     color: colors.textSecondary,
-    fontSize: 13,
-    marginHorizontal: 6,
+    fontSize: 15,
+    marginHorizontal: 8,
   },
   identityBlock: {
     marginTop: 10,
