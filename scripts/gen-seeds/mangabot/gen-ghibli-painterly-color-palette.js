@@ -7,7 +7,7 @@ generatePool({
   append: false, // R1 rewrite — broaden the saturation range
   metaPrompt: (n) => `Write ${n} COLOR PALETTE entries for a MangaBot ghibli-painterly keyframe. EXPLICITLY SPAN TWO REGISTERS so the path delivers RANGE across batches. Per Kevin's 37-heart spread, his hearts include both soft-pastel Whisper-of-the-Heart frames AND bold-saturated Castle-in-the-Sky / Demon-Slayer frames. EACH entry MUST open with the register name in CAPS so downstream Sonnet honors it.
 
-Each entry: 12-22 words. Open with `MUTED:` or `SATURATED:` or `PASTEL:` so the register is unmistakable.
+Each entry: 12-22 words. Open with "MUTED:" or "SATURATED:" or "PASTEL:" so the register is unmistakable.
 
 REGISTER SPLIT (25 bespoke entries — equal weight to all three):
 - 40% SATURATED VIBRANT (bold high-chroma — Castle-in-the-Sky / Spirited-Away exteriors / Mononoke firelight / Demon-Slayer-bright)
