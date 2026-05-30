@@ -27,6 +27,15 @@ import { OnboardingFooter } from './OnboardingFooter';
 import type { DreamCastMember, CastRelationship } from '@/types/vibeProfile';
 
 interface Props {
+  /**
+   * When true, the component renders the slot list + privacy note WITHOUT
+   * the outer ScrollView and the onboarding hero text. Used by the Edit
+   * Profile screen which embeds this inline beneath its own form fields
+   * and supplies its own ScrollView. When false (default — onboarding +
+   * /settings/dream-cast), the component renders standalone with hero
+   * + scrolling chrome.
+   */
+  embedded?: boolean;
   onNext: () => void;
   onBack: () => void;
 }
@@ -212,7 +221,7 @@ function CastSlot({
   );
 }
 
-export function DreamCastStep({ onNext, onBack }: Props) {
+export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
   const isEditing = useOnboardingStore((s) => s.isEditing);
   const dreamCast = useOnboardingStore((s) => s.profile.dream_cast);
   const setCastMember = useOnboardingStore((s) => s.setCastMember);
@@ -444,6 +453,36 @@ export function DreamCastStep({ onNext, onBack }: Props) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }
 
+  // When embedded (Edit Profile inline), skip the outer ScrollView, the
+  // hero copy, and the OnboardingFooter — the host screen supplies its
+  // own scroll surface, header, and Save action.
+  const innerSlots = (
+    <>
+      {SLOTS.map((slot) => (
+        <CastSlot
+          key={slot.role}
+          config={slot}
+          member={getMember(slot.role)}
+          onUpload={handleUpload}
+          onRemove={handleRemove}
+          onRelationship={handleRelationship}
+          uploading={uploading}
+        />
+      ))}
+      <View style={s.privacyNote}>
+        <Ionicons name="lock-closed" size={13} color={colors.textSecondary} />
+        <Text style={s.privacyNoteText}>
+          Your photo is only used to place your likeness into your dreams. It&apos;s never displayed
+          publicly. Your dreams are 100% private unless you choose to share them.
+        </Text>
+      </View>
+    </>
+  );
+
+  if (embedded) {
+    return <View>{innerSlots}</View>;
+  }
+
   return (
     <View style={shared.root}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
@@ -453,25 +492,7 @@ export function DreamCastStep({ onNext, onBack }: Props) {
           get scenes of you two together. Optional — but highly recommended.
         </Text>
         <View style={{ height: 16 }} />
-        {SLOTS.map((slot) => (
-          <CastSlot
-            key={slot.role}
-            config={slot}
-            member={getMember(slot.role)}
-            onUpload={handleUpload}
-            onRemove={handleRemove}
-            onRelationship={handleRelationship}
-            uploading={uploading}
-          />
-        ))}
-
-        <View style={s.privacyNote}>
-          <Ionicons name="lock-closed" size={13} color={colors.textSecondary} />
-          <Text style={s.privacyNoteText}>
-            Your photo is only used to place your likeness into your dreams. It&apos;s never
-            displayed publicly. Your dreams are 100% private unless you choose to share them.
-          </Text>
-        </View>
+        {innerSlots}
       </ScrollView>
 
       {!isEditing && (

@@ -31,12 +31,15 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
 import { useAuthStore } from '@/store/auth';
+import { useOnboardingStore } from '@/store/onboarding';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useAvatarUpload } from '@/hooks/useAvatarUpload';
+import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
+import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 
 const DISPLAY_NAME_MAX = 50;
 const BIO_MAX = 160;
@@ -47,13 +50,16 @@ interface DrillRow {
   route: string;
 }
 
+// Mediums + Vibes drill-ins were removed when Kevin pivoted away from
+// user-curated taste (the nightly engine rolls these on its own, and the
+// Create screen exposes the full catalog every render). Dream Cast moved
+// from a drill-in row to an inline section below the bio so users can
+// swap face photos directly on this screen instead of pushing a separate
+// route.
 const DREAM_IDENTITY_ROWS: DrillRow[] = [
-  { icon: 'color-palette-outline', label: 'Mediums', route: '/settings/art-styles' },
-  { icon: 'sparkles-outline', label: 'Vibes', route: '/settings/vibes' },
   { icon: 'options-outline', label: 'Mood', route: '/settings/mood' },
   { icon: 'location-outline', label: 'Locations', route: '/settings/locations' },
   { icon: 'cube-outline', label: 'Objects', route: '/settings/objects' },
-  { icon: 'people-outline', label: 'Dream Cast', route: '/settings/dream-cast' },
 ];
 
 export default function EditProfileScreen() {
@@ -61,6 +67,18 @@ export default function EditProfileScreen() {
   const queryClient = useQueryClient();
   const { data: profile, isLoading } = usePublicProfile(user?.id ?? '');
   const { mutate: uploadAvatar, isPending: avatarUploading } = useAvatarUpload();
+
+  // Onboarding-store editing mode + auto-save — mirrors
+  // /settings/dream-cast.tsx so the embedded DreamCastStep persists
+  // photo/relationship changes through the existing useAutoSaveProfile
+  // debounce (1.5s + on unmount).
+  useEffect(() => {
+    useOnboardingStore.getState().setIsEditing(true);
+    return () => {
+      useOnboardingStore.getState().setIsEditing(false);
+    };
+  }, []);
+  useAutoSaveProfile();
 
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
@@ -237,7 +255,18 @@ export default function EditProfileScreen() {
             </Text>
           </View>
 
-          {/* Dream identity drill-ins */}
+          {/* Dream Cast — inline editor. Embedding DreamCastStep with
+              embedded=true skips its outer ScrollView + onboarding hero
+              chrome, leaving just the slots + privacy note in the host
+              ScrollView's flow. Auto-saves via useAutoSaveProfile above. */}
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>DREAM CAST</Text>
+            <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
+          </View>
+
+          {/* Dream identity drill-ins (Mood / Locations / Objects). Mediums
+              + Vibes + Dream Cast no longer appear here — see comment by
+              the DREAM_IDENTITY_ROWS array. */}
           <View style={styles.section}>
             <Text style={styles.sectionLabel}>DREAM IDENTITY</Text>
             <View style={styles.sectionCard}>
