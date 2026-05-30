@@ -39,11 +39,29 @@ export function useMarkAllSeen() {
       });
       // Optimistically zero the tab badge so it clears immediately on screen
       // entry — server roundtrip otherwise leaves the red dot up for a beat.
+      // Zero BOTH the legacy per-row count AND the new distinct-group count
+      // (Phase 1) so whichever the badge is reading from stays in sync.
       queryClient.setQueryData<number>(['unreadNotificationCount', user!.id], 0);
+      queryClient.setQueryData<number>(['unreadGroupCount', user!.id], 0);
+      // Flip anyUnseen=false on every cached grouped page too.
+      queryClient.setQueryData(['inboxGrouped', user!.id], (data: unknown) => {
+        if (!data || typeof data !== 'object') return data;
+        const d = data as { pages?: { groups: { anyUnseen: boolean }[] }[] };
+        if (!d.pages) return data;
+        return {
+          ...d,
+          pages: d.pages.map((p) => ({
+            ...p,
+            groups: p.groups.map((g) => ({ ...g, anyUnseen: false })),
+          })),
+        };
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['inbox', user!.id] });
       queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user!.id] });
+      queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user!.id] });
+      queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user!.id] });
     },
   });
 }

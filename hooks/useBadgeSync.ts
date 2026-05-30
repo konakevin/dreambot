@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
-import { useUnreadCount } from './useUnreadCount';
+import { useUnreadGroupCount } from './useUnreadGroupCount';
 
 /**
  * Mirrors the in-app unread-notification count onto the iOS app-icon badge.
@@ -15,9 +15,13 @@ import { useUnreadCount } from './useUnreadCount';
  * AppState handler in _layout.tsx invalidates it) / realtime notification INSERT.
  *
  * Mounted once app-wide (PushRegistrar in app/_layout.tsx).
+ *
+ * Counts distinct unread GROUPS (useUnreadGroupCount), per D6 in
+ * NOTIFICATIONS_ARCHITECTURE.md: 14 likes on one post = badge "1", matching
+ * IG/TikTok semantics — not "14".
  */
 export function useBadgeSync() {
-  const { data: unreadCount } = useUnreadCount();
+  const { data: unreadCount } = useUnreadGroupCount();
 
   useEffect(() => {
     if (unreadCount === undefined) return; // no user / not loaded yet — don't stomp the badge

@@ -10,6 +10,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   RefreshControl,
+  Modal,
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,10 +19,11 @@ import { Image } from 'expo-image';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
-import { useInbox, type NotificationItem } from '@/hooks/useInbox';
-import { useMarkShareSeen } from '@/hooks/useMarkShareSeen';
-import { useDeleteShare } from '@/hooks/useDeleteShare';
+import { useInboxGrouped, type InboxGroup } from '@/hooks/useInboxGrouped';
+import { useMarkGroupSeen } from '@/hooks/useMarkGroupSeen';
+import { useDeleteGroup } from '@/hooks/useDeleteGroup';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
+import { useGroupActors } from '@/hooks/useGroupActors';
 import { InboxSkeleton } from '@/components/Skeleton';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import { useAlbumStore } from '@/store/album';
@@ -43,56 +46,91 @@ function formatTimeAgo(dateStr: string): string {
   return `${Math.floor(days / 7)}w`;
 }
 
-function getNotificationText(item: NotificationItem): { action: string; preview: string | null } {
-  switch (item.type) {
-    case 'post_share':
-      return { action: 'sent you a post', preview: null };
-    case 'post_comment':
-      return { action: 'commented on your post', preview: item.body };
-    case 'comment_reply':
-      return { action: 'replied to your comment', preview: item.body };
-    case 'comment_mention':
-      return { action: 'mentioned you', preview: item.body };
-    case 'friend_request':
-      return { action: 'wants to dream with you', preview: null };
-    case 'friend_accepted':
-      return { action: 'accepted your dream request', preview: null };
-    case 'follow_request':
-      return { action: 'requested to follow you', preview: null };
+/**
+ * Build the "Alice and 12 others liked your dream" headline for a group.
+ *
+ * - Aggregating types (post_like, post_twin, post_fuse, follow_accepted, …)
+ *   use actorCount + the first 1-2 preview usernames to render the prefix.
+ * - Individual types (post_comment, comment_reply, comment_mention,
+ *   post_share, friend_request, follow_request) always render the single
+ *   actor's username.
+ * - Self-events (dream_generated, dream_failed, download_ready) render an
+ *   actor-less title (e.g., "Your dream has arrived!").
+ */
+function getGroupText(g: InboxGroup): {
+  actorPrefix: string | null; // null = no leading actor name (self-events)
+  action: string;
+  preview: string | null;
+  isAggregable: boolean;
+} {
+  const first = g.previewUsernames[0] ?? '';
+  const second = g.previewUsernames[1] ?? '';
+  const count = g.actorCount;
+
+  // Aggregating actor prefix — used when multiple distinct actors share the group.
+  const aggPrefix = (action: string) => {
+    if (count >= 3) return `${first}, ${second} and ${count - 2} others`;
+    if (count === 2) return `${first} and ${second}`;
+    return first;
+  };
+
+  switch (g.type) {
+    case 'post_like':
+      return { actorPrefix: aggPrefix('liked'), action: 'liked your dream', preview: null, isAggregable: true };
+    case 'comment_like':
+      return { actorPrefix: aggPrefix('liked'), action: 'liked your comment', preview: null, isAggregable: true };
+    case 'post_twin':
+      return { actorPrefix: aggPrefix('twinned'), action: 'twinned your dream', preview: null, isAggregable: true };
+    case 'post_fuse':
+      return { actorPrefix: aggPrefix('fused'), action: 'fused with your dream', preview: null, isAggregable: true };
+    case 'post_milestone':
+      return { actorPrefix: null, action: g.body ?? 'milestone reached', preview: null, isAggregable: false };
     case 'follow_accepted':
-      return { action: 'accepted your follow request', preview: null };
+      return { actorPrefix: aggPrefix('followed'), action: 'accepted your follow request', preview: null, isAggregable: true };
+    case 'friend_accepted':
+      return { actorPrefix: aggPrefix('accepted'), action: 'accepted your dream request', preview: null, isAggregable: true };
+    case 'post_share':
+      return { actorPrefix: first, action: 'sent you a post', preview: null, isAggregable: false };
+    case 'post_comment':
+      return { actorPrefix: first, action: 'commented on your post', preview: g.body, isAggregable: false };
+    case 'comment_reply':
+      return { actorPrefix: first, action: 'replied to your comment', preview: g.body, isAggregable: false };
+    case 'comment_mention':
+      return { actorPrefix: first, action: 'mentioned you', preview: g.body, isAggregable: false };
+    case 'friend_request':
+      return { actorPrefix: first, action: 'wants to dream with you', preview: null, isAggregable: false };
+    case 'follow_request':
+      return { actorPrefix: first, action: 'requested to follow you', preview: null, isAggregable: false };
     case 'dream_generated': {
-      const isWish = item.body?.startsWith('wish:');
-      const isWelcome = item.body?.startsWith('welcome:');
-      const botMsg = item.body?.replace(/^(wish|dream|welcome):/, '') || null;
+      const isWish = g.body?.startsWith('wish:');
+      const isWelcome = g.body?.startsWith('welcome:');
+      const botMsg = g.body?.replace(/^(wish|dream|welcome):/, '') || null;
       return {
+        actorPrefix: null,
         action: isWelcome
           ? 'Welcome to DreamBot :)'
           : isWish
             ? 'Your wish has arrived!'
             : 'Your dream has arrived!',
         preview: botMsg || null,
+        isAggregable: false,
       };
     }
-    case 'dream_failed': {
-      const body = item.body?.replace(/^dream:/, '') || null;
+    case 'dream_failed':
       return {
+        actorPrefix: null,
         action: "Your dream couldn't render",
-        preview: body,
+        preview: g.body?.replace(/^dream:/, '') || null,
+        isAggregable: false,
       };
-    }
-    case 'post_like':
-      return { action: 'liked your dream', preview: null };
-    case 'post_fuse':
-      return { action: 'fused with your dream', preview: null };
     case 'download_ready':
-      return { action: 'Your HD download is ready', preview: 'Tap to save it to your photos' };
+      return { actorPrefix: null, action: 'Your HD download is ready', preview: 'Tap to save it to your photos', isAggregable: false };
     default:
-      return { action: '', preview: null };
+      return { actorPrefix: first, action: '', preview: g.body, isAggregable: false };
   }
 }
 
-function FollowRequestActions({ actorId, notifId }: { actorId: string; notifId: string }) {
+function FollowRequestActions({ actorId }: { actorId: string }) {
   const { mutate: approve, isPending: approving } = useApproveFollowRequest();
   const { mutate: approveAndFollow, isPending: approving2 } = useApproveFollowAndFollowBack();
   const { mutate: deny, isPending: denying } = useDenyFollowRequest();
@@ -128,85 +166,149 @@ function FollowRequestActions({ actorId, notifId }: { actorId: string; notifId: 
   );
 }
 
-function NotificationRow({
-  item,
+/**
+ * Modal sheet showing the full actor list for one aggregated group —
+ * opened when the user taps an aggregable group with actorCount > 1.
+ */
+function GroupActorsSheet({
+  groupKey,
+  visible,
+  titleAction,
+  onClose,
+}: {
+  groupKey: string | null;
+  visible: boolean;
+  titleAction: string;
+  onClose: () => void;
+}) {
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useGroupActors(visible ? groupKey : null);
+  const actors = useMemo(() => data?.pages.flatMap((p) => p.actors) ?? [], [data]);
+
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+      <Pressable style={styles.sheetBackdrop} onPress={onClose}>
+        <Pressable style={styles.sheetCard} onPress={(e) => e.stopPropagation()}>
+          <View style={styles.sheetHandle} />
+          <Text style={styles.sheetTitle}>{titleAction}</Text>
+          {isLoading ? (
+            <ActivityIndicator color={colors.accent} style={{ marginTop: 24 }} />
+          ) : (
+            <FlatList
+              data={actors}
+              keyExtractor={(a) => a.actorId}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.sheetActorRow}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    onClose();
+                    nav.push(`/user/${item.actorId}`);
+                  }}
+                >
+                  {item.avatarUrl ? (
+                    <Image
+                      source={{ uri: resizeAvatar(item.avatarUrl) }}
+                      style={styles.avatar}
+                      cachePolicy="memory-disk"
+                    />
+                  ) : (
+                    <View style={styles.avatarFallback}>
+                      <Text style={styles.avatarText}>
+                        {(item.username || '?')[0].toUpperCase()}
+                      </Text>
+                    </View>
+                  )}
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.actorName}>{item.username}</Text>
+                  </View>
+                  <Text style={styles.time}>{formatTimeAgo(item.latestAt)}</Text>
+                </TouchableOpacity>
+              )}
+              onEndReached={() => {
+                if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+              }}
+              onEndReachedThreshold={0.6}
+              ListFooterComponent={
+                isFetchingNextPage ? (
+                  <View style={styles.footer}>
+                    <ActivityIndicator color={colors.textSecondary} />
+                  </View>
+                ) : null
+              }
+            />
+          )}
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+}
+
+function GroupRow({
+  group,
   onPress,
-  onMarkSeen,
-  onDelete,
+  onLongPress,
   selectMode,
   isSelected,
   onToggleSelect,
 }: {
-  item: NotificationItem;
+  group: InboxGroup;
   onPress: () => void;
-  onMarkSeen: () => void;
-  onDelete: () => void;
+  onLongPress: () => void;
   selectMode: boolean;
   isSelected: boolean;
   onToggleSelect: () => void;
 }) {
-  const { action, preview } = getNotificationText(item);
-  const [expanded, setExpanded] = useState(false);
-
-  function handleRowPress() {
-    if (selectMode) {
-      onToggleSelect();
-      return;
-    }
-    if (!item.isSeen) onMarkSeen();
-    if (preview) {
-      setExpanded(!expanded);
-    } else {
-      onPress();
-    }
-  }
+  const { actorPrefix, action, preview } = getGroupText(group);
+  const isUnseen = group.anyUnseen;
+  const firstActorId = group.previewActorIds[0] ?? null;
+  const firstAvatar = group.previewAvatars[0] ?? null;
+  const firstUsername = group.previewUsernames[0] ?? '?';
+  const isSelfEvent = actorPrefix === null;
 
   return (
     <TouchableOpacity
-      style={[styles.row, !item.isSeen && styles.rowUnseen]}
-      onPress={handleRowPress}
-      onLongPress={
-        selectMode
-          ? undefined
-          : () => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              showAlert('Delete', 'Remove this item?', [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'Delete', style: 'destructive', onPress: onDelete },
-              ]);
-            }
-      }
+      style={[styles.row, isUnseen && styles.rowUnseen]}
+      onPress={() => (selectMode ? onToggleSelect() : onPress())}
+      onLongPress={selectMode ? undefined : onLongPress}
       delayLongPress={400}
       activeOpacity={0.7}
     >
-      {/* Checkbox in select mode */}
       {selectMode && (
         <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
           {isSelected && <Ionicons name="checkmark" size={14} color="#000" />}
         </View>
       )}
 
-      {/* Actor avatar — show bot mascot for dream notifications */}
+      {/* Actor avatar — bot mascot for self-events; first preview actor otherwise. */}
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
-          if (item.type !== 'dream_generated') nav.push(`/user/${item.actorId}`);
+          if (!isSelfEvent && firstActorId) nav.push(`/user/${firstActorId}`);
         }}
-        disabled={item.type === 'dream_generated'}
+        disabled={isSelfEvent || !firstActorId}
       >
-        {item.type === 'dream_generated' ? (
+        {isSelfEvent ? (
           <View style={[styles.avatarFallback, { backgroundColor: colors.accentBg }]}>
             <Ionicons name="moon" size={20} color={colors.accent} />
           </View>
-        ) : item.actorAvatarUrl ? (
-          <Image
-            source={{ uri: resizeAvatar(item.actorAvatarUrl) }}
-            style={styles.avatar}
-            cachePolicy="memory-disk"
-          />
+        ) : firstAvatar ? (
+          <View>
+            <Image
+              source={{ uri: resizeAvatar(firstAvatar) }}
+              style={styles.avatar}
+              cachePolicy="memory-disk"
+            />
+            {/* Tiny stacked-avatar hint for groups with multiple actors. */}
+            {group.actorCount > 1 && (
+              <View style={styles.avatarCountBadge}>
+                <Text style={styles.avatarCountText}>+{group.actorCount - 1}</Text>
+              </View>
+            )}
+          </View>
         ) : (
           <View style={styles.avatarFallback}>
-            <Text style={styles.avatarText}>{(item.actorUsername || '?')[0].toUpperCase()}</Text>
+            <Text style={styles.avatarText}>{firstUsername[0].toUpperCase()}</Text>
           </View>
         )}
       </TouchableOpacity>
@@ -214,53 +316,50 @@ function NotificationRow({
       {/* Text */}
       <View style={styles.textCol}>
         <Text style={styles.mainLine} numberOfLines={2}>
-          {item.type === 'dream_generated' ? (
+          {isSelfEvent ? (
             <Text style={styles.actorName}>{action}</Text>
           ) : (
             <>
-              <Text style={styles.actorName}>{item.actorUsername}</Text>
+              <Text style={styles.actorName}>{actorPrefix}</Text>
               <Text style={styles.actionText}> {action}</Text>
             </>
           )}
         </Text>
         {preview && (
-          <Text style={styles.preview} numberOfLines={expanded ? undefined : 1}>
+          <Text style={styles.preview} numberOfLines={1}>
             {preview}
           </Text>
         )}
       </View>
 
-      {/* Follow request approve/deny buttons */}
-      {item.type === 'follow_request' && !item.isSeen && (
-        <FollowRequestActions actorId={item.actorId} notifId={item.id} />
+      {/* Follow-request approve/deny — only on the actor's own follow request. */}
+      {group.type === 'follow_request' && isUnseen && firstActorId && (
+        <FollowRequestActions actorId={firstActorId} />
       )}
 
       {/* Post thumbnail — tap to navigate */}
-      {item.imageUrl && (
-        <TouchableOpacity
-          onPress={() => {
-            if (!item.isSeen) onMarkSeen();
-            onPress();
-          }}
-          activeOpacity={0.8}
-        >
-          <Image source={{ uri: item.imageUrl }} style={styles.thumbnail} contentFit="cover" />
+      {group.uploadImageUrl && (
+        <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
+          <Image
+            source={{ uri: group.uploadImageUrl }}
+            style={styles.thumbnail}
+            contentFit="cover"
+          />
         </TouchableOpacity>
       )}
 
-      {/* Time + delete */}
+      {/* Time + unseen dot */}
       <View style={styles.timeCol}>
-        <Text style={styles.time}>{formatTimeAgo(item.createdAt)}</Text>
-        {!item.isSeen && <View style={styles.unseenDot} />}
+        <Text style={styles.time}>{formatTimeAgo(group.lastAt)}</Text>
+        {isUnseen && <View style={styles.unseenDot} />}
       </View>
     </TouchableOpacity>
   );
 }
 
 export default function InboxScreen() {
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage, refetch } = useInbox();
-  // Local pull-to-refresh spinner state — see FullScreenFeed for the rationale.
-  // iOS only resets contentOffset cleanly after a gesture-driven refresh.
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage, refetch } =
+    useInboxGrouped();
   const [isPulling, setIsPulling] = useState(false);
   const handlePullToRefresh = useCallback(async () => {
     setIsPulling(true);
@@ -270,8 +369,8 @@ export default function InboxScreen() {
       setIsPulling(false);
     }
   }, [refetch]);
-  const { mutate: markSeen } = useMarkShareSeen();
-  const { mutate: deleteNotification } = useDeleteShare();
+  const { mutate: markGroupSeen } = useMarkGroupSeen();
+  const { mutate: deleteGroup } = useDeleteGroup();
   const { mutate: markAllSeen } = useMarkAllSeen();
   const { mutate: deleteAll } = useDeleteAllNotifications();
   const queryClient = useQueryClient();
@@ -280,31 +379,32 @@ export default function InboxScreen() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [allSelectedGlobal, setAllSelectedGlobal] = useState(false);
 
-  // Page shape is { rows, hasMore, nextOffset } — flatMap rows, ignore metadata
-  const inbox = useMemo(() => data?.pages.flatMap((p) => p.rows) ?? [], [data]);
-  const hasUnread = inbox.some((item) => !item.isSeen);
-  const hasAny = inbox.length > 0;
+  // Expand sheet state — opens for aggregable groups with > 1 distinct actor.
+  const [expandedGroupKey, setExpandedGroupKey] = useState<string | null>(null);
+  const [expandedTitle, setExpandedTitle] = useState('');
 
-  // Instagram-style auto-clear: viewing the Inbox screen IS the trigger that
-  // marks all unread notifications as seen. Fires once per focus to avoid
-  // re-marking on every render. Notifications stay in the list with their
-  // content; they just lose the "unread" highlight.
+  const groups = useMemo(() => data?.pages.flatMap((p) => p.groups) ?? [], [data]);
+  const hasUnread = groups.some((g) => g.anyUnseen);
+  const hasAny = groups.length > 0;
+
+  // IG-style auto-clear: viewing the Inbox marks all unread seen. Fires once per
+  // focus to avoid re-marking on every render.
   const lastFocusFireRef = useRef(0);
   useFocusEffect(
     useCallback(() => {
       if (!hasUnread) return;
       const now = Date.now();
-      if (now - lastFocusFireRef.current < 500) return; // de-dupe rapid focus events
+      if (now - lastFocusFireRef.current < 500) return;
       lastFocusFireRef.current = now;
       markAllSeen();
     }, [hasUnread, markAllSeen])
   );
 
-  function toggleSelect(id: string) {
+  function toggleSelect(groupKey: string) {
     setSelected((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(groupKey)) next.delete(groupKey);
+      else next.add(groupKey);
       return next;
     });
   }
@@ -315,18 +415,15 @@ export default function InboxScreen() {
       setSelected(new Set());
     } else {
       setAllSelectedGlobal(true);
-      setSelected(new Set(inbox.map((item) => item.id)));
+      setSelected(new Set(groups.map((g) => g.groupKey)));
     }
   }
 
   function deleteSelected() {
     if (allSelectedGlobal) {
-      // Delete ALL notifications server-side, not just loaded ones
       deleteAll();
     } else {
-      for (const id of selected) {
-        deleteNotification(id);
-      }
+      for (const key of selected) deleteGroup(key);
     }
     setSelected(new Set());
     setAllSelectedGlobal(false);
@@ -339,25 +436,50 @@ export default function InboxScreen() {
     setAllSelectedGlobal(false);
   }
 
-  function handleTap(item: NotificationItem) {
-    if (!item.isSeen) {
-      markSeen(item.id);
+  function handleTap(g: InboxGroup) {
+    if (g.anyUnseen) markGroupSeen(g.groupKey);
+    const text = getGroupText(g);
+    // Aggregable groups with multiple actors → open the expand sheet so the user
+    // can see who liked / twinned / followed; tapping the thumbnail still navs
+    // to the post (handled separately on the thumbnail itself).
+    if (text.isAggregable && g.actorCount > 1) {
+      setExpandedGroupKey(g.groupKey);
+      setExpandedTitle(text.action);
+      return;
     }
-    // Friend notifications → profile, dream → full detail, everything else → post
-    if (item.type === 'friend_request' || item.type === 'friend_accepted') {
-      nav.push(`/user/${item.actorId}`);
-    } else if (item.type === 'dream_generated' && item.uploadId) {
+    // Single-actor or individual types → navigate to the relevant surface.
+    const firstActorId = g.previewActorIds[0] ?? null;
+    if ((g.type === 'friend_request' || g.type === 'friend_accepted') && firstActorId) {
+      nav.push(`/user/${firstActorId}`);
+      return;
+    }
+    if ((g.type === 'follow_request' || g.type === 'follow_accepted') && firstActorId) {
+      nav.push(`/user/${firstActorId}`);
+      return;
+    }
+    if (g.type === 'dream_generated' && g.uploadId) {
       useAlbumStore.getState().clearAlbum();
       queryClient.invalidateQueries({ queryKey: ['dreamWish'] });
-      nav.push(`/photo/${item.uploadId}`);
-    } else if (item.type === 'download_ready' && item.uploadId) {
-      // Auto-save the now-cached HD on arrival (see app/photo/[id].tsx).
-      useAlbumStore.getState().clearAlbum();
-      nav.push(`/photo/${item.uploadId}?downloadReady=1`);
-    } else if (item.uploadId) {
-      useAlbumStore.getState().clearAlbum();
-      nav.push(`/photo/${item.uploadId}`);
+      nav.push(`/photo/${g.uploadId}`);
+      return;
     }
+    if (g.type === 'download_ready' && g.uploadId) {
+      useAlbumStore.getState().clearAlbum();
+      nav.push(`/photo/${g.uploadId}?downloadReady=1`);
+      return;
+    }
+    if (g.uploadId) {
+      useAlbumStore.getState().clearAlbum();
+      nav.push(`/photo/${g.uploadId}`);
+    }
+  }
+
+  function handleLongPress(g: InboxGroup) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    showAlert('Delete', 'Remove this notification?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: () => deleteGroup(g.groupKey) },
+    ]);
   }
 
   return (
@@ -384,7 +506,7 @@ export default function InboxScreen() {
                       if (allSelectedGlobal) {
                         markAllSeen();
                       } else {
-                        for (const id of selected) markSeen(id);
+                        for (const key of selected) markGroupSeen(key);
                       }
                       setSelected(new Set());
                       setAllSelectedGlobal(false);
@@ -439,8 +561,8 @@ export default function InboxScreen() {
       </View>
 
       <FlatList
-        data={inbox}
-        keyExtractor={(item) => item.id}
+        data={groups}
+        keyExtractor={(g) => g.groupKey}
         refreshControl={
           <RefreshControl
             refreshing={isPulling}
@@ -449,14 +571,13 @@ export default function InboxScreen() {
           />
         }
         renderItem={({ item }) => (
-          <NotificationRow
-            item={item}
+          <GroupRow
+            group={item}
             onPress={() => handleTap(item)}
-            onMarkSeen={() => markSeen(item.id)}
-            onDelete={() => deleteNotification(item.id)}
+            onLongPress={() => handleLongPress(item)}
             selectMode={selectMode}
-            isSelected={selected.has(item.id)}
-            onToggleSelect={() => toggleSelect(item.id)}
+            isSelected={selected.has(item.groupKey)}
+            onToggleSelect={() => toggleSelect(item.groupKey)}
           />
         )}
         onEndReached={() => {
@@ -486,6 +607,13 @@ export default function InboxScreen() {
             )}
           </View>
         }
+      />
+
+      <GroupActorsSheet
+        groupKey={expandedGroupKey}
+        visible={expandedGroupKey !== null}
+        titleAction={expandedTitle}
+        onClose={() => setExpandedGroupKey(null)}
       />
     </SafeAreaView>
   );
@@ -533,6 +661,25 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+  },
+  avatarCountBadge: {
+    position: 'absolute',
+    bottom: -2,
+    right: -4,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: colors.accent,
+    paddingHorizontal: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: colors.background,
+  },
+  avatarCountText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '800',
   },
   avatarFallback: {
     width: 40,
@@ -651,9 +798,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  trashButton: {
-    padding: 4,
-  },
   footer: {
     paddingVertical: 20,
     alignItems: 'center',
@@ -674,5 +818,42 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     paddingHorizontal: 40,
+  },
+  sheetBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'flex-end',
+  },
+  sheetCard: {
+    backgroundColor: colors.background,
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+    paddingHorizontal: 16,
+    paddingBottom: 28,
+    maxHeight: '75%',
+  },
+  sheetHandle: {
+    alignSelf: 'center',
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.border,
+    marginTop: 8,
+    marginBottom: 12,
+  },
+  sheetTitle: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '700',
+    marginBottom: 12,
+    textTransform: 'capitalize',
+  },
+  sheetActorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    gap: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.card,
   },
 });

@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { useExploreStore } from '@/store/explore';
 import { ANIM, colors } from '@/constants/theme';
-import { useUnreadCount } from '@/hooks/useUnreadCount';
+import { useUnreadGroupCount } from '@/hooks/useUnreadGroupCount';
 
 // Pure render — receives unreadCount as a prop. The subscription lives at
 // TabLayout level so parent re-renders propagate new options to RN's tab
@@ -42,7 +42,8 @@ export default function TabLayout() {
   // which makes React Navigation re-render the bottom-bar icon. Without
   // this, child-component-internal subscriptions don't propagate to the
   // tab bar (RN's BottomTabBar memoizes options).
-  const { data: unreadCount = 0 } = useUnreadCount();
+  // Distinct-group unread count (Phase 1, D6): 14 likes on one post = 1.
+  const { data: unreadCount = 0 } = useUnreadGroupCount();
   const tabBarOpacity = useRef(new Animated.Value(1)).current;
   useEffect(() => {
     Animated.timing(tabBarOpacity, {

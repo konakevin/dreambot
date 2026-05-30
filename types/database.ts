@@ -2177,6 +2177,10 @@ export type Database = {
         Returns: number;
       };
       notification_category: { Args: { p_type: string }; Returns: string };
+      delete_group: {
+        Args: { p_user_id: string; p_group_key: string };
+        Returns: undefined;
+      };
       // ─── /Phase 1 grouped notifications ─────────────────────────────────
       grant_sparkles: {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
