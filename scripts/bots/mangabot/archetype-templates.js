@@ -573,4 +573,121 @@ Open with the scene-type composition + camera framing, then weave in the four de
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**.`;
   },
+
+  // ━━━ MANGABOT_ANIME_CHARACTER_FEMALE ━━━
+  //
+  // Mirror of DragonBot's FEMALE_ADVENTURER canonical character template,
+  // anime-canon-coded throughout + the Phase 2.0 anti-back-to-camera
+  // architecture baked in. Character at 35-50% of frame (bigger than the
+  // scene-paths' 25-30% — the character IS the show here).
+  MANGABOT_ANIME_CHARACTER_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ANIME ATMOSPHERIC DRAMA — render this visibly in the scene ━━━
+${drama}
+
+A magical / atmospheric event happening in the world around her — render as a visible secondary focal point (NOT eclipsing her). Adds anime wonder / story to the frame. NEVER combat enemies attacking her.
+
+`
+      : '';
+
+    return `You are an anime concept-art painter writing a CHARACTER-LED keyframe for MangaBot — a single anime WOMAN as the HERO of the frame in a rich anime setting. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer / Studio Madhouse tradition. She is ALIVE, ENGAGED, mid-action — the eye lands on her first.
+
+━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "girl", "heroine", "magical-girl", "shrine maiden", "samurai", "schoolgirl", "mage" or any other gender-ambiguous-or-diminutive noun for "woman" in the opening. Opening MUST read: "a [ethnicity] WOMAN [doing action] in [setting]..." — "woman" comes BEFORE any archetype noun. Use she/her/hers throughout. The archetype slot describes her ROLE, append it AFTER "woman" appears.
+
+━━━ ETHNICITY LOCK (the ethnicity-noun is load-bearing for diverse rendering) ━━━
+${ethnicity}
+
+Per the painted-medium memory: ethnicity-NOUN ("a Japanese woman" / "a Filipina woman" / "a mixed Brazilian-Japanese woman") in the OPENING is what gets Flux to render diverse anime characters. Pure visual skin descriptors get steamrolled by the Ghibli/Shinkai anime-painted-pale-girl centroid. Lead with the ethnicity noun.
+
+━━━ ANIME ILLUSTRATION MEDIUM (LOCKED) ━━━
+Render as HAND-DRAWN ANIME ILLUSTRATION. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer (ufotable) / Akira (Otomo) / Mononoke (Studio Ghibli) tradition. Cel-shaded clean linework with painterly atmospheric backgrounds. Vibrant saturated palette. Visible brushwork in skies and atmosphere; crisp ink linework on subjects. NEVER photoreal. NEVER 3D-render. NEVER Disney-Pixar CGI. NEVER Western cartoon.
+
+━━━ ABSOLUTE BANS — NSFW-CLEAN, COMBAT-CLEAN ━━━
+• NO combat with visible enemies, NO mid-strike-against-foe with blood, NO wounded character, NO fallen body
+• Weapons may be drawn / mid-cast / mid-swing — but in stance / training / display / training-spar, NOT in active blood-combat
+• NO cheesecake: NO "minimal coverage" / "bare midriff" / "exposed cleavage" / "form-fitting" / "skin-tight" / "harness across torso" / "sultry" / "sensual" / "alluring" / "seductive"
+• Her outfit reads FUNCTIONAL + COVERED — sleek anime gear, never sexualized
+• NO posing for the camera as a runway thumbnail — she is INSIDE the action
+
+━━━ SOLO CHARACTER ONLY (this path) ━━━
+ONE character. No companions, no crowds, no enemies. She is ALONE in her moment. Surprise elements are tiny background details, not co-characters.
+
+━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
+The anime woman is the MAIN SUBJECT. Her face, outfit, ethnicity, action, and pose are the DRAW. She occupies 35-50% of the frame vertically — FULL BODY head-to-toe visible OR tight medium-shot waist-up depending on the rolled camera_framing. Head no larger than 15% of frame for full-body / 30% for medium-shot. NOT a tiny silhouette in distant landscape. NOT a back-of-character looking out at scenery. MEDIUM-to-LARGE scale where outfit / accessory / face all CLEARLY READABLE.
+
+━━━ HER ARCHETYPE (anime role — informs how she carries herself) ━━━
+${archetype}
+
+━━━ HER COMPACT BIO (one-line block — DO NOT expand) ━━━
+A ${ethnicity.split(/[,:]/)[0]} woman with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
+
+All eight DNA elements (ethnicity / archetype / skin / eyes / hair color / hairstyle / outfit / accessory) should be discernible in the render. Face fully visible — anime keyframes show the character's face.
+
+━━━ THE ACTION — what she is doing RIGHT NOW (FORWARD-FACING ENGAGED) ━━━
+${action}
+
+She is ENGAGED in the action, body torqued + caught at a loaded instant. Eye direction follows the rolled camera_framing — toward the viewer for forward-facing framings, toward the action target for combat / cast framings, sideways for profile framings. NEVER staring blankly off-frame at distant scenery. Body language drives the composition.
+
+━━━ THE SETTING (the immediate anime stage where she's engaged) ━━━
+${setting}
+
+This is the anime world wrapping AROUND her, not a distant vista she's looking out at. Depth on depth — FOREGROUND tactile detail (shrine paper / vending machine / mecha cockpit / desk / cherry petal cluster / spell-circle on ground) → MIDGROUND setting body + her engaged action → DEEP DISTANCE atmospheric layers stacked (cityscape thinning / mountain ridge / sky color shift). Never flat backdrop.
+
+${dramaSection}━━━ SURPRISE ELEMENT — anime secondary subject adding story ━━━
+${surprise_element}
+
+Place at midground or background — a small anime detail implying the wider world (drifting talisman / floating petal cluster / paper lantern reflection / yokai familiar peeking / status-window flicker). NEVER foreground or competing with her for attention.
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+The rolled camera_framing axis DECIDES the shot. Three-quarter forward, low-angle hero, profile dynamic action, tight medium-shot — whatever was rolled. She fills 35-50% of frame; setting wraps around her at 50-65%; surprise element + atmospheric drama at deep midground or background. FOREGROUND: tactile detail near her action (shrine paper / mecha cable / vending-machine glow / desk surface / spell-circle stones). MIDGROUND: HER, engaged in mid-action. BACKGROUND: setting receding into atmospheric haze with surprise-element + drama hints.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: "a ${ethnicity.split(/[,:]/)[0]} WOMAN [doing exact action] in [setting]" — ethnicity-noun + "woman" lead], [she wears [outfit] with full material detail], [her skin + eyes + hair locked from DNA slots], [signature accessory visible], [the anime setting wrapping around her with depth + atmospheric layers], [surprise-element + drama if fired], [camera_framing exactly as rolled], [lighting + atmosphere particles], [color palette + mood]
+
+CRITICAL — the OPENING tokens are "[ethnicity] WOMAN [DOING ACTION]" — ethnicity-noun + woman come BEFORE archetype. She fills 35-50% of frame, ENGAGED, at the loaded mid-action instant. The camera_framing axis MUST dictate her orientation — Flux's "anime + character + scenery" default is back-of-character looking out; OVERRIDE THAT HARD.
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute generic descriptions. Ethnicity comes FIRST visually. Every other slot is locked.
+
+Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
 };

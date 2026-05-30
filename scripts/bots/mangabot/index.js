@@ -137,7 +137,13 @@ module.exports = {
     // R1 housekeeping test showed 3 of 5 isekai-fantasy renders dropped
     // back to back-to-camera despite the rewritten templates because
     // Haiku had stripped the camera_framing description entirely.
-    skipPaths: ['isekai-fantasy', 'ghibli-countryside', 'neo-tokyo', 'samurai-era'],
+    skipPaths: [
+      'isekai-fantasy',
+      'ghibli-countryside',
+      'neo-tokyo',
+      'samurai-era',
+      'anime-character-female',
+    ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista
       'anime-character-female': '90-130',
@@ -202,6 +208,15 @@ module.exports = {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
+  },
+
+  // Bot-level pool defaults for declarative axis paths. The composer
+  // resolves a slot via path-override → bot-default → throw. Adding these
+  // lets axis paths declare `universal: ['lighting', 'atmosphere']`
+  // without each path having to wire its own lighting/atmosphere pool.
+  defaultPools: {
+    lighting: 'LIGHTING',
+    atmosphere: 'ATMOSPHERES',
   },
 
   poolByName(name) {

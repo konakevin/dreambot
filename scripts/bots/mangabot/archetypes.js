@@ -126,4 +126,58 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // PATH-BESPOKE — MangaBot anime-character-female (2026-05-29 Phase 2.1
+  // axis-system migration; legacy inline form preserved at
+  // paths/legacy/anime-character-female.js).
+  //
+  // Anime girl as the HERO of the frame in a richly-rendered anime setting.
+  // Mirror of DragonBot's FEMALE_ADVENTURER 12-axis split (the canonical
+  // character-path recipe) but anime-canon-coded throughout. Designed
+  // anti-back-to-camera from gen-1 per the Phase 2.0 validation lesson:
+  //   • camera_framing wired as MANDATORY DRIVING AXIS via
+  //     shared-blocks.CAMERA_FRAMING_MANDATORY_BLOCK
+  //   • action pool seeded FORWARD-FACING ONLY (mid-strike toward viewer /
+  //     mid-cast / forward 3/4 stance / profile dynamic action — never
+  //     "walking toward gate" / "approaching the temple" / "looking out")
+  //   • setting pool designed for character-led compositions where the
+  //     character is naturally engaged with something IN-FRAME, not
+  //     "X looking out over Y"
+  //   • twoPassPolish skipped (Phase 2.0c lesson — Haiku strips axis text)
+  //
+  // 12-axis split (8 character DNA + 3 path + 1 conditional drama):
+  //   • characterDnaAxes: ethnicity + archetype + skin + eyes + hair_color
+  //     + hairstyle + outfit + accessory
+  //   • path: setting + action + camera_framing + surprise_element
+  //   • conditionalLayer: drama (40% gate)
+  //
+  // Reuses existing 200-entry character-DNA pools (ANIME_ARCHETYPE_FEMALE /
+  // ANIME_OUTFITS_FEMALE / ANIME_HAIRSTYLES_FEMALE / ANIME_ACCESSORIES_FEMALE
+  // / ANIME_SKIN / ANIME_EYES / ANIME_HAIR_COLOR) — those describe
+  // appearance only, no composition bias. The 5 new bespoke pools below
+  // (ethnicity / setting / action / camera_framing / surprise_element /
+  // drama) carry the anime-canon flavor + the forward-facing mandate.
+  MANGABOT_ANIME_CHARACTER_FEMALE: {
+    description:
+      'PATH-BESPOKE — MangaBot anime-character-female (2026-05-29 Phase 2.1). Anime woman as the HERO of the frame in a rich anime setting. 12-axis split mirroring DragonBot FEMALE_ADVENTURER, anime-canon-coded throughout. ANTI-BACK-TO-CAMERA architecture: action pool seeded forward-facing only; camera_framing wired as MANDATORY DRIVING AXIS via shared block; skipPaths twoPassPolish so axis text reaches Flux.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

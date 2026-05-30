@@ -1,86 +1,76 @@
 /**
- * MangaBot anime-character-female path — anime girl out and about in a
- * richly-rendered anime setting. Wall-poster slice-of-life keyframe.
+ * MangaBot anime-character-female path — declarative axis-system form
+ * (Phase 2.1 of the MangaBot overhaul, 2026-05-29).
  *
- * Two-tier scenery (setting + vista), character ~25-40% of frame, mid-
- * action body-pose, NO posing. Now using the shared keyframe + density
- * + story-moment framework.
+ * Anime woman as the HERO of the frame in a richly-rendered anime setting.
+ * First legacy MangaBot path converted to the axis system + the canonical
+ * pattern for the remaining 17 conversions.
+ *
+ * Designed anti-back-to-camera from gen-1 per the Phase 2.0 validation
+ * lesson:
+ *   • action pool seeded FORWARD-FACING ONLY (mid-strike toward viewer /
+ *     mid-cast / forward 3/4 stance / profile dynamic action — never
+ *     "walking toward gate" / "approaching the temple" / "looking out
+ *     over X")
+ *   • camera_framing pool seeded FORWARD-FACING ONLY (low-angle hero /
+ *     forward 3/4 / tight medium-shot / profile dynamic — never
+ *     over-shoulder / wide-figure-tiny / silhouette-from-behind)
+ *   • setting pool designed for character-led compositions where the
+ *     character is naturally engaged with something IN-FRAME, not
+ *     "X looking out over Y"
+ *   • camera_framing wired as MANDATORY DRIVING AXIS via shared-blocks.
+ *     CAMERA_FRAMING_MANDATORY_BLOCK in the template
+ *   • twoPassPolish skipped (Phase 2.0c lesson — Haiku strips axis text)
+ *
+ * 12-axis split (8 character DNA + 4 path + 1 conditional drama):
+ *   characterDnaAxes:
+ *     ethnicity (NEW, 50)         — anime-canon ethnicity-noun lead
+ *     archetype (REUSE, 200)      — anime role
+ *     skin (REUSE, 200)           — anime skin tone
+ *     eyes (REUSE, 200)           — anime eye color + shape
+ *     hair_color (REUSE, 200)     — anime hair color
+ *     hairstyle (REUSE, 200)      — anime hairstyle
+ *     outfit (REUSE, 200)         — anime outfit silhouette
+ *     accessory (REUSE, 200)      — anime signature object
+ *   path:
+ *     setting (NEW, 200)          — anime stage with in-frame engagement
+ *     action (NEW, 200)           — FORWARD-FACING mid-action only
+ *     camera_framing (NEW, 150)   — FORWARD-FACING-ONLY framings
+ *     surprise_element (NEW, 150) — anime midground secondary subject
+ *   conditional (40%-gated):
+ *     drama (NEW, 60)             — anime atmospheric event (NOT eclipsing her)
+ *
+ * Legacy inline-form preserved at paths/legacy/anime-character-female.js.
+ *
+ * See:
+ *   - scripts/bots/mangabot/archetypes.js (MANGABOT_ANIME_CHARACTER_FEMALE
+ *     slot definitions)
+ *   - scripts/bots/mangabot/archetype-templates.js (template w/ gender
+ *     lock, ethnicity-noun lock, anti-back-to-camera mandates, CAMERA_
+ *     FRAMING_MANDATORY_BLOCK)
+ *   - scripts/bots/mangabot/shared-blocks.js (CAMERA_FRAMING_MANDATORY_
+ *     BLOCK — used by the template)
+ *   - project_mangabot_back_to_camera_overhaul memory file
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const archetype = picker.pickWithRecency(pools.ANIME_ARCHETYPE_FEMALE, 'acf_archetype');
-  const outfit = picker.pickWithRecency(pools.ANIME_OUTFITS_FEMALE, 'acf_outfit');
-  const skin = picker.pickWithRecency(pools.ANIME_SKIN, 'acf_skin');
-  const eyes = picker.pickWithRecency(pools.ANIME_EYES, 'acf_eyes');
-  const hairColor = picker.pickWithRecency(pools.ANIME_HAIR_COLOR, 'acf_hair_color');
-  const hairstyle = picker.pickWithRecency(pools.ANIME_HAIRSTYLES_FEMALE, 'acf_hairstyle');
-  const accessory = picker.pickWithRecency(pools.ANIME_ACCESSORIES_FEMALE, 'acf_accessory');
-  const setting = picker.pickWithRecency(pools.ANIME_SETTING, 'acf_setting');
-  const vista = picker.pickWithRecency(pools.ANIME_VISTA, 'acf_vista');
-  const activity = picker.pickWithRecency(pools.ANIME_ACTIVITY, 'acf_activity');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are an anime concept-art painter writing a CHARACTER-FOCUSED keyframe for MangaBot. An anime woman caught in a candid slice-of-anime-life moment, with the rich anime world as costar. Output wraps with style prefix + suffix.
-
-${blocks.ANIME_ILLUSTRATION_BLOCK}
-
-${blocks.KEYFRAME_COMPOSITION_BLOCK}
-
-${blocks.DENSITY_BLOCK}
-
-${blocks.STORY_MOMENT_BLOCK}
-
-${blocks.NO_NAMED_CHARACTERS_BLOCK}
-
-${blocks.NO_GENERIC_POSE_BLOCK}
-
-${blocks.CULTURAL_RESPECT_BLOCK}
-
-━━━ THE CHARACTER (full identity — render exactly) ━━━
-${archetype}
-
-━━━ HER OUTFIT (silhouette is the hero) ━━━
-${outfit}
-
-━━━ HER PHYSICAL DNA ━━━
-- Skin: ${skin}
-- Eyes: ${eyes}
-- Hair color: ${hairColor}
-- Hairstyle: ${hairstyle}
-
-━━━ HER SIGNATURE OBJECT ━━━
-${accessory}
-
-━━━ THE SETTING (the immediate place — costar) ━━━
-${setting}
-
-━━━ THE VISTA (scale-anchor backdrop) ━━━
-${vista}
-
-━━━ HER BODY ACTIVITY ━━━
-${activity}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION CLOSER ━━━
-WIDE cinematic shot — character occupies 25-40% of frame, scenery 60-75%. Camera 3/4-rear or 3/4-front, never head-on. She is mid-step / mid-sip / mid-laugh / mid-reach, eyes never locked on camera. Setting + vista frame her with poster-worthy density.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'MANGABOT_ANIME_CHARACTER_FEMALE',
+  pools: {
+    // Character DNA (reused 200-entry pools — appearance-only, no composition bias)
+    ethnicity: 'ANIME_CHARACTER_FEMALE_ETHNICITY',
+    archetype: 'ANIME_ARCHETYPE_FEMALE',
+    skin: 'ANIME_SKIN',
+    eyes: 'ANIME_EYES',
+    hair_color: 'ANIME_HAIR_COLOR',
+    hairstyle: 'ANIME_HAIRSTYLES_FEMALE',
+    outfit: 'ANIME_OUTFITS_FEMALE',
+    accessory: 'ANIME_ACCESSORIES_FEMALE',
+    // Path-bespoke (new — Phase 2.1)
+    setting: 'ANIME_CHARACTER_FEMALE_SETTING',
+    action: 'ANIME_CHARACTER_FEMALE_ACTION',
+    camera_framing: 'ANIME_CHARACTER_FEMALE_CAMERA_FRAMING',
+    surprise_element: 'ANIME_CHARACTER_FEMALE_SURPRISE_ELEMENT',
+    // Conditional drama (40% gate)
+    drama: 'ANIME_CHARACTER_FEMALE_DRAMA',
+  },
 };
