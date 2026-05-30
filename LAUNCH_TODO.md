@@ -14,7 +14,7 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 - [ ] **StarBot** — exotic-aliens path: "go AI! 11/10"
 - [ ] **MangaBot** — audit, correct or rip out problematic paths
 - [ ] **FaeBot** — new cozy-fae path: very ornate fae cottage interiors with all the pretty little things a fae would collect; full of details, layers, whimsy
-- [ ] 🤖 **Audit all mediums + face swap** — could probably automate this with Claude
+- [x] 🤖 **Audit all mediums + face swap** — could probably automate this with Claude — shipped 2026-05-29 (static + render sweep across all 19 active user-pickable mediums × {self, dual}. DB fixes: hyperreal kontext_directive rewrite + gender-lock paragraph appended to 16 directives + vinyl gender line. Embodied routing fix: animation/pixels/handcrafted flipped to is_character_only=true with HUMAN CHARACTERS mandate prepended — re-verified renders post-fix.)
 
 ## Feed, albums & images
 
