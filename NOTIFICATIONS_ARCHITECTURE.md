@@ -244,10 +244,12 @@ Discovery: link from Settings index ("Notifications") + a one-time prompt the fi
 3. **Migration 202** — New RPCs: `get_inbox`, `get_group_actors`, `mark_group_seen`, `get_unread_group_count`. Helper `notification_category(text) → text`. Old `get_notifications` left in place during cutover.
 4. **Client** — Rewire `useInbox` to `get_inbox`; replace `useUnreadCount` with `get_unread_group_count`; add group-tap-to-expand UX in `app/inbox.tsx`; rewire `useMarkAllSeen` and per-group read.
 
-### Phase 2 — Push debounce
-5. `pending_push_groups` table + pg_cron worker.
-6. `send-push` extended to accept `(recipient_id, group_key, latest_id)` and build aggregated payload.
-7. Switch the existing per-INSERT trigger from "fire push directly" to "enqueue into `pending_push_groups`". Old direct-fire path preserved behind an env flag for emergency revert.
+### Phase 2 — Push debounce ✅ SHIPPED (migration 204 + send-push v2)
+5. **Migration 204** — `pending_push_groups(recipient_id, group_key, latest_notification_id, fire_at, original_created_at)`. Primary key (recipient_id, group_key) so each in-flight group is a single row.
+6. **`notify_send_push()` rewritten** — was pg_net POST to send-push; now UPSERTs into `pending_push_groups` with `fire_at = now() + 30s`. On conflict, slides `fire_at` to `LEAST(now() + 30s, original_created_at + 2 min)` — a sustained burst still pings within ~2 min.
+7. **`drain_pending_push_groups()` + pg_cron** — every minute, claims due rows (SELECT FOR UPDATE SKIP LOCKED + atomic DELETE RETURNING, LIMIT 100/tick), POSTs one `aggregated: true` payload per group to send-push via pg_net. Worst-case delivery latency: debounce(30s) + cadence(60s) = **~90s**. (Sub-minute cron schedule strings aren't enabled on this project's pg_cron build; flip to `'30 seconds'` to cut latency once available.)
+8. **`send-push` extended** — when `aggregated: true`, queries the group's current unread state for `actor_count` + the second-most-recent actor's username, then `getAggregatedNotificationContent(type, latestActorName, secondActorName, actorCount, body)` builds the right copy line (`Alice liked` / `Alice and Bob liked` / `Alice and 12 others liked`). Self-events (`dream_generated`, `download_ready`) skip aggregation. Also fixed: `post_like` / `post_favorite` / `comment_like` previously fell through to `"New notification"` in the single-actor switch — now have proper titles.
+9. **Revert plan** — restore migration 196's `notify_send_push()` body (single CREATE OR REPLACE) and the trigger fires send-push directly again; `pending_push_groups` becomes a quiet unused table.
 
 ### Phase 3 — Preferences
 8. `notification_preferences` + `notification_settings` migrations.
@@ -274,8 +276,9 @@ Discovery: link from Settings index ("Notifications") + a one-time prompt the fi
 - Old `get_notifications` still returns the row-level shape (kept for safety, no callers after rewire).
 
 **Phase 2:**
-- 10 rapid likes on one post → exactly 1 push to the post owner ("Alice and 9 others liked …").
-- Single trickle event → push within ≤ 30 s.
+- 10 rapid likes on one post → exactly 1 push to the post owner ("Alice and 9 others liked …"). ✅
+- Single trickle event → push within ≤ ~90 s (debounce 30 s + cron cadence 60 s). ✅
+- `pending_push_groups` queue depth stays at 0 between bursts (drain runs cleanly). ✅ verified post-deploy.
 
 **Phase 3:**
 - Toggle "Likes / Push" off → next like still lands in inbox, no push.

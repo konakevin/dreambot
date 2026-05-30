@@ -18,7 +18,15 @@ interface WebhookPayload {
     comment_id: string | null;
     body: string | null;
     created_at: string;
+    group_key?: string | null;
   };
+  // Phase 2 (migration 204): the drain_pending_push_groups() pg_cron worker
+  // sets these when collapsing a debounced group into a single aggregated
+  // push. When present, we look up the group's CURRENT state (actor count +
+  // most-recent actor usernames) and build "Alice and N others …" copy
+  // instead of the single-actor copy below.
+  aggregated?: boolean;
+  group_key?: string;
 }
 
 // Rotating push copy for the nightly-dream notification. Short, mysterious,
@@ -45,6 +53,12 @@ function pickDreamPushBody(): string {
 
 function getNotificationContent(type: string, actorName: string, body: string | null) {
   switch (type) {
+    case 'post_like':
+      return { title: `${actorName} liked your dream`, body: '' };
+    case 'post_favorite':
+      return { title: `${actorName} favorited your dream`, body: '' };
+    case 'comment_like':
+      return { title: `${actorName} liked your comment`, body: '' };
     case 'post_comment':
       return { title: `${actorName} commented on your post`, body: body ?? '' };
     case 'comment_reply':
@@ -74,6 +88,69 @@ function getNotificationContent(type: string, actorName: string, body: string | 
       return { title: 'Your HD download is ready ✨', body: 'Tap to save it to your photos.' };
     default:
       return { title: 'New notification', body: '' };
+  }
+}
+
+// Per-type aggregated push copy. Same call sites as getNotificationContent,
+// but parameterized by total actor count + the two most-recent actors so the
+// title reads like Instagram/TikTok ("Alice and 12 others liked your dream").
+// Self-events (dream_generated, download_ready) ignore the count — they're
+// always individual per recipient and shouldn't be aggregated even if the
+// debounce queue collapsed them by accident.
+function getAggregatedNotificationContent(
+  type: string,
+  latestActorName: string,
+  secondActorName: string | null,
+  actorCount: number,
+  body: string | null
+) {
+  if (actorCount <= 1) {
+    // Singleton group — fall back to the single-actor copy.
+    return getNotificationContent(type, latestActorName, body);
+  }
+
+  const others = actorCount - 1;
+
+  // "Alice and Bob" (2 actors) vs "Alice and N others" (3+).
+  // 2-actor copy is warmer than "Alice and 1 other"; only switch to the
+  // numeric "N others" line at 3+.
+  const actors2 =
+    actorCount === 2 && secondActorName
+      ? `${latestActorName} and ${secondActorName}`
+      : `${latestActorName} and ${others} other${others === 1 ? '' : 's'}`;
+
+  switch (type) {
+    case 'post_like':
+      return { title: `${actors2} liked your dream`, body: '' };
+    case 'post_favorite':
+      return { title: `${actors2} favorited your dream`, body: '' };
+    case 'comment_like':
+      return { title: `${actors2} liked your comment`, body: '' };
+    case 'post_comment':
+      // Per-comment groups are single-actor by group_key design (comment:<id>),
+      // so this branch usually doesn't fire — but if a future grouping change
+      // bundles comments per post, this reads correctly.
+      return { title: `${actors2} commented on your post`, body: '' };
+    case 'comment_reply':
+      return { title: `${actors2} replied to your comment`, body: '' };
+    case 'comment_mention':
+      return { title: `${actors2} mentioned you`, body: '' };
+    case 'post_share':
+      return { title: `${actors2} sent you posts`, body: 'Tap to check them out' };
+    case 'friend_request':
+      return { title: `${actors2} want to dream with you`, body: 'Tap to respond' };
+    case 'friend_accepted':
+      return { title: `${actors2} accepted your friend request`, body: "You're now friends!" };
+    case 'follow_request':
+      return { title: `${actors2} requested to follow you`, body: 'Tap to approve or deny' };
+    case 'follow_accepted':
+      return { title: `${actors2} accepted your follow request`, body: '' };
+    case 'dream_generated':
+    case 'download_ready':
+      // Self-events — fall through to single-actor copy regardless of count.
+      return getNotificationContent(type, latestActorName, body);
+    default:
+      return { title: 'New notifications', body: '' };
   }
 }
 
@@ -107,7 +184,8 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ message: 'No push tokens' }), { status: 200 });
     }
 
-    // Get actor's username
+    // Get actor's username (the LATEST actor in the group when aggregated;
+    // the only actor otherwise).
     const { data: actor } = await supabase
       .from('users')
       .select('username')
@@ -115,7 +193,52 @@ Deno.serve(async (req) => {
       .single();
 
     const actorName = actor?.username ?? 'Someone';
-    const content = getNotificationContent(record.type, actorName, record.body);
+
+    // Phase 2 (migration 204): aggregated push path. The drain worker sets
+    // aggregated=true + group_key when collapsing a debounced group into one
+    // push. Look up the group's CURRENT state from notifications (the row count
+    // = number of events in this group; distinct actor_ids = number of unique
+    // actors) and the second-most-recent actor's username for the 2-actor copy
+    // line. Falls back to single-actor copy if any of that lookup fails.
+    let content = getNotificationContent(record.type, actorName, record.body);
+    if (payload.aggregated && payload.group_key) {
+      // Distinct unread actors in this group, recipient-scoped. (Counting only
+      // unseen so an already-read group doesn't double-count an older actor on
+      // a follow-up push — the user already saw the earlier event.)
+      const { data: groupActors } = await supabase
+        .from('notifications')
+        .select('actor_id, created_at')
+        .eq('recipient_id', record.recipient_id)
+        .eq('group_key', payload.group_key)
+        .is('seen_at', null)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      const seenActorIds = new Set<string>();
+      const orderedActorIds: string[] = [];
+      for (const row of groupActors ?? []) {
+        if (!row.actor_id || row.actor_id === record.recipient_id) continue;
+        if (seenActorIds.has(row.actor_id)) continue;
+        seenActorIds.add(row.actor_id);
+        orderedActorIds.push(row.actor_id);
+      }
+      const actorCount = orderedActorIds.length || 1;
+      let secondActorName: string | null = null;
+      if (actorCount >= 2 && orderedActorIds[1] && orderedActorIds[1] !== record.actor_id) {
+        const { data: second } = await supabase
+          .from('users')
+          .select('username')
+          .eq('id', orderedActorIds[1])
+          .single();
+        secondActorName = second?.username ?? null;
+      }
+      content = getAggregatedNotificationContent(
+        record.type,
+        actorName,
+        secondActorName,
+        actorCount,
+        record.body
+      );
+    }
 
     // App-icon badge = recipient's true unread count. This trigger fires AFTER
     // INSERT, so the just-inserted row is already counted. The client mirrors
