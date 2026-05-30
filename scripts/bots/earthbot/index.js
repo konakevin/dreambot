@@ -1,3 +1,4 @@
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 /**
  * EarthBot — the bot-engine contract.
  *
@@ -215,7 +216,7 @@ module.exports = {
   // EARTH_SUFFIX scrub (no more "no humans, no people" negative-prompt
   // tokens) — see [[feedback_negative_prompt_leak]].
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-1.1-pro'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   // Chaos layer — both source bots had chaos enabled. Earth had no
   // subject-chaos (allowSubjectChaosPaths: []) because there's no human

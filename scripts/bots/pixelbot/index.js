@@ -15,6 +15,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'cozy-rpg-town': require('./paths/cozy-rpg-town'),
@@ -54,12 +55,7 @@ module.exports = {
 
   // 4-model rotation. Engine picks at random per render — diversity
   // across models is part of the variance the bot trades on.
-  allowedModels: [
-    'black-forest-labs/flux-dev',
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-2-dev',
-    'black-forest-labs/flux-2-pro',
-  ],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,

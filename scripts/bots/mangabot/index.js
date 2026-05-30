@@ -8,6 +8,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   // Bespoke axis-system paths (Wave 1-4 overhaul 2026-05-29..30):
@@ -42,7 +43,7 @@ module.exports = {
   mediums: ['anime'],
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-1.1-pro'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   // Single 'anime' medium — pin heavy on anime-friendly vibes
   vibesByMedium: {

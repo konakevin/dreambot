@@ -68,17 +68,17 @@ export async function generateGeminiImage(
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         responseModalities: ['IMAGE'],
-        // imageConfig is the Nano Banana Pro knob for resolution + aspect.
-        // The field is only honored on gemini-3-pro-image-preview; Gemini
-        // 2.5 Flash ignores it and renders at its baseline. NOTE: the size
-        // field is `imageSize` ('1K'/'2K'/'4K') — NOT `resolution`, which
-        // 400s with "Unknown name 'resolution' at ...image_config". 2026-05-25.
-        ...(isNanoBananaPro && {
-          imageConfig: {
-            aspectRatio: '9:16',
-            imageSize: '1K',
-          },
-        }),
+        // imageConfig.aspectRatio is honored on BOTH gemini-3-pro-image-preview
+        // AND gemini-2.5-flash-image — the old comment claiming Flash ignored
+        // it was wrong, and Nano Banana 2 renders at default 1024x1024 square
+        // without it (cropping on the portrait fullscreen viewer). `imageSize`
+        // is Pro-only — Flash ignores it. NOTE: the size field is `imageSize`
+        // ('1K'/'2K'/'4K') — NOT `resolution`, which 400s with "Unknown name
+        // 'resolution' at ...image_config". 2026-05-25 / aspect-fix 2026-05-30.
+        imageConfig: {
+          aspectRatio: '9:16',
+          ...(isNanoBananaPro && { imageSize: '1K' }),
+        },
       },
     }),
   });
@@ -93,10 +93,15 @@ export async function generateGeminiImage(
 
   const data = await res.json();
 
-  // Check for safety block in the response (Gemini sometimes 200s with finishReason=SAFETY)
+  // Check for safety block in the response (Gemini sometimes 200s with
+  // finishReason set instead of a 4xx). SAFETY = legacy, IMAGE_SAFETY =
+  // current, PROHIBITED_CONTENT = stricter category seen on Nano Banana 2
+  // (often false-positives on innocuous prompts). All three should map to
+  // our NSFW_CONTENT: prefix so the upstream retry loop kicks in.
   const candidate = data.candidates?.[0];
-  if (candidate?.finishReason === 'SAFETY' || candidate?.finishReason === 'IMAGE_SAFETY') {
-    throw new Error('NSFW_CONTENT: Gemini safety filter blocked the response.');
+  const SAFETY_REASONS = new Set(['SAFETY', 'IMAGE_SAFETY', 'PROHIBITED_CONTENT']);
+  if (candidate?.finishReason && SAFETY_REASONS.has(candidate.finishReason)) {
+    throw new Error(`NSFW_CONTENT: Gemini ${candidate.finishReason} on response.`);
   }
 
   const parts = candidate?.content?.parts ?? [];

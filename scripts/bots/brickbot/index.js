@@ -19,6 +19,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'macro-display': require('./paths/macro-display'),
@@ -44,7 +45,7 @@ module.exports = {
   mediums: ['photography'],
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-1.1-pro'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
   modelByPath: Object.fromEntries(
     pools.PATHS.map((p) => [p, { 'black-forest-labs/flux-1.1-pro': 100 }])
   ),

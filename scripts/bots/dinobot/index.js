@@ -8,6 +8,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'dino-portrait': require('./paths/dino-portrait'),
@@ -81,7 +82,7 @@ module.exports = {
   },
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-1.1-pro'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   // Single locked vibe — cinematic. Was rotating 11 vibes which produced
   // inconsistent moods (cozy/ethereal/shimmer pulled away from the

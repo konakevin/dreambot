@@ -7,6 +7,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   diorama: require('./paths/diorama'),
@@ -33,7 +34,7 @@ module.exports = {
   mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted', 'render'],
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,

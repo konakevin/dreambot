@@ -20,6 +20,7 @@
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
 const { REGION_KEYS_GENERAL, regionRosterPrompt } = require('./species-roster');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   // 2026-05-16: landscape migration attempted + REVERTED — legacy compose.js
@@ -54,12 +55,7 @@ module.exports = {
   useModelPicker: true,
   // All paths random-pick one of these four per render (2026-05-27) — EXCEPT
   // any path locked in modelByPath below, which falls through to its lock.
-  allowedModels: [
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-pro',
-    'black-forest-labs/flux-2-max',
-  ],
+  allowedModels: ALL_ENABLED_AI_MODELS,
   // Per-path model lock. tropical-grove → random pick between flux-1.1-pro and
   // flux-1.1-pro-ultra only (Kevin 2026-05-27). Paths NOT listed here use the
   // uniform allowedModels pick above.

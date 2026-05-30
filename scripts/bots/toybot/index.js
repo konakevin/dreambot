@@ -13,6 +13,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   // existing
@@ -56,7 +57,7 @@ module.exports = {
   // all 4 Flux models (~1/4 each). modelByPath + this whitelist constrain the
   // BOT only — user-facing mediums (claymation/vinyl) are untouched.
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
   modelByPath: {
     'toybox-chaos': [
       'black-forest-labs/flux-dev',

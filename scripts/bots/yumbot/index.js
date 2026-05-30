@@ -11,6 +11,7 @@
  */
 
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'floral-garden-cup': require('./paths/floral-garden-cup'),
@@ -36,7 +37,7 @@ module.exports = {
   },
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,

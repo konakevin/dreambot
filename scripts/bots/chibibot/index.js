@@ -25,6 +25,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   // 3 ChibiBot-original indoor paths
@@ -161,7 +162,7 @@ module.exports = {
   cycleAllPaths: true,
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   // Per-path model lock. creature-world → flux-dev. CONFIRMED from the DB:
   // the ornate reference renders Kevin hearted (2026-05-07, paths

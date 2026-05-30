@@ -34,6 +34,8 @@ const path = require('path');
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { pickModel } = require('./modelPicker');
+const { isOpenAIModel, generateOpenAIImage } = require('./providers/openai');
+const { isGeminiModel, generateGeminiImage } = require('./providers/gemini');
 const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
 const { rollSensoryAnchors, buildSensoryBriefBlock } = require('./sensoryAnchors');
 const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
@@ -85,6 +87,35 @@ const MODEL_COST_PER_CALL_CENTS = {
   [PRIMARY_MODEL]: 0.3, // rough avg for a 500-token-in / 250-token-out brief
   [SECONDARY_MODEL]: 0.05,
 };
+
+/**
+ * Wrap an image-generation call with NSFW false-positive retry. Each
+ * provider has its own safety filter that occasionally false-positives
+ * on clean prompts (Flux's "E005 sensitive", OpenAI's
+ * "content_policy_violation", Gemini's "SAFETY"). Retrying the same
+ * prompt usually succeeds because diffusion is stochastic. The provider
+ * modules throw with an "NSFW_CONTENT:" prefix on safety errors; this
+ * helper detects that + retries up to `nsfwRetries` times.
+ *
+ * Non-safety errors propagate immediately (no retry).
+ */
+async function withNsfwRetry(nsfwRetries, fn) {
+  for (let attempt = 0; attempt <= nsfwRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      const isSafetyFlag =
+        err && err.message && /NSFW|sensitive|flagged|safety|E005/i.test(err.message);
+      if (isSafetyFlag && attempt < nsfwRetries) {
+        console.warn(
+          `  ⚠️ safety-filter (possibly false-positive), retry ${attempt + 1}/${nsfwRetries}`
+        );
+        continue;
+      }
+      throw err;
+    }
+  }
+}
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -180,24 +211,44 @@ const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c92
  */
 async function fluxOnce({ prompt, aspectRatio, model, replicateKey, inputOverrides = {} }) {
   const isSDXL = model === 'sdxl';
-  const input = {
-    prompt,
-    ...(isSDXL
-      ? { num_outputs: 1 }
-      : {
-          aspect_ratio: aspectRatio,
-          num_outputs: 1,
-          // JPEG q95 (was PNG q100 2026-05-29). Storage masters are now JPEG
-          // across the app (matches user-dream pipeline). At q95, Clarity
-          // (diffusion-based) upscales effectively identically to PNG input;
-          // the visible HD download is unchanged. Cuts bot master from ~2MB
-          // PNG to ~400KB JPEG — smaller storage AND a smaller feed-card
-          // fallback when image_url_display is ever null.
-          output_format: 'jpg',
-          output_quality: 95,
-        }),
-    ...inputOverrides,
-  };
+  // Replicate-wrapped non-Flux models accept a DIFFERENT input schema than
+  // the Flux family. Flux's `num_outputs` / `output_quality` / 'jpg' aren't
+  // valid keys/values on these wrappers — sending them yields HTTP 422.
+  //   openai/gpt-image-2 → aspect_ratio ∈ {1:1,3:2,2:3}, output_format ∈ {png,jpeg,webp}
+  //   google/nano-banana → aspect_ratio defaults to match_input_image (needs
+  //                        an override for text-to-image), output_format: jpg ok
+  // Per-model defaults live in modelPicker.MODEL_INPUT_DEFAULTS and arrive
+  // here as `inputOverrides` from pickModel() — we just need to AVOID
+  // injecting Flux-specific keys for these models.
+  const isOpenAI = typeof model === 'string' && model.startsWith('openai/');
+  const isGoogle = typeof model === 'string' && model.startsWith('google/');
+  const isReplicateWrapper = isOpenAI || isGoogle;
+
+  let input;
+  if (isSDXL) {
+    input = { prompt, num_outputs: 1, ...inputOverrides };
+  } else if (isReplicateWrapper) {
+    // Minimal shape — picker-supplied overrides own aspect_ratio + output_format.
+    // No num_outputs (gpt-image-2 uses number_of_images instead) and no
+    // output_quality (rejected). Prompt + caller overrides only.
+    input = { prompt, ...inputOverrides };
+  } else {
+    // Flux family
+    input = {
+      prompt,
+      aspect_ratio: aspectRatio,
+      num_outputs: 1,
+      // JPEG q95 (was PNG q100 2026-05-29). Storage masters are now JPEG
+      // across the app (matches user-dream pipeline). At q95, Clarity
+      // (diffusion-based) upscales effectively identically to PNG input;
+      // the visible HD download is unchanged. Cuts bot master from ~2MB
+      // PNG to ~400KB JPEG — smaller storage AND a smaller feed-card
+      // fallback when image_url_display is ever null.
+      output_format: 'jpg',
+      output_quality: 95,
+      ...inputOverrides,
+    };
+  }
   const url = isSDXL
     ? 'https://api.replicate.com/v1/predictions'
     : `https://api.replicate.com/v1/models/${model}/predictions`;
@@ -213,9 +264,16 @@ async function fluxOnce({ prompt, aspectRatio, model, replicateKey, inputOverrid
     throw new Error(`Replicate ${res.status}: ${text}`);
   }
   const data = await res.json();
-  // Poll prediction — 60 * 1.5s = 90s max
-  for (let i = 0; i < 60; i++) {
-    await sleep(1500);
+  // Poll prediction. Flux models finish in ~20–30s so 90s was historically
+  // plenty. Replicate-wrapped non-Flux models (gpt-image-2, nano-banana)
+  // run on the wrapped provider's pipeline + Replicate's queuing, which
+  // can push past 90s — 2026-05-30 we lost 2/3 gpt-image-2 renders to a
+  // 90s ceiling. 240s for wrappers, 90s for Flux.
+  const maxPollMs = isReplicateWrapper ? 240_000 : 90_000;
+  const intervalMs = 1500;
+  const maxPolls = Math.floor(maxPollMs / intervalMs);
+  for (let i = 0; i < maxPolls; i++) {
+    await sleep(intervalMs);
     const p = await fetch('https://api.replicate.com/v1/predictions/' + data.id, {
       headers: { Authorization: 'Bearer ' + replicateKey },
     });
@@ -227,13 +285,24 @@ async function fluxOnce({ prompt, aspectRatio, model, replicateKey, inputOverrid
       throw new Error(`Replicate ${pd.status}: ${pd.error || 'no error message'}`);
     }
   }
-  throw new Error('Replicate timed out after 90s');
+  throw new Error(`Replicate timed out after ${Math.round(maxPollMs / 1000)}s`);
 }
 
 /**
- * Replicate render with NSFW false-positive auto-retry. Flux's safety
- * model occasionally flags clean prompts as NSFW — retrying the same
- * prompt usually succeeds due to stochastic diffusion. Up to 2 retries.
+ * Multi-provider image render with NSFW false-positive auto-retry. Routes
+ * by model prefix:
+ *   openai/*  → native OpenAI API (providers/openai.js)
+ *   google/*  → native Gemini API (providers/gemini.js)
+ *   anything else → Replicate (fluxOnce)
+ *
+ * Native routing matches the user-dream Edge Function
+ * (`_shared/generateImage.ts`) — bots used to be Replicate-only, which
+ * forced the OpenAI + Gemini renders through Replicate's wrappers and
+ * added 20-40s of queueing on already-slow models. 2026-05-30.
+ *
+ * NSFW retry: Flux's safety model occasionally flags clean prompts as
+ * NSFW; same with the OpenAI + Gemini safety filters. Retrying often
+ * passes because diffusion is stochastic. Up to `nsfwRetries` attempts.
  *
  * Accepts `model` string directly. If bot opts into `useModelPicker`,
  * runBot calls pickModel() first to choose the model + inputOverrides
@@ -247,6 +316,29 @@ async function flux({
   replicateKey,
   nsfwRetries = 2,
 }) {
+  // Native OpenAI route. Lazy-required so a bot that never touches OpenAI
+  // doesn't pay the parse cost — and an environment without OPENAI_API_KEY
+  // still loads the engine.
+  if (isOpenAIModel(model)) {
+    const key = getKey('OPENAI_API_KEY');
+    if (!key) throw new Error('OPENAI_API_KEY missing — set it in .env.local or env');
+    return await withNsfwRetry(nsfwRetries, async () => {
+      const r = await generateOpenAIImage(model, prompt, key);
+      return r.url;
+    });
+  }
+
+  // Native Gemini route.
+  if (isGeminiModel(model)) {
+    const key = getKey('GEMINI_API_KEY');
+    if (!key) throw new Error('GEMINI_API_KEY missing — set it in .env.local or env');
+    return await withNsfwRetry(nsfwRetries, async () => {
+      const r = await generateGeminiImage(model, prompt, key);
+      return r.url;
+    });
+  }
+
+  // Replicate (Flux + SDXL + Kontext + any Replicate-hosted wrapper).
   const key = replicateKey || getKey('REPLICATE_API_TOKEN');
   if (!key) throw new Error('REPLICATE_API_TOKEN missing');
 
@@ -276,7 +368,29 @@ async function flux({
   throw new Error('Flux: unreachable code path'); // for linter — loop always returns or throws
 }
 
+/**
+ * Download an image to `dest`. Supports two URL schemes:
+ *   - https://...           → standard HTTP GET (Replicate, Supabase Storage)
+ *   - data:image/...;base64 → decode in-process, no network
+ *
+ * The native OpenAI + Gemini providers return base64-inline images as
+ * `data:image/png;base64,...` URLs (same shape as the Deno providers in
+ * `supabase/functions/_shared/providers/*.ts`). Without this dual-mode
+ * downloader, those providers blew up at this step with `Protocol "data:"
+ * not supported. Expected "https:"`. 2026-05-30.
+ */
 function download(url, dest) {
+  if (typeof url === 'string' && url.startsWith('data:')) {
+    // Format: data:<mime>;base64,<payload>
+    const comma = url.indexOf(',');
+    if (comma < 0) return Promise.reject(new Error('Invalid data URL: no payload'));
+    const header = url.slice(5, comma); // e.g. "image/png;base64"
+    if (!/;base64$/i.test(header)) {
+      return Promise.reject(new Error(`Unsupported data URL encoding: ${header}`));
+    }
+    const payload = url.slice(comma + 1);
+    return fs.promises.writeFile(dest, Buffer.from(payload, 'base64'));
+  }
   return new Promise((resolve, reject) => {
     https
       .get(url, (s) => {
@@ -626,6 +740,7 @@ async function postAsBot({
   caption,
   recipe,
   fluxSeed,
+  model,
 }) {
   const bytes = fs.readFileSync(localPath);
   // Pipeline produces JPG (post 2026-05-09 webp revert). PNG kept as a
@@ -684,6 +799,7 @@ async function postAsBot({
       caption: caption || null,
       recipe: recipe || null,
       flux_seed: fluxSeed ?? null,
+      model: model || null,
     })
     .select('id')
     .single();
@@ -1307,6 +1423,7 @@ async function runBot(opts) {
         caption,
         recipe,
         fluxSeed: null,
+        model: renderModel,
       });
 
       // 13. Commit dedup picks ONLY on successful post

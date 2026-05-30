@@ -9,6 +9,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'dark-landscape': require('./paths/dark-landscape'),
@@ -43,7 +44,7 @@ module.exports = {
   // pool BEFORE picking. GothBot bans flux-2-dev (tensor bug: "q_descale must
   // have shape...") and flux-2-pro (over-strict E005 safety filter). Every
   // gothbot render picks flux-dev or flux-1.1-pro only.
-  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   // Per-path model override — takes precedence over pickModel (medium pool).
   // Every path locked to flux-1.1-pro (Kevin's call 2026-05-16: PNG output

@@ -159,6 +159,23 @@ export function findModel(id: string): ImageModel | undefined {
   return IMAGE_MODELS.find((m) => m.id === id);
 }
 
+/**
+ * Friendly badge label for a model id. Powers the bottom-left model badge
+ * on DreamCard (above the username). Falls back to the slug after the
+ * last `/`, title-cased, so an unknown id never surfaces as a raw vendor
+ * path. Returns null for null/undefined so callers can render-or-hide.
+ */
+export function getModelDisplayName(modelId: string | null | undefined): string | null {
+  if (!modelId) return null;
+  const known = findModel(modelId);
+  if (known) return known.label;
+  const slug = modelId.includes('/') ? modelId.slice(modelId.lastIndexOf('/') + 1) : modelId;
+  return slug
+    .split('-')
+    .map((p) => (p ? p[0].toUpperCase() + p.slice(1) : p))
+    .join(' ');
+}
+
 export function getSparkleCost(id: string | null | undefined): number {
   if (!id) return 1;
   return findModel(id)?.sparkleCost ?? 1;

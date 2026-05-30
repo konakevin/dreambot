@@ -36,6 +36,7 @@ import { colors, ui, ANIM } from '@/constants/theme';
 import { handleImageLongPress, openDownloadSheet } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import { avatarUrl } from '@/lib/imageUrl';
+import { getModelDisplayName } from '@/constants/imageModels';
 import { useAuthStore } from '@/store/auth';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -67,6 +68,11 @@ export interface DreamPostItem {
   bot_message?: string | null;
   dream_medium?: string | null;
   dream_vibe?: string | null;
+  /** AI model identifier that rendered this image (e.g. 'openai/gpt-image-2',
+   * 'black-forest-labs/flux-1.1-pro'). Populated for new posts by the bot
+   * engine + Edge Functions; older posts are null. Powers the bottom-left
+   * model badge (above the username). */
+  model?: string | null;
   is_public?: boolean;
   posted_at?: string | null;
   description?: string | null;
@@ -483,6 +489,18 @@ export const DreamCard = memo(function DreamCard({
           {/* HUD — post info + side actions, toggled by single tap */}
           <Animated.View style={[StyleSheet.absoluteFill, hudStyle]} pointerEvents="box-none">
             <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
+              {/* Model badge — sits ABOVE the username so Kevin (and users)
+                  can see which AI rendered the image at a glance. Friendly
+                  name from constants/imageModels; hidden when model is null
+                  (legacy posts + user dreams not yet wired through). */}
+              {item.model && (
+                <View style={s.modelBadgeWrap}>
+                  <View style={s.modelBadge}>
+                    <Ionicons name="sparkles" size={13} color="#FFFFFF" />
+                    <Text style={s.modelBadgeText}>{getModelDisplayName(item.model)}</Text>
+                  </View>
+                </View>
+              )}
               <TouchableOpacity
                 style={s.usernameRow}
                 onPress={() =>
@@ -728,6 +746,31 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     gap: 6,
     paddingBottom: 4,
+  },
+  // Model badge — chip rendered above the usernameRow. flex-start wrapper
+  // keeps the chip hugging its label width (without it, the chip would
+  // stretch the full row). Translucent dark fill so it reads cleanly over
+  // either dark or bright image content but doesn't compete with the
+  // username typography. Sized 2026-05-30 per Kevin's "bump it" request —
+  // the original 11px / 8x3 padding was readable but felt cramped at
+  // arm's length on the fullscreen viewer.
+  modelBadgeWrap: { flexDirection: 'row', marginBottom: 8 },
+  modelBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 11,
+    paddingVertical: 5,
+    borderRadius: 999,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.18)',
+  },
+  modelBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+    letterSpacing: 0.2,
   },
   usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 8 },
   avatar: {

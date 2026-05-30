@@ -9,6 +9,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'saturday-morning': require('./paths/saturday-morning'),
@@ -65,7 +66,7 @@ module.exports = {
   ],
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

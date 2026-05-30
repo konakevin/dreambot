@@ -14,6 +14,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'steampunk-scene': require('./paths/steampunk-scene'),
@@ -71,7 +72,7 @@ module.exports = {
   displayName: 'SteamBot',
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-dev'],
+  allowedModels: ALL_ENABLED_AI_MODELS,
 
   modelByPath: {
     'steampunk-scene': { 'black-forest-labs/flux-1.1-pro': 100 },

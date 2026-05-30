@@ -44,6 +44,30 @@ const SDXL_OVERRIDES = Object.freeze({
 // Empty today; mirrors the Deno sibling's SDXL_ALWAYS set for parity.
 const SDXL_ALWAYS = new Set([]);
 
+// Per-model Replicate input defaults for non-Flux wrappers. These models
+// have DIFFERENT input schemas than the Flux family — sending Flux's
+// `aspect_ratio: '9:16'` or `output_format: 'jpg'` to gpt-image-2 yields
+// HTTP 422. Defaults below pin each wrapper to portrait output in its
+// nearest-supported ratio + a sensible output format. botEngine.fluxOnce()
+// also skips Flux-specific keys (num_outputs, output_quality) for any
+// `openai/*` or `google/*` model. SOURCE OF TRUTH: each model's Replicate
+// `openapi_schema.components.Input.properties` enum values.
+const MODEL_INPUT_DEFAULTS = Object.freeze({
+  // Replicate's gpt-image-2 wrapper: aspect ∈ {1:1,3:2,2:3}; 9:16 is NOT
+  // accepted. 2:3 = 1024×1536 portrait, our canonical Flux size.
+  'openai/gpt-image-2': Object.freeze({ aspect_ratio: '2:3', output_format: 'jpeg' }),
+  // Nano Banana defaults aspect_ratio to `match_input_image`, which fails
+  // on text-to-image with no input. Pin to 9:16.
+  'google/nano-banana': Object.freeze({ aspect_ratio: '9:16', output_format: 'jpg' }),
+});
+
+/** Returns a fresh {...overrides} or {} for a given model id. */
+function defaultsForModel(model) {
+  if (model === 'sdxl') return { ...SDXL_OVERRIDES };
+  const m = MODEL_INPUT_DEFAULTS[model];
+  return m ? { ...m } : {};
+}
+
 // ── Env loading (Node may not have process.env populated in CLI runs) ───
 
 function loadEnvFile() {
@@ -68,8 +92,7 @@ function getSupabase() {
     process.env.EXPO_PUBLIC_SUPABASE_URL ||
     envFile.EXPO_PUBLIC_SUPABASE_URL ||
     'https://jimftynwrinwenonjrlj.supabase.co';
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY || envFile.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || envFile.SUPABASE_SERVICE_ROLE_KEY;
   if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY missing for modelPicker');
   cachedClient = createClient(url, key, { auth: { persistSession: false } });
   return cachedClient;
@@ -154,7 +177,7 @@ async function pickModel({
   if (forceModel) {
     return {
       model: forceModel,
-      inputOverrides: forceModel === 'sdxl' ? { ...SDXL_OVERRIDES } : {},
+      inputOverrides: defaultsForModel(forceModel),
     };
   }
 
@@ -166,7 +189,7 @@ async function pickModel({
   }
 
   if (mediumKey && SDXL_ALWAYS.has(mediumKey)) {
-    return { model: 'sdxl', inputOverrides: { ...SDXL_OVERRIDES } };
+    return { model: 'sdxl', inputOverrides: defaultsForModel('sdxl') };
   }
 
   await refreshCache();
@@ -188,7 +211,7 @@ async function pickModel({
       const picked = pickRandom(filtered);
       return {
         model: picked,
-        inputOverrides: picked === 'sdxl' ? { ...SDXL_OVERRIDES } : {},
+        inputOverrides: defaultsForModel(picked),
       };
     }
   }
@@ -201,7 +224,7 @@ async function pickModel({
       const picked = pickRandom(filtered);
       return {
         model: picked,
-        inputOverrides: picked === 'sdxl' ? { ...SDXL_OVERRIDES } : {},
+        inputOverrides: defaultsForModel(picked),
       };
     }
   }
@@ -211,7 +234,7 @@ async function pickModel({
     const picked = pickRandom(allowedModels);
     return {
       model: picked,
-      inputOverrides: picked === 'sdxl' ? { ...SDXL_OVERRIDES } : {},
+      inputOverrides: defaultsForModel(picked),
     };
   }
   return { model: DEFAULT_MODEL, inputOverrides: {} };

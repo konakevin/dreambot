@@ -47,6 +47,10 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     fuse_of: (row.fuse_of as string | null) ?? null,
     dream_medium: (row.dream_medium as string | null) ?? null,
     dream_vibe: (row.dream_vibe as string | null) ?? null,
+    // Defensive cast — pre-migration-211 generated types don't have this
+    // column yet. Either order (run migration first or types-regen first)
+    // is safe; the runtime value is null until backfill + new renders.
+    model: ((row as Record<string, unknown>).model as string | null) ?? null,
     is_public: (row.is_public as boolean) ?? false,
     posted_at: (row.posted_at as string | null) ?? null,
     description: (row.description as string | null) ?? null,
@@ -76,6 +80,10 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     ai_concept: (row.ai_concept as Record<string, unknown> | null) ?? null,
     dream_medium: (row.dream_medium as string | null) ?? null,
     dream_vibe: (row.dream_vibe as string | null) ?? null,
+    // Defensive cast — pre-migration-211 generated types don't have this
+    // column yet. Either order (run migration first or types-regen first)
+    // is safe; the runtime value is null until backfill + new renders.
+    model: ((row as Record<string, unknown>).model as string | null) ?? null,
     is_public: (row.is_public as boolean) ?? false,
     posted_at: (row.posted_at as string | null) ?? null,
     description: (row.description as string | null) ?? null,
