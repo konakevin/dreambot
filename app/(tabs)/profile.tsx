@@ -165,6 +165,15 @@ export default function ProfileScreen() {
     outputRange: [0, 36], // 28px avatar + 8px margin
     extrapolate: 'clamp',
   });
+  // The @handle text fades in alongside the avatar — at scrollY=0 the
+  // big hero already shows the user's identity prominently, so showing
+  // @kevin in the top bar too would be redundant. Only reveals once the
+  // hero has scrolled away.
+  const compactHandleOpacity = scrollY.interpolate({
+    inputRange: [80, 150],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
   const topBarBorderOpacity = scrollY.interpolate({
     inputRange: [20, 80],
     outputRange: [0, 1],
@@ -192,9 +201,12 @@ export default function ProfileScreen() {
             />
           )}
         </Animated.View>
-        <Text style={styles.topBarHandle} numberOfLines={1}>
+        <Animated.Text
+          style={[styles.topBarHandle, { opacity: compactHandleOpacity }]}
+          numberOfLines={1}
+        >
           @{user?.user_metadata?.username ?? 'you'}
-        </Text>
+        </Animated.Text>
       </View>
       <View style={styles.topBarActions}>
         <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
