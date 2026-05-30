@@ -19,7 +19,7 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 ## Feed, albums & images
 
 - [x] 🤖 Jumping to images in albums is **weird, janky** — shipped 2026-05-29 (PostGrid: animate the badge-tap jump, drop the 300ms dim-spinner overlay that lingered after a synchronous scroll)
-- [ ] 🤖 Images load **slow** in general — is our infra for image delivery bad?
+- [x] 🤖 Images load **slow** in general — is our infra for image delivery bad? — handled by another agent 2026-05-29
 - [x] 🤖 Feeds **stall out** + reach the bottom when there are obviously more posts (~30 in), after navigate/background/return. How do we recover from those stale conditions? — shipped 2026-05-29 (cursor-termination bug; details in commit)
 - [x] 🤖 **Remove** the "↑ new posts" pill on **all** feeds — shipped 2026-05-29
 - [x] 🤖 Pulling down on any **bot feed** should refresh **all** the bots — shipped 2026-05-29
