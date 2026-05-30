@@ -19,9 +19,15 @@ describe('onboarding store — isHydrated gate', () => {
   });
 
   it('loadProfile (returning user / Settings) hydrates the store', () => {
-    useOnboardingStore.getState().loadProfile({ ...DEFAULT_VIBE_PROFILE, aesthetics: ['dreamy'] });
+    // Was checking aesthetics roundtrip; that field was removed when
+    // Kevin pivoted away from user-curated vibes. dream_seeds.places is
+    // a comparable string[] slot on the live shape.
+    useOnboardingStore.getState().loadProfile({
+      ...DEFAULT_VIBE_PROFILE,
+      dream_seeds: { ...DEFAULT_VIBE_PROFILE.dream_seeds, places: ['kauai'] },
+    });
     expect(useOnboardingStore.getState().isHydrated).toBe(true);
-    expect(useOnboardingStore.getState().profile.aesthetics).toEqual(['dreamy']);
+    expect(useOnboardingStore.getState().profile.dream_seeds.places).toEqual(['kauai']);
   });
 
   it('setHydrated(true) marks hydrated without mutating the profile (new-user onboarding path)', () => {

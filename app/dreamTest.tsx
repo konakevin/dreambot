@@ -223,8 +223,6 @@ export default function DreamTestScreen() {
             '[DreamTest] Profile sent:',
             JSON.stringify({
               version: profile.version,
-              aesthetics: profile.aesthetics?.length,
-              art_styles: profile.art_styles?.length,
               cast: profile.dream_cast?.length,
               seeds: Object.values(profile.dream_seeds ?? {}).flat().length,
             })

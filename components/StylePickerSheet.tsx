@@ -36,8 +36,6 @@ interface Props {
   onClose: () => void;
   /** Full list of available options (from DB) */
   options: StyleOption[];
-  /** If provided, only show options the user selected + Surprise Me */
-  userFilter?: string[];
 }
 
 export function StylePickerSheet({
@@ -47,7 +45,6 @@ export function StylePickerSheet({
   onSelect,
   onClose,
   options: allAvailable,
-  userFilter,
 }: Props) {
   const insets = useSafeAreaInsets();
   const progress = useSharedValue(0);

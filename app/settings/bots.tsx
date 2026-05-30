@@ -6,36 +6,31 @@
  * so it's accessible any time from the settings screen rather than as a
  * one-shot post-onboarding showcase.
  *
- * Ordering: bots the user already follows first, then aesthetics-curated
- * recommendations, then alphabetical for everything else. This makes it
- * useful as a management surface — you can immediately see who you follow.
+ * Ordering: bots the user already follows first, then alphabetical for
+ * everything else. (Aesthetics-curated middle tier was removed when
+ * Kevin pivoted away from onboarding-time vibe selection 2026-05-29.)
+ * This makes it useful as a management surface — you can immediately
+ * see who you follow.
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
-import { supabase } from '@/lib/supabase';
-import { useAuthStore } from '@/store/auth';
-import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { useBotUsers, type BotUser } from '@/hooks/useBotUsers';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useBotThumbnails } from '@/hooks/useBotThumbnails';
-import { curateBotsForAesthetics } from '@/lib/curatedBots';
 import { BotCard } from '@/components/BotCard';
 import { BotImageViewer } from '@/components/BotImageViewer';
 
 export default function SettingsBotsScreen() {
-  const user = useAuthStore((s) => s.user);
   const { data: allBots = [], isLoading: botsLoading } = useBotUsers();
   const { data: thumbnails } = useBotThumbnails(3);
   const { data: followingIds = [] } = useFollowingIds();
   const followingSet = useMemo(() => new Set(followingIds), [followingIds]);
 
-  const [aesthetics, setAesthetics] = useState<string[]>([]);
-  const [profileLoaded, setProfileLoaded] = useState(false);
   const [viewer, setViewer] = useState<{ urls: string[]; initialIndex: number } | null>(null);
 
   const openViewer = useCallback((urls: string[], initialIndex: number) => {
@@ -46,65 +41,24 @@ export default function SettingsBotsScreen() {
     setViewer(null);
   }, []);
 
-  // Pull the user's aesthetics so we can sort the bot list by relevance.
-  useEffect(() => {
-    if (!user) {
-      setProfileLoaded(true);
-      return;
-    }
-    let cancelled = false;
-    (async () => {
-      try {
-        const { data: recipe } = await supabase
-          .from('user_recipes')
-          .select('recipe')
-          .eq('user_id', user.id)
-          .single();
-        const raw = recipe?.recipe as unknown;
-        const list = isVibeProfile(raw)
-          ? raw.aesthetics
-          : (((raw as { aesthetics?: string[] } | null)?.aesthetics ?? []) as string[]);
-        if (!cancelled) setAesthetics(list);
-      } catch {
-        // No recipe yet — fall through with empty aesthetics → fallback ordering
-      } finally {
-        if (!cancelled) setProfileLoaded(true);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [user]);
-
-  // Followed-first ordering: bots you already follow up top, then aesthetics-
-  // curated recommendations, then everything else alphabetical. Dedupe by id.
-  // Different from meet-the-bots (which leads with curated) — here you usually
-  // want to see who you're already following first so you can manage.
+  // Followed-first ordering: bots you already follow up top, then
+  // everything else alphabetical. The aesthetics-driven recommended tier
+  // in the middle was removed when Kevin pivoted away from onboarding
+  // vibe selection 2026-05-29 — no user-curated aesthetics means no
+  // signal to rank against.
   const orderedBots = useMemo<BotUser[]>(() => {
     if (allBots.length === 0) return [];
     const followed = allBots
       .filter((b) => followingSet.has(b.id))
       .sort((a, b) => a.username.localeCompare(b.username));
-
-    const recommended = curateBotsForAesthetics(aesthetics);
-    const byUsername = new Map(allBots.map((b) => [b.username.toLowerCase(), b]));
-
-    const seen = new Set<string>(followed.map((b) => b.id));
-    const recommendedTier: BotUser[] = [];
-    for (const u of recommended) {
-      const b = byUsername.get(u.toLowerCase());
-      if (b && !seen.has(b.id)) {
-        recommendedTier.push(b);
-        seen.add(b.id);
-      }
-    }
+    const followedIds = new Set<string>(followed.map((b) => b.id));
     const tail = [...allBots]
-      .filter((b) => !seen.has(b.id))
+      .filter((b) => !followedIds.has(b.id))
       .sort((a, b) => a.username.localeCompare(b.username));
-    return [...followed, ...recommendedTier, ...tail];
-  }, [allBots, aesthetics, followingSet]);
+    return [...followed, ...tail];
+  }, [allBots, followingSet]);
 
-  const isLoading = botsLoading || !profileLoaded;
+  const isLoading = botsLoading;
   const followingCount = allBots.filter((b) => followingSet.has(b.id)).length;
 
   return (

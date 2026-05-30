@@ -55,11 +55,21 @@ export interface DreamCastMember {
   relationship?: CastRelationship;
 }
 
-/** The complete vibe profile stored in user_recipes.recipe JSONB */
+/**
+ * The complete vibe profile stored in user_recipes.recipe JSONB.
+ *
+ * `aesthetics` (vibes) and `art_styles` (mediums) used to be user-curated
+ * selections captured at onboarding. Kevin pivoted away from that
+ * 2026-05-29: the nightly engine rolls mediums/vibes from the curated
+ * dream_eligible pool regardless, and the Create screen exposes the full
+ * catalog every render. Those fields stopped being written — existing
+ * recipes in the DB may still carry them as vestigial keys (JSONB
+ * tolerates extras), and engine code that legitimately needs them
+ * (generate-dream's surprise_me fallback) reads via optional access on
+ * the raw row, not via this type.
+ */
 export interface VibeProfile {
   version: 2;
-  aesthetics: Aesthetic[];
-  art_styles: ArtStyle[];
   moods: MoodAxes;
   /** Three categories of dream ingredients the engine remixes */
   dream_seeds: DreamSeeds;
@@ -76,8 +86,6 @@ export const DEFAULT_DREAM_SEEDS: DreamSeeds = {
 
 export const DEFAULT_VIBE_PROFILE: VibeProfile = {
   version: 2,
-  aesthetics: [],
-  art_styles: [],
   moods: {
     peaceful_chaotic: 0.5,
     cute_terrifying: 0.3,

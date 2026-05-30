@@ -11,8 +11,6 @@ import { OnboardingHeader } from '@/components/OnboardingHeader';
 import { colors } from '@/constants/theme';
 
 import { WelcomeStep } from '@/components/onboarding/WelcomeStep';
-import { MediumsStep } from '@/components/onboarding/MediumsStep';
-import { VibesStep } from '@/components/onboarding/VibesStep';
 import { MoodSlidersStep } from '@/components/onboarding/MoodSlidersStep';
 import { LocationPickerStep } from '@/components/onboarding/LocationPickerStep';
 import { ObjectPickerStep } from '@/components/onboarding/ObjectPickerStep';
@@ -29,12 +27,15 @@ interface StepConfig {
   skipInEdit?: boolean;
 }
 
+// Mediums + vibes picker steps removed when Kevin pivoted away from user-
+// curated taste (the nightly engine rolls its own and the Create screen
+// exposes the full catalog every render). The remaining sequence shapes
+// the user's personal anchors + dream cast + mood — what the engine
+// genuinely personalizes from — and ends on the first-dream reveal.
 const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep },
   { key: 'locations', component: LocationPickerStep },
   { key: 'cast', component: DreamCastStep },
-  { key: 'mediums', component: MediumsStep },
-  { key: 'vibes', component: VibesStep },
   { key: 'personality', component: MoodSlidersStep },
   { key: 'objects', component: ObjectPickerStep },
   { key: 'reveal', component: RevealStep, skipInEdit: true },
@@ -105,20 +106,12 @@ export default function OnboardingPager() {
     switch (stepKey) {
       case 'locations':
         return profile.dream_seeds.places.length >= 1;
-      case 'mediums':
-        return profile.art_styles.length >= 1;
-      case 'vibes':
-        return profile.aesthetics.length >= 1;
+      // 'mediums' + 'vibes' branches removed when those steps were
+      // dropped from the sequence — see STEPS comment.
       default:
         return true;
     }
-  }, [
-    step,
-    steps,
-    profile.dream_seeds.places.length,
-    profile.art_styles.length,
-    profile.aesthetics.length,
-  ]);
+  }, [step, steps, profile.dream_seeds.places.length]);
 
   const onMomentumScrollEnd = useCallback(
     (e: { nativeEvent: { contentOffset: { x: number } } }) => {

@@ -28,14 +28,6 @@ interface OnboardingStore {
 
   profile: VibeProfile;
 
-  // Mediums
-  toggleArtStyle: (key: ArtStyle) => void;
-  setAllArtStyles: (keys: ArtStyle[]) => void;
-
-  // Vibes
-  toggleAesthetic: (key: Aesthetic) => void;
-  setAllAesthetics: (keys: Aesthetic[]) => void;
-
   // Personality
   setMoodAxis: (axis: keyof MoodAxes, value: number) => void;
 
@@ -87,24 +79,6 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   setHydrated: (v) => set({ isHydrated: v }),
 
   profile: { ...DEFAULT_VIBE_PROFILE },
-
-  toggleArtStyle: (key) =>
-    set((s) => ({ profile: { ...s.profile, art_styles: toggle(s.profile.art_styles, key) } })),
-
-  setAllArtStyles: (keys) =>
-    set((s) => {
-      const allSelected = keys.every((k) => s.profile.art_styles.includes(k));
-      return { profile: { ...s.profile, art_styles: allSelected ? [] : [...keys] } };
-    }),
-
-  toggleAesthetic: (key) =>
-    set((s) => ({ profile: { ...s.profile, aesthetics: toggle(s.profile.aesthetics, key) } })),
-
-  setAllAesthetics: (keys) =>
-    set((s) => {
-      const allSelected = keys.every((k) => s.profile.aesthetics.includes(k));
-      return { profile: { ...s.profile, aesthetics: allSelected ? [] : [...keys] } };
-    }),
 
   setMoodAxis: (axis, value) =>
     set((s) => ({

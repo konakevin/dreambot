@@ -128,6 +128,16 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
+    // Axis-system paths skip polish per playbook lesson
+    // `feedback_axis_system_skip_polish` — Haiku polish strips the rolled
+    // camera_framing axis content + CAMERA_FRAMING_MANDATORY_BLOCK text +
+    // per-template anti-back-to-camera mandates when compressing the
+    // 150-word Sonnet concept down to 65-110 words. Without polish, the
+    // rolled axis language reaches Flux intact. Validated 2026-05-29:
+    // R1 housekeeping test showed 3 of 5 isekai-fantasy renders dropped
+    // back to back-to-camera despite the rewritten templates because
+    // Haiku had stripped the camera_framing description entirely.
+    skipPaths: ['isekai-fantasy', 'ghibli-countryside', 'neo-tokyo', 'samurai-era'],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista
       'anime-character-female': '90-130',

@@ -4,9 +4,9 @@
  * showcase of every bot: avatar, tagline, 3 sample post thumbnails,
  * Follow button.
  *
- * Order: bots curated to the user's selected aesthetics first (using the
- * existing `curateBotsForAesthetics` scoring), then alphabetical for the
- * rest. Tapping a thumbnail opens that bot's profile.
+ * Order: alphabetical by username. (User-curated aesthetics-driven
+ * ranking was removed when Kevin pivoted away from onboarding-time vibe
+ * selection 2026-05-29.) Tapping a thumbnail opens that bot's profile.
  *
  * One-time gating: same AsyncStorage flag as the legacy sheet
  * (`dreambot.seenBotIntro.v1`). The flag is set the moment the user
@@ -27,29 +27,22 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '@/lib/supabase';
-import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
-import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { useBotUsers, type BotUser } from '@/hooks/useBotUsers';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useBotThumbnails } from '@/hooks/useBotThumbnails';
-import { curateBotsForAesthetics } from '@/lib/curatedBots';
 import { BotCard } from '@/components/BotCard';
 import { BotImageViewer } from '@/components/BotImageViewer';
 
 const SEEN_BOT_INTRO_KEY = 'dreambot.seenBotIntro.v1';
 
 export default function MeetTheBotsScreen() {
-  const user = useAuthStore((s) => s.user);
   const { data: allBots = [], isLoading: botsLoading } = useBotUsers();
   const { data: thumbnails } = useBotThumbnails(3);
   const { data: followingIds = [] } = useFollowingIds();
   const followingSet = useMemo(() => new Set(followingIds), [followingIds]);
 
-  const [aesthetics, setAesthetics] = useState<string[]>([]);
-  const [profileLoaded, setProfileLoaded] = useState(false);
   // Fullscreen image viewer state — null when closed, otherwise the urls + which one was tapped
   const [viewer, setViewer] = useState<{ urls: string[]; initialIndex: number } | null>(null);
 
@@ -69,57 +62,13 @@ export default function MeetTheBotsScreen() {
     });
   }, []);
 
-  // Pull the user's aesthetics so we can sort the bot list by relevance.
-  useEffect(() => {
-    if (!user) {
-      setProfileLoaded(true);
-      return;
-    }
-    let cancelled = false;
-    (async () => {
-      try {
-        const { data: recipe } = await supabase
-          .from('user_recipes')
-          .select('recipe')
-          .eq('user_id', user.id)
-          .single();
-        const raw = recipe?.recipe as unknown;
-        const list = isVibeProfile(raw)
-          ? raw.aesthetics
-          : (((raw as { aesthetics?: string[] } | null)?.aesthetics ?? []) as string[]);
-        if (!cancelled) setAesthetics(list);
-      } catch {
-        // No recipe yet — fall through with empty aesthetics → fallback ordering
-      } finally {
-        if (!cancelled) setProfileLoaded(true);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [user]);
-
-  // Curated-first ordering: top recommendations from the user's aesthetics,
-  // then everything else alphabetical for stable layout. Dedupe by id.
-  const orderedBots = useMemo<BotUser[]>(() => {
-    if (allBots.length === 0) return [];
-    const recommended = curateBotsForAesthetics(aesthetics);
-    const byUsername = new Map(allBots.map((b) => [b.username.toLowerCase(), b]));
-
-    const seen = new Set<string>();
-    const head: BotUser[] = [];
-    for (const u of recommended) {
-      const b = byUsername.get(u.toLowerCase());
-      if (b && !seen.has(b.id)) {
-        head.push(b);
-        seen.add(b.id);
-      }
-    }
-    const tail = [...allBots]
-      .filter((b) => !seen.has(b.id))
-      .sort((a, b) => a.username.localeCompare(b.username));
-    return [...head, ...tail];
-  }, [allBots, aesthetics]);
+  // Bot ordering: alphabetical by username. The previous curate-by-user-
+  // aesthetics ranking was removed when Kevin removed onboarding-time
+  // vibe selection — every user now sees the same neutral ordering.
+  const orderedBots = useMemo<BotUser[]>(
+    () => [...allBots].sort((a, b) => a.username.localeCompare(b.username)),
+    [allBots]
+  );
 
   function handleDone() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -133,7 +82,7 @@ export default function MeetTheBotsScreen() {
     router.replace('/(tabs)');
   }
 
-  const isLoading = botsLoading || !profileLoaded;
+  const isLoading = botsLoading;
 
   return (
     <SafeAreaView style={s.root}>

@@ -39,16 +39,12 @@ import { vs } from '@/lib/responsive';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
-import { useAuthStore } from '@/store/auth';
-import { supabase } from '@/lib/supabase';
-import { isVibeProfile } from '@/types/vibeProfile';
 import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { FluxModelPicker } from '@/components/FluxModelPicker';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { useImageModels } from '@/hooks/useImageModels';
-import type { VibeProfile } from '@/types/vibeProfile';
 
 // One-time toast: "1 sparkle = 1 dream" surfaces the first time a user
 // opens the Create tab. Stops surfacing once dismissed (per-device flag).
@@ -66,7 +62,6 @@ export default function CreateScreen() {
   const setForceModel = useDreamStore((s) => s.setForceModel);
 
   const { data: sparkleBalance = 0 } = useSparkleBalance();
-  const user = useAuthStore((s) => s.user);
   const { data: dbMediums = [] } = useDreamMediums();
   const { data: dbVibes = [] } = useDreamVibes();
 
@@ -89,25 +84,12 @@ export default function CreateScreen() {
     setForceModel(config.useExactPrompt ? advancedModelId : null);
   }, [config.useExactPrompt, advancedModelId, setForceModel]);
 
-  // Load user's art_styles/aesthetics for filtering
-  const [userArtStyles, setUserArtStyles] = useState<string[] | undefined>();
-  const [userAesthetics, setUserAesthetics] = useState<string[] | undefined>();
-  useEffect(() => {
-    if (!user) return;
-    supabase
-      .from('user_recipes')
-      .select('recipe')
-      .eq('user_id', user.id)
-      .single()
-      .then(({ data }) => {
-        const raw = data?.recipe as unknown;
-        if (raw && isVibeProfile(raw)) {
-          const vp = raw as VibeProfile;
-          if (vp.art_styles?.length) setUserArtStyles(vp.art_styles);
-          if (vp.aesthetics?.length) setUserAesthetics(vp.aesthetics);
-        }
-      });
-  }, [user]);
+  // The Create-screen pickers used to filter their options down to the
+  // user's onboarding-curated aesthetics + art_styles via a `userFilter`
+  // prop. Kevin removed that selection step entirely 2026-05-29, so the
+  // filter has nothing to clamp against and the pickers now show the
+  // full active catalog every time. State + the effect that loaded the
+  // recipe lived here too — gone along with the prop.
 
   // Rehydrate "use my exact prompt" toggle on mount + persist on changes.
   // Power users only flip it once.
@@ -755,7 +737,6 @@ export default function CreateScreen() {
         }}
         onClose={() => setPickerType(null)}
         options={pickerType === 'vibe' ? vibeOptions : mediumOptions}
-        userFilter={pickerType === 'vibe' ? userAesthetics : userArtStyles}
       />
 
       {/* Photo fullscreen preview */}
