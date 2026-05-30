@@ -48,9 +48,8 @@ interface BaseProps {
   onAvatarPress?: () => void;
   /**
    * Slot rendered between the identity text and the action pill row. Use
-   * for DreamBot-signature inline elements like VibeProfilePeek and
-   * CastPeek. Optional — when null/undefined, the action pills sit
-   * directly under the bio.
+   * for DreamBot-signature inline elements like CastPeek. Optional —
+   * when null/undefined, the action pills sit directly under the bio.
    */
   children?: ReactNode;
 }

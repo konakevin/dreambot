@@ -41,6 +41,14 @@ interface PostGridProps {
   highlightPostId?: string;
   scrollToTopToken?: number;
   showPrivateBadge?: boolean;
+  /**
+   * Fired with the current contentOffset.y on every scroll event. Used by
+   * profile screens to reveal a compact sticky top bar once the user
+   * scrolls past the avatar block. Throttled via the FlatList's
+   * scrollEventThrottle, not here — the callback runs whenever a frame
+   * fires.
+   */
+  onScrollProgress?: (y: number) => void;
 }
 
 export function PostGrid({
@@ -51,6 +59,7 @@ export function PostGrid({
   highlightPostId,
   scrollToTopToken,
   showPrivateBadge = false,
+  onScrollProgress,
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -65,11 +74,15 @@ export function PostGrid({
   // drops below the threshold. Bottom-left so it never collides with the
   // bottom-right "Just viewed" pill.
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const handleScroll = useCallback((e: { nativeEvent: { contentOffset: { y: number } } }) => {
-    const y = e.nativeEvent.contentOffset.y;
-    const shouldShow = y > headerHeightRef.current + ROW_HEIGHT;
-    setShowBackToTop((prev) => (prev === shouldShow ? prev : shouldShow));
-  }, []);
+  const handleScroll = useCallback(
+    (e: { nativeEvent: { contentOffset: { y: number } } }) => {
+      const y = e.nativeEvent.contentOffset.y;
+      const shouldShow = y > headerHeightRef.current + ROW_HEIGHT;
+      setShowBackToTop((prev) => (prev === shouldShow ? prev : shouldShow));
+      onScrollProgress?.(y);
+    },
+    [onScrollProgress]
+  );
   const handleBackToTop = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Hide immediately rather than waiting for the scroll animation to cross

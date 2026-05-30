@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { useAlbumStore } from '@/store/album';
@@ -11,7 +11,9 @@ import {
   FlatList,
   RefreshControl,
   Share,
+  Animated,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -26,9 +28,8 @@ import { useUnreadGroupCount } from '@/hooks/useUnreadGroupCount';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
-import { VibeProfilePeek } from '@/components/VibeProfilePeek';
 import { CastPeek } from '@/components/CastPeek';
-import { useMyVibeProfile } from '@/hooks/useMyVibeProfile';
+import { useMyDreamCast } from '@/hooks/useMyDreamCast';
 import { colors } from '@/constants/theme';
 import { useFocusEffect } from '@react-navigation/native';
 import { trackProfileViewed } from '@/lib/analytics';
@@ -77,9 +78,9 @@ export default function ProfileScreen() {
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
-  // Inline signature peeks (aesthetics + mediums + cast). Owner-only by
-  // RLS; cross-user peek would need a sanitized RPC.
-  const { data: myVibe } = useMyVibeProfile();
+  // Inline Cast peek (self / plus_one / pet thumbnails). Owner-only by
+  // RLS — cross-user not exposed because cast = real face photos.
+  const { data: dreamCast } = useMyDreamCast();
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
   );
@@ -136,35 +137,95 @@ export default function ProfileScreen() {
     nav.push('/settings/edit-profile');
   }, []);
 
+  // ── Collapsing hero on scroll ──
+  // scrollY is fed by both code paths (PostGrid via onScrollProgress, the
+  // followers/following FlatList via its own onScroll) so the sticky top
+  // bar collapses identically on every sub-view.
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const handleScrollProgress = useCallback(
+    (y: number) => {
+      // Animated.Value.setValue runs on the JS thread, but the
+      // interpolations driving topBar styles run on the native driver
+      // where possible — clamped output ranges keep visuals stable when
+      // scrollY moves slightly past the threshold.
+      scrollY.setValue(y);
+    },
+    [scrollY]
+  );
+  // Compact avatar appears beside the @handle once the user has scrolled
+  // past the big hero avatar (96px) + a little overshoot. Interpolations
+  // share a single shared value so they stay in lockstep.
+  const compactAvatarOpacity = scrollY.interpolate({
+    inputRange: [60, 130],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+  const compactAvatarWidth = scrollY.interpolate({
+    inputRange: [60, 130],
+    outputRange: [0, 36], // 28px avatar + 8px margin
+    extrapolate: 'clamp',
+  });
+  const topBarBorderOpacity = scrollY.interpolate({
+    inputRange: [20, 80],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+
+  // Sticky top bar — always pinned at the top of the screen, OUTSIDE the
+  // FlatList. Background is solid so the scrolling grid content slides
+  // beneath cleanly; the hairline bottom border fades in on scroll to
+  // mark the boundary visually.
+  const stickyTopBar = (
+    <Animated.View style={styles.topBar}>
+      <View style={styles.topBarLeft}>
+        <Animated.View
+          style={[
+            styles.compactAvatarWrap,
+            { width: compactAvatarWidth, opacity: compactAvatarOpacity },
+          ]}
+        >
+          {profile?.avatar_url && (
+            <Image
+              source={{ uri: profile.avatar_url }}
+              style={styles.compactAvatar}
+              contentFit="cover"
+            />
+          )}
+        </Animated.View>
+        <Text style={styles.topBarHandle} numberOfLines={1}>
+          @{user?.user_metadata?.username ?? 'you'}
+        </Text>
+      </View>
+      <View style={styles.topBarActions}>
+        <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
+          <View style={styles.inboxBubbleWrap}>
+            <Ionicons
+              name={unreadCount > 0 ? 'chatbubble' : 'chatbubble-outline'}
+              size={26}
+              color={unreadCount > 0 ? colors.accent : colors.textSecondary}
+            />
+            {unreadCount > 0 && (
+              <View style={styles.inboxBubbleCountWrap} pointerEvents="none">
+                <Text style={styles.inboxBubbleCount}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
+              </View>
+            )}
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
+          <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
+        </TouchableOpacity>
+      </View>
+      {/* Bottom-border hairline fades in on scroll so the bar reads as
+          a separate surface from the grid scrolling beneath it. */}
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.topBarBottomBorder, { opacity: topBarBorderOpacity }]}
+      />
+    </Animated.View>
+  );
+
   const header = (
     <>
-      {/* Compact top bar — chat bubble + settings live here regardless of
-          which sub-view (grid / followers / following) the user is on. */}
-      <View style={styles.topBar}>
-        <Text style={styles.topBarHandle}>@{user?.user_metadata?.username ?? 'you'}</Text>
-        <View style={styles.topBarActions}>
-          <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
-            <View style={styles.inboxBubbleWrap}>
-              <Ionicons
-                name={unreadCount > 0 ? 'chatbubble' : 'chatbubble-outline'}
-                size={26}
-                color={unreadCount > 0 ? colors.accent : colors.textSecondary}
-              />
-              {unreadCount > 0 && (
-                <View style={styles.inboxBubbleCountWrap} pointerEvents="none">
-                  <Text style={styles.inboxBubbleCount}>
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </Text>
-                </View>
-              )}
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
-            <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
       <ProfileHeader
         variant="own"
         avatar_url={profile?.avatar_url ?? null}
@@ -178,12 +239,7 @@ export default function ProfileScreen() {
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
       >
-        <VibeProfilePeek
-          aesthetics={myVibe?.aesthetics ?? []}
-          art_styles={myVibe?.art_styles ?? []}
-          onPress={handleEditProfile}
-        />
-        <CastPeek cast={myVibe?.cast ?? []} onPress={() => nav.push('/settings/dream-cast')} />
+        <CastPeek cast={dreamCast?.cast ?? []} onPress={() => nav.push('/settings/dream-cast')} />
       </ProfileHeader>
 
       {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;
@@ -246,6 +302,7 @@ export default function ProfileScreen() {
     };
     return (
       <SafeAreaView style={styles.root}>
+        {stickyTopBar}
         <PostGrid
           source={sourceMap[activeTab]}
           isOwn={activeTab === 'posts' || activeTab === 'dreams'}
@@ -254,6 +311,7 @@ export default function ProfileScreen() {
           scrollToTopToken={profileResetToken}
           showPrivateBadge={activeTab === 'dreams'}
           highlightPostId={currentPostId ?? undefined}
+          onScrollProgress={handleScrollProgress}
         />
       </SafeAreaView>
     );
@@ -265,6 +323,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.root}>
+      {stickyTopBar}
       <FlatList<FollowUser>
         key="users"
         data={listData}
@@ -277,6 +336,10 @@ export default function ProfileScreen() {
         }
         keyExtractor={(item) => item.id}
         ListHeaderComponent={header}
+        // Mirror the PostGrid path's scroll-progress wiring so the same
+        // sticky top bar collapses identically on this sub-view.
+        onScroll={(e) => handleScrollProgress(e.nativeEvent.contentOffset.y)}
+        scrollEventThrottle={16}
         ListEmptyComponent={
           <View style={styles.center}>
             {isLoadingList ? (
@@ -305,8 +368,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 6,
+    paddingBottom: 6,
+    backgroundColor: colors.background, // opaque so the grid scrolls beneath cleanly
+    zIndex: 10,
+  },
+  topBarLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   topBarHandle: {
     color: colors.textPrimary,
@@ -317,6 +387,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
+  },
+  topBarBottomBorder: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+  },
+  compactAvatarWrap: {
+    // width is animated 0 → 36 (28px avatar + 8px right-margin) so the
+    // hero name slides right rather than the avatar popping in beside
+    // already-placed text.
+    height: 28,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  compactAvatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.surface,
   },
   // Outer wrap matches the icon size so the count overlay can use
   // flexbox-center over the bubble. The Ionicons chatbubble icon has a

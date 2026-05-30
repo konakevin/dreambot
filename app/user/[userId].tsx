@@ -21,6 +21,8 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   Easing,
+  interpolate,
+  Extrapolation,
 } from 'react-native-reanimated';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useFollowersList } from '@/hooks/useFollowersList';
@@ -120,6 +122,26 @@ export default function PublicProfileScreen() {
     opacity: avatarProgress.value,
     transform: [{ translateY: 10 * (1 - avatarProgress.value) }],
   }));
+
+  // ── Collapsing-hero hooks — must live ABOVE the early-return guard
+  // for `profileLoading || !profile` so hook order stays stable across
+  // renders (rules-of-hooks). They read no profile-dependent data, just
+  // a scroll y-position driven by both code paths (PostGrid via
+  // onScrollProgress and the followers/following FlatList's onScroll).
+  const scrollY = useSharedValue(0);
+  const compactAvatarStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollY.value, [60, 130], [0, 1], Extrapolation.CLAMP),
+    width: interpolate(scrollY.value, [60, 130], [0, 36], Extrapolation.CLAMP),
+  }));
+  const compactNameStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollY.value, [80, 150], [0, 1], Extrapolation.CLAMP),
+  }));
+  const topBarBorderStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollY.value, [20, 80], [0, 1], Extrapolation.CLAMP),
+  }));
+  const handleScrollProgress = (y: number) => {
+    scrollY.value = y;
+  };
 
   useEffect(() => {
     if (showAvatarPreview) {
@@ -235,18 +257,41 @@ export default function PublicProfileScreen() {
   }
 
   // Public profile uses the same shared ProfileHeader as the own-profile
-  // screen, in 'other' variant. Top compact row owns the back chevron;
-  // the More (⋯) menu is in the action-pill row inside ProfileHeader.
+  // screen, in 'other' variant. The compact top bar is now lifted out as
+  // a sticky element (rendered OUTSIDE the FlatList) and collapses on
+  // scroll: a small avatar + display name / @handle fades in to the right
+  // of the back chevron once the user has scrolled past the hero. Same
+  // pattern as (tabs)/profile.tsx; Reanimated here because this file
+  // already imports it for the avatar-preview modal. The animated styles
+  // + scrollY shared value are declared up above with the other Reanimated
+  // hooks so they sit ABOVE the early-return guard.
   const backButton = null;
+  const heroNameForBar = profile.display_name?.trim() || `@${profile.username}`;
+
+  const stickyTopBar = (
+    <Animated.View style={styles.topBar}>
+      <TouchableOpacity onPress={() => router.back()} style={styles.iconButton} hitSlop={12}>
+        <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+      </TouchableOpacity>
+      <Animated.View style={[styles.compactAvatarWrap, compactAvatarStyle]}>
+        {profile.avatar_url && (
+          <Image
+            source={{ uri: profile.avatar_url }}
+            style={styles.compactAvatar}
+            contentFit="cover"
+          />
+        )}
+      </Animated.View>
+      <Animated.Text style={[styles.compactName, compactNameStyle]} numberOfLines={1}>
+        {heroNameForBar}
+      </Animated.Text>
+      <View style={{ flex: 1 }} />
+      <Animated.View pointerEvents="none" style={[styles.topBarBottomBorder, topBarBorderStyle]} />
+    </Animated.View>
+  );
 
   const header = (
     <>
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.iconButton} hitSlop={12}>
-          <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
-
       <ProfileHeader
         variant="other"
         avatar_url={profile.avatar_url ?? null}
@@ -339,15 +384,20 @@ export default function PublicProfileScreen() {
         <SafeAreaView style={styles.root}>
           {backButton}
           {avatarModal}
+          {stickyTopBar}
           {canSeePosts ? (
             <PostGrid
               source={{ type: 'user', userId }}
               emptyText="No posts yet"
               ListHeaderComponent={header}
               highlightPostId={viewedPost}
+              onScrollProgress={handleScrollProgress}
             />
           ) : (
-            <ScrollView>
+            <ScrollView
+              onScroll={(e) => handleScrollProgress(e.nativeEvent.contentOffset.y)}
+              scrollEventThrottle={16}
+            >
               {header}
               <View style={styles.lockedState}>
                 <Ionicons name="lock-closed" size={48} color={colors.textSecondary} />
@@ -381,6 +431,7 @@ export default function PublicProfileScreen() {
       <SafeAreaView style={styles.root}>
         {backButton}
         {avatarModal}
+        {stickyTopBar}
         <FlatList<FollowUser>
           key="users"
           data={listData}
@@ -393,6 +444,8 @@ export default function PublicProfileScreen() {
             />
           }
           ListHeaderComponent={header}
+          onScroll={(e) => handleScrollProgress(e.nativeEvent.contentOffset.y)}
+          scrollEventThrottle={16}
           ListEmptyComponent={
             <View style={styles.center}>
               {isLoadingList ? (
@@ -427,14 +480,46 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  // Compact top row above ProfileHeader — owns just the back chevron now
-  // that follow / message / more all live as action pills inside the header.
+  // Sticky compact top bar — always visible at the top of the screen,
+  // collapses on scroll to reveal a small avatar + display name beside
+  // the back chevron. Opaque background so the FlatList content slides
+  // beneath cleanly; hairline bottom border fades in on scroll to mark
+  // the boundary.
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 8,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 6,
+    paddingBottom: 6,
+    backgroundColor: colors.background,
+    zIndex: 10,
+  },
+  topBarBottomBorder: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+  },
+  compactAvatarWrap: {
+    height: 28,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 4,
+  },
+  compactAvatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.surface,
+  },
+  compactName: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '700',
+    flexShrink: 1,
   },
   iconButton: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   // followButton/followingButton/etc. kept for the private-account locked
