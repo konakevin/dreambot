@@ -259,9 +259,12 @@ Discovery: link from Settings index ("Notifications") + a one-time prompt the fi
 14. **`get_inbox` + `get_unread_group_count` patched** — both filter through `category_enabled_for(p_user_id, notification_category(n.type), 'inbox')`. Disabled inbox categories disappear from the feed AND the badge. Notification rows are NOT filtered at write time, so re-enabling instantly resurfaces past events.
 15. **Client** — `useNotificationSettings`, `useToggleNotificationPref`, `useTogglePushPaused` (all optimistic, settle-time invalidates `notificationSettings` + `inboxGrouped`/`unreadGroupCount` on inbox-channel changes). New screen `app/settings/notifications.tsx` — master "Push notifications" switch (inverted from `push_paused`) + 7×2 toggle grid with "Your dreams" inbox visually locked + footer copy. Linked from `app/settings/index.tsx`.
 
-### Phase 4 — Cleanup
-11. Replace the body-prefix parsing hack (`wish:` / `welcome:` / `dream:` / `download:` magic strings) with a proper `subtype text` column.
-12. Drop legacy `get_notifications` once the client is fully on `get_inbox`.
+### Phase 4 — Cleanup ✅ SHIPPED (migration 206 + 5 edge deploys + legacy hook purge)
+11. **Migration 206** — `notifications.subtype text` (nullable, open-ended). Backfilled from existing `body` prefixes (`wish:`/`welcome:`/`dream:`/`download:`) AND stripped the prefix from `body` so it's just clean message text. Subtype taxonomy: `wish` (dream_generated w/ wish), `welcome` (onboarding first dream), `failed` (dream_failed), `download` (download_ready), `NULL` (plain dream_generated / friend events / likes / etc.). `get_inbox` patched to surface `subtype`. Legacy `get_notifications` RPC dropped (zero callers — Explore-agent audit 2026-05-29 confirmed).
+12. **7 writers updated** to set `subtype` directly + write `body` as plain message text (no prefix concat): `dream-queue-worker/dispatchers/nightly.ts`, `components/onboarding/RevealStep.tsx`, `upscale-image/index.ts`, `generate-dream/index.ts`, `restyle-photo/index.ts`, `refund-stuck-jobs/index.ts`, `scripts/sweep-stuck-upscales.js`. 5 Edge Functions redeployed.
+13. **`app/inbox.tsx` reader patched** — `getGroupText` routes `dream_generated` on `g.subtype === 'wish' / 'welcome'` instead of `body.startsWith('wish:')` etc. `body` is now displayed raw — no `.replace(/^(wish|dream|welcome):/)` strip. `InboxGroup` type gains `subtype: string | null`.
+14. **Legacy hooks deleted** — `hooks/useInbox.ts`, `hooks/useUnreadCount.ts`, `hooks/useMarkShareSeen.ts`, `hooks/useDeleteShare.ts`. `useMarkAllSeen` simplified to drop the dead `['inbox']` / `['unreadNotificationCount']` cache flips + `NotificationItem` import. Profile-tab badge migrated `useUnreadCount → useUnreadGroupCount`.
+15. **Bulk cache-key rewire** — 7 sites in `app/_layout.tsx` + `hooks/useFollowRequests.ts` + `hooks/useSendShare.ts` + `hooks/useDeleteAllNotifications.ts` were invalidating dead legacy cache keys (`['inbox']` + `['unreadNotificationCount']`). All swapped to live keys (`['inboxGrouped']` + `['unreadGroupCount']`). Comment in `usePushNotifications.ts` updated to reference `useUnreadGroupCount`.
 
 ---
 
@@ -302,7 +305,7 @@ Discovery: link from Settings index ("Notifications") + a one-time prompt the fi
 ---
 
 *Commits tied to this doc:*
-- Phase 1: TBD
-- Phase 2: TBD
-- Phase 3: TBD
-- Phase 4: TBD
+- Phase 1: see `git log -- supabase/migrations/{200,201,202,203}_notifications_*.sql`
+- Phase 2: `cf810d93` (migration 204 + send-push v2)
+- Phase 3: `b2a37d66` (migration 205 + settings screen + 3 hooks)
+- Phase 4: see migration 206 commit (subtype col + writer rewrites + legacy-hook purge)

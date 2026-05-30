@@ -1,14 +1,18 @@
-import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import type { NotificationItem } from './useInbox';
 
-interface InboxPage {
-  rows: NotificationItem[];
-  hasMore: boolean;
-  nextOffset: number;
-}
-
+/**
+ * Marks every unseen notification on the current user as seen, then refreshes
+ * the grouped inbox + distinct-group badge.
+ *
+ * Optimistic: zeroes the badge cache and flips `anyUnseen=false` on every
+ * cached grouped page so the red dot clears the instant the inbox screen
+ * mounts (the server roundtrip otherwise leaves it up for a beat).
+ *
+ * The legacy per-row inbox cache (`['inbox']` + `['unreadNotificationCount']`)
+ * was dropped in Phase 4 along with the `useInbox` / `useUnreadCount` hooks.
+ */
 export function useMarkAllSeen() {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
@@ -24,26 +28,7 @@ export function useMarkAllSeen() {
       if (error) throw error;
     },
     onMutate: async () => {
-      // Optimistic update — mark all seen locally + zero the badge count.
-      // Inbox page shape is { rows, hasMore, nextOffset } — must map page.rows,
-      // not page itself (page.map would throw and abort the mutation).
-      queryClient.setQueryData<InfiniteData<InboxPage>>(['inbox', user!.id], (old) => {
-        if (!old) return old;
-        return {
-          ...old,
-          pages: old.pages.map((page) => ({
-            ...page,
-            rows: page.rows.map((n) => ({ ...n, isSeen: true })),
-          })),
-        };
-      });
-      // Optimistically zero the tab badge so it clears immediately on screen
-      // entry — server roundtrip otherwise leaves the red dot up for a beat.
-      // Zero BOTH the legacy per-row count AND the new distinct-group count
-      // (Phase 1) so whichever the badge is reading from stays in sync.
-      queryClient.setQueryData<number>(['unreadNotificationCount', user!.id], 0);
       queryClient.setQueryData<number>(['unreadGroupCount', user!.id], 0);
-      // Flip anyUnseen=false on every cached grouped page too.
       queryClient.setQueryData(['inboxGrouped', user!.id], (data: unknown) => {
         if (!data || typeof data !== 'object') return data;
         const d = data as { pages?: { groups: { anyUnseen: boolean }[] }[] };
@@ -58,8 +43,6 @@ export function useMarkAllSeen() {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['inbox', user!.id] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user!.id] });
       queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user!.id] });
       queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user!.id] });
     },

@@ -47,6 +47,14 @@ export interface InboxGroup {
   /** Stable group identity; passed to mark_group_seen / get_group_actors. */
   groupKey: string;
   type: NotificationType;
+  /**
+   * Fine-grained discriminator (migration 206). Replaces the legacy body-prefix
+   * hack — e.g. `dream_generated` with `subtype === 'wish'` is a wish-fulfilled
+   * dream, `'welcome'` is the onboarding first-dream ping, `null` is a plain
+   * nightly dream. `dream_failed` is always `'failed'`; `download_ready` is
+   * always `'download'`. Most rows are `null`.
+   */
+  subtype: string | null;
   category: NotificationCategory;
   /** Up to 3 most-recent distinct actors (for stacked avatars + "X, Y…" text). */
   previewActorIds: string[];
@@ -72,6 +80,7 @@ function mapRow(row: Record<string, unknown>): InboxGroup {
   return {
     groupKey: row.group_key as string,
     type: row.type as NotificationType,
+    subtype: (row.subtype as string | null) ?? null,
     category: row.category as NotificationCategory,
     previewActorIds: (row.preview_actor_ids as string[] | null) ?? [],
     previewUsernames: (row.preview_usernames as string[] | null) ?? [],

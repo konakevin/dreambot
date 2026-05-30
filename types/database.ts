@@ -1134,6 +1134,7 @@ export type Database = {
           id: string;
           recipient_id: string;
           seen_at: string | null;
+          subtype: string | null;
           type: string;
           upload_id: string | null;
         };
@@ -1146,6 +1147,7 @@ export type Database = {
           id?: string;
           recipient_id: string;
           seen_at?: string | null;
+          subtype?: string | null;
           type: string;
           upload_id?: string | null;
         };
@@ -1158,6 +1160,7 @@ export type Database = {
           id?: string;
           recipient_id?: string;
           seen_at?: string | null;
+          subtype?: string | null;
           type?: string;
           upload_id?: string | null;
         };
@@ -2075,23 +2078,7 @@ export type Database = {
           isSetofReturn: true;
         };
       };
-      get_notifications: {
-        Args: { p_limit?: number; p_offset?: number; p_user_id: string };
-        Returns: {
-          actor_avatar_url: string;
-          actor_id: string;
-          actor_username: string;
-          body: string;
-          comment_id: string;
-          created_at: string;
-          id: string;
-          image_url: string;
-          is_seen: boolean;
-          thumbnail_url: string;
-          type: string;
-          upload_id: string;
-        }[];
-      };
+      // get_notifications dropped in Phase 4 (migration 206) — replaced by get_inbox.
       get_public_profile: {
         Args: { p_user_id: string };
         Returns: {
@@ -2141,6 +2128,7 @@ export type Database = {
         Returns: {
           group_key: string;
           type: string;
+          subtype: string | null;
           category: string;
           preview_actor_ids: string[] | null;
           preview_usernames: string[] | null;

@@ -21,7 +21,7 @@ import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
-import { useUnreadCount } from '@/hooks/useUnreadCount';
+import { useUnreadGroupCount } from '@/hooks/useUnreadGroupCount';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { GradientUsername } from '@/components/GradientUsername';
@@ -40,7 +40,8 @@ export default function ProfileScreen() {
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
   const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
-  const { data: unreadCount = 0 } = useUnreadCount();
+  // Distinct-group unread count (Phase 1, D6) — same source as the tab badge.
+  const { data: unreadCount = 0 } = useUnreadGroupCount();
   const markAllSeen = useMarkAllSeen();
 
   // Fire on each focus (tab revisit), not just first mount, so we count visits.

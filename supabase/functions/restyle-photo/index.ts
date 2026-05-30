@@ -574,9 +574,10 @@ async function handleRequest(req: Request): Promise<Response> {
           recipient_id: userId,
           actor_id: userId,
           type: 'dream_failed',
+          subtype: 'failed',
           body: sparkleRefunded
-            ? `dream:Your dream couldn't render — sparkle refunded (${refundClass})`
-            : `dream:Your dream couldn't render (${refundClass})`,
+            ? `Your dream couldn't render — sparkle refunded (${refundClass})`
+            : `Your dream couldn't render (${refundClass})`,
         });
       } catch (notifyErr) {
         // No longer silent: the user's only signal their dream failed + was

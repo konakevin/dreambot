@@ -138,9 +138,9 @@ function RealtimeSubscriber() {
           filter: `recipient_id=eq.${user.id}`,
         },
         () => {
-          // New notification — refresh inbox and unread count
-          queryClient.invalidateQueries({ queryKey: ['inbox', user.id] });
-          queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user.id] });
+          // New notification — refresh grouped inbox + distinct-group badge.
+          queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
+          queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user.id] });
         }
       )
       .on(
@@ -193,9 +193,9 @@ function RealtimeSubscriber() {
         (payload) => {
           const status = (payload.new as { status?: string }).status;
           if (status === 'done') {
-            // Queued dream finished — refresh inbox and dreams
-            queryClient.invalidateQueries({ queryKey: ['inbox', user.id] });
-            queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user.id] });
+            // Queued dream finished — refresh grouped inbox + badge + dreams.
+            queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user.id] });
             queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
           }
         }
@@ -324,9 +324,9 @@ function DataPrefetcher() {
         if (elapsed > 60 * 1000) {
           queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
           if (user) {
-            queryClient.invalidateQueries({ queryKey: ['inbox', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
             queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
-            queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user.id] });
           }
         }
 

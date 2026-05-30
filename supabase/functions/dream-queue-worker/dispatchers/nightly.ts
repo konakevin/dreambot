@@ -104,15 +104,18 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
   });
   if (rpcErr) console.error(`[nightly] finalize_nightly_upload failed: ${rpcErr.message}`);
 
-  // 4. Notify the dreamer (prefix lets the inbox distinguish wish vs dream).
+  // 4. Notify the dreamer. `subtype` lets the inbox distinguish wish vs
+  // plain-dream variants (migration 206 — replaces the legacy body-prefix
+  // discriminator). body is the clean bot message text.
   await supabase
     .from('notifications')
     .insert({
       recipient_id: userId,
       actor_id: userId,
       type: 'dream_generated',
+      subtype: wish ? 'wish' : null,
       upload_id: uploadId,
-      body: (wish ? 'wish:' : 'dream:') + (botMessage || ''),
+      body: botMessage || '',
     })
     .then(swallow, swallow);
 

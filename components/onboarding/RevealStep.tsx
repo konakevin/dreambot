@@ -367,13 +367,15 @@ export function RevealStep({ onBack }: Props) {
         });
       }
 
-      // Send welcome notification from DreamBot
+      // Send welcome notification from DreamBot. subtype='welcome' tells the
+      // inbox to render the special first-dream copy (migration 206).
       await supabase.from('notifications').insert({
         recipient_id: user.id,
         actor_id: user.id,
         type: 'dream_generated',
+        subtype: 'welcome',
         upload_id: uploadId,
-        body: "welcome:Hey. I'm your DreamBot. I left you 25 sparkles to start dreaming. Sleep well.",
+        body: "Hey. I'm your DreamBot. I left you 25 sparkles to start dreaming. Sleep well.",
       });
 
       reset();

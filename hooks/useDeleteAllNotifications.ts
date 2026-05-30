@@ -13,8 +13,8 @@ export function useDeleteAllNotifications() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['inbox', user?.id] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user?.id] });
     },
   });
 }

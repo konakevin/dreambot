@@ -111,9 +111,10 @@ Deno.serve(async (req) => {
           recipient_id: job.user_id,
           actor_id: job.user_id,
           type: 'dream_failed',
+          subtype: 'failed',
           body: didRefund
-            ? `dream:Your dream couldn't render — sparkle refunded (timeout)`
-            : `dream:Your dream couldn't render (timeout)`,
+            ? `Your dream couldn't render — sparkle refunded (timeout)`
+            : `Your dream couldn't render (timeout)`,
         });
       } catch {
         // Non-critical — refund already landed

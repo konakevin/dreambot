@@ -76,43 +76,99 @@ function getGroupText(g: InboxGroup): {
 
   switch (g.type) {
     case 'post_like':
-      return { actorPrefix: aggPrefix('liked'), action: 'liked your dream', preview: null, isAggregable: true };
+      return {
+        actorPrefix: aggPrefix('liked'),
+        action: 'liked your dream',
+        preview: null,
+        isAggregable: true,
+      };
     case 'comment_like':
-      return { actorPrefix: aggPrefix('liked'), action: 'liked your comment', preview: null, isAggregable: true };
+      return {
+        actorPrefix: aggPrefix('liked'),
+        action: 'liked your comment',
+        preview: null,
+        isAggregable: true,
+      };
     case 'post_twin':
-      return { actorPrefix: aggPrefix('twinned'), action: 'twinned your dream', preview: null, isAggregable: true };
+      return {
+        actorPrefix: aggPrefix('twinned'),
+        action: 'twinned your dream',
+        preview: null,
+        isAggregable: true,
+      };
     case 'post_fuse':
-      return { actorPrefix: aggPrefix('fused'), action: 'fused with your dream', preview: null, isAggregable: true };
+      return {
+        actorPrefix: aggPrefix('fused'),
+        action: 'fused with your dream',
+        preview: null,
+        isAggregable: true,
+      };
     case 'post_milestone':
-      return { actorPrefix: null, action: g.body ?? 'milestone reached', preview: null, isAggregable: false };
+      return {
+        actorPrefix: null,
+        action: g.body ?? 'milestone reached',
+        preview: null,
+        isAggregable: false,
+      };
     case 'follow_accepted':
-      return { actorPrefix: aggPrefix('followed'), action: 'accepted your follow request', preview: null, isAggregable: true };
+      return {
+        actorPrefix: aggPrefix('followed'),
+        action: 'accepted your follow request',
+        preview: null,
+        isAggregable: true,
+      };
     case 'friend_accepted':
-      return { actorPrefix: aggPrefix('accepted'), action: 'accepted your dream request', preview: null, isAggregable: true };
+      return {
+        actorPrefix: aggPrefix('accepted'),
+        action: 'accepted your dream request',
+        preview: null,
+        isAggregable: true,
+      };
     case 'post_share':
       return { actorPrefix: first, action: 'sent you a post', preview: null, isAggregable: false };
     case 'post_comment':
-      return { actorPrefix: first, action: 'commented on your post', preview: g.body, isAggregable: false };
+      return {
+        actorPrefix: first,
+        action: 'commented on your post',
+        preview: g.body,
+        isAggregable: false,
+      };
     case 'comment_reply':
-      return { actorPrefix: first, action: 'replied to your comment', preview: g.body, isAggregable: false };
+      return {
+        actorPrefix: first,
+        action: 'replied to your comment',
+        preview: g.body,
+        isAggregable: false,
+      };
     case 'comment_mention':
       return { actorPrefix: first, action: 'mentioned you', preview: g.body, isAggregable: false };
     case 'friend_request':
-      return { actorPrefix: first, action: 'wants to dream with you', preview: null, isAggregable: false };
+      return {
+        actorPrefix: first,
+        action: 'wants to dream with you',
+        preview: null,
+        isAggregable: false,
+      };
     case 'follow_request':
-      return { actorPrefix: first, action: 'requested to follow you', preview: null, isAggregable: false };
+      return {
+        actorPrefix: first,
+        action: 'requested to follow you',
+        preview: null,
+        isAggregable: false,
+      };
     case 'dream_generated': {
-      const isWish = g.body?.startsWith('wish:');
-      const isWelcome = g.body?.startsWith('welcome:');
-      const botMsg = g.body?.replace(/^(wish|dream|welcome):/, '') || null;
+      // Route on `subtype` (migration 206) — used to parse a magic prefix
+      // off `body`, which couples body format to the renderer. `body` is now
+      // just clean message text.
       return {
         actorPrefix: null,
-        action: isWelcome
-          ? 'Welcome to DreamBot :)'
-          : isWish
-            ? 'Your wish has arrived!'
-            : 'Your dream has arrived!',
-        preview: botMsg || null,
+        action:
+          g.subtype === 'welcome'
+            ? 'Welcome to DreamBot :)'
+            : g.subtype === 'wish'
+              ? 'Your wish has arrived!'
+              : 'Your dream has arrived!',
+        preview: g.body || null,
         isAggregable: false,
       };
     }
@@ -120,11 +176,16 @@ function getGroupText(g: InboxGroup): {
       return {
         actorPrefix: null,
         action: "Your dream couldn't render",
-        preview: g.body?.replace(/^dream:/, '') || null,
+        preview: g.body || null,
         isAggregable: false,
       };
     case 'download_ready':
-      return { actorPrefix: null, action: 'Your HD download is ready', preview: 'Tap to save it to your photos', isAggregable: false };
+      return {
+        actorPrefix: null,
+        action: 'Your HD download is ready',
+        preview: 'Tap to save it to your photos',
+        isAggregable: false,
+      };
     default:
       return { actorPrefix: first, action: '', preview: g.body, isAggregable: false };
   }
@@ -181,8 +242,9 @@ function GroupActorsSheet({
   titleAction: string;
   onClose: () => void;
 }) {
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useGroupActors(visible ? groupKey : null);
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGroupActors(
+    visible ? groupKey : null
+  );
   const actors = useMemo(() => data?.pages.flatMap((p) => p.actors) ?? [], [data]);
 
   return (

@@ -196,8 +196,9 @@ Deno.serve(async (req) => {
             recipient_id: r.user_id,
             actor_id: r.user_id,
             type: 'download_ready',
+            subtype: 'download',
             upload_id: uploadId,
-            body: 'download:Your HD download is ready ✨',
+            body: 'Your HD download is ready ✨',
           });
         }
         await supabase
