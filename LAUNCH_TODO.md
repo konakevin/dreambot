@@ -28,7 +28,7 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 
 ## Render & background reliability
 
-- [ ] 🤖 Test **closing / backgrounding the app during render OR upscale** — it needs to succeed and send a push notification
+- [x] 🤖 Test **closing / backgrounding the app during render OR upscale** — it needs to succeed and send a push notification — shipped 2026-05-29 (gap audit: render durability already correct via `EdgeRuntime.waitUntil` in generate-dream/restyle-photo/upscale-image; upscale auto-notifies via the `trg_notify_send_push` trigger chain. The missing piece was that user-create dream completion is opt-in via "Queue This", so a user who just hit home mid-render got no push. Added AppState background listener in `app/dream/loading.tsx` that auto-fires `request_dream_notification` (idempotent upsert from migration 195) so backgrounding now auto-enrolls for the push.)
 
 ## Reveal & dream creation
 

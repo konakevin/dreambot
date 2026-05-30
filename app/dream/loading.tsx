@@ -4,7 +4,15 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Modal } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+  Modal,
+  AppState,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
@@ -118,6 +126,34 @@ export default function DreamLoadingScreen() {
   // Show "Queue This" button immediately
   useEffect(() => {
     setShowQueue(true);
+  }, []);
+
+  // Auto-opt-in to the completion push if the user BACKGROUNDS the app while
+  // a render is still in flight. The Edge Function already runs the render
+  // to completion via EdgeRuntime.waitUntil, but its push gate
+  // (shouldSendCompletionNotification) only fires when notify_on_complete
+  // is true on dream_jobs. Without this listener, a user who just hits home
+  // mid-render gets the render but no push — Kevin's launch-list item
+  // ("backgrounding during render… needs to send a push"). The RPC is the
+  // same idempotent upsert (migration 195) used by the explicit "Queue This"
+  // tap below, so the two paths compose: whichever happens first sets the
+  // flag, the second is a cheap no-op. queued.current dedups within-session.
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state !== 'background') return;
+      if (queued.current) return;
+      const jobId = useDreamStore.getState().activeJobId;
+      if (!jobId) return;
+      queued.current = true;
+      void (async () => {
+        try {
+          await supabase.rpc('request_dream_notification', { p_job_id: jobId });
+        } catch (e) {
+          if (__DEV__) console.warn('[loading] auto-request notification on background failed', e);
+        }
+      })();
+    });
+    return () => sub.remove();
   }, []);
 
   function handleQueue() {
