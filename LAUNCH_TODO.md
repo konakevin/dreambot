@@ -57,7 +57,7 @@ Captured from Kevin's brain-dump, 2026-05-29. Groups his items by category for w
 
 ## Notifications & messages
 
-- [ ] **Clean up notifications and messages** (overall content + UX)
+- [x] **Clean up notifications and messages** (overall content + UX) — handled by another agent 2026-05-29
 
 ## Settings & docs
 
