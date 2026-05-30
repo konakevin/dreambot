@@ -105,6 +105,8 @@ ${emotional_dna}
 ━━━ CAMERA FRAMING ━━━
 ${camera_framing}
 
+${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
+
 ━━━ STORY PROP (fantasy item — sword / map / potion / coin-pouch / scroll) ━━━
 ${story_prop}
 
@@ -129,7 +131,7 @@ Studio Madhouse / Studio Bones / A-1 Pictures painterly anime-isekai keyframe. S
 - NO Western photoreal medieval (Witcher / Skyrim / D&D / GoT / LotR)
 - NO bearded gritty Western-fantasy protagonist
 - NO photoreal CGI
-- NO eye-contact with viewer
+- NO STATIC POSED THUMBNAIL (character must be ENGAGED in dynamic action)
 - NO gore
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
@@ -205,11 +207,11 @@ A deep-distance secondary detail (a farmer in a distant field, cattle grazing fa
 
 ━━━ ⚠ HARD RULE #9: CANDID ACTION — RURAL TASK ━━━
 
-The character below is CAUGHT mid-rural-task — hanging laundry, picking flowers, drinking tea, sketching, cycling, walking through grass. Never posing. Never eye-contact with viewer. The eye finds them inside their pastoral moment.
+The character below is ENGAGED in a rural task — hanging laundry, picking flowers, drinking tea, sketching, cycling, walking through grass. Never STATIC posing for a thumbnail. Their eye direction is whatever fits the rolled camera_framing + action — eye contact with viewer is FINE for forward-facing framings, eyes-on-the-task is FINE for environmental framings. Body engaged in the moment, fabric/hair caught in air.
 
 ━━━ ⚠ HARD RULE #10: COMPOSITION VARIETY ━━━
 
-The scene_type and camera_framing axes specify TODAY'S composition. Honor them — do NOT default to "wandering girl on hilltop with windswept tree." That's ONE composition out of many. Mix doorstep-cottage / through-grass / over-shoulder / inside-a-room / bridge-crossing / well-tending / boat-on-stream.
+The scene_type and camera_framing axes specify TODAY'S composition. Honor them strictly — do NOT default to "wandering girl on hilltop with windswept tree" or "tiny back-silhouette looking out over valley." Those are ONE composition out of many. Mix doorstep-cottage close-up / through-grass forward / cycling-toward-camera / inside-a-room medium-shot / bridge-crossing profile / well-tending three-quarter / boat-on-stream low-angle. The rolled camera_framing axis decides; honor it.
 
 ━━━ ⚠ HARD RULE #11: DRAMATIC POSTER MOMENT — WOW FACTOR ━━━
 
@@ -255,15 +257,21 @@ ${emotional_dna}
 ━━━ CAMERA FRAMING ━━━
 ${camera_framing}
 
+${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
+
 ━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY (HARD RULE #6) ━━━
 ${story_prop}
 
 ━━━ ⚠ BACKGROUND DETAIL — MUST APPEAR IN DEEP DISTANCE (HARD RULE #7) ━━━
 ${background_detail}
-${spirit_element ? `
+${
+  spirit_element
+    ? `
 
 ━━━ ⚠ SPIRIT ELEMENT — render subtly (Ghibli magical-realism) ━━━
-${spirit_element}` : ''}
+${spirit_element}`
+    : ''
+}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -284,7 +292,7 @@ Studio Ghibli hand-painted pastoral keyframe. Kazuo Oga sky brushwork. Soft warm
 - NO cities / skyscrapers / modern infrastructure
 - NO armor / weapons / military / cybernetics
 - NO photoreal — hand-painted oil-watercolor only
-- NO posed model character — caught mid-task
+- NO STATIC POSED THUMBNAIL — character must be ENGAGED in their rural task
 - NO English text / modern signage / kanji storefronts
 - NO dramatic apocalyptic skies (no red-orb suns / no lightning-storm hero-shots)
 - NO empty composition — nature density mandate applies
@@ -408,6 +416,8 @@ ${emotional_dna}
 ━━━ CAMERA FRAMING ━━━
 ${camera_framing}
 
+${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
+
 ━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY (HARD RULE #6) ━━━
 ${story_prop}
 
@@ -434,7 +444,7 @@ Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo painterly cyberpunk-anime keyfra
 - NO empty sky — vertical clutter mandate
 - NO empty street — wet-pavement-with-reflections mandate
 - NO real corporate logos / IP brands (Nike / Coca-Cola / etc.) — fictional kanji + fake-brand signage only
-- NO posed model character — caught mid-action
+- NO STATIC POSED THUMBNAIL — character must be ENGAGED in dynamic mid-action
 - NO photoreal — painterly cyberpunk-anime keyframe register
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
@@ -492,9 +502,9 @@ The keyframe MUST visibly contain four distinct depth layers: (1) foreground pro
 
 The architectural anchor must DWARF the human figure(s). Towering, massive, scale-proving.
 
-━━━ ⚠ HARD RULE #5: CANDID ACTION ━━━
+━━━ ⚠ HARD RULE #5: ENGAGED ACTION ━━━
 
-Character is CAUGHT mid-beat (mid-step / mid-draw / mid-prayer). Not posing. Not eye-contact with viewer.
+Character is ENGAGED in a mid-beat (mid-step / mid-draw / mid-prayer / mid-strike). Body weight shifted, fabric/hair caught in air, weapon in motion. Eye direction follows the rolled camera_framing + action — eye contact with viewer is FINE for forward-facing framings (low-angle hero / forward three-quarter / medium close-up); eyes-on-the-opponent is FINE for combat / profile-action framings. The ban is on STATIC POSED, not on eye contact.
 
 ━━━ THE SCENE TYPE (composition lead) ━━━
 ${scene_type}
@@ -508,7 +518,7 @@ ${architectural_anchor}
 ━━━ CHARACTER(S) IN FRAME (role-coded, NEVER named) ━━━
 ${character_role}
 
-━━━ ACTION MOMENT (candid mid-beat — never posed) ━━━
+━━━ ACTION MOMENT (engaged mid-beat — never static posed) ━━━
 ${action_moment}
 
 ━━━ ATMOSPHERIC ELEMENT (frame motion — drifting petals / snow / mist / rain / fireflies / leaves / banners) ━━━
@@ -525,6 +535,8 @@ ${emotional_dna}
 
 ━━━ CAMERA FRAMING ━━━
 ${camera_framing}
+
+${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
 
 ━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY (HARD RULE #1) ━━━
 ${story_prop}
