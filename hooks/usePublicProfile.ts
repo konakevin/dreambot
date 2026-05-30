@@ -4,6 +4,8 @@ import { supabase } from '@/lib/supabase';
 export interface PublicProfile {
   id: string;
   username: string;
+  display_name: string | null;
+  bio: string | null;
   avatar_url: string | null;
   is_public: boolean;
   postCount: number;
@@ -29,6 +31,8 @@ export function usePublicProfile(userId: string) {
       return {
         id: row.id as string,
         username: row.username as string,
+        display_name: (row.display_name as string | null) ?? null,
+        bio: (row.bio as string | null) ?? null,
         avatar_url: (row.avatar_url as string | null) ?? null,
         is_public: (row.is_public as boolean) ?? false,
         postCount: Number(row.post_count),

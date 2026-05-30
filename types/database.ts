@@ -506,6 +506,7 @@ export type Database = {
           created_at: string;
           error: string | null;
           id: string;
+          notify_on_complete: boolean;
           result_image_url: string | null;
           result_medium: string | null;
           result_prompt: string | null;
@@ -519,6 +520,7 @@ export type Database = {
           created_at?: string;
           error?: string | null;
           id: string;
+          notify_on_complete?: boolean;
           result_image_url?: string | null;
           result_medium?: string | null;
           result_prompt?: string | null;
@@ -532,6 +534,7 @@ export type Database = {
           created_at?: string;
           error?: string | null;
           id?: string;
+          notify_on_complete?: boolean;
           result_image_url?: string | null;
           result_medium?: string | null;
           result_prompt?: string | null;
@@ -643,6 +646,7 @@ export type Database = {
           attempt_count: number;
           completed_at: string | null;
           created_at: string;
+          dedup_key: string | null;
           id: string;
           last_error: string | null;
           payload: Json;
@@ -657,6 +661,7 @@ export type Database = {
           attempt_count?: number;
           completed_at?: string | null;
           created_at?: string;
+          dedup_key?: string | null;
           id?: string;
           last_error?: string | null;
           payload: Json;
@@ -671,6 +676,7 @@ export type Database = {
           attempt_count?: number;
           completed_at?: string | null;
           created_at?: string;
+          dedup_key?: string | null;
           id?: string;
           last_error?: string | null;
           payload?: Json;
@@ -1124,6 +1130,64 @@ export type Database = {
         };
         Relationships: [];
       };
+      notification_preferences: {
+        Row: {
+          category: string;
+          channel: string;
+          enabled: boolean;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          category: string;
+          channel: string;
+          enabled?: boolean;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          category?: string;
+          channel?: string;
+          enabled?: boolean;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'notification_preferences_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      notification_settings: {
+        Row: {
+          push_paused: boolean;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          push_paused?: boolean;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          push_paused?: boolean;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'notification_settings_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: true;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       notifications: {
         Row: {
           actor_id: string;
@@ -1270,6 +1334,45 @@ export type Database = {
         };
         Relationships: [];
       };
+      pending_push_groups: {
+        Row: {
+          fire_at: string;
+          group_key: string;
+          latest_notification_id: string;
+          original_created_at: string;
+          recipient_id: string;
+        };
+        Insert: {
+          fire_at: string;
+          group_key: string;
+          latest_notification_id: string;
+          original_created_at?: string;
+          recipient_id: string;
+        };
+        Update: {
+          fire_at?: string;
+          group_key?: string;
+          latest_notification_id?: string;
+          original_created_at?: string;
+          recipient_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'pending_push_groups_latest_notification_id_fkey';
+            columns: ['latest_notification_id'];
+            isOneToOne: false;
+            referencedRelation: 'notifications';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'pending_push_groups_recipient_id_fkey';
+            columns: ['recipient_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       post_impressions: {
         Row: {
           first_seen: string;
@@ -1396,6 +1499,33 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      push_send_failures: {
+        Row: {
+          created_at: string;
+          detail: string | null;
+          error_kind: string | null;
+          id: string;
+          notification_type: string | null;
+          recipient_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          detail?: string | null;
+          error_kind?: string | null;
+          id?: string;
+          notification_type?: string | null;
+          recipient_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          detail?: string | null;
+          error_kind?: string | null;
+          id?: string;
+          notification_type?: string | null;
+          recipient_id?: string | null;
+        };
+        Relationships: [];
       };
       push_tokens: {
         Row: {
@@ -1532,8 +1662,8 @@ export type Database = {
           height: number | null;
           id: string;
           image_url: string;
-          image_url_hq: string | null;
           image_url_display: string | null;
+          image_url_hq: string | null;
           image_url_hq_generated_at: string | null;
           is_active: boolean;
           is_ai_generated: boolean;
@@ -1576,8 +1706,8 @@ export type Database = {
           height?: number | null;
           id?: string;
           image_url: string;
-          image_url_hq?: string | null;
           image_url_display?: string | null;
+          image_url_hq?: string | null;
           image_url_hq_generated_at?: string | null;
           is_active?: boolean;
           is_ai_generated?: boolean;
@@ -1620,8 +1750,8 @@ export type Database = {
           height?: number | null;
           id?: string;
           image_url?: string;
-          image_url_hq?: string | null;
           image_url_display?: string | null;
+          image_url_hq?: string | null;
           image_url_hq_generated_at?: string | null;
           is_active?: boolean;
           is_ai_generated?: boolean;
@@ -1816,7 +1946,9 @@ export type Database = {
       users: {
         Row: {
           avatar_url: string | null;
+          bio: string | null;
           created_at: string;
+          display_name: string | null;
           email: string;
           first_dream_completed_at: string | null;
           has_ai_recipe: boolean;
@@ -1834,7 +1966,9 @@ export type Database = {
         };
         Insert: {
           avatar_url?: string | null;
+          bio?: string | null;
           created_at?: string;
+          display_name?: string | null;
           email: string;
           first_dream_completed_at?: string | null;
           has_ai_recipe?: boolean;
@@ -1852,7 +1986,9 @@ export type Database = {
         };
         Update: {
           avatar_url?: string | null;
+          bio?: string | null;
           created_at?: string;
+          display_name?: string | null;
           email?: string;
           first_dream_completed_at?: string | null;
           has_ai_recipe?: boolean;
@@ -1893,6 +2029,10 @@ export type Database = {
       };
       block_exists: { Args: { a: string; b: string }; Returns: boolean };
       block_user: { Args: { p_blocked_id: string }; Returns: undefined };
+      category_enabled_for: {
+        Args: { p_category: string; p_channel: string; p_user_id: string };
+        Returns: boolean;
+      };
       charge_sparkles: {
         Args: {
           p_amount: number;
@@ -1908,6 +2048,7 @@ export type Database = {
           attempt_count: number;
           completed_at: string | null;
           created_at: string;
+          dedup_key: string | null;
           id: string;
           last_error: string | null;
           payload: Json;
@@ -1925,6 +2066,30 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      claim_dream_queue_jobs: {
+        Args: { p_limit?: number; p_worker_id: string };
+        Returns: {
+          attempt_count: number;
+          completed_at: string | null;
+          created_at: string;
+          dedup_key: string | null;
+          id: string;
+          last_error: string | null;
+          payload: Json;
+          source: string;
+          started_at: string | null;
+          status: string;
+          upload_id: string | null;
+          user_id: string;
+          worker_id: string | null;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'dream_queue';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
       claim_upscale_job: {
         Args: { p_stale_minutes?: number; p_upload_id: string };
         Returns: string;
@@ -1937,11 +2102,16 @@ export type Database = {
         };
         Returns: string;
       };
+      delete_group: {
+        Args: { p_group_key: string; p_user_id: string };
+        Returns: undefined;
+      };
       delete_own_account: { Args: never; Returns: undefined };
       deny_follow_request: {
         Args: { p_requester_id: string };
         Returns: undefined;
       };
+      drain_pending_push_groups: { Args: never; Returns: undefined };
       fetch_nightly_history: {
         Args: { p_user_id: string };
         Returns: {
@@ -2048,13 +2218,27 @@ export type Database = {
           height: number;
           id: string;
           image_url: string;
-          image_url_hq: string;
           image_url_display: string;
+          image_url_hq: string;
           like_count: number;
           posted_at: string;
           user_id: string;
           username: string;
           width: number;
+        }[];
+      };
+      get_group_actors: {
+        Args: {
+          p_group_key: string;
+          p_limit?: number;
+          p_offset?: number;
+          p_user_id: string;
+        };
+        Returns: {
+          actor_id: string;
+          avatar_url: string;
+          latest_at: string;
+          username: string;
         }[];
       };
       get_image_models: {
@@ -2078,11 +2262,32 @@ export type Database = {
           isSetofReturn: true;
         };
       };
-      // get_notifications dropped in Phase 4 (migration 206) — replaced by get_inbox.
+      get_inbox: {
+        Args: { p_limit?: number; p_offset?: number; p_user_id: string };
+        Returns: {
+          actor_count: number;
+          any_unseen: boolean;
+          body: string;
+          category: string;
+          comment_id: string;
+          group_key: string;
+          last_at: string;
+          preview_actor_ids: string[];
+          preview_avatars: string[];
+          preview_usernames: string[];
+          subtype: string;
+          type: string;
+          upload_id: string;
+          upload_image_url: string;
+        }[];
+      };
+      get_notification_settings: { Args: { p_user_id?: string }; Returns: Json };
       get_public_profile: {
         Args: { p_user_id: string };
         Returns: {
           avatar_url: string;
+          bio: string;
+          display_name: string;
           follower_count: number;
           following_count: number;
           has_request: boolean;
@@ -2118,80 +2323,32 @@ export type Database = {
           vibe_score: number;
         }[];
       };
+      get_unread_group_count: { Args: { p_user_id: string }; Returns: number };
       get_unread_notification_count: {
         Args: { p_user_id: string };
         Returns: number;
       };
-      // ─── Phase 1 grouped notifications (migration 202) ───────────────────
-      get_inbox: {
-        Args: { p_user_id: string; p_limit?: number; p_offset?: number };
-        Returns: {
-          group_key: string;
-          type: string;
-          subtype: string | null;
-          category: string;
-          preview_actor_ids: string[] | null;
-          preview_usernames: string[] | null;
-          preview_avatars: (string | null)[] | null;
-          actor_count: number;
-          upload_id: string | null;
-          comment_id: string | null;
-          upload_image_url: string | null;
-          body: string | null;
-          last_at: string;
-          any_unseen: boolean;
-        }[];
-      };
-      get_group_actors: {
-        Args: {
-          p_user_id: string;
-          p_group_key: string;
-          p_limit?: number;
-          p_offset?: number;
-        };
-        Returns: {
-          actor_id: string;
-          username: string;
-          avatar_url: string | null;
-          latest_at: string;
-        }[];
-      };
-      mark_group_seen: {
-        Args: { p_user_id: string; p_group_key: string };
-        Returns: undefined;
-      };
-      get_unread_group_count: {
-        Args: { p_user_id: string };
-        Returns: number;
-      };
-      notification_category: { Args: { p_type: string }; Returns: string };
-      delete_group: {
-        Args: { p_user_id: string; p_group_key: string };
-        Returns: undefined;
-      };
-      // ─── /Phase 1 grouped notifications ─────────────────────────────────
-      // ─── Phase 3 notification preferences (migration 205) ───────────────
-      get_notification_settings: {
-        Args: { p_user_id?: string };
-        Returns: { push_paused: boolean; prefs: Record<string, boolean> };
-      };
-      set_notification_pref: {
-        Args: { p_category: string; p_channel: string; p_enabled: boolean };
-        Returns: undefined;
-      };
-      set_push_paused: { Args: { p_paused: boolean }; Returns: undefined };
-      category_enabled_for: {
-        Args: { p_user_id: string; p_category: string; p_channel: string };
-        Returns: boolean;
-      };
-      // ─── /Phase 3 notification preferences ──────────────────────────────
       grant_sparkles: {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
         Returns: undefined;
       };
       is_pro_active: { Args: { p_user_id: string }; Returns: boolean };
-      request_dream_notification: { Args: { p_job_id: string }; Returns: undefined };
       list_my_upload_paths: { Args: never; Returns: string[] };
+      mark_group_seen: {
+        Args: { p_group_key: string; p_user_id: string };
+        Returns: undefined;
+      };
+      notification_category: { Args: { p_type: string }; Returns: string };
+      notification_group_key: {
+        Args: {
+          p_comment_id: string;
+          p_id: string;
+          p_recipient_id: string;
+          p_type: string;
+          p_upload_id: string;
+        };
+        Returns: string;
+      };
       rebalance_bot_schedules: {
         Args: { p_min_lead_seconds?: number };
         Returns: undefined;
@@ -2220,6 +2377,15 @@ export type Database = {
         };
         Returns: boolean;
       };
+      request_dream_notification: {
+        Args: { p_job_id: string };
+        Returns: undefined;
+      };
+      set_notification_pref: {
+        Args: { p_category: string; p_channel: string; p_enabled: boolean };
+        Returns: undefined;
+      };
+      set_push_paused: { Args: { p_paused: boolean }; Returns: undefined };
       spend_sparkles: {
         Args: {
           p_amount: number;

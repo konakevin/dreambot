@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   FlatList,
   RefreshControl,
+  Share,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -24,11 +25,11 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useUnreadGroupCount } from '@/hooks/useUnreadGroupCount';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { PostGrid } from '@/components/PostGrid';
-import { GradientUsername } from '@/components/GradientUsername';
+import { ProfileHeader } from '@/components/ProfileHeader';
 import { colors } from '@/constants/theme';
 import { useFocusEffect } from '@react-navigation/native';
 import { trackProfileViewed } from '@/lib/analytics';
-import { ProfileStatsRow, type StatsTab } from '@/components/ProfileStatsRow';
+import { type StatsTab } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
@@ -108,106 +109,113 @@ export default function ProfileScreen() {
     setActiveTab(tab as Tab);
   }
 
-  const statsActiveTab: StatsTab =
-    activeTab === 'saved' || activeTab === 'dreams' ? 'posts' : (activeTab as StatsTab);
+  // System share-sheet handler for the [Share] button on the profile
+  // header. Web fallback at /user/<id> doesn't exist yet (registered in
+  // AASA but no Next page), so we share an App Store URL + the @handle.
+  // Anyone with the app installed → opens the app via the App Store
+  // listing's universal link; anyone without → lands on the App Store
+  // product page. Replace with /user/<id> URL once dreambot-web ships
+  // the public profile page.
+  const handleShareProfile = useCallback(async () => {
+    if (!user) return;
+    const handle = user.user_metadata?.username ?? 'someone';
+    try {
+      await Share.share({
+        message: `Check out @${handle} on DreamBot ✨ https://apps.apple.com/app/id6761505205`,
+      });
+    } catch {
+      /* user cancelled — no-op */
+    }
+  }, [user]);
+
+  const handleEditProfile = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    nav.push('/settings/edit-profile');
+  }, []);
 
   const header = (
     <>
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <View>
-            <GradientUsername
-              username={user?.user_metadata?.username ?? 'you'}
-              rank={null}
-              style={styles.username}
-              avatarUrl={profile?.avatar_url}
-              showAvatar
-              avatarSize={32}
-            />
-          </View>
-          <View style={styles.headerActions}>
-            <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
-              <View style={styles.inboxBubbleWrap}>
-                <Ionicons
-                  name={unreadCount > 0 ? 'chatbubble' : 'chatbubble-outline'}
-                  size={26}
-                  color={unreadCount > 0 ? colors.accent : colors.textSecondary}
-                />
-                {unreadCount > 0 && (
-                  <View style={styles.inboxBubbleCountWrap} pointerEvents="none">
-                    <Text style={styles.inboxBubbleCount}>
-                      {unreadCount > 9 ? '9+' : unreadCount}
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
-              <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
-            </TouchableOpacity>
-          </View>
+      {/* Compact top bar — chat bubble + settings live here regardless of
+          which sub-view (grid / followers / following) the user is on. */}
+      <View style={styles.topBar}>
+        <Text style={styles.topBarHandle}>@{user?.user_metadata?.username ?? 'you'}</Text>
+        <View style={styles.topBarActions}>
+          <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
+            <View style={styles.inboxBubbleWrap}>
+              <Ionicons
+                name={unreadCount > 0 ? 'chatbubble' : 'chatbubble-outline'}
+                size={26}
+                color={unreadCount > 0 ? colors.accent : colors.textSecondary}
+              />
+              {unreadCount > 0 && (
+                <View style={styles.inboxBubbleCountWrap} pointerEvents="none">
+                  <Text style={styles.inboxBubbleCount}>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
+            <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
+          </TouchableOpacity>
         </View>
-
-        <ProfileStatsRow
-          postCount={profile?.postCount ?? 0}
-          followerCount={profile?.followerCount ?? 0}
-          followingCount={profile?.followingCount ?? 0}
-          activeTab={statsActiveTab}
-          onTabChange={handleStatsTabChange}
-        />
       </View>
 
-      {/* TODO: revisit wish feature once we figure out how it will work
-      {(activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') && (
-        <View style={styles.wishRow}>
-          <DreamWishBadge variant="card" />
-        </View>
-      )}
-      */}
+      <ProfileHeader
+        variant="own"
+        avatar_url={profile?.avatar_url ?? null}
+        username={user?.user_metadata?.username ?? 'you'}
+        display_name={profile?.display_name ?? null}
+        bio={profile?.bio ?? null}
+        postCount={profile?.postCount ?? 0}
+        followerCount={profile?.followerCount ?? 0}
+        followingCount={profile?.followingCount ?? 0}
+        onStatsPress={handleStatsTabChange}
+        onEditPress={handleEditProfile}
+        onSharePress={handleShareProfile}
+      />
 
+      {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;
+          hidden when the user has tapped Followers/Following on the stats
+          row and is looking at the user-list view. */}
       {(activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') && (
         <View style={styles.tabRow}>
           <TouchableOpacity
             style={[styles.tab, activeTab === 'posts' && styles.tabActive]}
             onPress={() => setActiveTab('posts')}
             activeOpacity={0.7}
+            accessibilityLabel="Posts"
           >
             <Ionicons
-              name="grid-outline"
-              size={16}
+              name={activeTab === 'posts' ? 'grid' : 'grid-outline'}
+              size={20}
               color={activeTab === 'posts' ? colors.textPrimary : colors.textSecondary}
             />
-            <Text style={[styles.tabText, activeTab === 'posts' && styles.tabTextActive]}>
-              My Posts
-            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.tab, activeTab === 'dreams' && styles.tabActive]}
             onPress={() => setActiveTab('dreams')}
             activeOpacity={0.7}
+            accessibilityLabel="Dreams"
           >
             <Ionicons
               name={activeTab === 'dreams' ? 'moon' : 'moon-outline'}
-              size={16}
+              size={20}
               color={activeTab === 'dreams' ? colors.textPrimary : colors.textSecondary}
             />
-            <Text style={[styles.tabText, activeTab === 'dreams' && styles.tabTextActive]}>
-              My Dreams
-            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.tab, activeTab === 'saved' && styles.tabActive]}
             onPress={() => setActiveTab('saved')}
             activeOpacity={0.7}
+            accessibilityLabel="Saved"
           >
             <Ionicons
               name={activeTab === 'saved' ? 'bookmark' : 'bookmark-outline'}
-              size={16}
+              size={20}
               color={activeTab === 'saved' ? colors.textPrimary : colors.textSecondary}
             />
-            <Text style={[styles.tabText, activeTab === 'saved' && styles.tabTextActive]}>
-              Saved
-            </Text>
           </TouchableOpacity>
         </View>
       )}
@@ -282,23 +290,20 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  header: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 20,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.border,
-    marginBottom: 2,
-  },
-  headerTop: {
+  topBar: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    paddingHorizontal: 16,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
-  username: { color: colors.textPrimary, fontSize: 20, fontWeight: '800' },
-  email: { color: colors.textSecondary, fontSize: 13, marginTop: 2 },
-  headerActions: {
+  topBarHandle: {
+    color: colors.textPrimary,
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  topBarActions: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
@@ -336,22 +341,23 @@ const styles = StyleSheet.create({
   },
   tabRow: {
     flexDirection: 'row',
+    borderTopWidth: 0.5,
+    borderTopColor: colors.border,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
+    marginTop: 4,
   },
   tab: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
     paddingVertical: 12,
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
   },
-  tabActive: {},
-  tabText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
-  tabTextActive: { color: colors.textPrimary },
+  tabActive: {
+    borderBottomColor: colors.textPrimary,
+  },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
   wishRow: { paddingHorizontal: 16, paddingBottom: 8 },

@@ -31,9 +31,8 @@ import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
 import { PostGrid } from '@/components/PostGrid';
-import { GradientUsername } from '@/components/GradientUsername';
+import { ProfileHeader } from '@/components/ProfileHeader';
 import { colors } from '@/constants/theme';
-import { ProfileStatsRow } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
@@ -214,7 +213,9 @@ export default function PublicProfileScreen() {
     toggleFollow({ userId: targetId, currentlyFollowing: followingIds.has(targetId) });
   }
 
-  const followLabel = isFollowing ? 'Following' : hasRequest ? 'Requested' : 'Follow';
+  // followLabel was used by the old inline follow button; ProfileHeader's
+  // 'other' variant now derives the label internally from isFollowing +
+  // hasRequest.
 
   if (profileLoading || !profile) {
     return (
@@ -233,63 +234,40 @@ export default function PublicProfileScreen() {
     );
   }
 
-  // Single consolidated top row: back chevron, avatar+username, follow
-  // button, ellipsis. Replaces the previous two-row layout (back/ellipsis
-  // on row 1, avatar/follow on row 2) which wasted ~50px vertically.
+  // Public profile uses the same shared ProfileHeader as the own-profile
+  // screen, in 'other' variant. Top compact row owns the back chevron;
+  // the More (⋯) menu is in the action-pill row inside ProfileHeader.
   const backButton = null;
 
   const header = (
-    <View style={styles.header}>
-      <View style={styles.headerTop}>
+    <>
+      <View style={styles.topBar}>
         <TouchableOpacity onPress={() => router.back()} style={styles.iconButton} hitSlop={12}>
           <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setShowAvatarPreview(true)}
-          activeOpacity={0.8}
-          style={styles.usernameWrap}
-        >
-          <GradientUsername
-            username={profile.username}
-            rank={null}
-            hideRank
-            style={styles.username}
-            avatarUrl={profile.avatar_url}
-            showAvatar
-            avatarSize={32}
-          />
-        </TouchableOpacity>
-        {!isOwnProfile && (
-          <TouchableOpacity
-            style={[styles.followButton, (isFollowing || hasRequest) && styles.followingButton]}
-            onPress={handleFollow}
-            activeOpacity={0.8}
-          >
-            <Text
-              style={[
-                styles.followButtonText,
-                (isFollowing || hasRequest) && styles.followingButtonText,
-              ]}
-            >
-              {followLabel}
-            </Text>
-          </TouchableOpacity>
-        )}
-        {!isOwnProfile && (
-          <TouchableOpacity onPress={handleMoreMenu} style={styles.iconButton} hitSlop={12}>
-            <Ionicons name="ellipsis-horizontal" size={22} color={colors.textSecondary} />
-          </TouchableOpacity>
-        )}
       </View>
 
-      <ProfileStatsRow
+      <ProfileHeader
+        variant="other"
+        avatar_url={profile.avatar_url ?? null}
+        username={profile.username}
+        display_name={profile.display_name ?? null}
+        bio={profile.bio ?? null}
         postCount={profile.postCount}
         followerCount={profile.followerCount}
         followingCount={profile.followingCount}
-        activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab as Tab)}
+        isFollowing={isFollowing}
+        hasRequest={hasRequest}
+        isPrivate={!isTargetPublic}
+        onStatsPress={(tab) => setActiveTab(tab as Tab)}
+        onAvatarPress={() => setShowAvatarPreview(true)}
+        onFollowPress={handleFollow}
+        onMessagePress={() => {
+          /* TODO: DM flow once it ships — silent no-op for now */
+        }}
+        onMorePress={handleMoreMenu}
       />
-    </View>
+    </>
   );
 
   const initial = (profile.username || '?')[0].toUpperCase();
@@ -449,26 +427,19 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  header: {
-    paddingHorizontal: 8,
-    paddingTop: 4,
-    paddingBottom: 16,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.border,
-    marginBottom: 2,
-  },
-  // Single consolidated row: back chevron, avatar+username (flex:1), follow, ellipsis.
-  headerTop: {
+  // Compact top row above ProfileHeader — owns just the back chevron now
+  // that follow / message / more all live as action pills inside the header.
+  topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 12,
+    paddingHorizontal: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   iconButton: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
-  usernameWrap: { flex: 1, minWidth: 0 },
-  username: { color: colors.textPrimary, fontSize: 18, fontWeight: '800' },
-  // Asymmetric weight: Follow is the action we want, so it's filled and
-  // bright. Following/Requested is de-emphasized — visible but quiet.
+  // followButton/followingButton/etc. kept for the private-account locked
+  // state below (line ~378), where the page can't render the full
+  // ProfileHeader.
   followButton: {
     borderRadius: 14,
     paddingHorizontal: 12,

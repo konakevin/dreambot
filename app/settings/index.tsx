@@ -119,26 +119,10 @@ export default function SettingsScreen() {
     };
   }, [user]);
 
-  // Summaries for dream engine rows
-  const artStylesSummary =
-    vibeProfile.art_styles.length > 0
-      ? vibeProfile.art_styles.length === 1
-        ? vibeProfile.art_styles[0]
-        : `${vibeProfile.art_styles.slice(0, 2).join(', ')} +${vibeProfile.art_styles.length - 2}`
-      : 'Not set';
-  const vibesSummary =
-    vibeProfile.aesthetics.length > 0
-      ? vibeProfile.aesthetics.length === 1
-        ? vibeProfile.aesthetics[0]
-        : `${vibeProfile.aesthetics.slice(0, 2).join(', ')} +${vibeProfile.aesthetics.length - 2}`
-      : 'Not set';
-  const locationCount = vibeProfile.dream_seeds?.places?.length ?? 0;
-  const objectCount = vibeProfile.dream_seeds?.things?.length ?? 0;
-  const castMembers = vibeProfile.dream_cast ?? [];
-  const castSummary =
-    castMembers.length === 0
-      ? 'Not set up'
-      : castMembers.map((m) => (m.role === 'self' ? 'You' : 'Your +1')).join(' + ');
+  // Dream-engine summary helpers (artStylesSummary, vibesSummary,
+  // locationCount, objectCount, castSummary) used to live here for the
+  // inline DREAM ENGINE rows; those rows moved to the Edit Profile
+  // screen so the summaries went with them.
 
   function handleChangePhoto() {
     showAlert('Profile picture', '', [
@@ -402,9 +386,17 @@ export default function SettingsScreen() {
           <Text style={styles.changePhotoLabel}>Change photo</Text>
         </TouchableOpacity>
 
-        {/* Profile section */}
+        {/* Profile section — the new Edit Profile screen is the canonical
+            home for avatar / display name / bio / dream-identity drill-ins.
+            Profile-picture quick-row kept for the muscle-memory path; the
+            two converge on the same useAvatarUpload mutation. */}
         <Text style={styles.sectionHeader}>PROFILE</Text>
         <View style={styles.section}>
+          <SettingsRow
+            icon="person-circle-outline"
+            label="Edit Profile"
+            onPress={() => nav.push('/settings/edit-profile')}
+          />
           <SettingsRow icon="camera-outline" label="Profile picture" onPress={handleChangePhoto} />
           <SettingsRow
             icon="person-outline"
@@ -488,54 +480,12 @@ export default function SettingsScreen() {
           <SettingsRow icon="planet" label="Bots" onPress={() => nav.push('/settings/bots')} />
         </View>
 
-        {/* Dream Engine */}
-        <Text style={styles.sectionHeader}>DREAM ENGINE</Text>
-        <View style={styles.section}>
-          <SettingsRow
-            icon="color-palette"
-            label="Art Styles"
-            trailing={<Text style={styles.trailingSummary}>{artStylesSummary}</Text>}
-            onPress={() => nav.push('/settings/art-styles')}
-          />
-          <SettingsRow
-            icon="sparkles"
-            label="Vibes"
-            trailing={<Text style={styles.trailingSummary}>{vibesSummary}</Text>}
-            onPress={() => nav.push('/settings/vibes')}
-          />
-          <SettingsRow
-            icon="options"
-            label="Mood"
-            trailing={<Text style={styles.trailingSummary}>Customized</Text>}
-            onPress={() => nav.push('/settings/mood')}
-          />
-          <SettingsRow
-            icon="location"
-            label="Locations"
-            trailing={
-              <Text style={styles.trailingSummary}>
-                {locationCount > 0 ? `${locationCount} selected` : 'Not set'}
-              </Text>
-            }
-            onPress={() => nav.push('/settings/locations')}
-          />
-          <SettingsRow
-            icon="cube"
-            label="Objects"
-            trailing={
-              <Text style={styles.trailingSummary}>
-                {objectCount > 0 ? `${objectCount} selected` : 'Not set'}
-              </Text>
-            }
-            onPress={() => nav.push('/settings/objects')}
-          />
-          <SettingsRow
-            icon="people"
-            label="Dream Cast"
-            trailing={<Text style={styles.trailingSummary}>{castSummary}</Text>}
-            onPress={() => nav.push('/settings/dream-cast')}
-          />
-        </View>
+        {/* Dream Engine drill-ins (Art Styles / Vibes / Mood / Locations /
+            Objects / Dream Cast) used to live here; moved to the Edit
+            Profile screen so all identity-shaping rows live in one place.
+            The leaf screens themselves still exist at the same routes —
+            navigated to via Edit Profile's DREAM IDENTITY section now. */}
+
         {/* Advanced Mode section — power-user Flux model preference for
             the Create-screen "Advanced Mode" toggle. Free feature; not to
             be confused with Pro subscription. */}
