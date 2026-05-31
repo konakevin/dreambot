@@ -17,6 +17,7 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
+import { normalizeImageToJpeg } from '@/lib/normalizeImageToJpeg';
 import { useOnboardingStore } from '@/store/onboarding';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
@@ -308,9 +309,15 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
     const previousThumb = getMember(role)?.thumb_url;
 
     try {
-      // Upload to Supabase Storage — need a public URL for describe-photo + Kontext
+      // Upload to Supabase Storage — need a public URL for describe-photo + Kontext.
+      // Transcode whatever the picker handed us to actual JPEG bytes BEFORE
+      // upload. Without this, PNG/WebP/GIF/AVIF picks from the Files app
+      // upload with their raw bytes under a lying 'image/jpeg' content-type,
+      // which trips downstream face-swap + display-variant decoders on edge
+      // cases. See lib/normalizeImageToJpeg.ts header for the full audit.
       const path = `${user.id}/cast-${role}-${Date.now()}.jpg`;
-      const response = await fetch(asset.uri);
+      const normalized = await normalizeImageToJpeg(asset.uri);
+      const response = await fetch(normalized.uri);
       const arrayBuffer = await response.arrayBuffer();
 
       const { error: uploadError } = await supabase.storage

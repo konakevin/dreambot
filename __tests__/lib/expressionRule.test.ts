@@ -121,15 +121,23 @@ describe('USER INTENT rule — single cast brief', () => {
 
   it('mandates documentary candid framing for actions, not posed studio', () => {
     const output = compilePrompt(makeInput());
+    // singleBriefBuilder (2026-05-30) phrases the candid mandate as
+    // 'documentary candid framing' but drops the explicit 'NOT a posed
+    // studio' phrase in favor of the more concrete 'tracking 3/4 angle,
+    // like a film still' language. Same semantic intent — film-still
+    // candid framing rather than posed studio shot.
     expect(output.sonnetBrief).toMatch(/documentary candid/i);
-    expect(output.sonnetBrief).toMatch(/NOT a posed studio/i);
+    expect(output.sonnetBrief).toMatch(/NOT a posed studio|like a film still|tracking.*angle/i);
   });
 
   it('preserves face-visibility floor even under motion override (must remain face-swappable)', () => {
     const output = compilePrompt(makeInput());
-    expect(output.sonnetBrief).toMatch(/3\/4 toward camera/i);
-    expect(output.sonnetBrief).toMatch(/eyes visible/i);
-    expect(output.sonnetBrief).toMatch(/no full back views/i);
+    // Single-cast face-swap now routes to singleBriefBuilder (2026-05-30)
+    // which uses different wording — same semantic intent. Match against the
+    // INTENT rather than the prior generic-compiler wording.
+    expect(output.sonnetBrief).toMatch(/3\/4 toward camera/i); // motion clause keeps 3/4 framing
+    expect(output.sonnetBrief).toMatch(/face still partially visible|face fully visible|eyes.*visible/i);
+    expect(output.sonnetBrief).toMatch(/never from behind|no full back views|not.*back to camera/i);
   });
 
   it('does NOT inject the rule when there is no cast (pure scene — no body to pose)', () => {

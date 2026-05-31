@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { normalizeImageToJpeg } from '@/lib/normalizeImageToJpeg';
 
 const MAX_AVATAR_BYTES = 8 * 1024 * 1024; // 8MB
 
@@ -13,7 +14,11 @@ export function useAvatarUpload() {
       const userId = user!.id;
       const fileName = `${userId}/avatar.jpg`;
 
-      const response = await fetch(uri);
+      // Transcode picker output to real JPEG bytes before upload. Without
+      // this, PNG/WebP/GIF picks land with their raw bytes under a lying
+      // 'image/jpeg' content-type. See lib/normalizeImageToJpeg.ts header.
+      const normalized = await normalizeImageToJpeg(uri);
+      const response = await fetch(normalized.uri);
       const arrayBuffer = await response.arrayBuffer();
 
       if (arrayBuffer.byteLength > MAX_AVATAR_BYTES) {
