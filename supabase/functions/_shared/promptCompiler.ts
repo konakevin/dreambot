@@ -33,6 +33,14 @@ export interface CompilerInput {
     fluxFragment: string;
     characterRenderMode: 'natural' | 'embodied';
     faceSwaps: boolean;
+    /** Face-swap override for `directive` — only applied when the swap is
+     *  active. NULL → use `directive`. Migration 154. Without this field
+     *  being plumbed through, applyFaceSwapOverride() silently no-ops on
+     *  the compilePrompt → singleBriefBuilder / dualBriefBuilder path and
+     *  the swap-friendly DB column never takes effect for user dreams. */
+    faceSwapDirective?: string | null;
+    /** Face-swap override for `fluxFragment` — same semantics. */
+    faceSwapFluxFragment?: string | null;
   };
 
   vibe: {

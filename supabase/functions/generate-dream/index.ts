@@ -497,6 +497,12 @@ async function handleRequest(req: Request): Promise<Response> {
             fluxFragment: medium.fluxFragment ?? medium.key,
             characterRenderMode: medium.characterRenderMode,
             faceSwaps: medium.faceSwaps,
+            // Without these two, applyFaceSwapOverride in singleBriefBuilder
+            // + dualBriefBuilder silently no-ops and we render the standard
+            // (often big-Disney-eye) version of stylized mediums for face
+            // swaps. The DB columns exist (migration 154); plumb them through.
+            faceSwapDirective: medium.faceSwapDirective ?? null,
+            faceSwapFluxFragment: medium.faceSwapFluxFragment ?? null,
           },
           vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
@@ -616,6 +622,12 @@ async function handleRequest(req: Request): Promise<Response> {
             fluxFragment: medium.fluxFragment ?? medium.key,
             characterRenderMode: medium.characterRenderMode,
             faceSwaps: medium.faceSwaps,
+            // Without these two, applyFaceSwapOverride in singleBriefBuilder
+            // + dualBriefBuilder silently no-ops and we render the standard
+            // (often big-Disney-eye) version of stylized mediums for face
+            // swaps. The DB columns exist (migration 154); plumb them through.
+            faceSwapDirective: medium.faceSwapDirective ?? null,
+            faceSwapFluxFragment: medium.faceSwapFluxFragment ?? null,
           },
           vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
@@ -863,6 +875,12 @@ Output ONLY the prompt.`;
             fluxFragment: medium.fluxFragment ?? medium.key,
             characterRenderMode: medium.characterRenderMode,
             faceSwaps: medium.faceSwaps,
+            // Without these two, applyFaceSwapOverride in singleBriefBuilder
+            // + dualBriefBuilder silently no-ops and we render the standard
+            // (often big-Disney-eye) version of stylized mediums for face
+            // swaps. The DB columns exist (migration 154); plumb them through.
+            faceSwapDirective: medium.faceSwapDirective ?? null,
+            faceSwapFluxFragment: medium.faceSwapFluxFragment ?? null,
           },
           vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
@@ -1003,6 +1021,12 @@ Output ONLY the prompt.`;
             fluxFragment: medium.fluxFragment ?? medium.key,
             characterRenderMode: medium.characterRenderMode,
             faceSwaps: medium.faceSwaps,
+            // Without these two, applyFaceSwapOverride in singleBriefBuilder
+            // + dualBriefBuilder silently no-ops and we render the standard
+            // (often big-Disney-eye) version of stylized mediums for face
+            // swaps. The DB columns exist (migration 154); plumb them through.
+            faceSwapDirective: medium.faceSwapDirective ?? null,
+            faceSwapFluxFragment: medium.faceSwapFluxFragment ?? null,
           },
           vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
