@@ -23,6 +23,59 @@ import { decodeImage, encodeJpeg } from './imageCodec.ts';
 const DEFAULT_MAX_WAIT_MS = 90_000;
 const POLL_INTERVAL_MS = 1000;
 
+/**
+ * Replicate's face-swap models need a PUBLIC HTTPS URL — they download the
+ * target image from inside Replicate's infra. Our native OpenAI + Gemini
+ * providers return base64-inline `data:image/...;base64,...` URLs from
+ * `_shared/providers/{openai,gemini}.ts` (the API responses are b64), so a
+ * data URL would be unreachable. This helper detects that, uploads the
+ * decoded bytes to a temp Supabase Storage path, and returns the public
+ * HTTPS URL the face-swap model can actually fetch.
+ *
+ * Returns `{ url, tempPath }` — `tempPath` is non-null only when a temp
+ * upload happened, so callers can clean up in a finally block (or leave
+ * it; it's ~1-2 MB and the temp/ prefix can be swept later).
+ *
+ * Wired 2026-05-30 to unblock face-swap on OpenAI/Gemini-rendered scenes;
+ * the same path is also used by dispatchDualFaceSwap so we don't blow up
+ * the cross-Edge-Function POST body by carrying ~6-8 MB of base64.
+ */
+export async function ensureHttpsImageUrl(
+  url: string,
+  supabase: SupabaseClient,
+  userId: string,
+  bucket = 'uploads'
+): Promise<{ url: string; tempPath: string | null }> {
+  if (typeof url !== 'string') throw new Error('ensureHttpsImageUrl: url is not a string');
+  if (!url.startsWith('data:')) return { url, tempPath: null };
+
+  // Parse: data:<mime>;base64,<payload>
+  const comma = url.indexOf(',');
+  if (comma < 0) throw new Error('ensureHttpsImageUrl: malformed data URL (no payload)');
+  const header = url.slice(5, comma); // e.g. "image/png;base64"
+  const mimeMatch = header.match(/^image\/(png|jpeg|jpg|webp)/i);
+  if (!mimeMatch) throw new Error(`ensureHttpsImageUrl: unsupported mime in data URL: ${header}`);
+  if (!/;base64$/i.test(header)) {
+    throw new Error(`ensureHttpsImageUrl: only base64 data URLs supported, got: ${header}`);
+  }
+  const ext = mimeMatch[1].toLowerCase() === 'jpeg' ? 'jpg' : mimeMatch[1].toLowerCase();
+  const contentType = `image/${ext === 'jpg' ? 'jpeg' : ext}`;
+
+  // Decode b64 → Uint8Array via atob (ample for ~5MB images).
+  const b64 = url.slice(comma + 1);
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+
+  const tempPath = `${userId}/swap-target-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const { error: upErr } = await supabase.storage
+    .from(bucket)
+    .upload(tempPath, bytes, { contentType, upsert: false, cacheControl: '300' });
+  if (upErr) throw new Error(`ensureHttpsImageUrl: temp upload failed: ${upErr.message}`);
+  const { data: pub } = supabase.storage.from(bucket).getPublicUrl(tempPath);
+  return { url: pub.publicUrl, tempPath };
+}
+
 // ── Model registry — primary + fallback chain ──────────────────────────
 //
 // All entries use the same underlying face-swap technology (InsightFace's
@@ -288,79 +341,102 @@ export async function faceSwap(
   const startedAt = Date.now();
   const deadline = startedAt + maxWaitMs;
 
+  // Convert data: URL target → temp HTTPS upload. Replicate's face-swap
+  // models can't reach data: URIs (they fetch from inside Replicate's infra).
+  // Native OpenAI + Gemini providers return b64-inline data URLs — without
+  // this step, any OpenAI/Gemini-rendered scene would fail face swap.
+  const { url: httpsTarget, tempPath: targetTempPath } = await ensureHttpsImageUrl(
+    targetImageUrl,
+    supabase,
+    userId
+  );
+
   const [primary, ...fallbacks] = FACE_SWAP_MODELS;
   const maxPrimaryAttempts = retry ? MAX_PRIMARY_ATTEMPTS : 1;
 
   let lastErr: Error | null = null;
 
-  // ── Primary with retries (skipped when skipPrimary is set) ──
-  if (!skipPrimary) {
-    for (let attempt = 1; attempt <= maxPrimaryAttempts; attempt++) {
+  try {
+    // ── Primary with retries (skipped when skipPrimary is set) ──
+    if (!skipPrimary) {
+      for (let attempt = 1; attempt <= maxPrimaryAttempts; attempt++) {
+        try {
+          const remaining = deadline - Date.now();
+          if (remaining <= 0) throw new Error(`Face swap deadline exceeded (${primary.name})`);
+          const url = await faceSwapOnce(
+            sourceImageUrl,
+            httpsTarget,
+            replicateToken,
+            supabase,
+            userId,
+            primary,
+            remaining
+          );
+          if (attempt > 1)
+            console.log(`[faceSwap] primary recovered on attempt ${attempt}/${maxPrimaryAttempts}`);
+          return url;
+        } catch (err) {
+          lastErr = err as Error;
+          const msg = lastErr.message || '';
+          if (attempt < maxPrimaryAttempts && isTransientReplicateError(msg)) {
+            const delay = BACKOFF_MS[attempt - 1] ?? BACKOFF_MS[BACKOFF_MS.length - 1];
+            console.warn(
+              `[faceSwap] primary ${primary.name} attempt ${attempt}/${maxPrimaryAttempts} failed (${msg.slice(0, 80)}) — retrying in ${delay}ms`
+            );
+            await new Promise((r) => setTimeout(r, delay));
+            continue;
+          }
+          // Non-transient OR primary exhausted: break out and try fallbacks
+          console.warn(
+            `[faceSwap] primary ${primary.name} exhausted after ${attempt}/${maxPrimaryAttempts} (${msg.slice(0, 80)})`
+          );
+          break;
+        }
+      }
+    }
+
+    // ── Fallback chain (single-shot each) ──
+    for (const fb of fallbacks) {
+      const remaining = deadline - Date.now();
+      if (remaining < MIN_FALLBACK_TIME_MS) {
+        console.warn(
+          `[faceSwap] skipping fallback ${fb.name}: only ${remaining}ms budget remaining`
+        );
+        continue;
+      }
       try {
-        const remaining = deadline - Date.now();
-        if (remaining <= 0) throw new Error(`Face swap deadline exceeded (${primary.name})`);
+        console.log(`[faceSwap] trying fallback ${fb.name} (${remaining}ms budget remaining)`);
         const url = await faceSwapOnce(
           sourceImageUrl,
-          targetImageUrl,
+          httpsTarget,
           replicateToken,
           supabase,
           userId,
-          primary,
+          fb,
           remaining
         );
-        if (attempt > 1)
-          console.log(`[faceSwap] primary recovered on attempt ${attempt}/${maxPrimaryAttempts}`);
+        console.log(`[faceSwap] fallback ${fb.name} succeeded`);
         return url;
       } catch (err) {
         lastErr = err as Error;
-        const msg = lastErr.message || '';
-        if (attempt < maxPrimaryAttempts && isTransientReplicateError(msg)) {
-          const delay = BACKOFF_MS[attempt - 1] ?? BACKOFF_MS[BACKOFF_MS.length - 1];
-          console.warn(
-            `[faceSwap] primary ${primary.name} attempt ${attempt}/${maxPrimaryAttempts} failed (${msg.slice(0, 80)}) — retrying in ${delay}ms`
-          );
-          await new Promise((r) => setTimeout(r, delay));
-          continue;
-        }
-        // Non-transient OR primary exhausted: break out and try fallbacks
         console.warn(
-          `[faceSwap] primary ${primary.name} exhausted after ${attempt}/${maxPrimaryAttempts} (${msg.slice(0, 80)})`
+          `[faceSwap] fallback ${fb.name} failed: ${(err as Error).message?.slice(0, 80)}`
         );
-        break;
+        // Continue to next fallback
       }
     }
-  }
 
-  // ── Fallback chain (single-shot each) ──
-  for (const fb of fallbacks) {
-    const remaining = deadline - Date.now();
-    if (remaining < MIN_FALLBACK_TIME_MS) {
-      console.warn(`[faceSwap] skipping fallback ${fb.name}: only ${remaining}ms budget remaining`);
-      continue;
-    }
-    try {
-      console.log(`[faceSwap] trying fallback ${fb.name} (${remaining}ms budget remaining)`);
-      const url = await faceSwapOnce(
-        sourceImageUrl,
-        targetImageUrl,
-        replicateToken,
-        supabase,
-        userId,
-        fb,
-        remaining
-      );
-      console.log(`[faceSwap] fallback ${fb.name} succeeded`);
-      return url;
-    } catch (err) {
-      lastErr = err as Error;
-      console.warn(
-        `[faceSwap] fallback ${fb.name} failed: ${(err as Error).message?.slice(0, 80)}`
-      );
-      // Continue to next fallback
+    throw lastErr ?? new Error('faceSwap: all models exhausted');
+  } finally {
+    // Clean up the temp data-URL conversion if we made one. Fire-and-forget;
+    // a failed delete just leaves a small file in temp/ for a later sweep.
+    if (targetTempPath) {
+      supabase.storage
+        .from('uploads')
+        .remove([targetTempPath])
+        .catch((e) => console.warn('[faceSwap] temp target cleanup failed:', (e as Error).message));
     }
   }
-
-  throw lastErr ?? new Error('faceSwap: all models exhausted');
 }
 
 // ── Pixel helpers for dual face swap ──────────────────────────────────
