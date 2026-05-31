@@ -146,10 +146,19 @@ module.exports = {
   // all 13 others still roll from the full 8.
   //
   // Bans (model → reason):
-  //   artsy-girl              ─ GPT-2
-  //   female-adventurer       ─ Banana, Flux 2 Flex
-  //   female-explorer         ─ Flux Dev
+  //   artsy-girl              ─ GPT-2  (no male twin in dragonbot — female-only)
+  //   female-adventurer       ─ Banana, Flux 2 Flex     (mirrored to male-adventurer)
+  //   female-explorer         ─ Flux Dev                (mirrored to male-explorer)
   //   female-action-scenes    ─ GPT-2, Flux Dev, Flux 2 Pro, Flux 2 Flex, Flux 2 Max
+  //                                                     (mirrored to male-action-scenes — only 3 survivors)
+  //
+  // Male sister-path bans (2026-05-31): for the 3 female paths with a
+  // direct male equivalent, the same bans were applied to keep the cast
+  // visual consistency across the male/female pair. Kevin's reasoning:
+  // the model fingerprint (eye geometry, face style, render polish)
+  // doesn't change between male and female subjects, so a model that
+  // looks bad on the female version of a path looks bad on the male
+  // version too.
   //
   // To unban: add the model id back to that path's array.
   // To extend a ban: remove the model id from the array.
@@ -171,6 +180,14 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-max',
     ],
+    'male-adventurer': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-max',
+    ],
     'female-explorer': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
@@ -180,7 +197,21 @@ module.exports = {
       'black-forest-labs/flux-2-flex',
       'black-forest-labs/flux-2-max',
     ],
+    'male-explorer': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
     'female-action-scenes': [
+      'google/gemini-2-image',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'male-action-scenes': [
       'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
