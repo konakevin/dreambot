@@ -86,12 +86,19 @@ export async function ensureHttpsImageUrl(
 //   - Input parameter names
 //   - Output shape
 //
-// We try them in order. Primary is yan-ops — it has ~200x cdingram's run
-// count on Replicate, so it's the least likely to cold-start. (Cold starts
-// across all three models caused the 2026-05-26 face-swap timeout window that
-// hit multiple users.) cdingram + pikachupichu25 are single-shot fallbacks
-// tried when the primary exhausts retries on a transient Replicate error.
-// Outputs are visually indistinguishable across all three (2026-04-30 benchmark).
+// We try them in order. Primary is cdingram (root-cause fix for yan-ops's
+// "canned-output bug" — yan-ops intermittently ignores target_image and
+// returns a hardcoded scene for certain face embeddings). The bug was
+// originally fixed in commit 98f59e94 (2026-04-29) by switching primary
+// to cdingram; later (7475e6a0) yan-ops was bumped back to primary as
+// a warmth/cold-start optimization, defended only by the dup-detect block
+// in nightly-dreams. generate-dream (paid Create) never got that defense,
+// so users hit the canned-output bug on Create with no fallback. Reverted
+// to cdingram-primary 2026-05-30 to make ALL paths safe by default; the
+// occasional cold-start cost is acceptable vs. paid-feature duplicates.
+//
+// yan-ops kept in the fallback chain — it's still useful when cdingram
+// itself is cold or rate-limited. pikachupichu25 is the third option.
 //
 // To swap primary: reorder the array. The first entry is always primary.
 
@@ -113,6 +120,12 @@ function parseUrlOrFirst(out: unknown): string | null {
 
 const FACE_SWAP_MODELS: FaceSwapModel[] = [
   {
+    name: 'cdingram',
+    version: 'd1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111',
+    buildInput: (source, target) => ({ swap_image: source, input_image: target }),
+    parseOutput: parseUrlOrFirst,
+  },
+  {
     name: 'yan-ops',
     version: 'd5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3899cfe23bab',
     buildInput: (source, target) => ({
@@ -133,12 +146,6 @@ const FACE_SWAP_MODELS: FaceSwapModel[] = [
     },
   },
   {
-    name: 'cdingram',
-    version: 'd1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111',
-    buildInput: (source, target) => ({ swap_image: source, input_image: target }),
-    parseOutput: parseUrlOrFirst,
-  },
-  {
     name: 'pikachupichu25',
     version: '94b109952d4dd3cb6e9947340a6a099cc9a4821af8807a879c1f7af92e2a3b00',
     buildInput: (source, target) => ({ swap_image: source, target_image: target }),
@@ -149,8 +156,10 @@ const FACE_SWAP_MODELS: FaceSwapModel[] = [
 /**
  * The ordered list of model NAMES faceSwap() will attempt for the given opts.
  * Pure + exported for unit testing the model-selection logic without hitting
- * Replicate. `skipPrimary` drops the yan-ops primary so the dup-detect retry
- * escapes its canned-output bug via the fallbacks.
+ * Replicate. `skipPrimary` drops whatever is currently primary (cdingram
+ * since 2026-05-30) and runs only the fallback chain. The dup-detect retry
+ * in nightly-dreams uses this to escape canned-output bugs at the cost of
+ * potentially cold-starting the next model down.
  */
 export function faceSwapAttemptOrder(skipPrimary = false): string[] {
   const names = FACE_SWAP_MODELS.map((m) => m.name);
