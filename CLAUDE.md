@@ -98,6 +98,34 @@ Bots post via a single DB-driven dispatcher (`.github/workflows/bots-dispatcher.
 
 All 17 bots have full path/pool/seed implementations and are active in `bot_schedules` at 4 posts/day (verified 2026-05-30). The full roster: BloomBot (18 paths), BrickBot (14), ChibiBot (18), DinoBot (15), DragonBot (26), EarthBot (23), FaeBot (8), GothBot (17), MangaBot (21), MechBot (12), PixelBot (10), RetroBot (9), StarBot (12), SteamBot (11), TinyBot (15), ToyBot (22), YumBot (11).
 
+### Per-bot model lineups (which AI models each bot rolls from)
+
+Set 2026-05-30 from `BOT_MODEL_TALLY.md` after a 17×8×3 review matrix. Each bot's `index.js` `allowedModels` lists which subset of `ALL_ENABLED_AI_MODELS` (`scripts/lib/imageModels.js` — 8 models total) it picks from per render. `modelByPath` locks override the picker per-path (kept where they pin a hearted-look — e.g. ChibiBot `creature-world` → Flux Dev, StarBot `cosmic-vista` + `real-space` exclude Flux 2 Pro). Native providers: Banana = Gemini API, GPT Image 2 = OpenAI API, everything else = Replicate.
+
+| Bot       | Banana | GPT-2 | FluxD | F2Pro | F1Pro | F1Ult | F2Flex | F2Max |  #  |
+| --------- | :----: | :---: | :---: | :---: | :---: | :---: | :----: | :---: | :-: |
+| bloombot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| brickbot  |   ✅   |  ✅   |  ❌   |  ❌   |  ✅   |  ✅   |   ✅   |  ✅   |  6  |
+| chibibot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| dinobot   |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| dragonbot |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| earthbot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ❌   |  ❌   |  6  |
+| faebot    |   ✅   |  ✅   |  ❌   |  ✅   |  ✅   |  ✅   |   ❌   |  ✅   |  6  |
+| gothbot   |   ✅   |  ✅   |  ❌   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  7  |
+| mangabot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| mechbot   |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| pixelbot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| retrobot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| starbot   |   ✅   |  ✅   |  ❌   |  🟡   |  ✅   |  ✅   |   ✅   |  ❌   | 6¹  |
+| steambot  |   ✅   |  ✅   |  ❌   |  ✅   |  ✅   |  ✅   |   ✅   |  ❌   |  6  |
+| tinybot   |   ❌   |  ❌   |  ❌   |  ❌   |  ✅   |  ✅   |   ✅   |  ❌   |  3  |
+| toybot    |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
+| yumbot    |   ✅   |  ✅   |  ✅   |  ❌   |  ✅   |  ✅   |   ✅   |  ✅   |  7  |
+
+¹ StarBot has per-path overrides — `cosmic-vista` + `real-space` paths additionally exclude Flux 2 Pro (5 models instead of 6).
+
+The `model` column on `uploads` (migration 211, 2026-05-30) records which model rendered each post; the DreamCard fullscreen view shows a small badge above the username with the friendly name (`constants/imageModels.ts:getModelDisplayName`). Source of truth for changing a bot's lineup is `BOT_MODEL_TALLY.md` → that bot's `index.js`.
+
 **Shared infrastructure (`scripts/lib/`):**
 
 - `botEngine.js` — orchestrator. `runBot()` rolls path/vibe/medium, fetches directives, calls `bot.rollSharedDNA()` + `bot.buildBrief()`, invokes Sonnet → Flux → upload → DB insert. Standalone (no coupling to `generate-dream`).
