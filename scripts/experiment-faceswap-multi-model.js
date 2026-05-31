@@ -20,7 +20,8 @@ const { createClient } = require('@supabase/supabase-js');
 
 const KEVIN = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 const EMAIL = 'konakevin@gmail.com';
-const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://jimftynwrinwenonjrlj.supabase.co';
+const SUPABASE_URL =
+  process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 const MODELS = [
@@ -96,11 +97,15 @@ async function runOne(jwt, model, mode, vibeProfile) {
   try {
     data = JSON.parse(text);
   } catch {
-    console.log(`  ❌ ${label.padEnd(28)} (${elapsed}s) non-JSON [${res.status}]: ${text.slice(0, 100)}`);
+    console.log(
+      `  ❌ ${label.padEnd(28)} (${elapsed}s) non-JSON [${res.status}]: ${text.slice(0, 100)}`
+    );
     return { ok: false, label, status: res.status };
   }
   if (!res.ok || data.error) {
-    console.log(`  ❌ ${label.padEnd(28)} (${elapsed}s) [${res.status}]: ${(data.error || text).slice(0, 150)}`);
+    console.log(
+      `  ❌ ${label.padEnd(28)} (${elapsed}s) [${res.status}]: ${(data.error || text).slice(0, 150)}`
+    );
     return { ok: false, label, error: data.error || text.slice(0, 200) };
   }
   console.log(`  ✅ ${label.padEnd(28)} (${elapsed}s) upload=${(data.image_url || '').slice(-30)}`);
@@ -146,6 +151,8 @@ async function runOne(jwt, model, mode, vibeProfile) {
   const ok = results.filter((r) => r.ok).length;
   console.log(`\n=== DONE — ${ok}/${results.length} succeeded in ${totalSec}s ===`);
   for (const r of results) {
-    console.log(`  ${r.ok ? '✅' : '❌'} ${r.label}${r.error ? ' — ' + r.error.slice(0, 120) : ''}`);
+    console.log(
+      `  ${r.ok ? '✅' : '❌'} ${r.label}${r.error ? ' — ' + r.error.slice(0, 120) : ''}`
+    );
   }
 })();

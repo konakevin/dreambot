@@ -136,7 +136,9 @@ describe('USER INTENT rule — single cast brief', () => {
     // which uses different wording — same semantic intent. Match against the
     // INTENT rather than the prior generic-compiler wording.
     expect(output.sonnetBrief).toMatch(/3\/4 toward camera/i); // motion clause keeps 3/4 framing
-    expect(output.sonnetBrief).toMatch(/face still partially visible|face fully visible|eyes.*visible/i);
+    expect(output.sonnetBrief).toMatch(
+      /face still partially visible|face fully visible|eyes.*visible/i
+    );
     expect(output.sonnetBrief).toMatch(/never from behind|no full back views|not.*back to camera/i);
   });
 
