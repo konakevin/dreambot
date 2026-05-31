@@ -11,6 +11,7 @@
 
 import type { ResolvedCastMember } from './castResolver.ts';
 import { buildDualBrief } from './dualBriefBuilder.ts';
+import { buildSingleBrief } from './singleBriefBuilder.ts';
 
 // ── Public Types ──
 
@@ -323,10 +324,23 @@ export function compilePrompt(input: CompilerInput): CompilerOutput {
   // ── ISOLATED DUAL FACE-SWAP PATH ──
   // When exactly 2 cast members are present and the medium is face-swap
   // eligible, delegate entirely to buildDualBrief. All other scenarios
-  // (single cast, pure scene, embodied dual, photo restyle) fall through
-  // to the existing compiler logic below — byte-identical to before.
+  // (pure scene, embodied dual, photo restyle) fall through to the
+  // existing compiler logic below — byte-identical to before.
   if (cast.length === 2 && composition.faceSwapEligible) {
     return buildDualBrief(input);
+  }
+
+  // ── ISOLATED SINGLE FACE-SWAP PATH ── (2026-05-30)
+  // Single-cast face-swap renders previously fell through to the generic
+  // path, which picked from V2_CAMERA in sceneExpander — a pool that
+  // included "tall environmental portrait, subject in lower third". That
+  // framing put the character in ~5% of the frame and the face-swap
+  // pipeline couldn't detect a face → "no face found" errors. The dedicated
+  // single brief builder mandates medium-shot waist-up framing, mirroring
+  // the proven dual pattern. See singleBriefBuilder.ts header for full
+  // rationale.
+  if (cast.length === 1 && composition.faceSwapEligible) {
+    return buildSingleBrief(input);
   }
 
   const mediumStyle = medium.key.replace(/_/g, ' ');
