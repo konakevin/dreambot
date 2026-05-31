@@ -230,16 +230,33 @@ export function FullScreenFeed({
   // Uses scrollToIndex (which calls getItemLayout for the exact offset) instead of manual
   // offset math. Waits for InteractionManager so the navigation transition and onLayout
   // have both completed — otherwise pageHeight may be stale and the card shows ~100px off.
+  //
+  // CRITICAL: skip the re-snap on pure pagination grow. FlatList already preserves
+  // visible position when items are appended at the end; calling scrollToIndex during
+  // a fetchNextPage append fires AFTER the user's swipe via runAfterInteractions and
+  // snaps to a stale currentIndex.current (onViewableItemsChanged hadn't fired yet),
+  // visually "popping" the view mid-swipe. This regression surfaced after commit
+  // 8f77f7b0 ("Fix premature feed stalls") made pagination actually advance —
+  // before that fix, fetchNextPage usually stalled so posts.length didn't change
+  // and this effect didn't fire. Same family as the May 2026 af4cb949 fix:
+  // render-side reordering / re-snap that fires on data-grow when it should only
+  // fire on data-shrink or focus.
+  const prevLength = useRef(posts.length);
   useEffect(() => {
-    if (isFocused && posts.length > 0) {
-      const handle = InteractionManager.runAfterInteractions(() => {
-        const idx = currentIndex.current;
-        if (idx >= 0 && idx < posts.length) {
-          ref.current?.scrollToIndex({ index: idx, animated: false });
-        }
-      });
-      return () => handle.cancel();
+    if (!isFocused || posts.length === 0) {
+      prevLength.current = posts.length;
+      return;
     }
+    const shrank = posts.length < prevLength.current;
+    prevLength.current = posts.length;
+    if (!shrank) return; // grew = pagination append, no re-snap needed
+    const handle = InteractionManager.runAfterInteractions(() => {
+      const idx = currentIndex.current;
+      if (idx >= 0 && idx < posts.length) {
+        ref.current?.scrollToIndex({ index: idx, animated: false });
+      }
+    });
+    return () => handle.cancel();
   }, [isFocused, posts.length, pageHeight, ref]);
 
   // Also re-snap when the APP returns from background. useIsFocused only tracks
