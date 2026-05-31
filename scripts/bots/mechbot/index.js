@@ -233,7 +233,34 @@ module.exports = {
   useModelPicker: true,
   allowedModels: ALL_ENABLED_AI_MODELS,
 
-  // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
+  // Per-path bans (2026-05-30): cyborg-woman + cyborg-man drop Nano Banana
+  // and Flux 2 Pro per Kevin's review of the 24-render cyborg-woman test —
+  // those two models produced renders he didn't want for the cyborg
+  // aesthetic. Same lineup minus those 2 = 6 models still available on
+  // these paths. modelByPath takes precedence over allowedModels in the
+  // engine (botEngine.js lines 1279-1311), so this is the right surface.
+  // To restore: add the model id back to the array. To ban from more
+  // paths: add a new key here.
+  modelByPath: {
+    'cyborg-woman': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
+    'cyborg-man': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
+  },
+
+  // Previous modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):
   // modelByPath: {
   // 'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
