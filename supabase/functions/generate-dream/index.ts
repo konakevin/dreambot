@@ -773,8 +773,21 @@ Output ONLY the prompt.`;
       let castMembers: DreamCastMember[] = [];
 
       if (force_cast_role) {
-        const forced = describedCast.find((m: DreamCastMember) => m.role === force_cast_role);
-        if (forced) castMembers = [forced];
+        // 'dual' is a special token (not an actual cast.role value) meaning
+        // "use both self + plus_one for a two-character dual face-swap render".
+        // Same semantics as nightly-dreams + the Reveal step. Without this
+        // branch, .find() returned undefined and castMembers stayed empty,
+        // which silently produced no-face-swap renders of generic people.
+        if (force_cast_role === 'dual') {
+          const self = describedCast.find((m: DreamCastMember) => m.role === 'self');
+          const plusOne = describedCast.find((m: DreamCastMember) => m.role === 'plus_one');
+          if (self && plusOne) castMembers = [self, plusOne];
+          else if (self) castMembers = [self];
+          else if (plusOne) castMembers = [plusOne];
+        } else {
+          const forced = describedCast.find((m: DreamCastMember) => m.role === force_cast_role);
+          if (forced) castMembers = [forced];
+        }
       } else if (selfInsertResult.isSelfInsert && !isPhoto) {
         castMembers = describedCast.filter((m: DreamCastMember) =>
           selfInsertResult.referencedRoles.has(m.role as 'self' | 'plus_one' | 'pet')
