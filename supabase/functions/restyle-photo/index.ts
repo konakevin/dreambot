@@ -386,6 +386,9 @@ async function handleRequest(req: Request): Promise<Response> {
           ai_concept: null,
           dream_medium: resolvedMediumKey,
           dream_vibe: resolvedVibeKey,
+          // Which AI model rendered this — drives the model badge on the
+          // DreamCard fullscreen view (migration 211, 2026-05-30).
+          model: pickedModel || null,
           is_public: false,
           is_ai_generated: true,
           width: 768,

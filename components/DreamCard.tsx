@@ -496,7 +496,7 @@ export const DreamCard = memo(function DreamCard({
               {item.model && (
                 <View style={s.modelBadgeWrap}>
                   <View style={s.modelBadge}>
-                    <Ionicons name="sparkles" size={13} color="#FFFFFF" />
+                    <Ionicons name="sparkles" size={10} color="#FFFFFF" />
                     <Text style={s.modelBadgeText}>{getModelDisplayName(item.model)}</Text>
                   </View>
                 </View>
@@ -747,20 +747,17 @@ const s = StyleSheet.create({
     gap: 6,
     paddingBottom: 4,
   },
-  // Model badge — chip rendered above the usernameRow. flex-start wrapper
-  // keeps the chip hugging its label width (without it, the chip would
-  // stretch the full row). Translucent dark fill so it reads cleanly over
-  // either dark or bright image content but doesn't compete with the
-  // username typography. Sized 2026-05-30 per Kevin's "bump it" request —
-  // the original 11px / 8x3 padding was readable but felt cramped at
-  // arm's length on the fullscreen viewer.
-  modelBadgeWrap: { flexDirection: 'row', marginBottom: 8 },
+  // Model badge — small chip rendered above the usernameRow. flex-start
+  // wrapper keeps the chip hugging its label width (without it, the chip
+  // would stretch the full row). Translucent dark fill + tight padding so
+  // it doesn't compete with the username/caption typography for attention.
+  modelBadgeWrap: { flexDirection: 'row', marginBottom: 6 },
   modelBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 11,
-    paddingVertical: 5,
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
     borderRadius: 999,
     backgroundColor: 'rgba(0,0,0,0.55)',
     borderWidth: StyleSheet.hairlineWidth,
@@ -768,7 +765,7 @@ const s = StyleSheet.create({
   },
   modelBadgeText: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: '600',
     letterSpacing: 0.2,
   },

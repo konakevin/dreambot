@@ -1303,6 +1303,10 @@ Output ONLY the prompt.`;
             ai_concept: conceptJson,
             dream_medium: resolvedMediumKey ?? null,
             dream_vibe: resolvedVibeKey ?? null,
+            // Which AI model rendered this — drives the model badge on
+            // DreamCard (migration 211, 2026-05-30). pickedModel resolves
+            // to force_model when provided, else the picker's choice.
+            model: pickedModel || null,
             is_public: false,
             width: 768,
             height: 1664,

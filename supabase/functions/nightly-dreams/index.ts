@@ -1652,6 +1652,9 @@ Output ONLY the prompt.`;
           ai_prompt: finalPrompt,
           dream_medium: resolvedMediumKey ?? null,
           dream_vibe: resolvedVibeKey ?? null,
+          // Which AI model rendered this — drives the model badge on
+          // DreamCard (migration 211, 2026-05-30).
+          model: pickedModel || null,
           is_ai_generated: true,
           is_public: false,
           width: 768,
