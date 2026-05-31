@@ -136,7 +136,58 @@ module.exports = {
   // per-path modelByPath — Kevin opened it up to all 8 models.
   useModelPicker: true,
   allowedModels: ALL_ENABLED_AI_MODELS,
-  // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
+
+  // Per-path bans (2026-05-31): Kevin reviewed the 4 female-character
+  // dragonbot paths (artsy-girl + female-adventurer/explorer/action-scenes)
+  // × 8 models × 3 reps and hearted the renders he WANTED REMOVED. The
+  // surviving model arrays are the bot-wide 8 minus his bans per path.
+  // modelByPath takes precedence over allowedModels in the engine
+  // (botEngine.js lines 1279-1311) — only these 4 paths are constrained;
+  // all 13 others still roll from the full 8.
+  //
+  // Bans (model → reason):
+  //   artsy-girl              ─ GPT-2
+  //   female-adventurer       ─ Banana, Flux 2 Flex
+  //   female-explorer         ─ Flux Dev
+  //   female-action-scenes    ─ GPT-2, Flux Dev, Flux 2 Pro, Flux 2 Flex, Flux 2 Max
+  //
+  // To unban: add the model id back to that path's array.
+  // To extend a ban: remove the model id from the array.
+  modelByPath: {
+    'artsy-girl': [
+      'google/gemini-2-image',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
+    'female-adventurer': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-max',
+    ],
+    'female-explorer': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
+    'female-action-scenes': [
+      'google/gemini-2-image',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+  },
+
+  // Previous modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):
   // modelByPath: {
   // landscape: 'black-forest-labs/flux-1.1-pro',
