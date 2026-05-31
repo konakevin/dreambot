@@ -1087,7 +1087,33 @@ Output ONLY the prompt.`;
     resolvedMediumKey,
     resolvedVibeKey
   );
-  const pickedModel = force_model || autoPicked.model;
+  let pickedModel = force_model || autoPicked.model;
+
+  // ── Dual-face-swap safety clamp: Flux 1.1 Pro Ultra → Flux 1.1 Pro ──
+  // Flux 1.1 Pro Ultra renders at 4MP. The dual-swap pipeline has to decode
+  // that output, crop it in half, encode each half, swap each half, then
+  // stitch — at 4MP that blows the Supabase Edge Function's 150MB
+  // per-isolate memory ceiling and returns 546 WORKER_RESOURCE_LIMIT
+  // (confirmed 2026-05-30 — 3/3 dual renders on Ultra failed even with
+  // DUAL_SWAP_FANOUT enabled). Single face-swap is fine because there's
+  // no halving step. Drop Ultra → Pro for dual face-swap only; Ultra is
+  // still picked for single + non-face-swap mediums (landscapes etc).
+  // faceSwapSources is only populated when the cast-injection branch
+  // resolved 2 face-swap-eligible cast members, so this implicitly gates
+  // on dual+face-swap-eligible without needing the (out-of-scope) local
+  // isFaceSwapEligible flag.
+  if (
+    faceSwapSources &&
+    faceSwapSources.length === 2 &&
+    pickedModel === 'black-forest-labs/flux-1.1-pro-ultra'
+  ) {
+    console.warn(
+      `[generate-dream] CLAMP: flux-1.1-pro-ultra → flux-1.1-pro for dual face swap (Ultra's 4MP output exceeds dual-swap memory ceiling)`
+    );
+    fallbackReasons.push('dual_ultra_clamped_to_pro');
+    pickedModel = 'black-forest-labs/flux-1.1-pro';
+  }
+
   logAxes.model = pickedModel;
   console.log(
     `[generate-dream] User ${userId}, mode=${effectiveMode}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`
@@ -1190,9 +1216,63 @@ Output ONLY the prompt.`;
       // catch refunds the sparkle. Previously this fell through with
       // unswapped output (random Sonnet faces) and no refund.
       if (!swapSuccess) {
-        throw new Error(
-          `face_swap: dual cast face swap exhausted after ${FACE_SWAP_MAX_RETRIES} attempts (${logAxes.faceSwapError ?? 'unknown'})`
+        // ── One final escape: re-render Flux + re-attempt dual swap ──
+        // The 3-attempt internal loop tries the SAME flux output every time;
+        // 9 (3 × 3 models) "no face found" rejections means the rendered
+        // scene has undetectable face geometry — usually faces too small,
+        // off-canvas, or occluded. A fresh Flux render with different seed
+        // generally fixes this. We cap at one re-render (2x total render
+        // cost on the dual path) — beyond that it's structural and the
+        // hard-fail + refund is correct. 2026-05-30, Kevin hardening pass.
+        console.warn(
+          '[generate-dream] Dual swap exhausted — re-rendering Flux once for fresh face geometry'
         );
+        fallbackReasons.push('dual_render_retry');
+        try {
+          const retryGen = await generateImage(
+            effectiveMode,
+            finalPrompt,
+            effectiveInputImage,
+            {
+              replicateToken: REPLICATE_TOKEN,
+              openaiKey: OPENAI_KEY,
+              geminiKey: GEMINI_KEY,
+            },
+            pickedModel,
+            'jpg'
+          );
+          tempUrl = retryGen.url;
+          replicatePredictionId = retryGen.predictionId;
+          // Re-route by gender — the fresh render may have flipped L/R.
+          const routed2 = await routeDualSwapByGender(
+            {
+              sourceUrl: faceSwapSources[0].sourceUrl,
+              gender: genderFromLock(faceSwapSources[0].genderLock),
+            },
+            {
+              sourceUrl: faceSwapSources[1].sourceUrl,
+              gender: genderFromLock(faceSwapSources[1].genderLock),
+            },
+            tempUrl,
+            REPLICATE_TOKEN
+          );
+          tempUrl = await dispatchDualFaceSwap(
+            routed2.leftSource,
+            routed2.rightSource,
+            tempUrl,
+            REPLICATE_TOKEN,
+            supabase,
+            userId,
+            t0 + 140_000
+          );
+          console.log('[generate-dream] Dual face swap recovered after Flux re-render');
+          logAxes.faceSwapResult = 'dual-success-rerender';
+          swapSuccess = true;
+        } catch (rerenderErr) {
+          throw new Error(
+            `face_swap: dual cast face swap exhausted after ${FACE_SWAP_MAX_RETRIES} attempts + 1 re-render (${(rerenderErr as Error).message.slice(0, 160)})`
+          );
+        }
       }
     } else if (faceSwapSource && tempUrl) {
       try {
