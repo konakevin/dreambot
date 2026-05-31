@@ -64,19 +64,71 @@ module.exports = {
   // 1.1-pro's E005 safety filter tripped on its dark vampire imagery. If
   // any path renders fail on E005, fall that single path back to flux-dev.
   modelByPath: {
-    // Scene / landscape / architecture paths
+    // Scene / landscape / architecture paths — unchanged, locked to 1.1-pro
     'dark-landscape': 'black-forest-labs/flux-1.1-pro',
     'gothic-architecture': 'black-forest-labs/flux-1.1-pro',
     'castlevania-scene': 'black-forest-labs/flux-1.1-pro',
     'cozy-goth': 'black-forest-labs/flux-1.1-pro',
     'gothic-vista': 'black-forest-labs/flux-1.1-pro',
-    // Character paths
-    'goth-closeup': 'black-forest-labs/flux-1.1-pro',
-    'goth-full-body': 'black-forest-labs/flux-1.1-pro',
-    // Vampire paths
-    'vampire-girls-2': 'black-forest-labs/flux-1.1-pro',
-    'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro',
-    'vampire-from-a-distance': 'black-forest-labs/flux-1.1-pro',
+
+    // ── Female character paths — multi-model arrays from Kevin's 5-path
+    // ── × 8-model × 3-rep audit (2026-05-31). The previous 1.1-pro locks
+    // ── on these 5 paths are intentionally REPLACED with the broader
+    // ── per-path lineup minus the hearted-as-bad models. Bans noted
+    // ── inline per path. To unban: add the model id back.
+    'goth-closeup': [
+      // BAN: Banana
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
+    'goth-full-body': [
+      // BAN: Flux Dev, Flux 2 Pro
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
+
+    // Vampire paths (female-coded subset gets the multi-model arrays)
+    'vampire-girls-2': [
+      // No bans — all 8 survive
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
+    'vampire-assassin-female': [
+      // BAN: Flux Dev, Flux 2 Flex
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-max',
+    ],
+    'vampire-from-a-distance': [
+      // BAN: Flux Dev
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
+
+    // Other character/vampire/monster paths — unchanged single-model locks
     'vampire-hunter-in-action': 'black-forest-labs/flux-1.1-pro',
     'goth-male-full-body-axis': 'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro',
