@@ -72,7 +72,14 @@ module.exports = {
   displayName: 'SteamBot',
 
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-2-pro',
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-2-flex',
+  ],
 
   modelByPath: {
     'steampunk-scene': { 'black-forest-labs/flux-1.1-pro': 100 },

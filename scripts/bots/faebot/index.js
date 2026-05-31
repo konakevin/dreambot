@@ -73,19 +73,30 @@ module.exports = {
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
   cycleAllPaths: true,
 
-  // Use flux-dev for painterly / illustrative looks (better than 1.1-pro
-  // for stylized non-photoreal). Lock to flux-dev for POC.
-  useModelPicker: false,
-  modelByPath: {
-    'forest-fairy-scene': 'black-forest-labs/flux-1.1-pro',
-    'dryad-portrait': 'black-forest-labs/flux-1.1-pro',
-    'tiny-fae': 'black-forest-labs/flux-1.1-pro',
-    'queen-of-the-forest': 'black-forest-labs/flux-1.1-pro',
-    'enchanted-vista': 'black-forest-labs/flux-1.1-pro',
-    'fae-village': 'black-forest-labs/flux-1.1-pro',
-    'fae-village-axis': 'black-forest-labs/flux-1.1-pro',
-    'flower-fairy': 'black-forest-labs/flux-1.1-pro',
-  },
+  // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
+  // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Max.
+  // Dropped per Kevin's review: Flux Dev, Flux 2 Flex.
+  useModelPicker: true,
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-2-pro',
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-2-max',
+  ],
+  // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
+  // Original locks (restore individual lines if a path needs pinning again):
+  // modelByPath: {
+  // 'forest-fairy-scene': 'black-forest-labs/flux-1.1-pro',
+  // 'dryad-portrait': 'black-forest-labs/flux-1.1-pro',
+  // 'tiny-fae': 'black-forest-labs/flux-1.1-pro',
+  // 'queen-of-the-forest': 'black-forest-labs/flux-1.1-pro',
+  // 'enchanted-vista': 'black-forest-labs/flux-1.1-pro',
+  // 'fae-village': 'black-forest-labs/flux-1.1-pro',
+  // 'fae-village-axis': 'black-forest-labs/flux-1.1-pro',
+  // 'flower-fairy': 'black-forest-labs/flux-1.1-pro',
+  // },
 
   // Disable chaos + sensory anchors for POC — keep the prompt clean and
   // the look consistent. We can layer those in later if we want texture.

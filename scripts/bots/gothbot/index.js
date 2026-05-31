@@ -44,7 +44,15 @@ module.exports = {
   // pool BEFORE picking. GothBot bans flux-2-dev (tensor bug: "q_descale must
   // have shape...") and flux-2-pro (over-strict E005 safety filter). Every
   // gothbot render picks flux-dev or flux-1.1-pro only.
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-2-pro',
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-2-flex',
+    'black-forest-labs/flux-2-max',
+  ],
 
   // Per-path model override — takes precedence over pickModel (medium pool).
   // Every path locked to flux-1.1-pro (Kevin's call 2026-05-16: PNG output

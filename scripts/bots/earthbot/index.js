@@ -216,7 +216,14 @@ module.exports = {
   // EARTH_SUFFIX scrub (no more "no humans, no people" negative-prompt
   // tokens) — see [[feedback_negative_prompt_leak]].
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-dev',
+    'black-forest-labs/flux-2-pro',
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+  ],
 
   // Chaos layer — both source bots had chaos enabled. Earth had no
   // subject-chaos (allowSubjectChaosPaths: []) because there's no human

@@ -34,7 +34,11 @@ module.exports = {
   mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted', 'render'],
 
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  allowedModels: [
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-2-flex',
+  ],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,

@@ -11,6 +11,7 @@
  */
 
 const pools = require('./pools');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'robot-moment': require('./paths/robot-moment'),
@@ -225,22 +226,31 @@ module.exports = {
     ],
   },
 
-  modelByPath: {
-    'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'cyborg-female-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'droid-assassin': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'cyborg-male-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'humanoid-robots': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'mecha-pilots': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'titan-war-machines': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'power-armor-infantry': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'industrial-machines': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'post-apoc-rust-tech': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'alien-biomechs': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'mech-skyships': { 'black-forest-labs/flux-1.1-pro': 100 },
-  },
+  // Picker on with the full 8-model lineup per BOT_MODEL_TALLY (2026-05-30).
+  // mechbot is flagged as in-flight WIP per CLAUDE.md — this rollout is
+  // additive (just opens the model set) and doesn't touch the path/pool
+  // work the other agent is iterating on.
+  useModelPicker: true,
+  allowedModels: ALL_ENABLED_AI_MODELS,
+
+  // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
+  // Original locks (restore individual lines if a path needs pinning again):
+  // modelByPath: {
+  // 'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  // 'cyborg-female-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  // 'droid-assassin': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  // 'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  // 'cyborg-male-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  // 'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // 'humanoid-robots': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // 'mecha-pilots': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // 'titan-war-machines': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // 'power-armor-infantry': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // 'industrial-machines': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // 'post-apoc-rust-tech': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // 'alien-biomechs': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // 'mech-skyships': { 'black-forest-labs/flux-1.1-pro': 100 },
+  // },
 
   // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
   promptPrefixByPath: {

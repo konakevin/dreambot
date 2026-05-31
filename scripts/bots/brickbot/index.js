@@ -45,7 +45,14 @@ module.exports = {
   mediums: ['photography'],
 
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-2-flex',
+    'black-forest-labs/flux-2-max',
+  ],
   modelByPath: Object.fromEntries(
     pools.PATHS.map((p) => [p, { 'black-forest-labs/flux-1.1-pro': 100 }])
   ),

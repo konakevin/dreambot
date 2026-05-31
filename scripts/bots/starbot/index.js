@@ -68,21 +68,42 @@ module.exports = {
     ],
   },
 
-  // all paths use flux-dev / flux-1.1-pro 50/50 rotation
+  // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
+  // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Flex.
+  // Dropped per Kevin's review: Flux Dev, Flux 2 Max.
+  useModelPicker: true,
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-2-pro',
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-2-flex',
+  ],
+
+  // Per-path override (2026-05-30 BOT_MODEL_TALLY): Kevin hearted Flux 2 Max
+  // renders on `cosmic-vista` and `real-space` but explicitly wants those
+  // paths to also exclude Flux 2 Pro so the OTHER models get reps. These
+  // entries OVERRIDE the bot-wide picker for these two paths — same lineup
+  // minus Flux 2 Pro (5 models). Other 10 paths fall through to the picker
+  // above and use the full 6-model bot-wide lineup.
+  // Original per-path locks stripped 2026-05-30; restore individual lines
+  // here if a path needs pinning again.
   modelByPath: {
-    'cosmic-vista': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'alien-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'space-opera': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'sci-fi-interior': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'cozy-sci-fi-interior': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'alien-city': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'real-space': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'cosmic-oracle': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'female-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'male-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
-    megastructure: { 'black-forest-labs/flux-1.1-pro-ultra': 100 },
-    // space-femme: match FE painted-cover lineage (flux-1.1-pro on canvas).
-    'space-femme': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'cosmic-vista': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+    ],
+    'real-space': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+    ],
   },
 
   // Per-medium prompt prefix/suffix overrides. The star_oil_cosmos medium

@@ -8,6 +8,7 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   landscape: require('./paths/landscape'),
@@ -130,28 +131,33 @@ module.exports = {
   promptSuffix:
     'painted fantasy concept art, soft brushwork, dreamy dappled light, no text, no watermarks',
 
-  // Lock to flux-1.1-pro for the painterly look (matches FaeBot setup).
-  useModelPicker: false,
-  modelByPath: {
-    landscape: 'black-forest-labs/flux-1.1-pro',
-    'fantasy-scene': 'black-forest-labs/flux-1.1-pro',
-    'epic-moment': 'black-forest-labs/flux-1.1-pro',
-    castle: 'black-forest-labs/flux-1.1-pro',
-    'dragon-scene': 'black-forest-labs/flux-1.1-pro',
-    'female-adventurer': 'black-forest-labs/flux-1.1-pro',
-    'female-explorer': 'black-forest-labs/flux-1.1-pro',
-    'female-action-scenes': 'black-forest-labs/flux-1.1-pro',
-    'artsy-girl': 'black-forest-labs/flux-1.1-pro',
-    'male-adventurer': 'black-forest-labs/flux-1.1-pro',
-    'male-explorer': 'black-forest-labs/flux-1.1-pro',
-    'male-action-scenes': 'black-forest-labs/flux-1.1-pro',
-    'cozy-arcane': 'black-forest-labs/flux-1.1-pro',
-    'arcane-halls': 'black-forest-labs/flux-1.1-pro',
-    'arcane-spaces': 'black-forest-labs/flux-1.1-pro',
-    'dark-realm': 'black-forest-labs/flux-1.1-pro',
-    'dragon-lore': 'black-forest-labs/flux-1.1-pro',
-    'iconic-landscape': 'black-forest-labs/flux-1.1-pro',
-  },
+  // Picker on with the full 8-model lineup per BOT_MODEL_TALLY (2026-05-30).
+  // Previously locked entirely to flux-1.1-pro via `useModelPicker:false` +
+  // per-path modelByPath — Kevin opened it up to all 8 models.
+  useModelPicker: true,
+  allowedModels: ALL_ENABLED_AI_MODELS,
+  // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
+  // Original locks (restore individual lines if a path needs pinning again):
+  // modelByPath: {
+  // landscape: 'black-forest-labs/flux-1.1-pro',
+  // 'fantasy-scene': 'black-forest-labs/flux-1.1-pro',
+  // 'epic-moment': 'black-forest-labs/flux-1.1-pro',
+  // castle: 'black-forest-labs/flux-1.1-pro',
+  // 'dragon-scene': 'black-forest-labs/flux-1.1-pro',
+  // 'female-adventurer': 'black-forest-labs/flux-1.1-pro',
+  // 'female-explorer': 'black-forest-labs/flux-1.1-pro',
+  // 'female-action-scenes': 'black-forest-labs/flux-1.1-pro',
+  // 'artsy-girl': 'black-forest-labs/flux-1.1-pro',
+  // 'male-adventurer': 'black-forest-labs/flux-1.1-pro',
+  // 'male-explorer': 'black-forest-labs/flux-1.1-pro',
+  // 'male-action-scenes': 'black-forest-labs/flux-1.1-pro',
+  // 'cozy-arcane': 'black-forest-labs/flux-1.1-pro',
+  // 'arcane-halls': 'black-forest-labs/flux-1.1-pro',
+  // 'arcane-spaces': 'black-forest-labs/flux-1.1-pro',
+  // 'dark-realm': 'black-forest-labs/flux-1.1-pro',
+  // 'dragon-lore': 'black-forest-labs/flux-1.1-pro',
+  // 'iconic-landscape': 'black-forest-labs/flux-1.1-pro',
+  // },
 
   // Inverts old excludeVibes (minimal/dark).
   vibes: [

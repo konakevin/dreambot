@@ -55,6 +55,7 @@ module.exports = {
 
   // 4-model rotation. Engine picks at random per render — diversity
   // across models is part of the variance the bot trades on.
+  useModelPicker: true,
   allowedModels: ALL_ENABLED_AI_MODELS,
 
   promptPrefix: blocks.PROMPT_PREFIX,
