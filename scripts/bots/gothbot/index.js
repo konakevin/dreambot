@@ -96,6 +96,18 @@ module.exports = {
       'black-forest-labs/flux-2-flex',
       'black-forest-labs/flux-2-max',
     ],
+    'goth-male-full-body-axis': [
+      // Mirror of goth-full-body (2026-05-31). Same bans on male twin:
+      // Flux Dev, Flux 2 Pro. Model fingerprint (eye geometry, face polish)
+      // doesn't change with subject gender, so a model that looks bad on
+      // the female version of a path looks bad on the male version too.
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-max',
+    ],
 
     // Vampire paths (female-coded subset gets the multi-model arrays)
     'vampire-girls-2': [
