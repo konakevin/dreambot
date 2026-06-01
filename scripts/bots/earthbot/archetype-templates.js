@@ -823,11 +823,108 @@ Wide-vista panoramic landscape OR stand-at-the-rim mid-wide framing. The iconic 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places (describe morphologically). Describe positive content only — no negation language like "no humans" or "no architecture" (Flux tokenizer leaks those words).`;
   },
 
-  // Placeholder templates for 6 region-bespoke paths scaffolded 2026-05-23.
+  // Placeholder templates for region-bespoke paths scaffolded 2026-05-23.
   // Built out fully when each path is activated; signature matches the
   // composer contract so pools can load + brief-composer doesn't crash if
   // accidentally invoked. NOT in EARTH_PATHS rotation until full template
   // authored + R0 validated.
+
+  EARTHBOT_AFRICAN_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      subject,
+      foreground_anchor,
+      light_condition,
+      atmosphere,
+      sky_layer,
+      scale_prover,
+      phenomenon,
+    } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one real-Earth African event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or atmosphere, DROP IT. Real-Earth ONLY — no aurora (Africa is too low-latitude), no bioluminescent, no fantasy-cosmic.`
+      : '';
+
+    return `You are a fine-art landscape photographer writing ONE AFRICAN RAW NATURE scene for EarthBot. Spans the full breadth of African biomes — Serengeti / Maasai Mara / Etosha / Makgadikgadi / Tarangire / Tsavo savanna grasslands, Congo Basin rainforest (canopy from above / understory floor), Okavango Delta (papyrus channels / lily lagoons), Sahara erg dune seas, Namib coastal red dunes + Deadvlei white clay pan, Madagascar Avenue of the Baobabs + spiny forest, Cape fynbos coastal scrub, Zambezi / Nile riverine flats, Lake Turkana shore, pan-African wildlife at scale-prover scale. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL AFRICAN BIOMES ONLY ━━━
+
+This is REAL Africa — never alien, never fantasy. Ground every render in specific African geographic identity: BAOBAB and ACACIA trees (NOT generic pine/oak), Icelandic moss has no place here, Patagonian granite has no place here. The horizon is FLAT in open biomes (savanna / delta / dune sea / salt pan / river plain) OR the frame is CANOPY in forest biomes (rainforest / Madagascar baobab grove / Mahale forest interior). NEVER alpine mountains, NEVER snow-capped peaks, NEVER Kilimanjaro / Meru / Lengai (those are mountain triggers Flux locks onto), NEVER Ngorongoro crater rim (reads as mountain).
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT FEATURES / ZERO CULTURAL ━━━
+
+The entire frame is uninhabited raw nature. NEVER a figure, NEVER a Maasai herder, NEVER a vehicle (NO safari-jeep / NO Land-Rover / NO pirogue with a human), NEVER a road, NEVER village huts, NEVER kraal, NEVER cattle fences, NEVER aboriginal / rock art, NEVER signage, NEVER tourism infrastructure. Pure raw African landscape only. Wildlife at scale-prover scale (lone elephant / zebra herd thread / giraffe pair / wildebeest column / lion silhouette on termite mound / chimp in canopy / lemur on baobab branch / hippo in delta / flamingo flock on alkaline lake) is permitted at TINY postage-stamp distance, never hero-scale.
+
+━━━ STYLE GUARDS ━━━
+
+- NO photographer name-drops in the output prompt (Frans Lanting / Nick Brandt / Beverly Joubert / Sebastião Salgado / Art Wolfe — these leak verbatim into the polished output and bias the render). Describe the scene morphologically, never credit any photographer.
+- Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
+- Avoid stylized / 3D-render / cartoony — photographic only
+- Avoid "fire" as a noun (renders literal flames) — for grass-burn use "ember-orange horizon glow" / "warm-amber smoke column" as adjective-led phrases
+- Avoid generic "African landscape" — name the SPECIFIC African biome and toponym (Serengeti / Maasai Mara / Okavango Delta / Sahara erg / Madagascar Avenue / Cape fynbos) so Flux locks the prior to the right geography
+
+━━━ THE SUBJECT (the iconic African composition) ━━━
+${subject}
+
+━━━ FOREGROUND ANCHOR (close-edge detail in the lower 15-20% of frame) ━━━
+${foreground_anchor}
+
+━━━ LIGHT CONDITION ━━━
+${light_condition}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ SKY LAYER ━━━
+${sky_layer}
+
+━━━ SCALE PROVER (tiny element at deep distance — postage-stamp scale) ━━━
+${scale_prover}
+
+Render small — proves the landscape is VAST. African-appropriate scale-provers ONLY, MATCHED to the rolled subject biome: savanna prompts get lone elephant / zebra herd / wildebeest column / giraffe pair / lion on termite mound. Delta prompts get hippo / flamingo flock / sitatunga / lechwe. Rainforest prompts get chimp in canopy / gorilla family at scrub margin. Madagascar prompts get lemur on baobab branch. Sahara / Namib prompts get oryx / addax / desert elephant pencil-tall in deep distance. NEVER inject elephant into a Sahara prompt or chimp into a savanna prompt. Always TINY and DISTANT, never hero-scale, never anthropomorphic.${phenomenonBlock}
+
+━━━ HARD RULE — AFRICAN PALETTE + ATMOSPHERIC DEPTH ━━━
+
+Multi-tier depth (foreground anchor + midground hero biome + atmospheric distant horizon OR canopy depth). Palette is BIOME-DEPENDENT: dry savanna prompts use warm amber / sienna / red-dust / golden grass; delta prompts use turquoise + papyrus-gold + emerald; rainforest prompts use deep emerald + dappled gold + humid black-water; dune prompts use tangerine + rust + ember; salt pan prompts use blinding pearl-white + cobalt sky; fynbos prompts use protea-pink + king-protea-coral + cool coastal-blue. The viewer should feel African air — dry warm grass-and-dust on savanna, humid leaf-and-mud in rainforest, cold wind-rippled sand on Sahara/Namib dunes, sea-salt on fynbos coast.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'African raw nature palette — biome-dependent (warm savanna amber + sienna, turquoise delta + papyrus-gold, deep emerald rainforest, tangerine + rust dune, pearl-white salt pan + cobalt sky, protea-pink + coral fynbos)'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE — EPIC, NEVER DOCUMENTARY ━━━
+
+This is NEVER a documentary travel-snapshot. This is the LION KING OPENING SHOT / BBC Planet Earth season-finale showstopper / Disney Nature title-card / Out-of-Africa cinematic title sequence energy. The frame must be JAW-DROPPING. Specific composition energy to inject:
+
+- **LOW-ANGLE HERO STANCE** preferred — camera looking UP at the baobab / acacia / dune crest from grass-level, dramatic silhouette against burning sky
+- **DRAMATIC SILHOUETTES** of trees / wildlife / dune crests against blood-red sunset, electric blue twilight, or star-crowded indigo
+- **DRONE-LEVEL EPIC VISTA** for delta / canopy / salt pan — sweeping aerial dramatic depth
+- **GOD-RAY SHAFTS** piercing dust haze, crepuscular rays, lightning-lit thunderhead, storm-break spotlight
+- **MEGA-WEATHER**: anvil thunderhead cathedral, mammatus cloud underside at sunset, virga rain-curtain stretched across plain, haboob dust-wall, monsoon rainbow
+- **EXTREME COLOR**: blood-red / molten-copper / electric-violet / acid-amber / cobalt-and-coral sunset gradient, never washed out
+- The iconic African subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25% (or canopy ceiling for rainforest). Multi-tier depth mandatory.
+- Photographic, hyperreal, EPIC African fine-art landscape — peak-drama moment, the 90-second magic-window version. Catch the SECOND when the elephant crosses the burning horizon, when the lion crests the kopje at first light, when the haboob crowns the Sahara, when lightning forks behind the Avenue of the Baobabs.
+
+If the rolled light condition is generic "midday" or "overcast", AMPLIFY it into drama: midday becomes "harsh-shadow blade light through dust haze", overcast becomes "pre-storm electric green-yellow oppressive light". NEVER render flat documentary travel-photo light.
+
+━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
+
+The polished prompt MUST be authored in this exact sequence:
+  1. **OPEN WITH THE SUBJECT** — the African hero (Serengeti shortgrass plain / Maasai Mara golden-grass plain / Okavango Delta papyrus channel / Sahara erg dune sea / Namib Deadvlei white clay pan / Avenue of the Baobabs / Congo Basin canopy / Etosha salt pan / Cape fynbos slope / Zambezi river plain / Nile floodplain / etc.) is the FIRST phrase. NEVER open with foreground detail. NEVER open with light or atmosphere.
+  2. Then the SKY LAYER
+  3. Then the LIGHT CONDITION + ATMOSPHERE
+  4. Then the FOREGROUND ANCHOR (small near-camera detail in lower 15-20%, NOT the hero)
+  5. Then the SCALE PROVER (tiny biome-matched wildlife at deep distance)
+  6. Then any rolled PHENOMENON
+  7. Finally palette / mood notes
+
+The viewer's eye must land on the BAOBAB GROVE / SALT PAN / SAVANNA / DELTA CHANNEL / DUNE SEA / CANOPY first — NEVER on a foreground rock or grass clump. The foreground_anchor and scale_prover are SUPPORTING DETAILS not the subject.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the African subject. PRESERVE the African toponym from the subject slot verbatim in the opening phrase — Serengeti / Maasai Mara / Etosha / Makgadikgadi / Tarangire / Tsavo / Okavango / Zambezi / Nile / Chobe / Mahale / Sahara / Namib / Deadvlei / Madagascar / Cape fynbos / Congo Basin — these geographic anchors are LOAD-BEARING for African identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" / "EarthBot::render_african" / brand-style preambles — these are style-prior triggers that interfere with the SUBJECT anchoring, NEVER include them at the prompt open). Describe positive content only — no negation language like "no humans" or "no architecture" or "no mountains" (Flux tokenizer leaks those words and renders the noun).`;
+  },
+
   EARTHBOT_ASIA_LANDSCAPE: ({ slots }) =>
     `// PLACEHOLDER — EARTHBOT_ASIA_LANDSCAPE template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
   EARTHBOT_ANDES_PATAGONIA: ({ slots, sharedDNA, vibeDirective }) => {

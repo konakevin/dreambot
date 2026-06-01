@@ -1098,6 +1098,360 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
     ],
     instructions: `Output ONLY a numbered list of {COUNT} South American phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // AFRICAN-LANDSCAPE path (2026-06-01 v2 resurrection after v1 scrap).
+  // Full breadth of African biomes — savanna, Congo rainforest, Okavango
+  // Delta, Sahara / Namib dunes, Madagascar baobab + spiny forest, Cape
+  // fynbos, riverine flats. Universal guards from
+  // [[feedback_regional_path_buildout_lessons]]:
+  //   • NO photographer names (Frans Lanting / Nick Brandt / Beverly
+  //     Joubert / Salgado / Art Wolfe — Art Wolfe especially leaked
+  //     mountain content into v1)
+  //   • NO negation language ("no mountains" / "no humans") in pools
+  //   • Subject entries LEAD with African toponym in first 5-8 words
+  //   • Subject pool has per-biome quotas so 25 entries actually span
+  //     the 8 biomes (v1 had no quota → 5/5 savanna)
+  //   • Scale-prover pool entries name the appropriate biome inline so
+  //     they only get matched to the right subjects (v1 R5 injected
+  //     elephant on grassland scale-prover into a Sahara prompt)
+  //   • NO mountain triggers anywhere (Kilimanjaro / Meru / Lengai /
+  //     alpine / alpenglow / escarpment / snow-capped — Africa is
+  //     non-mountain biomes for this path)
+  // ═══════════════════════════════════════════════════════════
+
+  african_landscape_subject: {
+    format: 'simple',
+    theme: `PURE AFRICAN RAW HABITAT SCENES for EarthBot's african-landscape path. THIS IS EARTHBOT — THE LAND IS THE HERO, NOT THE WILDLIFE. Each entry is ONE iconic African HABITAT composition where the place itself dominates the frame. Wildlife appears (this is Africa) but ALWAYS at scale-prover scale — tiny, incidental, NEVER the subject. Each entry 30-55 words.
+
+🎯 THE HABITAT IS THE HERO — composition guidance per entry:
+  • The HABITAT fills 50-65% of the frame (the canopy ceiling, the watering hole basin, the kopje boulder face, the delta channel, the dune sea, the salt pan, the baobab grove)
+  • CAMERA-ANGLE VARIETY mandatory across the pool — entries must rotate through: low-angle hero from ground level / DRONE POV aerial down-angle / canopy POV looking DOWN at jungle below / waterline reflection POV / kopje vantage looking out / silhouette against burning sky / wide cinematic deep-vista
+  • Wildlife if present is matchstick-tiny incidental detail at deep distance — never hero-scale, never dominating composition, never named as the subject of the entry
+
+⚠️ MANDATORY — every entry must LEAD with an African toponym in the first 5-8 words.
+
+🌍 ICONIC HABITAT COMPOSITIONS to draw from (mix across the 25 entries):
+  A. **WATERING HOLE VISTAS** — pretty Etosha / Mara / Tarangire watering hole at sunset with broad savanna stretching behind, golden grass reflected in still water, distant acacia line silhouettes, banner cumulus above — the WATER + BACKDROP is the hero. Animals if any are pencil-tall on far shore.
+  B. **CONGO CANOPY-DOWN POV** — drone-level aerial looking DOWN at the Congo Basin or Mahale rainforest canopy, emerald layers stretching to flat horizon, kapok and ceiba emergents rising above the canopy ceiling, distant blackwater river bend visible cutting through, mist drift in mid-canopy.
+  C. **FOREST UNDERSTORY DEEP** — Mahale / Kibale / Bwindi forest interior ground-level POV with dappled gold shafts through layered canopy, massive buttress roots, fern-and-moss ground, deep emerald shadow, cathedral-quiet light. No primates in shot — JUST the habitat.
+  D. **KOPJE / BOULDER VANTAGE** — Serengeti granite kopje pile rising from short-grass plain at sunset, lichen-encrusted boulders catching warm sidelight, the savanna stretching to horizon below, distant herd thread pencil-tall. The KOPJE is the hero.
+  E. **ICONIC TREE HERO** — lone massive ancient baobab on Tarangire / Serengeti plain at blood-red sunset, low-angle hero stance looking up at twisted bottle-trunk silhouetted against burning sky / OR Avenue of the Baobabs Madagascar colonnade at dusk / OR sausage-tree silhouette / OR umbrella acacia perfect canopy against horizon
+  F. **DELTA CHANNEL / LILY LAGOON** — Okavango Delta papyrus channel at sunset with flat water reflecting amber-and-rose sky, papyrus walls glowing gold, lily-pad cluster floating, distant palm islands at horizon / OR delta water-edge with hippo pod pencil-tall at deep distance
+  G. **DUNE SEA EPIC** — Sahara erg / Namib Sossusvlei dune sea stretching to flat blazing horizon, wind-sculpted crests casting deep slip-face shadows in raking sidelight, sky deepening cobalt-to-burnt-orange. The DUNE FORM is the hero.
+  H. **SALT PAN VISTA** — Etosha / Makgadikgadi / Deadvlei salt pan vast empty expanse with razor-flat horizon, heat-shimmer dissolving far edge, lone baobab island OR petrified camel-thorn trees as the focal detail. The PAN is the hero.
+  I. **RIVERINE PLAIN** — Zambezi / Nile / Mara River bend cutting a broad S-curve through golden plain, water glinting silver reflecting open sky, papyrus-fringed banks, heron silhouettes motionless along glassy shallows.
+  J. **FYNBOS COASTAL** — Cape fynbos protea-bloom slope rolling to flat Atlantic horizon, dense low scrub in coral and pink, breaking storm above ocean.
+  K. **MADAGASCAR SPINY FOREST** — alien Didierea + Alluaudia columns rising from red laterite, hard blue sky overhead, surreal forest of spines stretching to flat horizon.
+  L. **RAINFOREST CLEARING (BAI)** — Congo Basin natural forest clearing where the canopy parts to reveal a still pool, mineral-stained water reflecting sky-light shaft, dense emerald wall ringing the clearing.
+
+🎯 BIOME COVERAGE TARGET (across 25 entries):
+  • Savanna grasslands (Serengeti / Maasai Mara / Tarangire / Tsavo) inc. WATERING HOLES + KOPJES + ICONIC TREES: 7 entries
+  • Salt pans (Etosha / Makgadikgadi / Deadvlei): 3 entries
+  • Okavango Delta + Zambezi river plain + DELTA CHANNELS: 4 entries
+  • Congo Basin rainforest CANOPY-DOWN POV + Mahale / Bwindi UNDERSTORY + BAI CLEARING: 4 entries
+  • Sahara erg dune seas (Erg Chebbi / Tadrart Acacus): 2 entries
+  • Namib (Deadvlei / Sossusvlei / coastal red dunes): 2 entries
+  • Madagascar (Avenue of the Baobabs / spiny forest): 2 entries
+  • Cape fynbos coastal: 1 entry
+
+🚫 ABSOLUTE BANS (every entry MUST clear these):
+  • ZERO photographer names (Frans Lanting / Nick Brandt / Beverly Joubert / Sebastião Salgado / Art Wolfe / Anup Shah — these leak verbatim into the polished output)
+  • ZERO mountain triggers — NO Kilimanjaro, NO Mt. Meru, NO Ol Doinyo Lengai, NO Ngorongoro CRATER RIM (rim reads as mountain to Flux), NO alpenglow, NO snow-capped peaks, NO alpine ridges, NO escarpments, NO cliff-faces, NO Rift Valley walls. Africa for this path is FLAT or CANOPY only.
+  • ZERO humans, herders, villages, kraal huts, fences, roads, vehicles, safari trucks
+  • ZERO sci-fi / fantasy / portal / impossible-reflection
+  • ZERO negation phrases — describe positive content only
+  • ZERO non-African analogues (no "Yellowstone-like", no "Patagonian-style")
+  • ZERO wildlife as the hero — wildlife is allowed but ONLY at scale-prover scale (matchstick-tiny, deep distance, incidental detail). NEVER "lone elephant on grass plain" as the hero. NEVER "zebra herd crossing" as the hero. The HABITAT is the hero, the wildlife is decoration. If wildlife is in shot, name it AFTER the habitat hero, as a tiny pencil-tall element in deep distance.
+
+✅ EVERY ENTRY MUST INCLUDE:
+  • African toponym in first 5-8 words
+  • Specific HABITAT hero (watering hole vista / forest understory / canopy-down POV / kopje vantage / baobab grove / delta channel / dune sea / salt pan)
+  • Specific CAMERA ANGLE (low-angle / drone aerial / canopy POV / waterline reflection / silhouette / wide cinematic)
+  • Multi-tier depth language
+  • Africa-coded materials (red laterite / acacia / baobab / papyrus / dry golden grass / orange sand / kopje granite / fynbos protea / Madagascar Didierea / Congo emergent kapok)
+  • A specific DRAMATIC lighting moment (blood-red sunset silhouette / electric storm / Milky Way over delta / monsoon rainbow / haboob dust-wall / dappled canopy gold-shaft / mammatus cloud underside)
+
+Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Tarangire watering hole at sunset, the broad still water dominating the foreground reflecting a blood-orange sky in perfect mirror, golden grass and a distant acacia line silhouetted on the far bank, banner cumulus catching warm sidelight, the savanna backdrop stretching unbroken to flat amber horizon — the WATERING HOLE is the hero',
+      'Etosha waterhole vista at dusk, the broad mineral-rimmed pool filling the lower frame in cool blue-grey, flat thornveld stretching behind to a razor-flat horizon glowing copper-rose, distant elephant herd pencil-tall on the far bank as small dark dots — the WATERHOLE BASIN is the hero, not the elephants',
+      'Maasai Mara watering hole at golden hour, mirror-still water reflecting acacia silhouettes and burning sky in symmetrical doubling, golden grass rolling unbroken behind to distant horizon, foreground close water-edge reeds catching warm sidelight, banner cumulus glowing copper above',
+      'Congo Basin rainforest canopy DRONE-LEVEL aerial POV looking DOWN at the emerald canopy below, the layered green roof of the jungle stretching to flat horizon with kapok and ceiba emergent trees rising above the ceiling, mist drift in mid-canopy, distant blackwater river bend cutting silver through the green, golden-hour sidelight raking emergent crowns',
+      'Mahale forest canopy view looking DOWN through the upper canopy layer, dense emerald foliage layered in tiers below, a single kapok emergent crown catching warm raking light, mist drift through gaps revealing flat-emerald canopy stretching to horizon, no ground visible — this is the canopy world',
+      'Mahale forest interior ground-level POV with dappled gold shafts piercing the layered canopy above, ancient buttress-rooted hardwood trunks rising cathedral-tall, deep emerald understory in humid shadow, foreground close fern and moss cluster wet at near edge, warm gold light pooling on root buttress',
+      'Bwindi forest understory at dawn, dense layered emerald foliage with low mist drifting between massive buttress roots, dappled cool blue light filtering through canopy, foreground close ground-orchid cluster on rotting log, deep cathedral shadow receding into emerald gloom — the FOREST INTERIOR is the hero',
+      'Congo Basin natural forest clearing (bai) at midday, the canopy parts to reveal a still mineral-stained pool dappled by light shafts from above, dense emerald wall ringing the clearing, foreground close shore mud at near edge, distant forest elephant pencil-tall at far edge as a small dark shape',
+      'Serengeti granite kopje rising boulder-piled from the short-grass plain at sunset, lichen-encrusted weathered boulders catching warm copper sidelight, the savanna stretching below to flat amber horizon, foreground close kopje boulder face at near edge, distant herd thread pencil-tall on plain below',
+      'Maasai Mara granite kopje at first light, the ancient boulder pile silhouetted against pale rose dawn sky, surrounding short-grass plain rolling to flat horizon, foreground close lichen-and-rock detail at near edge, mist drift low over plain — the KOPJE is the hero',
+      'Tarangire dusk plain with a lone massive ancient baobab silhouetted hero-scale against a burning blood-red horizon, low-angle shot from grass level looking up at the twisted bottle-trunk and bare branch-crown, golden grass stretching flat beneath, blazing rose-amber sky behind the silhouette',
+      'Avenue of the Baobabs Madagascar at dusk, the colonnade of Adansonia grandidieri trunks rising straight and massive on both sides of the flat red-laterite track, low-angle hero stance looking up the colonnade, small flat-topped crowns catching last gold light against blazing rose-amber sky',
+      'Serengeti lone acacia umbrella tree silhouetted perfectly against a blazing copper sunset, the iconic flat canopy spread wide hero-scale at the horizon, golden grass plain stretching flat in every direction beneath, banner cumulus catching warm color above — the ICONIC ACACIA is the hero',
+      'Okavango Delta papyrus channel at sunset, the flat water filling lower frame reflecting amber-rose sky in perfect mirror, golden papyrus walls glowing on both banks, distant palm islands as low dark silhouettes on flat horizon, foreground close lily-pad floating wet at near edge',
+      'Okavango Delta lily-pad lagoon at golden hour drone POV looking down, the wide flat water surface entirely carpeted in green lily pads and white blooms, water-channels carving through, palm islands as dark dots, blazing amber-and-rose sky catching warm sidelight on water surface',
+      'Sahara Erg Chebbi dune sea at sunset, wave-after-wave of red-orange dunes stretching to flat blazing horizon, wind-sculpted crests casting deep violet slip-face shadows in raking horizontal sidelight, foreground close wind-rippled sand pattern at near edge, enormous sky deepening cobalt to burnt-orange',
+      'Namib Sossusvlei orange dune face at sunrise, the massive red-orange dune crest with razor-sharp slip-face shadow line bisecting the frame, low-angle stance looking up at the dune wall from clay-pan floor, foreground close iron-rich orange sand ripple at near edge, pale-rose sky brightening above',
+      'Namib Deadvlei white clay pan vista, cracked pale floor stretching flat in every direction with petrified camel-thorn trees standing black and skeletal hero-scale against the blazing orange dune wall behind, foreground close cracked clay polygon at near edge, deep cobalt overhead sky',
+      'Etosha salt pan vast empty vista, the glaring white expanse stretching to razor-flat horizon under hard midday cobalt sky, heat-shimmer mirage dissolving the far edge, foreground close salt-polygon hexagonal crust pattern at near edge, lone baobab island pencil-tall in middle distance',
+      'Makgadikgadi salt pan at moonless night, the white pan glowing pearl-grey under a star-crowded Milky Way arch overhead, the horizon razor-flat and faintly silvered, one isolated baobab silhouetted dark against the star field — the PAN + SKY is the hero',
+      'Zambezi river bend wide cinematic vista above the falls, the broad silver-flat water surface S-curving through golden floodplain to a distant horizon, papyrus-fringed banks catching warm sidelight, foreground close river-cobble shore at near edge, heron silhouettes motionless along glassy shallow margins',
+      'Cape fynbos coastal slope at golden hour, dense protea-bloom carpet in coral and pink stretching to a flat Atlantic horizon, foreground close king-protea bloom cluster catching warm sidelight, breaking storm cumulus over ocean catching molten copper light',
+      'Madagascar Didierea and Alluaudia spiny forest at midday, surreal alien columns of spiny succulents rising from red laterite soil in dense branching clusters, low-angle hero stance looking up at the spine-columns against hard blue Madagascar sky, foreground close laterite-red soil at near edge',
+      'Nile floodplain papyrus marsh at dawn, dense towering papyrus stands lining a broad flat-banked channel, still water reflecting pale rose sky in perfect mirror, foreground close papyrus stem cluster at near edge, flat open horizon stretching beyond the fringe, morning mist lying low over the calm water',
+      'Tsavo East red-elephant plain at golden hour, dry golden grass stretching to a flat dusty-red horizon, scattered acacia silhouettes catching warm sidelight, foreground close red-laterite soil with dust-covered acacia thorn at near edge, banner cumulus glowing copper above the flat plain',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} African subject entries. NO preamble. Each entry 30-55 words on a single line. Format follows the touchpoint pattern: "Toponym + biome + close-foreground + midground hero + distant flat-or-canopy depth + lighting note".`,
+  },
+
+  african_landscape_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHORS for EarthBot's african-landscape path. Each entry is ONE specific close-edge African detail anchoring the lower 15-20% of the frame. Each entry 14-25 words.
+
+✅ AFRICA-SPECIFIC CLOSE-EDGE DETAILS:
+  • Dry red-oat grass tussock at near edge (savanna)
+  • Termite mound dark and faintly glistening at near edge (savanna)
+  • Silver-leaf thorn bush cluster at near edge (savanna)
+  • Cracked salt-crust hexagonal pattern at near edge (Etosha / Makgadikgadi)
+  • Lily-pad cluster wet at near edge (Okavango Delta)
+  • River cobbles wet polished at near edge (Zambezi / Nile)
+  • Grass tussock on the river bank at near edge
+  • Wind-rippled sand parallel-ridge pattern at near edge (Sahara)
+  • Iron-streaked desert-varnish boulder at near edge (Sahara)
+  • Cracked clay polygon pattern at near edge (Namib Deadvlei)
+  • Iron-rich orange sand ripple pattern at near edge (Namib)
+  • Laterite-red soil at near edge (Madagascar)
+  • King-protea bloom cluster at near edge (Cape fynbos)
+  • Ceiba crown emergent foliage at near edge (Congo Basin canopy)
+  • Fern cluster on root-tangled forest floor (Mahale)
+  • Papyrus stem cluster at near edge (Nile / Okavango)
+  • Volcanic black-pebble shore at near edge (Lake Turkana)
+  • Red-dust covered acacia thorn at near edge (Tsavo)
+`,
+    touchpoints: [
+      'Dry red-oat grass tussock at near edge with seed-heads windswept and silhouetted',
+      'Weathered red-clay termite mound with rain-carved flutes catching sidelight at near edge',
+      'Silver-leaf thorn bush cluster at near edge catching lateral evening warmth on dusty paired thorns',
+      'Cracked salt-crust hexagonal polygon pattern at near edge stretching to white pan',
+      'Floating lily-pad cluster wet at near edge with white blooms partially open',
+      'Glacier-polished river cobbles wet at near edge sorted in arc pattern by current',
+      'Grass tussock on the river bank at near edge bent by floodplain current',
+      'Wind-rippled Sahara sand parallel-ridge pattern at near edge in fine wave forms',
+      'Iron-streaked desert-varnish boulder with rust-red flanks at near edge',
+      'Cracked clay polygon pattern at near edge bone-dry warm-cream Deadvlei surface',
+      'Iron-rich orange sand ripple pattern at near edge with wind-sculpted slip-face crest',
+      'Laterite-red Madagascar soil at near edge with single Alluaudia spine cluster',
+      'King-protea bloom cluster with papaya-bright flower heads at near edge in Cape fynbos slope',
+      'Ceiba crown emergent foliage at near edge above Congo canopy with dappled light',
+      'Cluster of ferns on root-tangled Mahale forest floor at near edge in humid shadow',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} African foreground anchor entries. NO preamble. Each entry 14-25 words on a single line.`,
+  },
+
+  african_landscape_light_condition: {
+    format: 'simple',
+    theme: `LIGHT CONDITIONS for EarthBot's african-landscape path. Each entry is ONE specific African lighting register. Each entry 14-22 words.
+
+✅ AFRICAN LIGHTING REGISTERS:
+  • Dust-haze sunset (savanna / Sahara)
+  • Golden-hour rake on grass plain
+  • Sundown amber on baobab trunk
+  • Blue-hour twilight over delta
+  • Hard cobalt overhead midday (salt pan / desert)
+  • Dappled emerald canopy break (rainforest)
+  • Sundown amber on Avenue of the Baobabs
+  • Storm-break shaft tearing through dark cloud
+  • Pre-storm yellow-green oppressive light
+  • Backlit translucent papyrus at sunset
+  • Sundown rake on dune crest with deep slip-face shadow
+  • Star-crowded moonless savanna night with Milky Way
+  • Diffuse overcast pearl-grey light (Makgadikgadi)
+  • Heat-shimmer dissolution at midday horizon
+  • Crepuscular ray ladder through breaking cloud
+`,
+    touchpoints: [
+      'Dust-haze sunset turning the descending sun deep ochre, savanna plain saturated in copper-orange',
+      'Golden-hour rake on grass plain in horizontal warm sidelight at thirty-degree solar angle',
+      'Sundown amber on baobab trunk lighting bottle-shaped silhouette against blazing horizon',
+      'Blue-hour polar twilight over delta in cool cobalt fading to amber at low horizon',
+      'Hard cobalt overhead midday on salt pan with razor-sharp shadows',
+      'Dappled emerald canopy break with warm gold shafts pooling on moss below',
+      'Sundown amber on Avenue of the Baobabs colonnade glowing copper against rose sky',
+      'Storm-break shaft tearing through dark nimbostratus illuminating one patch of plain',
+      'Pre-storm yellow-green oppressive light with falling barometric pressure',
+      'Backlit translucent papyrus at sunset glowing gold against pale rose sky',
+      'Sundown rake on dune crest casting deep violet slip-face shadow',
+      'Star-crowded moonless savanna night with Milky Way arching overhead',
+      'Diffuse overcast pearl-grey light rendering Makgadikgadi pan shadowless',
+      'Heat-shimmer dissolution at midday horizon making distant tree-line waver liquid',
+      'Crepuscular ray ladder breaking through breaking cloud over plain in three beams',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} African light-condition entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  african_landscape_atmosphere: {
+    format: 'simple',
+    theme: `ATMOSPHERE entries for EarthBot's african-landscape path. Each entry is ONE specific African atmospheric texture filling the air between camera and far distance. Each entry 14-22 words.
+
+✅ AFRICAN ATMOSPHERIC REGISTERS:
+  • Dry-season dust haze (savanna)
+  • Smoke-haze drift from distant grass-burn
+  • Humid emerald mist drift in Congo canopy
+  • Sea-fog rolling onto Namib coast
+  • Heat-shimmer mirage band at midday horizon
+  • Sahara haboob dust-wall advancing
+  • Delta morning mist low over glassy channel
+  • Steaming termite-mound damp earth (post-rain)
+  • Coastal salt-spray on Cape fynbos
+  • Pollen-edged sidelight on golden grass
+  • Madagascar red-dust suspended in warm bands
+  • Storm cell rain curtain advancing across plain
+  • Cloud shadow patches sliding across savanna
+  • Acacia-pollen-edged warm air
+  • Humid leaf-and-mud air in rainforest
+`,
+    touchpoints: [
+      'Dry-season dust haze suspended low over savanna in fine warm horizontal bands',
+      'Smoke-haze drift from distant grass-burn tinted warm against violet evening sky',
+      'Humid emerald mist drift in Congo canopy filtering through emergent tree gaps',
+      'Cold sea-fog rolling onto Namib coast from offshore in dense pearl veil',
+      'Heat-shimmer mirage band at midday horizon dissolving far tree-line into liquid',
+      'Sahara haboob dust-wall darkening far horizon with sharp vertical front advancing',
+      'Delta morning mist low over glassy channel in cool blue-grey horizontal bands',
+      'Steaming termite-mound damp earth post-rain rising in fine warm exhalation',
+      'Coastal salt-spray on Cape fynbos drifting inland from Atlantic breakers',
+      'Pollen-edged warm sidelight on golden grass with fine particulate suspension',
+      'Madagascar red-dust suspended in warm horizontal bands at mid-height',
+      'Storm cell rain curtain advancing across plain from west in diagonal sweep',
+      'Cloud shadow patches sliding across savanna in moving dark-light pattern',
+      'Acacia-pollen-edged warm air drifting across plain in fine yellow haze',
+      'Humid leaf-and-mud air in rainforest understory thick with smell of damp wood',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} African atmosphere entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  african_landscape_sky_layer: {
+    format: 'simple',
+    theme: `SKY LAYER entries for EarthBot's african-landscape path. Each entry is ONE specific African sky cover. Each entry 14-22 words.
+
+✅ AFRICAN SKY REGISTERS:
+  • Banner cumulus catching warm savanna sidelight
+  • Anvil cumulonimbus thunderhead rising over plain
+  • Cobalt midday Sahara sky with high cirrus
+  • Mare-tail cirrus tinted amber at sunset
+  • Heavy storm-cloud deck low over Tarangire
+  • Pale-rose sunset banner over Serengeti
+  • Star-crowded moonless African night sky with Milky Way
+  • Pre-storm yellow-green oppressive sky
+  • Layered stratocumulus over Cape fynbos broken by cobalt
+  • Hard blue Madagascar midday sky over spiny forest
+  • Sunset orange-and-rose ribbon at flat horizon
+  • Diffuse overcast pearl-grey over Makgadikgadi pan
+  • Towering thunderhead over Mahale lake
+  • Pale lavender pre-dawn over delta
+  • Sundown rose-and-copper over dune crest
+`,
+    touchpoints: [
+      'Banner cumulus catching warm savanna sidelight in pale rose with grey flat bases',
+      'Anvil cumulonimbus thunderhead rising thirty-thousand-feet over Serengeti plain',
+      'Cobalt midday Sahara sky with high cirrus contrails in pale streak',
+      'Mare-tail cirrus tinted amber at sunset over flat savanna horizon',
+      'Heavy storm-cloud deck low over Tarangire in dark pressing nimbostratus',
+      'Pale-rose sunset banner cumulus over Serengeti glowing copper-amber',
+      'Star-crowded moonless African night sky with the Milky Way arch overhead',
+      'Pre-storm yellow-green oppressive sky pressing low over savanna',
+      'Layered stratocumulus over Cape fynbos broken by cobalt patches',
+      'Hard blue Madagascar midday sky over spiny forest in deep saturation',
+      'Sunset orange-and-rose ribbon at flat horizon glowing across the plain',
+      'Diffuse overcast pearl-grey shadowless sky over Makgadikgadi salt pan',
+      'Towering thunderhead rising over Mahale lake in afternoon convection',
+      'Pale lavender pre-dawn over Okavango Delta water in cool gradient',
+      'Sundown rose-and-copper over Sahara dune crest in saturated horizon glow',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} African sky entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  african_landscape_scale_prover: {
+    format: 'simple',
+    theme: `SCALE PROVERS for EarthBot's african-landscape path. Each entry is ONE tiny postage-stamp-scale element in the deep distance proving the landscape's VAST scale. CRITICAL: each entry must SELF-DECLARE its biome match so it only gets picked for the right subject — e.g. "Lone elephant on Serengeti savanna" so the brief composer doesn't pair it with a Sahara subject. Each entry 14-22 words.
+
+✅ AFRICAN SCALE-PROVER REGISTERS (biome-tagged):
+  • Lone elephant silhouette on Serengeti plain (savanna)
+  • Zebra herd thread pencil-tall on Maasai Mara grassland (savanna)
+  • Wildebeest column threading across Mara plain (savanna)
+  • Giraffe pair silhouette on Tarangire dusk plain (savanna)
+  • Lion silhouette on distant termite mound (savanna)
+  • Hippo pod surfacing in Chobe river (Okavango / Zambezi)
+  • Flamingo flock as pink cloud on Lake Turkana (alkaline lake)
+  • Lechwe herd at delta water edge (Okavango)
+  • Sitatunga silhouette in Okavango papyrus (Okavango)
+  • Chimpanzee in canopy at Mahale forest interior (rainforest)
+  • Gorilla family at scrub margin Congo Basin (rainforest)
+  • Lemur on baobab branch Madagascar Avenue (Madagascar)
+  • Oryx silhouette on Namib dune crest (Namib)
+  • Addax pencil-tall on Sahara dune face (Sahara)
+  • Fennec fox shape on Sahara dune (Sahara)
+  • Cape gannet flock over fynbos coast (Cape fynbos)
+`,
+    touchpoints: [
+      'Lone elephant silhouette ant-small on Serengeti savanna plain in deep distance',
+      'Zebra herd thread pencil-tall crossing Maasai Mara grassland in deep distance',
+      'Wildebeest column threading across Mara plain at deep distance as dark river',
+      'Giraffe pair silhouette pencil-tall on Tarangire dusk plain in deep distance',
+      'Lion shape ant-small on distant Serengeti termite mound at deep distance',
+      'Hippo pod surfacing pencil-tall in Chobe river at deep distance',
+      'Flamingo flock as pink cloud on Lake Turkana shore in middle distance',
+      'Lechwe herd pencil-tall at Okavango delta water edge in deep distance',
+      'Sitatunga silhouette barely readable in Okavango papyrus at deep distance',
+      'Chimpanzee silhouette ant-small in Mahale forest canopy mid-distance',
+      'Gorilla family pencil-tall at scrub margin Congo Basin in deep distance',
+      'Lemur silhouette on Madagascar baobab branch in deep distance ant-small',
+      'Oryx silhouette pencil-tall on Namib dune crest at deep distance',
+      'Addax pencil-tall on Sahara dune face in deep distance',
+      'Cape gannet flock pencil-tall over fynbos coast in middle distance',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} African scale-prover entries. NO preamble. Each entry 14-22 words on a single line. EVERY entry must self-tag the biome (savanna / delta / rainforest / Sahara / Namib / Madagascar / fynbos / lake) inline so the brief composer matches it only to the right subject.`,
+  },
+
+  african_landscape_phenomenon: {
+    format: 'simple',
+    theme: `RARE PHENOMENA for EarthBot's african-landscape path. Each entry is ONE specific real-Earth African phenomenon. Each entry 14-22 words.
+
+✅ AFRICAN PHENOMENA:
+  • Sahara haboob dust-wall advancing across plain
+  • Virga curtain evaporating mid-fall before reaching ground
+  • Distant thunderstorm anvil over plain with rain curtain
+  • Mirage shimmer dissolving far horizon at midday
+  • Grass-burn smoke column rising warm against violet sky
+  • Wildebeest river-crossing at Mara River
+  • Flamingo flock takeoff en-masse from soda lake
+  • Dust-devil column rising vertically across savanna
+  • Double-rainbow arc through delta rain curtain
+  • Sundown banner cloud over Sossusvlei dunes
+  • Lightning fork over distant Congo highland
+  • Smoke-tinted yellow-green sky from wildfire haze
+  • Sand-storm advancing across Sahara erg
+  • Termite alate swarm rising at first rain
+  • Distant elephant-stirred dust column in deep distance
+`,
+    touchpoints: [
+      'Sahara haboob dust-wall advancing across plain with sharp vertical front darkening horizon',
+      'Virga curtain evaporating mid-fall before reaching ground over savanna',
+      'Distant thunderstorm anvil over plain with grey-blue rain curtain descending',
+      'Mirage shimmer dissolving far horizon at midday into mirage band',
+      'Grass-burn smoke column rising warm against violet evening sky in vertical plume',
+      'Wildebeest river-crossing at Mara River with thousands streaming through churning current',
+      'Flamingo flock takeoff en-masse from soda lake in pink cloud',
+      'Dust-devil column rising vertically across savanna in spiraling brown plume',
+      'Double-rainbow arc through delta rain curtain at golden hour',
+      'Sundown banner cloud over Sossusvlei dunes in copper-amber glowing layer',
+      'Distant lightning forking over Congo highland from a mature thunderstorm',
+      'Smoke-tinted yellow-green oppressive sky from distant wildfire haze',
+      'Sand-storm advancing across Sahara erg with horizontal sand streamers',
+      'Termite alate swarm rising at first rain in fine cloud over plain',
+      'Distant elephant-stirred dust column rising vertically in deep distance',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} African phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
 };
 
 if (!POOL_RECIPES[POOL]) {

@@ -88,6 +88,7 @@ const pathBuilders = {
   'lush-jungle': require('./paths/lush-jungle'), // axis-system (2026-05-20)
   'iceland-raw': require('./paths/iceland-raw'), // axis-system (2026-06-01 activation)
   'andes-patagonia': require('./paths/andes-patagonia'), // axis-system (2026-06-01 activation)
+  'african-landscape': require('./paths/african-landscape'), // axis-system (2026-06-01 v2 resurrection)
   // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
@@ -114,6 +115,7 @@ const EARTH_PATHS = [
   // sky / scale_prover / phenomenon).
   'iceland-raw',
   'andes-patagonia',
+  'african-landscape',
 ];
 
 const BEACH_PATHS = [
@@ -178,6 +180,15 @@ const ICELAND_RAW_PREFIX =
 // [[feedback_regional_path_buildout_lessons]] Lesson #1).
 const ANDES_PATAGONIA_PREFIX =
   'South American raw nature, sharp detail, gallery-quality, masterpiece';
+// 2026-06-01 v2 — African resurrection after the v1 R0-R6 churn + scrap.
+// BIOME-AGNOSTIC per the playbook anti-pattern lesson (Lesson #11): never
+// enumerate biomes in the prefix because CLIP locks to the first-named one
+// and the rest are dropped. v1 R5 enumerated "savanna grass plain or
+// Okavango Delta or Sahara dune sea or Congo Basin canopy or Madagascar
+// baobab forest" and every render rendered as savanna. v2 anchors the
+// region only — the scene content carries the biome.
+const AFRICAN_LANDSCAPE_PREFIX =
+  'African raw nature, sharp detail, gallery-quality, masterpiece';
 
 // Locked to cinematic only — Kevin's preferred single-vibe lock for
 // EarthBot 2026-05-05. Combined with the locked earthbot_photography medium
@@ -222,6 +233,7 @@ module.exports = {
     // perspective pulled R0 to European Alps/Dolomites with pine forests).
     'iceland-raw': ICELAND_RAW_PREFIX,
     'andes-patagonia': ANDES_PATAGONIA_PREFIX,
+    'african-landscape': AFRICAN_LANDSCAPE_PREFIX,
   },
 
   // Per-path suffix override — engine reads this BEFORE promptSuffixByMedium
@@ -347,9 +359,11 @@ module.exports = {
       'desert-southwest',
       // 2026-06-01: regional toponym paths. Haiku polish would compress away
       // load-bearing toponyms (Reynisfjara / Vatnajökull / Torres del Paine
-      // / Fitz Roy / Salar de Uyuni / Cotopaxi). Skip polish to keep them.
+      // / Fitz Roy / Salar de Uyuni / Cotopaxi / Serengeti / Maasai Mara /
+      // Okavango / Nile / Sahara). Skip polish to keep them.
       'iceland-raw',
       'andes-patagonia',
+      'african-landscape',
     ],
   },
 

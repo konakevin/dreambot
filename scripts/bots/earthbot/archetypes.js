@@ -171,6 +171,27 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  EARTHBOT_AFRICAN_LANDSCAPE: {
+    description:
+      "PATH-BESPOKE — EarthBot african-landscape (2026-06-01 v2 after v1 scrap). Full breadth of African raw nature — savanna grasslands (Serengeti / Maasai Mara / Etosha / Makgadikgadi / Tarangire / Tsavo), Congo Basin rainforest (canopy from above / river floor / understory), Okavango Delta (water channels / papyrus / lily pads), Sahara dunes, Namib coastal red dunes + Deadvlei, Madagascar baobab forest + spiny forest, Cape fynbos coastal scrub, riverine wetlands (Zambezi flats / Nile flats / Lake Turkana shore), pan-African wildlife scale-provers (elephant / zebra / giraffe / lion / wildebeest / chimp / gorilla / lemur / flamingo / hippo). NO humans, NO vehicles, NO buildings, NO village huts. Phenomena strictly real Earth (dust storm, virga, distant thunderstorm, mirage shimmer, grass-burn smoke). 7 path-bespoke axes — 6 always-on + 1 conditional 25%-gated phenomenon.",
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'subject',
+        'foreground_anchor',
+        'light_condition',
+        'atmosphere',
+        'sky_layer',
+        'scale_prover',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_ASIA_LANDSCAPE: {
     description:
       'PATH-BESPOKE — EarthBot asia-landscape (2026-05-23 scaffold). Pan-Asian raw nature — Japan (Mt. Fuji vistas, sakura groves, bamboo, autumn ginkgo, Hokkaido boreal), China (Huangshan granite + sea-of-clouds, Guilin / Zhangjiajie karst, Tibetan plateau), Taiwan (Taroko marble gorge), Vietnam (Halong Bay karst), Korea (Seoraksan granite, Jeju volcanic), Mongolia (Gobi dunes, Altai steppe). NO humans, NO torii, NO temples, NO villages, NO rice terraces. Phenomena strictly real Earth (sea of clouds, mist inversion, monsoon lightning, fog drift). 7 path-bespoke axes — 6 always-on + 1 conditional 25%-gated phenomenon.',
