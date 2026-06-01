@@ -25,6 +25,7 @@ interface DbMediumRow {
   render_base: string | null;
   engine: string | null;
   allowed_models: string[] | null;
+  scene_eligible_models: string[] | null;
 }
 
 /** App format — matches existing code expectations */
@@ -63,6 +64,10 @@ export interface ResolvedMedium {
    * modelPicker. Loaded here so callers can intersect with global
    * scene_eligible_models for the nightly scene gate (mig 213). */
   allowedModels: string[];
+  /** Per-medium override for the nightly scene-composition model gate.
+   * NULL → use engine_config.scene_eligible_models global. Non-null → use
+   * this list instead (still intersected with allowedModels). Mig 214. */
+  sceneEligibleModels: string[] | null;
 }
 
 export interface ResolvedVibe {
@@ -94,6 +99,7 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     renderBase: row.render_base,
     engine: row.engine,
     allowedModels: row.allowed_models ?? [],
+    sceneEligibleModels: row.scene_eligible_models ?? null,
   };
 }
 
@@ -118,7 +124,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
   const { data, error } = await sb
     .from('dream_mediums')
     .select(
-      'key,label,directive,flux_fragment,is_character_only,is_scene_only,is_scene_eligible,face_swaps,nightly_skip,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine,allowed_models'
+      'key,label,directive,flux_fragment,is_character_only,is_scene_only,is_scene_eligible,face_swaps,nightly_skip,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine,allowed_models,scene_eligible_models'
     )
     .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {

@@ -200,6 +200,9 @@ Deno.serve(async (req) => {
   // engine_config.scene_eligible_models.
   let resolvedComposition: 'character' | 'epic_tiny' | 'pure_scene' | undefined;
   let resolvedMediumAllowedModels: string[] = [];
+  // Per-medium scene-eligible model override (mig 214). NULL → fall back to
+  // engine_config.scene_eligible_models global. Captured for the post-try gate.
+  let resolvedMediumSceneModels: string[] | null = null;
   let faceSwapSource: string | undefined;
   let faceSwapSources:
     | Array<{ role: string; sourceUrl: string; gender: 'male' | 'female' | null | undefined }>
@@ -452,6 +455,7 @@ Deno.serve(async (req) => {
     // Capture for the post-try scene-composition model gate.
     resolvedComposition = composition;
     resolvedMediumAllowedModels = nightlyMedium.allowedModels;
+    resolvedMediumSceneModels = nightlyMedium.sceneEligibleModels;
 
     const castPick = selectedCast.length > 0 ? (selectedCast[0] as DreamCastMember) : null;
     console.log(
@@ -1370,7 +1374,18 @@ Output ONLY the prompt.`;
     !force_model &&
     (resolvedComposition === 'pure_scene' || resolvedComposition === 'epic_tiny')
   ) {
-    const sceneEligibleModels = await fetchSceneEligibleModels();
+    // Per-medium override (mig 214) wins over engine_config global (mig 213).
+    // NULL or empty → fall back to the global list. Either way the result is
+    // then intersected with the medium's own allowed_models as a safety net.
+    const globalSceneModels = await fetchSceneEligibleModels();
+    const sceneEligibleModels =
+      resolvedMediumSceneModels && resolvedMediumSceneModels.length > 0
+        ? resolvedMediumSceneModels
+        : globalSceneModels;
+    const sceneSrcLabel =
+      resolvedMediumSceneModels && resolvedMediumSceneModels.length > 0
+        ? 'medium-override'
+        : 'global';
     if (sceneEligibleModels.length > 0) {
       const mediumAllowed = new Set(resolvedMediumAllowedModels);
       const intersection = sceneEligibleModels.filter((m) => mediumAllowed.has(m));
@@ -1378,11 +1393,11 @@ Output ONLY the prompt.`;
         const oldModel = pickedModel;
         pickedModel = intersection[Math.floor(Math.random() * intersection.length)];
         console.log(
-          `[nightly-dreams] scene path (${resolvedComposition}): re-picked model '${oldModel}' -> scene-eligible '${pickedModel}' (intersection of ${intersection.length})`
+          `[nightly-dreams] scene path (${resolvedComposition}): re-picked model '${oldModel}' -> scene-eligible '${pickedModel}' (intersection of ${intersection.length}, source=${sceneSrcLabel})`
         );
       } else if (intersection.length === 0) {
         console.warn(
-          `[nightly-dreams] scene gate: NO intersection between scene_eligible_models and medium '${resolvedMediumKey}' allowed_models. Falling through to picker default '${pickedModel}'.`
+          `[nightly-dreams] scene gate: NO intersection between scene_eligible_models (${sceneSrcLabel}) and medium '${resolvedMediumKey}' allowed_models. Falling through to picker default '${pickedModel}'.`
         );
       }
     }
