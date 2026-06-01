@@ -64,12 +64,13 @@ module.exports = {
   // 1.1-pro's E005 safety filter tripped on its dark vampire imagery. If
   // any path renders fail on E005, fall that single path back to flux-dev.
   modelByPath: {
-    // Scene / landscape / architecture paths — unchanged, locked to 1.1-pro
-    'dark-landscape': 'black-forest-labs/flux-1.1-pro',
-    'gothic-architecture': 'black-forest-labs/flux-1.1-pro',
-    'castlevania-scene': 'black-forest-labs/flux-1.1-pro',
-    'cozy-goth': 'black-forest-labs/flux-1.1-pro',
-    'gothic-vista': 'black-forest-labs/flux-1.1-pro',
+    // Scene / landscape / architecture paths — modelByPath entries REMOVED
+    // 2026-05-31. These were 1.1-pro string-locks that overrode the 7-model
+    // bot-wide allowedModels lineup. Now these paths roll from the full
+    // 7-model picker (Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Pro Ultra,
+    // F2 Flex, F2 Max — Flux Dev was the bot-wide drop per BOT_MODEL_TALLY).
+    // Locks removed: dark-landscape, gothic-architecture, castlevania-scene,
+    // cozy-goth, gothic-vista.
 
     // ── Female character paths — multi-model arrays from Kevin's 5-path
     // ── × 8-model × 3-rep audit (2026-05-31). The previous 1.1-pro locks
@@ -128,14 +129,13 @@ module.exports = {
       'black-forest-labs/flux-2-max',
     ],
 
-    // Other character/vampire/monster paths — unchanged single-model locks
-    'vampire-hunter-in-action': 'black-forest-labs/flux-1.1-pro',
-    'goth-male-full-body-axis': 'black-forest-labs/flux-1.1-pro',
-    'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro',
-    'monster-prowl': 'black-forest-labs/flux-1.1-pro',
-    'monster-prowl-victorian': 'black-forest-labs/flux-1.1-pro',
-    'monster-prowl-inked': 'black-forest-labs/flux-1.1-pro',
-    'monster-prowl-weta': 'black-forest-labs/flux-1.1-pro',
+    // Other character/vampire/monster paths — modelByPath entries REMOVED
+    // 2026-05-31 same as the scene paths above. These were 1.1-pro string-
+    // locks. Now these paths roll from the 7-model bot-wide allowedModels
+    // lineup. Removed: vampire-hunter-in-action, goth-male-full-body-axis,
+    // vampire-assassin-combat, monster-prowl, monster-prowl-victorian,
+    // monster-prowl-inked, monster-prowl-weta. Re-pin individually here
+    // if any path needs to ban specific models.
   },
 
   // Per-path vibe restriction — vampire-girls-2 only renders well with

@@ -81,23 +81,18 @@ module.exports = {
     'black-forest-labs/flux-2-flex',
   ],
 
-  modelByPath: {
-    'steampunk-scene': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'airship-skies': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'steampunk-curio': { 'black-forest-labs/flux-1.1-pro': 100 },
-    // Female path locked to flux-1.1-pro 2026-05-15. Two-model rotation
-    // (flux-dev + flux-1.1-pro) produced inconsistent register — flux-dev
-    // anime/cartoony, flux-1.1-pro photoreal-painterly. Single-model lock
-    // matches the rest of the bot.
-    'sexy-steampunk-woman': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'steampunk-man': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'airship-female': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'airship-male': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'steampunk-spectacle': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'steam-transport': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'cozy-steampunk': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'steampunk-labs': { 'black-forest-labs/flux-1.1-pro': 100 },
-  },
+  // modelByPath: removed 2026-05-31. Previously every path was weighted-
+  // pinned to 100% flux-1.1-pro, which OVERRODE the 6-model allowedModels
+  // lineup above (engine consults modelByPath before allowedModels).
+  // Result: SteamBot's 12h post distribution was 100% flux-1.1-pro
+  // despite the bot-wide audit saying 6 models. Removing modelByPath lets
+  // the picker actually use the 6-model lineup as documented in
+  // BOT_MODEL_TALLY.md. To re-pin a specific path, add it back here.
+  //
+  // Notable lock removed: sexy-steampunk-woman / airship-female / airship-male
+  // had 2026-05-15 comments about "flux-dev produced inconsistent register"
+  // — but the 8-model audit since then has different survivors per path.
+  // Re-audit those paths individually if a future render quality regresses.
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
   // dream_mediums DB. Scene paths use steambot-hyperreal; female path uses

@@ -53,9 +53,15 @@ module.exports = {
     'black-forest-labs/flux-2-flex',
     'black-forest-labs/flux-2-max',
   ],
-  modelByPath: Object.fromEntries(
-    pools.PATHS.map((p) => [p, { 'black-forest-labs/flux-1.1-pro': 100 }])
-  ),
+  // modelByPath: removed 2026-05-31. Previously was Object.fromEntries(
+  //   pools.PATHS.map(p => [p, {'flux-1.1-pro': 100}])) — every path
+  // weighted-pinned to 100% flux-1.1-pro, which OVERRODE the 6-model
+  // allowedModels lineup above (engine consults modelByPath before
+  // allowedModels). Result: BrickBot's 12h post distribution was 100%
+  // flux-1.1-pro despite the bot-wide audit saying 6 models. Removing
+  // the modelByPath lets the picker actually use the 6-model lineup as
+  // documented in BOT_MODEL_TALLY.md. To re-pin a specific path, add
+  // it back here.
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
