@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
-import { router } from 'expo-router';
 import Constants from 'expo-constants';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { routeFromNotification, type NotificationRouteData } from '@/lib/notificationRouting';
 
 // handleNotification runs ONLY for pushes that arrive while the app is in the
 // FOREGROUND. Suppress the OS banner/alert/sound/badge here: the in-app
@@ -68,41 +68,89 @@ async function savePushToken(userId: string, token: string) {
   if (error && __DEV__) console.warn('[Push] Failed to save token:', error.message);
 }
 
+/** Module-level guard so the cold-start tap is handled exactly once per
+ *  process. Without this, every remount of `usePushNotifications` (which
+ *  happens on auth-state changes, fast refresh, etc.) would re-fire the
+ *  initial-response routing. */
+let coldStartHandled = false;
+
+/**
+ * usePushNotifications — two responsibilities, split into two effects so
+ * cold-start tap routing isn't gated by auth hydration.
+ *
+ * Effect 1 (mount-only, no deps): registers
+ *   • the foreground-arrival listener (logging only — banner suppressed
+ *     globally by setNotificationHandler above)
+ *   • the tap-response listener (warm-start: app was running when tap fired)
+ *   • the cold-start handler via getLastNotificationResponseAsync (the only
+ *     way iOS surfaces a tap that launched the app from a closed state —
+ *     addNotificationResponseReceivedListener is registered AFTER the OS
+ *     has already consumed the cold-start response, so the listener alone
+ *     would miss it). Routes via InteractionManager so we wait for
+ *     expo-router's navigator to mount before pushing.
+ *
+ * Effect 2 (user-gated): registers + persists the Expo push token for the
+ *   signed-in user. This is the part that needs auth — token registration
+ *   alone doesn't route notifications.
+ *
+ * Routing for all three paths uses the shared `routeFromNotification`
+ * helper in lib/notificationRouting.ts so the push tap and the inbox row
+ * tap stay in sync.
+ */
 export function usePushNotifications() {
   const user = useAuthStore((s) => s.user);
   const notificationListener = useRef<Notifications.Subscription>(undefined);
   const responseListener = useRef<Notifications.Subscription>(undefined);
 
+  // Effect 1: notification listeners + cold-start. NO user dep — these run
+  // on mount and stay registered for the app lifetime.
   useEffect(() => {
-    if (!user) return;
-
-    // Register and save token
-    registerForPushNotifications().then((token) => {
-      if (token) savePushToken(user.id, token);
-    });
-
-    // Handle notification received while app is open (foreground)
+    // Foreground arrival — log only; in-app indicators handle the UI.
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
       if (__DEV__) console.log('[Push] Received:', notification.request.content.title);
     });
 
-    // Handle notification tapped (opens app or brought to foreground)
+    // Warm-start tap handler. App was running (foreground OR background) when
+    // the user tapped the notification.
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      const data = response.notification.request.content.data;
-      if (data?.type === 'download_ready' && data?.uploadId) {
-        // Land on the post AND auto-save the now-cached HD (fulfills the
-        // "tap to save it to your photos" copy). See app/photo/[id].tsx.
-        router.push(`/photo/${data.uploadId}?downloadReady=1`);
-      } else if (data?.uploadId) {
-        router.push(`/photo/${data.uploadId}`);
-      } else if (data?.userId) {
-        router.push(`/user/${data.userId}`);
-      }
+      const data = response.notification.request.content.data as NotificationRouteData;
+      if (__DEV__) console.log('[Push] Tapped (warm):', data);
+      routeFromNotification(data, { deferUntilReady: true });
     });
+
+    // Cold-start tap handler. App was COMPLETELY CLOSED when the tap fired
+    // (iOS launched the app from the notification). The
+    // addNotificationResponseReceivedListener above is registered AFTER iOS
+    // has already delivered the cold-start response — so we'd miss it
+    // without explicitly fetching the last response here.
+    //
+    // Module-level coldStartHandled guard prevents re-handling on remount
+    // (hot reload, auth state change re-mounting RootLayout, etc.).
+    if (!coldStartHandled) {
+      coldStartHandled = true;
+      Notifications.getLastNotificationResponseAsync().then((response) => {
+        if (!response) return;
+        const data = response.notification.request.content.data as NotificationRouteData;
+        if (__DEV__) console.log('[Push] Tapped (cold):', data);
+        // deferUntilReady is critical here — at the moment this fires, the
+        // expo-router navigator typically hasn't mounted its initial route
+        // yet. InteractionManager runs the push after the first frame
+        // settles so the navigation tree is alive.
+        routeFromNotification(data, { deferUntilReady: true });
+      });
+    }
 
     return () => {
       if (notificationListener.current) notificationListener.current.remove();
       if (responseListener.current) responseListener.current.remove();
     };
+  }, []);
+
+  // Effect 2: register + persist push token (user-gated).
+  useEffect(() => {
+    if (!user) return;
+    registerForPushNotifications().then((token) => {
+      if (token) savePushToken(user.id, token);
+    });
   }, [user?.id]);
 }

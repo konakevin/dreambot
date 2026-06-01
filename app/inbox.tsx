@@ -1,7 +1,6 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { useQueryClient } from '@tanstack/react-query';
 import {
   View,
   Text,
@@ -18,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
+import { routeFromNotification } from '@/lib/notificationRouting';
 import * as Haptics from 'expo-haptics';
 import { useInboxGrouped, type InboxGroup } from '@/hooks/useInboxGrouped';
 import { useMarkGroupSeen } from '@/hooks/useMarkGroupSeen';
@@ -26,7 +26,6 @@ import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { useGroupActors } from '@/hooks/useGroupActors';
 import { InboxSkeleton } from '@/components/Skeleton';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
-import { useAlbumStore } from '@/store/album';
 import {
   useApproveFollowRequest,
   useApproveFollowAndFollowBack,
@@ -435,7 +434,6 @@ export default function InboxScreen() {
   const { mutate: deleteGroup } = useDeleteGroup();
   const { mutate: markAllSeen } = useMarkAllSeen();
   const { mutate: deleteAll } = useDeleteAllNotifications();
-  const queryClient = useQueryClient();
 
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -510,30 +508,14 @@ export default function InboxScreen() {
       return;
     }
     // Single-actor or individual types → navigate to the relevant surface.
-    const firstActorId = g.previewActorIds[0] ?? null;
-    if ((g.type === 'friend_request' || g.type === 'friend_accepted') && firstActorId) {
-      nav.push(`/user/${firstActorId}`);
-      return;
-    }
-    if ((g.type === 'follow_request' || g.type === 'follow_accepted') && firstActorId) {
-      nav.push(`/user/${firstActorId}`);
-      return;
-    }
-    if (g.type === 'dream_generated' && g.uploadId) {
-      useAlbumStore.getState().clearAlbum();
-      queryClient.invalidateQueries({ queryKey: ['dreamWish'] });
-      nav.push(`/photo/${g.uploadId}`);
-      return;
-    }
-    if (g.type === 'download_ready' && g.uploadId) {
-      useAlbumStore.getState().clearAlbum();
-      nav.push(`/photo/${g.uploadId}?downloadReady=1`);
-      return;
-    }
-    if (g.uploadId) {
-      useAlbumStore.getState().clearAlbum();
-      nav.push(`/photo/${g.uploadId}`);
-    }
+    // Delegates to the shared helper so push-tap + inbox-tap routing stays
+    // aligned. Helper handles clearAlbum + dreamWish invalidation as
+    // side effects before pushing. See lib/notificationRouting.ts.
+    routeFromNotification({
+      type: g.type,
+      uploadId: g.uploadId ?? undefined,
+      actorId: g.previewActorIds[0] ?? undefined,
+    });
   }
 
   function handleLongPress(g: InboxGroup) {
