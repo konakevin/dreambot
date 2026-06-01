@@ -13,6 +13,7 @@ interface DbMediumRow {
   flux_fragment: string;
   is_character_only: boolean;
   is_scene_only: boolean;
+  is_scene_eligible: boolean;
   face_swaps: boolean;
   nightly_skip: boolean;
   is_dream_eligible: boolean;
@@ -23,6 +24,7 @@ interface DbMediumRow {
   face_swap_flux_fragment: string | null;
   render_base: string | null;
   engine: string | null;
+  allowed_models: string[] | null;
 }
 
 /** App format — matches existing code expectations */
@@ -33,6 +35,12 @@ export interface ResolvedMedium {
   fluxFragment: string;
   isCharacterOnly: boolean;
   isSceneOnly: boolean;
+  /** True if this medium is in the curated "lush layered painterly/photoreal"
+   * set used for nightly pure_scene + epic_tiny composition rolls. See
+   * migration 213. Toggle via SQL: UPDATE dream_mediums SET is_scene_eligible
+   * = true WHERE key = 'X'. Distinct from isSceneOnly (which is a hard
+   * "this medium can only render scenes, never characters"). */
+  isSceneEligible: boolean;
   faceSwaps: boolean;
   nightlySkip: boolean;
   isDreamEligible: boolean;
@@ -51,6 +59,10 @@ export interface ResolvedMedium {
   faceSwapFluxFragment: string | null;
   renderBase: string | null;
   engine: string | null;
+  /** Replicate model ids this medium is allowed to render with. Used by
+   * modelPicker. Loaded here so callers can intersect with global
+   * scene_eligible_models for the nightly scene gate (mig 213). */
+  allowedModels: string[];
 }
 
 export interface ResolvedVibe {
@@ -68,6 +80,7 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     fluxFragment: row.flux_fragment,
     isCharacterOnly: row.is_character_only,
     isSceneOnly: !!row.is_scene_only,
+    isSceneEligible: !!row.is_scene_eligible,
     faceSwaps: row.face_swaps,
     nightlySkip: !!row.nightly_skip,
     isDreamEligible: !!row.is_dream_eligible,
@@ -80,6 +93,7 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     faceSwapFluxFragment: row.face_swap_flux_fragment,
     renderBase: row.render_base,
     engine: row.engine,
+    allowedModels: row.allowed_models ?? [],
   };
 }
 
@@ -104,7 +118,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
   const { data, error } = await sb
     .from('dream_mediums')
     .select(
-      'key,label,directive,flux_fragment,is_character_only,is_scene_only,face_swaps,nightly_skip,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine'
+      'key,label,directive,flux_fragment,is_character_only,is_scene_only,is_scene_eligible,face_swaps,nightly_skip,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine,allowed_models'
     )
     .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {
@@ -151,6 +165,29 @@ export async function randomDbMedium(): Promise<ResolvedMedium> {
 export async function randomDbVibe(): Promise<ResolvedVibe> {
   const vibes = await fetchVibes();
   return vibes[Math.floor(Math.random() * vibes.length)];
+}
+
+let cachedSceneEligibleModels: string[] | null = null;
+
+/** Fetch the curated list of models eligible for nightly pure_scene +
+ * epic_tiny composition rolls. Stored in engine_config singleton (mig 213).
+ * Cached per invocation. Returns [] on missing/empty config — callers should
+ * treat that as "no override, use the medium's normal allowed_models." */
+export async function fetchSceneEligibleModels(): Promise<string[]> {
+  if (cachedSceneEligibleModels) return cachedSceneEligibleModels;
+  const sb = getServiceClient();
+  const { data, error } = await sb
+    .from('engine_config')
+    .select('scene_eligible_models')
+    .eq('id', 1)
+    .single();
+  if (error || !data) {
+    console.warn('[dreamStyles] engine_config row missing; scene-model gate disabled');
+    cachedSceneEligibleModels = [];
+    return [];
+  }
+  cachedSceneEligibleModels = (data.scene_eligible_models as string[]) ?? [];
+  return cachedSceneEligibleModels;
 }
 
 /**
@@ -211,6 +248,24 @@ export async function resolveMediumFromDb(
     const eligibleKeys = mediums
       .filter((m) => m.isDreamEligible && m.faceSwaps && !NIGHTLY_FACE_SWAP_INELIGIBLE.has(m.key))
       .map((m) => m.key);
+    const pool = filterRecent(eligibleKeys, excludeRecent);
+    const picked = pick(pool);
+    return mediums.find((m) => m.key === picked)!;
+  }
+  // Nightly scene-composition pool (pure_scene + epic_tiny). Curated for
+  // lush layered painterly/photoreal — no kids/storybook/drawing-coded
+  // mediums. Toggle membership via SQL: UPDATE dream_mediums SET
+  // is_scene_eligible = true|false WHERE key = 'X'. Initial set (mig 213):
+  // canvas, photography, hyperreal, render, illustration.
+  if (key === 'dream_eligible_scene') {
+    const eligibleKeys = mediums
+      .filter((m) => m.isSceneEligible && m.isDreamEligible)
+      .map((m) => m.key);
+    if (eligibleKeys.length === 0) {
+      // Safety fallback if no mediums are flagged — preserves prior behavior.
+      console.warn('[dreamStyles] dream_eligible_scene pool empty; falling back to dream_eligible');
+      return resolveMediumFromDb('dream_eligible', undefined, excludeRecent);
+    }
     const pool = filterRecent(eligibleKeys, excludeRecent);
     const picked = pick(pool);
     return mediums.find((m) => m.key === picked)!;

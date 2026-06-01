@@ -15,7 +15,11 @@
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
-import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
+import {
+  resolveMediumFromDb,
+  resolveVibeFromDb,
+  fetchSceneEligibleModels,
+} from '../_shared/dreamStyles.ts';
 import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
@@ -190,6 +194,12 @@ Deno.serve(async (req) => {
   let logAxes: Record<string, unknown> = {};
   let resolvedMediumKey: string | undefined;
   let resolvedVibeKey: string | undefined;
+  // Hoisted for the post-try scene-composition model gate (mig 213). The
+  // gate runs after pickModel — needs to know the composition rolled inside
+  // the try block + the picked medium's allowed_models to intersect with
+  // engine_config.scene_eligible_models.
+  let resolvedComposition: 'character' | 'epic_tiny' | 'pure_scene' | undefined;
+  let resolvedMediumAllowedModels: string[] = [];
   let faceSwapSource: string | undefined;
   let faceSwapSources:
     | Array<{ role: string; sourceUrl: string; gender: 'male' | 'female' | null | undefined }>
@@ -420,6 +430,28 @@ Deno.serve(async (req) => {
         `[nightly-dreams] character path: re-rolled realistic medium '${oldKey}' -> stylized '${nightlyMedium.key}'`
       );
     }
+
+    // Scene-composition medium gate (mig 213). When the dream rolls
+    // pure_scene or epic_tiny, re-roll the medium from the curated
+    // "lush layered" subset (canvas / photography / hyperreal / render /
+    // illustration by default). Toggle membership via SQL — no code deploy
+    // needed: UPDATE dream_mediums SET is_scene_eligible = true|false ... .
+    // The model is also intersected with engine_config.scene_eligible_models
+    // later in the flow (search 'sceneEligibleModels' below).
+    const isSceneComposition = composition === 'pure_scene' || composition === 'epic_tiny';
+    if (isSceneComposition && !force_medium && !nightlyMedium.isSceneEligible) {
+      const oldKey = nightlyMedium.key;
+      nightlyMedium = await resolveMediumFromDb('dream_eligible_scene', undefined, recentMediums);
+      baseMedium = nightlyMedium;
+      resolvedMediumKey = nightlyMedium.key;
+      console.log(
+        `[nightly-dreams] scene path (${composition}): re-rolled medium '${oldKey}' -> scene-eligible '${nightlyMedium.key}'`
+      );
+    }
+
+    // Capture for the post-try scene-composition model gate.
+    resolvedComposition = composition;
+    resolvedMediumAllowedModels = nightlyMedium.allowedModels;
 
     const castPick = selectedCast.length > 0 ? (selectedCast[0] as DreamCastMember) : null;
     console.log(
@@ -1325,7 +1357,36 @@ Output ONLY the prompt.`;
   // the slot pipeline assembled the prompt. 3-way rotation: flux-dev /
   // flux-2-dev / flux-1.1-pro. Scene-only + pet single use the per-medium
   // model resolver as before.
-  const pickedModel = force_model ? force_model : faceSwapPrePickedModel || autoPicked.model;
+  let pickedModel = force_model ? force_model : faceSwapPrePickedModel || autoPicked.model;
+
+  // Scene-composition model gate (mig 213). For pure_scene + epic_tiny, the
+  // pickedModel is intersected with engine_config.scene_eligible_models.
+  // The medium was already re-rolled to a scene-eligible one above, so its
+  // allowed_models is the second constraint. If the intersection is empty
+  // (shouldn't happen in normal config; safety net), fall through to the
+  // original pickedModel. Skip when force_model is set so QA / testing
+  // overrides still work.
+  if (
+    !force_model &&
+    (resolvedComposition === 'pure_scene' || resolvedComposition === 'epic_tiny')
+  ) {
+    const sceneEligibleModels = await fetchSceneEligibleModels();
+    if (sceneEligibleModels.length > 0) {
+      const mediumAllowed = new Set(resolvedMediumAllowedModels);
+      const intersection = sceneEligibleModels.filter((m) => mediumAllowed.has(m));
+      if (intersection.length > 0 && !intersection.includes(pickedModel)) {
+        const oldModel = pickedModel;
+        pickedModel = intersection[Math.floor(Math.random() * intersection.length)];
+        console.log(
+          `[nightly-dreams] scene path (${resolvedComposition}): re-picked model '${oldModel}' -> scene-eligible '${pickedModel}' (intersection of ${intersection.length})`
+        );
+      } else if (intersection.length === 0) {
+        console.warn(
+          `[nightly-dreams] scene gate: NO intersection between scene_eligible_models and medium '${resolvedMediumKey}' allowed_models. Falling through to picker default '${pickedModel}'.`
+        );
+      }
+    }
+  }
   logAxes.model = pickedModel;
   console.log(
     `[nightly-dreams] User ${userId}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`
