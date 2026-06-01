@@ -438,26 +438,46 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
     }
   }
 
-  // Pulls the storage path out of a cast thumb_url and deletes the file
-  // (fire-and-forget). thumb_url shape:
+  // Pulls the storage path out of a cast thumb_url and deletes the file.
+  // thumb_url shape:
   //   https://<project>.supabase.co/storage/v1/object/public/avatars/<path>[?cache-bust]
-  function cleanupCastStorage(thumbUrl: string | undefined) {
+  // Returns a promise so the caller can await before mutating the recipe
+  // — the awaited variant is used by handleRemove (atomic delete), while
+  // re-upload sites can still fire-and-forget for the prior file.
+  async function cleanupCastStorage(thumbUrl: string | undefined): Promise<void> {
     if (!thumbUrl) return;
     const m = thumbUrl.match(/\/avatars\/(.+?)(\?|$)/);
-    if (m?.[1]) {
-      supabase.storage
-        .from('avatars')
-        .remove([decodeURIComponent(m[1])])
-        .catch((e) => {
-          if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
-        });
+    if (!m?.[1]) return;
+    const { error } = await supabase.storage.from('avatars').remove([decodeURIComponent(m[1])]);
+    if (error) {
+      if (__DEV__) console.warn('[DreamCast] storage cleanup failed', error.message);
+      throw error;
     }
   }
 
-  function handleRemove(role: CastRole) {
-    cleanupCastStorage(getMember(role)?.thumb_url);
-    removeCastMember(role);
+  async function handleRemove(role: CastRole) {
+    // ── Atomic delete (2026-05-31 hardening) ──
+    // Storage cleanup runs FIRST, awaited. Only if it succeeds do we
+    // remove the cast member from the recipe. Previously these were
+    // fire-and-forget in parallel — a transient Supabase Storage failure
+    // could leave the recipe pointing to a deleted file (or, worse, a
+    // deleted recipe entry but a leftover file), feeding stale URLs into
+    // the face-swap pipeline and producing canned-output collisions at
+    // the Replicate layer. If storage delete fails, we keep the recipe
+    // entry intact so the user can retry — they'll see the cast tile in
+    // their UI unchanged.
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const thumb = getMember(role)?.thumb_url;
+    if (thumb) {
+      try {
+        await cleanupCastStorage(thumb);
+      } catch (e) {
+        if (__DEV__)
+          console.warn('[DreamCast] aborting recipe removal — storage cleanup failed', e);
+        return; // do NOT mutate recipe
+      }
+    }
+    removeCastMember(role);
   }
 
   // When embedded (Edit Profile inline), skip the outer ScrollView, the

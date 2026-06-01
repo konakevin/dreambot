@@ -213,6 +213,46 @@ async function perturbSourceImage(
   };
 }
 
+/**
+ * HEAD-fetch the source URL to confirm it's reachable + an image before
+ * burning a Replicate call. Catches the "deleted cast photo / orphan URL
+ * in recipe → Replicate 404 → canned-output fallback" failure chain that
+ * the 2026-05-31 audit surfaced. Cheap (~100-200ms) compared to a wasted
+ * face-swap call (~5-15s) that returns a hardcoded scene.
+ *
+ * Throws with a precise reason — caller's outer catch refunds the
+ * sparkle and surfaces to the user instead of silently returning a
+ * canned image.
+ */
+async function validateSourceUrl(url: string, ctx: string): Promise<void> {
+  if (!url || typeof url !== 'string' || !url.startsWith('http')) {
+    throw new Error(`${ctx} invalid source URL: ${url || '(empty)'}`);
+  }
+  let res: Response;
+  try {
+    res = await fetch(url, { method: 'HEAD' });
+  } catch (e) {
+    throw new Error(
+      `${ctx} source fetch failed: ${url.slice(-50)} (${(e as Error).message.slice(0, 60)})`
+    );
+  }
+  if (!res.ok) {
+    throw new Error(`${ctx} source unreachable: ${url.slice(-50)} (HTTP ${res.status})`);
+  }
+  const ct = (res.headers.get('content-type') || '').toLowerCase();
+  // Be permissive on content-type — some Supabase Storage responses have a
+  // generic application/octet-stream label even for valid images. Reject
+  // only obvious non-image types (text/html = 404 page from CDN, application/json
+  // = error response, etc).
+  if (
+    ct.startsWith('text/') ||
+    ct.startsWith('application/json') ||
+    ct.startsWith('application/xml')
+  ) {
+    throw new Error(`${ctx} source not an image: ${url.slice(-50)} (content-type: ${ct})`);
+  }
+}
+
 async function faceSwapOnce(
   sourceImageUrl: string,
   targetImageUrl: string,
@@ -222,16 +262,15 @@ async function faceSwapOnce(
   model: FaceSwapModel,
   maxWaitMs: number = DEFAULT_MAX_WAIT_MS
 ): Promise<string> {
-  // Pass the source URL directly with a query string for cache-busting.
-  // The original perturbSourceImage step (decode + encode + upload) was
-  // the CPU bottleneck for dual face swap (4 simultaneous decode/encodes
-  // when run in parallel), pushing us past Supabase's 2s budget.
-  const sourceForReplicate =
-    sourceImageUrl +
-    (sourceImageUrl.includes('?') ? '&' : '?') +
-    'b=' +
-    Date.now() +
-    Math.random().toString(36).slice(2, 6);
+  // Source is sent as-is. Cache-busting (when needed) is now done UPFRONT
+  // in faceSwap() via perturbSourceImage — byte-level perturbation
+  // genuinely defeats Replicate's content-hash cache, unlike the previous
+  // URL query-string trick which Replicate ignores (it hashes downloaded
+  // bytes, not the URL — that's why the 2026-05-31 canned-output bug
+  // recurred even after the cdingram-primary swap). Gated to single-cast
+  // only via the perturb option on faceSwap() to preserve the dual CPU
+  // budget (2 parallel target-half decode/encodes already fill it).
+  const sourceForReplicate = sourceImageUrl;
   const perturbedPath: string | null = null;
 
   try {
@@ -337,18 +376,34 @@ export async function faceSwap(
   replicateToken: string,
   supabase: SupabaseClient,
   userId: string,
-  opts?: { maxWaitMs?: number; retry?: boolean; skipPrimary?: boolean }
+  opts?: { maxWaitMs?: number; retry?: boolean; skipPrimary?: boolean; perturb?: boolean }
 ): Promise<string> {
   const maxWaitMs = opts?.maxWaitMs ?? DEFAULT_MAX_WAIT_MS;
   const retry = opts?.retry ?? true;
-  // skipPrimary routes straight to the fallback models (cdingram →
-  // pikachupichu25), skipping the yan-ops primary entirely. Used by the
-  // dup-detect retry to escape yan-ops's canned-output bug — re-running
-  // yan-ops returns the same canned scene, so the only escape is a different
-  // model. See nightly-dreams dup-detect block.
+  // skipPrimary routes straight to the fallback models (yan-ops →
+  // pikachupichu25), skipping the cdingram primary entirely. Used by the
+  // dup-detect retry to escape canned-output collisions — re-running the
+  // primary returns the same canned scene, so the only escape is a
+  // different model. See nightly-dreams dup-detect block.
   const skipPrimary = opts?.skipPrimary ?? false;
+  // perturb: byte-level source-image perturbation that defeats Replicate's
+  // content-hash cache (the URL query-string cache-bust we'd been using
+  // since 2026-05-09 was a placebo — Replicate hashes downloaded BYTES,
+  // not the URL, so the canned-output bug for stuck face embeddings was
+  // free to recur. Restored 2026-05-31 after Kevin's nightly hit a
+  // recurring canned scene). Default ON for single-cast; dual-cast
+  // callers pass `perturb: false` to preserve CPU budget (2 parallel
+  // target-half decode/encodes already fill it).
+  const perturb = opts?.perturb ?? true;
   const startedAt = Date.now();
   const deadline = startedAt + maxWaitMs;
+
+  // ── Pre-flight: validate the source URL before any expensive work ──
+  // Catches deleted/orphaned cast photo URLs (recipe still points to a
+  // file that was deleted from storage). Without this, Replicate fetches
+  // 404 and the face-swap model returns a hardcoded canned scene — the
+  // 2026-05-31 root cause Kevin chased down.
+  await validateSourceUrl(sourceImageUrl, '[faceSwap]');
 
   // Convert data: URL target → temp HTTPS upload. Replicate's face-swap
   // models can't reach data: URIs (they fetch from inside Replicate's infra).
@@ -359,6 +414,25 @@ export async function faceSwap(
     supabase,
     userId
   );
+
+  // ── Perturb source ONCE upfront (single-cast path only) ──
+  // The perturbed URL is reused across primary + fallback attempts so we
+  // pay the decode/encode cost once per face-swap call, not per attempt.
+  let perturbedSource: { url: string; path: string } | null = null;
+  if (perturb) {
+    try {
+      perturbedSource = await perturbSourceImage(sourceImageUrl, supabase, userId);
+    } catch (e) {
+      // Perturbation failure isn't fatal — fall back to the raw URL. The
+      // canned-output cache hit will recur but we don't compound it with
+      // a hard failure (Kevin's plus_one face would still render with
+      // their unperturbed photo, just possibly into the canned scene).
+      console.warn(
+        `[faceSwap] perturbSourceImage failed (continuing unperturbed): ${(e as Error).message.slice(0, 80)}`
+      );
+    }
+  }
+  const effectiveSource = perturbedSource?.url ?? sourceImageUrl;
 
   const [primary, ...fallbacks] = FACE_SWAP_MODELS;
   const maxPrimaryAttempts = retry ? MAX_PRIMARY_ATTEMPTS : 1;
@@ -373,7 +447,7 @@ export async function faceSwap(
           const remaining = deadline - Date.now();
           if (remaining <= 0) throw new Error(`Face swap deadline exceeded (${primary.name})`);
           const url = await faceSwapOnce(
-            sourceImageUrl,
+            effectiveSource,
             httpsTarget,
             replicateToken,
             supabase,
@@ -416,7 +490,7 @@ export async function faceSwap(
       try {
         console.log(`[faceSwap] trying fallback ${fb.name} (${remaining}ms budget remaining)`);
         const url = await faceSwapOnce(
-          sourceImageUrl,
+          effectiveSource,
           httpsTarget,
           replicateToken,
           supabase,
@@ -444,6 +518,15 @@ export async function faceSwap(
         .from('uploads')
         .remove([targetTempPath])
         .catch((e) => console.warn('[faceSwap] temp target cleanup failed:', (e as Error).message));
+    }
+    // Clean up the perturbed source temp upload — restored 2026-05-31.
+    if (perturbedSource?.path) {
+      supabase.storage
+        .from('uploads')
+        .remove([perturbedSource.path])
+        .catch((e) =>
+          console.warn('[faceSwap] perturbed source cleanup failed:', (e as Error).message)
+        );
     }
   }
 }
@@ -611,11 +694,19 @@ export async function dualFaceSwap(
       maxWaitMs: swapBudgetMs,
       retry: false,
       skipPrimary,
+      // Skip byte-level source perturbation in the dual path — 2 parallel
+      // decode/encodes of the source plus the 2 already-running target-half
+      // encodes blow the per-isolate CPU budget (the 2026-05-09 reason
+      // perturbSourceImage was originally disabled). Dual relies on the
+      // dup-detect block in nightly-dreams to catch canned-output
+      // collisions instead.
+      perturb: false,
     }),
     faceSwap(rightSourceUrl, rightCropUrl, replicateToken, supabase, userId, {
       maxWaitMs: swapBudgetMs,
       retry: false,
       skipPrimary,
+      perturb: false,
     }),
   ]);
   console.log('[dualFaceSwap] Both swaps complete');
