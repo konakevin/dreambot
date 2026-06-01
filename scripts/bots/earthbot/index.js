@@ -87,6 +87,7 @@ const pathBuilders = {
   'deep-forest': require('./paths/deep-forest'), // axis-system (2026-05-20)
   'lush-jungle': require('./paths/lush-jungle'), // axis-system (2026-05-20)
   'iceland-raw': require('./paths/iceland-raw'), // axis-system (2026-06-01 activation)
+  'andes-patagonia': require('./paths/andes-patagonia'), // axis-system (2026-06-01 activation)
   // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
@@ -112,6 +113,7 @@ const EARTH_PATHS = [
   // 7 path-bespoke pools (subject / foreground / lighting / atmosphere /
   // sky / scale_prover / phenomenon).
   'iceland-raw',
+  'andes-patagonia',
 ];
 
 const BEACH_PATHS = [
@@ -156,8 +158,26 @@ const BEACH_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpi
 // the geographic prior before the medium's mountain-trope language kicks
 // in. Keep it MINIMAL — no biome enumeration (caused biome over-anchoring
 // on African R5) and no warm-color qualifier (Iceland palette is cool).
+// 2026-06-01 — keep BIOME-AGNOSTIC after the Andes-Patagonia diagnostic:
+// enumerating biome materials ("basalt and black volcanic sand and glacier
+// ice and Icelandic moss") risks Flux locking to the first-named material
+// across all subject types. The R0 Iceland renders happened to look OK
+// because Iceland's signature LOOKS overlap (basalt + glacier + black sand
+// appear across most subjects) but better practice is the biome-agnostic
+// recipe used for Andes.
 const ICELAND_RAW_PREFIX =
-  'Iceland raw nature, basalt and black volcanic sand and glacier ice and Icelandic moss, sharp detail, gallery-quality, masterpiece';
+  'Iceland raw nature, sharp detail, gallery-quality, masterpiece';
+// 2026-06-01 — Andes/Patagonia bespoke prefix. CRITICAL: keep BIOME-AGNOSTIC.
+// First attempt enumerated biomes ("granite spires and glacier ice and salt-
+// pan flats and emerald canopy") and Flux locked every render to GRANITE
+// SPIRES because that's the first-named biome — Iguazu Falls, Valle de la
+// Luna, Chimborazo volcano, Alpamayo ice spires ALL rendered as Patagonian
+// granite peaks. Same biome-over-anchoring bug from African-landscape R5.
+// Fix: anchor "South American raw nature" without naming any specific
+// biome, let the SCENE content carry the biome (per
+// [[feedback_regional_path_buildout_lessons]] Lesson #1).
+const ANDES_PATAGONIA_PREFIX =
+  'South American raw nature, sharp detail, gallery-quality, masterpiece';
 
 // Locked to cinematic only — Kevin's preferred single-vibe lock for
 // EarthBot 2026-05-05. Combined with the locked earthbot_photography medium
@@ -201,6 +221,7 @@ module.exports = {
     // generic EARTH_PREFIX's "landscape photography" + medium's atmospheric
     // perspective pulled R0 to European Alps/Dolomites with pine forests).
     'iceland-raw': ICELAND_RAW_PREFIX,
+    'andes-patagonia': ANDES_PATAGONIA_PREFIX,
   },
 
   // Per-path suffix override — engine reads this BEFORE promptSuffixByMedium
@@ -324,10 +345,11 @@ module.exports = {
       'seasonal-shift',
       'hidden-corner',
       'desert-southwest',
-      // 2026-06-01: regional toponym path. Haiku polish would compress away
-      // Reynisfjara / Vatnajökull / Jökulsárlón / Stuðlagil — those are
-      // load-bearing for Icelandic identity. Skip polish to keep them.
+      // 2026-06-01: regional toponym paths. Haiku polish would compress away
+      // load-bearing toponyms (Reynisfjara / Vatnajökull / Torres del Paine
+      // / Fitz Roy / Salar de Uyuni / Cotopaxi). Skip polish to keep them.
       'iceland-raw',
+      'andes-patagonia',
     ],
   },
 

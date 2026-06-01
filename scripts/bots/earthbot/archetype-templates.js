@@ -830,8 +830,90 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
   // authored + R0 validated.
   EARTHBOT_ASIA_LANDSCAPE: ({ slots }) =>
     `// PLACEHOLDER — EARTHBOT_ASIA_LANDSCAPE template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
-  EARTHBOT_ANDES_PATAGONIA: ({ slots }) =>
-    `// PLACEHOLDER — EARTHBOT_ANDES_PATAGONIA template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_ANDES_PATAGONIA: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      subject,
+      foreground_anchor,
+      light_condition,
+      atmosphere,
+      sky_layer,
+      scale_prover,
+      phenomenon,
+    } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one real-Earth Patagonian/Andean event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or atmosphere, DROP IT. Real-Earth ONLY — no aurora (rare at this latitude / not the signature look), no bioluminescent, no fantasy-cosmic.`
+      : '';
+
+    return `You are a fine-art landscape photographer writing ONE ANDES / PATAGONIA RAW NATURE scene for EarthBot. Spans the full breadth of South American raw geology — Patagonia (Torres del Paine granite spires, Fitz Roy + Cerro Torre, Perito Moreno glacier, Lago Argentino, Tierra del Fuego, Patagonian steppe), the Andes (Cotopaxi + Chimborazo volcanoes, Huayna Picchu + Salkantay peaks, Cordillera Blanca, Aconcagua), Altiplano (Salar de Uyuni mirror flats, Atacama desert, Laguna Colorada + Laguna Verde, Valle de la Luna), Amazon basin (canopy from above, blackwater channels, várzea floodplains), Iguazu Falls, Cordillera del Paine, Marble Caves (Lago General Carrera). Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL SOUTH AMERICAN GEOLOGY ONLY ━━━
+
+This is REAL Patagonia / Andes / Altiplano / Amazon — never fantasy, never alien. Phenomena are real-Earth (lenticular cloud over Patagonian peaks, alpenglow on granite spires, sea of clouds at Andean dawn, Atacama atmospheric clarity, mist drift in Amazon canopy). Ground every render in specific South American geographic identity: GRANITE spires (NOT generic alps), GLACIER fields with patagonian-blue ice (NOT North American), SALAR salt mirror flat (NOT North American playa), Amazon canopy with characteristic emergent trees, ALTIPLANO scrub (yareta cushions, tola shrub, not desert sand). The Andes are the highest tropical mountains on Earth.
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT FEATURES / ZERO CULTURAL HERITAGE ━━━
+
+The entire frame is uninhabited raw nature. NEVER a figure, NEVER a hiker, NEVER a vehicle, NEVER buildings or huts, NEVER roads, NEVER trail markers, NEVER fences, NEVER aqueducts. Critically: NEVER Machu Picchu, NEVER Sacsayhuamán, NEVER ANY Inca ruins or stonework, NEVER cultural heritage sites (respect — never render). Pure raw landscape only. Wildlife at scale-prover scale (guanaco / vicuña / condor silhouette / flamingo / llama herd) is permitted at TINY postage-stamp distance, never hero-scale.
+
+━━━ STYLE GUARDS ━━━
+
+- NO photographer name-drops in the output prompt (Marc Adamus / Max Rive / Daniel Kordan / Pie Aerts — these leak into Flux and bias the render toward those photographers' specific Patagonia shots). Describe morphologically, never credit any photographer.
+- Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
+- Avoid stylized / 3D-render / cartoony — photographic only
+- Avoid "fire" as a noun (Flux renders literal flames) — for active volcanism use "molten lava glow" / "incandescent crater rim" / "ember-red eruption fountain" as adjective-led phrases
+- Avoid generic "mountain landscape" — name the SPECIFIC South American formation (Torres del Paine, Fitz Roy, Cotopaxi, Aconcagua) so Flux locks the prior to the right peak
+
+━━━ THE SUBJECT (the iconic Patagonian/Andean composition) ━━━
+${subject}
+
+━━━ FOREGROUND ANCHOR (close-edge detail in the lower 15-20% of frame) ━━━
+${foreground_anchor}
+
+━━━ LIGHT CONDITION ━━━
+${light_condition}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ SKY LAYER ━━━
+${sky_layer}
+
+━━━ SCALE PROVER (tiny element at deep distance — postage-stamp scale) ━━━
+${scale_prover}
+
+Render small — proves the landscape is VAST. Patagonian/Andean scale-provers ONLY (lone guanaco silhouette / vicuña pair / Andean condor wingspan / single Andean fox / flamingo flock on altiplano laguna / matchstick-tiny gaucho-zero geometry on steppe / single tapir at Amazon canopy edge). Never hero-scale, never anthropomorphic.${phenomenonBlock}
+
+━━━ HARD RULE — SOUTH AMERICAN PALETTE + ATMOSPHERIC DEPTH ━━━
+
+Multi-tier depth (foreground anchor + midground hero geology + atmospheric distant horizon). Palette by biome: PATAGONIA cool greys and granite + glacier blues + Patagonian steppe ochre; ANDES alpenglow rose-amber on snow + cool morning blue + lenticular pink; ALTIPLANO blinding salt-white + cobalt sky + flamingo coral + laguna mineral colors (red Colorada, green Verde); ATACAMA terracotta and burnt-orange with high cobalt sky; AMAZON deep emerald + black-water reflection + golden canopy break. Air feels thin and clean at high elevation (Andes / Altiplano) OR humid emerald (Amazon) — viewer should feel which biome.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'South American raw nature palette — biome-dependent (cool Patagonian greys + glacier blues, alpenglow Andean rose, salt-white + cobalt altiplano, emerald Amazon)'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE ━━━
+
+The iconic South American subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Photographic — hyperreal fine-art landscape, never stylized.
+
+━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
+
+The polished prompt MUST be authored in this exact sequence:
+  1. **OPEN WITH THE SUBJECT** — the South American hero (Torres del Paine granite spires / Fitz Roy peak / Perito Moreno glacier face / Salar de Uyuni mirror flat / Cotopaxi volcano / Atacama Valle de la Luna / Iguazu Falls / Marble Caves of Lago General Carrera / Amazon canopy / etc.) is the FIRST phrase. NEVER open with foreground detail. NEVER open with light or atmosphere.
+  2. Then the SKY LAYER
+  3. Then the LIGHT CONDITION + ATMOSPHERE
+  4. Then the FOREGROUND ANCHOR (small near-camera detail in lower 15-20%, NOT the hero)
+  5. Then the SCALE PROVER (tiny element at deep distance)
+  6. Then any rolled PHENOMENON
+  7. Finally palette / mood notes
+
+The viewer's eye must land on the TORRES / FITZ ROY / GLACIER / SALAR / VOLCANO / FALLS / CANOPY first — NEVER on a foreground rock or grass clump. The foreground_anchor and scale_prover are SUPPORTING DETAILS not the subject.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the South American subject. PRESERVE the toponym from the subject slot verbatim in the opening phrase — Torres del Paine / Fitz Roy / Cerro Torre / Perito Moreno / Lago Argentino / Cotopaxi / Chimborazo / Aconcagua / Salar de Uyuni / Atacama / Laguna Colorada / Laguna Verde / Valle de la Luna / Iguazu / Marble Caves / Patagonia / Tierra del Fuego — these geographic anchors are LOAD-BEARING for South American identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" — these are style-prior triggers that interfere with the SUBJECT anchoring, NEVER include them at the prompt open). Describe positive content only — no negation language like "no humans" or "no architecture" (Flux tokenizer leaks those words).`;
+  },
   EARTHBOT_AUSTRALIAN_OUTBACK: ({ slots }) =>
     `// PLACEHOLDER — EARTHBOT_AUSTRALIAN_OUTBACK template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
   EARTHBOT_ICELAND_RAW: ({ slots, sharedDNA, vibeDirective }) => {

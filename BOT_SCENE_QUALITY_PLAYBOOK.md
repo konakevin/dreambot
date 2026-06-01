@@ -1172,6 +1172,45 @@ The fix: emptied the wrapper to `''`. Sonnet's body became the first content tok
 
 ---
 
+## Biome / material / style enumeration in a path prefix = first-named-noun lock (CRITICAL — 2026-06-01)
+
+A SPECIFIC sub-case of "stuffed wrappers" with its own failure signature on EarthBot's regional paths (african-landscape, andes-patagonia, iceland-raw, asia-landscape, european-wilderness — paths that need to span multiple biomes within ONE region).
+
+**The trap:** when a region spans visually-distinct biomes (Africa = savanna + Congo rainforest + Okavango Delta + Sahara dunes + Madagascar baobab forest; South America = Patagonian granite + Andean volcanoes + Altiplano salt + Amazon canopy; Iceland = black sand + glaciers + basalt + moss-on-lava), it FEELS smart to enumerate them in the path's prefix so Flux "knows the range":
+
+```js
+// WRONG — every path render locks to the FIRST-named biome
+'African landscape, savanna grass plain or Okavango Delta or Sahara dune sea or Congo Basin canopy or Madagascar baobab forest, sharp detail, gallery-quality, masterpiece'
+
+// WRONG — same trap with materials
+'South American raw nature, Andes Patagonia Altiplano Amazon, granite spires and glacier ice and salt-pan flats and emerald canopy, sharp detail, gallery-quality, masterpiece'
+
+// WRONG — same trap with materials on Iceland
+'Iceland raw nature, basalt and black volcanic sand and glacier ice and Icelandic moss, sharp detail, gallery-quality, masterpiece'
+```
+
+**What happens:** CLIP attends most to the FIRST-named noun. Every render gets locked to that biome/material regardless of what subject Sonnet's body wrote. The pool is varied; the renders are not. Bit:
+
+- **African-landscape R5 (2026-06-01)** — prefix opened "savanna grass plain or Okavango Delta...". 3 of 4 non-savanna SUBJECTS rolled (Okavango Delta lily lagoon, Okavango papyrus channel, Etosha salt pan) ALL rendered as savanna with acacia.
+- **Andes-Patagonia R0 (2026-06-01)** — prefix opened "granite spires and glacier ice...". 5/5 renders were the same Patagonian granite-spire formation even though subjects rolled Iguazu Falls, Cerro Torre, Valle de la Luna, Alpamayo ice spires, and Chimborazo volcano.
+
+**The fix — region-only prefix, biome-agnostic:**
+
+```js
+// RIGHT — name the REGION only, let the SCENE content carry the biome
+'African raw nature, sharp detail, gallery-quality, masterpiece'
+'South American raw nature, sharp detail, gallery-quality, masterpiece'
+'Iceland raw nature, sharp detail, gallery-quality, masterpiece'
+```
+
+The subject pool entries (each one toponym-led — "Reynisfjara black-sand beach...", "Salar de Uyuni mirror flat...", "Okavango Delta papyrus channel...") then carry full attention because no biome noun is already locked in.
+
+**Diagnostic test:** if a path's renders feel like the same composition across a varied subject pool, count biome / material nouns in `promptPrefixByPath[path]`. If there's more than ONE, strip them down to a region-anchor + quality terms only.
+
+**Generalizes:** the same trap exists for STYLE enumeration ("oil painting or watercolor or pencil sketch"), MEDIUM enumeration ("photography or illustration or 3D render"), and CHARACTER-CLASS enumeration ("ranger or rogue or sorceress"). Anything multi-noun-in-prefix locks to the first noun. Already covered for character paths in the "Stuffed wrappers" section above; THIS section is the explicit scene-path / region-path analog so future biome / material wrappers don't repeat it.
+
+---
+
 ## "Bespoke per path" extends to the PROMPT WRAPPER LAYER, NOT just pools (CRITICAL — 2026-05-13)
 
 Pool variety is INSUFFICIENT for a path to feel distinct from other paths sharing the same bot. **The prompt wrapper layer dominates Flux's first-token bias.** A bot-level / medium-level prefix injected before Sonnet's bespoke body locks the visual style BEFORE Flux reads any pool content.

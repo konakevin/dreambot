@@ -584,6 +584,7 @@ April 2026 audit found 14 silently-broken issues. Pattern: a step needed elsewhe
 - **NEVER write a SQL migration without checking `ls supabase/migrations/` for the next free number.**
 - **NEVER edit another agent's WIP files** when worktrees exist. Edit only files in your task's scope.
 - **NEVER propose a bot path migration without re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` first**, and update it with every new lesson — don't wait to be asked.
+- **NEVER enumerate biomes / materials / sub-styles in a path's `promptPrefixByPath`** (or any prompt-prefix that prepends to EVERY render of that path). Flux's CLIP tokenizer attends most to the FIRST-named noun in a comma-separated list and renders ONLY that, regardless of the actual subject content rolled. Symptom: every render on the path looks like the same composition even though the subject pool is varied. Bit African-landscape R5 ("savanna or Okavango Delta or Sahara dune sea or Congo Basin canopy or Madagascar baobab forest" → every subject rendered as savanna) and Andes-Patagonia R0 ("granite spires and glacier ice and salt-pan flats and emerald canopy" → Iguazu Falls / Valle de la Luna / Chimborazo volcano / Alpamayo ice spires all rendered as Patagonian granite peaks). FIX: prefix names the REGION only (`'South American raw nature, sharp detail, gallery-quality, masterpiece'`), the SCENE content carries the biome.
 
 ---
 

@@ -776,6 +776,328 @@ Each entry 14-22 words, single line. Output as a NUMBERED list.`,
     ],
     instructions: `Output ONLY a numbered list of {COUNT} Iceland phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // ANDES-PATAGONIA path (2026-06-01 fresh build).
+  // South American raw nature — Patagonia granite spires + glaciers,
+  // Andes volcanoes + peaks, Altiplano salt + lagunas, Amazon canopy.
+  // Same guardrails as iceland-raw (lessons from feedback_regional_path_buildout_lessons):
+  //   • NO photographer names anywhere
+  //   • NO negation language in pool entries
+  //   • Subject entries LEAD with the toponym in first 5-8 words
+  //   • NO Machu Picchu / Inca ruins (cultural heritage — never render)
+  // ═══════════════════════════════════════════════════════════
+
+  andes_patagonia_subject: {
+    format: 'simple',
+    theme: `PURE ANDES / PATAGONIA / SOUTH AMERICAN RAW NATURE SCENES for EarthBot's andes-patagonia path. Each entry is ONE unambiguous South American landscape composition spanning the full breadth of South America's signature geology — Patagonia (Torres del Paine, Fitz Roy, Cerro Torre, Perito Moreno glacier, Lago Argentino, Lago Pehoé, Tierra del Fuego, Patagonian steppe), Andes (Cotopaxi volcano, Chimborazo, Huayna Potosí, Aconcagua, Cordillera Blanca, Salkantay), Altiplano (Salar de Uyuni mirror flats, Atacama, Laguna Colorada with flamingos, Laguna Verde, Valle de la Luna, Tatio geysers), Amazon basin (canopy from above, blackwater channels), Iguazu Falls, Marble Caves of Lago General Carrera. Each entry 30-55 words.
+
+⚠️ MANDATORY — every entry must LEAD with a South American toponym in the first 5-8 words. Required openings include: "Torres del Paine granite spires...", "Fitz Roy peak...", "Cerro Torre summit...", "Perito Moreno glacier face...", "Lago Argentino glacial lake...", "Patagonian steppe rolling...", "Cotopaxi volcano cone...", "Chimborazo summit...", "Aconcagua peak...", "Salar de Uyuni mirror flat...", "Atacama Valle de la Luna...", "Laguna Colorada red waters...", "Laguna Verde mineral lake...", "Iguazu Falls cataract...", "Amazon canopy emergent layer...", "Marble Caves of Lago General Carrera...", "Tatio geyser field...", "Tierra del Fuego coastal..." — toponym FIRST, then the rest of the composition.
+
+🎯 BIOME COVERAGE TARGET (across 25 entries):
+  • Patagonia granite spires (Torres del Paine / Fitz Roy / Cerro Torre): 5 entries
+  • Patagonian glaciers + glacial lakes (Perito Moreno / Lago Argentino / Lago Pehoé): 3 entries
+  • Patagonian steppe + Tierra del Fuego coastal: 2 entries
+  • Andes volcanoes (Cotopaxi / Chimborazo / Tungurahua / Villarrica): 3 entries
+  • Andes high peaks (Aconcagua / Huayna Potosí / Cordillera Blanca): 2 entries
+  • Altiplano salt flats (Salar de Uyuni mirror): 3 entries
+  • Altiplano lagunas (Laguna Colorada / Verde with flamingos): 2 entries
+  • Atacama (Valle de la Luna / Tatio geyser field): 2 entries
+  • Amazon canopy + blackwater: 2 entries
+  • Iguazu Falls + Marble Caves: 1 entry
+
+🚫 ABSOLUTE BANS (every entry MUST clear these):
+  • ZERO photographer names (Marc Adamus / Max Rive / Daniel Kordan / Pie Aerts / Iurie Belegurschi — these leak verbatim into the polished output)
+  • ZERO Machu Picchu, ZERO Sacsayhuamán, ZERO Inca ruins, ZERO ANY cultural heritage stonework (respect — never render)
+  • ZERO humans, gauchos, villages, huts, fences, roads, vehicles, refugios
+  • ZERO sci-fi / fantasy / portal / impossible-reflection
+  • ZERO negation phrases — describe positive content only
+  • ZERO North American / European mountain analogues (no "Alps-like", no "Yosemite-style") — describe South American on its own terms
+
+✅ EVERY ENTRY MUST INCLUDE:
+  • South American toponym in first 5-8 words
+  • Specific geological hero (granite spires / glacier face / volcano cone / salt mirror flat / etc.)
+  • Multi-tier depth language (foreground + midground hero + atmospheric distance OR canopy depth)
+  • South-America-coded materials (granite / glacier ice / salt-pan crust / volcanic basalt / altiplano scrub / Amazon emergent trees / Patagonian beech forest)
+  • A specific lighting moment (alpenglow rose-amber on granite / blue-hour twilight / midday cobalt altiplano / golden-hour rake / sea-of-clouds dawn)
+
+Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Torres del Paine granite spires at alpenglow, the three iconic Cuernos catching first-light rose-amber wash against deep cobalt zenith, foreground glacial-river cobbles wet at near edge, midground Lago Pehoé turquoise water below, distant Patagonian steppe horizon',
+      'Fitz Roy peak at sunrise, the jagged granite skyline turning vivid red-orange against cold cobalt sky, foreground Patagonian lenga forest in dawn shadow, midground Río de las Vueltas valley with morning mist, glacier shoulder cool blue',
+      'Cerro Torre summit at blue-hour, the impossibly slender granite needle pierced through a lenticular cloud cap, foreground glacial moraine boulders dark at near edge, Patagonian ice cap below in pre-dawn cobalt, distant Cordillera in soft pink',
+      'Perito Moreno glacier face at midday, the 70-metre vertical ice wall calving into Lago Argentino with blue-white ice tier, foreground close turquoise glacial water at near edge, ice tongue stretching to distant Andes, cobalt sky',
+      'Lago Argentino glacial lake at golden hour, the milky-turquoise water filling the foreground with floating iceberg shards, midground distant glacier tongue descending from Cordillera, granite spires beyond in cool teal haze',
+      'Salar de Uyuni mirror flat at dawn, thin water layer reflecting the cobalt-to-amber gradient sky in perfect symmetry, foreground close salt-polygon hexagonal crust through the water, distant Tunupa volcano silhouette doubled in reflection',
+      'Cotopaxi volcano cone at sunrise, the symmetrical glacier-capped 5897-metre stratovolcano catching first-light alpenglow, foreground Altiplano grassland with páramo cushion plants, mid-distance herd of vicuña pencil-tall, cobalt sky',
+      'Atacama Valle de la Luna at sunset, the eroded salt-and-gypsum ridges turning copper-amber against deep cobalt sky, foreground close cracked salt-crust surface at near edge, mid-distance ridge-line shadow patterns, distant Andean range silhouette',
+      'Laguna Colorada red waters at midday, the borax-and-algae crimson-red lake stretching to a distant Altiplano horizon, foreground close white borax crust at the lake edge, midground thousand-plus flamingo flock as small dark dots, cobalt sky',
+      'Iguazu Falls cataract at golden hour, the horseshoe of 275 individual cascades plunging into the Devils Throat gorge, foreground rainforest emerald canopy at near edge, mist plume rising to backlit golden rainbow, distant cataract wall stretching corner to corner',
+      'Marble Caves of Lago General Carrera, swirling marble walls patterned in cobalt-blue and white striations reflecting turquoise lake water, foreground close polished marble at near cave edge, mid-distance cave interior receding, distant lake horizon visible through arch',
+      'Amazon canopy emergent layer aerial view, the dense emerald rainforest canopy stretching to a flat horizon with kapok and ceiba emergent trees rising above, foreground close ceiba crown catching golden-hour sidelight, mist drift in mid-canopy, distant river bend visible',
+      'Aconcagua peak at alpenglow, the 6961-metre highest peak in the Americas catching first-light rose against high-altitude cobalt sky, foreground close moraine boulder field, midground glacier fan descending, distant Andean range in cool blue atmospheric haze',
+      'Tatio geyser field at dawn, the 4320-metre altitude geothermal basin with eighty steaming geyser cones backlit copper against cold cobalt sky, foreground close mineral-crusted geyser rim, midground steam plume curtain, distant Andean peaks silhouetted',
+      'Patagonian steppe rolling to the horizon, the windswept grassland dotted with tussock grass clumps under a stretched-out lenticular cloud bank overhead, foreground close calafate bush at near edge, distant herd of guanaco pencil-tall, soft afternoon light',
+      'Chimborazo volcano summit at golden hour, the 6263-metre glacier-capped volcano catching warm amber rake-light on its western slope, foreground close Altiplano páramo with frailejón rosettes, midground vicuña pair pencil-tall, distant Andes',
+      'Laguna Verde mineral lake at midday, the arsenic-tinted emerald-green water of the 4300-metre altitude lake stretching toward Licancabur volcano cone, foreground close mineral-crusted shore, distant volcano silhouette, cobalt high-altitude sky',
+      'Tierra del Fuego coastal at storm light, the rugged glacier-carved fjord coast with breaking Atlantic surf against dark granite cliff, foreground close kelp-strewn rocky shore, sub-Antarctic beech forest on cliff above, distant Cordillera Darwin glacier silhouette',
+      'Cordillera Blanca sunrise, the snow-capped Peruvian Andes peak chain catching first-light alpenglow above a sea of clouds inversion, foreground close moraine ridge at near edge, mid-distance ice spires Alpamayo Artesonraju, distant horizon glow',
+      'Huayna Potosí summit at blue-hour, the 6088-metre Bolivian peak rising above the Altiplano with cool dawn light, foreground close ice-glazed boulder at near edge, midground glacier descent, distant La Paz valley in pre-dawn cobalt shadow',
+      'Lago Pehoé turquoise water reflecting Cuernos del Paine, the iconic horn-shaped peaks doubled in perfect reflection at golden hour, foreground close Patagonian shore grass at near edge, swan pair on water, distant peak range tier',
+      'Tunupa volcano salt-flat reflection, the dormant volcano cone rising from a thin-water-layer Salar de Uyuni mirror, foreground close salt-polygon crust through reflective surface, mid-distance volcano cone silhouetted, sunset banner cumulus',
+      'Mount Roraima tepui mesa, the Venezuelan flat-topped sandstone tabletop rising from emerald rainforest below, foreground close mossy tepui-summit rock at near edge, mist drift around mesa wall, distant waterfall thread descending',
+      'Bariloche granite ridge in autumn, the Cerro Catedral peak with surrounding Patagonian lenga forest turning red-orange below, foreground close fallen lenga branch at near edge, mid-distance Nahuel Huapi lake water, distant Andean spine cool blue',
+      'Villarrica volcano steam plume, the active 2860-metre Chilean stratovolcano with constant steam plume rising above its glacier cap at sunset, foreground close Araucaria pine forest at near edge, midground Lago Villarrica, distant Cordillera ridge',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Andes/Patagonia subject entries. NO preamble. Each entry 30-55 words on a single line. Format follows the touchpoint pattern: "Toponym + feature + close-foreground + midground hero + distant atmospheric depth + lighting note".`,
+  },
+
+  andes_patagonia_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHORS for EarthBot's andes-patagonia path. Each entry is ONE specific close-edge South American detail anchoring the lower 15-20% of the frame — texture-rich, tactile, near-camera, biome-appropriate. Each entry 14-25 words.
+
+✅ SOUTH-AMERICA-SPECIFIC CLOSE-EDGE DETAILS:
+  • Glacial-river cobbles wet polished grey-blue at near edge (Patagonia)
+  • Calafate bush with deep-purple berries at near edge (Patagonian steppe)
+  • Lenga forest fallen branch with red-orange autumn leaves at near edge
+  • Frailejón rosette cluster (Espeletia) at near edge (Andean páramo)
+  • Yareta cushion plant bright-green at near edge (Altiplano)
+  • Salt-polygon hexagonal crust pattern at near edge (Salar de Uyuni)
+  • Borax-and-salt crystal crust at lake edge (Laguna Colorada / Verde)
+  • Cracked salt-and-gypsum surface at near edge (Atacama)
+  • Mineral-crusted geyser rim at near edge (Tatio)
+  • Moraine boulder with glacier polish striations at near edge
+  • Patagonian tussock grass clump at near edge
+  • Wet kelp tangle on dark granite shore at near edge (Tierra del Fuego)
+  • Araucaria pine cone cluster at near edge (Chile)
+  • Mossy tepui-summit rock at near edge (Roraima)
+  • Black-water Amazon lily pad cluster at near edge
+  • Volcanic basalt slab with cooled flow texture at near edge
+`,
+    touchpoints: [
+      'Glacial-river cobbles wet polished grey-blue arranged at the near edge sorted by glacial sorting',
+      'Calafate bush with deep-purple berries and small dark leaves at near edge windswept',
+      'Lenga forest fallen branch with red-orange autumn leaves scattered at near edge',
+      'Frailejón rosette cluster (Espeletia) silver-leaved at near edge in Andean páramo morning frost',
+      'Yareta cushion plant bright-green mound at near edge on Altiplano rocky ground',
+      'Salt-polygon hexagonal crust pattern at near edge stretching to mirror water',
+      'Borax-and-salt crystal crust white-and-pink at lake edge with flamingo feathers caught',
+      'Cracked salt-and-gypsum surface at near edge in concentric polygon pattern',
+      'Mineral-crusted geyser rim at near edge concentric sulphur deposits',
+      'Moraine boulder with glacier polish striations at near edge cold wet',
+      'Patagonian tussock grass clump windswept at near edge with seed-heads silhouetted',
+      'Wet kelp tangle on dark granite shore at near edge Tierra del Fuego',
+      'Araucaria pine cone cluster spiny dark at near edge on volcanic soil',
+      'Mossy tepui-summit rock at near edge bromeliad rosette nestled in crack',
+      'Black-water Amazon Victoria-amazonica lily pad cluster at near edge in deep dark water',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} South American foreground anchor entries. NO preamble. Each entry 14-25 words on a single line.`,
+  },
+
+  andes_patagonia_light_condition: {
+    format: 'simple',
+    theme: `LIGHT CONDITIONS for EarthBot's andes-patagonia path. South American light has distinct registers — Andean alpenglow, Altiplano high-altitude clarity, Patagonian storm-break light, Amazon dappled humid light. Each entry 14-22 words.
+
+✅ SOUTH AMERICAN LIGHTING REGISTERS:
+  • Alpenglow rose-amber on Andean granite at first light
+  • High-altitude midday cobalt clarity (4000m+ thin atmosphere)
+  • Patagonian storm-break shaft tearing through dark cloud over Cuernos
+  • Sea-of-clouds dawn inversion with peaks emerging
+  • Golden-hour rake on granite spire face
+  • Blue-hour polar twilight over glacier face
+  • Atacama atmospheric clarity midday (driest air on Earth)
+  • Salar de Uyuni dawn cobalt-to-amber gradient reflection
+  • Amazon canopy dappled emerald-gold light
+  • Tundra mist rolling over Patagonian steppe
+  • Volcanic-vent backlit copper at sunset
+  • Sub-Antarctic late-summer rake low-sun
+  • Lenticular-cloud underside-lit pink at dusk
+  • Iguazu Falls backlit golden-hour rainbow through mist
+  • Cordillera Blanca dawn alpenglow on snow with cool valley shadow
+`,
+    touchpoints: [
+      'Alpenglow rose-amber on Andean granite spire at first-light forty-degree solar angle',
+      'High-altitude midday cobalt clarity at 4500-metre with razor-sharp shadow definition',
+      'Patagonian storm-break shaft tearing through dark cloud illuminating one peak face',
+      'Sea-of-clouds dawn inversion with mountain peaks emerging into clear sky above',
+      'Golden-hour copper-rose rake on granite spire face at thirty-degree solar angle',
+      'Blue-hour polar twilight stretching over a glacier face in cool cobalt-mauve',
+      'Atacama atmospheric clarity midday with shadows razor-sharp at five-thousand-metre elevation',
+      'Salar de Uyuni dawn cobalt-to-amber gradient reflected perfectly in thin-water mirror',
+      'Amazon canopy dappled emerald-gold light filtering through three layers of foliage',
+      'Tundra mist rolling over Patagonian steppe in cool blue-grey horizontal bands',
+      'Volcanic-vent steam plume backlit copper-orange at sunset against deep cobalt sky',
+      'Sub-Antarctic late-summer rake low-sun grazing the landscape at horizontal angle',
+      'Lenticular-cloud underside-lit pink and orange at dusk above Patagonian peak',
+      'Iguazu Falls backlit golden-hour rainbow piercing waterfall mist in full primary band',
+      'Cordillera Blanca dawn alpenglow on snow with cool valley shadow below',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} South American light-condition entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  andes_patagonia_atmosphere: {
+    format: 'simple',
+    theme: `ATMOSPHERE entries for EarthBot's andes-patagonia path. Each entry is ONE specific South American atmospheric texture filling the air between camera and far distance. Each entry 14-22 words.
+
+✅ SOUTH AMERICAN ATMOSPHERIC REGISTERS:
+  • Volcanic steam plume at high altitude in horizontal drift
+  • Glacier-cold mist hanging at glacier base
+  • Tatio geothermal-vent steam curtain rising vertically
+  • Patagonian wind-blown spindrift off ridge crest
+  • Salar de Uyuni dust-haze on dry-flat days
+  • Atacama atmospheric clarity (extreme — almost no aerial perspective)
+  • Amazon humid mist drift in canopy
+  • Iguazu Falls mist veil filling lower frame
+  • Inversion fog low in valley with peaks above
+  • Mountain-tundra cold-haze pearl-grey
+  • Storm cell advancing across Patagonian steppe
+  • High-altitude blue-shift haze from thin atmosphere
+  • Glacial-flour suspended in milky river creating cool haze
+  • Volcanic ash haze suspended after eruption
+  • Cloud shadow patches sliding across Altiplano plain
+`,
+    touchpoints: [
+      'Volcanic steam plume at high altitude drifting in horizontal ribbon over cone',
+      'Glacier-cold mist hanging in still air at glacier tongue base catching cool light',
+      'Tatio geothermal-vent steam curtain rising vertically in cold dawn air',
+      'Patagonian wind-blown spindrift streaming off granite ridge crest in white plumes',
+      'Salar de Uyuni dust-haze suspended low over salt-flat on dry-flat windless day',
+      'Atacama atmospheric clarity extreme with razor-sharp shadows and no aerial haze',
+      'Amazon humid mist drift in mid-canopy filtering through emergent tree gaps',
+      'Iguazu Falls mist veil filling lower frame in pearl-grey rainbow-shot shroud',
+      'Inversion fog low in Patagonian valley with peaks above breaking through to clear sky',
+      'Mountain-tundra cold-haze pearl-grey suspended over moraine field',
+      'Storm cell rain curtain advancing across Patagonian steppe from west',
+      'High-altitude blue-shift haze from thin atmosphere intensifying cobalt sky',
+      'Glacial-flour suspended in milky river creating cool blue-grey haze over outwash plain',
+      'Volcanic ash haze suspended after eruption tinting sky tan-grey',
+      'Cloud shadow patches sliding across Altiplano plain in moving dark-light pattern',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} South American atmosphere entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  andes_patagonia_sky_layer: {
+    format: 'simple',
+    theme: `SKY LAYER entries for EarthBot's andes-patagonia path. Each entry is ONE specific South American sky cover filling the upper third of the frame. Each entry 14-22 words.
+
+✅ SOUTH AMERICAN SKY REGISTERS:
+  • Lenticular cloud cap over Fitz Roy or Cerro Torre
+  • Patagonian banner cloud streaming off Cuernos peak
+  • Sea-of-clouds inversion below Andean summit
+  • Cobalt high-altitude noon sky (4000m+)
+  • Sunset banner cumulus over Salar de Uyuni
+  • Volcanic-ash-tinted sky with copper undertone
+  • Atacama clear cobalt with high cirrus contrails
+  • Pre-storm yellow-green oppressive Patagonian sky
+  • Stratus deck low over Tierra del Fuego coast
+  • Cumulonimbus anvil over Iguazu plateau
+  • Stack-of-three lenticular over Aconcagua peak
+  • Layered stratocumulus broken by cobalt patches
+  • Star-crowded moonless Altiplano sky with Milky Way
+  • Pastel polar-twilight cloud Patagonia
+  • Sunset orange-violet ribbon at horizon over Andes
+`,
+    touchpoints: [
+      'Lenticular cloud cap hovering motionless over Fitz Roy peak',
+      'Patagonian banner cloud streaming horizontally off Cuernos del Paine peak',
+      'Sea-of-clouds inversion below Andean summit with peaks emerging into clear sky',
+      'Cobalt high-altitude noon sky at 4500-metre elevation deep saturation',
+      'Sunset banner cumulus glowing copper-amber over Salar de Uyuni horizon',
+      'Volcanic-ash-tinted sky with copper-yellow undertone after recent eruption',
+      'Atacama clear cobalt sky with high cirrus contrails distant',
+      'Pre-storm yellow-green oppressive Patagonian sky pressing low',
+      'Stratus deck low over Tierra del Fuego coast in cool grey blanket',
+      'Cumulonimbus anvil rising thirty thousand feet over Iguazu plateau',
+      'Stack-of-three lenticular discs tiered over Aconcagua peak',
+      'Layered stratocumulus broken by cobalt patches in alternating bands',
+      'Star-crowded moonless Altiplano sky with the Milky Way arch overhead',
+      'Pastel polar-twilight cloud Patagonia in cool blue-pink-grey gradient',
+      'Sunset orange-violet ribbon at horizon over Cordillera Blanca',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} South American sky entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  andes_patagonia_scale_prover: {
+    format: 'simple',
+    theme: `SCALE PROVERS for EarthBot's andes-patagonia path. Each entry is ONE tiny postage-stamp-scale element in the deep distance proving the landscape's VAST scale. South American wildlife or geometry ONLY. Each entry 14-22 words.
+
+✅ SOUTH AMERICAN SCALE-PROVER REGISTERS:
+  • Lone guanaco silhouette ant-small on Patagonian steppe
+  • Small herd of guanaco pencil-tall on distant grassland
+  • Vicuña pair silhouette barely readable on Altiplano
+  • Andean condor wingspan distant against sky in glide
+  • Single Andean fox shape on moraine ridge
+  • Flamingo flock as small dark dots on Laguna Colorada
+  • Llama herd pencil-tall on distant Altiplano slope
+  • Lone Andean huemul deer on Patagonian forest edge
+  • Tiny iceberg in Lago Argentino at deep distance
+  • Glacial-melt-river thread silver-thin at far valley floor
+  • Distant volcano cone silhouette as a single triangle
+  • Tiny waterfall thread half-readable on distant cliff
+  • Far-shore black-pebble line marking water's edge
+  • Lone king penguin colony on distant Tierra del Fuego beach
+  • Distant tapir silhouette at Amazon canopy edge
+`,
+    touchpoints: [
+      'Lone guanaco silhouette ant-small in deep distance crossing Patagonian steppe',
+      'Small herd of guanaco pencil-tall on distant grassland windswept',
+      'Vicuña pair silhouette barely readable on Altiplano in deep distance',
+      'Andean condor wingspan distant against sky in slow glide',
+      'Single Andean fox shape on moraine ridge in deep distance',
+      'Flamingo flock as a thousand small dark dots on Laguna Colorada surface',
+      'Llama herd pencil-tall on distant Altiplano slope in deep distance',
+      'Lone Andean huemul deer at distant Patagonian forest edge',
+      'Tiny iceberg in Lago Argentino at deep distance dwarfed by glacier face',
+      'Glacial-melt-river thread silver-thin at the far valley floor',
+      'Distant volcano cone silhouette as a single triangle at deep horizon',
+      'Tiny waterfall thread half-readable on a distant cliff in deep haze',
+      'Far-shore black-pebble line marking the waters edge in deep distance',
+      'Lone king penguin colony on distant Tierra del Fuego beach as small dark dots',
+      'Distant tapir silhouette at Amazon canopy edge ant-small',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} South American scale-prover entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  andes_patagonia_phenomenon: {
+    format: 'simple',
+    theme: `RARE PHENOMENA for EarthBot's andes-patagonia path. Each entry is ONE specific real-Earth South American phenomenon — the dramatic-but-real optical/weather event that elevates the frame. Each entry 14-22 words.
+
+✅ SOUTH AMERICAN PHENOMENA:
+  • Glacier calving event mid-fall on Perito Moreno
+  • Lenticular cloud stack hovering over Fitz Roy
+  • Sea-of-clouds breaking around Cordillera Blanca peak
+  • Salt-flat mirror perfect at dawn during wet season
+  • Volcanic eruption fountain (Cotopaxi / Villarrica) glowing
+  • Sunset alpenglow on Aconcagua snowfield
+  • Iguazu Falls double-rainbow through mist at golden hour
+  • Flamingo flock takeoff en-masse at Laguna Colorada
+  • Snow squall over Torres del Paine
+  • Tatio geyser eruption plume backlit at dawn
+  • Patagonian wind-bend deformation of cloud
+  • Aurora-free clear-sky Milky Way over Atacama (driest)
+  • Sun-pillar vertical light column over Altiplano sunset
+  • Crepuscular ray ladder through Andean cumulus
+  • Glacial-flood (GLOF) surge across Patagonian outwash plain
+`,
+    touchpoints: [
+      'Glacier calving event mid-fall on Perito Moreno seracs cascading into lake',
+      'Lenticular cloud stack hovering over Fitz Roy peak in three discs',
+      'Sea-of-clouds breaking around Cordillera Blanca peak at dawn',
+      'Salt-flat mirror perfect at dawn during wet season with thin-water layer',
+      'Volcanic eruption fountain incandescent-red glowing at Villarrica crater rim',
+      'Sunset alpenglow rose-amber on Aconcagua snowfield at first-light',
+      'Iguazu Falls double-rainbow piercing waterfall mist at golden hour in full bands',
+      'Flamingo flock takeoff en-masse from Laguna Colorada in pink cloud',
+      'Snow squall sweeping over Torres del Paine peaks in diagonal streaks',
+      'Tatio geyser eruption plume backlit copper at dawn against cobalt sky',
+      'Patagonian wind-bend deformation curving cloud streamer off ridge',
+      'Aurora-free clear-sky Milky Way arching over Atacama driest-on-Earth atmosphere',
+      'Sun-pillar vertical light column rising from horizon over Altiplano sunset',
+      'Crepuscular ray ladder breaking through Andean cumulus in three distinct beams',
+      'Glacial-flood (GLOF) surge sweeping across Patagonian outwash plain in muddy churn',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} South American phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
 };
 
 if (!POOL_RECIPES[POOL]) {
