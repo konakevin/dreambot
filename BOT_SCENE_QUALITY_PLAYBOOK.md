@@ -155,6 +155,59 @@ Bots with NO bot-wide lock and full picker autonomy: bloombot, chibibot, dinobot
 
 ---
 
+## "HTML Matrix" model-test protocol — how Kevin triages which models work for which paths (2026-06-01)
+
+When Kevin says **"run an HTML matrix on `<bot>`"** he means this exact protocol. Don't ask him to re-explain it.
+
+**What it is.** A bot × model × path render grid — for every active path on the bot, render one image per allowed model, post them all to the live feed, then build an HTML page that lays them out as a grid (rows = paths, columns = models). Kevin opens the HTML locally, scrolls the grid, and identifies which (path × model) combos look bad → he hearts the bad ones in-app → you tally hearts and apply `modelByPath` bans path-by-path the same way as the "heart = ban" convention.
+
+**Defaults (NEVER ask, just do):**
+
+- **1 render per (path × model)** — triage default. Cheap (~$5–8 for a 10–20 path bot), fast (~10–15 min wall time). Bump to 3× only if Kevin explicitly asks for a stronger sample.
+- **`--post` enabled** — renders go to the live feed. Required so the matrix HTML can use the Supabase public URLs (no `file://` paths that only open on Kevin's Mac). If he specifically asks for `--no-post`, the script falls back to local URLs.
+- **Run in parallel — one process per model, paths sequential within each.** 8 background `iter-bot` processes for a bot with 8 allowed models. Wall time = (paths × ~40s) ≈ 10–15 min for typical bots, not paths × models × 40s.
+- **All bot.paths × all bot.allowedModels** unless he specifies `--paths` or `--models` to narrow the matrix.
+
+**The tool:**
+
+```bash
+node scripts/qa-bot-model-matrix.js --bot bloombot                       # default: 1×, post, all paths, all models
+node scripts/qa-bot-model-matrix.js --bot starbot --count 3              # stronger sample
+node scripts/qa-bot-model-matrix.js --bot dragonbot \
+  --paths "landscape,castle,dragon-scene" \
+  --models "google/gemini-2-image,black-forest-labs/flux-1.1-pro-ultra"  # narrow matrix
+node scripts/qa-bot-model-matrix.js --bot earthbot --no-post             # /tmp local-only
+```
+
+The script (`scripts/qa-bot-model-matrix.js`) does the whole thing: records the start time, fires the parallel `iter-bot` processes, waits, then queries Supabase for all bot posts since start, groups by `caption-extracted path × model`, and writes `/tmp/<bot>-matrix.html`. Tell Kevin to `open /tmp/<bot>-matrix.html` when done.
+
+**Output:** dark-themed HTML page (matches DreamBot palette). Rows = paths with the path label on the left. Columns = models with friendly model names in the header. Each cell is a thumbnail that links to the full-size Supabase URL. Empty cells show "—" if a render failed.
+
+**What you do when the matrix lands:**
+
+1. Tell Kevin the output path and that 144/144 (or whatever) cells filled.
+2. Wait for him to heart the bad ones in-app.
+3. He says "show me what I hearted" or similar → you query `likes` joined to `uploads` for that bot in the matrix's time window, tally by `caption-path × model`, propose the `modelByPath` bans, get his confirm, apply, update `BOT_MODEL_TALLY.md`.
+
+**Cost reference (typical 1× run):**
+
+| Bot path count | Models | Cells (1×) | Cost (avg) |
+| -------------- | -----: | ---------: | ---------: |
+| 5              |      4 |         20 |    ~$1.00 |
+| 12             |      6 |         72 |    ~$3.50 |
+| 18             |      8 |        144 |    ~$7.00 |
+
+Sonnet brief composition adds ~$1; Haiku polish (where enabled) negligible.
+
+**Don't:**
+
+- Don't ask Kevin to confirm the defaults; just do 1×, post, all paths/models.
+- Don't run 3× by default — wastes ~$15 vs $7 for an extra-strict sample he probably doesn't need yet.
+- Don't post to the feed AND THEN ALSO ask "or should I save to /tmp?" — pick the default (post) and inform.
+- Don't manually write the inline grouping/HTML in your session anymore. Use the script.
+
+---
+
 ## North Star — the actual goal
 
 **Every render must be a 10/10 poster-worthy frame.**

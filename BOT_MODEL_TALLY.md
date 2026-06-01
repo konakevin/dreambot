@@ -10,18 +10,18 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 
 ## bloombot
 
-| Model              | Status | Notes |
-| ------------------ | ------ | ----- |
-| Nano Banana        | ✅     | —     |
-| GPT Image 2        | ✅     | —     |
-| Flux Dev           | ✅     | —     |
-| Flux 2 Pro         | ✅     | —     |
-| Flux 1.1 Pro       | ✅     | —     |
-| Flux 1.1 Pro Ultra | ✅     | —     |
-| Flux 2 Flex        | ✅     | —     |
-| Flux 2 Max         | ✅     | —     |
+| Model              | Status | Notes              |
+| ------------------ | ------ | ------------------ |
+| Nano Banana        | ✅     | —                  |
+| GPT Image 2        | ✅     | —                  |
+| Flux Dev           | ❌     | dropped 2026-06-01 |
+| Flux 2 Pro         | ✅     | —                  |
+| Flux 1.1 Pro       | ✅     | —                  |
+| Flux 1.1 Pro Ultra | ✅     | —                  |
+| Flux 2 Flex        | ❌     | dropped 2026-06-01 |
+| Flux 2 Max         | ✅     | —                  |
 
-**Final allowedModels:** all 8 (= `ALL_ENABLED_AI_MODELS`)
+**Final allowedModels:** 6 — Banana, GPT2, F1.1 Pro Ultra, F1.1 Pro, F2 Pro, F2 Max
 
 ---
 
@@ -82,15 +82,16 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | ------------------ | ------ | ---------------------------------- |
 | Nano Banana        | ✅     | —                                  |
 | GPT Image 2        | ✅     | matrix had 2 fails (safety) — keep |
-| Flux Dev           | ✅     | —                                  |
+| Flux Dev           | ❌     | dropped 2026-05-31 (Kevin)         |
 | Flux 2 Pro         | ✅     | —                                  |
 | Flux 1.1 Pro       | ✅     | —                                  |
 | Flux 1.1 Pro Ultra | ✅     | —                                  |
 | Flux 2 Flex        | ✅     | —                                  |
-| Flux 2 Max         | ✅     | —                                  |
+| Flux 2 Max         | ❌     | dropped 2026-05-31 (Kevin)         |
 
-**Final allowedModels:** all 8 (= `ALL_ENABLED_AI_MODELS`).
-⚠ NOTE: currently `useModelPicker: false` + full per-path modelByPath lock to flux-1.1-pro — wiring needs to flip picker on AND strip/clear modelByPath, otherwise the constant has no effect.
+**Final bot-wide allowedModels:** 6 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex. Per-path bans then apply on top.
+
+**Per-path overrides (non-character, Kevin 2026-05-31 uniform lineup):** all 7 non-character paths (`landscape`, `iconic-landscape`, `castle`, `epic-moment`, `dark-realm`, `dragon-lore`, `dragon-scene`) locked to **5 models**: Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Ultra (F2 Flex banned per heart-test audit; F2 Max + Flux Dev already bot-wide banned).
 
 ---
 
@@ -98,16 +99,16 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 
 | Model              | Status | Notes   |
 | ------------------ | ------ | ------- |
-| Nano Banana        | ✅     | —       |
-| GPT Image 2        | ✅     | —       |
-| Flux Dev           | ✅     | —       |
-| Flux 2 Pro         | ✅     | —       |
-| Flux 1.1 Pro       | ✅     | —       |
-| Flux 1.1 Pro Ultra | ✅     | —       |
-| Flux 2 Flex        | ❌     | dropped |
-| Flux 2 Max         | ❌     | dropped |
+| Nano Banana        | ❌     | dropped 2026-06-01 (Kevin)                                                                |
+| GPT Image 2        | ❌     | dropped 2026-06-01 (Kevin)                                                                |
+| Flux Dev           | ❌     | dropped 2026-05-31 (Kevin)                                                                |
+| Flux 2 Pro         | ❌     | dropped 2026-06-01 (Kevin)                                                                |
+| Flux 1.1 Pro       | ❌     | dropped 2026-06-01 (Kevin)                                                                |
+| Flux 1.1 Pro Ultra | ✅     | locked sole model 2026-06-01 — premium fidelity for the new National-Geographic medium    |
+| Flux 2 Flex        | ❌     | dropped                                                                                   |
+| Flux 2 Max         | ❌     | dropped                                                                                   |
 
-**Final allowedModels:** 6 — Nano Banana, GPT Image 2, Flux Dev, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra
+**Final allowedModels:** **1 — Flux 1.1 Pro Ultra only** (bot-wide single-model lock after the National-Geographic medium overhaul + 20-render test).
 
 ---
 
@@ -118,14 +119,13 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | Nano Banana        | ✅     | —                                                       |
 | GPT Image 2        | ✅     | matrix 0/3 — all failed (safety filter); kept per Kevin |
 | Flux Dev           | ❌     | dropped                                                 |
-| Flux 2 Pro         | ✅     | —                                                       |
+| Flux 2 Pro         | ❌     | dropped 2026-06-01 (Kevin)                              |
 | Flux 1.1 Pro       | ✅     | —                                                       |
 | Flux 1.1 Pro Ultra | ✅     | —                                                       |
 | Flux 2 Flex        | ❌     | dropped                                                 |
 | Flux 2 Max         | ✅     | —                                                       |
 
-**Final allowedModels:** 6 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Max.
-⚠ NOTE: currently `useModelPicker: false` + full per-path modelByPath lock to flux-1.1-pro — wiring needs to flip picker on AND strip/clear modelByPath, otherwise the constant has no effect.
+**Final allowedModels:** 5 — Nano Banana, GPT Image 2, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Max.
 
 ---
 
@@ -142,7 +142,9 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | Flux 2 Flex        | ✅     | —       |
 | Flux 2 Max         | ✅     | —       |
 
-**Final allowedModels:** 7 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex, Flux 2 Max
+**Final bot-wide allowedModels:** 7 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex, Flux 2 Max.
+
+**Per-path overrides (non-character, Kevin 2026-05-31 uniform lineup):** all 7 non-character paths (`dark-landscape`, `gothic-architecture`, `castlevania-scene`, `gothic-vista`, `vampire-from-a-distance`, `monster-prowl`, `monster-prowl-victorian`) locked to **5 models**: Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Ultra (F2 Flex + F2 Max banned). Character paths (goth-closeup / goth-full-body / vampire-girls-2 / vampire-assassin-female / vampire-hunter-in-action / vampire-assassin-combat / goth-male-full-body-axis) keep their own per-path bans from the prior audit.
 
 ---
 
@@ -233,8 +235,13 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 
 **Per-path overrides:**
 
-- `cosmic-vista` → 5 models (bot-wide MINUS Flux 2 Pro)
-- `real-space` → 5 models (bot-wide MINUS Flux 2 Pro)
+- `cosmic-vista` → **2 models**: GPT-2, F1.1 Ultra (bot-wide MINUS Flux 2 Pro, F2 Flex, Banana, F1.1 Pro — 2026-05-31 comparison test heart-bans + Pro redundant w/ Ultra)
+- `alien-landscape` → **3 models**: GPT-2, F2 Pro, F1.1 Ultra (MINUS F2 Flex, Banana, F1.1 Pro)
+- `alien-city` → **4 models**: Banana, GPT-2, F2 Pro, F1.1 Ultra (MINUS F2 Flex, F1.1 Pro)
+- `megastructure` → **4 models**: Banana, GPT-2, F2 Pro, F1.1 Ultra (MINUS F2 Flex, F1.1 Pro)
+- `real-space` → **3 models**: GPT-2, F1.1 Pro, F1.1 Ultra (Kevin 2026-05-31 after premium-tier axis enrichment + 9-render gating-off test — Banana / F2 Pro / F2 Flex banned; F1.1 Pro intentionally kept per Kevin's "keep Pro on non-character paths" override of the redundant-with-Ultra rule)
+- `cozy-sci-fi-interior` → **4 models**: Banana, GPT-2, F1.1 Pro, F1.1 Ultra (Kevin 2026-05-31 — F2 Pro + F2 Flex banned after 3 hearts each in comparison test; F1.1 Pro intentionally kept per Kevin's call — "Pro redundant w/ Ultra" rule NOT applied here)
+- `space-opera` → **2 models**: GPT-2, F1.1 Ultra (Kevin 2026-05-31 — REVIVED at premium-tier axis enrichment after dormant since 2026-05-12; locked to these 2 after 3 model-test rounds — Banana / F2 Pro / F2 Flex produced "too messy" renders even with probabilistic axis gating)
 
 ⚠ NOTE: currently has no `useModelPicker` line + per-path `modelByPath` — wiring needs `useModelPicker: true` AND `modelByPath` reworked into per-path allow-arrays for the two flagged paths.
 
@@ -253,7 +260,9 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | Flux 2 Flex        | ✅     | —                                           |
 | Flux 2 Max         | ❌     | dropped                                     |
 
-**Final allowedModels:** 6 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex
+**Final bot-wide allowedModels:** 6 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex.
+
+**Per-path overrides (non-character, Kevin 2026-05-31 uniform lineup):** all 7 non-character paths (`steampunk-scene`, `airship-skies`, `steampunk-curio`, `steampunk-spectacle`, `steam-transport`, `steampunk-labs`, `cozy-steampunk`) locked to **5 models**: Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Ultra (F2 Flex banned). Character paths (airship-female / airship-male / sexy-steampunk-woman / steampunk-man) fall through to the bot-wide 6-model picker.
 
 ---
 

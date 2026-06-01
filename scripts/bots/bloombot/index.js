@@ -53,9 +53,19 @@ module.exports = {
   mediums: ['bloom_hyperreal_cgi'],
 
   useModelPicker: true,
-  // All paths random-pick one of these four per render (2026-05-27) — EXCEPT
-  // any path locked in modelByPath below, which falls through to its lock.
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  // All paths random-pick one of these per render — EXCEPT any path locked in
+  // modelByPath below, which falls through to its lock. 2026-06-01: dropped
+  // flux-dev + flux-2-flex (Kevin) — keeping 6 models (Banana, GPT2, F1.1Pro,
+  // F1.1Pro Ultra, F2Pro, F2Max). Defined explicitly (not via subtraction)
+  // so the lineup is auditable; BOT_MODEL_TALLY.md is the source of truth.
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-2-pro',
+    'black-forest-labs/flux-2-max',
+  ],
   // Per-path model lock. tropical-grove → random pick between flux-1.1-pro and
   // flux-1.1-pro-ultra only (Kevin 2026-05-27). Paths NOT listed here use the
   // uniform allowedModels pick above.

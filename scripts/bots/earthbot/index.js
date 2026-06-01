@@ -86,6 +86,7 @@ const pathBuilders = {
   'geological-wonder': require('./paths/geological-wonder'), // axis-system (2026-05-21)
   'deep-forest': require('./paths/deep-forest'), // axis-system (2026-05-20)
   'lush-jungle': require('./paths/lush-jungle'), // axis-system (2026-05-20)
+  'iceland-raw': require('./paths/iceland-raw'), // axis-system (2026-06-01 activation)
   // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
@@ -107,6 +108,10 @@ const EARTH_PATHS = [
   'desert-southwest',
   'deep-forest',
   'lush-jungle',
+  // Regional paths activated 2026-06-01 — each requires full template +
+  // 7 path-bespoke pools (subject / foreground / lighting / atmosphere /
+  // sky / scale_prover / phenomenon).
+  'iceland-raw',
 ];
 
 const BEACH_PATHS = [
@@ -125,8 +130,11 @@ const ALL_PATHS = [...EARTH_PATHS, ...BEACH_PATHS];
 // Source bot prefixes/suffixes — preserved verbatim, applied per path via
 // promptPrefixByPath / promptSuffixByPath so each path renders exactly like
 // it did in its source bot.
+// Stripped "hyperreal rendering" 2026-06-01 — legacy from the Unreal-Engine
+// medium, conflicts with the new National-Geographic photography register
+// and was biasing toward CGI-coded renders.
 const EARTH_PREFIX =
-  'cinematic photography, sharp detail, rich saturated color, hyperreal rendering, gallery-quality, masterpiece';
+  'cinematic landscape photography, sharp detail, rich saturated color, gallery-quality, masterpiece';
 // Suffix scrubbed of "no humans / no people" (2026-05-23) — Flux's CLIP/T5
 // tokenizer attends to the words "humans" / "people" regardless of the
 // preceding "no" and was rendering people silhouettes into landscape
@@ -139,9 +147,20 @@ const EARTH_SUFFIX =
 const BEACH_PREFIX =
   'travel photography, sharp detail, dramatic saturated color, hyperreal rendering, wallpaper-worthy, masterpiece';
 const BEACH_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+// 2026-06-01 — Iceland-raw bespoke prefix. The generic EARTH_PREFIX +
+// medium's "cinematic landscape photography" + "dramatic atmospheric
+// perspective" was pulling renders to European Alps / Dolomites with pine
+// forest foreground, even though the scene content correctly named
+// Hvítserkur / Stuðlagil / Vatnajökull / Kerlingarfjöll / Aldeyjarfoss.
+// Anchor "Iceland" + signature material vocab from token 0 so CLIP locks
+// the geographic prior before the medium's mountain-trope language kicks
+// in. Keep it MINIMAL — no biome enumeration (caused biome over-anchoring
+// on African R5) and no warm-color qualifier (Iceland palette is cool).
+const ICELAND_RAW_PREFIX =
+  'Iceland raw nature, basalt and black volcanic sand and glacier ice and Icelandic moss, sharp detail, gallery-quality, masterpiece';
 
 // Locked to cinematic only — Kevin's preferred single-vibe lock for
-// EarthBot 2026-05-05. Combined with the locked earthbot_hyperreal medium
+// EarthBot 2026-05-05. Combined with the locked earthbot_photography medium
 // + locked flux-1.1-pro model, the bot has a fully homogeneous lighting
 // identity (teal-and-orange cinematic grade across all renders). Variety
 // comes entirely from the 25 path-specific scene pools.
@@ -159,11 +178,11 @@ module.exports = {
   cycleAllPaths: true,
 
   // Locked to a single custom hyperreal Unreal-Engine-style medium across
-  // all 25 paths. earthbot_hyperreal is a bot-only DB row in dream_mediums
+  // all 25 paths. earthbot_photography is a bot-only DB row in dream_mediums
   // (is_active: false, is_bot_only: true) — never exposed to user pickers.
   // Its flux_fragment in the DB IS the override; no mediumStyles entry
   // needed since there's no DB fragment to replace.
-  defaultMedium: 'earthbot_hyperreal',
+  defaultMedium: 'earthbot_photography',
 
   // Bot-level prefix/suffix kept empty so the per-path overrides below
   // are the SOLE prefix/suffix sources. Engine prepends promptPrefixByPath
@@ -178,6 +197,10 @@ module.exports = {
   promptPrefixByPath: {
     ...byPath(EARTH_PATHS, EARTH_PREFIX),
     ...byPath(BEACH_PATHS, BEACH_PREFIX),
+    // Iceland-raw: bespoke prefix to anchor Iceland from token 0 (the
+    // generic EARTH_PREFIX's "landscape photography" + medium's atmospheric
+    // perspective pulled R0 to European Alps/Dolomites with pine forests).
+    'iceland-raw': ICELAND_RAW_PREFIX,
   },
 
   // Per-path suffix override — engine reads this BEFORE promptSuffixByMedium
@@ -217,11 +240,10 @@ module.exports = {
   // tokens) — see [[feedback_negative_prompt_leak]].
   useModelPicker: true,
   allowedModels: [
-    'google/gemini-2-image',
-    'openai/gpt-image-2',
-    'black-forest-labs/flux-dev',
-    'black-forest-labs/flux-2-pro',
-    'black-forest-labs/flux-1.1-pro',
+    // Kevin 2026-06-01: bot-wide LOCKED to F1.1 Pro Ultra only after the
+    // 20-render National-Geographic medium test. Other 3 models (Banana,
+    // GPT-2, F1.1 Pro) stripped — Ultra renders the new National-Geographic
+    // medium with the right premium-photography fidelity.
     'black-forest-labs/flux-1.1-pro-ultra',
   ],
 
@@ -302,6 +324,10 @@ module.exports = {
       'seasonal-shift',
       'hidden-corner',
       'desert-southwest',
+      // 2026-06-01: regional toponym path. Haiku polish would compress away
+      // Reynisfjara / Vatnajökull / Jökulsárlón / Stuðlagil — those are
+      // load-bearing for Icelandic identity. Skip polish to keep them.
+      'iceland-raw',
     ],
   },
 

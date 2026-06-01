@@ -143,6 +143,7 @@ The `model` column on `uploads` (migration 211, 2026-05-30) records which model 
 - `scripts/run-bot.js` — single-bot production entry; fails loud (no swallowed errors, unlike iter-bot). Called by the dispatcher per due-bot row.
 - `scripts/dispatch-bots.js` — fleet dispatcher; reads `bot_schedules`, runs each due bot via `run-bot.js`, marks `last_posted_at` on success (DB trigger advances `next_due_at`). Auto-deactivates a new bot that never posts within 6h.
 - `scripts/gen-<bot>-pool.js` — regenerates seed pools for a specific bot.
+- `scripts/qa-bot-model-matrix.js` — bot × model × path HTML matrix test. **When Kevin says "run an HTML matrix on `<bot>`" use this** — defaults are 1 render per (path × model), `--post` enabled (renders go to live feed), all bot.paths × bot.allowedModels. Outputs `/tmp/<bot>-matrix.html` (dark-themed grid Kevin opens locally to triage which models to keep per path). Full protocol + cost table + when-to-3x in `BOT_SCENE_QUALITY_PLAYBOOK.md` → "HTML Matrix model-test protocol".
 
 ### Bot scene quality — CRITICAL workflow
 

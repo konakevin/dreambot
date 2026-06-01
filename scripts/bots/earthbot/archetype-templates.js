@@ -219,7 +219,14 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
   },
 
   EARTHBOT_REEF_PARADISE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { bay_setting, shoreline_drama, water_quality, sky_drama, composition, foreground_element } = slots;
+    const {
+      bay_setting,
+      shoreline_drama,
+      water_quality,
+      sky_drama,
+      composition,
+      foreground_element,
+    } = slots;
     const foregroundBlock = foreground_element
       ? `\n\n━━━ FOREGROUND ELEMENT (one accent close to camera) ━━━\n${foreground_element}\n\nOne natural foreground accent close to camera that adds depth without dominating — palm fronds arching in, lava rocks at frame-edge, a hibiscus branch, a tiny silhouette far in the distance. Soft-focus / out-of-focus, never sharp competing detail.`
       : '';
@@ -515,7 +522,15 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
   },
 
   EARTHBOT_WAVES: ({ slots, sharedDNA, vibeDirective }) => {
-    const { wave_subject, composition, coastal_context, water_color, sky_layer, light_condition, phenomenon } = slots;
+    const {
+      wave_subject,
+      composition,
+      coastal_context,
+      water_color,
+      sky_layer,
+      light_condition,
+      phenomenon,
+    } = slots;
     const phenomenonBlock = phenomenon
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or subject, DROP IT.`
       : '';
@@ -598,7 +613,17 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
   },
 
   EARTHBOT_SEASONAL_SHIFT: ({ slots, sharedDNA, vibeDirective }) => {
-    const { subject, color_palette, depth_layers, seasonal_motion, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
+    const {
+      subject,
+      color_palette,
+      depth_layers,
+      seasonal_motion,
+      lighting,
+      atmosphere,
+      hero_feature,
+      sky_layer,
+      phenomenon,
+    } = slots;
     const phenomenonBlock = phenomenon
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled season or lighting, DROP IT.`
       : '';
@@ -720,7 +745,16 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
   },
 
   EARTHBOT_DESERT_SOUTHWEST: ({ slots, sharedDNA, vibeDirective }) => {
-    const { subject, foreground_anchor, surprise_element, light_condition, atmosphere, sky_layer, scale_prover, phenomenon } = slots;
+    const {
+      subject,
+      foreground_anchor,
+      surprise_element,
+      light_condition,
+      atmosphere,
+      sky_layer,
+      scale_prover,
+      phenomenon,
+    } = slots;
     const phenomenonBlock = phenomenon
       ? `\n\n━━━ RARE PHENOMENON (one real-Earth event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or feels supernatural, DROP IT. Real-Earth ONLY — no aurora, no nacreous, no bioluminescent, no sun-dogs, no fire-rainbow.`
       : '';
@@ -794,21 +828,110 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
   // composer contract so pools can load + brief-composer doesn't crash if
   // accidentally invoked. NOT in EARTH_PATHS rotation until full template
   // authored + R0 validated.
-  EARTHBOT_AFRICAN_SAVANNA: ({ slots }) =>
-    `// PLACEHOLDER — EARTHBOT_AFRICAN_SAVANNA template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
   EARTHBOT_ASIA_LANDSCAPE: ({ slots }) =>
     `// PLACEHOLDER — EARTHBOT_ASIA_LANDSCAPE template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
   EARTHBOT_ANDES_PATAGONIA: ({ slots }) =>
     `// PLACEHOLDER — EARTHBOT_ANDES_PATAGONIA template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
   EARTHBOT_AUSTRALIAN_OUTBACK: ({ slots }) =>
     `// PLACEHOLDER — EARTHBOT_AUSTRALIAN_OUTBACK template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
-  EARTHBOT_ICELAND_RAW: ({ slots }) =>
-    `// PLACEHOLDER — EARTHBOT_ICELAND_RAW template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_ICELAND_RAW: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      subject,
+      foreground_anchor,
+      light_condition,
+      atmosphere,
+      sky_layer,
+      scale_prover,
+      phenomenon,
+    } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one real-Earth Icelandic event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or atmosphere, DROP IT. Real-Earth ONLY — aurora is allowed (it IS a real Icelandic phenomenon) but rendered GROUNDED-PHOTOGRAPHIC (subtle green ribbon at moderate intensity, NOT fantasy-cosmic neon).`
+      : '';
+
+    return `You are a fine-art landscape photographer writing ONE ICELAND RAW NATURE scene for EarthBot. Iceland's signature raw geology — glacier tongues (Vatnajökull / Sólheimajökull / Breiðamerkurjökull), Jökulsárlón glacier lagoon + Diamond Beach iceberg shards, black-sand beaches (Reynisfjara / Vík), basalt sea stacks + columns (Reynisdrangar / Stuðlagil canyon / Svartifoss cliff face), waterfalls (Skógafoss / Seljalandsfoss / Gullfoss / Dettifoss / Háifoss / Goðafoss), ice caves (Vatnajökull blue-crystal interior), moss-on-lava fields (Eldhraun), rhyolite mountains (Landmannalaugar), Þingvellir continental rift, geothermal vents + geysers (Strokkur / Geysir). Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL ICELANDIC GEOLOGY ONLY ━━━
+
+This is REAL Iceland — never alien, never fantasy. Iceland's optical phenomena (aurora, polar twilight, midnight sun) are real and welcome BUT rendered as documentary fine-art photography NEVER as fantasy-cosmic spectacle. Ground every render in actual Icelandic geographic identity: black volcanic sand (NOT yellow desert sand), basalt (NOT granite), glacial-melt-river silt (NOT crystal-clear mountain stream), Icelandic moss + lichen (NOT lush grass), rhyolite color-banded mountains (NOT alpine snow-capped peaks).
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT FEATURES ━━━
+
+The entire frame is uninhabited raw nature. NEVER a figure, NEVER a tourist, NEVER a vehicle, NEVER a building / cabin / hut / lighthouse, NEVER a road or boardwalk or fence or signpost, NEVER a sheep, NEVER cropland. Pure raw Iceland only. Wildlife at scale-prover scale (Icelandic horse / arctic fox / lone seabird) is permitted at TINY postage-stamp distance, never hero-scale.
+
+━━━ STYLE GUARDS ━━━
+
+- NO photographer name-drops in the output prompt (Iurie Belegurschi / Albert Dros / Daniel Kordan etc — these leak into Flux and bias the render toward those photographers' specific Iceland shots). Describe the scene morphologically, never credit any photographer.
+- Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary (fantasy triggers)
+- Avoid stylized / 3D-render / cartoony — photographic only
+- Avoid "fire" as a noun (Flux renders literal flames) — for active volcanism use "molten lava glow" / "incandescent fissure" / "ember-red eruption fountain" as adjective-led phrases
+- Aurora is allowed but described as "subtle green ribbon" / "soft emerald arc" / "low-intensity polar curtain" — NEVER as "vivid neon" / "blinding cosmic ribbon" / "mythical fire-sky"
+
+━━━ THE SUBJECT (the iconic Icelandic composition) ━━━
+${subject}
+
+━━━ FOREGROUND ANCHOR (close-edge detail in the lower 15-20% of frame) ━━━
+${foreground_anchor}
+
+━━━ LIGHT CONDITION ━━━
+${light_condition}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ SKY LAYER ━━━
+${sky_layer}
+
+━━━ SCALE PROVER (tiny element at deep distance — postage-stamp scale) ━━━
+${scale_prover}
+
+Render small — proves the landscape is VAST. Iceland-appropriate scale-provers ONLY (Icelandic horse silhouette / arctic fox shape on black sand / lone puffin or kittiwake / single skua against snow / matchstick-tiny iceberg in deep distance). Never hero-scale, never anthropomorphic.${phenomenonBlock}
+
+━━━ HARD RULE — ICELANDIC PALETTE + ATMOSPHERIC DEPTH ━━━
+
+Multi-tier depth (foreground anchor + midground hero feature + atmospheric distant horizon). Iceland's palette is COOL — graphite black sand, glacier blue, basalt grey, moss green, polar twilight purple, white ice, rhyolite ochre and rust banding. Warm tones only at golden-hour / midnight-sun glow / volcanic ember. Air feels cold and clean — viewer should feel the chill of Atlantic spray, glacial wind, sub-zero ice cave.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'Icelandic raw nature palette — cool blacks, glacier blues, basalt greys, moss greens, polar twilight purples'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION DIRECTIVE ━━━
+
+The iconic Icelandic subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Photographic — hyperreal Iceland fine-art landscape, never stylized.
+
+━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
+
+The polished prompt MUST be authored in this exact sequence:
+  1. **OPEN WITH THE SUBJECT** — the Icelandic hero (Reynisfjara black-sand beach / Vatnajökull glacier tongue / Jökulsárlón iceberg lagoon / Skógafoss waterfall / Stuðlagil basalt canyon / Landmannalaugar rhyolite ridge / etc.) is the FIRST phrase. NEVER open with foreground detail. NEVER open with light condition or atmosphere.
+  2. Then the SKY LAYER
+  3. Then the LIGHT CONDITION + ATMOSPHERE
+  4. Then the FOREGROUND ANCHOR (small near-camera detail in lower 15-20%, NOT the hero)
+  5. Then the SCALE PROVER (tiny element at deep distance)
+  6. Then any rolled PHENOMENON
+  7. Finally palette / mood notes
+
+The viewer's eye must land on the GLACIER TONGUE / BLACK BEACH / BASALT STACK / WATERFALL / ICE CAVE / RHYOLITE RIDGE first — NEVER on a foreground rock or moss clump. The foreground_anchor and scale_prover are SUPPORTING DETAILS not the subject.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the Icelandic subject. PRESERVE the Icelandic toponym from the subject slot verbatim in the opening phrase — Reynisfjara / Vatnajökull / Sólheimajökull / Jökulsárlón / Skógafoss / Seljalandsfoss / Gullfoss / Dettifoss / Stuðlagil / Svartifoss / Landmannalaugar / Þingvellir / Eldhraun / Strokkur / Geysir / Diamond Beach / Vík — these geographic anchors are LOAD-BEARING for Icelandic identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" — these are style-prior triggers that interfere with the SUBJECT anchoring, NEVER include them at the prompt open). Describe positive content only — no negation language like "no humans" or "no architecture" (Flux tokenizer leaks those words).`;
+  },
   EARTHBOT_EUROPEAN_WILDERNESS: ({ slots }) =>
     `// PLACEHOLDER — EARTHBOT_EUROPEAN_WILDERNESS template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
 
   EARTHBOT_HIDDEN_CORNER: ({ slots, sharedDNA, vibeDirective }) => {
-    const { subject, foreground_anchor, water_feature, micro_detail, scale_prover, lighting, atmosphere, phenomenon } = slots;
+    const {
+      subject,
+      foreground_anchor,
+      water_feature,
+      micro_detail,
+      scale_prover,
+      lighting,
+      atmosphere,
+      phenomenon,
+    } = slots;
     const phenomenonBlock = phenomenon
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or feels supernatural, DROP IT. Real-Earth ONLY — no bioluminescent / aurora / nacreous / sun-dogs / fire-rainbow / iridescent.`
       : '';
@@ -906,7 +1029,14 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
   },
 
   EARTHBOT_COZY_BEACH: ({ slots, sharedDNA, vibeDirective }) => {
-    const { subject_setting, foreground_element, water_state, sky_layer, light_condition, phenomenon } = slots;
+    const {
+      subject_setting,
+      foreground_element,
+      water_state,
+      sky_layer,
+      light_condition,
+      phenomenon,
+    } = slots;
     const phenomenonBlock = phenomenon
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the cozy mood (storm / lightning), DROP IT.`
       : '';

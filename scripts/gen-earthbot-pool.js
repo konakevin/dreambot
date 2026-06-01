@@ -24,21 +24,32 @@ function readEnvFile() {
       if (eq > 0) env[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
     }
     return env;
-  } catch { return {}; }
+  } catch {
+    return {};
+  }
 }
 const env = readEnvFile();
 const ANTHROPIC = process.env.ANTHROPIC_API_KEY || env.ANTHROPIC_API_KEY;
-if (!ANTHROPIC) { console.error('ANTHROPIC_API_KEY missing'); process.exit(1); }
+if (!ANTHROPIC) {
+  console.error('ANTHROPIC_API_KEY missing');
+  process.exit(1);
+}
 
 const args = process.argv.slice(2);
-const flag = (n, fb) => { const i = args.indexOf('--' + n); return i >= 0 ? args[i + 1] : fb; };
+const flag = (n, fb) => {
+  const i = args.indexOf('--' + n);
+  return i >= 0 ? args[i + 1] : fb;
+};
 const has = (n) => args.includes('--' + n);
 const POOL = flag('pool', null);
 const COUNT = parseInt(flag('count', '30'), 10);
 const TARGET = flag('target', null) ? parseInt(flag('target', '0'), 10) : null;
 const MAX_ITERATIONS = parseInt(flag('max-iter', '15'), 10);
 const DRY = has('dry-run');
-if (!POOL) { console.error('Usage: --pool <name> --count <N> [--target N] [--dry-run]'); process.exit(1); }
+if (!POOL) {
+  console.error('Usage: --pool <name> --count <N> [--target N] [--dry-run]');
+  process.exit(1);
+}
 
 // ─────────────────────────────────────────────────────────────
 // EarthBot shared identity guards (referenced across all recipes)
@@ -399,6 +410,372 @@ Lineage to channel: Marc Adamus + Peter Lik + Galen Rowell SW landscape photogra
     ],
     instructions: `Each entry is ONE specific real-Earth SW phenomenon, 14-22 words. HARD BAN on aurora / nacreous / sun-dogs / fire-rainbow / bioluminescent / sci-fi / molten. ONE phenomenon per entry. Output as NUMBERED list.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // ICELAND-RAW path (2026-06-01 fresh build).
+  // PURE Icelandic raw nature — glaciers, black sand, basalt, waterfalls,
+  // ice caves, rhyolite mountains, geothermal vents. Iceland's Flux prior
+  // is STRONG (lots of training data of Iceland photography) so most pitfalls
+  // are mild compared to African. Still apply the universal guards:
+  //   • NO photographer names anywhere (Belegurschi / Dros / Kordan leak
+  //     verbatim into the polished Flux prompt and bias toward their
+  //     specific famous Iceland shots)
+  //   • NO negation language ("no humans" / "no buildings") in pool entries
+  //     — bans go in the template SYSTEM, not the literal output prompt
+  //   • Subject entries LEAD with the Iceland toponym in first 5-8 words
+  //     so CLIP locks the geographic prior from token 0
+  //   • Aurora is allowed (real Icelandic phenomenon) but rendered as a
+  //     subtle photographic ribbon, NEVER as fantasy-cosmic neon
+  // ═══════════════════════════════════════════════════════════
+
+  iceland_raw_subject: {
+    format: 'simple',
+    theme: `PURE ICELAND RAW NATURE SCENES for EarthBot's iceland-raw path. Each entry is ONE unambiguous Icelandic landscape composition spanning the full breadth of Iceland's signature geology — glacier tongues, glacier lagoons + iceberg beaches, black-sand beaches, basalt sea stacks + column canyons, ice caves, waterfalls, moss-on-lava fields, rhyolite color-banded mountains, continental rift fields, geothermal vents + geysers. Each entry 30-55 words.
+
+⚠️ MANDATORY — every entry must LEAD with an Icelandic toponym in the first 5-8 words. Required openings include: "Reynisfjara black-sand beach...", "Vatnajökull glacier tongue...", "Jökulsárlón glacier lagoon...", "Diamond Beach iceberg shards...", "Skógafoss waterfall...", "Seljalandsfoss waterfall...", "Gullfoss two-tier waterfall...", "Dettifoss thunder waterfall...", "Háifoss high waterfall...", "Goðafoss waterfall...", "Stuðlagil basalt canyon...", "Svartifoss basalt cliff...", "Reynisdrangar sea stacks...", "Sólheimajökull glacier tongue...", "Breiðamerkurjökull glacier face...", "Vatnajökull ice cave interior...", "Landmannalaugar rhyolite ridge...", "Þingvellir continental rift fissure...", "Eldhraun moss-on-lava field...", "Strokkur geyser cone...", "Kerlingarfjöll geothermal valley...", "Námafjall sulfur field...", "Hvítserkur basalt sea arch...", "Aldeyjarfoss basalt-column waterfall...", "Kirkjufell mountain..." — toponym FIRST, then the rest of the composition.
+
+🎯 BIOME COVERAGE TARGET (across 25 entries):
+  • Glacier tongues + ice caves: 4 entries
+  • Glacier lagoons + iceberg beaches (Jökulsárlón / Diamond Beach): 3 entries
+  • Black-sand beaches (Reynisfjara / Vík / Hvítserkur): 4 entries
+  • Basalt sea stacks + columns (Reynisdrangar / Stuðlagil / Svartifoss / Aldeyjarfoss): 3 entries
+  • Waterfalls (Skógafoss / Seljalandsfoss / Gullfoss / Dettifoss / Háifoss / Goðafoss): 4 entries
+  • Rhyolite mountains (Landmannalaugar / Kerlingarfjöll / Kirkjufell): 3 entries
+  • Moss-on-lava + continental rift + geothermal (Eldhraun / Þingvellir / Strokkur / Námafjall): 4 entries
+
+🚫 ABSOLUTE BANS (every entry MUST clear these):
+  • ZERO photographer names (Iurie Belegurschi / Albert Dros / Daniel Kordan / Erez Marom / Max Rive — these leak verbatim into the polished output and bias renders)
+  • ZERO sci-fi / fantasy / portal / impossible-reflection / multi-moon
+  • ZERO sheep, ZERO cropland, ZERO buildings, ZERO lighthouses, ZERO cabins, ZERO villages, ZERO roads, ZERO Vík village (the photographic landmark is the church but it's a building — describe Vík beach without the village)
+  • ZERO negation phrases — describe positive content only ("uninhabited black-sand beach" not "no humans on beach")
+  • ZERO American/European mountain analogues (no "alpine peaks like the Dolomites", no "like Yosemite") — describe Iceland on its own terms
+
+✅ EVERY ENTRY MUST INCLUDE:
+  • Icelandic toponym in first 5-8 words
+  • Specific geological hero (glacier face / basalt formation / waterfall / black sand / etc.)
+  • Multi-tier depth language (foreground + midground hero + atmospheric distance OR ice-cave interior depth)
+  • Icelandic-coded materials (basalt / glacier ice / black volcanic sand / Icelandic moss / rhyolite color banding / sulfur crust / pumice)
+  • A specific Icelandic lighting moment (low-sun-winter-rake / blue-hour-twilight / midnight-sun glow / polar-overcast flat / ice-cave-blue-glow / storm-break shaft)
+
+Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Reynisfjara black-sand beach at storm-light, basalt sea-stack column tier (Reynisdrangar) rising from churning Atlantic surf, foreground black-pumice arc on dark sand, breaking wave with foam-streak racing across mid-frame, distant Vík headland silhouette in cool sea mist',
+      'Vatnajökull glacier tongue at low-winter-sun, the tonguefront calving into a meltwater pool, foreground striated blue compressed ice with embedded volcanic ash bands, midground crevasse field receding, cobalt-blue tongue surface stretching to distant volcanic ridge',
+      'Jökulsárlón glacier lagoon at blue-hour, hundreds of pale-cyan icebergs floating on mirror-flat dark water, foreground iceberg shard close to camera, midground iceberg dispersion to lagoon centre, distant Breiðamerkurjökull glacier face glowing soft cool pink in twilight',
+      'Diamond Beach iceberg shards at sunrise, glass-clear ice fragments scattered across black volcanic sand catching first warm light, breaking Atlantic surf curling at mid-frame, foreground single large iceberg with internal blue veins, distant horizon in soft polar-rose glow',
+      'Skógafoss waterfall in golden-hour rake light, the 60-metre vertical thunder of water plunging into a mist-filled basin, foreground volcanic-pebble fan with wet basalt cobbles, double rainbow arcing through the spray, cliff-face wall striped in basalt columns',
+      'Seljalandsfoss waterfall from behind the curtain, the falling water sheeting in front of the camera with golden-hour sun pierced through, foreground wet basalt ledge with single fern cluster, mossy cliff wall arching overhead, distant Eyjafjallajökull horizon glow visible through the water sheet',
+      'Gullfoss two-tier waterfall at polar overcast, milky glacial-flour water cascading over two consecutive falls into a vast canyon, foreground basalt ledge wet and dark, canyon walls receding in cool-grey atmospheric depth, mare-tail cirrus high above',
+      'Dettifoss thunder waterfall at storm-break, the 100-metre-wide falls churning grey-brown glacial silt over the cliff edge, sun-shaft tearing through dark cloud overhead, foreground volcanic basalt-rim with spray-soaked black rock, canyon walls dark in distant haze',
+      'Stuðlagil basalt canyon in midnight sun, hexagonal black basalt columns lining the canyon walls in vertical stacks, milky-blue glacial river running through the canyon floor, foreground close detail of column-tops, distant canyon bend curving away into atmospheric soft-pink polar twilight',
+      'Svartifoss basalt cliff waterfall, the slim waterfall thread tumbling down a curtain of hexagonal black basalt columns, foreground mossy ground with single arctic-thyme cluster, midground falls and column-face dominant, distant cliff edge against soft cobalt sky',
+      'Vatnajökull ice cave interior, deep-blue compressed-glacier-ice walls arching overhead with ribbed flowing texture, single beam of cool blue daylight entering through a crevasse skylight, foreground ice-floor with embedded volcanic ash band, distant cave-throat receding into deeper blue',
+      'Landmannalaugar rhyolite ridge at golden hour, color-banded ridges in rust + ochre + amber + sulphur-yellow rising in striated layers, foreground close detail of obsidian-flecked volcanic pumice, midground hot-spring steam plume drifting low, distant lenticular cloud over the peak',
+      'Þingvellir continental rift fissure, the deep crack between North-American and Eurasian plates running through moss-covered volcanic ground, foreground close basalt-rim with Icelandic moss carpet, midground rift-valley floor receding, distant Hengill volcano in cool blue haze',
+      'Eldhraun moss-on-lava field at low-winter-sun, undulating volcanic-rock hummocks blanketed in thick Racomitrium lanuginosum moss in muted green-gold, foreground close moss carpet with embedded lava clinker, midground hummock waves stretching to distant Mýrdalsjökull glacier edge',
+      'Strokkur geyser fountain at blue-hour, the 20-metre boiling-water column rising vertically against cool twilight sky, foreground hot-spring rim crusted in sulphur and silica, steam plume drifting upward, distant Geysir field rust-red mineral-stained ground',
+      'Sólheimajökull glacier tongue at polar-overcast, the cracked grey-ash-streaked glacier face descending toward a black-sand outwash plain, foreground close blue-glacier-ice slab with ash bands, midground crevasse field, distant glacier tongue receding to cloud-shrouded ice cap',
+      'Hvítserkur basalt sea arch at midnight sun glow, the 15-metre-tall dragon-shaped sea stack rising from a glassy tidal plain, foreground tidal-flat with reflection of stack, soft cool-pink twilight on the rock face, distant Strandir coastline silhouette',
+      'Aldeyjarfoss basalt-column waterfall, milky-blue glacial water falling 20 metres into a basalt-column-walled pool, foreground close hexagonal basalt rim wet with spray, column-curtain wall dominant midground, sky a clear arctic cobalt',
+      'Kirkjufell mountain at blue-hour, the iconic conical Snæfellsnes peak rising 463 metres beside the small Kirkjufellsfoss waterfall, foreground wet basalt boulders with foaming stream, midground falls leading the eye to peak, distant fjord water and cobalt sky behind',
+      'Reynisdrangar sea stacks at storm light, three basalt sea stacks rising from churning Atlantic surf with crashing wave-spray, foreground Reynisfjara black sand with surf-pattern arcs, breaking storm cloud overhead with rain curtain advancing, distant cliff coast in cool grey mist',
+      'Goðafoss horseshoe waterfall at polar twilight, the 12-metre-tall arcing waterfall sweeping in a U-shape over a basalt rim, foreground close basalt ledge with mossy edge, milky-blue water curtain dominant, distant cliff-face and pink-violet polar dawn sky',
+      'Námafjall geothermal field at midday, rust-orange and sulphur-yellow mineral-crust ground steaming with active fumaroles and bubbling mud pots, foreground close fumarole rim with concentric sulphur deposit, midground bubbling pot, distant Mýrdalsjökull glacier edge cool blue',
+      'Háifoss high waterfall, the 122-metre vertical thread of glacial-silt-grey water dropping into a vast canyon, foreground close basalt-rim with moss carpet, neighboring smaller waterfall Granni at left, deep canyon walls in atmospheric blue depth',
+      'Kerlingarfjöll geothermal valley at golden hour, rhyolite ridges in rust + ochre + violet striations with steaming hot-spring veins running through the slope, foreground close mineral-crust ground with sulphur deposits, midground steam plume drifting, distant rhyolite peaks in warm copper sidelight',
+      'Snæfellsjökull peak at midnight sun, the 1446-metre glacier-capped volcano rising from coastal foothills, foreground basalt-pebble fan on coastal flat, midground moss-on-lava hummocks, glacier cap glowing soft cool-pink in midnight-sun grazing light',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Iceland subject entries. NO preamble, NO commentary. Each entry 30-55 words on a single line. Format follows the touchpoint pattern: "Toponym + feature + close-foreground detail + midground hero + distant atmospheric depth + lighting note".`,
+  },
+
+  iceland_raw_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHORS for EarthBot's iceland-raw path. Each entry is ONE specific close-edge Icelandic detail anchoring the lower 15-20% of the frame — texture-rich, tactile, near-camera, biome-appropriate. Each entry 14-25 words.
+
+✅ ICELAND-SPECIFIC CLOSE-EDGE DETAILS:
+  • Hexagonal basalt column tops at near edge (Stuðlagil / Reynisfjara / Svartifoss)
+  • Single iceberg shard polished glass-clear on black volcanic sand at frame corner
+  • Cluster of glacier-river cobbles wet and dark-grey at near edge
+  • Frost-edged Icelandic moss carpet (Racomitrium lanuginosum) at lower frame
+  • Sulfur-crust rim of geothermal pool at near edge
+  • Volcanic-sand ripple pattern wind-sculpted at near edge
+  • Black pumice fragments in arc pattern at lower frame
+  • Icelandic lichen patches on basalt at near edge
+  • Cracked dry lava-flow surface at lower frame edge
+  • Cluster of arctic-thyme alpine flowers at near edge
+  • Ice-cave wall ribbed pattern at frame-edge interior
+  • Glacial-melt-stream silver thread crossing lower frame
+  • Single tussock of sea-grass on Reynisfjara dune
+  • Beach-pebble fan of polished basalt at lower frame
+  • Frozen waterfall ice formation at near edge
+
+🚫 ABSOLUTE BANS:
+  • ZERO photographer names
+  • ZERO American / European foreground analogues (no "wildflower meadow" alpine analog)
+  • ZERO negation phrases
+  • ZERO non-Icelandic vegetation (no pine cones, no oak leaves, no temperate-forest debris)
+
+Each entry 14-25 words, single line. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Hexagonal black basalt column tops at near edge wet with sea spray, sharp polygon edges catching cool sidelight',
+      'Single glass-clear iceberg shard on black volcanic sand at frame corner, internal blue veins visible',
+      'Cluster of glacier-river cobbles wet and dark-grey at near edge, sorted by glacial sorting',
+      'Frost-edged Icelandic moss carpet (Racomitrium lanuginosum) at lower frame in muted green-gold pillows',
+      'Sulphur-yellow crust rim of a geothermal pool at near edge, concentric mineral deposits',
+      'Volcanic-sand ripple pattern wind-sculpted at near edge in fine parallel ridges',
+      'Black pumice fragments in arc pattern at lower frame, porous texture readable at close range',
+      'Cluster of arctic-thyme pink alpine flowers at near edge on moss-covered lava rock',
+      'Ice-cave wall ribbed flow pattern at frame-edge interior, blue-translucent ice with embedded ash',
+      'Glacial-melt-stream silver thread crossing lower frame between basalt cobbles',
+      'Single tussock of sea-grass on a Reynisfjara dune crest at near edge bent by Atlantic wind',
+      'Beach-pebble fan of polished basalt at lower frame in arcing tidal pattern',
+      'Frozen waterfall ice formation at near edge in cascading icicle layers',
+      'Cracked dry pahoehoe lava-flow surface at lower frame edge with mineral-stained crust',
+      'Cluster of mountain avens white-petalled alpine flowers at near edge on rocky moraine',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Iceland foreground anchor entries. NO preamble. Each entry 14-25 words on a single line.`,
+  },
+
+  iceland_raw_light_condition: {
+    format: 'simple',
+    theme: `ICELANDIC LIGHT CONDITIONS for EarthBot's iceland-raw path. Each entry is ONE specific Icelandic lighting register — Iceland's high latitude gives it dramatically different light than mid-latitude landscapes. Each entry 14-22 words.
+
+✅ ICELANDIC LIGHTING REGISTERS:
+  • Low winter sun raking horizontally across landscape (sun never gets high in winter)
+  • Blue-hour polar twilight extended over 2+ hours (long dawn / dusk transitions)
+  • Midnight sun glow June-July (sun skims horizon but never sets)
+  • Polar-overcast diffuse flat shadowless light (overcast volcanic ash sky)
+  • Storm-break shaft tearing through dark cloud deck
+  • Ice-cave-blue glow filtered through compressed-glacier-ice ceiling
+  • Golden-hour copper-rose rake on basalt + black sand
+  • Pre-storm yellow-green oppressive light
+  • White-out snow-squall diffuse illumination
+  • Crepuscular ray ladder through breaking cloud
+  • Backlit translucent waterfall mist + sun-disc
+  • Geothermal-vent steam backlit copper at sunset
+  • Aurora-night cool moonlit landscape underneath
+  • Sodium-orange pre-eruption volcanic glow (very rare)
+  • Inversion-fog top-lit by clear sky above
+
+🚫 ABSOLUTE BANS:
+  • ZERO photographer names
+  • ZERO mid-latitude-only lighting (no "warm summer afternoon" — Iceland summers are cool)
+  • ZERO negation phrases
+  • Aurora described as photographic-subtle, NEVER fantasy-cosmic neon
+
+Each entry 14-22 words, single line. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Low winter sun raking horizontally at 10-degree angle across the landscape in copper-amber rake light',
+      'Blue-hour polar twilight stretching 2 hours with cobalt zenith fading to copper-amber low horizon',
+      'Midnight sun glow grazing the horizon at 1am with warm-cool color split across the frame',
+      'Polar-overcast diffuse flat shadowless light rendering every detail in even cool-grey',
+      'Storm-break shaft tearing through a dark nimbostratus deck illuminating one patch of glacier',
+      'Ice-cave-blue glow filtered through 30 metres of compressed glacier ice ceiling',
+      'Golden-hour copper-rose rake side-lighting basalt and black sand at 30-degree sun angle',
+      'Pre-storm yellow-green oppressive light with falling barometric pressure visible in cloud color',
+      'White-out snow-squall diffuse illumination with falling streaks dimensionalizing the air',
+      'Crepuscular ray ladder through breaking cloud with three distinct beams hitting the ground',
+      'Backlit translucent waterfall mist with sun-disc just visible behind the falling water curtain',
+      'Geothermal-vent steam backlit copper-amber at sunset rising in vertical plume',
+      'Aurora-night cool moonlit landscape underneath subtle green aurora ribbon',
+      'Sodium-orange pre-eruption volcanic glow lighting the horizon underside of a cloud deck',
+      'Inversion-fog top-lit by clear sky above with peaks emerging from cloud-sea below',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Iceland light-condition entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  iceland_raw_atmosphere: {
+    format: 'simple',
+    theme: `ATMOSPHERE entries for EarthBot's iceland-raw path. Each entry is ONE specific Icelandic atmospheric texture — what fills the air between camera and far distance. Each entry 14-22 words.
+
+✅ ICELANDIC ATMOSPHERIC REGISTERS:
+  • Geothermal steam plume drifting low over rust-stained ground
+  • Glacier-cold mist hanging in still air at glacier tongue base
+  • Sea spray drifting inland from Atlantic breakers
+  • Snow squall sweeping across the frame in horizontal streaks
+  • Volcanic-vapor curtain rising from active fissure
+  • Inversion fog low in valley with peaks above breaking through
+  • Waterfall-mist veil filling lower frame in pearl-grey
+  • Ice-cave still cold air with suspended frost particles glittering
+  • Mist drift along glacial-river flats in cool blue-grey
+  • Sulfur-tinted yellow haze over geothermal field
+  • Polar wind-blown snow streamers off ridge crest
+  • Cold sea fog rolling onto black-sand beach
+  • Pumice-dust haze suspended after eruption
+  • Glacial-flour suspended in milky river casting cool haze
+  • Cloud shadow patches sliding across moss-on-lava field
+
+🚫 ABSOLUTE BANS:
+  • ZERO photographer names
+  • ZERO desert-coded dust haze (Iceland is wet)
+  • ZERO tropical humidity descriptors
+  • ZERO negation phrases
+
+Each entry 14-22 words, single line. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Geothermal steam plume drifting low over rust-stained ground in horizontal ribbons',
+      'Glacier-cold mist hanging in still air at glacier tongue base catching cool light',
+      'Atlantic sea spray drifting inland from breaking Reynisfjara surf in pearl-grey veil',
+      'Snow squall sweeping across the frame in horizontal streaks of falling crystals',
+      'Volcanic-vapor curtain rising from active fissure in copper-tinted plume',
+      'Inversion fog low in valley with peaks above breaking through into clear blue',
+      'Waterfall-mist veil filling lower frame in pearl-grey shroud',
+      'Ice-cave still cold air with suspended frost particles glittering in shafted light',
+      'Mist drift along glacial-river flats in cool blue-grey horizontal bands',
+      'Sulphur-tinted yellow haze hovering over geothermal field at midday',
+      'Polar wind-blown snow streamers off ridge crest in white horizontal plumes',
+      'Cold sea fog rolling onto black-sand beach from offshore in dense pearl veil',
+      'Pumice-dust haze suspended after eruption in tan-grey suspended layer',
+      'Glacial-flour suspended in milky river casting cool blue-grey haze over outwash plain',
+      'Cloud shadow patches sliding across moss-on-lava field in moving dark-light pattern',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Iceland atmosphere entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  iceland_raw_sky_layer: {
+    format: 'simple',
+    theme: `SKY LAYER entries for EarthBot's iceland-raw path. Each entry is ONE specific Icelandic sky cover — what fills the upper third of the frame. Each entry 14-22 words.
+
+✅ ICELANDIC SKY REGISTERS:
+  • Lenticular cloud over Eyjafjallajökull or Hekla volcano peak
+  • Breaking storm cloud deck with sun-shafts emerging
+  • Polar twilight gradient (cobalt zenith fading to copper-amber low horizon)
+  • Summer-night cloud (June-July): pastel blue-pink-grey illuminated by midnight sun
+  • Midnight-sun low-burn glow on horizon-grazing cloud bank
+  • Clear cobalt-blue arctic noon sky with high mare's-tail cirrus
+  • Heavy nimbostratus rain-bearing dark grey deck
+  • Aurora-curtain subtle green ribbon mid-sky
+  • Volcanic-ash-tinted sky with copper-yellow undertone
+  • Massive cumulonimbus anvil over distant glacier
+  • Layered stratocumulus broken by cobalt patches
+  • Snow-squall sky white-grey diffuse with falling streaks visible
+  • Star-crowded moonless night sky with Milky Way arch
+  • Inversion-cloud sea below peak with clear sky above
+  • Polar lenticular stack three-tiered over Snæfellsjökull
+
+🚫 ABSOLUTE BANS:
+  • ZERO photographer names
+  • ZERO desert / tropical / temperate sky tropes
+  • ZERO negation phrases
+
+Each entry 14-22 words, single line. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Lenticular cloud disc hovering motionless over Eyjafjallajökull volcano peak',
+      'Breaking storm cloud deck with sun-shafts emerging through three distinct openings',
+      'Polar twilight gradient with cobalt zenith fading down to copper-amber at low horizon',
+      'Summer-night cloud in pastel blue-pink-grey illuminated by midnight sun from below',
+      'Midnight-sun low-burn glow on horizon-grazing cumulus cloud bank stretching across',
+      'Clear cobalt-blue arctic noon sky with high mare-tail cirrus streaks',
+      'Heavy nimbostratus rain-bearing dark grey deck pressing low overhead',
+      'Aurora-curtain subtle green ribbon arching mid-sky at moderate intensity',
+      'Volcanic-ash-tinted sky with copper-yellow undertone after recent eruption',
+      'Massive cumulonimbus anvil rising above the distant glacier',
+      'Layered stratocumulus broken by cobalt patches in alternating bands',
+      'Snow-squall sky white-grey diffuse with falling streaks visible across the frame',
+      'Star-crowded moonless night sky with the Milky Way arch overhead',
+      'Inversion-cloud sea below the peak with clear cobalt sky above',
+      'Triple-stack polar lenticular cloud disc tier over Snæfellsjökull peak',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Iceland sky layer entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  iceland_raw_scale_prover: {
+    format: 'simple',
+    theme: `SCALE PROVERS for EarthBot's iceland-raw path. Each entry is ONE tiny postage-stamp-scale element in the deep distance, ant-sized, that proves the landscape's VAST scale. Iceland-coded wildlife or geometry ONLY. Each entry 14-22 words.
+
+✅ ICELANDIC SCALE-PROVER REGISTERS:
+  • Lone Icelandic horse silhouette ant-small on rhyolite ridge
+  • Small herd of Icelandic horses pencil-tall on moss-on-lava field
+  • Single arctic fox shape barely readable crossing black sand
+  • Tiny puffin colony on distant sea-stack ledge
+  • Lone northern fulmar gliding over Reynisfjara surf
+  • Distant skua silhouette over snowfield
+  • Matchstick-tiny iceberg in Jökulsárlón lagoon distance
+  • Glacial-melt-river thread silver-thin at far valley floor
+  • Tiny sea-stack silhouette far offshore in mist
+  • Distant geyser steam plume reading as a pencil-tall column
+  • Tiny waterfall thread half-readable on distant cliff
+  • Far-shore black-pebble line marking water's edge
+  • Skein of barnacle geese flying low along far horizon
+  • Lone Icelandic raven on basalt column rim ant-sized
+  • Small group of harbor seals on distant dark-rock shoreline
+
+🚫 ABSOLUTE BANS:
+  • ZERO photographer names
+  • ZERO non-Icelandic wildlife (no zebra, no elephant, no caribou, no moose, no bear)
+  • ZERO human figures or vehicles
+  • ZERO negation phrases
+  • Always TINY and DISTANT, NEVER hero-scale
+
+Each entry 14-22 words, single line. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Lone Icelandic horse silhouette ant-small on a distant rhyolite ridge in deep distance',
+      'Small herd of Icelandic horses pencil-tall on a moss-on-lava field at deep distance',
+      'Single arctic fox shape barely readable crossing distant black sand',
+      'Tiny puffin colony on a distant sea-stack ledge as small dark dots',
+      'Lone northern fulmar gliding over Reynisfjara surf at deep distance',
+      'Distant skua silhouette over snowfield as a pencil-tall dark shape',
+      'Matchstick-tiny iceberg in Jökulsárlón lagoon at deep distance',
+      'Glacial-melt-river thread silver-thin at the far valley floor',
+      'Tiny sea-stack silhouette far offshore in mist as a vertical dark shape',
+      'Distant geyser steam plume reading as a pencil-tall white column',
+      'Tiny waterfall thread half-readable on a distant cliff in deep haze',
+      'Far-shore black-pebble line marking the waters edge in deep distance',
+      'Skein of barnacle geese flying low along the far horizon',
+      'Lone Icelandic raven on a distant basalt column rim ant-sized',
+      'Small group of harbor seals on a distant dark-rock shoreline as small dark shapes',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Iceland scale-prover entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  iceland_raw_phenomenon: {
+    format: 'simple',
+    theme: `RARE PHENOMENA for EarthBot's iceland-raw path. Each entry is ONE specific real-Earth Icelandic phenomenon — the dramatic-but-real optical/weather event that elevates the frame. Each entry 14-22 words.
+
+✅ ICELANDIC PHENOMENA:
+  • Subtle green aurora ribbon arcing across mid-sky over snowfield
+  • Soft emerald aurora low above horizon at blue-hour
+  • Eruption fountain incandescent-red at fissure rim with steam plume
+  • Massive glacier calving event mid-fall with seracs cascading
+  • Glacial-flood (jökulhlaup) surge across outwash plain
+  • Snow squall sweeping through breaking cloud diagonals
+  • Rainbow arc through waterfall mist at golden hour
+  • Sun-pillar vertical light column at horizon
+  • Inversion-fog sea breaking around ridge crest
+  • Geothermal steam plume backlit copper at sunset
+  • Distant volcanic ash plume rising on horizon (non-eruptive cone)
+  • Mock sun (parhelion) faint on ice-crystal sky
+  • Diamond dust ice fog glittering in low sun
+  • Crepuscular ray ladder breaking through storm
+  • Distant lightning forking over highland interior
+
+🚫 ABSOLUTE BANS:
+  • ZERO photographer names
+  • ZERO non-Iceland phenomena (no monsoon, no sandstorm, no haboob)
+  • ZERO sci-fi / fantasy descriptors
+  • ZERO negation phrases
+  • Aurora descriptions stay GROUNDED-PHOTOGRAPHIC (subtle ribbon, soft arc, low-intensity curtain) — NEVER fantasy-cosmic (no "blazing neon", no "mythical fire-sky")
+
+Each entry 14-22 words, single line. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Subtle green aurora ribbon arcing across mid-sky over snowfield at moderate intensity',
+      'Soft emerald aurora low above the horizon at blue-hour with cool ground below',
+      'Eruption fountain incandescent-red at fissure rim with steam plume rising',
+      'Massive glacier calving event mid-fall with seracs cascading into lagoon water',
+      'Glacial-flood (jökulhlaup) surge sweeping across outwash plain in muddy churn',
+      'Snow squall sweeping through breaking cloud in diagonal streaks',
+      'Rainbow arc piercing waterfall mist at golden hour in full primary band',
+      'Sun-pillar vertical light column rising from horizon at sunset',
+      'Inversion-fog sea breaking around a ridge crest with peaks above',
+      'Geothermal steam plume backlit copper at sunset rising in vertical column',
+      'Distant volcanic ash plume rising on horizon from a non-eruptive volcanic cone',
+      'Mock sun (parhelion) faint on ice-crystal sky beside the actual sun',
+      'Diamond dust ice fog glittering in low sun in suspended sparkle',
+      'Crepuscular ray ladder breaking through storm in three distinct beams',
+      'Distant lightning forking over the highland interior from a mature thunderstorm',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Iceland phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
 };
 
 if (!POOL_RECIPES[POOL]) {
@@ -428,42 +805,165 @@ async function callSonnet(prompt) {
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'x-api-key': ANTHROPIC, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: SONNET, max_tokens: 16000, messages: [{ role: 'user', content: prompt }] }),
+      headers: {
+        'x-api-key': ANTHROPIC,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: SONNET,
+        max_tokens: 16000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
       signal: controller.signal,
     });
     if (!res.ok) throw new Error(`Sonnet ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const data = await res.json();
     return (data.content?.[0]?.text || '').trim();
-  } finally { clearTimeout(timeoutId); }
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 function parseArray(text) {
-  const body = text.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
+  const body = text
+    .replace(/```[a-z]*\n?/gi, '')
+    .replace(/```/g, '')
+    .trim();
   const lines = body.split('\n');
-  const entries = []; let current = null;
+  const entries = [];
+  let current = null;
   const numRe = /^\s*(\d+)\s*[.):\]]\s*(.+)$/;
   for (const raw of lines) {
     const trimmed = raw.trim();
     if (!trimmed) continue;
     const m = trimmed.match(numRe);
-    if (m) { if (current) entries.push(current); current = m[2].trim(); }
-    else if (current) current += ' ' + trimmed;
+    if (m) {
+      if (current) entries.push(current);
+      current = m[2].trim();
+    } else if (current) current += ' ' + trimmed;
   }
   if (current) entries.push(current);
   const cleaned = entries
-    .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+    .map((e) =>
+      e
+        .replace(/^["']|["']$/g, '')
+        .replace(/^[-•*]\s*/, '')
+        .trim()
+    )
     .filter((e) => e.length > 20 && e.length < 1200);
   if (cleaned.length === 0) throw new Error('No numbered entries found');
   return cleaned;
 }
 
-const STOPWORDS = new Set(['the','a','an','and','or','but','with','of','in','on','at','to','for','from','by','as','is','are','was','were','be','been','being','have','has','had','this','that','these','those','it','its','they','them','their','her','his','into','onto','through','across','over','under','near','around','between','one','two','three','some','any','all','no','not','than','then','also','so','very','more','most','many','much','each','every','other','another','same','such','only','own','just','still','here','there','where','when','what','who','wide','tall','long','high','low','large','small','massive','huge','vast','above','below','beside','behind','toward','within','throughout']);
+const STOPWORDS = new Set([
+  'the',
+  'a',
+  'an',
+  'and',
+  'or',
+  'but',
+  'with',
+  'of',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'from',
+  'by',
+  'as',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'have',
+  'has',
+  'had',
+  'this',
+  'that',
+  'these',
+  'those',
+  'it',
+  'its',
+  'they',
+  'them',
+  'their',
+  'her',
+  'his',
+  'into',
+  'onto',
+  'through',
+  'across',
+  'over',
+  'under',
+  'near',
+  'around',
+  'between',
+  'one',
+  'two',
+  'three',
+  'some',
+  'any',
+  'all',
+  'no',
+  'not',
+  'than',
+  'then',
+  'also',
+  'so',
+  'very',
+  'more',
+  'most',
+  'many',
+  'much',
+  'each',
+  'every',
+  'other',
+  'another',
+  'same',
+  'such',
+  'only',
+  'own',
+  'just',
+  'still',
+  'here',
+  'there',
+  'where',
+  'when',
+  'what',
+  'who',
+  'wide',
+  'tall',
+  'long',
+  'high',
+  'low',
+  'large',
+  'small',
+  'massive',
+  'huge',
+  'vast',
+  'above',
+  'below',
+  'beside',
+  'behind',
+  'toward',
+  'within',
+  'throughout',
+]);
 
 function signatureOf(entry) {
   const dashIdx = entry.indexOf(' — ');
   let body = dashIdx >= 0 ? entry.slice(dashIdx + 3) : entry;
-  const tokens = body.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter((w) => w.length > 4 && !STOPWORDS.has(w)).slice(0, 20);
+  const tokens = body
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 4 && !STOPWORDS.has(w))
+    .slice(0, 20);
   return [...new Set(tokens)].sort().slice(0, 12).join(' ');
 }
 
@@ -474,15 +974,27 @@ function titleOf(entry) {
 }
 
 function dedupe(entries) {
-  const seenSigs = new Map(); const seenTitles = new Map();
-  const kept = []; const dropped = [];
+  const seenSigs = new Map();
+  const seenTitles = new Map();
+  const kept = [];
+  const dropped = [];
   for (const e of entries) {
     if (typeof e !== 'string' || e.length < 20) continue;
     const title = titleOf(e);
-    if (title && seenTitles.has(title)) { dropped.push({ entry: e.slice(0, 80), reason: 'title' }); continue; }
+    if (title && seenTitles.has(title)) {
+      dropped.push({ entry: e.slice(0, 80), reason: 'title' });
+      continue;
+    }
     const sig = signatureOf(e);
-    if (sig.length < 10) { if (title) seenTitles.set(title, e); kept.push(e); continue; }
-    if (seenSigs.has(sig)) { dropped.push({ entry: e.slice(0, 80), reason: 'body' }); continue; }
+    if (sig.length < 10) {
+      if (title) seenTitles.set(title, e);
+      kept.push(e);
+      continue;
+    }
+    if (seenSigs.has(sig)) {
+      dropped.push({ entry: e.slice(0, 80), reason: 'body' });
+      continue;
+    }
     seenSigs.set(sig, e);
     if (title) seenTitles.set(title, e);
     kept.push(e);
@@ -495,9 +1007,17 @@ async function generateBatch(batchCount) {
   const text = await callSonnet(buildPrompt(batchCount, recipe));
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   let arr;
-  try { arr = parseArray(text); }
-  catch (e) { console.error('Parse failed:', e.message); console.error('First 400 chars:', text.slice(0, 400)); return []; }
-  if (!Array.isArray(arr) || arr.length === 0) { console.warn('  ⚠ Sonnet returned no usable entries'); return []; }
+  try {
+    arr = parseArray(text);
+  } catch (e) {
+    console.error('Parse failed:', e.message);
+    console.error('First 400 chars:', text.slice(0, 400));
+    return [];
+  }
+  if (!Array.isArray(arr) || arr.length === 0) {
+    console.warn('  ⚠ Sonnet returned no usable entries');
+    return [];
+  }
   console.log(`  • Sonnet returned ${arr.length} entries in ${elapsed}s`);
   return arr;
 }
@@ -505,21 +1025,36 @@ async function generateBatch(batchCount) {
 (async () => {
   const outPath = path.resolve(`scripts/bots/earthbot/seeds/${POOL}.json`);
   let preExisting = [];
-  if (fs.existsSync(outPath)) { try { preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8')); } catch {} }
+  if (fs.existsSync(outPath)) {
+    try {
+      preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    } catch {}
+  }
   const finalTarget = TARGET ?? preExisting.length + COUNT;
   const startCount = preExisting.length;
-  if (TARGET !== null) console.log(`Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`);
-  else console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
-  let pool = [...preExisting]; let iteration = 0;
+  if (TARGET !== null)
+    console.log(
+      `Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`
+    );
+  else
+    console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
+  let pool = [...preExisting];
+  let iteration = 0;
   while (pool.length < finalTarget && iteration < MAX_ITERATIONS) {
     iteration++;
     const stillNeeded = finalTarget - pool.length;
     const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
-    console.log(`\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`);
+    console.log(
+      `\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`
+    );
     const fresh = await generateBatch(batchSize);
-    if (fresh.length === 0) { console.warn('  ⚠ empty Sonnet response — stopping'); break; }
+    if (fresh.length === 0) {
+      console.warn('  ⚠ empty Sonnet response — stopping');
+      break;
+    }
     const within = dedupe(fresh);
-    if (within.dropped.length > 0) console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
+    if (within.dropped.length > 0)
+      console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
     const existingSigs = new Set(pool.map((e) => signatureOf(e)));
     const existingTitles = new Set(pool.map((e) => titleOf(e)).filter(Boolean));
     const newUnique = within.kept.filter((e) => {
@@ -534,12 +1069,23 @@ async function generateBatch(batchCount) {
     const toAdd = newUnique.slice(0, room);
     pool = [...pool, ...toAdd];
     console.log(`  ✓ Added ${toAdd.length} unique → pool at ${pool.length}/${finalTarget}`);
-    if (toAdd.length === 0 && newUnique.length === 0) { console.warn('  ⚠ batch added nothing — stopping'); break; }
+    if (toAdd.length === 0 && newUnique.length === 0) {
+      console.warn('  ⚠ batch added nothing — stopping');
+      break;
+    }
   }
-  console.log(`\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`);
-  if (DRY) { console.log('\nDry-run — not writing.'); return; }
+  console.log(
+    `\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`
+  );
+  if (DRY) {
+    console.log('\nDry-run — not writing.');
+    return;
+  }
   const bakPath = outPath + '.bak-' + Date.now();
-  if (fs.existsSync(outPath) && preExisting.length > 0) { fs.copyFileSync(outPath, bakPath); console.log(`Backed up → ${bakPath}`); }
+  if (fs.existsSync(outPath) && preExisting.length > 0) {
+    fs.copyFileSync(outPath, bakPath);
+    console.log(`Backed up → ${bakPath}`);
+  }
   fs.writeFileSync(outPath, JSON.stringify(pool, null, 2));
   console.log(`✓ Wrote ${pool.length} entries → ${outPath}`);
 })();
