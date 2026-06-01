@@ -254,9 +254,21 @@ Deno.serve(async (req) => {
 
     // Build push data for navigation on tap. `type` lets the client route by
     // notification kind — e.g. a download_ready tap auto-saves the cached HD
-    // rather than just opening the post.
+    // rather than just opening the post. `notificationId` + `groupKey` let
+    // the client mark the row as seen on tap so the inbox badge clears
+    // without requiring the user to open the inbox separately. group_key is
+    // preferred (handles aggregated likes/comments — one tap clears the
+    // whole debounced group, matching the inbox UX); notification_id is the
+    // single-row fallback.
     const data: Record<string, string> = { type: record.type };
     if (record.upload_id) data.uploadId = record.upload_id;
+    if (record.id) data.notificationId = record.id;
+    // group_key: prefer payload.group_key (worker-supplied for debounced
+    // aggregated pushes) over record.group_key (column on the underlying
+    // notification row) — they're usually the same but the worker payload
+    // is the authoritative source for aggregated cases.
+    const groupKey = payload.group_key ?? record.group_key;
+    if (groupKey) data.groupKey = groupKey;
     if (record.type === 'friend_request' || record.type === 'friend_accepted') {
       data.userId = record.actor_id;
     }

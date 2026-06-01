@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { DreamPostItem } from '@/components/DreamCard';
+import type { NotificationRouteData } from '@/lib/notificationRouting';
 
 export interface FeedStore {
   // Pinned post — shows as first card on home feed (e.g. deep link, first dream after onboarding)
@@ -32,6 +33,11 @@ export interface FeedStore {
   // Deep link — post ID to pin when the home screen is ready
   pendingPostId: string | null;
   setPendingPostId: (id: string | null) => void;
+  // Push-notification tap that arrived while user was signed OUT. Stashed
+  // here so a post-auth consumer effect in app/_layout.tsx can replay the
+  // tap once the user signs in. See lib/notificationRouting.ts.
+  pendingNotificationData: NotificationRouteData | null;
+  setPendingNotificationData: (data: NotificationRouteData | null) => void;
   // HUD visibility — toggled by single tap on feed cards
   hudVisible: boolean;
   setHudVisible: (visible: boolean) => void;
@@ -58,6 +64,8 @@ export const useFeedStore = create<FeedStore>((set) => ({
   setActiveTab: (tab) => set({ activeTab: tab }),
   pendingPostId: null,
   setPendingPostId: (id) => set({ pendingPostId: id }),
+  pendingNotificationData: null,
+  setPendingNotificationData: (data) => set({ pendingNotificationData: data }),
   hudVisible: true,
   setHudVisible: (visible) => set({ hudVisible: visible }),
 }));

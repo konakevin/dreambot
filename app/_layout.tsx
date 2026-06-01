@@ -15,6 +15,8 @@ import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useBadgeSync } from '@/hooks/useBadgeSync';
+import { routeFromNotification } from '@/lib/notificationRouting';
+import { useFeedStore } from '@/store/feed';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
 import { ToastHost } from '@/components/Toast';
@@ -106,6 +108,29 @@ function AuthInitializer() {
 function PushRegistrar() {
   usePushNotifications();
   useBadgeSync();
+  return null;
+}
+
+/**
+ * Replays a notification tap that was stashed because the user wasn't signed
+ * in when it arrived. usePushNotifications stashes via
+ * useFeedStore.setPendingNotificationData when the tap fires pre-auth (cold
+ * start before session hydrates, or a tap from the auth screen). Once user
+ * becomes non-null, route the stashed data through the same helper and
+ * clear the stash. One-shot per app launch via the helper's own gating.
+ */
+function PendingNotificationReplayer() {
+  const user = useAuthStore((s) => s.user);
+  const pending = useFeedStore((s) => s.pendingNotificationData);
+  useEffect(() => {
+    if (!user || !pending) return;
+    if (__DEV__) console.log('[notif] replaying post-auth notification:', pending);
+    useFeedStore.getState().setPendingNotificationData(null);
+    // deferUntilReady so the navigator has time to mount the post-auth tab tree.
+    // markSeen carries through — a pre-auth tap should still clear the badge
+    // once we replay it.
+    routeFromNotification(pending, { deferUntilReady: true, markSeen: true });
+  }, [user, pending]);
   return null;
 }
 
@@ -416,6 +441,7 @@ function RootLayout() {
               <AnalyticsIdentity />
               <ScreenTracker />
               <PushRegistrar />
+              <PendingNotificationReplayer />
               <RevenueCatInitializer />
               <RealtimeSubscriber />
               <DataPrefetcher />

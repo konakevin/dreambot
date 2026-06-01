@@ -115,7 +115,7 @@ export function usePushNotifications() {
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
       const data = response.notification.request.content.data as NotificationRouteData;
       if (__DEV__) console.log('[Push] Tapped (warm):', data);
-      routeFromNotification(data, { deferUntilReady: true });
+      routeFromNotification(data, { deferUntilReady: true, markSeen: true });
     });
 
     // Cold-start tap handler. App was COMPLETELY CLOSED when the tap fired
@@ -136,7 +136,7 @@ export function usePushNotifications() {
         // expo-router navigator typically hasn't mounted its initial route
         // yet. InteractionManager runs the push after the first frame
         // settles so the navigation tree is alive.
-        routeFromNotification(data, { deferUntilReady: true });
+        routeFromNotification(data, { deferUntilReady: true, markSeen: true });
       });
     }
 
