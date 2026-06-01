@@ -925,8 +925,99 @@ The viewer's eye must land on the BAOBAB GROVE / SALT PAN / SAVANNA / DELTA CHAN
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the African subject. PRESERVE the African toponym from the subject slot verbatim in the opening phrase — Serengeti / Maasai Mara / Etosha / Makgadikgadi / Tarangire / Tsavo / Okavango / Zambezi / Nile / Chobe / Mahale / Sahara / Namib / Deadvlei / Madagascar / Cape fynbos / Congo Basin — these geographic anchors are LOAD-BEARING for African identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" / "EarthBot::render_african" / brand-style preambles — these are style-prior triggers that interfere with the SUBJECT anchoring, NEVER include them at the prompt open). Describe positive content only — no negation language like "no humans" or "no architecture" or "no mountains" (Flux tokenizer leaks those words and renders the noun).`;
   },
 
-  EARTHBOT_ASIA_LANDSCAPE: ({ slots }) =>
-    `// PLACEHOLDER — EARTHBOT_ASIA_LANDSCAPE template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_ASIA_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      subject,
+      foreground_anchor,
+      light_condition,
+      atmosphere,
+      sky_layer,
+      scale_prover,
+      phenomenon,
+    } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one real-Earth pan-Asian event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or atmosphere, DROP IT. Real-Earth ONLY — no aurora at lower latitudes (only Hokkaido / Tibetan plateau / north Mongolia rarely allow it), no bioluminescent, no fantasy-cosmic.`
+      : '';
+
+    return `You are a fine-art landscape photographer writing ONE PAN-ASIAN RAW NATURE scene for EarthBot. THIS IS EARTHBOT — THE LAND IS THE HERO. Spans the full breadth of Asia's signature raw geology — Japan (Mt. Fuji silhouettes, sakura groves, bamboo forest, autumn ginkgo, Hokkaido boreal forest + winter snow trees, Yakushima ancient cedar), China (Huangshan granite peaks + sea-of-clouds, Guilin / Yangshuo / Zhangjiajie / Wulingyuan karst pillars, Tibetan plateau, Jiuzhaigou turquoise lakes), Taiwan (Taroko marble gorge), Vietnam (Halong Bay limestone karst islands), Korea (Seoraksan granite, Jeju volcanic crater), Mongolia (Gobi dunes, Altai steppe), Nepal/Bhutan (high cirque + glacial lake — no Everest), Indonesia (Mount Bromo volcanic basin, Ijen sulfur). Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL ASIAN BIOMES ONLY ━━━
+
+This is REAL Asia — never fantasy. Ground every render in specific Asian geographic identity: GRANITE peaks (NOT generic alps), KARST limestone pillars (NOT mesa), BAMBOO forest (NOT temperate hardwood), SAKURA + GINKGO grove (NOT European autumn), Hokkaido BIRCH/CONIFER snow-trees (NOT alpine), Gobi DUNE SEA, Halong limestone ISLANDS in jade water. Asian peaks are real and welcome (this path INCLUDES mountains — Asia IS mountainous, unlike the African path) but render as Chinese / Japanese / Tibetan / Vietnamese specifically (sea-of-clouds, mist-shrouded granite), NEVER European Alpine drift.
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT FEATURES / ZERO CULTURAL HERITAGE ━━━
+
+The entire frame is uninhabited raw nature. NEVER a figure, NEVER a monk, NEVER a vehicle, NEVER torii gates, NEVER pagodas, NEVER temples, NEVER stupas, NEVER village huts, NEVER rice terraces (agricultural), NEVER roads, NEVER stone-paved paths, NEVER prayer flags, NEVER buddha statues, NEVER stone lanterns. Pure raw landscape only. Wildlife if present is matchstick-tiny incidental detail at deep distance — Japanese macaque / snow monkey / red-crowned crane / Hokkaido fox / takin / blue-sheep — never hero-scale.
+
+━━━ STYLE GUARDS ━━━
+
+- NO photographer name-drops in the output prompt (Michael Kenna / Hengki Koentjoro / Marc Adamus / Max Rive — these leak verbatim into the polished output and bias the render). Describe morphologically.
+- Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
+- Avoid stylized / 3D-render / cartoony — photographic only
+- Avoid "fire" as a noun (Flux renders literal flames) — for active volcanism use "molten lava glow" / "ember-red crater rim" / "incandescent sulfur" as adjective-led phrases
+
+━━━ THE SUBJECT (the iconic pan-Asian HABITAT composition) ━━━
+${subject}
+
+━━━ FOREGROUND ANCHOR (close-edge detail in the lower 15-20% of frame) ━━━
+${foreground_anchor}
+
+━━━ LIGHT CONDITION ━━━
+${light_condition}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ SKY LAYER ━━━
+${sky_layer}
+
+━━━ SCALE PROVER (tiny element at deep distance — postage-stamp scale, optional) ━━━
+${scale_prover}
+
+If present, render small — proves the landscape is VAST. Asian-appropriate elements ONLY: Japanese macaque / snow monkey / red-crowned crane / Hokkaido fox / Tibetan blue-sheep / takin / yak / lone-temple-roof-zero geometry / single petrel over Halong / wingtip of distant Demoiselle crane. Never hero-scale, never anthropomorphic.${phenomenonBlock}
+
+━━━ HARD RULE — ASIAN PALETTE + ATMOSPHERIC DEPTH ━━━
+
+Multi-tier depth (foreground anchor + midground hero biome + atmospheric distant horizon OR canopy depth). Palette by biome: HUANGSHAN / SEA-OF-CLOUDS cool grey-and-pearl with granite black; KARST jade-and-emerald water + limestone grey-and-amber; SAKURA pink-and-pearl-pink-against-mist; HOKKAID O snow-white + birch-bone + cool-blue shadow; BAMBOO emerald-and-gold dappled; TIBETAN plateau cobalt-sky + ochre-grass + glacier-blue; GOBI tangerine sand + cobalt sky; HALONG jade water + limestone grey + mist-pearl; YAKUSHIMA emerald-moss + deep-shadow-cedar; INDONESIAN VOLCANO sulfur-yellow + cobalt sky + ash-grey + ember-orange.
+
+━━━ COMPOSITION DIRECTIVE — EPIC, NEVER DOCUMENTARY ━━━
+
+This is NEVER a documentary travel-snapshot. This is the LAST SAMURAI cinematic title-card / Kurosawa landscape / BBC Planet Earth Asian episode opener / Mononoke forest energy. The frame must be JAW-DROPPING. Specific composition energy to inject:
+
+- **LOW-ANGLE HERO STANCE** preferred — camera looking UP at the granite spire / karst pillar / cedar trunk from below, dramatic silhouette against mist or burning sky
+- **SEA-OF-CLOUDS** — Huangshan / Cordillera Asia signature: clouds breaking around granite peaks, peaks emerging like islands from a white sea
+- **DRONE-LEVEL AERIAL** for karst (Halong / Yangshuo / Zhangjiajie), dune sea (Gobi), turquoise-lake (Jiuzhaigou)
+- **DRAMATIC SILHOUETTES** of cedar / bamboo / pillar / peak against mist or sunset
+- **MIST-INVERSION** epic: Yakushima cedar forest with rolling mist, Huangshan peaks in cloud sea
+- **MEGA-WEATHER**: monsoon-lightning over karst, snow-squall over Hokkaido, sulfur plume over Bromo
+- **EXTREME COLOR**: blood-red sakura sunset / electric jade Jiuzhaigou lake / sulfur-yellow Ijen / orange Gobi against cobalt
+- The iconic Asian subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25% (or canopy ceiling for forest). Multi-tier depth mandatory.
+- Photographic, hyperreal, EPIC pan-Asian fine-art landscape — peak-drama moment.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'Pan-Asian raw nature palette — biome-dependent (cool grey + pearl + granite black for Huangshan, jade + emerald for karst, pink + pearl for sakura, snow + birch + cool-blue for Hokkaido, sulfur + cobalt for volcano)'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
+
+The polished prompt MUST be authored in this exact sequence:
+  1. **OPEN WITH THE SUBJECT** — the Asian hero (Mt. Fuji silhouette / Huangshan granite spire in sea-of-clouds / Halong Bay limestone islands aerial / Zhangjiajie pillar forest / Yakushima ancient cedar / Sakura grove / Hokkaido birch / Jiuzhaigou turquoise lake / Gobi dune sea / Mount Bromo volcanic basin / etc.) is the FIRST phrase. NEVER open with foreground detail. NEVER open with light or atmosphere.
+  2. Then the SKY LAYER
+  3. Then the LIGHT CONDITION + ATMOSPHERE
+  4. Then the FOREGROUND ANCHOR (small near-camera detail in lower 15-20%, NOT the hero)
+  5. Then the SCALE PROVER if applicable (tiny element at deep distance)
+  6. Then any rolled PHENOMENON
+  7. Finally palette / mood notes
+
+The viewer's eye must land on the PEAK / KARST / CEDAR / SAKURA / DUNE / VOLCANO / LAKE first — NEVER on a foreground rock or grass clump.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the Asian subject. PRESERVE the Asian toponym from the subject slot verbatim in the opening phrase — Mt. Fuji / Huangshan / Halong Bay / Zhangjiajie / Wulingyuan / Yangshuo / Guilin / Taroko / Seoraksan / Jeju / Hokkaido / Yakushima / Jiuzhaigou / Tibetan plateau / Gobi / Altai / Mount Bromo / Ijen — these geographic anchors are LOAD-BEARING for Asian identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" / "EarthBot::render" — these are style-prior triggers, NEVER include them at the open). Describe positive content only — no negation language like "no humans" or "no temples" (Flux tokenizer leaks those words).`;
+  },
   EARTHBOT_ANDES_PATAGONIA: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       subject,

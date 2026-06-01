@@ -1452,6 +1452,344 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
     ],
     instructions: `Output ONLY a numbered list of {COUNT} African phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // ASIA-LANDSCAPE path (2026-06-01 activation).
+  // Habitat-hero recipe applied from african v2 (the LAND is the hero,
+  // wildlife incidental). Universal guards:
+  //   • NO photographer names anywhere
+  //   • NO negation language in pool entries
+  //   • Subject entries LEAD with Asian toponym in first 5-8 words
+  //   • NO torii / pagoda / temple / stupa / village / rice-terrace
+  //     (cultural — respect)
+  //   • Asia HAS mountains (Huangshan / Cordillera / Himalaya) — those
+  //     are GOAL not anti-pattern. But Asian-specific (mist-shrouded
+  //     granite / karst pillar), NEVER generic European Alps.
+  // ═══════════════════════════════════════════════════════════
+
+  asia_landscape_subject: {
+    format: 'simple',
+    theme: `PURE PAN-ASIAN RAW HABITAT SCENES for EarthBot's asia-landscape path. THE LAND IS THE HERO. Each entry is ONE iconic Asian HABITAT composition where the place itself dominates the frame. Wildlife if present is matchstick-tiny incidental scale-prover, NEVER hero. Each entry 30-55 words.
+
+🎯 THE HABITAT IS THE HERO:
+  • The HABITAT fills 50-65% of the frame (the granite peak / karst pillar / sakura grove / bamboo forest / cedar trunk / lake / dune sea / volcano basin)
+  • CAMERA-ANGLE VARIETY mandatory: low-angle hero stance / DRONE POV aerial / canopy POV / waterline reflection / sea-of-clouds vantage / silhouette / wide cinematic vista
+  • No humans, no temples, no torii, no pagodas, no stupas, no rice terraces, no villages, no civilization
+
+⚠️ MANDATORY — every entry must LEAD with an Asian toponym in the first 5-8 words.
+
+🌏 ICONIC ASIAN HABITAT COMPOSITIONS (mix across the 25 entries):
+  A. **MT. FUJI SILHOUETTE** — iconic conical Fuji from Hakone / Kawaguchiko / 5-lakes region, mirror-reflected in foreground lake at dawn, cherry blossoms or autumn maples framing
+  B. **HUANGSHAN SEA-OF-CLOUDS** — Yellow Mountain granite peaks emerging like islands from a rolling white cloud sea at sunrise, twisted pine clinging to cliff, peak silhouettes layered in deep tier
+  C. **GUILIN / YANGSHUO KARST RIVER** — limestone pillars rising from misty Li River valley, fishermen-free water, mist drifting between pillars at dawn
+  D. **ZHANGJIAJIE / WULINGYUAN PILLAR FOREST** — Avatar-style sandstone pillar forest with mist between, drone POV down through pillar tops, lush vegetation crowning each pillar
+  E. **HALONG BAY AERIAL** — limestone karst islands rising from jade-green sea, drone POV looking down at the archipelago, mist drift between islands
+  F. **YAKUSHIMA ANCIENT CEDAR** — moss-covered ancient cedar trunks rising cathedral-tall in dense emerald rainforest, dappled light through dense canopy, ground-level hero POV
+  G. **SAKURA GROVE / CHERRY BLOSSOM** — dense cherry-blossom tunnel along Kyoto / Yoshino / Hirosaki, pink-and-pearl explosion against pale sky at peak bloom, low-angle hero stance
+  H. **HOKKAIDO BIRCH-CONIFER SNOW** — solitary frosted birch grove on Hokkaido snow plain, low-angle hero against pale winter sky, mist hanging low
+  I. **BAMBOO FOREST INTERIOR** — Arashiyama / Sagano bamboo grove, looking up at vertical green stalks reaching cathedral-tall, dappled emerald light filtering through
+  J. **JIUZHAIGOU TURQUOISE LAKE** — vivid jade-and-turquoise water with crystal clarity reflecting autumn-colored forest, travertine cascades flowing between pools
+  K. **TIBETAN PLATEAU VISTA** — high-altitude grassland stretching to distant snow peaks under deep cobalt sky, glacial lake mirror reflection, yak-skull-zero geometry
+  L. **GOBI DUNE SEA / FLAMING CLIFFS** — Mongolian Gobi tangerine dunes stretching to flat horizon, OR sunset-lit red-cliff badlands of Bayanzag
+  M. **MOUNT BROMO VOLCANO** — Indonesian Bromo / Semeru caldera with sulfur plume at dawn, sea-of-sand ash floor stretching below, neighboring volcano cones silhouetted
+  N. **TAROKO MARBLE GORGE** — Taiwan marble canyon walls with patterned blue-and-white striations, river running below, narrow slot opening
+  O. **MARBLE CAVES / CRYSTAL POOLS** — pattern reflections + cool grey-and-white marble walls
+
+🚫 ABSOLUTE BANS (every entry MUST clear these):
+  • ZERO photographer names (Michael Kenna / Hengki Koentjoro / Marc Adamus / Max Rive — these leak verbatim)
+  • ZERO temples, torii, pagodas, stupas, statues, prayer flags, stone lanterns, monks (cultural — respect)
+  • ZERO villages, rice terraces, agriculture, roads, vehicles, refugios, lighthouses, structures
+  • ZERO European Alpine analogues ("Alps-like" / "Dolomites-style") — describe Asia on its own terms
+  • ZERO sci-fi / fantasy / portal / impossible-reflection
+  • ZERO negation phrases — describe positive content only
+  • ZERO wildlife-as-hero — wildlife at scale-prover scale only (matchstick-tiny, deep distance)
+
+✅ EVERY ENTRY MUST INCLUDE:
+  • Asian toponym in first 5-8 words
+  • Specific HABITAT hero (peak / karst pillar / cedar grove / sakura tunnel / bamboo forest / lake / dune / volcano)
+  • Specific CAMERA ANGLE (low-angle / drone aerial / canopy POV / waterline reflection / sea-of-clouds vantage / silhouette / wide vista)
+  • Multi-tier depth language
+  • Asia-coded materials (granite / karst limestone / marble / volcanic ash / sulfur / bamboo / cedar / birch / sakura / moss / glacier ice)
+  • A specific DRAMATIC lighting moment (sea-of-clouds dawn / blood-red sunset / blue-hour twilight / Milky Way over Gobi / sulfur backlight at Ijen / monsoon rainbow)
+
+Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Mt. Fuji silhouette at dawn from Kawaguchiko lake POV, the iconic conical peak mirror-reflected in still water, pale rose sky deepening to cobalt zenith, foreground close cherry blossom branch at near edge in soft pink, mist drift low over the lake surface — the FUJI SILHOUETTE is the hero',
+      'Huangshan granite peaks emerging from a rolling sea-of-clouds at sunrise, twisted Huangshan pine clinging to a cliff in low-angle hero stance, peaks layered in deep tier into the distance, foreground close granite-cliff edge with pine roots at near edge, blazing rose-amber sky above the cloud sea',
+      'Guilin karst river valley at dawn, limestone pillars rising from misty Li River in a dramatic deep-tier procession, jade water reflecting the pillar silhouettes, mist drifting low between formations, foreground close river-edge reed cluster at near edge, pale rose sky brightening above',
+      'Zhangjiajie sandstone pillar forest aerial drone POV looking DOWN through the pillar tops, vegetation crowning each pillar in emerald clusters, mist filling the valley between pillars in white drift, distant pillar field stretching to flat horizon, golden-hour sidelight raking the tops',
+      'Halong Bay limestone karst archipelago drone POV looking down at the jade-green sea, hundreds of limestone island silhouettes dotting the bay in deep tier, mist drift between islands in pearl-grey, foreground close limestone cliff edge at near edge, blazing copper sunset on the water',
+      'Yakushima ancient cedar forest interior low-angle hero POV looking up at moss-covered cedar trunks rising cathedral-tall, dappled emerald-gold light shafts through dense canopy, foreground close moss-and-fern cluster wet at near edge, deep humid shadow receding into emerald gloom',
+      'Yoshino sakura grove at peak bloom, dense pink-and-pearl cherry-blossom tunnel filling the frame, low-angle hero stance looking up through blossom canopy at pale-pink sky, foreground close fallen petals scattered at near edge on mossy ground, blossom cloud dominating composition',
+      'Hokkaido birch grove at winter dawn, slender frosted white birch trunks standing in a wide pale-grey snow plain in cathedral spacing, low-angle hero stance, foreground close snow-and-fallen-leaf detail at near edge, low mist hanging between trunks in cool blue twilight',
+      'Arashiyama bamboo forest interior at golden hour, vertical green bamboo stalks reaching cathedral-tall in dense cluster, low-angle hero stance looking up through emerald canopy, dappled gold-and-emerald light shafts piercing through, foreground close bamboo-floor leaf litter at near edge',
+      'Jiuzhaigou turquoise lake at autumn, the vivid jade water with crystal-clear shallows reflecting autumn-colored forest above, travertine cascade flowing in foreground between pool tiers, fallen autumn leaves visible underwater, cool morning mist drift in middle distance',
+      'Tibetan plateau wide cinematic vista, the high-altitude golden grassland stretching to distant snow peaks under deep cobalt sky, glacial lake mirror reflection in middle distance, foreground close yak-skull-zero rock cairn at near edge, mare-tail cirrus high above',
+      'Mongolian Gobi tangerine dune sea at sunset, vast erg stretching to flat horizon with wind-sculpted crests casting deep slip-face shadow in raking sidelight, foreground close iron-orange sand-ripple detail at near edge, blazing horizon-rim and deepening cobalt sky',
+      'Mount Bromo Indonesian volcanic basin at dawn, the Tengger caldera with sulfur-plume rising from Bromo cone and neighboring Semeru silhouetted in distance, sea-of-sand ash floor stretching across foreground, mist drift in caldera below, blazing rose horizon',
+      'Taroko marble gorge in Taiwan, towering marble canyon walls with patterned blue-and-white striations, deep-emerald river running below in the slot, mid-distance gorge bend curving away into atmospheric haze, foreground close water-polished marble at near edge',
+      'Seoraksan granite peaks in Korea at sunrise, jagged granite ridge silhouetted against blazing copper sunrise sky, sea-of-clouds inversion below the ridge, foreground close granite boulder at near edge, autumn-colored forest sloping below the peaks',
+      'Wulingyuan sandstone pillar forest at dawn, hundreds of vertical sandstone pillars rising from forest floor in misty drift, vegetation crowning each pillar, low-angle hero stance from valley floor, foreground close fern cluster at near edge, blazing rose dawn sky above',
+      'Yangshuo Li River bend wide cinematic vista, karst pillars rising from misty river in deep-tier procession, jade water with cormorant-zero silhouette geometry, fishermen-free morning mist on water, foreground close bamboo cluster at near edge, blazing rose dawn',
+      'Hokkaido lavender field at golden hour — wait this is agricultural, replace: Akan caldera mist over volcanic lake at dawn, lake mirror reflecting layered forested hillsides in soft cool color, mist drift between hillsides, foreground close mossy lava-rock at near edge',
+      'Gobi flaming cliffs (Bayanzag) at sunset, red-cliff badlands with eroded sandstone formations catching ember-amber sidelight, deep cobalt sky above, foreground close cracked red soil at near edge, distant cliff-line silhouetted in copper, vast flat steppe beyond',
+      'Hokkaido boreal forest with morning mist, dense fir-and-birch canopy in cathedral spacing under cool pale sky, mist drift filling lower frame in pearl-grey, foreground close fern-and-moss cluster wet at near edge, dappled cool light filtering through canopy',
+      'Mt. Fuji from Chureito viewpoint with mid-distance autumn maples framing the cone, foreground close maple branch in deep red at near edge, the iconic Fuji silhouette in middle distance, pale rose sky brightening behind',
+      'Ijen Indonesian volcano sulfur lake at dawn, the turquoise sulfur water reflecting blue-flame eerie light at night-into-dawn transition, foreground close sulfur-crust crater rim at near edge, steam plume rising vertically, deep cobalt overhead sky brightening',
+      'Phang Nga Bay karst islands in Thailand drone POV, limestone islands rising from jade water in deep-tier procession, mist drift between islands, foreground close limestone cliff edge at near edge, golden-hour sidelight on water',
+      'Hokkaido Lake Mashu blue-hour deep-tier vista, the deep cobalt caldera lake with steep forested hillsides ringing it, mirror-still water reflecting cool dawn sky, foreground close lakeshore boulder cluster at near edge, mist filling mid-distance',
+      'Wulingyuan zhangjiajie aerial drone POV looking DOWN at pillar tops emerging from cloud sea at sunrise, vegetation crowning the pillars in emerald islands, mist swallowing the pillar bases, foreground close pillar-top vegetation at near edge, blazing rose sky above',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Asian subject entries. NO preamble. Each entry 30-55 words on a single line. Format follows the touchpoint pattern: "Toponym + habitat hero + camera-angle/composition + close-foreground + midground hero + distant atmospheric depth + lighting note".`,
+  },
+
+  asia_landscape_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHORS for EarthBot's asia-landscape path. Each entry is ONE specific close-edge Asian detail anchoring the lower 15-20% of the frame. Each entry 14-25 words.
+
+✅ ASIA-SPECIFIC CLOSE-EDGE DETAILS:
+  • Cherry-blossom branch in soft pink at near edge (Sakura)
+  • Fallen sakura petals scattered on mossy ground (Sakura)
+  • Maple branch in deep autumn red at near edge (Japan / Korea autumn)
+  • Bamboo-floor leaf litter at near edge (Bamboo)
+  • Moss-and-fern cluster wet at near edge (Yakushima)
+  • Granite-cliff edge with pine roots at near edge (Huangshan)
+  • Limestone-cliff edge wet with sea spray at near edge (Halong)
+  • River-edge reed cluster at near edge (Guilin / Li River)
+  • Frosted snow-and-fallen-leaf detail at near edge (Hokkaido)
+  • Tibetan blue-poppy or edelweiss cluster at near edge
+  • Mossy lava-rock at near edge (Akan / volcanic)
+  • Sulfur-crust crater rim at near edge (Ijen / Bromo)
+  • Iron-orange sand-ripple pattern at near edge (Gobi)
+  • Travertine pool-edge crystal-clear at near edge (Jiuzhaigou)
+  • Water-polished marble at near edge (Taroko)
+  • Cracked red soil at near edge (Flaming Cliffs)
+  • Cypress / cryptomeria branch in deep emerald at near edge
+`,
+    touchpoints: [
+      'Cherry-blossom branch in soft pink with petals fluttering at near edge in dappled light',
+      'Fallen sakura petals scattered on mossy stone ground at near edge in soft pink',
+      'Maple branch in deep autumn red and orange at near edge against pale sky',
+      'Bamboo-floor leaf litter with single dropped bamboo stalk at near edge',
+      'Moss-and-fern cluster wet at near edge with dewy droplets in dappled gold light',
+      'Granite-cliff edge with twisted pine roots gripping bare rock at near edge',
+      'Limestone-cliff edge wet with sea spray and salt crystal patina at near edge',
+      'River-edge reed cluster bent by current at near edge in cool morning mist',
+      'Frosted snow-and-fallen-leaf detail at near edge with crystalline frost',
+      'Tibetan blue-poppy cluster at near edge in cool alpine grass',
+      'Mossy black lava-rock at near edge with delicate fern cluster in crevice',
+      'Sulfur-crust crater rim with concentric yellow deposits at near edge',
+      'Iron-orange sand-ripple parallel-ridge pattern at near edge in raking light',
+      'Travertine pool-edge with crystal-clear shallow water at near edge in jade',
+      'Water-polished blue-and-white marble at near edge in flowing pattern',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Asian foreground anchor entries. NO preamble. Each entry 14-25 words on a single line.`,
+  },
+
+  asia_landscape_light_condition: {
+    format: 'simple',
+    theme: `LIGHT CONDITIONS for EarthBot's asia-landscape path. Each entry is ONE specific Asian lighting register. Each entry 14-22 words.
+
+✅ ASIAN LIGHTING REGISTERS:
+  • Sea-of-clouds dawn breaking around Huangshan peaks
+  • Sakura sunset blood-red on pink blossom canopy
+  • Blue-hour twilight over Halong Bay limestone islands
+  • Dappled emerald canopy break in bamboo forest
+  • Hokkaido cool blue winter dawn with frosted breath
+  • Jiuzhaigou autumn golden-hour rake on jade water
+  • Sulfur backlight at Ijen volcano dawn
+  • Tibetan high-altitude cobalt midday clarity
+  • Mt. Fuji alpenglow rose at first light
+  • Gobi sunset banner cumulus copper-amber
+  • Yakushima cedar-forest dappled gold-emerald
+  • Misty Li River dawn diffuse pearl light
+  • Mongolia Milky Way moonless dark steppe night
+  • Karst pillar silhouette at blazing sunset
+  • Pre-monsoon green-yellow oppressive light
+`,
+    touchpoints: [
+      'Sea-of-clouds dawn breaking around Huangshan peaks in tier-after-tier silhouette',
+      'Sakura sunset blood-red rake on pink blossom canopy in horizontal warm sidelight',
+      'Blue-hour polar twilight over Halong Bay limestone islands in cool cobalt-mauve',
+      'Dappled emerald canopy break in bamboo forest with gold light shafts piercing through',
+      'Hokkaido cool blue winter dawn with frost-edged pale sky and low-sun rake',
+      'Jiuzhaigou autumn golden-hour rake on jade water with crystal reflections',
+      'Sulfur-flame backlight at Ijen volcano crater in eerie blue-and-yellow glow',
+      'Tibetan high-altitude cobalt midday clarity with razor-sharp shadows at 4500-metre',
+      'Mt. Fuji alpenglow rose-amber on snow-cap at first light',
+      'Gobi sunset banner cumulus glowing copper-amber over flat dune horizon',
+      'Yakushima cedar-forest dappled gold-and-emerald shaft pooling on mossy ground',
+      'Misty Li River dawn diffuse pearl light with karst pillars softly silhouetted',
+      'Mongolia moonless dark steppe night with Milky Way arch overhead in deep saturation',
+      'Karst pillar silhouette at blazing crimson sunset against cobalt zenith',
+      'Pre-monsoon green-yellow oppressive light pressing low over rice-terrace-free valleys',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Asian light-condition entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  asia_landscape_atmosphere: {
+    format: 'simple',
+    theme: `ATMOSPHERE entries for EarthBot's asia-landscape path. Each entry is ONE specific Asian atmospheric texture. Each entry 14-22 words.
+
+✅ ASIAN ATMOSPHERIC REGISTERS:
+  • Sea-of-clouds inversion at Huangshan
+  • Karst mist drift between limestone pillars
+  • Bamboo-forest cool emerald shadow air
+  • Yakushima humid moss-laden air with mist drift
+  • Hokkaido frosted breath-cold winter air
+  • Sakura petal-drift fluttering through scene
+  • Tibetan thin-cold high-altitude air
+  • Volcanic-sulfur plume rising at Bromo / Ijen
+  • Gobi dust-haze suspended low over erg
+  • Monsoon rain-curtain advancing across karst
+  • Travertine mineral-rich water mist at Jiuzhaigou
+  • Maple-autumn cool damp air with falling leaves
+  • Misty Li River pearl-grey morning fog
+  • Halong Bay sea-spray drift between islands
+  • Indonesian volcanic ash-haze low across caldera
+`,
+    touchpoints: [
+      'Sea-of-clouds inversion rolling around Huangshan peaks in white drift',
+      'Karst mist drift between limestone pillars in cool pearl-grey horizontal bands',
+      'Bamboo-forest cool emerald shadow air with dappled gold particles suspended',
+      'Yakushima humid moss-laden air with mist drift between cathedral cedar trunks',
+      'Hokkaido frosted breath-cold winter air with suspended ice crystals glittering',
+      'Sakura petal-drift fluttering through scene in soft pink rain at peak bloom',
+      'Tibetan thin-cold high-altitude air with razor-sharp visibility',
+      'Volcanic-sulfur plume rising at Bromo crater in tan-yellow column',
+      'Gobi dust-haze suspended low over erg in fine warm horizontal bands',
+      'Monsoon rain-curtain advancing across karst valley from west',
+      'Travertine mineral-rich water mist at Jiuzhaigou cascades in cool drift',
+      'Maple-autumn cool damp air with falling leaves drifting through scene',
+      'Misty Li River pearl-grey morning fog low over jade water',
+      'Halong Bay sea-spray drift between limestone islands in cool pearl mist',
+      'Indonesian volcanic ash-haze suspended low across caldera in tan-grey layer',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Asian atmosphere entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  asia_landscape_sky_layer: {
+    format: 'simple',
+    theme: `SKY LAYER entries for EarthBot's asia-landscape path. Each entry is ONE specific Asian sky cover. Each entry 14-22 words.
+
+✅ ASIAN SKY REGISTERS:
+  • Sea-of-clouds horizon at Huangshan / Korea
+  • Sakura-pink pastel sky at peak bloom
+  • Hokkaido cool grey winter overcast
+  • Jiuzhaigou autumn cobalt with high cirrus
+  • Mongolian Gobi sunset banner cumulus
+  • Tibetan plateau deep cobalt high-altitude
+  • Pre-monsoon yellow-green oppressive sky
+  • Sakura sunset gradient cobalt-to-rose
+  • Halong Bay blue-hour gradient cool
+  • Volcanic-ash-tinted sky with copper undertone
+  • Star-crowded moonless Mongolian night sky
+  • Lenticular cloud over Mt. Fuji peak
+  • Layered stratocumulus over karst
+  • Mist-inversion sea below ridge
+  • Misty rose dawn over Li River
+`,
+    touchpoints: [
+      'Sea-of-clouds horizon at Huangshan with peaks emerging like islands from white sea',
+      'Sakura-pink pastel sky at peak bloom over Yoshino grove in soft pearl-pink',
+      'Hokkaido cool grey winter overcast pressing low over snow plain',
+      'Jiuzhaigou autumn cobalt sky with high cirrus over jade lake',
+      'Mongolian Gobi sunset banner cumulus glowing copper-amber over erg horizon',
+      'Tibetan plateau deep cobalt high-altitude sky with razor-sharp definition',
+      'Pre-monsoon yellow-green oppressive sky pressing low over karst valley',
+      'Sakura sunset gradient cobalt-to-rose-pink over blossom canopy',
+      'Halong Bay blue-hour gradient cool cobalt-to-amber low over jade water',
+      'Volcanic-ash-tinted sky with copper-yellow undertone after recent Bromo eruption',
+      'Star-crowded moonless Mongolian night sky with Milky Way arch overhead',
+      'Lenticular cloud disc hovering motionless over Mt. Fuji peak',
+      'Layered stratocumulus broken by cobalt patches over karst pillars',
+      'Mist-inversion sea below Huangshan ridge with clear cobalt above',
+      'Misty rose dawn over Li River with pillars softly silhouetted against pale gold',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Asian sky entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  asia_landscape_scale_prover: {
+    format: 'simple',
+    theme: `SCALE PROVERS for EarthBot's asia-landscape path. Each entry is ONE tiny postage-stamp-scale element in the deep distance, OR a no-wildlife scale-prover (single distant geometry). Each entry 14-22 words.
+
+✅ ASIAN SCALE-PROVER REGISTERS:
+  • Lone Japanese macaque on distant ridge (Honshu / Hokkaido)
+  • Red-crowned crane pair on Hokkaido marsh
+  • Tibetan blue-sheep on rocky distant slope
+  • Yak silhouette on distant Tibetan plateau
+  • Takin on distant Bhutanese ridge
+  • Hokkaido fox shape barely readable on snow
+  • Lone Demoiselle crane gliding over Gobi
+  • Distant single petrel over Halong Bay
+  • Single cedar emergent crown at distance
+  • Single granite spire at deep distance
+  • Tiny pagoda-free temple-roof-zero geometry
+  • Glacial-melt-stream thread silver-thin at far distance
+  • Tiny karst pillar at far distance
+  • Lone cypress silhouette at distant ridge
+  • Far-shore black-pebble line at water's edge
+`,
+    touchpoints: [
+      'Lone Japanese snow monkey silhouette on distant Hokkaido ridge ant-small',
+      'Red-crowned crane pair pencil-tall on distant Kushiro marsh in deep distance',
+      'Tibetan blue-sheep silhouette on distant rocky plateau slope barely readable',
+      'Yak silhouette ant-small on Tibetan plateau in deep distance',
+      'Takin barely readable on distant Bhutanese ridge in deep distance',
+      'Hokkaido red fox shape ant-small crossing snow plain in deep distance',
+      'Lone Demoiselle crane gliding over Gobi steppe at deep distance',
+      'Single petrel silhouette over Halong Bay in deep distance',
+      'Single cedar emergent crown silhouetted at distant ridge in deep haze',
+      'Single granite spire silhouette at deep distance in cool atmospheric blue',
+      'Glacial-melt-stream silver-thin thread at the far valley floor',
+      'Tiny karst pillar silhouette at deep distance in jade mist',
+      'Lone cypress silhouette at distant Yakushima ridge in cool blue haze',
+      'Far-shore black-pebble line marking water edge at deep distance',
+      'Lone takin silhouette on Bhutanese ridge as pencil-tall dark shape',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Asian scale-prover entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  asia_landscape_phenomenon: {
+    format: 'simple',
+    theme: `RARE PHENOMENA for EarthBot's asia-landscape path. Each entry is ONE specific real-Earth Asian phenomenon. Each entry 14-22 words.
+
+✅ ASIAN PHENOMENA:
+  • Sea-of-clouds inversion at Huangshan dawn
+  • Sakura petal storm at Hirosaki peak bloom
+  • Monsoon lightning over Halong karst
+  • Sulfur-flame eruption fountain at Ijen at night
+  • Bromo crater plume backlit at sunset
+  • Snow squall over Hokkaido birch grove
+  • Mist-inversion at Yakushima cedar forest
+  • Jiuzhaigou autumn-color peak with travertine
+  • Tibetan glacial calving on Karakoram
+  • Gobi sandstorm advancing across erg
+  • Hokkaido drift ice on Sea of Okhotsk
+  • Karst rainbow piercing limestone-pillar mist
+  • Mt. Fuji alpenglow on snow cap
+  • Mongolia Milky Way over star-crowded dark steppe
+  • Mongolia geliuda dust-devil over Gobi
+`,
+    touchpoints: [
+      'Sea-of-clouds inversion breaking around Huangshan peaks at sunrise with peaks emerging as islands',
+      'Sakura petal storm at Hirosaki peak bloom in pink-and-pearl drifting cloud',
+      'Monsoon lightning forking over Halong karst in dramatic blue-white flash',
+      'Sulfur-flame eruption at Ijen volcano blue-fire glowing in night crater',
+      'Bromo crater plume backlit copper-amber at sunset rising vertically',
+      'Snow squall sweeping over Hokkaido birch grove in diagonal white streaks',
+      'Mist-inversion sea breaking around Yakushima cedar trunks at dawn',
+      'Jiuzhaigou autumn-color peak with travertine cascade flowing through emerald-red pools',
+      'Tibetan glacial calving event mid-fall with seracs cascading into lake',
+      'Gobi sandstorm advancing across erg in horizontal sand streamers',
+      'Hokkaido drift ice forming on Sea of Okhotsk in pale jagged sheets',
+      'Karst rainbow piercing limestone-pillar mist at golden hour',
+      'Mt. Fuji alpenglow rose-amber on snow-cap at first light',
+      'Mongolia Milky Way arch over star-crowded dark steppe',
+      'Mongolia dust-devil rising vertically over Gobi in spiraling brown plume',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Asian phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
 };
 
 if (!POOL_RECIPES[POOL]) {

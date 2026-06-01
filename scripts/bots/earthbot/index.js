@@ -89,6 +89,7 @@ const pathBuilders = {
   'iceland-raw': require('./paths/iceland-raw'), // axis-system (2026-06-01 activation)
   'andes-patagonia': require('./paths/andes-patagonia'), // axis-system (2026-06-01 activation)
   'african-landscape': require('./paths/african-landscape'), // axis-system (2026-06-01 v2 resurrection)
+  'asia-landscape': require('./paths/asia-landscape'), // axis-system (2026-06-01 activation)
   // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
@@ -116,6 +117,7 @@ const EARTH_PATHS = [
   'iceland-raw',
   'andes-patagonia',
   'african-landscape',
+  'asia-landscape',
 ];
 
 const BEACH_PATHS = [
@@ -189,6 +191,11 @@ const ANDES_PATAGONIA_PREFIX =
 // region only — the scene content carries the biome.
 const AFRICAN_LANDSCAPE_PREFIX =
   'African raw nature, sharp detail, gallery-quality, masterpiece';
+// 2026-06-01 — Pan-Asian raw nature. BIOME-AGNOSTIC per the prefix-
+// enumeration anti-pattern rule. Just "Asian raw nature" — let the scene
+// content carry the biome (Mt. Fuji / Huangshan / Halong / sakura / Gobi).
+const ASIA_LANDSCAPE_PREFIX =
+  'Asian raw nature, sharp detail, gallery-quality, masterpiece';
 
 // Locked to cinematic only — Kevin's preferred single-vibe lock for
 // EarthBot 2026-05-05. Combined with the locked earthbot_photography medium
@@ -234,6 +241,7 @@ module.exports = {
     'iceland-raw': ICELAND_RAW_PREFIX,
     'andes-patagonia': ANDES_PATAGONIA_PREFIX,
     'african-landscape': AFRICAN_LANDSCAPE_PREFIX,
+    'asia-landscape': ASIA_LANDSCAPE_PREFIX,
   },
 
   // Per-path suffix override — engine reads this BEFORE promptSuffixByMedium
@@ -364,6 +372,7 @@ module.exports = {
       'iceland-raw',
       'andes-patagonia',
       'african-landscape',
+      'asia-landscape',
     ],
   },
 
