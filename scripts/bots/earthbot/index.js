@@ -90,6 +90,7 @@ const pathBuilders = {
   'andes-patagonia': require('./paths/andes-patagonia'), // axis-system (2026-06-01 activation)
   'african-landscape': require('./paths/african-landscape'), // axis-system (2026-06-01 v2 resurrection)
   'asia-landscape': require('./paths/asia-landscape'), // axis-system (2026-06-01 activation)
+  'australian-outback': require('./paths/australian-outback'), // axis-system (2026-06-01 activation)
   // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
@@ -118,6 +119,7 @@ const EARTH_PATHS = [
   'andes-patagonia',
   'african-landscape',
   'asia-landscape',
+  'australian-outback',
 ];
 
 const BEACH_PATHS = [
@@ -196,6 +198,13 @@ const AFRICAN_LANDSCAPE_PREFIX =
 // content carry the biome (Mt. Fuji / Huangshan / Halong / sakura / Gobi).
 const ASIA_LANDSCAPE_PREFIX =
   'Asian raw nature, sharp detail, gallery-quality, masterpiece';
+// 2026-06-01 — Australian outback raw nature. BIOME-AGNOSTIC per the
+// prefix-enumeration rule. Distinct from desert-southwest (American SW) —
+// Australian outback has its own iconic geology (Uluru / Bungle Bungle /
+// Pinnacles / Karijini) and its own palette (deep rust-red iron-oxide vs
+// American SW orange).
+const AUSTRALIAN_OUTBACK_PREFIX =
+  'Australian outback raw nature, sharp detail, gallery-quality, masterpiece';
 
 // Locked to cinematic only — Kevin's preferred single-vibe lock for
 // EarthBot 2026-05-05. Combined with the locked earthbot_photography medium
@@ -242,6 +251,7 @@ module.exports = {
     'andes-patagonia': ANDES_PATAGONIA_PREFIX,
     'african-landscape': AFRICAN_LANDSCAPE_PREFIX,
     'asia-landscape': ASIA_LANDSCAPE_PREFIX,
+    'australian-outback': AUSTRALIAN_OUTBACK_PREFIX,
   },
 
   // Per-path suffix override — engine reads this BEFORE promptSuffixByMedium
@@ -373,6 +383,7 @@ module.exports = {
       'andes-patagonia',
       'african-landscape',
       'asia-landscape',
+      'australian-outback',
     ],
   },
 

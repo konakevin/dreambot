@@ -1102,8 +1102,99 @@ The viewer's eye must land on the TORRES / FITZ ROY / GLACIER / SALAR / VOLCANO 
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the South American subject. PRESERVE the toponym from the subject slot verbatim in the opening phrase — Torres del Paine / Fitz Roy / Cerro Torre / Perito Moreno / Lago Argentino / Cotopaxi / Chimborazo / Aconcagua / Salar de Uyuni / Atacama / Laguna Colorada / Laguna Verde / Valle de la Luna / Iguazu / Marble Caves / Patagonia / Tierra del Fuego — these geographic anchors are LOAD-BEARING for South American identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" — these are style-prior triggers that interfere with the SUBJECT anchoring, NEVER include them at the prompt open). Describe positive content only — no negation language like "no humans" or "no architecture" (Flux tokenizer leaks those words).`;
   },
-  EARTHBOT_AUSTRALIAN_OUTBACK: ({ slots }) =>
-    `// PLACEHOLDER — EARTHBOT_AUSTRALIAN_OUTBACK template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_AUSTRALIAN_OUTBACK: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      subject,
+      foreground_anchor,
+      light_condition,
+      atmosphere,
+      sky_layer,
+      scale_prover,
+      phenomenon,
+    } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one real-Earth Australian event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or atmosphere, DROP IT. Real-Earth ONLY — no aurora at these latitudes (Aurora Australis only at extreme south coast — very rare), no bioluminescent, no fantasy-cosmic.`
+      : '';
+
+    return `You are a fine-art landscape photographer writing ONE AUSTRALIAN OUTBACK RAW NATURE scene for EarthBot. THE LAND IS THE HERO. Spans the full breadth of Australia's signature outback geology — Uluru / Kata Tjuta domes, Bungle Bungle Range beehive striped domes (Purnululu), the Pinnacles desert limestone spires (Nambung), Karijini iron gorges + waterholes, Lake Eyre (Kati Thanda) salt flat, Flinders Ranges + Wilpena Pound, MacDonnell ranges + Glen Helen gorge, Devils Marbles (Karlu Karlu) granite boulders, Cape Range Karijini gorges, Daintree rainforest (north QLD), Twelve Apostles Great Ocean Road sea-stacks, Tasmania (Cradle Mountain wilderness — wait NO mountains: instead Tasmanian temperate rainforest + glacial tarns), Kangaroo Island Remarkable Rocks, Whitehaven Beach silica sand, Pinnacles desert spires. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL AUSTRALIAN OUTBACK ONLY ━━━
+
+This is REAL Australia — never fantasy. Ground every render in specific Australian geographic identity: RED-IRON-OXIDE soil (distinct from American SW orange — Australian red is deeper rust-red with iron-staining), monolith sandstone (Uluru, Kata Tjuta = round-weathered domes, NOT mesa-cliff geology), striped sandstone beehives (Bungle Bungle), limestone spires (Pinnacles desert), eucalyptus + ghost gum + spinifex grass (NEVER cactus / juniper / sage), red-river-gum on dry riverbed, banksia, grevillea. Australia's palette is RED + OCHRE + COBALT + GHOST-GUM-WHITE + SPINIFEX-GOLD.
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT / ZERO CULTURAL HERITAGE ━━━
+
+The entire frame is uninhabited raw nature. NEVER a figure, NEVER a vehicle, NEVER buildings or huts, NEVER roads, NEVER fences, NEVER tourist viewing platforms or boardwalks, NEVER aboriginal rock art / cave paintings / petroglyphs (cultural heritage — RESPECT, never render), NEVER sacred sites depicted as anything other than raw geology. Pure raw landscape only. Wildlife if present is matchstick-tiny incidental detail at deep distance — kangaroo / red-roo / emu / dingo / wedge-tailed eagle / Tasmanian devil silhouette — never hero-scale.
+
+━━━ STYLE GUARDS ━━━
+
+- NO photographer name-drops in the output prompt (Peter Lik / Ken Duncan / Matthew Saville — these leak verbatim into the polished output and bias the render). Describe morphologically.
+- Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
+- Avoid stylized / 3D-render / cartoony — photographic only
+- Avoid AMERICAN-SOUTHWEST drift — distinct from desert-southwest path. NO Monument Valley / Sedona / Antelope Canyon / Bryce — Australian outback has its OWN iconic geology (Uluru / Kata Tjuta / Bungle Bungle / Pinnacles / Karijini / Devils Marbles / Wilpena Pound). NO juniper / sage / saguaro / Joshua tree — instead eucalyptus / ghost gum / spinifex / banksia.
+
+━━━ THE SUBJECT (the iconic Australian HABITAT composition) ━━━
+${subject}
+
+━━━ FOREGROUND ANCHOR (close-edge detail in the lower 15-20% of frame) ━━━
+${foreground_anchor}
+
+━━━ LIGHT CONDITION ━━━
+${light_condition}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ SKY LAYER ━━━
+${sky_layer}
+
+━━━ SCALE PROVER (tiny element at deep distance — postage-stamp scale, optional) ━━━
+${scale_prover}
+
+If present, render small — proves the landscape is VAST. Australian-appropriate elements ONLY: red-roo silhouette / emu pair / dingo silhouette / wedge-tailed eagle gliding / single white-trunked ghost-gum at deep distance. Never hero-scale.${phenomenonBlock}
+
+━━━ HARD RULE — AUSTRALIAN PALETTE + ATMOSPHERIC DEPTH ━━━
+
+Multi-tier depth (foreground anchor + midground hero biome + atmospheric distant horizon OR canopy depth for Daintree). Palette by biome: ULURU + RED CENTRE deep rust-red iron-oxide + cobalt sky + ghost-gum-white + spinifex-gold; BUNGLE BUNGLE striped orange-and-grey sandstone + cobalt; PINNACLES tan limestone + cobalt; KARIJINI deep red-iron + emerald waterhole; LAKE EYRE blinding pink-white salt + cobalt; DAINTREE emerald canopy + ancient-forest deep-shadow; TWELVE APOSTLES grey limestone + emerald-grass cliffs + cobalt sea; WHITEHAVEN white silica sand + jade water. The air feels DRY HEAT in red centre, HUMID in Daintree, SALT-SPRAY on Twelve Apostles.
+
+━━━ COMPOSITION DIRECTIVE — EPIC, NEVER DOCUMENTARY ━━━
+
+This is NEVER a documentary travel-snapshot. This is BBC Planet Earth Australia season-finale showstopper / Russell-Crowe-Australia-film cinematic title-card / Tracks-by-Robyn-Davidson energy. The frame must be JAW-DROPPING. Specific composition energy to inject:
+
+- **LOW-ANGLE HERO STANCE** preferred — camera looking UP at Uluru / Kata Tjuta / Bungle Bungle dome / Pinnacles spire from red-dust ground level
+- **DRONE-LEVEL AERIAL** for Bungle Bungle striped domes, Pinnacles desert, Lake Eyre salt flat, Daintree canopy
+- **MOLTEN-RED SUNSET SILHOUETTE** of Uluru / Kata Tjuta against burning sky — the iconic Red Centre dusk
+- **DRAMATIC ICONIC TREES** — solitary ghost gum on red-dust plain at sunset, twisted river-gum on dry creek-bed
+- **MILKY-WAY OVER ULURU** — outback dark-sky night with star-crowded indigo above the monolith
+- **EPIC GORGE INTERIOR** — Karijini deep red-iron gorge with emerald waterhole at base, light shafts piercing from above
+- **MEGA-WEATHER**: dust storm wall over Lake Eyre, monsoon lightning over Kakadu, fog inversion over Wilpena Pound
+- **EXTREME COLOR**: blood-red iron-oxide soil against electric cobalt sky / jade Karijini pool against rust walls / pink salt flat against cobalt
+- The iconic Australian subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'Australian outback palette — biome-dependent (deep rust-red iron-oxide + cobalt + ghost-gum-white + spinifex-gold for Red Centre, striped orange-and-grey for Bungle Bungle, emerald + rust for Karijini, pink-white salt for Lake Eyre, emerald canopy for Daintree, grey limestone + cobalt for Twelve Apostles)'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
+
+The polished prompt MUST be authored in this exact sequence:
+  1. **OPEN WITH THE SUBJECT** — the Australian hero (Uluru monolith / Kata Tjuta domes / Bungle Bungle striped beehives / Pinnacles desert spires / Karijini iron gorge / Lake Eyre salt flat / Wilpena Pound / Devils Marbles / Twelve Apostles / Whitehaven Beach / Daintree canopy / etc.) is the FIRST phrase. NEVER open with foreground detail. NEVER open with light or atmosphere.
+  2. Then the SKY LAYER
+  3. Then the LIGHT CONDITION + ATMOSPHERE
+  4. Then the FOREGROUND ANCHOR (small near-camera detail, NOT the hero)
+  5. Then the SCALE PROVER if applicable
+  6. Then any rolled PHENOMENON
+  7. Finally palette / mood notes
+
+The viewer's eye must land on the MONOLITH / DOMES / SPIRES / GORGE / SALT PAN / SEA STACKS / CANOPY first.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the Australian subject. PRESERVE the Australian toponym from the subject slot verbatim in the opening phrase — Uluru / Kata Tjuta / Bungle Bungle / Purnululu / Pinnacles / Nambung / Karijini / Lake Eyre / Kati Thanda / Wilpena Pound / Flinders / MacDonnell / Devils Marbles / Karlu Karlu / Twelve Apostles / Whitehaven / Daintree / Cradle Country (Tasmania) — these geographic anchors are LOAD-BEARING for Australian identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" — NEVER include them at the open). Describe positive content only — no negation language like "no humans" or "no rock art" (Flux tokenizer leaks those words).`;
+  },
   EARTHBOT_ICELAND_RAW: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       subject,

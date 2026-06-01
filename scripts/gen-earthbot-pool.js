@@ -1790,6 +1790,344 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
     ],
     instructions: `Output ONLY a numbered list of {COUNT} Asian phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // AUSTRALIAN-OUTBACK path (2026-06-01 activation).
+  // Habitat-hero recipe applied from african v2 / asia. Universal guards:
+  //   • NO photographer names (Peter Lik / Ken Duncan / Matthew Saville)
+  //   • NO negation language in pools
+  //   • Subject entries LEAD with Australian toponym in first 5-8 words
+  //   • NO aboriginal rock art / petroglyphs / cave paintings (cultural —
+  //     respect)
+  //   • Distinct from desert-southwest (American SW) — Australian outback
+  //     has its OWN iconic geology (Uluru / Bungle Bungle / Pinnacles /
+  //     Karijini / Devils Marbles / Wilpena Pound)
+  //   • NO American SW vegetation (saguaro / Joshua tree / juniper /
+  //     sage) — Australia has eucalyptus / ghost gum / spinifex / banksia
+  // ═══════════════════════════════════════════════════════════
+
+  australian_outback_subject: {
+    format: 'simple',
+    theme: `PURE AUSTRALIAN OUTBACK RAW HABITAT SCENES for EarthBot's australian-outback path. THE LAND IS THE HERO. Each entry is ONE iconic Australian HABITAT composition where the place itself dominates the frame. Wildlife if present is matchstick-tiny incidental scale-prover. Each entry 30-55 words.
+
+🎯 THE HABITAT IS THE HERO:
+  • The HABITAT fills 50-65% of the frame
+  • CAMERA-ANGLE VARIETY mandatory: low-angle hero / DRONE POV aerial / canopy POV / waterline reflection / silhouette / wide cinematic vista
+  • Wildlife if present is matchstick-tiny in deep distance
+
+⚠️ MANDATORY — every entry must LEAD with an Australian toponym in the first 5-8 words.
+
+🇦🇺 ICONIC AUSTRALIAN OUTBACK HABITAT COMPOSITIONS (mix across 25 entries):
+  A. **ULURU MONOLITH** — the iconic sandstone monolith silhouetted at sunset against burning sky / OR at dawn alpenglow / OR Milky Way night above / OR from a distance across spinifex plain
+  B. **KATA TJUTA DOMES** — Olgas group of red-sandstone domes rising from spinifex plain at sunset, deep cobalt sky above
+  C. **BUNGLE BUNGLE BEEHIVE** — Purnululu striped orange-and-grey sandstone beehive domes, drone POV aerial OR low-angle hero looking up at striped dome face
+  D. **PINNACLES DESERT** — Nambung limestone spires emerging from yellow sand at sunset, the otherworldly spire forest
+  E. **KARIJINI GORGE** — deep red-iron-banded gorge walls with emerald waterhole at base, light shafts from above
+  F. **LAKE EYRE SALT FLAT** — Kati Thanda vast pink-and-white salt expanse stretching to flat horizon
+  G. **WILPENA POUND** — Flinders Ranges natural amphitheater drone POV looking down at the bowl
+  H. **DEVILS MARBLES** — Karlu Karlu massive granite boulders perched precariously in cluster
+  I. **MACDONNELL RANGES** — Glen Helen gorge / Ormiston Pound with eucalyptus-lined waterhole
+  J. **DAINTREE RAINFOREST** — emerald canopy from above / forest interior with mossy ancient trees + giant strangler figs
+  K. **TWELVE APOSTLES** — Great Ocean Road limestone sea stacks at sunset above churning Southern Ocean
+  L. **WHITEHAVEN BEACH** — Whitsundays drone POV looking down at pure white silica sand swirls + jade water
+  M. **REMARKABLE ROCKS** — Kangaroo Island weathered granite forms at golden hour
+  N. **CRADLE COUNTRY TASMANIA** — Tasmanian temperate rainforest with mossy myrtle-beech trees + glacial tarn reflection (NO mountain naming — describe as forested hills + tarn)
+  O. **DAINTREE COASTAL** — where rainforest meets reef coast
+  P. **GHOST GUM HERO** — solitary brilliantly-white-trunked ghost gum on red-dust plain at sunset
+
+🚫 ABSOLUTE BANS:
+  • ZERO photographer names (Peter Lik / Ken Duncan / Matthew Saville)
+  • ZERO aboriginal rock art / cave paintings / petroglyphs (cultural — respect)
+  • ZERO humans, vehicles, buildings, viewing platforms, boardwalks, signage
+  • ZERO American Southwest analogues — NO Monument Valley / Sedona / Antelope Canyon / Bryce / saguaro / Joshua tree / juniper / sage. Australia has its OWN icons (Uluru / Bungle Bungle / Karijini) and its OWN vegetation (eucalyptus / ghost gum / spinifex / banksia)
+  • ZERO sci-fi / fantasy / portal
+  • ZERO negation phrases
+  • ZERO wildlife-as-hero
+
+✅ EVERY ENTRY MUST INCLUDE:
+  • Australian toponym in first 5-8 words
+  • Specific HABITAT hero
+  • Specific CAMERA ANGLE
+  • Multi-tier depth language
+  • Australia-coded materials (deep rust-red iron-oxide / round-weathered sandstone / striped beehive sandstone / limestone spires / red-river-gum / ghost gum / spinifex grass / pink salt / silica sand / mossy myrtle-beech)
+  • A specific DRAMATIC lighting moment (molten-red Uluru sunset / blood-red dusk on Bungle / Milky Way over outback / cobalt midday on salt / blue-hour Twelve Apostles / mist-shrouded Daintree dawn)
+
+Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Uluru monolith silhouetted hero-scale against a molten blood-red sunset sky, the round-weathered sandstone glowing crimson, low-angle stance from red-dust plain looking up at the massive form, foreground close spinifex grass tussock at near edge, blazing horizon-rim and deepening cobalt zenith',
+      'Uluru at dawn alpenglow rose-amber on the eastern face with red-dust plain stretching in foreground, lone solitary ghost gum tree silhouetted at mid-distance, pale rose sky brightening above, deep cobalt zenith',
+      'Kata Tjuta Olgas group of red-sandstone domes rising from spinifex plain at sunset, multiple round-weathered formations clustered in deep tier, deep cobalt sky above, foreground close spinifex grass cluster at near edge, blazing horizon',
+      'Bungle Bungle Purnululu beehive domes drone POV aerial looking down at the striped orange-and-grey sandstone domes in dense cluster, deep gorges carving between them, foreground close dome-top vegetation at near edge, golden-hour sidelight raking the stripes',
+      'Bungle Bungle Purnululu beehive dome low-angle hero stance looking up at one massive striped formation, alternating orange and grey sandstone bands, foreground close cracked red soil at near edge, deep cobalt sky above the dome rim',
+      'Pinnacles desert Nambung limestone spires at sunset, the otherworldly forest of pale-tan spires emerging from yellow sand stretching to flat horizon, foreground close sand-and-spire-base detail at near edge, blazing copper sky above',
+      'Karijini iron gorge interior, deep red-iron-banded vertical walls plunging to emerald jade-green waterhole at base, light shafts piercing from narrow slot above, foreground close water-edge cobbles wet at near edge, cool atmospheric shadow in gorge depth',
+      'Lake Eyre Kati Thanda salt flat aerial drone POV, vast pink-and-white salt expanse with mineral-rich red water veining patterns across flat horizon, foreground close salt-polygon crust at near edge, deep cobalt sky overhead',
+      'Wilpena Pound Flinders Ranges natural amphitheater drone POV looking down at the bowl, sunset rake-light on rim ridges, foreground close ridge edge with eucalyptus at near edge, distant pound floor stretching to far side',
+      'Devils Marbles Karlu Karlu massive round granite boulders perched precariously in cluster on red-spinifex plain, low-angle hero stance, foreground close granite boulder face at near edge, blazing copper sunset against deep cobalt sky',
+      'Glen Helen gorge MacDonnell ranges, deep red sandstone canyon walls plunging to emerald eucalyptus-lined waterhole at base, foreground close water-edge red-river-gum root at near edge, light shafts piercing from above',
+      'Daintree rainforest canopy aerial drone POV looking DOWN at the emerald canopy of one of the oldest forests on Earth, layered ancient tree crowns stretching to flat horizon, mist drift in mid-canopy, distant blackwater creek visible',
+      'Daintree rainforest interior ground-level POV with dappled emerald-gold shafts piercing layered canopy, massive ancient strangler fig trunks rising cathedral-tall, foreground close ferns and mossy buttress root at near edge, deep humid shadow',
+      'Twelve Apostles Great Ocean Road sea stacks at sunset, the limestone pillars rising from churning Southern Ocean against blazing copper sky, foreground close grass-clifftop edge at near edge, breaking waves below, deep cobalt sky above stacks',
+      'Twelve Apostles blue-hour twilight, the limestone sea stacks silhouetted against cobalt-and-amber gradient sky, mirror-still inshore pool reflecting silhouettes, foreground close grass-clifftop with coastal flowers at near edge',
+      'Whitehaven Beach Whitsundays drone POV looking down at pure white silica sand swirls in elaborate fractal patterns with jade tidal water flowing through, foreground close silica sand at near edge, blazing midday cobalt sky',
+      'Remarkable Rocks Kangaroo Island at golden hour, weathered orange-stained granite forms perched at cliff edge above Southern Ocean, low-angle hero stance, foreground close granite surface texture at near edge, blazing horizon over ocean',
+      'Cradle Country Tasmania temperate rainforest with mossy myrtle-beech trees and glacial tarn reflection at dawn, the tarn mirror-still reflecting forested rolling hills above, foreground close mossy boulder at near edge, cool blue-grey morning mist drift',
+      'Cradle Country glacial tarn aerial drone POV, the still water reflecting layered cool forested hills in perfect mirror, dawn mist drift between hillsides, foreground close lakeshore boulder at near edge, pale rose sky brightening above',
+      'Solitary ghost gum on red-dust plain at sunset, the brilliantly white-trunked tree silhouetted hero-scale against blazing copper sky, low-angle stance from ground level, foreground close red-spinifex tuft at near edge, deep cobalt zenith above',
+      'Cape Range Karijini gorge at midday, deep red-iron vertical walls plunging to swimming-pool jade water with shaft of sunlight piercing into the slot, foreground close water-edge banded rock at near edge, deep blue zenith above',
+      'Uluru night sky Milky Way arch over the monolith silhouette, star-crowded indigo above the iconic red-sandstone form, foreground close red-dust ground with spinifex at near edge, deep cool atmospheric blue around the monolith',
+      'Bungle Bungle striped sandstone gorge interior low-angle POV looking up at converging walls, alternating orange and grey horizontal bands receding overhead, foreground close cracked red soil at near edge, narrow strip of cobalt sky visible at top',
+      'Coober Pedy moon-plain badlands wide cinematic vista, eroded red-cream ridges stretching to flat horizon under deep cobalt sky, foreground close cracked red soil at near edge, distant ridges in cool atmospheric haze',
+      'Karijini Joffre Falls deep red-iron gorge with circular emerald waterhole at base, narrow waterfall plunging from above, low-angle hero stance from waterhole edge looking up the gorge walls',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Australian subject entries. NO preamble. Each entry 30-55 words on a single line. Format follows touchpoint pattern: "Toponym + habitat hero + camera angle + close-foreground + depth + lighting".`,
+  },
+
+  australian_outback_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHORS for EarthBot's australian-outback path. Each entry is ONE specific close-edge Australian detail anchoring the lower 15-20% of the frame. Each entry 14-25 words.
+
+✅ AUSTRALIA-SPECIFIC CLOSE-EDGE DETAILS:
+  • Spinifex grass tussock at near edge (Red Centre)
+  • Red-dust soil with iron-oxide patina at near edge
+  • Eucalyptus/ghost-gum bark-strip at near edge
+  • Banksia or grevillea bloom cluster at near edge
+  • Red-river-gum root emerging from dry creek-bed at near edge
+  • Cracked red soil polygon pattern at near edge
+  • Sandstone-and-iron-ore surface texture at near edge (Karijini)
+  • Salt-polygon hexagonal crust at near edge (Lake Eyre)
+  • White silica sand swirl pattern at near edge (Whitehaven)
+  • Mossy myrtle-beech root at near edge (Cradle Country / Daintree)
+  • Coastal limestone-edge with sea spray at near edge (Twelve Apostles)
+  • Tropical fern + strangler-fig root at near edge (Daintree)
+  • Striped sandstone wall close detail at near edge (Bungle Bungle)
+  • Granite-surface texture with weathered patina at near edge (Devils Marbles)
+  • Coastal grass tussock at near edge (Kangaroo Island)
+`,
+    touchpoints: [
+      'Spinifex grass tussock at near edge in pale gold catching warm sidelight',
+      'Red-dust soil with iron-oxide patina at near edge in deep rust-orange',
+      'Eucalyptus ghost-gum bark-strip at near edge with peeling white-and-grey texture',
+      'Banksia cone cluster at near edge with seed-pods open in textured pattern',
+      'Red-river-gum root emerging from dry creek-bed sand at near edge',
+      'Cracked red soil polygon pattern at near edge in concentric desiccation cracks',
+      'Sandstone-and-iron-ore surface texture at near edge in deep banded color',
+      'Salt-polygon hexagonal crust at near edge stretching to white pan',
+      'White silica sand swirl pattern at near edge in pristine pearl-white',
+      'Mossy myrtle-beech root at near edge wet with rainforest dew',
+      'Coastal limestone edge with sea spray and salt crystals at near edge',
+      'Tropical fern with strangler-fig root at near edge in deep emerald shadow',
+      'Striped sandstone wall close detail at near edge in alternating orange-and-grey bands',
+      'Granite-surface texture with weathered patina at near edge in soft grey-and-orange',
+      'Coastal grass tussock at near edge bent by southern ocean wind',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Australian foreground anchor entries. NO preamble. Each entry 14-25 words on a single line.`,
+  },
+
+  australian_outback_light_condition: {
+    format: 'simple',
+    theme: `LIGHT CONDITIONS for EarthBot's australian-outback path. Each entry is ONE specific Australian lighting register. Each entry 14-22 words.
+
+✅ AUSTRALIAN LIGHTING REGISTERS:
+  • Molten blood-red Uluru sunset
+  • Alpenglow rose-amber on Uluru eastern face at dawn
+  • Cobalt midday with razor shadows on Red Centre
+  • Milky Way night over outback dark-sky
+  • Karijini gorge light shaft piercing from above
+  • Lake Eyre cobalt midday clarity on pink salt
+  • Daintree dappled emerald canopy gold shaft
+  • Bungle Bungle golden-hour rake across striped stone
+  • Twelve Apostles blue-hour cobalt twilight
+  • Whitehaven blazing midday cobalt over jade water
+  • Pre-monsoon green-yellow oppressive Top End light
+  • Cradle Country pre-dawn cool blue mist light
+  • Pinnacles golden-hour copper rake across spires
+  • Devils Marbles golden-hour warm rim-light on boulders
+  • Outback dust-haze sunset turning red-dust crimson
+`,
+    touchpoints: [
+      'Molten blood-red sunset rake on Uluru eastern face glowing crimson against deep cobalt zenith',
+      'Alpenglow rose-amber on Uluru eastern face at first light at horizontal angle',
+      'Cobalt midday with razor-sharp shadows on Red Centre at thin-atmosphere clarity',
+      'Star-crowded Milky Way night over outback dark-sky with arch overhead',
+      'Karijini gorge narrow light shaft piercing from above into deep red-iron walls',
+      'Lake Eyre cobalt midday clarity on pink-and-white salt at razor-sharp horizon',
+      'Daintree dappled emerald-gold canopy shaft piercing through three layers',
+      'Bungle Bungle golden-hour rake horizontal across striped orange-and-grey bands',
+      'Twelve Apostles blue-hour cobalt twilight over Southern Ocean stacks',
+      'Whitehaven blazing midday cobalt sky over jade tidal water with sand swirls',
+      'Pre-monsoon green-yellow oppressive Top End light pressing low over canopy',
+      'Cradle Country pre-dawn cool blue mist light over rainforest tarn',
+      'Pinnacles golden-hour copper rake across limestone spires casting long shadows',
+      'Devils Marbles golden-hour warm rim-light on round granite boulders',
+      'Outback dust-haze sunset turning red-dust plain crimson under copper sky',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Australian light-condition entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  australian_outback_atmosphere: {
+    format: 'simple',
+    theme: `ATMOSPHERE entries for EarthBot's australian-outback path. Each entry is ONE specific Australian atmospheric texture. Each entry 14-22 words.
+
+✅ AUSTRALIAN ATMOSPHERIC REGISTERS:
+  • Red-dust haze suspended low over plain at sunset
+  • Heat-shimmer mirage at midday horizon (Red Centre)
+  • Daintree humid mist drift in canopy
+  • Outback heat-of-day cobalt clarity
+  • Salt-flat dust drift in horizontal warm bands
+  • Twelve Apostles sea-spray drift from Southern Ocean
+  • Karijini cool deep-shadow gorge air
+  • Cradle Country cool morning mist between rainforest hills
+  • Pinnacles dawn cool sand-haze
+  • Pre-storm yellow-green oppressive Top End air
+  • Sulfur-tinted volcanic haze (rare)
+  • Outback storm cell rain curtain advancing
+  • Cool dawn haze over Whitehaven jade tide
+  • Bungle Bungle gorge cool deep-shadow air
+  • Dust storm wall advancing across outback
+`,
+    touchpoints: [
+      'Red-dust haze suspended low over Red Centre plain in fine warm bands at sunset',
+      'Heat-shimmer mirage dissolving far horizon at midday in liquid distortion',
+      'Daintree humid mist drift in mid-canopy filtering through three layers',
+      'Outback heat-of-day cobalt clarity with razor-sharp shadow definition',
+      'Salt-flat dust drift in horizontal warm bands at low altitude over Lake Eyre',
+      'Twelve Apostles sea-spray drift inland from Southern Ocean breakers',
+      'Karijini cool deep-shadow gorge air with damp cool feel from waterhole below',
+      'Cradle Country cool morning mist drift between forested rolling hills',
+      'Pinnacles dawn cool sand-haze drifting low across the limestone spire field',
+      'Pre-storm yellow-green oppressive Top End air with falling barometric pressure',
+      'Outback dust storm wall advancing across plain with sharp vertical front',
+      'Cool dawn haze low over Whitehaven jade tidal flat in pearl-grey',
+      'Bungle Bungle gorge cool deep-shadow air with sulfur-tinted glow',
+      'Cool wind-blown spinifex-seed drift across red-dust plain',
+      'Coastal sea-fog rolling onto Twelve Apostles cliff line in dense veil',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Australian atmosphere entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  australian_outback_sky_layer: {
+    format: 'simple',
+    theme: `SKY LAYER entries for EarthBot's australian-outback path. Each entry is ONE specific Australian sky cover. Each entry 14-22 words.
+
+✅ AUSTRALIAN SKY REGISTERS:
+  • Cobalt midday outback sky with high cirrus
+  • Blazing copper sunset banner cumulus over Red Centre
+  • Star-crowded moonless Milky Way over Uluru
+  • Pre-storm yellow-green oppressive sky
+  • Daintree monsoon nimbostratus deck low overhead
+  • Twelve Apostles blue-hour cobalt-to-amber gradient
+  • Whitehaven cobalt clear midday
+  • Lake Eyre razor-sharp cobalt horizon
+  • Outback dust-tinted copper-yellow sky
+  • Sunset banner cumulus over Bungle Bungle
+  • Cool grey overcast Cradle Country
+  • Pre-dawn cool blue-pink Tasmania
+  • Layered stratocumulus broken by cobalt patches
+  • Cradle Country mist-inversion under clear sky
+  • Sunset gradient cobalt-to-rose over Pinnacles
+`,
+    touchpoints: [
+      'Cobalt midday outback sky with high cirrus contrails',
+      'Blazing copper sunset banner cumulus over Red Centre flat horizon',
+      'Star-crowded moonless Milky Way arch over Uluru with deep saturation',
+      'Pre-storm yellow-green oppressive sky pressing low over plain',
+      'Daintree monsoon nimbostratus deck low overhead in dark grey',
+      'Twelve Apostles blue-hour cobalt-to-amber gradient over Southern Ocean',
+      'Whitehaven cobalt clear midday sky over jade tidal water',
+      'Lake Eyre razor-sharp cobalt horizon with thin atmospheric perspective',
+      'Outback dust-tinted copper-yellow sky after recent dust storm',
+      'Sunset banner cumulus glowing copper-amber over Bungle Bungle striped domes',
+      'Cool grey overcast Cradle Country pressing low over forested hills',
+      'Pre-dawn cool blue-pink Tasmania sky over glacial tarn',
+      'Layered stratocumulus broken by cobalt patches over outback',
+      'Cradle Country mist-inversion sea below clear cobalt sky above',
+      'Sunset gradient cobalt-to-rose over Pinnacles limestone spire field',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Australian sky entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  australian_outback_scale_prover: {
+    format: 'simple',
+    theme: `SCALE PROVERS for EarthBot's australian-outback path. Each entry is ONE tiny postage-stamp-scale element in the deep distance — Australian-native wildlife or geometry, never hero-scale. Each entry 14-22 words.
+
+✅ AUSTRALIAN SCALE-PROVER REGISTERS:
+  • Lone red-roo silhouette on Red Centre plain
+  • Emu pair pencil-tall on outback
+  • Dingo silhouette on red-dust plain
+  • Wedge-tailed eagle gliding over outback
+  • Solitary ghost gum silhouette at distance
+  • Tiny mob of kangaroos pencil-tall on plain
+  • Distant single banksia tree silhouette
+  • Black swan pair on distant Cradle Country tarn
+  • Tasmanian devil silhouette barely readable
+  • Tiny saltwater croc shape on Top End creek bank
+  • Far-shore black-pebble line at edge
+  • Single coastal-cliff sea-bird silhouette
+  • Solitary spinifex pigeon on red plain
+  • Distant single white-trunked ghost gum at horizon
+  • Tiny river-gum silhouette on dry creek-bed
+`,
+    touchpoints: [
+      'Lone red kangaroo silhouette ant-small on Red Centre plain in deep distance',
+      'Emu pair pencil-tall on outback spinifex plain in deep distance',
+      'Dingo silhouette ant-small on red-dust plain in deep distance',
+      'Wedge-tailed eagle gliding silhouette over outback in deep sky',
+      'Solitary ghost gum silhouette pencil-tall at distance on red-dust plain',
+      'Tiny mob of kangaroos pencil-tall on spinifex plain in deep distance',
+      'Distant single banksia tree silhouette at deep distance against pale sky',
+      'Black swan pair on distant Cradle Country tarn in deep distance',
+      'Tasmanian devil silhouette barely readable at deep distance in rainforest',
+      'Tiny saltwater crocodile shape on Top End creek bank in deep distance',
+      'Far-shore black-pebble line marking water edge at deep distance',
+      'Single coastal sea-bird silhouette over Twelve Apostles in deep sky',
+      'Solitary spinifex pigeon on red plain at deep distance ant-small',
+      'Distant single white-trunked ghost gum at horizon as pencil-tall silhouette',
+      'Tiny river-gum silhouette on dry creek-bed in deep distance',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Australian scale-prover entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  australian_outback_phenomenon: {
+    format: 'simple',
+    theme: `RARE PHENOMENA for EarthBot's australian-outback path. Each entry is ONE specific real-Earth Australian phenomenon. Each entry 14-22 words.
+
+✅ AUSTRALIAN PHENOMENA:
+  • Dust storm wall over Lake Eyre
+  • Monsoon lightning over Daintree at night
+  • Twelve Apostles sea-stack collapse moment
+  • Lake Eyre flood event filling salt with water
+  • Milky Way over Uluru moonless dark sky
+  • Outback fog inversion at Wilpena Pound
+  • Karijini gorge waterfall after monsoon rain
+  • Daintree mist-inversion at dawn
+  • Top End monsoon thunderhead anvil over Kakadu
+  • Sun-pillar vertical light column at outback horizon
+  • Crepuscular ray ladder over outback plain
+  • Whitehaven swirl-pattern reveal at low tide
+  • Pre-eruption volcanic glow (rare — only at Heard Island)
+  • Distant lightning forking over Top End
+  • Rare Aurora Australis ribbon over Tasmania (very rare)
+`,
+    touchpoints: [
+      'Dust storm wall advancing across Lake Eyre salt flat with sharp vertical front',
+      'Monsoon lightning forking over Daintree rainforest at night in dramatic flash',
+      'Twelve Apostles sea-stack collapse moment with debris cascading into Southern Ocean',
+      'Lake Eyre flood event filling salt expanse with rare water and reflection',
+      'Milky Way arch over Uluru moonless dark sky in deep saturation',
+      'Outback fog inversion at Wilpena Pound with rim ridges emerging from cloud sea',
+      'Karijini gorge waterfall full-flow after monsoon rain plunging into emerald pool',
+      'Daintree mist-inversion at dawn with canopy emerging from cloud sea',
+      'Top End monsoon thunderhead anvil rising over Kakadu in afternoon convection',
+      'Sun-pillar vertical light column at outback horizon at sunset',
+      'Crepuscular ray ladder breaking through cloud over outback plain in three beams',
+      'Whitehaven swirl-pattern reveal at low tide with intricate sand patterns visible',
+      'Distant lightning forking over Top End from a mature thunderstorm',
+      'Subtle Aurora Australis green ribbon over Tasmania southern sky at moderate intensity',
+      'Outback dust-devil rising vertically over red plain in spiraling brown plume',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} Australian phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
 };
 
 if (!POOL_RECIPES[POOL]) {
