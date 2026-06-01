@@ -82,7 +82,17 @@ module.exports = {
   },
 
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  // Ban flux-2-max + flux-2-flex from DinoBot specifically. Per Kevin
+  // 2026-06-01 — those two models push DinoBot's photoreal-dinosaur prompt
+  // toward 3D-render/plastic-CGI looks that fight the BBC-Planet-Earth /
+  // museum-paleoart aesthetic the bot wants. Other 6 models in
+  // ALL_ENABLED_AI_MODELS stay (banana / gpt-2 / flux-dev / flux-1.1-pro /
+  // flux-1.1-pro-ultra / flux-2-pro). Filtered from the canonical list so
+  // newly-added models auto-inherit (still need explicit add to the ban
+  // set if they also fight the look).
+  allowedModels: ALL_ENABLED_AI_MODELS.filter(
+    (m) => m !== 'black-forest-labs/flux-2-max' && m !== 'black-forest-labs/flux-2-flex'
+  ),
 
   // Single locked vibe — cinematic. Was rotating 11 vibes which produced
   // inconsistent moods (cozy/ethereal/shimmer pulled away from the
