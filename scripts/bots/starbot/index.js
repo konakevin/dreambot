@@ -68,9 +68,11 @@ module.exports = {
     ],
   },
 
-  // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
-  // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Flex.
-  // Dropped per Kevin's review: Flux Dev, Flux 2 Max.
+  // Picker on with a 5-model lineup (2026-06-01 Kevin):
+  // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra.
+  // Dropped from the original BOT_MODEL_TALLY 7-model fleet set:
+  //   • Flux Dev, Flux 2 Max — earlier 2026-05-30 review
+  //   • Flux 2 Flex          — 2026-06-01 (this commit)
   useModelPicker: true,
   allowedModels: [
     'google/gemini-2-image',
@@ -78,7 +80,6 @@ module.exports = {
     'black-forest-labs/flux-2-pro',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-flex',
   ],
 
   // Per-path override (2026-05-30 BOT_MODEL_TALLY): Kevin hearted Flux 2 Max
@@ -90,19 +91,63 @@ module.exports = {
   // Original per-path locks stripped 2026-05-30; restore individual lines
   // here if a path needs pinning again.
   modelByPath: {
+    // cosmic-vista (Kevin 2026-05-31): bot-wide MINUS Flux 2 Pro (2026-05-30),
+    // MINUS Flux 2 Flex + MINUS Banana (heart-bans from today's comparison
+    // test), AND MINUS Flux 1.1 Pro (Ultra is strictly better — Pro is
+    // redundant when Ultra is present). Down to 2 models.
     'cosmic-vista': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
     ],
-    'real-space': [
+    // alien-landscape (Kevin 2026-05-31): bot-wide MINUS Flux 2 Flex,
+    // MINUS Banana (heart-ban), AND MINUS Flux 1.1 Pro (redundant w/ Ultra).
+    // Down to 3 models.
+    'alien-landscape': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // alien-city / megastructure (Kevin 2026-05-31): bot-wide MINUS Flux 2
+    // Flex AND MINUS Flux 1.1 Pro (redundant w/ Ultra). Down to 4 models.
+    'alien-city': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    megastructure: [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // cozy-sci-fi-interior (Kevin 2026-05-31): bot-wide MINUS Flux 2 Pro
+    // AND MINUS Flux 2 Flex (3 hearts each in tonight's comparison test).
+    // F1.1 Pro intentionally kept (the "Pro redundant w/ Ultra" rule is NOT
+    // applied here — Kevin's call). Down to 4 models.
+    'cozy-sci-fi-interior': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
+    ],
+    // space-opera (Kevin 2026-05-31): REVIVED at premium-tier axis enrichment
+    // (5 new bespoke pools + probabilistic axis gating). Locked to GPT-2 +
+    // F1.1 Ultra after 3 model-test rounds — Banana / F2 Pro / F2 Flex
+    // produced "too messy" renders even with gating; F1.1 Ultra ships clean,
+    // GPT-2 handles the gated density well.
+    'space-opera': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // real-space (Kevin 2026-05-31): GPT-2 + F1.1 Pro + F1.1 Ultra after the
+    // premium-tier axis enrichment + 9-render test. Banana / F2 Pro / F2 Flex
+    // remain banned. F1.1 Pro kept (Kevin's "keep Pro on non-character paths"
+    // override of the "Pro redundant with Ultra" rule).
+    'real-space': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
     ],
   },
 
@@ -190,8 +235,12 @@ module.exports = {
   paths: [
     'cosmic-vista',
     'alien-landscape',
-    // 'space-opera' — DISABLED 2026-05-12. Flux cannot reliably render
-    // cool sci-fi spaceship silhouettes.
+    // REVIVED 2026-05-31 — moved from disabled to premium-tier axis path
+    // (5 new bespoke pools added: crew_signal / faction_iconography /
+    // propulsion_signature / genre_register / signature_hull_feature).
+    // Original 2026-05-12 disable reason (Flux can't render ship silhouettes)
+    // is moot now — broader model lineup (Banana / GPT-2 / Flux 2 Pro/Flex / Ultra).
+    'space-opera',
     // 'sci-fi-interior' — disabled 2026-05-11 (cozy-sci-fi-interior wins)
     'cozy-sci-fi-interior',
     'alien-city',
@@ -253,6 +302,10 @@ module.exports = {
     polishedWordsByPath: {
       'female-explorer': '80-110',
       'male-explorer': '80-110',
+      // space-opera (2026-05-31): tighter target to reduce element-density
+      // for literal models (Banana / GPT-2 / Flux 2 Pro). Probabilistic axis
+      // gating + this compression nudge keeps per-render scenes coherent.
+      'space-opera': '55-75',
     },
     // Helmet/visor/EVA tokens kept stripping during compression on
     // female-explorer (2026-05-12 — Kevin called out "no helmets?"

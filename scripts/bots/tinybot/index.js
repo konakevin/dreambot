@@ -7,7 +7,6 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
-const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   diorama: require('./paths/diorama'),
@@ -33,12 +32,9 @@ module.exports = {
 
   mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted', 'render'],
 
+  // Banned (2026-06-01 Kevin): flux-2-flex.
   useModelPicker: true,
-  allowedModels: [
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-flex',
-  ],
+  allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
