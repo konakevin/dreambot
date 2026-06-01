@@ -28,6 +28,12 @@ export interface ResolvedCastMember {
   gender: CastGender | null;
   sourcePhotoUrl: string;
   physicalTraits: string;
+  /** Relationship of plus_one to self (partner / friend / parent / sibling / etc.).
+   * Gates romantic body language in dual brief — pickDualAction + dualBriefBuilder
+   * read this. Previously dropped during resolution, so generate-dream's dual gate
+   * received undefined for the entire lifetime of the create path and always took
+   * the platonic branch. (Bug found 2026-05-31, fixed by preserving the field.) */
+  relationship?: string;
 }
 
 export function resolveCastForPrompt(
@@ -74,6 +80,7 @@ export function resolveCastForPrompt(
         gender,
         sourcePhotoUrl: member.thumb_url,
         physicalTraits: member.physical_summary || '',
+        relationship: member.relationship,
       };
     });
 }

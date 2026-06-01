@@ -48,9 +48,11 @@ export function buildDualBrief(input: CompilerInput): CompilerOutput {
   // The pool is what enforces L/R-compatible body geometry (side by side, clear gap).
   // It runs in BOTH cases — 'ok' uses it as the primary action, 'breaking' uses it
   // alongside the reframe block to give Sonnet a concrete L/R pose to anchor on.
-  const plusOneRelationship = cast.find((c) => c.role === 'plus_one')
-    ? (cast.find((c) => c.role === 'plus_one') as unknown as { relationship?: string }).relationship
-    : undefined;
+  // Relationship now correctly preserved through resolveCastForPrompt (2026-05-31).
+  // Previously dropped — this read was always undefined, the partner pool gate
+  // never fired for the create path, and dual renders always used the companion
+  // pool (which the gate fix below NOW correctly distinguishes from partner).
+  const plusOneRelationship = cast.find((c) => c.role === 'plus_one')?.relationship;
   const dualAction = pickDualAction(plusOneRelationship, undefined);
 
   // ── Composition path: pick once, prepend at end via postProcess ──
@@ -104,23 +106,41 @@ This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their N
   // be rendered — there's no clean half for either face.
   //
   // When the user writes a contact verb, translate the EMOTIONAL VIBE of the verb
-  // into a strict side-by-side composition. The verb's intent (intimacy, romance,
-  // playfulness, support) is preserved through body language, NOT through literal
-  // contact or center positioning.
+  // into a strict side-by-side composition. The verb's intent is preserved through
+  // body language, NOT through literal contact or center positioning.
+  //
+  // RELATIONSHIP GATE: the translation language is split. Partners get
+  // romantic-coded body language ("romantic glance", "intimate energy"). Everyone
+  // else (friend / parent / sibling / coworker / etc.) gets PLATONIC translation
+  // — casual side-by-side with friendly warmth, no romantic body language, no
+  // intimate gaze. Without this gate a user typing "hugging my mom" would still
+  // land a romantic-coded side-hug pose because the reframe template's bullets
+  // were universally romantic. Mirrors the gate in pickDualAction() above.
+  const isPartner =
+    plusOneRelationship === 'partner' || plusOneRelationship === 'significant_other';
+  const reframeBullets = isPartner
+    ? `   • side hug (arms around each other's shoulders FROM THE SIDE, both facing camera)
+   • shoulder-to-shoulder leaning, romantic glance held across the gap toward camera
+   • one resting a hand on the other's arm/shoulder, both still facing forward
+   • playful side-by-side pose with intimate energy in posture and expression`
+    : `   • standing close side-by-side, both facing camera with relaxed friendly body language
+   • shoulder-to-shoulder leaning casually, both looking toward camera with warm friendly energy (NOT romantic)
+   • one with a brief casual hand on the other's shoulder (platonic only — quick contact, not an embrace)
+   • side-by-side pose with PLATONIC warmth — friendly grins toward camera, no romantic gaze, no lingering contact`;
+  const relationshipNote = isPartner
+    ? ''
+    : `\n*** RELATIONSHIP GATE — the plus-one relationship is "${plusOneRelationship ?? 'unspecified'}", which is NOT partner / significant_other. NO romantic body language allowed. NO holding hands, NO passionate gaze, NO intimate embrace, NO holding each other, NO leaning heads together. Even though the user typed "${userActionClass.kind === 'breaking' ? userActionClass.verb : ''}", translate it ONLY into platonic friendly side-by-side body language. ***\n`;
   const swapBreakingReframe =
     userActionClass.kind === 'breaking'
       ? `\n⚠ ACTION REFRAME — the user wrote "${userActionClass.verb}", which implies face contact or center-stacked composition.
 The face swap pipeline crops the frame in half and runs swap on each side independently.
 Center contact, overlap, piggyback, and full-frontal hugging are physically impossible to render correctly.
-
+${relationshipNote}
 TRANSLATE the emotional vibe of "${userActionClass.verb}" into a STRICT SIDE-BY-SIDE composition:
 - Character 1 stays in the LEFT half. Character 2 stays in the RIGHT half. Clear gap at the center. NON-NEGOTIABLE.
 - Both faces three-quarter view toward CAMERA. NEVER turning toward each other, NEVER in profile, NEVER overlapping.
 - Express the verb's intent through SIDE-BY-SIDE body language only:
-   • side hug (arms around each other's shoulders FROM THE SIDE, both facing camera)
-   • shoulder-to-shoulder leaning, romantic glance held across the gap toward camera
-   • one resting a hand on the other's arm/shoulder, both still facing forward
-   • playful side-by-side pose with intimate energy in posture and expression
+${reframeBullets}
 - DO NOT render: kissing, lip contact, full embrace, piggyback, anyone carrying anyone, foreheads touching, faces touching, characters facing each other, or any pose where one body covers part of the other.\n`
       : '';
 
