@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} HAIR COLOR descriptions for GothBot's character paths. Each entry is a SHORT phrase (3-8 words) describing ONLY a specific hair color/tone. Shared across male AND female gothic-horror characters.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIR COLOR descriptions for GothBot's character paths. Each entry is a SHORT phrase (3-8 words) describing ONLY a specific hair color/tone. Shared across male AND female gothic-horror characters.
 
 ━━━ COLOR SPECTRUM (enforce even distribution across ${n}) ━━━
 - JET BLACKS (3-4) — blue-black, oil-slick black, raven-black with violet sheen, true-black
@@ -24,4 +26,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

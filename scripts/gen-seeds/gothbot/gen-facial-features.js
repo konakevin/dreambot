@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} DISTINCTIVE FACIAL FEATURE descriptions for GothBot's vampire character paths. Each entry is a SHORT phrase (10-18 words) describing a UNIQUE face — bone structure, nose shape, jaw, brow, lip shape, cheekbone prominence, forehead, chin. These are the STRUCTURAL features that make one face look completely different from another, BEFORE any makeup or styling is applied.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DISTINCTIVE FACIAL FEATURE descriptions for GothBot's vampire character paths. Each entry is a SHORT phrase (10-18 words) describing a UNIQUE face — bone structure, nose shape, jaw, brow, lip shape, cheekbone prominence, forehead, chin. These are the STRUCTURAL features that make one face look completely different from another, BEFORE any makeup or styling is applied.
 
 ━━━ FACE STRUCTURE SPREAD (enforce variety across ${n}) ━━━
 - SHARP / ANGULAR (4-5) — razor jawline, severe cheekbones, narrow face, prominent brow ridge, aquiline nose, pointed chin. Faces that cut like glass. Think Tilda Swinton, Cate Blanchett.
@@ -25,4 +27,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

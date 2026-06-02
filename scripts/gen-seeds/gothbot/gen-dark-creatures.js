@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   maxTokens: 4000,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} BOSS-TIER DARK CREATURE descriptions for GothBot's horror-creature path. These are CASTLEVANIA BOSS ENCOUNTERS — massive, imposing, jaw-dropping creature designs that would be the final boss of a gothic horror game. Each entry is 25-40 words. Gorgeous + terrifying + operatic. The kind of creature art that makes you stop scrolling and stare.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BOSS-TIER DARK CREATURE descriptions for GothBot's horror-creature path. These are CASTLEVANIA BOSS ENCOUNTERS — massive, imposing, jaw-dropping creature designs that would be the final boss of a gothic horror game. Each entry is 25-40 words. Gorgeous + terrifying + operatic. The kind of creature art that makes you stop scrolling and stare.
 
 ━━━ AESTHETIC NORTH STAR ━━━
 Castlevania bosses (Death, Galamoth, Beelzebub, Legion, Dracula's final forms). Bloodborne bosses (Cleric Beast, Vicar Amelia, Ludwig, Orphan of Kos). Berserk apostles (Femto, Zodd, Slan, Void). Dark Souls bosses (Sif, Ornstein & Smough, Nameless King). Devil May Cry demons. Hellboy's Ogdru Jahad. Van Helsing's werewolf transformation. NOT generic fantasy creatures. NOT D&D monster manual. NOT cute monsters. BOSS-TIER — massive scale, operatic horror, devastating beauty.
@@ -69,4 +71,7 @@ Each entry must include: creature anatomy (specific — not just "claws" but "ob
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN STAGE descriptions for GothBot's vampire-assassin paths. Each entry is 25-40 words. The "stage" is the gothic biome / hunting-ground where the assassin is OUT IN THE WILD doing assassin business.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN STAGE descriptions for GothBot's vampire-assassin paths. Each entry is 25-40 words. The "stage" is the gothic biome / hunting-ground where the assassin is OUT IN THE WILD doing assassin business.
 
 CONTEXT: Castlevania + Devil May Cry + Van Helsing energy. Vampire-hunting environments — the stages where blade meets night. The biome surrounds the assassin (foreground / midground), the epic backdrop towers behind it. Every stage MUST READ as "vampires are here, and so is a hunter."
 
@@ -49,4 +51,7 @@ Examples (write fresh):
 - "Cursed crossroads with a hanging gibbet creaking in the wind, lightning-split signpost pointing four ways into darkness, hip-deep fog rolling across the cobblestones, ravens on the gibbet beam"
 
 Output ONLY a valid JSON array of ${n} strings (25-40 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

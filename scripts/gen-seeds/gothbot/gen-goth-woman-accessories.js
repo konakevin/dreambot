@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/goth_woman_accessories.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ICONIC STYLING/ACCESSORY descriptions for GothBot's goth-woman path — the signature detail that makes a dark-fantasy woman instantly iconic. Entries 10-18 words. Each entry is one specific iconic detail (or tight combination) that gives a character her VISUAL HOOK.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ICONIC STYLING/ACCESSORY descriptions for GothBot's goth-woman path — the signature detail that makes a dark-fantasy woman instantly iconic. Entries 10-18 words. Each entry is one specific iconic detail (or tight combination) that gives a character her VISUAL HOOK.
 
 ━━━ AESTHETIC NORTH STAR ━━━
 Castlevania / Bloodborne / Van-Helsing / Crimson-Peak / Berserk / WoW-undead-warlock-art (aesthetic DNA only, never the IP). Vampire queens, corrupted priestesses, succubi, blood-huntresses, witch-queens, occult-seductresses, death-knight-archetype women, banshee-brides, demon-courtesans, fallen-paladins. Haunting + ALLURING + dangerous.
@@ -112,4 +114,7 @@ Etc. Treat horns as a minor exotic flourish, never default.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

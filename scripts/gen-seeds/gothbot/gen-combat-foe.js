@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} GOTHIC-FANTASY COMBAT FOE descriptions for GothBot's vampire-assassin-combat path. Each entry is 25-40 words. The foe is the THING the assassin is fighting — a stylized supernatural creature.
+  metaPrompt: (
+    n
+  ) => `Write ${n} GOTHIC-FANTASY COMBAT FOE descriptions for GothBot's vampire-assassin-combat path. Each entry is 25-40 words. The foe is the THING the assassin is fighting — a stylized supernatural creature.
 
 CONTEXT: Castlevania-boss / Bloodborne-beast / Devil-May-Cry-demon / Van-Helsing-monster aesthetic. Each foe is BEAUTIFUL-BUT-DEADLY — operatic gothic horror, not cheap B-movie schlock. They fight back; the assassin engages mid-action.
 
@@ -47,4 +49,7 @@ Examples (write fresh):
 - "A wailing banshee mid-shriek with translucent tattered shroud streaming behind, hollow-glowing eye-sockets, skeletal hands extended toward her, hair flowing as if underwater"
 
 Output ONLY a valid JSON array of ${n} strings (25-40 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

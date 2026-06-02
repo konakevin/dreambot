@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} MALE ACCESSORY / WEAPON descriptions for GothBot's male character paths. Each entry is a SHORT phrase (5-12 words) describing ONE specific weapon, piece of gear, or accessory visible on a gothic-horror man. Castlevania / Bloodborne / Devil-May-Cry / Van-Helsing aesthetic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MALE ACCESSORY / WEAPON descriptions for GothBot's male character paths. Each entry is a SHORT phrase (5-12 words) describing ONE specific weapon, piece of gear, or accessory visible on a gothic-horror man. Castlevania / Bloodborne / Devil-May-Cry / Van-Helsing aesthetic.
 
 ━━━ ACCESSORY TYPES (enforce variety across ${n}) ━━━
 - BLADED WEAPONS (4-5) — silver longsword, obsidian-hilted rapier, notched greatsword with blood-groove, curved saber
@@ -23,4 +25,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} GOTHIC SKIN TONE descriptions for GothBot's female character paths. Each entry is a SHORT phrase (8-15 words) describing her skin with gothic-specific detail. These compose with separate archetype/makeup/hair pools.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GOTHIC SKIN TONE descriptions for GothBot's female character paths. Each entry is a SHORT phrase (8-15 words) describing her skin with gothic-specific detail. These compose with separate archetype/makeup/hair pools.
 
 These are hauntingly beautiful skin descriptions — NOT clinical color swatches. Every skin tone should feel GOTHIC — touched by moonlight, kissed by shadow, lit by candlefire. Include the color AND the quality/texture.
 
@@ -24,4 +26,7 @@ These are hauntingly beautiful skin descriptions — NOT clinical color swatches
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

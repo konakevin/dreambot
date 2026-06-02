@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_hair.json',
   total: 100,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} VAMPIRE HAIR descriptions for GothBot's vampire-girls-2 path. Each entry is ONE complete hair description — color + cut/style + texture/state + headpiece (when relevant). Each entry: 10-20 words, comma-separated phrases.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} VAMPIRE HAIR descriptions for GothBot's vampire-girls-2 path. Each entry is ONE complete hair description — color + cut/style + texture/state + headpiece (when relevant). Each entry: 10-20 words, comma-separated phrases.
 
 ━━━ WHAT MAKES A GOOD ENTRY ━━━
 - A specific COLOR (not just "black" — black with a silver streak, blood-red dyed, raven-with-violet-undertones, snow-white with shadowed roots, etc.)
@@ -76,4 +78,7 @@ Deduplicate by: color + cut/length + style direction. Two entries are too simila
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

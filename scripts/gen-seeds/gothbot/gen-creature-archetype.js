@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} GOTHIC CREATURE ARCHETYPE descriptions for GothBot's monster-prowl path. Each entry is 40-60 words. The "creature" is a stylized supernatural being out solo in the wild — operatic gothic horror, terrifying and beautiful.
+  metaPrompt: (
+    n
+  ) => `Write ${n} GOTHIC CREATURE ARCHETYPE descriptions for GothBot's monster-prowl path. Each entry is 40-60 words. The "creature" is a stylized supernatural being out solo in the wild — operatic gothic horror, terrifying and beautiful.
 
 CONTEXT: These are the BAD GUYS in the gothic world — what vampire-assassins hunt. Castlevania-boss / Bloodborne-beast / Devil-May-Cry-demon / Van-Helsing-monster aesthetic. Each entry describes ONE creature solo (no hunter present) — the WHO, the design, and signature features.
 
@@ -46,4 +48,7 @@ Examples (write fresh):
 - "A succubus with high cheekbones and ember-orange eyes, two curved black horns, leathery folded wings, blackened-leather corseted gown with silver chain-belt, alabaster skin, calculating and predatory, a small skull pendant at her throat"
 
 Output ONLY a valid JSON array of ${n} strings (40-60 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

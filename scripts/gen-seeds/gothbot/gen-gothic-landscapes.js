@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/gothic_landscapes.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} LARGER-THAN-LIFE landscape scenes for GothBot. Pure landscape, NO human figures. Entries 25-40 words. Every scene is GOTHIC + PUTRID + CORRUPTED + TWILIGHT + GOTH energy — the aesthetic is the constant. ANY setting, ANY perspective, ANY subject is fair game AS LONG AS it drips with that energy. Epic + haunting + beautiful.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LARGER-THAN-LIFE landscape scenes for GothBot. Pure landscape, NO human figures. Entries 25-40 words. Every scene is GOTHIC + PUTRID + CORRUPTED + TWILIGHT + GOTH energy — the aesthetic is the constant. ANY setting, ANY perspective, ANY subject is fair game AS LONG AS it drips with that energy. Epic + haunting + beautiful.
 
 ━━━ THE CORE IDENTITY — NON-NEGOTIABLE ━━━
 Every render must FEEL gothic / putrid / corrupted / twilight / goth. A sunlit meadow is wrong. A cheerful tropical beach is wrong. A clean bright architecture is wrong. Every entry drips with dread, decay, supernatural unease, ornate decay, nightshade mood. Castlevania + Van-Helsing + Bloodborne + Hellboy + Bram-Stoker-Dracula DNA. Dark fantasy at its most stylish — beautiful, dangerous, alive.
@@ -49,4 +51,7 @@ Each scene is MEMORABLE + EPIC + GORGEOUS. Think: the shot that makes you save t
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

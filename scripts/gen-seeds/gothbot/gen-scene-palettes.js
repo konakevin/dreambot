@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/scene_palettes.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for GothBot. Each entry is a specific Nightshade-aesthetic gothic palette: 3-5 specific color words that define the scene's overall color mood. Entries 12-22 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for GothBot. Each entry is a specific Nightshade-aesthetic gothic palette: 3-5 specific color words that define the scene's overall color mood. Entries 12-22 words.
 
 ━━━ AESTHETIC NORTH STAR — NIGHTSHADE ━━━
 Dark fantasy at its most stylish — moonlit baroque, twilight-hour gothic, occult-lit ritual, candle-and-amber. Castlevania / Bloodborne / Van-Helsing / Hellboy / Bram-Stoker-Dracula. Dark-dominant palettes with VIBRANT ACCENT COLOR — accent is purple/violet/green/blue/silver/amber territory. Red is RARE — never the dominant hue, never coloring windows or moons or fog.
@@ -53,4 +55,7 @@ Each entry: 3-5 specific color words, dark-dominant, with ONE clear vibrant acce
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

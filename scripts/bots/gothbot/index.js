@@ -130,24 +130,58 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-max',
     ],
+    // ── Non-character scene/atmosphere/monster paths (Kevin 2026-05-31 —
+    // ── uniform cross-bot lineup): 5 models — Banana, GPT-2, F2 Pro,
+    // ── F1.1 Pro, F1.1 Ultra. F2 Flex + F2 Max + Flux Dev banned.
+    // ── vampire-from-a-distance is classified non-character (distant figure,
+    // ── cinematic scenery) per Kevin's confirmation 2026-05-31.
     'vampire-from-a-distance': [
-      // BAN: Flux Dev
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-      'black-forest-labs/flux-2-max',
+    ],
+    'dark-landscape': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'gothic-architecture': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'castlevania-scene': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'gothic-vista': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'monster-prowl': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'monster-prowl-victorian': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
     ],
 
-    // Other character/vampire/monster paths — modelByPath entries REMOVED
-    // 2026-05-31 same as the scene paths above. These were 1.1-pro string-
-    // locks. Now these paths roll from the 7-model bot-wide allowedModels
-    // lineup. Removed: vampire-hunter-in-action, goth-male-full-body-axis,
-    // vampire-assassin-combat, monster-prowl, monster-prowl-victorian,
-    // monster-prowl-inked, monster-prowl-weta. Re-pin individually here
-    // if any path needs to ban specific models.
+    // Other character/vampire paths (vampire-hunter-in-action, goth-male-
+    // full-body-axis, vampire-assassin-combat) intentionally fall through to
+    // the bot-wide 7-model allowedModels picker — audit individually if
+    // render quality regresses.
   },
 
   // Per-path vibe restriction — vampire-girls-2 only renders well with

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_ethnicities.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} FEMALE VAMPIRE ETHNICITY descriptions for GothBot's vampire-girls-2 path. Each entry describes a specific ethnic background + the feminine facial features that come with it. These anchor Flux to render a specific FEMALE face, not a generic one.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FEMALE VAMPIRE ETHNICITY descriptions for GothBot's vampire-girls-2 path. Each entry describes a specific ethnic background + the feminine facial features that come with it. These anchor Flux to render a specific FEMALE face, not a generic one.
 
 GENDER: These are FEMALE vampires. Say "vampire woman" explicitly. Describe feminine features — high cheekbones, delicate or strong jaw, specific eye shape, lip fullness.
 
@@ -51,4 +53,7 @@ Every entry should feel like a DIFFERENT woman from a different region — not 1
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -39,7 +39,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     pools.VAMPIRE_HUNT_INTERACTION && pools.VAMPIRE_HUNT_INTERACTION.length
       ? pools.VAMPIRE_HUNT_INTERACTION
       : pools.ASSASSIN_ADVENTURE_ACTIONS,
-    'vam_action',
+    'vam_action'
   );
   // 40%-gated extra layer: target or spoor visible in the scene (silhouetted vampire
   // at midground / bloody hand-print on wall / overturned coffin / etc.).
@@ -177,10 +177,10 @@ If the backdrop description is castle-coded or epic-coded, render it as DISTANT-
 ${action}
 
 ⚠️ THIS IS A HUNT INTERACTION, NOT A SOLO POSE. The action above includes a target, evidence, or hunt-beat. Render the hunter INTERACTING with whatever the action describes — if it mentions a distant vampire silhouette, render the silhouette at midground. If it mentions tracking footprints, render the prints in the foreground. If it mentions cracking a whip toward an off-frame target, render the lash extending with motion-blur. The hunter is DOING SOMETHING TARGETED — never solo-posing-with-weapon.${
-      targetOrSpoor
-        ? `\n\n━━━ TARGET OR SPOOR IN THE SCENE (a specific scene-element the hunter is hunting / tracking) ━━━\n${targetOrSpoor}\n\nThis target or spoor MUST be visibly rendered in the scene at midground or in the foreground at his feet — never blocked, never hidden. It adds the story-beat without competing with the hunter for focus. The hunter remains 60-75% of the frame; this element occupies 5-15%.`
-        : ''
-    }
+    targetOrSpoor
+      ? `\n\n━━━ TARGET OR SPOOR IN THE SCENE (a specific scene-element the hunter is hunting / tracking) ━━━\n${targetOrSpoor}\n\nThis target or spoor MUST be visibly rendered in the scene at midground or in the foreground at his feet — never blocked, never hidden. It adds the story-beat without competing with the hunter for focus. The hunter remains 60-75% of the frame; this element occupies 5-15%.`
+      : ''
+  }
 
 ⚠️ HARD POSE RULE: Render the EXACT body pose described above. If the action says mid-leap, render him MID-AIR with body extended. If it says mid-vault, render him MID-VAULT over the obstacle. If it says crouched mid-spring, render him COILED + ABOUT TO LAUNCH (not crouched-resting). If it says swinging from a chain, render him IN THE SWING. NEVER default to "standing-still-holding-weapon" or "walking-toward-camera" if the action pool says otherwise. POSE VARIETY IS MANDATORY — this path is NOT a vampire-walking-down-street path; he does dynamic acrobatic gothic-hunter moves.
 

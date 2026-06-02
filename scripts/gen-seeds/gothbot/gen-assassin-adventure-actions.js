@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN ADVENTURE ACTION descriptions for GothBot's vampire-assassin paths. Each entry is 14-22 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN ADVENTURE ACTION descriptions for GothBot's vampire-assassin paths. Each entry is 14-22 words.
 
 CONTEXT: HOT, AGILE, mean, crafty vampire assassins MID-ACTION, never posed, never seated, never static. Castlevania + Devil May Cry + Van Helsing energy. The action is candid body-pose — the camera caught them mid-motion. Setting-agnostic so it fits any stage.
 
@@ -41,4 +43,7 @@ Examples (write fresh):
 - "mid-draw of an ornate pistol over the shoulder in a single motion, body twisted at the waist, eyes locked forward"
 
 Output ONLY a valid JSON array of ${n} strings (14-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

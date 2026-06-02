@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_settings.json',
   total: 100,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DRAMATIC GOTHIC SETTING descriptions for GothBot's vampire-girls-2 path. Each entry describes a STUNNING DRAMATIC ENVIRONMENT seen as the BACKDROP behind a bust closeup of a vampire woman. The vampire is the focal point of the painting (50-65% of frame); the setting is the dramatic backdrop visible in the remaining 35-50%. Each entry: 18-30 words, present-tense, comma-separated phrases.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DRAMATIC GOTHIC SETTING descriptions for GothBot's vampire-girls-2 path. Each entry describes a STUNNING DRAMATIC ENVIRONMENT seen as the BACKDROP behind a bust closeup of a vampire woman. The vampire is the focal point of the painting (50-65% of frame); the setting is the dramatic backdrop visible in the remaining 35-50%. Each entry: 18-30 words, present-tense, comma-separated phrases.
 
 CALIBRATION: From 11 hearted renders, the settings that LANDED were: cliff balcony with castle on opposing cliff + full moon (×2), gothic stone bridge with torches + full moon, gothic teal columned hall, multi-arch aqueduct with lightning, dark throne with twin torches, gothic archway with full moon, gothic cathedral spires through stone arch, MOROCCAN COURTYARD with palms + colonnade + reflecting pool, skull-headdress against violet lightning, flooded gothic chasm structures. Common thread: ONE strong architectural element + atmospheric light (full moon, torches, lightning).
 
@@ -64,4 +66,7 @@ Deduplicate by: setting type + dominant architecture or terrain + dominant light
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

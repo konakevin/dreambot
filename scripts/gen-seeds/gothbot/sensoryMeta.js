@@ -47,7 +47,9 @@ const SHARED_RULES = `━━━ HARD RULES ━━━
 // ─────────────────────────────────────────────────────────────
 
 const female = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for GothBot's FEMALE-character paths (vampire-girls-2, goth-closeup, goth-full-body). Each entry is one short olfactory cue tied to a female-presenting vampire/goth subject in a gothic setting.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for GothBot's FEMALE-character paths (vampire-girls-2, goth-closeup, goth-full-body). Each entry is one short olfactory cue tied to a female-presenting vampire/goth subject in a gothic setting.
 
 Smell entries should evoke: scents on her body / clothing / hair / breath, or scents in the immediate gothic environment around her.
 
@@ -66,7 +68,9 @@ Both the SCENT NOUN (rose, frankincense, blood, etc.) AND the LOCATION (her hair
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for GothBot's FEMALE-character paths. Each entry is one short auditory cue — sounds the female subject makes, hears, or is surrounded by in the gothic setting.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for GothBot's FEMALE-character paths. Each entry is one short auditory cue — sounds the female subject makes, hears, or is surrounded by in the gothic setting.
 
 Sound entries should evoke: her own movement / breath / voice, or environmental sounds nearby (organ, bell, candle, raven, wind, distant choir).
 
@@ -85,7 +89,9 @@ Both the SOURCE (her breath, raven, organ, etc.) AND the QUALITY (whispering, be
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for GothBot's FEMALE-character paths. Each entry is one short tactile cue — what she feels against her skin, what she's touching with her hands, what's pressing or scraping or wrapping her body.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for GothBot's FEMALE-character paths. Each entry is one short tactile cue — what she feels against her skin, what she's touching with her hands, what's pressing or scraping or wrapping her body.
 
 Touch entries should reference: her skin / hands / throat / shoulders / fingertips / lips / hair, in contact with gothic materials (lace, velvet, silk, iron, stone, blood, wax, claws).
 
@@ -104,7 +110,9 @@ Both the BODY PART (throat, hand, hip, etc.) AND the SENSATION VERB (digging, co
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for GothBot's FEMALE-character paths. Each entry is one short thermal cue — heat or cold sensation on her body, or in the gothic space around her.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for GothBot's FEMALE-character paths. Each entry is one short thermal cue — heat or cold sensation on her body, or in the gothic space around her.
 
 Temperature entries should evoke: warmth (candle/torch/forge/blood/breath) or cold (stone/crypt/moonlight/grave/winter) interacting with her body specifically.
 
@@ -123,7 +131,9 @@ Both the THERMAL SOURCE (candle, stone, breath, etc.) AND the BODY PART. Vary on
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for GothBot's FEMALE-character paths. Each entry is one short cue evoking heaviness, drag, or pressure on her body — usually clothing, jewelry, or carried objects.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for GothBot's FEMALE-character paths. Each entry is one short cue evoking heaviness, drag, or pressure on her body — usually clothing, jewelry, or carried objects.
 
 Weight entries should reference: gowns / capes / trains / crowns / chains / jewelry / weapons / books / chalices interacting with her body's specific physics.
 
@@ -142,7 +152,9 @@ Both the GARMENT/OBJECT (crown, locket, train, etc.) AND the BODY PART. Vary one
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  air: (n) => `You are writing ${n} distinct AIR anchors for GothBot's FEMALE-character paths. Each entry is one short cue evoking atmospheric movement — particles drifting, smoke curling, mist trailing, hair stirring — around her body.
+  air: (
+    n
+  ) => `You are writing ${n} distinct AIR anchors for GothBot's FEMALE-character paths. Each entry is one short cue evoking atmospheric movement — particles drifting, smoke curling, mist trailing, hair stirring — around her body.
 
 Air entries should evoke visible atmosphere: smoke / dust / mist / pollen / snow / sparks / breath cloud / candle haze in motion near her.
 
@@ -161,7 +173,9 @@ Both the PARTICLE/MEDIUM (smoke, dust, mist, etc.) AND the MOTION VERB. Vary one
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for GothBot's FEMALE-character paths. Each entry forces Flux to render a SPECIFIC, PUNCHY lighting palette on her face/body — overriding Sonnet's safe defaults.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for GothBot's FEMALE-character paths. Each entry forces Flux to render a SPECIFIC, PUNCHY lighting palette on her face/body — overriding Sonnet's safe defaults.
 
 Each entry must include: COLOR + DIRECTION (key/rim/sidelight/underlight/uplight/backlight/spot/shaft) + IMPACT POINT on her body or composition.
 
@@ -204,7 +218,9 @@ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 // ─────────────────────────────────────────────────────────────
 
 const male = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for GothBot's MALE-character paths (goth-male-closeup, goth-male-full-body). Each entry is one short olfactory cue tied to a male-presenting vampire/goth subject in a gothic setting.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for GothBot's MALE-character paths (goth-male-closeup, goth-male-full-body). Each entry is one short olfactory cue tied to a male-presenting vampire/goth subject in a gothic setting.
 
 Smell entries should evoke scents on his body / clothing / weapons / hair, or in the immediate gothic environment around him.
 
@@ -223,7 +239,9 @@ Both the SCENT NOUN AND the LOCATION on/around him. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for GothBot's MALE-character paths. Each entry is one short auditory cue — sounds he makes, hears, or is surrounded by.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for GothBot's MALE-character paths. Each entry is one short auditory cue — sounds he makes, hears, or is surrounded by.
 
 Sound entries should evoke his armor / boots / weapons / breath, or environmental sounds nearby.
 
@@ -242,7 +260,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for GothBot's MALE-character paths. Each entry is one short tactile cue — what he feels against his skin, what's pressing or scraping his body.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for GothBot's MALE-character paths. Each entry is one short tactile cue — what he feels against his skin, what's pressing or scraping his body.
 
 Touch entries should reference his hands / jaw / shoulders / forearm / chest, in contact with gothic materials (leather, mail, iron, stone, blood, wax, fur).
 
@@ -261,7 +281,9 @@ Both the BODY PART AND the SENSATION VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for GothBot's MALE-character paths. Each entry is one short thermal cue — heat or cold on his body, or in the gothic space around him.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for GothBot's MALE-character paths. Each entry is one short thermal cue — heat or cold on his body, or in the gothic space around him.
 
 EXAMPLES (DO NOT REUSE):
 - "sweat cooling on the back of his neck"
@@ -278,7 +300,9 @@ Both the THERMAL SOURCE AND the BODY PART. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for GothBot's MALE-character paths. Each entry is one short cue evoking heaviness or drag on his body — usually armor, weapons, or carried gear.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for GothBot's MALE-character paths. Each entry is one short cue evoking heaviness or drag on his body — usually armor, weapons, or carried gear.
 
 EXAMPLES (DO NOT REUSE):
 - "longsword dragging at his hip"
@@ -295,7 +319,9 @@ Both the OBJECT AND the BODY PART. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  air: (n) => `You are writing ${n} distinct AIR anchors for GothBot's MALE-character paths. Each entry is one short atmospheric cue around him.
+  air: (
+    n
+  ) => `You are writing ${n} distinct AIR anchors for GothBot's MALE-character paths. Each entry is one short atmospheric cue around him.
 
 EXAMPLES (DO NOT REUSE):
 - "smoke clinging to his cloak"
@@ -312,7 +338,9 @@ Both the MEDIUM AND the MOTION/LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for GothBot's MALE-character paths. Each entry forces Flux to render a SPECIFIC PUNCHY lighting palette on his face/body.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for GothBot's MALE-character paths. Each entry forces Flux to render a SPECIFIC PUNCHY lighting palette on his face/body.
 
 Each entry must include: COLOR + DIRECTION + IMPACT POINT (his face, jaw, eye, blade, armor, shoulder, silhouette).
 
@@ -347,7 +375,9 @@ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 // ─────────────────────────────────────────────────────────────
 
 const scene = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for GothBot's PURE-SCENE paths (dark-landscape, gothic-architecture, gothic-vista, gothic-darklands, castlevania-scene, horror-creature, cozy-goth). NO human subject — scents in the empty gothic environment.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for GothBot's PURE-SCENE paths (dark-landscape, gothic-architecture, gothic-vista, gothic-darklands, castlevania-scene, horror-creature, cozy-goth). NO human subject — scents in the empty gothic environment.
 
 EXAMPLES (DO NOT REUSE):
 - "centuries of damp stone and decayed tapestry"
@@ -364,7 +394,9 @@ Both the SCENT NOUN AND the LOCATION/SOURCE. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for GothBot's PURE-SCENE paths. NO human subject — environmental sounds only.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for GothBot's PURE-SCENE paths. NO human subject — environmental sounds only.
 
 EXAMPLES (DO NOT REUSE):
 - "wind moaning through broken arches"
@@ -381,7 +413,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for GothBot's PURE-SCENE paths. NO human subject — environmental texture/contact cues (rain on stone, ivy on walls, moss on graves, dust on books, frost on iron).
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for GothBot's PURE-SCENE paths. NO human subject — environmental texture/contact cues (rain on stone, ivy on walls, moss on graves, dust on books, frost on iron).
 
 EXAMPLES (DO NOT REUSE):
 - "rain finding cracks in the cathedral roof"
@@ -398,7 +432,9 @@ Both the TEXTURE/MEDIUM AND the SURFACE. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for GothBot's PURE-SCENE paths. NO human subject — thermal cues in the environment itself.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for GothBot's PURE-SCENE paths. NO human subject — thermal cues in the environment itself.
 
 EXAMPLES (DO NOT REUSE):
 - "stone radiating crypt-cold into the empty hall"
@@ -415,7 +451,9 @@ Both the THERMAL SOURCE AND the LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for GothBot's PURE-SCENE paths. NO human subject — anchors that imply gravity / mass / pressure on environmental elements.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for GothBot's PURE-SCENE paths. NO human subject — anchors that imply gravity / mass / pressure on environmental elements.
 
 EXAMPLES (DO NOT REUSE):
 - "tapestry sagging under centuries of dust"
@@ -432,7 +470,9 @@ Both the OBJECT AND the WEIGHT VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  air: (n) => `You are writing ${n} distinct AIR anchors for GothBot's PURE-SCENE paths. NO human subject — atmospheric particle/movement cues in empty space.
+  air: (
+    n
+  ) => `You are writing ${n} distinct AIR anchors for GothBot's PURE-SCENE paths. NO human subject — atmospheric particle/movement cues in empty space.
 
 EXAMPLES (DO NOT REUSE):
 - "mist drifting between the empty pews"
@@ -449,7 +489,9 @@ Both the PARTICLE/MEDIUM AND the LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for GothBot's PURE-SCENE paths (NO human subject). Each entry forces Flux to render a SPECIFIC PUNCHY lighting palette across the scene.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for GothBot's PURE-SCENE paths (NO human subject). Each entry forces Flux to render a SPECIFIC PUNCHY lighting palette across the scene.
 
 Each entry must include: COLOR + DIRECTION/SOURCE (key/rim/uplight/shaft/spot) + IMPACT POINT in the environment (altar, throne, archway, statue, stairwell, fountain, balcony, cliff face, fog bank, cracked dome).
 

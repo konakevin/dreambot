@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/lighting.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for GothBot's character and scene paths. Each entry is a SHORT phrase (6-15 words) describing ONLY the quality, color, direction, and mood of the light. NOT a scene description — JUST the light itself.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING descriptions for GothBot's character and scene paths. Each entry is a SHORT phrase (6-15 words) describing ONLY the quality, color, direction, and mood of the light. NOT a scene description — JUST the light itself.
 
 ━━━ THE KEY RULE ━━━
 Describe ONLY the light — its color, direction, intensity, and quality. NO architecture, NO objects, NO characters, NO locations. "Warm amber candlelight from the left, deep shadows on the right" YES. "Candlelight in the cathedral illuminating the altar" NO — that's a scene, not lighting.
@@ -31,4 +33,7 @@ The old pool was 60%+ purple/violet. Fix that. Distribute evenly:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

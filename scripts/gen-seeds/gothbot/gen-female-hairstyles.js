@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} FEMALE HAIRSTYLE descriptions for GothBot's female character paths. Each entry is a SHORT phrase (4-10 words) describing ONLY a specific hairstyle/texture/length. Gothic-horror women — Castlevania / Crimson-Peak / gothic-fairy-tale aesthetic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FEMALE HAIRSTYLE descriptions for GothBot's female character paths. Each entry is a SHORT phrase (4-10 words) describing ONLY a specific hairstyle/texture/length. Gothic-horror women — Castlevania / Crimson-Peak / gothic-fairy-tale aesthetic.
 
 ━━━ STYLE SPREAD (enforce variety across ${n}) ━━━
 - LONG FLOWING (4-5) — waist-length loose waves, hip-length straight silk, cascading heavy curls
@@ -24,4 +26,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

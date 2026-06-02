@@ -10,7 +10,9 @@ generatePool({
     : 'scripts/bots/gothbot/seeds/gothic_structures.json',
   total: TOTAL,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} GOTHIC STRUCTURE scenes for GothBot's gothic-architecture path. The STRUCTURE is the hero — every render is a showcase of extreme gothic architecture with dark-magic light animating it. Entries 25-40 words. NO humans as primary subject.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GOTHIC STRUCTURE scenes for GothBot's gothic-architecture path. The STRUCTURE is the hero — every render is a showcase of extreme gothic architecture with dark-magic light animating it. Entries 25-40 words. NO humans as primary subject.
 
 ━━━ NON-NEGOTIABLE RULE — WARM + COOL LIGHT MIX IN EVERY ENTRY ━━━
 
@@ -122,4 +124,7 @@ You will be shown prior entries. READ THEM. Do NOT repeat the same structure + g
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

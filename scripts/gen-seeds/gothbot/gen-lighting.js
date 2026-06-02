@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for GothBot — the specific light-source + quality of light + how it interacts with the scene. Entries 12-22 words. Gothic chiaroscuro + twilight color + occult-source variety.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING descriptions for GothBot — the specific light-source + quality of light + how it interacts with the scene. Entries 12-22 words. Gothic chiaroscuro + twilight color + occult-source variety.
 
 ━━━ AESTHETIC NORTH STAR ━━━
 Castlevania / Bloodborne / Van-Helsing / Crimson-Peak / Berserk / WoW-undead-warlock-art lighting. Dramatic chiaroscuro with TWILIGHT COLOR — the night is vibrant, not flat-gray. Moon-and-candle-and-stained-glass-and-occult-glow are all in play. Lighting SHAPES the scene's emotional tone.
@@ -123,4 +125,7 @@ CHIAROSCURO-GENERAL (min 10):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

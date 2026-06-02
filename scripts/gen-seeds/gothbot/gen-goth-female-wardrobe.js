@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} GOTHIC FEMALE WARDROBE descriptions for GothBot's goth-closeup and goth-full-body paths. Each entry is ONE specific outfit described in 12-20 words. These compose with separate archetype/makeup/hair pools.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GOTHIC FEMALE WARDROBE descriptions for GothBot's goth-closeup and goth-full-body paths. Each entry is ONE specific outfit described in 12-20 words. These compose with separate archetype/makeup/hair pools.
 
 These outfits are DARK, SEXY, POWERFUL — period-gothic with attitude. She dresses like she's attending her own coronation in hell. NOT modern fashion, NOT casual — these are dramatic gothic costumes with presence.
 
@@ -25,4 +27,7 @@ These outfits are DARK, SEXY, POWERFUL — period-gothic with attitude. She dres
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

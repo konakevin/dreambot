@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN-MALE OUTFIT descriptions for GothBot. Each entry is 30-50 words. The outfit is the SILHOUETTE — what defines his shape against the gothic backdrop. ORNATE, agile, sleek, deadly. Castlevania-Belmont + Devil May Cry-Dante + Van Helsing aesthetic.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN-MALE OUTFIT descriptions for GothBot. Each entry is 30-50 words. The outfit is the SILHOUETTE — what defines his shape against the gothic backdrop. ORNATE, agile, sleek, deadly. Castlevania-Belmont + Devil May Cry-Dante + Van Helsing aesthetic.
 
 CONTEXT: He's HOT and an assassin. Outfits should look fitted, agile, gorgeous, dangerous — NEVER bulky generic-armor, NEVER LARP costume, NEVER schlubby-hunter. Asymmetric cuts, silver-and-leather, intricate metalwork, tactical-couture for men.
 
@@ -44,4 +46,7 @@ Examples (write fresh):
 - "Asymmetric black silk tailcoat with silver-buttoned diagonal slashes and a long split-tail, black tactical breeches, heeled leather boots cuffed at the knee, silver chain-mail vambraces, silver-skull pendant at the throat, cravat half-undone"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

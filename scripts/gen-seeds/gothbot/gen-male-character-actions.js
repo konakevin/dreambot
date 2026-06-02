@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} MALE CHARACTER ACTION descriptions for GothBot's male character paths — specific mid-action verbs/stances that pair with a male character seed. Entries 10-18 words. MASCULINE MENACE + POWER + DANGER energy. Castlevania / Devil-May-Cry / Bloodborne / Berserk / Van-Helsing poster composition.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MALE CHARACTER ACTION descriptions for GothBot's male character paths — specific mid-action verbs/stances that pair with a male character seed. Entries 10-18 words. MASCULINE MENACE + POWER + DANGER energy. Castlevania / Devil-May-Cry / Bloodborne / Berserk / Van-Helsing poster composition.
 
 ━━━ THE NORTH STAR ━━━
 Castlevania-boss encounter. Devil-May-Cry action-freeze. Van-Helsing movie poster. Bloodborne-hunter mid-hunt. Berserk-Guts mid-swing. Characters are POWERFUL, DANGEROUS, ALIVE — ground-planted predatory confidence. These are men who have killed things older than civilizations and are about to do it again.
@@ -72,4 +74,7 @@ HUNTER-SPECIFIC (10%):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

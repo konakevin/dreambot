@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for GothBot — gothic atmospheric elements. Fog / rain / bats / ravens / falling-ash / blood-mist / moths / candles-flicker / cobweb-drift.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for GothBot — gothic atmospheric elements. Fog / rain / bats / ravens / falling-ash / blood-mist / moths / candles-flicker / cobweb-drift.
 
 Each entry: 6-14 words. One specific gothic atmospheric element.
 
@@ -48,4 +50,7 @@ Each entry: 6-14 words. One specific gothic atmospheric element.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} GOTHIC FEMALE MAKEUP descriptions for GothBot's goth-closeup and goth-full-body paths. Each entry is ONE specific makeup look described in 10-20 words. These compose with separate archetype/wardrobe/hair pools.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GOTHIC FEMALE MAKEUP descriptions for GothBot's goth-closeup and goth-full-body paths. Each entry is ONE specific makeup look described in 10-20 words. These compose with separate archetype/wardrobe/hair pools.
 
 These are BOLD, DRAMATIC, dark-beauty looks. Sultry, sexy, wicked. Think dark glamour — not subtle natural beauty, not corpse-paint horror. She CHOSE this look and it's devastating.
 
@@ -25,4 +27,7 @@ These are BOLD, DRAMATIC, dark-beauty looks. Sultry, sexy, wicked. Think dark gl
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

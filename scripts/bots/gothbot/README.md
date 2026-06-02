@@ -8,22 +8,24 @@ christmas` (auto-retries Sonnet).
 
 ## 6 render paths
 
-| Path | What it is |
-|---|---|
-| `dark-scene` | Character in gothic setting — knight in crimson ballroom, cursed priest at altar |
-| `dark-landscape` | Pure gothic landscape — haunted castle, foggy cemetery, blood-moon forest |
-| `horror-creature` | Dark-fantasy creature as hero — werewolf, vampire, demon, wraith, wendigo |
-| `goth-woman` | Exquisitely beautiful goth-hellspawn woman, solo, with unique dark accessory |
-| `castlevania-scene` | Castlevania-game-art/Bloodborne/Berserk aesthetic scenes |
-| `cozy-goth` | Cozy dark-fantasy pockets — candlelit library, witch's apothecary, rain-window grimoire |
+| Path                | What it is                                                                              |
+| ------------------- | --------------------------------------------------------------------------------------- |
+| `dark-scene`        | Character in gothic setting — knight in crimson ballroom, cursed priest at altar        |
+| `dark-landscape`    | Pure gothic landscape — haunted castle, foggy cemetery, blood-moon forest               |
+| `horror-creature`   | Dark-fantasy creature as hero — werewolf, vampire, demon, wraith, wendigo               |
+| `goth-woman`        | Exquisitely beautiful goth-hellspawn woman, solo, with unique dark accessory            |
+| `castlevania-scene` | Castlevania-game-art/Bloodborne/Berserk aesthetic scenes                                |
+| `cozy-goth`         | Cozy dark-fantasy pockets — candlelit library, witch's apothecary, rain-window grimoire |
 
 ## Axes rolled per render
 
 Shared:
+
 - `scene_palette` — gothic color mood
 - `colorPalette` — secondary lighting keyed to vibe
 
 Path-specific (all 50-entry Sonnet-seeded pools):
+
 - `dark_characters` — knight / cursed-priest / gothic-noble / warlock / blood-hunter
 - `gothic_landscapes` — haunted castles / cemeteries / cathedral ruins
 - `dark_creatures` — werewolf / vampire / demon / wraith / wendigo / lich

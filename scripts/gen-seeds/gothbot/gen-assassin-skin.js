@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN SKIN descriptions for GothBot's vampire-assassin paths (gender-neutral — used for both male and female assassins). Each entry is 14-22 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN SKIN descriptions for GothBot's vampire-assassin paths (gender-neutral — used for both male and female assassins). Each entry is 14-22 words.
 
 CONTEXT: These are HOT, ornate, agile, crafty vampire-assassins — Castlevania + Devil May Cry + Van Helsing energy. Beautiful and dangerous in equal measure. NOT weathered grizzled hunters — sleek deadly predators with high-fashion-villain pallor.
 
@@ -24,4 +26,7 @@ Examples (write fresh):
 - "milk-pale with a small crescent-moon birthmark below the left eye, refined Mediterranean features"
 
 Output ONLY a valid JSON array of ${n} strings (14-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

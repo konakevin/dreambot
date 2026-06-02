@@ -57,22 +57,27 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   // Pool-first with inline fallback. Pools were Sonnet-scaled to 100 entries
   // each, calibrated to the inline reference entries that drove the QA-loop
   // wins. Keep inline arrays as safety fallback.
-  const composition = pools.VAMPIRE_COMPOSITIONS && pools.VAMPIRE_COMPOSITIONS.length > 0
-    ? picker.pickWithRecency(pools.VAMPIRE_COMPOSITIONS, 'vg2_composition')
-    : COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
-  const menaceFeature = pools.VAMPIRE_MENACE_FEATURES && pools.VAMPIRE_MENACE_FEATURES.length > 0
-    ? picker.pickWithRecency(pools.VAMPIRE_MENACE_FEATURES, 'vg2_menace')
-    : MENACE_FEATURES[Math.floor(Math.random() * MENACE_FEATURES.length)];
+  const composition =
+    pools.VAMPIRE_COMPOSITIONS && pools.VAMPIRE_COMPOSITIONS.length > 0
+      ? picker.pickWithRecency(pools.VAMPIRE_COMPOSITIONS, 'vg2_composition')
+      : COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
+  const menaceFeature =
+    pools.VAMPIRE_MENACE_FEATURES && pools.VAMPIRE_MENACE_FEATURES.length > 0
+      ? picker.pickWithRecency(pools.VAMPIRE_MENACE_FEATURES, 'vg2_menace')
+      : MENACE_FEATURES[Math.floor(Math.random() * MENACE_FEATURES.length)];
 
-  const scenario = pools.VAMPIRE_SETTINGS && pools.VAMPIRE_SETTINGS.length > 0
-    ? picker.pickWithRecency(pools.VAMPIRE_SETTINGS, 'vg2_setting')
-    : 'a vast moonlit cathedral nave with massive rose window blazing crimson light';
-  const killerDetail = pools.VAMPIRE_KILLER_DETAILS && pools.VAMPIRE_KILLER_DETAILS.length > 0
-    ? picker.pickWithRecency(pools.VAMPIRE_KILLER_DETAILS, 'vg2_killer_detail')
-    : 'an ornate vampire-queen crown of dark gold and obsidian set high on her hair';
-  const hair = pools.VAMPIRE_HAIR && pools.VAMPIRE_HAIR.length > 0
-    ? picker.pickWithRecency(pools.VAMPIRE_HAIR, 'vg2_hair')
-    : `${picker.pickWithRecency(pools.HAIR_COLORS, 'vg2_hair_color')}, ${picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'vg2_hairstyle')}`;
+  const scenario =
+    pools.VAMPIRE_SETTINGS && pools.VAMPIRE_SETTINGS.length > 0
+      ? picker.pickWithRecency(pools.VAMPIRE_SETTINGS, 'vg2_setting')
+      : 'a vast moonlit cathedral nave with massive rose window blazing crimson light';
+  const killerDetail =
+    pools.VAMPIRE_KILLER_DETAILS && pools.VAMPIRE_KILLER_DETAILS.length > 0
+      ? picker.pickWithRecency(pools.VAMPIRE_KILLER_DETAILS, 'vg2_killer_detail')
+      : 'an ornate vampire-queen crown of dark gold and obsidian set high on her hair';
+  const hair =
+    pools.VAMPIRE_HAIR && pools.VAMPIRE_HAIR.length > 0
+      ? picker.pickWithRecency(pools.VAMPIRE_HAIR, 'vg2_hair')
+      : `${picker.pickWithRecency(pools.HAIR_COLORS, 'vg2_hair_color')}, ${picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'vg2_hairstyle')}`;
   const wardrobe = picker.pickWithRecency(pools.VAMPIRE_WARDROBE, 'vg2_wardrobe');
   const archetype = picker.pickWithRecency(pools.VAMPIRE_ARCHETYPES, 'vg2_archetype');
   const ethnicity =

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} GOTHIC FEMALE ARCHETYPE descriptions for GothBot's goth-closeup and goth-full-body paths. Each entry is a SHORT phrase (8-15 words) describing WHO this gothic woman IS — her role, her energy, her story, her danger. NOT what she looks like — WHO she is. These compose with separate makeup/wardrobe/hair/skin pools.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GOTHIC FEMALE ARCHETYPE descriptions for GothBot's goth-closeup and goth-full-body paths. Each entry is a SHORT phrase (8-15 words) describing WHO this gothic woman IS — her role, her energy, her story, her danger. NOT what she looks like — WHO she is. These compose with separate makeup/wardrobe/hair/skin pools.
 
 These women are SEXY, SULTRY, EVIL, FEISTY — dark seductresses with power and menace. Corrupted beauty. She's dangerous and she knows it. NOT damsels, NOT victims, NOT wallflowers. Every one of them would ruin your life and you'd thank her.
 
@@ -26,4 +28,7 @@ These women are SEXY, SULTRY, EVIL, FEISTY — dark seductresses with power and 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

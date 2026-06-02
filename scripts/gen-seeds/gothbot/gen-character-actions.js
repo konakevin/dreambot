@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/character_actions.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} CONFIDENT PREDATORY ACTION descriptions for GothBot's character paths — specific mid-action verbs/stances that pair with a character seed to give the render unmistakable MENACE + DANGER + PREDATORY CONFIDENCE. Entries 10-18 words. NOT elegant-floating-pretty.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CONFIDENT PREDATORY ACTION descriptions for GothBot's character paths — specific mid-action verbs/stances that pair with a character seed to give the render unmistakable MENACE + DANGER + PREDATORY CONFIDENCE. Entries 10-18 words. NOT elegant-floating-pretty.
 
 ━━━ THE NORTH STAR ━━━
 Vampirella-comic cover pose. Van-Helsing movie poster. Castlevania-boss portrait. Hellboy-Mignola panel. Bloodborne hunter. Bram Stoker's Dracula operatic stance. Characters are BEAUTIFUL, DANGEROUS, ALIVE — ground-planted predatory confidence, not YA-fantasy levitating-in-white-dress.
@@ -91,4 +93,7 @@ MONSTER-HUNTRESS ACTIONS (min 15) — Van-Helsing energy:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SKIN TONE descriptions for GothBot's character paths. Each entry is a SHORT phrase (4-10 words) describing ONLY a specific skin tone/texture. Shared across male AND female gothic-horror characters. Dark fantasy — some tones are natural, some are supernatural.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKIN TONE descriptions for GothBot's character paths. Each entry is a SHORT phrase (4-10 words) describing ONLY a specific skin tone/texture. Shared across male AND female gothic-horror characters. Dark fantasy — some tones are natural, some are supernatural.
 
 ━━━ TONE SPREAD (enforce even distribution across ${n}) ━━━
 - PALE / VAMPIRIC (4-5) — porcelain-pale, translucent corpse-white with visible blue veins, ash-grey pallor, moon-pale with violet undertone
@@ -23,4 +25,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

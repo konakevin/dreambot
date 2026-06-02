@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN HAIR-COLOR descriptions for GothBot's vampire-assassin paths (gender-neutral). Each entry is 8-16 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN HAIR-COLOR descriptions for GothBot's vampire-assassin paths (gender-neutral). Each entry is 8-16 words.
 
 CONTEXT: HOT, ornate vampire assassins. Hair color is a STATEMENT — gothic, dramatic, sometimes supernatural. NOT mundane brown/blonde — every color has presence.
 
@@ -29,4 +31,7 @@ Examples (write fresh):
 - "blue-black with witch-fire-green streaks at the temples, supernatural shimmer"
 
 Output ONLY a valid JSON array of ${n} strings (8-16 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

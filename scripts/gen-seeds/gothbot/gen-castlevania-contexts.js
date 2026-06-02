@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/castlevania_contexts.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} CASTLEVANIA-STYLE architecture + landscape settings for GothBot's castlevania-scene path. Each entry is a PURE ARCHITECTURE/ENVIRONMENT description — NO humans, NO figures, NO people. Entries 25-40 words. Castlevania / Van-Helsing / Bloodborne / Berserk gothic architecture + landscape DNA.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CASTLEVANIA-STYLE architecture + landscape settings for GothBot's castlevania-scene path. Each entry is a PURE ARCHITECTURE/ENVIRONMENT description — NO humans, NO figures, NO people. Entries 25-40 words. Castlevania / Van-Helsing / Bloodborne / Berserk gothic architecture + landscape DNA.
 
 ━━━ THREE NON-NEGOTIABLE RULES ━━━
 
@@ -71,4 +73,7 @@ Deep purples, midnight blues, velvet blacks, charcoal, moonlit silver — PLUS w
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

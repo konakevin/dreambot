@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN EYE descriptions for GothBot's vampire-assassin paths (gender-neutral). Each entry is 12-20 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN EYE descriptions for GothBot's vampire-assassin paths (gender-neutral). Each entry is 12-20 words.
 
 CONTEXT: HOT, ornate, agile, mean, predator-eyed vampire assassins. Castlevania + Devil May Cry + Van Helsing aesthetic. Eyes communicate the predator inside — sharp, focused, dangerous, and beautiful.
 
@@ -24,4 +26,7 @@ Examples (write fresh):
 - "steel-grey almond eyes with a single thin tear-mark scar below the right, sharp and impassive"
 
 Output ONLY a valid JSON array of ${n} strings (12-20 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

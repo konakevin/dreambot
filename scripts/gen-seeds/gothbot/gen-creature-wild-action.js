@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} CREATURE WILD ACTION descriptions for GothBot's monster-prowl path. Each entry is 14-22 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CREATURE WILD ACTION descriptions for GothBot's monster-prowl path. Each entry is 14-22 words.
 
 CONTEXT: A solo gothic creature OUT IN THE WILD doing creature-business (no hunter present, no fight). Castlevania-boss / Bloodborne-beast / Devil-May-Cry-demon / Van-Helsing-monster aesthetic. The creature is mid-action, doing something specifically MONSTROUS — stalking, hunting, lurking, transforming, summoning, mid-flight, etc. Frozen-instant of action.
 
@@ -44,4 +46,7 @@ Examples (write fresh):
 - "drifting between gravestones with feet barely touching the ground, robe trailing behind in cold wind, head turning slowly"
 
 Output ONLY a valid JSON array of ${n} strings (14-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

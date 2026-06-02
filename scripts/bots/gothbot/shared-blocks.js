@@ -13,7 +13,8 @@
 const PROMPT_PREFIX =
   'Dark gothic fantasy, hauntingly beautiful, operatic dark romance with vampire-hunter danger, Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing energy, rich varied palette with deep purples + midnight blues + velvet blacks + poison greens + candle-amber + moonlit silver accents';
 
-const PROMPT_SUFFIX = 'no text no words no watermarks, hyper-detailed, frame-worthy dark-fantasy art';
+const PROMPT_SUFFIX =
+  'no text no words no watermarks, hyper-detailed, frame-worthy dark-fantasy art';
 
 const ELEGANT_DARKNESS_BLOCK = `━━━ NIGHTSHADE — BEAUTIFUL, DANGEROUS, ALIVE ━━━
 

@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} COMBAT MOMENT descriptions for GothBot's vampire-assassin-combat path. Each entry is 18-30 words. This is the SPECIFIC moment of action — what the assassin and foe are doing in the frozen instant of the frame.
+  metaPrompt: (
+    n
+  ) => `Write ${n} COMBAT MOMENT descriptions for GothBot's vampire-assassin-combat path. Each entry is 18-30 words. This is the SPECIFIC moment of action — what the assassin and foe are doing in the frozen instant of the frame.
 
 CONTEXT: Castlevania-boss-fight / Bloodborne-beast-fight / Devil-May-Cry-combat / Van-Helsing-confrontation. Cinematic FROZEN-INSTANT combat — the single beat of action that captures the fight. Not after, not before, the EXACT instant.
 
@@ -45,4 +47,7 @@ Examples (write fresh):
 - "Whip mid-crack uncoiling toward the demon's wrist, silver-tipped barbed length slicing through fog, demon mid-recoil with claws raised"
 
 Output ONLY a valid JSON array of ${n} strings (18-30 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

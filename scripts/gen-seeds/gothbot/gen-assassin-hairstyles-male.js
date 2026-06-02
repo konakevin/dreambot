@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN-MALE HAIRSTYLE descriptions for GothBot. Each entry is 12-22 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN-MALE HAIRSTYLE descriptions for GothBot. Each entry is 12-22 words.
 
 CONTEXT: HOT, agile, deadly male assassins. Hairstyles must be combat-practical AND ornate gothic — out of the way for a fight, but with styling presence. NOT casual short-back-and-sides, NOT modern fade, NOT clean-shaven-corporate, NOT scruffy-grizzled-veteran.
 
@@ -41,4 +43,7 @@ Examples (write fresh):
 - "Mid-length tousled hair with deliberate texture, mid-motion in cold wind, light stubble"
 
 Output ONLY a valid JSON array of ${n} strings (12-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

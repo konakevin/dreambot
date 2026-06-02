@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN-FEMALE archetype descriptions for GothBot. Each entry is 25-40 words. This is the character's identity / energy / story-flavor — NOT outfit (separate pool), NOT face details (separate pools). Just WHO she is and HOW she moves through the night.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN-FEMALE archetype descriptions for GothBot. Each entry is 25-40 words. This is the character's identity / energy / story-flavor — NOT outfit (separate pool), NOT face details (separate pools). Just WHO she is and HOW she moves through the night.
 
 CONTEXT: She is a HOT, ornate, agile, crafty, mean, resourceful vampire ASSASSIN. Castlevania + Devil May Cry + Van Helsing energy. She kills vampires for a reason — vengeance / duty / coin / vow / faith / lineage. She is BEAUTIFUL and DANGEROUS.
 
@@ -29,4 +31,7 @@ Examples (write fresh):
 - "Mid-twenties noble-blood defying her cursed family, predatory and restless, hunting her own bloodline by night with a curse-mark on her throat she keeps hidden"
 
 Output ONLY a valid JSON array of ${n} strings (25-40 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN-FEMALE WEAPON & ACCESSORY descriptions for GothBot. Each entry is 16-26 words. The accessory is the SIGNATURE OBJECT visible at full-body wide-shot — what makes her readable as an assassin from across the frame.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-ASSASSIN-FEMALE WEAPON & ACCESSORY descriptions for GothBot. Each entry is 16-26 words. The accessory is the SIGNATURE OBJECT visible at full-body wide-shot — what makes her readable as an assassin from across the frame.
 
 CONTEXT: HOT, ornate, agile, mean, crafty assassins. Castlevania + Devil May Cry + Van Helsing weapon language. ARMED-BUT-NOT-FIRING — weapons are visible, holstered or drawn but not in active combat use. Ornate metalwork, silver detail, gothic-engraved.
 
@@ -49,4 +51,7 @@ Examples (write fresh):
 - "Stake-holster bandolier crossed over her chest, six pointed silver-tipped wooden stakes visible in leather loops, ornate buckles at the shoulder"
 
 Output ONLY a valid JSON array of ${n} strings (16-26 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

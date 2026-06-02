@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} EPIC GOTHIC BACKDROP descriptions for GothBot's vampire-assassin paths. Each entry is 20-35 words. This backdrop DWARFS the character — the scale-defining gothic anchor that fills the upper portion of the frame OR dominates the horizon.
+  metaPrompt: (
+    n
+  ) => `Write ${n} EPIC GOTHIC BACKDROP descriptions for GothBot's vampire-assassin paths. Each entry is 20-35 words. This backdrop DWARFS the character — the scale-defining gothic anchor that fills the upper portion of the frame OR dominates the horizon.
 
 CONTEXT: Castlevania-castle / Bloodborne-cathedral / Van-Helsing-fortress scale energy. The setting is the world; this backdrop is the WORLD'S MOST IMPRESSIVE SILHOUETTE.
 
@@ -40,4 +42,7 @@ Examples (write fresh):
 - "Blood-moon swallowing the upper half of the frame, deep-crimson with corona burning around its edges, casting blood-shadow across the gothic landscape below"
 
 Output ONLY a valid JSON array of ${n} strings (20-35 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

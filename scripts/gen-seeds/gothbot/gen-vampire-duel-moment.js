@@ -6,7 +6,9 @@ generatePool({
   batch: 30,
   append: false,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-VS-VAMPIRE DUEL MOMENT descriptions for GothBot's vampire-assassin-combat path. Each entry is 25-40 words. The moment is the FROZEN INSTANT of a humanoid-vs-humanoid vampire-duel — both combatants in mid-strike, weapons or claws or magic CONNECTING them physically in the frame.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-VS-VAMPIRE DUEL MOMENT descriptions for GothBot's vampire-assassin-combat path. Each entry is 25-40 words. The moment is the FROZEN INSTANT of a humanoid-vs-humanoid vampire-duel — both combatants in mid-strike, weapons or claws or magic CONNECTING them physically in the frame.
 
 CRITICAL: This is HUMANOID-VS-HUMANOID combat. Two vampire-combatants (the vampire-assassin AND a vampire-foe), both human-shaped, both armed, locked in a frozen instant of fight engagement. NOT a beast-fight. NOT a creature-attack. A DUEL between two upright humanoid figures.
 
@@ -57,4 +59,7 @@ Examples (write fresh):
 - "Pistol-muzzle flashing point-blank at vampire-foe's face, the foe's head jerked back mid-snarl, smoke trailing from the barrel, the assassin's free hand already drawing a silver dagger, frozen mid-firing"
 
 Output ONLY a valid JSON array of ${n} strings (25-40 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

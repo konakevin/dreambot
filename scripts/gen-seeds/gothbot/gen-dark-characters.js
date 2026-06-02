@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/dark_characters.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DARK CHARACTER descriptions for GothBot. Each entry is a ONE-LINE description of an EVIL + CORRUPTED + ALLURING gothic archetype MID-ACTION. Entries 15-25 words. Castlevania-game-art (Ayami Kojima) / Devil-May-Cry / vampire-goth-manga-horror / WoW-undead-warlock-art. Stylized dark-manga-horror aesthetic, NOT painterly-fantasy-book-cover.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DARK CHARACTER descriptions for GothBot. Each entry is a ONE-LINE description of an EVIL + CORRUPTED + ALLURING gothic archetype MID-ACTION. Entries 15-25 words. Castlevania-game-art (Ayami Kojima) / Devil-May-Cry / vampire-goth-manga-horror / WoW-undead-warlock-art. Stylized dark-manga-horror aesthetic, NOT painterly-fantasy-book-cover.
 
 ━━━ WHAT THIS BOT IS — THE NIGHTSHADE AESTHETIC ━━━
 Dark fantasy at its most stylish — the aesthetic world of vampire hunters, gothic action cinema, supernatural adventure. Reference DNA: Castlevania, Van Helsing, Devil May Cry, Hellboy, Bloodborne, Bram Stoker's Dracula. Operatic dark romance with a hint of danger. BEAUTIFUL, DANGEROUS, ALIVE.
@@ -96,4 +98,7 @@ Each entry must pack 3-4 specific details: the glowing-eye color, one makeup/ski
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

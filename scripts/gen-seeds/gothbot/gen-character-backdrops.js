@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC BACKDROP descriptions for GothBot's character paths (full-body male and female). Each entry is a SHORT phrase (6-12 words) describing an ATMOSPHERIC ENVIRONMENT HINT behind a character. NOT a full landscape — just enough to ground the character in a place without overpowering them.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERIC BACKDROP descriptions for GothBot's character paths (full-body male and female). Each entry is a SHORT phrase (6-12 words) describing an ATMOSPHERIC ENVIRONMENT HINT behind a character. NOT a full landscape — just enough to ground the character in a place without overpowering them.
 
 ━━━ THE KEY RULE ━━━
 The CHARACTER is the hero, not the background. These are bokeh-level environment hints — blurred edges of a world suggested, never a detailed landscape. Think: what's behind the character in a movie poster, NOT what's in an establishing shot.
@@ -27,4 +29,7 @@ The CHARACTER is the hero, not the background. These are bokeh-level environment
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

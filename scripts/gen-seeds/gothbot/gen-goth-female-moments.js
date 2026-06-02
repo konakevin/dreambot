@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CANDID MOMENT descriptions for GothBot's goth-closeup and goth-full-body female paths. Each entry is a SHORT phrase (8-15 words) describing what she was caught doing RIGHT NOW. These are micro-actions — the camera snapped at this exact instant.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CANDID MOMENT descriptions for GothBot's goth-closeup and goth-full-body female paths. Each entry is a SHORT phrase (8-15 words) describing what she was caught doing RIGHT NOW. These are micro-actions — the camera snapped at this exact instant.
 
 She is SEXY, SULTRY, DANGEROUS, FEISTY — caught in a loaded candid moment. Not posing. Not modeling. Caught mid-something by a camera that shouldn't be this close.
 
@@ -25,4 +27,7 @@ She is SEXY, SULTRY, DANGEROUS, FEISTY — caught in a loaded candid moment. Not
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

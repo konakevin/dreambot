@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_menace_features.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} VAMPIRE MENACE-FEATURE descriptions for GothBot's vampire-girls-2 path. Each entry is the PRIMARY face description for one render — eye-color + glow + heavy gothic eye makeup + lip color + skin tone + ONE demonic tell, woven into a single phrase. Each entry: 25-40 words, comma-separated phrases, no preamble.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} VAMPIRE MENACE-FEATURE descriptions for GothBot's vampire-girls-2 path. Each entry is the PRIMARY face description for one render — eye-color + glow + heavy gothic eye makeup + lip color + skin tone + ONE demonic tell, woven into a single phrase. Each entry: 25-40 words, comma-separated phrases, no preamble.
 
 CALIBRATION — these 17 hardcoded entries drove the QA-loop wins (Round 13 was the breakthrough). Match their structure, vocabulary, and intensity exactly. Generate ${n} new entries in the same lineage:
 
@@ -39,4 +41,7 @@ Deduplicate by: eye color + makeup color + lip color + tell. Two entries are too
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

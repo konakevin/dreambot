@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_compositions.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} BUST-FRAMING COMPOSITION descriptions for GothBot's vampire-girls-2 path. Each entry is a single short composition phrase (8-18 words) describing how the bust portrait is framed. Comma-separated phrases.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BUST-FRAMING COMPOSITION descriptions for GothBot's vampire-girls-2 path. Each entry is a single short composition phrase (8-18 words) describing how the bust portrait is framed. Comma-separated phrases.
 
 CALIBRATION — these 6 hardcoded entries drove the QA-loop wins. Match their structure and intent:
 
@@ -45,4 +47,7 @@ Deduplicate by: angle (frontal/3-4/profile) + framing element (window/throne/mir
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

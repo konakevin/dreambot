@@ -6,7 +6,9 @@ generatePool({
   batch: 30,
   append: false,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} VAMPIRE-VILLAIN FOE descriptions for GothBot's vampire-assassin-combat path. Each entry is 25-40 words. The foe is a HUMANOID VAMPIRE — the bad-guy the vampire-assassin is fighting. Castlevania-boss / Bloodborne-aristocrat / Interview-with-the-Vampire-elder / Van-Helsing-Dracula / Underworld-vampire-noble aesthetic.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VAMPIRE-VILLAIN FOE descriptions for GothBot's vampire-assassin-combat path. Each entry is 25-40 words. The foe is a HUMANOID VAMPIRE — the bad-guy the vampire-assassin is fighting. Castlevania-boss / Bloodborne-aristocrat / Interview-with-the-Vampire-elder / Van-Helsing-Dracula / Underworld-vampire-noble aesthetic.
 
 CRITICAL: the foe is a HUMANOID VAMPIRE — vampire-lord, vampiress, blood-prince/princess, ancient elder, vampire-noble, strigoi, nosferatu, dhampir-rival, vampire-priestess, vampire-warlord. NOT a beast, NOT a creature, NOT a werewolf, NOT a demon. ALWAYS a vampire in human-form (with vampire features: fangs, glowing eyes, pale-skin, supernatural beauty).
 
@@ -53,4 +55,7 @@ Examples (write fresh):
 - "A blood-prince in jeweled scarlet doublet with rapier drawn mid-thrust, raven hair tied back with black silk, glowing violet eyes, fangs bared in a snarl, lace-cuffs flaring as he advances"
 
 Output ONLY a valid JSON array of ${n} strings (25-40 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

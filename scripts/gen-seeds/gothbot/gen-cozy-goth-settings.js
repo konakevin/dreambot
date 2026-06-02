@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} COZY GOTH SETTING descriptions for GothBot's cozy-goth path — cozy dark-fantasy pockets. Warm-dark coziness. Never dramatic action — places you want to spend a rainy afternoon.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY GOTH SETTING descriptions for GothBot's cozy-goth path — cozy dark-fantasy pockets. Warm-dark coziness. Never dramatic action — places you want to spend a rainy afternoon.
 
 Each entry: 15-30 words. One specific cozy-goth setting.
 
@@ -49,4 +51,7 @@ Each entry: 15-30 words. One specific cozy-goth setting.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   maxTokens: 4000,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} DARK MALE CHARACTER descriptions for GothBot's male character paths. Each entry is a ONE-LINE description of a MENACING + POWERFUL + HAUNTINGLY BEAUTIFUL male gothic archetype. Entries 15-25 words. Castlevania (Ayami Kojima) / Devil-May-Cry / Bloodborne / Berserk / Van-Helsing aesthetic. Dark-manga-horror stylization.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DARK MALE CHARACTER descriptions for GothBot's male character paths. Each entry is a ONE-LINE description of a MENACING + POWERFUL + HAUNTINGLY BEAUTIFUL male gothic archetype. Entries 15-25 words. Castlevania (Ayami Kojima) / Devil-May-Cry / Bloodborne / Berserk / Van-Helsing aesthetic. Dark-manga-horror stylization.
 
 ━━━ WHAT THIS BOT IS — THE NIGHTSHADE AESTHETIC ━━━
 Dark fantasy at its most stylish — vampire hunters, gothic action cinema, supernatural adventure. Reference DNA: Castlevania (Alucard, Richter Belmont archetypes — NOT by name), Devil May Cry (Dante/Vergil archetypes), Bloodborne hunters, Berserk (Guts archetype), Van Helsing. Operatic dark romance with DANGER. BEAUTIFUL, DANGEROUS, ALIVE.
@@ -78,4 +80,7 @@ Each entry packs 3-4 specific details: glowing-eye color, one skin/scar detail, 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

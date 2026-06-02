@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_killer_details.json',
   total: 100,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} VAMPIRE KILLER-DETAIL descriptions for GothBot's vampire-girls-2 path. Each entry is ONE distinctive vampire-coded hero element ON or HELD BY her. Energy: D&D vampire character portrait, dark-fantasy paperback cover, Castlevania splash page (Ayami Kojima), dark-fantasy game character art. Each entry: 6-15 words, comma-separated noun phrase.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} VAMPIRE KILLER-DETAIL descriptions for GothBot's vampire-girls-2 path. Each entry is ONE distinctive vampire-coded hero element ON or HELD BY her. Energy: D&D vampire character portrait, dark-fantasy paperback cover, Castlevania splash page (Ayami Kojima), dark-fantasy game character art. Each entry: 6-15 words, comma-separated noun phrase.
 
 CALIBRATION: Across 11 hearted renders from this path, the killer-details that LANDED were ornate crowns / tiaras / feathered headpieces (5 of 11 hearts), ornate jewelry at the throat (universal), dramatic dark gowns with ornate trim. Bat-wing pauldrons did NOT land. Animal companions are forbidden. Crown-heavy distribution.
 
@@ -66,4 +68,7 @@ Deduplicate by: detail category + dominant material + position on body. Two entr
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
