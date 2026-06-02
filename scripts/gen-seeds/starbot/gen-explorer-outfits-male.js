@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_outfits_male.json',
   total: 25,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} OUTFIT entries for StarBot's male-explorer path. Each entry is a DENSE phrase (20-35 words) describing his FULL TACTICAL EXPLORER OUTFIT in obsessive material detail.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OUTFIT entries for StarBot's male-explorer path. Each entry is a DENSE phrase (20-35 words) describing his FULL TACTICAL EXPLORER OUTFIT in obsessive material detail.
 
 CRITICAL — NO FRANCHISE NAMES. NEVER write "Mandalorian", "Beskar", "Spartan", "Mjolnir", "N7", "Aeldari", "desert moisture-recycler", "Jedi", "Sith", "Dune", "Halo", or any specific franchise reference. Describe AESTHETIC generically.
 
@@ -61,4 +63,7 @@ CYBERPUNK / AUGMENTED (3-4):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. NO franchise names.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -123,6 +123,12 @@ OUTPUT ORDER — lead with: "[alien] woman in [her cool stylized sci-fi outfit +
       lighting,
       surprise_element,
       phenomenon,
+      painted_tradition,
+      vista_composition,
+      narrative_witness,
+      atmospheric_layer,
+      color_register,
+      signature_phenomenon,
       event,
     } = slots;
 
@@ -132,6 +138,63 @@ OUTPUT ORDER — lead with: "[alien] woman in [her cool stylized sci-fi outfit +
 ${event}
 
 The event is the MOMENT — caught mid-detonation, mid-collision, mid-eruption. Energy + matter + light surging through the frame.
+
+`
+      : '';
+
+    // Probabilistic axis gating (2026-05-31) — each accent axis fires 50% of
+    // the time so per-render density stays coherent across literal models.
+    // Always-on identity = phenomenon + painted_tradition (the "what + how").
+    // 5 gated accents = vista_composition / narrative_witness / atmospheric_layer
+    // / color_register / signature_phenomenon.
+    const includeVistaComp = Math.random() < 0.5;
+    const includeWitness = Math.random() < 0.5;
+    const includeAtmoLayer = Math.random() < 0.5;
+    const includeColorReg = Math.random() < 0.5;
+    const includeSigPhenom = Math.random() < 0.5;
+    const vistaCompSection = includeVistaComp
+      ? `
+━━━ PAINTED VISTA COMPOSITION — specific framing for this cosmic vista ━━━
+${vista_composition}
+
+Apply this composition on top of the universal composition_frame axis. Painted-tradition framings (terraformed-foreground-globe-behind / two-moons-on-horizon / planetary-rings-bisecting / spiral-arm-overhead / nebula-cathedral / etc.) — bake the named framing into the prompt structure.
+
+`
+      : '';
+    const witnessSection =
+      narrative_witness && includeWitness
+        ? `
+━━━ NARRATIVE WITNESS — tiny silhouette scale-prover (NOT a hero) ━━━
+${narrative_witness}
+
+Render as a TINY silhouette providing scale — observatory dome / orbiting habitat / lone lander / painted figure-at-windowsill. Place at frame edge or middle distance. Pixels-tall, NEVER the focal subject. Just gives the eye a human/structural anchor for the cosmic scale.
+
+`
+        : '';
+    const atmoLayerSection = includeAtmoLayer
+      ? `
+━━━ ATMOSPHERIC LAYER — terrestrial-foreground atmospheric interpretation ━━━
+${atmospheric_layer}
+
+If the vista is viewed FROM a planet surface or near-orbit, render this specific atmospheric layer (dust-laden / cryogenic crystal-fog / methane-blue haze / sulfur-yellow smog / volcanic-ash veil / lichen-spore drift). Anchors the painted-cosmic-vista to a concrete viewpoint.
+
+`
+      : '';
+    const colorRegSection = includeColorReg
+      ? `
+━━━ PAINTED COLOR REGISTER — the specific palette signature ━━━
+${color_register}
+
+Wash the painted vista in THIS exact palette — saturated and named (e.g. "sunset-on-Jupiter amber-and-burgundy" / "Saturn-rings ivory-and-cobalt"). Painted-tradition colors, not photoreal.
+
+`
+      : '';
+    const sigPhenomSection = includeSigPhenom
+      ? `
+━━━ SIGNATURE PAINTED PHENOMENON — bigger painted-cosmic drama ━━━
+${signature_phenomenon}
+
+This is in addition to the main phenomenon — a secondary painted-tradition drama (Kuiper comet streak / mass-driver stream / planetary alignment / Lagrange habitat-cluster / Dyson-veil shimmer / impossible-aurora). Bake at midground or deep distance.
 
 `
       : '';
@@ -149,7 +212,12 @@ Foreground: tactile cosmic detail (gas filaments / dust shimmer / ring debris). 
 
 ━━━ THE PRIMARY PHENOMENON (fills the frame) ━━━
 ${phenomenon}
-${eventSection}
+
+━━━ PAINTED TRADITION — the painter aesthetic for this render (always-on identity) ━━━
+${painted_tradition}
+
+Open the polished prompt with this painter's lineage. Bonestell saturated planetscape reads differently than McCall NASA-watercolor reads differently than Whelan paperback. Anchor the entire painted aesthetic on the named tradition.
+${vistaCompSection}${witnessSection}${atmoLayerSection}${colorRegSection}${sigPhenomSection}${eventSection}
 ━━━ NARRATIVE BEAT (cosmic-scale interpretation) ━━━
 ${story_beat}
 
@@ -180,12 +248,10 @@ ${surprise_element}
 If the surprise element above names a human / mechanical / biological detail, reinterpret it as an astronomical equivalent.
 
 ━━━ FORBIDDEN ━━━
-- NO ships / spacecraft / probes / satellites / drones / vehicles
-- NO figures / silhouettes / characters / creatures
-- NO buildings / architecture / megastructures / orbital habitats
-- NO planetary surfaces with ground-level details
-- NO atmospheric haze in vacuum (haze only inside nebulae or near planetary atmospheres)
+- NO hero figure / NO foreground character / NO ship-as-subject
 - NO franchise proper nouns
+- Tiny silhouette figures/structures from the NARRATIVE WITNESS axis above are ALLOWED ONLY when that axis fires — render them at scale-prover size (pixels-tall, frame-edge or middle-distance, NEVER the focal subject)
+- NO atmospheric haze in vacuum (haze only inside nebulae or near planetary atmospheres or when the ATMOSPHERIC LAYER axis fires)
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -676,6 +742,11 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
       ship,
       setting,
       ship_action,
+      crew_signal,
+      faction_iconography,
+      propulsion_signature,
+      genre_register,
+      signature_hull_feature,
       traffic,
       battle,
       _conditionalFired,
@@ -703,6 +774,61 @@ The frame is a CINEMATIC HERO SHOT of the featured ship. Scale-proving figures o
 
 `;
 
+    // Probabilistic axis gating (2026-05-31) — each accent axis fires 50% of
+    // the time so the per-render density stays cleaner across literal models
+    // (Banana / GPT-2 / Flux 2 Pro). The 3 subject-identity axes (ship,
+    // ship_action, setting) stay always-on. The 5 new bespoke axes gate.
+    const includeHullFeature = Math.random() < 0.5;
+    const includePropulsion = Math.random() < 0.5;
+    const includeFaction = Math.random() < 0.5;
+    const includeCrewSignal = Math.random() < 0.5;
+    const includeGenreRegister = Math.random() < 0.5;
+    const hullFeatureSection = includeHullFeature
+      ? `
+━━━ SIGNATURE HULL FEATURE — the one weird memorable detail on this ship ━━━
+${signature_hull_feature}
+
+Bake this feature INTO the ship description as a specific named detail with shape/color/scale. It's the readable-focus element — the thing the viewer will remember about THIS ship versus every other.
+
+`
+      : '';
+    const propulsionSection = includePropulsion
+      ? `
+━━━ PROPULSION SIGNATURE — engine/drive aesthetic + visible exhaust ━━━
+${propulsion_signature}
+
+The drive must render as visible light/exhaust/heat behind the ship — name the COLOR, GLOW, plume shape, and trail length.
+
+`
+      : '';
+    const factionSection = includeFaction
+      ? `
+━━━ FACTION ICONOGRAPHY — visible markings/badges/colors hinting at allegiance ━━━
+${faction_iconography}
+
+Paint THIS specific iconography onto the hull at readable scale — a numeral, glyph, sigil, or color-bar placed somewhere visible. Not text-block / not floating watermarks — heraldic/painted/etched onto the ship itself.
+
+`
+      : '';
+    const crewSignalSection = includeCrewSignal
+      ? `
+━━━ CREW SIGNAL — visible life ON or AROUND the ship ━━━
+${crew_signal}
+
+Render this as a specific element with COUNT and SCALE — "twelve lit bridge silhouettes in the forward canopy" / "six EVA workers tethered to a midship hull-breach". Makes the ship feel inhabited and the scale legible.
+
+`
+      : '';
+    const genreRegisterSection = includeGenreRegister
+      ? `
+━━━ GENRE REGISTER — the narrative tone of this frame ━━━
+${genre_register}
+
+Bend the entire scene tone to this register. story_beat + this register together set whether the frame reads as military thriller / pirate adventure / first contact / lost-ship horror / smuggler chase / etc.
+
+`
+      : '';
+
     return `You are a sci-fi concept-art painter writing a SINGLE CINEMATIC FRAME of a spaceship scene for StarBot. The ship is the ANCHOR ENTITY at MEDIUM-LARGE scale, set in a sci-fi environment with multi-tier depth. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — SHIP AS HERO ━━━
@@ -719,8 +845,7 @@ ${ship}
 
 ━━━ THE SHIP'S ACTION (posture / state / motion) ━━━
 ${ship_action}
-
-━━━ THE SETTING (sci-fi environment wrapping the ship) ━━━
+${hullFeatureSection}${propulsionSection}${factionSection}${crewSignalSection}${genreRegisterSection}━━━ THE SETTING (sci-fi environment wrapping the ship) ━━━
 ${setting}
 
 ━━━ SKY OVERHEAD / COSMIC LAYER ━━━
@@ -1033,6 +1158,12 @@ Output ONLY the raw 120-180 word scene description. Comma-separated phrases or s
       lighting,
       surprise_element,
       subject,
+      wavelength_signature,
+      structural_detail,
+      color_palette_band,
+      scale_anchor,
+      composition_focus,
+      narrative_phase,
       event,
     } = slots;
 
@@ -1042,6 +1173,60 @@ Output ONLY the raw 120-180 word scene description. Comma-separated phrases or s
 ${event}
 
 The event is happening RIGHT NOW in the frame — caught mid-detonation, mid-collision, mid-eruption. If the subject above already shows a similar phenomenon, AMPLIFY it (more violent, more luminous, more visible). If the subject is more static (a planet / moon / asteroid field), the event happens behind/beyond it.
+
+`
+      : '';
+
+    // Probabilistic axis gating DISABLED 2026-05-31 — Kevin's call: "let it
+    // rip" — all 5 accent axes always-on. Restore by flipping the constants
+    // back to Math.random() < 0.5 to re-enable per-render gating.
+    const includeStructural = true;
+    const includePalette = true;
+    const includeScaleAnchor = true;
+    const includeComposition = true;
+    const includeNarrative = true;
+    const structuralSection = includeStructural
+      ? `
+━━━ STRUCTURAL DETAIL — name the specific physical feature(s) visible ━━━
+${structural_detail}
+
+Bake the named structure into the prompt as a specific phrase (e.g. "twin polar jets venting at relativistic speed" / "two-arm spiral with razor-sharp dust lanes"). This is the readable-focus element.
+
+`
+      : '';
+    const paletteSection = includePalette
+      ? `
+━━━ FALSE-COLOR PALETTE BAND — the wavelength-mapped color treatment ━━━
+${color_palette_band}
+
+Wash the whole scene in this exact color band — every layer rendered in the named hue family. NOT a generic "vibrant" — name the specific palette.
+
+`
+      : '';
+    const scaleAnchorSection = includeScaleAnchor
+      ? `
+━━━ SCALE ANCHOR — astro-specific scale-prover ━━━
+${scale_anchor}
+
+This is in ADDITION to the universal scale_provers above. Specifically astronomical (foreground asteroid silhouette / nearby star with diffraction cross / approaching probe / contrasting smaller galaxy beside the subject).
+
+`
+      : '';
+    const compositionSection = includeComposition
+      ? `
+━━━ ASTRO COMPOSITION FOCUS ━━━
+${composition_focus}
+
+This is the composition framing — apply on top of the universal composition_frame above. Astronomical framing: edge-on disk / spiral-arm hero / centered jewel-box / merging-galaxies pair / nebula-into-void wide / etc.
+
+`
+      : '';
+    const narrativeSection = includeNarrative
+      ? `
+━━━ NARRATIVE PHASE — the cosmic moment captured ━━━
+${narrative_phase}
+
+The frame is captured at THIS specific phase of cosmic time (star formation / supernova death / galaxy merger / quiet majesty / aftermath / discovery / etc.). Bend the story_beat above to this phase.
 
 `
       : '';
@@ -1059,7 +1244,12 @@ Foreground: tactile detail (dust filaments / razor-sharp gas wisps / refraction 
 
 ━━━ THE ASTRONOMICAL SUBJECT (primary scene seed — build the rest around this) ━━━
 ${subject}
-${eventSection}
+
+━━━ WAVELENGTH SIGNATURE — the telescope/instrument tradition that defines the aesthetic ━━━
+${wavelength_signature}
+
+This sets the WHOLE rendering tradition — open the polished prompt with this. Hubble visible-light reads differently than JWST IR-mapped reads differently than Chandra X-ray pseudo-color reads differently than ALMA radio. Anchor the entire aesthetic on the named instrument.
+${structuralSection}${paletteSection}${scaleAnchorSection}${compositionSection}${narrativeSection}${eventSection}
 ━━━ NARRATIVE BEAT (interpret at cosmic / observational scale) ━━━
 ${story_beat}
 

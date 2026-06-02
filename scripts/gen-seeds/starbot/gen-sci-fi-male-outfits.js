@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_male_outfits.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} descriptions of BADASS MALE SCI-FI OUTFITS for StarBot. Each is an ornate, heavy, "holy fuck" space suit, armor, or tactical rig. 20-35 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} descriptions of BADASS MALE SCI-FI OUTFITS for StarBot. Each is an ornate, heavy, "holy fuck" space suit, armor, or tactical rig. 20-35 words each.
 
 ━━━ WHAT THESE OUTFITS ARE ━━━
 The most jaw-dropping sci-fi armor and gear ever designed. Heavy, ornate, imposing — built for war and survival in the most hostile environments in the galaxy. Think: Mandalorian beskar'gam, Master Chief MJOLNIR, Warhammer 40K power armor, but ORIGINAL. Every rivet, plate, and weapon mount is designed to make you say "holy shit that's cool." These outfits should make you want to BE this person.
@@ -41,4 +43,7 @@ No two outfits should share primary material + overall silhouette:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

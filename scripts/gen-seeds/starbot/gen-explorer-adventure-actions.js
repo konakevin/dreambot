@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_adventure_actions.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} MOTION-FIRST EXPLORATION action entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (10-22 words) describing the EXACT body position of an explorer caught MID-MOTION while exploring an alien planet — striding, climbing, traversing, examining, looking up, pointing, wading, reaching, turning.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MOTION-FIRST EXPLORATION action entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (10-22 words) describing the EXACT body position of an explorer caught MID-MOTION while exploring an alien planet — striding, climbing, traversing, examining, looking up, pointing, wading, reaching, turning.
 
 CRITICAL — ABSOLUTELY NO SEATED / SITTING / KNEELING-STILL / MEDITATION / EYES-CLOSED / LEANING-BACK / CURLED-UP / RESTING poses. The character is ALWAYS in motion or caught mid-action while exploring. They are EXPLORERS — they explore, traverse, climb, look. Never just sit there.
 
@@ -72,4 +74,7 @@ WADING / DRINKING-IN (2-3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. NO seated / meditation / eyes-closed poses anywhere.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

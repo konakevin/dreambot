@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} ALIEN-PLANET SETTING entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a SPECIFIC ALIEN BIOME / TERRAIN — the GROUND / FLORA / ATMOSPHERE / SKY of the scene where the explorer stands.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ALIEN-PLANET SETTING entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a SPECIFIC ALIEN BIOME / TERRAIN — the GROUND / FLORA / ATMOSPHERE / SKY of the scene where the explorer stands.
 
 CRITICAL — these MUST read as ALIEN. Earth-coded grassland, meadow, savanna, prairie, tundra-prairie, rolling green hills, wildflower fields are ABSOLUTELY BANNED — they look like Earth nature photography, not alien planet sci-fi. NO grass-fields. NO pastoral-rolling-hills. NO meadows.
 
@@ -112,4 +114,7 @@ EXTREME / WEIRD (~5% of ${n}) — MANDATORY VARIETY:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

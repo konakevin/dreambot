@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/alien_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ALIEN LANDSCAPE descriptions for StarBot's alien-landscape path — surfaces of alien planets. Bioluminescent, crystal-spire, floating-coral, methane-lakes. Fictional but plausible alien geography.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ALIEN LANDSCAPE descriptions for StarBot's alien-landscape path — surfaces of alien planets. Bioluminescent, crystal-spire, floating-coral, methane-lakes. Fictional but plausible alien geography.
 
 Each entry: 15-30 words. One specific alien planet surface.
 
@@ -42,4 +44,7 @@ Each entry: 15-30 words. One specific alien planet surface.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

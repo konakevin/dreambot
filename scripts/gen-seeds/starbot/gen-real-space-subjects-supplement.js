@@ -13,7 +13,9 @@ generatePool({
   total: 250, // existing 200 + 50 new
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} OVER-EXAGGERATED astrophotography subjects for StarBot's real-space path. Each entry is a dense phrase (20-40 words) describing a REAL celestial object PUNCHED UP — the NASA / Hubble / JWST version cranked to 11, with dramatic events captured mid-action, multiple things happening in the frame at once.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OVER-EXAGGERATED astrophotography subjects for StarBot's real-space path. Each entry is a dense phrase (20-40 words) describing a REAL celestial object PUNCHED UP — the NASA / Hubble / JWST version cranked to 11, with dramatic events captured mid-action, multiple things happening in the frame at once.
 
 THE LOAD-BEARING RULE: every entry shows a celestial object DOING SOMETHING dramatic — jets, shockwaves, aurora, lensing, gravitational tidal stripping, x-ray flares, supernova mid-detonation. Not just "the nebula sits there" — "the nebula is being torn apart by a Wolf-Rayet star's stellar wind, ionization fronts cascading outward in three colors at once."
 
@@ -76,4 +78,7 @@ EX-10: "Black-hole binary inspiral GW150914 visualized as relativistic accretion
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Each entry is a dense over-exaggerated celestial subject with mid-event drama.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

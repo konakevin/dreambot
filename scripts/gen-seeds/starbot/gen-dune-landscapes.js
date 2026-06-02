@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/dune_landscapes.json',
   total: 50,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DUNE-CODED LANDSCAPE entries for StarBot's dune-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ALIEN DESERT VISTA in the Dune / Arrakis aesthetic tradition — vast cinematic deserts, twin-sun horizons, sandworm-trail-coded terrain, polar ice caps, spice-blue dawn light, ornithopter-scale skies, fremen-sietch silhouettes in cliffs.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DUNE-CODED LANDSCAPE entries for StarBot's dune-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ALIEN DESERT VISTA in the Dune / Arrakis aesthetic tradition — vast cinematic deserts, twin-sun horizons, sandworm-trail-coded terrain, polar ice caps, spice-blue dawn light, ornithopter-scale skies, fremen-sietch silhouettes in cliffs.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE. Pure landscape only.
 
@@ -67,4 +69,7 @@ NIGHT DESERT WITH MOONS (~5):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

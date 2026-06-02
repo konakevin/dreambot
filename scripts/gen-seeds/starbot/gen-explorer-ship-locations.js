@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_ship_locations.json',
   total: 25,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} SPACESHIP / SPACE-STATION INTERIOR location entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a SPECIFIC ship-or-station interior where the explorer is CANDID.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SPACESHIP / SPACE-STATION INTERIOR location entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a SPECIFIC ship-or-station interior where the explorer is CANDID.
 
 These are PLACES, not actions. The character will be IN this place, doing something peaceful. The location is the BACKDROP that places the explorer aboard a deep-space starship or station.
 
@@ -64,4 +66,7 @@ LAB / SCIENCE / WORKSHOP (2-3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

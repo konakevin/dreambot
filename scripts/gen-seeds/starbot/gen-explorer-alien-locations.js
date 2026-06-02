@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_alien_locations.json',
   total: 25,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} ALIEN-PLANET LOCATION entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a SPECIFIC alien-world location where the explorer is CANDID — out in the wild, on the surface, in an alien environment.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ALIEN-PLANET LOCATION entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a SPECIFIC alien-world location where the explorer is CANDID — out in the wild, on the surface, in an alien environment.
 
 These are PLACES, not actions. The character will be IN this place, doing something peaceful. The location is the BACKDROP that places the explorer in deep space, on a strange world.
 
@@ -65,4 +67,7 @@ RUINS / ANCIENT ALIEN (2-3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

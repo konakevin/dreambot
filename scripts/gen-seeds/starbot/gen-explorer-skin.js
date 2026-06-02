@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_skin.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} SKIN-DESCRIPTION entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (10-20 words) describing the EXACT visual texture of explorer skin in sci-fi light — how alien-sun / cockpit-glow / ship-corridor lighting / nebula-glow hits it.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKIN-DESCRIPTION entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (10-20 words) describing the EXACT visual texture of explorer skin in sci-fi light — how alien-sun / cockpit-glow / ship-corridor lighting / nebula-glow hits it.
 
 This pool composes with separate hair/eyes/outfit pools.
 
@@ -25,4 +27,7 @@ This pool composes with separate hair/eyes/outfit pools.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/halo_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HALO-CODED ARCHITECTURE entries for StarBot's halo-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR or STRUCTURAL EXTERIOR in the Halo aesthetic tradition — Forerunner crystalline-machine ruins, ring-installation interiors, Covenant purple-gold ship-architecture, Reach-style military bases, Sangheili gravity-lift design, ancient-precursor monuments.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HALO-CODED ARCHITECTURE entries for StarBot's halo-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR or STRUCTURAL EXTERIOR in the Halo aesthetic tradition — Forerunner crystalline-machine ruins, ring-installation interiors, Covenant purple-gold ship-architecture, Reach-style military bases, Sangheili gravity-lift design, ancient-precursor monuments.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO MASTER-CHIEF, NO ELITES, NO GRUNTS. Pure architecture only.
 
@@ -66,4 +68,7 @@ PRECURSOR EXTERIOR INSTALLATIONS (~3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_hair_color.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HAIR-COLOR entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (6-14 words) describing the EXACT vivid hair color AND a sci-fi-light interaction — cockpit-glow, aurora-shimmer, nebula-tinge, corridor-red.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIR-COLOR entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (6-14 words) describing the EXACT vivid hair color AND a sci-fi-light interaction — cockpit-glow, aurora-shimmer, nebula-tinge, corridor-red.
 
 ━━━ COLOR SPREAD (enforce diversity across ${n}) ━━━
 - BLACK / RAVEN (4) — coal-black catching cockpit-blue to violet, raven black drinking nebula-aurora to indigo, blue-black with steel highlights from corridor-light, deep midnight-black going warm under engine-bay-glow
@@ -23,4 +25,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

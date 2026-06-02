@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/city_camera_angles.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CITY-SCALE CAMERA ANGLE descriptions for StarBot's alien-city path — cinematic framings specifically designed for vast alien cityscapes. 15-25 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CITY-SCALE CAMERA ANGLE descriptions for StarBot's alien-city path — cinematic framings specifically designed for vast alien cityscapes. 15-25 words each.
 
 ━━━ WHAT THESE ARE ━━━
 Each entry describes a camera position and framing that shows an ALIEN CITY at its best. These are about WHERE you are relative to the city and HOW MUCH of it you see. They get injected into city scene prompts to force variety in how the city is revealed to the viewer.
@@ -38,4 +40,7 @@ No two entries should share the same altitude + viewing direction + distance to 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

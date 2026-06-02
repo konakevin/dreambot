@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/halo_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HALO-CODED LANDSCAPE entries for StarBot's halo-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ALIEN VISTA in the Halo aesthetic tradition — ring-installation arcs visible across the sky, Forerunner megaliths on alien planet surfaces, Reach-style mountain wastes, ancient precursor temple-ruins on planet plateaus, frontier military colony surfaces, Halo-arc curving across the alien horizon.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HALO-CODED LANDSCAPE entries for StarBot's halo-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ALIEN VISTA in the Halo aesthetic tradition — ring-installation arcs visible across the sky, Forerunner megaliths on alien planet surfaces, Reach-style mountain wastes, ancient precursor temple-ruins on planet plateaus, frontier military colony surfaces, Halo-arc curving across the alien horizon.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO MASTER-CHIEF, NO ELITES, NO DROP-SHIPS-AS-FOREGROUND. Pure landscape only.
 
@@ -63,4 +65,7 @@ GAS-GIANT-HORIZON RINGWORLD (~3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

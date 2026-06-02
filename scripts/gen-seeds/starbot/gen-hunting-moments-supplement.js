@@ -12,7 +12,9 @@ generatePool({
   total: 95, // existing 80 + 15 new
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} HUNTING-THEMED mid-action moments to ADD to an existing pool of dynamic robot actions. Each entry is 15-30 words describing the EXACT FROZEN MOMENT a robot is captured mid-hunt.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HUNTING-THEMED mid-action moments to ADD to an existing pool of dynamic robot actions. Each entry is 15-30 words describing the EXACT FROZEN MOMENT a robot is captured mid-hunt.
 
 THE LOAD-BEARING RULE: every entry shows the robot ACTIVELY HUNTING something — tracking, stalking, pursuing, cornering, mid-strike, mid-pounce. NOT "watching for prey." NOT "patrolling area." The action is HUNT-IN-PROGRESS.
 
@@ -84,4 +86,7 @@ POST-STRIKE / TROPHY:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. All 15 entries are HUNTING moments — the robot is actively pursuing or engaging quarry.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

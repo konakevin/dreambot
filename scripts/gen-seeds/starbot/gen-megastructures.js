@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/megastructures.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} descriptions of JAW-DROPPING MEGASTRUCTURES for StarBot — impossible-scale artificial constructs that make the viewer whisper "holy shit." 20-35 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} descriptions of JAW-DROPPING MEGASTRUCTURES for StarBot — impossible-scale artificial constructs that make the viewer whisper "holy shit." 20-35 words each.
 
 ━━━ WHAT THESE ARE ━━━
 The biggest things ever built. Structures so vast they have their own weather, their own gravity, their own ecosystems. Ancient alien machines the size of planets. Human engineering pushed to its absolute theoretical limit. Space stations so large they're visible from other star systems. Every one should make the viewer feel TINY and AWED.
@@ -43,4 +45,7 @@ No two entries should share the same structure type + primary material + state o
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

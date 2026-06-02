@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_interiors.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SCI-FI INTERIOR descriptions for StarBot's sci-fi-interior path — epic interior scale. Space-station bridge, starship corridor, cathedral-hangar, Blade-Runner apartment, minimalist lab. Production-art polish.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SCI-FI INTERIOR descriptions for StarBot's sci-fi-interior path — epic interior scale. Space-station bridge, starship corridor, cathedral-hangar, Blade-Runner apartment, minimalist lab. Production-art polish.
 
 Each entry: 15-30 words. One specific epic sci-fi interior.
 
@@ -47,4 +49,7 @@ Each entry: 15-30 words. One specific epic sci-fi interior.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

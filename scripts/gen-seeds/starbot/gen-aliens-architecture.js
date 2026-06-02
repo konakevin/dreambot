@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/aliens_architecture.json',
   total: 50,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ALIENS-CODED ARCHITECTURE entries for StarBot's aliens-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR or STRUCTURAL EXTERIOR in the Alien / Aliens / Prometheus aesthetic tradition — biomechanical hive corridors, derelict-Engineer-spacecraft chambers, abandoned colony interiors, atmospheric-processor industrial labyrinths, sterile corporate labs, dropship interiors, escape-pod chambers.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ALIENS-CODED ARCHITECTURE entries for StarBot's aliens-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR or STRUCTURAL EXTERIOR in the Alien / Aliens / Prometheus aesthetic tradition — biomechanical hive corridors, derelict-Engineer-spacecraft chambers, abandoned colony interiors, atmospheric-processor industrial labyrinths, sterile corporate labs, dropship interiors, escape-pod chambers.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO XENOMORPHS. Pure architecture / spaces only.
 
@@ -71,4 +73,7 @@ DERELICT POWER / REACTOR CHAMBERS (~4):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

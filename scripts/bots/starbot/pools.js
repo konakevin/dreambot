@@ -83,6 +83,15 @@ module.exports = {
 
   // Scene pools
   COSMIC_PHENOMENA: load('cosmic_phenomena'),
+  // ── cosmic-vista PREMIUM-TIER enrichment (2026-05-31) — 6 new bespoke pools
+  // + COSMIC_VISTA_EVENT (split from shared COSMIC_EVENT). MVP-25 each.
+  COSMIC_VISTA_PAINTED_TRADITION: load('cosmic_vista_painted_tradition'),
+  COSMIC_VISTA_COMPOSITION: load('cosmic_vista_composition'),
+  COSMIC_VISTA_NARRATIVE_WITNESS: load('cosmic_vista_narrative_witness'),
+  COSMIC_VISTA_ATMOSPHERIC_LAYER: load('cosmic_vista_atmospheric_layer'),
+  COSMIC_VISTA_COLOR_REGISTER: load('cosmic_vista_color_register'),
+  COSMIC_VISTA_SIGNATURE_PHENOMENON: load('cosmic_vista_signature_phenomenon'),
+  COSMIC_VISTA_EVENT: load('cosmic_vista_event'),
   COSMIC_ANCHORS: load('cosmic_anchors'),
   MEGASTRUCTURES: load('megastructures'),
   ALIEN_LANDSCAPES: load('alien_landscapes'),
@@ -108,10 +117,27 @@ module.exports = {
   SPACE_OPERA_LIGHTING: load('space_opera_lighting'),
   SPACE_OPERA_PARTICULATE: load('space_opera_particulate'),
   SPACE_OPERA_EMOTION: load('space_opera_emotion'),
+  // ── Space-opera PREMIUM-TIER enrichment (2026-05-31 reactivation) ──
+  // 5 new path-bespoke axes pushing SPACE_OPERA from 5 → 10 bespoke pools.
+  // Each axis seeded at MVP-25 until verified.
+  SPACE_OPERA_CREW_SIGNAL: load('space_opera_crew_signal'),
+  SPACE_OPERA_FACTION_ICONOGRAPHY: load('space_opera_faction_iconography'),
+  SPACE_OPERA_PROPULSION_SIGNATURE: load('space_opera_propulsion_signature'),
+  SPACE_OPERA_GENRE_REGISTER: load('space_opera_genre_register'),
+  SPACE_OPERA_SIGNATURE_HULL_FEATURE: load('space_opera_signature_hull_feature'),
   SCI_FI_INTERIORS: load('sci_fi_interiors'),
   COZY_SCI_FI_INTERIORS: load('cozy_sci_fi_interiors'),
   ALIEN_CITIES: load('alien_cities'),
   REAL_SPACE_SUBJECTS: load('real_space_subjects'),
+  // ── real-space PREMIUM-TIER enrichment (2026-05-31) — 6 new bespoke pools
+  // + REAL_SPACE_EVENT (split from shared COSMIC_EVENT). MVP-25 each.
+  REAL_SPACE_WAVELENGTH_SIGNATURE: load('real_space_wavelength_signature'),
+  REAL_SPACE_STRUCTURAL_DETAIL: load('real_space_structural_detail'),
+  REAL_SPACE_COLOR_PALETTE_BAND: load('real_space_color_palette_band'),
+  REAL_SPACE_SCALE_ANCHOR: load('real_space_scale_anchor'),
+  REAL_SPACE_COMPOSITION_FOCUS: load('real_space_composition_focus'),
+  REAL_SPACE_NARRATIVE_PHASE: load('real_space_narrative_phase'),
+  REAL_SPACE_EVENT: load('real_space_event'),
   COSMIC_ORACLE_CHARACTERS: load('cosmic_oracle_characters'),
   COSMIC_ORACLE_ACTIONS: load('cosmic_oracle_actions'),
   // Conditional ritual/mystic moment for cosmic-oracle path (40% gate)
@@ -179,19 +205,21 @@ module.exports = {
   // PLANET_SETTING is a flat merge of 11 biome-specific 25-entry pools.
   // Equal random roll across the merged 275-entry collection (1/11 odds per
   // biome, 1/25 within). Old `planet_setting.json` retired.
-  PLANET_SETTING: FORCE_MAP ? FORCE_MAP : [
-    ...load('planet_jungle'),
-    ...load('planet_swamp'),
-    ...load('planet_ocean'),
-    ...load('planet_ice'),
-    ...load('planet_desert'),
-    ...load('planet_crystal'),
-    ...load('planet_volcanic'),
-    ...load('planet_sky'),
-    ...load('planet_ruins'),
-    ...load('planet_cave'),
-    ...load('planet_extreme'),
-  ],
+  PLANET_SETTING: FORCE_MAP
+    ? FORCE_MAP
+    : [
+        ...load('planet_jungle'),
+        ...load('planet_swamp'),
+        ...load('planet_ocean'),
+        ...load('planet_ice'),
+        ...load('planet_desert'),
+        ...load('planet_crystal'),
+        ...load('planet_volcanic'),
+        ...load('planet_sky'),
+        ...load('planet_ruins'),
+        ...load('planet_cave'),
+        ...load('planet_extreme'),
+      ],
   // SCALE-DEFINING BACKDROP — massive thing in the sky/horizon dwarfing the character
   EXPLORER_EPIC_BACKDROPS: load('explorer_epic_backdrops'),
   // Retired (kept for safety; explorer paths no longer consume):

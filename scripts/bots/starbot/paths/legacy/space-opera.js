@@ -40,7 +40,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const anchorScale = pickScaleFromRange(pools.ANCHOR_SCALE, ANCHOR_SCALE_RANGE, picker);
   const compositionFrame = picker.pickWithRecency(pools.COMPOSITION_FRAME, 'composition_frame');
   const scaleProvers = pickN(pools.SCALE_PROVERS, 3, picker, 'scale_prover');
-  const weatherParticulate = picker.pickWithRecency(pools.WEATHER_PARTICULATE, 'weather_particulate');
+  const weatherParticulate = picker.pickWithRecency(
+    pools.WEATHER_PARTICULATE,
+    'weather_particulate'
+  );
   const emotionalDna = picker.pickWithRecency(pools.EMOTIONAL_DNA, 'emotional_dna');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
 
@@ -55,9 +58,14 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
   // ── Conditional WIDE-ACTION drama layer (50% gate) ──
   const wideAction = Math.random() < 0.5;
-  const trafficElements = wideAction ? pickN(pools.BUSY_FLEET_ELEMENTS, 3, picker, 'traffic_element') : [];
-  const battleDynamics = wideAction ? pickN(pools.BATTLE_DYNAMICS, 3, picker, 'battle_dynamic') : [];
-  const wideActionSection = wideAction ? `
+  const trafficElements = wideAction
+    ? pickN(pools.BUSY_FLEET_ELEMENTS, 3, picker, 'traffic_element')
+    : [];
+  const battleDynamics = wideAction
+    ? pickN(pools.BATTLE_DYNAMICS, 3, picker, 'battle_dynamic')
+    : [];
+  const wideActionSection = wideAction
+    ? `
 ━━━ WIDE-ACTION MODE — MULTI-SHIP SCENE ━━━
 The frame is a CHAOTIC ACTION SCENE with multiple ships at varied depths, motion, weapons firing, missile contrails streaking, plasma engines blazing. Not a quiet hero portrait — a busy fleet engagement / traffic chaos / battle.
 
@@ -71,7 +79,8 @@ The frame is a CHAOTIC ACTION SCENE with multiple ships at varied depths, motion
 - ${battleDynamics[1]}
 - ${battleDynamics[2]}
 
-` : `
+`
+    : `
 ━━━ CLOSE-UP HERO MODE — SHIP AS THE SHOW ━━━
 The frame is a CINEMATIC HERO SHOT of the featured ship. Scale-proving figures or smaller craft visible nearby. Hull detail readable — paneling, gantries, antennas, weathering, lived-in complexity. Like a poster shot.
 

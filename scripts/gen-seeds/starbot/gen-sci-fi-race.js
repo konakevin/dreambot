@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_race.json',
   total: 50,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HUMANOID ALIEN / SCI-FI LINEAGE entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (15-25 words) describing the EXACT visual signature of a HUMAN-SHAPED sci-fi lineage — INSPIRED BY popular sci-fi worlds (Star Wars / Star Trek / Mass Effect / Warhammer 40K / Dune / Halo / Cyberpunk / Avatar / Blade Runner) WITHOUT directly naming any franchise's specific characters or races.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HUMANOID ALIEN / SCI-FI LINEAGE entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (15-25 words) describing the EXACT visual signature of a HUMAN-SHAPED sci-fi lineage — INSPIRED BY popular sci-fi worlds (Star Wars / Star Trek / Mass Effect / Warhammer 40K / Dune / Halo / Cyberpunk / Avatar / Blade Runner) WITHOUT directly naming any franchise's specific characters or races.
 
 CRITICAL — NO FRANCHISE NAMES IN THE OUTPUT. NEVER write "Twi'lek", "Vulcan", "Klingon", "Mandalorian", "Spartan", "Na'vi", "Asari", "Replicant", "Aeldari", "Space Marine", "N7", "Mjolnir", "Beskar", "Sin'dorei", "Kaldorei", "Dunmer", "Witcher", "Time Lord", "Cylon", "Zabrak", "Togruta", "Mirialan", "Chiss", "Pantoran", "Trill", "Andorian", "Bajoran", "Romulan", "Goa'uld", "Quarian", "Turian", "Drell", "Fremen" or any other proper noun from these IPs.
 
@@ -101,4 +103,7 @@ ARTIFICIAL / SYNTHETIC (2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. NO franchise names anywhere.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

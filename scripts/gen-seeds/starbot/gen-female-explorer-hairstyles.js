@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/female_explorer_hairstyles.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HAIRSTYLE entries for StarBot's female-explorer path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a sci-fi space-explorer woman — practical for EVA helmets, often tied for zero-gravity, sometimes augmented with cybernetic implants visible at the scalp.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIRSTYLE entries for StarBot's female-explorer path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a sci-fi space-explorer woman — practical for EVA helmets, often tied for zero-gravity, sometimes augmented with cybernetic implants visible at the scalp.
 
 ━━━ STYLE SPREAD (enforce variety across ${n}) ━━━
 - TIED-BACK / EVA-PRACTICAL (5-6) — tight low-tail bound with a chrome ring for helmet-clearance, slick bun pinned with a small comm-implant visible at the crown, fishtail braid pulled forward over an EVA collar, double space-pilot braids tucked into a flight-suit collar, single thick rope-braid with steel-ring bindings
@@ -22,4 +24,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

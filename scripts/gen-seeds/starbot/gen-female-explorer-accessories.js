@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/female_explorer_accessories.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ACCESSORY entries for StarBot's female-explorer path. Each entry is a SHORT phrase (8-16 words) describing ONE signature object she's wearing or carrying — the small detail that anchors her sci-fi explorer identity.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACCESSORY entries for StarBot's female-explorer path. Each entry is a SHORT phrase (8-16 words) describing ONE signature object she's wearing or carrying — the small detail that anchors her sci-fi explorer identity.
 
 ━━━ ACCESSORY SPREAD (enforce variety across ${n}) ━━━
 - WEAPONS / TOOLS (4-5) — plasma-pistol holstered at her hip, energy-blade strapped to her thigh, multi-tool with extending probe-arms at her belt, pulse-rifle slung across her back, hand-crossbow with energy-bolts at her hip
@@ -24,4 +26,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/alien_cities.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} descriptions of ALIEN CITIES for StarBot — vast, jaw-dropping cityscapes across every flavor of sci-fi. Blade Runner, Coruscant, Fifth Element, Guardians of the Galaxy, Dune, Arrival, Mass Effect, Star Wars prequels. 20-35 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} descriptions of ALIEN CITIES for StarBot — vast, jaw-dropping cityscapes across every flavor of sci-fi. Blade Runner, Coruscant, Fifth Element, Guardians of the Galaxy, Dune, Arrival, Mass Effect, Star Wars prequels. 20-35 words each.
 
 ━━━ WHAT THESE ARE ━━━
 The most awe-inspiring cities ever imagined. These should span the FULL range of sci-fi city types — from neon-drenched cyberpunk megacities to ancient alien ruins to sleek utopian metropolises to gritty industrial colonies. NOT just organic/volcanic/crystal. We need STREETS, NEON, RAIN, MARKETS, TRAFFIC, SKYLINES as much as we need alien biology.
@@ -49,4 +51,7 @@ No two entries should share the same combination:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

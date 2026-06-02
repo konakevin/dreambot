@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/cozy_sci_fi_interiors.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} descriptions of COZY SCI-FI INTERIOR SPACES for StarBot — warm, intimate, lived-in corners of the SAME universe as our cosmic vistas, megastructures, and alien landscapes. 20-35 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} descriptions of COZY SCI-FI INTERIOR SPACES for StarBot — warm, intimate, lived-in corners of the SAME universe as our cosmic vistas, megastructures, and alien landscapes. 20-35 words each.
 
 ━━━ WHAT THESE ARE ━━━
 The warm private spaces where people actually LIVE in a sci-fi universe. NOT Earth hobbies crammed into a spaceship. These are spaces that could ONLY exist in space — alien-planet homes, deep-space station hideaways, generation-ship neighborhoods, orbital habitat living quarters, asteroid-mining outpost break rooms. Every space must feel unmistakably SCI-FI while also feeling COZY and LIVED-IN.
@@ -55,4 +57,7 @@ No two entries should share the same setting type + primary visual element:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -19,7 +19,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/real_space_subjects.json',
   total: 25, // proof-of-concept batch — scale to 250 after Kevin approves quality
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} OVER-EXAGGERATED celestial-object subjects for StarBot's real-space path. Each entry is a dense phrase (25-45 words) describing a celestial object PUNCHED UP — NASA / Hubble / JWST imagery used as VISUAL INSPIRATION (not factual gospel) cranked to 11 with dramatic events captured mid-action and multiple things happening in the same frame.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OVER-EXAGGERATED celestial-object subjects for StarBot's real-space path. Each entry is a dense phrase (25-45 words) describing a celestial object PUNCHED UP — NASA / Hubble / JWST imagery used as VISUAL INSPIRATION (not factual gospel) cranked to 11 with dramatic events captured mid-action and multiple things happening in the same frame.
 
 Subjects can be REAL-NAMED-loosely (Saturn / Jupiter / Crab Nebula / Eta Carinae — used as flavor, not strict scientific accuracy) OR FICTIONAL (Sci-fi alien gas giant / unnamed asteroid field in a star-forming region / fictional binary system / unnamed quasar in a deep-field). Lean fictional or generic when it fits the over-exaggerated drama.
 
@@ -129,4 +131,7 @@ This pool MUST hit the category distribution above. Do NOT cluster: rotate categ
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Each entry is a dense over-exaggerated celestial subject with mid-event drama and the astro object as the main character.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/starcraft_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} STARCRAFT-CODED ARCHITECTURE entries for StarBot's starcraft-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the StarCraft aesthetic tradition — three faction-coded interiors: TERRAN frontier-industrial bunkers and command centers, PROTOSS crystalline psionic temple-chambers, ZERG organic-biomech hive-cluster interiors.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STARCRAFT-CODED ARCHITECTURE entries for StarBot's starcraft-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the StarCraft aesthetic tradition — three faction-coded interiors: TERRAN frontier-industrial bunkers and command centers, PROTOSS crystalline psionic temple-chambers, ZERG organic-biomech hive-cluster interiors.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO MARINES, NO ZEALOTS, NO HYDRALISKS-AS-FOREGROUND. Pure architecture only.
 
@@ -61,4 +63,7 @@ ZERG ORGANIC-BIOMECH HIVE INTERIORS (~8):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

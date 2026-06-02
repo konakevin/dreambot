@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/mass_effect_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} MASS-EFFECT-CODED ARCHITECTURE entries for StarBot's mass-effect-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the Mass Effect aesthetic tradition — Citadel Council chamber, Normandy ship interiors, asari floating-temple chambers, krogan brutalist bunkers, geth-platform synthetic interiors, Reaper-coded biomechanical ship-corridors, Salarian science labs, Cerberus sterile labs.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MASS-EFFECT-CODED ARCHITECTURE entries for StarBot's mass-effect-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the Mass Effect aesthetic tradition — Citadel Council chamber, Normandy ship interiors, asari floating-temple chambers, krogan brutalist bunkers, geth-platform synthetic interiors, Reaper-coded biomechanical ship-corridors, Salarian science labs, Cerberus sterile labs.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO ALIENS-AS-FIGURES. Pure architecture only.
 
@@ -67,4 +69,7 @@ GALACTIC-COMMERCIAL CONCOURSE (~3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

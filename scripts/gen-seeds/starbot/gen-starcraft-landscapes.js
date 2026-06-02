@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/starcraft_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} STARCRAFT-CODED LANDSCAPE entries for StarBot's starcraft-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ALIEN VISTA in the StarCraft aesthetic tradition — three faction-coded biomes: TERRAN frontier-industrial wastelands, PROTOSS crystalline psionic ancient-civilization vistas, ZERG organic-biomechanical creep-infested wastelands.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STARCRAFT-CODED LANDSCAPE entries for StarBot's starcraft-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ALIEN VISTA in the StarCraft aesthetic tradition — three faction-coded biomes: TERRAN frontier-industrial wastelands, PROTOSS crystalline psionic ancient-civilization vistas, ZERG organic-biomechanical creep-infested wastelands.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO MARINES, NO ZEALOTS, NO HYDRALISKS-AS-FOREGROUND. Pure landscape only (distant Zerg-creature silhouettes against horizon at scale OK).
 
@@ -61,4 +63,7 @@ ZERG ORGANIC-BIOMECH WASTELANDS (~8):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

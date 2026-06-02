@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/mass_effect_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} MASS-EFFECT-CODED LANDSCAPE entries for StarBot's mass-effect-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ALIEN VISTA in the Mass Effect aesthetic tradition — rotating space-station arms enclosing a habitat-galaxy, volcanic clan-warrior wastelands, floating-architecture goddess-worlds, biomechanical Reaper-coded ship-architecture, geth-tech industrial planets, asari floating crystalline cities, krogan ravaged badlands.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MASS-EFFECT-CODED LANDSCAPE entries for StarBot's mass-effect-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ALIEN VISTA in the Mass Effect aesthetic tradition — rotating space-station arms enclosing a habitat-galaxy, volcanic clan-warrior wastelands, floating-architecture goddess-worlds, biomechanical Reaper-coded ship-architecture, geth-tech industrial planets, asari floating crystalline cities, krogan ravaged badlands.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO ALIENS, NO REAPERS-AS-FOREGROUND-CHARACTERS. Pure landscape only (Reaper-style biomechanical ARCHITECTURE in the distance OK as silhouette).
 
@@ -68,4 +70,7 @@ PLANET-SURFACE COLONIES (~3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

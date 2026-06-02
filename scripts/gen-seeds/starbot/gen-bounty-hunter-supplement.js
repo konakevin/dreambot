@@ -18,7 +18,9 @@ generatePool({
   total: 116, // existing 108 + 8 new (we'll cull two Mando-tainted ones first)
   batch: 8,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} BOUNTY HUNTER ROBOT entries to ADD to an existing pool. Each entry is a DENSE phrase (40-60 words) describing the BODY of a sci-fi bounty-hunter droid — NOT its action, NOT its setting (those come from other pools).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BOUNTY HUNTER ROBOT entries to ADD to an existing pool. Each entry is a DENSE phrase (40-60 words) describing the BODY of a sci-fi bounty-hunter droid — NOT its action, NOT its setting (those come from other pools).
 
 EVERY entry is a LONE-OPERATOR TRACKER who finds and captures/kills targets.
 
@@ -110,4 +112,7 @@ EX-8: "Bipedal bounty-droid, weather-beaten chrome-and-bronze chassis with verdi
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Each entry is a body-only description of a bounty-hunter droid. NO Mandalorian-similar features.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/guardians_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} GUARDIANS-OF-THE-GALAXY-CODED LANDSCAPE entries for StarBot's guardians-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC COSMIC-WEIRD ALIEN VISTA in the GotG aesthetic tradition — neon nightclub-planets, severed-Celestial-head mining colonies, gold-aesthetic perfect societies, mist-shrouded forest moons, kaleidoscopic crystal worlds, junkyard pirate-town landscapes, vibrant colorful alien biomes, classical-future white-marble cities.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GUARDIANS-OF-THE-GALAXY-CODED LANDSCAPE entries for StarBot's guardians-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC COSMIC-WEIRD ALIEN VISTA in the GotG aesthetic tradition — neon nightclub-planets, severed-Celestial-head mining colonies, gold-aesthetic perfect societies, mist-shrouded forest moons, kaleidoscopic crystal worlds, junkyard pirate-town landscapes, vibrant colorful alien biomes, classical-future white-marble cities.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO ALIENS-AS-CHARACTERS, NO SPACESHIPS-AS-FOREGROUND-SUBJECTS. Pure landscape only.
 
@@ -68,4 +70,7 @@ OUTLAW-FRONTIER PLANETS (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

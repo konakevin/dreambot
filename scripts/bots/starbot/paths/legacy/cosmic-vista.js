@@ -37,7 +37,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const storyBeat = picker.pickWithRecency(pools.STORY_BEATS, 'story_beat');
   const compositionFrame = picker.pickWithRecency(pools.COMPOSITION_FRAME, 'composition_frame');
   const scaleProvers = pickN(pools.SCALE_PROVERS, 3, picker, 'scale_prover');
-  const weatherParticulate = picker.pickWithRecency(pools.WEATHER_PARTICULATE, 'weather_particulate');
+  const weatherParticulate = picker.pickWithRecency(
+    pools.WEATHER_PARTICULATE,
+    'weather_particulate'
+  );
   const emotionalDna = picker.pickWithRecency(pools.EMOTIONAL_DNA, 'emotional_dna');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
 
@@ -49,14 +52,18 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
   // ── Conditional COSMIC_EVENT drama layer (40% gate) ──
   const isCosmicEvent = Math.random() < 0.4;
-  const cosmicEvent = isCosmicEvent ? picker.pickWithRecency(pools.COSMIC_EVENT, 'cosmic_event') : null;
-  const eventSection = isCosmicEvent ? `
+  const cosmicEvent = isCosmicEvent
+    ? picker.pickWithRecency(pools.COSMIC_EVENT, 'cosmic_event')
+    : null;
+  const eventSection = isCosmicEvent
+    ? `
 ━━━ COSMIC EVENT — render this drama visibly ACTIVE in the scene ━━━
 ${cosmicEvent}
 
 The event is the MOMENT — caught mid-detonation, mid-collision, mid-eruption. Energy + matter + light surging through the frame.
 
-` : '';
+`
+    : '';
 
   return `You are a sci-fi concept-art painter writing a PURE COSMIC VISTA for StarBot — a jaw-dropping cosmic phenomenon that fills the ENTIRE frame. NO characters, NO ships, NO architecture, NO figures of any kind. Pure cosmos, vast and overwhelming. Hubble / Webb / Villeneuve Dune cosmic-horror aesthetic. Output wraps with style prefix + suffix.
 

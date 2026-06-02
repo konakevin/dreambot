@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/cosmic_oracle_locations.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} OTHERWORLDLY LOCATION descriptions for StarBot's cosmic-oracle path — painted sci-fi scenes. Draw from the vast catalog of sci-fi cinema, games, and novels. Reference the AESTHETIC of these worlds, never character names.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OTHERWORLDLY LOCATION descriptions for StarBot's cosmic-oracle path — painted sci-fi scenes. Draw from the vast catalog of sci-fi cinema, games, and novels. Reference the AESTHETIC of these worlds, never character names.
 
 Each entry: 25-40 words. ONE specific alien/cosmic location with time-of-cosmic-day + visible cosmic-light-source + atmospheric detail.
 
@@ -32,4 +34,7 @@ Star Wars worlds (Coruscant megacity, Kashyyyk canopy, Mustafar lava, Kamino sto
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

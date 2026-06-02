@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_female_outfits.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} descriptions of ORNATE FEMALE SCI-FI OUTFITS for StarBot. Each is a form-fitting, sultry but functional space suit, armor, or tactical outfit. 20-35 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} descriptions of ORNATE FEMALE SCI-FI OUTFITS for StarBot. Each is a form-fitting, sultry but functional space suit, armor, or tactical outfit. 20-35 words each.
 
 ━━━ WHAT THESE OUTFITS ARE ━━━
 The most jaw-dropping sci-fi suits and armor ever designed. Ornate, detailed, form-fitting — they hug feminine curves while being FUNCTIONAL combat/exploration gear. Think: high-fashion space couture meets battle-tested engineering. Every seam, panel, and buckle is designed with both beauty and purpose. These outfits should make you stare at the craftsmanship.
@@ -41,4 +43,7 @@ No two outfits should share primary material + overall silhouette:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

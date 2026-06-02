@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/male_explorer_hairstyles.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HAIRSTYLE entries for StarBot's male-explorer path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a sci-fi space-explorer man — practical for EVA, often shaved or augmented, sometimes long for ceremony.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIRSTYLE entries for StarBot's male-explorer path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a sci-fi space-explorer man — practical for EVA, often shaved or augmented, sometimes long for ceremony.
 
 ━━━ STYLE SPREAD (enforce variety across ${n}) ━━━
 - SHAVED / CYBER-AUGMENTED (5-6) — fully shaved skull showing a chrome neural-port glowing at the base, sides shaved with a glowing ridge of cybernetic implants, undercut showing chrome plates behind one ear, completely shaved with a single bio-monitor light at the temple, mohawk over a shaved-and-augmented scalp, shaved with a single chrome jack at the crown
@@ -22,4 +24,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

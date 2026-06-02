@@ -47,162 +47,245 @@ PUSH-TO-11 MANDATE — every render stacks 3+ ornate elements simultaneously. Ma
   },
 
   PURE_COSMOS: {
-  description: 'Astronomical phenomenon as subject. No figure.',
-  slots: {
-    universal: [ 'story_beat', 'composition_frame', 'scale_provers', 'weather_particulate', 'emotional_dna', 'lighting' ],
-    bot: [ 'surprise_element' ],
-    path: [ 'phenomenon' ]
+    description: `Painted Bonestell/McCall/Whelan cosmic vista tradition — Analog SF paperback-cover painted cosmos. Astronomical phenomenon as subject, tiny figure/structure permitted as scale-prover.
+
+PREMIUM-TIER axis stack (2026-05-31 enrichment — 2 → 8 bespoke pools):
+  Always-on identity (sets WHAT is rendered + the painting tradition):
+    • phenomenon       — the cosmic subject (COSMIC_PHENOMENA, 200 entries)
+    • painted_tradition — painter aesthetic (Bonestell saturated planetscape / McCall NASA-watercolor / Whelan paperback / Harris vast-cinematic / Pennington dreamy-acid / Hardy poster-grandeur)
+  Gated 50% (accent layers — keeps per-render density coherent for literal models):
+    • vista_composition  — painted vista framing (terraformed-foreground-globe / two-moons-on-horizon / planetary-rings-bisecting / spiral-arm-overhead / nebula-cathedral / binary-double-shadow)
+    • narrative_witness  — tiny figure/structure as scale-prover (painted silhouette / observatory dome / ancient ruin / orbiting habitat / lone lander / generation-ship cutaway)
+    • atmospheric_layer  — terrestrial-foreground atmosphere (dust-laden / cryogenic crystal-fog / methane-blue / sulfur-yellow smog / volcanic-ash / lichen-spore drift)
+    • color_register     — painted palette signature (Jupiter amber-burgundy / Saturn ivory-cobalt / Mars rust-ochre / nebula pastel-magenta-cyan / methane-and-antifreeze)
+    • signature_phenomenon — painted-tradition cosmic drama (Kuiper-comet streak / mass-driver stream / planetary alignment / Lagrange habitat-cluster / Dyson-veil shimmer / impossible-aurora)
+  Conditional (40% gate): event — drama beat (COSMIC_VISTA_EVENT, path-bespoke — split from shared COSMIC_EVENT)`,
+    slots: {
+      universal: [
+        'story_beat',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['surprise_element'],
+      path: [
+        'phenomenon',
+        'painted_tradition',
+        'vista_composition',
+        'narrative_witness',
+        'atmospheric_layer',
+        'color_register',
+        'signature_phenomenon',
+      ],
+    },
+    pickN: { scale_provers: 3 },
+    conditionalLayer: { slot: 'event', gate: 0.4 },
+    framingModes: null,
   },
-  pickN: { scale_provers: 3 },
-  conditionalLayer: { slot: 'event', gate: 0.4 },
-  framingModes: null
-},
 
   FEMALE_EXPLORER: {
-  description: 'Sci-fi female explorer character path — gender-locked to "she/her/woman" throughout the template (per 2026-05-12 lesson: Flux uses gendered pronouns + nouns as primary gender-rendering signals, gender-neutral templates regress character renders). Full 7-axis female DNA stack composed at runtime. Character is the SHOW at MEDIUM scale (25-40% frame). Alien biome serves as her stage.',
-  slots: {
-    universal: [ 'lighting', 'weather_particulate' ],
-    bot: [ 'sky_layer', 'surprise_element' ],
-    characterDnaAxes: [ 'race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
-    path: [ 'biome', 'action', 'explorer_archetype' ]
+    description:
+      'Sci-fi female explorer character path — gender-locked to "she/her/woman" throughout the template (per 2026-05-12 lesson: Flux uses gendered pronouns + nouns as primary gender-rendering signals, gender-neutral templates regress character renders). Full 7-axis female DNA stack composed at runtime. Character is the SHOW at MEDIUM scale (25-40% frame). Alien biome serves as her stage.',
+    slots: {
+      universal: ['lighting', 'weather_particulate'],
+      bot: ['sky_layer', 'surprise_element'],
+      characterDnaAxes: ['race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['biome', 'action', 'explorer_archetype'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: null,
-  framingModes: null,
-  anchorScaleRange: null
-},
 
   MALE_EXPLORER: {
-  description: 'Sci-fi male explorer character path — gender-locked to "he/his/man" throughout the template. Sibling archetype to FEMALE_EXPLORER; separate template per gender per the 2026-05-12 hard rule about character-path gender-locking. Full 7-axis male DNA stack composed at runtime.',
-  slots: {
-    universal: [ 'lighting', 'weather_particulate' ],
-    bot: [ 'sky_layer', 'surprise_element' ],
-    characterDnaAxes: [ 'race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory' ],
-    path: [ 'biome', 'action', 'explorer_archetype' ]
+    description:
+      'Sci-fi male explorer character path — gender-locked to "he/his/man" throughout the template. Sibling archetype to FEMALE_EXPLORER; separate template per gender per the 2026-05-12 hard rule about character-path gender-locking. Full 7-axis male DNA stack composed at runtime.',
+    slots: {
+      universal: ['lighting', 'weather_particulate'],
+      bot: ['sky_layer', 'surprise_element'],
+      characterDnaAxes: ['race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['biome', 'action', 'explorer_archetype'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: null,
-  framingModes: null,
-  anchorScaleRange: null
-},
 
   CHARACTER: {
-  description: 'Figure is protagonist within a scene. Anchor at MEDIUM/LARGE scale. Slim character + location + action pools layered with full canonical axes; Sonnet weaves the figure INTO the scene.',
-  slots: {
-    universal: [
-      'story_beat',
-      'anchor_scale',
-      'composition_frame',
-      'scale_provers',
-      'weather_particulate',
-      'emotional_dna',
-      'lighting'
-    ],
-    bot: [ 'sky_layer', 'surprise_element' ],
-    path: [ 'character', 'location', 'action' ]
+    description:
+      'Figure is protagonist within a scene. Anchor at MEDIUM/LARGE scale. Slim character + location + action pools layered with full canonical axes; Sonnet weaves the figure INTO the scene.',
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['sky_layer', 'surprise_element'],
+      path: ['character', 'location', 'action'],
+    },
+    pickN: { scale_provers: 3 },
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: ['MEDIUM', 'LARGE'],
   },
-  pickN: { scale_provers: 3 },
-  conditionalLayer: { slot: 'drama', gate: 0.4 },
-  framingModes: null,
-  anchorScaleRange: [ 'MEDIUM', 'LARGE' ]
-},
 
   OUTDOOR_CITY: {
-  description: 'Architecture / city as hero. Anchor entity at TINY/SMALL scale (scale prover only). City fills 80%+ of frame. Path-bespoke pools for setting + lone city-witness (anchor_entity override) + signature deep-distance feature + conditional drama (40% gate).',
-  slots: {
-    universal: [
-      'story_beat',
-      'anchor_scale',
-      'composition_frame',
-      'scale_provers',
-      'weather_particulate',
-      'emotional_dna',
-      'lighting'
-    ],
-    bot: [ 'anchor_entity', 'sky_layer', 'surprise_element' ],
-    path: [ 'setting', 'deep_distance' ]
+    description:
+      'Architecture / city as hero. Anchor entity at TINY/SMALL scale (scale prover only). City fills 80%+ of frame. Path-bespoke pools for setting + lone city-witness (anchor_entity override) + signature deep-distance feature + conditional drama (40% gate).',
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['anchor_entity', 'sky_layer', 'surprise_element'],
+      path: ['setting', 'deep_distance'],
+    },
+    pickN: { scale_provers: 2 },
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: ['TINY', 'SMALL'],
   },
-  pickN: { scale_provers: 2 },
-  conditionalLayer: { slot: 'drama', gate: 0.4 },
-  framingModes: null,
-  anchorScaleRange: [ 'TINY', 'SMALL' ]
-},
 
   SPACE_OPERA: {
-  description: 'Sci-fi spaceship as anchor entity, MEDIUM/LARGE scale. Hero ship in cosmic setting with optional 50%-gated wide-action mode (multi-ship battle/traffic chaos with two sub-pools rolled together).',
-  slots: {
-    universal: [
-      'story_beat',
-      'anchor_scale',
-      'composition_frame',
-      'scale_provers',
-      'weather_particulate',
-      'emotional_dna',
-      'lighting'
-    ],
-    bot: [ 'sky_layer', 'surprise_element' ],
-    path: [ 'ship', 'setting', 'ship_action' ]
+    description: `Sci-fi spaceship as anchor entity, MEDIUM/LARGE scale. Hero ship in cosmic setting with optional 50%-gated wide-action mode (multi-ship battle/traffic chaos with two sub-pools rolled together).
+
+PREMIUM-TIER axis stack (2026-05-31 reactivation + enrichment — paritying space-femme/explorer richness):
+  • ship                   — primary anchor entity (slim, ~30 entries)
+  • setting                — cosmic environment wrapping the ship
+  • ship_action            — posture/state/motion
+  • crew_signal            — visible life ON the ship (lit bridge silhouettes / EVA teams / gunner cupolas / deck crews) — gives the ship LIFE
+  • faction_iconography    — visible markings/badges/colors hinting at allegiance (corp sigils / military squadron numerals / pirate banners / alien-empire glyphs)
+  • propulsion_signature   — engine/drive aesthetic (plasma cone / antimatter glare / fusion torch / silent ion blue / quantum-jump signature) — strong visual identity differentiator
+  • genre_register         — narrative tone (military thriller / pirate adventure / diplomatic incident / first contact / lost-ship horror / smuggler chase / generation-ship arrival)
+  • signature_hull_feature — the one weird memorable detail per ship (asymmetric exhaust manifold / ribbed armor pattern / glasshouse observation pod / battle-scar mosaic) — readable focus
+  • CONDITIONAL (50% gate): traffic (BUSY_FLEET_ELEMENTS ×3) + battle (BATTLE_DYNAMICS ×3) — wide-action multi-ship mode`,
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['sky_layer', 'surprise_element'],
+      path: [
+        'ship',
+        'setting',
+        'ship_action',
+        'crew_signal',
+        'faction_iconography',
+        'propulsion_signature',
+        'genre_register',
+        'signature_hull_feature',
+      ],
+    },
+    pickN: { scale_provers: 3 },
+    conditionalLayer: {
+      gate: 0.5,
+      pools: {
+        traffic: { name: 'BUSY_FLEET_ELEMENTS', pickN: 3 },
+        battle: { name: 'BATTLE_DYNAMICS', pickN: 3 },
+      },
+    },
+    framingModes: null,
+    anchorScaleRange: ['MEDIUM', 'LARGE'],
   },
-  pickN: { scale_provers: 3 },
-  conditionalLayer: {
-    gate: 0.5,
-    pools: { traffic: { name: 'BUSY_FLEET_ELEMENTS', pickN: 3 }, battle: { name: 'BATTLE_DYNAMICS', pickN: 3 } }
-  },
-  framingModes: null,
-  anchorScaleRange: [ 'MEDIUM', 'LARGE' ]
-},
 
   MEGASTRUCTURE: {
-  description: 'Colossal post-planetary engineered construct as hero — orbital rings, Dyson constructs, planetary mantles, megaships. Anchor at TINY/SMALL (scale prover). Structure fills 85%+ of frame. Path-bespoke pools for setting + lone structure-scale witness (anchor_entity override) + signature deep-distance feature + conditional drama (40% gate).',
-  slots: {
-    universal: [
-      'story_beat',
-      'anchor_scale',
-      'composition_frame',
-      'scale_provers',
-      'weather_particulate',
-      'emotional_dna',
-      'lighting'
-    ],
-    bot: [ 'anchor_entity', 'sky_layer', 'surprise_element' ],
-    path: [ 'setting', 'deep_distance' ]
+    description:
+      'Colossal post-planetary engineered construct as hero — orbital rings, Dyson constructs, planetary mantles, megaships. Anchor at TINY/SMALL (scale prover). Structure fills 85%+ of frame. Path-bespoke pools for setting + lone structure-scale witness (anchor_entity override) + signature deep-distance feature + conditional drama (40% gate).',
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['anchor_entity', 'sky_layer', 'surprise_element'],
+      path: ['setting', 'deep_distance'],
+    },
+    pickN: { scale_provers: 3 },
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: ['TINY', 'SMALL'],
   },
-  pickN: { scale_provers: 3 },
-  conditionalLayer: { slot: 'drama', gate: 0.4 },
-  framingModes: null,
-  anchorScaleRange: [ 'TINY', 'SMALL' ]
-},
 
   ALIEN_LANDSCAPE: {
-  description: 'Alien planet biome as hero. Anchor entity at TINY/SMALL scale (silhouette scale prover). Path-bespoke pools for biome, lone wilderness witness (anchor_entity overrides bot default), candid landscape moment, signature deep-distance feature. Bot surprise_element is wired (was previously missing).',
-  slots: {
-    universal: [
-      'story_beat',
-      'anchor_scale',
-      'composition_frame',
-      'scale_provers',
-      'weather_particulate',
-      'emotional_dna',
-      'lighting'
-    ],
-    bot: [ 'anchor_entity', 'sky_layer', 'surprise_element' ],
-    path: [ 'biome', 'moment', 'deep_distance' ]
+    description:
+      'Alien planet biome as hero. Anchor entity at TINY/SMALL scale (silhouette scale prover). Path-bespoke pools for biome, lone wilderness witness (anchor_entity overrides bot default), candid landscape moment, signature deep-distance feature. Bot surprise_element is wired (was previously missing).',
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['anchor_entity', 'sky_layer', 'surprise_element'],
+      path: ['biome', 'moment', 'deep_distance'],
+    },
+    pickN: { scale_provers: 2 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: ['TINY', 'SMALL'],
   },
-  pickN: { scale_provers: 2 },
-  conditionalLayer: null,
-  framingModes: null,
-  anchorScaleRange: [ 'TINY', 'SMALL' ]
-},
 
   PHOTOREAL_ASTRO: {
-  description: 'NASA-grade photoreal astrophotography — slim seed (named astronomical objects) + full canonical axes. Sonnet weaves the layers; medium wrapper adds Hubble/JWST/Chandra/EHT cranked-to-11 framing.',
-  slots: {
-    universal: [ 'story_beat', 'composition_frame', 'scale_provers', 'weather_particulate', 'emotional_dna', 'lighting' ],
-    bot: [ 'surprise_element' ],
-    path: [ 'subject' ]
+    description: `NASA-grade photoreal astrophotography — Hubble / JWST / Chandra / ALMA / EHT cranked-to-11 framing.
+
+PREMIUM-TIER axis stack (2026-05-31 enrichment — 2 → 8 bespoke pools):
+  Always-on identity (sets WHAT is rendered + the rendering tradition):
+    • subject               — the astronomical subject (REAL_SPACE_SUBJECTS, 106 entries)
+    • wavelength_signature  — telescope/instrument tradition (Hubble visible / JWST IR / Chandra X-ray / ALMA radio / EHT event-horizon) — each renders very differently
+  Gated 50% (accent layers — keeps per-render density coherent for literal models):
+    • structural_detail     — visible features (jets / accretion disks / shock fronts / stellar nurseries / polar lobes / dust lanes)
+    • color_palette_band    — false-color register (Pillars orange+teal / JWST burnt-amber+cobalt / Chandra purple-cyan)
+    • scale_anchor          — astro scale-prover (foreground asteroid / nearby star with diffraction cross / approaching probe / contrasting smaller galaxy)
+    • composition_focus     — astro composition (centered jewel-box / edge-on disk / spiral-arm hero / merging-galaxies / Dyson-sphere transit / nebula-into-void)
+    • narrative_phase       — cosmic moment (birth: star formation / death: supernova / collision: galaxy merge / quiet majesty / aftermath / discovery)
+  Conditional (35% gate): event — drama beat (REAL_SPACE_EVENT, path-bespoke — split from shared COSMIC_EVENT)`,
+    slots: {
+      universal: [
+        'story_beat',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['surprise_element'],
+      path: [
+        'subject',
+        'wavelength_signature',
+        'structural_detail',
+        'color_palette_band',
+        'scale_anchor',
+        'composition_focus',
+        'narrative_phase',
+      ],
+    },
+    pickN: { scale_provers: 3 },
+    conditionalLayer: { slot: 'event', gate: 0.35 },
+    framingModes: null,
   },
-  pickN: { scale_provers: 3 },
-  conditionalLayer: { slot: 'event', gate: 0.35 },
-  framingModes: null
-},
 };

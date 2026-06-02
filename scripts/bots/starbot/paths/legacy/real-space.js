@@ -34,14 +34,18 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   // ── Conditional COSMIC_EVENT drama layer (35% gate — slightly lower than
   // cosmic-vista because the subject often already implies its own drama) ──
   const isCosmicEvent = Math.random() < 0.35;
-  const cosmicEvent = isCosmicEvent ? picker.pickWithRecency(pools.COSMIC_EVENT, 'cosmic_event') : null;
-  const eventSection = isCosmicEvent ? `
+  const cosmicEvent = isCosmicEvent
+    ? picker.pickWithRecency(pools.COSMIC_EVENT, 'cosmic_event')
+    : null;
+  const eventSection = isCosmicEvent
+    ? `
 ━━━ COSMIC EVENT — render this drama visibly ACTIVE in the scene ━━━
 ${cosmicEvent}
 
 The event is happening RIGHT NOW in the frame — caught mid-detonation, mid-collision, mid-eruption. If the subject above already shows a similar phenomenon, AMPLIFY it (more violent, more luminous, more visible). If the subject is more static (a planet / moon / asteroid field), the event happens behind/beyond it.
 
-` : '';
+`
+    : '';
 
   return `You are an astrophotographer writing a REAL SPACE scene for StarBot — photoreal NASA / Hubble / JWST / Chandra / EHT multi-wavelength composite astrophotography. REAL astronomical subjects, not fictional sci-fi. The universe is already jaw-dropping — render it faithfully, then PUNCH the color and saturation. Output wraps with style prefix + suffix.
 

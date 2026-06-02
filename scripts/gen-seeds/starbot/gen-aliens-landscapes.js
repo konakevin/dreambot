@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/aliens_landscapes.json',
   total: 50,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ALIENS-CODED LANDSCAPE entries for StarBot's aliens-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ALIEN PLANET VISTA in the Alien / Aliens / Prometheus aesthetic tradition — wind-blasted alien moon surfaces, derelict-spaceship-graveyard landscapes, atmospheric processor silhouettes in distance, primordial bioluminescent terrain, hellish-but-beautiful otherworldly vistas, ash-storm-swept colony exteriors.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ALIENS-CODED LANDSCAPE entries for StarBot's aliens-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ALIEN PLANET VISTA in the Alien / Aliens / Prometheus aesthetic tradition — wind-blasted alien moon surfaces, derelict-spaceship-graveyard landscapes, atmospheric processor silhouettes in distance, primordial bioluminescent terrain, hellish-but-beautiful otherworldly vistas, ash-storm-swept colony exteriors.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO XENOMORPHS. Pure landscape only.
 
@@ -68,4 +70,7 @@ HELLISH BUT BEAUTIFUL OTHERWORLDLY (~4):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

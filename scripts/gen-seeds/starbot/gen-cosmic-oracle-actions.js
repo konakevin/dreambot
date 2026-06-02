@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/cosmic_oracle_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} DYNAMIC ACTION descriptions for StarBot's cosmic-oracle path — a sci-fi character DOING something physically compelling. Every entry must produce an image where the character's BODY IS IN MOTION or EXERTING FORCE. These are action-movie freeze-frames, not portraits of people sitting around.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DYNAMIC ACTION descriptions for StarBot's cosmic-oracle path — a sci-fi character DOING something physically compelling. Every entry must produce an image where the character's BODY IS IN MOTION or EXERTING FORCE. These are action-movie freeze-frames, not portraits of people sitting around.
 
 Each entry: 12-22 words. ONE specific dynamic action. GENDER-AGNOSTIC language — use "the figure" / "they".
 
@@ -59,4 +61,7 @@ Max 2-3 entries using the same verb. Rotate across: diving, climbing, hauling, s
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

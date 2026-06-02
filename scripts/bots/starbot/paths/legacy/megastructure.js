@@ -38,13 +38,19 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const anchorScale = pickScaleFromRange(pools.ANCHOR_SCALE, ANCHOR_SCALE_RANGE, picker);
   const compositionFrame = picker.pickWithRecency(pools.COMPOSITION_FRAME, 'composition_frame');
   const scaleProvers = pickN(pools.SCALE_PROVERS, 3, picker);
-  const weatherParticulate = picker.pickWithRecency(pools.WEATHER_PARTICULATE, 'weather_particulate');
+  const weatherParticulate = picker.pickWithRecency(
+    pools.WEATHER_PARTICULATE,
+    'weather_particulate'
+  );
   const emotionalDna = picker.pickWithRecency(pools.EMOTIONAL_DNA, 'emotional_dna');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const anchorEntity = picker.pickWithRecency(pools.STARBOT_ANCHOR_ENTITY, 'starbot_anchor_entity');
   const skyLayer = picker.pickWithRecency(pools.ALIEN_SKY_LAYER, 'alien_sky_layer');
   const surpriseElement = picker.pickWithRecency(pools.SURPRISE_ELEMENT, 'surprise_element');
-  const megastructure = picker.pickWithRecency(pools.MEGASTRUCTURE_SETTING, 'megastructure_setting');
+  const megastructure = picker.pickWithRecency(
+    pools.MEGASTRUCTURE_SETTING,
+    'megastructure_setting'
+  );
 
   return `You are a sci-fi concept-art painter writing a SINGLE CINEMATIC FRAME of a colossal megastructure for StarBot. The megastructure is the HERO; the anchor entity proves the impossible scale. Output wraps with style prefix + suffix.
 

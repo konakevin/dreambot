@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/dune_architecture.json',
   total: 50,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DUNE-CODED ARCHITECTURE entries for StarBot's dune-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR or STRUCTURAL EXTERIOR in the Dune aesthetic tradition — desert-empire palaces, fremen sietch cave-cities, harkonnen brutalist industrial halls, imperial throne chambers, water-cathedral reservoirs, ornithopter hangars, sandstone fortresses.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DUNE-CODED ARCHITECTURE entries for StarBot's dune-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR or STRUCTURAL EXTERIOR in the Dune aesthetic tradition — desert-empire palaces, fremen sietch cave-cities, harkonnen brutalist industrial halls, imperial throne chambers, water-cathedral reservoirs, ornithopter hangars, sandstone fortresses.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE. Pure architecture / spaces only.
 
@@ -70,4 +72,7 @@ ANCIENT CORRIDORS / PASSAGES (~5):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

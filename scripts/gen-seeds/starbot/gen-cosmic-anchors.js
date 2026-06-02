@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/cosmic_anchors.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} FOREGROUND ANCHOR ELEMENTS for cosmic vista scenes in StarBot. Each is a physical object or structure that sits in the FOREGROUND or MIDGROUND of a vast cosmic scene, giving it SCALE and GROUNDING. 15-25 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FOREGROUND ANCHOR ELEMENTS for cosmic vista scenes in StarBot. Each is a physical object or structure that sits in the FOREGROUND or MIDGROUND of a vast cosmic scene, giving it SCALE and GROUNDING. 15-25 words each.
 
 ━━━ WHAT THESE ARE ━━━
 The thing in the FOREGROUND that makes the cosmic background feel IMPOSSIBLY VAST. Without an anchor, a nebula is just a pretty gradient. WITH an anchor — a tiny space station silhouetted against it, a derelict ship drifting past, an asteroid catching light — suddenly the nebula is ENORMOUS and the viewer feels SMALL.
@@ -34,4 +36,7 @@ No two anchors should be the same type of object. Each must create a DIFFERENT s
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

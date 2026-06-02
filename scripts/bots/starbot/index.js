@@ -95,10 +95,7 @@ module.exports = {
     // MINUS Flux 2 Flex + MINUS Banana (heart-bans from today's comparison
     // test), AND MINUS Flux 1.1 Pro (Ultra is strictly better — Pro is
     // redundant when Ultra is present). Down to 2 models.
-    'cosmic-vista': [
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'cosmic-vista': ['openai/gpt-image-2', 'black-forest-labs/flux-1.1-pro-ultra'],
     // alien-landscape (Kevin 2026-05-31): bot-wide MINUS Flux 2 Flex,
     // MINUS Banana (heart-ban), AND MINUS Flux 1.1 Pro (redundant w/ Ultra).
     // Down to 3 models.
@@ -136,10 +133,7 @@ module.exports = {
     // F1.1 Ultra after 3 model-test rounds — Banana / F2 Pro / F2 Flex
     // produced "too messy" renders even with gating; F1.1 Ultra ships clean,
     // GPT-2 handles the gated density well.
-    'space-opera': [
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'space-opera': ['openai/gpt-image-2', 'black-forest-labs/flux-1.1-pro-ultra'],
     // real-space (Kevin 2026-05-31): GPT-2 + F1.1 Pro + F1.1 Ultra after the
     // premium-tier axis enrichment + 9-render test. Banana / F2 Pro / F2 Flex
     // remain banned. F1.1 Pro kept (Kevin's "keep Pro on non-character paths"

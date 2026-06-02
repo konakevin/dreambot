@@ -24,6 +24,14 @@ module.exports = {
   archetype: 'PHOTOREAL_ASTRO',
   pools: {
     subject: 'REAL_SPACE_SUBJECTS', // primary subject (fat seed — path-bespoke)
-    event: 'COSMIC_EVENT', // 35%-gated conditional drama
+    // NEW path-bespoke axes (2026-05-31 enrichment from 2 → 8 bespoke pools):
+    wavelength_signature: 'REAL_SPACE_WAVELENGTH_SIGNATURE', // ALWAYS-ON identity — telescope tradition
+    structural_detail: 'REAL_SPACE_STRUCTURAL_DETAIL', // 50%-gated — visible physical features
+    color_palette_band: 'REAL_SPACE_COLOR_PALETTE_BAND', // 50%-gated — false-color register
+    scale_anchor: 'REAL_SPACE_SCALE_ANCHOR', // 50%-gated — astro scale-prover
+    composition_focus: 'REAL_SPACE_COMPOSITION_FOCUS', // 50%-gated — astro composition
+    narrative_phase: 'REAL_SPACE_NARRATIVE_PHASE', // 50%-gated — cosmic moment captured
+    // Split from shared COSMIC_EVENT — path-bespoke per cross-bot rule
+    event: 'REAL_SPACE_EVENT', // 35%-gated conditional drama
   },
 };

@@ -7,24 +7,26 @@ owns cyborg-woman territory — StarBot does not.
 
 ## 8 render paths
 
-| Path | What it is |
-|---|---|
-| `cosmic-vista` | Fictional sci-fi cosmic phenomenon — nebula skies, black-hole, binary-sun, ringed-planet |
-| `alien-landscape` | Alien planet surfaces — bioluminescent jungles, crystal deserts, methane lakes |
-| `space-opera` | Epic fleet/battle — capital ships, armadas, dogfights, boarding |
-| `sci-fi-interior` | Epic interior scale — bridge, corridor, hangar, Blade-Runner apartment |
-| `cozy-sci-fi-interior` | Warm sci-fi pocket — quarters with plants, station cafe, captain's study |
-| `alien-city` | Vast alien city from above — Coruscant, floating-platform, dome-city |
-| `robot-moment` | Solo robot having tranquil human moment — meditating, reading, stargazing |
-| `real-space` | PHOTOREAL astrophotography — Hubble/JWST real nebulae/galaxies/planets |
+| Path                   | What it is                                                                               |
+| ---------------------- | ---------------------------------------------------------------------------------------- |
+| `cosmic-vista`         | Fictional sci-fi cosmic phenomenon — nebula skies, black-hole, binary-sun, ringed-planet |
+| `alien-landscape`      | Alien planet surfaces — bioluminescent jungles, crystal deserts, methane lakes           |
+| `space-opera`          | Epic fleet/battle — capital ships, armadas, dogfights, boarding                          |
+| `sci-fi-interior`      | Epic interior scale — bridge, corridor, hangar, Blade-Runner apartment                   |
+| `cozy-sci-fi-interior` | Warm sci-fi pocket — quarters with plants, station cafe, captain's study                 |
+| `alien-city`           | Vast alien city from above — Coruscant, floating-platform, dome-city                     |
+| `robot-moment`         | Solo robot having tranquil human moment — meditating, reading, stargazing                |
+| `real-space`           | PHOTOREAL astrophotography — Hubble/JWST real nebulae/galaxies/planets                   |
 
 ## Axes rolled per render
 
 Shared:
+
 - `scene_palette` — cosmic/sci-fi palette
 - `colorPalette` — secondary lighting keyed to vibe
 
 Path-specific (all 50-entry Sonnet-seeded pools):
+
 - `cosmic_phenomena` — fictional sci-fi space physics
 - `alien_landscapes` — alien surfaces
 - `space_opera_scenes` — battle/fleet moments

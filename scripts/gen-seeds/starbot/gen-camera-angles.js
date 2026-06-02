@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/camera_angles.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CAMERA ANGLE / SHOT FRAMING descriptions for StarBot — cinematic camera compositions for sci-fi scenes. 15-25 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CAMERA ANGLE / SHOT FRAMING descriptions for StarBot — cinematic camera compositions for sci-fi scenes. 15-25 words each.
 
 ━━━ WHAT THESE ARE ━━━
 Each entry describes a specific camera position, angle, lens choice, and framing approach. These get injected into sci-fi scene prompts to force variety in how scenes are composed. They should describe WHERE the camera is and HOW it sees the scene — NOT what's in the scene.
@@ -39,4 +41,7 @@ No two entries should share the same camera height + angle + lens feel:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

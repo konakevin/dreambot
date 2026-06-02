@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} dynamic BODY-SHAPING ACTIONS for sci-fi explorer characters in StarBot. Each describes what a character is physically doing RIGHT NOW — pose-first, caught mid-moment. 15-25 words each. Gender-neutral (used for both male and female).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} dynamic BODY-SHAPING ACTIONS for sci-fi explorer characters in StarBot. Each describes what a character is physically doing RIGHT NOW — pose-first, caught mid-moment. 15-25 words each. Gender-neutral (used for both male and female).
 
 ━━━ WHAT THESE ARE ━━━
 Freeze-frame moments of ACTION. The camera just clicked and caught this person mid-motion. The action shapes the body into a visually interesting SILHOUETTE that Flux can render clearly. Every action should create a DISTINCT body shape — arms in different positions, weight on different legs, torso at different angles.
@@ -44,4 +46,7 @@ No two actions should create the same body silhouette:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

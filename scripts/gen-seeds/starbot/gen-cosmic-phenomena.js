@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/cosmic_phenomena.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COSMIC PHENOMENA descriptions for StarBot's cosmic-vista path — FICTIONAL sci-fi space/cosmic marvels. Blade-Runner/Dune/Interstellar style. Pure environment, no characters.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COSMIC PHENOMENA descriptions for StarBot's cosmic-vista path — FICTIONAL sci-fi space/cosmic marvels. Blade-Runner/Dune/Interstellar style. Pure environment, no characters.
 
 Each entry: 15-30 words. One specific cosmic phenomenon with scale-and-detail context.
 
@@ -44,4 +46,7 @@ Each entry: 15-30 words. One specific cosmic phenomenon with scale-and-detail co
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

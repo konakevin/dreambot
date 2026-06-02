@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/guardians_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} GUARDIANS-OF-THE-GALAXY-CODED ARCHITECTURE entries for StarBot's guardians-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the GotG aesthetic tradition — severed-Celestial-skull mining colony interiors, gold-aesthetic ornate halls, neon nightclub interiors, ravager-pirate-ship interiors, ego-living-planet biological palaces, kaleidoscopic crystal-chamber interiors.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GUARDIANS-OF-THE-GALAXY-CODED ARCHITECTURE entries for StarBot's guardians-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the GotG aesthetic tradition — severed-Celestial-skull mining colony interiors, gold-aesthetic ornate halls, neon nightclub interiors, ravager-pirate-ship interiors, ego-living-planet biological palaces, kaleidoscopic crystal-chamber interiors.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO ALIENS-AS-FIGURES. Pure architecture only.
 
@@ -67,4 +69,7 @@ OUTLAW FRONTIER SALOONS (~3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -21,7 +21,9 @@ generatePool({
   total: 65, // existing 50 + 15 new
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} robot entries to ADD to an existing pool. Each entry is a DENSE phrase (40-60 words) describing a SPECIFIC mecha-grade FULLY-ARMORED autonomous machine.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} robot entries to ADD to an existing pool. Each entry is a DENSE phrase (40-60 words) describing a SPECIFIC mecha-grade FULLY-ARMORED autonomous machine.
 
 These ${n} entries fill the CLASSIC CINEMATIC FUNCTIONAL DROID SILHOUETTE cluster. Body type and armor density vary by aesthetic target — some are heavily armored, some stiff-jointed protocol bipeds, some weathered-shell utility droids, some hovering probe-spheres. The ONE forbidden body type: skeletal / endoskeleton / "robot underneath the skin" exposed-bone frames — those look horror-skeletal not hero-mecha.
 
@@ -61,4 +63,7 @@ A7. **Asymmetric hunter-droid** — bipedal hunter with one massive cannon-arm a
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Vary across the seven aesthetic targets above.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

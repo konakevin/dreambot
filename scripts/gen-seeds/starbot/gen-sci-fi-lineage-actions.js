@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_lineage_actions.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} RACE-FLAVORED MOTION-FIRST action entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (10-22 words) describing a SIGNATURE MID-MOTION gesture / body-position that lets a sci-fi lineage's flavor SHINE while exploring.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} RACE-FLAVORED MOTION-FIRST action entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (10-22 words) describing a SIGNATURE MID-MOTION gesture / body-position that lets a sci-fi lineage's flavor SHINE while exploring.
 
 CRITICAL — ABSOLUTELY NO SEATED / SITTING / KNEELING-STILL / MEDITATION / EYES-CLOSED / LEANING-BACK / CURLED-UP / RESTING poses. The character is ALWAYS in motion or caught mid-action while exploring.
 
@@ -69,4 +71,7 @@ HOODED / CULTURAL — MID-MOTION (1-2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. NO seated poses, NO franchise names.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

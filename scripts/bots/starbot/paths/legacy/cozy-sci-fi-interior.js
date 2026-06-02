@@ -37,21 +37,25 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   // ── Conditional COZY_MOMENT drama layer (40% gate) ──
   const isCozyMoment = Math.random() < 0.4;
   const cozyMoment = isCozyMoment ? picker.pickWithRecency(pools.COZY_MOMENT, 'cozy_moment') : null;
-  const momentSection = isCozyMoment ? `
+  const momentSection = isCozyMoment
+    ? `
 ━━━ COZY MOMENT — render this specific moment visibly in the scene ━━━
 ${cozyMoment}
 
 This moment is the focal point of the render — render it precisely as described, in scale and position appropriate to the framing. Small, human, intimate.
 
-` : '';
+`
+    : '';
 
   // ── Framing mode (30% zoom-in / 70% wide-room) ──
   const isZoomIn = Math.random() < 0.3;
-  const framingSection = isZoomIn ? `
+  const framingSection = isZoomIn
+    ? `
 ━━━ FRAMING MODE — ZOOM IN (CENTERPIECE WINDOW) ━━━
 This render is in ZOOM-IN mode (30% of renders). The viewport / observation window is the DOMINANT focal point — fills a large portion of the frame, draws the eye immediately to the cosmic vista beyond. Cozy room elements (chair, blankets, lamps, instruments) wrap around the window as supporting frame. The viewer should feel like they're SITTING IN THE COZY SPACE LOOKING OUT at something wondrous.
 
-` : `
+`
+    : `
 ━━━ FRAMING MODE — WIDE ROOM (DEFAULT) ━━━
 This render is in WIDE-ROOM mode (70% of renders). The cozy ROOM is the subject — its lived-in details, personal mementos, warmth sources, holo-UI, worn furniture, plants, tools fill the foreground and dominate the composition. Any window is ONE element among many — clearly visible but not centerpiece. The viewer's eye should wander the rich room interior; the window anchors the sci-fi setting in the periphery.
 

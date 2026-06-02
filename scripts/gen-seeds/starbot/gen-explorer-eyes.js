@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_eyes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of explorer eyes AND how sci-fi-world light interacts — cockpit HUD glow, nebula aurora reflection, ship-corridor red-light, alien-star catch.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of explorer eyes AND how sci-fi-world light interacts — cockpit HUD glow, nebula aurora reflection, ship-corridor red-light, alien-star catch.
 
 ━━━ COLOR SPREAD (enforce diversity across ${n}) ━━━
 - AMBER / GOLD (4-5) — molten amber catching cockpit HUD glow, warm honey-amber with copper rings around the pupil, dark amber that glints in nebula-light, dragon-gold eyes burning under aurora, antique-bronze gold with darker outer rim
@@ -23,4 +25,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

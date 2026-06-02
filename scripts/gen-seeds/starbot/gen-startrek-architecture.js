@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/startrek_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} STAR-TREK-CODED ARCHITECTURE entries for StarBot's star-trek-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the Star Trek aesthetic tradition — Federation starship bridge, Borg cube hexagonal corridor, Klingon volcanic-stone hall, Bajoran orange-stone temple, Cardassian station promenade, Romulan throne chamber, Vulcan red-stone meditation chamber, Trill cave-temple, Risa tropical resort lounge.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STAR-TREK-CODED ARCHITECTURE entries for StarBot's star-trek-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the Star Trek aesthetic tradition — Federation starship bridge, Borg cube hexagonal corridor, Klingon volcanic-stone hall, Bajoran orange-stone temple, Cardassian station promenade, Romulan throne chamber, Vulcan red-stone meditation chamber, Trill cave-temple, Risa tropical resort lounge.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO BORG-DRONES, NO FEDERATION-OFFICERS-AS-FIGURES. Pure architecture only.
 
@@ -70,4 +72,7 @@ UNDERGROUND BASE / SECRET FACILITY (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

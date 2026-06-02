@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_cozy_locations.json',
   total: 25,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} COZY / SOCIAL / DOWNTIME location entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a SPECIFIC cozy / social / off-duty space-station-or-ship location where the explorer is CANDID at rest or socializing.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY / SOCIAL / DOWNTIME location entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a SPECIFIC cozy / social / off-duty space-station-or-ship location where the explorer is CANDID at rest or socializing.
 
 These are PLACES, not actions. The character will be IN this place, doing something peaceful. The location is the BACKDROP for relaxed downtime — they're off-duty.
 
@@ -58,4 +60,7 @@ CAFE / FOOD (3-4):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

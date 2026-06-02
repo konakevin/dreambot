@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/space_opera_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SPACE OPERA SCENE descriptions for StarBot's space-opera path. Epic ships + cosmic scale. The SHIPS are the stars — varied, visually stunning, from across ALL sci-fi design traditions. NOT just grey naval carriers.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SPACE OPERA SCENE descriptions for StarBot's space-opera path. Epic ships + cosmic scale. The SHIPS are the stars — varied, visually stunning, from across ALL sci-fi design traditions. NOT just grey naval carriers.
 
 Each entry: 15-30 words. One specific scene featuring one or more visually distinct ships.
 
@@ -40,4 +42,7 @@ Each entry: 15-30 words. One specific scene featuring one or more visually disti
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

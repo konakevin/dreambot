@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/male_explorers.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} descriptions of BADASS MALE sci-fi explorers for StarBot. Each is a powerful, rugged MAN in ornate space gear. 25-40 words. Start every entry with "A powerful male" or "A massive male" or "A rugged male" — the image model MUST know he is a man.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} descriptions of BADASS MALE sci-fi explorers for StarBot. Each is a powerful, rugged MAN in ornate space gear. 25-40 words. Start every entry with "A powerful male" or "A massive male" or "A rugged male" — the image model MUST know he is a man.
 
 ━━━ WHO THESE MEN ARE ━━━
 These are the most badass, awe-inspiring men in all of sci-fi. When you see one, you think "fuck yeah" — raw masculine energy, ornate gear that looks like it was forged by legendary armorers, the kind of presence that makes you want to follow them into battle. Grizzled, powerful, dangerous, magnificent.
@@ -43,4 +45,7 @@ No two characters should share species + hair style + distinguishing feature. Sp
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

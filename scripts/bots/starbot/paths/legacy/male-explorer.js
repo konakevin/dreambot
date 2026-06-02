@@ -15,7 +15,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const biome = picker.pickWithRecency(pools.ALIEN_PLANET_BIOME, 'alien_planet_biome');
   const skyLayer = picker.pickWithRecency(pools.ALIEN_SKY_LAYER, 'alien_sky_layer');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const weatherParticulate = picker.pickWithRecency(pools.WEATHER_PARTICULATE, 'weather_particulate');
+  const weatherParticulate = picker.pickWithRecency(
+    pools.WEATHER_PARTICULATE,
+    'weather_particulate'
+  );
   const action = picker.pickWithRecency(pools.CHARACTER_ACTION, 'character_action');
   const surpriseElement = picker.pickWithRecency(pools.SURPRISE_ELEMENT, 'surprise_element');
 

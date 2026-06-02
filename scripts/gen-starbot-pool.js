@@ -59,7 +59,6 @@ if (!POOL) {
 // Per-pool recipe — what kind of scenes this pool authors + aesthetic
 // touchpoints Sonnet should draw from. Same format the playbook uses.
 const POOL_RECIPES = {
-
   // ════════════════════════════════════════════════════════
   // SPACE-FEMME PATH (2026-05-23 — new StarBot path)
   // Push-to-11 ornate female-figure poster art.
@@ -539,7 +538,8 @@ EXAMPLES (10):
   },
 
   alien_cities: {
-    theme: 'vast alien CITY scenes — multi-tier megacity density, planet-scale ecumenopolis, layered urban verticality, atmospheric depth. NOT a single hero building — DENSE cities with hundreds of supporting structures.',
+    theme:
+      'vast alien CITY scenes — multi-tier megacity density, planet-scale ecumenopolis, layered urban verticality, atmospheric depth. NOT a single hero building — DENSE cities with hundreds of supporting structures.',
     touchpoints: [
       'Coruscant (planet-city stacked levels)',
       'Blade Runner 2049 megaholograms + fog layers',
@@ -557,7 +557,8 @@ EXAMPLES (10):
     instructions: `Each city must feel like a CIVILIZATION, not a single building. The MG layer is where this is proven — name DOZENS of supporting structures, hundreds of windows, multi-elevation skybridges, tiny ships threading the gaps. The Hero anchor is dominant but never alone.`,
   },
   alien_landscapes: {
-    theme: 'alien planetary surfaces — distinctive biomes with strong geological / biological / atmospheric identity. NOT generic "alien planet" — each is a specific ecology.',
+    theme:
+      'alien planetary surfaces — distinctive biomes with strong geological / biological / atmospheric identity. NOT generic "alien planet" — each is a specific ecology.',
     touchpoints: [
       'Dune Arrakis (twin suns, biblical desert scale)',
       'Solaris ocean (sentient world)',
@@ -566,12 +567,13 @@ EXAMPLES (10):
       'Avatar Pandora (bioluminescent verticality)',
       'Beksinski painted dread landscapes',
       'Brian Despain alien-flora paintings',
-      "Roadside Picnic Zone (broken physics)",
+      'Roadside Picnic Zone (broken physics)',
     ],
     instructions: `Each landscape must read as a specific ecology — biology, geology, atmosphere coherent. MG layer: biology / formations / weather. Scene must include EITHER a sentient figure (1-2% frame, midground-back silhouette) OR an alien creature native to this world.`,
   },
   sleek_female_explorer_outfits: {
-    theme: 'Sleek, form-fit FUTURISTIC EVA EXPLORER outfits modeled on the StarBot-hearted exemplars 2026-05-12: gold-mirror-visor pressure-suit climbers, hydraulic-exoskeleton scientists with brass chestplates, prone marksmen in olive-drab + chrome chest plates, bald-tattooed bubble-helm scouts, Tron-blue circuit-line android operatives. Every outfit is a complete EVA-class explorer kit — form-fitting pressure suit base + sealed helmet + multiple pieces of visible engineered tech + ONE distinguishing identity marker that makes her unmistakably herself. Sci-fi paperback-cover oil-painting tradition: Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Frank-Kelly-Freas covers.\n\nABSOLUTE BAN — NO Mandalorian / NO beskar plate / NO T-visor / NO Boba Fett / NO Star Wars helmet language. Flux renders the actual franchise IP from those tokens regardless of brief admonitions. Use generic descriptive language instead (sealed visor / bubble helmet / gold mirror visor / amber HUD faceplate / full-coverage helm).',
+    theme:
+      'Sleek, form-fit FUTURISTIC EVA EXPLORER outfits modeled on the StarBot-hearted exemplars 2026-05-12: gold-mirror-visor pressure-suit climbers, hydraulic-exoskeleton scientists with brass chestplates, prone marksmen in olive-drab + chrome chest plates, bald-tattooed bubble-helm scouts, Tron-blue circuit-line android operatives. Every outfit is a complete EVA-class explorer kit — form-fitting pressure suit base + sealed helmet + multiple pieces of visible engineered tech + ONE distinguishing identity marker that makes her unmistakably herself. Sci-fi paperback-cover oil-painting tradition: Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Frank-Kelly-Freas covers.\n\nABSOLUTE BAN — NO Mandalorian / NO beskar plate / NO T-visor / NO Boba Fett / NO Star Wars helmet language. Flux renders the actual franchise IP from those tokens regardless of brief admonitions. Use generic descriptive language instead (sealed visor / bubble helmet / gold mirror visor / amber HUD faceplate / full-coverage helm).',
     touchpoints: [
       'Mass Effect Andromeda Pathfinder Ryder — form-fit N7 + sealed helmet + amber HUD visor',
       'Apollo / NASA EVA pressure suit — sealed bubble helmet + life-support backpack',
@@ -624,7 +626,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     })(),
   },
   cozy_warmth_source: {
-    theme: 'The ONE dominant warmth source defining each cozy sci-fi interior — every cozy space has its own specific source of warmth (visual + emotional). Each entry names a single warmth source with enough detail that Sonnet+Flux can render the room AROUND that warmth. Each entry 20-50 words.',
+    theme:
+      'The ONE dominant warmth source defining each cozy sci-fi interior — every cozy space has its own specific source of warmth (visual + emotional). Each entry names a single warmth source with enough detail that Sonnet+Flux can render the room AROUND that warmth. Each entry 20-50 words.',
     touchpoints: [
       'amber engine-bay glow leaking through floor grates',
       'grow-lamp lighting a hanging garden of xeno-ferns',
@@ -650,7 +653,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE dominant warmth source, 20-50 words. Format: "WARMTH NAME — visual description + how it lights the room + sensory hook". The warmth should be the FOCAL point of the room's atmosphere. Variety across all 30: machinery / culinary / biological / electrical / fire-based / ambient cosmic / body / ritual. NO outdoor weather. NO industrial-cold-blue lights. Each is intimate, lived-in, dominant. Output JSON array of strings.`,
   },
   alien_city_drama: {
-    theme: 'Path-specific drama events for alien-city scenes — visible incidents that bring story to a still of a vast alien metropolis. Examples: street protest with crowd torches, atmospheric phenomenon over city (auroras, debris field, eclipse), military lockdown checkpoint, alien festival with hanging lanterns, sky-train passing between megabuildings, fire on lower-tier ledge, parade with banners. Each entry 25-50 words.',
+    theme:
+      'Path-specific drama events for alien-city scenes — visible incidents that bring story to a still of a vast alien metropolis. Examples: street protest with crowd torches, atmospheric phenomenon over city (auroras, debris field, eclipse), military lockdown checkpoint, alien festival with hanging lanterns, sky-train passing between megabuildings, fire on lower-tier ledge, parade with banners. Each entry 25-50 words.',
     touchpoints: [
       'street protest — crowd with torches in lower-tier plaza',
       'atmospheric phenomenon — aurora curtains over the skyline',
@@ -671,7 +675,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE visible drama element woven into an alien city scene, 25-50 words. Format: "DRAMA NAME — description of what's happening, where in the city, what the viewer SEES". Visible from a wide shot — NOT internal-only events. Variety: civil unrest, atmospheric phenomena, religious/festival, military, technological, environmental, criminal, ceremonial. Output JSON array of strings.`,
   },
   alien_city_anchor_entity: {
-    theme: 'Lone city-witness entities for alien-city scenes — a SINGLE figure / vehicle visible at TINY/SMALL frame proportion in a vast alien metropolis. Street-level witnesses, sky-tier traffic, low-altitude flyers. NOT capital ships, NOT cities (we ARE in the city), NOT megastructures. Just lone witnesses: a vendor, a hovercar, a pedestrian, a patrol drone, a lone skybridge walker. Each entry 15-40 words.',
+    theme:
+      'Lone city-witness entities for alien-city scenes — a SINGLE figure / vehicle visible at TINY/SMALL frame proportion in a vast alien metropolis. Street-level witnesses, sky-tier traffic, low-altitude flyers. NOT capital ships, NOT cities (we ARE in the city), NOT megastructures. Just lone witnesses: a vendor, a hovercar, a pedestrian, a patrol drone, a lone skybridge walker. Each entry 15-40 words.',
     touchpoints: [
       'lone hovercar threading between towers',
       'sky-tier pedestrian crossing a transparent skybridge',
@@ -692,7 +697,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE lone witness in a city, 15-40 words. Format: "ENTITY NAME — visual description of one figure/vehicle at TINY/SMALL scale within the alien city". NEVER crowds, NEVER capital ships, NEVER architecture (that's the city itself). Output JSON array of strings.`,
   },
   alien_city_deep_distance: {
-    theme: 'The signature deep-distance feature defining the alien-city FAR-back layer. Each city has a horizon-defining detail beyond the immediate megabuilding cluster — distant orbital ring, ecumenopolis canyon vanishing to horizon, megabuilding piercing clouds, planetary curvature at top of skyline, distant temple-spire, broken arcology silhouette. Each entry 20-50 words.',
+    theme:
+      'The signature deep-distance feature defining the alien-city FAR-back layer. Each city has a horizon-defining detail beyond the immediate megabuilding cluster — distant orbital ring, ecumenopolis canyon vanishing to horizon, megabuilding piercing clouds, planetary curvature at top of skyline, distant temple-spire, broken arcology silhouette. Each entry 20-50 words.',
     touchpoints: [
       'orbital ring visible overhead through gap in towers',
       'distant ecumenopolis canyon vanishing to horizon',
@@ -713,7 +719,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE deep-distance signature feature, 20-50 words. Specific visible feature that punches up the far-back layer. NOT generic atmospheric haze. Output JSON array of strings.`,
   },
   megastructure_drama: {
-    theme: 'Path-specific drama events for megastructure scenes — visible incidents at colossal post-planetary engineered scale. Examples: energy beam firing from structure, ring-section rotating slowly, atmospheric leak venting, fleet passing through hangar, construction-mech swarm working surface, debris field of dead ships nearby. Each entry 25-50 words.',
+    theme:
+      'Path-specific drama events for megastructure scenes — visible incidents at colossal post-planetary engineered scale. Examples: energy beam firing from structure, ring-section rotating slowly, atmospheric leak venting, fleet passing through hangar, construction-mech swarm working surface, debris field of dead ships nearby. Each entry 25-50 words.',
     touchpoints: [
       'energy beam firing from a structure aperture',
       'ring-section rotating against starfield',
@@ -734,7 +741,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE visible megastructure-scale drama, 25-50 words. Format: "DRAMA NAME — description of what's happening and what the viewer SEES at megastructure scale". Variety: combat, atmospheric, mechanical, civic, industrial, environmental. Output JSON array of strings.`,
   },
   megastructure_anchor_entity: {
-    theme: 'Lone megastructure-scale witness entities — a SINGLE small vehicle / figure / ship visible at TINY/SMALL frame proportion against the megastructure. Capital ships are TINY against a megastructure; fighters are SUB-pixel; engineers in suits are dust motes. Each entry 15-40 words.',
+    theme:
+      'Lone megastructure-scale witness entities — a SINGLE small vehicle / figure / ship visible at TINY/SMALL frame proportion against the megastructure. Capital ships are TINY against a megastructure; fighters are SUB-pixel; engineers in suits are dust motes. Each entry 15-40 words.',
     touchpoints: [
       'small shuttle threading toward docking maw',
       'fighter-wing in formation passing structure spine',
@@ -755,7 +763,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE lone witness at megastructure scale, 15-40 words. Format: "ENTITY NAME — visual description". NEVER cities, NEVER groups, NEVER the megastructure itself. Single small witness proving scale. Output JSON array of strings.`,
   },
   megastructure_deep_distance: {
-    theme: 'The signature deep-distance feature defining the megastructure FAR-back layer. Planet visible through structure gap, gas-giant looming behind, fleet at far edge, secondary megastructure on horizon, cosmic phenomenon framing the structure. Each entry 20-50 words.',
+    theme:
+      'The signature deep-distance feature defining the megastructure FAR-back layer. Planet visible through structure gap, gas-giant looming behind, fleet at far edge, secondary megastructure on horizon, cosmic phenomenon framing the structure. Each entry 20-50 words.',
     touchpoints: [
       'planet visible through structural gap',
       'gas giant looming behind megastructure',
@@ -776,7 +785,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE specific deep-distance signature feature, 20-50 words. Specific visible mega-feature far behind the megastructure. Output JSON array of strings.`,
   },
   landscape_anchor_entity: {
-    theme: 'Lone wilderness witness entities for alien-landscape scenes — a SINGLE figure / creature / small vehicle placed in midground-back of an alien wilderness as a SCALE PROVER (TINY/SMALL frame proportion). NEVER cities, NEVER capital ships, NEVER megastructures, NEVER architecture. Just lone witnesses in the wild — vac-suit explorers, native creatures, scout drones, ground rovers, hovering probes, single tents, lone xeno-fauna. Each entry 15-40 words.',
+    theme:
+      'Lone wilderness witness entities for alien-landscape scenes — a SINGLE figure / creature / small vehicle placed in midground-back of an alien wilderness as a SCALE PROVER (TINY/SMALL frame proportion). NEVER cities, NEVER capital ships, NEVER megastructures, NEVER architecture. Just lone witnesses in the wild — vac-suit explorers, native creatures, scout drones, ground rovers, hovering probes, single tents, lone xeno-fauna. Each entry 15-40 words.',
     touchpoints: [
       'vac-suit explorer in EVA gear with backpack',
       'native alien creature (sentient biped)',
@@ -802,7 +812,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE lone wilderness witness entity, 15-40 words. Format: "ENTITY NAME — visual description of the entity at TINY/SMALL scale in alien-landscape composition". Variety required across all entries: human explorers in EVA gear, native alien creatures (sentient AND fauna), small scout vehicles, single survival objects. NO cities, NO architecture, NO capital ships, NO megastructures, NO crowds, NO multiple figures. ALWAYS a single witness. Output JSON array of strings.`,
   },
   landscape_moment: {
-    theme: 'The candid action moment a lone wilderness witness is captured doing — a small-scale verb that adds story to a landscape still. Each entry is ONE simple visible action: cresting a ridge, hesitating at the canyon edge, kneeling at strange formation, scanning the horizon, approaching alien glow, brushing dust from artifact. NOT epic-scale heroics — small candid moments that show "she/he/it is real and alive in this landscape." Each entry 15-30 words.',
+    theme:
+      'The candid action moment a lone wilderness witness is captured doing — a small-scale verb that adds story to a landscape still. Each entry is ONE simple visible action: cresting a ridge, hesitating at the canyon edge, kneeling at strange formation, scanning the horizon, approaching alien glow, brushing dust from artifact. NOT epic-scale heroics — small candid moments that show "she/he/it is real and alive in this landscape." Each entry 15-30 words.',
     touchpoints: [
       'CRESTING RIDGE — silhouetted as horizon emerges',
       'HESITATING — paused at canyon edge',
@@ -823,7 +834,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE simple landscape moment in 15-30 words. Format: "ACTION-VERB-CAP — body position + tool/object". The action is SMALL-SCALE candid (not combat, not heroics) — a witness moment in alien wilderness. Examples: "CRESTING RIDGE — silhouetted figure topping ridge, distant horizon emerging beyond"; "KNEELING AT ARTIFACT — figure low to ground, hand pressed to luminous alien formation". GROUNDED, single moment, readable in first 5 words. Output JSON array of strings.`,
   },
   landscape_deep_distance: {
-    theme: 'The signature deep-distance feature that defines the alien-landscape FAR-back layer. NOT generic "atmospheric haze" — a specific MEGA-FEATURE looming on the horizon that proves the world is alien AND vast. Examples: 10km-tall gas geyser, megaflora silhouette, distant alien herd migration, crashed generation ship overgrown, megafauna walking the horizon, alien archology miniature on far ridge, eclipse arch, falling debris field, gravitational lensing distortion. Each entry 20-50 words.',
+    theme:
+      'The signature deep-distance feature that defines the alien-landscape FAR-back layer. NOT generic "atmospheric haze" — a specific MEGA-FEATURE looming on the horizon that proves the world is alien AND vast. Examples: 10km-tall gas geyser, megaflora silhouette, distant alien herd migration, crashed generation ship overgrown, megafauna walking the horizon, alien archology miniature on far ridge, eclipse arch, falling debris field, gravitational lensing distortion. Each entry 20-50 words.',
     touchpoints: [
       '10-kilometer gas pillar venting cryogenic vapor',
       'megaflora silhouette — 500m trees miniature on horizon',
@@ -849,7 +861,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE specific deep-distance signature feature, 20-50 words. Format: "FEATURE NAME — description of what it looks like + sense of distance/scale". Variety: gas geysers, distant herds, crashed wrecks, megafauna, atmospheric phenomena, orbital fragments visible, lensing/cosmic effects. NO generic "alien sky" or "atmospheric haze". Each must be a SPECIFIC visible mega-feature that punches up the far-back layer. Output JSON array of strings.`,
   },
   rugged_male_explorer_outfits: {
-    theme: 'Tactical sci-fi EXPLORER / ROGUE / ASSASSIN outfits for a male character — Destiny Guardian / Destiny 2 Hunter / Mass Effect operative / Halo ODST / Mandalorian protagonist / Cad Bane / Star-Lord / Cowboy Bebop Spike / Han Solo with armor / John Wick in space. Armored cloaks over sealed helms, tactical armor over thermal underlayers, weapon-bristled mercenary kit, weathered cybernetic-augmented operative gear. He is CAPABLE, MYSTERIOUS, stylish-tactical — Destiny Guardian energy.\n\nFULLY CLOTHED RULE — NEVER shirtless, NEVER bare-chested, NEVER exposed torso, NEVER tank top, NEVER sleeveless, NEVER beefcake. Torso is ALWAYS covered in armor / coat / pressure suit / harness.\n\nABSOLUTE BAN — NO Mandalorian (the word) / NO beskar / NO T-visor / NO Boba Fett / NO Star Wars (the words). Flux renders the franchise IP from those tokens. Use generic descriptive language instead (sealed visor / amber HUD faceplate / full-coverage helm / armored cloak with hood).',
+    theme:
+      'Tactical sci-fi EXPLORER / ROGUE / ASSASSIN outfits for a male character — Destiny Guardian / Destiny 2 Hunter / Mass Effect operative / Halo ODST / Mandalorian protagonist / Cad Bane / Star-Lord / Cowboy Bebop Spike / Han Solo with armor / John Wick in space. Armored cloaks over sealed helms, tactical armor over thermal underlayers, weapon-bristled mercenary kit, weathered cybernetic-augmented operative gear. He is CAPABLE, MYSTERIOUS, stylish-tactical — Destiny Guardian energy.\n\nFULLY CLOTHED RULE — NEVER shirtless, NEVER bare-chested, NEVER exposed torso, NEVER tank top, NEVER sleeveless, NEVER beefcake. Torso is ALWAYS covered in armor / coat / pressure suit / harness.\n\nABSOLUTE BAN — NO Mandalorian (the word) / NO beskar / NO T-visor / NO Boba Fett / NO Star Wars (the words). Flux renders the franchise IP from those tokens. Use generic descriptive language instead (sealed visor / amber HUD faceplate / full-coverage helm / armored cloak with hood).',
     touchpoints: [
       'Destiny 2 Guardian Hunter — armored cloak + sealed helm + utility belt + tactical armor',
       'Destiny 2 Guardian Titan — heavy plate armor + helmet + shoulder mantle',
@@ -910,7 +923,8 @@ The bar: each entry should read as a Destiny Guardian, Mass Effect operative, Ha
     })(),
   },
   explorer_outfits_female: {
-    theme: 'tactical-explorer outfits for female sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Treat the character with the same dignity as a male soldier — full coverage, professional military / explorer kit, no cheesecake.',
+    theme:
+      'tactical-explorer outfits for female sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Treat the character with the same dignity as a male soldier — full coverage, professional military / explorer kit, no cheesecake.',
     touchpoints: [
       'Halo Spartan armor (full sealed plate)',
       'Mass Effect N7 (sealed tactical suit)',
@@ -954,7 +968,8 @@ EXAMPLES of varied entries the pool should contain (use these as flavor anchors,
 Each entry should feel like a CHARACTER you'd recognize from sci-fi cinema — distinct visual identity.`,
   },
   architecture_style: {
-    theme: 'distinct architectural style vocabulary for alien cities — each entry names a specific structural language so Flux renders varied architecture instead of defaulting to "cyberpunk spires" every time. Each entry 30-60 words.',
+    theme:
+      'distinct architectural style vocabulary for alien cities — each entry names a specific structural language so Flux renders varied architecture instead of defaulting to "cyberpunk spires" every time. Each entry 30-60 words.',
     touchpoints: [
       'brutalist concrete (Stalinist scale)',
       'biomechanical Giger chitin',
@@ -980,7 +995,8 @@ Each entry should feel like a CHARACTER you'd recognize from sci-fi cinema — d
     instructions: `Each entry names a SINGLE distinct architectural style with specific structural language. Format: "STYLE NAME — visual description of forms / materials / textures / scale". Vary across all 100 entries — never repeat a style; each must feel like a different civilization or aesthetic tradition. NO generic "alien architecture" — every entry has a precise style identity.`,
   },
   character_action: {
-    theme: 'Clear simple action verbs for a sci-fi female explorer — what she is DOING right now. Each entry is ONE simple action, no obscure setup, no extra props. The verb leads. Reader sees the action immediately.',
+    theme:
+      'Clear simple action verbs for a sci-fi female explorer — what she is DOING right now. Each entry is ONE simple action, no obscure setup, no extra props. The verb leads. Reader sees the action immediately.',
     touchpoints: [
       'BATTLING — firefight from cover',
       'CLIMBING — three points of contact on alien rock',
@@ -1015,7 +1031,8 @@ Cover all genre categories: combat (battling), exploring (climbing/wading), tink
 NO franchise proper nouns. NO superhero poses. Every action is a working professional doing real work.`,
   },
   starbot_anchor_entity: {
-    theme: 'sci-fi anchor entities for StarBot scenes — what figure / ship / creature populates the scene at the prescribed scale. Each entry 15-40 words describing ONE entity type.',
+    theme:
+      'sci-fi anchor entities for StarBot scenes — what figure / ship / creature populates the scene at the prescribed scale. Each entry 15-40 words describing ONE entity type.',
     touchpoints: [
       'robed wandering explorer',
       'vac-suit scientist (Ad Astra/Interstellar)',
@@ -1041,7 +1058,8 @@ NO franchise proper nouns. NO superhero poses. Every action is a working profess
     instructions: `Each entry describes ONE entity type — a figure, ship, creature, or vehicle that could be a SILHOUETTE / SMALL element in a scene path render. Variety required across all 50 entries: humanoid figures of various professions, ships of various designs, alien creatures of various biologies, vehicles of various scales. NO franchise lookalikes. Each entry is the TYPE not a specific named character.`,
   },
   alien_sky_layer: {
-    theme: 'sci-fi alien sky / overhead atmosphere layers for StarBot. Each entry describes what is OVERHEAD in 15-40 words — the sky layer that completes the scene composition.',
+    theme:
+      'sci-fi alien sky / overhead atmosphere layers for StarBot. Each entry describes what is OVERHEAD in 15-40 words — the sky layer that completes the scene composition.',
     touchpoints: [
       'twin suns at different altitudes',
       'ring-curve overhead (Halo/Niven)',
@@ -1067,7 +1085,8 @@ NO franchise proper nouns. NO superhero poses. Every action is a working profess
     instructions: `Each entry is a complete sky layer description for a sci-fi scene. The sky is the upper third of the frame composition. Vary across all 30 entries: day skies / night skies / dawn / dusk / storm / clear / nebula / orbital structures visible / multiple celestial bodies / weather phenomena. NO franchise proper nouns (don't say "Death Star overhead" — describe it generically).`,
   },
   surprise_element: {
-    theme: 'sci-fi secondary subjects woven into scenes to add visual interest. Each entry describes ONE element that can be placed at midground or deep midground.',
+    theme:
+      'sci-fi secondary subjects woven into scenes to add visual interest. Each entry describes ONE element that can be placed at midground or deep midground.',
     touchpoints: [
       'alien creature watching',
       'fellow explorer at distance',
@@ -1098,7 +1117,8 @@ NO franchise proper nouns. NO superhero poses. Every action is a working profess
     instructions: `Each entry is a single secondary subject that adds story to a scene without overwhelming the primary subject. Format: "ELEMENT NAME — description of what it looks like + where it sits in the scene + atmospheric/story implication". Variety across all 100 entries: creatures, sentient figures, ships, drones, vehicles, artifacts, ruins, distant phenomena, traces of past events. Each must imply a wider world.`,
   },
   explorer_outfits_male: {
-    theme: 'tactical-explorer outfits for male sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Sealed coverage, equipment-laden, professional military / explorer kit, like Master Chief or Aliens colonial marine.',
+    theme:
+      'tactical-explorer outfits for male sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Sealed coverage, equipment-laden, professional military / explorer kit, like Master Chief or Aliens colonial marine.',
     touchpoints: [
       'Halo Spartan armor',
       'Mass Effect N7',
@@ -1124,7 +1144,8 @@ VARIETY MANDATE across all entries — hit each:
 50% of entries include head covering (helmet/hood/visor/mask); 50% head uncovered (hair visible, hood pulled back, helmet held).`,
   },
   female_explorer_hairstyles: {
-    theme: 'sci-fi female hairstyles — functional, helmet-compatible, characterful. Each entry is a hairstyle description in 10-25 words.',
+    theme:
+      'sci-fi female hairstyles — functional, helmet-compatible, characterful. Each entry is a hairstyle description in 10-25 words.',
     touchpoints: [
       'tight low ponytail (EVA-compatible)',
       'shaved sides with top braid',
@@ -1168,7 +1189,8 @@ VARIETY MANDATE across all entries — hit each:
     instructions: `Each entry describes ONE male hairstyle in 10-25 words: cut + length + facial hair (if any) + characterful detail. Variety across cuts, beards, ages, ethnicities, formality. Practical for sci-fi explorers.`,
   },
   female_explorer_accessories: {
-    theme: 'signature accessory / weapon / tool for female sci-fi explorer. Each entry 10-25 words describing ONE accessory she carries visibly.',
+    theme:
+      'signature accessory / weapon / tool for female sci-fi explorer. Each entry 10-25 words describing ONE accessory she carries visibly.',
     touchpoints: [
       'plasma pistol holstered',
       'long-range scanner handheld',
@@ -1212,7 +1234,8 @@ VARIETY MANDATE across all entries — hit each:
     instructions: `Each entry: what + where + signature. Variety across weapons / tools / scanners / mounts. Each distinctive.`,
   },
   alien_planet_biome: {
-    theme: 'alien planetary BIOMES — each entry is ONE distinctive ecological/geological identity used as a SETTING pool for the slot-pool composer. Used in alien-landscape path. Concise but specific — each biome is a 3-5 sentence description Sonnet weaves with other rolled axes.',
+    theme:
+      'alien planetary BIOMES — each entry is ONE distinctive ecological/geological identity used as a SETTING pool for the slot-pool composer. Used in alien-landscape path. Concise but specific — each biome is a 3-5 sentence description Sonnet weaves with other rolled axes.',
     touchpoints: [
       'Dune Arrakis dune sea',
       'Solaris sentient ocean',
@@ -1220,7 +1243,7 @@ VARIETY MANDATE across all entries — hit each:
       'Annihilation Shimmer (color-refracted)',
       'Avatar Pandora bioluminescent forest',
       'Beksinski painted dread plain',
-      "Roadside Picnic Zone (broken physics anomalies)",
+      'Roadside Picnic Zone (broken physics anomalies)',
       'Tatooine binary-sun desert',
       'Hoth glacial polar',
       'Mustafar volcanic obsidian river',
@@ -1234,7 +1257,8 @@ VARIETY MANDATE across all entries — hit each:
   },
   megastructure_setting: {
     format: 'simple',
-    theme: 'SLIM atomic seeds for ICONIC CYBERPUNK BUILDINGS within a bustling sci-fi city — single notable towers featuring distinctive shape + MASSIVE HOLOGRAPHIC ADVERTISEMENTS (often sexy fashion-coded or seductive cyborg/android pitch) + dense neon signage + clear relationship to flying-vehicle traffic. Blade Runner 2049 / Cyberpunk 2077 / Ghost in the Shell aesthetic baked into every entry.',
+    theme:
+      'SLIM atomic seeds for ICONIC CYBERPUNK BUILDINGS within a bustling sci-fi city — single notable towers featuring distinctive shape + MASSIVE HOLOGRAPHIC ADVERTISEMENTS (often sexy fashion-coded or seductive cyborg/android pitch) + dense neon signage + clear relationship to flying-vehicle traffic. Blade Runner 2049 / Cyberpunk 2077 / Ghost in the Shell aesthetic baked into every entry.',
     touchpoints: [],
     instructions: `Write 30 SLIM atomic cyberpunk-building seeds for a sci-fi cityscape. Each entry is ONE short phrase (20-30 words) naming a SINGLE notable building/tower within a cyberpunk megacity, with these elements ALWAYS baked into the seed text:
 
@@ -1269,7 +1293,8 @@ Format: ONE entry per line, 20-30 words each. Distinctive building + holographic
   },
 
   megastructures: {
-    theme: 'colossal artificial structures at planet-or-greater scale — orbital rings, Dyson constructs, planetary mantles. Civilization-as-superstructure. NOTE: this recipe builds the LEGACY MEGASTRUCTURES pool (POOLS.MEGASTRUCTURES). The active megastructure path uses MEGASTRUCTURE_SETTING (iconic buildings in cities) — see the megastructure_setting recipe above.',
+    theme:
+      'colossal artificial structures at planet-or-greater scale — orbital rings, Dyson constructs, planetary mantles. Civilization-as-superstructure. NOTE: this recipe builds the LEGACY MEGASTRUCTURES pool (POOLS.MEGASTRUCTURES). The active megastructure path uses MEGASTRUCTURE_SETTING (iconic buildings in cities) — see the megastructure_setting recipe above.',
     touchpoints: [
       'Halo ring (orbital ring world, visible curvature)',
       "Niven's Ringworld",
@@ -1283,7 +1308,8 @@ Format: ONE entry per line, 20-30 words each. Distinctive building + holographic
     instructions: `Scale must EXCEED planetary. Visible curvature, atmospheric haze at impossible distances. Scale provers: ships are dots, cities are dots-of-dots. Foreground ALWAYS has something at human-comprehensible scale for the brain to anchor on.`,
   },
   space_opera_scenes: {
-    theme: 'spacecraft scenes — distinctive vessels with strong design DNA, in dramatic cosmic settings. Push HARD away from navy-grey-military and tail-fin-50s-rocket clichés.',
+    theme:
+      'spacecraft scenes — distinctive vessels with strong design DNA, in dramatic cosmic settings. Push HARD away from navy-grey-military and tail-fin-50s-rocket clichés.',
     touchpoints: [
       'Heighliners (Dune crystalline impossibles)',
       'Mass Effect Reaper (squid-organic alien)',
@@ -1299,7 +1325,8 @@ Format: ONE entry per line, 20-30 words each. Distinctive building + holographic
   },
   space_opera_ships: {
     format: 'simple',
-    theme: 'Cool ICONIC sci-fi spaceships with strong recognizable silhouettes and visible functional parts. Mass Effect Normandy / Halo UNSC Pelican / Cyberpunk Edgerunners AV-4 / Cowboy Bebop Bebop / Expanse Rocinante / Star Wars X-wing-class fighters / Star Trek shuttlecraft / Blade Runner Spinner aesthetic — INSPIRED BY, not literal franchise names. Every ship has a clear cockpit + wings/fins + engines + sometimes weapons.',
+    theme:
+      'Cool ICONIC sci-fi spaceships with strong recognizable silhouettes and visible functional parts. Mass Effect Normandy / Halo UNSC Pelican / Cyberpunk Edgerunners AV-4 / Cowboy Bebop Bebop / Expanse Rocinante / Star Wars X-wing-class fighters / Star Trek shuttlecraft / Blade Runner Spinner aesthetic — INSPIRED BY, not literal franchise names. Every ship has a clear cockpit + wings/fins + engines + sometimes weapons.',
     touchpoints: [],
     instructions: `Write 30 SLIM atomic iconic sci-fi spaceship seeds. Each entry: ONE short phrase (20-35 words) naming a single ship + its DISTINCTIVE FUNCTIONAL ANATOMY.
 
@@ -1340,7 +1367,8 @@ Examples:
 Format: ONE entry per line, 20-35 words each. Distinctive ship + clear silhouette + named functional parts. NO franchise proper nouns. NO modern Earth naval. NO steampunk / dieselpunk / brass-and-copper. NO biomech / creature-shaped / dolphin / whale / chitin / wraithbone. NO abstract "vessel with geometric volumes" — every entry must have a CLEAR readable silhouette.`,
   },
   space_opera_setting: {
-    theme: 'DYNAMIC FIGHTER-ACTION SETTINGS — places where starfighters dogfight, recon, chase, or skim. Each entry is one specific action environment with motion-friendly cinematic depth. NO static landscape views. NO ground-level architecture. Pure space + atmospheric action contexts.',
+    theme:
+      'DYNAMIC FIGHTER-ACTION SETTINGS — places where starfighters dogfight, recon, chase, or skim. Each entry is one specific action environment with motion-friendly cinematic depth. NO static landscape views. NO ground-level architecture. Pure space + atmospheric action contexts.',
     touchpoints: [
       'asteroid canyon (rocks at varied scale + tight spaces)',
       'debris field of broken capital wreck (twisted hull fragments)',
@@ -1388,7 +1416,8 @@ Output 25 numbered list entries.`,
   },
   busy_fleet_elements: {
     format: 'simple',
-    theme: 'Scene-filling elements that populate dense sci-fi space scenes around a featured spaceship: EVA crews on tethers, magnetic dock grapples, supply ships parallel-running, refueling tenders, gantries with welding sparks, hauler queues, drone swarms, sensor buoys, debris fragments, capital ship hulls as deep-background scale anchors, station infrastructure, repair scaffolds, escort craft.',
+    theme:
+      'Scene-filling elements that populate dense sci-fi space scenes around a featured spaceship: EVA crews on tethers, magnetic dock grapples, supply ships parallel-running, refueling tenders, gantries with welding sparks, hauler queues, drone swarms, sensor buoys, debris fragments, capital ship hulls as deep-background scale anchors, station infrastructure, repair scaffolds, escort craft.',
     touchpoints: [],
     instructions: `Write 30 scene-filling sci-fi space elements that go AROUND the featured spaceship in a busy scene. One sentence each. Detailed, specific, visual — describe count + motion + glowing detail.
 
@@ -1405,7 +1434,8 @@ Output 30 numbered list entries.`,
   },
   battle_dynamics: {
     format: 'simple',
-    theme: 'Action and drama moments that bring a sci-fi space scene alive: weapons firing, shields flaring, hull-strikes sparking, missile contrails streaking, refinery accidents venting, reactor overloads glowing, debris tumbling, drive sections venting plasma.',
+    theme:
+      'Action and drama moments that bring a sci-fi space scene alive: weapons firing, shields flaring, hull-strikes sparking, missile contrails streaking, refinery accidents venting, reactor overloads glowing, debris tumbling, drive sections venting plasma.',
     touchpoints: [],
     instructions: `Write 30 action / drama moments that add visible activity to a sci-fi space scene. One sentence each. Frozen at a loaded instant — visual cues that read in a still frame.
 
@@ -1422,7 +1452,8 @@ Output 30 numbered list entries.`,
   },
   ship_action: {
     format: 'simple',
-    theme: 'What the featured spaceship is doing in this exact frame — posture, motion, drive state, weapons status, hull condition. Verb-led when possible.',
+    theme:
+      'What the featured spaceship is doing in this exact frame — posture, motion, drive state, weapons status, hull condition. Verb-led when possible.',
     touchpoints: [],
     instructions: `Write 30 ship-action descriptions — what the featured sci-fi spaceship is DOING in the scene. One sentence each. Frozen at a loaded instant.
 
@@ -1437,8 +1468,189 @@ Examples:
 
 Output 30 numbered list entries.`,
   },
+  // ════════════════════════════════════════════════════════
+  // SPACE_OPERA PREMIUM-TIER ENRICHMENT (2026-05-31 reactivation)
+  // 5 new path-bespoke axes pushing SPACE_OPERA to 10 bespoke pools.
+  // ════════════════════════════════════════════════════════
+  space_opera_crew_signal: {
+    format: 'simple',
+    theme:
+      'Visible LIFE on or around the featured spaceship — readable counts of crew/EVA/deck-personnel/bridge-silhouettes/maintenance-teams/gunner-cupolas. Makes the ship feel inhabited and gives the viewer a scale-prover at body-level. Always a specific COUNT + SCALE + WHERE-on-the-ship.',
+    touchpoints: [],
+    instructions: `Write 25 crew-signal descriptions — visible life elements on/around a featured sci-fi spaceship. One sentence each, 18-32 words. Each must name a COUNT, SCALE, and the LOCATION on/around the ship.
+
+Mix across these life-on-ship vignettes:
+- Bridge / cockpit silhouettes seen through canopy (count: 1–8 figures, lit panel glow)
+- EVA / spacewalker teams tethered to hull (count: 3–20 figures in white/orange suits)
+- Deck crew / launch-handlers on flight deck (count: 12–60 figures with light wands or orange vests)
+- Gunner cupolas / turret pods with visible operator (count: 2–8 turrets with visible heads)
+- Maintenance / repair crew on gantries (count: 4–24 figures with welding sparks)
+- Marines / boarding parties at airlock (count: 6–30 in armored suits, weapons visible)
+- Cargo handlers loading shuttles (count: 8–40 figures with anti-grav pallets)
+- Refugees crowding observation decks (count: 50–500 silhouettes in lit windows)
+- Sentries patrolling external catwalks (count: 1–6 figures, helmet glow)
+- Engineers in plasma-glow under exposed drive plates (count: 4–12 figures in protective gear)
+- Passengers visible through habitat-ring viewports (count: 30–200 lit silhouettes)
+- Sick-bay / medical staff visible through illuminated medbay window (count: 4–12 in white)
+- Crew on parallel-running auxiliary vessel waving (count: 5–20 distant figures)
+- Drone-handler operators with hand-tracking gloves (count: 2–8 figures, holographic interface glow)
+- Officers on observation balcony watching battle (count: 1–4 figures in dress uniform)
+
+Each entry must specify (a) the COUNT, (b) the SCALE (ant-sized vs body-readable), (c) the LOCATION on the ship. NO vague "crew visible" — always concrete.
+
+Examples (DO NOT copy verbatim — write 25 new entries varying these patterns):
+1. Twelve lit bridge silhouettes visible through the forward canopy windows, holographic tactical displays glowing turquoise around them like a halo, each figure leaning at a different angle reading instruments.
+2. Six white-suited EVA workers tethered to a midship hull breach, two welding sparks arcing yellow against the dark hull plating, the other four passing salvaged plate sections hand-to-hand.
+3. Thirty deck crew in orange high-visibility vests waving signal wands along the flight deck, four atmospheric craft in formation behind them ready for launch, blast deflectors raised.
+
+NO franchise proper nouns. NO Earth-naval (no aircraft-carrier deck-mules / battleship-marines). The crew should feel like sci-fi spacefaring personnel — pressure-suits, helmet glows, retroreflective stripes, magnetic boots, tether harnesses.
+
+Output 25 numbered list entries.`,
+  },
+  space_opera_faction_iconography: {
+    format: 'simple',
+    theme:
+      'Visible markings/badges/colors painted, etched, or decaled onto the featured spaceship — heraldic identifiers that hint at allegiance: corporate trade sigils, military squadron numerals, pirate clan banners, alien empire glyphs, civilian/civic markings. Always specific PLACEMENT + SHAPE + COLOR.',
+    touchpoints: [],
+    instructions: `Write 25 faction-iconography descriptions — heraldic markings visible ON the featured sci-fi spaceship hull. One sentence each, 18-30 words. Each must name a SHAPE, COLOR, and HULL PLACEMENT.
+
+Mix across allegiance flavors:
+- Corporate trade-house sigils (geometric monograms in brand colors — gold/silver/chrome wedges, polygonal logos, chevron stripes)
+- Military squadron numerals + insignia (large painted digits, division shields, kill-marks, mission tally hash-marks)
+- Pirate / mercenary clan banners (skulls, blades, scratched-on tally marks, hand-painted faction names)
+- Alien empire glyphs (non-Latin symbols — angular, organic, ideographic, glowing inset)
+- Federation / Republic clean iconography (concentric rings, eagle/sun symbols, official seals)
+- Religious / cult markings (mandala patterns, prayer-glyphs, ankh-equivalents, painted rune-strips)
+- Civilian / civic identification (registration codes in tall block-letters, color-coded planet-of-origin bands)
+- Smuggler / underworld markings (concealed dual-identity decals, scratched-off registration over old)
+- Generation-ship lineage seals (multi-generation lineage trees painted across the hull)
+- Mercenary contract codes (geometric patterns indicating active employer)
+
+Specify:
+(a) the SHAPE — what the marking visually is (a four-pronged star, a three-bar chevron, a circle with a slash)
+(b) the COLOR / FINISH — gloss / matte / enamel / pearl / glow-edged / weathered / scratched
+(c) the HULL PLACEMENT — port flank / dorsal spine / engine nacelle / nose / wing-root / aft hull / canopy frame
+
+Examples (DO NOT copy verbatim):
+1. A four-pronged silver-and-cobalt mercantile star emblem stenciled twice on each port flank, gloss-paint over weathered base, edges chipped from micrometeor impacts.
+2. Three-digit black squadron numerals painted shoulder-high across the dorsal hull spine, flanked by twelve smaller kill-mark hash slashes in flat yellow.
+3. A coiled-serpent pirate clan banner crudely hand-painted in dripping red across the starboard flank, layered over a half-scratched-off military registration code beneath.
+
+NO franchise proper nouns (no Star Wars / Star Trek / Halo / Mass Effect names). NO Earth-historical (no swastikas, hammer-and-sickle, US/UK/Russian roundels). All iconography should read as future-sci-fi-coded.
+
+Output 25 numbered list entries.`,
+  },
+  space_opera_propulsion_signature: {
+    format: 'simple',
+    theme:
+      'Engine / drive aesthetic visible behind the featured spaceship — the colored exhaust, plume shape, glow signature, trail length, heat-bloom, thermal aura. The drive is the strongest visual identity differentiator in space opera. Always specific COLOR + PLUME SHAPE + LENGTH.',
+    touchpoints: [],
+    instructions: `Write 25 propulsion-signature descriptions — drive/engine visual signatures rendered as visible light/exhaust BEHIND the featured sci-fi spaceship. One sentence each, 16-28 words. Each must name a COLOR, PLUME SHAPE, LENGTH, and any secondary visual.
+
+Mix across propulsion philosophies:
+- Plasma drives — colored hot plumes (electric-blue / violet / cyan / ion-pink / acid-green)
+- Fusion torch drives — long bright white-yellow trails with secondary heat bloom
+- Antimatter / matter-conversion — eye-searing violet-white pinpoint glare, near-zero trail
+- Chemical / RCS — sharp white-yellow exhaust plumes, short, dirty
+- Ion drives — pale blue / faint cyan, near-silent, nearly invisible long trail
+- Quantum / FTL signatures — distorted spacetime ripple, lens-flare halo, blue-shift afterimage
+- Fold-drive / warp emergence — Cherenkov-blue glow, shockwave ring, trailing afterimage
+- Reaction-mass (cold-gas) thrusters — crystalline white vapor puffs, short-duration
+- Damaged / asymmetric — uneven plume colors (one engine bright, one cold/sputtering)
+- Stealth / cold-coasting — no visible plume, heat-sink panels glowing dull red
+- Solar-sail propulsion — vast translucent mirrored sail catching distant star-light
+- Mass-driver kick-stages — sequential burst-flares like camera-flash strobes
+- Sublight chemical — smoky orange exhaust trail, particulate visible
+
+Specify:
+(a) COLOR — exact named hue (electric cobalt-blue / acid-green / pinprick violet-white / pale ion-cyan)
+(b) PLUME SHAPE — cone / triple-cone / pinpoint / wide-fan / corona / ring / vapor-puff
+(c) LENGTH — pinpoint / short / medium / long-trailing / km-long / fading-into-infinity
+(d) SECONDARY DETAIL — heat-bloom on radiator panels / shockwave / ripple / afterimage / particulate
+
+Examples (DO NOT copy verbatim):
+1. Twin electric-cobalt plasma cones four times the hull length, surrounded by faint pulsating violet shock-rings, secondary heat-bloom glowing dull red on accordion radiator panels.
+2. Single pinpoint antimatter glare brighter than nearby starfield, near-zero trail, lens-flare distortion bending the surrounding star-field around its core.
+3. Faint pale ion-blue glow trailing forty hull lengths, fading into invisibility, no shock or particulate — ghostly cold-running stealth coast.
+
+NO Earth-rocket smoke (no Saturn-V orange smoke trails / no Space-Shuttle billowing exhaust). The drive should feel future-sci-fi-coded.
+
+Output 25 numbered list entries.`,
+  },
+  space_opera_genre_register: {
+    format: 'simple',
+    theme:
+      'NARRATIVE TONE / GENRE of the frame — military thriller, pirate adventure, diplomatic incident, first contact, lost-ship horror, smuggler chase, generation-ship arrival, etc. Sets the emotional register that ship_action + setting must reinforce.',
+    touchpoints: [],
+    instructions: `Write 25 genre-register descriptions — distinct narrative TONES that a space-opera frame could be set in. One sentence each, 18-32 words. Each names a GENRE + the MOOD + the VISUAL CUE that reads it.
+
+Mix across sci-fi narrative registers:
+- MILITARY THRILLER — taut, disciplined, formation-flying, capital-ship-and-escorts, clean uniform colors
+- PIRATE ADVENTURE — ragged, swagger, contraband cargo, scratched paint, multi-flag, brigand swagger
+- DIPLOMATIC INCIDENT — gleaming polished, dignitaries-aboard, escort honor-guard, tense stillness
+- FIRST CONTACT — slow, reverent, careful approach, lone vessel meeting alien craft, awe-stillness
+- LOST-SHIP HORROR — drifting, silent, no lights, hull breach, no crew visible, dread atmosphere
+- SMUGGLER CHASE — fast, broken-light, evasive maneuvers, pursuit through hazard, frantic energy
+- GENERATION-SHIP ARRIVAL — vast, slow, ancient, weathered, weight-of-centuries gravitas
+- SCIENCE EXPEDITION — clean, white, observation domes, drone swarms, deliberate calm
+- COLONY EVACUATION — desperate, overcrowded, civilian craft, distant explosions, urgency
+- BLACK-OPS INFILTRATION — stealth, dark hulls, no markings, EM-suppressed glow, predatory
+- TRADE-CONVOY ESCORT — workhorse, methodical, cargo-haulers under fighter cover, businesslike
+- WAR-WEARY HOMECOMING — battle-damaged, somber, slow approach to friendly station, melancholy
+- CULT-CRUSADE — ornate, religious, banner-draped, ritual-style markings, fervor
+- MEGACORP POWER-PROJECTION — pristine, intimidating, perfect formation, brand-saturation
+- ALIEN-EMPIRE ENVOY — exotic, unsettling, non-human geometry, slow-moving, otherworldly threat
+- PRISON-TRANSPORT — utilitarian, armored, stark, surveillance-heavy, joyless
+- REFUGEE-FLOTILLA — patchwork, multi-vessel, mixed colors, hand-painted prayers, hope-and-loss
+
+Each entry: name the GENRE, the MOOD (one adjective), and the VISUAL CUES that signal it (paint condition / lighting / formation / pace).
+
+Examples (DO NOT copy verbatim):
+1. Pirate-adventure register: swaggering ragged cruiser with mismatched scratched paint and three different faction flags painted over each other, weapons-pylons hung with prize-claims, mid-chase swagger.
+2. Lost-ship horror register: silent unlit hulk drifting derelict, hull breached at midship, no running lights, no crew visible through any window, dread stillness, faint vapor escaping a single sealed compartment.
+3. First-contact register: lone clean-hulled science vessel hovering reverently 800 meters from an unknown alien craft of impossible angular geometry, lights dimmed in deferential gesture, slow careful approach.
+
+Output 25 numbered list entries.`,
+  },
+  space_opera_signature_hull_feature: {
+    format: 'simple',
+    theme:
+      'The ONE weird, memorable detail on the featured spaceship — asymmetric exhaust manifold / ribbed armor pattern / glasshouse observation pod / fungal hull-corrosion / vine-overgrown wreck / battle-scar mosaic / oversized comm-dish / decorative figurehead. Gives each render a "remember THIS one" element.',
+    touchpoints: [],
+    instructions: `Write 25 signature-hull-feature descriptions — one weird memorable readable-focus detail on the featured sci-fi spaceship. One sentence each, 14-28 words. Each names a SPECIFIC FEATURE + SHAPE + WHERE-ON-HULL + WHY-IT-READS.
+
+Mix across feature categories:
+- Asymmetric anomalies (one engine larger / cockpit offset to one side / single oversized weapon port)
+- Battle scars (huge gouge across portside / patched-with-mismatched-plate breach / blackened bombardment crater)
+- Custom modifications (welded-on extra weapon mount / strapped-on cargo container / patched salvage hull-section)
+- Organic infiltration (fungal hull-corrosion in green-and-orange patches / crystalline xeno-growths / vine-overgrown wreck-cluster)
+- Optical features (glasshouse observation pod jutting from spine / mirror-finish bow / fully-glazed nose)
+- Decorative / cultural (figurehead carved into bow / painted nose-art / hand-painted prayer-glyphs across midship)
+- Antenna/sensor anomalies (oversized dish on dorsal spine / forest of bristling sensor arrays / radar mast longer than the ship)
+- Weathering signatures (sun-bleached on one side only / micrometeor scarring across nose / acid-pitted hull on one flank)
+- Strange protrusions (extending grav-rod / oversized cooling fin / decorative spire / docking-claw armada)
+- Light-art (glowing color-changing seams / decorative LED runs along hull lines / illuminated cockpit "eyes")
+- Tertiary structures (parasite-craft docked on hull / external cargo strung with rope-nets / barnacle-cluster of escape pods)
+- Coloration anomalies (one panel painted differently / chrome-mirror nose / matte-vantablack stealth-skin)
+
+Specify:
+(a) THE FEATURE — name what it is
+(b) THE SHAPE — physical description
+(c) HULL PLACEMENT — port / starboard / dorsal / ventral / bow / aft / midship / nacelle
+(d) WHY-IT-READS — what makes it stand out (size / color / wear / contrast)
+
+Examples (DO NOT copy verbatim):
+1. A glasshouse observation pod jutting from the dorsal spine like an upturned glass thimble, lit warm-yellow from within, twelve tiny silhouettes visible through the panes.
+2. Portside hull scarred by a five-meter gouge mid-flank, exposed structural ribs visible beneath, three mismatched patch-plates welded over the deepest section.
+3. Fungal hull-corrosion blooming across the starboard nacelle in patches of acid-green and ochre-orange, growing through paneling seams like rust-flowers, organic and unsettling.
+
+The feature should be SPECIFIC enough that Sonnet bakes it into the prompt with a count/color/scale phrase. NO generic "weathered hull" — always pick a specific feature with placement.
+
+Output 25 numbered list entries.`,
+  },
   space_opera_story_beat: {
-    theme: 'ACTION NARRATIVE BEATS for fighter-action scenes — the dramatic moment the scene captures. Pursuit / Dogfight / Recon Discovery / Spy Mission Penetration / Wingmate Loss / Breakaway / Last-Stand / Bombing Run / Ambush / Daring Escape. Each entry sets the narrative stakes.',
+    theme:
+      'ACTION NARRATIVE BEATS for fighter-action scenes — the dramatic moment the scene captures. Pursuit / Dogfight / Recon Discovery / Spy Mission Penetration / Wingmate Loss / Breakaway / Last-Stand / Bombing Run / Ambush / Daring Escape. Each entry sets the narrative stakes.',
     touchpoints: [
       'mid-pursuit fighter chase',
       'dogfight in tight formation',
@@ -1485,7 +1697,8 @@ ABSOLUTE BANS:
 Output 20 numbered list entries.`,
   },
   space_opera_composition: {
-    theme: 'FIGHTER FRAMING / CAMERA PERSPECTIVES — how the camera frames the action. Cockpit POV / wingman view / under-the-keel skim / overhead chase / behind-shoulder / cinematic 3/4 / diving angle / asteroid-gap perspective / etc. Each entry is one specific camera framing rule.',
+    theme:
+      'FIGHTER FRAMING / CAMERA PERSPECTIVES — how the camera frames the action. Cockpit POV / wingman view / under-the-keel skim / overhead chase / behind-shoulder / cinematic 3/4 / diving angle / asteroid-gap perspective / etc. Each entry is one specific camera framing rule.',
     touchpoints: [
       'cockpit POV looking forward through canopy',
       'wingman-view from companion fighter',
@@ -1532,7 +1745,8 @@ ABSOLUTE BANS:
 Output 20 numbered list entries.`,
   },
   space_opera_lighting: {
-    theme: 'SPACE-ACTION LIGHTING — engine bloom / weapon flash / nebula backlight / hull-strike spark / explosion glow / sun rim-light / planet earthlight / etc. Each entry is one specific lighting situation for fighter-action scenes.',
+    theme:
+      'SPACE-ACTION LIGHTING — engine bloom / weapon flash / nebula backlight / hull-strike spark / explosion glow / sun rim-light / planet earthlight / etc. Each entry is one specific lighting situation for fighter-action scenes.',
     touchpoints: [
       'engine plasma bloom as primary light',
       'weapon-fire flash from forward cannons',
@@ -1580,7 +1794,8 @@ ABSOLUTE BANS:
 Output 20 numbered list entries.`,
   },
   space_opera_particulate: {
-    theme: 'COSMIC PARTICULATE FOR FIGHTER-ACTION — debris haze, plasma cloud, nebula gas, ice crystals streaming, vapor trails, smoke contrails, atmospheric particle scattering. Adds depth and motion to the scene.',
+    theme:
+      'COSMIC PARTICULATE FOR FIGHTER-ACTION — debris haze, plasma cloud, nebula gas, ice crystals streaming, vapor trails, smoke contrails, atmospheric particle scattering. Adds depth and motion to the scene.',
     touchpoints: [
       'debris haze drifting through frame',
       'plasma cloud from engine wash',
@@ -1627,7 +1842,8 @@ ABSOLUTE BANS:
 Output 20 numbered list entries.`,
   },
   space_opera_emotion: {
-    theme: 'ACTION-MOOD EMOTIONAL DNA for fighter scenes — adrenaline, pursuit-thrill, desperation, defiant heroism, triumph, focused-calm-before-strike, dread of overwhelming force, righteous fury, exhilaration. Each entry is one emotional tone for the scene.',
+    theme:
+      'ACTION-MOOD EMOTIONAL DNA for fighter scenes — adrenaline, pursuit-thrill, desperation, defiant heroism, triumph, focused-calm-before-strike, dread of overwhelming force, righteous fury, exhilaration. Each entry is one emotional tone for the scene.',
     touchpoints: [
       'adrenaline rush mid-dogfight',
       'pursuit-thrill chasing target',
@@ -1674,7 +1890,8 @@ Output 15 numbered list entries.`,
   },
   weather_particulate: {
     format: 'simple',
-    theme: 'Universal atmospheric particulate / weather effects that fill the air in a sci-fi scene — dust, mist, vapor, ash, plasma, aurora, radiation, glitter, etc.',
+    theme:
+      'Universal atmospheric particulate / weather effects that fill the air in a sci-fi scene — dust, mist, vapor, ash, plasma, aurora, radiation, glitter, etc.',
     touchpoints: [],
     instructions: `Write 30 atmospheric particulate / weather effects. Each entry: lowercase descriptive phrase — short body explaining how it fills the air and catches light. One sentence per entry.
 
@@ -1689,7 +1906,8 @@ Avoid duplicating: thick atmospheric haze, wind-driven dust haze, acid-rain fog,
   },
   real_space_subjects: {
     format: 'simple',
-    theme: 'SLIM atomic seeds for photoreal astrophotography — named real astronomical objects, ~15-25 words each. The brief composer layers in scale_provers / weather / surprise_element / story_beat / composition / lighting at render time, and Sonnet weaves it all into the polished multi-wavelength composite prompt. Pool entries provide the SUBJECT IDENTITY only; layering is the axis system\'s job.',
+    theme:
+      "SLIM atomic seeds for photoreal astrophotography — named real astronomical objects, ~15-25 words each. The brief composer layers in scale_provers / weather / surprise_element / story_beat / composition / lighting at render time, and Sonnet weaves it all into the polished multi-wavelength composite prompt. Pool entries provide the SUBJECT IDENTITY only; layering is the axis system's job.",
     touchpoints: [],
     instructions: `Write 30 SLIM atomic astronomical-subject seeds. Each entry is ONE short phrase (15-25 words) naming a real astronomical object + a 1-clause characterization of its distinctive visual signature. NO full scene paragraphs. NO scale-prover spacecraft (that's an axis layer). NO instrument framing language (the medium wrapper handles that). Just: named object + its defining visual feature.
 
@@ -1711,7 +1929,8 @@ Format: ONE entry per line, 15-25 words each. ALL-CAPS or capitalized named obje
   },
   cozy_moment: {
     format: 'simple',
-    theme: 'Small intimate cozy moments visible in a warm sci-fi interior — a steam curl, a turned page, a sleeping pet, a hand reaching for a mug. Conditional 40%-gated layer for cozy-sci-fi-interior path.',
+    theme:
+      'Small intimate cozy moments visible in a warm sci-fi interior — a steam curl, a turned page, a sleeping pet, a hand reaching for a mug. Conditional 40%-gated layer for cozy-sci-fi-interior path.',
     touchpoints: [],
     instructions: `Write 50 small intimate cozy moments — a single tiny action or detail caught freeze-frame in a warm sci-fi interior. Each entry: one sentence describing the specific moment. Sci-fi context still present (the moment happens in a starship galley / generation-ship quarters / hydroponics bay / etc.) but the moment itself is human-scale, intimate, warm.
 
@@ -1724,9 +1943,244 @@ Examples:
 
 The moment is QUIET — no action set-pieces. No combat, no awe, no epic scale. Soft, lived-in, human. Mix: solitary moments / paired moments / animal moments / sensory moments (steam, light, fabric, food, plants). Sometimes no person visible, just evidence of one. Output 50 numbered list entries.`,
   },
+  // ════════════════════════════════════════════════════════
+  // REAL-SPACE PREMIUM-TIER ENRICHMENT (2026-05-31)
+  // 6 new path-bespoke axes + REAL_SPACE_EVENT split. PHOTOREAL_ASTRO archetype.
+  // ════════════════════════════════════════════════════════
+  real_space_wavelength_signature: {
+    format: 'simple',
+    theme:
+      'Telescope/instrument tradition that defines the rendering aesthetic — Hubble visible-light / JWST IR-mapped / Chandra X-ray pseudo-color / ALMA radio / EHT event-horizon / Spitzer mid-IR / Roman wide-field / GALEX UV / etc. ALWAYS-ON identity axis — sets the entire visual tradition of the render.',
+    touchpoints: [],
+    instructions: `Write 25 wavelength-signature descriptions — each names a specific real telescope or instrument + the visual tradition it represents. One sentence each, 18-32 words. ALWAYS-ON axis (opens every render).
+
+Each entry must name:
+(a) THE INSTRUMENT — real telescope or imaging band (Hubble Space Telescope / James Webb / Chandra X-ray / ALMA radio / EHT event-horizon / Spitzer Space Telescope / Roman Telescope / GALEX UV / Hinode solar / Subaru visible / VLT / ESO / Hubble Ultra Deep Field / Pan-STARRS)
+(b) THE WAVELENGTH BAND — visible / near-IR / mid-IR / X-ray / radio / UV / mm-wavelength
+(c) THE VISUAL SIGNATURE that defines its aesthetic — what makes this telescope's images instantly recognizable (Hubble = saturated visible with diffraction spikes / JWST = burnt-amber-and-cobalt IR / Chandra = purple-cyan X-ray pseudo-color / EHT = dark-shadow-of-event-horizon / ALMA = molecular-cloud radio-pseudo-color)
+(d) THE TYPICAL SUBJECT MATTER — what kind of object this instrument is famous for imaging
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. Hubble Space Telescope visible-light deep composite, signature six-prong diffraction spikes on every star, saturated multi-filter color, classic Hubble Ultra Deep Field aesthetic with thousands of background galaxies.
+2. James Webb Space Telescope near-infrared NIRCam composite, characteristic eight-prong diffraction spike pattern, burnt-amber and cobalt-cyan false-color from molecular-hydrogen and ionized-gas mapping.
+3. Chandra X-ray Observatory pseudo-color composite, purple-and-cyan high-energy emission mapped from X-ray data, shock fronts and accretion-disk corona visible only at this wavelength.
+
+Cover the spectrum: visible-light telescopes, near/mid-IR (JWST, Spitzer), X-ray (Chandra, XMM-Newton), radio (ALMA, VLA), UV (GALEX, Hubble UV), event-horizon (EHT), solar (Hinode, SDO), wide-field (Roman, Pan-STARRS), ground-based optical (VLT, Subaru, Keck).
+
+NO fictional instruments. NO sci-fi telescopes. NO "imaginary" wavelengths. The strength of this path is REAL astronomical imaging.
+
+Output 25 numbered list entries.`,
+  },
+  real_space_structural_detail: {
+    format: 'simple',
+    theme:
+      'Specific visible physical features of the astronomical subject — jets, accretion disks, shock fronts, stellar nurseries, polar lobes, dust lanes, ionization fronts, bipolar outflows, ring-systems, gravitational arcs. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 structural-detail descriptions — specific visible physical features of astronomical objects. One sentence each, 16-28 words. Each names a SPECIFIC FEATURE + its visual signature.
+
+Mix across feature categories:
+- Jets / outflows (twin polar jets venting at relativistic speed / bipolar outflow lobes / herbig-haro shock fronts / pulsar wind nebula)
+- Accretion structures (accretion disk edge-on / hot inner disk glow / Roche-lobe overflow / spiral accretion lanes)
+- Stellar features (stellar nursery clusters / pillars of creation / proto-planetary disk / Bok globules silhouetted)
+- Galactic structures (two-arm spiral with razor-sharp dust lanes / barred-spiral central bulge / merging tidal tails / starburst ring)
+- Nebular features (ionization front edges / cometary globules / dark-cloud silhouettes / emission-line filament network)
+- Black hole features (event-horizon shadow / photon ring / relativistic jet beam / X-ray corona)
+- Star-cluster features (tightly-packed core / mass-segregated heavy-stars at center / blue-straggler population / tidal-disruption tails)
+- Planet-system features (planetary ring system / cassini-division gap / shepherd moons / volcanic plume from a moon)
+- Solar features (coronal mass ejection arc / sunspot active region / chromosphere prominence / coronal loops)
+- Cosmic-web features (gravitational lensing arc / galaxy-cluster filament / cosmic-microwave-background fluctuation / void-wall boundary)
+
+Each entry must specify:
+(a) THE FEATURE NAME — the specific astronomical structure
+(b) THE VISUAL FORM — shape, count, scale
+(c) THE COLOR / WAVELENGTH SIGNATURE — what wavelength it emits
+
+Examples (DO NOT copy verbatim):
+1. Twin polar jets venting at relativistic speed from the central engine, each jet a thin razor-bright filament extending five times the galaxy's diameter into intergalactic space.
+2. Two-arm grand-design spiral pattern with razor-sharp dust lanes silhouetted against the disk's stellar background, each lane tracing the spiral arm's leading edge.
+3. Event-horizon shadow ringed by a glowing photon-sphere, the dark circular silhouette unmistakable against the asymmetric accretion-flow corona.
+
+NO fictional structures. NO sci-fi-coded ("the dyson lattice"). All features must be real astronomical phenomena.
+
+Output 25 numbered list entries.`,
+  },
+  real_space_color_palette_band: {
+    format: 'simple',
+    theme:
+      'False-color palette / wavelength-mapped color treatment — the SIGNATURE color register of the render. Pillars-of-Creation orange-and-teal / JWST burnt-amber-and-cobalt / Chandra X-ray purple-and-cyan / aurora violet-and-green / radio molecular-cloud-blue / etc. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 false-color palette descriptions — wavelength-mapped color treatments that wash an entire render in a specific hue family. One sentence each, 14-26 words. Each names 2-4 SPECIFIC NAMED COLORS + what wavelength they map to + the overall mood.
+
+Mix across canonical astrophotography palettes:
+- Classic Hubble Pillars-of-Creation: deep teal (oxygen-III), saturated orange (sulfur-II + dust), with violet shadow nooks
+- JWST near-IR: burnt amber, deep cobalt-cyan, ghostly violet edges, hot-pink hydrogen
+- Chandra X-ray: purple high-energy, cyan medium-energy, gold low-energy, deep-black void contrast
+- Aurora-violet H-alpha: deep magenta hydrogen, violet helium, soft green oxygen
+- ALMA radio millimeter: cold blue molecular clouds, pink protostellar disks, deep black void
+- Spitzer mid-IR: green dust glow, red warm-dust emission, blue evolved-star halos
+- Solar SDO: orange chromosphere, gold coronal loops, electric magenta active regions
+- Cool-spectrum nebula: ice blue, mint green, lavender, with diamond-white stars
+- Warm-spectrum nebula: vermilion red, saturated marigold, copper edges, ember orange
+- Deep-sky deep-field: thousands of background galaxies in jewel-tone scatter against deep void
+- Auroral magnetosphere: emerald polar light, ruby southern auroras, violet upper atmosphere
+- Hot Jupiter color: amber bands, deep magenta cyclones, ember storm streaks
+- Quasar color: blinding white-violet core, ghostly cyan jets, golden gravitational halo
+
+Each entry must:
+(a) NAME 2-4 SPECIFIC COLORS (no "vibrant" / "rich" / "vivid" — name them)
+(b) MAP TO WAVELENGTH OR EMISSION SOURCE (oxygen-III / sulfur-II / hydrogen-alpha / X-ray hard-energy / IR molecular / radio cold-dust)
+(c) STATE THE OVERALL MOOD (jewel-tone / ember / aurora / void-deep-and-jewel / cool-saturated / etc.)
+
+Examples (DO NOT copy verbatim):
+1. Classic Pillars palette — deep teal of oxygen-III, saturated orange of sulfur-II and dust, with violet hydrogen-alpha shadow nooks, gem-tone saturation throughout.
+2. JWST near-IR signature — burnt amber and deep cobalt-cyan dominating the frame, ghostly violet edges where ionized-gas mapping kicks in, hot-pink hydrogen accents.
+3. Chandra X-ray pseudo-color register — purple high-energy emission, cyan medium-energy, gold low-energy bands, deep-black void contrast, scientific-imaging aesthetic.
+
+Output 25 numbered list entries.`,
+  },
+  real_space_scale_anchor: {
+    format: 'simple',
+    theme:
+      'Astro-specific scale-prover element — a small object in the foreground/midground that anchors the impossible scale of the subject. Foreground asteroid silhouette / nearby star with diffraction cross / approaching probe / contrasting smaller galaxy / lone exoplanet transit / etc. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 astro-specific scale-anchor descriptions — small but readable elements in the frame that anchor the scale of the astronomical subject. One sentence each, 14-26 words. Each names a SPECIFIC OBJECT + its scale + its position relative to the subject.
+
+Mix across scale-anchor categories:
+- Foreground objects (silhouetted asteroid / dust filament strand / nearby cometary nucleus)
+- Nearby stars (single bright foreground star with massive diffraction cross / blue supergiant edge of frame / red dwarf binary pair)
+- Mechanical scale-provers (tiny silhouette of an approaching probe / distant spacecraft against the subject / lone observation platform)
+- Comparison objects (contrasting smaller galaxy at frame edge / Moon-sized object near a planet / Earth-sized planet transit silhouette / Jupiter for scale)
+- Stellar witnesses (distant nova flash / brief gamma-ray burst pinpoint / pulsar at frame edge)
+- Lensing artifacts (gravitational arc from a background galaxy / Einstein cross / lensed quasar image multiplied)
+- Time-scale markers (light-echo expanding from past supernova / sequential pulse-image of a pulsar / orbital-motion blur trail)
+
+Each entry must:
+(a) NAME the specific scale-prover object
+(b) NAME the scale (asteroid-sized / star-sized / probe-sized / galaxy-sized)
+(c) PLACE it in the frame (foreground left / silhouetted against subject / at frame edge / midground)
+
+Examples (DO NOT copy verbatim):
+1. A silhouetted foreground asteroid the size of a small moon at lower-frame, its irregular shape backlit by the subject's ionized gas glow, providing direct scale.
+2. A nearby blue-supergiant star at upper-right with a massive six-prong diffraction cross, its scale dwarfed by the subject galaxy behind it.
+3. The tiny silhouette of an approaching probe at frame center, scale-mark for the kilometer-sized subject asteroid behind it.
+
+Output 25 numbered list entries.`,
+  },
+  real_space_composition_focus: {
+    format: 'simple',
+    theme:
+      'Astronomical composition framing — centered jewel-box / edge-on disk / spiral-arm hero / merging-galaxies pair / Dyson-sphere transit / nebula-into-void wide / etc. 50%-gated accent on top of the universal composition_frame axis.',
+    touchpoints: [],
+    instructions: `Write 25 astronomical composition descriptions — framing strategies specific to deep-sky imaging. One sentence each, 14-24 words. Each names a SPECIFIC FRAMING + how the subject is positioned.
+
+Mix across canonical astro composition:
+- Centered jewel-box (subject filling the frame, symmetrically composed)
+- Edge-on disk (galaxy or system viewed from its equatorial plane)
+- Face-on disk (galaxy viewed from above the disk plane)
+- Spiral-arm hero (focus on a single grand-design spiral arm)
+- Merging galaxies pair (two systems mid-collision, frame split)
+- Three-quarter angle (subject at oblique angle for depth)
+- Nebula-into-void wide (vast nebula with deep void at frame edges)
+- Transit silhouette (small object silhouetted against larger luminous one)
+- Pillar verticality (vertical columnar structure dominant)
+- Wide-field cluster (thousands of stars spread across frame)
+- Lensing-arc framing (gravitational lens forming arc across frame)
+- Centered black hole (event-horizon at exact center)
+- Off-center golden-spiral (subject placed at golden-ratio point)
+- Diagonal jet (jet structure cutting across frame diagonally)
+- Cosmic-web filament (linear filament structure across frame)
+
+Each entry must:
+(a) NAME the composition style
+(b) NAME the position of the subject in frame
+(c) STATE what reads first / leads the eye
+
+Examples (DO NOT copy verbatim):
+1. Edge-on disk composition, the subject galaxy spanning the entire horizontal frame with razor-thin dust lane cutting through its bright equator.
+2. Centered jewel-box framing, the subject nebula filling 80% of frame with symmetrical structure on both sides, leading the eye to the bright core.
+3. Diagonal jet composition, twin polar jets cutting the frame at a 30-degree angle, the host galaxy nucleus at one corner with the jets extending to the opposite corner.
+
+Output 25 numbered list entries.`,
+  },
+  real_space_narrative_phase: {
+    format: 'simple',
+    theme:
+      'The cosmic moment the still captures — what PHASE of cosmic time. Star formation / supernova death / galaxy merger / quiet majesty / aftermath / discovery / first light / etc. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 cosmic-narrative-phase descriptions — what moment of cosmic time the still captures. One sentence each, 14-24 words. Each names a SPECIFIC PHASE + its visual signature.
+
+Mix across cosmic narrative phases:
+- BIRTH — star formation, proto-stellar disk, molecular cloud collapse, ignition flash
+- DEATH — supernova explosion, planetary nebula expansion, black-hole-feeding final spiral, white-dwarf cooling
+- COLLISION — galaxy merger, tidal-disruption event, neutron-star inspiral, comet impact
+- QUIET MAJESTY — stable spiral, calm globular cluster, peaceful nebula at rest
+- AFTERMATH — supernova remnant expansion centuries later, evaporating black hole, fading planetary nebula
+- DISCOVERY — first-light from a new survey, unexpected transient flash, just-detected exoplanet transit
+- TRANSIT — planet crossing in front of star, moon shadow on planet, pulsar passing through lensing field
+- AWAKENING — quasar reignition, dormant black hole accreting again, nova outburst from a recurring system
+- WITNESSING — light-echo of an ancient event, photon arrival from billions of years ago
+- ECLIPSE — solar/lunar/exoplanet eclipse, occultation, syzygy alignment
+- FORMATION — proto-galaxy assembly, dark-matter halo cooling, primordial nucleosynthesis
+- DISRUPTION — tidal stream pulled from a merging satellite, jet boring through host galaxy
+- PROCESSION — slow rotation of a cluster, orbital dance of a binary system
+
+Each entry must:
+(a) NAME the phase
+(b) NAME a visual signature unique to that phase
+(c) STATE the time-scale tone (eternal / instant / millennia / billions of years)
+
+Examples (DO NOT copy verbatim):
+1. Star-formation phase — proto-stellar disk surrounding a newly-ignited central star, jets venting along the rotational axis, dust still falling inward in concentric rings.
+2. Supernova death phase — outer shock wave caught a thousand years post-detonation, expanding shell of ionized gas illuminated from within by the central remnant.
+3. Galaxy-merger collision phase — two grand-design spirals tidally distorted into starburst-orange streams pulled across the frame, dust lanes warping.
+
+Output 25 numbered list entries.`,
+  },
+  real_space_event: {
+    format: 'simple',
+    theme:
+      'Dramatic cosmic event for the real-space path — the moment a real astronomical phenomenon erupts into action. Path-bespoke split from shared COSMIC_EVENT pool. 35%-gated conditional drama.',
+    touchpoints: [],
+    instructions: `Write 25 dramatic cosmic events for real-space photoreal astrophotography. One sentence each, 16-28 words. Each describes a SPECIFIC PHENOMENON happening RIGHT NOW in the frame (freeze-frame). Pure cosmos — no figures, no ships, no fictional elements. NASA-grade imaging aesthetic.
+
+Mix across real astronomical events:
+- Supernova mid-detonation (shock wave bursting through outer envelope)
+- Black hole tidal-disruption event (star being shredded into spaghettified debris)
+- Gamma-ray burst pinpoint (briefest brightest electromagnetic event in the universe)
+- Neutron star merger (kilonova ejection of heavy elements)
+- Magnetar starquake (X-ray flash from crustal rearrangement)
+- Active galactic nucleus jet ignition (relativistic jet just launching)
+- Solar coronal mass ejection (billion-ton plasma launch toward space)
+- Pulsar wind nebula expansion (high-energy particle wind sweeping outward)
+- Cosmic-ray air-shower particle cascade visible
+- Type Ia supernova nucleosynthesis flash (carbon-burning runaway)
+- Variable star pulsation peak (Cepheid at maximum brightness)
+- Nova outburst (recurrent system in eruption)
+- Brown dwarf failed-ignition flash
+- Protostar bipolar jet first-launch
+- Gravitational wave detection moment (chirp ringing through spacetime)
+- Comet outburst (sudden brightening from cryovolcano)
+- Cosmic-string transit event (theoretical defect passing through frame)
+- Microlensing magnification peak (background star brightened by foreground compact object)
+- Planetary atmospheric escape stream (hot Jupiter losing gas)
+- Stellar flare apex (M-dwarf super-flare illuminating its planetary system)
+
+Each entry must:
+(a) NAME the real phenomenon
+(b) DESCRIBE its visual signature mid-event
+(c) STATE what's specifically visible in the still (light, color, motion-blur, structure)
+
+Examples (DO NOT copy verbatim):
+1. Supernova mid-detonation, shock wave expanding from the iron-core collapse, outer envelope blasted into a luminous shell glowing brighter than the host galaxy's entire stellar population.
+2. Black hole tidal-disruption event mid-shred, the doomed star spaghettified into a glowing accretion stream wrapping the central singularity, X-ray flash erupting from the inner disk.
+3. Coronal mass ejection mid-launch, a billion-ton magnetic plasma loop arcing off the solar limb, twisted and glowing in extreme-UV against the dark solar disk.
+
+Output 25 numbered list entries.`,
+  },
   cosmic_event: {
     format: 'simple',
-    theme: 'Dramatic cosmic events for cosmic-vista scenes — the moment a cosmic phenomenon erupts into ACTION. Conditional 40%-gated drama layer.',
+    theme:
+      'Dramatic cosmic events for cosmic-vista scenes — the moment a cosmic phenomenon erupts into ACTION. Conditional 40%-gated drama layer.',
     touchpoints: [],
     instructions: `Write 30 dramatic cosmic events — the MOMENT a cosmic phenomenon detonates into action. Each one sentence describing what is happening RIGHT NOW in the scene (not "could happen", not "was happening" — the freeze-frame). Pure cosmos, no figures, no ships, no human elements. Hubble / Webb / Villeneuve cosmic horror aesthetic.
 
@@ -1739,9 +2193,243 @@ Examples:
 
 Format: ALL-CAPS event-name OR descriptive opening — short body. One sentence. No ships, no figures, no architecture. Pure astronomical drama. Output 30 numbered list entries.`,
   },
+  // ════════════════════════════════════════════════════════
+  // COSMIC-VISTA PREMIUM-TIER ENRICHMENT (2026-05-31)
+  // 6 new path-bespoke axes + COSMIC_VISTA_EVENT split. PURE_COSMOS archetype.
+  // PAINTED Bonestell/McCall/Whelan tradition — NOT photoreal NASA.
+  // ════════════════════════════════════════════════════════
+  cosmic_vista_painted_tradition: {
+    format: 'simple',
+    theme:
+      'Painter tradition that defines the cosmic-vista aesthetic — Chesley Bonestell saturated planetscape / Robert McCall NASA-watercolor / Michael Whelan paperback-cover / John Harris vast-cinematic-cosmos / Bruce Pennington dreamy-acid-color / David Hardy science-poster-grandeur / Jim Burns analog-SF-paperback / Frank Kelly Freas pulp-SF / Vincent Di Fate. ALWAYS-ON identity axis.',
+    touchpoints: [],
+    instructions: `Write 25 painted-tradition descriptions — each names a specific real Analog-SF illustrator/painter + the visual signature that defines their cosmic vista paintings. One sentence each, 18-32 words.
+
+Each entry must name:
+(a) THE PAINTER — real Analog-SF or space-art illustrator (Chesley Bonestell / Robert McCall / Michael Whelan / John Harris / Bruce Pennington / David Hardy / Jim Burns / Frank Kelly Freas / Vincent Di Fate / Don Davis / Pat Rawlings / Lynette Cook / Don Punchatz / Ron Miller)
+(b) THE SIGNATURE STYLE — what their cosmic vistas characteristically look like (saturated panoramic planetscape / watercolor-and-gouache NASA-poster / paperback-cover oil saturation / vast atmospheric cinematic depth / dreamy acid-color hallucinatory)
+(c) THE TYPICAL FRAMING — their go-to composition (terraformed-Mars vista with two moons / astronaut on Mercury surface / paperback-cover spaceship-against-nebula / Heavy Metal cosmic surreal)
+(d) THE PALETTE TENDENCY — characteristic colors of their work
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. Chesley Bonestell saturated-planetscape tradition — terraformed-Mars vistas with razor-sharp horizon lines, two moons on the horizon, painted oil-on-canvas Analog-SF magazine-cover register with deep crimson-and-ochre palette.
+2. Robert McCall NASA-watercolor poster tradition — airbrushed gradient-sky-and-cosmos with deliberate hopeful atmosphere, planetary ringscapes painted in pale blues and silver-whites, mid-century-modern aerospace illustration sensibility.
+3. Michael Whelan paperback-cover oil tradition — saturated jewel-tone painted cosmos with dramatic dramatic lighting and atmospheric depth, hero-scale vistas with one or two figures dwarfed by the scene.
+
+Cover the spectrum: foundational Analog-SF illustrators, NASA poster painters, paperback-cover oil-on-canvas, Heavy Metal cosmic surrealists, modern space-art photoreal-painters, retro pulp-SF interior artists. Each painter named must be a REAL person.
+
+NO photoreal astrophotography (that's real-space's domain). NO fictional painters. NO film concept artists primarily known for non-cosmic work. The strength of this path is PAINTED COSMOS, not photoreal.
+
+Output 25 numbered list entries.`,
+  },
+  cosmic_vista_composition: {
+    format: 'simple',
+    theme:
+      'Painted-tradition vista compositions — terraformed-foreground-globe / two-moons-on-horizon / planetary-rings-bisecting / spiral-arm-overhead / nebula-cathedral-arches / binary-double-shadow / etc. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 painted vista composition descriptions — framing strategies that define classic painted cosmic vistas. One sentence each, 14-26 words. Each names a SPECIFIC FRAMING + how the subject is positioned.
+
+Mix across canonical painted-vista compositions:
+- Terraformed foreground globe with cosmic anchor behind (planet half-filling lower frame, distant phenomenon dominating upper frame)
+- Two-moons-on-horizon vista (two satellites at different sizes flanking the horizon line)
+- Planetary-rings-bisecting (rings cutting diagonally across frame, the planet at one end)
+- Spiral-arm-overhead (galaxy arm arching like a sky over the foreground vista)
+- Nebula-cathedral arches (gas-pillars rising like cathedral columns into deep distance)
+- Binary-double-shadow (two stars casting dual-shadow patterns across foreground)
+- Cosmic-horizon-from-moon-surface (lunar foreground, planet rising above horizon)
+- Asteroid-belt-tunneling-through (foreground rocks framing distant cosmic event)
+- Gas-giant-half-frame (planet's cloud-bands filling 50% with cosmic event at edge)
+- Rings-of-Saturn-from-Titan (looking up at ringed gas-giant through methane sky)
+- Distant-nebula-cathedral-window (looking out from a planetary surface through atmospheric haze)
+- Three-body-alignment (sun + planet + moon in precise syzygy across frame)
+- Cosmic-storm-from-orbit (looking down at planetary storm system with cosmic backdrop)
+- Comet-tail-arcing-overhead (tail of approaching comet stretching across the painted sky)
+- Aurora-dome-from-ice-cap (auroral curtain hanging over polar foreground)
+
+Each entry must:
+(a) NAME the composition style
+(b) NAME the position of the primary subject in frame
+(c) STATE what reads first / leads the eye through the painted vista
+
+Examples (DO NOT copy verbatim):
+1. Terraformed-foreground-globe composition, a half-terraformed planet filling the lower third with a distant blue nebula bloom dominating the upper-frame painted sky.
+2. Two-moons-on-horizon framing, a small reddish satellite low on the left horizon and a larger pale grey moon centered higher, planetary surface receding into painted distance.
+3. Planetary-rings-bisecting composition, Saturn's rings cutting the frame at a thirty-degree diagonal, the planet itself at the lower-right corner with stars filling the upper-left.
+
+Output 25 numbered list entries.`,
+  },
+  cosmic_vista_narrative_witness: {
+    format: 'simple',
+    theme:
+      'Tiny silhouette figure or structure providing scale in a painted cosmic vista — painted-figure-silhouette / observatory dome / ancient ruin / orbiting habitat / lone lander / generation-ship cutaway / suit-figure-at-cliff. NOT a hero subject. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 narrative-witness descriptions — tiny silhouette figures or structures providing scale in painted cosmic vistas. One sentence each, 14-26 words. Each names a SPECIFIC ELEMENT + its size + its placement (NEVER hero-scale).
+
+Mix across witness types:
+- Painted figure silhouettes (single astronaut at cliff edge / suited explorer pointing / lone observer at observatory window / pair of figures dwarfed by horizon)
+- Built structures (observatory dome with telescope visible / inflatable habitat module / radio-dish array / abandoned settlement / wind-turbine array / mining outpost)
+- Vehicles at distant scale (lone lander touched down / rover crawling along ridge / parked exploration vehicle / abandoned spacecraft husk)
+- Orbiting elements (small habitat station orbiting overhead / approaching probe at frame edge / lone shuttle in transit)
+- Ancient ruins (collapsed monolith / weathered alien structure / sand-buried megalith / glyph-carved cliff)
+- Generation-ship architecture (vast hull section partially visible / observation deck cutaway / interior city panels)
+- Other-world infrastructure (orbital-elevator anchor / mass-driver track / launch-pad scaffold)
+
+ALL must be:
+(a) TINY scale (silhouette / pixels-tall / frame-edge / middle distance — NEVER focal)
+(b) PROVIDING SCALE to the vast cosmic vista
+(c) SPECIFIC about what the element is
+
+Examples (DO NOT copy verbatim):
+1. A single suited figure silhouetted at the cliff edge, ant-sized against the looming planet rising on the horizon behind them, pointing toward something unseen.
+2. A small inflatable habitat module the size of a beach ball at this distance, parked on the ridge with running lights blinking faintly red.
+3. An observatory dome the size of a thumbnail at frame edge, its dome open and the telescope tube angled upward toward the cosmic phenomenon dominating the painted sky.
+
+NO hero characters. NO foreground figures. NO ship-as-subject. The witness is always scale-prover only.
+
+Output 25 numbered list entries.`,
+  },
+  cosmic_vista_atmospheric_layer: {
+    format: 'simple',
+    theme:
+      'Terrestrial-foreground atmospheric layer rendered in the painted vista — dust-laden alien atmosphere / cryogenic crystal-fog / methane-blue haze / sulfur-yellow smog / volcanic-ash veil / lichen-spore drift / cryo-vapor / aurora-borealis curtain. Anchors painted cosmic vistas to a concrete viewpoint. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 atmospheric-layer descriptions — terrestrial-foreground atmospheric interpretations for painted cosmic vistas viewed from a planetary surface or near-orbit. One sentence each, 14-26 words.
+
+Mix across atmospheric types:
+- Particulate hazes (dust-laden alien atmosphere / volcanic-ash veil / micrometeor dust shimmer / regolith haze)
+- Cryogenic atmospheres (cryogenic crystal-fog / nitrogen-snow drift / methane-rain mist / ammonia-frost curtain)
+- Toxic / colored atmospheres (sulfur-yellow smog / chlorine-green pall / mercury-vapor cloud / phosphine-pink haze)
+- Volcanic / industrial (sulfur-dioxide acid mist / pyroclastic-ash plume drift / steam-vent column)
+- Biological (lichen-spore drift / fungal-bloom haze / bioluminescent-dust swarm)
+- Aurora / radiation (aurora-curtain hanging in the upper atmosphere / magnetospheric ribbons / radiation-haze shimmer)
+- Methane-cycle atmospheres (methane-blue haze with hydrocarbon-rain streaks / methane-fog-bank rising)
+- Storm systems (lateral-lightning-mist / cyclonic-cloud-bank / electrified-dust-wall)
+
+Each entry must:
+(a) NAME the atmosphere type
+(b) NAME its color
+(c) DESCRIBE its visual signature (drift / shimmer / hang / pillar)
+
+Examples (DO NOT copy verbatim):
+1. Sulfur-yellow smog drifting laterally across the foreground in horizontal bands, dimming the painted cosmic vista behind it into amber-filtered atmospheric depth.
+2. Cryogenic crystal-fog hanging at knee-height across the entire foreground plain, catching the cosmic backlight in faint diamond-sparkle refractions.
+3. Methane-blue haze rising in a vertical column near frame center, dispersing into a translucent curtain that softens the cosmic event behind it to dreamy painted softness.
+
+Output 25 numbered list entries.`,
+  },
+  cosmic_vista_color_register: {
+    format: 'simple',
+    theme:
+      'Painted-tradition color palette signatures — sunset-on-Jupiter amber-and-burgundy / Saturn-rings ivory-and-cobalt / Mars-twin-moon rust-and-ochre / nebula-pastel-magenta-and-cyan / methane-cyan-and-antifreeze-blue / alien-double-sunset / impossibly-saturated. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 painted color-register descriptions — palette signatures for painted cosmic vistas. One sentence each, 14-26 words. Each names 2-4 SPECIFIC NAMED COLORS + the planetary/cosmic context + the painted mood.
+
+Mix across painted-cosmic palettes:
+- Jupiter sunset (amber, burgundy, deep ochre, atmospheric coffee-brown)
+- Saturn ringscape (ivory, cobalt, gunmetal-grey, pale gold)
+- Mars vista (rust, ochre, pale-pink, salmon, deep sienna)
+- Pluto-twilight (cerulean, lavender, pale-rose, glacial-mint)
+- Venus-greenhouse (sulfur-yellow, copper, brass, atmospheric-tan)
+- Neptune-methane (electric-blue, antifreeze-cyan, deep-cobalt, methane-violet)
+- Uranus-aquamarine (pale aqua, methane-mint, soft turquoise, ghost-grey)
+- Mercury-shadow (gunmetal, slate-grey, white-blaze, deep-black contrast)
+- Io-volcanic (sulfur-yellow, lava-orange, brass-amber, geothermal-red)
+- Europa-icescape (white-blue, silver, pale-cyan, deep-cobalt cracks)
+- Titan-methane (amber-haze, brown-ochre, peach, soft-gold)
+- Nebula-pastel (magenta, cyan, sea-foam, pale-mint, dreamy-amethyst)
+- Alien-double-sunset (twin-magentas, gold, copper, rose-quartz, dusty-violet)
+- Cosmic-storm (charcoal, ember-orange, electric-purple, deep-indigo)
+- Aurora-night (emerald, ruby, violet, midnight-cobalt)
+- Generation-ship-interior-lit (warm-amber, soft-gold, deep shadow)
+- Impossibly-saturated (HDR painted intensity — multiple primaries cranked beyond photoreal)
+
+Each entry must:
+(a) NAME 2-4 SPECIFIC COLORS (no "vibrant" — name them)
+(b) ANCHOR TO A PLANETARY/COSMIC CONTEXT (Jupiter sunset / Mars vista / nebula / alien biosphere)
+(c) STATE THE PAINTED MOOD (gem-tone / pastel / ember / hallucinatory / dreamy)
+
+Examples (DO NOT copy verbatim):
+1. Sunset-on-Jupiter palette — amber, deep burgundy, atmospheric coffee-brown, with pale-gold ring highlights, ember-warm painted mood.
+2. Saturn ringscape register — ivory, cobalt, gunmetal-grey ring shadows, pale-gold inner reflection, deep-cosmos black void, gem-tone painted mood.
+3. Mars twin-moon vista — rust, ochre, pale pink atmospheric haze, deep sienna mountains, with white blaze of distant cosmic event, dusty painted mood.
+
+Output 25 numbered list entries.`,
+  },
+  cosmic_vista_signature_phenomenon: {
+    format: 'simple',
+    theme:
+      'Painted-tradition signature cosmic phenomena — Kuiper-belt comet streaking through / mass-driver stream / planetary alignment / Lagrange-orbit habitat-cluster / Dyson-veil shimmer / impossible-aurora / cosmic-string filament. Bigger drama than COSMIC_VISTA_EVENT. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 signature painted-tradition cosmic-phenomenon descriptions — bigger painted-cosmic dramas in the Bonestell/McCall painted-tradition register. One sentence each, 14-28 words.
+
+Mix across signature painted phenomena:
+- Comet streaks (Kuiper-belt comet arcing through frame / Halley-style coma trailing / multi-tail bright comet)
+- Mass-driver streams (rail-launched cargo streaming from a planetary surface / mass-driver track lit at night / orbital-launch loop)
+- Planetary alignment (three-body syzygy / planet-moon-sun precise alignment / planetary conjunction)
+- Lagrange habitat-cluster (orbital habitat-station-cluster at L4/L5 / sphere-cluster of orbital cities)
+- Dyson-veil shimmer (Dyson swarm partial-transit shimmer / Dyson-bubble light-bending effect)
+- Impossible-aurora (auroral arc dome spanning the painted sky / aurora-cyclone hovering)
+- Cosmic-string filament (theoretical defect threading through the cosmic vista)
+- Solar-system inception (proto-planetary disk seen from a forming planet's surface)
+- Generation-ship arrival (vast generation-ship approaching the destination planet / cathedral-vast hull entering frame)
+- Black-hole-near-pass (a black hole crossing through the painted vista's deep distance, light bending visibly)
+- Hyperjump-emergence (distant ships emerging from FTL transit, Cherenkov-blue afterimage)
+- Magnetar-flare (distant magnetar flaring an X-ray pulse visible at scale)
+- Brown-dwarf parent (failed-star parent of the planetary system glowing dim infrared overhead)
+- Asteroid-impact incoming (massive asteroid in approach trajectory, painted prophetically)
+- Solar-corona-from-mercury (Sun's corona visible directly from Mercury orbit, painted with full halo)
+
+Each entry must:
+(a) NAME the phenomenon
+(b) NAME its visual signature in painted register
+(c) STATE its position/movement across the painted vista
+
+Examples (DO NOT copy verbatim):
+1. Kuiper-belt comet streaking through the upper-third of the frame, multi-tail spread, ice-blue and amber tail colors painted with classic Bonestell saturation.
+2. Lagrange-orbit habitat-cluster of seven spherical cities orbiting in delicate geometric formation, each city dotted with painted golden city-light points against deep cosmic black.
+3. Dyson-veil shimmer in the deep distance, partial-occulting curtain of orbital structures bending the parent star's light into a subtle painted glow halo.
+
+Output 25 numbered list entries.`,
+  },
+  cosmic_vista_event: {
+    format: 'simple',
+    theme:
+      'Dramatic cosmic event for the cosmic-vista path — the moment a painted cosmic phenomenon erupts into ACTION. Path-bespoke split from shared COSMIC_EVENT pool. 40%-gated conditional drama. PAINTED tradition (Bonestell/McCall) — NOT photoreal NASA.',
+    touchpoints: [],
+    instructions: `Write 25 dramatic cosmic events for the painted-cosmic-vista path. One sentence each, 16-28 words. Each describes a SPECIFIC PHENOMENON happening RIGHT NOW in the painted frame (freeze-frame). PAINTED tradition — Bonestell/McCall/Whelan register, NOT NASA-photoreal.
+
+Mix across painted-cosmic events:
+- Supernova mid-detonation (painted in Whelan-style saturated jewel-tone burst)
+- Galaxy merger (Bonestell-painted gravitational distortion across the painted sky)
+- Black-hole feeding (painted as hellscape-saturated drama)
+- Solar flare overhead (painted as god-ray-from-above)
+- Comet impact (painted as Earth-2-scale apocalypse vista)
+- Planet-eating star (Sun-as-red-giant in painted catastrophe register)
+- Cosmic storm passing through (electric-painted-cyclone)
+- Hyperjump emergence (Cherenkov-painted-flash from FTL arrival)
+- Asteroid mining-explosion (painted Bonestell catastrophe with rock-debris in frame)
+- Magnetar starquake (painted as overhead radiation-pulse)
+- Wormhole opening (painted as impossible-geometry tear in the cosmic vista)
+- Solar eclipse total (painted corona around occulting body)
+- Mass-driver launch (painted as kinetic-trail across the cosmic backdrop)
+- Generation-ship engine-burn (painted vast plume from approaching colony vessel)
+
+Each entry must:
+(a) NAME the event in painted register
+(b) DESCRIBE its visual signature mid-event (in painted-tradition terms)
+(c) STATE what's specifically visible in the painted still
+
+Examples (DO NOT copy verbatim):
+1. Supernova mid-detonation painted in saturated Whelan jewel-tone, expanding outer shell glowing amber and violet, central remnant blazing white-blue at the painted frame's heart.
+2. Comet impact in approach, painted prophetically — a massive ice-and-rock body trailing magenta-and-cyan plume, dwarfing the planetary surface beneath it.
+3. Galaxy-merger gravitational distortion painted across the upper frame, two spiral systems being tidally torn into painted-saturated streams of jewel-tone light.
+
+Output 25 numbered list entries.`,
+  },
   ritual_moment: {
     format: 'simple',
-    theme: 'Mystic / oracle action moments for cosmic-oracle scenes — channeling cosmic energy, divining starlight, casting sigils, communing with the void.',
+    theme:
+      'Mystic / oracle action moments for cosmic-oracle scenes — channeling cosmic energy, divining starlight, casting sigils, communing with the void.',
     touchpoints: [],
     instructions: `Write 25 mystic action moments — what the cosmic oracle is DOING when ritual energy is active. Each one sentence. Visible glow, sigil, energy thread, or supernatural presence.
 
@@ -1783,7 +2471,8 @@ Avoid duplicating: WIDE CINEMATIC VISTA, EXTREME LOW ANGLE LOOKING UP, AERIAL SW
   },
   scale_provers: {
     format: 'simple',
-    theme: 'Universal visual scale-reference elements — small details that prove an environment is monumentally large.',
+    theme:
+      'Universal visual scale-reference elements — small details that prove an environment is monumentally large.',
     touchpoints: [],
     instructions: `Write 25 visual scale-reference elements. Each entry: lowercase descriptive phrase — short explanation of how this element conveys scale. One sentence per entry.
 
@@ -1797,7 +2486,8 @@ Avoid duplicating: ships as dots, lit windows as honey-grain, figures-as-pinpric
   },
   emotional_dna: {
     format: 'simple',
-    theme: 'Universal sci-fi mood / atmosphere concepts — the EMOTIONAL register a cosmic / sci-fi scene is operating in.',
+    theme:
+      'Universal sci-fi mood / atmosphere concepts — the EMOTIONAL register a cosmic / sci-fi scene is operating in.',
     touchpoints: [],
     instructions: `Write 25 mood / atmosphere concepts. Each entry: ALL-CAPS NAME — short description of the emotional register, the light quality, how the entity / viewer feels. One sentence per entry.
 
@@ -1810,7 +2500,8 @@ Examples:
 Avoid duplicating: AWE, DREAD, MELANCHOLY, SACRED, INDIFFERENT-MEGALOPOLIS, ALIEN-WONDER, FRONTIER-ISOLATION, TRIUMPHANT-DISCOVERY. Invent NEW moods — EUPHORIC-ASCENSION, COSMIC-HOSTILITY, ANCIENT-PATIENCE, NEUROTIC-SUBLIME, TENDER-LONELINESS, EXALTED-VIGIL, etc. Output 25 numbered list entries.`,
   },
   cozy_sci_fi_interiors: {
-    theme: 'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary. Includes private quarters AND cozy social spaces (bars, lounges, observation decks, skybars, viewport lookouts).',
+    theme:
+      'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary. Includes private quarters AND cozy social spaces (bars, lounges, observation decks, skybars, viewport lookouts).',
     touchpoints: [
       'Cowboy Bebop Bebop ship interior (lived-in, gritty, warm lamps)',
       'Star Trek Ten Forward lounge (curved viewport, plush seating, soft amber light)',
@@ -1977,7 +2668,12 @@ function parseArray(text) {
   }
   if (current) entries.push(current);
   const cleaned = entries
-    .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+    .map((e) =>
+      e
+        .replace(/^["']|["']$/g, '')
+        .replace(/^[-•*]\s*/, '')
+        .trim()
+    )
     .filter((e) => e.length > 20 && e.length < 1200);
   if (cleaned.length === 0) throw new Error('No numbered entries found in response');
   return cleaned;
@@ -1990,17 +2686,116 @@ function parseArray(text) {
 // sorted alphabetically). Entries with identical signatures are duplicates.
 
 const STOPWORDS = new Set([
-  'the','a','an','and','or','but','with','of','in','on','at','to','for','from',
-  'by','as','is','are','was','were','be','been','being','have','has','had',
-  'this','that','these','those','it','its','they','them','their','her','his',
-  'into','onto','through','across','over','under','near','around','between',
-  'one','two','three','some','any','all','no','not','than','then','also','so',
-  'very','more','most','many','much','each','every','other','another','same',
-  'such','only','own','just','still','here','there','where','when','what','who',
-  'kilometer','kilometers','meter','meters','foot','feet','mile','miles','wide',
-  'tall','long','high','low','large','small','massive','huge','vast','huge',
-  'across','above','below','beside','behind','toward','within','throughout',
-  'meterdiameter','kilometerdiameter','metertall','kilometertall',
+  'the',
+  'a',
+  'an',
+  'and',
+  'or',
+  'but',
+  'with',
+  'of',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'from',
+  'by',
+  'as',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'have',
+  'has',
+  'had',
+  'this',
+  'that',
+  'these',
+  'those',
+  'it',
+  'its',
+  'they',
+  'them',
+  'their',
+  'her',
+  'his',
+  'into',
+  'onto',
+  'through',
+  'across',
+  'over',
+  'under',
+  'near',
+  'around',
+  'between',
+  'one',
+  'two',
+  'three',
+  'some',
+  'any',
+  'all',
+  'no',
+  'not',
+  'than',
+  'then',
+  'also',
+  'so',
+  'very',
+  'more',
+  'most',
+  'many',
+  'much',
+  'each',
+  'every',
+  'other',
+  'another',
+  'same',
+  'such',
+  'only',
+  'own',
+  'just',
+  'still',
+  'here',
+  'there',
+  'where',
+  'when',
+  'what',
+  'who',
+  'kilometer',
+  'kilometers',
+  'meter',
+  'meters',
+  'foot',
+  'feet',
+  'mile',
+  'miles',
+  'wide',
+  'tall',
+  'long',
+  'high',
+  'low',
+  'large',
+  'small',
+  'massive',
+  'huge',
+  'vast',
+  'huge',
+  'across',
+  'above',
+  'below',
+  'beside',
+  'behind',
+  'toward',
+  'within',
+  'throughout',
+  'meterdiameter',
+  'kilometerdiameter',
+  'metertall',
+  'kilometertall',
 ]);
 
 function signatureOf(entry) {
@@ -2011,7 +2806,8 @@ function signatureOf(entry) {
   const fgIdx = body.indexOf(' FOREGROUND:');
   if (fgIdx > 0) body = body.slice(0, fgIdx);
   // Tokenize and extract significant content nouns/adjectives
-  const tokens = body.toLowerCase()
+  const tokens = body
+    .toLowerCase()
     .replace(/[^a-z0-9 ]/g, ' ')
     .split(/\s+/)
     .filter((w) => w.length > 4 && !STOPWORDS.has(w))
@@ -2039,7 +2835,11 @@ function dedupe(entries) {
     if (typeof e !== 'string' || e.length < 20) continue;
     const title = titleOf(e);
     if (title && seenTitles.has(title)) {
-      dropped.push({ entry: e.slice(0, 80), duplicateOf: seenTitles.get(title).slice(0, 80), reason: 'title' });
+      dropped.push({
+        entry: e.slice(0, 80),
+        duplicateOf: seenTitles.get(title).slice(0, 80),
+        reason: 'title',
+      });
       continue;
     }
     const sig = signatureOf(e);
@@ -2050,7 +2850,11 @@ function dedupe(entries) {
       continue;
     }
     if (seenSigs.has(sig)) {
-      dropped.push({ entry: e.slice(0, 80), duplicateOf: seenSigs.get(sig).slice(0, 80), reason: 'body' });
+      dropped.push({
+        entry: e.slice(0, 80),
+        duplicateOf: seenSigs.get(sig).slice(0, 80),
+        reason: 'body',
+      });
       continue;
     }
     seenSigs.set(sig, e);
@@ -2077,11 +2881,13 @@ async function generateBatch(batchCount) {
     return [];
   }
   // Strip Rich-Scene-Seed bloat so signatures aren't polluted
-  const stripped = arr.map((e) => {
-    if (typeof e !== 'string') return null;
-    const i = e.indexOf(' FOREGROUND:');
-    return i > 0 ? e.slice(0, i).trim() : e;
-  }).filter(Boolean);
+  const stripped = arr
+    .map((e) => {
+      if (typeof e !== 'string') return null;
+      const i = e.indexOf(' FOREGROUND:');
+      return i > 0 ? e.slice(0, i).trim() : e;
+    })
+    .filter(Boolean);
   console.log(`  • Sonnet returned ${stripped.length} entries in ${elapsed}s`);
   return stripped;
 }
@@ -2090,17 +2896,21 @@ async function generateBatch(batchCount) {
   const outPath = path.resolve(`scripts/bots/starbot/seeds/${POOL}.json`);
   let preExisting = [];
   if (fs.existsSync(outPath)) {
-    try { preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8')); } catch {}
+    try {
+      preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    } catch {}
   }
 
   // Determine final target.
   // --target N → fill up to N via iterative gen+dedup loop
   // --count N → single batch of N (legacy behavior)
-  const finalTarget = TARGET ?? (preExisting.length + COUNT);
+  const finalTarget = TARGET ?? preExisting.length + COUNT;
   const startCount = preExisting.length;
 
   if (TARGET !== null) {
-    console.log(`Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`);
+    console.log(
+      `Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`
+    );
   } else {
     console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
   }
@@ -2113,7 +2923,9 @@ async function generateBatch(batchCount) {
     // Smaller batches (15-25) — Sonnet writes faster + ~10K-token responses
     // stay well under fetch timeouts. Overgen by ~50% to absorb dedup losses.
     const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
-    console.log(`\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`);
+    console.log(
+      `\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`
+    );
     const fresh = await generateBatch(batchSize);
     if (fresh.length === 0) {
       console.warn('  ⚠ empty Sonnet response — stopping iteration');
@@ -2148,7 +2960,9 @@ async function generateBatch(batchCount) {
     }
   }
 
-  console.log(`\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`);
+  console.log(
+    `\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`
+  );
 
   console.log('\nSample (last 2 added):');
   pool.slice(-2).forEach((e, i) => console.log(`\n[${pool.length - 1 + i}] ${e.slice(0, 400)}...`));

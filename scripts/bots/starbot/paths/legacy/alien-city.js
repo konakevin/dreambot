@@ -39,7 +39,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const anchorScale = pickScaleFromRange(pools.ANCHOR_SCALE, ANCHOR_SCALE_RANGE, picker);
   const compositionFrame = picker.pickWithRecency(pools.COMPOSITION_FRAME, 'composition_frame');
   const scaleProvers = pickN(pools.SCALE_PROVERS, 2, picker);
-  const weatherParticulate = picker.pickWithRecency(pools.WEATHER_PARTICULATE, 'weather_particulate');
+  const weatherParticulate = picker.pickWithRecency(
+    pools.WEATHER_PARTICULATE,
+    'weather_particulate'
+  );
   const emotionalDna = picker.pickWithRecency(pools.EMOTIONAL_DNA, 'emotional_dna');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
 

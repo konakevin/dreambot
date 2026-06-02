@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/atmospheres.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for StarBot — sci-fi + astronomy atmospheric elements. Space-dust, nebula-wisps, ion-storm, cosmic-rays, plasma-glow, crystal-refraction, rain-on-metal.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for StarBot — sci-fi + astronomy atmospheric elements. Space-dust, nebula-wisps, ion-storm, cosmic-rays, plasma-glow, crystal-refraction, rain-on-metal.
 
 Each entry: 6-14 words. One specific sci-fi atmospheric element.
 
@@ -47,4 +49,7 @@ Each entry: 6-14 words. One specific sci-fi atmospheric element.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

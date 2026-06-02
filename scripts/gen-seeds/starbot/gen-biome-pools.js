@@ -168,7 +168,9 @@ async function main() {
       total: 25,
       batch: 12,
       append: true,
-      metaPrompt: (n) => `You are writing ${n} ${cfg.title} entries for StarBot's female-explorer and male-explorer paths.
+      metaPrompt: (
+        n
+      ) => `You are writing ${n} ${cfg.title} entries for StarBot's female-explorer and male-explorer paths.
 
 Reference imagery: ${cfg.refs}.
 

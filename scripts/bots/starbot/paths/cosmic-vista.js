@@ -20,6 +20,14 @@ module.exports = {
   archetype: 'PURE_COSMOS',
   pools: {
     phenomenon: 'COSMIC_PHENOMENA', // primary subject (path-bespoke)
-    event: 'COSMIC_EVENT', // 40%-gated conditional drama
+    // NEW path-bespoke axes (2026-05-31 enrichment from 2 → 8 bespoke pools):
+    painted_tradition: 'COSMIC_VISTA_PAINTED_TRADITION', // ALWAYS-ON identity — painter aesthetic
+    vista_composition: 'COSMIC_VISTA_COMPOSITION', // 50%-gated — painted framing
+    narrative_witness: 'COSMIC_VISTA_NARRATIVE_WITNESS', // 50%-gated — tiny silhouette scale-prover
+    atmospheric_layer: 'COSMIC_VISTA_ATMOSPHERIC_LAYER', // 50%-gated — terrestrial-foreground atmosphere
+    color_register: 'COSMIC_VISTA_COLOR_REGISTER', // 50%-gated — painted palette signature
+    signature_phenomenon: 'COSMIC_VISTA_SIGNATURE_PHENOMENON', // 50%-gated — bigger painted cosmic drama
+    // Split from shared COSMIC_EVENT — path-bespoke per cross-bot rule
+    event: 'COSMIC_VISTA_EVENT', // 40%-gated conditional drama
   },
 };

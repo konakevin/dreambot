@@ -47,7 +47,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const anchorScale = pickScaleFromRange(pools.ANCHOR_SCALE, ANCHOR_SCALE_RANGE, picker);
   const compositionFrame = picker.pickWithRecency(pools.COMPOSITION_FRAME, 'composition_frame');
   const scaleProvers = pickN(pools.SCALE_PROVERS, 3, picker, 'scale_prover');
-  const weatherParticulate = picker.pickWithRecency(pools.WEATHER_PARTICULATE, 'weather_particulate');
+  const weatherParticulate = picker.pickWithRecency(
+    pools.WEATHER_PARTICULATE,
+    'weather_particulate'
+  );
   const emotionalDna = picker.pickWithRecency(pools.EMOTIONAL_DNA, 'emotional_dna');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
 
@@ -56,20 +59,27 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const surpriseElement = picker.pickWithRecency(pools.SURPRISE_ELEMENT, 'surprise_element');
 
   // ── Path-level axes ──
-  const character = picker.pickWithRecency(pools.COSMIC_ORACLE_CHARACTERS, 'cosmic_oracle_character');
+  const character = picker.pickWithRecency(
+    pools.COSMIC_ORACLE_CHARACTERS,
+    'cosmic_oracle_character'
+  );
   const location = picker.pickWithRecency(pools.COSMIC_ORACLE_LOCATIONS, 'cosmic_oracle_location');
   const action = picker.pickWithRecency(pools.COSMIC_ORACLE_ACTIONS, 'cosmic_oracle_action');
 
   // ── Conditional RITUAL drama layer (40% gate) ──
   const isRitual = Math.random() < 0.4;
-  const ritualMoment = isRitual ? picker.pickWithRecency(pools.RITUAL_MOMENT, 'ritual_moment') : null;
-  const ritualSection = isRitual ? `
+  const ritualMoment = isRitual
+    ? picker.pickWithRecency(pools.RITUAL_MOMENT, 'ritual_moment')
+    : null;
+  const ritualSection = isRitual
+    ? `
 ━━━ RITUAL / MYSTIC MOMENT — render this visibly in the scene ━━━
 ${ritualMoment}
 
 The mystic energy is part of the scene — the character is channeling / divining / manifesting / communing with the cosmos. Visible glow, sigil, energy thread, or supernatural presence.
 
-` : '';
+`
+    : '';
 
   return `You are a sci-fi concept-art painter writing a CHARACTER-WITHIN-COSMIC-SCENE for StarBot — one solo figure of a specific sci-fi lineage caught in a candid moment within a richly-detailed cosmic environment. The scene is painted, atmospheric, gallery-grade. The character is INSIDE the scene, not posed in front of it. Output wraps with style prefix + suffix (star_oil_cosmos painted oil-canvas medium).
 

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/starwars_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} STAR-WARS-CODED LANDSCAPE entries for StarBot's starwars-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ALIEN PLANET VISTA in the Star Wars aesthetic tradition — twin-sun deserts, ice-plain wastelands, redwood forest moons, gas-giant cloud-cities, ocean-storm platforms, lava-river hellscapes, jungle-canopy canopy-worlds, junkyard-shipwreck deserts, ringed gas-giant skies, classical lake-country, megalopolis cityscape skyscapes.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STAR-WARS-CODED LANDSCAPE entries for StarBot's starwars-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ALIEN PLANET VISTA in the Star Wars aesthetic tradition — twin-sun deserts, ice-plain wastelands, redwood forest moons, gas-giant cloud-cities, ocean-storm platforms, lava-river hellscapes, jungle-canopy canopy-worlds, junkyard-shipwreck deserts, ringed gas-giant skies, classical lake-country, megalopolis cityscape skyscapes.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO DROIDS, NO SPACESHIPS-AS-FOREGROUND-SUBJECTS, NO LIGHTSABERS. Pure landscape only.
 
@@ -67,4 +69,7 @@ JUNGLE-CANOPY WORLDS (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

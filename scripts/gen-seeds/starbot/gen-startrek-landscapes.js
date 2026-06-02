@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/startrek_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} STAR-TREK-CODED LANDSCAPE entries for StarBot's star-trek-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ALIEN VISTA in the Star Trek aesthetic tradition — Vulcan red-desert temples, Risa tropical paradise, Bajoran orange-stone monasteries, Borg cube/sphere matte-black assimilation interior, Cardassian station bone-architecture, Klingon volcanic warrior-empire homeworld, classical-future Federation colonies, Trill symbiont caves, Romulan green-and-bronze empire.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STAR-TREK-CODED LANDSCAPE entries for StarBot's star-trek-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ALIEN VISTA in the Star Trek aesthetic tradition — Vulcan red-desert temples, Risa tropical paradise, Bajoran orange-stone monasteries, Borg cube/sphere matte-black assimilation interior, Cardassian station bone-architecture, Klingon volcanic warrior-empire homeworld, classical-future Federation colonies, Trill symbiont caves, Romulan green-and-bronze empire.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO STARSHIP-FOREGROUND-SUBJECTS, NO BORG-DRONES-AS-CHARACTERS. Pure landscape only.
 
@@ -71,4 +73,7 @@ PASTORAL ALIEN PLANETS (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

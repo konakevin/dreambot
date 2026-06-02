@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/explorer_epic_backdrops.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} EPIC BACKDROP entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a MASSIVE structure / scale-defining element that DOMINATES the backdrop of a deep-space scene and DWARFS the human character standing in front of it.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EPIC BACKDROP entries for StarBot's female-explorer and male-explorer paths. Each entry is a DENSE phrase (20-35 words) describing a MASSIVE structure / scale-defining element that DOMINATES the backdrop of a deep-space scene and DWARFS the human character standing in front of it.
 
 CRITICAL: SCALE. The character will be SMALL relative to this thing. The backdrop is the HERO of the composition. Atmospheric haze and depth-perspective should be implied — kilometer-scale stuff fading into mist or distant orbit.
 
@@ -63,4 +65,7 @@ COSMIC / SPACE-SCENE (3-4):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -15,7 +15,9 @@ generatePool({
   total: 126, // existing 116 + 10 new
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} ROBOT entries to ADD to an existing pool. Each entry is a DENSE phrase (40-60 words) describing the BODY of a sci-fi droid — NOT actions, NOT settings, NOT stances.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ROBOT entries to ADD to an existing pool. Each entry is a DENSE phrase (40-60 words) describing the BODY of a sci-fi droid — NOT actions, NOT settings, NOT stances.
 
 These ${n} entries fill in BODY-PLAN diversity that the pool is missing — wheeled rovers, tracked mechs, hovering droids, squat heavy mechs. NO bipedal humanoids in this batch (pool already has ~40% bipedal — these are alternative body plans).
 
@@ -85,4 +87,7 @@ EX-10 (four-wheel war-rover): "Four-wheel armored war-rover droid, oversized rub
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Each entry is a body-only description matching the few-shot examples in body-plan variety.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

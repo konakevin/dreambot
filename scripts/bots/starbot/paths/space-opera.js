@@ -28,6 +28,12 @@ module.exports = {
     ship: 'SPACE_OPERA_SHIPS', // primary anchor entity (slim)
     setting: 'SPACE_OPERA_SETTING', // cosmic environment (slim)
     ship_action: 'SHIP_ACTION', // posture/state/motion (slim)
+    // NEW path-bespoke axes (2026-05-31 enrichment to premium tier):
+    crew_signal: 'SPACE_OPERA_CREW_SIGNAL', // life ON the ship (bridge silhouettes / EVA / deck crew)
+    faction_iconography: 'SPACE_OPERA_FACTION_ICONOGRAPHY', // markings/badges/colors of allegiance
+    propulsion_signature: 'SPACE_OPERA_PROPULSION_SIGNATURE', // engine/drive aesthetic + exhaust
+    genre_register: 'SPACE_OPERA_GENRE_REGISTER', // narrative tone (military thriller / pirate / first contact / etc)
+    signature_hull_feature: 'SPACE_OPERA_SIGNATURE_HULL_FEATURE', // the one weird memorable hull detail
     // WIDE-ACTION conditional (50% gate): two sub-pools fire together
     traffic: 'BUSY_FLEET_ELEMENTS', // 3 picks when fired
     battle: 'BATTLE_DYNAMICS', // 3 picks when fired

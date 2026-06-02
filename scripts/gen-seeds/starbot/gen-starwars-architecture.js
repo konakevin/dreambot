@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/starbot/seeds/starwars_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} STAR-WARS-CODED ARCHITECTURE entries for StarBot's starwars-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ARCHITECTURAL INTERIOR in the Star Wars aesthetic tradition — Imperial throne chambers, Senate-rotunda classical halls, cantina dive-bar interiors, Death-Star-corridor brutalist halls, Ewok-village treetop platforms, Naboo classical palaces, Jedi temple meditation chambers, droid factories, Cloud-City hangars.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STAR-WARS-CODED ARCHITECTURE entries for StarBot's starwars-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC ARCHITECTURAL INTERIOR in the Star Wars aesthetic tradition — Imperial throne chambers, Senate-rotunda classical halls, cantina dive-bar interiors, Death-Star-corridor brutalist halls, Ewok-village treetop platforms, Naboo classical palaces, Jedi temple meditation chambers, droid factories, Cloud-City hangars.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO DROIDS, NO LIGHTSABERS, NO STORMTROOPERS-AS-FIGURES. Pure architecture only.
 
@@ -70,4 +72,7 @@ CARBONITE / FREEZE CHAMBERS (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
