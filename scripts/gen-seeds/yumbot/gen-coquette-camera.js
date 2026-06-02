@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA FRAMING descriptions for a kawaii coquette food-party scene with 5 foods. Diverse framings.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA FRAMING descriptions for a kawaii coquette food-party scene with 5 foods. Diverse framings.
 
 Each entry: 14-22 words.
 
@@ -29,4 +31,7 @@ DO NOT write:
 - Setting / activity / character descriptions
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

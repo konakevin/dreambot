@@ -205,15 +205,7 @@
   },
   {
     "description": "A tall pastel parfait glass with smiling-face on the side, layered cream + fruit + cake-cubes, and a tiny umbrella-topper",
-    "tags": [
-      "DESSERT",
-      "UNIVERSAL",
-      "TALL",
-      "CAFE",
-      "BAKERY",
-      "KONBINI",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "UNIVERSAL", "TALL", "CAFE", "BAKERY", "KONBINI", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A tall ice-cream sundae glass with kawaii face, three pastel scoops, drizzling syrup, cherry-on-top, and rainbow sprinkles",
@@ -333,15 +325,7 @@
   },
   {
     "description": "A smiling mini-cake with cream-frosting-face, single candle on top, blush-cheeks, and pastel-rosette decorations",
-    "tags": [
-      "DESSERT",
-      "UNIVERSAL",
-      "ROUND",
-      "CAFE",
-      "BAKERY",
-      "TEA_PARTY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "UNIVERSAL", "ROUND", "CAFE", "BAKERY", "TEA_PARTY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling pocky-stick with kawaii face on the chocolate-dipped end, slim biscuit-body, pastel-glaze coating",
@@ -395,39 +379,15 @@
   },
   {
     "description": "A smiling egg-tart with golden custard-face, flaky-pastry-shell, and a small caramelized-top spot for a freckle",
-    "tags": [
-      "DESSERT",
-      "CHINESE",
-      "ROUND",
-      "BAKERY",
-      "MARKET",
-      "CAFE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "CHINESE", "ROUND", "BAKERY", "MARKET", "CAFE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling banana-pudding bowl with kawaii face on the cream, vanilla-wafer-eyes, and sliced-banana decorations",
-    "tags": [
-      "DESSERT",
-      "AMERICAN",
-      "BOWL",
-      "CAFE",
-      "BAKERY",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "AMERICAN", "BOWL", "CAFE", "BAKERY", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling mille-feuille pastry with kawaii face on the cream-layer, alternating crisp pastry-and-cream stripes",
-    "tags": [
-      "DESSERT",
-      "FRENCH",
-      "STACKED",
-      "CAFE",
-      "BAKERY",
-      "TEA_PARTY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "FRENCH", "STACKED", "CAFE", "BAKERY", "TEA_PARTY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling chocolate eclair with kawaii face on the chocolate-glaze top, oblong choux shape, cream-filling-glimpse",
@@ -458,37 +418,15 @@
   },
   {
     "description": "A tall smiling honey-toast tower with kawaii face on the front, cube-cut bread, honey-drizzle cascade, and ice-cream-scoop-topper",
-    "tags": [
-      "DESSERT",
-      "JAPANESE",
-      "STACKED",
-      "CAFE",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "JAPANESE", "STACKED", "CAFE", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling kakigori shaved-ice bowl with kawaii face on the side, mountainous-fluffy-ice, rainbow-syrup-drizzle, and mochi-balls on top",
-    "tags": [
-      "ICE_CREAM",
-      "JAPANESE",
-      "BOWL",
-      "FESTIVAL",
-      "KONBINI",
-      "RAINBOW_DREAMSCAPE",
-      "BENTO"
-    ]
+    "tags": ["ICE_CREAM", "JAPANESE", "BOWL", "FESTIVAL", "KONBINI", "RAINBOW_DREAMSCAPE", "BENTO"]
   },
   {
     "description": "A smiling bingsu bowl with kawaii face on the side, mountain of shaved-milk-ice, condensed-milk-drizzle, and fruit-cluster topping",
-    "tags": [
-      "ICE_CREAM",
-      "KOREAN",
-      "BOWL",
-      "CAFE",
-      "MARKET",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ICE_CREAM", "KOREAN", "BOWL", "CAFE", "MARKET", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling pastel jelly-cup with kawaii face wobbling in the gel, fruit-suspension inside, and pastel-rainbow gradient",
@@ -504,15 +442,7 @@
   },
   {
     "description": "A smiling yogurt-parfait bowl with kawaii face on the cream, layered granola + berries + honey-drip",
-    "tags": [
-      "BREAKFAST",
-      "UNIVERSAL",
-      "BOWL",
-      "CAFE",
-      "BAKERY",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["BREAKFAST", "UNIVERSAL", "BOWL", "CAFE", "BAKERY", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling stack of mini-pancakes with kawaii face on the top one, butter-pat-hat, and maple-syrup cascade",
@@ -555,15 +485,7 @@
   },
   {
     "description": "A smiling choco-cornet pastry with kawaii face on the cream-filled tip, golden-spiral cone-shape, chocolate-glaze coating",
-    "tags": [
-      "PASTRY",
-      "JAPANESE",
-      "ASIAN_SWEET",
-      "CONE",
-      "BAKERY",
-      "KONBINI",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["PASTRY", "JAPANESE", "ASIAN_SWEET", "CONE", "BAKERY", "KONBINI", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling melon-pan bun with kawaii face on the criss-cross top, golden-sugar crust, dimpled-blush, and round soft body",
@@ -580,39 +502,15 @@
   },
   {
     "description": "A smiling onigiri rice-ball with kawaii face on the side, perfect triangle-shape, and a strip of nori-seaweed belt",
-    "tags": [
-      "SAVORY",
-      "JAPANESE",
-      "TRIANGLE",
-      "KONBINI",
-      "BENTO",
-      "FESTIVAL",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "JAPANESE", "TRIANGLE", "KONBINI", "BENTO", "FESTIVAL", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling ramen-bowl with kawaii face on the side, floating soft-boiled-egg-companion with face, noodle-curl, scallion-bits",
-    "tags": [
-      "SAVORY",
-      "JAPANESE",
-      "BOWL",
-      "KONBINI",
-      "FESTIVAL",
-      "MINI_CHEF",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "JAPANESE", "BOWL", "KONBINI", "FESTIVAL", "MINI_CHEF", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling sushi-roll with kawaii face on the rice-side, avocado-and-cucumber spiral filling, and nori-seaweed wrap",
-    "tags": [
-      "SAVORY",
-      "JAPANESE",
-      "ROUND",
-      "BENTO",
-      "FESTIVAL",
-      "MINI_CHEF",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "JAPANESE", "ROUND", "BENTO", "FESTIVAL", "MINI_CHEF", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling cluster of three fried-chicken nuggets, each with kawaii face on the golden-crispy coating",
@@ -729,15 +627,7 @@
   },
   {
     "description": "A smiling mac-and-cheese cup with kawaii face on the cup, cheese-bubble eyes, golden-cheddar swirl, and pasta-curls visible",
-    "tags": [
-      "SAVORY",
-      "FAST_FOOD",
-      "AMERICAN",
-      "CUP",
-      "KONBINI",
-      "MINI_CHEF",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "FAST_FOOD", "AMERICAN", "CUP", "KONBINI", "MINI_CHEF", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling bagel with kawaii face on the side, sesame-seed sprinkles, cream-cheese-blush, and a perfect ring-shape",
@@ -754,15 +644,7 @@
   },
   {
     "description": "A smiling PB&J sandwich with kawaii face on the bread, jam-drip mustache, peanut-butter-blush cheeks, and corner-bite missing",
-    "tags": [
-      "SAVORY",
-      "AMERICAN",
-      "FLAT",
-      "PICNIC",
-      "BENTO",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "AMERICAN", "FLAT", "PICNIC", "BENTO", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling kawaii taco with kawaii face on the shell, lettuce-tuft hair, tomato-blush, and folded crispy-shell wrap",
@@ -778,27 +660,11 @@
   },
   {
     "description": "A smiling burrito with kawaii face on the tortilla wrap, salsa-blush cheeks, and tightly-rolled cylinder shape",
-    "tags": [
-      "SAVORY",
-      "MEXICAN",
-      "WRAPPED",
-      "MARKET",
-      "ARCADE",
-      "MINI_CHEF",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "MEXICAN", "WRAPPED", "MARKET", "ARCADE", "MINI_CHEF", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling tall soda-cup with kawaii face on the side, straw poking out, ice-cubes visible inside, and pastel-fizz bubbles",
-    "tags": [
-      "DRINK",
-      "FAST_FOOD",
-      "AMERICAN",
-      "TALL",
-      "ARCADE",
-      "KONBINI",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "FAST_FOOD", "AMERICAN", "TALL", "ARCADE", "KONBINI", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling pretzel-bite cluster with kawaii faces on each bite, dimpled-blush, golden-twist shapes, and salt-crystal sparkles",
@@ -828,156 +694,55 @@
   },
   {
     "description": "A tall smiling matcha-latte glass with kawaii face on the side, foam-art-heart on top, and vibrant green-and-cream gradient",
-    "tags": [
-      "DRINK",
-      "JAPANESE",
-      "ASIAN_SWEET",
-      "TALL",
-      "CAFE",
-      "TEA_PARTY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "JAPANESE", "ASIAN_SWEET", "TALL", "CAFE", "TEA_PARTY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling hot-cocoa mug with kawaii face on the ceramic, frothy whipped-cream cloud-top with marshmallows, and steam-curl",
-    "tags": [
-      "DRINK",
-      "AMERICAN",
-      "BOWL",
-      "CAFE",
-      "COTTAGECORE",
-      "KONBINI",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "AMERICAN", "BOWL", "CAFE", "COTTAGECORE", "KONBINI", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A tall smiling iced-coffee glass with kawaii face on the side, paper-straw, ice-cubes, and cream-swirl floating top",
-    "tags": [
-      "DRINK",
-      "AMERICAN",
-      "TALL",
-      "CAFE",
-      "KONBINI",
-      "ARCADE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "AMERICAN", "TALL", "CAFE", "KONBINI", "ARCADE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A tall smiling smoothie cup with kawaii face on the side, pastel pink-or-mint smoothie, fruit-skewer-topper, and tiny umbrella",
-    "tags": [
-      "DRINK",
-      "UNIVERSAL",
-      "TALL",
-      "CAFE",
-      "MARKET",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "UNIVERSAL", "TALL", "CAFE", "MARKET", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A tall smiling lemonade glass with kawaii face on the side, lemon-slice-floating, mint-sprig-eyebrow, and ice-cubes",
-    "tags": [
-      "DRINK",
-      "AMERICAN",
-      "TALL",
-      "MARKET",
-      "PICNIC",
-      "FESTIVAL",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "AMERICAN", "TALL", "MARKET", "PICNIC", "FESTIVAL", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A small smiling espresso cup with kawaii face on the porcelain, dark-coffee crema-top, and tiny saucer with biscotti",
-    "tags": [
-      "DRINK",
-      "ITALIAN",
-      "CUP",
-      "CAFE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "ITALIAN", "CUP", "CAFE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling cappuccino cup with kawaii face on the side, latte-art heart on the foam, and a tiny chocolate-cube on saucer",
-    "tags": [
-      "DRINK",
-      "ITALIAN",
-      "CUP",
-      "CAFE",
-      "TEA_PARTY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "ITALIAN", "CUP", "CAFE", "TEA_PARTY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A tall smiling taro-bubble-tea cup with kawaii face on the side, pastel-purple drink, large pearls visible, and paper-straw",
-    "tags": [
-      "DRINK",
-      "TAIWANESE",
-      "ASIAN_SWEET",
-      "TALL",
-      "CAFE",
-      "KONBINI",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "TAIWANESE", "ASIAN_SWEET", "TALL", "CAFE", "KONBINI", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A tall smiling strawberry-milk glass with kawaii face on the side, pink-cream blend, paper-straw, and strawberry-slice-on-rim",
-    "tags": [
-      "DRINK",
-      "UNIVERSAL",
-      "TALL",
-      "CAFE",
-      "KONBINI",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "UNIVERSAL", "TALL", "CAFE", "KONBINI", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling crème brûlée ramekin with kawaii face on the caramelized-top, cracked-sugar shell, and tiny berry-garnish",
-    "tags": [
-      "DESSERT",
-      "FRENCH",
-      "BOWL",
-      "CAFE",
-      "BAKERY",
-      "TEA_PARTY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "FRENCH", "BOWL", "CAFE", "BAKERY", "TEA_PARTY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling tiramisu square with kawaii face on the cocoa-dusted-top, mascarpone-cream layers, and ladyfinger-edges visible",
-    "tags": [
-      "DESSERT",
-      "ITALIAN",
-      "STACKED",
-      "CAFE",
-      "BAKERY",
-      "MARKET",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "ITALIAN", "STACKED", "CAFE", "BAKERY", "MARKET", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A tall smiling macaron tower with kawaii face on the top macaron, pastel-rainbow-stacked tier of macarons, and ribbon-bow",
-    "tags": [
-      "DESSERT",
-      "FRENCH",
-      "STACKED",
-      "TEA_PARTY",
-      "BAKERY",
-      "MARKET",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "FRENCH", "STACKED", "TEA_PARTY", "BAKERY", "MARKET", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling bao-bun with kawaii face on the white pillowy dough, dimpled-blush, and folded pleats at the top",
-    "tags": [
-      "SAVORY",
-      "CHINESE",
-      "ROUND",
-      "MARKET",
-      "MINI_CHEF",
-      "BENTO",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "CHINESE", "ROUND", "MARKET", "MINI_CHEF", "BENTO", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling spring-roll with kawaii face on the golden-crispy wrap, dimpled-blush, and vegetable-fill visible at the ends",
@@ -994,38 +759,15 @@
   },
   {
     "description": "A smiling Korean-fried-chicken-piece with kawaii face on the spicy-glaze, sesame-seed sprinkles, and crispy texture",
-    "tags": [
-      "SAVORY",
-      "KOREAN",
-      "FAST_FOOD",
-      "ROUND",
-      "MARKET",
-      "MINI_CHEF",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "KOREAN", "FAST_FOOD", "ROUND", "MARKET", "MINI_CHEF", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling hotteok pancake with kawaii face on the golden-pan-fried side, brown-sugar-drip cheeks, and crispy-edges",
-    "tags": [
-      "DESSERT",
-      "KOREAN",
-      "ROUND",
-      "FESTIVAL",
-      "MARKET",
-      "RAINBOW_DREAMSCAPE",
-      "MINI_CHEF"
-    ]
+    "tags": ["DESSERT", "KOREAN", "ROUND", "FESTIVAL", "MARKET", "RAINBOW_DREAMSCAPE", "MINI_CHEF"]
   },
   {
     "description": "A smiling kimbap roll with kawaii face on the nori-wrap side, colorful-vegetable-spiral filling, and sliced-round shape",
-    "tags": [
-      "SAVORY",
-      "KOREAN",
-      "ROUND",
-      "BENTO",
-      "KONBINI",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "KOREAN", "ROUND", "BENTO", "KONBINI", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling tteokbokki skewer with kawaii faces on the rice-cake-cylinders, spicy-red-pepper sauce coating, and sesame-sprinkle",
@@ -1144,57 +886,23 @@
   },
   {
     "description": "A smiling bento-box with kawaii face on the lid, sectioned compartments visible — rice + tamago + sausage + veggies",
-    "tags": [
-      "SAVORY",
-      "JAPANESE",
-      "FLAT",
-      "BENTO",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "JAPANESE", "FLAT", "BENTO", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling candy-apple on a stick with kawaii face on the glossy-red-shell, leafy-green-cap, and shiny pastel coating",
-    "tags": [
-      "CANDY",
-      "AMERICAN",
-      "ON_STICK",
-      "FESTIVAL",
-      "CANDY_FANTASY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["CANDY", "AMERICAN", "ON_STICK", "FESTIVAL", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling petit-four with kawaii face on the icing-top, perfectly-square-cake, pastel-floral piped-decorations",
-    "tags": [
-      "DESSERT",
-      "FRENCH",
-      "ROUND",
-      "TEA_PARTY",
-      "BAKERY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "FRENCH", "ROUND", "TEA_PARTY", "BAKERY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling pavlova with kawaii face on the meringue-shell, whipped-cream-cloud, and fresh-berry-cluster topping",
-    "tags": [
-      "DESSERT",
-      "UNIVERSAL",
-      "ROUND",
-      "CAFE",
-      "TEA_PARTY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "UNIVERSAL", "ROUND", "CAFE", "TEA_PARTY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling caramel-popcorn-pile with kawaii faces on the individual kernels, golden-glaze coating, and a paper-cone holder",
-    "tags": [
-      "CANDY",
-      "AMERICAN",
-      "CONE",
-      "ARCADE",
-      "FESTIVAL",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["CANDY", "AMERICAN", "CONE", "ARCADE", "FESTIVAL", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling lollipop on a paper-stick with kawaii face on the spiral-pastel-disk, ribbon-bow tied to the stick",
@@ -1210,15 +918,7 @@
   },
   {
     "description": "A smiling cluster of pastel donut-holes with kawaii faces on each ball, dimpled-blush, and sugar-glaze coating",
-    "tags": [
-      "DESSERT",
-      "AMERICAN",
-      "ROUND",
-      "CAFE",
-      "BAKERY",
-      "KONBINI",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "AMERICAN", "ROUND", "CAFE", "BAKERY", "KONBINI", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling fluffy pancake-stack with kawaii face on the top one, syrup-cascade, butter-pat-hat, and berry-cluster topper",
@@ -1234,37 +934,15 @@
   },
   {
     "description": "A smiling tres-leches cake slice with kawaii face on the cream-soaked-top, layered-sponge profile, and cinnamon-dust sprinkles",
-    "tags": [
-      "DESSERT",
-      "MEXICAN",
-      "STACKED",
-      "BAKERY",
-      "MARKET",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "MEXICAN", "STACKED", "BAKERY", "MARKET", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling fortune-cookie with kawaii face on the folded-arc, golden crispy-shell, and tiny paper-fortune peeking out",
-    "tags": [
-      "DESSERT",
-      "CHINESE",
-      "FOLDED",
-      "KONBINI",
-      "MARKET",
-      "RAINBOW_DREAMSCAPE",
-      "BENTO"
-    ]
+    "tags": ["DESSERT", "CHINESE", "FOLDED", "KONBINI", "MARKET", "RAINBOW_DREAMSCAPE", "BENTO"]
   },
   {
     "description": "A smiling milkshake glass with kawaii face on the side, whipped-cream-cloud topping, cherry-on-top, paper-straw, and rainbow sprinkles",
-    "tags": [
-      "DRINK",
-      "AMERICAN",
-      "TALL",
-      "CAFE",
-      "ARCADE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DRINK", "AMERICAN", "TALL", "CAFE", "ARCADE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling chocolate-chip-cookie with kawaii face on the golden-baked surface, chocolate-chip eyes, and a missing crescent-bite",
@@ -1281,15 +959,7 @@
   },
   {
     "description": "A smiling pastel macaron-trio stacked with kawaii faces, three different pastel colors, and a ribbon tied around them",
-    "tags": [
-      "DESSERT",
-      "FRENCH",
-      "STACKED",
-      "TEA_PARTY",
-      "BAKERY",
-      "MARKET",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["DESSERT", "FRENCH", "STACKED", "TEA_PARTY", "BAKERY", "MARKET", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling chocolate-glazed donut-with-sprinkles with kawaii face, rainbow-sprinkle eyebrows, and chocolate-drip cheeks",
@@ -1332,14 +1002,7 @@
   },
   {
     "description": "A smiling cluster of chocolate-truffles with kawaii faces, cocoa-dust coating, and pastel-paper-cups around each",
-    "tags": [
-      "CANDY",
-      "FRENCH",
-      "ROUND",
-      "TEA_PARTY",
-      "CANDY_FANTASY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["CANDY", "FRENCH", "ROUND", "TEA_PARTY", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling pastel-rainbow-cake slice with kawaii face on the side, layered rainbow-pastel sponge, and cream-rosette top",
@@ -1368,14 +1031,7 @@
   },
   {
     "description": "A smiling box of small chocolate-bonbons with kawaii faces, lavender-pearl-base, gold-foil-wraps, and pastel-rainbow-cocoa hues",
-    "tags": [
-      "CANDY",
-      "FRENCH",
-      "ROUND",
-      "TEA_PARTY",
-      "CANDY_FANTASY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["CANDY", "FRENCH", "ROUND", "TEA_PARTY", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling kawaii fruit-cup with kawaii face on the cup, watermelon-cube + cantaloupe-ball + strawberry-half scatter inside",
@@ -1416,14 +1072,7 @@
   },
   {
     "description": "A smiling kawaii-omurice plate with kawaii face on the egg-omelette-wrap, ketchup-zigzag drawn as a heart, and rice-base visible",
-    "tags": [
-      "SAVORY",
-      "JAPANESE",
-      "FOLDED",
-      "BENTO",
-      "MINI_CHEF",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["SAVORY", "JAPANESE", "FOLDED", "BENTO", "MINI_CHEF", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A smiling fluffy-pancake with kawaii face on the cream-swirl topper, jelly-blob cheeks, and a tiny ribbon-bow on the side",

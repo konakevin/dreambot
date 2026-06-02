@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} JAPANESE GARDEN BACKDROP descriptions for a kawaii koi-pond scene. The pond is the foreground; this is the SURROUNDING garden setting that frames it.
+  metaPrompt: (
+    n
+  ) => `Write ${n} JAPANESE GARDEN BACKDROP descriptions for a kawaii koi-pond scene. The pond is the foreground; this is the SURROUNDING garden setting that frames it.
 
 Each entry: 18-30 words. ONE specific Japanese garden setting.
 
@@ -39,4 +41,7 @@ DO NOT write:
 - Real kanji / Japanese-text labels
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} ultra-coquette kawaii FOOD PARTY scene-types for 5 kawaii food-characters composed cleanly in an over-the-top OMG-cute coquette setting. Each entry is a CLEAN CLUSTER with SLIGHT NATURAL POSE VARIATION per food.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ultra-coquette kawaii FOOD PARTY scene-types for 5 kawaii food-characters composed cleanly in an over-the-top OMG-cute coquette setting. Each entry is a CLEAN CLUSTER with SLIGHT NATURAL POSE VARIATION per food.
 
 The aesthetic is HYPER-FEMININE coquette + kawaii — ribbons, bows, lace, pearls, hearts, strawberries, cherries, ultra-pink palette. Think Marie-Antoinette tea party meets ballerina dressing-room meets pastel kawaii bakery.
 
@@ -29,4 +31,7 @@ DO NOT write:
 - Boys / masculine / dark / grungy — ultra-feminine ONLY
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

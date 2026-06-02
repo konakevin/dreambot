@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} COLOR-PALETTE prompts for YumBot floral-garden-cup. Each is the 3-4 dominant pastel colors for this render.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} COLOR-PALETTE prompts for YumBot floral-garden-cup. Each is the 3-4 dominant pastel colors for this render.
 
 Each entry: 8-12 words. ONE specific palette.
 
@@ -29,4 +31,7 @@ Each entry: 8-12 words. ONE specific palette.
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} SCATTERED MINI-FRIEND descriptions for YumBot checkered-tabletop. Small kawaii mini-foods scattered across the tablecloth around the hero. Template picks 5 per render to form the sticker-card-tableau feel.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} SCATTERED MINI-FRIEND descriptions for YumBot checkered-tabletop. Small kawaii mini-foods scattered across the tablecloth around the hero. Template picks 5 per render to form the sticker-card-tableau feel.
 
 Each entry: 8-15 words. ONE specific scattered mini-friend.
 
@@ -41,4 +43,7 @@ Mini-smiling cookies, smiling-stars, smiling-fruits, mini-marshmallows, heart-ca
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

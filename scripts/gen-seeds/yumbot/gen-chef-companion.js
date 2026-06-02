@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} TINY KITCHEN COMPANION elements for a kawaii mini-chef scene. Each entry is ONE small peripheral cute creature or kitchen-helper accent that hovers/sits near the chef-foods.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TINY KITCHEN COMPANION elements for a kawaii mini-chef scene. Each entry is ONE small peripheral cute creature or kitchen-helper accent that hovers/sits near the chef-foods.
 
 Each entry: 10-18 words. ONE specific tiny accent.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Large landscape / kitchen elements
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

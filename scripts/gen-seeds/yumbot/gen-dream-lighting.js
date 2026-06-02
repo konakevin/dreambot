@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_lighting.json',
   total: 60,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} LIGHTING descriptors for YumBot rainbow-dreamscape. Sunny pastel outdoor light.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} LIGHTING descriptors for YumBot rainbow-dreamscape. Sunny pastel outdoor light.
 
 Each entry: 10-18 words.
 
@@ -30,4 +32,7 @@ Each entry: 10-18 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

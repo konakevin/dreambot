@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} TINY KAWAII COMPANION accents for a kawaii checkered-tabletop scene. Each entry is ONE small peripheral kawaii creature or accent near the tabletop.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TINY KAWAII COMPANION accents for a kawaii checkered-tabletop scene. Each entry is ONE small peripheral kawaii creature or accent near the tabletop.
 
 Each entry: 10-18 words. ONE specific tiny accent.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Large landscape / backdrop elements
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

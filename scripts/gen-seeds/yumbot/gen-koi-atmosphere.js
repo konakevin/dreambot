@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERIC descriptors for a kawaii Japanese koi-pond scene. What's drifting / floating through the AIR.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERIC descriptors for a kawaii Japanese koi-pond scene. What's drifting / floating through the AIR.
 
 Each entry: 12-20 words. ONE specific atmospheric condition.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Ground / pond surface / characters / setting
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} kawaii cottagecore-nature scene-types for 5 kawaii food-characters composed together in a cottagecore/countryside-nature setting. Each entry is a CLEAN CLUSTER composition with SLIGHT NATURAL POSE VARIATION per food — natural family-portrait, NOT identical lineup, NOT chaotic.
+  metaPrompt: (
+    n
+  ) => `Write ${n} kawaii cottagecore-nature scene-types for 5 kawaii food-characters composed together in a cottagecore/countryside-nature setting. Each entry is a CLEAN CLUSTER composition with SLIGHT NATURAL POSE VARIATION per food — natural family-portrait, NOT identical lineup, NOT chaotic.
 
 Each entry: 30-44 words. Each entry MUST specify:
 1. A clean-cluster cottagecore composition (gathered on a checkered picnic blanket / clustered at a wildflower-bouquet / nestled at the foot of a cottage door / arranged on a wooden garden bench / gathered around a wicker basket / huddled at a mossy-stump table / at a windowsill with flower-pots / etc.)
@@ -26,4 +28,7 @@ DO NOT write:
 - Modern urban / industrial / mall — cottagecore countryside ONLY
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

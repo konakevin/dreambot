@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} LIGHTING DIRECTION / QUALITY descriptors for a kawaii cottagecore scene. ONLY how light falls. NOT time-of-day.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING DIRECTION / QUALITY descriptors for a kawaii cottagecore scene. ONLY how light falls. NOT time-of-day.
 
 Each entry: 12-20 words. ONE specific lighting direction/quality.
 
@@ -37,4 +39,7 @@ DO NOT write:
 - Setting / character / ground descriptions
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} WEATHER / ATMOSPHERIC CONDITIONS for YumBot's candy-fantasy Sugar Rush world. Each entry describes the AIR ATMOSPHERIC condition of the scene — what's drifting / floating / falling in the air.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WEATHER / ATMOSPHERIC CONDITIONS for YumBot's candy-fantasy Sugar Rush world. Each entry describes the AIR ATMOSPHERIC condition of the scene — what's drifting / floating / falling in the air.
 
 Each entry: 12-20 words. ONE atmospheric condition phrase.
 
@@ -37,4 +39,7 @@ Each entry: 12-20 words. ONE atmospheric condition phrase.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

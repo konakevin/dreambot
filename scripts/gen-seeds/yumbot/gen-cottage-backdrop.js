@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} COTTAGECORE-NATURE BACKDROP descriptions for a kawaii cottagecore scene. Each entry is the SURROUNDING natural cottagecore setting that frames the foreground — NOT the foreground characters or activity.
+  metaPrompt: (
+    n
+  ) => `Write ${n} COTTAGECORE-NATURE BACKDROP descriptions for a kawaii cottagecore scene. Each entry is the SURROUNDING natural cottagecore setting that frames the foreground — NOT the foreground characters or activity.
 
 Each entry: 18-30 words. ONE specific cottagecore setting. Atmospheric. NO foreground characters mentioned.
 
@@ -44,4 +46,7 @@ DO NOT write:
 - Real kanji / Japanese / English-script labels — decorative-pattern only
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

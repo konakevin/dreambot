@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} LIGHTING descriptors for YumBot floral-garden-cup. Soft, warm, pastel, magical.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} LIGHTING descriptors for YumBot floral-garden-cup. Soft, warm, pastel, magical.
 
 Each entry: 10-18 words.
 
@@ -28,4 +30,7 @@ Each entry: 10-18 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

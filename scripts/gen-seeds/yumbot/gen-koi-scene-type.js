@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} kawaii Japanese koi-pond scene-types for 5 kawaii pond creatures composed cleanly in/around a tranquil Japanese garden pond. Each entry is a CLEAN CLUSTER with SLIGHT NATURAL POSE VARIATION per creature (one peeking out of water, one tilted, one nestled at the edge, one tallest at the back, one floating between lily pads).
+  metaPrompt: (
+    n
+  ) => `Write ${n} kawaii Japanese koi-pond scene-types for 5 kawaii pond creatures composed cleanly in/around a tranquil Japanese garden pond. Each entry is a CLEAN CLUSTER with SLIGHT NATURAL POSE VARIATION per creature (one peeking out of water, one tilted, one nestled at the edge, one tallest at the back, one floating between lily pads).
 
 The aesthetic is painterly Studio-Ghibli kawaii — half-submerged kawaii blob-creatures + koi-fish + axolotls + cloud-mochi-spirits with smiling faces, gathered in a Japanese pond with floating lotus-flowers and stepping-stones.
 
@@ -27,4 +29,7 @@ DO NOT write:
 - Foods (this path is pond-creatures, not foods)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

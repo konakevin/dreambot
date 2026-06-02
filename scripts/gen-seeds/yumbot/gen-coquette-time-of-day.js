@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} TIME-OF-DAY descriptors for a kawaii coquette food-party scene. PURE time of day.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TIME-OF-DAY descriptors for a kawaii coquette food-party scene. PURE time of day.
 
 Palette LOCKED: pinks + lavenders + whites + soft purples ONLY. Time-of-day color must stay in this palette range.
 
@@ -32,4 +34,7 @@ DO NOT write:
 - Any time-of-day color outside the pink/lavender/white/soft-purple palette
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

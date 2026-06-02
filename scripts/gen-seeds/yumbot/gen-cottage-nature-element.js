@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} FEATURED NATURE ELEMENT descriptions for a kawaii cottagecore-nature scene. Each entry is ONE specific natural feature visible in the scene as a wow-detail.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FEATURED NATURE ELEMENT descriptions for a kawaii cottagecore-nature scene. Each entry is ONE specific natural feature visible in the scene as a wow-detail.
 
 Each entry: 12-22 words. ONE specific nature element.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Real kanji / English text
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

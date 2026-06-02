@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} POND-SURFACE / WATER textures for a kawaii koi-pond scene. The creatures are half-submerged in or floating on this surface.
+  metaPrompt: (
+    n
+  ) => `Write ${n} POND-SURFACE / WATER textures for a kawaii koi-pond scene. The creatures are half-submerged in or floating on this surface.
 
 Each entry: 10-18 words. ONE specific water/pond surface.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Dark / scary water
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

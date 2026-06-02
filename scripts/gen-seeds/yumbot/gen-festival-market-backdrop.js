@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} JAPANESE MATSURI / MARKET BACKDROP descriptions for a kawaii festival scene. Each entry is the SURROUNDING SETTING that frames the foreground — the matsuri/market backdrop, not the foreground characters or action.
+  metaPrompt: (
+    n
+  ) => `Write ${n} JAPANESE MATSURI / MARKET BACKDROP descriptions for a kawaii festival scene. Each entry is the SURROUNDING SETTING that frames the foreground — the matsuri/market backdrop, not the foreground characters or action.
 
 Each entry: 18-30 words. ONE specific traditional Japanese festival/market setting. Atmospheric and evocative. NO foreground characters mentioned (those are in a separate axis).
 
@@ -41,4 +43,7 @@ DO NOT write:
 - Dark / scary / moody atmosphere
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

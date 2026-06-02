@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} SIGNATURE LANDMARK elements for a candy-fantasy world. Each entry is ONE iconic candy-world object — a VERTICAL, STANDALONE, or CLUSTERED landmark that anchors a scene without creating Z-axis depth or receding lines.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SIGNATURE LANDMARK elements for a candy-fantasy world. Each entry is ONE iconic candy-world object — a VERTICAL, STANDALONE, or CLUSTERED landmark that anchors a scene without creating Z-axis depth or receding lines.
 
 Each entry: 12-22 words. ONE specific landmark. Sugar Rush kawaii Disney-CGI pastel register.
 
@@ -36,4 +38,7 @@ DO NOT write entries that contain ANY of these patterns:
 These ban patterns are non-negotiable — they all create Z-axis depth or center-receding composition that ruins the render. Stick to STANDALONE landmarks placed within the scene as anchors, not directional lines.
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

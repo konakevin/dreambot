@@ -5,7 +5,9 @@ generatePool({
   total: 50,
   batch: 15,
   append: false,
-  metaPrompt: (n) => `Write ${n} aggressive KAWAII NIGHTTIME LOCK paragraphs for outdoor YumBot scenes. These paragraphs SLAM the entire render into nighttime — Flux ignores soft night-language when surrounded by bright kawaii-pastel tokens, so each entry must DOMINATE.
+  metaPrompt: (
+    n
+  ) => `Write ${n} aggressive KAWAII NIGHTTIME LOCK paragraphs for outdoor YumBot scenes. These paragraphs SLAM the entire render into nighttime — Flux ignores soft night-language when surrounded by bright kawaii-pastel tokens, so each entry must DOMINATE.
 
 Each entry: 65-95 words. A single bold paragraph with three forced locks:
 1. SKY + TIME LOCK — start with "FULLY DARK [night-sky-spec] NOT twilight NOT dusk." Use words like indigo, navy, midnight, inky, ink-black, deep-cobalt, jewel-violet sky. Always include a visible moon (crescent / full / gibbous) and stars.
@@ -36,4 +38,7 @@ DO NOT write:
 REGISTER: cozy peaceful kawaii night. Studio-Ghibli warmth × bex.ai Pop-Mart kawaii. The night is safe and dreamy but UNAMBIGUOUSLY NIGHT — no twilight ambiguity. Each entry is a hammer that breaks through bright-pastel surrounding tokens.
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

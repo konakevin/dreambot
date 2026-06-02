@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} kawaii kitchen scene-types for 5 kawaii FOOD CHARACTERS composed together in a kitchen setting, cooking/preparing a kawaii dish. The food-characters ARE the cooks — no human / chibi-human chef figures, no human-coded accessories (no chef hats, no aprons, no neckerchiefs). The foods themselves are dusted with flour, holding tiny baking tools, leaning over a mixing bowl, etc.
+  metaPrompt: (
+    n
+  ) => `Write ${n} kawaii kitchen scene-types for 5 kawaii FOOD CHARACTERS composed together in a kitchen setting, cooking/preparing a kawaii dish. The food-characters ARE the cooks — no human / chibi-human chef figures, no human-coded accessories (no chef hats, no aprons, no neckerchiefs). The foods themselves are dusted with flour, holding tiny baking tools, leaning over a mixing bowl, etc.
 
 Each entry: 30-44 words. Each entry MUST specify:
 1. A clean-cluster kitchen composition (gathered at a kitchen counter / around a mixing bowl / at a stove / at a pastry station / clustered around a cake-decorating board / at a sushi-roll mat / etc.)
@@ -27,4 +29,7 @@ DO NOT write:
 - The broader kitchen BACKDROP / SETTING (separate axis)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

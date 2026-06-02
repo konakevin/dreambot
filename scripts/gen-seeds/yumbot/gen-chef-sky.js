@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} OVERHEAD/CEILING descriptions for a kawaii mini-chef kitchen scene. Each entry describes what's overhead — kitchen ceiling, hanging utensils, lighting fixtures, windows-above.
+  metaPrompt: (
+    n
+  ) => `Write ${n} OVERHEAD/CEILING descriptions for a kawaii mini-chef kitchen scene. Each entry describes what's overhead — kitchen ceiling, hanging utensils, lighting fixtures, windows-above.
 
 Each entry: 12-22 words. ONE specific overhead description.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Pathway / receding surface — overhead only
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

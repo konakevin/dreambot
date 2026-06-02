@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CANDY-TERRAIN ground textures for YumBot candy-fantasy — what the ground / floor / path is MADE of in the Sugar Rush world. NOT real soil, NOT real grass.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CANDY-TERRAIN ground textures for YumBot candy-fantasy — what the ground / floor / path is MADE of in the Sugar Rush world. NOT real soil, NOT real grass.
 
 Each entry: 12-22 words. ONE specific candy-ground texture.
 
@@ -38,4 +40,7 @@ Each entry: 12-22 words. ONE specific candy-ground texture.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

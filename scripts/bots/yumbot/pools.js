@@ -12,8 +12,11 @@ const path = require('path');
 const load = (name) => {
   const p = path.resolve(__dirname, 'seeds', `${name}.json`);
   if (!fs.existsSync(p)) return [];
-  try { return JSON.parse(fs.readFileSync(p, 'utf8')); }
-  catch { return []; }
+  try {
+    return JSON.parse(fs.readFileSync(p, 'utf8'));
+  } catch {
+    return [];
+  }
 };
 
 const VIBE_COLOR = {

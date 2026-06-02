@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} KITCHEN COUNTERTOP / FLOOR / SURFACE textures for a kawaii mini-chef scene. Each entry describes the SURFACE the foods are sitting/standing on (kitchen counter, prep board, kitchen floor, tabletop).
+  metaPrompt: (
+    n
+  ) => `Write ${n} KITCHEN COUNTERTOP / FLOOR / SURFACE textures for a kawaii mini-chef scene. Each entry describes the SURFACE the foods are sitting/standing on (kitchen counter, prep board, kitchen floor, tabletop).
 
 Each entry: 10-18 words. ONE specific surface.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Foreground characters
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

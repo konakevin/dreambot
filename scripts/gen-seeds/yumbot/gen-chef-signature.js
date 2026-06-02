@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} ICONIC KITCHEN SIGNATURE elements for a kawaii mini-chef kitchen scene. Each entry is ONE specific kitchen prop or tool that anchors the scene as a kawaii kitchen.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ICONIC KITCHEN SIGNATURE elements for a kawaii mini-chef kitchen scene. Each entry is ONE specific kitchen prop or tool that anchors the scene as a kawaii kitchen.
 
 Each entry: 10-18 words. ONE specific element.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Whole-kitchen scenes (those are in backdrop axis)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

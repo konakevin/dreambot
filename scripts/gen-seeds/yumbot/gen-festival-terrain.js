@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} GROUND-TEXTURE descriptors for a Japanese matsuri (festival) scene. Each entry describes ONLY the ground/floor texture under the kawaii foods — what they're standing/sitting/perched on.
+  metaPrompt: (
+    n
+  ) => `Write ${n} GROUND-TEXTURE descriptors for a Japanese matsuri (festival) scene. Each entry describes ONLY the ground/floor texture under the kawaii foods — what they're standing/sitting/perched on.
 
 Each entry: 10-18 words. ONE specific ground/floor texture.
 
@@ -37,4 +39,7 @@ DO NOT write:
 - Foods, characters, atmosphere — terrain only
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

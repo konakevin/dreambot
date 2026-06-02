@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} GARDEN SCENE compositions for a kawaii floral-garden bot. Each entry is a CONCRETE setting (indoor or outdoor) with MULTIPLE kawaii-faced planters / vessels arranged together, OVERFLOWING with flowers, and kawaii treats scattered around. The scene is RICH and FULL — never minimal, never a single hero on a plain background.
+  metaPrompt: (
+    n
+  ) => `Write ${n} GARDEN SCENE compositions for a kawaii floral-garden bot. Each entry is a CONCRETE setting (indoor or outdoor) with MULTIPLE kawaii-faced planters / vessels arranged together, OVERFLOWING with flowers, and kawaii treats scattered around. The scene is RICH and FULL — never minimal, never a single hero on a plain background.
 
 Each entry: 30-44 words. Each entry MUST include:
 1. A concrete setting (indoor: potting shed, conservatory, cottage windowsill, kitchen counter, vanity, fireplace mantle, bookshelf, bathroom shelf, tea-time table, sunroom corner — OR outdoor: cottage garden patio, greenhouse, balcony, picnic-in-garden, garden bench, gazebo, pond-side, garden swing, flower-fence, tea-garden table)
@@ -29,4 +31,7 @@ DO NOT write entries with:
 - streams or rivers running through
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

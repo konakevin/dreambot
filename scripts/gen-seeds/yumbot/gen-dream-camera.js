@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_camera.json',
   total: 60,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} CAMERA COMPOSITIONS for YumBot rainbow-dreamscape. Wider scenic shots showing the kawaii cups IN the landscape.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} CAMERA COMPOSITIONS for YumBot rainbow-dreamscape. Wider scenic shots showing the kawaii cups IN the landscape.
 
 Each entry: 12-22 words.
 
@@ -32,4 +34,7 @@ Each entry: 12-22 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

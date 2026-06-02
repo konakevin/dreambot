@@ -12,14 +12,31 @@
 
 module.exports = {
   YUMBOT_FLORAL_GARDEN_CUP: ({ slots, sharedDNA, vibeDirective }) => {
-    const { vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting, night_mode } = slots;
+    const {
+      vessel,
+      overflowing_flora,
+      tabletop_scatter,
+      frame_branches,
+      palette,
+      background,
+      lighting,
+      night_mode,
+    } = slots;
     const floraList = Array.isArray(overflowing_flora) ? overflowing_flora : [overflowing_flora];
-    const floraBlock = floraList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const floraBlock = floraList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const scatterList = Array.isArray(tabletop_scatter) ? tabletop_scatter : [tabletop_scatter];
-    const scatterBlock = scatterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const scatterBlock = scatterList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing FLORAL-GARDEN-CUP renders for YumBot — bex.ai's signature look. A kawaii-faced VESSEL (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical garden of flowers. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
-${night_mode ? `
+${
+  night_mode
+    ? `
 
 ⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
 
@@ -31,7 +48,9 @@ NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
 - Lighting = moon + paper-lanterns + candle-glow + fairy-light strings catching dewdrops. NO 'soft volumetric pastel-light pouring down', NO 'warm-pastel rim-light' on a daytime backdrop.
 - If any phrase below says 'soft volumetric pastel-light' / 'warm-pastel rim-light' on bright background / 'dreamy pastel bokeh' — REPLACE with night equivalent (moonlit dewdrop sparkle, candle-glow halos, lantern-bokeh dark backdrop).
 
-` : ''}
+`
+    : ''
+}
 ━━━ ⚠ HARD RULE #1: KAWAII VESSEL OVERFLOWING WITH MAGICAL FLORA ━━━
 
 The hero is a kawaii-faced vessel (cup / mug / bowl / takeout-cup with a smiling face printed on it — dimpled-blush, closed-arc eyes). Out of the TOP of the vessel BURSTS an oversized magical bouquet of flowers — like a giant flower-arrangement spilling out impossibly. The flora is OVERSIZED relative to the vessel — the bouquet is bigger than the cup itself. This is the wow-moment: a kawaii drink that's also a flower-vase.
@@ -62,9 +81,13 @@ ${palette}
 ━━━ BACKGROUND MOOD (dreamy pastel garden bokeh — NOT a recognizable setting) ━━━
 ${background}
 
-${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting) ━━━
-${night_mode}` : `━━━ LIGHTING ━━━
-${lighting}`}
+${
+  night_mode
+    ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting) ━━━
+${night_mode}`
+    : `━━━ LIGHTING ━━━
+${lighting}`
+}
 
 ━━━ SPARKLE STACK — FLORAL-GARDEN-CUP ━━━
 
@@ -106,14 +129,32 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_FLORAL_GARDEN_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, vessel, overflowing_flora, tabletop_scatter, frame_branches, palette, background, lighting, night_mode } = slots;
+    const {
+      scene_type,
+      vessel,
+      overflowing_flora,
+      tabletop_scatter,
+      frame_branches,
+      palette,
+      background,
+      lighting,
+      night_mode,
+    } = slots;
     const floraList = Array.isArray(overflowing_flora) ? overflowing_flora : [overflowing_flora];
-    const floraBlock = floraList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const floraBlock = floraList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const scatterList = Array.isArray(tabletop_scatter) ? tabletop_scatter : [tabletop_scatter];
-    const scatterBlock = scatterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const scatterBlock = scatterList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing FLORAL-GARDEN renders for YumBot. The SCENE is a RICH kawaii garden composition — indoor (potting shed / sunroom / windowsill / tea-time table / vanity / fireplace mantle) or outdoor (cottage patio / greenhouse / balcony / picnic-in-garden / garden bench / gazebo). The scene contains MULTIPLE kawaii-faced planters/vessels clustered together, OVERFLOWING with magical flowers, kawaii treats scattered through, magical sparkle accents. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
-${night_mode ? `
+${
+  night_mode
+    ? `
 
 ⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
 
@@ -126,7 +167,9 @@ NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
 - Lighting = moon + paper-lanterns + candle-glow + fairy-light strings + firefly drift. NO 'soft volumetric pastel-light pouring down', NO 'warm-pastel rim-light' on a bright daytime backdrop.
 - If any phrase below says 'soft volumetric pastel-light' / 'warm-pastel rim-light' / 'pastel atmosphere' / 'leaded windows' — REPLACE with night equivalent. The render must read as full NIGHT garden scene.
 
-` : ''}
+`
+    : ''
+}
 ━━━ ⚠ HARD RULE #1: SCENE-TYPE IS THE COMPOSITION ━━━
 
 The scene-type below establishes the full setting (indoor or outdoor garden setting) AND the cluster of 3+ kawaii planters. The render is ABOUT that scene-type — NOT a single isolated vessel on a plain background. The scene is FULL and RICH — packed with planters, flowers, treats, magical accents. NEVER minimal.
@@ -168,9 +211,13 @@ ${palette}
 ━━━ BACKGROUND MOOD (the setting's pastel atmosphere — leaded windows, garden bokeh, cottage walls, leafy backdrop, etc.) ━━━
 ${background}
 
-${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting) ━━━
-${night_mode}` : `━━━ LIGHTING ━━━
-${lighting}`}
+${
+  night_mode
+    ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting) ━━━
+${night_mode}`
+    : `━━━ LIGHTING ━━━
+${lighting}`
+}
 
 ━━━ SPARKLE STACK — FLORAL-GARDEN-SCENE ━━━
 
@@ -217,19 +264,44 @@ Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_RAINBOW_DREAMSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { food_inhabitants, dreamscape_setting, rainbow_element, sky_atmosphere, environment, decor, companions, camera, lighting, night_mode } = slots;
+    const {
+      food_inhabitants,
+      dreamscape_setting,
+      rainbow_element,
+      sky_atmosphere,
+      environment,
+      decor,
+      companions,
+      camera,
+      lighting,
+      night_mode,
+    } = slots;
     // food_inhabitants is now an array of 5 (pickN:5 from FOOD_CATALOG)
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
-    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const foodBlock = foodList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const decorList = Array.isArray(decor) ? decor : [decor];
-    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const envList = Array.isArray(environment) ? environment : [environment];
-    const envBlock = envList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const envBlock = envList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const compList = Array.isArray(companions) ? companions : [companions];
-    const compBlock = compList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const compBlock = compList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape, COLORFUL and VIBRANT pastel palette throughout (the "rainbow-" in the path name is a reminder that the palette is colorful pastels — it does NOT mean the render must be rainbow-themed). Output wraps with style prefix + suffix.
-${night_mode ? `
+${
+  night_mode
+    ? `
 
 ⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
 
@@ -241,7 +313,9 @@ NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
 - Lighting = moon + paper-lanterns + fairy-light strings + glowing-balloon-orbs + creature-bioluminescence. NO 'sunny vibrant pastel light', NO bright sunny landscape.
 - If any phrase below says 'sunny vibrant pastel' / 'colorful palette SINGS' / 'sunny meadow' — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT dreamscape, not bright-pastel-meadow-with-a-moon.
 
-` : ''}
+`
+    : ''
+}
 ━━━ ⚠ HARD RULE #1: NAME ALL 5 FOODS EXPLICITLY — COUNT THEM ━━━
 
 The 5 foods below MUST appear in the output by name. Count them: 1, 2, 3, 4, 5. Each visible in the scene as a creature-inhabitant of the meadow. Each has its own kawaii smiling face. Group them in the scene like little friends gathered together. NEVER drop a food. NEVER abbreviate to "and others." Name each one specifically.
@@ -282,9 +356,13 @@ ${compBlock}
 ━━━ CAMERA ━━━
 ${camera}
 
-${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + sky_atmosphere) ━━━
-${night_mode}` : `━━━ LIGHTING ━━━
-${lighting}`}
+${
+  night_mode
+    ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + sky_atmosphere) ━━━
+${night_mode}`
+    : `━━━ LIGHTING ━━━
+${lighting}`
+}
 
 ━━━ SCENE PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -307,16 +385,39 @@ Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_CANDY_FANTASY: ({ slots, sharedDNA, vibeDirective }) => {
-    const { candy_scene_type, candy_world_signature, candy_terrain, candy_sky, food_inhabitants, companions, decor_accents, candy_camera, candy_lighting, candy_time_of_day, candy_weather, night_mode } = slots;
-    const sigList = Array.isArray(candy_world_signature) ? candy_world_signature : [candy_world_signature];
-    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const {
+      candy_scene_type,
+      candy_world_signature,
+      candy_terrain,
+      candy_sky,
+      food_inhabitants,
+      companions,
+      decor_accents,
+      candy_camera,
+      candy_lighting,
+      candy_time_of_day,
+      candy_weather,
+      night_mode,
+    } = slots;
+    const sigList = Array.isArray(candy_world_signature)
+      ? candy_world_signature
+      : [candy_world_signature];
+    const sigBlock = sigList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
-    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const foodBlock = foodList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const compList = Array.isArray(companions) ? companions : [companions];
     const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
 
     return `You are writing CANDY-FANTASY renders for YumBot. The SCENE-TYPE is the WHOLE point — it dictates where the 5 food-characters are placed and how the composition is framed. Atmosphere, lighting, time-of-day, weather wrap around the scene-type. Output wraps with style prefix + suffix.
-${night_mode ? `
+${
+  night_mode
+    ? `
 
 ⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
 
@@ -328,7 +429,9 @@ NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
 - Lighting = moon + candy-paper-lanterns + glowing-gumdrop-fairy-lights + bioluminescent-frosting. NO daytime sun, NO bright pastel sunny light.
 - If any phrase below says 'sunny pastel' / 'warm Disney-CGI' / 'bright lush saturated pastel' — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT, not bright-candy-with-a-moon.
 
-` : ''}
+`
+    : ''
+}
 ━━━ ⚠ HARD RULE #1: SCENE-TYPE IS THE COMPOSITION ━━━
 
 The scene-type below is a COMPOSITION-LOCKED scene with explicit character placement (perched on a railing / seated around a campfire / clinging to a pinwheel / inside a glass jar / atop a cake mountain / on a roller-coaster crest / etc.). The 5 kawaii food-characters take the EXACT positions described in the scene-type. The render is ABOUT the scene-type — atmosphere is decoration around it.
@@ -352,15 +455,19 @@ ${foodBlock}
 ━━━ 1 BACKGROUND SIGNATURE ELEMENT (subtle accent, NOT a competing landmark) ━━━
 ${sigBlock}
 
-${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides time + weather + lighting) ━━━
-${night_mode}` : `━━━ TIME OF DAY ━━━
+${
+  night_mode
+    ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides time + weather + lighting) ━━━
+${night_mode}`
+    : `━━━ TIME OF DAY ━━━
 ${candy_time_of_day}
 
 ━━━ WEATHER / ATMOSPHERE ━━━
 ${candy_weather}
 
 ━━━ LIGHTING DIRECTION / QUALITY ━━━
-${candy_lighting}`}
+${candy_lighting}`
+}
 
 ━━━ CAMERA FRAMING ━━━
 ${candy_camera}
@@ -407,11 +514,29 @@ Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_JAPANESE_FESTIVAL: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, market_backdrop, signature, terrain, sky, camera, lighting, time_of_day, weather, food_inhabitants, companion } = slots;
+    const {
+      scene_type,
+      market_backdrop,
+      signature,
+      terrain,
+      sky,
+      camera,
+      lighting,
+      time_of_day,
+      weather,
+      food_inhabitants,
+      companion,
+    } = slots;
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
-    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const foodBlock = foodList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const sigList = Array.isArray(signature) ? signature : [signature];
-    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigBlock = sigList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing JAPANESE-FESTIVAL renders for YumBot — kawaii matsuri scenes with 5 kawaii Japanese festival foods composed cleanly in a richly-detailed matsuri/market setting. Natural family-portrait cluster with slight pose variation per food — NOT identical lineup, NOT chaotic action. Painterly Pop-Mart fusion register with Studio-Ghibli warmth. Output wraps with style prefix + suffix.
 
@@ -502,11 +627,30 @@ Output ONLY the raw 140-200 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_MINI_CHEF: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, kitchen_backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, food_inhabitants, companion, dish_being_prepared } = slots;
+    const {
+      scene_type,
+      kitchen_backdrop,
+      signature,
+      terrain,
+      sky,
+      camera,
+      lighting,
+      time_of_day,
+      atmosphere,
+      food_inhabitants,
+      companion,
+      dish_being_prepared,
+    } = slots;
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
-    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const foodBlock = foodList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const sigList = Array.isArray(signature) ? signature : [signature];
-    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigBlock = sigList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing MINI-CHEF renders for YumBot — kawaii kitchen scenes with 5 KAWAII FOOD-CHARACTERS (the foods themselves) cooking together to prepare a kawaii dish in a richly-detailed kitchen. The food-characters ARE the cooks — no human chef figures, no chibi-children, no human-coded clothing. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli kitchen warmth. Output wraps with style prefix + suffix.
 
@@ -605,14 +749,36 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_COTTAGECORE_NATURE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, food_inhabitants, companion, nature_element, night_mode } = slots;
+    const {
+      scene_type,
+      backdrop,
+      signature,
+      terrain,
+      sky,
+      camera,
+      lighting,
+      time_of_day,
+      atmosphere,
+      food_inhabitants,
+      companion,
+      nature_element,
+      night_mode,
+    } = slots;
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
-    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const foodBlock = foodList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const sigList = Array.isArray(signature) ? signature : [signature];
-    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigBlock = sigList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing COTTAGECORE-NATURE renders for YumBot — kawaii countryside-nature scenes with 5 kawaii food-characters composed cleanly in a richly-detailed cottagecore setting. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli countryside warmth. Output wraps with style prefix + suffix.
-${night_mode ? `
+${
+  night_mode
+    ? `
 
 ⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
 
@@ -624,7 +790,9 @@ NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
 - Lighting = moon + cottage-window-glow + paper-lanterns + fairy-light strings + firefly drift. NO daytime sun, NO 'soft warm light' afternoon glow.
 - If any phrase below says 'soft warm light' / 'warm cozy palette' / 'sage/butter/cream' bright daytime — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT, not bright-cottage-with-a-moon.
 
-` : ''}
+`
+    : ''
+}
 ━━━ ⚠ HARD RULE #1: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
 
 The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). The food ITSELF is the character (jam-jar / scone / berry / cream-puff / honey-jar / etc.) with kawaii face ON the food. Group them so all 5 fit cleanly in the frame.
@@ -664,16 +832,20 @@ ${sky}
 ━━━ CAMERA FRAMING ━━━
 ${camera}
 
-${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + time + atmosphere) ━━━
+${
+  night_mode
+    ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + time + atmosphere) ━━━
 ${night_mode}
-` : `━━━ LIGHTING DIRECTION / QUALITY ━━━
+`
+    : `━━━ LIGHTING DIRECTION / QUALITY ━━━
 ${lighting}
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
 
 ━━━ ATMOSPHERE (what's drifting through the air — petals / pollen / butterflies / dust motes) ━━━
-${atmosphere}`}
+${atmosphere}`
+}
 
 ━━━ 1 TINY COTTAGECORE COMPANION (bunny / honeybee / songbird / butterfly / etc.) ━━━
 ${companion}
@@ -716,13 +888,35 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_CHECKERED_TABLETOP: ({ slots, sharedDNA, vibeDirective }) => {
-    const { vessel_hero, mini_creature_pile, tablecloth, scattered_minis, decor_clusters, backdrop, signature, atmosphere, time_of_day, companion, camera, lighting } = slots;
+    const {
+      vessel_hero,
+      mini_creature_pile,
+      tablecloth,
+      scattered_minis,
+      decor_clusters,
+      backdrop,
+      signature,
+      atmosphere,
+      time_of_day,
+      companion,
+      camera,
+      lighting,
+    } = slots;
     const minisList = Array.isArray(scattered_minis) ? scattered_minis : [scattered_minis];
-    const minisBlock = minisList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const minisBlock = minisList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const clusterList = Array.isArray(decor_clusters) ? decor_clusters : [decor_clusters];
-    const clusterBlock = clusterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const clusterBlock = clusterList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const sigList = Array.isArray(signature) ? signature : [signature];
-    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigBlock = sigList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing CHECKERED-TABLETOP renders for YumBot — bex.ai's signature pastel-gingham tabletop look. Kawaii food/drink hero on a pastel-pink-blue (or pink-cream / pink-yellow) GINGHAM/CHECKERED/PLAID tablecloth, with a cluster of smiling mini-food-friends piled around (and often ON TOP of) the hero. Output wraps with style prefix + suffix.
 
@@ -815,13 +1009,38 @@ Output ONLY the raw 120-170 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_COQUETTE_FOOD: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, dessert_motif, palette_variant, bow_motif, scattered_items, companion, food_inhabitants } = slots;
+    const {
+      scene_type,
+      backdrop,
+      signature,
+      terrain,
+      sky,
+      camera,
+      lighting,
+      time_of_day,
+      atmosphere,
+      dessert_motif,
+      palette_variant,
+      bow_motif,
+      scattered_items,
+      companion,
+      food_inhabitants,
+    } = slots;
     const foodList = Array.isArray(food_inhabitants) ? food_inhabitants : [food_inhabitants];
-    const foodBlock = foodList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const foodBlock = foodList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const sigList = Array.isArray(signature) ? signature : [signature];
-    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigBlock = sigList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const scatterList = Array.isArray(scattered_items) ? scattered_items : [scattered_items];
-    const scatterBlock = scatterList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const scatterBlock = scatterList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing COQUETTE-FOOD renders for YumBot — the FLAGSHIP OMG-cute coquette kawaii food-party path. Hyper-feminine ultra-pink ultra-coquette palette. Output wraps with style prefix + suffix.
 
@@ -924,14 +1143,36 @@ Output ONLY the raw 170-240 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_KAWAII_KOI_POND: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene_type, backdrop, signature, terrain, sky, camera, lighting, time_of_day, atmosphere, water_element, companion, creatures, night_mode } = slots;
+    const {
+      scene_type,
+      backdrop,
+      signature,
+      terrain,
+      sky,
+      camera,
+      lighting,
+      time_of_day,
+      atmosphere,
+      water_element,
+      companion,
+      creatures,
+      night_mode,
+    } = slots;
     const creatureList = Array.isArray(creatures) ? creatures : [creatures];
-    const creatureBlock = creatureList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const creatureBlock = creatureList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const sigList = Array.isArray(signature) ? signature : [signature];
-    const sigBlock = sigList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const sigBlock = sigList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing KAWAII-KOI-POND renders for YumBot — a tranquil Japanese koi-pond scene with 5 kawaii pond-creatures (smiling koi-fish, axolotls, cloud-mochi-spirits, lily-frogs, pearl-blobs) half-submerged in/around the pond. Painterly Studio-Ghibli meets bex.ai Pop-Mart kawaii register. Output wraps with style prefix + suffix.
-${night_mode ? `
+${
+  night_mode
+    ? `
 
 ⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
 
@@ -944,7 +1185,9 @@ NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
 - The kawaii cast itself can keep soft cream-pink-blush faces, but the WORLD around them is DARK.
 - If any phrase below says 'twilight register' / 'warm sunny' / 'pink magic-hour' / 'bright pastel sky' / 'rose-silver moonlight on bright pastels' — REPLACE it with the unambiguously-night equivalent. The render must read as full NIGHT, not twilight-with-a-moon.
 
-` : ''}
+`
+    : ''
+}
 ━━━ ⚠ HARD RULE #1: 5 KAWAII POND-CREATURES NAMED FIRST — ALL VISIBLE ━━━
 
 The 5 kawaii creatures MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). Each is a kawaii pond-creature with kawaii face (closed-arc-eyes, blush cheeks, tiny mouth) — NOT a food. Half-submerged or floating in the pond water.
@@ -984,16 +1227,20 @@ ${sky}
 ━━━ CAMERA FRAMING ━━━
 ${camera}
 
-${night_mode ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + time + atmosphere) ━━━
+${
+  night_mode
+    ? `━━━ ⚠ NIGHTTIME OVERRIDE — this render is at NIGHT (overrides lighting + time + atmosphere) ━━━
 ${night_mode}
-` : `━━━ LIGHTING DIRECTION / QUALITY ━━━
+`
+    : `━━━ LIGHTING DIRECTION / QUALITY ━━━
 ${lighting}
 
 ━━━ TIME OF DAY ━━━
 ${time_of_day}
 
 ━━━ ATMOSPHERE (what's drifting through the air — petals / fireflies / mist) ━━━
-${atmosphere}`}
+${atmosphere}`
+}
 
 ━━━ 1 TINY COMPANION (dragonfly / origami-crane / butterfly / etc.) ━━━
 ${companion}

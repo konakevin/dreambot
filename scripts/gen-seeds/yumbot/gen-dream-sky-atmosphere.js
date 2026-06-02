@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_sky_atmosphere.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} SKY-AND-ATMOSPHERE descriptions for YumBot rainbow-dreamscape. The sky overhead — sunny pastel sky with optional balloons, mountains in distance, etc.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} SKY-AND-ATMOSPHERE descriptions for YumBot rainbow-dreamscape. The sky overhead — sunny pastel sky with optional balloons, mountains in distance, etc.
 
 Each entry: 15-25 words.
 
@@ -37,4 +39,7 @@ Sunny pastel-pink-blue gradient sky. Cherry-blossom-mountains in distance in sof
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

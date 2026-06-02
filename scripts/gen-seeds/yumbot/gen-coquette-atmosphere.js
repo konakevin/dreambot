@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERIC descriptors for a kawaii coquette food-party scene. What's drifting / floating / sparkling through the AIR.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERIC descriptors for a kawaii coquette food-party scene. What's drifting / floating / sparkling through the AIR.
 
 Palette LOCKED: pinks + lavenders + whites + soft purples ONLY.
 
@@ -41,4 +43,7 @@ DO NOT write:
 - Foods / characters / setting
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

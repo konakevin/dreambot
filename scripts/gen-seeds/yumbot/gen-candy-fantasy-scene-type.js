@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} COMPOSITION-LOCKED SCENES for a candy-fantasy world. Each entry is a CONCRETE situation that bakes CHARACTER PLACEMENT directly into the prompt — so Flux composes the scene around where the characters are positioned, not around a generic candy-meadow backdrop.
+  metaPrompt: (
+    n
+  ) => `Write ${n} COMPOSITION-LOCKED SCENES for a candy-fantasy world. Each entry is a CONCRETE situation that bakes CHARACTER PLACEMENT directly into the prompt — so Flux composes the scene around where the characters are positioned, not around a generic candy-meadow backdrop.
 
 Each entry: 28-42 words. Each entry MUST specify:
 1. A concrete location/situation (table, campfire, bridge, ledge, cliff, treehouse, fountain edge, balcony, market counter, window sill, snow-mound, giant macaron disc, frosted-cake mountain top, swing-set, candy fairground ride, sugar-spun pavilion, fondant throne, glass jar interior, hot-air-candy-balloon basket, bakery counter, etc.)
@@ -31,4 +33,7 @@ DO NOT write:
 - Vague "gathering" without explicit placement
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_inhabitants.json',
   total: 80,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} KAWAII FOOD-CREATURE GROUP descriptions for YumBot rainbow-dreamscape. Each entry describes 4-7 mixed-type anthropomorphized kawaii smiling-face foods/drinks/desserts sitting together in a pastel meadow.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} KAWAII FOOD-CREATURE GROUP descriptions for YumBot rainbow-dreamscape. Each entry describes 4-7 mixed-type anthropomorphized kawaii smiling-face foods/drinks/desserts sitting together in a pastel meadow.
 
 Each entry: 35-60 words. Describes ONE scene's group with named specific foods.
 
@@ -69,4 +71,7 @@ Each entry's LEAD food (first named) must rotate through 7 distinct CATEGORIES. 
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. Each entry covers ONE scene's diverse-group (4-7 mixed kawaii foods, drawn from different categories). No preamble, no numbering. Push variety hard — every entry should feel category-fresh.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} ICONIC KAWAII TABLETOP SIGNATURE PROPS for a kawaii checkered-tabletop scene. Each entry is ONE specific kawaii tabletop prop / accent that anchors the bex.ai-collectible aesthetic.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ICONIC KAWAII TABLETOP SIGNATURE PROPS for a kawaii checkered-tabletop scene. Each entry is ONE specific kawaii tabletop prop / accent that anchors the bex.ai-collectible aesthetic.
 
 Each entry: 8-16 words. ONE specific prop.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Whole-scene descriptions
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

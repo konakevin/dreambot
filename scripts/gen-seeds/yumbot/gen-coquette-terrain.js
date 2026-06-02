@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} SURFACE textures for a kawaii coquette food-party scene — what the foods sit on (tabletop / floor / cloth surface).
+  metaPrompt: (
+    n
+  ) => `Write ${n} SURFACE textures for a kawaii coquette food-party scene — what the foods sit on (tabletop / floor / cloth surface).
 
 Palette LOCKED: pinks + lavenders + whites + soft purples ONLY.
 
@@ -39,4 +41,7 @@ DO NOT write:
 - Foreground characters / atmosphere
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

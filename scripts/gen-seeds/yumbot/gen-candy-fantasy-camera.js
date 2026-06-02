@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CAMERA COMPOSITIONS for YumBot candy-fantasy — Wreck-It-Ralph Sugar Rush world. Each entry describes a CAMERA FRAMING — angle, distance, perspective. The scene-type axis drives WHAT the scene is; this axis drives HOW it's framed.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CAMERA COMPOSITIONS for YumBot candy-fantasy — Wreck-It-Ralph Sugar Rush world. Each entry describes a CAMERA FRAMING — angle, distance, perspective. The scene-type axis drives WHAT the scene is; this axis drives HOW it's framed.
 
 Each entry: 14-22 words. ONE specific camera framing.
 
@@ -39,4 +41,7 @@ Each entry: 14-22 words. ONE specific camera framing.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

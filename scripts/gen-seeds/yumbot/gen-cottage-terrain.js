@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} GROUND-SURFACE textures for a kawaii cottagecore-nature scene — what's underfoot.
+  metaPrompt: (
+    n
+  ) => `Write ${n} GROUND-SURFACE textures for a kawaii cottagecore-nature scene — what's underfoot.
 
 Each entry: 10-18 words. ONE specific surface.
 
@@ -37,4 +39,7 @@ DO NOT write:
 - Foreground characters / atmosphere / sky
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

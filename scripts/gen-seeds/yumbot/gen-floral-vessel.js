@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} KAWAII-FACED VESSELS for YumBot floral-garden-cup. Each is a cup / mug / teacup / takeout-cup / bowl with a literal smiling face printed on it and decorative painted detail. NO contents (those come from another pool). Just the vessel.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} KAWAII-FACED VESSELS for YumBot floral-garden-cup. Each is a cup / mug / teacup / takeout-cup / bowl with a literal smiling face printed on it and decorative painted detail. NO contents (those come from another pool). Just the vessel.
 
 Each entry: 18-30 words. ONE specific kawaii vessel.
 
@@ -42,4 +44,7 @@ The vessels are highly decorative, ornate, painterly-painted with kawaii face an
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

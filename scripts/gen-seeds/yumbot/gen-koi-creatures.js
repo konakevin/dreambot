@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} KAWAII POND-CREATURE descriptions for a Japanese koi-pond scene. Each entry is ONE kawaii pond inhabitant — koi-fish, axolotl, cloud-mochi-spirit, pearl-blob, lily-frog, or similar kawaii water-creature WITH a kawaii face (closed-arc-eyes, blush cheeks, tiny mouth).
+  metaPrompt: (
+    n
+  ) => `Write ${n} KAWAII POND-CREATURE descriptions for a Japanese koi-pond scene. Each entry is ONE kawaii pond inhabitant — koi-fish, axolotl, cloud-mochi-spirit, pearl-blob, lily-frog, or similar kawaii water-creature WITH a kawaii face (closed-arc-eyes, blush cheeks, tiny mouth).
 
 Each entry: 14-26 words. ONE specific creature with kawaii face. Painterly Pop-Mart-meets-Studio-Ghibli register.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Modern objects
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} CUTE GIRLY ACCESSORY items for a kawaii coquette food-party scene. These are SCATTERED DECOR items splashed into the scene alongside the foods — DIFFERENT from the prop-style signature pieces.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CUTE GIRLY ACCESSORY items for a kawaii coquette food-party scene. These are SCATTERED DECOR items splashed into the scene alongside the foods — DIFFERENT from the prop-style signature pieces.
 
 These are GIRLY ACCESSORIES: lipsticks, perfume bottles, hair-clips, mini bow-charms, pink hand-mirrors, pearl-chain bracelets, miniature ballet-flats, plushy teddy-bears, hair-ribbons, lip-gloss tubes, jewelry charms, perfume atomizers, makeup compacts, hand creams in pink jars, etc.
 
@@ -43,4 +45,7 @@ DO NOT write:
 - Real text / labels — decorative-pattern only
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

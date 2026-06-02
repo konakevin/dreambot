@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} TABLETOP-SCATTER elements for YumBot floral-garden-cup. Small details scattered on the surface around the base of the vessel. Template picks 3 per render.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} TABLETOP-SCATTER elements for YumBot floral-garden-cup. Small details scattered on the surface around the base of the vessel. Template picks 3 per render.
 
 Each entry: 8-15 words. ONE specific tabletop scatter piece.
 
@@ -40,4 +42,7 @@ Small pastel pearl-beads, mini-berries (blueberry / raspberry / cranberry / stra
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

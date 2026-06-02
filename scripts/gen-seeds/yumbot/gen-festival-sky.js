@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} OVERHEAD/SKY descriptions for a kawaii Japanese matsuri (festival) scene. Each entry describes ONLY what's overhead — the sky, lantern canopy, festival decorations above the scene.
+  metaPrompt: (
+    n
+  ) => `Write ${n} OVERHEAD/SKY descriptions for a kawaii Japanese matsuri (festival) scene. Each entry describes ONLY what's overhead — the sky, lantern canopy, festival decorations above the scene.
 
 Each entry: 12-22 words. ONE specific overhead description.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Pathway / lane / receding ground — overhead only
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

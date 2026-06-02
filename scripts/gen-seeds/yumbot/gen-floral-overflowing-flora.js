@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} OVERFLOWING FLORA elements for YumBot floral-garden-cup. Each is one specific oversized flower / sprig / floral piece that BURSTS UP AND OUT of the kawaii vessel as a magical bouquet. Template picks 4 per render to form the multi-bloom bouquet.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} OVERFLOWING FLORA elements for YumBot floral-garden-cup. Each is one specific oversized flower / sprig / floral piece that BURSTS UP AND OUT of the kawaii vessel as a magical bouquet. Template picks 4 per render to form the multi-bloom bouquet.
 
 Each entry: 12-22 words. ONE specific flora piece.
 
@@ -42,4 +44,7 @@ The bouquet is OVERSIZED — bigger than the vessel itself. Mix of pastel sphere
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

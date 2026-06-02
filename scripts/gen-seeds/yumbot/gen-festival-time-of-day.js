@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} TIME-OF-DAY descriptors for a kawaii Japanese matsuri scene. PURE time of day — what time of day the festival is happening.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TIME-OF-DAY descriptors for a kawaii Japanese matsuri scene. PURE time of day — what time of day the festival is happening.
 
 Each entry: 10-16 words. NAMES the time of day + brief color-temperature note. NO lighting direction. NO weather.
 
@@ -30,4 +32,7 @@ DO NOT write:
 - Setting / character description
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

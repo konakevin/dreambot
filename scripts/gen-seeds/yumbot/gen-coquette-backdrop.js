@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} ultra-coquette SURROUNDING SETTING BACKDROP descriptions for a kawaii coquette food-party scene. Each entry is the SURROUNDING coquette setting that frames the foreground.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ultra-coquette SURROUNDING SETTING BACKDROP descriptions for a kawaii coquette food-party scene. Each entry is the SURROUNDING coquette setting that frames the foreground.
 
 Palette LOCKED: pinks (blush, dusty-rose, bubblegum, coral-pink) + lavenders + whites + soft purples (lilac, mauve, periwinkle) ONLY. NO yellows, blues outside soft-purple, greens, oranges, reds, browns, blacks, neons.
 
@@ -41,4 +43,7 @@ DO NOT write:
 - Pathway / lane RECEDING into vanishing point — keep clustered/wide
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

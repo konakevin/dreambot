@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} TINY COTTAGECORE COMPANION accents for a kawaii cottagecore-nature scene. Each entry is ONE small peripheral cute creature near the foods.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TINY COTTAGECORE COMPANION accents for a kawaii cottagecore-nature scene. Each entry is ONE small peripheral cute creature near the foods.
 
 Each entry: 10-18 words. ONE specific tiny accent.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Large landscape elements
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

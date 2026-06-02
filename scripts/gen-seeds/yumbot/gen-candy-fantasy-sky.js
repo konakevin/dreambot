@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CANDY-FANTASY SKY/OVERHEAD descriptions for YumBot — the atmosphere above the Sugar Rush world.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CANDY-FANTASY SKY/OVERHEAD descriptions for YumBot — the atmosphere above the Sugar Rush world.
 
 Each entry: 12-22 words. ONE specific candy-sky.
 
@@ -37,4 +39,7 @@ Each entry: 12-22 words. ONE specific candy-sky.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} ICONIC MATSURI SIGNATURE elements for a kawaii Japanese festival render. Each entry is ONE specific iconic matsuri prop or decorative element that anchors the scene as a Japanese festival.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ICONIC MATSURI SIGNATURE elements for a kawaii Japanese festival render. Each entry is ONE specific iconic matsuri prop or decorative element that anchors the scene as a Japanese festival.
 
 Each entry: 12-22 words. ONE specific element. Traditional Japanese matsuri register.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Large landscape descriptions (mountains, sky) — those are in other axes
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

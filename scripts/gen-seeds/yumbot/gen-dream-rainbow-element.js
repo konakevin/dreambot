@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_rainbow_element.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} RAINBOW ELEMENT descriptions for YumBot rainbow-dreamscape. The literal rainbow visible in each render — pouring out of a cup, arching overhead, or cascading down. NO cup descriptions (other pool).
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} RAINBOW ELEMENT descriptions for YumBot rainbow-dreamscape. The literal rainbow visible in each render — pouring out of a cup, arching overhead, or cascading down. NO cup descriptions (other pool).
 
 Each entry: 12-22 words.
 
@@ -37,4 +39,7 @@ Rainbows literally POUR out of cups like spillover (with rainbow candy-balls or 
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

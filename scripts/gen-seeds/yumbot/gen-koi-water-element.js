@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} FEATURED WATER ELEMENT descriptions for a kawaii Japanese koi-pond scene. Each entry is ONE specific wow-detail centered in/on the pond water.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FEATURED WATER ELEMENT descriptions for a kawaii Japanese koi-pond scene. Each entry is ONE specific wow-detail centered in/on the pond water.
 
 Each entry: 12-22 words. ONE specific water element.
 
@@ -37,4 +39,7 @@ DO NOT write:
 - Modern objects
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

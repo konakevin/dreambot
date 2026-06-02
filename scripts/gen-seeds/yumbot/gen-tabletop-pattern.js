@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} PASTEL CHECKERED/GINGHAM/PLAID TABLECLOTH descriptions for YumBot checkered-tabletop. The signature pattern.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} PASTEL CHECKERED/GINGHAM/PLAID TABLECLOTH descriptions for YumBot checkered-tabletop. The signature pattern.
 
 Each entry: 10-18 words.
 
@@ -38,4 +40,7 @@ Pastel pink + soft blue gingham is most common. Variations: pastel pink + yellow
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

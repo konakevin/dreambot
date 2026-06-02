@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} TIME-OF-DAY descriptors for a kawaii mini-chef kitchen scene. PURE time of day — when in the day this kitchen scene takes place.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TIME-OF-DAY descriptors for a kawaii mini-chef kitchen scene. PURE time of day — when in the day this kitchen scene takes place.
 
 Each entry: 10-16 words. NAMES the time + brief color-temperature note.
 
@@ -30,4 +32,7 @@ DO NOT write:
 - Setting / character / activity descriptions
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

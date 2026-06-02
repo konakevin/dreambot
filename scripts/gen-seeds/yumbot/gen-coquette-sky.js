@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} OVERHEAD/CEILING descriptions for a kawaii coquette food-party scene — what's directly above.
+  metaPrompt: (
+    n
+  ) => `Write ${n} OVERHEAD/CEILING descriptions for a kawaii coquette food-party scene — what's directly above.
 
 Palette LOCKED: pinks + lavenders + whites + soft purples ONLY.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Dark / scary / moody overhead
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

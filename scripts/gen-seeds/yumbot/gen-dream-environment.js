@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} ENVIRONMENTAL FEATURES for a kawaii pastel-meadow dreamscape. Each entry is ONE STANDALONE or CLUSTERED feature that adds depth to the meadow scene — NOT a linear / Z-axis / receding element.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ENVIRONMENTAL FEATURES for a kawaii pastel-meadow dreamscape. Each entry is ONE STANDALONE or CLUSTERED feature that adds depth to the meadow scene — NOT a linear / Z-axis / receding element.
 
 Each entry: 12-22 words. ONE specific environmental feature. Painterly Studio-Ghibli-meets-bex.ai pastel register.
 
@@ -36,4 +38,7 @@ DO NOT write any entries containing these patterns:
 These ban patterns create center-receding Z-axis composition that ruins the render — Flux fills the center with a path or stream every time. Keep features STANDALONE or CLUSTERED, never linear or directional.
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

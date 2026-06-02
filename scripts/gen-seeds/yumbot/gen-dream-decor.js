@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_decor.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} DECOR elements for YumBot rainbow-dreamscape — small details in the foreground / midground meadow around the kawaii cups. Template picks 3 per render.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} DECOR elements for YumBot rainbow-dreamscape — small details in the foreground / midground meadow around the kawaii cups. Template picks 3 per render.
 
 Each entry: 10-18 words.
 
@@ -34,4 +36,7 @@ Each entry: 10-18 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/candy_fantasy_landscape.json',
   total: 60,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} CANDY-FANTASY WORLD SETTINGS for YumBot — Wreck-It-Ralph Sugar Rush world. Each entry describes the OVERALL CANDY LANDSCAPE the scene is set in.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CANDY-FANTASY WORLD SETTINGS for YumBot — Wreck-It-Ralph Sugar Rush world. Each entry describes the OVERALL CANDY LANDSCAPE the scene is set in.
 
 Each entry: 22-35 words. ONE specific candy-world setting.
 
@@ -44,4 +46,7 @@ The world is made ENTIRELY of candy/cake/sugar. Cakes are mountains. Cookies are
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

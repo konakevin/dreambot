@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} COQUETTE CENTERPIECE DESSERT descriptions for a kawaii coquette food-party scene. Each entry is ONE specific dreamy centerpiece dessert visible in the scene as a wow-detail.
+  metaPrompt: (
+    n
+  ) => `Write ${n} COQUETTE CENTERPIECE DESSERT descriptions for a kawaii coquette food-party scene. Each entry is ONE specific dreamy centerpiece dessert visible in the scene as a wow-detail.
 
 Palette LOCKED: pinks + lavenders + whites + soft purples ONLY.
 
@@ -39,4 +41,7 @@ DO NOT write:
 - The kitchen / backdrop / setting (separate axis)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

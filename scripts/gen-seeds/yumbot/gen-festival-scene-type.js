@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} matsuri scene-types for 5 kawaii Japanese festival foods composed together. Each entry is a CLEAN CLUSTER composition where the 5 foods sit/stand together at a matsuri spot, with SLIGHT NATURAL POSE VARIATION per food (one peeking forward, one tilted, one leaning back, one looking up, one sitting tallest at center) — natural personality, NOT identical-row-of-soldiers lineup, NOT chaotic acrobatics.
+  metaPrompt: (
+    n
+  ) => `Write ${n} matsuri scene-types for 5 kawaii Japanese festival foods composed together. Each entry is a CLEAN CLUSTER composition where the 5 foods sit/stand together at a matsuri spot, with SLIGHT NATURAL POSE VARIATION per food (one peeking forward, one tilted, one leaning back, one looking up, one sitting tallest at center) — natural personality, NOT identical-row-of-soldiers lineup, NOT chaotic acrobatics.
 
 Each entry: 30-42 words. Each entry MUST specify:
 1. A concrete clean-cluster matsuri composition (gathered around a yatai stall / clustered at a goldfish-tank / nestled on shrine steps / huddled on a festival blanket / arranged at the foot of a torii / gathered around a candy-fountain / etc.)
@@ -27,4 +29,7 @@ DO NOT write:
 - Modern urban / Western festival
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

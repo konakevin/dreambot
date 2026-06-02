@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} FRAME-BRANCH descriptions for YumBot floral-garden-cup. A cherry-blossom or floral branch arching from an upper corner into the frame, providing the magical floral-fantasy framing.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} FRAME-BRANCH descriptions for YumBot floral-garden-cup. A cherry-blossom or floral branch arching from an upper corner into the frame, providing the magical floral-fantasy framing.
 
 Each entry: 10-18 words. ONE specific framing branch.
 
@@ -38,4 +40,7 @@ Cherry-blossom branches with pastel-pink blooms arching diagonally from upper-co
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} LIGHTING DIRECTION / QUALITY descriptors for a kawaii coquette scene. ONLY how light falls.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING DIRECTION / QUALITY descriptors for a kawaii coquette scene. ONLY how light falls.
 
 Palette LOCKED: pinks + lavenders + whites + soft purples ONLY.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Setting / character / ground descriptions
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

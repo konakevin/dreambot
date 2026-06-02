@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} ICONIC COQUETTE SIGNATURE PROPS for a kawaii coquette food-party scene. Each entry is ONE specific coquette prop — a hero accent that anchors the coquette aesthetic.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ICONIC COQUETTE SIGNATURE PROPS for a kawaii coquette food-party scene. Each entry is ONE specific coquette prop — a hero accent that anchors the coquette aesthetic.
 
 Palette LOCKED: pinks + lavenders + whites + soft purples ONLY.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Whole-scene descriptions
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

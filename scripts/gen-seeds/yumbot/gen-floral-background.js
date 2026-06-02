@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} BACKGROUND MOODS for YumBot floral-garden-cup. Dreamy soft-bokeh that supports the floral-fantasy vessel — NOT a recognizable setting.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} BACKGROUND MOODS for YumBot floral-garden-cup. Dreamy soft-bokeh that supports the floral-fantasy vessel — NOT a recognizable setting.
 
 Each entry: 12-22 words.
 
@@ -34,4 +36,7 @@ Each entry: 12-22 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

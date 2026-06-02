@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} SOFT-FOCUS BACKDROP descriptions for a kawaii checkered-tabletop scene. The tabletop is the foreground hero — this axis describes what's visible BEHIND it (a window, kitchen wall, cafe interior, garden patio, cottage corner, etc.) as a SOFT-FOCUS atmospheric backdrop, NEVER sharp landscape.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SOFT-FOCUS BACKDROP descriptions for a kawaii checkered-tabletop scene. The tabletop is the foreground hero — this axis describes what's visible BEHIND it (a window, kitchen wall, cafe interior, garden patio, cottage corner, etc.) as a SOFT-FOCUS atmospheric backdrop, NEVER sharp landscape.
 
 Each entry: 16-26 words. ONE specific backdrop. Soft-focus / bokeh / dreamy.
 
@@ -39,4 +41,7 @@ DO NOT write:
 - Real kanji / English-text labels
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

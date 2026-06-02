@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING DIRECTION / QUALITY descriptors for YumBot candy-fantasy — Wreck-It-Ralph Sugar Rush world. Each entry describes HOW LIGHT FALLS in the scene — direction, quality, key/fill, accent — NOT what time of day it is.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING DIRECTION / QUALITY descriptors for YumBot candy-fantasy — Wreck-It-Ralph Sugar Rush world. Each entry describes HOW LIGHT FALLS in the scene — direction, quality, key/fill, accent — NOT what time of day it is.
 
 Each entry: 12-20 words. ONE specific lighting direction/quality.
 
@@ -37,4 +39,7 @@ Each entry: 12-20 words. ONE specific lighting direction/quality.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

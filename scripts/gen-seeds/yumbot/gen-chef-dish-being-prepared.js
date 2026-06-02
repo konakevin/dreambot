@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} KAWAII DISHES being prepared in a mini-chef kitchen scene. Each entry describes the SPECIFIC dish/treat the chef-foods are currently making — visible in the scene as a centerpiece.
+  metaPrompt: (
+    n
+  ) => `Write ${n} KAWAII DISHES being prepared in a mini-chef kitchen scene. Each entry describes the SPECIFIC dish/treat the chef-foods are currently making — visible in the scene as a centerpiece.
 
 Each entry: 14-26 words. ONE specific kawaii dish in mid-preparation. Magical/oversized scale, painterly Pop-Mart kawaii register.
 
@@ -39,4 +41,7 @@ DO NOT write:
 - Real kanji / Japanese-text — keep all labels as decorative-pattern
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

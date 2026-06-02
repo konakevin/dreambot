@@ -1,767 +1,414 @@
 [
   {
     "description": "A pastel-pink stream winding gently through the soft meadow grass with rainbow ripples",
-    "tags": [
-      "STREAM",
-      "COTTAGECORE"
-    ]
+    "tags": ["STREAM", "COTTAGECORE"]
   },
   {
     "description": "A glassy pastel-mint stream reflecting cotton-candy clouds as it meanders across the dreamscape",
-    "tags": [
-      "STREAM",
-      "COTTAGECORE"
-    ]
+    "tags": ["STREAM", "COTTAGECORE"]
   },
   {
     "description": "A soft sparkling pastel-blue brook babbling over smooth pebbles through the flowering meadow",
-    "tags": [
-      "STREAM",
-      "COTTAGECORE",
-      "PICNIC"
-    ]
+    "tags": ["STREAM", "COTTAGECORE", "PICNIC"]
   },
   {
     "description": "A rainbow-ribbon stream cutting a gentle curve across the pastel grass with shimmering water",
-    "tags": [
-      "STREAM",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["STREAM", "CANDY_FANTASY"]
   },
   {
     "description": "A pastel forest stream flowing past mossy rocks under cherry-blossom branches",
-    "tags": [
-      "STREAM",
-      "COTTAGECORE"
-    ]
+    "tags": ["STREAM", "COTTAGECORE"]
   },
   {
     "description": "A chocolate-syrup river flowing through soft candy-banks with marshmallow-foam",
-    "tags": [
-      "STREAM",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["STREAM", "CANDY_FANTASY"]
   },
   {
     "description": "A liquid-pastel-icing stream cascading over candy-cane stepping-stones",
-    "tags": [
-      "STREAM",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["STREAM", "CANDY_FANTASY"]
   },
   {
     "description": "A small glassy pastel-lavender pond reflecting the soft sky like a perfect mirror",
-    "tags": [
-      "POND",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE"
-    ]
+    "tags": ["POND", "RAINBOW_DREAMSCAPE", "COTTAGECORE"]
   },
   {
     "description": "A lily-pad-dotted pastel-pink pond nestled between gentle hills with pearlescent water",
-    "tags": [
-      "POND",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE"
-    ]
+    "tags": ["POND", "RAINBOW_DREAMSCAPE", "COTTAGECORE"]
   },
   {
     "description": "A pearl-blue mini-lake surrounded by soft pastel grasses and blooming meadow flowers",
-    "tags": [
-      "POND",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE",
-      "PICNIC"
-    ]
+    "tags": ["POND", "RAINBOW_DREAMSCAPE", "COTTAGECORE", "PICNIC"]
   },
   {
     "description": "A koi-pond with pastel water and floating cherry-blossom-petals at twilight",
-    "tags": [
-      "POND",
-      "FESTIVAL",
-      "COTTAGECORE"
-    ]
+    "tags": ["POND", "FESTIVAL", "COTTAGECORE"]
   },
   {
     "description": "A jelly-pool of pastel-rainbow gelatin shimmer with marshmallow-banks",
-    "tags": [
-      "POND",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["POND", "CANDY_FANTASY"]
   },
   {
     "description": "A small fairy-pool of glowing pastel-water at the base of a mossy bank",
-    "tags": [
-      "POND",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["POND", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A mossy stone-trail winding gently through the pastel grass toward a distant hilltop",
-    "tags": [
-      "TRAIL",
-      "COTTAGECORE"
-    ]
+    "tags": ["TRAIL", "COTTAGECORE"]
   },
   {
     "description": "A pastel-petal-strewn path lined with stones leading off into the meadow",
-    "tags": [
-      "TRAIL",
-      "COTTAGECORE"
-    ]
+    "tags": ["TRAIL", "COTTAGECORE"]
   },
   {
     "description": "A smooth pebble-path of pastel rounded stones meandering through wildflowers",
-    "tags": [
-      "TRAIL",
-      "COTTAGECORE",
-      "PICNIC"
-    ]
+    "tags": ["TRAIL", "COTTAGECORE", "PICNIC"]
   },
   {
     "description": "A pastel-stepping-stone trail crossing a stream toward a cottage",
-    "tags": [
-      "TRAIL",
-      "COTTAGECORE"
-    ]
+    "tags": ["TRAIL", "COTTAGECORE"]
   },
   {
     "description": "A golden-pastel-pollen trail glowing softly as if magical",
-    "tags": [
-      "TRAIL",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["TRAIL", "CANDY_FANTASY"]
   },
   {
     "description": "A cobblestone festival-lane lit by hanging paper-lanterns",
-    "tags": [
-      "TRAIL",
-      "FESTIVAL",
-      "MARKET"
-    ]
+    "tags": ["TRAIL", "FESTIVAL", "MARKET"]
   },
   {
     "description": "A pastel-rainbow-ribbon path snaking through a candy-grass field",
-    "tags": [
-      "TRAIL",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["TRAIL", "CANDY_FANTASY"]
   },
   {
     "description": "A cookie-tile road in alternating pastel-pink and pastel-yellow squares",
-    "tags": [
-      "TRAIL",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["TRAIL", "CANDY_FANTASY"]
   },
   {
     "description": "A cluster of mossy pastel-boulders covered in soft green moss and tiny ferns",
-    "tags": [
-      "ROCKS",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A cluster of round pastel-rocks dotting the meadow grass in soft cream and pink",
-    "tags": [
-      "ROCKS",
-      "COTTAGECORE",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "COTTAGECORE", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A sparkling pastel-crystal-cluster outcrop with iridescent shimmer in the light",
-    "tags": [
-      "ROCKS",
-      "CANDY_FANTASY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "Soft moss-covered rocks scattered along the edge of a stream",
-    "tags": [
-      "ROCKS",
-      "COTTAGECORE"
-    ]
+    "tags": ["ROCKS", "COTTAGECORE"]
   },
   {
     "description": "A cluster of pastel-pebbles arranged like a small cairn beside a path",
-    "tags": [
-      "ROCKS",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "Gumdrop-shaped boulders in pastel-rainbow colors clustered along a candy-path",
-    "tags": [
-      "ROCKS",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["ROCKS", "CANDY_FANTASY"]
   },
   {
     "description": "A small pastel cherry-blossom-tree with cascading pink petals and a moss-wrapped trunk",
-    "tags": [
-      "TREES",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE",
-      "FESTIVAL"
-    ]
+    "tags": ["TREES", "COTTAGECORE", "RAINBOW_DREAMSCAPE", "FESTIVAL"]
   },
   {
     "description": "A pastel-pink flowering-tree silhouette with delicate branches and floral-cluster blooms",
-    "tags": [
-      "TREES",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-rainbow-leaved tree with leaves in pink, mint, lavender, and peach",
-    "tags": [
-      "TREES",
-      "CANDY_FANTASY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-pine-tree dusted with soft snow-blossoms and pearl-glitter",
-    "tags": [
-      "TREES",
-      "COTTAGECORE"
-    ]
+    "tags": ["TREES", "COTTAGECORE"]
   },
   {
     "description": "A pastel-willow-tree with cascading branches trailing toward the water",
-    "tags": [
-      "TREES",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A cluster of small pastel-mint trees with rounded canopies and slim trunks",
-    "tags": [
-      "TREES",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A lollipop-shaped tree with pastel-swirl-disk canopy and a peppermint-stripe trunk",
-    "tags": [
-      "TREES",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["TREES", "CANDY_FANTASY"]
   },
   {
     "description": "A candy-cane-striped pastel-pine-tree with frosting-snow drape",
-    "tags": [
-      "TREES",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["TREES", "CANDY_FANTASY"]
   },
   {
     "description": "A pastel-marshmallow-tree with fluffy spherical-canopy clusters",
-    "tags": [
-      "TREES",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["TREES", "CANDY_FANTASY"]
   },
   {
     "description": "A wooden footbridge crossing a pastel-stream with mossy edges and a railing of vines",
-    "tags": [
-      "BRIDGE",
-      "COTTAGECORE"
-    ]
+    "tags": ["BRIDGE", "COTTAGECORE"]
   },
   {
     "description": "An arched stone-bridge with mossy edges spanning a small pastel-stream",
-    "tags": [
-      "BRIDGE",
-      "COTTAGECORE"
-    ]
+    "tags": ["BRIDGE", "COTTAGECORE"]
   },
   {
     "description": "A pastel-painted bridge with ribbon-railings and curved pastel-pink boards",
-    "tags": [
-      "BRIDGE",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["BRIDGE", "CANDY_FANTASY"]
   },
   {
     "description": "A small red lacquered festival-bridge with paper-lanterns hanging along the railing",
-    "tags": [
-      "BRIDGE",
-      "FESTIVAL"
-    ]
+    "tags": ["BRIDGE", "FESTIVAL"]
   },
   {
     "description": "A gingerbread-cookie bridge with icing-railings spanning a chocolate-stream",
-    "tags": [
-      "BRIDGE",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["BRIDGE", "CANDY_FANTASY"]
   },
   {
     "description": "A gentle pastel-hill rising in the foreground covered in pastel-wildflowers",
-    "tags": [
-      "HILL",
-      "COTTAGECORE",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["HILL", "COTTAGECORE", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A soft rolling pastel-grass-ridge curving across the midground",
-    "tags": [
-      "HILL",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["HILL", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-mossy mound in the meadow with tiny pastel-flowers blooming on top",
-    "tags": [
-      "HILL",
-      "COTTAGECORE",
-      "PICNIC"
-    ]
+    "tags": ["HILL", "COTTAGECORE", "PICNIC"]
   },
   {
     "description": "A pastel-pink frosting-hill with sprinkle-decorations along its slope",
-    "tags": [
-      "HILL",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["HILL", "CANDY_FANTASY"]
   },
   {
     "description": "A pastel-cake-mountain with layered fondant tiers visible",
-    "tags": [
-      "HILL",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["HILL", "CANDY_FANTASY"]
   },
   {
     "description": "A dense field of pastel cosmos blooming in pink, white, and lavender",
-    "tags": [
-      "FLORAL_FIELD",
-      "COTTAGECORE",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "COTTAGECORE", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A sea of pastel poppies and wildflowers stretching to the horizon",
-    "tags": [
-      "FLORAL_FIELD",
-      "COTTAGECORE",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "COTTAGECORE", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A sweeping pastel-lupine-field with tall flower-spires in pink and lilac",
-    "tags": [
-      "FLORAL_FIELD",
-      "COTTAGECORE",
-      "PICNIC"
-    ]
+    "tags": ["FLORAL_FIELD", "COTTAGECORE", "PICNIC"]
   },
   {
     "description": "A dense wildflower-meadow patch with cosmos, daisies, and clover all mixed",
-    "tags": [
-      "FLORAL_FIELD",
-      "COTTAGECORE",
-      "PICNIC",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "COTTAGECORE", "PICNIC", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A meadow of pastel tulips in cream, blush, and butter-yellow",
-    "tags": [
-      "FLORAL_FIELD",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A sweeping field of pastel-sunflowers turned toward the sky",
-    "tags": [
-      "FLORAL_FIELD",
-      "COTTAGECORE",
-      "PICNIC"
-    ]
+    "tags": ["FLORAL_FIELD", "COTTAGECORE", "PICNIC"]
   },
   {
     "description": "A cluster of giant pastel-mushrooms with cream-spotted red caps in a forest clearing",
-    "tags": [
-      "MUSHROOM_GROVE",
-      "COTTAGECORE",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["MUSHROOM_GROVE", "COTTAGECORE", "CANDY_FANTASY"]
   },
   {
     "description": "A glowing pastel-mushroom-grove with mushrooms in pink, mint, and lavender",
-    "tags": [
-      "MUSHROOM_GROVE",
-      "COTTAGECORE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["MUSHROOM_GROVE", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "An amanita-mushroom-cluster in the grass with iridescent shimmer on the caps",
-    "tags": [
-      "MUSHROOM_GROVE",
-      "COTTAGECORE"
-    ]
+    "tags": ["MUSHROOM_GROVE", "COTTAGECORE"]
   },
   {
     "description": "A pastel-marshmallow-mushroom-grove with fluffy cap-textures",
-    "tags": [
-      "MUSHROOM_GROVE",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["MUSHROOM_GROVE", "CANDY_FANTASY"]
   },
   {
     "description": "A small pastel-waterfall cascading off a rocky shelf into a glassy pool",
-    "tags": [
-      "WATERFALL",
-      "COTTAGECORE"
-    ]
+    "tags": ["WATERFALL", "COTTAGECORE"]
   },
   {
     "description": "A rainbow-mist waterfall splashing into a pool of pearl-pastel water",
-    "tags": [
-      "WATERFALL",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["WATERFALL", "CANDY_FANTASY"]
   },
   {
     "description": "A glassy waterfall with sparkle-spray rising in iridescent mist",
-    "tags": [
-      "WATERFALL",
-      "COTTAGECORE"
-    ]
+    "tags": ["WATERFALL", "COTTAGECORE"]
   },
   {
     "description": "A chocolate-syrup waterfall pouring over a candy-cliff into a marshmallow-pool",
-    "tags": [
-      "WATERFALL",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["WATERFALL", "CANDY_FANTASY"]
   },
   {
     "description": "A small floating pastel-rock-island hovering in the air with a tiny waterfall trickling off",
-    "tags": [
-      "FLOATING_ISLAND",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["FLOATING_ISLAND", "CANDY_FANTASY"]
   },
   {
     "description": "A mossy floating-cliff with a waterfall splashing into clouds below",
-    "tags": [
-      "FLOATING_ISLAND",
-      "COTTAGECORE"
-    ]
+    "tags": ["FLOATING_ISLAND", "COTTAGECORE"]
   },
   {
     "description": "A Studio-Ghibli-style floating pastel-platform with a single tree on top",
-    "tags": [
-      "FLOATING_ISLAND",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE"
-    ]
+    "tags": ["FLOATING_ISLAND", "RAINBOW_DREAMSCAPE", "COTTAGECORE"]
   },
   {
     "description": "Cotton-candy-cloud formations drifting at meadow-level like fluffy fog",
-    "tags": [
-      "CANDY_TERRAIN",
-      "CANDY_FANTASY",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["CANDY_TERRAIN", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-frosting-snow-bank with sprinkle-confetti scattered across it",
-    "tags": [
-      "CANDY_TERRAIN",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["CANDY_TERRAIN", "CANDY_FANTASY"]
   },
   {
     "description": "A field of gumdrop-bushes in pastel-rainbow colors clustered like shrubs",
-    "tags": [
-      "CANDY_TERRAIN",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["CANDY_TERRAIN", "CANDY_FANTASY"]
   },
   {
     "description": "A peppermint-striped pastel-snowy-hill with candy-cane-fence at the edge",
-    "tags": [
-      "CANDY_TERRAIN",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["CANDY_TERRAIN", "CANDY_FANTASY"]
   },
   {
     "description": "A meadow of pastel-jellybean-stones scattered like pebbles",
-    "tags": [
-      "CANDY_TERRAIN",
-      "CANDY_FANTASY"
-    ]
+    "tags": ["CANDY_TERRAIN", "CANDY_FANTASY"]
   },
   {
     "description": "A mossy forest floor carpeted with fallen pastel-leaves and tiny ferns",
-    "tags": [
-      "FOREST_FLOOR",
-      "COTTAGECORE"
-    ]
+    "tags": ["FOREST_FLOOR", "COTTAGECORE"]
   },
   {
     "description": "A pastel-fern-glade with sun-shafts piercing through a leafy canopy",
-    "tags": [
-      "FOREST_FLOOR",
-      "COTTAGECORE"
-    ]
+    "tags": ["FOREST_FLOOR", "COTTAGECORE"]
   },
   {
     "description": "A bed of pastel-clover dotted with tiny mushroom-clusters",
-    "tags": [
-      "FOREST_FLOOR",
-      "COTTAGECORE"
-    ]
+    "tags": ["FOREST_FLOOR", "COTTAGECORE"]
   },
   {
     "description": "A wide pastel-grass meadow stretching to gentle pastel-mountain peaks in the distance",
-    "tags": [
-      "OPEN_MEADOW",
-      "RAINBOW_DREAMSCAPE",
-      "PICNIC",
-      "COTTAGECORE"
-    ]
+    "tags": ["OPEN_MEADOW", "RAINBOW_DREAMSCAPE", "PICNIC", "COTTAGECORE"]
   },
   {
     "description": "A sun-dappled pastel-meadow with cherry-blossom-trees framing the edges",
-    "tags": [
-      "OPEN_MEADOW",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE",
-      "PICNIC"
-    ]
+    "tags": ["OPEN_MEADOW", "RAINBOW_DREAMSCAPE", "COTTAGECORE", "PICNIC"]
   },
   {
     "description": "A breezy pastel-grassland with pastel-mountains in soft pastel-haze on the horizon",
-    "tags": [
-      "OPEN_MEADOW",
-      "RAINBOW_DREAMSCAPE",
-      "PICNIC"
-    ]
+    "tags": ["OPEN_MEADOW", "RAINBOW_DREAMSCAPE", "PICNIC"]
   },
   {
     "description": "A pastel-valley with rolling hills and a winding stream at the floor",
-    "tags": [
-      "OPEN_MEADOW",
-      "COTTAGECORE"
-    ]
+    "tags": ["OPEN_MEADOW", "COTTAGECORE"]
   },
   {
     "description": "A festival-stall row of wooden-frame yatai with paper-lanterns hanging overhead",
-    "tags": [
-      "TRAIL",
-      "FESTIVAL",
-      "MARKET"
-    ]
+    "tags": ["TRAIL", "FESTIVAL", "MARKET"]
   },
   {
     "description": "A pastel-pebble path lit by paper-lanterns leading toward a festival-shrine entrance",
-    "tags": [
-      "TRAIL",
-      "FESTIVAL"
-    ]
+    "tags": ["TRAIL", "FESTIVAL"]
   },
   {
     "description": "A row of striped pastel market-tents with hand-painted signs and bunting",
-    "tags": [
-      "TRAIL",
-      "MARKET"
-    ]
+    "tags": ["TRAIL", "MARKET"]
   },
   {
     "description": "A pastel-cobblestone market-square with hanging-laundry across the alley above",
-    "tags": [
-      "TRAIL",
-      "MARKET"
-    ]
+    "tags": ["TRAIL", "MARKET"]
   },
   {
     "description": "A single pastel-cherry-blossom tree in full bloom standing alone in soft meadow grass",
-    "tags": [
-      "TREES",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-pink wisteria-tree with cascading lavender blooms hanging in dense drapes",
-    "tags": [
-      "TREES",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A small cluster of pastel-bonsai-trees on a soft mossy mound",
-    "tags": [
-      "TREES",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-pearl-leaved tree with iridescent leaves shimmering in the breeze",
-    "tags": [
-      "TREES",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A tiny pastel-magnolia-tree with creamy oversized blooms tilting toward the light",
-    "tags": [
-      "TREES",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["TREES", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A cluster of pastel-glowing-orbs floating mid-air like soft fireflies",
-    "tags": [
-      "ROCKS",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A heap of soft pastel-cushion-mounds scattered like landscape pillows",
-    "tags": [
-      "ROCKS",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A standalone pastel-stone-archway covered in trailing pastel-vines",
-    "tags": [
-      "ROCKS",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A weathered pastel-wishing-well with mossy stones and a wooden roof",
-    "tags": [
-      "ROCKS",
-      "RAINBOW_DREAMSCAPE",
-      "COTTAGECORE"
-    ]
+    "tags": ["ROCKS", "RAINBOW_DREAMSCAPE", "COTTAGECORE"]
   },
   {
     "description": "A pastel-clamshell open in the grass with a glowing pearl inside",
-    "tags": [
-      "ROCKS",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A small pastel-gazebo with curved frosted-glass roof and ribbon-bunting",
-    "tags": [
-      "ROCKS",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["ROCKS", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A sweeping pastel-cosmos-meadow in soft pinks and creams covering the foreground",
-    "tags": [
-      "FLORAL_FIELD",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A field of pastel-peonies in pink, peach, and butter-cream blooming around the scene",
-    "tags": [
-      "FLORAL_FIELD",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A dense bed of pastel-ranunculus in mixed pastel-rainbow colors",
-    "tags": [
-      "FLORAL_FIELD",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A meadow patch of pastel-baby-breath and forget-me-nots in soft white-and-blue",
-    "tags": [
-      "FLORAL_FIELD",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-dandelion-field with seedheads catching the breeze in golden drift",
-    "tags": [
-      "FLORAL_FIELD",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLORAL_FIELD", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A glowing pastel-mushroom-cluster in soft pink and mint with iridescent shimmer",
-    "tags": [
-      "MUSHROOM_GROVE",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["MUSHROOM_GROVE", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A floating pastel-cloud-island with a single tree sitting on top",
-    "tags": [
-      "FLOATING_ISLAND",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLOATING_ISLAND", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A floating pastel-rock-platform with pastel-flowers blooming on its surface",
-    "tags": [
-      "FLOATING_ISLAND",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLOATING_ISLAND", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A small floating pastel-pearl-orb suspended in mid-air",
-    "tags": [
-      "FLOATING_ISLAND",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["FLOATING_ISLAND", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-rainbow ribbon arcing softly across the upper sky like a gentle accent",
-    "tags": [
-      "OPEN_MEADOW",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["OPEN_MEADOW", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A wide pastel-grass meadow with pastel-mountain peaks in soft pastel-haze on the horizon",
-    "tags": [
-      "OPEN_MEADOW",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["OPEN_MEADOW", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-meadow with floating pastel-dandelion-seedheads drifting through the air",
-    "tags": [
-      "OPEN_MEADOW",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["OPEN_MEADOW", "RAINBOW_DREAMSCAPE"]
   },
   {
     "description": "A pastel-clearing among soft cherry-blossom trees opening into a circle",
-    "tags": [
-      "OPEN_MEADOW",
-      "RAINBOW_DREAMSCAPE"
-    ]
+    "tags": ["OPEN_MEADOW", "RAINBOW_DREAMSCAPE"]
   }
 ]

@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} FEATURED BOW / RIBBON arrangement descriptions for a kawaii coquette food-party scene. Each entry is ONE specific hero bow/ribbon arrangement that anchors the coquette signature.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FEATURED BOW / RIBBON arrangement descriptions for a kawaii coquette food-party scene. Each entry is ONE specific hero bow/ribbon arrangement that anchors the coquette signature.
 
 Palette LOCKED: pinks + lavenders + whites + soft purples ONLY.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Whole-scene descriptions
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

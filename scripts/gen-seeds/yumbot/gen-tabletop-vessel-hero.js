@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} KAWAII VESSEL HEROES for YumBot checkered-tabletop. Each is a kawaii-faced food/drink centerpiece sitting on the tablecloth. NO mini-friends pile (separate pool), NO tablecloth.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} KAWAII VESSEL HEROES for YumBot checkered-tabletop. Each is a kawaii-faced food/drink centerpiece sitting on the tablecloth. NO mini-friends pile (separate pool), NO tablecloth.
 
 Each entry: 15-25 words.
 
@@ -37,4 +39,7 @@ Boba-cups, hot-cocoa-mugs, teapots, sundae-glasses, parfaits — all kawaii-face
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing \${n} MINI-CREATURE PILE descriptions for YumBot checkered-tabletop. A cluster of smiling-food-friend mini-creatures sitting ON TOP / IN / ON THE RIM of the hero vessel — like a small kawaii audience. Each entry describes the pile for ONE render.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} MINI-CREATURE PILE descriptions for YumBot checkered-tabletop. A cluster of smiling-food-friend mini-creatures sitting ON TOP / IN / ON THE RIM of the hero vessel — like a small kawaii audience. Each entry describes the pile for ONE render.
 
 Each entry: 18-28 words.
 
@@ -47,4 +49,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} TIMES-OF-DAY for YumBot's candy-fantasy Sugar Rush world. PURE time descriptors — what time of day the scene takes place.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIMES-OF-DAY for YumBot's candy-fantasy Sugar Rush world. PURE time descriptors — what time of day the scene takes place.
 
 Each entry: 10-16 words. NAMES THE TIME OF DAY + brief color-temperature note. NO lighting direction (separate axis). NO weather (separate axis).
 
@@ -35,4 +37,7 @@ Each entry: 10-16 words. NAMES THE TIME OF DAY + brief color-temperature note. N
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

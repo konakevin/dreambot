@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 18,
   append: true,
-  metaPrompt: (n) => `Write ${n} TIME-OF-DAY descriptors for a kawaii Japanese koi-pond scene. PURE time of day. Heavy emphasis on twilight / dusk / evening — the bex.ai reference aesthetic register.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TIME-OF-DAY descriptors for a kawaii Japanese koi-pond scene. PURE time of day. Heavy emphasis on twilight / dusk / evening — the bex.ai reference aesthetic register.
 
 Each entry: 10-16 words. NAMES the time + brief color-temperature note.
 
@@ -31,4 +33,7 @@ DO NOT write:
 - Setting / character description
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

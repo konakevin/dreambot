@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/yumbot/seeds/dream_setting.json',
   total: 150,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} DREAMSCAPE SETTINGS for YumBot rainbow-dreamscape. The wider pastel landscape that the kawaii cup-inhabitants sit in. NO cups, NO rainbows (those come from other pools).
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} DREAMSCAPE SETTINGS for YumBot rainbow-dreamscape. The wider pastel landscape that the kawaii cup-inhabitants sit in. NO cups, NO rainbows (those come from other pools).
 
 Each entry: 20-35 words. ONE specific landscape.
 
@@ -39,4 +41,7 @@ Wider scenic shots: grass-meadow with cherry-blossom-mountains in distance, vall
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
