@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} SCENE-TYPE entries for a MangaBot ghibli-countryside keyframe. Studio Ghibli pastoral wonder — Totoro / Kiki / Mononoke / Whisper of the Heart. Each entry is the COMPOSITION LEAD.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SCENE-TYPE entries for a MangaBot ghibli-countryside keyframe. Studio Ghibli pastoral wonder — Totoro / Kiki / Mononoke / Whisper of the Heart. Each entry is the COMPOSITION LEAD.
 
 CRITICAL VARIETY MANDATE: do NOT default to "wandering girl on hilltop with windswept tree." That's ONE composition. Mix many pastoral compositions.
 
@@ -44,4 +46,7 @@ DO NOT write:
 - Specific axes content (separate axes for character / weather / light / etc.)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

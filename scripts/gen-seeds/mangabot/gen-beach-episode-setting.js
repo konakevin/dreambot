@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/beach_episode_setting.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} BEACH-EPISODE SETTING entries — bright joyful summer vacation contexts. K-On!/Free!/Lucky-Star tropical-paradise / Japanese-coast aesthetic.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} BEACH-EPISODE SETTING entries — bright joyful summer vacation contexts. K-On!/Free!/Lucky-Star tropical-paradise / Japanese-coast aesthetic.
 
 Each 14-22 words. Setting + tactile foreground + midground + engagement-context (character clearly DOING something).
 
@@ -43,4 +47,7 @@ DO NOT: "standing at edge looking out at distant ocean" — back-to-camera trap.
 Every setting affords ENGAGED-WITH joyful-vacation-moment.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

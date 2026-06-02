@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} BACKGROUND DETAIL entries for a MangaBot samurai-era keyframe. Each entry is a DEEP-DISTANCE SECONDARY DETAIL — a silhouette, secondary figure, distant flock, or environmental feature that sits FAR back in the frame and gives the scene a third readable narrative layer (foreground prop + midground character + this).
+  metaPrompt: (
+    n
+  ) => `Write ${n} BACKGROUND DETAIL entries for a MangaBot samurai-era keyframe. Each entry is a DEEP-DISTANCE SECONDARY DETAIL — a silhouette, secondary figure, distant flock, or environmental feature that sits FAR back in the frame and gives the scene a third readable narrative layer (foreground prop + midground character + this).
 
 Each entry: 10-20 words. ONE specific deep-distance detail with implied story.
 
@@ -43,4 +45,7 @@ DO NOT write:
 - Gore / bodies
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

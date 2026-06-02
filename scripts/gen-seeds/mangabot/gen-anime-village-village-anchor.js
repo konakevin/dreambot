@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} VILLAGE-ANCHOR entries for a MangaBot anime-village keyframe. SCENE-LED — each entry is the NAMED MAIN-ANCHOR village or streetscape that becomes the HERO of the frame. The village IS the subject (not a backdrop for a person).
+  metaPrompt: (
+    n
+  ) => `Write ${n} VILLAGE-ANCHOR entries for a MangaBot anime-village keyframe. SCENE-LED — each entry is the NAMED MAIN-ANCHOR village or streetscape that becomes the HERO of the frame. The village IS the subject (not a backdrop for a person).
 
 Each entry: 12-22 words. ONE specific anime-Japan village / neighborhood anchor. Multi-tier depth implied (architectural mass + atmospheric distance).
 
@@ -59,4 +61,7 @@ DO NOT write:
 - Generic "Japanese village" — name the specific register
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

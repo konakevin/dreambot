@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} DRAMA entries for a MangaBot mythological-creature keyframe. SCENE-LED conditional layer (fired at 50%) — each entry names ONE BIG YOKAI-BEAT that elevates the frame to story-moment. Mononoke / Spirited-Away climax-register. Loud not quiet.
+  metaPrompt: (
+    n
+  ) => `Write ${n} DRAMA entries for a MangaBot mythological-creature keyframe. SCENE-LED conditional layer (fired at 50%) — each entry names ONE BIG YOKAI-BEAT that elevates the frame to story-moment. Mononoke / Spirited-Away climax-register. Loud not quiet.
 
 ⚠️ CRITICAL: Japanese-yokai-mythology beats only. NEVER western dragon-slaying / unicorn-purification / Greek-thunder. NEVER WESTERN. Use authentic: transformation, fox-fire-burst, dragon-spiral, yokai-procession, shrine-bell-tolling, sigil-ignites, spirit-doubles-emerge, possession-moment, summoning, exorcism-via-ofuda.
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Generic "magic" without yokai specificity
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

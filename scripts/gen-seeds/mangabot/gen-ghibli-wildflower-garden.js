@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} WILDFLOWER / GARDEN entries for a MangaBot ghibli-countryside keyframe. SIGNATURE NATURE-DENSITY LAYER — the flora that fills foreground/midground giving Ghibli its lush pastoral ABUNDANCE.
+  metaPrompt: (
+    n
+  ) => `Write ${n} WILDFLOWER / GARDEN entries for a MangaBot ghibli-countryside keyframe. SIGNATURE NATURE-DENSITY LAYER — the flora that fills foreground/midground giving Ghibli its lush pastoral ABUNDANCE.
 
 CRITICAL: each entry must read as ABUNDANT / OVERFLOWING / BURSTING / PACKED — not sparse. Combine 4-6 specific flora elements per entry, not 2-3. This is what makes Ghibli backgrounds feel maximalist.
 
@@ -43,4 +45,7 @@ DO NOT write:
 - Empty composition
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

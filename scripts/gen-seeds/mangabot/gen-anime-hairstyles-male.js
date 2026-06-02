@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME MALE HAIRSTYLE descriptions for MangaBot. Each entry is 12-22 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME MALE HAIRSTYLE descriptions for MangaBot. Each entry is 12-22 words.
 
 CONTEXT: Iconic anime male hairstyles spanning the full vocabulary. Each entry describes a SPECIFIC anime male hairstyle.
 
@@ -38,4 +40,7 @@ Examples (write fresh):
 - "Soft tousled chestnut hair with curtain bangs falling on either side of the brow, gentle and bookish"
 
 Output ONLY a valid JSON array of ${n} strings (12-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

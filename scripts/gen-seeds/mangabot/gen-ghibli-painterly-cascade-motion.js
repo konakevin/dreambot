@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CASCADE MOTION entries for a MangaBot ghibli-painterly keyframe. This is the DRIFT-ELEMENT — waterfalls / petals / fireflies / lanterns / spores — that keeps the frame from being a static postcard. Multiple drift-elements per entry are encouraged.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CASCADE MOTION entries for a MangaBot ghibli-painterly keyframe. This is the DRIFT-ELEMENT — waterfalls / petals / fireflies / lanterns / spores — that keeps the frame from being a static postcard. Multiple drift-elements per entry are encouraged.
 
 Each entry: 12-20 words. ONE or TWO specific drift-elements with directional language (cascading down / drifting upward / spiraling outward).
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Photoreal physics
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

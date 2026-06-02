@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} HANGAR-SETTING entries for a MangaBot mecha-hangar keyframe. THIS POOL IS THE ANTI-MT-FUJI LAW. Every entry describes an INTERIOR CONTAINER space (hangar bay / silo / dry-dock / cage / launch-deck) that FRAMES the mech without competing for hero status.
+  metaPrompt: (
+    n
+  ) => `Write ${n} HANGAR-SETTING entries for a MangaBot mecha-hangar keyframe. THIS POOL IS THE ANTI-MT-FUJI LAW. Every entry describes an INTERIOR CONTAINER space (hangar bay / silo / dry-dock / cage / launch-deck) that FRAMES the mech without competing for hero status.
 
 ⚠️ HARD BAN — REJECT INSTANTLY IF: open landscape / Mt-Fuji backdrop / mountain-vista postcard / iconic-landscape / mech-as-distant-silhouette / wide-open-field / wilderness / pure-sky / pure-ocean / mech-tiny-against-scenery. Flux's gravity is to render an iconic landscape and forget the mech. This pool's only job is to PUT the mech in a container that PROVES it's gigantic without stealing the frame.
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Camera angle (lives in camera_framing)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

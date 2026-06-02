@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME FEMALE HAIRSTYLE descriptions for MangaBot. Each entry is 12-22 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME FEMALE HAIRSTYLE descriptions for MangaBot. Each entry is 12-22 words.
 
 CONTEXT: Iconic anime hairstyles spanning the full vocabulary. Each entry describes a SPECIFIC anime hairstyle.
 
@@ -35,4 +37,7 @@ Examples (write fresh):
 - "Single long braid trailing down her back tied with a small charm, side bangs curtaining one eye"
 
 Output ONLY a valid JSON array of ${n} strings (12-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

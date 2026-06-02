@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} FOREGROUND-ELEMENT entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names an EXTREME-FOREGROUND ANCHOR that sits in the lower third / corner of the frame to deepen the multi-tier composition. This is the closest depth-plane to camera.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FOREGROUND-ELEMENT entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names an EXTREME-FOREGROUND ANCHOR that sits in the lower third / corner of the frame to deepen the multi-tier composition. This is the closest depth-plane to camera.
 
 Each entry: 12-22 words. ONE specific foreground anchor. Anchors scale, creates depth-bracket between viewer and midground village.
 
@@ -58,4 +60,7 @@ DO NOT write:
 - Western elements
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

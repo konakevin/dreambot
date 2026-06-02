@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/festival_nights_archetype.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} FESTIVAL-NIGHTS ARCHETYPE entries — characters at Japanese matsuri / hanabi / yatai-festival. Shinkai / Your-Name / Anohana register. Both genders. 12-22 words each.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} FESTIVAL-NIGHTS ARCHETYPE entries — characters at Japanese matsuri / hanabi / yatai-festival. Shinkai / Your-Name / Anohana register. Both genders. 12-22 words each.
 
 Format: Role + matsuri-coded tone + signature visual.
 
@@ -30,4 +34,7 @@ DO write:
 DO NOT: cheesecake-coded / yukata-half-falling / suggestive / multiple per entry / modern-streetwear (this is a traditional matsuri).
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

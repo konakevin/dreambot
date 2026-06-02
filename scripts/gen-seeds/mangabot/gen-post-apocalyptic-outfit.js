@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_outfit.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC OUTFIT entries — scavenged, patched, modest clothing for wanderer in ruined-Japan / desert-wasteland. Trigun / Made-in-Abyss / Girls-Last-Tour register.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} POST-APOCALYPTIC OUTFIT entries — scavenged, patched, modest clothing for wanderer in ruined-Japan / desert-wasteland. Trigun / Made-in-Abyss / Girls-Last-Tour register.
 
 Each 16-26 words. Outfit + material + scavenged/repaired detail. ANTI-cheesecake — fully covered, utilitarian.
 
@@ -32,4 +36,7 @@ DO NOT: "form-fitting" / "low-cut" / "cleavage" / "sultry" / "torn-revealing" / 
 Scavenged + lived-in + practical.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

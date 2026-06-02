@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/beach_episode_drama.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} BEACH-EPISODE DRAMA entries — 40%-gated bright vacation events around her. Subtle visible focal point.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} BEACH-EPISODE DRAMA entries — 40%-gated bright vacation events around her. Subtle visible focal point.
 
 Each 12-20 words. Drama + summer-bright aesthetic + frame placement.
 
@@ -36,4 +40,7 @@ DO write:
 DO NOT: drama positioning her back-to-camera. Drama she's facing-away-to-admire. Combat / storm / shark-fin / capsizing / drowning / dangerous. Cheesecake-implied. Multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

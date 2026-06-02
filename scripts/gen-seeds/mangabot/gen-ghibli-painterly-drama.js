@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} DRAMA / EVENT entries for a MangaBot ghibli-painterly keyframe. Fires at 40% gate. A loaded narrative beat that ELEVATES the scene from a pretty postcard to a moment-in-a-story. Subtle, atmospheric — never combat or violence.
+  metaPrompt: (
+    n
+  ) => `Write ${n} DRAMA / EVENT entries for a MangaBot ghibli-painterly keyframe. Fires at 40% gate. A loaded narrative beat that ELEVATES the scene from a pretty postcard to a moment-in-a-story. Subtle, atmospheric — never combat or violence.
 
 Each entry: 12-22 words. ONE specific loaded moment that adds narrative tension or wonder.
 
@@ -41,4 +43,7 @@ DO NOT write:
 - Vehicle crash / explosion
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

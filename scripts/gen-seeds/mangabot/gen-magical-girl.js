@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} MAGICAL-GIRL CELESTIAL scene descriptions for MangaBot's magical-girl path. Each entry is 30-50 words. Setting-only — describe the cosmic / celestial / transformation backdrop, not the magical-girl herself.
+  metaPrompt: (
+    n
+  ) => `Write ${n} MAGICAL-GIRL CELESTIAL scene descriptions for MangaBot's magical-girl path. Each entry is 30-50 words. Setting-only — describe the cosmic / celestial / transformation backdrop, not the magical-girl herself.
 
 CONTEXT: Mahou shoujo aesthetic — Sailor-Moon / Madoka / Card-Captor-Sakura / Pretty-Cure / CLAMP-spiritual visual vocabulary. Cosmic backdrops, transformation halos, ribbon-streamers, celestial energy. Sparkle-and-shimmer maxed out. Pink / lavender / gold / opalescent palette.
 
@@ -41,4 +43,7 @@ Examples (write fresh):
 - "Floating crystal cathedral on a pastel cloudscape, ornate gold-and-pink architecture with stained-glass roses and trailing crystal-vines, ribbons floating between spires, sparkle-mist below, celestial god-rays piercing the soft clouds"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

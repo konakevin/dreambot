@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} FESTIVAL NIGHTS scene descriptions for MangaBot's festival-nights path. Each entry is 30-50 words. Setting-only.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FESTIVAL NIGHTS scene descriptions for MangaBot's festival-nights path. Each entry is 30-50 words. Setting-only.
 
 CONTEXT: Japanese summer matsuri / hanami / fireworks night. Lanterns, food stalls, yukata, fireworks, riverbanks. Romance-coded summer-night anime keyframe. The most iconic anime-festival vibe.
 
@@ -40,4 +42,7 @@ Examples (write fresh):
 - "Shrine courtyard festival at night with stone lanterns lit, taiko drum platform in the midground, fortune-paper trees with hundreds of folded paper omikuji tied to branches, distant kimono-clad figures lighting incense, drifting incense smoke, lantern-warm amber lighting, cherry petals falling though it's not spring"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

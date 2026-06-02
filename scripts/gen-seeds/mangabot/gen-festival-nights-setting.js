@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/festival_nights_setting.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} FESTIVAL-NIGHTS SETTING entries — Japanese matsuri / hanabi / yatai places where character is ENGAGED (facing camera or partner, NOT staring at fireworks back-to-camera). Each 14-22 words. Setting + tactile foreground + midground + engagement-context.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} FESTIVAL-NIGHTS SETTING entries — Japanese matsuri / hanabi / yatai places where character is ENGAGED (facing camera or partner, NOT staring at fireworks back-to-camera). Each 14-22 words. Setting + tactile foreground + midground + engagement-context.
 
 ⚠️ CRITICAL: NEVER "standing watching distant fireworks", NEVER "back-to-camera looking at sky", NEVER "facing-away admiring the display". These are the genre's named failure modes. Character is ENGAGED with stall / food / partner / object.
 
@@ -33,4 +37,7 @@ DO NOT: "standing at edge watching distant fireworks" / "back-to-camera silhouet
 Every setting affords ENGAGED-WITH-stall/partner/food. Fireworks present but in MIDGROUND or BEYOND, NEVER the focal point character is fixated on.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CREATURE-TYPE entries for a MangaBot mythological-creature keyframe. SCENE-LED — the YOKAI is HERO and OCCUPIES 40-70% of the frame. Each entry names a SPECIFIC JAPANESE MYTHOLOGICAL BEING — its species + its iconic visual identifiers (tails, horns, eyes, scale, mask, color). Mononoke / Spirited-Away / Mushishi / Kakuriyo / xxxHolic register.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CREATURE-TYPE entries for a MangaBot mythological-creature keyframe. SCENE-LED — the YOKAI is HERO and OCCUPIES 40-70% of the frame. Each entry names a SPECIFIC JAPANESE MYTHOLOGICAL BEING — its species + its iconic visual identifiers (tails, horns, eyes, scale, mask, color). Mononoke / Spirited-Away / Mushishi / Kakuriyo / xxxHolic register.
 
 ⚠️ CRITICAL: ONLY JAPANESE MYTHOLOGY. NEVER western dragon / European fairy / unicorn / pegasus / phoenix / griffin / Cthulhu / Greek goddess / mermaid / werewolf. NEVER WESTERN MYTHOLOGY EVER. Only authentic yokai lineage.
 
@@ -53,4 +55,7 @@ DO NOT write:
 - Multiple yokai per entry (pick ONE species)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

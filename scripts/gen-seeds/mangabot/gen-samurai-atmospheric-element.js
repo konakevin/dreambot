@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERIC ELEMENT entries for a MangaBot samurai-era keyframe. Each entry is the AIR-MOTION — what's drifting / falling / swirling through the frame that gives it cinematic motion.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERIC ELEMENT entries for a MangaBot samurai-era keyframe. Each entry is the AIR-MOTION — what's drifting / falling / swirling through the frame that gives it cinematic motion.
 
 Each entry: 8-16 words. ONE specific atmospheric effect with concrete drift-language.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Generic "weather" — must be specific to one motion type
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: false, // R1 rewrite — span lush AND sparse
-  metaPrompt: (n) => `Write ${n} FOREGROUND TREATMENT entries for a MangaBot ghibli-painterly keyframe. The R0 pool was too maximalist — every entry wall-to-wall foliage made every render feel overstuffed. R1 SPANS lush AND minimal so the path gets RANGE.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FOREGROUND TREATMENT entries for a MangaBot ghibli-painterly keyframe. The R0 pool was too maximalist — every entry wall-to-wall foliage made every render feel overstuffed. R1 SPANS lush AND minimal so the path gets RANGE.
 
 Each entry: 10-22 words. ONE foreground treatment description, ranging from quiet-minimal to wall-to-wall-lush.
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Western objects (no Tuscan villa garden / no English cottage rose)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

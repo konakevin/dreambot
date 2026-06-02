@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_drama.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC DRAMA entries — 40%-gated subtle events at the ruin scene, NEVER positioning wanderer back-to-camera.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} POST-APOCALYPTIC DRAMA entries — 40%-gated subtle events at the ruin scene, NEVER positioning wanderer back-to-camera.
 
 Each 12-20 words. Event + post-apocalyptic aesthetic + frame placement. QUIET, bittersweet, hopeful — NEVER explosion / combat / horror.
 
@@ -34,4 +38,7 @@ DO NOT: drama positioning wanderer back-to-camera. Drama wanderer is FACING AWAY
 Drama enhances quiet ruin atmosphere. Wanderer is INSIDE it engaged, NOT staring out at it.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

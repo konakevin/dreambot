@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_drama.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} OCCULT-TOKYO DRAMA entries — 50%-gated supernatural events at the scene, NEVER positioning character back-to-camera.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} OCCULT-TOKYO DRAMA entries — 50%-gated supernatural events at the scene, NEVER positioning character back-to-camera.
 
 Each 12-20 words. Event + occult aesthetic + frame placement.
 
@@ -36,4 +40,7 @@ DO NOT: drama positioning her back-to-camera. Drama she's FACING AWAY to admire.
 Drama enhances occult-Tokyo atmosphere. Character is ENGAGED inside it, NOT staring at it from afar.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

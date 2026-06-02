@@ -33,7 +33,9 @@ const SHARED_RULES = `━━━ HARD RULES ━━━
 // ─────────────────────────────────────────────────────────────
 
 const female = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for MangaBot's FEMALE-character paths (kawaii, slice-of-life, cozy-anime). Each entry is one olfactory cue tied to a young anime-protagonist woman in modern/traditional Japan.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for MangaBot's FEMALE-character paths (kawaii, slice-of-life, cozy-anime). Each entry is one olfactory cue tied to a young anime-protagonist woman in modern/traditional Japan.
 
 EXAMPLES (DO NOT REUSE):
 - "ramen steam clinging to her bangs"
@@ -78,7 +80,9 @@ ${SHARED_RULES}
 ━━━ DEDUP — share BODY PART and SENSATION VERB = too similar. Vary one.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for MangaBot's FEMALE paths.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for MangaBot's FEMALE paths.
 
 EXAMPLES (DO NOT REUSE):
 - "summer-evening humidity sticking her bangs to her forehead"
@@ -120,7 +124,9 @@ ${SHARED_RULES}
 ━━━ DEDUP — share PARTICLE and MOTION VERB = too similar. Vary one.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for MangaBot's FEMALE paths. Anime-stylized lighting on her face/body.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for MangaBot's FEMALE paths. Anime-stylized lighting on her face/body.
 
 EXAMPLES (DO NOT REUSE):
 - "Shinkai-sunset peach-orange wash across her cheek"
@@ -145,7 +151,9 @@ key (12-14), rim (10-12), shaft (8-10), backlight (6-8), wash (8-10).
 // ─────────────────────────────────────────────────────────────
 
 const male = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for MangaBot's MALE-character paths (shonen-action / samurai-era).
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for MangaBot's MALE-character paths (shonen-action / samurai-era).
 
 EXAMPLES (DO NOT REUSE):
 - "blood and steel on his sword arm"
@@ -223,7 +231,9 @@ ${SHARED_RULES}
 ━━━ DEDUP — share PARTICLE and MOTION VERB = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for MangaBot's MALE paths. Anime-stylized lighting on his face/body/blade.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for MangaBot's MALE paths. Anime-stylized lighting on his face/body/blade.
 
 EXAMPLES (DO NOT REUSE):
 - "blood-red key cutting across his face mid-strike"
@@ -251,7 +261,9 @@ NEVER reference humans (her/his/she/he, hands, faces). Use "it" / "its".
 The creature is a yokai / kitsune / kappa / tengu / dragon / oni — Japanese folklore creature with non-human anatomy (multi-tails, scaled body, glowing fur, fox-mask, beak, horns).`;
 
 const creature = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for MangaBot's CREATURE path (mythological-creature — yokai/kitsune/dragon). NO HUMANS.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for MangaBot's CREATURE path (mythological-creature — yokai/kitsune/dragon). NO HUMANS.
 
 EXAMPLES (DO NOT REUSE):
 - "wet pine forest clinging to its multi-tailed coat"
@@ -265,7 +277,9 @@ ${ABSOLUTE_NO_HUMANS}
 ━━━ DEDUP — share SCENT NOUN and BODY/LOCATION = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for MangaBot's CREATURE path. NO HUMANS.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for MangaBot's CREATURE path. NO HUMANS.
 
 EXAMPLES (DO NOT REUSE):
 - "tails rustling against the bamboo grove"
@@ -293,7 +307,9 @@ ${ABSOLUTE_NO_HUMANS}
 ━━━ DEDUP — share TEXTURE and BODY/LOCATION = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for MangaBot's CREATURE path.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for MangaBot's CREATURE path.
 
 EXAMPLES (DO NOT REUSE):
 - "shrine-incense warmth glowing around its body"
@@ -335,7 +351,9 @@ ${ABSOLUTE_NO_HUMANS}
 ━━━ DEDUP — share PARTICLE and MOTION VERB = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for MangaBot's CREATURE path. Anime-stylized lighting on the yokai/kitsune/dragon body.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for MangaBot's CREATURE path. Anime-stylized lighting on the yokai/kitsune/dragon body.
 
 EXAMPLES (DO NOT REUSE):
 - "fox-fire amber underlight rising from the forest floor"
@@ -400,7 +418,9 @@ ${SHARED_RULES}
 ━━━ DEDUP — share TEXTURE and SURFACE = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for MangaBot's PURE-SCENE paths.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for MangaBot's PURE-SCENE paths.
 
 EXAMPLES (DO NOT REUSE):
 - "summer-evening humidity hanging over the empty bath-house"
@@ -439,7 +459,9 @@ ${SHARED_RULES}
 ━━━ DEDUP — share PARTICLE and LOCATION = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for MangaBot's PURE-SCENE paths.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for MangaBot's PURE-SCENE paths.
 
 EXAMPLES (DO NOT REUSE):
 - "Shinkai-sunset peach across the rooftops"

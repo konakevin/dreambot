@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} COSMIC-SETTING entries for a MangaBot space-opera keyframe. SCENE-LED — each entry is the BACKDROP / LOCATION the hero starship occupies. NOT the ship (different pool) — the cosmic STAGE around the ship.
+  metaPrompt: (
+    n
+  ) => `Write ${n} COSMIC-SETTING entries for a MangaBot space-opera keyframe. SCENE-LED — each entry is the BACKDROP / LOCATION the hero starship occupies. NOT the ship (different pool) — the cosmic STAGE around the ship.
 
 ⚠️ CRITICAL ANTI-STAR-WARS GUARDRAIL: NEVER write Tatooine / Hoth / Endor / Coruscant / Death-Star-trench / Mos-Eisley / Imperial / Mandalorian / stormtrooper-occupied. NEVER Star-Trek (Enterprise / starfleet / federation / warp-nacelle / nebula-class). Anime cosmic register ONLY (Cowboy-Bebop Mars-orbit / Macross SDF / Yamato Cosmo-Fleet / Galactic-Heroes Iserlohn / GitS orbital-Tokyo / Sidonia hyperspace-corridor).
 
@@ -58,4 +60,7 @@ DO NOT write:
 - Generic "space" without specific anime-cosmic identity
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

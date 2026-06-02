@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SCALE PROVER entries for a MangaBot ghibli-painterly keyframe. These are the architectural sub-elements (stairs / bridges / archways / windows) that PROVE the monumental anchor is MASSIVE by giving the viewer a relatable size reference. Without scale provers, the anchor reads as a model or miniature.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SCALE PROVER entries for a MangaBot ghibli-painterly keyframe. These are the architectural sub-elements (stairs / bridges / archways / windows) that PROVE the monumental anchor is MASSIVE by giving the viewer a relatable size reference. Without scale provers, the anchor reads as a model or miniature.
 
 Each entry: 12-22 words. ONE specific architectural sub-element that adds scale + multi-tier depth + Ghibli-painterly detail.
 
@@ -36,4 +38,7 @@ DO NOT write:
 - Tiny element that doesn't prove scale (e.g. a single flower)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

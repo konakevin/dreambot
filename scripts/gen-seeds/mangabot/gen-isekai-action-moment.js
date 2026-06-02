@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} ACTION-MOMENT entries for a MangaBot ANIME ISEKAI keyframe. Candid anime mid-action verb-phrase. Anime isekai canon.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ACTION-MOMENT entries for a MangaBot ANIME ISEKAI keyframe. Candid anime mid-action verb-phrase. Anime isekai canon.
 
 Each entry: 8-18 words. ONE anime-isekai action with body-language detail.
 
@@ -52,4 +54,7 @@ DO NOT write:
 - Generic "fighting" without specifying anime-isekai context
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

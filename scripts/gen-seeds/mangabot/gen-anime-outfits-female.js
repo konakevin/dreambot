@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME FEMALE OUTFIT descriptions for MangaBot's character paths. Each entry is 25-40 words. The outfit defines silhouette across the anime genre spectrum.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME FEMALE OUTFIT descriptions for MangaBot's character paths. Each entry is 25-40 words. The outfit defines silhouette across the anime genre spectrum.
 
 CONTEXT: Lush, vibrant, anime-stylized fashion. Draw from ALL anime genre wardrobes — slice-of-life / shoujo / shonen / fantasy / cyberpunk / historical. Each entry is a complete outfit description — top, bottom, footwear, optional layer/accessory. NOT just a piece — full silhouette.
 
@@ -49,4 +51,7 @@ Examples (write fresh):
 - "Crimson-and-white shrine maiden outfit — white kosode top, red hakama trousers tied at the waist, white tabi socks, zori sandals, small bell-charm tied at the obi"
 
 Output ONLY a valid JSON array of ${n} strings (25-40 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

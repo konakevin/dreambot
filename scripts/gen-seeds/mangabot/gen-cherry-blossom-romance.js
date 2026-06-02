@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} CHERRY-BLOSSOM-ROMANCE scene descriptions for MangaBot's cherry-blossom-romance path. Each entry is 30-50 words. Setting-only — describe the cherry-blossom setting, not the characters.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CHERRY-BLOSSOM-ROMANCE scene descriptions for MangaBot's cherry-blossom-romance path. Each entry is 30-50 words. Setting-only — describe the cherry-blossom setting, not the characters.
 
 CONTEXT: Peak shoujo cherry-blossom anime keyframe. Hanami / school-uniform / first-love / wind-blown-petals aesthetic. Soft, romantic, gentle, pastel. The most iconic anime spring vibe. Pink-and-cream palette dominant.
 
@@ -48,4 +50,7 @@ Examples (write fresh):
 - "Old wooden school gate flanked by two ancient cherry trees in full bloom, petal-carpet across the threshold, stone path leading inward to a glimpse of the school building, hanging banner with kanji, single bicycle leaning against the wall, drifting petals catching morning light, soft pastel sky beyond"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

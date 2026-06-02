@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_surprise_element.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} OCCULT-TOKYO SURPRISE-ELEMENT entries — small Tokyo-occult secondary subjects at midground/background.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} OCCULT-TOKYO SURPRISE-ELEMENT entries — small Tokyo-occult secondary subjects at midground/background.
 
 Each 10-18 words. Element + placement + urban-Japan-supernatural implication.
 
@@ -32,4 +36,7 @@ DO write:
 DO NOT: anything foreground competing with character / multiple per entry / explicit gore / western occult tropes.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

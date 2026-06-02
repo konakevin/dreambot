@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/beach_episode_ethnicity.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ETHNICITY-NOUN entries for BEACH-EPISODE MangaBot. Bright joyful K-On!/Free!/Lucky-Star summer-vacation register. Each 6-12 words.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ETHNICITY-NOUN entries for BEACH-EPISODE MangaBot. Bright joyful K-On!/Free!/Lucky-Star summer-vacation register. Each 6-12 words.
 
 Format: "[ethnicity] character, [vacation-coded feature anchor]"
 
@@ -23,4 +27,7 @@ DO write:
 DO NOT: cheesecake / sultry / "voluptuous" / "curvy" / oiled / "bombshell" — bright wholesome vacation-coded only. Multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

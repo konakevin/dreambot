@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME MALE ACCESSORY / SIGNATURE-OBJECT descriptions for MangaBot. Each entry is 14-22 words. The accessory is a single distinctive item the character carries / wears that adds personality.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME MALE ACCESSORY / SIGNATURE-OBJECT descriptions for MangaBot. Each entry is 14-22 words. The accessory is a single distinctive item the character carries / wears that adds personality.
 
 CONTEXT: Slice-of-anime-life details. Each accessory reads as iconic-anime-character-defining. NOT weapons. Evocative, story-hinting.
 
@@ -43,4 +45,7 @@ Examples (write fresh):
 - "Takeaway coffee cup in one hand with a small sticker stuck to the cardboard sleeve, the other hand tucked into his jacket pocket"
 
 Output ONLY a valid JSON array of ${n} strings (14-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_archetype.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC ARCHETYPE entries — who's surviving in the ruined world. Trigun / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} POST-APOCALYPTIC ARCHETYPE entries — who's surviving in the ruined world. Trigun / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register.
 
 Each 12-22 words. Role + reason-in-ruins + tone. Quiet melancholy + bittersweet hope, NOT grimdark.
 
@@ -32,4 +36,7 @@ DO write:
 DO NOT: zombies / corpses / blood / horror / multiple per entry / cheesecake.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

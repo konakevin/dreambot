@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_accessory.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC ACCESSORY entries — objects the wanderer is using/carrying. Anchors them ENGAGED in the ruined world (not silhouette-staring-at-vista).
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} POST-APOCALYPTIC ACCESSORY entries — objects the wanderer is using/carrying. Anchors them ENGAGED in the ruined world (not silhouette-staring-at-vista).
 
 Each 10-18 words. Object + use-detail. Must imply forward-facing engagement.
 
@@ -34,4 +38,7 @@ DO NOT: weapons-mid-fire / dramatic-combat / brandishing-rifles / multiple per e
 Object MUST anchor character ENGAGED, NOT staring at distant horizon.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} MECH-DETAIL entries for a MangaBot mecha-hangar keyframe. Each entry describes the SURFACE / PAINT / MATERIAL TRUTH of the mech (no posture, no setting). Establishes material reality — chipped enamel, oil-streaked plate, weathered war-paint, scratched bare-metal, biomech gloss, etc.
+  metaPrompt: (
+    n
+  ) => `Write ${n} MECH-DETAIL entries for a MangaBot mecha-hangar keyframe. Each entry describes the SURFACE / PAINT / MATERIAL TRUTH of the mech (no posture, no setting). Establishes material reality — chipped enamel, oil-streaked plate, weathered war-paint, scratched bare-metal, biomech gloss, etc.
 
 Each entry: 12-22 words. ONE specific surface/material description. Add visual texture cues + identifying marks (kanji decals, squadron emblem, hazard stripes).
 
@@ -52,4 +54,7 @@ DO NOT write:
 - Atmospheric vapor (lives in steam_or_spark)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

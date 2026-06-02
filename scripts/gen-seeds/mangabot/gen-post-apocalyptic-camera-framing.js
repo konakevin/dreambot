@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_camera_framing.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA FRAMING entries for post-apocalyptic keyframe — STRICT forward-facing-or-profile only.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA FRAMING entries for post-apocalyptic keyframe — STRICT forward-facing-or-profile only.
 
 ⚠️ THIS GENRE'S SIGNATURE FAILURE MODE = "back-of-lone-wanderer-on-cliff-looking-at-ruined-city-on-horizon." Every camera entry must AGGRESSIVELY counter that centroid. NO over-the-shoulder away-from-camera, NO silhouette-against-horizon, NO back-of-character.
 
@@ -42,4 +46,7 @@ DO NOT — STRICT bans:
 Forward-facing or profile-engaged ONLY. Ruins are BACKDROP, wanderer is ENGAGED with foreground.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA-FRAMING entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names a framing that keeps the YOKAI as HERO at 40-70% of frame. NEVER tiny-creature-in-distance. NEVER back-of-character-looking-out. The CREATURE dominates the composition.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA-FRAMING entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names a framing that keeps the YOKAI as HERO at 40-70% of frame. NEVER tiny-creature-in-distance. NEVER back-of-character-looking-out. The CREATURE dominates the composition.
 
 ⚠️ CRITICAL ANTI-TINY-CREATURE GUARDRAIL: NEVER write framings that make the creature a small dot in a wide vista. NEVER write "back-to-camera character looking at distant dragon" (audit-flagged anti-pattern). The yokai is the SUBJECT. Every framing must position the camera so the creature READS LARGE.
 
@@ -60,4 +62,7 @@ DO NOT write:
 - Cyberpunk megabuilding worm's-eye (different path)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

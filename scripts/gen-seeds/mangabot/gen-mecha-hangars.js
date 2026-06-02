@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} MECHA HANGAR / LAUNCH BAY scene descriptions for MangaBot's mecha-hangars path. Each entry is 30-50 words. Setting-only — describe the PLACE + atmosphere + scale, not the pilots.
+  metaPrompt: (
+    n
+  ) => `Write ${n} MECHA HANGAR / LAUNCH BAY scene descriptions for MangaBot's mecha-hangars path. Each entry is 30-50 words. Setting-only — describe the PLACE + atmosphere + scale, not the pilots.
 
 CONTEXT: Gundam / Evangelion / Macross / Patlabor / Code-Geass aesthetic. Massive industrial-mechanical hangars where giant robots live. Dramatic scale. Maintenance scaffolding. Warning lights. Engineers as tiny figures (optional). The MECH dwarfs everything.
 
@@ -39,4 +41,7 @@ Examples (write fresh):
 - "Carrier-deck launch position at dusk, mech crouched at the start of an extending catapult-rail, ocean horizon beyond the deck-edge, deck-crew silhouettes signaling, warning-strobes flashing red, exhaust haze drifting, painted launch-zone markings, klaxon-yellow lighting, salt-mist atmosphere"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

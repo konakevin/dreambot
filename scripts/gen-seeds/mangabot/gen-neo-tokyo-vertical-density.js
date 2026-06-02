@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} VERTICAL-DENSITY entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry describes the OVERHEAD CLUTTER that fills the upper frame zone — sky-fills, criss-crosses, suspended elements. neo-tokyo sky is NEVER empty. This axis enforces the vertical-stack chaos.
+  metaPrompt: (
+    n
+  ) => `Write ${n} VERTICAL-DENSITY entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry describes the OVERHEAD CLUTTER that fills the upper frame zone — sky-fills, criss-crosses, suspended elements. neo-tokyo sky is NEVER empty. This axis enforces the vertical-stack chaos.
 
 Each entry: 14-26 words. ONE specific cluster of overhead/sky-zone elements (multiple elements grouped to fill the upper frame).
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Architectural anchors (separate axis)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} FOREGROUND-ARTIFACT entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE specific object in the IMMEDIATE FOREGROUND (camera-side of the hero ship) that brackets the composition and creates depth-layer parallax.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FOREGROUND-ARTIFACT entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE specific object in the IMMEDIATE FOREGROUND (camera-side of the hero ship) that brackets the composition and creates depth-layer parallax.
 
 Each entry: 12-22 words. ONE specific foreground object. Anime-coded space debris / equipment / signal-buoy / discarded gear. Adds parallax depth.
 
@@ -54,4 +56,7 @@ DO NOT write:
 - Generic "floating object" without specific identity + scale
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

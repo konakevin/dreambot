@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} WEAPONRY-OR-TOOL entries for a MangaBot mecha-hangar keyframe. Each entry describes what the mech is HOLDING / EQUIPPED-WITH / has-on-its-rack — combat hardware OR maintenance tool. This is HANGAR-state, so weapons can be holstered, racked, or in mid-load.
+  metaPrompt: (
+    n
+  ) => `Write ${n} WEAPONRY-OR-TOOL entries for a MangaBot mecha-hangar keyframe. Each entry describes what the mech is HOLDING / EQUIPPED-WITH / has-on-its-rack — combat hardware OR maintenance tool. This is HANGAR-state, so weapons can be holstered, racked, or in mid-load.
 
 Each entry: 12-22 words. ONE specific weapon / tool / equipment loadout. Genre-coded (anime-mecha hardware).
 
@@ -52,4 +54,7 @@ DO NOT write:
 - Combat against another mech (this is hangar)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

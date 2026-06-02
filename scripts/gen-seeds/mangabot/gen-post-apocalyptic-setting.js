@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_setting.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC SETTING entries — overgrown / decayed / nature-reclaimed civilization locations where wanderer is ENGAGED with foreground prop, NOT silhouette-staring-at-vista.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} POST-APOCALYPTIC SETTING entries — overgrown / decayed / nature-reclaimed civilization locations where wanderer is ENGAGED with foreground prop, NOT silhouette-staring-at-vista.
 
 Each 14-22 words. Setting + tactile foreground ruin-prop + midground depth + character ENGAGED at foreground.
 
@@ -34,4 +38,7 @@ DO NOT: "lone silhouette on hill looking at ruined city" — back-to-camera trap
 Wanderer is ENGAGED with foreground ruin-prop. Ruined vista is BACKDROP behind them, never the target of their gaze.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SHRINE-OR-SETTING entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names a SPECIFIC JAPANESE SACRED-NATURAL LOCATION where the yokai HERO appears. The setting frames the creature and provides cultural anchoring. Mononoke / Spirited-Away / Mushishi / Kakuriyo / xxxHolic register.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SHRINE-OR-SETTING entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names a SPECIFIC JAPANESE SACRED-NATURAL LOCATION where the yokai HERO appears. The setting frames the creature and provides cultural anchoring. Mononoke / Spirited-Away / Mushishi / Kakuriyo / xxxHolic register.
 
 ⚠️ CRITICAL: ONLY Japanese sacred / natural / mythological locations. NEVER western castles / European forests / Greek temples / Egyptian pyramids. NEVER WESTERN. Authentic Japanese place language: torii / shimenawa / inari / shinto / kami / yokai-bridge / cedar-shrine / persimmon-orchard / Mt-Fuji.
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Multiple settings per entry (pick ONE place)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_setting.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} OCCULT-TOKYO SETTING entries — modern urban Tokyo locations bleeding with supernatural energy. Character ENGAGED with the location, NOT silhouetted-staring.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} OCCULT-TOKYO SETTING entries — modern urban Tokyo locations bleeding with supernatural energy. Character ENGAGED with the location, NOT silhouetted-staring.
 
 Each 14-22 words. Location + foreground occult-prop + midground depth + character ENGAGED.
 
@@ -36,4 +40,7 @@ DO NOT: "standing at edge looking out over Tokyo" — explicit back-to-camera tr
 City is BACKDROP. Character ENGAGED at the location with occult-prop AT HAND, NOT staring at distance.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

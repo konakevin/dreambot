@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cherry_blossom_romance_archetype.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROMANCE ARCHETYPE entries — characters in tender romantic moments. 5cm-per-second / Toradora / Your-Lie-In-April / Honey-Clover tradition.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROMANCE ARCHETYPE entries — characters in tender romantic moments. 5cm-per-second / Toradora / Your-Lie-In-April / Honey-Clover tradition.
 
 Each 12-22 words. Role + romantic-coded tone + signature visual.
 
@@ -29,4 +33,7 @@ DO write:
 DO NOT: cheesecake-coded / dramatic / multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

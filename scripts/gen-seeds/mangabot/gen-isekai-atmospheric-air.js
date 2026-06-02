@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERIC-AIR entries for a MangaBot ANIME ISEKAI keyframe. Anime-coded atmospheric treatments — Frieren / Konosuba / Re:Zero painterly air-effects.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERIC-AIR entries for a MangaBot ANIME ISEKAI keyframe. Anime-coded atmospheric treatments — Frieren / Konosuba / Re:Zero painterly air-effects.
 
 Each entry: 10-20 words. ONE anime-isekai atmospheric drift.
 
@@ -50,4 +52,7 @@ DO NOT write:
 - Cyberpunk-coded atmosphere
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

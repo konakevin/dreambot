@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/character_details.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ANIME CHARACTER DETAIL descriptions for MangaBot — visual vocabulary pieces that stack onto any character. Hair, eyes, clothing texture, accessories, specific anime-art tropes.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ANIME CHARACTER DETAIL descriptions for MangaBot — visual vocabulary pieces that stack onto any character. Hair, eyes, clothing texture, accessories, specific anime-art tropes.
 
 Each entry: 6-14 words. One specific anime character visual detail.
 
@@ -42,4 +44,7 @@ Each entry: 6-14 words. One specific anime character visual detail.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

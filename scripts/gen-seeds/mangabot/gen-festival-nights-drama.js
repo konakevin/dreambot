@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/festival_nights_drama.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} FESTIVAL-NIGHTS DRAMA entries — 50%-gated matsuri events around the character. Should celebrate matsuri-energy without pulling her back-to-camera. Each 12-20 words. Drama + festival aesthetic + frame placement.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} FESTIVAL-NIGHTS DRAMA entries — 50%-gated matsuri events around the character. Should celebrate matsuri-energy without pulling her back-to-camera. Each 12-20 words. Drama + festival aesthetic + frame placement.
 
 ⚠️ CRITICAL: Drama is BEHIND or ABOVE or AT-MIDGROUND, character REMAINS engaged-forward. NEVER drama that pulls her to face-away.
 
@@ -34,4 +38,7 @@ DO write:
 DO NOT: drama that pulls character back-to-camera (no "she turns to watch the fireworks"). Combat/dramatic. Photoreal cinematography. Multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

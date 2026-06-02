@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SCALE-PROVER entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE TINY detail on or near the hero starship that proves its monumental scale. The figure/object is small. The ship is hero.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SCALE-PROVER entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE TINY detail on or near the hero starship that proves its monumental scale. The figure/object is small. The ship is hero.
 
 ⚠️ CRITICAL ANTI-HERO-PORTRAIT GUARDRAIL: NEVER write close-up / portrait / face-visible / chest-up / "pilot in foreground". The pilot/crew/EVA-figure must be TINY (1-5% of frame) and only present as a scale-prover. NEVER make the figure the subject.
 
@@ -55,4 +57,7 @@ DO NOT write:
 - Generic "person near ship" — name the position + activity
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

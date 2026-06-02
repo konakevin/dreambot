@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA-FRAMING entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names a framing that keeps the SHIP as HERO at 40-70% of the frame.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA-FRAMING entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names a framing that keeps the SHIP as HERO at 40-70% of the frame.
 
 ⚠️ CRITICAL ANTI-HERO-PORTRAIT GUARDRAIL: NEVER write close-up / portrait / face-visible / chest-up / waist-up framing of any character. NEVER write "camera at pilot's face" or "character fills frame". The ship is the hero.
 
@@ -47,4 +49,7 @@ DO NOT write:
 - Multiple shots per entry
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

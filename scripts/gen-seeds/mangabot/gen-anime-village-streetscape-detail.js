@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} STREETSCAPE-DETAIL entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a MIDGROUND ACTIVITY DETAIL that fills the street / lane / plaza. This is what gives the village LIFE without becoming a hero-portrait. Vendor stalls, gathered objects, gear arrangements, etc — NOT character close-ups.
+  metaPrompt: (
+    n
+  ) => `Write ${n} STREETSCAPE-DETAIL entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a MIDGROUND ACTIVITY DETAIL that fills the street / lane / plaza. This is what gives the village LIFE without becoming a hero-portrait. Vendor stalls, gathered objects, gear arrangements, etc — NOT character close-ups.
 
 Each entry: 12-22 words. ONE specific midground streetscape detail. Multi-tier depth contribution.
 
@@ -58,4 +60,7 @@ DO NOT write:
 - Western elements
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

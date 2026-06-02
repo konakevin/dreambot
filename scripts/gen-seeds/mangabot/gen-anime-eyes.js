@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME EYE descriptions for MangaBot's character paths (gender-neutral). Each entry is 10-18 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME EYE descriptions for MangaBot's character paths (gender-neutral). Each entry is 10-18 words.
 
 CONTEXT: Anime-style large expressive eyes. The full anime color palette — vibrant, varied, sometimes supernatural. NOT realistic eye descriptors; stylized anime aesthetic.
 
@@ -34,4 +36,7 @@ Examples (write fresh):
 - "honey-amber eyes catching golden-hour light, soft and rounded, gentle and warm"
 
 Output ONLY a valid JSON array of ${n} strings (10-18 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

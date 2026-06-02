@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/atmospheres.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for MangaBot — anime-typical atmospheric particles and effects. Petal-rain, firefly, pollen, rain, fog, snow-drift, spirit-wisps.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for MangaBot — anime-typical atmospheric particles and effects. Petal-rain, firefly, pollen, rain, fog, snow-drift, spirit-wisps.
 
 Each entry: 6-14 words. One specific anime-atmospheric element.
 
@@ -41,4 +43,7 @@ Each entry: 6-14 words. One specific anime-atmospheric element.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

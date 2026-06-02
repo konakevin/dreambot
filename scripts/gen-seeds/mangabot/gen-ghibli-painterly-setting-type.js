@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SETTING TYPE entries for a MangaBot ghibli-painterly keyframe. This is the BROADER environment that contains the monumental anchor — sky-island / forest-cathedral / cavern / mountain-shrine etc. NOT the architecture itself, but the WORLD the architecture sits in.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SETTING TYPE entries for a MangaBot ghibli-painterly keyframe. This is the BROADER environment that contains the monumental anchor — sky-island / forest-cathedral / cavern / mountain-shrine etc. NOT the architecture itself, but the WORLD the architecture sits in.
 
 Each entry: 12-22 words. ONE specific Ghibli-painterly environment type that wraps the monumental anchor. Atmospheric depth + biome cue.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Empty postcard backdrop
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

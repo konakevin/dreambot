@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA-FRAMING entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a WIDE / ARCHITECTURAL framing that keeps the VILLAGE as HERO and any inhabitant TINY for scale only.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA-FRAMING entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a WIDE / ARCHITECTURAL framing that keeps the VILLAGE as HERO and any inhabitant TINY for scale only.
 
 ⚠️ CRITICAL ANTI-HERO-PORTRAIT GUARDRAIL: NEVER write close-up / medium-shot / portrait / face-visible / chest-up / waist-up framings. NEVER write "camera at character's face" or "character fills frame". The village is the hero. Every entry must keep the figure TINY (5-15% of frame at most).
 
@@ -46,4 +48,7 @@ DO NOT write:
 - Cyberpunk megabuilding worm's-eye
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

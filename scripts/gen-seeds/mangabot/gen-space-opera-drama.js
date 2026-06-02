@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} DRAMA entries for a MangaBot space-opera keyframe. SCENE-LED conditional layer (fired at 40%) — each entry names ONE LOADED MOMENT that elevates the frame from "ship cruising" to "ship in the middle of something". Operatic-anime register (Yamato wave-motion / Macross fighter-launch / Galactic-Heroes orbital-bombardment / Cowboy-Bebop pre-jump-charge).
+  metaPrompt: (
+    n
+  ) => `Write ${n} DRAMA entries for a MangaBot space-opera keyframe. SCENE-LED conditional layer (fired at 40%) — each entry names ONE LOADED MOMENT that elevates the frame from "ship cruising" to "ship in the middle of something". Operatic-anime register (Yamato wave-motion / Macross fighter-launch / Galactic-Heroes orbital-bombardment / Cowboy-Bebop pre-jump-charge).
 
 Each entry: 12-22 words. ONE specific dramatic moment. Bigger than surprise-pool — this is the operatic beat.
 
@@ -54,4 +56,7 @@ DO NOT write:
 - Multiple events per entry
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

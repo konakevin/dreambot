@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} CHARACTER-ROLE entries for a MangaBot ANIME ISEKAI keyframe. Anime isekai archetypes by ROLE only, never named. Painterly cel-shaded anime characters.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CHARACTER-ROLE entries for a MangaBot ANIME ISEKAI keyframe. Anime isekai archetypes by ROLE only, never named. Painterly cel-shaded anime characters.
 
 Each entry: 12-22 words. ROLE + outfit + anime archetype.
 
@@ -42,4 +44,7 @@ DO NOT write:
 - Multiple character groups per entry — ONE focal role
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

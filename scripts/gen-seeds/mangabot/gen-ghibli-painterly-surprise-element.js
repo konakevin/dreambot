@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SURPRISE ELEMENT entries for a MangaBot ghibli-painterly keyframe. This is a small subtle moment that adds whimsy or wonder — kodama / soot-sprite / dragonfly / fox-spirit / butterflies / passing-bird etc. Always SMALL and integrated, never the focus.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SURPRISE ELEMENT entries for a MangaBot ghibli-painterly keyframe. This is a small subtle moment that adds whimsy or wonder — kodama / soot-sprite / dragonfly / fox-spirit / butterflies / passing-bird etc. Always SMALL and integrated, never the focus.
 
 Each entry: 10-18 words. ONE specific small whimsical element.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Generic "magic" without specifics
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cherry_blossom_romance_surprise_element.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROMANCE SURPRISE-ELEMENT entries — small tender secondary subjects at midground/background.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROMANCE SURPRISE-ELEMENT entries — small tender secondary subjects at midground/background.
 
 Each 10-18 words. Element + placement + romantic-world implication.
 
@@ -29,4 +33,7 @@ DO write:
 DO NOT: anything foreground competing / multiple per entry / dramatic.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

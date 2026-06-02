@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} BACKGROUND-DETAIL entries for a MangaBot ghibli-countryside keyframe. Each entry is a DEEP-DISTANCE SECONDARY DETAIL — far back, proves the world extends beyond, gives a third readable layer. Pastoral, Ghibli-coded.
+  metaPrompt: (
+    n
+  ) => `Write ${n} BACKGROUND-DETAIL entries for a MangaBot ghibli-countryside keyframe. Each entry is a DEEP-DISTANCE SECONDARY DETAIL — far back, proves the world extends beyond, gives a third readable layer. Pastoral, Ghibli-coded.
 
 Each entry: 10-20 words. ONE specific deep-distance detail.
 
@@ -48,4 +50,7 @@ DO NOT write:
 - Animals as protagonists (those are character_role / spirit_element)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

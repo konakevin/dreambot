@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} ARCHITECTURAL-ANCHOR entries for a MangaBot ANIME ISEKAI keyframe. Anime-isekai fantasy structures only. NOT Western photoreal medieval.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ARCHITECTURAL-ANCHOR entries for a MangaBot ANIME ISEKAI keyframe. Anime-isekai fantasy structures only. NOT Western photoreal medieval.
 
 Each entry: 12-22 words. ONE anime-isekai fantasy structure with painterly detail.
 
@@ -50,4 +52,7 @@ DO NOT write:
 - Gritty desaturated register
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

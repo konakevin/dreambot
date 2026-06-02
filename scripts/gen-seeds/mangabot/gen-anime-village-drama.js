@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} DRAMA entries for a MangaBot anime-village keyframe. SCENE-LED conditional layer (fired at 30%) — each entry names ONE QUIET NARRATIVE BEAT that elevates the frame from "village exists" to "something is happening". Quiet not loud. Story not spectacle.
+  metaPrompt: (
+    n
+  ) => `Write ${n} DRAMA entries for a MangaBot anime-village keyframe. SCENE-LED conditional layer (fired at 30%) — each entry names ONE QUIET NARRATIVE BEAT that elevates the frame from "village exists" to "something is happening". Quiet not loud. Story not spectacle.
 
 Each entry: 12-22 words. ONE specific quiet narrative beat. NOT combat, NOT magical, NOT hero-portrait — just a story-tick.
 
@@ -57,4 +59,7 @@ DO NOT write:
 - Multi-beat sequences (pick ONE moment)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

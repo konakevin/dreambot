@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERIC LIGHT entries for a MangaBot ghibli-painterly keyframe. This is the LIGHT SIGNATURE — god-rays / haze / lantern-glow / firefly-light — that gives the scene its Ghibli emotional read.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERIC LIGHT entries for a MangaBot ghibli-painterly keyframe. This is the LIGHT SIGNATURE — god-rays / haze / lantern-glow / firefly-light — that gives the scene its Ghibli emotional read.
 
 Each entry: 12-20 words. ONE specific light treatment with Ghibli painterly cue. Hand-painted feel, not photoreal.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Western noir lighting
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

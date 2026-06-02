@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/rooftop_sunsets_setting.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROOFTOP-SETTING entries — rooftop contexts where character is ENGAGED with foreground/midground, NOT staring at city-vista.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROOFTOP-SETTING entries — rooftop contexts where character is ENGAGED with foreground/midground, NOT staring at city-vista.
 
 Each 14-22 words. Setting + tactile foreground rooftop-prop + midground depth + character ENGAGED.
 
@@ -32,4 +36,7 @@ DO NOT: "standing at edge of rooftop looking out over city" — explicit back-to
 City is BACKDROP. Character ENGAGED at rooftop with prop AT HAND.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

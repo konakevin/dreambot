@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} DRAMA entries for a MangaBot mecha-hangar keyframe. Each entry is a HANGAR-EVENT NARRATIVE BEAT — fires only 40% of the time (gated). It should add a story beat without breaking the hangar-state (no combat).
+  metaPrompt: (
+    n
+  ) => `Write ${n} DRAMA entries for a MangaBot mecha-hangar keyframe. Each entry is a HANGAR-EVENT NARRATIVE BEAT — fires only 40% of the time (gated). It should add a story beat without breaking the hangar-state (no combat).
 
 Each entry: 12-22 words. ONE specific hangar-event beat. Should add motion + meaning to the scene.
 
@@ -52,4 +54,7 @@ DO NOT write:
 - "Mech-vs-mech battle" / "explosion engulfs the mech"
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

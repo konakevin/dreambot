@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} EMOTIONAL-DNA entries for a MangaBot ghibli-countryside keyframe. Each entry locks the FRAME'S MOOD. Studio Ghibli quiet pastoral emotional register.
+  metaPrompt: (
+    n
+  ) => `Write ${n} EMOTIONAL-DNA entries for a MangaBot ghibli-countryside keyframe. Each entry locks the FRAME'S MOOD. Studio Ghibli quiet pastoral emotional register.
 
 Each entry: 8-16 words. Names the emotion + the physical cue.
 
@@ -47,4 +49,7 @@ DO NOT write:
 - Eye-contact with viewer
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} STORY PROP entries for a MangaBot samurai-era keyframe. Each entry is a FOREGROUND/MIDGROUND NARRATIVE-IMPLYING OBJECT that makes the viewer wonder "what happened here?" — the lived-in story layer that distinguishes a poster-grade keyframe from a clean-but-bland render.
+  metaPrompt: (
+    n
+  ) => `Write ${n} STORY PROP entries for a MangaBot samurai-era keyframe. Each entry is a FOREGROUND/MIDGROUND NARRATIVE-IMPLYING OBJECT that makes the viewer wonder "what happened here?" — the lived-in story layer that distinguishes a poster-grade keyframe from a clean-but-bland render.
 
 Each entry: 12-22 words. ONE specific prop with material-truth detail (smoke / charring / mud / weathered material / patina / wear).
 
@@ -45,4 +47,7 @@ DO NOT write:
 - Wide setting descriptions (just the prop + its material truth)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

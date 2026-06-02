@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME FEMALE ARCHETYPE descriptions for MangaBot's character paths. Each entry is 22-38 words. The archetype is WHO the character is + her vibe / energy / story-flavor — NOT outfit (separate pool), NOT face details (separate pools).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME FEMALE ARCHETYPE descriptions for MangaBot's character paths. Each entry is 22-38 words. The archetype is WHO the character is + her vibe / energy / story-flavor — NOT outfit (separate pool), NOT face details (separate pools).
 
 CONTEXT: Lush, vibrant, frame-worthy anime poster moments. Draw from ALL anime genres. Each archetype is a SPECIFIC type — distinct, evocative, recognizable as anime. NOT generic "anime girl"; specific roles with personality.
 
@@ -42,4 +44,7 @@ Examples (write fresh):
 - "Early-twenties amateur photographer wandering between projects, sardonic and clever, a film camera always slung across her chest, hunting for one perfect frame"
 
 Output ONLY a valid JSON array of ${n} strings (22-38 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} FANTASY-CREATURE entries for a MangaBot ANIME ISEKAI keyframe. Anime-coded fantasy creatures — Slime / Konosuba / Re:Zero / Frieren / Spice and Wolf canon. NOT Western D&D photoreal.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FANTASY-CREATURE entries for a MangaBot ANIME ISEKAI keyframe. Anime-coded fantasy creatures — Slime / Konosuba / Re:Zero / Frieren / Spice and Wolf canon. NOT Western D&D photoreal.
 
 Each entry: 10-22 words. ONE anime-isekai creature with painterly anime detail.
 
@@ -50,4 +52,7 @@ DO NOT write:
 - Gore / scary horror creatures (anime isekai is mostly comedic/whimsical/heroic)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_camera_framing.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA FRAMING entries for occult-tokyo keyframe — STRICT forward-facing-or-profile only.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA FRAMING entries for occult-tokyo keyframe — STRICT forward-facing-or-profile only.
 
 ⚠️ THE PATH AESTHETIC pushes toward back-of-character watching distant spirit. Pool must aggressively counter that centroid.
 
@@ -40,4 +44,7 @@ DO NOT — STRICT bans:
 Forward-facing or profile-engaged ONLY. Even over-shoulder framing must keep character's FACE visible in three-quarter profile.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/rooftop_sunsets_outfit.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROOFTOP-OUTFIT entries — casual evening/after-work clothing for character on rooftop at sunset.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROOFTOP-OUTFIT entries — casual evening/after-work clothing for character on rooftop at sunset.
 
 Each 16-26 words. Outfit + material + lived-in detail.
 
@@ -32,4 +36,7 @@ DO NOT: "form-fitting" / "low-cut" / "sultry" / multiple per entry.
 Casual + lived-in.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

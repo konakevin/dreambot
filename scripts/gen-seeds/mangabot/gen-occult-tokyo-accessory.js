@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_accessory.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} OCCULT-TOKYO ACCESSORY entries — Japanese occult tools/objects the character is wielding or carrying. STRICTLY Japanese vocabulary, NO western occult.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} OCCULT-TOKYO ACCESSORY entries — Japanese occult tools/objects the character is wielding or carrying. STRICTLY Japanese vocabulary, NO western occult.
 
 Each 10-18 words. Object + use-detail anchoring character in occult-engagement.
 
@@ -34,4 +38,7 @@ DO NOT: weapons-only-no-occult / western tools (pentagrams / wands / crystal-bal
 Object MUST keep character actively engaged with the occult, NOT idle.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/festival_nights_accessory.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} FESTIVAL-NIGHTS ACCESSORY entries — matsuri objects the character is holding. Japanese summer festival props. Each 10-18 words.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} FESTIVAL-NIGHTS ACCESSORY entries — matsuri objects the character is holding. Japanese summer festival props. Each 10-18 words.
 
 Format: Matsuri object + tactile detail.
 
@@ -32,4 +36,7 @@ DO write:
 DO NOT: weapons / dramatic / photoreal-catalog / multiple per entry / suggestive.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

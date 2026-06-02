@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/beach_episode_surprise_element.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} BEACH-EPISODE SURPRISE-ELEMENT entries — small bright vacation secondary subjects at midground/background.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} BEACH-EPISODE SURPRISE-ELEMENT entries — small bright vacation secondary subjects at midground/background.
 
 Each 10-18 words. Element + placement + summer-vacation-world implication.
 
@@ -40,4 +44,7 @@ DO write:
 DO NOT: anything foreground competing with character / multiple per entry / dramatic-violent / cheesecake-implied-bystanders.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

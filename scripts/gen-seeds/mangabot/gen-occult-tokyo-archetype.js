@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_archetype.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} OCCULT-TOKYO ARCHETYPE entries — who's interacting with the supernatural in modern urban Japan. Tokyo-Ghoul / Jujutsu-Kaisen / Mob-Psycho / Bleach register. BOTH genders represented.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} OCCULT-TOKYO ARCHETYPE entries — who's interacting with the supernatural in modern urban Japan. Tokyo-Ghoul / Jujutsu-Kaisen / Mob-Psycho / Bleach register. BOTH genders represented.
 
 Each 12-22 words. Role + relationship-to-occult + tone.
 
@@ -34,4 +38,7 @@ DO write:
 DO NOT: pure-evil / cheesecake roles / multiple per entry. Western occult tropes (no witches with cauldrons).
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

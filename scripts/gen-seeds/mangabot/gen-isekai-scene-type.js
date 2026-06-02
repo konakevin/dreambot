@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} SCENE-TYPE entries for a MangaBot ISEKAI-FANTASY anime keyframe. STRICT ANIME ISEKAI CANON — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei / Slime / Restaurant of Another World / Log Horizon / Tate no Yuusha. NOT Western Witcher / Skyrim / D&D / Game of Thrones.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SCENE-TYPE entries for a MangaBot ISEKAI-FANTASY anime keyframe. STRICT ANIME ISEKAI CANON — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei / Slime / Restaurant of Another World / Log Horizon / Tate no Yuusha. NOT Western Witcher / Skyrim / D&D / Game of Thrones.
 
 Each entry: 14-28 words. ONE anime-isekai composition concept.
 
@@ -42,4 +44,7 @@ DO NOT write:
 - Multiple compositions per entry
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/festival_nights_surprise_element.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} FESTIVAL-NIGHTS SURPRISE-ELEMENT entries — small matsuri secondary subjects at midground or background. Each 10-18 words. Element + placement + festival-world implication.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} FESTIVAL-NIGHTS SURPRISE-ELEMENT entries — small matsuri secondary subjects at midground or background. Each 10-18 words. Element + placement + festival-world implication.
 
 VARIETY:
 - 20% CHOCHIN-LANTERN-CLUSTER (paper-lantern string overhead at midground / single chochin glowing warm at midground / lantern-tower at background)
@@ -31,4 +35,7 @@ DO write:
 DO NOT: anything foreground competing with character / multiple per entry / dramatic / character back-to-camera staring at element.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

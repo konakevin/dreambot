@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} CHARACTER-ROLE entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry describes the figure(s) in the frame BY ROLE only, never by name. Akira / Ghost-in-the-Shell / Edgerunners / Blade-Runner / Bubblegum Crisis cyberpunk archetypes. Almost always SOLO — neo-tokyo is loneliness amid density.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CHARACTER-ROLE entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry describes the figure(s) in the frame BY ROLE only, never by name. Akira / Ghost-in-the-Shell / Edgerunners / Blade-Runner / Bubblegum Crisis cyberpunk archetypes. Almost always SOLO — neo-tokyo is loneliness amid density.
 
 Each entry: 10-22 words. ROLE + outfit + cyber-signature (visible augmentation or distinguishing gear).
 
@@ -37,4 +39,7 @@ DO NOT write:
 - Specific facial features locking a particular look
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

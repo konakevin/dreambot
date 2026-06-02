@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} BEACH-EPISODE scene descriptions for MangaBot's beach-episode path. Each entry is 30-50 words. Setting-only — describe the tropical / coastal / summer setting, not characters.
+  metaPrompt: (
+    n
+  ) => `Write ${n} BEACH-EPISODE scene descriptions for MangaBot's beach-episode path. Each entry is 30-50 words. Setting-only — describe the tropical / coastal / summer setting, not characters.
 
 CONTEXT: Anime "beach episode" trope — bright tropical paradise, peak summer-vacation energy. Wholesome, vibrant, vacation-coded. Free!  / K-On! / Free!-Iwatobi / Nichijou / Lucky-Star summer-arc visual vocabulary. Ocean-blue + sand-cream + sky-cyan palette.
 
@@ -46,4 +48,7 @@ Examples (write fresh):
 - "Tropical reef shore at low tide with crystal-clear shallow water revealing colorful coral, exposed kelp draped over rocks, scattered seashells and starfish, palm trees overhanging the sand, distant turquoise horizon, soft heat-haze on the water, golden-yellow afternoon light"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

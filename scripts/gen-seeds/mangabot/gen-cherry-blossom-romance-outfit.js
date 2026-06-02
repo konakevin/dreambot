@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cherry_blossom_romance_outfit.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROMANCE-OUTFIT entries — tender date/school/spring casual clothing. Cherry-blossom mood. ALWAYS modest + tender.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROMANCE-OUTFIT entries — tender date/school/spring casual clothing. Cherry-blossom mood. ALWAYS modest + tender.
 
 Each 16-26 words. Outfit + material detail + spring-romantic accent.
 
@@ -30,4 +34,7 @@ DO NOT: "form-fitting" / "low-cut" / "sultry" / "low-cut" / photoreal-catalog / 
 Modest + tender + age-appropriate.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

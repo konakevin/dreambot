@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/beach_episode_action.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} BEACH-EPISODE ACTION entries — bright joyful summer-vacation mid-moments. FORWARD-FACING ONLY.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} BEACH-EPISODE ACTION entries — bright joyful summer-vacation mid-moments. FORWARD-FACING ONLY.
 
 ⚠️ Never "looking out at horizon" / "walking away toward water" / "back to camera at shoreline" / "facing distant sea" — back-to-camera traps.
 ⚠️ ANTI-CHEESECAKE: no oiled-sunbathing-poses / no "stretching seductively" / no "lying-back on towel posing" — only bright kinetic vacation activities.
@@ -45,4 +49,7 @@ DO write:
 DO NOT: walking-away / facing-away-to-admire / looking-out-at-sea / standing-at-shoreline — back-to-camera traps. Cheesecake-suggestive / "lying-back stretching" / "arching-back" / "lifting-shirt" / "wading in lingerie" / oiled-sunbathing. Multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

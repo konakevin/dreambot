@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_surprise_element.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC SURPRISE-ELEMENT entries — small secondary subjects at midground/background that enrich the overgrown ruin world.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} POST-APOCALYPTIC SURPRISE-ELEMENT entries — small secondary subjects at midground/background that enrich the overgrown ruin world.
 
 Each 10-18 words. Element + placement + post-apocalyptic register. Quiet decay + nature reclaiming, NOT horror.
 
@@ -33,4 +37,7 @@ DO write:
 DO NOT: corpses / blood / gore / horror / anything foreground competing with wanderer / multiple per entry / zombies.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

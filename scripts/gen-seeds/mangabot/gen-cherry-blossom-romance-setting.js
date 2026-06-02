@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cherry_blossom_romance_setting.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROMANCE-SETTING entries — tender places where character is engaged. Cherry-blossom-rich contexts.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROMANCE-SETTING entries — tender places where character is engaged. Cherry-blossom-rich contexts.
 
 Each 14-22 words. Setting + tactile foreground + midground + engagement-context.
 
@@ -32,4 +36,7 @@ DO NOT: "standing at edge looking out at distant cherry-grove" — back-to-camer
 Every setting affords ENGAGED-WITH-tender-moment.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

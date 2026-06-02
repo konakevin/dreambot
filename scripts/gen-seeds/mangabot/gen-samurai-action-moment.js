@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} ACTION MOMENT entries for a MangaBot samurai-era keyframe. Each entry is a CANDID mid-beat — the verb-phase the figure is CAUGHT in. Never posed. Never head-on-camera modeling. Hidden-camera capture.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ACTION MOMENT entries for a MangaBot samurai-era keyframe. Each entry is a CANDID mid-beat — the verb-phase the figure is CAUGHT in. Never posed. Never head-on-camera modeling. Hidden-camera capture.
 
 Each entry: 8-18 words. ONE specific action verb-phrase with body-language detail. Story-moment energy.
 
@@ -35,4 +37,7 @@ DO NOT write:
 - Multiple actions per entry — ONE clear verb-phase
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

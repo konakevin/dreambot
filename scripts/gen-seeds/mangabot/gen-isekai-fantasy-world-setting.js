@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} FANTASY-WORLD-SETTING entries for a MangaBot ANIME ISEKAI keyframe. Anime-isekai locations only — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei canon. NOT Western Witcher/Skyrim.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FANTASY-WORLD-SETTING entries for a MangaBot ANIME ISEKAI keyframe. Anime-isekai locations only — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei canon. NOT Western Witcher/Skyrim.
 
 Each entry: 12-22 words. ONE anime-isekai location with painterly anime detail.
 
@@ -50,4 +52,7 @@ DO NOT write:
 - Generic "fantasy world" without anime-isekai reference
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

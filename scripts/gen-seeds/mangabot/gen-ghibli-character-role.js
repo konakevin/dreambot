@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} CHARACTER-ROLE entries for a MangaBot ghibli-countryside keyframe. Each entry describes the figure(s) in the frame BY ROLE only, never named. Studio Ghibli rural archetypes — Kiki / Mei / Satsuki / Chihiro / Sheeta / Granny Sosuke / Mononoke village kids. No urban, no armor, no weapons.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CHARACTER-ROLE entries for a MangaBot ghibli-countryside keyframe. Each entry describes the figure(s) in the frame BY ROLE only, never named. Studio Ghibli rural archetypes — Kiki / Mei / Satsuki / Chihiro / Sheeta / Granny Sosuke / Mononoke village kids. No urban, no armor, no weapons.
 
 Each entry: 10-22 words. Specifies role + outfit + bearing. SOLO mostly; OCCASIONAL pair.
 
@@ -41,4 +43,7 @@ DO NOT write:
 - Multiple-figure groups (>3) — usually 1, occasionally 2
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

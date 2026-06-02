@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SURPRISE-ELEMENT entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names ONE small unexpected detail that elevates the frame from "yokai in shrine" to "moment captured" — a flicker, a passing wing, a sudden sound, a tiny life-form drifting through.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SURPRISE-ELEMENT entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names ONE small unexpected detail that elevates the frame from "yokai in shrine" to "moment captured" — a flicker, a passing wing, a sudden sound, a tiny life-form drifting through.
 
 ⚠️ CRITICAL: Japanese-mythology coded surprise only. NEVER western fairy-dust / unicorn-sparkle / Greek-dove. NEVER WESTERN. Use shinto / yokai vocabulary: petal-release, lantern-flicker, sudden-cold, kitsune-laugh-echo, passing-dragonfly, shadow-shift, wind-chime, foxfire-ember, falling-shide-paper.
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Generic "sparkle" / "magic" without yokai specificity
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

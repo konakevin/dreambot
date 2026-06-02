@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} SCENE-TYPE entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is the COMPOSITION LEAD. Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo / Edgerunners / Bubblegum Crisis register.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SCENE-TYPE entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is the COMPOSITION LEAD. Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo / Edgerunners / Bubblegum Crisis register.
 
 CRITICAL VARIETY MANDATE: do NOT default to "solo figure standing centered in wet alley looking at a distant tower." That's ONE composition out of many. Spread entries across very different compositions.
 
@@ -44,4 +46,7 @@ DO NOT write:
 - Pastoral / nature without cyberpunk-coding
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

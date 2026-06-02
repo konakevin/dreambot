@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} STORY-PROP entries for a MangaBot ANIME ISEKAI keyframe. Foreground narrative-implying anime-isekai-coded prop. Sword Art Online / Konosuba / Frieren / Slime canon.
+  metaPrompt: (
+    n
+  ) => `Write ${n} STORY-PROP entries for a MangaBot ANIME ISEKAI keyframe. Foreground narrative-implying anime-isekai-coded prop. Sword Art Online / Konosuba / Frieren / Slime canon.
 
 Each entry: 12-22 words. ONE anime-isekai prop with painterly detail.
 
@@ -50,4 +52,7 @@ DO NOT write:
 - Gritty desaturated register
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

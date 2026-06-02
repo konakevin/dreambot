@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cherry_blossom_romance_ethnicity.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ETHNICITY-NOUN entries for cherry-blossom-romance MangaBot. Tender romantic register. Each 6-12 words.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ETHNICITY-NOUN entries for cherry-blossom-romance MangaBot. Tender romantic register. Each 6-12 words.
 
 Format: "[ethnicity] character, [romantic-coded feature anchor]"
 
@@ -19,4 +23,7 @@ DO write:
 DO NOT: cheesecake / dated terms / multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

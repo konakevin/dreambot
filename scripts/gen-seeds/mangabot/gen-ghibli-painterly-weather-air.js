@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} WEATHER + AIR entries for a MangaBot ghibli-painterly keyframe. This is ATMOSPHERIC DEPTH — mist / dust-motes / sunbeams / wind / particle-haze — that gives the scene its sense of distance and lived-in air. Different from cascade_motion (which is the drift-element) — this is the AMBIENT AIR QUALITY.
+  metaPrompt: (
+    n
+  ) => `Write ${n} WEATHER + AIR entries for a MangaBot ghibli-painterly keyframe. This is ATMOSPHERIC DEPTH — mist / dust-motes / sunbeams / wind / particle-haze — that gives the scene its sense of distance and lived-in air. Different from cascade_motion (which is the drift-element) — this is the AMBIENT AIR QUALITY.
 
 Each entry: 10-18 words. ONE specific atmospheric quality. Ghibli painterly cue — depth-haze, sun-particles, weather.
 
@@ -38,4 +40,7 @@ DO NOT write:
 - Western weather references
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

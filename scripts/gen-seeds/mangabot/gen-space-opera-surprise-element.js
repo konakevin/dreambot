@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SURPRISE-ELEMENT entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE subtle cosmic-moment that gives the frame a story-tick (the loaded instant that takes a static-poster into a keyframe).
+  metaPrompt: (
+    n
+  ) => `Write ${n} SURPRISE-ELEMENT entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE subtle cosmic-moment that gives the frame a story-tick (the loaded instant that takes a static-poster into a keyframe).
 
 Each entry: 12-22 words. ONE specific subtle moment. NOT dramatic (different pool), NOT hero-action — just a quiet beat that pricks the frame alive.
 
@@ -53,4 +55,7 @@ DO NOT write:
 - Multiple events per entry
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

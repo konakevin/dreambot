@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} EMOTIONAL DNA entries for a MangaBot samurai-era keyframe. Each entry locks the FRAME'S MOOD — the emotional register the viewer should feel. Mononoke / Vagabond / Demon-Slayer / Rurouni-Kenshin mood library.
+  metaPrompt: (
+    n
+  ) => `Write ${n} EMOTIONAL DNA entries for a MangaBot samurai-era keyframe. Each entry locks the FRAME'S MOOD — the emotional register the viewer should feel. Mononoke / Vagabond / Demon-Slayer / Rurouni-Kenshin mood library.
 
 Each entry: 8-16 words. Names the emotion + the visual cues that telegraph it.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Posed-for-camera emotion (chin-on-fist contemplation cliche)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

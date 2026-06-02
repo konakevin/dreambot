@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/japanese_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} JAPANESE LANDSCAPE descriptions for MangaBot's anime-landscape path — pure Japanese environments rendered in anime style. No characters. Setting is hero.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} JAPANESE LANDSCAPE descriptions for MangaBot's anime-landscape path — pure Japanese environments rendered in anime style. No characters. Setting is hero.
 
 Each entry: 15-30 words. One specific Japanese landscape/setting.
 
@@ -42,4 +44,7 @@ Each entry: 15-30 words. One specific Japanese landscape/setting.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

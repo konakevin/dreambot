@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME CHARACTER ACTIVITY descriptions for MangaBot's character paths. Each entry is 14-22 words. The activity is what the character is DOING — a candid mid-action body-pose. Place-agnostic so it fits any anime setting.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME CHARACTER ACTIVITY descriptions for MangaBot's character paths. Each entry is 14-22 words. The activity is what the character is DOING — a candid mid-action body-pose. Place-agnostic so it fits any anime setting.
 
 CONTEXT: Slice-of-anime-life moments. NOT adventuring, NOT combat. Just characters in their world, caught mid-moment. Wonder, beauty, style — the kind of pose that anchors a wall-poster anime frame.
 
@@ -41,4 +43,7 @@ Examples (write fresh):
 - "leaning on a rooftop railing with both forearms resting on it, gazing at the city below, hair lifted by gentle wind"
 
 Output ONLY a valid JSON array of ${n} strings (14-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} LANDMARK ANCHOR entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is the LARGE SCALE-PROVING ELEMENT in the scene — DOES NOT have to be a vertical tower behind the figure.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LANDMARK ANCHOR entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is the LARGE SCALE-PROVING ELEMENT in the scene — DOES NOT have to be a vertical tower behind the figure.
 
 CRITICAL VARIETY MANDATE: do NOT default to "massive vertical tower / megabuilding behind figure." That biases every composition into the same center-vertical shot. Spread entries across horizontal / side-positioned / overhead / interior / ground-level / vehicle landmarks.
 
@@ -46,4 +48,7 @@ DO NOT write:
 - Multiple landmarks per entry — ONE per entry
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

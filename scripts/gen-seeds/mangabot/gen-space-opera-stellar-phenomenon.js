@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} STELLAR-PHENOMENON entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE specific deep-cosmic spectacle that occupies the BACKDROP behind the hero ship. NOT the cosmic-setting (different pool — that's the location/stage); THIS is the spectacular ASTROPHYSICAL EVENT visible in the same frame.
+  metaPrompt: (
+    n
+  ) => `Write ${n} STELLAR-PHENOMENON entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE specific deep-cosmic spectacle that occupies the BACKDROP behind the hero ship. NOT the cosmic-setting (different pool — that's the location/stage); THIS is the spectacular ASTROPHYSICAL EVENT visible in the same frame.
 
 Each entry: 12-22 words. ONE specific anime-cosmic phenomenon. Visual + dramatic.
 
@@ -54,4 +56,7 @@ DO NOT write:
 - Cosmic-setting (location) — this pool is the ASTROPHYSICAL SPECTACLE only
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

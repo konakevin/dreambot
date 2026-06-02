@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} MONUMENTAL ANCHOR entries for a MangaBot ghibli-painterly keyframe. This is the DOMINANT architectural mass that fills 50-70% of the frame as the SCENE HERO. Castle-in-the-Sky / Spirited-Away / Princess-Mononoke / Howl's Moving Castle / Lost-Universe painterly-Ghibli register.
+  metaPrompt: (
+    n
+  ) => `Write ${n} MONUMENTAL ANCHOR entries for a MangaBot ghibli-painterly keyframe. This is the DOMINANT architectural mass that fills 50-70% of the frame as the SCENE HERO. Castle-in-the-Sky / Spirited-Away / Princess-Mononoke / Howl's Moving Castle / Lost-Universe painterly-Ghibli register.
 
 Each entry: 14-22 words. ONE monumental architectural anchor — towering, vertical, painterly, multi-tier-detailed. Specific architectural language that primes Flux for a MASSIVE structure.
 
@@ -37,4 +39,7 @@ DO NOT write:
 - Photoreal architecture
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

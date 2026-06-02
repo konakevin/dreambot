@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_ethnicity.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ETHNICITY-NOUN entries for occult-tokyo MangaBot. Modern Tokyo + supernatural register. Each 6-12 words.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ETHNICITY-NOUN entries for occult-tokyo MangaBot. Modern Tokyo + supernatural register. Each 6-12 words.
 
 Format: "[ethnicity] character, [occult-tinged feature anchor]"
 
@@ -22,4 +26,7 @@ DO write:
 DO NOT: just "anime character" / generic "Asian" / multiple per entry / dated colonial terms.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

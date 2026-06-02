@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_outfit.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} OCCULT-TOKYO OUTFIT entries — modern Japanese urban clothing with occult/supernatural touches. Tokyo-Ghoul / JJK / Bleach / Mob-Psycho register.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} OCCULT-TOKYO OUTFIT entries — modern Japanese urban clothing with occult/supernatural touches. Tokyo-Ghoul / JJK / Bleach / Mob-Psycho register.
 
 ⚠️ ANTI-CHEESECAKE — every outfit fully covers chest, midriff, thighs. NO low-cut, NO crop-tops, NO bare-midriff, NO suggestive. COVERED.
 
@@ -35,4 +39,7 @@ DO NOT: "low-cut" / "form-fitting" / "crop-top" / "bare midriff" / "thigh-high s
 Modern urban Japan + occult-thread. Always COVERED.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

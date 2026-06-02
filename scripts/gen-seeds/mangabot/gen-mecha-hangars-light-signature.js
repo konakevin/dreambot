@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} LIGHT-SIGNATURE entries for a MangaBot mecha-hangar keyframe. Each entry names a dramatic LIGHTING STYLE that sculpts the giant mech with chiaroscuro. Industrial-scale lighting — sodium-vapor, arc-weld, emergency-strobe, sunset god-rays, cockpit-glow, etc.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHT-SIGNATURE entries for a MangaBot mecha-hangar keyframe. Each entry names a dramatic LIGHTING STYLE that sculpts the giant mech with chiaroscuro. Industrial-scale lighting — sodium-vapor, arc-weld, emergency-strobe, sunset god-rays, cockpit-glow, etc.
 
 Each entry: 12-20 words. ONE specific lighting style. Always DRAMATIC, sculpting the mech's mass + shadow.
 
@@ -52,4 +54,7 @@ DO NOT write:
 - Photoreal exposure terms (f-stops, ISO)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} LANDSCAPE SETTING entries for a MangaBot ghibli-countryside keyframe. Each entry is the SPECIFIC RURAL-JAPAN BIOME that wraps the scene.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LANDSCAPE SETTING entries for a MangaBot ghibli-countryside keyframe. Each entry is the SPECIFIC RURAL-JAPAN BIOME that wraps the scene.
 
 Each entry: 12-22 words. ONE specific rural landscape.
 
@@ -48,4 +50,7 @@ DO NOT write:
 - Modern infrastructure (paved roads / power lines / cars)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,7 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_action.json',
-  total: 25, batch: 25, append: true,
+  total: 25,
+  batch: 25,
+  append: true,
   metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC ACTION entries — CRITICAL FORWARD-FACING ONLY.
 
 ⚠️ THIS GENRE'S DEFAULT FAILURE MODE = lone-wanderer with back-to-camera looking at ruin-vista on horizon. EVERY action entry must affirmatively position the wanderer ENGAGED with a ruin-prop / tool / pet / food / map AT HAND, FACING viewer or in profile — NEVER staring at distant skyline.
@@ -42,4 +44,7 @@ DO NOT — CRITICAL:
 Wanderer ALWAYS engaged with ruin-prop / tool / pet / food / map AT HAND. Ruin-vista is BACKDROP, never the target of their gaze.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/samurai_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SAMURAI-ERA ANIME scene descriptions for MangaBot — feudal Japan anime moments. Rurouni Kenshin / Samurai Champloo / Sword of the Stranger / Dororo energy. Historical Japan through anime lens.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SAMURAI-ERA ANIME scene descriptions for MangaBot — feudal Japan anime moments. Rurouni Kenshin / Samurai Champloo / Sword of the Stranger / Dororo energy. Historical Japan through anime lens.
 
 Each entry: 15-25 words. One specific feudal Japan anime scene with character archetype + setting + atmosphere.
 
@@ -27,4 +29,7 @@ Each entry: 15-25 words. One specific feudal Japan anime scene with character ar
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

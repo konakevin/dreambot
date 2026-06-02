@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/festival_nights_camera_framing.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA FRAMING entries for festival-nights keyframe — forward-facing engaged matsuri-moment ONLY. Each 8-16 words. Framing + character orientation + lantern-warm mood.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA FRAMING entries for festival-nights keyframe — forward-facing engaged matsuri-moment ONLY. Each 8-16 words. Framing + character orientation + lantern-warm mood.
 
 ⚠️ CRITICAL: NEVER "wide silhouette under fireworks", NEVER "back-view watching display", NEVER "over-shoulder behind staring up at sky". This IS the failure mode. Camera engages with the face.
 
@@ -34,4 +38,7 @@ DO write:
 DO NOT: "wide vista with character tiny under fireworks" / "back-view silhouette under hanabi" / "from-behind admiring sky" / "over-shoulder behind character watching display" — back-to-camera traps. Photoreal camera specs.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

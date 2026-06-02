@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} FOREGROUND-ELEMENT entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names ONE specific JAPANESE shrine / temple / nature element that sits in the immediate FOREGROUND of the frame, providing depth-layer and cultural anchoring. The element brackets / frames the yokai hero behind it.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FOREGROUND-ELEMENT entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names ONE specific JAPANESE shrine / temple / nature element that sits in the immediate FOREGROUND of the frame, providing depth-layer and cultural anchoring. The element brackets / frames the yokai hero behind it.
 
 ⚠️ CRITICAL: Japanese sacred/cultural objects ONLY. NEVER western crosses / chalices / books / candles in Gothic style. NEVER WESTERN. Use authentic: torii / shimenawa / ofuda / shumoku / kanzashi / shide / komainu / ema-board / persimmon / wisteria / cypress-branch.
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Multi-element dumps (pick ONE foreground element)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

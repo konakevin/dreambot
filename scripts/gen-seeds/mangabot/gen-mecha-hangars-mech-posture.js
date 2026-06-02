@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} MECH-POSTURE entries for a MangaBot mecha-hangar keyframe. THIS POOL IS THE ANTI-T-POSE LAW. Every entry describes the LOADED INSTANT body position of a giant mech in a hangar — kneeling, mid-stride, squatting, climbing, mid-launch, arm-extended, mid-rotation, etc.
+  metaPrompt: (
+    n
+  ) => `Write ${n} MECH-POSTURE entries for a MangaBot mecha-hangar keyframe. THIS POOL IS THE ANTI-T-POSE LAW. Every entry describes the LOADED INSTANT body position of a giant mech in a hangar — kneeling, mid-stride, squatting, climbing, mid-launch, arm-extended, mid-rotation, etc.
 
 ⚠️ HARD BAN — REJECT INSTANTLY IF: T-pose / arms-out-default / standing-at-attention-facing-camera / both-arms-out-symmetrically / standing-still-arms-down-at-sides / "standing in the hangar" / "posed" / "stationary upright". Flux DEFAULTS anime mechs to T-pose. This pool's only job is to FORCE a non-T-pose loaded posture into every render.
 
@@ -54,4 +56,7 @@ DO NOT write:
 - Mech class identifiers (lives in mech_class)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

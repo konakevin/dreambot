@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} OCCULT-TOKYO scene descriptions for MangaBot's occult-tokyo path. Each entry is 30-50 words. Setting-only.
+  metaPrompt: (
+    n
+  ) => `Write ${n} OCCULT-TOKYO scene descriptions for MangaBot's occult-tokyo path. Each entry is 30-50 words. Setting-only.
 
 CONTEXT: Urban Japan + spiritual / supernatural energy. Tokyo Ghoul / Bleach / Mob Psycho / Jujutsu Kaisen / Ghost Hound aesthetic. Cursed alleys, talismans, glowing sigils, spirit-energy bleeding through urban Japan. NIGHT-coded. Distinct from gothbot (Western gothic) and from samurai-era (historical). This is MODERN urban Japanese spiritual.
 
@@ -45,4 +47,7 @@ Examples (write fresh):
 - "Small neighborhood shrine wedged between modern concrete apartment buildings, stone torii gate at the entrance, paper-charm-strings tied across the path, single stone lantern lit, hundreds of folded omikuji fortune-papers tied to a tree, glowing-blue ofuda-talisman pulsing softly on the shrine door, spirit-mist gathering"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

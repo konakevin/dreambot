@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} ARCHITECTURAL ANCHOR entries for a MangaBot ghibli-countryside keyframe. Each entry is the PASTORAL STRUCTURE that anchors the scene. Unlike samurai-era (monumental towers) or neo-tokyo (megabuildings), Ghibli anchors are HUMAN-SCALE, intimate, weathered, lived-in.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ARCHITECTURAL ANCHOR entries for a MangaBot ghibli-countryside keyframe. Each entry is the PASTORAL STRUCTURE that anchors the scene. Unlike samurai-era (monumental towers) or neo-tokyo (megabuildings), Ghibli anchors are HUMAN-SCALE, intimate, weathered, lived-in.
 
 Each entry: 12-22 words. ONE specific pastoral structure with material-truth detail.
 
@@ -47,4 +49,7 @@ DO NOT write:
 - Decorative props at scale (those are story_prop)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

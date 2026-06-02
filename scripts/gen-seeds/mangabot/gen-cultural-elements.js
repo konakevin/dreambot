@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cultural_elements.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} JAPANESE CULTURAL ELEMENT descriptions for MangaBot — specific cultural details that add authenticity and visual richness to any scene. Stackable accent elements.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} JAPANESE CULTURAL ELEMENT descriptions for MangaBot — specific cultural details that add authenticity and visual richness to any scene. Stackable accent elements.
 
 Each entry: 6-14 words. One specific cultural element.
 
@@ -38,4 +40,7 @@ Each entry: 6-14 words. One specific cultural element.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

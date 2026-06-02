@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} ARCHITECTURAL ANCHOR entries for a MangaBot samurai-era keyframe. Each entry is the MONUMENTAL SCALE-PROVER for the scene — one specific historical-Japan structure that DWARFS the human figure(s) and anchors the composition.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ARCHITECTURAL ANCHOR entries for a MangaBot samurai-era keyframe. Each entry is the MONUMENTAL SCALE-PROVER for the scene — one specific historical-Japan structure that DWARFS the human figure(s) and anchors the composition.
 
 Each entry: 14-26 words. ONE specific architectural element. MUST imply MASSIVE scale.
 
@@ -29,4 +31,7 @@ DO NOT write:
 - Multiple anchors per entry — ONE monumental anchor only
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

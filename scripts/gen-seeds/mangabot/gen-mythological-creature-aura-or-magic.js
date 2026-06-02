@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} AURA-OR-MAGIC entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names ONE specific YOKAI-AURA or MAGICAL EFFECT that wreathes / trails / emanates from the creature. Mononoke / Spirited-Away spiritual-glow register. The aura proves the creature is supernatural — never just "glowing".
+  metaPrompt: (
+    n
+  ) => `Write ${n} AURA-OR-MAGIC entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names ONE specific YOKAI-AURA or MAGICAL EFFECT that wreathes / trails / emanates from the creature. Mononoke / Spirited-Away spiritual-glow register. The aura proves the creature is supernatural — never just "glowing".
 
 ⚠️ CRITICAL: Japanese-shinto / yokai-mythology aura vocabulary ONLY. NEVER western magic / D&D spell-effects / Harry Potter wands / Greek lightning. NEVER WESTERN. Use authentic terms: kitsune-bi (fox-fire), shimenawa-glow, onibi (demon-fire), sigil-circle, ofuda-burst, rune-glyph.
 
@@ -55,4 +57,7 @@ DO NOT write:
 - Multi-aura dumps (pick ONE magical effect per entry)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

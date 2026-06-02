@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} STORY-PROP entries for a MangaBot ghibli-countryside keyframe. Each entry is a FOREGROUND PROP CLUSTER — Ghibli's signature is LIVED-IN ABUNDANCE so each entry combines 2-3 specific props to tell the story richly.
+  metaPrompt: (
+    n
+  ) => `Write ${n} STORY-PROP entries for a MangaBot ghibli-countryside keyframe. Each entry is a FOREGROUND PROP CLUSTER — Ghibli's signature is LIVED-IN ABUNDANCE so each entry combines 2-3 specific props to tell the story richly.
 
 Each entry: 14-26 words. ONE cluster combining 2-3 specific props with material-truth detail.
 
@@ -43,4 +45,7 @@ DO NOT write:
 - Living animals (background_detail handles those)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME SETTING descriptions for MangaBot's character paths. Each entry is 25-40 words. The "setting" is the immediate place + atmosphere where an anime character is out and about — NOT adventuring, just being in a beautifully-rendered slice-of-anime-life moment.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME SETTING descriptions for MangaBot's character paths. Each entry is 25-40 words. The "setting" is the immediate place + atmosphere where an anime character is out and about — NOT adventuring, just being in a beautifully-rendered slice-of-anime-life moment.
 
 CONTEXT: Lush, vibrant, frame-worthy anime poster moments. Wonder, beauty, style. Draw from ALL anime genres: slice-of-life / shoujo / shonen / seinen / sports / fantasy / cyberpunk / historical / supernatural / magical-girl / cozy / urban. The character will be the LEAD subject, but the setting MUST be visually rich enough to share the spotlight.
 
@@ -42,4 +44,7 @@ Examples (write fresh):
 - "Forest shrine path at morning mist, weathered stone torii gates receding into the white haze, mossy stone lanterns lining the steps, cedar trunks rising into low clouds, bird-call echoing distantly through the silence"
 
 Output ONLY a valid JSON array of ${n} strings (25-40 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

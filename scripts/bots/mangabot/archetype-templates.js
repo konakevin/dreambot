@@ -576,7 +576,23 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 
   // ━━━ MANGABOT_CHERRY_BLOSSOM_ROMANCE ━━━
   MANGABOT_CHERRY_BLOSSOM_ROMANCE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
     const dramaSection = drama ? `\n━━━ PETAL DRAMA — render in scene ━━━\n${drama}\n\n` : '';
     return `You are an anime concept-art painter writing a CHERRY-BLOSSOM-ROMANCE keyframe for MangaBot — a solo character in a tender romantic moment under sakura. 5cm-per-second / Shinkai / Toradora / Your-Lie-In-April tradition. PINK petal-cascade mandate.
 
@@ -636,7 +652,23 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
 
   // ━━━ MANGABOT_ROOFTOP_SUNSETS ━━━
   MANGABOT_ROOFTOP_SUNSETS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
     const dramaSection = drama ? `\n━━━ SUNSET DRAMA — render in scene ━━━\n${drama}\n\n` : '';
     return `You are an anime concept-art painter writing a ROOFTOP-SUNSETS keyframe for MangaBot — character ON a rooftop at golden-hour, ENGAGED with foreground/midground (NOT looking out at vista). Shinkai / KyoAni / Tamako-Market rooftop tradition.
 
@@ -1334,7 +1366,23 @@ Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO p
 
   // ━━━ MANGABOT_OCCULT_TOKYO ━━━
   MANGABOT_OCCULT_TOKYO: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
     const dramaSection = drama ? `\n━━━ OCCULT DRAMA — render in scene ━━━\n${drama}\n\n` : '';
     return `You are an anime concept-art painter writing an OCCULT-TOKYO keyframe for MangaBot — a solo character engaging with supernatural energy in modern urban Japan. Tokyo Ghoul / Jujutsu Kaisen / Mob Psycho / Bleach register.
 
@@ -1394,8 +1442,26 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
 
   // ━━━ MANGABOT_POST_APOCALYPTIC ━━━
   MANGABOT_POST_APOCALYPTIC: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
-    const dramaSection = drama ? `\n━━━ POST-APOCALYPTIC DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+    const dramaSection = drama
+      ? `\n━━━ POST-APOCALYPTIC DRAMA — render in scene ━━━\n${drama}\n\n`
+      : '';
     return `You are an anime concept-art painter writing a POST-APOCALYPTIC keyframe for MangaBot — a solo wanderer engaged with the ruined world. Trigun / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register. Quiet decay + nature reclaiming.
 
 ━━━ ETHNICITY LOCK ━━━
@@ -1454,7 +1520,23 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
 
   // ━━━ MANGABOT_BEACH_EPISODE ━━━
   MANGABOT_BEACH_EPISODE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
     const dramaSection = drama ? `\n━━━ BEACH DRAMA — render in scene ━━━\n${drama}\n\n` : '';
     return `You are an anime concept-art painter writing a BEACH-EPISODE keyframe for MangaBot — anime summer-arc vacation paradise. K-On / Free / Lucky-Star / Nichijou beach-arc register. Bright joy, warm sand, ocean shimmer.
 
@@ -1515,8 +1597,26 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
 
   // ━━━ MANGABOT_FESTIVAL_NIGHTS ━━━
   MANGABOT_FESTIVAL_NIGHTS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, ethnicity, archetype, skin, eyes, hair_color, hairstyle, outfit, accessory, setting, action, camera_framing, surprise_element, drama } = slots;
-    const dramaSection = drama ? `\n━━━ FIREWORK / LANTERN DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    const {
+      lighting,
+      atmosphere,
+      ethnicity,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      setting,
+      action,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+    const dramaSection = drama
+      ? `\n━━━ FIREWORK / LANTERN DRAMA — render in scene ━━━\n${drama}\n\n`
+      : '';
     return `You are an anime concept-art painter writing a FESTIVAL-NIGHTS keyframe for MangaBot — solo character at a Japanese summer matsuri. Yukata / lanterns / fireworks / food-stalls. Shinkai / KyoAni / Mamoru-Hosoda festival-scene register.
 
 ━━━ ETHNICITY LOCK ━━━
@@ -1581,10 +1681,27 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
   // saturated-vibrant per Kevin's 37-heart spread. Loose brushwork over tight
   // illustration.
   MANGABOT_GHIBLI_PAINTERLY: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, monumental_anchor, setting_type, scale_provers, tiny_figure_optional, lush_foreground, atmospheric_light, color_palette, cascade_motion, weather_air, camera_framing, surprise_element, drama } = slots;
-    const figureSection = (tiny_figure_optional && !/^no figure|^none|^absent|^architecture only/i.test(tiny_figure_optional))
-      ? `\n━━━ TINY FIGURE (scale prover, 5-10% of frame) ━━━\n${tiny_figure_optional}\n`
-      : `\n━━━ NO FIGURE ━━━\nArchitecture alone fills the frame. No human or creature.\n`;
+    const {
+      lighting,
+      atmosphere,
+      monumental_anchor,
+      setting_type,
+      scale_provers,
+      tiny_figure_optional,
+      lush_foreground,
+      atmospheric_light,
+      color_palette,
+      cascade_motion,
+      weather_air,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+    const figureSection =
+      tiny_figure_optional &&
+      !/^no figure|^none|^absent|^architecture only/i.test(tiny_figure_optional)
+        ? `\n━━━ TINY FIGURE (scale prover, 5-10% of frame) ━━━\n${tiny_figure_optional}\n`
+        : `\n━━━ NO FIGURE ━━━\nArchitecture alone fills the frame. No human or creature.\n`;
     const dramaSection = drama ? `\n━━━ EVENT / DRAMA — render in scene ━━━\n${drama}\n\n` : '';
     return `You are an anime concept-art painter writing a GHIBLI-PAINTERLY keyframe for MangaBot — SCENE-LED, monumental architecture as the HERO. Studio Ghibli / Mononoke / Castle-in-the-Sky / Spirited-Away / Howl's Moving Castle register. LOOSE HAND-PAINTED BRUSHWORK — Miyazaki storybook feel, NOT tight digital illustration.
 
@@ -1667,8 +1784,23 @@ Output ONLY raw 80-120 word scene description. NO preamble.`;
 
   // ━━━ MANGABOT_MYTHOLOGICAL_CREATURE — yokai is hero, human-witness for scale ━━━
   MANGABOT_MYTHOLOGICAL_CREATURE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, creature_type, creature_pose, creature_detail, shrine_or_setting, human_witness, aura_or_magic, foreground_element, camera_framing, surprise_element, drama } = slots;
-    const dramaSection = drama ? `\n━━━ SUPERNATURAL DRAMA — render in scene ━━━\n${drama}\n\n` : '';
+    const {
+      lighting,
+      atmosphere,
+      creature_type,
+      creature_pose,
+      creature_detail,
+      shrine_or_setting,
+      human_witness,
+      aura_or_magic,
+      foreground_element,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
+    const dramaSection = drama
+      ? `\n━━━ SUPERNATURAL DRAMA — render in scene ━━━\n${drama}\n\n`
+      : '';
     return `You are an anime concept-art painter writing a MYTHOLOGICAL-CREATURE keyframe for MangaBot — a YOKAI / Japanese mythological being as HERO. Mononoke / Spirited-Away / Kakuriyo / Mushishi / Hozuki-no-Reitetsu register. Kitsune / tengu / ryujin / yuki-onna / nekomata / oni / kappa.
 
 ━━━ AESTHETIC LOCK ━━━
@@ -1728,7 +1860,20 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
 
   // ━━━ MANGABOT_SPACE_OPERA — starship / cosmic is hero ━━━
   MANGABOT_SPACE_OPERA: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, ship_class, cosmic_setting, scale_provers, engine_or_signal, foreground_artifact, stellar_phenomenon, lighting_signature, camera_framing, surprise_element, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      ship_class,
+      cosmic_setting,
+      scale_provers,
+      engine_or_signal,
+      foreground_artifact,
+      stellar_phenomenon,
+      lighting_signature,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
     const dramaSection = drama ? `\n━━━ COSMIC DRAMA — render in scene ━━━\n${drama}\n\n` : '';
     return `You are an anime concept-art painter writing a SPACE-OPERA keyframe for MangaBot — STARSHIP or COSMIC station as hero. Cowboy-Bebop / Outlaw-Star / Macross / Galactic-Heroes / Yamato / GitS-SAC register.
 
@@ -1792,7 +1937,21 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
   //   1. T-pose-arms-out default → mech_posture pool seeded forward-loaded only
   //   2. Mt-Fuji-no-mech postcard → scale_provers + 50-80%-of-frame mandate
   MANGABOT_MECHA_HANGARS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, mech_class, mech_posture, hangar_setting, scale_provers, mech_detail, mech_weaponry_or_tool, steam_or_spark, light_signature, camera_framing, surprise_element, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      mech_class,
+      mech_posture,
+      hangar_setting,
+      scale_provers,
+      mech_detail,
+      mech_weaponry_or_tool,
+      steam_or_spark,
+      light_signature,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
     const dramaSection = drama ? `\n━━━ HANGAR EVENT — render in scene ━━━\n${drama}\n\n` : '';
     return `You are an anime concept-art painter writing a MECHA-HANGAR keyframe for MangaBot — a SCENE-LED giant-mecha frame where the MECH is the HERO. Gundam-RX78 / Eva / Patlabor / Macross / Code-Geass / Big-O / GitS register. Industrial-scale + dramatic light + dwarf-the-pilot proportions.
 
@@ -1866,7 +2025,20 @@ Output ONLY raw 100-130 word scene description. NO preamble.`;
 
   // ━━━ MANGABOT_ANIME_VILLAGE — SCENE-LED (no character DNA) ━━━
   MANGABOT_ANIME_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, village_anchor, architecture, streetscape_detail, foreground_element, inhabitant, wildlife_or_object, weather_air, camera_framing, surprise_element, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      village_anchor,
+      architecture,
+      streetscape_detail,
+      foreground_element,
+      inhabitant,
+      wildlife_or_object,
+      weather_air,
+      camera_framing,
+      surprise_element,
+      drama,
+    } = slots;
     const dramaSection = drama ? `\n━━━ VILLAGE DRAMA — render in scene ━━━\n${drama}\n\n` : '';
     return `You are an anime concept-art painter writing an ANIME-VILLAGE keyframe for MangaBot — a SCENE-LED village / streetscape / mountain-edge neighborhood as the HERO. Mushishi / Spice-and-Wolf / Mononoke pastoral OR Akihabara / Asakusa modern alleyways. Inhabitant figure for human scale, NOT a hero portrait.
 

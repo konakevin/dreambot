@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SHIP-CLASS entries for a MangaBot space-opera keyframe. SCENE-LED — each entry is the NAMED HERO STARSHIP or ORBITAL STATION that fills 40-70% of the frame. The ship IS the subject. Inhabitants are TINY scale-provers only.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SHIP-CLASS entries for a MangaBot space-opera keyframe. SCENE-LED — each entry is the NAMED HERO STARSHIP or ORBITAL STATION that fills 40-70% of the frame. The ship IS the subject. Inhabitants are TINY scale-provers only.
 
 ⚠️ CRITICAL ANTI-STAR-WARS / ANTI-STAR-TREK GUARDRAIL: NEVER write X-wing / TIE / Star Destroyer / Millennium Falcon / Imperial / Mandalorian / stormtrooper / Enterprise / starfleet / federation / Klingon / warp-nacelle. NEVER write generic western-sci-fi (Mass Effect / Expanse / Halo / Battlestar / Star Citizen / Elite Dangerous). Anime lineage ONLY.
 
@@ -70,4 +72,7 @@ DO NOT write:
 - Realistic-spacecraft language (real-world satellites, ISS, NASA, SpaceX)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

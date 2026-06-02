@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC scene descriptions for MangaBot's post-apocalyptic path. Each entry is 30-50 words. Setting-only.
+  metaPrompt: (
+    n
+  ) => `Write ${n} POST-APOCALYPTIC scene descriptions for MangaBot's post-apocalyptic path. Each entry is 30-50 words. Setting-only.
 
 CONTEXT: Anime post-apocalyptic — Trigun / Made-in-Abyss / Girls'-Last-Tour / Shinsekai-Yori / 7-Seeds / Yokohama-Kaidashi-Kikou / Studio-Khara aesthetic. Overgrown civilization, abandoned trains, broken highways, lone-wanderer-quiet. Beauty in decay. NOT horror. Quiet. Wistful. Reclaimed-by-nature.
 
@@ -47,4 +49,7 @@ Examples (write fresh):
 - "Half-collapsed amusement park with the ferris wheel tilted at thirty degrees, vines climbing the support beams, carousel horses half-buried in moss and undergrowth, faded paint, broken light bulbs strung between posts, soft sunset-amber haze, drifting dandelion seeds, distant overgrown skyline"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

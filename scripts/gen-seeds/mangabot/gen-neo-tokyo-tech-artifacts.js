@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} TECH-ARTIFACT entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry describes the SIGNATURE FUNCTIONAL TECH PROP in the scene — the lived-in cyberpunk machinery that's not signage but ACTUAL OBJECTS doing things.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TECH-ARTIFACT entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry describes the SIGNATURE FUNCTIONAL TECH PROP in the scene — the lived-in cyberpunk machinery that's not signage but ACTUAL OBJECTS doing things.
 
 Each entry: 12-22 words. ONE specific tech artifact with sensory detail (LED glow, mechanical wear, cable tangle, hum).
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Single mention without sensory detail (every entry needs glow / sound / motion / material truth)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

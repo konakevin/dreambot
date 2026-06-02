@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} LANDSCAPE SETTING entries for a MangaBot samurai-era keyframe. Each entry is the WORLD — the natural / historical-Japan landscape that wraps the scene. Decoupled from any specific character action.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LANDSCAPE SETTING entries for a MangaBot samurai-era keyframe. Each entry is the WORLD — the natural / historical-Japan landscape that wraps the scene. Decoupled from any specific character action.
 
 Each entry: 12-22 words. ONE specific historical-Japan landscape.
 
@@ -41,4 +43,7 @@ DO NOT write:
 - Specific named locations (Mount Hiei specific places — keep landscape generic + Japan-coded)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

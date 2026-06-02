@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} CHARACTER ROLE entries for a MangaBot samurai-era keyframe. Each entry describes the figure(s) in the frame — by ROLE only, NEVER by name. Mononoke / Demon-Slayer / Rurouni-Kenshin / Vagabond archetypes.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CHARACTER ROLE entries for a MangaBot samurai-era keyframe. Each entry describes the figure(s) in the frame — by ROLE only, NEVER by name. Mononoke / Demon-Slayer / Rurouni-Kenshin / Vagabond archetypes.
 
 Each entry: 10-22 words. Specifies WHO is in frame + COUNT (solo / pair / small group). Outfit and bearing are part of role but no specific identity.
 
@@ -37,4 +39,7 @@ DO NOT write:
 - Gore or violence — implied combat only
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

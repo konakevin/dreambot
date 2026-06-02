@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} TIME-OF-DAY entries for a MangaBot ghibli-countryside keyframe. Pure time register, decoupled from light source. WEIGHTED toward dramatic-light times (golden-hour / dusk / dawn / firefly-twilight) — Studio Ghibli's most poster-grade moments live here — but KEEP a strong minority of daylight variety.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TIME-OF-DAY entries for a MangaBot ghibli-countryside keyframe. Pure time register, decoupled from light source. WEIGHTED toward dramatic-light times (golden-hour / dusk / dawn / firefly-twilight) — Studio Ghibli's most poster-grade moments live here — but KEEP a strong minority of daylight variety.
 
 Each entry: 8-16 words. Names the time + sky color register + Ghibli atmospheric note.
 
@@ -40,4 +42,7 @@ DO NOT write:
 - Vague "early" / "late"
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

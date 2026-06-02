@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME VISTA descriptions for MangaBot's character paths. Each entry is 20-35 words. The vista is a SCALE-DEFINING backdrop visible behind/around the character — the awe-inspiring scenic anchor that makes each render feel like a wall-poster anime moment.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME VISTA descriptions for MangaBot's character paths. Each entry is 20-35 words. The vista is a SCALE-DEFINING backdrop visible behind/around the character — the awe-inspiring scenic anchor that makes each render feel like a wall-poster anime moment.
 
 CONTEXT: Shinkai-grade backgrounds. Lush, vibrant, frame-worthy. The character will be the foreground subject; this vista fills the upper-mid frame and dominates the horizon.
 
@@ -50,4 +52,7 @@ Examples (write fresh):
 - "Coastal cliffs at golden hour with the ocean stretching to a hazy horizon, distant fishing boats catching sunlight, gulls circling far below, salt-air haze receding to gradient sky"
 
 Output ONLY a valid JSON array of ${n} strings (20-35 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_ethnicity.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ETHNICITY-NOUN entries for post-apocalyptic MangaBot. Lone-wanderer in overgrown ruined Japan / Trigun-desert / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register. Each 6-12 words.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ETHNICITY-NOUN entries for post-apocalyptic MangaBot. Lone-wanderer in overgrown ruined Japan / Trigun-desert / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register. Each 6-12 words.
 
 Format: "[ethnicity] character, [wanderer feature anchor]"
 
@@ -21,4 +25,7 @@ DO write:
 DO NOT: just "anime character" / dated terms / "silhouette" / "lone shadow" / "looking off into distance" / multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

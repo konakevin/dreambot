@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} BACKGROUND-DETAIL entries for a MangaBot ANIME ISEKAI keyframe. Deep-distance anime-isekai-coded detail.
+  metaPrompt: (
+    n
+  ) => `Write ${n} BACKGROUND-DETAIL entries for a MangaBot ANIME ISEKAI keyframe. Deep-distance anime-isekai-coded detail.
 
 Each entry: 10-20 words. ONE anime-isekai deep-distance element.
 
@@ -49,4 +51,7 @@ DO NOT write:
 - Multiple details per entry
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

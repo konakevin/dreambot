@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME HAIR-COLOR descriptions for MangaBot's character paths (gender-neutral). Each entry is 8-16 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME HAIR-COLOR descriptions for MangaBot's character paths (gender-neutral). Each entry is 8-16 words.
 
 CONTEXT: Anime hair colors span the full vibrant palette — natural, vibrant, and supernatural. Iconic anime palette is a STATEMENT.
 
@@ -29,4 +31,7 @@ Examples (write fresh):
 - "vibrant emerald-green with dark-green roots, anime-saturated and bold"
 
 Output ONLY a valid JSON array of ${n} strings (8-16 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

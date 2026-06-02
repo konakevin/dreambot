@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} ACTION-MOMENT entries for a MangaBot neo-tokyo cyberpunk anime keyframe. CANDID mid-beat, never posed, never eye-contact with viewer.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ACTION-MOMENT entries for a MangaBot neo-tokyo cyberpunk anime keyframe. CANDID mid-beat, never posed, never eye-contact with viewer.
 
 CRITICAL VARIETY MANDATE: do NOT default to passive standing/walking/staring. Mix dynamic action with intimate moments. Spread across active / kinetic / quiet / intimate.
 
@@ -47,4 +49,7 @@ DO NOT write:
 - Multiple actions per entry — ONE clear verb-phase
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

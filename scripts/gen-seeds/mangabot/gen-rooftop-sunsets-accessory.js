@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/rooftop_sunsets_accessory.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROOFTOP-ACCESSORY entries — objects character is using/carrying ON the rooftop. Anchors them ENGAGED at the rooftop (not staring at vista).
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROOFTOP-ACCESSORY entries — objects character is using/carrying ON the rooftop. Anchors them ENGAGED at the rooftop (not staring at vista).
 
 Each 10-18 words. Object + use-detail.
 
@@ -32,4 +36,7 @@ DO NOT: weapons / dramatic / multiple per entry.
 Object MUST anchor character ENGAGED at rooftop, not staring out.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

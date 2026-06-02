@@ -183,17 +183,53 @@ module.exports = {
 
   // PATH-BESPOKE — MangaBot cherry-blossom-romance (2026-05-29 Phase 2.7).
   MANGABOT_CHERRY_BLOSSOM_ROMANCE: {
-    description: 'PATH-BESPOKE — solo tender romantic-moment under sakura. Pink palette + petal-cascade mandate. Forward-facing tender pose.',
-    slots: { universal: ['lighting', 'atmosphere'], bot: [], characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'], path: ['setting', 'action', 'camera_framing', 'surprise_element'] },
-    pickN: {}, conditionalLayer: { slot: 'drama', gate: 0.4 }, framingModes: null, anchorScaleRange: null,
+    description:
+      'PATH-BESPOKE — solo tender romantic-moment under sakura. Pink palette + petal-cascade mandate. Forward-facing tender pose.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
 
   // PATH-BESPOKE — MangaBot rooftop-sunsets (2026-05-29 Phase 2.8).
   // The audit-failure path. Character ENGAGED on rooftop, not gazing out.
   MANGABOT_ROOFTOP_SUNSETS: {
-    description: 'PATH-BESPOKE — rooftop-sunsets. Audit-failure path reconfigured: character ENGAGED with foreground/midground on rooftop, not back-of-character looking out. Sunset palette.',
-    slots: { universal: ['lighting', 'atmosphere'], bot: [], characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'], path: ['setting', 'action', 'camera_framing', 'surprise_element'] },
-    pickN: {}, conditionalLayer: { slot: 'drama', gate: 0.4 }, framingModes: null, anchorScaleRange: null,
+    description:
+      'PATH-BESPOKE — rooftop-sunsets. Audit-failure path reconfigured: character ENGAGED with foreground/midground on rooftop, not back-of-character looking out. Sunset palette.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['setting', 'action', 'camera_framing', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
 
   // PATH-BESPOKE — MangaBot slice-of-life (2026-05-29 Phase 2.6).
@@ -342,7 +378,16 @@ module.exports = {
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
       path: ['setting', 'action', 'camera_framing', 'surprise_element'],
     },
     pickN: {},
@@ -358,7 +403,16 @@ module.exports = {
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
       path: ['setting', 'action', 'camera_framing', 'surprise_element'],
     },
     pickN: {},
@@ -374,7 +428,16 @@ module.exports = {
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
       path: ['setting', 'action', 'camera_framing', 'surprise_element'],
     },
     pickN: {},
@@ -390,7 +453,16 @@ module.exports = {
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      characterDnaAxes: ['ethnicity', 'archetype', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      characterDnaAxes: [
+        'ethnicity',
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
       path: ['setting', 'action', 'camera_framing', 'surprise_element'],
     },
     pickN: {},
@@ -409,7 +481,7 @@ module.exports = {
   // cathedral-spire / lantern-cavern / forest-tower territory.
   MANGABOT_GHIBLI_PAINTERLY: {
     description:
-      'PATH-BESPOKE — MangaBot ghibli-painterly (2026-05-30 Phase 2.19). SCENE-LED monumental-architecture painterly-Ghibli. Floating castles, cathedral spires, lantern caverns, forest towers, sky-temples. Architecture is HERO at 50-70% of frame, optional tiny figure for scale. 11 bespoke axes designed from Kevin\'s 37-heart SDXL-era signal.',
+      "PATH-BESPOKE — MangaBot ghibli-painterly (2026-05-30 Phase 2.19). SCENE-LED monumental-architecture painterly-Ghibli. Floating castles, cathedral spires, lantern caverns, forest towers, sky-temples. Architecture is HERO at 50-70% of frame, optional tiny figure for scale. 11 bespoke axes designed from Kevin's 37-heart SDXL-era signal.",
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],

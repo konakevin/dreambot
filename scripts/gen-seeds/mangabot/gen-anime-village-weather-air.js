@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} WEATHER-AND-AIR entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a SPECIFIC atmospheric / weather condition that wraps the village in mood + atmospheric depth. Aerial perspective haze IS encouraged; volumetric fog should be specific not vague.
+  metaPrompt: (
+    n
+  ) => `Write ${n} WEATHER-AND-AIR entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a SPECIFIC atmospheric / weather condition that wraps the village in mood + atmospheric depth. Aerial perspective haze IS encouraged; volumetric fog should be specific not vague.
 
 Each entry: 12-22 words. ONE specific weather + air condition. Adds depth via atmospheric perspective.
 
@@ -57,4 +59,7 @@ DO NOT write:
 - Multiple weather conditions per entry (pick ONE)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} WEATHER + AIR entries for a MangaBot ghibli-countryside keyframe. Each entry is the AIR-MOTION — what's drifting, swaying, dappling through the frame. Ghibli's air is ALIVE — wind in grass, dappled-shadow, mist, petals, fireflies.
+  metaPrompt: (
+    n
+  ) => `Write ${n} WEATHER + AIR entries for a MangaBot ghibli-countryside keyframe. Each entry is the AIR-MOTION — what's drifting, swaying, dappling through the frame. Ghibli's air is ALIVE — wind in grass, dappled-shadow, mist, petals, fireflies.
 
 Each entry: 10-20 words. ONE specific weather/air condition with sensory drift detail.
 
@@ -47,4 +49,7 @@ DO NOT write:
 - Static / lifeless descriptions
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

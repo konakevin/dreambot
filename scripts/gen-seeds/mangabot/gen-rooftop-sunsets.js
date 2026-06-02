@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ROOFTOP-SUNSET scene descriptions for MangaBot's rooftop-sunsets path. Each entry is 30-50 words. Setting-only.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROOFTOP-SUNSET scene descriptions for MangaBot's rooftop-sunsets path. Each entry is 30-50 words. Setting-only.
 
 CONTEXT: Anime rooftop / cityscape / golden-hour aesthetic. Shinkai / Your-Lie-in-April / Beyond-the-Boundary / Kimi-no-Na-wa / 5cm-per-Second visual vocabulary. Introspective, romantic, melancholic golden-hour vibe. Wind in hair. City below. Dramatic sky.
 
@@ -46,4 +48,7 @@ Examples (write fresh):
 - "Office-building helipad rooftop with painted circle markings at the center, painted Japanese kanji 'H' faded, distant Tokyo Tower silhouetted against violet-pink dusk sky, antennae and HVAC equipment in the foreground, drifting smoke from a distant chimney, blue-hour cool tones overtaking the warm sunset"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

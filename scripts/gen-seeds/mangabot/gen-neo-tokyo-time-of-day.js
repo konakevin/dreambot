@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} TIME-OF-DAY entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Heavily night-skewed — neo-tokyo lives at night. Pure time register, decoupled from the specific neon-light source (separate axis).
+  metaPrompt: (
+    n
+  ) => `Write ${n} TIME-OF-DAY entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Heavily night-skewed — neo-tokyo lives at night. Pure time register, decoupled from the specific neon-light source (separate axis).
 
 Each entry: 8-16 words. Names the time + sky color register.
 
@@ -35,4 +37,7 @@ DO NOT write:
 - Multiple times per entry — ONE clear time
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

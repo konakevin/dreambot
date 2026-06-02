@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} ACTION-MOMENT entries for a MangaBot ghibli-countryside keyframe. CANDID mid-task — the rural verb-phase the figure is caught in. Studio Ghibli quiet pastoral mid-moments — Kiki's deliveries, Mei's discoveries, Chihiro's pauses, Sheeta's quiet observations.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ACTION-MOMENT entries for a MangaBot ghibli-countryside keyframe. CANDID mid-task — the rural verb-phase the figure is caught in. Studio Ghibli quiet pastoral mid-moments — Kiki's deliveries, Mei's discoveries, Chihiro's pauses, Sheeta's quiet observations.
 
 Each entry: 8-18 words. ONE specific rural verb-phase with body-language detail.
 
@@ -47,4 +49,7 @@ DO NOT write:
 - Combat / weapons / violence
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

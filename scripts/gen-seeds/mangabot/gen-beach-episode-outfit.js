@@ -3,12 +3,19 @@ const { generatePool } = require('../../lib/seedGenHelper');
 const fs = require('fs');
 // R1: nuke prior pool — rebuild from scratch with stricter rules.
 const out = 'scripts/bots/mangabot/seeds/beach_episode_outfit.json';
-try { fs.writeFileSync(out, '["__STUB__"]'); console.log('reset pool to STUB-only for clean rebuild'); } catch(e){}
+try {
+  fs.writeFileSync(out, '["__STUB__"]');
+  console.log('reset pool to STUB-only for clean rebuild');
+} catch (e) {}
 
 generatePool({
   outPath: out,
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} BEACH-EPISODE OUTFIT entries — modest summer beachwear ONLY. K-On!/Free!/Lucky-Star wholesome-vacation register.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} BEACH-EPISODE OUTFIT entries — modest summer beachwear ONLY. K-On!/Free!/Lucky-Star wholesome-vacation register.
 
 ⚠️ ANTI-CHEESECAKE MANDATE — ABSOLUTELY NON-NEGOTIABLE — read carefully:
 
@@ -76,4 +83,7 @@ DO NOT (these triggered cheesecake renders before — NEVER produce these patter
 Bright joyful summer + explicit full coverage + age-appropriate vacation + single-garment focus.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

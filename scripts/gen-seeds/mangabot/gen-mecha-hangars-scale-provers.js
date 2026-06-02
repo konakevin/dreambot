@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SCALE-PROVER entries for a MangaBot mecha-hangar keyframe. THIS POOL'S ONLY JOB is to put a TINY HUMAN-SCALE element in the frame at the mech's feet / shoulders / hands so the mech reads MASSIVE.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SCALE-PROVER entries for a MangaBot mecha-hangar keyframe. THIS POOL'S ONLY JOB is to put a TINY HUMAN-SCALE element in the frame at the mech's feet / shoulders / hands so the mech reads MASSIVE.
 
 ⚠️ EVERY entry must include AT LEAST ONE tiny human-scale element. Without scale-provers, Flux renders a "medium-size action figure" instead of a giant mech. The mech is the hero; the scale-prover is a tiny depth-prop.
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Combat scene people
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

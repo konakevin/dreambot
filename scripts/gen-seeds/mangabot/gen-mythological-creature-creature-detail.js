@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CREATURE-DETAIL entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names ONE close-grained TEXTURE / ANATOMICAL / ICONOGRAPHIC detail on the yokai's body that gives it material truth and lineage specificity. This is the surface-texture pass that proves the creature is real and Japanese-myth-authentic.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CREATURE-DETAIL entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names ONE close-grained TEXTURE / ANATOMICAL / ICONOGRAPHIC detail on the yokai's body that gives it material truth and lineage specificity. This is the surface-texture pass that proves the creature is real and Japanese-myth-authentic.
 
 ⚠️ CRITICAL: ONLY Japanese-yokai iconography. NEVER western dragon scales / unicorn horn / mermaid tail / werewolf claws. NEVER WESTERN. Every detail must be a known yokai feature (kitsune fox-fire on tails / tengu beak-mask / ryujin scale-pattern / oni iron-club / yuki-onna kanzashi).
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Multi-feature dumps (pick ONE detail)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

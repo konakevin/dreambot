@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} STORY-PROP entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is a FOREGROUND NARRATIVE-IMPLYING OBJECT — the lived-in story layer. Cyberpunk-coded. Makes the viewer wonder "what happened here?"
+  metaPrompt: (
+    n
+  ) => `Write ${n} STORY-PROP entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is a FOREGROUND NARRATIVE-IMPLYING OBJECT — the lived-in story layer. Cyberpunk-coded. Makes the viewer wonder "what happened here?"
 
 Each entry: 12-22 words. ONE specific prop with material-truth detail (sparks / smoke / wet-glow / wear / spill).
 
@@ -41,4 +43,7 @@ DO NOT write:
 - Living creatures (animals belong to background_detail)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

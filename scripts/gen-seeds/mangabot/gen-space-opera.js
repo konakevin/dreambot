@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME SPACE-OPERA scene descriptions for MangaBot's space-opera path. Each entry is 30-50 words. Setting-only.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME SPACE-OPERA scene descriptions for MangaBot's space-opera path. Each entry is 30-50 words. Setting-only.
 
 CONTEXT: Anime cosmic / starship / orbital / galaxy aesthetic. Cowboy-Bebop / Outlaw-Star / Macross / Legend-of-Galactic-Heroes / Crest-of-the-Stars / Space-Battleship-Yamato / Captain-Harlock visual vocabulary. Vast cosmic scale, retrofuturistic starships, orbital cities, galaxy sunsets, nebula skies.
 
@@ -47,4 +49,7 @@ Examples (write fresh):
 - "Orbital-city rooftop at golden cosmic-hour, planet-curve dominating the lower frame with continents glowing, neon-lit Tokyo-style apartment-block silhouettes in the foreground, thin atmospheric haze separating city from planet, distant docking-tower with glowing landing-strobes, nebula-pink sky, drifting cosmic-dust"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

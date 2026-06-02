@@ -2,7 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/rooftop_sunsets_action.json',
-  total: 25, batch: 25, append: true,
+  total: 25,
+  batch: 25,
+  append: true,
   metaPrompt: (n) => `Write ${n} ROOFTOP-ACTION entries — CRITICAL FORWARD-FACING ONLY.
 
 ⚠️ THIS PATH IS THE ORIGINAL BACK-TO-CAMERA FAILURE MODE. The audit found rooftop-sunsets ALWAYS rendered as "back-of-character looking out over city". EVERY action entry must affirmatively position character ENGAGED with rooftop-prop / pet / instrument / food / person, FACING viewer or in profile — NEVER staring at distant city.
@@ -40,4 +42,7 @@ DO NOT — CRITICAL:
 Character ALWAYS engaged with rooftop-prop / pet / instrument / food / person. Sun-set is BACKDROP, never the target of their gaze.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

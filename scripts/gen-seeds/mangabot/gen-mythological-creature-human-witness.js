@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} HUMAN-WITNESS entries for a MangaBot mythological-creature keyframe. SCENE-LED — the YOKAI is the hero. The human-witness (when present) is TINY (5-15% of frame), serves as SCALE-PROVER only. Often absent — many entries should be "no human witness" so the creature stands alone.
+  metaPrompt: (
+    n
+  ) => `Write ${n} HUMAN-WITNESS entries for a MangaBot mythological-creature keyframe. SCENE-LED — the YOKAI is the hero. The human-witness (when present) is TINY (5-15% of frame), serves as SCALE-PROVER only. Often absent — many entries should be "no human witness" so the creature stands alone.
 
 ⚠️ CRITICAL ANTI-HERO-HUMAN GUARDRAIL: NEVER write a human-character that is hero-sized / centered / face-visible / portrait / close-up / chest-up. The yokai is the hero. Every human-figure must be EXPLICITLY scale-anchored — "tiny", "small", "distant", "background", "barely-visible", "silhouetted at distance". And ~30% of entries must be "no human witness — creature alone."
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Modern witness (salaryman / schoolgirl with phone — different paths)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

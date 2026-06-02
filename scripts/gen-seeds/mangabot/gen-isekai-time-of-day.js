@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} TIME-OF-DAY entries for a MangaBot ANIME ISEKAI keyframe. Pure time register, decoupled from light source.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TIME-OF-DAY entries for a MangaBot ANIME ISEKAI keyframe. Pure time register, decoupled from light source.
 
 Each entry: 8-16 words. Names time + anime fantasy sky register.
 
@@ -39,4 +41,7 @@ DO NOT write:
 - Multiple times per entry
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

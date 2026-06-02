@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} ARCHITECTURE entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names the SPECIFIC BUILDING DETAIL or facade that grounds the village frame (this is what gives the village its visual identity).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ARCHITECTURE entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names the SPECIFIC BUILDING DETAIL or facade that grounds the village frame (this is what gives the village its visual identity).
 
 Each entry: 12-22 words. ONE specific Japanese architectural element / building type / facade detail. Material truth + period coding.
 
@@ -58,4 +60,7 @@ DO NOT write:
 - Castles or fortresses (samurai-era path)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

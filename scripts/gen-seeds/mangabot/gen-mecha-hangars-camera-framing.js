@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA-FRAMING entries for a MangaBot mecha-hangar keyframe. THIS POOL'S JOB is to enforce LOW-ANGLE HERO framings that keep the MECH at 50-80% of the frame, NEVER tiny in distance.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA-FRAMING entries for a MangaBot mecha-hangar keyframe. THIS POOL'S JOB is to enforce LOW-ANGLE HERO framings that keep the MECH at 50-80% of the frame, NEVER tiny in distance.
 
 ⚠️ HARD BAN — REJECT INSTANTLY IF: top-down view / wide-establishing landscape / Mt-Fuji-postcard / mech-tiny-in-distance / aerial-overhead-far / "epic-vista with mech in the distance" / portrait-of-pilot-face-only. The mech is the hero; framing must put it BIG in the frame.
 
@@ -58,4 +60,7 @@ DO NOT write:
 - Photoreal camera specs (f-stops / mm)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

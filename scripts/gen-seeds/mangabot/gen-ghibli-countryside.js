@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} GHIBLI-COUNTRYSIDE scene descriptions for MangaBot's ghibli-countryside path. Each entry is 30-50 words. Setting-only.
+  metaPrompt: (
+    n
+  ) => `Write ${n} GHIBLI-COUNTRYSIDE scene descriptions for MangaBot's ghibli-countryside path. Each entry is 30-50 words. Setting-only.
 
 CONTEXT: Studio Ghibli pastoral wonder — Totoro / Kiki / Mononoke / Spirited-Away / Howl's / Whisper-of-the-Heart aesthetic. Rolling hills, windmills, farmhouses, magical realism, warm hand-painted backgrounds, cumulus clouds. The world is a CHARACTER. Sense of wonder and quiet magic.
 
@@ -45,4 +47,7 @@ Examples (write fresh):
 - "Stone bridge arching over a clear mountain stream, mossy boulders in the riverbed, ferns and wild grasses on the banks, a wooden lantern-post at the bridge entrance, dappled forest light filtering through cedar trees overhead, drifting cherry petals, soft sense of stillness"
 
 Output ONLY a valid JSON array of ${n} strings (30-50 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CREATURE-POSE entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names a LOADED MID-ACTION pose for a Japanese YOKAI hero (kitsune / tengu / ryujin / oni / yuki-onna / nekomata / kappa / tanuki / amabie / karakasa-obake / nure-onna / rokurokubi / inugami / bake-neko / namahage). The creature must be CAUGHT MID-MOTION — never a static portrait.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CREATURE-POSE entries for a MangaBot mythological-creature keyframe. SCENE-LED — each entry names a LOADED MID-ACTION pose for a Japanese YOKAI hero (kitsune / tengu / ryujin / oni / yuki-onna / nekomata / kappa / tanuki / amabie / karakasa-obake / nure-onna / rokurokubi / inugami / bake-neko / namahage). The creature must be CAUGHT MID-MOTION — never a static portrait.
 
 ⚠️ CRITICAL: poses must read as MID-ACTION dynamic. NEVER "standing", "posing", "looking at camera", "facing forward". The creature is DOING SOMETHING that loads the frame with story. Poses must work for yokai anatomy (tails / wings / coils / horns).
 
@@ -56,4 +58,7 @@ DO NOT write:
 - Multiple-pose sequences (one moment)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

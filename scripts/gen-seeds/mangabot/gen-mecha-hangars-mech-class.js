@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} MECH-CLASS entries for a MangaBot mecha-hangar keyframe. SCENE-LED — each entry names the LINEAGE + SILHOUETTE + 2 ICONIC COLORS + KEY HARDWARE so Flux locks the mech identity. The mech is the HERO of the frame (50-80% of canvas).
+  metaPrompt: (
+    n
+  ) => `Write ${n} MECH-CLASS entries for a MangaBot mecha-hangar keyframe. SCENE-LED — each entry names the LINEAGE + SILHOUETTE + 2 ICONIC COLORS + KEY HARDWARE so Flux locks the mech identity. The mech is the HERO of the frame (50-80% of canvas).
 
 Each entry: 12-22 words. ONE specific anime-mech class. Genre-specific lineage. Include silhouette descriptor + 2 visual colors + iconic shape/hardware.
 
@@ -44,4 +46,7 @@ DO NOT write:
 - Pilots / crew / characters (lives in scale_provers)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

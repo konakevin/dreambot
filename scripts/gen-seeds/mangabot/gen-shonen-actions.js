@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/shonen_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SHONEN ACTION MOMENT descriptions for MangaBot — big kinetic anime fight/power-up/clash moments. Demon Slayer / Naruto / Dragon Ball / Jujutsu Kaisen / Bleach / One Piece energy. These are THE MOMENT — mid-clash, mid-power-up, mid-technique.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SHONEN ACTION MOMENT descriptions for MangaBot — big kinetic anime fight/power-up/clash moments. Demon Slayer / Naruto / Dragon Ball / Jujutsu Kaisen / Bleach / One Piece energy. These are THE MOMENT — mid-clash, mid-power-up, mid-technique.
 
 Each entry: 15-25 words. One specific action moment with character archetype + technique + energy.
 
@@ -27,4 +29,7 @@ Each entry: 15-25 words. One specific action moment with character archetype + t
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

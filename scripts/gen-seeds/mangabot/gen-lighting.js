@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/lighting.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for MangaBot — anime-specific named lighting treatments.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING descriptions for MangaBot — anime-specific named lighting treatments.
 
 Each entry: 10-20 words. One specific anime lighting treatment.
 
@@ -47,4 +49,7 @@ Each entry: 10-20 words. One specific anime lighting treatment.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

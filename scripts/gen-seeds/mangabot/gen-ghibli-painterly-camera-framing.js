@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA FRAMING entries for a MangaBot ghibli-painterly keyframe. Architecture is HERO at 50-70% of frame. NEVER hero-character close-up. NEVER tiny-anchor-in-distance Mt-Fuji-postcard.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA FRAMING entries for a MangaBot ghibli-painterly keyframe. Architecture is HERO at 50-70% of frame. NEVER hero-character close-up. NEVER tiny-anchor-in-distance Mt-Fuji-postcard.
 
 Each entry: 12-20 words. ONE specific camera framing with explicit composition cue — must result in architecture-as-hero with scale provers visible.
 
@@ -36,4 +38,7 @@ DO NOT write:
 - Top-down birds-eye that flattens the anchor
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

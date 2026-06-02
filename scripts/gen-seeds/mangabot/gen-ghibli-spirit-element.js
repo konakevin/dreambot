@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} SPIRIT-ELEMENT entries for a MangaBot ghibli-countryside keyframe. Each entry is a SUBTLE MAGICAL-REALISM accent — the Ghibli moment where the world reveals itself alive. Fires at 40% gate; when it appears, it's a small element, never the whole frame.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SPIRIT-ELEMENT entries for a MangaBot ghibli-countryside keyframe. Each entry is a SUBTLE MAGICAL-REALISM accent — the Ghibli moment where the world reveals itself alive. Fires at 40% gate; when it appears, it's a small element, never the whole frame.
 
 Each entry: 10-20 words. ONE specific subtle magical element with material-truth detail.
 
@@ -51,4 +53,7 @@ DO NOT write:
 - Cyberpunk / horror tone — keep Ghibli's quiet-reverent register
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

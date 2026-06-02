@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cozy_anime_moments.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COZY ANIME MOMENT descriptions for MangaBot's cozy-anime path — Ghibli-warm heartwarming slower-paced vignettes. Totoro / Ponyo / Kiki / Whisper of the Heart energy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY ANIME MOMENT descriptions for MangaBot's cozy-anime path — Ghibli-warm heartwarming slower-paced vignettes. Totoro / Ponyo / Kiki / Whisper of the Heart energy.
 
 Each entry: 15-30 words. One specific Ghibli-warm cozy moment.
 
@@ -33,4 +35,7 @@ Each entry: 15-30 words. One specific Ghibli-warm cozy moment.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

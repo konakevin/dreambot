@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} WILDLIFE-OR-OBJECT entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a SMALL WILDLIFE PRESENCE or AMBIENT OBJECT that adds living-world texture across the village frame. Adds genre-coded atmosphere without becoming a focal subject.
+  metaPrompt: (
+    n
+  ) => `Write ${n} WILDLIFE-OR-OBJECT entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a SMALL WILDLIFE PRESENCE or AMBIENT OBJECT that adds living-world texture across the village frame. Adds genre-coded atmosphere without becoming a focal subject.
 
 Each entry: 12-22 words. ONE specific wildlife OR object presence. Scale should serve the village (NOT dominate).
 
@@ -58,4 +60,7 @@ DO NOT write:
 - Western wildlife
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

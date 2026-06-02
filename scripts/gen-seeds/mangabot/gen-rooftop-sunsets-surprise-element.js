@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/rooftop_sunsets_surprise_element.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROOFTOP-SURPRISE-ELEMENT entries — small Tokyo-rooftop secondary subjects at midground/background.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROOFTOP-SURPRISE-ELEMENT entries — small Tokyo-rooftop secondary subjects at midground/background.
 
 Each 10-18 words. Element + placement + rooftop-Tokyo implication.
 
@@ -30,4 +34,7 @@ DO write:
 DO NOT: anything foreground competing / multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

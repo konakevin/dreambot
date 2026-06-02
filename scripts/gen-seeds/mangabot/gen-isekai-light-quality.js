@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} LIGHT-QUALITY entries for a MangaBot ANIME ISEKAI keyframe. Anime fantasy palette — saturated cel-shaded register. NOT Western photoreal medieval.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHT-QUALITY entries for a MangaBot ANIME ISEKAI keyframe. Anime fantasy palette — saturated cel-shaded register. NOT Western photoreal medieval.
 
 Each entry: 10-20 words. ONE anime-isekai light source with direction + color + warmth.
 
@@ -50,4 +52,7 @@ DO NOT write:
 - Muted military / gritty palette
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

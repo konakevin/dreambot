@@ -2,7 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/occult_tokyo_action.json',
-  total: 25, batch: 25, append: true,
+  total: 25,
+  batch: 25,
+  append: true,
   metaPrompt: (n) => `Write ${n} OCCULT-TOKYO ACTION entries — CRITICAL FORWARD-FACING ONLY.
 
 ⚠️ ANTI-BACK-TO-CAMERA MANDATE. Every action entry must affirmatively position character ENGAGED with an occult-prop / sigil / shikigami / ofuda / weapon / spirit, FACING viewer or in profile — NEVER staring at distant city / spirit / horizon.
@@ -42,4 +44,7 @@ DO NOT — CRITICAL:
 Character ALWAYS engaged with occult-prop / sigil / weapon / spirit AT HAND. Spirits / city / aura are BACKDROP, never the target of their gaze.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

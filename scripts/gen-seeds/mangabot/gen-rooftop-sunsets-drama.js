@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/rooftop_sunsets_drama.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} ROOFTOP-SUNSETS DRAMA entries — 40%-gated subtle events at rooftop, NEVER positioning character back-to-camera.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} ROOFTOP-SUNSETS DRAMA entries — 40%-gated subtle events at rooftop, NEVER positioning character back-to-camera.
 
 Each 12-20 words. Event + sunset aesthetic + frame placement.
 
@@ -31,4 +35,7 @@ DO NOT: drama positioning her back-to-camera. Drama she's FACING AWAY to admire.
 Drama enhances rooftop atmosphere. She's INSIDE it engaged, NOT staring out at it.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

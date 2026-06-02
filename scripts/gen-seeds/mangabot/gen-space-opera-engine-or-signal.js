@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} ENGINE-OR-SIGNAL entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE specific propulsion-glow / signal-emission / charge-effect originating from the hero ship. This is the energy SIGNATURE that proves the ship is alive.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ENGINE-OR-SIGNAL entries for a MangaBot space-opera keyframe. SCENE-LED — each entry names ONE specific propulsion-glow / signal-emission / charge-effect originating from the hero ship. This is the energy SIGNATURE that proves the ship is alive.
 
 Each entry: 12-22 words. ONE specific anime-coded propulsion or signal effect. Bright + readable against the cosmic backdrop.
 
@@ -54,4 +56,7 @@ DO NOT write:
 - Multiple effects per entry — name ONE clear engine/signal source
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

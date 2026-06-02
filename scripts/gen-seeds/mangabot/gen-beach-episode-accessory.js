@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/beach_episode_accessory.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} BEACH-EPISODE ACCESSORY entries — summer vacation objects the character is holding/wearing. Wholesome K-On!/Free!/Lucky-Star tone.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} BEACH-EPISODE ACCESSORY entries — summer vacation objects the character is holding/wearing. Wholesome K-On!/Free!/Lucky-Star tone.
 
 Each 10-18 words. Object + tactile-summer detail.
 
@@ -38,4 +42,7 @@ DO write:
 DO NOT: weapons / cheesecake / lingerie / suggestive props / photoreal-catalog / multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

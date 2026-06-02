@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/beach_episode_archetype.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} BEACH-EPISODE ARCHETYPE entries — characters mid-summer-vacation. K-On!/Free!/Lucky-Star/Nichijou bright-joy register. MIX GENDERS roughly 50/50.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} BEACH-EPISODE ARCHETYPE entries — characters mid-summer-vacation. K-On!/Free!/Lucky-Star/Nichijou bright-joy register. MIX GENDERS roughly 50/50.
 
 Each 12-22 words. Role + summer-vacation-coded tone + signature visual.
 
@@ -34,4 +38,7 @@ DO write:
 DO NOT: cheesecake / "voluptuous" / "sultry beauty" / "bombshell" / pin-up-coded / oiled-skin / bikini-thong models. Multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_characters.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ANIME CHARACTER descriptions for MangaBot's anime-scene path — characters described BY ROLE only (never named). Mix of modern / traditional / mythic / futuristic. Full anime spectrum.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ANIME CHARACTER descriptions for MangaBot's anime-scene path — characters described BY ROLE only (never named). Mix of modern / traditional / mythic / futuristic. Full anime spectrum.
 
 Each entry: 10-20 words. One specific character archetype with distinguishing visual detail.
 
@@ -28,4 +30,7 @@ Each entry: 10-20 words. One specific character archetype with distinguishing vi
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

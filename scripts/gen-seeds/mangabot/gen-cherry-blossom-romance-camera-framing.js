@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cherry_blossom_romance_camera_framing.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA FRAMING entries for romance keyframe — tender intimate forward-facing or profile only.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA FRAMING entries for romance keyframe — tender intimate forward-facing or profile only.
 
 Each 8-16 words. Framing + character orientation + tender mood.
 
@@ -29,4 +33,7 @@ DO write:
 DO NOT: over-shoulder behind / wide-vista-with-character-tiny / silhouette-from-behind. Photoreal camera specs.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

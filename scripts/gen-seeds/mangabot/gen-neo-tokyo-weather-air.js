@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} WEATHER + AIR entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is the ATMOSPHERIC TREATMENT — what's falling, drifting, steaming, hazing through the air. Rain is dominant (Blade-Runner standard) but not always; vary the air-treatments.
+  metaPrompt: (
+    n
+  ) => `Write ${n} WEATHER + AIR entries for a MangaBot neo-tokyo cyberpunk anime keyframe. Each entry is the ATMOSPHERIC TREATMENT — what's falling, drifting, steaming, hazing through the air. Rain is dominant (Blade-Runner standard) but not always; vary the air-treatments.
 
 Each entry: 10-20 words. ONE specific weather/air condition with sensory drift detail.
 
@@ -42,4 +44,7 @@ DO NOT write:
 - Pastel-colored air (must be neon-tinted or noir-dark or smog-haze)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

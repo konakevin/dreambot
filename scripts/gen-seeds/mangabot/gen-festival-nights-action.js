@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/festival_nights_action.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} FESTIVAL-NIGHTS ACTION entries — engaged matsuri mid-moments. FORWARD-FACING ONLY. Each 12-20 words.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} FESTIVAL-NIGHTS ACTION entries — engaged matsuri mid-moments. FORWARD-FACING ONLY. Each 12-20 words.
 
 ⚠️ CRITICAL: NEVER "looking up at fireworks back-to-camera", NEVER "watching the display from behind", NEVER "facing-away staring at sky". This IS the genre's #1 failure mode. Action must be ENGAGED with food / stall / partner / object — face TOWARD camera or three-quarter.
 
@@ -38,4 +42,7 @@ DO write:
 DO NOT: "looking up at fireworks back-to-camera" / "watching display from behind" / "facing-away in silhouette" / "back-to-viewer admiring hanabi" — these are the named failure mode. Cheesecake-suggestive. Multiple per entry. Yukata-slipping descriptors.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

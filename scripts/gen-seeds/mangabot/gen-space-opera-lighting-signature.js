@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} LIGHTING-SIGNATURE entries for a MangaBot space-opera keyframe. SCENE-LED — each entry describes the specific LIGHT QUALITY catching the hero ship's hull. Anime cosmic-cinematography lighting (Cowboy-Bebop low-key + jewel-tones / Macross Itano-circus-color / Yamato cinematic-rim-light / Galactic-Heroes operatic-window-glow).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING-SIGNATURE entries for a MangaBot space-opera keyframe. SCENE-LED — each entry describes the specific LIGHT QUALITY catching the hero ship's hull. Anime cosmic-cinematography lighting (Cowboy-Bebop low-key + jewel-tones / Macross Itano-circus-color / Yamato cinematic-rim-light / Galactic-Heroes operatic-window-glow).
 
 Each entry: 12-22 words. ONE specific lighting signature. Names color + direction + surface-quality.
 
@@ -53,4 +55,7 @@ DO NOT write:
 - Camera specs (no f-stop / mm)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

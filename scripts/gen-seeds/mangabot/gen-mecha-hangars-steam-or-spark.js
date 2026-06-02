@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} STEAM-OR-SPARK entries for a MangaBot mecha-hangar keyframe. Each entry describes the atmospheric vapor / electrical / particulate detail that gives the hangar its mechanical aliveness. Steam, sparks, dust, vapor, engine-glow, weld-arcs, etc.
+  metaPrompt: (
+    n
+  ) => `Write ${n} STEAM-OR-SPARK entries for a MangaBot mecha-hangar keyframe. Each entry describes the atmospheric vapor / electrical / particulate detail that gives the hangar its mechanical aliveness. Steam, sparks, dust, vapor, engine-glow, weld-arcs, etc.
 
 Each entry: 12-20 words. ONE specific atmospheric phenomenon. Always READABLE (light-catching particles).
 
@@ -52,4 +54,7 @@ DO NOT write:
 - Heavy volumetric whiteout (atmospheric, not floor-to-ceiling fog)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

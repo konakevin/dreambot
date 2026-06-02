@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} MAGIC-EFFECT entries for a MangaBot ANIME ISEKAI keyframe. SIGNATURE anime isekai visual magic — runes, status-windows, mana-glow, summon-circles, level-up effects. RPG-game-coded.
+  metaPrompt: (
+    n
+  ) => `Write ${n} MAGIC-EFFECT entries for a MangaBot ANIME ISEKAI keyframe. SIGNATURE anime isekai visual magic — runes, status-windows, mana-glow, summon-circles, level-up effects. RPG-game-coded.
 
 Each entry: 10-22 words. ONE specific anime-isekai magic visual.
 
@@ -49,4 +51,7 @@ DO NOT write:
 - Generic "magic" without specifying anime-isekai signature
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

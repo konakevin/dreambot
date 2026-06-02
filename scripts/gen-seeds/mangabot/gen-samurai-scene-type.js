@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} SCENE-TYPE entries for a MangaBot samurai-era keyframe. Each entry is the COMPOSITION LEAD — what kind of frame this is, what the camera is showing, how the character(s) are placed in the world.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SCENE-TYPE entries for a MangaBot samurai-era keyframe. Each entry is the COMPOSITION LEAD — what kind of frame this is, what the camera is showing, how the character(s) are placed in the world.
 
 Each entry: 14-28 words. ONE specific composition concept. NOT a full scene description — just the composition skeleton.
 
@@ -34,4 +36,7 @@ DO NOT write:
 - Photoreal camera language
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

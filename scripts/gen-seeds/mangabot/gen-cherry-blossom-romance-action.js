@@ -2,7 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cherry_blossom_romance_action.json',
-  total: 25, batch: 25, append: true,
+  total: 25,
+  batch: 25,
+  append: true,
   metaPrompt: (n) => `Write ${n} ROMANCE ACTION entries — tender mid-moments. FORWARD-FACING ONLY.
 
 ⚠️ Never "looking out at sakura distance" / "walking away under blossoms" — back-to-camera traps.
@@ -33,4 +35,7 @@ DO write:
 DO NOT: walking-away / facing-away-to-admire / looking-out — back-to-camera traps. Cheesecake-suggestive. Multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

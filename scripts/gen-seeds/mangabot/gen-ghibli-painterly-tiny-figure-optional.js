@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} TINY FIGURE entries for a MangaBot ghibli-painterly keyframe. The figure (if present) is a SCALE PROVER at 5-10% of frame, NOT a hero portrait. About 30% of entries should be "NO FIGURE" so the architecture stands alone. NEVER a close-up character.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TINY FIGURE entries for a MangaBot ghibli-painterly keyframe. The figure (if present) is a SCALE PROVER at 5-10% of frame, NOT a hero portrait. About 30% of entries should be "NO FIGURE" so the architecture stands alone. NEVER a close-up character.
 
 Each entry: 10-18 words. ONE specific small figure (or absence). MUST be tiny relative to the monumental anchor.
 
@@ -37,4 +39,7 @@ DO NOT write:
 - Western character types
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

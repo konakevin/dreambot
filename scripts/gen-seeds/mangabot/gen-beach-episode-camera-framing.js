@@ -2,8 +2,12 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/beach_episode_camera_framing.json',
-  total: 25, batch: 25, append: true,
-  metaPrompt: (n) => `Write ${n} CAMERA FRAMING entries for BEACH-EPISODE keyframe — bright joyful summer-vacation FORWARD-FACING ONLY.
+  total: 25,
+  batch: 25,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `Write ${n} CAMERA FRAMING entries for BEACH-EPISODE keyframe — bright joyful summer-vacation FORWARD-FACING ONLY.
 
 ⚠️ ANTI-BACK-TO-CAMERA: no "back-to-viewer at shoreline" / no "silhouette-from-behind facing ocean" / no "over-shoulder gazing at horizon".
 ⚠️ ANTI-CHEESECAKE: no "low-angle from feet up legs" / no "tracking-down-the-body" / no "lingering-on-curves" — wholesome framings only.
@@ -37,4 +41,7 @@ DO write:
 DO NOT: over-shoulder behind-character-facing-away / silhouette-from-behind / wide-vista-with-character-tiny / low-angle-up-the-body / tracking-curves / photoreal-camera-specs. Multiple per entry.
 
 Return ONLY JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

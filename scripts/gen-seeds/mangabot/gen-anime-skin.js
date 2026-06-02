@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} ANIME CHARACTER SKIN descriptions for MangaBot's character paths (gender-neutral — used for both male and female). Each entry is 12-22 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} ANIME CHARACTER SKIN descriptions for MangaBot's character paths (gender-neutral — used for both male and female). Each entry is 12-22 words.
 
 CONTEXT: Anime art skin tone descriptors — varied across the anime palette range. NOT photoreal pore-detail; this is stylized anime cell-shading.
 
@@ -29,4 +31,7 @@ Examples (write fresh):
 - "warm beige tone with a faint scar at the temple, golden-hour glow along the brow line"
 
 Output ONLY a valid JSON array of ${n} strings (12-22 words each). No preamble, no commentary.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

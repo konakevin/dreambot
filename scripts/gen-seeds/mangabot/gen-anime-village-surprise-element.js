@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SURPRISE-ELEMENT entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names ONE SUBTLE MOMENT that gives the frame a story-tick (the loaded instant that takes a static-postcard into a keyframe).
+  metaPrompt: (
+    n
+  ) => `Write ${n} SURPRISE-ELEMENT entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names ONE SUBTLE MOMENT that gives the frame a story-tick (the loaded instant that takes a static-postcard into a keyframe).
 
 Each entry: 12-22 words. ONE specific subtle moment. NOT dramatic, NOT a hero action — just a quiet beat that pricks the frame alive.
 
@@ -57,4 +59,7 @@ DO NOT write:
 - Generic "movement" — name a SPECIFIC subtle moment
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

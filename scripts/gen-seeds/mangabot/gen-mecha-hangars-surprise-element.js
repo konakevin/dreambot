@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} SURPRISE-ELEMENT entries for a MangaBot mecha-hangar keyframe. Each entry adds ONE small narrative-beat or sensory grace-note that makes the scene alive — NEVER a distraction that competes with the mech.
+  metaPrompt: (
+    n
+  ) => `Write ${n} SURPRISE-ELEMENT entries for a MangaBot mecha-hangar keyframe. Each entry adds ONE small narrative-beat or sensory grace-note that makes the scene alive — NEVER a distraction that competes with the mech.
 
 Each entry: 10-18 words. ONE subtle moment. Must support, not steal, the mech-hero composition.
 
@@ -52,4 +54,7 @@ DO NOT write:
 - "Magical sparkles" / non-mecha fantasy elements
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

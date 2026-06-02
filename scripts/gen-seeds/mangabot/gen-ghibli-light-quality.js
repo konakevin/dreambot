@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} LIGHT-QUALITY entries for a MangaBot ghibli-countryside keyframe. Each entry is the LIGHTING TREATMENT — soft warm Ghibli light, AMPLIFIED toward dramatic-poster-light registers (god-rays, dappled-sun, sunset-glow, dawn-rim, firefly-glow) while keeping daylight variety.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHT-QUALITY entries for a MangaBot ghibli-countryside keyframe. Each entry is the LIGHTING TREATMENT — soft warm Ghibli light, AMPLIFIED toward dramatic-poster-light registers (god-rays, dappled-sun, sunset-glow, dawn-rim, firefly-glow) while keeping daylight variety.
 
 Each entry: 10-20 words. ONE light quality with direction + warmth + dramatic accent.
 
@@ -50,4 +52,7 @@ DO NOT write:
 - Light without color/warmth descriptor
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

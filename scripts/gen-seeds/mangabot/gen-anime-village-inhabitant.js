@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `Write ${n} INHABITANT entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a TINY HUMAN-SCALE FIGURE who appears at 5-15% of frame to ground the scale of the village. THIS IS NOT A HERO PORTRAIT. The figure must be SMALL, MID-DISTANCE, and visibly engaged in a humble task that anchors but never dominates.
+  metaPrompt: (
+    n
+  ) => `Write ${n} INHABITANT entries for a MangaBot anime-village keyframe. SCENE-LED — each entry names a TINY HUMAN-SCALE FIGURE who appears at 5-15% of frame to ground the scale of the village. THIS IS NOT A HERO PORTRAIT. The figure must be SMALL, MID-DISTANCE, and visibly engaged in a humble task that anchors but never dominates.
 
 ⚠️ CRITICAL ANTI-HERO-PORTRAIT GUARDRAIL: Every entry MUST contain explicit scale language — "tiny", "small", "distant", "mid-distance", "background figure", "small in frame", "5-10% of frame", "barely visible". Every entry must IMPLY the figure occupies a fraction of the frame, never centered or close-up.
 
@@ -58,4 +60,7 @@ DO NOT write:
 - Western dress
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

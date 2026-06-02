@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} LIGHT DRAMA entries for a MangaBot samurai-era keyframe. Each entry is the STRONG DIRECTIONAL LIGHT SOURCE that gives the scene its cinematic key — separate from time-of-day (that's a different axis).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHT DRAMA entries for a MangaBot samurai-era keyframe. Each entry is the STRONG DIRECTIONAL LIGHT SOURCE that gives the scene its cinematic key — separate from time-of-day (that's a different axis).
 
 Each entry: 10-20 words. ONE specific dramatic lighting effect with direction + quality.
 
@@ -41,4 +43,7 @@ DO NOT write:
 - Modern artificial lights (LEDs, streetlamps, neon)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

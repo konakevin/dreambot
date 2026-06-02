@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `Write ${n} EMOTIONAL-DNA entries for a MangaBot ANIME ISEKAI keyframe. Anime-isekai mood — adventure / cozy / dramatic / comedic. Frieren / Konosuba / Re:Zero / Slime mood library.
+  metaPrompt: (
+    n
+  ) => `Write ${n} EMOTIONAL-DNA entries for a MangaBot ANIME ISEKAI keyframe. Anime-isekai mood — adventure / cozy / dramatic / comedic. Frieren / Konosuba / Re:Zero / Slime mood library.
 
 Each entry: 8-16 words. Names mood + physical cue.
 
@@ -50,4 +52,7 @@ DO NOT write:
 - Eye-contact with viewer
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

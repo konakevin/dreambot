@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mangabot/seeds/mythological_beings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MYTHOLOGICAL BEING descriptions for MangaBot's mythological-creature path — specific Japanese mythological creatures as hero subject. Draw authentically from Japanese mythology, not vague fantasy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MYTHOLOGICAL BEING descriptions for MangaBot's mythological-creature path — specific Japanese mythological creatures as hero subject. Draw authentically from Japanese mythology, not vague fantasy.
 
 Each entry: 15-30 words. One specific mythological being with characteristic visual detail.
 
@@ -39,4 +41,7 @@ Each entry: 15-30 words. One specific mythological being with characteristic vis
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

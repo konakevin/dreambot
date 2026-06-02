@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `Write ${n} TIME-OF-DAY entries for a MangaBot samurai-era keyframe. Each entry is PURE TIME REGISTER — what time it is + the sky/atmosphere register that comes with it. Decoupled from the light source (that's a separate axis).
+  metaPrompt: (
+    n
+  ) => `Write ${n} TIME-OF-DAY entries for a MangaBot samurai-era keyframe. Each entry is PURE TIME REGISTER — what time it is + the sky/atmosphere register that comes with it. Decoupled from the light source (that's a separate axis).
 
 Each entry: 8-16 words. Names the time + sky color register + brief atmospheric note.
 
@@ -34,4 +36,7 @@ DO NOT write:
 - Modern sky-objects (aircraft, satellites, contrails)
 
 Return ONLY a JSON array of ${n} strings. No preamble.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
