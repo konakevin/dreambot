@@ -5,7 +5,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.TINY_BEACH, 'tiny_beach');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const includeCreature = Math.random() < 0.35;
-  const creature = includeCreature ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature') : null;
+  const creature = includeCreature
+    ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature')
+    : null;
 
   return `You are a master model-maker writing TINY BEACH / COASTAL DIORAMA scenes for TinyBot. Handmade-resin-diorama-scale coastal worlds — beaches, piers, lighthouses, beach huts, palm-thatch tropical cottages, weathered docks, surfboards, sailboats, tide pools, seashells. Cute miniature seaside magic. Output wraps with style prefix + suffix.
 

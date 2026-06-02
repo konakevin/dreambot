@@ -19,7 +19,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 15),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} WEATHER-OVERRIDE descriptions for TinyBot — visible atmospheric events that bend the render away from default "calm warm air at golden hour".
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WEATHER-OVERRIDE descriptions for TinyBot — visible atmospheric events that bend the render away from default "calm warm air at golden hour".
 
 Each entry: 10-20 words. The WEATHER event + the EXECUTION CUE (what makes it readable in a still image).
 
@@ -65,4 +67,7 @@ Examples:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.ENCHANTED_VILLAGE, 'enchanted_village');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const includeCreature = Math.random() < 0.4;
-  const creature = includeCreature ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature') : null;
+  const creature = includeCreature
+    ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature')
+    : null;
 
   return `You are a master diorama-artist writing ENCHANTED TWILIGHT VILLAGE scenes for TinyBot. Handmade-resin-diorama-scale fairy-tale architectures in LAVENDER / PURPLE / DUSTY-PINK / PEARL-WHITE palette set against DRAMATIC COOL DUSK SKY with WARM AMBER WINDOW-GLOW as the focal contrast. Twilight magic-hour cottagecore — fairy-tale architecture suspended in the deep cool-mauve atmosphere of blue hour, lit from within. Output wraps with style prefix + suffix.
 

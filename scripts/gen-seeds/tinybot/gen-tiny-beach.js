@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/tiny_beach.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TINY BEACH / COASTAL DIORAMA scene descriptions for TinyBot — handmade-resin-diorama-scale beach + pier + lighthouse + tropical-coast scenes. Cute miniature coastal worlds — sandy shores, weathered piers, lighthouses, surfboards, beach huts, palm trees, sailboats, tide pools, seashells.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TINY BEACH / COASTAL DIORAMA scene descriptions for TinyBot — handmade-resin-diorama-scale beach + pier + lighthouse + tropical-coast scenes. Cute miniature coastal worlds — sandy shores, weathered piers, lighthouses, surfboards, beach huts, palm trees, sailboats, tide pools, seashells.
 
 Each entry: 15-25 words. ONE specific tiny coastal scene with scale-cue + architectural or natural detail.
 
@@ -62,4 +64,7 @@ Deduplicate by: coastal-feature + time-of-day + atmospheric quality. "Lighthouse
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

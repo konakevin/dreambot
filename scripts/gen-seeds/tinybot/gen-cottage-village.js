@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/cottage_village.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MINIATURE COTTAGE VILLAGE scene descriptions for TinyBot — dollhouse-scale cottage villages photographed with a tilt-shift macro lens. Tiny thatched-roof cottages, cobblestone lanes, glowing windows, chimney smoke, village squares, stone bridges, market stalls — all at MINIATURE DIORAMA SCALE. These are exterior views of tiny villages, not interiors.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MINIATURE COTTAGE VILLAGE scene descriptions for TinyBot — dollhouse-scale cottage villages photographed with a tilt-shift macro lens. Tiny thatched-roof cottages, cobblestone lanes, glowing windows, chimney smoke, village squares, stone bridges, market stalls — all at MINIATURE DIORAMA SCALE. These are exterior views of tiny villages, not interiors.
 
 Each entry: 15-25 words. One specific miniature village scene with scale + architectural details.
 
@@ -43,4 +45,7 @@ Deduplicate by: village type + season/weather + specific architectural detail. "
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

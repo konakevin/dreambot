@@ -6,7 +6,9 @@ generatePool({
   append: true,
   batch: 25,
   maxTokens: 4000,
-  metaPrompt: (n) => `You are writing ${n} TINY-FOOD-WORLD scene descriptions for TinyBot — edible dioramas where REAL food becomes architecture and landscape at miniature scale. The food MUST READ AS REAL FOOD first, miniature world second. Studio Ghibli food-magic crossed with Great-British-Bake-Off + miniature wonder.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TINY-FOOD-WORLD scene descriptions for TinyBot — edible dioramas where REAL food becomes architecture and landscape at miniature scale. The food MUST READ AS REAL FOOD first, miniature world second. Studio Ghibli food-magic crossed with Great-British-Bake-Off + miniature wonder.
 
 Each entry: 18-28 words. ONE specific food-as-landscape scene with food-architecture detail.
 
@@ -72,4 +74,7 @@ Deduplicate by: food-base + scene-type + texture-detail. "Cake village with fros
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

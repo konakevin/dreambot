@@ -5,7 +5,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.PASTEL_VILLAGE, 'pastel_village');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const includeCreature = Math.random() < 0.55;
-  const creature = includeCreature ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature') : null;
+  const creature = includeCreature
+    ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature')
+    : null;
 
   return `You are a master diorama-artist writing PASTEL FAIRY-TALE VILLAGE scenes for TinyBot. Handmade-resin-diorama-scale fairy-tale architectures in soft PINK / LAVENDER / MAGENTA / LILAC / PEARL-WHITE palette with WARM-GOLDEN WINDOW-GLOW as the focal contrast. Dreamy snow-globe pastel-cottagecore aesthetic — a soft little world to escape into. Output wraps with style prefix + suffix.
 

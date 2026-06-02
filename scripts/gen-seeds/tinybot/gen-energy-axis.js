@@ -19,7 +19,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 15),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} ENERGY/MOOD-OVERRIDE descriptions for TinyBot — distinct emotional registers that push renders beyond the default "peaceful warm twilight cozy".
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENERGY/MOOD-OVERRIDE descriptions for TinyBot — distinct emotional registers that push renders beyond the default "peaceful warm twilight cozy".
 
 Each entry: 8-15 words. The MOOD/ENERGY + the VISUAL EXECUTION CUE (what makes it readable in a still — pose, composition, motion, stillness).
 
@@ -59,4 +61,7 @@ Examples:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

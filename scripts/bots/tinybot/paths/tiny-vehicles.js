@@ -5,7 +5,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const vehicle = picker.pickWithRecency(pools.TINY_VEHICLES, 'tiny_vehicle');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const includeCreature = Math.random() < 0.5;
-  const creature = includeCreature ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature') : null;
+  const creature = includeCreature
+    ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature')
+    : null;
 
   return `You are a master model-maker writing TINY-VEHICLE scenes for TinyBot. Delicate single miniature vehicles built from natural materials — walnut-shell sailboats with leaf sails, acorn-cap carriages drawn by snails, dandelion-seed parachutes, leaf hot-air balloons with twig baskets, mushroom-cap submarines, cricket-drawn chariots, beetle-elytra airships, paper-bird kites, twig-and-thread biplanes. The hero is the VEHICLE — beautifully crafted from real natural materials at hand-palm scale. Output wraps with style prefix + suffix.
 

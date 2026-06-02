@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/micro_fantasy.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MICRO-FANTASY scene descriptions for TinyBot — miniature-scale magical worlds. Tiny wizard towers, fairy bridges, miniature ruins, glowing portals hidden in moss, spell circles inside terrariums, enchanted miniature kingdoms. Everything at DOLLHOUSE SCALE — these are miniature fantasy dioramas, not full-scale fantasy landscapes.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MICRO-FANTASY scene descriptions for TinyBot — miniature-scale magical worlds. Tiny wizard towers, fairy bridges, miniature ruins, glowing portals hidden in moss, spell circles inside terrariums, enchanted miniature kingdoms. Everything at DOLLHOUSE SCALE — these are miniature fantasy dioramas, not full-scale fantasy landscapes.
 
 Each entry: 15-25 words. One specific micro-fantasy scene with scale + magic details.
 
@@ -38,4 +40,7 @@ Deduplicate by: setting type + magical element + specific details. "Wizard tower
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

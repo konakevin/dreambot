@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/macro_nature_subjects.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MACRO NATURE SUBJECT descriptions for TinyBot's macro-nature path — real nature at miniature scale as fantasy-kingdom. Mushroom-house, dewdrop-universe, acorn-pool, moss-forest.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MACRO NATURE SUBJECT descriptions for TinyBot's macro-nature path — real nature at miniature scale as fantasy-kingdom. Mushroom-house, dewdrop-universe, acorn-pool, moss-forest.
 
 Each entry: 15-30 words. One specific macro-nature scene.
 
@@ -54,4 +56,7 @@ Each entry: 15-30 words. One specific macro-nature scene.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

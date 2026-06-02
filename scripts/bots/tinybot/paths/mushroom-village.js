@@ -5,7 +5,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.MUSHROOM_VILLAGE, 'mushroom_village');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const includeCreature = Math.random() < 0.5;
-  const creature = includeCreature ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature') : null;
+  const creature = includeCreature
+    ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature')
+    : null;
 
   return `You are a master model-maker writing MUSHROOM-VILLAGE scenes for TinyBot. Fungal civilization at miniature scale — toadstool houses with carved doors and warm windows, acorn-cap roofs, lantern-mushrooms lighting moss paths, spore-light streetlamps, lichen carpets, fern canopies overhead, beetle-shell carts. Smurfs / Brambly Hedge / Beatrix Potter / Studio Ghibli energy at tilt-shift miniature scale. Output wraps with style prefix + suffix.
 

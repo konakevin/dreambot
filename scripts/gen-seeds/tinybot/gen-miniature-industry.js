@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/miniature_industry.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MINIATURE INDUSTRY scene descriptions for TinyBot — dollhouse-scale workshops, factories, train yards, construction sites, and maker spaces. The "wow, someone BUILT that" vibe. Every scene should feel like a master model-maker's proudest diorama.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MINIATURE INDUSTRY scene descriptions for TinyBot — dollhouse-scale workshops, factories, train yards, construction sites, and maker spaces. The "wow, someone BUILT that" vibe. Every scene should feel like a master model-maker's proudest diorama.
 
 Each entry: 15-25 words. One specific miniature industry scene with technical detail notes.
 
@@ -46,4 +48,7 @@ Deduplicate by: industry type + specific activity + unique tools. "Clockwork wor
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

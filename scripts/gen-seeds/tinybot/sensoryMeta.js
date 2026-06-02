@@ -41,7 +41,9 @@ ${SHARED_RULES}
 ━━━ DEDUP — share SOURCE and QUALITY = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `${n} TOUCH anchors for TinyBot's miniature scene. Felt/foam/moss/paper-craft textures.
+  touch: (
+    n
+  ) => `${n} TOUCH anchors for TinyBot's miniature scene. Felt/foam/moss/paper-craft textures.
 
 EXAMPLES (DO NOT REUSE):
 - "felt mushroom cap soft against the diorama floor"

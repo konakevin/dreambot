@@ -19,7 +19,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 20),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} BIOME-OVERRIDE descriptions for TinyBot — concrete ecosystems that the miniature scene will be transplanted INTO.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BIOME-OVERRIDE descriptions for TinyBot — concrete ecosystems that the miniature scene will be transplanted INTO.
 
 Each entry: 8-18 words. One specific biome with its signature visual element so Flux locks the look. The biome is the TERRAIN/ECOLOGY context — the path's scene seed (cottage / dollhouse / vehicle / mushroom) gets dropped into THIS biome at miniature scale.
 
@@ -60,4 +62,7 @@ Examples:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/pastel_village.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} PASTEL FAIRY-TALE VILLAGE scene descriptions for TinyBot — handmade-resin-diorama-scale fairytale architectures in soft pink / lavender / magenta / lilac / pearl-white palettes with warm-golden window-glow contrast. Dreamy pastel-cottagecore aesthetic — a soft little world to escape into.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PASTEL FAIRY-TALE VILLAGE scene descriptions for TinyBot — handmade-resin-diorama-scale fairytale architectures in soft pink / lavender / magenta / lilac / pearl-white palettes with warm-golden window-glow contrast. Dreamy pastel-cottagecore aesthetic — a soft little world to escape into.
 
 Each entry: 20-35 words. ONE specific pastel-fairytale scene with cherry-blossom-coded setting + golden-window-glow contrast + architectural fairy-tale hero.
 
@@ -64,4 +66,7 @@ Deduplicate by: architecture-type + setting + inhabitant. "Pink turreted cottage
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

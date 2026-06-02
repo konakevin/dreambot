@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/enchanted_village.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ENCHANTED TWILIGHT VILLAGE scene descriptions for TinyBot — handmade-resin-diorama-scale fairy-tale architectures at BLUE HOUR / TWILIGHT / DUSK, set against DRAMATIC DEEP-MAUVE / MIDNIGHT-NAVY / TWILIGHT-PURPLE skies with WARM AMBER WINDOW-GLOW as focal contrast.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENCHANTED TWILIGHT VILLAGE scene descriptions for TinyBot — handmade-resin-diorama-scale fairy-tale architectures at BLUE HOUR / TWILIGHT / DUSK, set against DRAMATIC DEEP-MAUVE / MIDNIGHT-NAVY / TWILIGHT-PURPLE skies with WARM AMBER WINDOW-GLOW as focal contrast.
 
 Each entry: 20-35 words. ONE specific enchanted-twilight scene with cool-dusk-sky + warm-amber-window-contrast + cherry-blossom-coded setting + lavender/purple fairy-tale architecture.
 
@@ -64,4 +66,7 @@ Deduplicate by: architecture-type + sky-condition + inhabitant. "Lavender castle
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

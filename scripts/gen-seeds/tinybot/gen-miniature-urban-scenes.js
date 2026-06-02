@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/miniature_urban_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MINIATURE URBAN SCENE descriptions for TinyBot's miniature-urban path — tiny perfect urban scenes. Tilt-shift makes real things feel dollhouse.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MINIATURE URBAN SCENE descriptions for TinyBot's miniature-urban path — tiny perfect urban scenes. Tilt-shift makes real things feel dollhouse.
 
 Each entry: 15-30 words. One specific miniature urban scene.
 
@@ -52,4 +54,7 @@ Each entry: 15-30 words. One specific miniature urban scene.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

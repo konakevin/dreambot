@@ -19,7 +19,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 15),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING-OVERRIDE descriptions for TinyBot — radical palette variety to break Flux's warm-cozy default.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING-OVERRIDE descriptions for TinyBot — radical palette variety to break Flux's warm-cozy default.
 
 Each entry: 8-18 words. One specific lighting situation with EXPLICIT PALETTE that bends Flux to a different corner of the color spectrum.
 
@@ -72,4 +74,7 @@ Examples:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

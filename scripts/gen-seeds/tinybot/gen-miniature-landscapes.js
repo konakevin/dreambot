@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/miniature_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MINIATURE LANDSCAPE descriptions for TinyBot's miniature-landscape path — master-modelmaker miniature landscapes. Rolling hills with countable trees, river-bridge, alpine, stone-cottage.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MINIATURE LANDSCAPE descriptions for TinyBot's miniature-landscape path — master-modelmaker miniature landscapes. Rolling hills with countable trees, river-bridge, alpine, stone-cottage.
 
 Each entry: 15-30 words. One specific handcrafted miniature landscape.
 
@@ -48,4 +50,7 @@ Each entry: 15-30 words. One specific handcrafted miniature landscape.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

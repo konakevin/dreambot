@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/tiny_vehicles.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} TINY-VEHICLE descriptions for TinyBot — delicate single miniature vehicles built from REAL natural materials at hand-palm scale. The vehicle is the HERO. Walnut-shell sailboats with leaf sails, acorn-cap carriages drawn by snails, dandelion-seed parachutes, leaf hot-air balloons with twig baskets, mushroom-cap submarines, cricket-drawn chariots, beetle-elytra airships, twig-and-thread biplanes.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TINY-VEHICLE descriptions for TinyBot — delicate single miniature vehicles built from REAL natural materials at hand-palm scale. The vehicle is the HERO. Walnut-shell sailboats with leaf sails, acorn-cap carriages drawn by snails, dandelion-seed parachutes, leaf hot-air balloons with twig baskets, mushroom-cap submarines, cricket-drawn chariots, beetle-elytra airships, twig-and-thread biplanes.
 
 Each entry: 18-28 words. ONE specific tiny vehicle with material detail + environment for scale.
 
@@ -94,4 +96,7 @@ Deduplicate by: vehicle-type + material + environment. "Walnut-shell boat on a p
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/tinybot/seeds/mushroom_village.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MUSHROOM-VILLAGE scene descriptions for TinyBot — fungal civilization at miniature diorama scale. Toadstool houses with carved doors and warm windows, acorn-cap roofs, lantern-mushrooms lighting moss paths, lichen carpets, fern canopies overhead, beetle-shell carts. Smurfs / Brambly Hedge / Beatrix Potter / Studio Ghibli energy at tilt-shift miniature scale. The mushrooms ARE the architecture.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MUSHROOM-VILLAGE scene descriptions for TinyBot — fungal civilization at miniature diorama scale. Toadstool houses with carved doors and warm windows, acorn-cap roofs, lantern-mushrooms lighting moss paths, lichen carpets, fern canopies overhead, beetle-shell carts. Smurfs / Brambly Hedge / Beatrix Potter / Studio Ghibli energy at tilt-shift miniature scale. The mushrooms ARE the architecture.
 
 Each entry: 18-28 words. ONE specific mushroom-village scene with fungal architecture + forest-floor environment.
 
@@ -70,4 +72,7 @@ Deduplicate by: mushroom-type + village-feature + season/time. "Red toadstool ho
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
