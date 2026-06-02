@@ -993,6 +993,62 @@ async function runBot(opts) {
         ? bot.rollSharedDNA({ vibeKey, medium, path: resolvedPath, picker })
         : {};
 
+      // 3b. PRE-PICK render model — moved earlier (2026-06-01) so the brief
+      // composer can apply model-aware entity-cap trimming before the
+      // template renders. High-faithfulness models (Flux 2 / Nano Banana /
+      // GPT Image 2) render every named entity crisply and produce chaotic
+      // frames with 6+ entities; older Flux 1.x soft-merges. See
+      // scripts/lib/modelDetailTiers.js. Conditional-layer overrides
+      // (night_mode) still happen post-buildBrief below.
+      //
+      // Priority here is the same as the legacy post-buildBrief site:
+      //   bot.modelByPath > bot.useModelPicker > the default declared at
+      //   the top of runBot ('flux-dev'). The night_mode override remains
+      //   downstream so a conditional brief signal can still swap models.
+      let renderInputOverrides = {};
+      if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
+        const modelVal = bot.modelByPath[resolvedPath];
+        // Support three formats:
+        //   string: 'flux-dev' — locked to one model
+        //   array:  ['flux-dev', 'flux-1.1-pro'] — uniform random pick
+        //   weighted object: { 'flux-1.1-pro': 65, 'flux-dev': 35 } — weighted random
+        if (typeof modelVal === 'object' && !Array.isArray(modelVal)) {
+          const entries = Object.entries(modelVal);
+          const totalW = entries.reduce((s, [, w]) => s + w, 0);
+          let roll = Math.random() * totalW;
+          renderModel = entries[entries.length - 1][0];
+          for (const [m, w] of entries) {
+            roll -= w;
+            if (roll <= 0) {
+              renderModel = m;
+              break;
+            }
+          }
+        } else {
+          renderModel = Array.isArray(modelVal)
+            ? modelVal[Math.floor(Math.random() * modelVal.length)]
+            : modelVal;
+        }
+        // SDXL needs explicit dimensions (PNG output is the global Flux default).
+        if (renderModel === 'sdxl')
+          renderInputOverrides = {
+            width: 768,
+            height: 1344,
+            num_inference_steps: 30,
+            guidance_scale: 7.5,
+          };
+        console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
+      } else if (bot.useModelPicker) {
+        const picked = await pickModel({
+          mediumKey: medium,
+          vibeKey: vibeKey,
+          allowedModels: bot.allowedModels,
+        });
+        renderModel = picked.model;
+        renderInputOverrides = picked.inputOverrides;
+        console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
+      }
+
       // 4. Optional text content (HumanBot/GlowBot thinking-bot pattern)
       textContent = null;
       if (bot.generateTextContent) {
@@ -1007,6 +1063,9 @@ async function runBot(opts) {
       }
 
       // 5. Build brief (or direct prompt if path opts out of Sonnet)
+      // `model` is the renderModel pre-picked above so the composer can
+      // apply entity-cap trimming for high-detail models. Bots that ignore
+      // the param work unchanged (backwards compatible).
       errorStage = 'build-brief';
       const briefResult = bot.buildBrief({
         path: resolvedPath,
@@ -1015,6 +1074,7 @@ async function runBot(opts) {
         vibeKey,
         medium,
         picker,
+        model: renderModel,
       });
 
       let middle;
@@ -1253,71 +1313,19 @@ async function runBot(opts) {
         .replace(/\s+,/g, ',')
         .trim();
 
-      // Resolve the render model BEFORE building the recipe — buildRecipe
-      // freezes recipe.model into the upload row, and DLT replay reads it
-      // back to pick the model on replay. Resolving after recipe-build
-      // (the prior order) silently stamped every recipe with the unmodified
-      // default ('flux-dev'), even on paths that modelByPath locked to
-      // flux-1.1-pro. DLT replay then re-rolled on flux-dev. See May 2026.
+      // Model is pre-picked at Phase 3b above so the composer can entity-cap
+      // for high-detail models. ONE late-stage override remains here: a
+      // conditional-layer night_mode signal from the brief composer swaps
+      // the model to one that handles dark scenes well. flux-dev locks into
+      // bright kawaii-pastel daytime lighting; flux-1.1-pro-ultra honors
+      // night/dark scene language. Override wins over the pre-picked model.
       //
-      // Priority: bot.modelByPath > pickModel (medium+vibe → pool) > default.
-      // If bot.useModelPicker is true, pickModel() reads dream_mediums.allowed_models
-      // (with bot-scope, includes bot-only mediums) and random-picks a Flux/SDXL model.
-      // Bot.modelByPath HARDCODES a specific model for a specific path, overriding
-      // the medium pool — use this when a path's aesthetic needs a specific model.
-      let renderInputOverrides = {};
-      // Conditional-layer override: when the brief composer's night_mode (or
-      // future similar signal) fired, swap to a model that handles dark scenes
-      // better than the default. flux-dev locks into bright kawaii-pastel
-      // daytime lighting regardless of prompt content; flux-1.1-pro-ultra
-      // honors night/dark scene language. Takes priority over modelByPath +
-      // useModelPicker (a fired conditional layer wins).
+      // Recipe-build still happens BELOW this site, so renderModel here is
+      // what lands in the upload row + DLT replay key.
       if (briefMeta && briefMeta.nightModeFired) {
         renderModel = 'black-forest-labs/flux-1.1-pro-ultra';
         renderInputOverrides = {};
         console.log(`  🌙 model=${renderModel} (night_mode fired — flux-1.1-pro-ultra override)`);
-      } else if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
-        const modelVal = bot.modelByPath[resolvedPath];
-        // Support three formats:
-        //   string: 'flux-dev' — locked to one model
-        //   array:  ['flux-dev', 'flux-1.1-pro'] — uniform random pick
-        //   weighted object: { 'flux-1.1-pro': 65, 'flux-dev': 35 } — weighted random
-        if (typeof modelVal === 'object' && !Array.isArray(modelVal)) {
-          const entries = Object.entries(modelVal);
-          const totalW = entries.reduce((s, [, w]) => s + w, 0);
-          let roll = Math.random() * totalW;
-          renderModel = entries[entries.length - 1][0];
-          for (const [m, w] of entries) {
-            roll -= w;
-            if (roll <= 0) {
-              renderModel = m;
-              break;
-            }
-          }
-        } else {
-          renderModel = Array.isArray(modelVal)
-            ? modelVal[Math.floor(Math.random() * modelVal.length)]
-            : modelVal;
-        }
-        // PNG output is the global Flux default (set in fluxOnce, 2026-05-15).
-        // SDXL needs explicit dimensions.
-        if (renderModel === 'sdxl')
-          renderInputOverrides = {
-            width: 768,
-            height: 1344,
-            num_inference_steps: 30,
-            guidance_scale: 7.5,
-          };
-        console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
-      } else if (bot.useModelPicker) {
-        const picked = await pickModel({
-          mediumKey: medium,
-          vibeKey: vibeKey,
-          allowedModels: bot.allowedModels,
-        });
-        renderModel = picked.model;
-        renderInputOverrides = picked.inputOverrides;
-        console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
       }
 
       // Build the DLT recipe — frozen LOOK anchors captured at posting time.

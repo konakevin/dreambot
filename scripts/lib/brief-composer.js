@@ -17,8 +17,9 @@
 
 const { ARCHETYPES } = require('./archetypes');
 const TEMPLATES = require('./archetype-templates');
+const { entityCapForModel, selectEntitiesForModel } = require('./modelDetailTiers');
 
-function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
+function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker, model = null }) {
   const arch = ARCHETYPES[pathConfig.archetype];
   if (!arch) {
     throw new Error(`composeBrief: unknown archetype "${pathConfig.archetype}"`);
@@ -143,6 +144,41 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
   // 5. Framing modes (if archetype declares them)
   if (arch.framingModes) {
     slots._framingMode = rollFromWeights(arch.framingModes.modes, arch.framingModes.weights);
+  }
+
+  // 5b. Model-aware entity-cap trim. High-faithfulness models (Flux 2 family,
+  // Nano Banana, GPT Image 2) render every named entity crisply and produce
+  // chaotic frames when 6+ distinct entities pile up. Older Flux 1.x soft-
+  // merges those same entities into coherent scenes. To match each model's
+  // detail tier, archetypes opt-in by tagging `entitySlots` (the subset of
+  // path slots that introduce new objects/creatures/elements). Slots not in
+  // that list (atmosphere / composition / palette tuners) are NEVER capped
+  // — they tune the existing scene without adding new focal points, so
+  // renders stay lush regardless of model.
+  //
+  // The first `protectedEntityCount` entries in `entitySlots` are always
+  // kept (hero + key supporting). The rest are randomly sampled down to
+  // the model's cap. Dropped slot values get NULLED so empty-section
+  // helpers in templates emit nothing for them.
+  //
+  // See scripts/lib/modelDetailTiers.js for the cap table + rationale.
+  // Archetypes without `entitySlots` are no-op (full backwards compat).
+  if (Array.isArray(arch.entitySlots) && arch.entitySlots.length > 0) {
+    const cap = entityCapForModel(model);
+    const { keep, drop } = selectEntitiesForModel(
+      arch.entitySlots,
+      cap,
+      arch.protectedEntityCount ?? 0
+    );
+    if (drop.length > 0) {
+      for (const slot of drop) {
+        // Null the value so block(label, val) helpers emit nothing. We
+        // preserve the key (`slot in slots`) so template destructuring
+        // doesn't throw — it just sees the empty value.
+        slots[slot] = null;
+      }
+      slots._cappedEntities = { kept: [...keep], dropped: drop, cap, model };
+    }
   }
 
   // 6. Hand off to archetype template for brief assembly
