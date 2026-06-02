@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/aerial_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for DinoBot's aerial-perspectives path. Each entry describes what's happening in the frame — flight motion or aerial-camera moment, 12-18 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for DinoBot's aerial-perspectives path. Each entry describes what's happening in the frame — flight motion or aerial-camera moment, 12-18 words.
 
 ━━━ ACTION CATEGORIES ━━━
 
@@ -53,4 +55,7 @@ Deduplicate by: primary flight-verb + body engagement + environment interaction.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

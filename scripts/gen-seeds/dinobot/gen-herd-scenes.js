@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/herd_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} HERO-DINOSAUR-WITH-HERD descriptions for DinoBot's herd-migration path. Each entry is 18-28 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HERO-DINOSAUR-WITH-HERD descriptions for DinoBot's herd-migration path. Each entry is 18-28 words.
 
 ━━━ NON-NEGOTIABLE — HERO + HERD FRAMING ━━━
 Every entry must establish:
@@ -71,4 +73,7 @@ Deduplicate by: hero species + herd activity + setting + scale-anchor.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

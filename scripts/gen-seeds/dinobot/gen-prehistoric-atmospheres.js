@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/prehistoric_atmospheres.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for DinoBot — Unreal Engine 5 cinematic paleoart. Each entry is 12-22 words and describes a specific atmospheric or surface element in the frame.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for DinoBot — Unreal Engine 5 cinematic paleoart. Each entry is 12-22 words and describes a specific atmospheric or surface element in the frame.
 
 ━━━ NON-NEGOTIABLE — REBALANCE: NOT EVERYTHING IS FOGGY ━━━
 Distribute entries across these proportions to fix over-foggy renders:
@@ -76,4 +78,7 @@ Deduplicate by: element type + texture descriptor + interaction (with light, wit
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

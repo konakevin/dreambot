@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/pack_dino_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} PACK/HERD GROUP BEHAVIOR descriptions for DinoBot's dino-pack path. Each entry describes a COLLECTIVE BEHAVIOR that a group of any dinosaur species could be doing. The species will be picked separately — your job is the group action/formation only.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PACK/HERD GROUP BEHAVIOR descriptions for DinoBot's dino-pack path. Each entry describes a COLLECTIVE BEHAVIOR that a group of any dinosaur species could be doing. The species will be picked separately — your job is the group action/formation only.
 
 Each entry: 10-20 words. One specific multi-animal behavior at wildlife-documentary scale, communicating numbers and formation.
 
@@ -47,4 +49,7 @@ Deduplicate by: group activity type + terrain/setting. Two entries with the same
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

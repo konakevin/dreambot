@@ -935,7 +935,8 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
   DINOBOT_DINO_PACK: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, biome, species, pack_action, surprise_element, phenomenon } = slots;
+    const { lighting, atmosphere, biome, species, pack_action, surprise_element, phenomenon } =
+      slots;
 
     const phenomenonSection = phenomenon
       ? `
@@ -1204,7 +1205,8 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
   DINOBOT_DINO_PORTRAIT: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, biome, species, visual_cue, surprise_element, phenomenon } = slots;
+    const { lighting, atmosphere, biome, species, visual_cue, surprise_element, phenomenon } =
+      slots;
 
     const phenomenonSection = phenomenon
       ? `
@@ -1477,7 +1479,8 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
   DINOBOT_EXTINCTION_EVENT: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, biome, species, extinction_scene, surprise_element, phenomenon } = slots;
+    const { lighting, atmosphere, biome, species, extinction_scene, surprise_element, phenomenon } =
+      slots;
 
     const phenomenonSection = phenomenon
       ? `

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/micro_details.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MICRO DETAIL descriptions for DinoBot — extreme close-ups of dinosaur anatomy. Macro wildlife photography of prehistoric animals.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MICRO DETAIL descriptions for DinoBot — extreme close-ups of dinosaur anatomy. Macro wildlife photography of prehistoric animals.
 
 Each entry: 15-25 words. One specific anatomical detail at macro/extreme-close-up scale.
 
@@ -28,4 +30,7 @@ Each entry: 15-25 words. One specific anatomical detail at macro/extreme-close-u
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

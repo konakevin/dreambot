@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/aerial_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SETTING descriptions for DinoBot's aerial-perspectives path. Each entry describes WHERE the aerial scene is happening in 14-22 words. Sky as canvas, with vast prehistoric world below as backdrop.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SETTING descriptions for DinoBot's aerial-perspectives path. Each entry describes WHERE the aerial scene is happening in 14-22 words. Sky as canvas, with vast prehistoric world below as backdrop.
 
 ━━━ SETTING CATEGORIES ━━━
 
@@ -59,4 +61,7 @@ Deduplicate by: terrain-or-sky context + altitude-or-perspective + atmospheric-e
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

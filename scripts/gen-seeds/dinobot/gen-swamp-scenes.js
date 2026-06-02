@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/swamp_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SWAMP AND RIVER scene descriptions for DinoBot — semi-aquatic prehistoric life in murky waterways, foggy swamps, muddy riverbanks.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SWAMP AND RIVER scene descriptions for DinoBot — semi-aquatic prehistoric life in murky waterways, foggy swamps, muddy riverbanks.
 
 Each entry: 15-25 words. One specific swamp/river scenario with species + water interaction + atmosphere.
 
@@ -28,4 +30,7 @@ Each entry: 15-25 words. One specific swamp/river scenario with species + water 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

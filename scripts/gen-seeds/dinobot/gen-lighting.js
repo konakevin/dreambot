@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/lighting.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for DinoBot — Unreal Engine 5 cinematic paleoart. Each entry is 14-22 words specifying ONE lighting treatment.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING descriptions for DinoBot — Unreal Engine 5 cinematic paleoart. Each entry is 14-22 words specifying ONE lighting treatment.
 
 ━━━ NON-NEGOTIABLE — REBALANCE TOWARD CRISP RAY-TRACED LIGHTING ━━━
 Distribute across these modes to fix over-foggy/over-hazy renders:
@@ -73,4 +75,7 @@ Deduplicate by: time-of-day + light direction + lighting mode (crisp/volumetric/
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

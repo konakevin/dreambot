@@ -66,13 +66,17 @@ module.exports = {
   // Territory-clash path-bespoke pool (added 2026-05-17 — axis-system migration)
   DINOBOT_TERRITORY_CLASH_SURPRISE_ELEMENT: load('dinobot_territory_clash_surprise_element'),
   // Cinematic-silhouette path-bespoke pool (added 2026-05-17 — axis-system migration)
-  DINOBOT_CINEMATIC_SILHOUETTE_SURPRISE_ELEMENT: load('dinobot_cinematic_silhouette_surprise_element'),
+  DINOBOT_CINEMATIC_SILHOUETTE_SURPRISE_ELEMENT: load(
+    'dinobot_cinematic_silhouette_surprise_element'
+  ),
   // Dino-cozy path-bespoke pool (added 2026-05-17 — axis-system migration)
   DINOBOT_DINO_COZY_SURPRISE_ELEMENT: load('dinobot_dino_cozy_surprise_element'),
   // Dino-pack path-bespoke pool (added 2026-05-17 — axis-system migration)
   DINOBOT_DINO_PACK_SURPRISE_ELEMENT: load('dinobot_dino_pack_surprise_element'),
   // Aerial-perspectives path-bespoke pool (added 2026-05-17 — axis-system migration)
-  DINOBOT_AERIAL_PERSPECTIVES_SURPRISE_ELEMENT: load('dinobot_aerial_perspectives_surprise_element'),
+  DINOBOT_AERIAL_PERSPECTIVES_SURPRISE_ELEMENT: load(
+    'dinobot_aerial_perspectives_surprise_element'
+  ),
   // Dino-portrait path-bespoke pool (added 2026-05-17 — axis-system migration)
   DINOBOT_DINO_PORTRAIT_SURPRISE_ELEMENT: load('dinobot_dino_portrait_surprise_element'),
   // Dino-action path-bespoke pool (added 2026-05-17 — axis-system migration)
@@ -82,7 +86,23 @@ module.exports = {
   VIBE_COLOR,
 
   SENSORY_POOLS: {
-    dinosaur: { smell: load('sensory_dinosaur_smell'), sound: load('sensory_dinosaur_sound'), touch: load('sensory_dinosaur_touch'), temperature: load('sensory_dinosaur_temperature'), weight: load('sensory_dinosaur_weight'), air: load('sensory_dinosaur_air'), lightcolor: load('sensory_dinosaur_lightcolor') },
-    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+    dinosaur: {
+      smell: load('sensory_dinosaur_smell'),
+      sound: load('sensory_dinosaur_sound'),
+      touch: load('sensory_dinosaur_touch'),
+      temperature: load('sensory_dinosaur_temperature'),
+      weight: load('sensory_dinosaur_weight'),
+      air: load('sensory_dinosaur_air'),
+      lightcolor: load('sensory_dinosaur_lightcolor'),
+    },
+    scene: {
+      smell: load('sensory_scene_smell'),
+      sound: load('sensory_scene_sound'),
+      touch: load('sensory_scene_touch'),
+      temperature: load('sensory_scene_temperature'),
+      weight: load('sensory_scene_weight'),
+      air: load('sensory_scene_air'),
+      lightcolor: load('sensory_scene_lightcolor'),
+    },
   },
 };

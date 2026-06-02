@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/cozy_dino_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COZY DINOSAUR ACTION descriptions for DinoBot's dino-cozy path. Each entry describes a TENDER, PEACEFUL BEHAVIOR that any dinosaur species could be doing. The species will be picked separately — your job is the action/behavior only.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY DINOSAUR ACTION descriptions for DinoBot's dino-cozy path. Each entry describes a TENDER, PEACEFUL BEHAVIOR that any dinosaur species could be doing. The species will be picked separately — your job is the action/behavior only.
 
 Each entry: 10-20 words. One specific cozy moment caught mid-action, with a lighting or weather detail that sells the coziness.
 
@@ -41,4 +43,7 @@ Deduplicate by: primary behavior + time-of-day/lighting. Two entries with the sa
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

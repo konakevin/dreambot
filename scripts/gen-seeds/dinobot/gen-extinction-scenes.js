@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/extinction_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} EXTINCTION EVENT scene descriptions for DinoBot — the asteroid impact and its aftermath. The final chapter of the Mesozoic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EXTINCTION EVENT scene descriptions for DinoBot — the asteroid impact and its aftermath. The final chapter of the Mesozoic.
 
 Each entry: 15-25 words. One specific extinction scenario with species + apocalyptic element + emotional tone.
 
@@ -30,4 +32,7 @@ Each entry: 15-25 words. One specific extinction scenario with species + apocaly
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

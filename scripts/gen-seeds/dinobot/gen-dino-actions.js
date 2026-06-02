@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/dino_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} DINO ACTION descriptions for DinoBot's dino-action path — dynamic frozen action moments. Species-agnostic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DINO ACTION descriptions for DinoBot's dino-action path — dynamic frozen action moments. Species-agnostic.
 
 Each entry: 10-20 words. One specific action beat.
 
@@ -60,4 +62,7 @@ Each entry: 10-20 words. One specific action beat.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

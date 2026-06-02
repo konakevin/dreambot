@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/camera_angles.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CAMERA ANGLE descriptions for DinoBot — wildlife-cinematography framings that show DINOSAUR + WORLD together. Each entry is 14-22 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CAMERA ANGLE descriptions for DinoBot — wildlife-cinematography framings that show DINOSAUR + WORLD together. Each entry is 14-22 words.
 
 ━━━ NON-NEGOTIABLE — WIDE / ESTABLISHING / SCALE-SHOWING DOMINANT ━━━
 The bot's signature is showing dinosaurs in their VAST primordial world. Camera angles must let the lush mega-foliage, vast terrain, and atmospheric depth be VISIBLE. Distribute STRICTLY:
@@ -82,4 +84,7 @@ Deduplicate by: framing distance + angle direction + cinematography style.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/clash_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} TERRITORY CLASH scene descriptions for DinoBot — two dinosaurs squaring off in dominance displays, territorial disputes, or mating-rights confrontations.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TERRITORY CLASH scene descriptions for DinoBot — two dinosaurs squaring off in dominance displays, territorial disputes, or mating-rights confrontations.
 
 Each entry: 15-25 words. One specific confrontation scenario with species matchup + behavior + setting.
 
@@ -28,4 +30,7 @@ Each entry: 15-25 words. One specific confrontation scenario with species matchu
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/dino_species.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} DINOSAUR species descriptions for DinoBot. Each entry is 10-22 words, naming a species and giving its UNMISTAKABLY DINOSAUR signature features.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DINOSAUR species descriptions for DinoBot. Each entry is 10-22 words, naming a species and giving its UNMISTAKABLY DINOSAUR signature features.
 
 ━━━ NON-NEGOTIABLE ━━━
 Every entry must read clearly as a DINOSAUR (or closely-grouped Mesozoic reptile). Flux must render an obvious dinosaur silhouette — NOT a bird, NOT a mammal, NOT a fish, NOT a generic creature.
@@ -62,4 +64,7 @@ Deduplicate by: species + body plan + signature angle. Repeated iconic species w
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

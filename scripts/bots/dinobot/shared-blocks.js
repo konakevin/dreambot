@@ -10,7 +10,8 @@
 const PROMPT_PREFIX =
   'NO HUMANS — 66 million years before humans evolved, cinematic primordial Mesozoic wilderness, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail';
 
-const PROMPT_SUFFIX = 'ABSOLUTELY NO humans, NO people, NO human figures, NO human silhouettes, NO human hands, NO man-made objects, NO buildings, no cartoon, no kids illustration, no toy-like, no stylized cute, no theme park, no fantasy dragon, no neon colors, no plastic CGI, no text, no watermark, ultra detailed, film grain, masterpiece';
+const PROMPT_SUFFIX =
+  'ABSOLUTELY NO humans, NO people, NO human figures, NO human silhouettes, NO human hands, NO man-made objects, NO buildings, no cartoon, no kids illustration, no toy-like, no stylized cute, no theme park, no fantasy dragon, no neon colors, no plastic CGI, no text, no watermark, ultra detailed, film grain, masterpiece';
 
 const DINOSAUR_IS_HERO_BLOCK = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST words of your output, BEFORE setting/lighting/anything else.

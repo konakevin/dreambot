@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/prehistoric_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} LOST-WORLD SETTING descriptions for DinoBot — mythic primordial landscapes nobody has ever seen. Each entry is 22-35 words. Skull Island × Pandora × Land of the Lost × Annihilation × Avatar floating mountains × Prehistoric Planet, all turned to 11.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LOST-WORLD SETTING descriptions for DinoBot — mythic primordial landscapes nobody has ever seen. Each entry is 22-35 words. Skull Island × Pandora × Land of the Lost × Annihilation × Avatar floating mountains × Prehistoric Planet, all turned to 11.
 
 ━━━ NON-NEGOTIABLE — TAKE CREATIVE LICENSE ━━━
 Drop documentary restraint. INVENT landscapes that surprise. Nobody knows for sure what these worlds looked like — and this is AI, so we have permission to push past what's "scientifically plausible." Make the viewer say "what IS this place?"
@@ -98,4 +100,7 @@ Deduplicate by: terrain type + dominant flora signature + water-or-weather featu
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

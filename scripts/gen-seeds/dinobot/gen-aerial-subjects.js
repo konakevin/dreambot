@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/aerial_subjects.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT descriptions for DinoBot's aerial-perspectives path. Each entry describes a flying prehistoric creature OR a ground dinosaur seen from an aerial perspective, in 14-22 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT descriptions for DinoBot's aerial-perspectives path. Each entry describes a flying prehistoric creature OR a ground dinosaur seen from an aerial perspective, in 14-22 words.
 
 ━━━ TWO SUBJECT MODES (mix freely across the 200) ━━━
 
@@ -63,4 +65,7 @@ Deduplicate by: species + flight-or-aerial mode + signature pose/feature.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

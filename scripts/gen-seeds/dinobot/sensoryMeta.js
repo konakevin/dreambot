@@ -15,7 +15,9 @@ const SHARED_RULES = `━━━ HARD RULES ━━━
   cycad, ginkgo, fern grove, primeval swamp, volcanic plain, prehistoric beach, La Brea`;
 
 const dinosaur = {
-  smell: (n) => `${n} SMELL anchors for DinoBot's DINOSAUR context. NO HUMANS. Smells around / on the dinosaur.
+  smell: (
+    n
+  ) => `${n} SMELL anchors for DinoBot's DINOSAUR context. NO HUMANS. Smells around / on the dinosaur.
 
 EXAMPLES (DO NOT REUSE):
 - "musky pebbled hide of the sauropod in the cycad grove"
@@ -113,7 +115,9 @@ VOLCANIC-ORANGE (12-14), CRETACEOUS-AMBER (10-12), MOONLIT-BLUE (8-10), ASH-GREY
 };
 
 const scene = {
-  smell: (n) => `${n} SMELL anchors for DinoBot's PURE-SCENE prehistoric environment. NO HUMANS, NO LIVE DINOSAURS — just empty Mesozoic landscape.
+  smell: (
+    n
+  ) => `${n} SMELL anchors for DinoBot's PURE-SCENE prehistoric environment. NO HUMANS, NO LIVE DINOSAURS — just empty Mesozoic landscape.
 
 EXAMPLES (DO NOT REUSE):
 - "sulfur drifting from the volcanic vent across the ash plain"
