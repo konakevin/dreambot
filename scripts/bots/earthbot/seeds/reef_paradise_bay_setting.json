@@ -1,802 +1,202 @@
 [
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by towering basalt walls, brilliant turquoise crystal water filling the foreground, deep cobalt at the center extending into open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped tropical cove, gradient sapphire-to-aquamarine water filling the bay interior, crystal clarity extending past the frame toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon, mirror-glass crystal water shifting from brilliant turquoise at the edges to deep cobalt at center, stretching to the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet between jagged volcanic ridges, deep cobalt-fading-to-turquoise water filling the lower distance, extending to a sliver of open ocean"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay between two distant headlands, brilliant turquoise crystal clarity in the foreground fading to deep sapphire, extending wide past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay ringed by towering volcanic ridges, brilliant turquoise water filling the shallows, deep sapphire at the enclosed center stretching into deep distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove, clear glassy lagoon with visible sandy bottom, gradient aquamarine-to-cobalt water extending wide between two curving headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay with towering basalt rim, deep cobalt-fading-to-turquoise water filling the enclosed basin, mirror-glass surface extending to the far volcanic wall"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove tucked between two low curved arms, brilliant turquoise crystal water with a visible sandy floor, extending toward a deep cobalt opening at the mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping arc-shaped bay between two distant island headlands, gradient cobalt-to-turquoise water stretching past the frame in both directions toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet cut between steep volcanic walls, mirror-glass deep cobalt water filling the lower half, extending in a long corridor to the open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon enclosed by an outer reef-edge, brilliant turquoise crystal water filling the interior, deep sapphire channel at center stretching to the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by sheer basalt walls, gradient sapphire-to-aquamarine water filling the broad basin, deep cobalt core extending into the enclosed far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a wide turquoise interior, mirror-glass clarity revealing a pale sandy floor, water deepening to cobalt at the open mouth extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon arcing between two low headlands, brilliant aquamarine water in the shallows shifting to deep sapphire at center, stretching wide into the open distance"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading between tall volcanic ridges, deep cobalt water filling the corridor, fading to bright turquoise at the widening mouth extending toward open ocean"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay, crystal turquoise clarity filling the foreground shallows, water transitioning to deep gradient sapphire extending wide between two far-distant headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a continuous volcanic rim, mirror-glass turquoise water ringing a deep cobalt center, the enclosed basin stretching into still depth at the middle distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay curving in a long gentle arc, gradient cobalt-to-aquamarine water filling the lower frame, brilliant turquoise edging the shallows, extending far past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-rimmed inlet between two basalt headlands, brilliant turquoise water at the margins deepening sharply to cobalt at center, extending in a wide corridor toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove enclosed by two gently curving arms, clear glassy turquoise water with a luminous sandy floor visible below, opening to a band of deep sapphire in the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a deep cobalt-fading-to-turquoise interior, mirror-glass surface across the full width, extending between two symmetrical headland arms toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay with a wide enclosed basin, brilliant turquoise water ringing a deep sapphire center, the entire water body stretching to the far basalt wall filling the deep distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed by a distant outer reef-edge, gradient aquamarine-to-cobalt water filling the interior, crystal clarity throughout, stretching to the open ocean beyond the reef line"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a continuous basalt rim, deep sapphire water at the core fading outward to brilliant turquoise, the full enclosed basin stretching into still open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove opening toward the horizon, gradient aquamarine-to-cobalt water filling the interior arc, crystal clarity throughout, extending wide past the frame at the mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon with a luminous aquamarine interior shifting to deep cobalt along the central channel, mirror-glass surface stretching in a long arc to the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading between sheer volcanic walls, mirror-glass cobalt water filling the tight corridor, brightening to turquoise at the widening far mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with crystal turquoise foreground shallows deepening gradually to a wide band of rich sapphire, the full water body extending far between two distant headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay fully enclosed by a jagged volcanic rim, brilliant turquoise water filling the outer ring, a deep cobalt core sitting still at the center of the enclosed basin"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove tucked between two low curving arms, clear glassy turquoise water over a pale sandy floor, narrowing to a sliver of deep cobalt at the open seaward mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay arcing in a broad crescent, gradient sapphire-to-aquamarine water filling the lower distance, brilliant turquoise shallowing at both flanks, stretching well past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-walled inlet between two basalt arms, cobalt water filling the enclosed corridor, transitioning abruptly to brilliant turquoise at the shallower margins extending into the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon behind a distant outer reef-edge, uniform brilliant turquoise crystal clarity filling the interior, a deeper cobalt channel cutting through the center toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay with a broad asymmetric basin, mirror-glass gradient sapphire-to-aquamarine water filling the lower frame, deep cobalt pooling at the far enclosed wall"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a wide open mouth, deep cobalt water at the center fading to crystal aquamarine at the curving inner margins, extending past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a low continuous basalt rim, gradient aquamarine-to-sapphire water filling the wide basin, deep cobalt pooling at the still enclosed center stretching into far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Narrow fjord-like tropical inlet tapering between two converging volcanic ridges, mirror-glass cobalt-fading-to-turquoise water filling the full corridor length, extending to a bright open mouth at the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a wide turquoise interior basin, clear glassy water deepening from pale aquamarine at the inner arc to rich cobalt at the open seaward mouth extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon enclosed by a curving outer reef-edge, mirror-glass aquamarine water filling the broad interior, a deep sapphire channel running along the center axis stretching to the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like inlet cut deep between two sheer volcanic headlands, brilliant turquoise water at the shallowing margins surrounding a long cobalt corridor extending far into the interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a gently curving shoreline arc, crystal turquoise clarity across the full foreground, water deepening gradually to a wide band of rich sapphire extending between two far-set headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay with a deep asymmetric enclosed basin, brilliant turquoise ringing the near shallows, a broad mirror-glass sapphire interior stretching to the far basalt wall at the deep distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove opening between two gently splayed arms, uniform brilliant turquoise crystal water over a luminous sandy floor, widening to a band of deep cobalt at the open seaward mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay curving in a long asymmetric arc between two unequal headlands, gradient cobalt-to-aquamarine water filling the lower half, brilliant turquoise edging both flanks stretching far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by an eroded volcanic rim, deep cobalt water sitting still at the core, a brilliant turquoise ring encircling the margins, the full enclosed basin extending into quiet open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon arcing broadly between two low distant headlands, gradient sapphire-to-aquamarine water with mirror-glass crystal clarity throughout, the full interior stretching well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-walled bay between two flanking basalt arms, cobalt water filling the broad enclosed interior, fading outward to gradient turquoise at the shallowing margins extending wide toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed by a distant outer reef-edge, brilliant turquoise crystal water filling the broad interior, deepening to a rich sapphire band along the far reef line extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading between two converging volcanic walls, deep cobalt corridor filling the length, brightening abruptly to clear turquoise at the widening seaward mouth extending toward open distance"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a rugged basalt rim, gradient aquamarine-to-sapphire water filling the broad enclosed basin, deep cobalt sitting still at the asymmetric far center stretching into open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a compact turquoise interior, clear glassy water revealing a pale sandy floor at the inner arc, deepening sharply to rich cobalt at the wide seaward mouth extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon curving in a long sweeping arc, mirror-glass aquamarine water filling the interior shallows, a broad sapphire band running the full central length stretching to the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet between two parallel volcanic walls, deep cobalt-fading-to-turquoise water filling the corridor floor, the tight channel extending in a straight corridor deep into the interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a gently bowed shoreline arc, crystal turquoise foreground shallows giving way to a wide gradient sapphire interior, the full water body extending far between two low distant headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay ringed by a near-complete volcanic wall, mirror-glass cobalt core surrounded by a brilliant turquoise margin, the sealed basin stretching into deep undisturbed stillness at the center distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove cupped between two symmetrical curved arms, uniform clear glassy turquoise water over a luminous floor, the cove mouth opening to a widening band of deep cobalt extending toward the far horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay arcing in a broad asymmetric crescent, cobalt-to-aquamarine gradient water filling the lower frame, the brilliant turquoise inner shallows edging both flanks stretching far past the frame in each direction"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay with a wide asymmetric enclosed basin, deep sapphire pooling along the far basalt wall, brilliant turquoise ringing the nearer shallows, the full water body filling the lower frame to the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon behind a low outer reef-edge, gradient aquamarine-to-cobalt water with crystal clarity throughout the interior, a deep sapphire channel tracing the reef line stretching well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-rimmed inlet between two diverging basalt arms, mirror-glass cobalt water filling the broad enclosed corridor, turquoise brightening at the shallowing lateral margins extending wide toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a wide open seaward mouth, gradient sapphire-to-aquamarine water filling the full interior arc, crystal clarity across both flanks extending far past the frame toward the open distance"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a broad continuous basalt rim, deep sapphire core surrounded by a wide gradient turquoise margin, the full sealed basin stretching into still enclosed distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a deep open seaward mouth, mirror-glass aquamarine water filling the interior arc, water deepening to rich cobalt at the center channel extending well past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon bowing gently between two symmetrical distant headlands, gradient cobalt-to-turquoise water with crystal clarity throughout, the full interior arc stretching far into the open distance"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet angling between two offset volcanic ridges, mirror-glass deep cobalt water filling the full corridor length, brightening gradually to turquoise as the channel widens toward the far open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a shallow turquoise foreground shelf dropping abruptly to a wide sapphire interior, the full water body extending between two broadly spaced headlands far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a weathered volcanic rim, uniform mirror-glass cobalt water filling the central basin, a narrow brilliant turquoise band tracing the shallower outer margin extending around the full enclosure"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove nestled between two asymmetric curved arms, clear glassy turquoise water over a pale luminous floor, the cove mouth widening to a deep sapphire band extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long low arc between two widely spaced island headlands, gradient sapphire-to-aquamarine water filling the lower distance, the turquoise inner shallows extending broadly past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay with a compact enclosed basin, brilliant turquoise water at the near margins deepening sharply to a mirror-glass cobalt interior, the full basin stretching to the enclosing far basalt wall"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed by a gently curving outer reef-edge, uniform crystal aquamarine clarity filling the broad interior, a distinct deep cobalt band tracing the full outer reef line extending far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet cutting between two converging basalt walls at an oblique angle, deep cobalt-fading-to-turquoise water filling the floor, the corridor extending at a long diagonal into the far interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay curving in a shallow asymmetric arc, crystal turquoise clarity spanning the foreground shallows, transitioning to a wide deep sapphire band across the full middle distance extending between two far headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a jagged asymmetric basalt rim, deep cobalt water pooling at the sealed center, brilliant turquoise ringing the near shallows and stretching to the far enclosing wall"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a narrow seaward mouth, mirror-glass aquamarine water filling the wide inner arc, pale sandy floor visible through crystal clarity, deepening to cobalt at the open mouth extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon bowing in a deep inward arc, gradient cobalt-to-aquamarine water with mirror-glass crystal clarity across the full interior, the turquoise shallows tracing both flanks stretching well past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading between two high parallel volcanic walls, mirror-glass sapphire water occupying the full corridor floor, opening gradually to a widening band of brilliant turquoise at the far seaward mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a gently convex shoreline arc, crystal turquoise foreground shelf giving way to a wide cobalt interior band, the full water body extending broadly between two low distant headlands past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a steep continuous volcanic rim, gradient aquamarine margin ringing a deep mirror-glass cobalt core, the sealed basin sitting in complete stillness extending into the enclosed interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove cupped between two diverging low curved arms, clear glassy turquoise water over a luminous sandy floor, the cove interior expanding gently toward a wide deep sapphire band at the open seaward mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long shallow crescent between two unequal island headlands, gradient sapphire-to-aquamarine water filling the lower frame, crystal turquoise edging the inner arc extending far past the frame on each side"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-walled bay enclosed between two converging basalt arms, cobalt water filling the wide interior corridor, transitioning to a brilliant turquoise band along the shallowing lateral margins extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed behind a low curving outer reef-edge, uniform crystal aquamarine water filling the broad protected interior, a distinct sapphire channel bisecting the full length and stretching to the open distance beyond the reef"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet angling sharply between two offset basalt ridges, deep cobalt water filling the tight corridor floor, the channel bending at a visible elbow before widening to turquoise at the far open mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a gently pinched inner arc and wide open seaward mouth, gradient cobalt-to-turquoise water filling the full interior, mirror-glass crystal clarity across both flanks extending far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a low eroded basalt rim, deep cobalt water pooling at the asymmetric sealed center, a wide gradient turquoise margin ringing the near shallows stretching into the enclosed far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a pronounced pinched inner arc, clear glassy aquamarine water over a luminous sandy floor deepening to rich cobalt at the broad seaward mouth, extending wide past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon bowing in a long inward arc, uniform mirror-glass turquoise crystal clarity across the full interior shallows, a deep cobalt band tracing the outer central axis stretching to the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading at a gentle curve between two diverging volcanic walls, mirror-glass cobalt water filling the full corridor length, brightening to clear turquoise at the widening seaward mouth in the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a subtly convex waterline, gradient sapphire-to-aquamarine clarity spanning the foreground, the full water body deepening to a wide cobalt band extending broadly between two widely spaced distant headlands"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove nestled between two asymmetric low arms, uniform crystal turquoise water with a luminous visible floor, the enclosed interior opening gently to a band of deep sapphire extending toward the far open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay ringed by a near-complete jagged volcanic wall, a wide brilliant turquoise margin encircling a deep mirror-glass sapphire core, the entire sealed basin stretching into undisturbed stillness at the interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long shallow asymmetric arc, cobalt-to-turquoise gradient water filling the lower frame, the brilliant aquamarine inner shallows tracing the full arc and extending far past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-rimmed inlet between two broadly spaced basalt arms, mirror-glass cobalt water filling the wide enclosed corridor, a distinct gradient turquoise band brightening along the shallowing far lateral margins extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed by a broadly curving outer reef-edge, gradient aquamarine-to-cobalt crystal clarity filling the full interior, a deep sapphire channel cutting diagonally across the central axis stretching well past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet cut at a steep oblique angle between two converging basalt ridges, deep cobalt-fading-to-turquoise water filling the corridor floor, the channel straightening into a long bright open mouth at the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a deep concave inner arc and a wide flaring seaward mouth, gradient cobalt-to-aquamarine water filling the full interior, crystal clarity across the inner shallows extending far past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a broad continuous basalt rim, deep cobalt water occupying the sealed core, a wide gradient turquoise band ringing the near shallows and filling the lower frame to the far enclosing wall"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a broadly curved inner arc and a narrow pinched seaward mouth, mirror-glass aquamarine water filling the enclosed interior, deepening to a rich cobalt band at the open mouth extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon sweeping in a long shallow inward bow, gradient cobalt-to-aquamarine water with crystal clarity across the full interior, the turquoise shallows edging both flanks and stretching well past the frame on each side"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading between two tall diverging volcanic walls, deep cobalt-fading-to-turquoise water filling the full corridor floor, the channel opening gradually into a widening bright mouth at the far open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a subtly bowed waterline, crystal turquoise clarity spanning the foreground shelf, the full water body transitioning to a wide deep sapphire band extending broadly between two widely spaced low headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a continuous weathered volcanic rim, a deep mirror-glass cobalt core ringed by a wide brilliant turquoise margin, the full sealed basin extending into complete undisturbed stillness at the interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove tucked between two broadly splayed asymmetric arms, clear glassy turquoise water over a pale luminous sandy floor, the enclosed interior widening gently to a deep sapphire band at the open seaward mouth extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long broad crescent between two symmetrical island headlands, gradient sapphire-to-aquamarine water filling the lower distance, brilliant turquoise edging the inner arc and stretching far past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay with a deep asymmetric sealed basin, mirror-glass gradient aquamarine-to-sapphire water filling the broad interior, deep cobalt pooling along the far irregular basalt wall stretching into the enclosed far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed by a low broadly curving outer reef-edge, uniform crystal aquamarine clarity filling the full protected interior, a distinct deep cobalt band tracing the outer reef line and extending well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet angling between two offset converging basalt ridges, mirror-glass deep cobalt water filling the tight corridor, the channel curving gently before brightening to clear turquoise at the wide open mouth in the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a wide flaring inner arc and an open seaward mouth, gradient cobalt-to-turquoise water filling the full interior, clear glassy crystal clarity across both inner flanks extending broadly past the frame in each direction"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a rugged continuous basalt rim, gradient aquamarine-to-cobalt water filling the broad sealed basin, deep sapphire pooling at the asymmetric core stretching into the enclosed far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a gently flared inner arc and a wide seaward opening, clear glassy aquamarine water over a pale luminous floor deepening to rich cobalt at the open mouth, extending broadly past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon bowing in a long inward sweep between two low distant headlands, mirror-glass cobalt-to-turquoise gradient water filling the full interior arc, crystal clarity stretching well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading between two steeply converging volcanic walls, deep cobalt water filling the tight corridor floor, the channel widening gradually to brilliant turquoise at the bright seaward mouth in the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a gently bowed waterline, crystal turquoise foreground shallows dropping to a wide gradient sapphire interior band, the full water body extending far between two broadly spaced low headlands past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a low continuous volcanic rim, deep mirror-glass cobalt water sitting still at the sealed core, a wide brilliant turquoise margin tracing the full shallower outer ring stretching into undisturbed interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove enclosed between two broadly curving asymmetric arms, uniform clear glassy turquoise water over a luminous sandy floor, the enclosed basin widening at the seaward mouth to a deep cobalt band extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay arcing in a long shallow crescent between two symmetrical island headlands, gradient cobalt-to-aquamarine water filling the lower distance, brilliant turquoise inner shallows extending far past the frame on each flank"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-walled inlet between two broadly splayed basalt arms, mirror-glass cobalt water filling the wide enclosed corridor, a clear gradient turquoise band brightening steadily along the shallowing lateral margins extending wide toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed behind a broadly arcing outer reef-edge, uniform brilliant aquamarine crystal clarity filling the broad protected interior, a distinct deep cobalt channel running the full central axis stretching well past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet cut between two diverging basalt ridges at a slight curve, deep cobalt-fading-to-turquoise water occupying the full corridor length, the channel bending gently before opening to a wide bright mouth at the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a deep concave inner arc and a broadly flared seaward mouth, gradient sapphire-to-aquamarine water filling the full interior, mirror-glass crystal clarity across the inner shallows extending far past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a broad irregular basalt rim, deep cobalt water occupying the wide sealed core, a luminous gradient turquoise band ringing the near shallows and filling the lower frame to the far enclosing wall"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a gently inward-bowing inner arc and a wide open seaward mouth, clear glassy aquamarine water over a pale sandy floor deepening to a rich cobalt band at the open mouth extending far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon sweeping in a long outward bow between two symmetrical low headlands, mirror-glass gradient cobalt-to-turquoise water filling the full interior arc, crystal clarity extending broadly past the frame on each side"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet running straight between two closely parallel volcanic walls, mirror-glass sapphire water filling the tight corridor floor, transitioning to a band of brilliant turquoise at the wide open seaward mouth in the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a subtly concave waterline, gradient aquamarine-to-sapphire clarity spanning the full foreground shelf, the water body deepening to a wide cobalt band extending between two broadly spaced low island headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a steep unbroken volcanic rim, a narrow brilliant turquoise margin ringing a broad deep mirror-glass cobalt core, the sealed basin extending into complete undisturbed stillness at the interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove cupped between two gently converging low curved arms, uniform clear glassy turquoise water with a luminous visible floor throughout, the cove mouth opening to a wide deep cobalt band extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long asymmetric inward arc between two unequal distant headlands, gradient sapphire-to-aquamarine water filling the lower frame, brilliant turquoise inner shallows tracing the full arc and extending far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-rimmed inlet between two broadly diverging basalt arms, cobalt water filling the wide enclosed interior, a distinct luminous turquoise band brightening steadily along both shallowing lateral margins extending wide toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed behind a gently sinuous outer reef-edge, uniform brilliant aquamarine crystal clarity filling the broad protected interior, a deep cobalt band running the full outer reef axis and stretching well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading at a shallow curve between two converging basalt ridges, deep cobalt-fading-to-turquoise water filling the full corridor length, the channel straightening into a long luminous open mouth at the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a broadly convex inner arc and a gently pinched seaward mouth, gradient cobalt-to-aquamarine water filling the full interior, clear glassy crystal clarity across both flanks extending broadly past the frame in each direction"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a low asymmetric basalt rim, wide gradient aquamarine-to-sapphire water filling the sealed basin, deep cobalt pooling at the offset core stretching into the enclosed far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a tightly pinched inner arc and a broadly flared seaward mouth, mirror-glass aquamarine water over a pale luminous floor deepening to rich cobalt at the open mouth extending far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon bowing in a long outward sweep between two asymmetric low headlands, gradient cobalt-to-turquoise water with mirror-glass crystal clarity throughout, the full interior arc stretching well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet running at a shallow oblique angle between two offset basalt ridges, mirror-glass cobalt water occupying the full corridor floor, brightening to clear turquoise at the gradually widening seaward mouth in the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a gently scalloped waterline, crystal turquoise foreground clarity dropping to a wide gradient sapphire band across the middle distance, the full water body extending broadly between two widely spaced low headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a broad low volcanic rim with a single breach, deep mirror-glass cobalt core ringed by a luminous gradient turquoise margin, the near-sealed basin extending into undisturbed stillness at the interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove cupped between two gently diverging asymmetric arms, clear glassy turquoise water over a pale sandy floor throughout, the enclosed interior tapering to a narrow deep cobalt band at the open seaward mouth extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long broad inward arc between two unequal island headlands, gradient sapphire-to-aquamarine water filling the lower distance, brilliant turquoise inner shallows tracing both flanks and stretching broadly past the frame in each direction"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-walled bay between two broadly converging basalt arms, mirror-glass cobalt water filling the enclosed interior corridor, a luminous gradient turquoise band brightening along both shallowing lateral margins extending wide toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed behind a gently bowed outer reef-edge, uniform crystal aquamarine clarity filling the broad protected interior, a narrow deep cobalt band tracing the full sinuous reef axis and stretching well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet cutting between two steeply diverging volcanic walls at a visible curve, deep cobalt-fading-to-turquoise water filling the corridor floor, the channel sweeping outward into a wide luminous open mouth at the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a broadly rounded inner arc and a gently narrowing seaward mouth, gradient cobalt-to-aquamarine water filling the full interior, clear glassy crystal clarity across both inner flanks extending far past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a broad uneven basalt rim, deep cobalt water pooling at the offset sealed center, a wide luminous gradient turquoise band filling the near shallows stretching into the enclosed far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a broad symmetrical inner arc and a gently widening seaward mouth, gradient aquamarine-to-cobalt water with mirror-glass crystal clarity throughout, the full interior extending broadly past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon sweeping in a long shallow outward bow between two asymmetric distant headlands, gradient sapphire-to-aquamarine water with crystal clarity throughout, the full interior arc stretching broadly past the frame on each side"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet running at a gentle diagonal between two broadly spaced volcanic walls, mirror-glass cobalt-fading-to-turquoise water filling the full corridor length, the channel opening into a wide luminous mouth at the far open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a subtly irregular waterline, crystal turquoise clarity spanning the full foreground shelf, the water body transitioning to a wide deep sapphire band extending between two broadly spaced low island headlands far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a tall continuous volcanic rim with a narrow breach, a deep mirror-glass sapphire core ringed by a wide brilliant turquoise margin, the near-complete sealed basin stretching into undisturbed stillness at the interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove nestled between two gently converging asymmetric arms, uniform clear glassy turquoise water over a pale luminous sandy floor, the enclosed basin opening to a wide deep cobalt band at the seaward mouth extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long broad outward arc between two symmetrical low headlands, gradient cobalt-to-aquamarine water filling the lower distance, brilliant turquoise inner shallows tracing both flanks and extending far past the frame in each direction"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-walled bay between two asymmetrically angled basalt arms, mirror-glass cobalt water filling the enclosed interior, a distinct luminous gradient turquoise band brightening along the shallowing near margins extending wide toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed behind a broadly sinuous outer reef-edge, uniform brilliant aquamarine crystal clarity filling the full protected interior, a deep cobalt channel tracing a diagonal axis across the central basin stretching well past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet angling between two closely set parallel volcanic ridges, deep cobalt water filling the tight corridor floor, the channel maintaining a straight axis before widening abruptly to clear turquoise at the bright open mouth in the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a gently scalloped inner arc and a broadly open seaward mouth, gradient sapphire-to-aquamarine water filling the full interior, mirror-glass crystal clarity across both inner flanks extending far past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a broad continuous basalt rim, gradient turquoise-to-sapphire water filling the sealed basin, deep cobalt pooling at the asymmetric far core stretching into the enclosed interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a wide symmetrical inner arc and a gently tapered seaward mouth, clear glassy turquoise water over a pale luminous floor deepening to rich cobalt at the open mouth extending broadly past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon sweeping in a long inward bow between two broadly spaced low headlands, uniform mirror-glass aquamarine clarity filling the full interior, a deep cobalt band tracing the outer central axis stretching well past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet running at a slight inward curve between two tall parallel basalt walls, mirror-glass sapphire water filling the full corridor floor, the channel bending once before opening to clear turquoise at the wide far mouth"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a gently irregular waterline and a wide foreground shelf, crystal turquoise clarity giving way to a deep gradient sapphire band across the full middle distance extending between two widely spaced low headlands"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a tall unbroken volcanic rim, a luminous aquamarine ring encircling a broad deep mirror-glass cobalt core, the fully sealed basin sitting in complete undisturbed stillness extending into the enclosed far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove tucked between two broadly flared asymmetric arms, uniform clear glassy turquoise water with a luminous visible sandy floor, the cove mouth opening into a wide deep cobalt band extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long shallow outward crescent between two unequal low island headlands, gradient cobalt-to-turquoise water filling the lower frame, crystal aquamarine inner shallows extending broadly past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-rimmed inlet between two broadly offset basalt arms, deep cobalt water filling the wide enclosed corridor, a luminous gradient turquoise band brightening steadily along both shallowing near margins extending wide toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed behind a broadly convex outer reef-edge, gradient aquamarine-to-cobalt crystal clarity filling the full protected interior, a distinct deep sapphire band tracing the sinuous outer reef line stretching well past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a rugged low asymmetric basalt rim, mirror-glass gradient sapphire-to-turquoise water filling the wide sealed basin, deep cobalt pooling at the offset far core stretching into the enclosed interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a subtly scalloped inner arc and a broadly open seaward mouth, gradient cobalt-to-aquamarine water filling the full interior, clear glassy crystal clarity across both inner flanks extending broadly past the frame in each direction"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a broad irregular basalt rim, mirror-glass gradient aquamarine-to-sapphire water filling the sealed basin, deep cobalt pooling at the offset far core stretching into the enclosed interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a gently convex inner arc and a broadly tapered seaward mouth, gradient aquamarine-to-cobalt water with mirror-glass crystal clarity throughout the full interior extending broadly past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon bowing in a long shallow outward sweep between two broadly offset low headlands, gradient cobalt-to-aquamarine water with crystal clarity throughout, the full interior arc stretching well past the frame on each side"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading between two closely parallel basalt walls at a slight inward angle, deep cobalt-fading-to-turquoise water occupying the full corridor length, the channel opening abruptly into a wide luminous mouth at the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a subtly scalloped waterline and a deep foreground shelf, crystal turquoise clarity spanning the full foreground, transitioning to a wide gradient sapphire band extending between two broadly spaced low headlands far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a broad continuous volcanic rim with two narrow breaches, a deep mirror-glass cobalt core ringed by a wide luminous turquoise margin, the near-sealed basin extending into undisturbed stillness at the interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove cupped between two broadly splayed symmetric arms, uniform clear glassy turquoise water over a pale luminous sandy floor, the enclosed basin narrowing to a sliver of deep cobalt at the pinched seaward mouth extending past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long asymmetric outward arc between two unequal symmetrical headlands, gradient sapphire-to-aquamarine water filling the lower distance, brilliant turquoise inner shallows tracing the full arc and extending broadly past the frame in each direction"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-walled bay between two broadly converging asymmetric basalt arms, deep cobalt water filling the wide enclosed interior corridor, a distinct luminous gradient turquoise band brightening steadily along the shallowing far lateral margins extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed behind a gently convex outer reef-edge, uniform brilliant aquamarine crystal clarity filling the full protected interior, a distinct deep cobalt channel tracing the full outer reef axis and stretching well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet running at a gentle outward curve between two broadly diverging volcanic ridges, mirror-glass cobalt water filling the full corridor floor, the channel sweeping gradually into a wide luminous turquoise mouth at the far open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a broadly rounded inner arc and a gently flared seaward mouth, gradient cobalt-to-turquoise water filling the full interior, clear glassy crystal clarity across both inner flanks extending broadly past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a broad uneven basalt rim, deep sapphire water occupying the wide sealed core, a luminous aquamarine band ringing the near shallows and filling the lower frame to the far enclosing wall"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a tightly curved inner arc and a broadly open seaward mouth, gradient aquamarine-to-sapphire water with mirror-glass crystal clarity, the full enclosed interior extending wide past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon sweeping in a long inward arc between two broadly offset low headlands, uniform brilliant turquoise crystal clarity filling the full interior, a deep cobalt band running the outer central axis stretching to the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet threading between two broadly splayed volcanic ridges at a gentle outward angle, deep cobalt-fading-to-turquoise water filling the corridor floor, the channel broadening into a wide luminous mouth at the far open distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a subtly convex foreground shelf, crystal aquamarine clarity spanning the near water, transitioning abruptly to a wide deep sapphire band extending between two low broadly spaced headlands far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Circular caldera bay enclosed by a rugged unbroken volcanic rim, a narrow luminous turquoise ring bordering a broad mirror-glass sapphire core, the fully sealed basin extending into complete undisturbed stillness at the enclosed interior distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove nestled between two symmetrical broadly curved arms, clear glassy aquamarine water over a pale luminous sandy floor, the enclosed basin widening at the seaward mouth to a deep cobalt band extending toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Sweeping bay forming a long shallow inward crescent between two symmetrical low headlands, gradient cobalt-to-aquamarine water filling the lower frame, crystal turquoise inner shallows extending broadly past the frame on each flank"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Deep volcanic-walled inlet between two closely set diverging basalt arms, mirror-glass cobalt water filling the enclosed corridor, a distinct luminous gradient turquoise band brightening along both shallowing lateral margins extending wide toward the open horizon"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide shallow lagoon enclosed behind a gently irregular outer reef-edge, uniform crystal aquamarine clarity filling the broad protected interior, a deep sapphire channel tracing the full sinuous reef axis and stretching broadly past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet cutting between two steeply converging basalt ridges at a visible inward curve, deep cobalt water filling the tight corridor, the channel sweeping into a wide luminous turquoise opening at the far seaward distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad horseshoe-shaped bay with a gently convex inner arc and a broadly open seaward mouth, gradient sapphire-to-aquamarine water filling the full interior, mirror-glass crystal clarity across both inner flanks extending far past the frame in both directions"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Volcanic-caldera bay enclosed by a tall continuous basalt rim, wide gradient turquoise-to-sapphire water filling the sealed basin, deep cobalt pooling at the offset core stretching into the enclosed far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Wide crescent lagoon bowing in a long shallow inward arc between two broadly spaced low headlands, gradient aquamarine-to-cobalt water with mirror-glass crystal clarity, the full interior arc stretching well past the frame on both sides"
-  },
-  {
-    "tags": ["coastal-tropical", "volcanic"],
-    "description": "Narrow fjord-like tropical inlet running at a steady diagonal between two closely set basalt walls, mirror-glass sapphire-fading-to-turquoise water filling the corridor floor, the channel maintaining a straight axis into the bright open mouth at the far distance"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Broad open island bay with a gently flared foreground shelf, crystal aquamarine clarity spanning the near water, deepening to a wide gradient cobalt band extending between two broadly spaced low headlands far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Horseshoe-shaped cove with a broadly flared inner arc and a gently tapered seaward mouth, clear glassy turquoise water over a pale luminous floor deepening to a wide rich cobalt band at the open mouth extending far past the frame"
-  },
-  {
-    "tags": ["coastal-tropical"],
-    "description": "Shallow protected cove cupped between two gently asymmetric curved arms, uniform brilliant turquoise crystal water with a luminous visible sandy floor, the enclosed basin opening gradually to a deep sapphire band extending toward the open horizon"
-  }
+  "Volcanic caldera bay under pre-storm sky, water restless and gunmetal-grey, basalt walls dark and brooding, heavy cloud pressing low, charged electric stillness before the rain arrives.",
+  "Horseshoe cove at dawn, mirror-still glassy water reflecting blush-pink sky, soft mist hovering just above the surface, headlands fading as dark velvet silhouettes in early light.",
+  "Wide crescent lagoon under midday sun, brilliant turquoise crystal clarity in the shallows fading to deep sapphire at center, scattered cumulus casting slow-moving shadows across the warm water.",
+  "Narrow fjord-like inlet between ridges, wind-rippled choppy surface breaking scattered light into a thousand silver fragments, steep walls dark green, brisk trade-wind pushing through the channel.",
+  "Open island bay between distant headlands, active rain shower drumming the surface, sky uniform soft grey, mist rising off warm teal water, far headlands dissolving into white haze.",
+  "Atoll lagoon under moonless night sky, water glowing faintly blue with bioluminescent plankton, each small wavelet trailing cold fire, stars brilliant overhead, dark reef rim barely visible.",
+  "Sand-bar enclosed lagoon shrouded in dense marine-layer fog, soft white veil obscuring the far bar, teal water diffuse and dreamlike beneath, silence broken only by distant surf.",
+  "Coral-reef enclosed lagoon on breezy afternoon, surface broken into thousands of glittering wind-rippled wavelets, deep cobalt beyond the reef line, scattered cumulus rolling fast overhead.",
+  "Volcanic caldera bay in post-storm clearing, water still slightly churned and steel-grey heaving slowly, fresh-washed sky brightening at the edges, rainbow arcing faintly above the open basin rim.",
+  "Mangrove-fringed estuary cove at dusk, mirror-still glassy water reflecting deep amber and violet sky, mangroves black silhouettes along the waterline, perfect stillness before night settles fully in.",
+  "Wave-cut coastal terrace bay under heavy tropical downpour, surface roiled and dark, rain hammering the exposed rock shelves, sky leaden uniform grey, waterfalls streaming down the terrace walls.",
+  "Horseshoe cove under brilliant midday sun, brilliant turquoise crystal clarity filling the foreground, sandy bottom visible in precise detail three meters down, white headland cliffs blazing against deep blue sky.",
+  "Atoll lagoon under heavy overcast, water teal-slate dulled by flat diffuse light, steady breeze rippling the surface in long parallel lines, mood quiet and introspective, horizon indistinct grey.",
+  "Narrow fjord-like inlet at pre-storm hour, water restless and gunmetal-calm, charged heavy air, walls black against purple-grey sky, distant squall line advancing with slow visible menace along the ridge.",
+  "Wide crescent lagoon at glassy pre-dawn, mirror-still water holding the last deep indigo of night, first pale band of gold appearing at the horizon, sand bar emerging as a pale ghost.",
+  "Open island bay under post-storm churning swell, steel-grey heaving water still unsettled, debris lines visible on the surface, sky half-cleared with dramatic cloud architecture and sharp angled light.",
+  "Sand-bar enclosed lagoon on sunny afternoon, brilliant turquoise crystal water inside the bar in sharp contrast to dark ocean beyond, cumulus towers building on the inland ridge above.",
+  "Volcanic caldera bay at active rain, surface pocked continuously with drumming raindrops, basalt walls streaming with rivulets, sky uniform soft grey pressing close, mist rising off the warm dark water.",
+  "Coral-reef enclosed lagoon at first light, perfect glassy mirror reflecting predawn pink and coral sky, reef barely breaking the surface at low tide, cool still air holding everything in suspension.",
+  "Wave-cut coastal terrace bay on gusty clear day, wind-rippled choppy surface sparkling hard under strong sun, spray lifting off the terrace edge, deep cobalt water beyond the shallow shelf.",
+  "Mangrove-fringed estuary cove under pre-storm sky, water restless and gunmetal-green, heavy charged air, mangrove canopy moving in fitful gusts, sky darkening from the inland hills toward the sea.",
+  "Atoll lagoon under post-storm heaving swell, steel-grey water churning inside the reef, sky rapidly clearing, last squall visible on the far horizon, lagoon floor disturbed and clouded with pale sand.",
+  "Horseshoe cove on a foggy morning, soft white veil hanging over the teal water, headlands barely visible as dark suggestions above the mist line, absolute stillness, sound muffled and close.",
+  "Open island bay at bioluminescent midnight, calm dark water lit from within by faint plankton glow, each small ripple edged in cold blue light, headlands massive black shapes under dense stars.",
+  "Wide crescent lagoon on a windy clear afternoon, choppy wind-rippled surface broken into glittering wavelets, brilliant turquoise in the shallows deepening to hard cobalt at the outer edge, cumulus racing fast overhead.",
+  "Volcanic caldera bay under pre-storm sky, water restless and gunmetal-grey, basalt walls dark and brooding, heavy cloud pressing low, charged atmosphere electric with approaching weather, surface heaving in slow restless swells.",
+  "Horseshoe cove at dawn, mirror-still glassy water reflecting blush-pink sky perfectly, soft mist hovering just above the surface, headlands dark soft silhouettes against the pale glowing east.",
+  "Wide crescent lagoon under brilliant midday sun, brilliant turquoise crystal clarity in the shallows fading to deep cobalt at center, scattered cumulus throwing crisp shadows across the luminous water.",
+  "Narrow fjord-like inlet between steep ridges, squall curtain sweeping across the open mouth, water dark and restless, rain hammering the surface, walls black and streaming against a charcoal sky.",
+  "Atoll lagoon under moonless night sky, water glowing faint electric blue with bioluminescent plankton stirred by a gentle current, stars brilliant overhead, dark sand bar a pale curve in the dark.",
+  "Sand-bar enclosed lagoon on a breezy afternoon, surface broken into thousands of wind-rippled glittering wavelets, deep jade water under moving cumulus, whitecaps forming at the exposed outer bar.",
+  "Coral-reef enclosed lagoon shrouded in pre-dawn marine-layer fog, soft white veil obscuring the far reef line, inner water calm and teal-grey beneath the mist, mangroves emerging spectral at the edge.",
+  "Open island bay between distant headlands after a heavy tropical squall, water still slightly churned and steel-grey heaving, sky freshly washed pale blue, rainbow arcing brilliant across the clearing horizon.",
+  "Mangrove-fringed estuary cove under heavy tropical downpour, water roiled and dark with drumming raindrops, mist rising off warm surface, mangroves dark emerald and streaming, sky a uniform leaden soft grey.",
+  "Wave-cut coastal terrace bay under late afternoon sun, brilliant turquoise crystal water pooling in the terraced foreground, deep sapphire beyond the reef edge, light golden and raking across the pale stone shelves.",
+  "Atoll lagoon at dusk, mirror-still glassy water reflecting the deep violet and amber sky, last orange band burning at the horizon, dark palm silhouettes fringing the far sand, air breathless and warm.",
+  "Volcanic caldera bay enclosed by towering basalt walls under active rain shower, surface pocked with drumming raindrops, sky uniform soft grey, mist rising off warm water, walls dark and streaming with fresh runoff.",
+  "Horseshoe cove on a windy clear morning, surface broken into glittering choppy wavelets under a deep cobalt sky, breeze scattering the light into thousands of sparkling shards across the turquoise water.",
+  "Wide crescent lagoon under pre-storm sky, water restless and gunmetal-calm, the surface heavy and mirror-dark, distant storm wall building purple on the horizon, charged silence over the entire bay.",
+  "Narrow fjord-like inlet at post-storm clearing, water still heaving steel-grey between the black ridges, sky lifting to pale silver, fresh waterfalls streaking the walls, debris line marking the storm's edge.",
+  "Sand-bar enclosed lagoon at first light, perfect glassy mirror reflecting predawn pink and gold sky, sand bar a pale curve barely above the still water, cool morning air carrying the scent of open ocean.",
+  "Coral-reef enclosed lagoon under brilliant tropical midday, brilliant turquoise crystal clarity filling the entire enclosed basin, deep cobalt at the far reef wall, sun overhead and shadowless, water luminous and warm.",
+  "Open island bay between headlands on a breezy overcast afternoon, wind-rippled choppy surface under flat diffuse light, water teal-slate dulled to muted jade, whitecaps scattering across the wide exposed fetch.",
+  "Volcanic caldera bay shrouded in morning fog, basalt walls emerging spectral above the soft white veil, inner water obscured and glassy-grey beneath the marine layer, the silence complete and muffled.",
+  "Atoll lagoon post-storm under fresh-washed sky, water still slightly churned and steel-grey at the edges settling toward teal at center, rainbow vivid across the open lagoon mouth, air clean and luminous.",
+  "Mangrove-fringed estuary cove under pre-storm overcast, water gunmetal-calm and restless at the edges, mangroves dark and still, heavy air hanging over the glassy surface, distant thunder low on the horizon.",
+  "Wide crescent lagoon under brilliant turquoise crystal clarity at midday, every coral head visible through the luminous water, deep sapphire at the lagoon center, white sand bottom glowing pale gold in the sunlight.",
+  "Wave-cut coastal terrace bay at dusk, glassy mirror-still water in the terraced pools reflecting the rose and violet sky perfectly, the outer bay darkening to indigo, last light warm on the pale stone.",
+  "Volcanic caldera bay under moonless night, water faintly bioluminescent where the surge touches the basalt walls, blue-green plankton glow pulsing in the small waves, stars dense overhead between the dark caldera rim.",
+  "Horseshoe cove under active tropical rain, surface drummed into constant silver pocking, warm mist rising off the water in wisps, headlands barely visible through the soft grey curtain, rain hissing on the teal water.",
+  "Volcanic caldera bay enclosed by towering basalt walls, brilliant turquoise crystal water filling the foreground, deep cobalt at center under midday sun, scattered cumulus casting slow-moving shadows across the glassy surface.",
+  "Horseshoe cove at dawn, mirror-still glassy water reflecting soft pink and lavender sky, thin mist hovering just above the surface, headlands reduced to dark tender silhouettes.",
+  "Wide crescent lagoon under active rain shower, surface pocked and alive with drumming raindrops, sky a uniform soft grey, warm mist rising in pale columns off the water.",
+  "Narrow fjord-like inlet between steep ridges, pre-storm water gunmetal-calm and restless, sky heavy and bruised purple-grey, walls slick-dark under charged still air before the break.",
+  "Atoll lagoon under moonless night sky, water glowing faintly blue with bioluminescent plankton stirred by a breath of breeze, stars brilliant overhead, dark reef rim barely visible.",
+  "Volcanic caldera bay shrouded in soft dawn marine-layer fog, half the bay dissolved in white veil, basalt walls emerging spectral and dark above the obscured water surface.",
+  "Open island bay between broad headlands, brilliant turquoise crystal clarity in the shallows fading to deep sapphire at the channel, sun high and hard with scattered fast-moving cumulus.",
+  "Coral-reef enclosed lagoon on a windy clear afternoon, surface broken into thousands of glittering wavelets, deep cobalt water flashing bright under scattered cumulus and strong trade winds.",
+  "Sand-bar enclosed lagoon under post-storm clearing sky, water still slightly churned and teal-grey settling, fresh-washed air luminous, a soft rainbow arcing across the distant open horizon.",
+  "Mangrove-fringed estuary cove under soft overcast sky, water glassy and pewter-still reflecting muted grey above, mangroves dark dense green at the waterline, mood hushed and close.",
+  "Wide crescent lagoon at dusk, mirror-still water holding the orange and rose of the last sky perfectly, headlands darkening fast, surface unbroken and breathless under cooling evening air.",
+  "Volcanic basalt bay under heavy tropical downpour, water roiled and dark, rain hammering the black walls in silver curtains, sky a uniform leaden grey pressing close to the surface.",
+  "Atoll lagoon at first light, perfect glassy mirror reflecting predawn pink dissolving into pale gold, sand bar curving low in the middle distance, cool still air carrying no sound.",
+  "Wave-cut coastal terrace bay under pre-storm sky, water restless and gunmetal-heaving against the terraced rock shelves, sky massing dark to the southwest, charged and heavy, light failing fast.",
+  "Horseshoe cove under afternoon sun, brilliant turquoise crystal clarity over white sand bottom glowing in the foreground, cobalt deepening sharply toward the mouth, cumulus towers building on the ridge above.",
+  "Narrow fjord-like inlet at dawn, glassy mirror-still dark water reflecting the first pale gold streak above the ridgeline, walls black and close, absolute silence before the day begins.",
+  "Post-storm open island bay between headlands, water churning steel-grey and heaving slowly, white foam traces on the surface, sky fresh and luminous above the settling chaos below.",
+  "Coral-reef enclosed lagoon under uniform grey overcast, water teal-slate dulled by flat diffuse light, breeze raising a restless chop, mood quiet and charged, the reef a dark rim beyond.",
+  "Sand-bar enclosed lagoon under heavy rain, surface hammered silver and opaque, sand bar barely a pale ghost in the mist, sky pressing grey to the horizon, warm rain-mist rising.",
+  "Volcanic caldera bay at post-sunset twilight, water deep indigo holding the violet sky, last orange band burning at the open horizon between the basalt walls, still and profound.",
+  "Atoll lagoon on a windy bright afternoon, surface wind-rippled into quick shallow chop, brilliant turquoise broken and glittering, deep cobalt beyond the reef, cumulus racing overhead casting fast shadows.",
+  "Mangrove-fringed estuary cove under pre-storm sky, water mirror-flat and gunmetal-still, mangroves eerily motionless, sky a bruised olive-grey to the east, charged silence before the first wind arrives.",
+  "Wave-cut coastal terrace bay under moonless night, bioluminescent plankton faintly glowing blue in each wave that slides across the terraced shelves, dark headlands above, Milky Way brilliant overhead.",
+  "Wide crescent lagoon shrouded in morning fog, soft white veil diffusing the teal water below, palms at the beach edge emerging as soft dark shapes, the air cool and still.",
+  "Post-storm horseshoe cove clearing rapidly, water still heaving slow grey swells inside the curve, sky breaking open to brilliant blue above, foam lines dissipating, fresh golden light flooding the cove.",
+  "Volcanic caldera bay under midday sun, brilliant turquoise crystal clarity filling the foreground, water fading to deep cobalt at center, basalt walls rising dark and jagged above the glittering surface.",
+  "Horseshoe cove at first light, mirror-still glassy water reflecting soft pink and amber predawn sky, headlands reduced to dark silhouettes, mist ghosting just above the surface.",
+  "Wide crescent lagoon on a breezy afternoon, surface shattered into thousands of wind-rippled glittering wavelets, deep cobalt under scattered fast-moving cumulus, scattered light dancing across the chop.",
+  "Atoll lagoon under moonless night sky, water glowing faint spectral blue with bioluminescent plankton stirred by a slow current, stars blazing overhead, dark sand bar curving silently below.",
+  "Narrow fjord-like inlet between ridges under pre-storm sky, water restless and gunmetal-dark, heavy cloud pressing low on the black walls, charged stillness before the break.",
+  "Open island bay between headlands, brilliant turquoise crystal clarity in the shallows fading to deep sapphire offshore, midday sun directly overhead, scattered cumulus casting slow drifting shadows.",
+  "Coral-reef enclosed lagoon shrouded in dawn marine-layer fog, soft white veil obscuring half the bay, the reef-line emerging as a dark suggestion below, teal water muted and spectral.",
+  "Post-storm sand-bar enclosed lagoon, water still slightly heaving steel-grey, churned foam lines crossing the surface, fresh-washed sky brightening at the horizon, a faint rainbow arcing across the gap.",
+  "Mangrove-fringed estuary cove under active rain shower, surface drummed and pocked by falling rain, mist rising off warm water, mangroves black-green and dripping, sky a uniform soft pewter grey.",
+  "Wave-cut coastal terrace bay at dusk, glassy mirror-still water catching last orange and violet light along the terrace edge, horizon glowing deep amber, surface perfectly undisturbed below the darkening cliff.",
+  "Atoll lagoon under heavy overcast, water teal dulled to slate under flat diffuse light, steady breeze raising a low restless chop across the wide interior, mood hushed and quietly moody.",
+  "Volcanic caldera bay under brilliant midday sun, crystal turquoise water shimmering in the foreground bowl, deep indigo at the caldera center, basalt walls bone-dry and dark against the vivid blue sky.",
+  "Horseshoe cove under approaching squall, water darkening to gunmetal green, wind picking up chop across the enclosed arms, rain curtain visible sweeping in from the open mouth under bruised cloud.",
+  "Wide crescent lagoon at post-storm clearing, water heaving with residual grey swells, sky breaking open with shafts of pale gold light, wet sand gleaming at the crescent edge.",
+  "Sand-bar enclosed lagoon at predawn, perfect glassy mirror reflecting charcoal sky and first pale rose streak at the horizon, sand bar a thin dark line, absolute stillness before the world wakes.",
+  "Narrow fjord-like inlet under active tropical downpour, rain hammering the dark ridgeline walls, water surface roiled and dark, visibility closing to the nearest cliff face, sky leaden and uniform.",
+  "Open island bay between distant headlands on a windy clear afternoon, surface broken into bright cobalt wavelets under strong trade-wind breeze, scattered cumulus racing overhead, light scattered and energetic.",
+  "Volcanic caldera bay at post-sunset twilight, water deep indigo mirroring the violet sky above, last orange band burning at the open horizon mouth, basalt walls fading to black silhouette.",
+  "Atoll lagoon at dead of night, bioluminescent plankton tracing faint blue fire along each small ripple, stars overhead pure and dense, the lagoon edge glowing softly where the water meets dark sand.",
+  "Coral-reef enclosed lagoon under dense pre-storm overcast, water restless and slate-green, reef line barely visible below the dark surface, charged humid air pressing down, horizon erased by low cloud.",
+  "Wave-cut coastal terrace bay under morning fog, soft white marine layer veiling the upper terrace cliff, teal water emerging below the fog line, diffuse silver light flattening all contrast into quiet haze.",
+  "Mangrove-fringed estuary cove at golden dawn, glassy still water perfectly reflecting the warm peach sky, mangrove roots dark in the mirror, absolute calm broken only by a single slow ripple.",
+  "Horseshoe cove after a heavy squall, water still churning pale grey-green inside the arms, foam streaks crossing the surface, sky freshly cleared to deep blue, smell of rain hanging in the air.",
+  "Wide crescent lagoon under classic tropical sun, brilliant turquoise crystal clarity stretching across the full crescent, deep sapphire beyond the reef edge, postcard-perfect cumulus towers rising above the distant headland.",
+  "Volcanic caldera bay in pre-dawn fog, basalt walls emerging spectral above the soft white veil, water surface invisible below the mist, faint bioluminescent shimmer bleeding through the fog at the waterline.",
+  "Volcanic caldera bay under midday sun, brilliant turquoise crystal clarity filling the foreground, deep cobalt pooling at center, basalt walls stark against scattered white cumulus overhead.",
+  "Horseshoe cove at dawn, water mirror-still and glassy, reflecting pale rose and gold sky perfectly, soft mist hovering just above the surface, headlands dark soft silhouettes.",
+  "Wide crescent lagoon under active rain shower, surface alive with drumming raindrops, sky uniform soft grey, warm mist rising off the teal water in slow drifting curls.",
+  "Narrow fjord-like inlet between ridges under pre-storm sky, water restless and gunmetal-calm, walls dark and brooding, charged electric stillness in the heavy air above.",
+  "Atoll lagoon under moonless night sky, water glowing faint spectral blue with bioluminescent plankton, stars brilliant overhead, low dark rim of the atoll barely visible.",
+  "Coral-reef enclosed lagoon under heavy tropical downpour, water churned and roiled dark grey, rain hammering the reef crest, sky a uniform leaden ceiling pressing down.",
+  "Sand-bar enclosed lagoon shrouded in dawn marine-layer fog, soft white veil obscuring half the bay, sand bar emerging as a ghost shape, muted teal beneath.",
+  "Wide crescent lagoon under full sun, brilliant turquoise crystal clarity in the shallows fading to deep sapphire at center, scattered cumulus throwing soft shadows across the water.",
+  "Open island bay between headlands at dusk, water glassy mirror-still reflecting the last orange and violet band at the horizon, headlands silhouetted black against deep rose sky.",
+  "Mangrove-fringed estuary cove under gusty breeze, surface wind-rippled and choppy, scattered light dancing across the dark teal, mangroves swaying slightly at the water edge.",
+  "Volcanic caldera bay under pre-storm sky, water restless and gunmetal-grey, basalt walls dark and brooding, heavy cloud mass building above the open mouth of the caldera.",
+  "Horseshoe cove after passing squall, water still slightly churned and steel-grey heaving slowly, fresh-washed sky opening at the horizon, faint rainbow arcing across the far headland.",
+  "Atoll lagoon at first light, perfect glassy mirror reflecting predawn pink fading to pale gold, sand bar curving in the middle distance, cool still air, no wind.",
+  "Wave-cut coastal terrace bay under scattered cloud and strong breeze, surface broken into thousands of choppy glittering wavelets, deep cobalt under the open patches of bright sky.",
+  "Narrow fjord-like inlet between tall ridges at night, water glowing faintly blue with bioluminescent plankton stirred by a slow current, dark walls rising spectral on each side.",
+  "Volcanic caldera bay under heavy tropical downpour, water dark and roiled, rain hammering the basalt walls and pocking the surface in dense white rings, sky uniform leaden grey.",
+  "Sand-bar enclosed lagoon on a bright clear morning, brilliant turquoise crystal clarity over the white sand bottom, deep teal beyond the bar, sun high with sharp clean shadows.",
+  "Wide crescent lagoon veiled in coastal fog, soft white mist obscuring the far headlands entirely, foreground water a muted teal-grey, quiet and dreamlike under diffuse pearl light.",
+  "Open island bay between headlands under brisk trade wind, surface wind-rippled and choppy, cobalt water scattered with white flecks, cumulus racing overhead casting quick shadows below.",
+  "Mangrove-fringed estuary cove at dusk, water perfectly glassy and mirror-still, reflecting the muted amber and grey sky above, mangroves dark silhouettes at the calm water edge.",
+  "Coral-reef enclosed lagoon under post-storm clearing sky, water still churning slightly steel-grey and heaving, reef crest white with foam, fresh pale blue opening at the far horizon.",
+  "Volcanic caldera bay at post-sunset twilight, water deep indigo mirroring the violet sky, last thin orange band glowing at the open horizon between the dark basalt walls.",
+  "Horseshoe cove under heavy overcast pre-storm sky, water gunmetal-calm and restless, charged stillness in the air, headland walls dark against the pressing grey cloud above.",
+  "Atoll lagoon under active rain, surface pocked with drumming drops across the teal-slate water, sky soft uniform grey, warm mist rising in thin veils off the warm shallows.",
+  "Wave-cut coastal terrace bay under brilliant midday sun, crystal turquoise clarity over pale limestone shelves in the foreground, open deep sapphire beyond, scattered cumulus and sharp-edged shadows.",
+  "Volcanic caldera bay under pre-storm sky, water restless and gunmetal-grey, basalt walls dark and brooding, heavy cloud pressing low, charged stillness before the break",
+  "Horseshoe cove at dawn, mirror-still glassy water reflecting pale pink and gold sky, soft mist hovering just above the surface, headlands fading to soft silhouettes",
+  "Wide crescent lagoon under brilliant midday sun, crystal turquoise clarity in the shallows fading to deep sapphire at center, scattered cumulus above white sand shoreline",
+  "Narrow fjord-like inlet on a breezy afternoon, wind-rippled choppy surface scattering silver light, dark ridges flanking both sides, whitecaps flicking at the chop",
+  "Atoll lagoon under moonless night sky, water glowing faint spectral blue with bioluminescent plankton, stars blazing overhead, low dark rim of sand barely visible",
+  "Open island bay between distant headlands shrouded in soft morning fog, white veil obscuring the far shore, teal surface just visible beneath the mist",
+  "Post-storm horseshoe cove clearing under fresh-washed sky, water still churning steel-grey and heaving gently, rainbow arcing across the open mouth between the headlands",
+  "Coral-reef enclosed lagoon under full tropical sun, brilliant turquoise crystal water glowing over the pale sandy floor, reef line dark at the far edge",
+  "Mangrove-fringed estuary cove under active rain shower, surface drumming with heavy raindrops, mist rising off warm water, mangroves dark green and dripping at the edge",
+  "Sand-bar enclosed lagoon at dusk, mirror-still glassy water reflecting the last violet and rose bands of sunset, the curving sandbar a pale sliver against deepening sky",
+  "Wide crescent lagoon on a windy clear day, surface broken into thousands of glittering wind-driven wavelets, deep cobalt water under racing scattered cumulus",
+  "Volcanic caldera bay under heavy tropical downpour, water roiled and dark, rain hammering the basalt walls in grey curtains, sky leaden and uniform overhead",
+  "Wave-cut coastal terrace bay under pre-storm restless calm, water gunmetal-still but charged, swell building at the open edge, sky bruised purple at the horizon",
+  "Atoll lagoon at first light, perfect glass mirror surface reflecting predawn pink and lavender sky, sandbar curving pale in the middle distance, air cool and still",
+  "Narrow fjord-like inlet between ridges on a gusty afternoon, wind-rippled choppy dark water, spray lifting off the chop, ridgelines black against broken grey cloud",
+  "Open island bay between headlands, brilliant turquoise crystal clarity foreground fading to deep sapphire, midday sun high overhead, cumulus towers rising at the horizon",
+  "Post-storm volcanic caldera bay under clearing sky, water still steel-grey and slightly heaving, basalt walls wet and black, fresh-washed light breaking through ragged cloud",
+  "Sand-bar enclosed lagoon under heavy overcast before rain, surface teal-slate dulled by flat diffuse light, mood quiet and moody, the sandbar pale under pewter sky",
+  "Coral-reef enclosed lagoon at dawn, mirror-still glassy water reflecting soft pink and gold sky, reef line just visible as a dark rim at the far edge",
+  "Mangrove-fringed estuary cove on a breezy morning, surface wind-rippled and light-scattered, mangroves swaying softly, bright broken reflections dancing across the shallow water",
+  "Volcanic caldera bay under active rain shower, surface pocked with drumming raindrops, mist rising off warm water, basalt walls dark and streaming, sky uniformly soft grey",
+  "Wide crescent lagoon under pre-storm sky, water restless and gunmetal-calm, charged heavy air, deep cloud building behind the far palm-lined shore, stillness before the break",
+  "Atoll lagoon at post-storm evening, water still churning and steel-grey, sky clearing to fresh pale blue at the zenith, distant squall line retreating over the horizon",
+  "Wave-cut coastal terrace bay under fog-veiled morning, soft white marine layer obscuring the outer bay, teal water emerging spectral at the near terrace edge below",
+  "Horseshoe cove on a clear breezy afternoon, surface broken into bright wind-driven chop, deep cobalt-turquoise water sparkling under full sun, headlands sharp and green above",
+  "Volcanic caldera bay enclosed by dark basalt walls, brilliant turquoise crystal clarity filling the shallows, deep cobalt at center, midday sun overhead with scattered white cumulus casting soft shadows on the water.",
+  "Horseshoe cove at dawn, glassy mirror-still water reflecting the blush-pink sky perfectly, soft mist hovering just above the surface, headlands reduced to dark velvet silhouettes in the cool morning air.",
+  "Wide crescent lagoon under active tropical rain shower, surface pocked with thousands of drumming raindrops, sky a uniform soft pearl-grey, warm mist rising in thin veils off the agitated teal water.",
+  "Narrow fjord-like inlet between steep ridges under pre-storm sky, water restless and gunmetal-calm, charged atmosphere heavy with pressure, walls dark and brooding, distant thunder rumbling beyond the open mouth.",
+  "Atoll lagoon under moonless night sky, water glowing faintly electric-blue with bioluminescent plankton along the breaking wave line, stars brilliant and dense overhead, dark reef rim a low shadow around the glow.",
+  "Volcanic caldera bay shrouded in dawn marine-layer fog, half the water obscured in soft white veil, basalt walls emerging spectral above the mist, diffuse light making everything luminous and directionless.",
+  "Open island bay between two distant headlands, brilliant turquoise crystal clarity in the foreground shading to deep sapphire at depth, sun near overhead, scattered cumulus throwing moving shadow-patches across the surface.",
+  "Sand-bar enclosed lagoon under windy clear afternoon sky, surface broken into thousands of glittering wind-rippled wavelets, deep cobalt water chopped by steady trade-wind breeze, sand bar brilliant white beyond.",
+  "Post-storm coral-reef enclosed lagoon clearing under fresh-washed sky, water still slightly churned and steel-tinted but slowly settling, rainbow arcing in a full arch across the seaward horizon above the reef crest.",
+  "Mangrove-fringed estuary cove at dusk, water glassy mirror-still reflecting the amber and violet sky above, mangroves a dense dark-green wall at the waterline, egrets settling silently into the canopy.",
+  "Wide crescent lagoon under heavy uniform overcast, water a muted teal-slate dulled by flat diffuse light, steady breeze rippling the surface in long wind-lanes, mood quiet and contemplative, horizon blurred.",
+  "Narrow fjord-like inlet with fast-moving squall passing through, rain curtain visible sweeping across the open mouth, water dark and restless inside, black walls slick and streaming against the grey churning sky.",
+  "Wave-cut coastal terrace bay at post-storm dawn, water still heaving steel-grey over the flat terrace shelves, white foam churning at the terrace edges, sky clearing in pale gold bands along the east horizon.",
+  "Atoll lagoon at first light, perfect predawn mirror reflecting pale pink and lilac clouds above, sand bar curving ivory in the middle distance, air cool and completely still, surface undisturbed as silk.",
+  "Volcanic caldera bay under pre-storm sky, water restless and gunmetal-grey, charged atmosphere pressing down, basalt walls dark and massive under a ceiling of bruised purple-green cloud moving fast overhead.",
+  "Horseshoe cove under heavy tropical downpour, rain hammering the enclosed water into a roiling dark surface, mist thick inside the cove, rocky headlands barely visible as grey shapes through the rain curtain.",
+  "Coral-reef enclosed lagoon on a sunny breezy afternoon, surface fractured into brilliant wind-rippled chop, light scattering off each wavelet in sharp silver flashes, deep turquoise water vivid under scattered cumulus.",
+  "Sand-bar enclosed lagoon at bioluminescent low tide, the shallow waterline glowing soft blue-green where small waves disturb the plankton, night sky reflected black in the deeper still center of the lagoon.",
+  "Wide open island bay in early morning fog, soft white veil sitting low over teal water, distant headlands fully obscured, near shoreline visible in muted detail, light diffuse and pearl-toned, utterly still.",
+  "Volcanic caldera bay at post-sunset twilight, water deep indigo mirroring the violet sky, last thin orange band burning at the open horizon between the basalt walls, first stars appearing at zenith.",
+  "Mangrove-fringed estuary cove under brooding pre-storm sky, water glassy but charged, the dark mangrove wall perfectly doubled in the gunmetal surface, distant lightning flickering silently over the open sea beyond.",
+  "Wave-cut coastal terrace bay on a brilliant midday, water crystal-clear turquoise over the shallow flat terraces, coral heads visible through the lens of clean water, sun high and blazing, sky cloudless and deep blue.",
+  "Atoll lagoon under post-storm heaving swell, water steel-grey and churned inside the reef, white caps running across the exposed lagoon surface, sky fast-clearing with ragged dark clouds retreating to the west.",
+  "Horseshoe cove on a windy clear afternoon, surface chopped by strong on-shore breeze into glittering wind-rippled chop, spray lifting off wave crests, headlands solid green above the bright cobalt water below.",
+  "Narrow fjord-like inlet under soft overcast at dusk, water a perfect mirror-still reflecting the grey-pink dimming sky above, steep ridges doubled in the glassy dark surface, complete silence, air smelling of rain.",
+  "Horseshoe cove at dawn, water mirror-still and glassy, reflecting pale rose and gold sky, headlands fading to soft violet silhouettes, mist threading just above the surface.",
+  "Wide crescent lagoon under heavy overcast, surface wind-rippled and choppy, deep teal broken into thousands of restless facets, scattered light flat and diffuse across the bay.",
+  "Narrow fjord-like inlet under pre-storm sky, water gunmetal-grey and restless, ridge walls dark and brooding, charged stillness pressing down, heavy clouds massing at the open mouth.",
+  "Atoll lagoon under moonless night sky, water glowing faint electric blue with bioluminescent plankton, stars brilliant overhead, coral ring barely visible as a dark curving line.",
+  "Coral-reef enclosed lagoon shrouded in dawn fog, soft white marine-layer veil obscuring half the bay, reef line emerging spectral beneath, warm teal hinting through the pale haze.",
+  "Open island bay between distant headlands, brilliant turquoise crystal clarity in the shallows grading to deep sapphire, midday sun overhead, scattered cumulus throwing soft moving shadows.",
+  "Sand-bar enclosed lagoon at dusk, water glassy and mirror-still, reflecting amber and coral sky, the curving sandbar a pale ribbon at the edge of perfect stillness.",
+  "Mangrove-fringed estuary cove under active rain shower, surface pocked with drumming raindrops, mist rising off warm water, mangrove walls dark green and dripping under uniform grey sky.",
+  "Post-storm volcanic caldera bay clearing, water still churning faintly steel-grey, fresh-washed sky brightening at the edges, rainbow arcing across the open mouth above settling swells.",
+  "Horseshoe cove on a breezy clear afternoon, surface broken into glittering wind-rippled chop, deep cobalt under full sun, headlands sharp green against scattered cumulus racing overhead.",
+  "Wave-cut coastal terrace bay under pre-storm dusk, water restless and gunmetal-calm, charged atmosphere heavy, distant lightning flickering at the horizon, terrace shelves dark and slick below.",
+  "Atoll lagoon at first light, perfect glassy mirror reflecting predawn blush-pink sky, sandbar curving pale in the middle distance, absolute stillness before the first breeze stirs.",
+  "Wide crescent lagoon under heavy tropical downpour, rain hammering the surface dark and roiled, sky uniform leaden grey, warm mist rising in wisps from the churned water.",
+  "Narrow fjord-like inlet at post-storm clearing, water heaving steel-grey between the ridges, fresh light breaking at the far end, walls black and streaming with runoff.",
+  "Volcanic caldera bay at twilight, water deep indigo reflecting violet sky, last orange band burning at the open horizon, basalt walls looming as dark monolithic forms above.",
+  "Sand-bar enclosed lagoon on a windy day, choppy wind-rippled surface scattering light across shallow turquoise, sandbar bright white against the restless interior water, cumulus stacking at the rim.",
+  "Coral-reef enclosed lagoon, brilliant turquoise crystal clarity over the coral shelf, water glassy and jewel-like under cloudless midday sky, reef crest foaming white at the outer edge.",
+  "Mangrove-fringed estuary cove at dusk, water mirror-still reflecting deep amber and rose, mangroves dark silhouettes framing the glassy surface, absolute quiet as the light fades slowly.",
+  "Wave-cut coastal terrace bay under active rain, surface roiled and pocked with heavy drumming drops, sky soft uniform grey, mist rising from warm water along the terrace shelf.",
+  "Open island bay between headlands under breezy overcast, water wind-rippled teal-slate, restless chop scattering flat diffuse light, headlands muted under moving grey cloud, mood cool and unsettled.",
+  "Atoll lagoon at post-storm morning, water still slightly churned and heaving, sky freshening above, lagoon colour shifting from steel-grey toward recovering teal as the last clouds thin.",
+  "Volcanic caldera bay in dense dawn fog, soft white veil shrouding the entire basin, basalt walls emerging spectral above the obscured water, faint teal glow hinting beneath the haze.",
+  "Horseshoe cove under pre-storm afternoon, water gunmetal-grey and eerily still, charged humid air pressing down, cove walls dark against the bruised purple-green sky massing at the ridgeline.",
+  "Wide crescent lagoon at breezy midday, surface dancing with wind-rippled glittering wavelets, brilliant turquoise shallows grading to deep cobalt at center, cumulus casting swift shadows across the chop.",
+  "Horseshoe cove at glassy pre-dawn stillness, mirror-still water reflecting deep rose and amber sky above, soft mist hovering just above the surface, twin headlands dissolving into cool lavender silhouettes at the edges."
 ]

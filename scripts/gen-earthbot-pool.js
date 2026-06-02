@@ -2470,6 +2470,181 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
     ],
     instructions: `Output ONLY a numbered list of {COUNT} European phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
   },
+
+  reef_paradise_sky_drama: {
+    format: 'simple',
+    theme: `SKY + WEATHER + TIME-OF-DAY entries for EarthBot's reef-paradise path. Each entry is ONE specific tropical sky/weather/light condition for a Pacific-island bay scene. Each entry 14-25 words.
+
+🚨 CRITICAL — WEATHER + TIME-OF-DAY DIVERSITY IS THE WHOLE POINT OF THIS POOL.
+This pool was previously locked to 86% high-noon sunny / golden-hour fair-weather cumulus, producing identical "bright tropical postcard" renders every time. The whole reason this pool exists is to ROTATE atmosphere across the full Pacific-tropics range so the path doesn't lock into one mood.
+
+🎯 MANDATORY distribution across {COUNT} entries — every category MUST appear:
+  • ~15% high-noon sunny / fair-weather (the "current" mode — keep some, don't ALL be this)
+  • ~15% golden-hour / pre-sunset warm amber
+  • ~10% dawn / sunrise / first light (cool pink-amber, mist over water)
+  • ~10% post-sunset twilight / blue-hour / gloaming (deep teal/violet sky over dark water)
+  • ~10% overcast tropical sky / soft diffuse grey / flat moody light
+  • ~12% approaching tropical storm / thunderhead / monsoon front / cumulonimbus tower
+  • ~10% active tropical rain / squall / heavy downpour / monsoon shower
+  • ~5% post-rain crystal-clear afterglow / rainbow / steaming jungle
+  • ~5% night / moonlit / starry tropical sky (no city light pollution)
+  • ~5% fog / sea-mist / morning marine layer drifting low over the bay
+  • ~3% unusual phenomena (mammatus cloud, sun pillar, double rainbow, water-spout in distance, st. elmo's fire on mast, green-flash sunset)
+
+❌ DO NOT write 200 variations of "fair-weather cumulus + sunburst + golden tint + brilliant azure." Every entry should be readable as a DIFFERENT weather mood from the previous one.
+
+❌ FORBIDDEN VOCAB (these collapse pool diversity):
+  • "fair-weather cumulus" (too generic — name the specific cloud type or weather)
+  • "sunburst" overused (use sparingly, ≤15% of entries)
+  • "golden tint" / "warm amber tint" (use only on actual golden-hour entries)
+  • "tack-sharp" / "blazing" (lighting-quality tells, not weather descriptions)
+  • Repetitive sentence structures — vary syntax across entries
+
+✓ ALLOWED VOCAB:
+  • Specific cloud names — cirrus, stratus, cumulonimbus, mammatus, lenticular, fog bank, marine layer
+  • Specific weather events — squall, monsoon shower, tropical downpour, sea-mist, fog inversion
+  • Specific time-of-day phrasing — predawn, dawn, post-sunrise, late morning, midday, mid-afternoon, late afternoon, sunset, post-sunset, blue-hour, gloaming, nightfall, late night
+  • Specific light qualities at each time — pink dawn, copper sunrise, white midday, amber golden-hour, violet twilight, indigo blue-hour, silver moonlight, monsoon-grey, storm-blue
+  • Specific sky moods — brooding, ominous, charged, restless, calm, glassy-still, hazy, dramatic, peaceful
+
+✅ DIVERSITY-OF-MOOD examples (one of each):
+  • "Approaching monsoon front, towering cumulonimbus stacking over the open Pacific, sky greying from cobalt to brooding slate, breeze freshening the bay"
+  • "Predawn cool pink-and-amber wash across the sky, soft marine layer drifting low over the bay surface, distant headland silhouetted in cool indigo"
+  • "Active tropical rain shower drumming the bay surface, sky uniform soft grey, mist rising off the water as rain hits warm tropical air"
+  • "Post-rain crystal-clear afterglow, towering dissipating cumulonimbus catching late warm light, primary rainbow arcing across the deep teal sky"
+  • "Late-night tropical sky with brilliant Milky Way visible above the island, no light pollution, moonless dark sea reflecting starlight"
+  • "Sea-mist inversion sitting low over the bay at dawn, island peaks emerging above the cloud sea, soft pink light hitting the cloud tops"
+  • "Heavy overcast tropical day, sky uniform stratus grey, water dulled to teal-slate, mood quiet and brooding"
+  • "Mid-afternoon scattered cumulus with deep cobalt gaps, sky boring and calm but the water perfect crystal turquoise"
+  • "Green-flash sunset moment, sun's upper rim flashing emerald just before disappearing into the open Pacific horizon"
+  • "Dramatic mammatus cloud belly hanging low over the bay after a passing storm, ominous and beautifully strange"
+`,
+    touchpoints: [
+      'Approaching monsoon front, towering cumulonimbus stacking over the open Pacific, sky greying from cobalt to brooding slate',
+      'Predawn cool pink-and-amber wash across the sky, soft marine layer drifting low over the bay surface',
+      'Active tropical rain shower drumming the bay surface, sky uniform soft grey, mist rising off the water',
+      'Post-rain crystal-clear afterglow, dissipating cumulonimbus catching warm light, primary rainbow arcing the sky',
+      'Late-night tropical sky with brilliant Milky Way visible above the island, no light pollution, moonless dark sea',
+      'Sea-mist inversion sitting low over the bay at dawn, island peaks emerging above the cloud sea',
+      'Heavy overcast tropical day, sky uniform stratus grey, water dulled to teal-slate, mood quiet and brooding',
+      'Green-flash sunset moment, sun upper rim flashing emerald just before disappearing into the open Pacific',
+      'Dramatic mammatus cloud belly hanging low over the bay after a passing storm, ominous and strange',
+      'Blue-hour gloaming with deep teal-violet sky over dark water, last orange band at the horizon',
+      'Fog-bank wall rolling in off the open Pacific, half the bay obscured in soft white veil',
+      'Lenticular cloud stack suspended over the central volcanic peak, cool late-afternoon blue sky',
+      'Brilliant late-morning sun cutting through scattered cumulus, water glittering with hard sun-sparkle',
+      'Pre-storm calm, glassy-still bay surface, sky charged green-grey, breeze dropping to nothing',
+      'Squall line passing in the distance with visible rain curtain trailing under dark cloud belly',
+      'Soft golden-hour low light raking across volcanic ridges, warm amber air, gentle scattered cumulus',
+      'Moonlit tropical night with bright full moon over the bay, silver path on dark water',
+      'Dawn fog burning off the bay as first sun reaches the headland tops, soft pink and gold',
+      'Mid-morning trade-wind cumulus drifting steadily across deep cobalt sky, normal Pacific weather',
+      'Overcast bruised-purple sky just before a storm breaks, charged air, restless water surface',
+      'Tropical downpour drumming the bay, sky uniform leaden grey, jungle steaming on the hills',
+      'Post-sunset orange-pink band fading to indigo above, deep teal twilight water below',
+      'High cirrus ice-crystal sky with halo-ring around the sun, calm tropical afternoon',
+      'Sun pillar rising vertically at dawn horizon above the open Pacific, cool pre-sunrise sky',
+      'Heavy marine-layer morning, low grey ceiling pressing down on the bay, soft diffuse flat light',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} reef-paradise sky/weather/time entries. NO preamble. Each entry 14-25 words on a single line. CRITICAL: every category from the mandatory distribution above MUST be represented — do not collapse to one mood. Vary syntax + cloud-type + time-of-day + weather + light-quality across every entry.`,
+  },
+
+  reef_paradise_bay_setting: {
+    format: 'simple',
+    theme: `BAY SETTING + WATER STATE entries for EarthBot's reef-paradise path. Each entry is ONE specific tropical bay composition with a specific WATER + WEATHER MOOD. Each entry 25-40 words.
+
+🚨 CRITICAL — this pool previously baked "brilliant turquoise crystal clarity" into every entry, locking the path to "perfect calm sunny day" regardless of what the sky pool said. Diversify by WATER STATE across the {COUNT} entries.
+
+🎯 MANDATORY distribution of WATER STATES:
+  • ~25% calm + crystal turquoise + classic sunny clarity (the "current" mode — keep some)
+  • ~15% glassy mirror-still at dawn or dusk (different light, calm water)
+  • ~15% wind-rippled choppy surface (breeze, scattered light)
+  • ~15% pre-storm restless / gunmetal calm (charged but still)
+  • ~10% active rain-pocked surface (drumming raindrops, mist rising)
+  • ~10% post-storm churning / steel-grey heaving water
+  • ~5% bioluminescent night water (faint blue glow from plankton)
+  • ~5% fog-veiled obscured bay (soft white veil over teal)
+
+🎯 Bay geometries to rotate across entries (vary the SHAPE of bay/cove + the LAND that frames it):
+  • Volcanic caldera bay (basalt walls)
+  • Horseshoe cove
+  • Wide crescent lagoon
+  • Narrow fjord-like inlet between ridges
+  • Open island bay between headlands
+  • Atoll lagoon
+  • Sand-bar enclosed lagoon
+  • Mangrove-fringed estuary cove
+  • Coral-reef enclosed lagoon
+  • Wave-cut coastal terrace bay
+
+`,
+    touchpoints: [
+      'Volcanic caldera bay under pre-storm sky, water restless and gunmetal-grey, basalt walls dark and brooding under heavy cloud cover above',
+      'Horseshoe cove at dawn, mirror-still glassy water reflecting pink sky, soft mist hovering just above the surface, headlands soft silhouettes',
+      'Wide crescent lagoon under active rain shower, surface pocked with drumming raindrops, sky uniform soft grey, mist rising off warm water',
+      'Post-storm bay clearing under fresh-washed sky, water still slightly churned but settling, rainbow arcing across the distant horizon',
+      'Atoll lagoon under moonless night sky, water glowing faintly blue with bioluminescent plankton, stars brilliant overhead, dark headlands',
+      'Volcanic caldera bay shrouded in dawn marine-layer fog, half the bay obscured in soft white veil, basalt walls emerging spectral above',
+      'Atoll lagoon under heavy overcast sky, water teal-slate dulled by flat diffuse light, breeze rippling the surface, mood quiet and moody',
+      'Narrow fjord-like inlet with squall passing, rain curtain visible across the open mouth, water restless and dark, walls black against grey sky',
+      'Volcanic caldera bay at post-sunset twilight, water deep indigo reflecting the violet sky, last orange band glowing at the open horizon',
+      'Wide open island bay between distant headlands, brilliant turquoise crystal clarity in the foreground fading to deep sapphire, sun overhead with scattered cumulus',
+      'Crescent lagoon on a windy clear day, surface broken into thousands of glittering wavelets, deep cobalt water under scattered cumulus',
+      'Volcanic basalt bay under heavy tropical downpour, water roiled and dark, rain hammering the basalt walls, sky uniform leaden grey',
+      'Atoll lagoon at first light, perfect mirror reflecting the predawn pink sky, sand bar curving in the middle distance under cool morning air',
+      'Mangrove-fringed estuary cove under soft overcast sky, glassy water reflecting the muted grey above, mangroves dark green at the water edge',
+      'Volcanic caldera bay enclosed by towering basalt walls, brilliant turquoise crystal water filling the foreground, deep cobalt at center under midday sun',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} reef-paradise bay-setting entries. NO preamble. Each entry 25-40 words on a single line. CRITICAL: every WATER STATE category above MUST be represented — do not collapse to one mood.`,
+  },
+
+  reef_paradise_water_quality: {
+    format: 'simple',
+    theme: `WATER QUALITY entries for EarthBot's reef-paradise path. Each entry is ONE specific WATER SURFACE + COLOR + LIGHT description for a tropical Pacific bay. Each entry 14-25 words.
+
+🚨 CRITICAL — this pool previously baked "brilliant turquoise crystal clarity + mirror-glass" into every entry, locking the path. Diversify by WATER STATE.
+
+🎯 MANDATORY distribution across {COUNT} entries:
+  • ~25% calm crystal turquoise (the "current" mode — keep some)
+  • ~15% glassy dawn/dusk mirror (different light, calm)
+  • ~15% wind-rippled scattered light
+  • ~15% pre-storm gunmetal calm
+  • ~10% rain-pocked drumming surface
+  • ~10% post-storm churning steel-grey
+  • ~5% bioluminescent night glow
+  • ~5% fog-veiled surface
+
+Vary the LIGHT quality interacting with water: midday sun-sparkle, golden-hour amber glow, dawn pink sheen, dusk indigo reflection, moonlight silver path, overcast diffuse, storm-grey, rain-drum, fog-soft.
+`,
+    touchpoints: [
+      'Glassy mirror-still water at dawn reflecting predawn pink sky, surface unbroken, soft mist hovering just above',
+      'Wind-rippled surface scattered with hundreds of glittering wavelets catching mid-afternoon sun',
+      'Pre-storm gunmetal calm, water motionless and ominous under charged green-grey sky',
+      'Active rain pocking the surface with drumming droplets, mist rising off warm tropical water',
+      'Post-storm churning steel-grey water with whitecaps, restless and dark under clearing sky',
+      'Bioluminescent night water glowing faint blue under starlight, plankton sparking with surface motion',
+      'Fog-veiled water surface soft and obscured, teal water visible in patches through drifting white mist',
+      'Brilliant turquoise crystal clarity revealing sand bottom, midday sun penetrating clear to the seabed',
+      'Golden-hour water glowing rich amber-warm, sun raking horizontally across the surface',
+      'Dusk water reflecting violet sky, deep indigo surface with last orange band at horizon',
+      'Overcast diffuse water dulled to teal-slate, flat diffuse light without sparkle or shadow',
+      'Calm crystal water at late afternoon, surface glittering with low warm sun-sparkle',
+      'Glassy at first light, perfect reflection of pink dawn sky and silhouetted headland',
+      'Choppy windy surface broken into thousands of small whitecaps, cobalt and white',
+      'Rain-shower water with concentric ripple-rings from each drop hitting the surface',
+      'Moonlit night water with silver path leading from the moon to the dark shoreline',
+      'Sea-mist morning surface soft and pearly, water visible in patches through low fog',
+      'Tropical storm churn with breaking whitecaps, water dark and aggressive under heavy sky',
+      'Post-rain crystal-clear water with rainbow caught in droplets above the surface',
+      'Late-afternoon clear water with scattered cumulus reflected in the calm surface',
+      'Glassy violet twilight surface reflecting deep teal sky, fading orange band at horizon',
+      'Trade-wind rippled clean cobalt water under brilliant noon sun, hard sparkle',
+      'Sunday-morning calm crystal turquoise with sand-bottom visible clear, lazy soft light',
+      'Heavy-rain hammered water with concentric ring patterns everywhere, soft mist over warm tropical sea',
+      'Pre-dawn glassy water with brilliant Milky Way reflected in the dark surface',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} reef water-quality entries. NO preamble. Each entry 14-25 words on a single line. CRITICAL: every water-state category MUST be represented — do not collapse to "crystal turquoise."`,
+  },
 };
 
 if (!POOL_RECIPES[POOL]) {
