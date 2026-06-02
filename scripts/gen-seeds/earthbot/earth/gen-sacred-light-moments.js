@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/sacred_light_moments.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SINGLE DIVINE LIGHT MOMENT descriptions for EarthBot — scenes where one dramatic shaft or source of light creates a sacred, breathtaking focal point.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SINGLE DIVINE LIGHT MOMENT descriptions for EarthBot — scenes where one dramatic shaft or source of light creates a sacred, breathtaking focal point.
 
 Each entry: 15-25 words. One specific moment of extraordinary light in a specific setting. No people.
 
@@ -35,4 +37,7 @@ ${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/bioluminescent_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} BIOLUMINESCENT / PANDORA-STYLE GLOWING LANDSCAPE descriptions for EarthBot — otherworldly luminous natural scenes that feel like Avatar's Pandora brought to Earth.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BIOLUMINESCENT / PANDORA-STYLE GLOWING LANDSCAPE descriptions for EarthBot — otherworldly luminous natural scenes that feel like Avatar's Pandora brought to Earth.
 
 Each entry: 15-25 words. One specific glowing landscape scene. No people, no animals as subjects.
 
@@ -35,4 +37,7 @@ ${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

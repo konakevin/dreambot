@@ -13,7 +13,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} WATER QUALITY entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). Each entry describes ONE water-aesthetic moment — the CRYSTAL WATER itself as a protagonist. Clarity, color gradient, surface texture, reflections, caustics. NOT the bay shape. NOT the shoreline. NOT the sky. ONLY the water.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WATER QUALITY entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). Each entry describes ONE water-aesthetic moment — the CRYSTAL WATER itself as a protagonist. Clarity, color gradient, surface texture, reflections, caustics. NOT the bay shape. NOT the shoreline. NOT the sky. ONLY the water.
 
 ━━━ THE BAR — THE WATER AS THE PROTAGONIST ━━━
 
@@ -106,4 +108,7 @@ Mix across entries:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Crystal water with clarity + color gradient + surface texture. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

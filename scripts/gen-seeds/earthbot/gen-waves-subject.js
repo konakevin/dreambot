@@ -27,7 +27,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} WAVE SUBJECT entries for EarthBot waves. Each entry describes ONE wave moment — the HERO of the frame. Two registers MIXED in the pool: ~50% INTIMATE (Clark-Little barrel POV / translucent tube / backlit crest / spray detail) and ~50% MONUMENTAL (big-wave 40-60ft face breaking on reef / cliff / point). Real ocean physics. NO surfers. NO named breaks.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WAVE SUBJECT entries for EarthBot waves. Each entry describes ONE wave moment — the HERO of the frame. Two registers MIXED in the pool: ~50% INTIMATE (Clark-Little barrel POV / translucent tube / backlit crest / spray detail) and ~50% MONUMENTAL (big-wave 40-60ft face breaking on reef / cliff / point). Real ocean physics. NO surfers. NO named breaks.
 
 ━━━ THE BAR — ONE WAVE MOMENT AS HERO ━━━
 
@@ -131,4 +133,7 @@ Different waves break differently. Vary which break pattern this entry describes
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE wave moment per entry. Real ocean physics. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

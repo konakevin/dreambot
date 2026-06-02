@@ -14,7 +14,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SHORELINE DRAMA entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). Each entry describes ONE dramatic ABOVE-WATER tropical shoreline — the landscape rising out of the bay. Generic morphological descriptions ONLY. NO named places.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SHORELINE DRAMA entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). Each entry describes ONE dramatic ABOVE-WATER tropical shoreline — the landscape rising out of the bay. Generic morphological descriptions ONLY. NO named places.
 
 ━━━ THE BAR — DRAMATIC TROPICAL SHORELINE (described generically) ━━━
 
@@ -107,4 +109,7 @@ Spread across entries:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Dramatic shoreline above the water, generic only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

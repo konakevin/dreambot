@@ -25,7 +25,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SACRED-LIGHT SUBJECT entries for EarthBot sacred-light. Each entry describes ONE natural setting PRIMED for sacred-light drama. The setting holds the stage — the lighting axis brings the actual light event. Generic morphological descriptions only — NO named places (LESSON 7).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SACRED-LIGHT SUBJECT entries for EarthBot sacred-light. Each entry describes ONE natural setting PRIMED for sacred-light drama. The setting holds the stage — the lighting axis brings the actual light event. Generic morphological descriptions only — NO named places (LESSON 7).
 
 ━━━ THE BAR — NATURAL SETTING PRIMED FOR TRANSCENDENT LIGHT ━━━
 
@@ -174,4 +176,7 @@ ALL entries mid to tight framing. NEVER wide panorama. ALL observational POV (vi
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Specific natural setting primed for light drama. Mid/tight framing. Observational POV only. No architecture. No named places. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

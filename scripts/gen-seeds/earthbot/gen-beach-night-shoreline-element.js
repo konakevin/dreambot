@@ -14,7 +14,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} NIGHT SHORELINE ELEMENT entries for EarthBot beach-night. Each entry describes ONE natural foreground element on the tropical-beach shoreline at night. NEVER human-built (no tiki torches / lanterns / fire pits / docks / piers).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} NIGHT SHORELINE ELEMENT entries for EarthBot beach-night. Each entry describes ONE natural foreground element on the tropical-beach shoreline at night. NEVER human-built (no tiki torches / lanterns / fire pits / docks / piers).
 
 ━━━ THE BAR — ONE NATURAL FOREGROUND ELEMENT ━━━
 
@@ -95,4 +97,7 @@ TROPICAL FLORA (natural shoreline plants):
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE natural foreground element. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

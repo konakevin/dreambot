@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/coastal_vistas.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COASTAL VISTA descriptions for BeachBot's coastal-vista path — dramatic craggy coastlines + water-eroded features + striking sea-color + dramatic weather/light.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COASTAL VISTA descriptions for BeachBot's coastal-vista path — dramatic craggy coastlines + water-eroded features + striking sea-color + dramatic weather/light.
 
 Each entry: 15-30 words. One specific craggy-coast scene.
 
@@ -61,4 +63,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

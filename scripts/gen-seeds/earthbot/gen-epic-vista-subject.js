@@ -24,7 +24,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} EPIC VISTA SUBJECT entries for EarthBot — each entry names ONE iconic real-world Earth landscape and tags it with biome category/categories so the composer can match a biome-appropriate foreground anchor.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EPIC VISTA SUBJECT entries for EarthBot — each entry names ONE iconic real-world Earth landscape and tags it with biome category/categories so the composer can match a biome-appropriate foreground anchor.
 
 ━━━ OUTPUT FORMAT (NON-NEGOTIABLE — JSON OBJECTS NOT STRINGS) ━━━
 
@@ -104,4 +106,7 @@ NEVER repeat a location twice. Each entry is a UNIQUE real place. Many subjects 
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS in the exact shape shown above. No preamble, no markdown code fences, no numbering. Just a clean JSON array starting with [ and ending with ].`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

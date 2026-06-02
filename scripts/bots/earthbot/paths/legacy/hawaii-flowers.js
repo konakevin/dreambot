@@ -9,7 +9,10 @@ const pools = require('../../beach/pools');
 const blocks = require('../../beach/shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const arrangement = picker.pickWithRecency(pools.TROPICAL_FLOWER_ARRANGEMENTS, 'tropical_flower_arrangement');
+  const arrangement = picker.pickWithRecency(
+    pools.TROPICAL_FLOWER_ARRANGEMENTS,
+    'tropical_flower_arrangement'
+  );
   const space = picker.pickWithRecency(pools.HAWAII_COASTAL_SPACES, 'hawaii_coastal_space');
   const weather = picker.pickWithRecency(pools.COASTAL_WEATHER_MOMENTS, 'coastal_weather');
   const atmosphere = picker.pick(pools.ATMOSPHERES);

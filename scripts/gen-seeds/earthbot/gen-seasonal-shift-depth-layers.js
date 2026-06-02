@@ -18,7 +18,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} DEPTH LAYER entries for EarthBot seasonal-shift. Each entry names what fills the FOREGROUND + MIDGROUND + DISTANT portions of the frame. Per playbook: 4+ tier depth is mandatory for 10/10 renders.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DEPTH LAYER entries for EarthBot seasonal-shift. Each entry names what fills the FOREGROUND + MIDGROUND + DISTANT portions of the frame. Per playbook: 4+ tier depth is mandatory for 10/10 renders.
 
 ━━━ THE BAR — MULTI-TIER DEPTH FOR A WIDE LANDSCAPE VISTA ━━━
 
@@ -70,4 +72,7 @@ Season tag MUST be the FIRST tag — ONLY "autumn" or "spring".
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. FG + MG + distant per entry. Season-tagged. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

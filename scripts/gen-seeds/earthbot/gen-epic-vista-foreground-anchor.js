@@ -22,7 +22,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/seeds/epic_vista_foreground_anchor.json',
   total: 50,
   batch: 15,
-  metaPrompt: (n) => `You are writing ${n} FOREGROUND ANCHOR entries for EarthBot epic-vista — each entry names ONE specific NEAR-FRAME compositional anchor (the eye lands here first before traveling deep into the vista), tagged with the biome(s) it fits.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FOREGROUND ANCHOR entries for EarthBot epic-vista — each entry names ONE specific NEAR-FRAME compositional anchor (the eye lands here first before traveling deep into the vista), tagged with the biome(s) it fits.
 
 ━━━ OUTPUT FORMAT (NON-NEGOTIABLE — JSON OBJECTS NOT STRINGS) ━━━
 
@@ -112,4 +114,7 @@ NEVER tag a palm tree as alpine. NEVER tag a bristlecone as tropical. Trees MUST
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS in the exact shape shown above. No preamble, no markdown code fences, no numbering. Just a clean JSON array starting with [ and ending with ].`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

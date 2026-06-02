@@ -15,7 +15,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CAMERA COMPOSITION entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). Each entry describes ONE camera POV / framing approach — the SPECIFIC angle / waterline-position the shot is captured from. NOT the bay. NOT the shoreline. NOT the sky. ONLY the camera.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CAMERA COMPOSITION entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). Each entry describes ONE camera POV / framing approach — the SPECIFIC angle / waterline-position the shot is captured from. NOT the bay. NOT the shoreline. NOT the sky. ONLY the camera.
 
 ━━━ THE BAR — THREE-WAY COMPOSITION DIVERSITY ━━━
 
@@ -97,4 +99,7 @@ NEVER include:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Camera composition only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

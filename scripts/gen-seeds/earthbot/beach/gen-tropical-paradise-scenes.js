@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/tropical_paradise_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} TROPICAL PARADISE SCENE descriptions for BeachBot's tropical-paradise path — dreamy destinations. Palm trees + turquoise water + white/pink sand.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TROPICAL PARADISE SCENE descriptions for BeachBot's tropical-paradise path — dreamy destinations. Palm trees + turquoise water + white/pink sand.
 
 Each entry: 15-30 words. One specific tropical-paradise destination/scene.
 
@@ -66,4 +68,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

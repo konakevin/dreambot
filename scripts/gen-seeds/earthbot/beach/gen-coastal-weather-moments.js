@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/coastal_weather_moments.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} WEATHER + LIGHTING MOMENT descriptions for BeachBot. Each entry describes a specific weather condition, time of day, or lighting scenario on a TROPICAL beach or coast. These set the mood and atmosphere for beach renders.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WEATHER + LIGHTING MOMENT descriptions for BeachBot. Each entry describes a specific weather condition, time of day, or lighting scenario on a TROPICAL beach or coast. These set the mood and atmosphere for beach renders.
 
 Each entry: 15-25 words. One specific weather/lighting moment with visual detail.
 
@@ -65,4 +67,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

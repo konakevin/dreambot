@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/beach_moments.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} BEACH MOMENT descriptions for BeachBot's beach-moment path — atmospheric beach-object moments. Beach-objects tell the story. NO PEOPLE.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BEACH MOMENT descriptions for BeachBot's beach-moment path — atmospheric beach-object moments. Beach-objects tell the story. NO PEOPLE.
 
 Each entry: 15-30 words. One specific object-centered beach moment.
 
@@ -60,4 +62,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

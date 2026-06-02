@@ -21,7 +21,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} COLOR PALETTE entries for EarthBot seasonal-shift. Each entry names 3-5 CONTRASTING colors with their natural source (specific plant species / mineral / atmospheric phenomenon). These are the colors the renderer MUST visibly land in the painting — never mono-tone.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COLOR PALETTE entries for EarthBot seasonal-shift. Each entry names 3-5 CONTRASTING colors with their natural source (specific plant species / mineral / atmospheric phenomenon). These are the colors the renderer MUST visibly land in the painting — never mono-tone.
 
 ━━━ THE BAR — MULTI-COLOR SEASONAL RICHNESS ━━━
 
@@ -85,4 +87,7 @@ Season tag MUST be the FIRST tag — ONLY "autumn" or "spring" (winter + summer 
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. 3-5 contrasting colors per entry + named natural sources. Season tag. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

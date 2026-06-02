@@ -13,7 +13,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERE entries for EarthBot geological-wonder. Each entry describes ONE specific atmospheric texture — the medium that makes the light VISIBLE in the scene. Mist, steam, dust beams, crystal air, haze, snow, vapor.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERE entries for EarthBot geological-wonder. Each entry describes ONE specific atmospheric texture — the medium that makes the light VISIBLE in the scene. Mist, steam, dust beams, crystal air, haze, snow, vapor.
 
 ━━━ THE BAR — ATMOSPHERE MAKES THE LIGHT VISIBLE ━━━
 
@@ -107,4 +109,7 @@ Mix across entries:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Atmospheric texture + interaction with light. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -173,8 +173,7 @@ const BEACH_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpi
 // because Iceland's signature LOOKS overlap (basalt + glacier + black sand
 // appear across most subjects) but better practice is the biome-agnostic
 // recipe used for Andes.
-const ICELAND_RAW_PREFIX =
-  'Iceland raw nature, sharp detail, gallery-quality, masterpiece';
+const ICELAND_RAW_PREFIX = 'Iceland raw nature, sharp detail, gallery-quality, masterpiece';
 // 2026-06-01 — Andes/Patagonia bespoke prefix. CRITICAL: keep BIOME-AGNOSTIC.
 // First attempt enumerated biomes ("granite spires and glacier ice and salt-
 // pan flats and emerald canopy") and Flux locked every render to GRANITE
@@ -193,13 +192,11 @@ const ANDES_PATAGONIA_PREFIX =
 // Okavango Delta or Sahara dune sea or Congo Basin canopy or Madagascar
 // baobab forest" and every render rendered as savanna. v2 anchors the
 // region only — the scene content carries the biome.
-const AFRICAN_LANDSCAPE_PREFIX =
-  'African raw nature, sharp detail, gallery-quality, masterpiece';
+const AFRICAN_LANDSCAPE_PREFIX = 'African raw nature, sharp detail, gallery-quality, masterpiece';
 // 2026-06-01 — Pan-Asian raw nature. BIOME-AGNOSTIC per the prefix-
 // enumeration anti-pattern rule. Just "Asian raw nature" — let the scene
 // content carry the biome (Mt. Fuji / Huangshan / Halong / sakura / Gobi).
-const ASIA_LANDSCAPE_PREFIX =
-  'Asian raw nature, sharp detail, gallery-quality, masterpiece';
+const ASIA_LANDSCAPE_PREFIX = 'Asian raw nature, sharp detail, gallery-quality, masterpiece';
 // 2026-06-01 — Australian outback raw nature. BIOME-AGNOSTIC per the
 // prefix-enumeration rule. Distinct from desert-southwest (American SW) —
 // Australian outback has its own iconic geology (Uluru / Bungle Bungle /

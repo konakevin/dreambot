@@ -28,7 +28,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} MINERAL COLOR DRAMA entries for EarthBot geological-wonder. Each entry describes ONE specific mineral / rock color signature for the render. REAL mineral colors only — no impossible / made-up colors.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MINERAL COLOR DRAMA entries for EarthBot geological-wonder. Each entry describes ONE specific mineral / rock color signature for the render. REAL mineral colors only — no impossible / made-up colors.
 
 ━━━ THE BAR — SATURATED REAL MINERAL COLORS ━━━
 
@@ -183,4 +185,7 @@ Mix across entries — vary the dominant color signature:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. 2-4 named real minerals + saturation + position. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/micro_nature.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} EXTREME MACRO CLOSE-UP descriptions for EarthBot — nature at tiny scale, where mundane details become entire worlds of texture, pattern, and light.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EXTREME MACRO CLOSE-UP descriptions for EarthBot — nature at tiny scale, where mundane details become entire worlds of texture, pattern, and light.
 
 Each entry: 15-25 words. One specific macro/close-up natural subject. No people, no animals as subjects.
 
@@ -35,4 +37,7 @@ ${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

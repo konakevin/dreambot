@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/sea_colors.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SEA COLOR descriptions for BeachBot — specific sea-color states.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SEA COLOR descriptions for BeachBot — specific sea-color states.
 
 Each entry: 6-14 words. One specific sea-color state.
 
@@ -55,4 +57,7 @@ Each entry: 6-14 words. One specific sea-color state.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

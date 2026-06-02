@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/tropical_flower_arrangements.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} HAWAIIAN TROPICAL FLOWER ARRANGEMENT descriptions for BeachBot's hawaii-flowers path. Each entry describes a specific combination of Hawaiian flowers with COLORS explicitly named. These flowers are blooming on Hawaiian beaches and coastlines — they should feel unmistakably HAWAIIAN.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAWAIIAN TROPICAL FLOWER ARRANGEMENT descriptions for BeachBot's hawaii-flowers path. Each entry describes a specific combination of Hawaiian flowers with COLORS explicitly named. These flowers are blooming on Hawaiian beaches and coastlines — they should feel unmistakably HAWAIIAN.
 
 Each entry: 10-20 words. A vivid description of Hawaiian tropical flowers — species AND colors named.
 
@@ -54,4 +56,7 @@ No two entries with the same dominant species AND same color palette.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

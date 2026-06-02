@@ -13,7 +13,9 @@ generatePool({
   total: 100,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} COZY PHENOMENON entries for EarthBot cozy-beach (v2). Each entry describes ONE soft cozy optical / accent event. 30%-gated.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY PHENOMENON entries for EarthBot cozy-beach (v2). Each entry describes ONE soft cozy optical / accent event. 30%-gated.
 
 ━━━ ABSOLUTELY BANNED ━━━
 
@@ -57,4 +59,7 @@ Output a JSON array of STRINGS, 12-22 words each.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE soft cozy accent per entry. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

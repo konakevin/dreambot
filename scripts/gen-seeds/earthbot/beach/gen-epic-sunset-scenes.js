@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/epic_sunset_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} EPIC SUNSET scene descriptions for BeachBot's epic-sunset path. Each entry describes a once-in-a-lifetime, jaw-dropping tropical sunset — the kind that makes everyone on the beach stop and stare. Every sunset is DIFFERENT — different color palettes, different cloud formations, different intensities, different moods.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EPIC SUNSET scene descriptions for BeachBot's epic-sunset path. Each entry describes a once-in-a-lifetime, jaw-dropping tropical sunset — the kind that makes everyone on the beach stop and stare. Every sunset is DIFFERENT — different color palettes, different cloud formations, different intensities, different moods.
 
 Each entry: 25-40 words. One specific epic sunset with color palette, cloud type, and tropical beach setting.
 
@@ -74,4 +76,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

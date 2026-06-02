@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/underwater_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} UNDERWATER LANDSCAPE descriptions for EarthBot — subaquatic environments where the terrain and water itself are the subjects. No fish or marine life as focal subjects.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} UNDERWATER LANDSCAPE descriptions for EarthBot — subaquatic environments where the terrain and water itself are the subjects. No fish or marine life as focal subjects.
 
 Each entry: 15-25 words. One specific underwater landscape scene. No people, no marine creatures as subjects.
 
@@ -35,4 +37,7 @@ ${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -14,7 +14,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} LIGHT SOURCE entries for EarthBot beach-night. Each entry describes ONE natural night-light source — the HERO of the frame. ONLY natural sources: moonlight (full / crescent / copper / low / overhead), starlight, Milky Way. NO human-built lights (tiki / lantern / paper / lighthouse / bonfire / dock light).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHT SOURCE entries for EarthBot beach-night. Each entry describes ONE natural night-light source — the HERO of the frame. ONLY natural sources: moonlight (full / crescent / copper / low / overhead), starlight, Milky Way. NO human-built lights (tiki / lantern / paper / lighthouse / bonfire / dock light).
 
 ━━━ THE BAR — NATURAL NIGHT LIGHT AS HERO ━━━
 
@@ -102,4 +104,7 @@ NEW-MOON / MOONLESS:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Natural light source only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

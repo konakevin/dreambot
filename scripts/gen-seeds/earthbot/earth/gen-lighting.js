@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/lighting.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SPECIFIC LIGHTING CONDITION descriptions for EarthBot — precise descriptions of how light behaves in a landscape, defining the quality, direction, color, and character of illumination.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SPECIFIC LIGHTING CONDITION descriptions for EarthBot — precise descriptions of how light behaves in a landscape, defining the quality, direction, color, and character of illumination.
 
 Each entry: 15-25 words. One specific lighting condition applied to a landscape. No people.
 
@@ -32,4 +34,7 @@ Each entry: 15-25 words. One specific lighting condition applied to a landscape.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

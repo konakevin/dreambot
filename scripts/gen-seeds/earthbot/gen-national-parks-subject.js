@@ -22,7 +22,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot national-parks — each entry describes ONE dramatic geological scene typical of the American National Park system. The seed pool's content (which geology appears) IS the path identity. The prose must NOT name the parks or tourist viewpoints — let beautiful descriptive geology do the work.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot national-parks — each entry describes ONE dramatic geological scene typical of the American National Park system. The seed pool's content (which geology appears) IS the path identity. The prose must NOT name the parks or tourist viewpoints — let beautiful descriptive geology do the work.
 
 ━━━ THE BAR ━━━
 
@@ -138,4 +140,7 @@ NEVER repeat a geological-type twice in nearly-identical terms — each entry is
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Pure drama-led geological descriptions. No tourist names. No preamble, no markdown code fences, no numbering. Just a clean JSON array starting with [ and ending with ].`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

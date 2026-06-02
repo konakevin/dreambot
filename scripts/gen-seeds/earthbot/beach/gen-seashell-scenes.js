@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/seashell_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SEASHELL + SEAGLASS scene descriptions for BeachBot's seashell path. Each entry frames shells, seaglass, or beach treasures as the SUBJECT in the foreground, with a gorgeous tropical beach as the backdrop. The shell/glass is the hero, the beach is the co-star.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SEASHELL + SEAGLASS scene descriptions for BeachBot's seashell path. Each entry frames shells, seaglass, or beach treasures as the SUBJECT in the foreground, with a gorgeous tropical beach as the backdrop. The shell/glass is the hero, the beach is the co-star.
 
 Each entry: 25-40 words. One specific shell/glass arrangement + beach backdrop + light.
 
@@ -66,4 +68,7 @@ Each entry must feature a DIFFERENT shell type or arrangement. No two entries wi
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

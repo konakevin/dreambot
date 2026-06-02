@@ -12,7 +12,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} LIGHT CONDITION entries for EarthBot cozy-beach (v2 — intimate beach moments). Warm cozy light only — golden hour dominant.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHT CONDITION entries for EarthBot cozy-beach (v2 — intimate beach moments). Warm cozy light only — golden hour dominant.
 
 ━━━ ABSOLUTELY BANNED ━━━
 
@@ -63,4 +65,7 @@ WARM CLOUD-BREAK (~10%):
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Warm cozy light only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

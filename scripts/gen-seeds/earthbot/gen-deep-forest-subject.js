@@ -23,7 +23,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot deep-forest — each entry describes ONE dramatic old-growth temperate forest scene at cathedral scale, biome-tagged for cross-axis matching.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot deep-forest — each entry describes ONE dramatic old-growth temperate forest scene at cathedral scale, biome-tagged for cross-axis matching.
 
 ━━━ THE BAR ━━━
 
@@ -121,4 +123,7 @@ NEVER repeat a sub-type twice in nearly identical terms — each entry is a dist
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Pure drama-led forest-interior compositions, POV-cued, no tourist names. No preamble, no markdown code fences, no numbering. Just a clean JSON array starting with [ and ending with ].`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -18,7 +18,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SEASONAL MOTION entries for EarthBot seasonal-shift. Each entry names ONE moment-in-motion accent — a specific captured-instant action that makes the frame feel alive.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SEASONAL MOTION entries for EarthBot seasonal-shift. Each entry names ONE moment-in-motion accent — a specific captured-instant action that makes the frame feel alive.
 
 ━━━ THE BAR — ONE CAPTURED-MOMENT MOTION ━━━
 
@@ -72,4 +74,7 @@ Season tag MUST be the FIRST tag — ONLY "autumn" or "spring".
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. ONE captured motion per entry. Season-tagged. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -24,7 +24,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} FOCAL ANCHOR entries for EarthBot geological-wonder. Each entry describes ONE specific compositional anchor element in the FOREGROUND of an OUTDOOR geological scene. Playbook 8-component memorable-scene mandate.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FOCAL ANCHOR entries for EarthBot geological-wonder. Each entry describes ONE specific compositional anchor element in the FOREGROUND of an OUTDOOR geological scene. Playbook 8-component memorable-scene mandate.
 
 ━━━ THE BAR — ONE OUTDOOR FOCAL ELEMENT IN THE FOREGROUND ━━━
 
@@ -177,4 +179,7 @@ NEVER include:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. ONE specific OUTDOOR natural focal anchor + neutral foreground position language. NO "proving the scale" phrasing. NO cave-interior anchors. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -12,7 +12,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} WATER COLOR entries for EarthBot waves. Each entry describes ONE specific water color signature for the wave. Real ocean colors only.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WATER COLOR entries for EarthBot waves. Each entry describes ONE specific water color signature for the wave. Real ocean colors only.
 
 ━━━ THE BAR — REAL OCEAN COLOR ━━━
 
@@ -89,4 +91,7 @@ COBALT GRADIENT:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE water color signature per entry. Real ocean colors only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

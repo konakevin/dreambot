@@ -13,7 +13,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} FOREGROUND ELEMENT entries for EarthBot cozy-beach. Each entry describes ONE cozy natural foreground accent at close-camera that adds warmth and intimacy to the intimate beach moment.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FOREGROUND ELEMENT entries for EarthBot cozy-beach. Each entry describes ONE cozy natural foreground accent at close-camera that adds warmth and intimacy to the intimate beach moment.
 
 ━━━ THE BAR — ONE COZY NATURAL FOREGROUND ACCENT ━━━
 
@@ -110,4 +112,7 @@ WEATHERED COCONUTS / NATURAL CLUTTER:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE cozy natural foreground element per entry. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

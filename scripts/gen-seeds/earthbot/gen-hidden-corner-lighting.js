@@ -18,7 +18,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING entries for EarthBot hidden-corner. Each entry names ONE specific intimate-scene lighting condition — dappled canopy light, sun shaft piercing through gap, fog-filtered diffuse, golden-hour glow, overcast soft, dawn mist, etc. Real Earth ONLY. NEVER flat overcast — light always has character.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING entries for EarthBot hidden-corner. Each entry names ONE specific intimate-scene lighting condition — dappled canopy light, sun shaft piercing through gap, fog-filtered diffuse, golden-hour glow, overcast soft, dawn mist, etc. Real Earth ONLY. NEVER flat overcast — light always has character.
 
 ━━━ THE BAR — ONE INTIMATE LIGHTING CONDITION ━━━
 
@@ -68,4 +70,7 @@ Bare strings acceptable.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} entries. ONE intimate lighting condition per entry. Real-Earth, varied across types. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

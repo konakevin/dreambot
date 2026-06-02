@@ -16,7 +16,9 @@ generatePool({
   total: 50,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} PHENOMENON entries for EarthBot epic-vista — each entry describes ONE rare real-Earth optical or weather phenomenon that occasionally fires (~30% of renders).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PHENOMENON entries for EarthBot epic-vista — each entry describes ONE rare real-Earth optical or weather phenomenon that occasionally fires (~30% of renders).
 
 ━━━ THE BAR ━━━
 
@@ -81,4 +83,7 @@ ONE phenomenon per entry. NEVER stack ("rainbow AND sun-pillar AND aurora all to
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering. Each entry names ONE real Earth phenomenon.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

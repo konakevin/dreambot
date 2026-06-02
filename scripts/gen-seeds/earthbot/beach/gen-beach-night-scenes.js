@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/beach_night_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} TROPICAL BEACH NIGHT scene descriptions for BeachBot's beach-night path. Each entry describes a gorgeous tropical beach at night — moonlit, starlit, firelit, lantern-lit, bioluminescent. Warm, magical, romantic, awe-inspiring nighttime beach scenes.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TROPICAL BEACH NIGHT scene descriptions for BeachBot's beach-night path. Each entry describes a gorgeous tropical beach at night — moonlit, starlit, firelit, lantern-lit, bioluminescent. Warm, magical, romantic, awe-inspiring nighttime beach scenes.
 
 Each entry: 25-40 words. One complete night beach scene with light source, setting, and atmosphere.
 
@@ -66,4 +68,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

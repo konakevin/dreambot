@@ -18,7 +18,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERE entries for EarthBot hidden-corner. Each entry names ONE mood + air-quality combination that gives the intimate pocket its emotional feel. Humid mist, post-rain freshness, dry summer warmth, autumn crispness, dawn awakening, quiet sanctuary hush. Real Earth ONLY.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERE entries for EarthBot hidden-corner. Each entry names ONE mood + air-quality combination that gives the intimate pocket its emotional feel. Humid mist, post-rain freshness, dry summer warmth, autumn crispness, dawn awakening, quiet sanctuary hush. Real Earth ONLY.
 
 ━━━ THE BAR — ONE MOOD + AIR-QUALITY COMBO ━━━
 
@@ -67,4 +69,7 @@ Bare strings acceptable.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} entries. ONE mood + air-quality per entry. Real-Earth, intimate, varied. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

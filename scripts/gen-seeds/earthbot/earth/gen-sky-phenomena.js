@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/sky_phenomena.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SKY-AS-SUBJECT descriptions for EarthBot — the sky itself is the entire composition, not just a backdrop. Celestial and atmospheric spectacles viewed from Earth.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKY-AS-SUBJECT descriptions for EarthBot — the sky itself is the entire composition, not just a backdrop. Celestial and atmospheric spectacles viewed from Earth.
 
 Each entry: 15-25 words. One specific sky phenomenon with a minimal ground anchor. No people.
 
@@ -34,4 +36,7 @@ ${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

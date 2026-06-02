@@ -25,7 +25,9 @@ const SHARED_RULES = `━━━ HARD RULES ━━━
 - bio: lichen, moss, kelp, coral, sequoia, redwood, baobab, mangrove, bioluminescence, reindeer-moss, fireflies, jellyfish bloom`;
 
 const scene = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for EarthBot's PURE-SCENE paths. NO HUMANS. Scents in the empty natural environment — pine forests, slot canyons, sea cliffs, volcanic vents, jungles, tundras, alpine meadows.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for EarthBot's PURE-SCENE paths. NO HUMANS. Scents in the empty natural environment — pine forests, slot canyons, sea cliffs, volcanic vents, jungles, tundras, alpine meadows.
 
 EXAMPLES (DO NOT REUSE):
 - "sun-warmed pine and crushed needles in the high alpine"
@@ -59,7 +61,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for EarthBot's PURE-SCENE paths. Texture/contact cues in the natural environment — moss on stone, frost on iron, lichen on basalt, rain on canyon walls.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for EarthBot's PURE-SCENE paths. Texture/contact cues in the natural environment — moss on stone, frost on iron, lichen on basalt, rain on canyon walls.
 
 EXAMPLES (DO NOT REUSE):
 - "rain-mist beading on the moss-covered fjord wall"
@@ -76,7 +80,9 @@ Both the TEXTURE/MEDIUM AND the SURFACE/LANDFORM. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for EarthBot's PURE-SCENE paths.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for EarthBot's PURE-SCENE paths.
 
 EXAMPLES (DO NOT REUSE):
 - "alpine-cold leaching from the granite cliff"
@@ -93,7 +99,9 @@ Both the THERMAL SOURCE AND the LANDFORM. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for EarthBot's PURE-SCENE paths. Anchors implying massive geological gravity, mass, or pressure.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for EarthBot's PURE-SCENE paths. Anchors implying massive geological gravity, mass, or pressure.
 
 EXAMPLES (DO NOT REUSE):
 - "kilometer-thick glacier sagging into the fjord"
@@ -110,7 +118,9 @@ Both the LANDFORM/OBJECT AND the WEIGHT VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  air: (n) => `You are writing ${n} distinct AIR anchors for EarthBot's PURE-SCENE paths. Atmospheric particle/movement cues in the natural environment.
+  air: (
+    n
+  ) => `You are writing ${n} distinct AIR anchors for EarthBot's PURE-SCENE paths. Atmospheric particle/movement cues in the natural environment.
 
 EXAMPLES (DO NOT REUSE):
 - "mist drifting between the redwood trunks"
@@ -127,7 +137,9 @@ Both the PARTICLE/MEDIUM AND the LANDFORM/LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for EarthBot's PURE-SCENE paths. Each entry forces Flux to render a SPECIFIC PUNCHY natural-light palette across the landscape.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for EarthBot's PURE-SCENE paths. Each entry forces Flux to render a SPECIFIC PUNCHY natural-light palette across the landscape.
 
 Each entry must include: COLOR + DIRECTION/SOURCE (godray / shaft / rim / underlight / wash / glow / pool / flash) + IMPACT POINT in the landscape (snow peak / canyon mist / desert dune / sea cliff / glacier / caldera / fjord / aurora / cathedral cave).
 

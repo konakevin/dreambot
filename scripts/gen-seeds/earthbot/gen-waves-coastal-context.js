@@ -14,7 +14,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} COASTAL CONTEXT entries for EarthBot waves. Each entry describes ONE coastal feature the wave breaks ON / against — the geographic anchor explaining wave physics. Natural coast only.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COASTAL CONTEXT entries for EarthBot waves. Each entry describes ONE coastal feature the wave breaks ON / against — the geographic anchor explaining wave physics. Natural coast only.
 
 ━━━ THE BAR — ONE COASTAL CONTEXT ━━━
 
@@ -112,4 +114,7 @@ OUTER REEF / ATOLL:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE coastal context per entry. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

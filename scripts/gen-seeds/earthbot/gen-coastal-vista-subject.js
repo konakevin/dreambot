@@ -22,7 +22,9 @@ generatePool({
   total: 200,
   batch: 15, // 25 hits Sonnet's 2500-token output cap mid-entry once dedup-prior list grows past ~5KB
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot coastal-vista — each entry describes ONE dramatic craggy coastline scene at gallery-print fine-art tier (Marc Adamus / Iurie Belegurschi / Daniel Kordan caliber). Cold-dramatic, water-eroded, geologically monumental coast — NOT tropical paradise (that's a different path).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot coastal-vista — each entry describes ONE dramatic craggy coastline scene at gallery-print fine-art tier (Marc Adamus / Iurie Belegurschi / Daniel Kordan caliber). Cold-dramatic, water-eroded, geologically monumental coast — NOT tropical paradise (that's a different path).
 
 ━━━ THE BAR ━━━
 
@@ -128,4 +130,7 @@ Each entry distinct in geology + region + POV + scale anchor.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Pure drama-led dramatic-coast scenes, POV-cued, no tourist names, no structures. No preamble, no markdown code fences, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

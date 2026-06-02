@@ -13,7 +13,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} TROPICAL BEACH NIGHT SUBJECT entries for EarthBot beach-night. Each entry describes ONE tropical-beach GEOGRAPHIC SETTING at NIGHT. The setting holds the stage — the light_source axis brings the actual moonlight / starlight / Milky Way. Generic morphological descriptions only — NO named places (LESSON 7).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TROPICAL BEACH NIGHT SUBJECT entries for EarthBot beach-night. Each entry describes ONE tropical-beach GEOGRAPHIC SETTING at NIGHT. The setting holds the stage — the light_source axis brings the actual moonlight / starlight / Milky Way. Generic morphological descriptions only — NO named places (LESSON 7).
 
 ━━━ THE BAR — REAL TROPICAL BEACH GEOGRAPHY AT NIGHT ━━━
 
@@ -84,4 +86,7 @@ Output a JSON array of STRINGS. Each string is one tropical-beach-at-night setti
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Tropical-beach-at-night setting only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

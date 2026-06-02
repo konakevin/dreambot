@@ -14,7 +14,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} NIGHT SKY entries for EarthBot beach-night. Each entry describes ONE night-sky condition (the SUPPORTING context to the primary light_source). NOT the light source itself — the sky around / behind it. Star density, cloud presence, sky tone gradient, faint horizon glow.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} NIGHT SKY entries for EarthBot beach-night. Each entry describes ONE night-sky condition (the SUPPORTING context to the primary light_source). NOT the light source itself — the sky around / behind it. Star density, cloud presence, sky tone gradient, faint horizon glow.
 
 ━━━ THE BAR — NIGHT SKY AS SUPPORTING CONTEXT ━━━
 
@@ -91,4 +93,7 @@ CLOUDS-AROUND-MOON:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Night sky supporting context only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -21,7 +21,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} RARE PHENOMENON entries for EarthBot seasonal-shift. Each entry names ONE signature optical / atmospheric event — a rare moment that makes the scene feel like a once-in-a-lifetime capture. Season-tagged so the phenomenon matches the rolled subject's season — never contradicts it.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} RARE PHENOMENON entries for EarthBot seasonal-shift. Each entry names ONE signature optical / atmospheric event — a rare moment that makes the scene feel like a once-in-a-lifetime capture. Season-tagged so the phenomenon matches the rolled subject's season — never contradicts it.
 
 ━━━ THE BAR — ONE RARE OPTICAL EVENT ━━━
 
@@ -96,4 +98,7 @@ EVERY entry MUST be a JSON OBJECT with "tags" array (containing "autumn" OR "spr
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS — each MUST have shape { "tags": ["autumn"|"spring"], "description": "..." }. No bare strings. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

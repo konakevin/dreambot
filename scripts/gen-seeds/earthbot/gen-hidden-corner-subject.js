@@ -21,7 +21,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot hidden-corner. Each entry names ONE off-the-beaten-path secret pocket of nature — the kind of magical hidden place you'd stumble into miles from any trail and gasp "I can't believe I found this." Real Earth ONLY. INTIMATE mid-tight framing, NEVER wide panorama.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot hidden-corner. Each entry names ONE off-the-beaten-path secret pocket of nature — the kind of magical hidden place you'd stumble into miles from any trail and gasp "I can't believe I found this." Real Earth ONLY. INTIMATE mid-tight framing, NEVER wide panorama.
 
 ━━━ THE BAR — LUSH OFF-THE-BEATEN-PATH SECRET POCKET ━━━
 
@@ -78,4 +80,7 @@ Bare strings also acceptable.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} entries. ONE hidden-corner setting per entry. LUSH packed detail, real-Earth only, intimate framing. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

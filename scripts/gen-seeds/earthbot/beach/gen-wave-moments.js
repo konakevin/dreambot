@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/wave_moments.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} WAVE MOMENT descriptions for BeachBot's wave path — Clark-Little-inspired wave photography. Unusual perspectives + rich backdrops.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WAVE MOMENT descriptions for BeachBot's wave path — Clark-Little-inspired wave photography. Unusual perspectives + rich backdrops.
 
 Each entry: 15-30 words. One specific wave perspective/moment.
 
@@ -60,4 +62,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

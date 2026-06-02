@@ -13,7 +13,9 @@ generatePool({
   total: 100,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SKY entries for EarthBot epic-vista — ONE sky condition per entry, describing what the sky is DOING above the vista.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKY entries for EarthBot epic-vista — ONE sky condition per entry, describing what the sky is DOING above the vista.
 
 ━━━ THE BAR ━━━
 
@@ -69,4 +71,7 @@ ONE sky condition per entry. NEVER stack ("mammatus AND lenticular AND nacreous 
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

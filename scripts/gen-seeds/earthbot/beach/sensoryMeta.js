@@ -41,7 +41,9 @@ ${SHARED_RULES}
 ━━━ DEDUP — share SOURCE and QUALITY = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `${n} TOUCH anchors for BeachBot's coastal scene. Sand / shell / kelp / coral textures.
+  touch: (
+    n
+  ) => `${n} TOUCH anchors for BeachBot's coastal scene. Sand / shell / kelp / coral textures.
 
 EXAMPLES (DO NOT REUSE):
 - "salt crusting on the lighthouse iron"

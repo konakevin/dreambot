@@ -24,7 +24,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} HERO FEATURE entries for EarthBot seasonal-shift. Each entry names ONE tiny deep-distance scale-prover — a small element in the far distance that proves the vast scale of the seasonal landscape. Postage-stamp / comma-speck scale ONLY — NEVER the hero of the frame, the seasonal forest is the hero. Season-tagged so the hero matches the rolled subject's season.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HERO FEATURE entries for EarthBot seasonal-shift. Each entry names ONE tiny deep-distance scale-prover — a small element in the far distance that proves the vast scale of the seasonal landscape. Postage-stamp / comma-speck scale ONLY — NEVER the hero of the frame, the seasonal forest is the hero. Season-tagged so the hero matches the rolled subject's season.
 
 ━━━ THE BAR — ONE TINY DISTANT ELEMENT ━━━
 
@@ -98,4 +100,7 @@ EVERY entry MUST be a JSON OBJECT with "tags" array (containing "autumn" OR "spr
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS — each MUST have shape { "tags": ["autumn"|"spring"], "description": "..." }. No bare strings. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

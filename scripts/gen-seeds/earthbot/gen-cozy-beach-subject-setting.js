@@ -13,7 +13,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT SETTING entries for EarthBot cozy-beach. Each entry describes ONE intimate tropical beach pocket setting where a cozy moment happens. Mid-tight framing — NEVER wide-vista panorama. Generic morphology only — NO named places.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT SETTING entries for EarthBot cozy-beach. Each entry describes ONE intimate tropical beach pocket setting where a cozy moment happens. Mid-tight framing — NEVER wide-vista panorama. Generic morphology only — NO named places.
 
 ━━━ THE BAR — INTIMATE COZY TROPICAL BEACH POCKET ━━━
 
@@ -100,4 +102,7 @@ LUSH-FRINGED CORNER:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Intimate beach setting only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/beach_landscape_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} BEACH LANDSCAPE SCENE descriptions for BeachBot's beach-landscape path — wide POSTCARD of any beach + its full context + any weather/time. Multiple-element composition.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BEACH LANDSCAPE SCENE descriptions for BeachBot's beach-landscape path — wide POSTCARD of any beach + its full context + any weather/time. Multiple-element composition.
 
 Each entry: 15-30 words. One specific wide beach-composition scene.
 
@@ -60,4 +62,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

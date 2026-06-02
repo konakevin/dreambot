@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/hawaii_coastal_spaces.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} HAWAIIAN COASTAL setting descriptions for BeachBot's hawaii-flowers path. Each entry describes a jaw-dropping beach or coastal scene on a SPECIFIC Hawaiian island. NO specific flower species or colors (a separate pool handles flowers).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAWAIIAN COASTAL setting descriptions for BeachBot's hawaii-flowers path. Each entry describes a jaw-dropping beach or coastal scene on a SPECIFIC Hawaiian island. NO specific flower species or colors (a separate pool handles flowers).
 
 Each entry: 15-25 words. One specific Hawaiian coastal setting with island name, atmosphere, and camera angle.
 
@@ -62,4 +64,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

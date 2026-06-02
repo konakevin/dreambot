@@ -13,7 +13,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} BAY SETTING entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic, NOT underwater reef). Each entry describes ONE bay/water-body GEOMETRY — generic morphological description only. NO named places (no "Bora Bora" / "Hanauma" / "Tahiti" / "Maui" — Flux pigeonholes on tourist photos when those names land).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BAY SETTING entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic, NOT underwater reef). Each entry describes ONE bay/water-body GEOMETRY — generic morphological description only. NO named places (no "Bora Bora" / "Hanauma" / "Tahiti" / "Maui" — Flux pigeonholes on tourist photos when those names land).
 
 ━━━ THE BAR — A DRAMATIC TROPICAL ISLAND BAY (described generically) ━━━
 
@@ -112,4 +114,7 @@ Spread across entries:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Bay geometry + water color + extent. Generic only. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

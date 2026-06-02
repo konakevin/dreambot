@@ -17,7 +17,9 @@ generatePool({
   total: 150,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} HERO FEATURE entries for EarthBot epic-vista — each entry names ONE scale-proving element that anchors the monumental scale of the landscape.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HERO FEATURE entries for EarthBot epic-vista — each entry names ONE scale-proving element that anchors the monumental scale of the landscape.
 
 ━━━ THE BAR ━━━
 
@@ -70,4 +72,7 @@ ONE element per entry. NEVER stack multiple wildlife or features ("an eagle AND 
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

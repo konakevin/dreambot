@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/tide_pool_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} TIDE POOL SCENE descriptions for BeachBot's tide-pool path — intimate tide-pool beauty. Starfish / anemones / kelp / sea-urchins / hermit-crabs. Crystal-clear shallow detail.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIDE POOL SCENE descriptions for BeachBot's tide-pool path — intimate tide-pool beauty. Starfish / anemones / kelp / sea-urchins / hermit-crabs. Crystal-clear shallow detail.
 
 Each entry: 10-20 words. One specific tide-pool detail scene.
 
@@ -61,4 +63,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -19,7 +19,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot hawaii-flowers — each entry describes ONE GROUND-LEVEL TROPICAL BEACH SETTING. This is the BEACH only — flowers come from a separate axis at render time. Do not name flowers here.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot hawaii-flowers — each entry describes ONE GROUND-LEVEL TROPICAL BEACH SETTING. This is the BEACH only — flowers come from a separate axis at render time. Do not name flowers here.
 
 ━━━ THE BAR — GROUND-LEVEL TROPICAL BEACH (NO FLOWERS) ━━━
 
@@ -132,4 +134,7 @@ All entries are ground-level (no aerials, no cliff-edge looking down). Spread ac
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Ground-level tropical beach setting + palms + sand + calm tropical water + distant context. NO flowers. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -18,7 +18,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} MICRO DETAIL entries for EarthBot hidden-corner. Each entry names 2-4 SPECIFIC rich texture elements that make every surface in the intimate scene visibly alive. Dew, lichen, mushrooms, water droplets, fern unfurling, etc. Real Earth ONLY.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MICRO DETAIL entries for EarthBot hidden-corner. Each entry names 2-4 SPECIFIC rich texture elements that make every surface in the intimate scene visibly alive. Dew, lichen, mushrooms, water droplets, fern unfurling, etc. Real Earth ONLY.
 
 ━━━ THE BAR — 2-4 SPECIFIC TEXTURE ELEMENTS ━━━
 
@@ -67,4 +69,7 @@ Bare strings acceptable.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} entries. 2-4 specific textures per entry. Real-Earth, named specifically. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

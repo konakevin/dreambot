@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/lush_jungle_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} LUSH JUNGLE scenes for TravelBot — Amazon / Borneo / Costa Rica / Bali / Daintree / Hawaii rainforest, multi-tier waterfalls, hidden pools, dense canopy, vine curtains, the kind of jungle a viewer wants to step INTO. Mid-to-wide framing. No people.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LUSH JUNGLE scenes for TravelBot — Amazon / Borneo / Costa Rica / Bali / Daintree / Hawaii rainforest, multi-tier waterfalls, hidden pools, dense canopy, vine curtains, the kind of jungle a viewer wants to step INTO. Mid-to-wide framing. No people.
 
 Each entry: 18-28 words. One specific tropical rainforest scene with a distinct hero feature. Real Earth jungles only — no fantasy, no magic.
 
@@ -44,4 +46,7 @@ ${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

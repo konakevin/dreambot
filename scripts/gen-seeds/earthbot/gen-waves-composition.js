@@ -21,7 +21,9 @@ const { generatePool } = require('../../lib/seedGenHelper');
 const outPath = 'scripts/bots/earthbot/seeds/waves_composition.json';
 if (fs.existsSync(outPath)) {
   fs.unlinkSync(outPath);
-  console.log('Removed R1 file for clean R2 regen (no inside-barrel POV; aerial overhead replacement)');
+  console.log(
+    'Removed R1 file for clean R2 regen (no inside-barrel POV; aerial overhead replacement)'
+  );
 }
 
 generatePool({
@@ -29,7 +31,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} COMPOSITION entries for EarthBot waves. Each entry describes ONE camera framing / angle for a wave scene. Surf-photography caliber framing variety.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COMPOSITION entries for EarthBot waves. Each entry describes ONE camera framing / angle for a wave scene. Surf-photography caliber framing variety.
 
 ━━━ THE BAR — FOUR FRAMING MODES ━━━
 
@@ -131,4 +135,7 @@ Output a JSON array of STRINGS, 16-32 words each.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE camera framing per entry. NO inside-barrel POV. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

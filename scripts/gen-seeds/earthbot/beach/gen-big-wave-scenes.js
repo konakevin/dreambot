@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/big_wave_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} BIG WAVE scene descriptions for BeachBot's big-wave path. Each entry describes a dramatic, awe-inspiring scene of massive waves and churning ocean set against a beautiful tropical coastline. The contrast between dangerous raw ocean power and stunning tropical beauty is the hook.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BIG WAVE scene descriptions for BeachBot's big-wave path. Each entry describes a dramatic, awe-inspiring scene of massive waves and churning ocean set against a beautiful tropical coastline. The contrast between dangerous raw ocean power and stunning tropical beauty is the hook.
 
 Each entry: 25-40 words. One complete big wave scene with wave type, coastal setting, weather, and light.
 
@@ -57,4 +59,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

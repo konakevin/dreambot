@@ -28,7 +28,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} GEOLOGICAL SUBJECT entries for EarthBot geological-wonder. Each entry describes ONE specific OUTDOOR geological feature — Earth's raw architecture as art, observed from outside with sky / vista / depth visible. Generic morphological descriptions only — NO named places (LESSON 7).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GEOLOGICAL SUBJECT entries for EarthBot geological-wonder. Each entry describes ONE specific OUTDOOR geological feature — Earth's raw architecture as art, observed from outside with sky / vista / depth visible. Generic morphological descriptions only — NO named places (LESSON 7).
 
 ━━━ THE BAR — REAL EARTH OUTDOOR GEOLOGY AT 10/10 POSTER-PRINT TIER ━━━
 
@@ -216,4 +218,7 @@ Spread across: desert (~35%), volcanic (~25%), alpine (~15%), tropical-jungle/ka
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. ALL OUTDOOR. Multi-tier depth always. Specific geological feature + scale tag + biome tag. NO interior chambers. NO named places. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

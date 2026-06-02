@@ -14,7 +14,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} NIGHT WATER STATE entries for EarthBot beach-night. Each entry describes ONE tropical water surface state at night — calm reflective tropical water. The water carries the light_source as reflection.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} NIGHT WATER STATE entries for EarthBot beach-night. Each entry describes ONE tropical water surface state at night — calm reflective tropical water. The water carries the light_source as reflection.
 
 ━━━ THE BAR — CALM REFLECTIVE TROPICAL NIGHT WATER ━━━
 
@@ -87,4 +89,7 @@ REFLECTIVE TIDE POOLS:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Calm reflective tropical night water only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

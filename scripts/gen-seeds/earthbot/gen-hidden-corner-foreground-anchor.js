@@ -19,7 +19,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} FOREGROUND ANCHOR entries for EarthBot hidden-corner. Each entry names ONE specific close-camera detail at the bottom of the frame — the eye-entry point of the intimate composition. Real Earth ONLY.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FOREGROUND ANCHOR entries for EarthBot hidden-corner. Each entry names ONE specific close-camera detail at the bottom of the frame — the eye-entry point of the intimate composition. Real Earth ONLY.
 
 ━━━ THE BAR — CLOSE-CAMERA TIGHT FG DETAIL ━━━
 
@@ -71,4 +73,7 @@ Bare strings acceptable.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} entries. ONE specific FG anchor per entry. Real-Earth, close-camera, intimate scale. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

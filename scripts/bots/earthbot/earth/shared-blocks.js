@@ -14,7 +14,8 @@
 const PROMPT_PREFIX =
   'cinematic photography, sharp detail, rich saturated color, hyperreal rendering, gallery-quality, masterpiece';
 
-const PROMPT_SUFFIX = 'no humans, no people, no text, no words, no watermarks, hyper detailed, masterpiece quality';
+const PROMPT_SUFFIX =
+  'no humans, no people, no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
 const NATURE_IS_HERO_BLOCK = `━━━ NATURE IS THE HERO ━━━
 

@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/cozy_coast_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COZY COAST SCENE descriptions for BeachBot's cozy-beach path — coastal villages / huts / lighthouses / cottages. Warm coastal pockets.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY COAST SCENE descriptions for BeachBot's cozy-beach path — coastal villages / huts / lighthouses / cottages. Warm coastal pockets.
 
 Each entry: 15-30 words. One specific cozy coastal scene.
 
@@ -66,4 +68,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

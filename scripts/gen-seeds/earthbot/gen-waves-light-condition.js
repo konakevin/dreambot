@@ -12,7 +12,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} LIGHT CONDITION entries for EarthBot waves. Each entry describes ONE time-of-day / light condition for the wave scene.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHT CONDITION entries for EarthBot waves. Each entry describes ONE time-of-day / light condition for the wave scene.
 
 ━━━ ABSOLUTELY BANNED ━━━
 
@@ -89,4 +91,7 @@ BACKLIT:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE light condition per entry. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

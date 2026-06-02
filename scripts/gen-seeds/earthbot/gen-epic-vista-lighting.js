@@ -20,7 +20,9 @@ generatePool({
   total: 150,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING entries for EarthBot epic-vista — gallery-print fine-art landscape (Marc Adamus / Peter Lik / Max Rive / Iurie Belegurschi caliber). Each entry STACKS 2-3 pure light dimensions at peak dramatic moment.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING entries for EarthBot epic-vista — gallery-print fine-art landscape (Marc Adamus / Peter Lik / Max Rive / Iurie Belegurschi caliber). Each entry STACKS 2-3 pure light dimensions at peak dramatic moment.
 
 ━━━ THE BAR ━━━
 
@@ -88,4 +90,7 @@ This entry is PURE LIGHT — the time, direction, color, and shadow it produces.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. Pure light dimensions stacked at peak drama. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

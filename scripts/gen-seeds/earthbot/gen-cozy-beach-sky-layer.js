@@ -12,7 +12,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SKY LAYER entries for EarthBot cozy-beach (v2 — intimate beach moments). Each entry describes ONE warm cozy sky context. NEVER dramatic / stormy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKY LAYER entries for EarthBot cozy-beach (v2 — intimate beach moments). Each entry describes ONE warm cozy sky context. NEVER dramatic / stormy.
 
 ━━━ ABSOLUTELY BANNED ━━━
 
@@ -58,4 +60,7 @@ Output a JSON array of STRINGS, 12-22 words each.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Warm cozy sky only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

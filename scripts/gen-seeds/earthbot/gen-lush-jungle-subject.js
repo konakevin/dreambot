@@ -31,7 +31,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot lush-jungle — each entry MUST scream TROPICAL JUNGLE (Amazon / Congo / Hawaii / Costa Rica / Bali / Borneo) with maximum exotic flora density, water features, rock formations, and tropical flowers. The viewer's reaction: "this can ONLY be a tropical jungle." Not a North American forest. Not a temperate woodland. EXOTIC TROPICAL.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot lush-jungle — each entry MUST scream TROPICAL JUNGLE (Amazon / Congo / Hawaii / Costa Rica / Bali / Borneo) with maximum exotic flora density, water features, rock formations, and tropical flowers. The viewer's reaction: "this can ONLY be a tropical jungle." Not a North American forest. Not a temperate woodland. EXOTIC TROPICAL.
 
 ━━━ THE TROPICAL ELEMENT MENU (use as scene-natural, NOT forced stacking) ━━━
 
@@ -142,4 +144,7 @@ NEVER repeat a sub-type in nearly identical terms — each entry distinct in tre
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Pure drama-led tropical-jungle interiors, POV-cued, 2-3 stacked tropical elements per entry, no tourist names. No preamble, no markdown code fences, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

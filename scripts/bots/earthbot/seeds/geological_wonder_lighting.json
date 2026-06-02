@@ -1,1346 +1,802 @@
 [
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Golden hour rake from low sun, warm copper-amber sidelight slashing across the formation, long shadows extending deep across the foreground plateau"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Alpenglow at peak chromatic moment, peak faces catching rose-pink to magenta, eastern sky holding deep indigo, every snow field catching the warm glow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Storm-break spotlight, sun blasting wide-open through a ragged cloud-tear, the landscape lit gold like a stage, surrounding ridges sunk in cool purple-grey shadow"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Dusk transition deep copper-orange horizon band backlighting the formation, sky overhead grading near-black, rim-edges catching last warm amber light"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Sunset sun-rays fanning through scattered cloud-gaps, multiple shafts illuminating different portions of the landscape, the foreground alternating between warm gold and cool shadow"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Backlit storm-light, sun behind a heavy cloud bank, the formation silhouetted with bright rim-light catching along every exposed edge, foreground in deep contrast shadow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Pre-dawn blue-hour deep indigo saturation, the formation just barely catching first cool light along the upper rim-edge, the landscape held in stillness"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Arctic midnight-sun low raking light across the ice plain, long shadows extending horizontally across the surface, soft cool tones washing the open sky"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "First-light dawn rake, warm copper light just clipping the highest ridges, the lower formation still deep in cool pre-dawn shadow, the sky banded amber to pale blue"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Broad spotlight breaking through the overcast ceiling, hitting one section of the foreground in warm diffuse gold while the surrounding landscape remains under flat grey cloud"
   },
   {
-    "tags": [
-      "intimate",
-      "desert"
-    ],
+    "tags": ["intimate", "desert"],
     "description": "Soft directional golden-hour sidelight skimming across the close-up rock face, raking warm amber across every textured ridge and eroded groove in low-angle detail"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Late-afternoon raking sidelight skimming the close-up surface at a steep angle, long micro-shadows filling every crack and grain, warm copper tones saturating the foreground detail"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Fading alpenglow with warm amber-rose catching along the ridge silhouette, the open plateau below already sunk in cool blue-purple dusk shadow"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Midday brilliance with crystal-clear air, direct overhead sun saturating every exposed surface in tack-sharp contrast, deep shadows pooling beneath every ledge and overhang"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dramatic backlighting with the sun glow rimming every cloud edge in bright gold, the entire foreground held in deep contrast shadow, the horizon saturated behind the formation"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Last-light golden warmth resting on a distant ridge, the mid-ground and foreground cooling rapidly into blue shadow, the sky still holding a faint amber band at the horizon"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Midday overcast even-diffuse light, no harsh shadows, every surface evenly rendered in flat cool tones, the full formation detail exposed without directional interference"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Storm-break broad spotlight punching through a ragged cloud gap, washing one wide section of the landscape in gold while dark storm clouds press low across the surrounding sky"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight with the sun sitting just below the horizon, the open sky grading through deep violet to faint copper at the edge, the landscape held in sourceless cold glow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Blue-hour deep cool indigo wash settling across the full landscape, rim-edges of the formation catching the last faint warmth of the vanished sun, overhead sky near-black"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Scattered cloud-gap light spilling in broad pools across the foreground, patches of warm gold alternating with bands of cool grey shadow as broken cloud drifts overhead"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "High-noon direct sun at altitude with thin air amplifying contrast, every cliff face razor-sharp in tack-direct light, shadows cut hard and black against bright exposed rock"
   },
   {
-    "tags": [
-      "intimate",
-      "coastal"
-    ],
+    "tags": ["intimate", "coastal"],
     "description": "Pre-dawn cool indigo light skimming the close-up rock surface at a low angle, every pitted texture and layered seam rendered in soft blue-grey tonal gradation"
   },
   {
-    "tags": [
-      "intimate",
-      "alpine"
-    ],
+    "tags": ["intimate", "alpine"],
     "description": "First-light dawn rake catching a close-up rock face at a steep low angle, warm copper clipping the uppermost ridges while the lower surface remains in cold pre-dawn shade"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Late-afternoon sidelight raking hard across the open plateau, warm ochre-gold washing every elevated surface, deep cool shadow pooling long across the foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Fading alpenglow holding a last rose-amber burn along the highest ridgeline, the valley floor already surrendered to deep blue-purple dusk, sky overhead grading toward black"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Storm-break light bursting wide across the mid-ground, the horizon saturated gold beneath a heavy dark cloud shelf, the near foreground still locked under cold storm shadow"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Pre-dawn blue hour settling in deep cool indigo across the open coastline, the horizon holding a faint copper whisper, every exposed edge barely touched by sourceless cold light"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Midday direct sun hammering down through clear volcanic air, every rough surface in ruthless tack-sharp contrast, shadows cut hard and black at the base of each formation"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Backlit sun sinking behind a dense cloud bank, the entire formation edged in brilliant gold rim-light, the foreground locked in deep contrast shadow beneath a brooding sky"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Arctic midnight-sun raking at extreme low angle across open tundra, long cool shadows stretching far across the surface, pale amber-gold washing the upper faces of exposed rock"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Fanning scattered cloud-gap light dropping in broad warm patches across the landscape, alternating pools of warm gold and cool grey shadow variegated as cloud breaks overhead"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Dawn first light clipping the absolute topmost ridge in warm copper-amber, the entire formation below still sunk in cold blue pre-dawn darkness, the sky banded pale rose to deep indigo"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dusk transition with a deep copper-orange horizon band catching low behind the formation, the sky overhead grading rapidly toward near-black, every exposed rim edge catching last warmth"
   },
   {
-    "tags": [
-      "intimate",
-      "volcanic"
-    ],
+    "tags": ["intimate", "volcanic"],
     "description": "Midday overcast diffuse light falling evenly across a close-up fractured rock surface, no directional shadow, every crack and mineral seam rendered in flat cool-toned detail"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Blue-hour cool indigo light washing across a close-up formation face, the last faint warmth of the departed sun still clinging to the uppermost textured ridge in soft amber"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "High-noon direct sun bleaching every elevated surface to near-white contrast, shadows slashing hard and black beneath each ledge, the open plateau saturated in relentless tack-sharp brilliance"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Alpenglow deepening past peak into final rose-crimson flush, the highest faces holding last warm color, the valley already surrendered to deep blue-purple shadow, sky overhead going black"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Broad warm spotlight from a ragged storm-break sweeping across the mid-ground, the near foreground still cold under storm shadow, the far ridgeline sunk in dark purple overcast"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Late-afternoon raking sidelight driving hard across the open coastal formation, warm amber-gold saturating every west-facing surface, long cool shadows trailing east across the rocky flats"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Pre-dawn blue-hour indigo settling deep across the volcanic landscape, the upper rim just barely catching first sourceless cool light, the lower formations held in absolute darkness"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Scattered cloud-gap light breaking in wide separate pools across different sections of the landscape, warm gold and cool grey alternating in broad variegated bands beneath a broken sky"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight sky grading from faint copper at the horizon through rose to deep violet overhead, the open landscape below held in cold sourceless glow with no visible shadow direction"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Storm-break spotlight bursting through a torn cloud edge, blasting one wide face of the formation in saturated gold while surrounding peaks remain cloaked in dark blue-grey storm shadow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dramatic backlit sun dropping behind the horizon cloud band, rim-light flaring gold along every exposed upper edge of the formation, the foreground deep in contrast shadow against an amber sky"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Fading last-light warm amber dissolving along the far ridge, the foreground plateau cooling fast into blue-purple shadow, the sky above grading from pale copper to deep indigo at zenith"
   },
   {
-    "tags": [
-      "intimate",
-      "coastal"
-    ],
+    "tags": ["intimate", "coastal"],
     "description": "Storm-break directional sidelight raking hard across a close-up weathered rock face, deep shadow filling every undercut seam, warm gold clipping each exposed upper ridge in sharp relief"
   },
   {
-    "tags": [
-      "intimate",
-      "alpine"
-    ],
+    "tags": ["intimate", "alpine"],
     "description": "Midday overcast diffuse light falling evenly across a close-up fractured cliff face at altitude, no directional shadow, every layered seam and crystal face rendered in flat cool-toned precision"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "First-light dawn rake skimming the open coastline at extreme low angle, warm copper-amber just clipping every elevated surface, the lower flats still held in cold blue pre-dawn shadow"
   },
   {
-    "tags": [
-      "intimate",
-      "desert"
-    ],
+    "tags": ["intimate", "desert"],
     "description": "Alpenglow last rose-amber flush catching a close-up canyon wall face, the upper texture catching warm while the lower surface cools fast into blue-purple dusk shade"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Midday sun saturated straight down through bone-dry air, every elevated surface washed in relentless warm ochre-gold, shadows slicing hard and black directly beneath each ledge"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Pre-dawn cool indigo deepening across the full alpine panorama, the absolute highest ridge catching a faint sourceless copper whisper, the sky banding pale rose at the far horizon edge"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Storm-break broad warm light sweeping hard across the open volcanic plain, the near foreground locked under cold purple storm shadow, distant ridgelines still cloaked in dark overcast"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Late-afternoon raking sidelight driving at a steep low angle, every west-facing surface saturated in warm amber-gold, long cool shadows pooling deep and blue across the open foreground"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Blue-hour transition settling in cold indigo across the open coastline, the last faint copper warmth dissolving along the horizon, every exposed rim edge touched by sourceless cool light"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Alpenglow holding its deepest rose-crimson burn across the highest exposed faces, valley floor already surrendered to blue-purple shadow, the eastern sky grading from indigo toward black overhead"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Scattered fanning cloud-gap light breaking open across the mid-ground in wide separate pools, warm gold and cool grey alternating in broad variegated bands beneath a fast-moving broken sky"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight transitioning through pale copper at the horizon to deep violet overhead, the open arctic surface held in cold sourceless glow, long low shadows barely perceptible across the terrain"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dusk horizon saturated in deep copper-orange directly behind the formation, the sky overhead already grading near-black, every exposed upper rim-edge catching the last faint warmth before full dark"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Backlit overcast storm-light with the sun fully obscured behind a dense cloud bank, bright diffuse rim-light edging every cloud mass in gold, the entire formation below in heavy contrast shadow"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Close-up rock face caught in golden-hour sidelight at extreme low angle, warm amber raking hard across every ridge and eroded groove, deep micro-shadows filling each crack and grain in sharp relief"
   },
   {
-    "tags": [
-      "intimate",
-      "alpine"
-    ],
+    "tags": ["intimate", "alpine"],
     "description": "Alpenglow at peak chromatic moment catching a close-up cliff face, the upper surface catching rose-pink while the lower half cools into deep blue-purple shadow, tonal contrast sharp and clean"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Last-light warm amber dissolving from the far mesa while the open foreground flats cool rapidly into deep blue-purple shadow, the sky banding pale copper to near-black at zenith"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Storm-break sidelight raking hard across the upper ridgeline from a torn cloud edge, one wide face saturated gold while the valley floor below remains locked in cold blue-grey storm shadow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Midday overcast ceiling pressing flat even-diffuse light across the full landscape, no directional shadow anywhere, every surface and formation edge rendered in clean cool-toned precision"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Backlit dusk sun dropping behind the horizon, bright diffuse gold rimming every cloud mass overhead, the full coastal formation silhouetted in deep contrast against a saturated amber horizon band"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "First-light dawn rake at extreme low angle across the volcanic plain, warm copper-amber just clipping the highest exposed ridges, the broad lower flats still held in cold pre-dawn indigo darkness"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Broad warm cloud-break spotlight sweeping slowly across the far mid-ground, the near foreground still cold under flat overcast, the lit section saturated against dark purple sky pressing from the north"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Arctic midnight-sun raking at extreme low angle, pale amber-gold washing every north-facing surface while long cool shadows stretch far across the open tundra floor toward the deep violet horizon"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Fanning cloud-gap light dropping in separate wide pools across the open plateau, each illuminated section glowing warm ochre-gold against the cool grey shadow bands between them beneath a broken sky"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Blue-hour deep cool indigo washing across the full alpine panorama, rim-edges of the highest ridges catching the last faint warmth of the vanished sun before the sky overhead goes completely black"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dramatic backlighting with sun glow flaring hard along every exposed upper edge of the formation, the entire foreground held in deep contrast shadow, the sky behind catching copper-gold to near-black"
   },
   {
-    "tags": [
-      "intimate",
-      "volcanic"
-    ],
+    "tags": ["intimate", "volcanic"],
     "description": "Storm-break directional sidelight catching a close-up fractured lava surface at a steep low angle, warm gold clipping every raised ridge, deep shadow filling every undercut crack in sharp tonal relief"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Pre-dawn cool indigo light skimming a close-up weathered rock face at extreme low angle, every layered seam and pitted texture rendered in soft blue-grey gradation before first warmth arrives"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Golden hour sidelight raking at extreme low angle across an open plateau, warm copper-amber saturating every west-facing surface, cool blue shadow pooling long and deep across the foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Alpenglow transitioning from peak rose-pink through deepening crimson, the highest exposed faces holding last warm color while the valley floor surrenders fully to cold blue-purple dusk shadow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Storm-break wide warm spotlight blasting open across the far ridge, the near foreground still locked under cold purple-grey storm shadow, a brilliant gold band saturated at the horizon beneath dark cloud"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Midday direct sun at full overhead brilliance with clear salt-washed air, every exposed surface razor-sharp in tack-direct contrast, hard black shadows pooling tight beneath every ledge and seam"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Blue-hour transition, the sky grading from faint residual copper at the horizon through deep indigo to near-black at zenith, the full landscape held in cold sourceless wash, every rim-edge barely perceptible"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Fanning scattered cloud-gap light breaking across the open volcanic plain in wide separate warm pools, cool grey shadow bands separating each lit section beneath a fast-moving broken overcast sky"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight sky holding a pale rose-copper arc low at the horizon, the open arctic surface beneath in cold sourceless violet-grey glow, no hard shadows, every form softly resolved in ambient cool light"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Backlit late-afternoon sun catching just above the ridge horizon, brilliant warm rim-light edging every elevated formation surface, the entire near foreground sunk in deep contrast shadow against a saturated sky"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "First-light pre-dawn copper just clipping the absolute topmost exposed ridgeline, the broad formation below still deep in cold indigo darkness, the sky banding pale amber to deep blue at the far horizon"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Overcast midday even-diffuse light pressing flat across the open desert formation, no directional shadow, every eroded surface and layered face rendered in clean cool-toned precision from edge to edge"
   },
   {
-    "tags": [
-      "intimate",
-      "coastal"
-    ],
+    "tags": ["intimate", "coastal"],
     "description": "Golden-hour sidelight at extreme low angle skimming a close-up tidal rock face, warm amber raking hard across every barnacle ridge and water-carved groove, micro-shadows cutting deep into each undercut seam"
   },
   {
-    "tags": [
-      "intimate",
-      "alpine"
-    ],
+    "tags": ["intimate", "alpine"],
     "description": "Blue-hour cool indigo settling across a close-up high-altitude rock face, the last faint copper warmth clinging only to the uppermost textured ridge, the lower surface already surrendered to cold blue-grey tone"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Last-light sidelight dissolving fast from the open mesa top, warm amber clinging to the uppermost flat while the broad foreground flats cool rapidly into long blue-purple shadow"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Storm-break sidelight punching hard through a ragged cloud-tear at ridge level, one wide high-altitude face saturated warm gold, the surrounding peaks buried under dark blue-grey storm overcast"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Midday high-contrast brilliance with bone-dry clear air amplifying every tonal edge, every elevated surface razor-sharp in tack-direct light, hard black shadows pooling tight beneath every overhang"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Fading dusk with last copper-orange warmth dissolving along the low horizon, the open coastal formation cooling fast into blue-purple shadow, the sky overhead grading toward full deep indigo"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Scattered cloud-gap light breaking in wide separate warm pools across the mid-ground volcanic field, cool grey shadow bands lying between each lit section beneath a fast-moving broken overcast ceiling"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dramatic backlit sun just cresting the far ridgeline, warm gold rim-light edging every exposed upper surface of the formation, the full near foreground locked in heavy contrast shadow beneath a charged sky"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Arctic midnight-sun at extreme low angle washing every north-facing surface in pale amber-gold, long cool shadows stretching far across the open terrain, the horizon band holding faint rose against deep violet sky"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Pre-dawn banding sky with pale copper whispering at the far horizon, rising through rose to deep indigo at zenith, the full formation below held in cold sourceless pre-dawn darkness before first light clips the ridge"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Broad storm-break warm spotlight sweeping across the near foreground while the far ridgeline remains cloaked under dark purple-grey overcast, the lit foreground saturated gold against the brooding sky behind"
   },
   {
-    "tags": [
-      "intimate",
-      "desert"
-    ],
+    "tags": ["intimate", "desert"],
     "description": "Overcast midday diffuse light falling flat across a close-up layered sandstone face, no directional shadow, every banded seam and eroded pit rendered in even cool-toned clarity from edge to edge"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Golden hour rake driving at extreme low angle across the open coastal platform, warm copper-amber saturating every west-facing surface, long cool shadows trailing hard across the foreground tidally scoured flats"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Storm-break sidelight raking hard across a close-up fractured rock face at a steep low angle, brilliant warm gold clipping every raised surface edge, deep shadow cutting hard into every undercut seam and crack"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Late golden hour sidelight angling hard across the open formation, warm ochre-amber saturating every west-facing ledge, long cool shadows pooling blue-purple deep across the foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Post-alpenglow transition, last rose-amber fully withdrawn from the peaks, the entire formation cooling into deep blue-purple shadow, a faint copper whisper lingering at the far horizon edge"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Broad warm storm-break light sweeping open across the near foreground, the far mid-ground still locked under cold purple-grey overcast, the horizon saturated gold beneath a ragged torn cloud edge"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Midday overcast pressing flat even-diffuse light across the full coastal platform, no directional shadow anywhere, every wave-carved ledge and barnacle seam rendered in clean cool-toned precision"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Dusk horizon saturated deep copper-orange low behind the volcanic plain, the sky overhead grading rapidly near-black, every exposed upper ridge edge catching the last faint warmth before full dark arrives"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Backlit afternoon sun catching low behind a dense cloud bank, diffuse bright gold rimming every cloud mass in brilliant warm edgelight, the entire formation below held in heavy contrast shadow"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight grading from pale rose-copper at the low horizon through cold violet to near-black overhead, the open arctic surface held in soft sourceless glow, every landform edge barely resolved"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "High-noon direct sun at altitude punching through crystal-thin air, every cliff face and exposed ridge razor-sharp in tack-direct brilliance, shadows cut hard and black against bright open rock"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Scattered cloud-gap light spilling in wide variegated pools across the mid-ground, each warm ochre-gold patch separated by bands of cool grey shadow as a broken overcast drifts steadily overhead"
   },
   {
-    "tags": [
-      "intimate",
-      "volcanic"
-    ],
+    "tags": ["intimate", "volcanic"],
     "description": "Blue-hour cool indigo washing across a close-up rough lava surface, the last faint copper warmth clinging only to the sharpest uppermost ridges, the lower textured face surrendered to cold blue-grey tone"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "First-light dawn rake clipping the absolute topmost mesa rim in warm copper-amber, the broad foreground plateau still locked in cold pre-dawn indigo darkness, the sky banding pale rose to deep blue overhead"
   },
   {
-    "tags": [
-      "intimate",
-      "alpine"
-    ],
+    "tags": ["intimate", "alpine"],
     "description": "Storm-break raking sidelight skimming a close-up high-altitude fractured face at steep low angle, warm gold clipping every protruding crystal edge, hard shadow filling every undercut seam in sharp tonal relief"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Golden hour rake angling hard across the open formation from extreme low sun, warm copper-amber flooding every west-facing ledge, cool blue-purple shadow pooling long and deep across the foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Alpenglow at peak chromatic moment deepening from rose-pink to full magenta across the highest exposed faces, the valley floor already surrendered to cold blue-purple shadow, eastern sky holding deep indigo"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Storm-break broad warm spotlight tearing open across the near foreground, the surrounding ridgelines buried under dark purple-grey storm overcast, a saturated gold band catching hard at the horizon beneath ragged cloud"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Pre-dawn blue-hour deep indigo settling cold across the full coastal platform, a faint copper whisper dissolving at the far horizon, every exposed rim-edge barely touched by sourceless cool ambient light"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Backlit late-afternoon sun catching just above the volcanic ridgeline, brilliant warm gold edging every exposed upper formation surface, the entire near foreground locked in heavy contrast shadow beneath a charged sky"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Fanning cloud-gap light spilling through a fast-breaking overcast in wide separate warm pools, each illuminated section glowing ochre-gold against the cool grey shadow bands lying between them across the open mid-ground"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Arctic midnight-sun raking at extreme low angle across open coastal tundra, pale amber-gold washing every elevated surface, long cool shadows stretching far across the terrain toward a faint rose-violet horizon band"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Post-storm clearing light breaking wide across the high alpine panorama, one broad warm spotlight sweeping the upper ridgeline while dark retreating cloud presses low across the far valley in cold grey-blue shadow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dusk transition with last copper-orange warmth saturated in a narrow band just above the far horizon, the sky overhead grading through deep indigo to near-black, every exposed upper rim-edge catching final faint warmth"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Midday direct sun hammering through bone-dry clear air, every elevated surface bleached to high contrast in relentless tack-direct brilliance, shadows slicing hard and black directly beneath each ledge and overhang"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Last-light alpenglow flush catching a close-up rock face at steep low angle, warm rose-amber catching across every protruding upper ridge while the lower surface cools fast into deep blue-purple shadow below"
   },
   {
-    "tags": [
-      "intimate",
-      "coastal"
-    ],
+    "tags": ["intimate", "coastal"],
     "description": "Midday overcast diffuse light pressing flat and even across a close-up wave-carved rock face, no directional shadow, every undercut seam and pitted surface rendered in clean cool-toned clarity from edge to edge"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Late-afternoon sidelight raking at extreme low angle across an open mesa, warm ochre-amber flooding every elevated ledge face, cool blue-purple shadow stretching long and deep across the foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Post-storm clearing with a broad warm spotlight sweeping the highest exposed ridgeline, dark retreating cloud pressing cold grey-blue across the lower valley, the lit ridge saturated gold against brooding overcast"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Fading last-light warm amber withdrawing fast from the upper volcanic rim, the broad open plain below cooling rapidly into deep blue-purple shadow, the sky banding pale copper to near-black at zenith"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Scattered fanning cloud-gap light breaking open across the near foreground in wide warm pools, cool grey shadow bands separating each lit section as a broken overcast shifts and rolls steadily overhead"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "First-light dawn rake skimming the open coastal platform at extreme low angle, warm copper just clipping every elevated west-facing surface, the broad tidal flats still locked in cold blue pre-dawn darkness"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight sky banding pale rose-copper at the low horizon, grading through soft violet to deep indigo overhead, the open tundra surface held in cold sourceless ambient glow with no perceptible shadow direction"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dramatic backlit afternoon sun just clearing the far ridge, brilliant warm gold rimming every exposed upper surface, the entire near foreground locked in heavy contrast shadow beneath a charged copper-gold sky"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Overcast midday even-diffuse light pressing flat across the open desert platform, every eroded ledge and banded seam rendered in clean cool-toned precision, no directional shadow interrupting the even tonal field"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Pre-dawn sky banding pale amber at the lowest horizon edge, rising through faint rose to cold deep indigo at zenith, the entire alpine formation below held in cold sourceless pre-dawn darkness before first rake arrives"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Storm-break wide warm light tearing open across the far mid-ground, the near foreground still cold under heavy purple-grey overcast, a brilliant gold sweep saturated across the distant landscape beneath ragged cloud"
   },
   {
-    "tags": [
-      "intimate",
-      "volcanic"
-    ],
+    "tags": ["intimate", "volcanic"],
     "description": "Pre-dawn cool indigo light barely skimming a close-up rough lava surface, every sharp ridge and fractured edge rendered in soft blue-grey gradation, the lower textured face held in near-total cold darkness"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Alpenglow at peak chromatic moment raking across a close-up high-altitude rock face, the upper surface catching rose-pink to magenta while the lower half cools sharply into deep blue-purple shadow below"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Golden hour sidelight angling at extreme low sun from the west, warm copper-amber flooding every elevated ledge, long blue-purple shadow bands pooling deep and cold across the open foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Storm-break sidelight tearing wide through a ragged cloud edge at ridge level, one broad high-altitude face saturated warm gold, the surrounding valley floor locked under cold blue-grey storm shadow"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Fading alpenglow holding last rose-amber along the sea-cliff silhouette, the open coastal platform below already surrendered to deep blue-purple dusk shadow, the eastern sky grading toward full indigo"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Post-storm clearing light breaking wide across the open mid-ground, one broad warm spotlight sweeping the near formation while dark retreating cloud presses cold grey-blue across the far ridgeline behind"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Scattered cloud-gap light dropping in wide separate warm pools across the open volcanic field, cool grey shadow bands lying between each illuminated section beneath a fast-moving broken overcast ceiling"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Arctic midnight-sun low raking sidelight skimming across open ice-scoured bedrock, every elevated face washed in pale amber-gold, long cool shadows stretching far across the terrain toward a faint violet horizon"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dusk copper-orange horizon band narrowing fast as full dark presses down from overhead, every exposed upper rim-edge catching a last faint warmth before the landscape surrenders to cold blue-purple shadow"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Midday high-altitude direct sun with razor-thin clear air sharpening every tonal edge, cliff faces bleached bright in tack-direct brilliance, shadows cut hard and black tight beneath every overhang and ledge"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Blue-hour deep indigo wash settling cold and even across the open plateau, a faint residual copper whisper dissolving at the far horizon edge, every exposed upper rim barely touched by sourceless ambient cool light"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Backlit overcast storm-light with diffuse bright gold rimming every dense cloud mass overhead, the full formation below held in heavy flat shadow, the charged sky catching warm along every cloud edge above"
   },
   {
-    "tags": [
-      "intimate",
-      "desert"
-    ],
+    "tags": ["intimate", "desert"],
     "description": "Late-afternoon raking sidelight skimming a close-up banded canyon wall at extreme low angle, warm ochre-amber clipping every protruding layer edge, deep micro-shadows cutting hard into each eroded horizontal seam"
   },
   {
-    "tags": [
-      "intimate",
-      "coastal"
-    ],
+    "tags": ["intimate", "coastal"],
     "description": "Pre-dawn cool indigo light barely grazing a close-up tidal rock surface at extreme low angle, every barnacle ridge and wave-worn groove resolved in soft blue-grey gradation before any warmth arrives"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Late golden hour sidelight dissolving fast from the upper mesa rim, warm amber still saturating every west-facing ledge while long blue-purple shadow pools stretch cold and deep across the foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Pre-alpenglow transition with the sun just vanished below the ridge, the highest faces holding a last faint rose warmth, the valley already surrendered to cold blue-purple shadow, sky banding amber to deep indigo"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Post-storm clearing broad warm light sweeping hard across the open volcanic plain, dark retreating cloud pressing cold grey-blue across the far horizon, the lit foreground saturated gold against brooding overcast behind"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dusk copper-orange horizon band catching low and narrow behind the formation, the sky above grading from deep indigo to near-black at zenith, every exposed upper ridge edge lit by last faint residual warmth"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Storm-break broad warm spotlight tearing open across the open coastal platform, surrounding sea-cliffs buried under dark purple-grey overcast, the lit foreground saturated ochre-gold beneath a ragged broken sky"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight sky holding a cold rose-violet arc low at the horizon, the open arctic terrain beneath suspended in sourceless ambient glow, no perceptible shadow direction, every landform edge softly resolved in muted tone"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "High-altitude midday direct sun blasting through razor-thin clear air, every exposed cliff face and ridge rendered in tack-sharp brilliance, shadows sliced hard and black tight beneath every overhang and protruding ledge"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Scattered cloud-gap light falling in wide separate warm pools across the open near foreground, each ochre-gold patch bordered by bands of cool flat grey shadow as a broken overcast rolls steadily overhead"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Overcast high-noon diffuse light pressing flat and even across the open canyon platform, no directional shadow anywhere, every banded seam and eroded ledge face rendered in clean even cool-toned clarity"
   },
   {
-    "tags": [
-      "intimate",
-      "volcanic"
-    ],
+    "tags": ["intimate", "volcanic"],
     "description": "Late-afternoon raking sidelight skimming a close-up fractured basalt surface at extreme low angle, warm copper-amber clipping every raised ridge and blocky edge, deep shadow cutting hard into each joint and crack"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Blue-hour cool indigo settling across a close-up weathered rock face, the last faint copper warmth barely clinging to the absolute uppermost ridge, the lower textured surface already fully surrendered to cold grey-blue tone"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Dawn first-light warm copper just barely clipping the highest exposed ridge, the broad formation below still locked in cold pre-dawn indigo darkness, the far sky banding pale rose through deep blue toward black at zenith"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Midday direct sun hammering through crystalline dry air, every west-facing ledge bleached to stark tonal contrast, shadows slicing hard and black directly beneath each overhang with zero diffusion"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Fading alpenglow past peak chromatic moment, last rose-crimson withdrawing from the highest exposed faces, the valley already deep in cold blue-purple shadow, sky overhead going black at zenith"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Post-storm clearing light sweeping wide across the near foreground, dark retreating cloud pressing cold grey-blue hard against the far ridgeline, the lit landscape saturated warm gold against a brooding sky"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Pre-dawn deep indigo hour settling cold and even across the open coastal platform, a faint residual copper whisper barely alive at the far horizon, every exposed rim-edge touched only by sourceless ambient cool"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Golden hour rake driving hard from low sun across the volcanic plain, warm copper-amber flooding every elevated surface, long cool shadows pooling blue-grey deep across the open foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Arctic midnight-sun sidelight raking at extreme low angle across open bedrock, pale amber-gold washing every north-facing elevated surface, cool shadows stretching far toward a faint copper-rose horizon band"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Dramatic backlighting with the afternoon sun catching just above the far ridgeline, warm gold flaring hard along every exposed upper edge, the entire near foreground deep in heavy contrast shadow beneath a charged sky"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Broad storm-break warm spotlight bursting through a torn cloud edge at altitude, one wide upper face saturated gold, the surrounding valley floor locked under cold blue-grey storm overcast pressing from every side"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Blue-hour deep cool indigo pressing flat across the open plateau, every exposed upper rim barely perceptible in sourceless ambient light, the last faint copper warmth fully dissolved below a near-black zenith sky"
   },
   {
-    "tags": [
-      "intimate",
-      "volcanic"
-    ],
+    "tags": ["intimate", "volcanic"],
     "description": "Dawn first-light copper barely clipping a close-up rough basalt surface at extreme low angle, the upper raised edges glowing faint warm amber while the lower fractured face remains in cold pre-dawn blue-grey shadow"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Fanning cloud-gap light breaking through fast-moving overcast in wide separate warm pools across the open coastal platform, cool grey shadow bands separating each lit section as broken cloud rolls steadily overhead"
   },
   {
-    "tags": [
-      "intimate"
-    ],
+    "tags": ["intimate"],
     "description": "Midday overcast diffuse light pressing flat and even across a close-up weathered rock face, no directional shadow anywhere, every layered seam and eroded pit rendered in clean cool-toned precision across the full surface"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Warm copper-amber last light dissolving from the far canyon rim, the broad open foreground already cooling fast into long blue-purple shadow, sky banding pale ochre to deep indigo at zenith"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Post-storm clearing sidelight raking hard across the upper ridgeline, one broad face saturated warm gold against dark retreating overcast, the valley floor still locked under cold blue-grey storm shadow"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "High-noon direct sun with crystal-clear salt-washed air, every exposed surface rendered in relentless tack-sharp brilliance, hard black shadows pooling tight beneath each wave-carved ledge and overhanging seam"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Pre-alpenglow transition with the sun just dropped below the ridge, highest faces holding a last faint rose warmth, the open volcanic plain surrendering rapidly to cold blue-purple shadow, sky banding amber to indigo"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Midday overcast ceiling pressing flat even-diffuse light across a wide open formation, every surface and eroded edge fully exposed in clean cool-toned clarity, no directional shadow interrupting the even tonal field"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight with a faint rose-copper arc catching low at the horizon, the full arctic terrain above held in cold sourceless violet-grey ambient glow, each landform edge barely resolved in the muted directionless light"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Alpenglow deepening from rose-pink past peak into final crimson-magenta flush, the absolute highest faces holding last saturated warm color, the valley floor already fully surrendered to cold blue-purple shadow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Late-afternoon raking sidelight driving at a steep low angle across the open mid-ground, every west-facing surface flooded in warm amber-gold, cool blue-purple shadow stretching long and cold across the foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Storm-break wide warm light tearing open across the near coastal platform, surrounding sea-cliffs buried under dark purple-grey overcast, the lit foreground section saturated warm ochre against a brooding charged sky"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Backlit dusk sun dropping hard behind the far volcanic ridge, brilliant warm gold edging every upper cloud mass and exposed rim surface, the entire near foreground locked in deep contrast shadow beneath a charged sky"
   },
   {
-    "tags": [
-      "intimate",
-      "desert"
-    ],
+    "tags": ["intimate", "desert"],
     "description": "Pre-dawn cool indigo light barely grazing a close-up layered sandstone face at extreme low angle, every banded seam and eroded groove resolved in soft blue-grey gradation before any warmth arrives at the rim"
   },
   {
-    "tags": [
-      "intimate",
-      "alpine"
-    ],
+    "tags": ["intimate", "alpine"],
     "description": "Post-storm clearing directional sidelight raking across a close-up fractured high-altitude face, warm gold clipping every protruding crystal edge, deep shadow cutting hard into every undercut joint in sharp tonal relief"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "High-contrast late-afternoon sidelight angling hard from the southwest, every elevated ledge face catching warm ochre-gold, cool blue-purple shadow stretching long and cold across the open foreground flats"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Pre-alpenglow sky transitioning fast, the sun vanished below the western ridge, highest exposed faces holding a last delicate rose warmth, the valley floor cooling rapidly into deep blue-purple shadow"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Broad post-storm clearing light sweeping the near foreground while dark retreating cloud presses cold grey-blue hard across the far ridgeline, the lit section saturated warm ochre-gold against brooding purple overcast"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Fading dusk copper-orange band dissolving low at the horizon, the open coastal platform cooling fast into deep blue-purple shadow, the sky overhead pressing steadily toward full indigo at zenith"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "First-light dawn rake skimming the volcanic plain at extreme low angle, warm copper-amber just clipping the highest exposed ridges, the broad lower flats still surrendered to cold pre-dawn indigo darkness"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Fanning cloud-gap light breaking open across the wide mid-ground in broad separate warm pools, each ochre-gold patch bordered sharply by cool flat grey shadow as a fast-moving broken overcast shifts steadily overhead"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Arctic midnight-sun raking at extreme low angle across open ice-scoured terrain, every elevated face washed in pale amber-gold, long cool shadows stretching far across the plain toward a faint rose-violet horizon"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "Storm-break spotlight punching through a ragged cloud-tear at ridge level, one broad high-altitude face saturated warm gold, the surrounding valley locked under cold blue-grey storm overcast pressing from every direction"
   },
   {
-    "tags": [
-      "epic"
-    ],
+    "tags": ["epic"],
     "description": "Backlit afternoon sun catching just above the far horizon cloud band, warm gold rim-light flaring hard along every exposed upper edge, the entire near foreground deep in heavy contrast shadow beneath a charged copper sky"
   },
   {
-    "tags": [
-      "intimate",
-      "coastal"
-    ],
+    "tags": ["intimate", "coastal"],
     "description": "Storm-break raking sidelight skimming a close-up sea-cliff face at steep low angle, brilliant warm gold clipping every protruding barnacle ridge, deep micro-shadows cutting hard into each wave-scoured undercut seam"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Polar-opposite of golden hour — midday overcast pressing flat even-diffuse light across the open canyon platform, no directional shadow anywhere, every banded layer and eroded groove rendered in clean cool-toned precision"
   },
   {
-    "tags": [
-      "intimate",
-      "alpine"
-    ],
+    "tags": ["intimate", "alpine"],
     "description": "Pre-dawn cool indigo light barely grazing a close-up high-altitude fractured face at extreme low angle, every layered seam and crystal edge softly resolved in blue-grey gradation before any warm light arrives at the rim"
   },
   {
-    "tags": [
-      "epic",
-      "desert"
-    ],
+    "tags": ["epic", "desert"],
     "description": "Last-light warm amber pulling fast off the open mesa, the broad foreground flats cooling hard into deep blue-purple shadow, a narrow copper band still catching at the horizon beneath a near-black zenith sky"
   },
   {
-    "tags": [
-      "epic",
-      "alpine"
-    ],
+    "tags": ["epic", "alpine"],
     "description": "High-noon sun at extreme altitude punching through bone-dry clear air, every exposed ridge and cliff face rendered in relentless tack-sharp brilliance, shadows sliced hard and black tight beneath each protruding overhang"
   },
   {
-    "tags": [
-      "epic",
-      "coastal"
-    ],
+    "tags": ["epic", "coastal"],
     "description": "Broad warm storm-break light tearing open across the open coastal headland, surrounding sea-cliffs sunk under dark purple-grey overcast, the lit platform saturated ochre-gold against a brooding charged sky overhead"
   },
   {
-    "tags": [
-      "epic",
-      "volcanic"
-    ],
+    "tags": ["epic", "volcanic"],
     "description": "Blue-hour deep cool indigo wash settling full across the volcanic plain, a last faint copper warmth dissolving along the upper rim-edge, the lower formations already surrendered to cold sourceless ambient darkness"
   },
   {
-    "tags": [
-      "epic",
-      "arctic-polar"
-    ],
+    "tags": ["epic", "arctic-polar"],
     "description": "Polar twilight sky banding faint amber at the very lowest horizon edge, rising through cold rose to deep violet overhead, the open tundra surface held in sourceless directionless glow, every landform edge softly resolved"
   },
   {
-    "tags": [
-      "intimate",
-      "desert"
-    ],
+    "tags": ["intimate", "desert"],
     "description": "Storm-break directional sidelight raking a close-up banded sandstone face at extreme low angle, warm gold clipping every protruding horizontal layer edge, hard micro-shadows cutting deep into each eroded undercut seam"
   }
 ]

@@ -23,7 +23,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot tropical-paradise — each entry describes ONE tropical-paradise coast scene at fine-art gallery-print tier. PARADISE coast (palms, turquoise water, white sand, lagoon, coral atoll). NOT dramatic craggy cliff coast (that's a different path). The "I want to BE there" tropical-dream-vacation feel.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot tropical-paradise — each entry describes ONE tropical-paradise coast scene at fine-art gallery-print tier. PARADISE coast (palms, turquoise water, white sand, lagoon, coral atoll). NOT dramatic craggy cliff coast (that's a different path). The "I want to BE there" tropical-dream-vacation feel.
 
 ━━━ THE BAR — TROPICAL PARADISE WALLPAPER TIER ━━━
 
@@ -132,4 +134,7 @@ Each entry distinct in geology + region + POV + scale anchor. Tropical-paradise 
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Pure drama-led tropical-paradise coast scenes, POV-cued, no tourist names, no structures. No preamble, no markdown code fences, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -26,7 +26,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot seasonal-shift. Each entry describes ONE landscape composition / setting where AUTUMN FOLIAGE or SPRING BLOSSOMS unfold. NO colors (color_palette axis owns multi-color). NO depth layers (depth_layers axis owns tiers). NO motion (seasonal_motion axis owns motion). Just the LANDSCAPE TYPE + framing + season tag.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot seasonal-shift. Each entry describes ONE landscape composition / setting where AUTUMN FOLIAGE or SPRING BLOSSOMS unfold. NO colors (color_palette axis owns multi-color). NO depth layers (depth_layers axis owns tiers). NO motion (seasonal_motion axis owns motion). Just the LANDSCAPE TYPE + framing + season tag.
 
 PATH IDENTITY (tight): this path is 100% about (1) AUTUMN FALL FOLIAGE — including the "first snow on autumn leaves" transition look — and (2) SPRING — blossoms, wildflowers, emerging green, life returning. NO pure winter scenes, NO summer scenes.
 
@@ -196,4 +198,7 @@ INTIMATE CLOSE-UP (rare — only 1-2 entries):
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Landscape composition + season-tag only. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

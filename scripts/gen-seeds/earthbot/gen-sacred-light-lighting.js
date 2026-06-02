@@ -21,7 +21,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SACRED-LIGHT LIGHTING entries for EarthBot sacred-light. Each entry describes ONE specific transcendent natural-light event — the HERO of the frame. The light moment is the emotional center. Marc Adamus / Galen Rowell / Peter Lik caliber gallery-print sacred-light photography.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SACRED-LIGHT LIGHTING entries for EarthBot sacred-light. Each entry describes ONE specific transcendent natural-light event — the HERO of the frame. The light moment is the emotional center. Marc Adamus / Galen Rowell / Peter Lik caliber gallery-print sacred-light photography.
 
 ━━━ THE BAR — LIGHT AS THE EMOTIONAL CENTER ━━━
 
@@ -142,4 +144,7 @@ NEVER include:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Specific transcendent natural-light event. NO single-beam language. NO bioluminescent. NO architecture. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

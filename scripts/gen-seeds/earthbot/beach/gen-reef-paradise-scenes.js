@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/beach/seeds/reef_paradise_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SHALLOW REEF PARADISE scene descriptions for BeachBot's reef-paradise path. Each entry is a complete underwater scene — a SHALLOW near-shore tropical reef teeming with vivid coral and tropical fish. Think snorkeling at Black Rock Maui, Hanauma Bay Oahu, or Captain Cook on Big Island.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SHALLOW REEF PARADISE scene descriptions for BeachBot's reef-paradise path. Each entry is a complete underwater scene — a SHALLOW near-shore tropical reef teeming with vivid coral and tropical fish. Think snorkeling at Black Rock Maui, Hanauma Bay Oahu, or Captain Cook on Big Island.
 
 Each entry: 25-40 words. One complete shallow reef scene with specific coral, fish, water quality, light, AND nearby beach context.
 
@@ -50,4 +52,7 @@ ${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

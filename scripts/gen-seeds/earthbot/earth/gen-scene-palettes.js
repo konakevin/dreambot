@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/scene_palettes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COLOR PALETTE descriptions for EarthBot — specific color schemes that define the chromatic identity of a landscape scene. These are injected as color direction.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COLOR PALETTE descriptions for EarthBot — specific color schemes that define the chromatic identity of a landscape scene. These are injected as color direction.
 
 Each entry: 10-15 words. One specific color palette using named colors. No scene description, just colors.
 
@@ -32,4 +34,7 @@ Each entry: 10-15 words. One specific color palette using named colors. No scene
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

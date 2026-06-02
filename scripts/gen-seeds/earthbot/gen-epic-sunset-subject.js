@@ -21,7 +21,9 @@ generatePool({
   total: 200,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SUBJECT entries for EarthBot epic-sunset — each entry describes ONE TROPICAL BEACH SUNSET. NOT a cliff. NOT a cove. NOT a rocky shore. NOT coastal-cliff. A wide FLAT TROPICAL BEACH with palms on sand.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUBJECT entries for EarthBot epic-sunset — each entry describes ONE TROPICAL BEACH SUNSET. NOT a cliff. NOT a cove. NOT a rocky shore. NOT coastal-cliff. A wide FLAT TROPICAL BEACH with palms on sand.
 
 ━━━ THE ABSOLUTE RULE — TROPICAL BEACH ONLY ━━━
 
@@ -146,4 +148,7 @@ ABSOLUTELY ZERO:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. EVERY entry is FLAT TROPICAL BEACH + PALMS ON SAND + TROPICAL SUNSET SKY. No cliffs. No coves. No rocky shores. No banned features. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

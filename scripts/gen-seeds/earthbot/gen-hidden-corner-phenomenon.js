@@ -21,7 +21,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} PHENOMENON entries for EarthBot hidden-corner. Each entry names ONE signature optical / atmospheric event woven naturally into the intimate scene. Real Earth ONLY. Hard ban on supernatural-drift triggers.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PHENOMENON entries for EarthBot hidden-corner. Each entry names ONE signature optical / atmospheric event woven naturally into the intimate scene. Real Earth ONLY. Hard ban on supernatural-drift triggers.
 
 ━━━ THE BAR — ONE INTIMATE-SCALE REAL-EARTH OPTICAL EVENT ━━━
 
@@ -74,4 +76,7 @@ Bare strings acceptable.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} entries. ONE intimate-scale real-Earth optical event per entry. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

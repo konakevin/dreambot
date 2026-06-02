@@ -25,7 +25,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} OUTDOOR LIGHTING entries for EarthBot geological-wonder. Each entry describes ONE specific outdoor light condition for a real-Earth geological scene. NEVER cave-interior lighting. Marc Adamus / Peter Lik gallery-print caliber.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OUTDOOR LIGHTING entries for EarthBot geological-wonder. Each entry describes ONE specific outdoor light condition for a real-Earth geological scene. NEVER cave-interior lighting. Marc Adamus / Peter Lik gallery-print caliber.
 
 ━━━ THE BAR — OUTDOOR LIGHT, NEVER INTERIOR ━━━
 
@@ -142,4 +144,7 @@ NEVER include:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} OBJECTS. Outdoor lighting only. NO beam / column / shaft language. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

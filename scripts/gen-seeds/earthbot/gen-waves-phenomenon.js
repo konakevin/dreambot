@@ -12,7 +12,9 @@ generatePool({
   total: 100,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} PHENOMENON entries for EarthBot waves. Each entry describes ONE rare optical event woven into the wave scene. 30%-gated conditional axis — fires on minority of renders.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PHENOMENON entries for EarthBot waves. Each entry describes ONE rare optical event woven into the wave scene. 30%-gated conditional axis — fires on minority of renders.
 
 ━━━ ABSOLUTELY BANNED ━━━
 
@@ -73,4 +75,7 @@ SKY EVENTS:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE rare phenomenon per entry. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

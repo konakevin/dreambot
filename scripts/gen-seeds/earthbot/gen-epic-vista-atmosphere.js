@@ -15,7 +15,9 @@ generatePool({
   total: 150,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERE entries for EarthBot epic-vista — ONE atmospheric condition per entry, weighted toward CRISP CLEAR AIR as the default.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERE entries for EarthBot epic-vista — ONE atmospheric condition per entry, weighted toward CRISP CLEAR AIR as the default.
 
 ━━━ THE BAR ━━━
 
@@ -65,4 +67,7 @@ Each entry: 12-22 words. Describe:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

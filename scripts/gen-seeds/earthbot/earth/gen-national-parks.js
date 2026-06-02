@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/earthbot/earth/seeds/national_parks.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} US NATIONAL PARKS landscape descriptions for EarthBot — real park geography amplified to impossible beauty.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} US NATIONAL PARKS landscape descriptions for EarthBot — real park geography amplified to impossible beauty.
 
 Each entry: 15-25 words. One specific scene at a named US national park or monument. No people.
 
@@ -52,4 +54,7 @@ ${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

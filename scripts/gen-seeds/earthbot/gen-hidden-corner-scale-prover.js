@@ -19,7 +19,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SCALE PROVER entries for EarthBot hidden-corner. Each entry names ONE tiny wildlife or micro element — postage-stamp scale in the frame — that proves the intimate pocket is alive. Real Earth ONLY.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SCALE PROVER entries for EarthBot hidden-corner. Each entry names ONE tiny wildlife or micro element — postage-stamp scale in the frame — that proves the intimate pocket is alive. Real Earth ONLY.
 
 ━━━ THE BAR — ONE TINY LIVING ELEMENT ━━━
 
@@ -69,4 +71,7 @@ Bare strings acceptable.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} entries. ONE tiny living element per entry. Real Earth species. Postage-stamp scale. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

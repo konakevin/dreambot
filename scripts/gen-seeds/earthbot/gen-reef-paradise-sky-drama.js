@@ -14,7 +14,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SKY DRAMA entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). Each entry describes ONE sky configuration — clouds + sun + light behavior ABOVE the bay. Generic descriptors only.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKY DRAMA entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). Each entry describes ONE sky configuration — clouds + sun + light behavior ABOVE the bay. Generic descriptors only.
 
 ━━━ THE BAR — DRAMATIC TROPICAL SKY (the SECOND hero) ━━━
 
@@ -103,4 +105,7 @@ NEVER include:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Sky + clouds + sun behavior. Always sunny tropical, dramatic. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

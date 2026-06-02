@@ -12,7 +12,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} WATER STATE entries for EarthBot cozy-beach (v2 — intimate beach moments). Each entry describes ONE calm soft tropical water state at the shore. NEVER dramatic surf.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WATER STATE entries for EarthBot cozy-beach (v2 — intimate beach moments). Each entry describes ONE calm soft tropical water state at the shore. NEVER dramatic surf.
 
 ━━━ ABSOLUTELY BANNED ━━━
 
@@ -59,4 +61,7 @@ Output a JSON array of STRINGS, 12-22 words each.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. Calm gentle tropical shore water only. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

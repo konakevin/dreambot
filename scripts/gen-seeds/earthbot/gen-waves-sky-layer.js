@@ -12,7 +12,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SKY LAYER entries for EarthBot waves. Each entry describes ONE sky condition above the wave. Real Earth sky — supports the wave drama without overshadowing it.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKY LAYER entries for EarthBot waves. Each entry describes ONE sky condition above the wave. Real Earth sky — supports the wave drama without overshadowing it.
 
 ━━━ ABSOLUTELY BANNED ━━━
 
@@ -87,4 +89,7 @@ CLEAR DRAMATIC:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. ONE sky condition per entry. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

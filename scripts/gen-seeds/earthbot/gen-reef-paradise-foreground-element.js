@@ -14,7 +14,9 @@ generatePool({
   total: 100,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} FOREGROUND ELEMENT entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). 30%-gated conditional axis — fires only on some renders. Each entry describes ONE foreground accent close to camera that adds depth without dominating the bay view.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FOREGROUND ELEMENT entries for EarthBot reef-paradise (R2 pivot — pretty island-bay aesthetic). 30%-gated conditional axis — fires only on some renders. Each entry describes ONE foreground accent close to camera that adds depth without dominating the bay view.
 
 ━━━ THE BAR — ONE TASTEFUL FOREGROUND ACCENT ━━━
 
@@ -102,4 +104,7 @@ NEVER include:
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} STRINGS. One soft-focus foreground accent per entry. No preamble, no markdown, no JSON keys — just strings.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

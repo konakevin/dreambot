@@ -19,7 +19,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} WATER FEATURE entries for EarthBot hidden-corner. Each entry names ONE water element in the intimate hidden-corner scene — a small still pool, gentle trickle, dripping rock, small waterfall, dew-only no-flowing-water option, etc. Real Earth ONLY.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WATER FEATURE entries for EarthBot hidden-corner. Each entry names ONE water element in the intimate hidden-corner scene — a small still pool, gentle trickle, dripping rock, small waterfall, dew-only no-flowing-water option, etc. Real Earth ONLY.
 
 ━━━ THE BAR — INTIMATE WATER ELEMENT ━━━
 
@@ -68,4 +70,7 @@ Bare strings acceptable.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} entries. ONE water feature per entry. Real-Earth intimate scale. No preamble, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
