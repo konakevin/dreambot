@@ -38,7 +38,10 @@ if (!ANTHROPIC) {
 }
 
 const args = process.argv.slice(2);
-const flag = (n, fb) => { const i = args.indexOf('--' + n); return i >= 0 ? args[i + 1] : fb; };
+const flag = (n, fb) => {
+  const i = args.indexOf('--' + n);
+  return i >= 0 ? args[i + 1] : fb;
+};
 const has = (n) => args.includes('--' + n);
 const POOL = flag('pool', null);
 const COUNT = parseInt(flag('count', '30'), 10);
@@ -1312,7 +1315,6 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE specific COZY RPG TOWN atmospheric magic-moment, 20-40 words. Format: "EFFECT NAME CAPS — primary detail + position in scene + cozy register cue". Vary across the 10 categories. NO horror / dark / sci-fi. NO UI / IP. NO sexual content. Cozy atmospheric only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
-
   // ─── pixel-horror path (2026-05-20 axis-system migration) ───
   pixelbot_pixel_horror_gothic_setting: {
     format: 'simple',
@@ -2496,7 +2498,7 @@ const POOL_RECIPES = {
   // PixelBot recipes go here — one entry per bespoke pool.
   // Each entry: { format: 'simple', theme: '...', touchpoints: [...], instructions: '...' }
   // See BOT_SCENE_QUALITY_PLAYBOOK.md "How to seed pools" section.
-};;
+};
 
 const recipe = POOL_RECIPES[POOL];
 if (!recipe) {
@@ -2524,18 +2526,31 @@ async function callSonnet(prompt) {
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'x-api-key': ANTHROPIC, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: SONNET, max_tokens: 16000, messages: [{ role: 'user', content: prompt }] }),
+      headers: {
+        'x-api-key': ANTHROPIC,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: SONNET,
+        max_tokens: 16000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
       signal: controller.signal,
     });
     if (!res.ok) throw new Error(`Sonnet ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const data = await res.json();
     return (data.content?.[0]?.text || '').trim();
-  } finally { clearTimeout(timeoutId); }
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 function parseArray(text) {
-  const body = text.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
+  const body = text
+    .replace(/```[a-z]*\n?/gi, '')
+    .replace(/```/g, '')
+    .trim();
   const lines = body.split('\n');
   const entries = [];
   let current = null;
@@ -2544,23 +2559,132 @@ function parseArray(text) {
     const trimmed = raw.trim();
     if (!trimmed) continue;
     const m = trimmed.match(numRe);
-    if (m) { if (current) entries.push(current); current = m[2].trim(); }
-    else if (current) current += ' ' + trimmed;
+    if (m) {
+      if (current) entries.push(current);
+      current = m[2].trim();
+    } else if (current) current += ' ' + trimmed;
   }
   if (current) entries.push(current);
   const cleaned = entries
-    .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+    .map((e) =>
+      e
+        .replace(/^["']|["']$/g, '')
+        .replace(/^[-•*]\s*/, '')
+        .trim()
+    )
     .filter((e) => e.length > 20 && e.length < 1200);
   if (cleaned.length === 0) throw new Error('No numbered entries found in response');
   return cleaned;
 }
 
-const STOPWORDS = new Set(['the','a','an','and','or','but','with','of','in','on','at','to','for','from','by','as','is','are','was','were','be','been','being','have','has','had','this','that','these','those','it','its','they','them','their','her','his','into','onto','through','across','over','under','near','around','between','one','two','three','some','any','all','no','not','than','then','also','so','very','more','most','many','much','each','every','other','another','same','such','only','own','just','still','here','there','where','when','what','who','wide','tall','long','high','low','large','small','massive','huge','vast','above','below','beside','behind','toward','within','throughout']);
+const STOPWORDS = new Set([
+  'the',
+  'a',
+  'an',
+  'and',
+  'or',
+  'but',
+  'with',
+  'of',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'from',
+  'by',
+  'as',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'have',
+  'has',
+  'had',
+  'this',
+  'that',
+  'these',
+  'those',
+  'it',
+  'its',
+  'they',
+  'them',
+  'their',
+  'her',
+  'his',
+  'into',
+  'onto',
+  'through',
+  'across',
+  'over',
+  'under',
+  'near',
+  'around',
+  'between',
+  'one',
+  'two',
+  'three',
+  'some',
+  'any',
+  'all',
+  'no',
+  'not',
+  'than',
+  'then',
+  'also',
+  'so',
+  'very',
+  'more',
+  'most',
+  'many',
+  'much',
+  'each',
+  'every',
+  'other',
+  'another',
+  'same',
+  'such',
+  'only',
+  'own',
+  'just',
+  'still',
+  'here',
+  'there',
+  'where',
+  'when',
+  'what',
+  'who',
+  'wide',
+  'tall',
+  'long',
+  'high',
+  'low',
+  'large',
+  'small',
+  'massive',
+  'huge',
+  'vast',
+  'above',
+  'below',
+  'beside',
+  'behind',
+  'toward',
+  'within',
+  'throughout',
+]);
 
 function signatureOf(entry) {
   const dashIdx = entry.indexOf(' — ');
   let body = dashIdx >= 0 ? entry.slice(dashIdx + 3) : entry;
-  const tokens = body.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter((w) => w.length > 4 && !STOPWORDS.has(w)).slice(0, 20);
+  const tokens = body
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 4 && !STOPWORDS.has(w))
+    .slice(0, 20);
   return [...new Set(tokens)].sort().slice(0, 12).join(' ');
 }
 
@@ -2571,15 +2695,27 @@ function titleOf(entry) {
 }
 
 function dedupe(entries) {
-  const seenSigs = new Map(); const seenTitles = new Map();
-  const kept = []; const dropped = [];
+  const seenSigs = new Map();
+  const seenTitles = new Map();
+  const kept = [];
+  const dropped = [];
   for (const e of entries) {
     if (typeof e !== 'string' || e.length < 20) continue;
     const title = titleOf(e);
-    if (title && seenTitles.has(title)) { dropped.push({ entry: e.slice(0, 80), reason: 'title' }); continue; }
+    if (title && seenTitles.has(title)) {
+      dropped.push({ entry: e.slice(0, 80), reason: 'title' });
+      continue;
+    }
     const sig = signatureOf(e);
-    if (sig.length < 10) { if (title) seenTitles.set(title, e); kept.push(e); continue; }
-    if (seenSigs.has(sig)) { dropped.push({ entry: e.slice(0, 80), reason: 'body' }); continue; }
+    if (sig.length < 10) {
+      if (title) seenTitles.set(title, e);
+      kept.push(e);
+      continue;
+    }
+    if (seenSigs.has(sig)) {
+      dropped.push({ entry: e.slice(0, 80), reason: 'body' });
+      continue;
+    }
     seenSigs.set(sig, e);
     if (title) seenTitles.set(title, e);
     kept.push(e);
@@ -2592,9 +2728,17 @@ async function generateBatch(batchCount) {
   const text = await callSonnet(buildPrompt(batchCount, recipe));
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   let arr;
-  try { arr = parseArray(text); }
-  catch (e) { console.error('Parse failed:', e.message); console.error('First 400 chars:', text.slice(0, 400)); return []; }
-  if (!Array.isArray(arr) || arr.length === 0) { console.warn('  ⚠ Sonnet returned no usable entries'); return []; }
+  try {
+    arr = parseArray(text);
+  } catch (e) {
+    console.error('Parse failed:', e.message);
+    console.error('First 400 chars:', text.slice(0, 400));
+    return [];
+  }
+  if (!Array.isArray(arr) || arr.length === 0) {
+    console.warn('  ⚠ Sonnet returned no usable entries');
+    return [];
+  }
   console.log(`  • Sonnet returned ${arr.length} entries in ${elapsed}s`);
   return arr;
 }
@@ -2602,21 +2746,38 @@ async function generateBatch(batchCount) {
 (async () => {
   const outPath = path.resolve(`scripts/bots/pixelbot/seeds/${POOL}.json`);
   let preExisting = [];
-  if (fs.existsSync(outPath)) { try { preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8')); } catch {} }
+  if (fs.existsSync(outPath)) {
+    try {
+      preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    } catch {}
+  }
   const finalTarget = TARGET ?? preExisting.length + COUNT;
   const startCount = preExisting.length;
-  if (TARGET !== null) console.log(`Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`);
-  else console.log(`Pool "${POOL}" (pixelbot): gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
-  let pool = [...preExisting]; let iteration = 0;
+  if (TARGET !== null)
+    console.log(
+      `Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`
+    );
+  else
+    console.log(
+      `Pool "${POOL}" (pixelbot): gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`
+    );
+  let pool = [...preExisting];
+  let iteration = 0;
   while (pool.length < finalTarget && iteration < MAX_ITERATIONS) {
     iteration++;
     const stillNeeded = finalTarget - pool.length;
     const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
-    console.log(`\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`);
+    console.log(
+      `\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`
+    );
     const fresh = await generateBatch(batchSize);
-    if (fresh.length === 0) { console.warn('  ⚠ empty Sonnet response — stopping iteration'); break; }
+    if (fresh.length === 0) {
+      console.warn('  ⚠ empty Sonnet response — stopping iteration');
+      break;
+    }
     const within = dedupe(fresh);
-    if (within.dropped.length > 0) console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
+    if (within.dropped.length > 0)
+      console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
     const existingSigs = new Set(pool.map((e) => signatureOf(e)));
     const existingTitles = new Set(pool.map((e) => titleOf(e)).filter(Boolean));
     const newUnique = within.kept.filter((e) => {
@@ -2631,12 +2792,23 @@ async function generateBatch(batchCount) {
     const toAdd = newUnique.slice(0, room);
     pool = [...pool, ...toAdd];
     console.log(`  ✓ Added ${toAdd.length} unique → pool at ${pool.length}/${finalTarget}`);
-    if (toAdd.length === 0 && newUnique.length === 0) { console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on theme, stopping'); break; }
+    if (toAdd.length === 0 && newUnique.length === 0) {
+      console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on theme, stopping');
+      break;
+    }
   }
-  console.log(`\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`);
-  if (DRY) { console.log('\nDry-run — not writing to disk.'); return; }
+  console.log(
+    `\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`
+  );
+  if (DRY) {
+    console.log('\nDry-run — not writing to disk.');
+    return;
+  }
   const bakPath = outPath + '.bak-' + Date.now();
-  if (fs.existsSync(outPath) && preExisting.length > 0) { fs.copyFileSync(outPath, bakPath); console.log(`Backed up existing pool → ${bakPath}`); }
+  if (fs.existsSync(outPath) && preExisting.length > 0) {
+    fs.copyFileSync(outPath, bakPath);
+    console.log(`Backed up existing pool → ${bakPath}`);
+  }
   fs.writeFileSync(outPath, JSON.stringify(pool, null, 2));
   console.log(`✓ Wrote ${pool.length} entries → ${outPath}`);
 })();

@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} 16-BIT SCI-FI ACTION GAMEPLAY SCREENSHOT scene descriptions for PixelBot's pixel-sci-fi-action path. Genre lineage: Contra III: The Alien Wars + Mega Man X + Super Metroid + Blaster Master + Turrican II + Gradius + R-Type + Salamander + Gunstar Heroes + Axelay + Cybernator + Star Soldier + Star Fox pixel-tribute.
+  metaPrompt: (
+    n
+  ) => `Write ${n} 16-BIT SCI-FI ACTION GAMEPLAY SCREENSHOT scene descriptions for PixelBot's pixel-sci-fi-action path. Genre lineage: Contra III: The Alien Wars + Mega Man X + Super Metroid + Blaster Master + Turrican II + Gradius + R-Type + Salamander + Gunstar Heroes + Axelay + Cybernator + Star Soldier + Star Fox pixel-tribute.
 
 ━━━ THE NORTH STAR ━━━
 
@@ -86,4 +88,7 @@ Armored space-marine with pulse-rifle, jetpack-soldier mid-thrust, mech-pilot in
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

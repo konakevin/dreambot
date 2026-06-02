@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's classic-jrpg path (Zelda LttP / FF VI / Chrono Trigger / Secret of Mana / Earthbound / Lufia II 16-bit-era top-down JRPG aesthetic — used as inspiration only, never named in output).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's classic-jrpg path (Zelda LttP / FF VI / Chrono Trigger / Secret of Mana / Earthbound / Lufia II 16-bit-era top-down JRPG aesthetic — used as inspiration only, never named in output).
 
 Each entry is 15-30 words. EVERY entry must include 2-3 of these animated-feel JRPG elements:
 - Drifting cherry-petals / autumn-leaves / spring-pollen
@@ -35,4 +37,7 @@ Examples (write fresh):
 - "Drifting bubbles rising from the underwater treasure-cave, sparkle-motes around the chest, drifting kelp-fronds, hopping bioluminescent-fish in the foreground."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

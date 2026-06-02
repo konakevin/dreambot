@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} 16-BIT RETRO PIXEL ART SIDE-SCROLLING PARALLAX-VISTA SCREENSHOT scene descriptions for PixelBot's epic-vista path. The frame is rendered as a horizontal layered side-scrolling parallax background — the kind you'd scroll past in a 16-bit RPG world-map / opening-cutscene / side-scrolling-engine vista cutaway. NOT atmospheric painting. NOT concept-art wallpaper. A SCREENSHOT FROM A 16-BIT GAME with chunky tile-edge mountains, hard-edge horizons, layered parallax-scrolling depth.
+  metaPrompt: (
+    n
+  ) => `Write ${n} 16-BIT RETRO PIXEL ART SIDE-SCROLLING PARALLAX-VISTA SCREENSHOT scene descriptions for PixelBot's epic-vista path. The frame is rendered as a horizontal layered side-scrolling parallax background — the kind you'd scroll past in a 16-bit RPG world-map / opening-cutscene / side-scrolling-engine vista cutaway. NOT atmospheric painting. NOT concept-art wallpaper. A SCREENSHOT FROM A 16-BIT GAME with chunky tile-edge mountains, hard-edge horizons, layered parallax-scrolling depth.
 
 Reference inspiration (USE AS FEEL-ANCHORS ONLY — NEVER name literally in scene output): Final Fantasy VI airship-flyover + Chrono Trigger world-map + Lufia II overworld + Secret of Mana world-vistas + Terranigma overworld + Castlevania IV background-vistas + Donkey Kong Country background-art + Sonic 2/3 horizon backgrounds + Trine pixel-tribute parallax + Owlboy parallax skies.
 
@@ -100,4 +102,7 @@ Each entry: 30-50 words, ONE paragraph. EVERY entry MUST OPEN with explicit side
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

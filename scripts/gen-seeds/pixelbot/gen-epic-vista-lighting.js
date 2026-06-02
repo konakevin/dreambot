@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's epic-vista path (Final Fantasy VI airship-flyover / Chrono Trigger world-map / Lufia II / Secret of Mana / Terranigma 16-bit-era panoramic vista aesthetic — used as inspiration only, never named in output).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's epic-vista path (Final Fantasy VI airship-flyover / Chrono Trigger world-map / Lufia II / Secret of Mana / Terranigma 16-bit-era panoramic vista aesthetic — used as inspiration only, never named in output).
 
 Each entry is 15-30 words. EVERY entry must include:
 - DRAMATIC LANDSCAPE LIGHTING — sunset gold-and-orange / sunrise pink-and-cream pastels / golden-hour amber / dawn-pearl morning / dusk-amber / blue-hour twilight / moonlit-blue night / aurora-ribbon night / starlit cosmic / storm-break god-ray / midday-clear blue-sky / overcast-cool / volcanic-orange-glow / alien-twin-moon
@@ -26,4 +28,7 @@ Examples (write fresh):
 - "Pink-pearl sunrise across cherry-blossom valley, dithered cloud-edge in soft warm-amber, far peaks fading to lavender-haze, dappled god-rays through canopy."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

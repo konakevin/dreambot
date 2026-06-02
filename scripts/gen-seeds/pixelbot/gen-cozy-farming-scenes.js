@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} COZY FARMING / LIFE-SIM EXTERIOR-VISTA scene descriptions for PixelBot's cozy-farming-life-sim path. Genre lineage: Stardew Valley + Spiritfarer pixel-tribute + Animal Crossing pixel-spinoff + Story of Seasons + Harvest Moon + Ooblets pixel.
+  metaPrompt: (
+    n
+  ) => `Write ${n} COZY FARMING / LIFE-SIM EXTERIOR-VISTA scene descriptions for PixelBot's cozy-farming-life-sim path. Genre lineage: Stardew Valley + Spiritfarer pixel-tribute + Animal Crossing pixel-spinoff + Story of Seasons + Harvest Moon + Ooblets pixel.
 
 Each entry: 30-50 words, ONE paragraph, focused on a WIDE COZY FARMSTEAD EXTERIOR vista — pixel farm with crops in neat rows, henhouse exterior with chickens scratching, beachside fish-shack with smoke curling, summer-festival town square, autumn-harvest barn (exterior), market vegetable-stall with vendor.
 
@@ -92,4 +94,7 @@ Every scene should feel like "a screenshot from a cozy pixel-farming-sim I want 
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

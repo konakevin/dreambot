@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's classic-jrpg path (Zelda LttP / FF VI / Chrono Trigger / Secret of Mana / Earthbound / Lufia II 16-bit-era top-down JRPG aesthetic — used as inspiration only, never named in output).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's classic-jrpg path (Zelda LttP / FF VI / Chrono Trigger / Secret of Mana / Earthbound / Lufia II 16-bit-era top-down JRPG aesthetic — used as inspiration only, never named in output).
 
 Each entry is 15-30 words. EVERY entry must include:
 - CLASSIC JRPG LIGHT SOURCE — golden-hour sunshine / dawn-pearl morning / dusk-amber sunset / moonlit-blue night / torch-glow on stone / candle-glow in inn / fireplace-glow in cottage / bioluminescent fungi-glow / magical rune-glow / crystal-cavern refraction / lava-glow / aurora-magic / sacred-grove rune-light
@@ -23,4 +25,7 @@ Examples (write fresh):
 - "Crystal-cavern refraction prismatic on stone-tiles, deep blue-violet ambient, dithered rainbow-edge shadows, warm-amber crystal-glow rim-light on hero sprites."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's cozy-rpg-town path. Each entry is 15-30 words describing the animated-feel atmospheric particulate + lived-in detail for a cozy pixel-RPG town (Stardew + Octopath HD-2D + Sea of Stars).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's cozy-rpg-town path. Each entry is 15-30 words describing the animated-feel atmospheric particulate + lived-in detail for a cozy pixel-RPG town (Stardew + Octopath HD-2D + Sea of Stars).
 
 EVERY entry must include 2-3 of these animated-feel elements:
 - Chimney smoke curling from rooftops
@@ -28,4 +30,7 @@ Examples (write fresh):
 - "Distant church-bells tolling, drifting petals from cherry trees, hanging laundry billowing, three NPCs gathered around the central well, a pixel-cat curled at a doorway."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

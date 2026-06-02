@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/scene_palettes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} PIXEL PALETTE descriptions for PixelBot — classic pixel-art palettes.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PIXEL PALETTE descriptions for PixelBot — classic pixel-art palettes.
 
 Each entry: 10-20 words. One specific pixel palette with 3-5 color words.
 
@@ -59,4 +61,7 @@ Each entry: 10-20 words. One specific pixel palette with 3-5 color words.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

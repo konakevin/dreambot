@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's pixel-horror path (now Castlevania / Ghosts 'n Goblins / Black Tiger / Demon's Crest gothic-fantasy action aesthetic, NOT modern psychological horror).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's pixel-horror path (now Castlevania / Ghosts 'n Goblins / Black Tiger / Demon's Crest gothic-fantasy action aesthetic, NOT modern psychological horror).
 
 Each entry is 15-30 words. EVERY entry must include 2-3 of these gothic-action elements:
 - Drifting bats / drifting black-feathers / falling autumn-leaves
@@ -35,4 +37,7 @@ Examples (write fresh):
 - "Drifting ash from incinerated village, falling embers from burning torches, smoke-haze receding into ruined background, cracked-stone debris on foreground tiles."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

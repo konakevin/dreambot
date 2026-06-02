@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's cozy-farming-life-sim path. Each entry is 15-30 words describing WARM, INVITING farming/life-sim pixel-art lighting (Stardew Valley + Spiritfarer pixel + Coffee Talk + Animal Crossing pixel + Story of Seasons + Ooblets).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's cozy-farming-life-sim path. Each entry is 15-30 words describing WARM, INVITING farming/life-sim pixel-art lighting (Stardew Valley + Spiritfarer pixel + Coffee Talk + Animal Crossing pixel + Story of Seasons + Ooblets).
 
 EVERY entry must include:
 - WARM, BRIGHT, INVITING — never dim, never threatening
@@ -24,4 +26,7 @@ Examples (write fresh):
 - "Autumn-harvest barn glowing warm-amber through the open doorway, golden-hour low sun raking across hay-bales, dappled-leaf shadow on pumpkin-pile."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

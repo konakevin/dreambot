@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's epic-vista path (Final Fantasy VI airship-flyover / Chrono Trigger world-map / Lufia II / Secret of Mana / Terranigma 16-bit-era panoramic vista aesthetic — used as inspiration only, never named in output).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's epic-vista path (Final Fantasy VI airship-flyover / Chrono Trigger world-map / Lufia II / Secret of Mana / Terranigma 16-bit-era panoramic vista aesthetic — used as inspiration only, never named in output).
 
 Each entry is 15-30 words. EVERY entry must include 2-3 of these animated-feel landscape elements:
 - Drifting clouds / chunky cumulus / wisps of mist
@@ -36,4 +38,7 @@ Examples (write fresh):
 - "Drifting magical motes across the sky-island vista, drifting cloud-platforms, distant airship-silhouette in flight, dithered atmospheric depth."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

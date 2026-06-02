@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's dungeon-depth path. Each entry is 15-30 words describing DIM, THREATENING, ATMOSPHERIC dungeon lighting (Diablo + Hades + Hyper Light Drifter + Dead Cells + Salt and Sanctuary lineage).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's dungeon-depth path. Each entry is 15-30 words describing DIM, THREATENING, ATMOSPHERIC dungeon lighting (Diablo + Hades + Hyper Light Drifter + Dead Cells + Salt and Sanctuary lineage).
 
 EVERY entry must include:
 - ALWAYS DIM mood — torches / candles / magical glow / bioluminescent fungi / single-source / cracked-skylight beam as PRIMARY light source. NEVER bright daylight.
@@ -26,4 +28,7 @@ Examples (write fresh):
 - "A swinging single oil-lantern casting strobing shadows, dust motes drifting in the strobing light, deep oppressive negative-space dark."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

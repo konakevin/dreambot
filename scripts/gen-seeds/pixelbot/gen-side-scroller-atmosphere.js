@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's side-scroller-world path. Each entry is 15-30 words describing the layered parallax animated-feel atmospheric details for a 2D pixel-platformer (Owlboy + Hollow Knight + Dead Cells + Celeste + Ori).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's side-scroller-world path. Each entry is 15-30 words describing the layered parallax animated-feel atmospheric details for a 2D pixel-platformer (Owlboy + Hollow Knight + Dead Cells + Celeste + Ori).
 
 EVERY entry must include 2-3 of these animated parallax-feel elements:
 - Drifting pollen / pollen-motes / spores
@@ -30,4 +32,7 @@ Examples (write fresh):
 - "Drifting waterfall mist between layers, magical motes catching the spray-light, falling petals from canopy, two dragonflies in flight at eye-level."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

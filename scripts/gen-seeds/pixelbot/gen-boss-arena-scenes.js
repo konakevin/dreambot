@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} 16-BIT BOSS-BATTLE GAMEPLAY SCREENSHOT scene descriptions for PixelBot's boss-arena path. Each entry feeds a Flux pixel-art prompt-writer. Genre lineage: Hyper Light Drifter + Hades + Diablo II + Octopath Traveler boss battles + Salt and Sanctuary + Children of Morta + Castlevania boss rooms.
+  metaPrompt: (
+    n
+  ) => `Write ${n} 16-BIT BOSS-BATTLE GAMEPLAY SCREENSHOT scene descriptions for PixelBot's boss-arena path. Each entry feeds a Flux pixel-art prompt-writer. Genre lineage: Hyper Light Drifter + Hades + Diablo II + Octopath Traveler boss battles + Salt and Sanctuary + Children of Morta + Castlevania boss rooms.
 
 ━━━ THE NORTH STAR ━━━
 
@@ -78,4 +80,7 @@ SIDE-VIEW arena (20% of entries):
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

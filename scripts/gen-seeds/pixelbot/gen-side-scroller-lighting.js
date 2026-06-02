@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's side-scroller-world path. Each entry is 15-30 words describing layered parallax pixel-platformer lighting (Owlboy + Hollow Knight + Dead Cells + Celeste + Ori-style lineage).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's side-scroller-world path. Each entry is 15-30 words describing layered parallax pixel-platformer lighting (Owlboy + Hollow Knight + Dead Cells + Celeste + Ori-style lineage).
 
 EVERY entry must include:
 - Time of day or biome-mood (sunrise, dawn, golden hour, dusk, twilight, midday-dappled, midnight-magical, underground-glow)
@@ -25,4 +27,7 @@ Examples (write fresh):
 - "Aurora ribbon-light pink-and-cyan in night sky, foreground ice-platforms rim-lit cool-blue, middle layer hills in deep-purple shadow, soft moonbeam wash."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

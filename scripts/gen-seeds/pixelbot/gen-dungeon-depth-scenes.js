@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} 16-BIT DIABLO-STYLE TOP-DOWN DUNGEON-CRAWLER GAMEPLAY SCREENSHOT scene descriptions for PixelBot's dungeon-depth path. Genre lineage: Diablo (and Diablo II) pixel-style + Hades chamber-reveals + Hyper Light Drifter top-down ruins + Children of Morta + Death's Gambit + Moonlighter + Eitr + Heroes of Hammerwatch.
+  metaPrompt: (
+    n
+  ) => `Write ${n} 16-BIT DIABLO-STYLE TOP-DOWN DUNGEON-CRAWLER GAMEPLAY SCREENSHOT scene descriptions for PixelBot's dungeon-depth path. Genre lineage: Diablo (and Diablo II) pixel-style + Hades chamber-reveals + Hyper Light Drifter top-down ruins + Children of Morta + Death's Gambit + Moonlighter + Eitr + Heroes of Hammerwatch.
 
 ━━━ THE NORTH STAR ━━━
 
@@ -92,4 +94,7 @@ Skeleton warrior, skeleton archer, charging zombie, ghoul crouching, lich castin
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

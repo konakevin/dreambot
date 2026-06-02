@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's boss-arena path. Each entry is 15-30 words describing the dramatic boss-arena animated-feel particulate (Hades + Hollow Knight + Salt and Sanctuary + Dead Cells boss-reveal).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's boss-arena path. Each entry is 15-30 words describing the dramatic boss-arena animated-feel particulate (Hades + Hollow Knight + Salt and Sanctuary + Dead Cells boss-reveal).
 
 EVERY entry must include 2-3 of these dramatic-tension elements:
 - Drifting embers / sparks / ash
@@ -30,4 +32,7 @@ Examples (write fresh):
 - "Drifting black-feathers from the boss's wings, pulsing nightshade-violet aura particles, cracked-floor blood-light leaking, deep tendril-shadow stretching from the boss."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

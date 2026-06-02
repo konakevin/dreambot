@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} 16-BIT GOTHIC-FANTASY ACTION GAMEPLAY SCREENSHOT scene descriptions for PixelBot's pixel-horror path. Genre lineage: Castlevania (NES/SNES) + Ghosts 'n Goblins + Ghouls 'n Ghosts + Black Tiger (Capcom) + Demon's Crest + Magical Quest + Splatterhouse + Rondo of Blood + Bloodstained pixel-tribute + Maximo pixel.
+  metaPrompt: (
+    n
+  ) => `Write ${n} 16-BIT GOTHIC-FANTASY ACTION GAMEPLAY SCREENSHOT scene descriptions for PixelBot's pixel-horror path. Genre lineage: Castlevania (NES/SNES) + Ghosts 'n Goblins + Ghouls 'n Ghosts + Black Tiger (Capcom) + Demon's Crest + Magical Quest + Splatterhouse + Rondo of Blood + Bloodstained pixel-tribute + Maximo pixel.
 
 ━━━ THE NORTH STAR ━━━
 
@@ -82,4 +84,7 @@ Skeleton warrior, skeleton archer, vampire bat-form, vampire-lord cape-spreading
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

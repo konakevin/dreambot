@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_perspectives.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} PIXEL ART CAMERA PERSPECTIVE descriptions for PixelBot. Each entry is a specific camera angle/viewpoint that will be injected into every render. These should describe HOW the scene is framed, not WHAT is in it.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PIXEL ART CAMERA PERSPECTIVE descriptions for PixelBot. Each entry is a specific camera angle/viewpoint that will be injected into every render. These should describe HOW the scene is framed, not WHAT is in it.
 
 Each entry: 8-15 words. A specific pixel-art camera perspective with its visual signature.
 
@@ -27,4 +29,7 @@ Deduplicate by: camera angle + distance (close/mid/wide). Two isometric entries 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

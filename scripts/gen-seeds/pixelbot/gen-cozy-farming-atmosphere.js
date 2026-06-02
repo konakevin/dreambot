@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's cozy-farming-life-sim path. Each entry is 15-30 words describing WARM, ANIMATED-FEEL farming/life-sim atmospheric details (Stardew + Spiritfarer pixel + Coffee Talk + Animal Crossing pixel).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's cozy-farming-life-sim path. Each entry is 15-30 words describing WARM, ANIMATED-FEEL farming/life-sim atmospheric details (Stardew + Spiritfarer pixel + Coffee Talk + Animal Crossing pixel).
 
 EVERY entry must include 2-3 of these animated-feel elements:
 - Drifting cherry-petals / apple-blossom / autumn-leaves / dandelion-fluff
@@ -32,4 +34,7 @@ Examples (write fresh):
 - "Drifting hay-dust in the barn light, sheep grazing in the foreground, a pixel-dog mid-herding, distant farmhouse warm-window-glow."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

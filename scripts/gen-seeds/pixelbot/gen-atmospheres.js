@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/atmospheres.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} PIXEL ATMOSPHERE descriptions for PixelBot — pixel atmosphere particles.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PIXEL ATMOSPHERE descriptions for PixelBot — pixel atmosphere particles.
 
 Each entry: 6-14 words. One specific pixel atmospheric element.
 
@@ -51,4 +53,7 @@ Each entry: 6-14 words. One specific pixel atmospheric element.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

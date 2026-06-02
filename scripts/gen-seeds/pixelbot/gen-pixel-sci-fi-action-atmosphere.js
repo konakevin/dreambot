@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's pixel-sci-fi-action path (Contra / Mega Man / Metroid / Blaster Master / Gradius / R-Type / Star Fox 16-bit retro sci-fi action aesthetic).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's pixel-sci-fi-action path (Contra / Mega Man / Metroid / Blaster Master / Gradius / R-Type / Star Fox 16-bit retro sci-fi action aesthetic).
 
 Each entry is 15-30 words. EVERY entry must include 2-3 of these animated sci-fi-action elements:
 - Plasma-bolt trails crossing the scene
@@ -37,4 +39,7 @@ Examples (write fresh):
 - "Drifting alien-pollen-motes in the canopy, plasma-bolt trails crossing the scene horizontally, muzzle-flash strobing on hero sprite, drifting smoke from a wrecked mech-walker."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

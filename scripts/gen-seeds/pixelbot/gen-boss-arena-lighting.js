@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's boss-arena path. Each entry is 15-30 words describing DRAMATIC, CINEMATIC boss-arena lighting (Hades + Hollow Knight + Salt and Sanctuary + Dead Cells + Souls-like + Cuphead boss reveal).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's boss-arena path. Each entry is 15-30 words describing DRAMATIC, CINEMATIC boss-arena lighting (Hades + Hollow Knight + Salt and Sanctuary + Dead Cells + Souls-like + Cuphead boss reveal).
 
 EVERY entry must include:
 - DRAMATIC RAKING LIGHT cutting the boss/architecture from the background
@@ -25,4 +27,7 @@ Examples (write fresh):
 - "Sickly-green poison-glow rising from the chamber floor as primary light, the spider-boss silhouetted against the toxic haze, deep shadow corners, dripping toxic-fluid puddles."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

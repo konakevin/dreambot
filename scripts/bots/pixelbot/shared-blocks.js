@@ -11,7 +11,8 @@
 const PROMPT_PREFIX =
   '16-bit retro pixel art game screenshot, classic SNES-era pixel craft, chunky visible pixel grid, low effective sprite resolution upscaled crisp, dithered limited palette, NO smooth gradients, NO vector smoothing, NO 32-bit polished pixel-illustration, NO HD-2D, NO modern indie-pixel painterly hybrid, classic 2D-RPG sprite character forms, every surface clearly pixelated';
 
-const PROMPT_SUFFIX = 'no text, no UI, no HUD, no menus, no health bars, no watermarks, no smooth gradients, no anti-aliasing, chunky pixel grid throughout';
+const PROMPT_SUFFIX =
+  'no text, no UI, no HUD, no menus, no health bars, no watermarks, no smooth gradients, no anti-aliasing, chunky pixel grid throughout';
 
 const PIXEL_ART_ONLY_BLOCK = `━━━ 16-BIT RETRO PIXEL ART ONLY — NON-NEGOTIABLE ━━━
 

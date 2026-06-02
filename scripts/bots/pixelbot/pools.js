@@ -80,7 +80,9 @@ module.exports = {
   PIXELBOT_COZY_RPG_TOWN_LOCALE: loadIfExists('pixelbot_cozy_rpg_town_locale'),
   PIXELBOT_COZY_RPG_TOWN_BIOME: loadIfExists('pixelbot_cozy_rpg_town_biome'),
   PIXELBOT_COZY_RPG_TOWN_NPC_LIFE: loadIfExists('pixelbot_cozy_rpg_town_npc_life'),
-  PIXELBOT_COZY_RPG_TOWN_ATMOSPHERIC_PHENOMENON: loadIfExists('pixelbot_cozy_rpg_town_atmospheric_phenomenon'),
+  PIXELBOT_COZY_RPG_TOWN_ATMOSPHERIC_PHENOMENON: loadIfExists(
+    'pixelbot_cozy_rpg_town_atmospheric_phenomenon'
+  ),
   // ─── dungeon-depth axis-system pools (2026-05-20) ───
   PIXELBOT_DUNGEON_DEPTH_CHAMBER: loadIfExists('pixelbot_dungeon_depth_chamber'),
   PIXELBOT_DUNGEON_DEPTH_BIOME: loadIfExists('pixelbot_dungeon_depth_biome'),
@@ -88,9 +90,13 @@ module.exports = {
   PIXELBOT_DUNGEON_DEPTH_LOOT_DETAIL: loadIfExists('pixelbot_dungeon_depth_loot_detail'),
   // ─── side-scroller-world axis-system pools (2026-05-20) ───
   PIXELBOT_SIDE_SCROLLER_BIOME_SETTING: loadIfExists('pixelbot_side_scroller_biome_setting'),
-  PIXELBOT_SIDE_SCROLLER_PLATFORM_GEOGRAPHY: loadIfExists('pixelbot_side_scroller_platform_geography'),
+  PIXELBOT_SIDE_SCROLLER_PLATFORM_GEOGRAPHY: loadIfExists(
+    'pixelbot_side_scroller_platform_geography'
+  ),
   PIXELBOT_SIDE_SCROLLER_HERO_ACTION: loadIfExists('pixelbot_side_scroller_hero_action'),
-  PIXELBOT_SIDE_SCROLLER_ATMOSPHERIC_PHENOMENON: loadIfExists('pixelbot_side_scroller_atmospheric_phenomenon'),
+  PIXELBOT_SIDE_SCROLLER_ATMOSPHERIC_PHENOMENON: loadIfExists(
+    'pixelbot_side_scroller_atmospheric_phenomenon'
+  ),
   // ─── boss-arena axis-system pools (2026-05-20) ───
   PIXELBOT_BOSS_ARENA_SETTING: loadIfExists('pixelbot_boss_arena_setting'),
   PIXELBOT_BOSS_ARENA_BOSS_CREATURE: loadIfExists('pixelbot_boss_arena_boss_creature'),
@@ -109,12 +115,16 @@ module.exports = {
   // ─── cozy-farming-life-sim axis-system pools (2026-05-20) ───
   PIXELBOT_COZY_FARMING_FARM_LOCALE: loadIfExists('pixelbot_cozy_farming_farm_locale'),
   PIXELBOT_COZY_FARMING_FARM_BIOME: loadIfExists('pixelbot_cozy_farming_farm_biome'),
-  PIXELBOT_COZY_FARMING_FARMER_VILLAGER_LIFE: loadIfExists('pixelbot_cozy_farming_farmer_villager_life'),
+  PIXELBOT_COZY_FARMING_FARMER_VILLAGER_LIFE: loadIfExists(
+    'pixelbot_cozy_farming_farmer_villager_life'
+  ),
   PIXELBOT_COZY_FARMING_COZY_PHENOMENON: loadIfExists('pixelbot_cozy_farming_cozy_phenomenon'),
   // ─── pixel-sci-fi-action axis-system pools (2026-05-20) ───
   PIXELBOT_PIXEL_SCI_FI_ACTION_SETTING: loadIfExists('pixelbot_pixel_sci_fi_action_setting'),
   PIXELBOT_PIXEL_SCI_FI_ACTION_ENEMY: loadIfExists('pixelbot_pixel_sci_fi_action_enemy'),
-  PIXELBOT_PIXEL_SCI_FI_ACTION_HERO_ACTION: loadIfExists('pixelbot_pixel_sci_fi_action_hero_action'),
+  PIXELBOT_PIXEL_SCI_FI_ACTION_HERO_ACTION: loadIfExists(
+    'pixelbot_pixel_sci_fi_action_hero_action'
+  ),
   PIXELBOT_PIXEL_SCI_FI_ACTION_PROPS: loadIfExists('pixelbot_pixel_sci_fi_action_props'),
   // ─── classic-jrpg axis-system pools (2026-05-20) ───
   PIXELBOT_CLASSIC_JRPG_LOCALE: loadIfExists('pixelbot_classic_jrpg_locale'),
@@ -133,7 +143,23 @@ module.exports = {
   VIBE_COLOR,
 
   SENSORY_POOLS: {
-    figure: { smell: load('sensory_figure_smell'), sound: load('sensory_figure_sound'), touch: load('sensory_figure_touch'), temperature: load('sensory_figure_temperature'), weight: load('sensory_figure_weight'), air: load('sensory_figure_air'), lightcolor: load('sensory_figure_lightcolor') },
-    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+    figure: {
+      smell: load('sensory_figure_smell'),
+      sound: load('sensory_figure_sound'),
+      touch: load('sensory_figure_touch'),
+      temperature: load('sensory_figure_temperature'),
+      weight: load('sensory_figure_weight'),
+      air: load('sensory_figure_air'),
+      lightcolor: load('sensory_figure_lightcolor'),
+    },
+    scene: {
+      smell: load('sensory_scene_smell'),
+      sound: load('sensory_scene_sound'),
+      touch: load('sensory_scene_touch'),
+      temperature: load('sensory_scene_temperature'),
+      weight: load('sensory_scene_weight'),
+      air: load('sensory_scene_air'),
+      lightcolor: load('sensory_scene_lightcolor'),
+    },
   },
 };

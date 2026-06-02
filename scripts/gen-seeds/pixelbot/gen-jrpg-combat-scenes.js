@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} 16-BIT JRPG COMBAT GAMEPLAY SCREENSHOT scene descriptions for PixelBot's jrpg-combat path. Genre lineage: Final Fantasy IV / V / VI battle scenes + Chrono Trigger active-time combat + Secret of Mana real-time combat + Seiken Densetsu 3 boss fights + Star Ocean combat + Tales of Phantasia combat + Lufia II battles + Y's series action combat + Live A Live combat.
+  metaPrompt: (
+    n
+  ) => `Write ${n} 16-BIT JRPG COMBAT GAMEPLAY SCREENSHOT scene descriptions for PixelBot's jrpg-combat path. Genre lineage: Final Fantasy IV / V / VI battle scenes + Chrono Trigger active-time combat + Secret of Mana real-time combat + Seiken Densetsu 3 boss fights + Star Ocean combat + Tales of Phantasia combat + Lufia II battles + Y's series action combat + Live A Live combat.
 
 ━━━ THE NORTH STAR ━━━
 
@@ -105,4 +107,7 @@ Fireball mid-arc trailing flame and embers, lightning-bolt zigzagging from staff
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

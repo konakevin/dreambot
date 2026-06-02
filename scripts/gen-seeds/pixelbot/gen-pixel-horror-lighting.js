@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's pixel-horror path (now Castlevania / Ghosts 'n Goblins / Black Tiger / Demon's Crest gothic-fantasy action aesthetic, NOT modern psychological horror).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's pixel-horror path (now Castlevania / Ghosts 'n Goblins / Black Tiger / Demon's Crest gothic-fantasy action aesthetic, NOT modern psychological horror).
 
 Each entry is 15-30 words. EVERY entry must include:
 - DRAMATIC GOTHIC LIGHT SOURCE — flickering torches / candelabras / stained-glass shafts / lit braziers / lit-chandelier / hellfire-glow / cursed-rune-glow / lightning-flash / lava-glow / blood-moon
@@ -23,4 +25,7 @@ Examples (write fresh):
 - "Ghostly cyan-blue spectral light from a wraith mid-frame, deep purple-black ambient, lit-candelabra orange counter-light, drifting ash particles in the wraith-glow."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

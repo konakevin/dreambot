@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's cozy-rpg-town path. Each entry is 15-30 words describing lighting + light-sources for a cozy pixel-RPG town scene (Stardew + Octopath HD-2D + Sea of Stars lineage). Warm, inviting, golden, layered.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's cozy-rpg-town path. Each entry is 15-30 words describing lighting + light-sources for a cozy pixel-RPG town scene (Stardew + Octopath HD-2D + Sea of Stars lineage). Warm, inviting, golden, layered.
 
 EVERY entry must include:
 - Time of day (dawn / golden hour / dusk / night / midday-dappled / blue-hour)
@@ -23,4 +25,7 @@ Examples (write fresh):
 - "Festival-night with hanging lantern-strings glowing warm-amber across the square, food-cart fire-glow, candles in lit cottage windows, deep cool blue ambient sky."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

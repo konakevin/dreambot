@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's pixel-sci-fi-action path (Contra / Mega Man / Metroid / Blaster Master / Gradius / R-Type / Star Fox 16-bit retro sci-fi action aesthetic).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's pixel-sci-fi-action path (Contra / Mega Man / Metroid / Blaster Master / Gradius / R-Type / Star Fox 16-bit retro sci-fi action aesthetic).
 
 Each entry is 15-30 words. EVERY entry must include:
 - DRAMATIC SCI-FI LIGHT SOURCE — pulsing reactor-core / energy-arcs / plasma-bolt-trails / neon-energy-shields / flickering monitors / lit fluorescent-strip / lava-glow / starlight / muzzle-flash strobe / explosion-glow / lit reactor-pillars / alien bioluminescence
@@ -23,4 +25,7 @@ Examples (write fresh):
 - "Pulsing magenta alien-rune-glow on temple walls, deep cool-cyan jungle-canopy ambient, lit muzzle-flash strobe orange-yellow on hero sprite."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

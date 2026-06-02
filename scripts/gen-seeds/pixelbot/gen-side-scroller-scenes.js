@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} 16-BIT SIDE-SCROLLING PLATFORMER GAMEPLAY SCREENSHOT scene descriptions for PixelBot's side-scroller-world path. Each entry feeds a Flux pixel-art prompt-writer. Genre lineage: Castlevania IV + Super Metroid + Donkey Kong Country + Mega Man X + Owlboy + Hollow Knight pixel-spinoff + Dead Cells + Celeste + Ori-style.
+  metaPrompt: (
+    n
+  ) => `Write ${n} 16-BIT SIDE-SCROLLING PLATFORMER GAMEPLAY SCREENSHOT scene descriptions for PixelBot's side-scroller-world path. Each entry feeds a Flux pixel-art prompt-writer. Genre lineage: Castlevania IV + Super Metroid + Donkey Kong Country + Mega Man X + Owlboy + Hollow Knight pixel-spinoff + Dead Cells + Celeste + Ori-style.
 
 ━━━ THE NORTH STAR ━━━
 
@@ -84,4 +86,7 @@ ALWAYS include a player-sprite (small hero figure) on the foreground platforming
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

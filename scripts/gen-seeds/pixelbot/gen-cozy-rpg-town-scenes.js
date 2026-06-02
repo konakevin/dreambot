@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} COZY RPG TOWN scene descriptions for PixelBot's cozy-rpg-town path. Each entry feeds a Flux pixel-art prompt-writer. Genre lineage: Stardew Valley + Octopath Traveler HD-2D + Sea of Stars + Eastward + Children of Morta town hubs.
+  metaPrompt: (
+    n
+  ) => `Write ${n} COZY RPG TOWN scene descriptions for PixelBot's cozy-rpg-town path. Each entry feeds a Flux pixel-art prompt-writer. Genre lineage: Stardew Valley + Octopath Traveler HD-2D + Sea of Stars + Eastward + Children of Morta town hubs.
 
 Each entry: 30-50 words, ONE paragraph, focused on a specific COZY RPG TOWN MOMENT — half-timbered houses, warm tavern light, market stalls, NPCs going about their day, cobblestone paths winding between shops.
 
@@ -62,4 +64,7 @@ Every scene should feel like "a screenshot from a cozy pixel-RPG town I desperat
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's dungeon-depth path. Each entry is 15-30 words describing the animated-feel atmospheric particulate + tension-building details for a pixel dungeon (Diablo + Hades + Hyper Light Drifter + Salt and Sanctuary).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's dungeon-depth path. Each entry is 15-30 words describing the animated-feel atmospheric particulate + tension-building details for a pixel dungeon (Diablo + Hades + Hyper Light Drifter + Salt and Sanctuary).
 
 EVERY entry must include 2-3 of these tension-building elements:
 - Drifting dust motes in light shafts
@@ -31,4 +33,7 @@ Examples (write fresh):
 - "Sickly-green glow-spore drift from cracked corpse-altar, dripping fluid into puddles below, breath-mist in the cold, distant scraping-claw echo."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

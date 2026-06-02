@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} 16-BIT CLASSIC JRPG GAMEPLAY SCREENSHOT scene descriptions for PixelBot's classic-jrpg path.
+  metaPrompt: (
+    n
+  ) => `Write ${n} 16-BIT CLASSIC JRPG GAMEPLAY SCREENSHOT scene descriptions for PixelBot's classic-jrpg path.
 
 Reference inspiration (USE AS FEEL-ANCHORS ONLY — NEVER name literally in scene output): Zelda: A Link to the Past + Link's Awakening + Final Fantasy IV / V / VI + Chrono Trigger + Secret of Mana + Seiken Densetsu 3 + Terranigma + Earthbound / Mother 2 + Illusion of Gaia + Soul Blazer + Lufia II + Dragon Quest VI + Breath of Fire I/II + Suikoden + Lunar: Silver Star Story + Y's series + Tales of Phantasia + Live A Live.
 
@@ -95,4 +97,7 @@ Enemies: slime with bouncing motion, giant rat, cave-bat, skeleton soldier, orc 
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (30-50 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

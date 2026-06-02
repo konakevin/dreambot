@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} ATMOSPHERE descriptions for PixelBot's jrpg-combat path (Final Fantasy IV-VI / Chrono Trigger / Secret of Mana / Seiken Densetsu 3 16-bit-era JRPG combat-screenshot aesthetic — used as inspiration only, never named in output).
+  metaPrompt: (
+    n
+  ) => `Write ${n} ATMOSPHERE descriptions for PixelBot's jrpg-combat path (Final Fantasy IV-VI / Chrono Trigger / Secret of Mana / Seiken Densetsu 3 16-bit-era JRPG combat-screenshot aesthetic — used as inspiration only, never named in output).
 
 Each entry is 15-30 words. EVERY entry must include 2-3 of these animated combat-action particle elements:
 - Spell residue / magic-spark trails (fireball-embers, ice-fragment-shimmer, lightning-arcs, dark-magic-wisps, holy-light-motes)
@@ -33,4 +35,7 @@ Examples (write fresh):
 - "Wind-blade vortex around mage, drifting dust-cloud from running ninja, motion-blur on shuriken, dappled sun-particles in clearing."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

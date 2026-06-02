@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING descriptions for PixelBot's jrpg-combat path (Final Fantasy IV-VI / Chrono Trigger / Secret of Mana / Seiken Densetsu 3 / Lufia II / Y's series 16-bit-era JRPG combat-screenshot aesthetic — used as inspiration only, never named in output).
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING descriptions for PixelBot's jrpg-combat path (Final Fantasy IV-VI / Chrono Trigger / Secret of Mana / Seiken Densetsu 3 / Lufia II / Y's series 16-bit-era JRPG combat-screenshot aesthetic — used as inspiration only, never named in output).
 
 Each entry is 15-30 words. EVERY entry must include:
 - DRAMATIC OUTDOOR JRPG-COMBAT LIGHT SOURCE — golden-hour amber sunshine / sunset gold-orange / dawn-pearl morning / dusk-amber / blue-hour twilight / moonlit-blue night / aurora-pink-cyan / storm-flash / lava-glow rising / cave crystal-glow / temple stained-glass shaft / dungeon torch-amber / desert noon-bleached / forest dappled-light / underwater refracted / mountain god-rays
@@ -25,4 +27,7 @@ Examples (write fresh):
 - "Dungeon torch-amber flickering from wall-sconces, dark-magic-violet pulse from lich's staff casting pulsing shadows, deep blue-black corner ambient, dithered shadow gradients."
 
 Output ONLY a valid JSON array of ${n} strings. No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
