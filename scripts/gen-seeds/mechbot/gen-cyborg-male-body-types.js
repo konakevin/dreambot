@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_male_body_types.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} BODY TYPE / SILHOUETTE descriptions for a MALE cyborg character. Each describes his overall build and physical proportions — the shape Flux should render.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BODY TYPE / SILHOUETTE descriptions for a MALE cyborg character. Each describes his overall build and physical proportions — the shape Flux should render.
 
 ━━━ THE BODY TYPE — LEAN / ATHLETIC ONLY ━━━
 
@@ -55,4 +57,7 @@ Examples (variety reference, do not copy):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

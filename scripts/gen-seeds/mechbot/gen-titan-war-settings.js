@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/titan_war_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} BATTLEFIELD descriptions for MechBot's titan-war-machines path. Each describes WHERE the titan combat is happening, 14-22 words. Includes scale-reference (tiny humans / tanks / aircraft) and atmospheric context (smoke / fire / debris).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BATTLEFIELD descriptions for MechBot's titan-war-machines path. Each describes WHERE the titan combat is happening, 14-22 words. Includes scale-reference (tiny humans / tanks / aircraft) and atmospheric context (smoke / fire / debris).
 
 ━━━ SETTING CATEGORIES ━━━
 - Destroyed urban skyline (skyscrapers half-collapsed, smoke columns, fires)
@@ -32,4 +34,7 @@ Deduplicate by: terrain + time-of-day + atmospheric element + scale-reference ty
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

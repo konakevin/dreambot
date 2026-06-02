@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/power_armor_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SETTING descriptions for MechBot's power-armor-infantry path. Each describes WHERE the squad is operating, 14-22 words. Tactical environments where soldiers do soldier work.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SETTING descriptions for MechBot's power-armor-infantry path. Each describes WHERE the squad is operating, 14-22 words. Tactical environments where soldiers do soldier work.
 
 ━━━ SETTING CATEGORIES ━━━
 - Urban rubble street (broken buildings, parked dead vehicles, smoke rising)
@@ -35,4 +37,7 @@ Deduplicate by: terrain category + time-of-day + atmospheric hazard.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -39,7 +39,10 @@ if (!ANTHROPIC) {
 }
 
 const args = process.argv.slice(2);
-const flag = (n, fb) => { const i = args.indexOf('--' + n); return i >= 0 ? args[i + 1] : fb; };
+const flag = (n, fb) => {
+  const i = args.indexOf('--' + n);
+  return i >= 0 ? args[i + 1] : fb;
+};
 const has = (n) => args.includes('--' + n);
 const POOL = flag('pool', null);
 const COUNT = parseInt(flag('count', '30'), 10);
@@ -508,25 +511,25 @@ Each entry must:
 • Specify what mech-fragment dominates (leg / hand / shoulder / chest / full silhouette / cockpit-interior)
 • Reference the deployment-context (hangar / silo / launch-cradle / shuttle-bay / catwalk-network)`,
     touchpoints: [
-      'WORM\'S-EYE UP THE LEG — camera flush against hangar-deck looking straight up the leg of a kneeling mech, pilot mid-climb on access ladder one-third up the leg, mech receding into impossible perspective overhead with deployment-rig framing the upper edges',
-      'PILOT IN MECH\'S OPEN PALM — mech kneeling in deployment-bay, holding the pilot in its open hand at eye-level, pilot small but clearly readable against the colossal palm, hangar-amber lighting from behind framing the moment, Iron Giant tenderness',
-      'PILOT ON SHOULDER VANTAGE — camera positioned on the mech\'s shoulder behind the pilot, pilot in foreground edge looking outward, vast deployment-bay opening up below them, gantry catwalks visible far below at multiple levels',
+      "WORM'S-EYE UP THE LEG — camera flush against hangar-deck looking straight up the leg of a kneeling mech, pilot mid-climb on access ladder one-third up the leg, mech receding into impossible perspective overhead with deployment-rig framing the upper edges",
+      "PILOT IN MECH'S OPEN PALM — mech kneeling in deployment-bay, holding the pilot in its open hand at eye-level, pilot small but clearly readable against the colossal palm, hangar-amber lighting from behind framing the moment, Iron Giant tenderness",
+      "PILOT ON SHOULDER VANTAGE — camera positioned on the mech's shoulder behind the pilot, pilot in foreground edge looking outward, vast deployment-bay opening up below them, gantry catwalks visible far below at multiple levels",
       'GANTRY-CATWALK CROSS — pilot walking confidently across catwalk that crosses the deployment-bay at mid-chest height of the mech, the mech filling 70% of the frame as wall of chassis with seam-glow, catwalk receding behind',
       'DEEP-HANGAR WIDE-SHOT — pilot small in foreground walking toward the hero mech that fills the deep tunnel-of-mechs flanking left and right, hangar lights receding into vanishing point, the hero mech amber-backlit at the end',
-      'COCKPIT-INTERIOR POV — over-pilot\'s-shoulder at multi-screen HUD displays bathed in cyan/amber, canopy showing the world beyond, instrument-glow reflected on the pilot\'s helmet visor, control-stick foreground',
+      "COCKPIT-INTERIOR POV — over-pilot's-shoulder at multi-screen HUD displays bathed in cyan/amber, canopy showing the world beyond, instrument-glow reflected on the pilot's helmet visor, control-stick foreground",
       'PILOT MID-LEAP TOWARD HATCH — pilot frozen mid-jump suspended between catwalk and open cockpit hatch, mech-chest filling background, hatch-glow framing the landing zone, hands outstretched',
       'ASYMMETRIC 1-TO-50 TWO-SHOT — pilot bottom-left of frame at full body height, mech filling the rest of the frame towering upward and out of frame, scale-ratio approximately 1:50 immediately legible',
       'MECH KNEELING FOR BOARDING — mech in subordinate boarding stance with one knee on the deck, pilot ascending the leg-step toward the open chest cockpit, deployment-bay framing left/right, amber emergency lighting',
       'SHUTTLE-EXIT TOWARD MECH — pilot stepping out of drop-shuttle silhouetted in the shuttle-doorway-glow, walking toward the waiting mech in the deployment-bay, shuttle-engine-amber backlight, mech-blue-eye-glow ahead',
-      'PILOT REPAIR ON SHOULDER PLATFORM — pilot on suspended maintenance-platform working at the mech\'s shoulder-seam with sparks flying, hangar gantry receding behind them at multiple levels, sodium-amber industrial light',
+      "PILOT REPAIR ON SHOULDER PLATFORM — pilot on suspended maintenance-platform working at the mech's shoulder-seam with sparks flying, hangar gantry receding behind them at multiple levels, sodium-amber industrial light",
       'PILOT RUNNING TOWARD COLLAPSED MECH — rescue moment, fallen damaged mech smoking in mid-distance, pilot mid-stride sprinting toward it through debris and smoke, dawn-cold-blue light, urgency reading in the figure',
-      'UNDER-THE-FOOT EMERGENCY — pilot directly beneath as mech\'s foot descends OR lifts above them, blast doors opening in the ceiling overhead, pilot looking up shielding face, dust kicked up',
+      "UNDER-THE-FOOT EMERGENCY — pilot directly beneath as mech's foot descends OR lifts above them, blast doors opening in the ceiling overhead, pilot looking up shielding face, dust kicked up",
       'CRANE-DEPLOYMENT GANTRY — mech being lowered by overhead deployment-crane into launch-position, pilot at the control panel in the foreground operating it, gantry receding overhead with hydraulic struts, cyan operational-lights',
       'VERTICAL CRADLE-IN-FRAME — mech locked in vertical launch cradle filling the frame, pilot ascending the side-walkway toward the cockpit, silo-walls receding upward and downward, alert-strobes pulsing red',
-      'THROUGH-HATCH WIDE-LOOKOUT — camera positioned at the open cockpit hatch looking outward, pilot\'s gloved hand on the rim of the hatch in foreground, vast hangar-deck beyond with multiple mechs in different states',
-      'PILOT WALKING AWAY POST-LAUNCH — pilot small in the foreground walking away from a just-deployed mech that\'s already rising on launch-thrust, smoke and steam billowing, sunset light raking across',
+      "THROUGH-HATCH WIDE-LOOKOUT — camera positioned at the open cockpit hatch looking outward, pilot's gloved hand on the rim of the hatch in foreground, vast hangar-deck beyond with multiple mechs in different states",
+      "PILOT WALKING AWAY POST-LAUNCH — pilot small in the foreground walking away from a just-deployed mech that's already rising on launch-thrust, smoke and steam billowing, sunset light raking across",
       'TWO-PILOTS BRIEFING ON DECK — two pilots in the foreground exchanging hand-gestures, mech being prepped in midground by maintenance crew, deployment-deck below visible through gantry-grating, industrial light',
-      'PILOT REFLECTED IN MECH CHEST-PLATE — pilot\'s reflection visible in the polished mech-chassis surface, mech-fragment dominating the frame, pilot reading small in the reflection, hangar-amber backlight',
+      "PILOT REFLECTED IN MECH CHEST-PLATE — pilot's reflection visible in the polished mech-chassis surface, mech-fragment dominating the frame, pilot reading small in the reflection, hangar-amber backlight",
       'RAIN-WET DEPLOYMENT-PAD NIGHT — pilot crossing wet hangar floor at night toward backlit mech, neon-amber and emergency-red reflections doubling on the puddles, scale-ratio massive, atmospheric haze',
     ],
     instructions: `Each entry is ONE specific pilot+mech scale-relationship camera angle, 25-50 words. Format: "ANGLE NAME CAPS — camera position + pilot position + dominant mech-fragment + deployment context". Always make the scale-gap legible. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -555,15 +558,15 @@ Each entry must:
       'EMERGENCY-RED STROBE PULSING — emergency-red rotating beacons across the scene pulsing in rhythm, hard shadow contrast pulsing with them, urgency reading immediate, the mech briefly silhouetted in alert-red between flashes',
       'DAWN-DEPLOYMENT DUAL-COLOR — pre-sunrise cold blue base ambient with first warm orange touching only the upper surfaces of the mech, dual-color contrast, deep blue shadow in the lower frame, every chassis-detail readable',
       'LAUNCH-SILO PULSING-ORANGE — rotating amber alert-strobes inside the vertical launch silo, silo walls catching the warm-pulse rhythm in concentric ring-patterns, lower shadow zones cold cobalt, vertical drama',
-      'NIGHT MECH-RUNNING-LIGHTS — cold cobalt-moonlight ambient base, the mech\'s own chassis running-lights and cockpit-interior glow providing primary illumination, hull self-lit in amber/cyan against deep sky',
-      'NEON-CYBERPUNK URBAN HANGAR — magenta and cyan sign-lights bleeding into the open hangar from the city outside, wet floor reflecting the colors in puddles, dramatic uplight on the mech\'s underside',
+      "NIGHT MECH-RUNNING-LIGHTS — cold cobalt-moonlight ambient base, the mech's own chassis running-lights and cockpit-interior glow providing primary illumination, hull self-lit in amber/cyan against deep sky",
+      "NEON-CYBERPUNK URBAN HANGAR — magenta and cyan sign-lights bleeding into the open hangar from the city outside, wet floor reflecting the colors in puddles, dramatic uplight on the mech's underside",
       'DUSK FIRE-GLOW POST-COMBAT — warm fire-glow from a burning installation uplighting the mech and pilot from below, atmospheric haze backlit by distant flames, end-of-mission mood weight in the air',
       'OVERCAST DEPLOYMENT-FIELD — uniform blanket-cloud diffuse light, low contrast, mechs lined up in formation reading in muted tones, ground bouncing fill-light upward into chassis shadows',
-      'HARD KEY-LIGHT INSPECTION — single intense spotlight on the mech for pre-launch inspection, pilot reading in deep shadow at the mech\'s feet, harsh shadow boundaries, theatrical drama',
+      "HARD KEY-LIGHT INSPECTION — single intense spotlight on the mech for pre-launch inspection, pilot reading in deep shadow at the mech's feet, harsh shadow boundaries, theatrical drama",
       'RAIN-WET NIGHT PAD — cold night ambient with rain backlighting from a single elevated source, wet hangar-deck reflections doubling the figures, atmospheric drama, droplets catching specular',
       'SUNRISE-OVER-DEPLOYMENT-FIELD — pink-purple gradient sky with the sun cresting the horizon, mech silhouetted edge-lit gold against the rising sun, pilot small in deep foreground shadow, hopeful operational mood',
       'BLAST-DOORS-OPENING LIGHT-FLOOD — beam of bright outside light flooding through opening blast doors into the dim deployment-bay, mech and pilot silhouetted against the rectangle of escaping light, dramatic key-source',
-      'COCKPIT-INTERIOR HUD GLOW — cyan and amber multi-screen HUD displays providing primary illumination, pilot\'s face lit cool from below, instrument-glow reflected on visor, tactile and intimate',
+      "COCKPIT-INTERIOR HUD GLOW — cyan and amber multi-screen HUD displays providing primary illumination, pilot's face lit cool from below, instrument-glow reflected on visor, tactile and intimate",
       'SHUTTLE-INTERIOR DEPLOYMENT-BAY — rotating warning-yellow lights inside a drop-shuttle bay, mech locked in cradle, pilot at the door framed by amber strobe, industrial drop-mission lighting',
       'WINTER-DAWN ARCTIC DEPLOYMENT — cold blue-white arctic dawn with snow accumulating on chassis, mech reading in cool tones, pilot in heavy gear small in foreground, breath visible',
     ],
@@ -602,22 +605,22 @@ Each entry must:
       'EMERGENCY-LAUNCH STROBES PULSING — rotating amber-and-red emergency strobes pulsing across the entire deployment-bay in rhythmic alert pattern, casting flickering shadows that pulse across the mech and pilot, urgency reading immediately',
       'BLAST-DOORS-OPENING LIGHT-FLOOD — massive blast-doors at the deployment-bay ceiling parting in mid-motion, outside light flooding through the widening gap, mech and pilot silhouetted against the rectangle of escaping brightness',
       'GANTRY-CRANE LOWERING MECH — overhead deployment-crane visibly lowering the mech into launch-position, hydraulic struts extended, the mech suspended mid-descent, gantry-cables tensioned, control-station active in foreground',
-      'COOLANT-VAPOR BILLOWING — pressurized coolant-vapor jetting from the mech\'s cooling-vents in volumetric plumes, partially obscuring the lower hemisphere of the mech in white mist, frozen-on-warm-metal aesthetic',
-      'PRE-LAUNCH IGNITION-FLARE — bright white-orange ignition flare building visibly at the mech\'s feet, sparks raining outward, the surrounding deck briefly lit hot-white from below, the launch sequence beginning',
-      'HYDRAULIC-LOCKS RELEASING — sequence of hydraulic-ram locks releasing along the mech\'s launch-cradle with audible-implied pneumatic-hiss and steam-jets, the mech preparing to detach, each lock-release flashing briefly',
-      'WEAPON-MOUNT CHARGING-GLOW — visible energy-conduit glow building along the mech\'s primary weapon-mounts as systems come online, conduits illuminating sequentially, the mech\'s power-up cycle visible',
+      "COOLANT-VAPOR BILLOWING — pressurized coolant-vapor jetting from the mech's cooling-vents in volumetric plumes, partially obscuring the lower hemisphere of the mech in white mist, frozen-on-warm-metal aesthetic",
+      "PRE-LAUNCH IGNITION-FLARE — bright white-orange ignition flare building visibly at the mech's feet, sparks raining outward, the surrounding deck briefly lit hot-white from below, the launch sequence beginning",
+      "HYDRAULIC-LOCKS RELEASING — sequence of hydraulic-ram locks releasing along the mech's launch-cradle with audible-implied pneumatic-hiss and steam-jets, the mech preparing to detach, each lock-release flashing briefly",
+      "WEAPON-MOUNT CHARGING-GLOW — visible energy-conduit glow building along the mech's primary weapon-mounts as systems come online, conduits illuminating sequentially, the mech's power-up cycle visible",
       'COCKPIT-HATCH SEALING — the open cockpit hatch in mid-motion of sealing closed mechanically, pneumatic-actuator visible, the pilot just-locked-in moment, the seal beginning around the perimeter',
-      'SHUTTLE-DROP DEPLOYMENT VECTOR — drop-shuttle\'s deployment-vector opening as a rectangular hole in the floor below the pilot, mech visible in the cradle below ready to drop, wind-rush implied',
+      "SHUTTLE-DROP DEPLOYMENT VECTOR — drop-shuttle's deployment-vector opening as a rectangular hole in the floor below the pilot, mech visible in the cradle below ready to drop, wind-rush implied",
       'RAIN POURING THROUGH OPEN BLAST-DOORS — heavy rain pouring through the open ceiling blast-doors onto the deployment-deck, puddles forming on the metal floor, the pilot and mech soaked, atmospheric drama',
       'SUNRISE CRESTING HORIZON — sun cresting the horizon of the deployment-field visible through open hangar doors, pink-purple gradient sky, the mech edge-lit gold against the rising sun, hopeful operational mood',
       'GROUND-CREW SCATTERING — ground-crew figures scattering away from the impending launch in foreground, hand-signals visible, the urgency reading in their motion, leaving the mech and pilot alone in the cradle',
-      'TARGETING-RETICLE BLOOMING — multiple targeting-reticles blooming across the cockpit canopy in sequence as systems come online, amber reticle-glow reflecting on pilot\'s visor, the targeting-lock cascade beginning',
-      'CRADLE-RELEASE LATCHES — sequence of cradle-release latches snapping open along the mech\'s launch-cradle, each latch sparking briefly as it releases, the mech beginning to free of its restraints',
+      "TARGETING-RETICLE BLOOMING — multiple targeting-reticles blooming across the cockpit canopy in sequence as systems come online, amber reticle-glow reflecting on pilot's visor, the targeting-lock cascade beginning",
+      "CRADLE-RELEASE LATCHES — sequence of cradle-release latches snapping open along the mech's launch-cradle, each latch sparking briefly as it releases, the mech beginning to free of its restraints",
       'DROP-POD ATMOSPHERIC-ENTRY — atmospheric-entry burn visible through an observation port, white-hot leading edge crossing the upper view, the pilot watching their imminent drop-mission begin',
       'DISTANT-ALERT-LIGHTS PULSING — chain of distant alert-lights pulsing across the deployment-deck horizon in synchronized rhythm, multiple deployment-bays activating in coordinated launch-sequence',
-      'CRACKED-GLASS VIEWING-PANEL — large viewing-panel with hairline-cracks across it providing the pilot\'s view of the world beyond, weather (storm / rain / dust) visible behind it, fractured-glass refractions',
+      "CRACKED-GLASS VIEWING-PANEL — large viewing-panel with hairline-cracks across it providing the pilot's view of the world beyond, weather (storm / rain / dust) visible behind it, fractured-glass refractions",
       'COMM-TOWER BEACON FAR-DISTANT — communication-tower beacon pulsing rhythmically on the far horizon of the deployment-field, contextualizing the wider operational network the deployment is part of',
-      'REFUELING-UMBILICAL DETACHING — refueling-umbilical detaching from the mech\'s side-port with vapor-spray and a brief flash of escaping coolant, the umbilical retracting toward its mount, the mech now free',
+      "REFUELING-UMBILICAL DETACHING — refueling-umbilical detaching from the mech's side-port with vapor-spray and a brief flash of escaping coolant, the umbilical retracting toward its mount, the mech now free",
       'TARP-SHEET BLOWING AWAY — protective tarp-sheet blowing away from the mech revealing the chassis beneath, wind-rush implied, the mech now exposed and ready for boarding, dramatic reveal moment',
     ],
     instructions: `Each entry is ONE specific deployment/hangar/launch environmental phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + deployment context". STRICT deployment/boarding context — NO active battlefield combat, NO industrial mining. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -651,10 +654,10 @@ Each entry must:
   • ABOVE THE CLOUD DECK — wide aerial shot at cloud-bank altitude, skyship piercing the cloud-deck with upper hull in sun and lower in shadow
   • THROUGH-DEBRIS-CLOUD — camera tracking skyship through a debris field / explosion aftermath, hull weaving through tumbling wreckage`,
     touchpoints: [
-      'WORM\'S-EYE FROM GROUND — camera flush against cracked desert hardpan looking straight up as the skyship roars overhead, blade-hull filling the upper frame, exhaust-cone trailing white-hot vapor, ground figures sprinting in the foreground silhouetted against the sun',
-      'OVER-THE-WING POV — camera mounted on the skyship\'s starboard blade-wing looking forward toward a distant target spire, wing dominating the lower-left of frame, target ship banking away across cumulus cloud-cover',
+      "WORM'S-EYE FROM GROUND — camera flush against cracked desert hardpan looking straight up as the skyship roars overhead, blade-hull filling the upper frame, exhaust-cone trailing white-hot vapor, ground figures sprinting in the foreground silhouetted against the sun",
+      "OVER-THE-WING POV — camera mounted on the skyship's starboard blade-wing looking forward toward a distant target spire, wing dominating the lower-left of frame, target ship banking away across cumulus cloud-cover",
       'CANOPY-POV PURSUIT — looking through forward canopy at the target skyship banking away in pursuit, reticle elements glowing red at frame edge, instrument-glow reflected on the canopy glass, sun-glare across the top',
-      'GOD\'S-EYE FROM HIGHER ALTITUDE — high-aerial view looking down at the skyship gliding between two cloud-layers, ground far below visible through a break in the lower cloud-deck, multiple ship-specks at vanishing point',
+      "GOD'S-EYE FROM HIGHER ALTITUDE — high-aerial view looking down at the skyship gliding between two cloud-layers, ground far below visible through a break in the lower cloud-deck, multiple ship-specks at vanishing point",
       'THROUGH-CLOUD-LAYER BREAK — skyship in the act of piercing the cloud-deck from above, hull half-emerging into open sky, vapor-cone bursting off prow, sun-shafts breaking through the cloud-tear',
       'MOUNTAIN-PASS THREADING — skyship banking hard through a narrow gap between snow-capped peaks, peaks framing the left and right edges of frame, blade-wings nearly grazing rock, contrails curling',
       'LOW-PASS OVER MEGACITY — camera at rooftop level as the skyship roars past tower-tops, neon signage reflecting off the hull-plating, downwash visible kicking debris from rooftops, distant skyline lit in dusk-orange',
@@ -704,16 +707,16 @@ Each entry must:
       'DAWN ABOVE CLOUD-DECK — cold blue ambient with first warm orange touching only the upper hull surfaces of the skyship, dual-color contrast, cloud-deck below glowing pink from horizon-line sun',
       'DUSK BLOOD-RED HORIZON — sun at horizon bleeding deep crimson across the entire sky, the skyship silhouetted edge-red against the burning sky, hard shadows cast on the cloud-deck below',
       'STORM-CELL LIGHTNING FLASH — pre-storm dark with actinic-white lightning forks branching between charged cloud-banks, briefly silhouetting the skyship in stark white-on-black, deep shadow between flashes',
-      'NIGHT ENGINE-GLOW PRIMARY — cold moonlight base ambient with the skyship\'s own engine-glow and chassis running-lights providing primary illumination, hull self-lit in amber/cyan against deep cobalt sky',
+      "NIGHT ENGINE-GLOW PRIMARY — cold moonlight base ambient with the skyship's own engine-glow and chassis running-lights providing primary illumination, hull self-lit in amber/cyan against deep cobalt sky",
       'SUNSET PURPLE-GOLD GRADIENT — sky transitioning purple at zenith to gold at horizon, skyship backlit edge-amber, cloud-deck below catching gold from horizon-side, shadows long and stretched',
-      'ATMOSPHERIC RE-ENTRY THERMAL — white-hot plasma-shield at the skyship\'s prow providing primary illumination, atmospheric burn-trail crossing the upper sky behind, hull glowing orange-white from heat',
+      "ATMOSPHERIC RE-ENTRY THERMAL — white-hot plasma-shield at the skyship's prow providing primary illumination, atmospheric burn-trail crossing the upper sky behind, hull glowing orange-white from heat",
       'MUZZLE-FLASH STROBE — combat scene with weapon-discharge from the skyship providing strobing primary light against deep storm-darkness, sharp shadow contrast pulsing in firing-rhythm',
-      'NEON-CYBERPUNK CITY-GLOW UPLIGHT — low-altitude over a neon megacity at night, magenta and cyan sign-lights from below uplighting the skyship\'s underside hull, hard upward shadows',
+      "NEON-CYBERPUNK CITY-GLOW UPLIGHT — low-altitude over a neon megacity at night, magenta and cyan sign-lights from below uplighting the skyship's underside hull, hard upward shadows",
       'ORBITAL TWILIGHT TERMINATOR — high-altitude shot at the day/night terminator-line, half the skyship hull in golden sun and half in cobalt shadow, atmospheric blue curve visible at horizon',
       'AURORA EM-WARFARE INTERFERENCE — high-altitude with aurora-coded electromagnetic distortion curtaining the sky in green-violet ribbons, skyship hull faintly reflecting the aurora-color',
       'HARSH MIDDAY ABOVE-CLOUD — overhead white sun with razor-edged shadows on the skyship hull, cloud-deck below bleached pale, heat-shimmer visible at distance',
       'OVERCAST BATTLEFIELD SKY — uniform blanket-cloud diffuse light, low contrast, skyship reading in muted tones, ground far below visible through atmospheric haze',
-      'VOLCANIC UPLIGHT FROM BELOW — flying over an active volcanic region with orange lava-glow uplighting the skyship\'s underside hull in warm orange-red, smoke-columns from below',
+      "VOLCANIC UPLIGHT FROM BELOW — flying over an active volcanic region with orange lava-glow uplighting the skyship's underside hull in warm orange-red, smoke-columns from below",
       'TWIN-SUN ALIEN SKY — alien-planet sky with two suns of different colors casting overlapping double-shadows on the skyship hull, atmospheric tint pulled toward unusual color',
     ],
     instructions: `Each entry is ONE specific aerial flight lighting setup, 20-40 words. Format: "LIGHTING MODE CAPS — [source + direction + color + shadow character + sky context]". Distribute across the 11 buckets. NO "volumetric haze / generic atmospheric fog" as PRIMARY mode. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -749,8 +752,8 @@ Each entry must:
     touchpoints: [
       'DOGFIGHT TANGLE — hero skyship banking hard pursued by three enemy interceptors in tight formation, missile-trails braiding between all four ships, one enemy already trailing smoke from a clean hit, contrails crossing the cloud-layer in tight loops, sun-glare lens-flaring across the engagement',
       'SQUADRON STRIKE — wing of five hero ships in V-formation diving toward an enemy convoy crawling across the wasteland below, lead ship releasing first ordnance with bloom-explosion already blooming on a target vehicle, AA-tracer rising from the convoy in colored arcs',
-      'ESCORT DEFENSE — hero skyship positioned in front of a larger carrier-class vessel, weapons firing forward at incoming enemy formation, shield-impact discharge rippling across the hero ship\'s prow, allied fighters launching from the carrier behind',
-      'CHASE PURSUIT — hero ship in stern-chase of a fleeing enemy ship, target throwing countermeasure-flares back in a spray of decoys, both ships banked hard through cloud-cover, hero ship\'s weapon-mount charging glowing red',
+      "ESCORT DEFENSE — hero skyship positioned in front of a larger carrier-class vessel, weapons firing forward at incoming enemy formation, shield-impact discharge rippling across the hero ship's prow, allied fighters launching from the carrier behind",
+      "CHASE PURSUIT — hero ship in stern-chase of a fleeing enemy ship, target throwing countermeasure-flares back in a spray of decoys, both ships banked hard through cloud-cover, hero ship's weapon-mount charging glowing red",
       'ARRIVAL DESCENT — hero ship breaking atmospheric re-entry over a defended ground installation, ground AA emplacements visibly rotating to track it, troops scattering for cover, dust and debris kicked up by downwash, allied dropships descending in formation behind',
       'AMBUSH FROM CLOUDS — hero ship bursting up out of a cumulus cloud-bank to engage an unsuspecting enemy formation at altitude, weapons opening up mid-emerge, enemy ships visibly reacting with hard banks',
       'BOMBING RUN OVER CITY — hero ship in low-pass over an enemy megacity releasing ordnance, multiple bloom-explosions in the city streets behind it, allied wingmen following in echelon, AA-fire rising from rooftops',
@@ -761,13 +764,13 @@ Each entry must:
       'CARRIER STRIKE — hero ship launching torpedo run against a colossal enemy carrier-class vessel, torpedo contrails extending forward, carrier point-defense lighting up in counter-fire, allied wingmen flanking',
       'WAVE-ATTACK SWARM — hero ship leading a wave of smaller drone-craft toward a larger enemy target, drones spreading into attack formation, target rotating defensive guns to track the wave',
       'WINGMAN-DOWN MOMENT — hero ship banking past a fellow ship spiraling down in flames, looking back at the dying wingman, enemy ship visible at vanishing point peeling away from the kill',
-      'PINCER MOVEMENT — hero ship closing on enemy target from one flank while allied ship visible closing from opposite flank, target ship caught between, hero\'s weapons charging for the kill-shot',
+      "PINCER MOVEMENT — hero ship closing on enemy target from one flank while allied ship visible closing from opposite flank, target ship caught between, hero's weapons charging for the kill-shot",
       'BOARDING REPEL — hero ship engaging incoming boarding-pods from enemy formation, point-defense lighting up the swarm of pods, debris from destroyed pods raining downward through cloud-layer',
       'RESCUE EXTRACTION — hero ship dropping low over a downed friendly ship in burning wreckage, deployment-bay open, ground figures running toward extraction, enemy ships closing at distance',
-      'COVER-FIRE ADVANCE — hero ship laying suppressive fire upward at enemy formation while allied gunship advances behind it toward target, multiple weapon-flashes from hero\'s mounts, enemy ships scattering',
+      "COVER-FIRE ADVANCE — hero ship laying suppressive fire upward at enemy formation while allied gunship advances behind it toward target, multiple weapon-flashes from hero's mounts, enemy ships scattering",
       'HIGH-G EVASION — hero ship pulling extreme maneuver through cloud-canyon to evade multiple incoming missiles, missiles tracking in trailing contrails, enemy ship visible at deep distance that launched them',
       'DRAGON-DESCENT OVER CITY — hero ship descending vertically toward a megacity target, AA-streams from below tracking it, target buildings already burning, allied formation circling at higher altitude',
-      'FRIENDLY-FORMATION INBOUND — hero ship leading a wedge of allied ships inbound to engagement zone visible at deep distance, distant flashes from ongoing combat, hero\'s weapons charging for the engagement',
+      "FRIENDLY-FORMATION INBOUND — hero ship leading a wedge of allied ships inbound to engagement zone visible at deep distance, distant flashes from ongoing combat, hero's weapons charging for the engagement",
     ],
     instructions: `Each entry is ONE multi-actor combat narrative beat, 40-80 words. Format: "ENGAGEMENT TYPE CAPS — hero ship + 2-4 other actors + their interaction + scale-provers if relevant". STRICT mandate: MULTIPLE actors interacting visibly. NO solo hero-ship-flying. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -806,7 +809,7 @@ Each entry must:
       'MISSILE-LAUNCH FROM UNDERSIDE — skyship releasing a missile from its underside with launch-flare bloom and white-hot contrail spiraling toward an off-frame target',
       'SHIELD-IMPACT DISCHARGE — energy-shield rippling visibly under heavy incoming fire, hexagonal cells lighting up where rounds strike, electromagnetic discharge bleeding outward in arcs',
       'ORBITAL-STRIKE BEAM DESCENT — single column of focused energy descending vertically from above the atmosphere onto a distant ground target, accompanied by ground-flash visible through cloud-break',
-      'DROPSHIP DEPLOYMENT — smaller craft launching in sequence from the skyship\'s chassis-bays, each dropship with its own engine-glow, deploying toward the ground far below',
+      "DROPSHIP DEPLOYMENT — smaller craft launching in sequence from the skyship's chassis-bays, each dropship with its own engine-glow, deploying toward the ground far below",
       'ATMOSPHERIC-RE-ENTRY BURN STREAK — long re-entry streak crossing the upper sky with white-hot leading edge, something descending toward the battlefield from orbit, burn-trail visible for miles',
       'DISTANT FORMATION ENGAGING — formation of ships visible at vanishing point engaging an unseen target with weapon-flashes, smoke-columns rising from kills',
       'DOGFIGHT TANGLE — multiple skyship silhouettes locked in pursuit across the upper sky, contrails crisscrossing in tight loops, weapon-flashes between them',
@@ -815,13 +818,13 @@ Each entry must:
       'CARRIER-AIRSHIP LOOMING ABOVE — vast carrier-class mothership in the upper background deploying smaller ships in waves, scale-prover for the hero ship',
       'DEBRIS-FIELD FOREGROUND — tumbling wreckage in the foreground from a recent kill, the hero skyship weaving through hull-fragments, dust and burning debris in the air',
       'SEARCHLIGHT BEAMS SWEEPING — multiple anti-air searchlights from ground positions sweeping the sky tracking the skyship, beams crossing through clouds',
-      'LIGHTNING ELECTROMAGNETIC STORM — sky filled with branching electromagnetic arc-discharges between charged cloud-banks, occasional strikes hitting the skyship\'s antenna-arrays',
-      'CONTRAIL TANGLE — multiple ships\' contrails crisscrossing the sky in tight dogfight patterns, sun lighting the white trails against deep blue, the spectacle of aerial battle visible in the trails alone',
-      'DEPLOYED SWARM-DRONES — swarm of small combat drones launching from the skyship\'s hangar-bays in coordinated formation, engine-trails braiding behind them',
+      "LIGHTNING ELECTROMAGNETIC STORM — sky filled with branching electromagnetic arc-discharges between charged cloud-banks, occasional strikes hitting the skyship's antenna-arrays",
+      "CONTRAIL TANGLE — multiple ships' contrails crisscrossing the sky in tight dogfight patterns, sun lighting the white trails against deep blue, the spectacle of aerial battle visible in the trails alone",
+      "DEPLOYED SWARM-DRONES — swarm of small combat drones launching from the skyship's hangar-bays in coordinated formation, engine-trails braiding behind them",
       'PLASMA-DISCHARGE FROM HULL — visible plasma-arc bleeding between damaged hull-plates after an impact, energy crackling across the chassis seams',
       'CITY-BELOW-ON-FIRE — distant city ablaze visible through breaks in the cloud-deck far below, multiple smoke-columns rising from the burning blocks',
       'CRASHED-SHIP FIREBALL — fresh impact-crater visible at ground level through a cloud-break, recently-downed ship with rising flames and smoke',
-      'EMP-PULSE DAMPENED HULL — skyship\'s running-lights stuttering offline sequentially after an EMP-burst, hull going dark in cascade, engine-glow flickering',
+      "EMP-PULSE DAMPENED HULL — skyship's running-lights stuttering offline sequentially after an EMP-burst, hull going dark in cascade, engine-glow flickering",
       'COMET-LIKE METEOR-STRIKE — incoming kinetic-rod or meteor-strike crossing the upper sky with white-hot leading edge, contrail visible for miles, impending impact',
     ],
     instructions: `Each entry is ONE specific sky-combat phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + aerial/atmospheric note". STRICT sky-combat aesthetic — NO peaceful, NO biomech, NO fantasy. Amplifies aerial-warfare spectacle. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -848,21 +851,21 @@ Each entry must:
   • SCRAPING-CLOUD-LAYER — wide aerial shot at cloud-bank altitude, titan's upper hemisphere PIERCING the cloud-deck, lower body invisible below clouds, jets visible at the cloud-line for scale
   • OVER-THE-SHOULDER-FROM-SOLDIER — POV behind a tiny human soldier on the ground, soldier in foreground, titan looms over them at full scale, viewer feels the soldier's perspective`,
     touchpoints: [
-      'WORM\'S-EYE-VIEW UP THE LEG — camera at ground level looking straight up the leg-pillar of the titan, foot dominating lower third of frame, leg-armor receding into impossible perspective vanishing point overhead, head barely visible at the top of the sky',
-      'FLY-BETWEEN-LEGS — camera positioned between two of the titan\'s massive leg-pillars at ground level, looking through to a distant burning battlefield, leg-columns framing the shot like ancient skyscraper columns',
-      'KAIJU-STEP-DESCENDING — extreme low-angle as the titan\'s foot DESCENDS toward viewer mid-impact, dust and debris exploding outward in a concentric pressure-wave ring, foot filling the upper two-thirds of the frame, shock-cracks radiating across the ground',
-      'AERIAL-ORBIT-AROUND-HEAD — camera at titan\'s head altitude tracking around it, head silhouette dominating against the sky, city/battlefield far below at the base, military jets dwarfed mid-air for scale reference',
+      "WORM'S-EYE-VIEW UP THE LEG — camera at ground level looking straight up the leg-pillar of the titan, foot dominating lower third of frame, leg-armor receding into impossible perspective vanishing point overhead, head barely visible at the top of the sky",
+      "FLY-BETWEEN-LEGS — camera positioned between two of the titan's massive leg-pillars at ground level, looking through to a distant burning battlefield, leg-columns framing the shot like ancient skyscraper columns",
+      "KAIJU-STEP-DESCENDING — extreme low-angle as the titan's foot DESCENDS toward viewer mid-impact, dust and debris exploding outward in a concentric pressure-wave ring, foot filling the upper two-thirds of the frame, shock-cracks radiating across the ground",
+      "AERIAL-ORBIT-AROUND-HEAD — camera at titan's head altitude tracking around it, head silhouette dominating against the sky, city/battlefield far below at the base, military jets dwarfed mid-air for scale reference",
       'DWARFED-SKYLINE-ESTABLISHING — wide cinematic establishing shot from a kilometer away, the titan stands in midground dwarfing the entire city skyline behind it, atmospheric haze receding miles into deep distance',
       'SLOT-CANYON-BETWEEN-BUILDINGS — camera in a narrow alley between skyscrapers at street level, the titan visible filling the SLOT of sky between buildings overhead, scale-shock from the impossibly-narrow frame against impossibly-large titan',
       'CRACKED-PAVEMENT-FOREGROUND — extreme low POV with cracked asphalt and an overturned car in foreground edge, the titan looming above mid-stride, scale-prover vehicles dwarfed by the leg in midground',
-      'HELICOPTER-PASS ALONGSIDE TORSO — camera at jet altitude doing a flyby alongside the titan\'s torso, the titan visible across miles of the frame, ground far below, the camera and titan moving together',
+      "HELICOPTER-PASS ALONGSIDE TORSO — camera at jet altitude doing a flyby alongside the titan's torso, the titan visible across miles of the frame, ground far below, the camera and titan moving together",
       'CLIFF-EDGE-VANTAGE LOOKING DOWN — camera on a cliff at human eye-level, the titan rising from below the cliff and visible all the way to the head far above, viewer feels the precipice and the scale together',
-      'MID-FALL-CAMERA — POV as if the camera is in free-fall past the titan\'s chest, the body filling the frame in motion-blur, ground far below visible through the blur, sense of vertigo and speed',
-      'SCRAPING-CLOUD-LAYER — wide aerial shot at cloud-bank altitude, the titan\'s upper hemisphere PIERCING the cloud-deck, lower body invisible below clouds, military jets visible at the cloud-line for scale reference',
-      'OVER-THE-SHOULDER-FROM-SOLDIER — POV behind a tiny human soldier on the ground in the foreground, the soldier silhouetted against the titan that LOOMS above them at full kilometer-scale, the viewer occupies the soldier\'s perspective',
+      "MID-FALL-CAMERA — POV as if the camera is in free-fall past the titan's chest, the body filling the frame in motion-blur, ground far below visible through the blur, sense of vertigo and speed",
+      "SCRAPING-CLOUD-LAYER — wide aerial shot at cloud-bank altitude, the titan's upper hemisphere PIERCING the cloud-deck, lower body invisible below clouds, military jets visible at the cloud-line for scale reference",
+      "OVER-THE-SHOULDER-FROM-SOLDIER — POV behind a tiny human soldier on the ground in the foreground, the soldier silhouetted against the titan that LOOMS above them at full kilometer-scale, the viewer occupies the soldier's perspective",
       'STREET-LEVEL-WITH-DEBRIS — camera at street level with chunks of falling debris suspended in the foreground, the titan in midground walking through downtown crushing skyscrapers underfoot, the debris frames the shot',
       'AERIAL-WIDE-WITH-JETS-IN-FOREGROUND — high-altitude shot with a squadron of military jets in the foreground frame, the titan visible across miles in midground at the same altitude as the jets, ground far below',
-      'BENEATH-THE-FALLING-FOOT — POV directly beneath as the titan\'s foot descends from above, sky disappearing as the foot fills the frame from above, the viewer about to be crushed, scale-shock at maximum',
+      "BENEATH-THE-FALLING-FOOT — POV directly beneath as the titan's foot descends from above, sky disappearing as the foot fills the frame from above, the viewer about to be crushed, scale-shock at maximum",
     ],
     instructions: `Each entry is ONE specific vertigo camera-angle preset, 25-50 words. Format: "ANGLE NAME CAPS — camera position + what dominates the frame + scale-prover reference". Vary across the 10+ angle categories. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -894,11 +897,11 @@ Each entry must:
       'HARD MIDDAY COMBAT — overhead white sun casting razor-edged shadows directly beneath the titan, brutal high-contrast, heat-shimmer visible across the distant battlefield, clean air, every panel of the titan crisp',
       'DAWN MILITARY OPERATION — pre-sunrise cold blue base with first warm orange touching the highest titan surfaces, dual-color contrast, deep blue shadow in the lower frame, every titan detail readable in the gradient',
       'DUSK FIRE-GLOW — sun at horizon-line painting the sky purple-and-gold, warm fire-glow uplighting the titan from below from the burning city beneath, hard shadows cast skyward',
-      'NIGHT MUZZLE-FLASH STROBE — cold cobalt moonlight as base, strobing white-hot muzzle-flashes from the titan\'s firing weapons creating freeze-frame illumination, sharp shadow contrast pulsing in rhythm',
-      'SODIUM-AMBER URBAN — warm orange sodium-lamp wash across the downtown battlefield, emergency floodlights from below illuminating the titan\'s lower half, hard yellow shadows, after-image of cooler distant light',
+      "NIGHT MUZZLE-FLASH STROBE — cold cobalt moonlight as base, strobing white-hot muzzle-flashes from the titan's firing weapons creating freeze-frame illumination, sharp shadow contrast pulsing in rhythm",
+      "SODIUM-AMBER URBAN — warm orange sodium-lamp wash across the downtown battlefield, emergency floodlights from below illuminating the titan's lower half, hard yellow shadows, after-image of cooler distant light",
       'PRE-STORM LIGHTNING FLASH — sky pre-storm dark, single actinic-white lightning fork briefly freezing the titan silhouetted against the sky, deep shadow areas momentarily readable, storm-darkness immediately after',
       'INDUSTRIAL ARC-FLASH STROBE — actinic blue-white arc-discharge from damaged power infrastructure briefly painting the titan in stuttering hard light, sodium-amber ambient between flashes',
-      'NUCLEAR-WINTER OVERCAST — flat diffuse cold light through perpetual ash-fall, low contrast, ash-grey ambient everywhere, ground bouncing fill-light into the titan\'s shadows, distant fires barely visible',
+      "NUCLEAR-WINTER OVERCAST — flat diffuse cold light through perpetual ash-fall, low contrast, ash-grey ambient everywhere, ground bouncing fill-light into the titan's shadows, distant fires barely visible",
       'REACTOR-MELTDOWN GLOW — distant catastrophic energy-event lighting the entire scene in orange-white from a single point on the horizon, hard shadows radiating outward, mushroom-cloud silhouette in the background',
       'TACTICAL FLOODLIGHT ARRAY — multiple bright stadium-style floodlights from elevated positions on surrounding ruins, the titan with multiple overlapping cast shadows in different directions, hard high-contrast frontal light',
       'SUNSET PURPLE-GOLD — sun at horizon with sky purple-and-gold gradient overhead, every titan surface backlit edge-amber, shadows long and stretched across the foreground rubble',
@@ -949,18 +952,18 @@ Each entry must:
       'FALLING MUNITIONS ARC — visible streaks of incoming artillery or missile-fire descending across the sky toward distant targets, each leaving a contrail across the upper atmosphere',
       'SMOKE COLUMNS BEYOND HORIZON — multiple smoke columns rising from a distant burning city blocks beyond the horizon, reaching high altitude before dispersing into the sky',
       'REACTOR-MELTDOWN GLOW — distant catastrophic energy-event lighting the horizon orange-white, atmospheric haze around the meltdown-site glowing dangerously, mushroom-cloud silhouette',
-      'PROPELLANT-VENT PLUME — pressurized vapor cloud erupting from the titan\'s chassis-vents in volumetric volume, briefly obscuring the lower hemisphere of the titan in fog',
+      "PROPELLANT-VENT PLUME — pressurized vapor cloud erupting from the titan's chassis-vents in volumetric volume, briefly obscuring the lower hemisphere of the titan in fog",
       'DRONE-SWARM FORMATION — dozens of small aerial mech-drones in coordinated geometric formation passing overhead, their running-lights tracing the formation pattern across the sky',
-      'ELECTROMAGNETIC STORM — sky filled with branching electromagnetic arc-discharges between charged cloud-banks, occasional strikes hitting the titan\'s antenna-arrays with visible arc-flash',
+      "ELECTROMAGNETIC STORM — sky filled with branching electromagnetic arc-discharges between charged cloud-banks, occasional strikes hitting the titan's antenna-arrays with visible arc-flash",
       'ATMOSPHERIC-ENTRY BURN — long re-entry streak crossing the upper sky with white-hot leading edge, something descending toward the battlefield from orbit, burn-trail visible for miles',
-      'WEAPON-CHARGING GLOW — energy-conduits illuminating along the titan\'s primary weapon-mount as charge builds, glow intensifying, sky around the muzzle starting to brighten',
+      "WEAPON-CHARGING GLOW — energy-conduits illuminating along the titan's primary weapon-mount as charge builds, glow intensifying, sky around the muzzle starting to brighten",
       'TANK-BATTALION ADVANCE — visible armored column in deep distance, dust-cloud trailing behind, tank-treads kicking up debris, scale-prover for the titan above',
       'JET-SQUADRON FLYBY — visible jet squadron passing across the frame at distance, contrails behind them, dwarfed by the titan in midground for scale',
       'CARRIER-AIRSHIP LOOMING — vast carrier-airship looming in the upper background at altitude, deploying jets, scale-comparison against the titan',
       'CRASHED-JET FIREBALL — fresh impact-crater with rising flames and smoke at midground, recently downed jet, debris scattered, contextualizing the active combat',
       'DISTANT-TITAN SILHOUETTE — another titan visible silhouetted in the deep background, mid-combat with unseen enemy, smoke and flash from its weapons-fire',
       'SHIELD-IMPACT DISCHARGE — energy-shield rippling visibly under heavy incoming fire, hexagonal cells lighting up where rounds strike, electromagnetic discharge spreading',
-      'DEPLOYED COMBAT DRONES — swarm of small combat drones launching from the titan\'s chassis-bays in coordinated formation, exhaust-trails behind them',
+      "DEPLOYED COMBAT DRONES — swarm of small combat drones launching from the titan's chassis-bays in coordinated formation, exhaust-trails behind them",
       'SEISMIC GROUND-CRACKS — visible cracks spreading outward through the pavement from each titan footfall, dust escaping the cracks, ground destabilizing',
       'TRACER-ROUND ARCS — colored tracer-round streaks crossing the sky in arcing lines from anti-air positions tracking the titan, briefly illuminating the air',
     ],
@@ -1077,7 +1080,7 @@ Each entry MUST:
       'Squad mid-engagement with enemy strike team, lead trooper mid-firing assault rifle in three-round burst at incoming target, second mid-grenade-throw arc visible overhead, third mid-fire heavy MG in suppressing burst from braced stance, fourth mid-charge forward with chain-blade raised overhead, multiple enemy down already',
       'Squad mid-pursuit of fleeing enemy through ruined city block, lead trooper mid-sprint with rifle raised firing at fleeing target ahead, second mid-leap over rubble-pile with shotgun raised, third mid-blast rotary-cannon at sniper-position high above, fourth mid-throw grenade up toward enemy position, dust kicking up',
       'Squad mid-execute on enemy command-tent, lead trooper just-finished cutting through tent-flap with chain-blade still raised dripping, second mid-fire shotgun blast into the tent interior, third pressing into tent with assault rifle raised firing, fourth rear-covering tent entrance with rotary, enemy bodies already strewn',
-      'Squad mid-charge across no-man\'s-land toward enemy position, lead trooper mid-stride sprinting forward with rifle raised firing at running target, second mid-leap over fallen body chain-blade extended overhead, third mid-grenade-throw arc visible toward enemy hardpoint, fourth firing heavy MG in suppressing burst from hip',
+      "Squad mid-charge across no-man's-land toward enemy position, lead trooper mid-stride sprinting forward with rifle raised firing at running target, second mid-leap over fallen body chain-blade extended overhead, third mid-grenade-throw arc visible toward enemy hardpoint, fourth firing heavy MG in suppressing burst from hip",
       'Squad mid-assault on alien-tech installation, lead trooper mid-blast plasma-cannon at installation door, second mid-fire heavy MG at defenders pouring out of installation, third mid-execute over a fallen alien defender pistol leveled at head, fourth covering with rotary-cannon, alien-tech sparking and bleeding',
       'Squad mid-hunt through war-torn forest, lead trooper in predator-stalk weapon up scanning treetops for snipers, second mid-execute over an enemy scout caught crawling away, third mid-fire shotgun blast at off-frame moving target, fourth rear-covering with rotary, dawn-cold light, breath fogging behind visors',
     ],
@@ -1118,24 +1121,24 @@ Each entry MUST:
     touchpoints: [
       'Mid-fire barrage from open rooftop edge, the killer-droid in braced kneeling stance unloading heavy long-rifle, muzzle-flash strobing white across its mirror-faceplate, spent brass arcing past its shoulder, scope-eye locked on a target collapsing three blocks distant, smoke trailing from the barrel-vents',
       'Mid-scale of a rain-slicked cathedral wall, the assassin-droid clamped to weathered stone by all four articulated limbs, combat-rifle strapped diagonal across its back, scope-eye glinting upward through the storm, target somewhere on the parapet above, lightning-flash freezing its silhouette against carved gargoyles',
-      'Mid-strike with wrist-blade fully extended, the kill-unit driving its bladed forearm clean through a guard\'s armored chest from behind, the guard mid-jerk-and-spasm, droid\'s other hand clamped over the guard\'s mouth, blood-mist hanging in the corridor\'s emergency-red strobe',
+      "Mid-strike with wrist-blade fully extended, the kill-unit driving its bladed forearm clean through a guard's armored chest from behind, the guard mid-jerk-and-spasm, droid's other hand clamped over the guard's mouth, blood-mist hanging in the corridor's emergency-red strobe",
       'Lurking advance through dissipating tear-gas in a wrecked subway corridor, the hunter-droid in low predator-stalk weapon-low, optic-cluster glowing cold cyan through the haze, gun-flash from a panicked guard ahead lighting its chassis edge for one frame, the kill already inevitable',
-      'Ambush mid-emerge from beneath a crashed transport, the murder-unit erupting up through a torn hull-plate firing dual-pistols in overlapping arcs, two security guards mid-fall with chest-wounds blooming, the droid\'s shoulder-armor still flecked with crash-debris and oil',
-      'Execute-stance over a kneeling corporate exec, the killer-droid pressing a silenced pistol to the back of the man\'s skull, the trigger-moment caught at the instant the firing-pin drops, the exec\'s mouth open in mid-protest, the droid\'s other hand etching a fresh kill-mark into its left pauldron',
+      "Ambush mid-emerge from beneath a crashed transport, the murder-unit erupting up through a torn hull-plate firing dual-pistols in overlapping arcs, two security guards mid-fall with chest-wounds blooming, the droid's shoulder-armor still flecked with crash-debris and oil",
+      "Execute-stance over a kneeling corporate exec, the killer-droid pressing a silenced pistol to the back of the man's skull, the trigger-moment caught at the instant the firing-pin drops, the exec's mouth open in mid-protest, the droid's other hand etching a fresh kill-mark into its left pauldron",
       'Sniper-perch atop a 200-floor tower edge, the assassin-droid prone behind a long-barreled rail-rifle, scope-eye glowing red-hot through the optical sight, the city sprawled below in neon haze, distant target framed in the crosshair on a balcony 1.4km out, breath-vents motionless',
       'Mid-leap rooftop-to-rooftop pursuit, the kill-unit caught full-extension across a 12-meter gap with combat-rifle still firing in mid-air at a fleeing courier ahead, cyberpunk skyline below scrolling in motion-blur, holo-billboards bleeding magenta across its underside',
       'Mid-fire dual-pistol sweep across an open warehouse floor, the killer-droid spinning mid-crouch with both pistols extended outward firing at four converging guards, brass cascading in twin arcs, three guards mid-fall already, fluorescent overheads strobing through gun-smoke',
       'Wall-climbing infiltration of a brutalist concrete bunker exterior, the assassin-droid scaling sheer rebar-exposed wall via embedded climbing-spikes in its palms and soles, sniper-rifle slung across its back, surveillance-cam below sweeping past obliviously, night-vision-amber glowing its optics',
-      'Mid-thrust combat-knife strike, the kill-unit driving a serrated combat-blade up under a sentry\'s jaw from a crouched flanking position, sentry mid-collapse with eyes wide, droid\'s other hand catching the dropping rifle before it can clatter, silenced kill in a marble corridor',
+      "Mid-thrust combat-knife strike, the kill-unit driving a serrated combat-blade up under a sentry's jaw from a crouched flanking position, sentry mid-collapse with eyes wide, droid's other hand catching the dropping rifle before it can clatter, silenced kill in a marble corridor",
       'Predator-stalk through knee-deep flooded sewer, the hunter-droid wading silent with rifle held above waterline, optic-cluster sweeping the tunnel curve ahead, distant target-voices echoing off the concrete, single drop falling from a rusted overhead pipe lit by its eye-glow',
       'Ambush from above as the kill-unit drops from a ceiling vent onto a meeting-table, executive figures mid-recoil-and-rise, the droid landing in a hunter-crouch already firing pistols outward in two directions, glass-conference-walls shattering behind from cross-shots, papers exploding into the air',
-      'Execute-pose over a fresh kill in a snowed-in alpine cabin, the killer-droid standing motionless beside a slumped diplomat in an armchair, silenced pistol still raised, blood pooling onto the rug, the droid\'s thermal vents melting snow in a halo on the floorboards',
+      "Execute-pose over a fresh kill in a snowed-in alpine cabin, the killer-droid standing motionless beside a slumped diplomat in an armchair, silenced pistol still raised, blood pooling onto the rug, the droid's thermal vents melting snow in a halo on the floorboards",
       'Sniper-perch wedged in the rafters of a derelict cathedral, the assassin-droid braced between two oak beams with anti-material rifle along one arm, scope-eye glowing cold green through the optical sight, the high altar 80 meters distant framed in crosshair, dust falling through stained-glass shafts',
       'Mid-sprint pursuit through a neon-flooded night market, the kill-unit shoving past vendors with combat-rifle leveled forward firing in bursts at a fleeing target ahead, market-stalls exploding into sparks behind it, holo-signs in three languages reflecting in its mirror-faceplate, target stumbling under fire',
       'Mid-blast plasma-cannon firing from waist-level brace, the murder-unit unloading a sustained beam into an armored door, door-metal glowing white and warping inward, shielded heat-haze distorting the air, kill-tally marks fresh-scored down the cannon-housing',
       'Lurking outside a bathhouse window in pouring monsoon rain, the hunter-droid pressed flat against the lacquered exterior wall, suppressed pistol drawn at thigh, scope-eye watching through a translucent paper screen at a target shadowed within, water sluicing down its chassis seams',
-      'Mid-emerge from underwater drop, the assassin-droid breaching the surface of a moonlit canal in a hunter-crouch already raising silenced pistol at a dockside target, water cascading off its chassis-plates, scope-eye locking on the target\'s back, kill-shot one second away',
-      'Mid-strike chain-blade overhead, the kill-unit bringing a vibro-saw down in a two-handed arc on a heavily armored opponent\'s clavicle, sparks exploding outward, opponent mid-stagger backward, droid\'s posture set for the follow-through, the duel framed against a burning warehouse interior',
+      "Mid-emerge from underwater drop, the assassin-droid breaching the surface of a moonlit canal in a hunter-crouch already raising silenced pistol at a dockside target, water cascading off its chassis-plates, scope-eye locking on the target's back, kill-shot one second away",
+      "Mid-strike chain-blade overhead, the kill-unit bringing a vibro-saw down in a two-handed arc on a heavily armored opponent's clavicle, sparks exploding outward, opponent mid-stagger backward, droid's posture set for the follow-through, the duel framed against a burning warehouse interior",
     ],
     instructions: `Each entry is ONE specific SOLO killer-droid predatory action, 30-55 words. Format: "[opening verb-phrase action], the [droid-noun] mid-[VERB] with [weapon], [target/kill detail], [one environmental detail]". Use ONLY genderless droid-nouns (killer-droid / assassin-droid / kill-unit / combat-unit / hunter-droid / murder-unit / the droid) — NEVER she/her/woman/female. Use predator/combat verbs (firing/climbing/striking/lurking/stalking/ambushing/executing/hunting/mid-blast/mid-thrust). STRICT BAN on contemplative verbs (stands/poses/leans/watches/examines/contemplates). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -1232,7 +1235,7 @@ Each entry MUST:
       'REGISTER: CYBER-COP / CORPORATE LOBBY RAID — the cyber-cop droid mid-stride through a shattered glass entrance with badge insignia burning gold on pauldron, red riot-strobe lighting pulsing across marble, two suited civilians taking cover behind holo-reception desk, stun-baton held low-ready in right hand',
       'REGISTER: CYBER-COP / MIDNIGHT-STREET ARREST — the cyber-cop droid standing over a kneeling cyberpunk suspect at the lens with sidearm trained, two backup hover-spinner cops touching down behind in landing-mode with red-and-blue strobes, holographic arrest-warrant projecting at eye-level, Blade Runner palette',
       'REGISTER: MILITARY-SOLDIER / ALIEN-COLONY PATROL — the military-soldier droid mid-patrol with combat-rifle held tactical-low, distant arc-lightning crackling between alien rock formations, smoking research-station ruin in middle distance, two squad-mates visible flanking through atmospheric haze, unit-callsign markings glowing',
-      'REGISTER: MILITARY-SOLDIER / ORBITAL-DROP DAWN — the military-soldier droid mid-emerge from drop-pod ramp weapons-up onto war-torn alien battlefield, three friendly drop-pods steaming nearby with sibling soldiers disembarking, distant titan-class enemy approaching across no-man\'s-land, smoke-pillars rising at dawn',
+      "REGISTER: MILITARY-SOLDIER / ORBITAL-DROP DAWN — the military-soldier droid mid-emerge from drop-pod ramp weapons-up onto war-torn alien battlefield, three friendly drop-pods steaming nearby with sibling soldiers disembarking, distant titan-class enemy approaching across no-man's-land, smoke-pillars rising at dawn",
       'REGISTER: MILITARY-SOLDIER / CITY-HOLD DEFENSE — the military-soldier droid in braced firing position behind concrete barricade with assault-rifle laying suppressing burst at off-frame enemy, smoke rolling through war-torn ruin, distant fellow squad-droid silhouettes in defensive positions, shell-craters and debris',
       'REGISTER: HUNTER-DROID / TUNDRA-RIDGE PERCH — the hunter-droid perched in low-crouch on a frozen tundra ridge overlooking distant prey-target with anti-material rifle braced on rock, breath-vents misting white in the cold, aurora rippling green-violet overhead, snow-buried hovercraft wreckage in middle distance',
       'REGISTER: HUNTER-DROID / FOG-FOREST STALK — the hunter-droid mid-stalk through dense bioluminescent mist with vibroblade drawn low, bioluminescent moss-patches glowing electric-blue across exposed roots, distant prey-creature silhouette barely visible through the haze, scope-eye glinting cold through the fog',
@@ -1295,7 +1298,7 @@ Each entry MUST:
       'CHROME-SKULL PROFILE — strict side profile of his bald polished chrome cranium with subtle ornate engraving along the parietal plate, organic neck visible below the chrome-flesh seam, stubbled jaw, weathered organic eye, gaunt focused expression',
       'BRUISED-AND-CHROMED FACE — three-quarter face shot, fresh bruise blooming purple across his organic cheekbone, chrome panel-line bisecting the face from temple to jawline, dried blood at the temple, set jaw, cold focused eyes',
       'FROM-COVER REVEAL — camera at the alley cover-edge as he leans out firing a heavy sidearm in two-handed grip, half-body in frame with the other half hidden behind shattered drywall, muzzle-flash strobing his weathered face',
-      'EYE-SOCKET CHROME APERTURE — extreme closeup of his mechanical iris-aperture eye, weathered crow\'s-feet at the corner, organic lashes contrasting with chrome shutter-petals, dust on the surrounding skin, focused intensity',
+      "EYE-SOCKET CHROME APERTURE — extreme closeup of his mechanical iris-aperture eye, weathered crow's-feet at the corner, organic lashes contrasting with chrome shutter-petals, dust on the surrounding skin, focused intensity",
       'THREE-QUARTER WEAPON-DRAWN — three-quarter back-angle as he draws a sidearm from a thigh-rig mid-pivot, his coat-flares streaming behind, chrome jaw set hard, weathered organic eye visible over the pauldron, kinetic motion frozen',
       'PERCH-DOWN PREDATOR — high-angle from his crane-perch looking down at a target plaza forty floors below, his silhouette crouched dominant in the foreground right edge, anti-material rifle braced steady, scope-eye glinting cold',
       'SIDE-PROFILE MID-STRIDE — camera 90-degrees as he strides past at full speed with combat-rifle held at his side, his weathered coat heavy with motion, chrome jaw visible in profile, motion-blur on the cyberpunk corridor behind',
@@ -1334,15 +1337,15 @@ Each entry MUST:
   L. **FROM-COVER REVEAL** — camera at the cover-edge as droid leans/emerges firing, half body in frame, other half hidden behind wall/crate/rubble`,
     touchpoints: [
       'LOW-FORWARD MID-CHARGE — camera at ground level looking up as the killer-droid sprints straight at lens, full-body filling frame, combat-rifle raised muzzle-flash strobing, motion-blur dragging the corridor behind, the kill imminent',
-      'OVER-SHOULDER MID-FIRE — camera tight behind the assassin-droid\'s right pauldron looking down the long-rifle barrel at distant off-frame target, muzzle-flash blooming forward into the dark, brass spraying past the lens',
+      "OVER-SHOULDER MID-FIRE — camera tight behind the assassin-droid's right pauldron looking down the long-rifle barrel at distant off-frame target, muzzle-flash blooming forward into the dark, brass spraying past the lens",
       'SCOPE-EYE POV — view through cracked HUD-faceplate of the kill-unit, red reticle crosshair locked on a small distant figure on a balcony 1.4km out, weapon-barrel in lower frame, breath-vent audio implied still',
-      'WORM\'S-EYE FROM DOWNED-TARGET — camera flat on the asphalt from a fallen kill\'s POV looking straight up at the killer-droid standing over them with silenced pistol still extended at the lens, neon billboards reflecting in its mirror-faceplate',
+      "WORM'S-EYE FROM DOWNED-TARGET — camera flat on the asphalt from a fallen kill's POV looking straight up at the killer-droid standing over them with silenced pistol still extended at the lens, neon billboards reflecting in its mirror-faceplate",
       'SIDE-PROFILE MID-LEAP — camera 90-degree to the assassin-droid as it leaps left-to-right across a 12-meter rooftop gap, full-body frozen mid-flight, motion-blur on the cyberpunk skyline behind, weapons still firing in mid-air',
-      'HIGH-ANGLE PERCH-DOWN — camera from the killer-droid\'s sniper-perch on a tower edge, droid silhouette dominant in foreground left, the city target-zone sprawled 200 floors below in neon haze, distant target framed in scope-line',
+      "HIGH-ANGLE PERCH-DOWN — camera from the killer-droid's sniper-perch on a tower edge, droid silhouette dominant in foreground left, the city target-zone sprawled 200 floors below in neon haze, distant target framed in scope-line",
       'THROUGH-SMOKE EMERGE — camera midground level as the murder-unit emerges from a wall of tear-gas smoke firing dual pistols outward, silhouette resolving into chassis-detail, muzzle-flashes lighting its faceplate from below',
       'DUTCH-ANGLE FIREFIGHT — frame tilted 18-degrees right to convey chaos, the kill-unit mid-firefight in a wrecked transit depot, debris falling from severed overhead conduit, muzzle-flashes lighting its torso from three directions',
       'WALL-CLIMB UPWARD-LOOK — camera at the wall base looking straight up as the assassin-droid scales a sheer brutalist concrete face, articulated limbs gripping rebar exposed plate edges, sniper-rifle strapped diagonal across its back against the sky',
-      'MID-STRIKE INTIMATE COMBAT — wide frame showing the killer-droid driving its wrist-blade through a sentry\'s armored chest from a flanking position, sentry mid-jerk-and-spasm, blood-mist hanging in the emergency-red strobe',
+      "MID-STRIKE INTIMATE COMBAT — wide frame showing the killer-droid driving its wrist-blade through a sentry's armored chest from a flanking position, sentry mid-jerk-and-spasm, blood-mist hanging in the emergency-red strobe",
       'THROUGH-WINDOW EXTERIOR LURK — camera inside a lit penthouse looking out a rain-streaked window at the hunter-droid pressed silent against the exterior wall ledge, silenced pistol drawn at thigh, scope-eye glowing cold cyan through the glass',
       'FROM-COVER REVEAL — camera at the cover-edge as the kill-unit leans out from behind a crashed transport firing combat-rifle in three-round bursts, half-body in frame, other half hidden behind twisted hull-plating',
       'OVER-SHOULDER STAIRWELL DESCENT — camera tight behind the assassin-droid descending a spiral fire-stair in low-crouch with suppressed weapon weapon-low, scope-eye sweeping the dark below, the kill on the floor beneath',
@@ -1390,23 +1393,23 @@ Each entry must specify:
       'LOW-FORWARD MID-CHARGE — camera at ground level looking straight up the assault-line as the squad runs at the lens, lead trooper boots filling the lower half of frame mid-stride, two flanking troopers visible in mid-distance weapons raised firing past camera',
       'OVER-THE-SHOULDER MID-FIRE — camera behind the lead trooper looking down the barrel of their bolter mid-blast, muzzle-flash blooming in the foreground frame-center, off-frame target hit visible in distant smoke, squad members partially visible left/right flanking',
       'HELMET-CAM COMBAT POV — point-of-view through the cracked HUD-helmet glass of the lead trooper, amber reticle visible at frame center, weapon-barrel in lower foreground frame, second trooper visible at frame-right mid-charge, blood-spatter on visor edge',
-      'DOOR-KICK FROM INSIDE — camera inside the breached room looking outward toward the door as the lead trooper\'s boot kicks it inward, door splintering mid-frame, two squad members visible behind in the corridor weapons raised firing past lead into the room',
+      "DOOR-KICK FROM INSIDE — camera inside the breached room looking outward toward the door as the lead trooper's boot kicks it inward, door splintering mid-frame, two squad members visible behind in the corridor weapons raised firing past lead into the room",
       'DROP-POD HATCH-BURST — camera positioned outside the drop-pod as the lead trooper bursts through the hatch weapon-leveled mid-blast, plasma-vent steam billowing around the pod-rim, second trooper visible behind in pod still firing through hatch',
-      'WORM\'S-EYE FROM DOWNED-ENEMY — camera at ground level looking up as if from the POV of a fallen enemy, lead trooper standing over the lens with weapon angled down toward camera ready to finish, two squad members visible at frame-edges covering perimeter',
+      "WORM'S-EYE FROM DOWNED-ENEMY — camera at ground level looking up as if from the POV of a fallen enemy, lead trooper standing over the lens with weapon angled down toward camera ready to finish, two squad members visible at frame-edges covering perimeter",
       'SIDE-PROFILE MID-STRIDE — camera positioned 90-degrees to the squad as they sprint through the frame left-to-right, all four troopers frozen mid-stride at different stride phases, motion-blur streaking the background, weapons all leveled forward',
       'ROOFTOP-DOWN COMBAT — high-angle camera from rooftop looking down at the squad clearing the courtyard below, lead trooper visible mid-execute over fallen enemy, brass scattered across the pavement, two other troopers covering perimeter, kill-trail of bodies',
       'THROUGH-SMOKE EMERGE — camera positioned at midground level as the squad emerges through a wall of dissipating smoke firing weapons, lead trooper resolving from silhouette into visible armor mid-blast, second/third still emerging muzzle-flashes lighting through smoke',
       'BEHIND-LEAD MID-BREACH — camera positioned behind the lead trooper as they enter a room weapon-up firing, second and third visible flanking through the doorway behind them, ceiling and walls visible left/right, room-interior lit by muzzle-flashes',
       'DUTCH-ANGLE FIREFIGHT — frame tilted 15-degrees to convey chaos, squad mid-firefight with debris falling from above, lead trooper mid-fire shotgun-blast, second mid-grenade-throw, muzzle-flashes lighting figures from below, urgency reading',
       'HERO-SHOT LOW-3/4 BACKLIT — squad backlit by massive explosion behind them, low 3/4 angle showing all weapons raised mid-aim, smoke and embers visible in foreground, every figure silhouetted edge-lit hot, slow-motion key-art quality',
-      'LEAD-TROOPER-FILL-FRAME — extreme close-up on lead trooper\'s snarling visor (cracked, blood-spattered) and weapon mid-blast, squad members visible in defocused background mid-action, the lead trooper\'s aggression filling the entire frame',
+      "LEAD-TROOPER-FILL-FRAME — extreme close-up on lead trooper's snarling visor (cracked, blood-spattered) and weapon mid-blast, squad members visible in defocused background mid-action, the lead trooper's aggression filling the entire frame",
       'VEHICLE-DISMOUNT FROM ABOVE — overhead 3/4 camera positioned above dropship as the squad mid-leaps from the open ramp to the ground below, ramp visible at top of frame, ground-impact dust kicking up below, weapons raised mid-jump',
-      'EXECUTE-OVER-KNEEL — wide shot of squad standing over kneeling captured enemy, lead trooper with weapon down pointed at enemy\'s head trigger-pull moment, two squad members covering perimeter weapons raised outward, blood-pool already at enemy\'s feet',
+      "EXECUTE-OVER-KNEEL — wide shot of squad standing over kneeling captured enemy, lead trooper with weapon down pointed at enemy's head trigger-pull moment, two squad members covering perimeter weapons raised outward, blood-pool already at enemy's feet",
       'MID-CHARGE WIDE-DRONE — high-altitude drone shot showing the squad in mid-charge across open ground toward an enemy position visible at deep distance, kill-zone with brass and bodies behind them, dust-trail kicking up, enemy hardpoint smoking ahead',
       'THROUGH-DEBRIS-BURST — camera at squad-level as they burst through a curtain of falling debris (collapsing wall above them), weapons-up emerging through dust and chunks of concrete, lead trooper mid-stride, dust catching backlight',
       'EXTREME-CLOSE PAULDRON — extreme close-up on the weathered armored pauldron of a squad-member with painted kill-streak tally marks (50+ visible), other squad members in soft-focused background mid-firefight, the pauldron-detail dominating composition',
-      'MID-EXECUTE FOREGROUND — execute-moment in tight foreground (lead trooper\'s weapon pressed to kneeling enemy\'s head with trigger-pull caught), other squad members visible in mid-distance covering perimeter, blood-pool spreading at feet, kill-confirmed energy',
-      'NIGHT-MUZZLE-FLASH-STROBE — squad in deep-night combat lit only by their own muzzle-flashes as they fire, brief silhouettes resolving against blackness, lead trooper\'s mag-dump throwing white light across the frame, others visible only by their own flashes',
+      "MID-EXECUTE FOREGROUND — execute-moment in tight foreground (lead trooper's weapon pressed to kneeling enemy's head with trigger-pull caught), other squad members visible in mid-distance covering perimeter, blood-pool spreading at feet, kill-confirmed energy",
+      "NIGHT-MUZZLE-FLASH-STROBE — squad in deep-night combat lit only by their own muzzle-flashes as they fire, brief silhouettes resolving against blackness, lead trooper's mag-dump throwing white light across the frame, others visible only by their own flashes",
     ],
     instructions: `Each entry is ONE specific squad-combat camera angle, 25-50 words. Format: "ANGLE NAME CAPS — camera position + height + what dominates frame + squad-formation depth + specific aggressive action captured". Every entry conveys AGGRESSION via angle (not static observation). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -1431,12 +1434,12 @@ Each entry must specify:
   J. **WHITE-PHOSPHORUS BURN** (~5%) — chemical-burn white-and-orange light from white-phosphorus or magnesium-flare, scene briefly over-exposed in zones, harsh shadow contrast
   K. **OVERCAST WAR-GREY** (~5%) — overcast battle-sky with diffuse cold-grey light, low contrast, muted tones, somber mid-engagement mood`,
     touchpoints: [
-      'MUZZLE-FLASH STROBE PRIMARY — squad\'s own heavy weapons-fire providing strobing primary illumination, hard shadow contrast pulsing in firing-rhythm, hot-white flash-light briefly illuminating armor-detail and surrounding rubble, ambient mode deep-dark between flashes',
+      "MUZZLE-FLASH STROBE PRIMARY — squad's own heavy weapons-fire providing strobing primary illumination, hard shadow contrast pulsing in firing-rhythm, hot-white flash-light briefly illuminating armor-detail and surrounding rubble, ambient mode deep-dark between flashes",
       'EXPLOSION-BACKLIT SILHOUETTE — massive mid-range explosion bloom backlighting the squad from behind, every trooper edge-lit hot-orange against the fireball, embers and smoke visible in the foreground, scene briefly bleached in firelight',
       'PLASMA-BOLT TRACER-WALL — neon-cyan and hot-orange plasma-bolt streaks crisscrossing the frame in arcing lines, tracer-fire walls casting moving colored light across armor plates, war-energy palpable, scene-mode high-contrast',
       'DAWN-COLD GRIM ASSAULT — pre-sunrise cold blue ambient with first warm-orange hint touching only the upper horizon-line, mean troopers reading in cool dread-tones with hard shadows beneath armor-overhangs, mood somber assault',
       'DUSK BLOOD-RED HORIZON — sun at horizon bleeding crimson across the entire battle-sky, squad silhouetted edge-red against the burning sky, hard shadows cast across the battlefield, kill-energy mood, hero-shot atmospheric',
-      'NIGHT HELMET-FLOODLAMPS — deep-dark ambient with the squad\'s own helmet-mounted flood-lamps cutting beams through smoke, cones of light catching airborne dust and brass, target areas illuminated only where lamps point',
+      "NIGHT HELMET-FLOODLAMPS — deep-dark ambient with the squad's own helmet-mounted flood-lamps cutting beams through smoke, cones of light catching airborne dust and brass, target areas illuminated only where lamps point",
       'SMOKE-PIERCED-BY-SPOTLIGHT — squad moving through dense battle-smoke with single-source bright spotlight cutting through (sun-shaft through clouds / vehicle-headlights / search-light), god-rays through smoke catching figures in motion',
       'EMERGENCY-STROBE BATTLEFIELD — emergency red strobes pulsing across a damaged-installation battlefield, urgency reading immediate, intermittent light moments illuminating the squad mid-action then plunging them back into shadow',
       'DISTANT-FIRE-GLOW MID-DISTANCE — distant fires from burning buildings providing warm orange uplight on the squad from one side, smoke-trails rising in the deep distance, post-apocalypse atmospheric mood, low key fill',
@@ -1444,7 +1447,7 @@ Each entry must specify:
       'OVERCAST WAR-GREY — overcast battle-sky with diffuse cold-grey light, low contrast, muted tones across armor, somber mid-engagement mood with no sun, blood reading dark red against grey ground',
       'TRACER-FIRE NIGHT-SKY — squad in night combat with multiple colored tracer-rounds streaking across the sky (red enemy / green friendly), traces lighting figures briefly as they pass, dark ambient ground',
       'BURNING-WRECK FOREGROUND — wreckage of recently-destroyed enemy vehicle burning in the foreground providing warm orange uplight on squad behind, fire-haze rising and distorting the air, embers in motion',
-      'SEARCHLIGHT-CUT FROM ABOVE — enemy searchlight from a tower-top sweeping across the squad\'s position, beam cutting through battle-smoke in a defined cone, squad caught in or out of the beam, hard light vs deep shadow',
+      "SEARCHLIGHT-CUT FROM ABOVE — enemy searchlight from a tower-top sweeping across the squad's position, beam cutting through battle-smoke in a defined cone, squad caught in or out of the beam, hard light vs deep shadow",
       'PLASMA-IMPACT FLARE — plasma-bolt impact-flare bursting against nearby cover sending ionized white-blue light across the squad, brief over-exposure on impact-side, scene-mode high-contrast electric',
     ],
     instructions: `Each entry is ONE specific battlefield combat lighting setup, 20-40 words. Format: "LIGHTING MODE CAPS — [source + direction + color + shadow character + battle context]". Distribute across the 11 buckets. STRICT BAN on cosmic / daylight-resort / industrial-hangar / aerial-flight modes. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -1485,16 +1488,16 @@ Each entry MUST:
     touchpoints: [
       'WAVE-DEFENSE HORDE — squad holding firing-line behind concrete barricade against charging enemy infantry-wave, 30+ enemy figures visible mid-charge across the open ground beyond, lead trooper mid-mag-dump heavy bolter spitting brass-rain, second mid-grenade-throw arc visible overhead, third mid-fire rotary-cannon in sweeping arc, multiple enemies dropping mid-charge, blood-spatter zones expanding, bodies piling at the barricade-line, smoke rising from prior kills',
       'HOT-LZ ASSAULT — squad mid-emerge from steaming drop-pods into actively defended landing zone, 4-6 enemy defenders mid-return-fire from elevated positions firing rifles down at the squad, AA-tracers crossing the sky above, two more friendly drop-pods slamming down at midground, lead trooper mid-blast shotgun at closest defender, second mid-leap from pod weapons-up, dust kicking up across the LZ',
-      'URBAN-CLEARANCE FIREFIGHT — squad mid-block-by-block clearance through ruined urban street, enemy sniper visible in third-floor window above mid-return-fire, two more defenders in alley mid-fall from squad\'s suppressing barrage, lead trooper mid-fire bolter up at sniper, second mid-leap behind cover, third mid-fire rotary at alley-defenders, rubble bursting from sniper-rounds impacting around them',
+      "URBAN-CLEARANCE FIREFIGHT — squad mid-block-by-block clearance through ruined urban street, enemy sniper visible in third-floor window above mid-return-fire, two more defenders in alley mid-fall from squad's suppressing barrage, lead trooper mid-fire bolter up at sniper, second mid-leap behind cover, third mid-fire rotary at alley-defenders, rubble bursting from sniper-rounds impacting around them",
       'TRENCH-CHARGE MASSACRE — squad mid-leap into enemy trench-line, 5-7 defenders mid-rise from trench mid-firing back, lead trooper mid-vault over trench-edge chain-blade raised overhead with first defender already mid-fall, second mid-grenade-drop into trench bottom with bloom-bursting, third mid-fire heavy MG at flanking defenders, fourth mid-execute pistol on rising defender, blood-spray and dirt erupting',
-      'BREACH-AND-CLEAR HARDPOINT — squad just breached enemy bunker through blown door, 3-4 defenders inside mid-fall from squad\'s opening blast, smoke pouring out of the breach in volume, two more friendly squads visible flanking the bunker from sides, lead trooper mid-stride through smoke firing assault rifle, second mid-grenade-throw deeper into bunker, third covering entrance with rotary against incoming reinforcements',
+      "BREACH-AND-CLEAR HARDPOINT — squad just breached enemy bunker through blown door, 3-4 defenders inside mid-fall from squad's opening blast, smoke pouring out of the breach in volume, two more friendly squads visible flanking the bunker from sides, lead trooper mid-stride through smoke firing assault rifle, second mid-grenade-throw deeper into bunker, third covering entrance with rotary against incoming reinforcements",
       'VEHICLE-AMBUSH EXECUTION — squad mid-execution of enemy armored convoy ambush, 3 enemy tanks visible — one mid-fireball-explosion in foreground, one mid-bail (crew mid-leap from hatches), one mid-rotate-turret toward squad position, lead trooper mid-fire RPG at the turret, second mid-fire heavy MG at bailing crews, third mid-throw thermite at fuel-stores, secondary explosions chaining',
       'DROP-POD ASSAULT MULTIPLE — three friendly drop-pods slamming down simultaneously across the enemy LZ, squad mid-emerge from lead pod under fire, 5-6 enemy defenders mid-retreat as more pods land behind them, lead trooper mid-blast shotgun at closest retreater, second mid-leap from adjacent pod with rotary already firing, third squad visible mid-emerge from deep-distance pod, dust-clouds rising from each landing',
       'CREATURE-SWARM REPEL — squad mid-firing into closing alien creature horde, 8-12 alien creatures visible mid-charge with multiple already down mid-scuttle, lead trooper mid-fire flame-thrower in wide arc engulfing front-line creatures, second mid-fire heavy MG sweeping the flank, third mid-execute pistol on a creature that broke through, fourth mid-grenade-throw at creature-cluster behind, chitin-armor visible on creatures',
       'PURSUIT-EXECUTION RUN — squad chasing fleeing enemy infantry through ruined urban street, 4-5 enemy figures mid-flight ahead through doorways and around corners, 2 enemies already dropped mid-flight with bodies sprawled on cobblestones, lead trooper mid-sprint firing assault rifle at running enemy ahead, second mid-leap over fallen body chain-blade raised, third mid-fire shotgun at flanker breaking sideways',
-      'OVERWATCH WITH VEHICLES — squad mid-fire from elevated rooftop position, two allied tanks visible on street below also mid-fire engaging enemy formation in mid-distance, 6-8 enemy infantry visible mid-charge toward tanks with multiple already dropping from squad\'s overwatch fire, lead trooper mid-fire sniper-rifle from prone, second mid-fire heavy MG belt-fed, third spotting/calling targets',
+      "OVERWATCH WITH VEHICLES — squad mid-fire from elevated rooftop position, two allied tanks visible on street below also mid-fire engaging enemy formation in mid-distance, 6-8 enemy infantry visible mid-charge toward tanks with multiple already dropping from squad's overwatch fire, lead trooper mid-fire sniper-rifle from prone, second mid-fire heavy MG belt-fed, third spotting/calling targets",
       'CIVILIAN-EXTRACTION UNDER FIRE — squad covering fleeing civilians while engaging pursuing enemy force, 5-7 civilian figures mid-flight past squad position toward extraction point, 4-5 enemy combatants visible mid-pursuit from behind mid-return-fire, lead trooper mid-fire shotgun at closest pursuer, second mid-fire rotary at pursuers behind, third dragging slow civilian forward, civilian-screaming-faces visible',
-      'AERIAL-SUPPORT INBOUND — squad mid-firefight as friendly gunship roars overhead opening up on enemy position with weapon-flashes from above, ground enemies mid-fall from above-fire and squad\'s ground-fire simultaneously, lead trooper mid-fire bolter up at remaining enemies, second mid-fire heavy MG, brass from gunship raining down past squad, exhaust-trail crossing upper frame',
+      "AERIAL-SUPPORT INBOUND — squad mid-firefight as friendly gunship roars overhead opening up on enemy position with weapon-flashes from above, ground enemies mid-fall from above-fire and squad's ground-fire simultaneously, lead trooper mid-fire bolter up at remaining enemies, second mid-fire heavy MG, brass from gunship raining down past squad, exhaust-trail crossing upper frame",
       'BUILDING-COLLAPSE COMBAT — squad mid-firefight as nearby building collapses from artillery-strike, 3-4 defenders inside mid-fall through collapsing structure, dust-cloud expanding outward blocking part of frame, allied units visible in deep distance also mid-engagement, lead trooper mid-fire heavy bolter, second mid-leap away from falling debris, third mid-execute kneeling captive in foreground',
       'STREET-AMBUSH FROM BOTH SIDES — squad mid-execution of urban ambush from both sides of street, enemy patrol caught mid-stride between, 4-5 enemy infantry mid-fall from crossfire, lead trooper mid-fire from rooftop position above, second mid-fire from alley to opposite side, third mid-execute survivor mid-flee, brass cascading from elevated positions, smoke rising from prior grenades',
       'BOARDING-VEHICLE ASSAULT — squad mid-board of enemy APC at full sprint, lead trooper mid-leap onto APC roof with chain-blade raised to plunge through hatch, second mid-fire shotgun at hatch where crew rising to defend, third mid-fire heavy MG at second APC closing in support, secondary friendly squad visible mid-charge across street, smoke from prior tank-kill rising behind',
@@ -1542,7 +1545,7 @@ Each entry MUST:
 • Describe its MID-ACTION (mid-fire / mid-stride / mid-pounce / mid-strike / mid-sweep / mid-deploy)
 • Reference 1-2 visual DETAILS (scorch-marks / kill-streak markings / hydraulic-hiss / weapon-mount glow / dust under treads)`,
     touchpoints: [
-      'HOVER COMBAT-DRONE GUARD-DOG — chest-height armored hover-drone floating at lead marine\'s shoulder, twin rotary-cannon underslung mid-fire spitting brass in sweeping arc at off-frame enemy, glowing-red sensor-eye sweeping perimeter, scorch-marks across hull-plating from prior engagements, kill-streak tally scratched on side',
+      "HOVER COMBAT-DRONE GUARD-DOG — chest-height armored hover-drone floating at lead marine's shoulder, twin rotary-cannon underslung mid-fire spitting brass in sweeping arc at off-frame enemy, glowing-red sensor-eye sweeping perimeter, scorch-marks across hull-plating from prior engagements, kill-streak tally scratched on side",
       'QUADRUPEDAL WALKER-BOT WAIST-HIGH — waist-height four-legged armored walker-bot striding alongside marines mid-pace, dorsal weapon-mount (heavy MG) belt-fed mid-fire at distant target, sand-and-dust kicked up from articulated paws, mission-tag bolted to neck-armor, hydraulic-hiss with each stride',
       'BIPED COMBAT MECH 2X-MARINE — 4-meter biped combat mech walking alongside marine squad with rotary-cannon arm mid-fire, second arm holding chain-blade, scratched matte-charcoal plating with skull-and-bones unit-marking on chest-pectoral, mid-step pivoting toward closer enemy, hydraulic-actuator visible in joints',
       'SPIDER-WALKER 6-LEGGED — chest-height six-legged spider-walker mid-stride alongside marines through rubble, central body housing twin plasma-cannon mid-fire in flanking sweep, multiple sensor-eyes blinking amber, leg-tips kicking up dust with each placement, mid-pivot to engage flank threat',
@@ -1550,14 +1553,14 @@ Each entry MUST:
       'SERVITOR-MECH CYBERNETIC — half-human-height cybernetic walking weapon-platform with two weapon-arms (one heavy bolter mid-fire, one plasma-pistol raised), exposed mechanical leg-actuators below skirt-armor, glowing-amber eye-sensor, mid-stride alongside marine lead, oath-paper nailed to chest',
       'ARMORED COMBAT-DOG ATTACK — dog-sized quadruped armored attack-bot mid-pounce onto downed enemy, weapon-mounted harness with twin-pistol auto-firing, scratched matte-black plating with kill-streak tally, mid-pounce-leap with all four legs extended, snarl-LED display on face-plate',
       'WAR-WALKER DREADNOUGHT — towering 3.5-meter bipedal war-walker striding behind marine squad, twin heavy-weapon arms (left rotary-cannon mid-fire / right chain-cannon mid-spin-up), wide-stance pose absorbing recoil, scratched bone-and-charcoal plating with unit-skull insignia, smoke trailing from previous shots',
-      'GUN-DRONE TURRET DEPLOYED — knee-high automated turret-platform deployed on cracked pavement at marine\'s feet, 360-rotating dual-cannon mid-fire in sweeping arc, brass spraying outward, glowing-blue targeting-sensor active, scorch-marks across base-plate from incoming fire, marines arrayed in defensive perimeter around it',
+      "GUN-DRONE TURRET DEPLOYED — knee-high automated turret-platform deployed on cracked pavement at marine's feet, 360-rotating dual-cannon mid-fire in sweeping arc, brass spraying outward, glowing-blue targeting-sensor active, scorch-marks across base-plate from incoming fire, marines arrayed in defensive perimeter around it",
       'POWER-LOADER EXOSUIT COMBAT — chest-high power-loader exosuit (piloted, visible operator in cockpit-cradle) mid-strike with weapon-mounted arm-cannon firing at off-frame target, hydraulic-amber lighting in joints, scratched safety-yellow paint over charcoal plating, mid-pivot alongside marine squad',
       'PATROL-WALKER 4-LEG — head-height four-legged patrol-walker striding alongside marines, dorsal twin-pulse-cannons mid-fire in alternating burst, scratched olive-and-charcoal plating with unit number stenciled, leg-tips kicking up dust, glowing-amber LIDAR sensor on raised mast',
       'COMBAT-FLOATER ARMED SHIELD-PLATFORM — chest-height armored hover-platform deploying riot-shield forward while top-mounted heavy MG mid-fires over the shield-edge, glowing-blue repulsor-lights underneath, scorch-marks on shield-face from absorbed rounds, marines stacking behind it for cover',
       'BIPED MECH AVATAR-STYLE — 4-meter exo-frame mech alongside marines (AMP-suit lineage but not named), twin weapon-arms (left chain-gun mid-fire / right grappler), scratched gunmetal plating with safety-orange unit-stripes, mid-pivot tracking enemy, dust kicked up from foot-impact',
       'WALKER-BOT 6-LEGGED CHEST-HIGH — chest-height six-legged combat walker striding alongside marines, dorsal weapon-pod mid-fire with twin missile-launchers blooming exhaust-trails, articulated leg-tips picking through rubble, mission-patch bolted to side-armor, mid-pivot toward fresh target',
       'COMBAT-BOT TRIPEDAL — waist-height three-legged combat-bot striding alongside marines with central weapon-mount (rotary cannon mid-fire), three legs pumping in alternating rhythm, scratched matte-black plating with red kill-streak ladder, mid-stride dust-kick from three feet simultaneously',
-      'DREADNOUGHT 40K-STYLE — towering 4-meter walking sarcophagus dreadnought (the kind containing a fallen marine\'s body, weapon-arms grafted to chassis), twin heavy-bolters mid-fire, ornate sarcophagus-chest with iconography, mid-stride alongside marines, hydraulic-thunder reading',
+      "DREADNOUGHT 40K-STYLE — towering 4-meter walking sarcophagus dreadnought (the kind containing a fallen marine's body, weapon-arms grafted to chassis), twin heavy-bolters mid-fire, ornate sarcophagus-chest with iconography, mid-stride alongside marines, hydraulic-thunder reading",
       'HOVER GUN-PLATFORM SQUAD-LEAD — head-height hover gun-platform leading marine squad through ruined street, underslung quad-cannon mid-fire sweeping the street ahead in walking suppression, glowing-blue repulsor-pads under hull, scratched bone-white-and-red paint, brass cascading onto pavement below',
     ],
     instructions: `Each entry is ONE specific allied combat tech unit (robot / drone / walker / war-mech) fighting alongside the marine squad, 35-65 words. Format: "TECH TYPE CAPS + SCALE — physical description + weapon + mid-action + relationship-to-squad + visual detail". Vary across the 10 categories. STRICT BAN on Star Wars / Halo IP names AND titan-class scale. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
@@ -1597,18 +1600,18 @@ Each entry MUST:
       'SUPPRESSING-FIRE TRACER-WALLS — opposing enemy fire-curtains crossing the frame in colored tracer-arcs as the squad advances under them, hot-white and red-orange tracers, squad heads-down mid-advance through the fire-walls',
       'DISTANT-VEHICLE EXPLOSION — enemy tank just destroyed in mid-distance behind the squad, secondary explosions chaining out from the wreck, black smoke-column rising into the sky, ammunition cooking off audibly',
       'DROP-POD ATMOSPHERIC IMPACT — friendly drop-pod just slammed into the ground 50 meters from the squad, dust-cloud expanding outward, troopers visibly emerging from the pod-hatches still venting plasma',
-      'MORTAR WALKS GROUND — sequential enemy mortar-impacts walking across the open ground past the squad\'s position, dust-columns rising in a line, the squad bracing for the next impact in sequence',
+      "MORTAR WALKS GROUND — sequential enemy mortar-impacts walking across the open ground past the squad's position, dust-columns rising in a line, the squad bracing for the next impact in sequence",
       'PLASMA-STORM OVERHEAD — enemy plasma-artillery storm overhead, plasma-bolts streaking across the sky in arcing lines, ground impacts visible at distance throwing dust-columns, squad heads-down advancing through the storm',
       'BUILDING-COLLAPSE BEHIND — a building just collapsed behind the squad from artillery-strike, dust-cloud rolling outward toward camera, chunks of concrete and rebar falling from the collapse-zone, debris in the air',
-      'WALL-OF-FIRE FOREGROUND — wall of flames from a flame-thrower (squad\'s or enemy\'s) bursting across the foreground, squad backlit edge-orange against the flame-wall, heat-shimmer distorting the air above',
+      "WALL-OF-FIRE FOREGROUND — wall of flames from a flame-thrower (squad's or enemy's) bursting across the foreground, squad backlit edge-orange against the flame-wall, heat-shimmer distorting the air above",
       'AERIAL-STRAFE OVERHEAD — friendly gunship strafing pass overhead, weapon-flashes visible from above the squad, brass falling from sky in motion-blur streaks, exhaust-trails crossing the upper frame',
-      'GROUND-CRACK FROM TITAN — distant titan-class mech footfall sending ground-shock through the squad\'s position, visible ground-crack splitting outward across the pavement, dust escaping from the crack at distance',
+      "GROUND-CRACK FROM TITAN — distant titan-class mech footfall sending ground-shock through the squad's position, visible ground-crack splitting outward across the pavement, dust escaping from the crack at distance",
       'GRENADE-BLOOM MIDGROUND — fresh grenade-bloom bursting at midground between the squad and an enemy position, frag-spread frozen mid-burst with dust expanding, target-area briefly over-exposed',
       'CHEMICAL-CLOUD ROLLING — chemical-warfare cloud (greenish-yellow / purple-violet) rolling across the battlefield, squad in respirator-helms wading through it weapons-up, distant figures barely visible through the haze',
       'CARRIER-AIRSHIP LOOMING — friendly carrier-airship looming in the upper background of the battle-zone, visible deploying additional dropships from chassis-bays, scale-prover for the operational scope',
       'VEHICLE-WRECK FIREBALL — fresh tank-wreck fireball burning in midground behind the squad, secondary munitions cooking off audibly, black smoke-column rising into the sky, fire-glow uplighting the squad',
       'ALIEN-CREATURE SWARM CLOSING — alien-creature swarm visible closing at distance, scuttling shapes (or biped-runners) resolving from smoke, squad bracing weapons-up against the incoming charge, urgency reading immediate',
-      'AIRBORNE-DEBRIS RAIN — debris from a prior explosion still raining down across the squad\'s position, chunks of concrete and metal-fragments falling in slow-motion, squad members visibly tracking debris with eyes',
+      "AIRBORNE-DEBRIS RAIN — debris from a prior explosion still raining down across the squad's position, chunks of concrete and metal-fragments falling in slow-motion, squad members visibly tracking debris with eyes",
       'SNIPER-ROUND IMPACT — incoming sniper-round impact on cover immediately next to the lead trooper, sparks and dust spraying from the impact-point, near-miss energy palpable, lead trooper visibly reacting',
       'DROP-SHIP DEPLOYMENT OVERHEAD — friendly drop-ship deploying additional troopers above the squad, rappel-lines extending downward from the open ramp, troopers visible mid-descent on the lines, dust kicked up below',
       'SMOKE-GRENADE BLOOM — friendly smoke-grenade bloom filling the lower half of frame, squad emerging through the smoke weapons-up, concealment-cover for the advance, gray smoke-tendrils rising',
@@ -1740,7 +1743,7 @@ Each entry MUST:
       'Convoy of three rigs running in column formation along a wasteland-spine ridge, hero rig in the lead with antenna spines bristling, dust-trails braiding behind all three, crew on each waving back-and-forth with signal-mirrors across the gaps, distant ruined mega-spire on horizon',
       'Rig mid-launch off a ramp built from salvaged debris, all four wheels off the ground mid-arc, crew braced inside with hands gripping the cage, driver leaning forward with goggles flashing, plasma-drive exhaust trailing behind in a bright orange tail',
       'Rig roaring through a dust-storm with the headlight-cones cutting through the orange haze, driver leaning forward to read the obscured path, two crew on rooftop scanning for off-frame threats with goggles fogged and bandanas pulled tight, the whole rig coated in a layer of settling dust',
-      'Rig parked at a fuel-cache with two crew mid-refill — one hauling a glowing plasma-cell from the cache to the rig\'s engine-block, the other operating a hand-pump to transfer thermal-fluid into the auxiliary tank, lookout on roof scanning with pulse-rifle ready',
+      "Rig parked at a fuel-cache with two crew mid-refill — one hauling a glowing plasma-cell from the cache to the rig's engine-block, the other operating a hand-pump to transfer thermal-fluid into the auxiliary tank, lookout on roof scanning with pulse-rifle ready",
       'Rig mid-pursuit closing on an enemy raider-rig ahead, hero driver leaning forward over the controls, two crew on the rooftop firing scavenged Gauss-cannons at the pursued vehicle, the gap closing visibly with each second, dust-cloud kicked up filling the space between them',
       'Rig pit-stopped at a rust-tower graveyard with three crew mid-bush-fix repair on the front spike-plate, one welding a cracked spike back, one hammering bent rebar straight, one hand-cranking the fusion-cell into a higher charge state, lookout on roof with binocs',
     ],
@@ -1785,7 +1788,7 @@ Each entry MUST:
       'Collapsed mega-city ruins at dusk, far-future skyscraper-skeletons half-buried in dust-drifts dominating the horizon, the skyline a jagged silhouette against the burning sunset, vegetation-mutations climbing the lower levels',
       'Acid-flat with toxic pools reflecting iridescent magenta and cyan, rust-formations growing organically from the chemical sludge, steam rising slow off the surface, a single skeletal rust-spire reflecting in a still pool',
       'Crashed orbital debris-field at dawn, fallen satellites and drop-pods half-buried in sand smoking from atmospheric entry, scavenger figures visible in the deep distance approaching cautiously, dawn-blue ambient with first warm orange at horizon',
-      'Endless dune-sea at midday, rolling sand-dunes stretching to every horizon, the lone rig\'s tracks visible as a single line across the crest of the foreground dune, sun bleaching everything pale-yellow, a sandstorm wall building in the distance',
+      "Endless dune-sea at midday, rolling sand-dunes stretching to every horizon, the lone rig's tracks visible as a single line across the crest of the foreground dune, sun bleaching everything pale-yellow, a sandstorm wall building in the distance",
       'Hidden gulch oasis at twilight, narrow rocky gulley with a small fuel-pool reflecting the violet sky, scavenger-tent encampment tucked against the wall, fire-pit smoke rising straight up, refuge from the wasteland beyond',
       'Wasteland-spine ridge at golden hour, long rocky spine running across the landscape, dramatic vista from high ground showing dust-canyons and salvage-yards far below, the rig small on the ridge silhouetted against the burning sky',
       'Cracked desert hardpan during sandstorm at twilight, orange particulate filling the upper sky and dimming the sun to a dull red disk, visibility limited to mid-distance, the rig small in the storm-haze with headlights cutting through',
@@ -1794,8 +1797,8 @@ Each entry MUST:
       'Mountain-pass canyon at dawn with rust-streaked rock walls, narrow road carved through ancient post-collapse landscape, dust-drifts piled against the walls, distant rust-tower skeleton visible at the canyon mouth',
       'Acid-flat at sunset, toxic pools reflecting blood-orange and crimson, rust-stalactites hanging from a collapsed gantry-skeleton overhead, chemical-haze hanging low, beauty hiding lethality',
       'Open mesa-plain at midday, flat hardpan stretching for kilometres with isolated wind-carved rock-pillars rising at intervals, mirage-shimmer at distance, dust-cloud from approaching pursuit visible at the deep horizon',
-      'Crashed orbital habitat-ring section at dusk, massive curved structure embedded in cracked desert, rusted and decayed for decades, scavenger-camps visible in the structure\'s shadow, dusk-sky tinted violet behind',
-      'Dune-sea at dawn with frost on the windward sand, sun cresting the horizon casting long blue-shadow on the leeward, the rig\'s tracks visible as twin lines across the foreground dune, distant rust-tower silhouette at horizon',
+      "Crashed orbital habitat-ring section at dusk, massive curved structure embedded in cracked desert, rusted and decayed for decades, scavenger-camps visible in the structure's shadow, dusk-sky tinted violet behind",
+      "Dune-sea at dawn with frost on the windward sand, sun cresting the horizon casting long blue-shadow on the leeward, the rig's tracks visible as twin lines across the foreground dune, distant rust-tower silhouette at horizon",
       'Salvage-yard graveyard with a fresh raider-encampment, captured rigs being stripped for parts, fires burning in scrap-barrels, war-banners hanging from the wreckage, dust-haze rolling through in the late afternoon light',
       'Wasteland-spine ridge during a thunderstorm, dramatic clouds rolling overhead with intermittent lightning flashes briefly illuminating the spine, the rig small on the ridge silhouetted against the storm-front, dust whipping in the wind',
     ],
@@ -1843,22 +1846,22 @@ Each entry must specify:
 • Motion or activity (roaring / pursuit / repair / convoy / jump)`,
     touchpoints: [
       'LOW-CHASE FROM ROAD — camera flush against cracked desert hardpan as the rig roars past at speed, rear of rig dominating upper frame with welded scrap-armor plating, dust-cloud kicked up by rear wheels filling lower frame, exhaust pipes belching smoke upward',
-      'OVER-THE-BONNET POV — camera mounted on the rig\'s spike-ram prow looking forward at oncoming wasteland, hood-ornament (welded scrap-metal skull) in lower foreground, the road stretching ahead with another rig at vanishing point being pursued',
+      "OVER-THE-BONNET POV — camera mounted on the rig's spike-ram prow looking forward at oncoming wasteland, hood-ornament (welded scrap-metal skull) in lower foreground, the road stretching ahead with another rig at vanishing point being pursued",
       'AERIAL DRONE FOLLOW — overhead helicopter-shot tracking the rig from above-left, dust-trail extending behind across the cracked salt-flat, distant wasteland vista of wrecked cars and burning oil-derricks',
       'PARALLEL-RUN-WITH-RIG — camera car alongside the rig at matching speed, three crew leaning out side-hatches firing improvised weapons at off-frame pursuer, side-armor in detail (welded license plates and oil-drum panels), motion-blur on the ground beneath',
       'DRIVER-OUT-WINDOW — driver leaning halfway out the side window mid-drive, war-painted face and goggles, one hand white-knuckled on the wheel through the open frame, scrap-armor inches from their elbow, the wasteland streaking past in motion-blur',
-      'GUNNER-ON-ROOF POV — POV from the rig\'s roof-gunner position firing a welded-together heavy-MG at an off-frame pursuer, weapon-barrel and brass-rain in lower foreground, the rig\'s antenna-pole forest visible at frame-edge, ground-haze below',
+      "GUNNER-ON-ROOF POV — POV from the rig's roof-gunner position firing a welded-together heavy-MG at an off-frame pursuer, weapon-barrel and brass-rain in lower foreground, the rig's antenna-pole forest visible at frame-edge, ground-haze below",
       'REAR-OF-RIG ASCENDING — camera at the rear of the hero rig as three smaller pursuit-buggies close in from behind across the dust-cloud, brass casings raining from a roof-mounted gunner firing back, smoke and grit filling the space between',
       'CRASHED-VS-RUNNING WIDE — wide wasteland vista with the hero rig running in midground at speed, a wrecked-and-burning pursuer in deep foreground silhouetted black against the smoke, distant skyline of post-apoc ruin',
-      'TOTEM-ANTENNA FOREGROUND — towering totem-pole/war-banner-pole rising from the rig\'s rear deck in extreme foreground, mounted with skulls and trophies, rig body extending behind dominated by the antenna spines, crew on deck below',
+      "TOTEM-ANTENNA FOREGROUND — towering totem-pole/war-banner-pole rising from the rig's rear deck in extreme foreground, mounted with skulls and trophies, rig body extending behind dominated by the antenna spines, crew on deck below",
       'GANG OF RIGS CONVOY — wide convoy of 4-5 mismatched scrap-welded rigs in loose formation across cracked desert hardpan, hero rig leading at centre, dust-trails braiding behind all of them, single sun overhead',
-      'CHASING-LEAD POV — POV from a pursuing rig closing on the hero rig ahead, road dust between them, hero rig\'s exhaust-smoke trailing back toward camera, pursuit-gunner\'s weapon-barrel visible at frame edge',
+      "CHASING-LEAD POV — POV from a pursuing rig closing on the hero rig ahead, road dust between them, hero rig's exhaust-smoke trailing back toward camera, pursuit-gunner's weapon-barrel visible at frame edge",
       'PIT-CREW MID-REPAIR — rig stopped in a hidden gulch with 4 crew swarming over it mid-bush-fix repair (welding a cracked chassis, jacking up a wheel, hand-cranking fuel-pump, replacing a broken antenna), dust-storm rolling in deep distance',
       'JUMP-MID-AIR — rig caught mid-launch off a dune-crest, all four wheels off the ground in mid-arc, dust trailing behind from take-off, crew braced inside, the landing strip of cracked dust visible below',
       'DUSK-SILHOUETTE WIDE — hero rig silhouetted edge-amber against a burning Mad Max sunset sky, massive dust-trail dominating the lower frame, antenna-spines reading black against the orange',
       'NIGHT-FIRE-LIT RIG — night scene with the rig lit only by its own torch-flame / improvised flame-thrower / fire-pit on the rear deck, crew silhouettes against the firelight, wasteland deep-dark around them',
       'WHIRLWIND CIRCLE — rig at the center of a swirling sandstorm / dust-devil, crew bracing against the wind with arms raised, antenna-poles bending, sand visibly streaming past in vortex motion',
-      'GUN-MOUNT REVERSE POV — camera at the rear of the rig looking forward across the deck, the welded gun-mount and crew silhouettes against the forward wasteland landscape, the driver\'s helmet visible far ahead through the cab-frame',
+      "GUN-MOUNT REVERSE POV — camera at the rear of the rig looking forward across the deck, the welded gun-mount and crew silhouettes against the forward wasteland landscape, the driver's helmet visible far ahead through the cab-frame",
       'WIDE-VALLEY APPROACH — hero rig descending into a wide salvage-yard valley from a high vantage, wrecked vehicles and scrap-piles scattered across the floor below, smoke columns rising from distant fires, the rig small at the entry',
       'CHASE-RAM IMPACT — frozen moment of two rigs impacting in mid-chase (ramming / spike-plates locking / pit-maneuver), dust and debris exploding outward, both crews braced and shouting, motion-blur in the surrounding wasteland',
       'SUNSET-OVER-THE-FLATS — wide flat horizon at burning sunset with the rig small in deep distance, a massive dust-trail extending across the entire frame behind it, sky filling 2/3 of the frame with theatrical color',
@@ -1893,10 +1896,10 @@ Each entry must specify:
       'SANDSTORM SEPIA WALL — massive sandstorm wall dominating the deep distance and upper-frame sky in orange-sepia, rig in foreground reading in cool tones against the wall, crew bracing for the incoming weather',
       'DAWN BLOOD-RED HORIZON — pre-sunrise blood-red horizon bleeding into deep-violet sky overhead, rig silhouetted edge-red against the burning band, urgency mood, hard shadows still long',
       'NEON-CYBERPUNK URBAN SCAVENGER — abandoned urban ruin with broken neon signs uplighting the rig from below in cyan-magenta bleed, wet pavement reflecting the colors, hard color contrast against the ruined backdrop',
-      'HEADLIGHTS-IN-DUST CONES — rig\'s own headlights cutting through dust as primary light source, hard cones of yellow-white visible projecting forward, the rig itself partially silhouetted, beyond-cone wasteland in shadow',
+      "HEADLIGHTS-IN-DUST CONES — rig's own headlights cutting through dust as primary light source, hard cones of yellow-white visible projecting forward, the rig itself partially silhouetted, beyond-cone wasteland in shadow",
       'MOLOTOV-IGNITION FOREGROUND — molotov cocktail or thermite-charge mid-ignition in extreme foreground, bright orange uplight on the rig and crew, scene briefly over-exposed where flame is, hard shadow contrast',
       'STORM-CELL LIGHTNING FLASH — pre-storm dark wasteland with actinic-white lightning forks branching between charged storm-clouds, briefly silhouetting the rig in stark white-on-black, deep shadow between flashes',
-      'DAWN COLD-BLUE WITH FIRE-PIT — pre-sunrise cold-blue ambient across the wasteland with the rig\'s own fire-pit / torch providing warm accent, dual-color contrast between cold sky and warm rig',
+      "DAWN COLD-BLUE WITH FIRE-PIT — pre-sunrise cold-blue ambient across the wasteland with the rig's own fire-pit / torch providing warm accent, dual-color contrast between cold sky and warm rig",
       'OVERCAST APOC-GREY — overcast post-apoc sky providing diffuse cold-grey light, low contrast, muted tones across the rig and wasteland, somber post-collapse mood',
       'GAS-FLARE GLOW DISTANT — distant gas-flare or burning oil-derrick in deep distance providing warm orange glow on the horizon, rig in foreground catching some of the warm-side light',
       'SUNSET BLOOD-ORANGE EXTREME — sun at horizon bleeding maximum-saturation blood-orange across the entire sky, rig silhouetted full-black against the burning sky, post-apoc operatic finale energy',
@@ -1934,10 +1937,10 @@ Each entry must specify:
   • **ENGINE-FIRE COMPLICATION** — rig's own engine catching fire mid-drive, smoke pouring from hood, crew trying to put it out
   • **RAM-PRONG IMPACT-MOMENT** — rig's ram-prong impacting another vehicle, debris and crew flying`,
     touchpoints: [
-      'DUST-DEVIL SPIRAL — towering dust-devil spiral on the horizon at midground level, the dust-column extending up into the sky, the rig\'s path likely intersecting it within seconds, atmospheric drama',
+      "DUST-DEVIL SPIRAL — towering dust-devil spiral on the horizon at midground level, the dust-column extending up into the sky, the rig's path likely intersecting it within seconds, atmospheric drama",
       'SANDSTORM WALL APPROACHING — massive sandstorm wall rolling in from the deep horizon dominating the upper third of the frame in orange-sepia, the rig in foreground silhouetted against the wall, ominous',
       'VEHICLE-WRECK FIREBALL — fresh wrecked pursuer vehicle fireball in midground behind the hero rig, secondary explosions chaining out, black smoke-column rising into the sky',
-      'MOLOTOV-EXPLOSION MID-AIR — molotov cocktail exploding mid-air or impacting against a pursuer\'s windshield, bright orange fireball mid-bloom, glass shattering, hands releasing the throw still visible',
+      "MOLOTOV-EXPLOSION MID-AIR — molotov cocktail exploding mid-air or impacting against a pursuer's windshield, bright orange fireball mid-bloom, glass shattering, hands releasing the throw still visible",
       'OIL-DERRICK BURNING DISTANT — burning oil-derrick or fuel-depot in deep distance with massive smoke-column rising into the sky, the rig speeding past in foreground silhouetted against the orange backdrop',
       'WRECKAGE-SCATTERED FOREGROUND — wrecks of prior crashes scattered across the foreground terrain (burned-out car-shells, twisted metal, abandoned scrap), the rig threading between them at speed',
       'VULTURES-CIRCLING OVERHEAD — flock of vultures or carrion-birds circling overhead in the upper-frame sky, eyeing the wasteland for fresh kills, atmospheric memento-mori',
@@ -1945,15 +1948,15 @@ Each entry must specify:
       'MIRAGE-HEAT-SHIMMER — heat-shimmer rising from the cracked desert hardpan creating a mirage-distortion in mid-distance, the pursuer at the heat-line dissolving into rippling air',
       'DUST-CLOUD-OVERTAKE — massive dust-cloud kicked up by pursuit closing in from behind, partially obscuring the rear of the hero rig, pursuit-vehicles emerging through the cloud',
       'FUEL-SPILL TRAIL — leaking fuel-can trail behind the rig with sparks dangerously close from the rear gun-mount, the spill ignition risk imminent, gunner glancing back',
-      'CONVOY-FLARE OVERHEAD — signal-flare arcing overhead from a friendly or enemy convoy in the deep distance, the flare\'s smoke-trail crossing the upper frame, message-implied',
-      'SUPPRESSION-FIRE TRACER — incoming tracer-rounds from a pursuer\'s MG creating colored arcs in the air around the hero rig, near-misses sparking off the welded-armor plating',
-      'CHAIN-WHIP CRACK — heavy chain mid-swing from a chain-mounted weapon impacting an enemy vehicle\'s windshield, glass shattering, the enemy driver visibly recoiling',
+      "CONVOY-FLARE OVERHEAD — signal-flare arcing overhead from a friendly or enemy convoy in the deep distance, the flare's smoke-trail crossing the upper frame, message-implied",
+      "SUPPRESSION-FIRE TRACER — incoming tracer-rounds from a pursuer's MG creating colored arcs in the air around the hero rig, near-misses sparking off the welded-armor plating",
+      "CHAIN-WHIP CRACK — heavy chain mid-swing from a chain-mounted weapon impacting an enemy vehicle's windshield, glass shattering, the enemy driver visibly recoiling",
       'DUNE-CREST LAUNCH — dune-crest mid-launch as the rig comes off the rise mid-arc, all four wheels off the ground, dust trailing behind from take-off, the landing-flat visible below',
       'ROAD-WARRIOR HORDE INCOMING — horde of pursuit-vehicles visible at the deep horizon closing in across the wasteland, multiple silhouettes at distance, dust-trails braiding behind them',
       'THUNDERSTORM ROLLING — thunderstorm rolling across the wasteland in deep distance with intermittent lightning flashes briefly illuminating the rig, the storm-front extending across the horizon',
-      'WATER-OASIS REVELATION — sudden glimpse of a green water-oasis ahead amid the desolation, water glistening, the rig\'s crew visibly reacting in surprise, brief beauty in the wasteland',
-      'ENGINE-FIRE COMPLICATION — rig\'s own engine catching fire mid-drive, smoke pouring from the hood, crew leaning out with fire-extinguisher or jacket to smother it, drive continuing',
-      'RAM-PRONG IMPACT-MOMENT — rig\'s ram-prong impacting another vehicle in frozen moment, debris and crew flying from the impacted vehicle, the hero rig\'s prow visibly buckling',
+      "WATER-OASIS REVELATION — sudden glimpse of a green water-oasis ahead amid the desolation, water glistening, the rig's crew visibly reacting in surprise, brief beauty in the wasteland",
+      "ENGINE-FIRE COMPLICATION — rig's own engine catching fire mid-drive, smoke pouring from the hood, crew leaning out with fire-extinguisher or jacket to smother it, drive continuing",
+      "RAM-PRONG IMPACT-MOMENT — rig's ram-prong impacting another vehicle in frozen moment, debris and crew flying from the impacted vehicle, the hero rig's prow visibly buckling",
     ],
     instructions: `Each entry is ONE specific Mad Max wasteland phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + wasteland-context". STRICT Mad Max aesthetic — NO clean industrial work, NO pristine nature, NO fantasy. Amplifies the chase/scavenger moment. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
@@ -2174,19 +2177,19 @@ Each entry must specify:
 • Full-body visibility (always head to feet)
 • What dominates the frame (the robot's silhouette + key environmental detail)`,
     touchpoints: [
-      'CINEMATIC FULL-BODY EYE-LEVEL — camera positioned at robot\'s chest-height looking straight on, full body centered in the frame from feet on lower edge to top of helm at upper third, environment receding equally on both sides, classic museum-piece composition',
+      "CINEMATIC FULL-BODY EYE-LEVEL — camera positioned at robot's chest-height looking straight on, full body centered in the frame from feet on lower edge to top of helm at upper third, environment receding equally on both sides, classic museum-piece composition",
       'HERO-SHOT LOW-3/4 ANGLE — camera positioned below knee-level looking up at the robot from 3/4 angle, full body extending into upper frame, robot looming hero-style with shoulders and helm dominant in upper half, environment visible at sides',
-      'WORM\'S-EYE LOW LOOKING UP — camera flush against the ground looking straight up at the robot, full body extending vertically into upper frame, sky or ceiling visible behind the robot\'s head, dramatic upward perspective',
+      "WORM'S-EYE LOW LOOKING UP — camera flush against the ground looking straight up at the robot, full body extending vertically into upper frame, sky or ceiling visible behind the robot's head, dramatic upward perspective",
       'OVER-THE-SHOULDER FROM ENVIRONMENT — POV from behind a partial silhouette in extreme foreground (another figure / equipment / doorframe) looking at the robot in midground, full body framed by the foreground element',
       'WIDE ESTABLISHING-SHOT — wide vista with the robot at midground as one element among many in the environment, full body visible at maybe 30% of frame height, multi-tier depth around them, the world is half the story',
       'THREE-QUARTER MID-DISTANCE — robot at three-quarter angle to camera at 25-40% of vertical frame, environment receding to deep distance behind, classic sci-fi concept-art framing with character + world balanced',
-      'GOD\'S-EYE ANGLED-DOWN — camera positioned above the robot looking down at angle (not straight-down), full body visible from above-front perspective, head and shoulders prominent in foreground, legs in midground',
+      "GOD'S-EYE ANGLED-DOWN — camera positioned above the robot looking down at angle (not straight-down), full body visible from above-front perspective, head and shoulders prominent in foreground, legs in midground",
       'SILHOUETTE BACKLIT WIDE — wide shot with robot silhouetted black against bright background (sunset sky / window / explosion / energy-discharge), full body silhouette readable, environment glowing behind',
       'WALKING-AWAY FROM CAMERA — robot mid-stride walking away from camera into the deeper scene, full body visible from rear, head at upper-frame, feet at lower-frame, the destination ahead of them visible',
       'SIDE-PROFILE MID-STRIDE — camera positioned 90-degrees to robot mid-stride at chest-height, motion-blur on background, full body in dynamic motion from one side, every joint articulation visible',
       'STAIRWELL DEEP-PERSPECTIVE — robot at top of long stairwell or end of a deep corridor with strong perspective leading the eye, full body framed at the vanishing-point destination, dramatic geometric composition',
       'WINDOW-FRAME WIDE — robot framed by a window or doorway in foreground or midground, full body visible through the frame, the frame itself creating compositional interest, environment visible beyond',
-      'REFLECTION-SURFACE FULL-BODY — robot\'s full body reflection visible in a mirror / window / wet floor / glass-table-surface, both the robot and the reflection in the frame, doubling the figure',
+      "REFLECTION-SURFACE FULL-BODY — robot's full body reflection visible in a mirror / window / wet floor / glass-table-surface, both the robot and the reflection in the frame, doubling the figure",
       'REVOLVING-PLATFORM WIDE-CIRCULAR — robot standing on a circular platform with environment radiating outward around them, full body visible centered on the platform, dramatic cinematic angle',
       'MID-ACTION FREEZE-FRAME — robot mid-leap / mid-strike / mid-fire / mid-charge caught in a freeze-frame moment, full body in dynamic motion captured at the peak of action, motion-blur on background',
       'LONE-FIGURE WIDE-LANDSCAPE — robot small in midground at maybe 15% of frame height against a vast environmental landscape, scale-prover for the world, the figure tiny but readable as the focal subject',
@@ -2217,7 +2220,7 @@ Each entry must specify:
   I. **DAWN COLD-BLUE PRE-MISSION** (~5%) — pre-sunrise cold blue ambient with warm accent from robot\'s own glowing chest-core or energy-conduits
   J. **NIGHT WITH ROBOT\'S OWN GLOW** (~5%) — deep-dark scene with the robot\'s own glowing eyes / chest-core / energy-conduits as primary light source`,
     touchpoints: [
-      'CINEMATIC RIM-LIGHT — strong directional rim-light catching the robot\'s silhouette edges in bright cyan-white from behind-left, hard shadow on the body-mass with bright edge-line tracing every joint and panel, dramatic cinematic separation from background',
+      "CINEMATIC RIM-LIGHT — strong directional rim-light catching the robot's silhouette edges in bright cyan-white from behind-left, hard shadow on the body-mass with bright edge-line tracing every joint and panel, dramatic cinematic separation from background",
       'DRAMATIC THREE-POINT — classical cinematography three-point lighting: warm key from front-left, cool fill from front-right, bright rim from behind, robot rendering as a sculpted museum-piece with every panel and surface texture readable',
       'NEON CYBERPUNK MULTI-COLOR — neon signage in magenta and cyan and amber uplighting / sidelighting the robot in multiple direction, color blending across the chassis, wet pavement reflections doubling the colors',
       'GOLDEN-HOUR ROBOT-PORTRAIT — warm golden-hour sun raking across the chassis at low angle, long shadows stretching across the ground, atmospheric haze gold, every surface detail catching the warm light beautifully',
@@ -2225,10 +2228,10 @@ Each entry must specify:
       'SOFT INTERIOR AMBIENT — clean diffuse interior lighting from above (laboratory / corporate / station overhead LED arrays), shadowless precision, robot rendering in cool clean tones, technical mood',
       'STORMY DRAMATIC SKY — overcast thunderstorm sky with intermittent lightning flashes briefly silhouetting the robot in stark white-on-dark, deep shadow between flashes, dramatic atmospheric tension',
       'HOLOGRAPHIC PROJECTION GLOW — robot lit primarily by holographic-displays and data-streams floating around it in cyan and amber and magenta, soft accent lighting from multiple angles, technical sci-fi atmosphere',
-      'DAWN COLD-BLUE PRE-MISSION — pre-sunrise cold blue ambient ground-light with warm accent from the robot\'s own glowing chest-core / energy-conduits / running-lights, dual-color contrast, mission-readiness mood',
-      'NIGHT ROBOT-SELF-LIT — deep-dark scene with the robot\'s own glowing eyes / chest-core / energy-conduits as primary illumination, hard dramatic shadows on the surrounding environment, mysterious mood',
+      "DAWN COLD-BLUE PRE-MISSION — pre-sunrise cold blue ambient ground-light with warm accent from the robot's own glowing chest-core / energy-conduits / running-lights, dual-color contrast, mission-readiness mood",
+      "NIGHT ROBOT-SELF-LIT — deep-dark scene with the robot's own glowing eyes / chest-core / energy-conduits as primary illumination, hard dramatic shadows on the surrounding environment, mysterious mood",
       'SUNSET BACKLIT WITH ATMOSPHERIC HAZE — sun at horizon behind the robot with warm-orange atmospheric haze diffusing the light, robot silhouetted edge-amber, contemplative mood',
-      'OVERHEAD KEY WITH SHADOW POOL — strong overhead directional key-light casting hard shadow pool around the robot\'s feet, body in high contrast, theatrical museum-piece composition',
+      "OVERHEAD KEY WITH SHADOW POOL — strong overhead directional key-light casting hard shadow pool around the robot's feet, body in high contrast, theatrical museum-piece composition",
       'WINDOWED-INTERIOR WITH LIGHT-SHAFTS — clean interior lit by sun-shafts streaming through tall windows at angle, light-shafts catching airborne dust, robot positioned in the shaft for hero-moment',
       'INDUSTRIAL SODIUM-AMBER WITH STROBE-ACCENT — sci-fi industrial sodium-amber overhead with intermittent strobing red emergency-light, hard shadow contrast pulsing in rhythm, urgency mood',
       'CRYSTAL-CAVE BIOLUMINESCENT GLOW — bioluminescent crystals or alien-flora providing primary glow in cyan or magenta from multiple angles, ethereal otherworldly lighting, alien mood',
@@ -2265,9 +2268,9 @@ Each entry must specify:
   • **PASSING-AIRSHIP OVERHEAD** — sci-fi airship or shuttle passing overhead at distance
   • **ELECTRICAL-DISCHARGE FROM EQUIPMENT** — equipment in the scene visibly arcing or discharging electricity`,
     touchpoints: [
-      'HOLOGRAPHIC INTERFACE FLOATING — translucent holographic data-display projecting in mid-air near the robot\'s outstretched hand, multi-layer information panels rotating slow with cyan-and-amber text, atmospheric haze catching the projection',
+      "HOLOGRAPHIC INTERFACE FLOATING — translucent holographic data-display projecting in mid-air near the robot's outstretched hand, multi-layer information panels rotating slow with cyan-and-amber text, atmospheric haze catching the projection",
       'ENERGY-DISCHARGE PARTICLE-SHOWER — sparks and energy-particles cascading downward from a recently-fired weapon or activation, glowing trails arcing through the air, brief over-exposure where particles are densest',
-      'COOLANT-VAPOR JET — pressurized coolant-vapor venting from a joint at the robot\'s shoulder or hip in a visible white plume, hot-air shimmer distorting the air around the vent, characteristic hiss-implied',
+      "COOLANT-VAPOR JET — pressurized coolant-vapor venting from a joint at the robot's shoulder or hip in a visible white plume, hot-air shimmer distorting the air around the vent, characteristic hiss-implied",
       'DEBRIS-FIELD MID-AIR — chunks of debris floating mid-air around the robot in slow-motion freeze-frame, dust and fragments suspended at various heights, frozen-moment-of-impact composition',
       'ATMOSPHERIC LIGHT-SHAFT — dramatic god-ray shaft of light cutting diagonally through the scene illuminating the robot from above-side, dust-motes catching the light, theatrical cinematic mood',
       'SECONDARY ROBOT-COMPANION DISTANT — a second humanoid robot visible in the deep distance behind the hero robot, smaller and out-of-focus (NOT competing for focus), suggesting a wider world of robots',
@@ -2277,7 +2280,7 @@ Each entry must specify:
       'PROJECTILE-IN-FLIGHT — an energy-bolt or projectile caught mid-flight crossing the frame near the robot, glowing trail extending behind it, freeze-frame moment of action',
       'EXPLOSION-FAR-DISTANT — explosion in the deep distance providing fire-glow on the horizon, smoke-column rising into the sky, the hero robot in mid-distance silhouetted against the orange glow',
       'DRONE-CAMERA SWARM — small camera-drones hovering around the robot at multiple altitudes filming or scanning, drones with glowing optic-eyes facing inward toward the subject, technological surveillance mood',
-      'PUDDLES-AND-REFLECTIONS — wet ground / reflective floor / glass surface doubling the robot\'s presence in mirror-reflection, both the robot and its reflection in frame composition',
+      "PUDDLES-AND-REFLECTIONS — wet ground / reflective floor / glass surface doubling the robot's presence in mirror-reflection, both the robot and its reflection in frame composition",
       'POWER-CABLE BUNDLES — bundles of glowing power-cables (cyan or amber energy visible through translucent sheaths) snaking through the scene connecting various equipment, scale-prover textural detail',
       'STEAM-VENT IN GROUND — pressurized steam erupting from a grate or vent in the floor near the robot in a vertical plume, the robot partially obscured at lower-body level by the steam',
       'GLOWING ENERGY-FIELD AROUND ROBOT — visible energy-field / shield / aura glowing softly around the robot, multi-color (cyan / amber) shimmer at the field-edge, sci-fi defensive system active',
@@ -2619,18 +2622,31 @@ async function callSonnet(prompt) {
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'x-api-key': ANTHROPIC, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: SONNET, max_tokens: 16000, messages: [{ role: 'user', content: prompt }] }),
+      headers: {
+        'x-api-key': ANTHROPIC,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: SONNET,
+        max_tokens: 16000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
       signal: controller.signal,
     });
     if (!res.ok) throw new Error(`Sonnet ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const data = await res.json();
     return (data.content?.[0]?.text || '').trim();
-  } finally { clearTimeout(timeoutId); }
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 function parseArray(text) {
-  const body = text.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
+  const body = text
+    .replace(/```[a-z]*\n?/gi, '')
+    .replace(/```/g, '')
+    .trim();
   const lines = body.split('\n');
   const entries = [];
   let current = null;
@@ -2639,23 +2655,132 @@ function parseArray(text) {
     const trimmed = raw.trim();
     if (!trimmed) continue;
     const m = trimmed.match(numRe);
-    if (m) { if (current) entries.push(current); current = m[2].trim(); }
-    else if (current) current += ' ' + trimmed;
+    if (m) {
+      if (current) entries.push(current);
+      current = m[2].trim();
+    } else if (current) current += ' ' + trimmed;
   }
   if (current) entries.push(current);
   const cleaned = entries
-    .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+    .map((e) =>
+      e
+        .replace(/^["']|["']$/g, '')
+        .replace(/^[-•*]\s*/, '')
+        .trim()
+    )
     .filter((e) => e.length > 20 && e.length < 1200);
   if (cleaned.length === 0) throw new Error('No numbered entries found in response');
   return cleaned;
 }
 
-const STOPWORDS = new Set(['the','a','an','and','or','but','with','of','in','on','at','to','for','from','by','as','is','are','was','were','be','been','being','have','has','had','this','that','these','those','it','its','they','them','their','her','his','into','onto','through','across','over','under','near','around','between','one','two','three','some','any','all','no','not','than','then','also','so','very','more','most','many','much','each','every','other','another','same','such','only','own','just','still','here','there','where','when','what','who','wide','tall','long','high','low','large','small','massive','huge','vast','above','below','beside','behind','toward','within','throughout']);
+const STOPWORDS = new Set([
+  'the',
+  'a',
+  'an',
+  'and',
+  'or',
+  'but',
+  'with',
+  'of',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'from',
+  'by',
+  'as',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'have',
+  'has',
+  'had',
+  'this',
+  'that',
+  'these',
+  'those',
+  'it',
+  'its',
+  'they',
+  'them',
+  'their',
+  'her',
+  'his',
+  'into',
+  'onto',
+  'through',
+  'across',
+  'over',
+  'under',
+  'near',
+  'around',
+  'between',
+  'one',
+  'two',
+  'three',
+  'some',
+  'any',
+  'all',
+  'no',
+  'not',
+  'than',
+  'then',
+  'also',
+  'so',
+  'very',
+  'more',
+  'most',
+  'many',
+  'much',
+  'each',
+  'every',
+  'other',
+  'another',
+  'same',
+  'such',
+  'only',
+  'own',
+  'just',
+  'still',
+  'here',
+  'there',
+  'where',
+  'when',
+  'what',
+  'who',
+  'wide',
+  'tall',
+  'long',
+  'high',
+  'low',
+  'large',
+  'small',
+  'massive',
+  'huge',
+  'vast',
+  'above',
+  'below',
+  'beside',
+  'behind',
+  'toward',
+  'within',
+  'throughout',
+]);
 
 function signatureOf(entry) {
   const dashIdx = entry.indexOf(' — ');
   let body = dashIdx >= 0 ? entry.slice(dashIdx + 3) : entry;
-  const tokens = body.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter((w) => w.length > 4 && !STOPWORDS.has(w)).slice(0, 20);
+  const tokens = body
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 4 && !STOPWORDS.has(w))
+    .slice(0, 20);
   return [...new Set(tokens)].sort().slice(0, 12).join(' ');
 }
 
@@ -2666,15 +2791,27 @@ function titleOf(entry) {
 }
 
 function dedupe(entries) {
-  const seenSigs = new Map(); const seenTitles = new Map();
-  const kept = []; const dropped = [];
+  const seenSigs = new Map();
+  const seenTitles = new Map();
+  const kept = [];
+  const dropped = [];
   for (const e of entries) {
     if (typeof e !== 'string' || e.length < 20) continue;
     const title = titleOf(e);
-    if (title && seenTitles.has(title)) { dropped.push({ entry: e.slice(0, 80), reason: 'title' }); continue; }
+    if (title && seenTitles.has(title)) {
+      dropped.push({ entry: e.slice(0, 80), reason: 'title' });
+      continue;
+    }
     const sig = signatureOf(e);
-    if (sig.length < 10) { if (title) seenTitles.set(title, e); kept.push(e); continue; }
-    if (seenSigs.has(sig)) { dropped.push({ entry: e.slice(0, 80), reason: 'body' }); continue; }
+    if (sig.length < 10) {
+      if (title) seenTitles.set(title, e);
+      kept.push(e);
+      continue;
+    }
+    if (seenSigs.has(sig)) {
+      dropped.push({ entry: e.slice(0, 80), reason: 'body' });
+      continue;
+    }
     seenSigs.set(sig, e);
     if (title) seenTitles.set(title, e);
     kept.push(e);
@@ -2687,9 +2824,17 @@ async function generateBatch(batchCount) {
   const text = await callSonnet(buildPrompt(batchCount, recipe));
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   let arr;
-  try { arr = parseArray(text); }
-  catch (e) { console.error('Parse failed:', e.message); console.error('First 400 chars:', text.slice(0, 400)); return []; }
-  if (!Array.isArray(arr) || arr.length === 0) { console.warn('  ⚠ Sonnet returned no usable entries'); return []; }
+  try {
+    arr = parseArray(text);
+  } catch (e) {
+    console.error('Parse failed:', e.message);
+    console.error('First 400 chars:', text.slice(0, 400));
+    return [];
+  }
+  if (!Array.isArray(arr) || arr.length === 0) {
+    console.warn('  ⚠ Sonnet returned no usable entries');
+    return [];
+  }
   console.log(`  • Sonnet returned ${arr.length} entries in ${elapsed}s`);
   return arr;
 }
@@ -2697,21 +2842,36 @@ async function generateBatch(batchCount) {
 (async () => {
   const outPath = path.resolve(`scripts/bots/mechbot/seeds/${POOL}.json`);
   let preExisting = [];
-  if (fs.existsSync(outPath)) { try { preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8')); } catch {} }
+  if (fs.existsSync(outPath)) {
+    try {
+      preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    } catch {}
+  }
   const finalTarget = TARGET ?? preExisting.length + COUNT;
   const startCount = preExisting.length;
-  if (TARGET !== null) console.log(`Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`);
-  else console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
-  let pool = [...preExisting]; let iteration = 0;
+  if (TARGET !== null)
+    console.log(
+      `Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`
+    );
+  else
+    console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
+  let pool = [...preExisting];
+  let iteration = 0;
   while (pool.length < finalTarget && iteration < MAX_ITERATIONS) {
     iteration++;
     const stillNeeded = finalTarget - pool.length;
     const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
-    console.log(`\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`);
+    console.log(
+      `\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`
+    );
     const fresh = await generateBatch(batchSize);
-    if (fresh.length === 0) { console.warn('  ⚠ empty Sonnet response — stopping iteration'); break; }
+    if (fresh.length === 0) {
+      console.warn('  ⚠ empty Sonnet response — stopping iteration');
+      break;
+    }
     const within = dedupe(fresh);
-    if (within.dropped.length > 0) console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
+    if (within.dropped.length > 0)
+      console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
     const existingSigs = new Set(pool.map((e) => signatureOf(e)));
     const existingTitles = new Set(pool.map((e) => titleOf(e)).filter(Boolean));
     const newUnique = within.kept.filter((e) => {
@@ -2726,12 +2886,23 @@ async function generateBatch(batchCount) {
     const toAdd = newUnique.slice(0, room);
     pool = [...pool, ...toAdd];
     console.log(`  ✓ Added ${toAdd.length} unique → pool at ${pool.length}/${finalTarget}`);
-    if (toAdd.length === 0 && newUnique.length === 0) { console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on theme, stopping'); break; }
+    if (toAdd.length === 0 && newUnique.length === 0) {
+      console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on theme, stopping');
+      break;
+    }
   }
-  console.log(`\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`);
-  if (DRY) { console.log('\nDry-run — not writing to disk.'); return; }
+  console.log(
+    `\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`
+  );
+  if (DRY) {
+    console.log('\nDry-run — not writing to disk.');
+    return;
+  }
   const bakPath = outPath + '.bak-' + Date.now();
-  if (fs.existsSync(outPath) && preExisting.length > 0) { fs.copyFileSync(outPath, bakPath); console.log(`Backed up existing pool → ${bakPath}`); }
+  if (fs.existsSync(outPath) && preExisting.length > 0) {
+    fs.copyFileSync(outPath, bakPath);
+    console.log(`Backed up existing pool → ${bakPath}`);
+  }
   fs.writeFileSync(outPath, JSON.stringify(pool, null, 2));
   console.log(`✓ Wrote ${pool.length} entries → ${outPath}`);
 })();

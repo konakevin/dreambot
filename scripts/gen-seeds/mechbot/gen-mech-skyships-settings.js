@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/mech_skyships_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SKY+ENVIRONMENT descriptions for MechBot's mech-skyships path. Each describes the SKY (always) and the GROUND BIOME below (when applicable), 14-22 words. The sky is the canvas; the biome below is for context and depth.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKY+ENVIRONMENT descriptions for MechBot's mech-skyships path. Each describes the SKY (always) and the GROUND BIOME below (when applicable), 14-22 words. The sky is the canvas; the biome below is for context and depth.
 
 ━━━ SETTING CATEGORIES — SKY OVER EACH MECHBOT BIOME ━━━
 Most entries (~70%) should be: sky over one of MechBot's other biomes. Tilt the camera up, OR tilt down to show ships passing over the world below. Either angle.
@@ -46,4 +48,7 @@ Deduplicate by: biome-below (or pure-sky-type) + cloud-layer composition + light
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

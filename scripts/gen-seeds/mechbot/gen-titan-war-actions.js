@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/titan_war_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's titan-war-machines path. Each describes what the titan is DOING mid-combat, 12-18 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for MechBot's titan-war-machines path. Each describes what the titan is DOING mid-combat, 12-18 words.
 
 ━━━ ABSOLUTE RULE — ACTIVE WAR ━━━
 The titan is ALWAYS in combat. Mid-engagement freeze-frames. Never idle, never passive. War is happening RIGHT NOW.
@@ -36,4 +38,7 @@ Deduplicate by: primary action + body part involved + visible violence/effect.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

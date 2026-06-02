@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/power_armor_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's power-armor-infantry path. Each describes what the SQUAD is doing, 12-18 words. Squad-level coordination, not individual heroics.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for MechBot's power-armor-infantry path. Each describes what the SQUAD is doing, 12-18 words. Squad-level coordination, not individual heroics.
 
 ━━━ ABSOLUTE RULES ━━━
 - The action involves the WHOLE SQUAD (or visible coordination across multiple troopers)
@@ -33,4 +35,7 @@ Deduplicate by: tactic + squad-formation + visible action across multiple bodies
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

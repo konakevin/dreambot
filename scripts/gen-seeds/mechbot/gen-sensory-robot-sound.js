@@ -7,4 +7,7 @@ generatePool({
   append: true,
   batch: 25,
   metaPrompt: metaPrompts['robot'].sound,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

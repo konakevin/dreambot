@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_closeup_framings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CLOSEUP FRAMING descriptions for StarBot's cyborg-woman path. Each describes a tight camera shot focused on her face, neck, throat, shoulders, or upper chest — showcasing the intricate transition between organic beauty and ornate mechanical internals.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CLOSEUP FRAMING descriptions for StarBot's cyborg-woman path. Each describes a tight camera shot focused on her face, neck, throat, shoulders, or upper chest — showcasing the intricate transition between organic beauty and ornate mechanical internals.
 
 Each entry: 12-20 words. One specific tight framing that highlights ornate mechanical detail near her face.
 
@@ -33,4 +35,7 @@ The beauty is in the DETAIL — where organic skin meets chrome, where you can s
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

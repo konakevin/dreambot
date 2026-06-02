@@ -14,7 +14,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/robot_types.json',
   total: 50,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} COOL ROBOT entries for StarBot's robot-moment path. Each entry is a DENSE phrase (40-60 words) describing a SPECIFIC MISSION-DRIVEN autonomous machine — concept-art-grade, the kind that makes you stop scrolling to zoom in.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COOL ROBOT entries for StarBot's robot-moment path. Each entry is a DENSE phrase (40-60 words) describing a SPECIFIC MISSION-DRIVEN autonomous machine — concept-art-grade, the kind that makes you stop scrolling to zoom in.
 
 THE LOAD-BEARING RULE: Every robot is FOR something specific. Its mission is readable at a glance from its tools, posture, and weathering. The viewer should know within 2 seconds: "this is a SENTINEL" or "this is a CARTOGRAPHER" or "this is a BREACHER." NOT "generic mech in cool environment." NOT "robot hanging out near a waterfall."
 
@@ -230,4 +232,7 @@ EX-U (caped multi-arm cyborg-warrior): "Bipedal cyborg-warrior, deep-charcoal ar
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Each entry begins with body-plan + mission-noun. Match the 14 few-shot examples in density and DNA.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_male_skin_tones.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} SKIN TONE entries for a MALE cyborg path. Each entry is a DENSE phrase (15-25 words) describing the EXACT visual appearance of a cyborg's organic skin — color, undertones, texture, finish, and a subtle sci-fi accent.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKIN TONE entries for a MALE cyborg path. Each entry is a DENSE phrase (15-25 words) describing the EXACT visual appearance of a cyborg's organic skin — color, undertones, texture, finish, and a subtle sci-fi accent.
 
 ━━━ THE BALANCE — neither feminine nor macho ━━━
 
@@ -57,4 +59,7 @@ Examples (variety reference, do not copy):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

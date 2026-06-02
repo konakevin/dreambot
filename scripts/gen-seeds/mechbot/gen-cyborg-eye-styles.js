@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_eye_styles.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CYBORG EYE descriptions for StarBot. Each describes one specific pair of eyes — color, glow quality, and any mechanical augmentation visible. Gender-neutral (shared across male and female cyborgs).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CYBORG EYE descriptions for StarBot. Each describes one specific pair of eyes — color, glow quality, and any mechanical augmentation visible. Gender-neutral (shared across male and female cyborgs).
 
 Each entry: 8-15 words. Eye color + glow/luminance quality + one mechanical detail.
 
@@ -29,4 +31,7 @@ No two entries should share the same color AND same mechanical detail.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

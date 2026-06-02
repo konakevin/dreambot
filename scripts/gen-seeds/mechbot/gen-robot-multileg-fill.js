@@ -11,7 +11,9 @@ generatePool({
   total: 188,
   batch: 15,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} MULTI-LEG DROID entries for StarBot's robot-moment pool. Each entry is a DENSE phrase (25-45 words) describing a SPECIFIC AUTONOMOUS MACHINE with 3 or more legs (tripedal, quadruped, hexapod, six-legged, eight-legged, spider-bodied, crab-bodied, centipede-bodied, etc.).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MULTI-LEG DROID entries for StarBot's robot-moment pool. Each entry is a DENSE phrase (25-45 words) describing a SPECIFIC AUTONOMOUS MACHINE with 3 or more legs (tripedal, quadruped, hexapod, six-legged, eight-legged, spider-bodied, crab-bodied, centipede-bodied, etc.).
 
 ━━━ SCALE — STRICTLY CHARACTER-SCALE ━━━
 
@@ -70,4 +72,7 @@ Examples (variety reference, do not copy):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

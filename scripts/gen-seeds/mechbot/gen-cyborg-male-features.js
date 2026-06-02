@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_male_features.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DOMINANT MECHANICAL FEATURE entries for a MALE cyborg path. Each entry is a DENSE phrase (20-35 words) describing ONE prominent mechanical body part or system that anchors the cyborg's visual identity — a major mechanical feature visible at full-body or half-body framing.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DOMINANT MECHANICAL FEATURE entries for a MALE cyborg path. Each entry is a DENSE phrase (20-35 words) describing ONE prominent mechanical body part or system that anchors the cyborg's visual identity — a major mechanical feature visible at full-body or half-body framing.
 
 ━━━ THE BALANCE — neither feminine nor macho ━━━
 
@@ -85,4 +87,7 @@ Examples (variety reference, do not copy):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

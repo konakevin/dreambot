@@ -11,7 +11,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/tranquil_moments.json',
   total: 80,
   batch: 16,
-  metaPrompt: (n) => `You are writing ${n} DYNAMIC MID-ACTION moments for a sci-fi robot caught in the middle of doing something. Each entry is a short phrase (15-30 words) describing the EXACT MOMENT a robot is captured — present-continuous verb, with environmental detail showing the action is in progress.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DYNAMIC MID-ACTION moments for a sci-fi robot caught in the middle of doing something. Each entry is a short phrase (15-30 words) describing the EXACT MOMENT a robot is captured — present-continuous verb, with environmental detail showing the action is in progress.
 
 THE LOAD-BEARING RULE: every entry shows the robot MID-ACTION. Not "standing." Not "watching." Not "perched." Not "kneeling in flowers." VERB-IN-MOTION captured at the exact frozen moment of impact / strike / stride / discharge / sweep / scan / extraction.
 
@@ -93,4 +95,7 @@ CONSTRUCTION / FORTIFICATION (mid-build):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Each entry is a dense mid-action moment matching the few-shot examples in dynamism and density.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

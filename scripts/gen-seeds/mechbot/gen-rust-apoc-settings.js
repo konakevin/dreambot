@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/rust_apoc_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} WASTELAND descriptions for MechBot's post-apoc-rust-tech path. Each describes WHERE the scavenger scene is happening, 14-22 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WASTELAND descriptions for MechBot's post-apoc-rust-tech path. Each describes WHERE the scavenger scene is happening, 14-22 words.
 
 ━━━ SETTING CATEGORIES ━━━
 - Cracked desert hardpan (heat shimmer, dust devils, distant wreck silhouette)
@@ -34,4 +36,7 @@ Deduplicate by: terrain type + time-of-day + decay-element.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

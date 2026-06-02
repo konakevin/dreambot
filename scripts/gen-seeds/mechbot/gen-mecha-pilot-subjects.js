@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/mecha_pilot_subjects.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} PILOT+MECH pairing descriptions for MechBot's mecha-pilots path. Each describes a specific pilot AND their specific mech in a single 14-22 word phrase.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PILOT+MECH pairing descriptions for MechBot's mecha-pilots path. Each describes a specific pilot AND their specific mech in a single 14-22 word phrase.
 
 Each entry: pilot biology + pilot signature gear + mech archetype + mech signature silhouette.
 
@@ -35,4 +37,7 @@ Deduplicate by: pilot biology + mech silhouette class + signature accent (color/
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Each entry 14-22 words.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

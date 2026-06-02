@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_male_actions.json',
   total: 25,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for StarBot's cyborg-man path. Each describes what the cyborg is DOING when the camera catches him — a dynamic freeze-frame moment, NOT a static pose. He is a cold, dangerous operative — every action radiates lethal precision.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for StarBot's cyborg-man path. Each describes what the cyborg is DOING when the camera catches him — a dynamic freeze-frame moment, NOT a static pose. He is a cold, dangerous operative — every action radiates lethal precision.
 
 Each entry: 10-18 words. One specific action caught mid-motion. Use "He" pronouns.
 
@@ -47,4 +49,7 @@ Deduplicate by: action verb. No two entries should use the same core verb (walks
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/alien_biomech_subjects.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} BIOMECHANICAL ORGANISM descriptions for MechBot's alien-biomechs path. Each describes a single creature-scale flesh-and-machine fusion organism, 14-22 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BIOMECHANICAL ORGANISM descriptions for MechBot's alien-biomechs path. Each describes a single creature-scale flesh-and-machine fusion organism, 14-22 words.
 
 Each entry: body plan + flesh-machine fusion ratio + signature anatomy + bioluminescent/fluid accents.
 
@@ -48,4 +50,7 @@ Deduplicate by: body plan + signature anatomy + flesh-machine fusion ratio.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

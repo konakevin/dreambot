@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_female_characters.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CYBORG WOMAN face/identity descriptions for StarBot. Each describes ONLY her organic face and which major body regions are mechanical — the brief has SEPARATE pools for skin tone, body type, hair, eyes, internal exposure, and glow color, so do NOT repeat those here.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CYBORG WOMAN face/identity descriptions for StarBot. Each describes ONLY her organic face and which major body regions are mechanical — the brief has SEPARATE pools for skin tone, body type, hair, eyes, internal exposure, and glow color, so do NOT repeat those here.
 
 Each entry: 20-30 words. Face ethnicity + which limbs/regions are mechanical + dominant material + one-word energy.
 
@@ -30,4 +32,7 @@ Vary: face ethnicity + which body regions are mechanical + dominant material. No
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

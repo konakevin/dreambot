@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_female_body_types.json',
   total: 100,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} BODY TYPE / SILHOUETTE descriptions for a female cyborg character. Each describes her overall build and physical proportions — the shape Flux should render. These cyborgs come from ALL walks of life but are ALWAYS beautiful.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BODY TYPE / SILHOUETTE descriptions for a female cyborg character. Each describes her overall build and physical proportions — the shape Flux should render. These cyborgs come from ALL walks of life but are ALWAYS beautiful.
 
 Each entry: 12-20 words. Body build + proportions + one defining physical trait + purpose word.
 
@@ -31,4 +33,7 @@ No two entries should describe the same build category with the same proportions
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

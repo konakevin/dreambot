@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_skin_tones.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SKIN TONE descriptions for StarBot's cyborg-woman path. Each describes the organic skin visible on the human parts of a half-machine cyborg woman — her face, neck, décolletage, and any exposed organic patches.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKIN TONE descriptions for StarBot's cyborg-woman path. Each describes the organic skin visible on the human parts of a half-machine cyborg woman — her face, neck, décolletage, and any exposed organic patches.
 
 Each entry: 10-18 words. A specific skin color with undertone, finish, and texture.
 
@@ -36,4 +38,7 @@ Deduplicate by: base hue + undertone + finish. "Moss-green matte" and "jade-gree
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_features.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} DOMINANT CYBORG FEATURE descriptions for StarBot's cyborg-woman path. Each describes one showpiece mechanical body element that dominates 40-50% of the visible frame — the thing your eye goes to first.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DOMINANT CYBORG FEATURE descriptions for StarBot's cyborg-woman path. Each describes one showpiece mechanical body element that dominates 40-50% of the visible frame — the thing your eye goes to first.
 
 Each entry: 15-25 words. One specific mechanical feature with material, texture, and visual detail.
 
@@ -36,4 +38,7 @@ Deduplicate by: body region (arm/leg/torso/spine/head/neck) + material (chrome/a
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

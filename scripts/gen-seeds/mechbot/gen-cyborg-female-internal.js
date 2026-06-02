@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CYBORG INTERNAL EXPOSURE descriptions for a female cyborg character. Each describes ONE visible translucent or open section of her body where you can see the mechanical workings inside.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CYBORG INTERNAL EXPOSURE descriptions for a female cyborg character. Each describes ONE visible translucent or open section of her body where you can see the mechanical workings inside.
 
 Each entry: 15-25 words. One specific internal-reveal detail. Use "her/she" pronouns.
 
@@ -30,4 +32,7 @@ No two entries should describe the same body location with the same type of reve
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

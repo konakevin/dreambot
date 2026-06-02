@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/rust_apoc_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's post-apoc-rust-tech path. Each describes what the rig + crew are DOING, 12-18 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for MechBot's post-apoc-rust-tech path. Each describes what the rig + crew are DOING, 12-18 words.
 
 ━━━ ABSOLUTE RULE — RIG IS ALIVE & MOVING ━━━
 Crew is engaged, rig is running (or actively being worked on). Never abandoned, never decay-pathos. Mad Max road-warrior energy.
@@ -31,4 +33,7 @@ Deduplicate by: primary verb + crew action + interaction-with-environment-or-oth
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

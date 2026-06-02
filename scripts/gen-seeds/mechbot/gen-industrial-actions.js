@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/industrial_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's industrial-machines path. Each describes what the machine is DOING — productive industrial work, 12-18 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for MechBot's industrial-machines path. Each describes what the machine is DOING — productive industrial work, 12-18 words.
 
 ━━━ ABSOLUTE RULE — PRODUCTIVE WORK ━━━
 The machine is working. NEVER fighting, NEVER abandoned, NEVER ceremonial. Doing industry-things RIGHT NOW.
@@ -36,4 +38,7 @@ Deduplicate by: industry verb + body part involved + visible byproduct (dust / s
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

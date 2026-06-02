@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/mecha_pilot_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SETTING descriptions for MechBot's mecha-pilots path. Each describes WHERE the pilot+mech scene takes place, 14-22 words. Setting is half the storytelling.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SETTING descriptions for MechBot's mecha-pilots path. Each describes WHERE the pilot+mech scene takes place, 14-22 words. Setting is half the storytelling.
 
 ━━━ SETTING CATEGORIES (spread across all) ━━━
 - Underground launch bay (vertical silo, lifting platform, blast doors)
@@ -33,4 +35,7 @@ Deduplicate by: setting category + lighting condition.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

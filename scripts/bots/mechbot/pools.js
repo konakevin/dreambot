@@ -31,10 +31,7 @@ const CYBORG_GLOW_COLORS = load('cyborg_glow_colors');
 // (2026-05-17). Bald variants mix in at ~10% rate when rolled. Per Kevin's
 // Attachments (5) IMG_8122 reference — bald chrome head is a striking
 // occasional alternative to hair, not a default.
-const CYBORG_HAIR_STYLES = [
-  ...load('cyborg_female_hair'),
-  ...load('cyborg_bald_chrome_skull'),
-];
+const CYBORG_HAIR_STYLES = [...load('cyborg_female_hair'), ...load('cyborg_bald_chrome_skull')];
 const CYBORG_BODY_TYPES = load('cyborg_female_body_types');
 
 // ─────────────────────────────────────────────────────────────

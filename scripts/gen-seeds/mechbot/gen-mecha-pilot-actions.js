@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/mecha_pilot_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's mecha-pilots path. Each describes what the PILOT is doing in their relationship to the mech, 12-18 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for MechBot's mecha-pilots path. Each describes what the PILOT is doing in their relationship to the mech, 12-18 words.
 
 ━━━ ABSOLUTE RULE — PILOT VISIBLE & MID-MOTION ━━━
 The pilot must be visible in frame and engaged in a clear action. NEVER static-portrait pilot facing camera. The pilot's body language tells the story.
@@ -36,4 +38,7 @@ Deduplicate by: primary verb + pilot's physical relationship to the mech (inside
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

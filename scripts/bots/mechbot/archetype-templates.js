@@ -266,7 +266,17 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
   },
 
   MECHBOT_POWER_ARMOR_INFANTRY: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, subject, action, landscape, composition, engagement, allied_tech, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      subject,
+      action,
+      landscape,
+      composition,
+      engagement,
+      allied_tech,
+      drama,
+    } = slots;
 
     // allied_tech is an array (pickN: 2) — format as 2 distinct allied machines fighting alongside
     const alliedTechBlock = Array.isArray(allied_tech)
@@ -633,7 +643,16 @@ Output ONLY the raw 150-200 word scene description. Comma-separated phrases. NO 
   },
 
   MECHBOT_CYBORG_WOMAN: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      cyborg_feature,
+      cyborg_material,
+      action,
+      landscape,
+      composition,
+      drama,
+    } = slots;
 
     const dramaSection = drama
       ? `
@@ -875,7 +894,16 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
   },
 
   MECHBOT_CYBORG_MAN: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      cyborg_feature,
+      cyborg_material,
+      action,
+      landscape,
+      composition,
+      drama,
+    } = slots;
 
     const dramaSection = drama
       ? `
@@ -1086,7 +1114,21 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
   // cyborg-man character fields).
   // ════════════════════════════════════════════════════════════════
   MECHBOT_ANDROID_MAN: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, identity, chassis, material, head, eye, augment, action, setting, composition, surprise, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      identity,
+      chassis,
+      material,
+      head,
+      eye,
+      augment,
+      action,
+      setting,
+      composition,
+      surprise,
+      drama,
+    } = slots;
 
     // ~40% chance: lean HARDER into the glowing-eye sci-fi MACHINE look (both
     // eyes full glowing optics, more high-tech augmentation) — still a cyborg
@@ -1096,9 +1138,11 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
 ━━━ HIS GLOWING EYES (sci-fi optic) ━━━
 ${eye}
 
-${machineMode
-  ? `⚙️ MACHINE-LEAN MODE (this render) — push HARDER into the sleek glowing-eyed SCI-FI MACHINE look: BOTH eyes are full glowing mechanical optics in his eye-color (no organic eye — luminous android optics), MORE visible high-tech augmentation across the face and body, a sleeker more-android cyborg with a brighter machine sheen. He is STILL a man with a readable face and human proportions (NOT a faceless robot, NOT bulky).`
-  : `His gaze stays mostly HUMAN with a glowing accent — one organic eye + one glowing cyber-optic in his eye-color (or both eyes faintly glowing) — the human stare still present beneath the machine.`}
+${
+  machineMode
+    ? `⚙️ MACHINE-LEAN MODE (this render) — push HARDER into the sleek glowing-eyed SCI-FI MACHINE look: BOTH eyes are full glowing mechanical optics in his eye-color (no organic eye — luminous android optics), MORE visible high-tech augmentation across the face and body, a sleeker more-android cyborg with a brighter machine sheen. He is STILL a man with a readable face and human proportions (NOT a faceless robot, NOT bulky).`
+    : `His gaze stays mostly HUMAN with a glowing accent — one organic eye + one glowing cyber-optic in his eye-color (or both eyes faintly glowing) — the human stare still present beneath the machine.`
+}
 `;
 
     const dramaSection = drama
@@ -1224,7 +1268,16 @@ Output ONLY the raw 75-105 word scene description. Comma-separated phrases. NO p
   },
 
   MECHBOT_DROID_ASSASSIN: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      cyborg_feature,
+      cyborg_material,
+      action,
+      landscape,
+      composition,
+      drama,
+    } = slots;
 
     const dramaSection = drama
       ? `

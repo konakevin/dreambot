@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_aesthetic.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} CYBORG AESTHETIC entries for StarBot's cyborg-woman and cyborg-man paths. Each entry is a DENSE phrase (25-50 words) describing the OVERALL VISUAL AESTHETIC of the cyborg's mechanical surfaces — the unifying style that ties together every panel, plate, joint, and circuit.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CYBORG AESTHETIC entries for StarBot's cyborg-woman and cyborg-man paths. Each entry is a DENSE phrase (25-50 words) describing the OVERALL VISUAL AESTHETIC of the cyborg's mechanical surfaces — the unifying style that ties together every panel, plate, joint, and circuit.
 
 Each entry locks the AESTHETIC LANGUAGE so every render has a consistent material/finish/ornament tradition instead of bolting random mechanical parts together. The entry describes the LOOK AND FEEL of the cyborg's machine surfaces.
 
@@ -61,4 +63,7 @@ MINIMAL / EXPRESSIONIST (3-4):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

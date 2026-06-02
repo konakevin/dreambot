@@ -10,7 +10,9 @@ generatePool({
   total: 248,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} EXOTIC / IMAGINATIVE DROID entries for StarBot's robot-moment pool. Each entry is a DENSE phrase (25-50 words) describing a CHARACTER-SCALE autonomous robot with an UNUSUAL body plan, hybrid form, or eccentric design — but still ENGINEERING-PLAUSIBLE (looks like it could actually function, not abstract art).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EXOTIC / IMAGINATIVE DROID entries for StarBot's robot-moment pool. Each entry is a DENSE phrase (25-50 words) describing a CHARACTER-SCALE autonomous robot with an UNUSUAL body plan, hybrid form, or eccentric design — but still ENGINEERING-PLAUSIBLE (looks like it could actually function, not abstract art).
 
 ━━━ THE BALANCE — IMPOSSIBLE-LOOKING BUT GROUNDED ━━━
 
@@ -99,4 +101,7 @@ Examples (variety reference, do not copy):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

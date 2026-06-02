@@ -33,8 +33,8 @@ module.exports = {
     action: 'TITAN_WAR_ACTIONS',
     landscape: 'TITAN_WAR_SETTINGS',
     // Path-overrides:
-    lighting: 'TITAN_WAR_LIGHTING',       // ground-based combat (overrides cosmic bot default)
+    lighting: 'TITAN_WAR_LIGHTING', // ground-based combat (overrides cosmic bot default)
     composition: 'TITAN_WAR_COMPOSITION', // vertigo-inducing camera angles
-    drama: 'TITAN_WAR_DRAMA',             // 40% gated combat phenomenon
+    drama: 'TITAN_WAR_DRAMA', // 40% gated combat phenomenon
   },
 };

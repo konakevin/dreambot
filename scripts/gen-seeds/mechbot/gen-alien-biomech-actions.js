@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/alien_biomech_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's alien-biomechs path. Each describes what the biomech is DOING, 12-18 words. Mid-motion alive — the organism is acting like an organism.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for MechBot's alien-biomechs path. Each describes what the biomech is DOING, 12-18 words. Mid-motion alive — the organism is acting like an organism.
 
 ━━━ ACTION CATEGORIES ━━━
 - Stalking (low silhouette, predatory advance, sensor-stalks scanning)
@@ -29,4 +31,7 @@ Deduplicate by: primary verb + body part involved + biological/mechanical effect
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

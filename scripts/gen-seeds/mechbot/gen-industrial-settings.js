@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/industrial_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SETTING descriptions for MechBot's industrial-machines path. Each describes WHERE the work is happening, 14-22 words. Industrial work environments — gritty, productive, dust + sparks + fluorescents.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SETTING descriptions for MechBot's industrial-machines path. Each describes WHERE the work is happening, 14-22 words. Industrial work environments — gritty, productive, dust + sparks + fluorescents.
 
 ━━━ SETTING CATEGORIES ━━━
 - Open-pit strip mine (terraces of red earth, distant haul trucks, dust haze)
@@ -33,4 +35,7 @@ Deduplicate by: industry environment + time-of-day + atmospheric byproduct.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

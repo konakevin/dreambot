@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_female_hair.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} HAIR STYLE descriptions for a female cyborg character. Each describes one specific hairstyle — color, length, texture, and any mechanical/sci-fi elements woven in.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIR STYLE descriptions for a female cyborg character. Each describes one specific hairstyle — color, length, texture, and any mechanical/sci-fi elements woven in.
 
 Each entry: 8-15 words. One hair style with color + length + texture + optional sci-fi element.
 
@@ -28,4 +30,7 @@ No two entries should share the same color AND same length AND same texture.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

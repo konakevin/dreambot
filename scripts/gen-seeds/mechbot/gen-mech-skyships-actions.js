@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/mech_skyships_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's mech-skyships path. Each describes what the skyship is DOING in the air, 12-18 words. Mid-motion, dynamic, cinematic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION descriptions for MechBot's mech-skyships path. Each describes what the skyship is DOING in the air, 12-18 words. Mid-motion, dynamic, cinematic.
 
 ━━━ ACTION CATEGORIES (spread across all) ━━━
 - Cresting / breaking through cloud layer (cloud parting, vapor cones)
@@ -35,4 +37,7 @@ Deduplicate by: primary verb + atmospheric byproduct (vapor / contrail / shockwa
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

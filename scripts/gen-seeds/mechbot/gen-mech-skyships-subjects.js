@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/mechbot/seeds/mech_skyships_subjects.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SKYSHIP descriptions for MechBot's mech-skyships path. Each describes a flying sci-fi mech-vessel — sleek, mean, advanced, predatory — in 14-22 words.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKYSHIP descriptions for MechBot's mech-skyships path. Each describes a flying sci-fi mech-vessel — sleek, mean, advanced, predatory — in 14-22 words.
 
 Each entry: ship class + signature silhouette + signature weapons/glow + scale anchor + aesthetic accent.
 
@@ -50,4 +52,7 @@ Deduplicate by: ship class + body silhouette + signature accent (weapon/glow/mat
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. Each entry 14-22 words.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
