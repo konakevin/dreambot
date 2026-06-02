@@ -643,11 +643,19 @@ Deno.serve(async (req) => {
     }
 
     // Pre-pick the Flux model for face-swap character renders (single human
-    // OR dual). 3-way rotation so we can conditionally swap the medium
+    // OR dual). Rotation, so we can conditionally swap the medium
     // fluxFragment BEFORE the slot pipeline assembles the prompt:
-    //   - flux-dev / flux-2-dev — honor the medium's face_swap fragment as-is
-    //   - flux-1.1-pro          — triggers curated override library
-    // flux-1.1-pro-ultra is excluded (compute cap blows face-swap-dual).
+    //   - flux-dev               — honors the medium's face_swap fragment as-is
+    //   - flux-1.1-pro           — triggers curated override library
+    //   - flux-1.1-pro-ultra     — same as flux-1.1-pro for override; was
+    //                              excluded until 2026-06-01 because dual
+    //                              face-swap blew the 256 MB Supabase Edge
+    //                              Function cap. Now safe: face-swap-dual
+    //                              runs on Fly.io with 2 GB RAM (matrix v3
+    //                              verified 3/3 dual-Ultra success).
+    // flux-2-dev removed 2026-06-01 (Kevin) — banned globally via the
+    // NIGHTLY_BANNED_MODELS gate downstream; keeping it in the rotation
+    // wastes the curated-override decision tree before it gets re-picked.
     // Same rotation + override applies to single and dual so the two paths
     // stay in parity.
     if (isFaceSwapCharacter) {
@@ -656,8 +664,8 @@ Deno.serve(async (req) => {
       } else {
         const FACE_SWAP_MODELS = [
           'black-forest-labs/flux-dev',
-          'black-forest-labs/flux-2-dev',
           'black-forest-labs/flux-1.1-pro',
+          'black-forest-labs/flux-1.1-pro-ultra',
         ];
         faceSwapPrePickedModel =
           FACE_SWAP_MODELS[Math.floor(Math.random() * FACE_SWAP_MODELS.length)];

@@ -63,15 +63,28 @@ export async function dispatchDualFaceSwap(
       );
     }
 
+    // 2026-06-01: when DUAL_SWAP_FLY_URL is set, route to the Fly.io
+    // hosted face-swap-dual (2 GB RAM, escapes the 256 MB Supabase Edge
+    // Function cap that was triggering HTTP 546 WORKER_RESOURCE_LIMIT on
+    // large-output models — Ultra / gpt-image-2). When unset, falls back
+    // to the in-Supabase face-swap-dual function. See services/face-swap-
+    // dual/README.md + CLAUDE.md Scaling Initiative.
+    const flyUrl = Deno.env.get('DUAL_SWAP_FLY_URL');
+    const flyToken = Deno.env.get('DUAL_SWAP_FLY_TOKEN');
+    const useFly = Boolean(flyUrl);
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
+    const endpoint = useFly ? flyUrl! : `${supabaseUrl}/functions/v1/face-swap-dual`;
+    const authToken = useFly && flyToken ? flyToken : serviceRoleKey;
+
     const t0 = Date.now();
-    const res = await fetch(`${supabaseUrl}/functions/v1/face-swap-dual`, {
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${serviceRoleKey}`,
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         targetUrl: httpsTarget,
@@ -86,9 +99,11 @@ export async function dispatchDualFaceSwap(
     const elapsedMs = Date.now() - t0;
     const text = await res.text();
 
+    const target = useFly ? 'face-swap-dual@fly' : 'face-swap-dual@supabase';
+
     if (!res.ok) {
       throw new Error(
-        `face-swap-dual returned ${res.status} after ${elapsedMs}ms: ${text.slice(0, 300)}`
+        `${target} returned ${res.status} after ${elapsedMs}ms: ${text.slice(0, 300)}`
       );
     }
 
@@ -97,17 +112,15 @@ export async function dispatchDualFaceSwap(
       parsed = JSON.parse(text);
     } catch {
       throw new Error(
-        `face-swap-dual returned invalid JSON (${res.status} after ${elapsedMs}ms): ${text.slice(0, 200)}`
+        `${target} returned invalid JSON (${res.status} after ${elapsedMs}ms): ${text.slice(0, 200)}`
       );
     }
 
     if (!parsed.swappedUrl) {
-      throw new Error(
-        `face-swap-dual: ${parsed.error ?? 'no swappedUrl in response'} (${elapsedMs}ms)`
-      );
+      throw new Error(`${target}: ${parsed.error ?? 'no swappedUrl in response'} (${elapsedMs}ms)`);
     }
 
-    console.log(`[dispatchDualFaceSwap] face-swap-dual succeeded in ${elapsedMs}ms`);
+    console.log(`[dispatchDualFaceSwap] ${target} succeeded in ${elapsedMs}ms`);
     return parsed.swappedUrl;
   } finally {
     // Clean up the temp data-URL conversion if we made one. Fire-and-forget.
