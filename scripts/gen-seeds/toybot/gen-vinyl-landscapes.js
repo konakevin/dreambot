@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/vinyl_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} DESIGNER-VINYL-TOY LANDSCAPE scene descriptions for ToyBot's vinyl path. Designer-vinyl-toy aesthetic (Dunny / Kidrobot / Bearbrick / Mighty-Jaxx) — glossy-ABS-plastic, mold-parting-seams, stylized-not-realistic, collector-display DNA.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DESIGNER-VINYL-TOY LANDSCAPE scene descriptions for ToyBot's vinyl path. Designer-vinyl-toy aesthetic (Dunny / Kidrobot / Bearbrick / Mighty-Jaxx) — glossy-ABS-plastic, mold-parting-seams, stylized-not-realistic, collector-display DNA.
 
 Each entry: 15-25 words. ONE specific designer-vinyl landscape scene.
 
@@ -33,4 +35,7 @@ Lead with body-position in first 5-8 words (kneeling / crouched / seated / recli
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

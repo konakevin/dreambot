@@ -14,7 +14,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 25),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} ARMY/TACTICAL SCENARIO descriptions for ToyBot's green-army-warzone + gi-joe-missions paths. Multi-figure military story beats in real-world environments at toy scale (think backyard / garden / kitchen / desk / sandbox war games — Toy Story Sarge's Squad meets full-scale missions).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ARMY/TACTICAL SCENARIO descriptions for ToyBot's green-army-warzone + gi-joe-missions paths. Multi-figure military story beats in real-world environments at toy scale (think backyard / garden / kitchen / desk / sandbox war games — Toy Story Sarge's Squad meets full-scale missions).
 
 Each entry: 24-40 words. Comma-separated phrase clusters. NO sentences with periods. NO toy-medium mentions (those slot in from the path's cast pool).
 

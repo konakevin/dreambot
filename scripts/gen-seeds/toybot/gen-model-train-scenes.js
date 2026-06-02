@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/model_train_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} HO-SCALE MODEL-TRAIN-DIORAMA scene descriptions for ToyBot's model-train-world path. Tiny scratch-built railroad worlds — die-cast steam locomotives, hand-built terrain, lit windows in tiny depots. NO HUMAN FIGURES IN FRAME. The train is the protagonist or the ambient detail in obsessively-detailed terrain. Cozy + dioramic + nostalgic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HO-SCALE MODEL-TRAIN-DIORAMA scene descriptions for ToyBot's model-train-world path. Tiny scratch-built railroad worlds — die-cast steam locomotives, hand-built terrain, lit windows in tiny depots. NO HUMAN FIGURES IN FRAME. The train is the protagonist or the ambient detail in obsessively-detailed terrain. Cozy + dioramic + nostalgic.
 
 Each entry: 18-28 words. ONE specific train-active moment in a hand-built model-railroad terrain.
 
@@ -72,4 +74,7 @@ Hand-built terrain — ground foam, lichen trees, plaster-cast rock-faces, stati
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

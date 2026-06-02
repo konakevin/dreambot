@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/mech_toy_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `Write ${n} MECH-TOY-RAMPAGE scenes for ToyBot's mech-toy-rampage path. ENSEMBLE BATTLE energy. Saturday-morning anime-toy-line. Non-IP. Each entry 20-32 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} MECH-TOY-RAMPAGE scenes for ToyBot's mech-toy-rampage path. ENSEMBLE BATTLE energy. Saturday-morning anime-toy-line. Non-IP. Each entry 20-32 words.
 
 ━━━ HARD RULES ━━━
 - 80%+ entries: MULTIPLE mechs (3+) in active combat / coordination.
@@ -40,4 +42,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

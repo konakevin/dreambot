@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/model_train_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MODEL-TRAIN-WORLD wider-landscape descriptions for ToyBot's model-train-world path. The train is small or absent — focus is the OBSESSIVELY-DETAILED hand-built terrain itself. NO HUMAN FIGURES. Cozy, atmospheric, hobby-magazine cover-shot energy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MODEL-TRAIN-WORLD wider-landscape descriptions for ToyBot's model-train-world path. The train is small or absent — focus is the OBSESSIVELY-DETAILED hand-built terrain itself. NO HUMAN FIGURES. Cozy, atmospheric, hobby-magazine cover-shot energy.
 
 Each entry: 18-28 words. ONE specific wider terrain shot — landscape as protagonist, train optional/distant.
 
@@ -69,4 +71,7 @@ Hand-built model-railroad landscape elements: scratch-built brick depot, water-t
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

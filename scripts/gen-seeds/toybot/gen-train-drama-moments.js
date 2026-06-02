@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/train_drama_moments.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} HO-SCALE MODEL-TRAIN DRAMA-MOMENT seeds for ToyBot's model-train-world path. Each seed describes ONE active, dramatic beat happening in a model-railroad diorama — the "what's about to happen?" hook that makes every frame feel like a movie still instead of an "average picture of a trainset."
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HO-SCALE MODEL-TRAIN DRAMA-MOMENT seeds for ToyBot's model-train-world path. Each seed describes ONE active, dramatic beat happening in a model-railroad diorama — the "what's about to happen?" hook that makes every frame feel like a movie still instead of an "average picture of a trainset."
 
 Each entry: 18-28 words. ONE narrative beat with kinetic energy, frozen-frame action, or implied story tension. Always set on/around a model train in a hand-built diorama. NO HUMAN FIGURES OUTSIDE THE DIORAMA — tiny model-scale figures OK if integral to the beat.
 

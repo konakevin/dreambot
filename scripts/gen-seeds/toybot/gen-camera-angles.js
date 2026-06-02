@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/camera_angles.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} camera-angle / lens / framing descriptors for toy-photography dioramas. Each entry = ONE specific camera setup (angle + framing + optional lens cue), written as comma-separated phrases. 8-18 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} camera-angle / lens / framing descriptors for toy-photography dioramas. Each entry = ONE specific camera setup (angle + framing + optional lens cue), written as comma-separated phrases. 8-18 words per entry.
 
 ━━━ HARD ANTI-BIAS RULES ━━━
 - MAX 10% straight-on / eye-level / front-facing (Sonnet's default — keep restrained).
@@ -66,4 +68,7 @@ Each entry: 8-18 words, comma-separated phrases, written as direct camera direct
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

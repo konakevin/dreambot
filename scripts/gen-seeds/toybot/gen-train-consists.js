@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/train_consists.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} INDIVIDUAL HO-scale or N-scale model-railroad TRAIN CONSISTS for ToyBot's model-train-world path. Each entry = ONE specific train (era + engine type + cars pulled). NO HUMAN FIGURES. 10-18 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} INDIVIDUAL HO-scale or N-scale model-railroad TRAIN CONSISTS for ToyBot's model-train-world path. Each entry = ONE specific train (era + engine type + cars pulled). NO HUMAN FIGURES. 10-18 words per entry.
 
 ━━━ HARD ANTI-BIAS RULES ━━━
 - MAX 22% steam-locomotives across pool (Sonnet's default — keep restrained).
@@ -41,4 +43,7 @@ Each entry is ONE train consist, 10-18 words, comma-separated phrases. Always re
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/plush_scenes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} PLUSH-WORLD scenes for ToyBot's plush-world path. ENSEMBLE-FORWARD storybook warmth. Multiple stuffed-animal characters together. Non-LBP-burlap. Each entry 20-32 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} PLUSH-WORLD scenes for ToyBot's plush-world path. ENSEMBLE-FORWARD storybook warmth. Multiple stuffed-animal characters together. Non-LBP-burlap. Each entry 20-32 words.
 
 ━━━ HARD RULES ━━━
 - 70%+ entries: MULTIPLE plush characters (3+) in shared activity.
@@ -44,4 +46,7 @@ Teddy-bear, plush-bunny, stuffed-fox, knitted-cat, stitched-dragon, fabric-owl, 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

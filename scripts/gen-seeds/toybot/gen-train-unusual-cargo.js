@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/train_unusual_cargo.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} UNUSUAL-CARGO seeds for ToyBot's model-train-world path. Each seed describes ONE specific extraordinary thing the train is hauling — a wow-factor cargo that makes the viewer's eye snap to "wait, what?". This pool fires ~35% of renders for surprise without overload, so each entry must EARN attention. NO ordinary freight (no generic coal / lumber / containers — those live in the consist pool).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} UNUSUAL-CARGO seeds for ToyBot's model-train-world path. Each seed describes ONE specific extraordinary thing the train is hauling — a wow-factor cargo that makes the viewer's eye snap to "wait, what?". This pool fires ~35% of renders for surprise without overload, so each entry must EARN attention. NO ordinary freight (no generic coal / lumber / containers — those live in the consist pool).
 
 Each entry: 12-22 words. ONE specific oversized, magical, surreal, or narratively-loaded cargo item. Always implies scale tension — the cargo dwarfs the consist, glows oddly, shouldn't fit on standard rails, or hints at a bigger story.
 

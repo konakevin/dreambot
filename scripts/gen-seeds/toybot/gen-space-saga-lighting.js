@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/space_saga_lighting.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} authentic STAR WARS toy-photography lighting + atmosphere descriptors for ToyBot's space-saga-figures path. Each entry combines a Star Wars location + light quality + atmospheric phenomenon. Cinematic 1977-1983 space-opera mood. 10-20 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} authentic STAR WARS toy-photography lighting + atmosphere descriptors for ToyBot's space-saga-figures path. Each entry combines a Star Wars location + light quality + atmospheric phenomenon. Cinematic 1977-1983 space-opera mood. 10-20 words per entry.
 
 ━━━ STAR WARS LOCATION-SPECIFIC LIGHTING TO ROTATE ━━━
 - Mos Eisley cantina amber-jukebox glow, smoke-haze, dim recessed booth-lighting, Modal Nodes spotlights
@@ -59,4 +61,7 @@ Each entry: 10-20 words, comma-separated phrases. Always cinematic 70s/80s Star 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

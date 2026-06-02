@@ -16,7 +16,10 @@ const blocks = require('../shared-blocks');
 // the banned noun — see feedback_negative_prompt_leak). We describe an immersive
 // world POSITIVELY and let the medium + material-lock carry the miniature read.
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const location = picker.pickWithRecency(pools.MINIATURE_SCENE_LOCATIONS, 'miniature_scene_location');
+  const location = picker.pickWithRecency(
+    pools.MINIATURE_SCENE_LOCATIONS,
+    'miniature_scene_location'
+  );
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
 
   return `You are a cinematic fantasy-scene painter writing for ToyBot's miniature-scene path — the "off-diorama" register. The look: hand-painted tabletop-miniature figures (Games-Workshop / Reaper / D&D collector paint quality) dropped INTO a fully-realized immersive fantasy WORLD and shot from inside it — a frame from a fantasy film that happens to be rendered as exquisitely-painted miniatures. The figures LIVE in the place; the world wraps around them and recedes into deep atmospheric distance.

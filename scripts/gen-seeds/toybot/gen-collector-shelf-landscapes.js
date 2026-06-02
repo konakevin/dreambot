@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/collector_shelf_landscapes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ACTION-FIGURE-PLAYSET LANDSCAPE scene descriptions for ToyBot's collector-shelf-epic path. Collector-grade 1/12-scale playsets (Hot-Toys / Mezco / NECA / Hasbro-Black-Series style) — handcrafted weathering, paint-detail, display-cabinet dramatic lighting.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION-FIGURE-PLAYSET LANDSCAPE scene descriptions for ToyBot's collector-shelf-epic path. Collector-grade 1/12-scale playsets (Hot-Toys / Mezco / NECA / Hasbro-Black-Series style) — handcrafted weathering, paint-detail, display-cabinet dramatic lighting.
 
 Each entry: 15-25 words. ONE specific action-figure-playset landscape scene.
 
@@ -53,4 +55,7 @@ Lead with body-position in first 5-8 words (kneeling / crouched / seated / recli
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

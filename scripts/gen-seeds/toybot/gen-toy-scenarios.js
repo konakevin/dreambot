@@ -20,7 +20,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 25),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} TOY SCENARIO descriptions for ToyBot. These are SHARED across all toy paths (vinyl Funko Pop, claymation, plush, action figures, etc.) — the WHO comes from the path's cast pool, this scenario describes the WHAT and WHERE.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TOY SCENARIO descriptions for ToyBot. These are SHARED across all toy paths (vinyl Funko Pop, claymation, plush, action figures, etc.) — the WHO comes from the path's cast pool, this scenario describes the WHAT and WHERE.
 
 The vibe is TOY STORY — what do toys get up to when their humans aren't looking? Multi-character story moments in real-world environments at toy scale. Implied narrative — cause + reaction, who's doing what to whom, what's about to happen.
 

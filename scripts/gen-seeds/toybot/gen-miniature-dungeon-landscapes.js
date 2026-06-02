@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/miniature_dungeon_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} WARHAMMER / D&D TABLETOP-MINIATURE TERRAIN LANDSCAPE scene descriptions for ToyBot's tabletop-minis path. Handcrafted terrain dioramas — sculpted-foam rocks, lichen-trees, plaster ruins, resin-water, flocked-bases. Games-Workshop / Reaper / WizKids display-cabinet pro-painter aesthetic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WARHAMMER / D&D TABLETOP-MINIATURE TERRAIN LANDSCAPE scene descriptions for ToyBot's tabletop-minis path. Handcrafted terrain dioramas — sculpted-foam rocks, lichen-trees, plaster ruins, resin-water, flocked-bases. Games-Workshop / Reaper / WizKids display-cabinet pro-painter aesthetic.
 
 Each entry: 15-25 words. ONE specific tabletop-terrain landscape scene.
 
@@ -35,4 +37,7 @@ Lead with body-position in first 5-8 words (kneeling / crouched / seated / recli
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/hotwheels_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} HOT-WHEELS-CITY landscape descriptions for ToyBot's hotwheels-city path — wider environment shots with the toy-car world as the focus, the cars themselves smaller in frame or absent. Real-world surfaces and orange-track architecture blown up to epic city/canyon scale by extreme low-angle macro framing. Cinematic establishing shots.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HOT-WHEELS-CITY landscape descriptions for ToyBot's hotwheels-city path — wider environment shots with the toy-car world as the focus, the cars themselves smaller in frame or absent. Real-world surfaces and orange-track architecture blown up to epic city/canyon scale by extreme low-angle macro framing. Cinematic establishing shots.
 
 Each entry: 18-28 words. ONE specific environment-as-protagonist toy-car-world scene. Cars optional or in distance.
 
@@ -66,4 +68,7 @@ Each entry: 18-28 words. ONE specific environment-as-protagonist toy-car-world s
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

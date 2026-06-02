@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/barbie_landscapes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} BARBIE-WORLD LANDSCAPE scene descriptions for ToyBot's barbie-scene path. Cinematic Mattel-scale fashion-doll dioramas — DreamHouse architecture, pink-dominant palette, boutique/rooftop-pool/runway/convertible-pink-car playsets, glossy-plastic sheen, Barbie-movie film-still framing.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BARBIE-WORLD LANDSCAPE scene descriptions for ToyBot's barbie-scene path. Cinematic Mattel-scale fashion-doll dioramas — DreamHouse architecture, pink-dominant palette, boutique/rooftop-pool/runway/convertible-pink-car playsets, glossy-plastic sheen, Barbie-movie film-still framing.
 
 Each entry: 15-25 words. ONE specific Barbie-world landscape scene.
 
@@ -42,4 +44,7 @@ When you describe an archetype (model, ballerina, etc.) ALWAYS attach "doll" / "
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

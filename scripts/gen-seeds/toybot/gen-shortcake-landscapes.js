@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/shortcake_landscapes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} 1980s STRAWBERRY-SHORTCAKE-era LANDSCAPE scene descriptions for ToyBot's shortcake-scene path. Pastel dessert-fantasy miniature worlds with oversized-scale props (giant strawberries / cupcake-castles / lollipop-trees / rainbow-bridges). Warm golden-hour nostalgic catalog lighting.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} 1980s STRAWBERRY-SHORTCAKE-era LANDSCAPE scene descriptions for ToyBot's shortcake-scene path. Pastel dessert-fantasy miniature worlds with oversized-scale props (giant strawberries / cupcake-castles / lollipop-trees / rainbow-bridges). Warm golden-hour nostalgic catalog lighting.
 
 Each entry: 15-25 words. ONE specific Strawberry-Shortcake-era landscape scene.
 
@@ -42,4 +44,7 @@ When you describe an archetype (girl, princess, baker, etc.) ALWAYS attach "doll
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

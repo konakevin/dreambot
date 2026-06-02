@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 const fs = require('fs');
-try { fs.unlinkSync('scripts/bots/toybot/seeds/lighting.json'); } catch (_) {}
+try {
+  fs.unlinkSync('scripts/bots/toybot/seeds/lighting.json');
+} catch (_) {}
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/lighting.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING treatment descriptions for ToyBot — toy-photography lighting. This pool MUST NOT default to warm-key-cool-fill cinematic "teal-and-orange." Force palette variety.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING treatment descriptions for ToyBot — toy-photography lighting. This pool MUST NOT default to warm-key-cool-fill cinematic "teal-and-orange." Force palette variety.
 
 Each entry: 10-20 words. ONE specific lighting treatment naming an exact palette + direction + quality.
 
@@ -52,4 +56,7 @@ The existing toybot pool was 16/50 warm-biased, 11/50 cool-biased — mostly war
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

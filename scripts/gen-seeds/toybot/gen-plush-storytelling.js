@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   maxTokens: 4500,
-  metaPrompt: (n) => `You are writing ${n} PLUSH-STORYBOOK-MISCHIEF seed entries for ToyBot's plush-world path.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PLUSH-STORYBOOK-MISCHIEF seed entries for ToyBot's plush-world path.
 
 ⭐ THE NORTH STAR
 Imagine CUTE Squishmallow-style fluffy huggable plushies — oversized round-pudgy fiberfill bodies, soft visible plush-fur, big adorable embroidered or button eyes, floppy limbs — living out absurdly specific UNEXPECTED storybook moments when no one is watching. Coraline-set-build meets cozy mischief.

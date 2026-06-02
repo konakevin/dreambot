@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/green_army_warzone_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} GREEN-ARMY-MEN BATTLE-DIORAMA LANDSCAPE scene descriptions for ToyBot's army-men path. Classic Bucket-O-Soldiers / Toy-Story-2nd-battalion single-pose molded-plastic toy-soldier aesthetic on handcrafted WWII-diorama or backyard-epic practical sets. Cotton-ball smoke, flash-bulb explosion-bursts, dramatic spotlight lighting.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GREEN-ARMY-MEN BATTLE-DIORAMA LANDSCAPE scene descriptions for ToyBot's army-men path. Classic Bucket-O-Soldiers / Toy-Story-2nd-battalion single-pose molded-plastic toy-soldier aesthetic on handcrafted WWII-diorama or backyard-epic practical sets. Cotton-ball smoke, flash-bulb explosion-bursts, dramatic spotlight lighting.
 
 Each entry: 15-25 words. ONE specific army-men battle-diorama landscape scene.
 
@@ -35,4 +37,7 @@ Lead with body-position in first 5-8 words (kneeling / crouched / seated / prone
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

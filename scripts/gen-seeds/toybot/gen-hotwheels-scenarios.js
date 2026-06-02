@@ -14,7 +14,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 25),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} HOT WHEELS / TOY CAR SCENARIO descriptions for ToyBot's hotwheels-city path. Vehicle story beats staged in real-world environments at toy scale — kitchen-floor races, bookshelf jumps, desk drag-strips, beach rallies, garage repairs.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HOT WHEELS / TOY CAR SCENARIO descriptions for ToyBot's hotwheels-city path. Vehicle story beats staged in real-world environments at toy scale — kitchen-floor races, bookshelf jumps, desk drag-strips, beach rallies, garage repairs.
 
 Each entry: 24-40 words. Comma-separated phrase clusters. NO sentences with periods. NO car brand mentions (Hot Wheels comes from path-side prefix). Cast = 2-4 vehicles + figures (drivers, mechanics, spectators) interacting.
 

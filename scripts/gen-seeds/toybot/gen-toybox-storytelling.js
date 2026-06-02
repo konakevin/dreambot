@@ -5,7 +5,9 @@ generatePool({
   total: 30,
   batch: 10,
   maxTokens: 4500,
-  metaPrompt: (n) => `You are writing ${n} TOY-MISCHIEF-STORYTELLING seed entries for ToyBot's toybox-chaos path.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TOY-MISCHIEF-STORYTELLING seed entries for ToyBot's toybox-chaos path.
 
 ⭐ THE NORTH STAR
 Imagine what TOYS would do if they were dicking off the way humans do when no one is watching. STORY first, scene second. Every render is a SINGLE-FRAME COMEDY MOMENT from a longer absurd toy-story — heist, talent show, wedding crash, mosh pit, rescue mission, tea party gone wrong, escape attempt, courtroom drama, magic show disaster, construction-site collapse. NOT a static "toys on the floor." A SCENE with a STORY playing out.

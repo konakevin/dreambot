@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/hotwheels_cars.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} INDIVIDUAL Hot-Wheels-style 1:64-scale die-cast toy car archetypes for ToyBot's hotwheels-city path. Each entry = ONE specific car with paint + body-type + signature visual detail. 8-18 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} INDIVIDUAL Hot-Wheels-style 1:64-scale die-cast toy car archetypes for ToyBot's hotwheels-city path. Each entry = ONE specific car with paint + body-type + signature visual detail. 8-18 words per entry.
 
 ━━━ HARD ANTI-BIAS RULES ━━━
 - MAX 12% muscle-cars across pool (don't dominate).
@@ -33,4 +35,7 @@ Each entry is ONE die-cast car, 8-18 words, comma-separated phrases. Always refe
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

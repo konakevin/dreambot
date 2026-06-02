@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/mech_archetypes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} INDIVIDUAL mech-toy archetypes for ToyBot's mech-toy-rampage path. Each entry = ONE specific mech with class + signature feature + weapon. Non-IP, archetype only. 8-18 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} INDIVIDUAL mech-toy archetypes for ToyBot's mech-toy-rampage path. Each entry = ONE specific mech with class + signature feature + weapon. Non-IP, archetype only. 8-18 words per entry.
 
 ━━━ HARD ANTI-BIAS RULES ━━━
 - MAX 25% pure humanoid-mechas (Sonnet's training default — keep restrained).
@@ -37,4 +39,7 @@ Each entry is ONE mech, 8-18 words, comma-separated phrases. Always reference 1/
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

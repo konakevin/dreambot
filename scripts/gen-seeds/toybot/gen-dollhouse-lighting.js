@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/dollhouse_lighting.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} dollhouse-life cozy-domestic lighting + atmosphere descriptors for ToyBot's dollhouse-life path. Each entry combines miniature-interior lighting + ambient warmth + atmospheric detail. 10-20 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} dollhouse-life cozy-domestic lighting + atmosphere descriptors for ToyBot's dollhouse-life path. Each entry combines miniature-interior lighting + ambient warmth + atmospheric detail. 10-20 words per entry.
 
 ━━━ THE WORLD ━━━
 Dollhouse-scale miniature interiors — Victorian parlors, modern kitchens, nurseries, libraries, garden-rooms, bathrooms, bakery shops, music-rooms, dining-rooms, attics, greenhouses, tea-rooms, studies, porches, playrooms, cottage hearths, bedrooms.
@@ -69,4 +71,7 @@ Each entry: 10-20 words, comma-separated phrases, miniature-interior + light + a
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

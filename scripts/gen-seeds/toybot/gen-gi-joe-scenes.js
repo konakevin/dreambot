@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/gi_joe_missions_scenes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} 1980s GI-JOE-era articulated-commando action-figure scene descriptions for ToyBot's gi-joe path — Saturday-morning-cartoon-serial military-toy storytelling. 3.75-inch hand-painted articulated figures with signature code-name commandos vs masked terror-organization troopers. Iconic plastic vehicles, battle playsets, Cobra-vs-Joe-style tableau cinema. Non-IP — archetype only.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} 1980s GI-JOE-era articulated-commando action-figure scene descriptions for ToyBot's gi-joe path — Saturday-morning-cartoon-serial military-toy storytelling. 3.75-inch hand-painted articulated figures with signature code-name commandos vs masked terror-organization troopers. Iconic plastic vehicles, battle playsets, Cobra-vs-Joe-style tableau cinema. Non-IP — archetype only.
 
 Each entry: 18-28 words. ONE specific scene with articulated-commando figures mid-action in a handcrafted playset diorama.
 
@@ -79,4 +81,7 @@ When you describe a commando archetype, ALWAYS attach "action figure" / "3.75-in
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

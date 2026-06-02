@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/mech_toy_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MECH-TOY-RAMPAGE wider-environment descriptions for ToyBot's mech-toy-rampage path — landscape as protagonist, mechs small or absent. Handcrafted mecha-anime-toy-line settings. Atmospheric, epic, cinematic-establishing-shot energy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MECH-TOY-RAMPAGE wider-environment descriptions for ToyBot's mech-toy-rampage path — landscape as protagonist, mechs small or absent. Handcrafted mecha-anime-toy-line settings. Atmospheric, epic, cinematic-establishing-shot energy.
 
 Each entry: 18-28 words. ONE specific wider environment shot — focus is the world itself.
 
@@ -67,4 +69,7 @@ Each entry: 18-28 words. ONE specific wider environment shot — focus is the wo
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

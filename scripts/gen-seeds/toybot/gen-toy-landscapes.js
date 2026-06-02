@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} TOY LANDSCAPE descriptions for ToyBot's toy-landscape path — NO characters. Pure landscape rendered entirely in a toy medium. Landscape is hero, toy-ness is the art.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TOY LANDSCAPE descriptions for ToyBot's toy-landscape path — NO characters. Pure landscape rendered entirely in a toy medium. Landscape is hero, toy-ness is the art.
 
 Each entry: 15-30 words. One specific landscape in a specific toy medium.
 
@@ -59,4 +61,7 @@ Each entry: 15-30 words. One specific landscape in a specific toy medium.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

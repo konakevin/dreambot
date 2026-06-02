@@ -17,7 +17,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 25),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} FUNKO POP CAST LINEUPS for ToyBot's vinyl path. Each entry describes 2-4 Funko Pop characters as an ensemble — the WHO of a scene. Where/what they're doing comes from a separate scenario pool (don't include activity here).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FUNKO POP CAST LINEUPS for ToyBot's vinyl path. Each entry describes 2-4 Funko Pop characters as an ensemble — the WHO of a scene. Where/what they're doing comes from a separate scenario pool (don't include activity here).
 
 Each entry: 18-32 words. Comma-separated phrase clusters. NO sentences with periods.
 

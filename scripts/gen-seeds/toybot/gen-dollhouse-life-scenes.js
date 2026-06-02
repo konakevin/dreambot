@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/dollhouse_life_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `Write ${n} DOLLHOUSE-LIFE scenes for ToyBot's dollhouse-life path. ENSEMBLE family / friend cozy daily-life dioramas. Three figurine traditions — Calico-Critter (~50%) / vintage-wooden (~30%) / modern Lori-doll (~20%). Each entry commits to ONE tradition (never mix). Each entry 20-32 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} DOLLHOUSE-LIFE scenes for ToyBot's dollhouse-life path. ENSEMBLE family / friend cozy daily-life dioramas. Three figurine traditions — Calico-Critter (~50%) / vintage-wooden (~30%) / modern Lori-doll (~20%). Each entry commits to ONE tradition (never mix). Each entry 20-32 words.
 
 ━━━ HARD RULES ━━━
 - 70%+ entries: MULTIPLE figurines (3+) in shared activity.
@@ -51,4 +53,7 @@ Victorian parlor, modern kitchen, nursery, library nook, garden-room, bathroom, 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/toybox_chaos_scenes.json',
   total: 400,
   batch: 15,
-  metaPrompt: (n) => `Write ${n} TOYBOX-CHAOS scenes for ToyBot's toybox-chaos path. The toybox just got dumped. MIXED-MEDIUM ensemble — multiple toy types coexist on a real-world surface at REAL-WORLD scale. Size-mismatch IS the point. Each toy keeps its OWN native style. Each entry 20-32 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} TOYBOX-CHAOS scenes for ToyBot's toybox-chaos path. The toybox just got dumped. MIXED-MEDIUM ensemble — multiple toy types coexist on a real-world surface at REAL-WORLD scale. Size-mismatch IS the point. Each toy keeps its OWN native style. Each entry 20-32 words.
 
 ━━━ HARD RULES ━━━
 - AT LEAST 3 different toy types per scene.
@@ -52,4 +54,7 @@ LEGO minifigs (~1.5", studs, blocky), 3.75" action-figures (jointed), plush tedd
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} GREEN-ARMY-MEN scene descriptions for ToyBot's army-men path — classic single-pose molded-plastic toy soldiers (the iconic bag-of-a-hundred Bucket-O-Soldiers / Toy Story 2nd Battalion DNA). Bright-green (or tan / grey) monochromatic rigid-plastic figures on attached oval bases, fixed in a single cast-in-plastic action pose — crouch-and-fire, bayonet-charge, binocular-spotting, radio-operator, bazooka-shoulder, grenade-throw, flamethrower, flag-bearer, prone-rifleman, mine-sweeper. Every scene is cinematic WWII-toy-soldier storytelling in a handcrafted practical-set diorama or real-world backyard-epic setting.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GREEN-ARMY-MEN scene descriptions for ToyBot's army-men path — classic single-pose molded-plastic toy soldiers (the iconic bag-of-a-hundred Bucket-O-Soldiers / Toy Story 2nd Battalion DNA). Bright-green (or tan / grey) monochromatic rigid-plastic figures on attached oval bases, fixed in a single cast-in-plastic action pose — crouch-and-fire, bayonet-charge, binocular-spotting, radio-operator, bazooka-shoulder, grenade-throw, flamethrower, flag-bearer, prone-rifleman, mine-sweeper. Every scene is cinematic WWII-toy-soldier storytelling in a handcrafted practical-set diorama or real-world backyard-epic setting.
 
 Each entry: 18-28 words. ONE specific green-army-men scene with multiple posed plastic soldiers mid-action on a built-up miniature set or oversized real-world environment.
 
@@ -104,4 +106,7 @@ HISTORIC / ICONIC:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CLAYMATION SCENE descriptions for ToyBot's claymation path — stop-motion clay scenes with clay-characters. Wallace-Gromit / Coraline / Laika / Play-Doh energy. Clay fingerprints + paint-strokes visible.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CLAYMATION SCENE descriptions for ToyBot's claymation path — stop-motion clay scenes with clay-characters. Wallace-Gromit / Coraline / Laika / Play-Doh energy. Clay fingerprints + paint-strokes visible.
 
 Each entry: 15-30 words. One specific claymation scene with clay-characters in action.
 
@@ -52,4 +54,7 @@ Each entry: 15-30 words. One specific claymation scene with clay-characters in a
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

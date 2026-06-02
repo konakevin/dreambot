@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/plush_creatures.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} INDIVIDUAL plush-creature archetypes for ToyBot's plush-world path. Each entry = ONE specific plush stuffed-animal with texture + signature visual detail. 8-18 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} INDIVIDUAL plush-creature archetypes for ToyBot's plush-world path. Each entry = ONE specific plush stuffed-animal with texture + signature visual detail. 8-18 words per entry.
 
 ━━━ HARD ANTI-BIAS RULES ━━━
 - MAX 8% teddy-bears across pool (not the default — used sparingly).
@@ -34,4 +36,7 @@ Each entry is ONE plush-creature, 8-18 words, comma-separated phrases:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

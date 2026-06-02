@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/space_saga_landscapes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} authentic STAR WARS vintage Kenner playset-diorama wide-vista descriptions for ToyBot's space-saga-figures path. Lean fully into Star Wars IP — name planets, name iconic locations, name vehicles. Wide environment shots — playset architecture is the protagonist, figures small or absent. 18-28 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} authentic STAR WARS vintage Kenner playset-diorama wide-vista descriptions for ToyBot's space-saga-figures path. Lean fully into Star Wars IP — name planets, name iconic locations, name vehicles. Wide environment shots — playset architecture is the protagonist, figures small or absent. 18-28 words per entry.
 
 ━━━ STAR WARS PLANETS / LOCATIONS (each gets multiple entries) ━━━
 Tatooine — Mos Eisley spaceport, Jabba's palace exterior + interior throne-room + sail-barge-deck, Sarlacc pit, Lars homestead, Tusken Raider camp, Cantina interior, Sand Crawler interior, dune-sea horizon
@@ -78,4 +80,7 @@ Each entry: 18-28 words, comma-separated phrases. Wide-vista, playset-as-protago
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

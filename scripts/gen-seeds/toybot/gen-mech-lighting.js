@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/mech_lighting.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} mech-toy-battle lighting + atmosphere descriptors for ToyBot's mech-toy-rampage path. Each entry combines battle-environment lighting + atmospheric phenomenon + color cast. 10-20 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} mech-toy-battle lighting + atmosphere descriptors for ToyBot's mech-toy-rampage path. Each entry combines battle-environment lighting + atmospheric phenomenon + color cast. 10-20 words per entry.
 
 ━━━ THE WORLD ━━━
 Mecha-anime toy-line battles — megacity rooftops, alien deserts, orbital stations, volcano labs, ruined cityscapes, beach landings, asteroid fields, space hangars, dam-power-stations, mountain training-grounds.
@@ -57,4 +59,7 @@ Each entry: 10-20 words, comma-separated phrases, written as direct atmospheric 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

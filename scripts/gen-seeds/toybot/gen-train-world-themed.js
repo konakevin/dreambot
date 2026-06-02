@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/train_world_themed.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CINEMATIC-THEMED-WORLD seed entries for ToyBot's model-train-world path. Each seed describes ONE moment where a tiny HO-scale or N-scale model train is the hero in a cinematic, genre-coded, immersive themed-world. NOT a diorama. NOT a real kitchen. A movie-still or video-game-screenshot vibe where the train is the protagonist.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CINEMATIC-THEMED-WORLD seed entries for ToyBot's model-train-world path. Each seed describes ONE moment where a tiny HO-scale or N-scale model train is the hero in a cinematic, genre-coded, immersive themed-world. NOT a diorama. NOT a real kitchen. A movie-still or video-game-screenshot vibe where the train is the protagonist.
 
 Each entry: 22-32 words. ONE specific genre-driven world the train inhabits. The world is fully realized (not handcrafted) — like a Hollywood-grade location shot at toy-train scale.
 

@@ -5,7 +5,9 @@ generatePool({
   total: 30,
   batch: 10,
   maxTokens: 4000,
-  metaPrompt: (n) => `You are writing ${n} TOY-TRAIN-PLAYTIME-SCENE seed entries for ToyBot's model-train-world path.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TOY-TRAIN-PLAYTIME-SCENE seed entries for ToyBot's model-train-world path.
 
 ⭐ THE EXEMPLAR ENERGY (Kevin hearted this — every seed must hit this vibe):
 The scene reads "TOY PLAYTIME SCENE FIRST that happens to have a train in it" — NOT a model railroad. A populated kid's-playtime moment with named toys + flowers as architecture + a tiny real critter + warm natural light + a whimsical floating element overhead.

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/sackboy_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} LITTLEBIGPLANET-WORLD LANDSCAPE scene descriptions for ToyBot's sackboy path. Media-Molecule craft-world — every element is fabric / felt / yarn / paper / cardboard / button with visible thread-stitching.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LITTLEBIGPLANET-WORLD LANDSCAPE scene descriptions for ToyBot's sackboy path. Media-Molecule craft-world — every element is fabric / felt / yarn / paper / cardboard / button with visible thread-stitching.
 
 Each entry: 15-25 words. ONE specific LBP-world landscape scene.
 
@@ -34,4 +36,7 @@ Lead with body-position in first 5-8 words (kneeling / crouched / seated / recli
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

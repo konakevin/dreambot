@@ -12,7 +12,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 25),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} TABLETOP-MINIATURE DIORAMA scene descriptions for ToyBot's miniature-dungeon path. The path is a flagship cinematic-tabletop-miniature feed — D&D adventuring parties, Warhammer-scale battles, dungeon crawls, taverns, boss fights, painted figurines, terrain kits, dice, spell effects, tiny-world storytelling. Reaction goal: "holy shit this miniature scene is insane" / "I want to play this campaign" / "I can't stop zooming in."
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TABLETOP-MINIATURE DIORAMA scene descriptions for ToyBot's miniature-dungeon path. The path is a flagship cinematic-tabletop-miniature feed — D&D adventuring parties, Warhammer-scale battles, dungeon crawls, taverns, boss fights, painted figurines, terrain kits, dice, spell effects, tiny-world storytelling. Reaction goal: "holy shit this miniature scene is insane" / "I want to play this campaign" / "I can't stop zooming in."
 
 Each entry: 30-50 words. Comma-separated descriptive phrase clusters. NO sentences with periods.
 

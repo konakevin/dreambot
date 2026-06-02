@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   maxTokens: 16000,
-  metaPrompt: (n) => `You are writing ${n} BARBIE-PLAYTIME-MISCHIEF seed entries for ToyBot's barbie-scene path.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BARBIE-PLAYTIME-MISCHIEF seed entries for ToyBot's barbie-scene path.
 
 ⭐ THE NORTH STAR
 Imagine MATTEL-STYLE 11.5-INCH FASHION-DOLLS (Barbie / Ken / friends / sisters / Bratz-style — diverse skin tones, hair colors, fashion-doll articulation, glossy painted makeup, oversized heads, glossy plastic limbs) — playing out absurdly specific UNEXPECTED kid-playroom story moments when no one is watching. NOT a Barbie movie poster. NOT a fashion-photoshoot. NOT a static product display. A populated kid-playtime story-beat captured mid-action.

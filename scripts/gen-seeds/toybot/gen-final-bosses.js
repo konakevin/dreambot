@@ -22,7 +22,9 @@ generatePool({
   total: TOTAL,
   batch: Math.min(TOTAL, 25),
   append: APPEND,
-  metaPrompt: (n) => `You are writing ${n} FINAL BOSS ENEMY TOY descriptions for ToyBot. These are THE ANTAGONIST in a toy-scale epic battle scene — Godzilla-style kaiju, demon-lord titans, giant mecha bosses, ancient evil entities, alien overlords, dragon final-bosses. The pool is SHARED across all toy paths — each entry will plug into a path's hero cast (Funko Pop / action figure / claymation / mech-toy / etc.) to compose a clash scene.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FINAL BOSS ENEMY TOY descriptions for ToyBot. These are THE ANTAGONIST in a toy-scale epic battle scene — Godzilla-style kaiju, demon-lord titans, giant mecha bosses, ancient evil entities, alien overlords, dragon final-bosses. The pool is SHARED across all toy paths — each entry will plug into a path's hero cast (Funko Pop / action figure / claymation / mech-toy / etc.) to compose a clash scene.
 
 Each entry: 24-40 words. Comma-separated phrase clusters. NO sentences with periods.
 

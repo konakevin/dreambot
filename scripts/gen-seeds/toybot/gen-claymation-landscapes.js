@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/claymation_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CLAYMATION-LANDSCAPE scene descriptions for ToyBot's claymation path — landscape-dominant composition with either (A) NO clay-puppet at all, or (B) ONE off-center clay-puppet in a specific body-shaping pose, with a claymation-world landscape as the compositional frame. Everything sculpted Plasticine with thumbprints and sculpting-tool marks. Aardman / Laika / Coraline aesthetic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CLAYMATION-LANDSCAPE scene descriptions for ToyBot's claymation path — landscape-dominant composition with either (A) NO clay-puppet at all, or (B) ONE off-center clay-puppet in a specific body-shaping pose, with a claymation-world landscape as the compositional frame. Everything sculpted Plasticine with thumbprints and sculpting-tool marks. Aardman / Laika / Coraline aesthetic.
 
 Each entry: 15-25 words. ONE specific claymation-landscape scene.
 
@@ -51,4 +53,7 @@ KNEELING / CROUCHED / SEATED / RECLINING / LYING / LEANING / MID-STRIDE / REACHI
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

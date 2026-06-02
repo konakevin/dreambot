@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/gi_joe_missions_landscapes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} GI-JOE-ERA PLAYSET LANDSCAPE scene descriptions for ToyBot's gi-joe path. 3.75-inch articulated-commando action-figure playset dioramas — iconic plastic military vehicles (tank / jeep / assault-chopper / hoverbike / attack-cruiser), Saturday-morning-cartoon-serial military-toy DNA. Non-IP — archetype only.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GI-JOE-ERA PLAYSET LANDSCAPE scene descriptions for ToyBot's gi-joe path. 3.75-inch articulated-commando action-figure playset dioramas — iconic plastic military vehicles (tank / jeep / assault-chopper / hoverbike / attack-cruiser), Saturday-morning-cartoon-serial military-toy DNA. Non-IP — archetype only.
 
 Each entry: 15-25 words. ONE specific GI-Joe-era playset landscape scene.
 
@@ -43,4 +45,7 @@ When you describe a commando archetype, ALWAYS attach "action figure" / "3.75-in
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

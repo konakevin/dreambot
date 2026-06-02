@@ -21,7 +21,6 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     cast.push(picker.pickWithRecency(pools.HOTWHEELS_CARS, `hotwheels_car_${i}`));
   }
 
-
   return `You are a die-cast-car commercial cinematographer writing HOT-WHEELS / MICRO-MACHINES city-and-stunt-track scenes for ToyBot. Tiny 1:64-scale die-cast cars defying physics on insane orange-track loops, kitchen-sink oceans, bookshelf canyons, garage megaramps. Real-world-surface practical sets blown up to epic scale by camera angle. Output wraps with style prefix + suffix.
 
 ${blocks.TOY_PHOTOGRAPHY_BLOCK}

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/plush_lighting.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} plush-world cozy-storybook lighting + atmosphere descriptors for ToyBot's plush-world path. Each entry combines cozy environment + light quality + atmospheric phenomenon. 10-20 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} plush-world cozy-storybook lighting + atmosphere descriptors for ToyBot's plush-world path. Each entry combines cozy environment + light quality + atmospheric phenomenon. 10-20 words per entry.
 
 ━━━ THE WORLD ━━━
 Plush stuffed-animal cozy adventures — forest campsites, picnic meadows, sailboats, attic bedrooms, treehouses, tea gardens, snow forts, library nooks, garden plots, beach coves, mountain ridges.
@@ -57,4 +59,7 @@ Each entry: 10-20 words, comma-separated phrases, written as direct atmospheric 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/space_saga_figures.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} authentic STAR WARS vintage Kenner 3.75-inch action-figure descriptions for ToyBot's space-saga-figures path. Lean fully into Star Wars IP — name characters, name eras, name factions. 8-18 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} authentic STAR WARS vintage Kenner 3.75-inch action-figure descriptions for ToyBot's space-saga-figures path. Lean fully into Star Wars IP — name characters, name eras, name factions. 8-18 words per entry.
 
 ━━━ STAR WARS CHARACTER ROSTER (rotate, vary) ━━━
 - Original Trilogy heroes: Luke Skywalker (farmboy / X-wing pilot / Bespin / Endor), Princess Leia (Hoth / Endor / slave / Bespin), Han Solo (vest / Hoth / carbonite / Endor), Chewbacca, Lando Calrissian, Obi-Wan Kenobi, Yoda, Wedge Antilles
@@ -49,4 +51,7 @@ Each entry: 8-18 words, comma-separated phrases. Always reference 3.75-inch / vi
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

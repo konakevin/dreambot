@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/collector_shelf_scenes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ACTION FIGURE BATTLE scene descriptions for ToyBot's collector-shelf-epic path — 80s/90s action-figure cinematic dioramas with toy-scale drama. Joint-articulation visible + explosion effects.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACTION FIGURE BATTLE scene descriptions for ToyBot's collector-shelf-epic path — 80s/90s action-figure cinematic dioramas with toy-scale drama. Joint-articulation visible + explosion effects.
 
 Each entry: 15-30 words. One specific action-figure battle scene.
 
@@ -85,4 +87,7 @@ Always describe the FACE as "painted face" or "painted features" — NEVER as "h
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

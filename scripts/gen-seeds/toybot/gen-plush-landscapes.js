@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/plush_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} PLUSH-WORLD wider-environment descriptions for ToyBot's plush-world path — landscape as protagonist, plush characters small or absent. Handcrafted miniature plush-world environments. Storybook warmth, atmospheric, magazine-cover energy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PLUSH-WORLD wider-environment descriptions for ToyBot's plush-world path — landscape as protagonist, plush characters small or absent. Handcrafted miniature plush-world environments. Storybook warmth, atmospheric, magazine-cover energy.
 
 Each entry: 18-28 words. ONE specific wider environment shot — focus is the plush-world setting itself.
 
@@ -69,4 +71,7 @@ Wide forest of fabric-trees, felt-water lake under embroidered-stars, knit-meado
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

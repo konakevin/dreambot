@@ -46,11 +46,13 @@ EVERY figure is an authentic vintage Kenner 1977-1985 Star Wars 3.75-inch hand-p
 ━━━ CAMERA ━━━
 ${camera}
 
-${castSize === 1
-  ? `━━━ COMPOSITION — HERO FIGURE PORTRAIT ━━━
+${
+  castSize === 1
+    ? `━━━ COMPOSITION — HERO FIGURE PORTRAIT ━━━
 A SINGLE 3.75-inch figure centered in the frame, mid-action on the playset diorama. Cinematic hero-shot.`
-  : `━━━ COMPOSITION LOCK — NON-NEGOTIABLE SPATIAL ANCHOR ━━━
-WIDE DIORAMA FRAME — exactly ${castSize} distinct 3.75-inch figures visible simultaneously, spatially separated as ${castSize === 2 ? 'left and right (or foreground and midground)' : 'left, center, right (or foreground / midground / background)'}. Each occupies its OWN silhouette zone — no overlap, no merging. NO single hero subject dominating. ALL ${castSize} figures visible in clear frame at the same time. (Camera direction above sets the lens.)`}
+    : `━━━ COMPOSITION LOCK — NON-NEGOTIABLE SPATIAL ANCHOR ━━━
+WIDE DIORAMA FRAME — exactly ${castSize} distinct 3.75-inch figures visible simultaneously, spatially separated as ${castSize === 2 ? 'left and right (or foreground and midground)' : 'left, center, right (or foreground / midground / background)'}. Each occupies its OWN silhouette zone — no overlap, no merging. NO single hero subject dominating. ALL ${castSize} figures visible in clear frame at the same time. (Camera direction above sets the lens.)`
+}
 
 ━━━ THE FIGURES — RENDER THESE EXACT CHARACTERS (NON-NEGOTIABLE) ━━━
 The figures in this scene MUST be exactly these specific vintage Kenner 3.75-inch Star Wars characters — render the EXACT character, outfit-variant, gear, and signature detail of each:

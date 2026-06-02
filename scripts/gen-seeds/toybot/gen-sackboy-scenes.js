@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SACKBOY SCENE descriptions for ToyBot's sackboy path — LBP-style fabric-world with stitched-Sackboy-style characters. EVERYTHING in the world is fabric / felt / yarn / paper / cardboard. LittleBigPlanet energy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SACKBOY SCENE descriptions for ToyBot's sackboy path — LBP-style fabric-world with stitched-Sackboy-style characters. EVERYTHING in the world is fabric / felt / yarn / paper / cardboard. LittleBigPlanet energy.
 
 Each entry: 15-30 words. One specific stitched-fabric-world scene with Sackboy-style character.
 
@@ -55,4 +57,7 @@ Each entry: 15-30 words. One specific stitched-fabric-world scene with Sackboy-s
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

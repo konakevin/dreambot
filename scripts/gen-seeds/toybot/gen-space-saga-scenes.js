@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/space_saga_scenes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} authentic STAR WARS vintage Kenner 3.75-inch CHAOS-LEVEL-11 BATTLE scene descriptions. Each entry must be a CINEMATIC CHAOS FREEZE-FRAME — multiple things exploding / clashing / firing / falling SIMULTANEOUSLY. Think the Battle of Hoth, Endor speeder chase, Trench Run climax, Cantina shootout — the most ICONIC ACTION FRAMES in Star Wars cinema. Each entry 22-36 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} authentic STAR WARS vintage Kenner 3.75-inch CHAOS-LEVEL-11 BATTLE scene descriptions. Each entry must be a CINEMATIC CHAOS FREEZE-FRAME — multiple things exploding / clashing / firing / falling SIMULTANEOUSLY. Think the Battle of Hoth, Endor speeder chase, Trench Run climax, Cantina shootout — the most ICONIC ACTION FRAMES in Star Wars cinema. Each entry 22-36 words.
 
 ━━━ CHAOS-LEVEL-11 RULE — NON-NEGOTIABLE ━━━
 EVERY entry must contain MINIMUM 3 simultaneous things happening — multi-event chaos:
@@ -60,4 +62,7 @@ Each entry: 22-36 words, comma-separated phrases. Multi-event chaos:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

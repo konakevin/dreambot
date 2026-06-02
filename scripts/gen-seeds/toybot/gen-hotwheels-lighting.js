@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/hotwheels_lighting.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} hot-wheels-event lighting + atmosphere descriptors for ToyBot's hotwheels-city path. Each entry combines real-world household event-mood + light quality + atmospheric phenomenon. 10-20 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} hot-wheels-event lighting + atmosphere descriptors for ToyBot's hotwheels-city path. Each entry combines real-world household event-mood + light quality + atmospheric phenomenon. 10-20 words per entry.
 
 ━━━ THE WORLD ━━━
 Hot Wheels die-cast cars on real-world household surfaces — kitchen counter, driveway, bedroom rug, garage floor, picnic blanket, coffee table, patio, bathtub, sandbox. Event-driven moods: birthday party, BBQ, Christmas morning, sleepover, garage workshop, kitchen-breakfast, summer-pool-party, halloween-driveway, snow-day rally, cul-de-sac block-party.
@@ -56,4 +58,7 @@ Each entry: 10-20 words, comma-separated phrases, real-world household setting +
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

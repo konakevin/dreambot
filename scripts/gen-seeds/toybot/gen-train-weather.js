@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/train_weather.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} weather + season + time-of-day + atmospheric-lighting descriptors for HO-scale model-railroad dioramas. Each entry = ONE specific atmospheric mood combining weather phenomenon + light quality + season. 10-20 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} weather + season + time-of-day + atmospheric-lighting descriptors for HO-scale model-railroad dioramas. Each entry = ONE specific atmospheric mood combining weather phenomenon + light quality + season. 10-20 words per entry.
 
 ━━━ HARD VARIETY RULES ━━━
 - Cover all 4 SEASONS roughly equally (spring / summer / fall / winter)
@@ -56,4 +58,7 @@ Each entry: 10-20 words, comma-separated phrases, written as direct atmospheric 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

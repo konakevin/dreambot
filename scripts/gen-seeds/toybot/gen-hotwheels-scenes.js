@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/hotwheels_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `Write ${n} HOT-WHEELS / MICRO-MACHINES toy-car scenes for ToyBot's hotwheels-city path. ENSEMBLE energy on real-world household surfaces. Each entry 20-32 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} HOT-WHEELS / MICRO-MACHINES toy-car scenes for ToyBot's hotwheels-city path. ENSEMBLE energy on real-world household surfaces. Each entry 20-32 words.
 
 ━━━ HARD RULES ━━━
 - 70%+ entries: MULTIPLE cars (3+) in race / chase / pile-up / parade / car-show / pit-crew / demolition-derby / starting-grid / finish-line.
@@ -41,4 +43,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
