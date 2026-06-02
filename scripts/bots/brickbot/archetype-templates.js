@@ -219,7 +219,8 @@ Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with 
   // ONE idea) + ~35% serene tropical views. READABILITY-FIRST: ONE clear hero idea
   // per scene, clean composition. Keeps the deep-focus diorama look + 100%-LEGO rule.
   BRICKBOT_CRAZY_ISLANDS: ({ slots, vibeDirective }) => {
-    const { island_scene, camera_framing, time_of_day, life_density, shoreline_edge, palette } = slots;
+    const { island_scene, camera_framing, time_of_day, life_density, shoreline_edge, palette } =
+      slots;
 
     return `You are a LEGO MOC photographer + AFOL convention judge + a playful island storyteller, writing ONE fun, crazy tropical-ISLAND scene for BrickBot's most playful path. Output is a 110-160 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
 

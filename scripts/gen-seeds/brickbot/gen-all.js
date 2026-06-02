@@ -91,7 +91,10 @@ No two entries share the same subject + framing combination.
 JSON array of ${n} strings, each starting with its FRAMING TAG (WIDE: / MEDIUM: / CLOSE: / ATMOSPHERIC: only — no MACRO). No preamble, no numbering.`;
 };
 
-const lightingMeta = (cfg, n) => `You are writing ${n} BrickBot ${cfg.label.toUpperCase()} LIGHTING DESCRIPTIONS — short prose phrases that lock the lighting / atmosphere of a single render.
+const lightingMeta = (
+  cfg,
+  n
+) => `You are writing ${n} BrickBot ${cfg.label.toUpperCase()} LIGHTING DESCRIPTIONS — short prose phrases that lock the lighting / atmosphere of a single render.
 
 ━━━ SUBJECT MOOD ━━━
 ${cfg.lightingMood}
@@ -118,7 +121,10 @@ No two entries describe the same lighting setup with different words.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`;
 
-const paletteMeta = (cfg, n) => `You are writing ${n} BrickBot ${cfg.label.toUpperCase()} COLOR PALETTES — short comma-separated palette descriptions for a single render.
+const paletteMeta = (
+  cfg,
+  n
+) => `You are writing ${n} BrickBot ${cfg.label.toUpperCase()} COLOR PALETTES — short comma-separated palette descriptions for a single render.
 
 ━━━ SUBJECT MOOD ━━━
 ${cfg.paletteMood}
@@ -149,8 +155,14 @@ async function genOne(cfg, kind) {
   const filename = `${cfg.key}_${kind}`;
   const outPath = `${SEED_DIR}/${filename}.json`;
   const config = (() => {
-    if (kind === 'scenes') return { total: SCENE_TOTAL, batch: Math.min(SCENE_TOTAL, 25), metaPrompt: (n) => sceneMeta(cfg, n) };
-    if (kind === 'lighting') return { total: 40, batch: 20, metaPrompt: (n) => lightingMeta(cfg, n) };
+    if (kind === 'scenes')
+      return {
+        total: SCENE_TOTAL,
+        batch: Math.min(SCENE_TOTAL, 25),
+        metaPrompt: (n) => sceneMeta(cfg, n),
+      };
+    if (kind === 'lighting')
+      return { total: 40, batch: 20, metaPrompt: (n) => lightingMeta(cfg, n) };
     if (kind === 'palette') return { total: 40, batch: 20, metaPrompt: (n) => paletteMeta(cfg, n) };
     throw new Error('unknown kind: ' + kind);
   })();
@@ -159,9 +171,13 @@ async function genOne(cfg, kind) {
 }
 
 (async () => {
-  const cfgs = onlyPath ? PATH_CONFIGS.filter((c) => c.key === onlyPath || c.label === onlyPath) : PATH_CONFIGS;
+  const cfgs = onlyPath
+    ? PATH_CONFIGS.filter((c) => c.key === onlyPath || c.label === onlyPath)
+    : PATH_CONFIGS;
   if (onlyPath && cfgs.length === 0) {
-    console.error(`Unknown path: ${onlyPath}. Valid keys: ${PATH_CONFIGS.map((c) => c.key).join(', ')}`);
+    console.error(
+      `Unknown path: ${onlyPath}. Valid keys: ${PATH_CONFIGS.map((c) => c.key).join(', ')}`
+    );
     process.exit(1);
   }
   const kinds = onlyKind ? [onlyKind] : ['scenes', 'lighting', 'palette'];

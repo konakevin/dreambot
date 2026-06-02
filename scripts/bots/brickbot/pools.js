@@ -94,7 +94,9 @@ const AXIS_POOLS = {
   // macro-display path — eleventh BrickBot axis migration (2026-05-27)
   BRICKBOT_MACRO_DISPLAY_DIORAMA_THEME: load('brickbot_macro_display_diorama_theme'),
   BRICKBOT_MACRO_DISPLAY_BUILD_SCOPE: load('brickbot_macro_display_build_scope'),
-  BRICKBOT_MACRO_DISPLAY_SIGNATURE_CENTERPIECE: load('brickbot_macro_display_signature_centerpiece'),
+  BRICKBOT_MACRO_DISPLAY_SIGNATURE_CENTERPIECE: load(
+    'brickbot_macro_display_signature_centerpiece'
+  ),
   BRICKBOT_MACRO_DISPLAY_CAMERA_FRAMING: load('brickbot_macro_display_camera_framing'),
   BRICKBOT_MACRO_DISPLAY_LIFE_DENSITY: load('brickbot_macro_display_life_density'),
   BRICKBOT_MACRO_DISPLAY_BASEPLATE_EDGE: load('brickbot_macro_display_baseplate_edge'),

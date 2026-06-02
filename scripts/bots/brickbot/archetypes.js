@@ -101,7 +101,14 @@ Bending advantage: island_scene × camera × time_of_day × life_density are dec
     slots: {
       universal: [],
       bot: [],
-      path: ['island_scene', 'camera_framing', 'time_of_day', 'life_density', 'shoreline_edge', 'palette'],
+      path: [
+        'island_scene',
+        'camera_framing',
+        'time_of_day',
+        'life_density',
+        'shoreline_edge',
+        'palette',
+      ],
     },
     pickN: {},
     conditionalLayer: null,
