@@ -61,16 +61,18 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 
 ## dinobot
 
-| Model              | Status | Notes |
-| ------------------ | ------ | ----- |
-| Nano Banana        | ✅     | —     |
-| GPT Image 2        | ✅     | —     |
-| Flux Dev           | ✅     | —     |
-| Flux 2 Pro         | ✅     | —     |
-| Flux 1.1 Pro       | ✅     | —     |
-| Flux 1.1 Pro Ultra | ✅     | —     |
-| Flux 2 Flex        | ✅     | —     |
-| Flux 2 Max         | ✅     | —     |
+| Model              | Status | Notes              |
+| ------------------ | ------ | ------------------ |
+| Nano Banana        | ✅     | —                  |
+| GPT Image 2        | ✅     | —                  |
+| Flux Dev           | ✅     | —                  |
+| Flux 2 Pro         | ✅     | —                  |
+| Flux 1.1 Pro       | ✅     | —                  |
+| Flux 1.1 Pro Ultra | ✅     | —                  |
+| Flux 2 Flex        | ❌     | dropped 2026-06-01 |
+| Flux 2 Max         | ❌     | dropped 2026-06-01 |
+
+**Final allowedModels:** 6 — Banana, GPT2, Flux Dev, F2 Pro, F1.1 Pro, F1.1 Pro Ultra
 
 **Final allowedModels:** all 8 (= `ALL_ENABLED_AI_MODELS`)
 
