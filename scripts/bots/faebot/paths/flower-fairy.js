@@ -49,7 +49,10 @@ module.exports = {
     lighting: 'FAEBOT_FLOWER_FAIRY_LIGHTING',
     weather: 'FAEBOT_FLOWER_FAIRY_WEATHER',
     foreground_anchor: 'FAEBOT_FLOWER_FAIRY_FOREGROUND_ANCHOR',
-    botanical_accent: { name: 'FAEBOT_FLOWER_FAIRY_BOTANICAL_ACCENT', matchTagsFromSlot: 'creature' },
+    botanical_accent: {
+      name: 'FAEBOT_FLOWER_FAIRY_BOTANICAL_ACCENT',
+      matchTagsFromSlot: 'creature',
+    },
     candid_action: 'FAEBOT_FLOWER_FAIRY_CANDID_ACTION',
     magical_flavor: 'FAEBOT_FLOWER_FAIRY_MAGICAL_FLAVOR',
     scale_prover: 'FAEBOT_FLOWER_FAIRY_SCALE_PROVER',

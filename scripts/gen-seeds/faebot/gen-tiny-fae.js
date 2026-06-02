@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} unified descriptions of TINY WINGED FAE for FaeBot's tiny-fae path — palm-sized fairies, sprites, pixie-folk caught in candid intimate moments. Painterly-realistic rendering matching FaeBot's same-world aesthetic (dryad-portrait + forest-fairy-scene). NOT cartoon Tinkerbell. NOT Disney-cute. NOT chibi-anime. Each entry feeds a Flux concept-art prompt-writer.
+  metaPrompt: (
+    n
+  ) => `Write ${n} unified descriptions of TINY WINGED FAE for FaeBot's tiny-fae path — palm-sized fairies, sprites, pixie-folk caught in candid intimate moments. Painterly-realistic rendering matching FaeBot's same-world aesthetic (dryad-portrait + forest-fairy-scene). NOT cartoon Tinkerbell. NOT Disney-cute. NOT chibi-anime. Each entry feeds a Flux concept-art prompt-writer.
 
 Each entry: 35-55 words, woven as ONE paragraph (not a field list).
 
@@ -76,4 +78,7 @@ G) MAGIC SIGNATURE:
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete fae description (35-55 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

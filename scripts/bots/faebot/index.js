@@ -80,7 +80,7 @@ module.exports = {
   allowedModels: [
     'google/gemini-2-image',
     'openai/gpt-image-2',
-    'black-forest-labs/flux-2-pro',
+    // flux-2-pro removed 2026-06-01 (Kevin)
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-2-max',

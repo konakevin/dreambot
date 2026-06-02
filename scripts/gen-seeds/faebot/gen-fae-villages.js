@@ -6,7 +6,9 @@ generatePool({
   batch: 50,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} unified scene descriptions of FAE DWELLINGS for FaeBot's fae-village path. Painterly enchanted-forest world matching FaeBot's other paths. Brian Froud + Greg Manchess + Eyvind Earle painted-fantasy lineage. Each entry feeds a Flux concept-art prompt-writer.
+  metaPrompt: (
+    n
+  ) => `Write ${n} unified scene descriptions of FAE DWELLINGS for FaeBot's fae-village path. Painterly enchanted-forest world matching FaeBot's other paths. Brian Froud + Greg Manchess + Eyvind Earle painted-fantasy lineage. Each entry feeds a Flux concept-art prompt-writer.
 
 Each entry: 35-55 words, ONE paragraph, focused PURELY on the DWELLING + ITS NATURAL FEATURE + LAYOUT.
 
@@ -86,4 +88,7 @@ When a prior batch is shown to you as "ALREADY GENERATED" — actively diverge f
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (35-55 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

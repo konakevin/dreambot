@@ -25,8 +25,7 @@ const COMPOSITIONS = [
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const vista = picker.pickWithRecency(pools.ENCHANTED_VISTA, 'enchanted_vista');
-  const composition =
-    COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
+  const composition = COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
 
   return `You are writing ONE Flux prompt for a LUSH ENCHANTED FOREST VISTA painting in the FaeBot enchanted-forest universe. Output ONLY the prompt — comma-separated phrases, 70-95 words, no preamble, no headers.
 

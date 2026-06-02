@@ -6,7 +6,9 @@ generatePool({
   batch: 25,
   append: true,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} unified descriptions of EXOTIC FOREST CREATURES — fairies, dryads, nymphs, forest-spirits, leshy-lords, kodama. The kind of beings that, glimpsed in a clearing, make you stop and think "wow, that's stunningly beautiful." Each entry is a complete creature description for a downstream Flux fantasy-illustration prompt-writer.
+  metaPrompt: (
+    n
+  ) => `Write ${n} unified descriptions of EXOTIC FOREST CREATURES — fairies, dryads, nymphs, forest-spirits, leshy-lords, kodama. The kind of beings that, glimpsed in a clearing, make you stop and think "wow, that's stunningly beautiful." Each entry is a complete creature description for a downstream Flux fantasy-illustration prompt-writer.
 
 Each entry: 35-55 words, woven as ONE paragraph (NOT a field list).
 
@@ -113,4 +115,7 @@ KODAMA / TREE-SPIRITS (occasional):
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete creature description (35-55 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

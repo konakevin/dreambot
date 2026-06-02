@@ -38,7 +38,10 @@ if (!ANTHROPIC) {
 }
 
 const args = process.argv.slice(2);
-const flag = (n, fb) => { const i = args.indexOf('--' + n); return i >= 0 ? args[i + 1] : fb; };
+const flag = (n, fb) => {
+  const i = args.indexOf('--' + n);
+  return i >= 0 ? args[i + 1] : fb;
+};
 const has = (n) => args.includes('--' + n);
 const POOL = flag('pool', null);
 const COUNT = parseInt(flag('count', '30'), 10);
@@ -192,7 +195,6 @@ const POOL_RECIPES = {
     ],
     instructions: `Each entry is ONE FLOWER-FAIRY SCENE SETTING, 30-60 words. Format: "fairy [verb] [interacting with specific flower or environment], [atmospheric detail], [magical element]". Distribute across field-of-flowers / garden-architecture / living-in-flowers / bloom-interaction / magical-bloom-event scene types. Output as a NUMBERED list, one per line.`,
   },
-
 
   // ─── flower-fairy path: wings (the centerpiece — flower-fairy wings) ───
   faebot_flower_fairy_wings: {
@@ -3059,7 +3061,6 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     instructions: `Each entry is ONE specific COMPANION animal, 15-35 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific species, (b) position relative to her, (c) posture/action, (d) scale cue (her scale or smaller). NO competing focal subject. NO predator-prey. NO creature description. NO modern or fantasy hybrids. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
 
-
   // ─── flower-fairy path (2026-05-20 axis-system migration, 10 axes) ───
   faebot_flower_fairy_creature: {
     format: 'simple',
@@ -3642,7 +3643,6 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     instructions: `Each entry is ONE specific COMPANION animal, 15-35 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific species, (b) position relative to her, (c) posture/action, (d) scale cue (her scale or smaller). NO competing focal subject. NO predator-prey. NO creature description. NO modern or fantasy hybrids. NO larger-than-fairy companions. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
 
-
   // ─── tiny-fae path (2026-05-21 axis-system migration, 10 axes) ───
   faebot_tiny_fae_creature: {
     format: 'simple',
@@ -3749,18 +3749,18 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   • NO predatory / aggressive postures (creature is gentle / sleeping / curious / playful)
   • NO oversized cartoonish proportions on the companion`,
     touchpoints: [
-      'A massive sleeping fox-cub curled in moss with soft russet fur filling the painted frame, painted gentle breathing, the palm-sized fae perched on its snout no taller than the bridge of its painted nose, the cub\'s nose alone wider than her body, dramatic dwarfing scale',
+      "A massive sleeping fox-cub curled in moss with soft russet fur filling the painted frame, painted gentle breathing, the palm-sized fae perched on its snout no taller than the bridge of its painted nose, the cub's nose alone wider than her body, dramatic dwarfing scale",
       'A spotted fawn lying gentle in moss with soft white-spotted brown fur dominating the painted background, painted long-lashed gentle eyes half-closed, the palm-sized fae perched on the curve of its raised hoof — fae fits inside a single hoof print, scale-dwarf register',
       'A red squirrel pausing on a thick branch with painted bright orange fur, its bushy tail curled forward like an enormous painted plume, the palm-sized fae sitting in the curve of its tail no taller than the tail-tuft itself, dramatic dwarfing scale',
       'A large hedgehog pauses on the moss with painted spiked-quill detail dominating the frame, the palm-sized fae balanced on the curve of its back atop the quills, fae barely as tall as a single quill, painted dramatic scale-proof',
-      'A massive sleeping bear-cub curled in painted soft brown fur filling the painted frame, painted gentle breathing, the palm-sized fae perched on its paw between two toes, fae would fit inside the cub\'s closed paw, dramatic dwarfing register',
-      'A hare-doe sitting motionless with painted soft brown-and-grey fur and tall ears upright dominating the painted frame, the palm-sized fae sitting on the curve of its back between the painted ears, the hare\'s ear alone twice her height, dramatic dwarfing scale',
-      'A red-fox kit pausing curious with painted soft russet fur, its massive face filling the painted upper frame, the palm-sized fae standing on its outstretched paw at the bottom of the frame, the kit\'s eye alone larger than her entire body',
-      'A wolf-pup lying playful with painted soft grey-and-cream fur dominating the painted frame, painted gentle eyes lowered, the palm-sized fae perched on its painted ear-tuft, the ear alone twice the fae\'s height, dramatic dwarfing scale',
-      'A massive painted red robin perched dominating the frame with painted feathered orange-red breast, the palm-sized fae fits on its back like a saddle her body half the length of a single wing, the robin\'s eye larger than her face',
-      'A painted chickadee on a fern-frond with painted black-and-white feather-pattern, the painted chickadee dominating the frame at its scale, the palm-sized fae standing on the bird\'s painted back her body fitting between two feathers, dramatic dwarfing scale',
-      'A wren mid-pause on a twig dominating the frame with painted soft brown plumage and bright eye, the palm-sized fae sitting on its painted shoulder, fae no taller than the wren\'s beak, painted intimate dwarfing register',
-      'A blue-tit perched on a hanging vine dominating the frame with painted soft-blue and yellow feathers, the palm-sized fae perched on its back her body the length of a single feather, the bird\'s eye larger than her face, dramatic dwarfing register',
+      "A massive sleeping bear-cub curled in painted soft brown fur filling the painted frame, painted gentle breathing, the palm-sized fae perched on its paw between two toes, fae would fit inside the cub's closed paw, dramatic dwarfing register",
+      "A hare-doe sitting motionless with painted soft brown-and-grey fur and tall ears upright dominating the painted frame, the palm-sized fae sitting on the curve of its back between the painted ears, the hare's ear alone twice her height, dramatic dwarfing scale",
+      "A red-fox kit pausing curious with painted soft russet fur, its massive face filling the painted upper frame, the palm-sized fae standing on its outstretched paw at the bottom of the frame, the kit's eye alone larger than her entire body",
+      "A wolf-pup lying playful with painted soft grey-and-cream fur dominating the painted frame, painted gentle eyes lowered, the palm-sized fae perched on its painted ear-tuft, the ear alone twice the fae's height, dramatic dwarfing scale",
+      "A massive painted red robin perched dominating the frame with painted feathered orange-red breast, the palm-sized fae fits on its back like a saddle her body half the length of a single wing, the robin's eye larger than her face",
+      "A painted chickadee on a fern-frond with painted black-and-white feather-pattern, the painted chickadee dominating the frame at its scale, the palm-sized fae standing on the bird's painted back her body fitting between two feathers, dramatic dwarfing scale",
+      "A wren mid-pause on a twig dominating the frame with painted soft brown plumage and bright eye, the palm-sized fae sitting on its painted shoulder, fae no taller than the wren's beak, painted intimate dwarfing register",
+      "A blue-tit perched on a hanging vine dominating the frame with painted soft-blue and yellow feathers, the palm-sized fae perched on its back her body the length of a single feather, the bird's eye larger than her face, dramatic dwarfing register",
       'A hummingbird mid-hover with painted iridescent green-and-ruby plumage dominating the painted frame, the palm-sized fae mid-flight beneath its painted belly, the hummingbird three times her height, dramatic dwarfing scale',
       'A massive painted sparrow on a fern-frond, painted soft brown plumage dominating the frame, the palm-sized fae standing on its painted talon, fae the size of a single sparrow-toe, dramatic scale-dwarf',
       'A chipmunk crouched in painted leaves with painted brown-and-cream stripes dominating the frame, the palm-sized fae sitting in the curve of its tail, fae no taller than its painted tail-tuft, dramatic dwarfing scale',
@@ -3771,7 +3771,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
       'A large dragonfly hovering with painted iridescent green-and-blue wing-detail dominating the painted frame, the palm-sized fae mid-flight at its painted abdomen-base her body the length of a single painted wing-vein, dramatic dwarfing',
       'A monarch butterfly with painted orange-and-black wing-detail spread filling the painted frame, the palm-sized fae riding on its painted thorax between the wings, fae the length of a single painted wing-cell, dramatic scale-dwarf register',
       'A swallowtail butterfly hovering near a bloom with painted yellow-and-black wing-pattern dominating the painted frame, the palm-sized fae riding on its painted back her body fitting between two wing-veins, dramatic dwarfing',
-      'A large luna-moth perched on a leaf with painted iridescent green-and-pearl wing-pattern dominating the painted frame, the palm-sized fae standing on the moth\'s back her body the length of a single painted wing-tip, dramatic dwarfing',
+      "A large luna-moth perched on a leaf with painted iridescent green-and-pearl wing-pattern dominating the painted frame, the palm-sized fae standing on the moth's back her body the length of a single painted wing-tip, dramatic dwarfing",
       'A painted barn-owl-juvenile perched on a branch dominating the painted frame with painted pale heart-shaped face and dark eyes, the palm-sized fae standing on its talons her body fitting inside one painted talon-curl, dramatic dwarfing scale',
       'A great-horned-owl looms over her from above with painted tufted ears and massive yellow eyes filling the painted upper frame, the palm-sized fae standing on the moss below dwarfed by its painted face, dramatic dwarfing register',
     ],
@@ -4232,7 +4232,6 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     ],
     instructions: `Each entry is ONE specific BOTANICAL ACCENT cluster at her scale, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific named species, (b) color detail, (c) position relative to her, (d) her scale implied. NO generic "flowers". NO creature. NO biome. NO lighting/weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
-
 
   // ─── dryad-portrait path (2026-05-21 axis-system migration, 10 axes) ───
   faebot_dryad_portrait_creature: {
@@ -4789,7 +4788,6 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     ],
     instructions: `Each entry is ONE specific FOREGROUND ANCHOR, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific type, (b) position in frame, (c) softly out-of-focus tactile detail. NO creature. NO biome. NO weather. NO modern. NO blocking her face. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
-
 
   // ─── fairy-court path (2026-05-21 axis-system migration, 10 axes) ───
   faebot_queen_of_forest_posed_setting: {
@@ -5619,11 +5617,11 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   • NO modern objects
   • NO crowds of dozens of critters — 3-5 specific elements layered cleanly`,
     touchpoints: [
-      'Small woodland critters dressing the chamber: a curious green frog at the throne-base, two tiny field-mice peeking from a fern-cluster at the left, a dragonfly hovering near the queen\'s left shoulder, scattered ladybugs across the moss-floor, a single brown hedgehog tucked at the chamber-edge under a fern-frond',
+      "Small woodland critters dressing the chamber: a curious green frog at the throne-base, two tiny field-mice peeking from a fern-cluster at the left, a dragonfly hovering near the queen's left shoulder, scattered ladybugs across the moss-floor, a single brown hedgehog tucked at the chamber-edge under a fern-frond",
       'Drifts of wildflower clusters blooming around the chamber boundary: foxglove-spires in pink-and-purple lining the left side, bluebell carpets in soft indigo at the floor, white lily-of-the-valley strands at the right, a few primroses scattered at the foreground, soft painted detail',
-      'Soft air-drift and butterflies populating the chamber air: pale lemon-yellow butterflies drifting around the queen\'s gown, iridescent blue butterflies orbiting the chamber-mid-tier, golden fireflies clustering near the floor, drifting dandelion-seeds floating across the ceremonial path',
+      "Soft air-drift and butterflies populating the chamber air: pale lemon-yellow butterflies drifting around the queen's gown, iridescent blue butterflies orbiting the chamber-mid-tier, golden fireflies clustering near the floor, drifting dandelion-seeds floating across the ceremonial path",
       'Lush foliage texture filling the chamber edges: lichen-and-moss crust on every root and stone, scattered hanging-mosses from the canopy in soft green drapes, small clover patches at the throne-base, dewdrops beading on the moss-floor, fiddlehead-fern tufts in the foreground-left',
-      'Layered ambient life across the chamber: a sparrow perched on a low branch at right, soft violet butterflies drifting around the queen\'s shoulders, foxglove-bells in pink lining the left side, scattered ladybugs on the moss-floor, fallen golden leaves at the foreground',
+      "Layered ambient life across the chamber: a sparrow perched on a low branch at right, soft violet butterflies drifting around the queen's shoulders, foxglove-bells in pink lining the left side, scattered ladybugs on the moss-floor, fallen golden leaves at the foreground",
       'Tiny woodland inhabitants and wildflowers: a chipmunk peeking from a hollow-log at the right, drifting silver moths around the lantern-orbs, lily-of-the-valley clusters at the throne-base, scattered forget-me-nots in soft blue, dewdrops on every petal',
       'Air-detail and floor-texture: drifting amber butterflies in clusters around the chamber-mid-tier, fireflies in warm-yellow points near the floor, lush hanging-mosses draping from the canopy, small mushroom-floor-clusters at the chamber edge as soft accents, scattered pinecones',
       'Wildflowers + critters layered: wild-rose and violet patches blooming at the floor edges, two robins perched on a low branch, dragonflies hovering near the chamber-mid-tier, soft floating thistledown drifting across the air, lichen-crust on the foreground stones',
@@ -5632,14 +5630,14 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
       'Wildflower drifts and butterflies: bluebell carpet beneath the throne fading into wild-rose clusters at the chamber edge, pale lemon butterflies drifting across the air, a single red ladybug climbing a fern-frond at foreground, dewdrops on every leaf',
       'Lush textural detail: lichen-and-moss crust on every root, scattered hanging-mosses in soft green from the canopy, small mushroom-floor-clusters (gentle floor accents only) at the chamber edges, sphagnum-moss humps, fiddlehead-ferns in the foreground',
       'Ambient air-life around the chamber: fireflies in warm-yellow points clustering near the floor, drifting iridescent butterflies around the queen, silver moths near the lantern-orbs, soft floating thistledown drifting through the chamber, drifting pollen-motes',
-      'Critters + wildflower clusters: a small wren perched on the throne\'s root-armrest at right, a curious frog at the floor, lily-of-the-valley strands at the throne-base, forget-me-nots clustering at the chamber edge, dewdrops beading on every petal',
+      "Critters + wildflower clusters: a small wren perched on the throne's root-armrest at right, a curious frog at the floor, lily-of-the-valley strands at the throne-base, forget-me-nots clustering at the chamber edge, dewdrops beading on every petal",
       'Floor-detail layering: foxglove-spires in pink-purple lining the left chamber-edge, wood-anemones scattered in white at the floor, scattered acorns and pinecones near the throne, a single brown hedgehog tucked among ferns, soft clover patches',
       'Multi-tier ambient life: two robins at the chamber mid-tier perched on a low branch, drifting amber butterflies in air, harebells and bluebells clustering at the floor, small mushroom-floor-cluster accents at the chamber edge, lichen-crust on stones',
       'Soft creature ensemble: a small bunny tucked at the chamber edge under a fern, a tiny field-mouse at the throne-base, a robin perched on a low branch at right, drifting butterflies in pale yellow, scattered wildflowers in soft pastels',
       'Painterly air-drift: drifting dandelion-seeds floating across the chamber air, drifting pollen-motes catching warm light, soft silver moths near the chandeliers, fireflies in warm-yellow points clustering at the floor, soft painted detail throughout',
       'Wildflower meadow at chamber edges: cowslips and primroses in soft yellow clustering at the right, violets in deep purple at the left, wild iris in blue at the foreground, dewdrops beading on every petal, soft painted floral detail',
       'Layered scattered detail: fallen golden leaves and acorns near the throne, small mushroom-floor-clusters at the chamber edge, lichen-and-moss crust on every root, dewdrops on the moss-floor, drifting pollen catching warm light',
-      'Critters + butterflies mix: a green frog at the foreground floor, dragonflies hovering near the queen\'s shoulders, drifting pale-blue butterflies in clusters across the chamber, scattered ladybugs on the moss, a single field-mouse peeking from a fern',
+      "Critters + butterflies mix: a green frog at the foreground floor, dragonflies hovering near the queen's shoulders, drifting pale-blue butterflies in clusters across the chamber, scattered ladybugs on the moss, a single field-mouse peeking from a fern",
       'Lush forest texture detail: hanging-moss curtains draping in soft green from the canopy, lichen-and-moss crust on every root and stone, sphagnum-moss humps at the chamber edge, fiddlehead-fern tufts in the foreground, scattered tiny mushroom accents',
       'Gentle multi-layer ambient: a fawn peeking from behind a tree-pillar at the right, butterflies in soft pastel pink drifting near the queen, foxglove-spires lining the left chamber-edge, bluebells at the floor, drifting pollen-motes in warm light',
       'Detailed floor-and-air layering: bluebell carpet at the throne-base fading into wild-rose at the edges, drifting amber butterflies in clusters across the chamber air, scattered acorns and pinecones near the throne, lichen-crust on the foreground stones',
@@ -5703,8 +5701,6 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     ],
     instructions: `Each entry is ONE specific SACRED COMPANION, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific sacred animal, (b) how it interacts (knelt / perched / sitting), (c) painted tactile detail. NO predatory. NO dwarfing-scale. NO creature description of queen. NO violence. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
-
-
 
   faebot_queen_of_forest_features: {
     format: 'simple',
@@ -6015,11 +6011,11 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   • NO modern objects
   • NO crowds of dozens of critters — 3-5 specific elements layered cleanly`,
     touchpoints: [
-      'Small woodland critters dressing the chamber: a curious green frog at the throne-base, two tiny field-mice peeking from a fern-cluster at the left, a dragonfly hovering near the queen\'s left shoulder, scattered ladybugs across the moss-floor, a single brown hedgehog tucked at the chamber-edge under a fern-frond',
+      "Small woodland critters dressing the chamber: a curious green frog at the throne-base, two tiny field-mice peeking from a fern-cluster at the left, a dragonfly hovering near the queen's left shoulder, scattered ladybugs across the moss-floor, a single brown hedgehog tucked at the chamber-edge under a fern-frond",
       'Drifts of wildflower clusters blooming around the chamber boundary: foxglove-spires in pink-and-purple lining the left side, bluebell carpets in soft indigo at the floor, white lily-of-the-valley strands at the right, a few primroses scattered at the foreground, soft painted detail',
-      'Soft air-drift and butterflies populating the chamber air: pale lemon-yellow butterflies drifting around the queen\'s gown, iridescent blue butterflies orbiting the chamber-mid-tier, golden fireflies clustering near the floor, drifting dandelion-seeds floating across the ceremonial path',
+      "Soft air-drift and butterflies populating the chamber air: pale lemon-yellow butterflies drifting around the queen's gown, iridescent blue butterflies orbiting the chamber-mid-tier, golden fireflies clustering near the floor, drifting dandelion-seeds floating across the ceremonial path",
       'Lush foliage texture filling the chamber edges: lichen-and-moss crust on every root and stone, scattered hanging-mosses from the canopy in soft green drapes, small clover patches at the throne-base, dewdrops beading on the moss-floor, fiddlehead-fern tufts in the foreground-left',
-      'Layered ambient life across the chamber: a sparrow perched on a low branch at right, soft violet butterflies drifting around the queen\'s shoulders, foxglove-bells in pink lining the left side, scattered ladybugs on the moss-floor, fallen golden leaves at the foreground',
+      "Layered ambient life across the chamber: a sparrow perched on a low branch at right, soft violet butterflies drifting around the queen's shoulders, foxglove-bells in pink lining the left side, scattered ladybugs on the moss-floor, fallen golden leaves at the foreground",
       'Tiny woodland inhabitants and wildflowers: a chipmunk peeking from a hollow-log at the right, drifting silver moths around the lantern-orbs, lily-of-the-valley clusters at the throne-base, scattered forget-me-nots in soft blue, dewdrops on every petal',
       'Air-detail and floor-texture: drifting amber butterflies in clusters around the chamber-mid-tier, fireflies in warm-yellow points near the floor, lush hanging-mosses draping from the canopy, small mushroom-floor-clusters at the chamber edge as soft accents, scattered pinecones',
       'Wildflowers + critters layered: wild-rose and violet patches blooming at the floor edges, two robins perched on a low branch, dragonflies hovering near the chamber-mid-tier, soft floating thistledown drifting across the air, lichen-crust on the foreground stones',
@@ -6028,14 +6024,14 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
       'Wildflower drifts and butterflies: bluebell carpet beneath the throne fading into wild-rose clusters at the chamber edge, pale lemon butterflies drifting across the air, a single red ladybug climbing a fern-frond at foreground, dewdrops on every leaf',
       'Lush textural detail: lichen-and-moss crust on every root, scattered hanging-mosses in soft green from the canopy, small mushroom-floor-clusters (gentle floor accents only) at the chamber edges, sphagnum-moss humps, fiddlehead-ferns in the foreground',
       'Ambient air-life around the chamber: fireflies in warm-yellow points clustering near the floor, drifting iridescent butterflies around the queen, silver moths near the lantern-orbs, soft floating thistledown drifting through the chamber, drifting pollen-motes',
-      'Critters + wildflower clusters: a small wren perched on the throne\'s root-armrest at right, a curious frog at the floor, lily-of-the-valley strands at the throne-base, forget-me-nots clustering at the chamber edge, dewdrops beading on every petal',
+      "Critters + wildflower clusters: a small wren perched on the throne's root-armrest at right, a curious frog at the floor, lily-of-the-valley strands at the throne-base, forget-me-nots clustering at the chamber edge, dewdrops beading on every petal",
       'Floor-detail layering: foxglove-spires in pink-purple lining the left chamber-edge, wood-anemones scattered in white at the floor, scattered acorns and pinecones near the throne, a single brown hedgehog tucked among ferns, soft clover patches',
       'Multi-tier ambient life: two robins at the chamber mid-tier perched on a low branch, drifting amber butterflies in air, harebells and bluebells clustering at the floor, small mushroom-floor-cluster accents at the chamber edge, lichen-crust on stones',
       'Soft creature ensemble: a small bunny tucked at the chamber edge under a fern, a tiny field-mouse at the throne-base, a robin perched on a low branch at right, drifting butterflies in pale yellow, scattered wildflowers in soft pastels',
       'Painterly air-drift: drifting dandelion-seeds floating across the chamber air, drifting pollen-motes catching warm light, soft silver moths near the chandeliers, fireflies in warm-yellow points clustering at the floor, soft painted detail throughout',
       'Wildflower meadow at chamber edges: cowslips and primroses in soft yellow clustering at the right, violets in deep purple at the left, wild iris in blue at the foreground, dewdrops beading on every petal, soft painted floral detail',
       'Layered scattered detail: fallen golden leaves and acorns near the throne, small mushroom-floor-clusters at the chamber edge, lichen-and-moss crust on every root, dewdrops on the moss-floor, drifting pollen catching warm light',
-      'Critters + butterflies mix: a green frog at the foreground floor, dragonflies hovering near the queen\'s shoulders, drifting pale-blue butterflies in clusters across the chamber, scattered ladybugs on the moss, a single field-mouse peeking from a fern',
+      "Critters + butterflies mix: a green frog at the foreground floor, dragonflies hovering near the queen's shoulders, drifting pale-blue butterflies in clusters across the chamber, scattered ladybugs on the moss, a single field-mouse peeking from a fern",
       'Lush forest texture detail: hanging-moss curtains draping in soft green from the canopy, lichen-and-moss crust on every root and stone, sphagnum-moss humps at the chamber edge, fiddlehead-fern tufts in the foreground, scattered tiny mushroom accents',
       'Gentle multi-layer ambient: a fawn peeking from behind a tree-pillar at the right, butterflies in soft pastel pink drifting near the queen, foxglove-spires lining the left chamber-edge, bluebells at the floor, drifting pollen-motes in warm light',
       'Detailed floor-and-air layering: bluebell carpet at the throne-base fading into wild-rose at the edges, drifting amber butterflies in clusters across the chamber air, scattered acorns and pinecones near the throne, lichen-crust on the foreground stones',
@@ -6752,7 +6748,6 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     ],
     instructions: `Each entry is ONE DISTANT WILDLIFE silhouette, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific animal type, (b) distant position (deep in grove / far clearing / through far trunks), (c) silhouette / ambient register (NEVER focal). NO close-up. NO multiple creatures. NO biome / hero / floor / water / lighting / weather / depth / foreground. NO predatory. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
-
 
   faebot_fae_village_dwelling_type: {
     format: 'simple',
@@ -7497,7 +7492,6 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     ],
     instructions: `Each entry is ONE WATER OR SPECIAL FEATURE, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific feature type, (b) position, (c) painterly detail. NO dwelling / lived-in / garden / wildlife / lighting / weather / forest / pathway. NO modern. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
-
 };
 
 const recipe = POOL_RECIPES[POOL];
@@ -7528,25 +7522,43 @@ async function callSonnet(prompt) {
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'x-api-key': ANTHROPIC, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: SONNET, max_tokens: 16000, messages: [{ role: 'user', content: prompt }] }),
+        headers: {
+          'x-api-key': ANTHROPIC,
+          'anthropic-version': '2023-06-01',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: SONNET,
+          max_tokens: 16000,
+          messages: [{ role: 'user', content: prompt }],
+        }),
         signal: controller.signal,
       });
-      if (res.ok) { const data = await res.json(); return (data.content?.[0]?.text || '').trim(); }
+      if (res.ok) {
+        const data = await res.json();
+        return (data.content?.[0]?.text || '').trim();
+      }
       const text = (await res.text()).slice(0, 300);
       if ((res.status === 529 || res.status === 429 || res.status >= 500) && i < delays.length) {
-        console.log(`  ⏳ Sonnet ${res.status} — retry ${i + 1}/${delays.length} in ${delays[i] / 1000}s`);
+        console.log(
+          `  ⏳ Sonnet ${res.status} — retry ${i + 1}/${delays.length} in ${delays[i] / 1000}s`
+        );
         await new Promise((r) => setTimeout(r, delays[i]));
         continue;
       }
       throw new Error(`Sonnet ${res.status}: ${text}`);
-    } finally { clearTimeout(timeoutId); }
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
   throw new Error('Sonnet: retry exhausted');
 }
 
 function parseArray(text) {
-  const body = text.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
+  const body = text
+    .replace(/```[a-z]*\n?/gi, '')
+    .replace(/```/g, '')
+    .trim();
   const lines = body.split('\n');
   const entries = [];
   let current = null;
@@ -7555,23 +7567,132 @@ function parseArray(text) {
     const trimmed = raw.trim();
     if (!trimmed) continue;
     const m = trimmed.match(numRe);
-    if (m) { if (current) entries.push(current); current = m[2].trim(); }
-    else if (current) current += ' ' + trimmed;
+    if (m) {
+      if (current) entries.push(current);
+      current = m[2].trim();
+    } else if (current) current += ' ' + trimmed;
   }
   if (current) entries.push(current);
   const cleaned = entries
-    .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+    .map((e) =>
+      e
+        .replace(/^["']|["']$/g, '')
+        .replace(/^[-•*]\s*/, '')
+        .trim()
+    )
     .filter((e) => e.length > 20 && e.length < 1200);
   if (cleaned.length === 0) throw new Error('No numbered entries found in response');
   return cleaned;
 }
 
-const STOPWORDS = new Set(['the','a','an','and','or','but','with','of','in','on','at','to','for','from','by','as','is','are','was','were','be','been','being','have','has','had','this','that','these','those','it','its','they','them','their','her','his','into','onto','through','across','over','under','near','around','between','one','two','three','some','any','all','no','not','than','then','also','so','very','more','most','many','much','each','every','other','another','same','such','only','own','just','still','here','there','where','when','what','who','wide','tall','long','high','low','large','small','massive','huge','vast','above','below','beside','behind','toward','within','throughout']);
+const STOPWORDS = new Set([
+  'the',
+  'a',
+  'an',
+  'and',
+  'or',
+  'but',
+  'with',
+  'of',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'from',
+  'by',
+  'as',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'have',
+  'has',
+  'had',
+  'this',
+  'that',
+  'these',
+  'those',
+  'it',
+  'its',
+  'they',
+  'them',
+  'their',
+  'her',
+  'his',
+  'into',
+  'onto',
+  'through',
+  'across',
+  'over',
+  'under',
+  'near',
+  'around',
+  'between',
+  'one',
+  'two',
+  'three',
+  'some',
+  'any',
+  'all',
+  'no',
+  'not',
+  'than',
+  'then',
+  'also',
+  'so',
+  'very',
+  'more',
+  'most',
+  'many',
+  'much',
+  'each',
+  'every',
+  'other',
+  'another',
+  'same',
+  'such',
+  'only',
+  'own',
+  'just',
+  'still',
+  'here',
+  'there',
+  'where',
+  'when',
+  'what',
+  'who',
+  'wide',
+  'tall',
+  'long',
+  'high',
+  'low',
+  'large',
+  'small',
+  'massive',
+  'huge',
+  'vast',
+  'above',
+  'below',
+  'beside',
+  'behind',
+  'toward',
+  'within',
+  'throughout',
+]);
 
 function signatureOf(entry) {
   const dashIdx = entry.indexOf(' — ');
   let body = dashIdx >= 0 ? entry.slice(dashIdx + 3) : entry;
-  const tokens = body.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter((w) => w.length > 4 && !STOPWORDS.has(w)).slice(0, 20);
+  const tokens = body
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 4 && !STOPWORDS.has(w))
+    .slice(0, 20);
   return [...new Set(tokens)].sort().slice(0, 12).join(' ');
 }
 
@@ -7582,15 +7703,27 @@ function titleOf(entry) {
 }
 
 function dedupe(entries) {
-  const seenSigs = new Map(); const seenTitles = new Map();
-  const kept = []; const dropped = [];
+  const seenSigs = new Map();
+  const seenTitles = new Map();
+  const kept = [];
+  const dropped = [];
   for (const e of entries) {
     if (typeof e !== 'string' || e.length < 20) continue;
     const title = titleOf(e);
-    if (title && seenTitles.has(title)) { dropped.push({ entry: e.slice(0, 80), reason: 'title' }); continue; }
+    if (title && seenTitles.has(title)) {
+      dropped.push({ entry: e.slice(0, 80), reason: 'title' });
+      continue;
+    }
     const sig = signatureOf(e);
-    if (sig.length < 10) { if (title) seenTitles.set(title, e); kept.push(e); continue; }
-    if (seenSigs.has(sig)) { dropped.push({ entry: e.slice(0, 80), reason: 'body' }); continue; }
+    if (sig.length < 10) {
+      if (title) seenTitles.set(title, e);
+      kept.push(e);
+      continue;
+    }
+    if (seenSigs.has(sig)) {
+      dropped.push({ entry: e.slice(0, 80), reason: 'body' });
+      continue;
+    }
     seenSigs.set(sig, e);
     if (title) seenTitles.set(title, e);
     kept.push(e);
@@ -7603,9 +7736,17 @@ async function generateBatch(batchCount) {
   const text = await callSonnet(buildPrompt(batchCount, recipe));
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   let arr;
-  try { arr = parseArray(text); }
-  catch (e) { console.error('Parse failed:', e.message); console.error('First 400 chars:', text.slice(0, 400)); return []; }
-  if (!Array.isArray(arr) || arr.length === 0) { console.warn('  ⚠ Sonnet returned no usable entries'); return []; }
+  try {
+    arr = parseArray(text);
+  } catch (e) {
+    console.error('Parse failed:', e.message);
+    console.error('First 400 chars:', text.slice(0, 400));
+    return [];
+  }
+  if (!Array.isArray(arr) || arr.length === 0) {
+    console.warn('  ⚠ Sonnet returned no usable entries');
+    return [];
+  }
   console.log(`  • Sonnet returned ${arr.length} entries in ${elapsed}s`);
   return arr;
 }
@@ -7613,21 +7754,36 @@ async function generateBatch(batchCount) {
 (async () => {
   const outPath = path.resolve(`scripts/bots/faebot/seeds/${POOL}.json`);
   let preExisting = [];
-  if (fs.existsSync(outPath)) { try { preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8')); } catch {} }
+  if (fs.existsSync(outPath)) {
+    try {
+      preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    } catch {}
+  }
   const finalTarget = TARGET ?? preExisting.length + COUNT;
   const startCount = preExisting.length;
-  if (TARGET !== null) console.log(`Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`);
-  else console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
-  let pool = [...preExisting]; let iteration = 0;
+  if (TARGET !== null)
+    console.log(
+      `Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`
+    );
+  else
+    console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
+  let pool = [...preExisting];
+  let iteration = 0;
   while (pool.length < finalTarget && iteration < MAX_ITERATIONS) {
     iteration++;
     const stillNeeded = finalTarget - pool.length;
     const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
-    console.log(`\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`);
+    console.log(
+      `\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`
+    );
     const fresh = await generateBatch(batchSize);
-    if (fresh.length === 0) { console.warn('  ⚠ empty Sonnet response — stopping iteration'); break; }
+    if (fresh.length === 0) {
+      console.warn('  ⚠ empty Sonnet response — stopping iteration');
+      break;
+    }
     const within = dedupe(fresh);
-    if (within.dropped.length > 0) console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
+    if (within.dropped.length > 0)
+      console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
     const existingSigs = new Set(pool.map((e) => signatureOf(e)));
     const existingTitles = new Set(pool.map((e) => titleOf(e)).filter(Boolean));
     const newUnique = within.kept.filter((e) => {
@@ -7642,12 +7798,23 @@ async function generateBatch(batchCount) {
     const toAdd = newUnique.slice(0, room);
     pool = [...pool, ...toAdd];
     console.log(`  ✓ Added ${toAdd.length} unique → pool at ${pool.length}/${finalTarget}`);
-    if (toAdd.length === 0 && newUnique.length === 0) { console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on theme, stopping'); break; }
+    if (toAdd.length === 0 && newUnique.length === 0) {
+      console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on theme, stopping');
+      break;
+    }
   }
-  console.log(`\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`);
-  if (DRY) { console.log('\nDry-run — not writing to disk.'); return; }
+  console.log(
+    `\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`
+  );
+  if (DRY) {
+    console.log('\nDry-run — not writing to disk.');
+    return;
+  }
   const bakPath = outPath + '.bak-' + Date.now();
-  if (fs.existsSync(outPath) && preExisting.length > 0) { fs.copyFileSync(outPath, bakPath); console.log(`Backed up existing pool → ${bakPath}`); }
+  if (fs.existsSync(outPath) && preExisting.length > 0) {
+    fs.copyFileSync(outPath, bakPath);
+    console.log(`Backed up existing pool → ${bakPath}`);
+  }
   fs.writeFileSync(outPath, JSON.stringify(pool, null, 2));
   console.log(`✓ Wrote ${pool.length} entries → ${outPath}`);
 })();

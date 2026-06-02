@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} unified scene descriptions of LUSH ENCHANTED FOREST VISTAS for FaeBot's enchanted-vista path — NO figures, NO creatures in the foreground, JUST the forest itself rendered LUSH and BEAUTIFUL with subtle hints of fairy magic woven everywhere. The "you walked into a glade and stopped breathing" energy. Painterly-realistic rendering matching FaeBot's same-world aesthetic (dryad-portrait + tiny-fae + fairy-court). Each entry feeds a Flux concept-art prompt-writer.
+  metaPrompt: (
+    n
+  ) => `Write ${n} unified scene descriptions of LUSH ENCHANTED FOREST VISTAS for FaeBot's enchanted-vista path — NO figures, NO creatures in the foreground, JUST the forest itself rendered LUSH and BEAUTIFUL with subtle hints of fairy magic woven everywhere. The "you walked into a glade and stopped breathing" energy. Painterly-realistic rendering matching FaeBot's same-world aesthetic (dryad-portrait + tiny-fae + fairy-court). Each entry feeds a Flux concept-art prompt-writer.
 
 Each entry: 35-55 words, woven as ONE paragraph (not a field list).
 
@@ -121,4 +123,7 @@ Each entry MUST include 3-4 of these magical-atmosphere elements (subtle, not ov
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete vista description (35-55 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

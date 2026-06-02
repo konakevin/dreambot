@@ -6,7 +6,9 @@ generatePool({
   batch: 40,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} LIGHTING + WEATHER + ATMOSPHERIC-MAGIC descriptions for FaeBot's fae-village path. Each entry is 25-45 words describing a coupled lighting/weather/atmospheric treatment that gets layered into a fae-village painted-fantasy scene. Lighting and weather are inseparable; magical atmospheric particles are part of the lighting layer.
+  metaPrompt: (
+    n
+  ) => `Write ${n} LIGHTING + WEATHER + ATMOSPHERIC-MAGIC descriptions for FaeBot's fae-village path. Each entry is 25-45 words describing a coupled lighting/weather/atmospheric treatment that gets layered into a fae-village painted-fantasy scene. Lighting and weather are inseparable; magical atmospheric particles are part of the lighting layer.
 
 ━━━ EVERY ENTRY MUST INCLUDE ━━━
 
@@ -73,4 +75,7 @@ When prior batches are shown as "ALREADY GENERATED" — actively diverge. Vary t
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete lighting+weather+magic description (25-45 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

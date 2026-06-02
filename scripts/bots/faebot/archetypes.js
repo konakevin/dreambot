@@ -14,167 +14,174 @@
 
 module.exports = {
   FAEBOT_FOREST_FAIRY_SCENE: {
-  description: 'PATH-BESPOKE — FaeBot forest-fairy-scene (2026-05-20 axis-system migration). The canonical FaeBot path — ONE mythic forest creature (40-55% of frame, off-center, candid hidden-camera capture) wrapped in a deep wild forest. Painted-fantasy concept-art lineage (Manchess + Giancola + Bonner + Froud). Otherworldly mythic-creature beauty, NOT human-model beauty. NEVER posing, NEVER eye-contact. 10 axes (9 always-on + 1 gated companion): creature / forest_biome / lighting / weather / foreground_anchor / botanical_accent / candid_action / magical_flavor / scale_prover + companion (50%-gated).',
-  slots: {
-    universal: [],
-    bot: [],
-    path: [
-      'creature',
-      'forest_biome',
-      'lighting',
-      'weather',
-      'foreground_anchor',
-      'botanical_accent',
-      'candid_action',
-      'magical_flavor',
-      'scale_prover'
-    ]
+    description:
+      'PATH-BESPOKE — FaeBot forest-fairy-scene (2026-05-20 axis-system migration). The canonical FaeBot path — ONE mythic forest creature (40-55% of frame, off-center, candid hidden-camera capture) wrapped in a deep wild forest. Painted-fantasy concept-art lineage (Manchess + Giancola + Bonner + Froud). Otherworldly mythic-creature beauty, NOT human-model beauty. NEVER posing, NEVER eye-contact. 10 axes (9 always-on + 1 gated companion): creature / forest_biome / lighting / weather / foreground_anchor / botanical_accent / candid_action / magical_flavor / scale_prover + companion (50%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'creature',
+        'forest_biome',
+        'lighting',
+        'weather',
+        'foreground_anchor',
+        'botanical_accent',
+        'candid_action',
+        'magical_flavor',
+        'scale_prover',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'companion', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: { slot: 'companion', gate: 0.5 },
-  framingModes: null,
-  anchorScaleRange: null
-},
 
   FAEBOT_FLOWER_FAIRY: {
-  description: 'PATH-BESPOKE — FaeBot flower-fairy (2026-05-20 axis-system migration). Sister to forest-fairy-scene. ONE flower-merged mythic fae creature (40-55% of frame, off-center, candid). DISTINCT DNA: creatures whose BODIES ARE FLOWERS (petal-skin / blossom-hair / petal-wings / petal-garment / pollen-glow). Sub-human scale — flowers can be her HOME. Color-coherent via matchTagsFromSlot: creature carries a palette tag (WARM/COOL/WHITE/MULTI), biome + botanical_accent filter to match. 10 axes (9 always-on + 1 gated companion): creature / flower_biome / lighting / weather / foreground_anchor / botanical_accent / candid_action / magical_flavor / scale_prover + companion (50%-gated).',
-  slots: {
-    universal: [],
-    bot: [],
-    path: [
-      'creature',
-      'flower_biome',
-      'lighting',
-      'weather',
-      'foreground_anchor',
-      'botanical_accent',
-      'candid_action',
-      'magical_flavor',
-      'scale_prover'
-    ]
+    description:
+      'PATH-BESPOKE — FaeBot flower-fairy (2026-05-20 axis-system migration). Sister to forest-fairy-scene. ONE flower-merged mythic fae creature (40-55% of frame, off-center, candid). DISTINCT DNA: creatures whose BODIES ARE FLOWERS (petal-skin / blossom-hair / petal-wings / petal-garment / pollen-glow). Sub-human scale — flowers can be her HOME. Color-coherent via matchTagsFromSlot: creature carries a palette tag (WARM/COOL/WHITE/MULTI), biome + botanical_accent filter to match. 10 axes (9 always-on + 1 gated companion): creature / flower_biome / lighting / weather / foreground_anchor / botanical_accent / candid_action / magical_flavor / scale_prover + companion (50%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'creature',
+        'flower_biome',
+        'lighting',
+        'weather',
+        'foreground_anchor',
+        'botanical_accent',
+        'candid_action',
+        'magical_flavor',
+        'scale_prover',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'companion', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: { slot: 'companion', gate: 0.5 },
-  framingModes: null,
-  anchorScaleRange: null
-},
 
   FAEBOT_TINY_FAE: {
-  description: 'PATH-BESPOKE — FaeBot tiny-fae (2026-05-21 axis-system migration). Palm-sized winged fae (3-8 inches tall) at MACRO perspective in the enchanted forest. THE PATH IDENTITY is the scale_anchor_companion — every render includes a normal-sized forest creature (fox / deer / fawn / robin / squirrel / hedgehog / owl / etc.) that DRAMATICALLY DWARFS her. Without this scale-proof, Flux defaults to regular-sized fairy. Painterly-real (Brian Froud + Charles Vess lineage). 10 axes (9 always-on + 1 gated botanical_accent). IMPORTANT: tiny-fae is in twoPassPolish.skipPaths because Haiku polish strips dwarfing language. Pool entries use strong dwarfing positions (perched on a single feature / under looming face / fits inside a paw).',
-  slots: {
-    universal: [],
-    bot: [],
-    path: [
-      'creature',
-      'scale_anchor_companion',
-      'macro_perch',
-      'forest_micro_biome',
-      'lighting',
-      'weather',
-      'fae_action',
-      'magical_flavor',
-      'foreground_anchor'
-    ]
+    description:
+      'PATH-BESPOKE — FaeBot tiny-fae (2026-05-21 axis-system migration). Palm-sized winged fae (3-8 inches tall) at MACRO perspective in the enchanted forest. THE PATH IDENTITY is the scale_anchor_companion — every render includes a normal-sized forest creature (fox / deer / fawn / robin / squirrel / hedgehog / owl / etc.) that DRAMATICALLY DWARFS her. Without this scale-proof, Flux defaults to regular-sized fairy. Painterly-real (Brian Froud + Charles Vess lineage). 10 axes (9 always-on + 1 gated botanical_accent). IMPORTANT: tiny-fae is in twoPassPolish.skipPaths because Haiku polish strips dwarfing language. Pool entries use strong dwarfing positions (perched on a single feature / under looming face / fits inside a paw).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'creature',
+        'scale_anchor_companion',
+        'macro_perch',
+        'forest_micro_biome',
+        'lighting',
+        'weather',
+        'fae_action',
+        'magical_flavor',
+        'foreground_anchor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'botanical_accent', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: { slot: 'botanical_accent', gate: 0.4 },
-  framingModes: null,
-  anchorScaleRange: null
-},
 
   FAEBOT_DRYAD_PORTRAIT: {
-  description: 'PATH-BESPOKE — FaeBot dryad-portrait (2026-05-21 axis-system migration). TIGHT close-up portrait (face 35-60% of frame) of an adult-scale tree-bound dryad / hamadryad / naiad / meliae / moss-maiden / Leshy. Intimate STILLNESS register — face turned 3/4 or profile, eyes lowered, NEVER eye-contact. Painted-fantasy register (Manchess + Giancola + Bonner + Froud). 10 axes (9 always-on + 1 gated foreground_anchor): creature / expression_moment / gesture_pose / portrait_composition / adornment / forest_backdrop / lighting / weather / magical_flavor + foreground_anchor (40%-gated). Decomposed creature pool to features-only (no posture), with expression / gesture / adornment broken out as separate axes for ~10^9 combinations.',
-  slots: {
-    universal: [],
-    bot: [],
-    path: [
-      'creature',
-      'expression_moment',
-      'gesture_pose',
-      'portrait_composition',
-      'adornment',
-      'forest_backdrop',
-      'lighting',
-      'weather',
-      'magical_flavor'
-    ]
+    description:
+      'PATH-BESPOKE — FaeBot dryad-portrait (2026-05-21 axis-system migration). TIGHT close-up portrait (face 35-60% of frame) of an adult-scale tree-bound dryad / hamadryad / naiad / meliae / moss-maiden / Leshy. Intimate STILLNESS register — face turned 3/4 or profile, eyes lowered, NEVER eye-contact. Painted-fantasy register (Manchess + Giancola + Bonner + Froud). 10 axes (9 always-on + 1 gated foreground_anchor): creature / expression_moment / gesture_pose / portrait_composition / adornment / forest_backdrop / lighting / weather / magical_flavor + foreground_anchor (40%-gated). Decomposed creature pool to features-only (no posture), with expression / gesture / adornment broken out as separate axes for ~10^9 combinations.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'creature',
+        'expression_moment',
+        'gesture_pose',
+        'portrait_composition',
+        'adornment',
+        'forest_backdrop',
+        'lighting',
+        'weather',
+        'magical_flavor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'foreground_anchor', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: { slot: 'foreground_anchor', gate: 0.4 },
-  framingModes: null,
-  anchorScaleRange: null
-},
 
   FAEBOT_FAE_VILLAGE_AXIS: {
-  description: 'PATH-BESPOKE — FaeBot fae-village (2026-05-21 axis-system migration). One of FaeBot most popular paths. Enchanted fae dwellings grown from forest (acorn / eggshell / mushroom / treehouse / hollow-trunk / bramble-nest / stone-ruin-overgrown / cliff-ledge / spider-silk-hammock / etc.) as primary subject (40-55% of frame). Amber-glowing windows + chimney smoke + lanterns + lush wildflower carpet + critters bring scene to life. 12 axes (11 always-on + 1 gated water_or_feature): dwelling_type / village_layout / lived_in_signs / approach_pathway / dwelling_garden / forest_setting / lighting / atmospheric_depth / wildlife_lived_in / floral_carpet / foreground_anchor + water_or_feature (40%-gated). village_layout covers 9 legacy layout types (SINGLE / PAIR / CLUSTER / CANOPY-NETWORK / VERTICAL-STACK / OVER-WATER / CLIFF-LEDGE / FAIRY-RING-COURTYARD / HANGING-INVERTED) and reconciles with dwelling_type via Sonnet composition.',
-  slots: {
-    universal: [],
-    bot: [],
-    path: [
-      'dwelling_type',
-      'village_layout',
-      'lived_in_signs',
-      'approach_pathway',
-      'dwelling_garden',
-      'forest_setting',
-      'lighting',
-      'atmospheric_depth',
-      'wildlife_lived_in',
-      'floral_carpet',
-      'foreground_anchor'
-    ]
+    description:
+      'PATH-BESPOKE — FaeBot fae-village (2026-05-21 axis-system migration). One of FaeBot most popular paths. Enchanted fae dwellings grown from forest (acorn / eggshell / mushroom / treehouse / hollow-trunk / bramble-nest / stone-ruin-overgrown / cliff-ledge / spider-silk-hammock / etc.) as primary subject (40-55% of frame). Amber-glowing windows + chimney smoke + lanterns + lush wildflower carpet + critters bring scene to life. 12 axes (11 always-on + 1 gated water_or_feature): dwelling_type / village_layout / lived_in_signs / approach_pathway / dwelling_garden / forest_setting / lighting / atmospheric_depth / wildlife_lived_in / floral_carpet / foreground_anchor + water_or_feature (40%-gated). village_layout covers 9 legacy layout types (SINGLE / PAIR / CLUSTER / CANOPY-NETWORK / VERTICAL-STACK / OVER-WATER / CLIFF-LEDGE / FAIRY-RING-COURTYARD / HANGING-INVERTED) and reconciles with dwelling_type via Sonnet composition.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'dwelling_type',
+        'village_layout',
+        'lived_in_signs',
+        'approach_pathway',
+        'dwelling_garden',
+        'forest_setting',
+        'lighting',
+        'atmospheric_depth',
+        'wildlife_lived_in',
+        'floral_carpet',
+        'foreground_anchor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'water_or_feature', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: { slot: 'water_or_feature', gate: 0.4 },
-  framingModes: null,
-  anchorScaleRange: null
-},
 
   FAEBOT_ENCHANTED_VISTA: {
-  description: 'PATH-BESPOKE — FaeBot enchanted-vista (2026-05-21 axis-system migration from legacy function-form). PURE FOREST LANDSCAPE — no figures, no creatures as focal subjects. The lush enchanted forest itself is the subject, the magical land where the other FaeBot creatures live and thrive. Multi-layer painterly richness (canopy + hero feature + floor + water + magic + light + depth + air + foreground). 11 axes: biome / hero_feature / floor_carpet / water_element / magical_ambient / composition / lighting / atmospheric_depth / weather / foreground_anchor + wildlife_distant (40%-gated). HARD BAN: never include "standing stones / stone circles / tomb / gravestone" (Flux renders these as cemetery imagery).',
-  slots: {
-    universal: [],
-    bot: [],
-    path: [
-      'biome',
-      'hero_feature',
-      'floor_carpet',
-      'water_element',
-      'magical_ambient',
-      'composition',
-      'lighting',
-      'atmospheric_depth',
-      'weather',
-      'foreground_anchor'
-    ]
+    description:
+      'PATH-BESPOKE — FaeBot enchanted-vista (2026-05-21 axis-system migration from legacy function-form). PURE FOREST LANDSCAPE — no figures, no creatures as focal subjects. The lush enchanted forest itself is the subject, the magical land where the other FaeBot creatures live and thrive. Multi-layer painterly richness (canopy + hero feature + floor + water + magic + light + depth + air + foreground). 11 axes: biome / hero_feature / floor_carpet / water_element / magical_ambient / composition / lighting / atmospheric_depth / weather / foreground_anchor + wildlife_distant (40%-gated). HARD BAN: never include "standing stones / stone circles / tomb / gravestone" (Flux renders these as cemetery imagery).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'biome',
+        'hero_feature',
+        'floor_carpet',
+        'water_element',
+        'magical_ambient',
+        'composition',
+        'lighting',
+        'atmospheric_depth',
+        'weather',
+        'foreground_anchor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'wildlife_distant', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: { slot: 'wildlife_distant', gate: 0.4 },
-  framingModes: null,
-  anchorScaleRange: null
-},
 
   FAEBOT_QUEEN_OF_THE_FOREST: {
-  description: 'PATH-BESPOKE — FaeBot queen-of-the-forest (2026-05-21 pivot from fairy-court). ONE ornate magic fae queen POSED beautifully in a stunning natural forest setting (gnarled-root throne in clearing / posed on tree-branch over stream / standing in wildflower meadow / sitting on mossy boulder by waterfall / framed in tree-archway / wading in forest stream / leaning against hero-tree). She is the Queen of the Forest — woodland critters FLOCK to her and pay respects (foxes, robins, fawns, butterflies, frogs, hares at her feet and around her). Sometimes lesser fae also gather (60%-gated). Painted-fantasy register. 11 axes: queen_features / posed_setting / forest_biome / regalia / forest_critters / lighting / weather / magical_flavor / ambient_detail / foreground_anchor + lesser_fae (60%-gated). MULTI-FIGURE / formal-court framing removed — this is the queen alone (or with lesser fae paying respects), posed in her natural domain.',
-  slots: {
-    universal: [],
-    bot: [],
-    path: [
-      'queen_features',
-      'posed_setting',
-      'forest_biome',
-      'regalia',
-      'forest_critters',
-      'lighting',
-      'weather',
-      'magical_flavor',
-      'ambient_detail',
-      'foreground_anchor'
-    ]
+    description:
+      'PATH-BESPOKE — FaeBot queen-of-the-forest (2026-05-21 pivot from fairy-court). ONE ornate magic fae queen POSED beautifully in a stunning natural forest setting (gnarled-root throne in clearing / posed on tree-branch over stream / standing in wildflower meadow / sitting on mossy boulder by waterfall / framed in tree-archway / wading in forest stream / leaning against hero-tree). She is the Queen of the Forest — woodland critters FLOCK to her and pay respects (foxes, robins, fawns, butterflies, frogs, hares at her feet and around her). Sometimes lesser fae also gather (60%-gated). Painted-fantasy register. 11 axes: queen_features / posed_setting / forest_biome / regalia / forest_critters / lighting / weather / magical_flavor / ambient_detail / foreground_anchor + lesser_fae (60%-gated). MULTI-FIGURE / formal-court framing removed — this is the queen alone (or with lesser fae paying respects), posed in her natural domain.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'queen_features',
+        'posed_setting',
+        'forest_biome',
+        'regalia',
+        'forest_critters',
+        'lighting',
+        'weather',
+        'magical_flavor',
+        'ambient_detail',
+        'foreground_anchor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'lesser_fae', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
   },
-  pickN: {},
-  conditionalLayer: { slot: 'lesser_fae', gate: 0.6 },
-  framingModes: null,
-  anchorScaleRange: null
-},
 };

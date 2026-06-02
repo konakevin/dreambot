@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} unified descriptions of ADULT-SCALE FEMININE PLANT-SPIRITS for FaeBot's dryad-portrait path — single dryads, nymphs, forest-priestesses, huldras, hamadryads. The "caught a real dryad on a hidden trail-cam" energy: gorgeous mythic-creature beauty, body partly-plant, intimate candid moments. Each entry feeds a Flux concept-art prompt-writer.
+  metaPrompt: (
+    n
+  ) => `Write ${n} unified descriptions of ADULT-SCALE FEMININE PLANT-SPIRITS for FaeBot's dryad-portrait path — single dryads, nymphs, forest-priestesses, huldras, hamadryads. The "caught a real dryad on a hidden trail-cam" energy: gorgeous mythic-creature beauty, body partly-plant, intimate candid moments. Each entry feeds a Flux concept-art prompt-writer.
 
 Each entry: 35-55 words, woven as ONE paragraph (not a field list).
 
@@ -60,4 +62,7 @@ Dryad (oak / willow / rowan / birch), Hamadryad (tree-bound, half-emerged from t
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete creature description (35-55 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

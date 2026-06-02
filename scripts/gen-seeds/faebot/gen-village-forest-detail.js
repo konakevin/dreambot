@@ -6,7 +6,9 @@ generatePool({
   batch: 40,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} FOREST DETAIL descriptions for FaeBot's fae-village path. Each entry is 35-55 words describing the lush painterly forest texture that surrounds and frames a fae-village scene — INCLUDING magical-flora elements that make the forest feel enchanted (koi ponds with glowing fish, living mushrooms, singing flowers, glowing fungi). Layered into the prompt to make every scene feel ALIVE with painted lushness and forest-magic.
+  metaPrompt: (
+    n
+  ) => `Write ${n} FOREST DETAIL descriptions for FaeBot's fae-village path. Each entry is 35-55 words describing the lush painterly forest texture that surrounds and frames a fae-village scene — INCLUDING magical-flora elements that make the forest feel enchanted (koi ponds with glowing fish, living mushrooms, singing flowers, glowing fungi). Layered into the prompt to make every scene feel ALIVE with painted lushness and forest-magic.
 
 The dwelling is the subject — but the FOREST AROUND IT must be packed with rich painterly detail at every distance, including occasional magical-flora touches.
 
@@ -79,4 +81,7 @@ When prior batches are shown as "ALREADY GENERATED" — actively diverge. Vary t
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete forest-detail description (35-55 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

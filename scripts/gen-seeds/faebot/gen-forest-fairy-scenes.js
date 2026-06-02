@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/faebot/seeds/forest_fairy_scenes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ENCHANTED FOREST CREATURE scene descriptions for ForestBot. Each scene is a CANDID GLIMPSE into a magical forest — caught a moment with a forest spirit, dryad, fairy, leshy, kodama, etc. The vibe is HIGHLY organic, HIGHLY enchanted, HIGHLY magical. Every render is a tiny sacred moment.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENCHANTED FOREST CREATURE scene descriptions for ForestBot. Each scene is a CANDID GLIMPSE into a magical forest — caught a moment with a forest spirit, dryad, fairy, leshy, kodama, etc. The vibe is HIGHLY organic, HIGHLY enchanted, HIGHLY magical. Every render is a tiny sacred moment.
 
 Each entry: 22-35 words. ONE specific creature in ONE specific forest setting in ONE intimate / contemplative / candid moment.
 
@@ -148,4 +150,7 @@ sipping dewdrops from cupped leaf / whispering blessing over a sprouting seedlin
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -6,7 +6,9 @@ generatePool({
   batch: 40,
   append: false,
   maxTokens: 6000,
-  metaPrompt: (n) => `Write ${n} WILDLIFE descriptions for FaeBot's fae-village path. Each entry is 35-55 words describing the scene BUZZING WITH VISIBLE FOREST LIFE — both mundane critters (butterflies, squirrels, hummingbirds) AND mythic forest creatures (white stags, owls, fox spirits, ravens, crows, spirit wolves, tree spirits, luna moths). The village must feel ALIVE.
+  metaPrompt: (
+    n
+  ) => `Write ${n} WILDLIFE descriptions for FaeBot's fae-village path. Each entry is 35-55 words describing the scene BUZZING WITH VISIBLE FOREST LIFE — both mundane critters (butterflies, squirrels, hummingbirds) AND mythic forest creatures (white stags, owls, fox spirits, ravens, crows, spirit wolves, tree spirits, luna moths). The village must feel ALIVE.
 
 ━━━ THE TARGET ━━━
 
@@ -83,4 +85,7 @@ When prior batches are shown as "ALREADY GENERATED" — actively diverge. Do NOT
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete wildlife description (35-55 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

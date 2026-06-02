@@ -5,7 +5,9 @@ generatePool({
   total: 25,
   batch: 25,
   maxTokens: 4000,
-  metaPrompt: (n) => `Write ${n} unified scene descriptions of FAIRY COURT moments for FaeBot's fairy-court path — regal fae queens, forest royalty, processional sidhe, the Tylwyth Teg of Welsh myth caught in candid sacred-court moments. Painterly-realistic rendering matching FaeBot's same-world aesthetic (dryad-portrait + tiny-fae + forest-fairy-scene). Brian Froud + Charles Vess + fantasy-novel-cover painted-fae lineage. NEVER cartoon. Each entry feeds a Flux concept-art prompt-writer.
+  metaPrompt: (
+    n
+  ) => `Write ${n} unified scene descriptions of FAIRY COURT moments for FaeBot's fairy-court path — regal fae queens, forest royalty, processional sidhe, the Tylwyth Teg of Welsh myth caught in candid sacred-court moments. Painterly-realistic rendering matching FaeBot's same-world aesthetic (dryad-portrait + tiny-fae + forest-fairy-scene). Brian Froud + Charles Vess + fantasy-novel-cover painted-fae lineage. NEVER cartoon. Each entry feeds a Flux concept-art prompt-writer.
 
 Each entry: 35-55 words, woven as ONE paragraph (not a field list).
 
@@ -63,4 +65,7 @@ G) CANDID NOBILITY MOMENT (regal but caught not posing):
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (35-55 words). No preamble, no commentary, no markdown code fences.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

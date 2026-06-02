@@ -24,7 +24,8 @@ function loadIfExists(name) {
 // secondary-light cue that pairs with the gouache palette.
 const VIBE_COLOR = {
   peaceful: 'soft golden afternoon glow filtering through canopy, dappled warm calm',
-  enchanted: 'soft magical violet-twilight glow, faint pollen-light particles, dreamy lavender-blue',
+  enchanted:
+    'soft magical violet-twilight glow, faint pollen-light particles, dreamy lavender-blue',
   ethereal: 'pearl-white morning mist, luminous pale haze, opalescent painted softness',
   nostalgic: 'faded warm sepia-gold, painted-storybook softness, gentle umber',
   whimsical: 'buoyant pastel forest tones, Ghibli-warm cream highlights, playful softness',
@@ -49,10 +50,16 @@ module.exports = {
   FAEBOT_FOREST_FAIRY_SCENE_BIOME: loadIfExists('faebot_forest_fairy_scene_biome'),
   FAEBOT_FOREST_FAIRY_SCENE_LIGHTING: loadIfExists('faebot_forest_fairy_scene_lighting'),
   FAEBOT_FOREST_FAIRY_SCENE_WEATHER: loadIfExists('faebot_forest_fairy_scene_weather'),
-  FAEBOT_FOREST_FAIRY_SCENE_FOREGROUND_ANCHOR: loadIfExists('faebot_forest_fairy_scene_foreground_anchor'),
-  FAEBOT_FOREST_FAIRY_SCENE_BOTANICAL_ACCENT: loadIfExists('faebot_forest_fairy_scene_botanical_accent'),
+  FAEBOT_FOREST_FAIRY_SCENE_FOREGROUND_ANCHOR: loadIfExists(
+    'faebot_forest_fairy_scene_foreground_anchor'
+  ),
+  FAEBOT_FOREST_FAIRY_SCENE_BOTANICAL_ACCENT: loadIfExists(
+    'faebot_forest_fairy_scene_botanical_accent'
+  ),
   FAEBOT_FOREST_FAIRY_SCENE_CANDID_ACTION: loadIfExists('faebot_forest_fairy_scene_candid_action'),
-  FAEBOT_FOREST_FAIRY_SCENE_MAGICAL_FLAVOR: loadIfExists('faebot_forest_fairy_scene_magical_flavor'),
+  FAEBOT_FOREST_FAIRY_SCENE_MAGICAL_FLAVOR: loadIfExists(
+    'faebot_forest_fairy_scene_magical_flavor'
+  ),
   FAEBOT_FOREST_FAIRY_SCENE_SCALE_PROVER: loadIfExists('faebot_forest_fairy_scene_scale_prover'),
   FAEBOT_FOREST_FAIRY_SCENE_COMPANION: loadIfExists('faebot_forest_fairy_scene_companion'),
   // ─── flower-fairy axis-system pools (2026-05-20) ───
@@ -109,9 +116,13 @@ module.exports = {
   FAEBOT_ENCHANTED_VISTA_MAGICAL_AMBIENT: loadIfExists('faebot_enchanted_vista_magical_ambient'),
   FAEBOT_ENCHANTED_VISTA_COMPOSITION: loadIfExists('faebot_enchanted_vista_composition'),
   FAEBOT_ENCHANTED_VISTA_LIGHTING: loadIfExists('faebot_enchanted_vista_lighting'),
-  FAEBOT_ENCHANTED_VISTA_ATMOSPHERIC_DEPTH: loadIfExists('faebot_enchanted_vista_atmospheric_depth'),
+  FAEBOT_ENCHANTED_VISTA_ATMOSPHERIC_DEPTH: loadIfExists(
+    'faebot_enchanted_vista_atmospheric_depth'
+  ),
   FAEBOT_ENCHANTED_VISTA_WEATHER: loadIfExists('faebot_enchanted_vista_weather'),
-  FAEBOT_ENCHANTED_VISTA_FOREGROUND_ANCHOR: loadIfExists('faebot_enchanted_vista_foreground_anchor'),
+  FAEBOT_ENCHANTED_VISTA_FOREGROUND_ANCHOR: loadIfExists(
+    'faebot_enchanted_vista_foreground_anchor'
+  ),
   FAEBOT_ENCHANTED_VISTA_WILDLIFE_DISTANT: loadIfExists('faebot_enchanted_vista_wildlife_distant'),
   // ─── queen-of-the-forest axis-system pools (2026-05-21, pivot from fairy-court) ───
   FAEBOT_QUEEN_OF_FOREST_FEATURES: loadIfExists('faebot_queen_of_forest_features'),
@@ -123,7 +134,9 @@ module.exports = {
   FAEBOT_QUEEN_OF_FOREST_WEATHER: loadIfExists('faebot_queen_of_forest_weather'),
   FAEBOT_QUEEN_OF_FOREST_MAGICAL_FLAVOR: loadIfExists('faebot_queen_of_forest_magical_flavor'),
   FAEBOT_QUEEN_OF_FOREST_AMBIENT_DETAIL: loadIfExists('faebot_queen_of_forest_ambient_detail'),
-  FAEBOT_QUEEN_OF_FOREST_FOREGROUND_ANCHOR: loadIfExists('faebot_queen_of_forest_foreground_anchor'),
+  FAEBOT_QUEEN_OF_FOREST_FOREGROUND_ANCHOR: loadIfExists(
+    'faebot_queen_of_forest_foreground_anchor'
+  ),
   FAEBOT_QUEEN_OF_FOREST_LESSER_FAE: loadIfExists('faebot_queen_of_forest_lesser_fae'),
   VIBE_COLOR,
 };
