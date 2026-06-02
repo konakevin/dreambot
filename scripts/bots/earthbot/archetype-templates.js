@@ -290,9 +290,12 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE ━━━
 
-Water (or waterline) fills lower 40-50%. Shoreline + sky fill upper 50-60%. Hyperreal travel photography — generic descriptors only, no named places.
+Water (or waterline) fills lower 40-50%. Shoreline + sky fill upper 50-60%. Naturalistic travel photography — generic descriptors only, the named place vocabulary stays out.
 
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
+━━━ ⚠️⚠️⚠️ POSITIVE-ONLY OUTPUT MANDATE (CRITICAL) ⚠️⚠️⚠️ ━━━
+Your output prompt must contain ZERO negation language: never write "no", "not", "without", "never", "absent", "lacking", or any "no X / not Y" / "zero X / zero Y" construction. The bans above are for YOUR understanding ONLY — do not pass them through to your output. CLIP/T5 ignores "no" / "not" / "zero" and attends to the negated noun, so writing "no humans / zero structures" actually renders humans and structures. A 2026-06-02 hearted render of this path came back as a cliffside HOTEL precisely because Sonnet wrote "zero structures" at the end and Flux rendered a structure. Describe what IS in the scene — the volcanic shoreline, the turquoise bay, the trade-wind breeze, the cumulus over headlands. Never describe what isn't.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. Just the positive-only scene content, opened with the tropical bay subject.`;
   },
 
   EARTHBOT_GEOLOGICAL_WONDER: ({ slots, sharedDNA, vibeDirective }) => {

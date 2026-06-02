@@ -67,13 +67,17 @@ module.exports = {
   // open paths use). Open paths (herd, paleo, volcanic, ocean, action,
   // territory, pack, extinction, silhouette, aerial) inherit the global
   // setting-neutral PROMPT_PREFIX and let their setting pools dictate.
+  // 2026-06-02 NEGATION STRIP — see shared-blocks.js for full explanation.
+  // Removed "NO HUMANS — " prefix from each jungle wrapper; the "66 million
+  // years before humans evolved" phrasing already carries the prehistoric-
+  // exclusive meaning without leaking "humans" into renders.
   promptPrefixByPath: {
     'dino-cozy':
-      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+      '66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
     'nesting-ground':
-      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+      '66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
     'swamp-river':
-      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world riparian wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle along tannin-dark waters, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+      '66 million years before humans evolved, cinematic primordial overgrown lost-world riparian wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle along tannin-dark waters, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
     // dino-portrait wrapper REMOVED 2026-05-17 — the legacy stuffed wrapper
     // forced every render to "dense Mesozoic jungle" overriding the biome
     // pool's variety. Portrait now inherits the global setting-neutral

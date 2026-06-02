@@ -7,29 +7,45 @@
  * Planet Earth" — that's documentary-restrained. We want EPIC.
  */
 
+// 2026-06-02 NEGATION STRIP: removed "NO HUMANS" cascades. The CLIP/T5
+// tokenizer ignores "NO" / "NOT" and attends to the negated noun, so
+// "NO HUMANS" actually pulled human figures into renders. Replaced with
+// positive-only framing ("66 million years before humans evolved" carries
+// the prehistoric meaning; "primordial wilderness only" carries the
+// dinosaurs-only meaning). Human-exclusion guidance lives in NO_HUMANS_
+// BLOCK below as Sonnet system text (Sonnet's output is then constrained
+// by the POSITIVE_OUTPUT_MANDATE at the end of each template). See
+// [[feedback_negative_prompt_leak]].
 const PROMPT_PREFIX =
-  'NO HUMANS — 66 million years before humans evolved, cinematic primordial Mesozoic wilderness, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail';
+  '66 million years before humans evolved, cinematic primordial Mesozoic wilderness, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail';
 
+// 2026-06-02 NEGATION STRIP: 16 "NO X" entries removed (humans, people,
+// figures, silhouettes, hands, man-made, buildings, cartoon, kids
+// illustration, toy-like, stylized cute, theme park, fantasy dragon,
+// neon colors, plastic CGI, text, watermark). All were leaking the
+// banned nouns INTO renders. Replaced with positive-only quality terms
+// ("primordial wilderness, photoreal organic wildlife, ultra detailed,
+// film grain, masterpiece").
 const PROMPT_SUFFIX =
-  'ABSOLUTELY NO humans, NO people, NO human figures, NO human silhouettes, NO human hands, NO man-made objects, NO buildings, no cartoon, no kids illustration, no toy-like, no stylized cute, no theme park, no fantasy dragon, no neon colors, no plastic CGI, no text, no watermark, ultra detailed, film grain, masterpiece';
+  'primordial wilderness, photoreal organic wildlife, ultra detailed, film grain, masterpiece';
 
 const DINOSAUR_IS_HERO_BLOCK = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST words of your output, BEFORE setting/lighting/anything else.
 
-1. THE DINOSAUR IS THE SUBJECT — and it is CLEARLY VISIBLE AT FULL BODY in the frame. The dinosaur is the eye's first landing place. NEVER tiny silhouette in distance. NEVER skull / fossil / bones in place of a living dinosaur — the subject must be ALIVE and BREATHING.
+1. THE DINOSAUR IS THE SUBJECT — and it is CLEARLY VISIBLE AT FULL BODY in the frame. The dinosaur is the eye's first landing place. Render it ALIVE and BREATHING at mid/large scale in frame (not a tiny silhouette, not a skull or fossil).
 
-2. SHOW THE SCALE. The dinosaur is impressive because of its SIZE relative to its world. Render it at a distance where the whole body reads, NOT zoomed-in to fill the frame with face/torso. Aim for the dinosaur occupying 20-45% of the frame — large enough to dominate the eye, small enough that the lush mega-foliage, vast terrain, and atmospheric depth are ALL visible around it. This is NOT a portrait crop — this is a wildlife-cinema establishing shot where the dinosaur is the obvious star and the world wraps around it.
+2. SHOW THE SCALE. The dinosaur is impressive because of its SIZE relative to its world. Render it at a distance where the whole body reads, while the lush mega-foliage, vast terrain, and atmospheric depth are ALL visible around it. Aim for the dinosaur occupying 20-45% of the frame. This is a wildlife-cinema establishing shot where the dinosaur is the obvious star and the world wraps around it.
 
-3. ONE DINOSAUR PER PROMPT (or one cohesive group/herd if the path calls for one). Do NOT mash unrelated dinosaurs.
+3. ONE DINOSAUR PER PROMPT (or one cohesive same-species group if the path calls for one). Keep species consistent within the frame.
 
 4. OPEN YOUR OUTPUT WITH THE DINOSAUR. Format:
 "[dinosaur species + signature anatomy + action at full body], [environment wrapping around it — foliage, terrain, atmosphere], [lighting]."
 The dinosaur opens. Everything else is its richly-shown WORLD.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Dinosaurs are the wildlife. This is a nature documentary frozen in time — but cinematic, hyperreal, jaw-dropping. They eat, sleep, hunt, nest, migrate, fight, drink, rest. Candid wildlife moments, not posed. The camera caught them existing in their VAST WORLD — and the world is shown alongside them.
+Dinosaurs are the wildlife. This is a nature documentary frozen in time — but cinematic, hyperreal, jaw-dropping. They eat, sleep, hunt, nest, migrate, fight, drink, rest. Candid wildlife moments, captured naturally (not posed for camera). The camera caught them existing in their VAST WORLD — and the world is shown alongside them.
 
-NEVER zoomed-in portrait crops. NEVER macro details that fill the frame with one body part. The mega-foliage, vast terrain, biblical weather, and primordial scale we mandate elsewhere can only show through if the framing is WIDE enough to reveal them. Show the WORLD with the dinosaur in it.`;
+WIDE framing is the default — mid to wide so the mega-foliage, vast terrain, biblical weather, and primordial scale can show through. Reserve tight crops for sacred-light path only. Show the WORLD with the dinosaur in it.`;
 
 const SPECIES_ACCURATE_BLOCK = `━━━ SPECIES-ACCURATE ANATOMY — REAL LIVING ANIMAL ━━━
 
@@ -56,25 +72,29 @@ const NO_GORE_BLOCK = `━━━ NO GORE ━━━
 
 Predator/prey moments allowed — hunting, chasing, territorial displays. BUT never explicit gore: no bloody wounds, no dismemberment, no blood-spatter, no visible viscera. Tension + dread + power, never slasher. PG-13 nature documentary, not horror.`;
 
+// 2026-06-02 NEGATION STRIP: the previous block listed 30+ banned nouns
+// (humans / people / hunters / rangers / explorers / scientists / camps /
+// tents / vehicles / etc) which Sonnet then echoed into the OUTPUT prompt
+// with "NO X" language, leaking every banned noun into the Flux render.
+// Restated as positive-only: describe what the world IS (pure ecosystem,
+// untouched wilderness, prehistoric-only) rather than what's banned.
+// Sonnet must NEVER write any banned-noun list in the output (enforced by
+// POSITIVE_OUTPUT_MANDATE at the bottom of each template).
 const NO_HUMANS_BLOCK = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ABSOLUTE NON-NEGOTIABLE — NO HUMANS, EVER
+ABSOLUTE NON-NEGOTIABLE — PURE PREHISTORIC ECOSYSTEM ONLY
 
-This world existed 66+ million years before the first human. Humans had not evolved. There can be NO human element in any frame.
+This world existed 66+ million years before any primate evolved. The biosphere is dinosaurs, pterosaurs, marine reptiles, prehistoric flora, insects, early mammals, and the geology of the Mesozoic Earth. Nothing else. Pure untouched ecosystem.
 
-BANNED — none of the following can appear:
-- People, humans, persons, humanoids, hominins, primates, apes
-- Hunters, rangers, explorers, scientists, children, tribespeople, settlers
-- Human silhouettes, hands, faces, body parts
-- Camps, tents, fires, cooking sites, dwellings
-- Vehicles, helicopters, drones, planes, boats, carts, wagons
-- Buildings, walls, structures, ruins of structures, foundations
-- Roads, paths, fences, signs, markers
-- Clothing, fabric, robes, capes, leather goods
-- Tools, weapons, spears, bows, swords, shields
-- Cinematic references that imply humans (NOT "Avatar Pandora", NOT "Skull Island", NOT "Land of the Lost", NOT "Annihilation", NOT "Jurassic Park" — all feature humans)
-- ANY trace, footprint, marker, or implied presence of humans
+ECOSYSTEM CONTENT (this is what appears in frame):
+- Dinosaurs, pterosaurs, marine reptiles — the wildlife
+- Mesozoic flora — cycads, tree ferns, conifers, ginkgoes, horsetails, gnarled mega-trees
+- Geological features — volcanic terrain, primordial rivers, sea coasts, mud plains, mountain ranges
+- Atmospheric phenomena — mist, dust, rain, lightning, dawn light, mega-weather
+- Smaller ecosystem players as accents — insects, lizards, tiny mammals, early-bird-like creatures
 
-This is the wild Mesozoic — pure ecosystem of dinosaurs and prehistoric flora. ANY human element = CATASTROPHIC FAILURE.
+This is the wild Mesozoic — pure ecosystem of dinosaurs and prehistoric flora. The framing is naturalistic-wildlife-cinematography (Prehistoric Planet, BBC Walking with Dinosaurs aesthetic). The world thrives on its own, unobserved.
+
+⚠️ POSITIVE-ONLY OUTPUT (CRITICAL): Your output prompt must contain ZERO words like "no", "not", "without", "never", "ban", "absent". Never list "no X / not Y" of any kind. The bans live in YOUR understanding only — your output describes what IS in the scene, never what isn't. CLIP/T5 attends to negated nouns and renders them anyway, so listing them in output is self-sabotage.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
 const DOCUMENTARY_CAMERA_BLOCK = `━━━ DOCUMENTARY CAMERA ━━━

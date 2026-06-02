@@ -950,13 +950,15 @@ A dramatic atmospheric or geologic event elevating the scene — volcano at dist
 
     return `You are a BBC wildlife cinematographer writing PACK / GROUP DINOSAUR scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. Prehistoric-Planet / Walking-with-Dinosaurs / BBC-Planet-Earth multi-individual-group cinematography.
 
-⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
-This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+⚠️⚠️⚠️ PURE MESOZOIC ECOSYSTEM ⚠️⚠️⚠️
+This is Earth 66+ million years before primates evolved. Render only the Mesozoic biosphere: the named species, their habitat, prehistoric flora, geology, and atmosphere. The world thrives unobserved.
 
-⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as African safari, NEVER as Yellowstone, NEVER as modern wildlife. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora. Pandora-Skull-Island-Prehistoric-Planet coded.
+⚠️ MESOZOIC-LOCKED IDENTITY — read as ancient primordial Mesozoic wilderness with alien mega-flora. Pandora-Skull-Island-Prehistoric-Planet coded. Earthy biological coloring (browns, ochres, dusty greens), weathered hides, naturalistic muscle.
 
-⚠️⚠️⚠️ MANDATORY — MULTIPLE DINOSAURS OF THE SAME SPECIES ⚠️⚠️⚠️
-The defining feature is a GROUP of the SAME species — dozens of individuals minimum, often 50-200. NEVER a solo dinosaur. NEVER mixed species as primary subjects (a different small species can appear as a small accent only).
+⚠️⚠️⚠️ SAME-SPECIES GROUP — the defining feature ⚠️⚠️⚠️
+A GROUP of the SAME species. The hero stance is 1-3 close foreground individuals leading the eye, with many more of the same species behind them receding through atmospheric haze into the distance. The exact count is unimportant and should NOT be specified — "many" / "a vast gathering" / "uncountable through the haze" reads better than any number. Avoid explicit counts ("100", "200", "fifty") — they trigger Flux to tile identical shapes.
+
+If the species is a PTEROSAUR (Pteranodon, Quetzalcoatlus, Pterodactylus, Tupuxuara, Rhamphorhynchus, Dimorphodon, Tapejara, Geosternbergia, any "-saur" with leathery wings) — render them in FLIGHT, soaring or gliding above the landscape in a wheeling flock formation. Pterosaurs are aerial reptiles; rendering them grounded in a line fails biologically and visually. Other species (sauropods, hadrosaurs, ceratopsians, theropods) are grounded as documented.
 
 Use UNMISTAKABLE dinosaur silhouette cues throughout the group:
 • LONG S-CURVE NECKS rising above the crowd (sauropods)
@@ -966,20 +968,25 @@ Use UNMISTAKABLE dinosaur silhouette cues throughout the group:
 • BIPEDAL THEROPOD silhouettes with counter-balance tails (raptors / tyrannosaurids / allosaurids)
 • THREE-CLAWED FOOTPRINTS in mud
 
-If only ONE dinosaur is visible → FAILED. If the group looks like wildebeest / bison / cattle / mammals → FAILED. Dinosaur identity MUST be unmistakable from silhouette.
+A single dinosaur fails the path; render multiple individuals of the same species. The group's silhouettes must scream dinosaur from anatomy alone (long S-curve neck, frilled head, crested duckbill, plate row, bipedal counter-balanced tail, leathery wings if pterosaur).
 
-⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
-The words "herd", "bull"/"bulls", "cow", "calf"/"calves", "grazing", "savanna" all pull Flux toward modern mammal training data. NEVER write ANY of them — use dinosaur-locked replacements ("adult"/"old male" NOT bull, "juvenile" NOT calf, "feeding" NOT grazing, "fern-plain"/"floodplain" NOT savanna, species-count NOT herd):
+⚠️⚠️⚠️ MAMMAL-TRIGGER WORDS TO AVOID ⚠️⚠️⚠️
+The words "herd", "bull", "cow", "calf", "grazing", "savanna" pull Flux toward modern mammal training data. Use these dinosaur-locked phrasings instead:
+• "adult" / "old male" (instead of bull)
+• "juvenile" / "yearling" (instead of calf)
+• "feeding" / "browsing on cycads" (instead of grazing)
+• "fern-plain" / "floodplain" / "cretaceous prairie" (instead of savanna)
+• "a vast gathering" / "a procession" / "a thundering mass" / "a cluster" / "a pack" [theropods only] (instead of herd)
 
-REPLACE "herd" / "group of" / "pack of" WITH:
-• "a hundred Triceratops moving together" / "a hundred Parasaurolophus crossing the plain"
-• "100+ ceratopsians" / "100+ hadrosaurs" / "100+ sauropods"
-• "a vast gathering of Brachiosaurus" / "a procession of Stegosaurus"
-• "a thundering mass of Iguanodon" / "a stampeding cluster of Velociraptor"
-• "a pack of Deinonychus" (theropod pack is OK as count-phrase)
-• "fifty Edmontosaurus spread across the floodplain"
+Always anchor with SPECIES NAME + quantity phrasing + NEUTRAL group word. Examples:
+• "many Triceratops moving together"
+• "a vast gathering of Brachiosaurus"
+• "a procession of Stegosaurus stretching through the haze"
+• "a thundering mass of Iguanodon across the floodplain"
+• "a pack of Deinonychus" (theropod pack works as a count-phrase)
+• "Edmontosaurus spread across the floodplain, more receding into mist"
 
-Always anchor with SPECIES NAME + COUNT + NEUTRAL group word (gathering / procession / mass / cluster / pack [theropods only] — NEVER "herd"). The species name is the strongest dinosaur anchor.
+DO NOT specify explicit counts. "Many" / "a vast gathering" / "uncountable through the haze" reads better than "100" or "200" and avoids Flux tiling identical shapes.
 
 ⚠️⚠️⚠️ MOVIE-POSTER QUALITY MANDATE ⚠️⚠️⚠️
 Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot, not a wallpaper, not a "nice render." A POSTER.
@@ -993,42 +1000,37 @@ Components of a poster-grade pack shot:
 
 If the render reads as "competent wildlife photography" rather than "I'd hang this on my wall" → not poster-grade. Aim for IMAX-trailer-shot, National-Geographic-cover, Prehistoric-Planet-key-art, Jurassic-World-promotional-still level.
 
-━━━ THE SCENE — HERO DINOSAURS + 100+ SAME-SPECIES + MESOZOIC BIOME ━━━
+━━━ THE SCENE — HERO DINOSAURS + SAME-SPECIES GROUP + MESOZOIC BIOME ━━━
 Composition:
-• HERO FOREGROUND DINOSAURS (1-3 individuals, 30-45% of frame): same species as the rest of the group, leading or anchoring
-• 100+ SAME-SPECIES GROUP (50-200 individuals): scale-staggered from midground mass to vanishing-point silhouettes through atmospheric haze
+• HERO FOREGROUND (1-3 individuals, 30-45% of frame): same species as the rest, anchoring the eye
+• SAME-SPECIES GROUP behind them: scale-staggered from midground mass into vanishing-point silhouettes through atmospheric haze, scattered naturally — not aligned in rows or formations
 • MESOZOIC LANDSCAPE: alien-Mesozoic biome as the stage
 
 ⚠️ COMPOSITIONAL RULES:
-• HERO + 100+ SAME-SPECIES framing — eye lands first on the foreground hero, then reads the group as supporting context
-• NEVER a wide pure-group shot with no clear foreground hero (renders as wildebeest)
-• Silhouettes throughout MUST scream DINOSAUR (neck/frill/crest/plate/spike/bipedal-tail cues)
-• Mid-movement / mid-action — never posed-facing-camera, never static-statue
-• Documentary framing — wide / mid (NEVER tight close-up of single head)
+• HERO + SAME-SPECIES framing — eye lands first on the foreground hero, then reads the group as supporting context
+• Asymmetric, scattered arrangement of the back group. Avoid centered-parade-march patterns (long opposing lines, single file, wing-to-wing alignment, ranks, columns) — those tile identically and ruin realism
+• Silhouettes throughout MUST read DINOSAUR (neck / frill / crest / plate / spike / bipedal-tail / leathery-wing cues)
+• Mid-movement / mid-action — captured naturally, not posed
+• Documentary framing — wide / mid. Tight head crops are reserved for sacred-light path
 • Atmospheric haze pulls the deep distance into pale color
 
-⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
-🚫 NO humans / no observers / no fences / no enclosures / no human-trace
-🚫 NO modern mammals (no wildebeest / no bison / no zebra / no elephants — DINOSAURS only)
-🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn / no grass)
-🚫 NO modern birds (pterosaurs OK as small accent above)
-🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
-🚫 NO gore / no kill-shot / no carcass-foreground — power and scale, not splatter
-🚫 NO close-up portrait of single dinosaur head (the group is the subject)
-🚫 NO DINOSAURS FLOATING / SUSPENDED MID-AIR — every dinosaur must be GROUNDED with feet visibly touching ground / mud / rock / water / log. NO mid-leap freeze-frames where the body is unsupported. NO levitating bodies. If the seed material mentions "leaping" / "jumping" / "crossing" / "in mid-air", REWRITE as a GROUNDED action — running / charging / striding / wading / stalking / drinking / standing-alert / nose-to-ground / coiled-to-pounce / mid-step / leaving-mud-prints / footprint-impacting-soil. Feet on the ground sells the realism.
-✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / BBC Planet Earth / Prehistoric Planet visual lineage
+⚠️ DINOBOT PHOTOREAL CINEMATIC ━━━
+✓ Photoreal cinematic 35mm film still, IMAX precision, ray-traced reflections, hyperreal organic textures, PBR materials, BBC Planet Earth / Prehistoric Planet visual lineage
+✓ Earthy biological coloring (browns, ochres, dusty greens, weathered greys), naturalistic muscle visible beneath skin, hide textured with wear and asymmetry
+✓ Power and scale, never explicit gore — PG-13 nature documentary intensity, not splatter
+✓ Every grounded dinosaur has feet visibly touching ground / mud / rock / water / log. For pack actions that imply motion across terrain (running / charging / striding / wading / stalking / drinking / mid-step), keep feet planted with mud-print / dust-puff / water-splash detail at contact
 
-━━━ THE SPECIES (focal subject — all 100+ are this species) ━━━
+━━━ THE SPECIES (focal subject — all individuals are this species) ━━━
 ${species}
 
-EVERY visible dinosaur in the group is this species. Anatomically consistent across all visible individuals.
+EVERY visible dinosaur in the group is this species. Anatomically consistent across all visible individuals. If the species is a pterosaur (see flying-species rule above), render the flock in AERIAL flight; otherwise render grounded.
 
 ━━━ THE GROUP BEHAVIOR (focal action) ━━━
 ${pack_action}
 
-NOTE: the seed material above may use the word "herd" — DO NOT pass that word through to your output. Replace with species-count phrasing.
+NOTE: the seed material above may use "herd" — replace with one of the dinosaur-locked phrasings (gathering / procession / mass / cluster / pack). Never carry "herd" through to your output.
 
-This is the FOCAL SCENE. Hero foreground dinosaurs anchor the eye; 100+ same-species extend behind into atmospheric haze. Mid-action.
+This is the FOCAL SCENE. Hero foreground dinosaurs anchor the eye; same-species individuals scatter behind into atmospheric haze. Mid-action.
 
 ━━━ THE MESOZOIC BIOME (alien primordial landscape) ━━━
 ${biome}
@@ -1055,26 +1057,29 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION — DOCUMENTARY-CINEMATIC PACK ━━━
-Wildlife-documentary cinematic framing of a massive Mesozoic dinosaur same-species group in mid-action. Hero foreground dinosaurs (30-45% frame) + 100+ same-species behind. Alien-Mesozoic biome around. Atmospheric haze into pale distance.
+Wildlife-documentary cinematic framing of a Mesozoic dinosaur same-species group in mid-action. Hero foreground dinosaurs (30-45% frame) + same-species individuals scattered behind. Alien-Mesozoic biome around. Atmospheric haze pulling distance pale.
 
-━━━ STRUCTURE (write the prompt in this order — HERO + 100+ SAME-SPECIES first) ━━━
-[OPENING: lead with a BOLD action-phrase + species + count phrasing (e.g. "Thundering across a volcanic floodplain, a hundred Parasaurolophus stampede in unison — three foreground adults leading the cresting wave..." / "Mid-river-crossing, fifty Triceratops flank their juveniles as a thundering mass surges through current..." / "Pack of nine Velociraptor coordinated mid-stalk, fanned across a fern-meadow, three foreground predators with crests raised") — action + species + count + biome in the FIRST 30-40 words. NEVER use the word "herd". Always anchor with species name + count.], [the group's recognizable dinosaur silhouettes — necks/crests/frills/plates/spikes], [the biome around], [the atmospheric phenomenon if rolled], [the small accent — sentinel / dust-cloud / pterosaurs / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+━━━ STRUCTURE (write the prompt in this order — HERO + GROUP first) ━━━
+[OPENING: lead with a BOLD action-phrase + species + scale phrasing (e.g. "Thundering across a volcanic floodplain, many Parasaurolophus stampede in unison — three foreground adults leading the cresting wave..." / "Mid-river-crossing, a thundering mass of Triceratops flank their juveniles as the group surges through current..." / "A pack of nine Velociraptor coordinated mid-stalk, fanned across a fern-meadow, three foreground predators with crests raised") — action + species + scale phrase + biome in the FIRST 30-40 words. Anchor with species name + a scale phrase ("many" / "a vast gathering" / "a thundering mass" / "a procession" / "a pack" [theropods]) — no explicit numbers.], [the group's recognizable dinosaur silhouettes — necks/crests/frills/plates/spikes/wings], [the biome around], [the atmospheric phenomenon if rolled], [the small accent — sentinel / dust-cloud / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
 
-CRITICAL — OPENING tokens lead with a bold action phrase + species name + count. The species-name + count is the strongest dinosaur anchor. NEVER use the word "herd".
+CRITICAL — OPENING tokens lead with a bold action phrase + species name + scale phrase. The species name is the strongest dinosaur anchor. Avoid the word "herd" (mammal trigger).
 
 ⚠️ FAILURE CONDITIONS:
 • If solo dinosaur visible (no group behind) → FAILED
-• If wildebeest / bison / mammals silhouettes → FAILED
-• If the output contains the word "herd" → REJECTED. Use species-count phrasing
-• If close-up portrait of single head → FAILED (the group is the subject)
-• If render reads as "competent wildlife photo" not poster-grade → FAILED
-• If ANY dinosaur is floating / suspended / levitating in mid-air with no ground-contact → FAILED. Every dinosaur is GROUNDED — feet on mud / rock / soil / water / log. Rewrite "leaping" / "jumping" seed phrases as grounded actions (running / charging / striding / wading / stalking).
+• If the output uses the word "herd" → REJECTED. Use a scale phrase instead
+• If the output specifies an explicit count ("100", "two hundred", "fifty") → REJECTED. Use scale phrasing
+• If the back group is aligned in formation (long line, single file, ranks, wing-to-wing, parade) → REJECTED. Scatter naturally
+• If a non-pterosaur dinosaur is floating / suspended / levitating in mid-air with no ground-contact → FAILED. Every grounded dinosaur has feet on mud / rock / soil / water / log
+• If a pterosaur is grounded in formation → FAILED. Pterosaurs render aerial flock-in-flight
 
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a HERO + 100+ SAME-SPECIES DINOSAUR GROUP in mid-action, in an alien-Mesozoic biome, with atmospheric haze. Poster-grade composition. National-Geographic real, never cartoon, never staged, never modern-mammalian.
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a HERO + SAME-SPECIES DINOSAUR GROUP in mid-action, in an alien-Mesozoic biome, with atmospheric haze. Poster-grade composition. National-Geographic real, captured naturally.
 
 ${SPECIES_ANCHOR}
 
-Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+━━━ ⚠️⚠️⚠️ POSITIVE-ONLY OUTPUT MANDATE (CRITICAL) ⚠️⚠️⚠️ ━━━
+Your output prompt must contain ZERO negation language: never write "no", "not", "without", "never", "absent", "lacking", or any "no X / not Y" construction. The bans above are for YOUR understanding ONLY — do not pass them through to your output. CLIP/T5 ignores "no" / "not" and attends to the negated noun, so writing "no humans" actually renders humans. Describe what IS in the scene — the dinosaurs, the Mesozoic flora, the geology, the atmosphere. Never describe what isn't.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. Just the scene content, positive-only.`;
   },
 
   DINOBOT_AERIAL_PERSPECTIVES: ({ slots, sharedDNA, vibeDirective }) => {

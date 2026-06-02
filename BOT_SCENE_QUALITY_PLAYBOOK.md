@@ -1211,6 +1211,57 @@ The subject pool entries (each one toponym-led — "Reynisfjara black-sand beach
 
 ---
 
+## Medium + prefix CRUFT ACCUMULATION — the slow drift toward AI-CGI / luxury-resort / mountain-photographer priors (CRITICAL — 2026-06-02)
+
+Mediums and prefixes accumulate tokens over time. Each agent / dev who works on a bot adds language they think will help, but **tokens are rarely removed even after they cause harm**. After months of this, a medium that started as a clean 200-char anchor balloons to 800+ chars of competing aesthetic priors. Every render gets prepended/appended with this cruft. Symptoms compound:
+
+- Renders feel "over-processed", "CGI sheen", "AI-generated photo tells"
+- Tropical paths drift into luxury resort architecture
+- Non-mountain paths drift into Dolomites / Alps
+- Subject content gets crowded out of Flux's attention budget
+- The bot's signature look feels "fake" / "Photoshopped" rather than earned
+
+**Source case study — EarthBot 2026-06-02:** the `earthbot_photography` medium had grown to 882 chars with 8 explicit `NOT X` bans, 5 redundant camera-brand names, mountain-photographer-coded tropes, and luxury-travel-magazine register. A hearted reef-paradise render came back as a cliffside Dolomites HOTEL (not a tropical bay) because every token in the medium was working against the path. After compressing the medium to 182 chars (positive-only, biome-neutral, one camera reference), the same paths render naturalistically.
+
+**Token categories that accumulate cruft and what they pull toward in Flux's prior:**
+
+| Cruft category | Example tokens | Pulls render toward |
+|---|---|---|
+| **Negation cascades** | `NOT golden hour`, `NOT HDR`, `NOT cartoon`, `NOT mobile-phone photography` | The negated noun is rendered anyway (CLIP/T5 ignores "no") |
+| **Camera-brand stuffing** | `Hasselblad H6D-100c + Phase One IQ4 150MP + Carl Zeiss + Velvia 50 + Lightroom touch-up` | Over-processed CGI sheen, AI-photo aesthetic, luxury commercial register |
+| **Tech-spec adjectives** | `8K`, `100MP`, `razor-sharp tack-sharp`, `ultra-detailed`, `hyper detailed` | AI-generated-photo tells; reads as "this is an AI render trying to look photographic" |
+| **Travel-magazine register** | `wallpaper-worthy`, `postcard-worthy`, `magazine-cover framing`, `Pulitzer-Prize editorial gravitas` | Conde Nast / Architectural Digest / Travel & Leisure prior — **prominently features hotels, resorts, infinity pools** |
+| **Mountain-photographer tropes** | `deep tonal depth`, `dramatic atmospheric perspective`, photographer name-drops (Ansel Adams / Marc Adamus / Peter Lik / Iurie Belegurschi) | Wide-vista alpine mountain landscapes — fights any non-mountain biome |
+| **Resort-coded aesthetics** | `hyperreal rendering`, `wallpaper-worthy`, `pristine`, `dream destination` | Luxury hospitality photography (hotel marketing, resort brochures) |
+| **Generic intensifiers** | `masterpiece`, `breathtaking`, `stunning`, `epic`, `cinematic` | Each one is fine alone; stacking 5+ at the open just burns attention budget on no semantic content |
+
+**The audit method** — apply periodically (every ~3 months per bot, or whenever a bot's renders "feel off"):
+
+1. **Pull the medium's `flux_fragment` and `directive` from the DB.** Count characters. If `flux_fragment` is >300 chars, it's a candidate. If >500, it's almost certainly drifted.
+2. **Pull each path's `promptPrefixByPath[path]` from the bot's `index.js`.** Same check.
+3. **Grep for the cruft patterns above.** Each match is a candidate for removal:
+   - `\bNOT\b|\bNO\b` (uppercase) — negation cascade
+   - `(Hasselblad|Phase One|Carl Zeiss|Velvia|Kodak|Leica|Sony|Canon|Nikon)` — camera brand stuffing (one ref is fine; 3+ is cruft)
+   - `\b\d+K\b|\b\d+MP\b|razor-sharp|tack-sharp|ultra-detailed|hyper detailed` — tech-spec cruft
+   - `wallpaper-worthy|postcard-worthy|magazine-cover|Pulitzer|editorial gravitas` — travel-magazine register
+   - `deep tonal depth|dramatic atmospheric perspective|gallery-print` — mountain-photographer tropes
+   - `hyperreal rendering|pristine` — resort/CGI aesthetic
+4. **For each match, ask: what does this token pull toward in Flux's prior, and does that match the path's intent?** If the token pulls toward hotels and the path is supposed to be wild nature → strip it.
+5. **Replace with positive-only, biome-neutral, descriptive minimum.** Target length: medium `flux_fragment` ≤ 250 chars; path prefix ≤ 120 chars. Anything longer is probably cruft.
+
+**Validation after edit:**
+
+- Fire 5 renders on the path that prompted the audit
+- Look for the failure mode that flagged you (hotels in reef-paradise, Dolomites in iceland-raw, over-processed CGI sheen, etc.)
+- Compare to a known-hearted pre-cruft render — same naturalistic feel? Then the strip landed
+- If a NEW failure mode appears (e.g. dinosaurs no longer photoreal because you stripped the photoreal anchor), restore the one token that was load-bearing and re-test
+
+**Each EarthBot path-specific prefix override added 2026-06-01** (`ICELAND_RAW_PREFIX`, `ANDES_PATAGONIA_PREFIX`, `AFRICAN_LANDSCAPE_PREFIX`, `ASIA_LANDSCAPE_PREFIX`, `AUSTRALIAN_OUTBACK_PREFIX`, `EUROPEAN_WILDERNESS_PREFIX`, `REEF_PARADISE_PREFIX` added 2026-06-02) **was a workaround for medium cruft, not a fix.** When the medium itself was cleaned 2026-06-02, the path prefixes became simpler / shorter to do the same work. Future audits should question whether path prefix overrides exist BECAUSE the medium is wrong, and fix the medium first.
+
+**Cross-reference:** this is a family with the "Stuffed wrappers" + "Biome / material / style enumeration" sections above + [[feedback_negative_prompt_leak]]. The wrapper LAYER is the same; the cruft categories vary. When auditing, apply all three diagnostic lenses.
+
+---
+
 ## "Bespoke per path" extends to the PROMPT WRAPPER LAYER, NOT just pools (CRITICAL — 2026-05-13)
 
 Pool variety is INSUFFICIENT for a path to feel distinct from other paths sharing the same bot. **The prompt wrapper layer dominates Flux's first-token bias.** A bot-level / medium-level prefix injected before Sonnet's bespoke body locks the visual style BEFORE Flux reads any pool content.

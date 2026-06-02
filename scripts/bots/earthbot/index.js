@@ -152,11 +152,30 @@ const EARTH_PREFIX =
 // template/system, never in the literal output prompt. Templates enforce
 // no-humans via positive composition mandates ("the entire frame is
 // uninhabited landscape").
+// 2026-06-02 OVER-PROCESSED STRIP: dropped "hyper detailed" tail. It pushes
+// renders toward the AI-generated CGI-sheen aesthetic Kevin flagged ("the
+// photos look so processed, they veer on the edge of looking fake"). Kept
+// the standard no-text/no-watermarks bans because those nouns don't render
+// as scene content (text/watermarks are image artifacts, not subjects).
+// Kept "uninhabited landscape" as a positive subject anchor.
 const EARTH_SUFFIX =
-  'uninhabited landscape, no text, no words, no watermarks, hyper detailed, masterpiece quality';
+  'uninhabited landscape, no text, no words, no watermarks, masterpiece quality';
+// 2026-06-02 OVER-PROCESSED + RESORT STRIP: dropped "dramatic saturated
+// color" (over-processed), "hyperreal rendering" (CGI tell), and
+// "wallpaper-worthy" (resort/luxury-travel-magazine register — the exact
+// token that pulled reef-paradise into a cliffside hotel render). Replaced
+// with naturalistic positives.
 const BEACH_PREFIX =
-  'travel photography, sharp detail, dramatic saturated color, hyperreal rendering, wallpaper-worthy, masterpiece';
-const BEACH_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+  'tropical coastal photography, sharp detail, naturalistic color, gallery-quality, masterpiece';
+const BEACH_SUFFIX = 'uninhabited coast, no text, no words, no watermarks, masterpiece quality';
+// 2026-06-02 — Reef-paradise bespoke prefix. BEACH_PREFIX + the
+// earthbot_photography medium were collectively pulling reef-paradise into
+// luxury travel-magazine territory (the hearted hotel-on-cliffside render).
+// Anchor TROPICAL ISLAND BAY at token 0 so Flux locks the prior to ocean +
+// volcanic shoreline before any travel-photography vocabulary can pull
+// toward resort architecture.
+const REEF_PARADISE_PREFIX =
+  'tropical Pacific island bay, crystal turquoise water, volcanic shoreline, sharp detail, naturalistic color, gallery-quality, masterpiece';
 // 2026-06-01 — Iceland-raw bespoke prefix. The generic EARTH_PREFIX +
 // medium's "cinematic landscape photography" + "dramatic atmospheric
 // perspective" was pulling renders to European Alps / Dolomites with pine
@@ -260,6 +279,11 @@ module.exports = {
     'asia-landscape': ASIA_LANDSCAPE_PREFIX,
     'australian-outback': AUSTRALIAN_OUTBACK_PREFIX,
     'european-wilderness': EUROPEAN_WILDERNESS_PREFIX,
+    // 2026-06-02: reef-paradise was the path that flagged the medium-cruft
+    // problem (hearted render came back as a cliffside Dolomites hotel).
+    // Anchor TROPICAL ISLAND BAY at token 0 to fight the resort/luxury
+    // prior even after the medium cleanup.
+    'reef-paradise': REEF_PARADISE_PREFIX,
   },
 
   // Per-path suffix override — engine reads this BEFORE promptSuffixByMedium
