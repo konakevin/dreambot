@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/bloombot/seeds/sensory_lightcolor.json',
   total: 120,
   batch: 30,
-  metaPrompt: (n) => `You are writing ${n} SENSORY LIGHT/COLOR ANCHOR descriptions for BloomBot — short atmospheric phrases that BloomBot's Sonnet brief weaves into the prose to lock the render's light + color sensation.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SENSORY LIGHT/COLOR ANCHOR descriptions for BloomBot — short atmospheric phrases that BloomBot's Sonnet brief weaves into the prose to lock the render's light + color sensation.
 
 Each entry: 12-22 words. A single sensation captured in concrete imagery, all FLORAL or BLOOM-ENVIRONMENT in subject. NO industrial, NO mechanical, NO non-floral imagery.
 

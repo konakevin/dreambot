@@ -16,13 +16,7 @@
 const blocks = require('./shared-blocks');
 const { REGION_KEYS_GENERAL, regionRosterPrompt } = require('./species-roster');
 
-module.exports = function composeBrief({
-  scene,
-  sharedDNA,
-  vibeDirective,
-  picker,
-  regionKey,
-}) {
+module.exports = function composeBrief({ scene, sharedDNA, vibeDirective, picker, regionKey }) {
   const region = regionKey || picker.pickWithRecency(REGION_KEYS_GENERAL, 'region');
   const roster = regionRosterPrompt(region);
 

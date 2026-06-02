@@ -85,7 +85,8 @@ function colorFor(f, theme) {
   return src[Math.floor(Math.random() * src.length)];
 }
 // "violet allium" — but avoid "blue blue delphinium" when the name already names the color
-const tagWith = (f, color) => (f.name.toLowerCase().includes(color) ? f.name : `${color} ${f.name}`);
+const tagWith = (f, color) =>
+  f.name.toLowerCase().includes(color) ? f.name : `${color} ${f.name}`;
 
 /**
  * @param {object} opts
