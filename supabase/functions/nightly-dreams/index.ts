@@ -642,22 +642,27 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Pre-pick the Flux model for face-swap character renders (single human
-    // OR dual). Rotation, so we can conditionally swap the medium
-    // fluxFragment BEFORE the slot pipeline assembles the prompt:
-    //   - flux-dev               — honors the medium's face_swap fragment as-is
-    //   - flux-1.1-pro           — triggers curated override library
+    // Pre-pick the base render model for face-swap character renders
+    // (single human OR dual). Rotation, so we can conditionally swap the
+    // medium fluxFragment BEFORE the slot pipeline assembles the prompt:
+    //   - flux-dev               — honors the medium's face_swap fragment
+    //   - flux-1.1-pro           — triggers curated Flux override library
     //   - flux-1.1-pro-ultra     — same as flux-1.1-pro for override; was
     //                              excluded until 2026-06-01 because dual
     //                              face-swap blew the 256 MB Supabase Edge
     //                              Function cap. Now safe: face-swap-dual
-    //                              runs on Fly.io with 2 GB RAM (matrix v3
-    //                              verified 3/3 dual-Ultra success).
-    // flux-2-dev removed 2026-06-01 (Kevin) — banned globally via the
-    // NIGHTLY_BANNED_MODELS gate downstream; keeping it in the rotation
-    // wastes the curated-override decision tree before it gets re-picked.
-    // Same rotation + override applies to single and dual so the two paths
-    // stay in parity.
+    //                              runs on Fly.io with 2 GB RAM.
+    //   - gemini-2-image         — native Gemini provider; skips Flux
+    //                              override library (no-op for non-Flux);
+    //                              face swap verified working on the
+    //                              output (matrix v2 + Fly verify).
+    //   - gpt-image-2            — native OpenAI provider; same as above.
+    // flux-2-dev removed 2026-06-01 — banned globally via the
+    // NIGHTLY_BANNED_MODELS gate downstream; in-rotation would waste the
+    // curated-override decision tree before the ban gate re-picked.
+    // Same rotation + override library applies to single and dual so the
+    // two paths stay in parity. For non-Flux models the override library
+    // is a no-op (they don't use flux_fragment).
     if (isFaceSwapCharacter) {
       if (force_model) {
         faceSwapPrePickedModel = force_model;
@@ -666,6 +671,8 @@ Deno.serve(async (req) => {
           'black-forest-labs/flux-dev',
           'black-forest-labs/flux-1.1-pro',
           'black-forest-labs/flux-1.1-pro-ultra',
+          'google/gemini-2-image',
+          'openai/gpt-image-2',
         ];
         faceSwapPrePickedModel =
           FACE_SWAP_MODELS[Math.floor(Math.random() * FACE_SWAP_MODELS.length)];
