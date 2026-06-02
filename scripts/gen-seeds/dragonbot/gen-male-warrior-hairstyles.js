@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HAIRSTYLE entries for DragonBot's male-warrior path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a battle-ready fantasy warrior man — practical, weathered, often tied for combat or shaved for war.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIRSTYLE entries for DragonBot's male-warrior path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a battle-ready fantasy warrior man — practical, weathered, often tied for combat or shaved for war.
 
 ━━━ STYLE SPREAD (enforce variety across ${n}) ━━━
 - LONG / TIED-BACK (5-6) — long warrior-hair pulled back in a low leather-bound tail, half-up topknot with the rest falling to the shoulders, full Highland-mane drawn back with a single iron-ring at the nape, long Berserker-locks tied with a strip of dragon-hide, long braided beard matching the long braided hair
@@ -24,4 +26,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

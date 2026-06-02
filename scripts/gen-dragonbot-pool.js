@@ -2119,14 +2119,14 @@ HUMAN ETHNIC HERITAGES (~25%) — Use FANTASY-CANON names to avoid real-world et
       'Sea elf: pearl-blue skin with faint scale-shimmer along the temple line, finned ears, sea-glass-green eyes, lithe athletic swimmer build, feminine jawline narrow waist beardless',
       'Eladrin (fey court): seasonally-shifting skin (silver-pale in winter aspect, rose-gold in summer aspect), almond eyes that match the season, ethereal grace, elegant feminine bone structure waist defined clean-shaven',
       'Satyr: warm olive skin with delicate ram-horns curling back from her brow, soft fawn-like hooves (legs covered by gear), forest-green eyes, slender feminine build above the hooves, feminine jawline beardless',
-      "Centaur: rich auburn human upper half with cream-and-russet horse lower half, soft-featured human face, finely braided dark mane flowing into the equine mane, feminine jawline narrow waist (human half) beardless",
+      'Centaur: rich auburn human upper half with cream-and-russet horse lower half, soft-featured human face, finely braided dark mane flowing into the equine mane, feminine jawline narrow waist (human half) beardless',
       'Air genasi: pale silver-blue skin with cloud-wisp markings at her temples, hair lifting subtly without wind, silver-grey eyes, slender ethereal build, soft-featured feminine face slender build no facial hair',
       'Water genasi: pearl-blue translucent skin with faint scale-flecks along the cheekbones, hair flowing as if underwater, sea-glass-green eyes, elegant feminine bone structure waist defined clean-shaven',
       'Shifter (wolfkin variant): tawny human skin with the faint feral cast of her bloodline at the cheekbones, amber-gold eyes catching firelight, slightly pointed canines, fitted feminine build, feminine jawline narrow waist beardless',
       'Halfling: sturdy Tauriel-build small adventurer, warm sun-tan complexion, curly auburn hair, hazel eyes, adult-proportioned (not infantile), feminine jawline narrow waist beardless',
       'Forest gnome: light tan skin with a freckle-scatter across her nose, large violet-and-amber eyes, copper curls, slender forest-build (adult-proportioned, NOT child-like), soft-featured feminine face slender build no facial hair',
       'Mountain dwarf (BEARDLESS shieldmaiden): ruddy weather-beaten skin, deep-set steely-grey eyes, broad-powerful build but feminine jawline, hair long and braided (NEVER bearded), elegant feminine bone structure waist defined clean-shaven',
-      "Triton: pearl-and-azure skin with finned ears and gill-slits at the throat (faintly visible), sea-glass-blue eyes, willowy aquatic build, feminine jawline narrow waist beardless",
+      'Triton: pearl-and-azure skin with finned ears and gill-slits at the throat (faintly visible), sea-glass-blue eyes, willowy aquatic build, feminine jawline narrow waist beardless',
       'Kenku (raven-headed): black raven-feathered head and shoulders blending into human-toned skin at the throat, dark intelligent eyes, slim feminine build below the feathered crown, elegant feminine bone structure waist defined clean-shaven',
       'Tabaxi (feline): tawny-spotted fur dappling her cheeks and forearms, vertical-slit amber eyes, retractable claws and faintly-feline ears, lithe athletic build, soft-featured feminine face slender build no facial hair',
       // HUMAN HERITAGES — ethnic diversity baked in
@@ -2178,7 +2178,7 @@ No cheesecake. No "smoldering" / "bedroom eyes" / "piercing gaze" stock-romance 
       'Slate-grey eyes with iron flecks, hunter-narrowed and unflinching, fine scar through one brow',
       'Burnt-orange eyes with amber veins radiating from the pupils, weather-creased and bandit-wary',
       'Glowing fey-gold Eladrin eyes with seasonal shift (silver in winter aspect, rose in summer)',
-      'Soft moss-green eyes lit lantern-amber, calm and forest-keen, fine crow\'s-feet from the open road',
+      "Soft moss-green eyes lit lantern-amber, calm and forest-keen, fine crow's-feet from the open road",
       'Honey-amber eyes with darker rim, half-closed in spell-focus, faint silver pact-mark at the iris-edge',
       'Pale gunmetal-grey eyes flushed lavender at the lower rim, glowing violet briefly when divine power channels through',
       'Midnight-violet eyes with darker outer rim, lit faintly indigo by ambient moonlight, half-elven and ancient-feeling',
@@ -2219,7 +2219,7 @@ No shampoo-commercial language. WEATHERED, LIVED-IN, road-dusted hair.`,
       'sable-brown braided tight, near-black at the root, cool brown register throughout',
       'glowing-fey silver-gold Eladrin hair shifting with the season-cast',
       'starlight-silver hair with faint violet undertone in moonlight, ethereal fae',
-      'void-black with no shine whatsoever, the warlock\'s pact-mark color',
+      "void-black with no shine whatsoever, the warlock's pact-mark color",
       'pact-touched white streak through otherwise cool-black hair, the bargain visible',
       'salt-and-pepper hair tied back, dark at the root and silver at the temples',
       'iron-grey hair shot through with darker strands, hard-won veteran palette',
@@ -2335,12 +2335,12 @@ The high fantasy world has its OWN climate-and-culture variety vocabulary — us
       // COOL ORNATE ARMOR — the dominant register (from Kevin's hearted refs)
       'Silver-and-cobalt articulated plate fitted to her form — overlapping lamé at the waist, engraved pauldrons, a deep-violet half-cape pinned at one shoulder, vambraces catching alpine light; Gondorian high-knight caliber',
       'A grey-and-gold cuirass with sculpted chest articulation over fitted gambeson, layered pauldrons, vambraces and greaves, a road-cloak snapping behind her — every plate dented from three campaigns',
-      'Ornate white-enamel-and-silver plate edged in filigree, gorget and shaped breastplate, a trailing dark surcoat, blackened-steel sabatons — a fallen-order paladin\'s war-harness',
-      'A dark teal chitin-and-hide cuirass layered with riveted leather, dual daggers crossed in a sharkskin shoulder-harness, tooled vambraces — a shadowmancer\'s fitted travel-armor',
+      "Ornate white-enamel-and-silver plate edged in filigree, gorget and shaped breastplate, a trailing dark surcoat, blackened-steel sabatons — a fallen-order paladin's war-harness",
+      "A dark teal chitin-and-hide cuirass layered with riveted leather, dual daggers crossed in a sharkskin shoulder-harness, tooled vambraces — a shadowmancer's fitted travel-armor",
       'Fitted blackened battle-leather over a dark under-layer, a single engraved gold belt-disc at the hip, studded bracers and a half-skirt of leather strips — lithe, dangerous, close to the body',
       'Reinforced studded-leather jerkin laced tight at the ribs, bare tattooed arms wrapped at the forearms in tooled bracers, a scimitar-harness across her back — a wiry duergar hunter built for the stalk',
       'A verdigris-bronze scale cuirass over a fitted sleeveless under-layer, riveted shoulder-scales and engraved greaves, a fur-lined half-cloak for the cold — Mahakaman dwarven warplate, fitted',
-      'A fitted battlemage\'s coat-armor in oxblood leather plated with runed steel panels at the chest and shoulders, arcane sigils etched into the vambraces — martial, not a flowing robe',
+      "A fitted battlemage's coat-armor in oxblood leather plated with runed steel panels at the chest and shoulders, arcane sigils etched into the vambraces — martial, not a flowing robe",
     ],
     instructions: `Each entry is ONE COOL fantasy-armor outfit, 20-50 words. TARGET: ~55% ornate articulated armor (plate / cuirass / scale / chitin) / ~30% fitted battle-leather + ranger / ~15% martial-caster armor. Fitted, badass, Witcher/Elden/Dragon-Age-cover caliber. AVOID BOTH failure modes: NO frumpy drapes (loose robes / shapeless hooded coats / billowing gowns) AND NO glamour (slit skirts / off-shoulder / bare-midriff-as-look / pin-up). Bare arms OK only when it reads warrior. CHEESECAKE LINE: never chainmail-bikini / battle-bra / cleavage-as-focus / sultry / bondage-harness. STRUCTURAL VARIETY — mix silhouette-led, material-led, single-piece-focus, lived-in-detail, color-palette-led. NO "CULTURE — garment list" rigid headline. NO TWO entries share archetype/material/culture. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -2428,7 +2428,7 @@ The high fantasy world has its OWN climate-and-culture variety vocabulary — us
       'RIDING THE FOREST TRAIL — relaxed in the saddle at golden hour, reins loose in one gloved hand, her mount walking a leaf-strewn path as low sun rakes between the trunks',
       // REST / DOWNTIME
       'READING THE MAP ON A ROCK — seated on a flat boulder with an unfolded map across her knees, one finger tracing the route, her staff and pack leaned beside her',
-      'RESTING AT THE CREEK-BANK — crouched at the water\'s edge refilling a waterskin, her free hand trailing in the cold current, boots planted on smooth wet stones',
+      "RESTING AT THE CREEK-BANK — crouched at the water's edge refilling a waterskin, her free hand trailing in the cold current, boots planted on smooth wet stones",
       'SHARPENING BY THE CAMPFIRE — seated on a log at a small dusk camp, drawing a whetstone slow along her blade, firelight throwing warm orange up her face, bedroll behind her',
       'NURSING AN ALE IN THE TAVERN — seated at a worn timber table by a leaded-glass window, both hands around a pewter tankard, lantern-light catching the rim, a quiet moment off the road',
       'LEANING ON THE BOULDER — back against sun-warmed stone with one knee up, tearing a piece of travel-bread, her pack and staff at her feet, eyes on the horizon',
@@ -4290,6 +4290,911 @@ FORBIDDEN scene types (NEVER write these):
 For observation-deck / skybar / lounge scenes: BIG curved viewport showing a planet below (Earth-like, Mars-like ringed gas giant, etc.) or vast nebula is the centerpiece. Cozy still wins the foreground — armchairs, plush booths, glowing lamps — but the window is the gravitational pull.
 
 Camera INTIMATE — small enclosed space, never wide corridor or transit area. May include 0-1 figures (rarely 2-4 distant patrons in bar/lounge). NEVER first-person POV.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // COZY-ARCANE PREMIUM-TIER MIGRATION (2026-05-31)
+  // 8 new bespoke pools extracted from the legacy inline form + enrichment.
+  // Migration preserves: race + age + archetype + candid moment + dense clutter.
+  // Adds: hearth_warmth + signature_familiar + aesthetic_tradition + magical_signature.
+  // ════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════
+  // LANDSCAPE PREMIUM-TIER ENRICHMENT (2026-06-01) — 5 new bespoke pools
+  // 5 → 10 bespoke. Flagship pure-landscape path — NO CHARACTERS.
+  // ════════════════════════════════════════════════════════
+  landscape_aesthetic_register: {
+    format: 'simple',
+    theme:
+      'Painter lineage that defines the rendering aesthetic for this flagship fantasy-landscape — Roger Dean prog-rock surreal / Bob Eggleton dragon-landscape / Larry Elmore D&D paperback / Keith Parkinson D&D oil / John Howe Tolkien dramatic-watercolor / Hildebrandt Brothers Tolkien painted-illustration / Justin Sweet modern-fantasy painterly / Frank Frazetta sword-and-sorcery / Jeff Easley D&D-paperback-oil / Don Maitz Analog-cover / Vincent Di Fate SF-fantasy. ALWAYS-ON identity axis. Distinct from iconic-landscape (which leans Tolkien-Blizzard-stylized) — landscape leans REALISTIC-PAINTED tradition.',
+    touchpoints: [],
+    instructions: `Write 25 aesthetic-register descriptions — painter lineages defining the flagship landscape path. One sentence each, 18-32 words.
+
+Each entry must name:
+(a) THE PAINTER — a real Western-fantasy-landscape illustrator
+(b) THEIR SIGNATURE STYLE — what makes their work recognizable
+(c) THE PALETTE TENDENCY — characteristic colors of their work
+(d) HOW IT APPLIES TO REALISTIC-PAINTED FANTASY LANDSCAPE (this path leans realistic, NOT iconic-stylized)
+
+Mix across the realistic-painted-fantasy-landscape canon (avoid pure-stylized — that's iconic-landscape's domain):
+- Roger Dean prog-rock surreal-fantasy (floating-island impossible-organic-architecture)
+- Bob Eggleton dragon-landscape painted (saturated emerald/violet, dynamic aerial perspective)
+- Larry Elmore D&D paperback oil (warm amber-sienna adventure-fantasy register)
+- Keith Parkinson D&D paperback (broad painterly atmospheric depth)
+- John Howe Tolkien dramatic-watercolor (weathered chiaroscuro, dark-thunder palette)
+- Alan Lee Tolkien atmospheric-watercolor (muted earth-green/grey-gold)
+- Ted Nasmith Tolkien luminous-oil (bright morning radiance, translucent skies)
+- Hildebrandt Brothers Tolkien painted-illustration (classic warm-color tradition)
+- Justin Sweet modern-fantasy painterly (soft-edged moody atmospheric)
+- Frank Frazetta sword-and-sorcery oil (dramatic chiaroscuro, ember-and-shadow)
+- Jeff Easley D&D-paperback-oil (saturated 80s adventure-fantasy)
+- Don Maitz Analog-cover oil (dramatic single-feature compositions)
+- Vincent Di Fate classic SF-fantasy (sweeping epic-scale panoramas)
+- Boris Vallejo fantasy oil (hyper-rendered painterly depth)
+- Michael Whelan paperback-oil cosmic-fantasy (jewel-tone saturated)
+- Wayne Reynolds D&D painterly (dynamic diagonal composition)
+- Brom dark-fantasy oil (Gothic painterly, deep purple-crimson)
+- Jeff Jones paperback-fantasy oil (quiet luminous atmosphere)
+- Frazetta-Brom dark-fantasy hybrid
+- Frank Frazetta Conan-coded register
+- Howe-Lee Tolkien-extended hybrid register
+- Justin Gerard fantasy-illustration (warm storybook painted)
+- Wesley Burt fantasy-creature-landscape (modern painted-illustration)
+- Jaime Jones fantasy-concept (atmospheric modern-painterly)
+- Marc Simonetti modern-fantasy concept (cinematic atmospheric painted)
+
+Each entry stands alone as a self-contained style direction.
+
+Examples (DO NOT copy verbatim):
+1. Roger Dean prog-rock surreal-fantasy — floating impossible-organic island formations suspended in dreamy saturated mist, soft curved architecture grown from living stone, pastel-jade-and-ivory palette.
+2. Bob Eggleton dragon-landscape painted — saturated emerald-and-violet fantasy-SF palette, dynamic aerial perspective across smoke-hazed mountain ranges, volcanic scale and primal chromatic intensity.
+3. John Howe Tolkien dramatic-watercolor — weathered painterly mood with deep chiaroscuro, dark-thunder palette, ragged storm-cloud edges consuming ancient ridge-lines.
+
+NO photoreal CGI / NO film-stills. PAINTED FANTASY ONLY.
+
+Output 25 numbered list entries.`,
+  },
+  landscape_light_quality: {
+    format: 'simple',
+    theme:
+      'Specific light effect rendered visibly as a HERO element — god-rays through cloud breaks / chiaroscuro / sun-pillar through canopy / moonbeam pool / cathedral-cloud-shaft / aurora-curtain / golden-hour amber-wash / dappled-canopy / lightning-flash through storm. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 light-quality descriptions for fantasy landscapes. One sentence each, 14-24 words. Each names a SPECIFIC LIGHT EFFECT with COLOR + ANIMATION.
+
+Mix across canonical fantasy-landscape lighting:
+- God-rays / shafts (god-rays piercing cloud-break / sun-pillar through canopy / cathedral-cloud light-shaft)
+- Chiaroscuro / contrast (dramatic chiaroscuro carving mountains / hard rim-light against shadow valley)
+- Pooled-light effects (moonbeam pool on meadow / wisp-light cluster in forest / glowing pool of fey-light)
+- Atmospheric color washes (golden-hour amber wash / blood-twilight crimson saturation / aurora-green ribbon)
+- Dappled / textured light (dappled-canopy through leaves / leaf-shadow patterns / sun-through-mist diffusion)
+- Storm light (lightning-flash white-blue / storm-broken sun-shafts / lightning-fork branching across cloud)
+- Mystical lighting (leyline-glow upward from earth / mana-stream pulsing along stones / fey-orb illumination)
+- Edge-light / rim (rim-light gilding ridge-tops / silhouette-edge lit by sunset / cliff-edge fire of dawn)
+- Volumetric (volumetric mist with sun-shaft / fog-lit-from-within / dust-particles in light beam)
+- Magical light-source (glowing waterfall illumination / phosphorescent canopy / floating spell-orbs)
+
+Each entry must:
+(a) NAME the light effect
+(b) NAME the COLOR
+(c) NAME its POSITION in the scene
+(d) DESCRIBE its visual character
+
+Examples (DO NOT copy verbatim):
+1. God-rays piercing a cloud-break above the central peak, golden columns spearing downward to spotlight the valley floor in liquid amber radiance.
+2. Cathedral-cloud light-shaft spearing down through the storm gap, illuminating the central tower in stark gold while the surrounding landscape stays in deep purple shadow.
+3. Aurora-curtain rippling green and violet above the northern peaks, the magical light dancing across the snowfields below in slow flickering reflection.
+
+Output 25 numbered list entries.`,
+  },
+  landscape_signature_flora: {
+    format: 'simple',
+    theme:
+      'Specific named flora defining this fantasy landscape — luminescent-orchid forest / giant-fern canopy / glass-bamboo grove / petrified-tree forest / mushroom-cathedral / kelp-canopy underwater / floating-lotus marsh / blood-rose field / etc. Adds genre-coded specificity beyond generic "lush forest." 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 signature-flora descriptions for fantasy landscapes. One sentence each, 14-26 words. Each names a SPECIFIC FLORA TYPE + SHAPE + WHERE-IN-FRAME.
+
+Mix across fantasy-flora types:
+- Forest canopies (giant-fern canopy / mushroom-cathedral grove / petrified-tree forest / silver-birch glen / luminescent-orchid forest)
+- Magical groves (sacred-oak ring / world-tree foothills / fey-grove with floating petals / spirit-pine grove)
+- Floral fields (blood-rose meadow / midnight-iris field / sun-tulip plain / starflower glade)
+- Exotic vegetation (glass-bamboo grove / crystal-bloom cluster / iron-flower thicket / obsidian-fern stand)
+- Wetland flora (kelp-canopy underwater / floating-lotus marsh / mangrove-on-stilts / cattail-and-reed shore)
+- Cold flora (frost-flower field / ice-rose tundra / glacier-lichen cliffs / aurora-fern under-snow)
+- Volcanic flora (ash-flower field / ember-thorn thicket / fire-fern bloom / obsidian-cactus garden)
+- Desert flora (sand-tree colony / mirage-flower field / spirit-cactus garden / dune-grass plain)
+- Decay flora (rot-bloom field / fungal-creep forest / corpse-flower stand / decay-vine spread)
+- Bioluminescent (glow-mushroom carpet / phosphorescent-tree forest / wisp-lily marsh / spirit-orchid grove)
+- Massive scale (titan-mushroom forest / mile-tall sequoia grove / continent-sized canopy / sky-tree spire)
+- Aerial / floating (sky-vine drift / floating-petal cluster / cherry-blossom-cloud)
+
+Each entry must:
+(a) NAME the flora type specifically
+(b) NAME its COLOR / TEXTURE
+(c) NAME its POSITION (foreground / midground / canopy / understory / scattered)
+(d) DESCRIBE its SCALE
+
+Examples (DO NOT copy verbatim):
+1. A luminescent-orchid forest filling the midground, blue-and-violet glowing petals scattered through the dark understory like fallen stars.
+2. A giant-fern canopy arching across the entire upper frame, fern fronds the size of sails throwing dappled green shadows on the rocky ground below.
+3. A mushroom-cathedral grove in the deep distance, towering caps of crimson-and-bone-white forming a natural vaulted ceiling over the lower foothills.
+
+Output 25 numbered list entries.`,
+  },
+  landscape_signature_fauna: {
+    format: 'simple',
+    theme:
+      'TINY scale-prover fauna woven into the deep distance — distant herd / pegasus flight / phoenix soaring / dragon-shadow on horizon / wolf-pack on ridge / unicorn-pair / hippogriff-flight / deer-herd / wild-horses. NEVER focal. ANT-SIZED or matchstick-sized only. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 signature-fauna descriptions for fantasy landscapes. One sentence each, 12-22 words. Each names a SPECIFIC FAUNA + scale + position at SCALE-PROVER scale.
+
+Mix across fantasy-landscape fauna (TINY scale only):
+- Flying creatures (distant pegasus flight / phoenix soaring / hippogriff pair / wyvern silhouette / dragon-shadow on horizon)
+- Mundane animals (deer-herd at watering hole / wolf-pack on ridge / wild-horses on plain / ibex on cliff face / elk-herd at clearing)
+- Magical fauna (unicorn-pair in clearing / griffon-pair circling / spirit-fox at forest edge / dire-bear on far ridge)
+- Aquatic (whale-spout at sea / merfolk silhouette / leviathan-back surfacing / dolphin-pod cresting)
+- Avian (distant eagle wheeling / bird-flock against sunset / heron-silhouette at marsh / crane-formation overhead)
+- Insect-like swarms (firefly-swarm in twilight / butterfly-cloud in meadow / bee-swarm at hive)
+- Predatory (lone-wolf silhouette / panther-shape in shadow / hawk-shadow on grass)
+- Pack/herd (wild-boar pack / aurochs-herd on plain / bison-thunder on prairie)
+- Mythical small (faerie-cluster in flowers / pixie-swarm at petal-cloud / wisp-spirit drift)
+- Distant single (lone giant on horizon / sphinx-silhouette on cliff / standing-stone-watcher creature)
+
+Each entry must:
+(a) NAME the fauna specifically
+(b) STATE its SCALE-PROVER size (silhouette / matchstick / ant-sized / pinprick / pixel-tall)
+(c) STATE its POSITION (on horizon / midground edge / overhead / in deep-distance valley / at forest edge)
+(d) NEVER focal — ALWAYS scale-prover
+
+Examples (DO NOT copy verbatim):
+1. Distant deer-herd of fifteen ant-sized shapes scattered across the meadow midground, their pale forms barely distinguishable in the morning mist.
+2. A lone dragon-shadow racing across the horizon ridge-line, pixel-tall silhouette but unmistakably winged, casting a moving dark crescent on the plain below.
+3. A wolf-pack of eight matchstick-sized shapes moving along the high ridge in single file, their silhouettes briefly outlined against the sunset before the cliff-edge swallows them.
+
+NEVER hero-scale. NEVER focal subject. Pure scale-prover only.
+
+Output 25 numbered list entries.`,
+  },
+  landscape_magical_element: {
+    format: 'simple',
+    theme:
+      'Specific visible magic detail in the frame — floating ruins / sigils in the air / ley-line glow / mana-stream / fey-light cluster / floating petals / glowing waterfall / spell-residue / hovering rune-circle / suspended bridge of light. Adds "magic exists in this world" cue without violating no-characters. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 magical-element descriptions for fantasy landscapes. One sentence each, 14-24 words. Each names a SPECIFIC VISIBLE MAGIC ELEMENT with SHAPE + COLOR + POSITION.
+
+Mix across visible-magic types:
+- Floating / hovering (floating ruins / hovering rune-circle / suspended bridge of light / drifting magical orbs / floating petals)
+- Light effects (ley-line glow / mana-stream pulsing / fey-light cluster / glowing waterfall / spell-residue shimmer)
+- Sigil / glyph (sigils in the air / glowing runes on standing-stones / spell-circle on the meadow / etched-glowing-glyphs on cliff)
+- Atmospheric magic (aurora-storm low in valley / leyline-aurora ribbons / magical-wind visible streamers / fey-storm clouds)
+- Inverted physics (inverted waterfall / floating rocks in formation / spiraling stones / hovering stone-bridge)
+- Tree / nature magic (glowing-leaf-canopy / pulsing root-veins / wisp-tree clusters / spirit-trees humming light)
+- Earth magic (crystal-eruption from ground / lava-magic glow / glowing-fissure scars / pulsing earth-vein)
+- Water magic (glowing reflective pool / luminescent waterfall / spring-of-light / aquamarine river-glow)
+- Sky magic (sky-tear in clouds / aurora-curtain low overhead / dimensional-rift in air / hovering storm-cloud)
+- Crystalline (crystal-cluster eruption / floating crystal-shards / suspended geode-cluster / shimmering ice-magic)
+
+Each entry must:
+(a) NAME the magical element
+(b) NAME its COLOR (amber / silver / blue-cyan / violet-purple / emerald-green / rose-pink / aurora-multi)
+(c) NAME its POSITION (in midground / at horizon / floating overhead / pooling at foreground / threading through forest)
+(d) DESCRIBE its ANIMATION (slow drift / pulsing / streaming / rotating / floating / threading)
+
+Examples (DO NOT copy verbatim):
+1. A ley-line glow threading through the valley floor in a luminous gold thread, branching at intervals like a glowing river of magic.
+2. Three floating rune-circles hovering above the standing-stones in slow rotation, their carved glyphs pulsing in violet-and-silver against the dawn sky.
+3. A waterfall glowing aquamarine in the midground cliff face, its descending column emitting soft blue light that catches the surrounding mist.
+
+Output 25 numbered list entries.`,
+  },
+  // ════════════════════════════════════════════════════════
+  // ICONIC-LANDSCAPE PREMIUM-TIER ENRICHMENT (2026-06-01) — 5 new bespoke pools
+  // 3 → 8 bespoke. Stylized fantasy landscape, NO characters, painted-tradition.
+  // ════════════════════════════════════════════════════════
+  iconic_landscape_mythic_tradition: {
+    format: 'simple',
+    theme:
+      'Painter lineage that defines the rendering aesthetic for this iconic-landscape render — John Howe / Alan Lee / Ted Nasmith Tolkien-watercolor / Samwise Didier / Glenn Rane Blizzard-stylized / Frank Frazetta / Boris Vallejo / Larry Elmore / Wayne Reynolds / Brom / Whelan / Bob Eggleton / Roger Dean / Don Maitz / Keith Parkinson / Jeff Easley. ALWAYS-ON identity axis. Sets the WHOLE rendering tradition.',
+    touchpoints: [],
+    instructions: `Write 25 mythic-tradition descriptions — fantasy-landscape-painter lineages for the iconic-landscape path. One sentence each, 18-32 words.
+
+Each entry must name:
+(a) THE PAINTER — a real fantasy-landscape illustrator
+(b) THEIR SIGNATURE STYLE — what makes their landscape work recognizable (Tolkien-watercolor / Blizzard-stylized / D&D-paperback-oil / etc.)
+(c) THE TYPICAL VISUAL CUES — palette / brushwork / composition / mood register
+(d) HOW IT APPLIES TO ICONIC FANTASY LANDSCAPE — what aspect of their style this render channels
+
+Mix across the canonical Western-fantasy-landscape illustrator canon:
+- John Howe (Tolkien dramatic-watercolor — weathered painterly mood, deep chiaroscuro)
+- Alan Lee (Tolkien atmospheric-watercolor — muted earth-green/grey-gold, soft wet washes, ancient organic warmth)
+- Ted Nasmith (Tolkien luminous-oil — bright morning light, watercolor-translucent skies)
+- Samwise Didier (Blizzard hand-painted-stylized — saturated bold color, painterly heroic-fantasy texture)
+- Glenn Rane (Blizzard saturated-fantasy — Hearthstone-Warcraft register, theatrical lighting)
+- Frank Frazetta (sword-and-sorcery oil — dramatic chiaroscuro, ember-and-shadow palette, Conan register)
+- Boris Vallejo (fantasy oil — saturated jewel-tone, painterly hero-landscape)
+- Larry Elmore (D&D paperback oil-painting — dramatic adventure-fantasy, warm color register)
+- Wayne Reynolds (D&D-paperback painterly — saturated heraldic color, dramatic action-landscape)
+- Brom (dark-fantasy oil — Gothic painterly, deep purple-and-crimson palette)
+- Michael Whelan (paperback-oil cosmic-fantasy — jewel-tone saturated, atmospheric depth)
+- Bob Eggleton (dragon-landscape painted — saturated emerald-and-violet fantasy-SF)
+- Roger Dean (prog-rock surreal-fantasy — floating islands, impossible-organic-architecture, dreamy saturated palette)
+- Don Maitz (Analog-cover oil — dramatic single-feature compositions, warm-gold-and-cobalt)
+- Keith Parkinson (D&D fantasy paperback — adventure-illustration register, broad painterly atmosphere)
+- Jeff Easley (D&D-paperback-oil — saturated D&D-adventure register, classic 80s fantasy aesthetic)
+- Hildebrandt Brothers (Tolkien painted-illustration — classic warm-color fantasy-painting tradition)
+- Justin Sweet (modern-fantasy painterly — soft-edged moody atmospheric landscape register)
+- Frazetta-Brom-style dark-fantasy hybrid (saturated dark moody register)
+- John Bauer (Swedish folk-fantasy — soft watercolor mythic-forest tradition)
+- Arthur Rackham (Victorian ink-and-wash gnarled-tree fantasy-tradition)
+- Eyvind Earle (mid-century Disney-stylized landscape register — flat geometric foliage with saturated color)
+- Mary Blair (mid-century Disney-color theory — saturated geometric pastel-fantasy)
+
+Each entry stands alone as a self-contained style direction.
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. John Howe Tolkien dramatic-watercolor — weathered painterly mood with deep chiaroscuro, dark-thunder palette, ancient mountain-storm atmosphere bleeding into ragged cloud-edges.
+2. Samwise Didier Blizzard hand-painted-stylized — saturated bold color block-textures, painterly heroic-fantasy mood, exaggerated theatrical lighting against simplified geometric foliage masses.
+3. Frank Frazetta sword-and-sorcery oil — dramatic chiaroscuro with ember-and-shadow palette, Conan-register sun-pillar lighting, saturated rust-and-bronze atmospheric depth.
+
+NO photoreal CGI / NO film-stills / NO 3D-render aesthetic. PAINTED FANTASY ONLY. Strict Western-high-fantasy register.
+
+Output 25 numbered list entries.`,
+  },
+  iconic_landscape_legendary_landmark: {
+    format: 'simple',
+    theme:
+      'Iconic mythic feature woven into the landscape — ruined-arch / sword-in-stone / sacred-grove / hovering-island / petrified-dragon-skull / massive-statue-fragment / world-tree / lost-throne / monolith-cluster / ley-spring / sunken-ship-on-cliff. Reads-focus mythic detail at LANDSCAPE-scale. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 legendary-landmark descriptions for iconic fantasy landscapes. One sentence each, 14-26 words. Each names a SPECIFIC LANDMARK + SHAPE + WHERE-IN-FRAME.
+
+Mix across mythic-landmark types:
+- Ruins / wreckage (collapsed-stone-arch / sunken-temple-tower / cracked-altar-stone / weathered-statue-fragment / shattered-bridge-span)
+- Iconic objects (sword-in-stone / massive-bone / petrified-dragon-skull / forgotten-crown-in-grass / abandoned-banner-pole)
+- Living / mythic (sacred-grove of ancient-trees / world-tree of impossible height / unicorn-spring-pool / phoenix-ashes-cairn)
+- Floating / impossible (hovering-island / impossible-floating-rock / suspended-bridge of light / inverted-waterfall)
+- Massive sculpture (hundred-foot statue with arm broken / colossal head half-buried / collapsed giant-king statue / weathered face on a cliff)
+- Lost civilization (sunken city visible through water / lost throne in the wilderness / abandoned monolith circle / runic stones in formation)
+- Magical features (ley-spring with glowing water / portal-rune circle on a hilltop / standing-stone with active magic / dragon-warding cairn)
+- Skeletal / death-coded (massive dragon-bones across a valley / titan-rib-bones forming arches / battlefield-bone-field overgrown)
+- Tree-coded (great-oak with iron-banded trunk / world-tree with golden-leaf canopy / petrified forest of dragon-killed trees)
+
+Each entry must:
+(a) NAME the landmark
+(b) NAME the SHAPE / SIZE
+(c) NAME its POSITION (foreground / midground / deep-distance / on the horizon / at the ridge-line)
+(d) STATE what makes it READABLE-FOCUS
+
+NEVER focal-character-scale. Always landscape-scale.
+
+Examples (DO NOT copy verbatim):
+1. A massive bone-arch formed from petrified dragon-vertebrae standing in midground, its ivory curve framing the deeper valley beyond, each vertebra the size of a small house.
+2. A sword-in-stone landmark on the highest hill in deep distance, the blade tiny but distinctly silhouetted, glowing faintly at the hilt against the painted sunset.
+3. A colossal collapsed king-statue lying in the midground meadow, the toppled head twice the size of a horse, weathered eye sockets staring upward.
+
+Output 25 numbered list entries.`,
+  },
+  iconic_landscape_mood_atmosphere: {
+    format: 'simple',
+    theme:
+      'The overall scene mood — epic-dawn / silent-noon / golden-dusk / blood-twilight / fog-shrouded / aurora-night / storm-prelude / saga-dusk / windswept-morn / harvest-evening. Bend the entire scene tone to this mood. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 mood-atmosphere descriptions for iconic fantasy landscapes. One sentence each, 12-22 words. Each names a SPECIFIC MOOD with LIGHT-QUALITY + EMOTIONAL DNA.
+
+Mix across cinematic-fantasy moods:
+- Dawn / dusk (epic-dawn / golden-dusk / blood-twilight / saga-dusk / first-light)
+- Night / dark (aurora-night / star-dense midnight / moon-silvered / blood-moon-night)
+- Day / midday (silent-noon / windswept-morn / harvest-noon / brilliant-summer-clarity)
+- Weather / atmospheric (storm-prelude / lightning-coming / fog-shrouded / mist-veiled / blizzard-edge)
+- Emotional moods (melancholy-autumn / triumphant-spring / desolate-winter / sun-dappled-summer)
+- Time-of-passage (the-last-light / dawn-of-conflict / eve-of-quest / aftermath-of-battle)
+- Magical moods (fey-twilight / leyline-charged / oracle-still / spell-prepared)
+- Apocalyptic (eclipse-noon / portal-storm-prelude / ragnarok-edge)
+
+Each entry must:
+(a) NAME the mood
+(b) DESCRIBE its LIGHT QUALITY
+(c) STATE its EMOTIONAL TONE (triumphant / melancholy / dread / wonder / serenity)
+
+Examples (DO NOT copy verbatim):
+1. Epic-dawn mood — rose-and-gold radiance bleeding outward from the horizon, breathing triumphant first-light optimism into every painted surface.
+2. Blood-twilight mood — crimson-and-violet sky deepening to indigo, breathing melancholy-saga atmosphere of an ending day's last drama.
+3. Fog-shrouded mood — pale silver-grey curtain softening every silhouette, breathing serene mystical quiet across the entire vista.
+
+Output 25 numbered list entries.`,
+  },
+  iconic_landscape_heraldic_color: {
+    format: 'simple',
+    theme:
+      'Specific named color palette for the iconic fantasy landscape — pine-and-mist / blood-and-bronze / silver-and-moonstone / ochre-and-flame / jade-and-gold / amber-and-shadow / etc. Wash the entire vista in this palette. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 heraldic-color palette descriptions for iconic fantasy landscapes. One sentence each, 14-22 words. Each names 2-4 SPECIFIC NAMED COLORS forming a recognizable palette signature.
+
+Mix across canonical fantasy-landscape palettes:
+- Forest moods (pine-and-mist / moss-and-amber / forest-gold-and-deep-green / autumn-russet-and-burgundy)
+- Mountain moods (slate-and-snow / granite-and-silver / blood-and-stone / iron-and-frost)
+- Desert / wasteland (ochre-and-flame / blood-and-bronze / sand-and-ember / rust-and-ash)
+- Tundra / arctic (silver-and-moonstone / ice-blue-and-pearl / cobalt-and-frost / glacial-mint-and-silver)
+- Volcanic / fiery (lava-orange-and-obsidian / ember-red-and-charcoal / sulfur-yellow-and-coal)
+- Mystical / fey (jade-and-gold / amethyst-and-silver / moonglow-and-pearl / aurora-pink-and-violet)
+- Coastal / oceanic (sea-foam-and-sapphire / pearl-and-deep-blue / kelp-green-and-bronze)
+- Twilight / dusk (rose-and-gold / blood-and-twilight / amber-and-shadow / violet-and-rose)
+- Dawn / morning (peach-and-cream / golden-and-rose / dawn-amber-and-cobalt)
+- Apocalyptic (ash-and-blood / ember-and-shadow / oil-black-and-fire)
+
+Each entry must:
+(a) NAME 2-4 specific colors (no "vibrant" — name them)
+(b) ANCHOR to a biome / mood register
+(c) STATE the palette MOOD (jewel-tone / pastel / smoldering / ember / hallucinatory / serene)
+
+Examples (DO NOT copy verbatim):
+1. Pine-and-mist palette — deep evergreen, pale silver-grey mist, faint amber sun-glow, breathing serene ancient-forest mood.
+2. Blood-and-bronze palette — crimson sky, rust-bronze hills, deep charcoal shadow, breathing dramatic saga-warrior register.
+3. Jade-and-gold palette — sage-green foliage, golden filtered sunlight, brass-amber distant glow, breathing magical fey mood.
+
+Output 25 numbered list entries.`,
+  },
+  iconic_landscape_signature_creature: {
+    format: 'simple',
+    theme:
+      'Tiny iconic creature woven into the deep distance — giant eagles overhead / aurora-spirits drifting / falling-stars / floating-cherry-blossoms / dragon-shadow on horizon / unicorn-herd / pegasus-flight / griffin-pair. SCALE-PROVER scale only — NEVER focal. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 signature-creature descriptions for iconic fantasy landscapes. One sentence each, 12-22 words. Each names a SPECIFIC CREATURE + scale + position at SCALE-PROVER scale.
+
+Mix across canonical fantasy creatures (TINY scale only):
+- Flying creatures (giant-eagles overhead / griffin-pair circling / pegasus-flight against sun / wyvern-shadow on cliff / dragon-shadow on horizon)
+- Magical apparitions (aurora-spirits drifting / fey-lights cluster / ghost-deer in mist / wisp-orbs in clearing)
+- Falling / streaming (falling-stars / floating-cherry-blossoms / drifting-snow-petals / glowing-pollen-cloud / leyline-particles)
+- Animal herds (unicorn-herd in clearing / wild-pegasi running / deer-pair at watering hole / horse-herd on plain)
+- Dragons (small dragon-silhouette on horizon / distant dragon-circling / dragon-flock at sunset / lone hatchling)
+- Mythic creatures (sphinx-statue-creature on cliff / chimera-silhouette / hydra-distant)
+- Magical ambient (will-o-wisp cluster / spell-light cloud / floating-prayer-flags / spirit-dust)
+- Small (faerie-dragon swarm in flowers / pixie-cloud / rabbit-pair / fox-silhouette at clearing edge)
+
+Each entry must:
+(a) NAME the creature specifically
+(b) STATE its SCALE-PROVER size (silhouette / matchstick / ant-sized / pinprick)
+(c) STATE its POSITION (on horizon / midground edge / overhead / in deep-distance valley)
+(d) NEVER focal — ALWAYS scale-prover
+
+Examples (DO NOT copy verbatim):
+1. Giant eagle-pair circling above the mountain peak, two matchstick-sized silhouettes spiraling in slow updraft against the saturated sunset sky.
+2. Dragon-shadow racing across the horizon ridgeline, ant-sized silhouette but unmistakably winged, sweeping in a single dark arc above the plain.
+3. Aurora-spirits drifting in pale gold ribbons through the deep-valley mist, dozens of pinprick lights moving in slow formation.
+
+NEVER hero-scale. NEVER focal subject. Pure scale-prover scale only.
+
+Output 25 numbered list entries.`,
+  },
+  // ════════════════════════════════════════════════════════
+  // EPIC-MOMENT PREMIUM-TIER ENRICHMENT (2026-05-31) — 6 new bespoke pools
+  // ════════════════════════════════════════════════════════
+  epic_moment_epoch_signature: {
+    format: 'simple',
+    theme:
+      'Historical era / culture this castle embodies — Medieval / Norman / Crusader / Byzantine / Romanesque / High-Gothic / Dwarven-mountain-hall / Elvish-Tolkienesque / Necromantic-Lichtenstein / Renaissance-fairytale / etc. ALWAYS-ON identity axis. Sets the WHOLE visual style.',
+    touchpoints: [],
+    instructions: `Write 25 epoch-signature descriptions for fantasy castles. One sentence each, 18-32 words. Each names a SPECIFIC HISTORICAL ERA / FANTASY-CULTURE register + signature architectural features that define it.
+
+Mix across the canonical Western-high-fantasy architectural traditions:
+- Medieval (10th-13th c.) — Romanesque round arches, motte-and-bailey, square keeps
+- Norman / Crusader — heavy stonework, machicolation, slit windows, fortress-pragmatic
+- High-Gothic (13th-15th c.) — flying buttresses, pointed arches, ribbed vaults, soaring cathedral-castles
+- Late-Medieval / Tudor — half-timbered upper stories, ornate timber-and-stone hybrid
+- Renaissance-fairytale — Neuschwanstein-style ornate-spires, decorative crenellation, romantic-revival
+- Byzantine-fortress — gold-domed, mosaic-clad, eastern fortress with iconostasis-decorated keep
+- Romanesque-cathedral-castle — squat round towers, painted interior frescoes, monastic-fortress
+- Mont-Saint-Michel monastery-castle — tidal-island ascending spire on rocky outcrop
+- Tolkien-Gondorian-marbled — white stone of Minas-Tirith, tier-rings, tall slender keeps
+- Tolkien-Elvish-Rivendell — flowing organic stone with waterfall integration, slender bridges
+- Tolkien-Dwarven-Erebor — mountain-cut, vast subterranean halls, geometric pillar-rooms
+- Tolkien-Rohirric — wooden + thatch Edoras hill-fortress, golden-roof great-hall
+- Norse-saga / Edda — turf-roofed long-halls, runic-carved doorposts, dragon-prow gables
+- D&D Forgotten Realms — generic late-Medieval fantasy-castle baseline
+- Witcher Northern Realms — battered functional-fortress, weather-beaten
+- Witcher Nilfgaardian — black-stone imperial-orderly, sun-emblem motifs
+- GoT Westerosi (multiple Houses — Lannister-gold / Stark-grey / Targaryen-dragon-stone)
+- Warcraft Stormwind / Lordaeron — high-cathedral whites and golds, banner-strewn
+- Warcraft Undercity / dark-fortress — necromantic-cathedral, spike-topped towers
+- Elden Ring Stormveil / Caelid — weathered ancient-civilization rune-carved
+- Bloodborne Yharnam — Victorian-Gothic, tall spires, jagged silhouettes
+- Skyrim Solitude / Whiterun — Nordic stone-and-timber, snow-roofed
+- Skyrim Markarth Dwemer — ancient-dwarven mathematically-precise stone
+- Fairy-tale Disney-castle baseline — pastel ornate-spires, romantic-fantasy
+- Persian-fantasy Sultan-palace (FANTASY-CANON variant ONLY — name as "Fantasy-equivalent of...")
+- Asian-fantasy Pagoda-fortress (FANTASY-CANON variant ONLY)
+
+Each entry must:
+(a) NAME the era/culture with a fantasy-canon anchor (LOTR / GoT / Warcraft / Witcher / Skyrim / Elden Ring / D&D / Bloodborne lineage)
+(b) NAME 2-3 signature architectural features
+(c) STATE the visual mood (pragmatic / romantic / soaring / weathered / forbidding / golden)
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. Tolkien-Gondorian-marbled register — Minas-Tirith white-stone tiered rings, tall slender keep-spires, gold-and-silver banners catching wind, austere noble bearing.
+2. High-Gothic cathedral-castle — flying buttresses arching outward, pointed-arch windows in vertical rows, ribbed-vault interiors visible through breaches, soaring religious-fortress mood.
+3. Norse-saga Edda register — turf-roofed long-halls leading to a stone-and-timber keep, runic-carved doorposts, dragon-prow gables, weathered storm-coast mood.
+
+NO real-world-modern. NO sci-fi. NO real-world ethnic codes — fantasy-canon analogues only. Strict Western-high-fantasy register.
+
+Output 25 numbered list entries.`,
+  },
+  epic_moment_peak_event_choreography: {
+    format: 'simple',
+    theme:
+      'The cinematic moment-within-the-moment — the SPECIFIC FRAMING of the peak event (mid-strafe / siege-ladders just touching / coronation banner unfurling / cavalry cresting the hill). Separate from the WHAT of the event (the EPIC_CASTLE_EVENT pool handles that) — this is the freeze-frame angle. ALWAYS-ON.',
+    touchpoints: [],
+    instructions: `Write 25 peak-event-choreography descriptions — specific freeze-frame moments-within-the-moment that frame a peak castle event cinematically. One sentence each, 14-26 words. Each names a SPECIFIC VERB-PHRASE showing the moment.
+
+Mix across event-framing types (the WHAT is in the existing event pool — this is the HOW-IT-IS-FRAMED-CINEMATICALLY):
+- Combat / siege moments
+  - Just-before-impact (siege-ladder tips touching the parapet / dragon mid-dive a wingspan above the spire / cavalry cresting the hill in golden formation)
+  - Mid-impact (battering ram contacting the gate / first stone hitting the wall / first arrow loosed from the battlement)
+  - Mid-action peak (catapult stone arcing at peak height over the towers / boiling-oil cascading from machicolation)
+- Ceremonial moments
+  - Coronation banner unfurling from the high spire / crown lowered onto the kneeling figure on the dais / processional banners crossing the gate threshold
+  - Wedding bell-ringer pulling the rope / first horn-blast from the parapet
+- Magical moments
+  - Portal mid-bloom — the iris dilating to full / spell-circle reaching maximum brilliance / leyline storm-front crossing the spires
+- Arrival moments
+  - Fleet rounding the headland into view / royal procession cresting the final hill / messenger reaching the gates lathered with sweat
+- Mid-cataclysm moments
+  - Spire mid-collapse — the tower tilting at 30 degrees / dragon-fire just licking the banner-flag / wave just cresting the seawall
+
+Each entry must:
+(a) Begin with a STRONG VERB-PHRASE (Banner unfurling / Catapult stone arcing / Dragon mid-strafe / Cavalry cresting)
+(b) NAME the exact moment in time (just-before / mid-impact / at-peak / first-instant / just-after)
+(c) NAME the SPECIFIC LOCATION on the castle relative to which the moment is framed (above the spire / at the gate / on the dais / over the courtyard)
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. Banner mid-unfurling from the highest spire just as the wind catches it, fabric snapping outward at full extension above the cheering walls.
+2. Dragon mid-strafe one wingspan above the cathedral spire, jaw extended and fire just kindling at the throat, shadow racing across the tile roof.
+3. Catapult stone at peak arc directly above the central keep, frozen at the apex of its trajectory before plunging into the courtyard.
+
+Output 25 numbered list entries.`,
+  },
+  epic_moment_skyline_drama: {
+    format: 'simple',
+    theme:
+      'Sky / weather mood directly above the castle silhouette — storm formation / aurora / comet / blood-moon / dawn-burst / cathedral-cloud light-shafts / dragon-shadow / lightning-storm crown / eclipse. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 skyline-drama descriptions for epic castle scenes. One sentence each, 14-24 words. Each names a SPECIFIC SKY/WEATHER MOOD with COLOR + ANIMATION.
+
+Mix across cinematic high-fantasy sky moods:
+- Storm formations (thunderhead anvil-cloud crowning the spires / lightning-storm dancing over the keep / lateral-rain wall sweeping in)
+- Aurora / magical light (aurora-curtain dancing above / leyline-aurora bands radiating / spirit-fire ribbons hanging)
+- Celestial events (red blood-moon rising / triple-moon alignment / comet tail arcing through frame / falling stars streaking)
+- Dawn / dusk moods (dawn-burst pink-and-gold radiance / dusk-coal red-and-violet smolder / blue-hour intimate twilight)
+- Light-shafts (cathedral-cloud light-shafts spearing down / god-rays through breach in cloud / sun-shafts spotlighting the keep)
+- Atmospheric drama (low-fog rolling over walls / smoke-column from siege-fires / mist tearing on the spires)
+- Magical phenomena (portal-storm crackling / leyline-storm front / dragon-shadow racing across the sky)
+- Cataclysmic skies (eclipse mid-totality / corona around blackened sun / sky-fissure opening above)
+- Color saturation (gold-flecked sunset / blood-orange harvest sky / cobalt-and-violet twilight)
+
+Each entry must:
+(a) NAME the sky mood
+(b) NAME the dominant COLOR
+(c) DESCRIBE its ANIMATION (rolling / dancing / radiating / spearing / streaking)
+
+Examples (DO NOT copy verbatim):
+1. Thunderhead anvil-cloud crowning the spires in charcoal-grey and slate-blue, lightning forking across its underside above the highest tower.
+2. Aurora-curtain dancing in emerald and violet above the keep, ribbons shifting slowly across the night sky behind the silhouetted parapet.
+3. Cathedral-cloud light-shafts spearing down in gold from a single breach in the storm overcast, spotlighting the central courtyard in liquid amber.
+
+Output 25 numbered list entries.`,
+  },
+  epic_moment_heraldic_identity: {
+    format: 'simple',
+    theme:
+      'Visible heraldic markings painted ONTO the castle — banners / flags / sigils / shield-emblazoned gates / colored pennants on spires / livery-painted walls. Castle\\u0027s FACTION coding. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 heraldic-identity descriptions for fantasy castles. One sentence each, 14-24 words. Each names a SPECIFIC HERALDIC ELEMENT with SHAPE + COLOR + HULL-PLACEMENT.
+
+Mix across heraldic types:
+- Banner sigils (wolf-sigil on crimson banner / golden lion on blood-red / silver tree on green / black dragon on white)
+- Flags / pennants (long crimson pennants snapping from spire-tips / triangular yellow flags lining battlements / square house-banners hanging from gate towers)
+- Shield-emblazoned features (heraldic shield mounted above the main gate / sigil-painted central keep door / emblem-carved gate-arch)
+- Painted livery (livery-painted curtain wall / dynastic colors striping the tower bases / brand-saturation across the keep)
+- Architectural heraldry (sculpted lion-head water-spouts / dragon-claw cornerstone carvings / heraldic-beast statue flanking the gate)
+- Ceremonial markings (coronation laurels draped on the gate / mourning black bunting on the parapet / festival garlands wreathing the spires)
+- Multi-faction visible (rival banners flying side-by-side / captured banners hung upside-down / mismatched pennants of allied factions)
+
+Each entry must:
+(a) NAME the heraldic motif (lion / dragon / wolf / tree / sword / chalice / crown / eagle / griffin / etc.)
+(b) NAME the colors (gold-on-crimson / silver-on-emerald / sable-on-pearl)
+(c) NAME the placement on the castle (banner from spire / shield above gate / livery on wall / pennants on battlements)
+
+Examples (DO NOT copy verbatim):
+1. Crimson-and-gold lion-rampant banners snapping from every spire, gold-thread embroidery catching the sun, repeated in rows along the battlements.
+2. Black-and-white dragon-sigil shields mounted above the gate flanked by twin sentinel statues, the dragon's eye fitted with a polished red gem.
+3. Long silver-and-green tree-emblem pennants lining the curtain wall in twenty-foot lengths, the embroidered tree-roots flowing into the green field below.
+
+NO Earth-historical heraldry (no swastika, no real national flags). All fantasy-canon-style heraldry.
+
+Output 25 numbered list entries.`,
+  },
+  epic_moment_witness_chorus: {
+    format: 'simple',
+    theme:
+      'TINY scale-prover figures dwarfed by castle scale — townsfolk crowd at gates / cavalry on approach / pilgrims on the road / soldiers on the walls / refugees in the courtyard / nobles on the balcony. Ant-sized but visible. NEVER hero-scale. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 witness-chorus descriptions for epic castle scenes. One sentence each, 14-24 words. Each names a SPECIFIC MULTITUDE with COUNT + SCALE + POSITION around the castle.
+
+Mix across witness types:
+- Townsfolk (crowd at the gates / market-day throng in the lower bailey / cheering populace on the walls)
+- Military (cavalry approaching on the road / archer-rows along the battlements / pikemen formed in the courtyard / sentry-patrols on the walks)
+- Refugees / pilgrims (long procession on the approach road / refugees crowding the outer ward / pilgrims kneeling on the road below)
+- Nobility (small group on the highest balcony / royal party watching from the parapet / officers on the gate-tower)
+- Combat (besieging army filling the field / defenders raining arrows from the battlements / siege crews working at the engines)
+- Ceremonial (processional column entering the gates / coronation guests on the high stairs / wedding procession descending the keep stair)
+- Mass casualty (wounded laid out in the courtyard / scribes recording the dead / clergy moving among the fallen)
+
+Each entry must:
+(a) NAME the multitude (cavalry company / townsfolk crowd / pilgrim procession / archer line / etc.)
+(b) NAME the COUNT (forty / two hundred / a thousand / countless / etc.)
+(c) NAME the SCALE relative to the castle (ant-sized / matchstick-sized / pencil-tall / pixels-tall)
+(d) NAME the POSITION (on the road / at the gate / on the battlements / in the courtyard / on the high balcony)
+
+Examples (DO NOT copy verbatim):
+1. Two hundred matchstick-sized cavalry cresting the hill on the approach road below, their pennants tiny but visible streaming in the wind.
+2. Ant-sized townsfolk crowd packed shoulder-to-shoulder in the lower bailey three hundred feet below, faces upturned toward the high balcony.
+3. A small noble group of six pencil-tall figures on the highest spire balcony in dress-robes, scaled appropriately tiny against the vast curtain wall behind them.
+
+Witnesses NEVER hero-scale. ALWAYS scale-prover scale (small but visible).
+
+Output 25 numbered list entries.`,
+  },
+  epic_moment_architectural_signature: {
+    format: 'simple',
+    theme:
+      'The one weird memorable castle detail — flying buttress / barbican / crystal-spire / bone-archway / dragon-skull gate / floating tower / waterfall integrated / drawbridge of skulls. Readable-focus element. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 architectural-signature descriptions — the one weird memorable detail on the castle. One sentence each, 14-26 words. Each names a SPECIFIC FEATURE + SHAPE + WHY-IT-READS.
+
+Mix across signature types:
+- Fantasy-canon architectural specifics (flying buttress / barbican / portcullis / machicolation / outer ward / arrow-slit-row / drawbridge / curtain-wall ring)
+- Anomalous / magical features (crystal-spire rising from the keep / floating tower tethered to the main castle / waterfall integrated into the gatehouse / hovering arcane orb above the keep)
+- Bone / dark fantasy (bone-archway gate / dragon-skull mounted on the keep / skeletal architecture / necromantic spike-topped towers)
+- Living architecture (vine-overgrown spire / tree-integrated tower / mossy roof-line / branches arching from a corner-tower)
+- Monumental sculpture (massive carved-stone griffin atop the gate / hundred-foot statue framing the keep / colossal carved-relief on the curtain wall)
+- Optical features (mirror-finish reflective spire / lattice glass-tower / stained-glass cathedral wall as a whole face of the castle)
+- Material weirdness (obsidian-glass tower / iron-and-bone construction / crystal-shard parapet / volcanic-glass spire)
+- Scale anomalies (one tower twice the height of any other / asymmetric wing-spread / impossible cantilevered balcony)
+- Defensive anomalies (dragon-tooth crenellation / spike-row on the parapet / lava-moat / acid-pit dry-moat)
+- Cultural-coded signatures (Dwarven-rune-carved gateway / Elvish-leaf-pattern stonework / Necromantic skull-row on the keep)
+
+Each entry must:
+(a) NAME the feature
+(b) NAME its SHAPE / scale
+(c) NAME its POSITION on the castle
+(d) STATE what makes it READABLE-FOCUS (size / color / weirdness / contrast)
+
+Examples (DO NOT copy verbatim):
+1. A flying buttress arch fifteen feet wide flanking the central keep, ornate stone tracery carved into its underside, dominating the visual silhouette.
+2. A crystal-spire rising from the highest tower, its glassy length glowing faintly blue with internal light, refracting sunset light across the surrounding walls.
+3. A bone-archway gate of articulated dragon-vertebrae forming the main entry, each vertebra carved with rune-marks, casting tooth-shadow patterns across the gatehouse interior.
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_race: {
+    format: 'simple',
+    theme:
+      'Fantasy race entries skewed toward COZY-SANCTUM-APPROPRIATE races for the cozy-arcane scholar/wizard inhabitant — human / elven / halfling / gnome / firbolg / aasimar / tiefling-scholar / dwarven-loremaster / etc. Replaces the shared FANTASY_RACE pool for this path because that pool was 28% orc/tusks/grey-skin which (a) Flux amplified into dominant green-orc renders and (b) read off-genre for the cozy register. AT MOST 2 orc-coded entries permitted in this pool.',
+    touchpoints: [],
+    instructions: `Write 25 fantasy-race descriptions for the cozy-arcane sanctum inhabitant (single scholar / wizard / alchemist / sage character at home in their cluttered magical study). Each entry 18-30 words, naming SPECIFIC FEATURES with COLOR + SHAPE: skin tone, ear shape, hair, eye color, distinguishing anatomy, bearing.
+
+THE BAR: each entry must read instantly as a DIFFERENT person Flux can render distinctively. The variety lives in COLOR + ANATOMY + BEARING — not in genre register (all stay cozy-scholar register, NOT war-painted-battler).
+
+LINEUP MANDATE (target distribution across the 25):
+  • 6-8 HUMAN VARIETIES — different ethnicities + regions (Mediterranean / Northern-pale / Saharan-warm-brown / East-Asian / Polynesian / South-Asian / Pacific-Northwest / Andean / Persian / Nordic / Slavic — all with cozy-scholar bearing)
+  • 4-5 ELVEN VARIETIES — high-elf / wood-elf / moon-elf / sun-elf / wild-elf / mossy-druid-elf / ice-elf / Tolkienesque Sindarin — each with distinct skin / hair / eye combo
+  • 2-3 HALFLING / HOBBIT / GNOME varieties — different ages and clans
+  • 2-3 DWARVEN-LOREMASTER varieties — mountain-dwarf / hill-dwarf / forge-scholar / book-scribe-dwarf (NOT war-coded — scholarly cozy)
+  • 1-2 TIEFLING-SCHOLAR varieties — quiet scholarly tieflings (subdued horns + non-war-coded register)
+  • 1 AASIMAR scholar (celestial-touched, gentle)
+  • 1 FIRBLOG / GENTLE-GIANT scholar
+  • 1 SATYR / FAUN scholar
+  • 1-2 OPTIONAL exotic (drow-scholar / kenku scribe / dragonborn-sage / harengon hare-folk / loxodon elephant-scholar — sanctum-appropriate)
+  • AT MOST 1-2 ORC-coded — half-orc-scholar or peaceful-orc-loremaster ONLY (no battle-painted / no war-forged language)
+
+Each entry must:
+(a) NAME the race (e.g. "Tolkienesque Sindar Elf" / "Mediterranean Human" / "Mountain-Dwarven Loremaster")
+(b) NAME 2-3 visible features with COLOR (skin tone / hair / eyes / horn-color if applicable / ear shape if applicable)
+(c) NAME a distinguishing bearing detail (poised / weathered / serene / cautious / kind / bookish — not aggressive)
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. Tolkienesque Sindar Elf: porcelain skin, long platinum-silver hair, pale grey eyes, swept-back leaf-shaped ears, ancient-bookish poise carrying centuries of quiet learning.
+2. Mediterranean human: warm olive-tan skin, dark curling hair worn loose at the shoulders, dark hazel eyes, broad scholarly hands, contemplative measured bearing.
+3. Mountain-dwarven loremaster: ruddy weathered skin, braided iron-grey beard with bookmarks woven through, deep amber eyes, broad ink-stained hands, calm patient bearing.
+4. Pacific-island human: deep golden-brown skin, long black hair pulled back with a wooden pin, dark warm eyes, gentle steady bearing of inherited oral traditions.
+
+CRITICAL — register restrictions:
+- NO battle-paint, NO war-forged language, NO "fierce" / "savage" / "brutal" features
+- NO heavily-tusked / no aggressively-jutting / no war-aggressive bearing
+- All entries read as SCHOLARLY / CONTEMPLATIVE / SANCTUM-APPROPRIATE
+- Skin tones must SPAN ethnicities (Mediterranean / Northern-pale / Saharan / East-Asian / Polynesian / South-Asian / etc.)
+- For non-human races: focus on the SCHOLARLY register of that race (not the warrior version)
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_inhabitant_archetype: {
+    format: 'simple',
+    theme:
+      'Fantasy character class / profession descriptors — a single intimate-scale fantasy scholar/wizard/alchemist/etc with EXACT named garments and props. Extracted + expanded from the legacy inline ARCHETYPES array (10 entries → 25). ALWAYS-ON identity axis.',
+    touchpoints: [],
+    instructions: `Write 25 fantasy-character-archetype descriptors for the cozy-arcane sanctum path. One sentence each, 14-26 words. Each describes a character CLASS / PROFESSION with their EXACT GARMENT + at least one named PROP / ACCESSORY.
+
+Mix across the cozy fantasy intellectual/magical archetypes:
+- Wizard / mage / arcane-mage (robes + staff + rune cuffs)
+- Alchemist / apothecary (apron + ink-stained fingers + mortar)
+- Scholar / lorekeeper / cartographer (scholar-coat + glasses + scroll-satchel)
+- Hedgewitch / herbalist / cunning-folk (layered shawl + herb-pouch + beaded necklace)
+- Dragon-lorekeeper / dragon-scholar (dragon-scale-motif robes + dragon-tooth pendant)
+- Sorcerer / sorceress (dark velvet + crystal-cluster harness + glowing tattoo)
+- Sage / monk / hermit-scholar (worn travel-robes + wool cloak + ink-scrolls satchel)
+- Apprentice (simple linen robes + leather rune-belt + glowing-mark forearms)
+- Occultist / necromancer (dark robes + bone-and-iron talismans + skull-tipped staff)
+- Cartomancer / divinator (patterned shawl + tarot deck + crystal pendant)
+- Astronomer / star-reader (deep-blue robes embroidered with constellations + astrolabe + telescope-monocle)
+- Rune-master / scriptscholar (linen robes + chisel + rune-carved wax tablet)
+- Dragon-keeper / wyrm-tender (leather-and-wool harness clothing + scale-brush + dragon-egg satchel)
+- Brewmaster / alewright (canvas apron + tasting-ladle + brewing-stick)
+- Map-illuminator (linen smock + quill case + gold-leaf brush)
+- Diplomat-scribe (formal robes embroidered with seals + sealing-wax + signet ring)
+- Music-keeper / bardic-archivist (silk robes + lute or harp + scroll bag of compositions)
+
+Each entry must specify:
+(a) THE PROFESSION/CLASS — what they do
+(b) ONE NAMED GARMENT — embroidered velvet mage-robes / linen tunic / leather apron / wool scholar-coat (with COLOR + MATERIAL)
+(c) ONE NAMED PROP/ACCESSORY — quill / staff / pendant / mortar / scroll / lantern (with detail)
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. Wizard with embroidered velvet mage-robes in deep indigo and glowing silver-rune cuffs, gemmed walnut staff at hand and an open spellbook nearby.
+2. Alchemist in leather-and-wool stained canvas apron over a linen tunic, ink-blackened fingertips, brass mortar and copper distillation tubing on the bench beside them.
+3. Hedgewitch in a layered shawl-and-skirt of dyed forest-green wool, beaded amber necklaces, leather herb-pouches hanging from a knotted hemp belt at the waist.
+
+NO armor / NO weapons / NO combat gear. NO adventurer wardrobe. INTIMATE INDOOR scholar / magical practitioner only.
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_inhabitant_age: {
+    format: 'simple',
+    theme:
+      'Age / life-stage descriptors for a cozy-arcane sanctum inhabitant. Extracted + expanded from the legacy inline AGES array (10 entries → 25). Each entry pairs an age range with a STAGE WORD (apprentice / scholar / sage / elder / etc.) for variety in body language and authority level.',
+    touchpoints: [],
+    instructions: `Write 25 age + life-stage descriptors for the cozy-arcane sanctum inhabitant. Each entry is 5-12 words, a compact phrase pairing an AGE range with a STAGE word. Reads naturally before a gender + race noun (e.g. "young apprentice in their early twenties woman, race: dwarf").
+
+Mix across the life arc:
+- Young apprentice / acolyte (early-to-mid twenties)
+- Journeyman scholar (late twenties to early thirties)
+- Maturing practitioner (mid thirties to forties)
+- Established sage (mid forties to fifties)
+- Elder sage / loremaster (sixties)
+- Ancient venerable (seventies-plus)
+
+Include some variety in TONE:
+- Bookish (scholarly emphasis)
+- Practical / hedge (rural / wise-craft emphasis)
+- Eccentric / wandering (oddball flavor)
+- Stoic / monastic (quiet austerity)
+- Bright-eyed / earnest (apprentice energy)
+- World-weary / fatigued (over-burdened scholar)
+
+Each entry must specify:
+(a) THE AGE RANGE — early-twenties / mid-thirties / late-fifties / ancient-seventies
+(b) THE STAGE WORD — apprentice / scholar / sage / elder / loremaster / acolyte / hermit-scholar / mature-practitioner
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. young apprentice in their early twenties
+2. earnest mid-twenties acolyte
+3. mid-thirties journeyman scholar
+4. world-weary forties practitioner
+5. mid-fifties established sage with grey at the temples
+6. sixties elder loremaster with deep-lined face
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_candid_moment: {
+    format: 'simple',
+    theme:
+      'The candid private moment the cozy-arcane character is caught in — never posing, never looking at the viewer. Extracted + expanded from the legacy inline 9 moments → 25. Each is a small, intimate, observable beat: brewing / writing / studying / resting / interacting with a familiar.',
+    touchpoints: [],
+    instructions: `Write 25 candid intimate moments for the cozy-arcane sanctum inhabitant. One sentence each, 12-22 words. Each describes a SPECIFIC ACTION/POSE caught freeze-frame — never staged, never looking at the viewer, never combat.
+
+Mix across intimate-scale beats:
+- Reading / writing / studying (hunched over grimoire / quill mid-write / unfurling parchment / tracing a map)
+- Brewing / experimenting (stirring cauldron / heating alembic / decanting potion / chopping herbs)
+- Examining / contemplating (holding crystal orb / inspecting an artifact / squinting at rune / weighing a stone)
+- Resting / lounging (asleep at desk / curled in armchair with book / dozing by fire / cross-legged before hearth)
+- Practical chores (sweeping ashes / tending fire / sorting herbs / refilling lamp oil / lacing book)
+- Familiar interaction (petting raven / feeding a wisp / scratching pseudo-dragon-cat under chin / coaxing book-imp out of shelf)
+- Sensory pause (warming hands at brazier / sipping from a steaming mug / listening to storm at the window / breathing herb-steam)
+- Magic mid-cast (drawing sigil mid-gesture / levitating ingredient / charging crystal / pulling a thread of wisp-light)
+- Small movements (turning a page / dipping quill in ink / blowing dust off a tome / breaking a wax seal)
+
+Each entry must:
+(a) NAME the action/pose
+(b) NAME at least one named prop / surface / object involved
+(c) FREEZE-FRAME tone — a single beat, not a sequence
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. Hunched over an open grimoire with the quill held mid-stroke, ink-pot uncapped on the desk beside them.
+2. Stirring a copper cauldron of glowing emerald potion with a long wooden spoon, steam curling toward the rafters.
+3. Standing at the leaded-glass window with a steaming mug cupped in both hands, watching the storm outside.
+
+NO posing / NO weapons-raised / NO looking-at-viewer / NO combat / NO grand-gesture epic-magic. INTIMATE quiet moments only.
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_clutter_focus: {
+    format: 'simple',
+    theme:
+      'Specific spotlighted clutter detail in the cozy-arcane sanctum — a named magical / scholarly / dragon-lore object with rich texture. Each entry is ONE clutter element rendered prominently. Drawn from the legacy 11 clutter categories (alchemy / books / glowing-artifacts / dragon-lore / hanging-detail / furniture / lights / maps / creatures / potions / curios) — expand each into specific named objects.',
+    touchpoints: [],
+    instructions: `Write 25 specific clutter-focus descriptors for the cozy-arcane sanctum. One sentence each, 14-26 words. Each names a SPECIFIC OBJECT with MATERIAL + DETAIL — something the eye lands on when scanning the cluttered room.
+
+Mix across the 11 inherited clutter categories (from the legacy inline form):
+- ALCHEMY GEAR — glass alembics with bubbling colored liquids / copper distillation rigs / mortars stained with herbs / racks of labeled apothecary bottles / dragon-glass beakers / clay crucibles
+- BOOKS + SCROLLS — towering stacks of leather-bound tomes with metal clasps / rolled scrolls tied with crimson ribbon / open grimoires with glowing script / parchment maps unfurled / quills and ink-pots
+- GLOWING ARTIFACTS — crystal orb pulsing with inner light / floating runes orbiting a pedestal / enchanted compass spinning / glowing magic-stone in wrought iron / levitating candle-flames
+- DRAGON-LORE DECOR — dragon skull mounted on wall / dragon-scale display case / dragon-claw pen-rests / dragon-tooth letter-opener / dragon-egg in velvet cradle
+- HANGING DETAIL — bundles of dried herbs from rafters / drying mushrooms on twine / dragon-tail feather garlands / suspended astrolabes / brass lanterns hanging
+- FURNITURE TEXTURE — cluttered roll-top desk / deep wing-back armchair worn at arms / low table with carved runes / chest with iron strap-bands / ornate carved wood with worn varnish
+- LIGHT-SOURCE OBJECTS — multi-arm candelabra with melted wax cascading / brass oil-lantern with blue-flame / fireplace with embers and brass tools / floating glowing wisp-orbs / lit pipe on a stand
+- MAP / NAVIGATION — wall-pinned maps with red string / brass compass / celestial chart parchment / cracked globe / sextant on windowsill
+- CREATURE EVIDENCE (no live animals) — empty raven-cage door open / cat-bed with curled depression / perch with feathers / fish-bowl with glowing creature
+- POTIONS + INGREDIENTS — glass vials of glowing colored liquids in wooden racks / jars of pickled things / bottles of sparkling powder / packets of folded herbs / small simmering cauldron
+- TROPHIES + CURIOSITIES — taxidermied owl on perch / butterfly collection in frame / glass jar with preserved tiny dragon / rune-carved wooden box / gilded chess set mid-game
+
+Each entry must:
+(a) NAME the object specifically
+(b) NAME at least one MATERIAL (leather / brass / dragon-glass / aged oak / tarnished silver / dripping wax)
+(c) NAME a SECONDARY DETAIL (glowing / steaming / open / cracked / dust-laden / candle-lit / pulsing)
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. A towering stack of seven leather-bound tomes with tarnished brass clasps and protruding paper bookmarks, balanced precariously on the corner of the roll-top desk.
+2. A copper distillation rig with three coiled tubes condensing emerald liquid into a small ceramic flask, steam curling from a clay crucible alongside it.
+3. A multi-arm wrought-iron candelabra with twelve melted candles cascading wax in long pale ribbons down the central column, three flames lit and dancing.
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_hearth_warmth_source: {
+    format: 'simple',
+    theme:
+      'Specific named warm-light source in the cozy-arcane sanctum — multi-arm candelabra / brass oil-lantern / fireplace embers / floating wisp-orbs / brazier glow / lit pipe / hearth-fire. The dominant warm-light element that pools amber light across the room. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 hearth/warmth-source descriptions for the cozy-arcane sanctum. One sentence each, 12-22 words. Each names a SPECIFIC LIGHT SOURCE with COLOR + POSITION + EFFECT on the surrounding clutter.
+
+Mix across warmth source types:
+- Fireplaces (stone hearth with crackling logs / open brick hearth with embers / iron stove glowing through grate / dragon-fire fireplace burning blue)
+- Candelabras (multi-arm wrought-iron with twelve candles / silver three-arm with dripping wax / dragon-shaped bronze candelabra / floor-standing twelve-tier candle-tree)
+- Brass lanterns (hanging brass oil-lantern with amber flame / tabletop brass lantern with blue magical flame / suspended sky-lantern with copper filigree)
+- Oil lamps (small brass desk-lamp / ceramic floor-lamp with carved rune-shade / hanging chandelier of small oil lamps)
+- Floating magical lights (wisp-orbs orbiting near the ceiling / floating candle-flames at eye-height / pulsing magic-stone on iron stand)
+- Braziers (iron brazier with glowing coals / bronze brazier with herb-steam rising / portable brass brazier on tripod / cauldron of slow-burning magical coals)
+- Smaller hearth-objects (lit pipe smoldering on a stand / glowing magic-stone in a wrought-iron cradle / dragon-fang lit-tip torch / pouch of glowing embers)
+- Window light (slanted afternoon sun through stained-glass / amber dusk through round leaded-glass window)
+
+Each entry must:
+(a) NAME the warmth source specifically
+(b) NAME its COLOR (amber / honey-gold / candle-yellow / firelight-orange / wisp-blue / dragon-fire teal)
+(c) NAME its POSITION (mantelpiece / above desk / beside armchair / on side-table / in the hearth / floating)
+(d) Describe how it POOLS LIGHT on the surrounding clutter (catching the wax / glinting off brass / warming worn leather / silhouetting books)
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. A stone hearth with crackling logs pouring amber-orange firelight across the worn brick floor and warming the deep wing-back armchair angled toward it.
+2. A multi-arm wrought-iron candelabra with twelve candles on the desk-corner, dripping honey-gold light onto stacks of open tomes and ink-pots.
+3. A hanging brass oil-lantern with steady candle-yellow flame above the work-bench, catching the bubbling potion-rack in a warm glow.
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_signature_familiar: {
+    format: 'simple',
+    theme:
+      'The inhabitant\\u0027s companion familiar — pet / spirit / minor creature sharing the sanctum. Raven on the desk / pseudo-dragon-cat curled in lap / smoke-fox by the hearth / glowing wisp-pet / book-imp peering from a shelf. NEVER aggressive, NEVER focal — a quiet co-present companion. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 signature-familiar descriptions for the cozy-arcane sanctum. One sentence each, 12-20 words. Each names a SPECIFIC CREATURE + its SCALE + its POSITION/POSE in the sanctum.
+
+Mix across familiar types (all NON-aggressive, NEVER focal):
+- Birds (raven on the desk preening / owl perched on shelf / songbird in cage / falcon hooded on a stand)
+- Cat-like (pseudo-dragon-cat curled in lap / shadow-cat on the mantelpiece / book-cat asleep on a tome stack / smoke-fox by the hearth)
+- Small reptilian (pseudo-dragon perched on shelf / rune-snake coiled on a warm stone / desert-gecko sunning on a windowsill)
+- Magical spirits (glowing wisp-pet orbiting the desk / blue-flame sprite dancing on a candle / book-imp peering between books)
+- Tiny-dragon (palm-sized dragon curled around the inkpot / small drake on the warm hearth-tile / hatchling on the apprentice's shoulder)
+- Frogs / amphibians (tower-frog in a glass jar / tree-frog on a hanging vine / wise-toad in a moss-bowl)
+- Insects (luminous-moth circling the candle / glow-beetle resting on a tome / spell-bound bee in a tiny jar)
+- Rodents (mouse with a tiny ribbon collar in a teacup / squirrel-familiar on the rafter / hedgehog in a herb-basket)
+- Reflective / silhouette familiar (raven silhouetted against the window / cat-shadow stretching on the wall / spirit-fox glimpsed in the mirror)
+
+Each entry must:
+(a) NAME the creature specifically
+(b) NAME its SIZE (palm-sized / cat-sized / bird-sized / mouse-sized)
+(c) NAME its POSITION (on desk / curled in lap / on shelf / by hearth / orbiting / on shoulder)
+(d) PRESENT but NOT FOCAL — quiet co-presence
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. A glossy black raven perched on the desk-corner preening its tail feathers, copper ring around its leg catching the candlelight.
+2. A palm-sized iridescent pseudo-dragon curled around the inkpot, its long tail draped over the edge of the parchment.
+3. A smoke-fox the size of a housecat curled on the hearthrug with its translucent tail wrapped around its feet.
+
+NEVER aggressive. NEVER attacking. NEVER focal — the inhabitant is the subject; the familiar is a quiet co-presence.
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_aesthetic_tradition: {
+    format: 'simple',
+    theme:
+      'Painter / illustrator / storybook-artist lineage that defines the rendering aesthetic for this cozy-arcane render. Brian Froud cluttered-faerie-realism / Wayne Anderson book-illustrator / Charles Vess fantasy-storybook / Tony DiTerlizzi Spiderwick / Trina Schart Hyman / Larry Elmore D&D-illustration. ALWAYS-RENDER-AS-PAINTED — never photoreal. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 aesthetic-tradition descriptions — illustrator / storybook-painter lineages that define the rendering style for the cozy-arcane sanctum. One sentence each, 16-30 words.
+
+Each entry must name:
+(a) THE ILLUSTRATOR — a real cozy-fantasy / storybook / D&D / book-illustration painter
+(b) THEIR SIGNATURE STYLE — what makes their work recognizable (cluttered-faerie-realism / book-illustration linework / oil-painted storybook / D&D paperback / pen-and-wash storybook / etc.)
+(c) HOW IT APPLIES TO COZY-ARCANE — what aspect of their style this render channels
+
+Mix across the cozy-fantasy / storybook illustrator canon:
+- Brian Froud (cluttered-faerie-realism, dense organic-ornate, naturalistic faerie figures, weathered earth-tones)
+- Wayne Anderson (book-illustrator oil-painting, dreamy storybook color, soft-edge transitions)
+- Charles Vess (storybook-fantasy, fine-line ink + saturated watercolor, mythic-pastoral mood)
+- Tony DiTerlizzi (Spiderwick / hidden-magical-world, sketchbook-natural-history style)
+- Trina Schart Hyman (Caldecott-medal storybook, lush oil-and-gouache illustration, fairy-tale-classical)
+- Larry Elmore (D&D paperback oil-painting, dramatic fantasy-illustration register)
+- Keith Parkinson (D&D fantasy paperback, dramatic adventure-illustration)
+- Brett Helquist (Series-of-Unfortunate-Events linework, ink-and-watercolor cozy-darkness)
+- Jerry Pinkney (Caldecott illustration, lush watercolor-and-ink storybook)
+- Lisbeth Zwerger (European storybook-illustration, delicate watercolor, mythic-quiet)
+- Maurice Sendak (storybook-cluttered-warmth, dense ink crosshatching with watercolor)
+- Quentin Blake (Roald Dahl-style loose ink-and-watercolor, expressive cozy-warmth)
+- Tasha Tudor (cozy-domestic watercolor, Vermont-cottage warmth, delicate detail)
+- Beatrix Potter (small-creature storybook-naturalism, soft watercolor, intimate scale)
+- Pauline Baynes (Narnia illustrator, delicate ink-and-color medieval-storybook style)
+- Alan Lee (Tolkien atmospheric-watercolor, weathered-painterly mood)
+- John Howe (Tolkien dramatic-watercolor, painterly fantasy-illustration)
+- Iain McCaig (Tony DiTerlizzi-adjacent fantasy concept-art, painted storybook)
+- Don Bluth-illustration tradition (animated-storybook intimacy, painted-cel warmth)
+- Hayao Miyazaki / Studio Ghibli book-art lineage (intimate clutter, soft watercolor backgrounds)
+- Tove Jansson (Moomin storybook, soft ink-and-wash intimate warmth)
+
+Each entry must read as a sentence Sonnet can fold into a render: "Brian Froud cluttered-faerie-realism — dense organic clutter, weathered earth-tones, naturalistic creature-companion realism, fine-line ink with muted gouache." Each entry stands alone as a self-contained style direction.
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. Brian Froud cluttered-faerie-realism — dense organic-ornate detail, naturalistic creature anatomy, weathered earth-tone palette with deep moss-green and amber, fine-line ink under muted gouache.
+2. Wayne Anderson book-illustrator tradition — soft-edge dreamy oil-painting, deep storybook color depth, cozy lantern-light pooling on rich textures, painted-fantasy-illustration register.
+3. Charles Vess storybook-fantasy lineage — fine-line ink linework over saturated watercolor washes, mythic-pastoral mood, slow lyrical composition with painted folkloric warmth.
+
+NO photoreal. NO film-stills. NO 3D-rendering aesthetic. The whole path is painted-fantasy-illustration ONLY.
+
+Output 25 numbered list entries.`,
+  },
+  cozy_arcane_magical_signature: {
+    format: 'simple',
+    theme:
+      'Specific visible magic in the cozy-arcane sanctum — glowing-rune mid-air above the desk / floating-quill writing on parchment / wisp-orbs orbiting bookshelf / spell-circle chalk-drawn on the floor / levitating ingredient over a flask. Small + intimate scale — NEVER cathedral-magic. 50%-gated accent.',
+    touchpoints: [],
+    instructions: `Write 25 magical-signature descriptions for the cozy-arcane sanctum. One sentence each, 14-24 words. Each names a SPECIFIC VISIBLE MAGIC ELEMENT with shape + color + position.
+
+Mix across small-scale intimate-magic types:
+- Floating runes / glyphs (single glowing rune above the desk / cluster of rotating glyphs around an open tome / hovering script in midair)
+- Levitating objects (quill writing by itself on parchment / floating ingredient above a flask / hovering crystal orb / floating bookmark turning a page)
+- Spell-circles / chalk drawings (chalk-drawn spell-circle on the floor / runes etched in glowing lines on the wall / silver-line sigil on the desk)
+- Wisp-light / minor lights (wisp-orbs orbiting the bookshelf / glowing motes drifting near the ceiling / candle-flame frozen mid-flicker / dancing flame-spirit)
+- Magic-stone / focus crystals (pulsing magic-stone on a wrought-iron stand / glowing crystal orb in a velvet cradle / hovering arcane focus emitting soft light)
+- Smoke / vapor magic (intricate smoke-curl forming a sigil above an incense burner / vapor rising from a potion writing words / steam-shape forming a small spirit)
+- Bound spirits (small spirit-fox glimpsed in the mirror / hovering wisp-companion / leaf-spirit sitting on the inhabitant's shoulder)
+- Glowing tattoos / marks (glowing-mark forearms / pulsing tattoo on the collarbone / lit rune on the inhabitant's hand)
+- Familiar-magic interaction (familiar with glowing eyes / wisp-trail following a moving pet / dragon-cat exhaling small flames)
+- Reactive magic (book pages flipping by themselves / scroll unrolling on its own / candles relighting after a draft / herbs floating into a pouch)
+
+Each entry must:
+(a) NAME the magic specifically
+(b) NAME its COLOR (amber-glow / silver-light / blue-wisp / purple-rune / emerald-pulse)
+(c) NAME its POSITION (above the desk / orbiting the bookshelf / on the floor / in the air at eye-height / on the inhabitant's hand)
+
+Examples (DO NOT copy verbatim — write 25 new entries):
+1. A single softly-pulsing emerald rune hovering in the air above the open spellbook, casting a green glow across the parchment.
+2. A wrought-iron-and-crystal focus pulsing slowly with silver light on the side-table, its rune-bands cycling between blue and lavender.
+3. Three small wisp-orbs of pale amber light orbiting slowly around the upper shelf, illuminating the spines of dust-laden tomes as they pass.
+
+Small + intimate magic only. NO cathedral-blast / NO ritual-summoning / NO combat-magic. Quiet sanctum magic, like a soft sound in a quiet room.
+
+Output 25 numbered list entries.`,
   },
 };
 

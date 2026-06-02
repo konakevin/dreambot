@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/fantasy_race.json',
   total: 50,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} FANTASY RACE / LINEAGE entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (15-25 words) describing the EXACT visual signature of a HUMAN-SHAPED fantasy lineage drawn from popular fantasy worlds — D&D / Forgotten Realms, LOTR / Tolkien, World of Warcraft, Elder Scrolls, Witcher, Pathfinder.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FANTASY RACE / LINEAGE entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (15-25 words) describing the EXACT visual signature of a HUMAN-SHAPED fantasy lineage drawn from popular fantasy worlds — D&D / Forgotten Realms, LOTR / Tolkien, World of Warcraft, Elder Scrolls, Witcher, Pathfinder.
 
 CRITICAL — ALL ENTRIES MUST BE HUMAN-SHAPED. NO scaled reptilians (no dragonborn, no yuan-ti, no argonian / lizardfolk). NO beast-headed creatures (no tabaxi, no worgen, no tauren). NO fully-mechanical (no warforged). NO non-humanoid creatures. Every race in this pool walks upright on two legs with a recognizably HUMAN-SHAPED body, head, and face — even if they have horns, tusks, pointed ears, ash-grey skin, glowing eyes, or other humanoid-but-distinct features.
 
@@ -88,4 +90,7 @@ AASIMAR (2, human-shaped with divine markings):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

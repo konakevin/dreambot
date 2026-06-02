@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/warrior_adventure_actions.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ADVENTURING / TRAVELING action entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (12-22 words) describing a CANDID moment of a warrior on the move — hiking, traveling, exploring a town, sitting in a tavern, breaking camp, scouting, gearing up, social candid, peaceful in-world life.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ADVENTURING / TRAVELING action entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (12-22 words) describing a CANDID moment of a warrior on the move — hiking, traveling, exploring a town, sitting in a tavern, breaking camp, scouting, gearing up, social candid, peaceful in-world life.
 
 ABSOLUTELY NO BATTLE SCENES. NO COMBAT. NO MID-STRIKE. NO DYING / DEAD / WOUNDED. NO VIOLENCE. NO BLOOD.
 
@@ -64,4 +66,7 @@ CRAFTING / TENDING (3-4) — quiet adventurer work:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/epic_moments.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} EPIC DRAGON MOMENT scene descriptions for DragonBot — jaw-dropping cinematic narrative beats where DRAGONS are central to the action. Every scene MUST feature at least one traditional winged high-fantasy dragon. 20-35 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EPIC DRAGON MOMENT scene descriptions for DragonBot — jaw-dropping cinematic narrative beats where DRAGONS are central to the action. Every scene MUST feature at least one traditional winged high-fantasy dragon. 20-35 words each.
 
 ━━━ THE UNIVERSE ━━━
 Gritty, grounded, medieval European high-fantasy. LOTR's Middle-earth, GoT's Westeros, Skyrim's Tamriel. Weathered stone fortresses, ancient forests, volcanic wastelands, vast mountain ranges, crumbling empires, storm-battered coastlines, snow-capped peaks. The world feels LIVED IN, ANCIENT, and REAL. Dragons are PART of this world — apex predators, living gods, weapons of war, ancient beings older than kingdoms.
@@ -56,4 +58,7 @@ EXACTLY ONE entry per category. No two entries should share the same dragon acti
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

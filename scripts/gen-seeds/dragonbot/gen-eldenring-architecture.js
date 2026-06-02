@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/eldenring_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ELDEN-RING / DARK-SOULS-CODED ARCHITECTURE entries for DragonBot's eldenring-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the Hidetaka-Miyazaki / FromSoftware aesthetic tradition — ancient gold-cathedral throne chambers, decaying castle interiors, ruined-king's-hall under crumbling vaulted ceilings, dragon-graveyard chambers, void-plateau architecture, blood-tainted nightmare temples, ancient libraries swallowed by ruin, frozen-throne mountain halls.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ELDEN-RING / DARK-SOULS-CODED ARCHITECTURE entries for DragonBot's eldenring-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the Hidetaka-Miyazaki / FromSoftware aesthetic tradition — ancient gold-cathedral throne chambers, decaying castle interiors, ruined-king's-hall under crumbling vaulted ceilings, dragon-graveyard chambers, void-plateau architecture, blood-tainted nightmare temples, ancient libraries swallowed by ruin, frozen-throne mountain halls.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO TARNISHED, NO HEROES. Pure architecture only.
 
@@ -68,4 +70,7 @@ FROZEN-THRONE MOUNTAIN HALLS (~3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} FANTASY LANDSCAPE descriptions for DragonBot — the FLAGSHIP path. Each entry is a gorgeous high-fantasy scene worthy of a fantasy-art-show gallery wall. Entries 20-40 words each. Cinematic wide vistas only — no characters, no people, no figures of any kind.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FANTASY LANDSCAPE descriptions for DragonBot — the FLAGSHIP path. Each entry is a gorgeous high-fantasy scene worthy of a fantasy-art-show gallery wall. Entries 20-40 words each. Cinematic wide vistas only — no characters, no people, no figures of any kind.
 
 ━━━ AESTHETIC NORTH STAR ━━━
 Think Ted Nasmith / John Howe / Alan Lee / Frank Frazetta — the painters who made LOTR, Middle-earth art books, Howl's-Moving-Castle, Hyrule. Grounded painterly high-fantasy. Castles nestled in dramatic natural settings. Waterfalls cascading down cliffs. Vast mist-filled valleys at dawn. Multi-tiered spired citadels with towers piercing clouds. Stone bridges over gorges. Gothic keeps against sunset sky. Rivendell, Minas Tirith, Hogwarts-as-architecture, fantasy-Kyoto, Elvish forest-citadel, Dwarven mountain-city.
@@ -49,4 +51,7 @@ Each entry should weave together:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

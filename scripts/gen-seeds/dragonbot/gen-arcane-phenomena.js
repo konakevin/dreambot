@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/arcane_phenomena.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ARCANE PHENOMENA descriptions for DragonBot — pure magical events happening in the landscape with NO characters. The magic erupts from the land itself: ancient ley-lines, stone circles, wild magic ruptures, artifacts detonating, rune-carved monuments igniting. 15-25 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ARCANE PHENOMENA descriptions for DragonBot — pure magical events happening in the landscape with NO characters. The magic erupts from the land itself: ancient ley-lines, stone circles, wild magic ruptures, artifacts detonating, rune-carved monuments igniting. 15-25 words each.
 
 ━━━ WHAT THESE ARE ━━━
 Pure magical phenomena — no wizards, no mages, no casters. The land IS the source:
@@ -35,4 +37,7 @@ gold/amber, violet/purple, emerald/green, sapphire/blue, crimson/red, white/silv
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

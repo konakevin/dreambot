@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/dark_realm_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} DARK REALM scene descriptions for DragonBot. Corrupted wastelands, necromancer kingdoms, fallen empires, cursed lands. Mordor / Dark Souls / Bloodborne / Diablo energy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DARK REALM scene descriptions for DragonBot. Corrupted wastelands, necromancer kingdoms, fallen empires, cursed lands. Mordor / Dark Souls / Bloodborne / Diablo energy.
 
 Each entry: 15-25 words. One specific dark fantasy landscape or realm.
 
@@ -34,4 +36,7 @@ Each entry: 15-25 words. One specific dark fantasy landscape or realm.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} OUTFIT entries for DragonBot's male-warrior path. Each entry is a DENSE phrase (20-35 words) describing his full warrior DRESS in obsessive material detail.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OUTFIT entries for DragonBot's male-warrior path. Each entry is a DENSE phrase (20-35 words) describing his full warrior DRESS in obsessive material detail.
 
 ━━━ HARD ANTI-BIAS RULE ━━━
 The existing pool was 64% fur-coded (bear-pelt, fur-lined, fur-mantle, fur-trim). NEW entries MUST avoid fur unless an archetype legitimately demands it. **MAX 10% of new entries may include fur.** The other 90% lean into ALL the other materials and silhouettes below. Variety is the goal — the renders should NOT all look like burly fur-shouldered berserkers.
@@ -63,4 +65,7 @@ WILD / BARBARIAN FAMILY (~5% — the only place fur belongs):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/female_warriors.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} descriptions of STUNNING FEMALE fantasy warriors for DragonBot. Each is a beautiful, dangerous WOMAN in an ornate outfit. 25-40 words. Start every entry with "A beautiful female" or "A stunning woman" or "A gorgeous female" — the image model MUST know she is a woman.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} descriptions of STUNNING FEMALE fantasy warriors for DragonBot. Each is a beautiful, dangerous WOMAN in an ornate outfit. 25-40 words. Start every entry with "A beautiful female" or "A stunning woman" or "A gorgeous female" — the image model MUST know she is a woman.
 
 ━━━ WHO THESE WOMEN ARE ━━━
 These are the most beautiful, exotic, awe-inspiring warrior women in all of high fantasy. When you see one, your jaw DROPS — not just because she's gorgeous, but because she radiates power, danger, and otherworldly beauty all at once. She looks like she could seduce a king and slay a dragon in the same breath.
@@ -49,4 +51,7 @@ No two characters should share race + hair color + armor type. CRITICAL: no more
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

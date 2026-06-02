@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of warrior eyes AND how fantasy-world light interacts with them — torchlight glint, firelight catch, dragon-flame reflection, moonlight bounce.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of warrior eyes AND how fantasy-world light interacts with them — torchlight glint, firelight catch, dragon-flame reflection, moonlight bounce.
 
 This pool composes with separate skin/hair/outfit pools. Eyes should feel POWERFUL — power, focus, weariness from countless battles. Suitable for both male and female.
 
@@ -26,4 +28,7 @@ This pool composes with separate skin/hair/outfit pools. Eyes should feel POWERF
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

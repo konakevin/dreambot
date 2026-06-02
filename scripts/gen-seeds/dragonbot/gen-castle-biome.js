@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} LUSH GORGEOUS WESTERN-HIGH-FANTASY BIOME entries for DragonBot's castle path. Each entry is a DENSE phrase (30-55 words) describing a RICH, COLORFUL, LIFE-FILLED Western-fantasy landscape — every entry must read as LUSH, NEVER plain or bare, and WESTERN-FANTASY ONLY (LOTR / GoT / Skyrim / Warcraft / Witcher / D&D / Elden-Ring lineage).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LUSH GORGEOUS WESTERN-HIGH-FANTASY BIOME entries for DragonBot's castle path. Each entry is a DENSE phrase (30-55 words) describing a RICH, COLORFUL, LIFE-FILLED Western-fantasy landscape — every entry must read as LUSH, NEVER plain or bare, and WESTERN-FANTASY ONLY (LOTR / GoT / Skyrim / Warcraft / Witcher / D&D / Elden-Ring lineage).
 
 ⚠️ THE BAR: each biome must feel like a Tolkien-illustrated-edition / Witcher-3-establishing-shot / Skyrim-Whiterun-meadow / LOTR-Shire-Pelennor-Lothlorien fairytale-paradise landscape. Verdant, flower-strewn, blossom-shaded, mirror-laked, sun-dappled. Movie-poster lush concept-art.
 

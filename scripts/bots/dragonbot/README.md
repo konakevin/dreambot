@@ -8,14 +8,14 @@ core offering. Characters by role only.
 
 ## 6 render paths
 
-| Path | What it is |
-|---|---|
-| `landscape` ⭐ FLAGSHIP | Stunning fantasy-world vistas + castles + ruins + mythic cities (no characters) |
-| `fantasy-scene` | Character in rich magical-atmospheric scene — wizard at cliff, ranger in forest |
-| `epic-moment` | Charged narrative moment — battle-charge, spell-cast, coronation, siege-assault |
-| `dragon-scene` | Dragon as hero — coiled on hoard, in flight, sleeping in volcanic cave |
-| `magic-moment` | ARCANE MAXIMALISM — 4-5 magical elements layered per scene, scene responds to magic |
-| `cozy-arcane` | Cozy fantasy places — Hobbiton hearth, elven tea-garden, fae-glen, glowing-moss creek |
+| Path                    | What it is                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| `landscape` ⭐ FLAGSHIP | Stunning fantasy-world vistas + castles + ruins + mythic cities (no characters)       |
+| `fantasy-scene`         | Character in rich magical-atmospheric scene — wizard at cliff, ranger in forest       |
+| `epic-moment`           | Charged narrative moment — battle-charge, spell-cast, coronation, siege-assault       |
+| `dragon-scene`          | Dragon as hero — coiled on hoard, in flight, sleeping in volcanic cave                |
+| `magic-moment`          | ARCANE MAXIMALISM — 4-5 magical elements layered per scene, scene responds to magic   |
+| `cozy-arcane`           | Cozy fantasy places — Hobbiton hearth, elven tea-garden, fae-glen, glowing-moss creek |
 
 ## pathWeights
 
@@ -25,10 +25,12 @@ Epic-moment + magic-moment at 1x.
 ## Axes rolled per render
 
 Shared:
+
 - `scene_palette` — epic-fantasy color mood
 - `colorPalette` — secondary lighting keyed to vibe
 
 Path-specific (all 50-entry Sonnet-seeded pools):
+
 - `fantasy_characters` — by role (wizard/ranger/mage/knight/druid/paladin)
 - `fantasy_landscapes` — flagship: castles/floating-islands/ruins/elven-forests
 - `epic_moments` — charged narrative beats

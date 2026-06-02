@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/lotr_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} LORD-OF-THE-RINGS-CODED LANDSCAPE entries for DragonBot's lotr-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC FANTASY VISTA in the Tolkien / Middle-earth aesthetic tradition — Shire-coded green hills with hobbit-holes, Mordor volcanic hellscape with looming dark tower, Rivendell elven-waterfall-valley, Lothlórien golden-mallorn-forest, Moria dwarven-dark-depths, Edoras golden-roof horse-clan plain, Minas Tirith white-stone seven-tier city silhouette, Helm's Deep fortress in valley, Fangorn ancient mossy forest, Erebor lonely-mountain, Misty Mountains pass.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LORD-OF-THE-RINGS-CODED LANDSCAPE entries for DragonBot's lotr-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC FANTASY VISTA in the Tolkien / Middle-earth aesthetic tradition — Shire-coded green hills with hobbit-holes, Mordor volcanic hellscape with looming dark tower, Rivendell elven-waterfall-valley, Lothlórien golden-mallorn-forest, Moria dwarven-dark-depths, Edoras golden-roof horse-clan plain, Minas Tirith white-stone seven-tier city silhouette, Helm's Deep fortress in valley, Fangorn ancient mossy forest, Erebor lonely-mountain, Misty Mountains pass.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO HOBBITS, NO ELVES, NO ORCS-AS-FOREGROUND, NO HEROES. Pure landscape only.
 
@@ -72,4 +74,7 @@ PELENNOR / BATTLE-PLAIN (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

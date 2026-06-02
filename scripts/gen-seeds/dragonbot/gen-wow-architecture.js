@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/wow_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} WORLD-OF-WARCRAFT-CODED ARCHITECTURE entries for DragonBot's wow-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the WoW aesthetic tradition — Stormwind-style human throne hall, Orgrimmar-style orc war-keep, Ironforge-style dwarven underground forge, Darnassus-style night-elf tree-temple, Silvermoon-style blood-elf classical hall, Dalaran-style wizard-tower chamber, Acherus-style death knight gothic citadel, Naxxramas-style necromantic bone-chamber, Pandaria-style Asian-coded zen temple, Shadowlands-realm interiors (Bastion classical, Maldraxxus necromantic, Ardenweald fey-grove, Revendreth gothic).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WORLD-OF-WARCRAFT-CODED ARCHITECTURE entries for DragonBot's wow-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the WoW aesthetic tradition — Stormwind-style human throne hall, Orgrimmar-style orc war-keep, Ironforge-style dwarven underground forge, Darnassus-style night-elf tree-temple, Silvermoon-style blood-elf classical hall, Dalaran-style wizard-tower chamber, Acherus-style death knight gothic citadel, Naxxramas-style necromantic bone-chamber, Pandaria-style Asian-coded zen temple, Shadowlands-realm interiors (Bastion classical, Maldraxxus necromantic, Ardenweald fey-grove, Revendreth gothic).
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO HEROES-IN-FRAME. Pure architecture only.
 
@@ -70,4 +72,7 @@ SHADOWLANDS-REALM INTERIORS (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

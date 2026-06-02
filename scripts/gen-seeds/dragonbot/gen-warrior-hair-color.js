@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HAIR-COLOR entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (6-14 words) describing the EXACT vivid hair color AND a fantasy-light interaction — torchlight glow, firelight sheen, dragon-flame catch, moonlight shimmer.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIR-COLOR entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (6-14 words) describing the EXACT vivid hair color AND a fantasy-light interaction — torchlight glow, firelight sheen, dragon-flame catch, moonlight shimmer.
 
 This pool composes with separate hairstyle/skin/eyes/outfit pools. Suitable for both male and female warriors.
 
@@ -26,4 +28,7 @@ This pool composes with separate hairstyle/skin/eyes/outfit pools. Suitable for 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

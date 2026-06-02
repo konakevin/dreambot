@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/lotr_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} LORD-OF-THE-RINGS-CODED ARCHITECTURE entries for DragonBot's lotr-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the Tolkien / Middle-earth aesthetic tradition — Shire-coded round-doored hobbit-hole interiors, Mordor black-tower throne chambers, Rivendell elven-waterfall-hall interiors, Moria dwarven stone-pillar halls, Edoras golden mead-hall interiors, Minas Tirith white-stone throne chambers, Erebor dwarven gold-treasury, Saruman tower interiors.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LORD-OF-THE-RINGS-CODED ARCHITECTURE entries for DragonBot's lotr-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the Tolkien / Middle-earth aesthetic tradition — Shire-coded round-doored hobbit-hole interiors, Mordor black-tower throne chambers, Rivendell elven-waterfall-hall interiors, Moria dwarven stone-pillar halls, Edoras golden mead-hall interiors, Minas Tirith white-stone throne chambers, Erebor dwarven gold-treasury, Saruman tower interiors.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO HOBBITS, NO ELVES, NO HEROES. Pure architecture only.
 
@@ -69,4 +71,7 @@ DARK-WIZARD STUDIES (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

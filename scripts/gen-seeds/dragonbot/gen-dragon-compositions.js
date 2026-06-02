@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/dragon_compositions.json',
   total: 200,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DRAGON COMPOSITION descriptions for DragonBot — the POSE + SETTING + MOMENT a dragon is caught in. Species-agnostic (species comes from separate pool). Each entry 15-30 words. Cinematic concept-art framings.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DRAGON COMPOSITION descriptions for DragonBot — the POSE + SETTING + MOMENT a dragon is caught in. Species-agnostic (species comes from separate pool). Each entry 15-30 words. Cinematic concept-art framings.
 
 ━━━ SCOPE — POSE + SETTING + MOMENT ONLY ━━━
 This pool describes HOW a dragon is arranged in frame. Do NOT describe the dragon's anatomy/species — that comes from a separate pool. Here describe:
@@ -31,4 +33,7 @@ This pool describes HOW a dragon is arranged in frame. Do NOT describe the drago
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

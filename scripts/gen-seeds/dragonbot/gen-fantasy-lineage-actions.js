@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/fantasy_lineage_actions.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} RACE-FLAVORED PEACEFUL ACTION entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (12-22 words) describing a SIGNATURE peaceful / candid / atmospheric moment that lets a fantasy lineage's flavor SHINE — drawing on canonical D&D / LOTR / WoW / Elder Scrolls / Witcher / Pathfinder / Eberron iconography.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} RACE-FLAVORED PEACEFUL ACTION entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (12-22 words) describing a SIGNATURE peaceful / candid / atmospheric moment that lets a fantasy lineage's flavor SHINE — drawing on canonical D&D / LOTR / WoW / Elder Scrolls / Witcher / Pathfinder / Eberron iconography.
 
 ABSOLUTELY NO BATTLE SCENES. NO COMBAT. NO MID-STRIKE. NO DYING / DEAD / WOUNDED. NO VIOLENCE. These are PEACEFUL moments that ONLY a specific lineage would do, written generically enough to render with whatever race the path has rolled. Sonnet sees the race entry + the lineage action and builds a coherent peaceful moment.
 
@@ -68,4 +70,7 @@ CELESTIAL / AASIMAR ACTIONS (1-2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

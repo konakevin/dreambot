@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/fantasy_characters.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} FANTASY CHARACTER descriptions for DragonBot — archetype characters by role only. LOTR/GoT/Harry-Potter/Witcher energy. Never named.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FANTASY CHARACTER descriptions for DragonBot — archetype characters by role only. LOTR/GoT/Harry-Potter/Witcher energy. Never named.
 
 Each entry: 10-20 words. One specific archetype with distinguishing visual details.
 
@@ -41,4 +43,7 @@ Each entry: 10-20 words. One specific archetype with distinguishing visual detai
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

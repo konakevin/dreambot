@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} TINY-SCALE-PROVER entries for DragonBot's castle path. Each entry is a SHORT DENSE phrase (15-30 words) describing ONE tiny element in the frame that PROVES the immense scale of the castle behind it.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TINY-SCALE-PROVER entries for DragonBot's castle path. Each entry is a SHORT DENSE phrase (15-30 words) describing ONE tiny element in the frame that PROVES the immense scale of the castle behind it.
 
 ⚠️ THE BAR: every entry produces a scene where the castle in the background reads as MASSIVE because of the tiny scale-prover in the foreground. The scale-prover is SMALL (5-15% of frame max) — its job is to make the castle look enormous by comparison. Think Lord-of-the-Rings establishing shot: tiny rider on a horse on the hilltop, vast castle filling the horizon.
 

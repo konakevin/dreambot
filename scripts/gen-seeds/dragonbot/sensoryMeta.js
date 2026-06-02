@@ -36,7 +36,9 @@ const SHARED_RULES = `━━━ HARD RULES ━━━
 // ─────────────────────────────────────────────────────────────
 
 const female = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for DragonBot's FEMALE-character path (female-warrior). Each entry is one short olfactory cue tied to an armored fantasy woman in epic-fantasy-magical settings.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for DragonBot's FEMALE-character path (female-warrior). Each entry is one short olfactory cue tied to an armored fantasy woman in epic-fantasy-magical settings.
 
 Smell entries should evoke scents on her body / armor / cloak / weapons / hair, or in the immediate magical environment around her.
 
@@ -55,7 +57,9 @@ Both the SCENT NOUN AND the LOCATION on/around her. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for DragonBot's FEMALE-character path. Each entry is one short auditory cue — sounds she makes, hears, or is surrounded by in epic-fantasy-magical settings.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for DragonBot's FEMALE-character path. Each entry is one short auditory cue — sounds she makes, hears, or is surrounded by in epic-fantasy-magical settings.
 
 Sound entries should evoke her movement / armor / weapons / breath, or environmental sounds nearby (raven, wind, war-horn, leyline-hum, distant battle).
 
@@ -74,7 +78,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for DragonBot's FEMALE-character path. Each entry is one short tactile cue — what she feels against her skin, what she's touching with her hands.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for DragonBot's FEMALE-character path. Each entry is one short tactile cue — what she feels against her skin, what she's touching with her hands.
 
 Touch entries should reference her skin / hands / throat / shoulders / fingertips / lips / hair, in contact with epic-fantasy materials (leather, mythril, iron, runed stone, blood, fur, embroidered silk).
 
@@ -93,7 +99,9 @@ Both the BODY PART AND the SENSATION VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for DragonBot's FEMALE-character path. Each entry is one short thermal cue — heat or cold sensation on her body, or in the magical space around her.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for DragonBot's FEMALE-character path. Each entry is one short thermal cue — heat or cold sensation on her body, or in the magical space around her.
 
 Temperature entries should evoke: warmth (forge / torch / spell-fire / dragon-breath / blood) or cold (mountain-pass / snow / leyline-frost / crypt-stone) interacting with her body specifically.
 
@@ -112,7 +120,9 @@ Both the THERMAL SOURCE AND the BODY PART. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for DragonBot's FEMALE-character path. Each entry is one short cue evoking heaviness, drag, or pressure on her body — usually armor, weapons, cloak, jewelry.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for DragonBot's FEMALE-character path. Each entry is one short cue evoking heaviness, drag, or pressure on her body — usually armor, weapons, cloak, jewelry.
 
 Weight entries should reference: cloak / chainmail / pauldron / sword / shield / quiver / talisman / spell-book interacting with her body's specific physics.
 
@@ -131,7 +141,9 @@ Both the OBJECT AND the BODY PART. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  air: (n) => `You are writing ${n} distinct AIR anchors for DragonBot's FEMALE-character path. Each entry is one short cue evoking atmospheric movement near her — particles drifting, smoke curling, mist trailing, hair stirring.
+  air: (
+    n
+  ) => `You are writing ${n} distinct AIR anchors for DragonBot's FEMALE-character path. Each entry is one short cue evoking atmospheric movement near her — particles drifting, smoke curling, mist trailing, hair stirring.
 
 Air entries should evoke visible atmosphere: ash / smoke / mist / pollen / snow / spell-mist / spark in motion near her body.
 
@@ -150,7 +162,9 @@ Both the PARTICLE/MEDIUM AND the MOTION VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for DragonBot's FEMALE-character path. Each entry forces Flux to render a SPECIFIC PUNCHY lighting palette on her face/body — overriding Sonnet's safe defaults.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for DragonBot's FEMALE-character path. Each entry forces Flux to render a SPECIFIC PUNCHY lighting palette on her face/body — overriding Sonnet's safe defaults.
 
 Each entry must include: COLOR + DIRECTION (key/rim/sidelight/underlight/uplight/backlight/spot/shaft) + IMPACT POINT on her body/armor/silhouette.
 
@@ -194,7 +208,9 @@ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 // ─────────────────────────────────────────────────────────────
 
 const male = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for DragonBot's MALE-character path (male-warrior). Each entry is one short olfactory cue tied to a rugged armored fantasy man in epic-fantasy-magical settings.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for DragonBot's MALE-character path (male-warrior). Each entry is one short olfactory cue tied to a rugged armored fantasy man in epic-fantasy-magical settings.
 
 EXAMPLES (DO NOT REUSE):
 - "wet wool and pine-smoke clinging to his cloak"
@@ -211,7 +227,9 @@ Both the SCENT NOUN AND the LOCATION on/around him. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for DragonBot's MALE-character path. Each entry is one short auditory cue — sounds he makes, hears, or is surrounded by.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for DragonBot's MALE-character path. Each entry is one short auditory cue — sounds he makes, hears, or is surrounded by.
 
 EXAMPLES (DO NOT REUSE):
 - "his greatsword scraping the stone as he stands"
@@ -228,7 +246,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for DragonBot's MALE-character path. Each entry is one short tactile cue — what he feels against his skin, what he's touching with his hands.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for DragonBot's MALE-character path. Each entry is one short tactile cue — what he feels against his skin, what he's touching with his hands.
 
 EXAMPLES (DO NOT REUSE):
 - "iron pommel resting cold against his palm"
@@ -245,7 +265,9 @@ Both the BODY PART AND the SENSATION VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for DragonBot's MALE-character path.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for DragonBot's MALE-character path.
 
 EXAMPLES (DO NOT REUSE):
 - "forge-warmth pressing at his back from the smithy door"
@@ -262,7 +284,9 @@ Both the THERMAL SOURCE AND the BODY PART. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for DragonBot's MALE-character path. Each entry evokes heaviness or drag on his body — armor, weapons, cloak, gear.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for DragonBot's MALE-character path. Each entry evokes heaviness or drag on his body — armor, weapons, cloak, gear.
 
 EXAMPLES (DO NOT REUSE):
 - "longsword dragging at his hip"
@@ -296,7 +320,9 @@ Both the MEDIUM AND the MOTION/LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for DragonBot's MALE-character path.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for DragonBot's MALE-character path.
 
 Each entry must include: COLOR + DIRECTION + IMPACT POINT (his face, jaw, shoulder, blade, armor, silhouette).
 
@@ -333,7 +359,9 @@ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 // ─────────────────────────────────────────────────────────────
 
 const creature = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for DragonBot's CREATURE path (dragon-scene). The DRAGON is the sole subject. NO HUMANS. Anchors reference dragon anatomy + dragon-environment scents.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for DragonBot's CREATURE path (dragon-scene). The DRAGON is the sole subject. NO HUMANS. Anchors reference dragon anatomy + dragon-environment scents.
 
 EXAMPLES (DO NOT REUSE):
 - "sulphur clinging to its breath as it parts its jaws"
@@ -353,7 +381,9 @@ Both the SCENT NOUN AND the LOCATION on/around the dragon. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for DragonBot's CREATURE path. Dragon as sole subject, NO HUMANS.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for DragonBot's CREATURE path. Dragon as sole subject, NO HUMANS.
 
 EXAMPLES (DO NOT REUSE):
 - "its wing-membranes thundering open in one beat"
@@ -373,7 +403,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for DragonBot's CREATURE path. Tactile cues from the DRAGON'S perspective or environment touching it.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for DragonBot's CREATURE path. Tactile cues from the DRAGON'S perspective or environment touching it.
 
 EXAMPLES (DO NOT REUSE):
 - "a kingdom's worth of gold scraping under its belly"
@@ -393,7 +425,9 @@ Both the TEXTURE/MEDIUM AND the BODY PART (scale / wing-membrane / talon / belly
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for DragonBot's CREATURE path.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for DragonBot's CREATURE path.
 
 EXAMPLES (DO NOT REUSE):
 - "furnace-heat radiating from beneath its ribcage outward"
@@ -413,7 +447,9 @@ Both the THERMAL SOURCE AND the LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for DragonBot's CREATURE path. Multi-ton dragon body interacting with environment.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for DragonBot's CREATURE path. Multi-ton dragon body interacting with environment.
 
 EXAMPLES (DO NOT REUSE):
 - "stone tower groaning under its single perched claw"
@@ -453,7 +489,9 @@ Both the MEDIUM AND the MOTION VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for DragonBot's CREATURE path. Lighting hits the dragon's scaled body / wing-membrane / glowing throat / cave-lair.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for DragonBot's CREATURE path. Lighting hits the dragon's scaled body / wing-membrane / glowing throat / cave-lair.
 
 Each entry must include: COLOR + DIRECTION + IMPACT POINT (its scaled snout / wing-membranes / glowing throat / talon / silhouette).
 
@@ -492,7 +530,9 @@ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 // ─────────────────────────────────────────────────────────────
 
 const scene = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for DragonBot's PURE-SCENE paths (landscape, fantasy-scene, epic-moment, cozy-arcane, arcane-halls, dark-realm, dragon-lore). NO human or creature subject — scents in the empty epic-fantasy environment.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for DragonBot's PURE-SCENE paths (landscape, fantasy-scene, epic-moment, cozy-arcane, arcane-halls, dark-realm, dragon-lore). NO human or creature subject — scents in the empty epic-fantasy environment.
 
 EXAMPLES (DO NOT REUSE):
 - "ancient parchment and beeswax in the arcane library"
@@ -509,7 +549,9 @@ Both the SCENT NOUN AND the LOCATION/SOURCE. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for DragonBot's PURE-SCENE paths. Environmental sounds only.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for DragonBot's PURE-SCENE paths. Environmental sounds only.
 
 EXAMPLES (DO NOT REUSE):
 - "wind howling through the broken cathedral-vault"
@@ -526,7 +568,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for DragonBot's PURE-SCENE paths. Environmental texture/contact cues — rain on stone, ivy on walls, frost on iron, dust on books, embers on tapestries.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for DragonBot's PURE-SCENE paths. Environmental texture/contact cues — rain on stone, ivy on walls, frost on iron, dust on books, embers on tapestries.
 
 EXAMPLES (DO NOT REUSE):
 - "ivy creeping over the fallen warrior's headstone"
@@ -543,7 +587,9 @@ Both the TEXTURE/MEDIUM AND the SURFACE. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for DragonBot's PURE-SCENE paths. Thermal cues in the environment.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for DragonBot's PURE-SCENE paths. Thermal cues in the environment.
 
 EXAMPLES (DO NOT REUSE):
 - "leyline-warmth radiating from the spellforge floor"
@@ -560,7 +606,9 @@ Both the THERMAL SOURCE AND the LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for DragonBot's PURE-SCENE paths. Anchors implying gravity / mass / pressure on environmental elements.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for DragonBot's PURE-SCENE paths. Anchors implying gravity / mass / pressure on environmental elements.
 
 EXAMPLES (DO NOT REUSE):
 - "stone tower bowed under centuries of arcane storms"
@@ -577,7 +625,9 @@ Both the OBJECT AND the WEIGHT VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  air: (n) => `You are writing ${n} distinct AIR anchors for DragonBot's PURE-SCENE paths. Atmospheric particle/movement cues in empty space.
+  air: (
+    n
+  ) => `You are writing ${n} distinct AIR anchors for DragonBot's PURE-SCENE paths. Atmospheric particle/movement cues in empty space.
 
 EXAMPLES (DO NOT REUSE):
 - "spell-mist drifting between the standing stones"
@@ -594,7 +644,9 @@ Both the PARTICLE/MEDIUM AND the LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for DragonBot's PURE-SCENE paths. Each entry forces Flux to render a SPECIFIC PUNCHY lighting palette across the environment.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for DragonBot's PURE-SCENE paths. Each entry forces Flux to render a SPECIFIC PUNCHY lighting palette across the environment.
 
 Each entry must include: COLOR + DIRECTION/SOURCE + IMPACT POINT in the environment (altar, throne, archway, statue, brazier, gateway, peak, valley, cliff face, cavern, lair, tower).
 

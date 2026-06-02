@@ -39,10 +39,12 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     actionType = 'CANDID MOMENT (atmospheric quiet — render this exact peaceful frame)';
   } else if (actionRoll < 0.8) {
     action = picker.pickWithRecency(pools.WARRIOR_ADVENTURE_ACTIONS, 'fw_adventure_action');
-    actionType = 'ADVENTURING MOMENT (hiking / traveling / town / tavern / camp — peaceful candid life)';
+    actionType =
+      'ADVENTURING MOMENT (hiking / traveling / town / tavern / camp — peaceful candid life)';
   } else {
     action = picker.pickWithRecency(pools.FANTASY_LINEAGE_ACTIONS, 'fw_lineage_action');
-    actionType = 'LINEAGE-SIGNATURE MOMENT (race-flavored peaceful moment — let her ancestry SHINE)';
+    actionType =
+      'LINEAGE-SIGNATURE MOMENT (race-flavored peaceful moment — let her ancestry SHINE)';
   }
 
   return `You are a fantasy concept-art painter writing PEACEFUL ADVENTURING scenes for DragonBot — a single heroic woman of a SPECIFIC fantasy lineage (drow, dragonborn, tiefling, blood elf, dwarf, etc.) caught in a CANDID peaceful moment of adventuring life: hiking, traveling, in a tavern, breaking camp, scouting, in a quiet lineage-flavored moment. Same universe as our dragons and vast landscapes. The character is ALIVE, CAPABLE, and the camera caught her between battles, never IN one. Output wraps with style prefix + suffix.

@@ -135,7 +135,17 @@ module.exports = {
   // Previously locked entirely to flux-1.1-pro via `useModelPicker:false` +
   // per-path modelByPath — Kevin opened it up to all 8 models.
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  // Bot-wide allowedModels (Kevin 2026-05-31): bot-wide MINUS Flux Dev AND
+  // MINUS Flux 2 Max. Was `ALL_ENABLED_AI_MODELS` — both dropped fleet-wide
+  // for DragonBot after audit. Explicit list because bot is a proper subset.
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-2-flex',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-2-pro',
+  ],
 
   // Per-path bans (2026-05-31): Kevin reviewed the 4 female-character
   // dragonbot paths (artsy-girl + female-adventurer/explorer/action-scenes)
@@ -213,6 +223,69 @@ module.exports = {
     ],
     'male-action-scenes': [
       'google/gemini-2-image',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // cozy-arcane (Kevin 2026-05-31): locked to F1.1 Pro + F1.1 Ultra after
+    // the 6-model × 3 verification test on the premium-tier-migrated path.
+    // The painted-fantasy-illustration register only hits its target look
+    // on the F1.1 family.
+    'cozy-arcane': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    // ── Non-character scene paths (Kevin 2026-05-31, after the 7-path × 6-model
+    // audit): uniform 5-model lineup — Banana, GPT-2, F2 Pro, F1.1 Pro,
+    // F1.1 Ultra. Banned the F2 Flex + F2 Max + Flux Dev that flunked the
+    // heart-test on each. Same lineup applies on all 7 non-char paths.
+    // landscape (Kevin 2026-06-01 after premium-tier axis enrichment +
+    // 18-render comparison): F2 Pro + F2 Flex hearted-as-bad. Locked to 4.
+    landscape: [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // iconic-landscape (Kevin 2026-06-01 after premium-tier axis enrichment +
+    // 18-render comparison): F2 Pro + F2 Flex hearted-as-bad. Locked to 4 models.
+    // (F2 Flex never reachable via normal picker — wasn't in the modelByPath
+    // list to begin with — but documenting the heart-ban here for completeness.)
+    'iconic-landscape': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    castle: [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // epic-moment (Kevin 2026-06-01 after premium-tier axis enrichment +
+    // 18-render comparison): locked to 3 models. Banana + GPT-2 + F2 Flex
+    // all hearted-as-bad in the enriched-path test.
+    'epic-moment': [
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'dark-realm': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'dragon-lore': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'dragon-scene': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],

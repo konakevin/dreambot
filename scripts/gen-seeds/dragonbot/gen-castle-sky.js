@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DRAMATIC SKY-OVERHEAD entries for DragonBot's castle path. Each entry is a DENSE phrase (20-40 words) describing a SPECIFIC dramatic sky / atmosphere overhead the castle. The sky is HALF the image.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DRAMATIC SKY-OVERHEAD entries for DragonBot's castle path. Each entry is a DENSE phrase (20-40 words) describing a SPECIFIC dramatic sky / atmosphere overhead the castle. The sky is HALF the image.
 
 ⚠️ THE BAR: every sky must be CINEMATIC — painted concept-art quality, breath-taking palette, dramatic mood. NEVER flat blue daytime. Always at a magical hour (dawn / dusk / golden hour / blue hour / night / storm).
 

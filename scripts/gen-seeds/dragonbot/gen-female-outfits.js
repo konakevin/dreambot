@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/female_outfits.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ORNATE FANTASY OUTFIT descriptions for beautiful female warriors. Each describes ONLY the outfit/armor — NOT the character wearing it. 20-35 words. These outfits are sultry, badass, and jaw-droppingly detailed.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ORNATE FANTASY OUTFIT descriptions for beautiful female warriors. Each describes ONLY the outfit/armor — NOT the character wearing it. 20-35 words. These outfits are sultry, badass, and jaw-droppingly detailed.
 
 ━━━ THE VIBE ━━━
 These are outfits worn by the most dangerous, beautiful women in high fantasy. Sultry but powerful — she looks like she could kill you and look incredible doing it. Think Yennefer's battle dress, Triss's enchanted armor, a drow queen's ceremonial war-garb. Every piece is a masterwork — intricate, ornate, expensive-looking.
@@ -49,4 +51,7 @@ No two outfits should share the same primary material + silhouette. Every outfit
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

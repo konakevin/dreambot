@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} BIG-EPIC WESTERN-HIGH-FANTASY CASTLE entries for DragonBot's castle path. Each entry is a DENSE phrase (35-65 words) describing a SPECIFIC MASSIVE SPRAWLING WESTERN-HIGH-FANTASY CASTLE complex as the ABSOLUTE FOCAL SUBJECT.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BIG-EPIC WESTERN-HIGH-FANTASY CASTLE entries for DragonBot's castle path. Each entry is a DENSE phrase (35-65 words) describing a SPECIFIC MASSIVE SPRAWLING WESTERN-HIGH-FANTASY CASTLE complex as the ABSOLUTE FOCAL SUBJECT.
 
 ⚠️ HARD MANDATE — BIG EPIC ONLY:
 Every castle MUST be MASSIVE, SPRAWLING, MULTI-TIER — hundreds-of-meters tall, dozens of distinct spires/towers/battlements, sprawling complex with multiple sections. NEVER a small 2-3 story square keep. NEVER a single isolated tower. NEVER a modest manor-castle. References: Minas-Tirith city-mountain / Erebor whole-mountain-fortress / Hogwarts sprawling-multi-wing complex / Anor-Londo vast-cathedral-city / Stormveil-Castle multi-tier mountain complex / Cair-Paravel sprawling-coast-citadel / Howl's-Moving-Castle multi-element-architecture / Karazhan Karazhan multi-spire tower-complex.

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/got_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} GAME-OF-THRONES-CODED LANDSCAPE entries for DragonBot's got-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC FANTASY VISTA in the GoT / ASOIAF aesthetic tradition — Winterfell-style northern stone-keep on snow-plain, Wall-style ice barrier and frozen-wastes-beyond, Eyrie-style sky-castle on high mountain, Dornish-coded sun-baked-desert with palm groves, Highgarden-coded golden-rose-fields, Beyond-the-Wall haunted frozen-wilderness, Dragonstone-coded volcanic-island fortress, Pyke-coded sea-stack-castle, Riverlands rolling-hills with crossings.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GAME-OF-THRONES-CODED LANDSCAPE entries for DragonBot's got-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC FANTASY VISTA in the GoT / ASOIAF aesthetic tradition — Winterfell-style northern stone-keep on snow-plain, Wall-style ice barrier and frozen-wastes-beyond, Eyrie-style sky-castle on high mountain, Dornish-coded sun-baked-desert with palm groves, Highgarden-coded golden-rose-fields, Beyond-the-Wall haunted frozen-wilderness, Dragonstone-coded volcanic-island fortress, Pyke-coded sea-stack-castle, Riverlands rolling-hills with crossings.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO STARKS, NO LANNISTERS, NO TARGARYENS, NO HEROES. Pure landscape only (distant dragon silhouettes at scale OK).
 
@@ -72,4 +74,7 @@ ESSOS / EXOTIC-EAST CITIES (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

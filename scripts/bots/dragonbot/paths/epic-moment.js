@@ -1,16 +1,13 @@
 /**
- * DragonBot epic-moment path = EPIC CASTLE SCENES (2026-05-14
- * migration + reframing from legacy single-pool form).
+ * DragonBot epic-moment path = EPIC CASTLE SCENES (2026-05-31 PREMIUM-TIER
+ * enrichment 2 → 8 bespoke). Vast sweeping cinematic castle scenes with
+ * massive peak events. Wide-shot establishing composition.
  *
- * Vast sweeping cinematic views of jaw-dropping fantasy castles with
- * massive events unfolding at them. 50/50 castle hero + peak event.
- * Wide-shot establishing composition, characters at scale-prover size.
+ * NEW axes added (2026-05-31):
+ *   Always-on identity: epoch_signature + peak_event_choreography
+ *   Gated 50%: skyline_drama + heraldic_identity + witness_chorus + architectural_signature
  *
- * Path-bespoke pools (2 × 30 MVP):
- *   - castle: EPIC_CASTLE (vast detailed fantasy castle as hero)
- *   - event: EPIC_CASTLE_EVENT (peak event at/in/above/around castle)
- *
- * Pre-refactor file preserved at paths/legacy/epic-moment.js.
+ * Pre-enrichment file preserved at paths/legacy/epic-moment.js.
  */
 
 module.exports = {
@@ -18,5 +15,12 @@ module.exports = {
   pools: {
     castle: 'EPIC_CASTLE',
     event: 'EPIC_CASTLE_EVENT',
+    // NEW (2026-05-31 PREMIUM-TIER enrichment):
+    epoch_signature: 'EPIC_MOMENT_EPOCH_SIGNATURE', // ALWAYS-ON — historical era / culture
+    peak_event_choreography: 'EPIC_MOMENT_PEAK_EVENT_CHOREOGRAPHY', // ALWAYS-ON — cinematic moment-within-moment
+    skyline_drama: 'EPIC_MOMENT_SKYLINE_DRAMA', // 50%-gated — sky / weather mood
+    heraldic_identity: 'EPIC_MOMENT_HERALDIC_IDENTITY', // 50%-gated — banners / flags / sigils
+    witness_chorus: 'EPIC_MOMENT_WITNESS_CHORUS', // 50%-gated — TINY scale-prover figures
+    architectural_signature: 'EPIC_MOMENT_ARCHITECTURAL_SIGNATURE', // 50%-gated — weird memorable detail
   },
 };

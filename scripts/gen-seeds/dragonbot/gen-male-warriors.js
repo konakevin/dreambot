@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/male_warriors.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} descriptions of EPIC MALE fantasy warriors for DragonBot. Each is a powerful, awe-inspiring MAN in ornate battle gear. 25-40 words. Start every entry with "A powerful male" or "A massive male" or "A rugged male" — the image model MUST know he is a man.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} descriptions of EPIC MALE fantasy warriors for DragonBot. Each is a powerful, awe-inspiring MAN in ornate battle gear. 25-40 words. Start every entry with "A powerful male" or "A massive male" or "A rugged male" — the image model MUST know he is a man.
 
 ━━━ WHO THESE MEN ARE ━━━
 These are the most badass, awe-inspiring warrior men in all of high fantasy. When you see one, you think "holy fuck" — not just because he's dangerous, but because he radiates raw power, battle-forged authority, and legendary presence. He looks like he's conquered kingdoms and walked through hellfire to get here.
@@ -48,4 +50,7 @@ No two characters should share race + build + hair style. Vary broadly:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

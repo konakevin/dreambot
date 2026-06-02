@@ -1093,7 +1093,18 @@ Output ONLY the raw 140-200 word scene description. Comma-separated phrases. NO 
   },
 
   ICONIC_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, biome, sky_layer, phenomenon } = slots;
+    const {
+      lighting,
+      atmosphere,
+      biome,
+      sky_layer,
+      mythic_tradition,
+      legendary_landmark,
+      mood_atmosphere,
+      heraldic_color,
+      signature_creature,
+      phenomenon,
+    } = slots;
 
     const phenomenonSection = phenomenon
       ? `
@@ -1101,6 +1112,49 @@ Output ONLY the raw 140-200 word scene description. Comma-separated phrases. NO 
 ${phenomenon}
 
 A magical or atmospheric event woven into the landscape — render as a visible focal point that AMPLIFIES the iconic aesthetic.
+
+`
+      : '';
+
+    // 3 always-on identity (biome + sky_layer + mythic_tradition) + 4 gated
+    // accent axes at 50% each — keeps per-render density coherent.
+    const includeLandmark = Math.random() < 0.5;
+    const includeMood = Math.random() < 0.5;
+    const includeHeraldic = Math.random() < 0.5;
+    const includeCreature = Math.random() < 0.5;
+    const landmarkSection = includeLandmark
+      ? `
+━━━ LEGENDARY LANDMARK — the iconic mythic feature woven in ━━━
+${legendary_landmark}
+
+Bake this landmark INTO the biome as a specific named element with shape + scale + position. NEVER focal-character-scale — landscape-scale. It's the readable-focus mythic detail.
+
+`
+      : '';
+    const moodSection = includeMood
+      ? `
+━━━ MOOD ATMOSPHERE — the overall scene mood ━━━
+${mood_atmosphere}
+
+Bend the entire scene tone to this mood. epic-dawn reads differently than blood-twilight reads differently than silent-noon. Sets the emotional DNA of the painted vista.
+
+`
+      : '';
+    const heraldicColorSection = includeHeraldic
+      ? `
+━━━ HERALDIC PALETTE — the specific color signature ━━━
+${heraldic_color}
+
+Wash the entire vista in this exact palette — named colors only. Pine-and-mist / blood-and-bronze / silver-and-moonstone — bake the palette into the prompt explicitly.
+
+`
+      : '';
+    const creatureSection = includeCreature
+      ? `
+━━━ SIGNATURE CREATURE — tiny iconic creature woven into the deep distance ━━━
+${signature_creature}
+
+Render at SCALE-PROVER scale ONLY — ant-sized / matchstick-sized / silhouette-on-horizon. NEVER focal, NEVER hero. The creature ADDS a mythic-tradition cue without violating the no-characters rule.
 
 `
       : '';
@@ -1142,7 +1196,12 @@ The biome fills the frame. Multi-tier depth: foreground tactile detail (rocks / 
 ${sky_layer}
 
 The sky is THEATRICAL and SATURATED — never washed-out natural-blue. Heightened color, dramatic cloud-architecture, mythic palette.
-${phenomenonSection}━━━ LIGHTING ━━━
+
+━━━ MYTHIC TRADITION — the painter lineage for this render ━━━
+${mythic_tradition}
+
+Anchor the entire render in this painter's aesthetic — John Howe Tolkien-watercolor reads differently than Samwise Didier Blizzard-stylized reads differently than Frank Frazetta sword-and-sorcery oil. Sets the WHOLE rendering tradition.
+${landmarkSection}${moodSection}${heraldicColorSection}${creatureSection}${phenomenonSection}━━━ LIGHTING ━━━
 ${lighting}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
@@ -1169,7 +1228,61 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
   EPIC_MOMENT: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, castle, event } = slots;
+    const {
+      lighting,
+      atmosphere,
+      castle,
+      event,
+      epoch_signature,
+      peak_event_choreography,
+      skyline_drama,
+      heraldic_identity,
+      witness_chorus,
+      architectural_signature,
+    } = slots;
+
+    // 4 always-on identity axes (castle + event + epoch_signature + peak_event_choreography).
+    // 4 gated accent axes at 50% each — keeps per-render density coherent.
+    const includeSkyline = Math.random() < 0.5;
+    const includeHeraldic = Math.random() < 0.5;
+    const includeWitness = Math.random() < 0.5;
+    const includeArchSig = Math.random() < 0.5;
+    const skylineSection = includeSkyline
+      ? `
+━━━ SKYLINE DRAMA — the sky and weather mood ━━━
+${skyline_drama}
+
+Render the sky exactly as named — storm formation / aurora / comet / blood-moon / dawn-burst / cathedral-cloud light-shafts. The sky directly above the castle's silhouette only (close-mid framing — not panoramic).
+
+`
+      : '';
+    const heraldicSection = includeHeraldic
+      ? `
+━━━ HERALDIC IDENTITY — visible banners / flags / sigils ━━━
+${heraldic_identity}
+
+Paint these heraldic markings ONTO the castle's walls / battlements / tower tops as readable visual elements — sigil-emblazoned banners snapping in the wind / shield-painted gate / colored pennants on the spires. Hint at the castle's allegiance / dynasty.
+
+`
+      : '';
+    const witnessSection = includeWitness
+      ? `
+━━━ WITNESS CHORUS — TINY scale-prover figures ━━━
+${witness_chorus}
+
+Render this multitude at SCALE-PROVER scale — ant-sized / matchstick-sized — small but visible because we're close to the castle. The witnesses PROVE the castle's massive scale and PROVE the event's impact. NEVER hero-scale, NEVER focal.
+
+`
+      : '';
+    const archSigSection = includeArchSig
+      ? `
+━━━ ARCHITECTURAL SIGNATURE — the one weird memorable castle detail ━━━
+${architectural_signature}
+
+Bake this detail INTO the castle's silhouette as a specific named element with shape + scale + position. It's the readable-focus — the thing the viewer will remember about THIS castle versus every other.
+
+`
+      : '';
 
     return `You are a fantasy concept-art painter writing EPIC CASTLE SCENES for DragonBot — vast sweeping cinematic views of jaw-dropping fantasy castles with massive events unfolding at them. LOTR / GoT / Warcraft / Elden Ring / Witcher 3 / Skyrim / D&D Forgotten Realms visual lineage. Strict Western high fantasy.
 
@@ -1180,20 +1293,18 @@ The castle must be:
 • **MASSIVE** — dwarfing everything around it. Cliff-perched / mountain-cut / island-fortress / sky-citadel scale.
 • **ORNATELY DETAILED** — individual windows, statues, gargoyles, banners, gilt-work, carved-stone tracery all readable in the frame. The architectural CRAFT is the visual hook.
 • **INSPIRING** — distinctive silhouette and signature features. Distinct from generic-fantasy-castle.
-• **CLOSE-MID FRAMED** — castle fills 60-70% of frame, NOT a tiny distant silhouette. The viewer is CLOSE — they can count tower-windows and see banner-embroidery. Show 2-4 major castle sections in detail rather than the full silhouette from miles away.
+• **CLOSE-MID FRAMED** — castle fills 60-70% of frame, NOT a tiny distant silhouette. The viewer is CLOSE — they can count tower-windows and see banner-embroidery.
 
 ━━━ THE PEAK EVENT ━━━
-A massive cinematic event is happening AT / IN / ABOVE / AROUND the castle. The event is the SECOND focal element, filling roughly 30-40% of the frame's visual attention. Render the event at peak intensity — frozen at the most jaw-dropping moment. The event integrates WITH the castle's detail — dragons on/near the ornate spires, portals among the carved-stone arches, siege-ladders against gargoyle-lined walls.
+A massive cinematic event is happening AT / IN / ABOVE / AROUND the castle. The event is the SECOND focal element, filling roughly 30-40% of the frame's visual attention. Render the event at peak intensity — frozen at the most jaw-dropping moment.
 
 ━━━ MOVIE POSTER MANDATE — STACK THE ELEMENTS ━━━
-Every render MUST be a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 3+ visually arresting elements:
+Every render MUST be a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack:
+  1. **THE CASTLE** filling 60-70% of frame with ORNATE DETAILS readable
+  2. **THE PEAK EVENT** at full intensity, integrated with the castle's architecture
+  3. **ATMOSPHERIC LAYER** — banners snapping / smoke rising / magical wind / aurora / cathedral-cloud light-shafts / falling embers / glowing particles
 
-  1. **THE CASTLE** filling 60-70% of frame with ORNATE DETAILS readable — gargoyles / statuary / window-rows / banners / gilt-work / carved-stone tracery all visible
-  2. **THE PEAK EVENT** at full intensity (dragon mid-attack / portal mid-bloom / siege mid-clash / coronation mid-procession / etc.) integrated with the castle's architecture
-  3. **SCALE-PROVER CROWD / ARMY / FIGURES** — soldiers on the walls / pilgrims in the courtyard / knights at the gates / city populace below / cavalry on the road — small relative to the castle but CLEARLY visible because we're closer in
-  4. **ATMOSPHERIC LAYER** — banners snapping in storm-wind / smoke rising from siege-fires / magical wind / aurora behind / cathedral-cloud light-shafts / falling embers / glowing particles
-
-THINK CLOSE-MID Minas-Tirith-gate / Hogwarts-tower-detail / Caer-Morhen-courtyard-view / King's-Landing-Red-Keep-balcony / Helm's-Deep-wall-from-attacker's-eye — close enough that the architectural ornament dominates, NOT a distant silhouette.
+THINK CLOSE-MID Minas-Tirith-gate / Hogwarts-tower-detail / Caer-Morhen-courtyard-view / King's-Landing-Red-Keep-balcony / Helm's-Deep-wall-from-attacker's-eye.
 
 ━━━ STRICT WESTERN HIGH FANTASY ━━━
 🚫 NO sci-fi / cyberpunk / neon / orbital / cosmic
@@ -1205,13 +1316,21 @@ THINK CLOSE-MID Minas-Tirith-gate / Hogwarts-tower-detail / Caer-Morhen-courtyar
 ━━━ THE CASTLE ━━━
 ${castle}
 
-The castle is rendered at WIDE-SHOT scale with full silhouette readable. Multi-tier depth: foreground (approach road / outer wall / cliff-edge), midground (castle body / gates / courtyard), background (towers / spires / keep rising into sky).
+The castle is rendered with multi-tier depth: foreground (approach road / outer wall / cliff-edge), midground (castle body / gates / courtyard), background (towers / spires / keep rising into sky).
+
+━━━ EPOCH SIGNATURE — the historical era / culture this castle embodies ━━━
+${epoch_signature}
+
+Anchor the entire render in this era's architectural register. Medieval Crusader-fortress reads differently than Romanesque-cathedral-castle reads differently than High-Gothic spire-cathedral. Sets the visual style.
 
 ━━━ THE PEAK EVENT ━━━
 ${event}
 
-Render the event at PEAK INTENSITY — frozen at its most jaw-dropping moment. The event interacts with the castle: a dragon strafing the walls / a portal blooming above the courtyard / an army crashing against the gates / a coronation procession on the long stair. Integrated into the scene, not isolated.
+━━━ PEAK-EVENT CHOREOGRAPHY — the cinematic moment-within-the-moment ━━━
+${peak_event_choreography}
 
+This is the SPECIFIC FRAMING of the event — mid-strafe rising from the dust column / siege-ladders just touching the wall / coronation banner unfurling from the spire / cavalry cresting the hill in golden formation. Bake the choreography into the prompt with a verb-phrase showing the freeze-frame moment.
+${skylineSection}${heraldicSection}${witnessSection}${archSigSection}
 ━━━ LIGHTING ━━━
 ${lighting}
 
@@ -1229,17 +1348,15 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION — CLOSE-MID, ORNATE DETAIL DOMINANT ━━━
 CLOSE-MID FRAMING. The castle's architectural ornament fills the frame. Multi-tier depth mandatory:
-• FOREGROUND: closest castle architecture — carved-stone tracery / a single ornate balcony / a banner-strung battlement / a gargoyle in profile / a buttress with statuary / a section of crenellated wall — RENDERED IN DETAIL
-• MIDGROUND: the castle body and the event taking place AT or AROUND it — towers / spire-tops / event in motion
+• FOREGROUND: closest castle architecture — carved-stone tracery / single ornate balcony / banner-strung battlement / gargoyle in profile — RENDERED IN DETAIL
+• MIDGROUND: the castle body and the event taking place AT or AROUND it
 • DEEP DISTANCE: more of the castle's structure or one peripheral atmospheric layer
-• SKY: dramatic — storm-bruised / aurora / sunset / dragon-shadow / cathedral-cloud, but tighter — only the slice of sky around the castle\'s top is visible
+• SKY: dramatic — storm-bruised / aurora / sunset / dragon-shadow / cathedral-cloud, tighter framing — only the slice of sky around the castle's top is visible
 
-The castle is CLOSE — the viewer can count windows in the tower-row, see embroidery on the banners, recognize individual statues on the parapet. NOT a wide distant silhouette. NOT a panoramic establishing shot. CLOSE-MID like an architectural-detail-rich movie poster.
+The castle is CLOSE — the viewer can count windows in the tower-row, see embroidery on the banners, recognize individual statues on the parapet. NOT a wide distant silhouette.
 
-━━━ STRUCTURE — write the prompt in this order ━━━
-[OPENING: "[castle name/type with signature feature]" leading the frame], [the peak event happening at/above/around it], [scale-prover figures/army/crowd at tiny scale], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
-
-DRAMATIC VISUALS: render the EXACT castle + event from the slots above. The castle must be VAST + DETAILED. The event must be at PEAK INTENSITY. Movie-poster establishing-shot composition.
+━━━ STRUCTURE — write 100-140 words ━━━
+[OPENING: epoch_signature + castle's signature feature], [the peak event + its choreography], [optional skyline / heraldic / witness / architectural-signature accents IF FIRED], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood].
 
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
@@ -1323,8 +1440,20 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
   DRAGONBOT_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, biome, architecture, surprise_element, sky_layer, phenomenon } =
-      slots;
+    const {
+      lighting,
+      atmosphere,
+      biome,
+      architecture,
+      surprise_element,
+      sky_layer,
+      aesthetic_register,
+      light_quality,
+      signature_flora,
+      signature_fauna,
+      magical_element,
+      phenomenon,
+    } = slots;
 
     const phenomenonSection = phenomenon
       ? `
@@ -1332,6 +1461,49 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 ${phenomenon}
 
 A magical / atmospheric event woven into the landscape — render as a visible focal point. Adds awe / wonder / drama. NEVER combat or enemies.
+
+`
+      : '';
+
+    // 5 always-on identity (biome + architecture + sky_layer + surprise_element + aesthetic_register).
+    // 4 gated 50% accent axes — keeps per-render density coherent.
+    const includeLightQuality = Math.random() < 0.5;
+    const includeFlora = Math.random() < 0.5;
+    const includeFauna = Math.random() < 0.5;
+    const includeMagical = Math.random() < 0.5;
+    const lightQualitySection = includeLightQuality
+      ? `
+━━━ LIGHT QUALITY — specific light effect rendered visibly ━━━
+${light_quality}
+
+Render this light effect EXACTLY — god-rays piercing cloud / chiaroscuro / sun-pillar through canopy / moonbeam pool / cathedral-cloud-shaft / aurora-curtain. The named light becomes a HERO ELEMENT in the frame.
+
+`
+      : '';
+    const floraSection = includeFlora
+      ? `
+━━━ SIGNATURE FLORA — the specific named flora defining this scene ━━━
+${signature_flora}
+
+Bake this specific flora into the prompt — luminescent-orchid forest / giant-fern canopy / glass-bamboo grove / petrified-tree forest / mushroom-cathedral / kelp-canopy underwater. Adds genre-coded specificity beyond a generic "lush forest."
+
+`
+      : '';
+    const faunaSection = includeFauna
+      ? `
+━━━ SIGNATURE FAUNA — TINY scale-prover fauna woven into the deep distance ━━━
+${signature_fauna}
+
+Render at SCALE-PROVER scale ONLY — pixel-tall / matchstick-sized. Distant herd / pegasus flight / phoenix soaring / dragon-shadow on horizon / wolf-pack on ridge. ALWAYS small + ALWAYS at frame edge or deep distance. NEVER focal.
+
+`
+      : '';
+    const magicalSection = includeMagical
+      ? `
+━━━ MAGICAL ELEMENT — specific visible magic detail in the frame ━━━
+${magical_element}
+
+Bake into the prompt as a specific named element — floating ruins / sigils in the air / ley-line glow / mana-stream / fey-light cluster / floating petals / glowing waterfall / spell-residue. Adds a "magic exists in this world" cue without violating no-characters.
 
 `
       : '';
@@ -1372,7 +1544,12 @@ ${biome}
 ${architecture}
 
 The architecture is positioned to ANCHOR the eye — at the midground or deep-distance focal point. NEVER the foreground (foreground belongs to tactile landscape detail). Architecture is fantasy-canon: castle ruin / tower / monastery / bridge / colonnade / temple / arch / standing-stone circle / sky-spire.
-${phenomenonSection}
+
+━━━ AESTHETIC REGISTER — the painter lineage for this render ━━━
+${aesthetic_register}
+
+Anchor the entire render in this painter's aesthetic. Roger Dean prog-rock-surreal reads differently than Bob Eggleton dragon-landscape reads differently than John Howe Tolkien-watercolor. Sets the WHOLE painted tradition.
+${lightQualitySection}${floraSection}${faunaSection}${magicalSection}${phenomenonSection}
 ━━━ SKY OVERHEAD ━━━
 ${sky_layer}
 
@@ -1823,5 +2000,135 @@ NEVER "tail wrapped around tower" cliché. NEVER tiny dragon in vast empty sky.
 Open with the dragon + its action ("Crimson dragon mid-roar with bone-spike crest, jaw extended over volcanic peaks..."). Then weave in: landscape backdrop with depth layers, lighting/atmosphere, surprise element at midground, any drama event, color palette and mood. Painted-fantasy-novel finish.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  COZY_ARCANE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      race,
+      inhabitant_archetype,
+      inhabitant_age,
+      candid_moment,
+      setting,
+      clutter_focus,
+      hearth_warmth_source,
+      signature_familiar,
+      aesthetic_tradition,
+      magical_signature,
+    } = slots;
+
+    // Inline gender roll — kept inline per the original (2 options, not pool-worthy).
+    const gender = Math.random() < 0.5 ? 'woman' : 'man';
+
+    // 4 always-on identity axes + setting + clutter_focus (pickN:3) = 5 always-on layers.
+    // 4 gated accent axes for premium-tier richness — each fires 50%.
+    const includeWarmth = Math.random() < 0.5;
+    const includeFamiliar = Math.random() < 0.5;
+    const includeAesthetic = Math.random() < 0.5;
+    const includeMagicSig = Math.random() < 0.5;
+
+    const clutterLines = (Array.isArray(clutter_focus) ? clutter_focus : [clutter_focus])
+      .map((c, i) => `  ${i + 1}. ${c}`)
+      .join('\n');
+
+    const warmthSection = includeWarmth
+      ? `
+━━━ HEARTH / WARMTH SOURCE — specific lit object pooling warm light ━━━
+${hearth_warmth_source}
+
+Render this as the dominant warm-light source in the scene — the eye lands on it, then radiates outward to find the inhabitant. Bake the warmth-source into the prompt with COLOR (amber / honey-gold / candle-yellow / firelight-orange) and POSITION (mantelpiece / desk-corner / above bookshelf / on side-table).
+
+`
+      : '';
+    const familiarSection = includeFamiliar
+      ? `
+━━━ SIGNATURE FAMILIAR — the inhabitant's companion creature ━━━
+${signature_familiar}
+
+The familiar is co-present in the scene — perched on the desk / curled in their lap / orbiting their shoulder. NEVER aggressive, NEVER the focal subject — a quiet companion that shares the sanctum. Bake with SCALE (palm-sized / cat-sized / bird-sized) and POSITION.
+
+`
+      : '';
+    const aestheticSection = includeAesthetic
+      ? `
+━━━ AESTHETIC TRADITION — the painter / illustrator lineage for this render ━━━
+${aesthetic_tradition}
+
+Anchor the entire render in this illustrator's aesthetic — Brian Froud cluttered-faerie-realism reads differently than Wayne Anderson book-illustrator reads differently than Charles Vess storybook-fantasy. Painted-fantasy-illustration tradition, NOT photoreal.
+
+`
+      : '';
+    const magicSigSection = includeMagicSig
+      ? `
+━━━ MAGICAL SIGNATURE — specific visible magic in the scene ━━━
+${magical_signature}
+
+Render this magic as a SPECIFIC NAMED ELEMENT with shape + color + position — glowing-rune-glyph in the air above the desk / floating-quill mid-write on parchment / wisp-orbs orbiting the bookshelf / spell-circle chalk-drawn on the floor / levitating ingredient above a flask. Small + intimate scale, NOT cathedral-magic.
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a COZY INTIMATE scene for DragonBot — a warm, inviting corner of an epic high-fantasy world. Same universe as dragons and vast landscapes, but zoomed into the WARM PRIVATE SPACE where a wizard/scholar/alchemist rests, where hearths crackle, where candlelight pools on worn wood. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — INTIMATE COZY SCALE ━━━
+This is NOT a cathedral hall or grand vista. The private study off the grand library / the hearthside corner of a dwarven forge-hall / a wizard's reading nook carved into ancient stone. Mid or mid-close framing. The viewer should WANT TO SIT DOWN in this space.
+
+━━━ THE INHABITANT — render this character exactly ━━━
+A ${inhabitant_age} ${gender}, race: ${race}. They are a ${inhabitant_archetype}.
+
+Render the FANTASY RACE features unmistakably (skin tone, ear shape, horn / tail / tusks if applicable, eye color, distinguishing anatomy). Render the AGE visible in face and posture. Render the ARCHETYPE garment exactly. NEVER substitute the race for a generic human. NEVER default to "old white wizard with beard" — preserve every rolled detail above.
+
+The character occupies 25-40% of frame, off-center, absorbed in their craft. NEVER posing, NEVER looking at viewer. "Caught on a hidden camera in their sanctum."
+
+━━━ THE CANDID MOMENT — what they are doing right now ━━━
+${candid_moment}
+
+Render this moment EXACTLY — pose, gesture, prop in hand, posture. The render captures this specific intimate beat, not a generic "wizard standing in study."
+
+━━━ THE COZY SPACE ━━━
+${setting}
+
+━━━ SIGNATURE CLUTTER FOCUS — render these THREE specific cluttered details prominently ━━━
+${clutterLines}
+
+These three named clutter items are the prominently-spotlighted detail in the render — render each with material specificity (worn leather / dripping wax / tarnished brass / ink-stained parchment). Plus the dense general clutter of the sanctum (stacked tomes / hanging herbs / rune-carved boxes / glowing potion vials in racks).
+
+The room should look ALIVE — like the wizard just stepped out for a moment. Every surface has STUFF on it. Every shelf is full. Light pools across MULTIPLE INTERESTING OBJECTS, not bare wood.
+${warmthSection}${familiarSection}${aestheticSection}${magicSigSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Reinterpret at INTIMATE scale — candle-light pool / hearth-glow / oil-lantern / firelight on worn velvet. NOT cathedral light. NOT epic god-rays. Warm + close + lived-in.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+Reinterpret at INTIMATE scale — dust motes in candlelight / steam from a kettle / smoke curl from a pipe / herbal-incense haze. NOT vast atmospheric perspective.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ FORBIDDEN ━━━
+- NO cathedral / grand hall / epic vista framing (this is INTIMATE)
+- NO multiple characters (one inhabitant + maybe one familiar — that's it)
+- NO posing / NO looking-at-viewer / NO "render as" hero composition
+- NO bare empty walls (every surface lived-in)
+- NO weapons-ready / combat-stance (cozy register only)
+- NO ostentatious magical lightshow (subtle intimate magic only)
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Mid or mid-close framing. WARMTH is everything: firelight, candleglow, hearth-embers, lantern-light pooling on worn surfaces. Rich texture on every surface — aged leather, dripping wax, weathered stone, tarnished brass. The viewer should want to SIT DOWN in this space. Cozy but still unmistakably high-fantasy.
+
+━━━ STRUCTURE — write 80-110 words ━━━
+Open with the AESTHETIC TRADITION (if fired) + the INHABITANT (age, gender, race, archetype) and their CANDID MOMENT. Then layer in the COZY SETTING + the 3 NAMED CLUTTER ITEMS + the WARMTH SOURCE / FAMILIAR / MAGICAL SIGNATURE accents (if fired). Close with the atmospheric lighting + color palette. PAINTED-FANTASY-ILLUSTRATION finish, intimate scale, warm + lived-in.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**. Just the scene content.`;
   },
 };

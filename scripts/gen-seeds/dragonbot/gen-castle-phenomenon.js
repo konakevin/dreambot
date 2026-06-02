@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC FLOURISH / PHENOMENON entries for DragonBot's castle path (40%-gated, fires occasionally). Each entry is a SHORT DENSE phrase (20-35 words) describing a SPECIFIC atmospheric event happening around or above the castle — the kind of detail that pushes a render from "beautiful" to "GASP-worthy."
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERIC FLOURISH / PHENOMENON entries for DragonBot's castle path (40%-gated, fires occasionally). Each entry is a SHORT DENSE phrase (20-35 words) describing a SPECIFIC atmospheric event happening around or above the castle — the kind of detail that pushes a render from "beautiful" to "GASP-worthy."
 
 ⚠️ THE BAR: every phenomenon adds DRAMATIC ATMOSPHERIC FLOURISH without competing with the castle as focal subject. Subtle dramatic flourish, not loud action. Movie-poster atmospheric beats.
 

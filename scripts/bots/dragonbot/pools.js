@@ -194,6 +194,46 @@ module.exports = {
   DRAGON_TYPES: load('dragon_types'),
   ARCANE_PHENOMENA: load('arcane_phenomena'),
   COZY_ARCANE_SETTINGS: load('cozy_arcane_settings'),
+  // ── cozy-arcane PREMIUM-TIER MIGRATION (2026-05-31) — 8 new bespoke pools
+  // extracted from the legacy inline form + enrichment. MVP-25 each.
+  COZY_ARCANE_INHABITANT_ARCHETYPE: load('cozy_arcane_inhabitant_archetype'),
+  COZY_ARCANE_INHABITANT_AGE: load('cozy_arcane_inhabitant_age'),
+  COZY_ARCANE_CANDID_MOMENT: load('cozy_arcane_candid_moment'),
+  COZY_ARCANE_CLUTTER_FOCUS: load('cozy_arcane_clutter_focus'),
+  COZY_ARCANE_HEARTH_WARMTH_SOURCE: load('cozy_arcane_hearth_warmth_source'),
+  COZY_ARCANE_SIGNATURE_FAMILIAR: load('cozy_arcane_signature_familiar'),
+  COZY_ARCANE_AESTHETIC_TRADITION: load('cozy_arcane_aesthetic_tradition'),
+  COZY_ARCANE_MAGICAL_SIGNATURE: load('cozy_arcane_magical_signature'),
+  // Cozy-arcane SPECIFIC race pool (2026-05-31) — replaces shared FANTASY_RACE
+  // for this path. The shared pool has 28% orc/tusks/grey-skin entries which
+  // (a) dominate visually due to Flux's training bias amplifying them and
+  // (b) read off-genre for the cozy scholar/sanctum register. This pool
+  // skews toward sanctum-appropriate races (human / elven / halfling /
+  // gnome / firbolg / dwarven-loremaster / tiefling-scholar / etc.) with
+  // only 1-2 orc-coded entries to preserve some variety.
+  COZY_ARCANE_RACE: load('cozy_arcane_race'),
+  // ── epic-moment PREMIUM-TIER enrichment (2026-05-31) — 6 new bespoke pools
+  // pushing EPIC_MOMENT from 2 → 8 bespoke. MVP-25 each.
+  EPIC_MOMENT_EPOCH_SIGNATURE: load('epic_moment_epoch_signature'),
+  EPIC_MOMENT_PEAK_EVENT_CHOREOGRAPHY: load('epic_moment_peak_event_choreography'),
+  EPIC_MOMENT_SKYLINE_DRAMA: load('epic_moment_skyline_drama'),
+  EPIC_MOMENT_HERALDIC_IDENTITY: load('epic_moment_heraldic_identity'),
+  EPIC_MOMENT_WITNESS_CHORUS: load('epic_moment_witness_chorus'),
+  EPIC_MOMENT_ARCHITECTURAL_SIGNATURE: load('epic_moment_architectural_signature'),
+  // ── iconic-landscape PREMIUM-TIER enrichment (2026-06-01) — 5 new bespoke
+  // pools pushing ICONIC_LANDSCAPE from 3 → 8 bespoke. MVP-25 each.
+  ICONIC_LANDSCAPE_MYTHIC_TRADITION: load('iconic_landscape_mythic_tradition'),
+  ICONIC_LANDSCAPE_LEGENDARY_LANDMARK: load('iconic_landscape_legendary_landmark'),
+  ICONIC_LANDSCAPE_MOOD_ATMOSPHERE: load('iconic_landscape_mood_atmosphere'),
+  ICONIC_LANDSCAPE_HERALDIC_COLOR: load('iconic_landscape_heraldic_color'),
+  ICONIC_LANDSCAPE_SIGNATURE_CREATURE: load('iconic_landscape_signature_creature'),
+  // ── landscape PREMIUM-TIER enrichment (2026-06-01) — 5 new bespoke pools
+  // pushing DRAGONBOT_LANDSCAPE from 5 → 10 bespoke. MVP-25 each.
+  LANDSCAPE_AESTHETIC_REGISTER: load('landscape_aesthetic_register'),
+  LANDSCAPE_LIGHT_QUALITY: load('landscape_light_quality'),
+  LANDSCAPE_SIGNATURE_FLORA: load('landscape_signature_flora'),
+  LANDSCAPE_SIGNATURE_FAUNA: load('landscape_signature_fauna'),
+  LANDSCAPE_MAGICAL_ELEMENT: load('landscape_magical_element'),
   ARCHITECTURAL_ELEMENTS: load('architectural_elements'),
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),

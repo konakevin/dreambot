@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/wow_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} WORLD-OF-WARCRAFT-CODED LANDSCAPE entries for DragonBot's wow-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC FANTASY VISTA in the WoW aesthetic tradition — Eastern-Kingdoms rolling hills with distant castles, Kalimdor purple-mist elf-forests, Outland shattered alien-colored hellscapes, Northrend icy fjord-wastes, Pandaria misty Asian-coded mountains, Shadowlands realm-vistas (gold-blue ascended Bastion, necromantic Maldraxxus, fey-fae Ardenweald, gothic Revendreth), demonic-fel Argus hellscapes, troll desert ruins, underwater naga cities.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WORLD-OF-WARCRAFT-CODED LANDSCAPE entries for DragonBot's wow-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC FANTASY VISTA in the WoW aesthetic tradition — Eastern-Kingdoms rolling hills with distant castles, Kalimdor purple-mist elf-forests, Outland shattered alien-colored hellscapes, Northrend icy fjord-wastes, Pandaria misty Asian-coded mountains, Shadowlands realm-vistas (gold-blue ascended Bastion, necromantic Maldraxxus, fey-fae Ardenweald, gothic Revendreth), demonic-fel Argus hellscapes, troll desert ruins, underwater naga cities.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO ORCS-AS-FOREGROUND, NO HEROES-IN-FRAME. Pure landscape only (distant beast silhouettes at scale OK).
 
@@ -70,4 +72,7 @@ UNDERWATER NAGA / CORAL-FORTRESS (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/warrior_actions.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} DYNAMIC ACTION descriptions for fantasy characters. These are candid adventurer moments — things a warrior/ranger/mage does between battles. 8-15 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DYNAMIC ACTION descriptions for fantasy characters. These are candid adventurer moments — things a warrior/ranger/mage does between battles. 8-15 words each.
 
 ━━━ BODY POSITION RULES (CRITICAL) ━━━
 At LEAST 70% of actions must be UPRIGHT — standing, striding, walking, climbing, reaching, turning. The character looks POWERFUL and TALL in frame.
@@ -53,4 +55,7 @@ No two entries should have the same primary verb or body position. Every action 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

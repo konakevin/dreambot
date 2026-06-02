@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/architectural_elements.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ARCHITECTURAL ELEMENT descriptions for DragonBot — epic-fantasy structures that anchor composition. Castles, towers, temples, bridges, gates, thrones, banners.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ARCHITECTURAL ELEMENT descriptions for DragonBot — epic-fantasy structures that anchor composition. Castles, towers, temples, bridges, gates, thrones, banners.
 
 Each entry: 10-20 words. One specific fantasy architectural element with style/detail.
 
@@ -40,4 +42,7 @@ Each entry: 10-20 words. One specific fantasy architectural element with style/d
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

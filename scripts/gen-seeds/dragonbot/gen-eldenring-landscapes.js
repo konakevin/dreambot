@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/eldenring_landscapes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ELDEN-RING / DARK-SOULS-CODED LANDSCAPE entries for DragonBot's eldenring-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC FANTASY VISTA in the Hidetaka-Miyazaki / FromSoftware aesthetic tradition — Erdtree-glowing-tree-of-life dominating skyline, decaying-kingdom landscapes, Limgrave shadow-of-the-Erdtree pastoral plains, rotting Caelid red-wasteland, Mountaintops-of-the-Giants frozen peaks, Lake-of-Rot poisonous waters, ancient ruins under impossible skies, Anor-Londo gold-cathedral plateau, dragon-graveyard valleys.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ELDEN-RING / DARK-SOULS-CODED LANDSCAPE entries for DragonBot's eldenring-landscape path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ICONIC FANTASY VISTA in the Hidetaka-Miyazaki / FromSoftware aesthetic tradition — Erdtree-glowing-tree-of-life dominating skyline, decaying-kingdom landscapes, Limgrave shadow-of-the-Erdtree pastoral plains, rotting Caelid red-wasteland, Mountaintops-of-the-Giants frozen peaks, Lake-of-Rot poisonous waters, ancient ruins under impossible skies, Anor-Londo gold-cathedral plateau, dragon-graveyard valleys.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO TARNISHED, NO HEROES, NO ELDEN-LORDS-IN-FRAME. Pure landscape only (distant dragon silhouettes at scale OK).
 
@@ -70,4 +72,7 @@ NIGHTMARE / VOID PLATEAUS (~2):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

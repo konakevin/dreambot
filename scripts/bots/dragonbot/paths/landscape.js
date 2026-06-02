@@ -26,5 +26,11 @@ module.exports = {
     phenomenon: 'LANDSCAPE_PHENOMENON',
     surprise_element: 'LANDSCAPE_SURPRISE_ELEMENT',
     sky_layer: 'LANDSCAPE_SKY',
+    // NEW (2026-06-01 PREMIUM-TIER enrichment 5 → 10 bespoke):
+    aesthetic_register: 'LANDSCAPE_AESTHETIC_REGISTER', // ALWAYS-ON painter lineage
+    light_quality: 'LANDSCAPE_LIGHT_QUALITY', // 50%-gated
+    signature_flora: 'LANDSCAPE_SIGNATURE_FLORA', // 50%-gated
+    signature_fauna: 'LANDSCAPE_SIGNATURE_FAUNA', // 50%-gated
+    magical_element: 'LANDSCAPE_MAGICAL_ELEMENT', // 50%-gated
   },
 };

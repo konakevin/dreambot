@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/got_architecture.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} GAME-OF-THRONES-CODED ARCHITECTURE entries for DragonBot's got-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the GoT / ASOIAF aesthetic tradition — Winterfell-style northern feast hall, Red-Keep style throne chamber, Castle-Black brotherhood mess hall, Eyrie sky-cell-and-throne, Dornish water-garden palace, Highgarden rose-marble hall, Dragonstone volcanic chamber, Pyke driftwood throne, Wildling cave settlement, Iron Bank chamber.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GAME-OF-THRONES-CODED ARCHITECTURE entries for DragonBot's got-architecture path. Each entry is a DENSE phrase (25-50 words) describing a SPECIFIC ARCHITECTURAL INTERIOR in the GoT / ASOIAF aesthetic tradition — Winterfell-style northern feast hall, Red-Keep style throne chamber, Castle-Black brotherhood mess hall, Eyrie sky-cell-and-throne, Dornish water-garden palace, Highgarden rose-marble hall, Dragonstone volcanic chamber, Pyke driftwood throne, Wildling cave settlement, Iron Bank chamber.
 
 CRITICAL — NO CHARACTERS, NO PEOPLE, NO STARKS, NO LANNISTERS, NO HEROES. Pure architecture only.
 
@@ -71,4 +73,7 @@ IRON-BANK / EXOTIC-EAST CHAMBERS (~3):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

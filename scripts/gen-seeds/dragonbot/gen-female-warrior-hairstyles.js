@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HAIRSTYLE entries for DragonBot's female-warrior path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a battle-ready fantasy warrior woman — practical, weathered, often tied for combat, sometimes loose for ceremony.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIRSTYLE entries for DragonBot's female-warrior path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a battle-ready fantasy warrior woman — practical, weathered, often tied for combat, sometimes loose for ceremony.
 
 ━━━ STYLE SPREAD (enforce variety across ${n}) ━━━
 - BATTLE-PRACTICAL BRAIDS (5-6) — thick warrior-braid down one shoulder bound with leather thongs and small bone-beads, tight Norse-style boxer-braids close to the scalp, fishtail braid pulled forward over a pauldron, double battle-braids tucked under a leather collar, single thick rope-braid with iron-ring bindings every few inches
@@ -23,4 +25,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ACCESSORY entries for DragonBot's male-warrior path. Each entry is a SHORT phrase (8-16 words) describing ONE signature object he's wearing or carrying — the small detail that anchors his warrior identity.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACCESSORY entries for DragonBot's male-warrior path. Each entry is a SHORT phrase (8-16 words) describing ONE signature object he's wearing or carrying — the small detail that anchors his warrior identity.
 
 ━━━ ACCESSORY SPREAD (enforce variety across ${n}) ━━━
 - WEAPONS / SIGNATURE BLADES (5-6) — ancestral two-handed greatsword strapped to his back, dragon-bone war-axe at his hip, runed broadsword in a worn leather scabbard, ornate war-hammer with a dragon-claw head, cursed black-blade sheathed across his back, twin throwing-axes at his belt
@@ -25,4 +27,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

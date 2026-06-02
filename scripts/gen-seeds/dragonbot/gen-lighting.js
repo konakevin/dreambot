@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/lighting.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for DragonBot — cinematic fantasy lighting treatments. LOTR/GoT/Elden-Ring/Warhammer cinematography.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING descriptions for DragonBot — cinematic fantasy lighting treatments. LOTR/GoT/Elden-Ring/Warhammer cinematography.
 
 Each entry: 10-20 words. One specific cinematic fantasy lighting.
 
@@ -47,4 +49,7 @@ Each entry: 10-20 words. One specific cinematic fantasy lighting.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

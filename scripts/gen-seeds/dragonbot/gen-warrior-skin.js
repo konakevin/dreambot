@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} SKIN-DESCRIPTION entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (10-20 words) describing the EXACT visual texture of warrior skin in fantasy light — how lantern-glow / firelight / moonlight hits it, where shadow pools, what tones it carries.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SKIN-DESCRIPTION entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (10-20 words) describing the EXACT visual texture of warrior skin in fantasy light — how lantern-glow / firelight / moonlight hits it, where shadow pools, what tones it carries.
 
 This pool composes with separate hair/eyes/outfit pools. Render the warrior with weathered, worked, real skin — not idealized airbrushed fantasy-art smoothness.
 
@@ -26,4 +28,7 @@ This pool composes with separate hair/eyes/outfit pools. Render the warrior with
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
