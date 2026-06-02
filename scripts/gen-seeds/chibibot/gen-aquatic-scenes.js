@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/aquatic_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CUDDLY AQUATIC SCENE descriptions for CuddleBot's cuddly-aquatic path. Adorable underwater / surface-water / tide-pool / coral-reef / kelp-forest / lily-pond / freshwater settings where cute baby aquatic creatures live. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Finding-Nemo aesthetic. NEVER photoreal, NEVER documentary nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUDDLY AQUATIC SCENE descriptions for CuddleBot's cuddly-aquatic path. Adorable underwater / surface-water / tide-pool / coral-reef / kelp-forest / lily-pond / freshwater settings where cute baby aquatic creatures live. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Finding-Nemo aesthetic. NEVER photoreal, NEVER documentary nature.
 
 Each entry: 15-25 words. ONE specific cuddly-aquatic scene with HABITAT details + cute interaction hint.
 
@@ -54,4 +56,7 @@ Deduplicate by: habitat-type + key-feature + time-of-day. "Coral reef village" a
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

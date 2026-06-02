@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} OUTDOOR RAINY-DAY SETTINGS for ChibiBot rainy-day-outdoor path — the SCENE where adorable chibi creatures play outside in the rain. Wet flower gardens with creatures splashing in puddles, lakeside docks with rain hitting the water, cobblestone village lanes with reflected lamplight, muddy garden paths with creatures stomping in boots, forest paths with rain pattering the leaves overhead, hilltops with creatures sharing an umbrella, parks with rain-jeweled grass, courtyards with paper-boat-puddle races.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OUTDOOR RAINY-DAY SETTINGS for ChibiBot rainy-day-outdoor path — the SCENE where adorable chibi creatures play outside in the rain. Wet flower gardens with creatures splashing in puddles, lakeside docks with rain hitting the water, cobblestone village lanes with reflected lamplight, muddy garden paths with creatures stomping in boots, forest paths with rain pattering the leaves overhead, hilltops with creatures sharing an umbrella, parks with rain-jeweled grass, courtyards with paper-boat-puddle races.
 
 Each entry: 15-25 words. ONE specific outdoor rainy setting. NO creatures (separate axis). NO time-of-day (separate axis). NO activity (separate axis). Just the setting.
 
@@ -48,4 +50,7 @@ Dedup by: setting type + signature rain-affected detail.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

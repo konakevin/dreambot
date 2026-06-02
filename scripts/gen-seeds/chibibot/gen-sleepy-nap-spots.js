@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SLEEPY NAP SPOT descriptions for CuddleBot's sleepy-naptime path — impossibly cozy places where a tiny creature has fallen asleep. Species-agnostic (creature placed later).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SLEEPY NAP SPOT descriptions for CuddleBot's sleepy-naptime path — impossibly cozy places where a tiny creature has fallen asleep. Species-agnostic (creature placed later).
 
 Each entry: 15-25 words. One specific cozy nap spot with sleeping-cozy details.
 
@@ -39,4 +41,7 @@ Each entry: 15-25 words. One specific cozy nap spot with sleeping-cozy details.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

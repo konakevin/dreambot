@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} HEARTWARMING ACTIVITY descriptions for CuddleBot's heartwarming-scene path — specific heart-melting activities a cute creature could be doing. Described as activity + beat, species-agnostic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HEARTWARMING ACTIVITY descriptions for CuddleBot's heartwarming-scene path — specific heart-melting activities a cute creature could be doing. Described as activity + beat, species-agnostic.
 
 Each entry: 10-20 words. One specific heart-melting activity beat.
 
@@ -43,4 +45,7 @@ Each entry: 10-20 words. One specific heart-melting activity beat.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

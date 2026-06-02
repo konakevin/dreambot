@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} NIGHT-MEADOW PROP descriptions for ChibiBot night-meadow — the tiny accessory props that stack to amplify the night-time-wonder cuteness. The prop is a SPECIFIC OBJECT placed in/around the scene. Each render picks 2 of these (pickN:2) so each entry must be distinct enough to layer with another.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} NIGHT-MEADOW PROP descriptions for ChibiBot night-meadow — the tiny accessory props that stack to amplify the night-time-wonder cuteness. The prop is a SPECIFIC OBJECT placed in/around the scene. Each render picks 2 of these (pickN:2) so each entry must be distinct enough to layer with another.
 
 Each entry: 8-15 words. ONE specific nighttime-themed prop with concrete visual detail. NO setting / creature / activity / time-of-night language.
 
@@ -40,4 +42,7 @@ Dedup by: prop type + concrete detail. "mason jar with fireflies" and "glass jar
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_interior_time_of_day.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot cozy-interior — warm-amber-lit indoor times. Interior is always warm + amber + cozy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot cozy-interior — warm-amber-lit indoor times. Interior is always warm + amber + cozy.
 
 Each entry: 8-15 words.
 
@@ -26,4 +28,7 @@ Each entry: 8-15 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

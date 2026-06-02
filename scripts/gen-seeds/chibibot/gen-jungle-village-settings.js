@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_settings.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} COZY JUNGLE-VILLAGE settings for ChibiBot — magical rainforest VILLAGES + COTTAGES + TREEHOUSE clusters that a viewer would want to MOVE INTO. The architecture and the jungle environment are the hero of the frame. Studio Ghibli / Encanto / Princess-Mononoke / Avatar-Pandora-village / Lost-Tribe aesthetic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY JUNGLE-VILLAGE settings for ChibiBot — magical rainforest VILLAGES + COTTAGES + TREEHOUSE clusters that a viewer would want to MOVE INTO. The architecture and the jungle environment are the hero of the frame. Studio Ghibli / Encanto / Princess-Mononoke / Avatar-Pandora-village / Lost-Tribe aesthetic.
 
 Each entry: 20-35 words. ONE specific cozy jungle-village setting with concrete architecture + jungle context. NO creatures (separate axis). NO time-of-day or weather (separate axes). NO activity verbs.
 
@@ -48,4 +50,7 @@ Dedup by: village-type + architecture + jungle-feature.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

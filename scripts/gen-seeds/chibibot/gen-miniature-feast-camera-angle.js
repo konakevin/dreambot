@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/miniature_feast_camera_angle.json',
   total: 60,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CAMERA-ANGLE compositions for ChibiBot miniature-feast — how the chibi + food + scene is framed. Pop-Mart kawaii register.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CAMERA-ANGLE compositions for ChibiBot miniature-feast — how the chibi + food + scene is framed. Pop-Mart kawaii register.
 
 Each entry: 12-25 words. ONE specific camera framing.
 
@@ -32,4 +34,7 @@ Each entry: 12-25 words. ONE specific camera framing.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

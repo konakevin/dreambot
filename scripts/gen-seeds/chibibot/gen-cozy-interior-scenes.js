@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COZY-INTERIOR SCENE descriptions for CuddleBot's cozy-interior path. Beautiful interior SPACES — snug fireplace reading-nook, sunlit kitchen with bubbling pot, attic library, rain-window window-seat, cottage-loft bedroom under exposed beams, tea-room with floral wallpaper. The COZY ROOM and ATMOSPHERE are the hero. Pixar / Sanrio / Studio Ghibli / Howl's-Moving-Castle / Kiki's-Delivery-Service / Hobbit-hole / Beatrix-Potter aesthetic. NEVER photoreal, NEVER documentary.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY-INTERIOR SCENE descriptions for CuddleBot's cozy-interior path. Beautiful interior SPACES — snug fireplace reading-nook, sunlit kitchen with bubbling pot, attic library, rain-window window-seat, cottage-loft bedroom under exposed beams, tea-room with floral wallpaper. The COZY ROOM and ATMOSPHERE are the hero. Pixar / Sanrio / Studio Ghibli / Howl's-Moving-Castle / Kiki's-Delivery-Service / Hobbit-hole / Beatrix-Potter aesthetic. NEVER photoreal, NEVER documentary.
 
 Each entry: 18-28 words. ONE specific cozy-interior scene with COZY ROOM detail.
 
@@ -65,4 +67,7 @@ Deduplicate by: room-type + key-furnishing + critter-activity + light-source. Va
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

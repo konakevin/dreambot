@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} BATH AMENITY descriptions for ChibiBot — the tiny accessory props that stack to amplify bath-cuteness. The amenity is a SPECIFIC PROP placed in/around the bath. Each render picks 2 of these (pickN:2) so each entry must be distinct enough to layer with another.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BATH AMENITY descriptions for ChibiBot — the tiny accessory props that stack to amplify bath-cuteness. The amenity is a SPECIFIC PROP placed in/around the bath. Each render picks 2 of these (pickN:2) so each entry must be distinct enough to layer with another.
 
 Each entry: 8-15 words. ONE specific bath prop with concrete visual detail. NO setting / creature / activity language.
 
@@ -34,4 +36,7 @@ Dedup by: prop type + concrete detail. "yellow rubber duck with painted smile" a
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

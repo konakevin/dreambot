@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/creature_portrait_set_decorations.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} SCATTERED SET-DECORATIONS for ChibiBot creature-portrait — small charming props that appear scattered around the chibi creature in the soft-bokeh foreground or floating in the air. Template picks 3 per render. Adds visual abundance to the portrait.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SCATTERED SET-DECORATIONS for ChibiBot creature-portrait — small charming props that appear scattered around the chibi creature in the soft-bokeh foreground or floating in the air. Template picks 3 per render. Adds visual abundance to the portrait.
 
 Each entry: 10-20 words. ONE specific decoration. NO creatures, NO outfits, NO recognizable settings.
 
@@ -54,4 +56,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

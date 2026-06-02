@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cottagecore_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COTTAGE VILLAGE scene descriptions for CuddleBot — a cute/cozy bot that renders stylized adorable artwork. These are scenes of CUTE LITTLE COTTAGES, VILLAGE STREETS, TOWN SQUARES, and tiny creatures OUT AND ABOUT in their charming cottage villages. Think: a tiny hedgehog walking down a cobblestone path past flower-covered cottages, a village of mushroom houses with glowing windows at night, a rainy afternoon on a cottage lane with puddles reflecting warm light.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COTTAGE VILLAGE scene descriptions for CuddleBot — a cute/cozy bot that renders stylized adorable artwork. These are scenes of CUTE LITTLE COTTAGES, VILLAGE STREETS, TOWN SQUARES, and tiny creatures OUT AND ABOUT in their charming cottage villages. Think: a tiny hedgehog walking down a cobblestone path past flower-covered cottages, a village of mushroom houses with glowing windows at night, a rainy afternoon on a cottage lane with puddles reflecting warm light.
 
 The ARCHITECTURE and SETTING are the star — cottages, pathways, bridges, market squares, forest clearings with little homes. Creatures are secondary — they're residents going about their village life.
 
@@ -32,4 +34,7 @@ Deduplicate by: village setting type + time/weather + creature activity (if pres
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

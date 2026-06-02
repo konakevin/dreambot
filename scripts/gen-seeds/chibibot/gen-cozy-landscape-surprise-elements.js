@@ -5,7 +5,9 @@ generatePool({
   total: 150,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot cozy-landscape scenes — tiny secondary subjects or ambient details the eye finds AFTER the wider world view. The world is the hero, the tiny resident is the focal point, the surprise element is the second-tier detail that proves the bigger cozy world exists.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot cozy-landscape scenes — tiny secondary subjects or ambient details the eye finds AFTER the wider world view. The world is the hero, the tiny resident is the focal point, the surprise element is the second-tier detail that proves the bigger cozy world exists.
 
 Each entry: 12-25 words. ONE specific surprise element with concrete visual detail.
 
@@ -41,4 +43,7 @@ Dedup by: element type + concrete detail.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

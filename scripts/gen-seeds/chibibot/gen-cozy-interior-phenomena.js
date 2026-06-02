@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_interior_phenomena.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot cozy-interior — magical or atmospheric events that crank drama when they fire (60%-gated).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot cozy-interior — magical or atmospheric events that crank drama when they fire (60%-gated).
 
 Each entry: 15-25 words.
 
@@ -27,4 +29,7 @@ Each entry: 15-25 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

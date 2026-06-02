@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/night_meadow_time_of_night.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-NIGHT phrases for ChibiBot night-meadow — short cinematic NIGHTTIME-light descriptors that fix WHEN-AT-NIGHT this meadow scene takes place. Path is LOCKED to night/twilight, never midday. The mood comes from this axis — the moon phase, sky color, ambient luminance.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-NIGHT phrases for ChibiBot night-meadow — short cinematic NIGHTTIME-light descriptors that fix WHEN-AT-NIGHT this meadow scene takes place. Path is LOCKED to night/twilight, never midday. The mood comes from this axis — the moon phase, sky color, ambient luminance.
 
 Each entry: 8-15 words. ONE specific NIGHTTIME / TWILIGHT moment with its signature sky color + ambient light quality. Concrete sensory anchors that Flux can render directly.
 
@@ -40,4 +42,7 @@ Dedup by: time-of-night + sky color + moon-or-sky detail. "full moon overhead, s
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

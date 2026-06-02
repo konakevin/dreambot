@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/portrait_features.json',
   total: 200,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} PORTRAIT FEATURE descriptions for CuddleBot's creature-portrait path — close-up cute details to highlight on a creature. These stack onto a creature portrait.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PORTRAIT FEATURE descriptions for CuddleBot's creature-portrait path — close-up cute details to highlight on a creature. These stack onto a creature portrait.
 
 Each entry: 10-20 words. One specific cute feature/detail.
 
@@ -35,4 +37,7 @@ Each entry: 10-20 words. One specific cute feature/detail.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

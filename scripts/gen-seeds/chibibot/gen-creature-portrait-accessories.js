@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/creature_portrait_accessories.json',
   total: 150,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CUTE PORTRAIT ACCESSORIES for ChibiBot creature-portrait — a small charming accessory or prop on the chibi creature in a tight portrait. NO creature species names.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE PORTRAIT ACCESSORIES for ChibiBot creature-portrait — a small charming accessory or prop on the chibi creature in a tight portrait. NO creature species names.
 
 Each entry: 8-15 words. ONE specific accessory.
 
@@ -51,4 +53,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/creature_portrait_poses.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CUTE PORTRAIT POSES for ChibiBot creature-portrait — what a chibi creature is doing in a tight portrait crop. The creature fills the frame; the pose is intimate and charming.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE PORTRAIT POSES for ChibiBot creature-portrait — what a chibi creature is doing in a tight portrait crop. The creature fills the frame; the pose is intimate and charming.
 
 Each entry: 10-18 words. ONE specific pose. NO creature species names, NO setting, NO time-of-day.
 
@@ -51,4 +53,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering. Each is a specific intimate portrait pose.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

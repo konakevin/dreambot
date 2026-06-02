@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} PLUSHIE SCENE descriptions for CuddleBot's plushie-life path — plushies/soft toys come alive Toy-Story-style doing cozy activities together. Fabric-textured, button-eyes, visible stitching. Wholesome, warm, cozy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} PLUSHIE SCENE descriptions for CuddleBot's plushie-life path — plushies/soft toys come alive Toy-Story-style doing cozy activities together. Fabric-textured, button-eyes, visible stitching. Wholesome, warm, cozy.
 
 Each entry: 15-30 words. One specific plushie-alive scene.
 
@@ -41,4 +43,7 @@ Each entry: 15-30 words. One specific plushie-alive scene.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

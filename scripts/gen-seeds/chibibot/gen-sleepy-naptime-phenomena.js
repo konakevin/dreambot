@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/sleepy_naptime_phenomena.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} GENTLE ENVIRONMENTAL PHENOMENA for ChibiBot sleepy-naptime — soft magical or atmospheric events that drift around the sleeper without waking them. 60%-gated, fires sometimes.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GENTLE ENVIRONMENTAL PHENOMENA for ChibiBot sleepy-naptime — soft magical or atmospheric events that drift around the sleeper without waking them. 60%-gated, fires sometimes.
 
 Each entry: 15-25 words. ONE soft event.
 
@@ -28,4 +30,7 @@ Each entry: 15-25 words. ONE soft event.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

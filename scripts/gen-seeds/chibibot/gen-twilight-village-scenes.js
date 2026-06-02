@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} TWILIGHT-VILLAGE SCENE descriptions for CuddleBot's twilight-village path. Cozy night / twilight / lantern-lit / firefly-meadow / moonlit VILLAGES + COTTAGES + HAMLETS that the viewer wants to move into. The ARCHITECTURE and ATMOSPHERE are the hero — not the creatures. Pixar / Sanrio / Studio Ghibli / Beatrix-Potter / Owl-Who-Was-Afraid-of-the-Dark aesthetic. NEVER photoreal, NEVER documentary, NEVER scary.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TWILIGHT-VILLAGE SCENE descriptions for CuddleBot's twilight-village path. Cozy night / twilight / lantern-lit / firefly-meadow / moonlit VILLAGES + COTTAGES + HAMLETS that the viewer wants to move into. The ARCHITECTURE and ATMOSPHERE are the hero — not the creatures. Pixar / Sanrio / Studio Ghibli / Beatrix-Potter / Owl-Who-Was-Afraid-of-the-Dark aesthetic. NEVER photoreal, NEVER documentary, NEVER scary.
 
 Each entry: 18-28 words. ONE specific twilight-village scene with COZY ARCHITECTURE detail. The scene must READ as twilight / night (deep indigo + violet + warm-amber lantern-pop) — never just "dark".
 
@@ -61,4 +63,7 @@ Deduplicate by: village-type + key-architectural-feature + creature-vs-empty + l
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

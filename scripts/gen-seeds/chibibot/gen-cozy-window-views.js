@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_window_views.json',
   total: 60,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} COZY WINDOW-VIEW descriptions for ChibiBot — what the viewer sees through a window in an interior scene. The window is the cozy contrast — warm inside, cool/wild outside. 15-30 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY WINDOW-VIEW descriptions for ChibiBot — what the viewer sees through a window in an interior scene. The window is the cozy contrast — warm inside, cool/wild outside. 15-30 words each.
 
 ━━━ THE FORMULA ━━━
 Each entry describes a view OUTSIDE a window — usually cold, wet, or wintry — that makes the warm interior feel safer by comparison.
@@ -40,4 +42,7 @@ EX-4: "Old European cobblestone alley wet from earlier rain, distant gabled roof
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

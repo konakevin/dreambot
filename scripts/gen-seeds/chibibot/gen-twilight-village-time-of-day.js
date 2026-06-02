@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/twilight_village_time_of_day.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} TIME-OF-DAY descriptions for ChibiBot twilight-village — biome-fitting lighting registers. Pixar painterly storybook.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} TIME-OF-DAY descriptions for ChibiBot twilight-village — biome-fitting lighting registers. Pixar painterly storybook.
 
 Each entry: 10-18 words. ONE specific time-of-day lighting state.
 
@@ -32,4 +34,7 @@ Each entry: 10-18 words. ONE specific time-of-day lighting state.
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CUTE-FOOD scene descriptions for ChibiBot's new cute-food path. The aesthetic is hard-locked to the Instagram account @bex.ai — 3D-rendered kawaii pastel pop-mart-style food/drink scenes where the food ITSELF has a smiling face.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE-FOOD scene descriptions for ChibiBot's new cute-food path. The aesthetic is hard-locked to the Instagram account @bex.ai — 3D-rendered kawaii pastel pop-mart-style food/drink scenes where the food ITSELF has a smiling face.
 
 Each entry: 20-35 words. ONE specific kawaii food/drink scene with the hero food/drink centered as the cast.
 

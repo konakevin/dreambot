@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_interior_surprise.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot cozy-interior scenes — tiny secondary details the eye finds AFTER the room + main creature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot cozy-interior scenes — tiny secondary details the eye finds AFTER the room + main creature.
 
 Each entry: 12-25 words.
 
@@ -27,4 +29,7 @@ Each entry: 12-25 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

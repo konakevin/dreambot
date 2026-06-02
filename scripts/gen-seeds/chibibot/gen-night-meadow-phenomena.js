@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/night_meadow_phenomena.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot night-meadow scenes — magical or celestial nighttime events that crank atmospheric drama when they fire. This axis is 60%-gated — only fires on some renders — so each entry should be a STATEMENT MOMENT that transforms the nighttime frame.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot night-meadow scenes — magical or celestial nighttime events that crank atmospheric drama when they fire. This axis is 60%-gated — only fires on some renders — so each entry should be a STATEMENT MOMENT that transforms the nighttime frame.
 
 Each entry: 15-25 words. ONE magical / celestial / atmospheric nighttime event woven into the scene.
 
@@ -41,4 +43,7 @@ Dedup by: phenomenon type + concrete signature. "meteor shower streaking" and "s
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

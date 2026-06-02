@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/creature_portrait_expressions.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CUTE PORTRAIT EXPRESSIONS for ChibiBot creature-portrait — the emotional state visible on a chibi creature's face in a tight portrait. Hyper-cute, never sad/scary/aggressive.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE PORTRAIT EXPRESSIONS for ChibiBot creature-portrait — the emotional state visible on a chibi creature's face in a tight portrait. Hyper-cute, never sad/scary/aggressive.
 
 Each entry: 8-15 words. ONE specific expression. NO creature species names, NO pose (that's a different axis), NO setting.
 
@@ -51,4 +53,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

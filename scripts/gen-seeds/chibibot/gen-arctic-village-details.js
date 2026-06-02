@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_village_details.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ARCTIC-VILLAGE DETAILS for ChibiBot arctic-village — small lived-in details scattered across the snowy village that make it feel inhabited. Template picks 3 per render.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ARCTIC-VILLAGE DETAILS for ChibiBot arctic-village — small lived-in details scattered across the snowy village that make it feel inhabited. Template picks 3 per render.
 
 Each entry: 10-20 words. ONE specific detail. NO creatures, NO main setting, NO activity verbs (other than light-on / smoke-rising / etc.).
 
@@ -45,4 +47,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

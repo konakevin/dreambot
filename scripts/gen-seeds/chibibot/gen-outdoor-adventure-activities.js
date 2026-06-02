@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/outdoor_adventure_activities.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ADVENTURE ACTIVITIES for ChibiBot outdoor-adventure — what a chibi creature is mid-doing in the wild. ACTIVE adventure-poses, NEVER posing still.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ADVENTURE ACTIVITIES for ChibiBot outdoor-adventure — what a chibi creature is mid-doing in the wild. ACTIVE adventure-poses, NEVER posing still.
 
 Each entry: 12-22 words. ACTIVE VERB-LED. NO creature species names, NO wilderness description.
 
@@ -51,4 +53,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering. Each begins with an active verb-led adventure phrase.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

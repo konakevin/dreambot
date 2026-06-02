@@ -14,7 +14,9 @@ generatePool({
   total: 400,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MULTI-CREATURE descriptions for ChibiBot's cute-creature pools. The pool currently has 200 SOLO creature entries — your job is to add PAIR and TRIO entries so renders vary character count.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MULTI-CREATURE descriptions for ChibiBot's cute-creature pools. The pool currently has 200 SOLO creature entries — your job is to add PAIR and TRIO entries so renders vary character count.
 
 This batch is ALL multi-character. Mix:
 - ~60% PAIR (two characters): "tiny fox companion to a small badger, both peering from a moss-burrow"
@@ -73,4 +75,7 @@ EVERY ENTRY uses a UNIQUE species combination + activity. Don't repeat "fox + bu
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

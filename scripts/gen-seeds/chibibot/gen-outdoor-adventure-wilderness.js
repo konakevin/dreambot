@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/outdoor_adventure_wilderness.json',
   total: 200,
   batch: 15,
-  metaPrompt: (n) => `You are writing ${n} WILDERNESS SETTINGS for ChibiBot outdoor-adventure — pure wilderness/open-world scenes where a chibi creature is having an adventure. NO villages, NO cottages, NO architecture. Just nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WILDERNESS SETTINGS for ChibiBot outdoor-adventure — pure wilderness/open-world scenes where a chibi creature is having an adventure. NO villages, NO cottages, NO architecture. Just nature.
 
 Each entry: 25-40 words. ONE specific wilderness scene. NO creatures, NO time-of-day, NO weather verbs, NO activity verbs.
 
@@ -45,4 +47,7 @@ Each entry MUST visibly include at least 3 wilderness elements (rocks / water / 
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering. Aim for biome variety across the 14 sub-types.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

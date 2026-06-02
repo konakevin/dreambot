@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cuddly_aquatic_phenomena.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot cuddly-aquatic scenes — magical or seasonal aquatic events that crank atmospheric drama when they fire. This axis is 60%-gated — only fires on some renders — so each entry should be a STATEMENT MOMENT that transforms the underwater/surface frame.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot cuddly-aquatic scenes — magical or seasonal aquatic events that crank atmospheric drama when they fire. This axis is 60%-gated — only fires on some renders — so each entry should be a STATEMENT MOMENT that transforms the underwater/surface frame.
 
 Each entry: 15-25 words. ONE magical / seasonal / atmospheric event woven into the aquatic scene.
 
@@ -41,4 +43,7 @@ Dedup by: phenomenon type + concrete signature. "bioluminescent jellyfish bloom"
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_objects.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} COZY OBJECT descriptions for ChibiBot — specific, evocative cozy items that get scattered into interior scenes to make them feel lived-in. 8-18 words each. Two of these are picked per render and injected into the scene.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY OBJECT descriptions for ChibiBot — specific, evocative cozy items that get scattered into interior scenes to make them feel lived-in. 8-18 words each. Two of these are picked per render and injected into the scene.
 
 ━━━ THE FORMULA ━━━
 Each entry names a SPECIFIC physical cozy object, with material/texture/condition detail. Multi-element entries are encouraged ("steaming ceramic mug beside dog-eared paperback open to page 84").
@@ -39,4 +41,7 @@ EX-5: "Sleeping ginger cat curled on a stack of leather-bound books, paws tucked
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

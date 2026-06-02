@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_lights.json',
   total: 60,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} COZY LIGHTING descriptions for ChibiBot — specific warm light sources that act as the dominant illumination of a scene. 15-30 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY LIGHTING descriptions for ChibiBot — specific warm light sources that act as the dominant illumination of a scene. 15-30 words each.
 
 ━━━ THE FORMULA ━━━
 Each entry names ONE PRIMARY warm light source and describes (a) its character, (b) its color/temperature, (c) what surfaces it pools on, (d) the mood it creates. Always WARM-DOMINANT.
@@ -39,4 +41,7 @@ EX-4: "Single shaft of golden-hour sun cutting through tall library window, dust
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

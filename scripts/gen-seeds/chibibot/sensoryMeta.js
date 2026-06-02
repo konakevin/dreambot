@@ -37,7 +37,9 @@ const SHARED_RULES = `━━━ HARD RULES ━━━
 // ─────────────────────────────────────────────────────────────
 
 const creature = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for CuddleBot's CREATURE-context paths (cute fluffy animal or plushie subject). Each entry is one short olfactory cue tied to the cute creature in a cozy/storybook setting.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for CuddleBot's CREATURE-context paths (cute fluffy animal or plushie subject). Each entry is one short olfactory cue tied to the cute creature in a cozy/storybook setting.
 
 Smell entries should evoke sweet/cozy scents on its body / paws / fur / snout, or in the immediate cottage/storybook environment around it.
 
@@ -59,7 +61,9 @@ Both the SCENT NOUN AND the LOCATION on the creature. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  sound: (n) => `You are writing ${n} distinct SOUND anchors for CuddleBot's CREATURE-context paths. Cute creature sounds + nearby cozy environment sounds.
+  sound: (
+    n
+  ) => `You are writing ${n} distinct SOUND anchors for CuddleBot's CREATURE-context paths. Cute creature sounds + nearby cozy environment sounds.
 
 EXAMPLES (DO NOT REUSE):
 - "its tiny snore in the marshmallow nest"
@@ -79,7 +83,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for CuddleBot's CREATURE-context paths. What it feels against its fur/paws/snout, or what's brushing/touching its body.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for CuddleBot's CREATURE-context paths. What it feels against its fur/paws/snout, or what's brushing/touching its body.
 
 EXAMPLES (DO NOT REUSE):
 - "soft cloud-fluff brushing its whiskers"
@@ -99,7 +105,9 @@ Both the BODY PART AND the SENSATION VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for CuddleBot's CREATURE-context paths.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for CuddleBot's CREATURE-context paths.
 
 EXAMPLES (DO NOT REUSE):
 - "fireside warmth glowing through its fur"
@@ -119,7 +127,9 @@ Both the THERMAL SOURCE AND the BODY PART. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for CuddleBot's CREATURE-context paths. Soft cozy weight on the creature's small body.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for CuddleBot's CREATURE-context paths. Soft cozy weight on the creature's small body.
 
 EXAMPLES (DO NOT REUSE):
 - "its plushie body sinking into the marshmallow pillow"
@@ -139,7 +149,9 @@ Both the OBJECT AND the BODY PART. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  air: (n) => `You are writing ${n} distinct AIR anchors for CuddleBot's CREATURE-context paths. Sweet/cozy atmosphere around the creature.
+  air: (
+    n
+  ) => `You are writing ${n} distinct AIR anchors for CuddleBot's CREATURE-context paths. Sweet/cozy atmosphere around the creature.
 
 EXAMPLES (DO NOT REUSE):
 - "soap bubbles drifting around it in the bath"
@@ -159,7 +171,9 @@ Both the PARTICLE/MEDIUM AND the MOTION VERB. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for CuddleBot's CREATURE-context paths. Each entry forces Flux to render a SPECIFIC WARM/COZY lighting palette on the creature.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for CuddleBot's CREATURE-context paths. Each entry forces Flux to render a SPECIFIC WARM/COZY lighting palette on the creature.
 
 Each entry must include: COLOR + DIRECTION (key/rim/sidelight/uplight/backlight/spot/shaft) + IMPACT POINT on its body (face / fluffy ears / paws / whiskers / silhouette).
 
@@ -208,7 +222,9 @@ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 // ─────────────────────────────────────────────────────────────
 
 const scene = {
-  smell: (n) => `You are writing ${n} distinct SMELL anchors for CuddleBot's PURE-SCENE paths (cozy cottage / storybook / heartwarming environments). NO creature subject — scents in the empty cozy space.
+  smell: (
+    n
+  ) => `You are writing ${n} distinct SMELL anchors for CuddleBot's PURE-SCENE paths (cozy cottage / storybook / heartwarming environments). NO creature subject — scents in the empty cozy space.
 
 EXAMPLES (DO NOT REUSE):
 - "fresh-baked gingerbread drifting from the cottage oven"
@@ -242,7 +258,9 @@ Both the SOURCE AND the QUALITY. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `You are writing ${n} distinct TOUCH anchors for CuddleBot's PURE-SCENE paths. Cozy material textures.
+  touch: (
+    n
+  ) => `You are writing ${n} distinct TOUCH anchors for CuddleBot's PURE-SCENE paths. Cozy material textures.
 
 EXAMPLES (DO NOT REUSE):
 - "moss creeping over the cottage stepping stones"
@@ -259,7 +277,9 @@ Both the TEXTURE/MEDIUM AND the SURFACE. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  temperature: (n) => `You are writing ${n} distinct TEMPERATURE anchors for CuddleBot's PURE-SCENE paths.
+  temperature: (
+    n
+  ) => `You are writing ${n} distinct TEMPERATURE anchors for CuddleBot's PURE-SCENE paths.
 
 EXAMPLES (DO NOT REUSE):
 - "fireside warmth glowing through the cottage parlor"
@@ -276,7 +296,9 @@ Both the THERMAL SOURCE AND the LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  weight: (n) => `You are writing ${n} distinct WEIGHT anchors for CuddleBot's PURE-SCENE paths. Cozy environmental weight implications.
+  weight: (
+    n
+  ) => `You are writing ${n} distinct WEIGHT anchors for CuddleBot's PURE-SCENE paths. Cozy environmental weight implications.
 
 EXAMPLES (DO NOT REUSE):
 - "stack of patchwork quilts piled on the bed"
@@ -310,7 +332,9 @@ Both the PARTICLE/MEDIUM AND the LOCATION. Vary one.
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  lightcolor: (n) => `You are writing ${n} distinct LIGHTCOLOR anchors for CuddleBot's PURE-SCENE paths. Each entry forces Flux to render a SPECIFIC WARM/COZY lighting palette across the environment.
+  lightcolor: (
+    n
+  ) => `You are writing ${n} distinct LIGHTCOLOR anchors for CuddleBot's PURE-SCENE paths. Each entry forces Flux to render a SPECIFIC WARM/COZY lighting palette across the environment.
 
 Each entry must include: COLOR + DIRECTION + IMPACT POINT (cottage parlor / kitchen / picnic / garden / meadow / bedroom / window / hearth / trellis / storybook).
 

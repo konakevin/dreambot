@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} BATH TIME SCENE descriptions for CuddleBot's bath-time path — adorable bathing and spa scenarios. Species-agnostic (creature placed later).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BATH TIME SCENE descriptions for CuddleBot's bath-time path — adorable bathing and spa scenarios. Species-agnostic (creature placed later).
 
 Each entry: 15-25 words. One specific bath/spa cozy scenario.
 
@@ -39,4 +41,7 @@ Each entry: 15-25 words. One specific bath/spa cozy scenario.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

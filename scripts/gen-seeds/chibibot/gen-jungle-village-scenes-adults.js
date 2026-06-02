@@ -11,7 +11,9 @@ generatePool({
   total: 390,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} JUNGLE-VILLAGE SCENE descriptions for CuddleBot's jungle-village path. The existing pool features baby creatures in every scene — your job is to add ADULT-creature scenes (and some empty-architecture scenes) to balance.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} JUNGLE-VILLAGE SCENE descriptions for CuddleBot's jungle-village path. The existing pool features baby creatures in every scene — your job is to add ADULT-creature scenes (and some empty-architecture scenes) to balance.
 
 Cozy rainforest / canopy / cloud-forest / mangrove VILLAGES + TREEHOUSES + JUNGLE-CLEARINGS. Pixar / Sanrio / Studio Ghibli / Encanto STYLIZED — never photoreal, never documentary.
 
@@ -74,4 +76,7 @@ Deduplicate by: village-type + key-architectural-feature + creature-species (or 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

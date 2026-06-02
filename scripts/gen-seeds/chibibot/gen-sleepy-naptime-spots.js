@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} IMPOSSIBLY COZY NAP-SPOT settings for ChibiBot sleepy-naptime — magical tiny places where an adorable chibi creature is curled up dozing. The spot itself is the cozy hero, the creature will be added separately. Each spot is INTIMATE, INVITING, and feels like the most perfect place to fall asleep.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} IMPOSSIBLY COZY NAP-SPOT settings for ChibiBot sleepy-naptime — magical tiny places where an adorable chibi creature is curled up dozing. The spot itself is the cozy hero, the creature will be added separately. Each spot is INTIMATE, INVITING, and feels like the most perfect place to fall asleep.
 
 Each entry: 15-25 words. ONE specific nap-spot setting. NO creatures (separate axis). NO time-of-day or weather (separate axes). NO sleep-pose (separate axis).
 
@@ -45,4 +47,7 @@ Dedup by spot-type + cozy material/feature.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

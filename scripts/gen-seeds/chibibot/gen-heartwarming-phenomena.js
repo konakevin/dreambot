@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/heartwarming_phenomena.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot heartwarming creature scenes — magical or seasonal events woven into the scene that crank atmospheric drama. This axis is 60%-gated — only fires on some renders — so each entry should be a STATEMENT MOMENT that transforms the frame when it lands.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot heartwarming creature scenes — magical or seasonal events woven into the scene that crank atmospheric drama. This axis is 60%-gated — only fires on some renders — so each entry should be a STATEMENT MOMENT that transforms the frame when it lands.
 
 Each entry: 15-25 words. ONE magical / seasonal / atmospheric event that fills the scene with wow.
 
@@ -34,4 +36,7 @@ Dedup by: phenomenon type + concrete signature. "aurora overhead" and "northern 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

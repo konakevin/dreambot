@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/miniature_feast_time_of_day.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY descriptions for ChibiBot miniature-feast — the lighting time that's always soft, pastel, kawaii. Pop-Mart aesthetic.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-DAY descriptions for ChibiBot miniature-feast — the lighting time that's always soft, pastel, kawaii. Pop-Mart aesthetic.
 
 Each entry: 10-18 words. ONE specific time-of-day lighting state.
 
@@ -28,4 +30,7 @@ Each entry: 10-18 words. ONE specific time-of-day lighting state.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

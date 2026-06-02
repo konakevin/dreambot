@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/outdoor_adventure_props.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ADVENTURE PROPS for ChibiBot outdoor-adventure — small adventure gear that the chibi creature is holding or wearing as they explore the wild.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ADVENTURE PROPS for ChibiBot outdoor-adventure — small adventure gear that the chibi creature is holding or wearing as they explore the wild.
 
 Each entry: 8-15 words. ONE specific prop. NO creatures, NO settings, NO activities.
 
@@ -50,4 +52,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

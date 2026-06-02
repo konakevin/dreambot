@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} GROUP-OF-FRIENDS COZY-HUDDLE activities for ChibiBot rainy-day-cozy — 2-4 chibi friends sheltering TOGETHER from the rain in COZY huddle moments. Sharing cocoa under a porch, huddled under one umbrella shoulder-to-shoulder, piled together under a mushroom cap, cuddled in a hollow log watching rain together, etc. NOT active wet-play (that's rainy-interior path). COZY-INTIMATE shelter scenes.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GROUP-OF-FRIENDS COZY-HUDDLE activities for ChibiBot rainy-day-cozy — 2-4 chibi friends sheltering TOGETHER from the rain in COZY huddle moments. Sharing cocoa under a porch, huddled under one umbrella shoulder-to-shoulder, piled together under a mushroom cap, cuddled in a hollow log watching rain together, etc. NOT active wet-play (that's rainy-interior path). COZY-INTIMATE shelter scenes.
 
 Each entry: 20-35 words. ONE specific group cozy-huddle activity. Describes what the friends are doing TOGETHER while sheltered from rain.
 
@@ -63,4 +65,7 @@ Think Studio Ghibli "Totoro" bus-stop scene / Calvin-and-Hobbes-under-porch / Ch
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. Each starts with group-structure phrase, has shelter-cozy verb + evidence detail.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

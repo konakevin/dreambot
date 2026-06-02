@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} HEARTWARMING SETTINGS for ChibiBot — the picture-book stage where adorable creatures share heart-melting moments. The SETTING is the stage where the cuddly action happens. Each setting must feel like a frame from a different page of a beautiful storybook.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HEARTWARMING SETTINGS for ChibiBot — the picture-book stage where adorable creatures share heart-melting moments. The SETTING is the stage where the cuddly action happens. Each setting must feel like a frame from a different page of a beautiful storybook.
 
 Each entry: 15-25 words. One specific setting. NO creatures (they live in a separate axis). NO time-of-day or weather (separate axes). Just the SETTING.
 
@@ -36,4 +38,7 @@ Dedup by: location type + specific micro-detail. "cottage kitchen with copper po
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CUDDLY-AQUATIC SETTING descriptions for ChibiBot — the underwater / surface-water / waterside HABITAT where adorable cuddly aquatic creatures live. The SETTING is the aquatic stage — depth, habitat, biome — for the cuddly pair. Each must feel like a frame from a different page of a "tiny aquatic creatures around the world" storybook.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUDDLY-AQUATIC SETTING descriptions for ChibiBot — the underwater / surface-water / waterside HABITAT where adorable cuddly aquatic creatures live. The SETTING is the aquatic stage — depth, habitat, biome — for the cuddly pair. Each must feel like a frame from a different page of a "tiny aquatic creatures around the world" storybook.
 
 Each entry: 15-25 words. ONE specific aquatic setting. NO creatures (separate axis). NO interaction / activity (separate axis). NO time-of-day / weather (separate axes).
 
@@ -49,4 +51,7 @@ Dedup by: habitat type + depth + signature feature. "tropical reef with sun-dapp
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

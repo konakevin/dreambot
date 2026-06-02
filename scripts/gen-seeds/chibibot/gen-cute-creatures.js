@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cute_creatures.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CUTE CREATURE descriptions for CuddleBot — adorable stylized creatures rendered in Pixar / Sanrio / Totoro energy. BIG eyes, soft round shapes, infinite cuteness.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE CREATURE descriptions for CuddleBot — adorable stylized creatures rendered in Pixar / Sanrio / Totoro energy. BIG eyes, soft round shapes, infinite cuteness.
 
 Each entry: 10-20 words. One adorable creature with 2-3 identifying cute details (eye type, fur/texture, accessories, pose).
 
@@ -28,4 +30,7 @@ EVERY ENTRY MUST START WITH A UNIQUE CREATURE NAME. Scan the "ALREADY GENERATED"
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

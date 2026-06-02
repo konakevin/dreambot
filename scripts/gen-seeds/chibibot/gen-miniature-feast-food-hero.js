@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/miniature_feast_food_hero.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} KAWAII SMILING-FACE FOOD HEROES for ChibiBot miniature-feast — the centerpiece kawaii food/drink with a literal smiling face on it. bex.ai Pop-Mart aesthetic. Pop-Mart designer-vinyl glossy-pearlescent rendering.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} KAWAII SMILING-FACE FOOD HEROES for ChibiBot miniature-feast — the centerpiece kawaii food/drink with a literal smiling face on it. bex.ai Pop-Mart aesthetic. Pop-Mart designer-vinyl glossy-pearlescent rendering.
 
 Each entry: 15-25 words. ONE specific kawaii food hero. MUST have a smiling face. NO chibi creatures (those come from another pool).
 
@@ -45,4 +47,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

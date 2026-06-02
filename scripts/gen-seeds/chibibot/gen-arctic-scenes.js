@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SNOWY-ARCTIC SCENE descriptions for CuddleBot's snowy-arctic path. Adorable arctic / sub-arctic / alpine / sea-ice / snow-pine-forest / aurora-night settings where cute baby cold-weather creatures live. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Happy-Feet / baby-Christmas-special aesthetic. NEVER photoreal, NEVER documentary nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SNOWY-ARCTIC SCENE descriptions for CuddleBot's snowy-arctic path. Adorable arctic / sub-arctic / alpine / sea-ice / snow-pine-forest / aurora-night settings where cute baby cold-weather creatures live. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Happy-Feet / baby-Christmas-special aesthetic. NEVER photoreal, NEVER documentary nature.
 
 Each entry: 15-25 words. ONE specific snowy-arctic scene with HABITAT details + cute interaction hint.
 
@@ -56,4 +58,7 @@ Deduplicate by: habitat-type + key-feature + time-of-day. "Igloo with glow insid
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

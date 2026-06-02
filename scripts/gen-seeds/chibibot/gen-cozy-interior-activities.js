@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_interior_activities.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} COZY-SNUGGLE ACTIVITIES for ChibiBot cozy-interior — what a small peripheral creature is doing in the cozy tiny-scale space. NOT generic indoor activities — SNUGGLE moments. Wrapped in a blanket, curled by a fire, reading by candle-light, sipping cocoa under a quilt, sleepy in a window-seat. The cozy DNA is wrapped/curled/warm-lit/sleepy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY-SNUGGLE ACTIVITIES for ChibiBot cozy-interior — what a small peripheral creature is doing in the cozy tiny-scale space. NOT generic indoor activities — SNUGGLE moments. Wrapped in a blanket, curled by a fire, reading by candle-light, sipping cocoa under a quilt, sleepy in a window-seat. The cozy DNA is wrapped/curled/warm-lit/sleepy.
 
 Each entry: 15-25 words. ACTIVE VERB-LED. Include a CONCRETE cozy-snuggle prop.
 
@@ -56,4 +58,7 @@ Every entry MUST include at least ONE cozy-element:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. Each begins with an active cozy-snuggle verb + includes blanket/fire/candle/warm-beverage element.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

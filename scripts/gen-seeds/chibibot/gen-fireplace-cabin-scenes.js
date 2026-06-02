@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/fireplace_cabin_scenes.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} FIREPLACE-CABIN scene descriptions for ChibiBot — but these are CONCEPT ART of impossibly cozy cabins, NOT real cabins. Painterly storybook illustration, never photography. 25-45 words each. NO PEOPLE.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} FIREPLACE-CABIN scene descriptions for ChibiBot — but these are CONCEPT ART of impossibly cozy cabins, NOT real cabins. Painterly storybook illustration, never photography. 25-45 words each. NO PEOPLE.
 
 ━━━ THE LOAD-BEARING RULE ━━━
 These cabins do NOT exist as real photographable interiors. They are illustrated concept-art spaces with architectural ambition that no real cabin actually achieves. If the entry could be a Pinterest "cozy cabin" photo of an actual rental, IT IS WRONG.
@@ -64,4 +66,7 @@ EX-5: "Mongolian ger interior with central iron stove glowing through its grate,
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. Dense, comma-rich, concept-art-ambitious. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

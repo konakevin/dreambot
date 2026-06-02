@@ -10,7 +10,9 @@ generatePool({
   total: 400,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MULTI-CHARACTER SUNNY-VILLAGE scenes for ChibiBot's sunny-village path. The pool already has 200 single-creature scenes — your job is to add PAIR + TRIO village scenes so renders vary character count.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MULTI-CHARACTER SUNNY-VILLAGE scenes for ChibiBot's sunny-village path. The pool already has 200 single-creature scenes — your job is to add PAIR + TRIO village scenes so renders vary character count.
 
 Pixar / Sanrio / Studio Ghibli / Greek-island / Provence STYLIZED. NEVER photoreal. Cute baby AND adult creatures both fine — mix freely.
 
@@ -72,4 +74,7 @@ UNIQUE village-type + species-combination + activity per entry. Existing 200 are
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

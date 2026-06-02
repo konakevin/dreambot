@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/miniature_feast_scene_setting.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} KAWAII OUTDOOR-VARIETY SCENE SETTINGS for ChibiBot miniature-feast — heavily-decorated cute outdoor environments where chibis + tons of smiling-face food are gathered. Pop-Mart designer-vinyl pastel kawaii register. bex.ai Instagram aesthetic. The viewer's reaction: "I want to PICNIC there with kawaii food and friends!"
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} KAWAII OUTDOOR-VARIETY SCENE SETTINGS for ChibiBot miniature-feast — heavily-decorated cute outdoor environments where chibis + tons of smiling-face food are gathered. Pop-Mart designer-vinyl pastel kawaii register. bex.ai Instagram aesthetic. The viewer's reaction: "I want to PICNIC there with kawaii food and friends!"
 
 Each entry: 22-35 words. ONE specific kawaii setting. NO chibis, NO food hero (those come from other pools) — JUST the setting + its decor.
 
@@ -46,4 +48,7 @@ Kevin wants VARIETY — picnics, beaches, camping, treehouses, gardens, boats, h
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering. Aim for ~90% outdoor variety.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

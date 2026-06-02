@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_landscape_time_of_day.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot cozy-landscape — short cinematic time/light descriptors that fix WHEN this cozy world is rendered. Path covers full day + cozy-evening + dawn (NOT deep-night specifically — that's night-meadow path).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot cozy-landscape — short cinematic time/light descriptors that fix WHEN this cozy world is rendered. Path covers full day + cozy-evening + dawn (NOT deep-night specifically — that's night-meadow path).
 
 Each entry: 8-15 words. ONE time-of-day moment with signature sky color + ambient light quality.
 
@@ -40,4 +42,7 @@ Dedup by time + color cast + light detail.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/night_meadow_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} NIGHT-MEADOW SCENE descriptions for CuddleBot's night-meadow path. Adorable twilight / nighttime / starlit / firefly / glow-worm / moonlit settings — meadow, forest clearing, glade, hill-top, garden, lily-pond at dusk. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Beatrix-Potter-twilight aesthetic. NEVER photoreal, NEVER documentary nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} NIGHT-MEADOW SCENE descriptions for CuddleBot's night-meadow path. Adorable twilight / nighttime / starlit / firefly / glow-worm / moonlit settings — meadow, forest clearing, glade, hill-top, garden, lily-pond at dusk. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Beatrix-Potter-twilight aesthetic. NEVER photoreal, NEVER documentary nature.
 
 Each entry: 15-25 words. ONE specific night-meadow scene with HABITAT details + cute interaction hint. The scene must READ as twilight / night (deep indigo + violet + warm-amber lantern-pop) — never just "dark".
 
@@ -57,4 +59,7 @@ Deduplicate by: habitat-type + key-feature + light-source. "Firefly meadow" and 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

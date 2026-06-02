@@ -10,7 +10,9 @@ generatePool({
   total: 692,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MULTI-CREATURE arctic entries for ChibiBot's snowy-arctic path. The pool already has 346 SOLO entries — your job is to add PAIR and TRIO entries so renders vary character count.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MULTI-CREATURE arctic entries for ChibiBot's snowy-arctic path. The pool already has 346 SOLO entries — your job is to add PAIR and TRIO entries so renders vary character count.
 
 This batch is ALL multi-character. Mix ~60% PAIR / 40% TRIO.
 
@@ -63,4 +65,7 @@ UNIQUE species combination + activity per entry.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

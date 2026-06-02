@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cuddle_plush_lighting.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} CUDDLEBOT plush-world ULTRA-CUTE cozy lighting + atmosphere descriptors. Each entry combines cozy environment + light quality + atmospheric phenomenon. Slight Sanrio / Hello-Kitty / Pusheen / Studio-Ghibli kawaii nudge — softer, dreamier, rosier than typical storybook. 10-20 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CUDDLEBOT plush-world ULTRA-CUTE cozy lighting + atmosphere descriptors. Each entry combines cozy environment + light quality + atmospheric phenomenon. Slight Sanrio / Hello-Kitty / Pusheen / Studio-Ghibli kawaii nudge — softer, dreamier, rosier than typical storybook. 10-20 words per entry.
 
 ━━━ THE WORLD ━━━
 Plush stuffed-animal cozy adventures — forest campsites, picnic meadows, sailboats, attic bedrooms, treehouses, tea gardens, snow forts, library nooks, garden plots, beach coves, mountain ridges. Cuddlebot brand: cute-cozy-cuddly maximalism.
@@ -66,4 +68,7 @@ Each entry: 10-20 words, comma-separated phrases. Always cute-cozy:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

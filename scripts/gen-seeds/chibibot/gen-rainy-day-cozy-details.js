@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} COZY-SHELTER DETAILS for ChibiBot rainy-day-cozy — the tiny props that populate a cozy outdoor-shelter scene during rain. Each render picks 3 (pickN:3).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY-SHELTER DETAILS for ChibiBot rainy-day-cozy — the tiny props that populate a cozy outdoor-shelter scene during rain. Each render picks 3 (pickN:3).
 
 Each entry: 8-15 words. ONE specific cozy-shelter prop.
 
@@ -32,4 +34,7 @@ Dedup by prop-type + concrete material/detail.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

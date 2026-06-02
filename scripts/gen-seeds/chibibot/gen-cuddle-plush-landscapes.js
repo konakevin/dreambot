@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cuddle_plush_landscapes.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} CUDDLEBOT plush-world wider-environment descriptions — landscape as protagonist, plushies small or absent. Handcrafted miniature plush-world environments. ULTRA-CUTE storybook warmth, soft cozy + dreamy + rosy, magazine-cover energy. Slight Sanrio/Hello-Kitty/Studio-Ghibli/Totoro/Pusheen kawaii nudge. Each entry 18-28 words.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CUDDLEBOT plush-world wider-environment descriptions — landscape as protagonist, plushies small or absent. Handcrafted miniature plush-world environments. ULTRA-CUTE storybook warmth, soft cozy + dreamy + rosy, magazine-cover energy. Slight Sanrio/Hello-Kitty/Studio-Ghibli/Totoro/Pusheen kawaii nudge. Each entry 18-28 words.
 
 ━━━ CUTE NUDGE — APPLY TO EVERY ENTRY ━━━
 - pastel + dreamy + soft-pink-rosy palette layering
@@ -70,4 +72,7 @@ generatePool({
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

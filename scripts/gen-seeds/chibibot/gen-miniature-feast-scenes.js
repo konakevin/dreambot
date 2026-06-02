@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} MINIATURE FEAST SCENE descriptions for CuddleBot's miniature-feast path — tiny food and cooking scenarios. Species-agnostic (creature placed later).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MINIATURE FEAST SCENE descriptions for CuddleBot's miniature-feast path — tiny food and cooking scenarios. Species-agnostic (creature placed later).
 
 Each entry: 15-25 words. One specific food/cooking/feast scenario at miniature scale.
 
@@ -39,4 +41,7 @@ Each entry: 15-25 words. One specific food/cooking/feast scenario at miniature s
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

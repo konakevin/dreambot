@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/twilight_village_activities.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} TWILIGHT-VILLAGE ACTIVITIES for ChibiBot twilight-village — what a small peripheral creature is doing in the twilight village foreground. Story-beat actions.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} TWILIGHT-VILLAGE ACTIVITIES for ChibiBot twilight-village — what a small peripheral creature is doing in the twilight village foreground. Story-beat actions.
 
 Each entry: 12-22 words. ACTIVE VERB-LED. Include a specific biome-fitting prop or destination. NO creature species names.
 
@@ -38,4 +40,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering. Each begins with an active verb-led phrase.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

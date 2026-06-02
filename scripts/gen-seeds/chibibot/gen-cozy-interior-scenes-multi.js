@@ -6,7 +6,9 @@ generatePool({
   total: 400,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} MULTI-CHARACTER COZY INTERIOR scenes for ChibiBot's cozy-interior path. The pool already has 200 single-creature scenes — your job is to add PAIR + TRIO scenes for character variance.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MULTI-CHARACTER COZY INTERIOR scenes for ChibiBot's cozy-interior path. The pool already has 200 single-creature scenes — your job is to add PAIR + TRIO scenes for character variance.
 
 Pixar / Sanrio / Studio Ghibli STYLIZED. NEVER photoreal. Mix baby + adult creatures freely. Cozy lived-in INTERIOR rooms — snug cottage living rooms, library nooks, kitchens, bedrooms, attic studios.
 
@@ -45,4 +47,7 @@ UNIQUE interior-type + species-combination + activity per entry.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

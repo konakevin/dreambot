@@ -5,7 +5,9 @@ generatePool({
   total: 400,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CUTE-CREATURE entries for ChibiBot's unified critter pool — a tagged, multi-biome roster of adorable real animals and fantasy critters that ALL paths across ChibiBot will pull from. Each entry has BIOME TAGS so paths can filter to creatures that fit their setting.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE-CREATURE entries for ChibiBot's unified critter pool — a tagged, multi-biome roster of adorable real animals and fantasy critters that ALL paths across ChibiBot will pull from. Each entry has BIOME TAGS so paths can filter to creatures that fit their setting.
 
 ChibiBot is CREATURES ONLY — adorable animals and fantasy critters. NO humans of any kind (no children, no adults, no people).
 
@@ -75,4 +77,7 @@ Dedup by: species + signature feature. "baby fox kit with white-tipped ears" and
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} objects exactly matching the schema { "tags": [...], "description": "..." }. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

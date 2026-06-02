@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} BATH-TIME ACTIVITY descriptions for ChibiBot — the heart-melting BATH MOMENT an adorable tiny creature is having right now. The ACTIVITY is what the creature is DOING in/around the bath. Each must read as a candid storybook moment that produces "AWWW + I want to hug it" instantly.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BATH-TIME ACTIVITY descriptions for ChibiBot — the heart-melting BATH MOMENT an adorable tiny creature is having right now. The ACTIVITY is what the creature is DOING in/around the bath. Each must read as a candid storybook moment that produces "AWWW + I want to hug it" instantly.
 
 Each entry: 15-25 words. ONE specific bath activity. Describe the creature's body posture / expression / interaction with bath elements. NO setting language (separate axis). NO amenities themselves (separate axis) — they can be USED in the activity verb but not described as setting props.
 
@@ -36,4 +38,7 @@ Dedup by: verb + posture + bath element. "blowing bubbles" and "puffed-cheek blo
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

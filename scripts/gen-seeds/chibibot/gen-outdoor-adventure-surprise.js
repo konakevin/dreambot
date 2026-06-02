@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/outdoor_adventure_surprise.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot outdoor-adventure — tiny second-tier details the eye finds after the wilderness + foreground creature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot outdoor-adventure — tiny second-tier details the eye finds after the wilderness + foreground creature.
 
 Each entry: 12-25 words. ONE specific tucked-away wilderness surprise.
 
@@ -30,4 +32,7 @@ Each entry: 12-25 words. ONE specific tucked-away wilderness surprise.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

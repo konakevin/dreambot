@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/rainy_interior_phenomena.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot rainy-day-outdoor scenes — magical, weather, or seasonal events that crank atmospheric drama (60%-gated, fires sometimes).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot rainy-day-outdoor scenes — magical, weather, or seasonal events that crank atmospheric drama (60%-gated, fires sometimes).
 
 Each entry: 15-25 words. ONE event woven into a rainy-outdoor frame.
 
@@ -27,4 +29,7 @@ Each entry: 15-25 words. ONE event woven into a rainy-outdoor frame.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

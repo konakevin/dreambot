@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_atmospheres.json',
   total: 60,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} COZY ATMOSPHERIC DETAIL descriptions for ChibiBot — the haze, dust, steam, condensation, smoke, particles in the air that make a room feel TANGIBLY warm. 15-30 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY ATMOSPHERIC DETAIL descriptions for ChibiBot — the haze, dust, steam, condensation, smoke, particles in the air that make a room feel TANGIBLY warm. 15-30 words each.
 
 ━━━ THE FORMULA ━━━
 Each entry names a specific atmospheric phenomenon visible in the room/scene that makes warmth and time-of-day FEELABLE. These are subtle but mandatory cozy ingredients.
@@ -39,4 +41,7 @@ EX-4: "Faint curl of pale smoke from a just-extinguished beeswax candle, tracing
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

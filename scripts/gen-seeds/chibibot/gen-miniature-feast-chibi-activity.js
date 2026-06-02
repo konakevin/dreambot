@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/miniature_feast_chibi_activity.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CHIBI-WITH-FOOD ACTIVITIES for ChibiBot miniature-feast — what an adorable chibi creature is doing WITH a kawaii smiling-face food/drink. The chibi is INTERACTING with the food.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CHIBI-WITH-FOOD ACTIVITIES for ChibiBot miniature-feast — what an adorable chibi creature is doing WITH a kawaii smiling-face food/drink. The chibi is INTERACTING with the food.
 
 Each entry: 12-22 words. ACTIVE VERB-LED. NO chibi species names, NO food hero description (those come from other pools). Just the activity.
 
@@ -46,4 +48,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering. Each begins with an active verb-led phrase.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

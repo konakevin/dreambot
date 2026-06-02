@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/bookish_sanctuary_scenes.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} BOOKISH-SANCTUARY scene descriptions for ChibiBot — but these are CONCEPT ART of impossibly book-saturated spaces, NOT real libraries. Painterly storybook illustration, never photography. 25-45 words each. NO PEOPLE.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BOOKISH-SANCTUARY scene descriptions for ChibiBot — but these are CONCEPT ART of impossibly book-saturated spaces, NOT real libraries. Painterly storybook illustration, never photography. 25-45 words each. NO PEOPLE.
 
 ━━━ THE LOAD-BEARING RULE ━━━
 These libraries do NOT exist as real photographable rooms. They are illustrated concept-art spaces with architectural ambition + book density that no real library actually achieves. If the entry could be a Pinterest "cozy library" photo of an actual study, IT IS WRONG.
@@ -60,4 +62,7 @@ EX-5: "Sleeping-loft library above the main study, ladder leaning against the lo
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. Dense, comma-rich, concept-art-ambitious. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

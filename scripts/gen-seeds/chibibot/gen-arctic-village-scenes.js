@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ARCTIC-VILLAGE SCENE descriptions for CuddleBot's arctic-village path. Cozy snow / ice / aurora / sub-arctic / alpine VILLAGES + LOG-CABINS + IGLU-CLUSTERS + SNOWY-PINE-COTTAGES that the viewer wants to move into. The ARCHITECTURE and ATMOSPHERE are the hero — not the creatures. Pixar / Sanrio / Studio Ghibli / Frozen / Polar-Express aesthetic. NEVER photoreal, NEVER documentary nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ARCTIC-VILLAGE SCENE descriptions for CuddleBot's arctic-village path. Cozy snow / ice / aurora / sub-arctic / alpine VILLAGES + LOG-CABINS + IGLU-CLUSTERS + SNOWY-PINE-COTTAGES that the viewer wants to move into. The ARCHITECTURE and ATMOSPHERE are the hero — not the creatures. Pixar / Sanrio / Studio Ghibli / Frozen / Polar-Express aesthetic. NEVER photoreal, NEVER documentary nature.
 
 Each entry: 18-28 words. ONE specific arctic-village scene with COZY ARCHITECTURE detail.
 
@@ -59,4 +61,7 @@ Deduplicate by: village-type + key-architectural-feature + time-of-day + creatur
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

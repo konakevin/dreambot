@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} GROUP-OF-FRIENDS rainy-day activities for ChibiBot rainy-day-outdoor — multi-creature group scenes of chibi friends playing together IN the rain. NOT solo. NOT one creature. A GROUP of 2-4 friends interacting with each other and the rain.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} GROUP-OF-FRIENDS rainy-day activities for ChibiBot rainy-day-outdoor — multi-creature group scenes of chibi friends playing together IN the rain. NOT solo. NOT one creature. A GROUP of 2-4 friends interacting with each other and the rain.
 
 Each entry: 20-35 words. ONE specific group activity. Describes WHAT THE FRIENDS ARE DOING TOGETHER.
 
@@ -69,4 +71,7 @@ Think Calvin-and-Hobbes-with-friends / Studio-Ghibli-kids-in-the-rain / Charlie-
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. Each starts with a group-structure phrase ("Three friends...", "A pair of...", "Four creatures together..."). Each has a SHARED activity verb + action evidence.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

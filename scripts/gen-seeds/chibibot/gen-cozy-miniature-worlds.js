@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 10,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} COZY MINIATURE WORLD descriptions for CuddleBot's cozy-landscape path — tiny magical cozy worlds. Miniature-scale + storybook-warm + wholesome. No creatures needed (setting is hero).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY MINIATURE WORLD descriptions for CuddleBot's cozy-landscape path — tiny magical cozy worlds. Miniature-scale + storybook-warm + wholesome. No creatures needed (setting is hero).
 
 Each entry: 15-30 words. One specific tiny cozy world.
 
@@ -44,4 +46,7 @@ Each entry: 15-30 words. One specific tiny cozy world.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

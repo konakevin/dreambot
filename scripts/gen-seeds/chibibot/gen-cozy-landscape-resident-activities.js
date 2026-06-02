@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} TINY-RESIDENT ACTIVITY descriptions for ChibiBot cozy-landscape — what the SOLO tiny creature is DOING somewhere in the wider cozy world. The resident is a TINY scale-prover (small but visible), going about their day with a STORY-driven activity. NOT a pose, NOT centered hero — they're a small element in the larger frame.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TINY-RESIDENT ACTIVITY descriptions for ChibiBot cozy-landscape — what the SOLO tiny creature is DOING somewhere in the wider cozy world. The resident is a TINY scale-prover (small but visible), going about their day with a STORY-driven activity. NOT a pose, NOT centered hero — they're a small element in the larger frame.
 
 Each entry: 15-25 words. ONE specific story-driven activity featuring a SINGLE solo creature. Active verb-led. The activity should imply a NARRATIVE moment — the viewer can see what the creature is doing AND read a tiny story.
 
@@ -60,4 +62,7 @@ Dedup by: verb + prop + posture/location. "walking a path with a basket" and "ca
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. Each begins with an active verb.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

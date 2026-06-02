@@ -11,7 +11,9 @@ generatePool({
   total: 314,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ARCTIC-VILLAGE SCENE descriptions for CuddleBot's arctic-village path. The existing pool features baby creatures in most scenes — your job is to add ADULT-creature scenes (and some empty-architecture scenes) to balance.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ARCTIC-VILLAGE SCENE descriptions for CuddleBot's arctic-village path. The existing pool features baby creatures in most scenes — your job is to add ADULT-creature scenes (and some empty-architecture scenes) to balance.
 
 Cozy snow / ice / aurora / sub-arctic / alpine VILLAGES + LOG-CABINS + IGLOO-CLUSTERS + SNOWY-PINE-COTTAGES. Pixar / Sanrio / Studio Ghibli / Frozen / Polar-Express STYLIZED — never photoreal, never documentary.
 
@@ -74,4 +76,7 @@ Deduplicate by: village-type + key-architectural-feature + creature-species (or 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

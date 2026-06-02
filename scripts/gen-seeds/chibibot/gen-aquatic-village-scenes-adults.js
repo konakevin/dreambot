@@ -11,7 +11,9 @@ generatePool({
   total: 392,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} AQUATIC-VILLAGE SCENE descriptions for CuddleBot's aquatic-village path. The existing pool features baby creatures in nearly every scene — your job is to add ADULT-creature scenes (and some empty-architecture scenes) to balance.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} AQUATIC-VILLAGE SCENE descriptions for CuddleBot's aquatic-village path. The existing pool features baby creatures in nearly every scene — your job is to add ADULT-creature scenes (and some empty-architecture scenes) to balance.
 
 Cozy underwater / surface-water / tide-pool / lily-pond / coastal-harbor VILLAGES + COTTAGES + COMMUNITIES. Pixar / Sanrio / Studio Ghibli / Finding-Nemo STYLIZED — never photoreal, never documentary.
 
@@ -75,4 +77,7 @@ Deduplicate by: village-type + key-architectural-feature + creature-species (or 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

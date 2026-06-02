@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} WORLD-DETAIL elements for ChibiBot cozy-landscape — the tiny architectural / nature / props that POPULATE a cozy world and prove the scene is alive. Each render picks 3 (pickN:3) so each entry must be distinct enough to layer with two others without overlap. These are the obsessive details that make a cozy world feel LIVED-IN.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} WORLD-DETAIL elements for ChibiBot cozy-landscape — the tiny architectural / nature / props that POPULATE a cozy world and prove the scene is alive. Each render picks 3 (pickN:3) so each entry must be distinct enough to layer with two others without overlap. These are the obsessive details that make a cozy world feel LIVED-IN.
 
 Each entry: 10-20 words. ONE specific detail. NO time-of-day / weather / creature / activity language.
 
@@ -42,4 +44,7 @@ Dedup by: detail-type + concrete material/feature. "climbing roses on a trellis"
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

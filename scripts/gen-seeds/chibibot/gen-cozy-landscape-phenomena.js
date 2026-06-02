@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_landscape_phenomena.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot cozy-landscape scenes — magical, seasonal, or atmospheric events that crank atmospheric drama when they fire (60%-gated, fires sometimes).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot cozy-landscape scenes — magical, seasonal, or atmospheric events that crank atmospheric drama when they fire (60%-gated, fires sometimes).
 
 Each entry: 15-25 words. ONE magical / seasonal / atmospheric event woven into the cozy-world frame.
 
@@ -40,4 +42,7 @@ Dedup by phenomenon-type + signature.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

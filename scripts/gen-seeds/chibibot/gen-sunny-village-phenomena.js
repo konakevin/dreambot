@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/sunny_village_phenomena.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} ENVIRONMENTAL PHENOMENA for ChibiBot sunny-village — atmospheric/weather/magical layers that fire on 60% of renders, adding a wow-moment.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} ENVIRONMENTAL PHENOMENA for ChibiBot sunny-village — atmospheric/weather/magical layers that fire on 60% of renders, adding a wow-moment.
 
 Each entry: 12-25 words. ONE specific environmental phenomenon. Stack on base lighting.
 
@@ -34,4 +36,7 @@ Each entry: 12-25 words. ONE specific environmental phenomenon. Stack on base li
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

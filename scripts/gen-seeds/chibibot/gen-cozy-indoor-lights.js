@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_indoor_lights.json',
   total: 60,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} INDOOR COZY LIGHTING descriptions for ChibiBot — specific warm interior light sources that act as the dominant or accent lighting of a painted-storybook-illustration interior scene. 18-32 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} INDOOR COZY LIGHTING descriptions for ChibiBot — specific warm interior light sources that act as the dominant or accent lighting of a painted-storybook-illustration interior scene. 18-32 words each.
 
 ━━━ THE CORE FORMULA ━━━
 Each entry names ONE INTERIOR light source and describes (a) its character, (b) its color/warmth, (c) what surfaces it pools on, (d) the cozy mood it creates. ALWAYS warm-dominant. Required vocabulary register includes phrases from this comfort-lighting palette: "warm lamplight glow", "candlelit warmth", "soft window light", "diffused dreamy lighting", "gentle bloom on highlights", "soft volumetric light", "golden hour haze", "honey-amber glow", "soft halation", "warm pool of light".
@@ -41,4 +43,7 @@ EX-4: "Cluster of beeswax candles in pewter holders along the mantel, fresh flam
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

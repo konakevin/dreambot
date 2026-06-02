@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/miniature_feast_food_decoration.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} KAWAII FOOD-DECORATION elements for ChibiBot miniature-feast scenes — tiny details scattered throughout the scene to amplify cute-maxxing. Pop-Mart designer-vinyl pastel kawaii register.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} KAWAII FOOD-DECORATION elements for ChibiBot miniature-feast scenes — tiny details scattered throughout the scene to amplify cute-maxxing. Pop-Mart designer-vinyl pastel kawaii register.
 
 Each entry: 10-20 words. ONE specific decoration. NO chibi creatures, NO food hero, NO scene setting.
 
@@ -53,4 +55,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

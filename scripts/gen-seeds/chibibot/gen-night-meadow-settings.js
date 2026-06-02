@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} NIGHT-MEADOW SETTING descriptions for ChibiBot — the spectacular NIGHTTIME OUTDOOR STAGE where adorable cuddly critters share twilight/night-time moments together under the stars. The SETTING is the meadow/glade/forest-clearing/hilltop/etc. — the where, the ground, the framing landscape. Each entry must feel like a frame from a different page of a "tiny creatures gazing at the stars" picture book.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} NIGHT-MEADOW SETTING descriptions for ChibiBot — the spectacular NIGHTTIME OUTDOOR STAGE where adorable cuddly critters share twilight/night-time moments together under the stars. The SETTING is the meadow/glade/forest-clearing/hilltop/etc. — the where, the ground, the framing landscape. Each entry must feel like a frame from a different page of a "tiny creatures gazing at the stars" picture book.
 
 Each entry: 15-25 words. ONE specific nighttime outdoor setting. NO creatures (separate axis). NO interaction / activity (separate axis). NO time-of-night language ("under a full moon" / "at dusk" — separate axis). NO props ("with a lantern" — separate axis). NO weather / phenomenon. Just the SETTING — the geography, ground, surrounding flora, and ambient nighttime mood.
 
@@ -50,4 +52,7 @@ Dedup by: landscape type + ground texture + signature feature. "wildflower meado
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

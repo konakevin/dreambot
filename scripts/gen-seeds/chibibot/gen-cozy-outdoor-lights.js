@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_outdoor_lights.json',
   total: 60,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} OUTDOOR COZY LIGHTING descriptions for ChibiBot's village paths — specific warm exterior light moments that establish the painted-storybook-illustration outdoor cozy register (cottagecore village, snowy hamlet, sunny harbor, jungle-canopy village, twilight lantern street, etc). 18-32 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OUTDOOR COZY LIGHTING descriptions for ChibiBot's village paths — specific warm exterior light moments that establish the painted-storybook-illustration outdoor cozy register (cottagecore village, snowy hamlet, sunny harbor, jungle-canopy village, twilight lantern street, etc). 18-32 words each.
 
 ━━━ THE CORE FORMULA ━━━
 Each entry names ONE OUTDOOR lighting moment and describes (a) the light source / time of day, (b) the warmth tone, (c) what surfaces / atmosphere it touches, (d) the cozy mood. Required vocabulary register: "warm lamplight glow", "golden hour haze", "soft window light spilling onto cobblestones", "diffused dreamy lighting", "soft volumetric light", "gentle bloom on highlights", "misty morning light", "twilight glow", "lantern-pop", "fairy-light haze".
@@ -47,4 +49,7 @@ EX-4: "Snow falling softly under warm string-lights strung overhead, every snowf
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

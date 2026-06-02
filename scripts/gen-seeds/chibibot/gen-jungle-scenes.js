@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} JUNGLE-CANOPY SCENE descriptions for CuddleBot's jungle-canopy path. Adorable rainforest / tropical / canopy / jungle-stream / mangrove / cloud-forest settings where cute baby jungle creatures live. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Jungle-Book / Encanto aesthetic. NEVER photoreal, NEVER documentary nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} JUNGLE-CANOPY SCENE descriptions for CuddleBot's jungle-canopy path. Adorable rainforest / tropical / canopy / jungle-stream / mangrove / cloud-forest settings where cute baby jungle creatures live. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Jungle-Book / Encanto aesthetic. NEVER photoreal, NEVER documentary nature.
 
 Each entry: 15-25 words. ONE specific jungle scene with HABITAT details + cute interaction hint.
 
@@ -56,4 +58,7 @@ Deduplicate by: habitat-type + key-feature + time-of-day. "Jungle clearing with 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_interior_rooms.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CHIBI-SCALE COZY INTERIORS for ChibiBot cozy-interior. The HERO of this pool is REAL-OBJECT-AS-HOME (chibi has converted a normal-sized human object into a fully-decorated tiny home). A MINORITY (~40%) are PURPOSE-BUILT chibi-scale dwellings (mushroom-house / treehouse / chibi-cottage). Every entry is HEAVILY DECORATED COTTAGECORE.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CHIBI-SCALE COZY INTERIORS for ChibiBot cozy-interior. The HERO of this pool is REAL-OBJECT-AS-HOME (chibi has converted a normal-sized human object into a fully-decorated tiny home). A MINORITY (~40%) are PURPOSE-BUILT chibi-scale dwellings (mushroom-house / treehouse / chibi-cottage). Every entry is HEAVILY DECORATED COTTAGECORE.
 
 Each entry: 18-30 words. ONE specific chibi-scale interior. NO creatures, time-of-day, weather, or activity verbs.
 
@@ -49,4 +51,7 @@ Each entry MUST visibly include at least 3 of: blankets/quilts, warm light sourc
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering. Aim for 60% real-object-as-home, 40% purpose-built tiny-chibi-dwelling.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

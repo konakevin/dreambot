@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SUNNY-VILLAGE SCENE descriptions for CuddleBot's sunny-village path. Cozy BRIGHT-SUNNY DAYTIME VILLAGES + COTTAGES + SEASIDE-HAMLETS that the viewer wants to live in. The ARCHITECTURE and SUN-DRENCHED ATMOSPHERE are the hero — not the creatures. Pixar / Sanrio / Studio Ghibli / Greek-island-cottage / Provence-pastoral aesthetic. NEVER photoreal, NEVER documentary nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUNNY-VILLAGE SCENE descriptions for CuddleBot's sunny-village path. Cozy BRIGHT-SUNNY DAYTIME VILLAGES + COTTAGES + SEASIDE-HAMLETS that the viewer wants to live in. The ARCHITECTURE and SUN-DRENCHED ATMOSPHERE are the hero — not the creatures. Pixar / Sanrio / Studio Ghibli / Greek-island-cottage / Provence-pastoral aesthetic. NEVER photoreal, NEVER documentary nature.
 
 Each entry: 18-28 words. ONE specific sunny-village scene with COZY ARCHITECTURE detail.
 
@@ -61,4 +63,7 @@ Deduplicate by: village-type + key-architectural-feature + creature-vs-empty + l
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

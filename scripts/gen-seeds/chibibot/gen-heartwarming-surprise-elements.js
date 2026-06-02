@@ -5,7 +5,9 @@ generatePool({
   total: 150,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot heartwarming creature scenes — tiny secondary subjects, ambient details, or background life that proves there's a bigger picture-book world. The hero creature(s) are the main subject; the surprise element is the second-tier detail the eye finds AFTER the hero.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot heartwarming creature scenes — tiny secondary subjects, ambient details, or background life that proves there's a bigger picture-book world. The hero creature(s) are the main subject; the surprise element is the second-tier detail the eye finds AFTER the hero.
 
 Each entry: 12-25 words. ONE specific surprise element with concrete visual detail.
 
@@ -35,4 +37,7 @@ Dedup by: element type + concrete detail. "firefly drifting near the window" and
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

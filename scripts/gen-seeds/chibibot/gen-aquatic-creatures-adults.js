@@ -10,7 +10,9 @@ generatePool({
   total: 340,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ADULT aquatic creature descriptions to balance an existing ChibiBot pool. The pool currently leans heavily juvenile — your job is to add MATURE ADULT counterparts.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ADULT aquatic creature descriptions to balance an existing ChibiBot pool. The pool currently leans heavily juvenile — your job is to add MATURE ADULT counterparts.
 
 Pixar / Sanrio / Studio Ghibli / Finding-Nemo STYLIZED aesthetic — cute, never photoreal. ADULT-cute (mature, weathered, dignified, characterful) — NOT baby-cute.
 
@@ -57,4 +59,7 @@ EVERY ENTRY STARTS WITH A UNIQUE SPECIES NAME. Existing 200 entries are baby ver
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

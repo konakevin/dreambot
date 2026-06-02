@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/rainy_day_cozy_time_of_day.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot rainy-day-cozy — when this cozy-rain-shelter moment is happening. The shelter is warm-cozy inside; the exterior is cool-blue-grey from rain. The time-of-day shapes both ambient quality.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot rainy-day-cozy — when this cozy-rain-shelter moment is happening. The shelter is warm-cozy inside; the exterior is cool-blue-grey from rain. The time-of-day shapes both ambient quality.
 
 Each entry: 8-15 words.
 
@@ -31,4 +33,7 @@ Dedup by time + ambient quality + signature detail.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

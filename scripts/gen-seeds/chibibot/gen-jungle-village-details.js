@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_details.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} JUNGLE-VILLAGE DETAILS for ChibiBot — the tiny architectural / nature / prop details that populate a cozy jungle village. Each render picks 3 (pickN:3).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} JUNGLE-VILLAGE DETAILS for ChibiBot — the tiny architectural / nature / prop details that populate a cozy jungle village. Each render picks 3 (pickN:3).
 
 Each entry: 8-15 words. ONE specific jungle-village detail.
 
@@ -28,4 +30,7 @@ Each entry: 8-15 words. ONE specific jungle-village detail.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

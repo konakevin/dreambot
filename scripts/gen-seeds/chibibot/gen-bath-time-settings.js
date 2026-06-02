@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} BATH-TIME SETTING descriptions for ChibiBot — the WILD, SPECTACULAR, FUN destinations where adorable tiny creatures take their baths. The SETTING is the bath vessel + its location, and we want EPIC PICTURE-BOOK VARIETY — every entry feels like a frame from a different page of a "tiny creatures' bathtime around the world" travel book. We want viewers going "wait, WHERE is this bath?!" not "another cute clawfoot tub."
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} BATH-TIME SETTING descriptions for ChibiBot — the WILD, SPECTACULAR, FUN destinations where adorable tiny creatures take their baths. The SETTING is the bath vessel + its location, and we want EPIC PICTURE-BOOK VARIETY — every entry feels like a frame from a different page of a "tiny creatures' bathtime around the world" travel book. We want viewers going "wait, WHERE is this bath?!" not "another cute clawfoot tub."
 
 Each entry: 15-30 words. ONE specific bath vessel + a SPECTACULAR or UNEXPECTED location. NO creatures (separate axis). NO time-of-day or weather (separate axes). NO activity verbs (separate axis). NO amenities/props beyond the vessel itself.
 
@@ -49,4 +51,7 @@ Dedup by: location-type + vessel-type + signature scale detail. "tub on a cloud"
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

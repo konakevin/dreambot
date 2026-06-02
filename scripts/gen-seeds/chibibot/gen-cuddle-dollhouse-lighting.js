@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cuddle_dollhouse_lighting.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `Write ${n} CUDDLEBOT dollhouse-life ULTRA-CUTE cozy-domestic lighting + atmosphere descriptors. Each entry combines miniature-interior lighting + ambient warmth + atmospheric detail. Slight Sanrio / Pusheen / Hello-Kitty kawaii nudge — softer, dreamier, rosier than typical cozy interior. 10-20 words per entry.
+  metaPrompt: (
+    n
+  ) => `Write ${n} CUDDLEBOT dollhouse-life ULTRA-CUTE cozy-domestic lighting + atmosphere descriptors. Each entry combines miniature-interior lighting + ambient warmth + atmospheric detail. Slight Sanrio / Pusheen / Hello-Kitty kawaii nudge — softer, dreamier, rosier than typical cozy interior. 10-20 words per entry.
 
 ━━━ THE WORLD ━━━
 Cuddlebot dollhouse-scale miniature interiors — Victorian parlors, modern kitchens, nurseries, libraries, garden-rooms, bathrooms, bakery shops, music-rooms, dining-rooms, attics, greenhouses, tea-rooms, studies, porches, playrooms, cottage hearths, bedrooms. ULTRA-CUTE with plushie-creature inhabitants.
@@ -73,4 +75,7 @@ Each entry: 10-20 words, comma-separated phrases:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/miniature_feast_kawaii_atmosphere.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} KAWAII ATMOSPHERIC layers for ChibiBot miniature-feast — the magical environmental effect that amplifies cute-maxxing. Pop-Mart designer-vinyl pastel kawaii register.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} KAWAII ATMOSPHERIC layers for ChibiBot miniature-feast — the magical environmental effect that amplifies cute-maxxing. Pop-Mart designer-vinyl pastel kawaii register.
 
 Each entry: 12-22 words. ONE specific atmospheric layer. NO chibis, NO food, NO scene.
 
@@ -52,4 +54,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

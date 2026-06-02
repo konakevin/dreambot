@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/heartwarming_time_of_day.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot — short cinematic time/light descriptors that fix WHEN a heartwarming creature scene takes place. The scene's emotional temperature comes from this axis.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot — short cinematic time/light descriptors that fix WHEN a heartwarming creature scene takes place. The scene's emotional temperature comes from this axis.
 
 Each entry: 8-15 words. ONE time-of-day moment with its signature color/light quality. Concrete sensory anchors that Flux can render directly.
 
@@ -36,4 +38,7 @@ Dedup by: time-of-day + color cast + light-quality detail. "dawn with pink sky" 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

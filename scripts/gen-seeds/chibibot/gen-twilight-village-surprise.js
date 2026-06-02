@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/twilight_village_surprise.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} SURPRISE-ELEMENT descriptions for ChibiBot twilight-village — tiny second-tier details the eye finds after the village + foreground creature.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} SURPRISE-ELEMENT descriptions for ChibiBot twilight-village — tiny second-tier details the eye finds after the village + foreground creature.
 
 Each entry: 12-25 words. ONE specific tucked-away surprise detail.
 
@@ -30,4 +32,7 @@ Each entry: 12-25 words. ONE specific tucked-away surprise detail.
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/aquatic_creatures.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CUTE AQUATIC CREATURE descriptions for CuddleBot's cuddly-aquatic path. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Finding-Nemo-baby aesthetic. NEVER photoreal, NEVER documentary nature. Adorable stylized baby aquatic creatures.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE AQUATIC CREATURE descriptions for CuddleBot's cuddly-aquatic path. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Finding-Nemo-baby aesthetic. NEVER photoreal, NEVER documentary nature. Adorable stylized baby aquatic creatures.
 
 Each entry: 10-20 words. ONE specific cute aquatic creature with 2-3 identifying cute details (eye type, body texture, accessories, pose).
 
@@ -46,4 +48,7 @@ EVERY ENTRY STARTS WITH A UNIQUE SPECIES NAME. Scan "ALREADY GENERATED" — if a
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/lighting.json',
   total: 200,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for CuddleBot — soft storybook lighting treatments with BROAD variety. 10-20 words each. Cozy/wholesome always, but the previous pool had 39/50 entries saying "warm" — far too warm-heavy. Invent fresh treatments spanning the full time-of-day / temperature / source spectrum.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING descriptions for CuddleBot — soft storybook lighting treatments with BROAD variety. 10-20 words each. Cozy/wholesome always, but the previous pool had 39/50 entries saying "warm" — far too warm-heavy. Invent fresh treatments spanning the full time-of-day / temperature / source spectrum.
 
 ━━━ HARD DIVERSITY CAPS (enforced) ━━━
 Across the full pool of 50:
@@ -25,4 +27,7 @@ No two lighting treatments may share the same primary source AND same palette. V
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/outdoor_adventure_time_of_day.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY descriptions for ChibiBot outdoor-adventure — the lighting time across a wilderness adventure scene. Pixar painterly storybook register.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-DAY descriptions for ChibiBot outdoor-adventure — the lighting time across a wilderness adventure scene. Pixar painterly storybook register.
 
 Each entry: 10-18 words. ONE specific time-of-day lighting state.
 
@@ -35,4 +37,7 @@ Each entry: 10-18 words. ONE specific time-of-day lighting state.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

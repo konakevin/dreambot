@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_village_activities.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ARCTIC-VILLAGE ACTIVITIES for ChibiBot arctic-village — what a small peripheral creature is doing in the snow-village foreground. Story-beat actions that make the scene feel lived-in.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ARCTIC-VILLAGE ACTIVITIES for ChibiBot arctic-village — what a small peripheral creature is doing in the snow-village foreground. Story-beat actions that make the scene feel lived-in.
 
 Each entry: 12-22 words. ACTIVE VERB-LED. Include a specific arctic prop or destination. NO creature species names.
 
@@ -52,4 +54,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering. Each begins with an active verb-led phrase.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

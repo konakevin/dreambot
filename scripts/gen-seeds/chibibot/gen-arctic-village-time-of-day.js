@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_village_time_of_day.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY descriptions for ChibiBot arctic-village — the lighting time across an arctic-village scene. Always WARM-cozy contrast against cool snow despite the cold biome.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-DAY descriptions for ChibiBot arctic-village — the lighting time across an arctic-village scene. Always WARM-cozy contrast against cool snow despite the cold biome.
 
 Each entry: 10-18 words. ONE specific time-of-day lighting state.
 
@@ -33,4 +35,7 @@ Each entry: 10-18 words. ONE specific time-of-day lighting state.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

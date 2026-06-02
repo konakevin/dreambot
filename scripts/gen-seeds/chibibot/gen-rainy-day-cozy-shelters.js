@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} COZY-SHELTER-FROM-RAIN settings for ChibiBot rainy-day-cozy — outdoor scenes where chibi friends find a COZY SHELTER from the rain. The shelter is small/intimate (one giant mushroom cap, a covered porch, under a leaf, inside a hollow log, beneath a stone bridge). Rain falls VISIBLY around the shelter while the friends stay dry and warm inside it.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY-SHELTER-FROM-RAIN settings for ChibiBot rainy-day-cozy — outdoor scenes where chibi friends find a COZY SHELTER from the rain. The shelter is small/intimate (one giant mushroom cap, a covered porch, under a leaf, inside a hollow log, beneath a stone bridge). Rain falls VISIBLY around the shelter while the friends stay dry and warm inside it.
 
 Each entry: 15-25 words. ONE specific cozy shelter setting in the rain. NO creatures (separate axis). NO time-of-day or weather (separate axes). NO activity (separate axis). Just the shelter + its outdoor rainy surrounding.
 
@@ -46,4 +48,7 @@ Dedup by: shelter type + surrounding feature.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

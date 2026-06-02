@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/atmospheres.json',
   total: 200,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for CuddleBot — soft particles, warm glows, and gentle atmospheric elements. Always wholesome + soft + warm. Never harsh / dark.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for CuddleBot — soft particles, warm glows, and gentle atmospheric elements. Always wholesome + soft + warm. Never harsh / dark.
 
 Each entry: 8-16 words. One specific soft atmospheric element.
 
@@ -38,4 +40,7 @@ Each entry: 8-16 words. One specific soft atmospheric element.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

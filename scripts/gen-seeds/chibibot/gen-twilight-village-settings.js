@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/twilight_village_settings.json',
   total: 200,
   batch: 15,
-  metaPrompt: (n) => `You are writing \${n} TWILIGHT-VILLAGE SETTINGS for ChibiBot twilight-village — cozy twilight-biome villages that are the HERO of the frame. NOT a single cottage — a VILLAGE (cluster of multiple dwellings).
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} TWILIGHT-VILLAGE SETTINGS for ChibiBot twilight-village — cozy twilight-biome villages that are the HERO of the frame. NOT a single cottage — a VILLAGE (cluster of multiple dwellings).
 
 Each entry: 25-40 words. ONE specific village. NO creatures, NO time-of-day, NO weather verbs.
 
@@ -41,4 +43,7 @@ Each entry MUST visibly include at least 3 village elements that establish the b
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

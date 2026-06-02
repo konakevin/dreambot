@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} COZY STORYBOOK WORLD descriptions for ChibiBot's cozy-landscape path — the magical SETTING that IS the hero of the frame. NOT just any landscape — a deliberately COZY, INVITING, cozy storybook / picture-book world where a tiny creature could live forever. The viewer should want to step INTO the frame and stay.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY STORYBOOK WORLD descriptions for ChibiBot's cozy-landscape path — the magical SETTING that IS the hero of the frame. NOT just any landscape — a deliberately COZY, INVITING, cozy storybook / picture-book world where a tiny creature could live forever. The viewer should want to step INTO the frame and stay.
 
 Each entry: 20-35 words. ONE specific cozy world with concrete geography + architecture + scale-anchor. NO creatures (separate axis). NO weather / time-of-day (separate axes). NO resident activity (separate axis). NO props beyond the world's intrinsic features (windows, doors, lanterns are intrinsic to a village; "candle on a table" is a prop axis).
 
@@ -48,4 +50,7 @@ Dedup by: setting-type + architecture + scale-anchor. "mushroom-cap village in a
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

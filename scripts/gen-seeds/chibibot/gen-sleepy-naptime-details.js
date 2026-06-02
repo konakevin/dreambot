@@ -5,7 +5,9 @@ generatePool({
   total: 150,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} COZY-PERSONAL-ACCENT details for ChibiBot sleepy-naptime — the sleeper's PERSONAL FAVORITE THINGS arranged around them, the kind of cute accents a child would have at bedtime that make the scene feel full and lived-in. Each render picks 3 (pickN:3).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY-PERSONAL-ACCENT details for ChibiBot sleepy-naptime — the sleeper's PERSONAL FAVORITE THINGS arranged around them, the kind of cute accents a child would have at bedtime that make the scene feel full and lived-in. Each render picks 3 (pickN:3).
 
 Each entry: 10-18 words. ONE specific cozy-personal-accent. Think the kind of stuff that makes a kid's bedside look cute and personal: their favorite stuffed animal, a colorful patterned blanket, an open storybook, a candle in a jar, slippers tucked underneath, a sleeping pet companion, etc.
 
@@ -45,4 +47,7 @@ Dedup by accent-type + concrete color/pattern detail.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

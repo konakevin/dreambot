@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ADORABLE SLEEPING-POSE descriptions for ChibiBot sleepy-naptime — the sleeping body posture of a chibi creature mid-nap. The creature is asleep / dozing / half-asleep. Maximum cute = peak sleeping animal poses.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ADORABLE SLEEPING-POSE descriptions for ChibiBot sleepy-naptime — the sleeping body posture of a chibi creature mid-nap. The creature is asleep / dozing / half-asleep. Maximum cute = peak sleeping animal poses.
 
 Each entry: 15-25 words. ONE specific sleeping pose. Describes BODY POSTURE + face expression + paw position + signature sleep-detail.
 
@@ -38,4 +40,7 @@ Think the cutest sleeping animal photos: belly-up with paws curled, snout-tucked
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

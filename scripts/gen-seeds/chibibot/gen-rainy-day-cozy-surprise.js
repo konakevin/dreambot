@@ -5,7 +5,9 @@ generatePool({
   total: 150,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot rainy-day-cozy — tiny secondary details the eye finds AFTER the group of friends. Adds life and charm to the wider cozy-shelter scene during rain.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot rainy-day-cozy — tiny secondary details the eye finds AFTER the group of friends. Adds life and charm to the wider cozy-shelter scene during rain.
 
 Each entry: 12-25 words.
 
@@ -29,4 +31,7 @@ Each entry: 12-25 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

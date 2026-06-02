@@ -121,7 +121,10 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
     const phenomenonFires = Math.random() < 0.6;
 
     const amenityList = Array.isArray(amenity) ? amenity : [amenity];
-    const amenityBlock = amenityList.filter(Boolean).map((a, i) => `${i + 1}. ${a}`).join('\n');
+    const amenityBlock = amenityList
+      .filter(Boolean)
+      .map((a, i) => `${i + 1}. ${a}`)
+      .join('\n');
 
     const creatureBlock = isGroup
       ? `A SMALL GROUP (3-5) of adorable creatures together — led by: ${creature_1}, joined by: ${creature_2} and a few others. Different species, different sizes, all squeezed into the bath together or doing spa activities side by side. Squeezed-in-together energy.`
@@ -361,7 +364,10 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
     const phenomenonFires = Math.random() < 0.6;
 
     const propList = Array.isArray(prop) ? prop : [prop];
-    const propBlock = propList.filter(Boolean).map((p, i) => `${i + 1}. ${p}`).join('\n');
+    const propBlock = propList
+      .filter(Boolean)
+      .map((p, i) => `${i + 1}. ${p}`)
+      .join('\n');
 
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
@@ -502,7 +508,10 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
     const phenomenonFires = Math.random() < 0.6;
 
     const detailList = Array.isArray(world_detail) ? world_detail : [world_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
@@ -607,9 +616,15 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(setting_detail) ? setting_detail : [setting_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const creatureList = Array.isArray(creature_group) ? creature_group : [creature_group];
-    const creatureBlock = creatureList.filter(Boolean).map((c, i) => `Friend ${i + 1}: ${c}`).join('\n\n');
+    const creatureBlock = creatureList
+      .filter(Boolean)
+      .map((c, i) => `Friend ${i + 1}: ${c}`)
+      .join('\n\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
@@ -743,9 +758,15 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(detail) ? detail : [detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const creatureList = Array.isArray(creature_group) ? creature_group : [creature_group];
-    const creatureBlock = creatureList.filter(Boolean).map((c, i) => `Friend ${i + 1}: ${c}`).join('\n\n');
+    const creatureBlock = creatureList
+      .filter(Boolean)
+      .map((c, i) => `Friend ${i + 1}: ${c}`)
+      .join('\n\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
@@ -861,7 +882,10 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(detail) ? detail : [detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (gentle event drifting around the sleeper) ━━━\n${phenomenon}`
       : '';
@@ -981,7 +1005,10 @@ Then unfold the rest. Output ONLY the raw 80-110 word scene description. Comma-s
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(room_detail) ? room_detail : [room_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
@@ -1133,7 +1160,10 @@ Then unfold the rest of the room/details/sparkle-stack. Output ONLY the raw 90-1
       weather,
     } = slots;
     const detailList = Array.isArray(wilderness_detail) ? wilderness_detail : [wilderness_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing OUTDOOR-ADVENTURE scenes for ChibiBot — a SOLO chibi creature out in the WILD/OPEN WORLD doing an adventurous activity. Pure wilderness — NO villages, NO architecture, NO cottages. Studio Ghibli wilderness / Pokemon-overworld / Pixar-adventure painterly storybook aesthetic. The viewer's reaction: "look at that little adventurer!" Output wraps with style prefix + suffix.
 
@@ -1254,9 +1284,15 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
       weather,
     } = slots;
     const featureList = Array.isArray(portrait_feature) ? portrait_feature : [portrait_feature];
-    const featureBlock = featureList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const featureBlock = featureList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const decorList = Array.isArray(set_decoration) ? set_decoration : [set_decoration];
-    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
 
     return `You are writing CHIBI CREATURE PORTRAITS for ChibiBot — a tight close-up of ONE impossibly cute creature filling the frame, MAXED with a cute outfit, accessory, and scattered set-decorations. The viewer cannot look away from the cuteness. Pixar / Sanrio / Pop-Mart designer-vinyl meets storybook-illustration. Output wraps with style prefix + suffix.
 
@@ -1381,7 +1417,10 @@ Then unfold the sparkle-stack and atmospheric details. Output ONLY the raw 90-13
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
@@ -1513,7 +1552,10 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
@@ -1635,7 +1677,10 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
@@ -1757,7 +1802,10 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
@@ -1879,7 +1927,10 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
@@ -1998,7 +2049,10 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
     } = slots;
     const phenomenonFires = Math.random() < 0.6;
     const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
-    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
     const phenomenonBlock = phenomenonFires
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';

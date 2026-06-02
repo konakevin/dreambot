@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_surprise.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot jungle-village scenes — tiny secondary details the eye finds AFTER the main resident in the wider village.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot jungle-village scenes — tiny secondary details the eye finds AFTER the main resident in the wider village.
 
 Each entry: 12-25 words.
 
@@ -28,4 +30,7 @@ Each entry: 12-25 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

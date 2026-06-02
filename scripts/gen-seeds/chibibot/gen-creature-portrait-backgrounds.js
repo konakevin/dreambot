@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/creature_portrait_backgrounds.json',
   total: 150,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} DREAMY BACKGROUND MOODS for ChibiBot creature-portrait. The background is SOFT BOKEH MOOD ONLY — never a recognizable setting. The CREATURE fills the frame; this background is just a pretty melt of color and light.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} DREAMY BACKGROUND MOODS for ChibiBot creature-portrait. The background is SOFT BOKEH MOOD ONLY — never a recognizable setting. The CREATURE fills the frame; this background is just a pretty melt of color and light.
 
 Each entry: 12-22 words. ONE specific dreamy bokeh-mood. NO recognizable architecture, NO villages, NO specific locations.
 
@@ -50,4 +52,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

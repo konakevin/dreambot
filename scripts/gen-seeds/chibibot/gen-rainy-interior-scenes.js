@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/rainy_interior_scenes.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} RAINY-INTERIOR scene descriptions for ChibiBot — but these are CONCEPT ART of impossibly cozy spaces, NOT real rooms. Painterly storybook illustration, never photography. 25-45 words each. NO PEOPLE.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} RAINY-INTERIOR scene descriptions for ChibiBot — but these are CONCEPT ART of impossibly cozy spaces, NOT real rooms. Painterly storybook illustration, never photography. 25-45 words each. NO PEOPLE.
 
 ━━━ THE LOAD-BEARING RULE ━━━
 These rooms do NOT exist as real interiors. They are illustrated concept-art spaces with architectural ambition + density that no real home actually achieves. If the entry could be a Pinterest interior-design photo of an actual room, IT IS WRONG.
@@ -59,4 +61,7 @@ EX-5: "Mezzanine loft bedroom above a main study, rolling-ladder leaning against
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. Dense, comma-rich, concept-art-ambitious. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/twilight_village_details.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing \${n} TWILIGHT-VILLAGE DETAILS for ChibiBot twilight-village — small lived-in details scattered across the village that make it feel inhabited. Template picks 3 per render.
+  metaPrompt: (
+    n
+  ) => `You are writing \${n} TWILIGHT-VILLAGE DETAILS for ChibiBot twilight-village — small lived-in details scattered across the village that make it feel inhabited. Template picks 3 per render.
 
 Each entry: 10-20 words. ONE specific detail. NO creatures, NO main setting, NO activity verbs.
 
@@ -34,4 +36,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \\${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/sleepy_naptime_time_of_day.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot sleepy-naptime — drowsy/peaceful times when an adorable creature would nap. Warm + golden + soft + drowsy ambient.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot sleepy-naptime — drowsy/peaceful times when an adorable creature would nap. Warm + golden + soft + drowsy ambient.
 
 Each entry: 8-15 words.
 
@@ -27,4 +29,7 @@ Each entry: 8-15 words.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

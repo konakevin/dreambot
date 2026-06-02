@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/creature_portrait_outfits.json',
   total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CUTE OUTFITS for ChibiBot creature-portrait — the cute clothing the chibi creature is wearing in a tight portrait. Pop-Mart designer-vinyl + Pixar storybook register. Charming, never gaudy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE OUTFITS for ChibiBot creature-portrait — the cute clothing the chibi creature is wearing in a tight portrait. Pop-Mart designer-vinyl + Pixar storybook register. Charming, never gaudy.
 
 Each entry: 10-18 words. ONE specific outfit. NO creature species names, NO pose, NO accessories (those are a separate axis), NO setting.
 
@@ -54,4 +56,7 @@ Examples:
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

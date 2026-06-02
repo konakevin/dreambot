@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 50,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} CUDDLY-PAIR INTERACTION descriptions for ChibiBot cuddly-aquatic — the heart-melting CUDDLE MOMENT between two adorable aquatic baby creatures together. The INTERACTION is what the PAIR is doing together right now. Every entry must produce "OMG THEY ARE TOO CUTE TOGETHER" instantly.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUDDLY-PAIR INTERACTION descriptions for ChibiBot cuddly-aquatic — the heart-melting CUDDLE MOMENT between two adorable aquatic baby creatures together. The INTERACTION is what the PAIR is doing together right now. Every entry must produce "OMG THEY ARE TOO CUTE TOGETHER" instantly.
 
 Each entry: 15-25 words. ONE specific pair interaction. Active interactive verb + posture/expression detail. NO setting language (separate axis). NO creature descriptions (separate axes).
 
@@ -41,4 +43,7 @@ Dedup by: verb + posture + emotional beat. "cheek-to-cheek with closed eyes" and
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

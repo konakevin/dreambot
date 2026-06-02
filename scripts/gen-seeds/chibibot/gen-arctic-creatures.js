@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_creatures.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CUTE ARCTIC CREATURE descriptions for CuddleBot's snowy-arctic path. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Happy-Feet / baby-animal-Christmas-special aesthetic. NEVER photoreal, NEVER documentary nature. Adorable stylized baby arctic / sub-arctic / alpine creatures.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE ARCTIC CREATURE descriptions for CuddleBot's snowy-arctic path. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Happy-Feet / baby-animal-Christmas-special aesthetic. NEVER photoreal, NEVER documentary nature. Adorable stylized baby arctic / sub-arctic / alpine creatures.
 
 Each entry: 10-20 words. ONE specific cute arctic creature with 2-3 identifying cute details (eye type, body texture, accessories, pose).
 
@@ -45,4 +47,7 @@ EVERY ENTRY STARTS WITH A UNIQUE SPECIES NAME. Scan "ALREADY GENERATED". "Arctic
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_village_settings.json',
   total: 200,
   batch: 15,
-  metaPrompt: (n) => `You are writing ${n} ARCTIC-VILLAGE SETTINGS for ChibiBot arctic-village — cozy snow/ice/aurora villages that are the HERO of the frame. The village ARCHITECTURE and arctic atmosphere are the subject. NOT a single cottage — a VILLAGE (cluster of multiple dwellings).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ARCTIC-VILLAGE SETTINGS for ChibiBot arctic-village — cozy snow/ice/aurora villages that are the HERO of the frame. The village ARCHITECTURE and arctic atmosphere are the subject. NOT a single cottage — a VILLAGE (cluster of multiple dwellings).
 
 Each entry: 25-40 words. ONE specific arctic-village. NO creatures, NO time-of-day, NO weather verbs.
 
@@ -44,4 +46,7 @@ Each entry MUST visibly include at least 3 cozy-village elements: warm-amber-win
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

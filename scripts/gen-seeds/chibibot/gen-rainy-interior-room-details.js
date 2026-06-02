@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} OUTDOOR-RAINY-DAY DETAILS for ChibiBot rainy-day-outdoor path — the tiny lived-in OUTDOOR objects/features that POPULATE a wet rainy setting. Each render picks 3 (pickN:3).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} OUTDOOR-RAINY-DAY DETAILS for ChibiBot rainy-day-outdoor path — the tiny lived-in OUTDOOR objects/features that POPULATE a wet rainy setting. Each render picks 3 (pickN:3).
 
 Each entry: 8-15 words. ONE specific outdoor rainy detail.
 
@@ -34,4 +36,7 @@ Dedup by: object type + specific rain-affected detail.
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} SUNNY-PAIR SCENE descriptions for CuddleBot's sunny-pair path. BRIGHT, GOLDEN-HOUR, SUN-DRENCHED outdoor settings where cute creature pairs cuddle/picnic/play. The SUNSHINE is the differentiator — warm-gold light is the dominant atmospheric element. Pixar / Sanrio / Studio Ghibli / My-Neighbor-Totoro-summer / Heidi / Anne-of-Green-Gables aesthetic. NEVER photoreal, NEVER documentary nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SUNNY-PAIR SCENE descriptions for CuddleBot's sunny-pair path. BRIGHT, GOLDEN-HOUR, SUN-DRENCHED outdoor settings where cute creature pairs cuddle/picnic/play. The SUNSHINE is the differentiator — warm-gold light is the dominant atmospheric element. Pixar / Sanrio / Studio Ghibli / My-Neighbor-Totoro-summer / Heidi / Anne-of-Green-Gables aesthetic. NEVER photoreal, NEVER documentary nature.
 
 Each entry: 18-28 words. ONE specific sunny outdoor scene with HABITAT details + cute interaction hint.
 
@@ -62,4 +64,7 @@ Deduplicate by: habitat-type + key-feature + time-of-day-within-sunny. "Sunflowe
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

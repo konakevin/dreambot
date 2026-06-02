@@ -6,7 +6,9 @@ generatePool({
   total: 628,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} MULTI-CHARACTER ARCTIC-VILLAGE scenes for ChibiBot's arctic-village path. The pool already has 314 single-creature scenes — your job is to add PAIR + TRIO scenes for character variance.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MULTI-CHARACTER ARCTIC-VILLAGE scenes for ChibiBot's arctic-village path. The pool already has 314 single-creature scenes — your job is to add PAIR + TRIO scenes for character variance.
 
 Pixar / Sanrio / Studio Ghibli / Frozen STYLIZED. NEVER photoreal. Mix baby + adult creatures freely. Cozy snow / ice / aurora / sub-arctic VILLAGES.
 
@@ -49,4 +51,7 @@ UNIQUE village-type + species-combination + activity per entry.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

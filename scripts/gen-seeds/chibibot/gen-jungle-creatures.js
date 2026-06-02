@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_creatures.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CUTE JUNGLE CREATURE descriptions for CuddleBot's jungle-canopy path. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Jungle-Book / Encanto / Madagascar-baby aesthetic. NEVER photoreal, NEVER documentary nature. Adorable stylized baby jungle/rainforest creatures.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE JUNGLE CREATURE descriptions for CuddleBot's jungle-canopy path. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Jungle-Book / Encanto / Madagascar-baby aesthetic. NEVER photoreal, NEVER documentary nature. Adorable stylized baby jungle/rainforest creatures.
 
 Each entry: 10-20 words. ONE specific cute jungle creature with 2-3 identifying cute details (eye type, body texture, accessories, pose).
 
@@ -46,4 +48,7 @@ EVERY ENTRY STARTS WITH A UNIQUE SPECIES NAME. Scan "ALREADY GENERATED" carefull
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

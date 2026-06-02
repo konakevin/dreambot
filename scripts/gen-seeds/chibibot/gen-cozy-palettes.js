@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_palettes.json',
   total: 60,
   batch: 20,
-  metaPrompt: (n) => `You are writing ${n} COZY COLOR PALETTE descriptions for ChibiBot — scene-wide color stories that anchor the warm cozy register. 20-35 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY COLOR PALETTE descriptions for ChibiBot — scene-wide color stories that anchor the warm cozy register. 20-35 words each.
 
 ━━━ THE FORMULA ━━━
 Each entry describes a complete scene-wide palette: dominant warm note + supporting warm midtone + accent color + shadow tone. ALWAYS warm-dominant. Cool tones (rain, snow, twilight) are accents only.
@@ -42,4 +44,7 @@ EX-4: "Winter twilight palette: deep-cobalt snow dominant outside, warm-tungsten
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

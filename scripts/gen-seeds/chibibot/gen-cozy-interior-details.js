@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_interior_details.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COZY-INTERIOR DETAILS for ChibiBot cozy-interior — the tiny lived-in objects/features that POPULATE a cozy room. Each render picks 3 (pickN:3).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY-INTERIOR DETAILS for ChibiBot cozy-interior — the tiny lived-in objects/features that POPULATE a cozy room. Each render picks 3 (pickN:3).
 
 Each entry: 8-15 words. ONE specific cozy-interior detail.
 
@@ -29,4 +31,7 @@ Each entry: 8-15 words. ONE specific cozy-interior detail.
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

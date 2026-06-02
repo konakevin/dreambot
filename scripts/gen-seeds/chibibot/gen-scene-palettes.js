@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/scene_palettes.json',
   total: 200,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for CuddleBot. Each palette is 10-20 words naming 3-5 color words + a one-beat atmospheric tone. Previous pool was 90% yellow-orange tinted (peach/amber/honey/cream) — invent fresh, diverse palettes across the full cozy-wholesome spectrum.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for CuddleBot. Each palette is 10-20 words naming 3-5 color words + a one-beat atmospheric tone. Previous pool was 90% yellow-orange tinted (peach/amber/honey/cream) — invent fresh, diverse palettes across the full cozy-wholesome spectrum.
 
 ━━━ HARD DIVERSITY CAPS (enforced) ━━━
 Across the full pool of 50:
@@ -25,4 +27,7 @@ No two palettes share the same dominant color family. Do not repeat adjective co
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

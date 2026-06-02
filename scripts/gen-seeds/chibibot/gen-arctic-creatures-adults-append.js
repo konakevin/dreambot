@@ -9,7 +9,9 @@ generatePool({
   total: 346,
   append: true,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CUTE ADULT ARCTIC CREATURE descriptions for CuddleBot's snowy-arctic path. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Frozen / Polar-Express aesthetic. Adorable stylized ADULT arctic/polar/sub-arctic creatures. NEVER photoreal, NEVER documentary nature.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CUTE ADULT ARCTIC CREATURE descriptions for CuddleBot's snowy-arctic path. SUPER OVERLAY CUTE — Pixar / Sanrio / Studio Ghibli / Frozen / Polar-Express aesthetic. Adorable stylized ADULT arctic/polar/sub-arctic creatures. NEVER photoreal, NEVER documentary nature.
 
 This batch BALANCES an existing pool of ~173 baby/juvenile entries. Your job is ADULTS ONLY so the final pool reaches 50/50.
 
@@ -57,4 +59,7 @@ EVERY ENTRY STARTS WITH A UNIQUE ADULT SPECIES NAME. Scan "ALREADY GENERATED" ca
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

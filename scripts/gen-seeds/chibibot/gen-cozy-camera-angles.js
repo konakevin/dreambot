@@ -5,7 +5,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_camera_angles.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CAMERA ANGLE / SHOT FRAMING descriptions for ChibiBot — composition guides that frame cozy interiors and seasonal exteriors as paintings, not photos. 15-25 words each.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CAMERA ANGLE / SHOT FRAMING descriptions for ChibiBot — composition guides that frame cozy interiors and seasonal exteriors as paintings, not photos. 15-25 words each.
 
 ━━━ THE FORMULA ━━━
 Each entry describes WHERE the camera is and HOW it sees the cozy scene. Lean toward INTIMATE framing (medium-wide is best for cozy — too tight loses context, too wide loses warmth).
@@ -42,4 +44,7 @@ EX-4: "Streetside view at twilight looking through a frost-edged window into a w
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

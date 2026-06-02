@@ -5,7 +5,9 @@ generatePool({
   total: 150,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot night-meadow scenes — tiny secondary subjects or ambient nighttime details the eye finds AFTER the cuddling pair. The pair is the main subject; the surprise element is the second-tier detail that proves there's a bigger magical-nighttime world.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot night-meadow scenes — tiny secondary subjects or ambient nighttime details the eye finds AFTER the cuddling pair. The pair is the main subject; the surprise element is the second-tier detail that proves there's a bigger magical-nighttime world.
 
 Each entry: 12-25 words. ONE specific surprise element with concrete visual detail.
 
@@ -42,4 +44,7 @@ Dedup by: element type + concrete detail. "firefly drifting near pair" and "sing
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

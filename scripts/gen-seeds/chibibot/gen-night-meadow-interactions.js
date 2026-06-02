@@ -5,7 +5,9 @@ generatePool({
   total: 200,
   batch: 25,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} STORY-BEAT INTERACTIONS for ChibiBot night-meadow — each entry is a HIGH-ACTION NARRATIVE EVENT happening to a pair of adorable critters under the night sky. NOT poses. NOT reactions to off-screen things. NOT "both looking at X". These are ACTIVE VERB-LED MOMENTS where the pair is DOING SOMETHING TOGETHER with a SHARED PHYSICAL OBJECT or with EACH OTHER directly.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STORY-BEAT INTERACTIONS for ChibiBot night-meadow — each entry is a HIGH-ACTION NARRATIVE EVENT happening to a pair of adorable critters under the night sky. NOT poses. NOT reactions to off-screen things. NOT "both looking at X". These are ACTIVE VERB-LED MOMENTS where the pair is DOING SOMETHING TOGETHER with a SHARED PHYSICAL OBJECT or with EACH OTHER directly.
 
 ━━━ FORMAT REQUIREMENT (NON-NEGOTIABLE) ━━━
 
@@ -94,4 +96,7 @@ Dedup by: verb + object + body-language. "tipping over a jar" and "knocking over
 ━━━ OUTPUT ━━━
 
 JSON array of ${n} strings. No preamble, no numbering. Each entry begins with an active verb (NEVER with "both" or a noun).`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

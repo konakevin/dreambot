@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_activities.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TINY-RESIDENT ACTIVITY descriptions for ChibiBot jungle-village — what a SOLO tiny resident creature is DOING in the village, going about their day. The resident is a TINY scale-prover (small but visible), not centered. Active verb-led story-driven activity.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} TINY-RESIDENT ACTIVITY descriptions for ChibiBot jungle-village — what a SOLO tiny resident creature is DOING in the village, going about their day. The resident is a TINY scale-prover (small but visible), not centered. Active verb-led story-driven activity.
 
 Each entry: 15-25 words. ONE specific resident activity. ACTIVE VERB-LED. Interacting with a CONCRETE jungle-village prop.
 
@@ -40,4 +42,7 @@ Every entry MUST start with an active verb + include a concrete jungle-village p
 ━━━ OUTPUT ━━━
 
 JSON array of \${n} strings. Each begins with an active verb.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
