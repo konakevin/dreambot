@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/spectacle_events.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK SPECTACLE EVENT descriptions for SteamBot's steampunk-spectacle path — grand events, ceremonies, performances, and crowd moments in steampunk worlds.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK SPECTACLE EVENT descriptions for SteamBot's steampunk-spectacle path — grand events, ceremonies, performances, and crowd moments in steampunk worlds.
 
 Each entry: 15-30 words. One specific event/ceremony/gathering.
 
@@ -31,4 +33,7 @@ Each entry must be a DIFFERENT event type in a DIFFERENT setting. No two parades
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

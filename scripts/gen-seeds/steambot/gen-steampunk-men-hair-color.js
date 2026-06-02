@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK MAN HAIR-COLOR descriptions for SteamBot's steampunk-man path. Each entry describes hair color + texture — period-accurate Victorian-industrial era. NOT modern dyed hair.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK MAN HAIR-COLOR descriptions for SteamBot's steampunk-man path. Each entry describes hair color + texture — period-accurate Victorian-industrial era. NOT modern dyed hair.
 
 Each entry: 8-14 words. ONE hair-color description.
 
@@ -38,4 +40,7 @@ Each entry: 8-14 words. ONE hair-color description.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

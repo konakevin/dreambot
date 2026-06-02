@@ -24,10 +24,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const hairstyle = picker.pickWithRecency(pools.STEAMPUNK_MEN_HAIRSTYLES, 'spm_hairstyle');
   const wardrobe = picker.pickWithRecency(pools.STEAMPUNK_MEN_WARDROBE, 'spm_wardrobe');
   const accessory = picker.pickWithRecency(pools.STEAMPUNK_MEN_ACCESSORIES, 'spm_accessory');
-  const moment = picker.pickWithRecency(
-    pools.STEAMPUNK_MEN_CANDID_MOMENTS,
-    'steampunk_man_moment'
-  );
+  const moment = picker.pickWithRecency(pools.STEAMPUNK_MEN_CANDID_MOMENTS, 'steampunk_man_moment');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.STEAMPUNK_ATMOSPHERES, 'atmosphere');
 

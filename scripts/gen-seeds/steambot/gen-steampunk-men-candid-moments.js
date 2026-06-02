@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} CANDID-MOMENT descriptions for SteamBot's steampunk-man path. Each entry is ONE specific moment of a steampunk gentleman in his daily working life — caught natural, not posing.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} CANDID-MOMENT descriptions for SteamBot's steampunk-man path. Each entry is ONE specific moment of a steampunk gentleman in his daily working life — caught natural, not posing.
 
 The framing stays CLOSE (waist-up to thigh-up character-portrait), but THE SCENE TYPES MUST VARY WIDELY. Previous version was too clustered — guys at desks reading papers and fiddling with small objects. This version should show him EVERYWHERE doing EVERY KIND of steampunk activity, not just sit-and-read.
 
@@ -79,4 +81,7 @@ ACTION TYPES (mix broadly — cap any single category at 5 entries max):
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

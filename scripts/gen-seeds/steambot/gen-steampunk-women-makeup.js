@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} MAKEUP entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (12-22 words) describing INTENTIONAL, SOOT-ADJACENT, BRASS-WORLD makeup — these women aren't fashion-magazine glossy, they're working-class-glamour, machinist-chic, weathered-and-deliberate.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} MAKEUP entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (12-22 words) describing INTENTIONAL, SOOT-ADJACENT, BRASS-WORLD makeup — these women aren't fashion-magazine glossy, they're working-class-glamour, machinist-chic, weathered-and-deliberate.
 
 This pool composes with separate skin/hair/eyes/wardrobe pools. The makeup should feel STEAMPUNK — kohl from a kohl pot, soot-smudged, gaslight-shadowed. NOT modern cosmetic counter.
 
@@ -25,4 +27,7 @@ This pool composes with separate skin/hair/eyes/wardrobe pools. The makeup shoul
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

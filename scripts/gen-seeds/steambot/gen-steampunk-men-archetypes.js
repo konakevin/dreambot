@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK MAN ARCHETYPES for SteamBot's steampunk-man path. STRICTLY two genres only: COMBAT/GUNSLINGER types and ADVENTURER/EXPLORER types. Period-accurate Victorian-industrial era, NOT modern, NOT anime, NOT sexualized.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK MAN ARCHETYPES for SteamBot's steampunk-man path. STRICTLY two genres only: COMBAT/GUNSLINGER types and ADVENTURER/EXPLORER types. Period-accurate Victorian-industrial era, NOT modern, NOT anime, NOT sexualized.
 
 Each entry: 14-25 words. ONE specific archetype.
 
@@ -98,4 +100,7 @@ Each entry: 14-25 words. ONE specific archetype.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

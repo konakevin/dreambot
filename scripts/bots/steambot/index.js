@@ -81,18 +81,56 @@ module.exports = {
     'black-forest-labs/flux-2-flex',
   ],
 
-  // modelByPath: removed 2026-05-31. Previously every path was weighted-
-  // pinned to 100% flux-1.1-pro, which OVERRODE the 6-model allowedModels
-  // lineup above (engine consults modelByPath before allowedModels).
-  // Result: SteamBot's 12h post distribution was 100% flux-1.1-pro
-  // despite the bot-wide audit saying 6 models. Removing modelByPath lets
-  // the picker actually use the 6-model lineup as documented in
-  // BOT_MODEL_TALLY.md. To re-pin a specific path, add it back here.
-  //
-  // Notable lock removed: sexy-steampunk-woman / airship-female / airship-male
-  // had 2026-05-15 comments about "flux-dev produced inconsistent register"
-  // — but the 8-model audit since then has different survivors per path.
-  // Re-audit those paths individually if a future render quality regresses.
+  // modelByPath: per-path bans (2026-05-31 — Kevin's uniform non-character
+  // lineup). All 7 non-character paths get the same 5-model lineup:
+  // Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Ultra (F2 Flex banned). Character
+  // paths (airship-female, airship-male, sexy-steampunk-woman, steampunk-man)
+  // intentionally fall through to the bot-wide 6-model picker — audit them
+  // individually if needed.
+  modelByPath: {
+    'steampunk-scene': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'airship-skies': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'steampunk-curio': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'steampunk-spectacle': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'steam-transport': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'steampunk-labs': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'cozy-steampunk': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+  },
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
   // dream_mediums DB. Scene paths use steambot-hyperreal; female path uses

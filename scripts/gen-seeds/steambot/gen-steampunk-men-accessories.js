@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK MAN SIGNATURE-ACCESSORY descriptions for SteamBot's steampunk-man path. Each entry is ONE small object that anchors his identity — Victorian/steampunk-period.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK MAN SIGNATURE-ACCESSORY descriptions for SteamBot's steampunk-man path. Each entry is ONE small object that anchors his identity — Victorian/steampunk-period.
 
 Each entry: 8-18 words. ONE distinctive accessory.
 
@@ -52,4 +54,7 @@ Each entry: 8-18 words. ONE distinctive accessory.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

@@ -7,14 +7,14 @@ Characters by role.
 
 ## 6 render paths
 
-| Path | What it is |
-|---|---|
-| `steampunk-scene` | Character in rich steampunk setting — inventor, airship-pilot, corseted-engineer |
-| `steampunk-landscape` | Vast cityscape/landscape — brass-spire cities, airship-dock skies, clockwork-bridges |
-| `contraption` | Fantastical machines in closeup — wide range, NOT clock-dominant |
-| `airship-skies` | Airships in dramatic sky scenes — breaking clouds, fleet, storm, docking |
-| `cozy-steampunk` | Warm cozy steampunk pockets — inventor's workshop, brass parlor, observatory |
-| `sexy-steampunk-woman` | Really-fucking-sexy steampunk woman candid solo, steampunk-specific action |
+| Path                   | What it is                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------ |
+| `steampunk-scene`      | Character in rich steampunk setting — inventor, airship-pilot, corseted-engineer     |
+| `steampunk-landscape`  | Vast cityscape/landscape — brass-spire cities, airship-dock skies, clockwork-bridges |
+| `contraption`          | Fantastical machines in closeup — wide range, NOT clock-dominant                     |
+| `airship-skies`        | Airships in dramatic sky scenes — breaking clouds, fleet, storm, docking             |
+| `cozy-steampunk`       | Warm cozy steampunk pockets — inventor's workshop, brass parlor, observatory         |
+| `sexy-steampunk-woman` | Really-fucking-sexy steampunk woman candid solo, steampunk-specific action           |
 
 ## Mediums
 

@@ -5,7 +5,9 @@ generatePool({
   total: 150,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} ADDITIONAL STEAMPUNK WOMAN SKIN descriptions for SteamBot's sexy-steampunk-woman path. The existing pool is heavy on European/Mediterranean/Black skin tones — these new entries MUST fill the missing ethnic representations.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ADDITIONAL STEAMPUNK WOMAN SKIN descriptions for SteamBot's sexy-steampunk-woman path. The existing pool is heavy on European/Mediterranean/Black skin tones — these new entries MUST fill the missing ethnic representations.
 
 Each entry: 12-22 words. ONE specific skin description with steampunk-light interaction.
 
@@ -40,4 +42,7 @@ Each entry: 12-22 words. ONE specific skin description with steampunk-light inte
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

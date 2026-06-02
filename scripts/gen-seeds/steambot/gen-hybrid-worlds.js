@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/hybrid_worlds.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK GENRE-HYBRID world descriptions for SteamBot's steampunk-hybrid path — steampunk mashed up with other genres to create unique visual worlds.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK GENRE-HYBRID world descriptions for SteamBot's steampunk-hybrid path — steampunk mashed up with other genres to create unique visual worlds.
 
 Each entry: 15-30 words. One specific hybrid world/scene.
 
@@ -27,4 +29,7 @@ Each entry must be a DIFFERENT genre combo + setting. No two entries from the sa
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

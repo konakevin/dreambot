@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_actions.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK WOMAN ACTIONS for SteamBot's sexy-steampunk-woman path. Each entry is JUST what she's DOING — a candid mid-action verb-phrase. NO setting. NO background. NO outfit. NO cleavage/skin language. Just the action.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK WOMAN ACTIONS for SteamBot's sexy-steampunk-woman path. Each entry is JUST what she's DOING — a candid mid-action verb-phrase. NO setting. NO background. NO outfit. NO cleavage/skin language. Just the action.
 
 Each entry: 8-15 words. ONE specific action she's caught performing.
 
@@ -35,4 +37,7 @@ DAILY MOMENT: sipping tea while reading mechanical-encyclopedia, adjusting hairp
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

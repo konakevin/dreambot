@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ACCESSORY entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (8-16 words) describing ONE signature accessory she's wearing or carrying — the small detail that makes her unmistakably HER.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} ACCESSORY entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (8-16 words) describing ONE signature accessory she's wearing or carrying — the small detail that makes her unmistakably HER.
 
 This pool composes with separate skin/hair/eyes/makeup/wardrobe pools. The accessory should be small enough to fit naturally in the frame but distinctive enough to anchor identity.
 
@@ -26,4 +28,7 @@ This pool composes with separate skin/hair/eyes/makeup/wardrobe pools. The acces
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

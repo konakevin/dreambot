@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/cozy_steampunk_settings.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} COZY STEAMPUNK SETTING descriptions for SteamBot's cozy-steampunk path — warm cozy steampunk pockets.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} COZY STEAMPUNK SETTING descriptions for SteamBot's cozy-steampunk path — warm cozy steampunk pockets.
 
 Each entry: 15-30 words. One specific cozy steampunk setting.
 
@@ -50,4 +52,7 @@ Each entry: 15-30 words. One specific cozy steampunk setting.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

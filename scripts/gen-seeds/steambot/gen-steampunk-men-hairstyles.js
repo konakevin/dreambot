@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK MAN HAIRSTYLE descriptions for SteamBot's steampunk-man path. Period-accurate Victorian-industrial era hairstyles only. NOT modern haircuts.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK MAN HAIRSTYLE descriptions for SteamBot's steampunk-man path. Period-accurate Victorian-industrial era hairstyles only. NOT modern haircuts.
 
 Each entry: 10-18 words. ONE hairstyle description.
 
@@ -48,4 +50,7 @@ Each entry: 10-18 words. ONE hairstyle description.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

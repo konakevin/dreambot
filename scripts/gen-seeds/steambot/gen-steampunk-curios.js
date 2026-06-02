@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   batch: 12,
   append: true,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK CURIO descriptions for SteamBot's steampunk-curio path.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK CURIO descriptions for SteamBot's steampunk-curio path.
 
 ━━━ THE GOLD-STANDARD REFERENCE ━━━
 The pinnacle render: an articulated brass peacock-songbird with iridescent copper plumage, glowing teal-gem eyes, gear-driven internals visible through chest panels, life-size, alive-feeling, displayed on a velvet pedestal under a red velvet curtain like a Vatican relic. Every entry MUST aspire to this energy: LIVING, ALIVE-FEELING, ANIMATED, CHARACTER-DRIVEN, IMPRESSIVE SCALE.
@@ -71,4 +73,7 @@ Each entry: 22-35 words. ONE specific intricate object. LIVING + ALIVE-FEELING +
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

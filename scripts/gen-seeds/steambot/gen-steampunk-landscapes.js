@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_landscapes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK LANDSCAPE descriptions for SteamBot's steampunk-landscape path — vast steampunk cityscapes / environments at massive scale. No characters. BioShock-Infinite / Mortal-Engines energy.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK LANDSCAPE descriptions for SteamBot's steampunk-landscape path — vast steampunk cityscapes / environments at massive scale. No characters. BioShock-Infinite / Mortal-Engines energy.
 
 Each entry: 15-30 words. One specific steampunk vista.
 
@@ -53,4 +55,7 @@ Each entry: 15-30 words. One specific steampunk vista.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

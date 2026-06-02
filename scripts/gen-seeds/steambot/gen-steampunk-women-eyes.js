@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of her eyes AND how steampunk-world light interacts with them — gaslight glint, brass reflection, forge-flame catch, oil-lamp glow.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of her eyes AND how steampunk-world light interacts with them — gaslight glint, brass reflection, forge-flame catch, oil-lamp glow.
 
 This pool composes with separate skin/hair/makeup/wardrobe pools. The eyes should feel SUPERNATURALLY VIVID — gaslight bouncing, brass reflecting, forge-flame catching the iris.
 
@@ -25,4 +27,7 @@ This pool composes with separate skin/hair/makeup/wardrobe pools. The eyes shoul
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

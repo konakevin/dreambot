@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK MAN SKIN descriptions for SteamBot's steampunk-man path. Each entry describes a specific face/skin look — not just ethnicity but the LIVED-IN texture: weathering, soot, scars, sun, gaslight tan, factory pallor, fine bone structure.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK MAN SKIN descriptions for SteamBot's steampunk-man path. Each entry describes a specific face/skin look — not just ethnicity but the LIVED-IN texture: weathering, soot, scars, sun, gaslight tan, factory pallor, fine bone structure.
 
 Each entry: 12-22 words. ONE specific skin description.
 
@@ -47,4 +49,7 @@ Each entry: 12-22 words. ONE specific skin description.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

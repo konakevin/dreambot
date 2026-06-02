@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/transport_scenes.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} STEAM TRANSPORT scene descriptions for SteamBot's steam-transport path — non-airship steampunk vehicles in dramatic terrain and moments.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAM TRANSPORT scene descriptions for SteamBot's steam-transport path — non-airship steampunk vehicles in dramatic terrain and moments.
 
 Each entry: 15-30 words. One specific vehicle + terrain/moment.
 
@@ -31,4 +33,7 @@ Each entry must be a DIFFERENT vehicle type + terrain combo. No two trains on br
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

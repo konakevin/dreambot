@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK MAN FACIAL-HAIR descriptions for SteamBot's steampunk-man path. Period-accurate Victorian-industrial / 19th-century facial hair styles. This is the male-only axis equivalent of women's makeup.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK MAN FACIAL-HAIR descriptions for SteamBot's steampunk-man path. Period-accurate Victorian-industrial / 19th-century facial hair styles. This is the male-only axis equivalent of women's makeup.
 
 Each entry: 8-15 words. ONE facial-hair description.
 
@@ -45,4 +47,7 @@ Each entry: 8-15 words. ONE facial-hair description.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

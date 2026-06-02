@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} HAIRSTYLE entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle — including the Victorian / mechanical / aviation / forge-context details that make it unmistakably steampunk.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} HAIRSTYLE entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle — including the Victorian / mechanical / aviation / forge-context details that make it unmistakably steampunk.
 
 This pool composes with separate hair-color/skin/eyes/makeup/wardrobe pools.
 
@@ -24,4 +26,7 @@ This pool composes with separate hair-color/skin/eyes/makeup/wardrobe pools.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

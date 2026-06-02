@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK MAN EYE descriptions for SteamBot's steampunk-man path. Each entry describes specific eye color + intensity — what his eyes do in the gaslight.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK MAN EYE descriptions for SteamBot's steampunk-man path. Each entry describes specific eye color + intensity — what his eyes do in the gaslight.
 
 Each entry: 8-15 words. ONE specific eye description.
 
@@ -41,4 +43,7 @@ Each entry: 8-15 words. ONE specific eye description.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

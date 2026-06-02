@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_settings.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK SETTING / BACKGROUND descriptions for SteamBot's sexy-steampunk-woman path. Each entry is JUST the environment around her — what's behind / framing her in the portrait. NO action. NO outfit. NO character description. Just the setting.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK SETTING / BACKGROUND descriptions for SteamBot's sexy-steampunk-woman path. Each entry is JUST the environment around her — what's behind / framing her in the portrait. NO action. NO outfit. NO character description. Just the setting.
 
 Each entry: 12-22 words. ONE specific steampunk environment with atmospheric detail.
 
@@ -79,4 +81,7 @@ EXTERIOR — FANTASTICAL:
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

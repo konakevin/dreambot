@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK MAN WARDROBE descriptions for SteamBot's steampunk-man path. Period-accurate Victorian-industrial menswear with steampunk modifications. NOT modern, NOT anime, NOT shirtless.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK MAN WARDROBE descriptions for SteamBot's steampunk-man path. Period-accurate Victorian-industrial menswear with steampunk modifications. NOT modern, NOT anime, NOT shirtless.
 
 Each entry: 18-32 words. ONE complete outfit description with material detail.
 
@@ -49,4 +51,7 @@ Each entry: 18-32 words. ONE complete outfit description with material detail.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

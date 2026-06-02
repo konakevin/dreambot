@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_atmospheres.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK ATMOSPHERIC DETAIL descriptions for SteamBot — steampunk atmospheric elements.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK ATMOSPHERIC DETAIL descriptions for SteamBot — steampunk atmospheric elements.
 
 Each entry: 6-14 words. One specific steampunk atmospheric element.
 
@@ -47,4 +49,7 @@ Each entry: 6-14 words. One specific steampunk atmospheric element.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

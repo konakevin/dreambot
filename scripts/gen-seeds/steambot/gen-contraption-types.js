@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/contraption_types.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK CONTRAPTION descriptions for SteamBot's contraption path — fantastical steampunk devices. WIDE RANGE — NOT clock-dominant. Vary widely.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK CONTRAPTION descriptions for SteamBot's contraption path — fantastical steampunk devices. WIDE RANGE — NOT clock-dominant. Vary widely.
 
 Each entry: 15-30 words. One specific steampunk contraption with rich detail.
 
@@ -77,4 +79,7 @@ Each entry: 15-30 words. One specific steampunk contraption with rich detail.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

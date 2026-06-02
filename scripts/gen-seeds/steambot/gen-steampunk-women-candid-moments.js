@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_candid_moments.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK WOMAN CANDID MOMENT descriptions for SteamBot's sexy-steampunk-woman path — STUNNING + tastefully alluring + ornate steampunk woman candid solo doing a specific steampunk action. Capable, magnetic, unmistakably steampunk. Heavy ornate gear-laden character. SOLO. The COOL OUTFIT + GEAR + ACTION is the hero. Skin-reveal language banned (no "cleavage", no "bare shoulders backlit", no "corset straining", no "sweat glistening", no "low-cut", no "barely contained" — she's tastefully alluring through CRAFT, GEAR, OUTFIT and CONFIDENCE, not through skin display).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK WOMAN CANDID MOMENT descriptions for SteamBot's sexy-steampunk-woman path — STUNNING + tastefully alluring + ornate steampunk woman candid solo doing a specific steampunk action. Capable, magnetic, unmistakably steampunk. Heavy ornate gear-laden character. SOLO. The COOL OUTFIT + GEAR + ACTION is the hero. Skin-reveal language banned (no "cleavage", no "bare shoulders backlit", no "corset straining", no "sweat glistening", no "low-cut", no "barely contained" — she's tastefully alluring through CRAFT, GEAR, OUTFIT and CONFIDENCE, not through skin display).
 
 Each entry: 15-30 words. One specific steampunk-female + specific action + setting.
 
@@ -55,4 +57,7 @@ Each entry: 15-30 words. One specific steampunk-female + specific action + setti
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

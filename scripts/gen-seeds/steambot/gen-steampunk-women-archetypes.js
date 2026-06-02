@@ -5,7 +5,9 @@ generatePool({
   total: 100,
   append: true,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK FEMALE ARCHETYPE descriptions for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (8-15 words) describing WHO this steampunk woman IS — her role, her competence, her edge. NOT what she looks like — WHO she is. These compose with separate makeup/wardrobe/hair/skin/eyes pools.
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK FEMALE ARCHETYPE descriptions for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (8-15 words) describing WHO this steampunk woman IS — her role, her competence, her edge. NOT what she looks like — WHO she is. These compose with separate makeup/wardrobe/hair/skin/eyes pools.
 
 These women are CAPABLE, DANGEROUS-MAGNETIC, OBVIOUSLY STEAMPUNK — masters of their machines, weathered by the work, sharp-tongued and sharper-minded. NOT damsels, NOT decorations. She built it, fixed it, or she'll dismantle YOU.
 
@@ -27,4 +29,7 @@ These women are CAPABLE, DANGEROUS-MAGNETIC, OBVIOUSLY STEAMPUNK — masters of 
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

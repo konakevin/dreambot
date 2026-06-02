@@ -4,7 +4,9 @@ generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_skin.json',
   total: 100,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} STEAMPUNK WOMAN SKIN descriptions for SteamBot's sexy-steampunk-woman path. Each entry describes the skin of a stunning steampunk woman in a way that ANCHORS HER ETHNICITY HARD so Flux 1.1 Pro will render the correct ethnicity (Flux has a strong default-toward-European-brunette bias that we need to FIGHT).
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} STEAMPUNK WOMAN SKIN descriptions for SteamBot's sexy-steampunk-woman path. Each entry describes the skin of a stunning steampunk woman in a way that ANCHORS HER ETHNICITY HARD so Flux 1.1 Pro will render the correct ethnicity (Flux has a strong default-toward-European-brunette bias that we need to FIGHT).
 
 Each entry: 14-25 words. ONE specific skin description.
 
@@ -63,4 +65,7 @@ the dominant majority, with global variety sprinkled in.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
