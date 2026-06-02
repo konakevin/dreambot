@@ -41,7 +41,9 @@ ${SHARED_RULES}
 ━━━ DEDUP — share SOURCE and QUALITY = too similar.
 ━━━ OUTPUT ━━━ JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
 
-  touch: (n) => `${n} TOUCH anchors for RetroBot's 80s/90s scene. Carpet/wallpaper/wood-panel/lacquer textures.
+  touch: (
+    n
+  ) => `${n} TOUCH anchors for RetroBot's 80s/90s scene. Carpet/wallpaper/wood-panel/lacquer textures.
 
 EXAMPLES (DO NOT REUSE):
 - "shag-carpet pile catching dust in the den"

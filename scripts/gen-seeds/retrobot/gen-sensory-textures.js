@@ -3,8 +3,11 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/retrobot/seeds/sensory_textures.json',
   total: 200,
-  batch: 50, append: true,
-  metaPrompt: (n) => `You are writing ${n} SENSORY TEXTURE descriptions for RetroBot — tactile and atmospheric details from 1975-1995. These get layered into scene descriptions to add sensory depth.
+  batch: 50,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SENSORY TEXTURE descriptions for RetroBot — tactile and atmospheric details from 1975-1995. These get layered into scene descriptions to add sensory depth.
 
 Each entry: 8-16 words. One specific sensory/tactile/atmospheric detail.
 
@@ -32,4 +35,7 @@ Each entry: 8-16 words. One specific sensory/tactile/atmospheric detail.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

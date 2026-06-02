@@ -3,8 +3,11 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/retrobot/seeds/video_store.json',
   total: 200,
-  batch: 50, append: true,
-  metaPrompt: (n) => `You are writing ${n} VIDEO STORE FRIDAY scene descriptions for RetroBot — the ritual of renting movies on Friday night, 1982-1998. No people visible. Pure scene/environment.
+  batch: 50,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} VIDEO STORE FRIDAY scene descriptions for RetroBot — the ritual of renting movies on Friday night, 1982-1998. No people visible. Pure scene/environment.
 
 Each entry: 10-20 words. One specific video store scene or detail.
 
@@ -33,4 +36,7 @@ Each entry: 10-20 words. One specific video store scene or detail.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

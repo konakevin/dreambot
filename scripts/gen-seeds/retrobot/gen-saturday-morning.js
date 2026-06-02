@@ -3,8 +3,11 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/retrobot/seeds/saturday_morning.json',
   total: 200,
-  batch: 50, append: true,
-  metaPrompt: (n) => `You are writing ${n} SATURDAY MORNING scene descriptions for RetroBot — the ritual of waking up early to watch cartoons, 1975-1995. No people visible. Pure scene/environment.
+  batch: 50,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} SATURDAY MORNING scene descriptions for RetroBot — the ritual of waking up early to watch cartoons, 1975-1995. No people visible. Pure scene/environment.
 
 Each entry: 10-20 words. One specific Saturday morning scene or setup.
 
@@ -30,4 +33,7 @@ Each entry: 10-20 words. One specific Saturday morning scene or setup.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

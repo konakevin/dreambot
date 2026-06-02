@@ -3,8 +3,11 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/retrobot/seeds/lighting.json',
   total: 200,
-  batch: 50, append: true,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for RetroBot — the specific quality of light from 1975-1995 scenes. These get layered into scene descriptions to set the lighting mood.
+  batch: 50,
+  append: true,
+  metaPrompt: (
+    n
+  ) => `You are writing ${n} LIGHTING descriptions for RetroBot — the specific quality of light from 1975-1995 scenes. These get layered into scene descriptions to set the lighting mood.
 
 Each entry: 8-16 words. One specific lighting condition or quality.
 
@@ -33,4 +36,7 @@ Each entry: 8-16 words. One specific lighting condition or quality.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});
