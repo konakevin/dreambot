@@ -1279,8 +1279,99 @@ The viewer's eye must land on the GLACIER TONGUE / BLACK BEACH / BASALT STACK / 
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the Icelandic subject. PRESERVE the Icelandic toponym from the subject slot verbatim in the opening phrase — Reynisfjara / Vatnajökull / Sólheimajökull / Jökulsárlón / Skógafoss / Seljalandsfoss / Gullfoss / Dettifoss / Stuðlagil / Svartifoss / Landmannalaugar / Þingvellir / Eldhraun / Strokkur / Geysir / Diamond Beach / Vík — these geographic anchors are LOAD-BEARING for Icelandic identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" — these are style-prior triggers that interfere with the SUBJECT anchoring, NEVER include them at the prompt open). Describe positive content only — no negation language like "no humans" or "no architecture" (Flux tokenizer leaks those words).`;
   },
-  EARTHBOT_EUROPEAN_WILDERNESS: ({ slots }) =>
-    `// PLACEHOLDER — EARTHBOT_EUROPEAN_WILDERNESS template TBD. Activate only after full template authored. Slots: ${Object.keys(slots).join(', ')}.`,
+  EARTHBOT_EUROPEAN_WILDERNESS: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      subject,
+      foreground_anchor,
+      light_condition,
+      atmosphere,
+      sky_layer,
+      scale_prover,
+      phenomenon,
+    } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE PHENOMENON (one real-Earth European event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or atmosphere, DROP IT. Real-Earth ONLY — no fantasy.`
+      : '';
+
+    return `You are a fine-art landscape photographer writing ONE EUROPEAN WILDERNESS RAW NATURE scene for EarthBot. THE LAND IS THE HERO. Spans the full breadth of Europe's signature wild geology — British Isles (Scottish Highlands: Glen Coe / Quiraing / Old Man of Storr / Loch Lomond / Trotternish ridge; Welsh Snowdonia / Llyn Idwal / Cadair Idris; Irish Cliffs of Moher / Connemara / Burren / Ring of Kerry / Skellig Michael cliffs; English Lake District), Alpine European (Dolomites — Tre Cime / Lago di Braies / Seceda ridge / Cinque Torri; Matterhorn from Riffelsee / Stellisee; Slovenian Julian Alps + Lake Bled island; Bavarian Alps + Königssee / Eibsee; Polish Tatras), Scandinavian fjords (Lofoten / Geirangerfjord / Trolltunga / Preikestolen), Faroe Islands (Drangarnir / Múlafossur / Sørvágsvatn floating-lake), Iceland-overlap-aware (avoid — that's iceland-raw path's domain). Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL EUROPEAN WILDERNESS ONLY ━━━
+
+This is REAL Europe — never fantasy. Ground every render in specific European geographic identity: Scottish HIGHLANDS heather + bog + glen + loch; Welsh Snowdonia slate-grey + emerald grass + cirque-tarn; Irish moss-green + limestone-grey + Atlantic cliff; Dolomites dramatic pale-limestone-and-pink-alpenglow signature; Matterhorn pyramidal silhouette + Riffelsee reflection; Slovenian Julian Alps lake-and-peak Lake-Bled-island signature; Lofoten fjord-and-spire arctic-cool color; Faroe basalt cliff + emerald turf + Atlantic spray. Europe HAS mountains — they're the GOAL here (unlike african-landscape which is flat) — but render as EUROPEAN-specific (Dolomites limestone pink-alpenglow, Matterhorn pyramidal, Scottish-heather-glen, Norwegian fjord), NEVER American Rockies / Patagonian / Asian drift.
+
+━━━ ZERO HUMANS / ZERO HUMAN-BUILT / ZERO CULTURAL HERITAGE ━━━
+
+The entire frame is uninhabited raw nature. NEVER a figure, NEVER a hiker, NEVER a vehicle, NEVER buildings, NEVER huts (including the famous Tre Cime rifugio / Faroe black cabins), NEVER villages, NEVER castles, NEVER ruins (Skellig Michael monastery / Hadrian's Wall / etc — cultural heritage, respect), NEVER standing stones / megalithic features (Stonehenge / Avebury / Ring of Brodgar — cultural), NEVER sheep / cows / agricultural pastures, NEVER fences / drystone walls (cultural), NEVER lighthouses, NEVER roads, NEVER funicular cables. Pure raw landscape only. Wildlife if present is matchstick-tiny incidental detail — red deer / chamois / ibex / mountain hare / Scottish wildcat / Atlantic puffin / sea eagle / gannet — never hero-scale.
+
+━━━ STYLE GUARDS ━━━
+
+- NO photographer name-drops in the output prompt (Max Rive / Marc Adamus / Daniel Kordan / Albert Dros — these leak verbatim and bias toward those photographers' specific famous shots). Describe morphologically.
+- Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
+- Avoid stylized / 3D-render / cartoony — photographic only
+- Avoid AMERICAN-ROCKIES / PATAGONIAN drift — name the SPECIFIC European formation (Dolomites Tre Cime / Matterhorn / Lofoten Reine / Trolltunga / Quiraing / Old Man of Storr) so Flux locks the prior to the right peak / fjord / glen
+
+━━━ THE SUBJECT (the iconic European HABITAT composition) ━━━
+${subject}
+
+━━━ FOREGROUND ANCHOR ━━━
+${foreground_anchor}
+
+━━━ LIGHT CONDITION ━━━
+${light_condition}
+
+━━━ ATMOSPHERE ━━━
+${atmosphere}
+
+━━━ SKY LAYER ━━━
+${sky_layer}
+
+━━━ SCALE PROVER (tiny element at deep distance — postage-stamp scale, optional) ━━━
+${scale_prover}
+
+If present, render small. European-appropriate ONLY: chamois / ibex on cliff / red deer stag / mountain hare / Atlantic puffin / sea eagle / gannet flock / lone Scottish wildcat. Never hero-scale.${phenomenonBlock}
+
+━━━ HARD RULE — EUROPEAN PALETTE + ATMOSPHERIC DEPTH ━━━
+
+Multi-tier depth (foreground anchor + midground hero geology + atmospheric distant horizon). Palette by biome: SCOTTISH HIGHLANDS heather-purple + moss-green + grey-mist + loch-cobalt; SNOWDONIA slate-grey + emerald-grass + cool-mist; IRISH CLIFFS limestone-pale-grey + Atlantic-cobalt + emerald-grass; DOLOMITES pale-limestone-and-pink-alpenglow + cobalt sky + emerald larch-and-pasture; MATTERHORN cobalt-and-snow + Riffelsee reflection cool-blue; JULIAN ALPS emerald-pasture + lake-turquoise + pale-limestone; LOFOTEN cool-blue + snow-white + arctic-pink-twilight + black basalt; FAROE basalt-grey + emerald-turf + Atlantic-pearl-spray.
+
+━━━ COMPOSITION DIRECTIVE — EPIC, NEVER DOCUMENTARY ━━━
+
+This is NEVER documentary travel-snapshot. This is BBC Planet Earth Europe season opener / Lord of the Rings Scottish Highlands cinematic / Skyfall Glen Coe energy. JAW-DROPPING. Specific composition energy:
+
+- **LOW-ANGLE HERO STANCE** — camera looking UP at Dolomites peak / Matterhorn pyramid / Old Man of Storr pinnacle / Faroe sea-cliff from below
+- **DRONE-LEVEL AERIAL** for Lofoten fjord, Faroe Sørvágsvatn floating-lake, Lake Bled island, Loch Lomond aerial
+- **DRAMATIC PEAK REFLECTION** in mirror tarn (Riffelsee Matterhorn, Lago di Braies Dolomites, Llyn Idwal Snowdon)
+- **MIST-INVERSION SEA-OF-CLOUDS** epic: Scottish Highlands dawn cloud-sea, Dolomites alpenglow above cloud floor
+- **HEATHER MOOR SUNSET** — Scottish Highlands carpet of purple heather in raking sidelight
+- **DRAMATIC SILHOUETTES** — Old Man of Storr pinnacles / Cliffs of Moher edge / Trolltunga rock-tongue
+- **MEGA-WEATHER**: snow squall over Cairngorms, monsoon-like rain curtain Quiraing, lenticular over Matterhorn, Atlantic storm over Cliffs of Moher
+- **EXTREME COLOR**: blood-red Dolomites alpenglow / electric heather sunset / cobalt fjord at blue-hour / molten Faroe basalt-and-sea
+- 50-65% subject, 15-20% foreground, 15-25% sky. Multi-tier depth mandatory.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'European wilderness palette — biome-dependent (heather-purple + moss-green for Scotland, slate-grey + emerald for Wales, limestone-pale + pink-alpenglow for Dolomites, cobalt + snow + Riffelsee for Matterhorn, emerald + turquoise for Slovenian Lakes, cool-blue + arctic-pink for Lofoten, basalt-grey + emerald-turf for Faroe)'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
+
+The polished prompt MUST be authored in this exact sequence:
+  1. **OPEN WITH THE SUBJECT** — the European hero (Tre Cime di Lavaredo / Matterhorn from Riffelsee / Old Man of Storr / Quiraing / Glen Coe / Lofoten Reine fjord / Trolltunga / Cliffs of Moher / Faroe Drangarnir sea stack / Sørvágsvatn / Lago di Braies / Snowdonia Llyn Idwal / Lake Bled island / etc.) is the FIRST phrase. NEVER open with foreground.
+  2. Then the SKY LAYER
+  3. Then the LIGHT CONDITION + ATMOSPHERE
+  4. Then the FOREGROUND ANCHOR
+  5. Then the SCALE PROVER if applicable
+  6. Then any rolled PHENOMENON
+  7. Finally palette / mood notes
+
+The viewer's eye must land on the PEAK / FJORD / CLIFF / TARN / RIDGE / SEA-STACK first.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the European subject. PRESERVE the European toponym from the subject slot verbatim — Tre Cime / Lavaredo / Matterhorn / Riffelsee / Stellisee / Dolomites / Lago di Braies / Seceda / Cinque Torri / Old Man of Storr / Quiraing / Glen Coe / Loch Lomond / Trotternish / Snowdonia / Llyn Idwal / Cadair Idris / Cliffs of Moher / Connemara / Burren / Lofoten / Reine / Geirangerfjord / Trolltunga / Preikestolen / Drangarnir / Múlafossur / Sørvágsvatn / Lake Bled / Königssee / Eibsee / Tatras — these toponyms are LOAD-BEARING, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" — NEVER include them at the open). Describe positive content only — no negation language like "no humans" or "no castles" (Flux tokenizer leaks those words).`;
+  },
 
   EARTHBOT_HIDDEN_CORNER: ({ slots, sharedDNA, vibeDirective }) => {
     const {

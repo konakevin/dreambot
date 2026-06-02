@@ -91,6 +91,7 @@ const pathBuilders = {
   'african-landscape': require('./paths/african-landscape'), // axis-system (2026-06-01 v2 resurrection)
   'asia-landscape': require('./paths/asia-landscape'), // axis-system (2026-06-01 activation)
   'australian-outback': require('./paths/australian-outback'), // axis-system (2026-06-01 activation)
+  'european-wilderness': require('./paths/european-wilderness'), // axis-system (2026-06-01 activation)
   // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
@@ -120,6 +121,7 @@ const EARTH_PATHS = [
   'african-landscape',
   'asia-landscape',
   'australian-outback',
+  'european-wilderness',
 ];
 
 const BEACH_PATHS = [
@@ -205,6 +207,14 @@ const ASIA_LANDSCAPE_PREFIX =
 // American SW orange).
 const AUSTRALIAN_OUTBACK_PREFIX =
   'Australian outback raw nature, sharp detail, gallery-quality, masterpiece';
+// 2026-06-01 — European raw nature. BIOME-AGNOSTIC per the prefix-
+// enumeration rule. Spans Scottish Highlands + Snowdonia + Cliffs of
+// Moher + Dolomites + Matterhorn + Lofoten fjords + Faroe Islands.
+// R0 with prefix "European wilderness raw nature" rendered 5/5 alpine
+// even though pool rolled Scottish / Faroe / Irish subjects — Flux's
+// "wilderness" interpretation was Alps-coded. Dropping "wilderness".
+const EUROPEAN_WILDERNESS_PREFIX =
+  'European raw nature, sharp detail, gallery-quality, masterpiece';
 
 // Locked to cinematic only — Kevin's preferred single-vibe lock for
 // EarthBot 2026-05-05. Combined with the locked earthbot_photography medium
@@ -252,6 +262,7 @@ module.exports = {
     'african-landscape': AFRICAN_LANDSCAPE_PREFIX,
     'asia-landscape': ASIA_LANDSCAPE_PREFIX,
     'australian-outback': AUSTRALIAN_OUTBACK_PREFIX,
+    'european-wilderness': EUROPEAN_WILDERNESS_PREFIX,
   },
 
   // Per-path suffix override — engine reads this BEFORE promptSuffixByMedium
@@ -384,6 +395,7 @@ module.exports = {
       'african-landscape',
       'asia-landscape',
       'australian-outback',
+      'european-wilderness',
     ],
   },
 

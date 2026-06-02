@@ -2128,6 +2128,348 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
     ],
     instructions: `Output ONLY a numbered list of {COUNT} Australian phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // EUROPEAN-WILDERNESS path (2026-06-01 activation).
+  // Habitat-hero recipe. Universal guards:
+  //   • NO photographer names (Max Rive / Marc Adamus / Daniel Kordan /
+  //     Albert Dros — these leak verbatim)
+  //   • NO negation language in pools
+  //   • Subject entries LEAD with European toponym in first 5-8 words
+  //   • NO castles / ruins / villages / standing stones (cultural heritage —
+  //     respect). NO sheep with fence / drystone wall (agricultural-cultural)
+  //   • NO Iceland content (that's iceland-raw path's domain)
+  //   • Europe HAS mountains — they're the GOAL — but render as EUROPEAN
+  //     specific (Dolomites limestone-pink alpenglow, Matterhorn pyramidal,
+  //     Lofoten arctic fjord), NEVER American Rockies / Patagonian drift
+  // ═══════════════════════════════════════════════════════════
+
+  european_wilderness_subject: {
+    format: 'simple',
+    theme: `PURE EUROPEAN WILDERNESS RAW HABITAT SCENES for EarthBot's european-wilderness path. THE LAND IS THE HERO. Each entry is ONE iconic European HABITAT composition. Wildlife if present is matchstick-tiny incidental scale-prover. Each entry 30-55 words.
+
+🎯 THE HABITAT IS THE HERO:
+  • The HABITAT fills 50-65% of the frame
+  • CAMERA-ANGLE VARIETY mandatory: low-angle hero / DRONE POV aerial / mirror-reflection / silhouette / wide cinematic vista
+  • Wildlife if present is matchstick-tiny in deep distance
+
+⚠️ MANDATORY — every entry must LEAD with a European toponym in the first 5-8 words.
+
+🇪🇺 ICONIC EUROPEAN WILDERNESS COMPOSITIONS (mix across 25 entries):
+  A. **DOLOMITES TRE CIME** — the three iconic limestone peaks at alpenglow, low-angle stance from Tre Cime trail at sunset / OR Lago di Braies turquoise lake mirror-reflecting Dolomite peaks / OR Seceda ridge razor edge at sunrise
+  B. **MATTERHORN RIFFELSEE** — iconic pyramidal Matterhorn mirror-reflected in Riffelsee / Stellisee at dawn, perfect alpenglow on east face
+  C. **SCOTTISH HIGHLANDS GLEN COE** — dramatic glen with heather-covered slopes + Three Sisters peaks, mist drift through valley at dawn
+  D. **OLD MAN OF STORR / QUIRAING** — Trotternish ridge pinnacles silhouetted against burning sky, Atlantic mist
+  E. **CLIFFS OF MOHER** — sheer Irish Atlantic cliff face plunging to ocean below at sunset
+  F. **SNOWDONIA LLYN IDWAL** — cirque tarn reflecting slate-grey peaks above, mossy emerald rocks
+  G. **LOFOTEN REINE FJORD** — drone POV aerial of Norwegian arctic fjord with snow peaks rising from black-water inlet
+  H. **GEIRANGERFJORD AERIAL** — drone POV looking down narrow Norwegian fjord with waterfalls cascading from cliffs
+  I. **TROLLTUNGA ROCK TONGUE** — dramatic horizontal rock tongue jutting over fjord far below
+  J. **FAROE DRANGARNIR ARCH** — basalt sea arch with emerald-turf island beyond
+  K. **MÚLAFOSSUR FAROE** — waterfall plunging from cliff into Atlantic at sunset
+  L. **SØRVÁGSVATN FAROE** — floating-lake illusion above ocean cliff
+  M. **LAKE BLED ISLAND** — Slovenian island reflected in turquoise lake, Julian Alps behind
+  N. **KÖNIGSSEE / EIBSEE** — Bavarian Alps lake with cliffs rising from emerald water
+  O. **HEATHER MOOR SUNSET** — Scottish moor blanket of purple heather catching raking sidelight
+  P. **CONNEMARA / BURREN** — Irish limestone karst pavement with Atlantic in distance
+
+🚫 ABSOLUTE BANS:
+  • ZERO photographer names (Max Rive / Marc Adamus / Daniel Kordan / Albert Dros)
+  • ZERO castles, ruins, monasteries, villages, viewing platforms (cultural — respect)
+  • ZERO standing stones / Stonehenge / Avebury / megalithic features (cultural)
+  • ZERO sheep / cows / agricultural pastures / drystone walls / fences (agricultural)
+  • ZERO lighthouses, cabins, huts (including Tre Cime rifugio / Faroe black cabins)
+  • ZERO roads / funiculars / cable cars
+  • ZERO Iceland content (that's iceland-raw path's domain — no Reynisfjara / Vatnajökull / Jökulsárlón)
+  • ZERO American Rockies / Patagonian analogues — describe Europe on its own terms
+  • ZERO sci-fi / fantasy / portal
+  • ZERO negation phrases
+  • ZERO wildlife-as-hero
+
+✅ EVERY ENTRY MUST INCLUDE:
+  • European toponym in first 5-8 words
+  • Specific HABITAT hero (peak / cliff / cirque tarn / fjord / sea arch / heather moor / limestone pavement)
+  • Specific CAMERA ANGLE
+  • Multi-tier depth language
+  • Europe-coded materials (limestone / Dolomite-pink stone / heather / Scottish moor / Welsh slate / Irish limestone karst / Norwegian basalt / Faroe basalt + turf / alpine larch / Julian-Alps emerald)
+  • A specific DRAMATIC lighting moment (Dolomites pink alpenglow / Lofoten arctic-pink twilight / Glen Coe storm-break / Cliffs of Moher Atlantic sunset / Riffelsee mirror dawn / heather moor raking sidelight)
+
+Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBERED list.`,
+    touchpoints: [
+      'Tre Cime di Lavaredo Dolomites at sunset, the three iconic limestone peaks glowing pink alpenglow against deep cobalt sky, low-angle stance from Tre Cime trail looking up, foreground close alpine wildflower cluster at near edge, breaking cumulus catching warm color',
+      'Lago di Braies Dolomites turquoise lake mirror-reflecting the pale-limestone peaks above at dawn, foreground close mossy boulder at lake edge, larch trees framing the shoreline, blue-hour cobalt twilight gradient brightening to pink at horizon',
+      'Seceda ridge razor edge at sunrise in the Dolomites, the dramatic limestone ridge sweeping into deep tier of peaks against blazing rose-amber sky, foreground close alpine grass at near edge, low-angle hero stance from below ridge',
+      'Matterhorn pyramidal silhouette mirror-reflected in Riffelsee at dawn, perfect alpenglow rose-amber on east face doubled in glassy still water, foreground close lakeshore pebbles at near edge, deep cobalt sky brightening',
+      'Stellisee mirror lake reflecting Matterhorn pyramidal silhouette at sunset, foreground close alpine-flower cluster on grass at near edge, deep cobalt zenith and blazing copper horizon over the peak',
+      'Glen Coe Scottish Highlands dramatic glen at dawn, the Three Sisters peaks rising from heather-covered slopes with mist drift through valley, foreground close moss-and-heather at near edge, blue-hour cobalt sky brightening, low cloud base catching warm color',
+      'Old Man of Storr pinnacles on Trotternish ridge Isle of Skye, the iconic basalt pinnacles silhouetted against blazing copper sunset over Atlantic, low-angle hero stance, foreground close moss-and-heather at near edge, Cuillin range beyond in cool blue haze',
+      'Quiraing Trotternish landslip dramatic rock formations at sunrise, swooping ridges and pinnacle towers with mist drift between, foreground close grass-and-rock at near edge, sea-of-clouds inversion in distance below ridge',
+      'Cliffs of Moher Atlantic sea-cliff face at sunset, sheer 200-metre limestone wall plunging to churning ocean below, low-angle stance from clifftop, foreground close grass-clifftop edge with thrift flowers at near edge, deep cobalt sky above',
+      'Snowdonia Llyn Idwal cirque tarn reflecting slate-grey peaks above at dawn, mossy emerald rocks ring the tarn shoreline, foreground close moss-and-water-edge boulder at near edge, mist drift between peaks, blue-hour cobalt gradient',
+      'Lofoten Reine fjord drone POV aerial looking down at the iconic arctic fjord with snow peaks rising from black-water inlet, foreground close fjord shore at near edge, blue-hour arctic-pink twilight, deep cobalt-and-rose gradient sky',
+      'Geirangerfjord aerial drone POV looking down the narrow Norwegian fjord with multiple waterfalls cascading from sheer cliffs above, deep emerald water below, foreground close fjord-edge ledge at near edge, blazing golden-hour sidelight on cliffs',
+      'Trolltunga rock tongue jutting horizontal over fjord far below in dramatic perspective, low-angle stance from the tongue edge looking down, foreground close granite-and-moss rock at near edge, deep emerald fjord water 700 metres below, cobalt sky',
+      'Faroe Drangarnir basalt sea arch with emerald-turf island beyond in deep tier, drone POV from sea-level looking through the arch, foreground close basalt rock at near edge, Atlantic spray drift around arch, cobalt sky and breaking cloud',
+      'Múlafossur waterfall Faroe Islands plunging from emerald-turf cliff into Atlantic Ocean at sunset, foreground close emerald-turf cliff edge at near edge, blazing copper sky behind, deep cobalt sea below',
+      'Sørvágsvatn floating-lake Faroe optical illusion appearing to hover above ocean cliff drop, drone POV from elevated angle, foreground close emerald-turf at near edge, lake stretching to distant cliff edge, Atlantic Ocean beyond and below',
+      'Lake Bled Slovenian island reflected in turquoise lake at sunrise, the iconic small island with the Julian Alps rising beyond, foreground close lakeshore boulder at near edge, mist drift on lake surface, pale rose sky brightening',
+      'Königssee Bavarian Alps lake with sheer cliffs rising from emerald water, drone POV from fjord-style narrow lake, foreground close lake-edge larch tree at near edge, sea-of-clouds inversion above peaks in distance, blue-hour cobalt twilight',
+      'Eibsee Bavarian Alps mirror-still lake reflecting Zugspitze-area peaks at dawn, foreground close pebble shore at near edge, larch trees framing the water, pale rose sky brightening',
+      'Scottish moor blanket of purple heather at sunset in raking horizontal sidelight, vast carpet of heather stretching to distant hills, foreground close heather flower cluster at near edge, blazing copper sky, low-angle hero stance from moor level',
+      'Burren limestone karst pavement Ireland with criss-crossing fissures stretching to flat Atlantic horizon, drone POV looking down at the karst-pattern, foreground close limestone slab edge with grass-tuft at near edge, cobalt sky',
+      'Cinque Torri Dolomites five-tower limestone formation cluster at sunset, low-angle hero stance from below the towers, foreground close alpine-grass-and-rock at near edge, pink alpenglow on towers, deep cobalt sky',
+      'Skogafoss-style cliffside waterfall Faroe Islands plunging onto basalt beach below, drone POV from offshore, foreground close basalt-beach at near edge, golden-hour sidelight on emerald-turf cliff above',
+      'Connemara Ireland boggy peat-stream snaking through emerald moss to flat Atlantic horizon, foreground close boggy peat-edge at near edge, mist drift over the moor, blazing rose sunset, low Atlantic horizon',
+      'Bavarian Alpsee mirror lake reflecting distant peaks at dawn, foreground close mossy lakeshore at near edge, pale rose sky brightening, mist drift on water surface in pearl-grey',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} European subject entries. NO preamble. Each entry 30-55 words on a single line. Format follows touchpoint pattern: "Toponym + habitat hero + camera angle + close-foreground + depth + lighting".`,
+  },
+
+  european_wilderness_foreground_anchor: {
+    format: 'simple',
+    theme: `FOREGROUND ANCHORS for EarthBot's european-wilderness path. Each entry is ONE specific close-edge European detail. Each entry 14-25 words.
+
+✅ EUROPE-SPECIFIC CLOSE-EDGE DETAILS:
+  • Heather flower cluster at near edge (Scotland)
+  • Moss-and-heather tussock at near edge
+  • Slate-grey rock with lichen at near edge (Wales)
+  • Limestone karst slab edge with grass-tuft (Burren / Ireland)
+  • Pebble shore with mossy boulder at near edge (Alps lakes)
+  • Alpine wildflower (gentian / edelweiss) cluster at near edge
+  • Larch tree branch in autumn gold at near edge (Dolomites)
+  • Emerald-turf cliff edge (Faroe)
+  • Basalt rock with sea spray at near edge (Faroe / Lofoten)
+  • Grass-clifftop edge with thrift flowers at near edge (Moher)
+  • Boggy peat-edge with cotton-grass at near edge (Connemara)
+  • Mossy lake-edge boulder at near edge (Snowdonia / Bled)
+  • Granite-and-lichen rock at near edge (Cuillin / Glen Coe)
+  • Snow-and-grass tussock at near edge (Lofoten winter)
+  • Fjord-shore cobble at near edge (Lofoten / Geiranger)
+`,
+    touchpoints: [
+      'Heather flower cluster at near edge in deep purple bloom catching warm sidelight',
+      'Moss-and-heather tussock at near edge wet with morning dew',
+      'Slate-grey rock with lichen crust at near edge cool damp from Welsh mist',
+      'Limestone karst slab edge with grass-tuft at near edge in soft grey pattern',
+      'Pebble shore with mossy boulder at near edge wet from alpine lake water',
+      'Alpine gentian cluster at near edge in vivid blue against grey rock',
+      'Larch tree branch in autumn gold at near edge against pale Dolomite sky',
+      'Emerald-turf cliff edge at near edge with single thrift flower',
+      'Basalt rock with sea spray and salt crust at near edge on Faroe shore',
+      'Grass-clifftop edge with thrift flowers at near edge on Cliffs of Moher',
+      'Boggy peat-edge with cotton-grass at near edge in soft pale fluff',
+      'Mossy lake-edge boulder at near edge reflecting alpine peaks above',
+      'Granite-and-lichen rock at near edge cool damp from Highland mist',
+      'Snow-and-grass tussock at near edge in cool dawn light',
+      'Fjord-shore cobble at near edge wet from Norwegian arctic spray',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} European foreground anchor entries. NO preamble. Each entry 14-25 words on a single line.`,
+  },
+
+  european_wilderness_light_condition: {
+    format: 'simple',
+    theme: `LIGHT CONDITIONS for EarthBot's european-wilderness path. Each entry is ONE specific European lighting register. Each entry 14-22 words.
+
+✅ EUROPEAN LIGHTING REGISTERS:
+  • Dolomites pink alpenglow on limestone at sunrise
+  • Matterhorn rose-amber dawn alpenglow east face
+  • Glen Coe storm-break shaft through dark cloud
+  • Cliffs of Moher Atlantic sunset blazing copper
+  • Riffelsee dawn cool blue-hour mirror calm
+  • Heather moor raking sidelight golden hour
+  • Lofoten arctic-pink twilight cool palette
+  • Faroe golden-hour rake on emerald turf
+  • Welsh Snowdonia overcast cool soft pearl light
+  • Scottish Highlands rim-light sunset
+  • Mist-inversion dawn over Dolomites
+  • Lake Bled sunrise warm-pink reflection
+  • Königssee blue-hour cool cobalt mirror
+  • Faroe Múlafossur backlit copper sunset
+  • Lofoten Milky-Way dark-sky arctic night
+`,
+    touchpoints: [
+      'Dolomites pink alpenglow on pale limestone peaks at sunrise in warm rose-amber',
+      'Matterhorn rose-amber dawn alpenglow on east face at horizontal angle',
+      'Glen Coe storm-break shaft tearing through dark cloud illuminating one ridge',
+      'Cliffs of Moher Atlantic sunset blazing copper rake on limestone cliff face',
+      'Riffelsee dawn cool blue-hour mirror calm reflecting Matterhorn silhouette',
+      'Scottish heather moor raking sidelight golden hour bringing out purple bloom',
+      'Lofoten arctic-pink twilight cool palette stretching across snow-and-fjord',
+      'Faroe golden-hour rake on emerald turf cliff with Atlantic spray suspended',
+      'Welsh Snowdonia overcast cool soft pearl light on slate-grey cirque',
+      'Scottish Highlands rim-light sunset on Three Sisters peaks Glen Coe',
+      'Mist-inversion dawn breaking around Dolomite peaks in white drift',
+      'Lake Bled sunrise warm-pink reflection on still turquoise water',
+      'Königssee blue-hour cool cobalt mirror surface reflecting Bavarian cliffs',
+      'Faroe Múlafossur backlit copper sunset with waterfall mist catching warmth',
+      'Lofoten Milky-Way dark-sky arctic night over arctic fjord',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} European light-condition entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  european_wilderness_atmosphere: {
+    format: 'simple',
+    theme: `ATMOSPHERE entries for EarthBot's european-wilderness path. Each entry is ONE specific European atmospheric texture. Each entry 14-22 words.
+
+✅ EUROPEAN ATMOSPHERIC REGISTERS:
+  • Sea-of-clouds inversion in Dolomites valley
+  • Scottish Highland mist drift through glen
+  • Atlantic sea-fog rolling onto Irish cliff
+  • Faroe Atlantic spray drift onto emerald turf
+  • Bavarian alpine cool mountain mist
+  • Lofoten arctic cold-clear air
+  • Welsh slate-grey overcast cool damp air
+  • Cirque tarn cool morning mist drift (Snowdonia)
+  • Lake-mirror still cold air at dawn (Bled / Königssee)
+  • Heather moor cool damp morning fog
+  • Storm cell rain curtain advancing across glen
+  • Snow squall over Cairngorms
+  • Dolomites high-altitude clear thin air
+  • Mountain-tundra cold-haze pearl-grey
+  • Cool dawn haze low over fjord water
+`,
+    touchpoints: [
+      'Sea-of-clouds inversion rolling in Dolomites valley below alpine peaks',
+      'Scottish Highland mist drift through glen in cool pearl-grey horizontal bands',
+      'Atlantic sea-fog rolling onto Irish cliff face in dense veil',
+      'Faroe Atlantic spray drift onto emerald turf in cool pearl mist',
+      'Bavarian alpine cool mountain mist hanging between forested slopes',
+      'Lofoten arctic cold-clear air with razor-sharp visibility',
+      'Welsh slate-grey overcast cool damp air pressing low over Snowdonia',
+      'Cirque tarn cool morning mist drift over Snowdonia Llyn Idwal water',
+      'Lake-mirror still cold air at dawn over Königssee in glass-perfect stillness',
+      'Heather moor cool damp morning fog low over Scottish purple bloom',
+      'Storm cell rain curtain advancing across glen from west',
+      'Snow squall sweeping over Cairngorms in diagonal white streaks',
+      'Dolomites high-altitude clear thin air with razor-sharp shadow definition',
+      'Mountain-tundra cold-haze pearl-grey suspended over alpine ridge',
+      'Cool dawn haze low over Lofoten fjord water in arctic blue',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} European atmosphere entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  european_wilderness_sky_layer: {
+    format: 'simple',
+    theme: `SKY LAYER entries for EarthBot's european-wilderness path. Each entry is ONE specific European sky cover. Each entry 14-22 words.
+
+✅ EUROPEAN SKY REGISTERS:
+  • Lenticular cloud over Matterhorn peak
+  • Banner cloud streaming off Dolomite peak
+  • Sea-of-clouds inversion below alpine ridge
+  • Heavy nimbostratus over Scottish Highlands
+  • Pale-rose Dolomite sunrise sky
+  • Cool grey Welsh overcast pressing low
+  • Cobalt arctic noon sky Lofoten
+  • Atlantic sunset gradient over Cliffs of Moher
+  • Pre-storm yellow-green oppressive sky
+  • Star-crowded Lofoten night Milky-Way arch
+  • Pre-dawn cool blue-pink Faroe
+  • Layered stratocumulus broken by cobalt
+  • Cumulonimbus anvil rising over Dolomite
+  • Lake Bled warm-pink sunrise mirror
+  • Sunset orange-violet ribbon over fjord
+`,
+    touchpoints: [
+      'Lenticular cloud disc hovering motionless over Matterhorn peak',
+      'Banner cloud streaming horizontally off Dolomite Tre Cime peak',
+      'Sea-of-clouds inversion below alpine ridge with peaks emerging into clear sky',
+      'Heavy nimbostratus rain-bearing dark grey deck over Scottish Highlands',
+      'Pale-rose Dolomite sunrise sky with peaks silhouetted',
+      'Cool grey Welsh overcast pressing low over Snowdonia',
+      'Cobalt arctic noon sky Lofoten in deep saturation',
+      'Atlantic sunset gradient cobalt-to-amber over Cliffs of Moher',
+      'Pre-storm yellow-green oppressive sky pressing low over Glen Coe',
+      'Star-crowded Lofoten moonless night sky with Milky Way arch overhead',
+      'Pre-dawn cool blue-pink Faroe sky over Drangarnir arch',
+      'Layered stratocumulus broken by cobalt patches over Lake District',
+      'Cumulonimbus anvil rising over Dolomite in afternoon convection',
+      'Lake Bled warm-pink sunrise sky reflected in mirror lake',
+      'Sunset orange-violet ribbon at horizon over Lofoten fjord',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} European sky entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  european_wilderness_scale_prover: {
+    format: 'simple',
+    theme: `SCALE PROVERS for EarthBot's european-wilderness path. Each entry is ONE tiny postage-stamp-scale element at deep distance — European-native wildlife or geometry. Each entry 14-22 words.
+
+✅ EUROPEAN SCALE-PROVER REGISTERS:
+  • Lone red deer stag on Scottish moor (Highlands)
+  • Chamois pair on Dolomite ridge
+  • Ibex silhouette on Alpine cliff
+  • Mountain hare on snow plain
+  • Scottish wildcat shape on heather moor
+  • Atlantic puffin flock on Faroe cliff
+  • Sea eagle gliding over fjord
+  • Gannet flock over Cliffs of Moher
+  • Distant single larch on alpine slope
+  • Solitary cairn-shape on moor
+  • Distant single pine on Dolomite
+  • Lone reindeer on Lofoten
+  • Glacial-melt stream silver thread
+  • Tiny single sea-bird over Trolltunga
+  • Distant sailboat (no — that's human; skip)
+`,
+    touchpoints: [
+      'Lone red deer stag silhouette on distant Scottish moor in deep distance',
+      'Chamois pair pencil-tall on distant Dolomite ridge',
+      'Ibex silhouette on distant Alpine cliff in cool atmospheric blue',
+      'Mountain hare shape ant-small on snow plain in deep distance',
+      'Scottish wildcat silhouette on heather moor barely readable at deep distance',
+      'Atlantic puffin flock on distant Faroe cliff ledge as small dark dots',
+      'Sea eagle gliding silhouette over Norwegian fjord in deep sky',
+      'Gannet flock over Cliffs of Moher in middle distance',
+      'Distant single larch silhouette on alpine slope in deep distance',
+      'Solitary cairn-shape on distant Scottish moor at deep distance',
+      'Distant single pine silhouette on Dolomite ridge in cool atmospheric blue',
+      'Lone reindeer pencil-tall on Lofoten tundra in deep distance',
+      'Glacial-melt stream silver-thin thread at far valley floor',
+      'Tiny single sea-bird gliding over Trolltunga in deep distance',
+      'Lone red squirrel shape barely readable in distant European forest edge',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} European scale-prover entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
+
+  european_wilderness_phenomenon: {
+    format: 'simple',
+    theme: `RARE PHENOMENA for EarthBot's european-wilderness path. Each entry is ONE specific real-Earth European phenomenon. Each entry 14-22 words.
+
+✅ EUROPEAN PHENOMENA:
+  • Dolomite alpenglow pink moment at sunrise
+  • Mist-inversion sea around Dolomite peaks
+  • Glen Coe rain-curtain storm break
+  • Atlantic storm-break over Cliffs of Moher
+  • Heather moor blue-hour mist drift
+  • Lofoten Northern Lights green ribbon aurora
+  • Faroe Atlantic spray geyser at sea arch
+  • Snow squall over Cairngorms
+  • Lenticular cloud stack over Matterhorn
+  • Crepuscular ray ladder through Bavarian Alps
+  • Sunset alpenglow on Trolltunga
+  • Rainbow arc over Snowdonia after rain
+  • Distant lightning forking over Dolomites
+  • Sea-fog inversion at Connemara coast
+  • Faroe waterfall mist-rainbow at sunset
+`,
+    touchpoints: [
+      'Dolomite alpenglow pink moment at sunrise on limestone peaks in warm rose',
+      'Mist-inversion sea breaking around Dolomite peaks with peaks emerging as islands',
+      'Glen Coe rain-curtain storm break with sun-shaft illuminating one valley',
+      'Atlantic storm-break over Cliffs of Moher with sun-shafts piercing dark cloud',
+      'Heather moor blue-hour mist drift low over Scottish purple bloom',
+      'Lofoten Northern Lights green aurora ribbon arching across arctic sky',
+      'Faroe Atlantic spray geyser blasting up at sea arch with sunset light',
+      'Snow squall sweeping over Cairngorms in diagonal white streaks',
+      'Lenticular cloud stack over Matterhorn peak in three discs',
+      'Crepuscular ray ladder breaking through cloud over Bavarian Alps',
+      'Sunset alpenglow rose-amber on Trolltunga rock tongue and fjord below',
+      'Rainbow arc piercing post-rain mist over Snowdonia at golden hour',
+      'Distant lightning forking over Dolomites from a mature thunderstorm',
+      'Sea-fog inversion at Connemara coast with hills emerging from cloud',
+      'Faroe Múlafossur waterfall mist-rainbow at sunset in full primary band',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} European phenomenon entries. NO preamble. Each entry 14-22 words on a single line.`,
+  },
 };
 
 if (!POOL_RECIPES[POOL]) {
