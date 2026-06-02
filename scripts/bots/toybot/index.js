@@ -57,19 +57,18 @@ module.exports = {
   // all 4 Flux models (~1/4 each). modelByPath + this whitelist constrain the
   // BOT only — user-facing mediums (claymation/vinyl) are untouched.
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  // Banned 2026-06-02: flux-2-pro (Kevin heart-ban).
+  allowedModels: ALL_ENABLED_AI_MODELS.filter((m) => m !== 'black-forest-labs/flux-2-pro'),
   modelByPath: {
     'toybox-chaos': [
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-2-dev',
-      'black-forest-labs/flux-2-pro',
     ],
     'dino-diorama': [
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-2-dev',
-      'black-forest-labs/flux-2-pro',
     ],
   },
 

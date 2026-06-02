@@ -44,13 +44,13 @@ module.exports = {
   // pool BEFORE picking. GothBot bans flux-2-dev (tensor bug: "q_descale must
   // have shape...") and flux-2-pro (over-strict E005 safety filter). Every
   // gothbot render picks flux-dev or flux-1.1-pro only.
+  // Banned 2026-06-02: flux-2-flex (Kevin heart-ban — fleet-wide for gothbot).
   allowedModels: [
     'google/gemini-2-image',
     'openai/gpt-image-2',
     'black-forest-labs/flux-2-pro',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-flex',
     'black-forest-labs/flux-2-max',
   ],
 
@@ -78,47 +78,44 @@ module.exports = {
     // ── per-path lineup minus the hearted-as-bad models. Bans noted
     // ── inline per path. To unban: add the model id back.
     'goth-closeup': [
-      // BAN: Banana
+      // BAN: Banana, Flux 2 Flex (2026-06-02)
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
       'black-forest-labs/flux-2-max',
     ],
     'goth-full-body': [
-      // BAN: Flux Dev, Flux 2 Pro
+      // BAN: Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02)
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
       'black-forest-labs/flux-2-max',
     ],
     'goth-male-full-body-axis': [
       // Mirror of goth-full-body (2026-05-31). Same bans on male twin:
-      // Flux Dev, Flux 2 Pro. Model fingerprint (eye geometry, face polish)
-      // doesn't change with subject gender, so a model that looks bad on
-      // the female version of a path looks bad on the male version too.
+      // Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02). Model fingerprint
+      // (eye geometry, face polish) doesn't change with subject gender,
+      // so a model that looks bad on the female version of a path looks
+      // bad on the male version too.
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
       'black-forest-labs/flux-2-max',
     ],
 
     // Vampire paths (female-coded subset gets the multi-model arrays)
     'vampire-girls-2': [
-      // No bans — all 8 survive
+      // BAN: Flux 2 Flex (2026-06-02)
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
       'black-forest-labs/flux-2-max',
     ],
     'vampire-assassin-female': [

@@ -135,8 +135,9 @@ module.exports = {
   // Previously locked entirely to flux-1.1-pro via `useModelPicker:false` +
   // per-path modelByPath — Kevin opened it up to all 8 models.
   useModelPicker: true,
-  // Bot-wide allowedModels (Kevin 2026-05-31): bot-wide MINUS Flux Dev AND
-  // MINUS Flux 2 Max. Was `ALL_ENABLED_AI_MODELS` — both dropped fleet-wide
+  // Bot-wide allowedModels: bot-wide MINUS Flux Dev + Flux 2 Max
+  // (Kevin 2026-05-31) AND MINUS Flux 2 Pro (Kevin 2026-06-02, fleet-wide
+  // heart-ban). Was `ALL_ENABLED_AI_MODELS` — dropped 3 models fleet-wide
   // for DragonBot after audit. Explicit list because bot is a proper subset.
   allowedModels: [
     'google/gemini-2-image',
@@ -144,7 +145,6 @@ module.exports = {
     'black-forest-labs/flux-2-flex',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-2-pro',
   ],
 
   // Per-path bans (2026-05-31): Kevin reviewed the 4 female-character
@@ -176,7 +176,6 @@ module.exports = {
     'artsy-girl': [
       'google/gemini-2-image',
       'black-forest-labs/flux-dev',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-flex',
@@ -185,7 +184,6 @@ module.exports = {
     'female-adventurer': [
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-max',
@@ -193,7 +191,6 @@ module.exports = {
     'male-adventurer': [
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-max',
@@ -201,7 +198,6 @@ module.exports = {
     'female-explorer': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-flex',
@@ -210,7 +206,6 @@ module.exports = {
     'male-explorer': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-flex',
@@ -256,36 +251,28 @@ module.exports = {
     castle: [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // epic-moment (Kevin 2026-06-01 after premium-tier axis enrichment +
     // 18-render comparison): locked to 3 models. Banana + GPT-2 + F2 Flex
     // all hearted-as-bad in the enriched-path test.
-    'epic-moment': [
-      'black-forest-labs/flux-2-pro',
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'epic-moment': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'dark-realm': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'dragon-lore': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'dragon-scene': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
