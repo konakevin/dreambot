@@ -8,19 +8,29 @@ export function useLikeIds() {
   return useQuery({
     queryKey: ['likeIds', user?.id],
     queryFn: async () => {
-      // No .limit() — PostgREST default is 1000, override via .range() to be safe.
-      // Prev code had .limit(500); admins testing heavily ran past that, causing
-      // their old likes to fall out of the cached Set. Heart showed un-highlighted
-      // on previously-liked posts; tap re-liked → upsert no-op + optimistic drift
-      // (count bumps but heart clears on re-render because new fetch still
-      // didn't include the uploadId). UUID rows are tiny — 10k = ~360KB, fine.
-      const { data, error } = await supabase
-        .from('likes')
-        .select('upload_id')
-        .eq('user_id', user!.id)
-        .range(0, 9999);
-      if (error) throw error;
-      const fresh = new Set((data ?? []).map((r) => r.upload_id as string));
+      // Paginate in 1000-row chunks until exhausted. Supabase's PostgREST
+      // applies a hard `max-rows: 1000` cap regardless of the requested
+      // .range() — so the previous `.range(0, 9999)` silently truncated
+      // to 1000 rows. Anyone with >1000 likes (Kevin had 1114) had ~114
+      // likes invisible to the client: the heart un-filled on those
+      // posts cross-session even though the server count was correct.
+      // And without an explicit .order(), which 1000 PostgREST returned
+      // was undefined (physical row order) — a TODAY like could fall out
+      // of the slice. Pagination guarantees the full set comes back.
+      const all: { upload_id: string }[] = [];
+      const PAGE = 1000;
+      for (let offset = 0; ; offset += PAGE) {
+        const { data, error } = await supabase
+          .from('likes')
+          .select('upload_id')
+          .eq('user_id', user!.id)
+          .range(offset, offset + PAGE - 1);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        for (const row of data) all.push(row as { upload_id: string });
+        if (data.length < PAGE) break;
+      }
+      const fresh = new Set(all.map((r) => r.upload_id));
 
       // Defense-in-depth UNION with current cache. Without this, a refetch
       // that races against Supabase read-after-write (the new likes row
