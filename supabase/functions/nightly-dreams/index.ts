@@ -1402,6 +1402,35 @@ Output ONLY the prompt.`;
       }
     }
   }
+
+  // ── Nightly-wide hard model ban ───────────────────────────────────────
+  // 2026-06-01 (Kevin): flux-2-dev produces too many low-quality renders for
+  // nightlies. Banned across the board — scene AND character composition,
+  // regardless of medium.allowed_models. Re-picks from the medium's
+  // allowed_models excluding the banned list. force_model still wins (QA /
+  // testing override). Centralized here so add/remove takes one edit.
+  const NIGHTLY_BANNED_MODELS = new Set(['black-forest-labs/flux-2-dev']);
+  if (!force_model && NIGHTLY_BANNED_MODELS.has(pickedModel)) {
+    const allowedMinusBanned = resolvedMediumAllowedModels.filter(
+      (m) => !NIGHTLY_BANNED_MODELS.has(m)
+    );
+    if (allowedMinusBanned.length > 0) {
+      const oldModel = pickedModel;
+      pickedModel = allowedMinusBanned[Math.floor(Math.random() * allowedMinusBanned.length)];
+      console.log(
+        `[nightly-dreams] ban gate: re-picked '${oldModel}' -> '${pickedModel}' (from medium '${resolvedMediumKey}' allowed_models minus banned)`
+      );
+    } else {
+      // No alternatives in medium's pool — last-resort safe fallback. flux-
+      // 1.1-pro is a reasonable universal default (same role flux-2-dev
+      // would have filled).
+      const fallback = 'black-forest-labs/flux-1.1-pro';
+      console.warn(
+        `[nightly-dreams] ban gate: medium '${resolvedMediumKey}' has no non-banned models; forcing safe default '${fallback}' (was '${pickedModel}')`
+      );
+      pickedModel = fallback;
+    }
+  }
   logAxes.model = pickedModel;
   console.log(
     `[nightly-dreams] User ${userId}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`
