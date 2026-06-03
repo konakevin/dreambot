@@ -10,7 +10,6 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
-import { randomMascot } from '@/constants/mascots';
 import { useDreamCreate } from '@/hooks/useDreamCreate';
 import { useDreamStore } from '@/store/dream';
 import { supabase } from '@/lib/supabase';
@@ -27,7 +26,6 @@ const RELATIONSHIP_REGEX =
   /\bmy\s+(partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
 
 export default function DreamLoadingScreen() {
-  const mascotUrl = useRef(randomMascot()).current;
   const { generate } = useDreamCreate();
   const started = useRef(false);
   const queued = useRef(false);
@@ -203,7 +201,7 @@ export default function DreamLoadingScreen() {
         // This button float in a SafeAreaView below it so they don't
         // collide with the home indicator.
         <>
-          <MagicalLoadingStage mascotUrl={mascotUrl} />
+          <MagicalLoadingStage />
           <SafeAreaView style={s.bottomOverlay} edges={['bottom']} pointerEvents="box-none">
             <View style={s.bottomStack} pointerEvents="box-none">
               {isFaceSwap && (
