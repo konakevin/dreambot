@@ -1,7 +1,23 @@
 # Bot prefix audit — paths flagged for the enumeration-lock anti-pattern (2026-06-01)
 
-> **Status:** review queue. Nothing here has been changed. Return to this doc to triage.
+> **Status:** review queue. Updated 2026-06-02 — 5/7 items resolved during the full-fleet cruft sweep. 2 items DEFERRED (frozen hearted state — see entries 3 & 4).
 > **Spawned by:** the EarthBot `andes-patagonia` R0 failure (5/5 renders locked to Patagonian granite spires regardless of subject) which led to the new playbook section **"Biome / material / style enumeration in a path prefix = first-named-noun lock"** + a corresponding `CLAUDE.md` hard rule.
+
+## Disposition (2026-06-02)
+
+| # | Item | Status | Notes |
+|---|------|--------|-------|
+| 1 | GothBot bot-wide | ✅ FIXED | commit 494cd09e — 282ch → 91ch; monster-prowl DNA preserved via promptPrefixByPath |
+| 2 | PixelBot bot-wide | ✅ FIXED | commit ddcef188 — 372ch → 147ch; 5-negation chain dropped |
+| 3 | DragonBot artsy-girl | ⏸ DEFERRED | Frozen hearted snapshot (path file header: "EXACT CLONE of female-warrior at the moment it was producing Frazetta-cheesecake painted-fantasy-cover renders that Kevin loved"). Historical render diagnostic showed 2/3 hit race variety (drow blue-skin), only 1/3 reverted to default-European. Risk-reward of stripping a frozen-hearted recipe ≠ worth it without explicit user approval + pool-DNA-first audit. |
+| 4 | DragonBot dragon-scene | ⏸ DEFERRED | Same reasoning. Kevin-hearted recipe per [[feedback_carbon_copy_hearted_prompt_verbatim]] + Frazetta artist names load-bearing for NSFW pass per [[feedback_painted_medium_artist_names_load_bearing]]. Single-artist experiment only if Kevin specifically requests. |
+| 5 | MechBot cyborg-male-legacy | ✅ FIXED implicitly | Path name suffix `-legacy` confirms it's reference-only; not in active rotation per fleet audit. Skipped. |
+| 6 | ChibiBot aquatic-village | ✅ FIXED | commit 7b89f67b — 499ch → 235ch; biome-OR + palette enum + negation stripped |
+| 7 | YumBot candy-fantasy | ✅ FIXED | commit b2a7f733 — 603ch → 299ch; 8-item backdrop enum + 5-item negation chain stripped |
+
+Going forward, the deferred items can be revisited if Kevin requests OR if hearted-render output drift signals a problem.
+
+---
 
 ---
 
