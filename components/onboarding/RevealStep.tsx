@@ -201,64 +201,129 @@ export function RevealStep({ onBack }: Props) {
     } = await supabase.auth.getSession();
     if (!session?.access_token) throw new Error('Not authenticated');
 
-    // Route the first dream through the NIGHTLY engine. It loads the recipe
-    // we just saved (places / moods / cast) and casts the user into the scene.
-    // We FORCE a cast face swap so the very first dream is unmistakably
-    // "this is ME" in one of my places — dual when self + plus_one both
-    // exist, single otherwise. force_face_swap_eligible pins the medium to
-    // the face-swap-capable pool so the swap always lands. No usable cast →
-    // omit the force params and the engine renders a personalized scene
-    // (still anchored to the user's locations, far better than a generic
-    // roll).
+    // Route the first dream through the NIGHTLY engine. We force a cast
+    // face swap so the very first dream is unmistakably "this is ME" in
+    // one of my places. force_face_swap_eligible pins the medium to the
+    // face-swap-capable pool so the swap lands cleanly.
     //
-    // The experimental generate-first-dream Edge Function + the
-    // EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED feature flag were ripped out
-    // 2026-06-02 (commit ...). The strongest-cast-render approach via this
-    // nightly path is now the only first-dream path.
+    // Reliability cascade (2026-06-03): we send strict_face_swap so the
+    // server returns 422 on face-swap exhaustion / NSFW guardrail / worker
+    // limit instead of returning a degraded render. The client then tries
+    // the next tier on a fresh call:
+    //
+    //   1. dual swap (if self + plus_one) →
+    //   2. single swap (whichever single cast role is available) →
+    //   3. scene-only render (no cast, location-anchored personalized scene)
+    //
+    // The user never sees a face-swap error or an NSFW label — those are
+    // shame-free retries that resolve transparently. Only when ALL tiers
+    // fail does the catch in generateImage() surface a generic retry UI.
     const cast = describedProfile.current.dream_cast ?? [];
     const usable = (role: string) =>
       cast.find((m) => m.role === role && !!m.thumb_url && m.thumb_url.startsWith('http'));
-    const forceParams: Record<string, unknown> = {};
+
+    type Tier = { name: string; body: Record<string, unknown> };
+    const tiers: Tier[] = [];
     if (usable('self') && usable('plus_one')) {
-      forceParams.force_cast_role = 'dual';
-      forceParams.force_face_swap_eligible = true;
+      tiers.push({
+        name: 'dual',
+        body: {
+          force_cast_role: 'dual',
+          force_face_swap_eligible: true,
+          strict_face_swap: true,
+        },
+      });
+      tiers.push({
+        name: 'self',
+        body: {
+          force_cast_role: 'self',
+          force_face_swap_eligible: true,
+          strict_face_swap: true,
+        },
+      });
     } else if (usable('self')) {
-      forceParams.force_cast_role = 'self';
-      forceParams.force_face_swap_eligible = true;
+      tiers.push({
+        name: 'self',
+        body: {
+          force_cast_role: 'self',
+          force_face_swap_eligible: true,
+          strict_face_swap: true,
+        },
+      });
     } else if (usable('plus_one')) {
-      forceParams.force_cast_role = 'plus_one';
-      forceParams.force_face_swap_eligible = true;
+      tiers.push({
+        name: 'plus_one',
+        body: {
+          force_cast_role: 'plus_one',
+          force_face_swap_eligible: true,
+          strict_face_swap: true,
+        },
+      });
     } else if (usable('pet')) {
-      forceParams.force_cast_role = 'pet';
-      forceParams.force_face_swap_eligible = true;
+      tiers.push({
+        name: 'pet',
+        body: {
+          force_cast_role: 'pet',
+          force_face_swap_eligible: true,
+          strict_face_swap: true,
+        },
+      });
     }
+    // Final tier — explicit null force_cast_role → server's rollDream lands
+    // on includeCharacter=false → pure_scene composition anchored to the
+    // user's location. Works even if the user uploaded zero cast photos.
+    // strict_face_swap omitted intentionally — scene-only doesn't swap.
+    tiers.push({ name: 'scene', body: { force_cast_role: null } });
 
-    if (__DEV__) console.log('[Reveal] nightly first-dream force params:', forceParams);
-
-    const res = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/nightly-dreams`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify({ vibe_profile: describedProfile.current, ...forceParams }),
-    });
-
-    if (!res.ok) {
-      const errBody = await res.text();
-      if (__DEV__) console.warn('[Reveal] nightly-dreams error:', res.status, errBody);
-      throw new Error(`Generation failed: ${res.status}`);
+    let lastErr: Error | null = null;
+    for (const tier of tiers) {
+      try {
+        if (__DEV__) console.log('[Reveal] tier attempt:', tier.name);
+        const res = await fetch(
+          `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/nightly-dreams`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({ vibe_profile: describedProfile.current, ...tier.body }),
+          }
+        );
+        if (res.status === 422) {
+          // Cascadeable failure (face_swap_failed_dual / face_swap_failed_single /
+          // render_blocked). Try the next tier silently.
+          const errBody = await res.text();
+          if (__DEV__) console.log('[Reveal] tier cascade:', tier.name, '→', errBody);
+          lastErr = new Error(`cascade:${tier.name}:${errBody}`);
+          continue;
+        }
+        if (!res.ok) {
+          // Non-cascadeable error (auth / 500 / network) — bail out of the
+          // cascade so the user sees the retry UI rather than spending
+          // budget on more failed renders.
+          const errBody = await res.text();
+          if (__DEV__) console.warn('[Reveal] tier hard fail:', tier.name, res.status, errBody);
+          throw new Error(`Generation failed: ${res.status}`);
+        }
+        const data = await res.json();
+        if (!data.image_url) throw new Error('No image URL in response');
+        if (__DEV__) console.log('[Reveal] tier succeeded:', tier.name);
+        return {
+          url: data.image_url,
+          prompt: data.prompt_used ?? '',
+          medium: data.resolved_medium ?? undefined,
+          vibe: data.resolved_vibe ?? undefined,
+          uploadId: data.upload_id ?? undefined,
+        };
+      } catch (err) {
+        lastErr = err as Error;
+        // Network-level errors (DNS, connection drop) also cascade — the
+        // user shouldn't pay for a single-network-blip first impression.
+        if (__DEV__) console.warn('[Reveal] tier exception:', tier.name, lastErr.message);
+      }
     }
-
-    const data = await res.json();
-    if (!data.image_url) throw new Error('No image URL in response');
-    return {
-      url: data.image_url,
-      prompt: data.prompt_used ?? '',
-      medium: data.resolved_medium ?? undefined,
-      vibe: data.resolved_vibe ?? undefined,
-      uploadId: data.upload_id ?? undefined,
-    };
+    throw lastErr ?? new Error('All tiers exhausted');
   }
 
   async function handleCreateBot(makePublic: boolean) {

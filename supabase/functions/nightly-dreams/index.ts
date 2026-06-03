@@ -160,6 +160,16 @@ Deno.serve(async (req) => {
   // normal nightly queue path never sets this, so its dream_eligible roll is
   // untouched. Ignored when force_medium is also set (explicit wins).
   const force_face_swap_eligible = body.force_face_swap_eligible === true;
+  // First-dream cascade flag — set by RevealStep.tsx. When true:
+  //   • face-swap exhaustion throws { error: 'face_swap_failed',
+  //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
+  //     base render (the client cascades to single → scene-only).
+  //   • NSFW-retry exhaustion + worker-limit errors come back as 422 with a
+  //     non-shameful code so the client can swap to a safer tier without
+  //     showing the user an NSFW label.
+  // Nightly cron path leaves this false → existing soft-fallback behavior
+  // (base render persists with `fallbackReasons` logged) is unchanged.
+  const strict_face_swap = body.strict_face_swap === true;
   // QA / dry-run flag — when false, skip the uploads insert + budget upsert so
   // the Dream Generator Test screen can exercise the nightly pipeline without
   // polluting the user's album. Default true (normal nightly + first-dream).
@@ -1441,7 +1451,16 @@ Output ONLY the prompt.`;
           }
         }
       }
+      // First-dream cascade: when strict_face_swap is set the client expects
+      // a hard failure here so it can drop down to single-swap on a fresh
+      // call. Don't persist the base render (no Frankenstein dream in the
+      // user's album), don't grant sparkles. Standard nightly cron path
+      // leaves strict_face_swap false → soft-fallback preserved.
+      if (!swapSuccess && strict_face_swap) {
+        throw new Error('face_swap_failed:dual');
+      }
     } else if (faceSwapSource && tempUrl) {
+      let swapSuccessSingle = false;
       for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
         try {
           if (attempt > 1) {
@@ -1458,6 +1477,7 @@ Output ONLY the prompt.`;
           console.log('[nightly-dreams] Face swap complete');
           logAxes.faceSwapResult = 'success';
           logAxes.faceSwapAttempts = attempt;
+          swapSuccessSingle = true;
           break;
         } catch (err) {
           console.warn(
@@ -1471,6 +1491,10 @@ Output ONLY the prompt.`;
             logAxes.faceSwapAttempts = attempt;
           }
         }
+      }
+      // First-dream cascade — see comment in the dual branch above.
+      if (!swapSuccessSingle && strict_face_swap) {
+        throw new Error('face_swap_failed:single');
       }
     }
 
@@ -1765,6 +1789,28 @@ Output ONLY the prompt.`;
       fallback_reasons: [`nightly_error:${errMsg.slice(0, 200)}`],
       replicate_prediction_id: null,
     });
+
+    // First-dream cascade — when strict_face_swap is set, classify the
+    // failure into a structured 422 the client can act on. Face-swap and
+    // NSFW exhaustions are CASCADEABLE — the client drops to a safer
+    // tier (dual → single → scene-only) on a fresh call. NSFW is also
+    // intentionally NOT surfaced to the user as "NSFW" — the user did
+    // nothing wrong, the scene-engine roll happened to trip the model
+    // safety classifier. Generic 500 stays for the nightly cron path.
+    if (strict_face_swap) {
+      let code: string | null = null;
+      if (errMsg.startsWith('face_swap_failed:dual')) code = 'face_swap_failed_dual';
+      else if (errMsg.startsWith('face_swap_failed:single')) code = 'face_swap_failed_single';
+      else if (errMsg.includes('NSFW_CONTENT')) code = 'render_blocked';
+      else if (errMsg.includes('WORKER_LIMIT') || errMsg.includes('worker_limit'))
+        code = 'render_blocked';
+      if (code) {
+        return new Response(JSON.stringify({ error: code }), {
+          status: 422,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    }
 
     return new Response(JSON.stringify({ error: errMsg }), {
       status: 500,
