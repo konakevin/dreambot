@@ -130,11 +130,12 @@ export function MagicalLoadingStage() {
 
 const styles = StyleSheet.create({
   stage: {
-    flex: 1,
+    // Tight centered column — the PARENT now controls vertical placement
+    // and pairs this block with the CTA cluster below as one unit. This
+    // component used to be `flex: 1, justifyContent: 'center'` which let
+    // it dominate the screen and float its title in dead space.
     alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: 32,
-    backgroundColor: colors.background,
     gap: 24,
   },
   mascot: {

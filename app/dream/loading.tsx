@@ -195,30 +195,29 @@ export default function DreamLoadingScreen() {
   return (
     <View style={s.container}>
       {!failure ? (
-        // The magical stage covers the whole screen (intentionally
-        // ignores top/bottom safe areas — the cosmic gradient + sparkle
-        // field look better edge-to-edge). The face-swap subtip + Queue
-        // This button float in a SafeAreaView below it so they don't
-        // collide with the home indicator.
-        <>
+        // Single centered column: mascot + wave loader + "Dreaming" +
+        // (face-swap subtip) + queue hint + Queue This button. All one
+        // unit — no floating title up top with a disconnected CTA at
+        // the bottom. SafeAreaView keeps the bottom of the stack clear
+        // of the home indicator since the button is no longer absolutely
+        // positioned.
+        <SafeAreaView style={s.scene} edges={['bottom']}>
           <MagicalLoadingStage />
-          <SafeAreaView style={s.bottomOverlay} edges={['bottom']} pointerEvents="box-none">
-            <View style={s.bottomStack} pointerEvents="box-none">
-              {isFaceSwap && <Text style={s.subtip}>Face swaps take a little longer.</Text>}
-              {showQueue && (
-                <>
-                  <Text style={s.queueHint}>
-                    Don’t want to wait? Tap Queue This below and we’ll notify you when it’s ready.
-                  </Text>
-                  <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
-                    <Ionicons name="time-outline" size={16} color="#FFFFFF" />
-                    <Text style={s.queueText}>Queue This</Text>
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
-          </SafeAreaView>
-        </>
+          <View style={s.cta}>
+            {isFaceSwap && <Text style={s.subtip}>Face swaps take a little longer.</Text>}
+            {showQueue && (
+              <>
+                <Text style={s.queueHint}>
+                  Don’t want to wait? Tap Queue This below and we’ll notify you when it’s ready.
+                </Text>
+                <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
+                  <Ionicons name="time-outline" size={16} color="#FFFFFF" />
+                  <Text style={s.queueText}>Queue This</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </SafeAreaView>
       ) : (
         <SafeAreaView style={s.failureWrap}>
           <DreamFailureCard
@@ -283,24 +282,27 @@ const s = StyleSheet.create({
   // Bottom overlay: floats over the magical stage so the face-swap
   // subtip + Queue This button sit safely above the home indicator
   // without painting a backdrop over the sparkle field.
-  bottomOverlay: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  bottomStack: {
+  // Single centered column for the loading state. The MagicalLoadingStage
+  // sits above the CTA cluster with a generous gap so the upper "what's
+  // happening" block and the lower "what you can do" block read as
+  // separated but related — one cohesive screen, not two floating
+  // islands like the previous absolute-positioned overlay produced.
+  scene: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 24,
     paddingBottom: 16,
-    // Tight gap between the casual queue-hint and the Queue This button
-    // so they read as one unit. The face-swap subtip (when present)
-    // sits a row above and uses the same gap.
-    gap: 10,
+    gap: 40,
   },
-  // Casual queue prompt above the Queue This button — muted gray so it
-  // doesn't compete with the lavender pill, sitting close enough that
-  // the eye reads "this sentence + this button" as one CTA group.
+  cta: {
+    alignItems: 'center',
+    gap: 12,
+  },
+  // Casual queue prompt right above the Queue This button — muted gray
+  // so it doesn't compete with the lavender pill. Tight 12px gap to the
+  // button below so the eye reads "this sentence + this button" as one
+  // CTA group.
   queueHint: {
     color: colors.textSecondary,
     fontSize: 13,
