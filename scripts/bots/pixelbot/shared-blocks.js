@@ -8,11 +8,30 @@
  * Universal subjects, NO IP references.
  */
 
+// 2026-06-02 cruft-audit strip — was 372ch with 5 stacked `NO X` negations
+// (smooth gradients / vector smoothing / 32-bit polished pixel-illustration
+// / HD-2D / modern indie-pixel painterly hybrid). Per [[feedback_negative_
+// prompt_leak]] Flux's CLIP tokenizer ignores `NO` and attends to the
+// banned noun — so these negations were actively LEAKING exactly the
+// drift they were trying to ban. Also held 6 redundant pixel-style
+// anchors (16-bit + SNES-era + chunky grid + low sprite res + dithered
+// palette + 2D-RPG sprite forms) competing for first-token weight.
+//
+// New prefix: short single anchor + the ONE non-redundant style fact
+// (chunky pixel grid + dithered palette) stated positively. Other anchors
+// live in the PIXEL_ART_ONLY_BLOCK which Sonnet reads but Flux doesn't
+// see directly as first tokens.
 const PROMPT_PREFIX =
-  '16-bit retro pixel art game screenshot, classic SNES-era pixel craft, chunky visible pixel grid, low effective sprite resolution upscaled crisp, dithered limited palette, NO smooth gradients, NO vector smoothing, NO 32-bit polished pixel-illustration, NO HD-2D, NO modern indie-pixel painterly hybrid, classic 2D-RPG sprite character forms, every surface clearly pixelated';
+  '16-bit retro pixel art game screenshot, SNES-era sprite craft, chunky visible pixel grid, dithered limited palette, every surface clearly pixelated';
 
+// 2026-06-02 — same negation-leak strip on the suffix. "no text / no UI /
+// no HUD / no menus / no health bars / no watermarks" stays (these are
+// the standard text/overlay suppressors every bot uses + they target
+// stamp-like overlays Flux treats differently from scene content). The
+// `no smooth gradients / no anti-aliasing` pair was injecting smooth
+// gradient drift exactly like the prefix negations were — stripped.
 const PROMPT_SUFFIX =
-  'no text, no UI, no HUD, no menus, no health bars, no watermarks, no smooth gradients, no anti-aliasing, chunky pixel grid throughout';
+  'no text, no UI, no HUD, no menus, no health bars, no watermarks, chunky pixel grid throughout, sharp dithered pixel edges';
 
 const PIXEL_ART_ONLY_BLOCK = `━━━ 16-BIT RETRO PIXEL ART ONLY — NON-NEGOTIABLE ━━━
 
