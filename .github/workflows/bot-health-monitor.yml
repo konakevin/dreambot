@@ -1,0 +1,34 @@
+name: Bot Health Monitor
+
+# Loud health check for the bot fleet (17 image-gen bots dispatched by
+# bots-dispatcher.yml). Fails the run when the fleet has silently stopped
+# posting — credit exhaustion, Replicate outage, dispatcher cron not firing,
+# or a wave of auto-deactivations. Mirrors the dream-queue-monitor +
+# ai-failure-monitor shape. See scripts/check-bot-health.js.
+
+on:
+  schedule:
+    - cron: '20 */4 * * *' # every 4 hours (offset 20m past)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Check bot fleet health
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/check-bot-health.js

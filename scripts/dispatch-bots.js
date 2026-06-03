@@ -190,6 +190,48 @@ function runBotProcess(botName) {
     const newFailures = (bot.consecutive_failures || 0) + 1;
     const reason = errTail.slice(-300) || 'run-bot.js exited non-zero (no stderr captured)';
 
+    // ── Fleet-wide infra failure detection ───────────────────────────
+    // If the failure is an Anthropic credit-balance exhaustion (or a
+    // similar fleet-wide infra issue), it's not a per-bot config bug —
+    // EVERY bot will hit the same wall. Don't increment the per-bot
+    // failure counter (an unpaid bill should not auto-deactivate the
+    // entire fleet 5 ticks later), don't spend 15 more minutes burning
+    // through the remaining due bots, and exit the workflow non-zero so
+    // GitHub Actions surfaces it as a red run + failure email.
+    // Caught: 2026-06-03 — credit exhaustion took down 10 of 17 bots
+    // one by one before anyone noticed.
+    const CREDIT_PATTERNS = [
+      /credit\s*balance\s*is\s*too\s*low/i,
+      /credit_balance_too_low/i,
+      /Claude\s+exhausted/i,
+    ];
+    if (CREDIT_PATTERNS.some((re) => re.test(reason))) {
+      console.error(
+        `🚨 ${bot.bot_name}: ANTHROPIC CREDIT EXHAUSTION DETECTED — this is fleet-wide infra, not a bot bug.`,
+      );
+      console.error(`   ↳ ${reason.slice(0, 200)}`);
+      console.error(
+        '   ↳ Skipping per-bot failure counter (an unpaid bill should not deactivate the fleet).',
+      );
+      console.error(
+        '   ↳ Aborting remaining due bots in this tick (they would all hit the same error).',
+      );
+      // Record the latest failure timestamp/reason so the health monitor
+      // can correlate, but DON'T bump consecutive_failures.
+      await sb
+        .from('bot_schedules')
+        .update({
+          last_failure_at: new Date().toISOString(),
+          last_failure_reason: `credit_exhaustion: ${reason.slice(0, 200)}`,
+        })
+        .eq('bot_name', bot.bot_name);
+      failCount++;
+      console.log(
+        `\n📊 dispatcher aborted on credit exhaustion — ok=${okCount} fail=${failCount} deactivated=${deactivatedCount}`,
+      );
+      process.exit(1); // red workflow → GitHub failure email
+    }
+
     if (newFailures >= MAX_CONSECUTIVE_FAILURES) {
       const note = `auto-deactivated after ${newFailures} consecutive failures. Last error: ${reason}`;
       console.error(`🛑 ${bot.bot_name}: ${note}`);
