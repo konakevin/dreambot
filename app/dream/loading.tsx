@@ -204,16 +204,17 @@ export default function DreamLoadingScreen() {
           <MagicalLoadingStage />
           <SafeAreaView style={s.bottomOverlay} edges={['bottom']} pointerEvents="box-none">
             <View style={s.bottomStack} pointerEvents="box-none">
-              {isFaceSwap && (
-                <Text style={s.subtip}>
-                  Face swaps take a little longer — feel free to queue it.
-                </Text>
-              )}
+              {isFaceSwap && <Text style={s.subtip}>Face swaps take a little longer.</Text>}
               {showQueue && (
-                <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
-                  <Ionicons name="time-outline" size={16} color="#FFFFFF" />
-                  <Text style={s.queueText}>Queue This</Text>
-                </TouchableOpacity>
+                <>
+                  <Text style={s.queueHint}>
+                    Don’t want to wait? Tap Queue This below and we’ll notify you when it’s ready.
+                  </Text>
+                  <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
+                    <Ionicons name="time-outline" size={16} color="#FFFFFF" />
+                    <Text style={s.queueText}>Queue This</Text>
+                  </TouchableOpacity>
+                </>
               )}
             </View>
           </SafeAreaView>
@@ -292,7 +293,20 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingBottom: 16,
-    gap: 14,
+    // Tight gap between the casual queue-hint and the Queue This button
+    // so they read as one unit. The face-swap subtip (when present)
+    // sits a row above and uses the same gap.
+    gap: 10,
+  },
+  // Casual queue prompt above the Queue This button — muted gray so it
+  // doesn't compete with the lavender pill, sitting close enough that
+  // the eye reads "this sentence + this button" as one CTA group.
+  queueHint: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    textAlign: 'center',
+    maxWidth: 300,
+    lineHeight: 18,
   },
   failureWrap: {
     flex: 1,
