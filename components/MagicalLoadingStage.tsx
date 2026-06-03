@@ -91,39 +91,15 @@ function WaveLoader() {
 }
 
 // ── Mascot ─────────────────────────────────────────────────────────────────
-// Static-sized painter mascot with a gentle vertical bob (no scale pulse
-// — Kevin: "don't increase/decrease the size, just leave it static
-// sized"). The translateY float keeps it feeling alive without changing
-// the image dimensions.
-function BreathingMascot() {
-  const bob = useSharedValue(0);
-
-  useEffect(() => {
-    bob.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.sin) }),
-        withTiming(0, { duration: 2000, easing: Easing.inOut(Easing.sin) })
-      ),
-      -1,
-      false
-    );
-  }, [bob]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: interpolate(bob.value, [0, 1], [0, -4]) }],
-  }));
-
-  return (
-    <Animated.View style={animatedStyle}>
-      <Image source={MASCOT_SOURCE} style={styles.mascot} contentFit="contain" />
-    </Animated.View>
-  );
-}
+// Fully static — Kevin: "don't even animate it." Rendered inline in the
+// stage JSX as a plain Image, no Reanimated wrapper. The whimsy scene
+// baked into the artwork (clouds, stars, painter setup) carries all the
+// visual interest on its own.
 
 export function MagicalLoadingStage() {
   return (
     <View style={styles.stage}>
-      <BreathingMascot />
+      <Image source={MASCOT_SOURCE} style={styles.mascot} contentFit="contain" />
       <WaveLoader />
       <Text style={styles.title}>Dreaming</Text>
     </View>
