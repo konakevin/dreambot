@@ -15,16 +15,24 @@
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withRepeat,
+  withSequence,
   withTiming,
   withDelay,
   Easing,
   interpolate,
 } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
+
+// The app-icon/splash mascot — the little robot reaching for a star.
+// Local require so it ships with the JS bundle (no remote fetch, no
+// flash). The image itself already has soft pink/lavender clouds in
+// its background, which sits cleanly against the black stage.
+const MASCOT_SOURCE = require('@/assets/images/splash-icon.png');
 
 // ── Wave loader ────────────────────────────────────────────────────────────
 // 5 small dots in a horizontal row. Each dot runs the same 1400ms
@@ -95,9 +103,42 @@ function AnimatedDots() {
   );
 }
 
+// ── Mascot ─────────────────────────────────────────────────────────────────
+// Splash-icon robot, soft sine-breathe so it feels alive instead of
+// pasted-on. Subtle (translateY −4, scale 1→1.025) — we don't want it
+// drawing attention away from the wave loader, just gently breathing.
+function BreathingMascot() {
+  const breathe = useSharedValue(0);
+
+  useEffect(() => {
+    breathe.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.sin) }),
+        withTiming(0, { duration: 2000, easing: Easing.inOut(Easing.sin) })
+      ),
+      -1,
+      false
+    );
+  }, [breathe]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: interpolate(breathe.value, [0, 1], [0, -4]) },
+      { scale: interpolate(breathe.value, [0, 1], [1, 1.025]) },
+    ],
+  }));
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Image source={MASCOT_SOURCE} style={styles.mascot} contentFit="contain" />
+    </Animated.View>
+  );
+}
+
 export function MagicalLoadingStage() {
   return (
     <View style={styles.stage}>
+      <BreathingMascot />
       <WaveLoader />
       <View style={styles.titleRow}>
         <Text style={styles.title}>Dreaming</Text>
@@ -115,7 +156,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 32,
     backgroundColor: colors.background,
-    gap: 28,
+    gap: 24,
+  },
+  mascot: {
+    width: 140,
+    height: 140,
   },
   waveRow: {
     flexDirection: 'row',
