@@ -19,7 +19,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
+import { NebulaBackdrop } from './NebulaBackdrop';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -200,12 +200,11 @@ export function MagicalLoadingStage({ mascotUrl }: Props) {
 
   return (
     <View style={styles.stage}>
-      <LinearGradient
-        colors={['#1B0E33', '#0F0F1A', '#1A0F2C']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={StyleSheet.absoluteFill}
-      />
+      {/* Animated Skia nebula — fluid lavender clouds drifting in two
+          parallaxed layers, GPU-driven, ~zero JS cost. See NebulaBackdrop
+          for the tuning knobs (palette stops, noise scales, scroll speeds,
+          vignette). Replaced the prior static LinearGradient 2026-06-03. */}
+      <NebulaBackdrop />
 
       {/* Pulsing radial glow centered behind the mascot. Just a big
           soft purple disc with shadow + low opacity — does the work of
