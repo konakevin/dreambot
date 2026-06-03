@@ -280,13 +280,12 @@ Deno.serve(async (req) => {
     // rotation across the eligible pool.
     let nightlyMedium = await resolveMediumFromDb(
       force_face_swap_eligible ? 'dream_eligible_face_swap' : 'dream_eligible',
-      undefined,
       recentMediums
     );
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);
     }
-    let nightlyVibe = await resolveVibeFromDb('dream_eligible', undefined, recentVibes);
+    let nightlyVibe = await resolveVibeFromDb('dream_eligible', recentVibes);
     if (force_vibe) {
       nightlyVibe = await resolveVibeFromDb(force_vibe);
     }
@@ -409,11 +408,7 @@ Deno.serve(async (req) => {
       REALISTIC_BANNED_FOR_CHARACTER.has(nightlyMedium.key)
     ) {
       const oldKey = nightlyMedium.key;
-      nightlyMedium = await resolveMediumFromDb(
-        'dream_eligible_face_swap',
-        undefined,
-        recentMediums
-      );
+      nightlyMedium = await resolveMediumFromDb('dream_eligible_face_swap', recentMediums);
       baseMedium = nightlyMedium;
       resolvedMediumKey = nightlyMedium.key;
       console.log(
@@ -431,7 +426,7 @@ Deno.serve(async (req) => {
     const isSceneComposition = composition === 'pure_scene' || composition === 'epic_tiny';
     if (isSceneComposition && !force_medium && !nightlyMedium.isSceneEligible) {
       const oldKey = nightlyMedium.key;
-      nightlyMedium = await resolveMediumFromDb('dream_eligible_scene', undefined, recentMediums);
+      nightlyMedium = await resolveMediumFromDb('dream_eligible_scene', recentMediums);
       baseMedium = nightlyMedium;
       resolvedMediumKey = nightlyMedium.key;
       console.log(

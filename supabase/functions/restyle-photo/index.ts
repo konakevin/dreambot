@@ -212,14 +212,11 @@ async function handleRequest(req: Request): Promise<Response> {
   const fallbackReasons: string[] = [];
 
   // ── Resolve medium + vibe from DB ───────────────────────────────────────
-  const medium = await resolveMediumFromDb(
-    medium_key,
-    vibeProfile && vibeProfile.art_styles ? vibeProfile.art_styles : undefined
-  );
-  const vibe = await resolveVibeFromDb(
-    vibe_key,
-    vibeProfile && vibeProfile.aesthetics ? vibeProfile.aesthetics : undefined
-  );
+  // 2026-06-02 — art_styles / aesthetics favorites removed from VibeProfile
+  // + the resolver branches that consumed them. Client always passes a
+  // concrete key here.
+  const medium = await resolveMediumFromDb(medium_key);
+  const vibe = await resolveVibeFromDb(vibe_key);
   lap('resolve-styles');
 
   const resolvedMediumKey = medium.key;

@@ -390,9 +390,12 @@ async function handleRequest(req: Request): Promise<Response> {
     // ── V2 ENGINE: Medium + Vibe directive-based generation ──────────
     const vibeProfile = vibe_profile as VibeProfile | undefined;
 
-    // Resolve medium and vibe to real curated entries — never store placeholders
-    let medium = await resolveMediumFromDb(medium_key, vibeProfile?.art_styles);
-    const vibe = await resolveVibeFromDb(vibe_key, vibeProfile?.aesthetics);
+    // Resolve medium and vibe to real curated entries — never store placeholders.
+    // 2026-06-02 — art_styles / aesthetics favorites removed from VibeProfile
+    // + the resolver branches that consumed them. Client always passes a
+    // concrete key here.
+    let medium = await resolveMediumFromDb(medium_key);
+    const vibe = await resolveVibeFromDb(vibe_key);
 
     // DLT: bot mediums carry scene/cast directives that would replace the
     // user's subject. Swap in the STYLE-ONLY cleaned medium (dlt_clean_mediums)

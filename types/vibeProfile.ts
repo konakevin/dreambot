@@ -1,15 +1,11 @@
 /**
- * Vibe Profile v2 — replaces Recipe as the user's creative identity.
+ * Vibe Profile v2 — the user's creative identity stored as JSONB on
+ * user_recipes.recipe.
  *
- * ArtStyle and Aesthetic are medium/vibe keys from the dream_mediums
- * and dream_vibes DB tables. Validated at runtime via DB fetch.
+ * The ArtStyle (mediums) + Aesthetic (vibes) favorite arrays were
+ * removed 2026-06-02 — see VibeProfile interface docstring + memory
+ * project_vibe_profile_favorites_removed_2026-06-02.
  */
-
-/** Medium key from dream_mediums table. Validated at runtime via DB fetch. */
-export type ArtStyle = string;
-
-/** Vibe key from dream_vibes table. Validated at runtime via DB fetch. */
-export type Aesthetic = string;
 
 /** 4 bipolar mood sliders, each 0.0–1.0 */
 export interface MoodAxes {
@@ -70,19 +66,20 @@ export interface DreamCastMember {
  * The complete vibe profile stored in user_recipes.recipe JSONB.
  *
  * `aesthetics` (vibes) and `art_styles` (mediums) used to be user-curated
- * selections captured at onboarding. Kevin pivoted away from that
- * 2026-05-29: the nightly engine rolls mediums/vibes from the curated
- * dream_eligible pool regardless, and the Create screen exposes the full
- * catalog every render. Those fields stopped being written — existing
- * recipes in the DB may still carry them as vestigial keys (JSONB
- * tolerates extras), and engine code that legitimately needs them
- * (generate-dream's surprise_me fallback) reads via optional access on
- * the raw row, not via this type.
+ * favorites captured at onboarding. Kevin pivoted away from that 2026-05-29
+ * (the nightly engine rolls mediums/vibes from the curated dream_eligible
+ * pool regardless; the Create screen exposes the full catalog every render)
+ * and the fields stopped being written. The matching server-side reader
+ * branches in resolveMediumFromDb / resolveVibeFromDb (surprise_me,
+ * my_mediums, my_vibes — userArtStyles/userAesthetics params) were ripped
+ * out 2026-06-02 along with the type field itself. Migration 218 strips
+ * the now-dead keys from existing JSONB rows.
  */
 export interface VibeProfile {
   version: 2;
   moods: MoodAxes;
-  /** Three categories of dream ingredients the engine remixes */
+  /** Two categories of dream ingredients the engine remixes (objects/things
+   *  were removed 2026-06-02 — see project_objects_removed_2026-06-02). */
   dream_seeds: DreamSeeds;
   /** Photos described as text — randomly appear in dreams as stylized characters */
   dream_cast: DreamCastMember[];

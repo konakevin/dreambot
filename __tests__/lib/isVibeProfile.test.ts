@@ -22,8 +22,6 @@ describe('isVibeProfile', () => {
     it('returns true for a full v2 profile shape', () => {
       const full = {
         version: 2,
-        aesthetics: ['dreamy', 'cozy', 'whimsical'],
-        art_styles: ['watercolor', 'anime'],
         moods: {
           peaceful_chaotic: 0.5,
           cute_terrifying: 0.5,
@@ -38,7 +36,7 @@ describe('isVibeProfile', () => {
     });
 
     it('narrows the type when used as a type guard', () => {
-      const data: unknown = { version: 2, aesthetics: ['cozy'] };
+      const data: unknown = { version: 2 };
       if (isVibeProfile(data)) {
         // After narrowing, TS treats data as VibeProfile and the
         // typecheck (npm run typecheck) covers this path.

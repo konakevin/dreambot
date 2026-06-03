@@ -210,28 +210,27 @@ function filterRecent(pool: string[], excludeRecent?: string[]): string[] {
 }
 
 /**
- * Resolve a medium key. Handles surprise_me, my_mediums, and direct keys.
- * Falls back to random if key not found.
+ * Resolve a medium key. Handles dream_eligible / dream_eligible_face_swap /
+ * dream_eligible_scene curation tokens and direct DB keys. Falls back to
+ * a stable canvas default if the key isn't found.
  *
  * @param excludeRecent — keys to avoid (e.g., user's last 5-7 nightly mediums).
  *   Filtering is applied only when the pool still has 2+ options after exclusion,
  *   so small profiles never get starved.
  *
- * Stale-key safety: the user's selection is filtered to ONLY active mediums
- * (not inactive rows or keys that have since moved to vibes) before picking.
- * Without this, sampling a stale key like 'coquette' (now a vibe, previously
- * a medium) returned undefined from mediums.find() and triggered rand() across
- * the full active pool — effectively ignoring the user's actual selection.
+ * 2026-06-02 — the `userArtStyles` param + the `surprise_me`/`my_mediums`
+ * branches that consumed it were removed along with the VibeProfile
+ * `art_styles` favorites field. Client-side resolves surprise tiles to
+ * concrete keys before calling the API; nothing in production ever
+ * reached those branches.
  */
 export async function resolveMediumFromDb(
   key: string | undefined,
-  userArtStyles?: string[],
   excludeRecent?: string[]
 ): Promise<ResolvedMedium> {
   const mediums = await fetchMediums();
   const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
   const rand = () => mediums[Math.floor(Math.random() * mediums.length)];
-  const activeKeys = new Set(mediums.map((m) => m.key));
 
   // Nightly + first-dream: ignore the user's stored art_styles entirely.
   // Pick from the curated dream-eligible pool (DB column is_dream_eligible).
@@ -270,27 +269,11 @@ export async function resolveMediumFromDb(
     if (eligibleKeys.length === 0) {
       // Safety fallback if no mediums are flagged — preserves prior behavior.
       console.warn('[dreamStyles] dream_eligible_scene pool empty; falling back to dream_eligible');
-      return resolveMediumFromDb('dream_eligible', undefined, excludeRecent);
+      return resolveMediumFromDb('dream_eligible', excludeRecent);
     }
     const pool = filterRecent(eligibleKeys, excludeRecent);
     const picked = pick(pool);
     return mediums.find((m) => m.key === picked)!;
-  }
-  if (
-    (key === 'surprise_me' || key === 'my_mediums') &&
-    userArtStyles &&
-    userArtStyles.length > 0
-  ) {
-    // Strip stale keys (inactive mediums + keys that moved to vibes) so we
-    // only pick from the user's CURRENT valid selections.
-    const validUserArtStyles = userArtStyles.filter((s) => activeKeys.has(s));
-    if (validUserArtStyles.length === 0) {
-      // Profile fully stale — fall back to random across full active pool.
-      return rand();
-    }
-    const pool = filterRecent(validUserArtStyles, excludeRecent);
-    const picked = pick(pool);
-    return mediums.find((m) => m.key === picked) ?? rand();
   }
   // Explicit key resolution. If the key isn't found (legacy upload key,
   // typo, retired medium, schema cache lag), fall back to a STABLE default
@@ -304,25 +287,23 @@ export async function resolveMediumFromDb(
 }
 
 /**
- * Resolve a vibe key. Handles surprise_me, my_vibes, and direct keys.
- * Falls back to random if key not found.
+ * Resolve a vibe key. Handles the dream_eligible curation token and direct
+ * DB keys. Falls back to a stable cinematic default if the key isn't found.
  *
  * @param excludeRecent — keys to avoid (e.g., user's last 5-7 nightly vibes).
  *
- * Stale-key safety: see note on resolveMediumFromDb above. Same logic applies
- * — Kevin's 2026-04-19 profile has inactive vibe keys (`chaos`, `dreamy`,
- * `ominous`, `majestic`) that would previously silently trigger full-pool
- * random fallback.
+ * 2026-06-02 — the `userAesthetics` param + the `surprise_me`/`my_vibes`
+ * branches that consumed it were removed along with the VibeProfile
+ * `aesthetics` favorites field. Client-side resolves surprise tiles to
+ * concrete keys before calling the API.
  */
 export async function resolveVibeFromDb(
   key: string | undefined,
-  userAesthetics?: string[],
   excludeRecent?: string[]
 ): Promise<ResolvedVibe> {
   const vibes = await fetchVibes();
   const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
   const rand = () => vibes[Math.floor(Math.random() * vibes.length)];
-  const activeKeys = new Set(vibes.map((v) => v.key));
 
   // Nightly + first-dream: pick from the curated dream-eligible vibe pool
   // (DB column is_dream_eligible). Coquette is excluded because it forces
@@ -333,22 +314,9 @@ export async function resolveVibeFromDb(
     const picked = pick(pool);
     return vibes.find((v) => v.key === picked)!;
   }
-  if (
-    (key === 'surprise_me' || key === 'my_vibes') &&
-    userAesthetics &&
-    userAesthetics.length > 0
-  ) {
-    const validUserAesthetics = userAesthetics.filter((s) => activeKeys.has(s));
-    if (validUserAesthetics.length === 0) {
-      return rand();
-    }
-    const pool = filterRecent(validUserAesthetics, excludeRecent);
-    const picked = pick(pool);
-    return vibes.find((v) => v.key === picked) ?? rand();
-  }
   // Explicit key resolution. Stable fallback to 'cinematic' (most generic
-  // mood) instead of random pick. Same rationale as resolveMediumFromDb —
-  // unknown vibe keys should degrade predictably, not roulette.
+  // mood) instead of random pick. Unknown vibe keys should degrade
+  // predictably, not roulette.
   const found = vibes.find((v) => v.key === key);
   if (found) return found;
   console.warn(`[dreamStyles] Unknown vibe key: ${key} — falling back to cinematic`);

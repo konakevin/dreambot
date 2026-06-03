@@ -1,12 +1,5 @@
 import { create } from 'zustand';
-import type {
-  VibeProfile,
-  Aesthetic,
-  ArtStyle,
-  MoodAxes,
-  DreamSeeds,
-  DreamCastMember,
-} from '@/types/vibeProfile';
+import type { VibeProfile, MoodAxes, DreamSeeds, DreamCastMember } from '@/types/vibeProfile';
 import { DEFAULT_VIBE_PROFILE } from '@/types/vibeProfile';
 
 const MAX_SEEDS_PER_CATEGORY = 10;

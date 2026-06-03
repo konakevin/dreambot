@@ -1,10 +1,18 @@
-/** Vibe Profile v2 — replaces Recipe as the user's creative identity */
-
-/** Vibe key from dream_vibes table. Validated at runtime via DB fetch. */
-export type Aesthetic = string;
-
-/** Medium key from dream_mediums table. Validated at runtime via DB fetch. */
-export type ArtStyle = string;
+/** Vibe Profile v2 — server-side mirror of types/vibeProfile.ts.
+ *
+ * Aesthetic + ArtStyle types + the aesthetics/art_styles favorite arrays
+ * were removed 2026-06-02 (Kevin pivoted away from user-curated favorites
+ * 2026-05-29 — the nightly engine rolls from dream_eligible curation, the
+ * Create screen shows the full catalog every render). Companion strip:
+ * resolveMediumFromDb / resolveVibeFromDb lost their userArtStyles /
+ * userAesthetics params + the surprise_me / my_mediums / my_vibes
+ * branches that consumed them. Migration 218 clears the now-dead
+ * `aesthetics` + `art_styles` keys from existing user_recipes.recipe
+ * JSONB rows.
+ *
+ * `dream_seeds.things` was removed 2026-06-02 with the entire objects
+ * feature — see project_objects_removed_2026-06-02 memory + migration 216.
+ */
 
 /** 4 bipolar mood sliders, each 0.0–1.0 */
 export interface MoodAxes {
@@ -18,14 +26,16 @@ export interface MoodAxes {
   realistic_surreal: number;
 }
 
-/** Dream seeds — three categories of ingredients the engine mashes up */
+/** Dream seeds — locations where dreams happen.
+ *
+ * `characters` is vestigial — cast lives in `dream_cast`. Kept on the
+ * type so old JSONB rows deserialize; engine ignores it.
+ */
 export interface DreamSeeds {
-  /** Who shows up — my cat, astronauts, tiny monsters, grandma */
+  /** Vestigial — nothing reads this post-2026-05; cast lives in dream_cast */
   characters: string[];
   /** Where dreams happen — Disneyland, abandoned malls, Tokyo at night */
   places: string[];
-  /** Objects that appear, transform, or become something else — donuts, guitars, neon signs */
-  things: string[];
 }
 
 /** Relationship type for the +1 cast member — affects how they appear in dreams */
@@ -53,10 +63,8 @@ export interface DreamCastMember {
 /** The complete vibe profile stored in user_recipes.recipe JSONB */
 export interface VibeProfile {
   version: 2;
-  aesthetics: Aesthetic[];
-  art_styles: ArtStyle[];
   moods: MoodAxes;
-  /** Three categories of dream ingredients the engine remixes */
+  /** Locations + vestigial characters slot */
   dream_seeds: DreamSeeds;
   /** Photos described as text — randomly appear in dreams as stylized characters */
   dream_cast: DreamCastMember[];
@@ -79,13 +87,10 @@ export interface VibeProfile {
 export const DEFAULT_DREAM_SEEDS: DreamSeeds = {
   characters: [],
   places: [],
-  things: [],
 };
 
 export const DEFAULT_VIBE_PROFILE: VibeProfile = {
   version: 2,
-  aesthetics: [],
-  art_styles: [],
   moods: {
     peaceful_chaotic: 0.5,
     cute_terrifying: 0.3,
