@@ -28,13 +28,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 
-// DreamBot mascot painting on an easel — rendered via
+// DreamBot mascot painting a star on an easel, set in a dreamy
+// lavender starscape with pink puffy clouds underneath — rendered via
 // `scripts/gen-mascot-painter.js` (Flux 1.1 Pro Ultra with a locked
-// character DNA paragraph and a painter pose phrase) against pure
-// RGB(0,0,0) so it blends seamlessly into the loading screen's
-// `colors.background` with no visible matte/border seam. Local require
-// → ships with the JS bundle, no remote fetch, paints instantly.
-// ~28 KB at 512×512 JPG q85.
+// character DNA paragraph + painter pose + whimsy-scene closing).
+// Mirrors the app-icon vibe so the loading screen reads as the same
+// magical world. Mounted as a rounded-corner card floating on the
+// black stage. Local require → ships with the JS bundle, no remote
+// fetch, paints instantly. ~32 KB at 512×512 JPG q85.
 const MASCOT_SOURCE = require('@/assets/images/mascots/mascot.jpg');
 
 // ── Wave loader ────────────────────────────────────────────────────────────
@@ -143,8 +144,17 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   mascot: {
-    width: 140,
-    height: 140,
+    // Bumped 140 → 180 now that the mascot has its own whimsy scene
+    // baked in (lavender starscape + clouds + painter setup) — it
+    // deserves more presence than a plain isolated character did.
+    width: 180,
+    height: 180,
+    // Rounded "card" treatment so the lavender scene floats on the
+    // black stage as a discrete dreamy artifact rather than a hard-
+    // edged rectangle. ~22% radius (the iOS app-icon ratio) reads
+    // friendly without going full-circle.
+    borderRadius: 32,
+    overflow: 'hidden',
   },
   waveRow: {
     flexDirection: 'row',

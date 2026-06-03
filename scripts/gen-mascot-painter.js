@@ -44,13 +44,22 @@ const CHARACTER_DNA = [
   'cute 3D Pixar render with subtle micro material texture on the body',
 ].join(', ');
 
+// Whimsical "dreambot in dreamland" scene — matches the splash-icon
+// vibe (icon.png) so the painter mascot reads as the same magical
+// world as the app icon. Soft pink/lavender puffy clouds underneath
+// the bot, dreamy deep-lavender starry sky background, a few small
+// glowing amber stars sprinkled in the sky. Will sit on the loading
+// screen as a rounded-corner card.
 const CLOSING = [
-  'completely surrounded by pitch-black RGB(0,0,0) void',
-  'jet-black solid black background',
-  'NOT studio photography, NOT white background, NOT gray background, NOT seamless paper, NOT softbox lighting',
-  'no clouds, no walls, no floor, no ground shadow',
-  'subject floating in pure black emptiness',
-  'square 1:1 composition, character centered with comfortable headroom',
+  'soft pink and lavender puffy cotton-candy cloud blobs underneath and around the character',
+  'dreamy deep-lavender starry night sky background',
+  'a few small softly glowing warm amber stars scattered across the upper sky',
+  'subtle bokeh lavender and pink light dots',
+  'magical whimsical fairy-tale dreamscape atmosphere',
+  'soft pastel color palette: lavender, pink, periwinkle, warm amber',
+  'soft dreamy atmospheric lighting',
+  'NOT pure black background, NOT studio photography, NOT white background',
+  'square 1:1 composition, character centered',
 ].join(', ');
 
 // 5 distinct painter pose variations — same activity, different framing /
