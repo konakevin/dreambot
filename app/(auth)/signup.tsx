@@ -143,7 +143,7 @@ export default function SignupScreen() {
           <View className="flex-1 px-6">
             <Ionicons name="flame" size={32} color="#FF4500" style={{ marginBottom: 8 }} />
             <Text className="text-white text-2xl font-bold mb-1">Create your account</Text>
-            <Text className="text-text-secondary mb-8">Join and start rating.</Text>
+            <Text className="text-text-secondary mb-8">Join and start dreaming.</Text>
 
             <Text className="text-text-secondary text-xs mb-2 ml-1">USERNAME</Text>
             <View className="bg-card border border-border rounded-2xl px-4 py-4 flex-row items-center mb-5">

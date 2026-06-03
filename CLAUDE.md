@@ -209,7 +209,7 @@ Profile saves on first dream generation (not just on post).
 ```
 app/                 Expo Router routes
   (auth)/            login, signup, OAuth
-  (onboarding)/      8-step vibe profile builder
+  (onboarding)/      5-step vibe profile builder
   (tabs)/            5 tabs: index, top, create, inbox, profile
   settings/          11 settings sub-screens (advanced-mode, vibes, mood, dream-cast, etc.)
   dream/             loading, newPost, reveal
