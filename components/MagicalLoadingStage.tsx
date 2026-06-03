@@ -34,7 +34,7 @@ import Animated, {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MASCOT_SIZE = 200;
-const PARTICLE_COUNT = 14;
+const PARTICLE_COUNT = 18;
 
 const PHRASES = [
   'Mixing moonlight and memory…',
@@ -80,11 +80,12 @@ function Sparkle({ index }: { index: number }) {
     );
   }, [delay, duration, progress, wobble]);
 
-  const size = useMemo(() => 3 + seed * 4, [seed]); // 3–7px
-  // Warm cream or pure white — both pop nicely against the soft lavender
-  // backdrop. The prior purple #C4B5FD blended in once the backdrop
-  // lightened to periwinkle.
-  const color = seed > 0.5 ? '#FFE9B3' : '#FFFFFF';
+  const size = useMemo(() => 4 + seed * 4, [seed]); // 4–8px (was 3–7)
+  // Warm golden hour sparkles — saturated gold + soft cream amber. The
+  // prior white sparkles disappeared into the highlight band; warmer
+  // tones pop against both the dusky lavender shadows and the peach
+  // highlights without ever color-matching either.
+  const color = seed > 0.5 ? '#FFD27A' : '#FFEED1';
   const wobbleAmp = 14 * (1 - seed * 0.4);
   // Spawn just above the screen; drift to just past the bottom so the
   // field stays continuous across the loop (no pop-in/pop-out moment).
@@ -243,11 +244,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 32,
     overflow: 'hidden',
-    // Match NebulaBackdrop.BASE_COLOR (~#B7B3EB) so the stage paints
-    // periwinkle the instant React mounts the View — no black flash
-    // while the Skia Canvas allocates its first frame or the mascot
-    // image fetches.
-    backgroundColor: '#B7B3EB',
+    // Match NebulaBackdrop.BASE_COLOR (~#8C7AB3 dusky lavender) so the
+    // stage paints the cloud-shadow color the instant React mounts the
+    // View — no flash while the Skia Canvas allocates its first frame
+    // or the mascot image fetches.
+    backgroundColor: '#8C7AB3',
   },
   sparkleField: {
     // Sparkles spawn just above the screen top and drift slowly downward;
@@ -256,10 +257,16 @@ const styles = StyleSheet.create({
   },
   sparkle: {
     position: 'absolute',
-    top: '60%',
+    // top: 0 so the translateY range (-40 → SCREEN_HEIGHT+40) actually
+    // sweeps the FULL screen. The prior `top: '60%'` was a leftover
+    // from the old upward-drift design and kept all sparkles trapped
+    // in the bottom 40% of the screen — half of them never appeared.
+    top: 0,
     left: 0,
-    shadowOpacity: 0.95,
-    shadowRadius: 5,
+    // Bigger glow halo so each particle reads as a luminous dot
+    // against the warmer (less-bright) backdrop.
+    shadowOpacity: 1,
+    shadowRadius: 8,
     shadowOffset: { width: 0, height: 0 },
   },
   mascot: {
@@ -277,12 +284,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   title: {
-    // Deep periwinkle/indigo — readable on the light lavender backdrop.
-    // White (the prior color) faded into the haze and read as washed-out.
-    color: '#3B2178',
+    // Pale cream — bright enough to read clearly against the warmer,
+    // slightly darker golden-hour backdrop. The prior dark indigo
+    // (#3B2178) was tuned for a near-white backdrop and reads as
+    // cramped/heavy now that the bg is dusty lavender + mauve.
+    color: '#FFF5E1',
     fontSize: 26,
     fontWeight: '700',
     letterSpacing: 0.3,
+    // Soft amber glow lifts the title off the cloud — golden hour
+    // light wrapping the type.
+    textShadowColor: 'rgba(255, 188, 110, 0.55)',
+    textShadowRadius: 12,
+    textShadowOffset: { width: 0, height: 0 },
   },
   dotsRun: {
     fontSize: 26,
@@ -298,9 +312,10 @@ const styles = StyleSheet.create({
     color: 'transparent',
   },
   subtitle: {
-    // Soft mauve — feels dreamy + sits halfway between the title's
-    // deep periwinkle and the backdrop's lavender so the eye flows.
-    color: '#6B4FA8',
+    // Warm cream a couple shades softer than the title — golden hour
+    // light through fabric. Stays legible on both the mauve mids and
+    // the peach highlights of the cloud field.
+    color: '#FBE3B7',
     fontSize: 15,
     fontWeight: '500',
     textAlign: 'center',

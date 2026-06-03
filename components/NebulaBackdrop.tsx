@@ -24,13 +24,16 @@ import { Canvas, Fill, Shader, Skia, useClock } from '@shopify/react-native-skia
 import { useDerivedValue } from 'react-native-reanimated';
 
 // ── Tuning knobs ───────────────────────────────────────────────────────────
-// Soft periwinkle / lavender haze — dreamy and airy, not ominous. The first
-// iteration used a near-black deep-purple base that read as gothic; this
-// palette stays luminous across the whole tonal range so the clouds feel
-// like they're glowing from within rather than receding into shadow.
-const BASE_COLOR = [0.72, 0.7, 0.92]; // soft periwinkle (~#B7B3EB)
-const MID_COLOR = [0.82, 0.76, 0.94]; // airy lavender (~#D1C2EF)
-const HIGHLIGHT_COLOR = [0.95, 0.91, 0.98]; // pale lilac mist (~#F2E8F9)
+// Golden hour through lavender clouds — dusky periwinkle base where the
+// clouds are "in shadow", warm dusty mauve in the mid-densities (like the
+// underside of a cloud catching low light), and warm peach/gold at the
+// brightest peaks (the sun bleeding through). The eye reads this as
+// "sunset behind clouds" rather than "noon haze." Sparkles + dark text
+// stay readable because the brightest cloud band caps at ~peach, not
+// near-white.
+const BASE_COLOR = [0.55, 0.48, 0.7]; // dusky lavender shadow (~#8C7AB3)
+const MID_COLOR = [0.82, 0.65, 0.75]; // warm dusty mauve (~#D1A6BF)
+const HIGHLIGHT_COLOR = [0.98, 0.85, 0.65]; // golden hour peach (~#FAD9A6)
 
 // Smaller numbers = bigger, slower-moving cloud blobs. The two layers
 // scrolling at different rates is what gives the parallax depth feel.
@@ -40,9 +43,16 @@ const SCROLL_SPEED_1 = 0.018; // seconds → noise-space units
 const SCROLL_SPEED_2 = 0.026;
 
 // How dark the corners go vs the center. 0.0 = no vignette, 0.9 = heavy.
-// Light palette wants almost no vignette — heavy edge-dimming on a light
-// scene reads as gloomy, the opposite of "dream haze."
-const VIGNETTE_STRENGTH = 0.12;
+// Slightly bumped from 0.12 → 0.20 — golden hour scenes naturally have
+// cooler/darker edges (sky away from the sun) and warmer interiors. A
+// touch of edge falloff sells the "sun behind the clouds" read.
+const VIGNETTE_STRENGTH = 0.2;
+
+// Warm bias toward the center — pushes additional gold/peach into the
+// middle of the frame and pulls a touch of cool toward the edges. This
+// mimics directional sunset lighting on top of the cloud field. Set to
+// 0 to disable.
+const CENTER_WARMTH = 0.08;
 
 // ── Shader source ──────────────────────────────────────────────────────────
 const source = Skia.RuntimeEffect.Make(`
@@ -92,8 +102,16 @@ half4 main(vec2 fragCoord) {
   vec3 color = mix(base, mid, smoothstep(0.30, 0.65, cloud));
   color = mix(color, highlight, smoothstep(0.72, 0.95, cloud));
 
-  // Radial vignette so the bright lilac stays interior-only.
+  // Distance from frame center (0.0 dead-center, ~0.7 at corners).
   float dist = length(uv - vec2(0.5));
+
+  // Directional sunset bias — push warmth (gold/peach) into the interior
+  // and pull cool (deep lavender) toward the edges. Read as "the sun is
+  // behind the clouds in the middle of the sky."
+  float warmth = 1.0 - smoothstep(0.0, 0.7, dist);
+  color += vec3(0.10, 0.05, -0.04) * warmth * ${CENTER_WARMTH.toFixed(2)} * 10.0;
+
+  // Soft radial vignette on top.
   color *= 1.0 - dist * ${VIGNETTE_STRENGTH.toFixed(2)};
 
   return half4(color, 1.0);
