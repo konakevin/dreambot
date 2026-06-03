@@ -91,15 +91,15 @@ function WaveLoader() {
 }
 
 // ── Mascot ─────────────────────────────────────────────────────────────────
-// Static painter mascot with a soft sine breathe so it feels alive
-// instead of pasted-on. Subtle (translateY −4, scale 1→1.025) — we don't
-// want it drawing attention away from the wave loader, just gently
-// breathing.
+// Static-sized painter mascot with a gentle vertical bob (no scale pulse
+// — Kevin: "don't increase/decrease the size, just leave it static
+// sized"). The translateY float keeps it feeling alive without changing
+// the image dimensions.
 function BreathingMascot() {
-  const breathe = useSharedValue(0);
+  const bob = useSharedValue(0);
 
   useEffect(() => {
-    breathe.value = withRepeat(
+    bob.value = withRepeat(
       withSequence(
         withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.sin) }),
         withTiming(0, { duration: 2000, easing: Easing.inOut(Easing.sin) })
@@ -107,13 +107,10 @@ function BreathingMascot() {
       -1,
       false
     );
-  }, [breathe]);
+  }, [bob]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateY: interpolate(breathe.value, [0, 1], [0, -4]) },
-      { scale: interpolate(breathe.value, [0, 1], [1, 1.025]) },
-    ],
+    transform: [{ translateY: interpolate(bob.value, [0, 1], [0, -4]) }],
   }));
 
   return (
