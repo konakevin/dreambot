@@ -443,7 +443,7 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 - **`dream_mediums`** — art style definitions (key, label, directive, flux_fragment, kontext_directive, is_active, is_bot_only, is_character_only, face_swaps, character_render_mode, sort_order, allowed_models)
 - **`dream_vibes`** — vibe definitions (key, label, directive, sort_order, is_active)
 - **`dream_cast`** — user's cast photos (cast_role, photo_url, description, relationship)
-- **`dream_seeds`** — user's selected places (text[]). `things` column dropped 2026-06-02 with the objects feature; `characters` is vestigial (cast lives in `dream_cast`).
+- **`dream_seeds`** — JSONB SHAPE inside `user_recipes.recipe` (not a separate relational table), holding the user's `places: string[]`. The `things` key was stripped 2026-06-02 with the objects feature rip-out (migration 216 JSONB cleanup); `characters` is vestigial (cast lives in `dream_cast`).
 - **`location_cards`** — 63 curated locations (palette, atmosphere, architecture, light_signature, texture_details, cinematic_phrases, fusion_settings, biome_config, is_approved)
 - **`location_iconic_spots`** — per-location signature spots
 - ~~`object_cards`~~ — DROPPED 2026-06-02, migration 216, see `project_objects_removed_2026-06-02` memory
