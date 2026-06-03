@@ -279,11 +279,7 @@ export default function DreamLoadingScreen() {
 const s = StyleSheet.create({
   container: {
     flex: 1,
-    // Match the MagicalLoadingStage / NebulaBackdrop base color so the
-    // route paints the cloud-shadow lavender the instant it mounts —
-    // no dark-theme flash before MagicalLoadingStage renders its own
-    // backdrop.
-    backgroundColor: '#8C7AB3',
+    backgroundColor: colors.background,
   },
   // Bottom overlay: floats over the magical stage so the face-swap
   // subtip + Queue This button sit safely above the home indicator

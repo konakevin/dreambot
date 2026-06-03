@@ -1,40 +1,42 @@
 /**
  * MagicalLoadingStage — the "Workshop" loading visual.
  *
- * Cosmic gradient backdrop + a pulsing radial glow + the DreamBot
- * mascot breathing softly + a field of upward-drifting sparkle
- * particles + a `Dreaming…` title with sequenced dots + a rotating
+ * Clean black backdrop matching the Create screen + the DreamBot
+ * mascot breathing softly + a soft lavender pulse glow behind the
+ * mascot + a `Dreaming…` title with sequenced dots + a rotating
  * poetic subtitle that cross-fades through a small phrase pool.
  *
- * Designed to occupy the whole screen of the dream-generation
- * loading flow (replacing the prior tiny mascot + ActivityIndicator)
- * and intentionally re-usable on the first-dream generating screen —
- * pass the mascot URL and we'll do the rest.
+ * Designed to occupy the whole screen of the dream-generation loading
+ * flow (replacing the prior tiny mascot + ActivityIndicator) and
+ * intentionally re-usable on the first-dream generating screen — pass
+ * the mascot URL and we'll do the rest.
  *
- * All animations run on the Reanimated worklet thread (no JS-side
- * Animated.Value polling), so frame budget cost is ~negligible even
- * with 14 sparkles in flight.
+ * History: an earlier iteration drove a Skia nebula shader + a 14-18
+ * particle sparkle field. It looked nice in stills but took 2-3s to
+ * compile its GLSL on cold launch — the user saw a black flash before
+ * anything appeared. Ripped 2026-06-02 in favor of this lightweight
+ * pure-Reanimated approach: zero GPU compile cost, on-screen instantly.
+ *
+ * All animations run on the Reanimated worklet thread, so frame cost
+ * is ~negligible.
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
-import { NebulaBackdrop } from './NebulaBackdrop';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withRepeat,
   withTiming,
   withSequence,
-  withDelay,
   Easing,
   interpolate,
-  Extrapolation,
 } from 'react-native-reanimated';
+import { colors } from '@/constants/theme';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MASCOT_SIZE = 200;
-const PARTICLE_COUNT = 18;
+const GLOW_SIZE = 360;
 
 const PHRASES = [
   'Mixing moonlight and memory…',
@@ -45,90 +47,6 @@ const PHRASES = [
   'Folding shadows into wings…',
   'Borrowing colors from a sunset…',
 ];
-
-// ── Sparkle ────────────────────────────────────────────────────────────────
-// Single particle that drifts DOWNWARD from above the top of the screen
-// to below the bottom with a slow sine-wave horizontal wobble, fades in
-// then back out, and loops forever. Each instance bakes its own seed at
-// mount so the field looks individually random but stays deterministic
-// per render. Slower than the prior upward drift (5–8s per pass vs 2.8–
-// 4.4s) so it reads as gentle haze rather than confetti.
-function Sparkle({ index }: { index: number }) {
-  const seed = useMemo(() => Math.random(), []);
-  // Spawn anywhere across the screen width — full spread, not clustered
-  // near the mascot like the old upward field.
-  const startX = useMemo(() => seed * (SCREEN_WIDTH - 16), [seed]);
-  const duration = useMemo(() => 5000 + seed * 3000, [seed]); // 5–8s
-  const delay = useMemo(
-    () => (index / PARTICLE_COUNT) * duration + seed * 600,
-    [index, seed, duration]
-  );
-
-  const progress = useSharedValue(0);
-  const wobble = useSharedValue(0);
-
-  useEffect(() => {
-    progress.value = withDelay(
-      delay,
-      // Linear easing for a steady "snow falling" feel — out(cubic)
-      // accelerated the drift, which read as urgent.
-      withRepeat(withTiming(1, { duration, easing: Easing.linear }), -1, false)
-    );
-    wobble.value = withDelay(
-      delay,
-      withRepeat(withTiming(1, { duration: duration * 0.5 }), -1, true)
-    );
-  }, [delay, duration, progress, wobble]);
-
-  const size = useMemo(() => 4 + seed * 4, [seed]); // 4–8px (was 3–7)
-  // Warm golden hour sparkles — saturated gold + soft cream amber. The
-  // prior white sparkles disappeared into the highlight band; warmer
-  // tones pop against both the dusky lavender shadows and the peach
-  // highlights without ever color-matching either.
-  const color = seed > 0.5 ? '#FFD27A' : '#FFEED1';
-  const wobbleAmp = 14 * (1 - seed * 0.4);
-  // Spawn just above the screen; drift to just past the bottom so the
-  // field stays continuous across the loop (no pop-in/pop-out moment).
-  const startY = useMemo(() => -40 - seed * 40, [seed]); // -40 to -80px
-  const endY = useMemo(() => SCREEN_HEIGHT + 40, []);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    const y = interpolate(progress.value, [0, 1], [startY, endY]);
-    const x = startX + interpolate(wobble.value, [0, 1], [-wobbleAmp, wobbleAmp]);
-    const opacity = interpolate(
-      progress.value,
-      [0, 0.1, 0.9, 1],
-      [0, 1, 1, 0],
-      Extrapolation.CLAMP
-    );
-    const scale = interpolate(
-      progress.value,
-      [0, 0.1, 0.9, 1],
-      [0.5, 1, 1, 0.7],
-      Extrapolation.CLAMP
-    );
-    return {
-      transform: [{ translateX: x }, { translateY: y }, { scale }],
-      opacity,
-    };
-  });
-
-  return (
-    <Animated.View
-      style={[
-        styles.sparkle,
-        {
-          width: size,
-          height: size,
-          borderRadius: size / 2,
-          backgroundColor: color,
-          shadowColor: color,
-        },
-        animatedStyle,
-      ]}
-    />
-  );
-}
 
 // ── Dots ───────────────────────────────────────────────────────────────────
 // 3-dot sequence: `.` → `..` → `...` → repeat. Reserves space for the
@@ -155,15 +73,12 @@ interface Props {
 
 export function MagicalLoadingStage({ mascotUrl }: Props) {
   const breathe = useSharedValue(0);
+  const glowPulse = useSharedValue(0);
   const subtitleOpacity = useSharedValue(1);
   const [phraseIndex, setPhraseIndex] = useState(0);
 
-  // Mascot breathing — runs forever on the worklet thread, free of
-  // JS-side ticking. The standalone radial-glow disc that used to pulse
-  // behind the mascot was removed 2026-06-03 — the new Skia nebula
-  // backdrop already breathes in/out via its drifting cloud density,
-  // so a discrete glow circle felt redundant + read as an "expanding
-  // bubble" that drew attention away from the mascot.
+  // Mascot breathing — gentle 1.8s in / 1.8s out, runs forever on the
+  // worklet thread.
   useEffect(() => {
     breathe.value = withRepeat(
       withSequence(
@@ -174,6 +89,21 @@ export function MagicalLoadingStage({ mascotUrl }: Props) {
       false
     );
   }, [breathe]);
+
+  // Lavender glow pulse behind the mascot — same sine breath but
+  // slightly out of phase via a longer period so the two animations
+  // don't lock-step. Subtle enough to feel like ambient warmth, not a
+  // discrete "ring expanding."
+  useEffect(() => {
+    glowPulse.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 2400, easing: Easing.inOut(Easing.sin) }),
+        withTiming(0, { duration: 2400, easing: Easing.inOut(Easing.sin) })
+      ),
+      -1,
+      false
+    );
+  }, [glowPulse]);
 
   // Rotating subtitle — fade out, swap text, fade back in. setTimeout
   // for the swap+rise step keeps the worklet/runOnJS dance out of this:
@@ -198,27 +128,24 @@ export function MagicalLoadingStage({ mascotUrl }: Props) {
     ],
   }));
 
+  // Glow: opacity ranges 0.25 → 0.45 (subtle baseline + gentle swell);
+  // scale 0.95 → 1.08 (soft breath that follows the mascot but feels
+  // like a halo, not a discrete object).
+  const glowStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(glowPulse.value, [0, 1], [0.25, 0.45]),
+    transform: [{ scale: interpolate(glowPulse.value, [0, 1], [0.95, 1.08]) }],
+  }));
+
   const subtitleStyle = useAnimatedStyle(() => ({
     opacity: subtitleOpacity.value,
   }));
 
   return (
     <View style={styles.stage}>
-      {/* Animated Skia nebula — fluid periwinkle/lavender haze drifting
-          in two parallaxed layers, GPU-driven, ~zero JS cost. See
-          NebulaBackdrop for the tuning knobs (palette stops, noise scales,
-          scroll speeds, vignette). Replaced the prior static LinearGradient
-          2026-06-03 + retuned to soft daylight haze. */}
-      <NebulaBackdrop />
-
-      {/* Sparkle field — particles drift slowly DOWN from above the top
-          of the screen to below the bottom, like soft falling snow.
-          Layered absolutely under the mascot/text. */}
-      <View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.sparkleField]}>
-        {Array.from({ length: PARTICLE_COUNT }).map((_, i) => (
-          <Sparkle key={i} index={i} />
-        ))}
-      </View>
+      {/* Soft lavender halo behind the mascot. A simple radial-ish
+          look using a translucent View with a heavy shadow — no Skia,
+          no shader compile, paints instantly. */}
+      <Animated.View pointerEvents="none" style={[styles.glow, glowStyle]} />
 
       <Animated.View style={mascotStyle}>
         <Image source={{ uri: mascotUrl }} style={styles.mascot} contentFit="cover" />
@@ -244,30 +171,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 32,
     overflow: 'hidden',
-    // Match NebulaBackdrop.BASE_COLOR (~#8C7AB3 dusky lavender) so the
-    // stage paints the cloud-shadow color the instant React mounts the
-    // View — no flash while the Skia Canvas allocates its first frame
-    // or the mascot image fetches.
-    backgroundColor: '#8C7AB3',
+    // Pure black — matches the Create screen + the rest of the dark
+    // theme. The route container also paints this so React mounts the
+    // backdrop the instant the screen pushes.
+    backgroundColor: colors.background,
   },
-  sparkleField: {
-    // Sparkles spawn just above the screen top and drift slowly downward;
-    // the field itself just provides an absolute coordinate space. No
-    // padding — particles use their own absolute positions.
-  },
-  sparkle: {
+  // Soft lavender halo behind the mascot — translucent accent disc
+  // with a heavy glow shadow. Roughly twice the mascot diameter so the
+  // mascot floats inside a warm pool of color rather than feeling like
+  // it's wearing a tight ring.
+  glow: {
     position: 'absolute',
-    // top: 0 so the translateY range (-40 → SCREEN_HEIGHT+40) actually
-    // sweeps the FULL screen. The prior `top: '60%'` was a leftover
-    // from the old upward-drift design and kept all sparkles trapped
-    // in the bottom 40% of the screen — half of them never appeared.
-    top: 0,
-    left: 0,
-    // Bigger glow halo so each particle reads as a luminous dot
-    // against the warmer (less-bright) backdrop.
-    shadowOpacity: 1,
-    shadowRadius: 8,
+    width: GLOW_SIZE,
+    height: GLOW_SIZE,
+    borderRadius: GLOW_SIZE / 2,
+    backgroundColor: colors.accent,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.9,
+    shadowRadius: 60,
     shadowOffset: { width: 0, height: 0 },
+    // The pulse animation positions this absolutely centered via the
+    // flex parent — the mascot sits on top because it's the next sibling.
   },
   mascot: {
     width: MASCOT_SIZE,
@@ -284,19 +208,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   title: {
-    // Pale cream — bright enough to read clearly against the warmer,
-    // slightly darker golden-hour backdrop. The prior dark indigo
-    // (#3B2178) was tuned for a near-white backdrop and reads as
-    // cramped/heavy now that the bg is dusty lavender + mauve.
-    color: '#FFF5E1',
+    color: colors.textPrimary,
     fontSize: 26,
     fontWeight: '700',
     letterSpacing: 0.3,
-    // Soft amber glow lifts the title off the cloud — golden hour
-    // light wrapping the type.
-    textShadowColor: 'rgba(255, 188, 110, 0.55)',
-    textShadowRadius: 12,
-    textShadowOffset: { width: 0, height: 0 },
   },
   dotsRun: {
     fontSize: 26,
@@ -304,18 +219,13 @@ const styles = StyleSheet.create({
     marginLeft: 2,
   },
   dots: {
-    // Warm cream accent — still pops nicely against the lavender bg
-    // (the warm/cool contrast carries readability without needing dark).
-    color: '#D4A547',
+    color: colors.accent,
   },
   dotsHidden: {
     color: 'transparent',
   },
   subtitle: {
-    // Warm cream a couple shades softer than the title — golden hour
-    // light through fabric. Stays legible on both the mauve mids and
-    // the peach highlights of the cloud field.
-    color: '#FBE3B7',
+    color: colors.textSecondary,
     fontSize: 15,
     fontWeight: '500',
     textAlign: 'center',
