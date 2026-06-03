@@ -1067,40 +1067,68 @@ Output ONLY the prompt.`;
       };
     } else {
       // ── Pure scene — uses upstream iconicAnchor + biomeConfig + axes ──
+      //
+      // Phase 1 quality pass (2026-06-03): the previous brief was 70-100
+      // words and let Sonnet roll PHENOMENON every time. That extra
+      // creative budget + the "JAW-DROPPING" framing pulled Sonnet into
+      // hallucinating extras: lone figures with staffs, hanging tapestry
+      // frames, narrative dream-weirdness lines, secondary surprise
+      // elements stacked alongside the iconic anchor. Result was
+      // "anchor + 4 surprise axes" collages instead of clean postcards.
+      //
+      // The tighten:
+      //   • 50-75 words (less room to ad-lib)
+      //   • PHENOMENON rolled ~33% of the time, otherwise omitted
+      //     (was always included). Time + weather + camera carry the
+      //     variation reliably; phenomena adds noise more than help.
+      //   • Explicit "NO ADDITIONS" rule block that bans figures,
+      //     tapestries, narrative lines, and other competing elements
+      //     by name.
+      //   • Subject framing copy compressed.
       const banLines = biomeConfig.BANS.map((b) => `- ${b}`).join('\n');
-      nightlyBrief = `You are a cinematographer composing a JAW-DROPPING postcard of ${userPlace || 'the location'}. Write a Flux AI prompt (70-100 words, comma-separated).
+      const includePhenomenon = Math.random() < 0.33;
+      const phenomenonLine = includePhenomenon
+        ? `\n- ATMOSPHERIC PHENOMENON: ${phenomenaAxis}`
+        : '';
+      nightlyBrief = `You are a cinematographer composing a POSTCARD of ${userPlace || 'the location'}. Write a Flux AI prompt (50-75 words, comma-separated).
 
-━━━ THE SUBJECT (NON-NEGOTIABLE) ━━━
-The render MUST depict: ${iconicAnchor || userPlace || 'the location'}
+━━━ THE SUBJECT (LOCKED — NON-NEGOTIABLE) ━━━
+The render IS: ${iconicAnchor || userPlace || 'the location'}
 
-This is the LOCKED SUBJECT of the image. Do NOT substitute another feature of ${userPlace || 'the location'} (no swapping in different cliffs, valleys, beaches, or landmarks). Do NOT add multiple competing iconic features. The image IS this specific view — render this view, enhanced and dramatized.
+This is the only subject. Do NOT substitute another landmark. Do NOT add multiple competing iconic features. Name this specific view explicitly in the prompt.
 
 MEDIUM: ${baseMedium.fluxFragment}
 
 SUBJECT FRAMING: ${biomeConfig.SUBJECT_RULE}
 
-VARIATION AXES (these layer ONTO the locked subject above — they alter LIGHT, ATMOSPHERE, and CAMERA ONLY, never the subject):
+VARIATION AXES (alter LIGHT, ATMOSPHERE, and CAMERA ONLY — never the subject):
 - TIME: ${timeAxis}
 - WEATHER: ${weatherAxis}
-- CAMERA: ${cameraAxis}
-- ATMOSPHERIC PHENOMENON: ${phenomenaAxis}
+- CAMERA: ${cameraAxis}${phenomenonLine}
+
+NO ADDITIONS (HARD BANS — these have polluted past renders):
+- NO figures, people, characters, lone travelers, hooded silhouettes, animals — the landscape IS the subject, no actors inside it
+- NO foreground frames or props (tapestries, banners, archways, hanging lanterns, curtains) unless they are physically part of the locked subject above
+- NO narrative or dream-weirdness phrases ("the pattern repeats", "you remember this place", etc.)
+- NO secondary iconic features stacked alongside the anchor — one subject, one image
+- NO surreal additions (ringworld arcs, cable cars, floating islands, ash-as-snow) unless the rolled axes above explicitly call for them
 
 ENHANCING LANGUAGE (mandatory):
-- DEFINED LIGHT SOURCE — name the light explicitly (direct sun, warm lamplight, neon glow, golden rim, sharp shadow play, glittering reflections, god-rays, etc.) — pick what fits the rolled WEATHER + TIME, not a default
-- LAYERED DEPTH — rich foreground anchor + dense midground + distant background
-- SATURATED COLOR — pigments cranked, palette vivid and true to THIS specific place (do not invent foliage/water that isn't there)
-- DENSE DETAIL — every surface, material, texture, edge and highlight catching light, true to this location
+- DEFINED LIGHT SOURCE — name it explicitly (direct sun, warm lamplight, golden rim, glittering reflections, god-rays) — fit to the rolled WEATHER + TIME
+- LAYERED DEPTH — foreground / midground / distant background, all of the LOCKED SUBJECT
+- SATURATED COLOR — pigments cranked, palette true to THIS specific place
+- DENSE DETAIL — every surface, material, edge catching light
 
-ATMOSPHERIC RULE — WEATHER axis is the SOLE source of truth for atmosphere. Render exactly the conditions specified by the rolled WEATHER. Do NOT add fog, mist, haze, god-rays, or atmospheric particles unless the WEATHER axis asks for them. Do NOT strip them if it does. WEATHER decides — full stop.
+ATMOSPHERIC RULE — WEATHER is the SOLE source of truth for atmosphere. Render exactly what the rolled WEATHER specifies. Do not add fog/mist/haze/god-rays/particles unless WEATHER asks. Do not strip them if it does.
 
-MOOD (tone only — do NOT let mood words pull in new subjects/scenes):
+MOOD (tone only — do NOT let mood pull in new subjects):
 ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
 ABSOLUTELY BANNED:
 ${banLines}
 
-Render the LOCKED SUBJECT above, lit by the rolled TIME + WEATHER + PHENOMENON, framed by the rolled CAMERA. The image must NAME the locked subject explicitly in the prompt (e.g., "Nā Pali Coast emerald cliffs and Pacific surf, ..." not "Hawaiian rainforest canyon, ...").
+Render the LOCKED SUBJECT, lit by TIME + WEATHER${includePhenomenon ? ' + PHENOMENON' : ''}, framed by CAMERA. NAME the locked subject explicitly.
 
 End with: no text, no words, no letters, no watermarks, hyper detailed, masterwork composition.
 
@@ -1113,6 +1141,7 @@ Output ONLY the prompt.`;
         anchor: iconicAnchor || null,
         time: timeAxis.split(' — ')[0],
         weather: weatherAxis.split(',')[0],
+        phenomenon_included: includePhenomenon,
       };
     }
 
