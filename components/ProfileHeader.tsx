@@ -30,6 +30,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-nativ
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { avatarUrl } from '@/lib/imageUrl';
 import type { StatsTab } from '@/components/ProfileStatsRow';
 
 const AVATAR_SIZE = 96;
@@ -85,7 +86,15 @@ function AvatarBlock({
 }) {
   const initial = (username || '?')[0]?.toUpperCase() ?? '?';
   const inner = avatar_url ? (
-    <Image source={{ uri: avatar_url }} style={styles.avatar} contentFit="cover" />
+    // Wrap in the Supabase transform helper so we fetch a 128×128 WebP
+    // (~5-10 KB) instead of the raw full-res avatar upload (up to 1+ MB).
+    // Drops the "black avatar in header until the original loads" pause.
+    <Image
+      source={{ uri: avatarUrl(avatar_url) }}
+      style={styles.avatar}
+      contentFit="cover"
+      cachePolicy="memory-disk"
+    />
   ) : (
     <View style={[styles.avatar, styles.avatarFallback]}>
       <Text style={styles.avatarInitial}>{initial}</Text>
