@@ -24,12 +24,13 @@ import { Canvas, Fill, Shader, Skia, useClock } from '@shopify/react-native-skia
 import { useDerivedValue } from 'react-native-reanimated';
 
 // ── Tuning knobs ───────────────────────────────────────────────────────────
-// Match the existing MagicalLoadingStage gradient (#1B0E33 / #0F0F1A / #1A0F2C)
-// but extend upward into a brighter lilac highlight so the moving clouds
-// have somewhere to glow toward.
-const BASE_COLOR = [0.1, 0.07, 0.18]; // deep purple bg (~#1A1230)
-const MID_COLOR = [0.36, 0.2, 0.58]; // lavender (~#5C3394)
-const HIGHLIGHT_COLOR = [0.65, 0.5, 0.85]; // bright lilac (~#A680D9)
+// Soft periwinkle / lavender haze — dreamy and airy, not ominous. The first
+// iteration used a near-black deep-purple base that read as gothic; this
+// palette stays luminous across the whole tonal range so the clouds feel
+// like they're glowing from within rather than receding into shadow.
+const BASE_COLOR = [0.72, 0.7, 0.92]; // soft periwinkle (~#B7B3EB)
+const MID_COLOR = [0.82, 0.76, 0.94]; // airy lavender (~#D1C2EF)
+const HIGHLIGHT_COLOR = [0.95, 0.91, 0.98]; // pale lilac mist (~#F2E8F9)
 
 // Smaller numbers = bigger, slower-moving cloud blobs. The two layers
 // scrolling at different rates is what gives the parallax depth feel.
@@ -39,7 +40,9 @@ const SCROLL_SPEED_1 = 0.018; // seconds → noise-space units
 const SCROLL_SPEED_2 = 0.026;
 
 // How dark the corners go vs the center. 0.0 = no vignette, 0.9 = heavy.
-const VIGNETTE_STRENGTH = 0.55;
+// Light palette wants almost no vignette — heavy edge-dimming on a light
+// scene reads as gloomy, the opposite of "dream haze."
+const VIGNETTE_STRENGTH = 0.12;
 
 // ── Shader source ──────────────────────────────────────────────────────────
 const source = Skia.RuntimeEffect.Make(`

@@ -32,7 +32,7 @@ import Animated, {
   Extrapolation,
 } from 'react-native-reanimated';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MASCOT_SIZE = 200;
 const PARTICLE_COUNT = 14;
 
@@ -47,14 +47,18 @@ const PHRASES = [
 ];
 
 // ── Sparkle ────────────────────────────────────────────────────────────────
-// Single particle that drifts upward with a sine-wave horizontal wobble,
-// fades in then back out, and loops forever. Each instance bakes its own
-// seed at mount so the field looks individually random but stays
-// deterministic per render.
+// Single particle that drifts DOWNWARD from above the top of the screen
+// to below the bottom with a slow sine-wave horizontal wobble, fades in
+// then back out, and loops forever. Each instance bakes its own seed at
+// mount so the field looks individually random but stays deterministic
+// per render. Slower than the prior upward drift (5–8s per pass vs 2.8–
+// 4.4s) so it reads as gentle haze rather than confetti.
 function Sparkle({ index }: { index: number }) {
   const seed = useMemo(() => Math.random(), []);
-  const startX = useMemo(() => (SCREEN_WIDTH - 16) / 2 + (seed - 0.5) * 220, [seed]);
-  const duration = useMemo(() => 2800 + seed * 1600, [seed]);
+  // Spawn anywhere across the screen width — full spread, not clustered
+  // near the mascot like the old upward field.
+  const startX = useMemo(() => seed * (SCREEN_WIDTH - 16), [seed]);
+  const duration = useMemo(() => 5000 + seed * 3000, [seed]); // 5–8s
   const delay = useMemo(
     () => (index / PARTICLE_COUNT) * duration + seed * 600,
     [index, seed, duration]
@@ -66,7 +70,9 @@ function Sparkle({ index }: { index: number }) {
   useEffect(() => {
     progress.value = withDelay(
       delay,
-      withRepeat(withTiming(1, { duration, easing: Easing.out(Easing.cubic) }), -1, false)
+      // Linear easing for a steady "snow falling" feel — out(cubic)
+      // accelerated the drift, which read as urgent.
+      withRepeat(withTiming(1, { duration, easing: Easing.linear }), -1, false)
     );
     wobble.value = withDelay(
       delay,
@@ -75,22 +81,29 @@ function Sparkle({ index }: { index: number }) {
   }, [delay, duration, progress, wobble]);
 
   const size = useMemo(() => 3 + seed * 4, [seed]); // 3–7px
-  const color = seed > 0.5 ? '#FFE9B3' : '#C4B5FD'; // warm gold or soft purple
+  // Warm cream or pure white — both pop nicely against the soft lavender
+  // backdrop. The prior purple #C4B5FD blended in once the backdrop
+  // lightened to periwinkle.
+  const color = seed > 0.5 ? '#FFE9B3' : '#FFFFFF';
   const wobbleAmp = 14 * (1 - seed * 0.4);
+  // Spawn just above the screen; drift to just past the bottom so the
+  // field stays continuous across the loop (no pop-in/pop-out moment).
+  const startY = useMemo(() => -40 - seed * 40, [seed]); // -40 to -80px
+  const endY = useMemo(() => SCREEN_HEIGHT + 40, []);
 
   const animatedStyle = useAnimatedStyle(() => {
-    const y = interpolate(progress.value, [0, 1], [0, -240]);
+    const y = interpolate(progress.value, [0, 1], [startY, endY]);
     const x = startX + interpolate(wobble.value, [0, 1], [-wobbleAmp, wobbleAmp]);
     const opacity = interpolate(
       progress.value,
-      [0, 0.15, 0.85, 1],
+      [0, 0.1, 0.9, 1],
       [0, 1, 1, 0],
       Extrapolation.CLAMP
     );
     const scale = interpolate(
       progress.value,
       [0, 0.1, 0.9, 1],
-      [0.5, 1, 1, 0.6],
+      [0.5, 1, 1, 0.7],
       Extrapolation.CLAMP
     );
     return {
@@ -141,12 +154,15 @@ interface Props {
 
 export function MagicalLoadingStage({ mascotUrl }: Props) {
   const breathe = useSharedValue(0);
-  const glow = useSharedValue(0);
   const subtitleOpacity = useSharedValue(1);
   const [phraseIndex, setPhraseIndex] = useState(0);
 
-  // Mascot breathing + glow pulse — both run forever on the worklet
-  // thread, free of JS-side ticking.
+  // Mascot breathing — runs forever on the worklet thread, free of
+  // JS-side ticking. The standalone radial-glow disc that used to pulse
+  // behind the mascot was removed 2026-06-03 — the new Skia nebula
+  // backdrop already breathes in/out via its drifting cloud density,
+  // so a discrete glow circle felt redundant + read as an "expanding
+  // bubble" that drew attention away from the mascot.
   useEffect(() => {
     breathe.value = withRepeat(
       withSequence(
@@ -156,15 +172,7 @@ export function MagicalLoadingStage({ mascotUrl }: Props) {
       -1,
       false
     );
-    glow.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 2400, easing: Easing.inOut(Easing.sin) }),
-        withTiming(0, { duration: 2400, easing: Easing.inOut(Easing.sin) })
-      ),
-      -1,
-      false
-    );
-  }, [breathe, glow]);
+  }, [breathe]);
 
   // Rotating subtitle — fade out, swap text, fade back in. setTimeout
   // for the swap+rise step keeps the worklet/runOnJS dance out of this:
@@ -189,30 +197,22 @@ export function MagicalLoadingStage({ mascotUrl }: Props) {
     ],
   }));
 
-  const glowStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(glow.value, [0, 1], [0.32, 0.62]),
-    transform: [{ scale: interpolate(glow.value, [0, 1], [0.9, 1.1]) }],
-  }));
-
   const subtitleStyle = useAnimatedStyle(() => ({
     opacity: subtitleOpacity.value,
   }));
 
   return (
     <View style={styles.stage}>
-      {/* Animated Skia nebula — fluid lavender clouds drifting in two
-          parallaxed layers, GPU-driven, ~zero JS cost. See NebulaBackdrop
-          for the tuning knobs (palette stops, noise scales, scroll speeds,
-          vignette). Replaced the prior static LinearGradient 2026-06-03. */}
+      {/* Animated Skia nebula — fluid periwinkle/lavender haze drifting
+          in two parallaxed layers, GPU-driven, ~zero JS cost. See
+          NebulaBackdrop for the tuning knobs (palette stops, noise scales,
+          scroll speeds, vignette). Replaced the prior static LinearGradient
+          2026-06-03 + retuned to soft daylight haze. */}
       <NebulaBackdrop />
 
-      {/* Pulsing radial glow centered behind the mascot. Just a big
-          soft purple disc with shadow + low opacity — does the work of
-          a true radial gradient at a fraction of the cost. */}
-      <Animated.View style={[styles.glow, glowStyle]} pointerEvents="none" />
-
-      {/* Sparkle field — sits underneath the mascot, particles rise
-          past it. Layered absolutely. */}
+      {/* Sparkle field — particles drift slowly DOWN from above the top
+          of the screen to below the bottom, like soft falling snow.
+          Layered absolutely under the mascot/text. */}
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.sparkleField]}>
         {Array.from({ length: PARTICLE_COUNT }).map((_, i) => (
           <Sparkle key={i} index={i} />
@@ -243,20 +243,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 32,
     overflow: 'hidden',
-  },
-  glow: {
-    position: 'absolute',
-    width: 320,
-    height: 320,
-    borderRadius: 160,
-    backgroundColor: '#8B5CF6',
-    top: '42%',
-    marginTop: -160,
+    // Match NebulaBackdrop.BASE_COLOR (~#B7B3EB) so the stage paints
+    // periwinkle the instant React mounts the View — no black flash
+    // while the Skia Canvas allocates its first frame or the mascot
+    // image fetches.
+    backgroundColor: '#B7B3EB',
   },
   sparkleField: {
-    // Sparkles spawn near the middle of the screen and rise; the field
-    // itself just provides an absolute coordinate space. No padding —
-    // particles use their own absolute positions.
+    // Sparkles spawn just above the screen top and drift slowly downward;
+    // the field itself just provides an absolute coordinate space. No
+    // padding — particles use their own absolute positions.
   },
   sparkle: {
     position: 'absolute',
@@ -281,7 +277,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   title: {
-    color: '#FFFFFF',
+    // Deep periwinkle/indigo — readable on the light lavender backdrop.
+    // White (the prior color) faded into the haze and read as washed-out.
+    color: '#3B2178',
     fontSize: 26,
     fontWeight: '700',
     letterSpacing: 0.3,
@@ -292,13 +290,17 @@ const styles = StyleSheet.create({
     marginLeft: 2,
   },
   dots: {
-    color: '#FFE9B3',
+    // Warm cream accent — still pops nicely against the lavender bg
+    // (the warm/cool contrast carries readability without needing dark).
+    color: '#D4A547',
   },
   dotsHidden: {
     color: 'transparent',
   },
   subtitle: {
-    color: '#C4B5FD',
+    // Soft mauve — feels dreamy + sits halfway between the title's
+    // deep periwinkle and the backdrop's lavender so the eye flows.
+    color: '#6B4FA8',
     fontSize: 15,
     fontWeight: '500',
     textAlign: 'center',

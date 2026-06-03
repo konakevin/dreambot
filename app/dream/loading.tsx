@@ -279,7 +279,10 @@ export default function DreamLoadingScreen() {
 const s = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    // Match the MagicalLoadingStage / NebulaBackdrop base color so the
+    // route paints periwinkle the instant it mounts — no dark-theme
+    // flash before MagicalLoadingStage renders its own backdrop.
+    backgroundColor: '#B7B3EB',
   },
   // Bottom overlay: floats over the magical stage so the face-swap
   // subtip + Queue This button sit safely above the home indicator
