@@ -25,6 +25,7 @@ import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
 import { getLocationCard } from '../_shared/essenceCards.ts';
+import { isBannedLocationName } from '../_shared/locationFilters.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
@@ -465,7 +466,10 @@ Deno.serve(async (req) => {
     // Apply recency filter to location picks — forces rotation through
     // user's places instead of clustering on one. With 2 places + filter,
     // locations alternate; with many places, they rotate naturally.
-    let placePool = seeds.places;
+    // Strip banned (fantasy/sci-fi/imagined) entries from the place pool
+    // before any rolling logic touches it. See _shared/locationFilters.ts
+    // for the rationale + the 3-layer cleanup it pairs with.
+    let placePool: string[] = (seeds.places ?? []).filter((p: string) => !isBannedLocationName(p));
     if (placePool.length > 0 && recentPlaces.length > 0) {
       const excludeSet = new Set(recentPlaces);
       const filtered = placePool.filter((p: string) => !excludeSet.has(p));

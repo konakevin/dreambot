@@ -8,6 +8,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { SONNET } from './models.ts';
+import { isBannedLocationName, isBannedLocationBiome } from './locationFilters.ts';
 
 // ── Types ─────────────────────────────────────────────────────────────
 
@@ -187,6 +188,17 @@ export async function getLocationCard(
   anthropicKey: string
 ): Promise<LocationCard | null> {
   const name = normalizeName(rawName);
+
+  // Safety net (2026-06-03): refuse fantasy/sci-fi names UPFRONT so we
+  // never auto-generate a fresh card for one. Without this, removing
+  // "high fantasy" from is_approved=true silently triggers the
+  // generateLocationCard() fallback below — Sonnet would happily write
+  // a brand-new "high fantasy" card and the engine would render it.
+  if (isBannedLocationName(name)) {
+    console.log('[essenceCards] Refusing banned location name:', name);
+    return null;
+  }
+
   if (locationCache.has(name)) return locationCache.get(name)!;
 
   const sb = getServiceClient();
@@ -200,6 +212,13 @@ export async function getLocationCard(
     .maybeSingle();
 
   if (!error && data) {
+    // Belt+suspenders biome check — refuses any card whose biome class
+    // is in the banned set even if is_approved gets flipped back later.
+    if (isBannedLocationBiome(data.biome)) {
+      console.log('[essenceCards] Refusing banned biome:', data.biome, 'for', name);
+      return null;
+    }
+
     const card: LocationCard = {
       name: data.name,
       tags: data.tags || [],
