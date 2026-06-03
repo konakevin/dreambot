@@ -85,11 +85,15 @@ async function main() {
   let kbTotal = 0;
   for (;;) {
     if (done >= LIMIT) break;
+    // 2026-06-04: was filtered to `.png` only, but the render pipeline
+    // switched to JPEG q95 originals on 2026-05-29 — that left ~11,585
+    // JPEG-original uploads without a display variant. Sharp's resize+q80
+    // produces a meaningfully-smaller variant regardless of source format
+    // (1-2 MB JPEG → ~150 KB JPEG), so process anything missing.
     const { data: rows, error } = await sb
       .from('uploads')
       .select('id, image_url')
       .is('image_url_display', null)
-      .ilike('image_url', '%.png')
       .order('created_at', { ascending: false })
       .limit(BATCH);
     if (error) {
