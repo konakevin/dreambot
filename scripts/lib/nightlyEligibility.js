@@ -48,10 +48,99 @@ function nightlyDreamedUserIds(completedLogRows) {
   return ids;
 }
 
+/**
+ * Hours remaining until the trial expires. Negative when expired.
+ * Returns null when the user never started a trial.
+ */
+function hoursUntilTrialEnds(u, now = Date.now()) {
+  if (!u || !u.pro_trial_started_at) return null;
+  const endsMs = new Date(u.pro_trial_started_at).getTime() + TRIAL_MS;
+  return (endsMs - now) / (60 * 60 * 1000);
+}
+
+/**
+ * Hours remaining until the PAID Pro subscription's current period ends.
+ * Negative when expired. Null when the user has no paid expiry recorded
+ * (a paid-PRO row without expiry would mean indefinite access; we skip
+ * the reminder for those since there's nothing to remind about).
+ */
+function hoursUntilProSubscriptionEnds(u, now = Date.now()) {
+  if (!u || u.pro_subscription !== true) return null;
+  if (!u.pro_subscription_expires_at) return null;
+  const endsMs = new Date(u.pro_subscription_expires_at).getTime();
+  return (endsMs - now) / (60 * 60 * 1000);
+}
+
+/**
+ * 3-day trial reminder window. Returns true when trial expires in (48, 84]
+ * hours — i.e., between 2.0 and 3.5 days from now. The window is wider than
+ * 24h on each side to absorb GitHub Actions scheduled-cron drift (we have
+ * seen 4+h late fires); idempotency via the notifications-table dedup keeps
+ * a same-trial-cycle re-fire from causing a duplicate. Paid Pro users skip
+ * (handled at the caller).
+ */
+function shouldSend3DayTrialReminder(u, now = Date.now()) {
+  const h = hoursUntilTrialEnds(u, now);
+  if (h === null) return false;
+  return h > 48 && h <= 84;
+}
+
+/**
+ * 3-day paid Pro expiry reminder. Same window logic as the trial version
+ * but reads `pro_subscription_expires_at`. The caller MUST additionally
+ * check `pro_subscription_will_renew === false` — auto-renewing users
+ * aren't actually going to lose access at expires_at, so reminding them
+ * is a false alarm.
+ */
+function shouldSend3DayPaidProReminder(u, now = Date.now()) {
+  const h = hoursUntilProSubscriptionEnds(u, now);
+  if (h === null) return false;
+  return h > 48 && h <= 84;
+}
+
+/**
+ * Last-night trial reminder window. Returns true when trial expires in
+ * (0, 36] hours — i.e., between right-now and ~1.5 days out, AND still in
+ * the future. The caller MUST additionally confirm the user is being
+ * enqueued for a dream THIS run (isProActive=true at cron time) so the
+ * "Tonight is your last Pro nightly dream" promise is accurate.
+ *
+ * Why 36h: cron drifts up to ~5h late; if expiry is 24h from a 13:00 cron,
+ * tomorrow's cron at 09:00 would be 4h after expiry — the last-night
+ * window must extend past 24h to guarantee we catch the user on a cron
+ * that DOES deliver their final dream. The opposite bound (anything <0)
+ * just means the trial already expired so we skip — too late to call it
+ * "tonight's the last."
+ */
+function shouldSendLastNightTrialReminder(u, now = Date.now()) {
+  const h = hoursUntilTrialEnds(u, now);
+  if (h === null) return false;
+  return h > 0 && h <= 36;
+}
+
+/**
+ * Last-night paid Pro expiry reminder. Mirrors the trial version but reads
+ * `pro_subscription_expires_at`. Caller MUST additionally check
+ * `pro_subscription_will_renew === false` AND that we're enqueuing the
+ * user's dream this same cron run (so "tonight is your last Pro nightly
+ * dream" is accurate to system behavior).
+ */
+function shouldSendLastNightPaidProReminder(u, now = Date.now()) {
+  const h = hoursUntilProSubscriptionEnds(u, now);
+  if (h === null) return false;
+  return h > 0 && h <= 36;
+}
+
 module.exports = {
   isProActive,
   isPaidProActive,
   isTrialActive,
   nightlyDreamedUserIds,
+  hoursUntilTrialEnds,
+  hoursUntilProSubscriptionEnds,
+  shouldSend3DayTrialReminder,
+  shouldSendLastNightTrialReminder,
+  shouldSend3DayPaidProReminder,
+  shouldSendLastNightPaidProReminder,
   TRIAL_DURATION_DAYS,
 };

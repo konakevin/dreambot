@@ -278,11 +278,18 @@ Deno.serve(async (req) => {
       // Grant or extend Pro access
       if (PRO_GRANT_EVENTS.has(eventType)) {
         const expiresAt = expirationAtMs ? new Date(expirationAtMs).toISOString() : null;
+        // INITIAL_PURCHASE / RENEWAL / PRODUCT_CHANGE / UNCANCELLATION all
+        // reset the cancellation flag — these events mean the user has an
+        // active, auto-renewing subscription right now (UNCANCELLATION is
+        // explicit; the others are implicit because cancelling, then
+        // RE-purchasing or renewing past expiry, would land here).
+        // Migration 215.
         const { error } = await supabase
           .from('users')
           .update({
             pro_subscription: true,
             pro_subscription_expires_at: expiresAt,
+            pro_subscription_will_renew: true,
           })
           .eq('id', appUserId);
         if (error) {
@@ -352,7 +359,26 @@ Deno.serve(async (req) => {
       // Informational only — access state unchanged. CANCELLATION = user
       // tapped cancel but keeps access until EXPIRATION fires.
       // BILLING_ISSUE = card failed; Apple is retrying within grace period.
+      //
+      // Migration 215: CANCELLATION flips pro_subscription_will_renew to
+      // false so nightly-dreams.js knows to send the "your Pro ends in 3
+      // days" + "tonight is your last Pro nightly dream" reminders. The
+      // user keeps access until pro_subscription_expires_at. BILLING_ISSUE
+      // is NOT a cancellation (Apple is retrying the charge) — don't flip
+      // the flag so we don't false-alarm a recoverable card issue.
       if (PRO_INFO_EVENTS.has(eventType)) {
+        if (eventType === 'CANCELLATION') {
+          const { error } = await supabase
+            .from('users')
+            .update({ pro_subscription_will_renew: false })
+            .eq('id', appUserId);
+          if (error) {
+            console.error(`[RevenueCat] will_renew=false failed for ${appUserId}:`, error);
+            // Don't fail the webhook — the cancel is acked at the source
+            // of truth (RC); worst case we send one false-alarm reminder
+            // next cron, which is recoverable.
+          }
+        }
         console.log(`[RevenueCat] Pro info event for ${appUserId}: ${eventType}`);
         return new Response(JSON.stringify({ message: `Logged ${eventType}` }), { status: 200 });
       }

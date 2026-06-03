@@ -32,6 +32,8 @@ export type NotificationType =
   | 'post_twin'
   | 'post_milestone'
   | 'download_ready'
+  | 'trial_reminder' // Pro-trial expiry pings (3-day + last-night), migration 215 commit
+  | 'pro_reminder' // Paid Pro expiry pings (cancelled but still in paid period)
   | 'comment'; // legacy rows kept queryable
 
 export type NotificationCategory =

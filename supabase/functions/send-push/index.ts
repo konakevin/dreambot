@@ -17,6 +17,10 @@ interface WebhookPayload {
     upload_id: string | null;
     comment_id: string | null;
     body: string | null;
+    // Migration 206: subtype is the typed discriminator for variants like
+    // wish/welcome/3day/last_night within a parent type. Read here to route
+    // trial_reminder / pro_reminder push titles by subtype.
+    subtype: string | null;
     created_at: string;
     group_key?: string | null;
   };
@@ -51,7 +55,48 @@ function pickDreamPushBody(): string {
   return DREAM_PUSH_BODIES[Math.floor(Math.random() * DREAM_PUSH_BODIES.length)];
 }
 
-function getNotificationContent(type: string, actorName: string, body: string | null) {
+function getNotificationContent(
+  type: string,
+  actorName: string,
+  body: string | null,
+  subtype: string | null = null
+) {
+  // Trial-expiry reminders inserted by scripts/nightly-dreams.js.
+  // Subtype routes the push title; body is the in-app copy as inserted.
+  if (type === 'trial_reminder') {
+    if (subtype === '3day') {
+      return {
+        title: 'Your Pro trial ends in 3 days',
+        body: body ?? 'Subscribe to keep nightly dreams coming.',
+      };
+    }
+    if (subtype === 'last_night') {
+      return {
+        title: 'Tonight is your last Pro nightly dream',
+        body: body ?? 'Your trial ends tomorrow — subscribe to keep nightly dreams coming.',
+      };
+    }
+    return { title: 'Your Pro trial is ending', body: body ?? 'Tap to learn more.' };
+  }
+  // Paid Pro expiry reminders (sub cancelled but still in paid period).
+  // Same windows as trial_reminder; different copy ("resubscribe" not
+  // "subscribe").
+  if (type === 'pro_reminder') {
+    if (subtype === 'paid_3day') {
+      return {
+        title: 'Your Pro subscription ends in 3 days',
+        body: body ?? 'Resubscribe to keep nightly dreams coming.',
+      };
+    }
+    if (subtype === 'paid_last_night') {
+      return {
+        title: 'Tonight is your last Pro nightly dream',
+        body:
+          body ?? 'Your subscription ends tomorrow — resubscribe to keep nightly dreams coming.',
+      };
+    }
+    return { title: 'Your Pro subscription is ending', body: body ?? 'Tap to learn more.' };
+  }
   switch (type) {
     case 'post_like':
       return { title: `${actorName} liked your dream`, body: '' };
@@ -147,6 +192,8 @@ function getAggregatedNotificationContent(
       return { title: `${actors2} accepted your follow request`, body: '' };
     case 'dream_generated':
     case 'download_ready':
+    case 'trial_reminder':
+    case 'pro_reminder':
       // Self-events — fall through to single-actor copy regardless of count.
       return getNotificationContent(type, latestActorName, body);
     default:
@@ -200,7 +247,12 @@ Deno.serve(async (req) => {
     // = number of events in this group; distinct actor_ids = number of unique
     // actors) and the second-most-recent actor's username for the 2-actor copy
     // line. Falls back to single-actor copy if any of that lookup fails.
-    let content = getNotificationContent(record.type, actorName, record.body);
+    let content = getNotificationContent(
+      record.type,
+      actorName,
+      record.body,
+      record.subtype ?? null
+    );
     if (payload.aggregated && payload.group_key) {
       // Distinct unread actors in this group, recipient-scoped. (Counting only
       // unseen so an already-read group doesn't double-count an older actor on

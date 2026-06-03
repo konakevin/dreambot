@@ -185,6 +185,34 @@ function getGroupText(g: InboxGroup): {
         preview: 'Tap to save it to your photos',
         isAggregable: false,
       };
+    case 'trial_reminder':
+      // Pro-trial expiry pings (3-day + last-night). Subtype routes the title;
+      // body is the verbatim message the writer inserted (also the push body).
+      return {
+        actorPrefix: null,
+        action:
+          g.subtype === 'last_night'
+            ? 'Tonight is your last Pro nightly dream'
+            : g.subtype === '3day'
+              ? 'Your Pro trial ends in 3 days'
+              : 'Your Pro trial is ending',
+        preview: g.body || 'Tap to subscribe and keep nightly dreams coming.',
+        isAggregable: false,
+      };
+    case 'pro_reminder':
+      // Paid Pro expiry pings (sub cancelled but still in paid period).
+      // Same window + accuracy guarantees as trial_reminder; different copy.
+      return {
+        actorPrefix: null,
+        action:
+          g.subtype === 'paid_last_night'
+            ? 'Tonight is your last Pro nightly dream'
+            : g.subtype === 'paid_3day'
+              ? 'Your Pro subscription ends in 3 days'
+              : 'Your Pro subscription is ending',
+        preview: g.body || 'Tap to resubscribe and keep nightly dreams coming.',
+        isAggregable: false,
+      };
     default:
       return { actorPrefix: first, action: '', preview: g.body, isAggregable: false };
   }
