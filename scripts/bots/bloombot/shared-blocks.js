@@ -9,8 +9,17 @@
 const PROMPT_PREFIX =
   'breathtaking LUSH flower scene, abundant blooms filling the entire frame edge-to-edge as the unmistakable hero, a monumental bloom-form or dense overflowing bloom-mass dominating the composition, every petal jewel-saturated, magazine-cover composition, any setting is only a backdrop to the flowers';
 
+// 2026-06-02 cruft-audit strip — was 469ch with redundancy against
+// PROMPT_PREFIX + bloom_hyperreal_cgi flux (same "tack-sharp + saturated
+// + jewel-tone + clear background" claims appeared in all 3 layers).
+// Also held a parenthetical negation `(no hues outside it)` that the
+// positive "STRICTLY within the scene's chosen color theme" already
+// covers. Dropped tech-spec "hyper-detailed" (AI-photo tell). Kept the
+// unique enforcement points: species-color faithfulness + receding-
+// layer depth + sky clean. "no text/words/watermarks" stays — standard
+// overlay suppression that doesn't leak scene content.
 const PROMPT_SUFFIX =
-  "render every named species as that exact species in its named color, saturated color STRICTLY within the scene's chosen color theme (no hues outside it), the hero blooms and foreground rendered tack-sharp and jewel-saturated, the background staying clear and colored with depth built from receding layers of more blooms and clearly-rendered scenery, the sky clean and clear, every layer crisply rendered, no text, no words, no watermarks, hyper-detailed gallery quality";
+  "render every named species as that exact species in its named color, color STRICTLY within the scene's chosen theme, depth built from receding layers of more blooms and clearly-rendered scenery, the sky clean and clear, every layer crisply rendered, no text, no words, no watermarks, gallery quality";
 
 const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE — NON-NEGOTIABLE ━━━
 No humans, no faces, no figures, no silhouettes, no shadows of people anywhere in the frame. Wildlife (hummingbird, bee, butterfly, dragonfly, small lizard) is allowed only as peripheral accent — never the subject.`;
