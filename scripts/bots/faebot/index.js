@@ -80,13 +80,12 @@ module.exports = {
   // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Max.
   // Dropped per Kevin's review: Flux Dev, Flux 2 Flex.
   useModelPicker: true,
+  // Trimmed to 3 (Kevin 2026-06-02): Banana + F1.1 Pro + F1.1 Pro Ultra.
+  // History: flux-2-pro removed 2026-06-01; gpt-image-2 + flux-2-max removed today.
   allowedModels: [
     'google/gemini-2-image',
-    'openai/gpt-image-2',
-    // flux-2-pro removed 2026-06-01 (Kevin)
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-max',
   ],
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):
