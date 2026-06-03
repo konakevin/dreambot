@@ -82,7 +82,10 @@ const POSE_PHRASES = [
 ];
 
 async function renderOne(prompt, index) {
-  const tag = `painter-${index}`;
+  // Save straight to `mascot-{N}.jpg` so the loading screen can require()
+  // them by number without an extra rename step. The 5 rotate randomly
+  // on each mount (see MagicalLoadingStage).
+  const tag = `mascot-${index}`;
   console.log(`🎨 [${tag}] ${prompt.slice(CHARACTER_DNA.length + 2).slice(0, 80)}…`);
 
   const createRes = await fetch(

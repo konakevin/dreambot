@@ -13,14 +13,13 @@
  * message" instead of a centered glowing ball.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withRepeat,
-  withSequence,
   withTiming,
   withDelay,
   Easing,
@@ -28,15 +27,24 @@ import Animated, {
 } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 
-// DreamBot mascot painting a star on an easel, set in a dreamy
-// lavender starscape with pink puffy clouds underneath — rendered via
-// `scripts/gen-mascot-painter.js` (Flux 1.1 Pro Ultra with a locked
-// character DNA paragraph + painter pose + whimsy-scene closing).
-// Mirrors the app-icon vibe so the loading screen reads as the same
-// magical world. Mounted as a rounded-corner card floating on the
-// black stage. Local require → ships with the JS bundle, no remote
-// fetch, paints instantly. ~32 KB at 512×512 JPG q85.
-const MASCOT_SOURCE = require('@/assets/images/mascots/mascot.jpg');
+// 5 DreamBot painter variants — same character DNA, same dreamy
+// lavender/cloud/star scene, different painting poses (standing
+// frontal w/ palette, sitting on stool painting a star, crouched w/
+// supplies, three-quarter angle at easel, triumphant beside finished
+// star canvas). Rendered via `scripts/gen-mascot-painter.js` (Flux
+// 1.1 Pro Ultra + locked DNA + whimsy-scene closing). Mirror the
+// app-icon vibe so the loading screen reads as the same magical
+// world. Mounted as a rounded-corner card floating on the black
+// stage; the mount picks one at random. Local requires → ship with
+// the JS bundle, no remote fetch, paint instantly. ~150 KB total
+// across all 5 (~30 KB each, 512×512 JPG q85).
+const MASCOT_SOURCES = [
+  require('@/assets/images/mascots/mascot-1.jpg'),
+  require('@/assets/images/mascots/mascot-2.jpg'),
+  require('@/assets/images/mascots/mascot-3.jpg'),
+  require('@/assets/images/mascots/mascot-4.jpg'),
+  require('@/assets/images/mascots/mascot-5.jpg'),
+];
 
 // ── Wave loader ────────────────────────────────────────────────────────────
 // 5 small dots in a horizontal row. Each dot runs the same 1400ms
@@ -91,15 +99,22 @@ function WaveLoader() {
 }
 
 // ── Mascot ─────────────────────────────────────────────────────────────────
-// Fully static — Kevin: "don't even animate it." Rendered inline in the
-// stage JSX as a plain Image, no Reanimated wrapper. The whimsy scene
-// baked into the artwork (clouds, stars, painter setup) carries all the
-// visual interest on its own.
+// Fully static (Kevin: "don't even animate it"). Picks a random painter
+// variant per mount, stable across re-renders via useMemo + empty deps.
+// The whimsy scene baked into the artwork (clouds, stars, painter
+// setup) carries all the visual interest on its own.
 
 export function MagicalLoadingStage() {
+  // Stable across re-renders of the same mount (no re-roll on parent
+  // updates); fresh pick each time the stage mounts.
+  const mascotSource = useMemo(
+    () => MASCOT_SOURCES[Math.floor(Math.random() * MASCOT_SOURCES.length)],
+    []
+  );
+
   return (
     <View style={styles.stage}>
-      <Image source={MASCOT_SOURCE} style={styles.mascot} contentFit="contain" />
+      <Image source={mascotSource} style={styles.mascot} contentFit="contain" />
       <WaveLoader />
       <Text style={styles.title}>Dreaming</Text>
     </View>
