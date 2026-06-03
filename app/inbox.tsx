@@ -433,6 +433,7 @@ function GroupRow({
             source={{ uri: group.uploadImageUrl }}
             style={styles.thumbnail}
             contentFit="cover"
+            cachePolicy="memory-disk"
           />
         </TouchableOpacity>
       )}

@@ -196,7 +196,11 @@ export function PostGrid({
         if (!v.item) continue;
         if (prefetchedRef.current.has(v.item.id)) continue;
         prefetchedRef.current.add(v.item.id);
-        toPrefetch.push(v.item.image_url);
+        // Prefetch the small JPEG display variant (~150 KB), not the full
+        // image_url (1-2 MB PNG). Detail view reads image_url_display
+        // anyway — prefetching the same URL is what actually warms the
+        // tap-into-detail cache. Was downloading 10× the bytes needed.
+        toPrefetch.push(v.item.image_url_display ?? v.item.image_url);
       }
       if (toPrefetch.length > 0) {
         ExpoImage.prefetch(toPrefetch);

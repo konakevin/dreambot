@@ -671,7 +671,12 @@ const hiddenCount = { opacity: 0 } as const;
 
 const s = StyleSheet.create({
   card: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: '#000' },
-  fullImage: { ...StyleSheet.absoluteFillObject },
+  // Surface-tinted background under the Image while it decodes/loads —
+  // replaces the pure-black gap users were seeing during expo-image's
+  // decode window. With colors.surface (~#0F0F14) showing through, a
+  // load that takes a beat reads as intentional dim placeholder, not
+  // "is this card broken?".
+  fullImage: { ...StyleSheet.absoluteFillObject, backgroundColor: colors.surface },
   wishGlow: {
     position: 'absolute',
     top: 0,
