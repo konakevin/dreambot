@@ -59,7 +59,7 @@ The dream engine has evolved beyond the legacy two-pass `vibeEngine.ts`. Current
 
 **Nightly dreams** — **async queue pipeline** (overhauled 2026-05-26; previously rendered inline). Flow: the GitHub Actions cron `0 8 * * *` (08:00 UTC, no jitter) runs `scripts/nightly-dreams.js`, which **ENQUEUES** one `dream_queue` job (`source='nightly'`) per eligible **Pro-or-in-trial** user (free post-trial get none; bots excluded; per-user-per-day idempotent via `dedup_key`). The `dream-queue-worker` (pg_cron every minute, migration 193) batch-claims jobs and fans each out to the `nightly-dreams` render Edge Function (its own isolate) + finalizes it (bot message, `finalize_nightly_upload`, notification, wish). Same scene engine: personalizes from `user_recipes.recipe` JSONB (places/things/cast/moods), NOT the (vestigial) `dream_seeds`/`dream_cast` tables. Three composition paths roll 40/30/30: cast+anchor, anchor-only, cast-in-random-scene. Full architecture: `NIGHTLY_DREAM_ENGINE.md` + Scaling Initiative below.
 
-**First dream** (onboarding Reveal) — renders through the **`nightly-dreams` engine** (user-JWT path), NOT `generate-dream` (changed 2026-05-28). `RevealStep.tsx` forces a cast face swap so the user is reliably cast into one of their own places: `force_cast_role:'dual'` when self+plus_one exist, else `'self'`/`'plus_one'`/`'pet'`, plus the gated `force_face_swap_eligible:true` (pins the medium to the `dream_eligible_face_swap` pool). No usable cast → personalized scene in the user's location. `nightly-dreams` persists a PRIVATE `uploads` row and returns its `upload_id`; Post flips that SAME row public (no double-insert), Skip leaves it private. The `generate-first-dream` Edge Function (persona-locked banger picker, `FIRST_DREAM_BANGER_SPEC.md`) still exists but is the OFF-by-default experimental path (`EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED`).
+**First dream** (onboarding Reveal) — renders through the **`nightly-dreams` engine** (user-JWT path), NOT `generate-dream` (changed 2026-05-28). `RevealStep.tsx` forces a cast face swap so the user is reliably cast into one of their own places: `force_cast_role:'dual'` when self+plus_one exist, else `'self'`/`'plus_one'`/`'pet'`, plus the gated `force_face_swap_eligible:true` (pins the medium to the `dream_eligible_face_swap` pool). No usable cast → personalized scene in the user's location. `nightly-dreams` persists a PRIVATE `uploads` row and returns its `upload_id`; Post flips that SAME row public (no double-insert), Skip leaves it private. The experimental `generate-first-dream` Edge Function + the `EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED` feature flag were ripped out 2026-06-02 — this strongest-cast-render path is now the only first-dream path.
 
 **Async queue + fan-out workers** (`dream_queue` table + `dream-queue-worker`) — drains **nightly (live)** + first_dream jobs: pg_cron-triggered, batch-claim (SKIP LOCKED), parallel dispatch, `EdgeRuntime.waitUntil` background processing, retry/backoff/dead-letter. See Scaling Initiative section below.
 
@@ -239,7 +239,6 @@ lib/                 Engine glue + utilities
 types/
   vibeProfile.ts     VibeProfile v2 + isVibeProfile() guard
   database.ts        Supabase auto-generated DB types (regen after schema change)
-  firstDream.ts
 
 constants/
   promptModes.ts     7 modes + UI tiles
@@ -608,7 +607,7 @@ supabase functions deploy <function-name> --no-verify-jwt
 
 **Always `--no-verify-jwt`. Deploy immediately after editing — don't wait to be asked.**
 
-Active functions: `generate-dream`, `generate-first-dream`, `nightly-dreams`, `dream-queue-worker`, `face-swap-dual`, `restyle-photo`, `describe-photo`, `classify-photo`, `extract-style`, `revenuecat-webhook`, `send-push`, `refund-self-moderation`, `refund-stuck-jobs`.
+Active functions: `generate-dream`, `nightly-dreams`, `dream-queue-worker`, `face-swap-dual`, `restyle-photo`, `describe-photo`, `classify-photo`, `extract-style`, `revenuecat-webhook`, `send-push`, `refund-self-moderation`, `refund-stuck-jobs`.
 
 ### Dev Build
 
@@ -704,8 +703,8 @@ Single-cast face swap is NOT split — light enough to stay in-process.
 **Async queue + fan-out workers (`dream_queue` + `dream-queue-worker`).** The worker **batch-claims** up to `MAX_JOBS_PER_TICK` (10) due jobs via `claim_dream_queue_jobs` (SELECT FOR UPDATE SKIP LOCKED) and processes them **in parallel**. Critically, it **acks the trigger immediately and runs the batch via `EdgeRuntime.waitUntil`** — the cron's `pg_net` call disconnects after a short timeout, and Edge isolates are reaped at the **150s request-idle limit** (CPU 2s excl I/O, wall-clock 150s free / 400s paid), so awaiting renders synchronously caused `IDLE_TIMEOUT` (root-caused + fixed 2026-05-26, commit `71568afa`; the render itself is fine — ~24s). Per-source dispatch:
 
 - **nightly** (LIVE 2026-05-26) — fire to the `nightly-dreams` render Edge Function via its worker-token branch (`Bearer DREAM_QUEUE_WORKER_TOKEN`, `{user_id}` in body, recipe loaded fresh from DB so edits land), each render its own isolate; then finalize. NSFW → immediate dead-letter (no costly retries). Dispatcher: `dispatchers/nightly.ts`.
-- **first_dream** — renders inline in the worker (`dispatchers/firstDream.ts`); enqueued by `generate-first-dream` (feature-flagged onboarding path `EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED`, OFF by default). With the flag OFF (default), onboarding renders the first dream **synchronously via the `nightly-dreams` engine** with a forced cast face swap — see the First dream note under Generation Architecture (changed 2026-05-28; was `generate-dream`).
 - **create / dlt** — not implemented (throw `dispatcher_not_implemented`).
+- **first_dream** — DISPATCHER REMOVED 2026-06-02. Onboarding renders the first dream synchronously via the `nightly-dreams` engine with a forced cast face swap (see the First dream note under Generation Architecture). The vestigial 'first_dream' enum value remains in `dream_queue.source` CHECK constraint for back-compat with pre-2026-06-02 dead-letter rows — old rows now hit the default switch branch and dead-letter cleanly via `unknown_source:first_dream`.
 
 Retry = exponential backoff (1m/5m/30m/2h via `created_at`-in-future), dead_letter after 5 attempts; stale-recovery requeues `in_progress` jobs older than 5min. **Trigger:** pg_cron every minute (migration `193`, worker token read from Supabase Vault `dream_queue_worker_token`). **Idempotency:** `dream_queue.dedup_key` unique index (`nightly:<uid>:<UTC-date>`). **Health monitor:** `scripts/check-dream-queue.js` + `.github/workflows/dream-queue-monitor.yml` (hourly, fails loud on stuck-queued / dead-letter pileup) — this replaced the old inline cron's exit-1-on-zero signal. `refund-stuck-jobs` sweeps the legacy `dream_jobs` (paid create path), NOT the queue. **Tuning knobs:** `MAX_JOBS_PER_TICK` × pg_cron cadence × overlapping ticks (SKIP LOCKED). Plan: `QUEUE_WORKERS_REFACTOR.md` (matches reality; `DREAM_QUEUE_PLAN.md` describes an unbuilt `dream_jobs` design — ignore). **Future scale-up if a tick can't fit its batch in wall-clock:** make each render a self-marking consumer (fire-and-forget + render owns its job row) instead of the worker awaiting the batch.
 
@@ -730,4 +729,4 @@ Retry = exponential backoff (1m/5m/30m/2h via `created_at`-in-future), dead_lett
 
 ## Reference Docs (in repo root)
 
-`BOTS.md` (bot system + seed tables), `BOT_SCENE_QUALITY_PLAYBOOK.md` (path migration + 10/10 bar), `BOT_AXIS_REFACTOR_PLAN.md`, `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_QA_HANDOFF.md`, `QUEUE_WORKERS_REFACTOR.md` + `DREAM_QUEUE_PLAN.md`, `FIRST_DREAM_BANGER_SPEC.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`, `SPARKLE_PAYMENTS_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`, `PRO_SUBSCRIPTION_SETUP.md`, `AUTH_PROVIDERS.md`, `MEDIUMS_FAQ.md`, `BUNDLE_ID_MIGRATION.md`, `DREAMBOT.md` + `DREAMBOT_CHARACTER.md` (personality).
+`BOTS.md` (bot system + seed tables), `BOT_SCENE_QUALITY_PLAYBOOK.md` (path migration + 10/10 bar), `BOT_AXIS_REFACTOR_PLAN.md`, `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_QA_HANDOFF.md`, `QUEUE_WORKERS_REFACTOR.md` + `DREAM_QUEUE_PLAN.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`, `SPARKLE_PAYMENTS_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`, `PRO_SUBSCRIPTION_SETUP.md`, `AUTH_PROVIDERS.md`, `MEDIUMS_FAQ.md`, `BUNDLE_ID_MIGRATION.md`, `DREAMBOT.md` + `DREAMBOT_CHARACTER.md` (personality).

@@ -201,46 +201,20 @@ export function RevealStep({ onBack }: Props) {
     } = await supabase.auth.getSession();
     if (!session?.access_token) throw new Error('Not authenticated');
 
-    // Feature flag — when enabled, route the first-dream render through the
-    // dedicated generate-first-dream Edge Function (persona × location-class
-    // matrix). OFF by default; left untouched. Spec:
-    // memory/project_first_dream_engine_spec.md.
-    const useFirstDreamEngine = process.env.EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED === 'true';
-    if (useFirstDreamEngine) {
-      const res = await fetch(
-        `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/generate-first-dream`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({ vibe_profile: describedProfile.current }),
-        }
-      );
-      if (!res.ok) {
-        const errBody = await res.text();
-        if (__DEV__) console.warn('[Reveal] generate-first-dream error:', res.status, errBody);
-        throw new Error(`Generation failed: ${res.status}`);
-      }
-      const data = await res.json();
-      if (!data.image_url) throw new Error('No image URL in response');
-      return {
-        url: data.image_url,
-        prompt: data.prompt_used ?? '',
-        medium: data.resolved_medium ?? undefined,
-        vibe: data.resolved_vibe ?? undefined,
-      };
-    }
-
-    // Default path — route the first dream through the NIGHTLY engine. It loads
-    // the recipe we just saved (places / moods / cast) and casts the user into
-    // the scene. We FORCE a cast face swap so the very first dream is
-    // unmistakably "this is ME" in one of my places — dual when self + plus_one
-    // both exist, single otherwise. force_face_swap_eligible pins the medium to
+    // Route the first dream through the NIGHTLY engine. It loads the recipe
+    // we just saved (places / moods / cast) and casts the user into the scene.
+    // We FORCE a cast face swap so the very first dream is unmistakably
+    // "this is ME" in one of my places — dual when self + plus_one both
+    // exist, single otherwise. force_face_swap_eligible pins the medium to
     // the face-swap-capable pool so the swap always lands. No usable cast →
-    // omit the force params and the engine renders a personalized scene (still
-    // anchored to the user's locations, far better than a generic roll).
+    // omit the force params and the engine renders a personalized scene
+    // (still anchored to the user's locations, far better than a generic
+    // roll).
+    //
+    // The experimental generate-first-dream Edge Function + the
+    // EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED feature flag were ripped out
+    // 2026-06-02 (commit ...). The strongest-cast-render approach via this
+    // nightly path is now the only first-dream path.
     const cast = describedProfile.current.dream_cast ?? [];
     const usable = (role: string) =>
       cast.find((m) => m.role === role && !!m.thumb_url && m.thumb_url.startsWith('http'));

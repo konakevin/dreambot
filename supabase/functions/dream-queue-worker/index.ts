@@ -10,15 +10,18 @@
  * Trigger: Supabase cron (configured in the dashboard).
  * Auth: worker token (Authorization: Bearer <DREAM_QUEUE_WORKER_TOKEN>).
  *
- * Implemented dispatchers: first_dream (renders inline in this isolate) and
- * nightly (fans out — invokes the nightly-dreams render Edge Function per job,
- * each in its own isolate, then finalizes). create / dlt still pending.
+ * Implemented dispatchers: nightly (fans out — invokes the nightly-dreams
+ * render Edge Function per job, each in its own isolate, then finalizes).
+ * create / dlt still pending. The first_dream dispatcher was removed
+ * 2026-06-02 with the rip-out of the experimental generate-first-dream
+ * engine — onboarding now uses the production nightly engine with forced
+ * cast face swap (see RevealStep.tsx + memory:
+ * project_first_dream_via_nightly_engine).
  *
  * See QUEUE_WORKERS_REFACTOR.md.
  */
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { processFirstDreamJob } from './dispatchers/firstDream.ts';
 import { processNightlyJob } from './dispatchers/nightly.ts';
 
 const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
@@ -34,6 +37,10 @@ const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
 interface QueueRow {
   id: string;
   user_id: string;
+  // 'first_dream' value kept for back-compat with pre-2026-06-02 dead-
+  // letter rows in dream_queue (the DB CHECK constraint still allows it).
+  // The switch below treats it as unknown_source so any sneak-in retries
+  // dead-letter cleanly.
   source: 'first_dream' | 'nightly' | 'create' | 'dlt';
   payload: Record<string, unknown>;
   status: string;
@@ -114,15 +121,6 @@ Deno.serve(async (req) => {
         try {
           let uploadId: string;
           switch (job.source) {
-            case 'first_dream':
-              uploadId = await processFirstDreamJob({
-                supabase,
-                replicateToken: REPLICATE_TOKEN,
-                anthropicKey: ANTHROPIC_KEY,
-                userId: job.user_id,
-                payload: job.payload,
-              });
-              break;
             case 'nightly':
               uploadId = await processNightlyJob({
                 supabase,
@@ -137,6 +135,8 @@ Deno.serve(async (req) => {
             case 'dlt':
               throw new Error(`dispatcher_not_implemented:${job.source}`);
             default:
+              // Also catches the vestigial 'first_dream' source value
+              // (dispatcher removed 2026-06-02).
               throw new Error(`unknown_source:${job.source}`);
           }
 
