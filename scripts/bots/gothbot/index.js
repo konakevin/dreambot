@@ -256,8 +256,10 @@ module.exports = {
   ],
 
   promptPrefixByMedium: {
+    // 2026-06-02 cruft-audit micro-strip — dropped travel-mag `wallpaper-
+    // worthy` (Condé-Nast prior pull).
     vampire_portrait:
-      'wallpaper-worthy operatic gothic vampire painting, dramatic theatrical composition, gallery-poster gravity',
+      'gallery-print operatic gothic vampire painting, dramatic theatrical composition, gallery-poster gravity',
     // FaeBot-pattern: empty prefix so the scene leads, not style language.
     painted_gothic_fantasy: blocks.PROMPT_PREFIX_PAINTED_GOTHIC_FANTASY,
     // gothic-architecture path bespoke (2026-05-15). Empty so the structure
@@ -299,18 +301,34 @@ module.exports = {
       'Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing energy, rich varied palette with deep purples + midnight blues + velvet blacks + poison greens + candle-amber + moonlit silver accents',
   },
   promptSuffixByMedium: {
+    // 2026-06-02 cruft-audit micro-strip — dropped 6-stack NOT chain
+    // (NOT photoreal / NOT cinematic film-still / NOT 35mm / NOT magazine
+    // editorial / NOT plastic-skin / NOT Halloween / NOT modern fashion).
+    // The "operatic painting / painterly brushwork" positive anchors keep
+    // the painted register.
     vampire_portrait:
-      'operatic gothic dark-fantasy painting finish, painterly brushwork with bold heavy shadow, gallery-poster gravity, no text no words no watermarks, NOT photoreal NOT cinematic film-still NOT 35mm NOT magazine editorial NOT plastic-skin NOT Halloween costume NOT modern fashion photography',
+      'operatic gothic dark-fantasy painting finish, painterly brushwork with bold heavy shadow, gallery-poster gravity, no text no words no watermarks',
     painted_gothic_fantasy: blocks.PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY,
+    // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `hyper-detailed`
+    // + 4-stack NOT chain (NOT photoreal / NOT film-still / NOT 35mm /
+    // NOT photo-realistic CGI / NOT plain-anime). The "Castlevania-promo
+    // illustration / sharp linework / high-def gallery-print" positive
+    // anchors carry the illustration register.
     gothbot_gothic_print:
-      'Castlevania-promotional-art finish, hyper-detailed sharp linework, high-def gallery-print fidelity, dark gothic-action-horror illustration quality, no text no words no watermarks, NOT photoreal NOT film-still NOT 35mm NOT photo-realistic CGI NOT plain-anime',
+      'Castlevania-promotional-art finish, sharp linework, high-def gallery-print fidelity, dark gothic-action-horror illustration quality, no text no words no watermarks',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
   // This fragment gets injected between promptPrefix and the Sonnet-written scene.
   mediumStyles: {
+    // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `hyper-detailed`
+    // + 8-stack NOT chain (NOT photoreal/film-still/35mm/photo-realistic
+    // CGI/plain-anime/shonen/moe/cute). The "Castlevania concept-art /
+    // Symphony-of-the-Night promotional-art / Devil-May-Cry environment-art
+    // / Bloodborne polish / Berserk-manga ink" positive anchors carry the
+    // dark gothic-horror illustration register without the leak.
     gothbot_gothic_print:
-      'hyper-detailed Castlevania-illustration concept-art, Symphony-of-the-Night promotional-art lineage, Devil-May-Cry environment-art tradition, Bloodborne concept-illustration polish, Berserk-manga Kentaro-Miura ink-detail stylization but painted-not-flat, sharp clean linework, every architectural ornament rendered crisp at every readable scale, theatrical high-contrast lighting, rich tonal depth, high-def gallery-print fidelity, dark gothic-horror action-game promotional-art quality, NOT photoreal NOT film-still NOT 35mm NOT photo-realistic CGI NOT plain-anime NOT shonen NOT moe NOT cute',
+      'Castlevania-illustration concept-art, Symphony-of-the-Night promotional-art lineage, Devil-May-Cry environment-art tradition, Bloodborne concept-illustration polish, Berserk-manga Kentaro-Miura ink-detail stylization but painted-not-flat, sharp clean linework, every architectural ornament rendered crisp at every readable scale, theatrical high-contrast lighting, rich tonal depth, high-def gallery-print fidelity, dark gothic-horror action-game promotional-art quality',
     gothic_architecture:
       'dark gothic-horror illustration, heavy-ink shadow, hyper-baroque ornate architectural detail, high-contrast chiaroscuro, Castlevania-environment concept-art, moonlit stone and stained-glass atmosphere',
     // Subject-agnostic rewrite — stripped all character/face/makeup/expression
@@ -318,12 +336,27 @@ module.exports = {
     // describes ONLY the rendering style (painted oil-on-canvas dark-fantasy
     // paperback polish) with no subject implied. Any path's subject (landscape,
     // architecture, character, interior) gets rendered in this style cleanly.
+    // 2026-06-02 cruft-audit micro-strip — dropped 7-stack NOT tail
+    // (NOT photoreal / NOT plastic-digital / NOT flat-inked / NOT manga /
+    // NOT smooth-digital-art / NOT Artgerm-plastic / NOT Rossdraws). The
+    // 5-painter lineage + "semi-realistic painterly rendering with visible
+    // brushwork and heavy impasto oil texture" anchors lock the register.
     gothic_realistic:
-      '1980s-1990s dark-fantasy paperback oil-painting cover art, Luis-Royo + Boris-Vallejo + Julie-Bell + Frank-Frazetta + Ken-Kelly painted-cover tradition, semi-realistic painterly rendering with visible brushwork and heavy impasto oil texture (NOT photoreal, NOT plastic-digital), strong chiaroscuro with warm amber candle / torch / moonlit key-light against cool violet-blue shadow, dramatic painted-polish dark-fantasy atmosphere, dark-fantasy-paperback-cover craft quality, NOT flat-inked, NOT manga, NOT smooth-digital-art, NOT Artgerm-plastic, NOT Rossdraws',
+      '1980s-1990s dark-fantasy paperback oil-painting cover art, Luis-Royo + Boris-Vallejo + Julie-Bell + Frank-Frazetta + Ken-Kelly painted-cover tradition, semi-realistic painterly rendering with visible brushwork and heavy impasto oil texture, strong chiaroscuro with warm amber candle / torch / moonlit key-light against cool violet-blue shadow, dramatic painted-polish dark-fantasy atmosphere, dark-fantasy-paperback-cover craft quality',
+    // 2026-06-02 cruft-audit micro-strip — dropped travel-mag `WALLPAPER-
+    // WORTHY` + 7-stack NOT tail (NOT photoreal / NOT cinematic film-still /
+    // NOT magazine editorial / NOT plastic-skin / NOT smooth-digital-art /
+    // NOT modern fashion photography / NOT pretty-girl-in-dress). The
+    // "operatic gothic-theatrical / old-master-oil-painting tradition /
+    // visible painterly brushwork" anchors carry the painted register.
     vampire_portrait:
-      'WALLPAPER-WORTHY operatic gothic-theatrical painting fusing old-master-oil-painting tradition with painted-fantasy-poster drama, visible painterly brushwork, punchy jewel-tone palette anchored by deep velvet shadow, theatrical chiaroscuro pushed to operatic extreme, dramatic single-source key-light cutting through gloom, frame-worthy gallery-painting composition, dark gothic horror character energy, NOT photoreal NOT cinematic film-still NOT magazine editorial NOT plastic-skin NOT smooth-digital-art NOT modern fashion photography NOT pretty-girl-in-dress',
+      'GALLERY-PRINT operatic gothic-theatrical painting fusing old-master-oil-painting tradition with painted-fantasy-poster drama, visible painterly brushwork, punchy jewel-tone palette anchored by deep velvet shadow, theatrical chiaroscuro pushed to operatic extreme, dramatic single-source key-light cutting through gloom, frame-worthy gallery-painting composition, dark gothic horror character energy',
+    // 2026-06-02 cruft-audit micro-strip — dropped 3-stack NOT tail (NOT
+    // cute-anime / NOT shonen / NOT moe). "Berserk-Kentaro-Miura ink
+    // stylization / Devil-May-Cry character-art / heavy-shadow anime-
+    // horror" anchors carry the mature-dark-anime register.
     anime:
-      'dark-anime horror illustration, Berserk-manga Kentaro-Miura ink stylization, Devil-May-Cry character-art, heavy-shadow anime-horror aesthetic, NOT cute-anime NOT shonen NOT moe',
+      'dark-anime horror illustration, Berserk-manga Kentaro-Miura ink stylization, Devil-May-Cry character-art, heavy-shadow anime-horror aesthetic',
     comics:
       'gothic-horror comic-panel illustration, Mike-Mignola-Hellboy inked shadow, Hellblazer vertigo-horror comic stylization, bold black ink, dramatic chiaroscuro panels',
     pencil:
@@ -334,8 +367,12 @@ module.exports = {
     // (Kevin 2026-05-25 — preferred over the later Frazetta classical-Victorian tune).
     canvas:
       'oil-painted gothic-horror portrait, heavy impasto brushwork, chiaroscuro painterly-horror tradition (Caravaggio-meets-Castlevania), painterly dark-fantasy baroque canvas',
+    // 2026-06-02 cruft-audit micro-strip — dropped 4-stack NOT tail
+    // (NOT photographic / NOT anime / NOT digital-cartoon / NOT cel-shaded).
+    // The 3-painter lineage + "painterly brushwork / oil painting on canvas"
+    // anchors carry the classical oil register.
     canvas_victorian:
-      'lush classical oil painting on canvas, vivid luminous dark-fantasy oil in the tradition of Frank Frazetta + Brom + Caravaggio, rich JEWEL-TONED SATURATED color, glowing radiant highlights against deep velvety shadows, dramatic chiaroscuro, fine detailed painterly brushwork, bold vibrant high-saturation gothic-horror oil painting, painterly NOT photographic, NOT anime, NOT digital-cartoon, NOT cel-shaded',
+      'lush classical oil painting on canvas, vivid luminous dark-fantasy oil in the tradition of Frank Frazetta + Brom + Caravaggio, rich JEWEL-TONED SATURATED color, glowing radiant highlights against deep velvety shadows, dramatic chiaroscuro, fine detailed painterly brushwork, bold vibrant high-saturation gothic-horror oil painting',
     // monster-prowl bespoke (Kevin 2026-05-25) — inked dark-anime / comic-horror.
     // monster-prowl — ULTRA-HIGH-DEF HYPERREAL cinematic render (Kevin 2026-05-25).
     hyperreal:

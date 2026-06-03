@@ -48,8 +48,11 @@ module.exports = {
   // Per-medium prompt prefix overrides for flower-fairy: lead with painterly
   // + fae register so Flux lands on the soft ethereal style FaeBot wants.
   promptPrefixByMedium: {
+    // 2026-06-02 cruft-audit micro-strip — dropped trailing `NOT photoreal
+    // NOT polished CGI`. The "painted fantasy / oil-brushwork / painted-
+    // fantasy lineage" positive anchors hold the register.
     painted_fantasy_novel:
-      'soft ethereal painterly fantasy illustration, visible oil-brushwork, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, dreamy atmospheric painted glow, NOT photoreal NOT polished CGI',
+      'soft ethereal painterly fantasy illustration, visible oil-brushwork, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, dreamy atmospheric painted glow',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,

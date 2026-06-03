@@ -288,9 +288,9 @@ module.exports = {
     'cyborg-male-legacy':
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman':
-      'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
+      'beautiful woman, cybernetic breakthroughs integrated into a human body rather than a robotic chassis',
     'cyborg-female-legacy':
-      'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
+      'beautiful woman, cybernetic breakthroughs integrated into a human body rather than a robotic chassis',
     'droid-assassin':
       'cool predator-droid (ninja / combat / cyber-cop / military / hunter), sleek robotic killer with cinematic poise, dramatic atmospheric rim-light',
     // 2026-05-15: bespoke-axis migration. Empty per playbook
@@ -309,8 +309,13 @@ module.exports = {
   // Per-medium prompt injection — MechBot's dialect for the `render` medium.
   // Front-loads photoreal / VFX language ahead of the Sonnet-written scene.
   mediumStyles: {
+    // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `4K film-
+    // finish polish` + 3-stack NOT tail (NOT cartoon / NOT toy / NOT
+    // videogame). "Feature-film VFX quality / physically-based rendering /
+    // raytraced reflections / cinematic lighting precision" anchors carry
+    // the VFX-render register.
     render:
-      'high-end cinematic 3D render — feature-film VFX quality, physically-based rendering with realistic subsurface-scatter and raytraced reflections, practical-plus-digital hybrid aesthetic, volumetric atmospheric depth, cinematic lighting precision, 4K film-finish polish, NOT cartoon NOT toy NOT videogame',
+      'high-end cinematic 3D render — feature-film VFX quality, physically-based rendering with realistic subsurface-scatter and raytraced reflections, practical-plus-digital hybrid aesthetic, volumetric atmospheric depth, cinematic lighting precision',
   },
 
   // 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed` (prefix)

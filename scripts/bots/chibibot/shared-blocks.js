@@ -48,8 +48,15 @@ Cuteness is the canvas, not the ceiling. Stack cute-elements appropriate to the 
 // dominating Instagram feeds (Kim Sung Hwan baby giraffes, vinaykumar182023
 // baby turtles). Front-loads chibi proportions + glassy eyes + glossy
 // materials before scene-specific tokens.
+// 2026-06-02 cruft-audit strip — dropped tech-spec `hyper-detailed`,
+// the 5-stack NOT tail (NOT painted / NOT 2D illustration / NOT Pixar-
+// soft / NOT photoreal / NOT plasticky), the embedded "NOT a single
+// hero figurine" and "NOT hero-with-secondary-behind-bokeh" negations,
+// and the travel-mag `wallpaper-poster`. Positive identity anchors
+// (Pop-Mart-vinyl designer-collectible / glossy-dewy / ultra-clean
+// form / group composition rule for multi-character) carry the look.
 const CHIBI_RENDER_MEDIUM =
-  'hyper-detailed 3D CGI render, Octane / Redshift quality, Pop Mart / Be@rbrick designer-vinyl WORLD aesthetic (a whole magical diorama set rendered as collectible-figurine display, NOT a single hero figurine — environments, villages, interiors, multi-character scenes all sit naturally in this register), glossy dewy material treatment with subsurface scattering on every organic surface, ultra-clean form language with crisp surface definition and graphic-design crisp pattern work, framing varies — sometimes shallow-DOF hero portrait, OFTEN medium-wide group composition with all characters equally prominent at equal sharpness, lush magical detail in every corner, volumetric warm god-rays cutting through magical atmosphere, saturated jewel-tone palette (warm amber + emerald + teal + peach + magenta), frame-worthy wallpaper-poster composition. When characters appear, render each with chibi proportions — oversized head, massive glassy reflective multi-catchlight eyes, tiny stubby body. WHEN MULTIPLE CHARACTERS ARE PRESENT (pair or trio), frame as a GROUP COMPOSITION — medium-wide shot, ALL figures equally prominent in the foreground, NOT hero-with-secondary-behind-bokeh, all characters in sharp focus interacting relationally. NOT painted NOT 2D illustration NOT Pixar-soft NOT photoreal NOT plasticky';
+  '3D CGI render, Octane / Redshift quality, Pop Mart / Be@rbrick designer-vinyl WORLD aesthetic (a whole magical diorama set rendered as collectible-figurine display — environments, villages, interiors, multi-character scenes all sit naturally in this register), glossy dewy material treatment with subsurface scattering on every organic surface, ultra-clean form language with crisp surface definition and graphic-design crisp pattern work, framing varies — sometimes shallow-DOF hero portrait, OFTEN medium-wide group composition with all characters equally prominent at equal sharpness, lush magical detail in every corner, volumetric warm god-rays cutting through magical atmosphere, saturated jewel-tone palette (warm amber + emerald + teal + peach + magenta), gallery-print poster composition. When characters appear, render each with chibi proportions — oversized head, massive glassy reflective multi-catchlight eyes, tiny stubby body. WHEN MULTIPLE CHARACTERS ARE PRESENT (pair or trio), frame as a GROUP COMPOSITION — medium-wide shot, ALL figures equally prominent in the foreground and equally sharp, all characters in clear focus interacting relationally';
 
 // CHIBI_CREATURE_MEDIUM — the EXACT medium text (verbatim from the recipe of
 // Kevin's hearted 2026-05-07 reference renders, recovered from the DB since
@@ -131,8 +138,12 @@ const BLOW_IT_UP_BLOCK_PIXAR = `━━━ BLOW IT UP — CUTENESS AMPLIFICATION 
 
 Cuteness is the canvas, not the ceiling. Stack cute-elements: big dewy eyes + fluffy texture + blushing cheeks + sparkles + warm glow + layered atmospheric charm + adorable supporting micro-details (tiny mushrooms, floating hearts, cozy accessories). Go ALL the way on sweet + warm + cozy. Obsessive detail in service of wholesome delight.`;
 
+// 2026-06-02 cruft-audit strip — dropped 3-stack NOT tail (NOT 2005-era
+// CGI / NOT plasticky / NOT photoreal) + travel-mag `wallpaper-poster`.
+// The "modern Pixar Disney DreamWorks polish / current-decade animation
+// movie still" positive anchors carry the modern-feature-film register.
 const CHIBI_PIXAR_MEDIUM =
-  'modern Pixar Disney DreamWorks 3D animated feature-film polish, current-decade animation movie still quality, soft subsurface scattering on every fluffy texture, volumetric warm god-rays cutting through magical atmosphere, shallow depth of field with creamy painterly bokeh, saturated jewel-tone palette (warm amber + emerald + teal + peach + magenta), lush magical detail in every corner, frame-worthy wallpaper-poster composition, NOT 2005-era CGI NOT plasticky NOT photoreal';
+  'modern Pixar Disney DreamWorks 3D animated feature-film polish, current-decade animation movie still quality, soft subsurface scattering on every fluffy texture, volumetric warm god-rays cutting through magical atmosphere, shallow depth of field with creamy painterly bokeh, saturated jewel-tone palette (warm amber + emerald + teal + peach + magenta), lush magical detail in every corner, gallery-print poster composition';
 
 // CHIBI_CHARACTER_COUNT_BLOCK — only injected for chibibot_render renders
 // (via the buildBrief dispatcher). Tells Sonnet to vary character count 1–3

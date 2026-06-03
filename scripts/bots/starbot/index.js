@@ -151,29 +151,53 @@ module.exports = {
   promptPrefixByMedium: {
     star_oil_cosmos:
       'cinematic sci-fi oil painting, environment-dominant composition, heavy impasto brushwork, atmospheric depth',
+    // 2026-06-02 cruft-audit micro-strip — dropped travel-mag `wallpaper-
+    // worthy`. The "PUNCHED UP / cranked to 11 / blazing" positive
+    // intensifiers already carry the maxed-saturation register.
     real_astro:
-      'NASA Hubble JWST astrophotography PUNCHED UP to maximum, vibrant false-color composite cranked to 11, dramatic events captured mid-action — jets shooting / shockwaves expanding / aurora flaring / accretion disks burning / gravitational lensing distorting backgrounds, multiple celestial elements happening at once in the same frame, luminous glowing structures saturated to wallpaper-worthy intensity, blazing star fields with diffraction spikes',
+      'NASA Hubble JWST astrophotography PUNCHED UP to maximum, vibrant false-color composite cranked to 11, dramatic events captured mid-action — jets shooting / shockwaves expanding / aurora flaring / accretion disks burning / gravitational lensing distorting backgrounds, multiple celestial elements happening at once in the same frame, luminous glowing structures saturated to gallery-print intensity, blazing star fields with diffraction spikes',
     // Hyperreal sci-fi concept-art prefix for starbot_hyperreal medium (migration 145).
     starbot_hyperreal:
       'hyperrealistic photoreal rendering of a science-fiction world, cinematic concept art, ray-traced volumetric lighting, atmospheric depth haze, photoreal future-tech surfaces, mythic epic scale, movie-poster composition',
     // Cosmic-void prefix for space-opera path — mandates pure space vacuum
-    // context with ship-as-subject. NO landscape/world bias. Added 2026-05-11.
+    // context with ship-as-subject. Added 2026-05-11.
+    // 2026-06-02 cruft-audit micro-strip — dropped 4-stack NOT chain
+    // (NOT planetary surface / NOT canyon / NOT ground-level / NOT
+    // atmospheric) per [[feedback_negative_prompt_leak]]. The "pure
+    // vacuum / deep void of space / starfield and nebula backdrop ONLY /
+    // ship-as-subject" positive anchors already mandate vacuum context.
     starbot_cosmic_void:
-      'epic cosmic space scene set in pure vacuum, deep void of space, kilometer-class capital spaceships dominating the frame, starfield and nebula backdrop only, NOT planetary surface, NOT canyon, NOT ground-level, NOT atmospheric, hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting in vacuum, ship-as-subject composition',
+      'epic cosmic space scene set in pure vacuum, deep void of space, kilometer-class capital spaceships dominating the frame, starfield and nebula backdrop only, hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting in vacuum, ship-as-subject composition',
     // space-femme: minimal neutral prefix so the rolled render_style axis (not a
     // fixed style) sets the look. Overrides the heavier bot-wide PROMPT_PREFIX.
     starbot_space_femme: 'bold vivid imaginative science-fiction cover art',
   },
   promptSuffixByMedium: {
     star_oil_cosmos: 'oil-on-canvas finish, impasto brushwork, no text no words no watermarks',
+    // 2026-06-02 cruft-audit micro-strip — dropped 5-stack NO chain
+    // (NO monitors / NO screens / NO viewports / NO characters / NO
+    // industrial scene framing) per [[feedback_negative_prompt_leak]].
+    // Replaced travel-mag `wallpaper saturation` with `gallery-print
+    // saturation`. The positive "celestial object is the MAIN SUBJECT /
+    // occupies bulk of frame / spaceships only as scale-reference"
+    // anchors already pin the subject framing.
     real_astro:
-      'astrophotography finish cranked to wallpaper saturation, deep black space contrast, pinpoint stars with diffraction spikes, multi-wavelength false-color composite, dramatic mid-event detail (jets / shockwaves / accretion disks / lensing) visible in frame, the celestial object is the MAIN SUBJECT (occupies the bulk of the frame), spaceships permitted only as small silhouette / scale-reference elements at the frame edge, no text, no words, no watermarks, NO monitors NO screens NO viewports NO characters NO industrial scene framing',
+      'astrophotography finish cranked to gallery-print saturation, deep black space contrast, pinpoint stars with diffraction spikes, multi-wavelength false-color composite, dramatic mid-event detail (jets / shockwaves / accretion disks / lensing) visible in frame, the celestial object is the MAIN SUBJECT (occupies the bulk of the frame), spaceships permitted only as small silhouette / scale-reference elements at the frame edge, no text, no words, no watermarks',
     // Hyperreal sci-fi concept-art suffix for starbot_hyperreal medium (migration 145).
+    // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `8K` + 5-stack
+    // NOT chain (NOT painted / NOT illustration / NOT drawing / NOT
+    // cartoon / NOT stylized). The "photorealistic film still / cinematic
+    // concept art precision / photoreal materials" positive anchors
+    // carry the register.
     starbot_hyperreal:
-      '8K cinematic concept art precision, photoreal materials and lighting, atmospheric lens flare and slight bloom, dust motes in light shafts, every plane filled with detail, no text, no words, no watermarks, photorealistic film still — NOT painted, NOT illustration, NOT drawing, NOT cartoon, NOT stylized',
+      'cinematic concept art precision, photoreal materials and lighting, atmospheric lens flare and slight bloom, dust motes in light shafts, every plane filled with detail, no text, no words, no watermarks, photorealistic film still',
     // Cosmic-void suffix — reinforces vacuum context + ship-as-subject.
+    // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `8K` + 5-stack
+    // NO chain (NO planet surface / NO canyon / NO city / NO ground /
+    // NO buildings). The "in vacuum / deep black void backdrop / nebula
+    // clouds only" positive anchors hold the vacuum context.
     starbot_cosmic_void:
-      '8K cinematic concept art precision, photoreal materials in vacuum, lens flare from distant stars, atmospheric haze from nebula clouds only, the kilometer-class capital spaceship is the MAIN SUBJECT filling the frame, surrounded by smaller craft and starfield, NO planet surface NO canyon NO city NO ground NO buildings, deep black void backdrop, no text, no words, no watermarks, photorealistic film still in deep space',
+      'cinematic concept art precision, photoreal materials in vacuum, lens flare from distant stars, atmospheric haze from nebula clouds only, the kilometer-class capital spaceship is the MAIN SUBJECT filling the frame, surrounded by smaller craft and starfield, deep black void backdrop, no text, no words, no watermarks, photorealistic film still in deep space',
   },
 
   // Per-medium prompt injection — StarBot's dialect for each medium.
@@ -194,30 +218,55 @@ module.exports = {
     // CONSISTENT signature style (Kevin 2026-05-23: art style stays the same;
     // the variety/weird lives in the GIRL + FASHION + scene, not the art style).
     // Vivid glossy neon-chrome sci-fi cover — the kept-posts look.
+    // 2026-06-02 cruft-audit micro-strip — dropped 4-stack NOT tail
+    // (NOT muted / NOT dull / NOT drab / NOT abstract-art-style). The
+    // "vibrant glossy / eye-popping vivid electric / high-energy" positive
+    // intensifiers carry the maxed-saturation register.
     starbot_space_femme:
-      'vibrant glossy science-fiction cover illustration, bold saturated comic-cover color, slick chrome-and-neon rendering, eye-popping vivid electric palette, high-contrast dramatic neon-and-rim lighting, fun bold high-energy over-the-top sci-fi poster art, polished and crisp — NOT muted, NOT dull, NOT drab, NOT abstract-art-style',
+      'vibrant glossy science-fiction cover illustration, bold saturated comic-cover color, slick chrome-and-neon rendering, eye-popping vivid electric palette, high-contrast dramatic neon-and-rim lighting, fun bold high-energy over-the-top sci-fi poster art, polished and crisp',
     // Hyperreal sci-fi concept-art mediumStyle — formalized as the bot-only
     // medium `starbot_hyperreal` in migration 145. Mirrors the DB row's
     // flux_fragment so the override is explicit rather than implicit.
+    // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `8K` + 7-stack
+    // NOT tail (NOT painted / NOT illustration / NOT drawing / NOT cartoon /
+    // NOT stylized / NOT toy / NOT videogame). The "hyperrealistic photoreal
+    // / Denis Villeneuve sci-fi film still" positive anchors carry the
+    // photoreal-cinematic register.
     starbot_hyperreal:
-      'hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting, atmospheric depth haze, photoreal future-tech and alien-world surfaces, slight bloom and lens flare, 8K film-still precision, mythic epic scale, like a still from a Denis Villeneuve sci-fi film — NOT painted, NOT illustration, NOT drawing, NOT cartoon, NOT stylized, NOT toy, NOT videogame',
+      'hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting, atmospheric depth haze, photoreal future-tech and alien-world surfaces, slight bloom and lens flare, film-still precision, mythic epic scale, like a still from a Denis Villeneuve sci-fi film',
+    // 2026-06-02 cruft-audit micro-strip — dropped 3-stack NOT tail
+    // (NOT cute-watercolor / NOT children-book / NOT flowers). The 2-artist
+    // lineage + "NASA concept-art / aerospace-concept-art / muted cosmic
+    // palette" anchors carry the muted-cosmic-watercolor register.
     watercolor:
-      'NASA concept-art watercolor wash — Robert-McCall painted-space-tradition + Jean-Giraud-Moebius watercolor-sci-fi, soft pigment-bleed on cold-press paper, delicate astronaut-sketch washes, muted cosmic palette (pale blues / dusty rose / sepia star-fields), atmospheric color-field abstraction, painterly aerospace-concept-art feel, NOT cute-watercolor NOT children-book NOT flowers',
+      'NASA concept-art watercolor wash — Robert-McCall painted-space-tradition + Jean-Giraud-Moebius watercolor-sci-fi, soft pigment-bleed on cold-press paper, delicate astronaut-sketch washes, muted cosmic palette (pale blues / dusty rose / sepia star-fields), atmospheric color-field abstraction, painterly aerospace-concept-art feel',
     pencil:
       'Ralph-McQuarrie Star-Wars-concept-art graphite + Syd-Mead architectural-pencil-rendering + NASA engineering-blueprint-cross-hatch + Moebius pencil-and-ink sci-fi concept sketch — tight cross-hatched shadow, technical-drafting precision, silver-graphite-on-toned-paper tradition, dramatic value range, architectural-scale cosmic machinery, pre-production-concept-sketch authority',
+    // 2026-06-02 cruft-audit micro-strip — dropped 3-stack NOT tail (NOT
+    // superhero-comic / NOT manga / NOT cartoon). The 5-artist Heavy-Metal
+    // lineage + "European bande-dessinée / Arzach-Incal visual family /
+    // dream-logic cosmic surrealism" anchors carry the BD register.
     illustration:
-      'Moebius / Jean-Giraud / Philippe-Druillet / Enki-Bilal / Jodorowsky Heavy-Metal-magazine ink-and-color sci-fi BD tradition, clean-ink linework + flat-color-wash with gradient-field cosmic backgrounds, European bande-dessinée science-fiction craftsmanship, Arzach / Incal / The-Airtight-Garage visual family, dream-logic cosmic surrealism, NOT superhero-comic NOT manga NOT cartoon',
+      'Moebius / Jean-Giraud / Philippe-Druillet / Enki-Bilal / Jodorowsky Heavy-Metal-magazine ink-and-color sci-fi BD tradition, clean-ink linework + flat-color-wash with gradient-field cosmic backgrounds, European bande-dessinée science-fiction craftsmanship, Arzach / Incal / The-Airtight-Garage visual family, dream-logic cosmic surrealism',
     // Bot-only custom medium for cosmic-oracle path — sci-fi adaptation of
     // gothbot's gothic_oil_garden. Full-scene painted cosmic oil-canvas where
     // a figure lives WITHIN the environment (NOT a centered portrait).
     star_oil_cosmos:
       'cinematic sci-fi oil painting, environment-dominant composition with figure WITHIN scene, visible impasto brushwork, heavy canvas texture, dramatic volumetric lighting, gallery-quality masterwork',
+    // 2026-06-02 cruft-audit micro-strip — dropped travel-mag `wallpaper-
+    // worthy` + 3-stack NOT tail (NOT sci-fi concept art / NOT painting /
+    // NOT CGI). The Hubble/JWST/ESO false-color composite + scientific-
+    // imaging anchors carry the astrophotography register.
     real_astro:
-      'NASA-grade astrophotography — Hubble / JWST / ESO false-color composite, vibrant wavelength-mapped colors cranked to maximum, luminous nebula clouds glowing from within, blazing star clusters with diffraction spikes, deep-black void contrast, scientific-imaging aesthetic pushed to wallpaper-worthy vivid, NOT sci-fi concept art NOT painting NOT CGI',
+      'NASA-grade astrophotography — Hubble / JWST / ESO false-color composite, vibrant wavelength-mapped colors cranked to maximum, luminous nebula clouds glowing from within, blazing star clusters with diffraction spikes, deep-black void contrast, scientific-imaging aesthetic pushed to gallery-print vivid',
     // Cosmic-void mediumStyle — kilometer-class capital spaceships in pure
-    // vacuum, ship-as-subject, no landscape bias.
+    // vacuum, ship-as-subject.
+    // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `8K` + 4-stack
+    // NOT tail (NOT planetary surface / NOT canyon / NOT ground / NOT
+    // atmospheric). The "deep space vacuum / pure vacuum context / nebula
+    // haze in deep space" anchors hold the vacuum-only framing.
     starbot_cosmic_void:
-      'hyperrealistic photoreal cinematic sci-fi concept art of a kilometer-class capital spaceship in deep space vacuum, ray-traced volumetric lighting from nebulae and distant stars, photoreal hull materials with weapon batteries lit-window grids and hangar bays visible, surrounded by smaller fighter wings cargo trains and satellites as scale provers, atmospheric nebula haze in deep space, 8K film-still precision, like a still from a Denis Villeneuve cosmic sci-fi film — pure vacuum context — NOT planetary surface NOT canyon NOT ground NOT atmospheric',
+      'hyperrealistic photoreal cinematic sci-fi concept art of a kilometer-class capital spaceship in deep space vacuum, ray-traced volumetric lighting from nebulae and distant stars, photoreal hull materials with weapon batteries lit-window grids and hangar bays visible, surrounded by smaller fighter wings cargo trains and satellites as scale provers, atmospheric nebula haze in deep space, film-still precision, like a still from a Denis Villeneuve cosmic sci-fi film — pure vacuum context throughout',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
