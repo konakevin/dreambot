@@ -124,7 +124,10 @@ export function MagicalLoadingStage() {
       <BreathingMascot />
       <WaveLoader />
       <Text style={styles.title}>Dreaming</Text>
-      <Text style={styles.hint}>Don’t want to wait? We’ll notify you when it’s ready.</Text>
+      <Text style={styles.hint}>
+        Don’t want to wait? Tap <Text style={styles.hintEmphasis}>Queue This</Text> below and we’ll
+        notify you when it’s ready.
+      </Text>
     </View>
   );
 }
@@ -170,5 +173,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: 280,
     lineHeight: 18,
+  },
+  // Bolded button label — echoes the "Queue This" pill below so the
+  // user sees the connection at a glance without us coloring the text
+  // and creating a second accent that competes with the actual button.
+  hintEmphasis: {
+    color: colors.textPrimary,
+    fontWeight: '700',
   },
 });
