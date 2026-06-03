@@ -113,8 +113,19 @@ module.exports = {
   // as the FIRST tokens Flux sees. Used to lock path-specific world DNA
   // that the shared medium prefix can't establish on its own.
   promptPrefixByPath: {
+    // 2026-06-02 cruft-audit strip — was 603ch with:
+    //   • 8-item backdrop enum (frosted-cake mountains, oversized lollipop-
+    //     trees, marshmallow drifts, sprinkle-grass, cotton-candy clouds,
+    //     sugar-glitter air, gumdrop bushes, candy-cane accents) → Flux
+    //     locks frosted-cake mountains, drops the other 7
+    //   • 5-item negation chain `NEVER real wood/grass/stone/metal/fabric`
+    //     → leaks those materials via [[feedback_negative_prompt_leak]]
+    //   • `NOT a default candy meadow` negation
+    // The "every surface confectionery" positive instruction does the
+    // backdrop work without enumerating. Per-path pools carry specific
+    // backdrop elements (frosted-cake mountains etc.) one per entry.
     'candy-fantasy':
-      'Kawaii candy-fantasy scene — composition follows the scene description below (NOT a default candy meadow). The scene sits inside a RICH KAWAII CANDY-FANTASY WORLD with a lush layered candy-world backdrop visible BEHIND the foreground scene — frosted-cake mountains, oversized lollipop-trees, marshmallow drifts, sprinkle-grass, cotton-candy clouds, sugar-glitter air, gumdrop bushes, candy-cane accents — every surface confectionary, NEVER real wood/grass/stone/metal/fabric. The candy-world backdrop is RICH AND DETAILED but never overrides the foreground composition the scene description establishes.',
+      'Kawaii candy-fantasy scene — composition follows the scene description below. The scene sits inside a RICH KAWAII CANDY-FANTASY WORLD where every surface is confectionery. The candy-world backdrop is RICH AND DETAILED but never overrides the foreground composition the scene description establishes.',
   },
 
   poolByName(name) {
