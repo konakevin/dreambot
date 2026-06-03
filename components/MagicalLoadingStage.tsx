@@ -13,7 +13,7 @@
  * message" instead of a centered glowing ball.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import Animated, {
@@ -86,23 +86,6 @@ function WaveLoader() {
   );
 }
 
-// ── Animated dots in title (·, ··, ···) ────────────────────────────────────
-// Same trick as before — placeholder reserves width so the title row
-// doesn't horizontally jitter between states.
-function AnimatedDots() {
-  const [count, setCount] = useState(1);
-  useEffect(() => {
-    const id = setInterval(() => setCount((c) => (c % 3) + 1), 380);
-    return () => clearInterval(id);
-  }, []);
-  return (
-    <Text style={styles.titleDotsRun}>
-      <Text style={styles.titleDots}>{'·'.repeat(count)}</Text>
-      <Text style={styles.titleDotsHidden}>{'·'.repeat(3 - count)}</Text>
-    </Text>
-  );
-}
-
 // ── Mascot ─────────────────────────────────────────────────────────────────
 // Splash-icon robot, soft sine-breathe so it feels alive instead of
 // pasted-on. Subtle (translateY −4, scale 1→1.025) — we don't want it
@@ -140,10 +123,7 @@ export function MagicalLoadingStage() {
     <View style={styles.stage}>
       <BreathingMascot />
       <WaveLoader />
-      <View style={styles.titleRow}>
-        <Text style={styles.title}>Dreaming</Text>
-        <AnimatedDots />
-      </View>
+      <Text style={styles.title}>Dreaming</Text>
       <Text style={styles.hint}>Don’t want to wait? We’ll notify you when it’s ready.</Text>
     </View>
   );
@@ -178,26 +158,11 @@ const styles = StyleSheet.create({
     borderRadius: DOT_SIZE / 2,
     backgroundColor: colors.accent,
   },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
   title: {
     color: colors.textPrimary,
     fontSize: 24,
     fontWeight: '700',
     letterSpacing: 0.3,
-  },
-  titleDotsRun: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginLeft: 2,
-  },
-  titleDots: {
-    color: colors.accent,
-  },
-  titleDotsHidden: {
-    color: 'transparent',
   },
   hint: {
     color: colors.textSecondary,
