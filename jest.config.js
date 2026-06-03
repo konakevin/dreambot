@@ -16,6 +16,7 @@ module.exports = {
     // Map Deno URL imports to mocks
     '^https://esm\\.sh/@supabase/supabase-js@2$': '<rootDir>/__tests__/__mocks__/supabase-esm.js',
     '^https://esm\\.sh/@jsquash/.*$': '<rootDir>/__tests__/__mocks__/jsquash-stub.js',
+    '^https://esm\\.sh/thumbhash@.*$': '<rootDir>/__tests__/__mocks__/thumbhash-stub.js',
     // Native analytics/crash SDKs — stub so transitive imports don't crash jest.
     '^posthog-react-native$': '<rootDir>/__tests__/__mocks__/posthog-react-native.js',
     '^@sentry/react-native$': '<rootDir>/__tests__/__mocks__/sentry-react-native.js',

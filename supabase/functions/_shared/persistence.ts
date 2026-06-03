@@ -7,6 +7,8 @@
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { decodeImage, encodeJpeg } from './imageCodec.ts';
+import { computeThumbhash } from './thumbhashGen.ts';
 
 export async function persistToStorage(
   tempUrl: string,
@@ -21,30 +23,68 @@ export async function persistToStorage(
 
 /**
  * Build + persist a small JPEG "display variant" of an already-persisted image
- * and return its public URL. The feed serves this (~150KB) while image_url stays
- * the full-quality original (the upscale source — HD downloads unchanged). q80
- * re-encode at native dimensions (the win is quality, not resolution). BEST-
- * EFFORT: returns null on any failure (timeout / decode / upload) so the caller
- * simply falls back to serving image_url — this never blocks or fails a render.
+ * AND a thumbhash preview hash, returning both. The feed serves the display
+ * variant URL (~150KB) while image_url stays the full-quality original (the
+ * upscale source — HD downloads unchanged); the thumbhash is used as the
+ * expo-image `placeholder` so cards show a sharp blurry preview INSTANTLY
+ * instead of a black/surface-tinted void during decode/network.
+ *
+ * 2026-06-04: return shape changed from `string | null` → `{ url, thumbhash }`.
+ * Callers used to write `image_url_display: displayUrl` — now they write
+ * `image_url_display: result.url` and `thumbhash: result.thumbhash`. The
+ * single decode is reused for both — no extra cost.
+ *
+ * BEST-EFFORT: any piece failing (decode, hash, upload) just yields null for
+ * THAT piece — never blocks or fails a render.
  */
+export interface DisplayVariantResult {
+  url: string | null;
+  thumbhash: string | null;
+}
+
 export async function buildDisplayVariant(
   imageUrl: string,
   userId: string,
   supabase: SupabaseClient
-): Promise<string | null> {
+): Promise<DisplayVariantResult> {
   try {
     const res = await fetch(imageUrl);
-    if (!res.ok) return null;
-    const decoded = await decodeImage(await res.arrayBuffer());
-    const jpeg = await encodeJpeg(decoded, 80);
-    const key = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.display.jpg`;
-    const { error } = await supabase.storage
-      .from('uploads')
-      .upload(key, jpeg, { contentType: 'image/jpeg', cacheControl: '2592000' });
-    if (error) return null;
-    return supabase.storage.from('uploads').getPublicUrl(key).data.publicUrl;
+    if (!res.ok) return { url: null, thumbhash: null };
+
+    // ONE decode → both variants. Thumbhash gen nearest-neighbor
+    // downsamples the same DecodedImage we'd JPEG-re-encode for the
+    // display variant, so we never decode twice.
+    let decoded;
+    try {
+      decoded = await decodeImage(await res.arrayBuffer());
+    } catch (_e) {
+      return { url: null, thumbhash: null };
+    }
+
+    // Thumbhash — cheap, ~25-byte base64. Compute first; even if the
+    // JPEG re-encode/upload fails below, we still persist the hash so
+    // the client gets the instant blurry placeholder.
+    const thumbhash = computeThumbhash(decoded);
+
+    // Display JPEG variant — heavier; upload may fail (storage quota,
+    // network) without invalidating the thumbhash we just computed.
+    let url: string | null = null;
+    try {
+      const jpeg = await encodeJpeg(decoded, 80);
+      const key = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.display.jpg`;
+      const { error } = await supabase.storage
+        .from('uploads')
+        .upload(key, jpeg, { contentType: 'image/jpeg', cacheControl: '2592000' });
+      if (!error) {
+        url = supabase.storage.from('uploads').getPublicUrl(key).data.publicUrl;
+      }
+    } catch (_e) {
+      // url stays null; thumbhash may still be present
+    }
+
+    return { url, thumbhash };
   } catch (_e) {
-    return null;
+    return { url: null, thumbhash: null };
   }
 }
 
@@ -112,8 +152,6 @@ export async function sha256Hex(buf: ArrayBuffer): Promise<string> {
  *   4. Each pixel: 1 if >= average, 0 otherwise
  *   5. Pack 64 bits into 16-char hex
  */
-import { decodeImage, encodeJpeg } from './imageCodec.ts';
-
 export async function aHashHex(buf: ArrayBuffer): Promise<string> {
   const decoded = await decodeImage(new Uint8Array(buf));
   const data = decoded.data;

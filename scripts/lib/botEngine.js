@@ -761,8 +761,11 @@ async function postAsBot({
   // the feed serves image_url_display. Best-effort: any failure leaves it null
   // and the client coalesces to image_url, so a missing encoder never blocks a post.
   let displayUrl = null;
+  let thumbhash = null;
   try {
     const sharp = require('sharp');
+
+    // Display JPEG variant.
     const displayBuf = await sharp(bytes)
       .resize({ width: 768, withoutEnlargement: true })
       .jpeg({ quality: 80, mozjpeg: true })
@@ -773,6 +776,30 @@ async function postAsBot({
       .upload(displayKey, displayBuf, { contentType: 'image/jpeg', cacheControl: '2592000' });
     if (!dUp.error) {
       displayUrl = sb.storage.from('uploads').getPublicUrl(displayKey).data.publicUrl;
+    }
+
+    // Thumbhash — tiny ~25-byte base64 preview hash for the expo-image
+    // `placeholder` prop. Resize to fit a 100×100 box (thumbhash spec),
+    // ensureAlpha so we always feed it RGBA, then base64-encode the
+    // hash bytes. Failure → null; client falls back to surface-tinted
+    // placeholder.
+    try {
+      const meta = await sharp(bytes).metadata();
+      if (meta.width && meta.height) {
+        const ratio = Math.min(100 / meta.width, 100 / meta.height, 1);
+        const tw = Math.max(1, Math.round(meta.width * ratio));
+        const th = Math.max(1, Math.round(meta.height * ratio));
+        const { data: rgba } = await sharp(bytes)
+          .resize(tw, th, { fit: 'fill' })
+          .ensureAlpha()
+          .raw()
+          .toBuffer({ resolveWithObject: true });
+        const { rgbaToThumbHash } = require('thumbhash');
+        const hashBytes = rgbaToThumbHash(tw, th, rgba);
+        thumbhash = Buffer.from(hashBytes).toString('base64');
+      }
+    } catch (e) {
+      if (process.env.DEBUG) console.warn(`[botEngine] thumbhash skipped: ${e.message}`);
     }
   } catch (e) {
     if (process.env.DEBUG) console.warn(`[botEngine] display variant skipped: ${e.message}`);
@@ -785,6 +812,7 @@ async function postAsBot({
       user_id: userId,
       image_url: publicUrl,
       image_url_display: displayUrl,
+      thumbhash,
       thumbnail_url: null,
       ai_prompt: prompt,
       dream_medium: medium,

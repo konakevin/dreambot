@@ -370,7 +370,7 @@ async function handleRequest(req: Request): Promise<Response> {
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
     let uploadId: string | undefined;
 
-    const displayUrl = await buildDisplayVariant(imageUrl, userId, supabase);
+    const { url: displayUrl, thumbhash } = await buildDisplayVariant(imageUrl, userId, supabase);
     const [uploadResult] = await Promise.all([
       supabase
         .from('uploads')
@@ -378,6 +378,7 @@ async function handleRequest(req: Request): Promise<Response> {
           user_id: userId,
           image_url: imageUrl,
           image_url_display: displayUrl,
+          thumbhash,
           caption,
           ai_prompt: finalPrompt,
           ai_concept: null,

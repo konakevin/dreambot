@@ -1410,7 +1410,7 @@ Output ONLY the prompt.`;
       );
 
     if (persist) {
-      const displayUrl = await buildDisplayVariant(imageUrl, userId, supabase);
+      const { url: displayUrl, thumbhash } = await buildDisplayVariant(imageUrl, userId, supabase);
       const [uploadResult] = await Promise.all([
         supabase
           .from('uploads')
@@ -1418,6 +1418,7 @@ Output ONLY the prompt.`;
             user_id: userId,
             image_url: imageUrl,
             image_url_display: displayUrl,
+            thumbhash,
             caption,
             ai_prompt: finalPrompt,
             ai_concept: conceptJson,

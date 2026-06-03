@@ -53,6 +53,12 @@ export interface DreamPostItem {
   /** Small JPEG display variant served to the feed (~150KB). NULL until the
    * render pipeline / backfill populates it; the card coalesces to image_url. */
   image_url_display?: string | null;
+  /** ~25-byte base64 thumbhash preview hash. Fed to expo-image's `placeholder`
+   * prop so the card shows a sharp blurry preview the instant it mounts,
+   * instead of a surface-tinted void while the image loads. NULL until the
+   * render pipeline / backfill populates it; the card falls back to the
+   * surface-tinted placeholder when null. */
+  thumbhash?: string | null;
   caption: string | null;
   username: string;
   avatar_url: string | null;
@@ -427,6 +433,13 @@ export const DreamCard = memo(function DreamCard({
               cachePolicy="memory-disk"
               recyclingKey={item.id}
               transition={150}
+              // Tiny blurry preview shown instantly during decode/network,
+              // so the card never reads as "broken black void" while
+              // expo-image is busy. Falls back to the surface-tinted
+              // backgroundColor on fullImage when thumbhash is null
+              // (legacy posts pre-219 — backfilled in a separate pass).
+              placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
+              placeholderContentFit="cover"
               onError={() => {
                 if (retryCountRef.current >= MAX_IMG_RETRIES) return; // give up silently
                 retryCountRef.current += 1;
