@@ -16,7 +16,8 @@
 const PROMPT_PREFIX =
   'toy photography, real physical toys, action-packed toy-world storytelling, toy-ness elevated as the subject';
 
-const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+// 2026-06-02 cruft-audit micro-strip — dropped `hyper detailed` tech-spec.
+const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
 const TOY_PHOTOGRAPHY_BLOCK = `━━━ TOY PHOTOGRAPHY (NON-NEGOTIABLE) ━━━
 

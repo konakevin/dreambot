@@ -9,7 +9,8 @@
 const PROMPT_PREFIX =
   'nostalgic scene, warm film grain, 1970s 1980s 1990s retro aesthetic, no people, atmospheric detail, memory-triggering';
 
-const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+// 2026-06-02 cruft-audit micro-strip — dropped `hyper detailed` tech-spec.
+const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
 const NOSTALGIA_CORE_BLOCK = `━━━ NOSTALGIA CORE (NON-NEGOTIABLE) ━━━
 

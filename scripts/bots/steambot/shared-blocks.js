@@ -9,7 +9,8 @@
 const PROMPT_PREFIX =
   'gorgeous steampunk illustration, brass and copper clockwork detail, Victorian-industrial impossibly-detailed, warm gaslit atmosphere';
 
-const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+// 2026-06-02 cruft-audit micro-strip — dropped `hyper detailed` tech-spec.
+const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
 const STEAMPUNK_OBSESSIVE_DETAIL_BLOCK = `━━━ OBSESSIVE STEAMPUNK DETAIL — NON-NEGOTIABLE ━━━
 

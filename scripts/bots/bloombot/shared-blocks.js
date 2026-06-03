@@ -6,8 +6,10 @@
  * here is short and load-bearing. Resist accumulation.
  */
 
+// 2026-06-02 cruft-audit micro-strip — dropped `magazine-cover` (travel-
+// magazine register, pulls toward Condé-Nast prior).
 const PROMPT_PREFIX =
-  'breathtaking LUSH flower scene, abundant blooms filling the entire frame edge-to-edge as the unmistakable hero, a monumental bloom-form or dense overflowing bloom-mass dominating the composition, every petal jewel-saturated, magazine-cover composition, any setting is only a backdrop to the flowers';
+  'breathtaking LUSH flower scene, abundant blooms filling the entire frame edge-to-edge as the unmistakable hero, a monumental bloom-form or dense overflowing bloom-mass dominating the composition, every petal jewel-saturated, gallery-quality composition, any setting is only a backdrop to the flowers';
 
 // 2026-06-02 cruft-audit strip — was 469ch with redundancy against
 // PROMPT_PREFIX + bloom_hyperreal_cgi flux (same "tack-sharp + saturated

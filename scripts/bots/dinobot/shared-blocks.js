@@ -16,8 +16,9 @@
 // BLOCK below as Sonnet system text (Sonnet's output is then constrained
 // by the POSITIVE_OUTPUT_MANDATE at the end of each template). See
 // [[feedback_negative_prompt_leak]].
+// 2026-06-02 cruft-audit micro-strip — dropped `8K detail` tech-spec tail.
 const PROMPT_PREFIX =
-  '66 million years before humans evolved, cinematic primordial Mesozoic wilderness, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail';
+  '66 million years before humans evolved, cinematic primordial Mesozoic wilderness, ray-traced reflections, hyperreal textures, IMAX cinematic precision';
 
 // 2026-06-02 NEGATION STRIP: 16 "NO X" entries removed (humans, people,
 // figures, silhouettes, hands, man-made, buildings, cartoon, kids
@@ -26,8 +27,9 @@ const PROMPT_PREFIX =
 // banned nouns INTO renders. Replaced with positive-only quality terms
 // ("primordial wilderness, photoreal organic wildlife, ultra detailed,
 // film grain, masterpiece").
+// 2026-06-02 cruft-audit micro-strip — dropped `ultra detailed` tech-spec.
 const PROMPT_SUFFIX =
-  'primordial wilderness, photoreal organic wildlife, ultra detailed, film grain, masterpiece';
+  'primordial wilderness, photoreal organic wildlife, film grain, masterpiece';
 
 const DINOSAUR_IS_HERO_BLOCK = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST words of your output, BEFORE setting/lighting/anything else.

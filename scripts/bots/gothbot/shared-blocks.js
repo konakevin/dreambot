@@ -29,8 +29,9 @@
 const PROMPT_PREFIX =
   'Dark gothic fantasy, hauntingly beautiful, operatic dark romance with vampire-hunter danger';
 
+// 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed` tech-spec.
 const PROMPT_SUFFIX =
-  'no text no words no watermarks, hyper-detailed, frame-worthy dark-fantasy art';
+  'no text no words no watermarks, frame-worthy dark-fantasy art';
 
 const ELEGANT_DARKNESS_BLOCK = `━━━ NIGHTSHADE — BEAUTIFUL, DANGEROUS, ALIVE ━━━
 

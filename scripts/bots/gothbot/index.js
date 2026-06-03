@@ -45,8 +45,8 @@ module.exports = {
   // have shape...") and flux-2-pro (over-strict E005 safety filter). Every
   // gothbot render picks flux-dev or flux-1.1-pro only.
   // Banned 2026-06-02: flux-2-flex (Kevin heart-ban — fleet-wide for gothbot).
+  // Banned 2026-06-02: google/gemini-2-image (Kevin heart-ban — Nano Banana).
   allowedModels: [
-    'google/gemini-2-image',
     'openai/gpt-image-2',
     'black-forest-labs/flux-2-pro',
     'black-forest-labs/flux-1.1-pro',

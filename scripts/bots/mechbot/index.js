@@ -313,9 +313,13 @@ module.exports = {
       'high-end cinematic 3D render — feature-film VFX quality, physically-based rendering with realistic subsurface-scatter and raytraced reflections, practical-plus-digital hybrid aesthetic, volumetric atmospheric depth, cinematic lighting precision, 4K film-finish polish, NOT cartoon NOT toy NOT videogame',
   },
 
+  // 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed` (prefix)
+  // and `hyper detailed` (suffix) tech-spec adjectives. MechBot's index.js
+  // overrides the shared-blocks PROMPT_PREFIX/SUFFIX so both layers needed
+  // the same edit.
   promptPrefix:
-    'cinematic sci-fi concept art, hyper-detailed mechanical surfaces, ornate machinery, production-art polish',
-  promptSuffix: 'no text, no words, no watermarks, hyper detailed, masterpiece quality',
+    'cinematic sci-fi concept art, mechanical surfaces, ornate machinery, production-art polish',
+  promptSuffix: 'no text, no words, no watermarks, masterpiece quality',
 
   vibes: ['cinematic'],
 

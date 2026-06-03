@@ -43,7 +43,11 @@ module.exports = {
   mediums: ['anime'],
 
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  // Banned 2026-06-02: openai/gpt-image-2 (Kevin heart-ban).
+  // Banned 2026-06-02: flux-2-flex (Kevin heart-ban).
+  allowedModels: ALL_ENABLED_AI_MODELS.filter(
+    (m) => m !== 'openai/gpt-image-2' && m !== 'black-forest-labs/flux-2-flex'
+  ),
 
   // Single 'anime' medium — pin heavy on anime-friendly vibes
   vibesByMedium: {

@@ -18,8 +18,20 @@
 const PROMPT_PREFIX =
   'highly detailed LEGO diorama scene, built entirely from real LEGO bricks, studs clearly visible, authentic LEGO plastic texture, molded seams and connection points, realistic brick geometry, accurate minifigure scale, intricate brick-built details using slopes tiles plates and transparent pieces, professional LEGO MOC showcase photography';
 
+// 2026-06-02 cruft-audit strip — was a 13-item `no X` negation chain
+// (no human hands / no human fingers / no human skin / no real people /
+// no cartoon render / no minecraft / no voxel art / no claymation /
+// no painted textures / no smooth surfaces / no melted plastic /
+// no deformed studs / no text / no watermark) — Flux's CLIP tokenizer
+// ignores `no` and reads each banned noun as DESIRED content per
+// [[feedback_negative_prompt_leak]]. Stripped to a positive all-LEGO
+// anchor — the EVERYTHING_IS_BRICK_BLOCK already covers the rules
+// downstream so the suffix just needs to keep the brick register at
+// the tail. Dropped tech-spec `ultra detailed`. `no text, no watermark`
+// stays — overlay-text suppressor that Flux treats differently from
+// scene content.
 const PROMPT_SUFFIX =
-  'no human hands, no human fingers, no human skin, no real people, no cartoon render, no minecraft, no voxel art, no claymation, no painted textures, no smooth surfaces, no melted plastic, no deformed studs, no text, no watermark, ultra detailed, sharp detail';
+  'all-LEGO scene throughout, every element brick-built, crisp brick texture, sharp stud detail, no text, no watermark';
 
 const EVERYTHING_IS_BRICK_BLOCK = `━━━ EVERYTHING IS BRICK — NON-NEGOTIABLE ━━━
 Every element in the frame is built from LEGO bricks. Buildings, vehicles, terrain, water, fire, smoke, trees, rocks, sky-elements — all plastic on a tabletop. Studs visible. Minifigures have yellow skin (or path-specified color), C-shaped hands, printed faces. Macro lens / tabletop diorama photography. NEVER real human hands, fingers, skin, or photoreal people.`;

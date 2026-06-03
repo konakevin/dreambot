@@ -6,8 +6,10 @@
  * stop + lean in + smile + look twice.
  */
 
+// 2026-06-02 cruft-audit micro-strip — dropped `ultra-detailed` tech-spec
+// open. The rest of the prefix carries the diorama specificity.
 const PROMPT_PREFIX =
-  'ultra-detailed miniature diorama photography, tabletop model world, tilt-shift macro lens, extreme shallow depth of field, dollhouse-scale, handcrafted tiny props, miniature set dressing, realistic modelmaking textures, visible tiny imperfections';
+  'miniature diorama photography, tabletop model world, tilt-shift macro lens, extreme shallow depth of field, dollhouse-scale, handcrafted tiny props, miniature set dressing, realistic modelmaking textures, visible tiny imperfections';
 
 const PROMPT_SUFFIX =
   'miniature tabletop diorama model, tilt-shift shallow depth of field, macro lens close-up, tiny handcrafted props, visible miniature scale, no text, no words, no watermarks';

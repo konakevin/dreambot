@@ -7,10 +7,12 @@
  * exposed clockwork, glowing power cores, ornate mechanical detail.
  */
 
+// 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed` (mechanical
+// detail context already strong) and `hyper detailed` from suffix.
 const PROMPT_PREFIX =
-  'cinematic sci-fi concept art, hyper-detailed mechanical surfaces, ornate machinery, production-art polish';
+  'cinematic sci-fi concept art, mechanical surfaces, ornate machinery, production-art polish';
 
-const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
 const SOLO_ROBOT_BLOCK = `━━━ SOLO ROBOT (robot-moment path only) ━━━
 

@@ -10,10 +10,13 @@
  * No humans. Pets/creatures peripheral, going about cozy-life.
  */
 
+// 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed` (AI-photo
+// tell tech-spec); rest of the polish anchors carry the work.
 const PROMPT_PREFIX =
-  'hyper-detailed 3D CGI render, designer collectible quality, glossy dewy surfaces with subsurface scattering, frame-worthy magical wallpaper composition';
+  '3D CGI render, designer collectible quality, glossy dewy surfaces with subsurface scattering, frame-worthy magical wallpaper composition';
 
-const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+// 2026-06-02 — dropped tech-spec `hyper detailed`.
+const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
 const CUTE_CUDDLY_COZY_BLOCK = `━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
 

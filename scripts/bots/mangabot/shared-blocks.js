@@ -45,8 +45,9 @@ const PROMPT_PREFIX =
 //   "emotional cinematic still,"
 //   "frame-worthy anime poster art,"
 //   "beautiful bokeh and lens flare accents," (lens-defining composition)
+// 2026-06-02 cruft-audit micro-strip — dropped `ultra-detailed` tech-spec.
 const PROMPT_SUFFIX =
-  'soft bloom highlights, atmospheric depth haze, filmic color grading, ultra-detailed environment rendering, no text no words no watermarks no logos no frame borders';
+  'soft bloom highlights, atmospheric depth haze, filmic color grading, detailed environment rendering, no text no words no watermarks no logos no frame borders';
 
 // ━━━ KEYFRAME COMPOSITION — defer to rolled camera_framing axis ━━━
 //

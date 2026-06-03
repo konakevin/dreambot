@@ -46,12 +46,12 @@ module.exports = {
 
   useModelPicker: true,
   // Banned 2026-06-02: flux-2-flex (Kevin heart-ban).
+  // Banned 2026-06-02: flux-2-max (Kevin heart-ban).
   allowedModels: [
     'google/gemini-2-image',
     'openai/gpt-image-2',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-max',
   ],
   // modelByPath: removed 2026-05-31. Previously was Object.fromEntries(
   //   pools.PATHS.map(p => [p, {'flux-1.1-pro': 100}])) — every path

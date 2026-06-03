@@ -7,10 +7,12 @@
  * VenusBot owns cyborg-woman territory — StarBot does NOT.
  */
 
+// 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed composition`
+// and `hyper detailed` tech-spec.
 const PROMPT_PREFIX =
-  'cinematic sci-fi concept art, epic scale, awe-inspiring cosmic beauty, hyper-detailed composition, production-art polish';
+  'cinematic sci-fi concept art, epic scale, awe-inspiring cosmic beauty, production-art polish';
 
-const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
 const SCI_FI_AWE_BLOCK = `━━━ SCI-FI AWE (NON-NEGOTIABLE) ━━━
 

@@ -13,11 +13,15 @@
 const YUMBOT_FOOD_MEDIUM =
   'Hyper-detailed 3D CGI render with painterly illustration fusion, Pop-Mart designer-vinyl glossy-pearlescent finish — kawaii smiling faces ON the food/drink itself (each food IS the character with dimpled-cheek blush, closed-arc eyes, tiny printed mouth, NOT a creature holding food). Glossy dewy subsurface-scattered material treatment. Pastel-rainbow palette (blush pink, lavender, mint, peach, cream, baby-blue). ABSOLUTELY NO human / chibi / creature mascots — the food/drink IS the only cast.';
 
+// 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed` (CGI/
+// glossy already carry the work) and 4 stacked `NOT X` bans from the
+// suffix (NOT painted-flat NOT 2D NOT photoreal NOT generic-cartoon)
+// which leaked exactly those styles per [[feedback_negative_prompt_leak]].
 const PROMPT_PREFIX =
-  'hyper-detailed 3D CGI render with painterly illustration polish, designer collectible Pop-Mart quality, glossy dewy pearlescent surfaces with subsurface scattering, frame-worthy magical wallpaper composition, pastel palette';
+  '3D CGI render with painterly illustration polish, designer collectible Pop-Mart quality, glossy dewy pearlescent surfaces with subsurface scattering, frame-worthy magical wallpaper composition, pastel palette';
 
 const PROMPT_SUFFIX =
-  'designer-vinyl glossy-pearlescent finish, painterly illustration fusion, dreamy bokeh, soft pastel kawaii palette, NOT painted-flat NOT 2D NOT photoreal NOT generic-cartoon';
+  'designer-vinyl glossy-pearlescent finish, painterly illustration fusion, dreamy bokeh, soft pastel kawaii palette';
 
 module.exports = {
   YUMBOT_FOOD_MEDIUM,
