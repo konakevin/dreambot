@@ -746,6 +746,7 @@ Deno.serve(async (req) => {
     // branches: character, epic_tiny, pure_scene. For character path the
     // pillar is the BACKDROP; for pure_scene the pillar IS the subject.
     let iconicAnchor: string | null = null;
+    let iconicAnchorScale: 'wide' | 'medium' | 'intimate' | null = null;
     let biomeKey: string | null = null;
     // Per-location bespoke biome (migration 170). When set, it OVERRIDES
     // the shared biomeAxes lookup so atmospheres feel recognizable to
@@ -755,7 +756,7 @@ Deno.serve(async (req) => {
       const [{ data: spots }, { data: locCard }] = await Promise.all([
         supabase
           .from('location_iconic_spots')
-          .select('spot_text')
+          .select('spot_text, spot_kind')
           .eq('location_key', userPlace)
           .eq('is_active', true),
         supabase
@@ -765,7 +766,20 @@ Deno.serve(async (req) => {
           .maybeSingle(),
       ]);
       if (spots && spots.length > 0) {
-        iconicAnchor = spots[Math.floor(Math.random() * spots.length)].spot_text;
+        const picked = spots[Math.floor(Math.random() * spots.length)];
+        iconicAnchor = picked.spot_text;
+        // Spot scale = how the brief should frame this anchor. Classified
+        // by Sonnet via scripts/classify-iconic-spots.js → 'wide' (vast
+        // vistas) | 'medium' (single named landmark) | 'intimate' (close
+        // detail / interior / under-canopy / grotto). Engine uses this
+        // to choose framing language so an intimate spot doesn't get
+        // rendered as a sweeping vista (the failure mode that produced
+        // weird stretched renders before 2026-06-03). Null guard handles
+        // any future un-classified rows.
+        const k = String(picked.spot_kind || '').toLowerCase();
+        if (k === 'wide' || k === 'medium' || k === 'intimate') {
+          iconicAnchorScale = k;
+        }
       }
       biomeKey = locCard?.biome ?? null;
       // Per-location biome_config override — validated by the single shared gate
@@ -805,8 +819,28 @@ Deno.serve(async (req) => {
     const weatherAxis = pickAxis(biomeConfig.WEATHER);
     const cameraAxis = pickAxis(biomeConfig.CAMERA);
     const phenomenaAxis = pickAxis(biomeConfig.PHENOMENA);
+
+    // ── Per-anchor framing rule ───────────────────────────────────────
+    // Picks the SUBJECT_RULE for the brief based on the rolled spot's
+    // scale (wide / medium / intimate). Without this, an intimate spot
+    // like "Founders Grove with fallen Dyerville Giant" gets framed by
+    // the biome-wide vista rule and the render comes back as a sweeping
+    // forest panorama instead of an under-canopy close view. Falls back
+    // to biomeConfig.SUBJECT_RULE when the spot is null / un-classified
+    // (preserves existing behavior for any future un-tagged spots).
+    const FRAMING_BY_SCALE: Record<'wide' | 'medium' | 'intimate', string> = {
+      wide: 'EPIC vast composition. Sweeping vista — the landscape itself is the subject. Horizon visible, depth extending to the distance. Camera pulled back, wide-angle.',
+      medium:
+        'BALANCED single-subject composition. The named landmark IS the subject — frame it prominently (~50-60% of frame), with its immediate setting visible but secondary. No tiny-subject-in-vast-vista framing; no extreme close-up.',
+      intimate:
+        'CLOSE INTIMATE composition. Tight framing on the named feature — interior / under-canopy / close-detail / human-scale view. Subject fills 60-75% of frame. NO sweeping horizon. NO vast-vista language ("expanse", "endless", "panoramic"). The viewer is INSIDE or NEXT TO the subject, not looking at it from afar.',
+    };
+    const subjectRule = iconicAnchorScale
+      ? FRAMING_BY_SCALE[iconicAnchorScale]
+      : biomeConfig.SUBJECT_RULE;
+
     console.log(
-      `[nightly-dreams] biome="${biomeKey || '(default)'}"${bespokeBiome ? ' [BESPOKE]' : ''} anchor="${iconicAnchor || '(none)'}" composition=${composition} time="${timeAxis.split(' — ')[0]}"`
+      `[nightly-dreams] biome="${biomeKey || '(default)'}"${bespokeBiome ? ' [BESPOKE]' : ''} anchor="${iconicAnchor || '(none)'}" scale=${iconicAnchorScale || '(biome-default)'} composition=${composition} time="${timeAxis.split(' — ')[0]}"`
     );
 
     let nightlyBrief: string;
@@ -1099,7 +1133,7 @@ This is the only subject. Do NOT substitute another landmark. Do NOT add multipl
 
 MEDIUM: ${baseMedium.fluxFragment}
 
-SUBJECT FRAMING: ${biomeConfig.SUBJECT_RULE}
+SUBJECT FRAMING: ${subjectRule}
 
 VARIATION AXES (alter LIGHT, ATMOSPHERE, and CAMERA ONLY — never the subject):
 - TIME: ${timeAxis}
@@ -1139,6 +1173,7 @@ Output ONLY the prompt.`;
         engine: 'nightly-pure-scene',
         biome: biomeKey || null,
         anchor: iconicAnchor || null,
+        anchor_scale: iconicAnchorScale || null,
         time: timeAxis.split(' — ')[0],
         weather: weatherAxis.split(',')[0],
         phenomenon_included: includePhenomenon,
