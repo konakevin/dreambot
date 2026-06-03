@@ -110,11 +110,24 @@ module.exports = {
 
   // Per-path prefix override — prepended BEFORE the medium style prefix as
   // the FIRST tokens Flux sees. Use case: aquatic-village needs cool-teal-water
-  // context to override the warm-amber-jungle-palette baked into PROMPT_PREFIX_PIXAR
+  // context to override the warm-amber-jungle-palette baked into the medium
   // (which causes Flux to render coastal scenes as warm-cottage villages).
+  //
+  // 2026-06-02 cruft-audit strip — was 499ch with THREE enumeration locks:
+  //   • biome-OR `UNDERWATER OR COASTAL OCEAN SCENE` at the open (locked
+  //     Flux UNDERWATER, every render fully submerged regardless of subject)
+  //   • palette enum `TEAL + CYAN + AQUA + CORAL-PINK + PEARL-VIOLET`
+  //     (locked TEAL, dropped the other 4)
+  //   • biome-OR repeated `submerged underwater village OR coastal tidepool`
+  //   • negation tail `NOT warm tropical jungle palette` (per
+  //     [[feedback_negative_prompt_leak]] this LEAKS jungle palette)
+  //
+  // New: single anchor "aquatic ocean scene with VISIBLE WATER", cool
+  // aquatic mood as a single attribute (not an enum), positive-only.
+  // Subject pool decides submerged vs tidepool — wrapper doesn't pre-pick.
   promptPrefixByPath: {
     'aquatic-village':
-      'UNDERWATER OR COASTAL OCEAN SCENE — cool teal-cyan-aqua water-caustic light dappling every surface, deep-blue ocean-water filling the scene, drifting bubble-streams rising through water, swirling fish-schools visible in background, bioluminescent coral-glow accents, water-reflection on architecture, palette of TEAL + CYAN + AQUA + CORAL-PINK + PEARL-VIOLET (cool aquatic palette, NOT warm tropical jungle palette), submerged underwater village OR coastal tidepool village always with VISIBLE WATER',
+      'aquatic ocean scene with VISIBLE WATER, cool aquatic palette, water-caustic light dappling every surface, drifting bubble-streams, swirling fish-schools in background, bioluminescent coral-glow accents, water-reflection on architecture',
   },
 
   // Cute-forward vibes (banned: dark, fierce, macabre, nightshade,
