@@ -10,8 +10,24 @@
  * castles, corrupted women, succubi, demons, blood-hunters, dark witches.
  */
 
+// 2026-06-02 cruft-audit strip — was 282ch with TWO enumeration locks
+// hitting EVERY GothBot path × 4/day = 68 daily renders:
+//   • franchise list `Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing`
+//     (Flux locks Castlevania, drops the rest — first-named-noun trap)
+//   • palette list `deep purples + midnight blues + velvet blacks + poison
+//     greens + candle-amber + moonlit silver` (Flux locks deep purples,
+//     drops the other 5 — the phrase "rich varied palette" is self-defeating
+//     once 6 colors are enumerated)
+//
+// Bot-wide is now a single short anchor. The hearted Castlevania DNA for
+// monster-prowl (which renders via medium='anime') is preserved by an
+// `anime` entry in promptPrefixByMedium that holds the FULL original
+// prefix verbatim — so monster-prowl renders are unchanged, but the
+// other 16 paths get a clean non-enumerated prefix that lets per-medium
+// promptPrefixByMedium overrides + mediumStyles + TWILIGHT_COLOR_BLOCK
+// do the palette/franchise work where they belong.
 const PROMPT_PREFIX =
-  'Dark gothic fantasy, hauntingly beautiful, operatic dark romance with vampire-hunter danger, Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing energy, rich varied palette with deep purples + midnight blues + velvet blacks + poison greens + candle-amber + moonlit silver accents';
+  'Dark gothic fantasy, hauntingly beautiful, operatic dark romance with vampire-hunter danger';
 
 const PROMPT_SUFFIX =
   'no text no words no watermarks, hyper-detailed, frame-worthy dark-fantasy art';

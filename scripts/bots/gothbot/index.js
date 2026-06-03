@@ -263,10 +263,10 @@ module.exports = {
     // gothic-architecture path bespoke (2026-05-15). Empty so the structure
     // description leads — style language lives in mediumStyles + suffix.
     gothbot_gothic_print: '',
-    // monster-prowl (canvas): NO override — uses the bot-wide Castlevania/
-    // Bloodborne PROMPT_PREFIX. Reverted to the hearted impasto-Castlevania state
-    // (Kevin 2026-05-25, preferred over the later Frazetta classical-Victorian tune).
-    // The classical-Victorian prefix now lives ONLY on canvas_victorian (frozen).
+    // monster-prowl (canvas): NO override — uses the bot-wide PROMPT_PREFIX.
+    // Reverted to the hearted impasto-Castlevania state (Kevin 2026-05-25,
+    // preferred over the later Frazetta classical-Victorian tune). The
+    // classical-Victorian prefix now lives ONLY on canvas_victorian (frozen).
     // monster-prowl-victorian — FROZEN classical-Victorian prefix (converged state).
     canvas_victorian:
       'a classical Victorian gothic oil painting of a single recognizable monster, dark-Romantic 19th-century painted horror, operatic and beautiful and terrifying, vivid and richly saturated',
@@ -285,6 +285,18 @@ module.exports = {
       'ultra-high-definition hyperreal cinematic 3D render, Weta-Workshop + Unreal Engine 5 lifelike realism, RICH FULL-SPECTRUM SATURATED color against deep ominous shadow, dark dramatic and cinematic',
     gargoyle_anime:
       'richly-detailed dark-anime gothic-horror illustration, hand-drawn and cel-shaded, vivid, dramatic and cinematic',
+  },
+  // 2026-06-02 — Per-path prefix prepended BEFORE the bot-wide prefix in the
+  // engine resolution order. monster-prowl's hearted impasto-Castlevania
+  // state (Kevin 2026-05-25) relied on the OLD 282ch bot-wide prefix that
+  // contained the franchise enumeration + 6-color palette enumeration. The
+  // bot-wide was stripped in shared-blocks.js to a clean single anchor so
+  // the other 14 paths render without first-token enum-lock; this entry
+  // preserves the FULL ORIGINAL prefix verbatim for ONLY monster-prowl,
+  // restoring its hearted DNA.
+  promptPrefixByPath: {
+    'monster-prowl':
+      'Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing energy, rich varied palette with deep purples + midnight blues + velvet blacks + poison greens + candle-amber + moonlit silver accents',
   },
   promptSuffixByMedium: {
     vampire_portrait:
