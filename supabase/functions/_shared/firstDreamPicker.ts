@@ -166,10 +166,6 @@ export function pickCompositionMode(
   return weights[0][0];
 }
 
-/** Roll whether to include an object using the persona's pct. */
-export function rollIncludeObject(
-  persona: FirstDreamPersona,
-  rand: () => number = Math.random
-): boolean {
-  return rand() < PERSONA_COMPOSITION[persona].objectIncludePct;
-}
+// rollIncludeObject() removed 2026-06-02 with the objects feature.
+// objectIncludePct on the persona config remains as a vestigial field
+// for forward-compat with frozen recipes; nothing reads it.

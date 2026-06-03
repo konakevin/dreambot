@@ -12,7 +12,7 @@
  *   2. One-shot guard (users.first_dream_completed_at)
  *   3. Derive persona + pick medium + pick vibe (firstDreamPicker)
  *   4. Describe undescribed cast photos via Llama Vision
- *   5. Lock composition + compositionMode + includeObject from persona config
+ *   5. Lock composition + compositionMode from persona config
  *   6. assembleScene() with always-on first chosen location
  *   7. Build Sonnet brief (one of 3 templates per persona)
  *   8. Sonnet → 70-100 word Flux prompt
@@ -38,7 +38,6 @@ import {
   pickFirstDreamMedium,
   pickFirstDreamVibe,
   pickCompositionMode,
-  rollIncludeObject,
   FirstDreamCastInput,
 } from '../_shared/firstDreamPicker.ts';
 import { PERSONA_COMPOSITION, FirstDreamPersona } from '../_shared/firstDream.ts';
@@ -216,9 +215,9 @@ Deno.serve(async (req) => {
   }
 
   // ── Persona-locked composition knobs ───────────────────────────────────
+  // (Object roll removed 2026-06-02 with the objects feature rip-out.)
   const personaConfig = PERSONA_COMPOSITION[persona];
   const compositionMode = pickCompositionMode(persona);
-  const includeObject = rollIncludeObject(persona);
   const composition = personaConfig.composition;
 
   // Cast selection (deterministic per persona)
@@ -248,17 +247,11 @@ Deno.serve(async (req) => {
   }
 
   // ── Always include user's first chosen location ────────────────────────
-  const seeds = profile.dream_seeds ?? { characters: [], places: [], things: [] };
+  const seeds = profile.dream_seeds ?? { characters: [], places: [] };
   const userPlace = seeds.places && seeds.places.length > 0 ? seeds.places[0] : undefined;
 
-  // Object: persona-configured percentage
-  let userThing: string | undefined;
-  if (includeObject) {
-    const thingsPool = [...(seeds.things ?? []), ...(seeds.characters ?? [])];
-    if (thingsPool.length > 0) {
-      userThing = thingsPool[Math.floor(Math.random() * thingsPool.length)];
-    }
-  }
+  // (Object roll removed 2026-06-02 with the whole objects feature. See
+  // project_objects_removed_2026-06-02 memory.)
 
   // ── Location card (cinematic phrases, fusion settings, tags) ───────────
   const locationCard =
@@ -306,9 +299,7 @@ Deno.serve(async (req) => {
     faceSwapEligible,
     compositionMode,
     includeLocation: !!userPlace,
-    includeObject: !!userThing,
     userPlace,
-    userThing,
     locationCard: locationCard ?? undefined,
     castGender,
     moodAxis: moods,
@@ -496,7 +487,6 @@ Output ONLY the prompt.`;
     is_dual_face_swap: isDualFaceSwap,
     face_swap_eligible: faceSwapEligible,
     user_place: userPlace ?? null,
-    user_thing: userThing ?? null,
     cast: selectedCast.map((c) => ({
       role: c.role,
       thumb_url: c.thumb_url,

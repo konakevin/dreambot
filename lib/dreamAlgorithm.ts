@@ -3,12 +3,12 @@
  *
  * Independent rolls (not path-based):
  *   Character: 50% (face swap when medium supports it)
- *   Location:  60% (from user's dream_seeds.places)
- *   Object:    50% (from user's dream_seeds.things + characters)
+ *   Location:  always included (from user's dream_seeds.places)
  *
- * Non-character dreams: 15% pure scene, 85% roll loc/obj with guard.
- * Non-character composition: 70% pure_scene, 30% epic_tiny (anonymous silhouette).
+ * (Object roll was removed 2026-06-02 with the whole objects feature —
+ * see project_objects_removed_2026-06-02 memory.)
  *
+ * Non-character composition: pure_scene with the user's location.
  * Face-swap mediums: single cast member per dream (50% self, 25% +1, 25% pet).
  * Non-face-swap mediums: 1-3 cast members rendered stylized.
  */
@@ -48,8 +48,6 @@ export interface DreamRoll {
   castMembers: CastMember[];
   /** Whether to include a personal location in the scene */
   includeLocation: boolean;
-  /** Whether to include a personal object in the scene */
-  includeObject: boolean;
 }
 
 // ── Algorithm ──────────────────────────────────────────────────────────
@@ -99,20 +97,10 @@ export function rollDream(
   // ── Step 2: Location — ALWAYS included for personalization ──
   const includeLocation = true;
 
-  // ── Step 3: Object roll (50%) ──
-  let includeObject = Math.random() < 0.5;
+  // (Step 3 — object roll — removed 2026-06-02 with the whole objects
+  // feature. The location-only personalization remains.)
 
-  // ── Step 4: Non-character path logic ──
-  // Location is always true (Step 2), so the non-character path always includes
-  // location. The only remaining choice is whether to also include an object.
-  if (!includeCharacter) {
-    const pureSceneRoll = Math.random();
-    if (pureSceneRoll < 0.15) {
-      includeObject = false;
-    }
-  }
-
-  // ── Step 5: Cast selection ──
+  // ── Step 4: Cast selection ──
   let castMembers: CastMember[] = [];
 
   if (includeCharacter) {
@@ -165,7 +153,7 @@ export function rollDream(
     }
   }
 
-  // ── Step 6: Composition ──
+  // ── Step 5: Composition ──
   // Scene-only mediums are pinned to pure_scene — even epic_tiny would put
   // a silhouette in the frame, which breaks the medium's contract (e.g.,
   // NASA astrophotography has no human silhouettes anywhere).
@@ -174,22 +162,18 @@ export function rollDream(
   if (medium.isSceneOnly) {
     composition = 'pure_scene';
   } else if (!includeCharacter) {
-    if (!includeLocation && !includeObject) {
-      composition = 'pure_scene';
-    } else {
-      composition = Math.random() < 0.7 ? 'pure_scene' : 'epic_tiny';
-    }
+    // Location is always true at this point; non-character paths land on
+    // pure_scene most of the time with an occasional epic_tiny silhouette.
+    composition = Math.random() < 0.7 ? 'pure_scene' : 'epic_tiny';
   } else if (medium.isCharacterOnly || medium.faceSwaps) {
     composition = 'character';
   } else if (castMembers.length >= 2) {
-    // Dual+ cast always uses character composition so both members are
-    // visible. Epic_tiny shrinks them to specks or drops them entirely.
     composition = 'character';
   } else {
     composition = Math.random() < 0.6 ? 'character' : 'epic_tiny';
   }
 
-  // ── Step 7: Composition mode roll ──
+  // ── Step 6: Composition mode roll ──
   const COMPOSITION_WEIGHTS: [CompositionMode, number][] = [
     ['balanced', 25],
     ['open_vista', 20],
@@ -237,19 +221,14 @@ export function rollDream(
   if (includeCharacter) {
     const parts = ['char'];
     if (includeLocation) parts.push('loc');
-    if (includeObject) parts.push('obj');
     nightlyPath = parts.join('_');
-  } else if (!includeLocation && !includeObject) {
+  } else if (!includeLocation) {
     nightlyPath = 'pure';
   } else {
-    const parts: string[] = [];
-    if (includeLocation) parts.push('loc');
-    if (includeObject) parts.push('obj');
-    parts.push(composition === 'epic_tiny' ? 'epic_tiny' : 'pure');
-    nightlyPath = parts.join('_');
+    nightlyPath = composition === 'epic_tiny' ? 'loc_epic_tiny' : 'loc_pure';
   }
 
-  return { nightlyPath, composition, compositionMode, castMembers, includeLocation, includeObject };
+  return { nightlyPath, composition, compositionMode, castMembers, includeLocation };
 }
 
 // ── Legacy path handler for backwards compat ──────────────────────────
@@ -261,30 +240,20 @@ function rollLegacyPath(
   forceCastRole: string | null | undefined,
   findRole: (r: string) => CastMember | undefined
 ): DreamRoll {
+  // Object roll removed 2026-06-02 — legacy paths now collapse to
+  // location-on/character-on/off booleans only.
   let includeCharacter = false;
   let includeLocation = false;
-  let includeObject = false;
 
   if (path === 'personal_cast') {
     includeCharacter = true;
     includeLocation = true;
-    includeObject = Math.random() < 0.5;
-    if (!includeLocation && !includeObject) {
-      if (Math.random() < 0.5) includeLocation = true;
-      else includeObject = true;
-    }
   } else if (path === 'personal_scene') {
     includeCharacter = false;
     includeLocation = true;
-    includeObject = Math.random() < 0.5;
-    if (!includeLocation && !includeObject) {
-      if (Math.random() < 0.5) includeLocation = true;
-      else includeObject = true;
-    }
   } else {
     includeCharacter = true;
     includeLocation = true;
-    includeObject = Math.random() < 0.3;
   }
 
   if (describedCast.length === 0) includeCharacter = false;
@@ -324,6 +293,5 @@ function rollLegacyPath(
     compositionMode: 'balanced' as CompositionMode,
     castMembers,
     includeLocation,
-    includeObject,
   };
 }

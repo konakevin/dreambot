@@ -44,18 +44,8 @@ export interface LocationCardData {
   fusion_settings: Record<string, string[]>;
 }
 
-export interface ObjectCardData {
-  tags: string[];
-  visual_forms: string[];
-  signature_details: string[];
-  interaction_modes: string[];
-  environment_bindings: string[];
-  role_options: string[];
-  fusion_forms: Record<string, string[]>;
-  soft_presence_forms: string[];
-  faceswap_forbidden: string[];
-  faceswap_safe_positive: string[];
-}
+// ObjectCardData interface removed 2026-06-02 — the entire objects /
+// object_cards system was ripped out. See project_objects_removed_2026-06-02.
 
 type CompositionMode =
   | 'balanced'
@@ -136,11 +126,8 @@ interface SceneOptions {
   faceSwapEligible: boolean;
   compositionMode?: CompositionMode;
   includeLocation: boolean;
-  includeObject: boolean;
   userPlace?: string;
-  userThing?: string;
   locationCard?: LocationCardData;
-  objectCard?: ObjectCardData;
   castGender?: 'male' | 'female';
   moodAxis?: {
     peaceful_chaotic: number;
@@ -661,51 +648,8 @@ export function assembleScene(opts: SceneOptions): string {
     settingText = setting ? setting.text : 'vast cinematic landscape';
   }
 
-  // ── Object injection via card or fallback ──
-  let objectBlock = '';
-
-  if (opts.includeObject && opts.userThing) {
-    if (opts.objectCard) {
-      const oc = opts.objectCard;
-      const softRoll = rand();
-
-      if (softRoll < 0.3 && oc.soft_presence_forms && oc.soft_presence_forms.length > 0) {
-        // 30% symbolic: indirect appearance
-        objectBlock = pickOne(oc.soft_presence_forms, rand);
-      } else {
-        // 70% literal: pick genre-appropriate form + role + binding
-        const genreForms =
-          oc.fusion_forms && oc.fusion_forms[genre] && oc.fusion_forms[genre].length > 0
-            ? oc.fusion_forms[genre]
-            : oc.visual_forms;
-        const form = genreForms.length > 0 ? pickOne(genreForms, rand) : opts.userThing;
-        const binding =
-          oc.environment_bindings.length > 0 ? pickOne(oc.environment_bindings, rand) : '';
-        const role = oc.role_options.length > 0 ? pickOne(oc.role_options, rand) : '';
-
-        // Placement roll: 50% foreground, 35% midground, 15% background
-        const placementRoll = rand();
-        const placement =
-          placementRoll < 0.5 ? 'foreground' : placementRoll < 0.85 ? 'midground' : 'background';
-
-        objectBlock = placement + ' object: ' + form;
-        if (binding) objectBlock += ', ' + binding;
-        if (role) objectBlock += ', ' + role;
-
-        // Face-swap safety
-        if (opts.faceSwapEligible) {
-          if (oc.faceswap_safe_positive && oc.faceswap_safe_positive.length > 0) {
-            objectBlock += ', ' + pickOne(oc.faceswap_safe_positive, rand);
-          }
-          if (oc.faceswap_forbidden && oc.faceswap_forbidden.length > 0) {
-            objectBlock += ', ' + oc.faceswap_forbidden.join(', ');
-          }
-        }
-      }
-    } else {
-      objectBlock = opts.userThing + ' prominent in the scene';
-    }
-  }
+  // (Object injection block removed 2026-06-02 with the whole objects
+  // feature. The scene now composes from location + axes only.)
 
   // Build the scene description
   const pieces: string[] = [settingText];
@@ -716,7 +660,6 @@ export function assembleScene(opts: SceneOptions): string {
   pieces.push(lighting.text, foreground.text, midground.text, background.text);
 
   if (signatureText) pieces.push(signatureText);
-  if (objectBlock) pieces.push(objectBlock);
 
   if (opts.faceSwapEligible) {
     // Face-swap: controlled DOF, subject scale, anti-wide negatives

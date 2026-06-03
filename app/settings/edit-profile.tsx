@@ -59,7 +59,6 @@ interface DrillRow {
 const DREAM_IDENTITY_ROWS: DrillRow[] = [
   { icon: 'options-outline', label: 'Mood', route: '/settings/mood' },
   { icon: 'location-outline', label: 'Locations', route: '/settings/locations' },
-  { icon: 'cube-outline', label: 'Objects', route: '/settings/objects' },
 ];
 
 export default function EditProfileScreen() {

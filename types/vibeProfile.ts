@@ -23,14 +23,25 @@ export interface MoodAxes {
   realistic_surreal: number;
 }
 
-/** Dream seeds — three categories of ingredients the engine mashes up */
+/**
+ * Dream seeds — places where the user's nightly + first dreams are set.
+ *
+ * `characters` is vestigial — the cast lives in `dream_cast` (richer
+ * photo-described entries) and nothing reads `characters` post-2026-05.
+ * Kept on the type so existing recipes deserialize without explosion;
+ * the engine ignores it.
+ *
+ * `things` (personal-anchor objects) was removed 2026-06-02 — the
+ * onboarding Objects step, the engine's object roll + object_card
+ * compat filter, and the underlying object_cards table were all ripped
+ * out at once. See project_objects_removed_2026-06-02 memory + the
+ * migration that drops dream_seeds.things + object_cards table.
+ */
 export interface DreamSeeds {
-  /** Who shows up — my cat, astronauts, tiny monsters, grandma */
+  /** Vestigial — nothing reads this post-2026-05; cast lives in dream_cast */
   characters: string[];
   /** Where dreams happen — Disneyland, abandoned malls, Tokyo at night */
   places: string[];
-  /** Objects that appear, transform, or become something else — donuts, guitars, neon signs */
-  things: string[];
 }
 
 /** Relationship type for the +1 cast member — affects how they appear in dreams */
@@ -81,7 +92,6 @@ export interface VibeProfile {
 export const DEFAULT_DREAM_SEEDS: DreamSeeds = {
   characters: [],
   places: [],
-  things: [],
 };
 
 export const DEFAULT_VIBE_PROFILE: VibeProfile = {

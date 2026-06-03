@@ -46,7 +46,7 @@ DreamBot is an AI-powered dream image generator for iOS. Users build a "Vibe Pro
 The dream engine has evolved beyond the legacy two-pass `vibeEngine.ts`. Current flow for user-initiated dreams (the `generate-dream` Edge Function):
 
 1. **Resolve medium + vibe** from `dream_mediums` / `dream_vibes` DB tables (`_shared/dreamStyles.ts` with caching).
-2. **Resolve cast + dream seeds** — load the user's `dream_cast` rows (self / plus_one photos + descriptions) and `dream_seeds.places[] / things[]` (curated location + object selections).
+2. **Resolve cast + dream seeds** — load the user's `dream_cast` rows (self / plus_one photos + descriptions) and `dream_seeds.places[]` (curated location selections; the `things[]` / objects half was ripped out 2026-06-02 — see `project_objects_removed_2026-06-02` memory).
 3. **Roll the scene** (`_shared/dreamAlgorithm.ts:rollDream()`) — picks one of three composition paths based on context (cast+location, location/object only, cast in random scene). Pulls biome config (`_shared/biomeAxes.ts`) for time/weather/camera/phenomena axes per medium+vibe.
 4. **Detect intent** — `selfInsertDetector` ("put me in...") and `dualActionDetector` (multi-character) route to specialized brief builders (`dualBriefBuilder` for two-person renders).
 5. **Build a Sonnet brief** (`_shared/recipeBuilder.ts` + `sceneEngine.ts`) — structured prompt that includes scene DNA, axes, character slots, medium directive, vibe directive, personal anchors, optional chaos layer.
@@ -188,18 +188,17 @@ App → RevenueCat SDK → Apple payment → RevenueCat webhook → `revenuecat-
 
 ---
 
-## Onboarding (8 steps)
+## Onboarding (5 steps)
+
+Steps 2 (Mediums) + 3 (Vibes) were removed when Kevin pivoted away from user-curated taste (the nightly engine rolls its own; Create exposes the full catalog every render). Step 6 (Objects) was ripped out 2026-06-02 along with the whole objects/things personal-anchor system — see `project_objects_removed_2026-06-02` memory + migration 216.
 
 1. **Welcome** — intro
-2. **Mediums** — pick art styles (min 2) from DB-driven pill grid (`dream_mediums`)
-3. **Vibes** — pick aesthetics (min 3) from DB-driven pill grid (`dream_vibes`)
+2. **Locations** — curated 63 location cards (`location_cards` DB table). Starter packs, category filters. Min 3, max 10. Stored as `dream_seeds.places[]`.
+3. **Dream Cast** — photo upload for self + plus_one. Llama Vision (`describe-photo` Edge Function) generates descriptions. Relationship picker for +1.
 4. **Mood Sliders** — 4 bipolar sliders
-5. **Locations** — curated 63 location cards (`location_cards` DB table). Starter packs, category filters. Min 3, max 10. Stored as `dream_seeds.places[]`.
-6. **Objects** — curated 58 object cards (`object_cards`). Min 3, max 10. Stored as `dream_seeds.things[]`.
-7. **Dream Cast** — photo upload for self + plus_one. Llama Vision (`describe-photo` Edge Function) generates descriptions. Relationship picker for +1.
-8. **Reveal** — first-dream generation via the `nightly-dreams` engine with a forced cast face swap (the user is cast into one of their places), post/skip, 25-sparkle welcome, welcome notification. See the First dream note under Generation Architecture.
+5. **Reveal** — first-dream generation via the `nightly-dreams` engine with a forced cast face swap (the user is cast into one of their places), post/skip, 25-sparkle welcome, welcome notification. See the First dream note under Generation Architecture.
 
-**Architecture rule:** locations and objects are selected from pre-curated cards with rich essence data (palette, atmosphere, architecture, light signature, fusion settings, iconic spots). NEVER free-text. The dream engine picks randomly from the user's selections — no smart selection logic in the engine.
+**Architecture rule:** locations are selected from pre-curated cards with rich essence data (palette, atmosphere, architecture, light signature, fusion settings, iconic spots). NEVER free-text. The dream engine picks randomly from the user's selections — no smart selection logic in the engine.
 
 Profile saves on first dream generation (not just on post).
 
@@ -444,10 +443,10 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 - **`dream_mediums`** — art style definitions (key, label, directive, flux_fragment, kontext_directive, is_active, is_bot_only, is_character_only, face_swaps, character_render_mode, sort_order, allowed_models)
 - **`dream_vibes`** — vibe definitions (key, label, directive, sort_order, is_active)
 - **`dream_cast`** — user's cast photos (cast_role, photo_url, description, relationship)
-- **`dream_seeds`** — user's selected places + things (text[])
+- **`dream_seeds`** — user's selected places (text[]). `things` column dropped 2026-06-02 with the objects feature; `characters` is vestigial (cast lives in `dream_cast`).
 - **`location_cards`** — 63 curated locations (palette, atmosphere, architecture, light_signature, texture_details, cinematic_phrases, fusion_settings, biome_config, is_approved)
 - **`location_iconic_spots`** — per-location signature spots
-- **`object_cards`** — 58 curated objects (visual_forms, material_textures, signature_details, scale_contexts, role_options, soft_presence_forms, faceswap_forbidden)
+- ~~`object_cards`~~ — DROPPED 2026-06-02, migration 216, see `project_objects_removed_2026-06-02` memory
 - **`bot_seeds`** — bot-specific seeds with `used_at` lifecycle
 - **`nightly_seeds`** — 8 pools × 100 slotted templates for user nightly dreams. Permanent, no usage tracking.
 - **`dream_templates`** — LEGACY (not read by any code, will be dropped)

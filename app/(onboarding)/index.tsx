@@ -13,7 +13,6 @@ import { colors } from '@/constants/theme';
 import { WelcomeStep } from '@/components/onboarding/WelcomeStep';
 import { MoodSlidersStep } from '@/components/onboarding/MoodSlidersStep';
 import { LocationPickerStep } from '@/components/onboarding/LocationPickerStep';
-import { ObjectPickerStep } from '@/components/onboarding/ObjectPickerStep';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 
@@ -29,15 +28,16 @@ interface StepConfig {
 
 // Mediums + vibes picker steps removed when Kevin pivoted away from user-
 // curated taste (the nightly engine rolls its own and the Create screen
-// exposes the full catalog every render). The remaining sequence shapes
-// the user's personal anchors + dream cast + mood — what the engine
-// genuinely personalizes from — and ends on the first-dream reveal.
+// exposes the full catalog every render). Objects step removed 2026-06-02
+// (ripped out of the engine entirely — see project_objects_removed_2026-06-02
+// memory). The remaining sequence shapes the user's locations + dream cast
+// + mood — what the engine genuinely personalizes from — and ends on the
+// first-dream reveal.
 const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep },
   { key: 'locations', component: LocationPickerStep },
   { key: 'cast', component: DreamCastStep },
   { key: 'personality', component: MoodSlidersStep },
-  { key: 'objects', component: ObjectPickerStep },
   { key: 'reveal', component: RevealStep, skipInEdit: true },
 ];
 

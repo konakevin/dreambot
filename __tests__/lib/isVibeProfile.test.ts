@@ -30,7 +30,7 @@ describe('isVibeProfile', () => {
           minimal_maximal: 0.5,
           realistic_surreal: 0.5,
         },
-        dream_seeds: { characters: [], places: [], things: [] },
+        dream_seeds: { characters: [], places: [] },
         dream_cast: [],
         avoid: ['text', 'watermarks'],
       };

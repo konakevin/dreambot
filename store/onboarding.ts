@@ -31,7 +31,8 @@ interface OnboardingStore {
   // Personality
   setMoodAxis: (axis: keyof MoodAxes, value: number) => void;
 
-  // Dream seeds (characters, places, things)
+  // Dream seeds (places — `characters` is vestigial; objects/things removed
+  // 2026-06-02, see project_objects_removed_2026-06-02 memory)
   addSeed: (category: SeedCategory, value: string) => void;
   removeSeed: (category: SeedCategory, value: string) => void;
 
@@ -39,13 +40,10 @@ interface OnboardingStore {
   setCastMember: (member: DreamCastMember) => void;
   removeCastMember: (role: DreamCastMember['role']) => void;
 
-  // Location/object toggles (for curated pickers)
+  // Location toggles (curated picker)
   toggleLocation: (key: string) => void;
-  toggleObject: (key: string) => void;
   addLocationPack: (keys: string[]) => void;
-  addObjectPack: (keys: string[]) => void;
   toggleAllLocations: (keys: string[]) => void;
-  toggleAllObjects: (keys: string[]) => void;
 
   // Avoid list
   addAvoid: (value: string) => void;
@@ -132,17 +130,6 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       },
     })),
 
-  toggleObject: (key) =>
-    set((s) => ({
-      profile: {
-        ...s.profile,
-        dream_seeds: {
-          ...s.profile.dream_seeds,
-          things: toggle(s.profile.dream_seeds.things, key),
-        },
-      },
-    })),
-
   addLocationPack: (keys) =>
     set((s) => {
       const current = s.profile.dream_seeds.places;
@@ -167,34 +154,6 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
         profile: {
           ...s.profile,
           dream_seeds: { ...s.profile.dream_seeds, places: newPlaces },
-        },
-      };
-    }),
-
-  addObjectPack: (keys) =>
-    set((s) => {
-      const current = s.profile.dream_seeds.things;
-      const newKeys = keys.filter((k) => !current.includes(k));
-      if (newKeys.length === 0) return s;
-      return {
-        profile: {
-          ...s.profile,
-          dream_seeds: { ...s.profile.dream_seeds, things: [...current, ...newKeys].slice(0, 25) },
-        },
-      };
-    }),
-
-  toggleAllObjects: (keys) =>
-    set((s) => {
-      const current = s.profile.dream_seeds.things;
-      const allSelected = keys.every((k) => current.includes(k));
-      const newThings = allSelected
-        ? current.filter((k) => !keys.includes(k))
-        : [...current, ...keys.filter((k) => !current.includes(k))].slice(0, 25);
-      return {
-        profile: {
-          ...s.profile,
-          dream_seeds: { ...s.profile.dream_seeds, things: newThings },
         },
       };
     }),

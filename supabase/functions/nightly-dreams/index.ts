@@ -24,7 +24,7 @@ import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_sh
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
-import { getLocationCard, normalizeName } from '../_shared/essenceCards.ts';
+import { getLocationCard } from '../_shared/essenceCards.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
@@ -256,31 +256,19 @@ Deno.serve(async (req) => {
       .map((l) => (l.rolled_axes as Record<string, unknown>)?.vibe)
       .filter((v): v is string => typeof v === 'string' && v.length > 0);
     const profilePlaces = nightlyProfile.dream_seeds?.places ?? [];
-    const profileThings = [
-      ...(nightlyProfile.dream_seeds?.things ?? []),
-      ...(nightlyProfile.dream_seeds?.characters ?? []),
-    ];
     const recentPlaces = (recentLogs ?? [])
       .map((l) => {
         const prompt = (l.enhanced_prompt || '').toLowerCase();
         return profilePlaces.find((p) => prompt.includes(p.toLowerCase()));
       })
       .filter((p): p is string => !!p);
-    const recentThings = (recentLogs ?? [])
-      .map((l) => {
-        const prompt = (l.enhanced_prompt || '').toLowerCase();
-        return profileThings.find((t) => prompt.includes(t.toLowerCase()));
-      })
-      .filter((t): t is string => !!t);
     console.log(
       '[nightly-dreams] recent mediums:',
       recentMediums.slice(0, 5).join(', '),
       '| recent vibes:',
       recentVibes.slice(0, 5).join(', '),
       '| recent places:',
-      recentPlaces.slice(0, 5).join(', '),
-      '| recent things:',
-      recentThings.slice(0, 5).join(', ')
+      recentPlaces.slice(0, 5).join(', ')
     );
 
     // Filter out mediums marked nightly_skip in the DB (e.g., photography —
@@ -319,7 +307,7 @@ Deno.serve(async (req) => {
     );
 
     // Step 1: Pick a mood-weighted scene template from 6,200+ Sonnet-generated DB templates
-    const seeds = nightlyProfile.dream_seeds ?? { characters: [], places: [], things: [] };
+    const seeds = nightlyProfile.dream_seeds ?? { characters: [], places: [] };
     const moods = nightlyProfile.moods ?? {
       peaceful_chaotic: 0.5,
       cute_terrifying: 0.3,
@@ -407,7 +395,6 @@ Deno.serve(async (req) => {
       compositionMode,
       castMembers: selectedCast,
       includeLocation,
-      includeObject,
     } = dreamRoll;
     // Character renders MUST be stylized art mediums — realistic mediums
     // (hyperreal / render / photography) push Flux into "generic adult"
@@ -466,9 +453,7 @@ Deno.serve(async (req) => {
       '| cast:',
       selectedCast.map((m) => m.role),
       '| location:',
-      includeLocation,
-      '| object:',
-      includeObject
+      includeLocation
     );
 
     // Assemble scene from modular pools (Scene DNA engine)
@@ -486,18 +471,6 @@ Deno.serve(async (req) => {
       includeLocation && placePool.length > 0
         ? placePool[Math.floor(Math.random() * placePool.length)]
         : undefined;
-    // Same recency treatment on objects — rotates through user's things so
-    // all of them get a turn, not just the lucky first-pick ones.
-    let thingsPool = [...seeds.things, ...seeds.characters];
-    if (thingsPool.length > 0 && recentThings.length > 0) {
-      const excludeSet = new Set(recentThings);
-      const filtered = thingsPool.filter((t: string) => !excludeSet.has(t));
-      if (filtered.length >= 1) thingsPool = filtered;
-    }
-    let userThing =
-      includeObject && thingsPool.length > 0
-        ? thingsPool[Math.floor(Math.random() * thingsPool.length)]
-        : undefined;
 
     // Fetch location essence card (lazy-generates on first encounter)
     let locationCard: LocationCard | null = null;
@@ -510,90 +483,14 @@ Deno.serve(async (req) => {
       }
     }
 
-    // ── Object-location compatibility filter ──────────────────────────
-    // If the randomly-picked object's tags clash with the location's tags,
-    // re-select from compatible pool items. 12% chaos gate preserves
-    // unexpected combos. Fully fail-safe: errors keep the original pick.
-    const COMPAT_CONFLICTS: Record<string, string[]> = {
-      snow: ['tropical', 'desert', 'underwater'],
-      water: ['desert', 'space'],
-      ocean: ['desert', 'space', 'underground'],
-      fire: ['underwater', 'snow'],
-      plant: ['space', 'underwater'],
-    };
-
-    if (
-      userThing &&
-      locationCard &&
-      locationCard.tags &&
-      locationCard.tags.length > 0 &&
-      Math.random() >= 0.12
-    ) {
-      try {
-        const normalizedPool = thingsPool.map((t: string) => normalizeName(t));
-        const { data: tagRows } = await supabase
-          .from('object_cards')
-          .select('name, tags')
-          .in('name', normalizedPool)
-          .eq('is_approved', true);
-
-        if (tagRows && tagRows.length > 0) {
-          const tagMap = new Map<string, string[]>();
-          for (const row of tagRows) {
-            tagMap.set(row.name, row.tags ?? []);
-          }
-          const locTags = new Set(locationCard.tags);
-
-          const isCompat = (objName: string): boolean => {
-            const oTags = tagMap.get(normalizeName(objName)) ?? [];
-            for (const oTag of oTags) {
-              const banned = COMPAT_CONFLICTS[oTag];
-              if (!banned) continue;
-              for (const b of banned) {
-                if (locTags.has(b)) return false;
-              }
-            }
-            return true;
-          };
-
-          if (!isCompat(userThing)) {
-            const compatible = thingsPool.filter((t: string) => isCompat(t));
-            if (compatible.length > 0) {
-              const originalThing = userThing;
-              userThing = compatible[Math.floor(Math.random() * compatible.length)];
-              console.log(
-                `[nightly-dreams] Compat filter: "${originalThing}" -> "${userThing}"`,
-                `| loc: [${locationCard.tags.join(',')}]`,
-                `| ${compatible.length}/${thingsPool.length} compatible`
-              );
-              logAxes.compatFilter = {
-                original: originalThing,
-                replacement: userThing,
-                locationTags: locationCard.tags,
-                compatibleCount: compatible.length,
-                poolSize: thingsPool.length,
-              };
-            } else {
-              console.log(
-                `[nightly-dreams] Compat filter: no alternatives, keeping "${userThing}"`
-              );
-              logAxes.compatFilter = { original: userThing, replacement: null };
-            }
-          }
-        }
-      } catch (compatErr) {
-        console.warn('[nightly-dreams] Compat filter error:', (compatErr as Error).message);
-        fallbackReasons.push(`compat_filter_error:${(compatErr as Error).message}`);
-      }
-    }
+    // (Object roll + object-location compat filter removed 2026-06-02 with
+    // the whole objects feature. See project_objects_removed_2026-06-02.)
 
     console.log(
       '[nightly-dreams] Essence cards | place:',
       userPlace ?? 'none',
       '| locationCard:',
-      locationCard ? locationCard.cinematic_phrases.length + ' phrases' : 'null',
-      '| thing:',
-      userThing ?? 'none'
+      locationCard ? locationCard.cinematic_phrases.length + ' phrases' : 'null'
     );
     lap('essence-cards');
 
@@ -747,9 +644,7 @@ Deno.serve(async (req) => {
       faceSwapEligible,
       compositionMode,
       includeLocation,
-      includeObject,
       userPlace,
-      userThing,
       locationCard: locationCard ?? undefined,
       castGender,
       moodAxis: moods,
