@@ -116,20 +116,21 @@ export default function WelcomeScreen() {
           black would stand out more") so the lavender base reads more
           clearly behind the new pure-black social buttons. */}
       <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
-        {/* Main purple wash — clean 2-stop, no mid-gradient peak (the 3-stop
-            version showed a faintly visible "brightest band" across the
-            middle). Top stays a touch quieter than bottom so the wordmark
-            keeps its contrast; bottom is the warmer pocket where the
+        {/* Main purple wash — clean 2-stop with a wide alpha range. The
+            previous narrow range (0.25→0.40) made the screen feel flat;
+            this widens the contrast (0.10 top → 0.55 bottom) so the screen
+            has real top-to-bottom progression without the banding the
+            3-stop version had. Top stays subtle so the wordmark keeps its
+            contrast; the bottom is the brighter "focal pocket" where the
             buttons sit. */}
         <LinearGradient
-          colors={['rgba(167,139,250,0.25)', 'rgba(167,139,250,0.40)']}
+          colors={['rgba(167,139,250,0.10)', 'rgba(167,139,250,0.55)']}
           start={{ x: 0.4, y: 0 }}
           end={{ x: 0.6, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
-        {/* Accent pink — start anchored to BOTTOM-right (y:0.7, not 0.4) so
-            the brightest pink kiss actually lands behind the buttons, not
-            next to the wordmark. Fades clear toward the upper-left. */}
+        {/* Accent pink anchored to BOTTOM-right so the brightest pink kiss
+            lands behind the buttons. Fades clear toward upper-left. */}
         <LinearGradient
           colors={['rgba(249,168,212,0.32)', 'rgba(249,168,212,0)']}
           locations={[0, 0.8]}
