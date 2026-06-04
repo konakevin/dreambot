@@ -482,8 +482,7 @@ export function RevealStep({ onBack }: Props) {
           <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
           <Text style={s.bigTitle}>Time for your first dream!</Text>
           <Text style={s.centeredSub}>
-            Your DreamBot’s got your taste locked in. Tap below and see what tumbles out of that
-            little robot head.
+            Your DreamBot’s got your taste locked in. Tap below to see what it dreams up!
           </Text>
           <TouchableOpacity
             style={[s.createButton, { alignSelf: 'stretch', marginTop: 8 }]}
