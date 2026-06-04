@@ -84,12 +84,6 @@ const SECTION_META: SectionMeta[] = [
     icon: 'leaf-outline',
     description: 'Mountains, canyons, and wild landscapes',
   },
-  {
-    id: 'fantasy_worlds',
-    title: 'Fantasy Worlds',
-    icon: 'sparkles-outline',
-    description: 'Enchanted, gothic, and storybook places',
-  },
 ];
 
 interface Props {
@@ -224,7 +218,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         <View style={s.hero}>
           <Text style={shared.heroTitle}>Where do you want to dream?</Text>
           <Text style={shared.heroSubtitle}>
-            Real places, fantasy worlds, sci-fi cities. Pick the ones you love.
+            Anywhere you’ve loved, or anywhere you’d love to go.
           </Text>
         </View>
 
