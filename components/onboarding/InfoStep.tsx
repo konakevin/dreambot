@@ -138,8 +138,11 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  // Mascot dimensions match WelcomeStep (160×160 / radius 32) so the
+  // custom per-step mascot art reads at the same size as the icon mascot
+  // on the very first screen — no visual size shift between pages.
   mascotWrap: { alignItems: 'center', marginBottom: 20 },
-  mascot: { width: 130, height: 130, borderRadius: 28 },
+  mascot: { width: 160, height: 160, borderRadius: 32 },
   emoji: { fontSize: 64, marginBottom: 18, textAlign: 'center' },
   // 4:5 aspect matches the cropped Create-screen capture used today; if a
   // future step ships a full phone-bezel screenshot, swap to 9/16 or make
