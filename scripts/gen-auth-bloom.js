@@ -23,23 +23,32 @@ const W = 1080;
 const H = 2340;
 const OUT = path.resolve(__dirname, '..', 'Development/apps/dreambot/assets/images/auth-bloom.png');
 
-// Single radial gradient that progresses through ALL THREE brand stops
-// — moon purple → cloud pink → star teal — exactly like the DreamBot
-// wordmark gradient, just faded out really light and soft so it reads
-// as ambient atmosphere instead of a hard color band.
-// Kevin's brochure observation: "it looks like the gradient on the
-// dreambot-web is the same colors as the logo gradient, just faded out
-// really light and soft."
+// Soft lavender-haze daydream vibe — matches the dreambotapp.com Hero's
+// `gradient-hero` CSS EXACTLY:
+//   radial-gradient(ellipse 80% 60% at 50% 0%, rgba(167,139,250,0.18), transparent 60%),
+//   radial-gradient(ellipse 60% 50% at 80% 50%, rgba(249,168,212,0.10), transparent 60%),
+//   #0F0F1A
+//
+// Earlier attempts in this branch failed because:
+//   - Including TEAL (#5EEAD4) blends with the dark bg into a sickly
+//     green murk — teal lives in the wordmark only, NOT the bloom.
+//   - Alphas at 0.45-0.75 read as heavy/dystopian; brochure uses
+//     0.18 and 0.10 (very light/airy).
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <defs>
-    <radialGradient id="bloom" cx="50%" cy="20%" r="85%">
-      <stop offset="0%"   stop-color="#A78BFA" stop-opacity="0.60" />
-      <stop offset="35%"  stop-color="#F9A8D4" stop-opacity="0.30" />
-      <stop offset="70%"  stop-color="#5EEAD4" stop-opacity="0.12" />
-      <stop offset="100%" stop-color="#5EEAD4" stop-opacity="0" />
+    <radialGradient id="bloomPurple" cx="50%" cy="0%" rx="80%" ry="60%">
+      <stop offset="0%"   stop-color="#A78BFA" stop-opacity="0.18" />
+      <stop offset="60%"  stop-color="#A78BFA" stop-opacity="0" />
+      <stop offset="100%" stop-color="#A78BFA" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="bloomPink" cx="80%" cy="50%" rx="60%" ry="50%">
+      <stop offset="0%"   stop-color="#F9A8D4" stop-opacity="0.10" />
+      <stop offset="60%"  stop-color="#F9A8D4" stop-opacity="0" />
+      <stop offset="100%" stop-color="#F9A8D4" stop-opacity="0" />
     </radialGradient>
   </defs>
-  <rect width="100%" height="100%" fill="url(#bloom)" />
+  <rect width="100%" height="100%" fill="url(#bloomPurple)" />
+  <rect width="100%" height="100%" fill="url(#bloomPink)" />
 </svg>`;
 
 (async () => {
