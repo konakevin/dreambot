@@ -30,14 +30,16 @@ const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCRE
 
 type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles';
 /**
- * Three-beat education sequence shown over the reveal image. Beat 1 anchors
- * the moment ("this is your first dream"), beat 2 teaches the nightly loop,
- * beat 3 offers the post action. User taps Continue to advance through
- * beats 1→2→3. The "Keep it private" path is intentionally NOT implemented
- * yet — it needs the privacy/visibility migration first (see memory:
- * project_privacy_visibility). Single CTA preserves current behavior.
+ * Reveal overlay: the user already saw the nightly-dream pitch on the
+ * INFO Nightly onboarding screen, so the reveal collapses to a single
+ * beat — a small caption + Post/Skip buttons over the rendered image.
+ * (Previous 3-beat "this is your first dream → this happens every night →
+ * post or skip" sequence was three sequential taps of redundant copy; cut
+ * 2026-06-03.)
+ *
+ * The "Keep it private" path is intentionally NOT implemented yet — needs
+ * the privacy/visibility migration first (memory: project_privacy_visibility).
  */
-type RevealBeat = 1 | 2 | 3;
 
 const BOOT_MESSAGE = 'Your DreamBot is dreaming up something special...';
 
@@ -72,8 +74,6 @@ export function RevealStep({ onBack }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [bootMessage] = useState(BOOT_MESSAGE);
-  // 3-beat education sequence on reveal — starts at beat 1 when dream lands
-  const [revealBeat, setRevealBeat] = useState<RevealBeat>(1);
   const generating = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -566,73 +566,31 @@ export function RevealStep({ onBack }: Props) {
                 backgroundColor: 'rgba(0,0,0,0.65)',
               }}
             />
-            {revealBeat === 1 && (
-              <>
-                <Text style={s.revealTitle}>This is your first dream</Text>
-                <Text style={s.revealBody}>
-                  Your DreamBot dreamed it for you using your taste.{' '}
-                  {activeDream.medium?.replace(/_/g, ' ')} · {activeDream.vibe}
-                </Text>
-                <TouchableOpacity
-                  style={s.createButton}
-                  onPress={() => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setRevealBeat(2);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={s.createButtonText}>Continue</Text>
-                </TouchableOpacity>
-              </>
-            )}
-            {revealBeat === 2 && (
-              <>
-                <Text style={s.revealTitle}>This happens every night</Text>
-                <Text style={s.revealBody}>
-                  Your DreamBot makes a new one while you sleep. Tomorrow morning, it&apos;ll be
-                  waiting.
-                </Text>
-                <TouchableOpacity
-                  style={s.createButton}
-                  onPress={() => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setRevealBeat(3);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={s.createButtonText}>Got it</Text>
-                </TouchableOpacity>
-              </>
-            )}
-            {revealBeat === 3 && (
-              <>
-                <Text style={s.revealTitle}>Your first dream is ready</Text>
-                <Text style={s.revealBody}>
-                  Post it to your feed so people who follow you can see it — or skip. Either way,
-                  it&apos;s saved to your dreams.
-                </Text>
-                <TouchableOpacity
-                  style={s.createButton}
-                  onPress={() => handleCreateBot(true)}
-                  disabled={phase === 'creating'}
-                  activeOpacity={0.7}
-                >
-                  {phase === 'creating' ? (
-                    <ActivityIndicator color="#FFFFFF" />
-                  ) : (
-                    <Text style={s.createButtonText}>Post to my feed</Text>
-                  )}
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={s.secondaryButton}
-                  onPress={() => handleCreateBot(false)}
-                  disabled={phase === 'creating'}
-                  activeOpacity={0.7}
-                >
-                  <Text style={s.secondaryButtonText}>Skip</Text>
-                </TouchableOpacity>
-              </>
-            )}
+            <Text style={s.revealTitle}>Your first dream</Text>
+            <Text style={s.revealBody}>
+              {activeDream.medium?.replace(/_/g, ' ')} · {activeDream.vibe}. Saved to your dreams
+              either way.
+            </Text>
+            <TouchableOpacity
+              style={s.createButton}
+              onPress={() => handleCreateBot(true)}
+              disabled={phase === 'creating'}
+              activeOpacity={0.7}
+            >
+              {phase === 'creating' ? (
+                <ActivityIndicator color="#FFFFFF" />
+              ) : (
+                <Text style={s.createButtonText}>Post to my feed</Text>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={s.secondaryButton}
+              onPress={() => handleCreateBot(false)}
+              disabled={phase === 'creating'}
+              activeOpacity={0.7}
+            >
+              <Text style={s.secondaryButtonText}>Skip</Text>
+            </TouchableOpacity>
           </View>
         </View>
       ) : null}
