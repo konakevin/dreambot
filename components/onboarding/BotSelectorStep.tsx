@@ -59,10 +59,10 @@ export function BotSelectorStep({ onNext, onBack }: Props) {
   return (
     <View style={s.root}>
       <View style={s.header}>
-        <Text style={s.title}>Meet the bots</Text>
+        <Text style={s.title}>What do you want to see?</Text>
         <Text style={s.subtitle}>
-          Each one has its own taste. Follow whoever speaks to you — their dreams will land in your
-          feed.
+          Follow at least one bot to fill your feed. You can follow as many as you want, and tweak
+          who you’re following anytime in settings.
         </Text>
       </View>
 
@@ -88,12 +88,17 @@ export function BotSelectorStep({ onNext, onBack }: Props) {
         </ScrollView>
       )}
 
-      {/* Following any bots is optional — Skip when none, Next when some
-          (same pattern DreamCastStep uses for cast photos). */}
+      {/* Following ≥1 bot is required — Next stays disabled until at
+          least one bot is followed so the user's feed isn't empty on
+          first launch. */}
       <OnboardingFooter
         onNext={handleNext}
         onBack={onBack}
-        nextLabel={followingSet.size === 0 ? 'Skip' : 'Next'}
+        disabled={followingSet.size === 0}
+        counter={
+          followingSet.size === 0 ? 'Pick at least one bot' : `${followingSet.size} following`
+        }
+        counterMet={followingSet.size > 0}
       />
 
       {viewer && (
