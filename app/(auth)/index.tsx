@@ -109,52 +109,20 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* Hazy brand-gradient backdrop — fullscreen bloom, no visible edges.
-          Two FULL-SCREEN LinearGradient layers (no clipped circles) with
-          `locations` controlling soft fade-to-transparent curves. Alpha
-          bumped 2026-06-04 (Kevin: "lighten the purple behind it a bit so
-          black would stand out more") so the lavender base reads more
-          clearly behind the new pure-black social buttons. */}
-      {/* Fake-radial bloom via two perpendicular LinearGradients. RN's
-          expo-linear-gradient has no radial primitive, so we approximate
-          the brochure's `radial-gradient(ellipse at 50% 0%, …)` by
-          stacking:
-            VERTICAL → bright at top, fades to transparent at bottom
-            HORIZONTAL → transparent at edges, bright at center (3-stop)
-          Where they overlap (top-center), both contribute at full alpha
-          → that's the bright bloom origin. Each gradient alone falls off
-          toward its respective edges, so the brightness dissipates
-          smoothly in ALL directions — no visible bands, no clipped halos. */}
-      <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
-        {/* Vertical wash — bright at top, fades to clear at bottom. The
-            'moon' stop of the brand wordmark gradient at low alpha. */}
-        <LinearGradient
-          colors={['rgba(167,139,250,0.45)', 'rgba(167,139,250,0)']}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={StyleSheet.absoluteFillObject}
-        />
-        {/* Horizontal wash — transparent at left/right edges, bright in
-            the center column. Multiplies with the vertical above to give
-            a top-centered bloom that fades in all directions. */}
-        <LinearGradient
-          colors={['rgba(167,139,250,0)', 'rgba(167,139,250,0.30)', 'rgba(167,139,250,0)']}
-          locations={[0, 0.5, 1]}
-          start={{ x: 0, y: 0.5 }}
-          end={{ x: 1, y: 0.5 }}
-          style={StyleSheet.absoluteFillObject}
-        />
-        {/* Small pink-cloud accent in the upper-right quadrant — the
-            'cloud' brand stop, same family. Adds a subtle warmth offset
-            from the pure-purple center so it doesn't feel monotone. */}
-        <LinearGradient
-          colors={['rgba(249,168,212,0.20)', 'rgba(249,168,212,0)']}
-          locations={[0, 0.6]}
-          start={{ x: 0.8, y: 0.1 }}
-          end={{ x: 0.2, y: 0.7 }}
-          style={StyleSheet.absoluteFillObject}
-        />
-      </View>
+      {/* True radial bloom — baked PNG overlay. expo-linear-gradient has
+          no radial primitive (stacking perpendicular linears looks patchy,
+          see commit e807f860), so we pre-render the radial via SVG +
+          sharp (scripts/gen-auth-bloom.js) and overlay the PNG.
+          Gradient progresses through all 3 brand stops at low alpha —
+          moon purple → cloud pink → star teal — same colors as the
+          DreamBot wordmark gradient, just faded soft so it reads as
+          ambient atmosphere. */}
+      <Image
+        source={require('@/assets/images/auth-bloom.png')}
+        style={StyleSheet.absoluteFillObject}
+        contentFit="cover"
+        pointerEvents="none"
+      />
 
       <View className="flex-1 items-center justify-center px-8">
         <Logo />
