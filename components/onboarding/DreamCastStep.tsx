@@ -524,7 +524,10 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         <Text style={shared.heroTitle}>Who&apos;s coming along?</Text>
         <Text style={shared.heroSubtitle}>
           Upload your face and we&apos;ll put YOU into your nightly dreams. Add a +1 and you&apos;ll
-          get scenes of you two together. Optional — but highly recommended.
+          get scenes of you two together.
+        </Text>
+        <Text style={[shared.heroSubtitle, { marginTop: 10 }]}>
+          Optional, but highly recommended! It makes your dreams more personalized, and FUN!
         </Text>
         <View style={{ height: 16 }} />
         {innerSlots}
