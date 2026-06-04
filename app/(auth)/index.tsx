@@ -116,15 +116,25 @@ export default function WelcomeScreen() {
           black would stand out more") so the lavender base reads more
           clearly behind the new pure-black social buttons. */}
       <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
+        {/* Main purple wash — 3-stop gradient redistributes brightness so
+            the peak sits ~60% down (behind the buttons, where contrast helps
+            most) instead of at the top (where it was muddying the wordmark).
+            Quiet at top → peak mid-low → fade to dark at bottom. */}
         <LinearGradient
-          colors={['rgba(167,139,250,0.40)', 'rgba(167,139,250,0.06)']}
-          locations={[0, 1]}
+          colors={[
+            'rgba(167,139,250,0.22)', // quiet at top — wordmark stays legible
+            'rgba(167,139,250,0.50)', // peak behind the buttons
+            'rgba(167,139,250,0.10)', // fade out at bottom
+          ]}
+          locations={[0, 0.6, 1]}
           start={{ x: 0.4, y: 0 }}
           end={{ x: 0.6, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
+        {/* Accent pink wash from bottom-right — slight warmth where the
+            buttons sit, fades toward the upper-left. */}
         <LinearGradient
-          colors={['rgba(249,168,212,0.28)', 'rgba(249,168,212,0)']}
+          colors={['rgba(249,168,212,0.34)', 'rgba(249,168,212,0)']}
           locations={[0, 0.75]}
           start={{ x: 1, y: 0.4 }}
           end={{ x: 0, y: 1 }}
