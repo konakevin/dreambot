@@ -15,13 +15,13 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | Nano Banana        | ✅     | —                  |
 | GPT Image 2        | ✅     | —                  |
 | Flux Dev           | ❌     | dropped 2026-06-01 |
-| Flux 2 Pro         | ✅     | —                  |
+| Flux 2 Pro         | ❌     | dropped 2026-06-04 |
 | Flux 1.1 Pro       | ✅     | —                  |
 | Flux 1.1 Pro Ultra | ✅     | —                  |
 | Flux 2 Flex        | ❌     | dropped 2026-06-01 |
-| Flux 2 Max         | ✅     | —                  |
+| Flux 2 Max         | ❌     | dropped 2026-06-04 |
 
-**Final allowedModels:** 6 — Banana, GPT2, F1.1 Pro Ultra, F1.1 Pro, F2 Pro, F2 Max
+**Final allowedModels:** 4 — Banana, GPT2, F1.1 Pro Ultra, F1.1 Pro
 
 ---
 
@@ -119,15 +119,15 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | Model              | Status | Notes                                                   |
 | ------------------ | ------ | ------------------------------------------------------- |
 | Nano Banana        | ✅     | —                                                       |
-| GPT Image 2        | ✅     | matrix 0/3 — all failed (safety filter); kept per Kevin |
+| GPT Image 2        | ❌     | dropped 2026-06-02 (Kevin)                              |
 | Flux Dev           | ❌     | dropped                                                 |
 | Flux 2 Pro         | ❌     | dropped 2026-06-01 (Kevin)                              |
 | Flux 1.1 Pro       | ✅     | —                                                       |
 | Flux 1.1 Pro Ultra | ✅     | —                                                       |
 | Flux 2 Flex        | ❌     | dropped                                                 |
-| Flux 2 Max         | ✅     | —                                                       |
+| Flux 2 Max         | ❌     | dropped 2026-06-02 (Kevin)                              |
 
-**Final allowedModels:** 5 — Nano Banana, GPT Image 2, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Max.
+**Final allowedModels:** 3 — Nano Banana, Flux 1.1 Pro, Flux 1.1 Pro Ultra.
 
 ---
 
