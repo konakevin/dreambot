@@ -211,15 +211,17 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
 
   return (
     <View style={shared.root}>
+      {/* Sticky header — sits outside the ScrollView so the location grid
+          scrolls underneath it (matches BotSelectorStep's pattern). */}
+      <View style={s.stickyHeader}>
+        <Text style={shared.heroTitle}>Where do you want to dream?</Text>
+        <Text style={shared.heroSubtitle}>Places you love, or anywhere you’d love to go.</Text>
+      </View>
+
       <ScrollView
         contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: 20 }]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={s.hero}>
-          <Text style={shared.heroTitle}>Where do you want to dream?</Text>
-          <Text style={shared.heroSubtitle}>Places you love, or anywhere you’d love to go.</Text>
-        </View>
-
         {sections.map((section) => {
           const isExpanded = expandedSections.has(section.id);
           const visibleItems =
@@ -300,14 +302,20 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
 
 const s = StyleSheet.create({
   scrollContent: {
-    paddingTop: 8,
+    paddingTop: 12,
     // Clear the absolute OnboardingFooter (~126px) so the last row isn't
     // clipped behind it.
     paddingBottom: 150,
     paddingHorizontal: TILE_PADDING,
   },
 
-  hero: { paddingBottom: 20 },
+  // Sticky header that sits above the ScrollView (matches BotSelectorStep).
+  stickyHeader: {
+    paddingHorizontal: TILE_PADDING,
+    paddingTop: 8,
+    paddingBottom: 14,
+    backgroundColor: colors.background,
+  },
 
   section: { marginBottom: 28 },
   sectionHeaderText: { marginBottom: 10 },

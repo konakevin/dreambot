@@ -181,16 +181,20 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={100}
     >
+      {/* Sticky header — sits outside the ScrollView so the slider cards
+          scroll underneath it (matches BotSelectorStep / Locations). */}
+      <View style={s.stickyHeader}>
+        <Text style={shared.heroTitle}>What kind of dreams do you like?</Text>
+        <Text style={shared.heroSubtitle}>
+          Slide them however feels right. No wrong answers, just your taste.
+        </Text>
+      </View>
+
       <ScrollView
         contentContainerStyle={s.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator
       >
-        <Text style={shared.heroTitle}>Dial it in</Text>
-        <Text style={[shared.heroSubtitle, s.subtitleSpacing]}>
-          These sliders shape your DreamBot&apos;s personality. No wrong answers, just your taste.
-        </Text>
-
         {SLIDERS.map((slider) => (
           <SliderCard
             key={slider.axis}
@@ -214,8 +218,15 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
 }
 
 const s = StyleSheet.create({
-  scrollContent: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 100 },
-  subtitleSpacing: { marginBottom: 20 },
+  scrollContent: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 100 },
+  // Sticky header that sits above the ScrollView (matches Locations +
+  // BotSelectorStep). Bg-painted so scrolling content doesn't bleed through.
+  stickyHeader: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 14,
+    backgroundColor: colors.background,
+  },
 
   card: {
     backgroundColor: colors.surface,
