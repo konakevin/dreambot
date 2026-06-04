@@ -68,7 +68,6 @@ const SLOTS: SlotConfig[] = [
 const RELATIONSHIPS: { key: CastRelationship; label: string }[] = [
   { key: 'partner', label: 'Partner' },
   { key: 'friend', label: 'Friend' },
-  { key: 'family', label: 'Family' },
 ];
 
 function CastSlot({
@@ -347,13 +346,18 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
             });
       }
 
-      // Show the photo immediately (spinner stays on until describe completes)
+      // Show the photo immediately (spinner stays on until describe completes).
+      // plus_one always carries a relationship — default to 'partner' so the
+      // user doesn't have to actively select one. They can switch via the
+      // pill row below if Friend fits better.
       const existing = getMember(role);
+      const plusOneRel: CastRelationship | undefined =
+        role === 'plus_one' ? (existing?.relationship ?? 'partner') : existing?.relationship;
       setCastMember({
         role,
         thumb_url: publicUrl,
         description: '',
-        ...(existing?.relationship ? { relationship: existing.relationship } : {}),
+        ...(plusOneRel ? { relationship: plusOneRel } : {}),
       });
 
       // Describe the photo — spinner stays visible until this completes
@@ -400,8 +404,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         return;
       }
 
-      // Re-read current member from store (user may have set relationship while describe was running)
+      // Re-read current member from store (user may have set relationship
+      // while describe was running). plus_one keeps the 'partner' default
+      // applied on upload above unless the user changed it.
       const current = useOnboardingStore.getState().profile.dream_cast.find((m) => m.role === role);
+      const plusOneRelFinal: CastRelationship | undefined =
+        role === 'plus_one' ? (current?.relationship ?? 'partner') : current?.relationship;
       setCastMember({
         role,
         thumb_url: publicUrl,
@@ -409,7 +417,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         ...(descData.gender ? { gender: descData.gender } : {}),
         ...(typeof descData.age === 'number' ? { age: descData.age } : {}),
         ...(descData.physical_summary ? { physical_summary: descData.physical_summary } : {}),
-        ...(current?.relationship ? { relationship: current.relationship } : {}),
+        ...(plusOneRelFinal ? { relationship: plusOneRelFinal } : {}),
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       if (__DEV__)
