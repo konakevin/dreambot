@@ -61,8 +61,8 @@ export function BotSelectorStep({ onNext, onBack }: Props) {
       <View style={s.header}>
         <Text style={s.title}>What do you want to see?</Text>
         <Text style={s.subtitle}>
-          Follow at least one bot to fill your feed. You can follow as many as you want, and tweak
-          who you’re following anytime in settings.
+          Pick at least one bot for your Following tab. The home feed always shows a popular mix
+          from everyone, and you can change who you follow anytime in settings.
         </Text>
       </View>
 
