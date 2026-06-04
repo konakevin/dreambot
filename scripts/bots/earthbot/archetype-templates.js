@@ -17,7 +17,7 @@ module.exports = {
       ? `\n\n━━━ RARE OPTICAL / WEATHER PHENOMENON (one signature real-Earth event, woven naturally into the scene) ━━━\n${phenomenon}\n\nCRITICAL — PHENOMENON-LIGHTING COMPATIBILITY: If this phenomenon physically contradicts the rolled lighting time-of-day (e.g., total eclipse corona cannot co-exist with golden hour or daylight; aurora cannot appear in midday sun; green flash only happens at the exact moment the sunset disc disappears; sun pillars/sun-dogs/halos need the sun visible so can't appear at night), DROP THE PHENOMENON entirely from the render and just render the clean lighting + sky + scene. Restrained truth beats forced impossibility every single time.`
       : '';
 
-    return `You are a fine-art landscape photographer writing a SINGLE EPIC VISTA scene for EarthBot. The work bar: a Marc Adamus / Peter Lik / Max Rive / Daniel Kordan / Iurie Belegurschi / Albert Dros / Ryan Dyar caliber gallery-print masterpiece — extreme dramatic landscape art with theatrical peak-moment light, the kind of frame people print three feet wide and hang as the centerpiece of a room, the kind that stops a phone-scroller dead and makes them screenshot it. NOT documentary travel photography. NOT a competent travel snapshot. NOT a journalism frame. This is gallery-tier fine art — peak-drama composition, peak-drama light, peak-drama scale. Real Earth, larger than life via geology + lighting + weather amplification, never AI-fake. Output wraps with style prefix + suffix.
+    return `You are a fine-art landscape photographer writing a SINGLE EPIC VISTA scene for EarthBot. The work bar: a peak-drama gallery-print masterpiece — extreme dramatic landscape art with theatrical peak-moment light, the kind of frame people print three feet wide and hang as the centerpiece of a room, the kind that stops a phone-scroller dead and makes them screenshot it. NOT documentary travel photography. NOT a competent travel snapshot. NOT a journalism frame. This is gallery-tier fine art — peak-drama composition, peak-drama light, peak-drama scale. Real Earth, larger than life via geology + lighting + weather amplification, never AI-fake. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL EARTH, NEVER SCI-FI, NEVER AI-FAKE ━━━
 
@@ -77,7 +77,7 @@ ${lighting}
 
 ━━━ STACKED LIGHT DRAMA — render every dimension at gallery-print peak intensity ━━━
 
-The lighting above stacks 2-3 light dimensions (time + direction + color + shadow). Render ALL of them at the absolute peak of their drama, simultaneously. Not generic — the 90-second magic-window version. Color at maximum chromatic saturation, shadow at maximum depth-contrast, direction at maximum theatricality. Marc-Adamus / Peter-Lik gallery-print bar: light is THE protagonist of the frame, and every dimension is at eleven. This is the signature lever — light drama is what separates a competent travel snapshot from a wallpaper masterpiece. Push every light dimension HARD, every render.
+The lighting above stacks 2-3 light dimensions (time + direction + color + shadow). Render ALL of them at the absolute peak of their drama, simultaneously. Not generic — the 90-second magic-window version. Color at maximum chromatic saturation, shadow at maximum depth-contrast, direction at maximum theatricality. Gallery-print bar: light is THE protagonist of the frame, and every dimension is at eleven. This is the signature lever — light drama is what separates a competent travel snapshot from a wallpaper masterpiece. Push every light dimension HARD, every render.
 
 ━━━ ATMOSPHERE (render exactly as rolled — DO NOT override) ━━━
 ${atmosphere}
@@ -110,7 +110,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION — SUBJECT FILLS THE FRAME ━━━
 
-Wide sweeping panoramic vista where the SUBJECT geology fills 60-70%+ of the frame's visual weight. Sky above (~25-35%), scale-prover as a tiny dot in deep distance, no near-foreground prop. The viewer's eye lands on the SUBJECT immediately, registers its scale, follows the lighting drama across it, finds the tiny scale-prover as evidence. Photographic, hyperreal, alive — Marc-Adamus / Peter-Lik / Max-Rive gallery-print caliber, the kind of frame collectors pay four figures for and people screenshot to set as wallpaper. Theatrical fine-art landscape, never documentary snapshot.
+Wide sweeping panoramic vista where the SUBJECT geology fills 60-70%+ of the frame's visual weight. Sky above (~25-35%), scale-prover as a tiny dot in deep distance, no near-foreground prop. The viewer's eye lands on the SUBJECT immediately, registers its scale, follows the lighting drama across it, finds the tiny scale-prover as evidence. Photographic, hyperreal, alive — gallery-print caliber, the kind of frame collectors pay four figures for and people screenshot to set as wallpaper. Theatrical fine-art landscape, never documentary snapshot.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
@@ -213,7 +213,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION — 50/50 BEACH + FLOWERS PARTNERSHIP ━━━
 
-Ground-level POV. The tropical beach extends across the midground (~50% visual weight). Tropical flowers distributed through the scene as visible named-species accents (~50% visual weight). Both equally readable, neither dominating. Hyperreal photographic — Marc-Adamus / Peter-Lik / Iurie-Belegurschi caliber gallery-print tropical-paradise photography.
+Ground-level POV. The tropical beach extends across the midground (~50% visual weight). Tropical flowers distributed through the scene as visible named-species accents (~50% visual weight). Both equally readable, neither dominating. Hyperreal photographic — gallery-print tropical-paradise photography.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
@@ -304,7 +304,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. Just 
       ? `\n\n━━━ RARE PHENOMENON (one signature optical/weather event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or subject, DROP IT.`
       : '';
 
-    return `You are a geological photographer writing ONE GEOLOGICAL WONDER scene for EarthBot. Earth's raw architecture as art — covers BOTH scales: INTIMATE cave interiors (crystal caves with amethyst walls / lava tubes / glacier ice caves / slot canyons with light beams / amethyst geode cathedrals) AND EPIC outdoor vistas (hoodoo amphitheaters / salt flats / basalt cliff coastlines / sandstone wave formations / travertine terraces / fresh lava flows / geyser fields). The geology itself is spectacular and alien. Marc Adamus / Peter Lik / Michael Kenna caliber gallery-print geological photography. Output wraps with style prefix + suffix.
+    return `You are a geological photographer writing ONE GEOLOGICAL WONDER scene for EarthBot. Earth's raw architecture as art — covers BOTH scales: INTIMATE cave interiors (crystal caves with amethyst walls / lava tubes / glacier ice caves / slot canyons with light beams / amethyst geode cathedrals) AND EPIC outdoor vistas (hoodoo amphitheaters / salt flats / basalt cliff coastlines / sandstone wave formations / travertine terraces / fresh lava flows / geyser fields). The geology itself is spectacular and alien. Gallery-print geological photography with cinematic mineral palette and atmospheric depth. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL EARTH GEOLOGY, NEVER SCI-FI / FANTASY ━━━
 
@@ -345,7 +345,7 @@ ONE specific element gives the frame a focal anchor + scale-prover.${phenomenonB
 
 ━━━ HARD RULE — POSTER-WORTHY GALLERY-PRINT GEOLOGY ━━━
 
-This frame must be a 10/10 poster-print. Marc Adamus / Peter Lik / Iurie Belegurschi / Michael Kenna caliber.
+This frame must be a 10/10 poster-print with peak-drama mineral light and gallery-print fidelity.
 
 ━━━ MOMENT IN MOTION ━━━
 
@@ -373,7 +373,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one signature optical/weather event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or subject, DROP IT.`
       : '';
 
-    return `You are a fine-art landscape photographer writing ONE SACRED-LIGHT MOMENT scene for EarthBot. Transcendent natural-light moments in nature — the LIGHT itself is the hero. Dawn first-light burning a single ridge while valleys remain in cool shadow, raking shafts plural through old-growth canopy, alpenglow on a snow-capped peak, storm-break broad spotlight across a meadow, crepuscular rays through cypress over a misty lake, sun-halo over winter forest. Mid to tight framing — NOT wide panorama. The light moment fills the emotional center; the landscape supports it. Marc Adamus / Peter Lik / Galen Rowell caliber gallery-print sacred-light photography. Output wraps with style prefix + suffix.
+    return `You are a fine-art landscape photographer writing ONE SACRED-LIGHT MOMENT scene for EarthBot. Transcendent natural-light moments in nature — the LIGHT itself is the hero. Dawn first-light burning a single ridge while valleys remain in cool shadow, raking shafts plural through old-growth canopy, alpenglow on a snow-capped peak, storm-break broad spotlight across a meadow, crepuscular rays through cypress over a misty lake, sun-halo over winter forest. Mid to tight framing — NOT wide panorama. The light moment fills the emotional center; the landscape supports it. Gallery-print sacred-light photography — natural-light moments as the hero. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL NATURAL LIGHT, NEVER SCI-FI / FANTASY ━━━
 
@@ -442,7 +442,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — LIGHT-AS-HERO ━━━
 
-The light moment fills the emotional center of the frame. Mid to tight framing — NOT wide panorama. Surrounding landscape sits in cool shadow / cool tones, the lit area glows with warm contrasting saturation. Hyperreal photographic — Galen Rowell / Marc Adamus caliber gallery-print sacred-light photography.
+The light moment fills the emotional center of the frame. Mid to tight framing — NOT wide panorama. Surrounding landscape sits in cool shadow / cool tones, the lit area glows with warm contrasting saturation. Hyperreal photographic — gallery-print sacred-light fine-art.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
@@ -453,7 +453,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one signature night-sky event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled light_source (moonbow needs moisture, etc), DROP IT.`
       : '';
 
-    return `You are a night-sky photographer writing ONE TROPICAL BEACH NIGHT scene for EarthBot. Magical warm tropical beach scenes at night — moonlit water, silver Milky Way overhead, calm reflective tropical surf, palm silhouettes. The NATURAL light source (moon / stars / Milky Way) is the hero. Awe-inspiring, warm, intimate — NEVER cold ominous night. Marc Adamus / Galen Rowell caliber gallery-print tropical-night photography. Output wraps with style prefix + suffix.
+    return `You are a night-sky photographer writing ONE TROPICAL BEACH NIGHT scene for EarthBot. Magical warm tropical beach scenes at night — moonlit water, silver Milky Way overhead, calm reflective tropical surf, palm silhouettes. The NATURAL light source (moon / stars / Milky Way) is the hero. Awe-inspiring, warm, intimate — NEVER cold ominous night. Gallery-print tropical-night photography with moon/star light as hero. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL TROPICAL BEACH AT NIGHT, NEVER SCI-FI ━━━
 
@@ -631,7 +631,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled season or lighting, DROP IT.`
       : '';
 
-    return `You are a fine-art nature photographer writing ONE SEASONAL-SHIFT scene for EarthBot. Real-Earth landscape captured at the peak dramatic moment of a season — wall-to-wall multi-color autumn density across mixed forests, first snow with lingering color on alpine valleys, cherry-blossom + wildflower spring superbloom richness, golden summer evenings. THE SEASON IS THE SUBJECT, MULTI-COLOR RICHNESS is mandatory, and DENSITY IS TURNED TO 11 — every branch, every meadow, every slope packed with peak color edge-to-edge. Marc Adamus / Peter Lik / Daniel Kordan / Galen Rowell caliber gallery-print seasonal photography — National Geographic cover quality, the kind of frame people print and hang. Output wraps with style prefix + suffix.
+    return `You are a fine-art nature photographer writing ONE SEASONAL-SHIFT scene for EarthBot. Real-Earth landscape captured at the peak dramatic moment of a season — wall-to-wall multi-color autumn density across mixed forests, first snow with lingering color on alpine valleys, cherry-blossom + wildflower spring superbloom richness, golden summer evenings. THE SEASON IS THE SUBJECT, MULTI-COLOR RICHNESS is mandatory, and DENSITY IS TURNED TO 11 — every branch, every meadow, every slope packed with peak color edge-to-edge. gallery-print seasonal photography — National Geographic cover quality, the kind of frame people print and hang. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL EARTH SEASONAL DRAMA, NEVER SCI-FI / FANTASY ━━━
 
@@ -694,7 +694,7 @@ ${sky_layer}${phenomenonBlock}
 
 ━━━ HARD RULE — THE SEASON IS THE EMOTIONAL CENTER, MULTI-COLOR RICHNESS MANDATORY ━━━
 
-The viewer should feel the season in their bones. ALL named colors from the color_palette must be visible in the render — NEVER mono-tone. Multi-tier depth (FG/MG/distant) per the depth_layers axis. One captured moment per the seasonal_motion axis. Marc Adamus / Peter Lik / Daniel Kordan caliber gallery-print seasonal photography.
+The viewer should feel the season in their bones. ALL named colors from the color_palette must be visible in the render — NEVER mono-tone. Multi-tier depth (FG/MG/distant) per the depth_layers axis. One captured moment per the seasonal_motion axis. Gallery-print seasonal photography with peak-color density and multi-tier depth.
 
 ━━━ SCENE-WIDE PALETTE ━━━
 ${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'peak-saturation seasonal multi-color, dramatic light, atmospheric depth'}
@@ -738,7 +738,7 @@ For SPRING: the rendered output MUST read as "a mature flowering forest hillside
 
 ━━━ WOW FACTOR — GALLERY-PRINT BANGER ━━━
 
-This must be a render people frame and hang. National Geographic cover. Marc Adamus / Peter Lik / Daniel Kordan / Galen Rowell caliber gallery-print fine-art photography. Every frame is a poster-worthy banger with hard cinematic light, atmospheric depth, teal-and-orange grade, scale-prover, named species.
+This must be a render people frame and hang. National Geographic cover quality. Gallery-print fine-art photography. Every frame is a poster-worthy banger with hard cinematic light, atmospheric depth, teal-and-orange grade, scale-prover, named species.
 
 Multi-tier depth (foreground anchor + midground forest + distant peaks/horizon) is mandatory. Hyperreal photographic. ALL named colors visible across the wide scene.
 
@@ -762,7 +762,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one real-Earth event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or feels supernatural, DROP IT. Real-Earth ONLY — no aurora, no nacreous, no bioluminescent, no sun-dogs, no fire-rainbow.`
       : '';
 
-    return `You are a fine-art landscape photographer writing ONE DESERT SOUTHWEST scene for EarthBot. American SW iconic raw geology — Monument Valley sandstone towers, Antelope Canyon slot beams, Bryce hoodoo amphitheaters, Zion narrows, Arches, Sedona red rock, Painted Desert, Canyonlands. Marc Adamus / Peter Lik / Galen Rowell caliber gallery-print SW landscape photography. Warm-terracotta on cobalt cinematic. Output wraps with style prefix + suffix.
+    return `You are a fine-art landscape photographer writing ONE DESERT SOUTHWEST scene for EarthBot. American SW iconic raw geology — Monument Valley sandstone towers, Antelope Canyon slot beams, Bryce hoodoo amphitheaters, Zion narrows, Arches, Sedona red rock, Painted Desert, Canyonlands. Gallery-print Southwest landscape photography with terracotta-on-cobalt cinematic depth. Warm-terracotta on cobalt cinematic. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — RAW EARTH SW GEOLOGY ━━━
 
@@ -821,7 +821,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — WIDE-VISTA OR STAND-AT-THE-RIM ━━━
 
-Wide-vista panoramic landscape OR stand-at-the-rim mid-wide framing. The iconic landform fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Hyperreal photographic — gallery-print SW fine-art landscape (Marc Adamus / Peter Lik / Galen Rowell caliber).
+Wide-vista panoramic landscape OR stand-at-the-rim mid-wide framing. The iconic landform fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Hyperreal photographic — gallery-print Southwest fine-art landscape.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places (describe morphologically). Describe positive content only — no negation language like "no humans" or "no architecture" (Flux tokenizer leaks those words).`;
   },
@@ -858,7 +858,6 @@ The entire frame is uninhabited raw nature. NEVER a figure, NEVER a Maasai herde
 
 ━━━ STYLE GUARDS ━━━
 
-- NO photographer name-drops in the output prompt (Frans Lanting / Nick Brandt / Beverly Joubert / Sebastião Salgado / Art Wolfe — these leak verbatim into the polished output and bias the render). Describe the scene morphologically, never credit any photographer.
 - Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
 - Avoid stylized / 3D-render / cartoony — photographic only
 - Avoid "fire" as a noun (renders literal flames) — for grass-burn use "ember-orange horizon glow" / "warm-amber smoke column" as adjective-led phrases
@@ -925,7 +924,7 @@ The polished prompt MUST be authored in this exact sequence:
 
 The viewer's eye must land on the BAOBAB GROVE / SALT PAN / SAVANNA / DELTA CHANNEL / DUNE SEA / CANOPY first — NEVER on a foreground rock or grass clump. The foreground_anchor and scale_prover are SUPPORTING DETAILS not the subject.
 
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the African subject. PRESERVE the African toponym from the subject slot verbatim in the opening phrase — Serengeti / Maasai Mara / Etosha / Makgadikgadi / Tarangire / Tsavo / Okavango / Zambezi / Nile / Chobe / Mahale / Sahara / Namib / Deadvlei / Madagascar / Cape fynbos / Congo Basin — these geographic anchors are LOAD-BEARING for African identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" / "EarthBot::render_african" / brand-style preambles — these are style-prior triggers that interfere with the SUBJECT anchoring, NEVER include them at the prompt open). Describe positive content only — no negation language like "no humans" or "no architecture" or "no mountains" (Flux tokenizer leaks those words and renders the noun).`;
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the African subject. PRESERVE the African toponym from the subject slot verbatim in the opening phrase — Serengeti / Maasai Mara / Etosha / Makgadikgadi / Tarangire / Tsavo / Okavango / Zambezi / Nile / Chobe / Mahale / Sahara / Namib / Deadvlei / Madagascar / Cape fynbos / Congo Basin — these geographic anchors are LOAD-BEARING for African identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" — these are style-prior triggers that interfere with the SUBJECT anchoring, NEVER include them at the prompt open). Describe positive content only — no negation language like "no humans" or "no architecture" or "no mountains" (Flux tokenizer leaks those words and renders the noun).`;
   },
 
   EARTHBOT_ASIA_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
@@ -954,7 +953,6 @@ The entire frame is uninhabited raw nature. NEVER a figure, NEVER a monk, NEVER 
 
 ━━━ STYLE GUARDS ━━━
 
-- NO photographer name-drops in the output prompt (Michael Kenna / Hengki Koentjoro / Marc Adamus / Max Rive — these leak verbatim into the polished output and bias the render). Describe morphologically.
 - Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
 - Avoid stylized / 3D-render / cartoony — photographic only
 - Avoid "fire" as a noun (Flux renders literal flames) — for active volcanism use "molten lava glow" / "ember-red crater rim" / "incandescent sulfur" as adjective-led phrases
@@ -1019,7 +1017,7 @@ The polished prompt MUST be authored in this exact sequence:
 
 The viewer's eye must land on the PEAK / KARST / CEDAR / SAKURA / DUNE / VOLCANO / LAKE first — NEVER on a foreground rock or grass clump.
 
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the Asian subject. PRESERVE the Asian toponym from the subject slot verbatim in the opening phrase — Mt. Fuji / Huangshan / Halong Bay / Zhangjiajie / Wulingyuan / Yangshuo / Guilin / Taroko / Seoraksan / Jeju / Hokkaido / Yakushima / Jiuzhaigou / Tibetan plateau / Gobi / Altai / Mount Bromo / Ijen — these geographic anchors are LOAD-BEARING for Asian identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" / "EarthBot::render" — these are style-prior triggers, NEVER include them at the open). Describe positive content only — no negation language like "no humans" or "no temples" (Flux tokenizer leaks those words).`;
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The FIRST phrase MUST be the Asian subject. PRESERVE the Asian toponym from the subject slot verbatim in the opening phrase — Mt. Fuji / Huangshan / Halong Bay / Zhangjiajie / Wulingyuan / Yangshuo / Guilin / Taroko / Seoraksan / Jeju / Hokkaido / Yakushima / Jiuzhaigou / Tibetan plateau / Gobi / Altai / Mount Bromo / Ijen — these geographic anchors are LOAD-BEARING for Asian identity, never paraphrase them away. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO meta-descriptors at the open ("Fine-art landscape photography" / "wide-vista gallery print" / "hyperreal photography" — these are style-prior triggers, NEVER include them at the open). Describe positive content only — no negation language like "no humans" or "no temples" (Flux tokenizer leaks those words).`;
   },
   EARTHBOT_ANDES_PATAGONIA: ({ slots, sharedDNA, vibeDirective }) => {
     const {
@@ -1047,7 +1045,6 @@ The entire frame is uninhabited raw nature. NEVER a figure, NEVER a hiker, NEVER
 
 ━━━ STYLE GUARDS ━━━
 
-- NO photographer name-drops in the output prompt (Marc Adamus / Max Rive / Daniel Kordan / Pie Aerts — these leak into Flux and bias the render toward those photographers' specific Patagonia shots). Describe morphologically, never credit any photographer.
 - Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
 - Avoid stylized / 3D-render / cartoony — photographic only
 - Avoid "fire" as a noun (Flux renders literal flames) — for active volcanism use "molten lava glow" / "incandescent crater rim" / "ember-red eruption fountain" as adjective-led phrases
@@ -1131,7 +1128,6 @@ The entire frame is uninhabited raw nature. NEVER a figure, NEVER a vehicle, NEV
 
 ━━━ STYLE GUARDS ━━━
 
-- NO photographer name-drops in the output prompt (Peter Lik / Ken Duncan / Matthew Saville — these leak verbatim into the polished output and bias the render). Describe morphologically.
 - Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
 - Avoid stylized / 3D-render / cartoony — photographic only
 - Avoid AMERICAN-SOUTHWEST drift — distinct from desert-southwest path. NO Monument Valley / Sedona / Antelope Canyon / Bryce — Australian outback has its OWN iconic geology (Uluru / Kata Tjuta / Bungle Bungle / Pinnacles / Karijini / Devils Marbles / Wilpena Pound). NO juniper / sage / saguaro / Joshua tree — instead eucalyptus / ghost gum / spinifex / banksia.
@@ -1224,7 +1220,6 @@ The entire frame is uninhabited raw nature. NEVER a figure, NEVER a tourist, NEV
 
 ━━━ STYLE GUARDS ━━━
 
-- NO photographer name-drops in the output prompt (Iurie Belegurschi / Albert Dros / Daniel Kordan etc — these leak into Flux and bias the render toward those photographers' specific Iceland shots). Describe the scene morphologically, never credit any photographer.
 - Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary (fantasy triggers)
 - Avoid stylized / 3D-render / cartoony — photographic only
 - Avoid "fire" as a noun (Flux renders literal flames) — for active volcanism use "molten lava glow" / "incandescent fissure" / "ember-red eruption fountain" as adjective-led phrases
@@ -1308,7 +1303,6 @@ The entire frame is uninhabited raw nature. NEVER a figure, NEVER a hiker, NEVER
 
 ━━━ STYLE GUARDS ━━━
 
-- NO photographer name-drops in the output prompt (Max Rive / Marc Adamus / Daniel Kordan / Albert Dros — these leak verbatim and bias toward those photographers' specific famous shots). Describe morphologically.
 - Avoid "sci-fi / portal / mystical / impossible-reflection" vocabulary
 - Avoid stylized / 3D-render / cartoony — photographic only
 - Avoid AMERICAN-ROCKIES / PATAGONIAN drift — name the SPECIFIC European formation (Dolomites Tre Cime / Matterhorn / Lofoten Reine / Trolltunga / Quiraing / Old Man of Storr) so Flux locks the prior to the right peak / fjord / glen
@@ -1391,7 +1385,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The F
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or feels supernatural, DROP IT. Real-Earth ONLY — no bioluminescent / aurora / nacreous / sun-dogs / fire-rainbow / iridescent.`
       : '';
 
-    return `You are a fine-art nature photographer writing ONE HIDDEN CORNER scene for EarthBot. The OFF-THE-BEATEN-PATH discovered pocket of nature — the secret magical place you stumble into where the whole little scene is visible to you. Real-Earth ONLY. STAND-IN-THE-POCKET mid-wide framing — NOT macro close-up of a single element, NOT wide panoramic vista. The viewer is standing IN the secret pocket and can see the whole 10-15 foot intimate scene around them. CRITICAL: intimate scale does NOT mean minimal OR macro — every render must show the WHOLE little pocket of nature PACKED LUSH with multi-tier detail. Marc Adamus / Peter Lik / Daniel Kordan caliber intimate-nature photography (NOT macro close-up). Output wraps with style prefix + suffix.
+    return `You are a fine-art nature photographer writing ONE HIDDEN CORNER scene for EarthBot. The OFF-THE-BEATEN-PATH discovered pocket of nature — the secret magical place you stumble into where the whole little scene is visible to you. Real-Earth ONLY. STAND-IN-THE-POCKET mid-wide framing — NOT macro close-up of a single element, NOT wide panoramic vista. The viewer is standing IN the secret pocket and can see the whole 10-15 foot intimate scene around them. CRITICAL: intimate scale does NOT mean minimal OR macro — every render must show the WHOLE little pocket of nature PACKED LUSH with multi-tier detail. Gallery-print intimate-nature photography (NOT macro close-up). Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — OFF-THE-BEATEN-PATH SECRET POCKET (NOT MACRO) ━━━
 
@@ -1475,7 +1469,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — STAND-IN-THE-POCKET MID-WIDE ━━━
 
-Mid-wide framing showing the WHOLE 10-15 foot pocket of nature. The viewer is standing inside the secret pocket. NOT macro close-up, NOT wide panoramic vista. Multi-tier depth (NEAR EDGE ground details + MIDGROUND subject + BACKGROUND surrounding trees / walls / canopy). EVERY surface alive with texture. Dappled or shaft-filtered light catching dew + wet stones + leaf edges throughout the scene. Hyperreal photographic — gallery-print intimate-nature fine-art photography (Marc Adamus / Peter Lik / Daniel Kordan), National Geographic intimate-nature feature quality.
+Mid-wide framing showing the WHOLE 10-15 foot pocket of nature. The viewer is standing inside the secret pocket. NOT macro close-up, NOT wide panoramic vista. Multi-tier depth (NEAR EDGE ground details + MIDGROUND subject + BACKGROUND surrounding trees / walls / canopy). EVERY surface alive with texture. Dappled or shaft-filtered light catching dew + wet stones + leaf edges throughout the scene. Hyperreal photographic — gallery-print intimate-nature fine-art photography, National Geographic intimate-nature feature quality.
 
 ⚠️ DO NOT render as macro close-up of one element. The whole pocket must be visible.
 ⚠️ DO NOT render as wide panoramic landscape. Stay inside the pocket.
