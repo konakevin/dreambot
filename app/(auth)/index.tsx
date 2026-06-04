@@ -29,6 +29,21 @@ const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4
 function Logo() {
   return (
     <View style={authStyles.logoContainer}>
+      {/* Bright multi-color HALO behind the mascot — purple → pink → teal
+          (the full brand gradient) at moderate opacity. This is the
+          showstopper from dreambotapp.com Hero: a soft blurred blob
+          behind the mascot that's the whole reason that screen reads as
+          bright/dreamy. Sized larger than the mascot so the colored
+          glow extends past its edges. */}
+      <View style={authStyles.mascotHaloWrap}>
+        <LinearGradient
+          colors={BRAND_GRADIENT}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={authStyles.mascotHaloGradient}
+        />
+      </View>
+
       {/* Mascot */}
       <Image
         source={require('@/assets/images/icon.png')}
@@ -54,6 +69,23 @@ const authStyles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
   },
+  // Multi-color halo behind the mascot — same pattern as the brochure
+  // Hero's `blur-3xl` gradient circle. RN has no CSS blur filter, but the
+  // gradient's natural soft edges at low edge-opacity approximate it.
+  // Sized 240×240 (larger than the 130×130 mascot) so the glow extends
+  // past the mascot edges. Absolute-positioned so it sits BEHIND the
+  // mascot without taking layout space.
+  mascotHaloWrap: {
+    position: 'absolute',
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    top: -55,
+    alignSelf: 'center',
+    overflow: 'hidden',
+    opacity: 0.55,
+  },
+  mascotHaloGradient: { width: '100%', height: '100%' },
   mascot: {
     width: 130,
     height: 130,
@@ -109,14 +141,12 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* Single vertical LinearGradient — brand moon-purple lavender wash
-          across the WHOLE screen. Keep the alpha range NARROW (0.65→0.40)
-          so the screen reads as light/pastel LAVENDER throughout instead
-          of fading into deep violet at the bottom. Wider ranges (0.55→
-          0.18) made the lower half drop into dark violet territory; this
-          stays in the bright lavender register start to finish. */}
+      {/* Gentle vertical lavender wash — quieter now (the bright halo
+          behind the mascot does the heavy lifting for atmosphere). This
+          gradient just tints the bg so the screen doesn't read as pure
+          black around the edges. */}
       <LinearGradient
-        colors={['rgba(167,139,250,0.65)', 'rgba(167,139,250,0.40)']}
+        colors={['rgba(167,139,250,0.30)', 'rgba(167,139,250,0.15)']}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         style={StyleSheet.absoluteFillObject}
