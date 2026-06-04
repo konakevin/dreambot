@@ -88,7 +88,13 @@ export function BotSelectorStep({ onNext, onBack }: Props) {
         </ScrollView>
       )}
 
-      <OnboardingFooter onNext={handleNext} onBack={onBack} nextLabel="Show me my first dream" />
+      {/* Following any bots is optional — Skip when none, Next when some
+          (same pattern DreamCastStep uses for cast photos). */}
+      <OnboardingFooter
+        onNext={handleNext}
+        onBack={onBack}
+        nextLabel={followingSet.size === 0 ? 'Skip' : 'Next'}
+      />
 
       {viewer && (
         <BotImageViewer

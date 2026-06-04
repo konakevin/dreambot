@@ -62,7 +62,7 @@ export function InfoStep({
   headline,
   body,
   subFeatures,
-  ctaLabel = 'Continue',
+  ctaLabel = 'Next',
   onNext,
   onBack,
 }: Props) {

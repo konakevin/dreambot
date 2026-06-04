@@ -490,11 +490,11 @@ export function RevealStep({ onBack }: Props) {
             activeOpacity={0.7}
           >
             <Ionicons name="sparkles" size={18} color="#FFFFFF" />
-            <Text style={s.createButtonText}>Dream It</Text>
+            <Text style={s.createButtonText}>Let’s go!</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ marginTop: 12 }} onPress={onBack} activeOpacity={0.7}>
             <Text style={{ color: colors.textSecondary, fontSize: 15, fontWeight: '600' }}>
-              Go Back
+              Back
             </Text>
           </TouchableOpacity>
         </View>
