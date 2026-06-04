@@ -114,20 +114,17 @@ export default function WelcomeScreen() {
       </View>
 
       <View className="px-6 pb-8 gap-3">
-        {/* All three social buttons share PURE BLACK so they read as a
-            single calm group anchored on the bottom of the lavender-haze
-            backdrop. Brand identity is carried entirely by the LOGO color
-            (Apple white, Google multicolor-G #4285F4, Facebook blue
-            #1877F2). All three styles are brand-compliant: Apple HIG
-            permits black buttons; Google has an official 'dark' variant;
-            Meta allows custom backgrounds as long as the f-mark is
-            rendered correctly. */}
+        {/* Social buttons use the theme's `bg-card` (#1A1A24) with a thin
+            `border-border` so they read as discrete tappable cards against
+            the solid black bg. Pure-black-on-black is invisible; this
+            gives just enough elevation for the eye to lock on without
+            adding bright color. Brand identity is carried by the LOGO
+            color (Apple white, Google multi-color G, Facebook blue f). */}
 
         {/* Apple Sign-In (iOS only) */}
         {Platform.OS === 'ios' && (
           <TouchableOpacity
-            className="rounded-full py-4 flex-row items-center justify-center gap-3"
-            style={{ backgroundColor: '#000000' }}
+            className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
             onPress={() => handleSocialSignIn('apple')}
             disabled={loading !== null}
             activeOpacity={0.8}
@@ -145,8 +142,7 @@ export default function WelcomeScreen() {
 
         {/* Google Sign-In */}
         <TouchableOpacity
-          className="rounded-full py-4 flex-row items-center justify-center gap-3"
-          style={{ backgroundColor: '#000000' }}
+          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
           onPress={() => handleSocialSignIn('google')}
           disabled={loading !== null}
           activeOpacity={0.8}
@@ -163,8 +159,7 @@ export default function WelcomeScreen() {
 
         {/* Facebook Sign-In */}
         <TouchableOpacity
-          className="rounded-full py-4 flex-row items-center justify-center gap-3"
-          style={{ backgroundColor: '#000000' }}
+          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
           onPress={() => handleSocialSignIn('facebook')}
           disabled={loading !== null}
           activeOpacity={0.8}
