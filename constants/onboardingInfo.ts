@@ -37,7 +37,7 @@ export const CREATE_INFO: InfoStepConfig = {
   eyebrow: 'on demand, anytime',
   imageSource: require('@/assets/images/onboarding/create-studio.png'),
   headline: 'A full AI image studio',
-  body: 'Type a prompt (or leave it blank for a surprise), pick which AI model you want (Flux 2, Nano Banana, GPT Image 2, and more), then tap Dream. Each render costs a sparkle or two, and we’ll drop 25 ✨ in your account when you finish setup so you can start playing right away.',
+  body: 'Type a prompt, pick which AI model you want (Flux 2, Nano Banana, GPT Image 2, and more), then tap Dream. Each render costs a sparkle or two, and we’ll drop 25 ✨ in your account when you finish setup so you can start playing right away.',
   ctaLabel: 'Nice',
 };
 
