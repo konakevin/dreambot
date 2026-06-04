@@ -15,6 +15,8 @@ import { MoodSlidersStep } from '@/components/onboarding/MoodSlidersStep';
 import { LocationPickerStep } from '@/components/onboarding/LocationPickerStep';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
+import { InfoStep } from '@/components/onboarding/InfoStep';
+import { NIGHTLY_INFO, CAST_INFO, MOOD_INFO, MORE_INSIDE_INFO } from '@/constants/onboardingInfo';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -30,14 +32,39 @@ interface StepConfig {
 // curated taste (the nightly engine rolls its own and the Create screen
 // exposes the full catalog every render). Objects step removed 2026-06-02
 // (ripped out of the engine entirely — see project_objects_removed_2026-06-02
-// memory). The remaining sequence shapes the user's locations + dream cast
-// + mood — what the engine genuinely personalizes from — and ends on the
-// first-dream reveal.
+// memory).
+//
+// Sequence: a Welcome hook, then 4 InfoStep cards interleaved with the 3
+// data-collection steps so each pillar of the brochure pitch gets its own
+// moment right before the user provides the matching input (locations →
+// cast → mood), then a final "what else is in the app" card before the
+// first-dream reveal. Info cards are `skipInEdit: true` so editing existing
+// settings from /settings doesn't re-display them.
 const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep },
+  {
+    key: 'info_nightly',
+    component: (p) => <InfoStep {...NIGHTLY_INFO} {...p} />,
+    skipInEdit: true,
+  },
   { key: 'locations', component: LocationPickerStep },
+  {
+    key: 'info_cast',
+    component: (p) => <InfoStep {...CAST_INFO} {...p} />,
+    skipInEdit: true,
+  },
   { key: 'cast', component: DreamCastStep },
+  {
+    key: 'info_mood',
+    component: (p) => <InfoStep {...MOOD_INFO} {...p} />,
+    skipInEdit: true,
+  },
   { key: 'personality', component: MoodSlidersStep },
+  {
+    key: 'info_more_inside',
+    component: (p) => <InfoStep {...MORE_INSIDE_INFO} {...p} />,
+    skipInEdit: true,
+  },
   { key: 'reveal', component: RevealStep, skipInEdit: true },
 ];
 

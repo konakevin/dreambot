@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
 
@@ -9,29 +11,9 @@ interface Props {
   onBack: () => void;
 }
 
-function StepRow({
-  icon,
-  color,
-  title,
-  subtitle,
-}: {
-  icon: string;
-  color: string;
-  title: string;
-  subtitle: string;
-}) {
-  return (
-    <View style={s.stepRow}>
-      <View style={[s.stepIcon, { backgroundColor: `${color}15` }]}>
-        <Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={22} color={color} />
-      </View>
-      <View style={s.stepText}>
-        <Text style={s.stepTitle}>{title}</Text>
-        <Text style={s.stepSubtitle}>{subtitle}</Text>
-      </View>
-    </View>
-  );
-}
+// Brand gradient — same purple → pink → teal used by the brochure wordmark
+// and the InfoStep headlines so the whole onboarding feels visually unified.
+const WORDMARK_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 export function WelcomeStep({ onNext }: Props) {
   function handleStart() {
@@ -46,46 +28,32 @@ export function WelcomeStep({ onNext }: Props) {
           <Image source={require('@/assets/images/icon.png')} style={s.mascot} contentFit="cover" />
         </View>
 
-        <Text style={s.title}>Create Your DreamBot</Text>
+        {/* Gradient wordmark — matches the dreambotapp.com Hero treatment */}
+        <MaskedView
+          maskElement={
+            <View style={s.titleMaskWrap}>
+              <Text style={s.titleMask}>DreamBot</Text>
+            </View>
+          }
+        >
+          <LinearGradient colors={WORDMARK_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+            <Text style={[s.titleMask, s.titleGhost]}>DreamBot</Text>
+          </LinearGradient>
+        </MaskedView>
+
+        <Text style={s.tagline}>Where bots dream and you’re invited.</Text>
 
         <Text style={s.body}>
-          Tell us your taste. Your DreamBot will turn it into a new dream every single night while
-          you sleep.
+          Let’s set up your dream world. The next few screens walk you through what DreamBot does
+          and ask a few questions so it can dream up the right things for you.
         </Text>
 
-        <View style={s.steps}>
-          <StepRow
-            icon="construct"
-            color={colors.accent}
-            title="Build its personality"
-            subtitle="Your choices shape how it sees the world"
-          />
-          <StepRow
-            icon="moon"
-            color={colors.accent}
-            title="It dreams while you sleep"
-            subtitle="Wake up to a new creation every morning"
-          />
-          <StepRow
-            icon="sparkles"
-            color={colors.accent}
-            title="Create anything, anytime"
-            subtitle="Go beyond your DreamBot and experiment freely"
-          />
-          <StepRow
-            icon="people-circle"
-            color={colors.accent}
-            title="Meet humans + bots"
-            subtitle="Real artists and friendly AI bots posting dreams alongside you"
-          />
-        </View>
-
-        <Text style={s.footnote}>You can change these settings anytime.</Text>
+        <Text style={s.footnote}>You can change anything later.</Text>
       </View>
 
       <View style={s.footer}>
-        <TouchableOpacity style={s.startButton} onPress={handleStart} activeOpacity={0.7}>
-          <Text style={s.startButtonText}>Next</Text>
+        <TouchableOpacity style={s.startButton} onPress={handleStart} activeOpacity={0.85}>
+          <Text style={s.startButtonText}>Let’s go</Text>
           <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
@@ -99,40 +67,44 @@ const s = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 28,
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  iconStack: { alignItems: 'center', marginBottom: 28 },
-  mascot: {
-    width: 160,
-    height: 160,
-    borderRadius: 32,
-  },
-  title: {
-    color: colors.textPrimary,
-    fontSize: 28,
+  iconStack: { alignItems: 'center', marginBottom: 24 },
+  mascot: { width: 160, height: 160, borderRadius: 32 },
+
+  titleMaskWrap: { alignItems: 'center' },
+  titleMask: {
+    fontSize: 44,
     fontWeight: '800',
+    letterSpacing: -0.5,
+    color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 14,
+  },
+  titleGhost: { opacity: 0 },
+
+  tagline: {
+    color: colors.textPrimary,
+    fontSize: 19,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 14,
+    marginBottom: 18,
   },
   body: {
     color: colors.textSecondary,
-    fontSize: 16,
-    lineHeight: 23,
+    fontSize: 15,
+    lineHeight: 22,
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 24,
+    maxWidth: 340,
   },
-  steps: { gap: 18, marginBottom: 28 },
-  stepRow: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  stepIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
+  footnote: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    textAlign: 'center',
+    opacity: 0.75,
   },
-  stepText: { flex: 1, gap: 2 },
-  stepTitle: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
-  stepSubtitle: { color: colors.textSecondary, fontSize: 13, lineHeight: 18 },
-  footnote: { color: colors.textSecondary, fontSize: 13, textAlign: 'center' },
+
   footer: { paddingHorizontal: 20, paddingBottom: 16 },
   startButton: {
     flexDirection: 'row',
