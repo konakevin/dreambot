@@ -116,26 +116,26 @@ export default function WelcomeScreen() {
           black would stand out more") so the lavender base reads more
           clearly behind the new pure-black social buttons. */}
       <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
-        {/* Main purple wash — clean 2-stop with a wide alpha range. The
-            previous narrow range (0.25→0.40) made the screen feel flat;
-            this widens the contrast (0.10 top → 0.55 bottom) so the screen
-            has real top-to-bottom progression without the banding the
-            3-stop version had. Top stays subtle so the wordmark keeps its
-            contrast; the bottom is the brighter "focal pocket" where the
-            buttons sit. */}
+        {/* Main purple wash — `#A78BFA` is the 'moon' stop of the brand
+            wordmark gradient (moon → cloud → star = #A78BFA → #F9A8D4 →
+            #5EEAD4), so the screen bg is the SAME purple that opens the
+            DreamBot wordmark, just at low alpha. Lighter at top (0.55) →
+            darker at bottom (0.10) so the lavender wash settles over the
+            mascot/wordmark area and the buttons sit on cleaner dark below. */}
         <LinearGradient
-          colors={['rgba(167,139,250,0.10)', 'rgba(167,139,250,0.55)']}
+          colors={['rgba(167,139,250,0.55)', 'rgba(167,139,250,0.10)']}
           start={{ x: 0.4, y: 0 }}
           end={{ x: 0.6, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
-        {/* Accent pink anchored to BOTTOM-right so the brightest pink kiss
-            lands behind the buttons. Fades clear toward upper-left. */}
+        {/* Accent pink (#F9A8D4 = the brand 'cloud' stop, same family as
+            the main wash) — anchored TOP-right now to match the brighter-
+            up-top register. Fades clear toward lower-left. */}
         <LinearGradient
           colors={['rgba(249,168,212,0.32)', 'rgba(249,168,212,0)']}
           locations={[0, 0.8]}
-          start={{ x: 1, y: 0.7 }}
-          end={{ x: 0.2, y: 0 }}
+          start={{ x: 1, y: 0.2 }}
+          end={{ x: 0.2, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
       </View>
