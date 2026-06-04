@@ -115,27 +115,43 @@ export default function WelcomeScreen() {
           bumped 2026-06-04 (Kevin: "lighten the purple behind it a bit so
           black would stand out more") so the lavender base reads more
           clearly behind the new pure-black social buttons. */}
+      {/* Fake-radial bloom via two perpendicular LinearGradients. RN's
+          expo-linear-gradient has no radial primitive, so we approximate
+          the brochure's `radial-gradient(ellipse at 50% 0%, …)` by
+          stacking:
+            VERTICAL → bright at top, fades to transparent at bottom
+            HORIZONTAL → transparent at edges, bright at center (3-stop)
+          Where they overlap (top-center), both contribute at full alpha
+          → that's the bright bloom origin. Each gradient alone falls off
+          toward its respective edges, so the brightness dissipates
+          smoothly in ALL directions — no visible bands, no clipped halos. */}
       <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
-        {/* Main purple wash — `#A78BFA` is the 'moon' stop of the brand
-            wordmark gradient (moon → cloud → star = #A78BFA → #F9A8D4 →
-            #5EEAD4), so the screen bg is the SAME purple that opens the
-            DreamBot wordmark, just at low alpha. Lighter at top (0.55) →
-            darker at bottom (0.10) so the lavender wash settles over the
-            mascot/wordmark area and the buttons sit on cleaner dark below. */}
+        {/* Vertical wash — bright at top, fades to clear at bottom. The
+            'moon' stop of the brand wordmark gradient at low alpha. */}
         <LinearGradient
-          colors={['rgba(167,139,250,0.55)', 'rgba(167,139,250,0.10)']}
-          start={{ x: 0.4, y: 0 }}
-          end={{ x: 0.6, y: 1 }}
+          colors={['rgba(167,139,250,0.45)', 'rgba(167,139,250,0)']}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
-        {/* Accent pink (#F9A8D4 = the brand 'cloud' stop, same family as
-            the main wash) — anchored TOP-right now to match the brighter-
-            up-top register. Fades clear toward lower-left. */}
+        {/* Horizontal wash — transparent at left/right edges, bright in
+            the center column. Multiplies with the vertical above to give
+            a top-centered bloom that fades in all directions. */}
         <LinearGradient
-          colors={['rgba(249,168,212,0.32)', 'rgba(249,168,212,0)']}
-          locations={[0, 0.8]}
-          start={{ x: 1, y: 0.2 }}
-          end={{ x: 0.2, y: 1 }}
+          colors={['rgba(167,139,250,0)', 'rgba(167,139,250,0.30)', 'rgba(167,139,250,0)']}
+          locations={[0, 0.5, 1]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          style={StyleSheet.absoluteFillObject}
+        />
+        {/* Small pink-cloud accent in the upper-right quadrant — the
+            'cloud' brand stop, same family. Adds a subtle warmth offset
+            from the pure-purple center so it doesn't feel monotone. */}
+        <LinearGradient
+          colors={['rgba(249,168,212,0.20)', 'rgba(249,168,212,0)']}
+          locations={[0, 0.6]}
+          start={{ x: 0.8, y: 0.1 }}
+          end={{ x: 0.2, y: 0.7 }}
           style={StyleSheet.absoluteFillObject}
         />
       </View>
