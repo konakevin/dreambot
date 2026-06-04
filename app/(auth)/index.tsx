@@ -111,26 +111,21 @@ export default function WelcomeScreen() {
     <SafeAreaView className="flex-1 bg-background">
       {/* Hazy brand-gradient backdrop — fullscreen bloom, no visible edges.
           Two FULL-SCREEN LinearGradient layers (no clipped circles) with
-          `locations` controlling soft fade-to-transparent curves. Mirrors
-          the dreambotapp.com Hero's gradient-hero pattern (RN has no
-          radial-gradient primitive; layered linear with transparent stops
-          is the established workaround).
-          Layer 1 = purple wash from top, fades to clear by mid-screen.
-          Layer 2 = pink wash from bottom-right, fades to clear toward
-          top-left. The two overlap softly in the upper-right quadrant
-          where the logo sits, giving the brightest area there without any
-          hard boundary anywhere. */}
+          `locations` controlling soft fade-to-transparent curves. Alpha
+          bumped 2026-06-04 (Kevin: "lighten the purple behind it a bit so
+          black would stand out more") so the lavender base reads more
+          clearly behind the new pure-black social buttons. */}
       <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
         <LinearGradient
-          colors={['rgba(167,139,250,0.32)', 'rgba(167,139,250,0)']}
-          locations={[0, 0.65]}
+          colors={['rgba(167,139,250,0.55)', 'rgba(167,139,250,0.10)']}
+          locations={[0, 1]}
           start={{ x: 0.4, y: 0 }}
           end={{ x: 0.6, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
         <LinearGradient
-          colors={['rgba(249,168,212,0.22)', 'rgba(249,168,212,0)']}
-          locations={[0, 0.7]}
+          colors={['rgba(249,168,212,0.38)', 'rgba(249,168,212,0)']}
+          locations={[0, 0.75]}
           start={{ x: 1, y: 0.4 }}
           end={{ x: 0, y: 1 }}
           style={StyleSheet.absoluteFillObject}
@@ -142,19 +137,20 @@ export default function WelcomeScreen() {
       </View>
 
       <View className="px-6 pb-8 gap-3">
-        {/* All three social buttons share the same dark-card style so the
-            stack reads as a calm, serene group — preserves the purple-haze
-            atmosphere instead of snapping the eye to a bright bottom strip.
-            Brand identity is carried entirely by the LOGO color (Apple
-            white, Google multicolor-G #4285F4, Facebook blue #1877F2).
-            All three styles are brand-compliant: Apple HIG permits black
-            buttons; Google has an official 'dark' variant; Meta allows
-            custom backgrounds as long as the f-mark is rendered correctly. */}
+        {/* All three social buttons share PURE BLACK so they read as a
+            single calm group anchored on the bottom of the lavender-haze
+            backdrop. Brand identity is carried entirely by the LOGO color
+            (Apple white, Google multicolor-G #4285F4, Facebook blue
+            #1877F2). All three styles are brand-compliant: Apple HIG
+            permits black buttons; Google has an official 'dark' variant;
+            Meta allows custom backgrounds as long as the f-mark is
+            rendered correctly. */}
 
         {/* Apple Sign-In (iOS only) */}
         {Platform.OS === 'ios' && (
           <TouchableOpacity
-            className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
+            className="rounded-full py-4 flex-row items-center justify-center gap-3"
+            style={{ backgroundColor: '#000000' }}
             onPress={() => handleSocialSignIn('apple')}
             disabled={loading !== null}
             activeOpacity={0.8}
@@ -172,7 +168,8 @@ export default function WelcomeScreen() {
 
         {/* Google Sign-In */}
         <TouchableOpacity
-          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
+          className="rounded-full py-4 flex-row items-center justify-center gap-3"
+          style={{ backgroundColor: '#000000' }}
           onPress={() => handleSocialSignIn('google')}
           disabled={loading !== null}
           activeOpacity={0.8}
@@ -189,7 +186,8 @@ export default function WelcomeScreen() {
 
         {/* Facebook Sign-In */}
         <TouchableOpacity
-          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
+          className="rounded-full py-4 flex-row items-center justify-center gap-3"
+          style={{ backgroundColor: '#000000' }}
           onPress={() => handleSocialSignIn('facebook')}
           disabled={loading !== null}
           activeOpacity={0.8}
