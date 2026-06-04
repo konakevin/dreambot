@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -78,6 +78,21 @@ export function RevealStep({ onBack }: Props) {
 
   const activeDream = dreams.at(activeIndex) ?? null;
   const describedProfile = useRef(profile);
+
+  // Hide the pager's step header from the moment the user taps "Let's go!"
+  // (phase leaves 'idle') through the whole render → reveal → finished
+  // flow. By the time the dream's on screen the step indicator just adds
+  // noise; the user is past the data-collection stage. Restored on reset()
+  // when nav'ing away (store.reset clears chromeHidden back to false).
+  useEffect(() => {
+    const hidden =
+      phase === 'booting' ||
+      phase === 'generating' ||
+      phase === 'reveal' ||
+      phase === 'creating' ||
+      phase === 'finished';
+    setChromeHidden(hidden);
+  }, [phase, setChromeHidden]);
 
   async function runBootSequence() {
     await new Promise((r) => setTimeout(r, 1500));
@@ -431,7 +446,7 @@ export function RevealStep({ onBack }: Props) {
         reset();
         router.replace('/(tabs)');
       } else {
-        setChromeHidden(true);
+        // chromeHidden flips via the phase-driven effect above.
         setPhase('finished');
       }
     } catch (err) {
@@ -522,7 +537,7 @@ export function RevealStep({ onBack }: Props) {
   if (phase === 'booting' || (phase === 'generating' && dreams.length === 0)) {
     return (
       <View style={s.loadingContainer}>
-        <MagicalLoadingStage />
+        <MagicalLoadingStage subtext="Hang tight, this can take a moment." />
       </View>
     );
   }

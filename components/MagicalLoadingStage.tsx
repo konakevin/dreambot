@@ -104,7 +104,16 @@ function WaveLoader() {
 // The whimsy scene baked into the artwork (clouds, stars, painter
 // setup) carries all the visual interest on its own.
 
-export function MagicalLoadingStage() {
+interface MagicalLoadingStageProps {
+  /**
+   * Optional small subline rendered below the "Dreaming" title. Used by
+   * the onboarding first-dream flow to set wait expectations; callers
+   * elsewhere (Create tab) leave it unset.
+   */
+  subtext?: string;
+}
+
+export function MagicalLoadingStage({ subtext }: MagicalLoadingStageProps = {}) {
   // Stable across re-renders of the same mount (no re-roll on parent
   // updates); fresh pick each time the stage mounts.
   const mascotSource = useMemo(
@@ -117,6 +126,7 @@ export function MagicalLoadingStage() {
       <Image source={mascotSource} style={styles.mascot} contentFit="contain" />
       <WaveLoader />
       <Text style={styles.title}>Dreaming</Text>
+      {subtext ? <Text style={styles.subtext}>{subtext}</Text> : null}
     </View>
   );
 }
@@ -165,5 +175,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     letterSpacing: 0.3,
+  },
+  // Optional wait-hint shown when the caller passes `subtext`. Muted vs.
+  // the title so it reads as supporting info, not a competing headline.
+  subtext: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    textAlign: 'center',
+    maxWidth: 260,
+    marginTop: -12, // tighten against the gap:24 the parent set
   },
 });
