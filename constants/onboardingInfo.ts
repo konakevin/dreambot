@@ -37,7 +37,29 @@ export const CREATE_INFO: InfoStepConfig = {
   eyebrow: 'on demand, anytime',
   imageSource: require('@/assets/images/onboarding/create-studio.png'),
   headline: 'A full AI image studio',
-  body: 'Type a prompt, pick which AI model you want (Flux 2, Nano Banana, GPT Image 2, and more), then tap Dream. Each render costs a sparkle or two, and we’ll drop 25 ✨ in your account when you finish setup so you can start playing right away.',
+  body: 'Type a prompt, pick a model (Flux 2, Nano Banana, GPT Image 2, and more), tap Dream. Each render costs a sparkle or two, and we’ll drop 25 ✨ in your account when you finish setup. Four ways to use it:',
+  subFeatures: [
+    {
+      emoji: '🌙',
+      title: 'DreamBot mode',
+      body: 'Adds your taste to any prompt. Face-swaps you in too, if you’ve set up Dream Cast.',
+    },
+    {
+      emoji: '🎯',
+      title: 'Direct mode',
+      body: 'Sends your exact prompt straight to the AI model. No styling, no face swap.',
+    },
+    {
+      emoji: '📸',
+      title: 'Restyle a photo',
+      body: 'Upload one and pick a medium. We’ll transform it.',
+    },
+    {
+      emoji: '👤',
+      title: 'Drop your face in',
+      body: 'Upload any reference image and we’ll put you in it.',
+    },
+  ],
   ctaLabel: 'Nice',
 };
 
