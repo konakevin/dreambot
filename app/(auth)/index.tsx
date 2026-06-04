@@ -109,11 +109,13 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* Single vertical LinearGradient — brand moon-purple at top fading
-          to transparent at bottom. Clean, no banding, no radial-fake
-          patchiness. Iterating from here. */}
+      {/* Single vertical LinearGradient — brand moon-purple lavender wash
+          across the WHOLE screen. Brighter at top (0.55) where the mascot
+          + wordmark sit, still visible at bottom (0.18) behind the
+          buttons. No 'dead black' lower half — every pixel of the screen
+          carries some lavender, which is the cheerful daydream vibe. */}
       <LinearGradient
-        colors={['rgba(167,139,250,0.45)', 'rgba(167,139,250,0)']}
+        colors={['rgba(167,139,250,0.55)', 'rgba(167,139,250,0.18)']}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         style={StyleSheet.absoluteFillObject}
