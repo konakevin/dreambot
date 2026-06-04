@@ -258,12 +258,15 @@ export const DreamCard = memo(function DreamCard({
   // wider-than-9:16 to `contain`; reverted 2026-05-30 per Kevin.)
   // Image load resilience: a failed load (transient network / decode hiccup)
   // used to leave a permanent BLACK card. AUTO-retry silently — cache-busted,
-  // with backoff, capped at MAX_IMG_RETRIES — no user-facing retry UI. (The
-  // small-JPEG display variant cuts the failure rate; this is the safety net.)
+  // with backoff, capped at MAX_IMG_RETRIES. After those, surface a
+  // user-tappable "Tap to retry" overlay so a persistent failure isn't a
+  // dead end. (The small-JPEG display variant cuts the failure rate; this
+  // is the visible safety net for the rare persistent case.)
   const MAX_IMG_RETRIES = 3;
   const retryCountRef = useRef(0);
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
+  const [showRetryUi, setShowRetryUi] = useState(false);
   useEffect(
     () => () => {
       if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
@@ -441,7 +444,13 @@ export const DreamCard = memo(function DreamCard({
               placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
               placeholderContentFit="cover"
               onError={() => {
-                if (retryCountRef.current >= MAX_IMG_RETRIES) return; // give up silently
+                if (retryCountRef.current >= MAX_IMG_RETRIES) {
+                  // Silent auto-retries exhausted — show the user-tappable
+                  // overlay so a persistent failure isn't a dead-end black
+                  // card. Tapping the overlay resets and tries again.
+                  setShowRetryUi(true);
+                  return;
+                }
                 retryCountRef.current += 1;
                 if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
                 // backoff: 0.6s, 1.2s, 1.8s — refetch via cache-busted nonce
@@ -452,8 +461,30 @@ export const DreamCard = memo(function DreamCard({
               }}
               onLoad={() => {
                 retryCountRef.current = 0;
+                if (showRetryUi) setShowRetryUi(false);
               }}
             />
+            {/* Tap-to-retry overlay — only shown after the silent auto-retry
+                budget is exhausted (3 backoffs over ~3.6s). Sits over the
+                thumbhash/surface-tinted placeholder so the user never gets
+                stuck looking at a permanent "broken card" state. Reset on
+                press: nonce++ refetches, onLoad clears the overlay. */}
+            {showRetryUi && (
+              <Pressable
+                style={s.retryOverlay}
+                onPress={() => {
+                  retryCountRef.current = 0;
+                  setShowRetryUi(false);
+                  setRetryNonce((n) => n + 1);
+                }}
+                hitSlop={20}
+              >
+                <View style={s.retryPill}>
+                  <Ionicons name="refresh" size={16} color={colors.textPrimary} />
+                  <Text style={s.retryText}>Tap to retry</Text>
+                </View>
+              </Pressable>
+            )}
           </Animated.View>
 
           {/* Wish shimmer border */}
@@ -690,6 +721,29 @@ const s = StyleSheet.create({
   // load that takes a beat reads as intentional dim placeholder, not
   // "is this card broken?".
   fullImage: { ...StyleSheet.absoluteFillObject, backgroundColor: colors.surface },
+  // Tap-to-retry overlay — covers the failed-Image area, centered pill.
+  // Only shown after silent auto-retries are exhausted.
+  retryOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  retryPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 22,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
+  },
+  retryText: {
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
   wishGlow: {
     position: 'absolute',
     top: 0,

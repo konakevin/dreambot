@@ -578,6 +578,7 @@ export type Database = {
           is_character_only: boolean;
           is_dream_eligible: boolean;
           is_public: boolean;
+          is_scene_eligible: boolean;
           is_scene_only: boolean;
           key: string;
           kontext_directive: string | null;
@@ -585,6 +586,7 @@ export type Database = {
           nightly_skip: boolean;
           preferred_model: string | null;
           render_base: string | null;
+          scene_eligible_models: string[] | null;
           sort_order: number;
         };
         Insert: {
@@ -604,6 +606,7 @@ export type Database = {
           is_character_only?: boolean;
           is_dream_eligible?: boolean;
           is_public?: boolean;
+          is_scene_eligible?: boolean;
           is_scene_only?: boolean;
           key: string;
           kontext_directive?: string | null;
@@ -611,6 +614,7 @@ export type Database = {
           nightly_skip?: boolean;
           preferred_model?: string | null;
           render_base?: string | null;
+          scene_eligible_models?: string[] | null;
           sort_order?: number;
         };
         Update: {
@@ -630,6 +634,7 @@ export type Database = {
           is_character_only?: boolean;
           is_dream_eligible?: boolean;
           is_public?: boolean;
+          is_scene_eligible?: boolean;
           is_scene_only?: boolean;
           key?: string;
           kontext_directive?: string | null;
@@ -637,6 +642,7 @@ export type Database = {
           nightly_skip?: boolean;
           preferred_model?: string | null;
           render_base?: string | null;
+          scene_eligible_models?: string[] | null;
           sort_order?: number;
         };
         Relationships: [];
@@ -737,6 +743,24 @@ export type Database = {
           label?: string;
           mood_profile?: Json | null;
           sort_order?: number;
+        };
+        Relationships: [];
+      };
+      engine_config: {
+        Row: {
+          id: number;
+          scene_eligible_models: string[];
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          scene_eligible_models?: string[];
+          updated_at?: string;
+        };
+        Update: {
+          id?: number;
+          scene_eligible_models?: string[];
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -1259,81 +1283,6 @@ export type Database = {
           },
         ];
       };
-      object_cards: {
-        Row: {
-          category: string;
-          context_bridges: string[];
-          created_at: string;
-          environment_bindings: string[];
-          faceswap_forbidden: string[];
-          faceswap_safe_positive: string[];
-          fusion_forms: Json;
-          id: string;
-          interaction_modes: string[];
-          is_approved: boolean;
-          material_textures: string[];
-          model_version: string;
-          name: string;
-          prompt_version: number;
-          role_options: string[];
-          scale: string;
-          scale_contexts: string[];
-          signature_details: string[];
-          soft_presence_forms: string[];
-          tags: string[];
-          updated_at: string;
-          visual_forms: string[];
-        };
-        Insert: {
-          category?: string;
-          context_bridges?: string[];
-          created_at?: string;
-          environment_bindings?: string[];
-          faceswap_forbidden?: string[];
-          faceswap_safe_positive?: string[];
-          fusion_forms?: Json;
-          id?: string;
-          interaction_modes?: string[];
-          is_approved?: boolean;
-          material_textures?: string[];
-          model_version?: string;
-          name: string;
-          prompt_version?: number;
-          role_options?: string[];
-          scale?: string;
-          scale_contexts?: string[];
-          signature_details?: string[];
-          soft_presence_forms?: string[];
-          tags?: string[];
-          updated_at?: string;
-          visual_forms?: string[];
-        };
-        Update: {
-          category?: string;
-          context_bridges?: string[];
-          created_at?: string;
-          environment_bindings?: string[];
-          faceswap_forbidden?: string[];
-          faceswap_safe_positive?: string[];
-          fusion_forms?: Json;
-          id?: string;
-          interaction_modes?: string[];
-          is_approved?: boolean;
-          material_textures?: string[];
-          model_version?: string;
-          name?: string;
-          prompt_version?: number;
-          role_options?: string[];
-          scale?: string;
-          scale_contexts?: string[];
-          signature_details?: string[];
-          soft_presence_forms?: string[];
-          tags?: string[];
-          updated_at?: string;
-          visual_forms?: string[];
-        };
-        Relationships: [];
-      };
       pending_push_groups: {
         Row: {
           fire_at: string;
@@ -1654,7 +1603,6 @@ export type Database = {
           description: string | null;
           dream_medium: string | null;
           dream_vibe: string | null;
-          first_dream: boolean;
           flux_seed: number | null;
           from_wish: string | null;
           fuse_count: number;
@@ -1673,6 +1621,7 @@ export type Database = {
           is_public: boolean;
           like_count: number;
           media_type: string;
+          model: string | null;
           output_hash: string | null;
           output_phash: string | null;
           posted_at: string | null;
@@ -1682,6 +1631,7 @@ export type Database = {
           search_tsv: unknown;
           share_count: number;
           style_summary: string | null;
+          thumbhash: string | null;
           thumbnail_url: string | null;
           user_id: string;
           view_count: number;
@@ -1698,7 +1648,6 @@ export type Database = {
           description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
-          first_dream?: boolean;
           flux_seed?: number | null;
           from_wish?: string | null;
           fuse_count?: number;
@@ -1717,6 +1666,7 @@ export type Database = {
           is_public?: boolean;
           like_count?: number;
           media_type?: string;
+          model?: string | null;
           output_hash?: string | null;
           output_phash?: string | null;
           posted_at?: string | null;
@@ -1726,6 +1676,7 @@ export type Database = {
           search_tsv?: unknown;
           share_count?: number;
           style_summary?: string | null;
+          thumbhash?: string | null;
           thumbnail_url?: string | null;
           user_id: string;
           view_count?: number;
@@ -1742,7 +1693,6 @@ export type Database = {
           description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
-          first_dream?: boolean;
           flux_seed?: number | null;
           from_wish?: string | null;
           fuse_count?: number;
@@ -1761,6 +1711,7 @@ export type Database = {
           is_public?: boolean;
           like_count?: number;
           media_type?: string;
+          model?: string | null;
           output_hash?: string | null;
           output_phash?: string | null;
           posted_at?: string | null;
@@ -1770,6 +1721,7 @@ export type Database = {
           search_tsv?: unknown;
           share_count?: number;
           style_summary?: string | null;
+          thumbhash?: string | null;
           thumbnail_url?: string | null;
           user_id?: string;
           view_count?: number;
@@ -1960,6 +1912,7 @@ export type Database = {
           pro_mode_flux_model: string;
           pro_subscription: boolean;
           pro_subscription_expires_at: string | null;
+          pro_subscription_will_renew: boolean;
           pro_trial_started_at: string | null;
           sparkle_balance: number;
           username: string;
@@ -1980,6 +1933,7 @@ export type Database = {
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
           pro_subscription_expires_at?: string | null;
+          pro_subscription_will_renew?: boolean;
           pro_trial_started_at?: string | null;
           sparkle_balance?: number;
           username: string;
@@ -2000,6 +1954,7 @@ export type Database = {
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
           pro_subscription_expires_at?: string | null;
+          pro_subscription_will_renew?: boolean;
           pro_trial_started_at?: string | null;
           sparkle_balance?: number;
           username?: string;
@@ -2221,7 +2176,9 @@ export type Database = {
           image_url_display: string;
           image_url_hq: string;
           like_count: number;
+          model: string;
           posted_at: string;
+          thumbhash: string;
           user_id: string;
           username: string;
           width: number;
@@ -2287,6 +2244,7 @@ export type Database = {
         Returns: {
           avatar_url: string;
           bio: string;
+          created_at: string;
           display_name: string;
           follower_count: number;
           following_count: number;

@@ -68,6 +68,12 @@ export interface InboxGroup {
   commentId: string | null;
   /** Upload's display variant (image_url_display) when present, else image_url. */
   uploadImageUrl: string | null;
+  /** ~25-byte base64 thumbhash preview hash. Fed to expo-image's
+   *  `placeholder` prop so the inbox thumbnail shows a sharp blurry
+   *  preview the instant it mounts, instead of a tinted-card flash.
+   *  Surfaced by get_inbox (migration 220, 2026-06-04). NULL on rows
+   *  whose underlying upload hasn't been thumbhash-backfilled. */
+  uploadThumbhash: string | null;
   /** Latest body for individual types (comments, mentions); null for aggregates. */
   body: string | null;
   /** Newest event time in the group — drives ordering + "X minutes ago". */
@@ -91,6 +97,7 @@ function mapRow(row: Record<string, unknown>): InboxGroup {
     uploadId: (row.upload_id as string | null) ?? null,
     commentId: (row.comment_id as string | null) ?? null,
     uploadImageUrl: (row.upload_image_url as string | null) ?? null,
+    uploadThumbhash: (row.upload_thumbhash as string | null) ?? null,
     body: (row.body as string | null) ?? null,
     lastAt: row.last_at as string,
     anyUnseen: row.any_unseen as boolean,

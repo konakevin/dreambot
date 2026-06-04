@@ -186,6 +186,11 @@ export const PostTile = memo(function PostTile({
         contentFit="cover"
         transition={0}
         cachePolicy="memory-disk"
+        // Thumbhash placeholder shows a sharp blurry preview the instant
+        // the tile mounts — replaces the surface-tinted card-color flash
+        // while the Supabase transform endpoint round-trips.
+        placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
+        placeholderContentFit="cover"
       />
       {isHighlighted && (
         <View style={styles.highlightOverlay}>

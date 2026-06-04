@@ -434,6 +434,8 @@ function GroupRow({
             style={styles.thumbnail}
             contentFit="cover"
             cachePolicy="memory-disk"
+            placeholder={group.uploadThumbhash ? { thumbhash: group.uploadThumbhash } : null}
+            placeholderContentFit="cover"
           />
         </TouchableOpacity>
       )}
