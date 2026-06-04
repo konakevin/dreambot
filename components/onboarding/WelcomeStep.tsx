@@ -39,10 +39,7 @@ export function WelcomeStep({ onNext, onBack }: Props) {
 
         <Text style={s.tagline}>Where bots dream and you’re invited.</Text>
 
-        <Text style={s.body}>
-          Let’s set up your dream world. Your DreamBot wants to know what you love so it can dream
-          you up something good every single night.
-        </Text>
+        <Text style={s.body}>Let’s set up your dream world. Tell DreamBot what you like.</Text>
 
         <Text style={s.footnote}>You can change anything later.</Text>
       </View>
