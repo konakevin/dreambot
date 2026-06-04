@@ -53,7 +53,8 @@ const LIMIT_LOC = (() => {
   return i >= 0 ? parseInt(args[i + 1], 10) : Infinity;
 })();
 const PER_LOCATION = 20;
-const NOTE_TAG = 'pure_scene_phase3'; // stored in `notes` column for idempotency
+// Idempotency below uses spot_text exact-match dedup against existing rows.
+// (location_iconic_spots has no `notes`-style tag column.)
 
 const sb = createClient(SB_URL, SB_KEY);
 const anthropic = new Anthropic({ apiKey: ANTHROPIC_KEY });
@@ -117,7 +118,10 @@ async function generateOne(location) {
     quality_tier: 'S',
     is_active: true,
     pure_scene_eligible: true,
-    notes: NOTE_TAG,
+    // (No `notes` column on the table — Phase 3 rows are identifiable
+    // post-hoc as quality_tier='S' + pure_scene_eligible=true + created_at
+    // on the Phase 3 generation date. Idempotency below switches to a
+    // spot_text exact-match dedup since we can't tag the rows directly.)
   }));
 }
 
@@ -133,22 +137,11 @@ async function generateOne(location) {
   const locs = live.map((c) => c.name).slice(0, LIMIT_LOC);
   console.log(`Live locations to seed: ${locs.length}`);
 
-  // Which ones already have Phase 3 rows (idempotency)
-  const skipSet = new Set();
-  if (!REGENERATE) {
-    const { data: existing } = await sb
-      .from('location_iconic_spots')
-      .select('location_key')
-      .eq('notes', NOTE_TAG)
-      .range(0, 5000);
-    const counts = {};
-    (existing || []).forEach((r) => (counts[r.location_key] = (counts[r.location_key] || 0) + 1));
-    for (const [k, v] of Object.entries(counts)) {
-      if (v >= PER_LOCATION) skipSet.add(k);
-    }
-    console.log(`Skipping ${skipSet.size} locations that already have ${PER_LOCATION}+ phase3 rows.`);
-  }
-  const todo = locs.filter((l) => !skipSet.has(l));
+  // Idempotency note: no tag column on this table, so we just generate for
+  // all live locations and rely on insert-time dedup against existing
+  // spot_text values per location. --regenerate is a no-op now (kept for
+  // future use if a `source` column gets added).
+  const todo = locs;
   console.log(`To generate: ${todo.length}\n`);
 
   if (DRY_RUN) {
@@ -170,12 +163,28 @@ async function generateOne(location) {
         continue;
       }
       const rows = r.value;
-      const { error, data } = await sb.from('location_iconic_spots').insert(rows).select('id');
+      // Dedup: pull existing spot_text for this location, filter out any
+      // Sonnet-authored duplicates (case-insensitive trimmed match).
+      const { data: existing } = await sb
+        .from('location_iconic_spots')
+        .select('spot_text')
+        .eq('location_key', loc);
+      const existingNorm = new Set(
+        (existing || []).map((r) => String(r.spot_text).toLowerCase().trim()),
+      );
+      const fresh = rows.filter(
+        (r) => !existingNorm.has(String(r.spot_text).toLowerCase().trim()),
+      );
+      if (fresh.length === 0) {
+        console.log(`  • ${loc} (+0, all 20 were dupes of existing pool)`);
+        continue;
+      }
+      const { error, data } = await sb.from('location_iconic_spots').insert(fresh).select('id');
       if (error) {
         console.error(`  ✗ ${loc}: insert err: ${error.message}`);
       } else {
-        totalInserted += data?.length || rows.length;
-        console.log(`  ✓ ${loc} (+${rows.length})`);
+        totalInserted += data?.length || fresh.length;
+        console.log(`  ✓ ${loc} (+${fresh.length}${fresh.length < rows.length ? ` of 20; ${rows.length - fresh.length} dupes` : ''})`);
       }
     }
   }

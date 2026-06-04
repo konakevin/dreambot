@@ -753,25 +753,33 @@ Deno.serve(async (req) => {
     // travelers who have been to that specific place.
     let bespokeBiome: ReturnType<typeof getBiomeConfig> | null = null;
     if (userPlace) {
-      // pure_scene Phase 1 quality filter (2026-06-04): the location_iconic_spots
-      // pool is curated for "real recognizable landmark" — which mixes Hollywood
-      // Sign with Anne Frank House with Los Angeles River concrete channel. Cast
-      // paths (character / epic_tiny) tolerate mundane locations because a person
-      // carries the scene. pure_scene has no subject other than the landscape, so
-      // a "concrete ditch in LA" type anchor reads as a random building photo, not
-      // a postcard. Restrict to S + A quality tiers when rolling for pure_scene
-      // to exclude the B-tier "anywhere will do" entries. Cast paths keep the full
-      // pool. (Phase 2 will replace the S+A heuristic with a Sonnet-classified
-      // `pure_scene_eligible` boolean column for finer-grained A-tier curation;
-      // Phase 3 will seed fresh "postcard-only" spots per location.)
-      const POSTCARD_TIERS = ['S', 'A'];
+      // pure_scene quality filter (2026-06-04): the location_iconic_spots
+      // pool was originally curated for "real recognizable landmark" — which
+      // mixes Hollywood Sign with Anne Frank House with Los Angeles River
+      // concrete channel. Cast paths (character / epic_tiny) tolerate mundane
+      // locations because a person carries the scene. pure_scene has no
+      // subject other than the landscape, so a "concrete ditch in LA" type
+      // anchor reads as a random building photo, not a postcard.
+      //
+      // Three-phase fix landed 2026-06-04:
+      //   1. Engine filter (originally quality_tier IN ('S','A'), now
+      //      pure_scene_eligible = true).
+      //   2. classify-pure-scene-eligible.js Sonnet pass — S auto-true,
+      //      B auto-false, A judged per spot with a strict postcard rubric.
+      //      Net pool kept: ~50% of the 4,897 original spots.
+      //   3. gen-postcard-spots.js — added 960 fresh Sonnet-authored
+      //      postcard anchors (20 per location × 48 live locations),
+      //      pre-marked pure_scene_eligible=true.
+      //
+      // Cast paths still get the full pool — mundane spots are fine when
+      // a human is the subject.
       let spotsQ = supabase
         .from('location_iconic_spots')
         .select('spot_text, spot_kind, quality_tier')
         .eq('location_key', userPlace)
         .eq('is_active', true);
       if (composition === 'pure_scene') {
-        spotsQ = spotsQ.in('quality_tier', POSTCARD_TIERS);
+        spotsQ = spotsQ.eq('pure_scene_eligible', true);
       }
       const [{ data: spots }, { data: locCard }] = await Promise.all([
         spotsQ,
