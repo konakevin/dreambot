@@ -598,7 +598,7 @@ export function RevealStep({ onBack }: Props) {
                 }}
               />
               <Text style={s.revealTitle}>Your first dream</Text>
-              <Text style={s.revealBody}>(Saved to your Dreams album either way)</Text>
+              <Text style={s.revealBody}>(saved to your Dreams album either way)</Text>
               <TouchableOpacity
                 style={s.createButton}
                 onPress={() => handleCreateBot(true)}
