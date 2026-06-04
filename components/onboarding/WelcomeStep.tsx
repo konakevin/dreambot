@@ -22,6 +22,8 @@ export function WelcomeStep({ onNext, onBack }: Props) {
           <Image source={require('@/assets/images/icon.png')} style={s.mascot} contentFit="cover" />
         </View>
 
+        <Text style={s.welcomeEyebrow}>Welcome to</Text>
+
         {/* Gradient wordmark — matches the dreambotapp.com Hero treatment */}
         <MaskedView
           maskElement={
@@ -62,6 +64,13 @@ const s = StyleSheet.create({
   iconStack: { alignItems: 'center', marginBottom: 24 },
   mascot: { width: 160, height: 160, borderRadius: 32 },
 
+  welcomeEyebrow: {
+    color: colors.textSecondary,
+    fontSize: 17,
+    fontWeight: '500',
+    textAlign: 'center',
+    marginBottom: 6,
+  },
   titleMaskWrap: { alignItems: 'center' },
   titleMask: {
     fontSize: 44,

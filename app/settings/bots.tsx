@@ -1,10 +1,10 @@
 /**
  * Settings → Bots — management surface for the user's bot follows.
  *
- * Mirrors the onboarding meet-the-bots screen (same BotCard layout, same
+ * Mirrors the onboarding BotSelectorStep (same BotCard layout, same
  * 3-thumbnail preview, same Follow toggle), but framed inside ScreenLayout
  * so it's accessible any time from the settings screen rather than as a
- * one-shot post-onboarding showcase.
+ * one-shot in-onboarding step.
  *
  * Ordering: bots the user already follows first, then alphabetical for
  * everything else. (Aesthetics-curated middle tier was removed when

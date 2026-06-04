@@ -16,7 +16,14 @@ import { LocationPickerStep } from '@/components/onboarding/LocationPickerStep';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 import { InfoStep } from '@/components/onboarding/InfoStep';
-import { NIGHTLY_INFO, CAST_INFO, MOOD_INFO, MORE_INSIDE_INFO } from '@/constants/onboardingInfo';
+import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
+import {
+  NIGHTLY_INFO,
+  CAST_INFO,
+  MOOD_INFO,
+  CREATE_INFO,
+  MEET_BOTS_INTRO,
+} from '@/constants/onboardingInfo';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -61,10 +68,16 @@ const STEPS: StepConfig[] = [
   },
   { key: 'personality', component: MoodSlidersStep },
   {
-    key: 'info_more_inside',
-    component: (p) => <InfoStep {...MORE_INSIDE_INFO} {...p} />,
+    key: 'info_create',
+    component: (p) => <InfoStep {...CREATE_INFO} {...p} />,
     skipInEdit: true,
   },
+  {
+    key: 'info_meet_bots',
+    component: (p) => <InfoStep {...MEET_BOTS_INTRO} {...p} />,
+    skipInEdit: true,
+  },
+  { key: 'bot_selector', component: BotSelectorStep, skipInEdit: true },
   { key: 'reveal', component: RevealStep, skipInEdit: true },
 ];
 

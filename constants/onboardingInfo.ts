@@ -1,13 +1,13 @@
 import type { InfoStepConfig } from '@/components/onboarding/InfoStep';
 
-// Copy for the four informational onboarding screens that interleave the
+// Copy for the informational onboarding screens that interleave the
 // data-collection steps. Lifted from the dreambotapp.com brochure's pitch
-// so onboarding tells the same story as the site (nightly postcards, cast,
-// mood, then "what else is in the app").
+// so onboarding tells the same story as the site.
 //
 // Step order in app/(onboarding)/index.tsx:
 //   welcome → NIGHTLY_INFO → locations → CAST_INFO → cast →
-//   MOOD_INFO → personality → MORE_INSIDE_INFO → reveal
+//   MOOD_INFO → personality → CREATE_INFO → MEET_BOTS_INTRO →
+//   bot_selector → reveal
 
 export const NIGHTLY_INFO: InfoStepConfig = {
   eyebrow: 'the nightly thing',
@@ -33,22 +33,25 @@ export const MOOD_INFO: InfoStepConfig = {
   ctaLabel: 'Let’s tune it',
 };
 
-export const MORE_INSIDE_INFO: InfoStepConfig = {
-  eyebrow: 'before your first dream',
-  emoji: '✨',
-  headline: 'There’s more inside',
-  body: 'Beyond the nightly postcard, you’ve got:',
+export const CREATE_INFO: InfoStepConfig = {
+  eyebrow: 'on demand, anytime',
+  imageSource: require('@/assets/images/onboarding/create-studio.png'),
+  headline: 'A full AI image studio',
+  body: 'Beyond the nightly postcard, you’ve got a clean prompt box and every top AI image model in one app: Flux 2, Nano Banana, GPT Image 2. Pick one, write what you want, generate.',
   subFeatures: [
     {
-      emoji: '🎨',
-      title: 'A full AI image studio',
-      body: 'Every top model in one app: Flux 2, Nano Banana, GPT Image 2. Pick one and write a prompt.',
-    },
-    {
-      emoji: '🤖',
-      title: 'A fleet of bots in the feed',
-      body: 'Each off in their own little world, posting whatever they dream up. Cosmic vistas, flowers, vampires, toys.',
+      emoji: '✨',
+      title: 'Runs on sparkles',
+      body: 'Each render costs a sparkle or two. We’ll drop 25 in your account when you finish setup so you can start playing right away.',
     },
   ],
-  ctaLabel: 'Show me my first dream',
+  ctaLabel: 'Nice',
+};
+
+export const MEET_BOTS_INTRO: InfoStepConfig = {
+  eyebrow: 'the dream team',
+  emoji: '🤖',
+  headline: 'Meet the bots',
+  body: 'There’s a fleet of specialized bots posting to the feed around the clock. Each is off in its own little world — cosmic vistas, flowers, vampires, toys, whatever. Follow the ones whose vibe you like and they’ll land in your home feed.',
+  ctaLabel: 'Show me the roster',
 };

@@ -24,11 +24,16 @@ export interface InfoStepConfig {
   eyebrow: string;
   /** When true, show the app icon mascot at the top instead of a glyph. */
   useMascot?: boolean;
-  /** Large emoji shown above the eyebrow when `useMascot` is false. */
+  /** Large emoji shown above the eyebrow when no mascot/image is set. */
   emoji?: string;
+  /**
+   * Optional phone-frame screenshot shown above the eyebrow (replaces the
+   * mascot/emoji slot). Pass a `require('@/assets/…')` source.
+   */
+  imageSource?: number;
   headline: string;
   body: string;
-  /** Optional sub-feature cards under the body (used by the "more inside" step). */
+  /** Optional sub-feature cards under the body. */
   subFeatures?: InfoSubFeature[];
   ctaLabel?: string;
 }
@@ -46,6 +51,7 @@ export function InfoStep({
   eyebrow,
   useMascot,
   emoji,
+  imageSource,
   headline,
   body,
   subFeatures,
@@ -56,7 +62,11 @@ export function InfoStep({
   return (
     <View style={s.root}>
       <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
-        {useMascot ? (
+        {imageSource ? (
+          <View style={s.screenshotWrap}>
+            <Image source={imageSource} style={s.screenshot} contentFit="contain" />
+          </View>
+        ) : useMascot ? (
           <View style={s.mascotWrap}>
             <Image
               source={require('@/assets/images/icon.png')}
@@ -120,6 +130,21 @@ const s = StyleSheet.create({
   mascotWrap: { alignItems: 'center', marginBottom: 20 },
   mascot: { width: 130, height: 130, borderRadius: 28 },
   emoji: { fontSize: 64, marginBottom: 18, textAlign: 'center' },
+  screenshotWrap: {
+    width: 200,
+    aspectRatio: 9 / 16,
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: 22,
+    backgroundColor: colors.surface,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+  },
+  screenshot: { width: '100%', height: '100%' },
 
   eyebrow: {
     color: colors.accentLight,

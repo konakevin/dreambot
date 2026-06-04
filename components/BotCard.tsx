@@ -1,6 +1,6 @@
 /**
  * BotCard — avatar + tagline + Follow toggle + 3 latest-post thumbnails.
- * Used by both the onboarding meet-the-bots screen and the settings/bots
+ * Used by both the onboarding BotSelectorStep and the settings/bots
  * management screen. Tap a thumbnail to open the fullscreen viewer.
  */
 
