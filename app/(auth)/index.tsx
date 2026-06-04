@@ -29,20 +29,17 @@ const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4
 function Logo() {
   return (
     <View style={authStyles.logoContainer}>
-      {/* Bright multi-color HALO behind the mascot — purple → pink → teal
-          (the full brand gradient) at moderate opacity. This is the
-          showstopper from dreambotapp.com Hero: a soft blurred blob
-          behind the mascot that's the whole reason that screen reads as
-          bright/dreamy. Sized larger than the mascot so the colored
-          glow extends past its edges. */}
-      <View style={authStyles.mascotHaloWrap}>
-        <LinearGradient
-          colors={BRAND_GRADIENT}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={authStyles.mascotHaloGradient}
-        />
-      </View>
+      {/* Soft brand halo behind the mascot — pre-rendered PNG via SVG's
+          feGaussianBlur (scripts/gen-mascot-halo.js). RN's LinearGradient
+          clipped to a circular View leaves a hard edge; SVG Gaussian
+          blur creates true smooth alpha falloff in every direction with
+          no banding, baked into a transparent PNG. */}
+      <Image
+        source={require('@/assets/images/mascot-halo.png')}
+        style={authStyles.mascotHalo}
+        contentFit="contain"
+        pointerEvents="none"
+      />
 
       {/* Mascot */}
       <Image
@@ -69,23 +66,18 @@ const authStyles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
   },
-  // Multi-color halo behind the mascot — same pattern as the brochure
-  // Hero's `blur-3xl` gradient circle. RN has no CSS blur filter, but the
-  // gradient's natural soft edges at low edge-opacity approximate it.
-  // Sized 240×240 (larger than the 130×130 mascot) so the glow extends
-  // past the mascot edges. Absolute-positioned so it sits BEHIND the
-  // mascot without taking layout space.
-  mascotHaloWrap: {
+  // Soft brand halo PNG — pre-rendered via SVG Gaussian blur. Sized
+  // ~2.4× the mascot so the soft glow extends well past its edges.
+  // Absolute-positioned so it sits BEHIND the mascot in z-order without
+  // taking layout space (mascot is centered separately).
+  mascotHalo: {
     position: 'absolute',
-    width: 240,
-    height: 240,
-    borderRadius: 120,
-    top: -55,
+    width: 320,
+    height: 320,
+    top: -95,
     alignSelf: 'center',
-    overflow: 'hidden',
-    opacity: 0.55,
+    opacity: 0.85,
   },
-  mascotHaloGradient: { width: '100%', height: '100%' },
   mascot: {
     width: 130,
     height: 130,
