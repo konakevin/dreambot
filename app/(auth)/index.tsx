@@ -161,26 +161,31 @@ export default function WelcomeScreen() {
           </TouchableOpacity>
         )}
 
-        {/* Google Sign-In */}
+        {/* Google Sign-In — white bg + black text + colored G logo per
+            Google's "Sign in with Google" brand guidelines, so all 3 social
+            buttons read as branded auth providers of equal visual weight
+            (was a dark card masquerading as a secondary button). */}
         <TouchableOpacity
-          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
+          className="bg-white rounded-full py-4 flex-row items-center justify-center gap-3"
           onPress={() => handleSocialSignIn('google')}
           disabled={loading !== null}
           activeOpacity={0.8}
         >
           {loading === 'google' ? (
-            <ActivityIndicator color="#FFFFFF" size="small" />
+            <ActivityIndicator color="#000000" size="small" />
           ) : (
             <>
-              <Ionicons name="logo-google" size={20} color="#FFFFFF" />
-              <Text className="text-white font-semibold text-base">Continue with Google</Text>
+              <Ionicons name="logo-google" size={20} color="#4285F4" />
+              <Text className="text-black font-semibold text-base">Continue with Google</Text>
             </>
           )}
         </TouchableOpacity>
 
-        {/* Facebook Sign-In */}
+        {/* Facebook Sign-In — Facebook brand blue + white text + white "f"
+            logo per Meta's brand guidelines. */}
         <TouchableOpacity
-          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
+          className="rounded-full py-4 flex-row items-center justify-center gap-3"
+          style={{ backgroundColor: '#1877F2' }}
           onPress={() => handleSocialSignIn('facebook')}
           disabled={loading !== null}
           activeOpacity={0.8}
@@ -189,33 +194,42 @@ export default function WelcomeScreen() {
             <ActivityIndicator color="#FFFFFF" size="small" />
           ) : (
             <>
-              <Ionicons name="logo-facebook" size={20} color="#1877F2" />
+              <Ionicons name="logo-facebook" size={20} color="#FFFFFF" />
               <Text className="text-white font-semibold text-base">Continue with Facebook</Text>
             </>
           )}
         </TouchableOpacity>
 
-        <Link href="/(auth)/signup" asChild>
-          <TouchableOpacity
-            className="bg-[#8B7BEE] rounded-full py-4 items-center"
-            activeOpacity={0.8}
-            onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
-          >
-            <Text className="text-white font-bold text-base">Create account</Text>
-          </TouchableOpacity>
-        </Link>
+        {/* Email signup + login as inline text links — social trio above is
+            now the primary path; email signup is the alternative, demoted
+            from full-width buttons (was visually competing with the social
+            buttons and muddling the "do this" hierarchy). */}
+        <View className="flex-row items-center justify-center gap-1.5 mt-3">
+          <Text className="text-white/60 text-sm">New here?</Text>
+          <Link href="/(auth)/signup" asChild>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+            >
+              <Text className="text-white font-semibold text-sm">Create an account</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
+        <View className="flex-row items-center justify-center gap-1.5">
+          <Text className="text-white/60 text-sm">Have an account?</Text>
+          <Link href="/(auth)/login" asChild>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+            >
+              <Text className="text-white font-semibold text-sm">Sign in</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
 
-        <Link href="/(auth)/login" asChild>
-          <TouchableOpacity
-            className="border border-border rounded-full py-4 items-center"
-            activeOpacity={0.8}
-            onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
-          >
-            <Text className="text-white font-semibold text-base">Sign in</Text>
-          </TouchableOpacity>
-        </Link>
-
-        <Text className="text-text-tertiary text-xs text-center mt-2 px-4">
+        {/* Legal disclosure — bumped from text-tertiary (invisible on the
+            purple haze) to white/55 so it's legible without shouting. */}
+        <Text className="text-xs text-center mt-3 px-4" style={{ color: 'rgba(255,255,255,0.55)' }}>
           By continuing you agree to our{' '}
           <Text
             className="underline"
