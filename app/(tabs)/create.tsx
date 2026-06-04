@@ -43,12 +43,9 @@ import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { FluxModelPicker } from '@/components/FluxModelPicker';
+import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { useImageModels } from '@/hooks/useImageModels';
-
-// One-time toast: "1 sparkle = 1 dream" surfaces the first time a user
-// opens the Create tab. Stops surfacing once dismissed (per-device flag).
-const SEEN_SPARKLE_HINT_KEY = 'dreambot.seenSparkleHint.v1';
 
 export default function CreateScreen() {
   const config = useDreamStore((s) => s.config);
@@ -113,33 +110,24 @@ export default function CreateScreen() {
     [setUseExactPrompt]
   );
 
-  // First-Create-tap teaching toast — explains the sparkle unit cost the
-  // moment a new user opens the Create tab. Fires ONCE per device per
-  // install (AsyncStorage flag), then never surfaces again.
+  // First-Create-tap teaching sheet — explains the modes + sparkles via a
+  // full sheet (CreateIntroSheet) the first time a user opens the Create
+  // tab. Replaces the older one-liner "1 sparkle = 1 dream" toast which
+  // didn't actually explain how Create works. Once-per-device-per-install
+  // (persistence handled inside the sheet on its own mount).
+  const [introVisible, setIntroVisible] = useState(false);
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      try {
-        const seen = await AsyncStorage.getItem(SEEN_SPARKLE_HINT_KEY);
-        if (seen === '1' || cancelled) return;
-        // Wait a tick so the toast doesn't fight the screen mount animation
-        setTimeout(() => {
-          if (cancelled) return;
-          Toast.show(`1 sparkle = 1 dream. You've got ${sparkleBalance}.`, 'sparkles');
-          AsyncStorage.setItem(SEEN_SPARKLE_HINT_KEY, '1').catch((e) => {
-            if (__DEV__) console.warn('[create] pref persist failed', e);
-          });
-        }, 700);
-      } catch {
-        // Toast is non-critical; silent fail
-      }
-    })();
+    hasSeenCreateIntro().then((seen) => {
+      if (cancelled || seen) return;
+      // Wait a tick so the sheet doesn't fight the screen mount animation.
+      setTimeout(() => {
+        if (!cancelled) setIntroVisible(true);
+      }, 350);
+    });
     return () => {
       cancelled = true;
     };
-    // Only run once on mount — sparkleBalance is captured in closure but
-    // we deliberately don't re-fire when it changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Keyboard tracking — delay state update until after keyboard animation
@@ -851,6 +839,9 @@ export default function CreateScreen() {
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
+
+      {/* First-Create-tap teaching sheet — see effect above. */}
+      <CreateIntroSheet visible={introVisible} onClose={() => setIntroVisible(false)} />
     </SafeAreaView>
   );
 }

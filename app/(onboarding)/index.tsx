@@ -17,13 +17,11 @@ import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 import { InfoStep } from '@/components/onboarding/InfoStep';
 import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
-import {
-  NIGHTLY_INFO,
-  CAST_INFO,
-  MOOD_INFO,
-  CREATE_INFO,
-  MEET_BOTS_INTRO,
-} from '@/constants/onboardingInfo';
+// CREATE_INFO is intentionally NOT imported here — the Create-screen intro
+// was pulled out of onboarding 2026-06-03 and is now shown as a one-time
+// sheet the first time the user opens the Create tab (CreateIntroSheet,
+// which reuses the same CREATE_INFO config).
+import { NIGHTLY_INFO, CAST_INFO, MOOD_INFO, MEET_BOTS_INTRO } from '@/constants/onboardingInfo';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -41,11 +39,12 @@ interface StepConfig {
 // (ripped out of the engine entirely — see project_objects_removed_2026-06-02
 // memory).
 //
-// Sequence: a Welcome hook, then 4 InfoStep cards interleaved with the 3
-// data-collection steps so each pillar of the brochure pitch gets its own
-// moment right before the user provides the matching input (locations →
-// cast → mood), then a final "what else is in the app" card before the
-// first-dream reveal. Info cards are `skipInEdit: true` so editing existing
+// Sequence: Welcome hook, then 3 InfoStep cards interleaved with the data
+// steps (Nightly → locations, Cast → cast, Mood → personality), then
+// "Meet the bots" intro → bot selector → reveal. The Create-screen intro
+// used to be a 4th info card here; it was moved to a one-time sheet in the
+// Create tab (CreateIntroSheet) so the lesson lands in context with the
+// real UI visible. Info cards are `skipInEdit: true` so editing existing
 // settings from /settings doesn't re-display them.
 const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep },
@@ -67,11 +66,6 @@ const STEPS: StepConfig[] = [
     skipInEdit: true,
   },
   { key: 'personality', component: MoodSlidersStep },
-  {
-    key: 'info_create',
-    component: (p) => <InfoStep {...CREATE_INFO} {...p} />,
-    skipInEdit: true,
-  },
   {
     key: 'info_meet_bots',
     component: (p) => <InfoStep {...MEET_BOTS_INTRO} {...p} />,
