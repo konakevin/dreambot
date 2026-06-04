@@ -116,28 +116,25 @@ export default function WelcomeScreen() {
           black would stand out more") so the lavender base reads more
           clearly behind the new pure-black social buttons. */}
       <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
-        {/* Main purple wash — 3-stop gradient redistributes brightness so
-            the peak sits ~60% down (behind the buttons, where contrast helps
-            most) instead of at the top (where it was muddying the wordmark).
-            Quiet at top → peak mid-low → fade to dark at bottom. */}
+        {/* Main purple wash — clean 2-stop, no mid-gradient peak (the 3-stop
+            version showed a faintly visible "brightest band" across the
+            middle). Top stays a touch quieter than bottom so the wordmark
+            keeps its contrast; bottom is the warmer pocket where the
+            buttons sit. */}
         <LinearGradient
-          colors={[
-            'rgba(167,139,250,0.22)', // quiet at top — wordmark stays legible
-            'rgba(167,139,250,0.50)', // peak behind the buttons
-            'rgba(167,139,250,0.10)', // fade out at bottom
-          ]}
-          locations={[0, 0.6, 1]}
+          colors={['rgba(167,139,250,0.25)', 'rgba(167,139,250,0.40)']}
           start={{ x: 0.4, y: 0 }}
           end={{ x: 0.6, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
-        {/* Accent pink wash from bottom-right — slight warmth where the
-            buttons sit, fades toward the upper-left. */}
+        {/* Accent pink — start anchored to BOTTOM-right (y:0.7, not 0.4) so
+            the brightest pink kiss actually lands behind the buttons, not
+            next to the wordmark. Fades clear toward the upper-left. */}
         <LinearGradient
-          colors={['rgba(249,168,212,0.34)', 'rgba(249,168,212,0)']}
-          locations={[0, 0.75]}
-          start={{ x: 1, y: 0.4 }}
-          end={{ x: 0, y: 1 }}
+          colors={['rgba(249,168,212,0.32)', 'rgba(249,168,212,0)']}
+          locations={[0, 0.8]}
+          start={{ x: 1, y: 0.7 }}
+          end={{ x: 0.2, y: 0 }}
           style={StyleSheet.absoluteFillObject}
         />
       </View>
