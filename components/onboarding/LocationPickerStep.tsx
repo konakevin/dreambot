@@ -217,9 +217,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
       >
         <View style={s.hero}>
           <Text style={shared.heroTitle}>Where do you want to dream?</Text>
-          <Text style={shared.heroSubtitle}>
-            Anywhere you’ve loved, or anywhere you’d love to go.
-          </Text>
+          <Text style={shared.heroSubtitle}>Places you love, or anywhere you’d love to go.</Text>
         </View>
 
         {sections.map((section) => {
