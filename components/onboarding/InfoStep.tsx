@@ -1,10 +1,9 @@
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
-import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { OnboardingFooter } from './OnboardingFooter';
 
 // Informational onboarding screens that interleave with the data-collection
 // steps (Locations / Cast / Personality). They mirror the four pieces of
@@ -52,12 +51,8 @@ export function InfoStep({
   subFeatures,
   ctaLabel = 'Continue',
   onNext,
+  onBack,
 }: Props) {
-  function handleNext() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    onNext();
-  }
-
   return (
     <View style={s.root}>
       <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
@@ -107,12 +102,7 @@ export function InfoStep({
         )}
       </ScrollView>
 
-      <View style={s.footer}>
-        <TouchableOpacity style={s.cta} onPress={handleNext} activeOpacity={0.85}>
-          <Text style={s.ctaText}>{ctaLabel}</Text>
-          <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
+      <OnboardingFooter onNext={onNext} onBack={onBack} nextLabel={ctaLabel} />
     </View>
   );
 }
@@ -174,16 +164,4 @@ const s = StyleSheet.create({
   subFeatureText: { flex: 1, gap: 4 },
   subFeatureTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
   subFeatureBody: { color: colors.textSecondary, fontSize: 13, lineHeight: 19 },
-
-  footer: { paddingHorizontal: 20, paddingBottom: 16, paddingTop: 8 },
-  cta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: 16,
-  },
-  ctaText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
 });

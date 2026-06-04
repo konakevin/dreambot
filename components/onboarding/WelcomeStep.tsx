@@ -1,10 +1,9 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
-import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { OnboardingFooter } from './OnboardingFooter';
 
 interface Props {
   onNext: () => void;
@@ -15,12 +14,7 @@ interface Props {
 // and the InfoStep headlines so the whole onboarding feels visually unified.
 const WORDMARK_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
-export function WelcomeStep({ onNext }: Props) {
-  function handleStart() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    onNext();
-  }
-
+export function WelcomeStep({ onNext, onBack }: Props) {
   return (
     <View style={s.root}>
       <View style={s.content}>
@@ -51,12 +45,8 @@ export function WelcomeStep({ onNext }: Props) {
         <Text style={s.footnote}>You can change anything later.</Text>
       </View>
 
-      <View style={s.footer}>
-        <TouchableOpacity style={s.startButton} onPress={handleStart} activeOpacity={0.85}>
-          <Text style={s.startButtonText}>Let’s go</Text>
-          <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
+      {/* First step — no previous screen to go back to. */}
+      <OnboardingFooter onNext={onNext} onBack={onBack} nextLabel="Let’s go" hideBack />
     </View>
   );
 }
@@ -104,16 +94,4 @@ const s = StyleSheet.create({
     textAlign: 'center',
     opacity: 0.75,
   },
-
-  footer: { paddingHorizontal: 20, paddingBottom: 16 },
-  startButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: 16,
-  },
-  startButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
 });

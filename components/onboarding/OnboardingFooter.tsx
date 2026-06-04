@@ -12,6 +12,8 @@ interface Props {
   counter?: string;
   counterMet?: boolean;
   counterRight?: React.ReactNode;
+  /** Hide the Back button (used on the first onboarding screen — nowhere to go back to). */
+  hideBack?: boolean;
 }
 
 export function OnboardingFooter({
@@ -22,6 +24,7 @@ export function OnboardingFooter({
   counter,
   counterMet = false,
   counterRight,
+  hideBack = false,
 }: Props) {
   return (
     <View style={shared.footer}>
@@ -36,10 +39,12 @@ export function OnboardingFooter({
         </View>
       )}
       <View style={shared.footerButtons}>
-        <TouchableOpacity style={shared.backBtn} onPress={onBack} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-          <Text style={shared.backBtnText}>Back</Text>
-        </TouchableOpacity>
+        {!hideBack && (
+          <TouchableOpacity style={shared.backBtn} onPress={onBack} activeOpacity={0.7}>
+            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
+            <Text style={shared.backBtnText}>Back</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={[shared.continueBtn, disabled && shared.continueBtnDisabled]}
           onPress={() => {
