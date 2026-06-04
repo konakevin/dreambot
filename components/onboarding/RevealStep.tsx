@@ -599,8 +599,8 @@ export function RevealStep({ onBack }: Props) {
               />
               <Text style={s.revealTitle}>Your first dream</Text>
               <Text style={s.revealBody}>
-                {activeDream.medium?.replace(/_/g, ' ')} · {activeDream.vibe}. Saved to your dreams
-                either way.
+                {activeDream.medium?.replace(/_/g, ' ')} · {activeDream.vibe}. Saved to your Dreams
+                album either way.
               </Text>
               <TouchableOpacity
                 style={s.createButton}
