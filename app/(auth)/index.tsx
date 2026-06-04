@@ -109,18 +109,14 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* True radial bloom — baked PNG overlay. expo-linear-gradient has
-          no radial primitive (stacking perpendicular linears looks patchy,
-          see commit e807f860), so we pre-render the radial via SVG +
-          sharp (scripts/gen-auth-bloom.js) and overlay the PNG.
-          Gradient progresses through all 3 brand stops at low alpha —
-          moon purple → cloud pink → star teal — same colors as the
-          DreamBot wordmark gradient, just faded soft so it reads as
-          ambient atmosphere. */}
-      <Image
-        source={require('@/assets/images/auth-bloom.png')}
+      {/* Single vertical LinearGradient — brand moon-purple at top fading
+          to transparent at bottom. Clean, no banding, no radial-fake
+          patchiness. Iterating from here. */}
+      <LinearGradient
+        colors={['rgba(167,139,250,0.45)', 'rgba(167,139,250,0)']}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
         style={StyleSheet.absoluteFillObject}
-        contentFit="cover"
         pointerEvents="none"
       />
 
