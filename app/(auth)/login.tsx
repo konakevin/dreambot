@@ -122,86 +122,90 @@ export default function LoginScreen() {
               <View className="flex-1 h-px bg-border" />
             </View>
 
-            {/* Apple Sign-In (iOS only) */}
-            {Platform.OS === 'ios' && (
+            {/* Compact icon-only social row — three round buttons, brand
+                logos only. Visually secondary to the primary Sign-in
+                button above so the eye knows email/password is the main
+                path here. (Welcome screen still surfaces the full-width
+                social labeled versions for first-time sign-up.) */}
+            <View className="flex-row items-center justify-center gap-4">
+              {Platform.OS === 'ios' && (
+                <TouchableOpacity
+                  className="w-14 h-14 rounded-full bg-card border border-border items-center justify-center"
+                  onPress={async () => {
+                    try {
+                      setLoading(true);
+                      await signInWithApple();
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                      router.replace('/');
+                    } catch (err: unknown) {
+                      const msg = (err as Error).message;
+                      if (
+                        !msg.includes('canceled') &&
+                        !msg.includes('cancelled') &&
+                        !msg.includes('ERR_CANCELED')
+                      ) {
+                        showAlert('Apple Sign-In failed', msg);
+                      }
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  disabled={loading}
+                  activeOpacity={0.7}
+                  accessibilityLabel="Sign in with Apple"
+                >
+                  <Ionicons name="logo-apple" size={26} color="#FFFFFF" />
+                </TouchableOpacity>
+              )}
+
               <TouchableOpacity
-                className="bg-white rounded-full py-4 flex-row items-center justify-center gap-3 mb-3"
+                className="w-14 h-14 rounded-full bg-card border border-border items-center justify-center"
                 onPress={async () => {
                   try {
                     setLoading(true);
-                    await signInWithApple();
+                    await signInWithGoogle();
                     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                     router.replace('/');
                   } catch (err: unknown) {
                     const msg = (err as Error).message;
-                    if (
-                      !msg.includes('canceled') &&
-                      !msg.includes('cancelled') &&
-                      !msg.includes('ERR_CANCELED')
-                    ) {
-                      showAlert('Apple Sign-In failed', msg);
+                    if (!msg.includes('canceled') && !msg.includes('cancelled')) {
+                      showAlert('Google Sign-In failed', msg);
                     }
                   } finally {
                     setLoading(false);
                   }
                 }}
                 disabled={loading}
-                activeOpacity={0.8}
+                activeOpacity={0.7}
+                accessibilityLabel="Sign in with Google"
               >
-                <Ionicons name="logo-apple" size={20} color="#000000" />
-                <Text className="text-black font-semibold text-base">Continue with Apple</Text>
+                <Ionicons name="logo-google" size={24} color="#4285F4" />
               </TouchableOpacity>
-            )}
 
-            {/* Google Sign-In */}
-            <TouchableOpacity
-              className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
-              onPress={async () => {
-                try {
-                  setLoading(true);
-                  await signInWithGoogle();
-                  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                  router.replace('/');
-                } catch (err: unknown) {
-                  const msg = (err as Error).message;
-                  if (!msg.includes('canceled') && !msg.includes('cancelled')) {
-                    showAlert('Google Sign-In failed', msg);
+              <TouchableOpacity
+                className="w-14 h-14 rounded-full bg-card border border-border items-center justify-center"
+                onPress={async () => {
+                  try {
+                    setLoading(true);
+                    await signInWithFacebook();
+                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                    router.replace('/');
+                  } catch (err: unknown) {
+                    const msg = (err as Error).message;
+                    if (!msg.includes('canceled') && !msg.includes('cancelled')) {
+                      showAlert('Facebook Sign-In failed', msg);
+                    }
+                  } finally {
+                    setLoading(false);
                   }
-                } finally {
-                  setLoading(false);
-                }
-              }}
-              disabled={loading}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="logo-google" size={20} color="#FFFFFF" />
-              <Text className="text-white font-semibold text-base">Continue with Google</Text>
-            </TouchableOpacity>
-
-            {/* Facebook Sign-In */}
-            <TouchableOpacity
-              className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3 mt-3"
-              onPress={async () => {
-                try {
-                  setLoading(true);
-                  await signInWithFacebook();
-                  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                  router.replace('/');
-                } catch (err: unknown) {
-                  const msg = (err as Error).message;
-                  if (!msg.includes('canceled') && !msg.includes('cancelled')) {
-                    showAlert('Facebook Sign-In failed', msg);
-                  }
-                } finally {
-                  setLoading(false);
-                }
-              }}
-              disabled={loading}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="logo-facebook" size={20} color="#1877F2" />
-              <Text className="text-white font-semibold text-base">Continue with Facebook</Text>
-            </TouchableOpacity>
+                }}
+                disabled={loading}
+                activeOpacity={0.7}
+                accessibilityLabel="Sign in with Facebook"
+              >
+                <Ionicons name="logo-facebook" size={26} color="#1877F2" />
+              </TouchableOpacity>
+            </View>
 
             <View className="flex-row justify-center mt-6">
               <Text className="text-text-secondary">Don{"'"}t have an account? </Text>
