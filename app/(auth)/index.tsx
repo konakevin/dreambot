@@ -29,18 +29,6 @@ const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4
 function Logo() {
   return (
     <View style={authStyles.logoContainer}>
-      {/* Soft brand halo behind the mascot — pre-rendered PNG via SVG's
-          feGaussianBlur (scripts/gen-mascot-halo.js). RN's LinearGradient
-          clipped to a circular View leaves a hard edge; SVG Gaussian
-          blur creates true smooth alpha falloff in every direction with
-          no banding, baked into a transparent PNG. */}
-      <Image
-        source={require('@/assets/images/mascot-halo.png')}
-        style={authStyles.mascotHalo}
-        contentFit="contain"
-        pointerEvents="none"
-      />
-
       {/* Mascot */}
       <Image
         source={require('@/assets/images/icon.png')}
@@ -65,21 +53,6 @@ function Logo() {
 const authStyles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
-  },
-  // Soft brand halo PNG — pre-rendered via SVG Gaussian blur. Sized
-  // ~4× the mascot so the soft glow really spreads across the upper
-  // area, matching the brochure Hero's blur-3xl gradient circle scale.
-  // Absolute-positioned so it sits BEHIND the mascot in z-order without
-  // taking layout space (mascot is centered separately). top:-195 puts
-  // the halo's center on the mascot's center (mascot center ≈ +65 from
-  // container top; 520×520 halo center = top+260 → top=-195).
-  mascotHalo: {
-    position: 'absolute',
-    width: 520,
-    height: 520,
-    top: -195,
-    alignSelf: 'center',
-    opacity: 1,
   },
   mascot: {
     width: 130,
@@ -136,18 +109,6 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      {/* Gentle vertical lavender wash — quieter now (the bright halo
-          behind the mascot does the heavy lifting for atmosphere). This
-          gradient just tints the bg so the screen doesn't read as pure
-          black around the edges. */}
-      <LinearGradient
-        colors={['rgba(167,139,250,0.30)', 'rgba(167,139,250,0.15)']}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        style={StyleSheet.absoluteFillObject}
-        pointerEvents="none"
-      />
-
       <View className="flex-1 items-center justify-center px-8">
         <Logo />
       </View>
