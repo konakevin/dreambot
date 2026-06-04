@@ -37,13 +37,13 @@ const OUT = path.resolve(__dirname, '..', 'Development/apps/dreambot/assets/imag
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <defs>
     <radialGradient id="bloomPurple" cx="50%" cy="0%" rx="80%" ry="60%">
-      <stop offset="0%"   stop-color="#A78BFA" stop-opacity="0.18" />
-      <stop offset="60%"  stop-color="#A78BFA" stop-opacity="0" />
+      <stop offset="0%"   stop-color="#A78BFA" stop-opacity="0.45" />
+      <stop offset="50%"  stop-color="#A78BFA" stop-opacity="0.15" />
       <stop offset="100%" stop-color="#A78BFA" stop-opacity="0" />
     </radialGradient>
     <radialGradient id="bloomPink" cx="80%" cy="50%" rx="60%" ry="50%">
-      <stop offset="0%"   stop-color="#F9A8D4" stop-opacity="0.10" />
-      <stop offset="60%"  stop-color="#F9A8D4" stop-opacity="0" />
+      <stop offset="0%"   stop-color="#F9A8D4" stop-opacity="0.25" />
+      <stop offset="60%"  stop-color="#F9A8D4" stop-opacity="0.05" />
       <stop offset="100%" stop-color="#F9A8D4" stop-opacity="0" />
     </radialGradient>
   </defs>
