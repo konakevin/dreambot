@@ -120,7 +120,11 @@ const s = StyleSheet.create({
     lineHeight: 20,
   },
   loadingWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  scrollContent: { paddingHorizontal: 16, paddingBottom: 24, gap: 12 },
+  // The shared OnboardingFooter is `position: absolute` (bottom-anchored)
+  // and ~120px tall (button + safe-area). Padding the scroll content past
+  // it so the last bot (YumBot) can fully scroll above the floating chrome
+  // instead of being clipped underneath.
+  scrollContent: { paddingHorizontal: 16, paddingBottom: 140, gap: 12 },
   emptyText: {
     color: colors.textSecondary,
     fontSize: 14,
