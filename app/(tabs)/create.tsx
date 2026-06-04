@@ -28,6 +28,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
@@ -46,6 +48,12 @@ import { FluxModelPicker } from '@/components/FluxModelPicker';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { useImageModels } from '@/hooks/useImageModels';
+
+// Same brand gradient used by the homepage wordmark, brochure Hero, and the
+// onboarding info-step headlines: moon purple → cloud pink → star teal.
+// Applied to the "Create" title at the top of the screen so the tab reads
+// as part of the same brand surface.
+const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 export default function CreateScreen() {
   const config = useDreamStore((s) => s.config);
@@ -279,9 +287,22 @@ export default function CreateScreen() {
       >
         {/* Header */}
         <View className="flex-row items-center justify-between px-5 py-3">
-          <Text className="text-2xl font-extrabold" style={{ color: colors.textPrimary }}>
-            Create
-          </Text>
+          {/* Gradient wordmark — same MaskedView + LinearGradient pattern used
+              by the onboarding WelcomeStep/InfoStep titles. White Text inside
+              the mask defines the SHAPE; the LinearGradient fills it. */}
+          <MaskedView
+            maskElement={
+              <Text className="text-2xl font-extrabold" style={{ color: '#FFFFFF' }}>
+                Create
+              </Text>
+            }
+          >
+            <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+              <Text className="text-2xl font-extrabold" style={{ opacity: 0 }}>
+                Create
+              </Text>
+            </LinearGradient>
+          </MaskedView>
           <View className="flex-row items-center gap-2">
             <TouchableOpacity
               onPress={() => nav.push('/sparkleStore')}
