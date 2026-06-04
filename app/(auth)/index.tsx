@@ -67,16 +67,19 @@ const authStyles = StyleSheet.create({
     alignItems: 'center',
   },
   // Soft brand halo PNG — pre-rendered via SVG Gaussian blur. Sized
-  // ~2.4× the mascot so the soft glow extends well past its edges.
+  // ~4× the mascot so the soft glow really spreads across the upper
+  // area, matching the brochure Hero's blur-3xl gradient circle scale.
   // Absolute-positioned so it sits BEHIND the mascot in z-order without
-  // taking layout space (mascot is centered separately).
+  // taking layout space (mascot is centered separately). top:-195 puts
+  // the halo's center on the mascot's center (mascot center ≈ +65 from
+  // container top; 520×520 halo center = top+260 → top=-195).
   mascotHalo: {
     position: 'absolute',
-    width: 320,
-    height: 320,
-    top: -95,
+    width: 520,
+    height: 520,
+    top: -195,
     alignSelf: 'center',
-    opacity: 0.85,
+    opacity: 1,
   },
   mascot: {
     width: 130,
