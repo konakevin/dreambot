@@ -117,14 +117,14 @@ export default function WelcomeScreen() {
           clearly behind the new pure-black social buttons. */}
       <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
         <LinearGradient
-          colors={['rgba(167,139,250,0.55)', 'rgba(167,139,250,0.10)']}
+          colors={['rgba(167,139,250,0.40)', 'rgba(167,139,250,0.06)']}
           locations={[0, 1]}
           start={{ x: 0.4, y: 0 }}
           end={{ x: 0.6, y: 1 }}
           style={StyleSheet.absoluteFillObject}
         />
         <LinearGradient
-          colors={['rgba(249,168,212,0.38)', 'rgba(249,168,212,0)']}
+          colors={['rgba(249,168,212,0.28)', 'rgba(249,168,212,0)']}
           locations={[0, 0.75]}
           start={{ x: 1, y: 0.4 }}
           end={{ x: 0, y: 1 }}
