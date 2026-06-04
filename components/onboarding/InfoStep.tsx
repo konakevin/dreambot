@@ -22,13 +22,19 @@ export interface InfoSubFeature {
 
 export interface InfoStepConfig {
   eyebrow: string;
-  /** When true, show the app icon mascot at the top instead of a glyph. */
+  /** When true, show the default app icon mascot at the top. */
   useMascot?: boolean;
+  /**
+   * Optional custom mascot illustration (renders in the same 130×130
+   * rounded slot as `useMascot`). Use this when each step has its own
+   * tailored mascot art. Pass `require('@/assets/…')`.
+   */
+  customMascot?: number;
   /** Large emoji shown above the eyebrow when no mascot/image is set. */
   emoji?: string;
   /**
    * Optional phone-frame screenshot shown above the eyebrow (replaces the
-   * mascot/emoji slot). Pass a `require('@/assets/…')` source.
+   * mascot/emoji slot, larger 4:5 frame). Pass `require('@/assets/…')`.
    */
   imageSource?: number;
   headline: string;
@@ -50,6 +56,7 @@ interface Props extends InfoStepConfig {
 export function InfoStep({
   eyebrow,
   useMascot,
+  customMascot,
   emoji,
   imageSource,
   headline,
@@ -65,6 +72,10 @@ export function InfoStep({
         {imageSource ? (
           <View style={s.screenshotWrap}>
             <Image source={imageSource} style={s.screenshot} contentFit="contain" />
+          </View>
+        ) : customMascot ? (
+          <View style={s.mascotWrap}>
+            <Image source={customMascot} style={s.mascot} contentFit="cover" />
           </View>
         ) : useMascot ? (
           <View style={s.mascotWrap}>

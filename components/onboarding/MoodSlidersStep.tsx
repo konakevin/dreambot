@@ -182,12 +182,11 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
       keyboardVerticalOffset={100}
     >
       {/* Sticky header — sits outside the ScrollView so the slider cards
-          scroll underneath it (matches BotSelectorStep / Locations). */}
+          scroll underneath it (matches BotSelectorStep / Locations).
+          Title kept to one line so all 4 sliders fit above the fold. */}
       <View style={s.stickyHeader}>
-        <Text style={shared.heroTitle}>What kind of dreams do you like?</Text>
-        <Text style={shared.heroSubtitle}>
-          Slide them however feels right. No wrong answers, just your taste.
-        </Text>
+        <Text style={shared.heroTitle}>What kind of dreams?</Text>
+        <Text style={shared.heroSubtitle}>Slide them however feels right.</Text>
       </View>
 
       <ScrollView
@@ -218,21 +217,23 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
 }
 
 const s = StyleSheet.create({
-  scrollContent: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 100 },
+  scrollContent: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 100 },
   // Sticky header that sits above the ScrollView (matches Locations +
   // BotSelectorStep). Bg-painted so scrolling content doesn't bleed through.
   stickyHeader: {
     paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 14,
+    paddingTop: 6,
+    paddingBottom: 10,
     backgroundColor: colors.background,
   },
 
+  // Tightened from padding:18 / marginBottom:14 / cardDesc.marginBottom:14
+  // so all 4 cards fit above the fold (Kevin: shouldn't have to scroll).
   card: {
     backgroundColor: colors.surface,
     borderRadius: 16,
-    padding: 18,
-    marginBottom: 14,
+    padding: 14,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -240,13 +241,13 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 17,
     fontWeight: '800',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   cardDesc: {
     color: colors.textSecondary,
     fontSize: 13,
     lineHeight: 18,
-    marginBottom: 14,
+    marginBottom: 10,
   },
 
   sliderWrap: { alignItems: 'center' },
