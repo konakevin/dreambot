@@ -46,6 +46,12 @@ interface OnboardingStore {
   scrollLocked: boolean;
   setScrollLocked: (v: boolean) => void;
 
+  // Hide the pager's chrome (OnboardingHeader). Used by the Reveal step's
+  // post-Skip "finished" state so the dream renders fully edge-to-edge
+  // with no progress dots competing for attention.
+  chromeHidden: boolean;
+  setChromeHidden: (v: boolean) => void;
+
   // Load existing profile for editing
   loadProfile: (profile: VibeProfile) => void;
 
@@ -166,6 +172,9 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   scrollLocked: false,
   setScrollLocked: (v) => set({ scrollLocked: v }),
 
+  chromeHidden: false,
+  setChromeHidden: (v) => set({ chromeHidden: v }),
+
   loadProfile: (profile) => set({ profile, isHydrated: true }),
 
   reset: () =>
@@ -174,6 +183,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       isEditing: false,
       isHydrated: false,
       scrollLocked: false,
+      chromeHidden: false,
       profile: { ...DEFAULT_VIBE_PROFILE },
     }),
 }));

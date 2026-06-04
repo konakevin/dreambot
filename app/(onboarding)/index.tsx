@@ -81,6 +81,7 @@ export default function OnboardingPager() {
   const setStep = useOnboardingStore((s) => s.setStep);
   const profile = useOnboardingStore((s) => s.profile);
   const scrollLocked = useOnboardingStore((s) => s.scrollLocked);
+  const chromeHidden = useOnboardingStore((s) => s.chromeHidden);
   const user = useAuthStore((s) => s.user);
   const listRef = useRef<FlatList>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -159,12 +160,17 @@ export default function OnboardingPager() {
 
   return (
     <SafeAreaView style={s.root}>
+      {/* Step header hides during the Reveal's post-Skip "finished" state
+          (chromeHidden=true) so the dream renders edge-to-edge with no
+          progress dots competing for attention. */}
       <View style={s.headerRow}>
-        <OnboardingHeader
-          stepNumber={step}
-          totalSteps={steps.length}
-          onBack={step > 1 || isEditing ? goBack : undefined}
-        />
+        {!chromeHidden && (
+          <OnboardingHeader
+            stepNumber={step}
+            totalSteps={steps.length}
+            onBack={step > 1 || isEditing ? goBack : undefined}
+          />
+        )}
         {isEditing && (
           <TouchableOpacity
             style={s.doneButton}

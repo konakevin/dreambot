@@ -29,7 +29,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCREEN_HEIGHT * 0.45);
 
-type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles';
+type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles' | 'finished';
 /**
  * Reveal overlay: the user already saw the nightly-dream pitch on the
  * INFO Nightly onboarding screen, so the reveal collapses to a single
@@ -65,6 +65,7 @@ export function RevealStep({ onBack }: Props) {
   const profile = useOnboardingStore((s) => s.profile);
   const isEditing = useOnboardingStore((s) => s.isEditing);
   const reset = useOnboardingStore((s) => s.reset);
+  const setChromeHidden = useOnboardingStore((s) => s.setChromeHidden);
   const user = useAuthStore((s) => s.user);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
 
@@ -415,13 +416,24 @@ export function RevealStep({ onBack }: Props) {
         body: "Hey. I'm your DreamBot. I left you 25 sparkles to start dreaming. Sleep well.",
       });
 
-      reset();
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      // Bot-selector moved INTO the onboarding pager (2026-06-03) so the
-      // user already picked bots to follow before they got here. Go
-      // straight to the feed.
       trackOnboardingCompleted();
-      router.replace('/(tabs)');
+      // Bot-selector moved INTO the onboarding pager (2026-06-03) so the
+      // user already picked bots to follow before they got here.
+      //
+      // Post → reset + go straight to the feed.
+      // Skip → drop the reveal overlay + pager chrome (chromeHidden) and
+      //        transition to the "finished" phase, which renders the dream
+      //        edge-to-edge with a single "Go to feed" CTA. Defer reset()
+      //        until that CTA tap so onboarding state stays consistent
+      //        while the preview is on screen.
+      if (makePublic) {
+        reset();
+        router.replace('/(tabs)');
+      } else {
+        setChromeHidden(true);
+        setPhase('finished');
+      }
     } catch (err) {
       if (__DEV__) console.warn('[Reveal] Create error:', err);
       setPhase('reveal');
@@ -533,51 +545,70 @@ export function RevealStep({ onBack }: Props) {
             transition={300}
           />
 
-          {/* 3-beat education overlay at bottom */}
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              paddingBottom: 50,
-              paddingHorizontal: 24,
-              paddingTop: 80,
-              backgroundColor: 'transparent',
-            }}
-          >
+          {phase === 'finished' ? (
+            // Post-Skip preview — overlay text removed entirely so the dream
+            // gets the whole frame. Single bottom CTA finalizes the nav to
+            // home (lands on Explore tab by default).
+            <View style={s.finishedFooter}>
+              <View style={s.finishedFooterScrim} />
+              <TouchableOpacity
+                style={s.createButton}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  reset();
+                  router.replace('/(tabs)');
+                }}
+                activeOpacity={0.7}
+              >
+                <Text style={s.createButtonText}>Go to feed</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
             <View
               style={{
-                ...StyleSheet.absoluteFillObject,
-                backgroundColor: 'rgba(0,0,0,0.65)',
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                paddingBottom: 50,
+                paddingHorizontal: 24,
+                paddingTop: 80,
+                backgroundColor: 'transparent',
               }}
-            />
-            <Text style={s.revealTitle}>Your first dream</Text>
-            <Text style={s.revealBody}>
-              {activeDream.medium?.replace(/_/g, ' ')} · {activeDream.vibe}. Saved to your dreams
-              either way.
-            </Text>
-            <TouchableOpacity
-              style={s.createButton}
-              onPress={() => handleCreateBot(true)}
-              disabled={phase === 'creating'}
-              activeOpacity={0.7}
             >
-              {phase === 'creating' ? (
-                <ActivityIndicator color="#FFFFFF" />
-              ) : (
-                <Text style={s.createButtonText}>Post to my feed</Text>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={s.secondaryButton}
-              onPress={() => handleCreateBot(false)}
-              disabled={phase === 'creating'}
-              activeOpacity={0.7}
-            >
-              <Text style={s.secondaryButtonText}>Skip</Text>
-            </TouchableOpacity>
-          </View>
+              <View
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                  backgroundColor: 'rgba(0,0,0,0.65)',
+                }}
+              />
+              <Text style={s.revealTitle}>Your first dream</Text>
+              <Text style={s.revealBody}>
+                {activeDream.medium?.replace(/_/g, ' ')} · {activeDream.vibe}. Saved to your dreams
+                either way.
+              </Text>
+              <TouchableOpacity
+                style={s.createButton}
+                onPress={() => handleCreateBot(true)}
+                disabled={phase === 'creating'}
+                activeOpacity={0.7}
+              >
+                {phase === 'creating' ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text style={s.createButtonText}>Post to my feed</Text>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={s.secondaryButton}
+                onPress={() => handleCreateBot(false)}
+                disabled={phase === 'creating'}
+                activeOpacity={0.7}
+              >
+                <Text style={s.secondaryButtonText}>Skip</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       ) : null}
     </View>
@@ -593,6 +624,23 @@ const s = StyleSheet.create({
     backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  // Post-Skip "finished" state — just a thin gradient scrim behind a
+  // single Go-to-feed CTA pinned at the bottom. No headline, no body
+  // text — the dream takes the whole screen.
+  finishedFooter: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingBottom: 50,
+    paddingHorizontal: 24,
+    paddingTop: 60,
+  },
+  finishedFooterScrim: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.55)',
   },
 
   centeredContent: {
