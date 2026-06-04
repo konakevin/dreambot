@@ -137,37 +137,35 @@ const BEACH_PATHS = [
 
 const ALL_PATHS = [...EARTH_PATHS, ...BEACH_PATHS];
 
-// Source bot prefixes/suffixes — preserved verbatim, applied per path via
-// promptPrefixByPath / promptSuffixByPath so each path renders exactly like
-// it did in its source bot.
-// Stripped "hyperreal rendering" 2026-06-01 — legacy from the Unreal-Engine
-// medium, conflicts with the new National-Geographic photography register
-// and was biasing toward CGI-coded renders.
-const EARTH_PREFIX =
-  'cinematic landscape photography, sharp detail, rich saturated color, gallery-quality, masterpiece';
+// Source bot prefixes/suffixes — applied per path via promptPrefixByPath /
+// promptSuffixByPath so each path renders with its regional anchor + the
+// medium's Nat-Geo photography block. Kept INTENTIONALLY MINIMAL after the
+// 2026-06-04 cruft strip: the medium itself ("award-winning National
+// Geographic nature photography, medium-format film honesty, naturalistic
+// light, restrained color saturation, exhibition-quality composition,
+// documentary realism") carries the quality bar. The prefix only anchors
+// the region + reminds Flux this is a photograph. Removed:
+//   - "cinematic" → pulls toward Hollywood teal/orange post-grade
+//   - "sharp detail" → over-sharpened digital tell
+//   - "rich saturated color" → directly CONFLICTED with the medium's
+//     "restrained color saturation" (Flux picked the prefix's brighter
+//     value, killing the medium's restraint — visible in the R0/R1 Deadvlei
+//     renders as fluorescent orange instead of natural sandstone)
+//   - "gallery-quality" / "masterpiece" → AI-generation tells (per cruft
+//     audit memory entry: "stacked generic intensifiers burn attention
+//     budget on zero semantic content")
+const EARTH_PREFIX = 'landscape photograph';
 // Suffix scrubbed of "no humans / no people" (2026-05-23) — Flux's CLIP/T5
 // tokenizer attends to the words "humans" / "people" regardless of the
 // preceding "no" and was rendering people silhouettes into landscape
 // renders. Per [[feedback_negative_prompt_leak]] — bans go in the
-// template/system, never in the literal output prompt. Templates enforce
-// no-humans via positive composition mandates ("the entire frame is
-// uninhabited landscape").
-// 2026-06-02 OVER-PROCESSED STRIP: dropped "hyper detailed" tail. It pushes
-// renders toward the AI-generated CGI-sheen aesthetic Kevin flagged ("the
-// photos look so processed, they veer on the edge of looking fake"). Kept
-// the standard no-text/no-watermarks bans because those nouns don't render
-// as scene content (text/watermarks are image artifacts, not subjects).
-// Kept "uninhabited landscape" as a positive subject anchor.
-const EARTH_SUFFIX =
-  'uninhabited landscape, no text, no words, no watermarks, masterpiece quality';
-// 2026-06-02 OVER-PROCESSED + RESORT STRIP: dropped "dramatic saturated
-// color" (over-processed), "hyperreal rendering" (CGI tell), and
-// "wallpaper-worthy" (resort/luxury-travel-magazine register — the exact
-// token that pulled reef-paradise into a cliffside hotel render). Replaced
-// with naturalistic positives.
-const BEACH_PREFIX =
-  'tropical coastal photography, sharp detail, naturalistic color, gallery-quality, masterpiece';
-const BEACH_SUFFIX = 'uninhabited coast, no text, no words, no watermarks, masterpiece quality';
+// template/system, never in the literal output prompt.
+// 2026-06-04: also dropped "masterpiece quality" (AI-CGI tell) and "no
+// words" (redundant with no-text). "no text" + "no watermarks" stay because
+// those are real image artifacts the suffix needs to suppress.
+const EARTH_SUFFIX = 'uninhabited landscape, no text, no watermarks';
+const BEACH_PREFIX = 'tropical coastal photograph';
+const BEACH_SUFFIX = 'uninhabited coast, no text, no watermarks';
 // 2026-06-02 — Reef-paradise bespoke prefix. BEACH_PREFIX + the
 // earthbot_photography medium were collectively pulling reef-paradise into
 // luxury travel-magazine territory (the hearted hotel-on-cliffside render).
@@ -175,7 +173,7 @@ const BEACH_SUFFIX = 'uninhabited coast, no text, no words, no watermarks, maste
 // volcanic shoreline before any travel-photography vocabulary can pull
 // toward resort architecture.
 const REEF_PARADISE_PREFIX =
-  'tropical Pacific island bay, crystal turquoise water, volcanic shoreline, sharp detail, naturalistic color, gallery-quality, masterpiece';
+  'tropical Pacific island bay, crystal turquoise water, volcanic shoreline, photograph';
 // 2026-06-01 — Iceland-raw bespoke prefix. The generic EARTH_PREFIX +
 // medium's "cinematic landscape photography" + "dramatic atmospheric
 // perspective" was pulling renders to European Alps / Dolomites with pine
@@ -192,7 +190,7 @@ const REEF_PARADISE_PREFIX =
 // because Iceland's signature LOOKS overlap (basalt + glacier + black sand
 // appear across most subjects) but better practice is the biome-agnostic
 // recipe used for Andes.
-const ICELAND_RAW_PREFIX = 'Iceland raw nature, sharp detail, gallery-quality, masterpiece';
+const ICELAND_RAW_PREFIX = 'Iceland raw nature, photograph';
 // 2026-06-01 — Andes/Patagonia bespoke prefix. CRITICAL: keep BIOME-AGNOSTIC.
 // First attempt enumerated biomes ("granite spires and glacier ice and salt-
 // pan flats and emerald canopy") and Flux locked every render to GRANITE
@@ -202,8 +200,7 @@ const ICELAND_RAW_PREFIX = 'Iceland raw nature, sharp detail, gallery-quality, m
 // Fix: anchor "South American raw nature" without naming any specific
 // biome, let the SCENE content carry the biome (per
 // [[feedback_regional_path_buildout_lessons]] Lesson #1).
-const ANDES_PATAGONIA_PREFIX =
-  'South American raw nature, sharp detail, gallery-quality, masterpiece';
+const ANDES_PATAGONIA_PREFIX = 'South American raw nature, photograph';
 // 2026-06-01 v2 — African resurrection after the v1 R0-R6 churn + scrap.
 // BIOME-AGNOSTIC per the playbook anti-pattern lesson (Lesson #11): never
 // enumerate biomes in the prefix because CLIP locks to the first-named one
@@ -211,26 +208,24 @@ const ANDES_PATAGONIA_PREFIX =
 // Okavango Delta or Sahara dune sea or Congo Basin canopy or Madagascar
 // baobab forest" and every render rendered as savanna. v2 anchors the
 // region only — the scene content carries the biome.
-const AFRICAN_LANDSCAPE_PREFIX = 'African raw nature, sharp detail, gallery-quality, masterpiece';
+const AFRICAN_LANDSCAPE_PREFIX = 'African raw nature, photograph';
 // 2026-06-01 — Pan-Asian raw nature. BIOME-AGNOSTIC per the prefix-
 // enumeration anti-pattern rule. Just "Asian raw nature" — let the scene
 // content carry the biome (Mt. Fuji / Huangshan / Halong / sakura / Gobi).
-const ASIA_LANDSCAPE_PREFIX = 'Asian raw nature, sharp detail, gallery-quality, masterpiece';
+const ASIA_LANDSCAPE_PREFIX = 'Asian raw nature, photograph';
 // 2026-06-01 — Australian outback raw nature. BIOME-AGNOSTIC per the
 // prefix-enumeration rule. Distinct from desert-southwest (American SW) —
 // Australian outback has its own iconic geology (Uluru / Bungle Bungle /
 // Pinnacles / Karijini) and its own palette (deep rust-red iron-oxide vs
 // American SW orange).
-const AUSTRALIAN_OUTBACK_PREFIX =
-  'Australian outback raw nature, sharp detail, gallery-quality, masterpiece';
+const AUSTRALIAN_OUTBACK_PREFIX = 'Australian outback raw nature, photograph';
 // 2026-06-01 — European raw nature. BIOME-AGNOSTIC per the prefix-
 // enumeration rule. Spans Scottish Highlands + Snowdonia + Cliffs of
 // Moher + Dolomites + Matterhorn + Lofoten fjords + Faroe Islands.
 // R0 with prefix "European wilderness raw nature" rendered 5/5 alpine
 // even though pool rolled Scottish / Faroe / Irish subjects — Flux's
 // "wilderness" interpretation was Alps-coded. Dropping "wilderness".
-const EUROPEAN_WILDERNESS_PREFIX =
-  'European raw nature, sharp detail, gallery-quality, masterpiece';
+const EUROPEAN_WILDERNESS_PREFIX = 'European raw nature, photograph';
 
 // Locked to cinematic only — Kevin's preferred single-vibe lock for
 // EarthBot 2026-05-05. Combined with the locked earthbot_photography medium
@@ -384,7 +379,10 @@ module.exports = {
   // polish compression strips location/geography language. As each Earth
   // path migrates to axis-system, add it here.
   twoPassPolish: {
-    enabled: true,
+    // Disabled 2026-06-04 for an A/B vs. R0 brief-cleanup (commit 96c8d250).
+    // R0 = two-pass ON post brief cleanup. R1 = two-pass OFF same briefs.
+    // Compare Kevin's hearts on both batches; flip back to true if R0 wins.
+    enabled: false,
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {},
