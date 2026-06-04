@@ -753,12 +753,28 @@ Deno.serve(async (req) => {
     // travelers who have been to that specific place.
     let bespokeBiome: ReturnType<typeof getBiomeConfig> | null = null;
     if (userPlace) {
+      // pure_scene Phase 1 quality filter (2026-06-04): the location_iconic_spots
+      // pool is curated for "real recognizable landmark" — which mixes Hollywood
+      // Sign with Anne Frank House with Los Angeles River concrete channel. Cast
+      // paths (character / epic_tiny) tolerate mundane locations because a person
+      // carries the scene. pure_scene has no subject other than the landscape, so
+      // a "concrete ditch in LA" type anchor reads as a random building photo, not
+      // a postcard. Restrict to S + A quality tiers when rolling for pure_scene
+      // to exclude the B-tier "anywhere will do" entries. Cast paths keep the full
+      // pool. (Phase 2 will replace the S+A heuristic with a Sonnet-classified
+      // `pure_scene_eligible` boolean column for finer-grained A-tier curation;
+      // Phase 3 will seed fresh "postcard-only" spots per location.)
+      const POSTCARD_TIERS = ['S', 'A'];
+      let spotsQ = supabase
+        .from('location_iconic_spots')
+        .select('spot_text, spot_kind, quality_tier')
+        .eq('location_key', userPlace)
+        .eq('is_active', true);
+      if (composition === 'pure_scene') {
+        spotsQ = spotsQ.in('quality_tier', POSTCARD_TIERS);
+      }
       const [{ data: spots }, { data: locCard }] = await Promise.all([
-        supabase
-          .from('location_iconic_spots')
-          .select('spot_text, spot_kind')
-          .eq('location_key', userPlace)
-          .eq('is_active', true),
+        spotsQ,
         supabase
           .from('location_cards')
           .select('biome, biome_config')
