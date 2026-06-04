@@ -21,6 +21,7 @@ import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analyt
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
+import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 
 const MASCOT = require('@/assets/images/icon.png');
 
@@ -40,8 +41,6 @@ type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkl
  * The "Keep it private" path is intentionally NOT implemented yet — needs
  * the privacy/visibility migration first (memory: project_privacy_visibility).
  */
-
-const BOOT_MESSAGE = 'Your DreamBot is dreaming up something special...';
 
 interface Dream {
   url: string;
@@ -73,7 +72,6 @@ export function RevealStep({ onBack }: Props) {
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [bootMessage] = useState(BOOT_MESSAGE);
   const generating = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -502,29 +500,17 @@ export function RevealStep({ onBack }: Props) {
     );
   }
 
-  // ── Boot-up sequence ──
-  if (phase === 'booting') {
+  // ── Boot-up + generating ── single clean loading screen.
+  // Both phases used to render their own copy ("Your DreamBot is dreaming
+  // up something special..." → "Dreaming...") which flashed in sequence
+  // and felt like the screen reloaded mid-render. Consolidated 2026-06-03
+  // to the same MagicalLoadingStage component the Create-tab loader uses,
+  // so the first-dream wait visually matches every subsequent dream
+  // generation — repetition + familiarity.
+  if (phase === 'booting' || (phase === 'generating' && dreams.length === 0)) {
     return (
-      <View style={s.root}>
-        <View style={s.centeredContent}>
-          <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
-          <Text style={s.bigTitle}>{bootMessage}</Text>
-          <ActivityIndicator size="small" color={colors.accent} />
-        </View>
-      </View>
-    );
-  }
-
-  // ── Generating (after boot-up) ──
-  if (phase === 'generating' && dreams.length === 0) {
-    return (
-      <View style={s.root}>
-        <View style={s.centeredContent}>
-          <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
-          <Text style={s.bigTitle}>Dreaming...</Text>
-          <Text style={s.centeredSub}>Your DreamBot is painting something just for you</Text>
-          <ActivityIndicator size="small" color={colors.accent} />
-        </View>
+      <View style={s.loadingContainer}>
+        <MagicalLoadingStage />
       </View>
     );
   }
@@ -600,6 +586,14 @@ export function RevealStep({ onBack }: Props) {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  // Centers the MagicalLoadingStage during boot+generating phases (same
+  // layout the Create-tab dream loader uses).
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
   centeredContent: {
     flex: 1,
