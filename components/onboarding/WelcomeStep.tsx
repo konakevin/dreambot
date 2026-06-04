@@ -65,11 +65,12 @@ const s = StyleSheet.create({
   mascot: { width: 160, height: 160, borderRadius: 32 },
 
   welcomeEyebrow: {
-    color: colors.textSecondary,
+    color: colors.textPrimary,
     fontSize: 17,
     fontWeight: '500',
     textAlign: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
+    opacity: 0.92,
   },
   titleMaskWrap: { alignItems: 'center' },
   titleMask: {
