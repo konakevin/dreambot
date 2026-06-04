@@ -130,14 +130,17 @@ const s = StyleSheet.create({
   mascotWrap: { alignItems: 'center', marginBottom: 20 },
   mascot: { width: 130, height: 130, borderRadius: 28 },
   emoji: { fontSize: 64, marginBottom: 18, textAlign: 'center' },
+  // 4:5 aspect matches the cropped Create-screen capture used today; if a
+  // future step ships a full phone-bezel screenshot, swap to 9/16 or make
+  // it configurable.
   screenshotWrap: {
-    width: 200,
-    aspectRatio: 9 / 16,
-    borderRadius: 20,
+    width: 220,
+    aspectRatio: 4 / 5,
+    borderRadius: 18,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 22,
+    marginBottom: 20,
     backgroundColor: colors.surface,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
