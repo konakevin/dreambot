@@ -142,50 +142,54 @@ export default function WelcomeScreen() {
       </View>
 
       <View className="px-6 pb-8 gap-3">
+        {/* All three social buttons share the same dark-card style so the
+            stack reads as a calm, serene group — preserves the purple-haze
+            atmosphere instead of snapping the eye to a bright bottom strip.
+            Brand identity is carried entirely by the LOGO color (Apple
+            white, Google multicolor-G #4285F4, Facebook blue #1877F2).
+            All three styles are brand-compliant: Apple HIG permits black
+            buttons; Google has an official 'dark' variant; Meta allows
+            custom backgrounds as long as the f-mark is rendered correctly. */}
+
         {/* Apple Sign-In (iOS only) */}
         {Platform.OS === 'ios' && (
           <TouchableOpacity
-            className="bg-white rounded-full py-4 flex-row items-center justify-center gap-3"
+            className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
             onPress={() => handleSocialSignIn('apple')}
             disabled={loading !== null}
             activeOpacity={0.8}
           >
             {loading === 'apple' ? (
-              <ActivityIndicator color="#000000" size="small" />
+              <ActivityIndicator color="#FFFFFF" size="small" />
             ) : (
               <>
-                <Ionicons name="logo-apple" size={20} color="#000000" />
-                <Text className="text-black font-semibold text-base">Continue with Apple</Text>
+                <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
+                <Text className="text-white font-semibold text-base">Continue with Apple</Text>
               </>
             )}
           </TouchableOpacity>
         )}
 
-        {/* Google Sign-In — white bg + black text + colored G logo per
-            Google's "Sign in with Google" brand guidelines, so all 3 social
-            buttons read as branded auth providers of equal visual weight
-            (was a dark card masquerading as a secondary button). */}
+        {/* Google Sign-In */}
         <TouchableOpacity
-          className="bg-white rounded-full py-4 flex-row items-center justify-center gap-3"
+          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
           onPress={() => handleSocialSignIn('google')}
           disabled={loading !== null}
           activeOpacity={0.8}
         >
           {loading === 'google' ? (
-            <ActivityIndicator color="#000000" size="small" />
+            <ActivityIndicator color="#FFFFFF" size="small" />
           ) : (
             <>
               <Ionicons name="logo-google" size={20} color="#4285F4" />
-              <Text className="text-black font-semibold text-base">Continue with Google</Text>
+              <Text className="text-white font-semibold text-base">Continue with Google</Text>
             </>
           )}
         </TouchableOpacity>
 
-        {/* Facebook Sign-In — Facebook brand blue + white text + white "f"
-            logo per Meta's brand guidelines. */}
+        {/* Facebook Sign-In */}
         <TouchableOpacity
-          className="rounded-full py-4 flex-row items-center justify-center gap-3"
-          style={{ backgroundColor: '#1877F2' }}
+          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
           onPress={() => handleSocialSignIn('facebook')}
           disabled={loading !== null}
           activeOpacity={0.8}
@@ -194,7 +198,7 @@ export default function WelcomeScreen() {
             <ActivityIndicator color="#FFFFFF" size="small" />
           ) : (
             <>
-              <Ionicons name="logo-facebook" size={20} color="#FFFFFF" />
+              <Ionicons name="logo-facebook" size={20} color="#1877F2" />
               <Text className="text-white font-semibold text-base">Continue with Facebook</Text>
             </>
           )}
