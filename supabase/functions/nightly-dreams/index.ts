@@ -771,8 +771,13 @@ Deno.serve(async (req) => {
       //      postcard anchors (20 per location × 48 live locations),
       //      pre-marked pure_scene_eligible=true.
       //
-      // Cast paths still get the full pool — mundane spots are fine when
-      // a human is the subject.
+      // Cast paths used to get the full unfiltered pool, but ~50% of cast
+      // rolls had quality issues: Phase 4 pure-landscape entries fight
+      // cast injection (they were authored "no humans, no figures"), and
+      // B-tier mundane backdrops (concrete ditches, gym equipment) read
+      // as gritty-but-bad even with a person in frame. Migration 222 +
+      // qa-character-pool.js added a parallel `character_eligible`
+      // boolean: cast paths now roll from that filtered subset.
       let spotsQ = supabase
         .from('location_iconic_spots')
         .select('spot_text, spot_kind, quality_tier')
@@ -780,6 +785,9 @@ Deno.serve(async (req) => {
         .eq('is_active', true);
       if (composition === 'pure_scene') {
         spotsQ = spotsQ.eq('pure_scene_eligible', true);
+      } else {
+        // character + epic_tiny composition paths
+        spotsQ = spotsQ.eq('character_eligible', true);
       }
       const [{ data: spots }, { data: locCard }] = await Promise.all([
         spotsQ,
