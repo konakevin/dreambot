@@ -30,9 +30,16 @@ const TILES_COLLAPSED = 4;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TILE_GAP = 10;
 const TILE_PADDING = 20;
-const RAIL_WIDTH = 13;
-const TILE_WIDTH = Math.floor((SCREEN_WIDTH - TILE_PADDING * 2 - RAIL_WIDTH - TILE_GAP) / 2);
+// Two tiles per row, edge-to-edge across the content area. (Used to leave
+// room for a colored "section rail" on the left; removed 2026-06-03 in the
+// brand-color cleanup.)
+const TILE_WIDTH = Math.floor((SCREEN_WIDTH - TILE_PADDING * 2 - TILE_GAP) / 2);
 const TILE_HEIGHT = 110;
+
+// Neutral dark gradient used as a tile placeholder when a location has no
+// thumbnail URL — same surface→deeper drop used elsewhere in the app, so
+// no per-section color coding.
+const PLACEHOLDER_GRADIENT: [string, string] = [colors.surface, colors.background];
 
 interface LocationItem {
   key: string;
@@ -85,13 +92,6 @@ const SECTION_META: SectionMeta[] = [
   },
 ];
 
-const SECTION_COLORS: Record<string, { gradient: [string, string]; tint: string }> = {
-  iconic_cities: { gradient: ['#DC2626', '#7F1D1D'], tint: 'rgba(220,38,38,0.45)' },
-  tropical: { gradient: ['#EA580C', '#7C2D12'], tint: 'rgba(234,88,12,0.45)' },
-  epic_nature: { gradient: ['#16A34A', '#14532D'], tint: 'rgba(22,163,74,0.45)' },
-  fantasy_worlds: { gradient: ['#8B5CF6', '#3B0764'], tint: 'rgba(139,92,246,0.45)' },
-};
-
 interface Props {
   onNext: () => void;
   onBack: () => void;
@@ -101,24 +101,18 @@ function LocationTile({
   item,
   selected,
   thumbnailUrl,
-  sectionId,
   onToggle,
 }: {
   item: LocationItem;
   selected: boolean;
   thumbnailUrl: string | undefined;
-  sectionId: string;
   onToggle: () => void;
 }) {
-  const sectionColor = SECTION_COLORS[sectionId] || SECTION_COLORS.iconic_cities;
-
-  const highlightColor = sectionColor.gradient[0];
-
   return (
     <TouchableOpacity
       style={[
         s.tile,
-        selected && { borderColor: highlightColor, shadowColor: highlightColor },
+        selected && s.tileSelected,
         selected && s.tileSelectedShadow,
         { transform: [{ scale: selected ? 1.03 : 1 }] },
       ]}
@@ -134,7 +128,7 @@ function LocationTile({
         />
       ) : (
         <LinearGradient
-          colors={sectionColor.gradient}
+          colors={PLACEHOLDER_GRADIENT}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={StyleSheet.absoluteFillObject}
@@ -147,7 +141,7 @@ function LocationTile({
 
       {selected && (
         <View style={s.heartBadge}>
-          <Ionicons name="heart" size={14} color={highlightColor} />
+          <Ionicons name="heart" size={14} color={colors.accent} />
         </View>
       )}
     </TouchableOpacity>
@@ -228,10 +222,9 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         showsVerticalScrollIndicator={false}
       >
         <View style={s.hero}>
-          <Text style={shared.heroTitle}>Where should it drop you?</Text>
+          <Text style={shared.heroTitle}>Where do you want to dream?</Text>
           <Text style={shared.heroSubtitle}>
-            Real places. Fantasy worlds. Sci-fi cities. Pick a few — the mix is where the magic
-            happens.
+            Real places, fantasy worlds, sci-fi cities. Pick the ones you love.
           </Text>
         </View>
 
@@ -246,69 +239,55 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
           const selectedInSection = sectionKeys.filter((k) => places.includes(k)).length;
           const allInSectionSelected = selectedInSection === section.items.length;
 
-          const headerColor = (SECTION_COLORS[section.id] || SECTION_COLORS.iconic_cities)
-            .gradient[0];
-
           return (
             <View key={section.id} style={s.section}>
-              <View style={s.sectionRow}>
-                <View style={[s.sectionRail, { backgroundColor: headerColor }]} />
-                <View style={s.sectionContent}>
-                  <View style={s.sectionHeaderText}>
-                    <View style={s.sectionTitleRow}>
-                      <Ionicons name={section.icon} size={20} color={headerColor} />
-                      <Text style={s.sectionTitle}>{section.title}</Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                          toggleAllLocations(sectionKeys);
-                        }}
-                        activeOpacity={0.7}
-                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                      >
-                        <Text style={[s.selectAllText, { color: headerColor }]}>
-                          {allInSectionSelected ? 'Deselect All' : 'Select All'}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                    <Text style={s.sectionDesc}>{section.description}</Text>
-                    <Text
-                      style={[
-                        s.sectionBadge,
-                        { color: headerColor },
-                        selectedInSection === 0 && s.sectionBadgeHidden,
-                      ]}
-                    >
-                      {selectedInSection} selected
+              <View style={s.sectionHeaderText}>
+                <View style={s.sectionTitleRow}>
+                  <Ionicons name={section.icon} size={18} color={colors.accent} />
+                  <Text style={s.sectionTitle}>{section.title}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      toggleAllLocations(sectionKeys);
+                    }}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    style={s.selectAllBtn}
+                  >
+                    <Text style={s.selectAllText}>
+                      {allInSectionSelected ? 'Deselect all' : 'Select all'}
                     </Text>
-                  </View>
-
-                  <View style={s.tileGrid}>
-                    {visibleItems.map((item) => (
-                      <LocationTile
-                        key={item.key}
-                        item={item}
-                        selected={places.includes(item.key)}
-                        thumbnailUrl={thumbnails.get(item.key)}
-                        sectionId={section.id}
-                        onToggle={() => handleToggle(item.key)}
-                      />
-                    ))}
-                  </View>
-
-                  {hasMore && (
-                    <TouchableOpacity
-                      style={s.seeMoreBtn}
-                      onPress={() => toggleExpand(section.id)}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={[s.seeMoreText, { color: headerColor }]}>
-                        {isExpanded ? '- Show less' : '+ Show more'}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
+                  </TouchableOpacity>
                 </View>
+                <Text style={s.sectionDesc}>{section.description}</Text>
+                <Text style={[s.sectionBadge, selectedInSection === 0 && s.sectionBadgeHidden]}>
+                  {selectedInSection} selected
+                </Text>
               </View>
+
+              <View style={s.tileGrid}>
+                {visibleItems.map((item) => (
+                  <LocationTile
+                    key={item.key}
+                    item={item}
+                    selected={places.includes(item.key)}
+                    thumbnailUrl={thumbnails.get(item.key)}
+                    onToggle={() => handleToggle(item.key)}
+                  />
+                ))}
+              </View>
+
+              {hasMore && (
+                <TouchableOpacity
+                  style={s.seeMoreBtn}
+                  onPress={() => toggleExpand(section.id)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.seeMoreText}>
+                    {isExpanded ? 'Show less' : `Show all ${section.items.length}`}
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           );
         })}
@@ -338,12 +317,14 @@ const s = StyleSheet.create({
 
   hero: { paddingBottom: 20 },
 
-  section: { marginBottom: 32 },
-  sectionRow: { flexDirection: 'row' },
-  sectionRail: { width: 3, borderRadius: 2, marginRight: 10 },
-  sectionContent: { flex: 1 },
+  section: { marginBottom: 28 },
   sectionHeaderText: { marginBottom: 10 },
-  sectionTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 3 },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 3,
+  },
   sectionTitle: { fontSize: 19, fontWeight: '700', color: '#FFFFFF' },
   sectionDesc: { fontSize: 13, color: colors.textSecondary },
   sectionBadge: {
@@ -354,6 +335,13 @@ const s = StyleSheet.create({
     height: 18,
   },
   sectionBadgeHidden: { opacity: 0 },
+
+  selectAllBtn: { marginLeft: 'auto', paddingVertical: 2 },
+  selectAllText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.accent,
+  },
 
   tileGrid: {
     flexDirection: 'row',
@@ -368,6 +356,10 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 2,
     borderColor: 'transparent',
+  },
+  tileSelected: {
+    borderColor: colors.accent,
+    shadowColor: colors.accent,
   },
   tileSelectedShadow: {
     shadowOffset: { width: 0, height: 0 },
@@ -403,7 +395,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
 
-  selectAllText: { fontSize: 12, fontWeight: '600', marginLeft: 'auto' },
   seeMoreBtn: { paddingTop: 10, paddingBottom: 4 },
-  seeMoreText: { fontSize: 14, fontWeight: '500' },
+  seeMoreText: { fontSize: 14, fontWeight: '500', color: colors.accent },
 });
