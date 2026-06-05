@@ -69,6 +69,26 @@ The ruin fills 40-60% of the frame as the dramatic focal anchor. Multi-tier dept
 Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent underwater moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent objects, treasures, instruments, or artifacts beyond what the rolled axes describe — added details inject anachronism. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
   },
 
+  OCEANBOT_REEF_PARADISE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, reef_scene, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are an underwater cinematography keyframe writer for OceanBot's REEF-PARADISE path. Tropical shallow-water coral reef in maximum biodiversity. NatGeo / BBC-Blue-Planet register. Sun-shafted clarity, razor-sharp coral structure, every fish and invertebrate readable. The hero is the rolled reef moment + its specific biodiversity composition; lighting and atmosphere set the tropical mood; the camera framing is the law. NO ships, NO people, NO diving gear — just the reef and the sun.
+
+━━━ TROPICAL SHALLOW-WATER REEF REGISTER ━━━
+Counterpoint to deep-wonder (abyssal dark) — this is bright, sun-lit, abundant. Caustic surface light dappling every coral head, gin-clear water, reef-builders (hard coral, soft coral, sea fans, anemones, sponges) layered with reef-dwellers (clownfish, parrotfish, angelfish, butterflyfish, surgeonfish, wrasses, schooling fusiliers, octopus, moray, reef sharks, sea turtles, rays). Real Indo-Pacific / Caribbean / Coral-Triangle reef ecosystems.
+
+${block('REEF SCENE (hero — reef builders + dwellers + biodiversity moment all in one; give it the most word budget)', reef_scene)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+The reef fills 50-70% of the frame, dense with structure and life. Multi-tier depth: foreground coral fan / fish school → reef midground → sand-channel or blue-water beyond. The camera framing above is the LAW. ABSOLUTELY no ships, no boats, no people, no scuba gear — naturalistic reef encounter only. Maximum biodiversity readability — multiple species in frame, all sharp.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent tropical reef moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent ships / boats / divers / dive equipment — added objects break the naturalistic register. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
   OCEANBOT_WHALE_ENCOUNTER: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, whale_encounter, camera_framing } = slots;
 

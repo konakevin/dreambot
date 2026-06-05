@@ -97,6 +97,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  OCEANBOT_REEF_PARADISE: {
+    description:
+      'Tropical shallow-water coral reef teeming with marine life — maximum abundance, sun-lit. Counterpoint to deep-wonder (abyssal dark) — this is razor-sharp sun-shafted clarity with reef-builders + reef-dwellers all in frame. Naturalistic NatGeo / BBC Blue Planet reef register. No ships, no people, no diving gear. Same lean 2-path-slot shape.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['reef_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   OCEANBOT_WHALE_ENCOUNTER: {
     description:
       'NatGeo whale-documentary register — cetaceans as wonders of the natural world. Humpback breach, blue-whale glide, orca pod hunting, sperm whale sounding, gray whale with calf, beluga arctic dance, narwhal, fin whale, right whale, bowhead. Naturalistic register (NOT myth — kraken-leviathan path is for myth). No ships, no people, no diving gear. Same lean 2-path-slot shape.',

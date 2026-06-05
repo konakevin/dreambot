@@ -41,7 +41,8 @@ const pathBuilders = {
   'kraken-leviathan': require('./paths/kraken-leviathan'),
   'deep-wonder': require('./paths/deep-wonder'),
   'whale-encounter': require('./paths/whale-encounter'),
-  // Other 3 paths land as the bot matures.
+  'reef-paradise': require('./paths/reef-paradise'),
+  // Other 2 paths land as the bot matures.
 };
 
 module.exports = {
@@ -132,6 +133,24 @@ module.exports = {
     'nightshade',
   ],
 
+  // Per-path vibe overrides (Kevin 2026-06-04 R0 reviews).
+  // • reef-paradise: bot-wide MINUS dark / voltage / nightshade — these
+  //   cold/violet/electric vibes don't fit sun-lit tropical reef and
+  //   produce gloomy / unnatural color casts. Down to 7 sunny-compatible
+  //   vibes. Other sunny paths to receive same trim if they show the
+  //   same clash on R0 review.
+  vibesByPath: {
+    'reef-paradise': [
+      'cinematic',
+      'peaceful',
+      'epic',
+      'nostalgic',
+      'ethereal',
+      'ancient',
+      'enchanted',
+    ],
+  },
+
   paths: [
     'shipwreck-kingdom',
     'lost-cities',
@@ -140,6 +159,7 @@ module.exports = {
     'kraken-leviathan',
     'deep-wonder',
     'whale-encounter',
+    'reef-paradise',
   ],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
@@ -160,6 +180,7 @@ module.exports = {
       'kraken-leviathan',
       'deep-wonder',
       'whale-encounter',
+      'reef-paradise',
     ],
   },
 

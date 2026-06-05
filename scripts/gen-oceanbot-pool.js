@@ -1299,6 +1299,105 @@ NEVER use negation. NEVER name modern cinema terms.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // REEF-PARADISE path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 8th OceanBot path, 3rd scenic — tropical shallow-water coral reef
+  // in maximum biodiversity. Counterpoint to deep-wonder (sun-lit
+  // instead of abyssal-dark). NO SHIPS, NO PEOPLE, NO DIVING GEAR.
+
+  reef_scenes: {
+    format: 'simple',
+    theme: `REEF SCENES for OceanBot's reef-paradise path — tropical shallow-water coral reef in maximum biodiversity. NatGeo / BBC-Blue-Planet register. Each entry is ONE specific reef moment with multi-species composition, 20-28 words. Reef structure + fish/inverts + biodiversity moment ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ MANDATORY REGISTER — every entry is a REAL Indo-Pacific / Caribbean / Coral-Triangle / Red Sea / Great-Barrier reef ecosystem. Sun-shafted shallow tropical water (gin-clear or sun-dappled), razor-sharp coral structure, multiple species visible together.
+
+⚠️ NO SHIPS. NO PEOPLE. NO SCUBA GEAR. NO BOATS. Just the reef and its inhabitants.
+
+✓ VARIETY MANDATE — distribute across reef-scene categories:
+  A. CORAL HEAD + ANEMONE FISH (clownfish darting through anemone tentacles on a brain-coral dome)
+  B. SCHOOL THROUGH REEF (silverside / fusilier / snapper school streaming through a coral channel)
+  C. MEGAFAUNA AT REEF (reef shark / manta ray / sea turtle cruising along reef wall)
+  D. STAGHORN/ELKHORN FOREST (dense branching coral forest with parrotfish grazing)
+  E. SEA-FAN CORNICE (purple gorgonian fans with butterflyfish hovering, vertical reef wall)
+  F. REEF-EDGE BLUE-WATER DROP-OFF (reef shelf meeting deep blue, schools at the boundary)
+  G. SAND-CHANNEL between bommies (rays cruising sand between coral heads)
+  H. NIGHT REEF (coral polyps extended, lionfish hunting, parrotfish in mucous cocoon)
+  I. CLEANING-STATION (cleaner wrasses tending to a grouper / shark / turtle)
+  J. SEA-GRASS MEADOW edge (turtles grazing, juvenile fish using grass as nursery)
+  K. RAY-ON-SAND (eagle ray / spotted ray gliding over white sand between corals)
+  L. APEX HUNTER PASS (gray reef shark / great barracuda / giant trevally cruising the reef-line)
+  M. SPAWNING/AGGREGATION moment (mass coral spawn / fish aggregation at dusk)
+  N. CEPHALOPOD HIDE (octopus / cuttlefish camouflaged on coral, color-changing in motion)
+  O. CAVE/SWIM-THROUGH (light from cavern entrance, fish silhouetted)
+
+Each entry: ONE reef-structure anchor + ONE specific dweller species (or school) + ONE atmospheric or light detail. Names species explicitly. Multiple species in one entry OK; but ONE dominant action/moment per entry.
+
+DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Clownfish family darting through magnificent anemone on a brain-coral dome, sun-shafts dappling purple sea-fans behind, electric-blue chromis schooling above.',
+      'Fusilier school streaming through a coral channel in razor-sharp gin-clear water, sun-shafts catching their flanks against staghorn coral walls.',
+      'Whitetip reef shark cruising slow along a vertical reef wall, sea-fans waving above, schooling jacks parting around its passage.',
+      'Staghorn coral forest dense across the foreground, parrotfish flock chewing audibly at the branches, sun-dappled mosaic across every surface.',
+      'Purple gorgonian sea-fan dominating mid-frame on a vertical wall, butterflyfish hovering in pairs, gin-clear water revealing deep blue beyond.',
+      'Reef-edge drop-off, hard coral table meeting deep blue, eagle ray cruising past with school of jacks following in formation.',
+      'Sand channel between massive bommies, blue-spotted ray gliding low across the white sand, coral heads framing both sides.',
+      'Night reef with coral polyps fully extended, red lionfish hunting glassfish in pillar coral shadow, single dive-light beam illuminating one head.',
+      'Cleaning station on a coral outcrop, cleaner wrasse tending to a giant grouper hovering with mouth and gills open.',
+      'Sea-grass meadow at reef edge, green sea-turtle grazing in afternoon sun-shafts, juvenile reef fish hiding in the blades.',
+      'Eagle ray gliding diagonally over white sand between massive coral bommies, wingtips brushing past sea-fans, sun-mosaic on its back.',
+      'Gray reef shark patrolling the reef line in mid-water, deep blue beyond the drop-off, jacks streaming above in dense column.',
+      'Mass coral spawn at dusk, billions of pink gamete bundles drifting upward, schooling fish gathering to feed on the bloom.',
+      'Day octopus camouflaged on a coral head, mottled red-and-brown skin matching the substrate, single suckered arm trailing into a crevice.',
+      'Cavern swim-through, light shafts cutting from the cave entrance, glassfish school silhouetted against the bright opening.',
+      'Anthias swarm above an Indo-Pacific reef, thousands of orange-pink females hovering over hard coral, single male flashing display colors.',
+      'Caribbean elkhorn coral thicket in clear shallows, blue tang school weaving through branches, sergeant majors guarding nests on coral plates.',
+      'Manta ray banking over a Maldivian reef, mouth wide as it filter-feeds plankton, cleaner wrasses attending its underside.',
+      'Hawksbill turtle resting on a Coral Triangle pinnacle, scarred shell encrusted, two cleaner shrimp picking algae from its eye-ridge.',
+    ],
+    instructions: `Each entry is ONE specific reef moment, 20-28 words. Format: "reef-structure anchor + named species + atmospheric/light detail." Vary across the 15 categories above. NEVER include ships / boats / people / scuba gear. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  reef_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's reef-paradise path — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across reef-specific framing:
+  A. WIDE REEF VISTA (vast reef structure with depth, multi-tier biodiversity readable)
+  B. CLOSE CORAL DETAIL (camera near a coral head, polyps/texture filling frame)
+  C. THROUGH-CORAL framing (camera looking through a coral arch / swim-through / cave)
+  D. SCHOOL-WALL (camera close to a fish school filling the frame, reef visible beyond)
+  E. REEF-EDGE DROP-OFF (split composition: coral shelf foreground, deep blue beyond)
+  F. UNDERWATER LOOKING UP (reef silhouetted against bright sun-dome at surface)
+  G. OVER-THE-CORAL aerial (top-down on coral spread across the seafloor)
+  H. EYE-LEVEL with a single creature (turtle / shark / octopus at lens-level)
+  I. SAND-CHANNEL TRACK (lateral camera moving along sand between bommies)
+  J. APEX-PREDATOR PASS (camera at distance watching shark/ray cruise reef line)
+
+NEVER use negation. NEVER name modern cinema terms.`,
+    touchpoints: [
+      'WIDE REEF VISTA framing, vast multi-tier reef structure stretching from foreground coral into blue distance',
+      'CLOSE CORAL DETAIL framing, camera near a coral head with polyps and texture filling the foreground frame',
+      'THROUGH-CORAL framing, camera looking through a swim-through arch, light streaming from the far opening',
+      'SCHOOL-WALL framing, dense fish school filling the foreground, reef structure visible through gaps in the school',
+      'REEF-EDGE DROP-OFF framing, coral shelf in close foreground, vast deep blue stretching beyond into depth',
+      'UNDERWATER LOOKING UP, reef silhouetted against the bright sun-dome surface, sun-shafts cutting downward',
+      'OVER-THE-CORAL aerial framing, top-down on coral colonies spread across the seafloor in mosaic pattern',
+      'EYE-LEVEL with a single creature, turtle or shark at lens height meeting the camera with calm presence',
+      'SAND-CHANNEL TRACK framing, lateral camera moving along white sand between coral bommies on both sides',
+      'APEX-PREDATOR PASS framing, camera at distance watching a shark or ray cruise along the reef line',
+      'EXTREME WIDE-ANGLE reef panorama, dome-port distortion stretching reef horizon-to-horizon',
+      'OVER-THE-FAN framing, purple gorgonian sea-fan dominating foreground, fish hovering beyond in clear water',
+      'POLYP MACRO framing, individual coral polyps in full extension filling the frame with tentacle detail',
+      'BACKLIT-SCHOOL framing, fish school silhouetted against bright surface light, individual silhouettes readable',
+      'OVER-THE-SHOULDER OF A REEF DWELLER, camera behind a turtle or grouper looking at its world from its perspective',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

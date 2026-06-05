@@ -115,5 +115,12 @@ module.exports = {
   WHALE_ENCOUNTER: load('whale_encounter'),
   WHALE_ENCOUNTER_CAMERA_FRAMING: load('whale_encounter_camera_framing'),
 
-  // (Other 3 paths' pools added when their gen-scripts ship.)
+  // ── reef-paradise path-bespoke pools (8th path, 3rd scenic —
+  // ── tropical shallow-water coral reef in maximum biodiversity.
+  // ── Counterpoint to deep-wonder (sun-lit instead of abyssal-dark).
+  // ── NO SHIPS, NO PEOPLE, NO DIVING GEAR.) ──
+  REEF_SCENES: load('reef_scenes'),
+  REEF_CAMERA_FRAMING: load('reef_camera_framing'),
+
+  // (Other 2 paths' pools added when their gen-scripts ship.)
 };

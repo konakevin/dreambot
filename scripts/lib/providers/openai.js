@@ -15,6 +15,16 @@
  *
  * Output: a data: URL (base64-PNG) — the upload pipeline already handles
  * data URLs (see imageCodec.uploadFromUrl).
+ *
+ * ASPECT-RATIO NOTE (2026-06-04). The OpenAI API only accepts size from a
+ * fixed enum (1024x1024 / 1024x1536 / 1536x1024) — there is no 9:16
+ * generation option. We pick 1024x1536 (2:3 = 0.667) as the nearest
+ * portrait. In DreamCard feed view (contentFit='cover') this crops a
+ * little horizontally and looks fine. In BotImageViewer full-screen
+ * view (contentFit='contain') the source's wider-than-9:16 ratio shows
+ * top/bottom bars. A server-side center-crop would butcher off-center
+ * subjects (e.g. a turtle near the frame edge) — display-side handling
+ * is the right place to address the bars, not the provider.
  */
 
 const OPENAI_MODEL_MAP = {

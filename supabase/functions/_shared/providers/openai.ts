@@ -18,6 +18,16 @@
  * NSFW: OpenAI has its own safety system. Failed safety surfaces as
  *   a 400 with `code: 'content_policy_violation'`. We re-throw with
  *   our NSFW_CONTENT: prefix so the upstream retry logic kicks in.
+ *
+ * ASPECT-RATIO NOTE (2026-06-04). The OpenAI API only accepts size from a
+ * fixed enum (1024x1024 / 1024x1536 / 1536x1024) — there is no 9:16
+ * generation option. We pick 1024x1536 (2:3 = 0.667) as the nearest
+ * portrait. DreamCard feed view uses contentFit='cover' so the source
+ * crops a little horizontally and fills the card; BotImageViewer
+ * full-screen uses contentFit='contain' so non-9:16 sources show
+ * top/bottom bars (preserves the full render). A server-side
+ * center-crop would butcher off-center subjects — display-side
+ * handling is the right place to address bars, not the provider.
  */
 
 export interface OpenAIImageResult {
