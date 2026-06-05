@@ -34,6 +34,7 @@ export type NotificationType =
   | 'download_ready'
   | 'trial_reminder' // Pro-trial expiry pings (3-day + last-night), migration 215 commit
   | 'pro_reminder' // Paid Pro expiry pings (cancelled but still in paid period)
+  | 'welcome_gift' // Onboarding welcome ping (mig 223) — routes to /welcome-gift
   | 'comment'; // legacy rows kept queryable
 
 export type NotificationCategory =
@@ -80,6 +81,14 @@ export interface InboxGroup {
   lastAt: string;
   /** True iff any row in the group is unread. */
   anyUnseen: boolean;
+  /**
+   * True iff any row in the group landed after the user's last inbox view
+   * (`users.last_inbox_view_at`). Migration 223. Drives the "new" pip on
+   * the row icon in the new viewed=read inbox UI. Distinct from `anyUnseen`
+   * — that's per-row seen_at (still used by the push-tap mark-seen path);
+   * this is the time-window-relative one the inbox cares about.
+   */
+  isNewSinceView: boolean;
 }
 
 const PAGE_SIZE = 20;
@@ -101,6 +110,7 @@ function mapRow(row: Record<string, unknown>): InboxGroup {
     body: (row.body as string | null) ?? null,
     lastAt: row.last_at as string,
     anyUnseen: row.any_unseen as boolean,
+    isNewSinceView: (row.is_new_since_view as boolean | undefined) ?? false,
   };
 }
 

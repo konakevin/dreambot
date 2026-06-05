@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { useExploreStore } from '@/store/explore';
 import { ANIM, colors } from '@/constants/theme';
-import { useUnreadGroupCount } from '@/hooks/useUnreadGroupCount';
+import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 
 // Pure render — receives unreadCount as a prop. The subscription lives at
 // TabLayout level so parent re-renders propagate new options to RN's tab
@@ -37,13 +37,15 @@ export default function TabLayout() {
   const activeTab = useFeedStore((s) => s.activeTab);
   const setActiveTab = useFeedStore((s) => s.setActiveTab);
   const hudVisible = useFeedStore((s) => s.hudVisible);
-  // Subscribe to unread count at the layout level — when the count
-  // changes, TabLayout re-renders and passes new options to <Tabs.Screen>,
-  // which makes React Navigation re-render the bottom-bar icon. Without
-  // this, child-component-internal subscriptions don't propagate to the
-  // tab bar (RN's BottomTabBar memoizes options).
-  // Distinct-group unread count (Phase 1, D6): 14 likes on one post = 1.
-  const { data: unreadCount = 0 } = useUnreadGroupCount();
+  // Subscribe to new-since-last-view count at the layout level — when the
+  // count changes, TabLayout re-renders and passes new options to
+  // <Tabs.Screen>, which makes React Navigation re-render the bottom-bar
+  // icon. Without this, child-component-internal subscriptions don't
+  // propagate to the tab bar (RN's BottomTabBar memoizes options).
+  // Migration 223: "viewed = read" — count = groups landed AFTER
+  // users.last_inbox_view_at. 14 likes on one post = 1 (group-collapsed
+  // semantics preserved from the legacy useUnreadGroupCount hook).
+  const { data: unreadCount = 0 } = useNewNotificationCount();
   const tabBarOpacity = useRef(new Animated.Value(1)).current;
   useEffect(() => {
     Animated.timing(tabBarOpacity, {

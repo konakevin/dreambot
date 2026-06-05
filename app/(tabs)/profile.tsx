@@ -24,8 +24,7 @@ import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
-import { useUnreadGroupCount } from '@/hooks/useUnreadGroupCount';
-import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
+import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { colors } from '@/constants/theme';
@@ -43,9 +42,10 @@ export default function ProfileScreen() {
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
   const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
-  // Distinct-group unread count (Phase 1, D6) — same source as the tab badge.
-  const { data: unreadCount = 0 } = useUnreadGroupCount();
-  const markAllSeen = useMarkAllSeen();
+  // New-since-last-view count (mig 223) — same source as the tab badge.
+  // The inbox screen itself fires useMarkInboxViewed on focus, so by the
+  // time the user is back here this count has already reset to 0.
+  const { data: unreadCount = 0 } = useNewNotificationCount();
 
   // Fire on each focus (tab revisit), not just first mount, so we count visits.
   useFocusEffect(
@@ -54,15 +54,14 @@ export default function ProfileScreen() {
     }, [])
   );
 
-  // Tapping the inbox bubble pushes to /inbox AND optimistically marks
-  // every notification as seen — the badge clears instantly. The
-  // useMarkAllSeen mutation also clears the in-cache inbox query data
-  // so re-entering inbox shows everything as already-seen.
+  // Tapping the inbox bubble just navigates — the inbox screen owns its
+  // own mark-viewed firing on focus (mig 223 viewed=read model). No more
+  // duplicate "mark seen" call site here; the badge clears via the
+  // optimistic update inside useMarkInboxViewed once the inbox mounts.
   const handleInboxPress = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (unreadCount > 0) markAllSeen.mutate();
     nav.push('/inbox');
-  }, [unreadCount, markAllSeen]);
+  }, []);
 
   // Reset to posts tab only when profile tab icon is re-tapped
   useEffect(() => {

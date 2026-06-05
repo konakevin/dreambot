@@ -1078,28 +1078,34 @@ export type Database = {
       };
       location_iconic_spots: {
         Row: {
+          character_eligible: boolean | null;
           created_at: string;
           id: string;
           is_active: boolean;
           location_key: string;
+          pure_scene_eligible: boolean | null;
           quality_tier: string;
           spot_kind: string;
           spot_text: string;
         };
         Insert: {
+          character_eligible?: boolean | null;
           created_at?: string;
           id?: string;
           is_active?: boolean;
           location_key: string;
+          pure_scene_eligible?: boolean | null;
           quality_tier?: string;
           spot_kind?: string;
           spot_text: string;
         };
         Update: {
+          character_eligible?: boolean | null;
           created_at?: string;
           id?: string;
           is_active?: boolean;
           location_key?: string;
+          pure_scene_eligible?: boolean | null;
           quality_tier?: string;
           spot_kind?: string;
           spot_text?: string;
@@ -1909,6 +1915,7 @@ export type Database = {
           is_bot: boolean;
           is_public: boolean;
           last_active_at: string | null;
+          last_inbox_view_at: string | null;
           pro_mode_flux_model: string;
           pro_subscription: boolean;
           pro_subscription_expires_at: string | null;
@@ -1930,6 +1937,7 @@ export type Database = {
           is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
+          last_inbox_view_at?: string | null;
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
           pro_subscription_expires_at?: string | null;
@@ -1951,6 +1959,7 @@ export type Database = {
           is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
+          last_inbox_view_at?: string | null;
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
           pro_subscription_expires_at?: string | null;
@@ -2228,15 +2237,20 @@ export type Database = {
           category: string;
           comment_id: string;
           group_key: string;
+          is_new_since_view: boolean;
           last_at: string;
           preview_actor_ids: string[];
           preview_avatars: string[];
           preview_usernames: string[];
-          subtype: string;
           type: string;
           upload_id: string;
           upload_image_url: string;
+          upload_thumbhash: string;
         }[];
+      };
+      get_new_notification_count: {
+        Args: { p_user_id: string };
+        Returns: number;
       };
       get_notification_settings: { Args: { p_user_id?: string }; Returns: Json };
       get_public_profile: {
@@ -2296,6 +2310,7 @@ export type Database = {
         Args: { p_group_key: string; p_user_id: string };
         Returns: undefined;
       };
+      mark_inbox_viewed: { Args: { p_user_id: string }; Returns: undefined };
       notification_category: { Args: { p_type: string }; Returns: string };
       notification_group_key: {
         Args: {
