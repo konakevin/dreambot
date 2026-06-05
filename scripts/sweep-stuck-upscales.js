@@ -47,10 +47,14 @@ async function notifyRequesters(sb, uploadId) {
     .select('user_id')
     .eq('upload_id', uploadId)
     .is('notified_at', null);
-  for (const r of pending || []) {
+  // Dedup by user_id: the partial unique index (migration 225) prevents
+  // duplicate un-notified rows going forward, but legacy duplicates may
+  // already exist and shouldn't double-push.
+  const uniqueRecipients = [...new Set((pending || []).map((r) => r.user_id))];
+  for (const userId of uniqueRecipients) {
     await sb.from('notifications').insert({
-      recipient_id: r.user_id,
-      actor_id: r.user_id,
+      recipient_id: userId,
+      actor_id: userId,
       type: 'download_ready',
       subtype: 'download',
       upload_id: uploadId,

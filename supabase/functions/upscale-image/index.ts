@@ -155,7 +155,24 @@ Deno.serve(async (req) => {
   // app mid-upscale. The watcher isn't spammed: foreground push banners are
   // suppressed client-side, the modal still auto-saves in front of them, and the
   // inbox row is accurate. (allow_upscale_notify is now unused — vestigial.)
-  await supabase.from('upscale_requests').insert({ upload_id: body.upload_id, user_id: user.id });
+  //
+  // Race-safety: the dedup SELECT above is TOCTOU — two concurrent requests
+  // for the same (upload, user) can both miss the existing row and try to
+  // INSERT. The partial unique index from migration 225 catches the loser
+  // with 23505 (unique_violation); we treat that as "joined the existing
+  // request" and return processing. Postgres ON CONFLICT inference can't
+  // target a partial index from supabase-js (the WHERE clause doesn't pass
+  // through), so we rely on the error code instead.
+  const insertRes = await supabase
+    .from('upscale_requests')
+    .insert({ upload_id: body.upload_id, user_id: user.id });
+  if (insertRes.error) {
+    if (insertRes.error.code === '23505') {
+      return json({ status: 'processing' }, 202);
+    }
+    console.warn(`[upscale-image] upscale_requests insert failed: ${insertRes.error.message}`);
+    return json({ error: 'Failed to record request' }, 500);
+  }
   await supabase
     .from('pro_hq_downloads_log')
     .insert({ user_id: user.id, upload_id: body.upload_id })
@@ -186,15 +203,19 @@ Deno.serve(async (req) => {
           .eq('upload_id', uploadId);
         // Notify every requester not yet told (inserting a notification fires
         // the push via the notifications webhook). Multiple users → each pinged.
+        // Dedup by user_id: the partial unique index (migration 225) prevents
+        // duplicates going forward, but ANY existing duplicate rows + any
+        // future bug in the upsert path shouldn't double-push.
         const { data: pending } = await supabase
           .from('upscale_requests')
           .select('user_id')
           .eq('upload_id', uploadId)
           .is('notified_at', null);
-        for (const r of pending ?? []) {
+        const uniqueRecipients = [...new Set((pending ?? []).map((r) => r.user_id))];
+        for (const userId of uniqueRecipients) {
           await supabase.from('notifications').insert({
-            recipient_id: r.user_id,
-            actor_id: r.user_id,
+            recipient_id: userId,
+            actor_id: userId,
             type: 'download_ready',
             subtype: 'download',
             upload_id: uploadId,

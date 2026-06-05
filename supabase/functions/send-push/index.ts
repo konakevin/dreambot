@@ -3,7 +3,7 @@
 // Looks up the recipient's Expo push token and sends a push notification.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { shouldSkipForActivity } from '../_shared/notify.ts';
+import { hasSeenSibling, shouldSkipForActivity } from '../_shared/notify.ts';
 
 const EXPO_PUSH_URL = 'https://exp.host/--/api/v2/push/send';
 
@@ -241,7 +241,7 @@ Deno.serve(async (req) => {
     // is unit-tested in jest.
     const { data: activityRow } = await supabase
       .from('users')
-      .select('last_active_at')
+      .select('last_active_at, last_inbox_view_at')
       .eq('id', record.recipient_id)
       .maybeSingle();
     if (shouldSkipForActivity({ lastActiveAt: activityRow?.last_active_at, now: Date.now() })) {
@@ -249,6 +249,39 @@ Deno.serve(async (req) => {
         JSON.stringify({ message: 'Recipient active in-app; skipping push', skipped: 'active' }),
         { status: 200 }
       );
+    }
+
+    // Sibling-acknowledged gate (migration 225): if the user has already
+    // tapped or viewed ANY sibling notification (same group_key), skip the
+    // OS banner. Catches the case Kevin hit — first download_ready push
+    // tapped, in-app save still in progress, then a duplicate notification
+    // would have fired a second push. Decision lives in
+    // _shared/notify.ts:hasSeenSibling so it's unit-tested.
+    if (record.group_key) {
+      const { data: siblings } = await supabase
+        .from('notifications')
+        .select('seen_at, created_at')
+        .eq('recipient_id', record.recipient_id)
+        .eq('group_key', record.group_key)
+        .neq('id', record.id)
+        .order('created_at', { ascending: true });
+      const oldest = siblings && siblings.length > 0 ? siblings[0].created_at : null;
+      const anySeen = !!siblings && siblings.some((s) => s.seen_at !== null);
+      if (
+        hasSeenSibling({
+          oldestSiblingCreatedAt: oldest,
+          anySiblingSeen: anySeen,
+          lastInboxViewedAt: activityRow?.last_inbox_view_at,
+        })
+      ) {
+        return new Response(
+          JSON.stringify({
+            message: 'User already acknowledged a sibling notification; skipping push',
+            skipped: 'sibling-acknowledged',
+          }),
+          { status: 200 }
+        );
+      }
     }
 
     // Get actor's username (the LATEST actor in the group when aggregated;
