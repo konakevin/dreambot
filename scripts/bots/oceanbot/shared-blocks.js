@@ -51,8 +51,20 @@ const CANVAS_MARITIME =
 // painted mer-folk anatomy much better when pushed hard into the
 // painted register. Photoreal cues make Flux render half-woman-half-
 // fish as a costume; the painted register makes it read as MYTH.
+// Mystical-mermaid medium directive (gpt-image-2 only — see modelByPath).
+// 2026-06-05 rewrite: the earlier version stacked the abstract-leaning
+// triggers (Pre-Raphaelite plate, on canvas, ornamental linework,
+// visible painterly brushwork) on top of three artist name-drops and a
+// five-noun negation cascade. GPT-image-2 read all of that as "go full
+// Art-Nouveau plate" — renders came back abstract / canvas / painterly
+// without recognizable mer-folk anatomy. New direction: positive-only,
+// classical storybook illustration register, smooth painted shading
+// with explicitly readable anatomy. Still firmly in the painted-
+// illustration register (not photoreal) so GPT-image-2's modesty bar
+// continues to hold. Per memories: no name-drops, no negation cascade,
+// describe what we DO want.
 const MERMAID_PAINT =
-  'Waterhouse and Dulac and Arthur Rackham painted Pre-Raphaelite mer-folk illustration tradition, oil-painted fairy-tale plate on canvas with visible painterly brushwork and ornamental linework, every surface painted not photographed, mythic illustrated-fantasy-tale register, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT 3D render, NOT a costume';
+  'Classical fairy-tale illustration of mer-folk, golden-age storybook plate, smooth painted shading with clearly readable anatomy and recognizable mer-folk features, luminous jewel-tone palette, mythic illustrated register';
 
 // Ship anatomy guardrail — embedded into ANY naval-lore path template
 // (pirates / ghost-ship / shipwreck-kingdom). Positive-language only.

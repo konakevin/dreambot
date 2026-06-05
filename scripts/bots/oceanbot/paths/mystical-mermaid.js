@@ -4,8 +4,9 @@
  * Mystical mer-folk across shore / underwater / kelp forests / coral
  * palaces / tide pools / moonlit grottos. Every render slanted toward
  * the magical / mythic "stuff of legend" register Kevin called out.
- * Painted Pre-Raphaelite + Dulac + Rackham illustration medium (per
- * the MERMAID_PAINT mediumStyles override). Cultural diversity baked
+ * Classical storybook illustration medium with readable anatomy (per
+ * the MERMAID_PAINT mediumStyles override — rewritten 2026-06-05 to
+ * pull back from abstract Art-Nouveau plate drift). Cultural diversity baked
  * into the ARCHETYPE + FACE_AND_SKIN pools (Sirena / Mami Wata /
  * Selkie / Ningyo / Rusalka / Naiad / Iara / Sedna / Hai-Ren /
  * Andersen-Western mer-maids).

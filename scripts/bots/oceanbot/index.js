@@ -80,9 +80,9 @@ module.exports = {
 
   // mediumStyles overrides:
   // • canvas (scene paths): Pre-Raphaelite maritime oil tradition
-  // • oceanbot_mermaid_paint (mystical-mermaid only): Waterhouse /
-  //   Dulac / Rackham painted Pre-Raphaelite mer-folk illustration
-  //   tradition with anti-CG + anti-photoreal guards
+  // • oceanbot_mermaid_paint (mystical-mermaid only): classical
+  //   storybook illustration with smooth shading + readable
+  //   anatomy (2026-06-05 rewrite — see shared-blocks comment)
   mediumStyles: {
     canvas: blocks.CANVAS_MARITIME,
     oceanbot_mermaid_paint: blocks.MERMAID_PAINT,
