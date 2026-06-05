@@ -340,6 +340,7 @@ function GroupRow({
   selectMode,
   isSelected,
   onToggleSelect,
+  isTextExpanded,
 }: {
   group: InboxGroup;
   onPress: () => void;
@@ -347,6 +348,10 @@ function GroupRow({
   selectMode: boolean;
   isSelected: boolean;
   onToggleSelect: () => void;
+  /** When true, the body-text preview renders unclipped so the user can
+   *  read the full message. Driven by InboxScreen's expandedTextKeys
+   *  for text-only notifications (welcome, trial reminders, etc.). */
+  isTextExpanded: boolean;
 }) {
   const { actorPrefix, action, preview } = getGroupText(group);
   const isUnseen = group.anyUnseen;
@@ -415,7 +420,7 @@ function GroupRow({
           )}
         </Text>
         {preview && (
-          <Text style={styles.preview} numberOfLines={1}>
+          <Text style={styles.preview} numberOfLines={isTextExpanded ? undefined : 1}>
             {preview}
           </Text>
         )}
@@ -473,6 +478,20 @@ export default function InboxScreen() {
   // Expand sheet state — opens for aggregable groups with > 1 distinct actor.
   const [expandedGroupKey, setExpandedGroupKey] = useState<string | null>(null);
   const [expandedTitle, setExpandedTitle] = useState('');
+
+  // Per-row expand state for text-only notifications (welcome, trial
+  // reminders, expiry reminders) whose body overflows the 1-line preview.
+  // Tap toggles between truncated and full text so the user can actually
+  // read the message. Cleared on row dismount via React's natural lifecycle.
+  const [expandedTextKeys, setExpandedTextKeys] = useState<Set<string>>(new Set());
+  const toggleTextExpanded = useCallback((groupKey: string) => {
+    setExpandedTextKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(groupKey)) next.delete(groupKey);
+      else next.add(groupKey);
+      return next;
+    });
+  }, []);
 
   const groups = useMemo(() => data?.pages.flatMap((p) => p.groups) ?? [], [data]);
   const hasUnread = groups.some((g) => g.anyUnseen);
@@ -536,6 +555,15 @@ export default function InboxScreen() {
     if (text.isAggregable && g.actorCount > 1) {
       setExpandedGroupKey(g.groupKey);
       setExpandedTitle(text.action);
+      return;
+    }
+    // Text-only notifications (welcome, trial/expiry reminders) have a body
+    // but no uploadId, so routeFromNotification has nowhere to go — the tap
+    // visibly does nothing and the preview is truncated to 1 line. Toggle a
+    // per-row expand state so the full body is readable; tap again to
+    // collapse. Notifications WITH an upload route as before.
+    if (text.preview && !g.uploadId) {
+      toggleTextExpanded(g.groupKey);
       return;
     }
     // Single-actor or individual types → navigate to the relevant surface.
@@ -653,6 +681,7 @@ export default function InboxScreen() {
             selectMode={selectMode}
             isSelected={selected.has(item.groupKey)}
             onToggleSelect={() => toggleSelect(item.groupKey)}
+            isTextExpanded={expandedTextKeys.has(item.groupKey)}
           />
         )}
         onEndReached={() => {
