@@ -208,7 +208,7 @@ export default function DreamLoadingScreen() {
             {showQueue && (
               <>
                 <Text style={s.queueHint}>
-                  Don’t want to wait? Tap Queue This below and we’ll notify you when it’s ready.
+                  Don’t want to wait? Tap “Queue This” below and we’ll notify you when it’s ready.
                 </Text>
                 <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
                   <Ionicons name="time-outline" size={16} color="#FFFFFF" />
