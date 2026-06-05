@@ -334,7 +334,7 @@ module.exports = {
     'cyborg-woman',
     // 'cyborg-female-legacy',  // 2026-05-17 DISABLED — see pathBuilders comment
     'droid-assassin',
-    'cyborg-man', // 2026-05-26 android-man rebuild (full rich axis system)
+    // 'cyborg-man',  // 2026-06-05 DISABLED (Kevin) — even after killing the mandatory opening tag, renders are unusable; redesign deferred
     // 'cyborg-male-legacy',  // 2026-05-26 DISABLED — superseded by android-man rebuild
     'mecha-pilots',
     'titan-war-machines',
