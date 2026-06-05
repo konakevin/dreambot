@@ -11,7 +11,6 @@
  */
 
 const pools = require('./pools');
-const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'robot-moment': require('./paths/robot-moment'),
@@ -226,37 +225,37 @@ module.exports = {
     ],
   },
 
-  // Picker on with the full 8-model lineup per BOT_MODEL_TALLY (2026-05-30).
-  // mechbot is flagged as in-flight WIP per CLAUDE.md — this rollout is
-  // additive (just opens the model set) and doesn't touch the path/pool
-  // work the other agent is iterating on.
+  // Picker on. 2026-06-05: Kevin banned Flux 2 Flex + Flux 2 Max + Flux 2 Pro
+  // fleet-wide from mechbot — keeping 5 models. Defined explicitly (not via
+  // subtraction of ALL_ENABLED_AI_MODELS) so the lineup is auditable.
+  // BOT_MODEL_TALLY.md is the source of truth.
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  allowedModels: [
+    'google/gemini-2-image',
+    'openai/gpt-image-2',
+    'black-forest-labs/flux-dev',
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-1.1-pro',
+  ],
 
   // Per-path bans (2026-05-30): cyborg-woman + cyborg-man drop Nano Banana
-  // and Flux 2 Pro per Kevin's review of the 24-render cyborg-woman test —
-  // those two models produced renders he didn't want for the cyborg
-  // aesthetic. Same lineup minus those 2 = 6 models still available on
-  // these paths. modelByPath takes precedence over allowedModels in the
-  // engine (botEngine.js lines 1279-1311), so this is the right surface.
-  // To restore: add the model id back to the array. To ban from more
-  // paths: add a new key here.
+  // and Flux 2 Pro per Kevin's review of the 24-render cyborg-woman test.
+  // 2026-06-05: Flux 2 Flex + Flux 2 Max also removed here (fleet-wide ban
+  // above already excludes them, but kept consistent for readability).
+  // cyborg-man path is deactivated 2026-06-05 — entry left for reference if
+  // the path is ever re-enabled.
   modelByPath: {
     'cyborg-woman': [
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-      'black-forest-labs/flux-2-max',
     ],
     'cyborg-man': [
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-      'black-forest-labs/flux-2-max',
     ],
   },
 

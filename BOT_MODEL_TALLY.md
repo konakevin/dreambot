@@ -135,16 +135,16 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 
 | Model              | Status | Notes   |
 | ------------------ | ------ | ------- |
-| Nano Banana        | ✅     | —       |
+| Nano Banana        | ❌     | dropped 2026-06-02 (Kevin) |
 | GPT Image 2        | ✅     | —       |
 | Flux Dev           | ❌     | dropped |
-| Flux 2 Pro         | ✅     | —       |
+| Flux 2 Pro         | ❌     | dropped 2026-06-05 (Kevin) |
 | Flux 1.1 Pro       | ✅     | —       |
 | Flux 1.1 Pro Ultra | ✅     | —       |
-| Flux 2 Flex        | ✅     | —       |
-| Flux 2 Max         | ✅     | —       |
+| Flux 2 Flex        | ❌     | dropped 2026-06-02 (Kevin) |
+| Flux 2 Max         | ❌     | dropped 2026-06-05 (Kevin) |
 
-**Final bot-wide allowedModels:** 7 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex, Flux 2 Max.
+**Final bot-wide allowedModels:** 3 — GPT Image 2, Flux 1.1 Pro, Flux 1.1 Pro Ultra.
 
 **Per-path overrides (non-character, Kevin 2026-05-31 uniform lineup):** all 7 non-character paths (`dark-landscape`, `gothic-architecture`, `castlevania-scene`, `gothic-vista`, `vampire-from-a-distance`, `monster-prowl`, `monster-prowl-victorian`) locked to **5 models**: Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Ultra (F2 Flex + F2 Max banned). Character paths (goth-closeup / goth-full-body / vampire-girls-2 / vampire-assassin-female / vampire-hunter-in-action / vampire-assassin-combat / goth-male-full-body-axis) keep their own per-path bans from the prior audit.
 
@@ -174,14 +174,13 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | Nano Banana        | ✅     | —                |
 | GPT Image 2        | ✅     | —                |
 | Flux Dev           | ✅     | —                |
-| Flux 2 Pro         | ✅     | 1 fail in matrix |
+| Flux 2 Pro         | ❌     | dropped 2026-06-05 (Kevin) |
 | Flux 1.1 Pro       | ✅     | —                |
 | Flux 1.1 Pro Ultra | ✅     | —                |
-| Flux 2 Flex        | ✅     | —                |
-| Flux 2 Max         | ✅     | —                |
+| Flux 2 Flex        | ❌     | dropped 2026-06-05 (Kevin) |
+| Flux 2 Max         | ❌     | dropped 2026-06-05 (Kevin) |
 
-**Final allowedModels:** all 8 (= `ALL_ENABLED_AI_MODELS`).
-⚠ NOTE: currently has no `useModelPicker` line (defaults false) + per-path `modelByPath` — wiring needs to add `useModelPicker: true` AND strip/clear `modelByPath`, otherwise the constant has no effect. Also flagged as WIP per CLAUDE.md.
+**Final allowedModels:** 5 — Nano Banana, GPT Image 2, Flux Dev, Flux 1.1 Pro Ultra, Flux 1.1 Pro.
 
 ---
 

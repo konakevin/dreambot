@@ -48,10 +48,8 @@ module.exports = {
   // Banned 2026-06-02: google/gemini-2-image (Kevin heart-ban — Nano Banana).
   allowedModels: [
     'openai/gpt-image-2',
-    'black-forest-labs/flux-2-pro',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-max',
   ],
 
   // Per-path model override — takes precedence over pickModel (medium pool).
@@ -81,10 +79,8 @@ module.exports = {
       // BAN: Banana, Flux 2 Flex (2026-06-02)
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-max',
     ],
     'goth-full-body': [
       // BAN: Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02)
@@ -92,7 +88,6 @@ module.exports = {
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-max',
     ],
     'goth-male-full-body-axis': [
       // Mirror of goth-full-body (2026-05-31). Same bans on male twin:
@@ -104,7 +99,6 @@ module.exports = {
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-max',
     ],
 
     // Vampire paths (female-coded subset gets the multi-model arrays)
@@ -113,19 +107,15 @@ module.exports = {
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-max',
     ],
     'vampire-assassin-female': [
       // BAN: Flux Dev, Flux 2 Flex
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-max',
     ],
     // ── Non-character scene/atmosphere/monster paths (Kevin 2026-05-31 —
     // ── uniform cross-bot lineup): 5 models — Banana, GPT-2, F2 Pro,
