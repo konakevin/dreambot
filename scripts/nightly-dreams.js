@@ -143,7 +143,9 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
     const newRows = allRows.filter((r) => !existingKeys.has(r.dedup_key));
 
     if (newRows.length === 0) {
-      console.log('✨ All eligible users already have a nightly job today — nothing new to enqueue.');
+      console.log(
+        '✨ All eligible users already have a nightly job today — nothing new to enqueue.'
+      );
     } else {
       const { data: inserted, error: insErr } = await sb
         .from('dream_queue')
@@ -255,9 +257,7 @@ async function sendTrialReminders(sb, enqueuedPool) {
   // window for any old reminder (the trial-start moved 14+ days forward).
   // If retrial recycling becomes a thing, key on (recipient, subtype,
   // pro_trial_started_at) instead.
-  const sentSet = new Set(
-    (alreadySent || []).map((r) => `${r.recipient_id}:${r.subtype}`)
-  );
+  const sentSet = new Set((alreadySent || []).map((r) => `${r.recipient_id}:${r.subtype}`));
 
   const rows = [];
   for (const id of need3Day) {
@@ -267,7 +267,10 @@ async function sendTrialReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'trial_reminder',
         subtype: '3day',
-        body: 'Your Pro trial ends in 3 days. Subscribe to keep getting nightly dreams from DreamBot.',
+        // Subject-only inbox row — kept short for the single-line "no
+        // ellipsis" inbox layout (migration 223 / 2026-06-04). Push body
+        // uses the same string; iOS truncates long titles anyway.
+        body: 'Trial ends in 3 days. Tap to subscribe.',
         is_read: false,
       });
     }
@@ -279,7 +282,7 @@ async function sendTrialReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'trial_reminder',
         subtype: 'last_night',
-        body: "Tonight is your last Pro nightly dream. Your trial ends tomorrow — subscribe to keep nightly dreams coming.",
+        body: 'Trial ends tomorrow. Tap to subscribe.',
         is_read: false,
       });
     }
@@ -360,9 +363,7 @@ async function sendPaidProReminders(sb, enqueuedPool) {
     console.warn(`⚠️  paid-pro-reminder dedup lookup failed: ${dupErr.message}`);
     return;
   }
-  const sentSet = new Set(
-    (alreadySent || []).map((r) => `${r.recipient_id}:${r.subtype}`)
-  );
+  const sentSet = new Set((alreadySent || []).map((r) => `${r.recipient_id}:${r.subtype}`));
 
   const rows = [];
   for (const id of need3Day) {
@@ -372,7 +373,7 @@ async function sendPaidProReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'pro_reminder',
         subtype: 'paid_3day',
-        body: 'Your Pro subscription ends in 3 days. Resubscribe to keep getting nightly dreams from DreamBot.',
+        body: 'Pro ends in 3 days. Tap to renew.',
         is_read: false,
       });
     }
@@ -384,7 +385,7 @@ async function sendPaidProReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'pro_reminder',
         subtype: 'paid_last_night',
-        body: "Tonight is your last Pro nightly dream. Your subscription ends tomorrow — resubscribe to keep them coming.",
+        body: 'Pro ends tomorrow. Tap to renew.',
         is_read: false,
       });
     }

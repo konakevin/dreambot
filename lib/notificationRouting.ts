@@ -67,6 +67,15 @@ export function computeNotificationRoute(data: NotificationRouteData): string | 
     return '/proStore';
   }
 
+  // Welcome-gift notification (inserted at onboarding completion by
+  // RevealStep.tsx, migration 223) — routes to the celebratory welcome
+  // screen that introduces the 25-sparkle bonus + brief feature tour.
+  // Carries an uploadId (the user's first dream) but the welcome screen
+  // is the intended destination, not the dream itself.
+  if (data.type === 'welcome_gift') {
+    return '/welcome-gift';
+  }
+
   const actorId = data.userId ?? data.actorId;
 
   if (data.type && FRIEND_FOLLOW_TYPES.has(data.type) && actorId) {

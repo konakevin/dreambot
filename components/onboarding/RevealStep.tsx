@@ -420,15 +420,18 @@ export function RevealStep({ onBack }: Props) {
         });
       }
 
-      // Send welcome notification from DreamBot. subtype='welcome' tells the
-      // inbox to render the special first-dream copy (migration 206).
+      // Send welcome-gift notification. Routes to /welcome-gift on tap —
+      // a celebratory screen that introduces DreamBot, calls out the 25
+      // sparkles, and gives a brief feature tour. Subject-only (no body
+      // shown in the inbox row); the screen carries the full message.
+      // Migration 223 added 'welcome_gift' as a top-level type. Replaces
+      // the legacy dream_generated/subtype='welcome' insert that pointed
+      // at the first-dream upload.
       await supabase.from('notifications').insert({
         recipient_id: user.id,
         actor_id: user.id,
-        type: 'dream_generated',
-        subtype: 'welcome',
+        type: 'welcome_gift',
         upload_id: uploadId,
-        body: "Hey. I'm your DreamBot. I left you 25 sparkles to start dreaming. Sleep well.",
       });
 
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

@@ -80,7 +80,8 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
             recipient_id: userId,
             actor_id: userId,
             type: 'dream_generated',
-            body: `Your wish couldn't be dreamed — it was a bit too spicy. Try a different wish!`,
+            // Subject-only inbox row — short for single-line layout (mig 223).
+            body: 'Wish too spicy — try a different one.',
           })
           .then(swallow, swallow);
       }
@@ -115,7 +116,10 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
       type: 'dream_generated',
       subtype: wish ? 'wish' : null,
       upload_id: uploadId,
-      body: botMessage || '',
+      // Bot message is the inbox subtext when shown. Hard-cap at 28
+      // chars belt-and-suspenders to fit single-line render (mig 223).
+      // The Haiku prompt in generateBotMessage() asks for ≤28 already.
+      body: (botMessage || '').slice(0, 28),
     })
     .then(swallow, swallow);
 
@@ -131,7 +135,8 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
             actor_id: userId,
             type: 'dream_generated',
             upload_id: uploadId,
-            body: `Wished you a dream: "${wish.slice(0, 50)}"`,
+            // Inbox subtext — keep tight for single-line layout (mig 223).
+            body: wish.slice(0, 28),
           }))
         )
         .then(swallow, swallow);
@@ -187,13 +192,13 @@ async function generateBotMessage(
 
 Tonight's dream prompt: "${promptUsed.slice(0, 200)}"
 
-Write ONE short reaction to making this dream. 8-15 words max.
+Write ONE very short reaction to making this dream. Maximum 28 characters total (about 3-5 words). It will display as a single-line inbox preview.
 
 CRITICAL RULES:
+- ≤28 characters total (HARD LIMIT — server truncates beyond this anyway).
 - NEVER start with "Okay so" or "Not gonna lie" or "Honestly"
 - NEVER use the phrases "hit different", "chef's kiss", "you're welcome", "no regrets", "trust the process"
-- Every message must have a DIFFERENT opening word/structure
-- Reference ONE specific thing from the prompt — a creature, place, color, or vibe
+- Reference ONE specific thing from the prompt — a creature, place, color, or vibe — but as a single tight phrase, not a full sentence.
 - React to the creative choice, don't describe the image
 - No emojis. Max one exclamation mark.
 ${memoryBlock}
@@ -209,7 +214,11 @@ Output ONLY the message, nothing else.`,
       json && json.content && json.content[0] && typeof json.content[0].text === 'string'
         ? json.content[0].text.trim()
         : '';
-    if (text.length >= 5 && text.length <= 200) return text;
+    // Accept 3-40 chars (the prompt asks for ≤28, but Haiku occasionally
+    // overruns by a few; we slice to 28 at the insert call site as the
+    // hard cap, so accepting up to 40 here just gives Sonnet some
+    // breathing room without forcing a retry on borderline outputs).
+    if (text.length >= 3 && text.length <= 40) return text;
     return null;
   } catch {
     return null;
