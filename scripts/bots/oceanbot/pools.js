@@ -100,5 +100,12 @@ module.exports = {
   KRAKEN_SCENES: load('kraken_scenes'),
   KRAKEN_CAMERA_FRAMING: load('kraken_camera_framing'),
 
-  // (Other 5 paths' pools added when their gen-scripts ship.)
+  // ── deep-wonder path-bespoke pools (6th path, first of 5 scenic —
+  // ── bioluminescent beauty, alien elegance, deep-sea creatures with
+  // ── inner light. NO ships / no people / no diving gear; just the
+  // ── creature and the abyssal dark.) ──
+  DEEP_WONDER: load('deep_wonder'),
+  DEEP_WONDER_CAMERA_FRAMING: load('deep_wonder_camera_framing'),
+
+  // (Other 4 paths' pools added when their gen-scripts ship.)
 };

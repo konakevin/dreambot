@@ -39,7 +39,8 @@ const pathBuilders = {
   pirates: require('./paths/pirates'),
   'ghost-ship': require('./paths/ghost-ship'),
   'kraken-leviathan': require('./paths/kraken-leviathan'),
-  // Other 5 paths land as the bot matures.
+  'deep-wonder': require('./paths/deep-wonder'),
+  // Other 4 paths land as the bot matures.
 };
 
 module.exports = {
@@ -103,6 +104,15 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-pro',
     ],
+    // deep-wonder: bot-wide MINUS Gemini 2 Image (Nano Banana) — the
+    // abyssal-black bioluminescent register reads stronger on the
+    // other 4 models. Down to 4 models.
+    'deep-wonder': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-pro',
+    ],
   },
 
   // 10 ocean-coded vibes. Drops the 6 that don't fit ocean drama / wonder
@@ -121,7 +131,14 @@ module.exports = {
     'nightshade',
   ],
 
-  paths: ['shipwreck-kingdom', 'lost-cities', 'pirates', 'ghost-ship', 'kraken-leviathan'],
+  paths: [
+    'shipwreck-kingdom',
+    'lost-cities',
+    'pirates',
+    'ghost-ship',
+    'kraken-leviathan',
+    'deep-wonder',
+  ],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
   cycleAllPaths: true,
@@ -133,7 +150,14 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    skipPaths: ['shipwreck-kingdom', 'lost-cities', 'pirates', 'ghost-ship', 'kraken-leviathan'],
+    skipPaths: [
+      'shipwreck-kingdom',
+      'lost-cities',
+      'pirates',
+      'ghost-ship',
+      'kraken-leviathan',
+      'deep-wonder',
+    ],
   },
 
   // Chaos + sensory anchors — DISABLED for the pilot. We're keeping the

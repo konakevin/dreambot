@@ -97,6 +97,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  OCEANBOT_DEEP_WONDER: {
+    description:
+      'Bioluminescent beauty, alien elegance, deep-sea wonder — the BEAUTIFUL side of the deep ocean. Jellyfish trailing light, elegant siphonophores, glowing plankton clouds, translucent creatures with inner light, anglerfish lures, lantern-fish constellations. Beauty in the darkness, NOT horror. No ships, no people. First of 5 scenic-OceanBot paths; same lean 2-path-slot shape as the naval-lore set.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['deep_wonder', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   OCEANBOT_KRAKEN_LEVIATHAN: {
     description:
       'Sea monsters attacking pre-1850 wooden ships — maritime myth made vivid. ONLY 4 creatures: kraken, giant squid, giant octopus, leviathan-whale. Embodiment rule (whole-beast visible, never disembodied tentacles). The hardest hero pool of the bot — kraken_scene entries must encode specific creature + embodiment + specific wooden ship + attack moment + atmospheric register. Same lean 4-axis shape as pirates / ghost-ship.',

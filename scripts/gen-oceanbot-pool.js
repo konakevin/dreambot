@@ -1096,6 +1096,100 @@ NEVER use negation. NEVER name modern cinema terms.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DEEP-WONDER path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 6th OceanBot path, FIRST of 5 scenic — bioluminescent beauty,
+  // alien elegance, deep-sea creatures with inner light. Beauty in
+  // the darkness, NOT horror. NO ships / no people / no diving gear.
+  // Same lean 2-pool shape as the other paths.
+
+  deep_wonder: {
+    format: 'simple',
+    theme: `DEEP WONDER for OceanBot's deep-wonder path — bioluminescent deep-sea creatures rendered as alien elegance. Each entry is ONE specific deep-sea creature in a luminous moment, 18-26 words. Creature + bioluminescent glow detail + abyssal context ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ MANDATORY REGISTER — every entry is a BIOLUMINESCENT or TRANSLUCENT deep-sea creature, its body the primary light source in the frame, surrounded by inky abyssal darkness. NatGeo-deep-ocean documentary register — alien but real.
+
+⚠️ NO PEOPLE. NO SHIPS. NO DIVING GEAR. NO SUBMARINES. NO TREASURE. Just the creature and the dark.
+
+✓ VARIETY MANDATE — distribute across deep-sea bioluminescent creatures:
+  A. Jellyfish family (atolla / crystal jelly / box jellyfish / colossal lion's mane — radial glow, trailing tentacle-curtain)
+  B. Siphonophore / Portuguese man o' war (long luminous chain colony, sequential lights along the body)
+  C. Ctenophore / comb jelly (iridescent comb-rows pulsing rainbow light along the body)
+  D. Vampyroteuthis / cirrate octopus (deep-sea cephalopod with photophore-studded body, web-like arms)
+  E. Anglerfish lure (esca glowing at the end of the dorsal lure, dark body otherwise barely visible)
+  F. Lantern-fish school (constellation of photophore-dotted bodies arranged like stars in the dark)
+  G. Glass squid (translucent body with internal organs glowing, eyes huge and luminous)
+  H. Bioluminescent shark / dwarf lantern shark (belly glowing for counter-illumination)
+  I. Hatchetfish / dragonfish (rows of belly photophores, deep-sea hunter with internal lights)
+  J. Plankton/bacterial bloom (entire water column glowing cyan from billions of dinoflagellates, no central creature — atmospheric whole-frame glow)
+
+Each entry: ONE specific creature + ONE specific glow/light-source detail + ONE abyssal-context anchor (depth-blue darkness / plankton-motes / cathedral-stillness / etc.). Speak vivid and specific.
+
+DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Atolla jellyfish pulsing red bioluminescent rim around its bell, eight long tentacles trailing into inky abyssal black, plankton motes glowing cyan around it.',
+      'Siphonophore colony stretched fifteen meters through deep darkness, sequential blue lights firing along its chain-body like a celestial telegraph.',
+      'Crystal jellyfish drifting with translucent bell catching only its own pale green photophore-light, water around it absolute black void.',
+      'Ctenophore pulsing iridescent rainbow light along its eight comb-rows, body translucent against a depth-blue background, no other light source.',
+      'Vampyroteuthis curled into web-arms ball, photophores studding its dark mantle in constellation-pattern, single huge eye reflecting faint blue glow.',
+      'Anglerfish lure glowing bright green at the end of its dorsal stalk, the rest of the fish barely a shadow in the surrounding black.',
+      'Lantern-fish school arranged like a galaxy in the dark, each body marked with rows of yellow-green photophores, drifting in silent formation.',
+      'Glass squid suspended motionless, translucent body revealing internal organs glowing soft amber, two enormous luminous eyes dominating the frame.',
+      'Dwarf lantern shark cruising slow with belly photophores glowing soft cyan for counter-illumination, dorsal silhouette dissolving into the dark above.',
+      'Hatchetfish hovering edge-on in deep mid-water, rows of belly photophores casting cool downward light, mirror-silver flank reflecting plankton-glow.',
+      'Comb jelly drifting close to camera, full body iridescent with shifting rainbow combs, particulate-thick water pierced by drifting glow.',
+      'Box jellyfish elegant in deep mid-water, four long tentacles trailing translucent below glowing cube-shaped bell, soft blue inner pulse.',
+      'Sea-firefly bloom suffusing the entire water column with cyan particulate, no central creature visible, the dark itself rendered luminous.',
+      'Dragonfish stationary in absolute black, rows of belly photophores firing in slow sequence, long barbel glowing emerald at the tip.',
+      'Colossal lion\'s mane jelly drifting through abyssal twilight, dome-bell forty feet across, hundreds of tentacles trailing in radial luminous curtain.',
+      'Portuguese man o\' war suspended below surface, gas-filled float catching pale blue surface-glow, long tentacles trailing iridescent below.',
+      'Cirrate octopus floating with web-like arms outstretched, photophore-studded body soft-glowing amber, oversized eyes facing camera.',
+      'Pyrosome colony drifting as a single long luminous tube through the dark, walls of the colony glowing cool blue from within.',
+      'Bioluminescent plankton swirl spiraling outward from camera-motion disturbance, every disturbed micro-organism flaring cyan for an instant.',
+    ],
+    instructions: `Each entry is ONE specific bioluminescent deep-sea creature, 18-26 words. Format: "creature + specific glow detail + abyssal context." Vary across the 10 categories above. NEVER include people / ships / divers / submarines. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  deep_wonder_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's deep-wonder path — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across framing categories — deep-wonder-specific (creature is the only light source, abyssal black backdrop):
+  A. CLOSE-UP on creature glow (camera near the photophores or comb-rows, body filling the frame)
+  B. SILHOUETTE-IN-DEPTH (creature small in vast black, single luminous shape in empty water)
+  C. LOOKING-UP from below (creature backlit against a pale surface dome above, body silhouetted)
+  D. PARTICULATE-FOREGROUND (drifting plankton or marine snow in close foreground, creature beyond)
+  E. THROUGH-THE-JELLY-CURTAIN (camera looking through hanging jellyfish tentacles, second creature beyond)
+  F. SIDE-PROFILE drift (lateral framing of full creature parallel to camera, slow drift across frame)
+  G. ABYSSAL TOP-DOWN (camera above, creature far below in the dark, scale-of-emptiness composition)
+  H. EYE-LEVEL CONFRONTATION (camera meeting the creature's eye directly, intimate alien gaze)
+  I. WIDE COSMIC (creature small against a swirl of plankton-glow filling the frame, galaxy-of-the-deep composition)
+
+NEVER use negation. NEVER name modern cinema terms.`,
+    touchpoints: [
+      'CLOSE-UP on the creature\'s photophore row, body filling the frame, surrounding water rendered absolute black',
+      'SILHOUETTE-IN-DEPTH framing, creature small and luminous in vast empty water, single shape in the dark',
+      'LOOKING-UP from below, creature backlit against pale surface dome high above, body in soft silhouette',
+      'PARTICULATE-FOREGROUND framing, drifting plankton motes in close foreground, glowing creature beyond in the dark',
+      'THROUGH-THE-JELLY-CURTAIN framing, hanging tentacles silhouetted across the foreground, second creature glowing beyond',
+      'SIDE-PROFILE drift framing, full creature body parallel to camera, slow lateral glide across the dark frame',
+      'ABYSSAL TOP-DOWN angle, camera high above looking straight down, creature far below as a single luminous spot',
+      'EYE-LEVEL CONFRONTATION framing, camera meeting the creature\'s huge luminous eye directly, intimate alien gaze',
+      'WIDE COSMIC framing, creature small against a swirl of plankton-glow filling the frame like a galaxy of the deep',
+      'EXTREME CLOSE on the dangling esca lure, the rest of the anglerfish dissolved into the surrounding black',
+      'BACKLIT-CONSTELLATION framing, lantern-fish school arranged like stars against absolute black depth',
+      'LATERAL TRACKING shot along the length of a siphonophore colony, sequential photophore-lights firing in succession',
+      'COUNTER-ILLUMINATION VIEW from below, creature belly-photophores firing soft downward against the surface light',
+      'BIOLUMINESCENT SWIRL framing, creature centered in a vortex of disturbed plankton flaring cyan around it',
+      'TRANSLUCENT-X-RAY framing, internal organs of the creature glowing soft against translucent body, depth-blue beyond',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
