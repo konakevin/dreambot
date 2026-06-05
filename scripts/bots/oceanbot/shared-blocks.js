@@ -35,6 +35,25 @@ const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper-detailed, atmosph
 const CANVAS_MARITIME =
   'Turner / Aivazovsky / Winslow Homer maritime oil tradition, museum-gallery painted-canvas brushwork';
 
+// Bot-only medium for the mystical-mermaid character path. Pre-
+// Raphaelite + Golden Age illustration lineage — Waterhouse / Dulac /
+// Rackham / Frank Dicksee / Arthur Bowen Davies — the canonical
+// painters who DEFINED the mermaid visual register (Waterhouse's
+// Mermaid and Siren 1900, Dulac's Andersen plates, Rackham's mer-folk
+// illustrations). Painter names live in the MEDIUM (where Flux uses
+// them as style anchors), NOT in the brief body (per
+// [[feedback_llm_brief_echo_leak]] — names in briefs echo as literal
+// tokens). Anti-CG anchors counter Flux 1.1 Pro's "locked beautiful-
+// woman portrait" prior + force painted register, since the legacy
+// OceanBot retirement of mermaid-legend (commit f7f319cf) cited
+// "pre-Raphaelite/Waterhouse experiments all failed" on the OLD
+// engine — newer models (Flux 1.1 Pro Ultra, GPT Image 2) handle
+// painted mer-folk anatomy much better when pushed hard into the
+// painted register. Photoreal cues make Flux render half-woman-half-
+// fish as a costume; the painted register makes it read as MYTH.
+const MERMAID_PAINT =
+  'Waterhouse and Dulac and Arthur Rackham painted Pre-Raphaelite mer-folk illustration tradition, oil-painted fairy-tale plate on canvas with visible painterly brushwork and ornamental linework, every surface painted not photographed, mythic illustrated-fantasy-tale register, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT 3D render, NOT a costume';
+
 // Ship anatomy guardrail — embedded into ANY naval-lore path template
 // (pirates / ghost-ship / shipwreck-kingdom). Positive-language only.
 // Per legacy lesson f7f319cf: modern hulls / steamships / submarines /
@@ -104,6 +123,7 @@ module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   CANVAS_MARITIME,
+  MERMAID_PAINT,
   PRE_1850_VESSEL_BLOCK,
   SUBMERGED_CIVILIZATION_BLOCK,
   PIRATE_ERA_BLOCK,

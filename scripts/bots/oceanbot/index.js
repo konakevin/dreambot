@@ -47,24 +47,39 @@ const pathBuilders = {
   'reef-paradise': require('./paths/reef-paradise'),
   'polar-seas': require('./paths/polar-seas'),
   'bioluminescent-night': require('./paths/bioluminescent-night'),
-  // 10/10 paths populated — OceanBot v3 is complete.
+  // FUNCTION-FORM character path (not declarative archetype) — rich
+  // inline guardrails per the GothBot vampire-assassin-female pattern.
+  // Synthesized from the 2026-06-04 4-bot character-path research.
+  // Mer-folk anatomy is a known Flux weak zone (legacy OceanBot
+  // mermaid-legend was RETIRED 2026-05-01 for unreliable renders) —
+  // this attempt leans HARD into painted register + explicit tail
+  // anatomy mandate + cultural diversity to break the failure prior.
+  'mystical-mermaid': require('./paths/mystical-mermaid'),
 };
 
 module.exports = {
   username: 'oceanbot',
   displayName: 'OceanBot',
 
-  // 4 standard mediums — no custom bot-only mediums. photography is the
-  // primary NatGeo-wreck-discovery register; canvas activates the
-  // Pre-Raphaelite painted-maritime tradition (Turner/Aivazovsky); the
-  // others give register variety.
+  // 4 standard mediums — no custom bot-only mediums for the 10 scene
+  // paths. photography is the primary NatGeo-wreck-discovery register;
+  // canvas activates the Pre-Raphaelite painted-maritime tradition
+  // (Turner/Aivazovsky); the others give register variety.
+  //
+  // 'oceanbot_pirate_paint' is a bot-only medium pinned only to the
+  // pirate-girl path via mediumByPath — NOT exposed in the user-facing
+  // mediums list (it's a path-locked style register, not a freestanding
+  // user choice). Same pattern as SteamBot's steambot-painted-woman.
   mediums: ['photography', 'canvas', 'watercolor', 'illustration'],
 
-  // ONE bot-bespoke medium override — canvas activates the painted
-  // maritime tradition. Short single-anchor anchor (≤150ch), zero
-  // negation. The other 3 mediums fall through to their DB defaults.
+  // mediumStyles overrides:
+  // • canvas (scene paths): Pre-Raphaelite maritime oil tradition
+  // • oceanbot_mermaid_paint (mystical-mermaid only): Waterhouse /
+  //   Dulac / Rackham painted Pre-Raphaelite mer-folk illustration
+  //   tradition with anti-CG + anti-photoreal guards
   mediumStyles: {
     canvas: blocks.CANVAS_MARITIME,
+    oceanbot_mermaid_paint: blocks.MERMAID_PAINT,
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -116,6 +131,26 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
+    // mystical-mermaid: bot-wide MINUS Flux 2 Pro (Kevin 2026-06-04
+    // R1b review — Flux 2 Pro renders the painted-mer-folk register
+    // weakest of the 4 models, biases toward photoreal-fish-costume
+    // failure mode this path is specifically engineered to avoid).
+    // Down to 3 models: gemini-2-image, gpt-image-2,
+    // flux-1.1-pro-ultra.
+    'mystical-mermaid': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+  },
+
+  // Force-pin mystical-mermaid to the bot-only painted-mer-folk medium
+  // (Waterhouse / Dulac / Rackham lineage). Scene paths fall through
+  // to whatever the dispatcher rolls from the 4 standard mediums.
+  // Same pattern as SteamBot's mediumByPath pin to steambot-painted-
+  // woman for airship-female / sexy-steampunk-woman.
+  mediumByPath: {
+    'mystical-mermaid': 'oceanbot_mermaid_paint',
   },
 
   // 10 ocean-coded vibes. Drops the 6 that don't fit ocean drama / wonder
@@ -150,6 +185,23 @@ module.exports = {
       'ancient',
       'enchanted',
     ],
+    // mystical-mermaid: mystical-coded vibe subset. Drops the
+    // overtly-mundane vibes (peaceful — too flat) and keeps the
+    // registers that lean magical / dreamy / ancient / cosmic.
+    // ethereal + enchanted + ancient are the load-bearing ones for
+    // the "stuff of legend" framing Kevin called out; voltage /
+    // nightshade carry the cooler bioluminescent / moonlit variants;
+    // cinematic / dark / epic give framing range.
+    'mystical-mermaid': [
+      'cinematic',
+      'dark',
+      'epic',
+      'ancient',
+      'enchanted',
+      'ethereal',
+      'voltage',
+      'nightshade',
+    ],
   },
 
   paths: [
@@ -163,6 +215,7 @@ module.exports = {
     'reef-paradise',
     'polar-seas',
     'bioluminescent-night',
+    'mystical-mermaid',
   ],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
@@ -186,6 +239,12 @@ module.exports = {
       'reef-paradise',
       'polar-seas',
       'bioluminescent-night',
+      // mystical-mermaid: skip per the StarBot R1 lesson — Haiku
+      // polish strips load-bearing character DNA (ethnicity-noun,
+      // tail-anatomy specifics, hair/adornment detail, mystical-
+      // element token), leaving Flux's generic-mermaid-portrait
+      // default. Single-pass Sonnet preserves the full stack.
+      'mystical-mermaid',
     ],
   },
 
@@ -218,6 +277,14 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`OceanBot: unknown path "${path}"`);
+    // Function-form paths (e.g. pirate-girl) — rich character templates
+    // with inline guardrails. Pattern mirrored from GothBot's
+    // vampire-assassin-female. Called directly with the standard args
+    // and must return the Sonnet brief string.
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, picker });
+    }
+    // Declarative archetype paths (the 10 lean OceanBot scene paths)
     if (builder && typeof builder === 'object' && builder.archetype) {
       const { composeBrief } = require('../../lib/brief-composer');
       return composeBrief({

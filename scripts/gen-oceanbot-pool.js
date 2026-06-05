@@ -1590,6 +1590,463 @@ NEVER use negation. NEVER name modern cinema terms.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // MYSTICAL-MERMAID character-path pools (11)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 11th OceanBot path, first CHARACTER path. Mystical mer-folk across
+  // shore / underwater / kelp forests / coral palaces / tide pools /
+  // moonlit grottos — every render slanted toward the magical /
+  // mystical / "stuff of legend" register Kevin called out. Painted
+  // Pre-Raphaelite + Dulac + Rackham illustration medium (per the
+  // MERMAID_PAINT mediumStyles override). Cultural diversity baked
+  // into the ARCHETYPE + FACE_AND_SKIN pools (Sirena / Mami Wata /
+  // Selkie / Ningyo / Rusalka / Naiad / Iara / Sedna / Hai-Ren /
+  // Andersen-Western mer-maids). NSFW-clean via natural coverings
+  // (long flowing hair / shell-cluster / kelp-wrap / scaled chest-
+  // plate / coral-crown) — NEVER topless. Legacy OceanBot's mermaid-
+  // legend path was RETIRED 2026-05-01 (commit f7f319cf) with the
+  // note "Flux couldn't render mermaids reliably" — this attempt
+  // engineers against that prior with explicit tail-anatomy mandate,
+  // painted-only register, and obsessive identity-axis layering.
+
+  mermaid_archetype: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID ARCHETYPE for OceanBot's mystical-mermaid path — the cultural lineage + role + emotional / mythic temperament of the mer-folk character. Each entry is ONE specific archetype, 22-32 words.
+
+⚠️ Each entry encodes: CULTURAL LINEAGE + ROLE within that mythology + EMOTIONAL/MYTHIC TEMPERAMENT + HOOK that suggests the scene's intent.
+
+✓ CULTURAL VARIETY MANDATE (distribute across):
+  A. Andersen / Western fairy-tale mermaid (Little Mermaid lineage — longing, royal, sea-king's daughter)
+  B. Sirena (Filipino sea-spirit — luminescent, hair-of-seaweed, seducing fishermen)
+  C. Mami Wata (West African / Caribbean diaspora water-spirit — serpent-coiled, mirror-and-comb, regal)
+  D. Selkie (Scottish / Irish / Faroese seal-folk — sealskin shed on shore, melancholic, between worlds)
+  E. Ningyo (Japanese — pearl-pale, fish-headed-or-fish-tailed, omen-bringer, eternal life if eaten)
+  F. Rusalka (Slavic — drowned-maiden water-spirit, pale-and-cold, water-grasses in hair, lures with songs)
+  G. Naiad / Nereid (Greek — bronze-skinned freshwater or saltwater nymph, accompanied by dolphins, sea-foam born)
+  H. Iara (Brazilian / Amazonian — green-haired river-mother, mirror-eyed, luring with songs)
+  I. Sedna (Inuit / Polar — keeper of sea-creatures, scarred and powerful, polar mer-queen)
+  J. Hai-Ren (Chinese — pearl-tearing, silk-veiled, dragon-court servant)
+  K. Polynesian / Maori mermaid-spirit (tā-moko-tattooed, outrigger-canoe blesser, coral-crowned)
+  L. Mediterranean Siren (Greek bird-bodied original OR Renaissance painterly mer-form, golden-tongued)
+
+DO NOT name the SPECIFIC mythological figure (Ariel, etc.) — name the CULTURAL LINEAGE + role + temperament. Sonnet uses it as identity anchor.
+
+NEVER negation.`,
+    touchpoints: [
+      'Young Andersen-coded mermaid princess of an ancient sea-king\'s court, longing-eyed and curious, surfacing too often to watch the shore-world above her father\'s domain.',
+      'Filipino Sirena of the Visayan reefs, ancient and luminous, hair-of-living-seaweed, called to surface by a single fisherman\'s lantern in the moonlit night.',
+      'Mami Wata regal water-spirit of the Bight of Biafra, serpent-coiled and crowned, mirror-and-comb in hand, granting fortune to those who honor her shrine.',
+      'Faroese selkie woman just shed of her sealskin on a basalt shore at midnight, melancholic and torn, the skin folded beside her on the wet rocks.',
+      'Ancient Ningyo of the Japanese deep, pearl-pale and ageless, said to grant eternal life to any mortal who consumes her flesh, watching from kelp-shadow.',
+      'Slavic Rusalka of a forest river, drowned-pale and cold-eyed, water-weeds tangled through her hair, luring travelers with a song they cannot quite remember.',
+      'Greek Nereid of the Aegean dawn, bronze-skinned and dolphin-attended, daughter of Nereus the old man of the sea, sea-foam crowning her swimming wake.',
+      'Amazonian Iara of a green river-bend, river-green hair and mirror-bright eyes, luring sailors deeper into the flooded forest with a song of impossible promise.',
+      'Inuit Sedna of the polar dark, scarred-and-powerful, keeper of all sea-creatures, hair tangled with pack-ice fragments, watching from beneath broken ice.',
+      'Chinese Hai-Ren tear-pearling water-maiden, silk-veiled and dragon-court-bound, weeping pearls onto a shell-throne at the bottom of the South China Sea.',
+      'Polynesian mermaid-spirit of an atoll lagoon, tā-moko tattoos curling across her cheeks and shoulders, coral-crowned and quiet, blessing the outrigger fleet.',
+      'Mediterranean siren of a sea-stack cave, golden-throated and ancient, having stopped luring sailors centuries ago, now singing only for the gulls and the sun.',
+      'Cornish mer-witch of a tide-pool grotto, herb-and-shell-bedecked, brewing storm-charms from kelp and crab-shell, salt-cracked and shrewd.',
+      'Sumatran sea-naga maiden of the Strait of Malacca, serpent-finned and amber-eyed, hair-coiled with cowrie, guardian of a sunken Srivijaya temple.',
+      'Norse-coded mer-skald of a fjord cliff, bronze-haired and lute-bearing, singing the old sagas to passing whale-pods at the season\'s turn.',
+    ],
+    instructions: `Each entry 22-32 words. Format: "[AGE/SCALE-MARKER] [CULTURAL-LINEAGE mermaid] [BODY OF WATER / DOMAIN], [TEMPERAMENT + MYTHIC-ROLE detail], [HOOK that suggests the scene's intent]." Vary across the 12 cultural categories. NEVER name a specific mythological character (Ariel, Sedna-by-name, etc — name the LINEAGE not the figure). NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_face_and_skin: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID FACE-AND-SKIN axis — load-bearing because the entry IS the opening of the Flux prompt (per the airship-female lesson: ethnicity-noun-first-token is what Flux's CLIP locks identity from). Each entry 14-22 words opening with the ethnicity-noun-phrase.
+
+⚠️ MANDATORY OPENING FORMAT: "[a/an/the] [CULTURAL-LINEAGE] mermaid with [SKIN TONE / UNDERTONE + MYSTICAL DETAIL], [FACIAL FEATURE detail]." The "mermaid" noun MUST be in the first phrase — Flux locks species from there.
+
+⚠️ MYSTICAL SKIN VARIATIONS expected: subtle iridescent shimmer on cheekbones / faint scaling along temples-and-jaw / bioluminescent freckling / opalescent translucence at the throat / sea-foam-pale / coral-flushed / abalone-shifting. Always WITH cultural skin-tone base.
+
+✓ ETHNIC DIVERSITY DISTRIBUTION (~equal):
+  A. Anglo / Celtic / Nordic (pale + freckled + cool undertone)
+  B. Filipino / Southeast Asian (warm bronze, golden undertone)
+  C. West African / Caribbean (deep mahogany / ebony / umber)
+  D. Slavic / Russian (fair, cool undertone, drowned-pale variant for Rusalka)
+  E. Greek / Mediterranean (warm olive, golden undertone)
+  F. Brazilian / Amazonian (warm brown, copper undertone)
+  G. Inuit / Polar (warm honey-bronze, weathered)
+  H. Chinese / East Asian (cool ivory or pearl-pale)
+  I. Polynesian (warm bronze, often with tā-moko tattoo)
+  J. Japanese (pearl-pale or amber-tan)
+  K. Persian / Arabian (warm honey, golden)
+  L. Mixed-heritage / sea-foam-born (any blend with strong mystical sheen)
+
+NEVER porcelain-doll / NEVER plastic-perfect / NEVER without a sea-life or mystical mark. Always with a TRACE of mermaid biology (subtle scale-line / bioluminescent spot / pearl-iridescence). NEVER topless mention / NEVER neckline language.
+
+NEVER negation.`,
+    touchpoints: [
+      'an Anglo-Celtic mermaid with sea-foam-pale skin and faint freckling across her nose, a thin line of opalescent scales tracing her left jaw',
+      'a Filipino mermaid with warm bronze skin and golden undertone, faint phosphor-blue freckling across her cheekbones, a pearl-iridescent sheen along her throat',
+      'a West African Mami Wata mermaid with deep mahogany skin and warm umber undertone, faint indigo scaling along her temples, ritual scarification at her left eye',
+      'a Slavic Rusalka mermaid with drowned-pale skin and cool blue undertone, faint silver-iridescent traces beneath her eyes, river-water still dripping from her hair',
+      'a Greek Nereid mermaid with warm olive skin and golden undertone, sea-foam-pearl shimmer along her collarbones, dolphin-grace high cheekbones',
+      'a Brazilian Iara mermaid with warm copper-brown skin and green undertone, faint river-jade scaling along her jaw, mirror-bright eyes echoed in her skin sheen',
+      'an Inuit Sedna mermaid with warm honey-bronze weathered skin and copper undertone, faint frost-silver scaling at her temples, scars across her cheekbones',
+      'a Chinese Hai-Ren mermaid with cool pearl-pale skin and faint blue undertone, faint mother-of-pearl iridescence along her brow, jade tear-tracks visible on her cheeks',
+      'a Polynesian mermaid with warm bronze skin and copper undertone, tā-moko line-tattoos curling across her chin and lower lip, coral-pink shimmer at her collarbone',
+      'a Japanese Ningyo mermaid with pearl-pale skin and faint amber undertone, fine fish-scale traces along her temples, ancient-jeweled iridescence beneath her cheekbones',
+      'a Persian-coast mermaid with warm honey skin and golden undertone, faint turquoise scaling beneath her eyes, sun-darkened brow with subtle pearl-sheen at her throat',
+      'a Cornish mer-witch with milk-pale wind-burned skin and pink undertone, faint sea-glass-green freckling across her nose, salt-cracked at the corners of her mouth',
+    ],
+    instructions: `Each entry 14-22 words. Format: "[a/an/the] [CULTURAL-LINEAGE] mermaid with [skin tone + undertone + mystical sheen/scale-trace], [facial feature detail]." Vary across the 12 ethnic categories. The "mermaid" noun MUST be in the first phrase. NEVER porcelain / plastic-perfect / topless / neckline language. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_eyes: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID EYES axis — color + otherworldly luminous detail. Each entry 14-22 words.
+
+⚠️ Every entry includes a MYSTICAL detail (faint glow / pearl-iridescent ring / nictitating-second-eyelid / pupil that catches light unnaturally / sea-glass refraction / star-fleck). The eyes are CLEARLY not-quite-human.
+
+✓ VARIETY: sea-glass green / abalone-shifting / pearl-iridescent / storm-grey / amber-with-gold-fleck / coral-pink / deep-violet / bioluminescent-cyan / midnight-black with starlight / molten-copper / pale-silver.
+
+EVERY entry has a sea-life or magical lived-in detail (salt-crusted lashes / pearl-rimmed iris / coral-pink corneal-edge / faint phosphor-glow when she blinks). NEVER human-mundane / NEVER doe-eyed-innocent.
+
+NEVER negation.`,
+    touchpoints: [
+      'sea-glass green eyes with a faint pearl-iridescent inner ring, salt-crusted lashes catching pre-dawn light, pupils slit slightly vertical',
+      'abalone-shifting eyes flickering between blue, green and violet with the angle of her head, faintly luminescent in the deeper water',
+      'pearl-iridescent eyes with a deep-violet inner core, faintly glowing as she sings, the glow brightening on the held notes',
+      'storm-grey eyes with a thin coral-pink corneal edge, an oddly-second translucent eyelid blinking sideways across the pupil',
+      'amber eyes flecked with gold and lit faintly from within, lashes pearl-tipped, the glow steady even when her eyelids close',
+      'deep-violet eyes set wide and unblinking, pupils glowing faint phosphor-cyan, sea-water still beading at the outer corners',
+      'molten-copper eyes with a thin silver-iridescent rim, ancient and unhurried, catching torchlight from a sunken lantern below',
+      'bioluminescent-cyan eyes lit visibly from within, glowing brighter in the deeper dark, lashes salt-crusted and silver',
+      'midnight-black eyes scattered with tiny starlight points, pupils dilated wide in low light, lashes long and sea-spray-tangled',
+      'pale silver eyes with a coral-pink corneal edge, river-water still trickling from the outer corner, lashes pale and salt-crusted',
+      'sea-foam-grey eyes with a faint mother-of-pearl shimmer in the iris, pupils widening as she catches a passing fish-school in the dark',
+      'jade-green eyes with vertical-slit pupils and a thin gold rim, glowing faintly when she turns her head into the lantern-light',
+    ],
+    instructions: `Each entry 14-22 words. Color + otherworldly luminous detail + sea-life-lived-in mark. NEVER human-mundane / doe-eyed. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_hair: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID HAIR axis — combined COLOR + LENGTH + BEHAVIOR (underwater/wet/wind) + DECORATION (woven with seaweed / pearls / shells / coral / starfish / river-flowers). Each entry 22-32 words.
+
+⚠️ MERMAID HAIR IS THE CRITICAL MODESTY ELEMENT — long flowing hair often partly covers her chest as natural NSFW-clean covering. Front-load that in some entries.
+
+✓ COLOR VARIETY: sea-foam blonde / coral pink / abalone iridescent / kelp-green / river-jade / midnight-black / silver-pearl / oxblood-red / sandy-blonde / amber / charcoal / dawn-rose / starlight-platinum.
+
+✓ DECORATION VARIETY: braided through with kelp ribbon / pearl strand woven across the crown / cowrie shells at the temples / coral-cluster crown / starfish tucked at the ear / river-lily wreath / sea-glass beads / fish-bone hair-pin / abalone-shell comb.
+
+✓ BEHAVIOR VARIETY: floating outward in slow underwater drift / clinging wet to her shoulders fresh from the surf / wind-whipped on a sea-cliff / cascading over one shoulder partly covering her chest / draped across a rock in twilight / streaming behind her mid-swim.
+
+NEVER perfect-shampoo-ad / NEVER unrealistically-clean. There's always SEA in her hair.
+
+NEVER negation.`,
+    touchpoints: [
+      'Sea-foam blonde hair waist-length and floating outward in slow underwater drift, braided through with thin kelp ribbon and a strand of pearls woven across the crown.',
+      'Coral-pink hair to her hips clinging wet to her shoulders fresh from the tide, draped across her chest in protective curtains, woven with three cowrie shells at the temple.',
+      'Abalone-iridescent hair shifting blue-green-violet in the light, mid-back length and draped across one shoulder, tucked with a single starfish behind her left ear.',
+      'Kelp-green hair impossibly long and tangled with actual living kelp-fronds, floating in a slow halo around her head in the underwater current, water-flowers at her temples.',
+      'River-jade hair cascading past her hips and partly covering her chest, woven with river-lily blooms and tiny mirror-fragments, dripping from her recent surfacing.',
+      'Midnight-black hair to her waist, wind-whipped across a sea-cliff at dusk, threaded with single strand of phosphor-glowing pearl, salt-crusted at the tips.',
+      'Silver-pearl hair flowing past her hips in slow underwater drift, decorated with a crown of pink coral branches and tiny silver-shell beads at the brow.',
+      'Oxblood-red hair to her shoulders clinging wet to her neck, braided tightly with leather cord and dressed with bone-comb at the temple, salt-stiffened.',
+      'Sandy-blonde hair waist-length and wind-tangled on a shore-rock at sunset, sea-glass beads woven through, partly covering her chest in soft golden strands.',
+      'Amber-bronze hair past her hips floating in a slow ring around her in deep water, decorated with a fish-bone hair-pin and three small white shells at the crown.',
+      'Charcoal-black hair to mid-back, draped wet over one shoulder in a heavy column partly covering her chest, threaded with a single coral-twig and tiny pearls.',
+      'Dawn-rose hair waist-length and cascading freely in the underwater current, an entire crown of pink coral and white starfish woven into the crown of her head.',
+      'Starlight-platinum hair impossibly long, floating outward in a luminescent halo, glowing faintly from within with bioluminescent algae-strands threading the lengths.',
+    ],
+    instructions: `Each entry 22-32 words. Format: "[COLOR] hair [LENGTH] [BEHAVIOR], [DECORATION detail]." Vary across 13 colors / 9 decorations / 6 behaviors. Mention hair-as-modesty-covering in a meaningful portion of entries. NEVER perfect-shampoo / unrealistic. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_tail: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID TAIL axis — THE MAKE-OR-BREAK AXIS for this path. Each entry 28-38 words. Without explicit tail anatomy in the brief, Flux defaults to "fish-on-the-side-of-a-naked-woman" or "fish-tail-costume-belt" — both look wrong. Every entry MUST encode: tail-color + scale-pattern + fin-shape + tail-LENGTH + smooth-transition-from-hips.
+
+⚠️ MANDATORY ANATOMY: "scaled tail transitioning from human hips at the iliac line" or "tail starting at her waist with the scaling beginning above her hipbones" or similar EXPLICIT ANATOMY description. Never just "fish tail."
+
+⚠️ COLOR VARIETY: emerald-and-gold / sapphire-and-pearl / coral-pink / abalone-iridescent / silver-and-violet / bronze-and-bronze / kelp-green / midnight-black-with-starlight-flecks / sunset-orange-pink / opal-shifting / pearl-white / amber-tortoiseshell / blood-red-and-gold / glacier-cyan.
+
+✓ SCALE-PATTERN VARIETY: dense diamond-cut scales / overlapping fish-mail / iridescent micro-scales like sequins / striated bands of color / chromatophore-shifting / pearlescent gradient from hip to fluke / coral-textured carapace / tiny gold-rim each scale.
+
+✓ FIN-SHAPE VARIETY: classic fluked tail like a whale's fluke / flowing veil-fins like a betta / lacy ornamental fins like a swordtail / split-double-fin / koi-style trailing fins / shark-style strong functional fluke / dorsal-fin running along spine / pectoral fin-flares at the hips.
+
+✓ LENGTH VARIETY: tail of normal-leg length / impossibly long flowing tail trailing several body-lengths / compact powerful short tail / tail wrapped around a rock or coral.
+
+NEVER nudity-cue language. The tail BEGINS at the hips and covers everything below. NEVER cleavage / NEVER topless mention.
+
+NEVER negation.`,
+    touchpoints: [
+      'Long emerald-and-gold scaled tail transitioning smoothly from her human hips at the iliac line, dense diamond-cut scales each rimmed with gold, ending in a wide flowing fluke like a koi\'s tail trailing iridescent veil-fins.',
+      'Sapphire-and-pearl scaled tail beginning at her waist with the scaling rising above her hipbones in a smooth transition, overlapping fish-mail in dense blue rows, ending in a strong functional whale-fluke for power.',
+      'Coral-pink iridescent scaled tail starting just above her hipbones with a smooth painterly transition, micro-scales catching light like sequins, lacy ornamental swordtail fins trailing behind, total length nearly twice her torso.',
+      'Abalone-iridescent tail transitioning at the iliac line, scales shifting blue-green-violet with every movement, dorsal fin running along her spine from lower back to fluke, classic functional whale-fluke at the end.',
+      'Silver-and-violet scaled tail starting smoothly from her hips, pearlescent gradient running silver at the hip to deep violet at the fluke, betta-style flowing veil-fins, pectoral fin-flares cresting at her hips.',
+      'Bronze-and-bronze warm-toned tail transitioning at the iliac line, striated bands of warm copper and dark bronze, compact-powerful short tail with a strong shark-style fluke for maneuvering tide-pool currents.',
+      'Kelp-green scaled tail beginning above her hipbones with kelp-frond-like vertical scales, fins shaped like split betta-veils trailing behind, length nearly three body-lengths, kelp-living-on-the-scales texture.',
+      'Midnight-black scaled tail with tiny starlight-fleck phosphor spots, transitioning smoothly at her waist, dense overlapping scales, flowing trailing veil-fins like deep-sea bioluminescent jellyfish trailing behind her.',
+      'Sunset-orange-pink tail with chromatophore-shifting scales, transitioning at the iliac line in a smooth gradient, ornamental swordtail-style flowing fins, tail wrapped loosely around a coral spur for stillness.',
+      'Opal-shifting scaled tail beginning at her hips with iridescent micro-scales like sequins, classic whale-fluke ending, flowing veil-fins along the dorsal line, a pearlescent inner glow catching every passing shaft of light.',
+      'Pearl-white scaled tail transitioning above her hipbones in a smooth pale gradient, micro-scales each rimmed with silver, koi-style trailing fins, ancient and elegant rather than functional.',
+      'Glacier-cyan scaled tail with vertical white striated bands, transitioning smoothly at the waist, strong powerful shark-style fluke for the polar currents, dorsal-fin running from lower back to fluke-base.',
+      'Amber-tortoiseshell scaled tail beginning at the iliac line with warm honey and dark brown striations, lacy ornamental fins at the dorsal spine, fluke shaped like an open scallop-shell.',
+      'Blood-red-and-gold tail with carapace-textured coral-like scaling, transitioning at her hips, ornamental Asian-dragon-style trailing fins along the spine, total length three body-lengths trailing behind.',
+      'Starlight-luminescent tail of deep cobalt scales each glowing faint cyan from within, transitioning at her hips, dense bioluminescent micro-scales, trailing veil-fins extending the glow into the dark water.',
+    ],
+    instructions: `Each entry 28-38 words. Format: "[COLOR/PATTERN] tail [TRANSITION DESCRIPTION at hips/iliac line/waist], [SCALE-PATTERN detail], [FIN-SHAPE detail], [LENGTH or pose detail]." EVERY entry MUST include explicit smooth-transition-from-hips anatomy. NEVER nudity-cue / cleavage / topless. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_adornment: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID ADORNMENT axis — natural-world body-worn ornaments (NOT clothes — mer-folk don't wear clothes). Each entry 18-26 words.
+
+⚠️ NSFW-CLEAN HARD LINE: adornment combined with HAIR serves as natural chest-covering. Examples: shell-cluster necklace covering the chest / kelp-wrap draped diagonally across torso / scaled chest-plate extending the tail-scales up the torso / coral-rosette bra-form / pearl-strand bandeau / woven-seaweed wrap / sea-mist veil over the shoulders.
+
+✓ ADORNMENT VARIETY:
+  A. Necklace (shell-cluster, pearl-strand, coral-piece, sea-glass, bone-tooth)
+  B. Crown / circlet (coral-branch, kelp-wreath, pearl-tiara, starfish-circlet, abalone-disc-circlet)
+  C. Arm-band / bracelet (gold cuff with shell-inlay, coral-band, pearl-rope at wrist)
+  D. Chest-covering (scaled chest-plate matching the tail / coral-rosette bra-form / kelp-wrap diagonal / pearl-strand bandeau / abalone-shell pectoral)
+  E. Hair-decoration (already in HAIR axis — skip here)
+  F. Ear ornament (pearl-drop, shell-hoop, coral-pendant earring)
+  G. Body-paint / ritual-mark (luminescent bio-pigment painted across collarbones / arcane runes drawn in sea-pigment along arms)
+  H. Veils / drapes (sea-mist gauze / silver-thread net draped from shoulders)
+
+EVERY entry combines TWO OR THREE complementary ornaments + at least one that doubles as chest-modesty.
+
+NEVER negation.`,
+    touchpoints: [
+      'A heavy shell-cluster necklace of mixed conch + abalone-discs + pink-coral pieces covering her chest, paired with a coral-branch circlet at her brow and small pearl-drop earrings.',
+      'A scaled chest-plate of pearl-iridescent armor extending the tail-scales upward across her torso, paired with a kelp-wreath crown and gold arm-cuffs inlaid with mother-of-pearl.',
+      'A wide woven-kelp wrap draped diagonally from shoulder to opposite hip covering her chest, paired with a starfish-circlet at her brow and coral-pendant earrings.',
+      'A pearl-strand bandeau covering her chest with hundreds of pearls in graduated sizes, paired with an abalone-disc circlet at her brow and shell-hoop earrings.',
+      'A coral-rosette bra-form of fused pink-coral branches across her chest, paired with a kelp-ribbon circlet and bone-tooth earrings hanging long.',
+      'A sea-mist gauze veil draped across her shoulders and down her back covering her chest, paired with a tiara of pale pearl drops and silver arm-cuffs.',
+      'Luminescent bioluminescent body-paint covering her chest in spiraling runic patterns, paired with a single jade-disc circlet at her brow and copper arm-spirals.',
+      'An abalone-shell pectoral the size of a dinner plate covering her chest, paired with a coral-branch crown rising six inches above her head and pearl drop earrings.',
+      'A silver-thread net draped from shoulders across her chest woven with tiny seed-pearls and starfish, paired with a single sea-glass pendant and coral arm-bands.',
+      'A fitted scaled chest-piece in coral-pink iridescent scales matching her tail, paired with a kelp-wreath circlet woven with sea-flowers and gold ear-hoops.',
+      'A wrap of woven seaweed and shells across her chest in geometric pattern, paired with a coral-circlet and tiny phosphor-glowing bead earrings.',
+      'A heavy pearl-and-coral pectoral covering her chest in spiraling baroque pattern, paired with a starfish-and-sea-glass tiara and dangling pearl earrings.',
+    ],
+    instructions: `Each entry 18-26 words. Format: "[CHEST-COVERING ADORNMENT] [detail], paired with [TWO complementary ornaments]." Every entry includes a chest-covering modesty element. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_setting: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID SETTING axis — her immediate stage. Each entry 22-32 words.
+
+⚠️ Kevin explicitly called out: "on the shore, underwater, kelp forests, and SLANT all to have a magical/mystical feeling because mermaids are stuff of legend."
+
+✓ SETTING VARIETY (full range):
+  A. SHORE (sea-rock at sunset / black-sand beach moonlit / pebbled cove dawn / tide-pool grotto / sea-cliff overlook)
+  B. UNDERWATER OPEN (mid-water column with caustic sun-shafts / deep blue void / mid-water with passing whale)
+  C. KELP FOREST (towering kelp cathedral, sun-shafts through canopy, kelp-curtain hide-and-seek)
+  D. CORAL PALACE / THRONE (coral-built throne room, mer-court setting, shell-and-pearl encrusted)
+  E. SUNKEN-SHIP INTERIOR (mer-folk among the ribs of an old wreck, treasure-strewn captain's cabin underwater)
+  F. SEA-CAVE / LUMINESCENT GROTTO (bioluminescent ceiling, glowing pool, stalactites)
+  G. RIVER-MOUTH / FRESHWATER (river-mouth where she meets the sea, water-lilies, river-jade)
+  H. POLAR ICE (under-ice swimming with shafts from above, ice-cave with seal-companions)
+  I. TROPICAL LAGOON (turquoise shallows, coral garden, palm-shadows on the surface)
+  J. SURFACE AT MIDNIGHT (moonlit calm ocean, stars on the water, she rises waist-up)
+  K. STORM SURFACE (clinging to a rock in storm-spray, lightning above, hair-and-tail whipping)
+  L. ENCHANTED LAGOON / FAIRY-TALE GROTTO (jewel-toned water, suspiciously-glowing flora, sea-flowers blooming)
+
+EVERY entry has a MYSTICAL slant — at least one of: glow / sun-shaft / moonlight / aurora / shell-thrones / coral-cathedral / luminescent flora / suspended-magic / impossible-color.
+
+NEVER negation.`,
+    touchpoints: [
+      'On a sea-cliff black-rock at sunset above a violet sea, gold sun-shafts spearing through clouds, her tail draped across the wet rock dripping silver light into the surf below.',
+      'Underwater mid-column in deep cobalt water with caustic sun-shafts piercing from far above, suspended weightless in a slow spiral, hair floating in a halo around her crown.',
+      'In a towering kelp-forest cathedral at noon, sun-shafts piercing the kelp canopy fifty feet above, holding stillness in a clearing between kelp pillars, fish-shoals threading the columns.',
+      'On a coral-built throne in a mer-court palace, the throne fused from pink and white coral encrusted with pearls and shells, sea-fans waving behind her in slow current.',
+      'Among the broken ribs of a sunken Spanish galleon at dusk, the captain\'s cabin still recognizable beneath coral encrustation, treasure spilled around her, lantern still hanging.',
+      'In a luminescent sea-cave with bioluminescent ceiling glowing pale cyan and a still glowing pool reflecting it, stalactites dripping silver light, she rests on a flat rock at the pool\'s edge.',
+      'At a river-mouth where freshwater meets the sea, water-lilies floating, river-jade water becoming sea-blue, she perches on a moss-covered rock where the two waters meet.',
+      'Under an ice-shelf in arctic water with sun-shafts piercing thin ice from above in pale blue beams, seal-companions circling her, frost-pale tail glowing soft in the cold light.',
+      'In a turquoise tropical lagoon barely deep enough to cover her tail, palm-shadows on the surface, coral garden below, a manta-ray gliding past in the deeper blue.',
+      'On a calm moonlit sea at midnight, water flat as silver glass, she rises waist-up from the surface, stars reflected perfectly in the water around her, hair dripping silver.',
+      'Clinging to a sea-stack rock in a hurricane, spray erupting around her, hair and tail-fins whipping horizontal, sky bruised with lightning above, ocean wild around the rock.',
+      'In an enchanted jewel-lagoon with suspiciously-blue water, sea-flowers blooming in impossible coral-pink and gold beneath the surface, the water gleaming faintly from within.',
+      'On a moonlit tide-pool grotto at the foot of a sea-cliff at midnight, the pool glowing faintly with bioluminescent algae, kelp-tendrils dripping from the cave-mouth above.',
+      'In a deep abyssal blue at the edge of the continental shelf, drop-off to bottomless dark behind her, a single sun-shaft from far above lighting her position alone in the void.',
+      'In a pebbled cove at dawn pink-and-amber sky, sea-foam rolling in slow waves around the rock she sits on, gulls wheeling far above, dewy and quiet.',
+    ],
+    instructions: `Each entry 22-32 words. Spatial context + light + mystical slant. Vary across 12 setting categories. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_action: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID ACTION axis — what she is DOING IN HER WORLD when the camera catches her. Each entry 25-35 words.
+
+⚠️ CANDID, NOT POSED — THIS IS THE LOAD-BEARING RULE. The mermaid is CAUGHT mid-moment in her own environment — not performing for the lens. NEVER head-tilted-back-mid-song hero-pose. NEVER comb-and-mirror tableau. NEVER weeping-tear-caught-mid-fall portrait. NEVER hand-raised-spell-cast stance. NEVER eyes-meeting-camera. The camera STUMBLED ON her, it did not stage her. Most entries: back-turned, side-profile, partly-occluded, glancing-aside, body-in-motion-and-already-half-gone, observed-from-distance, distracted-by-something-in-her-world.
+
+⚠️ Mer-folk actions are POETIC and MYTHIC but ENVIRONMENTAL — passing through / gliding / exploring / hunting / gathering / weaving through / resting unobserved / surfacing-and-already-leaving / observed-from-distance / distracted-by-her-world.
+
+✓ ACTION VARIETY (candid mid-motion in her environment):
+  A. SWIMMING through kelp cathedral (body lateral, hair drifting behind, back-of-tail visible)
+  B. GLIDING past a coral garden (mid-pass, side-profile or back-to-camera)
+  C. DESCENDING into the abyss (body angled steeply downward, tail flicking back)
+  D. HUNTING fish-shoal (mid-dart toward darting silversides, body coiled in pursuit)
+  E. WEAVING THROUGH shipwreck-ribs (body curving around fallen mast / between hull-planks)
+  F. PASSING beside a leviathan-shadow (small alongside whale-fluke in deep distance)
+  G. SURFACING already-half-gone (only her tail-fluke visible breaking the surface in a swirl of spray)
+  H. RESTING unobserved (eyes closed against a sea-cave rock, tail wrapped in kelp, current pulling at her hair)
+  I. GATHERING shells in a tide-pool (back to camera, hand reaching into water, body partially out)
+  J. ESCORTING a sea-turtle (alongside in slow parallel motion, off-center in frame)
+  K. RIDING a fast current (body horizontal, hair streaming, gone in a moment)
+  L. EXPLORING a sunken statue (body angled curiously beside the marble bust, examining)
+  M. CHASING bioluminescent plankton (mid-swim through a bloom, body trailing the glow)
+  N. CIRCLING the coral-throne unhurried (mid-orbit, back partially turned)
+  O. OBSERVED FROM A DISTANCE (her tail just visible beyond a curtain of kelp, fragmentary)
+
+EVERY entry is CAUGHT mid-motion in her world. NEVER staging-for-portrait. NEVER center-of-frame hero stance. NEVER direct eye-contact with camera unless she's caught NOTICING the viewer mid-motion.
+
+NEVER negation.`,
+    touchpoints: [
+      'SWIMMING THROUGH KELP — Body lateral mid-glide between two towering kelp pillars, hair drifting behind in a slow column, only her back and tail-fluke visible to camera, fish-shoals parting around her.',
+      'DESCENDING INTO ABYSS — Body angled steeply downward into deep blue, tail flicking back twice as she vanishes into the dark, hair streaming upward in the wake of her descent.',
+      'HUNTING SILVERSIDES — Mid-dart through a fish-shoal with body fully coiled and lunging, fish scattering in silver flashes around her, tail snapping for the propulsion thrust.',
+      'WEAVING SHIPWRECK — Body curving sinuously through the fallen ribs of a sunken galleon, hand grazing the encrusted wood, tail trailing behind through the gap in the hull.',
+      'PASSING WHALE-FLUKE — Small alongside the broad fluke of a passing humpback in deep mid-water, her body dwarfed in scale, both moving in parallel through the blue.',
+      'SURFACING AWAY — Only her tail-fluke visible breaking the moonlit surface in a swirl of phosphorescent spray, the rest of her already submerged and disappearing.',
+      'RESTING IN SEA-CAVE — Eyes closed and body curled against a barnacled rock in a luminescent grotto, tail wrapped in kelp, current pulling slow at her drifting hair.',
+      'GATHERING SHELLS — Back turned to camera as she crouches in a tide-pool reaching one hand into the water, tail dragging across wet pebbles, only her shoulder and back visible.',
+      'ESCORTING TURTLE — Alongside a slow-gliding sea-turtle in parallel motion, both off-center in the frame, kelp-forest beyond them stretching deep into atmospheric haze.',
+      'RIDING THE CURRENT — Body horizontal and stretched fully out in a fast underwater current, hair streaming behind, captured in a frozen instant of speed.',
+      'EXPLORING STATUE — Body angled curiously beside an eroded marble bust of an ancient queen sunken on the seabed, hand drifting near the statue\'s cheek, examining quietly.',
+      'CHASING PLANKTON — Mid-swim through a glowing cloud of bioluminescent plankton, body trailing the cyan glow, plankton swirling in her wake, face turned away.',
+      'CIRCLING THRONE — Mid-orbit around a coral throne in a court chamber, back partially turned to camera, other mer-court attendants visible deeper in the architecture.',
+      'GLIMPSED PAST KELP — Her tail-fluke and lower torso just visible beyond a curtain of swaying kelp in foreground, the rest of her hidden, a fragmentary mythic moment.',
+      'CRESTING A WAVE — Mid-leap arched out of a breaking wave on the open sea, body curved in spray, gone again in the next breath, a glimpse from a passing distance.',
+      'PASSING A REEF — Side-profile gliding past a coral garden, body lateral, tail propelling slow, not noticing the camera, observing a small octopus on the reef ahead.',
+      'EMERGING FROM KELP — Body half-emerging from behind a kelp pillar, only torso and one arm visible, hair tangled with kelp fronds, mid-emergence not yet posed.',
+    ],
+    instructions: `Each entry 25-35 words. Format: "ALL-CAPS LABEL — candid mid-motion verb-led description with body position + spatial context + environmental detail." Every entry is CAUGHT in her world, NEVER posing. Prefer back-turned / side-profile / partly-occluded / off-center compositions. NEVER eyes-meeting-camera. NEVER staging-for-portrait. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_mystical_element: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID MYSTICAL ELEMENT axis — the MAGIC LAYER added to every render to deliver Kevin's "stuff of legend" slant. Each entry 18-26 words.
+
+⚠️ EVERY render gets one of these — this is the load-bearing slant. The element appears WITH her, on her, or around her.
+
+✓ MYSTICAL ELEMENT VARIETY:
+  A. Bioluminescent glow on her skin / hair / tail / eyes
+  B. Arcane runes in her body-paint or floating in the water near her
+  C. A floating glowing pearl above her cupped hands
+  D. Fish-spirits / spectral sea-creatures attending her
+  E. Wisps of glowing plankton spiraling around her
+  F. An aurora reflected on the water surface above
+  G. A constellation visible through the water above her
+  H. A magical-glowing object she's holding (treasure / artifact / shell)
+  I. Suspended particulate / sparkles drifting magically around her
+  J. A halo of refracted light around her head
+  K. Water bending unnaturally around her in slow gravity-defying patterns
+  L. Sea-flowers blooming impossibly in the water around her
+
+NEVER negation.`,
+    touchpoints: [
+      'Faint bioluminescent glow rising from her skin in soft cyan waves, brightest along her collarbones and the inner curves of her wrists',
+      'Arcane runes drawn in sea-pigment along her forearms glowing faint phosphor-green, pulsing gently in rhythm with her breath',
+      'A single luminescent pearl floating suspended above her cupped hands at chest height, casting cool blue light upward onto her face',
+      'A small school of spectral silver fish-spirits orbiting her shoulders in a slow halo, partially transparent, faintly glowing',
+      'Wisps of glowing cyan plankton spiraling around her body in a slow vortex, brightening with each movement of her tail',
+      'A vivid aurora borealis reflected on the calm water surface above her, pale green and violet ribbons rippling across the mirror',
+      'A constellation visible through the calm surface above her, the stars magnified and impossibly bright through the water',
+      'A glowing golden treasure-cup held in her hands radiating warm light across her face and the surrounding kelp',
+      'Suspended silver sparkles drifting magically through the water around her, defying gravity, glittering with each subtle current',
+      'A halo of refracted prismatic light fanning around her head in concentric rainbow rings, brightest against her crown of pearls',
+      'Water bending unnaturally around her in slow gravity-defying patterns, currents visibly looping back toward her hands',
+      'Sea-flowers blooming impossibly in coral-pink and pale gold in the water around her, petals slowly unfolding as she breathes',
+      'Tiny glowing jellyfish drifting in a constellation pattern around her hair, their bells pulsing in soft synchronized rhythm',
+      'Drops of seawater rising upward from her hair against gravity, gathering above her head in a slow magical halo of suspended water',
+      'A glowing pearl pendant at her throat casting cool light upward onto her chin, the light visibly stronger than the surrounding ambient',
+    ],
+    instructions: `Each entry 18-26 words. The magical / mythic layer added to the render. Vary across 12 mystical element categories. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_camera_framing: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID CAMERA FRAMING axis — explicit SCENE-FIRST composition mandate. Mermaid is INHABITANT of frame, not subject of portrait. Each entry 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW.
+
+⚠️ SCENE IS THE HERO. She fills 20-40% of the frame at most. The SETTING + ATMOSPHERE + MYSTICAL ELEMENT dominate the composition. NEVER hero-portrait framing. NEVER centered-pose. NEVER waist-up-portrait. NEVER full-figure-fills-vertical-frame. NEVER her-as-the-poster.
+
+✓ VARIETY (scene-environmental composition — mermaid as inhabitant):
+  A. WIDE ENVIRONMENTAL ESTABLISHING (mermaid 20-30% of frame, full setting visible all around)
+  B. AERIAL/OVERHEAD (looking down from above, mermaid small in the larger scene)
+  C. THROUGH-THE-KELP-CATHEDRAL (kelp pillars dominate foreground+midground, mermaid glimpsed between)
+  D. INTERIOR CORAL-PALACE (architecture dominates, mermaid small at throne or passing through)
+  E. LONG-LENS COMPRESSION (foreground tactile detail, mermaid distant in midground)
+  F. LOW-WATERLINE THROUGH-SURFACE (camera at water level, mermaid past a wave or rock)
+  G. DRAMATIC-SCALE WIDE (mermaid dwarfed by environment — leviathan-shadow / abyss / cathedral)
+  H. OVER-A-FOREGROUND-ELEMENT (rock / kelp / coral foreground, mermaid in midground)
+  I. WATERLINE HALF-AND-HALF WIDE (split air/water, mostly environment, mermaid at center small)
+  J. BACK-TURNED LATERAL (camera behind her, she facing into the scene, viewer follows her gaze)
+  K. PARTIALLY-OCCLUDED (mermaid half-hidden behind kelp / coral / rock — glimpse composition)
+  L. SCALE-PROVING WIDE (vast setting + mermaid as the scale-prover element)
+
+NEVER hero-portrait / waist-up / center-of-frame-vertical. NEVER eyes-meeting-camera framing. NEVER modern cinema terms. NEVER negation.`,
+    touchpoints: [
+      'WIDE ENVIRONMENTAL ESTABLISHING framing, mermaid at 20% of frame in midground, full setting wrapping her with deep atmospheric perspective',
+      'AERIAL OVERHEAD framing, looking down from above the water onto the scene, mermaid small at center of a vast lagoon or kelp clearing',
+      'THROUGH-THE-KELP-CATHEDRAL framing, kelp pillars dominating foreground and midground, mermaid glimpsed in motion between two trunks',
+      'INTERIOR CORAL-PALACE wide framing, ornate coral architecture dominating the frame, mermaid small at the throne or passing through an arch',
+      'LONG-LENS COMPRESSION framing, foreground tactile detail (coral / rock / shell), mermaid distant in midground softened by atmospheric haze',
+      'LOW-WATERLINE THROUGH-SURFACE framing, camera at wave-level looking past a breaking wave, mermaid glimpsed beyond in the deeper water',
+      'DRAMATIC-SCALE WIDE framing, mermaid dwarfed by a leviathan-shadow passing in deep blue behind her, sense of vast oceanic scale',
+      'OVER-A-FOREGROUND-CORAL framing, sharp coral branch silhouetted in close foreground, mermaid in midground passing through the deeper space',
+      'WATERLINE HALF-AND-HALF WIDE, camera at the air-water boundary, mostly sea and sky, mermaid small at center half-submerged',
+      'BACK-TURNED LATERAL framing, camera behind her at distance, she facing into the scene, viewer follows her gaze into the mythic depth',
+      'PARTIALLY-OCCLUDED GLIMPSE framing, mermaid half-hidden behind kelp curtain or coral spur, only her tail or shoulder visible in the gap',
+      'SCALE-PROVING WIDE framing, vast cathedral kelp or coral palace dominating frame, mermaid as small living scale-prover element off-center',
+      'OVERHEAD KELP-CANOPY framing, looking down through kelp tops at a clearing far below, mermaid tiny on the sand among scattered light-shafts',
+      'DEEP-LATERAL DRIFT framing, full-frame width of deep blue water with reef on one side, mermaid passing through middle of frame at small scale',
+      'POSTCARD-LANDSCAPE WIDE framing, the scene reads as painted-landscape-with-figure, mermaid an inhabitant providing scale not the visual subject',
+      'BEHIND-A-WAVE LOW framing, foreground wave-crest silhouetted black against sunset, mermaid past the wave glimpsed in profile',
+      'CORAL-GARDEN AERIAL framing, looking down through clear water at a coral garden, mermaid passing among the formations seen from above',
+      'CAVE-MOUTH FRAMING, dark cave-mouth arch dominating frame, mermaid small at the cave-pool inside, light pouring through the opening',
+    ],
+    instructions: `Each entry 14-22 words. Explicit scene-first camera framing. Mermaid is INHABITANT not portrait subject. Prefer wide environmental / over-foreground / through-kelp / behind-wave / scale-proving / back-turned / partially-occluded compositions. NEVER hero-portrait / centered-pose / waist-up. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  mermaid_drama: {
+    format: 'simple',
+    theme: `MYSTICAL-MERMAID DRAMA axis — conditional 40%-gated mystical escalation. Each entry 18-26 words.
+
+⚠️ SUBTLE WEAVING — the drama ADDS to the scene, never replaces her as the focal point. Most renders are quieter solo-mer moments; drama fires occasionally for cinematic / mythic escalation.
+
+✓ DRAMA VARIETY:
+  A. STORM ABOVE the surface (lightning fork, dark cloud, rain-pocked surface visible)
+  B. SHIP IN THE DEEP DISTANCE (a tall ship visible miles offshore, her gaze tracking it)
+  C. SEA-CREATURE COMPANION (whale fluke, manta, giant squid arm, sea-turtle close)
+  D. AURORA ESCALATION (aurora visibly stronger, ribbons reaching down to the water)
+  E. SHIPWRECK NEARBY (a wreck visible in the background blue, ribs and rigging)
+  F. CORAL PALACE ATTENDANTS (other mer-folk in deep background as scale-provers)
+  G. PORTAL / RUNE-GATE opening behind her (arcane glyphs lit up across an underwater archway)
+  H. MOONLIGHT BREAKTHROUGH (a single shaft of moonlight cutting down through deep water)
+  I. SEA-CREATURE LEVIATHAN passing (a vast shape in the distant blue dark)
+  J. DROWNED-OFFERING surrounding her (rings / coins / lockets scattered on the seabed at her tail)
+  K. BIOLUMINESCENT BLOOM rising (a vast cloud of glowing plankton drifting upward around her)
+  L. ANCIENT GOD-PILLAR (a massive stone face or pillar emerging from the deep behind her)
+
+NEVER negation.`,
+    touchpoints: [
+      'A storm bruising the surface above her, lightning forking through the dark cloud overhead, the surface rain-pocked silver, her tail glowing faintly defiant beneath',
+      'A distant tall-ship silhouette visible miles offshore in the deep background, her gaze tracking it with sad recognition, the ship oblivious to her below',
+      'A humpback whale gliding past in the deep background behind her, its enormous body dwarfing her in scale, eye briefly meeting hers in passage',
+      'An aurora visibly stronger above the surface, ribbons of green and violet reaching impossibly down through the water toward her, lighting her crown',
+      'A sunken galleon visible in the background blue, broken ribs and tilted mast looming, treasure scattered at her tail-base, kelp draping the wreck',
+      'Three other mer-folk visible in deep midground as scale-provers, each at their own coral throne, the mer-court suggested without dominating her foreground',
+      'An ancient stone archway behind her with arcane glyphs lit up in pulsing blue light, a portal opening to a deeper realm, her hair lifting toward it',
+      'A single shaft of moonlight cutting impossibly far down through deep water from far above, lighting her precisely as if she stood in a spotlight',
+      'A vast leviathan-shape passing in the distant blue dark behind her, larger than any whale, its silhouette barely visible but unmistakably enormous',
+      'Hundreds of drowned-offerings scattered on the seabed at her tail — rings, gold coins, lockets, broken figurines — collected from centuries of lost sailors',
+      'A vast bioluminescent plankton bloom rising in a slow glowing cloud around her body, lighting her from below in shifting cyan, her tail-scales catching the glow',
+      'An ancient stone god-pillar carved with a forgotten face emerging from the deep abyssal blue behind her, her position dwarfed by the monument',
+    ],
+    instructions: `Each entry 18-26 words. Subtle mythic dramatic escalation that ADDS but never replaces her as focal point. Vary across 12 drama categories. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

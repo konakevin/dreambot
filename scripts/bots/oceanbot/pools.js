@@ -136,5 +136,25 @@ module.exports = {
   BIOLUM_SCENES: load('biolum_scenes'),
   BIOLUM_CAMERA_FRAMING: load('biolum_camera_framing'),
 
-  // 10/10 paths populated — OceanBot v3 is complete.
+  // ── mystical-mermaid character-path pools (11 — 10 path axes + 1
+  // ── drama conditional). Full-bespoke per the
+  // ── feedback_full_bespoke_per_path_no_shared_pools rule. The path
+  // ── file (paths/mystical-mermaid.js) loads these directly via
+  // ── loadSeed (function-form), but registering them here keeps the
+  // ── registry complete + lets other tooling discover them. Each
+  // ── pool starts at MVP-25 entries and scales to production-200
+  // ── after R0 approval. ──
+  MERMAID_ARCHETYPE: load('mermaid_archetype'),
+  MERMAID_FACE_AND_SKIN: load('mermaid_face_and_skin'),
+  MERMAID_EYES: load('mermaid_eyes'),
+  MERMAID_HAIR: load('mermaid_hair'),
+  MERMAID_TAIL: load('mermaid_tail'),
+  MERMAID_ADORNMENT: load('mermaid_adornment'),
+  MERMAID_SETTING: load('mermaid_setting'),
+  MERMAID_ACTION: load('mermaid_action'),
+  MERMAID_MYSTICAL_ELEMENT: load('mermaid_mystical_element'),
+  MERMAID_CAMERA_FRAMING: load('mermaid_camera_framing'),
+  MERMAID_DRAMA: load('mermaid_drama'),
+
+  // 10 scene paths + 1 character path (mystical-mermaid) — OceanBot complete.
 };
