@@ -1,105 +1,64 @@
 #!/usr/bin/env node
+/**
+ * Sci-fi lineage entries for StarBot female-explorer and male-explorer.
+ *
+ * 2026-06-05 rewrite (Kevin call): describe alien anatomy freely —
+ * head-tendrils / pointed ears / forehead ridges / montrals / etc. are
+ * all fine. Just NEVER name the franchise (no "Twi'lek", "Vulcan",
+ * "Mandalorian", "Spartan", "Togruta", "Asari", "stillsuit", "beskar",
+ * "edgerunner", "netrunner", "ceramite", "bolter", "Tuchanka", etc.).
+ *
+ * The old prompt named the franchises as inspiration AND gave 1:1
+ * mapping examples — Sonnet learned the mapping and named the species
+ * downstream. New prompt drops the inspiration list + mapping pairs;
+ * the toolbox + the no-naming rule do the work.
+ */
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_race.json',
   total: 50,
-  batch: 12,
+  batch: 10,
+  append: true,
   metaPrompt: (
     n
-  ) => `You are writing ${n} HUMANOID ALIEN / SCI-FI LINEAGE entries for StarBot's female-explorer and male-explorer paths. Each entry is a SHORT phrase (15-25 words) describing the EXACT visual signature of a HUMAN-SHAPED sci-fi lineage — INSPIRED BY popular sci-fi worlds (Star Wars / Star Trek / Mass Effect / Warhammer 40K / Dune / Halo / Cyberpunk / Avatar / Blade Runner) WITHOUT directly naming any franchise's specific characters or races.
+  ) => `You are writing ${n} HUMANOID SCI-FI LINEAGE entries for StarBot's female-explorer and male-explorer paths. Each entry: a SHORT phrase (15-25 words) describing the EXACT visual signature of a HUMAN-SHAPED sci-fi lineage. Gender-neutral.
 
-CRITICAL — NO FRANCHISE NAMES IN THE OUTPUT. NEVER write "Twi'lek", "Vulcan", "Klingon", "Mandalorian", "Spartan", "Na'vi", "Asari", "Replicant", "Aeldari", "Space Marine", "N7", "Mjolnir", "Beskar", "Sin'dorei", "Kaldorei", "Dunmer", "Witcher", "Time Lord", "Cylon", "Zabrak", "Togruta", "Mirialan", "Chiss", "Pantoran", "Trill", "Andorian", "Bajoran", "Romulan", "Goa'uld", "Quarian", "Turian", "Drell", "Fremen" or any other proper noun from these IPs.
+━━━ CORE RULE: NO FRANCHISE NAMES ━━━
 
-Instead, describe the AESTHETIC GENERICALLY using physical features:
-- Instead of "Twi'lek": "humanoid with two long curving head-tendrils replacing hair"
-- Instead of "Vulcan": "sharply pointed-eared humanoid with green-tinted skin and severe arched eyebrows"
-- Instead of "Mandalorian": "armored mercenary in full burnished-steel plate with T-shaped visor helmet"
-- Instead of "Spartan": "augmented super-soldier in heavy power-armor with integrated AI-glow at the temples"
-- Instead of "Na'vi": "tall lithe blue-skinned humanoid with feline cheekbones and long braided queue"
+Describe alien anatomy and human cultures freely — but DO NOT name any sci-fi / fantasy franchise, species, race, faction, character, or trademark term. The output should read like our OWN universe, not a Star Wars / Star Trek / Mass Effect / Halo / Cyberpunk / Warhammer / Dune / Witcher / Avatar / Elder Scrolls / Mandalorian / WoW lookup.
 
-ALL ENTRIES MUST BE HUMAN-SHAPED. NO scaled reptilians, NO beast-headed creatures, NO fully non-humanoid. Distinguishing features sit ON the human-shaped frame.
+Specifically NEVER write any of: Twi'lek, Vulcan, Klingon, Na'vi, Mandalorian, Spartan, Asari, Togruta, Andorian, Trill, Mirialan, Drow, Witcher, Dunmer, Fremen, Space Marine, Edgerunner, Netrunner, Sin'dorei, Romulan, Cardassian, Bajoran, Ferengi, Tholian, Borg, Krogan, Turian, Quarian, Drell, Aeldari, N7, Reaper, Beskar, Stillsuit, Ceramite, Bolter, MJOLNIR, ODST, Lekku, Montrals, Tuchanka, Tatooine, Stormtrooper, Jedi, Sith, Boba Fett, Han Solo, Cad Bane.
 
-CRITICAL — NO HORNS, NO ANTLERS, NO TUSKS, NO FANGS, NO DEMONIC IMAGERY. These read fantasy/demonic, not space sci-fi. Distinguishing cranium features should be cranial-ridges, bone-crests, antennae, head-tendrils, head-tentacles, montrals, ear shapes, scalp tattoos — NEVER horns or antlers.
+Describe the FEATURES, not the franchise. "Head-tendrils replacing hair" is FINE; "Twi'lek" is NOT. "Pointed ears with green skin" is FINE; "Vulcan" is NOT. "Forehead-ridges and dark mane" is FINE; "Klingon" is NOT.
 
-━━━ COVERAGE TARGETS (enforce variety across ${n}) ━━━
+━━━ FEATURE TOOLBOX (mix freely — alien or human) ━━━
 
-POINTED-EAR HUMANOIDS / ELF-CODED (8):
-- sharply pointed-eared humanoid with almond-shaped luminous eyes, alabaster skin, regal aristocratic features, otherworldly elegant
-- bronze sun-warmed pointed-eared humanoid with leaf-green eyes, tribal forest-bearing, weathered ranger features
-- obsidian-grey-skinned pointed-eared humanoid with white-silver hair, glowing red or violet eyes, sharp angular features, deep-shadow heritage
-- ash-grey-skinned pointed-eared humanoid with blood-red eyes, sharp eastern-volcanic features, ash-warrior bearing
-- pale-ivory-skinned pointed-eared humanoid with glowing emerald-fel-green eyes, magic-fed gaunt elegance
-- purple-tinted moon-pale pointed-eared humanoid with glowing silver eyes, exceptionally long ears, druidic facial markings
-- olive-tan forest pointed-eared humanoid with hazel eyes, tribal beadwork in hair
-- fey-shifted seasonal pointed-eared humanoid with opalescent eyes, longer ears, courtier bearing
+ALIEN ANATOMY (any combination welcome):
+- skin: blue, green, purple, ash-grey, mahogany, copper, slate, ivory, ochre, iridescent, faintly bioluminescent
+- head: head-tendrils, head-tentacles, head-crests, forehead-ridges, bone-plating, antennae, cranial-grooves, brow-ridges, scalp-tessellation, montral-like striped projections
+- ears: pointed, elongated, flanged, finned
+- eyes: amber, double-pupil, all-iris-no-white, vertical-slit, ringed, glowing-luminous, color-shifting
+- markings: ritual scarification, tribal tattoos, geometric patterns, freckled photonics, subdermal tracery
+- build: lithe, dense, broad-shouldered, long-limbed, gracile
 
-DISTINCTIVE-CRANIUM HUMANOIDS (6):
-- forehead-ridged warrior humanoid with prominent skull crest, dark mane, fierce battle-bearing
-- humanoid with V-shaped brow ridge, pointed ears, severe agency-trained features
-- humanoid with prominent ridged nose-bridge, ornate ear-jewelry, devout-fighter bearing
-- humanoid with bone-crest crown sweeping back from skull instead of hair, gentle ascetic features
-- humanoid with male peacock-fan hair-style swept high (hairstyle = signature), refined courtly features
-- humanoid with elongated cranial ridges curving back from the brow, tribal facial tattoos, wilderness-fighter bearing
+CULTURAL / SPACER HUMAN VARIANTS (also valid — describe by real-world ethnic anchors and spacer cultures):
+- frontier colonist, ship-born spacer, low-grav-evolved, high-grav-evolved, desert-clan nomad, arctic-clan, steppe rider, umber-skinned warrior, Mediterranean noble, Northern fair-skinned, etc.
 
-COLORED-SKIN HUMANOIDS (8):
-- humanoid with vivid yellow-green tinted skin, geometric black facial tattoos, ascetic bearing
-- humanoid with deep blue skin, glowing red eyes, blue-black hair, sharp aristocratic features
-- humanoid with light blue-purple skin, yellow tribal facial markings around the eyes
-- humanoid with light blue skin, white antennae extending from the forehead, white hair
-- humanoid with distinctive spotted/tattooed pattern running from temples down neck and shoulders
-- humanoid with smooth blue skin, head-crests instead of hair, faintly luminous eyes, biotic-glow capable
-- humanoid with crimson or violet skin, slit-pupil eyes, sleek bald crown with subtle scalp-tattoos, lithe predatory features
-- humanoid with celestial-pale skin, faint glowing patches, divine markings on temples
+AUGMENTED HUMAN (also valid — generic chrome/cyber language, NOT trademark terms):
+- neural-port at temple, chrome prosthetic limbs, subdermal LED-tracery, smartlink at temple, cosmetic gene-mods, mantis-blades sheathed at forearms
 
-HEAD-APPENDAGE HUMANOIDS (4):
-- humanoid with two long curving head-tendrils replacing hair, bright skin tone (pink, blue, yellow, green), expressive features
-- humanoid with striped white-and-skin-tone head montrals (head-tentacles), white facial markings, slim athletic features
-- tall lithe blue-skinned humanoid with feline cheekbones, glowing yellow eyes, queue/braid down the back, tribal beadwork
-- humanoid with full-face tribal-tattoo down one cheek, dark hair, otherwise indistinguishable from human
-
-ARMORED ICONIC SILHOUETTES (5) — race-as-uniform:
-- armored mercenary in full burnished-steel plate with T-shaped visor helmet, jetpack mounted on the back, race-as-uniform identity, never reveals face
-- augmented super-soldier in heavy gunmetal power-armor with integrated AI-glow at the temples, helmeted-or-bare-faced
-- power-armored religious-warrior in white-and-red plate with bolter-style weapon, religious iconography on the breastplate
-- desert-dwelling warrior in tan stillsuit with hooded cloak, water-recycler tubes at the throat, hidden among sand-dunes
-- hooded warrior-monk in austere robes with ritualistic scarification, ash-pale skin, ascetic bearing
-
-CYBER / AUGMENTED HUMANS (5):
-- heavy-cyber augmented human with full chrome prosthetic arm, exposed neural ports at temple, glowing implant-tattoos, edgerunner bearing
-- gracile combat-cyber with retractable mantis-blades sheathed at forearms, chrome-traced cheekbones, mil-cyber bearing
-- netrunner with multiple chrome data-jacks at temple and neck, fiber-optic hair-tie glowing soft blue, fingerless mesh gloves
-- body-modder with subdermal LED-tracery glowing under skin, cosmetic gene-mods (idealized features), styled-augmented eyes
-- mil-spec hardpoint augmented soldier with smartlink visible at the temple, scarred but augmented features
-
-CULTURAL HUMAN VARIANTS (8):
-- long-lived noble human with sharply chiseled features, grey-blue eyes, raven-dark hair, tall regal bearing
-- sun-warmed Northern fair-skinned human with blue-or-green eyes, golden-blond braided hair, weathered horse-clan features
-- Mediterranean-olive-skinned human with dark eyes, dark hair, hawkish noble features, austere southern bearing
-- mutant human with pale-gold cat-slit eyes, scarred-pale skin, white-or-platinum hair, hardened alchemical-mutation features
-- warm olive-skinned human with brown eyes, dark wavy hair, soldierly aristocratic bearing
-- fair Northern human with blue eyes, blond braided beard or hair, weathered cold-clan features
-- deep umber dark-skinned human with dark almond eyes, close-cropped or twist-braided hair, desert-warrior bearing
-- ivory-fair-skinned human with magical undertone, hazel-or-green eyes, auburn hair, slight magical-glow at the temples
-
-SPACER VARIANTS (4):
-- long-limbed low-grav-evolved human with slim build, accent-coded face-tattoos, weathered space-bearing
-- stocky high-grav-evolved human with broader denser frame, weathered features, gravity-veteran bearing
-- ship-born human with pale long-lived skin from no-sun upbringing, intricate clan-tattoos, distant-traveler eyes
-- frontier colonist with UV-tanned pioneer skin, sun-bleached blond hair, dust-weathered features
-
-ARTIFICIAL / SYNTHETIC (2):
-- humanoid AI-android indistinguishable from human, slightly too-still poise, alabaster-perfect skin, eerie unblinking gaze
-- humanoid AI-android with subtle indicators of inhumanness, brand-name plate at the temple, faint cool inner glow
+ARTIFICIAL / SYNTHETIC (also valid):
+- humanoid android indistinguishable from human, eerily still poise
+- synthetic with brand-plate at temple and faint cool inner glow
 
 ━━━ RULES ━━━
-- EVERY entry must be HUMAN-SHAPED
-- ABSOLUTELY NO franchise names — NO Twi'lek, Vulcan, Klingon, Mandalorian, Spartan, Na'vi, Asari, Replicant, Sin'dorei, Kaldorei, Dunmer, Beskar, Mjolnir, N7, etc. Use GENERIC descriptors.
-- The aesthetic inspiration stays — describe generically (pointed-ear humanoid with green-tint = Vulcan-inspired without naming)
-- Each entry is a SHORT VISUAL SIGNATURE — anatomy, feature, skin/eye color, vibe
-- 15-25 words — dense and specific
-- GENDER-NEUTRAL
-- Each entry visually DISTINCT
-- No personality — JUST visual lineage signature
+- 15-25 words per entry
+- Gender-neutral phrasing
+- HUMAN-SHAPED required (no scaled reptilians, no beast-headed, no fully non-humanoid)
+- NO horns, NO antlers, NO tusks, NO fangs, NO demonic imagery (those read fantasy, not sci-fi)
+- NO franchise names anywhere
+- Each entry visually distinct
+- No personality or backstory — JUST visual signature
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering. NO franchise names anywhere.`,

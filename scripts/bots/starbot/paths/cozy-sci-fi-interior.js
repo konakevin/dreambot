@@ -138,7 +138,7 @@ ONLY TWO TYPES OF INHABITANT ALLOWED:
 - HUMANOID form (head / two arms / two legs / upright)
 - Exotic-but-appealing: subtle horns, slit pupils, jewel-colored skin (lavender / teal / pale gold), bioluminescent freckles / facial markings, pointed ears, slight scales like fish-jewelry, gradient hair
 - Otherwise human-attractive proportions and face structure — alien aesthetic enhances, doesn't disfigure
-- Mass Effect Asari / Star Wars Twi'lek / The Fifth Element Diva / Avatar Na'vi-coded — exotic-beautiful, NOT monster
+- Blue-skinned head-crest species / head-tendril species / smooth-feline blue species — exotic-beautiful, NOT monster (describe FEATURES, never name any sci-fi franchise / species / character)
 - ABSOLUTELY FORBIDDEN: tentacle faces, multi-limb body horror, insectoid forms, fungal/plant bodies, asymmetric distortion, Giger biomech, octopoid heads, anything that reads as "monster"
 
 ABSOLUTELY FORBIDDEN ACROSS BOTH TYPES:
