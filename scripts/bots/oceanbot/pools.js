@@ -122,5 +122,11 @@ module.exports = {
   REEF_SCENES: load('reef_scenes'),
   REEF_CAMERA_FRAMING: load('reef_camera_framing'),
 
-  // (Other 2 paths' pools added when their gen-scripts ship.)
+  // ── polar-seas path-bespoke pools (9th path, 4th scenic — Arctic /
+  // ── Antarctic ocean with ice formations + polar wildlife + aurora.
+  // ── NO SHIPS, NO PEOPLE — those are covered by other paths.) ──
+  POLAR_SCENES: load('polar_scenes'),
+  POLAR_CAMERA_FRAMING: load('polar_camera_framing'),
+
+  // (Other 1 path's pools added when its gen-script ships.)
 };

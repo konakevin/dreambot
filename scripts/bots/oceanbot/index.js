@@ -42,7 +42,8 @@ const pathBuilders = {
   'deep-wonder': require('./paths/deep-wonder'),
   'whale-encounter': require('./paths/whale-encounter'),
   'reef-paradise': require('./paths/reef-paradise'),
-  // Other 2 paths land as the bot matures.
+  'polar-seas': require('./paths/polar-seas'),
+  // Other 1 path lands as the bot matures.
 };
 
 module.exports = {
@@ -160,6 +161,7 @@ module.exports = {
     'deep-wonder',
     'whale-encounter',
     'reef-paradise',
+    'polar-seas',
   ],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
@@ -181,6 +183,7 @@ module.exports = {
       'deep-wonder',
       'whale-encounter',
       'reef-paradise',
+      'polar-seas',
     ],
   },
 

@@ -1398,6 +1398,102 @@ NEVER use negation. NEVER name modern cinema terms.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // POLAR-SEAS path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 9th OceanBot path, 4th scenic — Arctic / Antarctic ocean.
+  // Naturalistic register, NO SHIPS (covered by other paths), NO PEOPLE.
+
+  polar_scenes: {
+    format: 'simple',
+    theme: `POLAR SCENES for OceanBot's polar-seas path — Arctic / Antarctic ocean ecosystem. NatGeo / BBC-Frozen-Planet register. Each entry is ONE specific polar moment, 18-26 words. Ice formation OR wildlife OR aurora + setting ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ MANDATORY — every entry is a REAL Arctic OR Antarctic ocean / ice / wildlife scene. Real species, real ice formations, real polar light. Eerie blue silence of the far poles.
+
+⚠️ NO SHIPS. NO ICEBREAKERS. NO PEOPLE. NO EXPEDITION CAMPS. NO SCIENTISTS. Just the polar ocean and its inhabitants.
+
+✓ VARIETY MANDATE — distribute across polar-scene categories:
+  A. ICEBERG MAJESTY (towering tabular berg / Greenland calving glacier / ice arch / impossibly-blue iceberg cave)
+  B. PACK ICE LANDSCAPE (pack-ice mosaic from above / polynya open-water lead / ice-edge horizon)
+  C. POLAR CETACEAN (narwhal tusk-display through ice crack / beluga pod surfacing through fast ice / orca pod hunting along ice edge / humpback breach in icy water / bowhead breaking thin ice)
+  D. POLAR BEAR (bear hunting on ice edge / bear swimming between floes / bear and cub on tabular berg)
+  E. PENGUIN COLONY (emperor penguin march / Adélie colony on Antarctic ice shelf / king penguin sea-return)
+  F. SEAL / WALRUS (weddell seal on ice / leopard seal hunting at ice edge / ringed seal pup / walrus haul-out on ice floe)
+  G. AURORA OVER OCEAN (aurora borealis arcing over still arctic water / aurora australis over Antarctic peninsula / aurora reflecting on glassy polar sea)
+  H. POLAR LIGHT MOMENT (polar dawn pink-orange over ice / blue-hour stillness over fjord / midnight-sun amber on glacier)
+  I. UNDERWATER POLAR (camera below ice, sun-shafts piercing fast ice from above / krill swarm under sea ice / ice algae underside)
+  J. CALVING / FRAGMENTATION (glacier calving event mid-fall / berg fracturing into bergy bits / ice cliff face)
+
+Each entry: ONE polar subject + ONE setting/light anchor + ONE atmospheric detail. Specific named locations OK (Lemaire Channel, Disko Bay, Svalbard, Ross Sea, McMurdo Sound, etc.). Speak vivid and specific.
+
+DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Tabular iceberg dominating an Antarctic peninsula channel, vertical cliff face glacier-cyan and pearl-white, calm fjord water reflecting the full silhouette below.',
+      'Pack ice mosaic stretching to horizon, dark leads of open water threading between floes, low arctic sun raking long shadows across the white.',
+      'Narwhal pod surfacing through a crack in arctic fast ice, three spiraled tusks raised into pale polar light, breath crystallizing in the air above.',
+      'Beluga family surfacing through breathing holes in shore-fast ice, white melons gleaming wet, crystal-clear arctic water below visible through the ice.',
+      'Orca pod cruising along an Antarctic ice edge in tight formation, six tall dorsal fins cutting the dark swell, ice cliffs towering above the water.',
+      'Polar bear stepping carefully across pack ice between leads of dark water, paws spread wide on a thin floe, distant horizon hazy with sea-fog.',
+      'Emperor penguin column marching across an Antarctic ice shelf at dawn, hundreds of bodies casting long shadows on snow, blue-hour pink staining the horizon.',
+      'Weddell seal hauled out on fast ice in Antarctic still air, eyes half-closed, breath visible as fine vapor in the polar cold.',
+      'Aurora borealis arcing green-and-violet over a glassy arctic fjord, ice-cliff silhouettes below, perfect reflection of the auroral curtain in still water.',
+      'Glacier calving in slow motion, a vertical slab of ice the size of a building toppling forward into churning meltwater below, spray erupting upward.',
+      'Underwater polar scene, camera below sea ice with sun-shafts piercing the ice ceiling, ice algae brown-stained on the underside, plankton drifting in shafts.',
+      'Walrus haul-out on Svalbard ice floe, dozen-strong herd lying densely packed, ivory tusks catching low golden polar sun, breath rising in vapor columns.',
+      'Greenland calving glacier face stretching across the frame, blue-ice fractures running vertical, sea-spray fanning where ice meets sea.',
+      'Adélie penguin colony on an Antarctic island shore, thousands of nesting pairs across pebbled ground, distant tabular berg dominating the bay horizon.',
+      'Leopard seal hunting at the ice edge underwater, sleek serpentine body in mid-water, ringed seal silhouetted above the ice ceiling.',
+      'Midnight-sun amber light raking across an Arctic glacier, the ice front catching warm gold while shadowed crevasses hold deep cobalt blue.',
+      'Bowhead whale breaking through thin Beaufort Sea ice, smooth callous-free head emerging slow, ice fragments cracking outward in concentric rings.',
+      'Iceberg arch carved by wave action, dramatic tunnel through a Greenland berg, dark sea beyond visible through the opening, blue-ice walls glowing translucent.',
+      'Aurora australis sweeping cool-emerald above the Ross Sea pack ice, southern stars piercing the curtain, polar hush across the still water.',
+      'Polar bear mother and cub on a melting floe, mother nuzzling cub, both backs framed against vast pale arctic sky, distant pack ice receding to horizon.',
+      'Krill swarm under Antarctic sea ice, billions of bodies forming a glowing cloud beneath the ice ceiling, sun-shafts piercing where leads open above.',
+      'King penguin colony returning to sea, individuals porpoising through icy water beside a glacier face, others gathered on pebbled beach watching.',
+    ],
+    instructions: `Each entry is ONE specific polar moment, 18-26 words. Format: "polar subject + setting/light anchor + atmospheric detail." Vary across the 10 categories above. NEVER include ships / icebreakers / people / scientists / huts. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  polar_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's polar-seas path — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across polar-specific framing:
+  A. ICEBERG MONUMENTAL (low waterline angle, berg towering against sky)
+  B. AERIAL ICE-PACK (drone-style top-down, pack ice mosaic stretching to horizon)
+  C. WILDLIFE EYE-LEVEL (camera at the animal's eye height, intimate)
+  D. UNDERWATER UNDER-ICE (camera below sea ice, looking up through ceiling)
+  E. AURORA PANORAMA (wide vista of sky + ice + water, aurora arcing across full frame)
+  F. CALVING ACTION (mid-distance lateral, glacier face in mid-fall)
+  G. ICE-EDGE PROFILE (lateral view of pack ice meeting open dark water)
+  H. CETACEAN AT ICE (animal half-out-of-water beside ice formation, scale relationship clear)
+  I. POLAR PANORAMA (wide environmental establishing shot, multi-element polar scene)
+  J. SUN-SHAFT THROUGH ICE (underwater backlight, ice ceiling rim-lit by surface sun)
+
+NEVER use negation. NEVER name modern cinema terms.`,
+    touchpoints: [
+      'LOW-WATERLINE ICEBERG framing, berg towering massive against pale polar sky, full cliff face filling vertical frame',
+      'AERIAL ICE-PACK framing, drone-style top-down on pack ice mosaic stretching to horizon, dark leads threading between floes',
+      'WILDLIFE EYE-LEVEL framing, camera at the animal\'s height meeting its eye directly, intimate polar gaze',
+      'UNDERWATER UNDER-ICE framing, camera below the ice ceiling looking up through translucent fast ice, sun-shafts piercing',
+      'AURORA PANORAMA framing, wide vista with aurora arcing across the full sky, ice + water + reflection in frame',
+      'CALVING ACTION framing, mid-distance lateral view of glacier face in slow-motion mid-fall, spray erupting from impact',
+      'ICE-EDGE PROFILE framing, lateral view of pack ice meeting open dark water, sharp horizon line of ice-to-sea',
+      'CETACEAN AT ICE framing, whale half-out-of-water beside towering ice formation, dramatic scale relationship',
+      'WIDE POLAR PANORAMA establishing shot, ice + wildlife + sky + water all readable in vast environmental composition',
+      'SUN-SHAFT THROUGH ICE underwater backlight, ice ceiling rim-lit by surface sun, shafts cutting downward through water',
+      'OVERHEAD CETACEAN AT SURFACE framing, drone view of whale blowing among ice floes, scale-of-emptiness visible',
+      'PENGUIN COLONY WIDE ESTABLISHING shot, thousands of birds spread across an ice shelf or pebbled shore',
+      'BACKLIT BERG SILHOUETTE framing, iceberg as dark cutout against bright polar twilight, edges glowing rim-lit',
+      'POLAR BEAR ON FLOE framing, animal small against vast pale ice expanse, scale-of-isolation composition',
+      'THROUGH-THE-ICE-ARCH framing, camera in foreground looking through a carved iceberg arch at open polar sea beyond',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

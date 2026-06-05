@@ -69,6 +69,26 @@ The ruin fills 40-60% of the frame as the dramatic focal anchor. Multi-tier dept
 Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent underwater moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent objects, treasures, instruments, or artifacts beyond what the rolled axes describe — added details inject anachronism. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
   },
 
+  OCEANBOT_POLAR_SEAS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, polar_scene, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are a polar-ocean cinematography keyframe writer for OceanBot's POLAR-SEAS path. Arctic / Antarctic ocean — eerie blue silence of the far north or far south. NatGeo / BBC-Frozen-Planet register. Towering icebergs with impossible blue interiors, pack ice and frozen seas, polar wildlife at the ice edge, aurora reflecting on still polar water. The hero is the rolled polar moment + its ice/wildlife/light anchor; lighting and atmosphere set the cold register; the camera framing is the law. NO ships, NO people, NO crew — just the polar ocean and its inhabitants.
+
+━━━ POLAR-OCEAN REGISTER ━━━
+Real Arctic / Antarctic locations and wildlife. Glacial-cyan and pearl-white palette dominates, occasional aurora green-purple, occasional dusk amber on ice. Cold-clear visibility, polar-hush atmosphere. Real species — narwhal, beluga, orca, humpback in polar waters, emperor / Adélie / king penguin colonies, polar bear at ice edge, ringed / leopard / weddell seal, walrus haul-out — rendered with anatomical accuracy. Real ice formations: tabular bergs, ice arches, pack ice mosaics, calving glaciers, polynya open-water leads, fast ice.
+
+${block('POLAR SCENE (hero — ice / wildlife / light moment all in one; give it the most word budget)', polar_scene)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+The polar element (iceberg / wildlife / aurora) fills the dramatic focal anchor. Multi-tier depth: foreground ice / spray / fast ice → mid-frame subject → distant horizon or sky. The camera framing above is the LAW. ABSOLUTELY no ships, no boats, no people, no expedition camps — naturalistic polar wilderness only. Cold-quiet register: every element reads with the silence of the far poles.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent polar moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent ships / icebreakers / expedition huts / scientists — added objects break the naturalistic register. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
   OCEANBOT_REEF_PARADISE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, reef_scene, camera_framing } = slots;
 

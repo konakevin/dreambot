@@ -97,6 +97,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  OCEANBOT_POLAR_SEAS: {
+    description:
+      'Arctic / Antarctic ocean — towering icebergs with impossible blue interiors, pack ice and frozen seas, polar wildlife (narwhal / beluga / orca / humpback / penguin / polar bear at ice edge / seal / walrus haul-out), aurora over still polar water. Eerie blue silence of the far north or far south. Naturalistic register. NO ships, NO people. Same lean 2-path-slot shape.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['polar_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   OCEANBOT_REEF_PARADISE: {
     description:
       'Tropical shallow-water coral reef teeming with marine life — maximum abundance, sun-lit. Counterpoint to deep-wonder (abyssal dark) — this is razor-sharp sun-shafted clarity with reef-builders + reef-dwellers all in frame. Naturalistic NatGeo / BBC Blue Planet reef register. No ships, no people, no diving gear. Same lean 2-path-slot shape.',
