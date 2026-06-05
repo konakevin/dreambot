@@ -10,483 +10,219 @@ Do NOT auto-start the dev environment. Tell Kevin he can run `/dream` to spin up
 
 ## What This App Is
 
-DreamBot is an AI-powered dream image generator for iOS. Users build a "Vibe Profile" during onboarding (art styles, aesthetics, mood sliders, personal locations + objects, dream cast photos), and the app generates personalized AI dreams. Dark, high-energy aesthetic. Built for fun and delight.
+DreamBot is an AI-powered dream image generator for iOS. Users build a "Vibe Profile" during onboarding (locations, dream cast photos, mood sliders), and the app generates personalized AI dreams. Dark, high-energy aesthetic.
 
-**Key features:**
-
-- Personalized AI image generation via Sonnet brief → Flux render pipeline
-- Multiple creation modes (Dream Me, Chaos, Cinematic, Minimal, Nature, Character, Nostalgia, photo restyle, photo reimagine, Dream Like This, custom prompt)
-- Dream Cast — face-swap your real photo (self + plus_one) into stylized dreams
-- Nightly automatic dreams with bot messages from DreamBot
-- 17 image-generation bots posting to a public feed (each 4× daily, fleet-wide cadence owned by `bot_schedules.posts_per_day`)
-- Social feed with likes, comments, shares, follows, friends, share-to-friend
-- Sparkle currency (in-app purchases via RevenueCat) + Pro subscription for HQ downloads
-- Lightweight wordlist text moderation (no external API; Flux handles image NSFW)
+**Key features:** personalized AI image generation (Sonnet brief → Flux render), multiple creation modes (Dream Me / Chaos / Cinematic / restyle / reimagine / Dream Like This / custom), Dream Cast face-swap (self + plus_one), nightly automatic dreams with bot messages, social feed (likes / comments / shares / follows / friends), Sparkle currency (RevenueCat IAP) + Pro subscription for HQ downloads, 18 image-generation bots posting to a public feed (4× daily).
 
 ---
 
 ## Stack
 
-- **Framework:** React Native + Expo SDK 54, Expo Router v4 (file-based routing)
-- **Styling:** NativeWind v4 (Tailwind) preferred for new code; existing `StyleSheet.create` files are fine — match each file's existing style
-- **State:** Zustand (client) + TanStack Query (server/async)
-- **Backend:** Supabase (Postgres, auth, storage, realtime, Edge Functions on Deno)
-- **AI Image Gen:** Replicate (Flux Dev, Flux 1.1 Pro / Pro Ultra, Flux Kontext Pro / Max)
+- **Framework:** React Native 0.81 + Expo SDK 54, Expo Router v6 (file-based)
+- **Styling:** NativeWind v4 preferred for new code; existing `StyleSheet.create` is fine — match each file's existing style
+- **State:** Zustand (client) + TanStack Query v5 (server/async)
+- **Backend:** Supabase (Postgres, auth, storage, realtime, Deno Edge Functions)
+- **AI Image Gen:** Replicate (Flux family) + Gemini (Nano Banana) + OpenAI (GPT Image 2)
 - **AI Text:** Anthropic Claude Sonnet (briefs) + Haiku (vision, polishing, bot messages)
-- **Payments:** RevenueCat (sparkle IAP + Pro subscription)
+- **Payments:** RevenueCat (sparkle IAP + Pro)
 - **Auth:** Supabase Auth (email + Google + Apple + Facebook OAuth)
-- **Animations:** Reanimated 3 + Gesture Handler
-- **Images:** `expo-image` (NEVER React Native `Image`)
-- **Language:** TypeScript strict — no `any`, no `// @ts-ignore`, no `as any` / `as Function` / `as unknown as <type>` to bypass types
+- **Animations:** Reanimated 4 + Gesture Handler
+- **Images:** `expo-image` only (never RN `Image`)
+- **Language:** TypeScript strict — no `any`, no `as any`, no `as Function`, no `// @ts-ignore`
 
 ---
 
-## Generation Architecture (Current)
-
-The dream engine has evolved beyond the legacy two-pass `vibeEngine.ts`. Current flow for user-initiated dreams (the `generate-dream` Edge Function):
-
-1. **Resolve medium + vibe** from `dream_mediums` / `dream_vibes` DB tables (`_shared/dreamStyles.ts` with caching).
-2. **Resolve cast + dream seeds** — load the user's `dream_cast` rows (self / plus_one photos + descriptions) and `dream_seeds.places[]` (curated location selections; the `things[]` / objects half was ripped out 2026-06-02 — see `project_objects_removed_2026-06-02` memory).
-3. **Roll the scene** (`_shared/dreamAlgorithm.ts:rollDream()`) — picks one of three composition paths based on context (cast+location, location/object only, cast in random scene). Pulls biome config (`_shared/biomeAxes.ts`) for time/weather/camera/phenomena axes per medium+vibe.
-4. **Detect intent** — `selfInsertDetector` ("put me in...") and `dualActionDetector` (multi-character) route to specialized brief builders (`dualBriefBuilder` for two-person renders).
-5. **Build a Sonnet brief** (`_shared/recipeBuilder.ts` + `sceneEngine.ts`) — structured prompt that includes scene DNA, axes, character slots, medium directive, vibe directive, personal anchors, optional chaos layer.
-6. **Sonnet writes the Flux prompt** (`_shared/llm.ts:callSonnet()`) — short, comma-separated, ~50–90 words. Sanitized (`sanitize.ts`) and post-processed (`promptCompiler.ts:postProcessPrompt()`).
-7. **Flux renders** (`_shared/generateImage.ts`) — model picked per-medium by `modelPicker.ts`, with NSFW retry.
-8. **Face swap** (`_shared/faceSwap.ts` for single, `dualSwapDispatch.ts` → `face-swap-dual` Edge Function for dual) when the medium has `face_swaps=true` and user has cast photos.
-9. **Persist** — upload to Supabase Storage, dedup via `aHashHex()`, insert `uploads` row, log to `ai_generation_log`.
-
-**Photo restyle path** (`restyle-photo` Edge Function) — separate Kontext-based transformation for "upload photo + pick medium" flow. Uses per-medium `MEDIUM_CONFIGS` in `_shared/photoPrompts.ts`.
-
-**Nightly dreams** — **async queue pipeline** (overhauled 2026-05-26; previously rendered inline). Flow: the GitHub Actions cron `0 8 * * *` (08:00 UTC, no jitter) runs `scripts/nightly-dreams.js`, which **ENQUEUES** one `dream_queue` job (`source='nightly'`) per eligible **Pro-or-in-trial** user (free post-trial get none; bots excluded; per-user-per-day idempotent via `dedup_key`). The `dream-queue-worker` (pg_cron every minute, migration 193) batch-claims jobs and fans each out to the `nightly-dreams` render Edge Function (its own isolate) + finalizes it (bot message, `finalize_nightly_upload`, notification, wish). Same scene engine: personalizes from `user_recipes.recipe` JSONB (places/things/cast/moods), NOT the (vestigial) `dream_seeds`/`dream_cast` tables. Three composition paths roll 40/30/30: cast+anchor, anchor-only, cast-in-random-scene. Full architecture: `NIGHTLY_DREAM_ENGINE.md` + Scaling Initiative below. **Anchor pool curation (per composition path, 2026-06-04):** `location_iconic_spots` rows carry independent `pure_scene_eligible` + `character_eligible` booleans (migrations 221 + 222). pure_scene rolls from rows where `pure_scene_eligible=true` (5,091 across 48 locations); cast paths (character + epic_tiny) roll from rows where `character_eligible=true` (5,682). Different rubrics — pure_scene needs to postcard without a person; cast just needs a coherent backdrop. Built via 4 generation phases (S/A/B classifier → +20 named postcards/loc → +50 biome landscapes/loc) + 3 QA passes (strict pure_scene → recovery → cast). Full reference: `NIGHTLY_SEED_POOL_QA.md`.
-
-**First dream** (onboarding Reveal) — renders through the **`nightly-dreams` engine** (user-JWT path), NOT `generate-dream` (changed 2026-05-28). `RevealStep.tsx` forces a cast face swap so the user is reliably cast into one of their own places: `force_cast_role:'dual'` when self+plus_one exist, else `'self'`/`'plus_one'`/`'pet'`, plus the gated `force_face_swap_eligible:true` (pins the medium to the `dream_eligible_face_swap` pool). No usable cast → personalized scene in the user's location. `nightly-dreams` persists a PRIVATE `uploads` row and returns its `upload_id`; Post flips that SAME row public (no double-insert), Skip leaves it private. The experimental `generate-first-dream` Edge Function + the `EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED` feature flag were ripped out 2026-06-02 — this strongest-cast-render path is now the only first-dream path.
-
-**Async queue + fan-out workers** (`dream_queue` table + `dream-queue-worker`) — drains **nightly (live)** + first_dream jobs: pg_cron-triggered, batch-claim (SKIP LOCKED), parallel dispatch, `EdgeRuntime.waitUntil` background processing, retry/backoff/dead-letter. See Scaling Initiative section below.
-
-### Vibe Profile (`types/vibeProfile.ts`)
-
-Stored as JSONB in `user_recipes.recipe`. Version: 2. Keys:
-
-- `aesthetics[]` (vibes — min 3) | `art_styles[]` (mediums — min 2) | `interests[]` (min 3)
-- `moods` — 4 bipolar sliders (peaceful↔chaotic, cute↔terrifying, minimal↔maximal, realistic↔surreal)
-- `personal_anchors` — free text: places, objects, eras, dream vibe
-- `avoid[]` | `spirit_companion`
-
-VibeProfile v2 is the only supported format. Legacy v1 `Recipe` engine + migration helper were deleted 2026-04-30. The runtime `isVibeProfile()` type guard lives at `types/vibeProfile.ts`.
-
-### Personal Anchors
-
-Places, objects, eras, and dream vibe are gated per anchor (~40% inclusion) to prevent overuse. Dream vibe (the creative north star) is always included.
-
-### Bot Messages
-
-Each nightly dream gets a short whimsical message from DreamBot via a dedicated Haiku call. Personality-tuned, references the dream content, occasionally recalls past dreams/wishes.
-
----
-
-## Bot System (17 image-generation bots)
-
-> **STOP — read this before any bot work.** ANY task that touches bot config, path files, pools, seeds, brief composition, archetypes, render quality, or even just _answers a question_ about how a specific bot works (DragonBot, GothBot, StarBot, SteamBot, MechBot, DinoBot, BrickBot, BloomBot, ChibiBot, FaeBot, MangaBot, PixelBot, RetroBot, TinyBot, ToyBot, EarthBot, YumBot) REQUIRES re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` in full first. The playbook is the canonical brain for the bot pipeline — its bar (every render = 10/10 poster-worthy frame), its 8 components of memorable scenes, its per-bot Round-N iteration logs, its cross-bot lessons table, and its failure-mode catalog are how this system stays coherent across 17 bots and 260+ paths. Skipping it produces one-off fixes that contradict prior lessons. **And: UPDATE the playbook with every new lesson learned the moment you learn it — don't wait to be asked.**
-
-Bots post via a single DB-driven dispatcher (`.github/workflows/bots-dispatcher.yml`, every 15 min) that reads `bot_schedules` for due bots and shells out to `scripts/run-bot.js` per bot. Cadence is owned per-bot in the DB: `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = '<name>';` (no code commit, no app deploy). **Path rotation is a flat round-robin shuffle-bag** — every bot sets `cycleAllPaths: true` with no `pathWeights`, so each path posts exactly once per cycle in randomized order before the bag reshuffles (fleet-wide flatten 2026-05-26; cycle state persists across dispatcher runs via `bot_run_log` count % cycle-size; `mechbot` excepted pending its in-flight WIP). Each bot is a self-contained module under `scripts/bots/<botname>/`:
-
-- **`index.js`** — bot config (username, mediums, vibes, allowedModels, modelByPath, vibesByPath, mediumByPath, mediumStyles, enhancement layer toggles, `rollSharedDNA()` + `buildBrief()` entry points).
-- **`paths/*.js`** — one file per creative path (e.g., `dark-landscape.js`, `goth-closeup.js`). Each path declares either an inline brief or an archetype (`builder.archetype`) consumed by `scripts/lib/brief-composer.js`.
-- **`pools.js`** — bespoke axis pools (lighting, atmosphere, era, accessory, etc.) drawn during `rollSharedDNA()`.
-- **`seeds/*.json`** — generated seed rows that get loaded into the `bot_seeds` DB table by `scripts/generate-bot-seeds.js`.
-- **`paths/legacy/`** — superseded path implementations (DragonBot, StarBot, GothBot have these). Don't edit; reference only.
-
-All 17 bots have full path/pool/seed implementations and are active in `bot_schedules` at 4 posts/day (verified 2026-05-30). The full roster: BloomBot (18 paths), BrickBot (14), ChibiBot (18), DinoBot (15), DragonBot (26), EarthBot (23), FaeBot (8), GothBot (17), MangaBot (21), MechBot (12), PixelBot (10), RetroBot (9), StarBot (12), SteamBot (11), TinyBot (15), ToyBot (22), YumBot (11).
-
-### Per-bot model lineups (which AI models each bot rolls from)
-
-Set 2026-05-30 from `BOT_MODEL_TALLY.md` after a 17×8×3 review matrix. Each bot's `index.js` `allowedModels` lists which subset of `ALL_ENABLED_AI_MODELS` (`scripts/lib/imageModels.js` — 8 models total) it picks from per render. `modelByPath` locks override the picker per-path (kept where they pin a hearted-look — e.g. ChibiBot `creature-world` → Flux Dev, StarBot `cosmic-vista` + `real-space` exclude Flux 2 Pro). Native providers: Banana = Gemini API, GPT Image 2 = OpenAI API, everything else = Replicate.
-
-| Bot       | Banana | GPT-2 | FluxD | F2Pro | F1Pro | F1Ult | F2Flex | F2Max |  #  |
-| --------- | :----: | :---: | :---: | :---: | :---: | :---: | :----: | :---: | :-: |
-| bloombot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| brickbot  |   ✅   |  ✅   |  ❌   |  ❌   |  ✅   |  ✅   |   ✅   |  ✅   |  6  |
-| chibibot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| dinobot   |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| dragonbot |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| earthbot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ❌   |  ❌   |  6  |
-| faebot    |   ✅   |  ✅   |  ❌   |  ✅   |  ✅   |  ✅   |   ❌   |  ✅   |  6  |
-| gothbot   |   ✅   |  ✅   |  ❌   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  7  |
-| mangabot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| mechbot   |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| pixelbot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| retrobot  |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| starbot   |   ✅   |  ✅   |  ❌   |  🟡   |  ✅   |  ✅   |   ✅   |  ❌   | 6¹  |
-| steambot  |   ✅   |  ✅   |  ❌   |  ✅   |  ✅   |  ✅   |   ✅   |  ❌   |  6  |
-| tinybot   |   ❌   |  ❌   |  ❌   |  ❌   |  ✅   |  ✅   |   ✅   |  ❌   |  3  |
-| toybot    |   ✅   |  ✅   |  ✅   |  ✅   |  ✅   |  ✅   |   ✅   |  ✅   |  8  |
-| yumbot    |   ✅   |  ✅   |  ✅   |  ❌   |  ✅   |  ✅   |   ✅   |  ✅   |  7  |
-
-¹ StarBot has per-path overrides — `cosmic-vista` + `real-space` paths additionally exclude Flux 2 Pro (5 models instead of 6).
-
-The `model` column on `uploads` (migration 211, 2026-05-30) records which model rendered each post; the DreamCard fullscreen view shows a small badge above the username with the friendly name (`constants/imageModels.ts:getModelDisplayName`). Source of truth for changing a bot's lineup is `BOT_MODEL_TALLY.md` → that bot's `index.js`.
-
-**Shared infrastructure (`scripts/lib/`):**
-
-- `botEngine.js` — orchestrator. `runBot()` rolls path/vibe/medium, fetches directives, calls `bot.rollSharedDNA()` + `bot.buildBrief()`, invokes Sonnet → Flux → upload → DB insert. Standalone (no coupling to `generate-dream`).
-- `brief-composer.js` — archetype-based brief builder for paths using the declarative `builder.archetype` shape.
-- `chaosLayer.js` — perception-distortion layer (geometry, reflection, scale, framing, secondary-light) at ~70% probability. Per-bot config: `chaos: { enabled, skipPaths, allowSubjectChaosPaths }`.
-- `sensoryAnchors.js` — non-visual sensory enhancement (smell, sound, touch, temp, weight, air). Per-bot pools by context (female / male / scene) × channel.
-- `twoPassPolish.js` — Sonnet (~150 words) → Haiku (~65–90 words) compression. Per-bot config: `twoPassPolish: { enabled, conceptWords, polishedWords, polishedWordsByPath, preservePhrasesByPath, skipPaths }`.
-- `modelPicker.js` — intersects `dream_mediums.allowed_models` with `bot.allowedModels` + per-path overrides via `bot.modelByPath`.
-- `seed-generator.js` — auto-regenerates a bot's pool when exhausted (`used_at` lifecycle).
-- `archetype-templates.js` — brief templates extracted from path files for archetype migration parity.
-
-**Bot iteration entry points:**
-
-- `scripts/iter-bot.js` — dev iteration. `--bot, --count, --mode random|mixed|<path>, --vibe, --label, --post, --dry-run`. Default count = **5** and you must `--post` for renders to land in Kevin's feed (`/tmp` only is useless).
-- `scripts/run-bot.js` — single-bot production entry; fails loud (no swallowed errors, unlike iter-bot). Called by the dispatcher per due-bot row.
-- `scripts/dispatch-bots.js` — fleet dispatcher; reads `bot_schedules`, runs each due bot via `run-bot.js`, marks `last_posted_at` on success (DB trigger advances `next_due_at`). Auto-deactivates a new bot that never posts within 6h.
-- `scripts/gen-<bot>-pool.js` — regenerates seed pools for a specific bot.
-- `scripts/qa-bot-model-matrix.js` — bot × model × path HTML matrix test. **When Kevin says "run an HTML matrix on `<bot>`" use this** — defaults are 1 render per (path × model), `--post` enabled (renders go to live feed), all bot.paths × bot.allowedModels. Outputs `/tmp/<bot>-matrix.html` (dark-themed grid Kevin opens locally to triage which models to keep per path). Full protocol + cost table + when-to-3x in `BOT_SCENE_QUALITY_PLAYBOOK.md` → "HTML Matrix model-test protocol".
-
-### Bot scene quality — CRITICAL workflow
-
-`BOT_SCENE_QUALITY_PLAYBOOK.md` is the canonical reference for everything bot-render-quality. **It is not optional reading — re-read it BEFORE proposing any path migration or pool change, and UPDATE it with every new lesson learned (don't wait to be asked).** Building a repeatable cross-bot algorithm is the goal — not one-off fixes.
-
-**The bar:** every bot render must be a 10/10 poster-worthy frame. Not "pretty but empty" — visible story, multi-tier depth, an entity in the scene, genre-coded specificity, material/atmospheric richness. If you wouldn't save it to a folder or screenshot it, the pools need more iteration.
-
-**The 8 components of a memorable scene** (full detail in the playbook): monumental anchor, multi-tier composition (4+ depth layers), scale provers, narrative beat, readable focus, material truth, light drama, emotional DNA.
-
-**Per-bot iteration logs live in the playbook's per-bot sections.** Add Round-N entries as you tune; surface anti-patterns to the cross-bot lessons table at the top so the pattern compounds.
-
-**Bot axis refactor plan** lives at `BOT_AXIS_REFACTOR_PLAN.md` — extracts 6 archetypes + shared composer from hand-written paths. Phase 0 not started.
-
----
-
-## Sparkle Economy + Pro Subscription
-
-### Costs
-
-- **1 sparkle** per dream (Dream Me, photo, twin, re-dream, custom prompt)
-- **3 sparkles** per fusion
-- **Free:** first-dream banger (server-side). Nightly dreams are **Pro/trial-only** (free users post-trial get none — gated in `scripts/nightly-dreams.js`)
-- **25 sparkles** welcome bonus on onboarding completion
-
-### IAP Packs
-
-4 sparkle packs (25 / 50 / 100 / 500). Product IDs in `constants/sparklePacks.ts` (source of truth — bundle prefix `com.konakevin.radorbad.sparkles.*`).
-
-### Pro Subscription
-
-Long-press save-to-photos for HQ downloads + **a nightly dream every night** (Pro perk — free users post-trial get none). Setup details in `PRO_SUBSCRIPTION_SETUP.md` and `SPARKLE_PAYMENTS_SETUP.md`. Pricing strategy in `SPARKLE_PRICING_STRATEGY.md`.
-
-**Pro-state — single source of truth (3 runtimes, keep in sync).** A user is Pro if they have an active PAID subscription (`pro_subscription=true` AND unexpired `pro_subscription_expires_at`) **OR** are within the 14-day trial (`pro_trial_started_at` + `PRO_TRIAL_DAYS`). It's re-validated on **every read** so a missed RevenueCat `EXPIRATION` webhook can't leave permanent Pro; trial lapse is purely time-based (no event/sweep). Implementations that must stay identical: `lib/proStatus.ts` (client; `store/auth.ts` imports it), `scripts/lib/nightlyEligibility.js` (nightly cron gate), and the `is_pro_active()` Postgres fn (migration 176, used by Pro-gated Edge Functions). Change all three together. Behavioral tests: `__tests__/lib/proStatus.test.ts` + `nightlyEligibility.test.ts`. Paid expiry → `EXPIRATION` webhook flips `pro_subscription=false` (`revenuecat-webhook`, `PRO_REVOKE_EVENTS`); `CANCELLATION` does NOT revoke (access until expiry).
-
-### Purchase Flow
-
-App → RevenueCat SDK → Apple payment → RevenueCat webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC (or pro flag flip) → balance/entitlement updated → client refreshes.
-
-- RevenueCat key: production iOS in `lib/revenuecat.ts`
-- Webhook secret: `REVENUECAT_WEBHOOK_SECRET` (Supabase Edge secrets)
-- Refund path: `refund-self-moderation` Edge Function refunds sparkle when client-side text moderation rejects a prompt before server invocation.
-
----
-
-## Onboarding (5 steps)
-
-Steps 2 (Mediums) + 3 (Vibes) were removed when Kevin pivoted away from user-curated taste (the nightly engine rolls its own; Create exposes the full catalog every render). Step 6 (Objects) was ripped out 2026-06-02 along with the whole objects/things personal-anchor system — see `project_objects_removed_2026-06-02` memory + migration 216.
-
-1. **Welcome** — intro
-2. **Locations** — curated 63 location cards (`location_cards` DB table). Starter packs, category filters. Min 3, max 10. Stored as `dream_seeds.places[]`.
-3. **Dream Cast** — photo upload for self + plus_one. Llama Vision (`describe-photo` Edge Function) generates descriptions. Relationship picker for +1.
-4. **Mood Sliders** — 4 bipolar sliders
-5. **Reveal** — first-dream generation via the `nightly-dreams` engine with a forced cast face swap (the user is cast into one of their places), post/skip, 25-sparkle welcome, welcome notification. See the First dream note under Generation Architecture.
-
-**Architecture rule:** locations are selected from pre-curated cards with rich essence data (palette, atmosphere, architecture, light signature, fusion settings, iconic spots). NEVER free-text. The dream engine picks randomly from the user's selections — no smart selection logic in the engine.
-
-Profile saves on first dream generation (not just on post).
-
----
-
-## File Structure (high-level)
+## File Structure
 
 ```
-app/                 Expo Router routes
-  (auth)/            login, signup, OAuth
-  (onboarding)/      5-step vibe profile builder
-  (tabs)/            5 tabs: index, top, create, inbox, profile
-  settings/          11 settings sub-screens (advanced-mode, vibes, mood, dream-cast, etc.)
-  dream/             loading, newPost, reveal
-  photo/[id], post/[id], user/[userId]   detail routes
-  comments, dreamLikeThis, sharePost, sparkleStore, proStore, dreamTest
-
-components/          ~44 components: DreamCard, FullScreenFeed, CommentOverlay,
-                     onboarding/*, sheets, bot UI, themed primitives
-
-hooks/               ~48 TanStack Query hooks grouped by domain
-                     (dream, feed, social, sparkles, auth, profile, gestures/)
-
-store/               Zustand stores: auth, dream, onboarding, feed, album, explore
-
-lib/                 Engine glue + utilities
-  supabase.ts        Supabase client (Expo SecureStore for tokens)
-  dreamApi.ts        Edge Function client
-  dreamAlgorithm.ts  Medium/vibe resolution + prompt mode config (mirror of _shared/)
-  dreamPost.ts       Insert dream → uploads, pin to feed
-  revenuecat.ts      RevenueCat SDK setup
-  moderation.ts      Local wordlist text moderation
-  appleAuth/googleAuth/facebookAuth.ts
-  imageLongPress.ts  Pro feature: long-press save-to-photos
-  feedDiversity.ts, feedHelpers.ts, balancedMix.ts
-  curatedBots.ts, botProfiles.ts
-
-types/
-  vibeProfile.ts     VibeProfile v2 + isVibeProfile() guard
-  database.ts        Supabase auto-generated DB types (regen after schema change)
-
-constants/
-  promptModes.ts     7 modes + UI tiles
-  sparklePacks.ts    IAP product IDs (source of truth)
-  proPlan.ts         Pro entitlement features
-  theme.ts           Dark palette
-  onboarding.ts, gestures.ts, grid.ts, layout.ts, mascots.ts, etc.
-
+app/                  Expo Router routes
+  (auth)/             index, login, signup
+  (onboarding)/       single pager that orchestrates 5 data steps + 5 info screens
+  (tabs)/             5 tabs: index, create, top, bots, profile
+  settings/           11 sub-screens (edit-profile, dream-cast, locations, mood,
+                      notifications, advanced-mode, bots, blocked-users, about, …)
+  dream/, photo/[id], post/[id], user/[userId]
+  comments, inbox, dreamLikeThis, sharePost, sparkleStore, proStore, welcome-gift
+components/           58 files; onboarding/ + ui/ subdirs; biggest: DreamCard, DreamWishSheet,
+                      CommentOverlay, FullScreenFeed, PostGrid
+hooks/                58 TanStack Query + plain hooks; gestures/ subdir
+store/                6 Zustand stores: album, auth, dream, explore, feed, onboarding
+lib/                  36 glue files; supabase client, dreamApi, revenuecat, proStatus,
+                      moderation, navigation, sentry, posthog, analytics
+types/                database.ts (auto-gen), vibeProfile.ts (v2 + isVibeProfile guard)
+constants/            13 files; theme, promptModes, proPlan, sparklePacks, imageModels, …
 supabase/
-  migrations/        193 SQL migrations (highest prefix: 193)
-  functions/         13 Edge Functions (full list under "Deploying Edge Functions" below)
-    _shared/         37 shared modules (scene engine, casting, LLM, image,
-                     persistence, face swap, prompt compiler, etc.)
-
+  migrations/         223 SQL migrations (highest prefix: 223)
+  functions/          14 Edge Functions + 57 _shared/ modules
 scripts/
-  bots/<botname>/    17 self-contained bots (index.js, paths/, pools.js, seeds/)
-  lib/               Shared bot infra (botEngine, brief-composer, chaos, etc.)
-  dispatch-bots.js, run-bot.js, iter-bot.js, nightly-dreams.js (cron)
-  gen-*.js, test-*.js, qa-*.js  pool gen + testing scripts
-
-__tests__/           jest test files — engine, bots, hooks, utils, client
-  lib/, store/       fast suite (*.test.ts) — runs in husky + CI `check`
-  db/                live-DB lane (*.dbspec.ts) — real Postgres, CI `db-tests` only
+  bots/<botname>/     18 self-contained bots (index.js, paths/, pools.js, seeds/)
+  lib/                Shared bot infra (botEngine, brief-composer, chaosLayer, …)
+  dispatch-bots.js, run-bot.js, iter-bot.js, nightly-dreams.js, qa-bot-model-matrix.js, …
+__tests__/
+  lib/, store/        fast suite (*.test.ts) — runs in husky + CI `check`
+  db/                 live-DB lane (*.dbspec.ts) — real Postgres, CI `db-tests` only
 ```
 
 ---
 
-## Adding New Mediums/Styles
+## Generation Architecture
 
-A "medium" is an art style. The `dream_mediums` DB row is the single source of truth, but **the photo restyle path silently breaks if you skip step 2**.
+Two main render paths:
 
-**Critical naming rule: `key` MUST equal `label.toLowerCase().replace(/ /g, '_')`.** Legacy mismatches caused the April 2026 rename — don't create new ones.
+1. **User-initiated dreams** → `generate-dream` Edge Function. Flow: resolve medium + vibe from DB tables → load cast + `dream_seeds.places[]` → roll a composition (`_shared/dreamAlgorithm.ts:rollDream`) → build Sonnet brief (`_shared/recipeBuilder.ts` + `sceneEngine.ts`) → Sonnet writes Flux prompt (sanitized + post-processed) → Flux renders (model picked per-medium) → optional face swap → persist (Storage upload, dedup, `uploads` row, `ai_generation_log`).
 
-### Step 1 — Insert DB row
+2. **Nightly dreams** (and the **first dream** in onboarding) → async queue pipeline. The GitHub Actions cron `0 8 * * *` runs `scripts/nightly-dreams.js`, which ENQUEUES one `dream_queue` job per eligible Pro-or-in-trial user (bots excluded; per-user-per-day idempotent via `dedup_key`). The `dream-queue-worker` (pg_cron every minute) batch-claims jobs (`claim_dream_queue_jobs` — SELECT FOR UPDATE SKIP LOCKED) and dispatches to the `nightly-dreams` render Edge Function via `EdgeRuntime.waitUntil`. Same scene engine, personalizes from `user_recipes.recipe` JSONB. Full architecture: `NIGHTLY_DREAM_ENGINE.md` + `QUEUE_WORKERS_REFACTOR.md` + `NIGHTLY_SEED_POOL_QA.md`.
 
-```sql
-INSERT INTO public.dream_mediums (
-  key, label, directive, flux_fragment,
-  is_active, is_bot_only, is_character_only, face_swaps, character_render_mode,
-  sort_order
-) VALUES (
-  'newmedium', 'NewMedium',
-  '...tight ~120-150 word directive...',
-  '...compact comma-separated flux phrase...',
-  true, false, false, false, 'natural', 99
-);
-```
+**Onboarding Reveal (first dream)** routes through the `nightly-dreams` engine with `force_cast_role` + `force_face_swap_eligible` so the user is reliably cast into one of their places. The engine returns the private `upload_id`; Post flips it public (no double-insert). No separate `generate-first-dream` function — it was ripped out 2026-06-02.
 
-**Directive rules** (all from real bugs):
+**Photo restyle** → separate `restyle-photo` Edge Function. Kontext-based transform with per-medium configs in `_shared/photoPrompts.ts`.
 
-- Cap at ~120–150 words. Long directives dilute the user's subject and hamper Sonnet creativity.
-- Front-load identity rules (gender preservation, no horns, no Jack Skellington bans).
-- Avoid horns/demons defaults — Flux gravitates there. Push for varied accessories (hair, hats, masks, jewelry, tattoos, scars).
-- Avoid female-coded language for any-gender mediums: ban "shojo", "gowns", "veils", "delicate jewelry". Use neutral terms or split "if male: X / if female: Y".
-- No camera/composition language — conflicts with user photos.
+**Dual face swap** runs in its own `face-swap-dual` Edge Function isolate (memory separation). Routing via `_shared/dualSwapDispatch.ts`. Don't add new pixel work to the dual swap path in-process; new steps go in a separate Edge Function.
 
-**Active classification flags:**
-
-| Flag                    | Effect                                                                                        |
-| ----------------------- | --------------------------------------------------------------------------------------------- |
-| `is_active`             | Visible in user picker. `false` hides but engine can still resolve.                           |
-| `is_bot_only`           | Pair with `is_active=false` so picker hides but resolver finds it.                            |
-| `is_character_only`     | Always uses character composition path (LEGO, Claymation, Vinyl).                             |
-| `face_swaps`            | Photo path will face-swap from user's cast thumb.                                             |
-| `character_render_mode` | `'natural'` = swap onto stylized rendering. `'embodied'` = medium IS the body (LEGO Minifig). |
-
-**Flags that don't exist (despite older docs):** `is_scene_only`, `nightly_skip`. The only hardcoded medium classification today is `NIGHTLY_BANNED_MEDIUMS = new Set(['photography'])` at `nightly-dreams/index.ts:216`. To ban another medium from nightly, add it there OR ship the `nightly_skip` column refactor in `memory/project_medium_flags_audit.md`.
-
-### Step 2 — `_shared/photoPrompts.ts` MEDIUM_CONFIGS (CRITICAL — never skip)
-
-Without an entry, photo restyle falls through to a generic 1-liner that ignores the directive entirely → zero gender preservation, Kontext defaults to "young woman in dress" regardless of subject (Twilight April 2026).
-
-```typescript
-newmedium: {
-  model: 'kontext-max',  // 'flux-dev' for full rebuild like LEGO
-  buildPrompt: (_photo, vibe, hint) =>
-    `COMPLETELY transform this photo into [style description].
-
-CRITICAL — preserve identity: keep the person's exact face, gender, skin tone, age, and core features. Male subjects stay male with masculine features and clothing. Female subjects stay female. NEVER change their gender. NEVER put a male subject in a dress, gown, skirt, corset, or feminine bodice.
-
-[Element-by-element transformation: skin, hair, clothing, background, lighting].
-
-Express the mood through [DIMENSION] and [DIMENSION]:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-},
-```
-
-**Required elements:** `COMPLETELY transform` opener, identity/gender lock, element-by-element rules, `Express the mood through X and Y: [vibe]` (never just append vibe), `Portrait 9:16`, hint inclusion.
-
-**After adding, grep the file for the key to confirm no duplicates.** Duplicate keys silently let the LATER definition win (Claymation rendered as Sack Boy, Neon as cyberpunk cybernetics, April 2026).
-
-### Step 3 — `__tests__/lib/photoPrompts.test.ts`
-
-Add the new key to the `ACTIVE_MEDIUMS` list. The test fails if you forget step 2.
-
-### Step 4 — Bot config (optional)
-
-If a bot should post in this style, add the key to that bot's `mediums` array in `scripts/bots/<botname>/index.js`.
-
-### Step 5 — Deploy
-
-```bash
-supabase functions deploy generate-dream --no-verify-jwt
-supabase functions deploy restyle-photo --no-verify-jwt
-```
-
-### Verification
-
-```sql
--- Should return 0 rows
-SELECT key, label FROM dream_mediums
-WHERE is_active = true AND key != lower(replace(label, ' ', '_'));
-```
-
-**Smoke test all 5 user paths:**
-
-1. Create + medium + no hint + no photo → renders a scene that showcases the medium
-2. Create + medium + text prompt → user's subject in this medium
-3. Create + medium + self-reference text ("put me in...") → user appears with correct gender
-4. Create + medium + photo upload (restyle) → renders YOU in the medium, no gender swap
-5. Create + medium + photo + prompt → reimagines using both inputs
-
-If any path renders generic/wrong gender → you missed step 2.
-
-### What does NOT need updating
-
-UI tiles (`MediumVibeSelector` queries `get_dream_mediums` RPC), `ArtStyle` type (string, no union), `constants/dreamEngine.ts` (gutted; DB-only).
-
-### Edge Function Gotcha — No Optional Chaining in Top-Level Code
-
-**NEVER use `?.` in top-level module expressions** in `supabase/functions/_shared/*.ts`. Deno Edge runtime crashes (BOOT_ERROR). Use explicit null checks:
-
-```typescript
-// BAD — BOOT_ERROR:
-export const X = arr.filter((m) => m.foo?.length);
-// GOOD:
-export const X = arr.filter((m) => m.foo && m.foo.length > 0);
-```
+**Pro-state is one rule across three runtimes** that MUST stay in sync: `lib/proStatus.ts` (client), `scripts/lib/nightlyEligibility.js` (nightly cron gate), `is_pro_active()` Postgres fn (Edge Functions). Pro = paid+unexpired OR in 14-day trial; re-validated on every read. Tests: `__tests__/lib/proStatus.test.ts`, `__tests__/lib/nightlyEligibility.test.ts`, `__tests__/db/isProActive.dbspec.ts`. Change all three together.
 
 ---
 
-## Dual Character Face Swap
+## Bot System (18 bots)
 
-When a user has both self + plus_one cast photos, the engine renders both in a single scene with both faces swapped. **7-layer system — every layer must align or the render breaks.** Full QA history in commit log.
+> **STOP — read this before any bot work.** ANY task that touches bot config, paths, pools, seeds, archetypes, brief composition, or even just *answers a question* about how a specific bot works requires re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` in full first. The playbook is the canonical brain (the 10/10 bar, the 8 components of memorable scenes, per-bot Round-N iteration logs, cross-bot lessons, failure-mode catalog). Skipping it produces one-off fixes that contradict prior lessons. **And: update the playbook with every new lesson learned the moment you learn it — don't wait to be asked.**
 
-**The 7 layers:**
+**The 18:** bloombot, brickbot, chibibot, dinobot, dragonbot, earthbot, faebot, gothbot, mangabot, mechbot, oceanbot, pixelbot, retrobot, starbot, steambot, tinybot, toybot, yumbot. Active in `bot_schedules` at 4 posts/day.
 
-1. **Composition path** — 6 camera presets (candid, portrait, cinematic, environmental, editorial; `intimate` was removed) controlling framing/angle. Prepended to the Flux prompt.
-2. **Action pool** — Sonnet-seeded poses describing BOTH characters' body language. Rules: side-by-side, stationary, body-only, scene-neutral.
-3. **Flux fragment override** (`_shared/faceSwapFluxOverrides.ts`) — runtime override of medium's art-style prefix ONLY when face swap is active. Strips stylized character design language, adds face realism.
-4. **Directive override** — overrides the STYLE GUIDE paragraph Sonnet reads. Must agree with the flux fragment.
-5. **Sonnet brief** (`_shared/dualBriefBuilder.ts`) — mandatory face-lock phrase, left/right separation, face realism rule, action injection.
-6. **Post-processing prepend** — composition path's camera string prepended after Sonnet writes.
-7. **Face swap execution** (`dualFaceSwap()` via `dualSwapDispatch` → `face-swap-dual` Edge Function) — crop left 55% → crop right 55% → swap each in parallel → stitch at midpoint. Retries 3× before fallback.
+**Per-bot model lineups** (which AI models each bot rolls from) live in `BOT_MODEL_TALLY.md`. The `model` column on `uploads` (migration 211) records which model rendered each post; DreamCard shows a model badge.
 
-**Recipe for great dual renders:**
+**Architecture.** Each bot is a self-contained module under `scripts/bots/<botname>/`: `index.js` (config + `rollSharedDNA()` + `buildBrief()`), `paths/*.js` (one per creative path; inline brief OR archetype consumed by `scripts/lib/brief-composer.js`), `pools.js` (axis pools), `seeds/*.json` (loaded into the `bot_seeds` table). Shared infra in `scripts/lib/`: `botEngine.js`, `brief-composer.js`, `chaosLayer.js`, `sensoryAnchors.js`, `twoPassPolish.js`, `modelPicker.js`, `seed-generator.js`.
 
-- Front-load face realism in flux fragment BEFORE any style language (Flux early-token weighting).
-- **Style separation:** apply style modifiers to the WORLD, not the characters. "Illustration set in a fairy tale world" NOT "fairy tale animation style." Single most important insight.
-- Explicit negatives ("NOT cartoon eyes, NOT anime eyes") — weak alone, useful as reinforcement.
-- Eyebrow fix: "thin subtle eyebrows" in flux fragment + "Do NOT draw thick or prominent eyebrows" in Sonnet brief.
-- `isDualFaceSwap ? 300 : 200` max tokens — dual prompts need room or second character truncates (both-male renders).
-- Medium shot, waist-up, filling the frame (small characters = face swap can't detect faces).
-- Three-quarter toward viewer — clean face for swap.
+**Cadence is DB-driven.** The dispatcher (`.github/workflows/bots-dispatcher.yml`, every 15 min) reads `bot_schedules` for due bots and shells out to `scripts/run-bot.js`. To change a bot's cadence: `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = '<name>';` — no code commit, no app deploy.
 
-**Current FACE_SWAP_FLUX_OVERRIDES:** fairytale, storybook, pencil. DB `dream_mediums` rows are unchanged — overrides are runtime-only so non-face-swap renders keep their original style.
+**Path rotation is flat round-robin.** Every bot sets `cycleAllPaths: true` with no `pathWeights`; each path posts exactly once per cycle before the bag reshuffles. Cycle state persists via `bot_run_log` count % cycle-size.
 
-### Automated QA feedback loop
-
-When Kevin says "run an automated QA loop on path X" — Claude does the **entire** loop without human review. Detailed protocol:
-
-1. **Tag the run** — every render force-posted with `auto-qa: <path-name> R<round>` caption. Kevin filters and hearts later.
-2. **Run a batch of 5** — use `force_*` body params on the relevant Edge Function. `is_posted=true`. Always 5 per round.
-3. **Pull renders from DB** — `uploads.image_url, ai_prompt, dream_medium, dream_vibe, output_phash`. Use Read tool on the JPEG to actually look.
-4. **Self-grade 0–5** on dimensions that matter for the path. 5/5 = ship it. 3/5 = visible problems. Be brutal.
-5. **Identify the failing layer** — composition prepend? Sonnet brief? action pool? medium directive? swap pipeline? Pick ONE.
-6. **Make ONE change** — never multi-variate. Document in `memory/project_auto_qa_<path>.md` under "Round N".
-7. **Deploy + run round N+1**.
-8. **Stop conditions:** 3 consecutive 4.5+/5 rounds → production-ready, summary to memory; 20 rounds cap; Kevin says stop.
-9. **Cross-reference Kevin's hearts** every ~5 rounds — query `likes` joined to `uploads` filtered by caption pattern. Mismatch with your scoring = grader miscalibrated; recalibrate.
-
-**Memory protocol:** `memory/project_auto_qa_<path>.md` with round-by-round log, running config, hearted IDs + their prompts, final config when converged.
-
-**Caption taxonomy:** `auto-qa: <path> R<N>` during iteration; `auto-qa: <path> FINAL` after convergence.
-
-**Don't fake-converge.** If 3 rounds score 4.5+ but you suspect leniency, run another with stricter criteria. "I can't tell if this is good" beats shipping something Kevin will reject.
+**Entry points:** `scripts/run-bot.js` (production, called per due bot), `scripts/iter-bot.js` (dev iteration; `--bot`, `--count` default 5, `--mode`, `--post` required for live), `scripts/qa-bot-model-matrix.js` (HTML matrix — when Kevin says "run an HTML matrix on `<bot>`", just run it with defaults: 1 render per (path × model), `--post` on; full protocol in the playbook).
 
 ---
 
-## Database (193 migrations, key tables)
+## Sparkle + Pro
 
-### Core
+**Costs.** 1 sparkle per dream, 3 per fusion. First dream is free (server-side). Nightly dreams are Pro/trial-only (free users post-trial get none). 25-sparkle welcome bonus on onboarding completion. 4 sparkle packs (25/50/100/500) — product IDs in `constants/sparklePacks.ts` (source of truth).
 
-- **`users`** — id, email, username, avatar_url, sparkle_balance, pro_subscription, first_dream_completed_at, last_active_at
-- **`uploads`** — id, user_id, image_url, ai_prompt, caption, dream_medium, dream_vibe, is_ai_generated, is_posted, is_first_dream, comment_count, like_count, created_at
-- **`user_recipes`** — user_id (PK), recipe (JSONB VibeProfile v2), onboarding_completed, ai_enabled, dream_wish, created_at, updated_at
-- **`push_tokens`** — Expo push tokens
-
-### Dream system
-
-- **`dream_mediums`** — art style definitions (key, label, directive, flux_fragment, kontext_directive, is_active, is_bot_only, is_character_only, face_swaps, character_render_mode, sort_order, allowed_models)
-- **`dream_vibes`** — vibe definitions (key, label, directive, sort_order, is_active)
-- **`dream_cast`** — user's cast photos (cast_role, photo_url, description, relationship)
-- **`dream_seeds`** — JSONB SHAPE inside `user_recipes.recipe` (not a separate relational table), holding the user's `places: string[]`. The `things` key was stripped 2026-06-02 with the objects feature rip-out (migration 216 JSONB cleanup); `characters` is vestigial (cast lives in `dream_cast`).
-- **`location_cards`** — 63 curated locations (palette, atmosphere, architecture, light_signature, texture_details, cinematic_phrases, fusion_settings, biome_config, is_approved)
-- **`location_iconic_spots`** — per-location signature spots
-- ~~`object_cards`~~ — DROPPED 2026-06-02, migration 216, see `project_objects_removed_2026-06-02` memory
-- **`bot_seeds`** — bot-specific seeds with `used_at` lifecycle
-- **`nightly_seeds`** — 8 pools × 100 slotted templates for user nightly dreams. Permanent, no usage tracking.
-- **`dream_templates`** — LEGACY (not read by any code, will be dropped)
-
-### Generation infrastructure
-
-- **`ai_generation_log`** — audit trail (recipe_snapshot, rolled_axes, enhanced_prompt, model_used, cost_cents, status)
-- **`ai_generation_budget`** — daily per-user cost
-- **`dream_jobs`** — legacy in-flight tracking (status: processing/done/failed/nsfw)
-- **`dream_queue`** — async queue (queued → in_progress → completed/failed → dead_letter; claim via `claim_dream_queue_job` / `claim_dream_queue_jobs` = SELECT FOR UPDATE SKIP LOCKED; `source` ∈ first_dream/nightly/create/dlt; `dedup_key` unique index = per-source-per-day idempotency; `attempt_count` + `created_at`-future backoff). Drained by `dream-queue-worker` (pg_cron, migration 193).
-
-### Social
-
-- `likes`, `favorites`, `follows`, `follow_requests`, `friendships`, `comments`, `comment_likes`, `post_shares`, `post_impressions`, `blocked_users`, `reports`
-
-### Notifications + economy
-
-- **`notifications`** — recipient_id, actor_id, type (`dream:*`, `wish:*`, `welcome:*`, etc.), upload_id, comment_id, body, is_read
-- **`sparkle_transactions`** — spend/grant audit log
-
-### Notable RPCs
-
-`get_feed`, `get_friends_feed`, `get_following_feed`, `get_inbox`, `get_comments`, `get_public_profile`, `spend_sparkles`, `grant_sparkles`, `refund_sparkles` (idempotent), `record_impression`, `get_dream_mediums`, `get_dream_vibes`, `get_bot_thumbnails`, `get_vibe_stats`, `approve_follow_request`, `block_user`, `finalize_nightly_upload`, `delete_own_account`, `admin_delete_upload`, `claim_dream_queue_job`, `claim_dream_queue_jobs` (batch), `is_pro_active` (single-source Pro/trial gate — migration 176).
+**Pro perk.** Long-press save-to-photos for HQ downloads + a nightly dream every night. 14-day trial on signup. Purchase flow: app → RevenueCat SDK → Apple → RevenueCat webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC or pro flag flip. RevenueCat webhook secret: `REVENUECAT_WEBHOOK_SECRET` (Supabase Edge secrets). Setup: `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`.
 
 ---
 
-## Design System
+## Onboarding
 
-- **Background:** `#0F0F1A` | **Surface:** `#1A1A2E` | **Border:** `#2D2D44`
-- **Text primary:** `#FFFFFF` | **Text secondary:** `#9CA3AF`
-- **Accent (purple):** `colors.accent` | **Like (red):** `colors.like`
+5 data steps (welcome, locations, dream cast, mood sliders, reveal) wrapped by 5 info/selector screens (4 InfoStep cards + bot_selector) — 10 total UI screens in the STEPS array, orchestrated by a single pager at `app/(onboarding)/index.tsx`. Profile saves on first dream generation (not just on post).
 
-**Rules:**
+- **Locations:** curated 63 location cards (`location_cards` DB table). Min 3 / max 10. Stored as `dream_seeds.places[]`. NEVER free-text — locations come from cards with rich essence data.
+- **Dream Cast:** photo upload for self + plus_one. Llama Vision (`describe-photo`) generates descriptions. Relationship picker for +1.
+- **Mood Sliders:** 4 bipolar (peaceful↔chaotic, cute↔terrifying, minimal↔maximal, realistic↔surreal).
+- **Reveal:** first-dream generation via the `nightly-dreams` engine with a forced cast face swap; post / skip; 25-sparkle welcome; welcome notification.
 
-1. NativeWind `className` preferred for new components; existing `StyleSheet.create` (53+ files) is fine — match the file's existing style. Don't bulk-migrate.
-2. Never `any`.
-3. Always handle loading and error states in UI.
-4. Supabase queries go in TanStack Query hooks under `hooks/`.
-5. Keep screens thin — logic in hooks, UI in components.
-6. Dark-mode only — no light theme.
-7. `expo-image`, never RN `Image`.
+VibeProfile v2 is the only supported format (legacy v1 + `aesthetics`/`art_styles` favorites + `objects/things` were ripped out — migrations 216 + 218).
+
+---
+
+## Working With Kevin
+
+**Team.** Kevin is the sole human dev; Claude is the other dev. No PR review. All agents commit directly to `main` — no feature branches. Kevin keeps concurrent agents on different areas; when they collide, resolve in real time. **Don't edit files outside your task's scope** — if another agent has WIP in the working tree, leave their files alone.
+
+**Screenshots.** When Kevin asks to view one: `ls -t ~/Desktop/*.png | head -1` then Read it.
+
+**Node scripts.** `export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>`.
+
+**Deploying Edge Functions.** `supabase functions deploy <name> --no-verify-jwt`. **Always `--no-verify-jwt`. Deploy immediately after editing — don't wait to be asked.** Active functions: `generate-dream`, `nightly-dreams`, `dream-queue-worker`, `face-swap-dual`, `restyle-photo`, `describe-photo`, `classify-photo`, `extract-style`, `revenuecat-webhook`, `send-push`, `refund-self-moderation`, `refund-stuck-jobs`, `upscale-image`.
+
+**Migrations.** Files in `supabase/migrations/`. Run manually in Supabase dashboard SQL editor (DDL can't go through the JS client). Before adding one: `ls supabase/migrations/ | grep ^NNN` to check prefix collisions. For follow-ups to an existing number, use `NNNa_`, `NNNb_`.
+
+**Running the app — `dreambot` zsh function** (in Kevin's `~/.zshrc`, NOT the repo). `dreambot` = Debug + Metro tab (daily-dev default). `dreambot --release` = Release build (no `__DEV__`, no Metro) — required to test Sentry + PostHog (both gated on `!__DEV__`). `--clean` forces `expo prebuild --clean`. Flags combine.
+
+**Dev build for native modules.** Must use dev build via Xcode, not Expo Go. After adding native packages: `cd ios && pod install && cd ..` then rebuild.
+
+**Running nightly dreams locally.** `node scripts/nightly-dreams.js` (reads `.env.local`).
+
+**Setting a sparkle balance.** Inline node one-liner with `SUPABASE_SERVICE_ROLE_KEY` from `.env.local` → `users.update({sparkle_balance:N}).eq('id', kevinUserId)`. Project URL: `https://jimftynwrinwenonjrlj.supabase.co`.
+
+**Kevin's user ID.** `eab700d8-f11a-4f47-a3a1-addda6fb67ec`.
+
+**Observability.** Sentry (`@sentry/react-native`, gated on `EXPO_PUBLIC_SENTRY_DSN` + `!__DEV__`) and PostHog product analytics (`posthog-react-native`, same gating). Manual Sentry test: Settings → "Run Dream Generator" (admin) → 🐛 top-right. PostHog MCP available via `.mcp.json` (project DreamBot, id 442133). Full picture: `memory/project_observability_setup.md`, event taxonomy: `ANALYTICS_PLAN.md`.
+
+**Notifications.** Two layers — in-app inbox (the `notifications` table → `useInboxGrouped`) and push banners (`send-push` Edge Function → Expo). Push is fired by a DB trigger on `notifications` INSERT (migration 196); to send any push, just insert a notification row. Architecture: `NOTIFICATIONS_ARCHITECTURE.md`.
+
+---
+
+## Hard Rules (no exceptions)
+
+- **NEVER unscoped deletes on `bot_seeds` or `nightly_seeds`.** Scope by category prefix. `SELECT category, count(*) GROUP BY category` BEFORE any delete. The April 2026 incident wiped both tables with one unscoped delete.
+- **NEVER `git add -A` or `git add .`.** Always explicit paths — Kevin runs multiple agents in the same working tree; everything you don't recognize as yours stays unstaged.
+- **NEVER edit another agent's WIP files.** Edit only files in your task's scope.
+- **NEVER use `as Function`, `as any`, `as unknown as <type>` to bypass types.** Regenerate types instead: `supabase gen types typescript --linked 2>/dev/null > types/database.ts`.
+- **NEVER fire-and-forget critical RPCs without `.catch` that logs in dev.** Silent failures lived for months on `record_impression`.
+- **NEVER comment out a rate limit, security check, or RLS policy "for now".** Delete it AND create a follow-up. Comments rot.
+- **NEVER use `?.` in top-level module expressions** in `supabase/functions/_shared/*.ts`. Deno Edge runtime crashes (BOOT_ERROR). Use explicit null checks.
+- **NEVER enumerate biomes / materials / sub-styles in a path's `promptPrefixByPath`** (or any prompt-prefix that prepends to EVERY render of that path). Flux's CLIP tokenizer attends most to the FIRST-named noun in a comma-separated list and renders ONLY that. The prefix names the REGION; the scene content carries the biome.
+- **NEVER propose a bot path migration without re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` first**, and update it with every new lesson — don't wait to be asked.
+- **NEVER add new pixel work to `dualFaceSwap` in-process.** New steps go in a separate Edge Function. Don't introduce another base64 data URI in the swap pipeline — always upload to temp storage and pass URLs.
+- **AUDIT mediums + prefixes for accumulated cruft every ~3 months per bot, or whenever a bot's renders feel "off"** (negation cascades, camera-brand stuffing, tech-spec adjectives, travel-magazine register, mountain-photographer tropes, stacked intensifiers). Target: medium `flux_fragment` ≤ 250 chars, path prefix ≤ 120 chars. Method + cruft tables in `BOT_SCENE_QUALITY_PLAYBOOK.md` → "Medium + prefix CRUFT ACCUMULATION".
+
+---
+
+## After-Change Checklists
+
+### After adding / changing a Supabase table, column, or RPC
+
+1. **Regenerate types** — `supabase gen types typescript --linked 2>/dev/null > types/database.ts`.
+2. **For UPDATE policies on user-writable tables:** verify `WITH CHECK` OR an UPDATE trigger freezes sensitive columns. Postgres does NOT require `WITH CHECK` on UPDATE — you have to remember. Reference: `migrations/108_uploads_rls_lockdown.sql` `freeze_upload_columns_on_update`.
+3. **Smoke-test new RPCs** — especially fire-and-forget ones.
+4. **Signature change on existing function:** prepend `DROP FUNCTION IF EXISTS public.<name>(<args>);` before `CREATE OR REPLACE` — Postgres can't change return type in-place (42P13).
+
+### After adding a migration file
+
+1. `ls supabase/migrations/ | grep ^NNN` for prefix collisions.
+2. `npx jest __tests__/lib/migrations.test.ts` enforces unique numeric prefixes.
+3. Run via Supabase dashboard SQL editor.
+
+### After adding a medium to `dream_mediums`
+
+1. **Insert the DB row.** `key` MUST equal `label.toLowerCase().replace(/ /g, '_')`. Directive ≤ ~150 words, front-load identity rules, avoid female-coded language for any-gender mediums, no camera/composition language.
+2. **Add `MEDIUM_CONFIGS` entry in `_shared/photoPrompts.ts`** — without it the photo-restyle path falls through to a generic 1-liner and ignores the directive. After adding, grep for the key to confirm no duplicates.
+3. **Update `__tests__/lib/photoPrompts.test.ts` `ACTIVE_MEDIUMS`.** Test fails if step 2 was skipped.
+4. **Optional: bot config** — add the key to the bot's `mediums` in `scripts/bots/<botname>/index.js`.
+5. **Deploy** `generate-dream` + `restyle-photo`. Smoke-test all 5 user paths (no-hint scene, text prompt, self-reference, photo restyle, photo+prompt). Full reference: `MEDIUMS_FAQ.md`.
+
+### After ripping out a feature
+
+1. Audit DB columns it owned — write cleanup migration for vestigial columns (SightEngine + objects + VibeProfile favorites all left dead state for months before being cleaned up).
+2. Search hanging RLS references, triggers, RPCs that read those columns.
+3. Search type definitions that mention the feature.
+
+### Auto-QA loop (when Kevin says "run an automated QA loop on path X")
+
+Self-driven, no human review per round. Tag every render `auto-qa: <path> R<N>` for filtering. Batches of 5 with `--post`. Read the JPEG, grade 0–5, identify the failing layer (composition prepend / Sonnet brief / action pool / medium / swap pipeline), make ONE change per round, document in `memory/project_auto_qa_<path>.md`. Stop at 3 consecutive 4.5+/5 rounds OR 20 rounds OR Kevin stops. Cross-reference Kevin's hearts every ~5 rounds.
+
+### Seed tables — `bot_seeds` vs `nightly_seeds` (separate; never cross-contaminate)
+
+- **`bot_seeds`** — per-bot, `used_at` lifecycle, auto-regenerates when exhausted.
+- **`nightly_seeds`** — 8 pools × 100 slotted templates for user nightly dreams; permanent, random pick.
+
+Bot seed cleanup: `.delete().like('category', 'botname_%')` — scoped. Nightly seed refresh: `node scripts/generate-nightly-seeds.js`.
+
+---
+
+## Pre-Commit + Test Lanes
+
+A husky pre-commit hook runs `./scripts/check-secrets.sh` then `npm run check` (prettier → lint → tsc → typecheck:deno → jest). Don't bypass with `--no-verify` — every historical bypass broke CI.
+
+```
+npm run check          # full pre-commit gate
+npm run fix            # auto-fix prettier + lint
+npm run test           # jest fast suite
+npm run test:dbspec    # live-DB lane (CI only — no local Postgres on Kevin's Mac)
+```
+
+**Two test lanes.**
+
+1. **Fast jest** (`*.test.ts`, husky + CI `check`) — pure logic. `_shared/*` Deno modules importable via `@engine/*`; URL imports stubbed in `__tests__/__mocks__/`. Tests that import `@engine/*` are excluded from `tsc` — add new ones to `tsconfig.json` `exclude`.
+2. **Live-DB** (`*.dbspec.ts`, CI `db-tests` job only — a `postgres:16` service container) — for SQL invariants (`ON CONFLICT`, `FOR UPDATE SKIP LOCKED`, triggers, security-definer fns). Fixture pattern: FK-stub tables + the real DDL extracted from the migration file via `__tests__/db/_support/pg.ts`. Currently covers: `claim_upscale_job`, `claim_dream_queue_jobs` SKIP LOCKED, `is_pro_active`, `freeze_upload_columns`, notification opt-in, rate-limit inserts. RLS not yet covered. Validate changes by pushing + `gh run watch` the `db-tests` job — no local Docker.
 
 ---
 
@@ -494,239 +230,23 @@ When Kevin says "run an automated QA loop on path X" — Claude does the **entir
 
 **Repo:** `konakevin/dreambot`. `main` is the trunk.
 
-**Workflow:** all agents (Claude included) commit directly to `main`. No feature branches. Kevin keeps concurrent agents on different areas of the code so collisions are rare; when they happen, resolve conflicts in real time. The one rule that still holds: **don't edit files outside your task's scope** — if another agent has WIP staged or unstaged in the working tree, leave their files alone (edit in place if you must touch the same file, never stash or revert their work).
-
-**CI** (`.github/workflows/ci.yml`): tsc, lint, prettier, jest on every push.
-**Nightly cron** (`.github/workflows/nightly-dreams.yml`): `0 8 * * *` (08:00 UTC daily, no jitter). Fails loud (exit 1) on a zero-output or >50%-failure run. Secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
-**Bot dispatcher** (`.github/workflows/bots-dispatcher.yml`): every 15 min. Reads `bot_schedules`, runs each due bot via `scripts/run-bot.js`. Change cadence via `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = 'x';`. Same secrets as nightly. Audit: `SELECT bot_name, posts_per_day, active, next_due_at FROM bot_schedules ORDER BY next_due_at;`.
-
----
-
-## Pre-Commit Checklist
-
-A husky pre-commit hook auto-runs `npm run check` (prettier → lint → tsc → jest) and blocks the commit on any failure.
-
-```bash
-npm run check          # full pre-commit gate
-npm run fix            # auto-fix prettier + lint
-npm run format:check   # prettier --check
-npm run lint           # expo lint
-npm run typecheck      # tsc --noEmit
-npm run test           # jest
-```
-
-Bypass: `git commit --no-verify`. Don't abuse — every bypass has historically broken CI.
-
-### Two test lanes
-
-1. **Fast jest suite** (`npm run test`, runs in the husky gate + the CI `check` job) — pure logic / RN-agnostic units in `__tests__/**/*.test.ts`. `_shared/*` Deno modules are importable via `@engine/*` (jest `moduleNameMapper`); their URL imports (`https://esm.sh/...`) are stubbed in `__tests__/__mocks__/`. Tests that import `@engine/*` are excluded from `tsc` (the Deno URL imports don't resolve) — add new ones to the `tsconfig.json` `exclude` list, matching the existing entries.
-
-2. **Live-DB lane** (`npm run test:dbspec`, runs ONLY in the CI `db-tests` job — a `postgres:16` service container). For invariants that live in **SQL** and can't be faked in jest: `ON CONFLICT` atomicity, `FOR UPDATE SKIP LOCKED`, triggers, security-definer functions. Convention:
-   - Files: `__tests__/db/*.dbspec.ts`. The `.dbspec.ts` suffix is deliberately OUTSIDE the default jest `testMatch`, so the fast suite + husky never touch them.
-   - **Fixture pattern (no drift):** build a MINIMAL fixture — FK-stub tables (`CREATE TABLE public.users (id uuid PRIMARY KEY)` …) + the **real DDL extracted from the migration FILE** via `__tests__/db/_support/pg.ts` (`makePool`, `migrationSql`, `extract`). Do NOT replay full migration history — vanilla PG lacks Supabase-only roles/extensions (`auth`, `vault`, `pg_cron`). Loading the live DDL means a migration shape-change fails loudly instead of testing a stale hand-copy.
-   - **Covered:** `claim_upscale_job` (182), `claim_dream_queue_jobs` SKIP LOCKED (156+192), `is_pro_active` (176 — the Pro/trial SoT third runtime), `freeze_upload_columns` trigger (108). **NOT covered: RLS** (policies span migrations 079/116 + need `auth.uid()`/role scaffolding — add later if needed).
-   - **No local Postgres** on Kevin's Mac (no Docker), so dbspec only runs in CI. Validate changes by pushing + `gh run watch` the `db-tests` job. The service container uses `POSTGRES_HOST_AUTH_METHOD=trust` + a passwordless `DATABASE_URL` — never add a password literal (GitGuardian flags it). `pg`/`@types/pg` are devDeps.
-
----
-
-## After-Change Checklist (READ — bug classes that have bitten us)
-
-April 2026 audit found 14 silently-broken issues. Pattern: a step needed elsewhere when X was added got forgotten, CI didn't catch it. Full root-cause writeup in `memory/feedback_audit_lessons.md`.
-
-### After adding/changing a Supabase table, column, or RPC
-
-1. **Regenerate types** — `supabase gen types typescript --linked 2>/dev/null > types/database.ts`. Skipping this leads to `(supabase.from as Function)('table_name')` workarounds that bypass the type system.
-2. **For UPDATE policies on user-writable tables:** verify `WITH CHECK` clause OR an UPDATE trigger freezes sensitive columns (`is_approved`, `user_id`). Postgres does NOT require `WITH CHECK` on UPDATE — you have to remember. Reference: `migrations/108_uploads_rls_lockdown.sql` `freeze_upload_columns_on_update`.
-3. **Smoke-test new RPCs** — especially fire-and-forget. `record_impression` was broken for the app's lifetime (boolean = integer crash) because clients didn't `.catch`.
-
-### After adding a migration file
-
-1. `ls supabase/migrations/ | grep ^NNN` to check for prefix collisions.
-2. `npx jest __tests__/lib/migrations.test.ts` enforces unique numeric prefixes.
-3. Need a follow-up to existing number? Use `NNNa_`, `NNNb_` suffixes — alphabetical order resolves them deterministically.
-4. Run via Supabase dashboard SQL editor (DDL can't go through JS client).
-
-### After adding a medium to `dream_mediums`
-
-1. Update `__tests__/lib/photoPrompts.test.ts` `ACTIVE_MEDIUMS`.
-2. Add `MEDIUM_CONFIGS` entry in `_shared/photoPrompts.ts`. Test fails if forgotten.
-3. Full medium-add checklist above in "Adding New Mediums/Styles".
-
-### After ripping out a feature
-
-1. Audit DB columns it owned — write cleanup migration for vestigial columns. (SightEngine removal left `is_moderated`/`is_approved` as confusing dead state for months.)
-2. Search hanging RLS references, triggers, RPCs that read those columns.
-3. Search type definitions that mention the feature.
-
-### Seed tables — `bot_seeds` and `nightly_seeds` (SEPARATE; never cross-contaminate)
-
-- **`bot_seeds`** — bot-specific, `used_at` lifecycle. Used by `scripts/run-bot.js` (via the picker in `botEngine.js`). Auto-regenerates when exhausted.
-- **`nightly_seeds`** — 8 pools of slotted templates for user dreams. Used by Edge Function nightly path. Permanent, random pick.
-- **`dream_templates`** — LEGACY, no readers, will be dropped.
-
-**The April 2026 incident:** unscoped delete on the old shared `dream_templates` wiped ALL bot seeds + ALL nightly templates in one command. Bot seeds partially recovered from backup; nightly templates redesigned from scratch. This is why the tables were split.
-
-**Hard rules:**
-
-- NEVER unscoped deletes on either seed table.
-- Bot seed cleanup: `.delete().like('category', 'botname_%')` — scoped to one bot.
-- Nightly seed refresh: `node scripts/generate-nightly-seeds.js` — regenerates all 8 pools.
-- ALWAYS `SELECT category, count(*) GROUP BY category` BEFORE any delete.
-
-### Hard rules (no exceptions)
-
-- **NEVER unscoped deletes on `bot_seeds` or `nightly_seeds`.** Scope by category prefix. Query GROUP BY first.
-- **NEVER comment out a rate limit, security check, or RLS policy "for now".** Delete it AND create a follow-up task. Comments rot.
-- **NEVER use `as Function`, `as any`, `as unknown as <type>` to bypass types.** Regenerate types instead.
-- **NEVER fire-and-forget critical RPCs without `.catch` that logs in dev.** Silent failures lived for months.
-- **NEVER write a SQL migration without checking `ls supabase/migrations/` for the next free number.**
-- **NEVER edit another agent's WIP files** when worktrees exist. Edit only files in your task's scope.
-- **NEVER propose a bot path migration without re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` first**, and update it with every new lesson — don't wait to be asked.
-- **NEVER enumerate biomes / materials / sub-styles in a path's `promptPrefixByPath`** (or any prompt-prefix that prepends to EVERY render of that path). Flux's CLIP tokenizer attends most to the FIRST-named noun in a comma-separated list and renders ONLY that, regardless of the actual subject content rolled. Symptom: every render on the path looks like the same composition even though the subject pool is varied. Bit African-landscape R5 ("savanna or Okavango Delta or Sahara dune sea or Congo Basin canopy or Madagascar baobab forest" → every subject rendered as savanna) and Andes-Patagonia R0 ("granite spires and glacier ice and salt-pan flats and emerald canopy" → Iguazu Falls / Valle de la Luna / Chimborazo volcano / Alpamayo ice spires all rendered as Patagonian granite peaks). FIX: prefix names the REGION only (`'South American raw nature, sharp detail, gallery-quality, masterpiece'`), the SCENE content carries the biome.
-- **AUDIT mediums + prefixes for accumulated cruft every ~3 months per bot, or whenever a bot's renders feel "off".** Tokens accumulate over time and rarely get removed even when they cause harm. Eight specific cruft categories drift mediums toward AI-CGI / luxury-resort / mountain-photographer priors: (1) negation cascades (`NOT golden hour`, `NOT HDR` — the negated noun renders anyway), (2) camera-brand stuffing (one Hasselblad ref is fine; five is cruft), (3) tech-spec adjectives (`8K`, `100MP`, `razor-sharp tack-sharp` — AI-generated-photo tells), (4) travel-magazine register (`wallpaper-worthy`, `Pulitzer-Prize editorial gravitas` — pulls toward resort/hotel photography prior), (5) mountain-photographer tropes (`deep tonal depth`, `dramatic atmospheric perspective` — pulls toward Dolomites/Alps for any biome), (6) resort-coded aesthetics (`hyperreal rendering`, `pristine`), (7) stacked generic intensifiers (`masterpiece, breathtaking, stunning, epic, cinematic` — burns attention budget on zero semantic content), (8) photographer name-drops. Target after audit: medium `flux_fragment` ≤ 250 chars, path prefix ≤ 120 chars. The EarthBot 2026-06-02 cleanup compressed the medium from 882 → 182 chars after a hearted reef-paradise render came back as a Dolomites hotel; full audit method + cruft tables in `BOT_SCENE_QUALITY_PLAYBOOK.md` → "Medium + prefix CRUFT ACCUMULATION".
-
----
-
-## Working With Kevin
-
-### Screenshots
-
-When Kevin asks to view a screenshot: `ls -t ~/Desktop/*.png | head -1` then read it.
-
-### Running Node Scripts
-
-```bash
-export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>
-```
-
-### Deploying Edge Functions
-
-```bash
-supabase functions deploy <function-name> --no-verify-jwt
-```
-
-**Always `--no-verify-jwt`. Deploy immediately after editing — don't wait to be asked.**
-
-Active functions: `generate-dream`, `nightly-dreams`, `dream-queue-worker`, `face-swap-dual`, `restyle-photo`, `describe-photo`, `classify-photo`, `extract-style`, `revenuecat-webhook`, `send-push`, `refund-self-moderation`, `refund-stuck-jobs`.
-
-### Dev Build
-
-Native modules — must use dev build via Xcode, not Expo Go. After adding native packages: `cd ios && pod install && cd ..` then rebuild.
-
-### Running the app — `dreambot` shell function
-
-Kevin runs the app via the `dreambot` zsh function (in his `~/.zshrc`, NOT the repo — it auto-prebuilds when `app.config.js`/`.env.local` change, builds, installs on the iPhone 17 Pro sim, launches):
-
-- **`dreambot`** — Debug + Metro in a tab (live logs/reload). Daily-dev default.
-- **`dreambot --release`** — Release build (production JS, `__DEV__` false), no Metro. **Use this to test release-only behavior** (see Sentry below). After editing the function, `source ~/.zshrc` or open a new tab.
-- **`--clean`** forces `expo prebuild --clean`. Flags combine (`dreambot --release --clean`).
-
-### Crash Reporting (Sentry)
-
-`@sentry/react-native`, wired in `lib/sentry.ts` (`initSentry()` + `captureException()`), `app/_layout.tsx` (`Sentry.wrap(RootLayout)`), and `AppErrorBoundary`. Key facts:
-
-- **Gated on `EXPO_PUBLIC_SENTRY_DSN`** — a total no-op without it.
-- **OFF in `__DEV__`** (`enabled: !__DEV__`) — a normal `dreambot`/debug build never reports. **To test it you MUST build Release** (`dreambot --release`).
-- **Manual test event:** Settings → "Run Dream Generator" (admin row) → 🐛 bug icon top-right → fires a captured error → check sentry.io → Issues.
-- **Source maps:** local release builds set `SENTRY_DISABLE_AUTO_UPLOAD=true` (the `dreambot --release` function) because the Sentry org/project/token are EAS-only secrets — without it `sentry-cli` fails the "Bundle React Native code and images" phase. So local traces are minified; **production `eas build --profile production` uploads source maps** (via the `SENTRY_ORG`/`SENTRY_PROJECT`/`SENTRY_AUTH_TOKEN` production EAS env vars) → symbolicated traces.
-
-Full observability picture (this + the AI-failure / dream-queue CI monitors): `memory/project_observability_setup.md`.
-
-### Product Analytics (PostHog)
-
-`posthog-react-native`, wired in `lib/posthog.ts` (gated client + `capture`/`identifyUser`/`resetAnalytics`), `lib/analytics.ts` (20 typed product-event wrappers — the ONLY explicit events; screen views + tap autocapture are automatic via `_layout.tsx` ScreenTracker + PostHogProvider). Event → call-site map: `ANALYTICS_PLAN.md`.
-
-- **Same gating as Sentry:** active only when `EXPO_PUBLIC_POSTHOG_KEY` is set AND `!__DEV__`. Debug builds send nothing — **test with `dreambot --release`**. Native module → ships with a rebuild, not OTA.
-- **Every event is tagged `environment` (`local`/`preview`/`production`)** via `posthog.register({ environment: APP_ENV })` (`EXPO_PUBLIC_APP_ENV`, default `local`) so local test events stay out of production dashboards. Caveat: `register()` persists the super-property async, so the earliest cold-start SDK lifecycle/autocapture events (`Application Installed`, first `$screen`/`$identify`) can miss the tag; custom `capture()` events fire well after launch and are reliably tagged.
-- **PENDING:** add `EXPO_PUBLIC_POSTHOG_KEY` to EAS envs (only `.env.local` has it so far) before cloud builds emit analytics.
-
-**PostHog MCP (for Claude):** project-scoped MCP server defined in `.mcp.json` (`https://mcp.posthog.com/mcp`, OAuth — `/mcp` → posthog to authenticate), pre-approved via `.claude/settings.json` `enabledMcpjsonServers`. Bound to PostHog project **DreamBot** (id 442133). Use it to validate/query events: discover with `search`/`tools`, `info <tool>` before any `call`, then `read-data-schema` (kind `events`) for the taxonomy or `execute-sql` / `query-*` for data. Quick "are events flowing" check: `execute-sql` count over `events` in the last few hours grouped by `event` + `properties.environment`.
-
-### Notifications & Push Delivery
-
-Two layers — **in-app inbox** (the `notifications` table → polled/realtime by `useInbox`, drives the tab badge) and **push banners** (`send-push` Edge Function → Expo). The inbox row is the **guaranteed delivery backstop**; push rides on top of it.
-
-- **Push is fired by a DB trigger, NOT inline code.** `trg_notify_send_push` (migration `196`) runs `AFTER INSERT ON notifications` → `net.http_post` (pg_net) to `send-push`, wrapping the row as `{type,table,record}`. Fires for **every** notification type. So to send any push, just insert a `notifications` row — never call `send-push` directly. (History: `send-push` had **zero callers for the whole app lifetime** — no push ever fired, only the inbox badge — until migration 196. Don't let this regress; it's versioned now so it can't silently vanish like the pre-193 queue cron did.)
-- **`send-push` auth:** validates `Authorization: Bearer <DREAM_QUEUE_WORKER_TOKEN>` (the token the trigger reads from Vault `dream_queue_worker_token`). Same secret the queue worker uses — keep the Vault secret and the `DREAM_QUEUE_WORKER_TOKEN` edge secret in sync or push 401s.
-- **Dream completion notifications** (`generate-dream` / `restyle-photo`) are **opt-in**: only sent when the user tapped "Queue This" (sets `dream_jobs.notify_on_complete`). A user who WAITS on the loading screen gets no ping. The flag is set by `request_dream_notification` — an **idempotent upsert** (migration `195`) so it lands even if tapped before the server inserts the job row (the original silent-failure race). Gate: `_shared/notify.ts:shouldSendCompletionNotification`.
-- **Render durability:** both functions wrap their handler in `EdgeRuntime.waitUntil(task)` (then `await` the same promise for connected clients) so a user who queues a dream and then **backgrounds/kills the app** still gets it rendered, persisted, and notified — the connection dropping no longer aborts the render. Renders (~24s) fit the 150s/400s background wall-clock; did NOT build a `dream_queue` create/dlt dispatcher (queue scale-arch is deferred — see Scaling Initiative).
-- **No silent failures:** notification-insert errors are logged (not swallowed); the client RPC retries once. `send-push` **prunes** dead tokens (deletes the `push_tokens` row on a `DeviceNotRegistered` ticket) and records **systemic** failures (non-ok HTTP, non-stale ticket errors) to `push_send_failures` (migration `197`); `scripts/check-push-failures.js` + `.github/workflows/push-failure-monitor.yml` fail loud (red GitHub run → email; no Slack) when those spike. Remaining gap: ticket-level pruning only catches tokens Expo flags immediately — tokens that fail only in delayed Expo _receipts_ aren't pruned (would need a receipt-polling job). Full writeup: `memory/project_notification_system_fix.md`.
-- **APNs configured + push delivering end-to-end (verified 2026-05-27).** A live test push landed on-device; `push_send_failures` clean (no more `InvalidCredentials`). The APNs Auth Key is EAS-managed (`eas credentials` → iOS → "Set up your project to use Push Notifications" auto-generated + stored it server-side under the Apple account — account-wide, no expiry). If push ever breaks again, that's the first thing to re-check (and the push-failure monitor will flag it). Recall: push reaches a device whose app is **closed or backgrounded** (OS-delivered) — that's the point of the "Queue This" flow; foreground pushes are suppressed in favor of the in-app dot+bubble (`usePushNotifications` handler); the inbox badge is seen on next app open.
-
-### Database Migrations
-
-Files in `supabase/migrations/`. Run manually in Supabase dashboard SQL editor. `get_feed` RPC must be DROPped before recreating.
-
-### Running Nightly Dreams Locally
-
-```bash
-export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node scripts/nightly-dreams.js
-```
-
-Reads keys from `.env.local`. Clear budget first if testing specific users.
-
-### Setting Sparkle Balance
-
-Inline node one-liner using `SUPABASE_SERVICE_ROLE_KEY` from `.env.local` → `users.update({sparkle_balance:N}).eq('id', kevinUserId)`. Project URL: `https://jimftynwrinwenonjrlj.supabase.co`.
-
-### Kevin's User ID
-
-`eab700d8-f11a-4f47-a3a1-addda6fb67ec`
-
-### Team
-
-Kevin is the sole human developer. Claude is the other dev. No PR review — feature branches exist for cleanliness/atomicity. Land via merge once ready.
-
----
-
-## Scaling Initiative (read before touching dream-generation hot path)
-
-The dual face-swap pipeline previously hit HTTP **546 (`WORKER_LIMIT_EXCEEDED`)** during open-prompt dual-cast renders — Supabase Pro per-invocation budget is ~150 MB memory / ~2 s CPU / 150 s wall. Three things stacked: longer Sonnet briefs, variable Replicate latency (15–43s), rapid test cadence.
-
-**Phase 1 (shipped) — memory hygiene in `_shared/faceSwap.ts`** — three load-bearing fixes:
-
-1. `perturbSourceImage` uploads to temp storage instead of returning a 5–7 MB base64 URI; caller cleans up in `finally`.
-2. Sequential post-swap downloads (was `Promise.all`) — costs ~500ms wall, halves the memory window.
-3. Eagerly null buffers after last use (`imgData`, `leftPixels`/`rightPixels`, `leftSwapData`/`rightSwapData`).
-
-Net: ~10–15 MB peak savings. Helped, not enough alone.
-
-**Phase 2 (shipped, dormant) — function split via `DUAL_SWAP_FANOUT` env flag.** New `face-swap-dual` Edge Function owns the entire `dualFaceSwap` body in its own 150 MB isolate. Callers route through `_shared/dualSwapDispatch.ts:dispatchDualFaceSwap()`:
-
-- `DUAL_SWAP_FANOUT=true` → `supabase.functions.invoke('face-swap-dual', ...)`
-- unset → in-process `dualFaceSwap()` (current default)
-
-Activate: `supabase secrets set DUAL_SWAP_FANOUT=true`. Roll back: unset. Zero code change.
-
-Single-cast face swap is NOT split — light enough to stay in-process.
-
-**Async queue + fan-out workers (`dream_queue` + `dream-queue-worker`).** The worker **batch-claims** up to `MAX_JOBS_PER_TICK` (10) due jobs via `claim_dream_queue_jobs` (SELECT FOR UPDATE SKIP LOCKED) and processes them **in parallel**. Critically, it **acks the trigger immediately and runs the batch via `EdgeRuntime.waitUntil`** — the cron's `pg_net` call disconnects after a short timeout, and Edge isolates are reaped at the **150s request-idle limit** (CPU 2s excl I/O, wall-clock 150s free / 400s paid), so awaiting renders synchronously caused `IDLE_TIMEOUT` (root-caused + fixed 2026-05-26, commit `71568afa`; the render itself is fine — ~24s). Per-source dispatch:
-
-- **nightly** (LIVE 2026-05-26) — fire to the `nightly-dreams` render Edge Function via its worker-token branch (`Bearer DREAM_QUEUE_WORKER_TOKEN`, `{user_id}` in body, recipe loaded fresh from DB so edits land), each render its own isolate; then finalize. NSFW → immediate dead-letter (no costly retries). Dispatcher: `dispatchers/nightly.ts`.
-- **create / dlt** — not implemented (throw `dispatcher_not_implemented`).
-- **first_dream** — DISPATCHER REMOVED 2026-06-02. Onboarding renders the first dream synchronously via the `nightly-dreams` engine with a forced cast face swap (see the First dream note under Generation Architecture). The vestigial 'first_dream' enum value remains in `dream_queue.source` CHECK constraint for back-compat with pre-2026-06-02 dead-letter rows — old rows now hit the default switch branch and dead-letter cleanly via `unknown_source:first_dream`.
-
-Retry = exponential backoff (1m/5m/30m/2h via `created_at`-in-future), dead_letter after 5 attempts; stale-recovery requeues `in_progress` jobs older than 5min. **Trigger:** pg_cron every minute (migration `193`, worker token read from Supabase Vault `dream_queue_worker_token`). **Idempotency:** `dream_queue.dedup_key` unique index (`nightly:<uid>:<UTC-date>`). **Health monitor:** `scripts/check-dream-queue.js` + `.github/workflows/dream-queue-monitor.yml` (hourly, fails loud on stuck-queued / dead-letter pileup) — this replaced the old inline cron's exit-1-on-zero signal. `refund-stuck-jobs` sweeps the legacy `dream_jobs` (paid create path), NOT the queue. **Tuning knobs:** `MAX_JOBS_PER_TICK` × pg_cron cadence × overlapping ticks (SKIP LOCKED). Plan: `QUEUE_WORKERS_REFACTOR.md` (matches reality; `DREAM_QUEUE_PLAN.md` describes an unbuilt `dream_jobs` design — ignore). **Future scale-up if a tick can't fit its batch in wall-clock:** make each render a self-marking consumer (fire-and-forget + render owns its job row) instead of the worker awaiting the batch.
-
-**Signals to escalate further** (Replicate enterprise tier, Anthropic higher tier, or full async UI):
-
-- Replicate queue >30s consistently
-- Anthropic 429s in `ai_generation_log.fallback_reasons`
-- `generate-dream` invocation queue depth grows
-- > 200 concurrent users / >10 dreams/sec sustained
-- Compute errors return despite Phase 2
-- Daily renders >5,000
-
-**Hard rules:**
-
-- Don't disable Phase 1 memory hygiene "as just optimization." Each fix is load-bearing.
-- Don't add new pixel work to `dualFaceSwap` in-process. New steps go in a separate Edge Function in the fanout path.
-- Don't introduce another base64 data URI in the swap pipeline. Always upload to temp storage and pass URLs.
-- Don't run heavy decode/encode/stitch in `generate-dream` directly. Delegate to Edge Functions.
-- Don't pre-build new scaling architecture until at least one signal above fires.
+**Workflows (`.github/workflows/`):**
+
+- `ci.yml` — tsc, lint, prettier, jest, db-tests on every push
+- `nightly-dreams.yml` — `0 8 * * *` UTC: enqueue jobs for Pro/trial users
+- `bots-dispatcher.yml` — every 15 min: read `bot_schedules`, run due bots
+- `refund-stuck-jobs.yml` — every 5 min: sweep `dream_jobs` >5min processing
+- `upscale-sweep.yml` + `upscale-smoke-test.yml` — drain + smoke-test upscale queue
+- `dream-queue-monitor.yml` (hourly) / `ai-failure-monitor.yml` (6h) / `push-failure-monitor.yml` (6h) / `bot-health-monitor.yml` (4h) — fail-loud monitors → GitHub's built-in failure email
+
+Secrets used by crons: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
 
 ---
 
 ## Reference Docs (in repo root)
 
-`BOTS.md` (bot system + seed tables), `BOT_SCENE_QUALITY_PLAYBOOK.md` (path migration + 10/10 bar), `BOT_AXIS_REFACTOR_PLAN.md`, `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_SEED_POOL_QA.md` (per-spot eligibility curation — `pure_scene_eligible` + `character_eligible` columns, the 4-phase generation + 3 QA passes that built them), `NIGHTLY_QA_HANDOFF.md`, `QUEUE_WORKERS_REFACTOR.md` + `DREAM_QUEUE_PLAN.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`, `SPARKLE_PAYMENTS_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`, `PRO_SUBSCRIPTION_SETUP.md`, `AUTH_PROVIDERS.md`, `MEDIUMS_FAQ.md`, `BUNDLE_ID_MIGRATION.md`, `DREAMBOT.md` + `DREAMBOT_CHARACTER.md` (personality).
+- **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain), `BOTS.md`, `BOT_MODEL_TALLY.md`, `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`
+- **Engine + scaling:** `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_QA_HANDOFF.md`, `QUEUE_WORKERS_REFACTOR.md`, `V4_HARDENING_PLAN.md`
+- **Features:** `MEDIUMS_FAQ.md`, `DLT_FIDELITY_PLAN.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`, `COMMENTS_IMPLEMENTATION.md`, `UPSCALE_QUEUE_PLAN.md`, `UPSCALE_HARDENING_PLAN.md`, `NOTIFICATIONS_ARCHITECTURE.md`
+- **Money:** `SPARKLE_PAYMENTS_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`, `PRO_SUBSCRIPTION_SETUP.md`
+- **Other:** `AUTH_PROVIDERS.md`, `BUNDLE_ID_MIGRATION.md`, `ANALYTICS_PLAN.md`, `LAUNCH.md`, `DREAMBOT.md` + `DREAMBOT_CHARACTER.md` (personality)
