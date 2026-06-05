@@ -14,7 +14,8 @@
  *   @username
  *   Bio (optional, 1–2 lines)
  *   [ Edit Profile ]   [ Share ]   (own)
- *   [ Follow ]  [ Message ]  [ ⋯ ]  (other)
+ *   [ Follow ]  [ Message ]  [ ⋯ ]  (other — human)
+ *   [ Follow ]                       (other — bot)
  *
  * Borrows IG's left-aligned avatar + inline stats and IG's equal-width
  * pill action row; TikTok-bumps the avatar to 96px so the identity
@@ -68,6 +69,9 @@ interface OtherVariant extends BaseProps {
   isFollowing: boolean;
   hasRequest: boolean;
   isPrivate: boolean;
+  /** Hide Message + ellipsis controls for bot profiles — users can't DM
+   *  bots and don't need to block/report them (unfollow is enough). */
+  isBot?: boolean;
   onFollowPress: () => void;
   onMessagePress: () => void;
   onMorePress: () => void;
@@ -241,21 +245,25 @@ export function ProfileHeader(props: Props) {
               {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionPill, styles.actionPillSecondary]}
-            onPress={props.onMessagePress}
-            activeOpacity={0.7}
-          >
-            <Text style={[styles.actionText, styles.actionTextSecondary]}>Message</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.iconPill}
-            onPress={props.onMorePress}
-            activeOpacity={0.7}
-            hitSlop={6}
-          >
-            <Ionicons name="ellipsis-horizontal" size={18} color={colors.textPrimary} />
-          </TouchableOpacity>
+          {!props.isBot && (
+            <>
+              <TouchableOpacity
+                style={[styles.actionPill, styles.actionPillSecondary]}
+                onPress={props.onMessagePress}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.actionText, styles.actionTextSecondary]}>Message</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.iconPill}
+                onPress={props.onMorePress}
+                activeOpacity={0.7}
+                hitSlop={6}
+              >
+                <Ionicons name="ellipsis-horizontal" size={18} color={colors.textPrimary} />
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       )}
     </View>

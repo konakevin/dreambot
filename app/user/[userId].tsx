@@ -30,6 +30,7 @@ import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
+import { useBotUsers } from '@/hooks/useBotUsers';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
 import { PostGrid } from '@/components/PostGrid';
@@ -89,6 +90,10 @@ export default function PublicProfileScreen() {
   const { data: blockedIds = new Set<string>() } = useBlockedIds();
   const { mutate: toggleBlock } = useToggleBlock();
   const isBlocked = blockedIds.has(userId);
+  // Bot profiles hide the Message + ellipsis controls — users can't DM
+  // bots and don't need to block/report them (unfollow is enough).
+  const { data: bots = [] } = useBotUsers();
+  const isBot = bots.some((b) => b.id === userId);
 
   // Avatar preview animation hooks — ALL must be before any early returns
   const SCREEN_W = Dimensions.get('window').width;
@@ -333,6 +338,7 @@ export default function PublicProfileScreen() {
         isFollowing={isFollowing}
         hasRequest={hasRequest}
         isPrivate={!isTargetPublic}
+        isBot={isBot}
         onStatsPress={(tab) => setActiveTab(tab as Tab)}
         onAvatarPress={() => setShowAvatarPreview(true)}
         onFollowPress={handleFollow}
