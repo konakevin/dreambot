@@ -165,7 +165,7 @@ function RealtimeSubscriber() {
         () => {
           // New notification — refresh grouped inbox + distinct-group badge.
           queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
-          queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user.id] });
+          queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
         }
       )
       .on(
@@ -220,7 +220,7 @@ function RealtimeSubscriber() {
           if (status === 'done') {
             // Queued dream finished — refresh grouped inbox + badge + dreams.
             queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
-            queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
             queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
           }
         }
@@ -351,7 +351,7 @@ function DataPrefetcher() {
           if (user) {
             queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
             queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
-            queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
           }
         }
 

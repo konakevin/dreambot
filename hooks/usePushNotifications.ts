@@ -9,10 +9,10 @@ import { routeFromNotification, type NotificationRouteData } from '@/lib/notific
 // handleNotification runs ONLY for pushes that arrive while the app is in the
 // FOREGROUND. Suppress the OS banner/alert/sound/badge here: the in-app
 // indicators already cover it — the profile-tab dot + inbox header count
-// (useUnreadGroupCount, invalidated in real time by the notifications channel
-// in app/_layout.tsx) light up the instant the notification row lands. A
-// banner on top of that, while the user is actively in the app, is redundant
-// noise.
+// (useNewNotificationCount, invalidated in real time by the notifications
+// channel in app/_layout.tsx) light up the instant the notification row
+// lands. A banner on top of that, while the user is actively in the app, is
+// redundant noise.
 // When the app is BACKGROUNDED/CLOSED the OS shows the banner without consulting
 // this handler — so "your dream is ready" still pulls an away user back.
 Notifications.setNotificationHandler({

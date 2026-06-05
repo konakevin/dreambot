@@ -42,9 +42,10 @@ export default function TabLayout() {
   // <Tabs.Screen>, which makes React Navigation re-render the bottom-bar
   // icon. Without this, child-component-internal subscriptions don't
   // propagate to the tab bar (RN's BottomTabBar memoizes options).
-  // Migration 223: "viewed = read" — count = groups landed AFTER
-  // users.last_inbox_view_at. 14 likes on one post = 1 (group-collapsed
-  // semantics preserved from the legacy useUnreadGroupCount hook).
+  // Migration 223: "viewed = read" — count = notifications created AFTER
+  // users.last_inbox_view_at. Same hook drives useBadgeSync (iOS app icon
+  // badge), so the home-screen badge and this profile-tab dot are always
+  // identical.
   const { data: unreadCount = 0 } = useNewNotificationCount();
   const tabBarOpacity = useRef(new Animated.Value(1)).current;
   useEffect(() => {

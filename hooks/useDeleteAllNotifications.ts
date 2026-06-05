@@ -14,7 +14,7 @@ export function useDeleteAllNotifications() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user?.id] });
-      queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user?.id] });
     },
   });
 }

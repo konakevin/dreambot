@@ -41,7 +41,7 @@ export function useApproveFollowRequest() {
       const userId = useAuthStore.getState().user?.id;
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       queryClient.invalidateQueries({ queryKey: ['inboxGrouped', userId] });
-      queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', userId] });
+      queryClient.invalidateQueries({ queryKey: ['newNotificationCount', userId] });
       queryClient.invalidateQueries({ queryKey: ['followersList', userId] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile', userId] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile', requesterId] });
@@ -67,7 +67,7 @@ export function useDenyFollowRequest() {
       const userId = useAuthStore.getState().user?.id;
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       queryClient.invalidateQueries({ queryKey: ['inboxGrouped', userId] });
-      queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', userId] });
+      queryClient.invalidateQueries({ queryKey: ['newNotificationCount', userId] });
     },
   });
 }
@@ -87,7 +87,7 @@ export function useApproveFollowAndFollowBack() {
       const userId = useAuthStore.getState().user?.id;
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       queryClient.invalidateQueries({ queryKey: ['inboxGrouped', userId] });
-      queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', userId] });
+      queryClient.invalidateQueries({ queryKey: ['newNotificationCount', userId] });
       queryClient.invalidateQueries({ queryKey: ['followersList', userId] });
       queryClient.invalidateQueries({ queryKey: ['followingList', userId] });
       queryClient.invalidateQueries({ queryKey: ['followingIds', userId] });

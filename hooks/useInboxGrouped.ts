@@ -47,7 +47,7 @@ export type NotificationCategory =
   | 'Your dreams';
 
 export interface InboxGroup {
-  /** Stable group identity; passed to mark_group_seen / get_group_actors. */
+  /** Stable group identity; passed to delete_group / get_group_actors. */
   groupKey: string;
   type: NotificationType;
   /**
@@ -79,14 +79,17 @@ export interface InboxGroup {
   body: string | null;
   /** Newest event time in the group — drives ordering + "X minutes ago". */
   lastAt: string;
-  /** True iff any row in the group is unread. */
+  /**
+   * Legacy per-row seen_at aggregate. Retained on the wire (get_inbox still
+   * returns it) but no current consumer reads it — the inbox UX is fully on
+   * the `isNewSinceView` (migration 223) model.
+   */
   anyUnseen: boolean;
   /**
    * True iff any row in the group landed after the user's last inbox view
-   * (`users.last_inbox_view_at`). Migration 223. Drives the "new" pip on
-   * the row icon in the new viewed=read inbox UI. Distinct from `anyUnseen`
-   * — that's per-row seen_at (still used by the push-tap mark-seen path);
-   * this is the time-window-relative one the inbox cares about.
+   * (`users.last_inbox_view_at`). Drives the "new" pip on the row icon
+   * AND drives `useNewNotificationCount` (which drives the iOS app-icon
+   * badge via useBadgeSync + the profile-tab dot).
    */
   isNewSinceView: boolean;
 }

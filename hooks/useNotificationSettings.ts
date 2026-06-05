@@ -123,7 +123,7 @@ export function useToggleNotificationPref() {
       // Inbox-channel changes affect the feed + the unread badge.
       if (args.channel === 'inbox') {
         queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user?.id] });
-        queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', user?.id] });
+        queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user?.id] });
       }
     },
   });

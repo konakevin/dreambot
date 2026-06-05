@@ -8,14 +8,14 @@ import { useAuthStore } from '@/store/auth';
  * + select-mode bulk delete on the grouped inbox.
  *
  * Optimistic remove: drops the group from the cached inbox immediately, and
- * decrements the unread-group count by 1 if it had been unread. Rolls back
- * on error.
+ * decrements the new-notification count by 1 if the group was new-since-view
+ * (migration 223 model). Rolls back on error.
  */
 export function useDeleteGroup() {
   const user = useAuthStore((s) => s.user);
   const qc = useQueryClient();
   const inboxKey = ['inboxGrouped', user?.id];
-  const unreadKey = ['unreadGroupCount', user?.id];
+  const newCountKey = ['newNotificationCount', user?.id];
 
   return useMutation({
     mutationFn: async (groupKey: string) => {
@@ -28,18 +28,18 @@ export function useDeleteGroup() {
     onMutate: async (groupKey) => {
       await Promise.all([
         qc.cancelQueries({ queryKey: inboxKey }),
-        qc.cancelQueries({ queryKey: unreadKey }),
+        qc.cancelQueries({ queryKey: newCountKey }),
       ]);
 
       const prevInbox = qc.getQueryData(inboxKey);
-      const prevUnread = qc.getQueryData<number>(unreadKey);
+      const prevNewCount = qc.getQueryData<number>(newCountKey);
 
       // Remove the matching group from every cached page.
-      let wasUnseen = false;
+      let wasNew = false;
       qc.setQueryData(inboxKey, (data: unknown) => {
         if (!data || typeof data !== 'object') return data;
         const d = data as {
-          pages?: { groups: { groupKey: string; anyUnseen: boolean }[] }[];
+          pages?: { groups: { groupKey: string; isNewSinceView: boolean }[] }[];
         };
         if (!d.pages) return data;
         return {
@@ -48,25 +48,25 @@ export function useDeleteGroup() {
             ...p,
             groups: p.groups.filter((g) => {
               if (g.groupKey !== groupKey) return true;
-              if (g.anyUnseen) wasUnseen = true;
+              if (g.isNewSinceView) wasNew = true;
               return false;
             }),
           })),
         };
       });
 
-      if (wasUnseen && typeof prevUnread === 'number') {
-        qc.setQueryData(unreadKey, Math.max(0, prevUnread - 1));
+      if (wasNew && typeof prevNewCount === 'number') {
+        qc.setQueryData(newCountKey, Math.max(0, prevNewCount - 1));
       }
-      return { prevInbox, prevUnread };
+      return { prevInbox, prevNewCount };
     },
     onError: (_err, _vars, ctx) => {
       if (ctx?.prevInbox !== undefined) qc.setQueryData(inboxKey, ctx.prevInbox);
-      if (ctx?.prevUnread !== undefined) qc.setQueryData(unreadKey, ctx.prevUnread);
+      if (ctx?.prevNewCount !== undefined) qc.setQueryData(newCountKey, ctx.prevNewCount);
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey: inboxKey });
-      qc.invalidateQueries({ queryKey: unreadKey });
+      qc.invalidateQueries({ queryKey: newCountKey });
     },
   });
 }

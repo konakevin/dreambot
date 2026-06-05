@@ -33,12 +33,12 @@ export interface NotificationRouteData {
   userId?: string;
   /** Inbox-derived actor id. Treated as a synonym for userId. */
   actorId?: string;
-  /** notification.id — set in the push payload (mig: send-push/index.ts).
-   *  Used as a fallback for mark-as-seen when groupKey is absent. */
+  /** notification.id — set in the push payload (send-push/index.ts). Retained
+   *  for forensics / analytics; mark-as-viewed (migration 223 model) is a
+   *  user-level flip and doesn't need it. */
   notificationId?: string;
-  /** notification.group_key — preferred for mark-as-seen. Set in the push
-   *  payload; clears the whole aggregated group (e.g. all likes on a post)
-   *  in one shot, matching the inbox tap UX. */
+  /** notification.group_key — set in the push payload. Retained for forensics
+   *  / analytics; mark-as-viewed is user-level. */
   groupKey?: string;
 }
 
@@ -93,46 +93,36 @@ export function computeNotificationRoute(data: NotificationRouteData): string | 
 }
 
 /**
- * Mark a notification (or its whole group) as seen on the server.
- * Called by routeFromNotification when `markSeen: true` is passed (the push
- * path), so the inbox badge clears without requiring the user to open the
- * inbox separately.
+ * Mark the inbox as viewed on the server (migration 223 "viewed = read"
+ * model). Called by routeFromNotification when `markSeen: true` is passed —
+ * any tap on a notification (push or inbox row) is treated as the user
+ * acknowledging the unread state, so the app-icon badge clears.
  *
- * Inbox tap does NOT call this — it has its own optimistic mark-seen via
- * useMarkGroupSeen which also updates the inbox cache. Double-calling
- * would be wasteful (not broken — the RPC is idempotent).
+ * `mark_inbox_viewed` is a user-level flip (`users.last_inbox_view_at =
+ * now()`), not per-row — it clears the count for every currently-visible
+ * notification in one shot, matching IG/TikTok semantics. The next push or
+ * comment that lands afterward bumps the count back up.
  *
- * Prefers groupKey (handles aggregated debounced groups like
- * "Alice and 12 others liked your dream" in one shot); falls back to
- * notificationId for cases where group_key is somehow absent. Silent on
- * failure — marking-seen is best-effort UX polish, not a correctness gate.
+ * Silent on failure — marking-viewed is best-effort UX polish, not a
+ * correctness gate. The next inbox focus (`useMarkInboxViewed` in inbox.tsx)
+ * + the 30s `useNewNotificationCount` poll + the realtime channel will
+ * reconverge.
  */
-async function markNotificationSeen(data: NotificationRouteData): Promise<void> {
+async function markInboxViewed(): Promise<void> {
   const userId = useAuthStore.getState().user?.id;
   if (!userId) return;
   try {
-    if (data.groupKey) {
-      const { error } = await supabase.rpc('mark_group_seen', {
-        p_user_id: userId,
-        p_group_key: data.groupKey,
-      });
-      if (error && __DEV__) console.warn('[notif] mark_group_seen failed:', error.message);
-    } else if (data.notificationId) {
-      // Fallback: mark just this row. No dedicated RPC for single-row;
-      // direct UPDATE via PostgREST (uses RLS for safety — recipient-only).
-      const { error } = await supabase
-        .from('notifications')
-        .update({ seen_at: new Date().toISOString() })
-        .eq('id', data.notificationId)
-        .is('seen_at', null);
-      if (error && __DEV__) console.warn('[notif] mark single seen failed:', error.message);
-    }
-    // Invalidate inbox + unread caches so the badge updates immediately
-    // if the inbox is currently mounted.
+    const { error } = await supabase.rpc('mark_inbox_viewed', { p_user_id: userId });
+    if (error && __DEV__) console.warn('[notif] mark_inbox_viewed failed:', error.message);
+
+    // Optimistic local clear so the OS badge updates the instant the user taps,
+    // even before the RPC round-trip + refetch lands. useBadgeSync watches
+    // ['newNotificationCount', userId] → setBadgeCountAsync(0).
+    queryClient.setQueryData(['newNotificationCount', userId], 0);
+    queryClient.invalidateQueries({ queryKey: ['newNotificationCount', userId] });
     queryClient.invalidateQueries({ queryKey: ['inboxGrouped', userId] });
-    queryClient.invalidateQueries({ queryKey: ['unreadGroupCount', userId] });
   } catch (e) {
-    if (__DEV__) console.warn('[notif] mark-seen exception:', (e as Error).message);
+    if (__DEV__) console.warn('[notif] mark-viewed exception:', (e as Error).message);
   }
 }
 
@@ -144,9 +134,11 @@ async function markNotificationSeen(data: NotificationRouteData): Promise<void> 
  *   deferUntilReady — wrap the push in InteractionManager so cold-start can
  *     wait for the navigator to mount before pushing. Set this true on the
  *     push-tap path.
- *   markSeen — fire the mark-as-seen RPC after routing. Set this true on the
- *     push-tap path; leave default false on the inbox-tap path (which does
- *     its own optimistic mark-seen via useMarkGroupSeen).
+ *   markSeen — fire mark_inbox_viewed (migration 223 model) after routing.
+ *     Set true on every notification tap surface (push tap warm + cold,
+ *     inbox row tap). The RPC + cache invalidation are idempotent, so
+ *     double-fires from inbox focus + row tap on the same render are
+ *     harmless.
  */
 export function routeFromNotification(
   data: NotificationRouteData | null | undefined,
@@ -182,7 +174,7 @@ export function routeFromNotification(
 
   if (opts.markSeen) {
     // Fire-and-forget — don't block navigation on the network round-trip.
-    void markNotificationSeen(data);
+    void markInboxViewed();
   }
 
   if (opts.deferUntilReady) {

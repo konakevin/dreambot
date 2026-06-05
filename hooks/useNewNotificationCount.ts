@@ -3,15 +3,18 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
 /**
- * Count of notification groups created since the user's last inbox view
- * (`users.last_inbox_view_at`). Drives the profile-tab dot and the
- * inbox-bubble pip on the own-profile top bar.
+ * Count of notifications created since the user's last inbox view
+ * (`users.last_inbox_view_at`). Migration 223 model. Drives:
+ *   - the profile-tab dot (app/(tabs)/_layout.tsx)
+ *   - the iOS app-icon badge (hooks/useBadgeSync)
+ *   - the inbox-bubble pip on the own-profile top bar
  *
- * Replaces `useUnreadGroupCount` (which counted per-row seen_at).
- * "Viewed = read": opening the inbox sets last_inbox_view_at = now() via
- * useMarkInboxViewed → this count drops to 0 for everything currently in
- * the inbox. The next push or comment that lands afterward bumps it
- * back up.
+ * Three writers can flip last_inbox_view_at and clear this count:
+ *   - opening the inbox (app/inbox.tsx useFocusEffect)
+ *   - tapping any push notification (lib/notificationRouting.ts)
+ *   - tapping any inbox row (lib/notificationRouting.ts via markSeen: true)
+ *
+ * Next push or comment that lands after bumps it back up.
  *
  * Same refetch strategy as the hook it replaces: realtime-driven primary;
  * mount + 30s polling as safety nets.

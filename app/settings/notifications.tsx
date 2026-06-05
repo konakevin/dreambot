@@ -14,8 +14,9 @@
  * mutations via useNotificationSettings hooks; failed writes roll back.
  *
  * Pref invalidation: useToggleNotificationPref invalidates inboxGrouped +
- * unreadGroupCount when the inbox channel changes, so flipping a category
- * off makes it disappear from the feed + the badge on the next focus.
+ * newNotificationCount when the inbox channel changes, so flipping a
+ * category off makes it disappear from the feed + the badge on the next
+ * focus.
  */
 
 import { useCallback } from 'react';

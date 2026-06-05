@@ -1,27 +1,25 @@
 import { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
-import { useUnreadGroupCount } from './useUnreadGroupCount';
+import { useNewNotificationCount } from './useNewNotificationCount';
 
 /**
- * Mirrors the in-app unread-notification count onto the iOS app-icon badge.
+ * Mirrors the in-app new-notification count onto the iOS app-icon badge.
  *
- * The server sets `badge` on every push (send-push), so the home-screen badge
- * lights up when a push lands on a closed/backgrounded app — but nothing was
- * clearing it. Viewing the inbox marks notifications seen (useMarkAllSeen →
- * unread count drops to 0, optimistically + on server refetch), and this effect
- * propagates that to the OS badge, so the app-icon badge clears the moment the
- * inbox is viewed. It also self-corrects the badge to the true unread count once
- * the app is foregrounded — useUnreadCount refetches on mount / app-active (the
- * AppState handler in _layout.tsx invalidates it) / realtime notification INSERT.
+ * Uses the migration-223 "viewed = read" model: badge = notifications created
+ * after `users.last_inbox_view_at`. Anything tapping a notification (push tap,
+ * inbox row tap, inbox focus) flips last_inbox_view_at → this count drops to 0
+ * → the OS badge clears.
  *
- * Mounted once app-wide (PushRegistrar in app/_layout.tsx).
+ * Self-corrects on mount, every 30s, on app-foreground (the AppState handler in
+ * _layout.tsx invalidates ['newNotificationCount']), and on realtime
+ * notification INSERT (the notifications channel in _layout.tsx).
  *
- * Counts distinct unread GROUPS (useUnreadGroupCount), per D6 in
- * NOTIFICATIONS_ARCHITECTURE.md: 14 likes on one post = badge "1", matching
- * IG/TikTok semantics — not "14".
+ * Mounted once app-wide (PushRegistrar in app/_layout.tsx). Same count drives
+ * the profile-tab dot (app/(tabs)/_layout.tsx), so the home-screen badge and
+ * the in-app dot are always identical.
  */
 export function useBadgeSync() {
-  const { data: unreadCount } = useUnreadGroupCount();
+  const { data: unreadCount } = useNewNotificationCount();
 
   useEffect(() => {
     if (unreadCount === undefined) return; // no user / not loaded yet — don't stomp the badge

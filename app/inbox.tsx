@@ -521,11 +521,18 @@ export default function InboxScreen() {
     // Delegates to the shared helper so push-tap + inbox-tap routing stays
     // aligned. Helper handles clearAlbum + dreamWish invalidation as
     // side effects before pushing. See lib/notificationRouting.ts.
-    routeFromNotification({
-      type: g.type,
-      uploadId: g.uploadId ?? undefined,
-      actorId: g.previewActorIds[0] ?? undefined,
-    });
+    // markSeen: true defense-in-depth — useFocusEffect already fires
+    // mark_inbox_viewed on inbox mount, but if the focus fires after the
+    // row tap (rapid taps, tight remount), this guarantees the badge
+    // clears. RPC is idempotent.
+    routeFromNotification(
+      {
+        type: g.type,
+        uploadId: g.uploadId ?? undefined,
+        actorId: g.previewActorIds[0] ?? undefined,
+      },
+      { markSeen: true }
+    );
   }
 
   function handleLongPress(g: InboxGroup) {

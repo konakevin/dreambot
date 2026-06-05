@@ -292,17 +292,17 @@ Deno.serve(async (req) => {
       );
     }
 
-    // App-icon badge = recipient's true unread count. This trigger fires AFTER
-    // INSERT, so the just-inserted row is already counted. The client mirrors
-    // this onto the OS badge and clears it to 0 when the inbox is viewed
-    // (useBadgeSync + useMarkAllSeen); sending the real count keeps a closed app
-    // that accumulates several notifications from showing a stale "1".
-    const { count: unreadCount } = await supabase
-      .from('notifications')
-      .select('id', { count: 'exact', head: true })
-      .eq('recipient_id', record.recipient_id)
-      .is('seen_at', null);
-    const badge = unreadCount ?? 1;
+    // App-icon badge = recipient's "new since last inbox view" count
+    // (migration 223 "viewed = read" model — count of notifications with
+    // created_at > users.last_inbox_view_at). Same RPC the client uses for
+    // the profile-tab dot + useBadgeSync, so the OS badge always matches the
+    // in-app dot. This trigger fires AFTER INSERT, so the just-inserted row
+    // is already counted. Falls back to 1 if the RPC errors so a closed app
+    // accumulating several notifications doesn't get stuck on a stale value.
+    const { data: newCount } = await supabase.rpc('get_new_notification_count', {
+      p_user_id: record.recipient_id,
+    });
+    const badge = (newCount as number | null) ?? 1;
 
     // Build push data for navigation on tap. `type` lets the client route by
     // notification kind — e.g. a download_ready tap auto-saves the cached HD

@@ -7,10 +7,14 @@ import { useAuthStore } from '@/store/auth';
  * `users.last_inbox_view_at = now()` so the per-row "new since last view"
  * flag flips to false for everything currently in the inbox.
  *
- * Replaces the old per-row `useMarkGroupSeen` + bulk `useMarkAllSeen`
- * combo: instead of tracking which group the user tapped, we just
- * record the moment they opened the inbox. Anything older = read.
- * Anything newer = "new" pip.
+ * Replaces the old per-row mark_group_seen + bulk mark-all-seen combo:
+ * instead of tracking which group the user tapped, we just record the
+ * moment they opened the inbox. Anything older = read. Anything newer
+ * = "new" pip.
+ *
+ * Also fired by the push-tap path (lib/notificationRouting.ts) via the
+ * `mark_inbox_viewed` RPC equivalent — any notification tap clears the
+ * iOS app-icon badge, not just opening the inbox.
  *
  * Optimistic: zeroes the badge cache + flips every cached `isNewSinceView`
  * to false so the dot clears the instant the inbox mounts. The server
