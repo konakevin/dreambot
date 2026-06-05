@@ -1,34 +1,34 @@
 /**
- * ChibiBot bath-time path — full-bespoke axis-system (2026-05-19).
+ * ChibiBot bath-time path — lean 6-axis rebuild (2026-06-05).
  *
- * Adorable creature(s) in tiny cozy baths — bubbles, rubber ducks, foam on
- * noses, towel turbans, steamy spa-day-for-tiny-creatures bliss. Bespoke
- * axes per BOT_SCENE_QUALITY_PLAYBOOK.
+ * Replaces the 11-axis stack that was pushing the bath vessel out of frame
+ * in favor of spectacle locations + phenomena + sensory amplifiers + stacked
+ * mandates. Now: creature(s) + setting + lighting + 2 decorations. That's it.
  *
- * Axes (11 total):
- *   Universal (bot.defaultPools): lighting, atmosphere, weather
- *   Reused from heartwarming-scene: time_of_day (HEARTWARMING_TIME_OF_DAY)
- *   Path-bespoke: setting (bath vessel + location), activity, creature_1,
- *                 amenity (pickN:2), surprise_element, phenomenon
- *   Conditional 70%-gated: creature_2 (group vs solo)
- *   Template-gated 60%: phenomenon (drama / magical event)
+ * Axes:
+ *   creature_1                                  always
+ *   setting (BATH_TIME_SCENES)                  always — vessel + location
+ *   lighting (BATH_TIME_LIGHTING)               always — time/source/cast in one line
+ *   set_decorations (BATH_TIME_DECORATIONS x2)  always — cozy bath props
+ *   creature_2 + creature_3                     conditional 60% (composer-level)
+ *                                               template includes creature_3 only 25% of
+ *                                               the times the pair fires → ~40/45/15
+ *                                               solo/pair/trio split
  *
- * Amenity pickN:2 because bath cuteness amplifies with stacked props
- * (rubber duck + candle / towel + soap / etc.).
+ * Sensory anchors disabled for this path (creature_1 already carries the
+ * creature DNA; the anchors compounded into bubble-creature renders).
+ * Chaos disabled (every perturbation pushes the bath vessel further out
+ * of focus). twoPassPolish skip already in place.
  */
 
-// bath-time accepts any cute creature — kids, land animals, fantasy, marine.
-// All can take a bath. No biome filter on creatures.
 module.exports = {
   archetype: 'CHIBIBOT_BATH_TIME',
   pools: {
     creature_1: { name: 'CUTE_CREATURES_UNIFIED' },
-    creature_2: { name: 'CUTE_CREATURES_UNIFIED' },
-    activity: 'BATH_TIME_ACTIVITIES',
-    setting: 'BATH_TIME_SETTINGS',
-    time_of_day: 'HEARTWARMING_TIME_OF_DAY',
-    amenity: 'BATH_TIME_AMENITIES',
-    surprise_element: 'BATH_TIME_SURPRISE_ELEMENTS',
-    phenomenon: 'BATH_TIME_PHENOMENA',
+    setting: 'BATH_TIME_SCENES',
+    lighting: 'BATH_TIME_LIGHTING',
+    set_decorations: 'BATH_TIME_DECORATIONS',
+    signature_detail: 'BATH_TIME_SIGNATURE',
+    // creature_2 + creature_3 resolved via archetype.conditionalLayer.pools
   },
 };

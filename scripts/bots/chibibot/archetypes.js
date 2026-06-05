@@ -28,22 +28,23 @@ module.exports = {
 
   CHIBIBOT_BATH_TIME: {
     description:
-      'PATH-BESPOKE — ChibiBot bath-time path (2026-05-19 full-bespoke axis-system migration per BOT_SCENE_QUALITY_PLAYBOOK). Adorable creature(s) in tiny cozy baths — bubbles, rubber ducks, foam on noses, towel turbans, steamy spa-day-for-tiny-creatures bliss. 11 axes: 3 universal (lighting + atmosphere + weather, via bot.defaultPools) + 6 path-bespoke (setting + activity + creature_1 + amenity pickN:2 + surprise_element + phenomenon) + 1 reused time_of_day (HEARTWARMING_TIME_OF_DAY) + 1 conditional creature_2 70%-gated + 1 template-gated phenomenon 60%. Amenity pickN:2 because bath cuteness amplifies with stacked props (rubber duck + candle, towel + soap, etc.).',
+      'PATH-BESPOKE — ChibiBot bath-time path (2026-06-05 lean 7-axis rebuild — the previous 11-axis stack pushed the bath vessel out of frame in favor of spectacle locations, phenomena, sensory amplifiers, and stacked mandates; the 6-axis R4 cleared the bath as hero but renders felt generic. R5 adds signature_detail for per-render flavor.). 7 axes: creature_1 (always) + setting + lighting + set_decorations pickN:2 + signature_detail + conditional creature_2/creature_3 60%-gated (template includes creature_3 25% of the times creature_2 fires → ~40% solo / 45% pair / 15% trio).',
     slots: {
-      universal: ['lighting', 'atmosphere', 'weather'],
+      universal: [],
       bot: [],
-      path: [
-        'creature_1',
-        'activity',
-        'setting',
-        'time_of_day',
-        'amenity',
-        'surprise_element',
-        'phenomenon',
-      ],
+      path: ['creature_1', 'setting', 'lighting', 'set_decorations', 'signature_detail'],
     },
-    pickN: { amenity: 2 },
-    conditionalLayer: { slot: 'creature_2', gate: 0.7 },
+    pickN: { set_decorations: 2 },
+    // Multi-pool conditional: rolls creature_2 + creature_3 together at 60%.
+    // The template uses Math.random() < 0.25 to decide whether the rolled
+    // creature_3 actually appears in the brief — yielding ~15% trio overall.
+    conditionalLayer: {
+      gate: 0.6,
+      pools: {
+        creature_2: { name: 'CUTE_CREATURES_UNIFIED' },
+        creature_3: { name: 'CUTE_CREATURES_UNIFIED' },
+      },
+    },
     framingModes: null,
     anchorScaleRange: null,
   },

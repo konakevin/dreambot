@@ -42,21 +42,24 @@ const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — CUTENESS AMPLIFICATION ━━
 
 Cuteness is the canvas, not the ceiling. Stack cute-elements appropriate to the subject: glossy dewy surfaces with subsurface scattering + warm volumetric glow + sparkles + layered atmospheric charm + adorable supporting micro-details (tiny mushrooms, floating hearts, cozy accessories, fairy-lights, wildflowers, whimsical incidental life). WHEN A CHARACTER IS PRESENT, also stack: massive dewy glassy eyes with multi-layer catchlights + fluffy textured surfaces + blushing cheeks. WHEN THE SUBJECT IS SCENERY / VILLAGE / INTERIOR / LANDSCAPE, stack environmental cuteness instead: dense magical detail in every corner, glowing windows, blooming flora, atmospheric haze, postcard-pretty composition. Go ALL the way on sweet + warm + cozy. Obsessive detail in service of wholesome delight.`;
 
-// CHIBI_RENDER_MEDIUM — hyper-cute 3D character render, designer-collectible /
-// Pop-Mart-vinyl-figurine CGI register. Sharp + glossy + rendered, NOT painted
-// or Pixar-soft. Inspired by the cute-creature-render aesthetic that's
-// dominating Instagram feeds (Kim Sung Hwan baby giraffes, vinaykumar182023
-// baby turtles). Front-loads chibi proportions + glassy eyes + glossy
-// materials before scene-specific tokens.
-// 2026-06-02 cruft-audit strip — dropped tech-spec `hyper-detailed`,
-// the 5-stack NOT tail (NOT painted / NOT 2D illustration / NOT Pixar-
-// soft / NOT photoreal / NOT plasticky), the embedded "NOT a single
-// hero figurine" and "NOT hero-with-secondary-behind-bokeh" negations,
-// and the travel-mag `wallpaper-poster`. Positive identity anchors
-// (Pop-Mart-vinyl designer-collectible / glossy-dewy / ultra-clean
-// form / group composition rule for multi-character) carry the look.
+// CHIBI_RENDER_MEDIUM — hyper-cute 3D character render, Pop-Mart designer-vinyl
+// collectible register. Sharp + glossy + rendered.
+// 2026-06-05 cruft-strip down to positive identity anchors only (~270 chars,
+// playbook target ≤250). Dropped: duplicate "3D CGI render" overlap with
+// PROMPT_PREFIX, tech-spec ("Octane / Redshift quality"), travel-mag
+// ("gallery-print poster composition"), the WORLD-diorama language that
+// told Flux to render an entire environment/village/multi-character scene
+// regardless of path intent, the hard-locked warm-amber+teal+peach palette
+// + "volumetric warm god-rays" that overrode every time-of-day axis, and
+// the bot-wide "WHEN MULTIPLE CHARACTERS ARE PRESENT (pair/trio) GROUP
+// COMPOSITION" mandate that compounded with CHIBI_CHARACTER_COUNT_BLOCK
+// + per-path templates to push every render to 3+ creatures.
+// Kept: Pop Mart designer-vinyl collectible identity / glossy-dewy
+// subsurface-scatter / crisp form language / chibi proportions when a
+// creature subject is present. Palette + composition + creature-count
+// now owned by the path axes (time-of-day / setting / creature slots).
 const CHIBI_RENDER_MEDIUM =
-  '3D CGI render, Octane / Redshift quality, Pop Mart / Be@rbrick designer-vinyl WORLD aesthetic (a whole magical diorama set rendered as collectible-figurine display — environments, villages, interiors, multi-character scenes all sit naturally in this register), glossy dewy material treatment with subsurface scattering on every organic surface, ultra-clean form language with crisp surface definition and graphic-design crisp pattern work, framing varies — sometimes shallow-DOF hero portrait, OFTEN medium-wide group composition with all characters equally prominent at equal sharpness, lush magical detail in every corner, volumetric warm god-rays cutting through magical atmosphere, saturated jewel-tone palette (warm amber + emerald + teal + peach + magenta), gallery-print poster composition. When characters appear, render each with chibi proportions — oversized head, massive glassy reflective multi-catchlight eyes, tiny stubby body. WHEN MULTIPLE CHARACTERS ARE PRESENT (pair or trio), frame as a GROUP COMPOSITION — medium-wide shot, ALL figures equally prominent in the foreground and equally sharp, all characters in clear focus interacting relationally';
+  'Polished 3D CGI designer-collectible vinyl render, Pop Mart designer-toy register, glossy dewy subsurface-scattering materials, ultra-clean crisp form language; creature subjects rendered with chibi proportions — oversized head, massive glassy multi-catchlight eyes, soft stubby body';
 
 // CHIBI_CREATURE_MEDIUM — the EXACT medium text (verbatim from the recipe of
 // Kevin's hearted 2026-05-07 reference renders, recovered from the DB since

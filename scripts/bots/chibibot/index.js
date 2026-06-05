@@ -194,7 +194,10 @@ module.exports = {
   // cozy-interior + indoor paths get subject-chaos.
   chaos: {
     enabled: true,
-    skipPaths: [],
+    // 2026-06-05 — bath-time lean-rebuild: every chaos perturbation (geometry,
+    // framing, secondary_light, etc.) pushes the bath vessel further out of
+    // focus on a path whose entire identity is "creature in a bath." Skip.
+    skipPaths: ['bath-time'],
     allowSubjectChaosPaths: [
       'cozy-landscape',
       'rainy-day-cozy',
@@ -245,7 +248,10 @@ module.exports = {
       'creature-portrait': 'creature',
       'creature-world': 'creature',
       'sleepy-naptime': 'creature',
-      'bath-time': 'creature',
+      // 2026-06-05 — bath-time lean-rebuild: anchors compounded into the
+      // bubble-creature failure on shimmer; the medium fragment already
+      // carries the creature-DNA tokens. No anchor needed for this path.
+      // (Omit 'bath-time' → no sensory anchoring fires here.)
       'cuddly-aquatic': 'creature',
       'heartwarming-scene': 'scene',
       'cozy-landscape': 'scene',
@@ -312,7 +318,10 @@ module.exports = {
     // aren't all solo portraits. Pixar renders skip this entirely.
     // EXEMPT creature-world — its identity is a SOLO hero figure (the
     // count-block's pair/trio would break the "Pop Mart" collectible look).
-    if (medium === 'chibibot_render' && path !== 'creature-world') {
+    // EXEMPT bath-time (2026-06-05 lean rebuild) — count is owned by the
+    // path's creature_1 + conditional creature_2/creature_3 axes; the
+    // append-block double-sources count instructions.
+    if (medium === 'chibibot_render' && path !== 'creature-world' && path !== 'bath-time') {
       const append = (str) => str + '\n\n' + blocks.CHIBI_CHARACTER_COUNT_BLOCK;
       if (typeof result === 'string') return append(result);
       if (result && typeof result.brief === 'string')

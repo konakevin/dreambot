@@ -79,12 +79,19 @@ module.exports = {
   HEARTWARMING_SURPRISE_ELEMENTS: load('heartwarming_surprise_elements'),
   HEARTWARMING_PHENOMENA: load('heartwarming_phenomena'),
 
-  // Bath-time path-bespoke axes (2026-05-19 full-bespoke migration)
+  // Bath-time path-bespoke axes (2026-06-05 lean 6-axis rebuild — BATH_TIME_SCENES
+  // is the new vessel+location pool above. The old BATH_TIME_SETTINGS, ACTIVITIES,
+  // AMENITIES, SURPRISE_ELEMENTS, PHENOMENA are left loaded for back-compat /
+  // other-bot reference but no longer wired into bath-time.)
   BATH_TIME_SETTINGS: load('bath_time_settings'),
   BATH_TIME_ACTIVITIES: load('bath_time_activities'),
   BATH_TIME_AMENITIES: load('bath_time_amenities'),
   BATH_TIME_SURPRISE_ELEMENTS: load('bath_time_surprise_elements'),
   BATH_TIME_PHENOMENA: load('bath_time_phenomena'),
+  // 2026-06-05 lean-rebuild new pools — wired to the bath-time path
+  BATH_TIME_LIGHTING: load('bath_time_lighting'),
+  BATH_TIME_DECORATIONS: load('bath_time_decorations'),
+  BATH_TIME_SIGNATURE: load('bath_time_signature'),
 
   // Cuddly-aquatic path-bespoke axes (2026-05-19 full-bespoke migration)
   CUDDLY_AQUATIC_SETTINGS: load('cuddly_aquatic_settings'),

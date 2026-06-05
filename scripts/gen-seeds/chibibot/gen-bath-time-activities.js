@@ -23,7 +23,7 @@ Each entry: 15-25 words. ONE specific bath activity. Describe the creature's bod
 - 15% bubble-bath-fun (foam beard sculpted into wizard shape / bubble crown floating above ears / suds mustache curled up / bubble crowns balanced)
 - 15% spa-day (cucumber slices on closed eyes / face-mask of green clay / towel turban tied just right / robe pulled snug / hot-stone resting on back)
 - 10% post-bath drying (wrapped in fluffy towel only ears poking out / curled into a towel-cocoon / shaking off in a halo of droplets / mid-stretch fresh from bath)
-- 10% group-interaction (one scrubs another's back / pair toasting with tiny soap bottles / circle of bathers passing a sponge / trio in matching towel-turbans)
+- 10% pair-moment (scrubbing a friend's back / sharing a tiny soap-bottle toast / leaning sleepily against a friend in foam / passing a sponge to a friend mid-rinse)
 - 5% peek-moments (one paw waves over tub edge / nose pokes out of bubble cloud / ears just visible over foam line / eyes peek up from beneath suds)
 
 ━━━ DEDUP DIMENSIONS ━━━

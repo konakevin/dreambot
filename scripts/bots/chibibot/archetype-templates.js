@@ -103,106 +103,53 @@ ${isGroup ? 'Mid-wide frame with the group as heroes doing the activity together
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
-  CHIBIBOT_BATH_TIME: ({ slots, sharedDNA, vibeDirective }) => {
+  CHIBIBOT_BATH_TIME: ({ slots, vibeDirective }) => {
     const {
       creature_1,
       creature_2,
-      activity,
+      creature_3,
       setting,
-      time_of_day,
-      amenity,
-      surprise_element,
-      phenomenon,
       lighting,
-      atmosphere,
-      weather,
+      set_decorations,
+      signature_detail,
     } = slots;
-    const isGroup = !!creature_2;
-    const phenomenonFires = Math.random() < 0.6;
 
-    const amenityList = Array.isArray(amenity) ? amenity : [amenity];
-    const amenityBlock = amenityList
-      .filter(Boolean)
-      .map((a, i) => `${i + 1}. ${a}`)
-      .join('\n');
+    // Cast — composer's conditional layer rolls creature_2 + creature_3
+    // together at 60%. We then drop creature_3 75% of the time it was rolled,
+    // yielding ~40% solo / 45% pair / 15% trio.
+    const includeCreature3 = !!creature_3 && Math.random() < 0.25;
+    const cast = [creature_1, creature_2, includeCreature3 ? creature_3 : null].filter(Boolean);
+    const castLine =
+      cast.length === 1
+        ? `Solo: ${cast[0]}`
+        : cast.length === 2
+          ? `Pair: ${cast[0]} and ${cast[1]}, sharing the bath together.`
+          : `Trio: ${cast[0]}, ${cast[1]}, and ${cast[2]}, all in the bath together.`;
 
-    const creatureBlock = isGroup
-      ? `A SMALL GROUP (3-5) of adorable creatures together — led by: ${creature_1}, joined by: ${creature_2} and a few others. Different species, different sizes, all squeezed into the bath together or doing spa activities side by side. Squeezed-in-together energy.`
-      : `${creature_1} — solo bath time bliss.`;
+    const decorList = Array.isArray(set_decorations) ? set_decorations : [set_decorations];
+    const decorLine = decorList.filter(Boolean).join('; ');
 
-    const phenomenonBlock = phenomenonFires
-      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
-      : '';
+    return `Write a 55-80 word Flux prompt for a ChibiBot bath-time render. Lead with the bath vessel and the cast IN it, then layer in the cozy detail and the signature flavor. Comma-separated phrases, no headers, no labels, no preamble — just the prompt text.
 
-    return `You are writing BATH TIME scenes for ChibiBot — ${isGroup ? 'a group of adorable creatures' : 'an adorable creature'} enjoying a tiny cozy bath inside a deliberately-chosen bath vessel + location at a deliberately-chosen time of day with deliberate weather${phenomenonFires ? ' and a magical phenomenon transforming the bath frame' : ''}. Bubbles, foam, steamy warmth, tiny accessories stacked. Spa-day-for-tiny-creatures bliss. The viewer's reaction: "OMG IT'S TOO CUTE. I CAN'T." Output wraps with style prefix + suffix.
-
-━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
-
-Every render must produce: AWWW + instant smile + "I want to hug it" instinct. If the render has even a whisper of dark / edgy / scary — it FAILED. The reaction is wholesome bath-bliss — closed-eye contentment, foam-mustache joy, splashing delight. Lighting + weather + phenomenon should match the SCENE naturally — rainy ≠ stormy, outdoor-night ≠ scary, candlelit ≠ creepy — wholesome filter on everything.
-
-━━━ RENDERED CGI — NEVER PHOTOREAL, NEVER PAINTED ━━━
-
-Never photoreal. Never documentary-wildlife. Never flat illustration or painted artwork. Render as polished 3D CGI in the designer-collectible / Pop-Mart-vinyl register: glossy materials with subsurface scattering, ultra-clean form language with crisp surface definition, graphic-design crisp pattern work, dewy highlights. Creatures render with chibi proportions (oversized head, massive glassy reflective eyes, tiny stubby body). Bath vessel + amenities + setting render with the SAME glossy crisp CGI register. Bubbles are JEWEL-LIKE iridescent translucent spheres with rainbow refractions. Foam is fluffy + opaque with marshmallow texture. Water is clear with caustic light-play on surfaces below. Let the MEDIUM tag control the specific render style.
-
-━━━ NO DARK / NO INTENSE / NO CREEPY ━━━
-
-Absolutely no menace, no threat, no horror, no creepy undertones, no "uncanny cute" disturbing vibes, no slipping-falling-distress moments. Safe + wholesome + spa-bliss. The tone is kind and gentle. Lighting follows the time-of-day axis honestly — if it's blue hour, render blue hour; if it's golden hour, render golden hour; if it's moonlit, render silvery moonlit; if it's overcast soft daylight, render cool diffuse. DO NOT force everything to "warm steamy golden" — variety is the goal even though baths feel warm.
-
-━━━ NO HUMANS ━━━
-
-No human figures, no faces, no hands. All bathers are creatures (real-exaggerated or fantasy-cute). If a setting would normally include a person, reimagine it without — the creature uses the human-scale props at tiny scale, or no person is in the room. Human-coded items (towels, candles, soap) appear as STAGE PROPS, not as belonging to anyone.
-
-━━━ IMPOSSIBLE BEAUTY ━━━
-
-Wall-poster quality. NOT dramatic-beautiful (that's GlowBot) — CUTE-beautiful. The composition is balanced and charming. Every element rendered with love — the kind of image a kid pins above their bed.
-
-━━━ THE CUTE CREATURE(S) ━━━
-${creatureBlock}
-
-━━━ THE BATH-TIME ACTIVITY (what the creature is DOING right now) ━━━
-${activity}
-
-━━━ THE BATH VESSEL + LOCATION (the stage) ━━━
+The bath:
 ${setting}
 
-━━━ STACKED BATH AMENITIES (TWO specific props amplify the cuteness) ━━━
-${amenityBlock}
+The cast (in the bath):
+${castLine}
 
-━━━ TIME OF DAY (drives light + color cast — render honestly) ━━━
-${time_of_day}
-
-━━━ WEATHER (especially affects outdoor bath settings) ━━━
-${weather}
-
-━━━ LIGHTING ━━━
+The lighting:
 ${lighting}
 
-━━━ ATMOSPHERIC DETAIL (steam swirls, drifting bubbles, ambient charm) ━━━
-${atmosphere}
+Two cozy decorations around the bath:
+${decorLine}
 
-━━━ SURPRISE ELEMENT (second-tier detail the eye finds AFTER the hero) ━━━
-${surprise_element}${phenomenonBlock}
+The signature flavor — weave this specific micro-detail naturally into the scene:
+${signature_detail}
 
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
+Tone:
+Warm wholesome bath-bliss — creatures soaking in foam and bubbles, soft cozy mood, AWWW + I want to hug them. ${vibeDirective.slice(0, 180)}
 
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ BLOW IT UP — BATH CUTENESS AMPLIFICATION ━━━
-
-Cuteness is the canvas, not the ceiling. Stack bath-cute-elements: jewel-iridescent translucent bubbles + fluffy marshmallow foam mounds + steam wisps curling upward + glossy dewy surfaces with subsurface scattering + volumetric glow tinted to MATCH the time-of-day axis above (silvery-blue at moonlit night, indigo-pink at blue hour, peach-amber at golden hour, pearl-grey at dawn, cool-overcast at soft daylight, warm-amber-candlelit at evening interior — NOT forced warm-golden when the axis says otherwise) + sparkles drifting in the steam + layered atmospheric charm. For creatures, also stack: massive dewy glassy eyes with multi-layer catchlights + soaked-fluffy fur clumping in soft points + blushing cheeks + foam crowns / mustaches / beard sculptures + paws raised in bath-joy. For bath setting, stack environmental cuteness: TWO amenities prominently visible (rubber duck, candle, glass shampoo bottle, fluffy towels — whatever was picked above), thick stacked bubble mounds inside the tub, water with light-play caustics, dense magical detail in every corner. Obsessive detail in service of wholesome bath-bliss delight.
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION (SETTING IS A CO-HERO, NOT JUST A STAGE) ━━━
-
-The bath LOCATION must be visibly half the magic — NOT a tight intimate portrait with a generic backdrop. Pull the camera back so the viewer can SEE WHERE this bath is happening: pirate-ship deck visible behind the tub, mountain peaks above the hot spring, aurora dancing over the cloud-island plunge pool, lighthouse balcony railing framing the soak, submarine porthole showing fish swimming past, underwater coral surrounding the bubble dome, Roman-villa columns around the marble pool, tropical reef visible from the conch-shell rim. The location is half the magic — frame it as such.
-
-${isGroup ? 'Wider establishing frame with the group + the SPECTACULAR location both clearly readable. 3-5 creatures bathing together in the foreground/midground; the location vista (sky / sea / canopy / cave / volcano / aurora / etc.) fills 50%+ of the frame. Squeezed-in-together energy among the creatures, location-dominant scale around them.' : 'Wider establishing frame — creature in the bath at midground/foreground (still clearly the focal point), the dramatic LOCATION filling 50%+ of the frame. Think postcard-from-an-epic-bath-vacation, not bathroom selfie. Show what makes this place a destination.'} Viewer should be able to name BOTH (1) the specific bath vessel AND (2) the spectacular destination in one glance ("ohhh, creature bathing on a PIRATE SHIP / IN A CLOUD / AT A VOLCANIC HOT SPRING / IN A LIGHTHOUSE / UNDERWATER / ON A TREEHOUSE VERANDA"). Name the two amenities present without crowding the location. Time-of-day color cast honest. Surprise element tucked where the eye finds it second.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+Output the 55-80 word prompt only.`;
   },
 
   CHIBIBOT_CUDDLY_AQUATIC: ({ slots, sharedDNA, vibeDirective }) => {
