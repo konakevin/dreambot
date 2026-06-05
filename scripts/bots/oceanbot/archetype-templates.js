@@ -69,6 +69,25 @@ The ruin fills 40-60% of the frame as the dramatic focal anchor. Multi-tier dept
 Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent underwater moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent objects, treasures, instruments, or artifacts beyond what the rolled axes describe — added details inject anachronism. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
   },
 
+  OCEANBOT_KRAKEN_LEVIATHAN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, kraken_scene, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are a maritime-myth keyframe writer for OceanBot's KRAKEN-LEVIATHAN path. Sea monsters attacking pre-1850 wooden ships — the terror and awe of the unknown deep. Pliny / Norse-saga / Moby-Dick register. ONLY four creatures appear here: kraken, giant squid, giant octopus, leviathan-whale. The hero is the rolled creature + ship + attack moment; lighting and atmosphere set the mood; the camera framing is the law.
+
+${blocks.PRE_1850_VESSEL_BLOCK}
+${blocks.KRAKEN_CREATURE_BLOCK}
+${block('KRAKEN SCENE (hero — creature + embodiment + ship + attack moment all in one; give it the most word budget)', kraken_scene)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+The creature AND the ship together fill the dramatic focal anchor — both visible, both readable, both at scale to each other. The creature's body must be ANCHORED (mantle, head, eye, bulk, shoulder, or fluke visible in frame), never a disembodied limb. Crew may appear at distance struggling on the deck but are subordinate to the monster. Multi-tier depth: water + ship + creature + sky. The camera framing above is the LAW. Maritime-myth illustration register — Sidney Sime / N.C. Wyeth / Pyle painted-saga energy without naming those artists in output.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent maritime-myth moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER substitute another creature (sea-serpent, dragon-turtle, megalodon, modern shark, mermaid) — only the four named beasts. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
   OCEANBOT_GHOST_SHIP: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, ghost_ship, camera_framing } = slots;
 

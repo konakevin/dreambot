@@ -96,4 +96,24 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  OCEANBOT_KRAKEN_LEVIATHAN: {
+    description:
+      'Sea monsters attacking pre-1850 wooden ships — maritime myth made vivid. ONLY 4 creatures: kraken, giant squid, giant octopus, leviathan-whale. Embodiment rule (whole-beast visible, never disembodied tentacles). The hardest hero pool of the bot — kraken_scene entries must encode specific creature + embodiment + specific wooden ship + attack moment + atmospheric register. Same lean 4-axis shape as pirates / ghost-ship.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      // 2 path slots — hero + composition. The hero pool carries the
+      // creature + ship + attack moment in one phrase; supporting axes
+      // set lighting + atmospheric mood. Reuses PRE_1850_VESSEL_BLOCK
+      // from shared-blocks (same era constraint as shipwreck / ghost-
+      // ship) PLUS the kraken-specific KRAKEN_CREATURE_BLOCK that locks
+      // the 4-creature whitelist and the embodiment rule.
+      path: ['kraken_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

@@ -38,7 +38,8 @@ const pathBuilders = {
   'lost-cities': require('./paths/lost-cities'),
   pirates: require('./paths/pirates'),
   'ghost-ship': require('./paths/ghost-ship'),
-  // Other 6 paths land as the bot matures.
+  'kraken-leviathan': require('./paths/kraken-leviathan'),
+  // Other 5 paths land as the bot matures.
 };
 
 module.exports = {
@@ -120,7 +121,7 @@ module.exports = {
     'nightshade',
   ],
 
-  paths: ['shipwreck-kingdom', 'lost-cities', 'pirates', 'ghost-ship'],
+  paths: ['shipwreck-kingdom', 'lost-cities', 'pirates', 'ghost-ship', 'kraken-leviathan'],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
   cycleAllPaths: true,
@@ -132,7 +133,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    skipPaths: ['shipwreck-kingdom', 'lost-cities', 'pirates', 'ghost-ship'],
+    skipPaths: ['shipwreck-kingdom', 'lost-cities', 'pirates', 'ghost-ship', 'kraken-leviathan'],
   },
 
   // Chaos + sensory anchors — DISABLED for the pilot. We're keeping the

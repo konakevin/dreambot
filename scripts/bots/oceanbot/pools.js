@@ -93,5 +93,12 @@ module.exports = {
   GHOST_SHIPS: load('ghost_ships'),
   GHOST_SHIP_CAMERA_FRAMING: load('ghost_ship_camera_framing'),
 
-  // (Other 6 paths' pools added when their gen-scripts ship.)
+  // ── kraken-leviathan path-bespoke pools (5th path — sea monsters
+  // ── attacking pre-1850 wooden ships. ONLY 4 creatures: kraken,
+  // ── giant squid, giant octopus, leviathan-whale. Embodiment rule
+  // ── enforced via the KRAKEN_CREATURE_BLOCK in shared-blocks.js.) ──
+  KRAKEN_SCENES: load('kraken_scenes'),
+  KRAKEN_CAMERA_FRAMING: load('kraken_camera_framing'),
+
+  // (Other 5 paths' pools added when their gen-scripts ship.)
 };

@@ -86,6 +86,20 @@ The hero is an ancient civilizational monument resting on the seafloor — archi
 const PIRATE_ERA_BLOCK = `━━━ ERA — GOLDEN AGE OF PIRACY (1650-1730) ━━━
 Mid-17th to early-18th century. Wooden sailing ships — galleons, frigates, brigs, sloops, brigantines, schooners. Tricorn and bicorn hats, frock coats and waistcoats, sashes and bandoliers, cutlasses, flintlock pistols, blunderbusses, hemp rope, brass and iron fittings. Caribbean / Atlantic / Mediterranean / Indian Ocean settings — Tortuga, Port Royal, Nassau, Madagascar, Maracaibo. Lanterns, candlelight, cannon-smoke, gun-deck shadow.`;
 
+// Kraken-leviathan creature-whitelist block — embedded into the kraken
+// template. Same enumeration-as-reinforcement pattern: the 4 named
+// creatures here are EXACTLY what the kraken_scene pool rolls (every
+// entry is one of these 4 — kraken / giant squid / giant octopus /
+// leviathan-whale), so the block agrees with the axis instead of
+// competing. The EMBODIMENT rule is the load-bearing instruction —
+// disembodied floating tentacles without a body are the canonical
+// failure mode for this path (legacy lesson f7f319cf).
+const KRAKEN_CREATURE_BLOCK = `━━━ CREATURE LOCK — ONLY THESE FOUR ━━━
+The creature is one of FOUR named maritime-myth beasts: a KRAKEN (multi-tentacled cephalopodic horror with massive bullet-mantle and a single giant eye, Norse-myth tradition), a GIANT SQUID (eight arms plus two whip-tentacles with hooked clubs, enormous bullet-mantle, single huge eye, Architeuthis-scale), a GIANT OCTOPUS (eight arms with rows of suckers, mottled red-brown skin, mantle the size of a longboat, central beak, Pliny's polypus), or a LEVIATHAN-WHALE (Moby Dick / sperm-whale / Bible-leviathan — ancient massive whale, scarred, harpoon-bristling back, single ancient eye, flukes the size of cathedral doors). The specific creature is given in the KRAKEN SCENE axis below.
+
+━━━ EMBODIMENT RULE (CRITICAL) ━━━
+The creature's BODY must be visible in the frame — mantle, head, eye, bulk, shoulder, or fluke. Show the WHOLE BEAST attacking — its mantle rising beside the ship, its eye reflecting the lantern, its head breaking the surface, its bulk alongside its arms. A disembodied tentacle floating in the scene without the body alongside it reads as cartoonish — always anchor the limb to the beast.`;
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -93,4 +107,5 @@ module.exports = {
   PRE_1850_VESSEL_BLOCK,
   SUBMERGED_CIVILIZATION_BLOCK,
   PIRATE_ERA_BLOCK,
+  KRAKEN_CREATURE_BLOCK,
 };

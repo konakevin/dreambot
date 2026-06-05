@@ -993,6 +993,109 @@ NEVER use negation. NEVER name modern cinema terms.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // KRAKEN-LEVIATHAN path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 5th OceanBot path — sea monsters attacking pre-1850 wooden ships.
+  // ONLY 4 creatures: kraken, giant squid, giant octopus, leviathan-whale.
+  // Embodiment rule (whole-beast visible, never disembodied tentacles)
+  // enforced via the KRAKEN_CREATURE_BLOCK in shared-blocks.js.
+  // Same lean 2-pool shape as pirates / ghost-ship; hardest hero pool
+  // of the bot because each entry must encode creature + embodiment +
+  // specific wooden ship + attack moment + atmospheric register.
+
+  kraken_scenes: {
+    format: 'simple',
+    theme: `KRAKEN/LEVIATHAN SCENES for OceanBot's kraken-leviathan path — sea monsters attacking pre-1850 wooden sailing ships. Each entry is ONE specific maritime-myth attack moment, 20-28 words. Creature + WHOLE-BODY embodiment + specific wooden ship + attack action + atmospheric register ALL BAKED INTO THE ENTRY — this is the HERO pool and carries 80% of the render.
+
+⚠️ MANDATORY CREATURE — every entry features EXACTLY ONE of these four named beasts, NAMED EXPLICITLY in the entry:
+  1. KRAKEN — multi-tentacled cephalopodic horror, massive bullet-mantle, single giant eye, Norse-myth scale
+  2. GIANT SQUID — Architeuthis / colossal squid, eight arms + two whip-tentacles with hooked clubs, enormous bullet-mantle, single huge eye
+  3. GIANT OCTOPUS — eight arms with rows of suckers, mottled red-brown skin, longboat-sized mantle, central beak
+  4. LEVIATHAN-WHALE — Moby Dick / sperm whale / Bible-leviathan: ancient massive whale, scarred, harpoon-bristling back, single ancient eye, cathedral-door flukes
+NEVER substitute another creature (no sea-serpents, dragon-turtles, megalodons, modern sharks, mermaids).
+
+⚠️ EMBODIMENT MANDATORY — the creature's BODY must appear in the entry. Name the mantle / head / eye / bulk / shoulder / fluke alongside any arms or tentacles. A disembodied tentacle without the body alongside is the canonical failure mode for this path.
+
+⚠️ SHIP MANDATORY — every entry includes a pre-1850 wooden sailing ship being attacked, with at least ONE period detail (oak hull / hemp rigging / cannon row / lateen yard / dragon-prow / etc.). Galleon, frigate, schooner, brig, sloop, longship, junk, whaler, caravel.
+
+✓ VARIETY MANDATE — distribute across attack moments:
+  A. Tentacle grapple (kraken/squid/octopus arm wrapping mast / hull / yard, body visible alongside)
+  B. Breaching strike (leviathan-whale ramming hull / breaching upward / smashing rail)
+  C. Whole-beast surfacing (mantle + eye rising beside ship, ship dwarfed in scale)
+  D. Crew-deck struggle (creature reaching across deck, tiny figures in motion — small at distance)
+  E. Bow / stern confrontation (creature blocking the ship's path / rising under bow)
+  F. Aerial / aerial-three-quarter (top-down view of the attack, both creature and ship visible from above)
+  G. Submerged glimpse (creature visible below the waterline, ship riding above unaware)
+  H. Distant-myth (long-shot silhouette of monster + ship against horizon — scale-of-terror composition)
+  I. Whale-specific (harpoon-bristling back / cathedral-door flukes raised / scarred eye meeting ship)
+
+✓ CREATURE DISTRIBUTION — roughly equal split: ~6 kraken, ~6 giant squid, ~7 giant octopus, ~6 leviathan-whale per 25-entry pool.
+
+DO write positively. Speak the moment directly, vivid and specific.`,
+    touchpoints: [
+      'Kraken erupting beside a Spanish galleon, mantle and single giant eye rising above the waterline, four tentacles wrapping the mainmast.',
+      'Giant squid breaching alongside a frigate at dusk, bullet-mantle and huge unblinking eye level with the deck, two whip-tentacles arching over the rigging.',
+      'Giant octopus draped across a foundering schooner, mottled red-brown mantle the size of a longboat dwarfing the hull, eight suckered arms pulling the rail down.',
+      'Leviathan-whale breaching directly under a colonial brig, scarred sperm-whale flank smashing the keel skyward, cathedral-door flukes raised in spray-curtain.',
+      'Kraken surfacing in a dawn fog bank, vast bullet-mantle a slate-grey mountain beside a Dutch East Indiaman, three tentacles already entangled in the mizzen rigging.',
+      'Giant squid suspended below the waterline alongside a longship, body and eye visible through clear water, two whip-tentacles reaching up to caress the keel.',
+      'Giant octopus folded over the foredeck of a junk, all eight arms in motion across rigging, central beak visible beneath the mantle\'s soft red bulk.',
+      'Leviathan-whale ramming a Tudor warship broadside, scarred head crashing through oak hull amidships, single ancient eye locked on the rail in passing.',
+      'Kraken seen from above attacking a Roman trireme, vast mantle dark beneath the water, four arms above surface coiling around oar-banks.',
+      'Giant squid wrapped fully around a Caribbean sloop at sunset, bullet-mantle on one rail, eye on the other, arms enveloping the entire deck.',
+      'Giant octopus rising from a calm sea beside a careened brigantine, suckered arms reaching across the exposed hull, mantle massive in the foreground water.',
+      'Leviathan-whale slowly surfacing alongside a whaler, harpoon-bristling back breaching first, eye then meeting the crew\'s lookout in cathedral stillness.',
+      'Kraken in storm-light rising beneath a clipper, mantle and eye breaking the wave-crest, multiple tentacles already higher than the topsail yard.',
+      'Giant squid full-body silhouette in deep blue beside a galleon\'s submerged stern, body curled, whip-tentacles reaching upward toward the rudder.',
+      'Giant octopus mantle and beak visible at the bowsprit of a privateer, eight arms wrapping the entire forecastle, mottled colors pulsing across the head.',
+      'Leviathan-whale flukes-aloft at the stern of a fluyt, body cathedral-vast in the water below, tiny crew dwarfed on the heeling deck.',
+      'Kraken breaching as a four-armed mountain beside a Phoenician bireme, single eye reflecting torchlight, painted prow inches from the cephalopodic head.',
+      'Giant squid surfacing alongside a Chinese junk in monsoon dusk, mantle the same red as the sails, eye reflecting lantern-flame from the stern.',
+      'Giant octopus seen from aerial three-quarter, all eight arms spread across a foundering schooner, central mantle and beak visible at the deck\'s center.',
+    ],
+    instructions: `Each entry is ONE specific maritime-myth attack moment, 20-28 words. Format: "named creature + body/embodiment + specific wooden ship + attack action + atmospheric anchor." Vary across the 9 attack-moment categories above. Vary across all 4 creatures (~6 each). NEVER substitute another creature. NEVER write a disembodied limb without the body alongside. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  kraken_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's kraken-leviathan path — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across framing categories — kraken-leviathan-specific (above water, both creature AND ship in frame, monumental scale):
+  A. LOW-ANGLE looking up (camera from deck-level, creature mantle towering against sky)
+  B. WIDE ENVIRONMENTAL (vast horizon establishing shot, creature + ship as elements in a sea-and-sky scene)
+  C. AERIAL THREE-QUARTER (top-down + perspective, both creature and ship visible from above)
+  D. SIDE-PROFILE long shot (lateral framing of creature beside ship, full silhouettes against horizon)
+  E. THROUGH-THE-RIGGING (mast-line + shroud-ratlines silhouetted across the foreground, creature visible beyond)
+  F. WATERLINE close-up (camera at sea-level, creature mantle and ship hull both rising massive overhead)
+  G. SUBMERGED HALF-AND-HALF (camera at the air-water boundary, creature visible below + ship above)
+  H. DRAMATIC LOW from the deck (camera among the crew, creature looming above the bowsprit / stern / midship)
+  I. STERN-CHASE composition (camera behind the ship, creature surfacing dead ahead or astern)
+
+NEVER use negation. NEVER name modern cinema terms.`,
+    touchpoints: [
+      'LOW-ANGLE looking up from the foredeck, creature mantle towering against bruised storm-sky behind the ship',
+      'WIDE ENVIRONMENTAL ESTABLISHING shot, both creature and ship rendered as elements in vast sea-and-sky',
+      'AERIAL THREE-QUARTER framing, creature body and ship deck both visible from above the action',
+      'SIDE-PROFILE LONG SHOT, full creature silhouette beside full ship silhouette against bright horizon',
+      'THROUGH-THE-RIGGING framing, taut shrouds silhouetted across the foreground, creature mantle visible beyond',
+      'WATERLINE CLOSE-UP at sea-level, creature mantle and ship hull both massive overhead, sky a narrow band above',
+      'SUBMERGED HALF-AND-HALF framing, creature visible below waterline, ship hull above riding the swell',
+      'DRAMATIC LOW from the deck among crew silhouettes, creature looming above the bowsprit blocking the sky',
+      'STERN-CHASE composition, camera behind the ship\'s wake, creature surfacing in the foreground astern',
+      'BOW-CONFRONTATION framing, camera ahead of the ship at sea-level, creature rising directly in its path',
+      'OVER-THE-DECK aerial sweep along the ship\'s length, creature visible alongside coiling across the rigging',
+      'SILHOUETTE STORM BACKLIGHT framing, both creature and ship carved as black cutouts against lightning-lit sky',
+      'OVER-THE-CRESTING-WAVE framing, ship pitched on a swell, creature breaching in the wave-trough beyond',
+      'EXTREME LONG SHOT establishing the SCALE-OF-TERROR, ship tiny against the immense creature body in deep distance',
+      'BREACHING-VIEW from sea-level, leviathan flukes filling the sky, ship dwarfed in the foreground shadow',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms (dolly / dutch / tilt-up). Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
