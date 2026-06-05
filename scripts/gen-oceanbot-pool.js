@@ -366,9 +366,9 @@ NEVER use negation.`,
       'EYE-LEVEL approach toward the prow, wreck looming larger as the camera nears, foreground sand racing past',
       'DRAMATIC LOW from the seafloor immediately beside the hull, looking up the encrusted side toward broken rigging',
       'OVER-THE-RAIL framing, camera positioned just above the broken rail looking down across the deck and into the hold',
-      'DIVER POV approach, first-person framing as if the viewer is finning toward the wreck from open water',
+      'STERN-LATERAL CAMERA at hull height, full hull stretched in profile through the frame, prow and stern both visible',
     ],
-    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms (dolly / dutch / tilt-up). Output a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER mention divers, ROVs, submersibles, scuba gear, or any human/vehicle presence — this path is empty-wreck only (no crew, no observers, no scale-prover figures in frame). NEVER use negation. NEVER modern cinema terms (dolly / dutch / tilt-up). Output a NUMBERED list, one entry per line, no internal newlines.`,
   },
 
   shipwreck_kingdom_surprise_element: {
@@ -733,9 +733,9 @@ NEVER use negation.`,
       'EYE-LEVEL approach toward the temple gateway, ruin looming larger as the camera nears, foreground sand racing past',
       'DRAMATIC LOW from the seafloor immediately beside the obelisk, looking up the encrusted shaft toward the broken tip',
       'OVER-THE-PEDIMENT framing, camera positioned just above the pediment edge looking down across the courtyard and into the cella',
-      'DIVER POV approach, first-person framing as if the viewer is finning toward the colonnade from open water',
+      'STERN-LATERAL CAMERA at column-height, full colonnade stretched in profile, both ends of the row visible in the frame',
     ],
-    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms (dolly / dutch / tilt-up). Output a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER mention divers, ROVs, submersibles, scuba gear, or any human/vehicle presence — this path is empty-ruin only (no archaeologists, no observers, no scale-prover figures in frame). NEVER use negation. NEVER modern cinema terms (dolly / dutch / tilt-up). Output a NUMBERED list, one entry per line, no internal newlines.`,
   },
 
   lost_cities_surprise_element: {
@@ -1295,7 +1295,7 @@ NEVER use negation. NEVER name modern cinema terms.`,
       'SUBMERGED PROFILE BACKLIT, whale silhouette in mid-water with surface light penetrating from above in shafts',
       'POLAR ICE-EDGE framing, whale at surface beside floating sea-ice, white-on-blue composition with cetacean as anchor',
     ],
-    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER name any boat / ship / hull / vessel — even in framing descriptions like "bow", "hull-level", or "bowriding" — only the whale, the ocean, and the camera. NEVER name "OceanBot" as a subject in the framing. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1490,7 +1490,7 @@ NEVER use negation. NEVER name modern cinema terms.`,
       'POLAR BEAR ON FLOE framing, animal small against vast pale ice expanse, scale-of-isolation composition',
       'THROUGH-THE-ICE-ARCH framing, camera in foreground looking through a carved iceberg arch at open polar sea beyond',
     ],
-    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER mention research vessels / icebreakers / ships / boats / divers / scientists / expedition equipment — this path is empty polar wilderness, no human presence. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1586,7 +1586,7 @@ NEVER use negation. NEVER name modern cinema terms.`,
       'OVER-THE-LAGOON framing, drone view of an entire glowing bay rimmed with mangrove silhouettes',
       'BACKLIT CREATURE SILHOUETTE framing, animal dark against glowing water, body shape readable against the cyan',
     ],
-    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER mention boats / kayaks / ships / hulls / paddles / "OceanBot vessels" — this path is empty surface ocean, no human or constructed presence. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1681,7 +1681,7 @@ NEVER use negation.`,
   A. Warm / sunset (golden-amber, copper-salmon sunset, coral-pink dawn)
   B. Cool / blue (abyssal-black-and-cyan, cool teal, glacier-cyan-white, deep navy-and-silver)
   C. Storm / dramatic (Aivazovsky-storm-amber, charcoal-and-gold, slate-and-silver)
-  D. Painterly classic (Pre-Raphaelite mossy-jade, burnished bronze, Burne-Jones emerald)
+  D. Painterly classic (mossy-jade brushwork, burnished bronze, jewel-tone emerald, Romantic-era oil register)
   E. Monochrome (pewter-monochrome, silver-tone)
   F. Bioluminescent / magical (bioluminescent-cobalt-emerald, phosphorescent-blue, glowing-cyan-and-violet)
   G. Cinematic (teal-and-orange cinematic, Hollywood blockbuster register)
@@ -1691,7 +1691,7 @@ NEVER use negation.`,
       'cinematic teal-and-orange palette, saturated cool-and-warm contrast, Hollywood blockbuster register',
       'abyssal-black-and-cyan palette, deep-sea register with bioluminescent cyan accents against the black void',
       'Aivazovsky-storm-amber palette, golden sun-break in the dark storm-cloud, painterly drama through chiaroscuro',
-      'Pre-Raphaelite mossy-jade palette, Burne-Jones emerald-and-amber, Brotherhood brushwork register',
+      'mossy-jade and amber painterly palette, jewel-tone Romantic-era oil brushwork register',
       'polar-silver-blue palette, glacier-cyan with cool whites, polar register',
       'sunset-coral-salmon palette, warm sky-gradient melting into the deep-ocean dark below',
       'monochrome-pewter palette, silver-tone classical register',
