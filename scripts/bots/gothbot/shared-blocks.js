@@ -33,6 +33,15 @@ const PROMPT_PREFIX =
 const PROMPT_SUFFIX =
   'no text no words no watermarks, frame-worthy dark-fantasy art';
 
+// gpt-image-2 medium directive (routed via mediumByModel in index.js).
+// GPT-Image-2 reads the bot's normal mediums + painterly anchors as "go
+// full abstract / ornamental plate" and drops the gothic-horror subject.
+// This clean directive — positive-only, no name-drops, no negation
+// cascade — renders recognizable gothic-fantasy scenes instead. Mirrors
+// the 2026-06-05 OceanBot mystical-mermaid cleanup (commit b0776fb9).
+const GPT_CLEAN =
+  'Cinematic gothic fantasy illustration, clean editorial-poster render with clearly readable figures and recognizable gothic architecture, deep moody jewel-tone palette with atmospheric depth, dark fantasy register';
+
 const ELEGANT_DARKNESS_BLOCK = `━━━ NIGHTSHADE — BEAUTIFUL, DANGEROUS, ALIVE ━━━
 
 Dark fantasy at its most stylish — the aesthetic world of vampire hunters, gothic action cinema, supernatural adventure. Moonlit baroque architecture, candlelit crypts, foggy graveyards, cathedral ruins with broken stained glass, moss-covered gargoyles, velvet-lined interiors, Victorian finery. Rich varied palette — DEEP PURPLES + MIDNIGHT BLUES + VELVET BLACKS + POISON GREENS + WITCH-FIRE GREEN + FEL-VIOLET + BLACKLIGHT + MOONLIT SILVER + TWILIGHT LAVENDER + CANDLE-AMBER + TORCH-ORANGE + FORGE-EMBER + ALCHEMIST-GOLD. WEAVE MULTIPLE ACCENT COLORS INTO EACH SCENE — a scene might have a violet twilight sky + witch-fire green glow in a window + warm amber candle in the foreground + crimson accents on a banner. Avoid single-hue monochrome clustering. Red/crimson stays as accent only — never coloring whole windows/buildings/moons. Supernatural tension hangs in the air — something ancient stirs in shadows, candles flicker at unseen currents, fog curls low across flagstones. Dramatic Victorian-era styling — ornate fabric, silver jewelry, baroque weapons.
@@ -126,6 +135,7 @@ const PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY =
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
+  GPT_CLEAN,
   ELEGANT_DARKNESS_BLOCK,
   TWILIGHT_COLOR_BLOCK,
   ALLURING_BEAUTY_BLOCK,

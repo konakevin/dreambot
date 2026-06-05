@@ -12,6 +12,14 @@ const PROMPT_PREFIX =
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
+// gpt-image-2 medium directive (routed via mediumByModel in index.js).
+// GPT-Image-2 reads "painterly movie-poster illustration" + "concept art"
+// + the dragon-scene path's 5 painter name-drops as "go full abstract
+// painterly plate" and drops the dragon / fantasy subject. Positive-only,
+// no name-drops, no negation cascade. Mirrors mystical-mermaid b0776fb9.
+const GPT_CLEAN =
+  'Cinematic epic-fantasy illustration, clean editorial-poster render with clearly readable creatures and recognizable fantasy figures, rich jewel-tone palette with atmospheric depth, mythic high-fantasy register';
+
 const EPIC_FANTASY_BLOCK = `━━━ EPIC FANTASY AESTHETIC (NON-NEGOTIABLE) ━━━
 
 LOTR / Game-of-Thrones / Harry-Potter film-still energy. Concept-art movie quality — think Peter Jackson / John Howe / Alan Lee / Frank Frazetta / Iain McCaig visual DNA. Warhammer-painterly-scale mythic. Never cartoon, never generic-RPG-art, never cheap-stock-fantasy. Every render could be a chapter-opener painting in an illustrated edition of a great fantasy novel.`;
@@ -94,6 +102,7 @@ ATMOSPHERIC PARTICLES THICK IN THE FRAME: drifting magical pollen, sparks, ember
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
+  GPT_CLEAN,
   EPIC_FANTASY_BLOCK,
   MAGICAL_ATMOSPHERE_EVERYWHERE_BLOCK,
   PAINTERLY_ILLUSTRATION_BLOCK,

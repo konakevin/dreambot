@@ -244,6 +244,18 @@ module.exports = {
   // above already excludes them, but kept consistent for readability).
   // cyborg-man path is deactivated 2026-06-05 — entry left for reference if
   // the path is ever re-enabled.
+  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
+  // 'mechbot_gpt_clean' medium + a minimal prefix override. Pulls
+  // GPT-Image-2 out of the abstract-plate prior triggered by the bot's
+  // "concept art / production-art polish" prefix. 2026-06-05.
+  mediumByModel: {
+    'openai/gpt-image-2': 'mechbot_gpt_clean',
+  },
+
+  promptPrefixByMedium: {
+    mechbot_gpt_clean: 'mech sci-fi scene',
+  },
+
   modelByPath: {
     'cyborg-woman': [
       'openai/gpt-image-2',
@@ -308,6 +320,12 @@ module.exports = {
   // Per-medium prompt injection — MechBot's dialect for the `render` medium.
   // Front-loads photoreal / VFX language ahead of the Sonnet-written scene.
   mediumStyles: {
+    // gpt-image-2 clean medium (routed via mediumByModel above). Pulls
+    // GPT-Image-2 out of the abstract-plate prior triggered by the bot's
+    // production-art prefix + mech render mediums. Mirrors mystical-mermaid
+    // (2026-06-05).
+    mechbot_gpt_clean:
+      'Cinematic mech illustration, clean editorial-poster render with clearly readable mechanical detail and recognizable machinery, polished metal palette with atmospheric depth, ornate-industrial sci-fi register',
     // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `4K film-
     // finish polish` + 3-stack NOT tail (NOT cartoon / NOT toy / NOT
     // videogame). "Feature-film VFX quality / physically-based rendering /

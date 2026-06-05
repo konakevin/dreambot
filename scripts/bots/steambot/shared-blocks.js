@@ -12,6 +12,14 @@ const PROMPT_PREFIX =
 // 2026-06-02 cruft-audit micro-strip — dropped `hyper detailed` tech-spec.
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
+// gpt-image-2 medium directive (routed via mediumByModel in index.js).
+// GPT-Image-2 reads "impossibly-detailed" + steampunk illustration as
+// "go full abstract ornamental plate" and drops the brass/clockwork
+// subject. Positive-only, no name-drops, no negation cascade. Mirrors
+// mystical-mermaid b0776fb9.
+const GPT_CLEAN =
+  'Cinematic steampunk illustration, clean editorial-poster render with clearly readable brass clockwork and recognizable Victorian-industrial detail, warm gaslit palette with atmospheric depth, ornate-industrial register';
+
 const STEAMPUNK_OBSESSIVE_DETAIL_BLOCK = `━━━ OBSESSIVE STEAMPUNK DETAIL — NON-NEGOTIABLE ━━━
 
 Every gear, rivet, pipe, valve, pressure-gauge, rivet-seam, polished-brass-surface, copper-patina-detail rendered with MAXIMUM detail. Warm brass + copper + bronze + oiled-wood DOMINANT palette. NEVER sparse, NEVER minimal. Surface density is the signature.`;
@@ -51,6 +59,7 @@ Handsome / dashing / rugged / intent / capable steampunk man, candid solo, doing
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
+  GPT_CLEAN,
   STEAMPUNK_OBSESSIVE_DETAIL_BLOCK,
   VICTORIAN_INDUSTRIAL_BLOCK,
   NO_NAMED_CHARACTERS_BLOCK,

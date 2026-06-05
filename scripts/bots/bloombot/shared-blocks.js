@@ -23,6 +23,20 @@ const PROMPT_PREFIX =
 const PROMPT_SUFFIX =
   "render every named species as that exact species in its named color, color STRICTLY within the scene's chosen theme, depth built from receding layers of more blooms and clearly-rendered scenery, the sky clean and clear, every layer crisply rendered, no text, no words, no watermarks, gallery quality";
 
+// gpt-image-2 medium directive (routed via mediumByModel in index.js).
+// GPT-Image-2 reads the bot's heavy "monumental bloom-form / dominating
+// the composition / every petal jewel-saturated" prefix + the bot's
+// regular flower-painting mediums as "go full abstract botanical plate"
+// and loses petal/species clarity. Positive-only directive — mirrors
+// mystical-mermaid b0776fb9.
+//
+// NO palette anchor (`jewel-tone`, `jewel-saturated`, etc.) — many
+// BloomBot seeds carry their own scene-specific color palette (white +
+// gold, soft pastels, monochrome rose, etc.). The medium's palette
+// would clash; let the scene's own color call land.
+const GPT_CLEAN =
+  'Cinematic floral illustration, clean editorial-poster render with clearly readable blooms and recognizable petal detail, lush layered composition with atmospheric depth, abundant garden register';
+
 const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE — NON-NEGOTIABLE ━━━
 No humans, no faces, no figures, no silhouettes, no shadows of people anywhere in the frame. Wildlife (hummingbird, bee, butterfly, dragonfly, small lizard) is allowed only as peripheral accent — never the subject.`;
 
@@ -42,6 +56,7 @@ const ANTI_DRIFT_BLOCK = `━━━ DEFAULTS TO RESIST ━━━
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
+  GPT_CLEAN,
   NO_PEOPLE_BLOCK,
   DENSITY_BLOCK,
   ARRANGEMENT_BLOCK,

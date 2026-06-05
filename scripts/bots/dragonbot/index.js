@@ -61,7 +61,20 @@ module.exports = {
   // context word dropped — DragonBot is dragon-fantasy, not forest).
   // FaeBot uses: 'enchanted-forest fantasy concept art, painterly'
   mediumStyles: {
+    // gpt-image-2 clean (routed via mediumByModel below). Pulls GPT-Image-2
+    // out of the abstract painterly-plate prior the bot's painted_fantasy
+    // medium + dragon-scene's 5-painter prefix trigger. Mirrors mystical-
+    // mermaid (2026-06-05). NOTE: dragon-scene path still prepends its
+    // own per-path prefix; if gpt-2 renders on dragon-scene still look
+    // painterly, that's the path-prefix winning — separate fix later.
+    dragonbot_gpt_clean: blocks.GPT_CLEAN,
     painted_fantasy_novel: 'fantasy concept art, painterly',
+  },
+
+  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
+  // 'dragonbot_gpt_clean' medium. 2026-06-05.
+  mediumByModel: {
+    'openai/gpt-image-2': 'dragonbot_gpt_clean',
   },
 
   // Override prefix to empty (matches FaeBot exactly).
@@ -136,13 +149,15 @@ module.exports = {
   // per-path modelByPath — Kevin opened it up to all 8 models.
   useModelPicker: true,
   // Bot-wide allowedModels: bot-wide MINUS Flux Dev + Flux 2 Max
-  // (Kevin 2026-05-31) AND MINUS Flux 2 Pro (Kevin 2026-06-02, fleet-wide
-  // heart-ban). Was `ALL_ENABLED_AI_MODELS` — dropped 3 models fleet-wide
-  // for DragonBot after audit. Explicit list because bot is a proper subset.
+  // (Kevin 2026-05-31), MINUS Flux 2 Pro (Kevin 2026-06-02, fleet-wide
+  // heart-ban), AND MINUS Flux 2 Flex (Kevin 2026-06-05, F2 Flex was the
+  // remaining F2-family model and the path-level audits had been banning
+  // it on every reviewed path anyway — promoting to bot-wide).
+  // Was `ALL_ENABLED_AI_MODELS` — dropped 4 models fleet-wide for DragonBot
+  // after audit. Explicit list because bot is a proper subset.
   allowedModels: [
     'google/gemini-2-image',
     'openai/gpt-image-2',
-    'black-forest-labs/flux-2-flex',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-1.1-pro',
   ],
@@ -152,15 +167,20 @@ module.exports = {
   // × 8 models × 3 reps and hearted the renders he WANTED REMOVED. The
   // surviving model arrays are the bot-wide 8 minus his bans per path.
   // modelByPath takes precedence over allowedModels in the engine
-  // (botEngine.js lines 1279-1311) — only these 4 paths are constrained;
-  // all 13 others still roll from the full 8.
+  // (botEngine.js lines 1279-1311) — only these paths are constrained;
+  // remaining paths roll from the bot-wide allowedModels.
   //
   // Bans (model → reason):
   //   artsy-girl              ─ GPT-2  (no male twin in dragonbot — female-only)
-  //   female-adventurer       ─ Banana, Flux 2 Flex     (mirrored to male-adventurer)
+  //   female-adventurer       ─ Banana                  (mirrored to male-adventurer)
   //   female-explorer         ─ Flux Dev                (mirrored to male-explorer)
-  //   female-action-scenes    ─ GPT-2, Flux Dev, Flux 2 Pro, Flux 2 Flex, Flux 2 Max
-  //                                                     (mirrored to male-action-scenes — only 3 survivors)
+  //   female-action-scenes    ─ GPT-2, Flux Dev, Flux 2 Pro
+  //                                                     (mirrored to male-action-scenes — 3 survivors)
+  //
+  // Note: Flux 2 Flex + Flux 2 Max were banned bot-wide 2026-06-05 — they
+  // no longer appear in any per-path override here (previously listed on
+  // artsy-girl / female-explorer / male-explorer / female-adventurer /
+  // male-adventurer / female-action-scenes / male-action-scenes).
   //
   // Male sister-path bans (2026-05-31): for the 3 female paths with a
   // direct male equivalent, the same bans were applied to keep the cast
@@ -178,38 +198,30 @@ module.exports = {
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-      'black-forest-labs/flux-2-max',
     ],
     'female-adventurer': [
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-max',
     ],
     'male-adventurer': [
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-max',
     ],
     'female-explorer': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-      'black-forest-labs/flux-2-max',
     ],
     'male-explorer': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-      'black-forest-labs/flux-2-max',
     ],
     'female-action-scenes': [
       'google/gemini-2-image',

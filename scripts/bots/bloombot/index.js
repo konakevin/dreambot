@@ -78,6 +78,25 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
+  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
+  // 'bloombot_gpt_clean' medium + minimal prefix + simpler suffix.
+  // The bot-wide PROMPT_PREFIX ("monumental bloom-form dominating
+  // composition") + PROMPT_SUFFIX (species-color faithfulness rules)
+  // both push GPT-Image-2 into abstract botanical plates. Strip them
+  // for gpt-2 only. 2026-06-05 (mirrors b0776fb9).
+  mediumByModel: {
+    'openai/gpt-image-2': 'bloombot_gpt_clean',
+  },
+  mediumStyles: {
+    bloombot_gpt_clean: blocks.GPT_CLEAN,
+  },
+  promptPrefixByMedium: {
+    bloombot_gpt_clean: 'lush flower scene',
+  },
+  promptSuffixByMedium: {
+    bloombot_gpt_clean: 'no text, no words, no watermarks, gallery quality',
+  },
+
   vibes: ['cinematic'],
 
   paths: [

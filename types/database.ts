@@ -207,6 +207,7 @@ export type Database = {
           prompt_preview: string | null;
           sonnet_fell_back_to_secondary: boolean | null;
           sonnet_retries: number | null;
+          source: string;
           status: string;
           vibe: string | null;
         };
@@ -225,6 +226,7 @@ export type Database = {
           prompt_preview?: string | null;
           sonnet_fell_back_to_secondary?: boolean | null;
           sonnet_retries?: number | null;
+          source?: string;
           status: string;
           vibe?: string | null;
         };
@@ -243,6 +245,7 @@ export type Database = {
           prompt_preview?: string | null;
           sonnet_fell_back_to_secondary?: boolean | null;
           sonnet_retries?: number | null;
+          source?: string;
           status?: string;
           vibe?: string | null;
         };

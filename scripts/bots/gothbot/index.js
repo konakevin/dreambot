@@ -197,6 +197,15 @@ module.exports = {
     'monster-prowl-weta': ['dark', 'nightshade', 'macabre'],
   },
 
+  // mediumByModel: when gpt-image-2 is rolled (any path), force the
+  // bot-only 'gothbot_gpt_clean' medium. The clean directive lives in
+  // shared-blocks.js GPT_CLEAN — neutralizes the painterly anchors that
+  // pull GPT-Image-2 into abstract / ornamental plate renders.
+  // 2026-06-05 (mirrors OceanBot mystical-mermaid cleanup b0776fb9).
+  mediumByModel: {
+    'openai/gpt-image-2': 'gothbot_gpt_clean',
+  },
+
   mediumByPath: {
     // Character paths consolidated to anime medium (matches scene paths).
     'goth-closeup': 'anime',
@@ -311,6 +320,11 @@ module.exports = {
   // Per-medium prompt injection — gives each medium distinct visual character.
   // This fragment gets injected between promptPrefix and the Sonnet-written scene.
   mediumStyles: {
+    // gpt-image-2 clean medium (routed via mediumByModel above). Pulls
+    // GPT-Image-2 out of the abstract / ornamental plate prior the bot's
+    // normal mediums + PROMPT_PREFIX trigger. Positive-only, no name-drops,
+    // no negation cascade. Mirrors mystical-mermaid (b0776fb9, 2026-06-05).
+    gothbot_gpt_clean: blocks.GPT_CLEAN,
     // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `hyper-detailed`
     // + 8-stack NOT chain (NOT photoreal/film-still/35mm/photo-realistic
     // CGI/plain-anime/shonen/moe/cute). The "Castlevania concept-art /

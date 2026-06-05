@@ -37,6 +37,15 @@ module.exports = {
   // Blade Runner 2049 / Dune / Interstellar live-action film aesthetic.
   mediums: ['starbot_hyperreal'],
 
+  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
+  // 'starbot_gpt_clean' medium. Strips the "concept art" / "production-art
+  // polish" anchors that pull GPT-Image-2 into abstract plates and gives it
+  // a clean sci-fi illustration register instead. 2026-06-05 (mirrors
+  // OceanBot mystical-mermaid cleanup b0776fb9).
+  mediumByModel: {
+    'openai/gpt-image-2': 'starbot_gpt_clean',
+  },
+
   mediumByPath: {
     'real-space': 'real_astro', // NASA-grade astrophotography stays separate
     // Character paths: starbot_hyperreal biases hero-portraits hard. Override
@@ -149,6 +158,10 @@ module.exports = {
   // uses environment-dominant language so the scene wins over the figure
   // (mirrors gothbot gothic_oil_garden pattern).
   promptPrefixByMedium: {
+    // gpt-image-2 clean: strip the bot-wide "concept art / production-art
+    // polish" prefix. Just a minimal content anchor — the GPT_CLEAN
+    // mediumStyle carries the actual register.
+    starbot_gpt_clean: 'sci-fi cosmic scene',
     star_oil_cosmos:
       'cinematic sci-fi oil painting, environment-dominant composition, heavy impasto brushwork, atmospheric depth',
     // 2026-06-02 cruft-audit micro-strip — dropped travel-mag `wallpaper-
@@ -205,6 +218,10 @@ module.exports = {
   // giving each medium StarBot's Blade-Runner / Dune / Alien / 2001 /
   // Moebius-Jodorowsky DNA instead of the generic medium text.
   mediumStyles: {
+    // gpt-image-2 clean medium (routed via mediumByModel above). Pulls
+    // GPT-Image-2 out of the abstract-plate prior the bot's normal
+    // production-art mediums trigger. Mirrors mystical-mermaid (2026-06-05).
+    starbot_gpt_clean: blocks.GPT_CLEAN,
     photography:
       '35mm cinematic sci-fi film-still — Denis-Villeneuve Blade-Runner-2049 / Dune / Arrival visual family, Roger-Deakins cinematography, anamorphic widescreen with characteristic horizontal lens-flare, shallow-DOF practical-effects scale, physical-model + miniature-photography authenticity, subdued naturalistic color-grade with shadow-heavy low-key lighting, Kubrick-2001-style precision framing, atmospheric haze, photographic grain',
     vaporwave:

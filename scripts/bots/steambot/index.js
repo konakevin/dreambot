@@ -137,6 +137,14 @@ module.exports = {
   // steambot-painted-woman (painterly-photographic character portraiture).
   mediums: ['steambot-hyperreal'],
 
+  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
+  // 'steambot_gpt_clean' medium + minimal prefix. Strips the
+  // "impossibly-detailed" anchor that pulls GPT-Image-2 into
+  // abstract ornamental plates. 2026-06-05 (mirrors b0776fb9).
+  mediumByModel: {
+    'openai/gpt-image-2': 'steambot_gpt_clean',
+  },
+
   mediumByPath: {
     'sexy-steampunk-woman': 'steambot-painted-woman',
     'steampunk-man': 'steambot-painted-man',
@@ -150,6 +158,10 @@ module.exports = {
   },
 
   mediumStyles: {
+    // gpt-image-2 clean (routed via mediumByModel above). Pulls GPT-Image-2
+    // out of the abstract-plate prior the heavy steampunk illustration
+    // anchors trigger. Mirrors mystical-mermaid (2026-06-05).
+    steambot_gpt_clean: blocks.GPT_CLEAN,
     'steambot-hyperreal': STEAMBOT_HYPERREAL_STYLE,
     'steambot-painted-woman': STEAMBOT_PAINTED_WOMAN_STYLE,
     'steambot-painted-man': STEAMBOT_PAINTED_MAN_STYLE,
@@ -157,6 +169,10 @@ module.exports = {
   },
 
   promptPrefixByMedium: {
+    // gpt-image-2 clean: replace the "impossibly-detailed" bot prefix
+    // with a minimal content anchor. The GPT_CLEAN mediumStyle carries
+    // the actual register.
+    steambot_gpt_clean: 'steampunk Victorian scene',
     'steambot-hyperreal': blocks.PROMPT_PREFIX,
     'steambot-painted-woman': blocks.PROMPT_PREFIX,
     'steambot-painted-man': blocks.PROMPT_PREFIX,

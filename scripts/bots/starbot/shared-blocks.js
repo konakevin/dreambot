@@ -14,6 +14,14 @@ const PROMPT_PREFIX =
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
+// gpt-image-2 medium directive (routed via mediumByModel in index.js).
+// GPT-Image-2 reads the bot's normal mediums + "concept art" /
+// "production-art polish" anchors as "go full abstract plate" and drops
+// the actual spacecraft / cosmic subject. Positive-only directive,
+// no name-drops, no negation cascade. Mirrors mystical-mermaid b0776fb9.
+const GPT_CLEAN =
+  'Cinematic sci-fi illustration, clean editorial-poster render with clearly readable spacecraft and recognizable cosmic architecture, luminous deep-space palette with atmospheric depth, epic space-opera register';
+
 const SCI_FI_AWE_BLOCK = `━━━ SCI-FI AWE (NON-NEGOTIABLE) ━━━
 
 Blade Runner / Dune / Interstellar / Alien / 2001 / Arrival / Annihilation / Foundation production value. Epic scale. Mind-bending composition. Concept-art-book / movie-frame quality. The kind of visual that makes you pause and whisper "woah."`;
@@ -85,6 +93,7 @@ NOT a static landscape painting. NOT a "ship in nebula" stock composition. EVERY
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
+  GPT_CLEAN,
   SCI_FI_AWE_BLOCK,
   NO_COZY_EXCEPT_COZY_PATH_BLOCK,
   NO_NAMED_CHARACTERS_BLOCK,
