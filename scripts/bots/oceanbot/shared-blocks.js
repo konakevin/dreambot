@@ -74,10 +74,23 @@ The vessel is a pre-1850 wooden sailing ship: timber hull, hemp rigging, canvas 
 const SUBMERGED_CIVILIZATION_BLOCK = `━━━ HERO IS AN ANCIENT CIVILIZATIONAL MONUMENT ━━━
 The hero is an ancient civilizational monument resting on the seafloor — architecture built by human hands centuries to millennia ago, now coral-encrusted and reclaimed by the sea. Carved geometry, deliberate proportion, and inscription remain readable through the encrustation. The specific monument is given in the RUIN CLASS axis below — render that, not a generic ruin.`;
 
+// Pirate-era guardrail — embedded into the pirates template. Locks era
+// (Golden Age of Piracy, 1650-1730) + character gear (tricorn, cutlass,
+// flintlock, frock coat) + vessel anatomy (pre-1850 wooden). Same
+// enumeration pattern as PRE_1850_VESSEL_BLOCK — the listed terms
+// REINFORCE what the rolled pirate_scene already encodes (every entry
+// names a Golden-Age era subject + period-specific kit + ship anatomy),
+// so the front-loading aligns with the axis instead of competing. The
+// specific scene + chars + action all come from the rolled pirate_scene
+// axis; this block just anchors the era boundary.
+const PIRATE_ERA_BLOCK = `━━━ ERA — GOLDEN AGE OF PIRACY (1650-1730) ━━━
+Mid-17th to early-18th century. Wooden sailing ships — galleons, frigates, brigs, sloops, brigantines, schooners. Tricorn and bicorn hats, frock coats and waistcoats, sashes and bandoliers, cutlasses, flintlock pistols, blunderbusses, hemp rope, brass and iron fittings. Caribbean / Atlantic / Mediterranean / Indian Ocean settings — Tortuga, Port Royal, Nassau, Madagascar, Maracaibo. Lanterns, candlelight, cannon-smoke, gun-deck shadow.`;
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   CANVAS_MARITIME,
   PRE_1850_VESSEL_BLOCK,
   SUBMERGED_CIVILIZATION_BLOCK,
+  PIRATE_ERA_BLOCK,
 };

@@ -803,6 +803,99 @@ NEVER use negation.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // PIRATES path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 3rd OceanBot path — Pirates-of-the-Caribbean cinema (Golden Age of
+  // Piracy, 1650-1730). EVEN LEANER than shipwreck-kingdom + lost-cities:
+  // only 2 path-bespoke pools because the hero pirate_scene entry
+  // encodes setting + characters + action + atmosphere all in one rich
+  // 18-22 word phrase. Lighting + atmosphere come from the universal
+  // pools.
+  //
+  // EXCEPTION TO OCEANBOT NO-PEOPLE CONVENTION — pirates are visible
+  // subjects, not distant scale-provers. But the SETTING (ocean / harbor
+  // / island / deck / cove) still does as much visual work as the figures.
+
+  pirate_scenes: {
+    format: 'simple',
+    theme: `PIRATE SCENES for OceanBot's pirates path — Pirates-of-the-Caribbean cinema, Golden Age of Piracy (1650-1730). Each entry is ONE specific maritime-cinema moment, 18-24 words. Setting + characters + action + atmosphere ALL BAKED INTO THE ENTRY — this is the HERO pool and carries 80% of the render.
+
+⚠️ MANDATORY ERA — every scene is 1650-1730 Golden Age of Piracy. Wooden ships (galleons, frigates, brigs, sloops, schooners, brigantines), tricorn/bicorn hats, frock coats, sashes and bandoliers, cutlasses, flintlock pistols, lanterns, cannon-smoke. Caribbean / Atlantic / Mediterranean / Indian Ocean settings.
+
+✓ VARIETY MANDATE — distribute across moment categories (~3 entries each):
+  A. Ship at sea (galleon under full sail, brig running before storm, sloop hidden in fog, schooner racing dawn light)
+  B. Boarding action / sea battle (two wooden hulls grappled, cutlasses + cannon smoke, broadside exchange, pirates swinging on boarding ropes)
+  C. Harbor town night (Tortuga / Port Royal / Nassau lantern-lit waterfront, ships at anchor, tavern doorway spilling amber light)
+  D. Hidden cove / tropical inlet (bonfire on white sand, longboats, treasure chests, palm silhouettes, careened ship)
+  E. Captain / crew portrait (captain at helm during storm, lookout at masthead, crew unloading cargo, lookout glassing horizon)
+  F. Below decks / interior (gun-deck mid-battle, captain's cabin candlelit, powder magazine, hammock-strung berth)
+  G. Tropical anchorage / island base (Madagascar moonlit cove, mangrove-hidden careenage, glassy bay at dusk, jungle-pressed inlet)
+  H. Period-specific named locations (Tortuga harbor, Port Royal raid, Nassau pirate republic, Maracaibo Spanish-fort attack, Madagascar pirate cove)
+
+Each entry: ONE specific maritime cinema moment with explicit period-accurate detail (tricorn/cutlass/flintlock/lantern/etc) + ONE atmospheric anchor (golden hour / storm / lantern-glow / fog / etc) + ONE action or character beat. NO modern vessels. NO sea monsters. NO sunken ruins. NO ghost ships (those are other paths).
+
+Visual register: "wallpaper-worthy / Pirates-of-the-Caribbean-poster cinematic." Setting carries mood as much as the figures.
+
+DO write positively. NEVER write a banned-word negation. Speak the moment directly, vivid and specific.`,
+    touchpoints: [
+      'Pirate frigate breaking through fog bank at dawn, bow spray catching pink sunlight, three masts silhouetted, tattered black sails filling with morning wind.',
+      'Two brigs locked hull-to-hull, grappling hooks taut, pirates swinging across on boarding ropes through cannon smoke, cutlasses gleaming in muzzle flash.',
+      'Nassau harbor at twilight, wooden taverns glowing amber along the waterfront, seven pirate sloops anchored in turquoise shallows, torch smoke drifting over cobblestones.',
+      'Secret Caribbean inlet at sunset, bonfire roaring on white sand, captured Spanish galleon careened offshore, treasure chests scattered open beside palm silhouettes.',
+      'Pirate captain gripping the helm during hurricane, green lightning splitting black sky, ocean spray freezing mid-air, greatcoat whipping in gale winds.',
+      'Broadside exchange at golden hour, pirate schooner versus Royal Navy frigate, cannon fire rippling down both hulls, smoke columns rising into orange sky.',
+      'Longboat crew hauling gold-filled chests onto tropical beach, palm fronds overhead, the mothership anchored beyond the reef, bonfire smoke curling skyward.',
+      'Tortuga tavern doorway spilling lantern light onto rain-slick stones, silhouettes of brawling pirates inside, Jolly Roger painted above the archway flapping wet.',
+      'Pirate brigantine hidden deep in mangrove channels, careened at low tide, crew scraping barnacles from exposed hull, parrots screaming from twisted branches overhead.',
+      'Gun deck below a galleon mid-battle, powder-blackened crew ramming 24-pounders, lantern light swinging violently, brass fittings gleaming through rolling cannon smoke.',
+      'Pirate sloop racing before monsoon squall at sunset, full canvas straining, bow plunging through violet swells, storm wall towering black behind golden light.',
+      'Madagascar anchorage at night, dozen pirate ships moored in glassy cove, lanterns reflected perfectly in still water, jungle shadows pressing close around the bay.',
+      'Captain at the bowsprit in golden hour, one boot on the figurehead, spyglass raised, ocean glittering to horizon, crew working rigging behind him in silhouette.',
+      'Lookout perched in the crow\'s nest at dawn, fog parting below to reveal an unsuspecting Spanish treasure galleon, hand cupped beside his mouth ready to shout.',
+      'Pirate captain\'s cabin by candlelight, sea-stained charts spread across the table, brass dividers and a silver compass, lantern swinging slow with the ship\'s roll.',
+    ],
+    instructions: `Each entry is ONE specific Golden Age of Piracy moment, 18-24 words. Format: "subject + period-detail + atmosphere + action/beat." Vary across the 8 categories above. NEVER name modern vessels or modern weaponry. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  pirate_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's pirates path — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across framing categories — pirates-specific (above water, characters in frame, maritime cinema):
+  A. LOW-ANGLE looking up at ship/figure (camera below deck-level, mast towering against sky / captain looming against storm)
+  B. ABOVE-DECK aerial (sweeping pan above the ship's deck / harbor-aerial above moored fleet / overhead of boarding action)
+  C. OVER-THE-SHOULDER (camera behind a pirate figure, gaze directed at the action / horizon / ship)
+  D. WIDE ENVIRONMENTAL (vast ocean establishing shot, ship as one element in a sea-and-sky scene)
+  E. CLOSE PORTRAIT (camera close to a single figure, ship-mass extending beyond frame)
+  F. THROUGH-THE-FOREGROUND (rigging silhouette / mast-line / cannon barrel framing the action beyond)
+  G. INTERIOR (camera inside the gun-deck / captain's cabin / harbor tavern / longboat, looking out or across)
+  H. CINEMATIC SIDE-PROFILE (lateral framing of two ships, broadside engagement, full ship visible parallel to camera)
+
+NEVER use negation. NEVER name modern cinema terms (dolly / dutch tilt / etc — anachronistic vocabulary).`,
+    touchpoints: [
+      'LOW-ANGLE looking up at the captain at the helm, sky towering behind him heavy with storm-clouds',
+      'ABOVE-DECK aerial sweep along the full length of the gun-deck, crew parading below as cannon-smoke curls upward',
+      'OVER-THE-SHOULDER framing behind the lookout in the crow\'s nest, his gaze locking onto an unsuspecting ship in the distance',
+      'WIDE ENVIRONMENTAL ESTABLISHING shot, pirate galleon as one element on a vast golden-hour sea, horizon stretching the full width',
+      'CLOSE PORTRAIT framing on the captain\'s face by lantern light, ship\'s wheel and rigging out-of-focus behind',
+      'THROUGH-THE-RIGGING framing, taut hemp lines and shroud-ratlines silhouetted across the foreground, action visible between them',
+      'INTERIOR FRAMING from the gun-deck shadow, cannon row receding into smoky depth, lantern light raking across powder-blackened crew',
+      'CINEMATIC SIDE-PROFILE of two ships at broadside range, full hulls visible parallel to camera, cannon-smoke billowing between',
+      'WORM\'S-EYE upward angle from waterline, ship\'s hull curving overhead like a wooden cathedral against bright sky',
+      'OVER-THE-BOWSPRIT framing, camera behind the figurehead looking forward, horizon and approaching prize ship in the distance',
+      'HARBOR-AERIAL framing above a moored fleet, dozens of ships and lantern-lights laid out in glassy still water below',
+      'THROUGH-THE-TAVERN-DOORWAY framing, lantern-warmth spilling outward across cobblestones, brawling silhouettes inside',
+      'SIDE-PROFILE long shot of a sloop racing before a storm, full canvas straining, dark storm-wall towering behind',
+      'CLOSE-DETAIL of hands on the helm or cutlass-grip, the broader action softly blurring behind in the deeper plane',
+      'AERIAL THREE-QUARTER above the deck during boarding action, multiple pirates swinging across on boarding ropes between the ships',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms (dolly / dutch / tilt-up). Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

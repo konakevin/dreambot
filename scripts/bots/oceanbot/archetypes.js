@@ -60,4 +60,22 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  OCEANBOT_PIRATES: {
+    description:
+      'Pirates-of-the-Caribbean cinema — Golden Age of Piracy (1650-1730). Pirate galleons under full sail, harbor towns lantern-lit at dusk, hidden tropical coves, boarding actions, gun-deck shadow. EXCEPTION to OceanBot’s no-people convention — pirates ARE visible subjects. The setting still does as much visual lifting as the figures. Even leaner than shipwreck/lost-cities — the pirate_scene hero pool encodes setting + characters + action + atmosphere in one entry, so the supporting axes can do less.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      // 2-slot path layer (hero + composition) — see archetypes.js header
+      // for axis-count calibration. Pirates hero is the richest pool in
+      // the bot (legacy 18-22 word entries doing 4 jobs at once); 2 path
+      // slots is the right count here.
+      path: ['pirate_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

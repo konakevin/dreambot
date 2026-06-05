@@ -77,5 +77,13 @@ module.exports = {
   LOST_CITIES_SURPRISE_ELEMENT: load('lost_cities_surprise_element'),
   LOST_CITIES_DRAMA: load('lost_cities_drama'),
 
-  // (Other 8 paths' pools added when their gen-scripts ship.)
+  // ── pirates path-bespoke pools (3rd path — above-water naval-lore,
+  // ── Pirates-of-the-Caribbean cinema. Even LEANER than lost-cities:
+  // ── the hero pirate_scene entry encodes setting + characters + action
+  // ── + atmosphere all in one, so only 2 path-bespoke pools are needed.
+  // ── Lighting + atmosphere come from the universal pools.) ──
+  PIRATE_SCENES: load('pirate_scenes'),
+  PIRATE_CAMERA_FRAMING: load('pirate_camera_framing'),
+
+  // (Other 7 paths' pools added when their gen-scripts ship.)
 };

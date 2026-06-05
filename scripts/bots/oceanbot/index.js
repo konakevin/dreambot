@@ -36,7 +36,8 @@ const blocks = require('./shared-blocks');
 const pathBuilders = {
   'shipwreck-kingdom': require('./paths/shipwreck-kingdom'),
   'lost-cities': require('./paths/lost-cities'),
-  // Other 8 paths land as the bot matures.
+  pirates: require('./paths/pirates'),
+  // Other 7 paths land as the bot matures.
 };
 
 module.exports = {
@@ -71,11 +72,22 @@ module.exports = {
     'black-forest-labs/flux-2-pro',
   ],
 
-  // Per-path model bans (Kevin 2026-06-04). lost-cities: bot-wide MINUS
-  // Flux 1.1 Pro — Ultra renders the sunken-stone ruins more atmospherically,
-  // Pro renders read flatter. Down to 4 models on this path.
+  // Per-path model bans (Kevin 2026-06-04).
+  // • lost-cities: bot-wide MINUS Flux 1.1 Pro — Ultra renders the
+  //   sunken-stone ruins more atmospherically, Pro reads flatter.
+  // • pirates: bot-wide MINUS Flux 1.1 Pro — same call from R0 batch;
+  //   the maritime-cinema cutlass/lantern look reads stronger on the
+  //   other 4 models.
+  // Both paths down to 4 models. shipwreck-kingdom + future paths still
+  // get the full 5-model lineup.
   modelByPath: {
     'lost-cities': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-pro',
+    ],
+    pirates: [
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro-ultra',
@@ -99,7 +111,7 @@ module.exports = {
     'nightshade',
   ],
 
-  paths: ['shipwreck-kingdom', 'lost-cities'],
+  paths: ['shipwreck-kingdom', 'lost-cities', 'pirates'],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
   cycleAllPaths: true,
@@ -111,7 +123,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    skipPaths: ['shipwreck-kingdom', 'lost-cities'],
+    skipPaths: ['shipwreck-kingdom', 'lost-cities', 'pirates'],
   },
 
   // Chaos + sensory anchors — DISABLED for the pilot. We're keeping the

@@ -68,4 +68,22 @@ The ruin fills 40-60% of the frame as the dramatic focal anchor. Multi-tier dept
 ━━━ OUTPUT FORMAT ━━━
 Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent underwater moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent objects, treasures, instruments, or artifacts beyond what the rolled axes describe — added details inject anachronism. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
   },
+
+  OCEANBOT_PIRATES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, pirate_scene, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are a maritime-cinema keyframe writer for OceanBot's PIRATES path. Pirates-of-the-Caribbean register — Golden Age of Piracy (1650-1730), Black Pearl / Tortuga / Port Royal / Nassau era. Pirate galleons under full sail, lantern-lit harbors, hidden tropical coves, boarding actions, gun-deck shadow. UNLIKE other OceanBot paths, pirates ARE visible subjects in this path. But the SETTING (ocean / harbor / island / deck / cove) still does as much visual work as the figures. The world is "blown out" cinematic — golden-hour seas, storm-lit decks, lantern-lit harbors, tropical sunsets carrying mood as much as the pirates themselves.
+
+${blocks.PIRATE_ERA_BLOCK}
+${block('PIRATE SCENE (hero — setting + characters + action all in one; give it the most word budget)', pirate_scene)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+The pirate scene fills 50-75% of the frame as the dramatic focal anchor — show CONFLICT, ATMOSPHERE, BEAUTY, not "a pirate ship sails." Multi-tier depth: foreground action / figures / ship rigging → mid-frame setting (ship / harbor / cove) → background sea / sky / horizon. The camera framing above is the LAW. Specific dramatic moments, period-accurate to 1650-1730. Wallpaper-worthy / movie-poster cinematic.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent maritime cinema moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent gear, treasure, or characters beyond what the rolled axes describe. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
 };
