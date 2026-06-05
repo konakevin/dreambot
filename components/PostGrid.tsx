@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import * as Haptics from 'expo-haptics';
 import { useNavigation } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image as ExpoImage } from 'expo-image';
@@ -68,28 +67,12 @@ export function PostGrid({
   const headerHeightRef = useRef(0);
   const [containerHeight, setContainerHeight] = useState(0);
 
-  // "Back to top" pill — surfaces once the user has scrolled past the album's
-  // first row, a quick jump back when they're deep in a long album. Hidden at
-  // the top (fresh navigation) and after a jump-to-top, since the scroll offset
-  // drops below the threshold. Bottom-left so it never collides with the
-  // bottom-right "Just viewed" pill.
-  const [showBackToTop, setShowBackToTop] = useState(false);
   const handleScroll = useCallback(
     (e: { nativeEvent: { contentOffset: { y: number } } }) => {
-      const y = e.nativeEvent.contentOffset.y;
-      const shouldShow = y > headerHeightRef.current + ROW_HEIGHT;
-      setShowBackToTop((prev) => (prev === shouldShow ? prev : shouldShow));
-      onScrollProgress?.(y);
+      onScrollProgress?.(e.nativeEvent.contentOffset.y);
     },
     [onScrollProgress]
   );
-  const handleBackToTop = useCallback(() => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // Hide immediately rather than waiting for the scroll animation to cross
-    // the threshold.
-    setShowBackToTop(false);
-    listRef.current?.scrollToOffset({ offset: 0, animated: true });
-  }, []);
 
   useEffect(() => {
     if (scrollToTopToken && scrollToTopToken > 0) {
@@ -418,16 +401,6 @@ export function PostGrid({
           <Ionicons name="chevron-down" size={14} color="rgba(255,255,255,0.7)" />
         </TouchableOpacity>
       )}
-      {showBackToTop && (
-        <TouchableOpacity
-          style={styles.backToTopButton}
-          onPress={handleBackToTop}
-          activeOpacity={0.85}
-        >
-          <Ionicons name="arrow-up" size={14} color="#FFFFFF" />
-          <Text style={styles.backToTopButtonText}>Top</Text>
-        </TouchableOpacity>
-      )}
     </View>
   );
 }
@@ -453,25 +426,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.15)',
   },
   justViewedButtonText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  backToTopButton: {
-    position: 'absolute',
-    bottom: 24,
-    left: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(15,15,26,0.85)',
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-  },
-  backToTopButtonText: {
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600',
