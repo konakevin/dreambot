@@ -15,6 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
 import { routeFromNotification } from '@/lib/notificationRouting';
@@ -43,6 +44,17 @@ function formatTimeAgo(dateStr: string): string {
   if (days < 7) return `${days}d`;
   return `${Math.floor(days / 7)}w`;
 }
+
+// 5 rotating painter mascots — same set the welcome-gift + loading screens
+// use. Picked stable per mount via useMemo so each visit to the inbox can
+// surface a different "snoozing mascot" in the empty state.
+const MASCOTS = [
+  require('@/assets/images/mascots/mascot-1.jpg'),
+  require('@/assets/images/mascots/mascot-2.jpg'),
+  require('@/assets/images/mascots/mascot-3.jpg'),
+  require('@/assets/images/mascots/mascot-4.jpg'),
+  require('@/assets/images/mascots/mascot-5.jpg'),
+];
 
 // Hard cap on subtext: ensures single-line render on the smallest devices
 // (iPhone SE has ~30 chars of visible budget after icon + time column).
@@ -408,6 +420,10 @@ function GroupRow({
 }
 
 export default function InboxScreen() {
+  // Stable per-mount mascot — different on each inbox visit, like
+  // welcome-gift. Adds a tiny "who's painting tonight?" delight without
+  // adding any user-facing state.
+  const emptyMascot = useMemo(() => MASCOTS[Math.floor(Math.random() * MASCOTS.length)], []);
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage, refetch } =
     useInboxGrouped();
   const [isPulling, setIsPulling] = useState(false);
@@ -590,15 +606,23 @@ export default function InboxScreen() {
             tintColor={colors.accent}
           />
         }
-        renderItem={({ item }) => (
-          <GroupRow
-            group={item}
-            onPress={() => handleTap(item)}
-            onLongPress={() => handleLongPress(item)}
-            selectMode={selectMode}
-            isSelected={selected.has(item.groupKey)}
-            onToggleSelect={() => toggleSelect(item.groupKey)}
-          />
+        renderItem={({ item, index }) => (
+          // Soft fade+slide entrance — staggers the first ~10 rows so the
+          // inbox feels like it's gently arriving rather than snapping in.
+          // FadeInDown only fires on mount, so existing rows don't re-animate
+          // on FlatList recycling; a NEW notification that lands while the
+          // inbox is open animates in by itself, which feels like a tiny
+          // gift each time.
+          <Animated.View entering={FadeInDown.duration(220).delay(Math.min(index * 25, 250))}>
+            <GroupRow
+              group={item}
+              onPress={() => handleTap(item)}
+              onLongPress={() => handleLongPress(item)}
+              selectMode={selectMode}
+              isSelected={selected.has(item.groupKey)}
+              onToggleSelect={() => toggleSelect(item.groupKey)}
+            />
+          </Animated.View>
         )}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) fetchNextPage();
@@ -617,11 +641,13 @@ export default function InboxScreen() {
               <InboxSkeleton />
             ) : (
               <>
-                <Ionicons name="notifications-outline" size={40} color="rgba(255,255,255,0.2)" />
-                <Text style={styles.emptyTitle}>All caught up</Text>
+                {/* Painter mascot stands in for the bell glyph — same
+                    rotating set as welcome-gift, picked stable per mount. */}
+                <Image source={emptyMascot} style={styles.emptyMascot} contentFit="contain" />
+                <Text style={styles.emptyTitle}>All caught up ✨</Text>
                 <Text style={styles.emptySubtitle}>
-                  When people heart, comment, or follow you — and when your DreamBot finishes a new
-                  dream — it lands here.
+                  Your DreamBot&rsquo;s snoozing. Hearts, comments, follows, and fresh dreams will
+                  land right here.
                 </Text>
               </>
             )}
@@ -817,19 +843,29 @@ const styles = StyleSheet.create({
   empty: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 80,
-    gap: 10,
+    paddingTop: 64,
+    gap: 12,
+  },
+  // ~120px mascot — big enough to read as the hero, small enough to leave
+  // room for the title + subtitle without scrolling on the smallest devices.
+  emptyMascot: {
+    width: 120,
+    height: 120,
+    borderRadius: 24,
+    marginBottom: 4,
   },
   emptyTitle: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '700',
+    letterSpacing: -0.2,
   },
   emptySubtitle: {
     color: colors.textSecondary,
     fontSize: 14,
     textAlign: 'center',
     paddingHorizontal: 40,
+    lineHeight: 20,
   },
   sheetBackdrop: {
     flex: 1,
