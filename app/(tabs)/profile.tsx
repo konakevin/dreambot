@@ -412,7 +412,9 @@ const styles = StyleSheet.create({
   topBarActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    // Bumped 14 → 22 so the inbox badge's right-edge (sticking ~6px
+    // past the icon) has clear breathing room from the gear next door.
+    gap: 22,
   },
   topBarBottomBorder: {
     position: 'absolute',
@@ -448,16 +450,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
-  // Standard activity-counter pip at the top-right of the bubble. Red
-  // matches the comment-count badge on DreamCard; cap is "9+" so the
-  // pip stays a single visual size regardless of count.
+  // Standard activity-counter pip at the top-right of the bubble.
+  // Sized so a single digit is comfortably legible — fontSize 9 read
+  // as a smear on retina at this screen scale; 11 reads cleanly.
   inboxBadge: {
     position: 'absolute',
-    top: -4,
-    right: -8,
-    minWidth: 16,
-    height: 16,
-    borderRadius: 8,
+    top: -6,
+    right: -10,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
     backgroundColor: colors.like,
     alignItems: 'center',
     justifyContent: 'center',
@@ -467,9 +469,9 @@ const styles = StyleSheet.create({
   },
   inboxBadgeText: {
     color: '#FFFFFF',
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
-    lineHeight: 11,
+    lineHeight: 13,
     includeFontPadding: false,
   },
   // Album tabs — X-style text + accent-colored underline beneath the
