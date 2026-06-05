@@ -953,7 +953,7 @@ async function runBot(opts) {
     }
     resolvedPath = pathArg;
   }
-  const medium = resolveMedium({ bot, path: resolvedPath });
+  let medium = resolveMedium({ bot, path: resolvedPath });
   const vibeKey = vibeArg === 'random' ? resolveVibe({ bot, medium, path: resolvedPath }) : vibeArg;
 
   const runMeta = {
@@ -1254,9 +1254,9 @@ async function runBot(opts) {
       // is set, use it INSTEAD of bot.promptPrefix/bot.promptSuffix. Lets a specific medium use
       // a totally different stylistic anchor (e.g. gothic-whimsy uses Tim-Burton-whimsical prefix
       // instead of the bot's default Castlevania-manga prefix).
-      const rawPrefix =
+      let rawPrefix =
         (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix || '';
-      const rawSuffix =
+      let rawSuffix =
         (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
         (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
         bot.promptSuffix ||
@@ -1346,6 +1346,48 @@ async function runBot(opts) {
         renderModel = picked.model;
         renderInputOverrides = picked.inputOverrides;
         console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
+      }
+
+      // mediumByModel override: when the rolled model is keyed in
+      // bot.mediumByModel, swap to that bot-only "clean" medium and
+      // rebuild the prompt. Model is unchanged (picker has already
+      // chosen) — only the prompt's stylistic register changes.
+      //
+      // Why: certain models (notably GPT-Image-2) read most bots' default
+      // mediums + promptPrefix as "go full abstract / over-stylized" and
+      // produce renders that don't read as the bot's actual content. A
+      // per-bot _gpt_clean medium with a positive-only directive +
+      // promptPrefixByMedium override neutralizes the bot's normal
+      // painterly anchors so GPT-Image-2's output is recognizable. Mirrors
+      // the 2026-06-05 OceanBot mystical-mermaid cleanup.
+      //
+      // The new medium MUST declare bot.mediumStyles[newMedium] (no DB
+      // re-fetch here). promptPrefixByMedium / promptSuffixByMedium are
+      // honored for the new medium, so the swap can replace prefix+suffix
+      // too — necessary for bots whose default promptPrefix carries
+      // strong stylistic anchors (gothic horror, steampunk brass, etc.).
+      if (bot.mediumByModel && bot.mediumByModel[renderModel]) {
+        const overrideMedium = bot.mediumByModel[renderModel];
+        console.log(
+          `  🎨 medium override: ${medium} → ${overrideMedium} (model=${renderModel} via mediumByModel)`
+        );
+        medium = overrideMedium;
+        rawPrefix =
+          (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) ||
+          bot.promptPrefix ||
+          '';
+        rawSuffix =
+          (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
+          (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
+          bot.promptSuffix ||
+          '';
+        const newPrefix = rawPrefix ? `${rawPrefix}, ` : '';
+        const newSuffix = rawSuffix ? `, ${rawSuffix}` : '';
+        const newMediumStyle =
+          bot.mediumStyles && bot.mediumStyles[medium] ? `${bot.mediumStyles[medium]}, ` : '';
+        finalPrompt = `${pathPrefix}${newPrefix}${newMediumStyle}${middle}${newSuffix}`
+          .replace(/\s+,/g, ',')
+          .trim();
       }
 
       // Build the DLT recipe — frozen LOOK anchors captured at posting time.
