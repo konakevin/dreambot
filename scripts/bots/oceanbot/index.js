@@ -176,29 +176,19 @@ module.exports = {
     'nightshade',
   ],
 
-  // Per-path vibe overrides (Kevin 2026-06-04 R0 reviews).
-  // • reef-paradise: bot-wide MINUS dark / voltage / nightshade — these
-  //   cold/violet/electric vibes don't fit sun-lit tropical reef and
-  //   produce gloomy / unnatural color casts. Down to 7 sunny-compatible
-  //   vibes. Other sunny paths to receive same trim if they show the
-  //   same clash on R0 review.
+  // Per-path vibe overrides. (The reef-paradise R0 trim that dropped
+  // dark / voltage / nightshade was reversed 2026-06-05 — Kevin wants
+  // the darker vibes back across the whole bot. reef-paradise now uses
+  // the full bot-wide vibe list with the other 13 scenic paths.)
+  //
+  // mystical-mermaid: mystical-coded vibe subset. Drops the overtly-
+  // mundane vibes (peaceful — too flat) and keeps the registers that
+  // lean magical / dreamy / ancient / cosmic. ethereal + enchanted +
+  // ancient are the load-bearing ones for the "stuff of legend"
+  // framing Kevin called out; voltage / nightshade carry the cooler
+  // bioluminescent / moonlit variants; cinematic / dark / epic give
+  // framing range.
   vibesByPath: {
-    'reef-paradise': [
-      'cinematic',
-      'peaceful',
-      'epic',
-      'nostalgic',
-      'ethereal',
-      'ancient',
-      'enchanted',
-    ],
-    // mystical-mermaid: mystical-coded vibe subset. Drops the
-    // overtly-mundane vibes (peaceful — too flat) and keeps the
-    // registers that lean magical / dreamy / ancient / cosmic.
-    // ethereal + enchanted + ancient are the load-bearing ones for
-    // the "stuff of legend" framing Kevin called out; voltage /
-    // nightshade carry the cooler bioluminescent / moonlit variants;
-    // cinematic / dark / epic give framing range.
     'mystical-mermaid': [
       'cinematic',
       'dark',
