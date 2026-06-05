@@ -8,9 +8,9 @@ generatePool({
     n
   ) => `You are writing ${n} OUTFIT entries for StarBot's female-explorer path. Each entry is a DENSE phrase (20-35 words) describing her FULL TACTICAL EXPLORER OUTFIT in obsessive material detail.
 
-CRITICAL — NO FRANCHISE NAMES. NEVER write "Mandalorian", "Beskar", "Spartan", "Mjolnir", "N7", "Aeldari", "desert moisture-recycler", "Jedi", "Sith", "Dune", "Star Trek", "Mass Effect", "Halo", "Cyberpunk-2077", or any specific franchise reference. Describe the AESTHETIC generically.
+CRITICAL — NO FRANCHISE NAMES. NEVER write "Mandalorian", "Beskar", "Spartan", "Mjolnir", "N7", "Aeldari", "stillsuit", "Jedi", "Sith", "Dune", "Star Trek", "Mass Effect", "Halo", "Cyberpunk", "Edgerunner", "Netrunner", "Fremen", "Twi'lek", "Vulcan", or any specific franchise / trademark / species term. Describe the AESTHETIC generically using FEATURES only.
 
-AESTHETIC: TACTICAL EXPLORER ready for the unknown. Armored bodysuit + utility pack + hooded cloak / cape / poncho + practical gear. Battle-worn warrior-monk vibes / power-armored super-soldier silhouettes / desert-warrior with moisture-recycler respirator-tubes / hooded mercenary-explorer / cyber-augmented edgerunner. Mysterious. Capable. Cool.
+AESTHETIC: TACTICAL EXPLORER ready for the unknown. Armored bodysuit + utility pack + hooded cloak / cape / poncho + practical gear. Battle-worn warrior-monk vibes / power-armored super-soldier silhouettes / desert-warrior with breathing tubes and dust wrap / hooded mercenary-explorer / chrome-augmented cyber-tactical. Mysterious. Capable. Cool.
 
 NOT puffy NASA. NOT fashion-show officer-dress. NOT exposed-tease.
 
@@ -28,10 +28,10 @@ HOODED-CLOAK EXPLORER (5-6) — silhouette-first:
 
 ARMORED BODYSUIT (4-5) — mercenary / super-soldier coded:
 - sleek black-and-orange armored bodysuit with glowing chest-circuit panels, fitted modular plates at shoulders / forearms / thighs, magnetic boot-clamps, helmet under one arm
-- gunmetal full burnished-steel plate-armor with T-shaped visor helmet (on or off), jetpack mounted on the back, magnetic boots, layered tabard at the hip — race-as-uniform
+- gunmetal full burnished-steel plate-armor with vertical-slit visor helmet (on or off), jetpack mounted on the back, magnetic boots, layered tabard at the hip — race-as-uniform
 - black tactical armor with crimson trim along collar and forearms, sleek plate-armor at chest/shoulders/thighs, tactical undersuit visible at joints, mil-grade boots
 - heavy power-armor with integrated AI-glow at the temples, hardpoint-armor at every limb, gauntlets glowing soft from internal lights, helmet either on or revealing the face
-- desert-warrior moisture-recycler suit with dust-toned armor, water-recycler tubes at the throat, hooded for desert work, sand-cape catching wind
+- desert-warrior bodysuit with dust-toned armor, breathing tubes at the throat, hooded for desert work, sand-cape catching wind
 
 UTILITY-VEST EXPLORER (4-5) — scout / ranger coded:
 - tactical scout-vest with dozens of pouches over a fitted bodysuit, tool-belt at the hip, sleek armored greaves, fingerless gloves, optical-scope at the temple
@@ -48,12 +48,12 @@ EVA / SUIT-UP (3-4):
 
 CYBER / AUGMENTED FASHION (3-4):
 - chrome-and-black tactical body-armor with subdermal LED-tracery glowing along the spine and forearms, fingerless tactical gloves, knee-high glossy combat boots
-- edgerunner outfit — fitted graphic crop-armor, high-waisted utility cargos, tactical boots, neon-piped jacket, retractable mantis-blade housings (sheathed)
+- chrome-cyber outfit — fitted graphic crop-armor, high-waisted utility cargos, tactical boots, neon-piped jacket, retractable mantis-blade housings (sheathed)
 - black armored bodysuit with chrome-traced cheekbones, plate-armor pieces, smartlink visible at the temple, mil-cyber heavy frame
 - razor-edge cyber-armor — deconstructed asymmetric plate-armor, single chrome shoulder-pauldron, technical gloves, knee-high glossy boots
 
 ━━━ RULES ━━━
-- ABSOLUTELY NO franchise names (no Mandalorian, Beskar, Spartan, Mjolnir, N7, Jedi, etc.) — describe AESTHETIC generically
+- ABSOLUTELY NO franchise / species / trademark names (no Mandalorian / Beskar / Spartan / Mjolnir / N7 / Jedi / stillsuit / edgerunner / Twi'lek / etc.) — describe AESTHETIC generically using features only
 - Each entry is OBSESSIVELY DETAILED — every layer, every plate, every strap
 - Aesthetic: TACTICAL / ARMORED / HOODED-SILHOUETTE / READY-FOR-THE-UNKNOWN
 - Materials: armored plate, leather, tactical fabric, chrome accents, subtle glowing trim, fitted mesh underneath
