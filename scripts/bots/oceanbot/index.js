@@ -139,17 +139,16 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    // mystical-mermaid: bot-wide MINUS Flux 2 Pro (Kevin 2026-06-04
-    // R1b review — Flux 2 Pro renders the painted-mer-folk register
-    // weakest of the 4 models, biases toward photoreal-fish-costume
-    // failure mode this path is specifically engineered to avoid).
-    // Down to 3 models: gemini-2-image, gpt-image-2,
-    // flux-1.1-pro-ultra.
-    'mystical-mermaid': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    // mystical-mermaid: HARD-LOCKED to gpt-image-2 only (Kevin
+    // 2026-06-05). Flux-1.1-pro-ultra + gemini-2-image both render
+    // nipples even when the prompt explicitly describes a concrete
+    // chest-covering (scaled bodice, shell cups, hair-over-shoulders).
+    // OpenAI's content policy on gpt-image-2 is the only one that
+    // reliably refuses to render bare-chest on the painted-mer-folk
+    // register. Verified across multiple R0/R1 batches — see
+    // BOT_SCENE_QUALITY_PLAYBOOK.md "Mermaid / painted-female-figure"
+    // section.
+    'mystical-mermaid': ['openai/gpt-image-2'],
   },
 
   // Force-pin mystical-mermaid to the bot-only painted-mer-folk medium
