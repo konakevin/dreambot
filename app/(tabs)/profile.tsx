@@ -246,8 +246,8 @@ export default function ProfileScreen() {
               color={unreadCount > 0 ? colors.accent : colors.textSecondary}
             />
             {unreadCount > 0 && (
-              <View style={styles.inboxBubbleCountWrap} pointerEvents="none">
-                <Text style={styles.inboxBubbleCount}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
+              <View style={styles.inboxBadge} pointerEvents="none">
+                <Text style={styles.inboxBadgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
               </View>
             )}
           </View>
@@ -437,35 +437,39 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: colors.surface,
   },
-  // Outer wrap matches the icon size so the count overlay can use
-  // flexbox-center over the bubble. The Ionicons chatbubble icon has a
-  // tail extending down + slightly out of the lower-left, so we shift
-  // the count up + right of geometric center to land on the bubble's
-  // visual body. Fits "1" through "9+" comfortably.
+  // Wrap is just a positioning anchor for the corner badge — the bubble
+  // icon centers naturally inside it. No more in-bubble text overlay
+  // (that approach gave the off-centered look Kevin flagged because the
+  // chatbubble glyph isn't symmetric — the tail throws "center" off).
   inboxBubbleWrap: {
     width: 26,
     height: 26,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
   },
-  inboxBubbleCountWrap: {
+  // Standard activity-counter pip at the top-right of the bubble. Red
+  // matches the comment-count badge on DreamCard; cap is "9+" so the
+  // pip stays a single visual size regardless of count.
+  inboxBadge: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    top: -4,
+    right: -8,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: colors.like,
     alignItems: 'center',
     justifyContent: 'center',
-    // Push the count up + slightly right to compensate for the tail
-    paddingBottom: 5,
-    paddingLeft: 1,
+    paddingHorizontal: 4,
+    borderWidth: 1.5,
+    borderColor: colors.background,
   },
-  inboxBubbleCount: {
+  inboxBadgeText: {
     color: '#FFFFFF',
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '800',
-    lineHeight: 12,
-    textAlign: 'center',
+    lineHeight: 11,
     includeFontPadding: false,
   },
   // Album tabs — X-style text + accent-colored underline beneath the
