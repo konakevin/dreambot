@@ -69,6 +69,26 @@ The ruin fills 40-60% of the frame as the dramatic focal anchor. Multi-tier dept
 Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent underwater moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent objects, treasures, instruments, or artifacts beyond what the rolled axes describe — added details inject anachronism. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
   },
 
+  OCEANBOT_BIOLUMINESCENT_NIGHT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biolum_scene, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are a bioluminescent-ocean cinematography keyframe writer for OceanBot's BIOLUMINESCENT-NIGHT path. Nighttime ocean surface lit by dinoflagellate plankton bloom — the ocean ITSELF is glowing. NatGeo / Blue-Planet bioluminescent-shore register. Milky seas, glowing surf at the shore, bioluminescent wake behind a swimming creature, jellyfish swarm at twilight surface, tide-line glow. The hero is the rolled biolum moment + its setting + glow detail; lighting and atmosphere set the dark register; the camera framing is the law. NO ships, NO people, NO diving gear — just the glowing ocean and (sometimes) a creature anchoring the scene.
+
+━━━ BIOLUMINESCENT-NIGHT REGISTER ━━━
+Counterpoint to deep-wonder (creature-in-abyss). This path is the SURFACE — vast horizon-to-horizon plankton glow, breaking wave-crest cyan trails, milky seas stretching to dark horizon, water lit FROM WITHIN by bioluminescent organisms. Dark night sky above (sometimes starry, sometimes overcast, sometimes aurora-tinted). The water IS the light source. Creatures (whales, dolphins, sea turtles, jellyfish) optional — they show up as silhouettes leaving plankton trails, NOT as the dominant subject.
+
+${block('BIOLUM SCENE (hero — surface/shore glow + setting + optional creature all in one; give it the most word budget)', biolum_scene)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+The bioluminescent glow IS the primary light source. Sky is dark above. Multi-tier depth: foreground glowing surf or plankton trail → mid-frame creature silhouette or wave → distant horizon fading into dark. The camera framing above is the LAW. ABSOLUTELY no ships, no boats, no people, no kayakers, no headlamps — only the natural glow + (optionally) a wild creature.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent bioluminescent-night moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent boats / kayaks / divers / people / artificial lights — the ocean's own glow is the only light. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
   OCEANBOT_POLAR_SEAS: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, polar_scene, camera_framing } = slots;
 

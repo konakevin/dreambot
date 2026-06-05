@@ -1494,6 +1494,102 @@ NEVER use negation. NEVER name modern cinema terms.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // BIOLUMINESCENT-NIGHT path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 10th and FINAL OceanBot path, 5th scenic — nighttime ocean surface
+  // lit by dinoflagellate plankton bloom. Counterpoint to deep-wonder
+  // (creature-in-abyss). NO SHIPS, NO PEOPLE, NO ARTIFICIAL LIGHTS.
+
+  biolum_scenes: {
+    format: 'simple',
+    theme: `BIOLUMINESCENT-NIGHT SCENES for OceanBot's bioluminescent-night path — nighttime ocean surface lit FROM WITHIN by dinoflagellate plankton bloom. NatGeo / Blue-Planet bioluminescent-shore register. Each entry is ONE specific glowing-surface moment, 18-26 words. Setting + glow detail + (optional) creature/landscape anchor ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ MANDATORY REGISTER — the ocean ITSELF is the light source. Cyan / electric-blue / aqua glow rising from the water. Dark night sky above. Counterpoint to deep-wonder which is creature-in-absolute-black; this path is SURFACE / SHORE / WAVE / TIDE scale.
+
+⚠️ NO SHIPS. NO BOATS. NO KAYAKS. NO PEOPLE. NO HEADLAMPS. NO DIVE LIGHTS. Only the natural glow + (optional) a wild creature leaving a plankton trail.
+
+✓ VARIETY MANDATE — distribute across biolum-scene categories:
+  A. SHORE GLOWING SURF (waves breaking glowing cyan on dark beach, full surf-line illuminated)
+  B. MILKY SEAS (horizon-to-horizon vast surface glow, ocean lit pale aqua under dark sky)
+  C. CETACEAN PLANKTON TRAIL (dolphin / whale swimming with luminous wake trailing behind)
+  D. JELLYFISH SURFACE SWARM (translucent jellies floating at twilight surface with own inner glow)
+  E. WAVE-CREST CYAN BREAK (single dramatic wave breaking with luminous crest, dark face below)
+  F. BIOLUMINESCENT BAY (sheltered tropical bay rim-lit with glow, palm silhouettes on shore)
+  G. PLUNGING-FISH TRAIL (single fish or dolphin breaching with cyan splash, droplets glowing)
+  H. AURORA + PLANKTON (rare: aurora above + plankton glow below, double-light composition)
+  I. TIDE-POOL GLOW (small intimate scene of glowing tide pool with sea-life rim-lit)
+  J. LAGOON FROM ABOVE (looking down into a glowing tropical lagoon, glow seeping outward)
+  K. STORM-DISTURBED BLOOM (chop and white-caps lit cyan from below, dramatic surface texture)
+  L. STARRY-SKY + GLOW (mirror composition: starry sky above + plankton-glow water below)
+
+Each entry: ONE setting/scale anchor + ONE specific glow detail + ONE atmospheric or creature/landscape detail. Real species OK (dolphins, whales, sea turtles, jellyfish, baitfish). Real locations OK (Vieques bioluminescent bay, Toyama Bay, Maldives glowing shore, etc.).
+
+DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Glowing cyan surf line breaking on a dark Maldivian beach, each wave erupting in bioluminescent foam, palm silhouettes against starry sky beyond.',
+      'Milky sea stretching horizon-to-horizon under a dark moonless sky, vast pale-aqua glow rising from the entire surface, no creature in frame.',
+      'Dolphin pod swimming through Vieques bay at night, six luminous plankton-trails behind their wakes glowing cyan in the dark water.',
+      'Translucent jellyfish swarm floating at the surface in twilight, each bell glowing soft green from within, dark water below mirroring stars above.',
+      'Single dramatic wave breaking in a Caribbean bay at night, cyan-electric crest illuminating the wave face, dark trough below holding deeper blue.',
+      'Bioluminescent bay rim-lit at midnight, mangrove silhouettes lining the shore, glow seeping from the still water in concentric ripples.',
+      'Bottlenose dolphin breaching through a plankton-thick night sea, every droplet of spray catching the cyan glow, body silhouetted against starry sky.',
+      'Aurora borealis sweeping green above an Icelandic shore, dinoflagellate bloom glowing pale cyan along the surf below, double-light composition.',
+      'Tide pool at low tide on a Pacific beach at night, water glowing soft cyan, hermit crabs rim-lit moving across rocks, dark sea pulling back beyond.',
+      'Aerial view down into a glowing tropical lagoon, ring of cyan radiating outward from a central reef, dark deeper-water at the edges.',
+      'Storm-chop on a bioluminescent sea, white-cap waves lit cyan from below, dark heavy storm sky pressing close above, dramatic charged atmosphere.',
+      'Glassy still ocean surface mirror-perfect, starry Milky Way arching above, plankton glow tracing fine cyan threads where currents move.',
+      'Sea turtle gliding through a tropical glow-bay at night, plankton trail behind each flipper-stroke, shell silhouetted against luminous water.',
+      'Baitfish school flashing cyan as they evade an unseen predator, hundreds of bioluminescent silhouettes scattering like fireworks in dark water.',
+      'Surf erupting against volcanic black rocks at midnight, cyan foam exploding upward, dark cliffs silhouetted against starry oceanic sky.',
+      'Toyama Bay firefly squid swarm rising to the surface in dense formation, thousands of small bioluminescent bodies glowing pale blue against night water.',
+      'Manta ray gliding through a Maldivian bioluminescent bay, wingtips trailing cyan plankton sparkles, body silhouetted against the glowing water beneath.',
+      'Whale exhaling at the surface in a plankton-rich nighttime sea, blow column lit cyan from below, dark body parallel to the camera.',
+      'Calm lagoon at new-moon midnight, paddle-stroke ripples spreading cyan glow outward in radial waves, no boat visible — only the glow pattern.',
+    ],
+    instructions: `Each entry is ONE specific bioluminescent-night moment, 18-26 words. Format: "setting/scale anchor + glow detail + atmospheric/creature anchor." Vary across the 12 categories above. NEVER include ships / boats / kayaks / people / artificial lights. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  biolum_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's bioluminescent-night path — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across biolum-night framing:
+  A. LOW-WATERLINE SURF (camera at sea-level on glowing shore, wave breaking toward lens)
+  B. HORIZON LONG SHOT (vast glowing sea stretching to dark horizon, scale-of-emptiness)
+  C. ABOVE-SURFACE AERIAL (drone view of glow patterns + wake trails from above)
+  D. UNDERWATER LOOKING UP (camera below surface, glow above + plankton in water column)
+  E. SIDE-PROFILE CREATURE (creature swimming parallel to camera leaving glow trail)
+  F. STARRY-SKY-AND-GLOW SPLIT (composition with sky above and glowing water below)
+  G. CLOSE-UP ON GLOW DETAIL (camera near wave-crest or jelly, glow texture filling frame)
+  H. SHORE-VANTAGE (camera on dark beach looking out at glowing surf line and bay)
+  I. BIRD'S-EYE TIDE-POOL (top-down on a small glowing tide pool, intimate macro)
+  J. EXTREME WIDE COSMIC (creature small against vast glowing sea + starry sky, galaxy-of-the-deep)
+
+NEVER use negation. NEVER name modern cinema terms.`,
+    touchpoints: [
+      'LOW-WATERLINE SURF framing, camera at sea-level on dark beach, glowing wave breaking toward the lens',
+      'HORIZON LONG SHOT, vast glowing sea stretching to dark horizon, sky a narrow band above, scale-of-emptiness',
+      'ABOVE-SURFACE AERIAL framing, drone view of glow patterns and creature wake trails from above the water',
+      'UNDERWATER LOOKING UP, camera below surface with glow above, plankton motes drifting in cool blue water column',
+      'SIDE-PROFILE CREATURE framing, animal swimming parallel to camera leaving glowing plankton trail behind',
+      'STARRY-SKY-AND-GLOW SPLIT framing, dark Milky Way sky above, glowing cyan water below, sharp horizon between',
+      'CLOSE-UP ON GLOW DETAIL, camera near wave-crest or jelly bell, bioluminescent texture filling the frame',
+      'SHORE-VANTAGE framing, camera on dark beach looking out at the glowing surf line and bay beyond',
+      'BIRD\'S-EYE TIDE-POOL framing, top-down on a small glowing tide pool, sea-life rim-lit in intimate macro',
+      'EXTREME WIDE COSMIC framing, creature small against vast glowing sea and starry sky, galaxy-of-the-deep',
+      'OVER-THE-WAVE framing, camera at wave-crest height in mid-break, foamy cyan luminescence filling foreground',
+      'SUBSURFACE PROFILE framing, camera below the surface looking through a glowing water column at distant horizon',
+      'CRESCENT-FALL framing, camera dipping into a swell, glowing wave crest rising in the frame center',
+      'OVER-THE-LAGOON framing, drone view of an entire glowing bay rimmed with mangrove silhouettes',
+      'BACKLIT CREATURE SILHOUETTE framing, animal dark against glowing water, body shape readable against the cyan',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

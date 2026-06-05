@@ -128,5 +128,13 @@ module.exports = {
   POLAR_SCENES: load('polar_scenes'),
   POLAR_CAMERA_FRAMING: load('polar_camera_framing'),
 
-  // (Other 1 path's pools added when its gen-script ships.)
+  // ── bioluminescent-night path-bespoke pools (10th and FINAL path,
+  // ── 5th scenic — nighttime ocean surface lit by dinoflagellate
+  // ── plankton bloom. Counterpoint to deep-wonder (surface vs abyss).
+  // ── NO SHIPS, NO PEOPLE, NO ARTIFICIAL LIGHTS — only the natural
+  // ── glow + optional wild creature.) ──
+  BIOLUM_SCENES: load('biolum_scenes'),
+  BIOLUM_CAMERA_FRAMING: load('biolum_camera_framing'),
+
+  // 10/10 paths populated — OceanBot v3 is complete.
 };

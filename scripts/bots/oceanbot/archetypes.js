@@ -97,6 +97,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  OCEANBOT_BIOLUMINESCENT_NIGHT: {
+    description:
+      'Nighttime ocean surface lit by bioluminescent bloom — milky seas, glowing surf at shore, bioluminescent wake behind a swimming whale or dolphin, jellyfish swarm at twilight surface, tide-line glow. Counterpoint to deep-wonder (creature-in-abyss) — this is broad atmospheric glow at the surface, sometimes anchored by a creature or shoreline. NO ships, NO people. Same lean 2-path-slot shape.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biolum_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   OCEANBOT_POLAR_SEAS: {
     description:
       'Arctic / Antarctic ocean — towering icebergs with impossible blue interiors, pack ice and frozen seas, polar wildlife (narwhal / beluga / orca / humpback / penguin / polar bear at ice edge / seal / walrus haul-out), aurora over still polar water. Eerie blue silence of the far north or far south. Naturalistic register. NO ships, NO people. Same lean 2-path-slot shape.',

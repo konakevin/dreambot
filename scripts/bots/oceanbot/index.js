@@ -9,16 +9,19 @@
  * Architecture: pure axis-system per-path (no entity-cap). Backwards
  * compatible with the standing engine — no shared-lib changes required.
  *
- * Status: 2 paths live — shipwreck-kingdom + lost-cities (both naval-
- * lore underwater siblings). Bot is active in bot_schedules at 4
- * posts/day (flipped 2026-06-03). Other 8 paths land as the bot
- * matures, in roadmap order.
+ * Status: 10/10 paths live (built out 2026-06-04 in one session). Bot is
+ * active in bot_schedules at 4 posts/day (flipped 2026-06-03). All
+ * paths use the same lean 4-axis architecture (2 path slots +
+ * lighting + atmosphere universals) — the hero pool entries are dense
+ * enough to carry the scene without the 10+ axis architecture that
+ * produced over-stuffed / anachronistic R0 renders earlier. See
+ * archetypes.js header for the full axis-count diagnosis.
  *
- * Path roadmap (Kevin 2026-06-02):
- *   Naval lore (5):  pirates, kraken-leviathan, ghost-ship,
- *                    ★ shipwreck-kingdom, ★ lost-cities
- *   Scenic (5):      deep-wonder, whale-encounter, reef-paradise,
- *                    polar-seas, bioluminescent-night
+ * Path roadmap (Kevin 2026-06-02 — all complete):
+ *   Naval lore (5):  ★ shipwreck-kingdom, ★ lost-cities, ★ pirates,
+ *                    ★ ghost-ship, ★ kraken-leviathan
+ *   Scenic (5):      ★ deep-wonder, ★ whale-encounter, ★ reef-paradise,
+ *                    ★ polar-seas, ★ bioluminescent-night
  *
  * Style discipline (per 2026-06-01/02 fleet cruft sweep):
  *   • Short single-anchor prompt prefix / suffix (no enumeration locks)
@@ -43,7 +46,8 @@ const pathBuilders = {
   'whale-encounter': require('./paths/whale-encounter'),
   'reef-paradise': require('./paths/reef-paradise'),
   'polar-seas': require('./paths/polar-seas'),
-  // Other 1 path lands as the bot matures.
+  'bioluminescent-night': require('./paths/bioluminescent-night'),
+  // 10/10 paths populated — OceanBot v3 is complete.
 };
 
 module.exports = {
@@ -66,55 +70,51 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  // 5-model scene-eligible lineup. Matches StarBot's recently-curated
-  // set. Drops flux-2-max + flux-2-flex (fleet-wide bans per recent
-  // session) and flux-dev (artistic register fights ocean photoreal).
+  // 4-model scene-eligible lineup. Drops flux-2-max + flux-2-flex
+  // (fleet-wide bans per recent session) and flux-dev (artistic
+  // register fights ocean photoreal). Dropped flux-1.1-pro 2026-06-04
+  // — Ultra consistently outperforms Pro on this bot's register, and
+  // dream_mediums.allowed_models was updated fleet-wide to actually
+  // surface Ultra in the picker (was filtered out previously). Pro
+  // was redundant with Ultra present.
   useModelPicker: true,
   allowedModels: [
     'google/gemini-2-image',
     'openai/gpt-image-2',
-    'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-2-pro',
   ],
 
-  // Per-path model bans (Kevin 2026-06-04).
-  // • lost-cities: bot-wide MINUS Flux 1.1 Pro — Ultra renders the
-  //   sunken-stone ruins more atmospherically, Pro reads flatter.
-  // • pirates: bot-wide MINUS Flux 1.1 Pro — same call from R0 batch;
-  //   the maritime-cinema cutlass/lantern look reads stronger on the
-  //   other 4 models.
-  // Both paths down to 4 models. shipwreck-kingdom + future paths still
-  // get the full 5-model lineup.
+  // Per-path model bans (Kevin 2026-06-04). lost-cities + pirates used
+  // to have their own modelByPath dropping flux-1.1-pro; that became
+  // redundant when flux-1.1-pro was dropped bot-wide, so those entries
+  // are gone. Only paths that DIFFER from the new bot-wide lineup keep
+  // an override here.
   modelByPath: {
-    'lost-cities': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-pro',
-    ],
-    pirates: [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-pro',
-    ],
     // ghost-ship: bot-wide MINUS GPT Image 2 — the haunted/spectral
-    // register reads stronger on the other 4 models. Down to 4 models.
+    // register reads stronger on the other 3 models. Down to 3.
     'ghost-ship': [
       'google/gemini-2-image',
-      'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-pro',
     ],
     // deep-wonder: bot-wide MINUS Gemini 2 Image (Nano Banana) — the
     // abyssal-black bioluminescent register reads stronger on the
-    // other 4 models. Down to 4 models.
+    // other 3 models. Down to 3.
     'deep-wonder': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-pro',
+    ],
+    // bioluminescent-night: bot-wide MINUS Flux 2 Pro PLUS Flux 1.1 Pro
+    // (re-enabled here even though banned bot-wide). Kevin's call from
+    // R0b — Flux 2 Pro reads off for the surface-glow register and
+    // Flux 1.1 Pro fits better here than on other paths. Stays at 4.
+    'bioluminescent-night': [
+      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-pro',
     ],
   },
 
@@ -162,6 +162,7 @@ module.exports = {
     'whale-encounter',
     'reef-paradise',
     'polar-seas',
+    'bioluminescent-night',
   ],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
@@ -184,6 +185,7 @@ module.exports = {
       'whale-encounter',
       'reef-paradise',
       'polar-seas',
+      'bioluminescent-night',
     ],
   },
 
