@@ -29,7 +29,16 @@ const RELATIONSHIP_REGEX =
 export default function DreamLoadingScreen() {
   const { generate } = useDreamCreate();
   const started = useRef(false);
+  // queued = user EXPLICITLY tapped "Queue This" and left the loading screen.
+  // When true, the recovery flow short-circuits ('noop') so a finished render
+  // doesn't yank the user back from wherever they navigated.
   const queued = useRef(false);
+  // notificationRequested = the AppState background handler has already fired
+  // request_dream_notification once. Just a dedup so brief background bounces
+  // don't re-fire the RPC. Must stay SEPARATE from `queued` — a user who tabs
+  // to Slack briefly hasn't queued; they're still watching the loading
+  // screen, so recovery must run when they come back.
+  const notificationRequested = useRef(false);
   const [showQueue, setShowQueue] = useState(false);
 
   // Decide once on mount whether the longer-wait subline applies. We
@@ -182,10 +191,10 @@ export default function DreamLoadingScreen() {
   // backgrounds and comes back won't see a stale banner.
   useEffect(() => {
     const sub = AppState.addEventListener('change', (state) => {
-      if (state === 'background' && !queued.current) {
+      if (state === 'background' && !notificationRequested.current && !queued.current) {
         const jobId = useDreamStore.getState().activeJobId;
         if (jobId) {
-          queued.current = true;
+          notificationRequested.current = true;
           void (async () => {
             try {
               await supabase.rpc('request_dream_notification', { p_job_id: jobId });
