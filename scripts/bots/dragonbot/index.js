@@ -150,13 +150,13 @@ module.exports = {
   useModelPicker: true,
   // Bot-wide allowedModels: bot-wide MINUS Flux Dev + Flux 2 Max
   // (Kevin 2026-05-31), MINUS Flux 2 Pro (Kevin 2026-06-02, fleet-wide
-  // heart-ban), AND MINUS Flux 2 Flex (Kevin 2026-06-05, F2 Flex was the
+  // heart-ban), MINUS Flux 2 Flex (Kevin 2026-06-05, F2 Flex was the
   // remaining F2-family model and the path-level audits had been banning
-  // it on every reviewed path anyway — promoting to bot-wide).
-  // Was `ALL_ENABLED_AI_MODELS` — dropped 4 models fleet-wide for DragonBot
+  // it on every reviewed path anyway — promoting to bot-wide), AND
+  // MINUS Nano Banana (Kevin 2026-06-05, banned bot-wide).
+  // Was `ALL_ENABLED_AI_MODELS` — dropped 5 models fleet-wide for DragonBot
   // after audit. Explicit list because bot is a proper subset.
   allowedModels: [
-    'google/gemini-2-image',
     'openai/gpt-image-2',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-1.1-pro',
@@ -172,15 +172,17 @@ module.exports = {
   //
   // Bans (model → reason):
   //   artsy-girl              ─ GPT-2  (no male twin in dragonbot — female-only)
-  //   female-adventurer       ─ Banana                  (mirrored to male-adventurer)
+  //   female-adventurer       ─ (Banana ban now subsumed by bot-wide)
   //   female-explorer         ─ Flux Dev                (mirrored to male-explorer)
   //   female-action-scenes    ─ GPT-2, Flux Dev, Flux 2 Pro
-  //                                                     (mirrored to male-action-scenes — 3 survivors)
+  //                                                     (mirrored to male-action-scenes)
   //
-  // Note: Flux 2 Flex + Flux 2 Max were banned bot-wide 2026-06-05 — they
-  // no longer appear in any per-path override here (previously listed on
-  // artsy-girl / female-explorer / male-explorer / female-adventurer /
-  // male-adventurer / female-action-scenes / male-action-scenes).
+  // Note: Flux 2 Flex + Flux 2 Max + Nano Banana were banned bot-wide
+  // 2026-06-05 — they no longer appear in any per-path override here
+  // (Banana previously rolled on artsy-girl / female-explorer /
+  // male-explorer / female/male-action-scenes / landscape / iconic-landscape
+  // / castle / dark-realm / dragon-lore / dragon-scene; F2 Flex + F2 Max
+  // listed on the character paths).
   //
   // Male sister-path bans (2026-05-31): for the 3 female paths with a
   // direct male equivalent, the same bans were applied to keep the cast
@@ -194,7 +196,6 @@ module.exports = {
   // To extend a ban: remove the model id from the array.
   modelByPath: {
     'artsy-girl': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
@@ -212,24 +213,20 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'female-explorer': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'male-explorer': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'female-action-scenes': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'male-action-scenes': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -245,7 +242,6 @@ module.exports = {
     // landscape (Kevin 2026-06-01 after premium-tier axis enrichment +
     // 18-render comparison): F2 Pro + F2 Flex hearted-as-bad. Locked to 4.
     landscape: [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
@@ -255,13 +251,11 @@ module.exports = {
     // (F2 Flex never reachable via normal picker — wasn't in the modelByPath
     // list to begin with — but documenting the heart-ban here for completeness.)
     'iconic-landscape': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     castle: [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
@@ -271,19 +265,16 @@ module.exports = {
     // all hearted-as-bad in the enriched-path test.
     'epic-moment': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'dark-realm': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'dragon-lore': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'dragon-scene': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',

@@ -82,18 +82,18 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 
 | Model              | Status | Notes                              |
 | ------------------ | ------ | ---------------------------------- |
-| Nano Banana        | ✅     | —                                  |
+| Nano Banana        | ❌     | dropped 2026-06-05 (Kevin)         |
 | GPT Image 2        | ✅     | matrix had 2 fails (safety) — keep |
 | Flux Dev           | ❌     | dropped 2026-05-31 (Kevin)         |
-| Flux 2 Pro         | ✅     | —                                  |
+| Flux 2 Pro         | ❌     | dropped 2026-06-02 (fleet-wide)    |
 | Flux 1.1 Pro       | ✅     | —                                  |
 | Flux 1.1 Pro Ultra | ✅     | —                                  |
-| Flux 2 Flex        | ✅     | —                                  |
+| Flux 2 Flex        | ❌     | dropped 2026-06-05 (Kevin)         |
 | Flux 2 Max         | ❌     | dropped 2026-05-31 (Kevin)         |
 
-**Final bot-wide allowedModels:** 6 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex. Per-path bans then apply on top.
+**Final bot-wide allowedModels:** 3 — GPT Image 2, Flux 1.1 Pro, Flux 1.1 Pro Ultra. Per-path bans then apply on top.
 
-**Per-path overrides (non-character, Kevin 2026-05-31 uniform lineup):** all 7 non-character paths (`landscape`, `iconic-landscape`, `castle`, `epic-moment`, `dark-realm`, `dragon-lore`, `dragon-scene`) locked to **5 models**: Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Ultra (F2 Flex banned per heart-test audit; F2 Max + Flux Dev already bot-wide banned).
+**Per-path overrides (non-character, Kevin 2026-05-31 uniform lineup):** all 7 non-character paths (`landscape`, `iconic-landscape`, `castle`, `epic-moment`, `dark-realm`, `dragon-lore`, `dragon-scene`) — Banana stripped from each 2026-06-05 alongside the bot-wide ban; surviving picks roll from the bot-wide 3.
 
 ---
 
