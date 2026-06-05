@@ -136,6 +136,32 @@ module.exports = {
   BIOLUM_SCENES: load('biolum_scenes'),
   BIOLUM_CAMERA_FRAMING: load('biolum_camera_framing'),
 
+  // ── seaturtle-scape path-bespoke pools (12th path — sea-turtles
+  // ── across life span from hatchling to adult, real species, in
+  // ── reef + kelp + open ocean + shore + nesting habitats.) ──
+  SEATURTLE_SCENES: load('seaturtle_scenes'),
+  SEATURTLE_CAMERA_FRAMING: load('seaturtle_camera_framing'),
+
+  // ── wild-sealife-camera path-bespoke pools (13th path — apex
+  // ── predators + pelagic giants + sea-mammals + game fish + notable
+  // ── invertebrates, NatGeo CAUGHT-on-camera register.) ──
+  WILD_SEALIFE_SCENES: load('wild_sealife_scenes'),
+  WILD_SEALIFE_CAMERA_FRAMING: load('wild_sealife_camera_framing'),
+
+  // ── tropical-fish-closeup path-bespoke pools (14th path — single-
+  // ── species portrait of one bright tropical fish in the reef,
+  // ── distinct from reef-paradise biodiversity-explosion.) ──
+  TROPICAL_FISH_SCENES: load('tropical_fish_scenes'),
+  TROPICAL_FISH_CAMERA_FRAMING: load('tropical_fish_camera_framing'),
+
+  // ── coastal-power path-bespoke pools (15th path — heavy swells +
+  // ── wave-crashes + shorebreak against cliffs / sea-stacks / jagged
+  // ── rocks / lighthouses / beaches, mother-nature-power register
+  // ── across multiple atmospheric weather/sky registers.) ──
+  COASTAL_POWER_SCENES: load('coastal_power_scenes'),
+  COASTAL_POWER_WEATHER_AND_SKY: load('coastal_power_weather_and_sky'),
+  COASTAL_POWER_CAMERA_FRAMING: load('coastal_power_camera_framing'),
+
   // ── mystical-mermaid character-path pools (11 — 10 path axes + 1
   // ── drama conditional). Full-bespoke per the
   // ── feedback_full_bespoke_per_path_no_shared_pools rule. The path

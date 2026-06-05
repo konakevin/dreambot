@@ -111,6 +111,62 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  OCEANBOT_SEATURTLE_SCAPE: {
+    description:
+      'Sea turtles across the full life-and-habitat span — adults gliding through reefs, kelp forests, open ocean with sharks / rays / fish-shoals; resting on coral; surfacing for breath; pulling up on tropical beach; nesting mothers digging in moonlit sand; hatchlings emerging from sand and rushing to the surf; juveniles in their first open-ocean dive. Naturalistic NatGeo / BBC Blue Planet register. All 7 real species (green / loggerhead / hawksbill / leatherback / olive ridley / Kemp\'s ridley / flatback). NO ships, NO people, NO diving gear. Same lean 2-path-slot shape.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['turtle_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  OCEANBOT_WILD_SEALIFE: {
+    description:
+      'Wild sea-life caught on camera moments — apex predators, pelagic giants, charismatic sea-mammals, schooling fish. Bluefin tuna schools, blue marlin chase, great white / mako / tiger / hammerhead sharks, sailfish, sea lions / fur seals / walrus / belugas, orca pods, mahi-mahi, barracuda, manta rays, sea snakes, octopus, giant squid, dolphinfish, goliath grouper. The CAUGHT moment register — NatGeo / BBC Blue Planet documentary. NO ships, NO people, NO diving gear. Same lean 2-path-slot shape.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['wild_sealife_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  OCEANBOT_TROPICAL_FISH_CLOSEUP: {
+    description:
+      'Single bright colorful tropical fish in the reef as the HERO — distinct from reef-paradise (which is biodiversity-explosion). This path is portrait-of-one-fish register: mandarinfish / clownfish / royal angelfish / lionfish / parrotfish / yellow tang / Moorish idol / triggerfish / pufferfish / boxfish / frogfish / seahorse / pipefish / butterflyfish / wrasse / etc., across sizes from tiny goby to large grouper. The single fish fills 30-60% of frame with coral / sea-fan / sand / anemone backdrop. NatGeo macro-fish-photography register. NO ships, NO people, NO diving gear. Same lean 2-path-slot shape.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['fish_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  OCEANBOT_COASTAL_POWER: {
+    description:
+      'Heavy swells and waves crashing against the shore — cliff faces, sea-stacks, jagged coastal rocks, reefs at breaker line, lighthouses engulfed in spray, AND shorebreak (heavy waves curling onto sand). Epic shots showcasing mother nature\'s power across DIFFERENT atmospheric registers — sunsets / storm fronts / golden hour / dawn / aurora-coast / hurricane sky / rainbow-after-squall / blue-hour / night-lightning. Iconic coasts (Big Sur / Cliffs of Moher / Cape Disappointment / Nazaré / Cape Horn / Reynisfjara / Portland Head / Lands End). NO ships, NO people, NO surfers. 3 path-bespoke slots (scene + weather/sky + camera framing) for the atmospheric range Kevin called out.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['coastal_power_scene', 'weather_and_sky', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   OCEANBOT_POLAR_SEAS: {
     description:
       'Arctic / Antarctic ocean — towering icebergs with impossible blue interiors, pack ice and frozen seas, polar wildlife (narwhal / beluga / orca / humpback / penguin / polar bear at ice edge / seal / walrus haul-out), aurora over still polar water. Eerie blue silence of the far north or far south. Naturalistic register. NO ships, NO people. Same lean 2-path-slot shape.',

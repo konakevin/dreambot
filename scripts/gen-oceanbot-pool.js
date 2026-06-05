@@ -2047,6 +2047,459 @@ NEVER negation.`,
   },
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // SEATURTLE-SCAPE path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  seaturtle_scenes: {
+    format: 'simple',
+    theme: `SEATURTLE SCENES for OceanBot's seaturtle-scape path — sea turtles in the ocean and at the shore. Each entry 18-26 words. Species + behavior + habitat ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ MANDATORY: every entry names a REAL species + REAL behavior + REAL habitat. NatGeo / BBC Blue Planet register. NO ships / NO people / NO diving gear.
+
+⚠️ 80% ADULT TURTLES UNDERWATER OR NEAR WATER — beautiful adult-focused renders are the main register. 20% baby/hatchling/nesting scenes for variety. Distribute as ~20 adult-coded entries to ~5 baby-coded entries per 25.
+
+✓ SPECIES VARIETY (~3 entries each across 7 real species):
+  A. Green sea turtle (Caribbean / Indo-Pacific seagrass meadows / Hawaiian reefs)
+  B. Loggerhead (Atlantic / Mediterranean / NW Pacific, powerful crushing jaws)
+  C. Hawksbill (Indo-Pacific coral reefs, pointed beak, intricate carapace pattern)
+  D. Leatherback (open pelagic, largest species, jellyfish hunter, no hard shell)
+  E. Olive ridley (warmer Pacific / Indian Ocean)
+  F. Kemp's ridley (Gulf of Mexico / Atlantic, smallest species)
+  G. Flatback (Australia-endemic, shallow coastal soft-bottom)
+
+✓ BEHAVIOR/HABITAT VARIETY — 80% ADULT (these eight bullets):
+  A. Adult gliding through coral reef in turquoise sun-shafted water
+  B. Adult drifting through kelp forest sun-shafts
+  C. Adult cruising open pelagic with shark / fish-shoal / manta nearby
+  D. Adult resting on coral / cleaning station with cleaner wrasse attending
+  E. Adult surfacing for breath, head and shoulders breaking the surface
+  F. Adult silhouetted against the bright surface dome from below
+  G. Adult cruising a reef wall drop-off, body lateral in atmospheric blue
+  H. Adult in mangrove or seagrass shallows, body just above the bottom
+  I. Pair of mating adults in shallow lagoon
+  J. Adult in golden-hour surface light, body lit warm from above
+
+✓ BEHAVIOR/HABITAT VARIETY — 20% BABY/NESTING (these four bullets, sparingly):
+  K. Nesting mother on a moonlit tropical beach (1-2 entries)
+  L. Hatchlings scrambling toward the surf line in chevron (1-2 entries)
+  M. Hatchling first underwater dive in surf-zone shallows (1 entry)
+  N. Juvenile in mid-ocean sargassum mat (1 entry)
+
+Each entry: species + behavior + habitat anchor + sensory/light detail. NEVER negation.`,
+    touchpoints: [
+      'Green sea turtle gliding slowly through a sun-shafted Caribbean coral reef, scarred shell catching dappled light, scissor-flippers sculling unhurried, blue tang school weaving past.',
+      'Hawksbill cruising vertical reef wall in turquoise water, pointed beak picking at orange sponge, tortoiseshell carapace catching afternoon light, sea-fan curtain swaying.',
+      'Loggerhead resting on a Mediterranean rocky bottom in clear blue water, powerful jaws closed, scarred shell encrusted with barnacles, single grouper hovering near her shoulder.',
+      'Leatherback gliding through deep open Pacific blue at twilight, vast leathery carapace ridged with seven keels, mouth half-open trailing a jellyfish she just engulfed.',
+      'Adult green turtle silhouetted against the bright surface dome above, viewed from below in deep blue, body in three-quarter profile, flippers extended in slow glide.',
+      'Hawksbill at a Pacific cleaning station, body still as cleaner wrasse picks parasites from her flippers and shell, head turned to watch the small fish work.',
+      'Leatherback surfacing for breath in deep open Atlantic at golden hour, head and shoulders breaking the calm surface, spray haloing her in warm light.',
+      'Pair of mating green turtles in a shallow Hawaiian lagoon, larger female below, male riding her shell, both heads turned upward toward the bright surface.',
+      'Loggerhead cruising past a hammerhead shark in open Caribbean blue, both moving in unhurried parallel, the shark in the deep distance behind her shoulder.',
+      'Green turtle gliding through a Pacific kelp forest sun-shafted at noon, body small against towering amber-green kelp columns, sea otters visible in midground.',
+      'Adult hawksbill silhouetted against a sunset surface dome in the Coral Triangle, body in lateral profile, deep coral garden receding in atmospheric blue below.',
+      'Adult green sea turtle cruising along a tropical reef drop-off at midday, body lateral in atmospheric blue, school of yellowtail snapper scattering before her.',
+      'Loggerhead at a deep-reef cleaning station, three cleaner wrasse working her shell, body still, sun-shafts piercing the water column above in soft pale pillars.',
+      'Adult olive ridley surfacing for breath in calm tropical Pacific at dawn, only head and shoulders above water, pink-and-amber sky reflecting in mirror sea behind.',
+      'Adult flatback turtle in Australian shallow seagrass meadow at noon, body floating just above the green carpet, jaws nibbling slowly at the blades.',
+      'Adult Kemp\'s ridley cruising a Gulf of Mexico mangrove edge, body just below the surface, mottled green-grey shell catching dappled mangrove-shadow light.',
+      'Hawksbill turtle drifting through a Solomon Islands soft-coral garden, body small against towering pink-and-orange coral spires rising past her in every direction.',
+      'Adult green turtle resting languidly on a flat coral table at midday, body weightless in the gentle current, single batfish hovering near her left flipper.',
+      'Loggerhead breaching just barely at the surface in golden-hour Mediterranean, head only just above water, eyes calm, vast shell submerged below.',
+      'Adult hawksbill three-quarter angled in a kelp-forest sun-shaft, body lit warm from above, kelp columns rising past her into the bright dome of surface light.',
+      'Olive ridley mid-arribada on a Costa Rican beach at dawn, thousands of mothers dragging trails across the sand, sea spray rising from the breakers behind them.',
+      'Green turtle hatchlings emerging from sand at night under starlight, hundreds of tiny dark silhouettes scrambling outward from the central cone toward distant surf.',
+      'Loggerhead hatchlings in mid-scramble across hot tropical sand toward the surf, tiny chevron formation, gulls wheeling above, surf line glinting silver ahead.',
+      'Green hatchling first dive in surf-zone shallows, tiny body kicking sideways through translucent wave, head turned upward, body silhouetted against bright surface.',
+      'Juvenile green turtle drifting in a sargassum mat in mid-Atlantic, body half-hidden in floating algae, tiny crabs visible in the weed around her shell.',
+    ],
+    instructions: `Each entry 18-26 words. Format: "[species] [behavior + body position] [habitat] [sensory detail]." Vary across 7 species + 15 behavior-habitat combos. NEVER include ships / boats / divers / people. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  seaturtle_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for seaturtle-scape — explicit composition mandate. Each entry 14-22 words.
+
+✓ VARIETY (turtle-documentary specific):
+  A. UNDERWATER SIDE-PROFILE (turtle parallel mid-glide)
+  B. SURFACE-LEVEL eye-contact (turtle's eye meeting lens at waterline)
+  C. AERIAL OVERHEAD (drone-style top-down on a swimming turtle)
+  D. BACKLIT SILHOUETTE from below (turtle silhouetted against bright surface dome)
+  E. SHORE LATERAL (turtle pulling onto / off beach in side-profile)
+  F. NESTING WIDE (mother on beach with full nesting context — sand + sea + sky)
+  G. HATCHLING CHEVRON WIDE (scrambling group across sand)
+  H. HATCHLING MACRO (tight on one or two hatchlings mid-scramble)
+  I. CLEANING STATION CLOSE (turtle with cleaner-wrasse at the eye-ridge)
+  J. KELP-FOREST WIDE (turtle small against towering kelp columns)
+
+NEVER use negation. NEVER name modern cinema terms.`,
+    touchpoints: [
+      'UNDERWATER SIDE-PROFILE framing, turtle parallel mid-glide through frame, scissor-flippers sculling, full body horizontal',
+      'SURFACE-LEVEL eye-contact framing at the waterline, turtle\'s head out of water and gaze meeting lens, calm and unhurried',
+      'AERIAL OVERHEAD drone framing, turtle visible from above against the dappled reef or sandy bottom, full body in plan-view',
+      'BACKLIT SILHOUETTE FROM BELOW framing, turtle silhouetted against bright surface dome, body shape and flipper-spread readable',
+      'SHORE LATERAL framing, turtle in side-profile pulling up onto wet sand, surf curling behind her, body angled forward',
+      'NESTING WIDE framing, mother on tropical beach mid-dig, full nesting context visible — sand foreground, surf middle, sky beyond',
+      'HATCHLING CHEVRON WIDE framing, dozens of tiny silhouettes scrambling across sand in formation, surf line visible at frame edge',
+      'HATCHLING MACRO framing, tight close on one or two hatchlings mid-scramble, body filling lower frame, sand grains visible',
+      'CLEANING STATION CLOSE framing, turtle\'s eye-ridge filling the frame with cleaner wrasse picking parasites from her face',
+      'KELP-FOREST WIDE framing, turtle small in midground against towering amber-green kelp columns rising past frame edges',
+      'UNDERWATER FOLLOWING framing, camera trailing behind a swimming turtle at flipper-stroke distance, body and rear-shell visible',
+      'CLOSE-UP HEAD framing, turtle\'s face and beak filling the frame underwater, scratches on the carapace visible at frame edge',
+      'WATERLINE SPLIT framing, half-air half-water, turtle\'s shell visible above the surface + flippers visible below',
+      'LOW WIDE BEACH framing from sand level, hatchlings scrambling toward camera in scattered formation, surf and sky beyond',
+      'OVER-THE-SHELL framing, camera close above the turtle\'s rear carapace looking forward across her shell at the reef ahead',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // WILD-SEALIFE-CAMERA path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  wild_sealife_scenes: {
+    format: 'simple',
+    theme: `WILD-SEALIFE SCENES for OceanBot's wild-sealife-camera path — apex predators + pelagic giants + sea-mammals + game fish + notable invertebrates CAUGHT-on-camera. Each entry 18-26 words.
+
+⚠️ MANDATORY: every entry names a REAL species + REAL behavior + REAL habitat. NatGeo / BBC Blue Planet register.
+
+✓ SPECIES VARIETY DISTRIBUTION:
+  A. SHARKS — great white, mako, tiger, hammerhead, bull, oceanic whitetip, nurse, blacktip, lemon
+  B. PELAGIC GIANTS — bluefin tuna, yellowfin tuna, blue marlin, black marlin, sailfish, swordfish, mahi-mahi
+  C. SEA-MAMMALS — sea lion, fur seal, harbor seal, elephant seal, walrus, beluga, narwhal, orca
+  D. LARGE GAME FISH — barracuda, wahoo, goliath grouper, tarpon, jack crevalle, amberjack, snapper
+  E. NOTABLE INVERTEBRATES — giant Pacific octopus, giant squid, manta ray, mobula, sea snake
+  F. SCHOOLING SPECTACULARS — sardine baitball, jack ball, scad school, bait swirl pursuit-by-predators
+  G. POLAR — leopard seal, weddell seal, narwhal tusk
+  H. DOLPHIN POD — common, spinner, bottlenose, Risso\'s, Pacific white-sided
+
+✓ BEHAVIOR VARIETY:
+  - Hunting / chasing prey
+  - Breaching / launching from water
+  - Cruising at surface (lateral pass)
+  - Pod travel in tight formation
+  - Predator-prey moment (mid-pursuit)
+  - Surfacing for air
+  - Patrolling reef edge / drop-off
+  - Schooling pattern (bait-ball / synchronized turn)
+  - Camouflaged in environment
+  - Mating display / lekking
+
+Each entry: species + behavior + habitat anchor + sensory/light detail. NEVER negation.`,
+    touchpoints: [
+      'Great white shark patrolling slow above a kelp forest at golden hour, scarred back catching the surface light, body dwarfing the kelp canopy below.',
+      'Blue marlin chasing a sailfish-pursued baitball, bill flashing forward through silver scatter, deep blue Atlantic stretching to horizon behind it.',
+      'Bluefin tuna school in tight formation cruising open Mediterranean blue, silver flanks catching surface light, dozens of streamlined bodies in synchronized motion.',
+      'Tiger shark patrolling a Hawaiian reef-edge at dusk, striped flank in lateral profile, school of jacks scattering from her path in flashes of silver.',
+      'California sea lion bull mid-pirouette underwater in kelp forest, whiskers flared, sun-shafts piercing the kelp canopy in pale-green pillars around him.',
+      'Walrus pod hauled out on Svalbard pack ice in afternoon polar sun, dozens of ivory tusks catching the warm light, breath visible as fine vapor.',
+      'Orca breaching full-body from a calm Salish Sea at sunset, twenty tons suspended momentarily, glassy water reflecting the silhouette below.',
+      'Hammerhead shark school spiraling in slow vertical helix above a Cocos Island pinnacle, dozens of distinctive head-profiles against deep blue water.',
+      'Sailfish lit-up mid-strike in baitball, dorsal fin fully erect and electric-blue, silver fish scattering in every direction around her bill.',
+      'Goliath grouper hovering at a sunken wreck entrance in the Florida Keys, vast body the size of a refrigerator filling the cabin doorway.',
+      'Mahi-mahi pursuing flying-fish across open Atlantic at midday, brilliant green-and-gold flank catching sun, prey already airborne ahead of the strike.',
+      'Manta ray gliding over a Maldivian reef cleaning station, eight-meter wingspan dwarfing the small wrasses attending its underside, slow and unhurried.',
+      'Giant Pacific octopus changing color across a sandy bottom mid-stride, eight arms in motion, body shifting from mottled brown to cream-and-red in a wave.',
+      'Spinner dolphin pod bow-riding a pelagic swell at golden hour, six bodies airborne in mid-spin simultaneously, sun-glow halo around each.',
+      'Sardine baitball cylindrical and shimmering off the Wild Coast, sea lions and gannets crashing through it from above, single mako shark cruising below.',
+      'Leopard seal cruising under Antarctic ice in lateral profile, sleek serpentine body, ringed seal silhouetted above the ice ceiling in pale blue.',
+      'Mako shark mid-leap from open Atlantic surface, full body airborne in mid-arc, blue-back flank catching the sun before the splash-down.',
+      'Beluga pod surfacing through cracks in arctic fast ice, white melons gleaming wet, breath crystallizing in the polar air above them.',
+      'Yellowfin tuna mid-pursuit of flying fish, body fully extended in fast strike, sickle-fin and yellow finlets visible, prey just leaving the surface ahead.',
+      'Wahoo cruising along a reef drop-off in the Bahamas, electric-blue tiger-striped flank catching the light, body streamlined and unhurried.',
+    ],
+    instructions: `Each entry 18-26 words. Format: "[species] [behavior + body position] [habitat] [sensory detail]." Vary across all species categories. NEVER include ships / boats / divers / people. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  wild_sealife_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for wild-sealife-camera — explicit composition mandate. Each entry 14-22 words.
+
+✓ VARIETY (wildlife-documentary specific):
+  A. UNDERWATER SIDE-PROFILE (creature parallel)
+  B. EYE-LEVEL CONFRONTATION (camera meeting creature's eye)
+  C. AERIAL OVERHEAD (drone view of pod / school / lone hunter)
+  D. BREACH MOMENT (low waterline angle, creature airborne)
+  E. POD/SCHOOL WIDE (multiple animals in formation)
+  F. SCALE-PROVING WIDE (creature tiny against vast ocean)
+  G. PREDATOR APPROACH (creature coming toward camera)
+  H. SPLIT-LEVEL HALF-AND-HALF (air-water boundary)
+  I. CLOSE FACE FRAMING (head + face dominant)
+  J. UNDERWATER LOOKING UP (creature backlit against surface)
+
+NEVER use negation. NEVER modern cinema terms.`,
+    touchpoints: [
+      'UNDERWATER SIDE-PROFILE framing, creature parallel to camera at mid-water depth, full body filling horizontal frame',
+      'EYE-LEVEL CONFRONTATION framing, creature head and eye meeting lens directly, intimate predator gaze',
+      'AERIAL OVERHEAD drone framing, pod or school visible from above against deeper blue water',
+      'BREACH MOMENT low-waterline framing, creature airborne above camera against pale sky, body suspended in spray',
+      'POD/SCHOOL WIDE framing, multiple animals in synchronized formation across frame, ocean stretching beyond',
+      'SCALE-PROVING WIDE framing, creature small against vast pelagic ocean, sense of immense scale',
+      'PREDATOR APPROACH framing, creature swimming toward camera in deep water, scale growing as it nears',
+      'SPLIT-LEVEL HALF-AND-HALF framing at air-water boundary, surface drama above + creature visible below',
+      'CLOSE FACE framing, creature\'s head and face dominant in frame, eye and mouth detail',
+      'UNDERWATER LOOKING UP, creature silhouetted against bright surface dome, body backlit by sun-shafts',
+      'TAIL-CHASE framing from behind, creature\'s rear visible propelling away into the blue, wake trailing',
+      'PARALLEL TRACKING shot beside a fast cruiser, body length-wise across frame, lateral motion visible',
+      'BAITBALL FRAMING, predator inside or beside a tight cylindrical baitball, prey fish scattering around it',
+      'POLAR ICE-EDGE framing, creature at the surface beside sea-ice, white-on-blue composition',
+      'EXTREME WIDE-ANGLE OPEN OCEAN framing, single creature distant in vast blue, atmospheric depth dominating',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // TROPICAL-FISH-CLOSEUP path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  tropical_fish_scenes: {
+    format: 'simple',
+    theme: `TROPICAL FISH SCENES for OceanBot's tropical-fish-closeup path — SINGLE bright colorful tropical fish in the reef as the HERO. Distinct from reef-paradise (biodiversity-explosion); this path is ONE FISH PORTRAIT. Each entry 18-26 words.
+
+⚠️ MANDATORY: every entry names ONE SPECIFIC fish species + ONE behavior + ONE backdrop element (coral / sea-fan / anemone / sand / kelp). The fish IS the hero — NO crowding species. Anatomical color/fin accuracy per species.
+
+✓ SPECIES VARIETY (cover the full reef-fish spectrum, both tiny and large):
+  TINY (1-3 inch macro register):
+  A. Mandarinfish (psychedelic blue + orange swirl pattern, Indo-Pacific)
+  B. Pygmy seahorse (matched to gorgonian coral, 1cm)
+  C. Sexy shrimp (pink-and-white, in anemone tentacles)
+  D. Yellow-banded sweetlips juvenile (yellow-and-black motion)
+  E. Tiny clown goby (cream + orange, on coral branch)
+  SMALL (3-6 inch):
+  F. Clownfish (orange-white-black, in anemone)
+  G. Yellow tang (Hawaiian)
+  H. Royal angelfish (vivid yellow + blue stripes)
+  I. Moorish idol (yellow-white-black with trailing dorsal filament)
+  J. Butterflyfish (various species, paired)
+  K. Damselfish (sergeant major / blue chromis)
+  L. Cleaner wrasse (blue-and-black, at station)
+  MEDIUM (6-18 inch):
+  M. Parrotfish (multiple species, biting coral)
+  N. Lionfish (Indo-Pacific, fan-spread fins)
+  O. Pufferfish (porcupine / boxfish / mappa)
+  P. Frogfish (camouflaged on sponge)
+  Q. Triggerfish (queen / clown / titan)
+  R. Surgeonfish (powder blue tang, achilles tang)
+  S. Hawkfish perched on coral
+  LARGE (18 inch - 6 feet):
+  T. Napoleon wrasse (humphead, blue-green)
+  U. Coral trout / coral grouper
+  V. Giant moray eel peeking from a coral crevice
+  W. Goliath grouper close-up
+  X. Bumphead parrotfish
+
+✓ BEHAVIOR VARIETY:
+  - Hovering still in current
+  - Mid-feeding (biting coral / picking algae / striking prey)
+  - In motion (mid-swim / mid-turn)
+  - Cleaning station moment
+  - Camouflaged in environment
+  - Defensive posture (puffed pufferfish / lionfish fins extended)
+  - In symbiotic relationship (clownfish in anemone / wrasse on grouper)
+
+Each entry: species name + behavior + backdrop + sensory detail. NEVER negation.`,
+    touchpoints: [
+      'Single mandarinfish hovering in a coral crevice at dusk, psychedelic blue-and-orange swirl pattern catching dim Indo-Pacific reef light, body filling lower half of frame.',
+      'Clownfish darting through magnificent anemone tentacles, orange-and-white body sharp against the purple-tipped anemone, mid-turn back into the host.',
+      'Yellow tang hovering still above a Hawaiian reef bommie, brilliant lemon-yellow body in profile against soft-focus coral garden behind.',
+      'Royal angelfish mid-glide past a sea-fan, vivid yellow body banded with electric blue stripes, sea-fan fronds out of focus in foreground.',
+      'Moorish idol hovering in profile, trailing dorsal filament arcing behind, black-and-white-and-yellow bands sharp against atmospheric deep-blue backdrop.',
+      'Lionfish hovering with all eighteen venomous spines fully fan-spread, mahogany-and-cream zebra pattern, head tilted toward small prey just out of frame.',
+      'Pygmy seahorse clinging to a pink gorgonian coral, body the size of a fingernail and perfectly color-matched, single eye visible in macro focus.',
+      'Stonefish frogfish camouflaged on a sponge, mottled red-brown skin pattern matching the substrate, only the eye and lure betraying its position.',
+      'Queen triggerfish mid-bite of a sea urchin spine, electric-blue cheek-stripes and yellow body in profile, urchin spines scattering around the strike.',
+      'Powder blue tang hovering at a coral cleaning station, brilliant cobalt-and-yellow body in three-quarter profile, cleaner wrasse at its gill plate.',
+      'Bumphead parrotfish mid-bite of a hard coral, vast forehead bulge dominating profile, coral fragments visible in the water from the impact crunch.',
+      'Giant moray eel peeking from a coral crevice, jaw working slowly, mottled green-yellow head and one watchful eye visible, body hidden in the reef.',
+      'Napoleon wrasse cruising past a reef wall, vast blue-green humphead profile dominating frame, scarred lips and golden flank catching surface light.',
+      'Single porcupine pufferfish hovering with body partially inflated and spines half-erect, large dark eye watchful, body filling 50% of frame.',
+      'Tiny clown goby perched on a coral branch tip, cream body with bright orange face, frame composition centered on the tiny fish at coral-branch end.',
+      'Hawkfish perched motionless on a sea-fan branch, banded red-and-white body in profile, fan fronds rising past frame edges in soft focus.',
+      'Achilles tang mid-turn above a Hawaiian reef, deep purple body with vivid orange teardrop near the tail, sun-shafts dappling the coral below.',
+      'Mandarinfish pair courtship dance, two males swirling around each other in their psychedelic pattern, soft-coral backdrop in deep amber tones.',
+      'Coral grouper hovering at a reef-edge cleaning station, electric red-and-blue speckled body in three-quarter profile, cleaner wrasse at its lip.',
+      'Sergeant major damselfish hovering above its purple egg-patch on dead coral, black-and-yellow striped body in defensive guard position.',
+    ],
+    instructions: `Each entry 18-26 words. Format: "[species name] [behavior + body position] [reef backdrop] [sensory detail]." Vary across 20+ species and 7+ behavior categories. NEVER include multiple competing species in one entry (one hero only). NEVER include ships / boats / divers / people. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  tropical_fish_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for tropical-fish-closeup — explicit composition mandate. Each entry 14-22 words.
+
+✓ VARIETY (macro-fish-portrait specific):
+  A. MACRO CLOSE (tiny fish filling frame, every scale visible)
+  B. SIDE-PROFILE PORTRAIT (full lateral body of the single fish)
+  C. THREE-QUARTER ANGLE (slight body turn showing depth)
+  D. HEAD-ON APPROACH (fish facing camera, face dominant)
+  E. EYE-LEVEL EYE-CONTACT (camera meeting the fish's eye)
+  F. OVER-THE-FIN framing (foreground fin silhouette, body beyond)
+  G. ANEMONE-IN-FOREGROUND (anemone tentacles soft, fish in midground)
+  H. CORAL-FRAMED (fish framed by coral arch / branch / sea-fan)
+  I. CLEANING-STATION CLOSE (fish + cleaner wrasse at gill)
+  J. UNDERWATER LOW (camera below fish, body silhouetted)
+
+NEVER use negation. NEVER modern cinema terms.`,
+    touchpoints: [
+      'MACRO CLOSE framing, tiny fish filling the frame entirely, every scale and fin-ray sharply visible at extreme close-distance',
+      'SIDE-PROFILE PORTRAIT framing, full lateral body of single fish, all coloration and fin shape clearly readable in sharp profile',
+      'THREE-QUARTER ANGLE framing, fish body slightly turned toward camera showing depth and body curvature, eye and gill visible',
+      'HEAD-ON APPROACH framing, fish facing camera, face and mouth dominant, body receding behind in soft focus',
+      'EYE-LEVEL EYE-CONTACT framing, camera meeting the single eye of the fish directly, intimate macro-portrait moment',
+      'OVER-THE-FIN framing, foreground fin silhouetted in soft focus, body and face of the fish sharp in midground',
+      'ANEMONE-IN-FOREGROUND framing, anemone tentacles waving soft in close foreground, clownfish sharp behind in the host',
+      'CORAL-FRAMED framing, single fish visible through a natural arch of coral branches, sharp in the frame the coral creates',
+      'CLEANING-STATION CLOSE framing, the host fish in three-quarter profile with the tiny cleaner wrasse sharp at the gill plate',
+      'UNDERWATER LOW framing, camera below the fish at coral-base level, body silhouetted against bright surface light above',
+      'ABOVE-LOOKING-DOWN framing, fish hovering still in profile with coral pattern below visible in atmospheric soft focus',
+      'PERCHED-ON-CORAL framing, fish in classic perched-on-branch pose with body anchored, frame centered on the perch',
+      'SOFT-CORAL CURTAIN framing, foreground curtain of soft coral fronds in motion, single fish sharp in the gap between',
+      'STATION-WIDE framing, single large fish hovering motionless with multiple tiny cleaner-wrasse attending across body',
+      'MID-MOTION TURN framing, single fish caught mid-turn, body angled and flowing through the curve, motion-implied frame',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // COASTAL-POWER path-bespoke pools (3)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  coastal_power_scenes: {
+    format: 'simple',
+    theme: `COASTAL POWER SCENES for OceanBot's coastal-power path — heavy swells and wave crashes colliding with the shore. Each entry 20-28 words. Shore element + wave action + location/intensity ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ MANDATORY: every entry names a REAL coastal shore-element (cliff face / sea-stack / jagged rock / reef breaker / lighthouse / cape / sand beach / rock-shelf) + a REAL wave action (crashing / exploding / surging / engulfing / shorebreak-curling / pounding / overtopping / spraying). NO ships, NO people, NO surfers. The collision is the visual spine.
+
+✓ VARIETY MANDATE (distribute across):
+  A. CLIFF FACE IMPACT (massive wave hitting vertical cliff, spray erupting 50+ feet)
+  B. SEA-STACK BREAK (waves wrapping around a tall offshore sea-stack)
+  C. JAGGED ROCK EXPLOSION (heavy swell exploding off a coastal-rock cluster)
+  D. REEF BREAKER WALL (heavy swell at the outer reef line, lip pitching forward)
+  E. LIGHTHOUSE SPRAY (wave overtopping the rocks at a lighthouse base, spray reaching the keeper's lamp)
+  F. CAPE HEADLAND IMPACT (massive Atlantic / Pacific wave on a cape headland)
+  G. SHOREBREAK CURL — sandy beach (Clark-Little-coded heavy wave curling onto wet sand, lip pitching forward)
+  H. SHOREBREAK BARREL — heavy curling barrel with sun-light through the lip, empty beach
+  I. ROCK-SHELF SLAM (wave hitting flat coastal rock-shelf, water sheeting in all directions)
+  J. SEA-CAVE OVERTOP (heavy surge surging into a sea-cave mouth)
+  K. STORM SURGE FRONT (wall of advancing water hitting a low coast)
+  L. HURRICANE-DRIVEN IMPACT (named-hurricane-scale wave on shore, frame full of spray)
+  M. ICELAND BLACK-SAND IMPACT (Reynisfjara-coded basalt sea-stacks + black sand + grey-green swells)
+  N. NAZARÉ-SCALE big-wave shore (massive Atlantic wave at a Portuguese cape, scale-proving rock visible)
+  O. NIGHT SHORE IMPACT (heavy wave hitting lighthouse rocks in moonlight, lighthouse beam sweeping)
+
+Each entry: shore element + wave-impact action + iconic-location-or-intensity-cue + sensory anchor. NEVER negation.`,
+    touchpoints: [
+      'Massive Atlantic wave exploding off a vertical Big Sur cliff face, spray erupting fifty feet skyward, foam cascading down the basalt in white veins.',
+      'Heavy storm-driven wave wrapping around a Faroe-Islands sea-stack, mist haloing the spire from all sides, dark grey-green water churning at its base.',
+      'Clark-Little-style heavy shorebreak wave curling onto wet Hawaiian sand, lip pitching forward, sun catching through the translucent wave-face into a tube.',
+      'Reynisfjara black-sand beach with a heavy grey-green wave exploding off the basalt sea-stacks, spray ten meters high, dark volcanic shore receding.',
+      'Cape Disappointment lighthouse engulfed by a heavy Pacific wave, spray reaching the keeper\'s lamp, foam cascading down the wet rocks below.',
+      'Nazaré-scale wave breaking off the Portuguese cape headland, sixty-foot wall of water, tiny rock-shelf in foreground proving the scale.',
+      'Cliffs of Moher with a massive Atlantic swell exploding at the base, white spray climbing two hundred feet up the dark sandstone, gulls wheeling in the wind.',
+      'Heavy shorebreak barrel curling onto an empty Oahu beach at golden hour, sun shining through the translucent wave lip, sand kicking up in the impact zone.',
+      'Massive storm wave hitting a coastal rock-shelf in Iceland, water sheeting outward in all directions, basalt cliffs dark and wet in the bruised dawn light.',
+      'Storm-driven shore-break crashing against the jagged rocks at Cape Horn, white water exploding skyward, grey-black sea stretching to the storm horizon.',
+      'Heavy Pacific swell engulfing the rocks at Portland Head Light, lighthouse white-painted tower visible above the surge, spray over the lower walls.',
+      'Sea-cave mouth at Lands End mid-surge, heavy wave compressing into the cave throat, spray-vapor blasting outward at violent pressure.',
+      'Hurricane-scale wave hitting a low-coastal sea-wall in the Outer Banks, advancing wall of water filling the frame, light-fixtures barely visible above.',
+      'Sea-stack of Iceland at Reynisfjara mid-impact, heavy grey-green wave breaking on the basalt column, white spray climbing the dark vertical pillars.',
+      'Shorebreak slam on a Mexican Pacific beach, heavy wave curling onto wet sand and exploding outward in a wide white foam-burst, empty shore beyond.',
+      'Coastal cliff at Etretat in Normandy mid-impact, chalk-white cliff dwarfed by exploding wave, spray fanning sideways in the brisk Atlantic wind.',
+      'Heavy storm surge at a Maine rocky coastline at blue hour, wave overtopping the jagged granite, spray sheeting upward into the steel-blue dawn.',
+      'Massive shorebreak barrel at Pipeline at golden hour, perfect tube curling onto wet sand, sun spear through the lip, empty beach stretching far behind.',
+      'Lighthouse rocks at Cap Fréhel completely engulfed by a heavy Atlantic wave at dusk, only the lighthouse tower visible above the white spray and foam.',
+      'Sea-stack impact at Stack Rocks in Wales mid-storm, heavy swell wrapping the column, brown-green water churning at the base, sky bruised behind.',
+    ],
+    instructions: `Each entry 20-28 words. Format: "[shore element + location] [wave action + impact intensity] [sensory anchor / scale-cue]." Vary across the 15 categories above. NEVER include ships / boats / surfers / people / drones. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  coastal_power_weather_and_sky: {
+    format: 'simple',
+    theme: `WEATHER + SKY for OceanBot's coastal-power path — the atmospheric mood that pairs with the wave-impact. Each entry 14-22 words. This axis gives the path its dramatic range across times of day / weather fronts / lighting moods.
+
+⚠️ The weather/sky entry is what makes a wave-on-cliff render either "moody storm" or "golden-hour wallpaper" or "stormy dawn" etc. — load-bearing for the path's atmospheric variety.
+
+✓ VARIETY MANDATE (distribute across):
+  A. GOLDEN HOUR (warm low-sun amber, long shadows, sun-shafts piercing cloud)
+  B. SUNSET (saturated pink-and-orange sky over storm-grey sea)
+  C. DAWN (pre-dawn blue-pink, mist over the water, soft light)
+  D. BLUE HOUR (cool steel-blue twilight, lighthouse beam visible)
+  E. STORM FRONT (advancing wall-cloud, rain-drizzle visible, charged atmosphere)
+  F. HURRICANE SKY (bruised purple-grey overhead, lightning fork visible in distance)
+  G. AURORA-OVER-COAST (Northern Lights green-violet ribbons over Iceland / Norway / Faroes coast)
+  H. RAINBOW-AFTER-SQUALL (departing rain on left, rainbow arcing over the shore)
+  I. NIGHT-WITH-MOON (full moon over storm-tossed sea, lighthouse beam sweeping)
+  J. NIGHT-WITH-LIGHTNING (storm with frequent lightning, dramatic strobes)
+  K. OVERCAST-DRAMATIC (low heavy grey ceiling, contrasted with white spray below)
+  L. SUN-SHAFTS THROUGH BROKEN CLOUD (dramatic god-rays piercing storm cloud onto the shore)
+  M. MIST-AND-FOG (thick coastal mist, foghorn-implied mood)
+  N. CRISP-CLEAR with whitecaps (blue sky, deep-cobalt water, distinct horizon)
+  O. WINTER-COASTAL (low sun, cold blue light, frost on rocks)
+
+NEVER negation.`,
+    touchpoints: [
+      'Golden hour amber-low-sun raking the wave-face, long shadows across the wet rocks, sun-shafts piercing broken cloud behind',
+      'Saturated pink-and-orange sunset blazing over the storm-grey sea, the silhouette of the shore receding into amber haze',
+      'Pre-dawn blue-pink sky with soft mist drifting low over the water, the eastern horizon glowing pale rose behind the cliffs',
+      'Cool steel-blue twilight at blue hour, lighthouse beam visible cutting through the gathering dusk above the shore',
+      'Storm front advancing as a wall-cloud over the headland, rain-drizzle visible in the middle distance, charged pre-storm atmosphere',
+      'Bruised purple-grey hurricane sky overhead, fork of lightning visible in the distant storm-wall, full sense of natural power gathering',
+      'Aurora borealis green-and-violet ribbons rippling over an Icelandic coast, the sky alive above the dark wave-impact zone below',
+      'Rainbow arcing over the shore as the squall departs to the left, foreground rocks still wet, the right sky already clearing pale blue',
+      'Full moon hanging over a storm-tossed sea at midnight, lighthouse beam sweeping across the dark spray-filled coast below',
+      'Frequent lightning forks splitting the storm sky over the cape, brief cold-white strobes illuminating the wave-face mid-impact',
+      'Low heavy overcast ceiling pressing down with a deep grey diffuse light, white spray below in stark contrast against the sky',
+      'Dramatic god-rays piercing broken storm cloud and spotlighting the wave-impact zone on the shore, sky theatrical and divine',
+      'Thick coastal mist and fog reducing visibility, foghorn mood implied, shore architecture half-revealed through the grey-white veil',
+      'Crisp clear blue sky with deep-cobalt water and a sharp horizon line, whitecaps visible all the way out, brisk wind energy',
+      'Winter coastal scene with low cold blue light, frost on the rocks above the high-tide line, sun-low at the horizon casting long shadow',
+      'Pastel dawn pink melting into pale orange across the upper sky, sea-mist drifting low over the breakers, soft and serene',
+      'Storm-break sun-shaft stabbing through the dark cloud onto a single point on the breaker, the rest of the shore still bruised grey',
+      'Rich amber golden hour with deep-blue ocean and brilliant orange spray-foam, the wave-impact lit warm from the side by low sun',
+      'Crepuscular rays fanning from a setting sun behind broken cloud over the shore, brilliant pink-and-gold theatrical sky',
+      'Night sky with full Milky Way arching overhead, the shore in pale silver moonlight, wave-impact a silver burst against dark rock',
+    ],
+    instructions: `Each entry 14-22 words. Format: "[time of day / weather] [sky color + cloud detail] [light behavior + secondary atmospheric mood]." Vary across the 15 categories above. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  coastal_power_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for coastal-power — explicit composition mandate. Each entry 14-22 words.
+
+✓ VARIETY (coastal-impact cinematography):
+  A. LOW WATERLINE PUNCH (camera at sea level looking up at wave + cliff)
+  B. AERIAL HIGH OVERLOOK (drone-style high above the shore looking down)
+  C. CLIFF-EDGE SIDE PROFILE (camera on cliff edge, wave-impact in lateral profile)
+  D. INSIDE-THE-BARREL (camera inside a shorebreak tube, lip curling overhead)
+  E. WIDE PANORAMA (sky + shore + ocean in full frame)
+  F. EXTREME LOW from sand (wave breaking over camera height on the beach)
+  G. LIGHTHOUSE LATERAL (lighthouse + wave impact in side-profile from cliff)
+  H. ZOOM-COMPRESSION distant (heavy wave hitting a distant landmark, atmospheric layers)
+  I. OVER-THE-ROCKS (foreground rocks silhouetted, wave impact behind)
+  J. SLAM-FROM-ABOVE (camera looking straight down at wave hitting flat shelf)
+
+NEVER use negation. NEVER modern cinema terms.`,
+    touchpoints: [
+      'LOW WATERLINE PUNCH framing, camera at sea-level looking up at the towering wave hitting the cliff above',
+      'AERIAL HIGH OVERLOOK framing, drone-style high above the shore, wave-impact zone visible from above',
+      'CLIFF-EDGE SIDE PROFILE framing, camera on the cliff edge, wave impact in lateral profile against the rock face',
+      'INSIDE-THE-BARREL framing, camera inside a heavy shorebreak tube with the lip curling overhead, light through the wave-face',
+      'WIDE PANORAMA framing, full vista with sky + shore + ocean visible, wave-impact in midground as one element of the larger composition',
+      'EXTREME LOW BEACH framing, camera planted at sand level, wave breaking forward toward the lens, sky narrow above',
+      'LIGHTHOUSE LATERAL framing, lighthouse and the wave-impact at its base both in side-profile, viewed from a nearby cliff',
+      'ZOOM-COMPRESSION DISTANT framing, telephoto compression making a distant wave-impact appear massive, atmospheric haze flattening layers',
+      'OVER-THE-ROCKS framing, jagged foreground rocks silhouetted in sharp focus, heavy wave impact in midground beyond them',
+      'SLAM-FROM-ABOVE framing, camera looking straight down at a wave hitting a flat rock shelf, water sheeting outward in radial pattern',
+      'GROUND-LEVEL SHOREBREAK framing, camera positioned mid-shorebreak on wet sand, wave curling toward lens',
+      'CLIFF-TOP HIGH framing, far view from a tall headland down onto a distant wave-impact, scale-proving rocks in foreground',
+      'AERIAL DRONE SHOREFRONT framing, sweeping along the coastline at altitude, multiple wave-impact zones visible',
+      'BACKLIT WAVE framing, low sun behind the wave-face, the wave lit through translucent like stained glass',
+      'WATERLINE-SPLIT framing, half air half water, wave-impact dominant in the air half with churning subsurface visible in the water half',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

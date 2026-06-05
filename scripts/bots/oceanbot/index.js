@@ -55,6 +55,12 @@ const pathBuilders = {
   // this attempt leans HARD into painted register + explicit tail
   // anatomy mandate + cultural diversity to break the failure prior.
   'mystical-mermaid': require('./paths/mystical-mermaid'),
+  // 3 new wildlife scenic paths (Kevin 2026-06-05) — same lean 4-axis
+  // shape as the other scenic paths.
+  'seaturtle-scape': require('./paths/seaturtle-scape'),
+  'wild-sealife-camera': require('./paths/wild-sealife-camera'),
+  'tropical-fish-closeup': require('./paths/tropical-fish-closeup'),
+  'coastal-power': require('./paths/coastal-power'),
 };
 
 module.exports = {
@@ -85,19 +91,19 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  // 4-model scene-eligible lineup. Drops flux-2-max + flux-2-flex
-  // (fleet-wide bans per recent session) and flux-dev (artistic
-  // register fights ocean photoreal). Dropped flux-1.1-pro 2026-06-04
-  // — Ultra consistently outperforms Pro on this bot's register, and
-  // dream_mediums.allowed_models was updated fleet-wide to actually
-  // surface Ultra in the picker (was filtered out previously). Pro
-  // was redundant with Ultra present.
+  // 3-model scene-eligible lineup. Dropped flux-2-pro bot-wide
+  // 2026-06-05 (Kevin call) — was consistently the weakest of the 4
+  // on this bot's painted/photoreal register and Kevin's heart-
+  // pattern across paths showed it never landed a winner. Was banned
+  // per-path on mystical-mermaid (R1b) for the same reason. Removing
+  // bot-wide simplifies. Prior bans: flux-2-max + flux-2-flex (fleet
+  // bans), flux-dev (artistic-fights-ocean-photoreal), flux-1.1-pro
+  // (redundant with Ultra after dream_mediums fix surfaced Ultra).
   useModelPicker: true,
   allowedModels: [
     'google/gemini-2-image',
     'openai/gpt-image-2',
     'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-pro',
   ],
 
   // Per-path model bans (Kevin 2026-06-04). lost-cities + pirates used
@@ -107,19 +113,21 @@ module.exports = {
   // an override here.
   modelByPath: {
     // ghost-ship: bot-wide MINUS GPT Image 2 — the haunted/spectral
-    // register reads stronger on the other 3 models. Down to 3.
+    // register reads stronger on the other 2 models. Down to 2.
+    // (flux-2-pro dropped from this entry when removed bot-wide
+    // 2026-06-05.)
     'ghost-ship': [
       'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-pro',
     ],
     // deep-wonder: bot-wide MINUS Gemini 2 Image (Nano Banana) — the
     // abyssal-black bioluminescent register reads stronger on the
-    // other 3 models. Down to 3.
+    // other 2 models. Down to 2.
+    // (flux-2-pro dropped from this entry when removed bot-wide
+    // 2026-06-05.)
     'deep-wonder': [
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-pro',
     ],
     // bioluminescent-night: bot-wide MINUS Flux 2 Pro PLUS Flux 1.1 Pro
     // (re-enabled here even though banned bot-wide). Kevin's call from
@@ -216,6 +224,10 @@ module.exports = {
     'polar-seas',
     'bioluminescent-night',
     'mystical-mermaid',
+    'seaturtle-scape',
+    'wild-sealife-camera',
+    'tropical-fish-closeup',
+    'coastal-power',
   ],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
@@ -245,6 +257,12 @@ module.exports = {
       // element token), leaving Flux's generic-mermaid-portrait
       // default. Single-pass Sonnet preserves the full stack.
       'mystical-mermaid',
+      // 3 new wildlife paths — same axis-system polish-skip pattern
+      // as the other scenic paths.
+      'seaturtle-scape',
+      'wild-sealife-camera',
+      'tropical-fish-closeup',
+      'coastal-power',
     ],
   },
 
