@@ -176,30 +176,12 @@ module.exports = {
     'nightshade',
   ],
 
-  // Per-path vibe overrides. (The reef-paradise R0 trim that dropped
-  // dark / voltage / nightshade was reversed 2026-06-05 — Kevin wants
-  // the darker vibes back across the whole bot. reef-paradise now uses
-  // the full bot-wide vibe list with the other 13 scenic paths.)
-  //
-  // mystical-mermaid: mystical-coded vibe subset. Drops the overtly-
-  // mundane vibes (peaceful — too flat) and keeps the registers that
-  // lean magical / dreamy / ancient / cosmic. ethereal + enchanted +
-  // ancient are the load-bearing ones for the "stuff of legend"
-  // framing Kevin called out; voltage / nightshade carry the cooler
-  // bioluminescent / moonlit variants; cinematic / dark / epic give
-  // framing range.
-  vibesByPath: {
-    'mystical-mermaid': [
-      'cinematic',
-      'dark',
-      'epic',
-      'ancient',
-      'enchanted',
-      'ethereal',
-      'voltage',
-      'nightshade',
-    ],
-  },
+  // No per-path vibe overrides — every OceanBot path (including
+  // reef-paradise and mystical-mermaid) uses the bot-wide 10-vibe list.
+  // Earlier trims (reef-paradise dark-vibe drop 2026-06-04, mystical-
+  // mermaid mystical-coded subset) were reversed 2026-06-05: full
+  // vibe surface area across the bot.
+  vibesByPath: {},
 
   paths: [
     'shipwreck-kingdom',
