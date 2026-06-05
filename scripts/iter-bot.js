@@ -106,6 +106,11 @@ function arg(name, fallback) {
         label,
         idx: i,
         post,
+        // Tag iter-bot runs so the dispatcher's cycle math (botEngine.js
+        // getCycledUsedPaths + getRecentPaths, filtered to source='dispatcher')
+        // ignores them — dev iteration doesn't pollute production path
+        // round-robin state.
+        source: 'iter-bot',
       });
       results.push(r);
       if (!r.ok) {

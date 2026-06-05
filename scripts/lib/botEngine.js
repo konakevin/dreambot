@@ -404,29 +404,43 @@ function download(url, dest) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// PICKER — DB-backed 5-day recency with in-memory sync API
+// PICKER — shuffle-bag round-robin with exhaustion-reset
 // ─────────────────────────────────────────────────────────────
 
 /**
- * Create a picker scoped to one render. Reads the last `windowDays` of
- * picks for `botName` from bot_dedup up front, then provides synchronous
- * pick / pickWithRecency for use inside bot.rollSharedDNA + bot.buildBrief.
+ * Create a picker scoped to one render. Reads ALL prior picks for `botName`
+ * from bot_dedup up front (no date window — see below), then provides
+ * synchronous pick / pickWithRecency for use inside bot.rollSharedDNA +
+ * bot.buildBrief.
+ *
+ * Per-axis behavior is a SHUFFLE-BAG (2026-06-05): every entry in the pool
+ * is picked exactly once before any repeats. When the pool exhausts
+ * (filtered set empty), the in-memory recent set is reset for that axis
+ * and the axis is marked for DB-side dedup-row deletion on commit(). The
+ * next pick draws from the full pool fresh — wash, rinse, repeat forever.
+ * Same wash/rinse/repeat the path-level cycle has had since 2026-05-26,
+ * now uniformly applied at axis level too.
+ *
+ * No date window — the historical 5-day rolling window meant entries
+ * aged out by clock time instead of by pool coverage, which caused
+ * partial cycles at small pool sizes (entries became eligible again
+ * before the bag had been emptied). Exhaustion-reset is the right model
+ * for round-robin coverage independent of post cadence.
  *
  * Picks are queued in memory and committed to the DB ONLY if the caller
  * invokes commit() — runBot does this only after a successful post.
+ * Failed renders don't burn cycle slots.
  *
  * Value stringification: strings pass through; objects use the `text`
  * field if present (matches MOMENTS shape convention), else `id`, else
  * JSON.stringify as last-resort. All bot pools with object values MUST
  * have a `text` property per the MIGRATE-BOT.md convention.
  */
-async function createPicker({ botName, windowDays = 5, sb }) {
-  const since = new Date(Date.now() - windowDays * 86400000).toISOString();
+async function createPicker({ botName, sb }) {
   const { data, error } = await sb
     .from('bot_dedup')
     .select('axis, value')
-    .eq('bot_name', botName)
-    .gte('picked_at', since);
+    .eq('bot_name', botName);
   if (error) {
     console.warn(`  ⚠️ bot_dedup read failed (${error.message}); falling back to no recency`);
   }
@@ -437,6 +451,7 @@ async function createPicker({ botName, windowDays = 5, sb }) {
   }
   const runRecent = {}; // within-this-render dedup
   const pendingPicks = [];
+  const exhaustedAxes = new Set(); // axes whose cycle completed this render → DB reset on commit
   const warnings = [];
 
   function keyOf(v) {
@@ -468,14 +483,15 @@ async function createPicker({ botName, windowDays = 5, sb }) {
       if (filtered.length > 0) {
         chosen = filtered[Math.floor(Math.random() * filtered.length)];
       } else {
-        // Pool exhausted in window — fall back, warn once per axis.
-        const warnKey = `exhausted:${axis}`;
-        if (!runRecent[warnKey]) {
-          warnings.push(
-            `[picker] axis=${axis} pool (${pool.length} entries) exhausted in ${windowDays}-day window — falling back to full pool`
-          );
-          runRecent[warnKey] = true;
-        }
+        // Pool exhausted — cycle complete. Reset in-memory db-recent set
+        // for this axis (so subsequent within-render picks see the fresh
+        // pool too) and mark axis for DB-side deletion on commit. Then
+        // draw from the full pool to start the new cycle.
+        warnings.push(
+          `[picker] axis=${axis} cycle complete after ${db.size} picks — resetting (pool=${pool.length})`
+        );
+        dbRecent[axis] = new Set();
+        exhaustedAxes.add(axis);
         chosen = pool[Math.floor(Math.random() * pool.length)];
       }
       (runRecent[axis] ??= new Set()).add(keyOf(chosen));
@@ -488,6 +504,23 @@ async function createPicker({ botName, windowDays = 5, sb }) {
     },
 
     async commit() {
+      if (pendingPicks.length === 0 && exhaustedAxes.size === 0) return;
+
+      // For each axis whose cycle exhausted this render, DELETE its
+      // prior dedup rows first — the new pick below seeds the fresh
+      // cycle. Scoped to (bot_name, axis) so other bots / other axes
+      // are untouched.
+      for (const axis of exhaustedAxes) {
+        const { error: delErr } = await sb
+          .from('bot_dedup')
+          .delete()
+          .eq('bot_name', botName)
+          .eq('axis', axis);
+        if (delErr) {
+          console.warn(`  ⚠️ bot_dedup cycle-reset (axis=${axis}) failed: ${delErr.message}`);
+        }
+      }
+
       if (pendingPicks.length === 0) return;
       const rows = pendingPicks.map((p) => ({
         bot_name: botName,
@@ -652,12 +685,17 @@ const _batchPathWindow = {};
 // Separate cycle tracker for cycleAllPaths bots — resets when cycle completes.
 const _batchCycleTracker = {};
 
+// 2026-06-05 — cycle reads filter to source='dispatcher' so iter-bot /
+// qa-matrix test runs (source='iter-bot') don't pollute the production
+// path cycle. See migration 226_bot_run_log_source.sql for the column
+// addition + backfill semantics.
 async function getRecentPaths(sb, botName, limit = 5) {
   const { data, error } = await sb
     .from('bot_run_log')
     .select('path')
     .eq('bot_name', botName)
     .eq('status', 'ok')
+    .eq('source', 'dispatcher')
     .order('created_at', { ascending: false })
     .limit(limit);
   if (error) {
@@ -672,7 +710,8 @@ async function getCycledUsedPaths(sb, botName, cycleSize) {
     .from('bot_run_log')
     .select('*', { count: 'exact', head: true })
     .eq('bot_name', botName)
-    .eq('status', 'ok');
+    .eq('status', 'ok')
+    .eq('source', 'dispatcher');
   if (error || !count) return [];
   const position = count % cycleSize;
   if (position === 0) return [];
@@ -681,6 +720,7 @@ async function getCycledUsedPaths(sb, botName, cycleSize) {
     .select('path')
     .eq('bot_name', botName)
     .eq('status', 'ok')
+    .eq('source', 'dispatcher')
     .order('created_at', { ascending: false })
     .limit(position);
   return (data || []).map((r) => r.path);
@@ -897,6 +937,12 @@ async function writeRunLog(sb, row) {
  *   label     — string to include in save filenames
  *   idx       — index within a batch (for filename uniqueness)
  *   post      — if outDir is set, still post to DB (for `iter-bot --post`)
+ *   source    — bot_run_log source tag ('dispatcher' | 'iter-bot' | 'qa-matrix'
+ *               | 'run-bot' | 'manual'). Default 'dispatcher' for the
+ *               production cron path. iter-bot passes 'iter-bot' so its test
+ *               runs are excluded from the cycle math (see getCycledUsedPaths
+ *               + getRecentPaths) and don't pollute production round-robin.
+ *               Migration 226_bot_run_log_source.sql adds the column.
  *   sbOverride — inject a supabase client (tests)
  *
  * Returns: { ok, finalPrompt, dna, path, vibeKey, medium, imageUrl?, localPath?, error?, errorStage? }
@@ -913,6 +959,7 @@ async function runBot(opts) {
     label,
     idx,
     post = false,
+    source = 'dispatcher',
     sbOverride,
   } = opts;
 
@@ -1011,9 +1058,11 @@ async function runBot(opts) {
         );
       }
 
-      // 2. Create picker (pre-loads recency window)
+      // 2. Create picker — shuffle-bag with exhaustion-reset (2026-06-05).
+      // Loads all prior bot_dedup picks for this bot at start; resets axis
+      // cycles when their pool exhausts during the render.
       errorStage = 'picker-init';
-      picker = await createPicker({ botName: bot.username, windowDays: 5, sb });
+      picker = await createPicker({ botName: bot.username, sb });
 
       // 3. Roll shared DNA (optional)
       errorStage = 'roll-shared-dna';
@@ -1515,6 +1564,7 @@ async function runBot(opts) {
         medium,
         model: renderModel,
         status: 'ok',
+        source,
         image_url: imageUrl,
         duration_ms: durationMs,
         cost_cents: costCents,
@@ -1556,6 +1606,7 @@ async function runBot(opts) {
           medium,
           model: renderModel,
           status: 'failed',
+          source,
           error: errStr.slice(0, 2000),
           error_stage: errorStage,
           duration_ms: durationMs,

@@ -91,5 +91,11 @@ ALTER TABLE public.bot_run_log ENABLE ROW LEVEL SECURITY;
 -- GROUP BY bot_name
 -- ORDER BY total_cents DESC;
 --
--- Monthly cleanup of bot_dedup (run as cron or manual):
--- DELETE FROM bot_dedup WHERE picked_at < now() - INTERVAL '30 days';
+-- !!! DO NOT WIRE THE FOLLOWING AS A CRON !!!
+-- The original comment suggested a 30-day cleanup. As of 2026-06-05 the
+-- picker (botEngine.js createPicker) uses bot_dedup as a shuffle-bag —
+-- entries stay until the axis's pool is exhausted, at which point the
+-- picker itself DELETEs them (axis-scoped, atomically with the new
+-- cycle's first pick). A time-based cleanup would silently reset cycles
+-- mid-flight and break round-robin.
+-- DELETE FROM bot_dedup WHERE picked_at < now() - INTERVAL '30 days';  -- DO NOT USE
