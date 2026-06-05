@@ -644,25 +644,13 @@ export const DreamCard = memo(function DreamCard({
               </TouchableOpacity>
               {onComment && (
                 <TouchableOpacity style={ui.sideButton} onPress={onComment} activeOpacity={0.7}>
-                  {/* Filled bubble when comments exist, outline when zero —
-                      drops the "number below the icon" alignment problem and
-                      gives a clear visual signal of "this post has activity".
-                      The actual count lives in a small red corner badge
-                      capped at 9+ so it stays a single visual size. */}
-                  <View style={s.commentIconWrap}>
-                    <Ionicons
-                      name={item.comment_count ? 'chatbubble' : 'chatbubble-outline'}
-                      size={26}
-                      color="#FFFFFF"
-                    />
-                    {!!item.comment_count && (
-                      <View style={s.commentBadge}>
-                        <Text style={s.commentBadgeText}>
-                          {item.comment_count > 9 ? '9+' : item.comment_count}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
+                  <Ionicons name="chatbubble-outline" size={26} color="#FFFFFF" />
+                  <Text
+                    style={[ui.sideCount, !(item.comment_count ?? 0) && hiddenCount]}
+                    numberOfLines={1}
+                  >
+                    {item.comment_count ?? 0}
+                  </Text>
                 </TouchableOpacity>
               )}
               {onToggleSave && (
@@ -733,33 +721,6 @@ const s = StyleSheet.create({
   // load that takes a beat reads as intentional dim placeholder, not
   // "is this card broken?".
   fullImage: { ...StyleSheet.absoluteFillObject, backgroundColor: colors.surface },
-  // Comment-button badge — small red corner pip with the count (capped 9+).
-  // commentIconWrap is the positioning anchor so commentBadge can absolute-
-  // position to the icon's top-right corner without affecting layout.
-  commentIconWrap: {
-    position: 'relative',
-  },
-  commentBadge: {
-    position: 'absolute',
-    top: -5,
-    right: -10,
-    minWidth: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: colors.like,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 4,
-    borderWidth: 1.5,
-    // Dark ring so the badge stays legible over light-background renders.
-    borderColor: 'rgba(0,0,0,0.55)',
-  },
-  commentBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '700',
-    lineHeight: 12,
-  },
   // Tap-to-retry overlay — covers the failed-Image area, centered pill.
   // Only shown after silent auto-retries are exhausted.
   retryOverlay: {
