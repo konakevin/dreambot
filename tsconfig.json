@@ -23,6 +23,7 @@
     "__tests__/lib/upscaleCaching.test.ts",
     "__tests__/lib/cleanMedium.test.ts",
     "__tests__/lib/notify.test.ts",
+    "__tests__/lib/notifyActivityGate.test.ts",
     "__tests__/lib/genderLock.test.ts",
     "__tests__/lib/faceSwapGenderLock.test.ts",
     "__tests__/lib/faceSwapFallback.test.ts"

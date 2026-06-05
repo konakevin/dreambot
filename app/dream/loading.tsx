@@ -17,6 +17,7 @@ import { Toast } from '@/components/Toast';
 import type { PhotoClassification } from '@/lib/dreamApi';
 import { DreamFailureCard } from '@/components/DreamFailureCard';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
+import { decideDreamJobRecovery } from '@/lib/dreamJobRecovery';
 
 // Self / relationship detection — kept in sync with the matching regexes
 // on the Create screen. Used once at mount to decide whether to surface
@@ -140,7 +141,6 @@ export default function DreamLoadingScreen() {
   const tryRecover = useCallback(async () => {
     const jobId = useDreamStore.getState().activeJobId;
     if (!jobId) return;
-    if (queued.current) return; // user opted into the push; don't yank them back here
     try {
       const { data: job } = await supabase
         .from('dream_jobs')
@@ -149,34 +149,26 @@ export default function DreamLoadingScreen() {
         )
         .eq('id', jobId)
         .maybeSingle();
-      if (!job) return;
 
-      if (job.status === 'done' && job.upload_id && job.result_image_url) {
-        setResult({
-          imageUrl: job.result_image_url,
-          prompt: job.result_prompt ?? '',
-          aiConcept: null,
-          dreamMode: null,
-          archetype: null,
-          resolvedMedium: job.result_medium ?? null,
-          resolvedVibe: job.result_vibe ?? null,
-          uploadId: job.upload_id,
-        });
-        setActiveJobFailure(null);
-        setIsRecovering(false);
-        router.replace('/dream/reveal');
-        return;
+      const decision = decideDreamJobRecovery({ job, queued: queued.current });
+      switch (decision.action) {
+        case 'navigate':
+          setResult(decision.result);
+          setActiveJobFailure(null);
+          setIsRecovering(false);
+          router.replace('/dream/reveal');
+          return;
+        case 'fail':
+          setIsRecovering(false);
+          return;
+        case 'poll':
+          // Render still in flight server-side. If a failure card was up, the
+          // showSpinner branch keeps the spinner visible while we keep polling.
+          setIsRecovering(true);
+          return;
+        case 'noop':
+          return;
       }
-
-      if (job.status === 'failed' || job.status === 'nsfw') {
-        setIsRecovering(false);
-        return;
-      }
-
-      // status === 'processing' — still in flight on the server. If the
-      // client already gave up (failure set), hide that card and show the
-      // spinner; the polling effect keeps checking.
-      setIsRecovering(true);
     } catch (e) {
       if (__DEV__) console.warn('[loading] tryRecover failed', e);
     }

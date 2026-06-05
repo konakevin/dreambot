@@ -3,6 +3,7 @@
 // Looks up the recipient's Expo push token and sends a push notification.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { shouldSkipForActivity } from '../_shared/notify.ts';
 
 const EXPO_PUSH_URL = 'https://exp.host/--/api/v2/push/send';
 
@@ -236,17 +237,14 @@ Deno.serve(async (req) => {
     // and the in-app indicators (profile-tab dot, inbox bubble, badge cache)
     // will light up — sending an OS banner on top is the redundant noise
     // Kevin called out ("getting push notifications while in DreamBot app").
-    //
-    // Threshold matches the client heartbeat cadence (debounced touch every
-    // ~10s on AppState 'active'). 30s catches the "Slack for a few seconds"
-    // case without suppressing pushes after a longer real absence.
+    // Decision lives in _shared/notify.ts:shouldSkipForActivity so the rule
+    // is unit-tested in jest.
     const { data: activityRow } = await supabase
       .from('users')
       .select('last_active_at')
       .eq('id', record.recipient_id)
       .maybeSingle();
-    const lastActive = activityRow?.last_active_at ? new Date(activityRow.last_active_at) : null;
-    if (lastActive && Date.now() - lastActive.getTime() < 30_000) {
+    if (shouldSkipForActivity({ lastActiveAt: activityRow?.last_active_at, now: Date.now() })) {
       return new Response(
         JSON.stringify({ message: 'Recipient active in-app; skipping push', skipped: 'active' }),
         { status: 200 }
