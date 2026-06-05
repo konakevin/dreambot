@@ -37,7 +37,8 @@ const pathBuilders = {
   'shipwreck-kingdom': require('./paths/shipwreck-kingdom'),
   'lost-cities': require('./paths/lost-cities'),
   pirates: require('./paths/pirates'),
-  // Other 7 paths land as the bot matures.
+  'ghost-ship': require('./paths/ghost-ship'),
+  // Other 6 paths land as the bot matures.
 };
 
 module.exports = {
@@ -93,6 +94,14 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-pro',
     ],
+    // ghost-ship: bot-wide MINUS GPT Image 2 — the haunted/spectral
+    // register reads stronger on the other 4 models. Down to 4 models.
+    'ghost-ship': [
+      'google/gemini-2-image',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-pro',
+    ],
   },
 
   // 10 ocean-coded vibes. Drops the 6 that don't fit ocean drama / wonder
@@ -111,7 +120,7 @@ module.exports = {
     'nightshade',
   ],
 
-  paths: ['shipwreck-kingdom', 'lost-cities', 'pirates'],
+  paths: ['shipwreck-kingdom', 'lost-cities', 'pirates', 'ghost-ship'],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
   cycleAllPaths: true,
@@ -123,7 +132,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    skipPaths: ['shipwreck-kingdom', 'lost-cities', 'pirates'],
+    skipPaths: ['shipwreck-kingdom', 'lost-cities', 'pirates', 'ghost-ship'],
   },
 
   // Chaos + sensory anchors — DISABLED for the pilot. We're keeping the

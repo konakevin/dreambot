@@ -896,6 +896,103 @@ NEVER use negation. NEVER name modern cinema terms (dolly / dutch tilt / etc —
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // GHOST-SHIP path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 4th OceanBot path — derelict pre-1850 wooden vessels drifting alone
+  // through fog. Flying Dutchman energy. Eerie, beautiful, haunted — NOT
+  // horror. NO CREW visible (pirates is the only crewed exception).
+  // Same lean 2-pool shape as pirates: hero encodes vessel + state +
+  // spectral atmosphere in one entry; supporting axes do less.
+
+  ghost_ships: {
+    format: 'simple',
+    theme: `GHOST SHIPS for OceanBot's ghost-ship path — derelict pre-1850 wooden sailing vessels drifting alone, Flying Dutchman register. Each entry is ONE specific haunted/derelict moment, 18-24 words. Vessel + state + spectral atmospheric detail ALL BAKED INTO THE ENTRY — this is the HERO pool and carries 80% of the render.
+
+⚠️ MANDATORY ANATOMY — every vessel is a pre-1850 WOODEN sailing ship: timber hull, hemp rigging, canvas sails, brass and iron fittings. Galleon, schooner, frigate, brig, sloop, brigantine, junk, longship, dhow, caravel, fluyt, ketch, clipper. Wood, rope, canvas, brass.
+
+⚠️ NO CREW. NO LIVING PEOPLE. Empty decks. Unmanned helms. The ships are ALONE. (Skeletal/decayed forms occasionally OK as part of the haunting, but no living crew.)
+
+✓ VARIETY MANDATE — distribute across haunted-vessel categories (~3 entries each):
+  A. Fog drift (vessel emerging from / fading into rolling fog bank, partial silhouette visible)
+  B. Becalmed / glassy (perfect calm, ship motionless on mirror-flat water, no wind in slack sails)
+  C. Listing / capsized partial (heeled at dramatic angle, half-submerged, sinking-but-not-sunk)
+  D. Encrusted / overgrown (barnacles armor-thick, kelp draping like Medusa hair, coral colonizing hull)
+  E. Spectral lighting (lanterns burning blue/green on empty deck, bioluminescent plankton outlining hull)
+  F. Arctic / ice-locked (frozen in pack ice, rigging crystallized, hull groaning under glacial pressure)
+  G. Storm-impossible (calm hurricane eye / sailing into wind / crew-less ship racing impossibly)
+  H. Crescent / fleet phantom (multiple derelicts drifting in formation, ghost-armada at horizon)
+  I. Decayed period detail (figurehead splintered, gun ports empty, wheel spinning to no hand)
+  J. Tropical / temperate setting (mangrove ghost, Caribbean derelict, monsoon-faded junk) — NOT all polar
+
+Each entry: ONE specific vessel type + state + ONE spectral atmospheric anchor (fog / lantern-glow / bioluminescence / ice-encrustation / etc.) + ONE haunting beat. NO modern vessels. NO sea monsters / krakens (separate path). NO sunken-into-coral ruins (shipwreck-kingdom path).
+
+Visual register: "eerie maritime ghost story" — haunting beauty, not gore-horror.
+
+DO write positively. Speak the moment directly, vivid and specific.`,
+    touchpoints: [
+      'Three-masted schooner draped in tattered canvas, barnacles thick as armor, drifting sideways through midnight fog banks with shredded rigging trailing.',
+      'Colonial galleon listing forty degrees, moonlight illuminating empty gun ports and a skeletal figurehead wrapped in rotting nets and seaweed.',
+      'Fog-shrouded whaling ship emerging at dawn, harpoons still mounted, deck planks split and warped, oil barrels cracked open and leaking.',
+      'Hurricane lanterns burning ghostly blue on empty quarterdeck, impossible flames reflected in calm black water under a starless sky.',
+      'Phantom brigantine silhouetted against blood-red sunset, every rope and spar perfectly outlined, sails hanging in windless air like funeral shrouds.',
+      'Clipper ship with shredded canvas racing at impossible speed against the prevailing wind, bow carving through glassy seas without a soul aboard.',
+      'Seven derelict vessels drifting in perfect crescent formation under full moon, their shadows converging on empty water at the center.',
+      'Ice-encrusted merchantman locked in arctic pack ice, rigging crystallized into frozen webs, hull groaning as glacier pressures slowly crush it.',
+      'Bioluminescent plankton coating the entire hull in pulsing green light, outlining every plank seam on the drifting sloop like living circuitry.',
+      'Battered schooner floating in the dead-calm hurricane eye, masts pointing at brilliant stars while walls of storm rage in perfect circle around it.',
+      'Only the crow\'s nest and top fifteen feet of mainmast visible above waterline, ship\'s bell still hanging and rocking with subsurface currents.',
+      'Dutch fluyt with hull so thick with barnacles the original wood is invisible, anchor chains hanging straight down into bottomless depths.',
+      'Chinese junk with red sails bleached pink and shredded, dragon figurehead\'s paint flaking, drifting through fog thick as cotton batting.',
+      'Privateer brig trailing hundreds of feet of kelp like Medusa\'s hair, the seaweed swaying in patterns suggesting movement through still water.',
+      'Twin-masted ketch with every surface covered in white salt crystals, sparkling under moonlight, rigging frozen solid despite temperate seas.',
+      'Caravel with moss-covered deck planks and small trees growing from split wood, roots penetrating deep into the hold below the empty decks.',
+      'Mangrove-tangled brigantine deep in a tropical channel, hull half-swallowed by aerial roots, vines climbing the bare masts to the crow\'s nest.',
+      'Frigate drifting at dusk with every lantern lit on empty decks, warm amber glow casting reflections across mirror-flat water with no shore in sight.',
+      'Whaler with blubber pots overturned and rusted, crow\'s nest hanging by a single rope, jawbones of leviathans lashed to rotting rails.',
+    ],
+    instructions: `Each entry is ONE specific haunted derelict moment, 18-24 words. Format: "wooden vessel + state + spectral atmospheric anchor + one haunting beat." Vary across the 10 categories above. NEVER name modern vessels or living crew. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  ghost_ship_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's ghost-ship path — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across framing categories — ghost-ship register (above-water spectral, empty decks, atmospheric):
+  A. LOW-ANGLE silhouette (camera from waterline, ship looming overhead against fogged sky)
+  B. HORIZON LONG SHOT (vessel small / distant against vast sea + sky, scale-of-loneliness composition)
+  C. ABOVE-DECK aerial (sweeping aerial pan along the empty deck — wheel spinning to no one)
+  D. SIDE-PROFILE drift (lateral framing of the full ship parallel to camera, slow drift across frame)
+  E. THROUGH-THE-FOG (camera close to thick fog wall, ship emerging / fading through veil)
+  F. EMPTY-DECK interior (camera on the deserted quarterdeck, looking forward/aft, no hand on the helm)
+  G. RIGGING SILHOUETTE (camera looking up through tattered shroud-ratlines and shredded canvas)
+  H. WATERLINE close-up (camera at sea-level alongside the encrusted hull, looking up the strake-line)
+  I. CREST-FALL approach (camera dipping into a swell, ship rising on the opposite swell at frame center)
+
+NEVER use negation. NEVER name modern cinema terms.`,
+    touchpoints: [
+      'LOW-ANGLE silhouette from the waterline, derelict galleon looming overhead against bruised fogged sky',
+      'HORIZON LONG SHOT, derelict ship tiny and distant against vast pale sea-and-sky, dwarfed by emptiness',
+      'ABOVE-DECK aerial sweep along the empty quarterdeck, wheel spinning to no hand, rigging trailing into open ocean below',
+      'SIDE-PROFILE drift framing, full barnacle-armored hull parallel to camera, slow lateral glide across frame',
+      'THROUGH-THE-FOG framing, dense fog wall in immediate foreground, vessel\'s silhouette emerging only at the edges',
+      'EMPTY-DECK INTERIOR framing, camera on the deserted quarterdeck looking forward toward the empty foremast and broken figurehead',
+      'RIGGING SILHOUETTE looking up through tattered shroud-ratlines and shredded canvas at a moon-lit fogged sky',
+      'WATERLINE CLOSE-UP alongside the encrusted hull, looking up the strake-line at the broken rail and tilted masts',
+      'CREST-FALL approach, camera dipping into a swell, the ghost ship rising on the opposite swell at frame center',
+      'OVER-THE-BOW framing from behind the broken bowsprit, looking forward into endless fog, no horizon visible',
+      'AERIAL THREE-QUARTER above the listing wreck, ship heeled forty degrees, decks raked toward camera',
+      'INSIDE-THE-FOG-BANK framing, ship dissolved into pale grey except for the silhouetted topmasts breaking through',
+      'BACKLIT SILHOUETTE against red-bleeding sunset, every rope and spar carved as cutout against the dying sky',
+      'LONG-LENS COMPRESSION shot at horizon distance, the derelict reading as a flat dark shape against luminous water',
+      'CRESCENT-MOON BACKLIGHT framing, ship dark against pale lunar disc, sails hanging slack in airless calm',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms (dolly / dutch / tilt-up). Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

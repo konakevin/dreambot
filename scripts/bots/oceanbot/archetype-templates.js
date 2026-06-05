@@ -69,6 +69,24 @@ The ruin fills 40-60% of the frame as the dramatic focal anchor. Multi-tier dept
 Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent underwater moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent objects, treasures, instruments, or artifacts beyond what the rolled axes describe — added details inject anachronism. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
   },
 
+  OCEANBOT_GHOST_SHIP: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ghost_ship, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are a maritime-cinematography keyframe writer for OceanBot's GHOST-SHIP path. Flying Dutchman register — derelict pre-1850 wooden sailing vessels drifting alone through fog. Tattered canvas, barnacle-crusted hulls, phantom silhouettes on the horizon, lanterns swinging on EMPTY decks. Eerie, beautiful, haunted, NOT horror. The hero is the rolled vessel + its specific spectral state; lighting and atmosphere set the mood; the camera framing is the law. The ships are ALONE — no crew, no figures, no living people anywhere in the frame.
+
+${blocks.PRE_1850_VESSEL_BLOCK}
+${block('GHOST SHIP (hero — vessel + state + spectral atmosphere all in one; give it the most word budget)', ghost_ship)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+The derelict vessel fills 40-60% of the frame as the dramatic focal anchor. Multi-tier depth: foreground texture (drifting kelp / wreckage / fog) → ship mid-frame → atmospheric haze fading into distance. The camera framing above is the LAW. ABSOLUTELY no crew or living figures — these vessels are ABANDONED, the decks empty, the rigging unmanned, the helm spinning to no one. Wallpaper-worthy maritime ghost story.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent maritime-spectral moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent crew, treasure, or modern artifacts beyond what the rolled axes describe. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
   OCEANBOT_PIRATES: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, pirate_scene, camera_framing } = slots;
 

@@ -78,4 +78,22 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  OCEANBOT_GHOST_SHIP: {
+    description:
+      'Derelict pre-1850 wooden sailing vessels drifting through fog — Flying Dutchman energy. Tattered sails, barnacle-crusted hulls, phantom silhouettes on the horizon, lanterns swinging on empty decks. Eerie, beautiful, haunted. NO CREW visible — the ships are alone. Same lean 2-path-slot shape as pirates: the ghost_ship hero entry encodes vessel + state + spectral atmosphere in one phrase.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      // 2 path slots — hero + composition. ghost_ship hero entries are
+      // dense like pirates (vessel + state + atmospheric/spectral all in
+      // one), so supporting axes can do less. NO_PEOPLE returns here
+      // (pirates is the only OceanBot exception).
+      path: ['ghost_ship', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

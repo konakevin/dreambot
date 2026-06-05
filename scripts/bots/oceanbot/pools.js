@@ -85,5 +85,13 @@ module.exports = {
   PIRATE_SCENES: load('pirate_scenes'),
   PIRATE_CAMERA_FRAMING: load('pirate_camera_framing'),
 
-  // (Other 7 paths' pools added when their gen-scripts ship.)
+  // ── ghost-ship path-bespoke pools (4th path — derelict pre-1850
+  // ── wooden ships drifting alone, Flying Dutchman energy. Same
+  // ── lean 2-pool shape as pirates — hero entries are dense enough
+  // ── that supporting axes can do less. NO PEOPLE / no crew on this
+  // ── path; pirates is OceanBot's only crewed exception.) ──
+  GHOST_SHIPS: load('ghost_ships'),
+  GHOST_SHIP_CAMERA_FRAMING: load('ghost_ship_camera_framing'),
+
+  // (Other 6 paths' pools added when their gen-scripts ship.)
 };
