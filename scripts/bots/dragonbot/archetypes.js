@@ -390,9 +390,17 @@ PREMIUM-TIER axis stack (4 always-on identity + 1 always-on multi-pick + 4 gated
   Gated 50% accent layers (premium-tier richness):
     • hearth_warmth_source — specific named warmth (multi-arm candelabra / brass oil-lantern / fireplace embers / floating wisp-orbs / lit pipe smoldering)
     • signature_familiar   — pet / familiar / companion creature (raven on desk / pseudo-dragon-cat / smoke-fox / book-imp / glowing wisp-pet)
-    • aesthetic_tradition  — illustrator lineage (Brian Froud cluttered-faerie / Wayne Anderson book-illustrator / Charles Vess storybook / Tony DiTerlizzi Spiderwick / Trina Schart Hyman / Tony Sandoval / book-cover oil-painting)
     • magical_signature    — specific visible magic detail (glowing-rune mid-air / floating-quill writing / wisp-orbs orbiting bookshelf / spell-circle in chalk / levitating ingredient)
-  Plus character DNA: race (FANTASY_RACE shared) + inline gender ('woman' / 'man' rolled in template body)`,
+  Plus character DNA: race (FANTASY_RACE shared) + inline gender ('woman' / 'man' rolled in template body)
+
+NOTE: a former \`aesthetic_tradition\` axis (illustrator-lineage descriptor) was
+deleted 2026-06-05 — Kevin caught it as render-style smuggled into a
+scene-content axis. The pool had drifted to children's-book illustrators
+(Hyman / Froud / Vess / DiTerlizzi / Rackham / Sendak), and the template's
+"Anchor the entire render in this illustrator's aesthetic" mandate locked
+every 50%-gated render away from high-fantasy painted register. Render
+style belongs to the medium + bot wrapper; scene axes carry scene content
+only.`,
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
@@ -405,7 +413,6 @@ PREMIUM-TIER axis stack (4 always-on identity + 1 always-on multi-pick + 4 gated
         'clutter_focus',
         'hearth_warmth_source',
         'signature_familiar',
-        'aesthetic_tradition',
         'magical_signature',
       ],
     },

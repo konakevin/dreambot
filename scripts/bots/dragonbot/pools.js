@@ -202,7 +202,9 @@ module.exports = {
   COZY_ARCANE_CLUTTER_FOCUS: load('cozy_arcane_clutter_focus'),
   COZY_ARCANE_HEARTH_WARMTH_SOURCE: load('cozy_arcane_hearth_warmth_source'),
   COZY_ARCANE_SIGNATURE_FAMILIAR: load('cozy_arcane_signature_familiar'),
-  COZY_ARCANE_AESTHETIC_TRADITION: load('cozy_arcane_aesthetic_tradition'),
+  // COZY_ARCANE_AESTHETIC_TRADITION removed 2026-06-05 — illustrator-lineage
+  // axis was render-style smuggled into a scene-content axis; see archetypes.js
+  // COZY_ARCANE note. Seed JSON + .bak + gen recipe also deleted.
   COZY_ARCANE_MAGICAL_SIGNATURE: load('cozy_arcane_magical_signature'),
   // Cozy-arcane SPECIFIC race pool (2026-05-31) — replaces shared FANTASY_RACE
   // for this path. The shared pool has 28% orc/tusks/grey-skin entries which

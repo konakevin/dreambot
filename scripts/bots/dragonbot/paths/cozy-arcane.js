@@ -7,7 +7,7 @@
  *
  * Architecture: COZY_ARCANE archetype — a single fantasy character at
  * home in their magical-cluttered sanctum, caught in a candid moment.
- * 9 path-bespoke pools at MVP-25 each + character DNA (race via shared
+ * 8 path-bespoke pools at MVP-25 each + character DNA (race via shared
  * FANTASY_RACE) + inline gender roll in the template. clutter_focus
  * uses pickN:3 to preserve the inline form's "stack 6 categories" mandate
  * at a tighter axis-system count.
@@ -15,9 +15,12 @@
  * Migration design preserves the intricate cozy-arcane character DNA
  * (race + age + archetype) + intimate-scale mandate (no cathedral
  * framing) + dense magical-clutter mandate (3 spotlighted items per
- * render + ambient density). Adds 4 new accent axes (hearth_warmth /
- * familiar / aesthetic_tradition / magical_signature) gated at 50%
- * for premium-tier richness.
+ * render + ambient density). Adds 3 accent axes (hearth_warmth /
+ * familiar / magical_signature) gated at 50% for premium-tier richness.
+ * (A 4th `aesthetic_tradition` accent axis was deleted 2026-06-05 —
+ * it was render-style smuggled into a scene-content axis and had
+ * drifted to children's-book illustrators; render style belongs to
+ * the medium + bot wrapper. See archetypes.js COZY_ARCANE note.)
  *
  * See:
  *   - scripts/bots/dragonbot/archetypes.js          (COZY_ARCANE slot definitions)
@@ -39,7 +42,6 @@ module.exports = {
     // Gated 50% accent layers (premium-tier richness):
     hearth_warmth_source: 'COZY_ARCANE_HEARTH_WARMTH_SOURCE',
     signature_familiar: 'COZY_ARCANE_SIGNATURE_FAMILIAR',
-    aesthetic_tradition: 'COZY_ARCANE_AESTHETIC_TRADITION',
     magical_signature: 'COZY_ARCANE_MAGICAL_SIGNATURE',
     // Character DNA — race via the cozy-arcane-specific COZY_ARCANE_RACE pool
     // (Kevin 2026-05-31). Replaces shared FANTASY_RACE because that pool's 28%

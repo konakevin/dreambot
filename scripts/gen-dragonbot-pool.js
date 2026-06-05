@@ -4294,9 +4294,12 @@ Camera INTIMATE — small enclosed space, never wide corridor or transit area. M
 
   // ════════════════════════════════════════════════════════
   // COZY-ARCANE PREMIUM-TIER MIGRATION (2026-05-31)
-  // 8 new bespoke pools extracted from the legacy inline form + enrichment.
+  // Bespoke pools extracted from the legacy inline form + enrichment.
   // Migration preserves: race + age + archetype + candid moment + dense clutter.
-  // Adds: hearth_warmth + signature_familiar + aesthetic_tradition + magical_signature.
+  // Adds: hearth_warmth + signature_familiar + magical_signature.
+  // (A 4th `aesthetic_tradition` axis was added in 2026-05-31 and removed
+  // 2026-06-05 — render-style smuggled into a scene-content axis; see
+  // archetypes.js COZY_ARCANE note.)
   // ════════════════════════════════════════════════════════
   // ════════════════════════════════════════════════════════
   // LANDSCAPE PREMIUM-TIER ENRICHMENT (2026-06-01) — 5 new bespoke pools
@@ -5117,52 +5120,11 @@ NEVER aggressive. NEVER attacking. NEVER focal — the inhabitant is the subject
 
 Output 25 numbered list entries.`,
   },
-  cozy_arcane_aesthetic_tradition: {
-    format: 'simple',
-    theme:
-      'Painter / illustrator / storybook-artist lineage that defines the rendering aesthetic for this cozy-arcane render. Brian Froud cluttered-faerie-realism / Wayne Anderson book-illustrator / Charles Vess fantasy-storybook / Tony DiTerlizzi Spiderwick / Trina Schart Hyman / Larry Elmore D&D-illustration. ALWAYS-RENDER-AS-PAINTED — never photoreal. 50%-gated accent.',
-    touchpoints: [],
-    instructions: `Write 25 aesthetic-tradition descriptions — illustrator / storybook-painter lineages that define the rendering style for the cozy-arcane sanctum. One sentence each, 16-30 words.
-
-Each entry must name:
-(a) THE ILLUSTRATOR — a real cozy-fantasy / storybook / D&D / book-illustration painter
-(b) THEIR SIGNATURE STYLE — what makes their work recognizable (cluttered-faerie-realism / book-illustration linework / oil-painted storybook / D&D paperback / pen-and-wash storybook / etc.)
-(c) HOW IT APPLIES TO COZY-ARCANE — what aspect of their style this render channels
-
-Mix across the cozy-fantasy / storybook illustrator canon:
-- Brian Froud (cluttered-faerie-realism, dense organic-ornate, naturalistic faerie figures, weathered earth-tones)
-- Wayne Anderson (book-illustrator oil-painting, dreamy storybook color, soft-edge transitions)
-- Charles Vess (storybook-fantasy, fine-line ink + saturated watercolor, mythic-pastoral mood)
-- Tony DiTerlizzi (Spiderwick / hidden-magical-world, sketchbook-natural-history style)
-- Trina Schart Hyman (Caldecott-medal storybook, lush oil-and-gouache illustration, fairy-tale-classical)
-- Larry Elmore (D&D paperback oil-painting, dramatic fantasy-illustration register)
-- Keith Parkinson (D&D fantasy paperback, dramatic adventure-illustration)
-- Brett Helquist (Series-of-Unfortunate-Events linework, ink-and-watercolor cozy-darkness)
-- Jerry Pinkney (Caldecott illustration, lush watercolor-and-ink storybook)
-- Lisbeth Zwerger (European storybook-illustration, delicate watercolor, mythic-quiet)
-- Maurice Sendak (storybook-cluttered-warmth, dense ink crosshatching with watercolor)
-- Quentin Blake (Roald Dahl-style loose ink-and-watercolor, expressive cozy-warmth)
-- Tasha Tudor (cozy-domestic watercolor, Vermont-cottage warmth, delicate detail)
-- Beatrix Potter (small-creature storybook-naturalism, soft watercolor, intimate scale)
-- Pauline Baynes (Narnia illustrator, delicate ink-and-color medieval-storybook style)
-- Alan Lee (Tolkien atmospheric-watercolor, weathered-painterly mood)
-- John Howe (Tolkien dramatic-watercolor, painterly fantasy-illustration)
-- Iain McCaig (Tony DiTerlizzi-adjacent fantasy concept-art, painted storybook)
-- Don Bluth-illustration tradition (animated-storybook intimacy, painted-cel warmth)
-- Hayao Miyazaki / Studio Ghibli book-art lineage (intimate clutter, soft watercolor backgrounds)
-- Tove Jansson (Moomin storybook, soft ink-and-wash intimate warmth)
-
-Each entry must read as a sentence Sonnet can fold into a render: "Brian Froud cluttered-faerie-realism — dense organic clutter, weathered earth-tones, naturalistic creature-companion realism, fine-line ink with muted gouache." Each entry stands alone as a self-contained style direction.
-
-Examples (DO NOT copy verbatim — write 25 new entries):
-1. Brian Froud cluttered-faerie-realism — dense organic-ornate detail, naturalistic creature anatomy, weathered earth-tone palette with deep moss-green and amber, fine-line ink under muted gouache.
-2. Wayne Anderson book-illustrator tradition — soft-edge dreamy oil-painting, deep storybook color depth, cozy lantern-light pooling on rich textures, painted-fantasy-illustration register.
-3. Charles Vess storybook-fantasy lineage — fine-line ink linework over saturated watercolor washes, mythic-pastoral mood, slow lyrical composition with painted folkloric warmth.
-
-NO photoreal. NO film-stills. NO 3D-rendering aesthetic. The whole path is painted-fantasy-illustration ONLY.
-
-Output 25 numbered list entries.`,
-  },
+  // cozy_arcane_aesthetic_tradition recipe removed 2026-06-05 — Kevin caught
+  // the axis as render-style smuggled into the scene-content layer. The recipe
+  // (which named 21 children's-book / storybook illustrators as the canon) +
+  // the axis itself + its template section have all been deleted. Render style
+  // belongs to the medium and the bot wrapper. Scene axes carry scene content.
   cozy_arcane_magical_signature: {
     format: 'simple',
     theme:

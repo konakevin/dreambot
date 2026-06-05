@@ -2014,7 +2014,6 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
       clutter_focus,
       hearth_warmth_source,
       signature_familiar,
-      aesthetic_tradition,
       magical_signature,
     } = slots;
 
@@ -2022,10 +2021,11 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
     const gender = Math.random() < 0.5 ? 'woman' : 'man';
 
     // 4 always-on identity axes + setting + clutter_focus (pickN:3) = 5 always-on layers.
-    // 4 gated accent axes for premium-tier richness — each fires 50%.
+    // 3 gated accent axes for premium-tier richness — each fires 50%.
+    // (Was 4 accents — `aesthetic_tradition` axis was deleted 2026-06-05; see
+    // note in archetypes.js COZY_ARCANE.)
     const includeWarmth = Math.random() < 0.5;
     const includeFamiliar = Math.random() < 0.5;
-    const includeAesthetic = Math.random() < 0.5;
     const includeMagicSig = Math.random() < 0.5;
 
     const clutterLines = (Array.isArray(clutter_focus) ? clutter_focus : [clutter_focus])
@@ -2047,15 +2047,6 @@ Render this as the dominant warm-light source in the scene — the eye lands on 
 ${signature_familiar}
 
 The familiar is co-present in the scene — perched on the desk / curled in their lap / orbiting their shoulder. NEVER aggressive, NEVER the focal subject — a quiet companion that shares the sanctum. Bake with SCALE (palm-sized / cat-sized / bird-sized) and POSITION.
-
-`
-      : '';
-    const aestheticSection = includeAesthetic
-      ? `
-━━━ AESTHETIC TRADITION — the painter / illustrator lineage for this render ━━━
-${aesthetic_tradition}
-
-Anchor the entire render in this illustrator's aesthetic — Brian Froud cluttered-faerie-realism reads differently than Wayne Anderson book-illustrator reads differently than Charles Vess storybook-fantasy. Painted-fantasy-illustration tradition, NOT photoreal.
 
 `
       : '';
@@ -2095,7 +2086,7 @@ ${clutterLines}
 These three named clutter items are the prominently-spotlighted detail in the render — render each with material specificity (worn leather / dripping wax / tarnished brass / ink-stained parchment). Plus the dense general clutter of the sanctum (stacked tomes / hanging herbs / rune-carved boxes / glowing potion vials in racks).
 
 The room should look ALIVE — like the wizard just stepped out for a moment. Every surface has STUFF on it. Every shelf is full. Light pools across MULTIPLE INTERESTING OBJECTS, not bare wood.
-${warmthSection}${familiarSection}${aestheticSection}${magicSigSection}
+${warmthSection}${familiarSection}${magicSigSection}
 ━━━ LIGHTING ━━━
 ${lighting}
 
