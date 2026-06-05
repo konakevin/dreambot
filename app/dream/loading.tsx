@@ -3,7 +3,7 @@
  * Triggers generation on mount, navigates to reveal on completion.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, AppState } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -44,9 +44,17 @@ export default function DreamLoadingScreen() {
     })()
   ).current;
   // Failure state set by useDreamCreate's catch block. When non-null, the
-  // failure card is rendered and the spinner is hidden.
+  // failure card is rendered and the spinner is hidden — UNLESS isRecovering
+  // is true, in which case we re-show the spinner (render likely still in
+  // flight server-side; we're polling dream_jobs).
   const failure = useDreamStore((s) => s.activeJobFailure);
   const setActiveJobFailure = useDreamStore((s) => s.setActiveJobFailure);
+  const setResult = useDreamStore((s) => s.setResult);
+  // True while we're polling dream_jobs after a transport-level disconnect.
+  // The render is durable (EdgeRuntime.waitUntil) so the server may finish
+  // even though the client lost the response. We don't show the failure
+  // card while this is true — we keep the loading spinner up and poll.
+  const [isRecovering, setIsRecovering] = useState(false);
 
   // Classification confirmation modal — shown when photo is ambiguous (group/unclear).
   // The Promise resolver is held in a ref so the generate() hook can await user input.
@@ -118,33 +126,134 @@ export default function DreamLoadingScreen() {
     setShowQueue(true);
   }, []);
 
-  // Auto-opt-in to the completion push if the user BACKGROUNDS the app while
-  // a render is still in flight. The Edge Function already runs the render
-  // to completion via EdgeRuntime.waitUntil, but its push gate
-  // (shouldSendCompletionNotification) only fires when notify_on_complete
-  // is true on dream_jobs. Without this listener, a user who just hits home
-  // mid-render gets the render but no push — Kevin's launch-list item
-  // ("backgrounding during render… needs to send a push"). The RPC is the
-  // same idempotent upsert (migration 195) used by the explicit "Queue This"
-  // tap below, so the two paths compose: whichever happens first sets the
-  // flag, the second is a cheap no-op. queued.current dedups within-session.
+  // Single recovery check: query dream_jobs by activeJobId and decide what to
+  // do. Called from three places:
+  //   1. AppState foreground transition (user tabbed back to the app)
+  //   2. failure-watch effect (transport-level catch fired)
+  //   3. polling effect (every 5s while isRecovering)
+  //
+  // Outcomes:
+  //   - status='done' + upload_id → load result, navigate to reveal.
+  //   - status='failed' or 'nsfw' → exit recovery, let the failure card show.
+  //   - status='processing' → enter (or stay in) recovery: hide failure card,
+  //     keep polling.
+  const tryRecover = useCallback(async () => {
+    const jobId = useDreamStore.getState().activeJobId;
+    if (!jobId) return;
+    if (queued.current) return; // user opted into the push; don't yank them back here
+    try {
+      const { data: job } = await supabase
+        .from('dream_jobs')
+        .select(
+          'status, upload_id, result_image_url, result_prompt, result_medium, result_vibe, error'
+        )
+        .eq('id', jobId)
+        .maybeSingle();
+      if (!job) return;
+
+      if (job.status === 'done' && job.upload_id && job.result_image_url) {
+        setResult({
+          imageUrl: job.result_image_url,
+          prompt: job.result_prompt ?? '',
+          aiConcept: null,
+          dreamMode: null,
+          archetype: null,
+          resolvedMedium: job.result_medium ?? null,
+          resolvedVibe: job.result_vibe ?? null,
+          uploadId: job.upload_id,
+        });
+        setActiveJobFailure(null);
+        setIsRecovering(false);
+        router.replace('/dream/reveal');
+        return;
+      }
+
+      if (job.status === 'failed' || job.status === 'nsfw') {
+        setIsRecovering(false);
+        return;
+      }
+
+      // status === 'processing' — still in flight on the server. If the
+      // client already gave up (failure set), hide that card and show the
+      // spinner; the polling effect keeps checking.
+      setIsRecovering(true);
+    } catch (e) {
+      if (__DEV__) console.warn('[loading] tryRecover failed', e);
+    }
+  }, [setResult, setActiveJobFailure]);
+
+  // AppState foreground recovery: when the user tabs back to the app, check
+  // if the render completed while we were backgrounded. ALSO auto-opt-in to
+  // the completion push the first time the user hits home so the gate in
+  // shouldSendCompletionNotification fires once the render lands — the
+  // server-side activity gate (migration 224) means a user who briefly
+  // backgrounds and comes back won't see a stale banner.
   useEffect(() => {
     const sub = AppState.addEventListener('change', (state) => {
-      if (state !== 'background') return;
-      if (queued.current) return;
-      const jobId = useDreamStore.getState().activeJobId;
-      if (!jobId) return;
-      queued.current = true;
-      void (async () => {
-        try {
-          await supabase.rpc('request_dream_notification', { p_job_id: jobId });
-        } catch (e) {
-          if (__DEV__) console.warn('[loading] auto-request notification on background failed', e);
+      if (state === 'background' && !queued.current) {
+        const jobId = useDreamStore.getState().activeJobId;
+        if (jobId) {
+          queued.current = true;
+          void (async () => {
+            try {
+              await supabase.rpc('request_dream_notification', { p_job_id: jobId });
+            } catch (e) {
+              if (__DEV__)
+                console.warn('[loading] auto-request notification on background failed', e);
+            }
+          })();
         }
-      })();
+        return;
+      }
+      if (state === 'active') {
+        void tryRecover();
+      }
     });
     return () => sub.remove();
-  }, []);
+  }, [tryRecover]);
+
+  // Failure-watch: when the catch block fires a transport-level failure
+  // (refunded:false, not NSFW, not pre-flight moderation), immediately
+  // poll dream_jobs to see if the render actually completed server-side.
+  // Most of Kevin's "lost connection" sightings are this — the render
+  // succeeded (push fired, upload persisted) but the client's await rejected.
+  useEffect(() => {
+    if (!failure) return;
+    if (failure.refunded || failure.isNsfw || failure.isPreFlightModeration) return;
+    void tryRecover();
+  }, [failure, tryRecover]);
+
+  // While isRecovering, poll dream_jobs every 5s. Exit after 90s if still
+  // processing — the refund-stuck-jobs sweeper takes over within 5min.
+  useEffect(() => {
+    if (!isRecovering) return;
+    let ticks = 0;
+    const interval = setInterval(() => {
+      ticks++;
+      if (ticks > 18) {
+        clearInterval(interval);
+        setIsRecovering(false);
+        // Polling exhausted. If no failure card is set, synthesize one so
+        // the user isn't left staring at an infinite spinner.
+        if (!useDreamStore.getState().activeJobFailure) {
+          const jobId = useDreamStore.getState().activeJobId;
+          if (jobId) {
+            setActiveJobFailure({
+              jobId,
+              message: 'render_timeout',
+              refunded: false,
+              refundReason: null,
+              isNsfw: false,
+              isPreFlightModeration: false,
+            });
+          }
+        }
+        return;
+      }
+      void tryRecover();
+    }, 5_000);
+    return () => clearInterval(interval);
+  }, [isRecovering, setActiveJobFailure, tryRecover]);
 
   function handleQueue() {
     queued.current = true;
@@ -192,9 +301,13 @@ export default function DreamLoadingScreen() {
     }
   }
 
+  // Show the spinner when there's no failure OR when we're actively
+  // recovering (render likely still in flight server-side).
+  const showSpinner = !failure || isRecovering;
+
   return (
     <View style={s.container}>
-      {!failure ? (
+      {showSpinner ? (
         // Single centered column: mascot + wave loader + "Dreaming" +
         // (face-swap subtip) + queue hint + Queue This button. All one
         // unit — no floating title up top with a disconnected CTA at

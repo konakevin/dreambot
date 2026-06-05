@@ -2368,6 +2368,7 @@ export type Database = {
         };
         Returns: boolean;
       };
+      touch_last_active: { Args: never; Returns: undefined };
     };
     Enums: {
       vote_type: 'rad' | 'bad' | 'skip';

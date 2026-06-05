@@ -231,6 +231,28 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ message: 'No push tokens' }), { status: 200 });
     }
 
+    // Activity gate (migration 224): skip the Expo POST when the recipient is
+    // currently active in the app. The notification row is already inserted
+    // and the in-app indicators (profile-tab dot, inbox bubble, badge cache)
+    // will light up — sending an OS banner on top is the redundant noise
+    // Kevin called out ("getting push notifications while in DreamBot app").
+    //
+    // Threshold matches the client heartbeat cadence (debounced touch every
+    // ~10s on AppState 'active'). 30s catches the "Slack for a few seconds"
+    // case without suppressing pushes after a longer real absence.
+    const { data: activityRow } = await supabase
+      .from('users')
+      .select('last_active_at')
+      .eq('id', record.recipient_id)
+      .maybeSingle();
+    const lastActive = activityRow?.last_active_at ? new Date(activityRow.last_active_at) : null;
+    if (lastActive && Date.now() - lastActive.getTime() < 30_000) {
+      return new Response(
+        JSON.stringify({ message: 'Recipient active in-app; skipping push', skipped: 'active' }),
+        { status: 200 }
+      );
+    }
+
     // Get actor's username (the LATEST actor in the group when aggregated;
     // the only actor otherwise).
     const { data: actor } = await supabase

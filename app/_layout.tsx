@@ -2,6 +2,7 @@ import '../global.css';
 
 import { useEffect, useRef, type ReactNode } from 'react';
 import { AppState, InteractionManager } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -237,22 +238,30 @@ function RealtimeSubscriber() {
 
 function DataPrefetcher() {
   const user = useAuthStore((s) => s.user);
-  const activityLogged = useRef(false);
+  const lastTouchAt = useRef(0);
 
-  // Track last_active_at for nightly dream eligibility (once per session)
-  // Must write to public.users (not auth.users) — nightly-dreams queries this table
+  // Activity heartbeat — call touch_last_active() on sign-in AND on every
+  // AppState 'active' transition (debounced to 10s). Two consumers:
+  //   - send-push (migration 224) skips the Expo POST when last_active_at is
+  //     within the last 30s, so a user actively in the app doesn't see push
+  //     banners for renders / likes / comments — the in-app indicators
+  //     already cover it.
+  //   - nightly-dreams eligibility (legacy use; once-per-day check).
+  const touchLastActive = (reason: string) => {
+    if (!user) return;
+    const now = Date.now();
+    if (now - lastTouchAt.current < 10_000) return;
+    lastTouchAt.current = now;
+    supabase.rpc('touch_last_active').then(({ error }) => {
+      if (error && __DEV__)
+        console.warn(`[DataPrefetcher] touch_last_active (${reason}) failed:`, error.message);
+    });
+  };
+
   useEffect(() => {
-    if (!user || activityLogged.current) return;
-    activityLogged.current = true;
-    supabase
-      .from('users')
-      .update({ last_active_at: new Date().toISOString() })
-      .eq('id', user.id)
-      .then(({ error }) => {
-        if (error && __DEV__)
-          console.warn('[DataPrefetcher] last_active_at update failed:', error.message);
-      });
-  }, [user]);
+    touchLastActive('signin');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   // Prefetch shareable friends after the app is fully interactive
   // so it doesn't compete with navigation, feed loading, etc.
@@ -337,44 +346,58 @@ function DataPrefetcher() {
     return () => handle.cancel();
   }, [user]);
 
-  // Refresh all data when app returns from background after 5+ minutes
-  // Also clean up stale dream jobs that never completed
+  // AppState foreground handler: heartbeat + stale-banner cleanup + (after
+  // 60s+ background) cache refresh + stale-job sweep.
   const backgroundedAt = useRef<number>(0);
   useEffect(() => {
     const sub = AppState.addEventListener('change', (state) => {
       if (state === 'background') {
         backgroundedAt.current = Date.now();
-      } else if (state === 'active' && backgroundedAt.current > 0) {
-        const elapsed = Date.now() - backgroundedAt.current;
-        if (elapsed > 60 * 1000) {
-          queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
-          if (user) {
-            queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
-            queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
-            queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
-          }
-        }
+        return;
+      }
+      if (state !== 'active') return;
 
-        // Mark stale processing jobs as failed (>3 min old)
+      // Every foreground transition: heartbeat + dismiss any push banners
+      // that landed while the app was backgrounded. The notification rows
+      // stay in the inbox; only the OS banner / lock-screen card is cleared.
+      // Belt-and-suspenders with the send-push activity gate (migration 224)
+      // — if a push slipped through (e.g. user backgrounded >30s and is now
+      // back), we still clear the stale banner.
+      touchLastActive('foreground');
+      Notifications.dismissAllNotificationsAsync().catch(() => {});
+
+      if (backgroundedAt.current === 0) return;
+      const elapsed = Date.now() - backgroundedAt.current;
+      if (elapsed > 60 * 1000) {
+        queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
         if (user) {
-          const cutoff = new Date(Date.now() - 3 * 60_000).toISOString();
-          supabase
-            .from('dream_jobs')
-            .update({
-              status: 'failed',
-              error: 'timed_out',
-              completed_at: new Date().toISOString(),
-            })
-            .eq('user_id', user.id)
-            .eq('status', 'processing')
-            .lt('created_at', cutoff)
-            .then(() => {
-              /* fire and forget */
-            });
+          queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
+          queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
+          queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
         }
+      }
+
+      // Mark stale processing jobs as failed (>3 min old)
+      if (user) {
+        const cutoff = new Date(Date.now() - 3 * 60_000).toISOString();
+        supabase
+          .from('dream_jobs')
+          .update({
+            status: 'failed',
+            error: 'timed_out',
+            completed_at: new Date().toISOString(),
+          })
+          .eq('user_id', user.id)
+          .eq('status', 'processing')
+          .lt('created_at', cutoff)
+          .then(() => {
+            /* fire and forget */
+          });
       }
     });
     return () => sub.remove();
+    // touchLastActive captures `user` via closure — re-bind on user change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return null;
