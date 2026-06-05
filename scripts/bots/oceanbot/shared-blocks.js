@@ -41,12 +41,43 @@ const CANVAS_MARITIME =
 // propellers are off-brand. The guardrail says what we WANT, not what
 // we don't. Flux's CLIP attends to the first-named noun ("wooden") and
 // the descriptive props bias the era correctly.
+//
+// EMPIRICAL NOTE (2026-06-04, Kevin): tried stripping the vessel-type +
+// material enumeration to a single-anchor block per the playbook's
+// first-named-noun-lock rule. Renders got WORSE — the enumeration was
+// load-bearing reinforcement against modern-hull drift, not cruft. The
+// playbook rule applies when the enumeration CONTRADICTS the rolled
+// axis (EarthBot's african-landscape listed biomes that didn't match
+// the rolled subject). Here every enumerated term AGREES with what
+// wreck_class rolls (pre-1850 wooden ship types + age-of-sail
+// materials), so the front-loaded enumeration REINFORCES the era
+// anchor instead of competing with it. Reverted to original.
 const PRE_1850_VESSEL_BLOCK = `━━━ VESSEL ERA — PRE-1850 WOODEN ━━━
 The vessel is a pre-1850 wooden sailing ship: timber hull, hemp rigging, canvas sails, brass and iron fittings. Age of sail era — galleons, schooners, brigs, barques, frigates, longships, junks. Wood, rope, canvas, brass.`;
+
+// Stone-civilization guardrail — embedded into the lost-cities template.
+// Same positive-language pattern as PRE_1850_VESSEL_BLOCK. The hero is
+// CIVILIZATIONAL ARCHITECTURE built by ancient hands. The brief MUST
+// anchor to this so Flux doesn't drift toward a shipwreck or a natural
+// sea-cave (the underwater axis content shares marine-life / coral /
+// caustic-light language with shipwreck-kingdom).
+//
+// CRITICAL — NO MATERIAL / MONUMENT ENUMERATION. Per the playbook's
+// first-named-noun lock rule, listing "marble columns, sandstone
+// obelisks, basalt colossi, brick ziggurats, carved temples..." here
+// would lock EVERY render to the first-named material/form regardless
+// of what ruin_class rolled. The specific material + monument type
+// come from the ruin_class axis pick, NOT this block. This block names
+// the HERO ARCHETYPE only ("ancient civilizational monument") + the
+// hero-vs-not-hero discrimination (built by hands, not a shipwreck,
+// not a natural sea-cave) and lets the axes carry everything else.
+const SUBMERGED_CIVILIZATION_BLOCK = `━━━ HERO IS AN ANCIENT CIVILIZATIONAL MONUMENT ━━━
+The hero is an ancient civilizational monument resting on the seafloor — architecture built by human hands centuries to millennia ago, now coral-encrusted and reclaimed by the sea. Carved geometry, deliberate proportion, and inscription remain readable through the encrustation. The specific monument is given in the RUIN CLASS axis below — render that, not a generic ruin.`;
 
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   CANVAS_MARITIME,
   PRE_1850_VESSEL_BLOCK,
+  SUBMERGED_CIVILIZATION_BLOCK,
 };

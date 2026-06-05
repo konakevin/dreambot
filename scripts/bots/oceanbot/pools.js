@@ -61,5 +61,21 @@ module.exports = {
   SHIPWRECK_KINGDOM_SURPRISE_ELEMENT: load('shipwreck_kingdom_surprise_element'),
   SHIPWRECK_KINGDOM_DRAMA: load('shipwreck_kingdom_drama'),
 
-  // (Other 9 paths' pools added when their gen-scripts ship.)
+  // ── lost-cities path-bespoke pools (2nd path — sunken civilizations
+  // ── reclaimed by coral. Hewn stone instead of wooden ships; otherwise
+  // ── same axis structure as shipwreck-kingdom. Full-bespoke content
+  // ── per [[feedback_full_bespoke_per_path_no_shared_pools]]) ──
+  LOST_CITIES_RUIN_CLASS: load('lost_cities_ruin_class'),
+  LOST_CITIES_CRUMBLE_STATE: load('lost_cities_crumble_state'),
+  LOST_CITIES_CORAL_GROWTH: load('lost_cities_coral_growth'),
+  LOST_CITIES_MARINE_LIFE: load('lost_cities_marine_life'),
+  LOST_CITIES_CAUSTIC_LIGHT: load('lost_cities_caustic_light'),
+  LOST_CITIES_WATER_CLARITY: load('lost_cities_water_clarity'),
+  LOST_CITIES_FOREGROUND_ELEMENT: load('lost_cities_foreground_element'),
+  LOST_CITIES_SCALE_PROVERS: load('lost_cities_scale_provers'),
+  LOST_CITIES_CAMERA_FRAMING: load('lost_cities_camera_framing'),
+  LOST_CITIES_SURPRISE_ELEMENT: load('lost_cities_surprise_element'),
+  LOST_CITIES_DRAMA: load('lost_cities_drama'),
+
+  // (Other 8 paths' pools added when their gen-scripts ship.)
 };

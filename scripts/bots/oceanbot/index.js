@@ -9,13 +9,14 @@
  * Architecture: pure axis-system per-path (no entity-cap). Backwards
  * compatible with the standing engine — no shared-lib changes required.
  *
- * Status: pilot. shipwreck-kingdom path only. Bot stays inactive in
- * bot_schedules until pilot quality is approved and the other 9 paths
- * are built.
+ * Status: 2 paths live — shipwreck-kingdom + lost-cities (both naval-
+ * lore underwater siblings). Bot is active in bot_schedules at 4
+ * posts/day (flipped 2026-06-03). Other 8 paths land as the bot
+ * matures, in roadmap order.
  *
  * Path roadmap (Kevin 2026-06-02):
  *   Naval lore (5):  pirates, kraken-leviathan, ghost-ship,
- *                    shipwreck-kingdom ★ PILOT, lost-cities
+ *                    ★ shipwreck-kingdom, ★ lost-cities
  *   Scenic (5):      deep-wonder, whale-encounter, reef-paradise,
  *                    polar-seas, bioluminescent-night
  *
@@ -34,7 +35,8 @@ const blocks = require('./shared-blocks');
 
 const pathBuilders = {
   'shipwreck-kingdom': require('./paths/shipwreck-kingdom'),
-  // Other 9 paths land after pilot approval.
+  'lost-cities': require('./paths/lost-cities'),
+  // Other 8 paths land as the bot matures.
 };
 
 module.exports = {
@@ -69,6 +71,18 @@ module.exports = {
     'black-forest-labs/flux-2-pro',
   ],
 
+  // Per-path model bans (Kevin 2026-06-04). lost-cities: bot-wide MINUS
+  // Flux 1.1 Pro — Ultra renders the sunken-stone ruins more atmospherically,
+  // Pro renders read flatter. Down to 4 models on this path.
+  modelByPath: {
+    'lost-cities': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-pro',
+    ],
+  },
+
   // 10 ocean-coded vibes. Drops the 6 that don't fit ocean drama / wonder
   // / age-of-sail (coquette, shimmer, cozy, macabre, surreal, dreamy,
   // arcane, fierce — none of those map cleanly to maritime register).
@@ -85,7 +99,7 @@ module.exports = {
     'nightshade',
   ],
 
-  paths: ['shipwreck-kingdom'],
+  paths: ['shipwreck-kingdom', 'lost-cities'],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
   cycleAllPaths: true,
@@ -97,7 +111,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    skipPaths: ['shipwreck-kingdom'],
+    skipPaths: ['shipwreck-kingdom', 'lost-cities'],
   },
 
   // Chaos + sensory anchors — DISABLED for the pilot. We're keeping the

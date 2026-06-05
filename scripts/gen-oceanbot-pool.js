@@ -436,6 +436,373 @@ NEVER use negation.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // LOST-CITIES path-bespoke pools (11)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // Sister of shipwreck-kingdom — same underwater register, but the hero
+  // is HEWN STONE instead of WOODEN SHIP. Atlantis-style sunken
+  // civilization: drowned temples, coral-grown statues of forgotten gods,
+  // toppled colossi, ziggurats half-buried in coral, palaces with kelp
+  // tapestries. Haunting beauty, NOT horror. NEVER human figures within
+  // the ruin (divers can appear small in the distance as scale-provers
+  // only). Full-bespoke per [[feedback_full_bespoke_per_path_no_shared_pools]]
+  // — content distinct from shipwreck-kingdom even where the axis name
+  // matches (coral on stone columns ≠ coral on wooden ribs).
+  //
+  // Civilizational variety baked into RUIN_CLASS so we get Greco-Roman,
+  // Egyptian, Mesoamerican, Khmer, Polynesian, Mesopotamian, Hindu,
+  // Phoenician, Minoan, Indus-Valley diversity from a single axis pick
+  // rather than needing a separate era axis.
+
+  lost_cities_ruin_class: {
+    format: 'simple',
+    theme: `RUIN CLASS for OceanBot's lost-cities path — sunken civilizational architecture resting on the seafloor, reclaimed by coral and time. Each entry is ONE specific named monument with civilizational origin + the period detail that makes it recognizable underwater. 16-24 words per entry.
+
+⚠️ MANDATORY — every ruin is HEWN STONE / brick / sandstone / marble / basalt — a built civilizational monument, NOT a ship. The structure sank centuries to millennia ago and is now permanent seafloor architecture, coral-fused but unmistakably built by ancient hands.
+
+✓ VARIETY MANDATE — distribute across civilizational categories (~3 entries each):
+  A. Greco-Roman (marble temple complex, amphitheater, forum, aqueduct, colossus)
+  B. Egyptian (pylon temple, sphinx, obelisk, mastaba, granite colonnade)
+  C. Mesoamerican (Mayan step-pyramid, Aztec temple, Toltec colonnade, Olmec head)
+  D. Khmer / Hindu (Angkor-style face-tower, gopuram, lotus-pond shrine, lingam complex)
+  E. Mesopotamian (Babylonian ziggurat, Assyrian palace, lamassu gateway)
+  F. Polynesian / Easter Island (moai colossi, basalt platform, lashed-stone shrine)
+  G. Phoenician / Carthaginian (harbor city, basalt jetty, anchor-bay platform)
+  H. Minoan / Aegean (Knossos-style palace, bull-fresco wall, megaron throne room)
+  I. East Asian (Hindu kingdom shrine, Japanese pagoda foundation, Chinese pavilion)
+  J. Indus Valley / Norte Chico (geometric brick city, stepped tank, stone columned hall)
+
+Each entry names the monument + ONE period-locking detail (hieroglyph relief / lotus capital / jaguar-glyph / bull-fresco / etc.) and a one-phrase position-or-state cue (face-down on the seafloor / leaning into a coral shelf / standing improbably upright / etc.). NO speculation about crumble state — that's a separate axis.
+
+DO write positively. NO words like "no ship / no wooden / no modern" — describe the stone, the carving, the form.`,
+    touchpoints: [
+      'Greco-Roman amphitheater half-buried, marble tiered seating spiraling into a coral-grown bowl, central stage cracked across the proscenium',
+      'Egyptian pylon temple complex with toppled obelisks, hieroglyph-carved sandstone columns sprouting kelp from fluted capitals',
+      'Mayan step-pyramid breached at the upper terrace, jaguar-glyph reliefs faintly visible under thick coral encrustation',
+      'Khmer face-tower complex, four-faced sandstone towers half-eaten by coral, lotus-pond bas-reliefs still readable on the lower walls',
+      'Polynesian moai colossi face-down on the seafloor, basalt heads slowly being buried by drifting sand and sea-grass',
+      'Babylonian ziggurat tiered upward in seven receding levels, glazed-brick lions on the lower terrace, upper steps crumbling outward',
+      'Hindu shrine complex with stone-carved devas, kalasha-finials still atop the gopuram, kelp draped across the cornice friezes',
+      'Phoenician harbor city, basalt jetty-stones tumbled into a long line, ancient anchor-stones still in their original bays',
+      'Minoan palace with red-painted megaron walls, the bull-fresco still partly visible above a fallen colonnade of slender columns',
+      'Toltec colonnade hall, Atlantean warrior-columns standing in two parallel ranks, their stone faces half-eaten by coral',
+      'sunken Roman aqueduct arching across a deep blue distance, broken arches catching shafts of caustic light',
+      'Egyptian sphinx avenue, twelve human-headed lion forms lining a ceremonial way, sand drifting up their flanks',
+    ],
+    instructions: `Each entry is ONE specific sunken monument, 16-24 words. Format: "monument type with civilizational origin, ONE period detail, ONE state cue." Vary across the 10 categories above. NEVER name ship parts (hull / mast / rigging). NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  lost_cities_crumble_state: {
+    format: 'simple',
+    theme: `CRUMBLE STATE for OceanBot lost-cities — how the stone has fractured, eroded, or held over centuries underwater. Each entry is ONE specific structural state, 14-22 words.
+
+✓ VARIETY across crumble categories:
+  A. Mostly-intact (walls still rising, colonnade complete, pediment held, central dome whole)
+  B. Cracked / fissured (column shafts cracked across, pediment split, dome fractured but standing)
+  C. Toppled (columns lying like fallen dominoes, statues face-down, colossus head separated from body)
+  D. Encrusted (so thickly coral-fused the original profile is barely visible)
+  E. Half-buried (lower courses lost to drifting sand, upper structure rising clear)
+  F. Dramatic anatomy (split-down-the-middle temple, single column standing alone in a field of debris, dome breached at the apex)
+
+Describe the STRUCTURE only — the coral/marine-life details live in separate axes. NEVER use negation.`,
+    touchpoints: [
+      'columns lying toppled in parallel ranks, like fallen dominoes across the seafloor, capitals still recognizable at their broken ends',
+      'temple walls mostly intact upright, pediment cracked but holding, the colonnade complete around three sides of the courtyard',
+      'central dome breached at the apex, sunlight pouring down through the broken keystone like a cathedral oculus',
+      'colossus head separated from the body, lying upright on the sand twenty meters from the headless shoulders',
+      'lower courses buried beneath drifting sand, the upper third of the structure still rising clear into the water',
+      'encrusted so thickly with coral the original architectural profile is barely readable, only the silhouette suggesting columns',
+      'split down the middle as if by an earthquake, two halves leaning apart, the central altar exposed in the fissure',
+      'single colonnade column still standing improbably upright, the rest of the temple collapsed into a debris field around it',
+      'pyramid stepped terraces partially collapsed inward, the lower levels intact, the upper apex caved into a crater',
+      'walls cracked but holding, fissures running diagonally across the masonry, the building still recognizably whole',
+      'ziggurat angled forty-five degrees against a basalt outcrop, three of seven tiers still distinguishable',
+      'face-tower with one face mostly intact, the other three eroded to featureless stone, kelp draped where eyes once were',
+    ],
+    instructions: `Each entry 14-22 words. Pure structural state of the ruin. NO coral/marine-life detail (separate axis). NO negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_coral_growth: {
+    format: 'simple',
+    theme: `CORAL GROWTH for lost-cities — what living reef has grown ON the stone monuments. Each entry is ONE specific coral/reef encrustation pattern on hewn architecture, 14-22 words.
+
+✓ VARIETY across reef-growth categories (distinct from wreck-coral — these grow on stone columns, friezes, pediments, statue surfaces):
+  A. Soft-coral / sea-fan (purple sea-fans hanging from cornices / pink soft-coral curtains on pediments / sea-whips along column flutes)
+  B. Hard coral (brain-coral fused to a frieze / staghorn forest from a broken capital / boulder coral atop a statue's shoulders)
+  C. Kelp / algae (kelp forest rooted in pediment cracks / algae carpet covering bas-reliefs / sea-grass meadow around toppled columns)
+  D. Anemone / sponge gardens (anemone colony in carved niches / barrel sponges along the architrave / encrusting sponges painting marble in patches)
+  E. Tube-worm / fan-worm (red-and-white fan-worm groves in old inscription channels / spiral tube-worms colonizing carved letters)
+  F. Mixed cathedral (sea-fans + brain coral + kelp layered into a living mosaic on a single wall)
+
+Describe what's ON the stone. NO marine-life animals (fish/etc) — those are a separate axis. NEVER use negation. Visual register: living reef draped over ancient architecture.`,
+    touchpoints: [
+      'purple sea-fans hanging from the cornice friezes, swaying in the slow current like funerary curtains',
+      'brain-coral cluster fused to the central pediment, fissures echoing the carved-relief lines beneath the encrustation',
+      'staghorn-coral forest erupting from a broken capital, branching upward toward the dim caustic light',
+      'kelp forest rooted in pediment cracks, fronds reaching ten meters toward the surface, swaying in unison',
+      'red-and-white fan-worm grove colonizing the inscription channels, each carved letter outlined in living spiral worms',
+      'anemone colony carpeting carved niches that once held votive statues, hundreds of tentacle-flowers swaying',
+      'orange barrel-sponges lining the architrave like sentries, each one large enough to swallow a human head',
+      'encrusting sponges in purple and yellow patches across a bas-relief wall, painting the carved figures in living color',
+      'sea-whip curtain spanning the gap between two fallen columns, filtering plankton in the slow drift',
+      'boulder-coral colony grown over the shoulders of a seated colossus, the head free above, the lap completely consumed',
+      'mussel beds carpeting the toppled column drums, thousands of dark shells packed against weathered marble',
+      'mixed cathedral of sea-fans and brain coral and soft coral layered across an entire temple wall, living mosaic of textures',
+    ],
+    instructions: `Each entry 14-22 words. Coral / reef-growth on hewn stone only. NO fish or marine-life animals (separate axis). NO negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_marine_life: {
+    format: 'simple',
+    theme: `MARINE LIFE for lost-cities — who LIVES in the ruins now. Each entry is ONE specific marine-life moment in/around drowned architecture, 14-22 words.
+
+✓ VARIETY across reef-inhabitant categories:
+  A. Schools (silversides streaming through a colonnade / barracuda school orbiting a broken obelisk / bait-ball swirling around a colossus)
+  B. Solitary predator (lone moray peeking from a carved niche / lone grouper hovering in a megaron throne room / lone barracuda watching from a fallen pediment)
+  C. Megafauna passing (sea-turtle gliding past a pylon gateway / shark patrolling along the temple wall / manta ray gliding over the amphitheater)
+  D. Cephalopods (octopus folded into a carved niche / cuttlefish hovering above a fresco / squid pulsing past a face-tower)
+  E. Reef regulars (clownfish in an anemone colony on a frieze / parrotfish chewing coral on a column / batfish hovering in an open doorway / sea-turtle resting on a stone platform)
+  F. Predator hunting (shark gliding along a colonnade / barracuda darting through silversides in a courtyard / grouper ambushing prey at an arched doorway)
+
+Describe ANIMAL behavior in/near the ruins. NO coral or sponge detail (separate axis). NEVER use negation.`,
+    touchpoints: [
+      'silverside school streaming through the colonnade in a shimmering river, breaking around each column drum',
+      'lone moray eel peeking from a carved niche that once held a votive lamp, jaw working slowly',
+      'sea-turtle gliding past a pylon gateway at column-capital height, flippers sculling through the blue',
+      'shark patrolling along the outer temple wall, body close to the encrusted stone, eyes scanning forward',
+      'octopus folded entirely inside a carved-niche shrine, only one suckered arm trailing out and tasting the current',
+      'grouper hovering motionless in a megaron throne room, body the size of a barrel, watching everything that passes',
+      'parrotfish flock chewing audibly at the brain-coral on a fallen column, biting and grinding the encrustation',
+      'barracuda school orbiting a broken obelisk in a slow vertical helix, sunlight catching their silver flanks',
+      'manta ray gliding diagonally over the entire amphitheater, wingtips brushing the upper tiers of seating',
+      'clownfish family darting in and out of an anemone colony that has colonized a carved frieze',
+      'batfish hovering vertically in an open temple doorway, flat bodies blending with the dark interior beyond',
+      'eagle-ray cruising along the sand at the ruin\'s base, kicking small puffs of silt with each wing-beat',
+    ],
+    instructions: `Each entry 14-22 words. Marine-life ANIMAL behavior in/around hewn-stone ruins. NO coral/sponge (separate axis). NEVER use negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_caustic_light: {
+    format: 'simple',
+    theme: `CAUSTIC LIGHT for lost-cities — how sun-shafts and submarine light play on hewn stone specifically. Each entry is ONE specific light pattern on the ruin, 14-22 words.
+
+This is DIFFERENT from the bot-wide LIGHTING axis (which is mood/register). This axis is the path-bespoke CAUSTIC-PATTERN — the specific way light interacts with the architecture.
+
+✓ VARIETY across caustic categories:
+  A. Tight god-shafts (single dramatic ray striking a column / pillars of light through a broken pediment / sun-beam stabbing through a dome oculus)
+  B. Dappled mosaic (dappled water-light across marble walls / shifting bright-and-dark pattern over the colonnade / moving light-mosaic on bas-reliefs)
+  C. Diffuse / depth-blue (deep blue ambient saturating the ruin / cool diffuse light from above / no direct rays just blue glow)
+  D. Backlit silhouette (ruin silhouetted against bright surface light / silhouette of broken columns against blue dome / monument as dark shape against sunlit shallows)
+  E. Edge-rim light (sun catching only the highest cornices / rim-lighting along a fallen colossus / golden edge on the upreaching obelisk)
+  F. Phosphorescent / unusual (bioluminescent glow lining carved channels / red-orange last-light during a sunset dive / cold-blue twilight diffuse)
+
+NEVER use negation.`,
+    touchpoints: [
+      'single dramatic god-shaft piercing the dome oculus, striking the central altar like a divine spotlight',
+      'dappled water-light shifting across the marble colonnade, bright-and-dark mosaic moving with the surface waves above',
+      'deep blue ambient saturating the entire amphitheater, no direct sun rays, just luminous depth-blue glow',
+      'ruin silhouetted against bright surface light above, broken columns dark cutouts against the sun-glow dome',
+      'sun catching only the highest cornice edges, golden rim-light tracing the temple\'s upper outline',
+      'three parallel god-shafts piercing the gaps in a broken pediment, lighting the courtyard floor in vertical pillars',
+      'cold blue diffuse with no direct rays, the ruin rendered in cool monochromatic depth tones',
+      'red-orange last-light filtering down from a sunset surface, painting the colonnade in warm dying tones',
+      'phosphorescent blue glow lining the carved inscription channels, faint but alive in the dim water',
+      'shifting caustic-mosaic playing across the entire pediment, moving in slow waves with the surface chop',
+      'single sun-shaft stabbing through a hole in the dome, illuminating a column of suspended particulate over the altar',
+      'silhouette of the entire face-tower against the surface dome, every carved detail blacked-out against the bright water',
+    ],
+    instructions: `Each entry 14-22 words. Sun-shaft / caustic / submarine-light pattern on hewn-stone architecture. NEVER use negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_water_clarity: {
+    format: 'simple',
+    theme: `WATER CLARITY for lost-cities — the visibility and particulate density around the sunken ruin. Each entry is ONE specific water-quality state, 14-22 words.
+
+✓ VARIETY across clarity categories:
+  A. Gin-clear (tropical blue with 30m visibility, every carved detail razor-sharp at distance)
+  B. Mid-particulate (suspended plankton drifting through every shaft of light, slight haze softening the colonnade)
+  C. Silty / estuarine (brown-green tinted water, visibility under ten meters, moody)
+  D. Cold-water clear (slate-blue Atlantic clarity, cold-water register, low color saturation)
+  E. Disturbed sediment (dust-storm of disturbed silt, recently kicked up, swirling clouds drifting past the colonnade)
+  F. Phosphorescent (cyan-tinted bioluminescent suspension, glowing particles in the water column)
+
+NEVER use negation.`,
+    touchpoints: [
+      'gin-clear tropical water with thirty-meter visibility, every carved hieroglyph razor-sharp at distance',
+      'mid-particulate suspension, plankton drifting through every shaft of light, slight diffusing haze around the colonnade',
+      'silty estuarine water, brown-green tint, visibility under ten meters, the ruin fading into murk',
+      'slate-blue cold-water Atlantic clarity, low color saturation, every carved detail visible but tonally muted',
+      'recently disturbed sediment, swirling silt clouds drifting past the temple like underwater dust storms',
+      'cyan-tinted bioluminescent suspension, glowing particles in the water column lighting up around any movement',
+      'warm tropical turquoise saturating everything, the ruin and reef-life rendered in vivid color',
+      'temperate-zone visibility, mid-distance haze softening the far end of the colonnade while the near columns stay crisp',
+      'thermocline-layered water with cool clearer water above and warmer hazier water below, dividing the ruin horizontally',
+      'pristine high-visibility deep blue, offshore pelagic clarity, the temple floating in luminous space',
+    ],
+    instructions: `Each entry 14-22 words. Water-quality state around the sunken ruin. NEVER use negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_foreground_element: {
+    format: 'simple',
+    theme: `FOREGROUND ELEMENT for lost-cities — what's in the immediate close-tier of the camera frame, anchoring depth. Each entry is ONE specific foreground anchor, 14-22 words.
+
+⚠️ NOT THE RUIN — the ruin is the mid-frame hero. Foreground = something CLOSE to camera, framing the scene.
+
+✓ VARIETY across foreground categories:
+  A. Ruin-debris fragments (broken column drum / fallen capital / mosaic shard / inscription stone block)
+  B. Civilizational artifact (gold coin half-buried / ceremonial amphora / bronze lamp / votive figurine / ritual blade)
+  C. Foreground reef element (coral fan in close-up / kelp fronds curling into frame / sea-fan whip in foreground)
+  D. Wildlife close-up (jellyfish drifting close to lens / school passing through the foreground / sea-snake undulating close)
+  E. Sediment / sand detail (rippled sand with shells / silt cloud / scattered mosaic-tile fragments)
+  F. Carved fragment (broken statue head face-up / chunk of frieze / inscribed stele tilted in the sand)
+
+NEVER use negation.`,
+    touchpoints: [
+      'scattered gold coins half-buried in the sand foreground, edges catching the light, fanning out from a tipped offering bowl',
+      'kelp fronds curling into the immediate foreground, swaying slowly, framing the temple beyond them',
+      'broken column drum lying on its side in the close foreground, fluted edges crusted with barnacles',
+      'mosaic shards scattered across the foreground sand, tesserae of blue-and-gold glass catching the dim caustic light',
+      'massive sea-fan in the close foreground, branching purple-pink fronds filtering the view of the colonnade behind',
+      'jellyfish drifting close to the camera lens, translucent bell pulsing softly, the temple dim in the background blue',
+      'silt cloud kicked up by unseen movement, swirling close to camera, the ruin a hazy silhouette beyond',
+      'fallen capital with acanthus-leaf carving suspended on a sand-shelf, intricate detail close to lens',
+      'inscribed stele tilted half-buried in the foreground sand, weathered letters still readable on the upper face',
+      'school of silversides streaming through the immediate foreground like a curtain, ruin visible through the gaps',
+      'broken statue head face-up in the sand foreground, calm carved eyes still meeting the camera across centuries',
+      'ceremonial amphora resting on its side in the close foreground, neck cracked, contents long dispersed',
+    ],
+    instructions: `Each entry 14-22 words. ONE close-tier foreground element. NOT the ruin itself. NEVER use negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_scale_provers: {
+    format: 'simple',
+    theme: `SCALE PROVERS for lost-cities — small, far-distance figures that prove the ruin's monumentality. Each entry is ONE specific tiny scale-anchor, 14-22 words.
+
+⚠️ TINY in the deep distance. These prove how massive the sunken architecture is by being small. NEVER place humans inside the ruin — they appear at distance only.
+
+✓ VARIETY across scale-prover categories:
+  A. Human (lone diver tiny against a colossus / pair of divers approaching a temple façade / silhouetted research team at the perimeter)
+  B. Submersible (small submarine silhouette above the amphitheater / ROV with bright lights / glass observation sphere)
+  C. Large fauna (manta ray gliding far above / shark patrolling at deep range / sea-turtle cruising past a colonnade)
+  D. Schools at distance (distant school as a silver cloud orbiting an obelisk / barracuda school at range / tuna school streaming past a pylon)
+  E. Marine megafauna passing (whale shark passing in the deep blue beyond / orca silhouette transiting / pod of dolphins above)
+
+NEVER close-up. NEVER use negation.`,
+    touchpoints: [
+      'lone diver tiny in the deep middle-distance, headlamp a single point of warm light against the temple\'s shadowed colonnade',
+      'small research submarine silhouette hovering above the amphitheater, bright spotlights making twin cones in the dim water',
+      'manta ray gliding far above the temple, wingspan dwarfing the broken pediment, silhouetted against the surface dome',
+      'distant fish school as a silver cloud orbiting the upper obelisk, individual fish lost in the shimmering mass',
+      'whale shark passing in the deep blue background beyond the ruin, the largest fish in the sea reduced to a graceful silhouette',
+      'pair of divers approaching the colossus from above, fins kicking slowly, scale-anchored against the seated giant',
+      'pod of dolphins transiting high above the ziggurat, six silhouettes against the surface-light dome',
+      'ROV with bright halogen lights working at the far end of the colonnade, cables trailing upward out of frame',
+      'school of barracuda orbiting at range, vertical helix moving in unison around a fallen capital',
+      'sea-turtle cruising past in the middle-distance, ancient shell tiny against the temple wall behind it',
+      'orca silhouette transiting in the deep blue, dorsal fin tall enough to identify even at extreme range',
+      'lone hammerhead patrolling at deep range past the ruin\'s perimeter, distinctive head-profile readable even at scale',
+    ],
+    instructions: `Each entry 14-22 words. ALWAYS small, distant, silhouetted. NEVER close-up. NEVER use negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for lost-cities — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across framing categories:
+  A. LOW-ANGLE looking up (camera below the ruin, columns towering against surface dome)
+  B. ABYSSAL DOWN (camera above, looking down onto the ruin spread across the seabed)
+  C. OVER-THE-COLONNADE aerial (aerial-style sweeping pan along a colonnade)
+  D. THROUGH-THE-DOORWAY (camera positioned inside a doorway / archway looking out)
+  E. SUBMERGED 3/4 (three-quarter perspective from beside a colossus / pylon at base level)
+  F. WIDE ENVIRONMENTAL (vast underwater establishing shot, ruin as one element in a deep scene)
+  G. CLOSE-DETAIL (camera close to a specific carved feature, ruin-mass extending beyond frame)
+
+NEVER use negation.`,
+    touchpoints: [
+      'LOW-ANGLE looking up at the colonnade, columns towering against the sunlit surface dome above',
+      'ABYSSAL DOWN angle, camera above looking straight down onto the temple complex spread across the seafloor',
+      'OVER-THE-COLONNADE aerial sweep along the entire length of the row, capitals parading beneath the camera',
+      'THROUGH-THE-DOORWAY framing, camera inside an arched gateway looking outward across the courtyard',
+      'SUBMERGED THREE-QUARTER perspective from beside a seated colossus, head looming left-foreground, plaza extending right',
+      'WIDE ENVIRONMENTAL ESTABLISHING shot, ruin as one element in a vast deep-blue scene, scale-provers proving monumentality',
+      'CLOSE DETAIL on a coral-encrusted carved face, ruin-mass extending out of frame on every side',
+      'LATERAL FRAMING along the pediment, camera moving horizontally past the frieze at cornice height',
+      'EYE-LEVEL approach toward the temple gateway, ruin looming larger as the camera nears, foreground sand racing past',
+      'DRAMATIC LOW from the seafloor immediately beside the obelisk, looking up the encrusted shaft toward the broken tip',
+      'OVER-THE-PEDIMENT framing, camera positioned just above the pediment edge looking down across the courtyard and into the cella',
+      'DIVER POV approach, first-person framing as if the viewer is finning toward the colonnade from open water',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms (dolly / dutch / tilt-up). Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_surprise_element: {
+    format: 'simple',
+    theme: `SURPRISE ELEMENT for lost-cities — ONE unexpected story detail that elevates the scene from generic-ruin to specific-civilization. Each entry 14-22 words.
+
+⚠️ STORY-IMPLYING — these are the "wait, WHAT?" details that make the ruin memorable. A perfectly preserved gold idol. A fresco still vivid behind a curtain of kelp. An unbroken seal on a ceremonial vessel.
+
+✓ VARIETY across surprise categories:
+  A. Cult/votive object (gold idol on a pedestal / jeweled crown on the altar / ceremonial mask propped against a column)
+  B. Preserved artwork (fresco still vivid behind kelp / mosaic floor intact under thin silt / carved frieze readable across the architrave)
+  C. Inscription / script (cuneiform tablet stack / hieroglyph wall complete / runestone with carving still sharp)
+  D. Civilizational artifact (unbroken ceremonial amphora / ritual blade in its sheath / ornamental bronze brazier)
+  E. Statuary in unexpected pose (seated colossus head turned to one side / standing figure with raised hand intact / paired figures facing each other across the plaza)
+  F. Wonder / anachronism (faint phosphorescent glow from a ceremonial vessel / abandoned diver gear tangled in a column / a single offering still on the altar)
+
+NEVER use negation. The surprise SHOULD be specific enough that a viewer pauses.`,
+    touchpoints: [
+      'gold idol resting upright on a pedestal at the temple\'s heart, surface still gleaming dimly through centuries of silt',
+      'fresco panel still vivid behind a curtain of kelp, royal procession painted in red-and-ochre, faces calm and ancient',
+      'mosaic floor intact beneath a thin layer of sand, tesserae forming a coiled sea-serpent across the courtyard',
+      'cuneiform tablet stack arranged on a stone shelf in a niche, lines of wedge-marks still readable across the clay',
+      'unbroken ceremonial amphora upright in a corner alcove, seal intact, contents preserved by centuries of submersion',
+      'colossus seated head turned to one side as if listening, the carved expression strangely alive in the dim caustic light',
+      'jeweled ceremonial crown resting on the altar slab, gemstone settings still holding their original ruby and lapis',
+      'a single fresh-looking offering bowl placed centrally on the altar, contents long dissolved but the placement deliberate',
+      'standing figure with one raised hand still intact, the gesture appearing to greet whoever enters the inner sanctum',
+      'paired guardian-statues facing each other across the plaza, swords still crossed in ceremonial salute',
+      'ornamental bronze brazier suspended on chains from the ceiling, chains still holding after the building has half-collapsed',
+      'runestone with carving still sharp, a tale of conquest readable across the face for any who can decipher the script',
+    ],
+    instructions: `Each entry 14-22 words. ONE story-implying surprise. NEVER use negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lost_cities_drama: {
+    format: 'simple',
+    theme: `DRAMA LAYER for lost-cities — conditional atmospheric escalation that fires at 40% gate. Each entry 14-22 words describing ONE subtle dramatic shift.
+
+⚠️ SUBTLE WEAVING — drama ADDS to the scene, doesn't replace it. Should COMBINE with the rest of the ruin composition, not dominate.
+
+✓ VARIETY across drama categories:
+  A. Apex predator passing (passing shark casts a long shadow across the colonnade / hammerhead patrolling overhead / orca silhouette transiting)
+  B. Marine megafauna event (whale silhouette visible at surface above / pod of dolphins racing past the temple / whale-fall carcass on the courtyard floor)
+  C. Weather above (storm darkening the surface light overhead / lightning faintly visible through the surface / heavy rain dimpling the dome above)
+  D. Current event (sudden current pulling kelp horizontal across the pediment / silt-storm rolling across the seafloor / thermocline shimmer dividing the water)
+  E. Bio-event (phosphorescent bloom rising around the ruin / dinoflagellate flash with movement / bioluminescent jellies drifting through the colonnade)
+  F. Discovery moment (diver discovering an inscription for the first time / camera-flash from a far diver / submarine emerging from the deep blue)
+
+NEVER use negation.`,
+    touchpoints: [
+      'a passing shark casts a long moving shadow across the colonnade, silhouette gliding from one end of the temple to the other',
+      'storm clouds darken the surface dome above the ruin, the sunlit ceiling dimming to bruised grey',
+      'sudden current pulls the kelp forest horizontal across the pediment, fronds streaming in a single direction',
+      'phosphorescent bloom rising around the temple, cyan glow intensifying with every movement of the water',
+      'whale silhouette visible above the surface dome, a massive shape blocking the sunlight in slow passing',
+      'silt-storm rolling across the seafloor toward the ruin, a swelling dust-cloud advancing in the deep current',
+      'diver appearing for the first time at the upper-frame edge, headlamp catching the broken pediment',
+      'lightning flickering faintly through the surface dome, brief strobes lighting the deeper water in cold pulses',
+      'pod of dolphins racing past the colonnade in the middle-distance, chevron of bodies moving as one through the blue',
+      'bioluminescent jellies drifting through the colonnade, soft glow pulsing rhythmically as they pass between columns',
+      'submarine emerging from the deeper blue beyond the ruin, hull-lights cutting twin beams toward the temple façade',
+      'thermocline shimmer dividing the water column horizontally across the ruin, columns appearing distorted at the boundary',
+    ],
+    instructions: `Each entry 14-22 words. Subtle dramatic escalation. ADDS to the scene, doesn't replace. NEVER use negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
