@@ -40,7 +40,8 @@ const pathBuilders = {
   'ghost-ship': require('./paths/ghost-ship'),
   'kraken-leviathan': require('./paths/kraken-leviathan'),
   'deep-wonder': require('./paths/deep-wonder'),
-  // Other 4 paths land as the bot matures.
+  'whale-encounter': require('./paths/whale-encounter'),
+  // Other 3 paths land as the bot matures.
 };
 
 module.exports = {
@@ -138,6 +139,7 @@ module.exports = {
     'ghost-ship',
     'kraken-leviathan',
     'deep-wonder',
+    'whale-encounter',
   ],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
@@ -157,6 +159,7 @@ module.exports = {
       'ghost-ship',
       'kraken-leviathan',
       'deep-wonder',
+      'whale-encounter',
     ],
   },
 

@@ -107,5 +107,13 @@ module.exports = {
   DEEP_WONDER: load('deep_wonder'),
   DEEP_WONDER_CAMERA_FRAMING: load('deep_wonder_camera_framing'),
 
-  // (Other 4 paths' pools added when their gen-scripts ship.)
+  // ── whale-encounter path-bespoke pools (7th path, 2nd scenic —
+  // ── NatGeo / Blue Planet whale documentary. Real cetacean species
+  // ── rendered with anatomical accuracy. Naturalistic, NOT mythic
+  // ── — kraken-leviathan handles the Moby-Dick register. NO SHIPS,
+  // ── NO PEOPLE, NO DIVING GEAR.) ──
+  WHALE_ENCOUNTER: load('whale_encounter'),
+  WHALE_ENCOUNTER_CAMERA_FRAMING: load('whale_encounter_camera_framing'),
+
+  // (Other 3 paths' pools added when their gen-scripts ship.)
 };

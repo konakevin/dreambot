@@ -97,6 +97,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  OCEANBOT_WHALE_ENCOUNTER: {
+    description:
+      'NatGeo whale-documentary register — cetaceans as wonders of the natural world. Humpback breach, blue-whale glide, orca pod hunting, sperm whale sounding, gray whale with calf, beluga arctic dance, narwhal, fin whale, right whale, bowhead. Naturalistic register (NOT myth — kraken-leviathan path is for myth). No ships, no people, no diving gear. Same lean 2-path-slot shape.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['whale_encounter', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   OCEANBOT_DEEP_WONDER: {
     description:
       'Bioluminescent beauty, alien elegance, deep-sea wonder — the BEAUTIFUL side of the deep ocean. Jellyfish trailing light, elegant siphonophores, glowing plankton clouds, translucent creatures with inner light, anglerfish lures, lantern-fish constellations. Beauty in the darkness, NOT horror. No ships, no people. First of 5 scenic-OceanBot paths; same lean 2-path-slot shape as the naval-lore set.',

@@ -1190,6 +1190,115 @@ NEVER use negation. NEVER name modern cinema terms.`,
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // WHALE-ENCOUNTER path-bespoke pools (2)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  //
+  // 7th OceanBot path, 2nd scenic — NatGeo / Blue Planet whale
+  // documentary register. Naturalistic, NOT mythic — the kraken-
+  // leviathan path handles Moby-Dick-leviathan myth. NO SHIPS,
+  // NO PEOPLE, NO DIVING GEAR.
+
+  whale_encounter: {
+    format: 'simple',
+    theme: `WHALE ENCOUNTER for OceanBot's whale-encounter path — real cetacean species in real ocean settings, rendered with anatomical accuracy. NatGeo / BBC-Blue-Planet register. Each entry is ONE specific species in ONE specific behavior moment, 18-26 words. Species + behavior + setting ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ MANDATORY — every entry is a REAL cetacean species, NAMED EXPLICITLY in the entry, in a REAL ocean setting, doing a REAL species-typical behavior. NOT mythic, NOT giant-Moby-Dick-leviathan. Photographic anatomical accuracy.
+
+⚠️ NO SHIPS. NO PEOPLE. NO HARPOONS. NO DIVING GEAR. NO BOATS. Just the whale and the ocean.
+
+✓ SPECIES VARIETY MANDATE — distribute across cetacean species (~2-3 per species):
+  A. Humpback whale (breach, fluke-slap, bubble-net feeding, song display, mother-calf)
+  B. Blue whale (open-pelagic glide, surface blow, deep dive arch)
+  C. Orca (pod travel, hunting cooperative, spy-hop, breaching display, mother-calf)
+  D. Gray whale (calf-protection in lagoon, migration column, breach in coastal shallows)
+  E. Sperm whale (deep sounding, surface logging, social pod gathering, fluke-up dive)
+  F. Beluga whale (arctic-ice surface, melon-flexing, pod travel through pack ice)
+  G. Narwhal (tusk display, arctic ice surfacing, social-cluster pod)
+  H. Fin whale (open-ocean cruise, asymmetric jaw flash, surface blow)
+  I. Right whale (callosity-covered head surfacing, surface skimming for plankton)
+  J. Bowhead (arctic ice-breaking surface, callus-free smooth head, breaching slow)
+  K. Whale-shark crossover (filter-feeding surface gulp — yes, technically a shark but in same NatGeo register)
+  L. Minke whale (curious approach, surface skim)
+
+✓ BEHAVIOR VARIETY MANDATE — vary across behaviors:
+  - Breaching (full-body explosive leap)
+  - Fluke-slap (powerful tail strike at surface)
+  - Spy-hopping (vertical head out of water)
+  - Bubble-net feeding (cooperative spiral)
+  - Mother-with-calf (gentle pairing)
+  - Pod travel (group cohesion, formation)
+  - Sounding / deep dive (fluke-up arc)
+  - Surface logging (resting at surface)
+  - Mating/song display
+  - Cooperative hunting (orca pods)
+
+Each entry: ONE specific named species + ONE specific behavior + ONE setting anchor (open pelagic / polar pack ice / coastal lagoon / surface / underwater glide / etc.). Speak vivid and specific.
+
+DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Humpback whale breaching full-body from a deep Pacific swell, pectoral fins outstretched, twenty tons suspended momentarily against pale dawn sky.',
+      'Blue whale gliding in horizontal deep-blue mid-water, mottled flank stretching forty meters past camera, single eye reflecting filtered surface light.',
+      'Orca pod traveling in tight formation along an Antarctic ice-edge, six tall dorsal fins cutting the swell, mother and calf in the lead.',
+      'Gray whale mother shielding her calf in a calm Baja lagoon, both backs barely breaking the silver surface, eye contact with calm intelligence.',
+      'Sperm whale fluke-up sounding into deep blue, massive triangular fluke held vertical above surface, body already disappearing into the dark below.',
+      'Beluga pod surfacing through cracks in arctic pack ice, white melons gleaming wet, breath crystallizing in the polar air above.',
+      'Narwhal tusk-clash display in arctic open water, two males raising spiraled tusks above the surface in slow contact, ice floes drifting around them.',
+      'Fin whale cruising at surface in open Atlantic, asymmetric white right jaw flashing as it rolls, twenty-meter body trailing wake behind.',
+      'Right whale skim-feeding at the surface, callosity-covered head plowing through calm water with baleen plates open, krill streaming around the jaw.',
+      'Bowhead whale breaking through thin arctic ice from below, smooth callous-free head emerging slow, gentle ripples spreading across mirror water.',
+      'Humpback bubble-net feeding cooperative, six whales rising in spiral with mouths agape through a cylinder of bubbles, herring boiling at the surface.',
+      'Whale-shark filter-feeding at the surface in tropical Indonesia, broad pale-spotted back at the surface, mouth wide as it gulps plankton.',
+      'Minke whale curious approach in temperate water, sleek pointed rostrum lifting just above surface to investigate camera, single eye visible.',
+      'Orca breaching at sunset in the Salish Sea, full body airborne against amber sky, two pod members surfacing beside in the silver wake.',
+      'Sperm whale pod social-logging at surface, four cetaceans resting in parallel formation, blowholes synchronously exhaling vapor in the calm.',
+      'Humpback mother nudging her newborn calf to the surface for first breath, both backs barely above water in a tropical breeding lagoon.',
+      'Blue whale surface blow at dawn, towering vertical column of vapor catching pink sunrise light, body cruising slow with subsurface bulk visible.',
+      'Orca cooperative hunt of a seal on an ice floe, pod surging together to wave-wash the prey into water, coordinated intelligence visible.',
+      'Humpback whale song display at depth, single male suspended vertical with head down, body posture and bubble-stream of audible vocalization.',
+    ],
+    instructions: `Each entry is ONE specific real cetacean in ONE specific behavior in ONE setting, 18-26 words. Format: "named species + behavior + setting + sensory detail." Vary across species and behaviors per the mandates above. NEVER include ships / boats / people / harpoons / diving gear. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+  },
+
+  whale_encounter_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's whale-encounter path — the explicit composition mandate. Each entry is ONE specific camera angle that the renderer must honor, 14-22 words.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across framing categories — whale-documentary-specific:
+  A. UNDERWATER SIDE-PROFILE (camera underwater, whale gliding past parallel, full body visible)
+  B. SURFACE-LEVEL eye-contact (camera at waterline, whale's eye meeting lens)
+  C. AERIAL OVERHEAD (drone-style top-down, whale or pod visible against deeper blue)
+  D. BREACH MOMENT (low waterline angle, whale airborne above camera against sky)
+  E. FLUKE-UP DIVE (camera at surface, whale's tail filling vertical frame as it sounds)
+  F. POD FORMATION (wide environmental shot, multiple whales arranged in frame)
+  G. MOTHER-CALF intimacy (close framing on pair, gentle proximity, subordinate scale to mother)
+  H. SPLIT-LEVEL half-and-half (camera at air-water boundary, whale visible below + surface event above)
+  I. SCALE-PROVING WIDE (whale tiny against vast ocean, sense of pelagic immensity)
+  J. UNDERWATER-LOOKING-UP (camera below whale, animal silhouetted against bright surface dome)
+
+NEVER use negation. NEVER name modern cinema terms.`,
+    touchpoints: [
+      'UNDERWATER SIDE-PROFILE framing, whale gliding parallel to camera at mid-water depth, full body filling horizontal frame',
+      'SURFACE-LEVEL eye-contact framing, camera at waterline, whale\'s eye meeting lens with calm intelligence',
+      'AERIAL OVERHEAD drone-style framing, whale or pod visible from above against deeper blue water',
+      'BREACH MOMENT low-waterline angle, whale airborne above camera against pale sky, full body suspended in spray',
+      'FLUKE-UP DIVE framing from surface level, massive triangular tail filling vertical frame as the whale sounds',
+      'POD FORMATION wide environmental shot, multiple whales arranged in cohesive group across frame, ocean stretching beyond',
+      'MOTHER-CALF intimacy framing, close on the gentle pair, calf small against mother\'s scale, no other subject',
+      'SPLIT-LEVEL HALF-AND-HALF framing at air-water boundary, whale body visible below, surface blow visible above',
+      'SCALE-PROVING WIDE shot, whale tiny against vast pelagic ocean, sense of immense scale and isolation',
+      'UNDERWATER LOOKING UP, whale silhouetted against bright surface dome above, body backlit by sun-shafts',
+      'EYE-LEVEL APPROACH framing, whale swimming toward camera in mid-water, scale growing as it nears',
+      'TAIL-CHASE framing from behind, whale\'s flukes propelling away from camera, wake trailing in clear water',
+      'OVER-THE-MELON framing close on whale\'s head, eye visible, body extending behind out of frame',
+      'SUBMERGED PROFILE BACKLIT, whale silhouette in mid-water with surface light penetrating from above in shafts',
+      'POLAR ICE-EDGE framing, whale at surface beside floating sea-ice, white-on-blue composition with cetacean as anchor',
+    ],
+    instructions: `Each entry 14-22 words. Explicit camera angle / framing mandate. NEVER use negation. NEVER modern cinema terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // Universal pools (3) — shared across all OceanBot paths
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

@@ -69,6 +69,26 @@ The ruin fills 40-60% of the frame as the dramatic focal anchor. Multi-tier dept
 Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent underwater moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent objects, treasures, instruments, or artifacts beyond what the rolled axes describe — added details inject anachronism. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
   },
 
+  OCEANBOT_WHALE_ENCOUNTER: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, whale_encounter, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are a whale-documentary cinematography keyframe writer for OceanBot's WHALE-ENCOUNTER path. NatGeo / BBC-Blue-Planet register — cetaceans as wonders of the natural world. Naturalistic register, NOT myth (the kraken-leviathan path handles myth). The hero is the rolled whale + behavior moment + ocean setting; lighting and atmosphere set the mood; the camera framing is the law. NO ships, NO people, NO diving gear — just the whale and the sea.
+
+━━━ NATURALISTIC WHALE REGISTER ━━━
+The whale is a real cetacean species rendered with anatomical accuracy. Humpback / blue / orca / gray / sperm / beluga / narwhal / fin / right / bowhead / minke. Real ocean settings — open pelagic / polar / coastal / surface / underwater. Real behaviors — breaching / fluke-slap / spy-hopping / bubble-net feeding / pod travel / mother-with-calf / sounding / mating-display. NOT mythic, NOT giant-Moby-Dick-leviathan (that's the other path).
+
+${block('WHALE ENCOUNTER (hero — species + behavior + ocean setting all in one; give it the most word budget)', whale_encounter)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+The whale fills the dramatic focal anchor — its scale visible and felt. Multi-tier depth: foreground spray / surface / underwater glow → whale mid-frame → ocean depth or sky beyond. The camera framing above is the LAW. ABSOLUTELY no ships, no boats, no people, no diving gear — naturalistic encounter only. The whale is the subject, the ocean is the world.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent whale-documentary moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent ships / boats / divers / harpoons / equipment — added objects break the naturalistic register. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
   OCEANBOT_DEEP_WONDER: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, deep_wonder, camera_framing } = slots;
 
