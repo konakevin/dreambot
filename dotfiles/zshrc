@@ -1,0 +1,256 @@
+export PATH="$HOME/.local/bin:$PATH"
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# ── Sexy Prompt (zsh port of gf3's bash prompt) ──────────────────────────────
+autoload -Uz add-zsh-hook
+
+default_username='kevin.mchenry'
+
+if (( ${terminfo[colors]:-0} >= 256 )); then
+  PROMPT_MAGENTA="%F{9}"
+  PROMPT_ORANGE="%F{172}"
+  PROMPT_GREEN="%F{190}"
+  PROMPT_PURPLE="%F{141}"
+  PROMPT_WHITE="%F{255}"
+else
+  PROMPT_MAGENTA="%F{magenta}"
+  PROMPT_ORANGE="%F{yellow}"
+  PROMPT_GREEN="%F{green}"
+  PROMPT_PURPLE="%F{red}"
+  PROMPT_WHITE="%F{white}"
+fi
+PROMPT_BOLD="%B"
+PROMPT_RESET="%b%f"
+
+function _git_info() {
+  git rev-parse --is-inside-work-tree &>/dev/null || return
+  local branch=$(git symbolic-ref -q HEAD 2>/dev/null | sed 's|^refs/heads/||')
+  local dirty=""
+  git diff --quiet --ignore-submodules HEAD &>/dev/null || dirty="*"
+  echo "${PROMPT_WHITE} on ${PROMPT_PURPLE}${branch}${dirty}"
+}
+
+function _usernamehost() {
+  if [[ $USER != $default_username ]]; then
+    echo "${PROMPT_MAGENTA}${USER} ${PROMPT_WHITE}at ${PROMPT_ORANGE}%m ${PROMPT_WHITE}in "
+  fi
+}
+
+# Update iTerm2 tab/title
+function _set_title() {
+  print -Pn "\e]2;%~\a"
+  print -Pn "\e]1;%1~\a"
+}
+add-zsh-hook precmd _set_title
+
+setopt PROMPT_SUBST
+PROMPT='${PROMPT_BOLD}$(_usernamehost)${PROMPT_GREEN}%~$(_git_info)${PROMPT_WHITE}
+$ ${PROMPT_RESET}'
+
+# ── Aliases ─────────────────────────────────────────────────────────────────────
+alias cc="claude --dangerously-skip-permissions"
+alias ll="ls -la"
+
+# DreamBot — full clean rebuild + Metro dev server
+# Pass `--clean` (or `clean`) to force a full `expo prebuild --clean` run.
+# Otherwise auto-detects: if app.config.js was modified after the last
+# prebuild's output, prebuild runs automatically.
+# Pass `--release` (or `release`) for a Release build — production JS bundle,
+# __DEV__ false (so Sentry is active), no Metro. Default is a Debug dev-client
+# build that runs against Metro. Flags can be combined (e.g. `dreambot --release --clean`).
+dreambot() {
+  cd ~/Development/apps/dreambot || return 1
+
+  local FORCE_CLEAN=0
+  local RELEASE=0
+  # Default simulator. Override per-invocation with `--sim "iPhone SE (3rd generation)"`.
+  # The name must match an installed Simulator device exactly (see `xcrun simctl list devices`).
+  local SIM="iPhone 17 Pro Max"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --clean|clean) FORCE_CLEAN=1; shift ;;
+      --release|release) RELEASE=1; shift ;;
+      --sim)
+        if [ -z "$2" ]; then
+          echo "❌ --sim requires a device name (e.g. --sim \"iPhone SE (3rd generation)\")"
+          return 1
+        fi
+        SIM="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+
+  # NO local build (Debug or Release) can upload source maps — Sentry's
+  # org/project/token live only as EAS secrets for production builds. Without
+  # them sentry-cli fails ("organization ID or slug is required") and kills the
+  # "Bundle React Native code and images" phase — which is why a plain `dreambot`
+  # Debug build started failing once Sentry was wired in. Disable the upload for
+  # EVERY local build; runtime crash capture still works (we just don't get
+  # symbolicated traces locally). Production `eas build` DOES upload — the creds
+  # are present there.
+  # `local -x` = exported to the xcodebuild child process but scoped to this
+  # function, so it does NOT linger in your shell (a stray export could otherwise
+  # disable uploads for a later `eas build --local` in the same tab).
+  local -x SENTRY_DISABLE_AUTO_UPLOAD=true
+
+  local CONFIG=Debug
+  if [ $RELEASE -eq 1 ]; then
+    CONFIG=Release
+  fi
+
+  # Auto-detect when prebuild is needed: if app.config.js (or .env.local that
+  # it reads) is newer than the generated Podfile.properties.json, native
+  # projects are stale and must be regenerated. This catches changes like
+  # EAS projectId, Facebook tokens, or any plugin config edit.
+  local needs_prebuild=$FORCE_CLEAN
+  if [ $needs_prebuild -eq 0 ]; then
+    if [ ! -d ios ] || [ ! -f ios/Podfile.properties.json ]; then
+      needs_prebuild=1
+      echo "🆕 No ios/ directory yet — will run prebuild."
+    elif [ app.config.js -nt ios/Podfile.properties.json ] 2>/dev/null; then
+      needs_prebuild=1
+      echo "🔄 app.config.js changed since last prebuild — regenerating native projects..."
+    elif [ .env.local -nt ios/Podfile.properties.json ] 2>/dev/null; then
+      needs_prebuild=1
+      echo "🔄 .env.local changed since last prebuild — regenerating native projects..."
+    fi
+  fi
+
+  if [ $needs_prebuild -eq 1 ]; then
+    echo "🧹 Running expo prebuild --clean..."
+    npx expo prebuild --clean || { echo "❌ prebuild failed"; return 1; }
+  fi
+
+  echo "📦 Installing dependencies..."
+  npm install
+
+  # prebuild --clean already ran pod install; skip the duplicate.
+  if [ $needs_prebuild -eq 0 ]; then
+    echo "🍎 Installing pods..."
+    (cd ios && pod install)
+  fi
+
+  echo "🔨 Building native app ($CONFIG) for $SIM..."
+  xcodebuild -workspace ios/DreamBot.xcworkspace \
+    -scheme DreamBot \
+    -sdk iphonesimulator \
+    -destination "platform=iOS Simulator,name=$SIM" \
+    -configuration $CONFIG \
+    build \
+    -quiet
+
+  if [ $? -ne 0 ]; then
+    echo "❌ Build failed"
+    return 1
+  fi
+
+  echo "📲 Installing on $SIM..."
+  xcrun simctl boot "$SIM" 2>/dev/null
+  open -a Simulator
+
+  APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "DreamBot.app" -path "*/$CONFIG-iphonesimulator/*" -maxdepth 5 2>/dev/null | head -1)
+  if [ -z "$APP_PATH" ]; then
+    echo "❌ Could not find built app"
+    return 1
+  fi
+  xcrun simctl install booted "$APP_PATH"
+
+  if [ $RELEASE -eq 1 ]; then
+    # Release embeds the production JS bundle (__DEV__ false → Sentry active).
+    # No Metro/dev server needed — just launch. Use this to test release-only
+    # behavior like crash reporting.
+    echo "🚀 Release build — JS is bundled in, no Metro needed."
+    echo "🎮 Launching DreamBot..."
+    xcrun simctl launch booted com.konakevin.radorbad
+    echo "✅ DreamBot (Release) is running. (No Metro — release has no live logs/reload.)"
+  else
+    # Debug/dev-client build: needs Metro serving the JS so you get live logs + reload.
+    # Kill any stale Metro processes
+    lsof -ti:8081 | xargs kill -9 2>/dev/null
+    sleep 1
+
+    # Start Metro in a separate tab with --clear so the transformer cache
+    # doesn't serve stale JS (e.g. an old hardcoded EAS projectId).
+    osascript -e '
+      tell application "Terminal"
+        do script "cd ~/Development/apps/dreambot && npx expo start --dev-client --scheme dreambot --clear"
+        activate
+      end tell
+    '
+
+    # Wait for Metro to be serving
+    echo "⏳ Waiting for Metro..."
+    for i in {1..30}; do
+      curl -s http://localhost:8081/status 2>/dev/null | grep -q "packager-status:running" && break
+      sleep 1
+    done
+
+    echo "🎮 Launching DreamBot..."
+    xcrun simctl launch booted com.konakevin.radorbad
+    echo "✅ DreamBot is running. Metro logs are in the other terminal tab."
+  fi
+}
+
+# Build + install + launch DreamBot on a PHYSICAL iPhone (vs `dreambot` = the
+# simulator). Wraps `expo run:ios --device`, which prebuilds-if-needed, builds,
+# installs to the phone, and (debug) starts Metro.
+#
+# Sets SENTRY_DISABLE_AUTO_UPLOAD=true for the SAME reason dreambot does: a LOCAL
+# build can't upload source maps (Sentry org/project/token are EAS-only), so the
+# "Bundle React Native code and images" build phase otherwise fails with
+# "An organization ID or slug is required". `local -x` scopes it to this function
+# so it never lingers in your shell. (Building in the Xcode GUI hits this same
+# error because the GUI doesn't inherit shell exports — use this instead.)
+#
+# Phone must be unlocked + "Trust This Computer" tapped; first run may prompt for
+# codesign keychain access.
+#
+# Usage:
+#   dreamphone                       # debug build -> phone + Metro
+#   dreamphone --release             # release build (bundled JS, no Metro)
+#   dreamphone --clean               # force `expo prebuild --clean` first
+#   dreamphone --device <name|udid>  # target a different device
+#   flags combine, e.g. `dreamphone --release --clean`
+dreamphone() {
+  cd ~/Development/apps/dreambot || return 1
+  local -x SENTRY_DISABLE_AUTO_UPLOAD=true
+
+  local CONFIG=Debug
+  local DEVICE="00008110-000464983C82801E"  # Kevin's iPhone (UDID — robust vs the typographic apostrophe in its name)
+  local DO_CLEAN=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --release|release) CONFIG=Release ;;
+      --debug|debug) CONFIG=Debug ;;
+      --clean|clean) DO_CLEAN=1 ;;
+      --device) shift; DEVICE="$1" ;;
+    esac
+    shift
+  done
+
+  if [ $DO_CLEAN -eq 1 ]; then
+    echo "🧹 Running expo prebuild --clean..."
+    npx expo prebuild --clean || { echo "❌ prebuild failed"; return 1; }
+  fi
+
+  # Release bundles the JS at build time, so no Metro/bundler is needed at runtime.
+  local extra=()
+  [ "$CONFIG" = "Release" ] && extra+=(--no-bundler)
+
+  echo "📲 Building $CONFIG -> device $DEVICE ..."
+  npx expo run:ios --device "$DEVICE" --configuration "$CONFIG" "${extra[@]}"
+}
+
+# Per-phone shortcuts for dreamphone — pin the device UDID so you don't type it.
+# Both DEFAULT TO RELEASE (standalone, works off-network — what you want for a
+# build someone actually uses). Override to a dev build with `--debug` (e.g.
+# `dreamkev --debug` for Metro/hot-reload). Other flags pass through (--clean).
+dreamkev()    { dreamphone --release --device "00008110-000464983C82801E" "$@"; }  # Kevin's iPhone
+dreamsteph()  { dreamphone --release --device "00008130-000115D40CF8001C" "$@"; }  # Steph's iPhone
+dreambunny()  { dreamphone --release --device "00008140-000214203A08801C" "$@"; }  # bunny's iPhone
+. "/Users/kevinmchenry/.deno/env"
