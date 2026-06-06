@@ -257,13 +257,47 @@ module.exports = {
   },
 
   modelByPath: {
+    // ── Character paths — Banana RE-ENABLED 2026-06-05 for character-path audit.
     'cyborg-woman': [
+      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'cyborg-man': [
+    // cyborg-man — DEACTIVATED 2026-06-05 from bot.paths; modelByPath entry
+    // removed since it never resolves. Restore the entry above with banana if
+    // the path is re-enabled.
+    'droid-assassin': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'mecha-pilots': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'humanoid-robots': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'power-armor-infantry': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'robot-moment': [
+      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',

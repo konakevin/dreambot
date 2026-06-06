@@ -76,25 +76,23 @@ module.exports = {
     // ── per-path lineup minus the hearted-as-bad models. Bans noted
     // ── inline per path. To unban: add the model id back.
     'goth-closeup': [
-      // BAN: Banana, Flux 2 Flex (2026-06-02)
+      // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux 2 Flex (2026-06-02)
+      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'goth-full-body': [
-      // BAN: Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02)
+      // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02)
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'goth-male-full-body-axis': [
-      // Mirror of goth-full-body (2026-05-31). Same bans on male twin:
-      // Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02). Model fingerprint
-      // (eye geometry, face polish) doesn't change with subject gender,
-      // so a model that looks bad on the female version of a path looks
-      // bad on the male version too.
+      // 2026-06-05: Banana re-enabled for character-path audit.
+      // Mirror of goth-full-body. BAN: Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02).
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
@@ -103,7 +101,7 @@ module.exports = {
 
     // Vampire paths (female-coded subset gets the multi-model arrays)
     'vampire-girls-2': [
-      // BAN: Flux 2 Flex (2026-06-02)
+      // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux 2 Flex (2026-06-02)
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
@@ -111,7 +109,21 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'vampire-assassin-female': [
-      // BAN: Flux Dev, Flux 2 Flex
+      // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux Dev, Flux 2 Flex
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'vampire-assassin-combat': [
+      // 2026-06-05: Banana re-enabled for character-path audit (new entry).
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'vampire-hunter-in-action': [
+      // 2026-06-05: Banana re-enabled for character-path audit (new entry).
       'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',

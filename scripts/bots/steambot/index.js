@@ -82,12 +82,46 @@ module.exports = {
   ],
 
   // modelByPath: per-path bans (2026-05-31 — Kevin's uniform non-character
-  // lineup). All 7 non-character paths get the same 5-model lineup:
-  // Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Ultra (F2 Flex banned). Character
-  // paths (airship-female, airship-male, sexy-steampunk-woman, steampunk-man)
-  // intentionally fall through to the bot-wide 6-model picker — audit them
-  // individually if needed.
+  // lineup). Non-character paths get the same 4-model lineup:
+  // Banana, GPT-2, F1.1 Pro, F1.1 Ultra. Character paths (airship-female,
+  // airship-male, sexy-steampunk-woman, steampunk-man) get the same lineup
+  // MINUS Banana per Kevin's 2026-06-05 character-path ban.
   modelByPath: {
+    // ── Character paths — bot-wide MINUS Banana (Kevin 2026-06-05).
+    'airship-female': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+    ],
+    'airship-male': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+    ],
+    'sexy-steampunk-woman': [
+      // Banana BANNED 2026-06-05 — 50% safety-filter refusal rate in audit
+      // (4 attempts: 2 refused with finishReason: NO_IMAGE). Headache to
+      // recover in production. F1.1 family + GPT-2 + F2 family carry it.
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+    ],
+    'steampunk-man': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-2-flex',
+    ],
     'steampunk-scene': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
