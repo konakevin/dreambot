@@ -195,6 +195,8 @@ module.exports = {
   // To unban: add the model id back to that path's array.
   // To extend a ban: remove the model id from the array.
   modelByPath: {
+    // ── Character paths — Banana BANNED (Kevin 2026-06-05 after character-path
+    // ── audit: Banana lost on every DragonBot character path).
     'artsy-girl': [
       'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
