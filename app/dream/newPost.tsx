@@ -28,6 +28,7 @@ import { useDreamStore } from '@/store/dream';
 import { pinToFeed } from '@/lib/dreamSave';
 import { moderateText } from '@/lib/moderation';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { Toast } from '@/components/Toast';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -157,23 +158,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
   cancelText: {
     color: colors.textSecondary,
-    fontSize: 16,
+    fontSize: fontScale(16),
   },
   title: {
     color: '#FFFFFF',
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '600',
   },
   postButton: {
     backgroundColor: colors.accent,
     paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     borderRadius: 20,
   },
   postButtonDisabled: {
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   },
   postButtonText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '700',
   },
   postButtonTextDisabled: {
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
   },
   image: {
     width: SCREEN_WIDTH - 64,
@@ -202,8 +203,8 @@ const styles = StyleSheet.create({
   },
   input: {
     color: '#FFFFFF',
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(22),
     minHeight: 80,
     padding: 0,
   },

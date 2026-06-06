@@ -10,6 +10,7 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useDreamCreate } from '@/hooks/useDreamCreate';
 import { useDreamStore } from '@/store/dream';
 import { supabase } from '@/lib/supabase';
@@ -355,7 +356,7 @@ export default function DreamLoadingScreen() {
               name={pendingConfirm?.type === 'group' ? 'people-outline' : 'help-circle-outline'}
               size={32}
               color={colors.accent}
-              style={{ marginBottom: 12 }}
+              style={{ marginBottom: verticalScale(12) }}
             />
             <Text style={s.modalTitle}>
               {pendingConfirm?.type === 'group' ? 'Multiple people detected' : 'Photo hard to read'}
@@ -406,7 +407,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
-    paddingBottom: 16,
+    paddingBottom: verticalScale(16),
     gap: 40,
   },
   cta: {
@@ -419,10 +420,10 @@ const s = StyleSheet.create({
   // CTA group.
   queueHint: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     textAlign: 'center',
     maxWidth: 300,
-    lineHeight: 18,
+    lineHeight: fontScale(18),
   },
   failureWrap: {
     flex: 1,
@@ -432,7 +433,7 @@ const s = StyleSheet.create({
   },
   subtip: {
     color: 'rgba(196,181,253,0.85)', // muted purple, matches the sparkle palette
-    fontSize: 13,
+    fontSize: fontScale(13),
     textAlign: 'center',
     paddingHorizontal: 8,
   },
@@ -441,7 +442,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     paddingHorizontal: 18,
-    paddingVertical: 11,
+    paddingVertical: verticalScale(11),
     borderRadius: 22,
     backgroundColor: colors.accent,
     shadowColor: colors.accent,
@@ -451,7 +452,7 @@ const s = StyleSheet.create({
   },
   queueText: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '700',
   },
   modalBackdrop: {
@@ -473,17 +474,17 @@ const s = StyleSheet.create({
   },
   modalTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '700',
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
   modalBody: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 20,
+    lineHeight: fontScale(20),
+    marginBottom: verticalScale(20),
   },
   modalActions: {
     flexDirection: 'row',
@@ -492,7 +493,7 @@ const s = StyleSheet.create({
   },
   modalBtn: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderRadius: 12,
     alignItems: 'center',
   },
@@ -503,7 +504,7 @@ const s = StyleSheet.create({
   },
   modalBtnSecondaryText: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   modalBtnPrimary: {
@@ -511,7 +512,7 @@ const s = StyleSheet.create({
   },
   modalBtnPrimaryText: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '700',
   },
 });

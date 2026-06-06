@@ -22,6 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { saveDream } from '@/lib/dreamSave';
@@ -171,7 +172,7 @@ const s = StyleSheet.create({
   },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 16,
+    fontSize: fontScale(16),
   },
   fullImage: {
     ...StyleSheet.absoluteFillObject,
@@ -196,29 +197,29 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
   },
-  savedHintText: { color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: '600' },
+  savedHintText: { color: 'rgba(255,255,255,0.7)', fontSize: fontScale(13), fontWeight: '600' },
   primaryPill: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
     alignSelf: 'stretch',
-    paddingVertical: 15,
+    paddingVertical: verticalScale(15),
     borderRadius: 26,
     backgroundColor: colors.accent,
   },
-  primaryPillText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  skipButton: { paddingVertical: 10, alignItems: 'center' },
-  skipText: { color: 'rgba(255,255,255,0.65)', fontSize: 15, fontWeight: '600' },
+  primaryPillText: { color: '#fff', fontSize: fontScale(16), fontWeight: '700' },
+  skipButton: { paddingVertical: verticalScale(10), alignItems: 'center' },
+  skipText: { color: 'rgba(255,255,255,0.65)', fontSize: fontScale(15), fontWeight: '600' },
   glassPill: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
     paddingHorizontal: 18,
-    paddingVertical: 11,
+    paddingVertical: verticalScale(11),
     borderRadius: 22,
     backgroundColor: 'rgba(255,255,255,0.12)',
     borderWidth: StyleSheet.hairlineWidth,
@@ -226,7 +227,7 @@ const s = StyleSheet.create({
   },
   glassPillText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
 });
