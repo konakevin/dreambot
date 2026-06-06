@@ -1447,6 +1447,25 @@ Output ONLY the prompt.`;
     }
   }
   logAxes.model = pickedModel;
+
+  // ── GPT-Image-2 cleanup ──────────────────────────────────────────────
+  // GPT-Image-2 reads most of our personalized-dream prompts (medium
+  // directives + vibe modifiers + sensory anchors stacked together) as
+  // "go fully abstract / over-stylized" and lands on ornamental plates
+  // that don't render the user's actual dream. Mirror the bot engine's
+  // mediumByModel pattern (commits bf2d7096 + 2a3144e5): when the model
+  // picker rolls gpt-image-2 for a nightly, prepend a strong clean
+  // canvas-illustration directive so the render lands as a high-def
+  // painted-canvas concept art piece with crisp readable subjects.
+  // The scene / subject / vibe content downstream still drives WHAT is
+  // rendered — only the style register is re-anchored.
+  if (pickedModel === 'openai/gpt-image-2') {
+    const GPT_CLEAN_PREFIX =
+      'Clean editorial illustration painted on canvas, high-definition concept-art render with crisp readable subjects, rich painterly depth, classical oil-on-canvas finish, gallery-tier production-art quality. ';
+    finalPrompt = GPT_CLEAN_PREFIX + finalPrompt;
+    console.log('[nightly-dreams] gpt-image-2 cleanup: prepended clean canvas prefix');
+  }
+
   console.log(
     `[nightly-dreams] User ${userId}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`
   );
