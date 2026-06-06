@@ -572,58 +572,41 @@ EXAMPLES (10):
     instructions: `Each landscape must read as a specific ecology — biology, geology, atmosphere coherent. MG layer: biology / formations / weather. Scene must include EITHER a sentient figure (1-2% frame, midground-back silhouette) OR an alien creature native to this world.`,
   },
   sleek_female_explorer_outfits: {
-    theme:
-      'Sleek, form-fit FUTURISTIC EVA EXPLORER outfits modeled on the StarBot-hearted exemplars 2026-05-12: gold-mirror-visor pressure-suit climbers, hydraulic-exoskeleton scientists with brass chestplates, prone marksmen in olive-drab + chrome chest plates, bald-tattooed bubble-helm scouts, Tron-blue circuit-line android operatives. Every outfit is a complete EVA-class explorer kit — form-fitting pressure suit base + sealed helmet + multiple pieces of visible engineered tech + ONE distinguishing identity marker that makes her unmistakably herself. Sci-fi paperback-cover oil-painting tradition: Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Frank-Kelly-Freas covers.\n\nABSOLUTE BAN — NO Mandalorian / NO beskar plate / NO T-visor / NO Boba Fett / NO Star Wars helmet language. Flux renders the actual franchise IP from those tokens regardless of brief admonitions. Use generic descriptive language instead (sealed visor / bubble helmet / gold mirror visor / amber HUD faceplate / full-coverage helm).',
+    format: 'simple',
+    theme: `STARBOT FEMALE-EXPLORER SLEEK OUTFIT POOL — pure outfit + gear + helmet/visor + tech descriptions. Each entry: 50-80 words. The aesthetic is FORM-FIT EVA pressure-suit explorers — sleek silhouettes, sealed helmets with glowing visor optics, engineered tech cascading off the suit, alien beauty revealed through cracked faceplates or open visor slits. She is capable, mysterious, and unmistakably herself — her outfit reads sexy through silhouette + competence + tech-mystery, not through skin exposure.
+
+This pool fills the \`wearing \${outfit}\` slot in the FEMALE_EXPLORER brief template. Scene, action, and lighting come from other axes — entries here describe ONLY what she is WEARING, CARRYING, and how her helmet/face sits.
+
+EVERY ENTRY WEAVES TOGETHER:
+• FORM-FIT PRESSURE SUIT BASE — sleek pressure suit / EVA / tactical bodysuit / power-armor in a specific color (burnished steel / matte black / midnight-blue with electric-blue circuit lines / pearl-white / oxblood / olive-drab / charcoal / chrome / bronze / rust-orange / cobalt / etc.)
+• PLATE + ARMOR DETAIL — segmented plates / ceramic shoulder guards / chrome chest plate reflecting light / hydraulic exoskeleton with exposed pistons / brass-trim panels / fitted modular plates at shoulders, forearms, thighs
+• HELMET + VISOR STATUS — sealed bubble helm / amber HUD visor with reticle overlay / gold mirror visor / cracked faceplate revealing pale skin and platinum hair / mag-locked at hip / pushed up on brow / faceplate half-raised showing eyes
+• 2-4 ENGINEERED TECH PIECES — life-support backpack venting silver mist / retractable grapple-launcher humming at the forearm / wrist-mounted scanner or welding torch or rangefinder / mag-boots / chest-mounted sensor pod / battery-pack pulsing soft amber / cryogenic vapor lines bleeding frost / jetpack venting cryogenic white exhaust / breath-regulator collar releasing filtered mist
+• GLOWING ACCENT — electric-blue circuit lines tracing limbs and spine / fel-violet rim glow / ion-blue accent at belt buckle / plasma-cyan key wash / amber HUD reflection / soft cyan implant glow at the temple
+• ONE IDENTITY MARKER REVEALED THROUGH THE FACEPLATE OR HELMET CRACK — intricate geometric facial tattoos / cybernetic eye glow / ceremonial clan markings / brand-plate at the temple / chrome twist-braids pressed against helmet padding / brass sigil engraving on the chestplate / a single ritual scar across one cheek
+
+She/her pronouns. Capable mid-action register: the suit fits like skin, the tech is functional, the helmet either seals her in mystery or cracks just enough to reveal alien beauty.
+
+The CONTENT lives in the suit fit, the engineered tech, the helmet/visor state, and the identity marker revealed through it. Each entry should feel like a complete capable sci-fi explorer kit — distinct silhouette, distinct color, distinct tech configuration, distinct identity tell.
+
+VARIETY across the pool: spread colors widely, vary helmet status (sealed / cracked / mag-locked / pushed up), vary silhouette (slim form-fit / bulky power-armor / hooded / segmented), vary identity marker family (markings / cyber-implant / clan-tattoo / brand-plate / scar / engraving).`,
     touchpoints: [
-      'Mass Effect Andromeda Pathfinder Ryder — form-fit N7 + sealed helmet + amber HUD visor',
-      'Apollo / NASA EVA pressure suit — sealed bubble helmet + life-support backpack',
-      'hydraulic exoskeleton scientist — burgundy hood + brass sigil chestplate + exposed pistons + battery-pack glow',
-      'EVA bubble-helmet climber — gold mirror visor + life-support backpack + mag-boots',
-      'olive-drab prone marksman — chrome chest plate + sealed helmet w/ amber HUD + bipod rifle',
-      'Tron-coded android operative — midnight-blue bodysuit w/ electric-blue circuit-lines + plasma-blue eyes',
-      'mutant explorer — pearl-white pressure suit + oxblood ceramic chest plate + chrome backpack venting',
-      'bald-tattooed scout — matte-black tactical bodysuit + sealed bubble helmet reflecting prismatic sand',
-      'Dune-coded stillsuit — rust-orange moisture recycler + armored shoulder + brass-filter goggles',
-      'Sunshine Icarus crew — gold mirror visor pressure suit',
+      "Form-fit burnished-steel segmented pressure suit, EVA helmet with red visor-slit and bronze trim, cracked faceplate revealing platinum hair, jetpack venting cryogenic white exhaust, retractable grapple-launcher humming at forearm, plasma-cutter holstered at thigh, biometric scanner glove glowing on right hand.",
+      "Form-fit charcoal pressure suit and bubble helmet with breathing apparatus, dragon-fire-orange rope-braid down the spine with steel-ring bindings, scientific sample-case in both arms, sample-cylinders labeled with coordinates racked at hip, mag-boots with reinforced toe-caps.",
+      "Matte-black form-fit pressure suit with segmented armor plates across shoulders and spine, sealed helmet with breathing apparatus and half-raised visor, wrist-mounted grapple-launcher, breath-regulator collar releasing filtered green mist, bandolier buckle at one side beneath the exo-rig, scoped rifle slung.",
+      "Rust-orange form-fit pressure suit with brass moisture-recycler tubes coiling across shoulders and spine, sealed bubble helmet with gold mirror visor, life-support backpack venting silver mist through scrubber ports, wrist-mounted spectrometer glowing amber, mag-boots with crampons folded.",
+      "Midnight-blue form-fit pressure suit with pearl-white ceramic shoulder guards, enclosed helmet with amber HUD visor displaying overlay grid, retractable grapple-launcher humming at right wrist, oxygen tank venting white vapor through spine-mounted ports, ice-axe mag-locked at hip, ritual clan tattoos visible through faceplate.",
+      "Matte-black tactical bodysuit with curved chrome chest plate, sealed helmet with breathing apparatus hissing at neck seal, forearm stabilization jets puffing white vapor, wrist-mounted rangefinder glowing soft amber, segmented armor plates across spine and shoulders, close-cropped coiled hair beneath helmet crown.",
+      "Form-fit midnight-blue pressure suit with electric-blue circuit lines glowing along limbs and torso, transparent helmet faceplate, retractable grapple-launcher at wrist, carbon-fiber rope coil slung across the chest, bolt-action rifle mag-locked to thigh, accent clan face-tattoos visible through visor.",
+      "Olive-drab pressure suit with chrome chest plate, sealed helmet with amber HUD visor glowing softly, hydraulic sampling arm extending over left shoulder, battery-pack pulsing amber at lower spine, sample canisters mag-locked to thigh plates, cryo-container venting liquid nitrogen at the hip.",
+      "Midnight-blue tactical bodysuit with electric-blue bioluminescent circuit-lines tracing limbs and spine, steel shoulder guard, power-cell glow casting azure halo, plasma-blue pupilless eyes through transparent faceplate, brand-plate at temple, fiber-optic cables from wrist-mounted hacking deck.",
+      "Charcoal pressure suit with bronze segmented plates, enclosed helmet with polarized visor, shoulder-mounted thruster array venting cryo vapor, wrist-mounted blue-white welding torch, ion-blue rim accent highlighting belt buckle and waist seal, pilot's gauntlet glowing at fingertips.",
+      "Pearl-white form-fit pressure suit with oxblood ceramic chest plate, bubble helm visor revealing copper-red pixie-cut hair and dragon-gold eyes, hydraulic manipulator arms folded against backpack, amber battery-pack glowing at lower spine, breathing apparatus with scrubber cartridges, survival knife strapped to boot.",
+      "Burgundy hooded armored bodysuit with sigil-engraved bronze chestplate, hood framing the face, gauntlets with built-in cutting tools, belt-pouches with spore-collection vials, no helmet — dark skin and silver-grey hair visible through hood opening.",
     ],
-    instructions: (() => {
-      // Load the 30 hearted-render exemplars (live render bodies from recent
-      // FE batches Kevin hearted) and feed them as few-shot to Sonnet. The
-      // pool entries should READ LIKE these real prompts — not abstract rules.
-      let exemplars = [];
-      try {
-        exemplars = require('fs').existsSync('/tmp/fe-30-truncated.json')
-          ? require('/tmp/fe-30-truncated.json')
-          : [];
-      } catch (_) {}
-      const exemplarBlock = exemplars.length
-        ? exemplars.map((e, i) => `EXEMPLAR ${i + 1}: ${e}`).join('\n\n')
-        : '';
-      return `Write ${COUNT} EVA-class explorer outfit entries, ~50-80 words each. Format: "SETTING — full character + outfit + tech description". Each entry is DENSE with engineered tech detail.
+    instructions: `Each entry: ONE outfit description, 50-80 words. Describe the suit + plate detail + helmet/visor state + 2-4 tech pieces + glowing accent + identity marker revealed through the faceplate. Pure outfit-and-tech register — the woman's competence and silhouette carry the appeal. Output as a NUMBERED list (1. ... 2. ... 3. ...).
 
-Below are ${exemplars.length} REAL prompts from previously-hearted renders. These are the bar. Generate new entries that read EXACTLY like these — same texture, same tech density, same identity-marker richness, same kind of distinctive non-default skin coloring + ceremonial markings + visible engineered tech. Vary the setting, race, color palette, helmet style, and tech configuration, but every new entry should feel like it BELONGS in this list.
-
-═══════ HEARTED EXEMPLARS — WRITE NEW ENTRIES LIKE THESE ═══════
-
-${exemplarBlock}
-
-═══════ END EXEMPLARS ═══════
-
-EVERY new entry MUST have:
-- DISTINCTIVE NON-DEFAULT SKIN COLOR or anatomy (deep umber / light blue / pale-ivory / yellow-green / bronze / iridescent pink / pale-grey / mutant / low-grav evolved / long-limbed / pointed-eared / sensory antennae / etc.) — never just "human woman"
-- FORM-FITTING PRESSURE SUIT BASE in a specific color (burnished steel / matte black / midnight-blue / pearl-white / oxblood / olive-drab / charcoal / chrome / bronze)
-- SEALED HELMET / BUBBLE HELM / GOLD MIRROR VISOR / AMBER HUD VISOR / FACEPLATE / FULL-COVERAGE HELM (mandatory — 90% of entries)
-- 2-4 distinct ENGINEERED TECH PIECES (life-support backpack venting / hydraulic exoskeleton with exposed pistons / retractable grapple-launcher / wrist-mounted scanner or laser / mag-boots / chest-mounted sensor pod / battery-pack glow / cryogenic vapor lines)
-- ONE DISTINGUISHING IDENTITY MARKER (geometric facial tattoo / cybernetic eye glow / ceremonial clan markings / brand-plate at temple / chrome twist-braids / brass sigil engraving / scar)
-
-ABSOLUTE BANS:
-- NO "Mandalorian" / NO "beskar" / NO "T-visor" / NO "T-shaped visor" / NO Boba Fett / NO Star Wars (Flux renders the franchise IP)
-- NO bare-headed bodyglove fashion / NO Tron-circuit clubwear without helmet / NO "no armor" entries / NO monastic-robe-only / NO bare feet / NO pilot cockpit suits / NO runway-coded entries
-
-Vary the role: planetary surveyor / EVA fieldworker / bounty-hunter on planet-side hunt / scientist with sample kit / prone marksman / cliff-climber / cave-diver / atmospheric specialist / android operative.
-
-The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars above — never less detail, never more abstract. Output JSON array of strings.`;
-    })(),
+VARIETY: each entry visually distinct — different suit color and material, different plate / armor configuration, different helmet status, different tech combination, different identity marker. Match the touchpoints' tight outfit-only register.`,
   },
   cozy_warmth_source: {
     theme:
@@ -923,49 +906,44 @@ The bar: each entry should read as a Destiny Guardian, Mass Effect operative, Ha
     })(),
   },
   explorer_outfits_female: {
-    theme:
-      'tactical-explorer outfits for female sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Treat the character with the same dignity as a male soldier — full coverage, professional military / explorer kit, no cheesecake.',
+    format: 'simple',
+    theme: `STARBOT FEMALE-EXPLORER TACTICAL OUTFITS — pure outfit + gear + helmet/visor descriptions across a WIDE VARIETY of sci-fi style-families. Each entry: 30-50 words. The aesthetic is capable, functional, and visually distinct from every other entry — each outfit reads as a different kind of woman doing a different kind of work in a different corner of the galaxy.
+
+This pool fills the \`wearing \${outfit}\` slot in the FEMALE_EXPLORER brief template. Scene, action, lighting, and sky come from other axes — entries here describe ONLY what she is WEARING and CARRYING.
+
+EVERY ENTRY HAS:
+• AN OPENING COLOR-FAMILY OUTFIT NAME in caps — "COPPER-BROWN SCAVENGER DUSTER" / "OXBLOOD-RED MERCENARY JUMPSUIT" / "ARCTIC-WHITE SEALED PARKA" / "BURGUNDY MONASTIC-ORDER ARMOR" / "BRASS-AND-RUST DIESELPUNK EXPLORER" / etc. — the COLOR + STYLE-FAMILY are both in the name.
+• OUTFIT MATERIAL + PLATE / ARMOR / COAT / CLOAK DETAIL — weathered leather / segmented metal plates / canvas-and-kevlar / ceramic / synthetic mesh / fabric-armor hybrid / brushed alloy / coated polymer / thermal-gel insulation / hooded robe over segmented chest-plate / armored bodysuit with chrome accents / etc.
+• FUNCTIONAL EQUIPMENT — utility belt, gauntlets, boots, sidearm in holster, scanner, gear pouches, climbing-rope coiled, breather-mask hanging at neck, multi-tool harness, bandolier of tool-canisters, wrist-mounted data-slate, etc.
+• HELMET / FACE STATE — about half with head covered (helmet / hood up / sealed visor / breathing mask / face-wrap), about half with head uncovered (hair visible, hood pulled back, helmet held under arm, visor pushed up on the brow). When the face is visible, hair color + styling reads as part of her identity.
+
+The STYLE-FAMILIES the pool spans: scavenger / corporate operative / monastic order / desert nomad / arctic explorer / jungle ranger / chrome-cyber / military / mercenary / scientific researcher / pirate / pilot / dieselpunk / industrial worker / hazmat / engineer / sniper / ranger / pilot / commander / scout / archaeologist / drifter / nomad / spec-ops.
+
+The COLORS the pool spans (widely): red / orange / olive / black / desert tan / cobalt blue / brass / chrome / forest green / oxblood / charcoal / off-white / sand / arctic-white / midnight / copper-brown / burgundy / rust / slate / emerald / ivory / teal / ochre / jade / amber / dusty rose / oxidized bronze.
+
+The SILHOUETTES the pool spans: slim scout / bulky power-armor / hooded cloaked / vest-and-pants / heavy backpack / minimalist / poncho-draped / coat-over-bodysuit / segmented plate / fitted EVA.
+
+Each entry should feel like a CHARACTER you'd recognize on sight — distinct visual identity through color + style-family + outfit silhouette + gear cascade + helmet state.`,
     touchpoints: [
-      'Halo Spartan armor (full sealed plate)',
-      'Mass Effect N7 (sealed tactical suit)',
-      'Edge of Tomorrow exosuit (functional rig)',
-      'Aliens colonial marine armor',
-      'Starship Troopers power armor',
-      'Halo ODST armor',
-      'The Expanse Martian Marine armor',
-      'Apollo / NASA EVA suit (sealed pressurized)',
-      'Dune stillsuit (utility-focused desert tactical)',
-      'Mandalorian armor (plated full coverage)',
+      "COBALT-BLUE IMPERIAL GUARD IN CEREMONIAL PLATE — segmented chrome pauldrons with royal insignia, high-collar gorget, mirrored visor helmet, white cape-drape.",
+      "CHARCOAL POWER-ARMOR WITH RED SERVICE-STRIPES — bulky exoskeleton frame, hydraulic-joint actuators, sealed helmet with tri-lens array, armored backpack-reactor, mag-locked sidearm.",
+      "BURGUNDY MONASTIC-ORDER ARMOR — hooded robe over segmented chest-plate, sigil engraved in bronze, wrist-mounted data-slate, tall boots, no helmet—hair in ritual braid.",
+      "BLACK-AND-MAGENTA CORPORATE OPERATIVE — sleek armored bodysuit with chrome accent-lines, slim holster at thigh, wrist-interface glowing, short hair, angular visor-glasses.",
+      "OLIVE-DRAB MILITARY FATIGUES — kevlar vest with ceramic plate-inserts, bulky tactical backpack, mirrored helmet visor, combat boots caked in mud, rifle mag-locked to chest.",
+      "BRASS-AND-RUST DIESELPUNK EXPLORER — leather flight-jacket with brass buckles, goggle-helmet with tinted lenses, oversized bandolier of tool-canisters, gauntlets with pressure-dials.",
+      "ARCTIC-WHITE SEALED PARKA — thermal-gel insulation visible through clear panels, tinted survival-goggles, breather-mask with vapor-exhaust, insulated gloves, ice-axe mag-locked.",
+      "SAND-TAN DESERT SCOUT — dust-weathered poncho over armored bodysuit, face-wrap leaving only eyes visible, wrist-mounted compass-scanner, boots with sand-gaiters.",
+      "OXBLOOD-RED MERCENARY JUMPSUIT — segmented armor-plates at shoulders and thighs, multi-tool belt with holster and plasma-cutter, short hair, tactical visor pushed up on forehead.",
+      "COPPER-BROWN SCAVENGER DUSTER — weathered leather coat to knees, rusted iron gauntlets, goggled half-mask, utility-harness with salvage-tools, climbing-rope coiled.",
+      "MIDNIGHT-BLACK SPEC-OPS ARMOR — form-fitting tactical-plate with sensor-absorbent coating, enclosed helmet with visor-slit, wrist-blades retracted, silenced sidearm.",
+      "EMERALD-GREEN JUNGLE RANGER — armored vest over moisture-wicking under-layer, machete sheathed, bio-hazard scanner on hip, helmet with insect-netting, tall boots.",
+      "CHROME-AND-WHITE PILOT FLIGHTSUIT — segmented pressure-suit with accordion joints, helmet with gold-tinted visor carried under arm, oxygen-pack compact on back, comm-unit chest-mounted.",
+      "SLATE-GREY ENGINEER UTILITY-SUIT — heavy canvas coveralls with knee-pads, tool-harness across chest, welding-visor flipped up, insulated gloves tucked in belt, work-boots steel-toed.",
+      "YELLOW HAZMAT RESEARCH SUIT — reinforced seals at joints, full-face respirator with filter cartridges, decontamination badges on shoulders, belt-pouches with specimen-containers, taped seams.",
     ],
-    instructions: `Each entry is a complete tactical-explorer outfit, ~30-50 words. The pool MUST express WIDE VISUAL VARIETY across color, texture, silhouette, and style-family — Kevin specifically called out the previous pool was repetitive "white spacesuit". Each entry must look DISTINCT from the others when rendered.
+    instructions: `Each entry: ONE outfit, 30-50 words. Format: "COLOR-FAMILY OUTFIT NAME — outfit description with material + plates + gear + helmet state". Output as a NUMBERED list (1. ... 2. ... 3. ...).
 
-VARIETY MANDATE — across all 25 entries, hit each of these axes multiple times:
-- COLOR variety: red / orange / olive / black / desert tan / cobalt blue / brass / chrome / forest green / oxblood / charcoal / off-white / sand / arctic-white / midnight / copper-brown. NOT mostly white.
-- TEXTURE variety: weathered leather / segmented metal plates / canvas-and-kevlar / chitin-coded carapace / ceramic / synthetic mesh / fabric-armor hybrid / brushed alloy / coated polymer
-- SILHOUETTE variety: slim scout / bulky power-armor / hooded cloaked / vest-and-pants / heavy backpack / minimalist / poncho-draped / cape-flowing / tank-top-with-armored-plates
-- STYLE-FAMILY variety: imperial soldier / merchant ranger / drifter scavenger / corporate operative / monastic order / desert nomad / arctic explorer / jungle ranger / cyber-edgerunner / clean military / dirty mercenary / scientific researcher / pirate / pilot
-
-REQUIRED ELEMENTS per entry:
-- A specific COLOR or material identity that distinguishes it
-- A specific STYLE-FAMILY (don't just be "tactical generic")
-- FUNCTIONAL EQUIPMENT (utility belt, gauntlets, boots, sidearm, scanner, gear pouches, climbing-rope, etc.)
-- About 50% of entries should include head covering (helmet, hood, visor, mask, breathing apparatus); 50% should have head uncovered (hair visible, hood pulled back, helmet held in hand)
-
-NEVER use words: crop, midriff, bare-arms, exposed-stomach, cleavage-emphasized, bikini, swimsuit, sexy, alluring. (Form-fitting is OK if balanced with armor plates.)
-
-EXAMPLES of varied entries the pool should contain (use these as flavor anchors, then invent 25 distinct):
-- Weathered ochre-leather scavenger duster with rusted iron-plate gauntlets and goggled half-mask — Mad-Max-meets-Outer-Worlds
-- Sleek black-and-magenta corporate operative suit with chrome accents and slim sidearm holster — Cyberpunk-2077 vibe
-- Olive-drab military tactical fatigues with kevlar vest, bulky backpack, mirrored helmet visor
-- Burgundy hooded monastic-order robe with armored undersuit, sigil-engraved chestplate
-- Brass-and-rust dieselpunk explorer jacket with goggle-helmet and oversized utility bandolier
-- Forest-green ranger cloak over canvas tactical with sniper-rifle slung, beard if applicable
-- Arctic-white sealed parka with thermal-gel insulation and tinted goggles — only ONE entry like this
-- Desert-tan moisture-recycler with face-wrap, dust-weathered, sand-pitted
-- Heavy charcoal power-armor with red service stripes, bulky helmet
-- Slim mercenary jumpsuit in black-and-orange with multi-tool belt
-
-Each entry should feel like a CHARACTER you'd recognize from sci-fi cinema — distinct visual identity.`,
+VARIETY: each entry visually distinct — different color, different style-family, different silhouette, different helmet state, different gear cascade. Match the touchpoints' tight outfit-only register.`,
   },
   architecture_style: {
     theme:
@@ -2510,38 +2488,34 @@ Avoid duplicating: AWE, DREAD, MELANCHOLY, SACRED, INDIFFERENT-MEGALOPOLIS, ALIE
 
   sci_fi_race: {
     format: 'simple',
-    theme: `STARBOT SCI-FI LINEAGE — humanoid alien + cultural human + augmented + synthetic FACE/BODY descriptions for the female-explorer and male-explorer paths. Each entry: 15-25 words. Gender-neutral. Describe alien anatomy and human cultures freely; never NAME a franchise.
+    theme: `STARBOT SCI-FI LINEAGE — humanoid descriptions for the female-explorer and male-explorer paths. Each entry: 15-25 words. Gender-neutral phrasing. One clear visual signature per entry. Every figure is HUMAN-SHAPED — head, torso, two arms, two legs, recognizable face. The pool spans original far-future humanoid kinds: Earth-evolved diaspora, original off-world lineages with unique skin and cranial signatures, augmented humans, and synthetic humanoids. Grounded sci-fi character design — original, plausible, distinct.
 
-CORE RULE: describe alien features as features (head-tendrils, pointed ears, montral-like striped projections, forehead ridges, blue/green/violet skin, etc.) — but NEVER write a franchise / species / trademark NAME in the output. The aesthetic inspiration is fine; the NAME is not.
+THE FOUR ORIGINS THIS POOL SPANS:
 
-NEVER WRITE: Twi'lek, Vulcan, Klingon, Na'vi, Mandalorian, Spartan, Asari, Togruta, Andorian, Trill, Mirialan, Drow, Witcher, Dunmer, Fremen, Space Marine, Edgerunner, Netrunner, Sin'dorei, Romulan, Cardassian, Bajoran, Ferengi, Tholian, Borg, Krogan, Turian, Quarian, Drell, Aeldari, N7, Reaper, beskar, stillsuit, ceramite, bolter, MJOLNIR, ODST, lekku, montrals, Tatooine, Stormtrooper, Jedi, Sith.
+EARTH-DESCENDED DIASPORA (~35%) — recognizably-human lineages adapted by generations on different worlds + cultures: frontier colonist with UV-weathered skin and sun-bleached hair; ship-born spacer with pale station skin and wiry build; low-gravity-evolved long-limbed slender humanoid; high-gravity-evolved dense-muscled stocky build; desert-clan nomad with sun-hardened features and ritual scars; arctic-world dweller with frost-pale skin and tribal frost-lines; volcanic-world dweller with ash-grey skin and burn-pattern markings; mahogany-skinned warrior with knotted coils and copper-flecked eyes; deep-umber close-cropped twist-braided desert hunter; Mediterranean-coded noble with olive skin and gold-thread braids; northern-fair pioneer; equatorial highland clan with caste tattoos.
 
-VARIETY MANDATE — distribute across:
-• Alien anatomy variants (~40%): head-tendrils + bright skin / pointed ears + colored skin / forehead-ridges + warrior build / smooth-blue head-crest / bone-plated brow / striped head-projections / glowing-eye pointed-ear / antennaed forehead / iridescent scaled jaw / segmented bone-plate at spine.
-• Cultural human variants (~35%): frontier colonist / ship-born spacer / low-grav-evolved / high-grav-evolved / desert-clan nomad / arctic-clan / steppe rider / umber-skinned warrior / Mediterranean noble / Northern fair-skinned.
-• Augmented human (~15%): neural-port at temple / chrome prosthetic limbs / subdermal LED-tracery / smartlink at temple / mantis-blades sheathed at forearms / cosmetic gene-mods.
-• Synthetic / android (~10%): humanoid android eerily-still / synthetic with brand-plate at temple and faint cool glow.
+ORIGINAL OFF-WORLD HUMANOIDS (~40%) — describe far-future humanoid signatures using ORIGINAL combinations of: SKIN TONE (deep teal, amber, pearl-cream, verdigris-green, iron-grey, opal-iridescent, volcanic-black with mica flecks, dusk-violet, soft rose, copper, jade, slate, brass); SCALP / CRANIAL SIGNATURE (smooth bone collar at the nape, chitinous brow plate, bioluminescent dorsal ridge tracing the spine of the skull, paired forehead nodules in symmetric arc above the brow, asymmetric cranial peaks, segmented scalp ridge along the crown, crystalline scalp formation, phosphorescent stripe pattern across the forehead, lateral nasal-ridge running cheek to cheek, ribbed skull crest, bone-collared neck, single central forehead ridge, glassy scalp plate); EYES (opaque silver, triple-pupil, vertical-slit amber, ringed iris, hexagonal pupil, glowing-from-within, deep solid-black, copper-flecked double-pupil, milky-white with dark slit-pupil); BUILD (tall slender, wiry fast, sinewy long-limbed, compact dense, graceful elongated); MARKINGS (caste tattoos at the jawline, geometric ritual scars at the temple, glowing circuit-traces along veins, striated facial pigmentation, single ritual scar at the cheekbone, intricate hair-fine ink patterning across the forehead). These signatures are ORIGINAL — invented for this universe. Build each entry by combining ONE of each axis into a humanoid that feels grounded and capable.
 
-HARD BANS: no horns / antlers / tusks / fangs / demonic imagery (reads fantasy not sci-fi). NO scaled reptilians / beast-headed / fully non-humanoid. HUMAN-SHAPED only. NO franchise names.
+AUGMENTED HUMANS (~15%) — neural-port at the temple with chrome trim, chrome prosthetic limbs visible at the shoulders or knees, subdermal LED tracery glowing along veins, smartlink jack at the temple, retractable mantis-blade housings sheathed at the forearms, cosmetic gene-mods (silver hair from birth, violet iris-mods, lab-grown gemstone teeth), partial chrome jaw, full chrome cranium with organic-only face, eye-replaced cybernetic optic.
 
-Each entry: 15-25 words. Gender-neutral phrasing. One clear visual signature.`,
+SYNTHETIC HUMANOIDS (~10%) — humanoid androids: alabaster-perfect skin with eerie unblinking gaze, faint brand-plate at the temple, synthetic with hairline seam at the jaw, subtle joint-light at neck and wrists, model serial scrolling across forehead, unnaturally still poise.
+
+CONSTRUCTION RULE: every entry has its OWN unique combination across the axes — never repeated. The pool's variety is the point. Every figure is humanoid, has two arms, two legs, recognizable face. 15-25 words per entry.`,
     touchpoints: [
-      'Humanoid with two long curving head-tendrils replacing hair, vibrant blue-green skin, expressive features, lithe dancer\'s build.',
-      'Sharply pointed-eared humanoid with green-tinted skin, severe arched eyebrows, almond-shaped eyes, logical disciplined bearing.',
-      'Forehead-ridged warrior humanoid with prominent skull crest, dark flowing mane, bronze skin, fierce battle-scarred features.',
-      'Long-limbed low-grav-evolved human with slender elongated build, accent clan face-tattoos, pale station-born skin, weightless graceful movement.',
-      'Stocky high-gravity-evolved human with broader denser muscular frame, weathered heavy-world features, dark hair, compact build.',
-      'Humanoid android indistinguishable from human, alabaster-perfect skin, unnaturally still poise, faint brand-plate at temple, eerie unblinking gaze.',
-      'Heavy-cyber augmented human with chrome prosthetic limbs, neural ports at temple, glowing subdermal tattoos, urban street-mercenary aesthetic.',
-      'Mahogany-skinned humanoid with lateral nasal-ridges, knotted coils pulled high, copper-flecked double-pupil eyes, single ritual scar at one cheekbone.',
-      'Deep umber dark-skinned human with dark almond eyes, close-cropped twist-braided hair, desert-warrior tribal markings, fierce sun-hardened features.',
-      'Frontier colonist with UV-tanned pioneer skin, sun-bleached blond hair, dust-weathered features, callused hands, rugged settler bearing.',
+      'Verdigris-green humanoid with a bioluminescent dorsal ridge tracing the back of the skull, hexagonal pupils, wiry long-limbed build, geometric ritual scars at the temple.',
+      'Frontier colonist with UV-weathered pioneer skin, sun-bleached blond hair, dust-grimed features, callused hands, rugged settler bearing in worn workwear.',
+      'Amber-skinned humanoid with paired forehead nodules in symmetric arc above the brow, vertical-slit copper eyes, compact dense build, striated facial pigmentation.',
+      'Stocky high-gravity-evolved human with broader denser muscular frame, weathered heavy-world features, close-cropped dark hair, jaw-set practical bearing.',
+      'Humanoid android with alabaster skin, faint brand-plate at the temple, hairline seam visible at the jaw, eerily still poise, unblinking pale-grey gaze.',
+      'Pearl-cream humanoid with segmented scalp ridge along the crown, ringed-iris pale eyes, tall slender build, intricate hair-fine ink patterning across the forehead.',
+      'Heavy-cyber augmented human with chrome prosthetic limbs at the shoulders, neural ports at the temple, glowing subdermal LED-tracery along the forearms, urban-mercenary cut.',
+      'Mahogany-skinned humanoid with lateral nasal-ridges running cheek-to-cheek, knotted coils pulled high, copper-flecked double-pupil eyes, single ritual scar at one cheekbone.',
+      'Iron-grey humanoid with chitinous brow plate above deep solid-black eyes, sinewy fast build, caste tattoos along the jawline, calm watchful bearing.',
+      'Deep umber close-cropped twist-braided desert hunter with sun-hardened features, dark almond eyes, tribal frost-lines across the brow, fierce focused gaze.',
     ],
-    instructions: `Each entry is ONE humanoid sci-fi lineage description, 15-25 words. Format: free-form prose. Output as a NUMBERED list.
+    instructions: `Each entry: ONE humanoid description, 15-25 words. Gender-neutral phrasing. Build each entry by combining ONE skin tone + ONE cranial signature + ONE eye type + ONE build + ONE marking into an ORIGINAL humanoid. Output as a NUMBERED list.
 
-STRICT BANS: no franchise / species / trademark names anywhere; no horns / antlers / tusks / fangs / demonic imagery (those read fantasy); no scaled reptilians / beast-headed / non-humanoid forms (HUMAN-SHAPED only); no personality or backstory; just the visual signature.
-
-VARIETY: each entry visually distinct from the others — vary skin tone, head feature, eye type, build, markings.`,
+VARIETY: each entry visually distinct — every entry must have its OWN unique combination of skin, head feature, eye, build, and marking.`,
   },
 
   sci_fi_male_outfits: {

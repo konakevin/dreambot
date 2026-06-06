@@ -77,14 +77,14 @@ module.exports = {
     ],
   },
 
-  // Picker on with a 5-model lineup (2026-06-01 Kevin):
-  // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra.
+  // Picker on with a 4-model lineup (2026-06-05 Kevin: Banana banned bot-wide).
+  // GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra.
   // Dropped from the original BOT_MODEL_TALLY 7-model fleet set:
   //   • Flux Dev, Flux 2 Max — earlier 2026-05-30 review
-  //   • Flux 2 Flex          — 2026-06-01 (this commit)
+  //   • Flux 2 Flex          — 2026-06-01
+  //   • Nano Banana          — 2026-06-05 (this commit, full bot-wide ban)
   useModelPicker: true,
   allowedModels: [
-    'google/gemini-2-image',
     'openai/gpt-image-2',
     'black-forest-labs/flux-2-pro',
     'black-forest-labs/flux-1.1-pro',
@@ -100,6 +100,37 @@ module.exports = {
   // Original per-path locks stripped 2026-05-30; restore individual lines
   // here if a path needs pinning again.
   modelByPath: {
+    // ── Character paths — Banana RE-ENABLED via per-path override
+    // ── (Kevin 2026-06-05 character-path audit). Bot-wide bans Banana,
+    // ── these paths opt back in. Bot-wide 4 models + Banana = 5.
+    'cosmic-oracle': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'female-explorer': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'male-explorer': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'space-femme': [
+      'google/gemini-2-image',
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-2-pro',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
     // cosmic-vista (Kevin 2026-05-31): bot-wide MINUS Flux 2 Pro (2026-05-30),
     // MINUS Flux 2 Flex + MINUS Banana (heart-bans from today's comparison
     // test), AND MINUS Flux 1.1 Pro (Ultra is strictly better — Pro is
@@ -113,8 +144,10 @@ module.exports = {
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    // alien-city / megastructure (Kevin 2026-05-31): bot-wide MINUS Flux 2
-    // Flex AND MINUS Flux 1.1 Pro (redundant w/ Ultra). Down to 4 models.
+    // alien-city / megastructure — city-coded paths (Kevin 2026-06-05):
+    // Banana re-enabled per-path (overriding the bot-wide Banana ban) and
+    // Flux 1.1 Pro explicitly banned per-path. Banana handles cityscape
+    // density well; F1.1 Pro is redundant with Ultra on these. Down to 3.
     'alien-city': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
@@ -130,9 +163,9 @@ module.exports = {
     // cozy-sci-fi-interior (Kevin 2026-05-31): bot-wide MINUS Flux 2 Pro
     // AND MINUS Flux 2 Flex (3 hearts each in tonight's comparison test).
     // F1.1 Pro intentionally kept (the "Pro redundant w/ Ultra" rule is NOT
-    // applied here — Kevin's call). Down to 4 models.
+    // applied here — Kevin's call). Banana dropped 2026-06-05 with the
+    // bot-wide ban. Down to 3 models.
     'cozy-sci-fi-interior': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
