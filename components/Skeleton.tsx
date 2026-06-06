@@ -5,6 +5,7 @@
  */
 
 import { useEffect } from 'react';
+import { verticalScale } from '@/lib/responsive';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -105,7 +106,7 @@ const s = StyleSheet.create({
   },
   feedBottom: {
     paddingHorizontal: 16,
-    paddingBottom: 100,
+    paddingBottom: verticalScale(100),
   },
   feedUserRow: {
     flexDirection: 'row',
@@ -129,6 +130,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
   },
 });

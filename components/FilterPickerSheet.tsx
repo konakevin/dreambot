@@ -178,7 +178,7 @@ const s = StyleSheet.create({
   handleRow: {
     alignItems: 'center',
     paddingTop: verticalScale(10),
-    paddingBottom: 4,
+    paddingBottom: verticalScale(4),
   },
   handle: {
     width: 36,

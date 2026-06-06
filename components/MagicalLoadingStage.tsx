@@ -26,7 +26,7 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
-import { fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 // 5 DreamBot painter variants — same character DNA, same dreamy
 // lavender/cloud/star scene, different painting poses (standing
@@ -184,6 +184,6 @@ const styles = StyleSheet.create({
     fontSize: fontScale(14),
     textAlign: 'center',
     maxWidth: 260,
-    marginTop: -12, // tighten against the gap:24 the parent set
+    marginTop: verticalScale(-12), // tighten against the gap:24 the parent set
   },
 });

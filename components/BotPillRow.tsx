@@ -1,4 +1,5 @@
 import { useRef, useCallback, useEffect } from 'react';
+import { verticalScale } from '@/lib/responsive';
 import {
   ScrollView,
   View,
@@ -118,5 +119,5 @@ function formatBotName(username: string): string {
 
 const s = StyleSheet.create({
   scroll: { flexGrow: 0 },
-  row: { flexDirection: 'row', gap: 6, paddingHorizontal: 16, paddingTop: 6 },
+  row: { flexDirection: 'row', gap: 6, paddingHorizontal: 16, paddingTop: verticalScale(6) },
 });

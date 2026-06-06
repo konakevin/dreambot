@@ -176,7 +176,7 @@ const s = StyleSheet.create({
     fontSize: fontScale(17),
     fontWeight: '500',
     textAlign: 'center',
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
     opacity: 0.92,
   },
   titleMaskWrap: { alignItems: 'center' },
@@ -207,7 +207,7 @@ const s = StyleSheet.create({
   },
   giftEmoji: {
     fontSize: fontScale(32),
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
   },
   giftBig: {
     color: colors.textPrimary,
@@ -219,7 +219,7 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fontScale(14),
     fontWeight: '500',
-    marginTop: 2,
+    marginTop: verticalScale(2),
   },
 
   intro: {

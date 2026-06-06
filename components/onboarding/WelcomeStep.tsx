@@ -73,7 +73,7 @@ const s = StyleSheet.create({
     fontSize: fontScale(17),
     fontWeight: '500',
     textAlign: 'center',
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
     opacity: 0.92,
   },
   titleMaskWrap: { alignItems: 'center' },

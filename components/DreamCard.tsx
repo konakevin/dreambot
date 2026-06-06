@@ -788,7 +788,13 @@ const s = StyleSheet.create({
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
   },
-  heartBurst: { position: 'absolute', top: '50%', left: '50%', marginTop: -40, marginLeft: -40 },
+  heartBurst: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: verticalScale(-40),
+    marginLeft: -40,
+  },
   adminDeleteCircle: {
     width: 32,
     height: 32,

@@ -2,6 +2,17 @@
 const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
 const security = require('eslint-plugin-security');
+const noHardcodedResponsiveUnits = require('./eslint-rules/no-hardcoded-responsive-units');
+
+// Local custom rules. Defined inline so we don't need a separate npm package
+// for what's essentially one rule. To add a new rule: require it above,
+// then add it to `responsivePlugin.rules` below + the rules section at the
+// bottom of this file.
+const responsivePlugin = {
+  rules: {
+    'no-hardcoded-responsive-units': noHardcodedResponsiveUnits,
+  },
+};
 
 module.exports = defineConfig([
   expoConfig,
@@ -12,6 +23,7 @@ module.exports = defineConfig([
     ignores: ['dist/*', 'scripts/qa-nightly-coherence.ts'],
   },
   {
+    plugins: { responsive: responsivePlugin },
     rules: {
       // Disabled intentionally: this rule flags every dynamic property access
       // (`arr[i]`, `obj[key]`) as a potential injection sink. In a typed
@@ -20,6 +32,14 @@ module.exports = defineConfig([
       // the noisiest rule in eslint-plugin-security and is widely disabled;
       // the rest of the recommended security rules stay active.
       'security/detect-object-injection': 'off',
+      // Custom rule — see eslint-rules/no-hardcoded-responsive-units.js.
+      'responsive/no-hardcoded-responsive-units': 'error',
     },
+  },
+  {
+    // The rule exempts the file that defines the scalers (it has to use raw
+    // numbers — they're the base constants) and tests (mock literals are fine).
+    files: ['lib/responsive.ts', '__tests__/**'],
+    rules: { 'responsive/no-hardcoded-responsive-units': 'off' },
   },
 ]);

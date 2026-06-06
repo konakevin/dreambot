@@ -247,7 +247,7 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(17),
     fontWeight: '800',
-    marginBottom: 2,
+    marginBottom: verticalScale(2),
   },
   cardDesc: {
     color: colors.textSecondary,
@@ -261,7 +261,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: SLIDER_WIDTH,
-    marginBottom: 2,
+    marginBottom: verticalScale(2),
   },
   poleCol: { gap: 1 },
   poleLabel: { color: colors.textMuted, fontSize: fontScale(13), fontWeight: '700' },

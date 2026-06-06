@@ -304,7 +304,7 @@ export default function CommentsScreen() {
                         name="arrow-up"
                         size={18}
                         color={text.trim() ? '#000000' : colors.textSecondary}
-                        style={{ marginTop: -1 }}
+                        style={{ marginTop: verticalScale(-1) }}
                       />
                     )}
                   </TouchableOpacity>
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   handleRow: {
     alignItems: 'center',
     paddingTop: verticalScale(10),
-    paddingBottom: 4,
+    paddingBottom: verticalScale(4),
   },
   handle: {
     width: 36,

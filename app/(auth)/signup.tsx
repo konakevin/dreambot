@@ -1,4 +1,5 @@
 import { showAlert } from '@/components/CustomAlert';
+import { verticalScale } from '@/lib/responsive';
 import { useState } from 'react';
 import {
   View,
@@ -141,7 +142,12 @@ export default function SignupScreen() {
           </View>
 
           <View className="flex-1 px-6">
-            <Ionicons name="flame" size={32} color="#FF4500" style={{ marginBottom: 8 }} />
+            <Ionicons
+              name="flame"
+              size={32}
+              color="#FF4500"
+              style={{ marginBottom: verticalScale(8) }}
+            />
             <Text className="text-white text-2xl font-bold mb-1">Create your account</Text>
             <Text className="text-text-secondary mb-8">Join and start dreaming.</Text>
 

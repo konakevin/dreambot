@@ -4,6 +4,7 @@
  */
 
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { verticalScale } from '@/lib/responsive';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
@@ -40,8 +41,8 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingTop: 12,
-    paddingBottom: 16,
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(16),
   },
   back: {
     width: 36,

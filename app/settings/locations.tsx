@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { verticalScale } from '@/lib/responsive';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -28,5 +29,5 @@ export default function LocationPickerStepSettings() {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: 16, paddingVertical: 8 },
+  header: { paddingHorizontal: 16, paddingVertical: verticalScale(8) },
 });

@@ -519,14 +519,14 @@ const s = StyleSheet.create({
     color: colors.textMuted,
     fontSize: fontScale(12),
     textAlign: 'center',
-    marginTop: -8,
+    marginTop: verticalScale(-8),
   },
   likenessHint: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     gap: 6,
-    marginTop: -8,
+    marginTop: verticalScale(-8),
   },
   likenessHintText: {
     color: colors.textSecondary,

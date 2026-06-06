@@ -1,4 +1,5 @@
 import { PropsWithChildren, useState } from 'react';
+import { verticalScale } from '@/lib/responsive';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   content: {
-    marginTop: 6,
+    marginTop: verticalScale(6),
     marginLeft: 24,
   },
 });

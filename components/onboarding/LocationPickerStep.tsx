@@ -220,7 +220,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
       </View>
 
       <ScrollView
-        contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: 20 }]}
+        contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: verticalScale(20) }]}
         showsVerticalScrollIndicator={false}
       >
         {sections.map((section) => {
@@ -324,7 +324,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 3,
+    marginBottom: verticalScale(3),
   },
   sectionTitle: { fontSize: fontScale(19), fontWeight: '700', color: '#FFFFFF' },
   sectionDesc: { fontSize: fontScale(13), color: colors.textSecondary },
@@ -332,12 +332,12 @@ const s = StyleSheet.create({
     fontSize: fontScale(12),
     fontWeight: '600',
     color: colors.accent,
-    marginTop: 4,
+    marginTop: verticalScale(4),
     height: 18,
   },
   sectionBadgeHidden: { opacity: 0 },
 
-  selectAllBtn: { marginLeft: 'auto', paddingVertical: 2 },
+  selectAllBtn: { marginLeft: 'auto', paddingVertical: verticalScale(2) },
   selectAllText: {
     fontSize: fontScale(13),
     fontWeight: '600',
@@ -396,6 +396,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
 
-  seeMoreBtn: { paddingTop: verticalScale(10), paddingBottom: 4 },
+  seeMoreBtn: { paddingTop: verticalScale(10), paddingBottom: verticalScale(4) },
   seeMoreText: { fontSize: fontScale(14), fontWeight: '500', color: colors.accent },
 });
