@@ -123,17 +123,38 @@ export const useAuthStore = create<AuthState>((set) => ({
         });
     };
 
-    supabase.auth.getSession().then(async ({ data: { session }, error }) => {
-      if (error?.message?.toLowerCase().includes('refresh token')) {
-        await supabase.auth.signOut({ scope: 'local' }).catch((e) => {
-          if (__DEV__) console.warn('[auth] local signOut on stale refresh token failed', e);
-        });
-        set({ session: null, user: null, initialized: true });
+    // Supabase's gotrue-js calls console.error internally when it fails to
+    // exchange a stale refresh token at startup — even though we already
+    // handle the rejection cleanly via the .then's `error` branch below.
+    // Result was a noisy red "AuthApiError: Invalid Refresh Token" line on
+    // every dreambot launch for a user with a wiped/rotated session. Wrap
+    // console.error for the duration of the init call to suppress JUST that
+    // specific message; everything else flows through unchanged.
+    const origConsoleError = console.error;
+    console.error = (...args: unknown[]) => {
+      const msg = String(args[0] ?? '');
+      if (msg.includes('Refresh Token Not Found') || msg.includes('Invalid Refresh Token')) {
         return;
       }
-      set({ session, user: session?.user ?? null, initialized: true });
-      if (session?.user) checkEntitlements(session.user.id);
-    });
+      origConsoleError(...args);
+    };
+
+    supabase.auth
+      .getSession()
+      .then(async ({ data: { session }, error }) => {
+        if (error?.message?.toLowerCase().includes('refresh token')) {
+          await supabase.auth.signOut({ scope: 'local' }).catch((e) => {
+            if (__DEV__) console.warn('[auth] local signOut on stale refresh token failed', e);
+          });
+          set({ session: null, user: null, initialized: true });
+          return;
+        }
+        set({ session, user: session?.user ?? null, initialized: true });
+        if (session?.user) checkEntitlements(session.user.id);
+      })
+      .finally(() => {
+        console.error = origConsoleError;
+      });
 
     const {
       data: { subscription },
