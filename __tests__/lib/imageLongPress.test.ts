@@ -97,7 +97,7 @@ describe('handleImageLongPress — quality sheet + entitlement gating', () => {
   it('free user: "Save in HD" routes to the paywall (the upsell)', () => {
     mockIsPro = false;
     handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
-    pressAlertButton('Save in HD ✨ (Pro)');
+    pressAlertButton('Save in HD (Pro)');
     expect(mockRouterPush).toHaveBeenCalledWith('/proStore');
     expect(mockSaveUrlToPhotos).not.toHaveBeenCalled();
     expect(mockInvoke).not.toHaveBeenCalled();
@@ -123,7 +123,7 @@ describe('saveHd — cache hit (instant resolve, no server call)', () => {
       imageUrl: 'https://img/orig.jpg',
       imageUrlHq: 'https://img/hq.png',
     });
-    await pressAlertButton('Save in HD ✨');
+    await pressAlertButton('Save in HD');
     expect(mockSaveUrlToPhotos).toHaveBeenCalledWith('p1', 'https://img/hq.png', true);
     expect(mockInvoke).not.toHaveBeenCalled();
   });
@@ -134,7 +134,7 @@ describe('saveHd — on-demand upscale (server resolve)', () => {
     mockInvoke.mockResolvedValue(invokeResult);
     handleImageLongPress({ id: 'p9', imageUrl: 'https://img/orig.jpg' });
     expect(mockShowAlert).toHaveBeenCalledWith('Download', '', expect.any(Array));
-    await pressAlertButton('Save in HD ✨');
+    await pressAlertButton('Save in HD');
   }
 
   it('status:done → opens the modal immediately, then saves the raced cache hit + closes', async () => {

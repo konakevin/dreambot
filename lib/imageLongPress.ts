@@ -92,9 +92,14 @@ type SheetButton = { text: string; style?: 'cancel' | 'destructive'; onPress?: (
 /**
  * The two quality options shared by the Download button and the long-press menu:
  *   - Save to Photos — native-res, free for everyone, any post.
- *   - Save in HD ✨   — Pro: cache hit = instant, else on-demand upscale (modal
+ *   - Save in HD     — Pro: cache hit = instant, else on-demand upscale (modal
  *                       auto-saves when ready). Free: routes to the paywall, so
  *                       the download moment doubles as the HD upsell.
+ *
+ * The ✨ that used to follow "HD" rendered as a broken-glyph placeholder
+ * in the CustomAlert button on some iOS font configurations — dropped
+ * 2026-06-06. The "(Pro)" suffix on the free-tier variant carries the
+ * upsell hint on its own.
  */
 function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
   const { isPro } = useAuthStore.getState();
@@ -102,7 +107,7 @@ function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
   return [
     { text: 'Save to Photos', onPress: () => saveUrlToPhotos(opts.id, opts.imageUrl, false) },
     {
-      text: isPro ? 'Save in HD ✨' : 'Save in HD ✨ (Pro)',
+      text: isPro ? 'Save in HD' : 'Save in HD (Pro)',
       onPress: () => (isPro ? saveHd(opts.id, cachedHqUrl) : router.push('/proStore')),
     },
   ];
