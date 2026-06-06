@@ -3721,7 +3721,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   - The fae stands UNDER the looming face of the creature, the creature's NOSE / SNOUT / BEAK fills half the frame above her
   - The fae perches ON a single feature (on the creature's NOSE / SNOUT / BACK / PAW / EAR / ANTLER / WING / HORN), the creature's body fills the rest of the frame
   - The fae mid-flight near the creature's MASSIVE HEAD, the creature fills most of the frame
-  - The fae fits INSIDE a single body-part curl (cupped in a paw / sleeping in a hoof-print / curled in an ear)
+  - The fae fits INSIDE a single body-part curl (cupped in a paw / cradled in the curve of a folded foreleg / curled in an ear)
   - The creature LOOMS OVER her from above (looking down at her from massive face)
 
 ⚠️ COMPANION CATEGORIES (bias toward LARGER creatures that dwarf better):
@@ -3750,7 +3750,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   • NO oversized cartoonish proportions on the companion`,
     touchpoints: [
       "A massive sleeping fox-cub curled in moss with soft russet fur filling the painted frame, painted gentle breathing, the palm-sized fae perched on its snout no taller than the bridge of its painted nose, the cub's nose alone wider than her body, dramatic dwarfing scale",
-      'A spotted fawn lying gentle in moss with soft white-spotted brown fur dominating the painted background, painted long-lashed gentle eyes half-closed, the palm-sized fae perched on the curve of its raised hoof — fae fits inside a single hoof print, scale-dwarf register',
+      "A spotted fawn lying gentle in moss with saturated chocolate-brown fur and crisp white spots filling the painted frame edge-to-edge, painted long-lashed gentle eyes half-closed, the palm-sized fae perched candidly on the curve of its raised hoof, dense painterly velvet-fur texture surrounding her, dramatic scale-dwarf register",
       'A red squirrel pausing on a thick branch with painted bright orange fur, its bushy tail curled forward like an enormous painted plume, the palm-sized fae sitting in the curve of its tail no taller than the tail-tuft itself, dramatic dwarfing scale',
       'A large hedgehog pauses on the moss with painted spiked-quill detail dominating the frame, the palm-sized fae balanced on the curve of its back atop the quills, fae barely as tall as a single quill, painted dramatic scale-proof',
       "A massive sleeping bear-cub curled in painted soft brown fur filling the painted frame, painted gentle breathing, the palm-sized fae perched on its paw between two toes, fae would fit inside the cub's closed paw, dramatic dwarfing register",
