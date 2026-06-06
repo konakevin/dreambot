@@ -49,6 +49,10 @@ interface BaseProps {
   createdAt?: string | null;
   /** Notify when one of the three stat slots is tapped. */
   onStatsPress: (tab: StatsTab) => void;
+  /** Which stat is currently the active sub-view (drives the inline label
+   *  highlight on the stats line). When omitted, no highlight is shown
+   *  (callers that don't surface a sub-view leave it undefined). */
+  activeStat?: StatsTab;
   /** Tap on the avatar (preview / change). Optional. */
   onAvatarPress?: () => void;
   /**
@@ -186,7 +190,11 @@ export function ProfileHeader(props: Props) {
         >
           <Text style={styles.statsItem}>
             <Text style={styles.statsCount}>{postCount}</Text>{' '}
-            <Text style={styles.statsLabel}>{postCount === 1 ? 'Post' : 'Posts'}</Text>
+            <Text
+              style={[styles.statsLabel, props.activeStat === 'posts' && styles.statsLabelActive]}
+            >
+              {postCount === 1 ? 'Post' : 'Posts'}
+            </Text>
           </Text>
         </Pressable>
         <Text style={styles.statsDivider}>·</Text>
@@ -197,7 +205,14 @@ export function ProfileHeader(props: Props) {
         >
           <Text style={styles.statsItem}>
             <Text style={styles.statsCount}>{followerCount}</Text>{' '}
-            <Text style={styles.statsLabel}>{followerCount === 1 ? 'Follower' : 'Followers'}</Text>
+            <Text
+              style={[
+                styles.statsLabel,
+                props.activeStat === 'followers' && styles.statsLabelActive,
+              ]}
+            >
+              {followerCount === 1 ? 'Follower' : 'Followers'}
+            </Text>
           </Text>
         </Pressable>
         <Text style={styles.statsDivider}>·</Text>
@@ -208,7 +223,14 @@ export function ProfileHeader(props: Props) {
         >
           <Text style={styles.statsItem}>
             <Text style={styles.statsCount}>{followingCount}</Text>{' '}
-            <Text style={styles.statsLabel}>Following</Text>
+            <Text
+              style={[
+                styles.statsLabel,
+                props.activeStat === 'following' && styles.statsLabelActive,
+              ]}
+            >
+              Following
+            </Text>
           </Text>
         </Pressable>
       </View>
@@ -339,6 +361,15 @@ const styles = StyleSheet.create({
   },
   statsLabel: {
     color: colors.textSecondary,
+  },
+  // Active sub-view highlight — promotes the selected stat's label to the
+  // same color + weight as the count itself so the user can see which
+  // tab they're in at a glance. Without it, the followers/following lists
+  // look interchangeable when both contain near-identical sets of users
+  // (e.g. the bot-on-bot follow graph).
+  statsLabelActive: {
+    color: colors.textPrimary,
+    fontWeight: '700',
   },
   statsDivider: {
     color: colors.textSecondary,

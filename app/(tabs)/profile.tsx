@@ -277,6 +277,14 @@ export default function ProfileScreen() {
         followerCount={profile?.followerCount ?? 0}
         followingCount={profile?.followingCount ?? 0}
         createdAt={profile?.created_at ?? null}
+        // Only one of the three StatsTab values maps directly to the stats
+        // row; 'dreams' / 'saved' live on the album tab row below it and
+        // don't highlight any stats slot.
+        activeStat={
+          activeTab === 'posts' || activeTab === 'followers' || activeTab === 'following'
+            ? activeTab
+            : undefined
+        }
         onStatsPress={handleStatsTabChange}
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
@@ -308,6 +316,22 @@ export default function ProfileScreen() {
               </TouchableOpacity>
             );
           })}
+        </View>
+      )}
+
+      {/* Section heading for the followers/following sub-views — repeats
+          the active tab + count so you can tell which list you're looking
+          at when the two sets are nearly identical. */}
+      {activeTab === 'followers' && (
+        <View style={styles.listSectionHeader}>
+          <Text style={styles.listSectionTitle}>Followers</Text>
+          <Text style={styles.listSectionCount}>{profile?.followerCount ?? 0}</Text>
+        </View>
+      )}
+      {activeTab === 'following' && (
+        <View style={styles.listSectionHeader}>
+          <Text style={styles.listSectionTitle}>Following</Text>
+          <Text style={styles.listSectionCount}>{profile?.followingCount ?? 0}</Text>
         </View>
       )}
     </>
@@ -389,6 +413,30 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  // Section header above the followers / following user list. Same shape
+  // as the public-profile screen's version so the two surfaces stay
+  // visually consistent.
+  listSectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: verticalScale(14),
+    paddingBottom: verticalScale(8),
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    marginTop: verticalScale(12),
+  },
+  listSectionTitle: {
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    fontWeight: '700',
+  },
+  listSectionCount: {
+    color: colors.textSecondary,
+    fontSize: fontScale(14),
+    fontWeight: '600',
+  },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',

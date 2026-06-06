@@ -340,6 +340,7 @@ export default function PublicProfileScreen() {
         hasRequest={hasRequest}
         isPrivate={!isTargetPublic}
         isBot={isBot}
+        activeStat={activeTab}
         onStatsPress={(tab) => setActiveTab(tab as Tab)}
         onAvatarPress={() => setShowAvatarPreview(true)}
         onFollowPress={handleFollow}
@@ -348,6 +349,23 @@ export default function PublicProfileScreen() {
         }}
         onMorePress={handleMoreMenu}
       />
+      {/* Section heading for the followers/following sub-views. Repeats the
+          tab label + count above the list so the user can tell which list
+          they're looking at — important when followers ≈ following (e.g.
+          the bot-on-bot graph) and the two lists are otherwise
+          indistinguishable. */}
+      {activeTab === 'followers' && (
+        <View style={styles.listSectionHeader}>
+          <Text style={styles.listSectionTitle}>Followers</Text>
+          <Text style={styles.listSectionCount}>{profile.followerCount}</Text>
+        </View>
+      )}
+      {activeTab === 'following' && (
+        <View style={styles.listSectionHeader}>
+          <Text style={styles.listSectionTitle}>Following</Text>
+          <Text style={styles.listSectionCount}>{profile.followingCount}</Text>
+        </View>
+      )}
     </>
   );
 
@@ -509,6 +527,31 @@ export default function PublicProfileScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
+  // Section header above the followers / following user list. Mirrors the
+  // hairline-separated row Instagram uses above its user list — gives the
+  // user a clear "this is the X list" cue when the followers and following
+  // sets are nearly identical (the bot graph hits this case).
+  listSectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: verticalScale(14),
+    paddingBottom: verticalScale(8),
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    marginTop: verticalScale(12),
+  },
+  listSectionTitle: {
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    fontWeight: '700',
+  },
+  listSectionCount: {
+    color: colors.textSecondary,
+    fontSize: fontScale(14),
+    fontWeight: '600',
+  },
   // backRow / backButton kept for the loading-state JSX above (line ~197).
   backRow: {
     flexDirection: 'row',
