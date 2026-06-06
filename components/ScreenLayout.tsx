@@ -27,7 +27,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { fontScale } from '@/lib/responsive';
 import { HEADER_H_PAD, HEADER_V_PAD, NAV_ICON_SIZE, NAV_HIT_SLOP } from '@/constants/layout';
 
 interface ScreenLayoutProps {

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, type TextProps } from 'react-native';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { fontScale } from '@/lib/responsive';
 
 import { useThemeColor } from '@/hooks/use-theme-color';
 
