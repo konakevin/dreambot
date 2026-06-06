@@ -761,30 +761,35 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   avatarText: { color: '#FFFFFF', fontSize: fontScale(14), fontWeight: '700' },
+  // textShadow is a tight 1pt drop shadow underneath the text — readable
+  // against both dark and white/light bottoms of the dream image. The old
+  // 16pt radius 0-offset halo was too diffuse against pale backdrops and
+  // left the text floating. The 0.85-opacity black + 3pt blur gives a
+  // crisp contrast line directly below each glyph without looking heavy.
   username: {
     color: '#FFFFFF',
     fontSize: fontScale(15),
     fontWeight: '700',
-    textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowRadius: 16,
-    textShadowOffset: { width: 0, height: 0 },
+    textShadowColor: 'rgba(0,0,0,0.85)',
+    textShadowRadius: 3,
+    textShadowOffset: { width: 0, height: 1 },
   },
   description: {
     color: 'rgba(255,255,255,0.85)',
     fontSize: fontScale(13),
     fontWeight: '400',
     marginTop: verticalScale(2),
-    textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowRadius: 16,
-    textShadowOffset: { width: 0, height: 0 },
+    textShadowColor: 'rgba(0,0,0,0.85)',
+    textShadowRadius: 3,
+    textShadowOffset: { width: 0, height: 1 },
   } as TextStyle,
   timestamp: {
     color: 'rgba(255,255,255,0.7)',
     fontSize: fontScale(12),
     fontWeight: '500',
-    textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowRadius: 16,
-    textShadowOffset: { width: 0, height: 0 },
+    textShadowColor: 'rgba(0,0,0,0.85)',
+    textShadowRadius: 3,
+    textShadowOffset: { width: 0, height: 1 },
     marginTop: verticalScale(1),
   },
 });
