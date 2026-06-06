@@ -174,6 +174,16 @@ export const ui = StyleSheet.create({
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 1 },
   },
+  // Icon style passed to the <Ionicons> rendered inside `sideButton`.
+  // Ionicons extend <Text>, so the textShadow* properties (NOT the View-
+  // level shadow* on sideButton) are what actually render on the glyph.
+  // Same tight 1pt-down 3pt-blur 0.85-black shadow used for the bottom-
+  // left text block — readable on both dark and white image bottoms.
+  sideIcon: {
+    textShadowColor: 'rgba(0,0,0,0.85)' as const,
+    textShadowRadius: 3,
+    textShadowOffset: { width: 0, height: 1 },
+  },
   sideCount: {
     color: '#FFFFFF',
     fontSize: 11,

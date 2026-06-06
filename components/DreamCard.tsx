@@ -525,6 +525,7 @@ export const DreamCard = memo(function DreamCard({
                   name={isLiked ? 'heart' : 'heart-outline'}
                   size={28}
                   color={isLiked ? colors.like : '#FFFFFF'}
+                  style={ui.sideIcon}
                 />
                 {/* Always-rendered count slot: opacity-hide when 0 instead of
                     conditionally mounting the Text. Adding/removing the Text
@@ -541,7 +542,12 @@ export const DreamCard = memo(function DreamCard({
               </TouchableOpacity>
               {onComment && (
                 <TouchableOpacity style={ui.sideButton} onPress={onComment} activeOpacity={0.7}>
-                  <Ionicons name="chatbubble-outline" size={26} color="#FFFFFF" />
+                  <Ionicons
+                    name="chatbubble-outline"
+                    size={26}
+                    color="#FFFFFF"
+                    style={ui.sideIcon}
+                  />
                   <Text
                     style={[ui.sideCount, !(item.comment_count ?? 0) && hiddenCount]}
                     numberOfLines={1}
@@ -556,6 +562,7 @@ export const DreamCard = memo(function DreamCard({
                     name={isSaved ? 'bookmark' : 'bookmark-outline'}
                     size={24}
                     color="#FFFFFF"
+                    style={ui.sideIcon}
                   />
                 </TouchableOpacity>
               )}
@@ -570,7 +577,12 @@ export const DreamCard = memo(function DreamCard({
                 }
                 activeOpacity={0.7}
               >
-                <Ionicons name="paper-plane-outline" size={24} color="#FFFFFF" />
+                <Ionicons
+                  name="paper-plane-outline"
+                  size={24}
+                  color="#FFFFFF"
+                  style={ui.sideIcon}
+                />
               </TouchableOpacity>
               <TouchableOpacity
                 style={ui.sideButton}
@@ -584,11 +596,16 @@ export const DreamCard = memo(function DreamCard({
                 activeOpacity={0.7}
                 accessibilityLabel="Download this dream"
               >
-                <Ionicons name="download-outline" size={24} color="#FFFFFF" />
+                <Ionicons name="download-outline" size={24} color="#FFFFFF" style={ui.sideIcon} />
               </TouchableOpacity>
               {onFamily && (
                 <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
-                  <Ionicons name="color-wand-outline" size={24} color="#FFFFFF" />
+                  <Ionicons
+                    name="color-wand-outline"
+                    size={24}
+                    color="#FFFFFF"
+                    style={ui.sideIcon}
+                  />
                   <Text
                     style={[ui.sideCount, !(item.fuse_count ?? 0) && hiddenCount]}
                     numberOfLines={1}
