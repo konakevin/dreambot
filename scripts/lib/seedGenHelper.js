@@ -123,7 +123,11 @@ async function callWithRetry(body, anthropicKey) {
  *   batch           - entries per Sonnet call (e.g., 10)
  *   metaPrompt      - function(perBatchCount) => string — the per-call brief
  *                     (does not need to include prior-batch dedup — helper adds that)
- *   maxTokens       - optional, default 2500
+ *   maxTokens       - optional, default 8000 (was 2500 pre-2026-06-05;
+ *                     too small for batch:50 + 25-40 word entries; Sonnet
+ *                     truncated mid-JSON and the parser bailed. Bumped after
+ *                     8 of 27 parallel dragonbot gens hit "Fatal: batch N
+ *                     failed parsing after 3 attempts.")
  *   model           - optional, default SONNET (see ./models.js)
  *
  * Writes JSON array to outPath. Resolves with the full array on success.
@@ -133,7 +137,7 @@ async function generatePool({
   total,
   batch = 10,
   metaPrompt,
-  maxTokens = 2500,
+  maxTokens = 8000,
   model = SONNET,
   append = false,
 }) {
@@ -164,14 +168,23 @@ async function generatePool({
     return all;
   }
   console.log(
-    `🌱 Generating ${total - all.length} new entries (target ${total}) in batches of ${batch} → ${outPath}\n`
+    `🌱 Generating up to ${total - all.length} new entries (target ${total}) → ${outPath}\n`
   );
-  for (let batchN = 1; batchN <= Math.ceil(total / batch); batchN++) {
-    const thisBatchCount = Math.min(batch, total - all.length);
-    const base = metaPrompt(thisBatchCount);
-    const prior = all.length > 0
-      ? `\n\n━━━ ALREADY GENERATED (DO NOT DUPLICATE, vary strongly from these) ━━━\n\n${all.map((x, i) => `${i + 1}. ${typeof x === 'string' ? x : JSON.stringify(x)}`).join('\n')}`
-      : '';
+  // Canonical iterative pattern (per playbook line 343-348 + gen-starbot-pool.js):
+  // 1. Ask Sonnet for a batch sized to remaining-need × 1.5 (overgen to absorb
+  //    dedup losses). NO anti-prompt list — Sonnet just generates fresh variety.
+  // 2. Client-side dedup against the running pool (signature + exact-string).
+  // 3. Append unique survivors. Loop until target reached, Sonnet returns
+  //    empty, or 0 new uniques accepted (semantic-ceiling stop).
+  // 4. MAX_ITERATIONS safety cap — never spin forever on an exhausted recipe.
+  const MAX_ITERATIONS = 12;
+  let iteration = 0;
+  let consecutiveEmpty = 0;
+  while (all.length < total && iteration < MAX_ITERATIONS) {
+    iteration++;
+    const stillNeeded = total - all.length;
+    const overgenSize = Math.min(batch, Math.max(10, Math.ceil(stillNeeded * 1.5)));
+    const base = metaPrompt(overgenSize);
     let newEntries = null;
     for (let parseAttempt = 0; parseAttempt < 3 && !newEntries; parseAttempt++) {
       const strictNote = parseAttempt > 0
@@ -181,7 +194,7 @@ async function generatePool({
         {
           model,
           max_tokens: maxTokens,
-          messages: [{ role: 'user', content: base + prior + strictNote }],
+          messages: [{ role: 'user', content: base + strictNote }],
         },
         anthropicKey
       );
@@ -192,7 +205,7 @@ async function generatePool({
         try {
           newEntries = JSON.parse(match[0]);
         } catch (err) {
-          console.warn(`  ⚠ batch ${batchN} attempt ${parseAttempt + 1}: JSON.parse failed (${err.message.slice(0, 80)})`);
+          console.warn(`  ⚠ iter ${iteration} attempt ${parseAttempt + 1}: JSON.parse failed (${err.message.slice(0, 80)})`);
         }
       }
       // Fallback: numbered-list parse
@@ -217,12 +230,12 @@ async function generatePool({
         if (cleaned.length > 0) {
           newEntries = cleaned;
         } else {
-          console.warn(`  ⚠ batch ${batchN} attempt ${parseAttempt + 1}: neither JSON nor numbered-list parsed, retrying...`);
+          console.warn(`  ⚠ iter ${iteration} attempt ${parseAttempt + 1}: neither JSON nor numbered-list parsed, retrying...`);
         }
       }
     }
     if (!newEntries) {
-      throw new Error(`batch ${batchN} failed parsing after 3 attempts`);
+      throw new Error(`iter ${iteration} failed parsing after 3 attempts`);
     }
     // Normalize: if Sonnet returned objects (id/description/text/composition), extract string field.
     // EXCEPTION: preserve full object when it has a non-empty `tags` array — needed for season/biome-tagged
@@ -283,9 +296,23 @@ async function generatePool({
     const dropMsg = droppedExact.length + droppedSig.length > 0
       ? ` (dedup: -${droppedExact.length} exact, -${droppedSig.length} sig)`
       : '';
-    console.log(`  ✓ batch ${batchN}: +${newEntries.length}${dropMsg} (total: ${all.length + newEntries.length}/${total})`);
+    console.log(`  ✓ iter ${iteration}: +${newEntries.length}${dropMsg} (total: ${all.length + newEntries.length}/${total})`);
     all.push(...newEntries);
-    if (all.length >= total) break; // target reached — don't waste more Sonnet calls
+    // Semantic-ceiling stop — if Sonnet produces 0 new uniques twice in a
+    // row, the recipe has exhausted its variety. Stop fighting it (playbook
+    // line 432-436).
+    if (newEntries.length === 0) {
+      consecutiveEmpty++;
+      if (consecutiveEmpty >= 2) {
+        console.log(`  ⚠ Semantic ceiling reached — ${consecutiveEmpty} consecutive empty iterations, stopping at ${all.length}/${total}`);
+        break;
+      }
+    } else {
+      consecutiveEmpty = 0;
+    }
+  }
+  if (all.length < total && iteration >= MAX_ITERATIONS) {
+    console.log(`  ⚠ max iterations (${MAX_ITERATIONS}) reached at ${all.length}/${total}`);
   }
 
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
