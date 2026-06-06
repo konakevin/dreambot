@@ -22,6 +22,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { trackBotViewed } from '@/lib/analytics';
 import { BotsHorizontalPager } from '@/components/BotsHorizontalPager';
@@ -135,7 +136,7 @@ export default function BotsScreen() {
       <Animated.View style={[s.topOverlayWrap, overlayStyle]}>
         <LinearGradient
           colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'transparent']}
-          style={[s.topOverlay, { paddingTop: insets.top, paddingBottom: 28 }]}
+          style={[s.topOverlay, { paddingTop: insets.top, paddingBottom: verticalScale(28) }]}
           pointerEvents="box-none"
         >
           {botUsers && botUsers.length > 0 && (
@@ -167,8 +168,8 @@ const s = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 40,
   },
-  emptyTitle: { color: colors.textPrimary, fontSize: 20, fontWeight: '700' },
-  emptySub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
+  emptyTitle: { color: colors.textPrimary, fontSize: fontScale(20), fontWeight: '700' },
+  emptySub: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
   topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
   topOverlay: {},
 });

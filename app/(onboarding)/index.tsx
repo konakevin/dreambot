@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase';
 import { trackOnboardingStep } from '@/lib/analytics';
 import { OnboardingHeader } from '@/components/OnboardingHeader';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 import { WelcomeStep } from '@/components/onboarding/WelcomeStep';
 import { MoodSlidersStep } from '@/components/onboarding/MoodSlidersStep';
@@ -230,13 +231,13 @@ const s = StyleSheet.create({
     right: 16,
     top: 16,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     borderRadius: 20,
     backgroundColor: colors.accent,
   },
   doneText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '700',
   },
 });

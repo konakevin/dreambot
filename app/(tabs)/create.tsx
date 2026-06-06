@@ -37,7 +37,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
-import { verticalScale } from '@/lib/responsive';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -335,7 +335,7 @@ export default function CreateScreen() {
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          contentContainerStyle={{ paddingBottom: verticalScale(20) }}
         >
           {/* Photo attachment card */}
           {/* Photo attachment card */}
@@ -394,11 +394,11 @@ export default function CreateScreen() {
                 name="information-circle-outline"
                 size={16}
                 color={colors.textSecondary}
-                style={{ marginTop: 1 }}
+                style={{ marginTop: verticalScale(1) }}
               />
               <Text
                 className="flex-1 text-xs"
-                style={{ color: colors.textSecondary, lineHeight: 16 }}
+                style={{ color: colors.textSecondary, lineHeight: fontScale(16) }}
               >
                 Photo dreams use the DreamBot engine — Direct mode is for text-only dreams.
               </Text>
@@ -578,7 +578,7 @@ export default function CreateScreen() {
               <View className="flex-row items-start mt-1.5 px-1">
                 <Text
                   className="flex-1 text-xs"
-                  style={{ color: colors.textSecondary, opacity: 0.7, lineHeight: 16 }}
+                  style={{ color: colors.textSecondary, opacity: 0.7, lineHeight: fontScale(16) }}
                 >
                   {config.useExactPrompt
                     ? 'Your exact prompt goes straight to the AI model you pick — no DreamBot styling, polish, or face swap.'
@@ -588,7 +588,7 @@ export default function CreateScreen() {
                   onPress={() => setShowProModeInfo(true)}
                   activeOpacity={0.6}
                   hitSlop={10}
-                  style={{ marginLeft: 8, marginTop: 1 }}
+                  style={{ marginLeft: 8, marginTop: verticalScale(1) }}
                 >
                   <Ionicons
                     name="information-circle-outline"
@@ -641,7 +641,7 @@ export default function CreateScreen() {
                       <View
                         style={{
                           paddingHorizontal: 5,
-                          paddingVertical: 1,
+                          paddingVertical: verticalScale(1),
                           borderRadius: 5,
                           backgroundColor: mediumFaceSwaps
                             ? 'rgba(96,165,250,0.15)'
@@ -650,7 +650,7 @@ export default function CreateScreen() {
                       >
                         <Text
                           style={{
-                            fontSize: 8,
+                            fontSize: fontScale(8),
                             fontWeight: '700',
                             color: mediumFaceSwaps ? '#60A5FA' : '#F59E0B',
                             textTransform: 'uppercase',
@@ -805,9 +805,9 @@ export default function CreateScreen() {
             <Text
               style={{
                 color: colors.textPrimary,
-                fontSize: 17,
+                fontSize: fontScale(17),
                 fontWeight: '700',
-                marginBottom: 14,
+                marginBottom: verticalScale(14),
               }}
             >
               Two ways to dream
@@ -818,7 +818,7 @@ export default function CreateScreen() {
               <Text
                 style={{
                   color: colors.textPrimary,
-                  fontSize: 15,
+                  fontSize: fontScale(15),
                   fontWeight: '700',
                   marginLeft: 7,
                 }}
@@ -826,18 +826,24 @@ export default function CreateScreen() {
                 DreamBot
               </Text>
             </View>
-            <Text style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 21 }}>
+            <Text
+              style={{
+                color: colors.textSecondary,
+                fontSize: fontScale(14),
+                lineHeight: fontScale(21),
+              }}
+            >
               Our engine. Renders your custom mediums & vibes, polishes your prompt for the best
               result, and swaps your cast photos into the scene so you and your +1 appear in the
               dream. 1 sparkle per dream.
             </Text>
 
-            <View className="flex-row items-center mb-1.5" style={{ marginTop: 16 }}>
+            <View className="flex-row items-center mb-1.5" style={{ marginTop: verticalScale(16) }}>
               <Ionicons name="flash" size={16} color={colors.accent} />
               <Text
                 style={{
                   color: colors.textPrimary,
-                  fontSize: 15,
+                  fontSize: fontScale(15),
                   fontWeight: '700',
                   marginLeft: 7,
                 }}
@@ -845,7 +851,13 @@ export default function CreateScreen() {
                 Direct
               </Text>
             </View>
-            <Text style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 21 }}>
+            <Text
+              style={{
+                color: colors.textSecondary,
+                fontSize: fontScale(14),
+                lineHeight: fontScale(21),
+              }}
+            >
               Sends your exact prompt straight to the AI model you choose — no styling, polish, or
               face swap. Each model shows its own sparkle cost in the picker.
             </Text>
@@ -855,7 +867,9 @@ export default function CreateScreen() {
               className="self-end mt-5 py-2 px-4 rounded-lg"
               style={{ backgroundColor: colors.accent }}
             >
-              <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>Got it</Text>
+              <Text style={{ color: '#fff', fontSize: fontScale(14), fontWeight: '600' }}>
+                Got it
+              </Text>
             </TouchableOpacity>
           </TouchableOpacity>
         </TouchableOpacity>

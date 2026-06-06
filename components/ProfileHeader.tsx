@@ -31,6 +31,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-nativ
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { avatarUrl } from '@/lib/imageUrl';
 import type { StatsTab } from '@/components/ProfileStatsRow';
 
@@ -273,8 +274,8 @@ export function ProfileHeader(props: Props) {
 const styles = StyleSheet.create({
   root: {
     paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 12,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(12),
   },
   topRow: {
     flexDirection: 'row',
@@ -305,11 +306,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    marginTop: 8,
+    marginTop: verticalScale(8),
   },
   joinedText: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
   },
   // Plain-text stats row — replaces the 3-column block that used to
   // live beside the avatar. All three items wrap in Pressables so the
@@ -320,17 +321,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    marginTop: 8,
+    marginTop: verticalScale(8),
   },
   // Each pressable gets a bit of vertical padding so the tap target is
   // comfortably finger-sized (was previously the text's natural ~15px
   // height — too small to land reliably).
   statsTap: {
-    paddingVertical: 4,
+    paddingVertical: verticalScale(4),
   },
   statsItem: {
     color: colors.textSecondary,
-    fontSize: 15,
+    fontSize: fontScale(15),
   },
   statsCount: {
     color: colors.textPrimary,
@@ -341,37 +342,37 @@ const styles = StyleSheet.create({
   },
   statsDivider: {
     color: colors.textSecondary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     marginHorizontal: 8,
   },
   identityBlock: {
-    marginTop: 10,
+    marginTop: verticalScale(10),
     gap: 2,
     alignItems: 'center',
   },
   heroName: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '700',
     textAlign: 'center',
   },
   handle: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '500',
     textAlign: 'center',
   },
   bio: {
     color: colors.textPrimary,
-    fontSize: 14,
-    lineHeight: 19,
-    marginTop: 4,
+    fontSize: fontScale(14),
+    lineHeight: fontScale(19),
+    marginTop: verticalScale(4),
     textAlign: 'center',
   },
   actionRow: {
     flexDirection: 'row',
     gap: 8,
-    marginTop: 14,
+    marginTop: verticalScale(14),
   },
   actionPill: {
     flex: 1,
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 8,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   actionTextSecondary: {
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 8,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -21,6 +21,7 @@ import { View, Text, StyleSheet, ActivityIndicator, Pressable } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
 import { startHqPoll } from '@/lib/upscalePoll';
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 28,
+    paddingVertical: verticalScale(28),
     paddingHorizontal: 32,
     backgroundColor: colors.surface,
     borderRadius: 16,
@@ -210,24 +211,24 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '700',
-    marginTop: 18,
+    marginTop: verticalScale(18),
     textAlign: 'center',
   },
   subtitle: {
     color: colors.textSecondary,
-    fontSize: 13,
-    marginTop: 8,
+    fontSize: fontScale(13),
+    marginTop: verticalScale(8),
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: fontScale(18),
   },
   dismissBtn: {
-    marginTop: 18,
-    paddingVertical: 10,
+    marginTop: verticalScale(18),
+    paddingVertical: verticalScale(10),
     paddingHorizontal: 24,
     borderRadius: 20,
     backgroundColor: colors.accent,
   },
-  dismissText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
+  dismissText: { color: '#FFFFFF', fontSize: fontScale(14), fontWeight: '700' },
 });

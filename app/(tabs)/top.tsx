@@ -48,7 +48,7 @@ import { FilterPickerSheet } from '@/components/FilterPickerSheet';
 import { PostTile } from '@/components/PostTile';
 import { GridSkeleton } from '@/components/Skeleton';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
-import { verticalScale } from '@/lib/responsive';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 // ── Browse mode feed query ───────────────────────────────────────────────────
@@ -487,7 +487,7 @@ export default function SearchExploreScreen() {
                         name="search"
                         size={40}
                         color={colors.border}
-                        style={{ marginBottom: 12 }}
+                        style={{ marginBottom: verticalScale(12) }}
                       />
                       <Text style={s.searchEmptyText}>Search for dreamers and dreams</Text>
                     </>
@@ -614,13 +614,19 @@ const s = StyleSheet.create({
 
   // Browse grid
   gridRow: { gap: TILE_GAP, marginBottom: TILE_GAP },
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, paddingTop: 60 },
-  emptyTitle: { color: colors.textSecondary, fontSize: 17, fontWeight: '600' },
-  emptySubtitle: { color: colors.textMuted, fontSize: 14 },
+  empty: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    paddingTop: verticalScale(60),
+  },
+  emptyTitle: { color: colors.textSecondary, fontSize: fontScale(17), fontWeight: '600' },
+  emptySubtitle: { color: colors.textMuted, fontSize: fontScale(14) },
 
   // Overlay
   topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
-  topOverlay: { paddingBottom: 8, gap: 6 },
+  topOverlay: { paddingBottom: verticalScale(8), gap: 6 },
 
   // Search bar
   searchBarRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, gap: 10 },
@@ -634,9 +640,9 @@ const s = StyleSheet.create({
     height: 40,
   },
   searchIcon: { marginRight: 8 },
-  searchInput: { flex: 1, color: colors.textPrimary, fontSize: 15, height: 40 },
-  cancelButton: { paddingVertical: 8 },
-  cancelText: { color: colors.accent, fontSize: 15, fontWeight: '600' },
+  searchInput: { flex: 1, color: colors.textPrimary, fontSize: fontScale(15), height: 40 },
+  cancelButton: { paddingVertical: verticalScale(8) },
+  cancelText: { color: colors.accent, fontSize: fontScale(15), fontWeight: '600' },
 
   // Filter chips
   chipRow: {
@@ -657,13 +663,13 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.1)',
     borderRadius: 16,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.15)',
   },
   chipLabel: {
     color: colors.textPrimary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
   },
   chipDismiss: {
@@ -673,16 +679,16 @@ const s = StyleSheet.create({
   // Search mode
   searchContainer: { flex: 1, backgroundColor: colors.background },
   searchSafeTop: { flex: 1 },
-  searchFooter: { paddingVertical: 20 },
-  searchEmpty: { alignItems: 'center', paddingTop: 60 },
-  searchEmptyText: { color: colors.textSecondary, fontSize: 14 },
+  searchFooter: { paddingVertical: verticalScale(20) },
+  searchEmpty: { alignItems: 'center', paddingTop: verticalScale(60) },
+  searchEmptyText: { color: colors.textSecondary, fontSize: fontScale(14) },
 
   // Search results — users
   searchUserRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.card,
     gap: 12,
@@ -696,33 +702,37 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  searchAvatarText: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
+  searchAvatarText: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '700' },
   searchUserInfo: { flex: 1, gap: 2 },
-  searchUsername: { color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
+  searchUsername: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '600' },
   searchActions: { flexDirection: 'row', gap: 8, alignItems: 'center' },
   followButton: {
     borderWidth: 1,
     borderColor: colors.accent,
     borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingVertical: verticalScale(5),
   },
-  followButtonText: { color: colors.accent, fontSize: 12, fontWeight: '600' },
+  followButtonText: { color: colors.accent, fontSize: fontScale(12), fontWeight: '600' },
   followingPill: {
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingVertical: verticalScale(5),
   },
-  followingPillText: { color: colors.textSecondary, fontSize: 12, fontWeight: '600' },
+  followingPillText: { color: colors.textSecondary, fontSize: fontScale(12), fontWeight: '600' },
 
   // Search results — posts
   postTripletRow: { flexDirection: 'row', gap: TILE_GAP },
-  sectionHeader: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
+  sectionHeader: {
+    paddingHorizontal: 16,
+    paddingTop: verticalScale(16),
+    paddingBottom: verticalScale(8),
+  },
   sectionHeaderText: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,

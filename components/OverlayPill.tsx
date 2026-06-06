@@ -4,6 +4,7 @@
  */
 
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import * as Haptics from 'expo-haptics';
 
 interface Props {
@@ -29,7 +30,7 @@ export function OverlayPill({ label, active, onPress }: Props) {
 
 const s = StyleSheet.create({
   pill: {
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
     borderRadius: 16,
     backgroundColor: 'rgba(0,0,0,0.35)',
     alignItems: 'center',
@@ -41,9 +42,9 @@ const s = StyleSheet.create({
   },
   text: {
     color: 'rgba(255,255,255,0.7)',
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
-    lineHeight: 16,
+    lineHeight: fontScale(16),
     includeFontPadding: false,
   },
   textActive: { color: '#FFFFFF', fontWeight: '700' },

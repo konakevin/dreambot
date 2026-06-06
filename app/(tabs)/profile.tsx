@@ -28,6 +28,7 @@ import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useFocusEffect } from '@react-navigation/native';
 import { trackProfileViewed } from '@/lib/analytics';
 import { type StatsTab } from '@/components/ProfileStatsRow';
@@ -393,8 +394,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 6,
-    paddingBottom: 6,
+    paddingTop: verticalScale(6),
+    paddingBottom: verticalScale(6),
     backgroundColor: colors.background, // opaque so the grid scrolls beneath cleanly
     zIndex: 10,
   },
@@ -405,7 +406,7 @@ const styles = StyleSheet.create({
   },
   topBarHandle: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '700',
   },
   topBarActions: {
@@ -468,9 +469,9 @@ const styles = StyleSheet.create({
   },
   inboxBadgeText: {
     color: '#FFFFFF',
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '800',
-    lineHeight: 13,
+    lineHeight: fontScale(13),
     includeFontPadding: false,
   },
   // Album tabs — X-style text + accent-colored underline beneath the
@@ -483,18 +484,18 @@ const styles = StyleSheet.create({
     borderTopColor: colors.border,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
-    marginTop: 4,
+    marginTop: verticalScale(4),
   },
   tab: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
     position: 'relative',
   },
   tabLabel: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   tabLabelActive: {
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: colors.accent,
   },
-  center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
-  emptyText: { color: colors.textSecondary, fontSize: 15 },
-  wishRow: { paddingHorizontal: 16, paddingBottom: 8 },
+  center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
+  emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },
+  wishRow: { paddingHorizontal: 16, paddingBottom: verticalScale(8) },
 });

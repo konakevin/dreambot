@@ -5,6 +5,7 @@ import * as nav from '@/lib/navigate';
 import { useAuthStore } from '@/store/auth';
 import type { FollowUser } from '@/hooks/useFollowersList';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 interface Props {
   item: FollowUser;
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.card,
     gap: 12,
@@ -68,16 +69,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarText: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
-  username: { flex: 1, color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
+  avatarText: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '700' },
+  username: { flex: 1, color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '600' },
   pill: {
     borderWidth: 1,
     borderColor: colors.accent,
     borderRadius: 16,
     paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
   },
   followingPill: { borderColor: colors.border, backgroundColor: colors.card },
-  pillText: { color: colors.accent, fontSize: 13, fontWeight: '600' },
+  pillText: { color: colors.accent, fontSize: fontScale(13), fontWeight: '600' },
   followingPillText: { color: colors.textSecondary },
 });

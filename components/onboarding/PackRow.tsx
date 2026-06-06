@@ -7,6 +7,7 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 export interface Pack {
   name: string;
@@ -72,14 +73,14 @@ export function PackRow({ packs, selected, onAddPack, title = 'Quick Picks' }: P
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 12,
-    paddingBottom: 4,
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(4),
   },
   title: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
     color: colors.textSecondary,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
     paddingHorizontal: 16,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     borderRadius: 20,
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -105,17 +106,17 @@ const styles = StyleSheet.create({
     backgroundColor: `${colors.accent}12`,
   },
   packText: {
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
     color: '#FFFFFF',
   },
   packTextDone: {
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
     color: colors.accent,
   },
   packCount: {
-    fontSize: 12,
+    fontSize: fontScale(12),
     color: colors.textSecondary,
   },
 });

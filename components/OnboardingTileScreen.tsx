@@ -11,6 +11,7 @@ import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { OnboardingHeader } from '@/components/OnboardingHeader';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 interface Tile {
   key: string;
@@ -174,16 +175,25 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 20,
+    paddingTop: verticalScale(16),
+    paddingBottom: verticalScale(20),
   },
   progressBar: { flexDirection: 'row', gap: 5 },
   progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.border },
   progressDotActive: { width: 20, borderRadius: 4 },
   scroll: { flex: 1 },
-  scrollContent: { paddingHorizontal: 20, paddingBottom: 20 },
-  title: { color: colors.textPrimary, fontSize: 28, fontWeight: '800', marginBottom: 8 },
-  subtitle: { color: colors.textSecondary, fontSize: 16, marginBottom: 24 },
+  scrollContent: { paddingHorizontal: 20, paddingBottom: verticalScale(20) },
+  title: {
+    color: colors.textPrimary,
+    fontSize: fontScale(28),
+    fontWeight: '800',
+    marginBottom: verticalScale(8),
+  },
+  subtitle: {
+    color: colors.textSecondary,
+    fontSize: fontScale(16),
+    marginBottom: verticalScale(24),
+  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -193,7 +203,7 @@ const styles = StyleSheet.create({
     width: '48%',
     flexDirection: 'row',
     backgroundColor: colors.surface,
-    paddingVertical: 11,
+    paddingVertical: verticalScale(11),
     paddingHorizontal: 10,
     borderRadius: 14,
     borderWidth: 1.5,
@@ -205,13 +215,13 @@ const styles = StyleSheet.create({
   tileSelected: {},
   tileLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
     textAlign: 'center',
   },
   pill: {
     paddingHorizontal: 18,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderRadius: 24,
     backgroundColor: colors.surface,
     borderWidth: 1.5,
@@ -220,10 +230,10 @@ const styles = StyleSheet.create({
   pillSelected: {},
   pillLabel: {
     color: colors.textSecondary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '600',
   },
-  footer: { paddingHorizontal: 20, paddingBottom: 16 },
+  footer: { paddingHorizontal: 20, paddingBottom: verticalScale(16) },
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   backBtn: {
     flex: 1,
@@ -231,13 +241,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     borderRadius: 14,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.accentBorder,
   },
-  backBtnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
+  backBtnText: { color: '#FFFFFF', fontSize: fontScale(15), fontWeight: '600' },
   nextButton: {
     flex: 1,
     flexDirection: 'row',
@@ -246,13 +256,13 @@ const styles = StyleSheet.create({
     gap: 8,
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
   },
   nextButtonDisabled: {
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
   },
-  nextButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
+  nextButtonText: { color: '#FFFFFF', fontSize: fontScale(17), fontWeight: '700' },
   nextButtonTextDisabled: { color: colors.textSecondary },
 });

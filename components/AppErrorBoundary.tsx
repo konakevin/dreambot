@@ -3,6 +3,7 @@ import type { ReactNode, ErrorInfo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { captureException } from '@/lib/sentry';
 
 interface Props {
@@ -70,15 +71,15 @@ const s = StyleSheet.create({
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 22,
+    fontSize: fontScale(22),
     fontWeight: '800',
     textAlign: 'center',
   },
   message: {
     color: colors.textSecondary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: fontScale(22),
   },
   button: {
     flexDirection: 'row',
@@ -87,13 +88,13 @@ const s = StyleSheet.create({
     gap: 8,
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     paddingHorizontal: 32,
-    marginTop: 8,
+    marginTop: verticalScale(8),
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '700',
   },
 });

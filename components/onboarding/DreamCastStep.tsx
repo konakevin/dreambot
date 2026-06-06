@@ -116,14 +116,14 @@ function CastSlot({
         <View
           style={{
             paddingHorizontal: 5,
-            paddingVertical: 1,
+            paddingVertical: verticalScale(1),
             borderRadius: 5,
             backgroundColor: 'rgba(96,165,250,0.15)',
           }}
         >
           <Text
             style={{
-              fontSize: 8,
+              fontSize: fontScale(8),
               fontWeight: '700',
               color: '#60A5FA',
               textTransform: 'uppercase',
@@ -157,7 +157,7 @@ function CastSlot({
                   <Text style={[s.uploadedCheck, { color: colors.like }]}>
                     Couldn&apos;t analyze this photo
                   </Text>
-                  <Text style={[s.slotTip, { marginTop: 4 }]}>
+                  <Text style={[s.slotTip, { marginTop: verticalScale(4) }]}>
                     Tap the X to try again, or try a different photo.
                   </Text>
                 </>
@@ -581,7 +581,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
   },
   slotLabel: {
     color: colors.textPrimary,

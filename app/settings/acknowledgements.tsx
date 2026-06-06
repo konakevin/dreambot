@@ -18,6 +18,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import data from '@/lib/acknowledgements.json';
 
 interface AckPackage {
@@ -140,27 +141,27 @@ export default function AcknowledgementsScreen() {
 const styles = StyleSheet.create({
   intro: {
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingTop: verticalScale(16),
+    paddingBottom: verticalScale(12),
   },
   introTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
   },
   introBody: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
   },
   searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 16,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     backgroundColor: colors.surface,
     borderRadius: 10,
     borderWidth: 1,
@@ -170,13 +171,13 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     padding: 0,
   },
-  list: { paddingBottom: 60 },
+  list: { paddingBottom: verticalScale(60) },
   item: {
     marginHorizontal: 16,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
     backgroundColor: colors.surface,
     borderRadius: 10,
     borderWidth: 1,
@@ -187,42 +188,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     gap: 10,
   },
   pkgName: {
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '600',
   },
   pkgMeta: {
     color: colors.textSecondary,
-    fontSize: 12,
-    marginTop: 2,
+    fontSize: fontScale(12),
+    marginTop: verticalScale(2),
   },
   itemBody: {
     paddingHorizontal: 14,
-    paddingBottom: 14,
-    paddingTop: 4,
+    paddingBottom: verticalScale(14),
+    paddingTop: verticalScale(4),
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
     gap: 8,
   },
   link: {
     color: colors.accent,
-    fontSize: 13,
+    fontSize: fontScale(13),
     textDecorationLine: 'underline',
   },
   licenseText: {
     color: colors.textSecondary,
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: fontScale(12),
+    lineHeight: fontScale(18),
     fontFamily: 'Courier',
   },
   empty: {
     color: colors.textSecondary,
     textAlign: 'center',
-    marginTop: 40,
-    fontSize: 14,
+    marginTop: verticalScale(40),
+    fontSize: fontScale(14),
   },
 });

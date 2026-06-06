@@ -209,7 +209,11 @@ export default function SparkleStoreScreen() {
           <Text style={s.sectionTitle}>Choose a Pack</Text>
 
           {isLoading ? (
-            <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 40 }} />
+            <ActivityIndicator
+              size="large"
+              color={colors.accent}
+              style={{ marginTop: verticalScale(40) }}
+            />
           ) : sorted.length === 0 ? (
             <View style={s.emptyWrap}>
               <Ionicons name="bag-outline" size={48} color={colors.textSecondary} />
@@ -307,7 +311,7 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: verticalScale(14),
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
   },
   balanceAmount: {
     color: colors.textPrimary,
@@ -327,7 +331,7 @@ const s = StyleSheet.create({
     fontSize: fontScale(18),
     fontWeight: '800',
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: verticalScale(4),
     marginBottom: verticalScale(16),
   },
 
@@ -383,11 +387,11 @@ const s = StyleSheet.create({
     marginLeft: 8,
     borderRadius: 6,
     paddingHorizontal: 7,
-    paddingVertical: 2,
+    paddingVertical: verticalScale(2),
   },
   inlineBadgeText: {
     color: '#FFFFFF',
-    fontSize: 9,
+    fontSize: fontScale(9),
     fontWeight: '800',
     letterSpacing: 0.6,
   },
@@ -395,7 +399,7 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fontScale(13),
     fontWeight: '600',
-    marginTop: 2,
+    marginTop: verticalScale(2),
   },
   // Right-edge selection radio
   packRadio: {
@@ -435,7 +439,7 @@ const s = StyleSheet.create({
     paddingVertical: verticalScale(16),
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
   },
   primaryCtaDisabled: {
     opacity: 0.5,

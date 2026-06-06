@@ -19,6 +19,7 @@ import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useBotUsers, type BotUser } from '@/hooks/useBotUsers';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useBotThumbnails } from '@/hooks/useBotThumbnails';
@@ -109,12 +110,12 @@ export default function SettingsBotsScreen() {
 const s = StyleSheet.create({
   subtitleWrap: {
     paddingHorizontal: 24,
-    paddingBottom: 12,
+    paddingBottom: verticalScale(12),
   },
   subtitle: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
   },
   loadingWrap: {
     flex: 1,
@@ -123,13 +124,13 @@ const s = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 16,
-    paddingBottom: 24,
+    paddingBottom: verticalScale(24),
     gap: 12,
   },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     textAlign: 'center',
-    paddingVertical: 30,
+    paddingVertical: verticalScale(30),
   },
 });

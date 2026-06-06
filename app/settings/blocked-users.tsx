@@ -20,6 +20,7 @@ import * as Haptics from 'expo-haptics';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useBlockedUsers, useToggleBlock, type BlockedUser } from '@/hooks/useBlockUser';
 
 export default function BlockedUsersScreen() {
@@ -110,31 +111,31 @@ export default function BlockedUsersScreen() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
-  muted: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
-  list: { paddingVertical: 8 },
+  muted: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
+  list: { paddingVertical: verticalScale(8) },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     gap: 12,
   },
   avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.surface },
   avatarFallback: { alignItems: 'center', justifyContent: 'center' },
-  username: { flex: 1, color: colors.textPrimary, fontSize: 16, fontWeight: '600' },
+  username: { flex: 1, color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '600' },
   unblockBtn: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     borderRadius: 18,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  unblockText: { color: colors.accent, fontSize: 14, fontWeight: '700' },
+  unblockText: { color: colors.accent, fontSize: fontScale(14), fontWeight: '700' },
   sep: { height: 1, backgroundColor: colors.border, marginLeft: 72 },
   retryBtn: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     borderRadius: 20,
     backgroundColor: colors.surface,
   },

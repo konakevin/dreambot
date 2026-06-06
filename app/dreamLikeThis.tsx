@@ -27,7 +27,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { useLocalSearchParams } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
-import { verticalScale } from '@/lib/responsive';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
 import * as nav from '@/lib/navigate';
 import { useDreamStore } from '@/store/dream';
@@ -285,7 +285,7 @@ export default function DreamLikeThisScreen() {
           style={s.flex}
           contentContainerStyle={[
             s.scrollContent,
-            !hasPhoto && kbOpen && { gap: 4, paddingBottom: 2, flexGrow: 1 },
+            !hasPhoto && kbOpen && { gap: 4, paddingBottom: verticalScale(2), flexGrow: 1 },
           ]}
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
@@ -376,7 +376,13 @@ export default function DreamLikeThisScreen() {
         </ScrollView>
 
         {/* Footer */}
-        <View style={[s.footer, !hasPhoto && kbOpen && { paddingBottom: 6, paddingVertical: 4 }]}>
+        <View
+          style={[
+            s.footer,
+            !hasPhoto &&
+              kbOpen && { paddingBottom: verticalScale(6), paddingVertical: verticalScale(4) },
+          ]}
+        >
           <TouchableOpacity style={s.dreamBtn} onPress={handleDream} activeOpacity={0.8}>
             <Ionicons name="sparkles" size={18} color="#fff" />
             <Text style={s.dreamBtnText}>Dream · {sparkleCostFrom(imageModels, refModelUsed)}</Text>
@@ -395,11 +401,11 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
   },
   headerTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '700',
     position: 'absolute',
     left: 0,
@@ -411,14 +417,14 @@ const s = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
     borderRadius: 16,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
   },
-  sparkleText: { color: colors.accent, fontSize: 13, fontWeight: '700' },
-  scrollContent: { paddingHorizontal: 16, paddingBottom: 16, gap: 12 },
+  sparkleText: { color: colors.accent, fontSize: fontScale(13), fontWeight: '700' },
+  scrollContent: { paddingHorizontal: 16, paddingBottom: verticalScale(16), gap: 12 },
 
   // Preview row
   previewRow: {
@@ -453,7 +459,7 @@ const s = StyleSheet.create({
     bottom: 6,
     left: 8,
     color: '#fff',
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '700',
     textShadowColor: 'rgba(0,0,0,0.6)',
     textShadowOffset: { width: 0, height: 1 },
@@ -499,19 +505,19 @@ const s = StyleSheet.create({
   },
   styleInfoTitle: {
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '700',
-    marginBottom: 2,
+    marginBottom: verticalScale(2),
   },
   styleInfoSubtext: {
     color: colors.textMuted,
-    fontSize: 12,
-    marginBottom: 4,
+    fontSize: fontScale(12),
+    marginBottom: verticalScale(4),
   },
 
   promptHint: {
     color: colors.textMuted,
-    fontSize: 12,
+    fontSize: fontScale(12),
     textAlign: 'center',
     marginTop: -8,
   },
@@ -524,7 +530,7 @@ const s = StyleSheet.create({
   },
   likenessHintText: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
   },
 
   // Prompt
@@ -536,28 +542,32 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: 14,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     minHeight: 56,
   },
   promptInput: {
     flex: 1,
     color: colors.textPrimary,
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(22),
     maxHeight: 100,
   },
-  promptClear: { paddingTop: 2, paddingLeft: 8 },
+  promptClear: { paddingTop: verticalScale(2), paddingLeft: 8 },
 
   // Footer
-  footer: { paddingHorizontal: 24, paddingVertical: 12, paddingBottom: verticalScale(36) },
+  footer: {
+    paddingHorizontal: 24,
+    paddingVertical: verticalScale(12),
+    paddingBottom: verticalScale(36),
+  },
   dreamBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     borderRadius: 14,
     backgroundColor: colors.accent,
   },
-  dreamBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+  dreamBtnText: { color: '#fff', fontSize: fontScale(17), fontWeight: '700' },
 });

@@ -155,7 +155,11 @@ export default function ProStoreScreen() {
           <Text style={s.sectionTitle}>Choose your plan</Text>
 
           {isLoading ? (
-            <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 24 }} />
+            <ActivityIndicator
+              size="large"
+              color={colors.accent}
+              style={{ marginTop: verticalScale(24) }}
+            />
           ) : (
             <>
               <View style={s.tierStack}>
@@ -289,7 +293,7 @@ const s = StyleSheet.create({
   heroSub: {
     color: colors.textSecondary,
     fontSize: fontScale(13),
-    marginTop: 4,
+    marginTop: verticalScale(4),
     textAlign: 'center',
     paddingHorizontal: 16,
   },
@@ -305,8 +309,8 @@ const s = StyleSheet.create({
     borderRadius: 14,
     paddingVertical: verticalScale(12),
     paddingHorizontal: 14,
-    marginTop: 4,
-    marginBottom: 8,
+    marginTop: verticalScale(4),
+    marginBottom: verticalScale(8),
   },
   trialBannerIcon: {
     width: 32,
@@ -315,7 +319,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(139,123,238,0.20)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 2,
+    marginTop: verticalScale(2),
   },
   trialBannerTitle: {
     color: colors.textPrimary,
@@ -326,7 +330,7 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fontScale(12),
     lineHeight: fontScale(16),
-    marginTop: 2,
+    marginTop: verticalScale(2),
   },
 
   // Perks
@@ -334,7 +338,7 @@ const s = StyleSheet.create({
     gap: verticalScale(14),
     paddingVertical: verticalScale(12),
     paddingHorizontal: 4,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
   perkRow: {
     flexDirection: 'row',
@@ -348,7 +352,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(139,123,238,0.10)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 2,
+    marginTop: verticalScale(2),
   },
   perkTitle: {
     color: colors.textPrimary,
@@ -359,7 +363,7 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fontScale(13),
     lineHeight: fontScale(18),
-    marginTop: 2,
+    marginTop: verticalScale(2),
   },
 
   // Section
@@ -424,7 +428,7 @@ const s = StyleSheet.create({
     paddingVertical: verticalScale(16),
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
   },
   primaryCtaDisabled: {
     opacity: 0.5,
@@ -447,11 +451,11 @@ const s = StyleSheet.create({
     backgroundColor: colors.accent,
     borderRadius: 10,
     paddingHorizontal: 10,
-    paddingVertical: 3,
+    paddingVertical: verticalScale(3),
   },
   savingsBadgeText: {
     color: '#FFFFFF',
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '800',
     letterSpacing: 0.5,
   },
@@ -467,7 +471,7 @@ const s = StyleSheet.create({
     fontSize: fontScale(22),
     fontWeight: '900',
     letterSpacing: -0.5,
-    marginTop: 2,
+    marginTop: verticalScale(2),
   },
   tierPeriod: {
     color: colors.textSecondary,

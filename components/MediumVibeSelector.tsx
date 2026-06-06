@@ -9,6 +9,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-nati
 import * as Haptics from 'expo-haptics';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 const PILL_WIDTH = 105;
 
@@ -152,7 +153,7 @@ const s = StyleSheet.create({
   selectorRowCompact: { gap: 0 },
   selectorLabel: {
     color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 1,
@@ -163,13 +164,13 @@ const s = StyleSheet.create({
     width: PILL_WIDTH,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     borderRadius: 20,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
   },
   pillActive: { backgroundColor: 'transparent', borderColor: colors.accent },
-  pillText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
+  pillText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
   pillTextActive: { color: colors.accent },
 });

@@ -20,6 +20,7 @@ import type { DreamPostItem } from '@/components/DreamCard';
 import type { PostGridSource } from '@/components/PostGrid';
 import { thumbnailUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { TILE_WIDTH, TILE_HEIGHT } from '@/constants/grid';
 
 function seededRandom(seed: number) {
@@ -266,11 +267,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.55)',
     borderRadius: 14,
     paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
   },
   highlightText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
   },
   privateBadge: {

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-native';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 interface AlertButton {
   text: string;
@@ -131,28 +132,28 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '800',
     textAlign: 'center',
   },
   message: {
     color: colors.textSecondary,
-    fontSize: 15,
-    lineHeight: 21,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(21),
     textAlign: 'center',
   },
   buttonRow: {
     flexDirection: 'row',
     gap: 10,
-    marginTop: 8,
+    marginTop: verticalScale(8),
   },
   buttonCol: {
     flexDirection: 'column',
     gap: 8,
-    marginTop: 8,
+    marginTop: verticalScale(8),
   },
   button: {
-    paddingVertical: 13,
+    paddingVertical: verticalScale(13),
     paddingHorizontal: 16,
     borderRadius: 14,
     alignItems: 'center',
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   buttonText: {
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '700',
     color: '#FFFFFF',
   },

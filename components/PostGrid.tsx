@@ -22,7 +22,7 @@ import { PostTile } from '@/components/PostTile';
 import { useAlbumStore } from '@/store/album';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
-import { verticalScale } from '@/lib/responsive';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
 import type { DreamPostItem } from '@/components/DreamCard';
 
@@ -407,9 +407,9 @@ export function PostGrid({
 
 const styles = StyleSheet.create({
   row: { gap: TILE_GAP, marginBottom: TILE_GAP },
-  center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
-  emptyText: { color: colors.textSecondary, fontSize: 15 },
-  footer: { paddingVertical: 20, alignItems: 'center' },
+  center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
+  emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },
+  footer: { paddingVertical: verticalScale(20), alignItems: 'center' },
   container: { flex: 1 },
   justViewedButton: {
     position: 'absolute',
@@ -421,13 +421,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(15,15,26,0.85)',
     borderRadius: 16,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.15)',
   },
   justViewedButtonText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
   },
 });

@@ -36,6 +36,7 @@ import { useAlbumStore } from '@/store/album';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
@@ -507,14 +508,14 @@ export default function PublicProfileScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
+  center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
   // backRow / backButton kept for the loading-state JSX above (line ~197).
   backRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 8,
-    paddingTop: 4,
-    paddingBottom: 12,
+    paddingTop: verticalScale(4),
+    paddingBottom: verticalScale(12),
   },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   // Sticky compact top bar — always visible at the top of the screen,
@@ -526,8 +527,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 8,
-    paddingTop: 6,
-    paddingBottom: 6,
+    paddingTop: verticalScale(6),
+    paddingBottom: verticalScale(6),
     backgroundColor: colors.background,
     zIndex: 10,
   },
@@ -562,7 +563,7 @@ const styles = StyleSheet.create({
   },
   compactName: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '700',
     flexShrink: 1,
   },
@@ -573,7 +574,7 @@ const styles = StyleSheet.create({
   followButton: {
     borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingVertical: verticalScale(5),
     backgroundColor: '#FFFFFF',
     borderWidth: 0,
   },
@@ -584,11 +585,11 @@ const styles = StyleSheet.create({
   },
   followButtonText: {
     color: '#000000',
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '700',
   },
   followingButtonText: { color: 'rgba(255,255,255,0.7)' },
-  emptyText: { color: colors.textSecondary, fontSize: 15 },
+  emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },
   avatarOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.9)',
@@ -598,9 +599,9 @@ const styles = StyleSheet.create({
   },
   avatarUsername: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: fontScale(20),
     fontWeight: '700',
-    marginTop: 8,
+    marginTop: verticalScale(8),
   },
   avatarClose: {
     position: 'absolute',
@@ -616,19 +617,19 @@ const styles = StyleSheet.create({
   lockedState: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 60,
+    paddingTop: verticalScale(60),
     paddingHorizontal: 40,
     gap: 12,
   },
   lockedTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '700',
   },
   lockedSub: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
 });

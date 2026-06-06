@@ -29,6 +29,7 @@ import { useFeedStore } from '@/store/feed';
 import { useOnboardingStore } from '@/store/onboarding';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { moderateText } from '@/lib/moderation';
 import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 
@@ -428,7 +429,13 @@ export default function SettingsScreen() {
             <Ionicons name="lock-closed-outline" size={20} color={colors.accent} />
             <View style={{ flex: 1 }}>
               <Text style={styles.rowLabel}>Public Profile</Text>
-              <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
+              <Text
+                style={{
+                  color: colors.textSecondary,
+                  fontSize: fontScale(12),
+                  marginTop: verticalScale(2),
+                }}
+              >
                 {isPublic ? 'Everyone can see your posts' : 'Only friends can see your posts'}
               </Text>
             </View>
@@ -506,7 +513,13 @@ export default function SettingsScreen() {
                 <Ionicons name="close-circle-outline" size={20} color={colors.accent} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.rowLabel}>One-tap delete button</Text>
-                  <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
+                  <Text
+                    style={{
+                      color: colors.textSecondary,
+                      fontSize: fontScale(12),
+                      marginTop: verticalScale(2),
+                    }}
+                  >
                     {showAdminDelete
                       ? 'Red X visible above heart — single tap deletes (no confirm)'
                       : 'Hidden — enable for bulk cleanup'}
@@ -635,15 +648,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
   },
-  title: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
-  scroll: { paddingBottom: 60 },
+  title: { color: colors.textPrimary, fontSize: fontScale(18), fontWeight: '700' },
+  scroll: { paddingBottom: verticalScale(60) },
   avatarHero: {
     alignItems: 'center',
-    paddingVertical: 28,
+    paddingVertical: verticalScale(28),
     gap: 10,
   },
   avatarLarge: {
@@ -655,29 +668,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
   },
-  avatarLargeText: { color: colors.textPrimary, fontSize: 32, fontWeight: '700' },
-  changePhotoLabel: { color: colors.accent, fontSize: 14, fontWeight: '600' },
+  avatarLargeText: { color: colors.textPrimary, fontSize: fontScale(32), fontWeight: '700' },
+  changePhotoLabel: { color: colors.accent, fontSize: fontScale(14), fontWeight: '600' },
   sectionHeader: {
     color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '600',
     letterSpacing: 0.8,
     paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(8),
   },
   section: {
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
-    marginBottom: 24,
+    marginBottom: verticalScale(24),
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
     gap: 12,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
@@ -685,11 +698,11 @@ const styles = StyleSheet.create({
   rowLabel: {
     flex: 1,
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '500',
   },
   destructiveText: { color: colors.textPrimary },
-  trailingSummary: { color: colors.textSecondary, fontSize: 13, maxWidth: 160 },
+  trailingSummary: { color: colors.textSecondary, fontSize: fontScale(13), maxWidth: 160 },
   rowTrailing: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -697,6 +710,6 @@ const styles = StyleSheet.create({
   },
   rowValue: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
   },
 });

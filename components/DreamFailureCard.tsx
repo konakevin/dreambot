@@ -16,6 +16,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import type { DreamFailure } from '@/store/dream';
 
 interface Props {
@@ -122,21 +123,21 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    marginBottom: 12,
+    marginBottom: verticalScale(12),
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '700',
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
   body: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 20,
+    lineHeight: fontScale(20),
+    marginBottom: verticalScale(20),
   },
   actions: {
     flexDirection: 'row',
@@ -145,7 +146,7 @@ const s = StyleSheet.create({
   },
   btn: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderRadius: 12,
     alignItems: 'center',
   },
@@ -156,7 +157,7 @@ const s = StyleSheet.create({
   },
   btnSecondaryText: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   btnPrimary: {
@@ -164,15 +165,15 @@ const s = StyleSheet.create({
   },
   btnPrimaryText: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '700',
   },
   debug: {
     color: colors.textSecondary,
-    fontSize: 10,
+    fontSize: fontScale(10),
     fontFamily: 'monospace',
     textAlign: 'center',
     opacity: 0.5,
-    marginTop: 12,
+    marginTop: verticalScale(12),
   },
 });

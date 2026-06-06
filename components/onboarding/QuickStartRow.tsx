@@ -7,6 +7,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 interface Props {
   onBalanced: () => void;
@@ -55,14 +56,14 @@ export function QuickStartRow({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 4,
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(4),
   },
   title: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
     color: colors.textSecondary,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     paddingHorizontal: 12,
     borderRadius: 12,
     backgroundColor: `${colors.accent}15`,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   buttonText: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
     color: colors.accent,
   },

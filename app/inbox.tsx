@@ -32,6 +32,7 @@ import {
   useDenyFollowRequest,
 } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 function formatTimeAgo(dateStr: string): string {
   const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
@@ -285,7 +286,7 @@ function GroupActorsSheet({
           <View style={styles.sheetHandle} />
           <Text style={styles.sheetTitle}>{titleAction}</Text>
           {isLoading ? (
-            <ActivityIndicator color={colors.accent} style={{ marginTop: 24 }} />
+            <ActivityIndicator color={colors.accent} style={{ marginTop: verticalScale(24) }} />
           ) : (
             <FlatList
               data={actors}
@@ -684,13 +685,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
   },
   headerTitle: {
     color: colors.textPrimary,
-    fontSize: 20,
+    fontSize: fontScale(20),
     fontWeight: '800',
   },
   headerActions: {
@@ -702,7 +703,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.card,
     gap: 12,
@@ -738,15 +739,15 @@ const styles = StyleSheet.create({
   },
   subject: {
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '600',
-    lineHeight: 20,
+    lineHeight: fontScale(20),
   },
   subtext: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '400',
-    lineHeight: 18,
+    lineHeight: fontScale(18),
   },
   actorName: {
     color: colors.textPrimary,
@@ -760,7 +761,7 @@ const styles = StyleSheet.create({
   },
   time: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '500',
     minWidth: 28,
     textAlign: 'right',
@@ -779,7 +780,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarText: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
+  avatarText: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '700' },
   followRequestActions: {
     flexDirection: 'row',
     gap: 6,
@@ -789,18 +790,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     borderRadius: 12,
     paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingVertical: verticalScale(5),
   },
   approveFollowBackButton: {
     borderWidth: 1,
     borderColor: colors.accent,
     borderRadius: 12,
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: verticalScale(5),
   },
   approveText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '700',
   },
   denyButton: {
@@ -808,11 +809,11 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingVertical: verticalScale(5),
   },
   denyText: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
   },
   checkbox: {
@@ -830,27 +831,27 @@ const styles = StyleSheet.create({
   },
   headerCancel: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   selectAllText: {
     color: colors.accent,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
   },
   editText: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   footer: {
-    paddingVertical: 20,
+    paddingVertical: verticalScale(20),
     alignItems: 'center',
   },
   empty: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 64,
+    paddingTop: verticalScale(64),
     gap: 12,
   },
   // ~120px mascot — big enough to read as the hero, small enough to leave
@@ -859,20 +860,20 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 24,
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
   },
   emptyTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '700',
     letterSpacing: -0.2,
   },
   emptySubtitle: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     textAlign: 'center',
     paddingHorizontal: 40,
-    lineHeight: 20,
+    lineHeight: fontScale(20),
   },
   sheetBackdrop: {
     flex: 1,
@@ -884,7 +885,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 18,
     borderTopRightRadius: 18,
     paddingHorizontal: 16,
-    paddingBottom: 28,
+    paddingBottom: verticalScale(28),
     maxHeight: '75%',
   },
   sheetHandle: {
@@ -893,20 +894,20 @@ const styles = StyleSheet.create({
     height: 4,
     borderRadius: 2,
     backgroundColor: colors.border,
-    marginTop: 8,
-    marginBottom: 12,
+    marginTop: verticalScale(8),
+    marginBottom: verticalScale(12),
   },
   sheetTitle: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '700',
-    marginBottom: 12,
+    marginBottom: verticalScale(12),
     textTransform: 'capitalize',
   },
   sheetActorRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     gap: 12,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.card,

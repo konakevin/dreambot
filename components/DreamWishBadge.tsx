@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useDreamWish } from '@/hooks/useDreamWish';
 import { DreamWishSheet } from '@/components/DreamWishSheet';
 
@@ -52,12 +53,12 @@ const s = StyleSheet.create({
     backgroundColor: colors.overlayWhite,
     borderRadius: 20,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
   },
   pillIcon: { width: 16, height: 16, borderRadius: 8 },
   pillText: {
     color: 'rgba(255,255,255,0.7)',
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
     maxWidth: 140,
   },
@@ -71,12 +72,12 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
   },
   cardIcon: { width: 20, height: 20, borderRadius: 10 },
   cardText: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
 });

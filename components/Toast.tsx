@@ -14,6 +14,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -91,7 +92,7 @@ const s = StyleSheet.create({
     backgroundColor: colors.card,
     borderRadius: 12,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     maxWidth: SCREEN_WIDTH - 48,
     borderWidth: 1,
     borderColor: colors.border,
@@ -103,7 +104,7 @@ const s = StyleSheet.create({
   },
   text: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
 });

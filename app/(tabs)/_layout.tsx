@@ -2,11 +2,13 @@ import { useRef, useEffect } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import { Tabs, Redirect } from 'expo-router';
 import { BottomTabBar } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { useExploreStore } from '@/store/explore';
 import { ANIM, colors } from '@/constants/theme';
+import { verticalScale } from '@/lib/responsive';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 
 // Pure render — receives unreadCount as a prop. The subscription lives at
@@ -47,6 +49,12 @@ export default function TabLayout() {
   // badge), so the home-screen badge and this profile-tab dot are always
   // identical.
   const { data: unreadCount = 0 } = useNewNotificationCount();
+  const insets = useSafeAreaInsets();
+  // Tab-bar bottom padding: prefer the safe-area inset (home indicator on
+  // newer phones), fall back to a sensible floor so icons don't sit flush
+  // against the screen edge on devices without a home indicator (older
+  // iPhones, iPhone SE 3rd gen with `Display Zoom: Default`).
+  const tabBarBottomPad = insets.bottom > 0 ? insets.bottom : verticalScale(8);
   const tabBarOpacity = useRef(new Animated.Value(1)).current;
   useEffect(() => {
     Animated.timing(tabBarOpacity, {
@@ -77,7 +85,8 @@ export default function TabLayout() {
           borderTopColor: 'rgba(255,255,255,0.08)',
           borderTopWidth: StyleSheet.hairlineWidth,
           position: 'absolute',
-          paddingTop: 8,
+          paddingTop: verticalScale(8),
+          paddingBottom: tabBarBottomPad,
         },
         tabBarActiveTintColor: '#FFFFFF',
         tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
@@ -166,7 +175,8 @@ export default function TabLayout() {
             borderTopColor: 'rgba(255,255,255,0.08)',
             borderTopWidth: StyleSheet.hairlineWidth,
             position: 'absolute',
-            paddingTop: 8,
+            paddingTop: verticalScale(8),
+            paddingBottom: tabBarBottomPad,
           },
           tabBarIcon: ({ color, size }) => (
             <ProfileTabIcon color={color} size={size} unreadCount={unreadCount} />

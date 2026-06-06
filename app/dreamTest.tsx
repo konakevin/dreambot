@@ -31,6 +31,7 @@ import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 import { saveDream } from '@/lib/dreamSave';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import type { VibeProfile } from '@/types/vibeProfile';
 import { Toast } from '@/components/Toast';
 import { MediumVibeSelector } from '@/components/MediumVibeSelector';
@@ -300,7 +301,7 @@ export default function DreamTestScreen() {
         {dreams.length === 0 && !generating && !error && (
           <ScrollView
             className="flex-1"
-            contentContainerStyle={{ paddingHorizontal: 8, paddingTop: 32 }}
+            contentContainerStyle={{ paddingHorizontal: 8, paddingTop: verticalScale(32) }}
           >
             <Text className="text-white text-xl font-extrabold text-center mb-2">
               Test the nightly dream pipeline
@@ -335,7 +336,7 @@ export default function DreamTestScreen() {
                     <Text
                       style={{
                         color: forceCastRole === opt.key ? colors.accent : colors.textSecondary,
-                        fontSize: 13,
+                        fontSize: fontScale(13),
                         fontWeight: '600',
                       }}
                       numberOfLines={1}
@@ -515,7 +516,7 @@ export default function DreamTestScreen() {
                 <Text
                   style={{
                     color: forceCastRole === opt.key ? colors.accent : colors.textSecondary,
-                    fontSize: 12,
+                    fontSize: fontScale(12),
                     fontWeight: '600',
                   }}
                   numberOfLines={1}
@@ -631,7 +632,7 @@ const s = StyleSheet.create({
   },
   castLabel: {
     color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 1,
@@ -639,7 +640,7 @@ const s = StyleSheet.create({
   },
   castPill: {
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     borderRadius: 20,
     backgroundColor: colors.surface,
     borderWidth: 1,

@@ -10,6 +10,7 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { getBotProfile } from '@/lib/botProfiles';
 import type { BotUser } from '@/hooks/useBotUsers';
@@ -154,17 +155,17 @@ const s = StyleSheet.create({
   },
   username: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '700',
   },
   tagline: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(18),
   },
   followBtn: {
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     borderRadius: 18,
     backgroundColor: colors.accent,
   },
@@ -175,7 +176,7 @@ const s = StyleSheet.create({
   },
   followBtnText: {
     color: '#FFFFFF',
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '700',
   },
   followBtnTextActive: {
@@ -184,7 +185,7 @@ const s = StyleSheet.create({
   thumbnailRow: {
     flexDirection: 'row',
     gap: 6,
-    marginTop: 12,
+    marginTop: verticalScale(12),
   },
   thumbnail: {
     flex: 1,

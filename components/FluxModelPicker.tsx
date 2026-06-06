@@ -34,6 +34,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { DEFAULT_MODEL_ID, FAMILY_ORDER, FAMILY_LABELS } from '@/constants/imageModels';
 import { useImageModels } from '@/hooks/useImageModels';
 
@@ -100,7 +101,7 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
         const familyModels = models.filter((m) => m.family === family);
         if (familyModels.length === 0) return null;
         return (
-          <View key={family} style={{ marginTop: 16 }}>
+          <View key={family} style={{ marginTop: verticalScale(16) }}>
             <Text style={[styles.familyLabel, { color: colors.textSecondary }]}>
               {FAMILY_LABELS[family]}
             </Text>
@@ -121,7 +122,13 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
                 >
                   <View style={{ flex: 1, marginRight: 12 }}>
                     <View style={styles.optionTitleRow}>
-                      <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
+                      <Text
+                        style={{
+                          color: colors.textPrimary,
+                          fontSize: fontScale(15),
+                          fontWeight: '600',
+                        }}
+                      >
                         {opt.label}
                       </Text>
                       {opt.id === DEFAULT_MODEL_ID && (
@@ -133,9 +140,9 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
                     <Text
                       style={{
                         color: colors.textSecondary,
-                        fontSize: 12,
-                        marginTop: 4,
-                        lineHeight: 17,
+                        fontSize: fontScale(12),
+                        marginTop: verticalScale(4),
+                        lineHeight: fontScale(17),
                       }}
                     >
                       {opt.description}
@@ -178,7 +185,7 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
   if (variant === 'list') {
     if (loading) {
       return (
-        <View style={{ paddingTop: 40, alignItems: 'center' }}>
+        <View style={{ paddingTop: verticalScale(40), alignItems: 'center' }}>
           <ActivityIndicator color={colors.accent} />
         </View>
       );
@@ -201,7 +208,7 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
       >
         <View style={{ flex: 1, marginRight: 8 }}>
           <Text
-            style={{ color: colors.textPrimary, fontSize: 14, fontWeight: '600' }}
+            style={{ color: colors.textPrimary, fontSize: fontScale(14), fontWeight: '600' }}
             numberOfLines={1}
           >
             {current?.label ?? 'Flux 1.1 Pro'}
@@ -212,7 +219,7 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
             <Text
               style={{
                 color: colors.textSecondary,
-                fontSize: 11,
+                fontSize: fontScale(11),
                 fontWeight: '600',
                 marginRight: 3,
               }}
@@ -244,7 +251,9 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
           <View style={[styles.modalSheet, { backgroundColor: colors.background }]}>
             <View style={styles.modalHandle} />
             <View style={styles.modalHeader}>
-              <Text style={{ color: colors.textPrimary, fontSize: 17, fontWeight: '700' }}>
+              <Text
+                style={{ color: colors.textPrimary, fontSize: fontScale(17), fontWeight: '700' }}
+              >
                 Choose AI Model
               </Text>
               <TouchableOpacity onPress={() => setModalOpen(false)} hitSlop={10}>
@@ -252,14 +261,19 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
               </TouchableOpacity>
             </View>
             <Text
-              style={{ color: colors.textSecondary, fontSize: 12, lineHeight: 17, marginBottom: 4 }}
+              style={{
+                color: colors.textSecondary,
+                fontSize: fontScale(12),
+                lineHeight: fontScale(17),
+                marginBottom: verticalScale(4),
+              }}
             >
               Your prompt is sent verbatim to this model. Some models cost more sparkles per render.
             </Text>
             <ScrollView
               style={{ maxHeight: 460 }}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 24 }}
+              contentContainerStyle={{ paddingBottom: verticalScale(24) }}
             >
               {renderFamilyList()}
             </ScrollView>
@@ -272,30 +286,30 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
 
 const styles = StyleSheet.create({
   familyLabel: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '700',
     letterSpacing: 0.4,
     textTransform: 'uppercase',
     paddingHorizontal: 4,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
   option: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderRadius: 12,
     borderWidth: 1,
-    marginBottom: 10,
+    marginBottom: verticalScale(10),
   },
   optionTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   defaultBadge: {
     paddingHorizontal: 7,
-    paddingVertical: 2,
+    paddingVertical: verticalScale(2),
     borderRadius: 4,
   },
   defaultBadgeText: {
-    fontSize: 9,
+    fontSize: fontScale(9),
     fontWeight: '800',
     letterSpacing: 0.5,
     color: '#FFFFFF',
@@ -304,19 +318,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingVertical: verticalScale(3),
     borderRadius: 6,
     borderWidth: 1,
     marginRight: 10,
   },
-  costBadgeText: { fontSize: 12, fontWeight: '700' },
+  costBadgeText: { fontSize: fontScale(12), fontWeight: '700' },
   // pill variant
-  pillLabel: { fontSize: 12, fontWeight: '500', marginBottom: 6, marginLeft: 4 },
+  pillLabel: {
+    fontSize: fontScale(12),
+    fontWeight: '500',
+    marginBottom: verticalScale(6),
+    marginLeft: 4,
+  },
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderRadius: 12,
     borderWidth: 1,
   },
@@ -324,7 +343,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 7,
-    paddingVertical: 2,
+    paddingVertical: verticalScale(2),
     borderRadius: 6,
     marginRight: 8,
   },
@@ -337,8 +356,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingHorizontal: 16,
-    paddingTop: 10,
-    paddingBottom: 8,
+    paddingTop: verticalScale(10),
+    paddingBottom: verticalScale(8),
   },
   modalHandle: {
     width: 40,
@@ -346,12 +365,12 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: 'rgba(255,255,255,0.2)',
     alignSelf: 'center',
-    marginBottom: 12,
+    marginBottom: verticalScale(12),
   },
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
 });

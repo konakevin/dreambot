@@ -1,6 +1,7 @@
 import { Modal, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 interface ConfirmDialogProps {
   visible: boolean;
@@ -64,17 +65,17 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '800',
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
     textAlign: 'center',
   },
   message: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: verticalScale(24),
   },
   confirmButton: {
     width: '100%',
@@ -83,11 +84,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
+    marginBottom: verticalScale(10),
   },
   confirmText: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '700',
     letterSpacing: 0.3,
   },
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     color: colors.textSecondary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '600',
   },
 });

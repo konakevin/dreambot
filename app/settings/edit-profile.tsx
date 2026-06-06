@@ -30,6 +30,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
 import { useOnboardingStore } from '@/store/onboarding';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
@@ -310,12 +311,12 @@ const styles = StyleSheet.create({
   },
   topBarTitle: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '700',
   },
   saveText: {
     color: colors.accent,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '700',
   },
   saveTextDisabled: {
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 40,
+    paddingBottom: verticalScale(40),
     gap: 20,
   },
   avatarBlock: {
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   },
   avatarInitial: {
     color: colors.textPrimary,
-    fontSize: 36,
+    fontSize: fontScale(36),
     fontWeight: '700',
   },
   avatarSpinner: {
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
   },
   changePhotoText: {
     color: colors.accent,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   field: {
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
     letterSpacing: 0.5,
   },
@@ -372,9 +373,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
   },
   inputMultiline: {
     minHeight: 72,
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   },
   charCount: {
     color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: fontScale(11),
     alignSelf: 'flex-end',
   },
   section: {
@@ -390,7 +391,7 @@ const styles = StyleSheet.create({
   },
   sectionLabel: {
     color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '700',
     letterSpacing: 0.5,
     marginLeft: 4,
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingHorizontal: 14,
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
   },
   drillRowBorder: {
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -416,7 +417,7 @@ const styles = StyleSheet.create({
   drillLabel: {
     flex: 1,
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '500',
   },
 });

@@ -13,6 +13,7 @@ import { useToggleCommentLike } from '@/hooks/useToggleCommentLike';
 import { useDeleteComment } from '@/hooks/useDeleteComment';
 import type { Comment } from '@/hooks/useComments';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 function formatTimeAgo(dateStr: string): string {
   const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     gap: 10,
   },
   replyRow: {
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     color: colors.textPrimary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '700',
   },
   body: {
@@ -237,17 +238,17 @@ const styles = StyleSheet.create({
   },
   username: {
     color: colors.textPrimary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '700',
   },
   time: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
   },
   commentText: {
     color: colors.textPrimary,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
   },
   mention: {
     color: '#6699EE',
@@ -256,21 +257,21 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: 'row',
     gap: 16,
-    marginTop: 4,
+    marginTop: verticalScale(4),
   },
   actionText: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
   },
   likeButton: {
     alignItems: 'center',
     gap: 2,
-    paddingTop: 4,
+    paddingTop: verticalScale(4),
   },
   likeCount: {
     color: 'rgba(255,255,255,0.4)',
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '600',
   },
   likeCountActive: {
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 58,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
     gap: 6,
   },
   repliesLine: {
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
   },
   repliesToggleText: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
   },
 });

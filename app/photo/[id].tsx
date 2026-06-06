@@ -1,5 +1,6 @@
 import { useMemo, useCallback, useEffect, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { FlatList } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
@@ -324,20 +325,20 @@ const s = StyleSheet.create({
   },
   unavailableTitle: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: fontScale(20),
     fontWeight: '600',
-    marginTop: 16,
+    marginTop: verticalScale(16),
   },
   unavailableBody: {
     color: '#9CA3AF',
-    fontSize: 15,
+    fontSize: fontScale(15),
     textAlign: 'center',
-    marginTop: 8,
+    marginTop: verticalScale(8),
   },
   unavailableBtn: {
-    marginTop: 24,
+    marginTop: verticalScale(24),
     paddingHorizontal: 24,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderRadius: 24,
     backgroundColor: '#1A1A2E',
     borderWidth: 1,
@@ -345,7 +346,7 @@ const s = StyleSheet.create({
   },
   unavailableBtnText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '500',
   },
 });

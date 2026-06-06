@@ -9,6 +9,7 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 const MASCOT = require('@/assets/images/splash-icon.png');
 
@@ -105,38 +106,38 @@ export default function AboutScreen() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingBottom: 80 },
+  scroll: { paddingBottom: verticalScale(80) },
   heroWrap: {
     alignItems: 'center',
-    paddingVertical: 32,
+    paddingVertical: verticalScale(32),
     paddingHorizontal: 24,
     gap: 8,
   },
   mascot: {
     width: 140,
     height: 140,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
   heroTitle: {
     color: colors.textPrimary,
-    fontSize: 24,
+    fontSize: fontScale(24),
     fontWeight: '800',
     letterSpacing: -0.3,
   },
   heroSub: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontStyle: 'italic',
   },
   body: {
     paddingHorizontal: 24,
-    paddingBottom: 24,
+    paddingBottom: verticalScale(24),
   },
   paragraph: {
     color: colors.textPrimary,
-    fontSize: 15,
-    lineHeight: 24,
-    marginBottom: 16,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(24),
+    marginBottom: verticalScale(16),
   },
   bold: {
     fontWeight: '700',
@@ -149,30 +150,30 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '700',
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
   },
   bandList: {
     gap: 6,
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
     paddingLeft: 8,
   },
   band: {
     color: colors.accent,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '600',
   },
   signoff: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '600',
-    marginTop: 8,
+    marginTop: verticalScale(8),
   },
   signoffSmall: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontStyle: 'italic',
-    marginTop: 4,
+    marginTop: verticalScale(4),
   },
 });

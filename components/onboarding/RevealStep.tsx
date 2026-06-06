@@ -481,7 +481,7 @@ export function RevealStep({ onBack }: Props) {
           <Text style={s.bigTitle}>Save your changes</Text>
           <Text style={s.centeredSub}>Your updated taste profile will shape all future dreams</Text>
           <TouchableOpacity
-            style={[s.createButton, { alignSelf: 'stretch', marginTop: 8 }]}
+            style={[s.createButton, { alignSelf: 'stretch', marginTop: verticalScale(8) }]}
             onPress={async () => {
               if (!user) return;
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -500,8 +500,14 @@ export function RevealStep({ onBack }: Props) {
           >
             <Text style={s.createButtonText}>Save Changes</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginTop: 12 }} onPress={onBack} activeOpacity={0.7}>
-            <Text style={{ color: colors.textSecondary, fontSize: 15, fontWeight: '600' }}>
+          <TouchableOpacity
+            style={{ marginTop: verticalScale(12) }}
+            onPress={onBack}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={{ color: colors.textSecondary, fontSize: fontScale(15), fontWeight: '600' }}
+            >
               Go Back
             </Text>
           </TouchableOpacity>
@@ -521,15 +527,21 @@ export function RevealStep({ onBack }: Props) {
             Your DreamBot knows what you like. Tap below to see what it dreams up!
           </Text>
           <TouchableOpacity
-            style={[s.createButton, { alignSelf: 'stretch', marginTop: 8 }]}
+            style={[s.createButton, { alignSelf: 'stretch', marginTop: verticalScale(8) }]}
             onPress={() => generateImage()}
             activeOpacity={0.7}
           >
             <Ionicons name="sparkles" size={18} color="#FFFFFF" />
             <Text style={s.createButtonText}>Let’s go!</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginTop: 12 }} onPress={onBack} activeOpacity={0.7}>
-            <Text style={{ color: colors.textSecondary, fontSize: 15, fontWeight: '600' }}>
+          <TouchableOpacity
+            style={{ marginTop: verticalScale(12) }}
+            onPress={onBack}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={{ color: colors.textSecondary, fontSize: fontScale(15), fontWeight: '600' }}
+            >
               Back
             </Text>
           </TouchableOpacity>
@@ -701,7 +713,7 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(22),
   },
 
-  content: { flex: 1, paddingTop: 4, alignItems: 'center' },
+  content: { flex: 1, paddingTop: verticalScale(4), alignItems: 'center' },
   heading: {
     color: colors.textPrimary,
     fontSize: fontScale(20),
@@ -751,13 +763,13 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     gap: 12,
   },
-  generatingText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
+  generatingText: { color: '#FFFFFF', fontSize: fontScale(16), fontWeight: '700' },
 
   dots: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 8,
-    marginTop: 14,
+    marginTop: verticalScale(14),
   },
   dot: {
     width: 8,
@@ -790,7 +802,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: verticalScale(16),
-    marginTop: 4,
+    marginTop: verticalScale(4),
   },
   secondaryButtonText: {
     color: 'rgba(255,255,255,0.7)',

@@ -9,6 +9,7 @@ import { useAuthStore } from '@/store/auth';
 import { trackFeedTabSelected } from '@/lib/analytics';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
 import { supabase } from '@/lib/supabase';
@@ -276,7 +277,7 @@ export default function HomeScreen() {
       <Animated.View style={[s.topOverlayWrap, overlayStyle]}>
         <LinearGradient
           colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'transparent']}
-          style={[s.topOverlay, { paddingTop: insets.top, paddingBottom: 20 }]}
+          style={[s.topOverlay, { paddingTop: insets.top, paddingBottom: verticalScale(20) }]}
           pointerEvents="box-none"
         >
           <View style={s.topRow}>
@@ -299,8 +300,8 @@ const s = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 40,
   },
-  emptyTitle: { color: colors.textPrimary, fontSize: 20, fontWeight: '700' },
-  emptySub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
+  emptyTitle: { color: colors.textPrimary, fontSize: fontScale(20), fontWeight: '700' },
+  emptySub: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
   topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
   topOverlay: {},
   topRow: {

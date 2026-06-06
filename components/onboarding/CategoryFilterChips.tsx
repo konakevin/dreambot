@@ -5,6 +5,7 @@
 import { TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 interface Category {
   key: string;
@@ -43,12 +44,12 @@ export function CategoryFilterChips({ categories, active, onSelect }: Props) {
 const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     gap: 8,
   },
   chip: {
     paddingHorizontal: 14,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
     borderRadius: 16,
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     borderColor: colors.accent,
   },
   text: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     color: colors.textSecondary,
     fontWeight: '500',
   },

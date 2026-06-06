@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 export type StatsTab = 'posts' | 'followers' | 'following';
 
@@ -59,8 +60,8 @@ export function ProfileStatsRow({
 const styles = StyleSheet.create({
   statsRow: { flexDirection: 'row', alignItems: 'center' },
   stat: { flex: 1, alignItems: 'center' },
-  statNumber: { color: colors.textPrimary, fontSize: 18, fontWeight: '800' },
-  statLabel: { color: colors.textSecondary, fontSize: 12, marginTop: 2 },
+  statNumber: { color: colors.textPrimary, fontSize: fontScale(18), fontWeight: '800' },
+  statLabel: { color: colors.textSecondary, fontSize: fontScale(12), marginTop: verticalScale(2) },
   statLabelActive: { color: colors.textPrimary },
   statDivider: { width: 0.5, height: 28, backgroundColor: colors.border },
 });

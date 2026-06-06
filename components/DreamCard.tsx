@@ -33,6 +33,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { handleImageLongPress, openDownloadSheet } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import { avatarUrl } from '@/lib/imageUrl';
@@ -733,7 +734,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     borderRadius: 22,
     backgroundColor: 'rgba(0,0,0,0.65)',
     borderWidth: 1,
@@ -741,7 +742,7 @@ const s = StyleSheet.create({
   },
   retryText: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   wishGlow: {
@@ -817,19 +818,19 @@ const s = StyleSheet.create({
     right: 60,
     paddingHorizontal: 16,
     gap: 6,
-    paddingBottom: 4,
+    paddingBottom: verticalScale(4),
   },
   // Model badge — small chip rendered above the usernameRow. flex-start
   // wrapper keeps the chip hugging its label width (without it, the chip
   // would stretch the full row). Translucent dark fill + tight padding so
   // it doesn't compete with the username/caption typography for attention.
-  modelBadgeWrap: { flexDirection: 'row', marginBottom: 6 },
+  modelBadgeWrap: { flexDirection: 'row', marginBottom: verticalScale(6) },
   modelBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
     paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingVertical: verticalScale(3),
     borderRadius: 999,
     backgroundColor: 'rgba(0,0,0,0.55)',
     borderWidth: StyleSheet.hairlineWidth,
@@ -837,11 +838,11 @@ const s = StyleSheet.create({
   },
   modelBadgeText: {
     color: '#FFFFFF',
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '600',
     letterSpacing: 0.2,
   },
-  usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 8 },
+  usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: verticalScale(8) },
   avatar: {
     width: 32,
     height: 32,
@@ -857,10 +858,10 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
+  avatarText: { color: '#FFFFFF', fontSize: fontScale(14), fontWeight: '700' },
   username: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '700',
     textShadowColor: 'rgba(0,0,0,0.4)',
     textShadowRadius: 16,
@@ -868,20 +869,20 @@ const s = StyleSheet.create({
   },
   description: {
     color: 'rgba(255,255,255,0.85)',
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '400',
-    marginTop: 2,
+    marginTop: verticalScale(2),
     textShadowColor: 'rgba(0,0,0,0.4)',
     textShadowRadius: 16,
     textShadowOffset: { width: 0, height: 0 },
   } as TextStyle,
   timestamp: {
     color: 'rgba(255,255,255,0.7)',
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '500',
     textShadowColor: 'rgba(0,0,0,0.4)',
     textShadowRadius: 16,
     textShadowOffset: { width: 0, height: 0 },
-    marginTop: 1,
+    marginTop: verticalScale(1),
   },
 });

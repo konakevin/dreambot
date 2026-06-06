@@ -15,22 +15,23 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { FluxModelPicker } from '@/components/FluxModelPicker';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 export default function SettingsAdvancedModeScreen() {
   return (
     <ScreenLayout title="Advanced Mode">
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 48 }}
+        contentContainerStyle={{ paddingBottom: verticalScale(48) }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+        <View style={{ paddingHorizontal: 16, paddingTop: verticalScale(16) }}>
           <Text style={[styles.intro, { color: colors.textSecondary }]}>
             When Advanced Mode is on (Create tab), your prompt is sent verbatim to the model — no AI
             enhancement, no medium or vibe directives, no face swap. Pick which model handles those
             renders. Premium models cost more sparkles per render.
           </Text>
         </View>
-        <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
+        <View style={{ paddingHorizontal: 16, paddingTop: verticalScale(8) }}>
           <FluxModelPicker variant="list" />
         </View>
       </ScrollView>
@@ -40,7 +41,7 @@ export default function SettingsAdvancedModeScreen() {
 
 const styles = StyleSheet.create({
   intro: {
-    fontSize: 13,
-    lineHeight: 19,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(19),
   },
 });

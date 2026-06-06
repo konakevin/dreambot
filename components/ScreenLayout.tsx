@@ -27,6 +27,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { HEADER_H_PAD, HEADER_V_PAD, NAV_ICON_SIZE, NAV_HIT_SLOP } from '@/constants/layout';
 
 interface ScreenLayoutProps {
@@ -126,7 +127,7 @@ const s = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '700',
   },
   titleSpacer: { flex: 1 },

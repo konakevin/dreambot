@@ -7,6 +7,7 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 interface Props {
   items: string[];
@@ -71,7 +72,7 @@ export function ChipsRow({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     paddingHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
@@ -87,13 +88,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
     borderRadius: 16,
     borderWidth: 1,
     backgroundColor: `${colors.accent}12`,
   },
   chipText: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
     maxWidth: 120,
   },
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: verticalScale(6),
     borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
@@ -112,11 +113,11 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   addText: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     color: colors.textSecondary,
   },
   emptyText: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     color: colors.textSecondary,
     fontStyle: 'italic',
   },

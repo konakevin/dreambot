@@ -25,6 +25,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import {
   NOTIFICATION_CATEGORIES,
   isCategoryEnabled,
@@ -193,55 +194,55 @@ export default function NotificationsSettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingBottom: 60 },
-  center: { paddingTop: 80, alignItems: 'center' },
+  scroll: { paddingBottom: verticalScale(60) },
+  center: { paddingTop: verticalScale(80), alignItems: 'center' },
   sectionHeader: {
     color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '600',
     letterSpacing: 0.8,
     paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(8),
   },
   section: {
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
   },
   // Master push row — wide, single switch, mirrors settings/index Privacy row.
   masterRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
     gap: 12,
   },
   masterLabel: {
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '500',
   },
   masterSublabel: {
     color: colors.textSecondary,
-    fontSize: 12,
-    marginTop: 2,
+    fontSize: fontScale(12),
+    marginTop: verticalScale(2),
   },
   // Grid header: column labels above the 7 category rows.
   gridHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(8),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
   },
   gridHeaderLabel: {
     color: colors.textTertiary,
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '600',
     letterSpacing: 0.6,
     width: 64,
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
   },
@@ -262,13 +263,13 @@ const styles = StyleSheet.create({
   },
   gridLabel: {
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '500',
   },
   gridSublabel: {
     color: colors.textSecondary,
-    fontSize: 12,
-    marginTop: 2,
+    fontSize: fontScale(12),
+    marginTop: verticalScale(2),
   },
   gridSwitchCol: {
     width: 64,
@@ -287,9 +288,9 @@ const styles = StyleSheet.create({
   },
   footerCopy: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     paddingHorizontal: 16,
-    paddingTop: 8,
-    lineHeight: 17,
+    paddingTop: verticalScale(8),
+    lineHeight: fontScale(17),
   },
 });
