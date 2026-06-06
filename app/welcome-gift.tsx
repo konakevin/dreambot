@@ -33,7 +33,7 @@ import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { router } from 'expo-router';
 import { colors } from '@/constants/theme';
-import { vs, vsClamp, fs } from '@/lib/responsive';
+import { verticalScale, verticalScaleClamped, fontScale } from '@/lib/responsive';
 
 // Same gradient as onboarding WelcomeStep — keeps the brand wordmark
 // consistent across the two welcome surfaces.
@@ -50,7 +50,7 @@ const MASCOTS = [
   require('@/assets/images/mascots/mascot-5.jpg'),
 ];
 
-const MASCOT_SIZE = vsClamp(140, 110, 160);
+const MASCOT_SIZE = verticalScaleClamped(140, 110, 160);
 
 function FeatureRow({ emoji, text }: { emoji: string; text: string }) {
   return (
@@ -151,7 +151,7 @@ const s = StyleSheet.create({
   },
   backBtn: {
     position: 'absolute',
-    top: vs(8),
+    top: verticalScale(8),
     left: 12,
     padding: 8,
     zIndex: 10,
@@ -159,8 +159,8 @@ const s = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 28,
-    paddingTop: vs(48),
-    paddingBottom: vs(32),
+    paddingTop: verticalScale(48),
+    paddingBottom: verticalScale(32),
     alignItems: 'center',
   },
 
@@ -168,12 +168,12 @@ const s = StyleSheet.create({
     width: MASCOT_SIZE,
     height: MASCOT_SIZE,
     borderRadius: 28,
-    marginBottom: vs(20),
+    marginBottom: verticalScale(20),
   },
 
   eyebrow: {
     color: colors.textPrimary,
-    fontSize: fs(17),
+    fontSize: fontScale(17),
     fontWeight: '500',
     textAlign: 'center',
     marginBottom: 4,
@@ -184,7 +184,7 @@ const s = StyleSheet.create({
   // hero reads the same on both surfaces. The mask is the bold text;
   // the gradient is the underlying paint.
   titleMask: {
-    fontSize: fs(40),
+    fontSize: fontScale(40),
     fontWeight: '800',
     letterSpacing: -0.5,
     color: '#FFFFFF',
@@ -195,7 +195,7 @@ const s = StyleSheet.create({
   },
 
   giftCard: {
-    marginTop: vs(28),
+    marginTop: verticalScale(28),
     paddingHorizontal: 24,
     paddingVertical: 18,
     borderRadius: 18,
@@ -211,24 +211,24 @@ const s = StyleSheet.create({
   },
   giftBig: {
     color: colors.textPrimary,
-    fontSize: fs(26),
+    fontSize: fontScale(26),
     fontWeight: '800',
     letterSpacing: -0.3,
   },
   giftSubtitle: {
     color: colors.textSecondary,
-    fontSize: fs(14),
+    fontSize: fontScale(14),
     fontWeight: '500',
     marginTop: 2,
   },
 
   intro: {
     color: colors.textPrimary,
-    fontSize: fs(15),
+    fontSize: fontScale(15),
     fontWeight: '600',
     textAlign: 'center',
-    marginTop: vs(28),
-    marginBottom: vs(14),
+    marginTop: verticalScale(28),
+    marginBottom: verticalScale(14),
     opacity: 0.92,
   },
   featureList: {
@@ -248,17 +248,17 @@ const s = StyleSheet.create({
   },
   featureText: {
     color: colors.textPrimary,
-    fontSize: fs(15),
+    fontSize: fontScale(15),
     fontWeight: '500',
     flex: 1,
   },
 
   footnote: {
     color: colors.textSecondary,
-    fontSize: fs(13),
+    fontSize: fontScale(13),
     fontWeight: '500',
     textAlign: 'center',
-    marginTop: vs(24),
+    marginTop: verticalScale(24),
     paddingHorizontal: 12,
   },
 
@@ -283,7 +283,7 @@ const s = StyleSheet.create({
   },
   ctaText: {
     color: '#FFFFFF',
-    fontSize: fs(17),
+    fontSize: fontScale(17),
     fontWeight: '700',
     letterSpacing: 0.2,
   },

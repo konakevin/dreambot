@@ -27,7 +27,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { useLocalSearchParams } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
-import { vs } from '@/lib/responsive';
+import { verticalScale } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
 import * as nav from '@/lib/navigate';
 import { useDreamStore } from '@/store/dream';
@@ -433,17 +433,17 @@ const s = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: colors.surface,
-    maxHeight: vs(280),
+    maxHeight: verticalScale(280),
   },
   previewCardDuo: {
-    maxHeight: vs(200),
+    maxHeight: verticalScale(200),
     maxWidth: '40%',
   },
   previewCardSmall: {
     flex: 0,
     aspectRatio: 1,
-    width: vs(200),
-    height: vs(200),
+    width: verticalScale(200),
+    height: verticalScale(200),
     maxHeight: undefined,
     alignSelf: 'center',
   },
@@ -549,7 +549,7 @@ const s = StyleSheet.create({
   promptClear: { paddingTop: 2, paddingLeft: 8 },
 
   // Footer
-  footer: { paddingHorizontal: 24, paddingVertical: 12, paddingBottom: vs(36) },
+  footer: { paddingHorizontal: 24, paddingVertical: 12, paddingBottom: verticalScale(36) },
   dreamBtn: {
     flexDirection: 'row',
     alignItems: 'center',

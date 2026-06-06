@@ -22,7 +22,7 @@ import { PostTile } from '@/components/PostTile';
 import { useAlbumStore } from '@/store/album';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
-import { vs } from '@/lib/responsive';
+import { verticalScale } from '@/lib/responsive';
 import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
 import type { DreamPostItem } from '@/components/DreamCard';
 
@@ -332,7 +332,7 @@ export function PostGrid({
         // evicted and remounted during slow drags. Letting FlatList
         // measure is correct and we don't use scrollToIndex anywhere.
         columnWrapperStyle={styles.row}
-        contentContainerStyle={{ paddingBottom: vs(90) }}
+        contentContainerStyle={{ paddingBottom: verticalScale(90) }}
         windowSize={7}
         maxToRenderPerBatch={6}
         initialNumToRender={12}

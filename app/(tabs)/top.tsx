@@ -48,7 +48,7 @@ import { FilterPickerSheet } from '@/components/FilterPickerSheet';
 import { PostTile } from '@/components/PostTile';
 import { GridSkeleton } from '@/components/Skeleton';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
-import { vs } from '@/lib/responsive';
+import { verticalScale } from '@/lib/responsive';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 // ── Browse mode feed query ───────────────────────────────────────────────────
@@ -414,7 +414,7 @@ export default function SearchExploreScreen() {
           keyExtractor={(item) => item.id}
           numColumns={NUM_COLUMNS}
           columnWrapperStyle={s.gridRow}
-          contentContainerStyle={{ paddingTop: overlayHeight, paddingBottom: vs(90) }}
+          contentContainerStyle={{ paddingTop: overlayHeight, paddingBottom: verticalScale(90) }}
           windowSize={7}
           maxToRenderPerBatch={8}
           initialNumToRender={10}

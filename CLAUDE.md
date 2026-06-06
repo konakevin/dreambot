@@ -20,6 +20,7 @@ DreamBot is an AI-powered dream image generator for iOS. Users build a "Vibe Pro
 
 - **Framework:** React Native 0.81 + Expo SDK 54, Expo Router v6 (file-based)
 - **Styling:** NativeWind v4 preferred for new code; existing `StyleSheet.create` is fine — match each file's existing style
+- **Responsive sizing:** all new UI components import scale helpers from `@/lib/responsive` — `verticalScale(n)` for paddings/margins/dimensions, `fontScale(n)` for `fontSize`/`lineHeight`, `horizontalScale(n)` for sparse horizontal needs, `verticalScaleClamped(n, min, max)` for hero elements with floors/ceilings, `useDeviceClass()` → `{isSmall, isLarge, isTablet, height, width}` for conditional layouts. Don't introduce hardcoded numeric values in `StyleSheet.create` or `style={{}}` — design at the iPhone 14 base (844×390pt) and scale. Legacy code is grandfathered; new code that adds hardcoded values is a regression.
 - **State:** Zustand (client) + TanStack Query v5 (server/async)
 - **Backend:** Supabase (Postgres, auth, storage, realtime, Deno Edge Functions)
 - **AI Image Gen:** Replicate (Flux family) + Gemini (Nano Banana) + OpenAI (GPT Image 2)

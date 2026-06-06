@@ -37,7 +37,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
-import { vs } from '@/lib/responsive';
+import { verticalScale } from '@/lib/responsive';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -702,7 +702,7 @@ export default function CreateScreen() {
         </ScrollView>
 
         {/* Fixed footer — always visible above keyboard */}
-        <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : vs(96) }}>
+        <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : verticalScale(96) }}>
           {/* Contextual hint */}
           <View className="flex-row items-center justify-center gap-1.5 mb-2">
             {exactPromptSelfWarning ? (
