@@ -10,8 +10,8 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
-  Share,
 } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -24,6 +24,7 @@ import { useSendShare } from '@/hooks/useSendShare';
 import { useStandardSheetDismiss } from '@/hooks/gestures/useStandardSheetDismiss';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { openDownloadSheet } from '@/lib/imageLongPress';
+import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { trackPostShared } from '@/lib/analytics';
@@ -129,22 +130,33 @@ export default function SharePostScreen() {
     );
   }
 
-  function handleCopyLink() {
+  async function handleCopyLink() {
+    // Use Clipboard directly instead of native Share.share — Share.share
+    // opens the iOS share-picker (a SECOND menu) which is redundant when
+    // the user just hit "Copy". Plain clipboard write + Toast = one tap,
+    // one outcome.
+    await Clipboard.setStringAsync(`https://dreambotapp.com/post/${uploadId}`);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    const label = username ? `View ${username}'s dream` : 'View this dream';
-    Share.share({
-      message: `${label}\nhttps://dreambotapp.com/post/${uploadId}`,
-    });
+    Toast.show('Link copied', 'checkmark-circle');
   }
 
   function handleSave() {
     if (!imageUrl) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    openDownloadSheet({
-      id: uploadId!,
-      imageUrl,
-      imageUrlHq: imageUrlHq ?? null,
-    });
+    // Dismiss this sheet FIRST — `openDownloadSheet` shows a CustomAlert
+    // that renders below the still-mounted share sheet, which is why the
+    // tap "did nothing" before. Closing the sheet lets the alert land on
+    // top of the screen the user came from.
+    router.back();
+    // Defer to the next tick so the dismiss animation has started before
+    // we render the alert (avoids a flash of the alert under the sheet).
+    setTimeout(() => {
+      openDownloadSheet({
+        id: uploadId!,
+        imageUrl,
+        imageUrlHq: imageUrlHq ?? null,
+      });
+    }, 220);
   }
 
   return (
