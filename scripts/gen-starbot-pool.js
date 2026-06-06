@@ -2499,6 +2499,306 @@ Examples:
 
 Avoid duplicating: AWE, DREAD, MELANCHOLY, SACRED, INDIFFERENT-MEGALOPOLIS, ALIEN-WONDER, FRONTIER-ISOLATION, TRIUMPHANT-DISCOVERY. Invent NEW moods — EUPHORIC-ASCENSION, COSMIC-HOSTILITY, ANCIENT-PATIENCE, NEUROTIC-SUBLIME, TENDER-LONELINESS, EXALTED-VIGIL, etc. Output 25 numbered list entries.`,
   },
+  // ════════════════════════════════════════════════════════
+  // PORTED 2026-06-05 from legacy gen-seeds/starbot/gen-*.js
+  // Migrated to gain the proper dedup pipeline (signatureOf + dedupe +
+  // cross-batch dedup + --target N iterative loop). The legacy scripts
+  // lacked programmatic dedup so "200 entries" was actually clustering.
+  // Per playbook §"Pool generation MUST have dedup" lines 333-471.
+  // All entries CLEANED of franchise NAMES per Kevin's "no IP refs" rule.
+  // ════════════════════════════════════════════════════════
+
+  sci_fi_race: {
+    format: 'simple',
+    theme: `STARBOT SCI-FI LINEAGE — humanoid alien + cultural human + augmented + synthetic FACE/BODY descriptions for the female-explorer and male-explorer paths. Each entry: 15-25 words. Gender-neutral. Describe alien anatomy and human cultures freely; never NAME a franchise.
+
+CORE RULE: describe alien features as features (head-tendrils, pointed ears, montral-like striped projections, forehead ridges, blue/green/violet skin, etc.) — but NEVER write a franchise / species / trademark NAME in the output. The aesthetic inspiration is fine; the NAME is not.
+
+NEVER WRITE: Twi'lek, Vulcan, Klingon, Na'vi, Mandalorian, Spartan, Asari, Togruta, Andorian, Trill, Mirialan, Drow, Witcher, Dunmer, Fremen, Space Marine, Edgerunner, Netrunner, Sin'dorei, Romulan, Cardassian, Bajoran, Ferengi, Tholian, Borg, Krogan, Turian, Quarian, Drell, Aeldari, N7, Reaper, beskar, stillsuit, ceramite, bolter, MJOLNIR, ODST, lekku, montrals, Tatooine, Stormtrooper, Jedi, Sith.
+
+VARIETY MANDATE — distribute across:
+• Alien anatomy variants (~40%): head-tendrils + bright skin / pointed ears + colored skin / forehead-ridges + warrior build / smooth-blue head-crest / bone-plated brow / striped head-projections / glowing-eye pointed-ear / antennaed forehead / iridescent scaled jaw / segmented bone-plate at spine.
+• Cultural human variants (~35%): frontier colonist / ship-born spacer / low-grav-evolved / high-grav-evolved / desert-clan nomad / arctic-clan / steppe rider / umber-skinned warrior / Mediterranean noble / Northern fair-skinned.
+• Augmented human (~15%): neural-port at temple / chrome prosthetic limbs / subdermal LED-tracery / smartlink at temple / mantis-blades sheathed at forearms / cosmetic gene-mods.
+• Synthetic / android (~10%): humanoid android eerily-still / synthetic with brand-plate at temple and faint cool glow.
+
+HARD BANS: no horns / antlers / tusks / fangs / demonic imagery (reads fantasy not sci-fi). NO scaled reptilians / beast-headed / fully non-humanoid. HUMAN-SHAPED only. NO franchise names.
+
+Each entry: 15-25 words. Gender-neutral phrasing. One clear visual signature.`,
+    touchpoints: [
+      'Humanoid with two long curving head-tendrils replacing hair, vibrant blue-green skin, expressive features, lithe dancer\'s build.',
+      'Sharply pointed-eared humanoid with green-tinted skin, severe arched eyebrows, almond-shaped eyes, logical disciplined bearing.',
+      'Forehead-ridged warrior humanoid with prominent skull crest, dark flowing mane, bronze skin, fierce battle-scarred features.',
+      'Long-limbed low-grav-evolved human with slender elongated build, accent clan face-tattoos, pale station-born skin, weightless graceful movement.',
+      'Stocky high-gravity-evolved human with broader denser muscular frame, weathered heavy-world features, dark hair, compact build.',
+      'Humanoid android indistinguishable from human, alabaster-perfect skin, unnaturally still poise, faint brand-plate at temple, eerie unblinking gaze.',
+      'Heavy-cyber augmented human with chrome prosthetic limbs, neural ports at temple, glowing subdermal tattoos, urban street-mercenary aesthetic.',
+      'Mahogany-skinned humanoid with lateral nasal-ridges, knotted coils pulled high, copper-flecked double-pupil eyes, single ritual scar at one cheekbone.',
+      'Deep umber dark-skinned human with dark almond eyes, close-cropped twist-braided hair, desert-warrior tribal markings, fierce sun-hardened features.',
+      'Frontier colonist with UV-tanned pioneer skin, sun-bleached blond hair, dust-weathered features, callused hands, rugged settler bearing.',
+    ],
+    instructions: `Each entry is ONE humanoid sci-fi lineage description, 15-25 words. Format: free-form prose. Output as a NUMBERED list.
+
+STRICT BANS: no franchise / species / trademark names anywhere; no horns / antlers / tusks / fangs / demonic imagery (those read fantasy); no scaled reptilians / beast-headed / non-humanoid forms (HUMAN-SHAPED only); no personality or backstory; just the visual signature.
+
+VARIETY: each entry visually distinct from the others — vary skin tone, head feature, eye type, build, markings.`,
+  },
+
+  sci_fi_male_outfits: {
+    format: 'simple',
+    theme: `STARBOT BADASS MALE SCI-FI OUTFITS — ornate, heavy, "holy fuck" space suit / armor / tactical rig descriptions. Each entry: 20-35 words. Battle-worn but magnificent; every detail tells a story.
+
+CORE RULE: NEVER name any sci-fi franchise / species / trademark / character. Describe FEATURES, not franchises. Generic equivalents only — no "Mandalorian", "Master Chief", "MJOLNIR", "Spartan", "beskar", "ceramite", "bolter", "Space Marine", "ODST", "N7", "Halo", "Mass Effect", "Star Wars", "Cyberpunk", "Edgerunner", or any other franchise / trademark term.
+
+OUTFIT CATEGORIES (distribute EVENLY across the pool):
+• Heavy power armor — full plated suit, ornate engravings, glowing power conduits, massive pauldrons.
+• Tactical combat rig — modular plates over tactical undersuit, ammo loops, weapon mounts.
+• Pilot exosuit — reinforced pressure suit with command insignia, HUD helmet, rank-marked pauldrons.
+• Explorer heavy EVA — industrial environmental suit, tool harness, reinforced joints, specimen containers.
+• Bounty hunter loadout — layered mismatched armor, trophy attachments, custom holsters.
+• Cathedral-grade war armor — full-coverage plate with devotional engravings, massive shoulder guards, built-in weaponry (describe the look; NEVER name the franchise).
+• Command battlesuit — officer's armor combining elegance with firepower, ceremonial + functional.
+• Engineer hardsuit — reinforced work armor, integrated tools, welding shield, hydraulic assist.
+• Mercenary custom — personalized kit, high-end + field-repaired mix, story of years.
+• Scavenger rig — cobbled from salvaged suits + alien tech, asymmetric, ugly-beautiful.
+
+DEDUP — vary across: MATERIALS (matte black armor-composite, polished chrome-steel, scorched durasteel, carbon-fiber weave, reactive nano-plate, scarred high-density alloy, brushed titanium, oxidized bronze alloy, alien bone-composite, mag-locked modular plate). SILHOUETTES (full enclosed power armor, chest-heavy asymmetric, light legs + massive torso, balanced tactical, long armored coat over suit, exoskeleton frame, minimal armor + heavy weapons, layered segmented, bulky industrial, streamlined predator). COLORS (matte olive, midnight black, desert sand, gunmetal, blood red, arctic grey, burnt umber, cobalt blue, charcoal, rust-orange).
+
+Describe the OUTFIT only — no body details (clashes with character pool). Focus on construction: plates, seams, power conduits, weapon mounts, ornamentation, wear patterns. Badass through MASS + DETAIL, not exposure. Functional — every element has a plausible purpose.`,
+    touchpoints: [
+      'Matte black armor-composite power suit with glowing cyan conduits across deep chest engravings, massive pauldrons bearing kill-marks, mag-locked rifle on the spine.',
+      'Desert-sand tactical rig with modular ballistic plates over reinforced mesh undersuit, criss-cross ammunition belts, custom-rivet weapon holsters, dusty boots.',
+      'Polished chrome-steel pilot exosuit with reinforced pressure joints, command rank striping, HUD-integrated helmet with targeting array, vacuum-cured gauntlets.',
+      'Scorched durasteel explorer EVA with hydraulic-assist exoskeleton frame, full tool harness across the back, reinforced gauntlets with integrated burner, weathered mag-boots.',
+      'Carbon-fiber bounty hunter loadout with layered patchwork plates, trophy bones wired to one shoulder-guard, twin holstered pistols cross-drawn, dust-cloak over.',
+      'Cathedral-white war armor with devotional script gold-leafed across every plate, massive curved shoulder guards, built-in arm-mounted artillery, ceremonial belt-tassels.',
+      'Burnished bronze command battlesuit with ornate epaulets, integrated power-core glowing at the chest, ceremonial blade at one hip, mil-spec pistol at the other.',
+      'Oxidized bronze engineer hardsuit with welding shield mag-locked at one wrist, hydraulic assist along the spine, integrated repair-tool bandolier across the chest.',
+    ],
+    instructions: `Each entry is ONE outfit, 20-35 words. Format: free-form prose. Output as a NUMBERED list.
+
+STRICT BANS: no franchise / trademark / species / character names; no body / skin descriptions (separate pool); no "generic space marine" or other lazy descriptors; no "sexy" / cheesecake framing.
+
+VARIETY: each outfit visually distinct — different material, silhouette, color, era of use.`,
+  },
+
+  cosmic_oracle_characters: {
+    format: 'simple',
+    theme: `STARBOT COSMIC-ORACLE CHARACTERS — cinematic sci-fi oil-painting portraits of badass, interesting characters in cosmic scenes. Each entry: 20-35 words. Format: "[Role] — [visual description], wearing [gear]".
+
+CORE RULE: NEVER name any sci-fi franchise, species, trademark, or character. Do not write "Mandalorian", "Spartan", "Space Marine", "Boba Fett", "Master Chief", "Twi'lek", "Vulcan", "Turian", "Asari", "Sangheili", "Yautja", "Wraith", "Cardassian", "HK-47", "Bishop", "Terminator", "Ripley", "Shepard", "beskar", "MJOLNIR", "ceramite", "Halo", "Mass Effect", "Star Wars", "Warhammer", or any franchise. Describe FEATURES, not franchises.
+
+CHARACTER MIX (distribute across the pool):
+• ~40% HUMAN — interesting humans (grizzled, scarred, augmented, weathered, young-and-scrappy, old-and-wise, battle-hardened, roguish).
+• ~30% HUMANOID ALIEN — person-shaped but clearly alien: pointed-ear humanoids, blue-skinned head-crest, head-tendril, scaled crested warriors, bone-plated combat-types (describe FEATURES, not franchises).
+• ~20% ARMORED / HELMETED — sealed-helmet bounty hunters, full-coverage power-armored super-soldiers, war-armored knights in heavy plate.
+• ~10% ROBOT / ANDROID / CYBORG — battle-droid commander, humanoid synthetic, chrome endoskeleton, cyborg veteran (not silly).
+
+ROLE MIX (rotate — don't cluster): Bounty hunter / Smuggler / Astronaut / Explorer / Pilot / Mercenary / Scientist / Soldier / Scavenger / Engineer / Medic / Captain / Navigator / Spy / Diplomat / Mystic / Warlord / Sniper / Mechanic / Archaeologist / Trader / Refugee / Drifter / Commander.
+
+WHAT MAKES A CHARACTER COOL: specific weathering (scars, cybernetic replacements, burn marks, tattoos, battle damage). Interesting gear (specific weapons, tools, gadgets, trophies). Attitude in the description ("grizzled", "sharp-eyed", "battle-scarred", "war-weary", "cocky"). Period/culture flavor (samurai-influenced, frontier-in-space, military-spec, nomadic-tribal, corporate-sleek).
+
+MUST-HAVE: 20-35 words strict. Role FIRST, visual description SECOND, gear/wardrobe THIRD. SOLO character, no companions. Gender-neutral or mix freely. Species-neutral language ("scaled warrior" not a franchise term).`,
+    touchpoints: [
+      'Bounty hunter — tall scaled reptilian with scarred snout and cybernetic targeting-eye, wearing battered metallic plate armor with trophy bones wired to shoulder-guards.',
+      'Astronaut — weathered human woman with close-cropped grey hair and radiation burns on her neck, wearing patched EVA suit with mission patches faded to ghosts.',
+      'Smuggler — wiry four-armed alien with blue-grey skin and sharp mandibles, wearing leather flight-jacket over cargo vest, twin pistols in cross-draw holsters.',
+      'Heavy trooper — massive armored figure in scarred power-armor with glowing eye-slits, chain-saw blade mag-locked to back, kill-tallies scratched into shoulder-plate.',
+      'Mechanic — stocky cyborg with one mechanical arm ending in integrated tools, oil-stained coveralls, welding goggles pushed up on forehead, wrench in human hand.',
+      'Explorer — lanky insectoid with compound eyes and chitinous exoskeleton, wearing expedition pack bristling with survey instruments, star-charts rolled in a tube on the back.',
+      'Sniper — lean human with targeting reticle tattooed around one eye and silence-scarred throat, wearing ghillie-tech suit that shifts patterns, long-barrel rifle in hands.',
+      'Diplomat — elegant alien with color-changing skin and elaborate head-crest, wearing formal robes with translation device and credentials on ornate chain.',
+    ],
+    instructions: `Each entry: ONE character, 20-35 words. Format: "[Role] — [visual description], wearing [gear]". Output as a NUMBERED list.
+
+STRICT BANS: no franchise / species / trademark / character names; no children; no sexualized descriptions; no lame/passive characters (everyone has a STORY); no mushrooms / jellyfish / coral / fungi / plants as characters; no "beautiful woman" / "handsome man" (describe the character, not their attractiveness).`,
+  },
+
+  cosmic_oracle_locations: {
+    format: 'simple',
+    theme: `STARBOT COSMIC-ORACLE LOCATIONS — painted sci-fi scenes set in OUR universe (not any existing franchise). Each entry: 25-40 words. ONE specific alien/cosmic location with time-of-cosmic-day + visible cosmic-light-source + atmospheric detail.
+
+CORE RULE: NEVER name any sci-fi franchise, named world, named species, or trademark. Do not write "Coruscant", "Kashyyyk", "Mustafar", "Kamino", "Bespin", "Arrakis", "Caladan", "Giedi-Prime", "Forerunner", "Covenant", "LV-426", "Engineer", "xenomorph", "Citadel", "Omega", "Tuchanka", "krogan", "Eros", "Gargantua", "Necron", "Eldar", "Aeldari", "Polyphemus", "Blade Runner", "Avatar floating mountains", "Star Wars", "Star Trek", "Halo", "Mass Effect", "Dune", "Alien", "Warhammer", or any franchise. Describe FEATURES, not franchises.
+
+LOCATION CATEGORIES (rotate evenly):
+• Tower-stacked megacity worlds (continent-spanning skyline, layered traffic, light-pollution skyglow)
+• Desert / dune worlds (sand sea, wind-carved spires, salt flats, lithic plains)
+• Canopy jungle worlds (towering bioluminescent canopy, vine bridges, light shafts)
+• Lava / volcanic worlds (lava lakes, basalt cliffs, ash storms, magma rivers)
+• Ocean / storm worlds (continent-sized waves, lightning-laced sky, floating platforms)
+• Cloud-city worlds (gas-giant cloud layers, anchored skybridges, sunset-banded atmosphere)
+• Ringworld interiors (curving land arching overhead into far skyline)
+• Garden-arm megastructures (organic-curved orbital habitats with greenery, parks, water features)
+• Forge / industrial worlds (refinery skylines, glowing slag-fields, smoke towers)
+• Dead worlds / ruin worlds (collapsed temples, fossil cities, exposed strata of past civilizations)
+• Crystal worlds (refractive prismatic landscape, geode caverns, light-piping flora)
+• Ice / glacial worlds (frozen seas, ice spires, methane glaciers, aurora-banded sky)
+• Hive / corridor habitats (inside-something — endless tunnels, biomechanical secretion-walls)
+• Tomb-pyramid worlds (ancient stone megastructures, monolithic geometry, low haze)
+• Pure-space cosmic phenomena (Dyson sphere interior, wormhole throat, neutron star surface, dead-god gravesite, black hole accretion disk, dust nebula, supernova remnant)
+
+EVERY ENTRY MUST INCLUDE:
+1. SETTING — specific alien/cosmic environment (described by features, never named after a franchise world)
+2. COSMIC TIME — nebula-twilight, pulsar-midnight, binary-dawn, supernova-noon, etc.
+3. LIGHT SOURCE IN FRAME — black-hole lens-halo, dying-red-giant, crystal refraction, ring-curvature, etc.
+4. ATMOSPHERIC DETAIL — exotic: fluorescent-spore-fog, gravity-shear-shimmer, methane-rain, plasma-glow, etc.
+
+VARIETY: spread evenly across categories (no more than ~12 per category). Vary color palettes (not all red/orange). At least 40% NOT on planet surface (in-space, megastructure, inside-something). Vary atmosphere types.`,
+    touchpoints: [
+      'Tower-stacked megacity at perpetual neon-twilight, kilometer-tall spires pierce violet smog layers as a distant dying star casts amber light through traffic streams.',
+      'Bioluminescent canopy forest at moonless midnight, three small moons visible through tangled branches emit pale cyan light, phosphorescent fungi pulse along the trunks.',
+      'Deep-desert dune sea at binary-dawn, twin suns cresting obsidian rock formations cast sharp crimson and violet shadows across rolling dunes, plasma mirages shimmer over crests.',
+      'Ringworld shadow-zone at eclipse-transition, the ring\'s edge bisects a red giant sun creating a terminator line of fire, shadow sweeps across landscape at visible speed.',
+      'Wormhole throat interior at flux-moment, Einstein-Rosen bridge walls shimmer with chromatic aberration, passing matter streams create lightning-like discharges through exotic-matter framework.',
+      'Ice-planet surface at whiteout-noon, weak sunlight diffuses through horizontal snow creating featureless ivory void, frozen methane crystals suspended in atmosphere refract rainbow halos.',
+      'Neutron star surface at quantum-noon, surface gravity lenses light into impossible angles, matter compressed to nuclear density glows white-hot, magnetic field lines visible as plasma arcs.',
+      'Dyson sphere interior surface at perpetual-zenith, the encapsulated star hangs motionless overhead casting white light across curved metal landscape, atmosphere glows with trapped stellar radiation.',
+    ],
+    instructions: `Each entry: ONE location, 25-40 words. Format: free-form prose, "[setting] at [cosmic time], [light source detail], [atmospheric detail]". Output as a NUMBERED list.
+
+STRICT BANS: NO franchise / world / species / character / trademark names; NO generic "blue sky" (specify alien sky colors); NO characters/people (separate pool); no "desert with twin suns" cliché.`,
+  },
+
+  lighting: {
+    format: 'simple',
+    theme: `STARBOT LIGHTING — sci-fi + real-astronomy lighting treatments. Each entry: 10-20 words. ONE specific lighting treatment.
+
+CORE RULE: NO FRANCHISE NAMES. Describe lighting treatments by their visual signature; never by a franchise / movie / trademark. Do not write "Blade Runner", "Dune", "Interstellar", "Gargantua", "2001", "Arrival", "Annihilation", "Foundation", "Alien", "Prometheus", "Halo", "Mass Effect", "Star Wars", "Star Trek", "Avatar", or any other franchise / trademark term.
+
+CATEGORIES (distribute across the pool):
+• Star illumination: single-star, binary-sun double-light, planet-glow backlighting, eclipse-corona ring-light, sunrise-from-orbit
+• Cosmic light sources: nebula-backlight, nebula-curtain multi-color wash, supernova-flash, accretion-disc lens-light, pulsar-strobe, magnetic-field aurora-cast
+• Scientific imaging: JWST-infrared mapped-color (orange-teal), Hubble-visible-light (natural blue-amber), H-alpha red hydrogen-line, false-color science mapping, ultraviolet-imaged, X-ray-mapped cold-color
+• Urban / industrial: neon-reflected wet-streets, industrial-strobe emergency, cybercity-neon-saturation, fluorescent-ship-interior, plasma-shield blue-ring
+• Atmospheric / planetary: desert binary-star, volcanic-planet underlight (lava glow), ice-world twin-moon silver, gas-giant-reflected warm-cream, alien-bioluminescence gentle-glow
+• Cinematic moods: warp-tunnel streaked-light, monolith-stark-geometric, Dyson-sphere glow-from-inside-out, space-station-command-dim, cryo-blue-sleep-chamber, emergency-red-alert
+
+Each entry: 10-20 words. Sci-fi specific named treatment + 1-2 visual qualifiers.`,
+    touchpoints: [
+      'Single-star illumination with one warm-amber sun casting long sharp shadows over alien terrain.',
+      'Binary-sun double-light producing twin overlapping shadows in dust-orange and pale-violet.',
+      'Neon-reflected wet streets bouncing magenta and electric-cyan signage across rain-slick concrete.',
+      'JWST-infrared mapped color treatment in deep-orange and teal across cosmic structure.',
+      'Accretion-disc lens-light bending around a black-hole event horizon in golden-rim arcs.',
+      'Industrial emergency strobe flashing intermittent red across smoky corridor surfaces.',
+      'Alien bioluminescence gentle glow in soft cyan-green washing over moss-covered ruins.',
+      'Eclipse-corona ring-light radiating diamond-bright at the moment of total eclipse.',
+    ],
+    instructions: `Each entry: ONE lighting treatment, 10-20 words. Format: free-form prose. Output as a NUMBERED list. Cinematic / production-art oriented. NO franchise / movie / trademark names anywhere.`,
+  },
+
+  scene_palettes: {
+    format: 'simple',
+    theme: `STARBOT SCENE PALETTES — cosmic + sci-fi color moods. Each entry: 10-20 words. ONE palette with 3-5 color words + 1-line mood.
+
+CORE RULE: NO FRANCHISE NAMES. Describe palettes by color, never by franchise / movie / trademark. Do not write "Blade Runner", "Dune", "Interstellar", "Annihilation", "Arrival", "2001", "Foundation", "Alien", "Prometheus", "Cyberpunk 2077", "Halo", "Mass Effect", or any other franchise.
+
+CATEGORIES (distribute across the pool):
+• Cosmic / deep-space: indigo + starlight-white + silver + black-void; rose-pink + violet + amber + deep-blue (nebula); teal + cyan + silver + deep-navy (ion); deep-orange + teal + burnt-amber + cobalt (mapped infrared); orange-disc + cobalt-void + black + golden-rim (accretion); amber + blue + cream + shadow-brown (Hubble-style); pearl + iridescent + moss + faded-rose (shimmer)
+• Planetary surfaces: pewter + bone + black-shadow + amber-earth (moon); rust-red + tan + deep-shadow-brown + pale-sky (Mars); pale-blue + white + silver-streak + black-crack (ice-moon); orange + brown + amber + deep-teal-sky (hazy moon); gold + cream + shadow-band + deep-blue-rings (gas-giant); cream + rust + amber + red-spot (storm-giant)
+• Urban / industrial: magenta + cyan + amber + oil-black (wet-neon-night); magenta + cyan + yellow + oil-black (saturated cyberpunk); grey + amber-light + rust + black (mining); rust-orange + tan + deep-shadow-brown + cream (desert-sepia)
+• Architectural / cinematic: cool-grey + cream + warm-amber + oil-black (monolith); white + red-accent + black + cream-wood (sterile-corridor); warm-copper + black + deep-gold (faded-empire); oil-black + bone-white + teal-slime (biomechanical hive); violet-crystal + obsidian + amber-warm (crystal vault); pale-blue + crystal-white + silver + deep-cobalt (ice)
+• Cosmic phenomena: yellow + orange + red + white-hot-core (solar-flare); white-core + red-ring + blue-shockwave (supernova); iridescent + white + blue + violet (wormhole)
+
+Each entry: 10-20 words. 3-5 specific color words + 1-line mood / world type.`,
+    touchpoints: [
+      'Deep-space-indigo palette of indigo + starlight-white + silver + black-void, cold cosmic loneliness.',
+      'Nebula-pink palette of rose-pink + violet + amber + deep-blue, gas clouds glowing softly.',
+      'Wet-neon-night palette of magenta + cyan + amber + oil-black, rain-slick urban surfaces.',
+      'JWST-infrared palette of deep-orange + teal + burnt-amber + cobalt, mapped scientific imaging.',
+      'Accretion-disc palette of orange-disc + cobalt-void + black + golden-rim, gravity-warping light.',
+      'Mars-rust palette of rust-red + tan + deep-shadow-brown + pale-sky, dusty alien surface.',
+      'Biomechanical-hive palette of oil-black + bone-white + teal-slime, claustrophobic alien environment.',
+      'Solar-flare palette of yellow + orange + red + white-hot-core, stellar surface eruption.',
+    ],
+    instructions: `Each entry: ONE palette, 10-20 words with 3-5 specific color words + 1-line mood/context. Output as a NUMBERED list. NO franchise / movie / trademark names anywhere.`,
+  },
+
+  cosmic_phenomena: {
+    format: 'simple',
+    theme: `STARBOT COSMIC PHENOMENA — FICTIONAL sci-fi space/cosmic marvels for the cosmic-vista path. Set in OUR universe (not any existing franchise). Cinematic visual register. Pure environment, no characters. Each entry: 15-30 words.
+
+CORE RULE: NO FRANCHISE NAMES. Describe phenomena by features, never by a franchise / movie / trademark. Do not write "Blade Runner", "Dune", "Interstellar", "Gargantua", "Annihilation", "Arrival", "Star Wars", "Star Trek", "Halo", "Mass Effect", "Avatar", "2001", "Foundation", "Alien", "Prometheus", or any other franchise.
+
+CATEGORIES (distribute across the pool):
+• Nebula sky (impossibly large nebula filling sky, purple-and-gold gas clouds)
+• Black-hole event-horizon (accretion disk glowing, lensed light, no franchise name)
+• Pulsar ice-world (frozen planet with pulsing lighthouse-beam in sky)
+• Binary-sun sunset (two suns setting over alien landscape, long dual shadows)
+• Ringed-planet horizon (standing on moon with massive ringed planet filling sky)
+• Star-field infinity (impossibly dense starfield, Milky-Way-like arc)
+• Wormhole entrance (gravitational lens distorting space visible)
+• Galaxy-overhead (massive spiral galaxy overhead from moon-surface)
+• Supernova mid-explosion (shockwave frozen, expanding light)
+• Quasar distant (blinding bright point with jets)
+• Comet close-pass (massive comet with visible ice tail near planet)
+• Asteroid belt from inside (rocks tumbling past viewer)
+• Solar flare eruption (from close solar orbit, prominences leaping)
+• Magnetosphere aurora (planet seen from space with aurora ring)
+• Fractal-nebula (recursive Mandelbrot-like nebula pattern)
+• Plasma-storm sky (colorful plasma discharges in atmosphere)
+• Crystal-meteor shower (crystalline rocks refracting as they burn)
+• Cosmic string (theoretical gravity-wire visible crossing sky)
+• Dark-matter-cloud hinted (invisible mass distorting starlight)
+• Dual-galaxy collision (two spirals merging)
+• White-hole burst (theoretical reverse-black-hole)
+• Brown-dwarf sun (deep-red dim sun with gas-giant orbiting)
+• Eclipse-of-nebula (moon passing in front of nebula)
+• Ringed-gas-giant with multiple moons aligned
+• Hypervelocity-star streaming through cosmos
+
+Each entry must be: FICTIONAL/concept-art sci-fi (real astronomy goes in real_space_subjects), EPIC scale, NO characters / ships (other paths), mind-bending + awe-inspiring.`,
+    touchpoints: [
+      'Impossibly large nebula filling sky, purple-and-gold gas clouds illuminated from within by hidden young stars, scale grounded by moon-curvature horizon.',
+      'Black-hole event-horizon dominating frame, glowing accretion disk lensed into a golden ring by gravity, infalling matter streaming in spiral arcs.',
+      'Binary-sun sunset over alien dune landscape, twin suns descending behind monolithic rock formations casting long dual shadows in violet and amber.',
+      'Massive ringed planet filling the sky as viewed from its largest moon, ring shadows striping the moonscape with sharp parallel bars.',
+      'Wormhole entrance distorting starfield around a perfect ring of light, gravitational lensing bending background stars into rainbow arcs.',
+      'Frozen pulsar ice-world with rhythmic lighthouse-beam sweeping across the icy surface, twin moons reflecting pale on the cracked plain.',
+      'Supernova mid-explosion frozen at peak intensity, expanding shockwave ring of light, debris streaming radially outward against deep-violet cosmic backdrop.',
+      'Asteroid belt from inside viewer perspective, rocks of varied sizes tumbling past in slow-motion silence, distant sun glinting off polished metal-rich surfaces.',
+    ],
+    instructions: `Each entry: ONE cosmic phenomenon, 15-30 words. Format: free-form prose with scale and detail. Output as a NUMBERED list. FICTIONAL concept-art sci-fi; epic scale; no characters; no ships; NO franchise / trademark / movie names anywhere.`,
+  },
+
+  cosmic_anchors: {
+    format: 'simple',
+    theme: `STARBOT COSMIC FOREGROUND ANCHORS — physical object or structure in FOREGROUND/MIDGROUND of a vast cosmic scene, giving it SCALE and GROUNDING. Each entry: 15-25 words.
+
+The thing in the FOREGROUND that makes the cosmic background feel IMPOSSIBLY VAST. Without an anchor, a nebula is just a pretty gradient. WITH an anchor — a tiny space station silhouetted against it, a derelict ship drifting past, an asteroid catching light — the nebula becomes ENORMOUS and the viewer feels SMALL.
+
+These are NOT the main subject. The cosmic phenomenon IS the subject. These anchors provide SCALE and COMPOSITION.
+
+CORE RULE: NO franchise / trademark / ship names. Describe FEATURES; no "Millennium Falcon", "Normandy", "Enterprise", etc.
+
+ANCHOR CATEGORIES (spread EVENLY — max 2 per category):
+1. Space station / outpost — orbital platform, research station, beacon relay, refueling depot
+2. Derelict / wreckage — ancient ship hulk, shattered hull, debris field, abandoned probe
+3. Asteroid / rock — cratered boulder, crystalline asteroid, tumbling rock catching light
+4. Ship silhouette — distant vessel, approaching freighter, patrol craft, generation ship
+5. Planetary element — planet's curved horizon, ring system edge, moon's surface, atmosphere limb
+6. Megastructure fragment — orbital ring segment, space elevator cable, broken Dyson swarm panel
+7. Natural formation — ice comet trailing gas, rogue planet, brown dwarf, stellar remnant
+8. Satellite / probe — ancient survey probe, communications array, telescope platform
+9. Gateway / portal — warp gate frame, jumpgate ring, gravitational lens structure
+10. Organic / alien — living reef structure, bioluminescent organism, cosmic-jellyfish silhouette, space-whale silhouette
+
+DEDUP: no two anchors should be the same type of object. Each must create a DIFFERENT silhouette shape against the cosmic background. Spread sizes: some tiny (probe), some medium (ship), some massive (megastructure fragment).
+
+Describe the OBJECT only — no cosmic background (separate pool). Include physical detail Flux can render: surface texture, light interaction, scale hints. These sit in FOREGROUND — they catch light, cast shadow, have visible detail.`,
+    touchpoints: [
+      'Tiny orbital research station — wheel-shaped habitat with one rotating ring, communication antennas extended, hull plating darkened by years of micrometeorite impacts.',
+      'Ancient derelict hulk — kilometer-long fractured warship drifting end-over-end, hull breaches exposing internal compartments, one engine bell still glowing faintly.',
+      'Cratered asteroid catching distant sunlight on one face, the other half black-shadowed, slow-spinning, pocked surface littered with metallic ore deposits glinting.',
+      'Distant patrol craft silhouette banking against a nebula backdrop, sleek angular hull catching rim-light, engine plume tracing a fading arc.',
+      'Curved planetary horizon at the bottom of the frame, atmospheric haze layer glowing soft blue, weather systems visible as swirled cloud patterns.',
+      'Broken orbital ring segment drifting in pieces, internal structure exposed showing habitat decks, vegetation visible through cracked viewports.',
+      'Solitary ice comet trailing a long gas tail, cyan-white plume backlit by distant sun, nucleus dark and pitted with sublimation craters.',
+      'Ancient survey probe — boxy chassis with two solar panels deployed, antenna pointed at far star, surface scoured by interstellar dust.',
+    ],
+    instructions: `Each entry: ONE foreground anchor object, 15-25 words. Format: free-form prose describing the OBJECT only (no cosmic background — that's a separate pool). Output as a NUMBERED list. NO franchise / trademark / ship names.`,
+  },
+
   cozy_sci_fi_interiors: {
     theme:
       'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary. Includes private quarters AND cozy social spaces (bars, lounges, observation decks, skybars, viewport lookouts).',
