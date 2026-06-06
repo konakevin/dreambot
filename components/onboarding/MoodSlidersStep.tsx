@@ -18,10 +18,11 @@ import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import type { MoodAxes } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 
-const SLIDER_WIDTH = 260;
+const SLIDER_WIDTH = verticalScaleClamped(260, 220, 280);
 const THUMB_SIZE = 28;
 
 interface SliderCardProps {
@@ -217,37 +218,42 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
 }
 
 const s = StyleSheet.create({
-  scrollContent: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 100 },
+  // paddingBottom was 100 (reservation for the old absolute footer); the
+  // footer is now in-flow so a tight 16 is enough.
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(16),
+  },
   // Sticky header that sits above the ScrollView (matches Locations +
   // BotSelectorStep). Bg-painted so scrolling content doesn't bleed through.
   stickyHeader: {
     paddingHorizontal: 20,
-    paddingTop: 6,
-    paddingBottom: 10,
+    paddingTop: verticalScale(6),
+    paddingBottom: verticalScale(10),
     backgroundColor: colors.background,
   },
 
-  // Tightened from padding:18 / marginBottom:14 / cardDesc.marginBottom:14
-  // so all 4 cards fit above the fold (Kevin: shouldn't have to scroll).
+  // Tightened so all 4 cards fit above the fold without scrolling.
   card: {
     backgroundColor: colors.surface,
     borderRadius: 16,
-    padding: 14,
-    marginBottom: 10,
+    padding: verticalScale(14),
+    marginBottom: verticalScale(10),
     borderWidth: 1,
     borderColor: colors.border,
   },
   cardTitle: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '800',
     marginBottom: 2,
   },
   cardDesc: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
-    marginBottom: 10,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(18),
+    marginBottom: verticalScale(10),
   },
 
   sliderWrap: { alignItems: 'center' },
@@ -258,10 +264,10 @@ const s = StyleSheet.create({
     marginBottom: 2,
   },
   poleCol: { gap: 1 },
-  poleLabel: { color: colors.textMuted, fontSize: 13, fontWeight: '700' },
+  poleLabel: { color: colors.textMuted, fontSize: fontScale(13), fontWeight: '700' },
   poleLabelActive: { color: colors.accent },
-  poleHint: { color: colors.textMuted, fontSize: 11 },
-  hitArea: { paddingVertical: 12 },
+  poleHint: { color: colors.textMuted, fontSize: fontScale(11) },
+  hitArea: { paddingVertical: verticalScale(12) },
   track: {
     width: SLIDER_WIDTH,
     height: 8,

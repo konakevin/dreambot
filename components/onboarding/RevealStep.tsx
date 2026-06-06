@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
@@ -20,6 +21,7 @@ import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analytics';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
 import { Toast } from '@/components/Toast';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 
@@ -28,6 +30,7 @@ const MASCOT = require('@/assets/images/icon.png');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCREEN_HEIGHT * 0.45);
+const IDLE_MASCOT_SIZE = verticalScaleClamped(140, 110, 160);
 
 type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles' | 'finished';
 /**
@@ -68,6 +71,11 @@ export function RevealStep({ onBack }: Props) {
   const setChromeHidden = useOnboardingStore((s) => s.setChromeHidden);
   const user = useAuthStore((s) => s.user);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
+  const insets = useSafeAreaInsets();
+  // Bottom inset for the overlay buttons: respect the home indicator when
+  // present (insets.bottom > 0), otherwise use a sensible floor so the
+  // buttons don't sit flush against the screen edge on SE-class devices.
+  const overlayBottom = Math.max(insets.bottom + verticalScale(8), verticalScale(24));
 
   const [phase, setPhase] = useState<Phase>('idle');
   const [dreams, setDreams] = useState<Dream[]>([]);
@@ -567,7 +575,7 @@ export function RevealStep({ onBack }: Props) {
             // Post-Skip preview — overlay text removed entirely so the dream
             // gets the whole frame. Single bottom CTA finalizes the nav to
             // home (lands on Explore tab by default).
-            <View style={s.finishedFooter}>
+            <View style={[s.finishedFooter, { paddingBottom: overlayBottom }]}>
               <View style={s.finishedFooterScrim} />
               <TouchableOpacity
                 style={s.createButton}
@@ -588,9 +596,9 @@ export function RevealStep({ onBack }: Props) {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                paddingBottom: 50,
+                paddingBottom: overlayBottom,
                 paddingHorizontal: 24,
-                paddingTop: 80,
+                paddingTop: verticalScale(60),
                 backgroundColor: 'transparent',
               }}
             >
@@ -642,16 +650,16 @@ const s = StyleSheet.create({
   },
 
   // Post-Skip "finished" state — just a thin gradient scrim behind a
-  // single Go-to-feed CTA pinned at the bottom. No headline, no body
-  // text — the dream takes the whole screen.
+  // single Go-to-feed CTA pinned at the bottom. paddingBottom comes from
+  // the safe-area inset (set in-component) so the CTA sits above the
+  // home indicator on devices that have one.
   finishedFooter: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    paddingBottom: 50,
     paddingHorizontal: 24,
-    paddingTop: 60,
+    paddingTop: verticalScale(60),
   },
   finishedFooterScrim: {
     ...StyleSheet.absoluteFillObject,
@@ -662,48 +670,53 @@ const s = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: verticalScale(16),
     paddingHorizontal: 32,
   },
   idleMascot: {
-    width: 140,
-    height: 140,
+    width: IDLE_MASCOT_SIZE,
+    height: IDLE_MASCOT_SIZE,
     borderRadius: 28,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
-  bigTitle: { color: colors.textPrimary, fontSize: 22, fontWeight: '800', textAlign: 'center' },
-  centeredSub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
-  revealTitle: {
-    color: '#FFFFFF',
-    fontSize: 22,
+  bigTitle: {
+    color: colors.textPrimary,
+    fontSize: fontScale(22),
     fontWeight: '800',
     textAlign: 'center',
-    marginBottom: 10,
+  },
+  centeredSub: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
+  revealTitle: {
+    color: '#FFFFFF',
+    fontSize: fontScale(22),
+    fontWeight: '800',
+    textAlign: 'center',
+    marginBottom: verticalScale(10),
   },
   revealBody: {
     color: 'rgba(255,255,255,0.85)',
-    fontSize: 15,
-    lineHeight: 21,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(21),
     textAlign: 'center',
-    marginBottom: 22,
+    marginBottom: verticalScale(22),
   },
 
   content: { flex: 1, paddingTop: 4, alignItems: 'center' },
   heading: {
     color: colors.textPrimary,
-    fontSize: 20,
+    fontSize: fontScale(20),
     fontWeight: '800',
     textAlign: 'center',
-    marginBottom: 6,
+    marginBottom: verticalScale(6),
     paddingHorizontal: 20,
   },
   subheading: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
     paddingHorizontal: 24,
-    lineHeight: 19,
+    lineHeight: fontScale(19),
   },
 
   imageWrap: {
@@ -759,9 +772,9 @@ const s = StyleSheet.create({
   },
 
   errorContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
-  errorText: { color: colors.textSecondary, fontSize: 15 },
+  errorText: { color: colors.textSecondary, fontSize: fontScale(15) },
 
-  footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 10 },
+  footer: { paddingHorizontal: 20, paddingBottom: verticalScale(16), gap: 10 },
   footerRow: { flexDirection: 'row', gap: 10 },
   createButton: {
     flexDirection: 'row',
@@ -770,16 +783,20 @@ const s = StyleSheet.create({
     gap: 10,
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 18,
+    paddingVertical: verticalScale(18),
   },
-  createButtonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
+  createButtonText: { color: '#FFFFFF', fontSize: fontScale(18), fontWeight: '800' },
   secondaryButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     marginTop: 4,
   },
-  secondaryButtonText: { color: 'rgba(255,255,255,0.7)', fontSize: 15, fontWeight: '700' },
+  secondaryButtonText: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: fontScale(15),
+    fontWeight: '700',
+  },
   dreamAgainButton: {
     flex: 1,
     flexDirection: 'row',
@@ -788,11 +805,11 @@ const s = StyleSheet.create({
     gap: 10,
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
   },
   dreamAgainText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '700',
   },
   saveButton: {
@@ -802,13 +819,13 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.surface,
     borderRadius: 14,
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
     borderWidth: 1,
     borderColor: colors.accentBorder,
   },
   saveButtonText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '700',
   },
 

@@ -19,6 +19,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useBotThumbnails } from '@/hooks/useBotThumbnails';
 import { BotCard } from '@/components/BotCard';
 import { BotImageViewer } from '@/components/BotImageViewer';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
 
 interface Props {
@@ -116,30 +117,31 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingHorizontal: 24,
-    paddingTop: 8,
-    paddingBottom: 16,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(16),
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 28,
+    fontSize: fontScale(28),
     fontWeight: '800',
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
   subtitle: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
   },
   loadingWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  // The shared OnboardingFooter is `position: absolute` (bottom-anchored)
-  // and ~120px tall (button + safe-area). Padding the scroll content past
-  // it so the last bot (YumBot) can fully scroll above the floating chrome
-  // instead of being clipped underneath.
-  scrollContent: { paddingHorizontal: 16, paddingBottom: 140, gap: 12 },
+  // Footer is now in-flow (was absolute) — only a small tail buffer needed.
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingBottom: verticalScale(16),
+    gap: verticalScale(12),
+  },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     textAlign: 'center',
-    paddingVertical: 30,
+    paddingVertical: verticalScale(30),
   },
 });

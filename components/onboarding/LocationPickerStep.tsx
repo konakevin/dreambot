@@ -16,6 +16,7 @@ import { Image as ExpoImage } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 import { supabase } from '@/lib/supabase';
@@ -34,7 +35,7 @@ const TILE_PADDING = 20;
 // room for a colored "section rail" on the left; removed 2026-06-03 in the
 // brand-color cleanup.)
 const TILE_WIDTH = Math.floor((SCREEN_WIDTH - TILE_PADDING * 2 - TILE_GAP) / 2);
-const TILE_HEIGHT = 110;
+const TILE_HEIGHT = verticalScale(110);
 
 // Neutral dark gradient used as a tile placeholder when a location has no
 // thumbnail URL — same surface→deeper drop used elsewhere in the app, so
@@ -301,34 +302,34 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
 }
 
 const s = StyleSheet.create({
+  // paddingBottom was 150 (reservation for the old absolute footer); the
+  // footer is now in-flow so a small bottom buffer is all that's needed.
   scrollContent: {
-    paddingTop: 12,
-    // Clear the absolute OnboardingFooter (~126px) so the last row isn't
-    // clipped behind it.
-    paddingBottom: 150,
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(16),
     paddingHorizontal: TILE_PADDING,
   },
 
   // Sticky header that sits above the ScrollView (matches BotSelectorStep).
   stickyHeader: {
     paddingHorizontal: TILE_PADDING,
-    paddingTop: 8,
-    paddingBottom: 14,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(14),
     backgroundColor: colors.background,
   },
 
-  section: { marginBottom: 28 },
-  sectionHeaderText: { marginBottom: 10 },
+  section: { marginBottom: verticalScale(28) },
+  sectionHeaderText: { marginBottom: verticalScale(10) },
   sectionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     marginBottom: 3,
   },
-  sectionTitle: { fontSize: 19, fontWeight: '700', color: '#FFFFFF' },
-  sectionDesc: { fontSize: 13, color: colors.textSecondary },
+  sectionTitle: { fontSize: fontScale(19), fontWeight: '700', color: '#FFFFFF' },
+  sectionDesc: { fontSize: fontScale(13), color: colors.textSecondary },
   sectionBadge: {
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
     color: colors.accent,
     marginTop: 4,
@@ -338,7 +339,7 @@ const s = StyleSheet.create({
 
   selectAllBtn: { marginLeft: 'auto', paddingVertical: 2 },
   selectAllText: {
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
     color: colors.accent,
   },
@@ -376,7 +377,7 @@ const s = StyleSheet.create({
     bottom: 10,
     left: 10,
     right: 10,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
     color: '#FFFFFF',
     textShadowColor: 'rgba(0,0,0,0.8)',
@@ -395,6 +396,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
 
-  seeMoreBtn: { paddingTop: 10, paddingBottom: 4 },
-  seeMoreText: { fontSize: 14, fontWeight: '500', color: colors.accent },
+  seeMoreBtn: { paddingTop: verticalScale(10), paddingBottom: 4 },
+  seeMoreText: { fontSize: fontScale(14), fontWeight: '500', color: colors.accent },
 });

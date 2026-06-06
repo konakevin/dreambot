@@ -1,8 +1,10 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { onboardingStyles as shared } from './sharedStyles';
 import { colors } from '@/constants/theme';
+import { verticalScale } from '@/lib/responsive';
 
 interface Props {
   onNext: () => void;
@@ -16,6 +18,14 @@ interface Props {
   hideBack?: boolean;
 }
 
+/**
+ * Onboarding footer — Back + Next buttons + optional counter row.
+ *
+ * Layout: flex / in-flow (NOT absolute-positioned). Lives at the bottom of
+ * each step's `flex: 1` column container. Bottom padding comes from
+ * `useSafeAreaInsets()` so the buttons sit above the home indicator on
+ * devices that have one, and use a reasonable floor on devices that don't.
+ */
 export function OnboardingFooter({
   onNext,
   onBack,
@@ -26,8 +36,10 @@ export function OnboardingFooter({
   counterRight,
   hideBack = false,
 }: Props) {
+  const insets = useSafeAreaInsets();
+  const bottomPad = Math.max(insets.bottom, verticalScale(16));
   return (
-    <View style={shared.footer}>
+    <View style={[shared.footer, { paddingBottom: bottomPad }]}>
       {(counter !== undefined || counterRight) && (
         <View style={shared.counterRow}>
           {counter !== undefined && (

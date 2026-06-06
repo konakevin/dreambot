@@ -3,7 +3,12 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
+
+const MASCOT_SIZE = verticalScaleClamped(160, 120, 180);
+const EMOJI_SIZE = verticalScaleClamped(64, 52, 72);
+const SCREENSHOT_WIDTH = verticalScaleClamped(220, 180, 240);
 
 // Informational onboarding screens that interleave with the data-collection
 // steps (Locations / Cast / Personality). They mirror the four pieces of
@@ -133,28 +138,27 @@ const s = StyleSheet.create({
   content: {
     flexGrow: 1,
     paddingHorizontal: 28,
-    paddingTop: 24,
-    paddingBottom: 24,
+    paddingTop: verticalScale(24),
+    paddingBottom: verticalScale(24),
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // Mascot dimensions match WelcomeStep (160×160 / radius 32) so the
-  // custom per-step mascot art reads at the same size as the icon mascot
-  // on the very first screen — no visual size shift between pages.
-  mascotWrap: { alignItems: 'center', marginBottom: 20 },
-  mascot: { width: 160, height: 160, borderRadius: 32 },
-  emoji: { fontSize: 64, marginBottom: 18, textAlign: 'center' },
+  // Mascot dimensions match WelcomeStep so the custom per-step mascot art
+  // reads at the same size as the icon mascot on the very first screen.
+  mascotWrap: { alignItems: 'center', marginBottom: verticalScale(20) },
+  mascot: { width: MASCOT_SIZE, height: MASCOT_SIZE, borderRadius: 32 },
+  emoji: { fontSize: EMOJI_SIZE, marginBottom: verticalScale(18), textAlign: 'center' },
   // 4:5 aspect matches the cropped Create-screen capture used today; if a
   // future step ships a full phone-bezel screenshot, swap to 9/16 or make
   // it configurable.
   screenshotWrap: {
-    width: 220,
+    width: SCREENSHOT_WIDTH,
     aspectRatio: 4 / 5,
     borderRadius: 18,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 20,
+    marginBottom: verticalScale(20),
     backgroundColor: colors.surface,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
@@ -165,45 +169,54 @@ const s = StyleSheet.create({
 
   eyebrow: {
     color: colors.accentLight,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '700',
     letterSpacing: 2.5,
     textTransform: 'uppercase',
-    marginBottom: 12,
+    marginBottom: verticalScale(12),
     textAlign: 'center',
   },
   headlineMaskWrap: { alignItems: 'center' },
   headlineMask: {
-    fontSize: 32,
+    fontSize: fontScale(32),
     fontWeight: '800',
     textAlign: 'center',
-    lineHeight: 38,
+    lineHeight: fontScale(38),
     color: '#FFFFFF', // fills the mask shape; LinearGradient supplies the color
     maxWidth: 340,
   },
   headlineGhost: { opacity: 0 },
   body: {
     color: colors.textSecondary,
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: fontScale(16),
+    lineHeight: fontScale(24),
     textAlign: 'center',
-    marginTop: 18,
+    marginTop: verticalScale(18),
     maxWidth: 360,
   },
 
-  subFeatures: { width: '100%', marginTop: 28, gap: 14 },
+  subFeatures: { width: '100%', marginTop: verticalScale(28), gap: verticalScale(14) },
   subFeature: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 14,
+    gap: verticalScale(14),
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 16,
-    padding: 16,
+    padding: verticalScale(16),
   },
-  subFeatureEmoji: { fontSize: 28, lineHeight: 32, width: 32, textAlign: 'center' },
+  subFeatureEmoji: {
+    fontSize: fontScale(28),
+    lineHeight: fontScale(32),
+    width: 32,
+    textAlign: 'center',
+  },
   subFeatureText: { flex: 1, gap: 4 },
-  subFeatureTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
-  subFeatureBody: { color: colors.textSecondary, fontSize: 13, lineHeight: 19 },
+  subFeatureTitle: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
+  subFeatureBody: {
+    color: colors.textSecondary,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(19),
+  },
 });

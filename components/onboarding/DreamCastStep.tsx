@@ -23,6 +23,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 import type { DreamCastMember, CastRelationship } from '@/types/vibeProfile';
@@ -526,10 +527,10 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
           Upload your face and we&apos;ll put YOU into your nightly dreams. Add a +1 and you&apos;ll
           get scenes of you two together.
         </Text>
-        <Text style={[shared.heroSubtitle, { marginTop: 10 }]}>
+        <Text style={[shared.heroSubtitle, { marginTop: verticalScale(10) }]}>
           Optional, but highly recommended! It makes your dreams more personalized, and FUN!
         </Text>
-        <View style={{ height: 16 }} />
+        <View style={{ height: verticalScale(16) }} />
         {innerSlots}
       </ScrollView>
 
@@ -545,33 +546,34 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
 }
 
 const s = StyleSheet.create({
-  scroll: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 100 },
+  // paddingBottom was 100 (absolute footer reservation); now in-flow → 16.
+  scroll: { paddingHorizontal: 20, paddingTop: verticalScale(8), paddingBottom: verticalScale(16) },
   encourageText: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
-    marginTop: 10,
-    marginBottom: 16,
-    lineHeight: 20,
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(16),
+    lineHeight: fontScale(20),
   },
   privacyNote: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 6,
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
   },
   privacyNoteText: {
     flex: 1,
     color: colors.textSecondary,
-    fontSize: 12,
-    lineHeight: 17,
+    fontSize: fontScale(12),
+    lineHeight: fontScale(17),
   },
 
   slotCard: {
     backgroundColor: colors.surface,
     borderRadius: 14,
-    padding: 16,
-    marginBottom: 12,
+    padding: verticalScale(16),
+    marginBottom: verticalScale(12),
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -583,13 +585,13 @@ const s = StyleSheet.create({
   },
   slotLabel: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '700',
   },
   slotTip: {
     color: colors.textSecondary,
-    fontSize: 13,
-    marginBottom: 12,
+    fontSize: fontScale(13),
+    marginBottom: verticalScale(12),
   },
 
   uploadButton: {
@@ -599,14 +601,14 @@ const s = StyleSheet.create({
     gap: 8,
     backgroundColor: colors.background,
     borderRadius: 10,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderWidth: 1,
     borderColor: colors.border,
     borderStyle: 'dashed',
   },
   uploadButtonText: {
     color: colors.accent,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
 
@@ -632,21 +634,21 @@ const s = StyleSheet.create({
   uploadedInfo: { flex: 1 },
   uploadedCheck: {
     color: colors.accent,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
 
   relSection: {
-    marginTop: 12,
-    paddingTop: 12,
+    marginTop: verticalScale(12),
+    paddingTop: verticalScale(12),
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
   relLabel: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
   },
   relRow: {
     flexDirection: 'row',
@@ -655,7 +657,7 @@ const s = StyleSheet.create({
   },
   relPill: {
     paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingVertical: verticalScale(7),
     borderRadius: 16,
     backgroundColor: colors.background,
     borderWidth: 1,
@@ -667,7 +669,7 @@ const s = StyleSheet.create({
   },
   relPillText: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
   },
   relPillTextActive: {
