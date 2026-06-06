@@ -197,7 +197,7 @@ const s = StyleSheet.create({
   giftCard: {
     marginTop: verticalScale(28),
     paddingHorizontal: 24,
-    paddingVertical: 18,
+    paddingVertical: verticalScale(18),
     borderRadius: 18,
     borderWidth: 1.5,
     borderColor: colors.accent,
@@ -206,7 +206,7 @@ const s = StyleSheet.create({
     minWidth: 240,
   },
   giftEmoji: {
-    fontSize: 32,
+    fontSize: fontScale(32),
     marginBottom: 4,
   },
   giftBig: {
@@ -233,7 +233,7 @@ const s = StyleSheet.create({
   },
   featureList: {
     alignSelf: 'stretch',
-    gap: 12,
+    gap: verticalScale(12),
   },
   featureRow: {
     flexDirection: 'row',
@@ -242,7 +242,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 8,
   },
   featureEmoji: {
-    fontSize: 22,
+    fontSize: fontScale(22),
     width: 30,
     textAlign: 'center',
   },
@@ -264,13 +264,13 @@ const s = StyleSheet.create({
 
   ctaWrap: {
     paddingHorizontal: 24,
-    paddingBottom: 12,
-    paddingTop: 8,
+    paddingBottom: verticalScale(12),
+    paddingTop: verticalScale(8),
   },
   ctaBtn: {
     backgroundColor: colors.accent,
     borderRadius: 28,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     alignItems: 'center',
     shadowColor: colors.accent,
     shadowOpacity: 0.45,

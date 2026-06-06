@@ -28,6 +28,7 @@ import { PRO_PERKS, PRO_TIERS } from '@/constants/proPlan';
 import { useProPackages, usePurchasePro, useRestorePurchases } from '@/hooks/useSparkles';
 import { useAuthStore } from '@/store/auth';
 import { trackProStoreOpened, trackProSubscribeTapped } from '@/lib/analytics';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 function findPackage(packages: PurchasesPackage[], packageId: string) {
   return packages.find((p) => p.identifier === packageId);
@@ -257,7 +258,7 @@ const s = StyleSheet.create({
   // Bottom padding sized for the sticky footer height (helper line +
   // CTA + paddings ≈ 130-150px) plus a buffer so the Restore link can
   // still be scrolled into view above the footer.
-  scroll: { paddingHorizontal: 16, paddingBottom: 180 },
+  scroll: { paddingHorizontal: 16, paddingBottom: verticalScale(180) },
 
   // Pinned footer — plan-specific copy + primary CTA, always visible.
   // paddingBottom 32 clears the home indicator (~34pt) on phones with
@@ -265,8 +266,8 @@ const s = StyleSheet.create({
   // truncated by the gesture area.
   stickyFooter: {
     paddingHorizontal: 16,
-    paddingTop: 10,
-    paddingBottom: 32,
+    paddingTop: verticalScale(10),
+    paddingBottom: verticalScale(32),
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
     backgroundColor: colors.background,
@@ -276,18 +277,18 @@ const s = StyleSheet.create({
   // already says "Get Pro"; this just lays out the brand + state hint).
   hero: {
     alignItems: 'center',
-    paddingTop: 12,
-    paddingBottom: 14,
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(14),
   },
   heroTitle: {
     color: colors.textPrimary,
-    fontSize: 24,
+    fontSize: fontScale(24),
     fontWeight: '900',
     letterSpacing: -0.5,
   },
   heroSub: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     marginTop: 4,
     textAlign: 'center',
     paddingHorizontal: 16,
@@ -302,7 +303,7 @@ const s = StyleSheet.create({
     borderColor: 'rgba(139,123,238,0.35)',
     borderWidth: 1,
     borderRadius: 14,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     paddingHorizontal: 14,
     marginTop: 4,
     marginBottom: 8,
@@ -318,20 +319,20 @@ const s = StyleSheet.create({
   },
   trialBannerTitle: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '800',
   },
   trialBannerSub: {
     color: colors.textSecondary,
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: fontScale(12),
+    lineHeight: fontScale(16),
     marginTop: 2,
   },
 
   // Perks
   perks: {
-    gap: 14,
-    paddingVertical: 12,
+    gap: verticalScale(14),
+    paddingVertical: verticalScale(12),
     paddingHorizontal: 4,
     marginBottom: 8,
   },
@@ -351,24 +352,24 @@ const s = StyleSheet.create({
   },
   perkTitle: {
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '700',
   },
   perkSub: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(18),
     marginTop: 2,
   },
 
   // Section
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '800',
     textAlign: 'center',
-    marginTop: 16,
-    marginBottom: 12,
+    marginTop: verticalScale(16),
+    marginBottom: verticalScale(12),
   },
 
   // Tier cards
@@ -380,7 +381,7 @@ const s = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1.5,
     borderColor: colors.border,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     paddingHorizontal: 18,
   },
   tierCardSelected: {
@@ -409,18 +410,18 @@ const s = StyleSheet.create({
   // Plan-specific helper line under the tier stack
   tierDetail: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(18),
     textAlign: 'center',
-    marginTop: 14,
-    marginBottom: 16,
+    marginTop: verticalScale(14),
+    marginBottom: verticalScale(16),
     paddingHorizontal: 12,
   },
   // Primary CTA button
   primaryCta: {
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
@@ -430,7 +431,7 @@ const s = StyleSheet.create({
   },
   primaryCtaText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '800',
     letterSpacing: 0.2,
   },
@@ -456,21 +457,21 @@ const s = StyleSheet.create({
   },
   tierLabel: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '700',
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
   tierPrice: {
     color: colors.textPrimary,
-    fontSize: 22,
+    fontSize: fontScale(22),
     fontWeight: '900',
     letterSpacing: -0.5,
     marginTop: 2,
   },
   tierPeriod: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
     letterSpacing: 0,
   },
@@ -486,19 +487,19 @@ const s = StyleSheet.create({
   // Fine print
   fineprint: {
     color: colors.textSecondary,
-    fontSize: 11,
-    lineHeight: 16,
+    fontSize: fontScale(11),
+    lineHeight: fontScale(16),
     textAlign: 'center',
-    marginTop: 18,
+    marginTop: verticalScale(18),
     paddingHorizontal: 12,
   },
 
   // Empty
-  emptyWrap: { alignItems: 'center', gap: 8, paddingVertical: 32 },
-  emptyText: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
-  emptySub: { color: colors.textSecondary, fontSize: 13, textAlign: 'center' },
+  emptyWrap: { alignItems: 'center', gap: 8, paddingVertical: verticalScale(32) },
+  emptyText: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
+  emptySub: { color: colors.textSecondary, fontSize: fontScale(13), textAlign: 'center' },
 
   // Restore
-  restoreButton: { alignItems: 'center', paddingVertical: 20 },
-  restoreText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
+  restoreButton: { alignItems: 'center', paddingVertical: verticalScale(20) },
+  restoreText: { color: colors.textSecondary, fontSize: fontScale(14), fontWeight: '600' },
 });

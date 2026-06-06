@@ -20,6 +20,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
+import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
+
+const MASCOT_SIZE = verticalScaleClamped(130, 100, 150);
 
 // Same brand gradient used by dreambotapp.com Hero, onboarding WelcomeStep,
 // InfoStep headlines, and the Create tab title. Moon purple → cloud pink
@@ -55,13 +58,13 @@ const authStyles = StyleSheet.create({
     alignItems: 'center',
   },
   mascot: {
-    width: 130,
-    height: 130,
+    width: MASCOT_SIZE,
+    height: MASCOT_SIZE,
     borderRadius: 28,
-    marginBottom: 18,
+    marginBottom: verticalScale(18),
   },
   wordmark: {
-    fontSize: 48,
+    fontSize: fontScale(48),
     fontWeight: '800',
     letterSpacing: -0.5,
     color: '#FFFFFF',
@@ -69,10 +72,10 @@ const authStyles = StyleSheet.create({
   },
   tagline: {
     color: 'rgba(255,255,255,0.85)',
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '500',
     textAlign: 'center',
-    marginTop: 12,
+    marginTop: verticalScale(12),
   },
 });
 

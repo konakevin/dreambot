@@ -21,6 +21,7 @@ import {
 } from '@/hooks/useSparkles';
 import { PACK_INFO } from '@/constants/sparklePacks';
 import { trackSparkleStoreOpened, trackSparklePurchaseTapped } from '@/lib/analytics';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 /** Flavor copy per sparkle pack — appears under the grid when selected.
  *  Uses the actual sparkle count so the copy never gets out of sync with
@@ -279,7 +280,7 @@ const s = StyleSheet.create({
   // Bottom padding sized for the sticky footer height (helper line +
   // CTA + paddings ≈ 130-150px) plus a buffer so the Restore link
   // can still be scrolled into view above the footer.
-  scroll: { paddingHorizontal: 16, paddingBottom: 180 },
+  scroll: { paddingHorizontal: 16, paddingBottom: verticalScale(180) },
 
   // Pinned footer — selection copy + primary CTA, always visible
   // above the keyboard / fold regardless of scroll position.
@@ -287,8 +288,8 @@ const s = StyleSheet.create({
   // the CTA's bottom corners don't get truncated.
   stickyFooter: {
     paddingHorizontal: 16,
-    paddingTop: 10,
-    paddingBottom: 32,
+    paddingTop: verticalScale(10),
+    paddingBottom: verticalScale(32),
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
     backgroundColor: colors.background,
@@ -305,29 +306,29 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
     marginBottom: 4,
   },
   balanceAmount: {
     color: colors.textPrimary,
-    fontSize: 20,
+    fontSize: fontScale(20),
     fontWeight: '800',
     letterSpacing: -0.3,
   },
   balanceLabel: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
 
   // Section
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '800',
     textAlign: 'center',
     marginTop: 4,
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
   },
 
   // Pack list — vertical stack of compact pack cards (matches proStore's
@@ -344,7 +345,7 @@ const s = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1.5,
     borderColor: colors.border,
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
     paddingHorizontal: 16,
   },
   packCardSelected: {
@@ -367,13 +368,13 @@ const s = StyleSheet.create({
   },
   packSparkles: {
     color: colors.textPrimary,
-    fontSize: 20,
+    fontSize: fontScale(20),
     fontWeight: '800',
     letterSpacing: -0.5,
   },
   packSparklesLabel: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   // Inline badge — replaces the old absolute-positioned overlay badge
@@ -392,7 +393,7 @@ const s = StyleSheet.create({
   },
   packPrice: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
     fontWeight: '600',
     marginTop: 2,
   },
@@ -419,11 +420,11 @@ const s = StyleSheet.create({
   // Selected-pack flavor copy
   packDetail: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(18),
     textAlign: 'center',
-    marginTop: 18,
-    marginBottom: 14,
+    marginTop: verticalScale(18),
+    marginBottom: verticalScale(14),
     paddingHorizontal: 12,
   },
 
@@ -431,7 +432,7 @@ const s = StyleSheet.create({
   primaryCta: {
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
@@ -441,17 +442,17 @@ const s = StyleSheet.create({
   },
   primaryCtaText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '800',
     letterSpacing: 0.2,
   },
 
   // Empty
-  emptyWrap: { alignItems: 'center', gap: 8, paddingVertical: 40 },
-  emptyText: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
-  emptySub: { color: colors.textSecondary, fontSize: 14, textAlign: 'center' },
+  emptyWrap: { alignItems: 'center', gap: 8, paddingVertical: verticalScale(40) },
+  emptyText: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '700' },
+  emptySub: { color: colors.textSecondary, fontSize: fontScale(14), textAlign: 'center' },
 
   // Restore
-  restoreButton: { alignItems: 'center', paddingVertical: 28 },
-  restoreText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
+  restoreButton: { alignItems: 'center', paddingVertical: verticalScale(28) },
+  restoreText: { color: colors.textSecondary, fontSize: fontScale(14), fontWeight: '600' },
 });
