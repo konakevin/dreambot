@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { colors } from '@/constants/theme';
+import { vs, vsClamp, fs } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
 
 interface Props {
@@ -13,6 +14,10 @@ interface Props {
 // Brand gradient — same purple → pink → teal used by the brochure wordmark
 // and the InfoStep headlines so the whole onboarding feels visually unified.
 const WORDMARK_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
+
+// Mascot size scales with screen height but never gets so small it loses
+// presence (iPhone SE) or so big it dominates (iPhone Pro Max).
+const MASCOT_SIZE = vsClamp(160, 120, 180);
 
 export function WelcomeStep({ onNext, onBack }: Props) {
   return (
@@ -60,12 +65,12 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  iconStack: { alignItems: 'center', marginBottom: 24 },
-  mascot: { width: 160, height: 160, borderRadius: 32 },
+  iconStack: { alignItems: 'center', marginBottom: vs(24) },
+  mascot: { width: MASCOT_SIZE, height: MASCOT_SIZE, borderRadius: 32 },
 
   welcomeEyebrow: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fs(17),
     fontWeight: '500',
     textAlign: 'center',
     marginBottom: 4,
@@ -73,7 +78,7 @@ const s = StyleSheet.create({
   },
   titleMaskWrap: { alignItems: 'center' },
   titleMask: {
-    fontSize: 44,
+    fontSize: fs(44),
     fontWeight: '800',
     letterSpacing: -0.5,
     color: '#FFFFFF',
@@ -83,23 +88,23 @@ const s = StyleSheet.create({
 
   tagline: {
     color: colors.textPrimary,
-    fontSize: 19,
+    fontSize: fs(19),
     fontWeight: '600',
     textAlign: 'center',
-    marginTop: 14,
-    marginBottom: 18,
+    marginTop: vs(14),
+    marginBottom: vs(18),
   },
   body: {
     color: colors.textSecondary,
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: fs(15),
+    lineHeight: fs(22),
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: vs(24),
     maxWidth: 340,
   },
   footnote: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fs(13),
     textAlign: 'center',
     opacity: 0.75,
   },
