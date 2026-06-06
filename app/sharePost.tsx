@@ -83,7 +83,11 @@ export default function SharePostScreen() {
   // imageUrlHq is optional (lazy-populated by upscale-image); when present
   // and the user is Pro, openDownloadSheet skips the "this will take ~30s"
   // confirm dialog.
-  const { uploadId, username, imageUrl, imageUrlHq } = useLocalSearchParams<{
+  // `username` is still accepted on the route (DreamCard passes it) but no
+  // longer consumed here — was previously used in the Share.share() copy
+  // label ("View kevin's dream"). Kept on the type so the navigate call
+  // doesn't have to change.
+  const { uploadId, imageUrl, imageUrlHq } = useLocalSearchParams<{
     uploadId: string;
     username?: string;
     imageUrl?: string;
