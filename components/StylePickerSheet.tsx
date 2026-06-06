@@ -18,9 +18,13 @@ import Animated, {
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-const SHEET_HEIGHT = SCREEN_HEIGHT * 0.5;
+// On smaller phones (iPhone SE class) bump the sheet to 60% so 6+ options
+// don't get clipped behind the rounded bottom. Larger phones stay at 50%
+// — they have plenty of headroom.
+const SHEET_HEIGHT = SCREEN_HEIGHT < 700 ? SCREEN_HEIGHT * 0.6 : SCREEN_HEIGHT * 0.5;
 
 interface StyleOption {
   key: string;
@@ -229,7 +233,7 @@ export function StylePickerSheet({
       { key: 'art', label: 'Dream Art' },
     ];
     return (
-      <View style={{ paddingHorizontal: 16, marginBottom: 8 }}>
+      <View style={{ paddingHorizontal: 16, marginBottom: verticalScale(8) }}>
         <View
           style={{
             flexDirection: 'row',
@@ -245,7 +249,7 @@ export function StylePickerSheet({
                 key={seg.key}
                 style={{
                   flex: 1,
-                  paddingVertical: 8,
+                  paddingVertical: verticalScale(8),
                   borderRadius: 8,
                   alignItems: 'center',
                   backgroundColor: active ? colors.surface : 'transparent',
@@ -267,7 +271,7 @@ export function StylePickerSheet({
               >
                 <Text
                   style={{
-                    fontSize: 13,
+                    fontSize: fontScale(13),
                     fontWeight: active ? '700' : '500',
                     color: active ? colors.textPrimary : colors.textSecondary,
                   }}
@@ -280,10 +284,10 @@ export function StylePickerSheet({
         </View>
         <Text
           style={{
-            fontSize: 11,
+            fontSize: fontScale(11),
             color: colors.textMuted,
             textAlign: 'center',
-            marginTop: 6,
+            marginTop: verticalScale(6),
           }}
         >
           {mediumSegment === 'face'

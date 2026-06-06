@@ -22,6 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as nav from '@/lib/navigate';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { usePostLikes } from '@/hooks/usePostLikes';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -122,23 +123,23 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingBottom: 14,
+    paddingBottom: verticalScale(14),
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '700',
   },
   loading: {
-    marginTop: 40,
+    marginTop: verticalScale(40),
   },
   empty: {
     color: colors.textSecondary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     textAlign: 'center',
-    marginTop: 40,
+    marginTop: verticalScale(40),
   },
   list: {
     flex: 1,
@@ -148,7 +149,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
   },
   avatar: {
     width: 36,
@@ -158,7 +159,7 @@ const s = StyleSheet.create({
   },
   username: {
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     fontWeight: '600',
     flex: 1,
   },

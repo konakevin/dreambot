@@ -22,10 +22,12 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { ACTIVE_OFFSET, SWIPE_DISMISS_DISTANCE, VELOCITY_THRESHOLD } from '@/constants/gestures';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const SHEET_HEIGHT = SCREEN_HEIGHT * 0.55;
+// On smaller phones bump to 65% so 6+ options don't get clipped.
+const SHEET_HEIGHT = SCREEN_HEIGHT < 700 ? SCREEN_HEIGHT * 0.65 : SCREEN_HEIGHT * 0.55;
 
 interface FilterPickerSheetProps {
   visible: boolean;
@@ -128,7 +130,11 @@ export function FilterPickerSheet({
           ref={listRef}
           data={items}
           keyExtractor={(item) => item.key}
-          getItemLayout={(_, index) => ({ length: 48, offset: 48 * index, index })}
+          getItemLayout={(_, index) => ({
+            length: verticalScale(48),
+            offset: verticalScale(48) * index,
+            index,
+          })}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={s.row}
@@ -171,7 +177,7 @@ const s = StyleSheet.create({
   },
   handleRow: {
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: verticalScale(10),
     paddingBottom: 4,
   },
   handle: {
@@ -182,10 +188,10 @@ const s = StyleSheet.create({
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: fontScale(17),
     fontWeight: '700',
     textAlign: 'center',
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
   },
@@ -193,11 +199,11 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 48,
+    height: verticalScale(48),
     paddingHorizontal: 20,
   },
   rowLabel: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
   },
 });

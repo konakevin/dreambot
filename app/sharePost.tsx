@@ -24,6 +24,7 @@ import { useSendShare } from '@/hooks/useSendShare';
 import { useStandardSheetDismiss } from '@/hooks/gestures/useStandardSheetDismiss';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { trackPostShared } from '@/lib/analytics';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -256,8 +257,8 @@ const styles = StyleSheet.create({
   },
   handleRow: {
     alignItems: 'center',
-    paddingTop: 10,
-    paddingBottom: 4,
+    paddingTop: verticalScale(10),
+    paddingBottom: verticalScale(4),
   },
   handle: {
     width: 36,
@@ -270,11 +271,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
   },
   headerTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '800',
   },
   linkButton: {
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
   },
   linkLabel: {
     color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '600',
   },
   searchWrap: {
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderRadius: 12,
     marginHorizontal: 16,
-    marginBottom: 12,
+    marginBottom: verticalScale(12),
     paddingHorizontal: 12,
     height: 40,
   },
@@ -312,20 +313,20 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     height: 40,
   },
   grid: {
     paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingBottom: verticalScale(16),
   },
   bubble: {
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
   },
   avatarWrap: {
     position: 'relative',
-    marginBottom: 6,
+    marginBottom: verticalScale(6),
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
   },
   avatarInitial: {
     color: colors.textPrimary,
-    fontSize: 22,
+    fontSize: fontScale(22),
     fontWeight: '700',
   },
   checkBadge: {
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
   },
   bubbleName: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '600',
     maxWidth: CELL_WIDTH - 8,
     textAlign: 'center',
@@ -378,16 +379,16 @@ const styles = StyleSheet.create({
   empty: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 40,
+    paddingTop: verticalScale(40),
     gap: 10,
   },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 15,
+    fontSize: fontScale(15),
   },
   sendRow: {
     paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingTop: verticalScale(8),
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
     backgroundColor: colors.surface,
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
   sendButton: {
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
   },
   sendButtonText: {
     color: '#000000',
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '800',
   },
   sendButtonTextDisabled: {

@@ -42,6 +42,7 @@ import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { avatarUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const THUMB_HEIGHT = Math.round(SCREEN_HEIGHT * 0.28);
@@ -507,18 +508,18 @@ const styles = StyleSheet.create({
   },
   thumbAvatarText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '700',
   },
   thumbUsername: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '700',
   },
   thumbCount: {
     color: colors.textSecondary,
-    fontSize: 12,
-    marginTop: 2,
+    fontSize: fontScale(12),
+    marginTop: verticalScale(2),
   },
   closeButton: {
     padding: 4,
@@ -535,8 +536,8 @@ const styles = StyleSheet.create({
   },
   handleRow: {
     alignItems: 'center',
-    paddingTop: 8,
-    paddingBottom: 4,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(4),
   },
   handle: {
     width: 36,
@@ -548,37 +549,37 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   footerLoader: {
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     alignItems: 'center',
   },
   empty: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 60,
+    paddingTop: verticalScale(60),
     gap: 8,
   },
   emptyTitle: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '700',
   },
   emptySub: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
   },
   replyBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     backgroundColor: colors.background,
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
   },
   replyText: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
   },
   replyUsername: {
     color: colors.textPrimary,
@@ -594,7 +595,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     gap: 10,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.card,
@@ -614,19 +615,19 @@ const styles = StyleSheet.create({
   },
   mentionAvatarInitial: {
     color: colors.textPrimary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '700',
   },
   mentionUsername: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   inputBar: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
     backgroundColor: colors.surface,
@@ -635,9 +636,9 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: colors.textPrimary,
-    fontSize: 15,
+    fontSize: fontScale(15),
     maxHeight: 80,
-    lineHeight: 20,
+    lineHeight: fontScale(20),
   },
   sendBtn: {
     width: 32,
@@ -653,8 +654,8 @@ const styles = StyleSheet.create({
   signInPrompt: {
     flex: 1,
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     textAlign: 'center',
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
   },
 });

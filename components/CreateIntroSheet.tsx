@@ -23,6 +23,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 import { CREATE_INFO } from '@/constants/onboardingInfo';
 
 const SEEN_CREATE_INTRO_KEY = 'dreambot.seenCreateIntro.v1';
@@ -135,8 +136,8 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 4,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(4),
   },
   closeBtn: {
     width: 36,
@@ -149,8 +150,8 @@ const s = StyleSheet.create({
   content: {
     flexGrow: 1,
     paddingHorizontal: 28,
-    paddingTop: 8,
-    paddingBottom: 24,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(24),
     alignItems: 'center',
   },
 
@@ -161,7 +162,7 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 20,
+    marginBottom: verticalScale(20),
     backgroundColor: colors.surface,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
@@ -172,33 +173,33 @@ const s = StyleSheet.create({
 
   eyebrow: {
     color: colors.accentLight,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '700',
     letterSpacing: 2.5,
     textTransform: 'uppercase',
-    marginBottom: 12,
+    marginBottom: verticalScale(12),
     textAlign: 'center',
   },
   headlineMaskWrap: { alignItems: 'center' },
   headlineMask: {
-    fontSize: 30,
+    fontSize: fontScale(30),
     fontWeight: '800',
     textAlign: 'center',
-    lineHeight: 36,
+    lineHeight: fontScale(36),
     color: '#FFFFFF',
     maxWidth: 320,
   },
   headlineGhost: { opacity: 0 },
   body: {
     color: colors.textSecondary,
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(22),
     textAlign: 'center',
-    marginTop: 16,
+    marginTop: verticalScale(16),
     maxWidth: 340,
   },
 
-  subFeatures: { width: '100%', marginTop: 24, gap: 12 },
+  subFeatures: { width: '100%', marginTop: verticalScale(24), gap: 12 },
   subFeature: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -209,18 +210,27 @@ const s = StyleSheet.create({
     borderRadius: 16,
     padding: 14,
   },
-  subFeatureEmoji: { fontSize: 24, lineHeight: 28, width: 28, textAlign: 'center' },
+  subFeatureEmoji: {
+    fontSize: fontScale(24),
+    lineHeight: fontScale(28),
+    width: 28,
+    textAlign: 'center',
+  },
   subFeatureText: { flex: 1, gap: 4 },
-  subFeatureTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
-  subFeatureBody: { color: colors.textSecondary, fontSize: 13, lineHeight: 19 },
+  subFeatureTitle: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
+  subFeatureBody: {
+    color: colors.textSecondary,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(19),
+  },
 
-  footer: { paddingHorizontal: 20, paddingBottom: 8, paddingTop: 8 },
+  footer: { paddingHorizontal: 20, paddingBottom: verticalScale(8), paddingTop: verticalScale(8) },
   cta: {
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     alignItems: 'center',
     justifyContent: 'center',
   },
-  ctaText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
+  ctaText: { color: '#FFFFFF', fontSize: fontScale(17), fontWeight: '700' },
 });

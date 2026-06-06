@@ -25,9 +25,12 @@ import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
 import { CommentRow } from '@/components/CommentRow';
 import { useStandardSheetDismiss } from '@/hooks/gestures/useStandardSheetDismiss';
 import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-const SHEET_HEIGHT = SCREEN_HEIGHT * 0.85;
+// Use 90% on smaller phones (SE class) so the comments list + composer +
+// keyboard have enough room. Tall phones keep 85%.
+const SHEET_HEIGHT = SCREEN_HEIGHT < 700 ? SCREEN_HEIGHT * 0.9 : SCREEN_HEIGHT * 0.85;
 const MAX_COMMENT_LENGTH = 500;
 
 export default function CommentsScreen() {
@@ -333,7 +336,7 @@ const styles = StyleSheet.create({
   },
   handleRow: {
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: verticalScale(10),
     paddingBottom: 4,
   },
   handle: {
@@ -347,7 +350,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
     gap: 12,
@@ -383,18 +386,18 @@ const styles = StyleSheet.create({
   },
   thumbAvatarText: {
     color: '#FFFFFF',
-    fontSize: 11,
+    fontSize: fontScale(11),
     fontWeight: '700',
   },
   thumbUsername: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '700',
     flexShrink: 1,
   },
   thumbCommentCount: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
   },
   // ── Header (fallback when no image) ────────────────────────────────────────
   header: {
@@ -402,50 +405,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
   },
   headerTitle: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '800',
   },
   listContent: {
     flexGrow: 1,
   },
   footerLoader: {
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     alignItems: 'center',
   },
   empty: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 60,
+    paddingTop: verticalScale(60),
     gap: 8,
   },
   emptyTitle: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: fontScale(16),
     fontWeight: '700',
   },
   emptySubtitle: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
   },
   replyBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     backgroundColor: colors.background,
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
   },
   replyBarText: {
     color: colors.textSecondary,
-    fontSize: 13,
+    fontSize: fontScale(13),
   },
   replyBarUsername: {
     color: colors.textPrimary,
@@ -455,13 +458,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
     backgroundColor: colors.background,
-    maxHeight: 200,
+    maxHeight: verticalScale(200),
   },
   mentionRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(10),
     gap: 10,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.card,
@@ -481,20 +484,20 @@ const styles = StyleSheet.create({
   },
   mentionAvatarText: {
     color: colors.textPrimary,
-    fontSize: 12,
+    fontSize: fontScale(12),
     fontWeight: '700',
   },
   mentionUsername: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     fontWeight: '600',
   },
   inputBar: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 16,
-    paddingVertical: 10,
-    paddingBottom: 16,
+    paddingVertical: verticalScale(10),
+    paddingBottom: verticalScale(16),
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
     backgroundColor: colors.surface,
@@ -503,9 +506,9 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: colors.textPrimary,
-    fontSize: 15,
-    maxHeight: 80,
-    lineHeight: 20,
+    fontSize: fontScale(15),
+    maxHeight: verticalScale(80),
+    lineHeight: fontScale(20),
   },
   sendButton: {
     width: 32,
@@ -521,8 +524,8 @@ const styles = StyleSheet.create({
   signInPrompt: {
     flex: 1,
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: fontScale(14),
     textAlign: 'center',
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
   },
 });
