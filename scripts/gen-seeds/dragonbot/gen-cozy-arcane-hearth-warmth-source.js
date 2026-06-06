@@ -14,7 +14,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/cozy_arcane_hearth_warmth_source.json',
-  total: 100,
+  total: 200,
   batch: 50,
   append: true,
   metaPrompt: (

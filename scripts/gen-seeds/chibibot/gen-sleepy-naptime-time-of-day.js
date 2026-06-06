@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/sleepy_naptime_time_of_day.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot sleepy-naptime — drowsy/peaceful times when an adorable creature would nap. Warm + golden + soft + drowsy ambient.

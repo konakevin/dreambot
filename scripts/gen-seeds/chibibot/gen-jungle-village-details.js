@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_details.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} JUNGLE-VILLAGE DETAILS for ChibiBot — the tiny architectural / nature / prop details that populate a cozy jungle village. Each render picks 3 (pickN:3).

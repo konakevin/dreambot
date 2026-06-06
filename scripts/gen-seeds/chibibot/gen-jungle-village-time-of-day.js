@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_time_of_day.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot jungle-village — drowsy / golden / candlelit / sunlight-filtering times in a cozy jungle. The jungle canopy filters all light into dappled patterns.

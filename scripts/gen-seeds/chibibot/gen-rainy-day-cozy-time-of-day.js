@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/rainy_day_cozy_time_of_day.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot rainy-day-cozy — when this cozy-rain-shelter moment is happening. The shelter is warm-cozy inside; the exterior is cool-blue-grey from rain. The time-of-day shapes both ambient quality.

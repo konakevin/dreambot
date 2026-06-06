@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_settings.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} COZY JUNGLE-VILLAGE settings for ChibiBot — magical rainforest VILLAGES + COTTAGES + TREEHOUSE clusters that a viewer would want to MOVE INTO. The architecture and the jungle environment are the hero of the frame. Studio Ghibli / Encanto / Princess-Mononoke / Avatar-Pandora-village / Lost-Tribe aesthetic.

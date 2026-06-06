@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_activities.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} TINY-RESIDENT ACTIVITY descriptions for ChibiBot jungle-village — what a SOLO tiny resident creature is DOING in the village, going about their day. The resident is a TINY scale-prover (small but visible), not centered. Active verb-led story-driven activity.

@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/jungle_village_surprise.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot jungle-village scenes — tiny secondary details the eye finds AFTER the main resident in the wider village.

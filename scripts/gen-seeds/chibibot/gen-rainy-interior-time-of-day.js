@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/rainy_interior_time_of_day.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot rainy-interior — when this rainy day is happening. The interior is always warm-amber-lit; the exterior is dim/blue-grey from the rain regardless.

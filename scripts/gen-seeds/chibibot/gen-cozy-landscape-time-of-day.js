@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_landscape_time_of_day.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} TIME-OF-DAY phrases for ChibiBot cozy-landscape — short cinematic time/light descriptors that fix WHEN this cozy world is rendered. Path covers full day + cozy-evening + dawn (NOT deep-night specifically — that's night-meadow path).

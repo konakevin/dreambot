@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/night_meadow_time_of_night.json',
-  total: 50,
+  total: 200,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} TIME-OF-NIGHT phrases for ChibiBot night-meadow — short cinematic NIGHTTIME-light descriptors that fix WHEN-AT-NIGHT this meadow scene takes place. Path is LOCKED to night/twilight, never midday. The mood comes from this axis — the moon phase, sky color, ambient luminance.

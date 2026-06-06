@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cozy_landscape_phenomena.json',
-  total: 50,
+  total: 100,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot cozy-landscape scenes — magical, seasonal, or atmospheric events that crank atmospheric drama when they fire (60%-gated, fires sometimes).

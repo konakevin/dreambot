@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/rainy_interior_phenomena.json',
-  total: 50,
+  total: 100,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot rainy-day-outdoor scenes — magical, weather, or seasonal events that crank atmospheric drama (60%-gated, fires sometimes).

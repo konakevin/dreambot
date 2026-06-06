@@ -1,326 +1,1856 @@
 [
   {
     "description": "A paper-lantern strand of warm red-and-gold lanterns hung overhead with soft glow",
-    "tags": ["LANTERN", "FESTIVAL", "CAFE"]
+    "tags": [
+      "LANTERN",
+      "FESTIVAL",
+      "CAFE"
+    ]
   },
   {
     "description": "A cluster of small pastel-pink paper-lanterns hanging at varying heights",
-    "tags": ["LANTERN", "FESTIVAL", "CAFE", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "LANTERN",
+      "FESTIVAL",
+      "CAFE",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A hanging glass-jar lantern with a tiny candle inside, twisted-wire handle",
-    "tags": ["LANTERN", "COTTAGECORE", "PICNIC", "CAFE"]
+    "tags": [
+      "LANTERN",
+      "COTTAGECORE",
+      "PICNIC",
+      "CAFE"
+    ]
   },
   {
     "description": "A vintage brass-lantern with warm-amber glow on a wooden post",
-    "tags": ["LANTERN", "COTTAGECORE", "MARKET", "CAFE"]
+    "tags": [
+      "LANTERN",
+      "COTTAGECORE",
+      "MARKET",
+      "CAFE"
+    ]
   },
   {
     "description": "A floating sky-lantern in pastel-pink drifting upward with a tiny ribbon-tail",
-    "tags": ["LANTERN", "FESTIVAL", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "LANTERN",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A row of festival-stall paper-lanterns in red, yellow, and pink along a stall-roof",
-    "tags": ["LANTERN", "FESTIVAL", "MARKET"]
+    "tags": [
+      "LANTERN",
+      "FESTIVAL",
+      "MARKET"
+    ]
   },
   {
     "description": "A small pastel-pink rose bouquet wrapped in lace tied with twine",
-    "tags": ["FLOWER", "COTTAGECORE", "TEA_PARTY", "PICNIC", "BAKERY"]
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "TEA_PARTY",
+      "PICNIC",
+      "BAKERY"
+    ]
   },
   {
     "description": "A cluster of pastel daisies in a tiny glass-bottle vase",
-    "tags": ["FLOWER", "COTTAGECORE", "PICNIC", "TEA_PARTY", "CAFE"]
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "PICNIC",
+      "TEA_PARTY",
+      "CAFE"
+    ]
   },
   {
     "description": "A cherry-blossom branch arching from a wall with pink petals",
-    "tags": ["FLOWER", "COTTAGECORE", "CAFE", "RAINBOW_DREAMSCAPE", "TEA_PARTY"]
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "CAFE",
+      "RAINBOW_DREAMSCAPE",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A sprig of pastel-lavender stems tied with a satin ribbon",
-    "tags": ["FLOWER", "COTTAGECORE", "TEA_PARTY", "PICNIC"]
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "TEA_PARTY",
+      "PICNIC"
+    ]
   },
   {
     "description": "A cluster of pastel wildflowers (cosmos, baby's breath, mini-roses) gathered casually",
-    "tags": ["FLOWER", "COTTAGECORE", "PICNIC", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "PICNIC",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A pastel hydrangea-cluster in a ceramic teapot-vase",
-    "tags": ["FLOWER", "TEA_PARTY", "COTTAGECORE", "CAFE"]
+    "tags": [
+      "FLOWER",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "CAFE"
+    ]
   },
   {
     "description": "A wreath of fresh wildflowers hanging on a wooden cottage-door",
-    "tags": ["FLOWER", "COTTAGECORE", "MARKET"]
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "MARKET"
+    ]
   },
   {
     "description": "A string of pastel-pink-and-blue triangular bunting hanging in a gentle arc",
-    "tags": ["BUNTING", "CANDY_FANTASY", "PICNIC", "CAFE", "BAKERY", "TEA_PARTY"]
+    "tags": [
+      "BUNTING",
+      "CANDY_FANTASY",
+      "PICNIC",
+      "CAFE",
+      "BAKERY",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A satin chiffon ribbon-loop in pastel-pink trailing across a surface",
-    "tags": ["RIBBON", "TEA_PARTY", "BAKERY", "CAFE", "CANDY_FANTASY"]
+    "tags": [
+      "RIBBON",
+      "TEA_PARTY",
+      "BAKERY",
+      "CAFE",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A row of pastel-rainbow ribbons fluttering in a soft breeze",
-    "tags": ["RIBBON", "CANDY_FANTASY", "PICNIC", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "RIBBON",
+      "CANDY_FANTASY",
+      "PICNIC",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A cluster of pastel polka-dot bunting hanging between two posts",
-    "tags": ["BUNTING", "PICNIC", "CAFE", "MARKET", "BAKERY"]
+    "tags": [
+      "BUNTING",
+      "PICNIC",
+      "CAFE",
+      "MARKET",
+      "BAKERY"
+    ]
   },
   {
     "description": "A pearl-bead chain draped across a shelf or beam",
-    "tags": ["RIBBON", "TEA_PARTY", "BAKERY", "CANDY_FANTASY"]
+    "tags": [
+      "RIBBON",
+      "TEA_PARTY",
+      "BAKERY",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A string of warm-amber fairy-lights tangled around a branch with soft glow",
-    "tags": ["FAIRY_LIGHT", "COTTAGECORE", "CAFE", "RAINBOW_DREAMSCAPE", "FESTIVAL"]
+    "tags": [
+      "FAIRY_LIGHT",
+      "COTTAGECORE",
+      "CAFE",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL"
+    ]
   },
   {
     "description": "A pastel-rainbow string-light cluster glowing softly overhead",
-    "tags": ["FAIRY_LIGHT", "COTTAGECORE", "CAFE", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "FAIRY_LIGHT",
+      "COTTAGECORE",
+      "CAFE",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A canopy of twinkling fairy-lights hung between two posts at a market-stall",
-    "tags": ["FAIRY_LIGHT", "MARKET", "FESTIVAL", "CAFE"]
+    "tags": [
+      "FAIRY_LIGHT",
+      "MARKET",
+      "FESTIVAL",
+      "CAFE"
+    ]
   },
   {
     "description": "A net of fairy-lights draped over a cottage-window with warm glow filtering through",
-    "tags": ["FAIRY_LIGHT", "COTTAGECORE", "CAFE"]
+    "tags": [
+      "FAIRY_LIGHT",
+      "COTTAGECORE",
+      "CAFE"
+    ]
   },
   {
     "description": "A small wicker picnic-basket with a checkered cloth peeking out",
-    "tags": ["BASKET", "PICNIC", "MARKET", "COTTAGECORE"]
+    "tags": [
+      "BASKET",
+      "PICNIC",
+      "MARKET",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A round wicker basket of pastel-mini-fruits (strawberries, blueberries, peaches)",
-    "tags": ["BASKET", "PICNIC", "MARKET", "COTTAGECORE", "BAKERY"]
+    "tags": [
+      "BASKET",
+      "PICNIC",
+      "MARKET",
+      "COTTAGECORE",
+      "BAKERY"
+    ]
   },
   {
     "description": "A small flower-basket of cosmos and daisies with woven handle",
-    "tags": ["BASKET", "COTTAGECORE", "PICNIC", "MARKET"]
+    "tags": [
+      "BASKET",
+      "COTTAGECORE",
+      "PICNIC",
+      "MARKET"
+    ]
   },
   {
     "description": "A pastel-painted wooden basket of fresh-baked rolls covered with a cloth",
-    "tags": ["BASKET", "BAKERY", "MARKET", "COTTAGECORE"]
+    "tags": [
+      "BASKET",
+      "BAKERY",
+      "MARKET",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A small kawaii plushie of a pastel-pink bear sitting on a shelf",
-    "tags": ["PLUSH", "CAFE", "TEA_PARTY", "UNIVERSAL"]
+    "tags": [
+      "PLUSH",
+      "CAFE",
+      "TEA_PARTY",
+      "UNIVERSAL"
+    ]
   },
   {
     "description": "A tiny pastel-bunny plushie with a ribbon-bow on its ear",
-    "tags": ["PLUSH", "CAFE", "COTTAGECORE", "TEA_PARTY"]
+    "tags": [
+      "PLUSH",
+      "CAFE",
+      "COTTAGECORE",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A cluster of three small kawaii-creature plushies sitting in a row",
-    "tags": ["PLUSH", "CAFE", "ARCADE", "TEA_PARTY"]
+    "tags": [
+      "PLUSH",
+      "CAFE",
+      "ARCADE",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A pastel-pink rabbit-plushie peeking from a wicker basket",
-    "tags": ["PLUSH", "CAFE", "PICNIC", "COTTAGECORE"]
+    "tags": [
+      "PLUSH",
+      "CAFE",
+      "PICNIC",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A handwritten pastel-chalkboard menu on a wooden easel with cute doodles",
-    "tags": ["SIGN", "CAFE", "BAKERY", "MARKET"]
+    "tags": [
+      "SIGN",
+      "CAFE",
+      "BAKERY",
+      "MARKET"
+    ]
   },
   {
     "description": "A small wooden sign painted pastel-pink with cursive lettering hanging by twine",
-    "tags": ["SIGN", "CAFE", "BAKERY", "COTTAGECORE", "MARKET"]
+    "tags": [
+      "SIGN",
+      "CAFE",
+      "BAKERY",
+      "COTTAGECORE",
+      "MARKET"
+    ]
   },
   {
     "description": "A pastel-painted shop-sign with floral border and gentle calligraphy",
-    "tags": ["SIGN", "CAFE", "BAKERY", "MARKET"]
+    "tags": [
+      "SIGN",
+      "CAFE",
+      "BAKERY",
+      "MARKET"
+    ]
   },
   {
     "description": "A festival-stall sign with calligraphy and red-paper trim",
-    "tags": ["SIGN", "FESTIVAL", "MARKET"]
+    "tags": [
+      "SIGN",
+      "FESTIVAL",
+      "MARKET"
+    ]
   },
   {
     "description": "A vintage porcelain teapot on a saucer with steam-curl rising",
-    "tags": ["VESSEL", "TEA_PARTY", "CAFE", "COTTAGECORE"]
+    "tags": [
+      "VESSEL",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-painted ceramic cake-stand with a tiny ribbon-bow",
-    "tags": ["VESSEL", "TEA_PARTY", "BAKERY", "CAFE"]
+    "tags": [
+      "VESSEL",
+      "TEA_PARTY",
+      "BAKERY",
+      "CAFE"
+    ]
   },
   {
     "description": "A small pastel-pink milk-pitcher with a kawaii face on the side",
-    "tags": ["VESSEL", "TEA_PARTY", "CAFE", "BREAKFAST"]
+    "tags": [
+      "VESSEL",
+      "TEA_PARTY",
+      "CAFE",
+      "BREAKFAST"
+    ]
   },
   {
     "description": "A pastel-mint sugar-bowl with a tiny silver-spoon resting on the lid",
-    "tags": ["VESSEL", "TEA_PARTY", "CAFE"]
+    "tags": [
+      "VESSEL",
+      "TEA_PARTY",
+      "CAFE"
+    ]
   },
   {
     "description": "A clear glass-jar of pastel-rainbow candy with a cork-lid",
-    "tags": ["VESSEL", "CANDY_FANTASY", "BAKERY", "CAFE"]
+    "tags": [
+      "VESSEL",
+      "CANDY_FANTASY",
+      "BAKERY",
+      "CAFE"
+    ]
   },
   {
     "description": "Cherry-blossom petals drifting through the air in a soft cluster",
-    "tags": ["WIND_DECOR", "COTTAGECORE", "CAFE", "RAINBOW_DREAMSCAPE", "FESTIVAL"]
+    "tags": [
+      "WIND_DECOR",
+      "COTTAGECORE",
+      "CAFE",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL"
+    ]
   },
   {
     "description": "Floating pastel-bubble-orbs drifting like soap-bubbles through the scene",
-    "tags": ["WIND_DECOR", "CANDY_FANTASY", "CAFE", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "WIND_DECOR",
+      "CANDY_FANTASY",
+      "CAFE",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "Drifting pastel-rainbow confetti scattered through the air",
-    "tags": ["WIND_DECOR", "CANDY_FANTASY", "PICNIC", "CAFE"]
+    "tags": [
+      "WIND_DECOR",
+      "CANDY_FANTASY",
+      "PICNIC",
+      "CAFE"
+    ]
   },
   {
     "description": "Sugar-glitter dust hovering in shafts of warm light",
-    "tags": ["WIND_DECOR", "CANDY_FANTASY", "CAFE", "BAKERY", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "WIND_DECOR",
+      "CANDY_FANTASY",
+      "CAFE",
+      "BAKERY",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A swirl of pastel-petal-snow falling gently through the scene",
-    "tags": ["WIND_DECOR", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "WIND_DECOR",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A vintage-lace doily under a serving-plate with floral edging",
-    "tags": ["LACE", "TEA_PARTY", "BAKERY", "COTTAGECORE"]
+    "tags": [
+      "LACE",
+      "TEA_PARTY",
+      "BAKERY",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-pink lace-trimmed napkin folded into a triangle",
-    "tags": ["LACE", "TEA_PARTY", "PICNIC", "CAFE"]
+    "tags": [
+      "LACE",
+      "TEA_PARTY",
+      "PICNIC",
+      "CAFE"
+    ]
   },
   {
     "description": "A delicate crocheted-doily in cream-white with pastel-floral embroidery",
-    "tags": ["LACE", "COTTAGECORE", "TEA_PARTY"]
+    "tags": [
+      "LACE",
+      "COTTAGECORE",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A small pastel-wrapped gift-box with a satin-ribbon-bow on top",
-    "tags": ["GIFT", "TEA_PARTY", "CAFE", "CANDY_FANTASY"]
+    "tags": [
+      "GIFT",
+      "TEA_PARTY",
+      "CAFE",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A stack of three pastel-striped gift-boxes tied together with twine",
-    "tags": ["GIFT", "TEA_PARTY", "BAKERY", "CANDY_FANTASY"]
+    "tags": [
+      "GIFT",
+      "TEA_PARTY",
+      "BAKERY",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A small pastel-pink tin-canister with floral printing, lid slightly ajar",
-    "tags": ["GIFT", "TEA_PARTY", "COTTAGECORE", "BAKERY"]
+    "tags": [
+      "GIFT",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "BAKERY"
+    ]
   },
   {
     "description": "A festival fireworks-burst lighting up the dark sky in pastel-rainbow",
-    "tags": ["WIND_DECOR", "FESTIVAL"]
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL"
+    ]
   },
   {
     "description": "A festival mask hanging on a stall-post — pastel-colored with cute design",
-    "tags": ["TINY_OBJECT", "FESTIVAL", "MARKET"]
+    "tags": [
+      "TINY_OBJECT",
+      "FESTIVAL",
+      "MARKET"
+    ]
   },
   {
     "description": "A row of festival-yukata-pattern paper-fans displayed at a stall",
-    "tags": ["TINY_OBJECT", "FESTIVAL", "MARKET"]
+    "tags": [
+      "TINY_OBJECT",
+      "FESTIVAL",
+      "MARKET"
+    ]
   },
   {
     "description": "A scattering of pastel candy-canes and lollipops stuck in the ground",
-    "tags": ["TINY_OBJECT", "CANDY_FANTASY", "FESTIVAL"]
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "FESTIVAL"
+    ]
   },
   {
     "description": "A small pile of sugar-cube blocks with pastel-icing decoration",
-    "tags": ["TINY_OBJECT", "CANDY_FANTASY", "BAKERY"]
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "BAKERY"
+    ]
   },
   {
     "description": "A pastel-marshmallow-cluster scattered on the ground like pillows",
-    "tags": ["TINY_OBJECT", "CANDY_FANTASY", "COTTAGECORE"]
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-neon arcade-sign glowing softly in pink and blue",
-    "tags": ["SIGN", "ARCADE"]
+    "tags": [
+      "SIGN",
+      "ARCADE"
+    ]
   },
   {
     "description": "A small claw-machine in pastel-colors with plushies inside visible",
-    "tags": ["TINY_OBJECT", "ARCADE"]
+    "tags": [
+      "TINY_OBJECT",
+      "ARCADE"
+    ]
   },
   {
     "description": "A stack of pastel-game-tokens in a small cup",
-    "tags": ["TINY_OBJECT", "ARCADE"]
+    "tags": [
+      "TINY_OBJECT",
+      "ARCADE"
+    ]
   },
   {
     "description": "A small stack of cute hand-illustrated magazines on a cafe-counter",
-    "tags": ["TINY_OBJECT", "CAFE", "COTTAGECORE"]
+    "tags": [
+      "TINY_OBJECT",
+      "CAFE",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-painted coffee-bag-of-beans tied with twine on a shelf",
-    "tags": ["TINY_OBJECT", "CAFE", "MARKET"]
+    "tags": [
+      "TINY_OBJECT",
+      "CAFE",
+      "MARKET"
+    ]
   },
   {
     "description": "A small succulent in a tiny pastel-painted clay pot",
-    "tags": ["FLOWER", "CAFE", "COTTAGECORE"]
+    "tags": [
+      "FLOWER",
+      "CAFE",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A rainbow-arc-ribbon stretched across the air like a hanging decoration",
-    "tags": ["RIBBON", "RAINBOW_DREAMSCAPE", "CANDY_FANTASY"]
+    "tags": [
+      "RIBBON",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A floating cluster of pastel-rainbow balloons tied with ribbons",
-    "tags": ["TINY_OBJECT", "RAINBOW_DREAMSCAPE", "CANDY_FANTASY", "PICNIC"]
+    "tags": [
+      "TINY_OBJECT",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "PICNIC"
+    ]
   },
   {
     "description": "A pair of pastel-pink lacquered chopsticks resting on a tiny chopstick-rest",
-    "tags": ["TINY_OBJECT", "BENTO"]
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO"
+    ]
   },
   {
     "description": "A folded pastel paper-divider separating bento-box compartments",
-    "tags": ["TINY_OBJECT", "BENTO"]
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO"
+    ]
   },
   {
     "description": "A tiny bunny-shaped hard-boiled-egg garnish with carved ears and dimpled face",
-    "tags": ["TINY_OBJECT", "BENTO"]
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO"
+    ]
   },
   {
     "description": "A small pastel-flower silicone-cup separator for bento-compartments",
-    "tags": ["TINY_OBJECT", "BENTO"]
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO"
+    ]
   },
   {
     "description": "A pastel-pink wire shelf row of perfectly-packaged konbini snacks with tiny labels",
-    "tags": ["TINY_OBJECT", "KONBINI"]
+    "tags": [
+      "TINY_OBJECT",
+      "KONBINI"
+    ]
   },
   {
     "description": "A glowing pastel fridge-shelf with neatly-arranged drink-bottles, soft-white-light strip",
-    "tags": ["TINY_OBJECT", "KONBINI"]
+    "tags": [
+      "TINY_OBJECT",
+      "KONBINI"
+    ]
   },
   {
     "description": "A small pastel-yellow konbini price-tag sign hanging from a wire shelf",
-    "tags": ["SIGN", "KONBINI"]
+    "tags": [
+      "SIGN",
+      "KONBINI"
+    ]
   },
   {
     "description": "A row of pastel-foil-wrapped onigiri triangles with cute character labels",
-    "tags": ["TINY_OBJECT", "KONBINI"]
+    "tags": [
+      "TINY_OBJECT",
+      "KONBINI"
+    ]
   },
   {
     "description": "A tiny pastel-pink chef's-hat sitting on a wooden hook",
-    "tags": ["TINY_OBJECT", "MINI_CHEF"]
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF"
+    ]
   },
   {
     "description": "A small pastel-mint mixing-bowl with a tiny whisk leaning against it",
-    "tags": ["VESSEL", "MINI_CHEF"]
+    "tags": [
+      "VESSEL",
+      "MINI_CHEF"
+    ]
   },
   {
     "description": "A miniature wooden rolling-pin with pastel-painted handles",
-    "tags": ["TINY_OBJECT", "MINI_CHEF"]
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF"
+    ]
   },
   {
     "description": "A pastel-floral apron hanging on a wall-hook with a single ribbon-tie",
-    "tags": ["TINY_OBJECT", "MINI_CHEF", "COTTAGECORE"]
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-rainbow ticket-strip curling out of an arcade-machine slot",
-    "tags": ["TINY_OBJECT", "ARCADE"]
+    "tags": [
+      "TINY_OBJECT",
+      "ARCADE"
+    ]
   },
   {
     "description": "A pastel-neon star-sign glowing softly above a snack-counter",
-    "tags": ["SIGN", "ARCADE"]
+    "tags": [
+      "SIGN",
+      "ARCADE"
+    ]
   },
   {
     "description": "A pixel-art-pattern checkered floor in pastel-pink and pastel-blue squares",
-    "tags": ["TINY_OBJECT", "ARCADE"]
+    "tags": [
+      "TINY_OBJECT",
+      "ARCADE"
+    ]
   },
   {
     "description": "A drift of soft pastel-glitter dust through the air, catching warm light",
-    "tags": ["WIND_DECOR", "UNIVERSAL", "CAFE", "BAKERY", "TEA_PARTY", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "WIND_DECOR",
+      "UNIVERSAL",
+      "CAFE",
+      "BAKERY",
+      "TEA_PARTY",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A tiny cluster of pastel-pearl-bead orbs scattered like small jewels",
-    "tags": ["TINY_OBJECT", "UNIVERSAL", "TEA_PARTY", "CANDY_FANTASY"]
+    "tags": [
+      "TINY_OBJECT",
+      "UNIVERSAL",
+      "TEA_PARTY",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A cluster of oversized gummy-bear charms in jewel-toned pastels hung from a candy-cane arch",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "ARCADE"
+    ]
+  },
+  {
+    "description": "A looping rainbow-ribbon arc in six soft pastel bands with pearl-tip ends drifting gently",
+    "tags": [
+      "RIBBON",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "FESTIVAL",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A trio of floating pastel-pearl orbs clustered together glowing with a soft inner warmth",
+    "tags": [
+      "FAIRY_LIGHT",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "CANDY_FANTASY",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A pastel-neon sign in bubbly rounded letters with a soft pink-and-mint glow",
+    "tags": [
+      "SIGN",
+      "ARCADE",
+      "KONBINI",
+      "CANDY_FANTASY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A tall glass display dome on a cake-stand pedestal with a soft frosted sheen",
+    "tags": [
+      "VESSEL",
+      "BAKERY",
+      "CAFE",
+      "TEA_PARTY",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A small wicker basket lined in cream gingham cloth with a hand-tied lavender ribbon",
+    "tags": [
+      "BASKET",
+      "PICNIC",
+      "COTTAGECORE",
+      "MARKET",
+      "BAKERY",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A lace-edged doily in crisp ivory beneath a neat porcelain cup arrangement",
+    "tags": [
+      "LACE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "CAFE",
+      "BAKERY",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A string of pastel-mint and lemon-yellow star-shaped fairy lights looped in a soft swag",
+    "tags": [
+      "FAIRY_LIGHT",
+      "CAFE",
+      "BAKERY",
+      "PICNIC",
+      "CANDY_FANTASY",
+      "ARCADE"
+    ]
+  },
+  {
+    "description": "A row of neat price-tag labels in pastel-peach with rounded corners clipped to a wire shelf",
+    "tags": [
+      "SIGN",
+      "KONBINI",
+      "MARKET",
+      "BAKERY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A paper koi-streamer flag in coral and gold swaying gently on a slender bamboo pole",
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL",
+      "MARKET",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A wildflower wreath of dried lavender, tiny daisies, and baby eucalyptus tied with cream twine",
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "PICNIC",
+      "TEA_PARTY",
+      "MARKET",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A pastel plushie claw-machine cabinet in soft mint with tiny star-shaped plush prizes visible inside",
+    "tags": [
+      "PLUSH",
+      "ARCADE",
+      "CANDY_FANTASY",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A miniature rolling-pin and mixing-bowl set in cream ceramic resting on a floured counter",
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "BAKERY",
+      "COTTAGECORE",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A soft cloud-cushion in fluffy white with a pearlescent shimmer floating at gentle mid-height",
+    "tags": [
+      "PLUSH",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A set of painted wooden chopstick rests shaped like tiny blossom flowers in blush and mint",
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO",
+      "TEA_PARTY",
+      "FESTIVAL",
+      "MINI_CHEF"
+    ]
+  },
+  {
+    "description": "A taiko-festival banner in bold red-and-white with kanji print hung from a lacquered dowel",
+    "tags": [
+      "BUNTING",
+      "FESTIVAL",
+      "MARKET",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A vintage amber glass jar filled with a loose bundle of dried wildflowers and seed-heads",
+    "tags": [
+      "VESSEL",
+      "COTTAGECORE",
+      "PICNIC",
+      "MARKET",
+      "TEA_PARTY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A folded pastel-peach apron hanging on a small brass hook with a soft gingham pocket detail",
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "BAKERY",
+      "COTTAGECORE",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A checkered cream-and-mint picnic blanket corner with a soft rumpled fold and ribbon border",
+    "tags": [
+      "TINY_OBJECT",
+      "PICNIC",
+      "COTTAGECORE",
+      "TEA_PARTY",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A pastel-sugar bauble ornament in translucent blush pink with a lace-loop ribbon hanger",
+    "tags": [
+      "GIFT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "TEA_PARTY",
+      "FESTIVAL",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A cluster of oversized gummy-bear charms in jewel-bright pastels hung from a glittery string",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "ARCADE"
+    ]
+  },
+  {
+    "description": "A candy-cane arch of spiraled red-and-white sugar poles with a pink ribbon bow at the top",
+    "tags": [
+      "WIND_DECOR",
+      "CANDY_FANTASY",
+      "FESTIVAL",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A row of pastel lollipop fence-posts in mint, peach, and lavender with scalloped tops",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "BAKERY",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A floating cluster of pastel-pearl orbs drifting slowly at varying heights in soft pearlescent light",
+    "tags": [
+      "WIND_DECOR",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "TEA_PARTY",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A small fluffy cloud-cushion in baby-blue and white with a gentle shimmer hovering mid-air",
+    "tags": [
+      "PLUSH",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A looping pastel rainbow-arc ribbon in gradient lavender-to-peach-to-yellow stretched between two posts",
+    "tags": [
+      "RIBBON",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL",
+      "CANDY_FANTASY",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A tall glass display dome on a cream pedestal with a soft interior glow and gold rim detail",
+    "tags": [
+      "VESSEL",
+      "BAKERY",
+      "TEA_PARTY",
+      "CAFE",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A tiered pastel-pink cake-stand with mint-dotted tiers and a pearl-bead finial on top",
+    "tags": [
+      "VESSEL",
+      "BAKERY",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A string of miniature pastel-neon signs in pink and mint spelling cute shapes hung zigzag",
+    "tags": [
+      "SIGN",
+      "ARCADE",
+      "KONBINI",
+      "CANDY_FANTASY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A pastel-yellow plushie claw-machine cabinet with tiny stuffed bears visible through the glass",
+    "tags": [
+      "PLUSH",
+      "ARCADE",
+      "KONBINI",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A neat wire display shelf with small pastel price-tag cards clipped along its front edge",
+    "tags": [
+      "SIGN",
+      "KONBINI",
+      "MARKET",
+      "BAKERY",
+      "ARCADE"
+    ]
+  },
+  {
+    "description": "A red-and-white checkered picnic blanket neatly spread with its corners pinned by small pebbles",
+    "tags": [
+      "TINY_OBJECT",
+      "PICNIC",
+      "COTTAGECORE",
+      "FESTIVAL",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A round wicker picnic basket with a cream linen lining and a pale-pink ribbon clasp",
+    "tags": [
+      "BASKET",
+      "PICNIC",
+      "COTTAGECORE",
+      "MARKET",
+      "BREAKFAST",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A pale-blue-and-white porcelain tea-setting of cup, saucer, and teaspoon arranged on a lace doily",
+    "tags": [
+      "VESSEL",
+      "LACE",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A small circular lace doily in ivory with a delicate floral trim laid flat on a surface",
+    "tags": [
+      "LACE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "BAKERY",
+      "CAFE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A hanging koi-shaped paper flag in orange and gold swaying gently with a soft shimmer",
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL",
+      "MARKET",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A wooden sign with hand-painted pastel lettering on a cream board hung by a length of jute twine",
+    "tags": [
+      "SIGN",
+      "COTTAGECORE",
+      "BAKERY",
+      "MARKET",
+      "CAFE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A small ceramic mixing bowl with a blue-stripe rim and a mini wooden whisk resting inside",
+    "tags": [
+      "VESSEL",
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "BAKERY",
+      "BREAKFAST",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-mint rolling pin with cream-colored handles laid flat on a dusted surface",
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "BAKERY",
+      "COTTAGECORE",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A pair of lacquered chopstick rests in coral-pink with tiny blossom relief patterns on each",
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO",
+      "TEA_PARTY",
+      "FESTIVAL",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A cluster of translucent gummy-bear ornaments hanging from a candy-striped arch in pastel rainbow hues",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A trio of pastel-mint and blush floating cloud-cushions drifting gently at scene height",
+    "tags": [
+      "WIND_DECOR",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A looping strand of iridescent rainbow-arc ribbons in baby-blue, lavender, and peach swaying softly",
+    "tags": [
+      "RIBBON",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "FESTIVAL",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A cluster of soft pastel-pearl orbs in cream and blush hovering at varying heights with gentle glow",
+    "tags": [
+      "FAIRY_LIGHT",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "TEA_PARTY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A short lollipop fence of oversized candy-swirl lollipops in pink and mint bordering the foreground",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "BAKERY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A tall glass display dome on a cake-stand pedestal with a pale-pink satin bow tied at its base",
+    "tags": [
+      "VESSEL",
+      "BAKERY",
+      "CAFE",
+      "TEA_PARTY",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A row of pastel-lavender and cream macaroon-tower stands arranged neatly on a lace-trim counter",
+    "tags": [
+      "VESSEL",
+      "BAKERY",
+      "CAFE",
+      "TEA_PARTY",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A red-and-white paper festival fan pinned open against a wooden stall post with a golden tassel",
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL",
+      "MARKET",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A pair of painted koi-fish fabric flags fluttering from a slender bamboo pole in orange and white",
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL",
+      "COTTAGECORE",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A neat wire shelf with rows of small ribbon-tied paper bags and price-tag labels in soft cream",
+    "tags": [
+      "TINY_OBJECT",
+      "KONBINI",
+      "MARKET",
+      "BAKERY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A squat wicker picnic basket with a red-and-white checked cloth spilling gently over its open lid",
+    "tags": [
+      "BASKET",
+      "PICNIC",
+      "COTTAGECORE",
+      "MARKET",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A checkered blush-and-cream picnic blanket spread flat with soft rumpled corners and a ribbon edge",
+    "tags": [
+      "LACE",
+      "PICNIC",
+      "COTTAGECORE",
+      "BREAKFAST",
+      "MINI_CHEF"
+    ]
+  },
+  {
+    "description": "A pastel-neon arcade sign in mint with pixel-font lettering and a soft pink halo glow",
+    "tags": [
+      "SIGN",
+      "ARCADE",
+      "KONBINI",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A mini plushie claw-machine in baby-blue filled with tiny pastel bear plushies visible through glass",
+    "tags": [
+      "PLUSH",
+      "ARCADE",
+      "CANDY_FANTASY",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A small ceramic token cup in peach with a scalloped rim sitting beside an arcade console edge",
+    "tags": [
+      "VESSEL",
+      "ARCADE",
+      "KONBINI",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A lace-trimmed doily spread flat beneath a delicate porcelain teacup-and-saucer pairing in ivory",
+    "tags": [
+      "LACE",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A petite apron hung on a small wooden hook, cream cotton with a hand-embroidered strawberry patch",
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "COTTAGECORE",
+      "BAKERY",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A pastel-yellow mixing bowl and a cream-handled rolling pin resting on a floured wooden board",
+    "tags": [
+      "VESSEL",
+      "MINI_CHEF",
+      "BAKERY",
+      "BREAKFAST",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A set of lacquered chopstick rests in coral and mint shaped like tiny blossoms beside a folded napkin",
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO",
+      "TEA_PARTY",
+      "FESTIVAL",
+      "MINI_CHEF"
+    ]
+  },
+  {
+    "description": "A wildflower wreath of dried lavender, baby's-breath, and cream ribbon loops hanging on a pale wall",
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "TEA_PARTY",
+      "PICNIC",
+      "BAKERY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A cluster of oversized gummy-bear baubles in jewel-bright pastels dangling from a ribbon strand",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "ARCADE"
+    ]
+  },
+  {
+    "description": "A candy-cane arch wrapped in pink-and-white spirals with a tiny bow at each tip",
+    "tags": [
+      "WIND_DECOR",
+      "CANDY_FANTASY",
+      "FESTIVAL",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A row of lollipop-topped fence posts in mint, lavender, and peach planted in soft soil",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A floating pastel-cloud cushion trimmed in silver lace edging with a soft pearlescent glow",
+    "tags": [
+      "PLUSH",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A gentle arc of seven-color ribbon streamers curving through the air in a glowing rainbow",
+    "tags": [
+      "RIBBON",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A cluster of softly glowing pastel-pearl orbs drifting slowly at varying heights",
+    "tags": [
+      "FAIRY_LIGHT",
+      "RAINBOW_DREAMSCAPE",
+      "TEA_PARTY",
+      "UNIVERSAL",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A hanging row of red-and-gold paper fan decorations fanned open against a wooden beam",
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL",
+      "MARKET",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A vertical koi-shaped fabric flag in orange and white swaying gently on a slim pole",
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL",
+      "MARKET",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A taiko-drum-print banner in deep red with gold kanji strung between two bamboo poles",
+    "tags": [
+      "BUNTING",
+      "FESTIVAL",
+      "MARKET",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A tiered glass cake-stand with a pearlescent dome lid catching soft warm light",
+    "tags": [
+      "VESSEL",
+      "BAKERY",
+      "TEA_PARTY",
+      "CAFE",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A neat row of pastel frosting-tube twists in pink, mint, and yellow resting on a marble slab",
+    "tags": [
+      "TINY_OBJECT",
+      "BAKERY",
+      "MINI_CHEF",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A glossy pastel-tile counter edge trimmed with a thin stripe of gold and cream grouting",
+    "tags": [
+      "TINY_OBJECT",
+      "BAKERY",
+      "CAFE",
+      "KONBINI",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A lace-trimmed porcelain saucer with a tiny pearl-handled teaspoon resting across it",
+    "tags": [
+      "VESSEL",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A delicate strand of cream lace doilies pinned in a looping garland along a shelf edge",
+    "tags": [
+      "LACE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "BAKERY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A neat wire display shelf holding small products in tidy pastel-labeled rows",
+    "tags": [
+      "TINY_OBJECT",
+      "KONBINI",
+      "MARKET",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A small hand-lettered price-tag card on a wire stake in mint-green ink on cream card",
+    "tags": [
+      "SIGN",
+      "KONBINI",
+      "MARKET",
+      "BAKERY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A wicker picnic basket with cream linen lining and a tied lavender ribbon handle bow",
+    "tags": [
+      "BASKET",
+      "PICNIC",
+      "COTTAGECORE",
+      "TEA_PARTY",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A pastel-neon pink sign in bubbly retro lettering glowing softly on a dark backdrop",
+    "tags": [
+      "SIGN",
+      "ARCADE",
+      "CANDY_FANTASY",
+      "KONBINI",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A miniature wooden rolling-pin with pastel-blue handles resting beside a dusted mixing bowl",
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "BAKERY",
+      "COTTAGECORE",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A set of lacquered chopstick rests shaped like tiny pink blossoms beside folded paper dividers",
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO",
+      "BREAKFAST",
+      "FESTIVAL",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A cluster of translucent gummy-bear ornaments dangling from a candy-striped ribbon loop",
+    "tags": [
+      "TINY_OBJECT",
+      "RIBBON",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-rainbow arc of layered satin ribbons cascading gently in soft curls",
+    "tags": [
+      "RIBBON",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "FESTIVAL",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A row of floating pearl-white orbs glowing with a faint inner pastel shimmer",
+    "tags": [
+      "TINY_OBJECT",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "TEA_PARTY",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A tall glass display dome on a cake stand with a pearl-trim base",
+    "tags": [
+      "VESSEL",
+      "BAKERY",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-mint lollipop fence in a neat row with pink swirl-tops catching light",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "ARCADE"
+    ]
+  },
+  {
+    "description": "A string of warm paper lanterns in persimmon and gold swaying over a festival stall",
+    "tags": [
+      "LANTERN",
+      "FESTIVAL",
+      "MARKET",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A small wicker picnic basket with a gingham-check lining and ribbon-bow latch",
+    "tags": [
+      "BASKET",
+      "PICNIC",
+      "COTTAGECORE",
+      "TEA_PARTY",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A lace-edged doily laid flat under a porcelain setting with soft ivory tone",
+    "tags": [
+      "LACE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "CAFE",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A pastel-neon sign reading sweet shop in loopy cursive with a soft pink glow",
+    "tags": [
+      "SIGN",
+      "ARCADE",
+      "CANDY_FANTASY",
+      "KONBINI",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "A mini wooden rolling-pin and mixing-bowl set resting on a floured counter surface",
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "BAKERY",
+      "COTTAGECORE",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A cheerful koi-shaped fabric flag on a thin bamboo pole in coral and gold",
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL",
+      "MARKET",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A neat wire shelf tier with tiny price-tag labels and pastel-peach color blocking",
+    "tags": [
+      "TINY_OBJECT",
+      "KONBINI",
+      "MARKET",
+      "BAKERY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A fluffy cloud-shaped cushion in pale silver-white with a pearlescent soft sheen",
+    "tags": [
+      "PLUSH",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "ARCADE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A lavender-and-cream bunting of tiny paper fans strung in a gentle scalloped arc",
+    "tags": [
+      "BUNTING",
+      "FESTIVAL",
+      "TEA_PARTY",
+      "BAKERY",
+      "CAFE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A checkered cream-and-red picnic blanket folded neatly with a ribbon tie around it",
+    "tags": [
+      "TINY_OBJECT",
+      "PICNIC",
+      "COTTAGECORE",
+      "MARKET",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A pastel-yellow token cup with a handful of shiny arcade coins spilling softly over the rim",
+    "tags": [
+      "VESSEL",
+      "ARCADE",
+      "KONBINI",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A small lacquered chopstick rest in blush-pink with a tiny floral motif painted on",
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO",
+      "TEA_PARTY",
+      "MINI_CHEF",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A gift box in pearlescent lavender wrapping tied with a double-loop satin bow",
+    "tags": [
+      "GIFT",
+      "TEA_PARTY",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A wildflower wreath of tiny dried daisies and mint sprigs hung on a pale wooden backdrop",
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "PICNIC",
+      "BAKERY",
+      "TEA_PARTY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A pair of pastel-mint fairy-light strands looped in soft swags with petal-shaped bulbs",
+    "tags": [
+      "FAIRY_LIGHT",
+      "CAFE",
+      "BAKERY",
+      "ARCADE",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A cluster of oversized gummy-bear baubles in translucent jewel-pastel colors strung together",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A candy-cane arch wrapped in mint and pink spirals with a small ribbon bow at top",
+    "tags": [
+      "WIND_DECOR",
+      "CANDY_FANTASY",
+      "BAKERY",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A row of pastel lollipop fence posts in alternating pink, lavender, and yellow",
+    "tags": [
+      "TINY_OBJECT",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "MARKET"
+    ]
+  },
+  {
+    "description": "Floating soft pastel-cloud cushions drifting gently at mid-height, rimmed with pearlescent glow",
+    "tags": [
+      "WIND_DECOR",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A looping rainbow-arc ribbon of glossy pastel bands curving overhead in a soft arch",
+    "tags": [
+      "RIBBON",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY",
+      "FESTIVAL",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A cluster of floating pastel-pearl orbs in blush, mint, and lavender catching soft light",
+    "tags": [
+      "TINY_OBJECT",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "TEA_PARTY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A strand of paper koi-fish flags in orange, red, and gold swaying in a gentle breeze",
+    "tags": [
+      "WIND_DECOR",
+      "FESTIVAL",
+      "MARKET",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A row of hand-painted paper folding fans mounted on a wooden stall rail in pastel hues",
+    "tags": [
+      "TINY_OBJECT",
+      "FESTIVAL",
+      "MARKET",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A glass-domed cake display stand on a cream pedestal with a pastel-pink ribbon handle",
+    "tags": [
+      "VESSEL",
+      "BAKERY",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A trio of pastel-tile counter squares in mint, blush, and cream arranged in a neat row",
+    "tags": [
+      "TINY_OBJECT",
+      "BAKERY",
+      "CAFE",
+      "MINI_CHEF"
+    ]
+  },
+  {
+    "description": "A lace-edged doily circle in ivory with a satin pearl-white ribbon bow at its center",
+    "tags": [
+      "LACE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "BAKERY",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A small porcelain teacup-and-saucer set in blush white with gold-rim detail and tiny rose motif",
+    "tags": [
+      "VESSEL",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A wire display shelf with neat rows of price-tag labels in pastel-yellow and white",
+    "tags": [
+      "SIGN",
+      "KONBINI",
+      "MARKET",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A wicker picnic basket with a hinged lid, pastel-gingham lining, and a lavender ribbon handle-bow",
+    "tags": [
+      "BASKET",
+      "PICNIC",
+      "COTTAGECORE",
+      "TEA_PARTY",
+      "BAKERY"
+    ]
+  },
+  {
+    "description": "A pastel-neon arcade sign in baby-pink with bubbly retro lettering and a soft inner glow",
+    "tags": [
+      "SIGN",
+      "ARCADE",
+      "CANDY_FANTASY",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A miniature plushie claw-machine cabinet in mint-green with a glass front full of tiny plush bears",
+    "tags": [
+      "PLUSH",
+      "ARCADE",
+      "CANDY_FANTASY",
+      "KONBINI"
+    ]
+  },
+  {
+    "description": "A small wooden rolling-pin with pastel-blue handles resting beside a dusting of cream flour",
+    "tags": [
+      "TINY_OBJECT",
+      "MINI_CHEF",
+      "BAKERY",
+      "COTTAGECORE",
+      "BREAKFAST"
+    ]
+  },
+  {
+    "description": "A set of pastel chopstick rests shaped like tiny clouds in white and lavender glaze",
+    "tags": [
+      "TINY_OBJECT",
+      "BENTO",
+      "TEA_PARTY",
+      "KONBINI",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A wildflower wreath of cream daisies and lavender sprigs tied with a soft sage-green ribbon",
+    "tags": [
+      "FLOWER",
+      "COTTAGECORE",
+      "PICNIC",
+      "TEA_PARTY",
+      "CAFE",
+      "FESTIVAL"
+    ]
   }
 ]

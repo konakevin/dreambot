@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/heartwarming_phenomena.json',
-  total: 50,
+  total: 100,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot heartwarming creature scenes — magical or seasonal events woven into the scene that crank atmospheric drama. This axis is 60%-gated — only fires on some renders — so each entry should be a STATEMENT MOMENT that transforms the frame when it lands.

@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/cuddly_aquatic_phenomena.json',
-  total: 50,
+  total: 100,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} ENVIRONMENTAL PHENOMENA for ChibiBot cuddly-aquatic scenes — magical or seasonal aquatic events that crank atmospheric drama when they fire. This axis is 60%-gated — only fires on some renders — so each entry should be a STATEMENT MOMENT that transforms the underwater/surface frame.

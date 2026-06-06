@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/female_explorer_hairstyles.json',
-  total: 25,
+  total: 50,
   batch: 12,
   metaPrompt: (
     n

@@ -19,7 +19,11 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/arcane_spell_moment.json',
   total: 200,
-  batch: 50,
+  // Smaller batch — entries are 50-90 words each; batch 50 + 8000 maxTokens
+  // truncated Sonnet's response. Batch 25 keeps each call comfortably
+  // under maxTokens.
+  batch: 25,
+  maxTokens: 16000,
   append: true,
   metaPrompt: (
     n

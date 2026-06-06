@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/sleepy_naptime_phenomena.json',
-  total: 50,
+  total: 100,
   batch: 25,
+  maxTokens: 8000,
+  append: true,
   metaPrompt: (
     n
   ) => `You are writing ${n} GENTLE ENVIRONMENTAL PHENOMENA for ChibiBot sleepy-naptime — soft magical or atmospheric events that drift around the sleeper without waking them. 60%-gated, fires sometimes.

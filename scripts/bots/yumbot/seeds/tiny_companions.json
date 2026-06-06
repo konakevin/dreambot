@@ -1,226 +1,1984 @@
 [
   {
     "description": "A tiny pastel-pink butterfly with closed-arc eyes, mid-flight, soft glittering wings",
-    "tags": ["BUTTERFLY", "SKY", "PICNIC", "COTTAGECORE", "RAINBOW_DREAMSCAPE", "UNIVERSAL"]
+    "tags": [
+      "BUTTERFLY",
+      "SKY",
+      "PICNIC",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL"
+    ]
   },
   {
     "description": "A pearl-blue butterfly with translucent wings catching warm pastel light, resting on a petal",
-    "tags": ["BUTTERFLY", "SKY", "PICNIC", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "BUTTERFLY",
+      "SKY",
+      "PICNIC",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A pastel-mint swallowtail butterfly with iridescent wing-tips and tiny kawaii face",
-    "tags": ["BUTTERFLY", "SKY", "COTTAGECORE", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "BUTTERFLY",
+      "SKY",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A trio of pastel-lavender butterflies fluttering in a tight cluster around a flower",
-    "tags": ["BUTTERFLY", "SKY", "PICNIC", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "BUTTERFLY",
+      "SKY",
+      "PICNIC",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A tiny pastel-pink bunny mid-hop, ears tilted, fluffy cotton-puff tail visible",
-    "tags": ["RABBIT", "MAMMAL", "FOREST", "COTTAGECORE", "PICNIC", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A pearl-cream bunny nibbling a tiny pastel-strawberry, dimpled blush cheeks",
-    "tags": ["RABBIT", "MAMMAL", "FOREST", "COTTAGECORE", "PICNIC"]
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
   },
   {
     "description": "A small pastel-lavender bunny sitting on a mossy stone, eyes half-closed in contentment",
-    "tags": ["RABBIT", "MAMMAL", "FOREST", "COTTAGECORE"]
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-mint bunny with wildflower-crown on head, paws crossed in front",
-    "tags": ["RABBIT", "MAMMAL", "COTTAGECORE", "PICNIC", "TEA_PARTY"]
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "COTTAGECORE",
+      "PICNIC",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A tiny pastel-green frog sitting on a lily-pad with a closed-arc smile and pearl-cheeks",
-    "tags": ["FROG", "AMPHIBIAN", "WATER", "COTTAGECORE", "FOREST"]
+    "tags": [
+      "FROG",
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "FOREST"
+    ]
   },
   {
     "description": "A pastel-mint frog mid-jump between two lily-pads, dewdrops trailing",
-    "tags": ["FROG", "AMPHIBIAN", "WATER", "COTTAGECORE"]
+    "tags": [
+      "FROG",
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-blue tree-frog clinging to a mossy branch, oversized eyes, blush cheeks",
-    "tags": ["FROG", "AMPHIBIAN", "FOREST", "COTTAGECORE"]
+    "tags": [
+      "FROG",
+      "AMPHIBIAN",
+      "FOREST",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-pink sparrow with a tiny ribbon-tied scarf, perched and chirping",
-    "tags": ["BIRD", "SKY", "COTTAGECORE", "PICNIC", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "BIRD",
+      "SKY",
+      "COTTAGECORE",
+      "PICNIC",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A pearl-blue songbird mid-flight, wings spread, leaving a sparkle-trail behind",
-    "tags": ["BIRD", "SKY", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "BIRD",
+      "SKY",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A tiny pastel-yellow finch on a cherry-blossom branch, head tilted curiously",
-    "tags": ["BIRD", "SKY", "COTTAGECORE", "PICNIC"]
+    "tags": [
+      "BIRD",
+      "SKY",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
   },
   {
     "description": "A pastel-cream owl with closed sleepy eyes, perched on a low branch",
-    "tags": ["BIRD", "SKY", "COTTAGECORE", "FOREST"]
+    "tags": [
+      "BIRD",
+      "SKY",
+      "COTTAGECORE",
+      "FOREST"
+    ]
   },
   {
     "description": "A cluster of tiny golden-glow fireflies drifting through twilight air",
-    "tags": ["INSECT", "FAIRY", "SKY", "FOREST", "FESTIVAL", "COTTAGECORE"]
+    "tags": [
+      "INSECT",
+      "FAIRY",
+      "SKY",
+      "FOREST",
+      "FESTIVAL",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A single warm-amber firefly mid-flight with a soft glow halo around it",
-    "tags": ["INSECT", "FAIRY", "SKY", "FOREST", "FESTIVAL", "COTTAGECORE"]
+    "tags": [
+      "INSECT",
+      "FAIRY",
+      "SKY",
+      "FOREST",
+      "FESTIVAL",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-violet glow-bug pulsing with iridescent shimmer at twilight",
-    "tags": ["INSECT", "FAIRY", "FOREST", "FESTIVAL", "COTTAGECORE"]
+    "tags": [
+      "INSECT",
+      "FAIRY",
+      "FOREST",
+      "FESTIVAL",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-iridescent dragonfly hovering above a stream, wings catching rainbow light",
-    "tags": ["INSECT", "WATER", "FOREST", "FESTIVAL", "COTTAGECORE"]
+    "tags": [
+      "INSECT",
+      "WATER",
+      "FOREST",
+      "FESTIVAL",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny pearl-blue damselfly resting on a reed, wings folded back",
-    "tags": ["INSECT", "WATER", "COTTAGECORE"]
+    "tags": [
+      "INSECT",
+      "WATER",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A smiling pastel-pink axolotl peeking out from behind a pebble in a stream",
-    "tags": ["FISH", "AMPHIBIAN", "WATER", "COTTAGECORE"]
+    "tags": [
+      "FISH",
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny school of pastel-iridescent fish swimming through a clear pastel-blue pond",
-    "tags": ["FISH", "WATER"]
+    "tags": [
+      "FISH",
+      "WATER"
+    ]
   },
   {
     "description": "A pastel-koi-fish gliding through shimmering water with red-and-white markings",
-    "tags": ["FISH", "WATER", "FESTIVAL"]
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL"
+    ]
   },
   {
     "description": "A kawaii pastel-tadpole with closed-arc eyes wiggling in shallow water",
-    "tags": ["AMPHIBIAN", "WATER", "COTTAGECORE"]
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-pink mochi-blob creature with closed-arc eyes and dimpled blush, hopping shyly",
-    "tags": ["MOCHI_BLOB", "UNIVERSAL", "CAFE", "CANDY_FANTASY"]
+    "tags": [
+      "MOCHI_BLOB",
+      "UNIVERSAL",
+      "CAFE",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A pastel-mint mochi-blob with tiny stub-legs, taking little wobbling steps",
-    "tags": ["MOCHI_BLOB", "UNIVERSAL", "CAFE", "CANDY_FANTASY"]
+    "tags": [
+      "MOCHI_BLOB",
+      "UNIVERSAL",
+      "CAFE",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A trio of small mochi-blob creatures in pink, yellow, blue — clustered like marshmallows",
-    "tags": ["MOCHI_BLOB", "UNIVERSAL", "CANDY_FANTASY", "TEA_PARTY"]
+    "tags": [
+      "MOCHI_BLOB",
+      "UNIVERSAL",
+      "CANDY_FANTASY",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A round mochi-bear with bear-ear-bumps and closed-arc-smile, sitting up",
-    "tags": ["MOCHI_BLOB", "MAMMAL", "UNIVERSAL", "CAFE", "COTTAGECORE", "TEA_PARTY"]
+    "tags": [
+      "MOCHI_BLOB",
+      "MAMMAL",
+      "UNIVERSAL",
+      "CAFE",
+      "COTTAGECORE",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A tiny glowing fairy-orb drifting through the air with a soft sparkle-trail",
-    "tags": ["FAIRY", "MAGICAL_ORB", "SKY", "FESTIVAL", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "FAIRY",
+      "MAGICAL_ORB",
+      "SKY",
+      "FESTIVAL",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A pastel-rainbow wisp curling like a ribbon through the air",
-    "tags": ["FAIRY", "MAGICAL_ORB", "SKY", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "FAIRY",
+      "MAGICAL_ORB",
+      "SKY",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A cluster of three glowing sparkle-spirits hovering in a soft constellation",
-    "tags": ["FAIRY", "MAGICAL_ORB", "SKY", "FESTIVAL", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "FAIRY",
+      "MAGICAL_ORB",
+      "SKY",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A tiny pastel-cream hedgehog with soft spines, sniffing a wildflower",
-    "tags": ["MAMMAL", "FOREST", "COTTAGECORE", "PICNIC"]
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
   },
   {
     "description": "A pastel-pink hedgehog curled into a soft ball on a mossy patch",
-    "tags": ["MAMMAL", "FOREST", "COTTAGECORE"]
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny pastel-cream mouse holding a single rose-petal like a cape",
-    "tags": ["MAMMAL", "FOREST", "COTTAGECORE", "PICNIC"]
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
   },
   {
     "description": "A pastel-grey field-mouse peeking out from behind a mushroom-cluster",
-    "tags": ["MAMMAL", "FOREST", "COTTAGECORE"]
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny hamster-creature with cheek-pouches stuffed, dimpled blush",
-    "tags": ["MAMMAL", "CAFE", "COTTAGECORE", "UNIVERSAL"]
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
   },
   {
     "description": "A small pastel-pink kitten mid-stretch with paws extended, eyes half-closed",
-    "tags": ["MAMMAL", "CAFE", "TEA_PARTY", "COTTAGECORE", "UNIVERSAL"]
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
   },
   {
     "description": "A pastel-cream kitten curled up sleeping in a tiny basket, tail wrapped",
-    "tags": ["MAMMAL", "CAFE", "COTTAGECORE", "TEA_PARTY"]
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "COTTAGECORE",
+      "TEA_PARTY"
+    ]
   },
   {
     "description": "A tiny fallen-star with kawaii face and dimpled blush, glowing soft yellow",
-    "tags": ["MAGICAL_ORB", "SKY", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A small cloud-creature with closed-arc eyes, dragging a soft rain-curtain",
-    "tags": ["MAGICAL_ORB", "SKY", "RAINBOW_DREAMSCAPE", "CANDY_FANTASY"]
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A pastel-rainbow-arc-creature with a tiny smiling face on the arc, drifting",
-    "tags": ["MAGICAL_ORB", "SKY", "CANDY_FANTASY", "RAINBOW_DREAMSCAPE"]
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE"
+    ]
   },
   {
     "description": "A pastel-cream baby deer with white-spotted back, peeking from behind a fern",
-    "tags": ["MAMMAL", "FOREST", "COTTAGECORE"]
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny pastel-orange fox-kit curled with its bushy tail wrapped around itself",
-    "tags": ["MAMMAL", "FOREST", "COTTAGECORE"]
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-mint baby-deer with floral-crown on antler-nubs, gentle expression",
-    "tags": ["MAMMAL", "FOREST", "COTTAGECORE", "COTTAGECORE"]
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny pastel-pink snail with a swirled iridescent shell, leaving a sparkle-trail",
-    "tags": ["INSECT", "FOREST", "COTTAGECORE"]
+    "tags": [
+      "INSECT",
+      "FOREST",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A pastel-mint snail with a flower growing out of its shell, smiling gently",
-    "tags": ["INSECT", "FOREST", "COTTAGECORE"]
+    "tags": [
+      "INSECT",
+      "FOREST",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny pastel-yellow bumblebee with iridescent wings, mid-flight near a flower",
-    "tags": ["INSECT", "SKY", "COTTAGECORE", "PICNIC"]
+    "tags": [
+      "INSECT",
+      "SKY",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
   },
   {
     "description": "A pastel-pink ladybug with white-spotted back, walking on a leaf",
-    "tags": ["INSECT", "COTTAGECORE", "PICNIC", "FOREST"]
+    "tags": [
+      "INSECT",
+      "COTTAGECORE",
+      "PICNIC",
+      "FOREST"
+    ]
   },
   {
     "description": "A pastel-iridescent moth at twilight, soft wing-dust trailing behind",
-    "tags": ["INSECT", "SKY", "FESTIVAL", "COTTAGECORE"]
+    "tags": [
+      "INSECT",
+      "SKY",
+      "FESTIVAL",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny gummy-bear creature with translucent jelly-body, hopping on candy-pebbles",
-    "tags": ["MAGICAL_ORB", "CANDY_FANTASY", "UNIVERSAL"]
+    "tags": [
+      "MAGICAL_ORB",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
   },
   {
     "description": "A small candy-cane-striped creature shaped like a snake, slithering past",
-    "tags": ["REPTILE", "CANDY_FANTASY"]
+    "tags": [
+      "REPTILE",
+      "CANDY_FANTASY"
+    ]
   },
   {
     "description": "A pastel-marshmallow-bunny with sugar-crystal-sparkle fur",
-    "tags": ["RABBIT", "MAMMAL", "CANDY_FANTASY", "COTTAGECORE"]
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "CANDY_FANTASY",
+      "COTTAGECORE"
+    ]
   },
   {
     "description": "A tiny paper-lantern-fairy with a glowing red-and-gold body, hovering at twilight",
-    "tags": ["FAIRY", "MAGICAL_ORB", "FESTIVAL", "SKY"]
+    "tags": [
+      "FAIRY",
+      "MAGICAL_ORB",
+      "FESTIVAL",
+      "SKY"
+    ]
   },
   {
     "description": "A pastel-koi-fish gliding under festival-paper-lanterns reflected in water",
-    "tags": ["FISH", "WATER", "FESTIVAL"]
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL"
+    ]
   },
   {
     "description": "A tiny porcelain-teacup-fairy with butterfly-wings made of porcelain shards, hovering",
-    "tags": ["FAIRY", "MAGICAL_ORB", "TEA_PARTY", "CAFE"]
+    "tags": [
+      "FAIRY",
+      "MAGICAL_ORB",
+      "TEA_PARTY",
+      "CAFE"
+    ]
   },
   {
     "description": "A small kawaii-puppy with floppy ears, sitting attentively on a cafe-stool",
-    "tags": ["MAMMAL", "CAFE", "COTTAGECORE"]
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-lavender cat curled on a tiny café stool, eyes closed-arc, cream puff tail tucked neatly",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A blush-pink sugar-rabbit with candy-stripe ears, dimpled cheeks, perched atop a glittering gumdrop",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "CANDY_FANTASY",
+      "CANDY",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A tiny pearl-white teacup fairy mid-hover, holding a miniature porcelain saucer, shimmering translucent wings",
+    "tags": [
+      "FAIRY",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A gummy-bear-shaped pastel-orange blob creature with closed-arc eyes, jiggling shyly in a candy-fantasy meadow",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "CANDY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A soft baby-blue cloud-puff orb drifting lazily, trailing sparkle wisps and tiny rainbow ribbons",
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A pastel-yellow chick perched on a teacup rim, blush cheeks, fluffed wings mid-wobble",
+    "tags": [
+      "BIRD",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "PICNIC",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A kawaii axolotl in peach-pink, tiny frilly gills puffed, paddling through still pond water",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "FOREST",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A glittering crimson-and-gold koi spirit mid-leap from festival lantern-light, trailing shimmer droplets",
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE",
+      "SKY"
+    ]
+  },
+  {
+    "description": "A mint-green dragonfly hovering near a pastel bloom, iridescent wings catching candy-bright light",
+    "tags": [
+      "INSECT",
+      "WATER",
+      "FOREST",
+      "PICNIC",
+      "COTTAGECORE",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A cream-and-lavender hedgehog peeking from behind a mushroom, glossy button eyes, dimpled blush cheeks",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-pink paper-crane spirit floating mid-air, soft glittering fold-lines glowing festival gold",
+    "tags": [
+      "BIRD",
+      "FESTIVAL",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "MAGICAL_ORB"
+    ]
+  },
+  {
+    "description": "A tiny lavender fox-kit mid-trot, fluffy oversized tail curled upward, blush-dot cheeks gleaming",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "CAFE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A sugary pastel-blue butterfly with closed-arc eyes, candy-striped wing edges, mid-flutter near a lollipop bloom",
+    "tags": [
+      "BUTTERFLY",
+      "INSECT",
+      "CANDY_FANTASY",
+      "CANDY",
+      "SKY",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A porcelain-white kawaii rabbit in a tiny bow-tie, seated formally at a miniature tea table, blush cheeks",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A rainbow-shimmer orb wisp bouncing playfully, leaving pastel sparkle trails across a dreamscape sky",
+    "tags": [
+      "MAGICAL_ORB",
+      "FAIRY",
+      "RAINBOW_DREAMSCAPE",
+      "SKY",
+      "FESTIVAL",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A baby-mint tadpole with oversized kawaii eyes and a tiny blush, swirling happily through lily-pad water",
+    "tags": [
+      "AMPHIBIAN",
+      "FROG",
+      "WATER",
+      "COTTAGECORE",
+      "FOREST"
+    ]
+  },
+  {
+    "description": "A pastel-peach hamster nibbling a tiny macaron on a café counter, fluffy round cheeks puffed adorably",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A luminous lantern-fairy with peach glowing wings, mid-float beside a festival paper lantern, trailing golden sparkles",
+    "tags": [
+      "FAIRY",
+      "FESTIVAL",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "MAGICAL_ORB"
+    ]
+  },
+  {
+    "description": "A candy-grape-purple mochi-blob with closed-arc smile, glossy jelly finish, rolling gently among pastel bonbons",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "CANDY",
+      "CAFE",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-cream squirrel mid-scurry, holding a glittering acorn, fluffy tail arched, dimpled blush on each cheek",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "FESTIVAL",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-lavender cat curled on a saucer rim, blush cheeks, tiny closed-arc smile, glossy fur",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A cream-white porcelain-patterned fairy perched on a teacup handle, dimpled blush, translucent wings",
+    "tags": [
+      "FAIRY",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A gummy-pink bear cub glowing softly, sugar-crystal sparkles trailing, closed-arc eyes, mid-wobble",
+    "tags": [
+      "MAMMAL",
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A baby-blue cloud-puff orb drifting lazily, pastel rainbow ribbon trailing behind, blush cheeks",
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A tiny golden lantern-fairy with petal wings, mid-flutter, soft amber glow, dimpled kawaii face",
+    "tags": [
+      "FAIRY",
+      "FESTIVAL",
+      "SKY",
+      "FOREST",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A peach-pink axolotl with fluffy pastel-lavender gills, blush cheeks, paddling through still water",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-mint kawaii koi fish with pearl-white scales and closed-arc eyes, mid-splash leap",
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A tiny sugar-plum bunny wearing a candy-stripe bow, nibbling a glittery gummy gem, blush cheeks",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "CANDY_FANTASY",
+      "TEA_PARTY",
+      "PICNIC",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A strawberry-cream hedgehog with pastel-pink spines, dimpled blush, curled shyly on a cozy cushion",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "CAFE",
+      "COTTAGECORE",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A pair of paper-crane birds in soft pearl-white and rose-gold, mid-glide, glittering wing-tips",
+    "tags": [
+      "BIRD",
+      "FESTIVAL",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A lemon-yellow kawaii bee with oversized blush cheeks and closed-arc eyes, hovering mid-flight",
+    "tags": [
+      "INSECT",
+      "SKY",
+      "PICNIC",
+      "FOREST",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-rainbow wisp orb pulsing with soft prismatic light, blush tint, drifting in dreamy arcs",
+    "tags": [
+      "MAGICAL_ORB",
+      "RAINBOW_DREAMSCAPE",
+      "SKY",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A mint-green kawaii frog wearing a tiny floral teacup hat, seated politely, dimpled cheeks",
+    "tags": [
+      "FROG",
+      "AMPHIBIAN",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "WATER",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A cotton-candy-pink poodle-pup with fluffy curls and blush patches, perched beside a cafe window",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "CANDY_FANTASY",
+      "UNIVERSAL",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A tiny pastel-coral starfish with closed-arc eyes and glittery arm-tips, resting in shallow water",
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A baby lilac fox-kit with oversized ears, sparkle-dusted tail mid-swish, blush cheeks, peeking shyly",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "FESTIVAL",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A pastel sky-blue dragonfly with iridescent glitter wings, mid-hover, tiny kawaii blush spots",
+    "tags": [
+      "INSECT",
+      "SKY",
+      "WATER",
+      "RAINBOW_DREAMSCAPE",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A pearl-cream mochi-blob dressed in a tiny bow-tie, blush dimples, bouncing beside a tiered cake stand",
+    "tags": [
+      "MOCHI_BLOB",
+      "TEA_PARTY",
+      "CAFE",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A soft peach-toned sparrow chick with oversized closed-arc eyes, perched on a pastel teapot spout",
+    "tags": [
+      "BIRD",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A cluster of three pastel gummy-tadpoles in pink, mint, and yellow, wriggling through sparkle-water",
+    "tags": [
+      "AMPHIBIAN",
+      "FROG",
+      "WATER",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A pastel-lavender cat curled on a cafe windowsill, closed-arc eyes, fluffy tail wrapped snugly",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "COTTAGECORE",
+      "TEA_PARTY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A tiny pearl-white bunny wearing a miniature bow-tie, perched beside a teacup, blush-cheeked",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A gummy-pink bear-shaped blob with closed-arc eyes, sugar-crystal shimmer, mid-bounce on candy ground",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "CANDY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A soft baby-blue cloud-puff creature with sleepy blush cheeks, drifting gently through pastel sky",
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A tiny golden lantern-fairy with gossamer wings, glowing warmly, hovering near a paper lantern",
+    "tags": [
+      "FAIRY",
+      "FESTIVAL",
+      "SKY",
+      "FOREST",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A kawaii peach-pink axolotl with feathery gill-plumes, dimpled blush, lazily paddling through still water",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-mint sugar-wing butterfly perched on a candy cane, antennae tipped with tiny glitter stars",
+    "tags": [
+      "BUTTERFLY",
+      "INSECT",
+      "CANDY_FANTASY",
+      "CANDY",
+      "SKY",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A cream-yellow hedgehog with round blush cheeks, mid-trot across a picnic blanket, soft spines gleaming",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "PICNIC",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A porcelain-white sparrow wearing a tiny lavender bow, perched on a teacup rim, eyes closed-arc sweet",
+    "tags": [
+      "BIRD",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A kawaii rainbow-koi spirit with shimmering pastel scales, trailing sparkle ribbons, mid-swirl upward",
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE",
+      "SKY"
+    ]
+  },
+  {
+    "description": "A tiny lilac mochi-blob with pearlescent gloss and dimpled blush, floating through a tea-party table scene",
+    "tags": [
+      "MOCHI_BLOB",
+      "TEA_PARTY",
+      "CAFE",
+      "CANDY_FANTASY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-orange fox-kit peeking shyly from behind a mushroom cap, fluffy tail curled, blush-cheeked",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A cluster of three baby-pink gummy-blob tadpoles with kawaii closed-arc eyes, wriggling playfully in water",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "CANDY_FANTASY",
+      "CANDY",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A glittering pastel-rainbow orb-sprite trailing soft sparkle-dust, drifting lazily across dreamscape sky",
+    "tags": [
+      "MAGICAL_ORB",
+      "FAIRY",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A tiny mint-green paper-crane spirit with soft glowing wings, hovering mid-flutter near festival lights",
+    "tags": [
+      "BIRD",
+      "FAIRY",
+      "FESTIVAL",
+      "SKY",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A kawaii caramel-brown squirrel clutching a pastel macaron, fluffy tail arched, blush dimples bright",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "CAFE",
+      "PICNIC",
+      "COTTAGECORE",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A peach-cream dragonfly with iridescent candy-stripe wings, mid-hover, trailing soft glitter mist",
+    "tags": [
+      "INSECT",
+      "WATER",
+      "CANDY_FANTASY",
+      "SKY",
+      "PICNIC",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-blue porcelain-frog with closed-arc smile and gold-dot blush, seated daintily beside a teacup",
+    "tags": [
+      "FROG",
+      "AMPHIBIAN",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "WATER"
+    ]
+  },
+  {
+    "description": "A tiny lavender deer-fawn with oversized glossy eyes, star-speckled spots, mid-step through forest mist",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A strawberry-pink sugar-fairy with candy-floss wings and dimpled blush, sprinkling pastel glitter mid-twirl",
+    "tags": [
+      "FAIRY",
+      "CANDY_FANTASY",
+      "CANDY",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A pastel-lavender cat curled on a cafe stool, fluffy tail wrapped around a tiny teacup",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A tiny pearl-white bunny in a paper party hat, dimpled blush cheeks, perched beside a macaron tower",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "TEA_PARTY",
+      "CAFE",
+      "FESTIVAL",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A soft gummy-bear-shaped blob glowing candy-pink, closed-arc eyes, bouncing mid-hop on a sugar tile",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "CANDY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-mint axolotl with feathery pink gills drifting lazily through a lily-dotted pond",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A tiny golden lantern-fairy with translucent wings, softly glowing, mid-drift at a festival night scene",
+    "tags": [
+      "FAIRY",
+      "FESTIVAL",
+      "SKY",
+      "MAGICAL_ORB",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A kawaii pastel-orange koi fish leaping from sparkling water, trailing glittering droplets behind",
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A chubby lavender cloud-puff creature with closed-arc smile, floating mid-air, soft sparkle trail following",
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A peach-cream hedgehog with glittery spines peeking shyly from behind a mushroom cap",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A pastel-blue porcelain-patterned fairy in a ruffled dress, hovering beside a tiny sugar-dusted teacup",
+    "tags": [
+      "FAIRY",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A baby-pink dragonfly with iridescent glittering wings, perched on the rim of a frosted cake stand",
+    "tags": [
+      "INSECT",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "PICNIC",
+      "SKY"
+    ]
+  },
+  {
+    "description": "A tiny rainbow-striped snail with a pastel swirl shell, creeping slowly across a candy-cobblestone path",
+    "tags": [
+      "REPTILE",
+      "CANDY_FANTASY",
+      "CANDY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A cluster of three pastel-yellow chicks with dimpled blush, huddled together mid-peep on a picnic blanket",
+    "tags": [
+      "BIRD",
+      "PICNIC",
+      "COTTAGECORE",
+      "FESTIVAL",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A mint-green frog wearing a tiny bow tie, seated primly on a porcelain saucer with closed-arc smile",
+    "tags": [
+      "FROG",
+      "AMPHIBIAN",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pearlescent rainbow wisp-orb trailing soft pastel ribbons of color, drifting through a dreamy sky",
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A tiny pastel-red fox kit with oversized fluffy ears and dimpled blush, mid-pounce on a fallen leaf",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A sugary gummy-worm creature with kawaii closed-arc eyes and blush, wriggling through a candy-floss cloud",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "CANDY",
+      "RAINBOW_DREAMSCAPE",
+      "SKY"
+    ]
+  },
+  {
+    "description": "A pastel-blue tadpole with tiny heart-shaped tail fin, wriggling happily through a sparkling dewdrop pond",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A cream-white paper-crane spirit with soft glowing edges and blush spots, mid-glide at a lantern festival",
+    "tags": [
+      "BIRD",
+      "FAIRY",
+      "FESTIVAL",
+      "SKY",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A tiny lavender squirrel clutching a pastel acorn, fluffy tail curled, peeking from a cafe windowsill",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "FOREST",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A glittery strawberry-pink butterfly with oversized rounded wings and closed-arc eyes, mid-flutter above a candy meadow",
+    "tags": [
+      "BUTTERFLY",
+      "INSECT",
+      "SKY",
+      "CANDY_FANTASY",
+      "CANDY",
+      "RAINBOW_DREAMSCAPE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A tiny pastel-lavender cat curled on a cafe counter, closed-arc eyes, fluffy tail wrapped around a thimble-cup",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A chubby pastel-yellow chick perched on a teacup rim, dimpled blush cheeks, glossy beak, mid-wobble",
+    "tags": [
+      "BIRD",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A gummy-clear strawberry-pink blob creature with closed-arc eyes, sparkling sugar-crystal skin, mid-bounce",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "CANDY",
+      "RAINBOW_DREAMSCAPE",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A pastel-mint axolotl with feathery pink gill-fronds, dimpled blush cheeks, drifting gently through glittering water",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A tiny paper-crane spirit glowing soft gold, translucent folded wings shimmering, drifting near a lantern at dusk",
+    "tags": [
+      "BIRD",
+      "MAGICAL_ORB",
+      "FESTIVAL",
+      "SKY",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pearlescent lavender cloud-puff orb with closed-arc eyes and a soft sparkle trail, floating dreamily overhead",
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A kawaii pastel-orange koi spirit mid-leap, trailing rainbow water droplets, glossy scales shimmering with gold flecks",
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A tiny porcelain-white fairy in a ruffle petal dress, blush cheeks, seated cross-legged on a sugar cube",
+    "tags": [
+      "FAIRY",
+      "TEA_PARTY",
+      "CANDY_FANTASY",
+      "CANDY",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A fluffy pastel-peach baby hedgehog curled into a ball, dimpled blush, tiny closed-arc smile, resting amid autumn leaves",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A candy-stripe pastel snail with a swirled lollipop shell, blush cheeks, slow-creeping across a peppermint tile",
+    "tags": [
+      "INSECT",
+      "CANDY_FANTASY",
+      "CANDY",
+      "CAFE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A glittering pastel-blue dragonfly mid-hover, oversized sparkle eyes, iridescent wings catching rainbow light near a pond",
+    "tags": [
+      "INSECT",
+      "WATER",
+      "FOREST",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A baby pastel-pink mouse in a tiny bow-tie, dimpled blush, peeking shyly over the edge of a teacup saucer",
+    "tags": [
+      "MAMMAL",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A soft cream-white bunny wearing a pastel flower crown, closed-arc eyes, mid-hop between festival-lantern glow",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "FESTIVAL",
+      "COTTAGECORE",
+      "PICNIC",
+      "FOREST"
+    ]
+  },
+  {
+    "description": "A plump pastel-mint mochi-blob with a tiny golden star stamped on its tummy, blush dimples, waddling cheerfully",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "CAFE",
+      "UNIVERSAL",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A lantern-fairy with a glowing persimmon-orange body, closed-arc eyes, tiny wisp tail, floating near a festival booth",
+    "tags": [
+      "FAIRY",
+      "FESTIVAL",
+      "SKY",
+      "MAGICAL_ORB",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A trio of tiny pastel-yellow honeybees with blush cheeks and fluffy striped bodies, hovering together near a cake",
+    "tags": [
+      "INSECT",
+      "PICNIC",
+      "COTTAGECORE",
+      "CAFE",
+      "FOREST",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A kawaii pastel-lilac tadpole cluster, oversized glossy eyes, tiny blush spots, swirling happily in a rain-puddle",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "FOREST",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A rainbow-winged pastel butterfly with softly glowing wing-spots, closed-arc eyes, perched delicately on a macaron",
+    "tags": [
+      "BUTTERFLY",
+      "SKY",
+      "CANDY_FANTASY",
+      "CAFE",
+      "TEA_PARTY",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A shy pastel-teal gecko with polka-dot blush patches and a curled sparkle tail, clinging to a warm cafe-window pane",
+    "tags": [
+      "REPTILE",
+      "CAFE",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A fluffy pastel-cream fox kit mid-pounce, oversized closed-arc eyes, glittery tail tip, among golden festival confetti",
+    "tags": [
+      "MAMMAL",
+      "FESTIVAL",
+      "FOREST",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-lavender cat curled on a cafe stool, blush cheeks, closed-arc eyes, soft glittering tail",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A tiny pearl-white rabbit in a miniature teacup, dimpled blush, nibbling a pastel macaron",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "TEA_PARTY",
+      "CAFE",
+      "CANDY_FANTASY",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A gummy-bear-shaped pastel-pink blob creature with closed-arc eyes, mid-wobble, sugar-gloss finish",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "CAFE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A cotton-candy-blue cloud-puff creature with tiny wings and blush cheeks drifting through rainbow sky",
+    "tags": [
+      "MAGICAL_ORB",
+      "MOCHI_BLOB",
+      "RAINBOW_DREAMSCAPE",
+      "SKY",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A pastel-gold lantern-fairy with glowing dewdrop wings, mid-flutter, trailing sparkle petals at festival",
+    "tags": [
+      "FAIRY",
+      "INSECT",
+      "FESTIVAL",
+      "SKY",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A kawaii axolotl in baby-pink with frilly pastel-coral gills, peeking from a mossy pond edge",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "FOREST",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A tiny peach-cream hedgehog curled softly on a saucer rim, dimpled blush, closed-arc smile",
+    "tags": [
+      "MAMMAL",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A pastel-mint dragonfly with iridescent glitter wings hovering over a teacup rim, mid-shimmer",
+    "tags": [
+      "INSECT",
+      "TEA_PARTY",
+      "WATER",
+      "COTTAGECORE",
+      "PICNIC",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A kawaii koi-spirit in pastel-orange and white, mid-leap, trailing golden sparkle ribbons at festival",
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE",
+      "SKY"
+    ]
+  },
+  {
+    "description": "A lemon-yellow baby chick in a tiny party hat, blush cheeks, mid-hop at a pastel festival stall",
+    "tags": [
+      "BIRD",
+      "FESTIVAL",
+      "PICNIC",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-violet orb-sprite with closed-arc eyes, swirling inner glow, drifting through rainbow dreamscape clouds",
+    "tags": [
+      "MAGICAL_ORB",
+      "FAIRY",
+      "RAINBOW_DREAMSCAPE",
+      "SKY",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A strawberry-red gummy-blob with kawaii blush dots and glassy finish, mid-bounce on candy platform",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "CAFE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-blue porcelain-feathered sparrow perched on a teapot spout, dimpled blush, head tilted",
+    "tags": [
+      "BIRD",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A tiny mint-cream fox-kit peeking from behind a mushroom, oversized blush cheeks, fluffy curled tail",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A paper-crane companion in soft peach origami folds, kawaii dot eyes, mid-glide through festival lantern glow",
+    "tags": [
+      "BIRD",
+      "FESTIVAL",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A baby-blue sugar-fairy with candy-cane striped wings, peeking from a pastel frosted cupcake, sparkle trail",
+    "tags": [
+      "FAIRY",
+      "CANDY_FANTASY",
+      "CAFE",
+      "TEA_PARTY",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pastel-lilac tadpole cluster of three, kawaii blush dots, swirling around a lily pad in a tea saucer",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A pearlescent white mouse in a tiny bow-tie, dimpled blush, seated primly at a kawaii cafe counter",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A pastel-rainbow wisp-butterfly with translucent ombre wings, mid-flight, scattering glitter over dreamscape sky",
+    "tags": [
+      "BUTTERFLY",
+      "MAGICAL_ORB",
+      "RAINBOW_DREAMSCAPE",
+      "SKY",
+      "FESTIVAL",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A cream-and-lavender kawaii squirrel clutching a tiny pastel acorn, mid-scurry, fluffy tail arched overhead",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A pastel-lavender cat curled on a cafe stool, closed-arc eyes, tiny blush cheeks, fluffy tail curled around paws",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A tiny gummy-bear spirit in translucent rose-pink, dimpled blush, mid-wobble with sparkling sugar-crystal trail",
+    "tags": [
+      "MOCHI_BLOB",
+      "CANDY",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A pearl-white porcelain-winged fairy perched on a teacup rim, closed-arc smile, pastel-blue ribbon sash",
+    "tags": [
+      "FAIRY",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A soft pastel-yellow cloud-puff orb drifting lazily, glittering rainbow shimmer, closed-arc sleepy expression",
+    "tags": [
+      "MAGICAL_ORB",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A kawaii paper-crane spirit in warm peach-gold, mid-glide, tiny blush cheeks, lantern-glow trailing from folded wings",
+    "tags": [
+      "BIRD",
+      "FESTIVAL",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-mint axolotl peeking from a water-lily leaf, feathery gills blushing pink, tiny closed-arc smile",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "COTTAGECORE",
+      "PICNIC",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A tiny strawberry-red ladybug with cream polka-dots, kawaii blush, perched mid-antenna-wiggle on a sugar flower",
+    "tags": [
+      "INSECT",
+      "CANDY_FANTASY",
+      "PICNIC",
+      "COTTAGECORE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A chubby pastel-orange koi spirit mid-leap, pearlescent scales glittering, trailing soft golden sparkle-ribbon",
+    "tags": [
+      "FISH",
+      "WATER",
+      "FESTIVAL",
+      "RAINBOW_DREAMSCAPE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A lavender-dusted baby hedgehog mid-snuffle, closed-arc eyes, dimpled rosy cheeks, soft cream quills tipped in pastel-pink",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "CAFE"
+    ]
+  },
+  {
+    "description": "A pastel-blue teacup fairy seated inside an oversized teacup, wings like frosted glass, blush cheeks, sipping daintily",
+    "tags": [
+      "FAIRY",
+      "TEA_PARTY",
+      "CAFE",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A bubblegum-pink gummy-worm creature doing a shy mid-curl, translucent glittery body, closed-arc eyes, candy-stripe pattern",
+    "tags": [
+      "INSECT",
+      "MOCHI_BLOB",
+      "CANDY",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A cloud-white baby rabbit in a tiny bow tie, perched beside a macaron tower, dimpled blush, closed-arc dreamy eyes",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "TEA_PARTY",
+      "CAFE",
+      "CANDY_FANTASY",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-rainbow wisp-orb spiraling upward, glowing softly with shifting hues, tiny closed-arc face glimmering inside",
+    "tags": [
+      "MAGICAL_ORB",
+      "FAIRY",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A kawaii lantern-fish spirit hovering mid-air, paper-gold body, soft bioluminescent pink glow, blush-cheeked and fluffy-finned",
+    "tags": [
+      "FISH",
+      "FESTIVAL",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "WATER",
+      "CANDY_FANTASY"
+    ]
+  },
+  {
+    "description": "A tiny cream-furred fox kit peeking from behind a mushroom cap, oversized pastel-amber eyes, fluffy tail curled with blush-pink tip",
+    "tags": [
+      "MAMMAL",
+      "FOREST",
+      "COTTAGECORE",
+      "PICNIC",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A cotton-candy-blue tadpole cluster of three, swirling in a pastel teacup pond, tiny blush spots, synchronized mid-wiggle",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "TEA_PARTY",
+      "CAFE",
+      "CANDY_FANTASY",
+      "COTTAGECORE"
+    ]
+  },
+  {
+    "description": "A pastel-peach sparrow in a tiny chef hat, perched on a cafe window ledge, dimpled blush, closed-arc cheerful eyes",
+    "tags": [
+      "BIRD",
+      "CAFE",
+      "COTTAGECORE",
+      "PICNIC",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A sugar-crystal butterfly with translucent candy-hued wings, mid-flutter, trailing fine glitter-dust in pink and mint",
+    "tags": [
+      "BUTTERFLY",
+      "INSECT",
+      "CANDY",
+      "CANDY_FANTASY",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "TEA_PARTY"
+    ]
+  },
+  {
+    "description": "A kawaii mint-green tree frog gripping a pastel-striped candy-cane, blush cheeks puffed, closed-arc beaming smile",
+    "tags": [
+      "FROG",
+      "AMPHIBIAN",
+      "CANDY",
+      "CANDY_FANTASY",
+      "FOREST",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A soft pastel-violet dragonfly with iridescent pearlescent wings, hovering mid-air beside a teacup, kawaii blush face",
+    "tags": [
+      "INSECT",
+      "WATER",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE",
+      "PICNIC"
+    ]
+  },
+  {
+    "description": "A lavender-cream cat curled on a tiny cafe stool, blush cheeks, glossy half-moon eyes",
+    "tags": [
+      "MAMMAL",
+      "CAFE",
+      "TEA_PARTY",
+      "COTTAGECORE",
+      "UNIVERSAL"
+    ]
+  },
+  {
+    "description": "A pastel-pink sugar-bunny made of shimmering gummy, closed-arc smile, dewdrop nose",
+    "tags": [
+      "RABBIT",
+      "MAMMAL",
+      "CANDY",
+      "CANDY_FANTASY",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL"
+    ]
+  },
+  {
+    "description": "A tiny mint-green axolotl with feathery peach gill-fronds, dimpled blush, mid-paddle",
+    "tags": [
+      "AMPHIBIAN",
+      "WATER",
+      "CAFE",
+      "COTTAGECORE",
+      "RAINBOW_DREAMSCAPE"
+    ]
+  },
+  {
+    "description": "A pearlescent cloud-puff orb with soft baby-blue glow, trailing sparkle wisps mid-drift",
+    "tags": [
+      "MAGICAL_ORB",
+      "FAIRY",
+      "SKY",
+      "RAINBOW_DREAMSCAPE",
+      "FESTIVAL",
+      "UNIVERSAL"
+    ]
   }
 ]
