@@ -24,8 +24,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/cozy_arcane_candid_moment.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   append: true,
   metaPrompt: (
     n

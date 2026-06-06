@@ -3,8 +3,18 @@
  *
  * Lets per-axis generator scripts stay tiny: just declare the meta-prompt
  * and output path, the helper handles env loading, batched generation
- * with intra-pool dedup (prior batches shown to Sonnet as "avoid these"),
- * retry on transient errors, and JSON output.
+ * with programmatic dedup (signature-based + exact-string), retry on
+ * transient errors, and JSON output.
+ *
+ * Dedup architecture (2026-06-05 — per playbook line 333-349):
+ *   1. Sonnet is shown the existing entries as "DO NOT DUPLICATE" anti-prompt
+ *      (best-effort; Sonnet honors imperfectly).
+ *   2. Within-batch dedup — each returned batch is filtered for exact-string
+ *      dupes (case-insensitive trim) and signature-hash dupes (first 12
+ *      non-stopword tokens >4 chars, alphabetized + joined) against itself
+ *      AND against the running pool.
+ *   3. Trimming applied only after dedup so the target count reflects
+ *      unique entries, not raw Sonnet output.
  *
  * Usage:
  *   const { generatePool } = require('../../lib/seedGenHelper');
@@ -19,6 +29,41 @@
 const fs = require('fs');
 const path = require('path');
 const { SONNET } = require('./models');
+
+// ─────────────────────────────────────────────────────────────
+// Dedup helpers — playbook line 333-349 (2026-06-05)
+// ─────────────────────────────────────────────────────────────
+
+// Common English/prompt-domain stopwords + frequent low-signal anchor words.
+// Stripped before signature hashing so two entries differing only in filler
+// words collapse to the same signature.
+const STOPWORDS = new Set([
+  'the', 'and', 'with', 'from', 'into', 'onto', 'over', 'under', 'above',
+  'their', 'them', 'they', 'this', 'that', 'these', 'those', 'a', 'an',
+  'of', 'in', 'on', 'at', 'to', 'for', 'is', 'are', 'was', 'were', 'be',
+  'been', 'being', 'as', 'it', 'its', 'has', 'have', 'had', 'his', 'her',
+  'she', 'he', 'him', 'one', 'two', 'three', 'across', 'beside', 'before',
+  'after', 'while', 'mid', 'tiny', 'small', 'large', 'huge', 'soft', 'slow',
+  'still', 'just', 'around', 'beyond', 'between', 'against', 'through',
+  'render', 'rendered', 'painted', 'wrapped', 'curled', 'piled',
+]);
+
+// Normalize an entry for exact-match dedup.
+function keyForExact(s) {
+  return s.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+// Signature = sorted-unique first-12 non-stopword tokens >4 chars, joined.
+// Two entries with the same signature are near-duplicates per the playbook.
+function signatureOf(s) {
+  const tokens = String(s)
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]+/g, ' ')
+    .split(/\s+/)
+    .filter((t) => t.length > 4 && !STOPWORDS.has(t));
+  const unique = Array.from(new Set(tokens)).sort();
+  return unique.slice(0, 12).join('|');
+}
 
 function loadEnv() {
   const env = {};
@@ -192,11 +237,53 @@ async function generatePool({
       }
       return String(e);
     });
-    // Trim if Sonnet over-delivered (sometimes returns more than asked)
+    // Programmatic dedup (2026-06-05 per playbook line 333-349):
+    //   (a) exact-string drop against running pool (case-insensitive trim)
+    //   (b) signature-hash drop against running pool (first 12 non-stopword
+    //       tokens >4 chars, alphabetized + joined)
+    // Apply within-batch first (so two near-dupes in the same batch only
+    // contribute one), then cross-batch against `all`.
+    const droppedExact = [];
+    const droppedSig = [];
+    const seenStrs = new Set(
+      all
+        .filter((e) => typeof e === 'string' || (e && typeof e.description === 'string'))
+        .map((e) => keyForExact(typeof e === 'string' ? e : e.description))
+    );
+    const seenSigs = new Set(
+      all
+        .filter((e) => typeof e === 'string' || (e && typeof e.description === 'string'))
+        .map((e) => signatureOf(typeof e === 'string' ? e : e.description))
+    );
+    const survivors = [];
+    for (const entry of newEntries) {
+      const text = typeof entry === 'string' ? entry : entry.description || '';
+      if (!text) continue;
+      const exactKey = keyForExact(text);
+      if (seenStrs.has(exactKey)) {
+        droppedExact.push(text.slice(0, 60));
+        continue;
+      }
+      const sig = signatureOf(text);
+      if (seenSigs.has(sig)) {
+        droppedSig.push(text.slice(0, 60));
+        continue;
+      }
+      seenStrs.add(exactKey);
+      seenSigs.add(sig);
+      survivors.push(entry);
+    }
+    newEntries = survivors;
+
+    // Trim if survivors exceed target — apply AFTER dedup so the count
+    // reflects unique entries.
     if (all.length + newEntries.length > total) {
       newEntries = newEntries.slice(0, total - all.length);
     }
-    console.log(`  ✓ batch ${batchN}: +${newEntries.length} (total: ${all.length + newEntries.length}/${total})`);
+    const dropMsg = droppedExact.length + droppedSig.length > 0
+      ? ` (dedup: -${droppedExact.length} exact, -${droppedSig.length} sig)`
+      : '';
+    console.log(`  ✓ batch ${batchN}: +${newEntries.length}${dropMsg} (total: ${all.length + newEntries.length}/${total})`);
     all.push(...newEntries);
     if (all.length >= total) break; // target reached — don't waste more Sonnet calls
   }
