@@ -35,7 +35,7 @@ import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { handleImageLongPress, openDownloadSheet } from '@/lib/imageLongPress';
+import { handleImageLongPress } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import { avatarUrl } from '@/lib/imageUrl';
 import { getModelDisplayName } from '@/constants/imageModels';
@@ -572,7 +572,12 @@ export const DreamCard = memo(function DreamCard({
                   onShare ??
                   (() =>
                     nav.push(
-                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}`
+                      // The download flow used to live in its own side-rail
+                      // icon next to share. Folded into the share sheet's
+                      // header (2026-06-06) so the user reaches Copy + Save
+                      // from the same surface; thread the image URLs through
+                      // as route params so the sheet has what it needs.
+                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(item.image_url)}${item.image_url_hq ? `&imageUrlHq=${encodeURIComponent(item.image_url_hq)}` : ''}`
                     ))
                 }
                 activeOpacity={0.7}
@@ -583,20 +588,6 @@ export const DreamCard = memo(function DreamCard({
                   color="#FFFFFF"
                   style={ui.sideIcon}
                 />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={ui.sideButton}
-                onPress={() =>
-                  openDownloadSheet({
-                    id: item.id,
-                    imageUrl: item.image_url,
-                    imageUrlHq: item.image_url_hq ?? null,
-                  })
-                }
-                activeOpacity={0.7}
-                accessibilityLabel="Download this dream"
-              >
-                <Ionicons name="download-outline" size={24} color="#FFFFFF" style={ui.sideIcon} />
               </TouchableOpacity>
               {onFamily && (
                 <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>

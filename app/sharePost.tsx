@@ -23,6 +23,7 @@ import { useShareableVibers, type ShareableViber } from '@/hooks/useShareableVib
 import { useSendShare } from '@/hooks/useSendShare';
 import { useStandardSheetDismiss } from '@/hooks/gestures/useStandardSheetDismiss';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
+import { openDownloadSheet } from '@/lib/imageLongPress';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { trackPostShared } from '@/lib/analytics';
@@ -76,7 +77,17 @@ function ViberBubble({
 }
 
 export default function SharePostScreen() {
-  const { uploadId, username } = useLocalSearchParams<{ uploadId: string; username?: string }>();
+  // imageUrl + imageUrlHq are threaded through so the in-sheet Save
+  // (Download) action has what it needs without re-fetching the row.
+  // imageUrlHq is optional (lazy-populated by upscale-image); when present
+  // and the user is Pro, openDownloadSheet skips the "this will take ~30s"
+  // confirm dialog.
+  const { uploadId, username, imageUrl, imageUrlHq } = useLocalSearchParams<{
+    uploadId: string;
+    username?: string;
+    imageUrl?: string;
+    imageUrlHq?: string;
+  }>();
   const { data: vibers = [], isLoading } = useShareableVibers();
   const { mutate: sendShare, isPending } = useSendShare();
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -126,6 +137,16 @@ export default function SharePostScreen() {
     });
   }
 
+  function handleSave() {
+    if (!imageUrl) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    openDownloadSheet({
+      id: uploadId!,
+      imageUrl,
+      imageUrlHq: imageUrlHq ?? null,
+    });
+  }
+
   return (
     <View style={styles.root}>
       {/* Tap backdrop to dismiss */}
@@ -145,16 +166,31 @@ export default function SharePostScreen() {
               <Ionicons name="close" size={24} color={colors.textSecondary} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Share</Text>
-            <TouchableOpacity
-              onPress={handleCopyLink}
-              style={styles.linkButton}
-              activeOpacity={0.7}
-            >
-              <View style={styles.linkIcon}>
-                <Ionicons name="link-outline" size={20} color={colors.textPrimary} />
-              </View>
-              <Text style={styles.linkLabel}>Copy</Text>
-            </TouchableOpacity>
+            <View style={styles.headerActions}>
+              <TouchableOpacity
+                onPress={handleCopyLink}
+                style={styles.linkButton}
+                activeOpacity={0.7}
+              >
+                <View style={styles.linkIcon}>
+                  <Ionicons name="link-outline" size={20} color={colors.textPrimary} />
+                </View>
+                <Text style={styles.linkLabel}>Copy</Text>
+              </TouchableOpacity>
+              {!!imageUrl && (
+                <TouchableOpacity
+                  onPress={handleSave}
+                  style={styles.linkButton}
+                  activeOpacity={0.7}
+                  accessibilityLabel="Download this dream"
+                >
+                  <View style={styles.linkIcon}>
+                    <Ionicons name="download-outline" size={20} color={colors.textPrimary} />
+                  </View>
+                  <Text style={styles.linkLabel}>Save</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
 
           {/* Search */}
@@ -277,6 +313,14 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(18),
     fontWeight: '800',
+  },
+  // Two-button cluster (Copy + Save) on the right side of the header.
+  // gap mirrors the inner button padding so they read as a typographic
+  // pair without crowding the title or the close-X on the left.
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
   },
   linkButton: {
     alignItems: 'center',
