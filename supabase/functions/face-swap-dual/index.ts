@@ -49,6 +49,23 @@ Deno.serve(async (req) => {
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+  // Server-to-server only — face-swap-dual is invoked exclusively by the
+  // generate-dream + nightly-dreams Edge Functions via dualSwapDispatch
+  // (which authenticates with SUPABASE_SERVICE_ROLE_KEY). Reject anything
+  // that doesn't carry the service role token. Without this, the userId in
+  // the request body is unauthenticated input — any caller could face-swap
+  // arbitrary cast photos for any user. Added 2026-06-06 after the
+  // Architect audit flagged it CRITICAL.
+  const authHeader = req.headers.get('Authorization') ?? '';
+  const presentedToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+  if (!presentedToken || presentedToken !== serviceRoleKey) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+    });
+  }
+
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
   let body: RequestBody;

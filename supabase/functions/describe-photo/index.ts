@@ -37,6 +37,26 @@ Deno.serve(async (req: Request) => {
       return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
     }
 
+    // Rate limit (migration 228): 10 vision calls/min/user. Service-role
+    // INSERT trips the BEFORE INSERT trigger on edge_function_invocations.
+    // The trigger raises P0001 with `hint: rate_limited` when over cap.
+    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
+    const { error: rateLimitError } = await supabaseAdmin
+      .from('edge_function_invocations')
+      .insert({ user_id: user.id, function_name: 'describe-photo' });
+    if (rateLimitError) {
+      const isRateLimit =
+        rateLimitError.message?.includes('rate_limited') ||
+        (rateLimitError as { hint?: string }).hint === 'rate_limited';
+      if (isRateLimit) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded — try again shortly' }), {
+          status: 429,
+        });
+      }
+      console.error('[describe-photo] rate-limit log INSERT failed:', rateLimitError.message);
+      // Fail open: don't block legitimate users on logging failures.
+    }
+
     const { image_url, role } = await req.json();
     if (!image_url || !role) {
       return new Response(JSON.stringify({ error: 'image_url and role required' }), {

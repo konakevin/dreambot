@@ -174,7 +174,6 @@ async function handleRequest(req: Request): Promise<Response> {
   let body: RequestBody;
   try {
     body = await req.json();
-    console.log('[generate-dream] BODY KEYS:', Object.keys(body), 'force_model:', body.force_model);
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }

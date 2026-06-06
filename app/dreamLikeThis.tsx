@@ -110,7 +110,7 @@ export default function DreamLikeThisScreen() {
         .single();
       // Surface fetch failures — a silently-ignored error here (a nonexistent
       // selected column) left refMedium null and dead-buttoned the whole screen.
-      if (error) console.warn('[DLT] reference post fetch failed:', error.message);
+      if (error && __DEV__) console.warn('[DLT] reference post fetch failed:', error.message);
       const row = data as unknown as Record<string, unknown> | null;
       if (row) {
         const mk = (row.dream_medium as string) ?? null;

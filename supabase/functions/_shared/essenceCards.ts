@@ -203,12 +203,14 @@ export async function getLocationCard(
 
   const sb = getServiceClient();
 
-  // Try to fetch existing card
+  // Try to fetch existing card. is_approved filter removed 2026-06-06
+  // (Architect audit): essenceCards.ts INSERTs new cards without setting
+  // is_approved, so the filter caused this lookup to MISS its own writes
+  // and re-generate the same card on every nightly run.
   const { data, error } = await sb
     .from('location_cards')
     .select('*')
     .eq('name', name)
-    .eq('is_approved', true)
     .maybeSingle();
 
   if (!error && data) {
@@ -262,7 +264,6 @@ export async function getLocationCard(
         .from('location_cards')
         .select('*')
         .eq('name', name)
-        .eq('is_approved', true)
         .maybeSingle();
       if (existing) {
         const fetched: LocationCard = {

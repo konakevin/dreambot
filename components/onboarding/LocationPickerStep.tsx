@@ -162,7 +162,9 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
     supabase
       .from('location_cards')
       .select('name, display_name, picker_category, picker_sort_order, thumbnail_url')
-      .eq('is_approved', true)
+      // is_approved removed 2026-06-06 (Architect audit): vestigial column,
+      // 54% of cards had is_approved=false and were silently invisible to
+      // onboarding. picker_category NOT NULL is the real visibility gate.
       .not('picker_category', 'is', null)
       .order('picker_sort_order')
       .then(({ data }) => {

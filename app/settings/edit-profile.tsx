@@ -41,6 +41,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
+import { moderateText } from '@/lib/moderation';
 
 const DISPLAY_NAME_MAX = 50;
 const BIO_MAX = 160;
@@ -104,9 +105,28 @@ export default function EditProfileScreen() {
     try {
       // Null-out empty strings so the DB row stores NULL when the user
       // clears the field (UI then shows the @username fallback).
+      const trimmedDisplayName = displayName.trim();
+      const trimmedBio = bio.trim();
+
+      // Moderate both user-facing free-text fields BEFORE the DB write.
+      // Without this, profanity / harassment in display_name + bio ships
+      // straight to the public profile. (Architect audit 2026-06-06.)
+      if (trimmedDisplayName) {
+        const modName = await moderateText(trimmedDisplayName);
+        if (!modName.passed) {
+          throw new Error(modName.reason ?? 'Display name contains inappropriate language');
+        }
+      }
+      if (trimmedBio) {
+        const modBio = await moderateText(trimmedBio);
+        if (!modBio.passed) {
+          throw new Error(modBio.reason ?? 'Bio contains inappropriate language');
+        }
+      }
+
       const payload = {
-        display_name: displayName.trim() ? displayName.trim().slice(0, DISPLAY_NAME_MAX) : null,
-        bio: bio.trim() ? bio.trim().slice(0, BIO_MAX) : null,
+        display_name: trimmedDisplayName ? trimmedDisplayName.slice(0, DISPLAY_NAME_MAX) : null,
+        bio: trimmedBio ? trimmedBio.slice(0, BIO_MAX) : null,
       };
       const { error } = await supabase.from('users').update(payload).eq('id', user.id);
       if (error) throw error;

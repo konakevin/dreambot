@@ -91,7 +91,7 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
       .from('users')
       .update({ pro_mode_flux_model: modelId })
       .eq('id', user.id);
-    if (error) console.error('[FluxModelPicker] save failed:', error.message);
+    if (error && __DEV__) console.error('[FluxModelPicker] save failed:', error.message);
     setSaving(false);
   };
 
