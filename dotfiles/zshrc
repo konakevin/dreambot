@@ -135,11 +135,25 @@ dreambot() {
     (cd ios && pod install)
   fi
 
-  echo "🔨 Building native app ($CONFIG) for $SIM..."
+  # Resolve $SIM → UDID so xcodebuild's destination matcher doesn't trip on
+  # `OS:latest` (which only matches the newest installed iOS runtime — and
+  # devices like iPhone SE 3rd gen only exist on older runtimes like iOS 18.6).
+  # `grep -F` matches the literal name (parens are not regex). The UDID
+  # pattern (8-4-4-4-12 hex) is then extracted with `grep -oE`.
+  local SIM_UDID
+  SIM_UDID=$(xcrun simctl list devices available 2>/dev/null \
+    | grep -F "    $SIM (" \
+    | head -1 \
+    | grep -oE "[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}")
+  if [ -z "$SIM_UDID" ]; then
+    echo "❌ No installed simulator named \"$SIM\". Try: xcrun simctl list devices"
+    return 1
+  fi
+  echo "🔨 Building native app ($CONFIG) for $SIM ($SIM_UDID)..."
   xcodebuild -workspace ios/DreamBot.xcworkspace \
     -scheme DreamBot \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name=$SIM" \
+    -destination "platform=iOS Simulator,id=$SIM_UDID" \
     -configuration $CONFIG \
     build \
     -quiet
@@ -150,7 +164,7 @@ dreambot() {
   fi
 
   echo "📲 Installing on $SIM..."
-  xcrun simctl boot "$SIM" 2>/dev/null
+  xcrun simctl boot "$SIM_UDID" 2>/dev/null
   open -a Simulator
 
   APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "DreamBot.app" -path "*/$CONFIG-iphonesimulator/*" -maxdepth 5 2>/dev/null | head -1)
