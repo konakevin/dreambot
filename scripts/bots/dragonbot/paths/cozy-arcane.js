@@ -43,12 +43,16 @@ module.exports = {
     hearth_warmth_source: 'COZY_ARCANE_HEARTH_WARMTH_SOURCE',
     signature_familiar: 'COZY_ARCANE_SIGNATURE_FAMILIAR',
     magical_signature: 'COZY_ARCANE_MAGICAL_SIGNATURE',
-    // Character DNA — race via the cozy-arcane-specific COZY_ARCANE_RACE pool
-    // (Kevin 2026-05-31). Replaces shared FANTASY_RACE because that pool's 28%
-    // orc/tusks/grey-skin entries dominated visually due to Flux's training
-    // bias + read off-genre for the cozy scholar/sanctum register. The bespoke
-    // pool skews toward sanctum-appropriate races with minimal orc-coded entries.
+    // Character DNA — race via the shared FANTASY_RACE pool (Kevin
+    // 2026-06-05 reverted the 2026-05-31 bespoke COZY_ARCANE_RACE split).
+    // The 2026-05-31 rationale ("28% orc/tusks/grey-skin entries dominate")
+    // was based on an earlier pool state — the current 50-entry FANTASY_RACE
+    // is 26% elves / 22% humans / 12% orc-coded / 8% dwarves / 6% tieflings /
+    // 12% other. Sanctum-friendly. The bespoke split over-corrected to 40%
+    // human / 0% orc / 0% dragonborn — Kevin caught it with "where are the
+    // elves? orcs? mostly just humans + horned race." COZY_ARCANE_RACE pool
+    // + gen-script kept on disk for back-compat / reference only.
     // Gender is rolled inline in the template body ('woman'/'man').
-    race: 'COZY_ARCANE_RACE',
+    race: 'FANTASY_RACE',
   },
 };

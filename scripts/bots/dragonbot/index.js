@@ -394,9 +394,12 @@ module.exports = {
       'nightshade',
       'cozy',
     ],
+    // 2026-06-05 — trimmed dark/fierce/voltage/nightshade after Kevin caught
+    // a 'fierce' cozy-arcane render landing as a tired sad old scribe.
+    // Those vibes pull cozy-arcane toward macabre / battle / electric / death
+    // registers — incongruous with "warm intimate sanctum with magic happening".
     'cozy-arcane': [
       'cinematic',
-      'dark',
       'cozy',
       'epic',
       'nostalgic',
@@ -405,9 +408,6 @@ module.exports = {
       'arcane',
       'ancient',
       'enchanted',
-      'fierce',
-      'voltage',
-      'nightshade',
       'shimmer',
       'surreal',
     ],
@@ -578,6 +578,13 @@ module.exports = {
       // playbook (Haiku compression drops path-bespoke DNA + occasionally
       // refuses the task when sensory-anchor mandates conflict with biome)
       'castle',
+      // 2026-06-05 — cozy-arcane: Haiku polish was demoting the candid-moment
+      // magic ("soft pale-violet rune pulsing above candle stub") to a buried
+      // mid-string token, so Flux ignored it and rendered a generic tired-old-
+      // wizard-at-desk scene. The path's identity IS the visible magic; polish
+      // strips that detail. Same lesson as ChibiBot bath-time
+      // (playbook line 2134 — polish strips setting-as-co-hero context).
+      'cozy-arcane',
     ],
     conceptWords: 150,
     polishedWords: '65-90',

@@ -2020,13 +2020,17 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
     // Inline gender roll — kept inline per the original (2 options, not pool-worthy).
     const gender = Math.random() < 0.5 ? 'woman' : 'man';
 
-    // 4 always-on identity axes + setting + clutter_focus (pickN:3) = 5 always-on layers.
-    // 3 gated accent axes for premium-tier richness — each fires 50%.
-    // (Was 4 accents — `aesthetic_tradition` axis was deleted 2026-06-05; see
-    // note in archetypes.js COZY_ARCANE.)
+    // 2026-06-05 — magical_signature is now ALWAYS-ON (was 50% gated). Kevin
+    // hearted a "fierce-vibe-tired-old-scribe-at-desk" render specifically to
+    // call out that NO MAGIC WAS VISIBLE. The path is *cozy-arcane* — every
+    // render must show active magic. The candid_moment axis now bakes magic
+    // into the character beat (gen rewrite 2026-06-05), and magical_signature
+    // now layers a second ambient magic event guaranteed in every frame.
+    // Hearth-warmth + familiar stay gated — those are stylistic accents, not
+    // the path identity.
     const includeWarmth = Math.random() < 0.5;
     const includeFamiliar = Math.random() < 0.5;
-    const includeMagicSig = Math.random() < 0.5;
+    const includeMagicSig = true;
 
     const clutterLines = (Array.isArray(clutter_focus) ? clutter_focus : [clutter_focus])
       .map((c, i) => `  ${i + 1}. ${c}`)
@@ -2060,22 +2064,31 @@ Render this magic as a SPECIFIC NAMED ELEMENT with shape + color + position — 
 `
       : '';
 
-    return `You are a fantasy concept-art painter writing a COZY INTIMATE scene for DragonBot — a warm, inviting corner of an epic high-fantasy world. Same universe as dragons and vast landscapes, but zoomed into the WARM PRIVATE SPACE where a wizard/scholar/alchemist rests, where hearths crackle, where candlelight pools on worn wood. Output wraps with style prefix + suffix.
+    return `You are a fantasy concept-art painter writing a COZY *ARCANE* scene for DragonBot — a warm, intimate sanctum where magic IS HAPPENING, captured as if on a hidden camera. The path's identity is magic in the cozy space; if the render has no visible magic, the render has failed.
 
-━━━ NON-NEGOTIABLE — INTIMATE COZY SCALE ━━━
-This is NOT a cathedral hall or grand vista. The private study off the grand library / the hearthside corner of a dwarven forge-hall / a wizard's reading nook carved into ancient stone. Mid or mid-close framing. The viewer should WANT TO SIT DOWN in this space.
+━━━ THE MAGIC HAPPENING — open the Flux prompt WITH this ━━━
 
-━━━ THE INHABITANT — render this character exactly ━━━
+Two magical elements MUST be visible in the rendered frame. Lead the prompt's opening clauses with them so Flux's first attention lands on the magic, not on "old white wizard at desk."
+
+(1) Inside the candid moment:
+${candid_moment}
+
+The MAGICAL ELEMENT named inside this moment (the glowing rune / the wisp-orb / the chalk-circle / the floating ingredient / the self-writing quill / the cauldron vapor / etc.) MUST appear in the rendered frame with its named COLOR + SHAPE + POSITION. Do not paraphrase it away. Do not leave it as background haze.
+
+(2) Ambient magical signature in the room:
+${magical_signature}
+
+Render this magic as a SPECIFIC NAMED ELEMENT with shape + color + position — glowing-rune-glyph in the air / floating-quill mid-write on parchment / wisp-orbs orbiting the bookshelf / spell-circle chalk-drawn on the floor / levitating ingredient above a flask. Intimate scale, NOT cathedral magic — but VISIBLE, not subtle. The viewer must immediately see "magic is happening here."
+
+━━━ INTIMATE COZY SCALE ━━━
+NOT a cathedral hall or grand vista. The private study off the grand library / the hearthside corner of a dwarven forge-hall / a wizard's reading nook carved into ancient stone. Mid or mid-close framing. The viewer should WANT TO SIT DOWN in this space.
+
+━━━ THE INHABITANT (render after the magic above) ━━━
 A ${inhabitant_age} ${gender}, race: ${race}. They are a ${inhabitant_archetype}.
 
 Render the FANTASY RACE features unmistakably (skin tone, ear shape, horn / tail / tusks if applicable, eye color, distinguishing anatomy). Render the AGE visible in face and posture. Render the ARCHETYPE garment exactly. NEVER substitute the race for a generic human. NEVER default to "old white wizard with beard" — preserve every rolled detail above.
 
 The character occupies 25-40% of frame, off-center, absorbed in their craft. NEVER posing, NEVER looking at viewer. "Caught on a hidden camera in their sanctum."
-
-━━━ THE CANDID MOMENT — what they are doing right now ━━━
-${candid_moment}
-
-Render this moment EXACTLY — pose, gesture, prop in hand, posture. The render captures this specific intimate beat, not a generic "wizard standing in study."
 
 ━━━ THE COZY SPACE ━━━
 ${setting}
@@ -2086,11 +2099,11 @@ ${clutterLines}
 These three named clutter items are the prominently-spotlighted detail in the render — render each with material specificity (worn leather / dripping wax / tarnished brass / ink-stained parchment). Plus the dense general clutter of the sanctum (stacked tomes / hanging herbs / rune-carved boxes / glowing potion vials in racks).
 
 The room should look ALIVE — like the wizard just stepped out for a moment. Every surface has STUFF on it. Every shelf is full. Light pools across MULTIPLE INTERESTING OBJECTS, not bare wood.
-${warmthSection}${familiarSection}${magicSigSection}
+${warmthSection}${familiarSection}
 ━━━ LIGHTING ━━━
 ${lighting}
 
-Reinterpret at INTIMATE scale — candle-light pool / hearth-glow / oil-lantern / firelight on worn velvet. NOT cathedral light. NOT epic god-rays. Warm + close + lived-in.
+Reinterpret at INTIMATE scale — candle-light pool / hearth-glow / oil-lantern / firelight on worn velvet, ALONGSIDE the magical glow from the rune/wisp/spell-circle named above. NOT cathedral light. NOT epic god-rays. Warm + close + lived-in WITH visible magical accent-light.
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -2109,7 +2122,7 @@ ${sharedDNA.colorPalette}
 - NO posing / NO looking-at-viewer / NO "render as" hero composition
 - NO bare empty walls (every surface lived-in)
 - NO weapons-ready / combat-stance (cozy register only)
-- NO ostentatious magical lightshow (subtle intimate magic only)
+- NO INVISIBLE MAGIC — both named magical elements above MUST be plainly visible in the rendered frame. A render that omits them has failed this path.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
