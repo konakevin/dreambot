@@ -28,6 +28,7 @@ const pathBuilders = {
   'pixel-sci-fi-action': require('./paths/pixel-sci-fi-action'),
   'classic-jrpg': require('./paths/classic-jrpg'),
   'epic-vista': require('./paths/epic-vista'),
+  'pixel-landscapes': require('./paths/pixel-landscapes'),
 };
 
 // Per-path vibe lock — each genre prefers a tight subset of vibes for
@@ -43,6 +44,7 @@ const vibesByPath = {
   'pixel-sci-fi-action': ['epic', 'fierce', 'voltage', 'cinematic'],
   'classic-jrpg': ['nostalgic', 'enchanted', 'whimsical', 'epic'],
   'epic-vista': ['epic', 'ethereal', 'cinematic', 'nostalgic'],
+  'pixel-landscapes': ['epic', 'ethereal', 'cinematic', 'nostalgic'],
 };
 
 const allVibes = Array.from(new Set(Object.values(vibesByPath).flat()));
@@ -57,6 +59,13 @@ module.exports = {
   // across models is part of the variance the bot trades on.
   useModelPicker: true,
   allowedModels: ALL_ENABLED_AI_MODELS,
+
+  // Per-path model pins. 2026-06-06: pixel-landscapes pinned to gpt-image-2
+  // (matches BrickBot's lego-landscapes pin — cleanest result for this
+  // pure-vista, real-world-place register).
+  modelByPath: {
+    'pixel-landscapes': { 'openai/gpt-image-2': 100 },
+  },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -75,6 +84,7 @@ module.exports = {
     'pixel-sci-fi-action',
     'classic-jrpg',
     'epic-vista',
+    'pixel-landscapes',
   ],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
@@ -95,6 +105,7 @@ module.exports = {
       'pixel-sci-fi-action',
       'classic-jrpg',
       'epic-vista',
+      'pixel-landscapes',
     ],
   },
 

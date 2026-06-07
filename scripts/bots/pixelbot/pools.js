@@ -52,6 +52,14 @@ module.exports = {
   CLASSIC_JRPG_SCENES: load('classic_jrpg_scenes'),
   EPIC_VISTA_SCENES: load('epic_vista_scenes'),
 
+  // pixel-landscapes path (2026-06-06) — real-world wide vistas as 16-bit
+  // pixel-art world-map scenes. Pool is extracted from location_iconic_spots
+  // (wide + pure_scene_eligible) and mirrored from BrickBot's
+  // lego-landscapes pool. Re-extract via
+  // scripts/bots/brickbot/seeds/extract-lego-landscapes-locations.js
+  // (writes to both bots' seed dirs). Entries are { location, scene } objects.
+  PIXELBOT_PIXEL_LANDSCAPES_LOCATIONS: load('pixelbot_pixel_landscapes_locations'),
+
   // Per-path lighting pools
   COZY_RPG_TOWN_LIGHTING: load('cozy_rpg_town_lighting'),
   DUNGEON_DEPTH_LIGHTING: load('dungeon_depth_lighting'),

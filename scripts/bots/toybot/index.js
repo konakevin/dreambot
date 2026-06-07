@@ -45,6 +45,11 @@ const pathBuilders = {
   'toy-blockbuster': require('./paths/toy-blockbuster'),
   // new (2026-05-24) — photoreal SURREAL colossal toys in real-world settings
   'giant-toys': require('./paths/giant-toys'),
+  // new (2026-06-06) — real-world wide vistas as handcrafted Sackboy/LBP
+  // craft worlds with a few real classic toys scattered as scale-prover
+  // accents. Pool mirrors BrickBot's lego-landscapes + PixelBot's
+  // pixel-landscapes (shared extraction from location_iconic_spots).
+  'toy-landscapes': require('./paths/toy-landscapes'),
 };
 
 module.exports = {
@@ -65,6 +70,20 @@ module.exports = {
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
   ],
+
+  // Per-path model rotation (2026-06-06). toy-landscapes rotates across
+  // gpt-image-2 + the two bot-wide Pro variants (flux-1.1-pro + ultra).
+  // gpt-image-2 was bot-wide heart-banned 2026-06-06 for other paths but
+  // works great for the LBP / Sackboy landscape register, so it's re-enabled
+  // here as one of three. Equal weights = roughly 33% each per render.
+  // Other ToyBot paths still rotate the 2-model whitelist above.
+  modelByPath: {
+    'toy-landscapes': {
+      'openai/gpt-image-2': 100,
+      'black-forest-labs/flux-1.1-pro': 100,
+      'black-forest-labs/flux-1.1-pro-ultra': 100,
+    },
+  },
 
   // mediumByPath — each path locks to its medium.
   // toybox-chaos rotates across an array per render to deliberately mix
@@ -87,6 +106,7 @@ module.exports = {
     'mech-toy-rampage': 'mech_toys',
     'toybox-chaos': 'toybox_chaos_mixed',
     'space-saga-figures': 'space_saga_figures',
+    'toy-landscapes': 'handcrafted',
     // monster-boss-battle rotates across the full toy-medium roster so the
     // boss + heroes can land in any toy world (vinyl Funko vs kaiju, action
     // figures vs demon lord, mechs vs alien overlord, etc.)
@@ -575,6 +595,7 @@ module.exports = {
     'dino-diorama',
     'toy-blockbuster',
     'giant-toys',
+    'toy-landscapes',
   ],
 
   // toy-blockbuster is the flagship — weighted to exactly 25% of all renders.
@@ -598,6 +619,7 @@ module.exports = {
       'dino-diorama',
       'toy-blockbuster',
       'giant-toys',
+      'toy-landscapes',
     ],
     allowSubjectChaosPaths: [
       'claymation',
@@ -662,6 +684,7 @@ module.exports = {
       'dino-diorama',
       'toy-blockbuster',
       'giant-toys',
+      'toy-landscapes',
     ],
     requiredChannels: ['lightcolor'],
     pathContext: {

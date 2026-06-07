@@ -162,9 +162,11 @@ export function rollDream(
   if (medium.isSceneOnly) {
     composition = 'pure_scene';
   } else if (!includeCharacter) {
-    // Location is always true at this point; non-character paths land on
-    // pure_scene most of the time with an occasional epic_tiny silhouette.
-    composition = Math.random() < 0.7 ? 'pure_scene' : 'epic_tiny';
+    // No cast → pure_scene only. epic_tiny references shortCastDesc / tinyDesc
+    // in the brief which resolves to "undefined" without a cast, polluting
+    // the Sonnet input. Mirrors the second composition block below which
+    // already pinned pure_scene for cast-less users.
+    composition = 'pure_scene';
   } else if (medium.isCharacterOnly || medium.faceSwaps) {
     composition = 'character';
   } else if (castMembers.length >= 2) {

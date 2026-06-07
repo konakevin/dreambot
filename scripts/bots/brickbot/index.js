@@ -36,6 +36,7 @@ const pathBuilders = {
   'theme-park': require('./paths/theme-park'),
   forest: require('./paths/forest'),
   landscape: require('./paths/landscape'),
+  'lego-landscapes': require('./paths/lego-landscapes'),
 };
 
 module.exports = {
@@ -53,15 +54,17 @@ module.exports = {
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
   ],
-  // modelByPath: removed 2026-05-31. Previously was Object.fromEntries(
+  // Per-path model pins. 2026-06-06: lego-landscapes pinned to gpt-image-2,
+  // matching the nightly LEGO pin — produces the cleanest physical-LEGO-build
+  // read (no flux-2 family blocky over-stacking, no flux-1.1 pasty plastic).
+  modelByPath: {
+    'lego-landscapes': { 'openai/gpt-image-2': 100 },
+  },
+  // (history) modelByPath was previously Object.fromEntries(
   //   pools.PATHS.map(p => [p, {'flux-1.1-pro': 100}])) — every path
-  // weighted-pinned to 100% flux-1.1-pro, which OVERRODE the 6-model
-  // allowedModels lineup above (engine consults modelByPath before
-  // allowedModels). Result: BrickBot's 12h post distribution was 100%
-  // flux-1.1-pro despite the bot-wide audit saying 6 models. Removing
-  // the modelByPath lets the picker actually use the 6-model lineup as
-  // documented in BOT_MODEL_TALLY.md. To re-pin a specific path, add
-  // it back here.
+  // weighted-pinned to 100% flux-1.1-pro, which OVERRODE the 4-model
+  // allowedModels lineup above. Removed 2026-05-31. Per-path pins now
+  // only land here when a specific path needs a specific model.
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -130,6 +133,7 @@ module.exports = {
       'crazy-islands',
       'girly',
       'lego-masters',
+      'lego-landscapes',
     ],
   },
 

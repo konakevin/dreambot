@@ -218,6 +218,10 @@ Deno.serve(async (req) => {
     | Array<{ role: string; sourceUrl: string; gender: 'male' | 'female' | null | undefined }>
     | undefined;
   let finalPrompt: string = '';
+  // Hoisted embodied-medium flag so the post-try GPT-image-2 prefix step
+  // can skip its canvas-illustration prefix (which fights LEGO / pixels /
+  // handcrafted directives — their own medium fragment is the CLIP anchor).
+  let isEmbodiedMedium = false;
   // Hoisted face-swap-character flag so the post-try model picker can branch
   // on it. Set true for BOTH single and dual face-swap renders (humans only —
   // pets stay on the legacy freeform path). Inner block-scoped flags
@@ -433,10 +437,18 @@ Deno.serve(async (req) => {
     // needed: UPDATE dream_mediums SET is_scene_eligible = true|false ... .
     // The model is also intersected with engine_config.scene_eligible_models
     // later in the flow (search 'sceneEligibleModels' below).
+    //
+    // Migration 234: pure_scene rolls from `dream_eligible_scene` (weighted
+    // natural/embodied sub-roll — LEGO / pixels / handcrafted compete with
+    // canvas / hyperreal / illustration). epic_tiny rolls from
+    // `dream_eligible_scene_natural` (natural-only — embodied can't render a
+    // recognizable cast at tiny-figure scale).
     const isSceneComposition = composition === 'pure_scene' || composition === 'epic_tiny';
     if (isSceneComposition && !force_medium && !nightlyMedium.isSceneEligible) {
       const oldKey = nightlyMedium.key;
-      nightlyMedium = await resolveMediumFromDb('dream_eligible_scene', recentMediums);
+      const sceneToken =
+        composition === 'pure_scene' ? 'dream_eligible_scene' : 'dream_eligible_scene_natural';
+      nightlyMedium = await resolveMediumFromDb(sceneToken, recentMediums);
       baseMedium = nightlyMedium;
       resolvedMediumKey = nightlyMedium.key;
       console.log(
@@ -448,6 +460,10 @@ Deno.serve(async (req) => {
     resolvedComposition = composition;
     resolvedMediumAllowedModels = nightlyMedium.allowedModels;
     resolvedMediumSceneModels = nightlyMedium.sceneEligibleModels;
+    // Tell the post-try GPT-image-2 prefix step to skip when the medium is
+    // embodied — its directive (LEGO bricks / pixel tiles / Sackboy felt) is
+    // already the CLIP anchor; canvas-illustration prefix would fight it.
+    isEmbodiedMedium = nightlyMedium.characterRenderMode === 'embodied';
 
     const castPick = selectedCast.length > 0 ? (selectedCast[0] as DreamCastMember) : null;
     console.log(
@@ -783,6 +799,15 @@ Deno.serve(async (req) => {
       } else {
         // character + epic_tiny composition paths
         spotsQ = spotsQ.eq('character_eligible', true);
+      }
+      // Embodied mediums (LEGO / pixels / handcrafted) render best as
+      // set-piece dioramas of a place — wide vistas with multiple terrain
+      // elements. Intimate close-ups ("single hibiscus blossom", "water-level
+      // shot of lava channel") fight the medium because they're photoreal
+      // moments LEGO/pixels can't build. Filter to wide-scale spots only
+      // for embodied scene renders.
+      if (nightlyMedium.characterRenderMode === 'embodied') {
+        spotsQ = spotsQ.eq('spot_kind', 'wide');
       }
       const [{ data: spots }, { data: locCard }] = await Promise.all([
         spotsQ,
@@ -1159,7 +1184,24 @@ The render IS: ${iconicAnchor || userPlace || 'the location'}
 This is the only subject. Do NOT substitute another landmark. Do NOT add multiple competing iconic features. Name this specific view explicitly in the prompt.
 
 MEDIUM: ${baseMedium.fluxFragment}
+${
+  nightlyMedium.characterRenderMode === 'embodied'
+    ? `
+━━━ EMBODIED MEDIUM — TRANSLATE EVERYTHING (NON-NEGOTIABLE) ━━━
+This medium REBUILDS the entire image — terrain, atmosphere, sky, water, weather, light, foliage — in its own physical/visual vocabulary. NO photoreal elements layered on top. NO realistic landscape language. Every noun in your prompt must be a medium-native object.
 
+Translate every scene element into the medium:
+- Terrain ("volcanic cliffs", "lava flows", "valley", "ridge", "caldera") → medium-built terrain (stepped/blocky brick formations for LEGO, blocky pixel-tile cliffs for pixels, cork/foam/sponge hills for handcrafted)
+- Water/ocean ("deep Pacific waters", "underwater reef") → medium-built water (translucent blue LEGO tile/plate ocean for LEGO, wave-tile pixel patterns for pixels, knitted-yarn felt ocean with thread ripples for handcrafted)
+- Sky/clouds → medium-built sky (solid brick backdrop with white cloud-brick puffs, pixel-band gradients with cluster cloud sprites, soft cotton-batting clouds on painted-canvas sky)
+- Sun / lighting ("golden afternoon", "warm amber") → medium-translated lighting (warm amber tinting on plastic LEGO surfaces, warm orange pixel highlights, soft warm cozy tilt-shift studio lighting)
+- Weather ("trade-wind shower", "rain") → medium-built weather (translucent blue raindrop tiles slanting across the build for LEGO, dithered pixel rain streaks for pixels, embroidered thread rain ripples for handcrafted)
+- Foliage ("palm trees", "ferns") → medium-built foliage (green plate-piece fronds on brown cylindrical trunks for LEGO, tile-cluster pixel palm sprites for pixels, pipe-cleaner trunks with paper/felt fronds for handcrafted)
+
+ZERO photoreal nouns. ZERO photoreal atmospheric language. EVERY element described in the medium's vocabulary, including the rolled TIME / WEATHER / CAMERA / PHENOMENON axes below — translate THEM too, do not paste them in verbatim.
+`
+    : ''
+}
 SUBJECT FRAMING: ${subjectRule}
 
 VARIATION AXES (alter LIGHT, ATMOSPHERE, and CAMERA ONLY — never the subject):
@@ -1413,17 +1455,32 @@ Output ONLY the prompt.`;
     }
   }
 
-  // ── Nightly-wide hard model ban ───────────────────────────────────────
+  // ── Nightly model bans ────────────────────────────────────────────────
   // 2026-06-01 (Kevin): flux-2-dev produces too many low-quality renders for
   // nightlies. Banned across the board — scene AND character composition,
   // regardless of medium.allowed_models. Re-picks from the medium's
   // allowed_models excluding the banned list. force_model still wins (QA /
   // testing override). Centralized here so add/remove takes one edit.
+  //
+  // Per-medium bans layered on top (2026-06-06): LEGO renders look pasty +
+  // over-smoothed under flux-2-max; banned for lego nightlies only (still
+  // allowed for create-screen renders via medium.allowed_models).
   const NIGHTLY_BANNED_MODELS = new Set(['black-forest-labs/flux-2-dev']);
-  if (!force_model && NIGHTLY_BANNED_MODELS.has(pickedModel)) {
-    const allowedMinusBanned = resolvedMediumAllowedModels.filter(
-      (m) => !NIGHTLY_BANNED_MODELS.has(m)
-    );
+  const NIGHTLY_BANNED_MODELS_BY_MEDIUM: Record<string, Set<string>> = {};
+  // Per-medium hard model pins: when set, that medium ALWAYS renders with
+  // the pinned model for nightlies (force_model still wins for QA). LEGO +
+  // pixels both pinned to gpt-image-2 — produces the cleanest physical-build /
+  // 16-bit-screenshot read. Create-screen renders still use the medium's
+  // full allowed_models pool.
+  const NIGHTLY_PINNED_MODELS_BY_MEDIUM: Record<string, string> = {
+    lego: 'openai/gpt-image-2',
+    pixels: 'openai/gpt-image-2',
+  };
+  const perMediumBans =
+    NIGHTLY_BANNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''] || new Set<string>();
+  const effectiveBans = new Set<string>([...NIGHTLY_BANNED_MODELS, ...perMediumBans]);
+  if (!force_model && effectiveBans.has(pickedModel)) {
+    const allowedMinusBanned = resolvedMediumAllowedModels.filter((m) => !effectiveBans.has(m));
     if (allowedMinusBanned.length > 0) {
       const oldModel = pickedModel;
       pickedModel = allowedMinusBanned[Math.floor(Math.random() * allowedMinusBanned.length)];
@@ -1441,6 +1498,18 @@ Output ONLY the prompt.`;
       pickedModel = fallback;
     }
   }
+  // Per-medium pin override — last word on which model renders this nightly.
+  // Runs after the ban gate so the pin can override any default pick. Skips
+  // when force_model is set (QA wins).
+  if (!force_model) {
+    const pin = NIGHTLY_PINNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''];
+    if (pin && pickedModel !== pin) {
+      console.log(
+        `[nightly-dreams] pin gate: medium '${resolvedMediumKey}' pinned -> '${pin}' (was '${pickedModel}')`
+      );
+      pickedModel = pin;
+    }
+  }
   logAxes.model = pickedModel;
 
   // ── GPT-Image-2 cleanup ──────────────────────────────────────────────
@@ -1454,11 +1523,15 @@ Output ONLY the prompt.`;
   // painted-canvas concept art piece with crisp readable subjects.
   // The scene / subject / vibe content downstream still drives WHAT is
   // rendered — only the style register is re-anchored.
-  if (pickedModel === 'openai/gpt-image-2') {
+  if (pickedModel === 'openai/gpt-image-2' && !isEmbodiedMedium) {
     const GPT_CLEAN_PREFIX =
       'Clean editorial illustration painted on canvas, high-definition concept-art render with crisp readable subjects, rich painterly depth, classical oil-on-canvas finish, gallery-tier production-art quality. ';
     finalPrompt = GPT_CLEAN_PREFIX + finalPrompt;
     console.log('[nightly-dreams] gpt-image-2 cleanup: prepended clean canvas prefix');
+  } else if (pickedModel === 'openai/gpt-image-2' && isEmbodiedMedium) {
+    console.log(
+      '[nightly-dreams] gpt-image-2 + embodied medium: skipping canvas prefix (medium directive anchors render)'
+    );
   }
 
   console.log(

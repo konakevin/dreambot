@@ -214,4 +214,14 @@ module.exports = {
   GIANT_TOY_ATMOSPHERE: load('giant_toy_atmosphere'),
   GIANT_TOY_CAMERA: load('giant_toy_camera'),
   GIANT_TOY_TWIST: load('giant_toy_twist'), // 40%-gated goofy combat gag
+
+  // toy-landscapes path (2026-06-06) — real-world wide vistas as Sackboy/LBP
+  // handcrafted craft-world dioramas with a few classic real toys scattered
+  // as tiny accents. Locations pool is extracted from location_iconic_spots
+  // (wide + pure_scene_eligible) and mirrors BrickBot's lego-landscapes /
+  // PixelBot's pixel-landscapes pools. Toys come from the shared
+  // TOYBOX_TOY_BUCKET above. Re-extract via
+  // scripts/bots/brickbot/seeds/extract-lego-landscapes-locations.js
+  // (writes to all three bots' seed dirs).
+  TOYBOT_TOY_LANDSCAPES_LOCATIONS: load('toybot_toy_landscapes_locations'),
 };

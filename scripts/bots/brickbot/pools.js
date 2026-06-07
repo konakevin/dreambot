@@ -32,12 +32,18 @@ const PATHS = [
   'theme-park',
   'forest',
   'landscape',
+  'lego-landscapes',
 ];
 
 const toFile = (p) => p.replace(/-/g, '_');
 
 const PER_PATH = {};
+// Paths whose pools live entirely under top-level UPPER_SNAKE pools below
+// (no legacy {path}_scenes / _lighting / _palette JSONs). These newer paths
+// build their briefs from bespoke axis pools, not the legacy triplet.
+const SKIP_LEGACY_PER_PATH = new Set(['lego-landscapes']);
 for (const p of PATHS) {
+  if (SKIP_LEGACY_PER_PATH.has(p)) continue;
   const f = toFile(p);
   PER_PATH[p] = {
     scenes: load(`${f}_scenes`),
@@ -222,6 +228,13 @@ const AXIS_POOLS = {
   BRICKBOT_PIRATES_LIGHTING: load('brickbot_pirates_lighting'),
   BRICKBOT_PIRATES_PALETTE: load('brickbot_pirates_palette'),
   BRICKBOT_PIRATES_WEATHER_DRAMA: load('brickbot_pirates_weather_drama'),
+
+  // lego-landscapes path (2026-06-06) — real-world wide vistas as LEGO
+  // landscape dioramas. Pool is extracted from location_iconic_spots
+  // (wide + pure_scene_eligible). Re-extract by running
+  // scripts/bots/brickbot/seeds/extract-lego-landscapes-locations.js.
+  // Entries are { location, scene } objects.
+  BRICKBOT_LEGO_LANDSCAPES_LOCATIONS: load('brickbot_lego_landscapes_locations'),
 };
 
 module.exports = {

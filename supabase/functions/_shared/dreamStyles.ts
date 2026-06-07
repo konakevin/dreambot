@@ -196,6 +196,29 @@ export async function fetchSceneEligibleModels(): Promise<string[]> {
   return cachedSceneEligibleModels;
 }
 
+let cachedSceneEmbodiedRate: number | null = null;
+
+/** Fetch the weighted sub-roll rate for picking an embodied medium
+ * (lego/pixels/handcrafted) vs a natural medium (canvas/hyperreal/
+ * illustration) inside the dream_eligible_scene pool. Migration 234.
+ * Default 0.30. Cached per invocation. */
+export async function fetchSceneEmbodiedRate(): Promise<number> {
+  if (cachedSceneEmbodiedRate !== null) return cachedSceneEmbodiedRate;
+  const sb = getServiceClient();
+  const { data, error } = await sb
+    .from('engine_config')
+    .select('scene_embodied_rate')
+    .eq('id', 1)
+    .single();
+  if (error || !data) {
+    console.warn('[dreamStyles] engine_config row missing; scene_embodied_rate=0.30');
+    cachedSceneEmbodiedRate = 0.3;
+    return 0.3;
+  }
+  cachedSceneEmbodiedRate = Number(data.scene_embodied_rate ?? 0.3);
+  return cachedSceneEmbodiedRate;
+}
+
 /**
  * Filter a candidate pool to exclude recently-used items. Falls back to the
  * full pool if filtering would leave fewer than 2 options (prevents stuck
@@ -236,8 +259,15 @@ export async function resolveMediumFromDb(
   // Pick from the curated dream-eligible pool (DB column is_dream_eligible).
   // The user's create-screen options stay broad; the auto-gen layer is
   // quality-gated by DB curation. See migration 160.
+  //
+  // Migration 234: embodied mediums (lego/pixels/handcrafted) are excluded
+  // from the broad pool — they only enter via the dream_eligible_scene
+  // re-roll triggered by pure_scene composition. Keeps embodied as a
+  // scene-only artistic register, never the user's body.
   if (key === 'dream_eligible') {
-    const eligibleKeys = mediums.filter((m) => m.isDreamEligible).map((m) => m.key);
+    const eligibleKeys = mediums
+      .filter((m) => m.isDreamEligible && m.characterRenderMode !== 'embodied')
+      .map((m) => m.key);
     const pool = filterRecent(eligibleKeys, excludeRecent);
     const picked = pick(pool);
     return mediums.find((m) => m.key === picked)!;
@@ -260,18 +290,55 @@ export async function resolveMediumFromDb(
   // Nightly scene-composition pool (pure_scene + epic_tiny). Curated for
   // lush layered painterly/photoreal — no kids/storybook/drawing-coded
   // mediums. Toggle membership via SQL: UPDATE dream_mediums SET
-  // is_scene_eligible = true|false WHERE key = 'X'. Initial set (mig 213):
-  // canvas, photography, hyperreal, render, illustration.
+  // is_scene_eligible = true|false WHERE key = 'X'.
+  //
+  // Migration 234: the pool now contains two stylistic subsets — NATURAL
+  // (canvas/hyperreal/illustration — character_render_mode='natural') and
+  // EMBODIED (lego/pixels/handcrafted — character_render_mode='embodied').
+  // A weighted sub-roll picks the subset first
+  // (engine_config.scene_embodied_rate fraction of picks go embodied),
+  // then a recency-aware pick picks within that subset.
   if (key === 'dream_eligible_scene') {
-    const eligibleKeys = mediums
-      .filter((m) => m.isSceneEligible && m.isDreamEligible)
-      .map((m) => m.key);
-    if (eligibleKeys.length === 0) {
-      // Safety fallback if no mediums are flagged — preserves prior behavior.
+    const scenePool = mediums.filter((m) => m.isSceneEligible && m.isDreamEligible);
+    if (scenePool.length === 0) {
       console.warn('[dreamStyles] dream_eligible_scene pool empty; falling back to dream_eligible');
       return resolveMediumFromDb('dream_eligible', excludeRecent);
     }
-    const pool = filterRecent(eligibleKeys, excludeRecent);
+    const naturalKeys = scenePool
+      .filter((m) => m.characterRenderMode !== 'embodied')
+      .map((m) => m.key);
+    const embodiedKeys = scenePool
+      .filter((m) => m.characterRenderMode === 'embodied')
+      .map((m) => m.key);
+    const embodiedRate = await fetchSceneEmbodiedRate();
+    const useEmbodied = embodiedKeys.length > 0 && Math.random() < embodiedRate;
+    const subset =
+      useEmbodied && embodiedKeys.length > 0
+        ? embodiedKeys
+        : naturalKeys.length > 0
+          ? naturalKeys
+          : scenePool.map((m) => m.key);
+    const pool = filterRecent(subset, excludeRecent);
+    const picked = pick(pool);
+    console.log(
+      `[dreamStyles] dream_eligible_scene: ${useEmbodied ? 'embodied' : 'natural'} subset (rate=${embodiedRate}) -> ${picked}`
+    );
+    return mediums.find((m) => m.key === picked)!;
+  }
+  // Natural-only scene pool — used by epic_tiny composition (tiny character
+  // in vast vista). Embodied mediums can't render a recognizable cast at that
+  // scale, so epic_tiny stays on canvas/hyperreal/illustration. Migration 234.
+  if (key === 'dream_eligible_scene_natural') {
+    const naturalKeys = mediums
+      .filter((m) => m.isSceneEligible && m.isDreamEligible && m.characterRenderMode !== 'embodied')
+      .map((m) => m.key);
+    if (naturalKeys.length === 0) {
+      console.warn(
+        '[dreamStyles] dream_eligible_scene_natural pool empty; falling back to dream_eligible'
+      );
+      return resolveMediumFromDb('dream_eligible', excludeRecent);
+    }
+    const pool = filterRecent(naturalKeys, excludeRecent);
     const picked = pick(pool);
     return mediums.find((m) => m.key === picked)!;
   }
