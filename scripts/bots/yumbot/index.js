@@ -47,6 +47,19 @@ const pathBuilders = {
   // (baking-in-progress / garden-harvest / pastry-shop-window / food-parade /
   // food-tea-party / bakery-delivery).
   narrative: require('./paths/narrative'),
+  // 2026-06-07 trial — bucket-aggregated fruits-and-veggies path. 6 sub-themes
+  // (vegetable-garden / fruit-tree / vine-and-bush / harvest-basket /
+  // forest-forage / farmers-market). Each scene = kawaii fruit/veggie HOST +
+  // 1-2 kawaii dessert FRIENDS.
+  'fruits-veggies': require('./paths/fruits-veggies'),
+  // 2026-06-07 trial — bucket-aggregated fast-food path. 6 sub-themes
+  // (burger-joint / pizza-shop / taco-stand / fried-classics / hot-dog-cart /
+  // diner-shake-and-fries).
+  'fast-food': require('./paths/fast-food'),
+  // 2026-06-07 trial — bucket-aggregated carnival-food path. 6 sub-themes
+  // (cotton-candy-cart / funnel-cake-stand / caramel-apple-booth /
+  // snow-cone-stand / pretzel-cart / carnival-corn-dog).
+  'carnival-food': require('./paths/carnival-food'),
 };
 
 module.exports = {
@@ -89,6 +102,9 @@ module.exports = {
     scale: 'yumbot_food_neutral',
     places: 'yumbot_food_neutral',
     narrative: 'yumbot_food_neutral',
+    'fruits-veggies': 'yumbot_food_neutral',
+    'fast-food': 'yumbot_food_neutral',
+    'carnival-food': 'yumbot_food_neutral',
   },
 
   // Per-medium prompt prefix override (engine line 1314) — REPLACES the
@@ -167,6 +183,9 @@ module.exports = {
     'scale',
     'places',
     'narrative',
+    'fruits-veggies',
+    'fast-food',
+    'carnival-food',
   ],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —

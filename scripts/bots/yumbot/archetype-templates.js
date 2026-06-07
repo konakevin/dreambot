@@ -1333,6 +1333,176 @@ Template:
 Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
   },
 
+  YUMBOT_FAST_FOOD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene, camera_framing, lighting, palette, time_of_day, companion, decor_accents, atmospheric_accent } = slots;
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium.
+
+` : ''}You are writing FAST-FOOD renders for YumBot — 1-3 kawaii fast-food items in a fast-food context. Visual treatment is set by the LOOK REGISTER above.
+
+━━━ THE SCENE ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME ━━━
+${decorBlock}
+
+━━━ COMPANION — MUST APPEAR BY NAME ━━━
+${companion}
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES ━━━
+1. The 1-3 kawaii fast-food items appear by name with kawaii face features.
+2. Fast-food context reads instantly. ALL 3 decor + companion + atmospheric accent appear BY NAME.
+
+━━━ HARD BANS ━━━
+- NO desserts / pastries / produce — cast is fast-food only.
+- NO human faces. NO photoreal tokens.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then fast-food + setting, then decor + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO bulleted lists.`;
+  },
+
+  YUMBOT_CARNIVAL_FOOD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene, camera_framing, lighting, palette, time_of_day, companion, decor_accents, atmospheric_accent } = slots;
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium.
+
+` : ''}You are writing CARNIVAL-FOOD renders for YumBot — 1-3 kawaii carnival foods at a carnival / fairground context. Visual treatment is set by the LOOK REGISTER above.
+
+━━━ THE SCENE ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME ━━━
+${decorBlock}
+
+━━━ COMPANION — MUST APPEAR BY NAME ━━━
+${companion}
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES ━━━
+1. The 1-3 kawaii carnival-foods appear by name with kawaii face features.
+2. Carnival context reads instantly. ALL 3 decor + companion + atmospheric accent appear BY NAME.
+
+━━━ HARD BANS ━━━
+- NO regular fast-food / desserts / produce — strictly carnival foods.
+- NO human faces. NO photoreal tokens.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then carnival food + context, then decor + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO bulleted lists.`;
+  },
+
+  YUMBOT_FRUITS_VEGGIES: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
+
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing FRUITS-AND-VEGGIES renders for YumBot — 2-3 kawaii fruits and/or vegetables hanging out together in an organic outdoor setting. The cast is PURELY fruits and vegetables. Visual treatment is set by the LOOK REGISTER above.
+
+━━━ THE SCENE (2-3 kawaii fruits and/or vegetables + organic environment) ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${decorBlock}
+
+━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${companion}
+Named explicitly. Small (5-10% of frame), positioned NEAR the kawaii produce.
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES ━━━
+1. The 2-3 kawaii FRUITS / VEGETABLES from THE SCENE appear in the prompt by name with kawaii face features.
+2. The organic environment reads instantly (soil / branch / vine / wicker basket / mossy forest floor / market crate).
+3. ALL 3 decor items appear BY NAME.
+4. The COMPANION appears BY NAME.
+5. The ATMOSPHERIC ACCENT appears BY NAME.
+
+━━━ HARD BANS ━━━
+- NO desserts, NO pastries, NO sweets, NO cookies, NO cakes, NO macarons, NO cupcakes, NO donuts, NO mochi, NO chocolate, NO breads — the cast is PURELY fruits and vegetables.
+- NO human faces (the cast is all produce / critter).
+- NO photoreal tokens.
+- NO swapping the organic setting for a generic kawaii meadow.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then the kawaii fruits/veggies + organic environment, then decor names + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
+  },
+
   YUMBOT_NARRATIVE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       scene,

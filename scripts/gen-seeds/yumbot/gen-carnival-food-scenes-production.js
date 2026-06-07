@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+const { generateBucketScenes, buildYumBotSubThemePrompt } = require('../../lib/yumbotBucketGen');
+
+const SUB_THEMES = [
+  { tag: 'cotton-candy-cart', blurb: 'Kawaii cotton-candy clouds on paper sticks (pink-and-blue / pastel-rainbow / sour-apple-green / bubblegum / lavender / pink-grapefruit) at a striped cotton-candy cart booth. Anchor: candy-striped awning, spinning-candy-tub, paper-stick cone.', example: '{ "tags": ["cotton-candy-cart"], "description": "Kawaii pink-and-blue cotton-candy cloud with smiling eyes spun onto a paper stick beside a kawaii sour-apple-green cotton-candy stick under a candy-striped awning, three-quarter low-angle view" }' },
+  { tag: 'funnel-cake-stand', blurb: 'Kawaii funnel cakes powdered with sugar (with strawberry-drizzle / chocolate-drizzle / lemon-zest / fruit-medley / Nutella / Oreo-crumble) at a fryer-stand with red-checker boats. Anchor: red-checker paper boat, fryer-stand, powdered-sugar shower.', example: '{ "tags": ["funnel-cake-stand"], "description": "Kawaii funnel cake with powdered-sugar smile on a red-checker paper boat at a fryer stand, strawberry-drizzle swirl mid-pour, intimate eye-level view" }' },
+  { tag: 'caramel-apple-booth', blurb: 'Kawaii caramel apples / candy apples / popcorn balls / chocolate-dipped marshmallow sticks / candy-coated peanut clusters / candy-coated strawberries on a booth display. Anchor: wooden sticks, autumn leaves, booth-display, chocolate-fountain.', example: '{ "tags": ["caramel-apple-booth"], "description": "Kawaii caramel apple on a wooden stick with smiling caramel-drip eyes beside a kawaii popcorn ball with grinning kernels at a fall-leaves-decorated booth, three-quarter view" }' },
+  { tag: 'snow-cone-stand', blurb: 'Kawaii snow cones / shaved ice / slushies / rainbow-ice / sno-balls / Italian-ice in colorful paper cones (rainbow stripe / cherry / blue raspberry / lime / piña-colada / tiger-blood) at a snow-cone stand. Anchor: striped paper cup, syrup-bottle row, fairground booth.', example: '{ "tags": ["snow-cone-stand"], "description": "Kawaii rainbow snow-cone in a striped paper cup with smiling shaved-ice face beside a kawaii blue-raspberry slushie at a colorful snow-cone stand, low hero-up view" }' },
+  { tag: 'pretzel-cart', blurb: 'Kawaii soft pretzels / churros / fried-dough strips / cinnamon-sugar twists / elephant-ears / beignets in paper sleeves at a carnival pretzel cart. Anchor: paper sleeve, salt-crystal eyes, sugar-shake, cart-rail.', example: '{ "tags": ["pretzel-cart"], "description": "Kawaii soft pretzel with smiling salt-crystal eyes wrapped in a paper sleeve at a carnival pretzel cart beside a kawaii cinnamon-sugar churro with grin, three-quarter framing" }' },
+  { tag: 'carnival-corn-dog', blurb: 'Kawaii corn dogs on sticks / fresh lemonade in striped cups / kettle corn / hot fresh pretzels / nacho-cheese fries / curly-fries at a carnival foodway. Anchor: wooden stick, striped paper cup, kettle-corn-bag, midway, string-lights.', example: '{ "tags": ["carnival-corn-dog"], "description": "Kawaii corn dog on a wooden stick with smiling face beside a kawaii striped paper-cup lemonade at a carnival foodway, string-lights overhead, low-angle hero view" }' },
+];
+
+generateBucketScenes({
+  outPath: 'scripts/bots/yumbot/seeds/yumbot_carnival_food_scenes.json',
+  perSubTheme: 34,
+  subThemes: SUB_THEMES,
+  buildPrompt: buildYumBotSubThemePrompt({ bucketTitle: 'CARNIVAL-FOOD', bannedNotes: 'NO regular fast-food (burgers / pizza / tacos) — strictly carnival / fairground food.' }),
+}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });

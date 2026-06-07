@@ -33,6 +33,64 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 
 ---
 
+## "Medium Looks" architecture — bot-wide CUTE-ONLY visual register axis (2026-06-07, NOVEL — replicate to other bots)
+
+**Origin:** Built on YumBot 2026-06-07 to break a single-bot Pop-Mart vinyl CLIP lock. Kevin asked YumBot to feel "more varied" and explicitly requested the LOOK to vary while the kawaii character stayed constant. The approach below was the answer and shipped to all 18 YumBot paths (11 original + 7 new bucket-aggregated). Validation: scale-bucket renders got "i LOVE LOVE LOVE those ones." Applicable to **any single-medium bot that needs varied visual treatment without losing its identity**.
+
+**The problem this solves:** Some bots are locked to one stylistic register because two stacked prefixes (bot-level `PROMPT_PREFIX` + medium-level `mediumStyles[medium]`) plus the suffix all front-load the same style tokens. CLIP attention anchors on those tokens. EVERY render of EVERY path under that bot looks like the same visual treatment regardless of how distinct the scene is. Per-path bespoke pools fix scene variety but NOT visual treatment.
+
+**The architecture:** Roll a different CUTE-ONLY visual treatment per render via a bot-wide axis. Keep the bot's CHARACTER identity (e.g. "kawaii food with face baked in") in a neutral medium fragment, and let the rolled look register provide the medium treatment. Templates inject the rolled register at the TOP of the Sonnet brief so it leads CLIP anchor on every render.
+
+**The 5 ingredients:**
+
+1. **Bot-wide `look_register` pool** (~25 entries) — distinct visual treatments that stay 100% kawaii / cute but vary the medium. Examples used on YumBot: Pop-Mart designer vinyl / claymation stop-motion / watercolor kawaii illustration / pastel gouache / children's picture-book / Ghibli cel-shaded / risograph / 16-bit pixel / paper-cut origami / felt embroidered / mochi-squishy 3D / ceramic figurine / colored-pencil / marker-and-ink cartoon / foil holographic sticker / linocut block-print + jewel-tone and vivid-saturated variants of each. Generated via `scripts/gen-seeds/<bot>/gen-look-register.js` with explicit palette-tilt distribution (pastel / jewel-tone / vivid).
+
+2. **Bot-wide rollSharedDNA injection** — `bot.rollSharedDNA({ vibeKey, picker })` returns `{ ..., lookRegister: picker.pickWithRecency(pools.LOOK_REGISTER, 'look_register') }`. Path templates consume via `sharedDNA.lookRegister`. The picker's recency-aware rotation prevents same-register-twice clustering.
+
+3. **Neutral medium fragment** — e.g. `YUMBOT_FOOD_NEUTRAL` keeps the CHARACTER lock ("kawaii smiling faces baked INTO the food") but drops the medium / palette / finish language. Visual treatment is explicitly deferred to the look register: "Visual treatment + surface + palette set by the look-register tokens that lead the prompt." Added to `bot.mediumStyles` and routed per-path via `bot.mediumByPath`.
+
+4. **`promptPrefixByMedium` + `promptSuffixByMedium` overrides** — engine line 1314 reads `(bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix`. Set tight short anchors (e.g. `'kawaii illustration'`) for the neutral medium so it REPLACES the bot's locked prefix. GOTCHA: empty string is falsy in JS and falls through to `bot.promptPrefix` — set a 2-4 word anchor instead. ANOTHER GOTCHA: duplicate `promptPrefixByMedium` keys in `index.js` silently overwrite each other (JS later-key-wins) — merge into one map.
+
+5. **Template injection** — each path's archetype template opens its return string with:
+   ```js
+   ${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+   ${sharedDNA.lookRegister}
+
+   This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+   ` : ''}
+   ```
+   Falls through gracefully if a template doesn't include it (existing paths keep working).
+
+**How it CLIP-anchors:** Sonnet writes a Flux prompt that opens with the rolled look-register tokens (because the template tells it to). The neutral medium's `mediumStyle` follows. Bot's `PROMPT_PREFIX` is bypassed by `promptPrefixByMedium`. Net Flux prompt order: `[neutral-prefix] [neutral medium fragment — character only] [Sonnet output starting with rolled look-register] [Sonnet's scene body] [neutral suffix]`. CLIP attention anchors on the rolled look register at the front of Sonnet's output.
+
+**Verification at scale:** YumBot ran 11 original paths × 1 render each post-flip — 8 of 11 showed the look-register working immediately (gouache / risograph / claymation / marker+ink / ceramic / vivid magenta / pastel picture-book / etc.). The other 3 hit the known `cleanMediumByModel` escape hatch (next section).
+
+**Known gotcha — `cleanMediumByModel` escape hatch:** Bots that route specific models (gpt-image-2 / gemini-2-image / nano-banana) through `cleanMediumByModel` to a `*_gpt_clean` medium need an extra step. The clean medium's `promptPrefixByMedium` override must ALSO be set (or empty must be replaced with a tight anchor), else the bot's locked PROMPT_PREFIX leaks back in. On YumBot this hits ~1 in 5 renders. Fix is to either drop those models from the clean route for these paths or set `promptPrefixByMedium[<bot>_gpt_clean] = '<short anchor>'`.
+
+**Replicate the pattern to another bot — copy-paste recipe:**
+
+1. Generate the look-register pool: copy `scripts/gen-seeds/yumbot/gen-look-register.js` to `scripts/gen-seeds/<bot>/gen-look-register.js`, adjust the cute-register list if the bot has a different aesthetic, run it.
+2. Load the pool: add `BOT_LOOK_REGISTER: load('<bot>_look_register')` to the bot's `pools.js`.
+3. Inject into rollSharedDNA: add `lookRegister: picker.pickWithRecency(pools.BOT_LOOK_REGISTER, 'look_register')`.
+4. Add a neutral medium fragment to the bot's `shared-blocks.js`. Lock the CHARACTER, NOT the medium.
+5. Add `mediums: [..., '<bot>_<character>_neutral']`, `mediumStyles: { ..., [neutralKey]: blocks.NEUTRAL }`, `mediumByPath: { 'path-name': neutralKey }` for each path you want flipped.
+6. Add `promptPrefixByMedium: { [neutralKey]: '<short anchor>' }` and `promptSuffixByMedium: { [neutralKey]: '<short tail>' }`.
+7. Edit each path's archetype template to open the return string with the LOOK REGISTER OVERRIDE block above.
+8. Fire 1 render per path to verify. If any path stays locked to the bot's original visual treatment, double-check the `mediumByPath` routing and confirm `promptPrefixByMedium` is a single non-duplicated key.
+
+**Don't apply to bots whose identity IS a single medium:** BrickBot is locked to LEGO photography — there's no value in giving it a "cute" look register because LEGO MOC photography IS its identity. EarthBot is locked to hyperreal Nat-Geo photography — same reason. The pattern is for bots whose CAST is the identity (kawaii food / kawaii pets / chibi characters / etc.) and whose visual treatment is the variable that's gone monotone.
+
+**Architecture file references** (YumBot — clone for the next bot):
+- Look-register gen script: `scripts/gen-seeds/yumbot/gen-look-register.js`
+- Pool load: `scripts/bots/yumbot/pools.js` line `YUMBOT_LOOK_REGISTER`
+- rollSharedDNA injection: `scripts/bots/yumbot/index.js` rollSharedDNA function
+- Neutral medium fragment: `scripts/bots/yumbot/shared-blocks.js` `YUMBOT_FOOD_NEUTRAL`
+- mediumByPath + promptPrefixByMedium + promptSuffixByMedium: `scripts/bots/yumbot/index.js`
+- Template injection example: `scripts/bots/yumbot/archetype-templates.js` — every YUMBOT_* archetype template
+
+---
+
 ## ⚠️ ADDING A BOT MEDIUM? You MUST also add a "cleaned medium" for DLT (2026-05-25)
 
 When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` row), you **must also create a corresponding row in `dlt_clean_mediums`**. This is not optional — skipping it silently breaks "Dream Like This."

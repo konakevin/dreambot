@@ -241,5 +241,38 @@ module.exports = {
   YUMBOT_NARRATIVE_DECOR: load('yumbot_narrative_decor'),
   YUMBOT_NARRATIVE_ATMOSPHERIC_ACCENT: load('yumbot_narrative_atmospheric_accent'),
 
+  // ============ FRUITS-VEGGIES path pools (2026-06-07 trial) ============
+  // Bucket FV — 6 organic-environment sub-themes share axis pools. Each
+  // scene features a kawaii fruit/veggie HOST + 1-2 kawaii dessert FRIENDS.
+  // Re-gen via scripts/gen-seeds/yumbot/gen-fruits-veggies-*.js
+  YUMBOT_FRUITS_VEGGIES_SCENES: load('yumbot_fruits_veggies_scenes'),
+  YUMBOT_FRUITS_VEGGIES_CAMERAS: load('yumbot_fruits_veggies_cameras'),
+  YUMBOT_FRUITS_VEGGIES_LIGHTING: load('yumbot_fruits_veggies_lighting'),
+  YUMBOT_FRUITS_VEGGIES_PALETTES: load('yumbot_fruits_veggies_palettes'),
+  YUMBOT_FRUITS_VEGGIES_TIME_OF_DAY: load('yumbot_fruits_veggies_time_of_day'),
+  YUMBOT_FRUITS_VEGGIES_COMPANIONS: load('yumbot_fruits_veggies_companions'),
+  YUMBOT_FRUITS_VEGGIES_DECOR: load('yumbot_fruits_veggies_decor'),
+  YUMBOT_FRUITS_VEGGIES_ATMOSPHERIC_ACCENT: load('yumbot_fruits_veggies_atmospheric_accent'),
+
+  // ============ FAST-FOOD path pools (2026-06-07 trial) ============
+  YUMBOT_FAST_FOOD_SCENES: load('yumbot_fast_food_scenes'),
+  YUMBOT_FAST_FOOD_CAMERAS: load('yumbot_fast_food_cameras'),
+  YUMBOT_FAST_FOOD_LIGHTING: load('yumbot_fast_food_lighting'),
+  YUMBOT_FAST_FOOD_PALETTES: load('yumbot_fast_food_palettes'),
+  YUMBOT_FAST_FOOD_TIME_OF_DAY: load('yumbot_fast_food_time_of_day'),
+  YUMBOT_FAST_FOOD_COMPANIONS: load('yumbot_fast_food_companions'),
+  YUMBOT_FAST_FOOD_DECOR: load('yumbot_fast_food_decor'),
+  YUMBOT_FAST_FOOD_ATMOSPHERIC_ACCENT: load('yumbot_fast_food_atmospheric_accent'),
+
+  // ============ CARNIVAL-FOOD path pools (2026-06-07 trial) ============
+  YUMBOT_CARNIVAL_FOOD_SCENES: load('yumbot_carnival_food_scenes'),
+  YUMBOT_CARNIVAL_FOOD_CAMERAS: load('yumbot_carnival_food_cameras'),
+  YUMBOT_CARNIVAL_FOOD_LIGHTING: load('yumbot_carnival_food_lighting'),
+  YUMBOT_CARNIVAL_FOOD_PALETTES: load('yumbot_carnival_food_palettes'),
+  YUMBOT_CARNIVAL_FOOD_TIME_OF_DAY: load('yumbot_carnival_food_time_of_day'),
+  YUMBOT_CARNIVAL_FOOD_COMPANIONS: load('yumbot_carnival_food_companions'),
+  YUMBOT_CARNIVAL_FOOD_DECOR: load('yumbot_carnival_food_decor'),
+  YUMBOT_CARNIVAL_FOOD_ATMOSPHERIC_ACCENT: load('yumbot_carnival_food_atmospheric_accent'),
+
   VIBE_COLOR,
 };

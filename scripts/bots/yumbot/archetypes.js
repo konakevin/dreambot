@@ -272,6 +272,75 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  YUMBOT_FAST_FOOD: {
+    description:
+      'PATH-BESPOKE — YumBot fast-food (2026-06-07 trial). Bucket-aggregated path covering 6 fast-food sub-themes (burger-joint / pizza-shop / taco-stand / fried-classics / hot-dog-cart / diner-shake-and-fries). Uses sharedDNA.lookRegister via yumbot_food_neutral medium.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_CARNIVAL_FOOD: {
+    description:
+      'PATH-BESPOKE — YumBot carnival-food (2026-06-07 trial). Bucket-aggregated path covering 6 carnival-food sub-themes (cotton-candy-cart / funnel-cake-stand / caramel-apple-booth / snow-cone-stand / pretzel-cart / carnival-corn-dog). Uses sharedDNA.lookRegister via yumbot_food_neutral medium.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_FRUITS_VEGGIES: {
+    description:
+      'PATH-BESPOKE — YumBot fruits-veggies (2026-06-07 trial). Bucket-aggregated path covering 6 organic-environment sub-themes (vegetable-garden / fruit-tree / vine-and-bush / harvest-basket / forest-forage / farmers-market). Each scene features a kawaii fruit/veggie HOST + 1-2 other kawaii dessert FRIENDS. Same architecture as other bucket paths. Uses sharedDNA.lookRegister via yumbot_food_neutral medium.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   YUMBOT_NARRATIVE: {
     description:
       'PATH-BESPOKE — YumBot narrative (2026-06-07 trial). Bucket-aggregated path covering 6 narrative-action sub-themes (baking-in-progress / garden-harvest / pastry-shop-window / food-parade / food-tea-party / bakery-delivery). Same architecture as the other bucket paths. Uses sharedDNA.lookRegister via yumbot_food_neutral medium.',

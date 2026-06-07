@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+const { generateBucketScenes, buildYumBotSubThemePrompt } = require('../../lib/yumbotBucketGen');
+
+const SUB_THEMES = [
+  { tag: 'vegetable-garden', blurb: '2-3 kawaii veggies together in a backyard garden (carrot + tomato + pea / lettuce + radish / pumpkin + corn / pepper + zucchini / cucumber + cabbage / broccoli + cauliflower / eggplant + bell-pepper / beet + onion / kale + spinach — realistic garden combos).', example: '{ "tags": ["vegetable-garden"], "description": "Kawaii orange carrot with leaf-tuft smile and kawaii red tomato with vine-curl eyes peek side-by-side from dark garden soil beside a kawaii pea pod on a wooden stake, three-quarter overhead view" }' },
+  { tag: 'fruit-tree', blurb: '2-3 kawaii fruits together on tree branches (apple + cherry / orange + lemon / pear + peach / pomegranate + fig / plum + apricot / mango + papaya / mulberry + persimmon — fruits that share a tree-orchard register).', example: '{ "tags": ["fruit-tree"], "description": "Kawaii red apple with smiling stem hanging from a leafy branch alongside a kawaii pair of yellow lemons with crescent eyes nestled in the foliage, three-quarter side view" }' },
+  { tag: 'vine-and-bush', blurb: '2-3 kawaii fruits on vines / bushes (grape cluster + strawberry / blueberry + raspberry / watermelon + pumpkin on the ground / blackberry + currant / kiwi + passionfruit / gooseberry + elderberry / dragonfruit + lychee).', example: '{ "tags": ["vine-and-bush"], "description": "Kawaii cluster of purple grapes with smiling globes hanging from a wooden trellis above a kawaii red strawberry resting on the leaves below, intimate three-quarter framing" }' },
+  { tag: 'harvest-basket', blurb: '3 kawaii fruits / veggies together in a woven wicker basket (mixed bounty — tomato + carrot + apple / pear + radish + cucumber / pumpkin + corn + beet / pepper + zucchini + apple / squash + onion + pear).', example: '{ "tags": ["harvest-basket"], "description": "Kawaii red tomato, kawaii orange carrot, and kawaii green apple with smiling faces nestled together in an overflowing wicker harvest basket, overhead centered view" }' },
+  { tag: 'forest-forage', blurb: '2-3 kawaii wild berries / mushrooms / herbs in a magical sun-dappled forest (wild strawberry + chanterelle / blueberry + morel + fiddlehead / nettle + mint + wild raspberry / chickweed + violet + ramp / clover + wood-sorrel / pawpaw + persimmon).', example: '{ "tags": ["forest-forage"], "description": "Kawaii red wild-strawberry with smiling seeds resting on a mossy forest floor beside a kawaii chanterelle mushroom with cap-grin and a kawaii fern frond with leaf-eyes, intimate eye-level view" }' },
+  { tag: 'farmers-market', blurb: '2-3 kawaii fruits / veggies at a charming market stall (apple pyramid + pear bunch / tomato display + carrot bundle / squash row + beet pile / artichoke + cauliflower / radicchio + endive / pumpkin + gourd display).', example: '{ "tags": ["farmers-market"], "description": "Kawaii red apple pyramid alongside a kawaii green pear bunch and a kawaii orange carrot bundle at a market stall with chalkboard signs, three-quarter view" }' },
+];
+
+generateBucketScenes({
+  outPath: 'scripts/bots/yumbot/seeds/yumbot_fruits_veggies_scenes.json',
+  perSubTheme: 34,
+  subThemes: SUB_THEMES,
+  buildPrompt: buildYumBotSubThemePrompt({ bucketTitle: 'FRUITS-AND-VEGGIES', bannedNotes: 'NO desserts, NO pastries, NO sweets, NO cookies, NO cakes, NO macarons, NO cupcakes, NO donuts, NO mochi, NO chocolate, NO breads, NO cinnamon rolls — the cast is PURELY fruits and vegetables.' }),
+}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
