@@ -372,11 +372,13 @@ export default function DreamLoadingScreen() {
         <SafeAreaView style={s.scene} edges={['bottom']}>
           <MagicalLoadingStage />
           <View style={s.cta}>
-            {isFaceSwap && <Text style={s.subtip}>Face swaps take a little longer.</Text>}
+            {isFaceSwap && (
+              <Text style={s.subtip}>Dreams with you in them take a little extra magic.</Text>
+            )}
             {showQueue && (
               <>
                 <Text style={s.queueHint}>
-                  Don’t want to wait? Tap below and we’ll notify you when it’s done.
+                  Don’t want to wait? Queue it and we’ll notify you when it’s done.
                 </Text>
                 <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
                   <Ionicons name="time-outline" size={16} color="#FFFFFF" />

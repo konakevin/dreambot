@@ -46,6 +46,7 @@ import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { FluxModelPicker } from '@/components/FluxModelPicker';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
+import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { useImageModels } from '@/hooks/useImageModels';
 
@@ -138,6 +139,34 @@ export default function CreateScreen() {
     };
   }, []);
 
+  // First time the user opens the medium picker, teach the face-vs-art
+  // distinction (MediumsIntroSheet) before the picker opens. Default the ref to
+  // `true` (don't show) until the async flag loads, so a fast tap before load
+  // never re-traps a user who's already seen it.
+  const mediumsIntroSeen = useRef(true);
+  useEffect(() => {
+    let cancelled = false;
+    hasSeenMediumsIntro().then((seen) => {
+      if (!cancelled) mediumsIntroSeen.current = seen;
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const [mediumsIntroVisible, setMediumsIntroVisible] = useState(false);
+
+  // Open the medium picker, but the first time gate it behind the intro sheet.
+  const openMediumPicker = useCallback(() => {
+    Keyboard.dismiss();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (!mediumsIntroSeen.current) {
+      mediumsIntroSeen.current = true; // dedupe; the sheet persists the flag itself
+      setMediumsIntroVisible(true);
+    } else {
+      setPickerType('medium');
+    }
+  }, []);
+
   // Keyboard tracking — delay state update until after keyboard animation
   useEffect(() => {
     const s1 = Keyboard.addListener('keyboardDidShow', () => {
@@ -184,24 +213,47 @@ export default function CreateScreen() {
     ? config.selectedMedium === 'surprise_me_face'
     : (selectedMediumRow?.face_swaps ?? true);
 
-  // Contextual hint above Dream button
-  // Footer hint — surfaces the face-swap-off warning when exact-prompt mode
-  // is on + the prompt mentions self/relationship. Footer is always visible
-  // above the keyboard, so the user sees this even when the inline area is
-  // squeezed.
-  const exactPromptSelfWarning =
-    config.useExactPrompt && (mentionsSelf || mentionsOther)
-      ? `Face swap is off — your face won${'’'}t appear in this dream`
-      : null;
-  const contextHint = exactPromptSelfWarning
-    ? exactPromptSelfWarning
-    : hasPhoto
-      ? config.photoStyle === 'new_scene'
-        ? 'Put your photo in a new scene'
-        : 'Restyle your photo in this medium'
-      : hasPrompt
-        ? 'Generate from your prompt'
-        : 'Leave blank for a surprise';
+  // Generic mode hint (shown when the face indicator doesn't apply — blank
+  // surprise, plain prompt, or photo restyle).
+  const contextHint = hasPhoto
+    ? config.photoStyle === 'new_scene'
+      ? 'Put your photo in a new scene'
+      : 'Restyle your photo in this medium'
+    : hasPrompt
+      ? 'Generate from your prompt'
+      : 'Leave blank for a surprise';
+
+  // ── Face indicator (footer) ───────────────────────────────────────────────
+  // One face icon that answers "will you be in this dream?" It glows green when
+  // a self / relationship reference (or a new-scene photo) puts you in the
+  // scene, and stays gray with a nudge otherwise. The medium's face/art badge
+  // says HOW you'd appear (real face vs look-alike); this says WHETHER you do.
+  const selfPresent =
+    mentionsSelf || mentionsOther || (hasPhoto && config.photoStyle === 'new_scene');
+  const faceActive = selfPresent && !config.useExactPrompt;
+  // Show the face line whenever you're (or could be) in the scene; otherwise
+  // fall back to contextHint (blank surprise / plain prompt / photo restyle).
+  const showFaceHint = selfPresent || (hasPrompt && !hasPhoto);
+  const faceHint: { icon: keyof typeof Ionicons.glyphMap; color: string; text: string } =
+    config.useExactPrompt && selfPresent
+      ? {
+          icon: 'warning-outline',
+          color: '#F59E0B',
+          text: 'Exact prompt’s on, so you’ll sit this one out',
+        }
+      : faceActive
+        ? {
+            icon: 'happy',
+            color: '#34D399',
+            text: mediumFaceSwaps
+              ? 'Your real face stars in this dream'
+              : 'You’ll pop in as a look-alike',
+          }
+        : {
+            icon: 'happy-outline',
+            color: 'rgba(255,255,255,0.5)',
+            text: 'Add “me” to hop into the dream',
+          };
 
   // Placeholder text
   const placeholder = hasPhoto
@@ -622,11 +674,7 @@ export default function CreateScreen() {
                     borderWidth: 1,
                     borderColor: colors.border,
                   }}
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setPickerType('medium');
-                  }}
+                  onPress={openMediumPicker}
                   activeOpacity={0.7}
                 >
                   <View className="flex-row items-center gap-1.5 flex-1 mr-1">
@@ -703,19 +751,24 @@ export default function CreateScreen() {
 
         {/* Fixed footer — always visible above keyboard */}
         <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : verticalScale(96) }}>
-          {/* Contextual hint */}
+          {/* Contextual hint — face indicator (will you be in this dream?) when
+              you're in the scene, otherwise the generic mode hint. */}
           <View className="flex-row items-center justify-center gap-1.5 mb-2">
-            {exactPromptSelfWarning ? (
-              <Ionicons name="warning-outline" size={14} color="#F59E0B" />
-            ) : (hasPhoto && hasPrompt) || mentionsSelf || mentionsOther ? (
-              <Ionicons name="information-circle" size={14} color={colors.accent} />
-            ) : null}
-            <Text
-              className="text-center text-sm font-medium"
-              style={{ color: exactPromptSelfWarning ? '#F59E0B' : 'rgba(255,255,255,0.5)' }}
-            >
-              {contextHint}
-            </Text>
+            {showFaceHint ? (
+              <>
+                <Ionicons name={faceHint.icon} size={15} color={faceHint.color} />
+                <Text className="text-center text-sm font-medium" style={{ color: faceHint.color }}>
+                  {faceHint.text}
+                </Text>
+              </>
+            ) : (
+              <Text
+                className="text-center text-sm font-medium"
+                style={{ color: 'rgba(255,255,255,0.5)' }}
+              >
+                {contextHint}
+              </Text>
+            )}
           </View>
 
           {/* Dream button */}
@@ -877,6 +930,15 @@ export default function CreateScreen() {
 
       {/* First-Create-tap teaching sheet — see effect above. */}
       <CreateIntroSheet visible={introVisible} onClose={() => setIntroVisible(false)} />
+
+      {/* First-time face-vs-art tutorial → opens the medium picker on dismiss. */}
+      <MediumsIntroSheet
+        visible={mediumsIntroVisible}
+        onClose={() => {
+          setMediumsIntroVisible(false);
+          setPickerType('medium');
+        }}
+      />
     </SafeAreaView>
   );
 }
