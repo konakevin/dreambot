@@ -4,6 +4,8 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const cast = picker.pickWithRecency(pools.VINYL_FUNKO_CAST, 'vinyl_funko_cast');
   const scenario = picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario');
+  // story_beat — different TOY_SCENARIOS pick than scenario.
+  const storyBeat = picker.pickWithRecency(pools.TOY_SCENARIOS, 'vinyl_story_beat');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -27,6 +29,13 @@ ${cast}
 ${scenario}
 
 Combine the cast above with the scenario above into a single scene. The Funko Pops are the figures performing the scenario.
+
+━━━ STORY BEAT — the SPECIFIC EVENT this render is showing ━━━
+${storyBeat}
+
+The scenario above sets the BROAD context; this story beat is the SPECIFIC moment — multiple Funko Pop figures mid-verb reacting to a shared prop/event/discovery. Recast as Funko Pop vinyl figures.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ━━━ REAL-WORLD STAGING — TOY LIVING IN OUR WORLD AT ITS SCALE ━━━
 ${sharedDNA.staging}

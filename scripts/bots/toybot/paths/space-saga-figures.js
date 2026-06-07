@@ -20,6 +20,8 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     sharedDNA.renderMode === 'world'
       ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
       : null;
+  // bespoke story_beat — verb-led Kenner Star Wars action moments
+  const storyBeat = picker.pickWithRecency(pools.SPACE_SAGA_STORY_BEATS, 'space_saga_story_beat');
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: 2-3 distinct figures per render to defeat
@@ -63,6 +65,13 @@ This render is a FROZEN FRAME OF CINEMATIC CHAOS. NEVER static / NEVER posed / N
 
 ━━━ THE SPACE-SAGA SCENE ━━━
 ${scene}
+
+━━━ STORY BEAT — the SAGA MOMENT this render is showing ━━━
+${storyBeat}
+
+Render every named character as a vintage Kenner 3.75-inch hand-painted action-figure performing the verb-led action above. ALL ${castSize} figures visible mid-action — no single hero dominates.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
 ━━━ CAMERA FRAMING — VARY THE ZOOM ━━━

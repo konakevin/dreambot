@@ -11,6 +11,8 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     sharedDNA.renderMode === 'world'
       ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
       : null;
+  // bespoke story_beat pool — verb-led claymation village events
+  const storyBeat = picker.pickWithRecency(pools.CLAYMATION_STORY_BEATS, 'claymation_story_beat');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a claymation stop-motion photographer writing CLAYMATION SCENES for ToyBot. Clay-everything. Wallace-Gromit / Coraline / Laika / Play-Doh energy. Output wraps with style prefix + suffix.
@@ -26,8 +28,18 @@ ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 ━━━ CLAYMATION MEDIUM LOCK ━━━
 EVERYTHING is clay. Thumbprints visible. Paint-strokes on clay-figures. Subtle imperfections = art. Clay-eyes painted-on.
 
+━━━ COMPOSITION LOCK — MULTI-FIGURE MANDATORY ━━━
+EXACTLY 3-5 clay characters visible simultaneously in the frame, each in its own zone, each mid-verb. NO single-clay-character centered. NO solo-claymation portraits. The story is the multi-character interaction in the clay world.
+
 ━━━ THE CLAYMATION SCENE ━━━
 ${scene}
+
+━━━ STORY BEAT — the EVENT this render is showing ━━━
+${storyBeat}
+
+Render every named cast role as a clay-everything stop-motion figure performing the verb-led action above. 3-5 clay characters mid-action together. NO single hero centered.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
 ━━━ CAMERA FRAMING — VARY THE ZOOM ━━━

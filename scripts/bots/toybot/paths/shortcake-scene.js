@@ -11,6 +11,8 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     sharedDNA.renderMode === 'world'
       ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
       : null;
+  // bespoke story_beat — verb-led Strawberry-Shortcake-style dessert-fantasy events
+  const storyBeat = picker.pickWithRecency(pools.SHORTCAKE_STORY_BEATS, 'shortcake_story_beat');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a 1980s-toy-catalog photographer writing STRAWBERRY-SHORTCAKE-era scented-doll scenes for ToyBot. Classic OG girl-targeted soft-plastic dolls (Strawberry Shortcake / Rainbow Brite / Rose-Petal-Place DNA) with oversized heads, rosy-cheeks, pastel yarn-or-rooted hair, dessert-and-flower-themed wardrobe. Pastel dessert-fantasy playsets, warm nostalgic catalog lighting. Output wraps with style prefix + suffix.
@@ -30,6 +32,13 @@ EVERY character is a 1980s-style soft-plastic scented-doll — 3–5 inches, ove
 
 ━━━ THE SHORTCAKE SCENE ━━━
 ${scene}
+
+━━━ STORY BEAT — the SWEET-MOMENT this render is showing ━━━
+${storyBeat}
+
+Render every named cast role as a 1980s soft-plastic scented-doll figurine performing the verb-led action above. 3-5 doll figurines mid-activity together. NO single doll centered.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
 ━━━ CAMERA FRAMING — VARY THE ZOOM ━━━

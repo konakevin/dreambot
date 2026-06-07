@@ -89,6 +89,31 @@ Good (multi-character story beat): "vinyl goth witch climbing onto a real moss-c
 
 The camera framing block above is the WHO-IS-IN-THE-FRAME control. The staging block is the WHERE. This block is the WHAT-HAPPENS.`;
 
+// Story-beat mandate — the rolled story_beat axis hands Sonnet a complete
+// narrative DNA seed (real surface + setup + protagonist mid-action + supporting
+// cast + chaos element + light). This block tells Sonnet how to render it: the
+// story_beat is the EVENT the scene is showing — never collapse it to a pose,
+// never drop the named characters, never dress it up as a portrait. ChibiBot
+// night-meadow R3 lesson (PASS/FAIL examples + active-verb mandate + implied
+// before/after) ported into ToyBot's multi-medium register.
+const STORY_BEAT_MANDATE_BLOCK = `━━━ STORY BEAT — THE SCENE IS A SINGLE FRAME OF AN EVENT ━━━
+Render the story_beat below as a single frame of an event mid-action — NOT a portrait, NOT a lineup, NOT a "characters posing in the setting." The viewer reads in 2 seconds: who is doing what to whom, why, and what's about to happen next.
+
+REQUIRED in every render:
+  • An ACTIVE VERB mid-motion for the protagonist — charging / hurling / dragging / climbing / firing / dodging / leaping / hauling / lunging / mid-tumble / mid-cast / mid-shout / mid-rescue (NEVER "standing" / "posing" / "looking at" / "gazing" / "watching")
+  • Named SUPPORTING CAST also mid-verb — each reacting (helping, opposing, fleeing, cheering, hiding, witnessing) — never just present
+  • A SHARED OBJECT or EVENT all the toys are reacting to (a tipping tower, a stolen prize, a launching rocket, a roaring boss, a collapsing bridge, an arriving package)
+  • An IMPLIED before/after — discarded gear / footprints / smoke / a falling hat / a half-eaten cookie / a tipped chair hints at what came two seconds ago and what will happen two seconds from now
+
+BAD (figurine portrait): "vinyl Funko bear, action figure soldier, and plush rabbit arranged on a wooden table"
+BAD (lineup): "three toys standing on a kitchen counter looking heroic"
+BAD (pose): "a Barbie holding a hot-glue gun while a G.I. Joe poses next to her"
+
+GOOD (story beat): "a Funko Pop judge mid-slamming the gavel so hard it launches off the bench while the defendant teddy bear flinches, a G.I. Joe attorney jabbing a paperclip at the jury of three Calico Critters, real attic floorboards"
+GOOD (story beat): "vinyl explorer mid-rappel down a real coffee-mug cliff toward a tiny glowing dropped earring, a plastic army-soldier belaying from the rim with the rope tied off on a real fork, a discarded canteen at the lip above"
+
+The story_beat is the EVENT — render it as a moment of motion the viewer just caught.`;
+
 // World-mode injection — the scenario + real-world staging axis. Returns
 // empty string in classic mode so path-builders render with just the path's
 // own bespoke SCENES/LANDSCAPES pool (the pre-2026-05 classic behavior).
@@ -124,6 +149,7 @@ module.exports = {
   ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK,
   REAL_WORLD_STAGING_BLOCK,
   STORY_AND_CAST_BLOCK,
+  STORY_BEAT_MANDATE_BLOCK,
   worldStagingSection,
   storyCastSection,
 };

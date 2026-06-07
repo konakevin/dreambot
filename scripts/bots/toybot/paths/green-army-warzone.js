@@ -2,15 +2,14 @@ const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const useLandscape = Math.random() < 0.3;
-  const scene = useLandscape
-    ? picker.pickWithRecency(pools.GREEN_ARMY_WARZONE_LANDSCAPES, 'green_army_warzone_landscape')
-    : picker.pickWithRecency(pools.GREEN_ARMY_WARZONE_SCENES, 'green_army_warzone_scene');
+  // R0 state — useLandscape gate removed, story_beat axis wired.
+  const scene = picker.pickWithRecency(pools.GREEN_ARMY_WARZONE_SCENES, 'green_army_warzone_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const scenario =
     sharedDNA.renderMode === 'world'
       ? picker.pickWithRecency(pools.ARMY_SCENARIOS, 'army_scenario')
       : null;
+  const storyBeat = picker.pickWithRecency(pools.ARMY_SCENARIOS, 'army_story_beat');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
@@ -42,6 +41,13 @@ ${framingBlock}
 
 ━━━ THE ARMY-MEN SCENE ━━━
 ${scene}
+
+━━━ STORY BEAT — the ACTION MOMENT this render is showing ━━━
+${storyBeat}
+
+The scene above sets the SETTING and the soldiers' classic toy-form; this story beat is the SPECIFIC EVENT playing out — multiple figures mid-verb, a named prop or threat they're reacting to, an implied before/after. Lift the action verbs and the multi-figure cast roles; render them as classic monochromatic green-army-men toys. The story beat is the EVENT — the army-men are the CAST performing it.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
 ━━━ CAMERA FRAMING — VARY THE ZOOM ━━━

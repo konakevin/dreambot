@@ -11,6 +11,8 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     sharedDNA.renderMode === 'world'
       ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
       : null;
+  // bespoke story_beat — verb-led mech combat events
+  const storyBeat = picker.pickWithRecency(pools.MECH_STORY_BEATS, 'mech_story_beat');
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: roll 3-5 distinct mech archetypes per render to defeat
@@ -31,8 +33,8 @@ ${blocks.DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK}
 
 ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 
-━━━ MECH-TOY MEDIUM LOCK ━━━
-EVERY mech is an articulated robot-toy / Gundam-style model-kit / transforming-mech-toy — visible ball-joint articulation at neck / shoulders / elbows / wrists / hips / knees / ankles, chrome-plated paneling and armor plates, visible transformation seams (line-cuts where panels would fold/flip), cockpit-canopy with glowing tinted plastic, hand-painted weathering / battle-damage / panel-line wash, snap-on weapon accessories (energy-sword / plasma-rifle / shield / shoulder-cannon / missile-pod), sometimes 1/144-scale (Gundam-kit) or 1/100-scale or larger collector size. Archetypes: humanoid mecha, transforming car-mecha, beast-form mecha (lion / tiger / wolf / dragon mech), powered-armor exosuits. NEVER IP-named (no Optimus Prime, no Megatron, no specific Gundam model designation). NEVER CGI, NEVER illustration. Real-physical-toy on a handcrafted set.
+━━━ MECH-TOY MEDIUM LOCK — MULTIPLE MECHS ━━━
+The MECHS in this scene are articulated robot-toys — visible ball-joint articulation, chrome-plated paneling, transformation seams, cockpit-canopy glow, hand-painted weathering, snap-on weapon accessories. Real-physical-toys on a handcrafted set. NEVER IP-named, NEVER CGI, NEVER illustration. MULTIPLE distinct mechs (not a single hero) — each rendered as a real physical articulated robot-toy in its own zone.
 
 ━━━ CAMERA ━━━
 ${camera}
@@ -46,6 +48,13 @@ ${cast.map((c, i) => `${i + 1}. ${c}`).join('\n')}
 
 ━━━ THE MECH-TOY SCENE ━━━
 ${scene}
+
+━━━ STORY BEAT — the COMBAT MOMENT this render is showing ━━━
+${storyBeat}
+
+Render every named mech role as an articulated mech-toy in the cast above performing the verb-led action. ALL ${castSize} mechs visible mid-combat — no single hero dominates.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
 ━━━ CAMERA FRAMING — VARY THE ZOOM ━━━

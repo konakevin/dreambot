@@ -4,6 +4,13 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const boss = picker.pickWithRecency(pools.FINAL_BOSSES, 'final_boss');
   const scenario = picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario');
+  // story_beat (2026-06-06) — legacy toybox_storytelling.json, 200 entries of
+  // complete multi-medium narrative scenes. Forces a specific EVENT shape so
+  // boss-vs-heroes lands as a story moment, not a posed clash.
+  const storyBeat = picker.pickWithRecency(
+    pools.TOYBOT_TOYBOX_STORYTELLING_SCENES,
+    'toybox_story_beat'
+  );
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -27,6 +34,13 @@ ${boss}
 ${scenario}
 
 Reframe this scenario as a CLIMACTIC TOY BATTLE — the heroes are confronting the boss in this real-world setting. Cause-and-effect: the boss is mid-attack (smashing / roaring / casting), the heroes are mid-counter (charging / firing / dodging). 2-4 hero toys facing the boss.
+
+━━━ THE STORY BEAT — the SPECIFIC narrative event ━━━
+${storyBeat}
+
+The scenario above is the GENRE; the story beat here is the SPECIFIC EVENT. Lift the action verbs, the chaos detail, the implied before/after, the props being reacted to — recast the named characters as the BOSS (protagonist/antagonist) and the HERO TOY CAST (supporting). The boss-vs-heroes clash performs THIS event.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ━━━ REAL-WORLD STAGING — TOY LIVING IN OUR WORLD AT ITS SCALE ━━━
 ${sharedDNA.staging}

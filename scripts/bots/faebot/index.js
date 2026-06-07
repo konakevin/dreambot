@@ -105,6 +105,23 @@ module.exports = {
   chaos: { enabled: false, allowSubjectChaosPaths: [] },
   sensoryAnchors: { enabled: false },
 
+  // 2026-06-06 — post-render Haiku-vision nudity check for character paths.
+  // Flux occasionally renders fae / dryad / nymph character paths with bare
+  // chests despite covered-outfit prompts. On flag, the whole render re-rolls
+  // (fresh picker + fresh brief). enchanted-vista skipped — pure landscape.
+  // See scripts/lib/nudityCheck.js for the classifier.
+  nudityCheck: {
+    enabled: true,
+    maxRetries: 2,
+    paths: [
+      'dryad-portrait',
+      'flower-fairy',
+      'forest-fairy-scene',
+      'queen-of-the-forest',
+      'tiny-fae',
+    ],
+  },
+
   // Two-pass Sonnet → Haiku polish. Sonnet writes a vivid concept,
   // Haiku polishes to ~70 words for clean Flux input.
   twoPassPolish: {

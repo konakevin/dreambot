@@ -11,6 +11,13 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     sharedDNA.renderMode === 'world'
       ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
       : null;
+  // story_beat (2026-06-06) — legacy toybox_storytelling.json, 200 entries of
+  // complete multi-medium narrative scenes. Fires every render regardless of
+  // renderMode so the epic-hero ensemble always has a SPECIFIC event to play.
+  const storyBeat = picker.pickWithRecency(
+    pools.TOYBOT_TOYBOX_STORYTELLING_SCENES,
+    'toybox_story_beat'
+  );
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are an 80s-toy-commercial cinematographer writing VINTAGE "EPIC" ACTION-FIGURE scenes for ToyBot — a rolled-up bucket covering (a) muscular sword-and-sorcery barbarian/sorceress heroes, (b) space-adventurer archetypes (hooded laser-sword monks / dark-helmet villains / scruffy smugglers / plastic droids / bounty-hunters), and (c) cape-and-cowl superhero figures (caped champions / dark vigilantes / powered-armor heroes / cosmic-gauntlet villains). All non-IP — archetype only, never named characters. Handcrafted playset dioramas, dramatic toy-photography lighting. Output wraps with style prefix + suffix.
@@ -28,6 +35,13 @@ EVERY character is a vintage 80s/90s hand-painted articulated action-figure — 
 
 ━━━ THE ACTION-HERO SCENE ━━━
 ${scene}
+
+━━━ THE STORY BEAT — the SPECIFIC narrative event ━━━
+${storyBeat}
+
+The scene above is the SETTING; the story beat here is the SPECIFIC EVENT playing out. Lift the action verbs, the chaos detail, the implied before/after, the props being reacted to — recast the named characters as ACTION-HERO FIGURES from the medium lock above (vintage barbarian-hero, space-adventurer, caped superhero). The hero ensemble performs THIS event in the action-hero diorama.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
 ━━━ CAMERA FRAMING — VARY THE ZOOM ━━━

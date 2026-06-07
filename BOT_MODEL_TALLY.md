@@ -286,18 +286,19 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 
 ## toybot
 
-| Model              | Status | Notes                  |
-| ------------------ | ------ | ---------------------- |
-| Nano Banana        | ✅     | —                      |
-| GPT Image 2        | ✅     | —                      |
-| Flux Dev           | ✅     | —                      |
-| Flux 2 Pro         | ✅     | —                      |
-| Flux 1.1 Pro       | ✅     | —                      |
-| Flux 1.1 Pro Ultra | ✅     | —                      |
-| Flux 2 Flex        | ✅     | 1 fail in matrix; kept |
-| Flux 2 Max         | ✅     | 1 fail in matrix; kept |
+| Model              | Status | Notes                            |
+| ------------------ | ------ | -------------------------------- |
+| Nano Banana        | ❌     | heart-banned 2026-06-06          |
+| GPT Image 2        | ❌     | heart-banned 2026-06-06          |
+| Flux Dev           | ❌     | heart-banned 2026-06-06          |
+| Flux 2 Dev         | ❌     | heart-banned 2026-06-06          |
+| Flux 2 Pro         | ❌     | heart-banned 2026-06-02          |
+| Flux 1.1 Pro       | ✅     | —                                |
+| Flux 1.1 Pro Ultra | ✅     | —                                |
+| Flux 2 Flex        | ❌     | heart-banned 2026-06-06 — softened toy register |
+| Flux 2 Max         | ❌     | heart-banned 2026-06-06 — softened toy register |
 
-**Final allowedModels:** all 8 (= `ALL_ENABLED_AI_MODELS`)
+**Final allowedModels:** 2 — Flux 1.1 Pro, Flux 1.1 Pro Ultra (Kevin lockdown 2026-06-06)
 
 ---
 

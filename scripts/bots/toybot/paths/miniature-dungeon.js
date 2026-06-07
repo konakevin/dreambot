@@ -10,6 +10,11 @@ function buildDisplay({ sharedDNA, vibeDirective, picker }) {
     ? picker.pickWithRecency(pools.MINIATURE_DUNGEON_LANDSCAPES, 'miniature_dungeon_landscape')
     : picker.pickWithRecency(pools.MINIATURE_DUNGEON_SCENES, 'miniature_dungeon_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  // bespoke story_beat — verb-led D&D-style dungeon/boss/tavern events
+  const storyBeat = picker.pickWithRecency(
+    pools.MINIATURE_DUNGEON_STORY_BEATS,
+    'miniature_dungeon_story_beat'
+  );
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a tabletop-miniature diorama photographer writing scenes for ToyBot's miniature-dungeon path. This is a flagship cinematic-tabletop-miniature feed covering 8 sub-themes: dungeon crawls, tavern quest hubs, campfire adventures, boss battle arenas, Warhammer-scale wargame battlefields, wizard tower libraries, ancient ruins expeditions, and overhead "game night" scenes with battle maps and dice. Hand-painted 28mm–32mm pewter-or-plastic miniatures on handcrafted terrain — visible brush-strokes, drybrushed highlights, flocked bases, collector-grade paint jobs. Games-Workshop / Reaper / WizKids aesthetic. Output wraps with style prefix + suffix.
@@ -25,8 +30,18 @@ ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 ━━━ TABLETOP-MINIS MEDIUM LOCK ━━━
 EVERY figure is a 28mm–32mm painted pewter-or-plastic tabletop-miniature — visible brush-strokes, wash-shaded recesses, drybrushed highlights, metallic-armor paint, freehand shield-crest detail, mounted on a round flocked base with static-grass / cork-rock / sand texture. Environment is a handcrafted terrain diorama — sculpted-foam rocks, lichen-trees, plaster ruins, resin-water. Games-Workshop / Reaper / WizKids DNA. Display-cabinet toy-photography — dramatic spotlight or cabinet-LED, warm-key rim-light. NEVER CGI, NEVER illustration, NEVER real fantasy scene.
 
+━━━ COMPOSITION LOCK — MULTI-FIGURE MANDATORY ━━━
+EXACTLY 3-5 painted miniatures visible simultaneously on the terrain, each in its own zone, each mid-quest-action. NO single hero miniature centered. NO solo mini portraits. The story is the multi-figure party encounter on the terrain.
+
 ━━━ THE TABLETOP SCENE ━━━
 ${scene}
+
+━━━ STORY BEAT — the QUEST MOMENT this render is showing ━━━
+${storyBeat}
+
+Render every named cast role as a 28-32mm hand-painted pewter-or-plastic tabletop miniature performing the verb-led action above. 3-5 minis mid-action together on the terrain diorama. NO single hero figure centered.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ━━━ LIGHTING ━━━
 ${lighting}

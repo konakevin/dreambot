@@ -51,26 +51,20 @@ module.exports = {
   username: 'toybot',
   displayName: 'ToyBot',
 
-  // 2026-05-24 — model rotation. DEFAULT (every path): 50/50 flux-dev /
-  // flux-1.1-pro via the bot whitelist below. modelByPath OVERRIDES the two
-  // paths that render great on flux-2 (toybox-chaos + dino-diorama) to rotate
-  // all 4 Flux models (~1/4 each). modelByPath + this whitelist constrain the
-  // BOT only — user-facing mediums (claymation/vinyl) are untouched.
+  // 2026-06-06 — model rotation HARD-LOCKED to flux-1.1-pro + flux-1.1-pro-ultra
+  // (Kevin: "only that"). Everything else heart-banned in a single session as
+  // Phase 1 story_beat renders surfaced soft / product-shot results:
+  //   - flux-2-pro (2026-06-02)
+  //   - flux-2-max, flux-2-flex, flux-2-dev, gpt-image-2 (2026-06-06)
+  //   - nano-banana (google/gemini-2-image), flux-dev (2026-06-06)
+  // modelByPath removed — the whitelist below IS the entire allowed set, no
+  // per-path overrides remain. Rotation per render is 50/50 across the two
+  // remaining Pro variants.
   useModelPicker: true,
-  // Banned 2026-06-02: flux-2-pro (Kevin heart-ban).
-  allowedModels: ALL_ENABLED_AI_MODELS.filter((m) => m !== 'black-forest-labs/flux-2-pro'),
-  modelByPath: {
-    'toybox-chaos': [
-      'black-forest-labs/flux-dev',
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-2-dev',
-    ],
-    'dino-diorama': [
-      'black-forest-labs/flux-dev',
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-2-dev',
-    ],
-  },
+  allowedModels: [
+    'black-forest-labs/flux-1.1-pro',
+    'black-forest-labs/flux-1.1-pro-ultra',
+  ],
 
   // mediumByPath — each path locks to its medium.
   // toybox-chaos rotates across an array per render to deliberately mix
@@ -225,29 +219,63 @@ module.exports = {
       'Funko Pop vinyl collectible figure, signature Funko Pop proportions (oversized SQUARE CUBE head approx 1:1 with body, small stocky body, tiny legs), large round solid-black dot eyes (no pupils, glossy black), tiny printed mouth or no mouth, glossy matte vinyl finish, mass-produced collectible aesthetic, printed costume / fur / accessory details, Funko Pop figure boxed-collectible look — ONLY classic Funko Pop visual language',
     action_figure:
       '1/12-scale posable action-figure, visible ball-joint articulation at neck / shoulders / elbows / wrists / hips / knees / ankles, hard-plastic body with cloth-hybrid costume elements, hand-painted weathering and detail wash, interchangeable accessories at scale, GI-Joe / Hot-Toys / Mezco / NECA / Hasbro-Black-Series aesthetic, practical diorama lighting with shallow depth-of-field',
+    // 2026-06-06 cruft audit — stripped LBP-world enumeration (fabric hills /
+    // cardboard trees / button flowers / yarn grass / corduroy stone / sponge
+    // rocks) + zipper-eye-feature catalog. The story_beat + path template carry
+    // WHO and WHAT; the medium carries HOW IT LOOKS only. Material + finish.
     stitched:
-      'LittleBigPlanet Sackboy-world aesthetic — burlap / hessian brown-sackcloth body with visible thread stitching along every seam, iconic zipper-down-chest, round plastic-button eyes, felt mouth-and-eyebrow details sewn on, cotton-fiberfill soft rounded body, optional yarn-or-felt-strip hair, LBP craft-world environment where everything looks hand-sewn (fabric hills, cardboard trees, button flowers, yarn grass, corduroy stone, sponge rocks), Media Molecule LittleBigPlanet game-world cinematography, practical lighting that follows the pool palette',
+      'LittleBigPlanet Sackboy-world aesthetic — sewn brown-sackcloth or burlap-hessian fabric body with visible thread stitching down every seam, plastic-button eyes, stitched-felt features, cotton-fiberfill softness, Media Molecule LBP craft-world look where everything in frame is hand-sewn or papercraft, practical pool-palette lighting',
+    // 2026-06-06 cruft audit — stripped 8-animal archetype enumeration + outfit
+    // catalog + miniature-prop catalog. Story_beat carries the cast; this is
+    // material + finish + practical-set anchor only.
     // Calico Critters — kept for legacy callers; dollhouse-life uses dollhouse_figures.
     calico_figures:
-      'Calico Critters / Sylvanian Families aesthetic — flocked velvet-textured small-animal figurines (bunny / bear / fox / cat / mouse / raccoon / hedgehog / squirrel) at ~3-inch dollhouse scale, painted plastic eyes, tiny cloth outfits with gingham / knit / calico detail (apron-dress / overalls / knit-sweater / bonnet / pinafore), fully-appointed miniature dollhouse sets with wooden furniture / tiny dishware / mini books / hand-sewn drapes, cozy wholesome daily-life energy, practical lighting per pool palette, shallow-depth-of-field miniature dollhouse photography, detail-rich handcrafted set',
-    // dollhouse-life — broader figurine medium. Rolls one of three traditions
-    // inside the path file. Generic phrasing here covers all three.
+      'Calico Critters / Sylvanian Families aesthetic — flocked velvet-textured small-animal figurines at ~3-inch dollhouse scale, painted plastic eyes, hand-sewn cloth outfits, wooden furniture and tiny props in a fully-appointed handcrafted miniature interior, cozy daily-life energy, shallow-depth-of-field dollhouse photography, practical pool-palette lighting',
+    // 2026-06-06 cruft audit — stripped 3-tradition enumeration + miniature-
+    // prop catalog. Path file rolls the tradition; the medium just locks the
+    // handcrafted-miniature-interior aesthetic.
     dollhouse_figures:
-      'dollhouse-scale miniature figurines in a fully-appointed handcrafted miniature interior — could be flocked Calico-Critter-style small-animals, vintage wooden / soft-plastic dollhouse-people, or modern Lori / Lottie-style posable fashion-doll-scale humans, painted faces, tiny cloth outfits, wooden furniture / tiny dishware / mini books / hand-sewn drapes / miniature appliances at scale, warm window-glow or lamp-glow practical lighting, cozy wholesome daily-life energy',
+      'dollhouse-scale figurine ensemble in a fully-appointed handcrafted miniature interior — painted faces, tiny cloth outfits, wooden furniture and mini-props at scale, warm window-glow or lamp practical lighting, cozy daily-life energy, shallow-depth miniature photography',
+    // 2026-06-06 cruft audit — stripped hair-color enumeration + costume
+    // catalog (apron-dress / pinafore / pantaloons / bonnet / tights /
+    // ankle-boots) + playset-prop list (giant strawberry / cupcake-castle /
+    // lollipop-tree / rainbow-bridge / pie-cottage). Story_beat carries the
+    // cast and playset; the medium carries the toy aesthetic.
     shortcake_figures:
-      '1980s Strawberry-Shortcake-era scented-doll aesthetic — 3-to-5-inch soft-plastic girl-doll figurines with oversized heads, huge round eyes, tiny nose, rosy painted blush, thick rooted pastel-yarn hair in strawberry-blonde / raspberry-pink / blueberry-blue / lemon-yellow / mint shades, gingham or calico apron-dress, pinafore, pantaloons, oversized berry-or-flower bonnet, striped tights, tiny ankle-boots, pastel dessert-and-flower-themed miniature playset with oversized-scale props (giant strawberry / cupcake-castle / lollipop-tree / rainbow-bridge / pie-cottage), nostalgic 80s-catalog lighting that follows the pool palette, faded-catalog color grade, wholesome no-edge mood',
+      '1980s Strawberry-Shortcake-era scented-doll aesthetic — 3-to-5-inch soft-plastic doll figurines with oversized heads, big round eyes, rosy painted blush, thick rooted pastel-yarn hair, cloth gingham-or-calico outfits, pastel dessert-and-flower-themed miniature playset with oversized scale-prop charm, nostalgic 80s-catalog look, faded-catalog color grade, practical pool-palette lighting',
+    // 2026-06-06 cruft audit — stripped hair-color enumeration + makeup
+    // catalog + 8-outfit-role enumeration + 5-playset enumeration. Story_beat
+    // carries the cast and playset; medium carries the doll aesthetic only.
     barbie_figures:
-      'Mattel-scale 11.5-inch fashion-doll aesthetic — articulated plastic fashion-doll bodies, molded hair (blonde / brunette / redhead / black / pastel-dyed variety), oversized head with glossy painted-makeup (winged eyeliner / pink-lip / highlight), fashion-forward mini-wardrobe (evening-gown / power-suit / swimsuit / astronaut / chef / rockstar / ballerina / vet-coat), spike-heel plastic shoes molded to foot, fully-dressed DreamHouse / boutique / rooftop-pool / convertible-pink-car / runway playset, pink-dominant signature palette, glossy-plastic sheen, practical lighting per pool palette, cinematic Barbie-film composition, shallow depth-of-field toy-photography',
+      'Mattel-scale 11.5-inch fashion-doll aesthetic — articulated glossy-plastic fashion-doll bodies, molded hair, oversized head with painted-glossy-makeup face, fashion-forward cloth outfit, spike-heel plastic shoes, fully-dressed handcrafted playset, pink-leaning signature palette, glossy-plastic sheen, practical pool-palette lighting, shallow depth of field, cinematic Barbie-film composition',
+    // 2026-06-06 cruft audit — stripped base-texture catalog (static-grass /
+    // cork-rock / sand / snow) + terrain-element catalog (sculpted-foam rocks /
+    // lichen-trees / plaster ruins / resin-water). Path scene + story_beat
+    // carry the diorama setup; medium carries paint quality + scale only.
     tabletop_minis:
-      'Warhammer / Dungeons-&-Dragons / Reaper / WizKids tabletop-miniature aesthetic — 28mm-to-32mm scale painted pewter-or-plastic fantasy figures with visible brush-strokes, wash-shaded recesses, drybrushed highlights on raised edges, metallic-armor paint, freehand shield-crest detail, mounted on round flocked bases with static-grass / cork-rock / sand / snow texture, handcrafted terrain dioramas with sculpted-foam rocks / lichen-trees / plaster ruins / resin-water, Games-Workshop / Reaper / WizKids collector-grade pro-painter display DNA, dramatic cabinet-LED spotlight rim-light per pool palette, shallow-depth display-cabinet photography',
+      'Warhammer / D&D / Reaper / WizKids tabletop-miniature aesthetic — 28-32mm scale painted pewter-or-plastic fantasy figures, visible brush-strokes, wash-shaded recesses, drybrushed metallic highlights on raised edges, freehand crest detail, mounted on flocked round bases, handcrafted terrain diorama, collector pro-painter display DNA, dramatic spotlight rim-light per pool palette, shallow-depth display photography',
     army_men:
-      'classic Bucket-O-Soldiers / Toy-Story 2nd-battalion / green-army-men aesthetic — monochromatic solid-color molded-plastic toy soldiers (army-green / olive-drab / tan-desert / grey-Wehrmacht / sand-Marine variants), ~2-inch scale, fixed cast-in-plastic single-pose (crouch-and-fire / bayonet-charge / binocular-spot / bazooka-shoulder / radio-operator / grenade-throw / flamethrower / flag-bearer / prone-rifleman), visible vertical mold-seam down each figure, plastic-shine where light catches, oval connector-base attached underfoot, helmet / rifle / backpack / canteen molded as one piece with body, handcrafted WWII-diorama or oversized-real-world backyard-epic practical set, cotton-ball smoke / flash-bulb explosion-burst / dramatic spotlight lighting, multiple soldiers in frame',
+      'classic Bucket-O-Soldiers / Toy-Story-2nd-battalion / green-army-men aesthetic — monochromatic solid-color molded-plastic toy soldiers, ~2-inch scale, fixed cast-in-plastic single-pose, visible vertical mold-seams, plastic-shine where light catches, oval connector-base attached underfoot, gear molded as one piece with body, handcrafted WWII-diorama or backyard-epic practical set, cotton-ball smoke / flash-bulb burst lighting, multiple soldiers in frame',
     gi_joe_figures:
-      '1980s GI-Joe-era articulated-commando action-figure aesthetic — 3.75-inch hand-painted multicolor military action-figures with swivel-waist / ball-joint arms / rubber-band-waist construction, colorful commando wardrobe (camo fatigues / berets / goggles / bandannas / chest-rig / dogtags), named-code-style commando archetypes (masked-operative / mohawk-soldier / ninja-operative / gruff-sergeant / demolitions-expert / pilot-ace / jungle-specialist / arctic-specialist) paired against masked terror-organization faceless-troopers in silver-visor helmets with armored jumpsuits and chrome-faceplate / hooded-cloak / snake-motif commanders, fully-dressed battle-playset with iconic plastic military vehicles (tank / jeep / assault-chopper / hoverbike / attack-cruiser), bright Saturday-morning-cartoon-serial energy, cotton-ball smoke / flash-bulb explosion-burst / dramatic practical lighting',
+      '1980s GI-Joe-era articulated-commando action-figure aesthetic — 3.75-inch hand-painted multicolor military action-figures with swivel-waist / ball-joint arms / rubber-band-waist construction, fully-dressed handcrafted battle-playset, bright Saturday-morning-cartoon-serial energy, cotton-ball smoke / flash-bulb burst lighting',
+    // 2026-06-06 cruft audit — the worst single offender by length (~1100
+    // chars). Stripped three full enumerated archetype categories (a/b/c) with
+    // ~21 named figure archetypes (barbarian-hero / sorceress / skeletal-villain
+    // / muscle-champion / beast-warrior / hooded laser-sword monk / dark-helmet
+    // villain / scruffy smuggler / astromech-or-protocol droid / rebel-pilot /
+    // bounty-hunter / alien-sidekick / caped champion / vigilante / winged hero
+    // / cosmic hero / powered-armor hero / amazon warrior / cape-villain etc.)
+    // + signature-gear catalogs + 4-lighting-effect enumeration. The path file's
+    // template still names the (a)/(b)/(c) categories conceptually; the medium
+    // just locks material + finish. Story_beat carries the cast.
     action_hero_figures:
-      'vintage 80s/90s "epic" action-figure aesthetic — rolled-up bucket covering (a) 5-to-7-inch hyper-muscled sword-and-sorcery Masters-of-Universe-style hand-painted figures (barbarian-hero / sorceress / skeletal-villain / muscle-champion / beast-warrior with loincloth-fur-boots-cross-straps, magic-sword or battle-axe, crystal-staff), (b) 3.75-inch space-adventurer-era figures (hooded laser-sword monk / dark-helmet full-face-mask villain / scruffy vested smuggler / astromech-or-protocol droid / flight-suited rebel-pilot / T-visor-helmeted bounty-hunter / fur-covered alien-sidekick), (c) cape-and-cowl generic superhero figures (caped champion with geometric chest-emblem / dark hooded vigilante with utility-belt and grappling-gun / winged hero / cosmic hero with glowing ring or staff / powered-armor hero with glowing chest-reactor / amazon warrior with tiara-and-bracers / horned cape-villain with scepter), hand-painted bright primary-color plastic, swivel-waist articulation, fully-dressed handcrafted playset diorama, dramatic toy-commercial lighting (backlit rim-light / fog-haze / laser-bolt-glow / magic-crystal glow), Saturday-morning-epic-serial energy',
+      'vintage 80s/90s "epic" articulated action-figure aesthetic — hand-painted bright primary-color plastic, swivel-waist articulation, fully-dressed handcrafted playset diorama, dramatic toy-commercial lighting, Saturday-morning-epic-serial energy',
+    // 2026-06-06 cruft audit — stripped 7-surface enumeration (kitchen counter /
+    // driveway / bedroom rug / garage floor / picnic blanket / coffee table /
+    // patio). Path scene + story_beat carry the surface; medium carries the
+    // die-cast-car material truth.
     hot_wheels:
-      'Hot Wheels / Micro Machines die-cast toy cars — 1:64-scale (~3-inch) die-cast metal-and-plastic toy cars with chrome accents, glossy paint, oversized hot-rod-style wheels, racing-stripes or flame-decals, visible mold-seam underneath, real-world-surface practical-set photography (kitchen counter / driveway / bedroom rug / garage floor / picnic blanket / coffee table / patio), speed-blur on tires, dust-puff under wheels, headlight cones cutting through shadow, bright die-cast-car-commercial energy',
+      'Hot Wheels / Micro Machines die-cast toy car aesthetic — 1:64-scale (~3-inch) die-cast metal-and-plastic toy cars with chrome accents, glossy paint, oversized hot-rod-style wheels, racing-stripes or decals, visible mold-seam underneath, real-world-surface practical-set photography, speed-blur on tires, dust-puff under wheels, headlight cones cutting through shadow, bright die-cast-car-commercial energy',
     model_train_diorama:
       // Stripped "HO-scale" / "model locomotive" / "panel-line wash" /
       // "knuckle-couplers" — those are Flux's diorama-trigger tokens.
@@ -257,10 +285,18 @@ module.exports = {
       // the template — classic mode re-adds diorama language inline,
       // world mode adds real-world language.
       'small toy train — tiny toy locomotive (steam-engine with brass stack and lit headlamp / diesel-engine with chrome trim) pulling toy train cars (boxcars / passenger cars / coal-tender / caboose) on twin metal rails, ~3-inch overall scale, visible toy-train aesthetic',
+    // 2026-06-06 cruft audit — stripped 5-setting enumeration (forest campsite /
+    // sailboat / picnic meadow / attic bedroom / treehouse) + 4-lighting-source
+    // enumeration. Path scene + story_beat carry the setting; medium carries
+    // plush material truth.
     plush_fabric:
-      'plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR or KNIT TEXTURE, embroidered or button eyes, stitched mouth, sewn-on muzzle, soft floppy limbs, fiberfill pudgy bodies, optional tiny knit sweaters or cloth bandanas, fully-dressed handcrafted miniature sets (forest campsite, sailboat, picnic meadow, attic bedroom, treehouse), warm firelight / lantern-glow / golden-hour / moonlit-window practical lighting, storybook warmth',
+      'plush stuffed-animal aesthetic — soft-fabric creatures with visible plush-fiber FUR or KNIT TEXTURE, embroidered or button eyes, stitched mouth, sewn-on muzzle, soft floppy limbs, fiberfill pudgy bodies, handcrafted miniature set, practical pool-palette lighting, storybook warmth',
+    // 2026-06-06 cruft audit — stripped 7-joint enumeration + 5-weapon catalog
+    // (energy-sword / plasma-rifle / shield / shoulder-cannon / missile-pod).
+    // Path scene + story_beat carry the action and equipment; medium carries
+    // mech-toy material truth.
     mech_toys:
-      'articulated mech-toys — robot-toys / Gundam-style model-kits / transforming-mech-toys with visible ball-joint articulation at neck / shoulders / elbows / wrists / hips / knees / ankles, chrome-plated paneling and armor plates, visible transformation seams (line-cuts where panels would fold/flip), cockpit-canopy with glowing tinted plastic, hand-painted weathering / battle-damage / panel-line wash, snap-on weapon accessories (energy-sword / plasma-rifle / shield / shoulder-cannon / missile-pod), 1/144 to 1/100 collector scale, real-physical-toys on a handcrafted set, chrome reflections, cockpit-glow, sparks-flying, missile-trail haze',
+      'articulated mech-toy aesthetic — robot / Gundam-style / transforming-mech model-kits with visible ball-joint articulation, chrome-plated paneling and armor plates, transformation seams, cockpit-canopy glow, hand-painted weathering and panel-line wash, 1/144-to-1/100 collector scale, real-physical-toys on a handcrafted set, chrome reflections, missile-trail haze',
     // 2026-05-19 axis-system rewrite: toybox-chaos was rotating ONE medium per
     // render, which Flux locked onto and rendered as a single-medium scene
     // (defeating the path's mixed-medium chaos intent). Replaced with a
@@ -290,8 +326,13 @@ module.exports = {
     // Vintage Kenner 3.75-inch space-saga action-figures (rebels / imperials /
     // hooded-monks / smugglers / bounty-hunters / droids / aliens). Bot-only.
     // Archetype-only — bans IP names (no Star Wars / Lucasfilm).
+    // 2026-06-06 cruft audit — stripped IP allow-list (~15 named Star Wars
+    // characters + 13 named locations/ships) + 7-gear catalog. This was direct
+    // first-named-noun-lock fuel — Sonnet/Flux were grabbing the first IP name
+    // as the subject. Path file's space_saga_scenes + space_saga_figures pools
+    // carry the cast; medium carries Kenner-toy material truth only.
     space_saga_figures:
-      'authentic vintage Kenner 1977-1985 Star Wars 3.75-inch action-figures — hand-painted plastic, bubble-card-mint paint quality, swivel-waist or limited-articulation, signature gear molded as part of body (lightsabers, blasters, jetpacks, helmets, capes, robes, droid-tools), real-physical-toys on handcrafted playset dioramas, named characters allowed (Luke / Leia / Han / Vader / Yoda / Boba Fett / Stormtroopers / R2-D2 / C-3PO / Chewbacca / Obi-Wan / Greedo / Ewoks / Tusken Raiders / Wampa / etc.), iconic Star Wars locations and ships (Tatooine / Hoth / Endor / Dagobah / Bespin / Death Star / Mos Eisley cantina / X-wings / TIE Fighters / Millennium Falcon / AT-ATs / Sandcrawlers)',
+      'vintage Kenner 1977-1985 3.75-inch space-saga action-figure aesthetic — hand-painted plastic, bubble-card-mint paint quality, swivel-waist or limited-articulation, signature gear molded as part of body, real-physical-toys on handcrafted playset dioramas, dramatic practical Saturday-morning lighting',
     // 2026-05-24 dino-diorama — mixed media: REAL plastic toy dinosaurs (cast)
     // staged inside a HANDMADE CLAYMATION prehistoric WORLD (clay environment).
     // Front-loads "real plastic toy dinosaurs" so Flux renders the dinos as
@@ -575,30 +616,34 @@ module.exports = {
     ],
   },
 
-  // Two-pass Sonnet→Haiku polish for tighter Flux-ready prompts.
-  // model-train-world + toybox-chaos skip polish: seeds are 6-slot
-  // structured DNA — Haiku compression strips story slots (supporting
-  // cast / gag prop / floating element) and sometimes refuses on phantom
-  // mandatory-phrase mismatches. Let Sonnet's pass-1 flow straight to Flux.
+  // Two-pass Sonnet→Haiku polish — DISABLED bot-wide 2026-06-06.
+  //
+  // Background: 7 paths were already skipping polish because their 6-slot
+  // baked DNA seeds (model-train-world / toybox-chaos / plush-world /
+  // barbie-scene / dino-diorama / toy-blockbuster / giant-toys) carry rich
+  // story DNA that Haiku's 65-90 word compression strips on the way to Flux.
+  // miniature-dungeon also skipped because its off-diorama register lives
+  // in the setting language.
+  //
+  // 2026-06-06: extending the same logic bot-wide. Phase 1 of the
+  // story_beat retrofit (toybox_storytelling.json wired into 5 paths) shipped
+  // briefs where Haiku was collapsing the story DNA to a single-character
+  // standing portrait — exactly the failure mode the retrofit was meant to
+  // fix. Kevin shut it down ("turn off the 2 pass polish for all toybot
+  // paths"). Same lesson as the per-path skips: when setting + cast + story
+  // matter as much as subject, Haiku reads the prose as descriptive fluff
+  // and prioritizes the subject + a single action verb. Result is the
+  // figurine-portrait register we're trying to escape.
+  //
+  // Re-enable per-path via `skipPaths: false` only after we've validated
+  // that the polished output preserves story_beat content across 5 renders.
   twoPassPolish: {
-    enabled: true,
+    enabled: false,
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: [
-      'model-train-world',
-      'toybox-chaos',
-      'plush-world',
-      'barbie-scene',
-      'dino-diorama',
-      'toy-blockbuster',
-      'giant-toys',
-      // miniature-dungeon now 50/50s into the off-diorama register, whose
-      // identity IS the immersive location — Haiku polish strips setting language
-      // first (setting-as-co-hero). Skip polish for the whole merged path.
-      'miniature-dungeon',
-    ],
+    skipPaths: [],
   },
 
   // Sensory anchors — lightcolor required, additional channels rolled.
@@ -666,7 +711,14 @@ module.exports = {
     // don't fall back to classic — model-train-world's classic mode produces
     // the boring "model railroad diorama" failure mode (the entire reason for
     // the world-mode rewrite); force world to make every render real-everyday.
-    const noClassicMode = new Set(['vinyl', 'monster-boss-battle', 'model-train-world']);
+    // green-army-warzone + gi-joe-missions force world mode (R0 hearted state).
+    const noClassicMode = new Set([
+      'vinyl',
+      'monster-boss-battle',
+      'model-train-world',
+      'green-army-warzone',
+      'gi-joe-missions',
+    ]);
     const renderMode = noClassicMode.has(path)
       ? 'world'
       : Math.random() < 0.5

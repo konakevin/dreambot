@@ -242,6 +242,16 @@ module.exports = {
   // after the pilot ships and other paths fan out.
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },
 
+  // 2026-06-06 — post-render Haiku-vision nudity check for mystical-mermaid.
+  // Mermaids render bare-chested sometimes despite shell-bra / coral-bra
+  // outfit prompts. On flag, the whole render re-rolls. See
+  // scripts/lib/nudityCheck.js for the classifier.
+  nudityCheck: {
+    enabled: true,
+    maxRetries: 2,
+    paths: ['mystical-mermaid'],
+  },
+
   // Composer reads path-bespoke pools by name via poolByName.
   // Universal axes (lighting / atmosphere) resolve via defaultPools.
   defaultPools: {

@@ -30,6 +30,10 @@ module.exports = {
     scenario: 'BLOCKBUSTER_SCENARIO',
     centerpiece: 'BLOCKBUSTER_CENTERPIECE',
     setting: 'BLOCKBUSTER_SETTING',
+    // story_beat (2026-06-06) — legacy 6-slot baked DNA, 200 entries of
+    // complete multi-medium narrative scenes. The blockbuster scenario
+    // axis is universe-agnostic; story_beat is the EVENT energy.
+    story_beat: 'TOYBOT_TOYBOX_STORYTELLING_SCENES',
     lighting: 'LIGHTING',
     atmosphere: 'ATMOSPHERES',
   },

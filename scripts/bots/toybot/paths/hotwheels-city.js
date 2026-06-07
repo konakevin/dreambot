@@ -11,6 +11,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     sharedDNA.renderMode === 'world'
       ? picker.pickWithRecency(pools.HOTWHEELS_SCENARIOS, 'hotwheels_scenario')
       : null;
+  // story_beat — different HOTWHEELS_SCENARIOS pick than scenario, fires
+  // every render regardless of mode. The EVENT the cars are reacting to.
+  const storyBeat = picker.pickWithRecency(pools.HOTWHEELS_SCENARIOS, 'hotwheels_story_beat');
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: roll 3-6 distinct cars per render to defeat Sonnet's
@@ -46,6 +49,13 @@ ${cast.map((c, i) => `${i + 1}. ${c}`).join('\n')}
 
 ━━━ THE HOT-WHEELS SCENE ━━━
 ${scene}
+
+━━━ STORY BEAT — the ACTION MOMENT this render is showing ━━━
+${storyBeat}
+
+The scene above sets the SETTING; this story beat is the SPECIFIC race/chase/stunt event playing out — multiple cars reacting to a shared track/prop/obstacle. Render every car in the cast roll above performing its role in this event.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
 ━━━ CAMERA FRAMING — VARY THE ZOOM ━━━

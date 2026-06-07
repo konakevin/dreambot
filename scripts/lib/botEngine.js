@@ -1051,6 +1051,15 @@ async function runBot(opts) {
     let sensoryProfile = { anchors: [], channelKeys: [], context: null };
     let nsfwRecoveryAttempt = 0;
     const MAX_NSFW_RECOVERY = 3;
+    // 2026-06-06 — bot-level nudity-check gating (e.g. faebot character paths,
+    // oceanbot mystical-mermaid). Haiku-vision classifier runs on downloaded
+    // image; if it flags bare chest / visible nipples, the whole render
+    // re-rolls (fresh picker + fresh brief). See scripts/lib/nudityCheck.js.
+    let nudityRecoveryAttempt = 0;
+    const MAX_NUDITY_RECOVERY = bot.nudityCheck?.maxRetries ?? 2;
+    const isNudityGated = !!(
+      bot.nudityCheck?.enabled && bot.nudityCheck?.paths?.includes(resolvedPath)
+    );
     while (true) {
       if (nsfwRecoveryAttempt > 0) {
         console.warn(
@@ -1494,7 +1503,6 @@ async function runBot(opts) {
           model: renderModel,
           inputOverrides: renderInputOverrides,
         });
-        break; // success — exit NSFW-recovery loop
       } catch (err) {
         const isNsfw =
           err && err.message && /NSFW|sensitive|flagged|safety|E005/i.test(err.message);
@@ -1504,15 +1512,41 @@ async function runBot(opts) {
         }
         throw err;
       }
-    } // end NSFW-recovery while
 
-    // 10. Download
-    errorStage = 'download';
-    const filename = `${String(idx ?? 1).padStart(2, '0')}-${label || 'run'}.jpg`;
-    const saveDir = outDir || `/tmp/${bot.username}-${label || 'run'}`;
-    fs.mkdirSync(saveDir, { recursive: true });
-    localPath = path.join(saveDir, filename);
-    await download(fluxUrl, localPath);
+      // 9b. Download — moved inside the loop 2026-06-06 so the optional
+      // bare-chest classifier (step 9c) can re-trigger this whole loop.
+      errorStage = 'download';
+      const filename = `${String(idx ?? 1).padStart(2, '0')}-${label || 'run'}.jpg`;
+      const saveDir = outDir || `/tmp/${bot.username}-${label || 'run'}`;
+      fs.mkdirSync(saveDir, { recursive: true });
+      localPath = path.join(saveDir, filename);
+      await download(fluxUrl, localPath);
+
+      // 9c. Optional nudity check — Haiku vision classifier. Only fires when
+      // the bot's nudityCheck config gates this path. On flag, re-roll the
+      // whole render (fresh picker + brief + flux). Fails open on classifier
+      // errors so a transient API outage doesn't strand renders.
+      if (isNudityGated) {
+        errorStage = 'nudity-check';
+        const { classifyImageForNudity } = require('./nudityCheck');
+        const result = await classifyImageForNudity({ localPath });
+        if (result.flagged) {
+          if (nudityRecoveryAttempt < MAX_NUDITY_RECOVERY) {
+            nudityRecoveryAttempt++;
+            console.warn(
+              `  🚫 nudity flagged (${result.raw}) — re-roll ${nudityRecoveryAttempt}/${MAX_NUDITY_RECOVERY}`
+            );
+            continue; // back to top of while — re-creates picker + re-rolls
+          }
+          // Exhausted: fail loudly so the render is dropped (not posted).
+          throw new Error(
+            `nudity-check: max retries exhausted (${MAX_NUDITY_RECOVERY}) — last result ${result.raw}`
+          );
+        }
+      }
+
+      break; // success — exit NSFW + nudity recovery loop
+    } // end NSFW-recovery while
 
     // 11. Optional post-process (HumanBot/GlowBot text overlay)
     if (bot.postProcess) {

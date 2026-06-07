@@ -28,6 +28,10 @@ module.exports = {
     toy_cast: 'TOYBOX_TOY_BUCKET',
     surface: 'TOYBOX_SURFACE',
     scenario: 'TOYBOX_SCENARIO',
+    // story_beat (2026-06-06) — legacy 6-slot baked DNA, 200 entries of
+    // complete multi-medium narrative scenes. Forces a story EVENT into
+    // every render instead of letting Sonnet drift to a static lineup.
+    story_beat: 'TOYBOT_TOYBOX_STORYTELLING_SCENES',
     lighting: 'LIGHTING',
     atmosphere: 'ATMOSPHERES',
     // conditional (40% gate)

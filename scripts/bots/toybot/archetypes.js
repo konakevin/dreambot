@@ -90,11 +90,11 @@ module.exports = {
 
   TOYBOT_TOYBOX_CHAOS: {
     description:
-      'PATH-BESPOKE — ToyBot toybox-chaos path (2026-05-24 bucket+pickN refactor). MIXED-TOY CHAOS — a big de-branded TOY BUCKET (trolls / ponies / barbarians / robots / heroes / army-men / plush / dinos / die-cast / dolls / gnomes…) pickN:4-composited into ONE interacting mini-vignette on a real surface, mid-chaos (rescue / battle / heist / race / monster-attack / tea-party-gone-wrong). The INTERACTION MANDATE is load-bearing — the picked toys must react to each other (chasing / rescuing / battling / fleeing), NOT a static lineup, with a clear focal beat. Each toy renders in its OWN native material (plastic / vinyl / plush / die-cast / tin). Replaces the old 6-slot baked-scene pool (combinatorial ceiling) — adding a toy is now a one-line bucket append. TOYBOX_TOY_BUCKET is a SHARED asset. Skips chaos / two-pass polish / sensory.',
+      'PATH-BESPOKE — ToyBot toybox-chaos path (2026-05-24 bucket+pickN refactor). MIXED-TOY CHAOS — a big de-branded TOY BUCKET (trolls / ponies / barbarians / robots / heroes / army-men / plush / dinos / die-cast / dolls / gnomes…) pickN:4-composited into ONE interacting mini-vignette on a real surface, mid-chaos (rescue / battle / heist / race / monster-attack / tea-party-gone-wrong). The INTERACTION MANDATE is load-bearing — the picked toys must react to each other (chasing / rescuing / battling / fleeing), NOT a static lineup, with a clear focal beat. Each toy renders in its OWN native material (plastic / vinyl / plush / die-cast / tin). Replaces the old 6-slot baked-scene pool (combinatorial ceiling) — adding a toy is now a one-line bucket append. TOYBOX_TOY_BUCKET is a SHARED asset. Skips chaos / two-pass polish / sensory. 2026-06-06: added story_beat axis (legacy toybox_storytelling.json, 200 entries) so every render carries a complete narrative DNA seed.',
     slots: {
       universal: ['camera_angle'],
       bot: [],
-      path: ['toy_cast', 'surface', 'scenario', 'lighting', 'atmosphere'],
+      path: ['toy_cast', 'surface', 'scenario', 'story_beat', 'lighting', 'atmosphere'],
     },
     pickN: { toy_cast: 4 },
     conditionalLayer: { slot: 'surprise', gate: 0.4 },
@@ -104,11 +104,11 @@ module.exports = {
 
   TOYBOT_TOY_BLOCKBUSTER: {
     description:
-      'PATH-BESPOKE — ToyBot toy-blockbuster path (2026-05-25 flagship). EPIC TOY-MOVIE — every render is a professional Hollywood movie-poster shot of an epic action scene staged ENTIRELY in ONE toy universe (cohesion via medium rotation: vinyl / army-men / claymation / Sackboy / GI-Joe / action-figures / mechs / plush / fashion-dolls / Shortcake / die-cast / minis / dollhouse / Calico). A cast of 3-6 figures of that line + a VERY BIG statement centerpiece (towering boss / kaiju / colossal mech / massive idol) dominating frame. Cinematic dramatic lighting, set decoration, real-world-as-epic-stage. SCENARIOS ARE UNIVERSE-AGNOSTIC ON PURPOSE — any toy line in any epic scene (Strawberry-Shortcake warzone, Calico mech-siege) — the mismatch is the comedy. Still obviously TOYS, real physical toys, NO CGI. Axes: scenario + centerpiece + setting + cinematic camera + universal lighting/atmosphere; cast template-driven. Skips chaos / two-pass polish / sensory.',
+      'PATH-BESPOKE — ToyBot toy-blockbuster path (2026-05-25 flagship). EPIC TOY-MOVIE — every render is a professional Hollywood movie-poster shot of an epic action scene staged ENTIRELY in ONE toy universe (cohesion via medium rotation: vinyl / army-men / claymation / Sackboy / GI-Joe / action-figures / mechs / plush / fashion-dolls / Shortcake / die-cast / minis / dollhouse / Calico). A cast of 3-6 figures of that line + a VERY BIG statement centerpiece (towering boss / kaiju / colossal mech / massive idol) dominating frame. Cinematic dramatic lighting, set decoration, real-world-as-epic-stage. SCENARIOS ARE UNIVERSE-AGNOSTIC ON PURPOSE — any toy line in any epic scene (Strawberry-Shortcake warzone, Calico mech-siege) — the mismatch is the comedy. Still obviously TOYS, real physical toys, NO CGI. Axes: scenario + centerpiece + setting + story_beat + cinematic camera + universal lighting/atmosphere; cast template-driven. Skips chaos / two-pass polish / sensory. 2026-06-06: added story_beat axis (legacy toybox_storytelling.json, 200 entries) so every render carries a complete narrative DNA seed.',
     slots: {
       universal: ['camera_angle'],
       bot: [],
-      path: ['scenario', 'centerpiece', 'setting', 'lighting', 'atmosphere'],
+      path: ['scenario', 'centerpiece', 'setting', 'story_beat', 'lighting', 'atmosphere'],
     },
     pickN: {},
     conditionalLayer: null,
@@ -118,11 +118,19 @@ module.exports = {
 
   TOYBOT_GIANT_TOYS: {
     description:
-      'PATH-BESPOKE — ToyBot giant-toys path (2026-05-24, boss-battle redesign). TOY BOSS BATTLE — ONE GIANT boss/enemy toy fighting a band of SMALLER regular toys (the heroes/victims) in a real-world setting (park / beach / city / backyard / playground). Kaiju-vs-heroes energy but the entire cast is TOYS — NO humans. Scale rolls per render between KAIJU-EPIC (towering boss, little toys swarm below) and GROUND-BRAWL (close scrappy scuffle). Goofy + slapstick + photoreal. Boss = giant_toy (character-toy pool); cast = cast_toys (SHARED 91-entry TOYBOX_TOY_BUCKET, pickN 3); engagement = the combat action; setting = real-world arena. 40%-gated combat bonus-gag. Bespoke photoreal medium giant_toy_surreal. Skips chaos / two-pass polish / sensory.',
+      'PATH-BESPOKE — ToyBot giant-toys path (2026-05-24, boss-battle redesign). TOY BOSS BATTLE — ONE GIANT boss/enemy toy fighting a band of SMALLER regular toys (the heroes/victims) in a real-world setting (park / beach / city / backyard / playground). Kaiju-vs-heroes energy but the entire cast is TOYS — NO humans. Scale rolls per render between KAIJU-EPIC (towering boss, little toys swarm below) and GROUND-BRAWL (close scrappy scuffle). Goofy + slapstick + photoreal. Boss = giant_toy (character-toy pool); cast = cast_toys (SHARED 91-entry TOYBOX_TOY_BUCKET, pickN 3); engagement = the combat action; setting = real-world arena. 40%-gated combat bonus-gag. Bespoke photoreal medium giant_toy_surreal. Skips chaos / two-pass polish / sensory. 2026-06-06: added story_beat axis (legacy toybox_storytelling.json, 200 entries) so every render carries a complete narrative DNA seed.',
     slots: {
       universal: ['camera_angle'],
       bot: [],
-      path: ['giant_toy', 'cast_toys', 'engagement', 'setting', 'lighting', 'atmosphere'],
+      path: [
+        'giant_toy',
+        'cast_toys',
+        'engagement',
+        'setting',
+        'story_beat',
+        'lighting',
+        'atmosphere',
+      ],
     },
     pickN: { cast_toys: 4 },
     conditionalLayer: { slot: 'surreal_twist', gate: 0.4 },

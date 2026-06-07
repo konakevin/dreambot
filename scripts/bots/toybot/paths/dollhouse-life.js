@@ -19,6 +19,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     sharedDNA.renderMode === 'world'
       ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
       : null;
+  // story_beat — different TOY_SCENARIOS pick, fires every render. EVENT the
+  // dollhouse cast is reacting to.
+  const storyBeat = picker.pickWithRecency(pools.TOY_SCENARIOS, 'dollhouse_story_beat');
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Roll one of three figurine traditions for variety. Each render commits
@@ -53,11 +56,21 @@ ${figureTradition}
 ━━━ DOLLHOUSE-LIFE MEDIUM LOCK ━━━
 Environment is a fully-dressed dollhouse-scale miniature interior — wooden furniture, tiny dishware, mini books, hand-sewn drapes, miniature appliances, scale-accurate household details (tiny lamps, miniature framed art, scale rugs). Cozy daily-life energy — baking, reading, tea, gardening, bedtime, dinner-party. NEVER mix figurine traditions within one scene — commit fully to the rolled tradition above. NEVER real human, NEVER real animal, NEVER CGI.
 
+━━━ COMPOSITION LOCK — MULTI-FIGURE MANDATORY ━━━
+EXACTLY 3-5 dollhouse figurines visible simultaneously in the frame, each occupying its own zone, each mid-activity. NO single hero figure centered. NO solo-doll portraits. The story is the multi-figure interaction.
+
 ━━━ CAMERA ━━━
 ${camera}
 
 ━━━ THE DOLLHOUSE SCENE ━━━
 ${scene}
+
+━━━ STORY BEAT — the COZY MOMENT this render is showing ━━━
+${storyBeat}
+
+The scene above sets the SETTING and the figurine tradition; this story beat is the SPECIFIC cozy daily-life event playing out — multiple figurines reacting to a shared cozy moment (baking / repairing / discovering / preparing / celebrating). Recast as dollhouse figurines in the rolled tradition.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
 ━━━ CAMERA FRAMING — VARY THE ZOOM ━━━

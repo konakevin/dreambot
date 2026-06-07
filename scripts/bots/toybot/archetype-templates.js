@@ -10,6 +10,8 @@
  * definition in ./archetypes.js.
  */
 
+const blocks = require('./shared-blocks');
+
 module.exports = {
   TOYBOT_BARBIE_STORYTELLING: ({ slots, sharedDNA }) => {
     const { camera_angle, scene } = slots;
@@ -554,7 +556,8 @@ Output ONLY the raw 90-130 word scene description. Comma-separated phrases. Lead
   },
 
   TOYBOT_TOYBOX_CHAOS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { camera_angle, toy_cast, surface, scenario, lighting, atmosphere, surprise } = slots;
+    const { camera_angle, toy_cast, surface, scenario, story_beat, lighting, atmosphere, surprise } =
+      slots;
     const toys = Array.isArray(toy_cast) ? toy_cast.join(', ') : toy_cast;
 
     return `You are a toy-photographer capturing a CHAOTIC TOYBOX SCENE for ToyBot — a handful of mismatched real toys composited into ONE interacting mini-vignette on a real surface. Fun, funny, packed with motion, everything reacting to everything.
@@ -564,6 +567,13 @@ ${surface}
 
 ━━━ THE TOYS — composite THESE into ONE interacting scene ━━━
 ${toys}
+
+━━━ THE STORY BEAT — the EVENT this render is showing ━━━
+${story_beat}
+
+Treat the story beat above as the SPECIFIC NARRATIVE EVENT this render captures — the unfolding situation, the characters mid-verb, the props they're reacting to, the implied before/after. Reuse the EVENT, the action verbs, and the kind of chaos described; recast the named toys to match THE TOYS picked above (don't render the literal characters in the seed, recast the same EVENT with the actual rolled toy cast).
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ━━━ INTERACTION MANDATE — THE WHOLE GAME, NON-NEGOTIABLE ━━━
 Weave these toys into ONE chaotic mini-vignette where they are REACTING TO EACH OTHER — chasing, rescuing, battling, fleeing, teaming up, colliding — mid-action. This is NOT a static lineup, NOT toys sitting near each other, NOT a collection/shelf photo. Give it a CLEAR FOCAL BEAT: the ONE toy the eye lands on first (caught mid-action), with the others in motion around it, reacting. Something is HAPPENING — the viewer reads the little story in 2 seconds.
@@ -608,7 +618,8 @@ Output ONLY the raw 80-120 word scene description. Comma-separated phrases. Lead
   },
 
   TOYBOT_TOY_BLOCKBUSTER: ({ slots, sharedDNA, vibeDirective }) => {
-    const { camera_angle, scenario, centerpiece, setting, lighting, atmosphere } = slots;
+    const { camera_angle, scenario, centerpiece, setting, story_beat, lighting, atmosphere } =
+      slots;
 
     return `You are a Hollywood movie-poster director shooting an EPIC TOY-MOVIE action scene for ToyBot. Every render is a poster-worthy, blockbuster-cinematic frame — dramatic, packed, beautifully staged and lit — but it is unmistakably made of REAL PHYSICAL TOYS at toy scale (toy photography / practical-set realism), NOT CGI, NOT digital characters.
 
@@ -621,6 +632,13 @@ The ENTIRE scene is a SINGLE toy line — EVERY figure, the cast, AND the giant 
 ${scenario}
 
 Stage it as a CLIMACTIC movie moment — caught mid-action, freeze-frame energy (charging, firing, leaping, bracing, casting, fleeing, rallying). Clear cause-and-effect. The viewer reads the epic story in 2 seconds.
+
+━━━ THE STORY BEAT — the SPECIFIC narrative event ━━━
+${story_beat}
+
+The scenario above is the GENRE; the story beat here is the SPECIFIC moment. Recast the named characters in the story beat as figures from the rolled toy universe — keep the EVENT, the action verbs, the props being reacted to, the implied before/after. The blockbuster cast performs THIS event.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ━━━ THE CAST — a heroic ensemble (all this one toy line) ━━━
 A cast of 3-6 figures of THIS toy universe — a clear hero figure caught mid-action + supporting characters reacting around them (allies charging, a few foes, background figures). Believable toy-scale figures, real toy materials (visible plastic / vinyl / plush / clay / die-cast). NOT a static lineup — everyone is mid-motion in the scene.
@@ -676,6 +694,7 @@ Output ONLY the raw 90-130 word scene description. Comma-separated phrases. Lead
       cast_toys,
       engagement,
       setting,
+      story_beat,
       lighting,
       atmosphere,
       surreal_twist,
@@ -700,6 +719,13 @@ A scrappy band of SMALLER regular-sized toys — the heroes/victims swarming, ch
 ${engagement}
 
 THIS is what the photo is ABOUT — the giant boss toy and the little toys mid-FIGHT. Caught in the action: stomping, swatting, grabbing, hurling, chasing, while the little toys charge, scatter, dogpile, or stand defiant. Roll the scale to match: a KAIJU-EPIC clash (towering boss, little toys swarming below) OR a close GROUND-BRAWL scuffle. The battle reads instantly.
+
+━━━ THE STORY BEAT — borrow this SPECIFIC narrative shape ━━━
+${story_beat}
+
+The engagement above is the GENRE of fight; the story beat here is the SPECIFIC EVENT shape — what props are being reacted to, what implied before/after frames the moment, what micro-detail sells the story. Lift the EVENT, the action verbs, the chaos detail; recast the named characters as the GIANT BOSS and the LITTLE TOY CAST. The boss takes the story beat's protagonist role (or central antagonist), the little toys take the supporting cast.
+
+${blocks.STORY_BEAT_MANDATE_BLOCK}
 
 ━━━ THE REAL-WORLD ARENA ━━━
 ${setting}

@@ -133,8 +133,17 @@ module.exports = {
   STAGING_AXIS: load('staging_axis'),
   CAMERA_FRAMING: load('camera_framing'),
   TOY_SCENARIOS: load('toy_scenarios'),
+  // 2026-06-06: re-merged into a single ARMY_SCENARIOS pool (425 entries) after
+  // a brief detour into bespoke per-path pools that didn't move the needle.
+  // Shared by green-army-warzone + gi-joe-missions paths.
   ARMY_SCENARIOS: load('army_scenarios'),
   HOTWHEELS_SCENARIOS: load('hotwheels_scenarios'),
+  // 2026-06-06 bespoke story-beat pools (MVP-25 each) — verb-led + shared-event
+  CLAYMATION_STORY_BEATS: load('claymation_story_beats'),
+  SHORTCAKE_STORY_BEATS: load('shortcake_story_beats'),
+  MINIATURE_DUNGEON_STORY_BEATS: load('miniature_dungeon_story_beats'),
+  MECH_STORY_BEATS: load('mech_story_beats'),
+  SPACE_SAGA_STORY_BEATS: load('space_saga_story_beats'),
   VINYL_FUNKO_CAST: load('vinyl_funko_cast'),
   FINAL_BOSSES: load('final_bosses'),
   VIBE_COLOR,
