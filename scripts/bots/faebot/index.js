@@ -43,6 +43,14 @@ module.exports = {
   // edges + romantic painted atmosphere. NOT ink-outlined, NOT animation.
   mediumStyles: {
     painted_fantasy_novel: blocks.PAINTED_FANTASY_NOVEL_MEDIUM,
+    faebot_gpt_clean: blocks.GPT_CLEAN,
+  },
+
+  // nano-banana clean-render override (2026-06-07; no gpt-image-2 in FaeBot's
+  // lineup). Banana reads the painted graphic-novel anchors as "go abstract";
+  // the clean medium (+ empty promptPrefixByMedium) lets the seed's fae scene lead.
+  cleanMediumByModel: {
+    'google/gemini-2-image': { medium: 'faebot_gpt_clean' },
   },
 
   // Per-medium prompt prefix overrides for flower-fairy: lead with painterly
@@ -53,6 +61,7 @@ module.exports = {
     // fantasy lineage" positive anchors hold the register.
     painted_fantasy_novel:
       'soft ethereal painterly fantasy illustration, visible oil-brushwork, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, dreamy atmospheric painted glow',
+    faebot_gpt_clean: '',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,

@@ -48,6 +48,13 @@ If the SCENE seed describes minifigs, render an ACTION moment — a story beat w
 const NO_TEMPLATE_BLOCK = `━━━ ANTI-SAMENESS ━━━
 The CAMERA AXIS is the variety knob. Macro detail of a build versus wide diorama vista versus dutch-angle action shot all read totally different. Use the camera axis below as a hard constraint, not a suggestion. Don't default to centered eye-level minifig framing.`;
 
+// Clean-render medium for gpt-image-2 + nano-banana (routed via
+// cleanMediumByModel in index.js). These models read the bot's MOC-photography
+// prefix/suffix as "go abstract"; this positive-only directive keeps the render
+// a readable physical LEGO build. Light genre tag, no negation cascade.
+const GPT_CLEAN =
+  'Clean LEGO diorama photography, crisp brick-built scene with clearly readable minifigures and brick architecture, vibrant LEGO color palette, soft studio lighting, MOC-showcase register';
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -56,4 +63,5 @@ module.exports = {
   BRICK_DETAIL_BLOCK,
   STORY_SCENE_BLOCK,
   NO_TEMPLATE_BLOCK,
+  GPT_CLEAN,
 };

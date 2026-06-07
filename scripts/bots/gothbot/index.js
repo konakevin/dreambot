@@ -209,13 +209,15 @@ module.exports = {
     'monster-prowl-weta': ['dark', 'nightshade', 'macabre'],
   },
 
-  // mediumByModel: when gpt-image-2 is rolled (any path), force the
-  // bot-only 'gothbot_gpt_clean' medium. The clean directive lives in
-  // shared-blocks.js GPT_CLEAN — neutralizes the painterly anchors that
-  // pull GPT-Image-2 into abstract / ornamental plate renders.
-  // 2026-06-05 (mirrors OceanBot mystical-mermaid cleanup b0776fb9).
-  mediumByModel: {
-    'openai/gpt-image-2': 'gothbot_gpt_clean',
+  // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
+  // 'gothbot_gpt_clean' medium (clean directive in shared-blocks.js GPT_CLEAN).
+  // Neutralizes the painterly Castlevania anchors that pull these models into
+  // abstract / ornamental plates. promptPrefixByMedium[gothbot_gpt_clean]='' so
+  // the bot's horror PROMPT_PREFIX doesn't leak back in.
+  // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'gothbot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'gothbot_gpt_clean' },
   },
 
   mediumByPath: {
@@ -267,6 +269,10 @@ module.exports = {
   ],
 
   promptPrefixByMedium: {
+    // gpt-image-2 clean swap: empty so the bot's painterly PROMPT_PREFIX
+    // (Castlevania horror anchors) does NOT leak in and pull GPT-Image-2
+    // abstract — the gothbot_gpt_clean mediumStyle carries the register alone.
+    gothbot_gpt_clean: '',
     // 2026-06-02 cruft-audit micro-strip — dropped travel-mag `wallpaper-
     // worthy` (Condé-Nast prior pull).
     vampire_portrait:

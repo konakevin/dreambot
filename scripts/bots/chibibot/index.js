@@ -69,6 +69,16 @@ module.exports = {
     // see CHIBI_CREATURE_MEDIUM). bot.mediumStyles overrides the DB
     // flux_fragment, so this fully controls creature-world's style prefix.
     chibibot_creature: blocks.CHIBI_CREATURE_MEDIUM,
+    chibibot_gpt_clean: blocks.GPT_CLEAN,
+  },
+
+  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
+  // read the CGI/polish anchors as "go abstract"; the clean medium (+ empty
+  // promptPrefixByMedium) lets the seed's cute subject lead. Overrides the
+  // chibibot_pixar mediumByPath locks below when one of these models rolls.
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'chibibot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'chibibot_gpt_clean' },
   },
 
   // Per-path medium lock — falls through to bot.mediums 50/50 rotation
@@ -106,6 +116,7 @@ module.exports = {
   // chibibot_render falls through to bot.promptPrefix above.
   promptPrefixByMedium: {
     chibibot_pixar: blocks.PROMPT_PREFIX_PIXAR,
+    chibibot_gpt_clean: '',
   },
 
   // Per-path prefix override — prepended BEFORE the medium style prefix as

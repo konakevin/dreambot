@@ -44,7 +44,14 @@ const NO_TEXT_BLOCK = `━━━ NEVER ADD ━━━
 
 NO text, NO floating words, NO captions, NO watermarks, NO signatures, NO labels, NO comic-panel borders or gutters. A single painted page-illustration, not a multi-panel comic.`;
 
+// Clean-render medium for nano-banana (routed via cleanMediumByModel in
+// index.js; FaeBot has no gpt-image-2 in its lineup). Keeps banana from reading
+// the painted graphic-novel anchors as "go abstract". Light genre tag, positive-only.
+const GPT_CLEAN =
+  'Clean enchanted-fae fantasy illustration, crisp render with clearly readable fae figures and lush forest scenes, rich jewel-tone palette, soft magical lighting, storybook fantasy register';
+
 module.exports = {
+  GPT_CLEAN,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   PAINTED_FANTASY_NOVEL_MEDIUM,

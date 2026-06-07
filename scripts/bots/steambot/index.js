@@ -72,10 +72,11 @@ module.exports = {
   displayName: 'SteamBot',
 
   useModelPicker: true,
+  // flux-2-pro BANNED bot-wide 2026-06-07 (Kevin) — removed from allowedModels
+  // and every modelByPath entry below.
   allowedModels: [
     'google/gemini-2-image',
     'openai/gpt-image-2',
-    'black-forest-labs/flux-2-pro',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-2-flex',
@@ -91,7 +92,6 @@ module.exports = {
     'airship-female': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-flex',
@@ -99,7 +99,6 @@ module.exports = {
     'airship-male': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-flex',
@@ -109,7 +108,6 @@ module.exports = {
       // (4 attempts: 2 refused with finishReason: NO_IMAGE). Headache to
       // recover in production. F1.1 family + GPT-2 + F2 family carry it.
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-flex',
@@ -117,7 +115,6 @@ module.exports = {
     'steampunk-man': [
       'google/gemini-2-image',
       'openai/gpt-image-2',
-      'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-2-flex',
@@ -171,12 +168,13 @@ module.exports = {
   // steambot-painted-woman (painterly-photographic character portraiture).
   mediums: ['steambot-hyperreal'],
 
-  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
-  // 'steambot_gpt_clean' medium + minimal prefix. Strips the
-  // "impossibly-detailed" anchor that pulls GPT-Image-2 into
-  // abstract ornamental plates. 2026-06-05 (mirrors b0776fb9).
-  mediumByModel: {
-    'openai/gpt-image-2': 'steambot_gpt_clean',
+  // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
+  // 'steambot_gpt_clean' medium + minimal prefix. Strips the "impossibly-
+  // detailed" anchor that pulls these models into abstract ornamental plates.
+  // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'steambot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'steambot_gpt_clean' },
   },
 
   mediumByPath: {

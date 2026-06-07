@@ -84,7 +84,7 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | ------------------ | ------ | ---------------------------------- |
 | Nano Banana        | ❌     | dropped 2026-06-05 (Kevin)         |
 | GPT Image 2        | ✅     | matrix had 2 fails (safety) — keep |
-| Flux Dev           | ❌     | dropped 2026-05-31 (Kevin)         |
+| Flux Dev           | ❌     | dropped 2026-05-31 bot-wide; per-path re-enables (artsy-girl / female-adventurer / male-adventurer) removed 2026-06-07 |
 | Flux 2 Pro         | ❌     | dropped 2026-06-02 (fleet-wide)    |
 | Flux 1.1 Pro       | ✅     | —                                  |
 | Flux 1.1 Pro Ultra | ✅     | —                                  |
@@ -255,15 +255,15 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | Nano Banana        | ✅     | —                                           |
 | GPT Image 2        | ✅     | matrix had 2 fails (safety); kept per Kevin |
 | Flux Dev           | ❌     | dropped                                     |
-| Flux 2 Pro         | ✅     | —                                           |
+| Flux 2 Pro         | ❌     | dropped 2026-06-07 (Kevin)                  |
 | Flux 1.1 Pro       | ✅     | —                                           |
 | Flux 1.1 Pro Ultra | ✅     | —                                           |
 | Flux 2 Flex        | ✅     | —                                           |
 | Flux 2 Max         | ❌     | dropped                                     |
 
-**Final bot-wide allowedModels:** 6 — Nano Banana, GPT Image 2, Flux 2 Pro, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex.
+**Final bot-wide allowedModels:** 5 — Nano Banana, GPT Image 2, Flux 1.1 Pro, Flux 1.1 Pro Ultra, Flux 2 Flex.
 
-**Per-path overrides (non-character, Kevin 2026-05-31 uniform lineup):** all 7 non-character paths (`steampunk-scene`, `airship-skies`, `steampunk-curio`, `steampunk-spectacle`, `steam-transport`, `steampunk-labs`, `cozy-steampunk`) locked to **5 models**: Banana, GPT-2, F2 Pro, F1.1 Pro, F1.1 Ultra (F2 Flex banned). Character paths (airship-female / airship-male / sexy-steampunk-woman / steampunk-man) fall through to the bot-wide 6-model picker.
+**Per-path overrides (non-character, Kevin 2026-05-31 uniform lineup):** all 7 non-character paths (`steampunk-scene`, `airship-skies`, `steampunk-curio`, `steampunk-spectacle`, `steam-transport`, `steampunk-labs`, `cozy-steampunk`) locked to **4 models**: Banana, GPT-2, F1.1 Pro, F1.1 Ultra (F2 Pro + F2 Flex banned). Character paths (airship-female / airship-male / sexy-steampunk-woman / steampunk-man) fall through to the bot-wide 5-model picker.
 
 ---
 

@@ -32,7 +32,14 @@ const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — NOSTALGIA AMPLIFICATION ━�
 
 Nostalgia is the canvas, not the ceiling. Stack era-authentic details: every shelf has period objects, every surface has the right texture, every light source is warm and analog. Layer atmospheric elements — dust motes, lens flare, golden hour glow, film grain. The scene should be so densely detailed that every corner triggers a different memory.`;
 
+// Clean-render medium for gpt-image-2 + nano-banana (routed via
+// cleanMediumByModel in index.js) — keeps these models from reading the bot's
+// film-grain/era polish anchors as "go abstract". Light genre tag, positive-only.
+const GPT_CLEAN =
+  'Clean nostalgic retro illustration, crisp render with clearly readable vintage subjects and period scenes, warm faded palette, soft analog lighting, era-authentic register';
+
 module.exports = {
+  GPT_CLEAN,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   NOSTALGIA_CORE_BLOCK,

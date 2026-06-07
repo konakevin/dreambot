@@ -34,6 +34,7 @@ const path = require('path');
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { pickModel } = require('./modelPicker');
+const { resolveCleanMedium } = require('./cleanMediumByModel');
 const { isOpenAIModel, generateOpenAIImage } = require('./providers/openai');
 const { isGeminiModel, generateGeminiImage } = require('./providers/gemini');
 const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
@@ -437,10 +438,7 @@ function download(url, dest) {
  * have a `text` property per the MIGRATE-BOT.md convention.
  */
 async function createPicker({ botName, sb }) {
-  const { data, error } = await sb
-    .from('bot_dedup')
-    .select('axis, value')
-    .eq('bot_name', botName);
+  const { data, error } = await sb.from('bot_dedup').select('axis, value').eq('bot_name', botName);
   if (error) {
     console.warn(`  ⚠️ bot_dedup read failed (${error.message}); falling back to no recency`);
   }
@@ -1406,44 +1404,51 @@ async function runBot(opts) {
         console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
       }
 
-      // mediumByModel override: when the rolled model is keyed in
-      // bot.mediumByModel, swap to that bot-only "clean" medium and
-      // rebuild the prompt. Model is unchanged (picker has already
-      // chosen) — only the prompt's stylistic register changes.
+      // cleanMediumByModel: per-model "clean render" override. When the rolled
+      // model is keyed here, swap to that model's clean bot medium and rebuild
+      // the prompt so the model renders the seed's SUBJECT cleanly, instead of
+      // reading the bot's stylized medium + painterly prefix as "go fully
+      // abstract / ornamental plate". Generic across models — gpt-image-2 and
+      // nano-banana (google/gemini-2-image) today; add a model key to extend.
       //
-      // Why: certain models (notably GPT-Image-2) read most bots' default
-      // mediums + promptPrefix as "go full abstract / over-stylized" and
-      // produce renders that don't read as the bot's actual content. A
-      // per-bot _gpt_clean medium with a positive-only directive +
-      // promptPrefixByMedium override neutralizes the bot's normal
-      // painterly anchors so GPT-Image-2's output is recognizable. Mirrors
-      // the 2026-06-05 OceanBot mystical-mermaid cleanup.
+      // Shape per model: { medium, pathPrefix?, skipPaths? }
+      //   • medium      — the bot-local clean medium (declares bot.mediumStyles[medium];
+      //                   its promptPrefixByMedium should be '' so the bot's painterly
+      //                   promptPrefix doesn't leak back in).
+      //   • pathPrefix  — { <path>: '<override>' }: on this swap only, REPLACE a
+      //                   path's normal painterly prefix (content kept, style
+      //                   stripped); '' drops it entirely. Paths not listed keep
+      //                   their normal prefix (so content locks, e.g. mechbot
+      //                   gender/subject anchors, are preserved).
+      //   • skipPaths   — paths that already declare their own intended medium for
+      //                   this model (e.g. a mediumByPath lock) and opt out of the
+      //                   swap (e.g. oceanbot mystical-mermaid).
       //
-      // The new medium MUST declare bot.mediumStyles[newMedium] (no DB
-      // re-fetch here). promptPrefixByMedium / promptSuffixByMedium are
-      // honored for the new medium, so the swap can replace prefix+suffix
-      // too — necessary for bots whose default promptPrefix carries
-      // strong stylistic anchors (gothic horror, steampunk brass, etc.).
-      if (bot.mediumByModel && bot.mediumByModel[renderModel]) {
-        const overrideMedium = bot.mediumByModel[renderModel];
+      // cleanSwapPathPrefix: non-null once a clean swap happens, holding the RAW
+      // path-prefix (no trailing comma) actually used — lets the DLT recipe below
+      // capture the cleaned prefix so replay matches. Decision logic lives in the
+      // pure, unit-tested resolveCleanMedium() (scripts/lib/cleanMedium.js).
+      let cleanSwapPathPrefix = null;
+      const cleanResolved = resolveCleanMedium(bot, renderModel, resolvedPath);
+      if (cleanResolved) {
         console.log(
-          `  🎨 medium override: ${medium} → ${overrideMedium} (model=${renderModel} via mediumByModel)`
+          `  🎨 clean medium: ${medium} → ${cleanResolved.medium} (model=${renderModel} via cleanMediumByModel)`
         );
-        medium = overrideMedium;
+        medium = cleanResolved.medium;
         rawPrefix =
-          (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) ||
-          bot.promptPrefix ||
-          '';
+          (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix || '';
         rawSuffix =
           (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
           (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
           bot.promptSuffix ||
           '';
+        cleanSwapPathPrefix = cleanResolved.pathPrefix;
+        const effPathPrefix = cleanSwapPathPrefix ? `${cleanSwapPathPrefix}, ` : '';
         const newPrefix = rawPrefix ? `${rawPrefix}, ` : '';
         const newSuffix = rawSuffix ? `, ${rawSuffix}` : '';
         const newMediumStyle =
           bot.mediumStyles && bot.mediumStyles[medium] ? `${bot.mediumStyles[medium]}, ` : '';
-        finalPrompt = `${pathPrefix}${newPrefix}${newMediumStyle}${middle}${newSuffix}`
+        finalPrompt = `${effPathPrefix}${newPrefix}${newMediumStyle}${middle}${newSuffix}`
           .replace(/\s+,/g, ',')
           .trim();
       }
@@ -1460,9 +1465,16 @@ async function runBot(opts) {
         // fluxSeed left null in Phase 1 — Replicate response capture is a
         // follow-up enrichment (see DLT_RECIPE_PLAN Phase 1.5).
         fluxSeed: null,
-        promptPrefix: pathPrefix
-          ? `${bot.promptPrefixByPath[resolvedPath]}, ${rawPrefix}`
-          : rawPrefix,
+        // On a clean swap, capture the EFFECTIVE (possibly cleaned/empty)
+        // path-prefix so DLT replay matches what actually rendered.
+        promptPrefix:
+          cleanSwapPathPrefix !== null
+            ? cleanSwapPathPrefix
+              ? `${cleanSwapPathPrefix}, ${rawPrefix}`
+              : rawPrefix
+            : pathPrefix
+              ? `${bot.promptPrefixByPath[resolvedPath]}, ${rawPrefix}`
+              : rawPrefix,
         mediumStyleOverride:
           bot.mediumStyles && bot.mediumStyles[medium]
             ? bot.mediumStyles[medium]

@@ -60,10 +60,23 @@ module.exports = {
   mediumStyles: {
     render:
       'this world is 66 million years before humans existed, cinematic 35mm film still, photoreal living animal with leathery scarred biological hide, hyperreal organic textures, ray-traced reflections, PBR materials, IMAX cinematic precision',
+    dinobot_gpt_clean: blocks.GPT_CLEAN,
   },
   promptSuffixByMedium: {
     render:
       'photoreal cinematic film still, the dinosaur is a REAL LIVING ANIMAL, hyperreal organic detail',
+    dinobot_gpt_clean: '',
+  },
+
+  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
+  // read the IMAX/PBR/ray-traced anchors as "go abstract"; the clean medium
+  // (+ empty prefix/suffix) lets the seed's dinosaur scene lead.
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'dinobot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'dinobot_gpt_clean' },
+  },
+  promptPrefixByMedium: {
+    dinobot_gpt_clean: '',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,

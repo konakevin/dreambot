@@ -131,6 +131,14 @@ The creature is one of FOUR named maritime-myth beasts: a KRAKEN (multi-tentacle
 ━━━ EMBODIMENT RULE (CRITICAL) ━━━
 The creature's BODY must be visible in the frame — mantle, head, eye, bulk, shoulder, or fluke. Show the WHOLE BEAST attacking — its mantle rising beside the ship, its eye reflecting the lantern, its head breaking the surface, its bulk alongside its arms. A disembodied tentacle floating in the scene without the body alongside it reads as cartoonish — always anchor the limb to the beast.`;
 
+// Clean-render medium for gpt-image-2 + nano-banana (routed via
+// cleanMediumByModel in index.js). The CANVAS_MARITIME oil anchors + bot prefix
+// pull these models into abstract painted plates; this positive-only directive
+// keeps a readable ocean scene. mystical-mermaid opts out (keeps its painted
+// mer-folk medium via mediumByPath). Light genre tag, no negation cascade.
+const GPT_CLEAN =
+  'Cinematic ocean illustration, clean editorial render with clearly readable ships, sea life, and underwater scenes, rich jewel-tone nautical palette with atmospheric depth, age-of-sail and deep-sea register';
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -140,4 +148,5 @@ module.exports = {
   SUBMERGED_CIVILIZATION_BLOCK,
   PIRATE_ERA_BLOCK,
   KRAKEN_CREATURE_BLOCK,
+  GPT_CLEAN,
 };

@@ -244,12 +244,15 @@ module.exports = {
   // above already excludes them, but kept consistent for readability).
   // cyborg-man path is deactivated 2026-06-05 — entry left for reference if
   // the path is ever re-enabled.
-  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
-  // 'mechbot_gpt_clean' medium + a minimal prefix override. Pulls
-  // GPT-Image-2 out of the abstract-plate prior triggered by the bot's
-  // "concept art / production-art polish" prefix. 2026-06-05.
-  mediumByModel: {
-    'openai/gpt-image-2': 'mechbot_gpt_clean',
+  // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
+  // 'mechbot_gpt_clean' medium + minimal prefix override. Pulls these models out
+  // of the abstract-plate prior triggered by the bot's "concept art /
+  // production-art polish" prefix. Content-bearing path prefixes (cyborg gender/
+  // body locks) are unlisted here, so they're KEPT on the swap.
+  // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'mechbot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'mechbot_gpt_clean' },
   },
 
   promptPrefixByMedium: {

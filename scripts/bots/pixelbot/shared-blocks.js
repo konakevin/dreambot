@@ -57,7 +57,14 @@ const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — PIXEL AMPLIFICATION ━━━
 
 Pixel art is the canvas, not the ceiling. Stack: atmospheric particle density + dramatic lighting + layered parallax background depth + animated-feel detail + saturated palette + careful dithering + sub-pixel shading. Every render is the kind of pixel art that goes viral on Twitter — gallery-wall key-art, the kind people screenshot and post going "look at this game I found."`;
 
+// Clean-render medium for gpt-image-2 + nano-banana (routed via
+// cleanMediumByModel in index.js) — keeps these models rendering crisp readable
+// pixel art instead of drifting off-style. Light genre tag, positive-only.
+const GPT_CLEAN =
+  'Clean crisp pixel-art illustration, readable pixel-art game scene with clear sprites and environment, vibrant limited palette, sharp pixel grid, retro-game register';
+
 module.exports = {
+  GPT_CLEAN,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   PIXEL_ART_ONLY_BLOCK,

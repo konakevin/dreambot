@@ -78,14 +78,15 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
-  // 'bloombot_gpt_clean' medium + minimal prefix + simpler suffix.
-  // The bot-wide PROMPT_PREFIX ("monumental bloom-form dominating
-  // composition") + PROMPT_SUFFIX (species-color faithfulness rules)
-  // both push GPT-Image-2 into abstract botanical plates. Strip them
-  // for gpt-2 only. 2026-06-05 (mirrors b0776fb9).
-  mediumByModel: {
-    'openai/gpt-image-2': 'bloombot_gpt_clean',
+  // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
+  // clean medium. The bot-wide PROMPT_PREFIX ("monumental bloom-form dominating
+  // composition") + PROMPT_SUFFIX (species-color faithfulness rules) push these
+  // models into abstract botanical plates; the clean medium + ''-prefix (see
+  // promptPrefixByMedium) strip them so the seed's bloom subject leads.
+  // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'bloombot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'bloombot_gpt_clean' },
   },
   mediumStyles: {
     bloombot_gpt_clean: blocks.GPT_CLEAN,

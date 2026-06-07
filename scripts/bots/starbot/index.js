@@ -37,13 +37,15 @@ module.exports = {
   // Blade Runner 2049 / Dune / Interstellar live-action film aesthetic.
   mediums: ['starbot_hyperreal'],
 
-  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
+  // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
   // 'starbot_gpt_clean' medium. Strips the "concept art" / "production-art
-  // polish" anchors that pull GPT-Image-2 into abstract plates and gives it
-  // a clean sci-fi illustration register instead. 2026-06-05 (mirrors
-  // OceanBot mystical-mermaid cleanup b0776fb9).
-  mediumByModel: {
-    'openai/gpt-image-2': 'starbot_gpt_clean',
+  // polish" anchors that pull these models into abstract plates and gives a
+  // clean sci-fi illustration register instead. (Banana is bot-wide-banned but
+  // re-added on several paths via modelByPath, so it can still roll.)
+  // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'starbot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'starbot_gpt_clean' },
   },
 
   mediumByPath: {

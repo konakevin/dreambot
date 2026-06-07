@@ -86,6 +86,20 @@ module.exports = {
   mediumStyles: {
     canvas: blocks.CANVAS_MARITIME,
     oceanbot_mermaid_paint: blocks.MERMAID_PAINT,
+    oceanbot_gpt_clean: blocks.GPT_CLEAN,
+  },
+
+  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
+  // read the maritime-oil anchors as "go abstract"; the clean medium (+ empty
+  // promptPrefixByMedium) lets the seed's ocean scene lead. mystical-mermaid is
+  // EXCLUDED — it's gpt-2-locked with its own painted mer-folk medium
+  // (mediumByPath below), so skipPaths keeps that look intact.
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'oceanbot_gpt_clean', skipPaths: ['mystical-mermaid'] },
+    'google/gemini-2-image': { medium: 'oceanbot_gpt_clean', skipPaths: ['mystical-mermaid'] },
+  },
+  promptPrefixByMedium: {
+    oceanbot_gpt_clean: '',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -116,19 +130,13 @@ module.exports = {
     // register reads stronger on the other 2 models. Down to 2.
     // (flux-2-pro dropped from this entry when removed bot-wide
     // 2026-06-05.)
-    'ghost-ship': [
-      'google/gemini-2-image',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'ghost-ship': ['google/gemini-2-image', 'black-forest-labs/flux-1.1-pro-ultra'],
     // deep-wonder: bot-wide MINUS Gemini 2 Image (Nano Banana) — the
     // abyssal-black bioluminescent register reads stronger on the
     // other 2 models. Down to 2.
     // (flux-2-pro dropped from this entry when removed bot-wide
     // 2026-06-05.)
-    'deep-wonder': [
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'deep-wonder': ['openai/gpt-image-2', 'black-forest-labs/flux-1.1-pro-ultra'],
     // bioluminescent-night: bot-wide MINUS Flux 2 Pro PLUS Flux 1.1 Pro
     // (re-enabled here even though banned bot-wide). Kevin's call from
     // R0b — Flux 2 Pro reads off for the surface-glow register and

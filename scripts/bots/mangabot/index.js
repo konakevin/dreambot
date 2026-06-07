@@ -54,6 +54,20 @@ module.exports = {
     anime: ['enchanted', 'cinematic', 'epic', 'ethereal', 'whimsical', 'arcane'],
   },
 
+  // nano-banana clean-render override (2026-06-07). Banana reads the anime
+  // medium/prefix as "go abstract"; the clean medium (+ empty
+  // promptPrefixByMedium) keeps a readable anime scene. gpt-image-2 stays
+  // banned (see allowedModels) — re-enabling it later would reuse this medium.
+  mediumStyles: {
+    mangabot_gpt_clean: blocks.GPT_CLEAN,
+  },
+  cleanMediumByModel: {
+    'google/gemini-2-image': { medium: 'mangabot_gpt_clean' },
+  },
+  promptPrefixByMedium: {
+    mangabot_gpt_clean: '',
+  },
+
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 

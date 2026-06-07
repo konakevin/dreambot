@@ -162,7 +162,16 @@ const CULTURAL_RESPECT_BLOCK = `━━━ CULTURAL RESPECT ━━━
 
 Japanese culture, mythology, and setting are rendered with respect and accuracy. Traditional details correct (torii gate orientation / tatami direction / kimono-wrap / katana tsuba / shrine architecture). Mythological beings drawn in authentic spirit (kitsune = fox-spirit with multiple tails, yokai = specific named type, oni = horned demon with iron club, tengu = mountain-spirit with long nose and wings). No caricature. No Orientalism. The reverence of a Studio Ghibli animator.`;
 
+// Clean-render medium for nano-banana (routed via cleanMediumByModel in
+// index.js). gpt-image-2 was banned bot-wide because the bot's anime medium
+// drove it into a weird drift state — if/when gpt-2 is re-enabled, this clean
+// medium is the intended fix and should be wired in alongside banana.
+// Light genre tag, positive-only.
+const GPT_CLEAN =
+  'Clean cel-shaded anime illustration, crisp render with clearly readable characters and recognizable anime environments, vibrant saturated palette, atmospheric depth, hand-drawn anime register';
+
 module.exports = {
+  GPT_CLEAN,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   KEYFRAME_COMPOSITION_BLOCK,

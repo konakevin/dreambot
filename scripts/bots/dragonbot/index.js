@@ -64,17 +64,25 @@ module.exports = {
     // gpt-image-2 clean (routed via mediumByModel below). Pulls GPT-Image-2
     // out of the abstract painterly-plate prior the bot's painted_fantasy
     // medium + dragon-scene's 5-painter prefix trigger. Mirrors mystical-
-    // mermaid (2026-06-05). NOTE: dragon-scene path still prepends its
-    // own per-path prefix; if gpt-2 renders on dragon-scene still look
-    // painterly, that's the path-prefix winning — separate fix later.
+    // mermaid (2026-06-05). The painterly per-path prefixes (dragon-scene,
+    // artsy-girl) are stripped for gpt-2 via gptCleanPathPrefixByPath below
+    // (engine swaps in the cleaned prefix — content kept, painters dropped).
     dragonbot_gpt_clean: blocks.GPT_CLEAN,
     painted_fantasy_novel: 'fantasy concept art, painterly',
   },
 
-  // mediumByModel: when gpt-image-2 is rolled, force the bot-only
-  // 'dragonbot_gpt_clean' medium. 2026-06-05.
-  mediumByModel: {
-    'openai/gpt-image-2': 'dragonbot_gpt_clean',
+  // cleanMediumByModel: gpt-image-2 renders the bot-only clean medium (DragonBot
+  // has no nano-banana in its lineup, so gpt-2 only). On the two painterly paths
+  // (dragon-scene, artsy-girl) the path-prefix is dropped ('') on this swap — the
+  // seed pools (DRAGON_SCENE_DRAGON anatomy; FANTASY_RACE / ARTSY_GIRL_OUTFIT /
+  // ARTSY_GIRL_ACTION) carry the subject, so we don't leak the painter name-drops
+  // that pull gpt-2 abstract. Flux is unaffected (it still uses the full
+  // promptPrefixByPath painterly wrappers below). 2026-06-07.
+  cleanMediumByModel: {
+    'openai/gpt-image-2': {
+      medium: 'dragonbot_gpt_clean',
+      pathPrefix: { 'dragon-scene': '', 'artsy-girl': '' },
+    },
   },
 
   // Override prefix to empty (matches FaeBot exactly).
@@ -177,6 +185,10 @@ module.exports = {
   //   female-action-scenes    ─ GPT-2, Flux Dev, Flux 2 Pro
   //                                                     (mirrored to male-action-scenes)
   //
+  // Note: Flux Dev BANNED across ALL paths 2026-06-07 (Kevin) — removed from
+  // the artsy-girl / female-adventurer / male-adventurer overrides (the only
+  // paths that still re-enabled it); it was already excluded bot-wide.
+  //
   // Note: Flux 2 Flex + Flux 2 Max + Nano Banana were banned bot-wide
   // 2026-06-05 — they no longer appear in any per-path override here
   // (Banana previously rolled on artsy-girl / female-explorer /
@@ -198,19 +210,16 @@ module.exports = {
     // ── Character paths — Banana BANNED (Kevin 2026-06-05 after character-path
     // ── audit: Banana lost on every DragonBot character path).
     'artsy-girl': [
-      'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'female-adventurer': [
       'openai/gpt-image-2',
-      'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'male-adventurer': [
       'openai/gpt-image-2',
-      'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],

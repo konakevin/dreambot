@@ -69,6 +69,20 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
+  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
+  // read the MOC-photography prefix/suffix as "go abstract"; the clean medium
+  // (+ empty promptPrefixByMedium) lets the seed's LEGO build lead.
+  mediumStyles: {
+    brickbot_gpt_clean: blocks.GPT_CLEAN,
+  },
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'brickbot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'brickbot_gpt_clean' },
+  },
+  promptPrefixByMedium: {
+    brickbot_gpt_clean: '',
+  },
+
   // Per-path prompt-prefix overrides — prepended BEFORE bot.promptPrefix.
   // Pirates: pushes cinematic deep-focus film-still framing to counter
   // Flux's "diorama / MOC showcase photography / natural bokeh" tilt-shift

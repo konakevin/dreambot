@@ -166,7 +166,14 @@ Pick the count for THIS render fresh — don't anchor to whatever count the seed
 
 When the scene is pure architecture / landscape (no creatures specified in the seed AT ALL), keep it empty — don't force-add characters.`;
 
+// Clean-render medium for gpt-image-2 + nano-banana (routed via
+// cleanMediumByModel in index.js) — keeps these models from reading the bot's
+// CGI/polish anchors as "go abstract". Light genre tag, positive-only.
+const GPT_CLEAN =
+  'Clean cute chibi character illustration, crisp render with clearly readable big-eyed rounded characters and cozy scenes, soft pastel palette, warm gentle lighting, designer-collectible register';
+
 module.exports = {
+  GPT_CLEAN,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   CUTE_CUDDLY_COZY_BLOCK,

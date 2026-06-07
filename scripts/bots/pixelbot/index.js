@@ -67,6 +67,20 @@ module.exports = {
     'pixel-landscapes': { 'openai/gpt-image-2': 100 },
   },
 
+  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Keeps the
+  // pixel-art register crisp + readable on these models (+ empty
+  // promptPrefixByMedium so the bot's prefix doesn't pull them off-style).
+  mediumStyles: {
+    pixelbot_gpt_clean: blocks.GPT_CLEAN,
+  },
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'pixelbot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'pixelbot_gpt_clean' },
+  },
+  promptPrefixByMedium: {
+    pixelbot_gpt_clean: '',
+  },
+
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 

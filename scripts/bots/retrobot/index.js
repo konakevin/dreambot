@@ -37,6 +37,20 @@ module.exports = {
     'cinematic',
   ],
 
+  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Keeps these
+  // models from reading the bot's film-grain/era anchors as "go abstract"
+  // (+ empty promptPrefixByMedium so the bot prefix doesn't pull them off).
+  mediumStyles: {
+    retrobot_gpt_clean: blocks.GPT_CLEAN,
+  },
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'retrobot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'retrobot_gpt_clean' },
+  },
+  promptPrefixByMedium: {
+    retrobot_gpt_clean: '',
+  },
+
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 

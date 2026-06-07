@@ -18,7 +18,7 @@ const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterp
 // painterly plate" and drops the dragon / fantasy subject. Positive-only,
 // no name-drops, no negation cascade. Mirrors mystical-mermaid b0776fb9.
 const GPT_CLEAN =
-  'Cinematic epic-fantasy illustration, clean editorial-poster render with clearly readable creatures and recognizable fantasy figures, rich jewel-tone palette with atmospheric depth, mythic high-fantasy register';
+  'Cinematic epic-fantasy illustration, clean editorial-poster render with clearly readable creatures, figures, castles, and sweeping fantasy landscapes, rich jewel-tone palette with atmospheric depth, mythic high-fantasy register';
 
 const EPIC_FANTASY_BLOCK = `━━━ EPIC FANTASY AESTHETIC (NON-NEGOTIABLE) ━━━
 

@@ -28,8 +28,7 @@ const PROMPT_PREFIX =
 // ("primordial wilderness, photoreal organic wildlife, ultra detailed,
 // film grain, masterpiece").
 // 2026-06-02 cruft-audit micro-strip — dropped `ultra detailed` tech-spec.
-const PROMPT_SUFFIX =
-  'primordial wilderness, photoreal organic wildlife, film grain, masterpiece';
+const PROMPT_SUFFIX = 'primordial wilderness, photoreal organic wildlife, film grain, masterpiece';
 
 const DINOSAUR_IS_HERO_BLOCK = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST words of your output, BEFORE setting/lighting/anything else.
@@ -272,7 +271,14 @@ const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — PREHISTORIC AMPLIFICATION ━
 
 Prehistoric Planet × Avatar-Pandora × Jurassic World wet-lush × National Geographic wildlife. Stack: atmospheric density + volumetric god-rays + wet reflective surfaces + exaggerated mega-foliage + species-accurate detail + primordial scale + environment storytelling. If it doesn't make someone's jaw drop and say "dinosaurs were REAL and the world was WILDER," dial it up. Every frame is the greatest paleoart ever painted.`;
 
+// Clean-render medium for gpt-image-2 + nano-banana (routed via
+// cleanMediumByModel in index.js) — keeps these models from reading the bot's
+// IMAX-paleoart polish anchors as "go abstract". Light genre tag, positive-only.
+const GPT_CLEAN =
+  'Clean cinematic dinosaur illustration, crisp render with clearly readable species-accurate dinosaurs and lush prehistoric environments, rich naturalistic palette, atmospheric depth, documentary register';
+
 module.exports = {
+  GPT_CLEAN,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   DINOSAUR_IS_HERO_BLOCK,

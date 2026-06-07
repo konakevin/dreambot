@@ -155,6 +155,43 @@ Bots with NO bot-wide lock and full picker autonomy: bloombot, chibibot, dinobot
 
 ---
 
+## Clean mediums for gpt-image-2 + nano-banana — `cleanMediumByModel` (2026-06-07)
+
+**The problem.** gpt-image-2 and nano-banana (`google/gemini-2-image`) read a bot's stylized medium + painterly prompt prefix ("painted oil tradition", painter name-drops, "concept-art polish") as **"go fully abstract / ornamental plate"** and drop the bot's actual subject. Flux _wants_ those anchors; these two models choke on them. So a bot that looks great on Flux renders as an abstract plate on gpt-2/banana.
+
+**The fix — a per-model "no-style" override.** It's basically _"render the seed's SUBJECT cleanly, ignore the bot's system medium."_ When the rolled model is keyed in `bot.cleanMediumByModel`, the engine swaps to a clean bot-only medium (`<bot>_gpt_clean`) and strips the painterly prefix. The seed body (pools + template) carries the subject + genre — the clean medium just keeps the model from over-stylizing.
+
+**Config shape** (`scripts/bots/<bot>/index.js`), generic across models — add a model key to extend:
+
+```js
+cleanMediumByModel: {
+  'openai/gpt-image-2':    { medium: 'dragonbot_gpt_clean', pathPrefix: { 'dragon-scene': '', 'artsy-girl': '' } },
+  'google/gemini-2-image': { medium: 'dragonbot_gpt_clean' },
+},
+```
+
+- **`medium`** — bot-local clean medium. Declare `bot.mediumStyles[medium] = blocks.GPT_CLEAN` (a ~25-word, positive-only, light-genre-tag string — NO painter names, NO negation cascade). Also set `promptPrefixByMedium[medium] = ''` so the bot's painterly `promptPrefix` doesn't leak back in.
+- **`pathPrefix`** — `{ <path>: '<override>' }`. On the swap ONLY, replace that path's normal `promptPrefixByPath`; `''` drops it. **This is the key fix for scene paths**: character paths already have empty path-prefixes (wrapper-strip lesson) so they were fine on gpt-2, but scene/landscape paths carry painterly path-prefixes that LEAK past the medium swap. Set those paths to `''` here — the seed pools carry the subject (dragon anatomy lives in `DRAGON_SCENE_DRAGON`/template, not the prefix), so dropping the painterly prefix loses style not content. **Paths NOT listed keep their prefix** — so content-bearing prefixes (mechbot cyborg gender/body locks) survive.
+- **`skipPaths`** — paths that already declare their own intended medium for this model (e.g. oceanbot `mystical-mermaid` is gpt-2-locked with a painted mer-folk medium via `mediumByPath`). They opt out of the swap entirely.
+
+**Decision logic is a pure, unit-tested helper:** `scripts/lib/cleanMediumByModel.js` → `resolveCleanMedium(bot, model, path)`. Tests in `__tests__/lib/cleanMediumByModel.test.ts`. botEngine only does the prompt assembly from the result. Keep the routing logic there + tested so model behavior can't silently drift.
+
+**Precedence (don't relitigate):** the swap overrides `mediumByPath` by design — starbot's `female-explorer` is `mediumByPath: canvas` for Flux, but on gpt-2 we WANT the clean medium, so the swap wins. To protect a path that genuinely needs its own medium on the clean model, use `skipPaths` (NOT a "mediumByPath wins" rule, which would break starbot).
+
+**DB requirement.** Each `<bot>_gpt_clean` medium needs a `dream_mediums` row (`is_bot_only:true`, `is_active:false`, `allowed_models:[the clean models]`) AND a `dlt_clean_mediums` row (the clean string doubles as the DLT style fragment — playbook hard rule). See migration `237_bot_clean_mediums_gap_bots.sql` for the canonical insert shape.
+
+**Why this matters going forward:** once a bot has a clean medium, **enabling gpt-2 or nano-banana on it is just an `allowedModels` line** — the clean override guarantees a readable result.
+
+**Fleet status (2026-06-07): every bot that uses either model has a clean medium for it.**
+- gpt-2 **and** nano-banana: bloombot, gothbot, mechbot, starbot, steambot, brickbot, oceanbot, yumbot, chibibot, dinobot, pixelbot, retrobot.
+- gpt-2 only (no banana in lineup): dragonbot.
+- nano-banana only (no gpt-2 in lineup): faebot, mangabot (mangabot keeps its gpt-2 ban — the clean medium is ready if it's ever re-enabled, since the ban was caused by the dirty anime medium this fixes).
+- neither model, so no clean medium: earthbot, tinybot, toybot.
+
+Wiring a clean medium is NOT the same as enabling a model — it only adds a clean register for models a bot ALREADY uses. Turning a new model ON for a bot is still a deliberate per-bot call (add to `allowedModels` + a render glance). The clean override removes the _quality_ blocker, not the product decision.
+
+---
+
 ## "HTML Matrix" model-test protocol — how Kevin triages which models work for which paths (2026-06-01)
 
 When Kevin says **"run an HTML matrix on `<bot>`"** he means this exact protocol. Don't ask him to re-explain it.
