@@ -33,7 +33,12 @@ module.exports = {
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing FLORAL-GARDEN-CUP renders for YumBot — bex.ai's signature look. A kawaii-faced VESSEL (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical garden of flowers. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing FLORAL-GARDEN-CUP renders for YumBot — bex.ai's signature look. A kawaii-faced VESSEL (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical garden of flowers. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
 ${
   night_mode
     ? `
@@ -151,7 +156,12 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing FLORAL-GARDEN renders for YumBot. The SCENE is a RICH kawaii garden composition — indoor (potting shed / sunroom / windowsill / tea-time table / vanity / fireplace mantle) or outdoor (cottage patio / greenhouse / balcony / picnic-in-garden / garden bench / gazebo). The scene contains MULTIPLE kawaii-faced planters/vessels clustered together, OVERFLOWING with magical flowers, kawaii treats scattered through, magical sparkle accents. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing FLORAL-GARDEN renders for YumBot. The SCENE is a RICH kawaii garden composition — indoor (potting shed / sunroom / windowsill / tea-time table / vanity / fireplace mantle) or outdoor (cottage patio / greenhouse / balcony / picnic-in-garden / garden bench / gazebo). The scene contains MULTIPLE kawaii-faced planters/vessels clustered together, OVERFLOWING with magical flowers, kawaii treats scattered through, magical sparkle accents. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
 ${
   night_mode
     ? `
@@ -298,7 +308,12 @@ Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape, COLORFUL and VIBRANT pastel palette throughout (the "rainbow-" in the path name is a reminder that the palette is colorful pastels — it does NOT mean the render must be rainbow-themed). Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape, COLORFUL and VIBRANT pastel palette throughout (the "rainbow-" in the path name is a reminder that the palette is colorful pastels — it does NOT mean the render must be rainbow-themed). Output wraps with style prefix + suffix.
 ${
   night_mode
     ? `
@@ -414,7 +429,12 @@ Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO 
     const compList = Array.isArray(companions) ? companions : [companions];
     const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
 
-    return `You are writing CANDY-FANTASY renders for YumBot. The SCENE-TYPE is the WHOLE point — it dictates where the 5 food-characters are placed and how the composition is framed. Atmosphere, lighting, time-of-day, weather wrap around the scene-type. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing CANDY-FANTASY renders for YumBot. The SCENE-TYPE is the WHOLE point — it dictates where the 5 food-characters are placed and how the composition is framed. Atmosphere, lighting, time-of-day, weather wrap around the scene-type. Output wraps with style prefix + suffix.
 ${
   night_mode
     ? `
@@ -538,7 +558,12 @@ Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing JAPANESE-FESTIVAL renders for YumBot — kawaii matsuri scenes with 5 kawaii Japanese festival foods composed cleanly in a richly-detailed matsuri/market setting. Natural family-portrait cluster with slight pose variation per food — NOT identical lineup, NOT chaotic action. Painterly Pop-Mart fusion register with Studio-Ghibli warmth. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing JAPANESE-FESTIVAL renders for YumBot — kawaii matsuri scenes with 5 kawaii Japanese festival foods composed cleanly in a richly-detailed matsuri/market setting. Natural family-portrait cluster with slight pose variation per food — NOT identical lineup, NOT chaotic action. Painterly Pop-Mart fusion register with Studio-Ghibli warmth. Output wraps with style prefix + suffix.
 
 ━━━ ⚠ HARD RULE #1: 5 FOODS NAMED FIRST — ALL VISIBLE ━━━
 
@@ -652,7 +677,12 @@ Output ONLY the raw 140-200 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing MINI-CHEF renders for YumBot — kawaii kitchen scenes with 5 KAWAII FOOD-CHARACTERS (the foods themselves) cooking together to prepare a kawaii dish in a richly-detailed kitchen. The food-characters ARE the cooks — no human chef figures, no chibi-children, no human-coded clothing. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli kitchen warmth. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing MINI-CHEF renders for YumBot — kawaii kitchen scenes with 5 KAWAII FOOD-CHARACTERS (the foods themselves) cooking together to prepare a kawaii dish in a richly-detailed kitchen. The food-characters ARE the cooks — no human chef figures, no chibi-children, no human-coded clothing. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli kitchen warmth. Output wraps with style prefix + suffix.
 
 ━━━ ⚠ HARD RULE #1: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
 
@@ -775,7 +805,12 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing COTTAGECORE-NATURE renders for YumBot — kawaii countryside-nature scenes with 5 kawaii food-characters composed cleanly in a richly-detailed cottagecore setting. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli countryside warmth. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing COTTAGECORE-NATURE renders for YumBot — kawaii countryside-nature scenes with 5 kawaii food-characters composed cleanly in a richly-detailed cottagecore setting. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli countryside warmth. Output wraps with style prefix + suffix.
 ${
   night_mode
     ? `
@@ -918,7 +953,12 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing CHECKERED-TABLETOP renders for YumBot — bex.ai's signature pastel-gingham tabletop look. Kawaii food/drink hero on a pastel-pink-blue (or pink-cream / pink-yellow) GINGHAM/CHECKERED/PLAID tablecloth, with a cluster of smiling mini-food-friends piled around (and often ON TOP of) the hero. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing CHECKERED-TABLETOP renders for YumBot — bex.ai's signature pastel-gingham tabletop look. Kawaii food/drink hero on a pastel-pink-blue (or pink-cream / pink-yellow) GINGHAM/CHECKERED/PLAID tablecloth, with a cluster of smiling mini-food-friends piled around (and often ON TOP of) the hero. Output wraps with style prefix + suffix.
 
 ━━━ ⚠ HARD RULE #1: PASTEL CHECKERED/GINGHAM TABLECLOTH ━━━
 
@@ -1042,7 +1082,12 @@ Output ONLY the raw 120-170 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing COQUETTE-FOOD renders for YumBot — the FLAGSHIP OMG-cute coquette kawaii food-party path. Hyper-feminine ultra-pink ultra-coquette palette. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing COQUETTE-FOOD renders for YumBot — the FLAGSHIP OMG-cute coquette kawaii food-party path. Hyper-feminine ultra-pink ultra-coquette palette. Output wraps with style prefix + suffix.
 
 ━━━ ⚠ HARD RULE #1: PALETTE LOCKED — PINKS / LAVENDERS / WHITES / SOFT PURPLES ONLY ━━━
 
@@ -1169,7 +1214,12 @@ Output ONLY the raw 170-240 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing KAWAII-KOI-POND renders for YumBot — a tranquil Japanese koi-pond scene with 5 kawaii pond-creatures (smiling koi-fish, axolotls, cloud-mochi-spirits, lily-frogs, pearl-blobs) half-submerged in/around the pond. Painterly Studio-Ghibli meets bex.ai Pop-Mart kawaii register. Output wraps with style prefix + suffix.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing KAWAII-KOI-POND renders for YumBot — a tranquil Japanese koi-pond scene with 5 kawaii pond-creatures (smiling koi-fish, axolotls, cloud-mochi-spirits, lily-frogs, pearl-blobs) half-submerged in/around the pond. Painterly Studio-Ghibli meets bex.ai Pop-Mart kawaii register. Output wraps with style prefix + suffix.
 ${
   night_mode
     ? `
@@ -1301,7 +1351,12 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing NARRATIVE-ACTION renders for YumBot — a kawaii food vignette CAUGHT MID-STORY (baking-in-progress, garden harvest, pastry-shop-window peek, food parade, food tea-party, bakery delivery). The kawaii food is DOING something or playing a role in a story moment. The VISUAL TREATMENT is locked by the LOOK REGISTER below.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing NARRATIVE-ACTION renders for YumBot — a kawaii food vignette CAUGHT MID-STORY (baking-in-progress, garden harvest, pastry-shop-window peek, food parade, food tea-party, bakery delivery). The kawaii food is DOING something or playing a role in a story moment. The VISUAL TREATMENT is locked by the LOOK REGISTER below.
 
 ━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
 ${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
@@ -1372,7 +1427,12 @@ The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, th
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing UNEXPECTED-PLACES renders for YumBot — a kawaii food vignette placed in a real-world venue where food doesn't usually live (greenhouse / library / vintage train / amusement park / aquarium / rooftop garden). The VISUAL TREATMENT is locked by the LOOK REGISTER below.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing UNEXPECTED-PLACES renders for YumBot — a kawaii food vignette placed in a real-world venue where food doesn't usually live (greenhouse / library / vintage train / amusement park / aquarium / rooftop garden). The VISUAL TREATMENT is locked by the LOOK REGISTER below.
 
 ━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
 ${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
@@ -1443,7 +1503,12 @@ The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, th
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing SCALE-TWIST renders for YumBot — a kawaii food vignette at an UNUSUAL SCALE or setting (colossal in a real city / microscopic at ant-scale / an entire island made of food / a chocolate-river world / undersea pastry kingdom / deep cosmic space). The VISUAL TREATMENT is locked by the LOOK REGISTER below.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing SCALE-TWIST renders for YumBot — a kawaii food vignette at an UNUSUAL SCALE or setting (colossal in a real city / microscopic at ant-scale / an entire island made of food / a chocolate-river world / undersea pastry kingdom / deep cosmic space). The VISUAL TREATMENT is locked by the LOOK REGISTER below.
 
 ━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
 ${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
@@ -1523,7 +1588,12 @@ NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing CUISINE renders for YumBot — a kawaii food vignette anchored in one of 7 global cuisine cultures (French / Italian / Mexican / Korean / Indian / Middle-Eastern / Nordic). The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing CUISINE renders for YumBot — a kawaii food vignette anchored in one of 7 global cuisine cultures (French / Italian / Mexican / Korean / Indian / Middle-Eastern / Nordic). The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
 
 ━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
 ${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
@@ -1603,7 +1673,12 @@ NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pur
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing WHIMSICAL renders for YumBot — a kawaii food vignette caught in an unexpected concept (modeling on a runway, relaxing at a spa, playing in an orchestra, attending school, hanging with pets / toys). The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing WHIMSICAL renders for YumBot — a kawaii food vignette caught in an unexpected concept (modeling on a runway, relaxing at a spa, playing in an orchestra, attending school, hanging with pets / toys). The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
 
 ━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
 ${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
@@ -1683,7 +1758,12 @@ NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pur
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing MEAL-TYPES renders for YumBot — a kawaii food vignette in a specific meal-occasion setting, populated with multiple props + a tiny companion + an atmospheric flourish. The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
+    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA.lookRegister}
+
+This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+
+` : ''}You are writing MEAL-TYPES renders for YumBot — a kawaii food vignette in a specific meal-occasion setting, populated with multiple props + a tiny companion + an atmospheric flourish. The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
 
 ━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
 ${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}

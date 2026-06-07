@@ -66,7 +66,23 @@ module.exports = {
   // Per-path medium override — meal-types uses the neutral anchor so the
   // rolled look_register from sharedDNA leads the CLIP anchor instead of
   // the Pop-Mart vinyl lock.
+  // 2026-06-07 — ALL paths use yumbot_food_neutral medium. The bot-wide
+  // sharedDNA.lookRegister rolls a different cute visual treatment per
+  // render, breaking the Pop-Mart vinyl CLIP lock on every path. Original
+  // 11 templates were edited in the same commit to inject sharedDNA.lookRegister
+  // at the top of their Sonnet briefs.
   mediumByPath: {
+    'floral-garden-cup': 'yumbot_food_neutral',
+    'floral-garden-scene': 'yumbot_food_neutral',
+    'rainbow-dreamscape': 'yumbot_food_neutral',
+    'checkered-tabletop': 'yumbot_food_neutral',
+    'candy-fantasy': 'yumbot_food_neutral',
+    'japanese-festival': 'yumbot_food_neutral',
+    'mini-chef': 'yumbot_food_neutral',
+    'cottagecore-nature': 'yumbot_food_neutral',
+    'coquette-food': 'yumbot_food_neutral',
+    'kawaii-koi-pond': 'yumbot_food_neutral',
+    'kawaii-koi-pond-ultra': 'yumbot_food_neutral',
     'meal-types': 'yumbot_food_neutral',
     whimsical: 'yumbot_food_neutral',
     cuisine: 'yumbot_food_neutral',
