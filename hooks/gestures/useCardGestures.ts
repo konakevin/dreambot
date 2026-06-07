@@ -39,7 +39,13 @@
 import { useWindowDimensions } from 'react-native';
 import { Gesture } from 'react-native-gesture-handler';
 import { useAnimatedStyle, useSharedValue, withTiming, runOnJS } from 'react-native-reanimated';
-import { PINCH_MAX_SCALE, PINCH_MIN_SCALE, PINCH_RESET_DURATION } from '@/constants/gestures';
+import {
+  ACTIVE_OFFSET,
+  FAIL_OFFSET,
+  PINCH_MAX_SCALE,
+  PINCH_MIN_SCALE,
+  PINCH_RESET_DURATION,
+} from '@/constants/gestures';
 
 export interface UseCardGesturesOptions {
   /** Called when user swipes left past the activation threshold (and not zoomed). */
@@ -87,9 +93,13 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
   const swipeGesture = Gesture.Pan()
     .minPointers(1)
     .maxPointers(1)
-    .activeOffsetX(-8)
-    .failOffsetX(8)
-    .failOffsetY([-15, 15])
+    // Require a clear leftward swipe before navigating to profile, and fail
+    // fast on vertical movement — at the old -8 / ±15 a vertical flick with a
+    // little left drift would trip profile-nav. Aligned to the shared offsets
+    // (ACTIVE_OFFSET ~2× FAIL_OFFSET) so horizontal must dominate. 2026-06-07.
+    .activeOffsetX(-ACTIVE_OFFSET)
+    .failOffsetX(FAIL_OFFSET)
+    .failOffsetY([-FAIL_OFFSET, FAIL_OFFSET])
     .enabled(!options?.disableSwipeLeft)
     .onStart(() => {
       'worklet';

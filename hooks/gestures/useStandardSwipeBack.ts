@@ -22,7 +22,8 @@
  *     const composed = Gesture.Simultaneous(backGesture, cardGesture);
  *
  * NOTES
- *   - Gesture activates only on clear right-swipe (activeOffsetX [12, Infinity]).
+ *   - Gesture activates only on a clear right-swipe (activeOffsetX [ACTIVE_OFFSET,
+ *     Infinity], ~2× FAIL_OFFSET so horizontal must dominate vertical).
  *   - Fails early if vertical drag exceeds FAIL_OFFSET — lets FlatLists scroll.
  *   - Fires router.back() via runOnJS after slide-off animation.
  *   - If gesture is cancelled mid-way, translation is sprung back to 0.

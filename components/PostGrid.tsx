@@ -333,6 +333,9 @@ export function PostGrid({
         // measure is correct and we don't use scrollToIndex anywhere.
         columnWrapperStyle={styles.row}
         contentContainerStyle={{ paddingBottom: verticalScale(90) }}
+        // Lock scrolling to one axis (iOS): a vertical flick won't pan
+        // diagonally and leak horizontal movement into the parent swipe-back.
+        directionalLockEnabled
         windowSize={7}
         maxToRenderPerBatch={6}
         initialNumToRender={12}

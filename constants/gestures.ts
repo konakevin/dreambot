@@ -24,12 +24,17 @@ export const SWIPE_PROFILE_DISTANCE = 25;
 /**
  * How far the gesture must travel on its primary axis before it activates.
  * Anything below this is absorbed by underlying scrollers.
+ *
+ * Kept at ~2× FAIL_OFFSET so the primary axis must CLEARLY dominate before the
+ * gesture wins — at 12 (vs FAIL 10) the 2px margin let diagonal vertical flicks
+ * on grids/feeds trip the horizontal swipe-back. 2026-06-07.
  */
-export const ACTIVE_OFFSET = 12;
+export const ACTIVE_OFFSET = 20;
 
 /**
  * How far the gesture can travel on its opposing axis before it fails.
- * Keeps vertical-scroll and horizontal-swipe from getting confused.
+ * Keeps vertical-scroll and horizontal-swipe from getting confused — a vertical
+ * scroll that drifts past this on the cross axis cancels the swipe immediately.
  */
 export const FAIL_OFFSET = 10;
 
