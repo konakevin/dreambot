@@ -28,8 +28,26 @@ const PROMPT_PREFIX =
 const PROMPT_SUFFIX =
   'designer-vinyl glossy-pearlescent finish, painterly illustration fusion, dreamy bokeh, soft pastel kawaii palette';
 
+// Clean-render medium for gpt-image-2 + nano-banana (routed via
+// cleanMediumByModel in index.js). The "3D CGI + painterly fusion" medium +
+// prefix make these models pick one extreme (abstract painterly or flat CGI);
+// this positive-only directive keeps a clean readable kawaii-food render. Light
+// genre tag, no negation cascade.
+const GPT_CLEAN =
+  'Clean kawaii food-character illustration, crisp designer-collectible render with clearly readable smiling food characters and scenes, pastel pearlescent color palette, glossy Pop-Mart register';
+
+// Neutral kawaii-food anchor (2026-06-06) — used by paths that roll a
+// per-render visual register via sharedDNA.lookRegister (e.g. meal-types).
+// Locks the "kawaii face baked into food" character identity but NOT the
+// medium / surface treatment / palette — those come from the rolled
+// look_register so each render gets a different visual treatment.
+const YUMBOT_FOOD_NEUTRAL =
+  'Kawaii smiling faces baked INTO the food/drink itself (each food IS the character with dimpled-cheek blush, closed-arc eyes, tiny printed mouth ON the surface). The only cast in frame is food and drink — every face belongs to a food item. Visual treatment + surface + palette set by the look-register tokens that lead the prompt.';
+
 module.exports = {
   YUMBOT_FOOD_MEDIUM,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
+  GPT_CLEAN,
+  YUMBOT_FOOD_NEUTRAL,
 };

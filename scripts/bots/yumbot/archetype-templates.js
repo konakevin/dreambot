@@ -1282,4 +1282,466 @@ Template:
 
 Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers.`;
   },
+
+  YUMBOT_NARRATIVE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
+
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `You are writing NARRATIVE-ACTION renders for YumBot — a kawaii food vignette CAUGHT MID-STORY (baking-in-progress, garden harvest, pastry-shop-window peek, food parade, food tea-party, bakery delivery). The kawaii food is DOING something or playing a role in a story moment. The VISUAL TREATMENT is locked by the LOOK REGISTER below.
+
+━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
+
+This medium is the CLIP anchor — your Flux prompt MUST open with these tokens. Every surface is rendered in THIS medium.
+
+━━━ THE SCENE (kawaii subject mid-action + narrative moment + composition) ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${decorBlock}
+
+━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${companion}
+Named explicitly. Small (5-10% of frame), positioned NEAR the kawaii hero.
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES ━━━
+1. The kawaii hero from THE SCENE is the HERO with kawaii face features.
+2. The NARRATIVE MOMENT reads instantly — the food IS DOING SOMETHING (mid-action, mid-story).
+3. ALL 3 decor items appear BY NAME.
+4. The COMPANION appears BY NAME.
+5. The ATMOSPHERIC ACCENT appears BY NAME.
+6. Kawaii register — LOOK REGISTER carries the medium.
+
+━━━ HARD BANS ━━━
+- NO human faces / NO human hands / NO human characters. The food IS the cast and the actor.
+- NO photoreal tokens.
+- NO swapping the narrative moment for a static still-life.
+- NO dropping decor or companion.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then the kawaii hero MID-ACTION + the narrative moment, then decor names + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
+  },
+
+  YUMBOT_PLACES: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
+
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `You are writing UNEXPECTED-PLACES renders for YumBot — a kawaii food vignette placed in a real-world venue where food doesn't usually live (greenhouse / library / vintage train / amusement park / aquarium / rooftop garden). The VISUAL TREATMENT is locked by the LOOK REGISTER below.
+
+━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
+
+This medium is the CLIP anchor — your Flux prompt MUST open with these tokens. Every surface is rendered in THIS medium.
+
+━━━ THE SCENE (kawaii subject + venue + composition) ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${decorBlock}
+
+━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${companion}
+Named explicitly. Small (5-10% of frame), positioned NEAR the kawaii hero.
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES ━━━
+1. The kawaii hero from THE SCENE is the HERO with kawaii face features.
+2. The VENUE reads instantly — the scene names a culturally-coded venue element. Keep it.
+3. ALL 3 decor items appear BY NAME.
+4. The COMPANION appears BY NAME.
+5. The ATMOSPHERIC ACCENT appears BY NAME.
+6. Kawaii register — LOOK REGISTER carries the medium.
+
+━━━ HARD BANS ━━━
+- NO human faces (food is the cast).
+- NO photoreal tokens.
+- NO swapping the venue for a generic kawaii meadow.
+- NO dropping decor or companion.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then hero + venue, then decor names + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
+  },
+
+  YUMBOT_SCALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
+
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `You are writing SCALE-TWIST renders for YumBot — a kawaii food vignette at an UNUSUAL SCALE or setting (colossal in a real city / microscopic at ant-scale / an entire island made of food / a chocolate-river world / undersea pastry kingdom / deep cosmic space). The VISUAL TREATMENT is locked by the LOOK REGISTER below.
+
+━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
+${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
+
+This medium is the CLIP anchor — your Flux prompt MUST open with these tokens. Every surface in the scene is rendered in THIS medium.
+
+━━━ THE SCENE (kawaii subject + scale twist + composition — rendered in the LOOK REGISTER) ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${decorBlock}
+Each appears explicitly. Each occupies its own zone — not stacked, each visible.
+
+━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${companion}
+Named explicitly. Small (5-10% of frame), positioned NEAR the kawaii hero.
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+Named. Small / understated, adds life.
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES ━━━
+1. The kawaii hero from THE SCENE is the HERO with kawaii face features.
+2. The SCALE TWIST reads instantly — colossal city / micro ant-world / cake-island / chocolate-river / undersea / cosmic. Keep what the scene names.
+3. ALL 3 decor items appear BY NAME.
+4. The COMPANION appears BY NAME.
+5. The ATMOSPHERIC ACCENT appears BY NAME.
+6. Kawaii register — the LOOK REGISTER carries the medium.
+
+━━━ HARD BANS ━━━
+- NO human-character cast (food is the cast).
+- NO photoreal tokens ("photograph" / "DSLR" / "f/2.8").
+- NO swapping the scale twist for a default tabletop kawaii scene.
+- NO dropping decor or companion.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated. STRUCTURE:
+1. OPEN with the LOOK REGISTER tokens.
+2. The kawaii hero + the scale twist.
+3. The 3 decor items by name.
+4. The companion by name.
+5. The atmospheric accent.
+6. Camera + lighting + time + palette + vibe.
+NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
+  },
+
+  YUMBOT_CUISINE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
+
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `You are writing CUISINE renders for YumBot — a kawaii food vignette anchored in one of 7 global cuisine cultures (French / Italian / Mexican / Korean / Indian / Middle-Eastern / Nordic). The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
+
+━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
+${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
+
+This medium is the CLIP anchor — your Flux prompt MUST open with these tokens (or near-equivalents). Every surface in the scene below is rendered in THIS medium.
+
+━━━ THE SCENE (kawaii subject + cuisine setting + composition — rendered in the LOOK REGISTER above) ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME IN YOUR PROMPT (NON-NEGOTIABLE) ━━━
+${decorBlock}
+Each of these 3 decor items must be named explicitly. Each occupies its own zone in the scene around the kawaii hero — not stacked on top, each visible.
+
+━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${companion}
+This companion must be named explicitly. Small (5-10% of frame), positioned NEAR the kawaii hero — not on top, not blending.
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+Name this atmospheric flourish in your output. Small / understated, adds life.
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES ━━━
+1. The kawaii hero from THE SCENE is the HERO — visible, readable, charming, with kawaii face features.
+2. The CUISINE setting reads instantly — the scene names a culturally-coded setting element. Keep it.
+3. ALL 3 decor items appear in the prompt BY NAME. Count them as you write.
+4. The COMPANION appears in the prompt BY NAME.
+5. The ATMOSPHERIC ACCENT appears in the prompt BY NAME.
+6. Kawaii register — NOT photoreal, NOT a literal product photo. The LOOK REGISTER carries the medium.
+
+━━━ HARD BANS ━━━
+- NO human faces, NO chefs / customers / vendors as people (food is the cast).
+- NO photoreal tokens ("photograph" / "DSLR" / "f/2.8").
+- NO swapping the cuisine for a generic kawaii meadow.
+- NO dropping decor items or the companion.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated phrases. STRUCTURE:
+1. OPEN with the LOOK REGISTER tokens — the CLIP anchor.
+2. The kawaii hero from THE SCENE + the cuisine setting.
+3. The 3 decor items by name.
+4. The companion by name.
+5. The atmospheric accent.
+6. Camera framing + lighting + time of day + palette + vibe mood.
+NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pure comma-separated Flux prompt.`;
+  },
+
+  YUMBOT_WHIMSICAL: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
+
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `You are writing WHIMSICAL renders for YumBot — a kawaii food vignette caught in an unexpected concept (modeling on a runway, relaxing at a spa, playing in an orchestra, attending school, hanging with pets / toys). The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
+
+━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
+${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
+
+This medium is the CLIP anchor — your Flux prompt MUST open with these tokens (or near-equivalents) so Flux locks onto this visual treatment. Every surface in the scene below is rendered in THIS medium.
+
+━━━ THE SCENE (kawaii subject + whimsical concept + composition — rendered in the LOOK REGISTER above) ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME IN YOUR PROMPT (NON-NEGOTIABLE) ━━━
+${decorBlock}
+Each of these 3 decor items must be named explicitly in your output. They occupy their own zones in the scene around the kawaii hero — not stacked on top, each visible.
+
+━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${companion}
+This companion must be named explicitly in your output. Small (5-10% of frame), positioned NEAR the kawaii hero — not on top, not blending. A tiny visible delight.
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+Name this atmospheric flourish in your output. Small / understated, adds life.
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES ━━━
+1. The kawaii hero from THE SCENE is the HERO — visible, readable, charming, with kawaii face features.
+2. The whimsical concept reads instantly — runway / spa / orchestra / school / pets / toys — keep what the scene names.
+3. ALL 3 decor items above appear in the prompt BY NAME. Count them as you write. Do not drop any.
+4. The COMPANION appears in the prompt BY NAME.
+5. The ATMOSPHERIC ACCENT appears in the prompt BY NAME.
+6. Kawaii register — NOT photoreal, NOT a literal product photo. The LOOK REGISTER above carries the medium.
+
+━━━ HARD BANS ━━━
+- NO human faces, NO human models / students / spa-goers (food is the cast).
+- NO photoreal-coded register ("photograph" / "DSLR" / "f/2.8").
+- NO swapping the whimsical concept for a generic kawaii meadow.
+- NO dropping decor items or the companion.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated phrases. STRUCTURE:
+1. OPEN with the LOOK REGISTER tokens — they're the CLIP anchor.
+2. The kawaii hero from THE SCENE + the whimsical concept setup.
+3. The 3 decor items by name.
+4. The companion by name.
+5. The atmospheric accent.
+6. Camera framing + lighting + time of day + palette + vibe mood.
+NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pure comma-separated Flux prompt.`;
+  },
+
+  YUMBOT_MEAL_TYPES: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
+
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `You are writing MEAL-TYPES renders for YumBot — a kawaii food vignette in a specific meal-occasion setting, populated with multiple props + a tiny companion + an atmospheric flourish. The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
+
+━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
+${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
+
+This medium is the CLIP anchor — your Flux prompt MUST open with these tokens (or near-equivalents) so Flux locks onto this visual treatment. Every surface in the scene below is rendered in THIS medium.
+
+━━━ THE SCENE (kawaii subject + meal-occasion setting + composition — rendered in the LOOK REGISTER above) ━━━
+${scene}
+
+━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME IN YOUR PROMPT (NON-NEGOTIABLE) ━━━
+${decorBlock}
+Each of these 3 decor items must be named explicitly in your output. They occupy their own zones in the scene around the kawaii hero — not stacked on top, each visible.
+
+━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+${companion}
+This companion must be named explicitly in your output. Small (5-10% of frame), positioned NEAR the kawaii hero — not on top, not blending. A tiny visible delight.
+
+━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+${atmospheric_accent}
+Name this atmospheric flourish in your output. Small / understated, adds life.
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD MANDATES (read in order, each one matters) ━━━
+1. The kawaii hero from THE SCENE is the HERO — visible, readable, charming, with kawaii face features.
+2. The meal-occasion setting reads instantly (windowsill / tiered china stand / checker blanket / cafe counter / neon food truck / dim kitchen — keep what the scene names).
+3. ALL 3 decor items above appear in the prompt BY NAME. Count them as you write. Do not drop any.
+4. The COMPANION appears in the prompt BY NAME.
+5. The ATMOSPHERIC ACCENT appears in the prompt BY NAME.
+6. Painterly kawaii illustration register — NOT photoreal, NOT a literal product photo. Soft brushwork, warm charm.
+
+━━━ HARD BANS ━━━
+- NO human faces, NO chef hats / aprons / uniforms.
+- NO photoreal-coded register ("photograph" / "DSLR" / "f/2.8").
+- NO replacing the named meal-occasion setting with a generic kawaii meadow.
+- NO dropping decor items or the companion — they're load-bearing for variety.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated phrases. STRUCTURE:
+1. OPEN with the LOOK REGISTER tokens — they're the CLIP anchor for the medium.
+2. The kawaii hero from THE SCENE + the meal-occasion setting.
+3. The 3 decor items by name.
+4. The companion by name.
+5. The atmospheric accent.
+6. Camera framing + lighting + time of day + palette + vibe mood.
+NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pure comma-separated Flux prompt.`;
+  },
 };

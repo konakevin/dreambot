@@ -160,5 +160,86 @@ module.exports = {
   TABLETOP_TIME_OF_DAY: load('tabletop_time_of_day'),
   TABLETOP_COMPANION: load('tabletop_companion'),
 
+  // ============ Bot-wide LOOK_REGISTER axis (2026-06-06) ============
+  // 25 distinct cute / kawaii visual registers (watercolor / claymation /
+  // risograph / pixel / felt / vinyl / picture-book / etc.). Picked per
+  // render in rollSharedDNA; paths consume via sharedDNA.lookRegister.
+  // Stays 100% kawaii — only the medium varies, never the cuteness.
+  YUMBOT_LOOK_REGISTER: load('yumbot_look_register'),
+
+  // ============ MEAL-TYPES path pools (2026-06-06 trial) ============
+  // Bucket-aggregated path — 6 meal-occasion sub-themes share axis pools.
+  // Scenes are tagged structured objects ({tags, description}); other axes
+  // are flat strings. Re-gen via scripts/gen-seeds/yumbot/gen-meal-types-*.js
+  YUMBOT_MEAL_TYPES_SCENES: load('yumbot_meal_types_scenes'),
+  YUMBOT_MEAL_TYPES_CAMERAS: load('yumbot_meal_types_cameras'),
+  YUMBOT_MEAL_TYPES_LIGHTING: load('yumbot_meal_types_lighting'),
+  YUMBOT_MEAL_TYPES_PALETTES: load('yumbot_meal_types_palettes'),
+  YUMBOT_MEAL_TYPES_TIME_OF_DAY: load('yumbot_meal_types_time_of_day'),
+  YUMBOT_MEAL_TYPES_COMPANIONS: load('yumbot_meal_types_companions'),
+  YUMBOT_MEAL_TYPES_DECOR: load('yumbot_meal_types_decor'),
+  YUMBOT_MEAL_TYPES_ATMOSPHERIC_ACCENT: load('yumbot_meal_types_atmospheric_accent'),
+
+  // ============ WHIMSICAL path pools (2026-06-07 trial) ============
+  // Bucket I — 6 whimsical-concept sub-themes share axis pools. Same
+  // architecture as meal-types. Re-gen via
+  // scripts/gen-seeds/yumbot/gen-whimsical-*.js
+  YUMBOT_WHIMSICAL_SCENES: load('yumbot_whimsical_scenes'),
+  YUMBOT_WHIMSICAL_CAMERAS: load('yumbot_whimsical_cameras'),
+  YUMBOT_WHIMSICAL_LIGHTING: load('yumbot_whimsical_lighting'),
+  YUMBOT_WHIMSICAL_PALETTES: load('yumbot_whimsical_palettes'),
+  YUMBOT_WHIMSICAL_TIME_OF_DAY: load('yumbot_whimsical_time_of_day'),
+  YUMBOT_WHIMSICAL_COMPANIONS: load('yumbot_whimsical_companions'),
+  YUMBOT_WHIMSICAL_DECOR: load('yumbot_whimsical_decor'),
+  YUMBOT_WHIMSICAL_ATMOSPHERIC_ACCENT: load('yumbot_whimsical_atmospheric_accent'),
+
+  // ============ CUISINE path pools (2026-06-07 trial) ============
+  // Bucket C — 7 global-cuisine sub-themes share axis pools.
+  // Re-gen via scripts/gen-seeds/yumbot/gen-cuisine-*.js
+  YUMBOT_CUISINE_SCENES: load('yumbot_cuisine_scenes'),
+  YUMBOT_CUISINE_CAMERAS: load('yumbot_cuisine_cameras'),
+  YUMBOT_CUISINE_LIGHTING: load('yumbot_cuisine_lighting'),
+  YUMBOT_CUISINE_PALETTES: load('yumbot_cuisine_palettes'),
+  YUMBOT_CUISINE_TIME_OF_DAY: load('yumbot_cuisine_time_of_day'),
+  YUMBOT_CUISINE_COMPANIONS: load('yumbot_cuisine_companions'),
+  YUMBOT_CUISINE_DECOR: load('yumbot_cuisine_decor'),
+  YUMBOT_CUISINE_ATMOSPHERIC_ACCENT: load('yumbot_cuisine_atmospheric_accent'),
+
+  // ============ SCALE path pools (2026-06-07 trial) ============
+  // Bucket D — 6 scale-twist sub-themes share axis pools.
+  // Re-gen via scripts/gen-seeds/yumbot/gen-scale-*.js
+  YUMBOT_SCALE_SCENES: load('yumbot_scale_scenes'),
+  YUMBOT_SCALE_CAMERAS: load('yumbot_scale_cameras'),
+  YUMBOT_SCALE_LIGHTING: load('yumbot_scale_lighting'),
+  YUMBOT_SCALE_PALETTES: load('yumbot_scale_palettes'),
+  YUMBOT_SCALE_TIME_OF_DAY: load('yumbot_scale_time_of_day'),
+  YUMBOT_SCALE_COMPANIONS: load('yumbot_scale_companions'),
+  YUMBOT_SCALE_DECOR: load('yumbot_scale_decor'),
+  YUMBOT_SCALE_ATMOSPHERIC_ACCENT: load('yumbot_scale_atmospheric_accent'),
+
+  // ============ PLACES path pools (2026-06-07 trial) ============
+  // Bucket H — 6 unexpected-place sub-themes share axis pools.
+  // Re-gen via scripts/gen-seeds/yumbot/gen-places-*.js
+  YUMBOT_PLACES_SCENES: load('yumbot_places_scenes'),
+  YUMBOT_PLACES_CAMERAS: load('yumbot_places_cameras'),
+  YUMBOT_PLACES_LIGHTING: load('yumbot_places_lighting'),
+  YUMBOT_PLACES_PALETTES: load('yumbot_places_palettes'),
+  YUMBOT_PLACES_TIME_OF_DAY: load('yumbot_places_time_of_day'),
+  YUMBOT_PLACES_COMPANIONS: load('yumbot_places_companions'),
+  YUMBOT_PLACES_DECOR: load('yumbot_places_decor'),
+  YUMBOT_PLACES_ATMOSPHERIC_ACCENT: load('yumbot_places_atmospheric_accent'),
+
+  // ============ NARRATIVE path pools (2026-06-07 trial) ============
+  // Bucket F — 6 narrative-action sub-themes share axis pools.
+  // Re-gen via scripts/gen-seeds/yumbot/gen-narrative-*.js
+  YUMBOT_NARRATIVE_SCENES: load('yumbot_narrative_scenes'),
+  YUMBOT_NARRATIVE_CAMERAS: load('yumbot_narrative_cameras'),
+  YUMBOT_NARRATIVE_LIGHTING: load('yumbot_narrative_lighting'),
+  YUMBOT_NARRATIVE_PALETTES: load('yumbot_narrative_palettes'),
+  YUMBOT_NARRATIVE_TIME_OF_DAY: load('yumbot_narrative_time_of_day'),
+  YUMBOT_NARRATIVE_COMPANIONS: load('yumbot_narrative_companions'),
+  YUMBOT_NARRATIVE_DECOR: load('yumbot_narrative_decor'),
+  YUMBOT_NARRATIVE_ATMOSPHERIC_ACCENT: load('yumbot_narrative_atmospheric_accent'),
+
   VIBE_COLOR,
 };

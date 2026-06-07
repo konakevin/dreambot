@@ -271,4 +271,142 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  YUMBOT_NARRATIVE: {
+    description:
+      'PATH-BESPOKE — YumBot narrative (2026-06-07 trial). Bucket-aggregated path covering 6 narrative-action sub-themes (baking-in-progress / garden-harvest / pastry-shop-window / food-parade / food-tea-party / bakery-delivery). Same architecture as the other bucket paths. Uses sharedDNA.lookRegister via yumbot_food_neutral medium.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_PLACES: {
+    description:
+      'PATH-BESPOKE — YumBot places (2026-06-07 trial). Bucket-aggregated path covering 6 unexpected-place sub-themes (greenhouse / library / train / amusement-park / aquarium / rooftop-garden). Same architecture as meal-types / whimsical / cuisine / scale. Uses sharedDNA.lookRegister via yumbot_food_neutral medium.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_SCALE: {
+    description:
+      'PATH-BESPOKE — YumBot scale (2026-06-07 trial). Bucket-aggregated path covering 6 scale-twist sub-themes (giant-real-world / microscopic / food-island / chocolate-river / underwater / food-in-space). Same architecture as meal-types / whimsical / cuisine. Uses sharedDNA.lookRegister via yumbot_food_neutral medium.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_CUISINE: {
+    description:
+      'PATH-BESPOKE — YumBot cuisine (2026-06-07 trial). Bucket-aggregated path covering 7 global-cuisine sub-themes (french-patisserie / italian-trattoria / mexican-fiesta / korean-dessert-cafe / indian-sweet-shop / middle-eastern-souk / nordic-bakery). Same architecture as meal-types / whimsical. Uses sharedDNA.lookRegister via yumbot_food_neutral medium so each render rolls a different cute visual treatment.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_WHIMSICAL: {
+    description:
+      'PATH-BESPOKE — YumBot whimsical (2026-06-07 trial). Bucket-aggregated path covering 6 whimsical-concept sub-themes (food-with-pets / food-fashion-show / food-spa / food-orchestra / food-school / food-and-toys). Same architecture as meal-types — scene pool is tagged structured objects, axis pools shared across the bucket. Uses sharedDNA.lookRegister via the neutral medium so each render rolls a different cute visual treatment.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  YUMBOT_MEAL_TYPES: {
+    description:
+      'PATH-BESPOKE — YumBot meal-types (2026-06-06 trial). Bucket-aggregated path covering 6 meal-occasion sub-themes (breakfast / high-tea / picnic / coffee-shop / food-truck / midnight-snack). Each render picks ONE scene from the structured tagged scenes pool — sub-theme baked into scene description, NOT into other axes. 8 path-bespoke pools: scene + camera_framing + lighting + palette + time_of_day + companion + decor_accents (pickN: 3) + atmospheric_accent.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

@@ -25,18 +25,89 @@ const pathBuilders = {
   'coquette-food': require('./paths/coquette-food'),
   'kawaii-koi-pond': require('./paths/kawaii-koi-pond'),
   'kawaii-koi-pond-ultra': require('./paths/kawaii-koi-pond-ultra'),
+  // 2026-06-06 trial — bucket-aggregated meal-occasion path. 6 sub-themes
+  // share axis pools; scenes are tagged structured objects.
+  'meal-types': require('./paths/meal-types'),
+  // 2026-06-07 trial — bucket-aggregated whimsical-concept path. 6 sub-themes
+  // (food-with-pets / food-fashion-show / food-spa / food-orchestra /
+  // food-school / food-and-toys). Same architecture as meal-types.
+  whimsical: require('./paths/whimsical'),
+  // 2026-06-07 trial — bucket-aggregated global-cuisine path. 7 sub-themes
+  // (french-patisserie / italian-trattoria / mexican-fiesta / korean-dessert-
+  // cafe / indian-sweet-shop / middle-eastern-souk / nordic-bakery).
+  cuisine: require('./paths/cuisine'),
+  // 2026-06-07 trial — bucket-aggregated scale-twist path. 6 sub-themes
+  // (giant-real-world / microscopic / food-island / chocolate-river /
+  // underwater / food-in-space).
+  scale: require('./paths/scale'),
+  // 2026-06-07 trial — bucket-aggregated unexpected-place path. 6 sub-themes
+  // (greenhouse / library / train / amusement-park / aquarium / rooftop-garden).
+  places: require('./paths/places'),
+  // 2026-06-07 trial — bucket-aggregated narrative-action path. 6 sub-themes
+  // (baking-in-progress / garden-harvest / pastry-shop-window / food-parade /
+  // food-tea-party / bakery-delivery).
+  narrative: require('./paths/narrative'),
 };
 
 module.exports = {
   username: 'YumBot',
   displayName: 'YumBot',
 
-  mediums: ['yumbot_food'],
+  mediums: ['yumbot_food', 'yumbot_food_neutral'],
   mediumStyles: {
     yumbot_food: blocks.YUMBOT_FOOD_MEDIUM,
+    yumbot_gpt_clean: blocks.GPT_CLEAN,
+    // 2026-06-06 — neutral kawaii anchor used by paths that roll a per-render
+    // visual treatment via sharedDNA.lookRegister (meal-types is the first).
+    // Locks the kawaii-food character but NOT the medium / palette / finish.
+    yumbot_food_neutral: blocks.YUMBOT_FOOD_NEUTRAL,
+  },
+
+  // Per-path medium override — meal-types uses the neutral anchor so the
+  // rolled look_register from sharedDNA leads the CLIP anchor instead of
+  // the Pop-Mart vinyl lock.
+  mediumByPath: {
+    'meal-types': 'yumbot_food_neutral',
+    whimsical: 'yumbot_food_neutral',
+    cuisine: 'yumbot_food_neutral',
+    scale: 'yumbot_food_neutral',
+    places: 'yumbot_food_neutral',
+    narrative: 'yumbot_food_neutral',
+  },
+
+  // Per-medium prompt prefix override (engine line 1314) — REPLACES the
+  // bot.promptPrefix when set. yumbot_food_neutral gets a minimal kawaii
+  // anchor so the rolled look_register from Sonnet's prompt leads CLIP
+  // attention instead of the bot-wide Pop-Mart-vinyl prefix smothering it.
+  // Empty string would be falsy and fall through to bot.promptPrefix; using
+  // a tight 4-word anchor that yields to whatever look the register dictates.
+  // gpt-image-2 + nano-banana clean-render override (2026-06-07). The CGI +
+  // painterly-fusion medium/prefix make these models pick one extreme; the
+  // clean medium (+ empty promptPrefixByMedium) lets the seed's kawaii food lead.
+  cleanMediumByModel: {
+    'openai/gpt-image-2': { medium: 'yumbot_gpt_clean' },
+    'google/gemini-2-image': { medium: 'yumbot_gpt_clean' },
+  },
+  // Per-medium prompt-prefix override (engine line 1314) — REPLACES the
+  // bot.promptPrefix when set for the current medium.
+  //   yumbot_food_neutral: tight 4-word anchor so the rolled sharedDNA
+  //     lookRegister from Sonnet's output leads CLIP attention.
+  //   yumbot_gpt_clean:   empty → falls through to bot.promptPrefix (existing
+  //     behavior; the clean medium's own fragment carries the kawaii anchor).
+  promptPrefixByMedium: {
+    yumbot_food_neutral: 'kawaii illustration',
+    yumbot_gpt_clean: '',
+  },
+  // Per-medium prompt-suffix override (engine line 1316-1319) — replaces
+  // bot.promptSuffix when set. yumbot_food_neutral drops the Pop-Mart vinyl
+  // tail ("designer-vinyl glossy-pearlescent finish") so the rolled look
+  // register can carry the visual treatment without late-prompt smothering.
+  promptSuffixByMedium: {
+    yumbot_food_neutral: 'soft kawaii charm, every face is a food, no humans',
   },
 
   useModelPicker: true,
+  // Banned 2026-06-07: flux-2-max (Kevin heart-ban).
   allowedModels: [
     'google/gemini-2-image',
     'openai/gpt-image-2',
@@ -44,7 +115,6 @@ module.exports = {
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-2-flex',
-    'black-forest-labs/flux-2-max',
   ],
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -75,6 +145,12 @@ module.exports = {
     'coquette-food',
     'kawaii-koi-pond',
     'kawaii-koi-pond-ultra',
+    'meal-types',
+    'whimsical',
+    'cuisine',
+    'scale',
+    'places',
+    'narrative',
   ],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
@@ -126,6 +202,11 @@ module.exports = {
     // backdrop elements (frosted-cake mountains etc.) one per entry.
     'candy-fantasy':
       'Kawaii candy-fantasy scene — composition follows the scene description below. The scene sits inside a RICH KAWAII CANDY-FANTASY WORLD where every surface is confectionery. The candy-world backdrop is RICH AND DETAILED but never overrides the foreground composition the scene description establishes.',
+    // 2026-06-06 — meal-types path: bot-wide Pop-Mart vinyl prefix overridden
+    // (left empty) so the rolled look_register from sharedDNA leads the brief.
+    // Sonnet front-loads the rolled cute medium (watercolor / claymation /
+    // pixel / felt / etc.) — that's the CLIP anchor variety knob.
+    'meal-types': '',
   },
 
   poolByName(name) {
@@ -155,11 +236,18 @@ module.exports = {
     throw new Error(`YumBot: path "${path}" has invalid export shape`);
   },
 
-  rollSharedDNA({ vibeKey }) {
+  rollSharedDNA({ vibeKey, picker }) {
     const pools = require('./pools');
     return {
       scenePalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cozy,
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cozy,
+      // 2026-06-06 — cute / kawaii visual register, mixed per render. Paths
+      // opt in by consuming sharedDNA.lookRegister in their template (lead
+      // with it so Flux's CLIP anchors there). Existing paths ignore it
+      // until plugged in path-by-path.
+      lookRegister: picker
+        ? picker.pickWithRecency(pools.YUMBOT_LOOK_REGISTER, 'look_register')
+        : pools.YUMBOT_LOOK_REGISTER[0],
     };
   },
 };
