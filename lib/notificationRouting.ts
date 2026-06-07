@@ -7,8 +7,7 @@
  *
  * The data shape is the loose superset of both surfaces' payloads. The
  * helper computes the destination route + applies the canonical side
- * effects (clear stale album state, invalidate the dreamWish cache when
- * landing on a dream-generated post) before pushing.
+ * effects (clear stale album state) before pushing.
  *
  * `deferUntilReady` wraps the push in InteractionManager.runAfterInteractions
  * — needed during cold-start when expo-router's navigator may not yet be
@@ -167,9 +166,6 @@ export function routeFromNotification(
   // inbox tap path runs (kept here so push + inbox stay aligned).
   if (target.startsWith('/photo/')) {
     useAlbumStore.getState().clearAlbum();
-    if (data.type === 'dream_generated') {
-      queryClient.invalidateQueries({ queryKey: ['dreamWish'] });
-    }
   }
 
   if (opts.markSeen) {

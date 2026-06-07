@@ -178,7 +178,6 @@ async function renderDream(jwt, vibeProfile, medium) {
         await sb.rpc('finalize_nightly_upload', {
           p_upload_id: result.upload_id,
           p_bot_message: `QA R${ROUND}/${i + 1} ${medium}`,
-          p_from_wish: null,
         });
         console.log(
           `    ✅ ${medium}/${result.resolved_vibe} (${elapsed}s) — ${result.prompt_used?.slice(0, 100)}...`

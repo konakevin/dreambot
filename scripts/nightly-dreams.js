@@ -76,7 +76,7 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
   const { data: users, error } = await sb
     .from('user_recipes')
     .select(
-      `user_id, dream_wish, wish_modifiers, wish_recipient_ids,
+      `user_id,
        users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, is_bot)`
     )
     .eq('onboarding_completed', true)
@@ -105,26 +105,17 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // One job per user. dedup_key (per-user-per-day) is the idempotency unit:
   // its unique index makes a same-day re-run a no-op. We pre-filter against
-  // jobs already enqueued today (the index also backstops a race). The wish is
-  // snapshotted into the payload and cleared from user_recipes below, so a
-  // render retry can't re-spend or double-clear it.
+  // jobs already enqueued today (the index also backstops a race).
   const allRows = pool.map((u) => ({
     source: 'nightly',
     user_id: u.user_id,
     status: 'queued',
-    payload: {
-      dream_wish: u.dream_wish || null,
-      wish_recipient_ids: Array.isArray(u.wish_recipient_ids) ? u.wish_recipient_ids : [],
-    },
+    payload: {},
     dedup_key: `nightly:${u.user_id}:${today}`,
   }));
 
   if (DRY_RUN) {
-    allRows.forEach((r) =>
-      console.log(
-        `  would enqueue ${r.user_id.slice(0, 8)}...${r.payload.dream_wish ? ' (wish)' : ''}`
-      )
-    );
+    allRows.forEach((r) => console.log(`  would enqueue ${r.user_id.slice(0, 8)}...`));
     console.log(`\n(dry run — ${allRows.length} jobs not enqueued)`);
     // Fall through to the reminder passes — they have their own DRY_RUN
     // guard and we want dry mode to print would-send reminders too.
@@ -159,16 +150,6 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
       console.log(
         `✨ Enqueued ${enqueued} nightly jobs (${allRows.length - newRows.length} already queued today).`
       );
-
-      // Clear wishes for users we just enqueued (snapshotted in their payload).
-      const wishUserIds = newRows.filter((r) => r.payload.dream_wish).map((r) => r.user_id);
-      if (wishUserIds.length > 0) {
-        const { error: clearErr } = await sb
-          .from('user_recipes')
-          .update({ dream_wish: null, wish_recipient_ids: null, wish_modifiers: null })
-          .in('user_id', wishUserIds);
-        if (clearErr) console.warn(`⚠️  wish clear failed: ${clearErr.message}`);
-      }
     }
   }
 

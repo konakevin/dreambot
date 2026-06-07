@@ -97,7 +97,6 @@ function iconForGroup(g: InboxGroup): IconSpec {
     case 'friend_accepted':
       return { name: 'people', color: colors.accent };
     case 'dream_generated':
-      if (g.subtype === 'wish') return { name: 'star', color: colors.accent };
       if (g.subtype === 'welcome') return { name: 'sparkles', color: colors.accent };
       return { name: 'moon', color: colors.accent };
     case 'dream_failed':
@@ -185,15 +184,17 @@ function getGroupText(g: InboxGroup): {
       return { subject: `${first} requested to follow you`, subtext: null, isAggregable: false };
 
     case 'dream_generated': {
-      // Wish-dream notifications (both self + recipients) carry the wish
-      // text or bot message in body — surface as subtext so the user sees
-      // what landed. Nightly = bot message (already ≤28). Welcome ping
-      // is subject-only (the welcome-gift screen carries the full copy).
+      // Body carries the bot message (nightly, already ≤28) or a short
+      // descriptor (manual) — surface as subtext. Welcome ping is
+      // subject-only (the welcome-gift screen carries the full copy).
       if (g.subtype === 'welcome') {
         return { subject: "Welcome, here's a gift", subtext: null, isAggregable: false };
       }
-      const subjectText = g.subtype === 'wish' ? 'Your wish has arrived' : 'Your dream has arrived';
-      return { subject: subjectText, subtext: capSubtext(g.body), isAggregable: false };
+      return {
+        subject: 'Your dream has arrived',
+        subtext: capSubtext(g.body),
+        isAggregable: false,
+      };
     }
 
     case 'dream_failed':
@@ -516,6 +517,24 @@ export default function InboxScreen() {
     if (text.isAggregable && g.actorCount > 1) {
       setExpandedGroupKey(g.groupKey);
       setExpandedTitle(text.subject);
+      return;
+    }
+    // Dream failures have no post to route to (the render never produced an
+    // upload), so routeFromNotification would no-op and the tap feels broken.
+    // The capped 28-char subtext also truncates right before "sparkle
+    // refunded", so the user never learns what happened. Surface the full
+    // message + refund status in an alert instead. Body is one of:
+    //   "Your dream couldn't render — sparkle refunded (<class>)"
+    //   "Your dream couldn't render (<class>)"  (refund pending / none)
+    if (g.type === 'dream_failed') {
+      const wasRefunded = (g.body ?? '').toLowerCase().includes('refund');
+      showAlert(
+        "Your dream couldn't render",
+        wasRefunded
+          ? "Something hiccuped while rendering, so this dream didn't make it through. Your sparkle has been refunded — give it another try whenever you like."
+          : "Something hiccuped while rendering, so this dream didn't make it through. If a sparkle was spent, it'll be refunded automatically within a few minutes.",
+        [{ text: 'OK' }]
+      );
       return;
     }
     // Single-actor or individual types → navigate to the relevant surface.

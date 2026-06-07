@@ -25,21 +25,19 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   withSequence,
-  withRepeat,
 } from 'react-native-reanimated';
 import { useCardGestures } from '@/hooks/gestures/useCardGestures';
-import { WishSparkle } from '@/components/dreamCardBits/WishSparkle';
 import { ExpandableDescription } from '@/components/dreamCardBits/ExpandableDescription';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { handleImageLongPress } from '@/lib/imageLongPress';
-import { Toast } from '@/components/Toast';
 import { avatarUrl } from '@/lib/imageUrl';
 import { getModelDisplayName } from '@/constants/imageModels';
 import { useAuthStore } from '@/store/auth';
+import { useFollowingIds } from '@/hooks/useFollowingIds';
+import { useToggleFollow } from '@/hooks/useToggleFollow';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -69,7 +67,6 @@ export interface DreamPostItem {
   created_at: string;
   comment_count?: number;
   like_count?: number;
-  from_wish?: string | null;
   recipe_id?: string | null;
   fuse_count?: number;
   fuse_of?: string | null;
@@ -145,6 +142,14 @@ export const DreamCard = memo(function DreamCard({
 }: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnPost = currentUser?.id === item.user_id;
+  // Inline "Follow" on the card (IG-style) — lets the user follow this account
+  // without drilling into the profile. Only shown once the following set has
+  // loaded (avoids flashing Follow on accounts you already follow). Cards only
+  // ever surface public/bot authors (get_feed returns public posts), so the
+  // public instant-follow path is correct here.
+  const { data: followingSet } = useFollowingIds();
+  const toggleFollow = useToggleFollow();
+  const showFollow = !isOwnPost && followingSet !== undefined && !followingSet.has(item.user_id);
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
@@ -174,22 +179,6 @@ export const DreamCard = memo(function DreamCard({
   const heroBase = item.image_url_display ?? item.image_url;
   const heroUrl =
     retryNonce > 0 ? `${heroBase}${heroBase.includes('?') ? '&' : '?'}r=${retryNonce}` : heroBase;
-
-  // Wish fairy dust — shimmering hazy border with sparkle particles
-  const isWish = !!item.from_wish;
-  const hazeOpacity = useSharedValue(0.3);
-  useEffect(() => {
-    if (isWish) {
-      hazeOpacity.value = withRepeat(
-        withSequence(withTiming(0.7, { duration: 2000 }), withTiming(0.3, { duration: 2000 })),
-        -1,
-        true
-      );
-    }
-  }, [isWish, hazeOpacity]);
-  const hazeStyle = useAnimatedStyle(() => ({
-    opacity: hazeOpacity.value,
-  }));
 
   // HUD visibility — single tap toggles, fades in/out
   const hudOpacity = useSharedValue(1);
@@ -384,44 +373,6 @@ export const DreamCard = memo(function DreamCard({
             )}
           </Animated.View>
 
-          {/* Wish shimmer border */}
-          {isWish && (
-            <View style={s.wishGlow} pointerEvents="none">
-              {/* Shimmering hazy edge glow */}
-              <Animated.View style={[StyleSheet.absoluteFill, hazeStyle]}>
-                <LinearGradient
-                  colors={['rgba(196,181,253,0.45)', 'rgba(255,223,150,0.2)', 'transparent']}
-                  style={s.wishEdgeTop}
-                />
-                <LinearGradient
-                  colors={['transparent', 'rgba(255,223,150,0.2)', 'rgba(196,181,253,0.45)']}
-                  style={s.wishEdgeBottom}
-                />
-                <LinearGradient
-                  colors={['rgba(196,181,253,0.4)', 'rgba(255,223,150,0.15)', 'transparent']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={s.wishEdgeLeft}
-                />
-                <LinearGradient
-                  colors={['transparent', 'rgba(255,223,150,0.15)', 'rgba(196,181,253,0.4)']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={s.wishEdgeRight}
-                />
-              </Animated.View>
-              {/* Sparkle particles evenly around the border */}
-              {Array.from({ length: 36 }).map((_, i) => (
-                <WishSparkle
-                  key={i}
-                  index={i}
-                  total={36}
-                  seed={item.id.charCodeAt(0) + item.id.charCodeAt(1) * 7}
-                />
-              ))}
-            </View>
-          )}
-
           {/* Heart burst */}
           <Animated.View style={[s.heartBurst, heartStyle]} pointerEvents="none">
             <Ionicons name="heart" size={80} color="#FFFFFF" />
@@ -463,20 +414,30 @@ export const DreamCard = memo(function DreamCard({
                   </View>
                 )}
                 <View style={{ flex: 1 }}>
-                  <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
+                  <View style={s.usernameLine}>
+                    <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
+                    {showFollow && (
+                      <TouchableOpacity
+                        style={s.followPill}
+                        onPress={() => {
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                          toggleFollow.mutate({
+                            userId: item.user_id,
+                            currentlyFollowing: false,
+                            isPublic: true,
+                          });
+                        }}
+                        hitSlop={{ top: 8, bottom: 8, left: 4, right: 10 }}
+                        activeOpacity={0.7}
+                      >
+                        <Text style={s.followText}>Follow</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                   {item.description ? <ExpandableDescription text={item.description} /> : null}
                   <Text style={s.timestamp}>{timeAgo(item.created_at)}</Text>
                 </View>
               </TouchableOpacity>
-              {item.from_wish && (
-                <TouchableOpacity
-                  onPress={() => Toast.show(`Wished: "${item.from_wish}"`, 'color-wand-outline')}
-                  activeOpacity={0.7}
-                  hitSlop={8}
-                >
-                  <Ionicons name="color-wand-outline" size={14} color="#FFFFFF" />
-                </TouchableOpacity>
-              )}
             </View>
 
             {/* Side actions */}
@@ -649,49 +610,6 @@ const s = StyleSheet.create({
     fontSize: fontScale(14),
     fontWeight: '600',
   },
-  wishGlow: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  wishEdgeTop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 40,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  wishEdgeBottom: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 40,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  wishEdgeLeft: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    width: 30,
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
-  },
-  wishEdgeRight: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    width: 30,
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
-  },
   heartBurst: {
     position: 'absolute',
     top: '50%',
@@ -781,6 +699,23 @@ const s = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.85)',
     textShadowRadius: 3,
     textShadowOffset: { width: 0, height: 1 },
+  },
+  // Inline "username  [Follow]" — Follow is a readable white chip (the lavender
+  // accent washed out on bright images).
+  usernameLine: { flexDirection: 'row', alignItems: 'center' },
+  followPill: {
+    marginLeft: 8,
+    paddingHorizontal: 9,
+    paddingVertical: verticalScale(3),
+    borderRadius: 11,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.55)',
+  },
+  followText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(12),
+    fontWeight: '700',
   },
   description: {
     color: 'rgba(255,255,255,0.85)',

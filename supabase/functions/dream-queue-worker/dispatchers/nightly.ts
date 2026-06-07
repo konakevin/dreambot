@@ -9,23 +9,15 @@
  *
  * After the render returns an upload, this finalizes it (ported from the old
  * inline cron in scripts/nightly-dreams.js): bot message → finalize_nightly_upload
- * → dreamer notification → wish-recipient notifications.
+ * → dreamer notification.
  *
  * Returns the upload_id; does NOT update dream_queue.status (the worker does,
  * based on whether this throws). Throws 'nsfw:...' for a safety rejection so the
  * worker dead-letters immediately instead of retrying a doomed render 5×.
- *
- * dream_wish is snapshotted into the job payload AND cleared from user_recipes
- * at ENQUEUE time, so retries never re-spend or double-clear it.
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { HAIKU } from '../../_shared/models.ts';
-
-interface NightlyPayload {
-  dream_wish?: string | null;
-  wish_recipient_ids?: string[] | null;
-}
 
 export interface NightlyDispatcherArgs {
   supabase: SupabaseClient;
@@ -49,17 +41,12 @@ const swallow = (resOrErr: unknown) => {
 
 export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<string> {
   const { supabase, supabaseUrl, workerToken, anthropicKey, userId } = args;
-  const payload = args.payload as unknown as NightlyPayload;
-  const wish = payload.dream_wish || null;
-  const wishRecipientIds = Array.isArray(payload.wish_recipient_ids)
-    ? payload.wish_recipient_ids
-    : [];
 
   // 1. Render in its own isolate via the worker-token branch of nightly-dreams.
   const res = await fetch(`${supabaseUrl}/functions/v1/nightly-dreams`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${workerToken}` },
-    body: JSON.stringify({ user_id: userId, dream_wish: wish || undefined }),
+    body: JSON.stringify({ user_id: userId }),
   });
   let data: Record<string, unknown> = {};
   try {
@@ -72,19 +59,7 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
     const errMsg =
       (data.error as string) || (data.code as string) || `nightly_render_http_${res.status}`;
     if (/nsfw|safety/i.test(errMsg)) {
-      // Terminal — a safety rejection won't pass on retry. Tell the wisher.
-      if (wish) {
-        await supabase
-          .from('notifications')
-          .insert({
-            recipient_id: userId,
-            actor_id: userId,
-            type: 'dream_generated',
-            // Subject-only inbox row — short for single-line layout (mig 223).
-            body: 'Wish too spicy — try a different one.',
-          })
-          .then(swallow, swallow);
-      }
+      // Terminal — a safety rejection won't pass on retry. Dead-letter it.
       throw new Error(`nsfw:${errMsg}`);
     }
     throw new Error(errMsg);
@@ -95,53 +70,28 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
   if (!uploadId) throw new Error('nightly_render_no_upload_id');
 
   // 2. Whimsical bot message (Haiku). Best-effort — never fail the job over it.
-  const botMessage = await generateBotMessage(supabase, anthropicKey, userId, promptUsed, wish);
+  const botMessage = await generateBotMessage(supabase, anthropicKey, userId, promptUsed);
 
-  // 3. Finalize the upload (bot_message + from_wish + approval/visibility).
+  // 3. Finalize the upload (bot_message + approval/visibility).
   const { error: rpcErr } = await supabase.rpc('finalize_nightly_upload', {
     p_upload_id: uploadId,
     p_bot_message: botMessage,
-    p_from_wish: wish,
   });
   if (rpcErr) console.error(`[nightly] finalize_nightly_upload failed: ${rpcErr.message}`);
 
-  // 4. Notify the dreamer. `subtype` lets the inbox distinguish wish vs
-  // plain-dream variants (migration 206 — replaces the legacy body-prefix
-  // discriminator). body is the clean bot message text.
+  // 4. Notify the dreamer. body is the clean bot message text (inbox subtext).
   await supabase
     .from('notifications')
     .insert({
       recipient_id: userId,
       actor_id: userId,
       type: 'dream_generated',
-      subtype: wish ? 'wish' : null,
       upload_id: uploadId,
-      // Bot message is the inbox subtext when shown. Hard-cap at 28
-      // chars belt-and-suspenders to fit single-line render (mig 223).
+      // Hard-cap at 28 chars to fit the single-line inbox layout (mig 223).
       // The Haiku prompt in generateBotMessage() asks for ≤28 already.
       body: (botMessage || '').slice(0, 28),
     })
     .then(swallow, swallow);
-
-  // 5. Notify wish recipients.
-  if (wish && wishRecipientIds.length > 0) {
-    const recipients = [...new Set(wishRecipientIds)].filter((rid) => rid && rid !== userId);
-    if (recipients.length > 0) {
-      await supabase
-        .from('notifications')
-        .insert(
-          recipients.map((rid) => ({
-            recipient_id: rid,
-            actor_id: userId,
-            type: 'dream_generated',
-            upload_id: uploadId,
-            // Inbox subtext — keep tight for single-line layout (mig 223).
-            body: wish.slice(0, 28),
-          }))
-        )
-        .then(swallow, swallow);
-    }
-  }
 
   return uploadId;
 }
@@ -150,14 +100,13 @@ async function generateBotMessage(
   supabase: SupabaseClient,
   anthropicKey: string,
   userId: string,
-  promptUsed: string,
-  wish: string | null
+  promptUsed: string
 ): Promise<string | null> {
   if (!anthropicKey) return null;
   try {
     const { data: recentDreams } = await supabase
       .from('uploads')
-      .select('ai_prompt, from_wish')
+      .select('ai_prompt')
       .eq('user_id', userId)
       .eq('is_ai_generated', true)
       .order('created_at', { ascending: false })
@@ -165,15 +114,10 @@ async function generateBotMessage(
     const recentContext = (recentDreams ?? [])
       .map((d: { ai_prompt?: string }) => (d.ai_prompt ? d.ai_prompt.slice(0, 80) : null))
       .filter(Boolean);
-    const pastWishes = (recentDreams ?? [])
-      .map((d: { from_wish?: string }) => d.from_wish)
-      .filter(Boolean);
 
     let memoryBlock = '';
     if (recentContext.length > 0)
       memoryBlock += `\nOPTIONAL CONTEXT (reference ONLY if genuinely interesting, otherwise ignore):\n- Recent dreams: ${recentContext.join(' | ')}`;
-    if (pastWishes.length > 0) memoryBlock += `\n- Past wishes: ${pastWishes.join(', ')}`;
-    if (wish) memoryBlock += `\n- Tonight's wish: "${wish}"`;
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

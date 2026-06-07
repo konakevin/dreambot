@@ -53,11 +53,20 @@ export type RecoveryDecision =
 export function decideDreamJobRecovery(args: {
   job: DreamJobSnapshot | null;
   queued: boolean;
+  /** True once recovery has polled past the no-job grace window without ever
+   *  seeing a dream_jobs row. When set, a missing row is treated as terminal
+   *  (the Edge Function never started) rather than a transient upsert race. */
+  noJobGraceExceeded?: boolean;
 }): RecoveryDecision {
   // User already opted into the background-push flow — leave them where they
   // are (back on the create tab / DLT screen). Don't yank them into reveal.
   if (args.queued) return { action: 'noop' };
-  if (!args.job) return { action: 'noop' };
+  // No dream_jobs row. The server upserts the job as one of its first steps,
+  // so a brief absence right after the invoke is the upsert race — keep polling.
+  // But if recovery has run past the grace window and there's STILL no row, the
+  // Edge Function never started (connect/boot/transport failure before any
+  // server work): fail fast instead of spinning out the full 90s poll window.
+  if (!args.job) return args.noJobGraceExceeded ? { action: 'fail' } : { action: 'noop' };
 
   const { status, upload_id, result_image_url, result_prompt, result_medium, result_vibe } =
     args.job;

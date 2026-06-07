@@ -41,7 +41,6 @@ async function runNight(n, recipe) {
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${jwt}` },
     body: JSON.stringify({
       vibe_profile: recipe,
-      dream_wish: recipe.dream_wish,
     }),
   });
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);

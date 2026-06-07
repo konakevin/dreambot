@@ -604,7 +604,7 @@ export default function CreateScreen() {
               directives are bypassed in this mode). OFF → the Medium/Vibe pills. */}
           {config.useExactPrompt ? (
             <View className="mb-4">
-              <FluxModelPicker variant="pill" onChange={setAdvancedModelId} />
+              <FluxModelPicker onChange={setAdvancedModelId} />
             </View>
           ) : (
             <View className="flex-row gap-3 mb-4">

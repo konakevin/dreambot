@@ -27,6 +27,12 @@ const SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
 const RELATIONSHIP_REGEX =
   /\bmy\s+(partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
 
+// How long recovery polls without ever seeing a dream_jobs row before
+// concluding the Edge Function never started (connect/boot failure) and failing
+// fast. Generous enough to cover the upsert race + cold start, far short of the
+// 90s processing-poll backstop.
+const NO_JOB_GRACE_MS = 12_000;
+
 export default function DreamLoadingScreen() {
   const { generate } = useDreamCreate();
   const started = useRef(false);
@@ -40,6 +46,11 @@ export default function DreamLoadingScreen() {
   // to Slack briefly hasn't queued; they're still watching the loading
   // screen, so recovery must run when they come back.
   const notificationRequested = useRef(false);
+  // Timestamp (ms) when transport-failure recovery began. Drives the no-job
+  // grace window: if we poll past NO_JOB_GRACE_MS and dream_jobs STILL has no
+  // row, the Edge Function never started → fail fast instead of spinning the
+  // full 90s. 0 = not in recovery.
+  const recoveryStartedAt = useRef(0);
   const [showQueue, setShowQueue] = useState(false);
 
   // Decide once on mount whether the longer-wait subline applies. We
@@ -66,6 +77,15 @@ export default function DreamLoadingScreen() {
   // even though the client lost the response. We don't show the failure
   // card while this is true — we keep the loading spinner up and poll.
   const [isRecovering, setIsRecovering] = useState(false);
+  // True once recovery has CONCLUDED that a recoverable (transport-level)
+  // failure is terminal — either dream_jobs reported failed/nsfw, or the 90s
+  // poll window elapsed. Until this flips, a transport-level failure keeps the
+  // spinner up instead of flashing the failure card. This is what kills the
+  // "lost connection" flash when the user backgrounds mid-render and returns:
+  // the suspended fetch rejects on resume, setting a recoverable failure, but
+  // the render is usually still in flight server-side (or already done), so we
+  // must NOT paint the card until recovery says it really failed.
+  const [recoveryFailed, setRecoveryFailed] = useState(false);
 
   // Classification confirmation modal — shown when photo is ambiguous (group/unclear).
   // The Promise resolver is held in a ref so the generate() hook can await user input.
@@ -99,6 +119,8 @@ export default function DreamLoadingScreen() {
 
     // Reset any prior failure state when a new generation starts
     setActiveJobFailure(null);
+    setRecoveryFailed(false);
+    recoveryStartedAt.current = 0;
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
@@ -121,6 +143,9 @@ export default function DreamLoadingScreen() {
   function handleRetry() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setActiveJobFailure(null);
+    setRecoveryFailed(false);
+    setIsRecovering(false);
+    recoveryStartedAt.current = 0;
     started.current = false;
     // Re-trigger the generation effect by setting started back to false and
     // forcing a re-mount via router.replace to the same path
@@ -160,7 +185,17 @@ export default function DreamLoadingScreen() {
         .eq('id', jobId)
         .maybeSingle();
 
-      const decision = decideDreamJobRecovery({ job, queued: queued.current });
+      // No-job grace: only fail-fast on a missing row once we've actually been
+      // in recovery (recoveryStartedAt set) past the grace window. The
+      // AppState-foreground path can call tryRecover with no active failure
+      // (recoveryStartedAt = 0) — there, a missing row stays a no-op.
+      const noJobGraceExceeded =
+        recoveryStartedAt.current > 0 && Date.now() - recoveryStartedAt.current >= NO_JOB_GRACE_MS;
+      const decision = decideDreamJobRecovery({
+        job,
+        queued: queued.current,
+        noJobGraceExceeded,
+      });
       switch (decision.action) {
         case 'navigate':
           setResult(decision.result);
@@ -169,6 +204,7 @@ export default function DreamLoadingScreen() {
           router.replace('/dream/reveal');
           return;
         case 'fail':
+          setRecoveryFailed(true);
           setIsRecovering(false);
           return;
         case 'poll':
@@ -222,6 +258,13 @@ export default function DreamLoadingScreen() {
   useEffect(() => {
     if (!failure) return;
     if (failure.refunded || failure.isNsfw || failure.isPreFlightModeration) return;
+    // Recoverable (transport-level) failure — typically the backgrounded fetch
+    // rejecting on resume. Enter recovery immediately: this (a) holds the
+    // spinner up via showSpinner and (b) guarantees the 5s poll + 90s timeout
+    // run even if this first tryRecover() throws, so we can never hang on an
+    // infinite spinner. tryRecover then navigates / keeps polling / marks failed.
+    if (!recoveryStartedAt.current) recoveryStartedAt.current = Date.now();
+    setIsRecovering(true);
     void tryRecover();
   }, [failure, tryRecover]);
 
@@ -235,6 +278,9 @@ export default function DreamLoadingScreen() {
       if (ticks > 18) {
         clearInterval(interval);
         setIsRecovering(false);
+        // Polling window elapsed — recovery is over, so let the failure card
+        // show now (the refund-stuck-jobs sweeper takes it from here).
+        setRecoveryFailed(true);
         // Polling exhausted. If no failure card is set, synthesize one so
         // the user isn't left staring at an infinite spinner.
         if (!useDreamStore.getState().activeJobFailure) {
@@ -303,9 +349,16 @@ export default function DreamLoadingScreen() {
     }
   }
 
-  // Show the spinner when there's no failure OR when we're actively
-  // recovering (render likely still in flight server-side).
-  const showSpinner = !failure || isRecovering;
+  // A "recoverable" failure is a transport-level drop (NOT a server NSFW
+  // block, pre-flight moderation, or confirmed refund) — typically the
+  // suspended fetch rejecting when the user returns from backgrounding. The
+  // render is durable server-side, so we keep the spinner up for these until
+  // recovery CONCLUDES they're terminal (recoveryFailed). Without this guard
+  // the failure card flashed for a frame between the catch firing and the
+  // recovery poll setting isRecovering.
+  const isRecoverableFailure =
+    !!failure && !failure.refunded && !failure.isNsfw && !failure.isPreFlightModeration;
+  const showSpinner = !failure || isRecovering || (isRecoverableFailure && !recoveryFailed);
 
   return (
     <View style={s.container}>

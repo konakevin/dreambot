@@ -419,9 +419,9 @@ async function handleRequest(req: Request): Promise<Response> {
     // request-upscale, cached on first download. See UPSCALE_QUEUE_PLAN.md.
 
     // ── Job update + notification in parallel ─────────────────────────
-    const notifBody = hint
-      ? `dream:Your dream is ready: ${hint.slice(0, 150)}`
-      : `dream:Your dream is ready: ${resolvedMediumKey}/${resolvedVibeKey}`;
+    // Inbox subtext only (push copy is generated in send-push from
+    // subtype='manual'). Clean descriptor — no legacy 'dream:' prefix.
+    const notifBody = hint ? hint.slice(0, 150) : `${resolvedMediumKey} · ${resolvedVibeKey}`;
 
     // Notify ONLY if the user queued/left (loading screen "Queue This" sets
     // notify_on_complete); a foreground wait gets no ping. See migration 191.
@@ -462,6 +462,7 @@ async function handleRequest(req: Request): Promise<Response> {
               recipient_id: userId,
               actor_id: userId,
               type: 'dream_generated',
+              subtype: 'manual',
               upload_id: uploadId,
               body: notifBody,
             })

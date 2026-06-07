@@ -414,12 +414,14 @@ export default function SettingsScreen() {
               )
             }
           />
-          <SettingsRow
-            icon="mail-outline"
-            label="Email"
-            onPress={() => {}}
-            trailing={<Text style={styles.rowValue}>{user?.email}</Text>}
-          />
+          {/* Email is the account identity (often owned by an OAuth provider —
+              Apple/Google/Facebook), so it's read-only: a static row, not a
+              TouchableOpacity, with no chevron, so it doesn't read as tappable. */}
+          <View style={styles.row}>
+            <Ionicons name="mail-outline" size={20} color={colors.accent} />
+            <Text style={styles.rowLabel}>Email</Text>
+            <Text style={styles.rowValue}>{user?.email}</Text>
+          </View>
         </View>
 
         {/* Privacy */}
@@ -481,7 +483,10 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* Bots */}
+        {/* Bots — browse the full roster with previews + follow toggles
+            (post-onboarding equivalent of the onboarding bot selector).
+            Inline Follow on cards covers contextual follows; this is the
+            discovery/manage surface. */}
         <Text style={styles.sectionHeader}>BOTS</Text>
         <View style={styles.section}>
           <SettingsRow icon="planet" label="Bots" onPress={() => nav.push('/settings/bots')} />
@@ -493,17 +498,9 @@ export default function SettingsScreen() {
             The leaf screens themselves still exist at the same routes —
             navigated to via Edit Profile's DREAM IDENTITY section now. */}
 
-        {/* Advanced Mode section — power-user Flux model preference for
-            the Create-screen "Advanced Mode" toggle. Free feature; not to
-            be confused with Pro subscription. */}
-        <Text style={styles.sectionHeader}>ADVANCED MODE</Text>
-        <View style={styles.section}>
-          <SettingsRow
-            icon="flash-outline"
-            label="Advanced Mode Flux Model"
-            onPress={() => nav.push('/settings/advanced-mode')}
-          />
-        </View>
+        {/* Advanced Mode's AI-model picker now lives inline on the Create
+            screen (toggle Advanced Mode → AI Model pill), so the settings
+            entry point + /settings/advanced-mode screen were removed. */}
 
         {isAdmin && (
           <>
@@ -535,6 +532,14 @@ export default function SettingsScreen() {
                   thumbColor="#FFFFFF"
                 />
               </View>
+              {/* Debug escape hatch — clears all query cache + reshuffles the
+                  feed + resets scroll. Admin-only (was a vague user-facing row). */}
+              <SettingsRow
+                icon="refresh-outline"
+                label="Refresh App"
+                onPress={handleRefreshAll}
+                trailing={null}
+              />
             </View>
           </>
         )}
@@ -558,17 +563,6 @@ export default function SettingsScreen() {
               router.replace('/(onboarding)');
             }}
             destructive
-            trailing={null}
-          />
-        </View>
-
-        {/* App section */}
-        <Text style={styles.sectionHeader}>APP</Text>
-        <View style={styles.section}>
-          <SettingsRow
-            icon="refresh-outline"
-            label="Refresh App"
-            onPress={handleRefreshAll}
             trailing={null}
           />
         </View>

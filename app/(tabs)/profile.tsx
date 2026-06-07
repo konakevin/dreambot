@@ -560,5 +560,4 @@ const styles = StyleSheet.create({
   },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
   emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },
-  wishRow: { paddingHorizontal: 16, paddingBottom: verticalScale(8) },
 });

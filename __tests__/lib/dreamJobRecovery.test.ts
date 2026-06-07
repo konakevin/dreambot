@@ -148,8 +148,26 @@ describe('decideDreamJobRecovery — queued/no-row guards', () => {
     expect(decideDreamJobRecovery({ job, queued: true })).toEqual({ action: 'noop' });
   });
 
-  it("returns 'noop' when there's no dream_jobs row (e.g. activeJobId stale)", () => {
+  it("returns 'noop' when there's no dream_jobs row within the grace window (upsert race)", () => {
     expect(decideDreamJobRecovery({ job: null, queued: false })).toEqual({ action: 'noop' });
+    expect(decideDreamJobRecovery({ job: null, queued: false, noJobGraceExceeded: false })).toEqual(
+      { action: 'noop' }
+    );
+  });
+
+  it("returns 'fail' when there's STILL no dream_jobs row past the grace window (Edge never started)", () => {
+    // The server upserts the job as one of its first steps — a missing row
+    // after the grace window means the Edge Function never ran. Fail fast
+    // instead of spinning out the full 90s poll.
+    expect(decideDreamJobRecovery({ job: null, queued: false, noJobGraceExceeded: true })).toEqual({
+      action: 'fail',
+    });
+  });
+
+  it('queued still overrides the no-job-grace fail', () => {
+    expect(decideDreamJobRecovery({ job: null, queued: true, noJobGraceExceeded: true })).toEqual({
+      action: 'noop',
+    });
   });
 
   it('queued overrides every other branch', () => {

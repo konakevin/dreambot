@@ -184,19 +184,6 @@ function RealtimeSubscriber() {
       )
       .on(
         'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'user_recipes',
-          filter: `user_id=eq.${user.id}`,
-        },
-        () => {
-          // Recipe/wish updated (e.g. wish cleared after granting)
-          queryClient.invalidateQueries({ queryKey: ['dreamWish', user.id] });
-        }
-      )
-      .on(
-        'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'uploads', filter: `user_id=eq.${user.id}` },
         () => {
           // New dream generated for this user — refresh feeds (single predicate call)

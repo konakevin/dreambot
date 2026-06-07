@@ -1480,9 +1480,11 @@ Output ONLY the prompt.`;
     // downloads. See UPSCALE_QUEUE_PLAN.md.
 
     // Job update + notification in parallel (both need uploadId but not each other)
+    // Inbox subtext only (the push copy is generated in send-push from
+    // subtype='manual'). Clean descriptor — no legacy 'dream:' prefix.
     const notifBody = hint
-      ? `dream:Your dream is ready: ${hint.slice(0, 150)}`
-      : `dream:Your dream is ready: ${resolvedMediumKey ?? 'surprise'}/${resolvedVibeKey ?? 'surprise'}`;
+      ? hint.slice(0, 150)
+      : `${resolvedMediumKey ?? 'surprise'} · ${resolvedVibeKey ?? 'surprise'}`;
 
     // Notify ONLY if the user left/queued (the loading screen's "Queue This"
     // sets dream_jobs.notify_on_complete). A user who waited on the loading
@@ -1525,6 +1527,7 @@ Output ONLY the prompt.`;
               recipient_id: userId,
               actor_id: userId,
               type: 'dream_generated',
+              subtype: 'manual',
               upload_id: uploadId,
               body: notifBody,
             })

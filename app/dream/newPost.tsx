@@ -49,7 +49,7 @@ export default function NewPostScreen() {
     setPosting(true);
     try {
       // Moderate the public description — same wordlist gate every other
-      // user-facing free-text field uses (comments, wishes, prompts, username).
+      // user-facing free-text field uses (comments, prompts, username).
       const trimmed = description.trim();
       if (trimmed) {
         const mod = await moderateText(trimmed);

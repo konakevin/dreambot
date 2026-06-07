@@ -27,10 +27,27 @@ interface AckPackage {
   license: string;
   homepage: string | null;
   author: string | null;
-  licenseText: string | null;
+  // License text is deduped: copyright is stored per-package, the shared body
+  // lives in `texts[textHash]` with a placeholder where the copyright goes.
+  copyright: string;
+  textHash: string | null;
 }
 
-const PACKAGES = data as AckPackage[];
+interface AckData {
+  packages: AckPackage[];
+  texts: Record<string, string>;
+}
+
+const COPYRIGHT_PLACEHOLDER = '__ACK_COPYRIGHT__';
+const { packages: PACKAGES, texts: TEXTS } = data as AckData;
+
+/** Reconstruct a package's exact license text from the shared body + its copyright. */
+function licenseTextFor(p: AckPackage): string | null {
+  if (!p.textHash) return null;
+  const body = TEXTS[p.textHash];
+  if (!body) return null;
+  return body.replace(COPYRIGHT_PLACEHOLDER, p.copyright || '');
+}
 
 export default function AcknowledgementsScreen() {
   const [query, setQuery] = useState('');
@@ -85,7 +102,7 @@ export default function AcknowledgementsScreen() {
                 </TouchableOpacity>
               )}
               <Text style={styles.licenseText} selectable>
-                {item.licenseText ??
+                {licenseTextFor(item) ??
                   `License: ${item.license}\n(Full license text not bundled — see the package's source repository.)`}
               </Text>
             </View>

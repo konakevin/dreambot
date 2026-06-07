@@ -138,7 +138,6 @@ Deno.serve(async (req) => {
     vibe_profile = body.vibe_profile as VibeProfile | undefined;
   }
 
-  const dream_wish = (body.dream_wish as string) || undefined;
   // Preserve explicit null — caller passes null to mean "force scene-only,
   // no cast". `||` would coerce null → undefined and break the
   // forceCastRole === null branch downstream in rollDream.
@@ -662,10 +661,6 @@ Deno.serve(async (req) => {
       // location (no canals/driftwood/lightning-deer in a café).
       biome: locationCard?.biome ?? undefined,
     });
-
-    if (dream_wish) {
-      dreamSubject += `. DREAM WISH (make this the heart): "${dream_wish}"`;
-    }
 
     console.log('[nightly-dreams] Scene DNA:', dreamSubject.slice(0, 200));
     lap('nightly-subject');

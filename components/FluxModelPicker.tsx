@@ -6,10 +6,8 @@
  * direct-pass-through renders). Selecting a model here updates that column,
  * so the change takes effect on the very next dream — no backend change.
  *
- * Two variants:
- *   • variant="list" — full inline grouped list (Settings → Advanced Mode).
- *   • variant="pill" — compact "AI Model" dropdown pill that opens the same
- *     grouped list in a bottom sheet (Create screen, when Advanced Mode is on).
+ * Renders a compact "AI Model" dropdown pill that opens a grouped model list
+ * in a bottom sheet (Create screen, when Advanced Mode is on).
  *
  * Models are grouped by family (Flux 1 / Flux 2 / OpenAI / Google); each row
  * shows that model's own sparkle cost. Flux 1.1 Pro carries a DEFAULT badge.
@@ -20,15 +18,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  Modal,
-  ScrollView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
@@ -39,23 +29,19 @@ import { DEFAULT_MODEL_ID, FAMILY_ORDER, FAMILY_LABELS } from '@/constants/image
 import { useImageModels } from '@/hooks/useImageModels';
 
 interface Props {
-  /** 'list' = full inline grouped list; 'pill' = dropdown pill + bottom sheet. */
-  variant?: 'list' | 'pill';
   /** Fires after initial load and on each selection. */
   onChange?: (modelId: string) => void;
 }
 
-export function FluxModelPicker({ variant = 'list', onChange }: Props) {
+export function FluxModelPicker({ onChange }: Props) {
   const user = useAuthStore((s) => s.user);
   const models = useImageModels();
   const [selected, setSelected] = useState<string>(DEFAULT_MODEL_ID);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
-      setLoading(false);
       return;
     }
     let active = true;
@@ -68,7 +54,6 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
       if (!active) return;
       const loaded = data?.pro_mode_flux_model || DEFAULT_MODEL_ID;
       setSelected(loaded);
-      setLoading(false);
       onChange?.(loaded);
     })();
     return () => {
@@ -84,7 +69,7 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelected(modelId);
     onChange?.(modelId);
-    if (variant === 'pill') setModalOpen(false);
+    setModalOpen(false);
     if (modelId === selected) return;
     setSaving(true);
     const { error } = await supabase
@@ -181,19 +166,6 @@ export function FluxModelPicker({ variant = 'list', onChange }: Props) {
     </View>
   );
 
-  // ── variant: list (inline, e.g. Settings) ──
-  if (variant === 'list') {
-    if (loading) {
-      return (
-        <View style={{ paddingTop: verticalScale(40), alignItems: 'center' }}>
-          <ActivityIndicator color={colors.accent} />
-        </View>
-      );
-    }
-    return renderFamilyList();
-  }
-
-  // ── variant: pill (Create screen dropdown → bottom sheet) ──
   const current = models.find((m) => m.id === selected);
   return (
     <View>

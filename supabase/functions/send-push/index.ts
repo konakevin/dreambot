@@ -55,6 +55,10 @@ function pickDreamPushTitle(): string {
 function pickDreamPushBody(): string {
   return DREAM_PUSH_BODIES[Math.floor(Math.random() * DREAM_PUSH_BODIES.length)];
 }
+// Copy for a dream the user ACTIVELY created and then left the app before it
+// finished (subtype='manual'). The nightly "while you slept" framing is wrong
+// here — they made this on purpose, so the copy is direct.
+const MANUAL_DREAM_PUSH_BODY = 'Tap to see what you created.';
 
 function getNotificationContent(
   type: string,
@@ -122,9 +126,14 @@ function getNotificationContent(
     case 'follow_accepted':
       return { title: `${actorName} accepted your follow request`, body: '' };
     case 'dream_generated':
-      // Rotating push copy — short, mysterious, personal. The emotional hook
-      // of DreamBot is "while you slept," so leaning into that. If the
-      // notification body field is populated (e.g., wish text), prefer that;
+      // A dream the user actively created + left the app before it finished —
+      // "while you slept" copy is wrong, so use create-flow copy (and ignore
+      // the stored body, which is the inbox subtext, not push copy).
+      if (subtype === 'manual') {
+        return { title: 'Your dream is ready ✨', body: MANUAL_DREAM_PUSH_BODY };
+      }
+      // Nightly auto-dream — short, mysterious, personal ("while you slept").
+      // If the notification body is populated (the bot message), prefer it;
       // otherwise rotate one of the curated lines.
       return {
         title: pickDreamPushTitle(),
