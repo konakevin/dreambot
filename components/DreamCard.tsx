@@ -392,9 +392,13 @@ export const DreamCard = memo(function DreamCard({
             {/* Top-right fit toggle — flips contentFit between 'cover'
                 (full-bleed crop) and 'contain' (letterboxed, full image
                 visible). Sits in the HUD so it fades with chrome on
-                single-tap clean-image mode. Per-card local state. */}
+                single-tap clean-image mode. Per-card local state.
+                Top offset clears the (tabs) screen's top-overlay gradient
+                (FeedTabs strip, ~insets.top + 50pt) — without this the
+                gradient sat over the button and the overlay's flex
+                spacer Views ate the tap. */}
             <TouchableOpacity
-              style={[s.fitToggle, { top: insets.top + verticalScale(8) }]}
+              style={[s.fitToggle, { top: insets.top + verticalScale(56) }]}
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 setFitMode((m) => (m === 'cover' ? 'contain' : 'cover'));
