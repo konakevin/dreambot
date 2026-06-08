@@ -20,7 +20,6 @@ import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
-import { useProfileAlbumCounts } from '@/hooks/useProfileAlbumCounts';
 import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
@@ -40,12 +39,12 @@ type Tab = 'posts' | 'saved' | 'dreams' | 'reposts' | 'followers' | 'following';
 type AlbumTab = 'posts' | 'dreams' | 'saved' | 'reposts';
 
 // Per-album subheader copy — the icon tabs alone don't say what each album is,
-// so a one-line explainer (+ count) sits under the active icon.
-const ALBUM_INFO: Record<AlbumTab, { name: string; desc: string }> = {
-  posts: { name: 'Posts', desc: "Dreams you've shared to the feed" },
-  dreams: { name: 'Dreams', desc: 'All your creations, public and private' },
-  saved: { name: 'Saved', desc: "Dreams you've bookmarked" },
-  reposts: { name: 'Reposts', desc: "Dreams you've reposted to your followers" },
+// so a single explainer line sits under the active icon.
+const ALBUM_INFO: Record<AlbumTab, string> = {
+  posts: 'Your public dreams, shared to the feed',
+  dreams: 'All your dreams — public and private',
+  saved: "Dreams you've saved",
+  reposts: "Dreams you've reposted to your followers",
 };
 
 export default function ProfileScreen() {
@@ -87,7 +86,6 @@ export default function ProfileScreen() {
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
-  const { data: albumCounts } = useProfileAlbumCounts(user?.id ?? '');
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
   );
@@ -339,19 +337,13 @@ export default function ProfileScreen() {
         </View>
       )}
 
-      {/* Per-album subheader — name + count + a one-line explainer, so the
-          icon-only tabs are unambiguous. Mirrors the Followers/Following row. */}
+      {/* Per-album explainer — one line under the icon tabs (the icon-only
+          tabs don't say what each album is). */}
       {(activeTab === 'posts' ||
         activeTab === 'dreams' ||
         activeTab === 'saved' ||
         activeTab === 'reposts') && (
-        <View style={styles.albumSubheader}>
-          <Text style={styles.albumSubheaderTitle}>
-            {ALBUM_INFO[activeTab as AlbumTab].name}
-            {albumCounts ? `  ·  ${albumCounts[activeTab as AlbumTab]}` : ''}
-          </Text>
-          <Text style={styles.albumSubheaderDesc}>{ALBUM_INFO[activeTab as AlbumTab].desc}</Text>
-        </View>
+        <Text style={styles.albumSubheader}>{ALBUM_INFO[activeTab as AlbumTab]}</Text>
       )}
 
       {/* Section heading for the followers/following sub-views — repeats
@@ -474,21 +466,13 @@ const styles = StyleSheet.create({
     fontSize: fontScale(15),
     fontWeight: '700',
   },
-  // Per-album subheader under the icon tab row (Posts/Dreams/Saved/Reposts).
+  // Per-album explainer line under the icon tab row (single line, no count).
   albumSubheader: {
-    paddingHorizontal: 16,
-    paddingTop: verticalScale(12),
-    paddingBottom: verticalScale(8),
-  },
-  albumSubheaderTitle: {
-    color: colors.textPrimary,
-    fontSize: fontScale(15),
-    fontWeight: '700',
-  },
-  albumSubheaderDesc: {
     color: colors.textSecondary,
-    fontSize: fontScale(12.5),
-    marginTop: verticalScale(2),
+    fontSize: fontScale(13),
+    paddingHorizontal: 16,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(8),
   },
   listSectionCount: {
     color: colors.textSecondary,
