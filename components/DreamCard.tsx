@@ -39,6 +39,8 @@ import { getModelDisplayName } from '@/constants/imageModels';
 import { useAuthStore } from '@/store/auth';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
+import { useRepostIds } from '@/hooks/useRepostIds';
+import { useToggleRepost } from '@/hooks/useToggleRepost';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -68,6 +70,7 @@ export interface DreamPostItem {
   created_at: string;
   comment_count?: number;
   like_count?: number;
+  repost_count?: number;
   recipe_id?: string | null;
   fuse_count?: number;
   fuse_of?: string | null;
@@ -157,6 +160,13 @@ export const DreamCard = memo(function DreamCard({
   const { data: followingSet } = useFollowingIds();
   const toggleFollow = useToggleFollow();
   const showFollow = !isOwnPost && followingSet !== undefined && !followingSet.has(item.user_id);
+  // Repost — self-contained (membership Set is one shared cached query; the
+  // mutation toggles via the toggle_repost RPC). Hidden on own posts; a post
+  // whose author opted out is rejected server-side (optimistic state rolls back).
+  const { data: repostIdsSet } = useRepostIds();
+  const toggleRepost = useToggleRepost();
+  const isReposted = repostIdsSet?.has(item.id) ?? false;
+  const canRepost = !isOwnPost;
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
@@ -419,6 +429,33 @@ export const DreamCard = memo(function DreamCard({
                     <Ionicons name="sparkles" size={10} color="#FFFFFF" />
                     <Text style={s.modelBadgeText}>{getModelDisplayName(item.model)}</Text>
                   </View>
+                </View>
+              )}
+              {/* Repost button — sits directly above the username (model badge,
+                  being debug-only, is bumped up above it). Reposting resurfaces
+                  this dream into the user's followers' feed + Explore. Hidden on
+                  own posts; works on bot dreams (bots are repost targets). */}
+              {canRepost && (
+                <View style={s.repostBtnWrap}>
+                  <TouchableOpacity
+                    style={[s.repostBtn, isReposted && s.repostBtnActive]}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      toggleRepost.mutate({ uploadId: item.id, currentlyReposted: isReposted });
+                    }}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Ionicons
+                      name="repeat"
+                      size={15}
+                      color={isReposted ? colors.success : '#FFFFFF'}
+                    />
+                    <Text style={[s.repostBtnText, isReposted && s.repostBtnTextActive]}>
+                      {isReposted ? 'Reposted' : 'Repost'}
+                      {(item.repost_count ?? 0) > 0 ? `  ${item.repost_count}` : ''}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               )}
               <TouchableOpacity
@@ -730,6 +767,31 @@ const s = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 0.2,
   },
+  // Repost button — a pill above the username. flex-start wrap hugs its label.
+  // Dark translucent when inactive; success-green tint + border when reposted.
+  repostBtnWrap: { flexDirection: 'row', marginBottom: verticalScale(2) },
+  repostBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 11,
+    paddingVertical: verticalScale(5),
+    borderRadius: 999,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.25)',
+  },
+  repostBtnActive: {
+    backgroundColor: 'rgba(76,170,100,0.22)',
+    borderColor: colors.success,
+  },
+  repostBtnText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(12),
+    fontWeight: '700',
+    letterSpacing: 0.2,
+  },
+  repostBtnTextActive: { color: colors.success },
   usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: verticalScale(8) },
   avatar: {
     width: 32,

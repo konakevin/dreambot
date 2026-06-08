@@ -69,6 +69,9 @@ export function trackCommentAdded(p: { is_reply: boolean }): void {
 export function trackPostShared(p: { recipient_count: number }): void {
   capture('post_shared', p);
 }
+export function trackPostReposted(): void {
+  capture('post_reposted');
+}
 export function trackFollowAdded(p: { target_is_bot: boolean }): void {
   capture('follow_added', p);
 }
