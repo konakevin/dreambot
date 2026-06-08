@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { timeAgo } from '@/lib/timeAgo';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -169,6 +170,14 @@ export const DreamCard = memo(function DreamCard({
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
   const [showRetryUi, setShowRetryUi] = useState(false);
+
+  // Per-card image fit toggle (top-right HUD button). 'cover' is the default
+  // (full-bleed, may crop the sides of off-ratio renders); 'contain'
+  // letterboxes so the user can see the full image when something was cropped
+  // out. Per-card local state — fresh on every scroll (FlatList recycler
+  // unmounts the card → state resets), matches IG-style "tap to peek".
+  const [fitMode, setFitMode] = useState<'cover' | 'contain'>('cover');
+  const insets = useSafeAreaInsets();
   useEffect(
     () => () => {
       if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
@@ -318,7 +327,7 @@ export const DreamCard = memo(function DreamCard({
             <Image
               source={{ uri: heroUrl }}
               style={s.fullImage}
-              contentFit="cover"
+              contentFit={fitMode}
               cachePolicy="memory-disk"
               recyclingKey={item.id}
               transition={150}
@@ -328,7 +337,7 @@ export const DreamCard = memo(function DreamCard({
               // backgroundColor on fullImage when thumbhash is null
               // (legacy posts pre-219 — backfilled in a separate pass).
               placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
-              placeholderContentFit="cover"
+              placeholderContentFit={fitMode}
               onError={() => {
                 if (retryCountRef.current >= MAX_IMG_RETRIES) {
                   // Silent auto-retries exhausted — show the user-tappable
@@ -380,6 +389,26 @@ export const DreamCard = memo(function DreamCard({
 
           {/* HUD — post info + side actions, toggled by single tap */}
           <Animated.View style={[StyleSheet.absoluteFill, hudStyle]} pointerEvents="box-none">
+            {/* Top-right fit toggle — flips contentFit between 'cover'
+                (full-bleed crop) and 'contain' (letterboxed, full image
+                visible). Sits in the HUD so it fades with chrome on
+                single-tap clean-image mode. Per-card local state. */}
+            <TouchableOpacity
+              style={[s.fitToggle, { top: insets.top + verticalScale(8) }]}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setFitMode((m) => (m === 'cover' ? 'contain' : 'cover'));
+              }}
+              hitSlop={10}
+              activeOpacity={0.7}
+              accessibilityLabel={fitMode === 'cover' ? 'Show full image' : 'Fill screen'}
+            >
+              <Ionicons
+                name={fitMode === 'cover' ? 'expand-outline' : 'contract-outline'}
+                size={20}
+                color="#FFFFFF"
+              />
+            </TouchableOpacity>
             <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
               {/* Model badge — sits ABOVE the username so Kevin (and users)
                   can see which AI rendered the image at a glance. Friendly
@@ -609,6 +638,18 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(14),
     fontWeight: '600',
+  },
+  fitToggle: {
+    position: 'absolute',
+    right: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
   },
   heartBurst: {
     position: 'absolute',
