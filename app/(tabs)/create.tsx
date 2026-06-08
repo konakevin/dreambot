@@ -44,8 +44,7 @@ import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
-import { FluxModelPicker } from '@/components/FluxModelPicker';
-import { DreamBotModelPicker, DREAMBOT_DEFAULT_MODEL } from '@/components/DreamBotModelPicker';
+import { ModelPicker } from '@/components/ModelPicker';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
@@ -94,27 +93,22 @@ export default function CreateScreen() {
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const [showProModeInfo, setShowProModeInfo] = useState(false);
-  // Advanced Mode AI model — synced from <FluxModelPicker> (which persists it to
-  // users.pro_mode_flux_model). Tracked here so the dream button can show the
-  // selected model's sparkle cost.
-  const [advancedModelId, setAdvancedModelId] = useState(DEFAULT_MODEL_ID);
-  // DreamBot-route AI model — synced from <DreamBotModelPicker> (sticky in
-  // AsyncStorage). In the engine (DreamBot) route this is forced over the
-  // medium's auto-pick so the user's choice is deterministic. All curated
-  // options are 1 sparkle, so cost/margin are unchanged.
-  const [dreamBotModelId, setDreamBotModelId] = useState(DREAMBOT_DEFAULT_MODEL);
+  // Unified AI model — the single top-level model choice shared by BOTH routes
+  // (DreamBot engine + Direct). Synced from <ModelPicker> (persisted to
+  // users.pro_mode_flux_model, cross-device). Drives force_model + the Dream
+  // button's sparkle cost for both routes.
+  const [selectedModelId, setSelectedModelId] = useState(DEFAULT_MODEL_ID);
   const imageModels = useImageModels();
   const engineConfig = useEngineConfig();
   const promptRef = useRef<TextInput>(null);
 
-  // Keep config.forceModel in sync with the active route:
-  //   • Advanced/Direct (useExactPrompt) → the FluxModelPicker model (verbatim).
-  //   • DreamBot (engine) → the DreamBotModelPicker model, forced over the
-  //     medium's auto-pick so the user's chosen model is deterministic.
-  // Both run through getSparkleCost server-side; all DreamBot options are 1✦.
+  // The chosen model is forced for BOTH routes: Direct sends the prompt verbatim
+  // to it; DreamBot runs the full engine (mediums/vibes/face-swap) and renders
+  // with it. The server charges getSparkleCost(force_model), so the cost is the
+  // model's tier (1–5) regardless of route — matching the Dream button below.
   useEffect(() => {
-    setForceModel(config.useExactPrompt ? advancedModelId : dreamBotModelId);
-  }, [config.useExactPrompt, advancedModelId, dreamBotModelId, setForceModel]);
+    setForceModel(selectedModelId);
+  }, [selectedModelId, setForceModel]);
 
   // The Create-screen pickers used to filter their options down to the
   // user's onboarding-curated aesthetics + art_styles via a `userFilter`
@@ -600,11 +594,21 @@ export default function CreateScreen() {
             </View>
           )}
 
+          {/* Unified AI-model picker — top-level, shared by BOTH routes. The
+              model is orthogonal to the engine: any model can render a raw
+              (Direct) prompt OR a full DreamBot dream (mediums/vibes/face-swap).
+              Drives force_model + the Dream button cost for both. */}
+          {!hasPhoto && (
+            <View className="mb-4">
+              <ModelPicker onChange={setSelectedModelId} />
+            </View>
+          )}
+
           {/* Engine selector — two named engines (no photo attached):
               • DreamBot (config.useExactPrompt = false) — our engine: custom
                 mediums/vibes, prompt polish, and cast-photo face swap.
               • Direct (config.useExactPrompt = true) — prompt goes verbatim to
-                the user's chosen AI model, skipping styling + face swap.
+                the chosen AI model, skipping styling + face swap.
               State is sticky per-user via AsyncStorage (USE_EXACT_PROMPT_KEY).
               Photo path hides this and shows the inline note above (Direct is
               text-only). */}
@@ -682,107 +686,97 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Advanced Mode ON → the AI model picker replaces Medium/Vibe (those
-              directives are bypassed in this mode). OFF → the Medium/Vibe pills
-              PLUS a friendly DreamBot model picker (still runs the full engine;
-              the chosen model is forced over the medium's auto-pick). */}
-          {config.useExactPrompt ? (
-            <View className="mb-4">
-              <FluxModelPicker onChange={setAdvancedModelId} />
-            </View>
-          ) : (
-            <>
-              <View className="flex-row gap-3 mb-4">
-                <View className="flex-1">
-                  <Text
-                    className="text-xs font-medium mb-1.5 ml-1"
-                    style={{ color: colors.textSecondary }}
-                  >
-                    Medium
-                  </Text>
-                  <TouchableOpacity
-                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                    style={{
-                      backgroundColor: colors.surface,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                    }}
-                    onPress={openMediumPicker}
-                    activeOpacity={0.7}
-                  >
-                    <View className="flex-row items-center gap-1.5 flex-1 mr-1">
-                      <Text
-                        className="text-sm font-semibold"
-                        style={{ color: colors.textPrimary }}
-                        numberOfLines={1}
-                      >
-                        {mediumLabel}
-                      </Text>
-                      {(isSurpriseMedium || selectedMediumRow) && (
-                        <View
-                          style={{
-                            paddingHorizontal: 5,
-                            paddingVertical: verticalScale(1),
-                            borderRadius: 5,
-                            backgroundColor: mediumFaceSwaps
-                              ? 'rgba(96,165,250,0.15)'
-                              : 'rgba(245,158,11,0.15)',
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: fontScale(8),
-                              fontWeight: '700',
-                              color: mediumFaceSwaps ? '#60A5FA' : '#F59E0B',
-                              textTransform: 'uppercase',
-                              letterSpacing: 0.5,
-                            }}
-                          >
-                            {mediumFaceSwaps ? 'face' : 'art'}
-                          </Text>
-                        </View>
-                      )}
-                    </View>
-                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                </View>
-
-                <View className="flex-1">
-                  <Text
-                    className="text-xs font-medium mb-1.5 ml-1"
-                    style={{ color: colors.textSecondary }}
-                  >
-                    Vibe
-                  </Text>
-                  <TouchableOpacity
-                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                    style={{
-                      backgroundColor: colors.surface,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                    }}
-                    onPress={() => {
-                      Keyboard.dismiss();
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      setPickerType('vibe');
-                    }}
-                    activeOpacity={0.7}
-                  >
+          {/* DreamBot route → Medium/Vibe pills (engine directives). Direct route
+              bypasses these (raw prompt), so they're hidden. The model picker is
+              top-level above, shared by both routes. */}
+          {!config.useExactPrompt && (
+            <View className="flex-row gap-3 mb-4">
+              <View className="flex-1">
+                <Text
+                  className="text-xs font-medium mb-1.5 ml-1"
+                  style={{ color: colors.textSecondary }}
+                >
+                  Medium
+                </Text>
+                <TouchableOpacity
+                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  }}
+                  onPress={openMediumPicker}
+                  activeOpacity={0.7}
+                >
+                  <View className="flex-row items-center gap-1.5 flex-1 mr-1">
                     <Text
                       className="text-sm font-semibold"
                       style={{ color: colors.textPrimary }}
                       numberOfLines={1}
                     >
-                      {vibeLabel}
+                      {mediumLabel}
                     </Text>
-                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                </View>
+                    {(isSurpriseMedium || selectedMediumRow) && (
+                      <View
+                        style={{
+                          paddingHorizontal: 5,
+                          paddingVertical: verticalScale(1),
+                          borderRadius: 5,
+                          backgroundColor: mediumFaceSwaps
+                            ? 'rgba(96,165,250,0.15)'
+                            : 'rgba(245,158,11,0.15)',
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: fontScale(8),
+                            fontWeight: '700',
+                            color: mediumFaceSwaps ? '#60A5FA' : '#F59E0B',
+                            textTransform: 'uppercase',
+                            letterSpacing: 0.5,
+                          }}
+                        >
+                          {mediumFaceSwaps ? 'face' : 'art'}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                </TouchableOpacity>
               </View>
-              <View className="mb-4">
-                <DreamBotModelPicker onChange={setDreamBotModelId} />
+
+              <View className="flex-1">
+                <Text
+                  className="text-xs font-medium mb-1.5 ml-1"
+                  style={{ color: colors.textSecondary }}
+                >
+                  Vibe
+                </Text>
+                <TouchableOpacity
+                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setPickerType('vibe');
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    className="text-sm font-semibold"
+                    style={{ color: colors.textPrimary }}
+                    numberOfLines={1}
+                  >
+                    {vibeLabel}
+                  </Text>
+                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                </TouchableOpacity>
               </View>
-            </>
+            </View>
           )}
         </ScrollView>
 
@@ -817,10 +811,7 @@ export default function CreateScreen() {
           >
             <View className="flex-row items-center gap-2">
               <Text className="text-white text-base font-bold">
-                Dream ·{' '}
-                {config.useExactPrompt
-                  ? sparkleCostFrom(imageModels, advancedModelId)
-                  : engineConfig.baseSparkleCost}
+                Dream · {sparkleCostFrom(imageModels, selectedModelId)}
               </Text>
               <Ionicons name="sparkles" size={16} color="#FFFFFF" />
             </View>

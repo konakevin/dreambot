@@ -204,3 +204,42 @@ export const FAMILY_LABELS: Record<ModelFamily, string> = {
   openai: 'OpenAI',
   google: 'Google',
 };
+
+/**
+ * Short, plain-English blurbs for the unified Create-screen model picker.
+ * Deliberately simple — DreamBot is built for non-technical users first; each
+ * line points out THIS model's felt difference, not its tech. The DB catalog's
+ * own `description` is more technical (Advanced surfaces), so the picker prefers
+ * these. Tweak freely — copy-only, no logic depends on the wording.
+ */
+export const MODEL_BLURBS: Record<string, string> = {
+  'black-forest-labs/flux-1.1-pro': 'Reliable all-rounder',
+  'black-forest-labs/flux-2-pro': 'Newest — crisp and detailed',
+  'google/gemini-2-image': 'Bright, bold colors',
+  'black-forest-labs/flux-dev': 'Soft and artistic',
+  'black-forest-labs/flux-schnell': 'Fastest — quick ideas',
+  'black-forest-labs/flux-krea-dev': 'Natural, painterly feel',
+  'black-forest-labs/flux-2-dev': 'Newer, well-rounded',
+  'black-forest-labs/flux-1.1-pro-ultra': 'Extra sharp and realistic',
+  'black-forest-labs/flux-2-flex': 'Rich, detailed look',
+  'black-forest-labs/flux-2-max': 'Maximum detail',
+  'openai/gpt-image-1': 'Very lifelike and real',
+  'openai/gpt-image-2': 'Great with text in images',
+  'google/gemini-3-image-preview': 'Top quality, crisp detail',
+};
+
+/** The handful shown in the picker's "Recommended" group (idiot-friendly
+ *  defaults). Everything else lives under "More models". All 1 sparkle. */
+export const RECOMMENDED_MODEL_IDS: string[] = [
+  'black-forest-labs/flux-1.1-pro',
+  'black-forest-labs/flux-2-pro',
+  'google/gemini-2-image',
+  'black-forest-labs/flux-dev',
+  'black-forest-labs/flux-schnell',
+];
+
+/** Picker blurb for an id — friendly map first, then the catalog's own
+ *  description, then empty. */
+export function modelBlurb(id: string, fallback?: string): string {
+  return MODEL_BLURBS[id] ?? fallback ?? '';
+}
