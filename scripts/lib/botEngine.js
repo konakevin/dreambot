@@ -1398,6 +1398,7 @@ async function runBot(opts) {
           mediumKey: medium,
           vibeKey: vibeKey,
           allowedModels: bot.allowedModels,
+          modelWeights: bot.modelWeights,
         });
         renderModel = picked.model;
         renderInputOverrides = picked.inputOverrides;

@@ -212,7 +212,16 @@ module.exports = {
   cycleAllPaths: true,
 
   useModelPicker: true,
-  allowedModels: ALL_ENABLED_AI_MODELS,
+  // Locked to flux-1.1-pro-ultra (Kevin 2026-06-07 — the chibi look rolls
+  // cleanest on pro-ultra) with a 20% bounce to gpt-image-2 for variety. The
+  // gpt-2 picks auto-swap to chibibot_gpt_clean via cleanMediumByModel (mig
+  // 238) so they render with the dedicated clean directive instead of the
+  // neutral medium's Pop-Mart vinyl default.
+  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra', 'openai/gpt-image-2'],
+  modelWeights: {
+    'black-forest-labs/flux-1.1-pro-ultra': 80,
+    'openai/gpt-image-2': 20,
+  },
 
   // Per-path model lock. creature-world → flux-dev. CONFIRMED from the DB:
   // the ornate reference renders Kevin hearted (2026-05-07, paths

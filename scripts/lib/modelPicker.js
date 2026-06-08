@@ -167,12 +167,28 @@ async function refreshCache() {
  * @param {string} [opts.forceModel] — override for testing (e.g. 'sdxl').
  * @returns {Promise<{ model: string, inputOverrides: Object }>}
  */
+// Weighted pick over a candidate array using a model-weight map. Falls back
+// to uniform random when no weight is provided for any candidate.
+function pickWeighted(candidates, weights) {
+  if (!weights || typeof weights !== 'object') return pickRandom(candidates);
+  const entries = candidates.map((c) => [c, weights[c] ?? 0]);
+  const totalWeight = entries.reduce((s, [, w]) => s + w, 0);
+  if (totalWeight <= 0) return pickRandom(candidates);
+  let roll = Math.random() * totalWeight;
+  for (const [c, w] of entries) {
+    roll -= w;
+    if (roll <= 0) return c;
+  }
+  return entries[entries.length - 1][0];
+}
+
 async function pickModel({
   renderMode = 'flux-dev',
   mediumKey,
   vibeKey,
   forceModel,
   allowedModels,
+  modelWeights,
 } = {}) {
   if (forceModel) {
     return {
@@ -208,7 +224,7 @@ async function pickModel({
     const overrideModels = overrideCache.get(`${mediumKey}|${vibeKey}`);
     const filtered = overrideModels ? filterByAllowed(overrideModels) : null;
     if (filtered && filtered.length > 0) {
-      const picked = pickRandom(filtered);
+      const picked = pickWeighted(filtered, modelWeights);
       return {
         model: picked,
         inputOverrides: defaultsForModel(picked),
@@ -221,7 +237,7 @@ async function pickModel({
     const mediumModels = mediumModelsCache.get(mediumKey);
     const filtered = mediumModels ? filterByAllowed(mediumModels) : null;
     if (filtered && filtered.length > 0) {
-      const picked = pickRandom(filtered);
+      const picked = pickWeighted(filtered, modelWeights);
       return {
         model: picked,
         inputOverrides: defaultsForModel(picked),
@@ -231,7 +247,7 @@ async function pickModel({
 
   // Fallback: pick from the bot's allowedModels whitelist itself, or DEFAULT.
   if (allowedModels && Array.isArray(allowedModels) && allowedModels.length > 0) {
-    const picked = pickRandom(allowedModels);
+    const picked = pickWeighted(allowedModels, modelWeights);
     return {
       model: picked,
       inputOverrides: defaultsForModel(picked),
