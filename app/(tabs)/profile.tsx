@@ -525,9 +525,12 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.28)',
     backgroundColor: 'rgba(255,255,255,0.06)',
   },
+  // Active state is NEUTRAL (not the accent) on purpose: the accent/purple means
+  // "public" on the Public badge, so a purple "Private only" toggle conflicts.
+  // The checked checkbox + brighter text/fill carry the on state instead.
   dreamsFilterActive: {
-    backgroundColor: colors.accent,
-    borderColor: colors.accent,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    borderColor: 'rgba(255,255,255,0.55)',
   },
   dreamsFilterText: {
     color: colors.textSecondary,
