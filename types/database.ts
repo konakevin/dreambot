@@ -749,20 +749,80 @@ export type Database = {
         };
         Relationships: [];
       };
+      edge_function_invocations: {
+        Row: {
+          created_at: string;
+          function_name: string;
+          id: number;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          function_name: string;
+          id?: number;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          function_name?: string;
+          id?: number;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       engine_config: {
         Row: {
+          chaos_high_threshold: number;
+          chaos_low_threshold: number;
+          embodied_mediums_high: string[];
+          embodied_mediums_mid: string[];
+          extra_models_high: string[];
+          extra_models_mid: string[];
+          face_swap_dual_rate: number;
+          face_swap_self_rate: number;
+          face_swap_share: number;
           id: number;
           scene_eligible_models: string[];
+          scene_embodied_rate: number;
+          scene_embodied_rate_high: number;
+          scene_embodied_rate_low: number;
+          scene_embodied_rate_mid: number;
           updated_at: string;
         };
         Insert: {
+          chaos_high_threshold?: number;
+          chaos_low_threshold?: number;
+          embodied_mediums_high?: string[];
+          embodied_mediums_mid?: string[];
+          extra_models_high?: string[];
+          extra_models_mid?: string[];
+          face_swap_dual_rate?: number;
+          face_swap_self_rate?: number;
+          face_swap_share?: number;
           id?: number;
           scene_eligible_models?: string[];
+          scene_embodied_rate?: number;
+          scene_embodied_rate_high?: number;
+          scene_embodied_rate_low?: number;
+          scene_embodied_rate_mid?: number;
           updated_at?: string;
         };
         Update: {
+          chaos_high_threshold?: number;
+          chaos_low_threshold?: number;
+          embodied_mediums_high?: string[];
+          embodied_mediums_mid?: string[];
+          extra_models_high?: string[];
+          extra_models_mid?: string[];
+          face_swap_dual_rate?: number;
+          face_swap_self_rate?: number;
+          face_swap_share?: number;
           id?: number;
           scene_eligible_models?: string[];
+          scene_embodied_rate?: number;
+          scene_embodied_rate_high?: number;
+          scene_embodied_rate_low?: number;
+          scene_embodied_rate_mid?: number;
           updated_at?: string;
         };
         Relationships: [];
@@ -1373,6 +1433,42 @@ export type Database = {
           },
         ];
       };
+      post_reposts: {
+        Row: {
+          created_at: string;
+          id: string;
+          reposter_id: string;
+          upload_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          reposter_id: string;
+          upload_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          reposter_id?: string;
+          upload_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'post_reposts_reposter_id_fkey';
+            columns: ['reposter_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'post_reposts_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       post_shares: {
         Row: {
           created_at: string;
@@ -1636,6 +1732,7 @@ export type Database = {
           posted_at: string | null;
           recipe: Json | null;
           recipe_id: string | null;
+          repost_count: number;
           save_count: number;
           search_tsv: unknown;
           share_count: number;
@@ -1681,6 +1778,7 @@ export type Database = {
           posted_at?: string | null;
           recipe?: Json | null;
           recipe_id?: string | null;
+          repost_count?: number;
           save_count?: number;
           search_tsv?: unknown;
           share_count?: number;
@@ -1726,6 +1824,7 @@ export type Database = {
           posted_at?: string | null;
           recipe?: Json | null;
           recipe_id?: string | null;
+          repost_count?: number;
           save_count?: number;
           search_tsv?: unknown;
           share_count?: number;
@@ -1906,6 +2005,7 @@ export type Database = {
       };
       users: {
         Row: {
+          allow_reposts: boolean;
           avatar_url: string | null;
           bio: string | null;
           created_at: string;
@@ -1928,6 +2028,7 @@ export type Database = {
           username: string;
         };
         Insert: {
+          allow_reposts?: boolean;
           avatar_url?: string | null;
           bio?: string | null;
           created_at?: string;
@@ -1950,6 +2051,7 @@ export type Database = {
           username: string;
         };
         Update: {
+          allow_reposts?: boolean;
           avatar_url?: string | null;
           bio?: string | null;
           created_at?: string;
@@ -1996,6 +2098,14 @@ export type Database = {
       };
       block_exists: { Args: { a: string; b: string }; Returns: boolean };
       block_user: { Args: { p_blocked_id: string }; Returns: undefined };
+      cancel_pending_download_push: {
+        Args: { p_upload_id: string };
+        Returns: undefined;
+      };
+      cancel_pending_dream_push: {
+        Args: { p_upload_id: string };
+        Returns: undefined;
+      };
       category_enabled_for: {
         Args: { p_category: string; p_channel: string; p_user_id: string };
         Returns: boolean;
@@ -2288,6 +2398,15 @@ export type Database = {
           username: string;
         }[];
       };
+      get_reposters: {
+        Args: { p_cursor?: string; p_limit?: number; p_upload_id: string };
+        Returns: {
+          avatar_url: string;
+          reposted_at: string;
+          user_id: string;
+          username: string;
+        }[];
+      };
       get_shareable_vibers: {
         Args: { p_user_id: string };
         Returns: {
@@ -2370,6 +2489,13 @@ export type Database = {
           p_user_id: string;
         };
         Returns: boolean;
+      };
+      toggle_repost: {
+        Args: { p_upload_id: string };
+        Returns: {
+          repost_count: number;
+          reposted: boolean;
+        }[];
       };
       touch_last_active: { Args: never; Returns: undefined };
     };
