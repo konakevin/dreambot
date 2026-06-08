@@ -663,12 +663,7 @@ export const DreamCard = memo(function DreamCard({
                 activeOpacity={0.7}
                 accessibilityLabel={fitMode === 'cover' ? 'Show full image' : 'Fill screen'}
               >
-                <Ionicons
-                  name={fitMode === 'cover' ? 'expand-outline' : 'contract-outline'}
-                  size={24}
-                  color="#FFFFFF"
-                  style={ui.sideIcon}
-                />
+                <Ionicons name="scan-outline" size={24} color="#FFFFFF" style={ui.sideIcon} />
               </TouchableOpacity>
             </View>
           </Animated.View>
@@ -803,10 +798,10 @@ const s = StyleSheet.create({
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
   },
-  // Reposted state: SOLID green fill + white text/icon (a green-text-on-tint
-  // version was unreadable against bright images). White-on-green reads anywhere.
+  // Reposted state: SOLID accent fill + white text/icon — readable on any image
+  // AND on-brand (green clashed with the app's lavender accent palette).
   repostBtnActive: {
-    backgroundColor: colors.success,
+    backgroundColor: colors.accent,
     borderColor: 'rgba(255,255,255,0.35)',
   },
   repostBtnText: {

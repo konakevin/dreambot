@@ -130,9 +130,9 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     fontWeight: '600',
   },
-  // "Public" pill on PUBLIC dreams — SOLID GREEN so it pops at a glance (a dark
-  // badge camouflages against photos). Green reads as "live / public". Subtle
-  // drop shadow lifts it off bright tiles.
+  // "Public" pill on PUBLIC dreams — SOLID accent fill so it pops at a glance
+  // (a dark badge camouflages against photos) AND stays on-brand (lavender,
+  // not the off-palette green). Subtle drop shadow lifts it off bright tiles.
   publicBadge: {
     position: 'absolute',
     bottom: 5,
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: verticalScale(2.5),
     borderRadius: 999,
-    backgroundColor: colors.success,
+    backgroundColor: colors.accent,
     shadowColor: '#000',
     shadowOpacity: 0.3,
     shadowRadius: 2,
