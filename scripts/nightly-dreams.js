@@ -70,22 +70,30 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 (async () => {
   console.log('\n🌙 Nightly Dream Enqueue');
   const cfg = await fetchEngineConfig(sb);
+  // Master kill-switch — pause nightly enqueues from the dashboard without touching
+  // the cron. Explicit --max-jobs (a manual/QA run) bypasses the switch.
+  if (!cfg.nightlyEnabled && MAX_JOBS_OVERRIDE == null) {
+    console.log('⏸  Nightly disabled via engine_config.nightly_enabled — skipping enqueue.\n');
+    return;
+  }
   const MAX_JOBS = MAX_JOBS_OVERRIDE != null ? MAX_JOBS_OVERRIDE : cfg.nightlyMaxJobs;
   console.log(`   Max jobs: ${MAX_JOBS} | Dry run: ${DRY_RUN}\n`);
 
   const today = new Date().toISOString().slice(0, 10); // UTC day
   const now = Date.now();
 
-  // Eligible: onboarded + ai_enabled, real users (no bots), Pro or in-trial.
-  const { data: users, error } = await sb
+  // Eligible: real users (no bots — never tunable), Pro or in-trial, gated by the
+  // config predicates (onboarding / ai_enabled, both default on).
+  let eligibleQuery = sb
     .from('user_recipes')
     .select(
       `user_id,
        users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, is_bot)`
     )
-    .eq('onboarding_completed', true)
-    .eq('ai_enabled', true)
     .eq('users.is_bot', false);
+  if (cfg.nightlyRequireOnboarding) eligibleQuery = eligibleQuery.eq('onboarding_completed', true);
+  if (cfg.nightlyRequireAiEnabled) eligibleQuery = eligibleQuery.eq('ai_enabled', true);
+  const { data: users, error } = await eligibleQuery;
 
   if (error) {
     console.error('DB error:', error.message);

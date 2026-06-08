@@ -18,6 +18,9 @@ const DEFAULT_ENGINE_CONFIG = {
   photoPreprocessWidth: 1024,
   photoPreprocessQuality: 0.8,
   nightlyMaxJobs: 5000,
+  nightlyEnabled: true,
+  nightlyRequireOnboarding: true,
+  nightlyRequireAiEnabled: true,
   selfRefRegex: null,
   relationshipRegex: null,
 };
@@ -30,7 +33,7 @@ async function fetchEngineConfig(sb) {
   const { data, error } = await sb
     .from('engine_config')
     .select(
-      'base_sparkle_cost, welcome_sparkle_bonus, pro_trial_days, prompt_max_length, photo_preprocess_width, photo_preprocess_quality, nightly_max_jobs, self_ref_regex, relationship_regex'
+      'base_sparkle_cost, welcome_sparkle_bonus, pro_trial_days, prompt_max_length, photo_preprocess_width, photo_preprocess_quality, nightly_max_jobs, nightly_enabled, nightly_require_onboarding, nightly_require_ai_enabled, self_ref_regex, relationship_regex'
     )
     .eq('id', 1)
     .single();
@@ -54,6 +57,11 @@ async function fetchEngineConfig(sb) {
       DEFAULT_ENGINE_CONFIG.photoPreprocessQuality
     ),
     nightlyMaxJobs: num(data.nightly_max_jobs, DEFAULT_ENGINE_CONFIG.nightlyMaxJobs),
+    nightlyEnabled: data.nightly_enabled ?? DEFAULT_ENGINE_CONFIG.nightlyEnabled,
+    nightlyRequireOnboarding:
+      data.nightly_require_onboarding ?? DEFAULT_ENGINE_CONFIG.nightlyRequireOnboarding,
+    nightlyRequireAiEnabled:
+      data.nightly_require_ai_enabled ?? DEFAULT_ENGINE_CONFIG.nightlyRequireAiEnabled,
     selfRefRegex: data.self_ref_regex ?? DEFAULT_ENGINE_CONFIG.selfRefRegex,
     relationshipRegex: data.relationship_regex ?? DEFAULT_ENGINE_CONFIG.relationshipRegex,
   };

@@ -16,6 +16,9 @@ export interface DreamMedium {
   is_character_only: boolean;
   face_swaps: boolean;
   character_render_mode?: string;
+  /** Forward-compat passthrough (migration 251) — new admin-set client attributes
+   *  (e.g. pro_only, badge, min_app_version) land here with no RPC/rebuild change. */
+  client_meta?: Record<string, unknown> | null;
 }
 
 export interface DreamVibe {
@@ -23,6 +26,7 @@ export interface DreamVibe {
   label: string;
   description?: string;
   directive: string;
+  client_meta?: Record<string, unknown> | null;
 }
 
 export function useDreamMediums() {
