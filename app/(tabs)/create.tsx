@@ -917,9 +917,9 @@ export default function CreateScreen() {
                 lineHeight: fontScale(21),
               }}
             >
-              Our engine. Renders your custom mediums & vibes, polishes your prompt for the best
-              result, and swaps your cast photos into the scene so you and your +1 appear in the
-              dream. 1 sparkle per dream.
+              Our engine. It polishes your prompt, styles your dream with a hand-picked set of
+              mediums & vibes, and swaps your cast photos into the scene — mention yourself to
+              appear solo, or you and your +1 to include both.
             </Text>
 
             <View className="flex-row items-center mb-1.5" style={{ marginTop: verticalScale(16) }}>
@@ -942,8 +942,18 @@ export default function CreateScreen() {
                 lineHeight: fontScale(21),
               }}
             >
-              Sends your exact prompt straight to the AI model you choose — no styling, polish, or
-              face swap. Each model shows its own sparkle cost in the picker.
+              Sends your exact words straight to the AI model — no mediums, polish, or face swap.
+              Best when you want full control over the prompt.
+            </Text>
+            <Text
+              style={{
+                color: colors.textMuted ?? colors.textSecondary,
+                fontSize: fontScale(12),
+                lineHeight: fontScale(18),
+                marginTop: verticalScale(14),
+              }}
+            >
+              Either way, pick your AI model up top — its sparkle cost shows on the Dream button.
             </Text>
             <TouchableOpacity
               onPress={() => setShowProModeInfo(false)}
