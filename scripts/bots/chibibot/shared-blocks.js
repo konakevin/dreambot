@@ -172,8 +172,30 @@ When the scene is pure architecture / landscape (no creatures specified in the s
 const GPT_CLEAN =
   'Clean cute chibi character illustration, crisp render with clearly readable big-eyed rounded characters and cozy scenes, soft pastel palette, warm gentle lighting, designer-collectible register';
 
+// CHIBI_NEUTRAL — the "looks" medium (2026-06-07). Locks ChibiBot's IDENTITY
+// (an adorable chibi CREATURE — never a human — at chibi proportions) but DROPS
+// the fixed Pop-Mart-vinyl render-style lock. The specific animation style /
+// rendering medium / finish / palette is set by the rolled sharedDNA.lookRegister
+// tokens that lead the prompt (Pixar / DreamWorks / Disney-CG / Ghibli / storybook
+// / etc.). HARD creatures-only + chibi-proportion locks are load-bearing here:
+// the film looks (Pixar/Disney/Tangled/Frozen) carry strong human-child/princess
+// priors and non-chibi proportion priors, and ChibiBot has a documented
+// human-children purge — so this fragment must out-vote those. Used by the
+// look-enabled paths (mediumByPath in index.js); creature-world keeps its
+// hearted chibibot_creature medium. Mirrors YumBot's YUMBOT_FOOD_NEUTRAL.
+// COMPOSITION-NEUTRAL on purpose (2026-06-07 fix): ChibiBot is HYBRID —
+// creature-led paths (a creature IS the subject) AND scene-led paths (a
+// village / landscape / interior is the hero, with chibi creatures in it). An
+// earlier version opened "The subject is a CHIBI CREATURE…", which front-loaded
+// creature-as-subject and collapsed the village/landscape paths into a single
+// creature close-up. So this fragment locks creatures-only + chibi proportions
+// + no-humans but DEFERS the subject/composition to the scene description.
+const CHIBI_NEUTRAL =
+  'Every figure in frame is an adorable chibi CREATURE — a real animal or a cute fantasy critter — at chibi proportions (oversized round head, big sparkling eyes), NEVER a human or human child. Keep the composition the scene below describes — a hero creature OR a village / landscape / interior populated by chibi creatures. The animation style, rendering medium, finish, and palette are set by the look-register tokens that lead the prompt.';
+
 module.exports = {
   GPT_CLEAN,
+  CHIBI_NEUTRAL,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   CUTE_CUDDLY_COZY_BLOCK,

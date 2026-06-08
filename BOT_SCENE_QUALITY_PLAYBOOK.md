@@ -127,6 +127,44 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 
 ---
 
+## "Medium Looks" — 3RD PROVEN BOT: ChibiBot cute-film looks + the HYBRID-bot lesson (2026-06-07)
+
+**Result:** shipped the look-register axis to ChibiBot — 13 cute film/storybook looks (Pixar / DreamWorks / modern-Disney-CG / Illumination / Sony-Spider-Verse / Cartoon-Saloon / classic-Disney-2D / SPA-Klaus / flat-2D-cartoon / Ghibli / vintage-storybook / mid-century-gouache / Pop-Mart) across all 17 look-enabled paths (creature-world excluded — hearted recipe). Kevin: "chibibot looks good." Full 20-render random-path batch: 0 failures, 0 human leaks, villages rendering as rich critter-villages, full 7-model spread. **This bot taught two lessons the first two didn't.**
+
+### LESSON 1 (the big one) — for a HYBRID bot, the neutral medium must be COMPOSITION-NEUTRAL
+
+YumBot (food) and MangaBot (anime) are single-disposition: the cast/subject is the same kind of thing on every path. **ChibiBot is HYBRID** — some paths are **creature-led** (a creature IS the subject: creature-portrait, cuddly-aquatic, sleepy-naptime) and some are **scene-led** (a *place* is the hero, with critters living in it: the 6 villages, cozy-landscape, interiors). My first neutral medium opened *"The subject is an adorable CHIBI CREATURE…"* — copied straight from YumBot's cast-locked pattern. It **collapsed every scene-led path into a creature close-up**: villages rendered as one critter with a single cottage as a blurry backdrop, NOT a village. Kevin caught it ("none looked like a village scene").
+
+**Diagnostic that nailed it:** read the actual `ai_prompt`. It opened `"cute chibi creature, The subject is a CHIBI CREATURE … every character in frame is a creature, [scene]"` — ~60 words of *subject-assertion* front-loading CLIP onto the creature before the scene was ever described. (The old `chibibot_pixar` medium was style-only, so the village templates' composition led — that's why villages worked before the looks change.)
+
+**The fix — lock the CAST, defer the COMPOSITION:**
+- Neutral medium reworded to: *"Every figure in frame is an adorable chibi CREATURE … NEVER a human. Keep the composition the scene below describes — a hero creature OR a village/landscape/interior populated by chibi creatures."* It still hard-locks creatures-only + chibi-proportions + no-humans, but does NOT assert the creature is the subject.
+- Prefix `'cute chibi creature'` → `'cute chibi'` (dropping "creature" — that one word front-loaded creature-as-subject).
+- Override block reworded from "render the chibi CREATURE + scene" → "describe **the scene** below … keep the scene's composition (a hero creature OR a village/landscape with creatures in it)."
+
+After the fix, villages came back as **the places critters live** — multiple cottages, market stalls, lit windows, *other resident critters* (a jungle-village with a tapir at a curry stall + raccoon + tree-frog; a snowy harbor with ice-fishing huts). **Litmus for any hybrid bot: if a scene-led path renders subject-dominant, read the `ai_prompt` opener — a subject-asserting medium fragment is front-loading CLIP onto the subject. Lock the cast, defer the composition.**
+
+### LESSON 1b — look entries must be PURE rendering-style (reinforces MangaBot)
+
+The same regression had a second cause: my look entries were **creature-coded** ("soft subsurface-scattered skin and fur, big expressive eyes"). Subject anatomy in a look entry biases every render toward that subject. Rewrote all 13 to **pure rendering technique** (palette / shading / linework / finish / lighting / studio reference, no anatomy) so a look applies equally to a creature or a village. The cast + proportions come from the medium + template, never the look.
+
+### LESSON 2 — gpt-2 + nano-banana CAN render WITH the looks (skipPaths bypass)
+
+The `cleanMediumByModel` rule auto-swaps gpt-image-2 + nano-banana to a `*_gpt_clean` medium that **ignores the rolled look** (a guard against those models going abstract on stylized bot mediums). On YumBot/MangaBot we kept them OUT of the look paths for this reason. On ChibiBot we tested the other option: **add the look paths to `cleanMediumByModel[model].skipPaths`** so gpt-2/banana use the `chibibot_neutral` medium + the rolled look directly. **Verified: zero abstract drift** — gpt-2 produced one of the best village renders in the batch (the curry-stall jungle village), banana produced clean cute creatures. The abstract-drift risk was the old *painterly-fusion* mediums, NOT concrete style tags like "Pixar-style 3D render" / "Ghibli watercolor" — those two models know those styles cold. **So for the looks system, a clean style register + skipPaths lets gpt-2/banana into the look lineup.** This also unlocked opening ChibiBot's model lineup from flux-1.1-pro-ultra-only (a lock that protected the OLD Pop-Mart-vinyl medium, which the film looks don't need) to the full 7-model set.
+
+### ChibiBot-specific guards that held
+- **Creatures-only / no-human-child:** ChibiBot has a documented human-children purge, and the film looks (Pixar/Disney/Tangled/Frozen) are human-saturated. The composition-neutral medium STILL hard-locks "NEVER a human" + the override reinforces it — 0 human leaks across 20 renders incl. the high-risk gpt-2 village renders.
+- **Short override block:** ChibiBot's known failure mode is verbose prompt-top blocks pushing Flux to its generic "chibi-toy" centroid. The look-override is deliberately terse (3 lines) — keep it that way on this bot.
+
+### Files (ChibiBot — clone for the next hybrid bot)
+- Look pool: `scripts/bots/chibibot/seeds/chibibot_look_register.json` (13, pure-style)
+- Neutral medium: `scripts/bots/chibibot/shared-blocks.js` `CHIBI_NEUTRAL` (composition-neutral)
+- Wiring: `scripts/bots/chibibot/index.js` (`CHIBI_LOOK_PATHS` derived const → `mediumByPath` + `cleanMediumByModel.skipPaths`; `rollSharedDNA.lookRegister`; buildBrief routes `chibibot_neutral` through the style-agnostic `_PIXAR` block swaps)
+- Template helper + injection: `scripts/bots/chibibot/archetype-templates.js` `lookOverride()` (short)
+- DB: migration `241_chibibot_neutral_looks_medium.sql` (7-model lineup)
+
+---
+
 ## ⚠️ ADDING A BOT MEDIUM? You MUST also add a "cleaned medium" for DLT (2026-05-25)
 
 When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` row), you **must also create a corresponding row in `dlt_clean_mediums`**. This is not optional — skipping it silently breaks "Dream Like This."

@@ -51,6 +51,12 @@ const pathBuilders = {
   'sunny-village': require('./paths/sunny-village'),
 };
 
+// All look-enabled paths = every path EXCEPT creature-world (which keeps its
+// hearted chibibot_creature recipe). Drives mediumByPath routing + the
+// cleanMediumByModel skipPaths (so gpt-2/banana render WITH the look). Derived
+// so a new path is look-enabled by default — exclude one by name here.
+const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter((p) => p !== 'creature-world');
+
 module.exports = {
   username: 'chibibot',
   displayName: 'ChibiBot',
@@ -70,42 +76,50 @@ module.exports = {
     // flux_fragment, so this fully controls creature-world's style prefix.
     chibibot_creature: blocks.CHIBI_CREATURE_MEDIUM,
     chibibot_gpt_clean: blocks.GPT_CLEAN,
+    // "Looks" medium (2026-06-07) — locks chibi-creature identity + proportions,
+    // defers the render style to the rolled sharedDNA.lookRegister. See
+    // shared-blocks.js CHIBI_NEUTRAL. Supersedes the chibibot_render/pixar
+    // coin-flip on look-enabled paths.
+    chibibot_neutral: blocks.CHIBI_NEUTRAL,
   },
 
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
   // read the CGI/polish anchors as "go abstract"; the clean medium (+ empty
   // promptPrefixByMedium) lets the seed's cute subject lead. Overrides the
   // chibibot_pixar mediumByPath locks below when one of these models rolls.
+  // skipPaths (2026-06-07): the look-enabled paths opt OUT of the clean swap so
+  // gpt-2 + nano-banana render WITH the rolled look (chibibot_neutral medium)
+  // instead of the look-blind chibibot_gpt_clean. VERIFIED they hold the look +
+  // chibi creature with no abstract drift (gorgeous critter-village + cute
+  // creature renders). Non-look paths still swap to clean. (MVP-4 listed here;
+  // expand to all 16 look paths at full rollout.)
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'chibibot_gpt_clean' },
-    'google/gemini-2-image': { medium: 'chibibot_gpt_clean' },
+    'openai/gpt-image-2': {
+      medium: 'chibibot_gpt_clean',
+      skipPaths: CHIBI_LOOK_PATHS,
+    },
+    'google/gemini-2-image': {
+      medium: 'chibibot_gpt_clean',
+      skipPaths: CHIBI_LOOK_PATHS,
+    },
   },
 
   // Per-path medium lock — falls through to bot.mediums 50/50 rotation
   // when path not listed.
+  //
+  // ── "Looks" axis (2026-06-07) — MVP on 4 paths ──────────────────────────
+  // chibibot_neutral routes the look-enabled paths so the fixed Pop-Mart-vinyl
+  // / pixar style lock is bypassed and the rolled sharedDNA.lookRegister (one of
+  // 13 cute film/storybook looks) leads CLIP. MVP scope: creature-portrait +
+  // cuddly-aquatic + cottagecore-village + sleepy-naptime — render-validated
+  // (human-child leak + species fidelity + proportions) before the other 12
+  // are flipped. creature-world stays on chibibot_creature (hearted recipe).
+  // Every look-enabled path → chibibot_neutral (the looks medium). creature-world
+  // is the ONLY exclusion — it keeps its hearted chibibot_creature medium (the
+  // verbatim 05-07 "creature IS the subject" text that produced Kevin's hearted
+  // ornate single-hero creatures) + its flux-dev lock.
   mediumByPath: {
-    // cozy-landscape — locked to pixar medium (storybook painterly rendering
-    // works better for setting-as-hero than the Pop-Mart vinyl register)
-    'cozy-landscape': 'chibibot_pixar',
-    // rainy-interior — same painterly storybook register as cozy-landscape
-    'rainy-interior': 'chibibot_pixar',
-    // rainy-day-cozy — same painterly storybook register
-    'rainy-day-cozy': 'chibibot_pixar',
-    // sleepy-naptime — painterly storybook for peak-cute sleeping moments
-    'sleepy-naptime': 'chibibot_pixar',
-    'jungle-village': 'chibibot_pixar',
-    'cozy-interior': 'chibibot_pixar',
-    'arctic-village': 'chibibot_pixar',
-    'aquatic-village': 'chibibot_pixar',
-    'cottagecore-village': 'chibibot_pixar',
-    'sunny-village': 'chibibot_pixar',
-    'twilight-village': 'chibibot_pixar',
-    'outdoor-adventure': 'chibibot_pixar',
-    // creature-portrait: no medium lock — both chibibot_render + chibibot_pixar work
-    // creature-world — locked to the chibibot_creature medium (the verbatim
-    // 05-07 "lineage applied to whatever / creature IS the subject" text that
-    // produced Kevin's hearted ornate single-hero creatures). NOT chibibot_render
-    // (whose current text forces "NOT a single hero figurine / group composition").
+    ...Object.fromEntries(CHIBI_LOOK_PATHS.map((p) => [p, 'chibibot_neutral'])),
     'creature-world': 'chibibot_creature',
   },
 
@@ -117,6 +131,18 @@ module.exports = {
   promptPrefixByMedium: {
     chibibot_pixar: blocks.PROMPT_PREFIX_PIXAR,
     chibibot_gpt_clean: '',
+    // Tight cute anchor that REPLACES the bot's Pop-Mart-vinyl PROMPT_PREFIX so
+    // the rolled look leads the style. Deliberately NOT "creature" — that word
+    // here front-loads creature-as-subject and collapses the scene-led village/
+    // landscape paths into a creature close-up. Empty would fall through to the
+    // Pop-Mart prefix, so a 2-word cute anchor that doesn't dictate the subject.
+    chibibot_neutral: 'cute chibi',
+  },
+
+  // Per-medium suffix override — chibibot_neutral drops the bot PROMPT_SUFFIX's
+  // generic tail and reinforces the no-humans guard; the look carries finish.
+  promptSuffixByMedium: {
+    chibibot_neutral: 'adorable wholesome charm, every character is a creature, no humans, no text no watermarks',
   },
 
   // Per-path prefix override — prepended BEFORE the medium style prefix as
@@ -302,6 +328,12 @@ module.exports = {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cozy,
+      // Bot-wide cute film/storybook look (2026-06-07). Rolled for every path
+      // but only CONSUMED by look-enabled templates (they lead their brief with
+      // it). recency-aware so the same look doesn't cluster.
+      lookRegister: picker
+        ? picker.pickWithRecency(pools.CHIBIBOT_LOOK_REGISTER, 'look_register')
+        : pools.CHIBIBOT_LOOK_REGISTER[0],
     };
   },
 
@@ -339,10 +371,12 @@ module.exports = {
         return { ...result, brief: append(result.brief) };
       return result;
     }
-    // chibibot_pixar: swap the new render-style shared blocks for their
-    // pre-rewrite verbatim originals so the brief Sonnet sees matches the
-    // OLD style verbatim.
-    if (medium === 'chibibot_pixar') {
+    // chibibot_pixar AND chibibot_neutral ("looks"): swap the render-style
+    // shared blocks for their style-AGNOSTIC _PIXAR variants. The default
+    // STYLIZED_NOT_PHOTOREAL_BLOCK hard-codes the Pop-Mart-vinyl register, which
+    // would fight a rolled look; the _PIXAR variant says "let the MEDIUM tag
+    // control the art style" — so the rolled look register provides the style.
+    if (medium === 'chibibot_pixar' || medium === 'chibibot_neutral') {
       const swap = (str) =>
         str
           .split(blocks.STYLIZED_NOT_PHOTOREAL_BLOCK)

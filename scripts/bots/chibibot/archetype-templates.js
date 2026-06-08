@@ -10,6 +10,24 @@
  * definition in ./archetypes.js.
  */
 
+// ── "Looks" axis (2026-06-07) ──────────────────────────────────────────────
+// Returns a SHORT look-override header that leads the brief on look-enabled
+// paths, telling Sonnet to open its Flux prompt with the rolled cute film/
+// storybook style. Deliberately terse — ChibiBot's documented failure mode is
+// that verbose prompt-top blocks push Flux to its generic "chibi-toy" centroid
+// and flatten species/look. Reinforces the creatures-only guard (the film looks
+// carry human-child priors). Returns '' when no look rolled (safe no-op).
+// Prepend to a template's `return` string:
+//   return `${lookOverride(sharedDNA)}You are writing …`
+function lookOverride(sharedDNA) {
+  if (!sharedDNA || !sharedDNA.lookRegister) return '';
+  return `━━━ LOOK — open your Flux prompt with THIS rendering style (overrides any other style wording below) ━━━
+${sharedDNA.lookRegister}
+Lead your Flux prompt with these style tokens FIRST, then describe the scene below rendered in THIS style — it sets the medium/finish only. Keep the scene's composition exactly as written (whether a hero creature OR a village/landscape with creatures in it), the chibi proportions, and all rules. NO humans.
+
+`;
+}
+
 module.exports = {
   CHIBIBOT_HEARTWARMING_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
@@ -38,7 +56,7 @@ module.exports = {
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing HEARTWARMING CREATURE SCENES for ChibiBot — ${isGroup ? 'a little group of adorable creatures' : 'one adorable creature'} doing something heart-melting, staged inside a deliberately-chosen storybook setting at a deliberately-chosen time of day with deliberate weather${phenomenonFires ? ' and a magical phenomenon transforming the frame' : ''}. The viewer's reaction: "OMG IT'S TOO CUTE. I CAN'T." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing HEARTWARMING CREATURE SCENES for ChibiBot — ${isGroup ? 'a little group of adorable creatures' : 'one adorable creature'} doing something heart-melting, staged inside a deliberately-chosen storybook setting at a deliberately-chosen time of day with deliberate weather${phenomenonFires ? ' and a magical phenomenon transforming the frame' : ''}. The viewer's reaction: "OMG IT'S TOO CUTE. I CAN'T." Output wraps with style prefix + suffix.
 
 ━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
 
@@ -103,7 +121,7 @@ ${isGroup ? 'Mid-wide frame with the group as heroes doing the activity together
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
-  CHIBIBOT_BATH_TIME: ({ slots, vibeDirective }) => {
+  CHIBIBOT_BATH_TIME: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       creature_1,
       creature_2,
@@ -129,7 +147,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
     const decorList = Array.isArray(set_decorations) ? set_decorations : [set_decorations];
     const decorLine = decorList.filter(Boolean).join('; ');
 
-    return `Write a 55-80 word Flux prompt for a ChibiBot bath-time render. Lead with the bath vessel and the cast IN it, then layer in the cozy detail and the signature flavor. Comma-separated phrases, no headers, no labels, no preamble — just the prompt text.
+    return `${lookOverride(sharedDNA)}Write a 55-80 word Flux prompt for a ChibiBot bath-time render. Lead with the bath vessel and the cast IN it, then layer in the cozy detail and the signature flavor. Comma-separated phrases, no headers, no labels, no preamble — just the prompt text.
 
 The bath:
 ${setting}
@@ -172,7 +190,7 @@ Output the 55-80 word prompt only.`;
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing CUDDLY AQUATIC scenes for ChibiBot — a PAIR of impossibly cute baby aquatic creatures cuddling together in their underwater / surface-water habitat. Sea otter pups holding paws, baby seals on ice, hermit-crab anemone villages, jellyfish-blanket octopuses, axolotl tea rooms, dumbo octopuses with bonnets. Pixar / Sanrio / Studio Ghibli / Finding Nemo cuteness${phenomenonFires ? ', with a magical aquatic phenomenon transforming the frame' : ''}. The viewer's reaction: "OMG THEY ARE TOO CUTE TOGETHER. I CAN'T." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing CUDDLY AQUATIC scenes for ChibiBot — a PAIR of impossibly cute baby aquatic creatures cuddling together in their underwater / surface-water habitat. Sea otter pups holding paws, baby seals on ice, hermit-crab anemone villages, jellyfish-blanket octopuses, axolotl tea rooms, dumbo octopuses with bonnets. Pixar / Sanrio / Studio Ghibli / Finding Nemo cuteness${phenomenonFires ? ', with a magical aquatic phenomenon transforming the frame' : ''}. The viewer's reaction: "OMG THEY ARE TOO CUTE TOGETHER. I CAN'T." Output wraps with style prefix + suffix.
 
 ━━━ MOVIE POSTER MOMENT — every shot must be a frame-worthy still ━━━
 
@@ -320,7 +338,7 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing NIGHT-MEADOW scenes for ChibiBot — a PAIR of impossibly cute critters at twilight/night in a deliberately-chosen outdoor setting, under a specific time-of-night, with stacked cozy props${phenomenonFires ? ', and a magical celestial or atmospheric phenomenon transforming the frame' : ''}. Stargazing fox kits, fireflies in mason jars, glow-worm tea parties, comet-watching bunnies, moonlit picnics, owl + hedgehog under a starry blanket. Pixar/Sanrio/Ghibli/Beatrix-Potter-twilight aesthetic. The viewer's reaction: "OMG IT'S TOO CUTE. I CAN'T." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing NIGHT-MEADOW scenes for ChibiBot — a PAIR of impossibly cute critters at twilight/night in a deliberately-chosen outdoor setting, under a specific time-of-night, with stacked cozy props${phenomenonFires ? ', and a magical celestial or atmospheric phenomenon transforming the frame' : ''}. Stargazing fox kits, fireflies in mason jars, glow-worm tea parties, comet-watching bunnies, moonlit picnics, owl + hedgehog under a starry blanket. Pixar/Sanrio/Ghibli/Beatrix-Potter-twilight aesthetic. The viewer's reaction: "OMG IT'S TOO CUTE. I CAN'T." Output wraps with style prefix + suffix.
 
 ━━━ HARD RULE: BOTH CREATURES VISIBLE — NEVER SOLO ━━━
 
@@ -464,7 +482,7 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing COZY-LANDSCAPE scenes for ChibiBot — a foreground CREATURE doing a story-driven activity with a cozy storybook world spanning behind them. Pixar / Studio Ghibli / Beatrix Potter painterly storybook aesthetic. Like the iconic "Ratatouille kitchen wide-shot" or "Up balloon-house morning" or "Studio Ghibli Kiki cottage" framings — a clear hero creature in the foreground, the rich world spanning behind. The viewer's reaction: "look at this little creature in this beautiful world — I want to live here." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing COZY-LANDSCAPE scenes for ChibiBot — a foreground CREATURE doing a story-driven activity with a cozy storybook world spanning behind them. Pixar / Studio Ghibli / Beatrix Potter painterly storybook aesthetic. Like the iconic "Ratatouille kitchen wide-shot" or "Up balloon-house morning" or "Studio Ghibli Kiki cottage" framings — a clear hero creature in the foreground, the rich world spanning behind. The viewer's reaction: "look at this little creature in this beautiful world — I want to live here." Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
 
@@ -576,7 +594,7 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing GROUP-OF-FRIENDS rainy-day scenes for ChibiBot — 2-4 adorable chibi friends playing TOGETHER outside in the rain. Splashing each other, sharing umbrellas, mud-fights, running side-by-side, building stick-dams in puddles, sliding through mud in a chain. Calvin-and-Hobbes-with-friends / Studio-Ghibli-kids-in-the-rain / Beatrix-Potter-group-romp aesthetic. The viewer's reaction: "I want to be playing in the rain with my friends right now!" Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing GROUP-OF-FRIENDS rainy-day scenes for ChibiBot — 2-4 adorable chibi friends playing TOGETHER outside in the rain. Splashing each other, sharing umbrellas, mud-fights, running side-by-side, building stick-dams in puddles, sliding through mud in a chain. Calvin-and-Hobbes-with-friends / Studio-Ghibli-kids-in-the-rain / Beatrix-Potter-group-romp aesthetic. The viewer's reaction: "I want to be playing in the rain with my friends right now!" Output wraps with style prefix + suffix.
 
 ━━━ HARD RULE: MULTIPLE FRIENDS PLAYING TOGETHER — NEVER SOLO ━━━
 
@@ -718,7 +736,7 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing GROUP-COZY-SHELTER scenes for ChibiBot rainy-day-cozy — 2-4 adorable chibi friends huddled TOGETHER in a cozy outdoor shelter (mushroom cap / porch / under umbrella / hollow log / stone arch) while RAIN visibly falls around them. Sharing cocoa, wrapped in blankets, piled together, sleepy nap-pile, mid-story-laugh. Studio Ghibli "Totoro bus-stop" / Calvin-Hobbes-under-porch / Charlie-Brown-Snoopy-huddle aesthetic. The viewer's reaction: "I want to be huddled in that shelter with my friends right now!" Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing GROUP-COZY-SHELTER scenes for ChibiBot rainy-day-cozy — 2-4 adorable chibi friends huddled TOGETHER in a cozy outdoor shelter (mushroom cap / porch / under umbrella / hollow log / stone arch) while RAIN visibly falls around them. Sharing cocoa, wrapped in blankets, piled together, sleepy nap-pile, mid-story-laugh. Studio Ghibli "Totoro bus-stop" / Calvin-Hobbes-under-porch / Charlie-Brown-Snoopy-huddle aesthetic. The viewer's reaction: "I want to be huddled in that shelter with my friends right now!" Output wraps with style prefix + suffix.
 
 ━━━ HARD RULE: MULTIPLE FRIENDS HUDDLED TOGETHER — NEVER SOLO ━━━
 
@@ -837,7 +855,7 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (gentle event drifting around the sleeper) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing SLEEPY-NAPTIME scenes for ChibiBot — ONE adorable chibi creature dozing in an impossibly cozy nap-spot. Peak-cute peaceful sleeping moment. The viewer's reaction: "shhh don't wake it." Pixar / Studio Ghibli / Beatrix-Potter / sleeping-puppy-stockphoto-cute aesthetic. Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing SLEEPY-NAPTIME scenes for ChibiBot — ONE adorable chibi creature dozing in an impossibly cozy nap-spot. Peak-cute peaceful sleeping moment. The viewer's reaction: "shhh don't wake it." Pixar / Studio Ghibli / Beatrix-Potter / sleeping-puppy-stockphoto-cute aesthetic. Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY: SOLO SLEEPING CREATURE — ONE CREATURE ONLY ━━━
 
@@ -960,7 +978,7 @@ Then unfold the rest. Output ONLY the raw 80-110 word scene description. Comma-s
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing COZY-INTERIOR scenes for ChibiBot — an UNEXPECTED chibi-scale cozy interior (often INSIDE a real object — teacup, music-box, matchbox, piano) with a tiny creature doing a story-driven cozy activity. Pixar / Studio Ghibli / Howl-Moving-Castle / Beatrix-Potter painterly storybook aesthetic. The viewer's reaction: "WAIT — they live INSIDE a teacup?? And look at how cozy this room is!" Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing COZY-INTERIOR scenes for ChibiBot — an UNEXPECTED chibi-scale cozy interior (often INSIDE a real object — teacup, music-box, matchbox, piano) with a tiny creature doing a story-driven cozy activity. Pixar / Studio Ghibli / Howl-Moving-Castle / Beatrix-Potter painterly storybook aesthetic. The viewer's reaction: "WAIT — they live INSIDE a teacup?? And look at how cozy this room is!" Output wraps with style prefix + suffix.
 
 ━━━ ⚠ HARD RULE #1: WIDE-SHOT INTERIOR + CREATURE MUST BE VISIBLE ━━━
 
@@ -1112,7 +1130,7 @@ Then unfold the rest of the room/details/sparkle-stack. Output ONLY the raw 90-1
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing OUTDOOR-ADVENTURE scenes for ChibiBot — a SOLO chibi creature out in the WILD/OPEN WORLD doing an adventurous activity. Pure wilderness — NO villages, NO architecture, NO cottages. Studio Ghibli wilderness / Pokemon-overworld / Pixar-adventure painterly storybook aesthetic. The viewer's reaction: "look at that little adventurer!" Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing OUTDOOR-ADVENTURE scenes for ChibiBot — a SOLO chibi creature out in the WILD/OPEN WORLD doing an adventurous activity. Pure wilderness — NO villages, NO architecture, NO cottages. Studio Ghibli wilderness / Pokemon-overworld / Pixar-adventure painterly storybook aesthetic. The viewer's reaction: "look at that little adventurer!" Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ADVENTURING ━━━
 
@@ -1241,7 +1259,7 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `You are writing CHIBI CREATURE PORTRAITS for ChibiBot — a tight close-up of ONE impossibly cute creature filling the frame, MAXED with a cute outfit, accessory, and scattered set-decorations. The viewer cannot look away from the cuteness. Pixar / Sanrio / Pop-Mart designer-vinyl meets storybook-illustration. Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing CHIBI CREATURE PORTRAITS for ChibiBot — a tight close-up of ONE impossibly cute creature filling the frame, MAXED with a cute outfit, accessory, and scattered set-decorations. The viewer cannot look away from the cuteness. Pixar / Sanrio / Pop-Mart designer-vinyl meets storybook-illustration. Output wraps with style prefix + suffix.
 
 ━━━ ⚠ HARD RULE #1: SOLO CREATURE FILLS THE FRAME ━━━
 
@@ -1372,7 +1390,7 @@ Then unfold the sparkle-stack and atmospheric details. Output ONLY the raw 90-13
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing COZY AQUATIC-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy underwater/coastal village spanning behind them. Studio Ghibli / Ponyo / Atlantis / Finding-Nemo painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing COZY AQUATIC-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy underwater/coastal village spanning behind them. Studio Ghibli / Ponyo / Atlantis / Finding-Nemo painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
 
@@ -1507,7 +1525,7 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing COZY COTTAGECORE-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy English-countryside cottagecore village spanning behind them. Studio Ghibli / Howl-Moving-Castle / Beatrix-Potter / Whisper-of-the-Heart painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing COZY COTTAGECORE-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy English-countryside cottagecore village spanning behind them. Studio Ghibli / Howl-Moving-Castle / Beatrix-Potter / Whisper-of-the-Heart painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
 
@@ -1632,7 +1650,7 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing COZY SUNNY-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy Mediterranean / sun-drenched village spanning behind them. Studio Ghibli / Kiki-Delivery-Service / Porco-Rosso / Luca / Spirited-Away painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing COZY SUNNY-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy Mediterranean / sun-drenched village spanning behind them. Studio Ghibli / Kiki-Delivery-Service / Porco-Rosso / Luca / Spirited-Away painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
 
@@ -1757,7 +1775,7 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing COZY TWILIGHT-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy twilight / lantern-lit / firefly-magic village spanning behind them. Studio Ghibli / Spirited-Away / Whisper-of-the-Heart / Howl-Moving-Castle / Tangled-lanterns painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing COZY TWILIGHT-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy twilight / lantern-lit / firefly-magic village spanning behind them. Studio Ghibli / Spirited-Away / Whisper-of-the-Heart / Howl-Moving-Castle / Tangled-lanterns painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
 
@@ -1882,7 +1900,7 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing COZY ARCTIC-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy snow/ice/arctic village (snow-cottage rows / igloo clusters / log-cabins under aurora / gingerbread-snow-fortresses / polar-station hamlets / mountain-chalets / fishing-villages on frozen lakes) spanning behind them. Studio Ghibli / Frozen / Arrietty-Borrowers / Polar-Express painterly storybook aesthetic. The viewer's reaction: "I want to live in that snow-village." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing COZY ARCTIC-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy snow/ice/arctic village (snow-cottage rows / igloo clusters / log-cabins under aurora / gingerbread-snow-fortresses / polar-station hamlets / mountain-chalets / fishing-villages on frozen lakes) spanning behind them. Studio Ghibli / Frozen / Arrietty-Borrowers / Polar-Express painterly storybook aesthetic. The viewer's reaction: "I want to live in that snow-village." Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
 
@@ -2004,7 +2022,7 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
       ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
       : '';
 
-    return `You are writing COZY JUNGLE-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy rainforest village (treehouses / mushroom-houses / vine-bridges / canopy platforms / market plazas) spanning behind them. Studio Ghibli / Encanto / Princess-Mononoke / Avatar-Pandora-village painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are writing COZY JUNGLE-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy rainforest village (treehouses / mushroom-houses / vine-bridges / canopy platforms / market plazas) spanning behind them. Studio Ghibli / Encanto / Princess-Mononoke / Avatar-Pandora-village painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
 
 ━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
 
