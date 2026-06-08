@@ -10,13 +10,16 @@
  *
  * Response: inline base64 image in `candidates[0].content.parts[].inlineData.data`
  *
- * Pricing (verified 2026-05-18, ai.google.dev/pricing):
- *   gemini-3-image-preview at 1K: $0.067, 2K: $0.101, 4K: $0.151
- *   gemini-2.5-flash-image: $0.039 (1024×1024 baseline)
+ * Pricing (verified 2026-06-08 against ai.google.dev + provider trackers):
+ *   gemini-3-pro-image (Nano Banana Pro): ~$0.134/img at 1K AND 2K (same
+ *     price), ~$0.24 at 4K — synchronous API (batch is ~half but we don't
+ *     use it). This is the 5-SPARKLE tier in modelPricing.ts ($0.134 = 13¢).
+ *   gemini-2.5-flash-image (Nano Banana): ~$0.039 (1024×1024 baseline), 1✦.
  *
- * We pin Nano Banana Pro to 1K to keep margin healthy at the 3-sparkle
- * tier — bumping to 2K+ would push us to $0.10+ per render and erode
- * the margin headroom we have.
+ * We pin Nano Banana Pro to 1K. 1K and 2K bill the same (~$0.134), so the
+ * pin doesn't save vs 2K — it guards against a 4K default ($0.24) blowing
+ * the cost basis. At 5 sparkles the $0.134 cost is well-covered (~$0.027/
+ * sparkle, the most cost-efficient tier we sell).
  *
  * NSFW: Gemini's safety system returns finishReason='SAFETY' or similar.
  *   We re-throw with NSFW_CONTENT: prefix so upstream retry kicks in.
@@ -56,9 +59,9 @@ export async function generateGeminiImage(
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiKey}`;
 
-  // Nano Banana Pro is resolution-priced ($0.067/1K, $0.101/2K, $0.151/4K).
-  // We pin to 1K to keep cost basis at ~$0.07/render — anything higher
-  // erodes margin on the 3-sparkle tier.
+  // Nano Banana Pro is resolution-priced: ~$0.134/img at 1K and 2K (same),
+  // ~$0.24 at 4K (synchronous API). We pin to 1K so a 4K default can't push
+  // the cost to $0.24 — at the 5-sparkle tier $0.134 has healthy margin.
   const isNanoBananaPro = modelId === 'google/gemini-3-image-preview';
 
   const res = await fetch(url, {

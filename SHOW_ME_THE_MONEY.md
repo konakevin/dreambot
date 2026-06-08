@@ -1,235 +1,208 @@
 # Show Me The Money — DreamBot Financial Model
 
-## Per-Dream Generation Costs
+**Last refreshed: 2026-06-08.** Numbers reconciled against the live code
+(`constants/sparklePacks.ts`, `constants/proPlan.ts`,
+`supabase/functions/_shared/modelPricing.ts`) and independently verified
+provider pricing (Replicate / OpenAI / Google). Companion doc:
+`SPARKLE_PRICING_STRATEGY.md` (strategy + scaling). For per-pack margin tables
+see that doc; this one is the operating P&L model.
 
-### Nightly Dream (auto-generated, user doesn't pay)
-
-| Step | Service | Cost |
-|------|---------|------|
-| Medium/vibe resolution | DB query | free |
-| Dream algorithm roll | Code | free |
-| Essence card fetch | DB query (pre-built) | free |
-| Scene engine assembly | Code | free |
-| buildRenderEntity | Code (regex) | free |
-| Sonnet writes Flux prompt | Anthropic Sonnet | ~$0.003-0.005 |
-| Flux Dev renders image | Replicate | ~$0.025 |
-| Face swap (fires ~50%) | Replicate | ~$0.013 |
-
-- Without face swap: **~$0.028**
-- With face swap: **~$0.041**
-- **Average nightly dream: ~$0.035**
-
-### User-Created Dream (V2 — costs sparkles)
-
-| Path | Steps | Cost |
-|------|-------|------|
-| Text + medium + vibe | Sonnet + Flux Dev | ~$0.028 |
-| Photo restyle (Kontext Max) | Kontext Max | ~$0.08 |
-| Photo restyle (Flux Dev, e.g. LEGO) | Vision + Haiku + Flux Dev | ~$0.036 |
-| Self-insert ("put me in...") | Sonnet + Flux Dev + face swap | ~$0.041 |
-| Surprise (medium showcase) | Sonnet + Flux Dev | ~$0.028 |
-
-**Weighted average user-created dream: ~$0.045**
-(60% text/surprise, 30% photo restyle, 10% self-insert)
-
-### Dream Like This (DLT)
-
-| Step | Cost |
-|------|------|
-| Sonnet merges style + subject | ~$0.003 |
-| Flux Dev renders | ~$0.025 |
-
-**Total DLT: ~$0.028**
-
-### Bot Dreams (daily content, fixed cost)
-
-- 19 image bots × $0.028/day = $0.53/day
-- 2 content bots × ~$0.01/day = $0.02/day
-- **Total: ~$0.55/day = ~$16.50/month**
-
-Fixed overhead regardless of user count. Keeps the social feed alive with fresh content.
+> ⚠️ **What changed in this refresh:** the prior version assumed a $5.99 sub,
+> 10 sparkles/mo, old packs (25/50/100/250), a permanent free *weekly* dream,
+> and — most importantly — a **rewarded-video + in-feed ad business that does
+> not exist** (no ad SDK is installed). Removing the phantom ad revenue is the
+> single biggest correction: free users are a (small) cost, not a profit
+> center. The model below reflects reality: **IAP sparkles + Pro subscription
+> only.**
 
 ---
 
-## Monetization Model
+## 1. What every render actually costs us (validated 2026-06-08)
 
-### User Journey
+Per-image API cost at the resolutions/qualities we actually render (Replicate
+defaults ~1MP; OpenAI medium/1024×1536; Gemini Pro pinned to 1K). These match
+`modelPricing.ts` and were re-verified against live provider pricing.
 
-**Week 1-2: Free Trial (hook them)**
-- Nightly dreams every night (14 free nightly dreams)
-- 25 free sparkles dripped: 10 on day 1, 10 on day 5, 5 on day 10
-- Full access to create, DLT, photo restyle
-- Your cost per new user: ~$0.94 (14 nightlies + ~10 user dreams)
+| Model | Sparkles charged | API cost/img |
+|---|---|---|
+| Flux Schnell | 1 | $0.003 |
+| Flux Krea | 1 | ~$0.004 |
+| Flux 2 Dev | 1 | $0.025 |
+| Flux 1 Dev | 1 | $0.030 |
+| Flux 2 Pro | 1 | $0.031 |
+| Nano Banana (Gemini 2.5 Flash) | 1 | $0.039 |
+| **Flux 1.1 Pro (default)** | **1** | **$0.040** |
+| Flux 1.1 Pro Ultra | 2 | $0.060 |
+| GPT Image 2 | 2 | $0.060 |
+| Flux 2 Flex | 2 | $0.063 |
+| GPT Image 1 (deprecating Oct '26) | 3 | $0.070 |
+| Flux 2 Max | 3 | $0.073 |
+| Nano Banana Pro (Gemini 3 Pro) | 5 | $0.134 |
 
-**Drip messaging:**
-- Day 1: 10 sparkles arrive automatically
-- Day 5: "Your DreamBot learned more about you 🌙 Here's 10 more sparkles to dream with"
-- Day 10: "4 nights left of free dreams ✨ 5 bonus sparkles to make them count"
-- Day 14: "Your free dreams are over — but your DreamBot is still dreaming about you 💭 Subscribe to keep waking up to new dreams"
-- Day 16 (if no conversion): "You missed 2 dreams this week 🌙" with blurred preview of what would have generated
+**Pipeline adders (on top of model cost):** Sonnet brief ~$0.004–0.006; face
+swap +$0.013 (fires on ~30% of dreams → ~$0.004 amortized); on-demand HD
+upscale +$0.008–0.03 (Pro only, capped 100/mo). All-in a typical user render ≈
+**model + ~$0.006**.
 
-**After trial: Free tier (forever)**
-- 1 auto-generated dream per week (keeps them engaged, keeps app installed)
-- Browse social feed, like, comment, share
-- No user-created dreams without sparkles
-- Sees ads (rewarded video + native in-feed)
-- Cost: ~$0.15/user/month
+### Cost per dream by path
 
-**Subscriber ($5.99/month or $39.99/year)**
-- Nightly dreams every night
-- 10 sparkles/month included
-- Ad-free experience
-- Priority generation
-- Cost: ~$1.28/user/month (nightly + sparkle usage)
+| Path | Typical model | All-in cost |
+|---|---|---|
+| Nightly dream (auto) | Flux 2 Dev + brief, ~30% face swap | **~$0.035** |
+| User text dream | Flux 1.1 Pro (default) + brief | **~$0.046** |
+| User "put me in" (face swap) | Flux + brief + swap | **~$0.058** |
+| DLT (Dream Like This) | Flux 2 Dev + brief | **~$0.031** |
+| Photo restyle (Kontext) | Kontext Pro/Max | **~$0.046–0.056** |
 
-**Sparkle packs (available to everyone)**
-- Purchasable anytime, no subscription needed
-- For users who want to create their own dreams without subscribing
+**Planning numbers:** nightly **$0.035**, user-created **$0.045**.
 
-### Sparkle Pack Pricing
+### The 1-sparkle margin spread (important)
 
-At $0.045 average cost per dream, 1 sparkle = 1 dream:
-
-| Pack | Sparkles | Your AI Cost | Price | After Apple (70%) | Real Margin |
-|------|----------|-------------|-------|-------------------|-------------|
-| Small | 25 | $1.13 | $2.99 | $2.09 | 46% |
-| Medium | 50 | $2.25 | $4.99 | $3.49 | 36% |
-| Large | 100 | $4.50 | $8.99 | $6.29 | 28% |
-| XL | 250 | $11.25 | $19.99 | $13.99 | 20% |
-
-No 500 pack — it's a money loser after Apple's cut at any reasonable price.
-
-### Who Sees Ads
-
-| User Type | Ads? | Ad Types |
-|-----------|------|----------|
-| Trial (week 1-2) | No | Clean experience during trial |
-| Free (post-trial) | Yes | Rewarded video + native in-feed |
-| Subscriber | Never | Ad-free is a subscription perk |
-
-### Ad Placements
-
-| Placement | Type | Trigger |
-|-----------|------|---------|
-| "Earn a sparkle ✨" button on create screen | Rewarded video | User-initiated |
-| Every 8th post in social feed | Native in-feed | Passive scrolling |
-| After viewing weekly free dream | Interstitial | "Want more? Watch or subscribe" |
-
-**Never:** banner ads (destroy the premium aesthetic).
-
-### Ad Revenue Estimates
-
-Assuming 35% DAU/MAU ratio for free users:
-
-| Metric | Per Free User/Month |
-|--------|-------------------|
-| In-feed impressions | ~600 (20/day × 30 days × 35% DAU) |
-| In-feed revenue at $5 eCPM | ~$0.003/impression = ~$1.06 |
-| Rewarded video views | ~9 (30% watch rate × 30 days × 35% DAU) |
-| Rewarded video at $20 eCPM | ~$0.18 |
-| **Total ad revenue per free user** | **~$1.12/month** |
-
-Each rewarded video earns you ~$0.02 in ad revenue but costs you ~$0.045 in AI (they earn a sparkle). Net cost per rewarded view: ~$0.025. Acceptable because it drives engagement and eventual conversion.
+The 1-sparkle tier covers a **15× cost range** — Flux Schnell ($0.003) to the
+default Flux 1.1 Pro ($0.040) / Nano Banana ($0.039), all charged the same 1
+sparkle. So **worst-case cost per sparkle ≈ $0.046** (default model + pipeline).
+Higher tiers are *more* efficient per sparkle (Nano Banana Pro: $0.134 / 5 =
+$0.027/sparkle). Use **$0.046/sparkle worst-case, ~$0.03 blended** for planning.
 
 ---
 
-## Revenue Projections
+## 2. What we charge
 
-### Fixed Monthly Overhead (all scales)
+### Sparkle packs (`sparkle_packs` table, migration 255)
 
-| Expense | Monthly |
-|---------|---------|
-| Bot dreams (21 bots daily) | $16.50 |
-| Supabase Pro | $25-75 |
-| Apple Developer ($99/yr) | $8.25 |
-| Domain/misc | ~$10 |
-| **Total fixed** | **~$60-110** |
+| Pack | Sparkles | Price | $/sparkle | Net @15% | Net @30% |
+|---|---|---|---|---|---|
+| Impulse | 15 | $1.99 | $0.133 | $0.113 | $0.093 |
+| Starter | 40 | $4.99 | $0.125 | $0.106 | $0.087 |
+| Popular | 90 | $9.99 | $0.111 | $0.094 | $0.078 |
+| Best Value | 200 | $19.99 | $0.100 | $0.085 | $0.070 |
+| Whale | 500 | $49.99 | $0.100 | $0.085 | $0.070 |
+
+**Worst-case pack margins** (every sparkle spent on the $0.046 default model):
+46–59% @15%, 34–50% @30%. Typical usage is better. All tiers profitable under
+every cost/cut combination.
+
+### Pro subscription (`proPlan.ts`)
+
+| Plan | Price | Eff./mo | Sparkles | Other perks |
+|---|---|---|---|---|
+| Monthly | $9.99/mo | $9.99 | 75/mo | 30 nightly dreams, 100 HD downloads/mo, 14-day trial |
+| Yearly | $79.99/yr | $6.67 | 900 upfront | same |
+
+**Cost to serve a Pro user/month:**
+
+| Scenario | Nightly (30×$0.035) | Sparkles spent | HD | **Total** |
+|---|---|---|---|---|
+| Typical | $1.05 | ~50 × $0.04 = $2.00 | $0.20 | **~$3.25** |
+| Maxed | $1.05 | 75 × $0.046 = $3.45 | ~$2.00 | **~$6.50** |
+
+| Plan / cut | Net rev/mo | Typical profit | Maxed profit |
+|---|---|---|---|
+| Monthly @15% | $8.49 | **+$5.24** | +$1.99 |
+| Monthly @30% | $6.99 | **+$3.74** | +$0.49 |
+| Yearly @15% | $5.67 | **+$2.42** | −$0.83 |
+| Yearly @30% | $4.67 | **+$1.42** | **−$1.83** |
+
+⚠️ **Yearly Pro is the thin SKU** — a maxed yearly power-user at 30% loses
+~$1–2/mo. Mitigated by: most users don't max, the 100-HD cap, and ~2% Apple
+refund rate. The 100-HD cap (`PRO_HQ_DOWNLOADS_PER_MONTH`) is load-bearing.
+
+---
+
+## 3. Operating model — 10,000 MAU (5% sparkle buyers + 3% Pro)
+
+The scenario you asked to model. Stated assumptions so it's auditable.
 
 ### Assumptions
 
-- Subscription conversion: 10% of MAU
-- Sparkle buyer conversion: 5% of MAU (non-overlapping with subscribers)
-- Average sparkle purchase: $4.99, 1.5x/month
-- DAU/MAU ratio: 35% for free users
-- Ad eCPM: $5 in-feed, $20 rewarded video
+- **10,000 MAU**
+- **3% Pro = 300 users** (blend 70% monthly @ $9.99 + 30% yearly @ $6.67/mo →
+  **$8.99/mo blended gross** per Pro user)
+- **5% sparkle buyers = 500 users** (non-overlapping with Pro). **$7.50/mo
+  blended gross** per buyer (mix of packs, not every buyer every month)
+- **92% = 9,200 free users** (post-trial: browse feed + bots; **no** nightly
+  dreams, **no** ads)
+- **1,000 new trials/mo** (10% of MAU — sustains the base against churn). Each:
+  14-day Pro trial (nightly + 25 welcome sparkles + free first dream)
+- Apple **15%** primary (Small Business Program); 30% shown as sensitivity
 
-### Projections by Scale
+### Monthly revenue
 
-| | 1K MAU | 10K MAU | 100K MAU |
+| Source | Gross | Net @15% | Net @30% |
 |---|---|---|---|
-| **Subscribers** | 100 | 1,000 | 10,000 |
-| **Sparkle buyers** | 50 | 500 | 5,000 |
-| **Free users** | 850 | 8,500 | 85,000 |
-| | | | |
-| **Revenue** | | | |
-| Subscriptions (after Apple) | $419 | $4,190 | $41,900 |
-| Sparkle packs (after Apple) | $87 | $870 | $8,700 |
-| Ads (free users) | $954 | $9,540 | $95,400 |
-| **Total revenue** | **$1,460** | **$14,600** | **$146,000** |
-| | | | |
-| **Costs** | | | |
-| Subscriber nightly dreams | $105 | $1,050 | $10,500 |
-| Subscriber sparkle usage | $23 | $230 | $2,300 |
-| Sparkle buyer dream costs | $17 | $170 | $1,700 |
-| Free user weekly dreams | $128 | $1,275 | $12,750 |
-| Rewarded video sparkle costs | $6 | $60 | $600 |
-| Bot dreams | $17 | $17 | $17 |
-| Fixed overhead | $75 | $100 | $200 |
-| **Total costs** | **$371** | **$2,902** | **$28,067** |
-| | | | |
-| **Net profit** | **$1,089** | **$11,698** | **$117,933** |
-| **Annual profit** | **$13,068** | **$140,376** | **$1,415,196** |
-| **Profit margin** | 75% | 80% | 81% |
+| Pro (300 × $8.99) | $2,697 | $2,292 | $1,888 |
+| Sparkles (500 × $7.50) | $3,750 | $3,188 | $2,625 |
+| **Total net revenue** | | **$5,480** | **$4,513** |
 
-### Sensitivity: What If Subscription Conversion Changes?
+### Monthly costs
 
-At 100K MAU:
+| Cost | Calc | Monthly |
+|---|---|---|
+| Pro serving | 300 × $3.25 | $975 |
+| Sparkle-buyer serving | 500 × ~$2.72 | $1,360 |
+| Free users (storage egress) | 9,200 × ~$0.02 | $184 |
+| Acquisition (trials) | 1,000 × ~$1.53 | $1,530 |
+| Bot content | 18 bots × 4/day × $0.028 | $60 |
+| Fixed infra (Supabase + misc) | — | $100 |
+| **Total costs** | | **$4,209** |
 
-| Sub Rate | Annual Profit |
-|----------|--------------|
-| 5% | ~$900K |
-| 10% | ~$1.4M |
-| 15% | ~$1.9M |
-| 20% | ~$2.4M |
+### Net profit @ 10K MAU
 
-Every 1% subscription conversion at 100K MAU ≈ **$100K/year**.
+| Apple cut | Net revenue | Costs | **Profit/mo** | **Annual** | Margin |
+|---|---|---|---|---|---|
+| **15%** | $5,480 | $4,209 | **+$1,271** | **~$15.3K** | 23% |
+| **30%** | $4,513 | $4,209 | **+$304** | **~$3.6K** | 7% |
 
-### Sensitivity: What If Ad eCPM Changes?
+**Read:** profitable, but **thin** at 10K MAU on this conversion mix — and
+**near break-even at the 30% rate.** The dominant variable cost is
+**acquisition** (the free 14-day Pro trial + 25 welcome sparkles), not serving.
+This is the honest picture once the phantom ad revenue is removed.
 
-At 100K MAU, 10% sub rate:
+### Per-paying-user contribution margin (the number that scales)
 
-| eCPM (in-feed) | Annual Ad Revenue | Annual Profit |
-|----------------|-------------------|--------------|
-| $3 | $686K | ~$1.1M |
-| $5 | $1.14M | ~$1.4M |
-| $8 | $1.83M | ~$2.1M |
+| User | Net @15% − cost | Net @30% − cost |
+|---|---|---|
+| Pro (blended) | $7.64 − $3.25 = **+$4.39/mo** | $6.29 − $3.25 = +$3.04 |
+| Sparkle buyer | $6.38 − $2.72 = **+$3.66/mo** | $5.25 − $2.72 = +$2.53 |
+
+Each paying user nets ~$3.5–4.4/mo @15%. Fixed + bot costs are flat, so
+**profit scales faster than MAU above ~10K** — the thinness here is a
+small-base + acquisition-drag effect, not a broken unit economic.
 
 ---
 
-## Key Decisions
+## 4. Sensitivity — what moves the needle at 10K MAU
 
-1. **2-week free trial** with nightly dreams + 25 dripped sparkles (10/10/5)
-2. **Post-trial free tier** with 1 dream/week (retention, not cutoff)
-3. **$5.99/month subscription** for nightly dreams + 10 sparkles + ad-free
-4. **$39.99/year subscription** option (discount for annual commitment)
-5. **Sparkle packs** at $2.99/$4.99/$8.99/$19.99
-6. **Ads for free users only** — rewarded video + native in-feed, never banners
-7. **Ad-free for subscribers** — part of the value proposition
-8. **Launch without ads** — add rewarded video month 2-3, in-feed month 4-6
+| Lever | Change | Profit impact (@15%) |
+|---|---|---|
+| Pro conversion 3% → 5% | +200 Pro | +$878/mo |
+| Sparkle buyers 5% → 8% | +300 buyers | +$1,098/mo |
+| Apple 30% → 15% (enroll) | rate | +$967/mo |
+| Default model → Flux 2 Dev ($0.025) | −$0.015/sparkle | +$300–500/mo |
+| Add rewarded-video ads to free tier | new line | +$1–3K/mo (requires building it) |
 
-## Unit Economics Summary
+The two biggest *free* levers: **enroll in Small Business (15%)** and **make
+the default model cheaper** (Flux 1.1 Pro is the worst cost/sparkle you sell).
+
+---
+
+## 5. Unit economics summary
 
 | Metric | Value |
-|--------|-------|
+|---|---|
 | Cost per nightly dream | $0.035 |
-| Cost per user-created dream | $0.045 |
-| Customer acquisition cost (trial) | $0.94 |
-| Revenue per subscriber/month (after Apple) | $4.19 |
-| Cost per subscriber/month | $1.28 |
-| Profit per subscriber/month | $2.91 |
-| Subscriber payback period | ~10 days |
-| Ad revenue per free user/month | ~$1.12 |
-| Cost per free user/month | ~$0.15 |
-| Profit per free user/month (with ads) | ~$0.97 |
+| Cost per user-created dream | ~$0.045 |
+| Worst-case cost per sparkle | $0.046 |
+| Blended cost per sparkle | ~$0.03 |
+| Trial CAC (14-day Pro trial) | ~$1.53 |
+| Pro contribution margin @15% | ~$4.39/mo |
+| Sparkle-buyer contribution @15% | ~$3.66/mo |
+| Pack margins (worst case) @15% / @30% | 46–59% / 34–50% |
+| Free-user cost (no ads) | ~$0.02/mo |
 
-**The insight:** with ads, free users are profitable. Without ads, they're a loss leader. The subscription is high-margin. The combination of both makes the business work at every scale.
+**The insight:** with no ads, the business is **paid-conversion-driven**, not
+ad-driven. Profit at any scale is `(paying users × ~$4 contribution) − (trial
+CAC + flat costs)`. Levers that matter, in order: **conversion rate**, **Apple
+cut (enroll in Small Business)**, **default model cost**, **trial generosity**.
+Free users are cheap to keep but contribute nothing until ads exist or they
+convert.

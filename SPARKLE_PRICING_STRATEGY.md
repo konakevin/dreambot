@@ -1,34 +1,52 @@
 # Sparkle Pricing & Monetization Strategy
 
-How to think about pricing, unit economics, and profit projections for DreamBot's sparkle packs + free-trial-then-pay model. Last updated 2026-05-02.
+How to think about pricing, unit economics, and profit projections for DreamBot's sparkle packs + Pro subscription + free-trial-then-pay model. Last updated 2026-06-08 (cost stack + pack lineup + Pro section reconciled against live code and verified provider pricing).
 
-This is the **business model** doc — for IAP/RevenueCat technical wiring see `SPARKLE_PAYMENTS_SETUP.md`.
+This is the **business model** doc — for IAP/RevenueCat technical wiring see `SPARKLE_PAYMENTS_SETUP.md`; for the operating P&L + scenario model see `SHOW_ME_THE_MONEY.md`. Per-model API costs live in `supabase/functions/_shared/modelPricing.ts`.
 
 ---
 
 ## TL;DR
 
-- **Cost per dream:** ~$0.045 marginal at scale, ~$0.06-0.08 fully-loaded pre-scale (includes Replicate + Anthropic + Supabase storage + amortized fixed costs).
-- **Apple's cut:** 30% standard, **15% if enrolled in Small Business Program** (auto-qualify if under $1M annual proceeds — enroll before launch).
-- **Pricing should target ~50% net margin** at current cost levels, designed to compound as scale lowers per-dream cost.
-- **Free nightly dream is a trial perk, not a permanent free tier** (2-4 weeks per new user). After trial, users must pay (sparkles or subscription) to keep getting personal nightly dreams. The bot feed remains free forever.
-- **Trial-and-pay model wins:** at 50K MAU it nets ~$156K/year. At 100K MAU, ~$313K/year. At 500K MAU (Apple Small-Business cap exceeded), ~$1.19M/year.
+- **Sparkle cost is model-tiered (1/2/3/5), not flat.** A render costs us $0.003–$0.134 depending on the model; the user pays 1–5 sparkles to match. Default model (Flux 1.1 Pro) = 1 sparkle, $0.040. Worst-case cost **$0.046/sparkle**, blended ~$0.03.
+- **Cost per dream:** nightly **~$0.035**, user-created **~$0.045** all-in (model + Sonnet brief + amortized face swap). Validated 2026-06-08 against provider pricing.
+- **Apple's cut:** 30% standard, **15% if enrolled in Small Business Program** (qualify under $1M annual proceeds). This is the biggest single margin lever — confirm enrollment.
+- **Two paid products:** consumable **sparkle packs** (15/40/90/200/500) + a **Pro subscription** ($9.99/mo or $79.99/yr) bundling 75 sparkles/mo + 30 nightly dreams + 100 HD downloads.
+- **No ads exist** (no ad SDK installed). Free users (post-trial) cost ~$0.02/mo and contribute nothing until they convert. The business is **paid-conversion-driven**.
+- **Pack margins (worst case):** 46–59% @15%, 34–50% @30% — profitable under every cost/cut combination.
 
 ---
 
 ## Cost Stack — what every dream actually costs you
 
+### Model cost is tiered — the user picks the model, the model sets the cost
+
+Per-image API cost at the sizes/qualities we render (validated 2026-06-08).
+The sparkle charge tracks cost monotonically (1/2/3/5), so a cheaper model
+never costs more sparkles than a pricier one.
+
+| Sparkles | Models | API cost/img |
+|---|---|---|
+| 1 | Flux Schnell ($0.003), Krea ($0.004), Flux 2 Dev ($0.025), Flux Dev ($0.030), Flux 2 Pro ($0.031), Nano Banana ($0.039), **Flux 1.1 Pro default ($0.040)** | $0.003–0.040 |
+| 2 | Flux 1.1 Pro Ultra ($0.060), GPT Image 2 ($0.060), Flux 2 Flex ($0.063) | ~$0.06 |
+| 3 | GPT Image 1 ($0.070), Flux 2 Max ($0.073) | ~$0.07 |
+| 5 | Nano Banana Pro ($0.134) | ~$0.134 |
+
+⚠️ These hold **only at our pinned resolutions** (Replicate ~1MP default,
+OpenAI medium/1024×1536, Gemini Pro 1K). Flux 2 / GPT Image / Nano Banana Pro
+price by megapixel/quality — render bigger and costs jump (Flux 2 Max → $0.19
+at 4MP; Nano Banana Pro → $0.24 at 4K). Don't unpin without repricing.
+
 ### Variable per dream (~$0.045)
 
 | Service | Cost | Notes |
 |---|---|---|
-| Replicate (Flux Dev / 1.1 Pro) | $0.025-0.030 | Core text-to-image generation |
-| Replicate (face-swap, when applicable) | +$0.013 | ~30% of dreams have face-swap |
-| Anthropic Sonnet (concept generation) | $0.003-0.006 | Pass 1 of two-pass engine |
-| Anthropic Haiku (prompt polish) | $0.001-0.002 | Pass 2 of two-pass engine |
-| Anthropic Haiku (bot message) | $0.001 | Whimsical message per dream |
+| Model render (default Flux 1.1 Pro) | $0.040 | See tier table above; varies by model |
+| Replicate (face-swap, when applicable) | +$0.013 | ~30% of dreams → ~$0.004 amortized |
+| Anthropic Sonnet (brief) | $0.003-0.006 | Flux-prompt authoring |
+| Anthropic Haiku (polish + bot message) | $0.001-0.002 | |
 | Supabase storage egress | $0.001-0.002 | Image bytes served to clients |
-| **Variable subtotal** | **~$0.04-0.05** | Use **$0.045** as planning number |
+| **Variable subtotal** | **~$0.045** | Worst-case cost **$0.046/sparkle** |
 
 ### Fixed monthly overhead (~$30-50/month)
 
@@ -84,12 +102,17 @@ If your Apple Developer organization earns under **$1,000,000 USD in proceeds** 
 - Approximate threshold: ~196K MAU at 5% conversion × $10 ARPPU/mo (= $1.18M annual gross → $1M proceeds)
 - Re-enroll if you drop back under $1M in a future year
 
-### Subscriptions are different
+### Subscriptions are different (and this helps Pro)
 
-For subscription products (not relevant if you're sparkles-only):
-- Year 1 of customer's subscription: 30%
-- Year 2+ of same customer's subscription: 15% automatically
+For auto-renewing subscriptions (Pro), Apple's cut steps down with tenure:
+- Year 1 of a customer's subscription: 30%
+- **Year 2+ of the same subscription: 15% automatically** (loyalty discount,
+  independent of Small Business)
 - Small Business Program drops Year 1 to 15% as well
+
+So a retained Pro subscriber is **always at 15% from year 2** even past the
+$1M threshold — which is exactly the cohort (long-tenured yearly power-users)
+where margin is thinnest. Retention is a margin lever, not just a revenue one.
 
 ---
 
@@ -101,48 +124,71 @@ For subscription products (not relevant if you're sparkles-only):
 - **Per-sparkle gross price tiers DOWN as packs get bigger** (incentivize larger purchases without bleeding margin)
 - **Margin floor: 25%** so a 20% cost spike doesn't go negative
 
-### Recommended packs (assumes 15% Small Business cut)
+### Shipped packs (source of truth: `sparkle_packs` table, migration 255)
 
-| Pack | Sparkles | Price | Net (×0.85) | Cost @ $0.06 | Profit | Margin % | $/sparkle gross |
+Margins below use the **worst case** — every sparkle spent on the $0.046
+default model. Real blended usage (~$0.03/sparkle) runs higher.
+
+| Pack | Sparkles | Price | $/sparkle | Net @15% | Cost (worst) | Profit | Margin |
 |---|---|---|---|---|---|---|---|
-| **Impulse** | 12 | $1.99 | $1.69 | $0.72 | **+$0.97** | 57% | $0.166 |
-| **Starter** | 30 | $4.99 | $4.24 | $1.80 | **+$2.44** | 58% | $0.166 |
-| **Popular** | 75 | $9.99 | $8.49 | $4.50 | **+$3.99** | 47% | $0.133 |
-| **Value** | 175 | $19.99 | $16.99 | $10.50 | **+$6.49** | 38% | $0.114 |
-| **Whale** | 450 | $49.99 | $42.49 | $27.00 | **+$15.49** | 36% | $0.111 |
+| **Impulse** | 15 | $1.99 | $0.133 | $1.69 | $0.69 | **+$1.00** | 59% |
+| **Starter** | 40 | $4.99 | $0.125 | $4.24 | $1.84 | **+$2.40** | 57% |
+| **Popular** | 90 | $9.99 | $0.111 | $8.49 | $4.14 | **+$4.35** | 51% |
+| **Best Value** | 200 | $19.99 | $0.100 | $16.99 | $9.20 | **+$7.79** | 46% |
+| **Whale** | 500 | $49.99 | $0.100 | $42.49 | $23.00 | **+$19.49** | 46% |
 
-**Gross-per-sparkle waterfall:** $0.17 → $0.17 → $0.13 → $0.11 → $0.11 — bigger packs = better deal for users without giving up margin.
+**Gross-per-sparkle waterfall:** $0.133 → $0.125 → $0.111 → $0.100 → $0.100 —
+bigger packs are a better deal per sparkle without dropping below the 25% floor.
 
-### Pricing if you DON'T enroll in Small Business (30% Apple cut)
+### Same packs at the 30% Apple cut (over $1M proceeds)
 
-| Pack | Sparkles | Price | Net (×0.70) | Cost @ $0.06 | Profit | Margin % |
-|---|---|---|---|---|---|---|
-| Impulse | 10 | $1.99 | $1.39 | $0.60 | +$0.79 | 57% |
-| Starter | 25 | $4.99 | $3.49 | $1.50 | +$1.99 | 57% |
-| Popular | 60 | $9.99 | $6.99 | $3.60 | +$3.39 | 49% |
-| Value | 130 | $19.99 | $13.99 | $7.80 | +$6.19 | 44% |
-| Whale | 350 | $49.99 | $34.99 | $21.00 | +$13.99 | 40% |
+| Pack | Net @30% | Cost (worst) | Profit | Margin |
+|---|---|---|---|---|
+| Impulse 15 / $1.99 | $1.39 | $0.69 | +$0.70 | 50% |
+| Starter 40 / $4.99 | $3.49 | $1.84 | +$1.65 | 47% |
+| Popular 90 / $9.99 | $6.99 | $4.14 | +$2.85 | 41% |
+| Best Value 200 / $19.99 | $13.99 | $9.20 | +$4.79 | 34% |
+| Whale 500 / $49.99 | $34.99 | $23.00 | +$11.99 | 34% |
 
-You give fewer sparkles per pack at the 30% rate to maintain margin. **Enrolling in Small Business is roughly equivalent to giving users 25-30% more sparkles for the same price** — meaningful product advantage.
+Every tier clears the 25% floor even at 30% + worst-case model. **Enrolling in
+Small Business (15%) is the single biggest margin lever** — see below.
 
-### Margin behavior as scale lowers cost
+---
 
-Same pack prices, lower marginal cost. At $0.045/dream (10K+/month volume):
+## Pro Subscription
 
-| Pack | Margin @ $0.06 (now) | Margin @ $0.045 (at scale) |
+The doc originally predated Pro; it now exists alongside packs. Source of truth:
+`constants/proPlan.ts`.
+
+| Plan | Price | Eff./mo | Sparkles | Perks |
+|---|---|---|---|---|
+| Monthly | $9.99/mo | $9.99 | 75/mo | 30 nightly dreams, 100 HD downloads/mo, 14-day trial |
+| Yearly | $79.99/yr | $6.67 | 900 upfront | same |
+
+**Cost to serve** (typical / maxed): ~$3.25 / ~$6.50 per Pro user/month
+(nightly $1.05 + sparkles $2.00 + HD $0.20 typical).
+
+| Plan / cut | Typical profit/mo | Maxed profit/mo |
 |---|---|---|
-| 12 / $1.99 | $0.97 (57%) | $1.15 (68%) |
-| 30 / $4.99 | $2.44 (58%) | $2.89 (68%) |
-| 75 / $9.99 | $3.99 (47%) | $5.12 (60%) |
-| 175 / $19.99 | $6.49 (38%) | $9.12 (54%) |
-| 450 / $49.99 | $15.49 (36%) | $22.24 (52%) |
+| Monthly @15% | +$5.24 | +$1.99 |
+| Monthly @30% | +$3.74 | +$0.49 |
+| Yearly @15% | +$2.42 | −$0.83 |
+| Yearly @30% | +$1.42 | **−$1.83** |
 
-**Set prices once, watch margins compound as volume grows.**
+⚠️ **Yearly Pro is the thin SKU** — a maxed yearly power-user at 30% loses
+~$1–2/mo. Held in check by the 100-HD-download cap, ~2% Apple refund rate, and
+the fact that most users don't max all three perks. If yearly power-users
+become common, raise the yearly price or trim the 900-sparkle grant.
 
-### Killed packs (mathematically impossible to profit at current cost)
+**Popular pack vs Pro collision (intentional):** Popular is 90 sparkles for
+$9.99 one-time; Pro is $9.99/mo for 75 sparkles **+ nightly + HD + recurring**.
+The comparison is designed to push undecided users toward Pro.
 
-- **Old: 100 / $7.99** — barely profitable at 30% Apple cut. Lift to $9.99 OR shrink to 75 sparkles.
-- **Old: 500 / $24.99** — **lost $7.50 per sale at 30% Apple cut**. The $24.99 price point can't fit 500 sparkles profitably under any cost model. New whale tier is $49.99 / 450.
+### Killed packs (historical — don't reintroduce)
+
+- **100 / $7.99** — barely profitable at 30%. Replaced by 90 / $9.99.
+- **500 / $24.99** — lost money per sale at 30%. The current Whale is 500 /
+  $49.99 (46% margin @15%).
 
 ---
 
@@ -273,14 +319,17 @@ Before locking pricing, confirm:
 
 ---
 
-## Reference Numbers (May 2026)
+## Reference Numbers (refreshed 2026-06-08)
 
-- Anthropic spend last 5 weeks: **$359.54** (~$10/day average)
-- Replicate spend last 5 weeks: **$395.42** (paid in credit purchases)
-- Total AI spend: **$754.96**
-- Posts in database: **8,787** (as of 2026-05-02)
-- Effective fully-loaded cost per dream: **$0.085** (includes heavy QA/dev burn)
-- Steady-state marginal cost: **$0.045** (no QA churn, no seed-pool generation)
-- Recommended planning cost: **$0.06** (conservative pre-scale)
+- Model costs **validated 2026-06-08** against live Replicate / OpenAI / Google
+  pricing — `modelPricing.ts` estimates are accurate at our pinned resolutions.
+- Worst-case cost per sparkle: **$0.046** (default Flux 1.1 Pro + pipeline).
+- Blended cost per sparkle: **~$0.03** (most renders use cheaper models / higher
+  tiers that are more efficient per sparkle).
+- Planning costs: nightly **$0.035**, user-created **$0.045**.
+- ⚠️ Pull a real monthly cost: `SELECT model, count(*), avg(cost_cents) FROM
+  ai_generation_log WHERE created_at > now() - interval '30 days' GROUP BY
+  model;` and reconcile against Replicate / OpenAI / Google invoices. Adjust
+  `image_models` (DB overlay) if any model diverges >20%.
 
-These numbers reflect heavy development iteration. Steady-state production-only operation will be cheaper.
+These reflect production rendering. Heavy dev/QA iteration runs higher.
