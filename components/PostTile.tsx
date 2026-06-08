@@ -87,10 +87,13 @@ export const PostTile = memo(function PostTile({
           </View>
         </View>
       )}
-      {showPrivateBadge && !item.is_public && (
-        <View style={styles.privateBadge}>
-          <Ionicons name={item.posted_at ? 'eye-off' : 'add'} size={10} color="#fff" />
-        </View>
+      {showPrivateBadge && item.is_public && (
+        <Ionicons
+          name="checkmark-circle"
+          size={18}
+          color={colors.success}
+          style={styles.publicBadge}
+        />
       )}
     </TouchableOpacity>
   );
@@ -126,15 +129,15 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     fontWeight: '600',
   },
-  privateBadge: {
+  // Green check on PUBLIC dreams (dreams album) so the user can see which of
+  // their dreams are live on the feed. The drop shadow keeps it legible on
+  // bright images (the icon is rendered as a glyph, so textShadow applies).
+  publicBadge: {
     position: 'absolute',
     bottom: 4,
     right: 4,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    textShadowColor: 'rgba(0,0,0,0.7)',
+    textShadowRadius: 3,
+    textShadowOffset: { width: 0, height: 1 },
   },
 });
