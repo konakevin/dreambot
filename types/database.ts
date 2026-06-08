@@ -772,6 +772,7 @@ export type Database = {
       };
       engine_config: {
         Row: {
+          base_sparkle_cost: number;
           chaos_high_threshold: number;
           chaos_low_threshold: number;
           embodied_mediums_high: string[];
@@ -782,14 +783,23 @@ export type Database = {
           face_swap_self_rate: number;
           face_swap_share: number;
           id: number;
+          nightly_max_jobs: number;
+          photo_preprocess_quality: number;
+          photo_preprocess_width: number;
+          pro_trial_days: number;
+          prompt_max_length: number;
+          relationship_regex: string | null;
           scene_eligible_models: string[];
           scene_embodied_rate: number;
           scene_embodied_rate_high: number;
           scene_embodied_rate_low: number;
           scene_embodied_rate_mid: number;
+          self_ref_regex: string | null;
           updated_at: string;
+          welcome_sparkle_bonus: number;
         };
         Insert: {
+          base_sparkle_cost?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           embodied_mediums_high?: string[];
@@ -800,14 +810,23 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           id?: number;
+          nightly_max_jobs?: number;
+          photo_preprocess_quality?: number;
+          photo_preprocess_width?: number;
+          pro_trial_days?: number;
+          prompt_max_length?: number;
+          relationship_regex?: string | null;
           scene_eligible_models?: string[];
           scene_embodied_rate?: number;
           scene_embodied_rate_high?: number;
           scene_embodied_rate_low?: number;
           scene_embodied_rate_mid?: number;
+          self_ref_regex?: string | null;
           updated_at?: string;
+          welcome_sparkle_bonus?: number;
         };
         Update: {
+          base_sparkle_cost?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           embodied_mediums_high?: string[];
@@ -818,12 +837,20 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           id?: number;
+          nightly_max_jobs?: number;
+          photo_preprocess_quality?: number;
+          photo_preprocess_width?: number;
+          pro_trial_days?: number;
+          prompt_max_length?: number;
+          relationship_regex?: string | null;
           scene_eligible_models?: string[];
           scene_embodied_rate?: number;
           scene_embodied_rate_high?: number;
           scene_embodied_rate_low?: number;
           scene_embodied_rate_mid?: number;
+          self_ref_regex?: string | null;
           updated_at?: string;
+          welcome_sparkle_bonus?: number;
         };
         Relationships: [];
       };
@@ -2269,6 +2296,7 @@ export type Database = {
           sort_order: number;
         }[];
       };
+      get_engine_config: { Args: never; Returns: Json };
       get_feed: {
         Args: {
           p_bot_user_id?: string;

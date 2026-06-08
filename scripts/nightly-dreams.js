@@ -25,6 +25,7 @@ const {
   shouldSend3DayPaidProReminder,
   shouldSendLastNightPaidProReminder,
 } = require('./lib/nightlyEligibility');
+const { fetchEngineConfig } = require('./lib/engineConfig');
 
 // ── Config ──────────────────────────────────────────────────────────────────
 
@@ -52,9 +53,10 @@ const SUPABASE_KEY = getKey('SUPABASE_SERVICE_ROLE_KEY');
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
 const MAX_JOBS_ARG = args.find((_, i, a) => a[i - 1] === '--max-jobs');
-// Cost guardrail — cap the number of nightly jobs enqueued in one run. Generous
-// default (prelaunch); raise as the Pro base grows. Each job ≈ one render.
-const MAX_JOBS = MAX_JOBS_ARG != null ? parseInt(MAX_JOBS_ARG, 10) : 5000;
+// Cost guardrail — cap the number of nightly jobs enqueued in one run. An explicit
+// --max-jobs wins; otherwise the default comes from engine_config.nightly_max_jobs
+// (resolved in main), so an admin can tune the cap without a code change.
+const MAX_JOBS_OVERRIDE = MAX_JOBS_ARG != null ? parseInt(MAX_JOBS_ARG, 10) : null;
 
 if (!SUPABASE_KEY) {
   console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
@@ -67,6 +69,8 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 (async () => {
   console.log('\n🌙 Nightly Dream Enqueue');
+  const cfg = await fetchEngineConfig(sb);
+  const MAX_JOBS = MAX_JOBS_OVERRIDE != null ? MAX_JOBS_OVERRIDE : cfg.nightlyMaxJobs;
   console.log(`   Max jobs: ${MAX_JOBS} | Dry run: ${DRY_RUN}\n`);
 
   const today = new Date().toISOString().slice(0, 10); // UTC day

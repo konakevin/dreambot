@@ -49,6 +49,7 @@ import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSh
 import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { useImageModels } from '@/hooks/useImageModels';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
 
 // Same brand gradient used by the homepage wordmark, brochure Hero, and the
 // onboarding info-step headlines: moon purple → cloud pink → star teal.
@@ -80,6 +81,7 @@ export default function CreateScreen() {
   // selected model's sparkle cost.
   const [advancedModelId, setAdvancedModelId] = useState(DEFAULT_MODEL_ID);
   const imageModels = useImageModels();
+  const engineConfig = useEngineConfig();
   const promptRef = useRef<TextInput>(null);
 
   // Keep config.forceModel in sync with Advanced Mode: ON → charge + render the
@@ -265,8 +267,12 @@ export default function CreateScreen() {
     try {
       const compressed = await ImageManipulator.manipulateAsync(
         asset.uri,
-        [{ resize: { width: 1024 } }],
-        { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+        [{ resize: { width: engineConfig.photoPreprocessWidth } }],
+        {
+          compress: engineConfig.photoPreprocessQuality,
+          format: ImageManipulator.SaveFormat.JPEG,
+          base64: true,
+        }
       );
       if (!compressed.base64) {
         Toast.show('Could not process photo', 'close-circle');
@@ -562,7 +568,7 @@ export default function CreateScreen() {
                 placeholderTextColor={colors.textMuted ?? '#6B7280'}
                 value={config.userPrompt}
                 onChangeText={setPrompt}
-                maxLength={2000}
+                maxLength={engineConfig.promptMaxLength}
                 multiline
                 scrollEnabled
                 returnKeyType="default"
@@ -780,7 +786,10 @@ export default function CreateScreen() {
           >
             <View className="flex-row items-center gap-2">
               <Text className="text-white text-base font-bold">
-                Dream · {config.useExactPrompt ? sparkleCostFrom(imageModels, advancedModelId) : 1}
+                Dream ·{' '}
+                {config.useExactPrompt
+                  ? sparkleCostFrom(imageModels, advancedModelId)
+                  : engineConfig.baseSparkleCost}
               </Text>
               <Ionicons name="sparkles" size={16} color="#FFFFFF" />
             </View>
