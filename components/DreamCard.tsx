@@ -85,6 +85,13 @@ export interface DreamPostItem {
   is_public?: boolean;
   posted_at?: string | null;
   description?: string | null;
+  /** Repost surface (get_feed migration 243). 'repost' = this card is reaching
+   * the viewer via a followed user's repost; reposter_* carry the attribution. */
+  surface_type?: 'original' | 'repost';
+  reposter_id?: string | null;
+  reposter_name?: string | null;
+  reposters_more?: number;
+  reposted_at?: string | null;
 }
 
 interface Props {
@@ -419,6 +426,20 @@ export const DreamCard = memo(function DreamCard({
               />
             )}
             <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
+              {/* Repost attribution — shown when this card reaches the viewer via
+                  a followed user's repost (surface_type='repost'). The card still
+                  credits the ORIGINAL author below; this line credits the reposter. */}
+              {item.surface_type === 'repost' && item.reposter_name && (
+                <View style={s.repostAttribRow}>
+                  <Ionicons name="repeat" size={13} color={colors.success} />
+                  <Text style={s.repostAttribText} numberOfLines={1}>
+                    Reposted by @{item.reposter_name}
+                    {(item.reposters_more ?? 0) > 0
+                      ? ` and ${item.reposters_more} ${item.reposters_more === 1 ? 'other' : 'others'}`
+                      : ''}
+                  </Text>
+                </View>
+              )}
               {/* Model badge — sits ABOVE the username so Kevin (and users)
                   can see which AI rendered the image at a glance. Friendly
                   name from constants/imageModels; hidden when model is null
@@ -792,6 +813,22 @@ const s = StyleSheet.create({
     letterSpacing: 0.2,
   },
   repostBtnTextActive: { color: colors.success },
+  // Repost attribution line ("♻ Reposted by @x") at the top of the post info.
+  repostAttribRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginBottom: verticalScale(6),
+  },
+  repostAttribText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(12),
+    fontWeight: '600',
+    opacity: 0.92,
+    textShadowColor: 'rgba(0,0,0,0.85)',
+    textShadowRadius: 3,
+    textShadowOffset: { width: 0, height: 1 },
+  },
   usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: verticalScale(8) },
   avatar: {
     width: 32,

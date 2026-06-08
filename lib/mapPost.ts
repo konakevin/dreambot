@@ -54,6 +54,14 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     is_public: (row.is_public as boolean) ?? false,
     posted_at: (row.posted_at as string | null) ?? null,
     description: (row.description as string | null) ?? null,
+    // Repost surface (get_feed migration 243). Non-feed rows lack these → default
+    // to a repost-free 'original' so callers other than get_feed are unaffected.
+    repost_count: (row.repost_count as number) ?? 0,
+    surface_type: (row.surface_type as 'original' | 'repost' | null) ?? 'original',
+    reposter_id: (row.reposter_id as string | null) ?? null,
+    reposter_name: (row.reposter_name as string | null) ?? null,
+    reposters_more: (row.reposters_more as number) ?? 0,
+    reposted_at: (row.reposted_at as string | null) ?? null,
   };
 }
 
@@ -87,5 +95,13 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     is_public: (row.is_public as boolean) ?? false,
     posted_at: (row.posted_at as string | null) ?? null,
     description: (row.description as string | null) ?? null,
+    // Repost surface (get_feed migration 243). Non-feed rows lack these → default
+    // to a repost-free 'original' so callers other than get_feed are unaffected.
+    repost_count: (row.repost_count as number) ?? 0,
+    surface_type: (row.surface_type as 'original' | 'repost' | null) ?? 'original',
+    reposter_id: (row.reposter_id as string | null) ?? null,
+    reposter_name: (row.reposter_name as string | null) ?? null,
+    reposters_more: (row.reposters_more as number) ?? 0,
+    reposted_at: (row.reposted_at as string | null) ?? null,
   };
 }

@@ -2300,6 +2300,12 @@ export type Database = {
           like_count: number;
           model: string;
           posted_at: string;
+          repost_count: number;
+          reposted_at: string;
+          reposter_id: string;
+          reposter_name: string;
+          reposters_more: number;
+          surface_type: string;
           thumbhash: string;
           user_id: string;
           username: string;
