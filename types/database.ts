@@ -167,6 +167,39 @@ export type Database = {
           },
         ];
       };
+      bot_config: {
+        Row: {
+          allowed_models: string[] | null;
+          bot_name: string;
+          chaos_enabled: boolean | null;
+          mediums: string[] | null;
+          overrides: Json | null;
+          two_pass_polish_enabled: boolean | null;
+          updated_at: string;
+          vibes: string[] | null;
+        };
+        Insert: {
+          allowed_models?: string[] | null;
+          bot_name: string;
+          chaos_enabled?: boolean | null;
+          mediums?: string[] | null;
+          overrides?: Json | null;
+          two_pass_polish_enabled?: boolean | null;
+          updated_at?: string;
+          vibes?: string[] | null;
+        };
+        Update: {
+          allowed_models?: string[] | null;
+          bot_name?: string;
+          chaos_enabled?: boolean | null;
+          mediums?: string[] | null;
+          overrides?: Json | null;
+          two_pass_polish_enabled?: boolean | null;
+          updated_at?: string;
+          vibes?: string[] | null;
+        };
+        Relationships: [];
+      };
       bot_dedup: {
         Row: {
           axis: string;
@@ -1217,6 +1250,45 @@ export type Database = {
           allowed_models?: string[];
           medium_key?: string;
           vibe_key?: string;
+        };
+        Relationships: [];
+      };
+      mood_axes: {
+        Row: {
+          default_value: number;
+          description: string | null;
+          is_active: boolean;
+          key: string;
+          left_hint: string | null;
+          left_label: string;
+          right_hint: string | null;
+          right_label: string;
+          sort_order: number;
+          title: string;
+        };
+        Insert: {
+          default_value?: number;
+          description?: string | null;
+          is_active?: boolean;
+          key: string;
+          left_hint?: string | null;
+          left_label: string;
+          right_hint?: string | null;
+          right_label: string;
+          sort_order?: number;
+          title: string;
+        };
+        Update: {
+          default_value?: number;
+          description?: string | null;
+          is_active?: boolean;
+          key?: string;
+          left_hint?: string | null;
+          left_label?: string;
+          right_hint?: string | null;
+          right_label?: string;
+          sort_order?: number;
+          title?: string;
         };
         Relationships: [];
       };
@@ -2396,6 +2468,20 @@ export type Database = {
           upload_id: string;
           upload_image_url: string;
           upload_thumbhash: string;
+        }[];
+      };
+      get_mood_axes: {
+        Args: never;
+        Returns: {
+          default_value: number;
+          description: string;
+          key: string;
+          left_hint: string;
+          left_label: string;
+          right_hint: string;
+          right_label: string;
+          sort_order: number;
+          title: string;
         }[];
       };
       get_new_notification_count: {

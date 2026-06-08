@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
-import type { MoodAxes } from '@/types/vibeProfile';
+import { useMoodAxes } from '@/hooks/useMoodAxes';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
@@ -123,54 +123,8 @@ interface Props {
   onBack: () => void;
 }
 
-const SLIDERS: {
-  axis: keyof MoodAxes;
-  title: string;
-  description: string;
-  left: string;
-  right: string;
-  leftHint: string;
-  rightHint: string;
-}[] = [
-  {
-    axis: 'peaceful_chaotic',
-    title: 'Energy',
-    description: 'Soft mornings… or chaos at midnight.',
-    left: 'Calm',
-    right: 'Wild',
-    leftHint: 'Still water, soft light',
-    rightHint: 'Thunder, motion, fire',
-  },
-  {
-    axis: 'cute_terrifying',
-    title: 'Tone',
-    description: 'Warm light or creeping shadows.',
-    left: 'Cozy',
-    right: 'Eerie',
-    leftHint: 'Cozy, friendly, safe',
-    rightHint: 'Moody, haunting, uneasy',
-  },
-  {
-    axis: 'minimal_maximal',
-    title: 'Detail',
-    description: 'Minimal… or packed edge to edge.',
-    left: 'Spare',
-    right: 'Lush',
-    leftHint: 'One subject, one mood',
-    rightHint: 'Every inch packed',
-  },
-  {
-    axis: 'realistic_surreal',
-    title: 'Reality',
-    description: 'Almost real… or dream-logic weird.',
-    left: 'Grounded',
-    right: 'Surreal',
-    leftHint: 'Could be a photo',
-    rightHint: 'Impossible physics',
-  },
-];
-
 export function MoodSlidersStep({ onNext, onBack }: Props) {
+  const sliders = useMoodAxes(); // DB-driven copy/order, built-in fallback
   const moods = useOnboardingStore((s) => s.profile.moods);
   const setMoodAxis = useOnboardingStore((s) => s.setMoodAxis);
   const isEditing = useOnboardingStore((s) => s.isEditing);
@@ -195,7 +149,7 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator
       >
-        {SLIDERS.map((slider) => (
+        {sliders.map((slider) => (
           <SliderCard
             key={slider.axis}
             title={slider.title}
