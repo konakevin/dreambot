@@ -11,18 +11,18 @@ import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
 
 const PAGE_SIZE = 18;
 
-export function useMyDreams() {
+export function useMyDreams(privateOnly = false) {
   const userId = useAuthStore((s) => s.user?.id);
 
   return useInfiniteQuery({
-    queryKey: ['my-dreams', userId],
+    queryKey: ['my-dreams', userId, privateOnly],
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
       if (!userId) return { rows: [], offset, hasMore: false };
-      const { data, error } = await supabase
-        .from('uploads')
-        .select(POST_SELECT)
-        .eq('user_id', userId)
+      let query = supabase.from('uploads').select(POST_SELECT).eq('user_id', userId);
+      // "Private only" filter — unposted dreams (not live on the feed).
+      if (privateOnly) query = query.eq('is_public', false);
+      const { data, error } = await query
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;

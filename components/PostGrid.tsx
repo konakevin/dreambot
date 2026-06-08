@@ -30,7 +30,7 @@ import type { DreamPostItem } from '@/components/DreamCard';
 export type PostGridSource =
   | { type: 'own' }
   | { type: 'saved' }
-  | { type: 'dreams' }
+  | { type: 'dreams'; privateOnly?: boolean }
   | { type: 'reposts'; userId: string }
   | { type: 'user'; userId: string };
 
@@ -89,10 +89,11 @@ export function PostGrid({
   const isReposts = source.type === 'reposts';
   const userId = isUser ? source.userId : isReposts ? source.userId : '';
 
+  const dreamsPrivateOnly = source.type === 'dreams' ? (source.privateOnly ?? false) : false;
   const ownQuery = useUserPosts(isOwn_);
   const savedQuery = useFavoritePosts(isSaved);
   const userQuery = usePublicProfilePosts(userId, isUser);
-  const dreamsQuery = useMyDreams();
+  const dreamsQuery = useMyDreams(dreamsPrivateOnly);
   const repostsQuery = useUserReposts(userId, isReposts);
 
   const activeQuery = isOwn_

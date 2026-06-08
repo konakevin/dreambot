@@ -50,6 +50,8 @@ const ALBUM_INFO: Record<AlbumTab, string> = {
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
   const [activeTab, setActiveTab] = useState<Tab>('posts');
+  // Dreams album "Private only" filter (toggle on the right of the subheader).
+  const [privateOnly, setPrivateOnly] = useState(false);
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
   const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
@@ -337,14 +339,26 @@ export default function ProfileScreen() {
         </View>
       )}
 
-      {/* Per-album explainer — one line under the icon tabs (the icon-only
-          tabs don't say what each album is). */}
-      {(activeTab === 'posts' ||
-        activeTab === 'dreams' ||
-        activeTab === 'saved' ||
-        activeTab === 'reposts') && (
+      {/* Per-album explainer — one line under the icon tabs. The Dreams tab
+          also carries a "Private only" filter toggle on the right. */}
+      {activeTab === 'dreams' ? (
+        <View style={styles.dreamsSubheaderRow}>
+          <Text style={styles.albumSubheaderInline}>
+            {privateOnly ? 'Your private (unposted) dreams' : ALBUM_INFO.dreams}
+          </Text>
+          <TouchableOpacity
+            style={[styles.dreamsFilter, privateOnly && styles.dreamsFilterActive]}
+            onPress={() => setPrivateOnly((v) => !v)}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.dreamsFilterText, privateOnly && styles.dreamsFilterTextActive]}>
+              Private only
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : activeTab === 'posts' || activeTab === 'saved' || activeTab === 'reposts' ? (
         <Text style={styles.albumSubheader}>{ALBUM_INFO[activeTab as AlbumTab]}</Text>
-      )}
+      ) : null}
 
       {/* Section heading for the followers/following sub-views — repeats
           the active tab + count so you can tell which list you're looking
@@ -373,7 +387,7 @@ export default function ProfileScreen() {
     const sourceMap = {
       posts: { type: 'own' as const },
       saved: { type: 'saved' as const },
-      dreams: { type: 'dreams' as const },
+      dreams: { type: 'dreams' as const, privateOnly },
       reposts: { type: 'reposts' as const, userId: user?.id ?? '' },
     };
     const emptyMap = {
@@ -474,6 +488,37 @@ const styles = StyleSheet.create({
     paddingTop: verticalScale(8),
     paddingBottom: verticalScale(8),
   },
+  // Dreams tab: explainer (left) + "Private only" filter toggle (right).
+  dreamsSubheaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(8),
+  },
+  albumSubheaderInline: {
+    flex: 1,
+    color: colors.textSecondary,
+    fontSize: fontScale(13),
+  },
+  dreamsFilter: {
+    paddingHorizontal: 10,
+    paddingVertical: verticalScale(4),
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
+  },
+  dreamsFilterActive: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  dreamsFilterText: {
+    color: colors.textSecondary,
+    fontSize: fontScale(12),
+    fontWeight: '600',
+  },
+  dreamsFilterTextActive: { color: '#FFFFFF' },
   listSectionCount: {
     color: colors.textSecondary,
     fontSize: fontScale(14),
