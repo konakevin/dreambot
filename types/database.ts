@@ -828,6 +828,7 @@ export type Database = {
           nightly_require_onboarding: boolean;
           photo_preprocess_quality: number;
           photo_preprocess_width: number;
+          pro_monthly_sparkle_bundle: number;
           pro_trial_days: number;
           prompt_max_length: number;
           relationship_regex: string | null;
@@ -858,6 +859,7 @@ export type Database = {
           nightly_require_onboarding?: boolean;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
+          pro_monthly_sparkle_bundle?: number;
           pro_trial_days?: number;
           prompt_max_length?: number;
           relationship_regex?: string | null;
@@ -888,6 +890,7 @@ export type Database = {
           nightly_require_onboarding?: boolean;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
+          pro_monthly_sparkle_bundle?: number;
           pro_trial_days?: number;
           prompt_max_length?: number;
           relationship_regex?: string | null;
@@ -1771,6 +1774,33 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      sparkle_packs: {
+        Row: {
+          icon: string;
+          is_active: boolean;
+          label: string;
+          product_id: string;
+          sort_order: number;
+          sparkles: number;
+        };
+        Insert: {
+          icon: string;
+          is_active?: boolean;
+          label: string;
+          product_id: string;
+          sort_order?: number;
+          sparkles: number;
+        };
+        Update: {
+          icon?: string;
+          is_active?: boolean;
+          label?: string;
+          product_id?: string;
+          sort_order?: number;
+          sparkles?: number;
+        };
+        Relationships: [];
       };
       sparkle_transactions: {
         Row: {

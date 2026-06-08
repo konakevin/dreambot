@@ -19,7 +19,7 @@ import {
   usePurchaseSparkles,
   useRestorePurchases,
 } from '@/hooks/useSparkles';
-import { PACK_INFO } from '@/constants/sparklePacks';
+import { useSparklePacks } from '@/hooks/useSparklePacks';
 import { trackSparkleStoreOpened, trackSparklePurchaseTapped } from '@/lib/analytics';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
@@ -54,7 +54,8 @@ function PackCard({
   onSelect: (pkg: PurchasesPackage) => void;
 }) {
   const product = pkg.product;
-  const info = PACK_INFO[product.identifier] ?? {
+  const packInfo = useSparklePacks();
+  const info = packInfo[product.identifier] ?? {
     sparkles: 0,
     icon: 'sparkles-outline',
     label: '',
@@ -141,6 +142,7 @@ const MOCK_PACKAGES: PurchasesPackage[] = [
 
 export default function SparkleStoreScreen() {
   const { data: balance = 0 } = useSparkleBalance();
+  const packInfo = useSparklePacks();
   const { data: livePackages = [], isLoading: liveIsLoading } = useSparklePackages();
   const { mutate: purchase, isPending: purchasing } = usePurchaseSparkles();
   useEffect(() => {
@@ -154,8 +156,8 @@ export default function SparkleStoreScreen() {
   const isLoading = USE_MOCK_PACKS_FOR_SCREENSHOT ? false : liveIsLoading;
 
   const sorted = [...packages].sort((a, b) => {
-    const aInfo = PACK_INFO[a.product.identifier];
-    const bInfo = PACK_INFO[b.product.identifier];
+    const aInfo = packInfo[a.product.identifier];
+    const bInfo = packInfo[b.product.identifier];
     return (aInfo?.sparkles ?? 0) - (bInfo?.sparkles ?? 0);
   });
 
@@ -163,12 +165,12 @@ export default function SparkleStoreScreen() {
   const [selectedPkgId, setSelectedPkgId] = useState<string | null>(null);
   useEffect(() => {
     if (selectedPkgId || sorted.length === 0) return;
-    const bestValue = sorted.find((p) => PACK_INFO[p.product.identifier]?.label === 'Best Value');
+    const bestValue = sorted.find((p) => packInfo[p.product.identifier]?.label === 'Best Value');
     setSelectedPkgId((bestValue ?? sorted[Math.floor(sorted.length / 2)]).identifier);
-  }, [sorted, selectedPkgId]);
+  }, [sorted, selectedPkgId, packInfo]);
 
   const selectedPkg = sorted.find((p) => p.identifier === selectedPkgId) ?? null;
-  const selectedInfo = selectedPkg ? PACK_INFO[selectedPkg.product.identifier] : null;
+  const selectedInfo = selectedPkg ? packInfo[selectedPkg.product.identifier] : null;
 
   function handleSelect(pkg: PurchasesPackage) {
     Haptics.selectionAsync();
@@ -182,7 +184,7 @@ export default function SparkleStoreScreen() {
     purchase(selectedPkg, {
       onSuccess: () => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        const info = PACK_INFO[selectedPkg.product.identifier];
+        const info = packInfo[selectedPkg.product.identifier];
         Toast.show(`${info?.sparkles ?? ''} sparkles added!`, 'sparkles');
       },
       onError: (err) => {

@@ -8,20 +8,36 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// Product ID → sparkle amount mapping
-// SOURCE OF TRUTH: constants/sparklePacks.ts — keep in sync
-const SPARKLE_PACKS: Record<string, number> = {
-  // Locked 2026-05-18 per SPARKLE_PRICING_STRATEGY.md. All tiers
-  // profitable at 15% Apple Small Business cut + $0.06/sparkle cost.
-  // _v2 suffix because Apple reserves the original .25 / .50 / .100__ /
-  // .500 product IDs from the earlier lineup — they can't be reused.
-  // Keep in sync with constants/sparklePacks.ts.
+// Product ID → sparkle amount FALLBACK. Source of truth is the sparkle_packs DB
+// table (migration 255), loaded per-request below; this fallback only kicks in if
+// that lookup fails/returns nothing, so a grant is never silently zero.
+const FALLBACK_SPARKLE_PACKS: Record<string, number> = {
   'com.konakevin.radorbad.sparkles.15_v2': 15,
   'com.konakevin.radorbad.sparkles.40_v2': 40,
   'com.konakevin.radorbad.sparkles.90_v2': 90,
   'com.konakevin.radorbad.sparkles.200_v2': 200,
   'com.konakevin.radorbad.sparkles.500_v2': 500,
 };
+
+// Resolve a product's sparkle amount from the DB (sparkle_packs), falling back to
+// the constant. Returns undefined for non-pack products (used as the is-pack test).
+async function resolvePackSparkles(
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
+  productId: string
+): Promise<number | undefined> {
+  const { data, error } = await supabase
+    .from('sparkle_packs')
+    .select('sparkles')
+    .eq('product_id', productId)
+    .eq('is_active', true)
+    .maybeSingle();
+  if (error) {
+    console.warn('[RevenueCat] sparkle_packs lookup failed, using fallback:', error.message);
+    return FALLBACK_SPARKLE_PACKS[productId];
+  }
+  return data ? Number(data.sparkles) : FALLBACK_SPARKLE_PACKS[productId];
+}
 
 // Pro subscription product IDs. Match these in App Store Connect /
 // Google Play and attach to the "pro" entitlement in RevenueCat.
@@ -32,17 +48,29 @@ const PRO_MONTHLY_PRODUCT = 'com.konakevin.radorbad.pro.monthly';
 const PRO_YEARLY_PRODUCT = 'com.konakevin.radorbad.pro.yearly';
 const PRO_SUBSCRIPTION_PRODUCTS = new Set([PRO_MONTHLY_PRODUCT, PRO_YEARLY_PRODUCT]);
 
-// Bundled sparkles granted with each Pro INITIAL_PURCHASE + RENEWAL.
-// SOURCE OF TRUTH: constants/proPlan.ts:PRO_SPARKLE_BUNDLE (monthly) and
-// PRO_YEARLY_SPARKLE_BUNDLE (yearly = 12× monthly). Keep in sync.
-const PRO_MONTHLY_SPARKLE_BUNDLE = 75;
-const PRO_YEARLY_SPARKLE_BUNDLE = PRO_MONTHLY_SPARKLE_BUNDLE * 12; // 900
+// Pro monthly sparkle bundle FALLBACK. Source of truth is
+// engine_config.pro_monthly_sparkle_bundle (migration 255); yearly = 12× monthly.
+const FALLBACK_PRO_MONTHLY_SPARKLE_BUNDLE = 75;
 
-/** Returns the right sparkle grant for a given Pro product ID. Yearly
- *  subscribers receive 12× the monthly bundle in one lump sum at each
- *  billing cycle. */
-function proBundleSize(productId: string): number {
-  return productId === PRO_YEARLY_PRODUCT ? PRO_YEARLY_SPARKLE_BUNDLE : PRO_MONTHLY_SPARKLE_BUNDLE;
+async function resolveProMonthlyBundle(
+  // deno-lint-ignore no-explicit-any
+  supabase: any
+): Promise<number> {
+  const { data, error } = await supabase
+    .from('engine_config')
+    .select('pro_monthly_sparkle_bundle')
+    .eq('id', 1)
+    .single();
+  if (error || !data || data.pro_monthly_sparkle_bundle == null) {
+    return FALLBACK_PRO_MONTHLY_SPARKLE_BUNDLE;
+  }
+  return Number(data.pro_monthly_sparkle_bundle);
+}
+
+/** The sparkle grant for a Pro product. Yearly subscribers receive 12× the
+ *  monthly bundle in one lump sum at each billing cycle. */
+function proBundleSize(productId: string, monthly: number): number {
+  return productId === PRO_YEARLY_PRODUCT ? monthly * 12 : monthly;
 }
 
 // Subscription events that should trigger the bundled-sparkle grant.
@@ -149,7 +177,8 @@ Deno.serve(async (req) => {
 
     // ── ROUTING ────────────────────────────────────────────────────────
     // Determine whether this event is for sparkle packs or Pro subscription.
-    const isSparklePack = SPARKLE_PACKS[productId] !== undefined;
+    const packSparkles = await resolvePackSparkles(supabase, productId);
+    const isSparklePack = packSparkles !== undefined;
     const isProSubscription = PRO_SUBSCRIPTION_PRODUCTS.has(productId);
 
     // ── APPLE REFUND CLAWBACK ──────────────────────────────────────────
@@ -244,7 +273,7 @@ Deno.serve(async (req) => {
 
     // ── SPARKLE PACK PURCHASE (consumable) ─────────────────────────────
     if (SPARKLE_PURCHASE_EVENTS.has(eventType) && isSparklePack) {
-      const sparkleAmount = SPARKLE_PACKS[productId];
+      const sparkleAmount = packSparkles ?? 0; // defined here (isSparklePack guard)
 
       // Idempotency: check if this transaction was already processed
       const { data: existing } = await supabase
@@ -298,15 +327,15 @@ Deno.serve(async (req) => {
         }
 
         // Grant the bundled sparkles on INITIAL_PURCHASE + each RENEWAL.
-        // Monthly subscribers get PRO_MONTHLY_SPARKLE_BUNDLE per billing
-        // cycle. Yearly subscribers get PRO_YEARLY_SPARKLE_BUNDLE (12×)
-        // in one lump sum per yearly billing cycle.
+        // Monthly subscribers get the configured monthly bundle per billing
+        // cycle; yearly subscribers get 12× in one lump sum per yearly cycle
+        // (engine_config.pro_monthly_sparkle_bundle).
         // Idempotent on transactionId — if the same event is delivered
         // twice, the second grant is skipped.
         let sparklesGranted = 0;
         if (PRO_SPARKLE_GRANT_EVENTS.has(eventType)) {
           const reason = `pro_bundle:${transactionId}`;
-          const bundleAmount = proBundleSize(productId);
+          const bundleAmount = proBundleSize(productId, await resolveProMonthlyBundle(supabase));
           const { data: existing } = await supabase
             .from('sparkle_transactions')
             .select('id')
