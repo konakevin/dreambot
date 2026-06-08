@@ -1824,8 +1824,6 @@ export type Database = {
           dream_vibe: string | null;
           flux_seed: number | null;
           from_wish: string | null;
-          fuse_count: number;
-          fuse_of: string | null;
           height: number | null;
           id: string;
           image_url: string;
@@ -1870,8 +1868,6 @@ export type Database = {
           dream_vibe?: string | null;
           flux_seed?: number | null;
           from_wish?: string | null;
-          fuse_count?: number;
-          fuse_of?: string | null;
           height?: number | null;
           id?: string;
           image_url: string;
@@ -1916,8 +1912,6 @@ export type Database = {
           dream_vibe?: string | null;
           flux_seed?: number | null;
           from_wish?: string | null;
-          fuse_count?: number;
-          fuse_of?: string | null;
           height?: number | null;
           id?: string;
           image_url?: string;
@@ -1950,13 +1944,6 @@ export type Database = {
           width?: number | null;
         };
         Relationships: [
-          {
-            foreignKeyName: 'uploads_fuse_of_fkey';
-            columns: ['fuse_of'];
-            isOneToOne: false;
-            referencedRelation: 'uploads';
-            referencedColumns: ['id'];
-          },
           {
             foreignKeyName: 'uploads_user_id_fkey';
             columns: ['user_id'];
@@ -2411,7 +2398,6 @@ export type Database = {
           dream_medium: string;
           dream_vibe: string;
           feed_score: number;
-          fuse_count: number;
           height: number;
           id: string;
           image_url: string;
