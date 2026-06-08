@@ -467,11 +467,7 @@ export const DreamCard = memo(function DreamCard({
                     activeOpacity={0.7}
                     hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                   >
-                    <Ionicons
-                      name="repeat"
-                      size={15}
-                      color={isReposted ? colors.success : '#FFFFFF'}
-                    />
+                    <Ionicons name="repeat" size={15} color="#FFFFFF" />
                     <Text style={[s.repostBtnText, isReposted && s.repostBtnTextActive]}>
                       {isReposted ? 'Reposted' : 'Repost'}
                       {(item.repost_count ?? 0) > 0 ? `  ${item.repost_count}` : ''}
@@ -801,10 +797,17 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.45)',
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: 'rgba(255,255,255,0.25)',
+    // Drop shadow so the pill reads on bright backgrounds in either state.
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
   },
+  // Reposted state: SOLID green fill + white text/icon (a green-text-on-tint
+  // version was unreadable against bright images). White-on-green reads anywhere.
   repostBtnActive: {
-    backgroundColor: 'rgba(76,170,100,0.22)',
-    borderColor: colors.success,
+    backgroundColor: colors.success,
+    borderColor: 'rgba(255,255,255,0.35)',
   },
   repostBtnText: {
     color: '#FFFFFF',
@@ -812,7 +815,7 @@ const s = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.2,
   },
-  repostBtnTextActive: { color: colors.success },
+  repostBtnTextActive: { color: '#FFFFFF' },
   // Repost attribution line ("♻ Reposted by @x") at the top of the post info.
   repostAttribRow: {
     flexDirection: 'row',
