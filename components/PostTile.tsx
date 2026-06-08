@@ -87,13 +87,16 @@ export const PostTile = memo(function PostTile({
           </View>
         </View>
       )}
-      {showPrivateBadge && item.is_public && (
-        <Ionicons
-          name="checkmark-circle"
-          size={18}
-          color={colors.success}
-          style={styles.publicBadge}
-        />
+      {/* PRIVATE dreams (Dreams album) are muted with a dark veil + lock so the
+          PUBLIC ones pop at a glance — a whole-tile contrast difference reads
+          far faster across a grid than a small corner badge. */}
+      {showPrivateBadge && !item.is_public && (
+        <>
+          <View style={styles.privateVeil} pointerEvents="none" />
+          <View style={styles.privateLock} pointerEvents="none">
+            <Ionicons name="lock-closed" size={11} color="#fff" />
+          </View>
+        </>
       )}
     </TouchableOpacity>
   );
@@ -129,15 +132,22 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     fontWeight: '600',
   },
-  // Green check on PUBLIC dreams (dreams album) so the user can see which of
-  // their dreams are live on the feed. The drop shadow keeps it legible on
-  // bright images (the icon is rendered as a glyph, so textShadow applies).
-  publicBadge: {
+  // Dark veil over PRIVATE/unposted dreams — mutes them so the full-color
+  // PUBLIC dreams stand out across the grid at a glance.
+  privateVeil: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  // Small lock on the muted private tiles (corner).
+  privateLock: {
     position: 'absolute',
     bottom: 4,
     right: 4,
-    textShadowColor: 'rgba(0,0,0,0.7)',
-    textShadowRadius: 3,
-    textShadowOffset: { width: 0, height: 1 },
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
