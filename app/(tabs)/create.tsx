@@ -60,8 +60,12 @@ const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4
 // Cast-detection patterns (defaults). Admin-overridable via engine_config; see
 // SELF_REF_REGEX / RELATIONSHIP_REGEX below.
 const DEFAULT_SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
+// Keep in sync with RELATIONSHIP_WORDS + PET_WORDS in the server detector
+// (supabase/functions/_shared/selfInsertDetector.ts). "plus one" / "+1" lead —
+// the app's own term for the +1 was missing and fell through to a solo-self
+// render (2026-06-08).
 const DEFAULT_RELATIONSHIP_REGEX =
-  /\bmy\s+(partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
+  /\bmy\s+(plus[\s-]?one|plus\s?1|\+\s?1|significant other|partner|wife|husband|girlfriend|boyfriend|gf|bf|spouse|fiancée?|fiancé|fiance|fiancee|friend|best friend|bestie|buddy|bff|pal|mate|mom|mum|dad|mother|father|parent|brother|sister|sibling|twin|son|daughter|kid|kids|child|children|cousin|aunt|uncle|niece|nephew|grandma|grandpa|grandmother|grandfather|granny|roommate|neighbour|neighbor|coworker|colleague|teammate|classmate|hubby|wifey|family|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
 
 /** Build a case-insensitive RegExp from an admin-provided string; fall back to
  *  `fallback` when the pattern is null/empty or invalid (never throws in render). */

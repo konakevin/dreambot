@@ -140,6 +140,26 @@ describe('detectSelfInsert', () => {
       expect(result.referencedRoles.has('plus_one')).toBe(true);
       expect(result.referencedRoles.has('self')).toBe(false);
     });
+
+    // ── "plus one" / "+1" — the app's OWN term for the second cast member.
+    //    Regression: these used to fall through MY_SELF and cast SELF instead.
+    it.each([
+      'show my plus one in hawaii',
+      'my plus-one at the beach',
+      'my +1 in paris',
+      'my plus 1 dancing',
+      'my significant other at sunset',
+    ])('"%s" → plus_one only, NOT self', (prompt) => {
+      const result = detectSelfInsert(prompt);
+      expect(result.referencedRoles.has('plus_one')).toBe(true);
+      expect(result.referencedRoles.has('self')).toBe(false);
+    });
+
+    it('"my plus one and I in tokyo" → self + plus_one', () => {
+      const result = detectSelfInsert('my plus one and I in tokyo');
+      expect(result.referencedRoles.has('self')).toBe(true);
+      expect(result.referencedRoles.has('plus_one')).toBe(true);
+    });
   });
 
   // ── CLEANED PROMPT ──────────────────────────────────────────────────

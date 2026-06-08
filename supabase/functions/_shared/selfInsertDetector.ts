@@ -21,8 +21,13 @@ export interface SelfInsertResult {
 
 // ── Relationship words (require "my" prefix) ─────────────────────────
 
+// NOTE: "plus one" / "+1" lead the list — that's the app's OWN term for the
+// second cast member, and its absence used to fall through the MY_SELF catch-all
+// below and wrongly cast SELF (Kevin, 2026-06-08: "show my plus one" → solo me).
+// Keep this in sync with DEFAULT_RELATIONSHIP_REGEX in app/(tabs)/create.tsx
+// (the client helper-text regex — separate runtime, must not diverge).
 const RELATIONSHIP_WORDS =
-  'partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey';
+  'plus[\\s-]?one|plus\\s?1|\\+\\s?1|significant other|partner|wife|husband|girlfriend|boyfriend|gf|bf|spouse|fiancée?|fiancé|fiance|fiancee|friend|best friend|bestie|buddy|bff|pal|mate|mom|mum|dad|mother|father|parent|brother|sister|sibling|twin|son|daughter|kid|kids|child|children|cousin|aunt|uncle|niece|nephew|grandma|grandpa|grandmother|grandfather|granny|roommate|neighbour|neighbor|coworker|colleague|teammate|classmate|hubby|wifey|family';
 const PET_WORDS = 'dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo';
 
 const MY_PLUS_ONE = new RegExp(`\\bmy\\s+(${RELATIONSHIP_WORDS})\\b`, 'i');
