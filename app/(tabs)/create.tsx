@@ -594,11 +594,13 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Unified AI-model picker — top-level, shared by BOTH routes. The
-              model is orthogonal to the engine: any model can render a raw
-              (Direct) prompt OR a full DreamBot dream (mediums/vibes/face-swap).
-              Drives force_model + the Dream button cost for both. */}
-          {!hasPhoto && (
+          {/* Unified AI-model picker — top-level. The model is orthogonal to the
+              engine: any model can render a raw (Direct) prompt, a full DreamBot
+              dream, OR a New Scene photo dream (your uploaded face is swapped
+              onto a scene the chosen model renders — model-agnostic, like the
+              cast photos). Hidden ONLY for Restyle, which is a Kontext img2img
+              transform of the photo itself and needs an edit-capable model. */}
+          {(!hasPhoto || config.photoStyle === 'new_scene') && (
             <View className="mb-4">
               <ModelPicker onChange={setSelectedModelId} />
             </View>
