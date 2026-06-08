@@ -551,7 +551,7 @@ export default function CreateScreen() {
               >
                 {config.photoStyle === 'new_scene'
                   ? 'We’ll invent a fresh scene around you — works best with a clear single-subject photo.'
-                  : 'We’ll keep your pose and restyle the scene in this medium.'}
+                  : 'We’ll keep your pose and restyle it in this medium. Restyle uses one model built for accurate edits, so the model picker doesn’t apply here.'}
               </Text>
             </View>
           )}
