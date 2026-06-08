@@ -19,6 +19,15 @@ for now (an in-app admin UI can come later on top of the same tables).
 | **4** | `mood_axes` — onboarding sliders DB-driven (copy/labels/hints/order/active/default); axis keys stay a typed engine contract | 250 |
 | **3** | `client_meta jsonb` passthrough on `dream_mediums`/`dream_vibes` + RPCs — future client attributes with no rebuild | 251 |
 | **6** | Nightly knobs on `engine_config`: `nightly_enabled` master kill-switch + `nightly_require_onboarding` / `nightly_require_ai_enabled` predicate toggles | 252 |
+| **Sparkle economy** | `sparkle_packs` table (pack sizes/labels/icons) — read by the store UI (`useSparklePacks`) AND `revenuecat-webhook`; `engine_config.pro_monthly_sparkle_bundle` (yearly = 12×). Constants stay as fallback so a grant is never silently zero. | 255 |
+
+**Related cleanup (same effort):** the dead **Twin/Fuse** feature was ripped out —
+client + DB (migrations 253/254): dropped `uploads.twin_of/twin_count/fuse_of/fuse_count`
++ their triggers/functions, rebuilt `get_feed` (dropped `fuse_count` from return +
+ranking) and `freeze_upload_columns`, removed the `post_twin`/`post_fuse` notif types,
+and renamed the `'Twins & Fuses'` notification category to `'Reposts'` (its sole
+survivor). The live "family" button was the DLT launcher — kept, renamed
+`onFamily`→`onDreamLikeThis`. The dead `prompt_mode` 7-mode system was also removed.
 
 **Deliberately still code** (by design): the scene-engine/dream-algorithm *logic*;
 bot paths/pools/archetypes/prose; sanitization/chaos/face-swap dispatch.

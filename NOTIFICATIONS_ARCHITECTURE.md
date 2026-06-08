@@ -43,8 +43,7 @@ Schema + plumbing is largely in place:
 | `follow_request` | *(no trigger; not wired)* | — | **missing — needs adding** |
 | `follow_accepted` | `approve_follow_request` RPC + `on_user_goes_public` trigger (098) | requester | |
 | `post_milestone` | `votes` INSERT thresholds (045) | post owner | thresholds: 5/10/25/50/100/250/500/1000 |
-| `post_twin` | `uploads` INSERT `twin_of` (067) | original owner | |
-| `post_fuse` | `uploads` INSERT `fuse_of` (067) | original owner | |
+| `post_repost` | `toggle_repost` RPC (242) | original owner | (replaced the removed `post_twin`/`post_fuse`, migration 254) |
 | `dream_generated` | Edge inserts (generate-dream / restyle / nightly) | dreamer + wish recipients | opt-in via `notify_on_complete` |
 | `dream_failed` | Edge insert | dreamer | |
 | `download_ready` | `upscale-image` Edge insert | requester | opt-in via `notified_at IS NULL` |
@@ -64,7 +63,7 @@ Missing entirely: **comment likes** (existing trigger only updates `comments.lik
 | Aggregation | every event = one row | group-by-target, "X and N others" cards |
 | Push fan-out control | every row fires a push | per-group debounce (1 push per group event) |
 | User preferences | none | per-category Push + In-app toggles |
-| Categories | flat `type` enum | bucket into Likes / Comments / Mentions / Follows / Shares / Twins&Fuses / Your dreams |
+| Categories | flat `type` enum | bucket into Likes / Comments / Mentions / Follows / Shares / Reposts / Your dreams |
 | Group read state | per-row `seen_at` | `mark_group_seen` marks all rows in the group |
 | Group-aware badge | counts rows | counts distinct unread groups |
 
@@ -75,10 +74,10 @@ Missing entirely: **comment likes** (existing trigger only updates `comments.lik
 | # | Decision |
 |---|---|
 | D1 | Comments + replies + mentions + shares + dream events → **individual rows** (content matters). |
-| D2 | Likes + comment-likes + twins + fuses + follow-accepted → **aggregated** by event target. |
+| D2 | Likes + comment-likes + reposts + follow-accepted → **aggregated** by event target. |
 | D3 | Aggregation window: **30 days** (older events freeze into stale groups; no new joins). |
 | D4 | Push debounce: **30 s sliding** window with a **2 min** cap (longest a user waits for a ping). |
-| D5 | Categories (7): **Likes / Comments / Mentions / Follows / Shares / Twins & Fuses / Your dreams**. |
+| D5 | Categories (7): **Likes / Comments / Mentions / Follows / Shares / Reposts / Your dreams**. |
 | D6 | Unread badge: **distinct unread groups** (1 like card on one post = 1, regardless of liker count). |
 | D7 | Channels per category: **Push + In-app**, independently togglable. |
 | D8 | "Your dreams" In-app channel is **forced on** (your own events should always show somewhere). |
@@ -99,8 +98,7 @@ A deterministic `text` column on `notifications`, computed at INSERT. Encodes "w
 |---|---|---|
 | `post_like` | `like:post:{upload_id}` | aggregate |
 | `comment_like` | `clike:comment:{comment_id}` | aggregate |
-| `post_twin` | `twin:post:{upload_id}` | aggregate |
-| `post_fuse` | `fuse:post:{upload_id}` | aggregate |
+| `post_repost` | `repost:post:{upload_id}` | aggregate |
 | `follow_accepted` | `follow:{recipient_id}` | aggregate (per recipient) |
 | `friend_accepted` | `friend:{recipient_id}` | aggregate |
 | `post_milestone` | `milestone:post:{upload_id}` | aggregate |

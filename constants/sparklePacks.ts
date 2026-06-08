@@ -1,6 +1,9 @@
 /**
- * Sparkle pack definitions — single source of truth for product IDs and amounts.
- * Used by: sparkleStore UI, revenuecat-webhook, and anywhere packs are referenced.
+ * Sparkle pack definitions — OFFLINE FALLBACK. Source of truth is the
+ * `sparkle_packs` DB table (migration 255): the store UI reads it via
+ * `useSparklePacks` and `revenuecat-webhook` grants from it. This constant is the
+ * fallback used when that lookup fails / before first fetch, so the picker + grant
+ * are never empty. Keep in sync with the seed rows in migration 255.
  *
  * Product IDs must match EXACTLY what's in App Store Connect + RevenueCat.
  *

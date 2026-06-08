@@ -26,11 +26,15 @@
 - (Android key too if you want Android support later)
 
 ### 3. Create Products in App Store Connect
+> **Authoritative pack list is the `sparkle_packs` DB table** (migration 255) + its
+> fallback `constants/sparklePacks.ts` — the current live lineup is 5 `_v2` packs
+> (15/40/90/200/500). Pack *sparkle amounts* are tuned in the DB (store UI + the
+> `revenuecat-webhook` grant both read it); Apple only owns the *prices*. The IDs
+> below are an older illustrative lineup — use the current `_v2` product IDs.
+
 - Go to App Store Connect > your app > In-App Purchases
-- Create 3 **consumable** products:
-  - `com.konakevin.radorbad.sparkles.5` — $0.99
-  - `com.konakevin.radorbad.sparkles.35` — $4.99
-  - `com.konakevin.radorbad.sparkles.85` — $9.99
+- Create the **consumable** products (one per `sparkle_packs.product_id`):
+  - `com.konakevin.radorbad.sparkles.15_v2` … `.500_v2`
 - Submit for review (Apple reviews IAP products separately)
 
 ### 4. Configure RevenueCat Entitlements & Offerings

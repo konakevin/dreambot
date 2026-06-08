@@ -51,10 +51,10 @@ store/                6 Zustand stores: album, auth, dream, explore, feed, onboa
 lib/                  36 glue files; supabase client, dreamApi, revenuecat, proStatus,
                       moderation, navigation, sentry, posthog, analytics
 types/                database.ts (auto-gen), vibeProfile.ts (v2 + isVibeProfile guard)
-constants/            13 files; theme, promptModes, proPlan, sparklePacks, imageModels, …
+constants/            12 files; theme, proPlan, sparklePacks (fallback), imageModels, …
 supabase/
-  migrations/         223 SQL migrations (highest prefix: 223)
-  functions/          14 Edge Functions + 57 _shared/ modules
+  migrations/         255 SQL migrations (highest prefix: 255)
+  functions/          14 Edge Functions + 58 _shared/ modules
 scripts/
   bots/<botname>/     18 self-contained bots (index.js, paths/, pools.js, seeds/)
   lib/                Shared bot infra (botEngine, brief-composer, chaosLayer, …)
@@ -80,7 +80,23 @@ Two main render paths:
 
 **Dual face swap** runs in its own `face-swap-dual` Edge Function isolate (memory separation). Routing via `_shared/dualSwapDispatch.ts`. Don't add new pixel work to the dual swap path in-process; new steps go in a separate Edge Function.
 
-**Pro-state is one rule across three runtimes** that MUST stay in sync: `lib/proStatus.ts` (client), `scripts/lib/nightlyEligibility.js` (nightly cron gate), `is_pro_active()` Postgres fn (Edge Functions). Pro = paid+unexpired OR in 14-day trial; re-validated on every read. Tests: `__tests__/lib/proStatus.test.ts`, `__tests__/lib/nightlyEligibility.test.ts`, `__tests__/db/isProActive.dbspec.ts`. Change all three together.
+**Pro-state is one rule across three runtimes** that MUST stay in sync: `lib/proStatus.ts` (client), `scripts/lib/nightlyEligibility.js` (nightly cron gate), `is_pro_active()` Postgres fn (Edge Functions). Pro = paid+unexpired OR within the trial window — **trial LENGTH is `engine_config.pro_trial_days`** (default 14, read by all three runtimes; migration 248), so change the trial length in ONE DB row, not in code. Re-validated on every read. Tests: `__tests__/lib/proStatus.test.ts`, `__tests__/lib/nightlyEligibility.test.ts`, `__tests__/db/isProActive.dbspec.ts`. Change the trial *logic* in all three together.
+
+---
+
+## Admin Config — patch generation without a client deploy
+
+A lot of generation config is **DB-driven** so it can be changed from the Supabase dashboard with **no App Store build** (the dangerous, days-slow path). Full audit + design: `ADMIN_CONFIG_PLAN.md` (status: SHIPPED). The backbone:
+
+- **`engine_config`** (singleton row, id=1) — the remote-config spine, read by all three runtimes (client `useEngineConfig` → `get_engine_config()` RPC; Edge `_shared/engineConfig.ts`; scripts `scripts/lib/engineConfig.js`). Holds: `base_sparkle_cost`, `welcome_sparkle_bonus`, `pro_trial_days` (the 3-runtime trial value), `prompt_max_length`, `photo_preprocess_*`, `nightly_max_jobs`, `nightly_enabled` (master kill-switch), `nightly_require_*`, `pro_monthly_sparkle_bundle`, the cast-detection regexes, plus the nightly distribution knobs (chaos tiers, embodied/face-swap rates). Every field has a code FALLBACK — a missing row never breaks anything.
+- **`dream_mediums` / `dream_vibes`** — directives/flux fragments/flags (already DB); `client_meta jsonb` (migration 251) lets NEW client-driving attributes be added with no RPC/rebuild.
+- **`bot_config`** (migration 249) — per-bot DIALS overlaid on code at run time (`scripts/lib/botConfig.js`): `allowed_models`, medium/vibe locks, `chaos_enabled`, `two_pass_polish_enabled`. NULL/missing = pure code. (Paths/pools/archetypes/prose stay code — creative source, not dials.)
+- **`mood_axes`** (250) — onboarding sliders (`useMoodAxes`); axis KEYS are a typed engine contract.
+- **`sparkle_packs`** (255) — pack sizes; **bot cadence/seeds** (`bot_schedules`/`bot_seeds`), **nightly seeds** (`nightly_seeds`), **locations** (`location_cards`) are all DB too.
+
+**Deliberately still code:** the scene-engine *algorithm* (`sceneEngine.ts`/`dreamAlgorithm.ts`/`recipeBuilder.ts`), bot paths/pools/prose, sanitization/chaos/face-swap dispatch, and the nightly *cron time* (GitHub Actions can't read the DB — would need pg_cron).
+
+When you add a hardcoded constant that shapes generation/economy/UX copy, ask: should this be an `engine_config` field (or a config table) instead? Default yes for anything an admin would reasonably want to tune post-launch.
 
 ---
 
@@ -104,9 +120,9 @@ Two main render paths:
 
 ## Sparkle + Pro
 
-**Costs.** 1 sparkle per dream, 3 per fusion. First dream is free (server-side). Nightly dreams are Pro/trial-only (free users post-trial get none). 25-sparkle welcome bonus on onboarding completion. 4 sparkle packs (25/50/100/500) — product IDs in `constants/sparklePacks.ts` (source of truth).
+**Costs (DB-tunable, no deploy).** Base dream = `engine_config.base_sparkle_cost` (default 1). First dream is free (server-side). Nightly dreams are Pro/trial-only (free users post-trial get none). Welcome bonus = `engine_config.welcome_sparkle_bonus` (default 25), granted on onboarding completion. 5 sparkle packs (15/40/90/200/500) — **source of truth is the `sparkle_packs` table** (migration 255), read by the store UI (`useSparklePacks`) AND `revenuecat-webhook`; `constants/sparklePacks.ts` is the offline fallback. Pro monthly bundle = `engine_config.pro_monthly_sparkle_bundle` (default 75; yearly = 12×). (There is no "fusion" cost — the Twin/Fuse feature was removed; DLT renders cost the base.)
 
-**Pro perk.** Long-press save-to-photos for HQ downloads + a nightly dream every night. 14-day trial on signup. Purchase flow: app → RevenueCat SDK → Apple → RevenueCat webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC or pro flag flip. RevenueCat webhook secret: `REVENUECAT_WEBHOOK_SECRET` (Supabase Edge secrets). Setup: `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`.
+**Pro perk.** Long-press save-to-photos for HQ downloads + a nightly dream every night. Trial = `engine_config.pro_trial_days` days on signup (default 14). Purchase flow: app → RevenueCat SDK → Apple → RevenueCat webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC or pro flag flip. RevenueCat webhook secret: `REVENUECAT_WEBHOOK_SECRET` (Supabase Edge secrets). Setup: `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`.
 
 ---
 
