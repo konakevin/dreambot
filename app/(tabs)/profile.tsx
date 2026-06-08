@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
+import { supabase } from '@/lib/supabase';
 import * as nav from '@/lib/navigate';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useFollowersList } from '@/hooks/useFollowersList';
@@ -75,6 +76,19 @@ export default function ProfileScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     nav.push('/inbox');
   }, []);
+
+  // Load the persisted "Private only" Dreams filter (users.dreams_private_only).
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('users')
+      .select('dreams_private_only')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => {
+        if (data) setPrivateOnly(data.dreams_private_only ?? false);
+      });
+  }, [user]);
 
   // Reset to posts tab only when profile tab icon is re-tapped
   useEffect(() => {
@@ -354,7 +368,19 @@ export default function ProfileScreen() {
           </Text>
           <TouchableOpacity
             style={[styles.dreamsFilter, privateOnly && styles.dreamsFilterActive]}
-            onPress={() => setPrivateOnly((v) => !v)}
+            onPress={() => {
+              const next = !privateOnly;
+              setPrivateOnly(next); // optimistic
+              if (user) {
+                supabase
+                  .from('users')
+                  .update({ dreams_private_only: next })
+                  .eq('id', user.id)
+                  .then(({ error }) => {
+                    if (error && __DEV__) console.warn('persist dreams_private_only failed', error);
+                  });
+              }
+            }}
             activeOpacity={0.7}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >

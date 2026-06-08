@@ -2010,6 +2010,7 @@ export type Database = {
           bio: string | null;
           created_at: string;
           display_name: string | null;
+          dreams_private_only: boolean;
           email: string;
           first_dream_completed_at: string | null;
           has_ai_recipe: boolean;
@@ -2033,6 +2034,7 @@ export type Database = {
           bio?: string | null;
           created_at?: string;
           display_name?: string | null;
+          dreams_private_only?: boolean;
           email: string;
           first_dream_completed_at?: string | null;
           has_ai_recipe?: boolean;
@@ -2056,6 +2058,7 @@ export type Database = {
           bio?: string | null;
           created_at?: string;
           display_name?: string | null;
+          dreams_private_only?: boolean;
           email?: string;
           first_dream_completed_at?: string | null;
           has_ai_recipe?: boolean;
