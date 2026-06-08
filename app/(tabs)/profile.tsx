@@ -356,7 +356,13 @@ export default function ProfileScreen() {
             style={[styles.dreamsFilter, privateOnly && styles.dreamsFilterActive]}
             onPress={() => setPrivateOnly((v) => !v)}
             activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
+            <Ionicons
+              name={privateOnly ? 'checkbox' : 'square-outline'}
+              size={14}
+              color={privateOnly ? '#FFFFFF' : colors.textSecondary}
+            />
             <Text style={[styles.dreamsFilterText, privateOnly && styles.dreamsFilterTextActive]}>
               Private only
             </Text>
@@ -509,11 +515,15 @@ const styles = StyleSheet.create({
     fontSize: fontScale(13),
   },
   dreamsFilter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
     paddingHorizontal: 10,
-    paddingVertical: verticalScale(4),
+    paddingVertical: verticalScale(5),
     borderRadius: 999,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.border,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.28)',
+    backgroundColor: 'rgba(255,255,255,0.06)',
   },
   dreamsFilterActive: {
     backgroundColor: colors.accent,
