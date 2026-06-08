@@ -260,11 +260,15 @@ export function ProfileHeader(props: Props) {
       ) : (
         <View style={styles.actionRow}>
           <TouchableOpacity
-            style={[styles.actionPill, props.isFollowing && styles.actionPillSecondary]}
+            style={[
+              styles.actionPill,
+              styles.actionPillFollow,
+              props.isFollowing && styles.actionPillFollowing,
+            ]}
             onPress={props.onFollowPress}
             activeOpacity={0.7}
           >
-            <Text style={[styles.actionText, props.isFollowing && styles.actionTextSecondary]}>
+            <Text style={styles.actionText}>
               {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
             </Text>
           </TouchableOpacity>
@@ -417,6 +421,18 @@ const styles = StyleSheet.create({
   },
   actionPillSecondary: {
     backgroundColor: 'transparent',
+  },
+  // Follow CTA — lavender to make it the clear primary action against the
+  // neutral Message / ⋯ pills. Darkens to accentDark in the Following state
+  // so the active relationship reads as already-actioned chrome rather than
+  // a fresh call to action.
+  actionPillFollow: {
+    backgroundColor: colors.accent,
+    borderColor: 'transparent',
+  },
+  actionPillFollowing: {
+    backgroundColor: colors.accentDark,
+    borderColor: 'transparent',
   },
   actionText: {
     color: colors.textPrimary,
