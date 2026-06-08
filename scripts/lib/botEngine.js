@@ -34,6 +34,7 @@ const path = require('path');
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { pickModel } = require('./modelPicker');
+const { applyBotConfigOverlay } = require('./botConfig');
 const { resolveCleanMedium } = require('./cleanMediumByModel');
 const { isOpenAIModel, generateOpenAIImage } = require('./providers/openai');
 const { isGeminiModel, generateGeminiImage } = require('./providers/gemini');
@@ -949,7 +950,6 @@ async function writeRunLog(sb, row) {
  */
 async function runBot(opts) {
   const {
-    bot,
     path: pathArg = 'random',
     vibe: vibeArg = 'random',
     dryRun = false,
@@ -961,9 +961,13 @@ async function runBot(opts) {
     sbOverride,
   } = opts;
 
-  if (!bot || !bot.username) throw new Error('runBot: bot module required');
+  const baseBot = opts.bot;
+  if (!baseBot || !baseBot.username) throw new Error('runBot: bot module required');
 
   const sb = sbOverride || getSupabase();
+  // Admin dial overlay — bot_config rows override the code config (DB wins where
+  // set; no row = pure code). Infra only; never touches creative content.
+  const bot = await applyBotConfigOverlay(sb, baseBot);
   const startedAt = Date.now();
   const isBatchMode = Boolean(outDir); // iter-bot sets this
   const shouldPostToDB = !dryRun && (!isBatchMode || post);
