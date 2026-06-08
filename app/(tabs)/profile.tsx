@@ -35,7 +35,7 @@ import { type StatsTab } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
-type Tab = 'posts' | 'saved' | 'dreams' | 'followers' | 'following';
+type Tab = 'posts' | 'saved' | 'dreams' | 'reposts' | 'followers' | 'following';
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -293,13 +293,17 @@ export default function ProfileScreen() {
       {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;
           hidden when the user has tapped Followers/Following on the stats
           row and is looking at the user-list view. */}
-      {(activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') && (
+      {(activeTab === 'posts' ||
+        activeTab === 'saved' ||
+        activeTab === 'dreams' ||
+        activeTab === 'reposts') && (
         <View style={styles.tabRow}>
           {(
             [
-              { key: 'posts', label: 'Posts' },
-              { key: 'dreams', label: 'Dreams' },
-              { key: 'saved', label: 'Saved' },
+              { key: 'posts', label: 'Posts', icon: 'grid-outline', activeIcon: 'grid' },
+              { key: 'dreams', label: 'Dreams', icon: 'moon-outline', activeIcon: 'moon' },
+              { key: 'saved', label: 'Saved', icon: 'bookmark-outline', activeIcon: 'bookmark' },
+              { key: 'reposts', label: 'Reposts', icon: 'repeat-outline', activeIcon: 'repeat' },
             ] as const
           ).map((t) => {
             const active = activeTab === t.key;
@@ -311,7 +315,11 @@ export default function ProfileScreen() {
                 activeOpacity={0.7}
                 accessibilityLabel={t.label}
               >
-                <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>{t.label}</Text>
+                <Ionicons
+                  name={active ? t.activeIcon : t.icon}
+                  size={23}
+                  color={active ? colors.textPrimary : colors.textSecondary}
+                />
                 {active && <View style={styles.tabUnderline} />}
               </TouchableOpacity>
             );
@@ -337,17 +345,24 @@ export default function ProfileScreen() {
     </>
   );
 
-  if (activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') {
+  if (
+    activeTab === 'posts' ||
+    activeTab === 'saved' ||
+    activeTab === 'dreams' ||
+    activeTab === 'reposts'
+  ) {
     const sourceMap = {
       posts: { type: 'own' as const },
       saved: { type: 'saved' as const },
       dreams: { type: 'dreams' as const },
+      reposts: { type: 'reposts' as const, userId: user?.id ?? '' },
     };
     const emptyMap = {
       posts:
         'Nothing posted yet. Anything you create or that your DreamBot dreams up can land here.',
       saved: 'Bookmark dreams you love. They live here.',
       dreams: 'No dreams yet. Create your first dream!',
+      reposts: 'Dreams you repost will show up here.',
     };
     return (
       <SafeAreaView style={styles.root}>

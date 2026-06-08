@@ -15,6 +15,7 @@ import { Image as ExpoImage } from 'expo-image';
 import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
+import { useUserReposts } from '@/hooks/useUserReposts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { useAuthStore } from '@/store/auth';
@@ -30,6 +31,7 @@ export type PostGridSource =
   | { type: 'own' }
   | { type: 'saved' }
   | { type: 'dreams' }
+  | { type: 'reposts'; userId: string }
   | { type: 'user'; userId: string };
 
 interface PostGridProps {
@@ -84,14 +86,24 @@ export function PostGrid({
   const isSaved = source.type === 'saved';
   const isDreams = source.type === 'dreams';
   const isUser = source.type === 'user';
-  const userId = isUser ? source.userId : '';
+  const isReposts = source.type === 'reposts';
+  const userId = isUser ? source.userId : isReposts ? source.userId : '';
 
   const ownQuery = useUserPosts(isOwn_);
   const savedQuery = useFavoritePosts(isSaved);
   const userQuery = usePublicProfilePosts(userId, isUser);
   const dreamsQuery = useMyDreams();
+  const repostsQuery = useUserReposts(userId, isReposts);
 
-  const activeQuery = isOwn_ ? ownQuery : isSaved ? savedQuery : isDreams ? dreamsQuery : userQuery;
+  const activeQuery = isOwn_
+    ? ownQuery
+    : isSaved
+      ? savedQuery
+      : isDreams
+        ? dreamsQuery
+        : isReposts
+          ? repostsQuery
+          : userQuery;
 
   // Pull-to-refresh on an infinite query refetches EVERY loaded page in
   // sequence (TanStack Query v5 removed the per-page `refetchPage` opt).
@@ -111,8 +123,9 @@ export function PostGrid({
     if (isOwn_) return ['userPosts', authUserId];
     if (isSaved) return ['favoritePosts', authUserId];
     if (isDreams) return ['my-dreams', authUserId];
+    if (isReposts) return ['userReposts', userId];
     return ['publicProfilePosts', userId];
-  }, [isOwn_, isSaved, isDreams, userId, authUserId]);
+  }, [isOwn_, isSaved, isDreams, isReposts, userId, authUserId]);
   const handleRefresh = useCallback(async () => {
     queryClient.setQueryData<InfiniteData<unknown>>(activeQueryKey, (old) =>
       old ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old

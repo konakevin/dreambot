@@ -51,6 +51,8 @@ export default function PublicProfileScreen() {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnProfile = currentUser?.id === userId;
   const [activeTab, setActiveTab] = useState<Tab>('posts');
+  // Posts vs Reposts sub-view within the posts grid (icon toggle in the header).
+  const [gridView, setGridView] = useState<'posts' | 'reposts'>('posts');
 
   // URL-param entry (avatar tap from main feed): viewedPost lights up the
   // "Just viewed" badge but should NOT trigger auto-scroll. Clear any
@@ -324,6 +326,9 @@ export default function PublicProfileScreen() {
     </Animated.View>
   );
 
+  // Visibility gate for this account's posts/reposts (referenced inside header).
+  const canSeePosts = profile.is_public || isFollowing || isOwnProfile;
+
   const header = (
     <>
       <ProfileHeader
@@ -349,6 +354,36 @@ export default function PublicProfileScreen() {
         }}
         onMorePress={handleMoreMenu}
       />
+      {/* Posts / Reposts icon toggle — only on the posts view, and only when
+          the viewer is allowed to see this account's posts. */}
+      {activeTab === 'posts' && canSeePosts && (
+        <View style={styles.gridToggleRow}>
+          {(
+            [
+              { key: 'posts', label: 'Posts', icon: 'grid-outline', activeIcon: 'grid' },
+              { key: 'reposts', label: 'Reposts', icon: 'repeat-outline', activeIcon: 'repeat' },
+            ] as const
+          ).map((t) => {
+            const active = gridView === t.key;
+            return (
+              <TouchableOpacity
+                key={t.key}
+                style={styles.gridToggleTab}
+                onPress={() => setGridView(t.key)}
+                activeOpacity={0.7}
+                accessibilityLabel={t.label}
+              >
+                <Ionicons
+                  name={active ? t.activeIcon : t.icon}
+                  size={23}
+                  color={active ? colors.textPrimary : colors.textSecondary}
+                />
+                {active && <View style={styles.gridToggleUnderline} />}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      )}
       {/* Section heading for the followers/following sub-views. Repeats the
           tab label + count above the list so the user can tell which list
           they're looking at — important when followers ≈ following (e.g.
@@ -430,8 +465,6 @@ export default function PublicProfileScreen() {
     </Modal>
   ) : null;
 
-  const canSeePosts = profile.is_public || isFollowing || isOwnProfile;
-
   if (activeTab === 'posts') {
     return (
       <View style={styles.root}>
@@ -441,8 +474,10 @@ export default function PublicProfileScreen() {
           {stickyTopBar}
           {canSeePosts ? (
             <PostGrid
-              source={{ type: 'user', userId }}
-              emptyText="No posts yet"
+              source={
+                gridView === 'reposts' ? { type: 'reposts', userId } : { type: 'user', userId }
+              }
+              emptyText={gridView === 'reposts' ? 'No reposts yet' : 'No posts yet'}
               ListHeaderComponent={header}
               highlightPostId={viewedPost}
               onScrollProgress={handleScrollProgress}
@@ -527,6 +562,31 @@ export default function PublicProfileScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
+  // Posts / Reposts icon toggle above the grid (mirrors the own-profile tab row).
+  gridToggleRow: {
+    flexDirection: 'row',
+    borderTopWidth: 0.5,
+    borderTopColor: colors.border,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.border,
+    marginTop: verticalScale(4),
+  },
+  gridToggleTab: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: verticalScale(14),
+    position: 'relative',
+  },
+  gridToggleUnderline: {
+    position: 'absolute',
+    left: '25%',
+    right: '25%',
+    bottom: 0,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: colors.accent,
+  },
   // Section header above the followers / following user list. Mirrors the
   // hairline-separated row Instagram uses above its user list — gives the
   // user a clear "this is the X list" cue when the followers and following
