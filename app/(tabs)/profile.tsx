@@ -323,7 +323,13 @@ export default function ProfileScreen() {
               <TouchableOpacity
                 key={t.key}
                 style={styles.tab}
-                onPress={() => setActiveTab(t.key)}
+                onPress={() => {
+                  // Switching album tabs enters a NEW grid context — clear the
+                  // "just viewed" highlight so the new tab doesn't bounce-scroll
+                  // to a post the user didn't view here.
+                  if (t.key !== activeTab) useAlbumStore.getState().setCurrentPostId(null);
+                  setActiveTab(t.key);
+                }}
                 activeOpacity={0.7}
                 accessibilityLabel={t.label}
               >
