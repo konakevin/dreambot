@@ -1,5 +1,5 @@
 /**
- * LIVE-DB test for repost surfacing in get_feed (migration 243).
+ * LIVE-DB test for repost surfacing in get_feed (migration 253, post twin/fuse removal).
  *
  * Loads the real get_feed body on top of stub tables and verifies: a post by a
  * NON-followed author that a FOLLOWED user reposted shows up in the Following
@@ -42,7 +42,7 @@ async function feed(tab: string): Promise<Record<string, unknown>[]> {
 
 beforeAll(async () => {
   db = await pool.connect();
-  const sql = migrationSql('243_get_feed_reposts.sql');
+  const sql = migrationSql('253_drop_twin_fuse_columns.sql');
 
   await db.query('DROP TABLE IF EXISTS public.post_reposts CASCADE');
   await db.query('DROP TABLE IF EXISTS public.uploads CASCADE');
@@ -64,7 +64,7 @@ beforeAll(async () => {
     width integer, height integer, caption text, description text,
     created_at timestamptz NOT NULL DEFAULT now(), posted_at timestamptz,
     comment_count integer NOT NULL DEFAULT 0, like_count integer NOT NULL DEFAULT 0,
-    fuse_count integer NOT NULL DEFAULT 0, share_count integer NOT NULL DEFAULT 0,
+    share_count integer NOT NULL DEFAULT 0,
     save_count integer NOT NULL DEFAULT 0, view_count integer NOT NULL DEFAULT 0,
     repost_count integer NOT NULL DEFAULT 0,
     ai_prompt text, ai_concept jsonb, bot_message text,

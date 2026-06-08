@@ -51,7 +51,7 @@ const CATEGORY_DESCRIPTIONS: Record<NotificationCategory, string> = {
   Mentions: 'When someone @mentions you in a comment',
   Follows: 'Follow requests + new followers',
   Shares: 'When someone sends you a post',
-  'Twins & Fuses': 'When someone twins or fuses your dream',
+  Reposts: 'When someone reposts your dream',
   'Your dreams': 'Your nightly + finished dreams',
 };
 

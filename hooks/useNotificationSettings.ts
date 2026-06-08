@@ -9,7 +9,7 @@ export const NOTIFICATION_CATEGORIES = [
   'Mentions',
   'Follows',
   'Shares',
-  'Twins & Fuses',
+  'Reposts',
   'Your dreams',
 ] as const;
 

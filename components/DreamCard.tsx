@@ -72,8 +72,6 @@ export interface DreamPostItem {
   like_count?: number;
   repost_count?: number;
   recipe_id?: string | null;
-  fuse_count?: number;
-  fuse_of?: string | null;
   bot_message?: string | null;
   dream_medium?: string | null;
   dream_vibe?: string | null;
@@ -110,8 +108,8 @@ interface Props {
   onDelete?: () => void;
   /** Admin-only one-tap delete (no confirm). Rendered as a red X above the heart. */
   onAdminDeleteImmediate?: () => void;
-  onFuse?: () => void;
-  onFamily?: () => void;
+  /** Launch "Dream Like This" from this post (the color-wand side button). */
+  onDreamLikeThis?: () => void;
   onLikesPress?: () => void;
   /** Show the eye/visibility toggle (only for own posts in album views) */
   showVisibilityToggle?: boolean;
@@ -148,8 +146,7 @@ export const DreamCard = memo(function DreamCard({
   disableSwipeToProfile,
   onDelete,
   onAdminDeleteImmediate,
-  onFuse,
-  onFamily,
+  onDreamLikeThis,
   onLikesPress,
   showVisibilityToggle,
   onTogglePosted,
@@ -637,25 +634,23 @@ export const DreamCard = memo(function DreamCard({
                   style={ui.sideIcon}
                 />
               </TouchableOpacity>
-              {onFamily && (
-                <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
+              {onDreamLikeThis && (
+                <TouchableOpacity
+                  style={ui.sideButton}
+                  onPress={onDreamLikeThis}
+                  activeOpacity={0.7}
+                >
                   <Ionicons
                     name="color-wand-outline"
                     size={24}
                     color="#FFFFFF"
                     style={ui.sideIcon}
                   />
-                  <Text
-                    style={[ui.sideCount, !(item.fuse_count ?? 0) && hiddenCount]}
-                    numberOfLines={1}
-                  >
-                    {item.fuse_count ?? 0}
-                  </Text>
                 </TouchableOpacity>
               )}
               {/* Fit toggle — flips contentFit between 'cover' (full-bleed
                   crop) and 'contain' (letterboxed, full image visible).
-                  Last item in the side rail; sits below the DLT/fuse
+                  Last item in the side rail; sits below the DLT
                   button. Per-card local state; resets on FlatList recycle. */}
               <TouchableOpacity
                 style={ui.sideButton}

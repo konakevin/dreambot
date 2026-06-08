@@ -85,9 +85,6 @@ function iconForGroup(g: InboxGroup): IconSpec {
       return { name: 'paper-plane', color: colors.accent };
     case 'post_repost':
       return { name: 'repeat', color: colors.success };
-    case 'post_twin':
-    case 'post_fuse':
-      return { name: 'sparkles', color: colors.accent };
     case 'post_milestone':
       return { name: 'trophy', color: '#FFD700' };
     case 'follow_request':
@@ -123,7 +120,7 @@ function iconForGroup(g: InboxGroup): IconSpec {
  * rewrites + Haiku ≤28 prompt) keep that invariant honored.
  *
  * `isAggregable` flags the rows that open the actor sheet on tap when
- * count > 1 (likes / twins / fuses / follow-accepted / friend-accepted).
+ * count > 1 (likes / reposts / follow-accepted / friend-accepted).
  */
 function getGroupText(g: InboxGroup): {
   subject: string;
@@ -147,10 +144,6 @@ function getGroupText(g: InboxGroup): {
       return { subject: `${actors()} liked your dream`, subtext: null, isAggregable: true };
     case 'comment_like':
       return { subject: `${actors()} liked your comment`, subtext: null, isAggregable: true };
-    case 'post_twin':
-      return { subject: `${actors()} twinned your dream`, subtext: null, isAggregable: true };
-    case 'post_fuse':
-      return { subject: `${actors()} fused your dream`, subtext: null, isAggregable: true };
     case 'post_repost':
       return { subject: `${actors()} reposted your dream`, subtext: null, isAggregable: true };
     case 'post_milestone':
@@ -513,7 +506,7 @@ export default function InboxScreen() {
   function handleTap(g: InboxGroup) {
     const text = getGroupText(g);
     // Aggregable groups with multiple actors → open the expand sheet so the
-    // user can see who liked / twinned / followed. Thumbnail tap could route
+    // user can see who liked / reposted / followed. Thumbnail tap could route
     // to the post but with the new "whole row = route" UX, multi-actor
     // aggregables route to the actor sheet (the post is still reachable via
     // the listed actors → that user's profile, or by tapping any single-actor

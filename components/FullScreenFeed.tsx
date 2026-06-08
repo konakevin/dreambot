@@ -156,7 +156,7 @@ const FeedCard = memo(function FeedCard({
       disableSwipeToProfile={disableSwipeToProfile}
       onDelete={canDelete ? () => onDelete(item.id) : undefined}
       onAdminDeleteImmediate={isAdmin && showAdminDelete ? () => onAdminDelete(item.id) : undefined}
-      onFamily={() => {
+      onDreamLikeThis={() => {
         const params = new URLSearchParams({
           postId: item.id,
           imageUrl: item.image_url,

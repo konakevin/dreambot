@@ -43,8 +43,6 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     like_count: (row.like_count as number) ?? 0,
     recipe_id: (row.recipe_id as string | null) ?? null,
     ai_prompt: (row.ai_prompt as string | null) ?? null,
-    fuse_count: (row.fuse_count as number) ?? 0,
-    fuse_of: (row.fuse_of as string | null) ?? null,
     dream_medium: (row.dream_medium as string | null) ?? null,
     dream_vibe: (row.dream_vibe as string | null) ?? null,
     // Defensive cast — pre-migration-211 generated types don't have this
@@ -82,8 +80,6 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     like_count: (row.like_count as number) ?? 0,
     recipe_id: (row.recipe_id as string | null) ?? null,
     ai_prompt: (row.ai_prompt as string | null) ?? null,
-    fuse_count: (row.fuse_count as number) ?? 0,
-    fuse_of: (row.fuse_of as string | null) ?? null,
     bot_message: (row.bot_message as string | null) ?? null,
     ai_concept: (row.ai_concept as Record<string, unknown> | null) ?? null,
     dream_medium: (row.dream_medium as string | null) ?? null,

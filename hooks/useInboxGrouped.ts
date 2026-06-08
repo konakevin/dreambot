@@ -28,8 +28,6 @@ export type NotificationType =
   | 'dream_generated'
   | 'dream_failed'
   | 'post_like'
-  | 'post_fuse'
-  | 'post_twin'
   | 'post_repost'
   | 'post_milestone'
   | 'download_ready'
@@ -44,7 +42,7 @@ export type NotificationCategory =
   | 'Mentions'
   | 'Follows'
   | 'Shares'
-  | 'Twins & Fuses'
+  | 'Reposts'
   | 'Your dreams';
 
 export interface InboxGroup {
