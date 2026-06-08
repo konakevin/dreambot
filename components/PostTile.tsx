@@ -130,9 +130,9 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     fontWeight: '600',
   },
-  // "Public" pill on PUBLIC dreams — SOLID accent fill so it pops at a glance
-  // (a dark badge camouflages against photos) AND stays on-brand (lavender,
-  // not the off-palette green). Subtle drop shadow lifts it off bright tiles.
+  // "Public" pill on PUBLIC dreams — neutral dark overlay + white text (an
+  // indicator, not a CTA; the accent/purple is reserved for the Private-only
+  // filter button). Drop shadow + hairline border keep it legible on any tile.
   publicBadge: {
     position: 'absolute',
     bottom: 5,
@@ -143,9 +143,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: verticalScale(2.5),
     borderRadius: 999,
-    backgroundColor: colors.accent,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.25)',
     shadowColor: '#000',
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.35,
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
   },
