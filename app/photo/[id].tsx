@@ -298,6 +298,7 @@ export default function PhotoDetailScreen() {
         disableSwipeToProfile
         hideTabBar
         showVisibilityToggle
+        showBottomScrim
         onTogglePosted={handleTogglePosted}
         onHudToggle={handleHudToggle}
         onEndReached={handleEndReached}

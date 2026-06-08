@@ -65,6 +65,8 @@ interface Props {
   onTogglePosted?: (postId: string) => void;
   /** Called when the card HUD is toggled (single tap) */
   onHudToggle?: (visible: boolean) => void;
+  /** Pass-through to DreamCard — opt-in bottom scrim for album-style views. */
+  showBottomScrim?: boolean;
   /**
    * Bumpable token — when its value changes, the feed scrolls to the top
    * AND resets the internal currentIndex (so the auto-resnap on focus/resume
@@ -108,6 +110,7 @@ type FeedCardProps = {
   onAdminDelete: (id: string) => void;
   onTogglePosted?: (id: string) => void;
   onHudToggle?: (visible: boolean) => void;
+  showBottomScrim?: boolean;
 };
 
 const FeedCard = memo(function FeedCard({
@@ -130,6 +133,7 @@ const FeedCard = memo(function FeedCard({
   onAdminDelete,
   onTogglePosted,
   onHudToggle,
+  showBottomScrim,
 }: FeedCardProps) {
   const canDelete = item.user_id === userId || isAdmin;
   return (
@@ -171,6 +175,7 @@ const FeedCard = memo(function FeedCard({
       onTogglePosted={onTogglePosted ? () => onTogglePosted(item.id) : undefined}
       onHudToggle={onHudToggle}
       isActive={isActive}
+      showBottomScrim={showBottomScrim}
     />
   );
 });
@@ -190,6 +195,7 @@ export function FullScreenFeed({
   onTogglePosted,
   onHudToggle,
   scrollToTopToken,
+  showBottomScrim,
 }: Props) {
   const insets = useSafeAreaInsets();
   const internalRef = useRef<FlatList>(null);
@@ -420,6 +426,7 @@ export function FullScreenFeed({
         onAdminDelete={deletePost}
         onTogglePosted={onTogglePosted}
         onHudToggle={onHudToggle}
+        showBottomScrim={showBottomScrim}
       />
     ),
     [
@@ -439,6 +446,7 @@ export function FullScreenFeed({
       deletePost,
       onTogglePosted,
       onHudToggle,
+      showBottomScrim,
     ]
   );
 

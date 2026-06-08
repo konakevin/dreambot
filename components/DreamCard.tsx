@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { timeAgo } from '@/lib/timeAgo';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -117,6 +117,11 @@ interface Props {
    *  with stale hudOpacity = 0 (when it becomes active again, isActive flips
    *  true → effect refires). Optional; non-feed callers omit it. */
   isActive?: boolean;
+  /** Draw a soft black scrim behind the post-info / side actions for
+   *  legibility. Off by default — main feeds (index, top) skip it so the
+   *  image reads clean; the photo/[id] album viewer opts in since its
+   *  description text needs the extra contrast. */
+  showBottomScrim?: boolean;
 }
 
 export const DreamCard = memo(function DreamCard({
@@ -140,6 +145,7 @@ export const DreamCard = memo(function DreamCard({
   onTogglePosted,
   onHudToggle,
   isActive,
+  showBottomScrim,
 }: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnPost = currentUser?.id === item.user_id;
@@ -177,7 +183,6 @@ export const DreamCard = memo(function DreamCard({
   // out. Per-card local state — fresh on every scroll (FlatList recycler
   // unmounts the card → state resets), matches IG-style "tap to peek".
   const [fitMode, setFitMode] = useState<'cover' | 'contain'>('cover');
-  const insets = useSafeAreaInsets();
   useEffect(
     () => () => {
       if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
@@ -389,30 +394,20 @@ export const DreamCard = memo(function DreamCard({
 
           {/* HUD — post info + side actions, toggled by single tap */}
           <Animated.View style={[StyleSheet.absoluteFill, hudStyle]} pointerEvents="box-none">
-            {/* Top-right fit toggle — flips contentFit between 'cover'
-                (full-bleed crop) and 'contain' (letterboxed, full image
-                visible). Sits in the HUD so it fades with chrome on
-                single-tap clean-image mode. Per-card local state.
-                Top offset clears the (tabs) screen's top-overlay gradient
-                (FeedTabs strip, ~insets.top + 50pt) — without this the
-                gradient sat over the button and the overlay's flex
-                spacer Views ate the tap. */}
-            <TouchableOpacity
-              style={[s.fitToggle, { top: insets.top + verticalScale(56) }]}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                setFitMode((m) => (m === 'cover' ? 'contain' : 'cover'));
-              }}
-              hitSlop={10}
-              activeOpacity={0.7}
-              accessibilityLabel={fitMode === 'cover' ? 'Show full image' : 'Fill screen'}
-            >
-              <Ionicons
-                name={fitMode === 'cover' ? 'expand-outline' : 'contract-outline'}
-                size={20}
-                color="#FFFFFF"
+            {/* Bottom scrim — subtle darken gradient behind the post-info +
+                side actions so the username / location / counts stay
+                readable over bright image regions. Fades with the HUD on
+                single-tap clean view. Gated on showBottomScrim so the main
+                feeds stay clean and only the album viewer (photo/[id]) opts
+                in. */}
+            {showBottomScrim && (
+              <LinearGradient
+                colors={['transparent', 'rgba(0,0,0,0.55)']}
+                locations={[0, 1]}
+                style={s.bottomScrim}
+                pointerEvents="none"
               />
-            </TouchableOpacity>
+            )}
             <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
               {/* Model badge — sits ABOVE the username so Kevin (and users)
                   can see which AI rendered the image at a glance. Friendly
@@ -467,7 +462,9 @@ export const DreamCard = memo(function DreamCard({
                       </TouchableOpacity>
                     )}
                   </View>
-                  {item.description ? <ExpandableDescription text={item.description} /> : null}
+                  {item.description ? (
+                    <ExpandableDescription text={item.description} style={s.description} />
+                  ) : null}
                   <Text style={s.timestamp}>{timeAgo(item.created_at)}</Text>
                 </View>
               </TouchableOpacity>
@@ -599,6 +596,26 @@ export const DreamCard = memo(function DreamCard({
                   </Text>
                 </TouchableOpacity>
               )}
+              {/* Fit toggle — flips contentFit between 'cover' (full-bleed
+                  crop) and 'contain' (letterboxed, full image visible).
+                  Last item in the side rail; sits below the DLT/fuse
+                  button. Per-card local state; resets on FlatList recycle. */}
+              <TouchableOpacity
+                style={ui.sideButton}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setFitMode((m) => (m === 'cover' ? 'contain' : 'cover'));
+                }}
+                activeOpacity={0.7}
+                accessibilityLabel={fitMode === 'cover' ? 'Show full image' : 'Fill screen'}
+              >
+                <Ionicons
+                  name={fitMode === 'cover' ? 'expand-outline' : 'contract-outline'}
+                  size={24}
+                  color="#FFFFFF"
+                  style={ui.sideIcon}
+                />
+              </TouchableOpacity>
             </View>
           </Animated.View>
         </Pressable>
@@ -643,18 +660,6 @@ const s = StyleSheet.create({
     fontSize: fontScale(14),
     fontWeight: '600',
   },
-  fitToggle: {
-    position: 'absolute',
-    right: 12,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-  },
   heartBurst: {
     position: 'absolute',
     top: '50%',
@@ -692,6 +697,16 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     gap: 6,
     paddingBottom: verticalScale(4),
+  },
+  // Bottom scrim — covers roughly the lower third of the card, transparent
+  // at the top so it doesn't dim the focal subject. Sits inside the HUD so
+  // single-tap "clean image" mode hides it with the rest of the chrome.
+  bottomScrim: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: verticalScale(220),
   },
   // Model badge — small chip rendered above the usernameRow. flex-start
   // wrapper keeps the chip hugging its label width (without it, the chip

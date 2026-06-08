@@ -4,7 +4,6 @@ import { FlatList } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useAuthStore } from '@/store/auth';
 import { trackFeedTabSelected } from '@/lib/analytics';
 import { useFeedStore } from '@/store/feed';
@@ -274,18 +273,19 @@ export default function HomeScreen() {
         scrollToTopToken={homeFeedResetToken}
       />
 
-      <Animated.View style={[s.topOverlayWrap, overlayStyle]}>
-        <LinearGradient
-          colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'transparent']}
-          style={[s.topOverlay, { paddingTop: insets.top, paddingBottom: verticalScale(20) }]}
-          pointerEvents="box-none"
-        >
-          <View style={s.topRow}>
-            <View style={{ flex: 1, minWidth: 42 }} />
-            <FeedTabs active={activeTab} onChange={handleTabChange} />
-            <View style={{ flex: 1, minWidth: 42 }} />
-          </View>
-        </LinearGradient>
+      <Animated.View
+        style={[
+          s.topOverlayWrap,
+          { paddingTop: insets.top, paddingBottom: verticalScale(20) },
+          overlayStyle,
+        ]}
+        pointerEvents="box-none"
+      >
+        <View style={s.topRow}>
+          <View style={{ flex: 1, minWidth: 42 }} />
+          <FeedTabs active={activeTab} onChange={handleTabChange} />
+          <View style={{ flex: 1, minWidth: 42 }} />
+        </View>
       </Animated.View>
     </View>
   );
@@ -303,7 +303,6 @@ const s = StyleSheet.create({
   emptyTitle: { color: colors.textPrimary, fontSize: fontScale(20), fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
   topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
-  topOverlay: {},
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -1,9 +1,13 @@
 /**
- * Generate a short Instagram-style scene description from a Flux prompt.
+ * Generate a short location label from a Flux prompt.
  *
- * Voice: frank, slightly understated, location-anchored. 2-6 words like a
- * museum plaque or photo album caption — names WHERE this is and WHAT'S
- * happening there. Ignores styling layers (lighting, poses, mood, camera).
+ * Format: "Place, Region" — like a photo album geotag.
+ *   - Earth places get the state / country: "Los Angeles, California",
+ *     "Lanikai Beach, Hawaii", "Bora Bora, French Polynesia"
+ *   - Fictional / non-Earth places use just the proper name (no region):
+ *     "Mars colony", "Cyberpunk Tokyo", "Space station"
+ *
+ * Ignores all styling layers (lighting, poses, mood, camera, medium).
  *
  * Used by:
  *   - nightly-dreams: parallel Haiku call alongside image gen (latency-free)
@@ -19,43 +23,55 @@ export async function generateSceneDescription(
   finalPrompt: string,
   anthropicKey: string
 ): Promise<string> {
-  const promptForHaiku = `You are tagging a dream image with a SHORT location/scene label — like a museum plaque or photo album caption. Read the Flux AI prompt below and output 2-6 words that name ONLY the LOCATION (the place) and optionally the SCENE ANCHOR (a defining feature/sub-spot/activity at that place).
+  const promptForHaiku = `You are tagging a dream image with a SHORT location label — like a photo album geotag. Read the Flux AI prompt below and output the location in this EXACT format:
 
-EXTRACT FROM THE PROMPT:
-- The base location (e.g., "Mars colony", "Caribbean island", "Moab arches", "space station")
-- The specific spot or activity if relevant ("quarters", "slot canyon", "casino floor", "noodle shop")
+  "<Place>, <Region>"
 
-IGNORE COMPLETELY (these are styling layers, not the dream's subject):
+Where <Place> is the specific city, town, beach, park, landmark, or natural feature, and <Region> is the state, province, or country.
+
+REAL-EARTH EXAMPLES (always include the region):
+- "Los Angeles, California"
+- "Lanikai Beach, Hawaii"
+- "Bora Bora, French Polynesia"
+- "Moab, Utah"
+- "Big Sur, California"
+- "Banff, Alberta"
+- "Tokyo, Japan"
+- "Santorini, Greece"
+- "Joshua Tree, California"
+
+FICTIONAL / NON-EARTH PLACES (no region — just the proper name):
+- "Mars colony"
+- "Cyberpunk Tokyo"
+- "Space station"
+- "Underwater city"
+
+EXTRACT THE LOCATION FROM THE PROMPT:
+- If the prompt names a real Earth place (city / beach / park / landmark / region), output "<Place>, <State or Country>"
+- If the prompt names a fictional or off-Earth setting, output just the proper name
+- If there are multiple places named, pick the most specific identifiable one
+- If the place is named without a region in the prompt but you know the region (e.g., "Lanikai Beach" → Hawaii, "Moab" → Utah), supply the region
+
+IGNORE COMPLETELY (these are styling layers, not the location):
 - Lighting (neon glow, golden hour, atmospheric haze, warm bounce light, blue hour)
-- Camera/composition (medium shot, three-quarter view, eye-level, 50mm lens)
+- Camera / composition (medium shot, three-quarter view, eye-level, 50mm lens)
 - Character poses or body language (barely touching, sitting cross-legged, hands in pockets)
 - Mood adjectives (cozy, dramatic, surreal, magical, whimsical)
 - Color palettes (saturated, muted, vibrant, desaturated)
-- Medium/style fragments (cinematic, photoreal, watercolor, oil painting)
-- Comments about the characters themselves ("two of us", "couple", "man and woman")
+- Medium / style fragments (cinematic, photoreal, watercolor, oil painting)
+- Sub-spots or activities at the place (rooftop pool, casino floor, slot canyon, noodle shop)
+- Comments about the characters themselves
 
-GOOD EXAMPLES:
-- "Mars colony quarters"
-- "Caribbean dock"
-- "Cyberpunk noodle shop"
-- "Moab slot canyon"
-- "Bora Bora overwater bungalow"
-- "Las Vegas casino floor"
-- "Space station observation deck"
-- "Hawaiian black sand beach"
-- "LA rooftop pool"
-- "Cathedral ruins, Caribbean"
-
-AVOID:
-- "Mars colony quarters at night, neon glow" (lighting commentary)
-- "Caribbean dock with two of us touching" (character commentary)
-- "A magical Moab moment" (mood)
+NEVER OUTPUT:
+- Sub-spot suffixes ("Las Vegas casino floor" — use "Las Vegas, Nevada")
+- Mood / styling words ("magical Moab" — use "Moab, Utah")
 - Sentences, hashtags, emojis, quotes
+- Generic terms when a specific place is identifiable ("a beach" — use the named one)
 
 PROMPT:
 ${finalPrompt}
 
-Output ONLY the 2-6 word location/scene label. No quotes, no preamble.`;
+Output ONLY the location label. No quotes, no preamble.`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
