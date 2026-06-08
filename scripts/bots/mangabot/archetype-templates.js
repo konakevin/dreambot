@@ -12,6 +12,25 @@
 
 const blocks = require('./shared-blocks');
 
+// ── "Looks" axis (2026-06-07) ──────────────────────────────────────────────
+// Returns a LOOK OVERRIDE header that leads the Sonnet brief on look-enabled
+// paths, telling Sonnet to open its Flux prompt with the rolled anime look and
+// to let it OVERRIDE any baked "cel-shaded / painterly" style wording lower in
+// the template. Returns '' when no look was rolled (non-look paths / older
+// callers) so it's a safe no-op. Prepend to a template's `return` string:
+//   return `${lookOverride(sharedDNA)}You are an anime concept-art painter …`
+// Only paths routed to the mangabot_anime_neutral medium should call this —
+// otherwise the bot PROMPT_PREFIX still leads CLIP and the look is smothered.
+function lookOverride(sharedDNA) {
+  if (!sharedDNA || !sharedDNA.lookRegister) return '';
+  return `━━━ ANIME LOOK OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this art style) ━━━
+${sharedDNA.lookRegister}
+
+This is the AUTHORITY on rendering style for THIS render. It OVERRIDES any other art-style / medium / finish wording anywhere below (e.g. "cel-shaded", "painterly", "watercolor", "hand-drawn"). Keep the scene content, characters, composition, and EVERY hard rule exactly as written — but render all of it entirely in THIS anime look. Open your Flux prompt with these style tokens so they lead the CLIP anchor.
+
+`;
+}
+
 module.exports = {
   MANGABOT_ISEKAI_FANTASY: ({ slots, sharedDNA, vibeDirective }) => {
     const {
@@ -31,7 +50,7 @@ module.exports = {
       background_detail,
     } = slots;
 
-    return `You are an anime concept-art painter writing an ISEKAI-FANTASY keyframe for MangaBot. STRICT ANIME ISEKAI CANON — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei / Slime / Restaurant of Another World / Log Horizon / Tate no Yuusha. Painterly hand-drawn anime cel-shaded register. Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing an ISEKAI-FANTASY keyframe for MangaBot. STRICT ANIME ISEKAI CANON — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei / Slime / Restaurant of Another World / Log Horizon / Tate no Yuusha. Painterly hand-drawn anime cel-shaded register. Output wraps with style prefix + suffix.
 
 ${blocks.ANIME_ILLUSTRATION_BLOCK}
 
@@ -323,7 +342,7 @@ Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO p
       background_detail,
     } = slots;
 
-    return `You are an anime concept-art painter writing a NEO-TOKYO keyframe for MangaBot. Cyberpunk Japan future — Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo / Edgerunners / Bubblegum Crisis aesthetic. Painterly hand-drawn cyberpunk-anime illustration. Output wraps with style prefix + suffix.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a NEO-TOKYO keyframe for MangaBot. Cyberpunk Japan future — Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo / Edgerunners / Bubblegum Crisis aesthetic. Painterly hand-drawn cyberpunk-anime illustration. Output wraps with style prefix + suffix.
 
 ${blocks.ANIME_ILLUSTRATION_BLOCK}
 
@@ -594,7 +613,7 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
       drama,
     } = slots;
     const dramaSection = drama ? `\n━━━ PETAL DRAMA — render in scene ━━━\n${drama}\n\n` : '';
-    return `You are an anime concept-art painter writing a CHERRY-BLOSSOM-ROMANCE keyframe for MangaBot — a solo character in a tender romantic moment under sakura. 5cm-per-second / Shinkai / Toradora / Your-Lie-In-April tradition. PINK petal-cascade mandate.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a CHERRY-BLOSSOM-ROMANCE keyframe for MangaBot — a solo character in a tender romantic moment under sakura. 5cm-per-second / Shinkai / Toradora / Your-Lie-In-April tradition. PINK petal-cascade mandate.
 
 ━━━ ETHNICITY LOCK ━━━
 ${ethnicity}
@@ -670,7 +689,7 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
       drama,
     } = slots;
     const dramaSection = drama ? `\n━━━ SUNSET DRAMA — render in scene ━━━\n${drama}\n\n` : '';
-    return `You are an anime concept-art painter writing a ROOFTOP-SUNSETS keyframe for MangaBot — character ON a rooftop at golden-hour, ENGAGED with foreground/midground (NOT looking out at vista). Shinkai / KyoAni / Tamako-Market rooftop tradition.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a ROOFTOP-SUNSETS keyframe for MangaBot — character ON a rooftop at golden-hour, ENGAGED with foreground/midground (NOT looking out at vista). Shinkai / KyoAni / Tamako-Market rooftop tradition.
 
 ⚠️ THIS PATH IS THE FAILURE-MODE PATH. The original audit found rooftop-sunsets ALWAYS rendered as "back-of-character looking out over sunset city." OVERRIDE THAT HARD. Character is ENGAGED with object/action AT THE ROOFTOP, NOT gazing at vista.
 
@@ -837,7 +856,7 @@ Output ONLY raw 80-120 word scene description. NO preamble.`;
     const dramaSection = drama
       ? `\n━━━ KAWAII DRAMA — render gently in scene ━━━\n${drama}\n\nGentle cute event in world — visible but soft, NOT eclipsing her.\n\n`
       : '';
-    return `You are an anime concept-art painter writing a KAWAII keyframe for MangaBot — a single cute character in a cozy cute moment. Sanrio / lolita / Pop-Mart-vinyl-cute / character-cafe / Sailor-Moon-coquette tradition. Soft pastel palette + sparkle stack + forward-facing cute pose.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a KAWAII keyframe for MangaBot — a single cute character in a cozy cute moment. Sanrio / lolita / Pop-Mart-vinyl-cute / character-cafe / Sailor-Moon-coquette tradition. Soft pastel palette + sparkle stack + forward-facing cute pose.
 
 ━━━ GENDER + ETHNICITY LOCK ━━━
 Subject is a WOMAN. "Woman" or "girl" MUST be in FIRST 8 TOKENS. Use she/her/hers.
@@ -934,7 +953,7 @@ Output ONLY raw 90-120 word scene description. Comma-separated phrases. NO pream
     const dramaSection = drama
       ? `\n━━━ BATTLEFIELD DRAMA — render visibly ━━━\n${drama}\n\nCombat-energy event in the world — visible secondary focal point, NOT eclipsing him.\n\n`
       : '';
-    return `You are an anime concept-art painter writing a SHONEN-ACTION keyframe for MangaBot — a single shonen hero MAN at peak-combat-action. Naruto / MHA / JJK / Bleach / Demon Slayer (ufotable) / DragonBall tradition. He is MID-STRIKE, MID-POWER-RELEASE, MID-COUNTER — captured at loaded peak instant.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a SHONEN-ACTION keyframe for MangaBot — a single shonen hero MAN at peak-combat-action. Naruto / MHA / JJK / Bleach / Demon Slayer (ufotable) / DragonBall tradition. He is MID-STRIKE, MID-POWER-RELEASE, MID-COUNTER — captured at loaded peak instant.
 
 ━━━ GENDER LOCK ━━━
 Subject is a MAN. "Man" or "hero" MUST appear in FIRST 8 TOKENS. He/him/his throughout.
@@ -1043,7 +1062,7 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
     const dramaSection = drama
       ? `\n━━━ MAGICAL DRAMA — render visibly in the scene ━━━\n${drama}\n\nMagical peak-moment event in the world — visible secondary focal point, NOT eclipsing her.\n\n`
       : '';
-    return `You are an anime concept-art painter writing a MAGICAL-GIRL keyframe for MangaBot — a single mahou-shoujo as the HERO of the frame mid-transformation OR mid-power-moment. Sailor-Moon / Precure / Madoka-Magica / Cardcaptor-Sakura tradition. She is GLOWING, ENGAGED, mid-action.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a MAGICAL-GIRL keyframe for MangaBot — a single mahou-shoujo as the HERO of the frame mid-transformation OR mid-power-moment. Sailor-Moon / Precure / Madoka-Magica / Cardcaptor-Sakura tradition. She is GLOWING, ENGAGED, mid-action.
 
 ━━━ GENDER LOCK ━━━
 The subject is a WOMAN (magical-girl). "Woman" or "magical-girl" MUST appear in the FIRST 8 TOKENS. Use she/her/hers throughout.
@@ -1162,7 +1181,7 @@ A magical / atmospheric event in the world around him — visible secondary foca
 `
       : '';
 
-    return `You are an anime concept-art painter writing a CHARACTER-LED keyframe for MangaBot — a single anime MAN as the HERO of the frame in a rich anime setting. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer / Studio Madhouse tradition. He is ALIVE, ENGAGED, mid-action — the eye lands on him first.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a CHARACTER-LED keyframe for MangaBot — a single anime MAN as the HERO of the frame in a rich anime setting. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer / Studio Madhouse tradition. He is ALIVE, ENGAGED, mid-action — the eye lands on him first.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
 The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "boy", "guy", "hero", "warrior", "samurai", "swordsman", "mage" or any other gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [ethnicity] MAN [doing action] in [setting]..." — "man" comes BEFORE any archetype noun. Use he/him/his throughout.
@@ -1280,7 +1299,7 @@ A magical / atmospheric event happening in the world around her — render as a 
 `
       : '';
 
-    return `You are an anime concept-art painter writing a CHARACTER-LED keyframe for MangaBot — a single anime WOMAN as the HERO of the frame in a rich anime setting. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer / Studio Madhouse tradition. She is ALIVE, ENGAGED, mid-action — the eye lands on her first.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a CHARACTER-LED keyframe for MangaBot — a single anime WOMAN as the HERO of the frame in a rich anime setting. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer / Studio Madhouse tradition. She is ALIVE, ENGAGED, mid-action — the eye lands on her first.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
 The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "girl", "heroine", "magical-girl", "shrine maiden", "samurai", "schoolgirl", "mage" or any other gender-ambiguous-or-diminutive noun for "woman" in the opening. Opening MUST read: "a [ethnicity] WOMAN [doing action] in [setting]..." — "woman" comes BEFORE any archetype noun. Use she/her/hers throughout. The archetype slot describes her ROLE, append it AFTER "woman" appears.
@@ -1384,7 +1403,7 @@ Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO p
       drama,
     } = slots;
     const dramaSection = drama ? `\n━━━ OCCULT DRAMA — render in scene ━━━\n${drama}\n\n` : '';
-    return `You are an anime concept-art painter writing an OCCULT-TOKYO keyframe for MangaBot — a solo character engaging with supernatural energy in modern urban Japan. Tokyo Ghoul / Jujutsu Kaisen / Mob Psycho / Bleach register.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing an OCCULT-TOKYO keyframe for MangaBot — a solo character engaging with supernatural energy in modern urban Japan. Tokyo Ghoul / Jujutsu Kaisen / Mob Psycho / Bleach register.
 
 ━━━ ETHNICITY LOCK ━━━
 ${ethnicity}
@@ -1462,7 +1481,7 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
     const dramaSection = drama
       ? `\n━━━ POST-APOCALYPTIC DRAMA — render in scene ━━━\n${drama}\n\n`
       : '';
-    return `You are an anime concept-art painter writing a POST-APOCALYPTIC keyframe for MangaBot — a solo wanderer engaged with the ruined world. Trigun / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register. Quiet decay + nature reclaiming.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a POST-APOCALYPTIC keyframe for MangaBot — a solo wanderer engaged with the ruined world. Trigun / Made-in-Abyss / Girls-Last-Tour / Yokohama-Kaidashi register. Quiet decay + nature reclaiming.
 
 ━━━ ETHNICITY LOCK ━━━
 ${ethnicity}
@@ -1538,7 +1557,7 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
       drama,
     } = slots;
     const dramaSection = drama ? `\n━━━ BEACH DRAMA — render in scene ━━━\n${drama}\n\n` : '';
-    return `You are an anime concept-art painter writing a BEACH-EPISODE keyframe for MangaBot — anime summer-arc vacation paradise. K-On / Free / Lucky-Star / Nichijou beach-arc register. Bright joy, warm sand, ocean shimmer.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a BEACH-EPISODE keyframe for MangaBot — anime summer-arc vacation paradise. K-On / Free / Lucky-Star / Nichijou beach-arc register. Bright joy, warm sand, ocean shimmer.
 
 ━━━ ETHNICITY LOCK ━━━
 ${ethnicity}
@@ -1617,7 +1636,7 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
     const dramaSection = drama
       ? `\n━━━ FIREWORK / LANTERN DRAMA — render in scene ━━━\n${drama}\n\n`
       : '';
-    return `You are an anime concept-art painter writing a FESTIVAL-NIGHTS keyframe for MangaBot — solo character at a Japanese summer matsuri. Yukata / lanterns / fireworks / food-stalls. Shinkai / KyoAni / Mamoru-Hosoda festival-scene register.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a FESTIVAL-NIGHTS keyframe for MangaBot — solo character at a Japanese summer matsuri. Yukata / lanterns / fireworks / food-stalls. Shinkai / KyoAni / Mamoru-Hosoda festival-scene register.
 
 ━━━ ETHNICITY LOCK ━━━
 ${ethnicity}
@@ -1801,7 +1820,7 @@ Output ONLY raw 80-120 word scene description. NO preamble.`;
     const dramaSection = drama
       ? `\n━━━ SUPERNATURAL DRAMA — render in scene ━━━\n${drama}\n\n`
       : '';
-    return `You are an anime concept-art painter writing a MYTHOLOGICAL-CREATURE keyframe for MangaBot — a YOKAI / Japanese mythological being as HERO. Mononoke / Spirited-Away / Kakuriyo / Mushishi / Hozuki-no-Reitetsu register. Kitsune / tengu / ryujin / yuki-onna / nekomata / oni / kappa.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a MYTHOLOGICAL-CREATURE keyframe for MangaBot — a YOKAI / Japanese mythological being as HERO. Mononoke / Spirited-Away / Kakuriyo / Mushishi / Hozuki-no-Reitetsu register. Kitsune / tengu / ryujin / yuki-onna / nekomata / oni / kappa.
 
 ━━━ AESTHETIC LOCK ━━━
 Mystical-spirit palette. Painterly atmospheric aura. Shimenawa rope, ofuda, fox-fire, spirit-glow.
@@ -1875,7 +1894,7 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
       drama,
     } = slots;
     const dramaSection = drama ? `\n━━━ COSMIC DRAMA — render in scene ━━━\n${drama}\n\n` : '';
-    return `You are an anime concept-art painter writing a SPACE-OPERA keyframe for MangaBot — STARSHIP or COSMIC station as hero. Cowboy-Bebop / Outlaw-Star / Macross / Galactic-Heroes / Yamato / GitS-SAC register.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a SPACE-OPERA keyframe for MangaBot — STARSHIP or COSMIC station as hero. Cowboy-Bebop / Outlaw-Star / Macross / Galactic-Heroes / Yamato / GitS-SAC register.
 
 ━━━ AESTHETIC LOCK ━━━
 Saturated space-opera palette — deep blue void / nebula magenta-teal / engine-glow orange / starlight blue-white. Realistic-anime industrial detailing on ships.
@@ -1953,7 +1972,7 @@ Output ONLY raw 90-120 word scene description. NO preamble.`;
       drama,
     } = slots;
     const dramaSection = drama ? `\n━━━ HANGAR EVENT — render in scene ━━━\n${drama}\n\n` : '';
-    return `You are an anime concept-art painter writing a MECHA-HANGAR keyframe for MangaBot — a SCENE-LED giant-mecha frame where the MECH is the HERO. Gundam-RX78 / Eva / Patlabor / Macross / Code-Geass / Big-O / GitS register. Industrial-scale + dramatic light + dwarf-the-pilot proportions.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a MECHA-HANGAR keyframe for MangaBot — a SCENE-LED giant-mecha frame where the MECH is the HERO. Gundam-RX78 / Eva / Patlabor / Macross / Code-Geass / Big-O / GitS register. Industrial-scale + dramatic light + dwarf-the-pilot proportions.
 
 ⚠️ TWO FAILURE-MODES THIS PATH FIGHTS:
 1. STATIC T-POSE — Flux's default "anime mech standing arms-out at the camera" is BANNED. The mech_posture axis above is the LAW. Render the EXACT loaded posture (kneeling / mid-stride / squatting at maintenance / cockpit-opening / arm-extended-mid-action). NEVER arms-out-T-pose.
@@ -2040,7 +2059,7 @@ Output ONLY raw 100-130 word scene description. NO preamble.`;
       drama,
     } = slots;
     const dramaSection = drama ? `\n━━━ VILLAGE DRAMA — render in scene ━━━\n${drama}\n\n` : '';
-    return `You are an anime concept-art painter writing an ANIME-VILLAGE keyframe for MangaBot — a SCENE-LED village / streetscape / mountain-edge neighborhood as the HERO. Mushishi / Spice-and-Wolf / Mononoke pastoral OR Akihabara / Asakusa modern alleyways. Inhabitant figure for human scale, NOT a hero portrait.
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing an ANIME-VILLAGE keyframe for MangaBot — a SCENE-LED village / streetscape / mountain-edge neighborhood as the HERO. Mushishi / Spice-and-Wolf / Mononoke pastoral OR Akihabara / Asakusa modern alleyways. Inhabitant figure for human scale, NOT a hero portrait.
 
 ━━━ AESTHETIC LOCK ━━━
 PAINTERLY-ANIME VILLAGE palette — soft warm or cool earthy tones (wood / clay / moss / dawn-pink / dusk-amber). Architectural detail leads. Atmospheric depth haze.

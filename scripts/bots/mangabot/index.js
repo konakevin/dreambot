@@ -60,12 +60,58 @@ module.exports = {
   // banned (see allowedModels) — re-enabling it later would reuse this medium.
   mediumStyles: {
     mangabot_gpt_clean: blocks.GPT_CLEAN,
+    // "Looks" medium (2026-06-07) — locks anime IDENTITY, defers the specific
+    // art-style to the rolled sharedDNA.lookRegister. See shared-blocks.js.
+    mangabot_anime_neutral: blocks.ANIME_NEUTRAL,
   },
   cleanMediumByModel: {
     'google/gemini-2-image': { medium: 'mangabot_gpt_clean' },
   },
+
+  // ── "Looks" axis (2026-06-07) — full rollout, 17 of 21 paths ───────────
+  // The look-enabled paths route to mangabot_anime_neutral so the bot-wide
+  // PROMPT_PREFIX Ghibli/Shinkai/KyoAni style lock is bypassed and the rolled
+  // sharedDNA.lookRegister leads CLIP (one of 12 anime sub-styles per render).
+  // EXCLUDED (stay on the 'anime' medium — their identity IS a fixed style):
+  // ghibli-countryside, ghibli-painterly (SDXL-locked), slice-of-life, samurai-era.
+  // Validated on 4 MVP paths (20 renders, 0 fails, Kevin "10/10") before this
+  // rollout to the remaining 13. Playbook: "Medium Looks" 2ND PROVEN BOT section.
+  // NOTE: mangabot_anime_neutral's dream_mediums.allowed_models is FLUX-ONLY
+  // (no nano-banana) — so the picker never rolls banana on look paths and the
+  // cleanMediumByModel banana→gpt_clean swap (which would skip the look) never
+  // fires here. Banana still serves the 4 style-locked paths via 'anime'.
+  mediumByPath: {
+    'neo-tokyo': 'mangabot_anime_neutral',
+    'shonen-action': 'mangabot_anime_neutral',
+    'isekai-fantasy': 'mangabot_anime_neutral',
+    'anime-character-female': 'mangabot_anime_neutral',
+    'anime-character-male': 'mangabot_anime_neutral',
+    'mythological-creature': 'mangabot_anime_neutral',
+    kawaii: 'mangabot_anime_neutral',
+    'anime-village': 'mangabot_anime_neutral',
+    'mecha-hangars': 'mangabot_anime_neutral',
+    'festival-nights': 'mangabot_anime_neutral',
+    'magical-girl': 'mangabot_anime_neutral',
+    'occult-tokyo': 'mangabot_anime_neutral',
+    'post-apocalyptic': 'mangabot_anime_neutral',
+    'beach-episode': 'mangabot_anime_neutral',
+    'rooftop-sunsets': 'mangabot_anime_neutral',
+    'cherry-blossom-romance': 'mangabot_anime_neutral',
+    'space-opera': 'mangabot_anime_neutral',
+  },
+
   promptPrefixByMedium: {
     mangabot_gpt_clean: '',
+    // Tight anchor that REPLACES the bot's Ghibli/Shinkai PROMPT_PREFIX so the
+    // rolled look leads. Empty would be falsy → fall through to PROMPT_PREFIX.
+    mangabot_anime_neutral: 'anime illustration',
+  },
+  promptSuffixByMedium: {
+    // Drop the bot PROMPT_SUFFIX's "soft bloom / filmic color grading" tail —
+    // it would smother flat-gouache / retro-cel / shonen-ink looks. Keep only
+    // a neutral detail anchor + the no-text guardrail; the look carries finish.
+    mangabot_anime_neutral:
+      'detailed anime rendering, no text no words no watermarks no logos no frame borders',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -246,6 +292,13 @@ module.exports = {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
+      // Bot-wide anime look (2026-06-07). Rolled for every path but only
+      // CONSUMED by look-enabled templates (they lead their Sonnet brief with
+      // it). Non-injected templates ignore it — harmless. recency-aware so the
+      // same look doesn't cluster across consecutive renders.
+      lookRegister: picker
+        ? picker.pickWithRecency(pools.MANGABOT_LOOK_REGISTER, 'look_register')
+        : pools.MANGABOT_LOOK_REGISTER[0],
     };
   },
 

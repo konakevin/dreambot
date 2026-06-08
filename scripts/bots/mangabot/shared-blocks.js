@@ -170,8 +170,22 @@ Japanese culture, mythology, and setting are rendered with respect and accuracy.
 const GPT_CLEAN =
   'Clean cel-shaded anime illustration, crisp render with clearly readable characters and recognizable anime environments, vibrant saturated palette, atmospheric depth, hand-drawn anime register';
 
+// ANIME_NEUTRAL — the "looks" medium (2026-06-07). Locks the anime-illustration
+// IDENTITY (it's 2D hand-drawn anime, not photoreal/3D/Western-cartoon) but
+// DROPS the fixed Ghibli/Shinkai/KyoAni style lock that PROMPT_PREFIX bakes in.
+// The specific art-style era / linework / shading / palette is set by the rolled
+// sharedDNA.lookRegister tokens that lead the Sonnet prompt — so each render gets
+// a different anime look while staying unmistakably anime. Used only by the
+// look-enabled paths (mediumByPath in index.js); the 4 style-locked paths
+// (ghibli-countryside / ghibli-painterly / slice-of-life / samurai-era) keep the
+// original 'anime' medium + PROMPT_PREFIX. Pattern mirrors YumBot's
+// YUMBOT_FOOD_NEUTRAL (playbook: "Medium Looks" architecture).
+const ANIME_NEUTRAL =
+  'The entire scene is rendered as 2D hand-drawn Japanese anime/manga art — characters, creatures, and environments all in authentic anime illustration with drawn linework and painted backgrounds, never photoreal, never 3D CGI, never Western cartoon. The specific art-style era, linework weight, shading method, and color treatment are set by the look-register tokens that lead the prompt.';
+
 module.exports = {
   GPT_CLEAN,
+  ANIME_NEUTRAL,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   KEYFRAME_COMPOSITION_BLOCK,

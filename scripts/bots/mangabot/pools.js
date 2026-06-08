@@ -45,6 +45,12 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // Bot-wide anime "look register" (2026-06-07) — 12 color-anime visual
+  // treatments rolled per render via rollSharedDNA on the look-enabled paths,
+  // so the same path renders in a different anime style each time (Ghibli /
+  // Shinkai / 90s OVA / shonen ink / gouache / etc.). Mirrors YumBot's
+  // look_register. Consumed by templates via sharedDNA.lookRegister.
+  MANGABOT_LOOK_REGISTER: load('mangabot_look_register'),
   ANIME_CHARACTERS: load('anime_characters'),
   JAPANESE_LANDSCAPES: load('japanese_landscapes'),
   MYTHOLOGICAL_BEINGS: load('mythological_beings'),
