@@ -45,6 +45,7 @@ import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { FluxModelPicker } from '@/components/FluxModelPicker';
+import { DreamBotModelPicker, DREAMBOT_DEFAULT_MODEL } from '@/components/DreamBotModelPicker';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
@@ -97,17 +98,23 @@ export default function CreateScreen() {
   // users.pro_mode_flux_model). Tracked here so the dream button can show the
   // selected model's sparkle cost.
   const [advancedModelId, setAdvancedModelId] = useState(DEFAULT_MODEL_ID);
+  // DreamBot-route AI model — synced from <DreamBotModelPicker> (sticky in
+  // AsyncStorage). In the engine (DreamBot) route this is forced over the
+  // medium's auto-pick so the user's choice is deterministic. All curated
+  // options are 1 sparkle, so cost/margin are unchanged.
+  const [dreamBotModelId, setDreamBotModelId] = useState(DREAMBOT_DEFAULT_MODEL);
   const imageModels = useImageModels();
   const engineConfig = useEngineConfig();
   const promptRef = useRef<TextInput>(null);
 
-  // Keep config.forceModel in sync with Advanced Mode: ON → charge + render the
-  // picked model; OFF → null (standard dream, 1 sparkle, engine picks the model).
-  // Without this the charge defaulted to 1 sparkle for ALL advanced dreams
-  // regardless of model (config.forceModel was only ever set by the DLT screen).
+  // Keep config.forceModel in sync with the active route:
+  //   • Advanced/Direct (useExactPrompt) → the FluxModelPicker model (verbatim).
+  //   • DreamBot (engine) → the DreamBotModelPicker model, forced over the
+  //     medium's auto-pick so the user's chosen model is deterministic.
+  // Both run through getSparkleCost server-side; all DreamBot options are 1✦.
   useEffect(() => {
-    setForceModel(config.useExactPrompt ? advancedModelId : null);
-  }, [config.useExactPrompt, advancedModelId, setForceModel]);
+    setForceModel(config.useExactPrompt ? advancedModelId : dreamBotModelId);
+  }, [config.useExactPrompt, advancedModelId, dreamBotModelId, setForceModel]);
 
   // The Create-screen pickers used to filter their options down to the
   // user's onboarding-curated aesthetics + art_styles via a `userFilter`
@@ -676,99 +683,106 @@ export default function CreateScreen() {
           )}
 
           {/* Advanced Mode ON → the AI model picker replaces Medium/Vibe (those
-              directives are bypassed in this mode). OFF → the Medium/Vibe pills. */}
+              directives are bypassed in this mode). OFF → the Medium/Vibe pills
+              PLUS a friendly DreamBot model picker (still runs the full engine;
+              the chosen model is forced over the medium's auto-pick). */}
           {config.useExactPrompt ? (
             <View className="mb-4">
               <FluxModelPicker onChange={setAdvancedModelId} />
             </View>
           ) : (
-            <View className="flex-row gap-3 mb-4">
-              <View className="flex-1">
-                <Text
-                  className="text-xs font-medium mb-1.5 ml-1"
-                  style={{ color: colors.textSecondary }}
-                >
-                  Medium
-                </Text>
-                <TouchableOpacity
-                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                  style={{
-                    backgroundColor: colors.surface,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                  }}
-                  onPress={openMediumPicker}
-                  activeOpacity={0.7}
-                >
-                  <View className="flex-row items-center gap-1.5 flex-1 mr-1">
+            <>
+              <View className="flex-row gap-3 mb-4">
+                <View className="flex-1">
+                  <Text
+                    className="text-xs font-medium mb-1.5 ml-1"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Medium
+                  </Text>
+                  <TouchableOpacity
+                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                    onPress={openMediumPicker}
+                    activeOpacity={0.7}
+                  >
+                    <View className="flex-row items-center gap-1.5 flex-1 mr-1">
+                      <Text
+                        className="text-sm font-semibold"
+                        style={{ color: colors.textPrimary }}
+                        numberOfLines={1}
+                      >
+                        {mediumLabel}
+                      </Text>
+                      {(isSurpriseMedium || selectedMediumRow) && (
+                        <View
+                          style={{
+                            paddingHorizontal: 5,
+                            paddingVertical: verticalScale(1),
+                            borderRadius: 5,
+                            backgroundColor: mediumFaceSwaps
+                              ? 'rgba(96,165,250,0.15)'
+                              : 'rgba(245,158,11,0.15)',
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: fontScale(8),
+                              fontWeight: '700',
+                              color: mediumFaceSwaps ? '#60A5FA' : '#F59E0B',
+                              textTransform: 'uppercase',
+                              letterSpacing: 0.5,
+                            }}
+                          >
+                            {mediumFaceSwaps ? 'face' : 'art'}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                </View>
+
+                <View className="flex-1">
+                  <Text
+                    className="text-xs font-medium mb-1.5 ml-1"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Vibe
+                  </Text>
+                  <TouchableOpacity
+                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      setPickerType('vibe');
+                    }}
+                    activeOpacity={0.7}
+                  >
                     <Text
                       className="text-sm font-semibold"
                       style={{ color: colors.textPrimary }}
                       numberOfLines={1}
                     >
-                      {mediumLabel}
+                      {vibeLabel}
                     </Text>
-                    {(isSurpriseMedium || selectedMediumRow) && (
-                      <View
-                        style={{
-                          paddingHorizontal: 5,
-                          paddingVertical: verticalScale(1),
-                          borderRadius: 5,
-                          backgroundColor: mediumFaceSwaps
-                            ? 'rgba(96,165,250,0.15)'
-                            : 'rgba(245,158,11,0.15)',
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: fontScale(8),
-                            fontWeight: '700',
-                            color: mediumFaceSwaps ? '#60A5FA' : '#F59E0B',
-                            textTransform: 'uppercase',
-                            letterSpacing: 0.5,
-                          }}
-                        >
-                          {mediumFaceSwaps ? 'face' : 'art'}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                </TouchableOpacity>
+                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                </View>
               </View>
-
-              <View className="flex-1">
-                <Text
-                  className="text-xs font-medium mb-1.5 ml-1"
-                  style={{ color: colors.textSecondary }}
-                >
-                  Vibe
-                </Text>
-                <TouchableOpacity
-                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                  style={{
-                    backgroundColor: colors.surface,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                  }}
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setPickerType('vibe');
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    className="text-sm font-semibold"
-                    style={{ color: colors.textPrimary }}
-                    numberOfLines={1}
-                  >
-                    {vibeLabel}
-                  </Text>
-                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                </TouchableOpacity>
+              <View className="mb-4">
+                <DreamBotModelPicker onChange={setDreamBotModelId} />
               </View>
-            </View>
+            </>
           )}
         </ScrollView>
 

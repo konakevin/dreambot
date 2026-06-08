@@ -10,7 +10,8 @@
  *   4. model_overrides table — medium+vibe combo (random from pool)
  *   5. dream_mediums.allowed_models — medium default (random from pool)
  *   6. Keyword SDXL fallback (no medium provided)
- *   7. Default: flux-2-dev
+ *   7. Default: flux-1.1-pro (bare fallback — only hit when a medium has no
+ *      allowed_models pool; the per-medium pool is the real default)
  *
  * Both DB tables are cached in-memory with a 60-second TTL.
  */
@@ -30,7 +31,7 @@ const SDXL_OVERRIDES = {
 } as const;
 
 const SDXL_ALWAYS = new Set<string>();
-const DEFAULT_MODEL = 'black-forest-labs/flux-2-dev';
+const DEFAULT_MODEL = 'black-forest-labs/flux-1.1-pro';
 
 // ── In-memory cache ─────────────────────────────────────────────────────
 
