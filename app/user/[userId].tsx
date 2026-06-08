@@ -25,6 +25,7 @@ import Animated, {
   Extrapolation,
 } from 'react-native-reanimated';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
+import { useProfileAlbumCounts } from '@/hooks/useProfileAlbumCounts';
 import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
@@ -74,6 +75,7 @@ export default function PublicProfileScreen() {
     isLoading: profileLoading,
     refetch: refetchProfile,
   } = usePublicProfile(userId);
+  const { data: albumCounts } = useProfileAlbumCounts(userId);
   // Local pull-to-refresh spinner — see FullScreenFeed for rationale.
   const [isPulling, setIsPulling] = useState(false);
   const handlePullToRefresh = useCallback(async () => {
@@ -384,6 +386,20 @@ export default function PublicProfileScreen() {
           })}
         </View>
       )}
+      {/* Subheader explaining the active album (name + count + one-liner). */}
+      {activeTab === 'posts' && canSeePosts && (
+        <View style={styles.albumSubheader}>
+          <Text style={styles.albumSubheaderTitle}>
+            {gridView === 'reposts' ? 'Reposts' : 'Posts'}
+            {albumCounts
+              ? `  ·  ${gridView === 'reposts' ? albumCounts.reposts : albumCounts.posts}`
+              : ''}
+          </Text>
+          <Text style={styles.albumSubheaderDesc}>
+            {gridView === 'reposts' ? 'Dreams this user has reposted' : 'Dreams shared to the feed'}
+          </Text>
+        </View>
+      )}
       {/* Section heading for the followers/following sub-views. Repeats the
           tab label + count above the list so the user can tell which list
           they're looking at — important when followers ≈ following (e.g.
@@ -586,6 +602,21 @@ const styles = StyleSheet.create({
     height: 3,
     borderRadius: 2,
     backgroundColor: colors.accent,
+  },
+  albumSubheader: {
+    paddingHorizontal: 16,
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(8),
+  },
+  albumSubheaderTitle: {
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    fontWeight: '700',
+  },
+  albumSubheaderDesc: {
+    color: colors.textSecondary,
+    fontSize: fontScale(12.5),
+    marginTop: verticalScale(2),
   },
   // Section header above the followers / following user list. Mirrors the
   // hairline-separated row Instagram uses above its user list — gives the
