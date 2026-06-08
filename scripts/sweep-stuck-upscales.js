@@ -58,7 +58,7 @@ async function notifyRequesters(sb, uploadId) {
       type: 'download_ready',
       subtype: 'download',
       upload_id: uploadId,
-      body: 'Your HD download is ready ✨',
+      body: 'Your HD download is ready',
     });
   }
   await sb

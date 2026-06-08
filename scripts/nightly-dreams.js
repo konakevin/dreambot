@@ -265,7 +265,7 @@ async function sendTrialReminders(sb, enqueuedPool) {
         // Subject-only inbox row — kept short for the single-line "no
         // ellipsis" inbox layout (migration 223 / 2026-06-04). Push body
         // uses the same string; iOS truncates long titles anyway.
-        body: 'Trial ends in 3 days. Tap to subscribe.',
+        body: 'Trial ends in 3 days — tap to subscribe',
         is_read: false,
       });
     }
@@ -277,7 +277,7 @@ async function sendTrialReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'trial_reminder',
         subtype: 'last_night',
-        body: 'Trial ends tomorrow. Tap to subscribe.',
+        body: 'Trial ends tomorrow — tap to subscribe',
         is_read: false,
       });
     }
@@ -368,7 +368,7 @@ async function sendPaidProReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'pro_reminder',
         subtype: 'paid_3day',
-        body: 'Pro ends in 3 days. Tap to renew.',
+        body: 'Pro ends in 3 days — tap to renew',
         is_read: false,
       });
     }
@@ -380,7 +380,7 @@ async function sendPaidProReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'pro_reminder',
         subtype: 'paid_last_night',
-        body: 'Pro ends tomorrow. Tap to renew.',
+        body: 'Pro ends tomorrow — tap to renew',
         is_read: false,
       });
     }

@@ -34,31 +34,13 @@ interface WebhookPayload {
   group_key?: string;
 }
 
-// Rotating push copy for the nightly-dream notification. Short, mysterious,
-// personal — leans on the "while you slept" emotional hook. Picked at random
-// per-send so users don't see the same line every morning.
-const DREAM_PUSH_TITLES = [
-  'New dream waiting',
-  'Your DreamBot made something',
-  'It dreamed while you slept',
-  'A new dream just landed',
-];
-const DREAM_PUSH_BODIES = [
-  'Tap to see what it made.',
-  'You were sleeping. It wasn’t.',
-  'Painted just for you.',
-  'Open to see tonight’s dream.',
-];
-function pickDreamPushTitle(): string {
-  return DREAM_PUSH_TITLES[Math.floor(Math.random() * DREAM_PUSH_TITLES.length)];
-}
-function pickDreamPushBody(): string {
-  return DREAM_PUSH_BODIES[Math.floor(Math.random() * DREAM_PUSH_BODIES.length)];
-}
+// Single, fixed copy for the nightly-dream notification. Title-only — clean
+// and consistent every morning.
+const NIGHTLY_DREAM_PUSH_TITLE = 'A new dream has appeared';
 // Copy for a dream the user ACTIVELY created and then left the app before it
 // finished (subtype='manual'). The nightly "while you slept" framing is wrong
 // here — they made this on purpose, so the copy is direct.
-const MANUAL_DREAM_PUSH_BODY = 'Tap to see what you created.';
+const MANUAL_DREAM_PUSH_BODY = 'Tap to see what you created';
 
 function getNotificationContent(
   type: string,
@@ -72,16 +54,16 @@ function getNotificationContent(
     if (subtype === '3day') {
       return {
         title: 'Your Pro trial ends in 3 days',
-        body: body ?? 'Subscribe to keep nightly dreams coming.',
+        body: body ?? 'Subscribe to keep nightly dreams coming',
       };
     }
     if (subtype === 'last_night') {
       return {
         title: 'Tonight is your last Pro nightly dream',
-        body: body ?? 'Your trial ends tomorrow — subscribe to keep nightly dreams coming.',
+        body: body ?? 'Your trial ends tomorrow — subscribe to keep nightly dreams coming',
       };
     }
-    return { title: 'Your Pro trial is ending', body: body ?? 'Tap to learn more.' };
+    return { title: 'Your Pro trial is ending', body: body ?? 'Tap to learn more' };
   }
   // Paid Pro expiry reminders (sub cancelled but still in paid period).
   // Same windows as trial_reminder; different copy ("resubscribe" not
@@ -90,17 +72,16 @@ function getNotificationContent(
     if (subtype === 'paid_3day') {
       return {
         title: 'Your Pro subscription ends in 3 days',
-        body: body ?? 'Resubscribe to keep nightly dreams coming.',
+        body: body ?? 'Resubscribe to keep nightly dreams coming',
       };
     }
     if (subtype === 'paid_last_night') {
       return {
         title: 'Tonight is your last Pro nightly dream',
-        body:
-          body ?? 'Your subscription ends tomorrow — resubscribe to keep nightly dreams coming.',
+        body: body ?? 'Your subscription ends tomorrow — resubscribe to keep nightly dreams coming',
       };
     }
-    return { title: 'Your Pro subscription is ending', body: body ?? 'Tap to learn more.' };
+    return { title: 'Your Pro subscription is ending', body: body ?? 'Tap to learn more' };
   }
   switch (type) {
     case 'post_like':
@@ -112,11 +93,11 @@ function getNotificationContent(
     case 'comment_like':
       return { title: `${actorName} liked your comment`, body: '' };
     case 'post_comment':
-      return { title: `${actorName} commented on your post`, body: body ?? '' };
+      return { title: `${actorName} commented on your post`, body: '' };
     case 'comment_reply':
-      return { title: `${actorName} replied to your comment`, body: body ?? '' };
+      return { title: `${actorName} replied to your comment`, body: '' };
     case 'comment_mention':
-      return { title: `${actorName} mentioned you`, body: body ?? '' };
+      return { title: `${actorName} mentioned you`, body: '' };
     case 'post_share':
       return { title: `${actorName} sent you a post`, body: 'Tap to check it out' };
     case 'friend_request':
@@ -132,17 +113,25 @@ function getNotificationContent(
       // "while you slept" copy is wrong, so use create-flow copy (and ignore
       // the stored body, which is the inbox subtext, not push copy).
       if (subtype === 'manual') {
-        return { title: 'Your dream is ready ✨', body: MANUAL_DREAM_PUSH_BODY };
+        return { title: 'Your dream is ready', body: MANUAL_DREAM_PUSH_BODY };
       }
-      // Nightly auto-dream — short, mysterious, personal ("while you slept").
-      // If the notification body is populated (the bot message), prefer it;
-      // otherwise rotate one of the curated lines.
+      // Nightly auto-dream — one fixed, clean title, no body. The stored
+      // `body` is the Haiku bot-message (clamped for the single-line INBOX
+      // preview); it is NOT used as push copy — reusing it surfaced
+      // mid-sentence fragments in the push banner ("those saturated colors
+      // went"). Inbox keeps the bot message; the push stays clean.
+      return { title: NIGHTLY_DREAM_PUSH_TITLE, body: 'Tap to step inside' };
+    case 'dream_failed':
+      // A render failed. The stored `body` is the inbox copy and already leads
+      // with "Your dream couldn't render…", so don't echo it as the push body
+      // (redundant with the title). Surface the refund outcome instead — the
+      // one thing the user actually wants to know.
       return {
-        title: pickDreamPushTitle(),
-        body: body ?? pickDreamPushBody(),
+        title: "Your dream couldn't render",
+        body: body && body.includes('refunded') ? 'Your sparkle was refunded' : 'Tap to try again',
       };
     case 'download_ready':
-      return { title: 'Your HD download is ready ✨', body: 'Tap to save it to your photos.' };
+      return { title: 'Your HD download is ready', body: 'Tap to save it to your photos' };
     default:
       return { title: 'New notification', body: '' };
   }

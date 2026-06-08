@@ -39,6 +39,19 @@ const swallow = (resOrErr: unknown) => {
   }
 };
 
+// Clamp a Haiku bot-message to the single-line inbox preview (mig 223) without
+// chopping mid-word. ≤28 → returned as-is; longer → trimmed back to the last
+// word boundary within 28 chars and ellipsised, so the inbox reads as a
+// complete (if shortened) phrase rather than a dangling fragment.
+function clampInboxBody(msg: string | null): string {
+  const s = (msg || '').trim();
+  if (s.length <= 28) return s;
+  const cut = s.slice(0, 28);
+  const lastSpace = cut.lastIndexOf(' ');
+  const trimmed = lastSpace > 12 ? cut.slice(0, lastSpace) : cut;
+  return trimmed.replace(/[\s.,;:!?-]+$/, '') + '…';
+}
+
 export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<string> {
   const { supabase, supabaseUrl, workerToken, anthropicKey, userId } = args;
 
@@ -87,9 +100,11 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
       actor_id: userId,
       type: 'dream_generated',
       upload_id: uploadId,
-      // Hard-cap at 28 chars to fit the single-line inbox layout (mig 223).
-      // The Haiku prompt in generateBotMessage() asks for ≤28 already.
-      body: (botMessage || '').slice(0, 28),
+      // Clamp to ≤28 chars to fit the single-line inbox layout (mig 223), but
+      // break on a WORD boundary so the preview never shows a mid-word
+      // fragment. (The Haiku prompt asks for ≤28; this catches the occasional
+      // overrun.) The push banner uses its own curated copy — see send-push.
+      body: clampInboxBody(botMessage),
     })
     .then(swallow, swallow);
 
