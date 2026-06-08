@@ -29,7 +29,9 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import {
   DEFAULT_MODEL_ID,
-  RECOMMENDED_MODEL_IDS,
+  STANDARD_MODEL_IDS,
+  PREMIUM_MODEL_IDS,
+  RECOMMENDED_MODEL_ID,
   modelBlurb,
   type ImageModel,
 } from '@/constants/imageModels';
@@ -87,15 +89,27 @@ export function ModelPicker({ onChange }: Props) {
     setSaving(false);
   };
 
-  // Split into Recommended (in the curated order) + More (everything else,
-  // cheapest first so the cost ladder reads naturally).
-  const recommended = RECOMMENDED_MODEL_IDS.map((id) => models.find((m) => m.id === id)).filter(
-    (m): m is ImageModel => !!m
+  // Two tiers in explicit curated order: Standard (1✦) + Premium (2✦+).
+  const order = (ids: string[]) =>
+    ids.map((id) => models.find((m) => m.id === id)).filter((m): m is ImageModel => !!m);
+  const standard = order(STANDARD_MODEL_IDS);
+  const premium = order(PREMIUM_MODEL_IDS);
+  // Lowest cost in each tier → shown in the group header ("1 ✦", "2 ✦ +").
+  const minCost = (list: ImageModel[]) =>
+    list.length ? Math.min(...list.map((m) => m.sparkleCost)) : 0;
+
+  const renderTierHeader = (title: string, cost: number, plus: boolean) => (
+    <View style={styles.groupHeader}>
+      <Text style={[styles.groupLabel, { color: colors.textSecondary }]}>{title}</Text>
+      <View style={styles.groupCost}>
+        <Text style={[styles.groupCostText, { color: colors.textSecondary }]}>
+          {cost}
+          {plus ? '+' : ''}
+        </Text>
+        <Ionicons name="sparkles" size={11} color={colors.accent} style={{ marginLeft: 3 }} />
+      </View>
+    </View>
   );
-  const recommendedIds = new Set(RECOMMENDED_MODEL_IDS);
-  const more = models
-    .filter((m) => !recommendedIds.has(m.id))
-    .sort((a, b) => a.sparkleCost - b.sparkleCost);
 
   const renderRow = (opt: ImageModel) => {
     const isSelected = opt.id === selected;
@@ -113,9 +127,14 @@ export function ModelPicker({ onChange }: Props) {
         ]}
       >
         <View style={{ flex: 1, marginRight: 12 }}>
-          <Text style={{ color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '600' }}>
-            {opt.label}
-          </Text>
+          <View style={styles.titleRow}>
+            <Text style={{ color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '600' }}>
+              {opt.label}
+            </Text>
+            {opt.id === RECOMMENDED_MODEL_ID && (
+              <Text style={[styles.recLabel, { color: colors.accent }]}>Recommended</Text>
+            )}
+          </View>
           <Text
             style={{
               color: colors.textSecondary,
@@ -226,20 +245,16 @@ export function ModelPicker({ onChange }: Props) {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: verticalScale(24) }}
             >
-              {recommended.length > 0 && (
+              {standard.length > 0 && (
                 <View style={{ marginTop: verticalScale(12) }}>
-                  <Text style={[styles.groupLabel, { color: colors.textSecondary }]}>
-                    Recommended
-                  </Text>
-                  {recommended.map(renderRow)}
+                  {renderTierHeader('Standard', minCost(standard), false)}
+                  {standard.map(renderRow)}
                 </View>
               )}
-              {more.length > 0 && (
+              {premium.length > 0 && (
                 <View style={{ marginTop: verticalScale(8) }}>
-                  <Text style={[styles.groupLabel, { color: colors.textSecondary }]}>
-                    More models
-                  </Text>
-                  {more.map(renderRow)}
+                  {renderTierHeader('Premium', minCost(premium), true)}
+                  {premium.map(renderRow)}
                 </View>
               )}
             </ScrollView>
@@ -251,14 +266,23 @@ export function ModelPicker({ onChange }: Props) {
 }
 
 const styles = StyleSheet.create({
+  groupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 4,
+    marginBottom: verticalScale(8),
+  },
   groupLabel: {
     fontSize: fontScale(13),
     fontWeight: '700',
     letterSpacing: 0.4,
     textTransform: 'uppercase',
-    paddingHorizontal: 4,
-    marginBottom: verticalScale(8),
   },
+  groupCost: { flexDirection: 'row', alignItems: 'center' },
+  groupCostText: { fontSize: fontScale(12), fontWeight: '700' },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  recLabel: { fontSize: fontScale(11), fontWeight: '700' },
   option: {
     flexDirection: 'row',
     alignItems: 'center',

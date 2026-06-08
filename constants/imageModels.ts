@@ -228,15 +228,28 @@ export const MODEL_BLURBS: Record<string, string> = {
   'google/gemini-3-image-preview': 'Top quality, crisp detail',
 };
 
-/** The handful shown in the picker's "Recommended" group (idiot-friendly
- *  defaults). Everything else lives under "More models". All 1 sparkle. */
-export const RECOMMENDED_MODEL_IDS: string[] = [
+/** Picker groups in explicit display order (curated, NOT cost-sorted).
+ *  STANDARD = all 1-sparkle models; PREMIUM = 2-sparkle-and-up. Flux 1.1 Pro
+ *  leads Standard and carries the "Recommended" label. */
+export const STANDARD_MODEL_IDS: string[] = [
   'black-forest-labs/flux-1.1-pro',
   'black-forest-labs/flux-2-pro',
   'google/gemini-2-image',
   'black-forest-labs/flux-dev',
+  'black-forest-labs/flux-2-dev',
+  'black-forest-labs/flux-krea-dev',
   'black-forest-labs/flux-schnell',
 ];
+export const PREMIUM_MODEL_IDS: string[] = [
+  'black-forest-labs/flux-1.1-pro-ultra',
+  'openai/gpt-image-2',
+  'black-forest-labs/flux-2-flex',
+  'black-forest-labs/flux-2-max',
+  'openai/gpt-image-1',
+  'google/gemini-3-image-preview',
+];
+/** The single model that carries the "Recommended" label (and is the default). */
+export const RECOMMENDED_MODEL_ID = 'black-forest-labs/flux-1.1-pro';
 
 /** Picker blurb for an id — friendly map first, then the catalog's own
  *  description, then empty. */
