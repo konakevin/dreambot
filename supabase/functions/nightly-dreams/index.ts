@@ -22,6 +22,14 @@ import {
 } from '../_shared/dreamStyles.ts';
 import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
+import {
+  fetchChaosConfig,
+  getChaosTier,
+  rollNightlyDreamType,
+  mapDreamTypeToInputs,
+  extraModelsForTier,
+  type NightlyDreamType,
+} from '../_shared/chaosTier.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
 import { getLocationCard } from '../_shared/essenceCards.ts';
@@ -235,6 +243,12 @@ Deno.serve(async (req) => {
   // the slot pipeline runs). Hoisted so the post-try image-gen step uses
   // the same model.
   let faceSwapPrePickedModel: string | null = null;
+  // Hoisted so the post-try scene model gate can pass chaos-tier extras
+  // (flux-2-pro at MID, flux-2-pro/flex/max at HIGH) to
+  // fetchSceneEligibleModels. Resolved inside the try block from the user's
+  // mood slider; defaults preserve pre-mig-239 behavior when missing.
+  let chaosTierOuter: 'low' | 'mid' | 'high' = 'low';
+  let chaosCfgOuter: Awaited<ReturnType<typeof fetchChaosConfig>> | null = null;
 
   // Budget tracking
   const today = new Date().toISOString().slice(0, 10);
@@ -285,17 +299,81 @@ Deno.serve(async (req) => {
       recentPlaces.slice(0, 5).join(', ')
     );
 
-    // Filter out mediums marked nightly_skip in the DB (e.g., photography —
-    // produces literal photoreal renders that read as "AI photoshop collage"
+    // ── Chaos-tier dream-type pre-roll (mig 239) ───────────────────────
+    // Compute the user's chaos tier from their onboarding mood slider, then
+    // roll the explicit dream type (face_swap_* / pure_scene / epic_tiny /
+    // embodied) BEFORE picking the medium. Distribution is gated on tier:
+    //   - low  (<0.4): 0% embodied, base scene models only
+    //   - mid  (0.4..<0.7): 10% embodied (lego, pixels) + flux-2-pro
+    //   - high (>=0.7): 15% embodied (lego, pixels, handcrafted) + flux-2-pro/flex/max
+    // First-dream override (force_face_swap_eligible) forces the showcase
+    // cascade: dual swap → self swap → pure_scene/epic_tiny (no embodied).
+    // The pre-roll translates to (medium token, forceCastRole, forceComposition)
+    // so the rest of the pipeline (rollDream, scene gate, model picker) honors
+    // it deterministically instead of re-randomizing.
+    const chaosCfg = await fetchChaosConfig(supabase);
+    const chaosValue =
+      typeof nightlyProfile.moods?.peaceful_chaotic === 'number'
+        ? nightlyProfile.moods.peaceful_chaotic
+        : 0.5;
+    const chaosTier = getChaosTier(chaosValue, chaosCfg);
+    chaosTierOuter = chaosTier;
+    chaosCfgOuter = chaosCfg;
+    const describedCastForRoll = (nightlyProfile.dream_cast ?? []).filter(
+      (m: DreamCastMember) => m.description && m.thumb_url && m.thumb_url.startsWith('http')
+    );
+    const hasSelf = describedCastForRoll.some((m: DreamCastMember) => m.role === 'self');
+    const hasPlusOne = describedCastForRoll.some((m: DreamCastMember) => m.role === 'plus_one');
+
+    let preRolledType: NightlyDreamType | null = null;
+    let preRolledMediumToken: string;
+    let preRolledCastRole: string | null = null;
+    let preRolledComposition: 'character' | 'epic_tiny' | 'pure_scene' = 'character';
+
+    if (force_medium) {
+      // Explicit force_medium short-circuits the chaos-tier flow — caller is
+      // doing a forced render (QA / test). Honor it as-is.
+      preRolledMediumToken = force_medium;
+    } else if (
+      force_face_swap_eligible ||
+      (force_cast_role !== undefined && force_cast_role !== null)
+    ) {
+      // First-dream onboarding OR explicit force_cast_role (also onboarding /
+      // QA): use the showcase cascade.
+      preRolledType = rollNightlyDreamType({
+        hasSelf,
+        hasPlusOne,
+        tier: chaosTier,
+        cfg: chaosCfg,
+        isFirstDream: true,
+      });
+      const inputs = mapDreamTypeToInputs(preRolledType, chaosTier, chaosCfg);
+      preRolledMediumToken = inputs.mediumToken;
+      preRolledCastRole = force_cast_role ?? inputs.forceCastRole;
+      preRolledComposition = inputs.forceComposition;
+    } else {
+      preRolledType = rollNightlyDreamType({
+        hasSelf,
+        hasPlusOne,
+        tier: chaosTier,
+        cfg: chaosCfg,
+        isFirstDream: false,
+      });
+      const inputs = mapDreamTypeToInputs(preRolledType, chaosTier, chaosCfg);
+      preRolledMediumToken = inputs.mediumToken;
+      preRolledCastRole = inputs.forceCastRole;
+      preRolledComposition = inputs.forceComposition;
+    }
+    console.log(
+      `[nightly-dreams] chaos pre-roll | chaosValue=${chaosValue.toFixed(2)} tier=${chaosTier} type=${preRolledType ?? 'force_medium'} mediumToken=${preRolledMediumToken} cast=${preRolledCastRole ?? 'random'} composition=${preRolledComposition}`
+    );
+
     // Pick from the curated dream-eligible pool — NOT from the user's
     // stored art_styles/aesthetics. Migration 160 added is_dream_eligible
     // as the auto-gen quality gate. The user's create-screen options stay
     // broad; nightly is curated. recentMediums/recentVibes still apply for
     // rotation across the eligible pool.
-    let nightlyMedium = await resolveMediumFromDb(
-      force_face_swap_eligible ? 'dream_eligible_face_swap' : 'dream_eligible',
-      recentMediums
-    );
+    let nightlyMedium = await resolveMediumFromDb(preRolledMediumToken, recentMediums);
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);
     }
@@ -395,12 +473,18 @@ Deno.serve(async (req) => {
       (m: DreamCastMember) => m.description && m.thumb_url && m.thumb_url.startsWith('http')
     );
 
-    // Roll the dream algorithm (path selection + cast + personal elements)
+    // Roll the dream algorithm. force_medium short-circuits the chaos
+    // pre-roll, so only thread forced cast/composition when we actually
+    // pre-rolled a dream type.
+    const effectiveCastRole =
+      preRolledType != null && force_cast_role === undefined ? preRolledCastRole : force_cast_role;
+    const effectiveComposition = preRolledType != null ? preRolledComposition : null;
     const dreamRoll = rollDream(
       describedCastMembers,
       nightlyMedium,
-      force_cast_role,
-      force_nightly_path
+      effectiveCastRole,
+      force_nightly_path,
+      effectiveComposition
     );
     const {
       nightlyPath,
@@ -1106,6 +1190,10 @@ Output ONLY the prompt.`;
         engine: 'nightly-cast-character',
         nightlyPath,
         castRoles: selectedCast.map((m) => m.role),
+        composition,
+        isDualFaceSwap,
+        chaosTier: chaosTierOuter,
+        dreamType: preRolledType,
       };
     } else if (composition === 'epic_tiny') {
       const tinyDesc =
@@ -1150,6 +1238,9 @@ Output ONLY the prompt.`;
         engine: 'nightly-cast-epic',
         nightlyPath,
         castRoles: selectedCast.map((m) => m.role),
+        composition,
+        chaosTier: chaosTierOuter,
+        dreamType: preRolledType,
       };
     } else {
       // ── Pure scene — uses upstream iconicAnchor + biomeConfig + axes ──
@@ -1246,6 +1337,10 @@ Output ONLY the prompt.`;
         time: timeAxis.split(' — ')[0],
         weather: weatherAxis.split(',')[0],
         phenomenon_included: includePhenomenon,
+        composition,
+        chaosTier: chaosTierOuter,
+        dreamType: preRolledType,
+        isEmbodied: isEmbodiedMedium,
       };
     }
 
@@ -1429,7 +1524,11 @@ Output ONLY the prompt.`;
     // Per-medium override (mig 214) wins over engine_config global (mig 213).
     // NULL or empty → fall back to the global list. Either way the result is
     // then intersected with the medium's own allowed_models as a safety net.
-    const globalSceneModels = await fetchSceneEligibleModels();
+    // Pass chaos-tier extras (flux-2-pro at MID, flux-2-pro/flex/max at HIGH)
+    // so high-chaos users unlock weirder models in the scene gate. Migration 239.
+    const tierExtras =
+      chaosCfgOuter != null ? extraModelsForTier(chaosTierOuter, chaosCfgOuter) : [];
+    const globalSceneModels = await fetchSceneEligibleModels(tierExtras);
     const sceneEligibleModels =
       resolvedMediumSceneModels && resolvedMediumSceneModels.length > 0
         ? resolvedMediumSceneModels

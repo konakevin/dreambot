@@ -9,7 +9,8 @@
  * see project_objects_removed_2026-06-02 memory.)
  *
  * Non-character composition: pure_scene with the user's location.
- * Face-swap mediums: single cast member per dream (50% self, 25% +1, 25% pet).
+ * Face-swap mediums: single cast member per dream (67% self, 33% +1). Pets
+ * are not supported in nightly dreams (Kevin 2026-06-07).
  * Non-face-swap mediums: 1-3 cast members rendered stylized.
  */
 
@@ -61,7 +62,8 @@ export function rollDream(
   describedCast: CastMember[],
   medium: MediumProps,
   forceCastRole?: string | null,
-  forceNightlyPath?: string | null
+  forceNightlyPath?: string | null,
+  forceComposition?: 'character' | 'epic_tiny' | 'pure_scene' | null
 ): DreamRoll {
   const findRole = (r: string) => describedCast.find((m) => m.role === r);
 
@@ -119,36 +121,31 @@ export function rollDream(
         // 25% dual face swap when both self + plus_one exist
         castMembers = [selfMember, plusOne];
       } else {
-        // Single face swap (50% self, 25% +1, 25% pet)
-        const whoRoll = Math.random() * 100;
+        // Single face swap (67% self, 33% +1). Pets not supported (2026-06-07).
+        const selfM = findRole('self');
+        const plus1 = findRole('plus_one');
         let pick: CastMember | undefined;
-        if (whoRoll < 50) pick = findRole('self');
-        else if (whoRoll < 75) pick = findRole('plus_one');
-        else pick = findRole('pet');
-        if (!pick) pick = describedCast[0];
+        if (selfM && plus1) {
+          pick = Math.random() < 0.67 ? selfM : plus1;
+        } else {
+          pick = selfM || plus1;
+        }
+        if (!pick) pick = describedCast.find((m) => m.role !== 'pet');
         if (pick) castMembers = [pick];
       }
     } else {
-      // Non-face-swap: can include 1, 2, or all 3
-      const available = [...describedCast];
+      // Non-face-swap. Cast is at most 2 (self + plus_one) since pets are
+      // not supported. 40% single, 60% both.
+      const selfM = findRole('self');
+      const plus1 = findRole('plus_one');
+      const available = [selfM, plus1].filter((m): m is CastMember => Boolean(m));
       if (available.length <= 1) {
         castMembers = available;
+      } else if (Math.random() < 0.4) {
+        // Single — 67% self, 33% +1
+        castMembers = [Math.random() < 0.67 ? selfM! : plus1!];
       } else {
-        const countRoll = Math.random();
-        if (countRoll < 0.4 || available.length === 1) {
-          const whoRoll = Math.random() * 100;
-          let pick: CastMember | undefined;
-          if (whoRoll < 50) pick = findRole('self');
-          else if (whoRoll < 75) pick = findRole('plus_one');
-          else pick = findRole('pet');
-          if (!pick) pick = available[0];
-          castMembers = pick ? [pick] : [];
-        } else if (countRoll < 0.75 || available.length === 2) {
-          const shuffled = available.sort(() => Math.random() - 0.5);
-          castMembers = shuffled.slice(0, 2);
-        } else {
-          castMembers = available;
-        }
+        castMembers = [selfM!, plus1!];
       }
     }
   }
@@ -157,10 +154,16 @@ export function rollDream(
   // Scene-only mediums are pinned to pure_scene — even epic_tiny would put
   // a silhouette in the frame, which breaks the medium's contract (e.g.,
   // NASA astrophotography has no human silhouettes anywhere).
+  //
+  // forceComposition (mig 239 chaos-tier flow): nightly-dreams pre-rolls the
+  // dream type and forces composition explicitly. Honored unless it would
+  // contradict a medium contract (scene-only → still pure_scene).
   let composition: 'character' | 'epic_tiny' | 'pure_scene';
 
   if (medium.isSceneOnly) {
     composition = 'pure_scene';
+  } else if (forceComposition) {
+    composition = forceComposition;
   } else if (!includeCharacter) {
     // No cast → pure_scene only. epic_tiny references shortCastDesc / tinyDesc
     // in the brief which resolves to "undefined" without a cast, polluting
@@ -266,12 +269,16 @@ function rollLegacyPath(
       const forced = findRole(forceCastRole);
       if (forced) castMembers = [forced];
     } else if (medium.faceSwaps) {
-      const whoRoll = Math.random() * 100;
+      // Single face swap (67% self, 33% +1). Pets not supported (2026-06-07).
+      const selfM = findRole('self');
+      const plus1 = findRole('plus_one');
       let pick: CastMember | undefined;
-      if (whoRoll < 50) pick = findRole('self');
-      else if (whoRoll < 75) pick = findRole('plus_one');
-      else pick = findRole('pet');
-      if (!pick) pick = describedCast[0];
+      if (selfM && plus1) {
+        pick = Math.random() < 0.67 ? selfM : plus1;
+      } else {
+        pick = selfM || plus1;
+      }
+      if (!pick) pick = describedCast.find((m) => m.role !== 'pet');
       if (pick) castMembers = [pick];
     } else {
       castMembers = [...describedCast].sort(() => Math.random() - 0.5).slice(0, 1);

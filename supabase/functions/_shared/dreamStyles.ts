@@ -178,22 +178,31 @@ let cachedSceneEligibleModels: string[] | null = null;
 /** Fetch the curated list of models eligible for nightly pure_scene +
  * epic_tiny composition rolls. Stored in engine_config singleton (mig 213).
  * Cached per invocation. Returns [] on missing/empty config — callers should
- * treat that as "no override, use the medium's normal allowed_models." */
-export async function fetchSceneEligibleModels(): Promise<string[]> {
-  if (cachedSceneEligibleModels) return cachedSceneEligibleModels;
-  const sb = getServiceClient();
-  const { data, error } = await sb
-    .from('engine_config')
-    .select('scene_eligible_models')
-    .eq('id', 1)
-    .single();
-  if (error || !data) {
-    console.warn('[dreamStyles] engine_config row missing; scene-model gate disabled');
-    cachedSceneEligibleModels = [];
-    return [];
+ * treat that as "no override, use the medium's normal allowed_models."
+ *
+ * Migration 239: when extraModels is passed (chaos-tier extras), it's
+ * appended/de-duped to the cached base list so HIGH chaos users get the
+ * flux-2 "weirder" family added. The base cache is reused; the merge happens
+ * per call so multiple tiers in one Edge Function invocation share the same
+ * scene_eligible_models read.
+ */
+export async function fetchSceneEligibleModels(extraModels?: string[]): Promise<string[]> {
+  if (!cachedSceneEligibleModels) {
+    const sb = getServiceClient();
+    const { data, error } = await sb
+      .from('engine_config')
+      .select('scene_eligible_models')
+      .eq('id', 1)
+      .single();
+    if (error || !data) {
+      console.warn('[dreamStyles] engine_config row missing; scene-model gate disabled');
+      cachedSceneEligibleModels = [];
+    } else {
+      cachedSceneEligibleModels = (data.scene_eligible_models as string[]) ?? [];
+    }
   }
-  cachedSceneEligibleModels = (data.scene_eligible_models as string[]) ?? [];
-  return cachedSceneEligibleModels;
+  if (!extraModels || extraModels.length === 0) return cachedSceneEligibleModels;
+  return [...new Set([...cachedSceneEligibleModels, ...extraModels])];
 }
 
 let cachedSceneEmbodiedRate: number | null = null;
@@ -323,6 +332,35 @@ export async function resolveMediumFromDb(
     console.log(
       `[dreamStyles] dream_eligible_scene: ${useEmbodied ? 'embodied' : 'natural'} subset (rate=${embodiedRate}) -> ${picked}`
     );
+    return mediums.find((m) => m.key === picked)!;
+  }
+  // Chaos-tier-gated embodied pool — picks from lego/pixels (MID) or
+  // lego/pixels/handcrafted (HIGH). For LOW chaos this resolver should never
+  // be called (the dream-type roller filters embodied out for low). When
+  // it IS called and the subset is empty, falls back to dream_eligible_scene.
+  // Pass the desired subset via `excludeRecent` second positional arg (not
+  // recency — that's the third). Migration 239.
+  if (key && key.startsWith('dream_eligible_embodied:')) {
+    const allowedKeys = key.slice('dream_eligible_embodied:'.length).split(',').filter(Boolean);
+    const allowed = new Set(allowedKeys);
+    const subset = mediums
+      .filter(
+        (m) =>
+          m.isSceneEligible &&
+          m.isDreamEligible &&
+          m.characterRenderMode === 'embodied' &&
+          allowed.has(m.key)
+      )
+      .map((m) => m.key);
+    if (subset.length === 0) {
+      console.warn(
+        `[dreamStyles] dream_eligible_embodied subset empty for [${allowedKeys.join(',')}]; falling back to dream_eligible_scene_natural`
+      );
+      return resolveMediumFromDb('dream_eligible_scene_natural', excludeRecent);
+    }
+    const pool = filterRecent(subset, excludeRecent);
+    const picked = pick(pool);
+    console.log(`[dreamStyles] dream_eligible_embodied (${allowedKeys.join(',')}) -> ${picked}`);
     return mediums.find((m) => m.key === picked)!;
   }
   // Natural-only scene pool — used by epic_tiny composition (tiny character

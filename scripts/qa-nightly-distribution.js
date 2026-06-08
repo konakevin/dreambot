@@ -11,7 +11,7 @@ const { createClient } = require('@supabase/supabase-js');
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const WORKER_TOKEN = process.env.DREAM_QUEUE_WORKER_TOKEN;
-const KEVIN = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
+const KEVIN = process.env.USER_ID || 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 const N = parseInt(process.env.N ?? '20', 10);
 const BATCH = 5;
 
@@ -66,23 +66,32 @@ async function main() {
 }
 
 function classify(ax) {
-  const comp = ax.composition;             // 'character' | 'epic_tiny' | 'pure_scene'
+  // Prefer the dreamType field (mig 239 — pre-rolled dream type), then fall
+  // back to (composition, isDualFaceSwap, engine) for legacy rows.
+  const dreamType = ax.dreamType;
+  if (dreamType === 'face_swap_dual') return 'dual face-swap';
+  if (dreamType === 'face_swap_self') return 'self face-swap';
+  if (dreamType === 'face_swap_plus_one') return '+1 face-swap';
+  if (dreamType === 'epic_tiny') return 'epic-tiny';
+  if (dreamType === 'embodied') return 'embodied scene';
+  if (dreamType === 'pure_scene') return 'pure scene';
+
+  const comp = ax.composition;
   const isDual = ax.isDualFaceSwap === true;
-  const swap = ax.faceSwapResult;          // 'dual-success' | 'dual-failed' | 'success' | 'failed' | undefined
+  const isEmbodied = ax.isEmbodied === true;
+  const engine = ax.engine;
 
-  if (comp === 'pure_scene') return 'scene';
-  if (comp === 'epic_tiny') return 'epic-tiny (scene + silhouette)';
-
-  // Character composition. Split by single vs dual + swap result.
-  if (isDual) {
-    return swap === 'dual-success' ? 'dual ✓' : swap === 'dual-failed' ? 'dual ✗ (face swap failed)' : 'dual ?';
+  if (engine === 'nightly-cast-epic' || comp === 'epic_tiny') return 'epic-tiny';
+  if (engine === 'nightly-pure-scene' || comp === 'pure_scene') {
+    return isEmbodied ? 'embodied scene' : 'pure scene';
   }
-  // Single character
-  if (swap === 'success') return 'single ✓';
-  if (swap === 'failed') return 'single ✗ (face swap failed)';
-  // No face swap result on a character render → likely non-face-swap medium
-  // or pet (faceSwapEligible=false)
-  return 'character (no face swap)';
+  if (engine === 'nightly-cast-character' || comp === 'character') {
+    if (isDual) return 'dual face-swap';
+    const cast = ax.castRoles || [];
+    if (cast.includes('plus_one') && !cast.includes('self')) return '+1 face-swap';
+    return 'self face-swap';
+  }
+  return 'unknown';
 }
 
 function tally(rows) {
