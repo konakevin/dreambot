@@ -130,25 +130,28 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     fontWeight: '600',
   },
-  // "Public" pill on PUBLIC dreams — on-brand dark translucent badge (matches
-  // the model badge / "Just viewed" pill), bottom-right.
+  // "Public" pill on PUBLIC dreams — SOLID GREEN so it pops at a glance (a dark
+  // badge camouflages against photos). Green reads as "live / public". Subtle
+  // drop shadow lifts it off bright tiles.
   publicBadge: {
     position: 'absolute',
-    bottom: 4,
-    right: 4,
+    bottom: 5,
+    right: 5,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    paddingHorizontal: 6,
-    paddingVertical: verticalScale(2),
+    paddingHorizontal: 7,
+    paddingVertical: verticalScale(2.5),
     borderRadius: 999,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.22)',
+    backgroundColor: colors.success,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
   },
   publicBadgeText: {
     color: '#FFFFFF',
-    fontSize: fontScale(9.5),
-    fontWeight: '700',
+    fontSize: fontScale(10),
+    fontWeight: '800',
   },
 });
