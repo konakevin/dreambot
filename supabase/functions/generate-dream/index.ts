@@ -44,6 +44,7 @@ import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
+import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
@@ -319,7 +320,10 @@ async function handleRequest(req: Request): Promise<Response> {
   // free functions), so there is no free-render case to guard here.
   if (jobId) {
     await loadModelCosts(supabase);
-    const dreamCost = getSparkleCost(force_model || '');
+    // DreamBot (no force_model) → engine_config.base_sparkle_cost (admin-tunable,
+    // default 1); Direct/DLT → the picked model's cost. Mirrors the client.
+    const cfg = await fetchEngineConfig(supabase);
+    const dreamCost = force_model ? getSparkleCost(force_model) : cfg.baseSparkleCost;
     try {
       const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
         p_user_id: userId,

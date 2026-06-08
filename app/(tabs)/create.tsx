@@ -57,6 +57,23 @@ import { useEngineConfig } from '@/hooks/useEngineConfig';
 // as part of the same brand surface.
 const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
+// Cast-detection patterns (defaults). Admin-overridable via engine_config; see
+// SELF_REF_REGEX / RELATIONSHIP_REGEX below.
+const DEFAULT_SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
+const DEFAULT_RELATIONSHIP_REGEX =
+  /\bmy\s+(partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
+
+/** Build a case-insensitive RegExp from an admin-provided string; fall back to
+ *  `fallback` when the pattern is null/empty or invalid (never throws in render). */
+function safeRegex(pattern: string | null, fallback: RegExp): RegExp {
+  if (!pattern) return fallback;
+  try {
+    return new RegExp(pattern, 'i');
+  } catch {
+    return fallback;
+  }
+}
+
 export default function CreateScreen() {
   const config = useDreamStore((s) => s.config);
   const setPhoto = useDreamStore((s) => s.setPhoto);
@@ -200,13 +217,13 @@ export default function CreateScreen() {
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
 
-  // Self-reference detection — first-person singular pronouns (NOT "my" alone)
-  const SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
+  // Self-reference + relationship detection. Patterns are admin-overridable via
+  // engine_config (self_ref_regex / relationship_regex); null → the built-in
+  // defaults below. safeRegex falls back if an admin saves an invalid pattern.
+  const SELF_REF_REGEX = safeRegex(engineConfig.selfRefRegex, DEFAULT_SELF_REF_REGEX);
   const mentionsSelf = hasPrompt && !hasPhoto && SELF_REF_REGEX.test(config.userPrompt);
 
-  // Relationship reference — user mentions a cast member by relationship
-  const RELATIONSHIP_REGEX =
-    /\bmy\s+(partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
+  const RELATIONSHIP_REGEX = safeRegex(engineConfig.relationshipRegex, DEFAULT_RELATIONSHIP_REGEX);
   const mentionsOther = hasPrompt && !hasPhoto && RELATIONSHIP_REGEX.test(config.userPrompt);
 
   // Whether the selected medium face-swaps (composites real face into scene)

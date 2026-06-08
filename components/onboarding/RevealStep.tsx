@@ -15,6 +15,7 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
@@ -71,6 +72,7 @@ export function RevealStep({ onBack }: Props) {
   const reset = useOnboardingStore((s) => s.reset);
   const setChromeHidden = useOnboardingStore((s) => s.setChromeHidden);
   const user = useAuthStore((s) => s.user);
+  const engineConfig = useEngineConfig();
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
   const insets = useSafeAreaInsets();
   // Bottom inset for the overlay buttons: respect the home indicator when
@@ -278,16 +280,18 @@ export function RevealStep({ onBack }: Props) {
 
       trackFirstDreamGenerated({ medium: activeDream.medium, vibe: activeDream.vibe });
 
-      // Grant 25 welcome sparkles (check balance first to avoid double-grant on retry)
+      // Grant welcome sparkles (engine_config.welcome_sparkle_bonus, default 25).
+      // Check balance first to avoid double-grant on retry.
+      const welcomeBonus = engineConfig.welcomeSparkleBonus;
       const { data: balanceCheck } = await supabase
         .from('users')
         .select('sparkle_balance')
         .eq('id', user.id)
         .single();
-      if ((balanceCheck?.sparkle_balance ?? 0) < 25) {
+      if ((balanceCheck?.sparkle_balance ?? 0) < welcomeBonus) {
         await supabase.rpc('grant_sparkles', {
           p_user_id: user.id,
-          p_amount: 25,
+          p_amount: welcomeBonus,
           p_reason: 'welcome_bonus',
         });
       }

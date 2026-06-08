@@ -32,6 +32,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { router } from 'expo-router';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { colors } from '@/constants/theme';
 import { verticalScale, verticalScaleClamped, fontScale } from '@/lib/responsive';
 
@@ -63,6 +64,7 @@ function FeatureRow({ emoji, text }: { emoji: string; text: string }) {
 
 export default function WelcomeGiftScreen() {
   const mascot = useMemo(() => MASCOTS[Math.floor(Math.random() * MASCOTS.length)], []);
+  const { welcomeSparkleBonus } = useEngineConfig();
 
   function handleStart() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -110,7 +112,7 @@ export default function WelcomeGiftScreen() {
             "25 sparkles" reads as a discrete artifact, not buried prose. */}
         <View style={s.giftCard}>
           <Text style={s.giftEmoji}>🎁</Text>
-          <Text style={s.giftBig}>25 sparkles</Text>
+          <Text style={s.giftBig}>{welcomeSparkleBonus} sparkles</Text>
           <Text style={s.giftSubtitle}>to get you started</Text>
         </View>
 
