@@ -112,3 +112,25 @@ describe('proStatus — effective state + lifecycle transitions', () => {
     expect(isPaidProActive(paid, muchLater)).toBe(false);
   });
 });
+
+describe('proStatus — configurable trial window (trialDays param)', () => {
+  // A trial started 20 days ago: lapsed under the default 14d, active under 30d.
+  const row = { pro_trial_started_at: days(-20) };
+
+  it('defaults to TRIAL_DURATION_DAYS (14) when trialDays omitted', () => {
+    expect(TRIAL_DURATION_DAYS).toBe(14);
+    expect(isProActive(row, NOW)).toBe(false);
+    expect(isTrialActive(row, NOW)).toBe(false);
+  });
+
+  it('honors a widened trialDays', () => {
+    expect(isTrialActive(row, NOW, 30)).toBe(true);
+    expect(isProActive(row, NOW, 30)).toBe(true);
+  });
+
+  it('trialEndsAt shifts with trialDays', () => {
+    const start = days(0);
+    expect(trialEndsAt({ pro_trial_started_at: start }, 30)).toBe(days(30));
+    expect(trialEndsAt({ pro_trial_started_at: start }, 7)).toBe(days(7));
+  });
+});

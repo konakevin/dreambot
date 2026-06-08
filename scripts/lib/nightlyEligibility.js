@@ -10,8 +10,11 @@
  * `now` (ms) is injectable for deterministic tests.
  */
 
+// Default trial length. The AUTHORITATIVE window is engine_config.pro_trial_days;
+// the cron reads it and passes `trialDays` to these fns so the enqueue gate matches
+// the is_pro_active() SQL. Defaults to 14 for callers/tests that don't pass it.
 const TRIAL_DURATION_DAYS = 14;
-const TRIAL_MS = TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** Active PAID subscription right now? (false for trial-only users.) */
 function isPaidProActive(u, now = Date.now()) {
@@ -20,15 +23,15 @@ function isPaidProActive(u, now = Date.now()) {
   return new Date(u.pro_subscription_expires_at).getTime() > now;
 }
 
-/** Within an active 14-day trial right now? */
-function isTrialActive(u, now = Date.now()) {
+/** Within an active trial right now? */
+function isTrialActive(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
   if (!u || !u.pro_trial_started_at) return false;
-  return new Date(u.pro_trial_started_at).getTime() + TRIAL_MS > now;
+  return new Date(u.pro_trial_started_at).getTime() + trialDays * DAY_MS > now;
 }
 
 /** Effective Pro entitlement: active paid OR active trial. */
-function isProActive(u, now = Date.now()) {
-  return isPaidProActive(u, now) || isTrialActive(u, now);
+function isProActive(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
+  return isPaidProActive(u, now) || isTrialActive(u, now, trialDays);
 }
 
 /**
@@ -52,9 +55,9 @@ function nightlyDreamedUserIds(completedLogRows) {
  * Hours remaining until the trial expires. Negative when expired.
  * Returns null when the user never started a trial.
  */
-function hoursUntilTrialEnds(u, now = Date.now()) {
+function hoursUntilTrialEnds(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
   if (!u || !u.pro_trial_started_at) return null;
-  const endsMs = new Date(u.pro_trial_started_at).getTime() + TRIAL_MS;
+  const endsMs = new Date(u.pro_trial_started_at).getTime() + trialDays * DAY_MS;
   return (endsMs - now) / (60 * 60 * 1000);
 }
 
@@ -79,8 +82,8 @@ function hoursUntilProSubscriptionEnds(u, now = Date.now()) {
  * a same-trial-cycle re-fire from causing a duplicate. Paid Pro users skip
  * (handled at the caller).
  */
-function shouldSend3DayTrialReminder(u, now = Date.now()) {
-  const h = hoursUntilTrialEnds(u, now);
+function shouldSend3DayTrialReminder(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
+  const h = hoursUntilTrialEnds(u, now, trialDays);
   if (h === null) return false;
   return h > 48 && h <= 84;
 }
@@ -112,8 +115,8 @@ function shouldSend3DayPaidProReminder(u, now = Date.now()) {
  * just means the trial already expired so we skip — too late to call it
  * "tonight's the last."
  */
-function shouldSendLastNightTrialReminder(u, now = Date.now()) {
-  const h = hoursUntilTrialEnds(u, now);
+function shouldSendLastNightTrialReminder(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
+  const h = hoursUntilTrialEnds(u, now, trialDays);
   if (h === null) return false;
   return h > 0 && h <= 36;
 }

@@ -254,3 +254,26 @@ describe('hour calculators — null-safe + correct sign', () => {
     ).toBeNull();
   });
 });
+
+describe('configurable trial window (trialDays param — mirrors engine_config.pro_trial_days)', () => {
+  // Trial started 20 days ago: lapsed under default 14d, active under 30d.
+  const u = { pro_trial_started_at: days(-20) };
+
+  it('defaults to 14 when trialDays omitted', () => {
+    expect(TRIAL_DURATION_DAYS).toBe(14);
+    expect(isProActive(u, NOW)).toBe(false);
+    expect(isTrialActive(u, NOW)).toBe(false);
+  });
+
+  it('isProActive + isTrialActive honor a widened trialDays', () => {
+    expect(isTrialActive(u, NOW, 30)).toBe(true);
+    expect(isProActive(u, NOW, 30)).toBe(true);
+  });
+
+  it('hoursUntilTrialEnds shifts with trialDays', () => {
+    // started 20d ago, 30d window → 10 days (240h) remaining
+    expect(hoursUntilTrialEnds(u, NOW, 30)).toBeCloseTo(240, 5);
+    // default 14d window → already 6 days past (negative)
+    expect(hoursUntilTrialEnds(u, NOW)).toBeCloseTo(-144, 5);
+  });
+});

@@ -92,7 +92,7 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
     process.exit(1);
   }
 
-  let pool = (users || []).filter((u) => isProActive(u.users, now));
+  let pool = (users || []).filter((u) => isProActive(u.users, now, cfg.proTrialDays));
   const proCount = pool.length;
   if (pool.length > MAX_JOBS) {
     console.warn(`⚠️  ${pool.length} eligible exceeds MAX_JOBS=${MAX_JOBS} — capping this run.`);
@@ -184,6 +184,8 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function sendTrialReminders(sb, enqueuedPool) {
   const now = Date.now();
+  // fetchEngineConfig is process-cached, so this is the same row main() read.
+  const cfg = await fetchEngineConfig(sb);
 
   // Pool of users to check: every onboarded non-bot trial user (we want to
   // ping even users who aren't currently eligible for nightlies — that's
@@ -212,8 +214,8 @@ async function sendTrialReminders(sb, enqueuedPool) {
   const needLast = [];
   for (const row of trialUsers || []) {
     const u = row.users;
-    if (shouldSend3DayTrialReminder(u, now)) need3Day.push(row.user_id);
-    if (shouldSendLastNightTrialReminder(u, now) && enqueuedIds.has(row.user_id)) {
+    if (shouldSend3DayTrialReminder(u, now, cfg.proTrialDays)) need3Day.push(row.user_id);
+    if (shouldSendLastNightTrialReminder(u, now, cfg.proTrialDays) && enqueuedIds.has(row.user_id)) {
       needLast.push(row.user_id);
     }
   }

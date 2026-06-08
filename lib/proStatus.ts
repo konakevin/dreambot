@@ -22,8 +22,12 @@ export interface EntitlementRow {
   pro_trial_started_at?: string | null;
 }
 
+// Default trial length. The AUTHORITATIVE window lives in engine_config.pro_trial_days
+// (read by is_pro_active() SQL + the nightly cron); pass `trialDays` to override
+// here. The client store uses this default — it's display-only, the server gate
+// re-validates every Pro action — so a changed admin window lags the UI at most.
 export const TRIAL_DURATION_DAYS = 14;
-const TRIAL_MS = TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** Active PAID subscription right now? (false for trial-only users.) */
 export function isPaidProActive(row: EntitlementRow | null, now: number = Date.now()): boolean {
@@ -33,19 +37,30 @@ export function isPaidProActive(row: EntitlementRow | null, now: number = Date.n
   return new Date(expiresAt).getTime() > now;
 }
 
-/** Absolute moment the 14-day trial ends, or null if no trial was started. */
-export function trialEndsAt(row: EntitlementRow | null): string | null {
+/** Absolute moment the trial ends, or null if no trial was started. */
+export function trialEndsAt(
+  row: EntitlementRow | null,
+  trialDays: number = TRIAL_DURATION_DAYS
+): string | null {
   if (!row || !row.pro_trial_started_at) return null;
-  return new Date(new Date(row.pro_trial_started_at).getTime() + TRIAL_MS).toISOString();
+  return new Date(new Date(row.pro_trial_started_at).getTime() + trialDays * DAY_MS).toISOString();
 }
 
-/** Within an active 14-day trial right now? */
-export function isTrialActive(row: EntitlementRow | null, now: number = Date.now()): boolean {
-  const end = trialEndsAt(row);
+/** Within an active trial right now? */
+export function isTrialActive(
+  row: EntitlementRow | null,
+  now: number = Date.now(),
+  trialDays: number = TRIAL_DURATION_DAYS
+): boolean {
+  const end = trialEndsAt(row, trialDays);
   return end != null && new Date(end).getTime() > now;
 }
 
 /** Effective Pro entitlement: active paid OR active trial. */
-export function isProActive(row: EntitlementRow | null, now: number = Date.now()): boolean {
-  return isPaidProActive(row, now) || isTrialActive(row, now);
+export function isProActive(
+  row: EntitlementRow | null,
+  now: number = Date.now(),
+  trialDays: number = TRIAL_DURATION_DAYS
+): boolean {
+  return isPaidProActive(row, now) || isTrialActive(row, now, trialDays);
 }
