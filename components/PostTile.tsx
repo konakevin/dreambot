@@ -87,16 +87,14 @@ export const PostTile = memo(function PostTile({
           </View>
         </View>
       )}
-      {/* PRIVATE dreams (Dreams album) are muted with a dark veil + lock so the
-          PUBLIC ones pop at a glance — a whole-tile contrast difference reads
-          far faster across a grid than a small corner badge. */}
-      {showPrivateBadge && !item.is_public && (
-        <>
-          <View style={styles.privateVeil} pointerEvents="none" />
-          <View style={styles.privateLock} pointerEvents="none">
-            <Ionicons name="lock-closed" size={11} color="#fff" />
-          </View>
-        </>
+      {/* "Public" badge on PUBLIC dreams (Dreams album) — tiles stay full
+          contrast; only the live ones carry the badge. On-brand dark pill +
+          icon + text, matching the model / "Just viewed" badges. */}
+      {showPrivateBadge && item.is_public && (
+        <View style={styles.publicBadge} pointerEvents="none">
+          <Ionicons name="earth" size={9} color="#FFFFFF" />
+          <Text style={styles.publicBadgeText}>Public</Text>
+        </View>
       )}
     </TouchableOpacity>
   );
@@ -132,22 +130,25 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     fontWeight: '600',
   },
-  // Dark veil over PRIVATE/unposted dreams — mutes them so the full-color
-  // PUBLIC dreams stand out across the grid at a glance.
-  privateVeil: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  // Small lock on the muted private tiles (corner).
-  privateLock: {
+  // "Public" pill on PUBLIC dreams — on-brand dark translucent badge (matches
+  // the model badge / "Just viewed" pill), bottom-right.
+  publicBadge: {
     position: 'absolute',
     bottom: 4,
     right: 4,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: 'rgba(0,0,0,0.55)',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 3,
+    paddingHorizontal: 6,
+    paddingVertical: verticalScale(2),
+    borderRadius: 999,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.22)',
+  },
+  publicBadgeText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(9.5),
+    fontWeight: '700',
   },
 });
