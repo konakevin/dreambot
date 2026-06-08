@@ -600,6 +600,7 @@ export type Database = {
         Row: {
           allowed_models: string[] | null;
           character_render_mode: string;
+          client_meta: Json | null;
           created_at: string;
           description: string | null;
           directive: string;
@@ -628,6 +629,7 @@ export type Database = {
         Insert: {
           allowed_models?: string[] | null;
           character_render_mode?: string;
+          client_meta?: Json | null;
           created_at?: string;
           description?: string | null;
           directive: string;
@@ -656,6 +658,7 @@ export type Database = {
         Update: {
           allowed_models?: string[] | null;
           character_render_mode?: string;
+          client_meta?: Json | null;
           created_at?: string;
           description?: string | null;
           directive?: string;
@@ -748,6 +751,7 @@ export type Database = {
       };
       dream_vibes: {
         Row: {
+          client_meta: Json | null;
           created_at: string;
           description: string | null;
           directive: string;
@@ -759,6 +763,7 @@ export type Database = {
           sort_order: number;
         };
         Insert: {
+          client_meta?: Json | null;
           created_at?: string;
           description?: string | null;
           directive: string;
@@ -770,6 +775,7 @@ export type Database = {
           sort_order?: number;
         };
         Update: {
+          client_meta?: Json | null;
           created_at?: string;
           description?: string | null;
           directive?: string;
@@ -816,7 +822,10 @@ export type Database = {
           face_swap_self_rate: number;
           face_swap_share: number;
           id: number;
+          nightly_enabled: boolean;
           nightly_max_jobs: number;
+          nightly_require_ai_enabled: boolean;
+          nightly_require_onboarding: boolean;
           photo_preprocess_quality: number;
           photo_preprocess_width: number;
           pro_trial_days: number;
@@ -843,7 +852,10 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           id?: number;
+          nightly_enabled?: boolean;
           nightly_max_jobs?: number;
+          nightly_require_ai_enabled?: boolean;
+          nightly_require_onboarding?: boolean;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
           pro_trial_days?: number;
@@ -870,7 +882,10 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           id?: number;
+          nightly_enabled?: boolean;
           nightly_max_jobs?: number;
+          nightly_require_ai_enabled?: boolean;
+          nightly_require_onboarding?: boolean;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
           pro_trial_days?: number;
@@ -2348,6 +2363,7 @@ export type Database = {
         Args: never;
         Returns: {
           character_render_mode: string;
+          client_meta: Json;
           description: string;
           directive: string;
           face_swaps: boolean;
@@ -2361,6 +2377,7 @@ export type Database = {
       get_dream_vibes: {
         Args: never;
         Returns: {
+          client_meta: Json;
           description: string;
           directive: string;
           key: string;

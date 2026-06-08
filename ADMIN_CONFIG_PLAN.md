@@ -1,11 +1,30 @@
 # Admin Configurability Plan — patch generation config without a client deploy
 
-Status: **AUDIT + PLAN (approved scope, not yet implemented)** — 2026-06-07
+Status: **SHIPPED** — 2026-06-07 (all phases live; migrations 247–252 applied)
 Goal (Kevin): be able to configure/patch/fix most-to-all of **mediums, vibes, bot
 dreams, nightly dreams, and user dreams (Create screen)** from the backend — ideally
 without ever shipping a new React Native client build. Scope = **everything**
 (incl. bot/nightly creative config). Admin surface = **DB / Supabase dashboard**
 for now (an in-app admin UI can come later on top of the same tables).
+
+---
+
+## ✅ Shipped (2026-06-07)
+
+| Phase | What | Migrations |
+|---|---|---|
+| **0** | `engine_config` backbone + readers (client/Edge/scripts); wired base sparkle cost, welcome bonus, prompt max-length, photo preprocessing, cast-detection regexes, nightly max-jobs; **trial window 3-runtime fix** (`is_pro_active()` + cron + client all read `pro_trial_days`) | 247, 248 |
+| **2** | Dead `prompt_mode` / 7-mode system removed (was vestigial — not a migration) | — |
+| **5** | `bot_config` per-bot dials overlay (allowed_models, mediums, vibes, chaos disable, two-pass-polish toggle); DB wins over code, missing row = pure code | 249 |
+| **4** | `mood_axes` — onboarding sliders DB-driven (copy/labels/hints/order/active/default); axis keys stay a typed engine contract | 250 |
+| **3** | `client_meta jsonb` passthrough on `dream_mediums`/`dream_vibes` + RPCs — future client attributes with no rebuild | 251 |
+| **6** | Nightly knobs on `engine_config`: `nightly_enabled` master kill-switch + `nightly_require_onboarding` / `nightly_require_ai_enabled` predicate toggles | 252 |
+
+**Deliberately still code** (by design): the scene-engine/dream-algorithm *logic*;
+bot paths/pools/archetypes/prose; sanitization/chaos/face-swap dispatch.
+
+**Deferred open question:** DB-driven nightly *cron time* (needs moving enqueue from
+GitHub Actions cron to pg_cron). Not built.
 
 ---
 
