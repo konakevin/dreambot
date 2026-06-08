@@ -9,7 +9,7 @@
  */
 
 import { supabase } from '@/lib/supabase';
-import type { VibeProfile, PromptMode } from '@/types/vibeProfile';
+import type { VibeProfile } from '@/types/vibeProfile';
 
 interface GenerateDreamOpts {
   /** Which Flux model to use */
@@ -40,8 +40,6 @@ interface GenerateDreamOpts {
   subject_description?: string;
   /** Pre-classified subject type (from classifyPhoto). Determines server routing. */
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
-  /** V4 prompt mode override (defaults applied server-side). */
-  prompt_mode?: PromptMode;
   /** Direct pass-through mode — user's prompt sent verbatim to flux-1.1-pro,
    *  no Sonnet expansion, no chaos, no medium/vibe directive merging. For
    *  power users with fully-polished prompts. */
@@ -139,7 +137,6 @@ export async function generateFromVibeProfile(
   profile: VibeProfile,
   opts?: {
     hint?: string;
-    promptMode?: PromptMode;
     mediumKey?: string;
     vibeKey?: string;
     jobId?: string;
@@ -152,7 +149,6 @@ export async function generateFromVibeProfile(
   return generateDream({
     mode: 'flux-dev',
     vibe_profile: profile,
-    prompt_mode: opts?.promptMode,
     hint: opts?.hint,
     medium_key: opts?.mediumKey,
     vibe_key: opts?.vibeKey,

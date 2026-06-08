@@ -100,13 +100,6 @@ describe('generateFromVibeProfile', () => {
     expect(body.mode).toBe('flux-dev');
     expect(body.vibe_profile).toEqual(DEFAULT_VIBE_PROFILE);
     expect(body.hint).toBeUndefined();
-    expect(body.prompt_mode).toBeUndefined();
-  });
-
-  it('passes promptMode when provided', async () => {
-    await generateFromVibeProfile(DEFAULT_VIBE_PROFILE, { promptMode: 'chaos' });
-    const body = mockInvoke.mock.calls[0][1].body;
-    expect(body.prompt_mode).toBe('chaos');
   });
 
   it('passes style hint for Dream Like This', async () => {
@@ -116,14 +109,14 @@ describe('generateFromVibeProfile', () => {
     expect(body.hint).toBe(hint);
   });
 
-  it('passes both promptMode and hint together', async () => {
+  it('passes style hint together with other opts', async () => {
     await generateFromVibeProfile(DEFAULT_VIBE_PROFILE, {
-      promptMode: 'minimal_mood',
       hint: 'STYLE TO COPY: "watercolor"',
+      mediumKey: 'canvas',
     });
     const body = mockInvoke.mock.calls[0][1].body;
-    expect(body.prompt_mode).toBe('minimal_mood');
     expect(body.hint).toBe('STYLE TO COPY: "watercolor"');
+    expect(body.medium_key).toBe('canvas');
   });
 });
 

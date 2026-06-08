@@ -102,16 +102,6 @@ export const DEFAULT_VIBE_PROFILE: VibeProfile = {
   avoid: ['text', 'watermarks'],
 };
 
-/** Prompt mode — adjusts weighting and creative direction */
-export type PromptMode =
-  | 'dream_me'
-  | 'chaos'
-  | 'cinematic_poster'
-  | 'minimal_mood'
-  | 'nature_escape'
-  | 'character_study'
-  | 'nostalgia_trip';
-
 /** Structured concept output from Pass 1 */
 export interface ConceptRecipe {
   subject: string;
