@@ -76,6 +76,10 @@ export function pinToFeed(opts: {
   imageUrl: string;
   username: string;
   avatarUrl: string | null;
+  /** User-typed description from the post screen — forwarded so the pinned
+   *  feed card shows it under the username instead of going blank between
+   *  post + first refetch from the DB. */
+  description?: string | null;
 }) {
   useFeedStore.getState().setPinnedPost({
     id: opts.id,
@@ -86,5 +90,6 @@ export function pinToFeed(opts: {
     avatar_url: opts.avatarUrl,
     created_at: new Date().toISOString(),
     comment_count: 0,
+    description: opts.description ?? null,
   });
 }

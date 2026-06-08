@@ -9,12 +9,16 @@ export function usePublicProfilePosts(userId: string, enabled = true) {
     queryKey: ['publicProfilePosts', userId],
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
+      // Order by posted_at — see useUserPosts for the why. Posts grid
+      // reflects the publish timeline, not the original generation moment.
       const { data, error } = await supabase
         .from('uploads')
         .select(POST_SELECT)
         .eq('user_id', userId)
         .eq('is_public', true)
-        .order('created_at', { ascending: false })
+        // See useUserPosts for the nullsLast rationale (mig 246 + defense
+        // against stray NULL posted_at on public uploads).
+        .order('posted_at', { ascending: false, nullsFirst: false })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
       const rows = castRows(data).map(mapToDreamPost);

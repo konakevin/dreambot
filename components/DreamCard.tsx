@@ -412,12 +412,15 @@ export const DreamCard = memo(function DreamCard({
           {/* HUD — post info + side actions, toggled by single tap */}
           <Animated.View style={[StyleSheet.absoluteFill, hudStyle]} pointerEvents="box-none">
             {/* Bottom scrim — subtle darken gradient behind the post-info +
-                side actions so the username / location / counts stay
+                side actions so the username / description / counts stay
                 readable over bright image regions. Fades with the HUD on
-                single-tap clean view. Gated on showBottomScrim so the main
-                feeds stay clean and only the album viewer (photo/[id]) opts
-                in. */}
-            {showBottomScrim && (
+                single-tap clean view. Content-driven: shown whenever the
+                card carries a description (user posts) since the description
+                is the text that suffers most on busy images; bot posts (no
+                description) skip the scrim and keep the original clean
+                main-feed look. showBottomScrim prop forces it on regardless
+                (album viewer opts in unconditionally). */}
+            {(showBottomScrim || !!item.description) && (
               <LinearGradient
                 colors={['transparent', 'rgba(0,0,0,0.55)']}
                 locations={[0, 1]}

@@ -21,12 +21,14 @@ import { Image } from 'expo-image';
 import { useLocalSearchParams, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { pinToFeed } from '@/lib/dreamSave';
 import { moderateText } from '@/lib/moderation';
+import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
+import type { DreamPostItem } from '@/components/DreamCard';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { Toast } from '@/components/Toast';
@@ -60,7 +62,9 @@ export default function NewPostScreen() {
         }
       }
 
-      const { error } = await supabase
+      // Update + return the row in one round-trip so we have the fully-mapped
+      // DreamPostItem for optimistic cache insertion below.
+      const { data: updatedRows, error } = await supabase
         .from('uploads')
         .update({
           is_public: true,
@@ -68,9 +72,13 @@ export default function NewPostScreen() {
           description: trimmed || null,
         })
         .eq('id', uploadId)
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .select(POST_SELECT);
 
       if (error) throw error;
+
+      const updatedPost: DreamPostItem | null =
+        updatedRows && updatedRows.length > 0 ? mapToDreamPost(castRows(updatedRows)[0]) : null;
 
       pinToFeed({
         id: uploadId,
@@ -78,10 +86,71 @@ export default function NewPostScreen() {
         imageUrl: decodeURIComponent(imageUrl!),
         username: user.user_metadata?.username ?? '',
         avatarUrl: user.user_metadata?.avatar_url ?? null,
+        description: trimmed || null,
       });
 
-      queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
-      queryClient.invalidateQueries({ queryKey: ['userPosts'] });
+      // Optimistic cache writes — the profile grid (userPosts / my-dreams)
+      // reflects the just-posted dream the instant the user navigates over,
+      // without waiting on a refetch round-trip. The background invalidate
+      // below reconciles with the server once the cache settles.
+      type FeedInfinite = InfiniteData<{
+        rows: DreamPostItem[];
+        offset: number;
+        hasMore: boolean;
+      }>;
+      if (updatedPost) {
+        // Posts tab (is_public=true subset): insert at top of page 0 if not
+        // already there; patch in place if it was already in cache.
+        queryClient.setQueriesData<FeedInfinite>({ queryKey: ['userPosts', user.id] }, (old) => {
+          if (!old?.pages?.length) return old;
+          const exists = old.pages.some((p) => p.rows.some((r) => r.id === uploadId));
+          if (exists) {
+            return {
+              ...old,
+              pages: old.pages.map((p) => ({
+                ...p,
+                rows: p.rows.map((r) => (r.id === uploadId ? updatedPost : r)),
+              })),
+            };
+          }
+          const [first, ...rest] = old.pages;
+          return {
+            ...old,
+            pages: [{ ...first, rows: [updatedPost, ...first.rows] }, ...rest],
+          };
+        });
+        // Dreams tab: patches every cached variant. setQueriesData's
+        // updater signature is single-arg in TanStack v5, so iterate the
+        // cache to find each my-dreams variant (key shape:
+        // ['my-dreams', userId, privateOnly]) and update with the right
+        // strategy. privateOnly=true filters is_public=false → REMOVE the
+        // just-posted row; privateOnly=false patches in place.
+        const myDreamsKeys = queryClient
+          .getQueryCache()
+          .findAll({ queryKey: ['my-dreams', user.id] })
+          .map((q) => q.queryKey);
+        for (const key of myDreamsKeys) {
+          const privateOnly = (key as unknown[])[2] === true;
+          queryClient.setQueryData<FeedInfinite>(key, (old) => {
+            if (!old?.pages?.length) return old;
+            return {
+              ...old,
+              pages: old.pages.map((p) => ({
+                ...p,
+                rows: privateOnly
+                  ? p.rows.filter((r) => r.id !== uploadId)
+                  : p.rows.map((r) => (r.id === uploadId ? updatedPost : r)),
+              })),
+            };
+          });
+        }
+      }
+
+      // Background reconcile — refetchType: 'all' covers inactive queries
+      // (profile tab hasn't been mounted yet this session) so the server
+      // truth lands as soon as the network call returns.
+      queryClient.invalidateQueries({ queryKey: ['userPosts'], refetchType: 'all' });
+      queryClient.invalidateQueries({ queryKey: ['my-dreams'], refetchType: 'all' });
       queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
       // Clear dream store in case we came from Reveal
       useDreamStore.getState().reset();
