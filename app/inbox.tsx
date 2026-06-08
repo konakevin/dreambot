@@ -83,6 +83,8 @@ function iconForGroup(g: InboxGroup): IconSpec {
       return { name: 'at', color: colors.accent };
     case 'post_share':
       return { name: 'paper-plane', color: colors.accent };
+    case 'post_repost':
+      return { name: 'repeat', color: colors.success };
     case 'post_twin':
     case 'post_fuse':
       return { name: 'sparkles', color: colors.accent };
@@ -149,6 +151,8 @@ function getGroupText(g: InboxGroup): {
       return { subject: `${actors()} twinned your dream`, subtext: null, isAggregable: true };
     case 'post_fuse':
       return { subject: `${actors()} fused your dream`, subtext: null, isAggregable: true };
+    case 'post_repost':
+      return { subject: `${actors()} reposted your dream`, subtext: null, isAggregable: true };
     case 'post_milestone':
       return { subject: g.body ?? 'Milestone reached', subtext: null, isAggregable: false };
     case 'follow_accepted':

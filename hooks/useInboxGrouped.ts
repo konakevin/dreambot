@@ -30,6 +30,7 @@ export type NotificationType =
   | 'post_like'
   | 'post_fuse'
   | 'post_twin'
+  | 'post_repost'
   | 'post_milestone'
   | 'download_ready'
   | 'trial_reminder' // Pro-trial expiry pings (3-day + last-night), migration 215 commit

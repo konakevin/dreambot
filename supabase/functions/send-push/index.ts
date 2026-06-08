@@ -105,6 +105,8 @@ function getNotificationContent(
   switch (type) {
     case 'post_like':
       return { title: `${actorName} liked your dream`, body: '' };
+    case 'post_repost':
+      return { title: `${actorName} reposted your dream`, body: '' };
     case 'post_favorite':
       return { title: `${actorName} favorited your dream`, body: '' };
     case 'comment_like':
@@ -177,6 +179,8 @@ function getAggregatedNotificationContent(
   switch (type) {
     case 'post_like':
       return { title: `${actors2} liked your dream`, body: '' };
+    case 'post_repost':
+      return { title: `${actors2} reposted your dream`, body: '' };
     case 'post_favorite':
       return { title: `${actors2} favorited your dream`, body: '' };
     case 'comment_like':

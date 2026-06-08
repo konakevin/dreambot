@@ -77,18 +77,24 @@ export default function SettingsScreen() {
   const proTrialEndsAt = useAuthStore((s) => s.proTrialEndsAt);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+  const [allowReposts, setAllowReposts] = useState(true);
   const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
   useEffect(() => {
     if (!user) return;
     supabase
       .from('users')
-      .select('is_admin, is_public')
+      .select('is_admin, is_public, allow_reposts')
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
-        const row = data as unknown as { is_admin?: boolean; is_public?: boolean };
+        const row = data as unknown as {
+          is_admin?: boolean;
+          is_public?: boolean;
+          allow_reposts?: boolean;
+        };
         if (row?.is_admin) setIsAdmin(true);
         if (row?.is_public) setIsPublic(true);
+        setAllowReposts(row?.allow_reposts ?? true);
       });
   }, [user]);
   const queryClient = useQueryClient();
@@ -450,6 +456,32 @@ export default function SettingsScreen() {
                 if (val) {
                   Toast.show('All pending follow requests approved', 'checkmark-circle');
                 }
+              }}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+          <View style={styles.row}>
+            <Ionicons name="repeat-outline" size={20} color={colors.accent} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.rowLabel}>Allow Reposts</Text>
+              <Text
+                style={{
+                  color: colors.textSecondary,
+                  fontSize: fontScale(12),
+                  marginTop: verticalScale(2),
+                }}
+              >
+                {allowReposts
+                  ? 'Others can repost your dreams to their followers'
+                  : 'No one can repost your dreams'}
+              </Text>
+            </View>
+            <Switch
+              value={allowReposts}
+              onValueChange={async (val) => {
+                setAllowReposts(val);
+                await supabase.from('users').update({ allow_reposts: val }).eq('id', user!.id);
               }}
               trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor="#FFFFFF"
