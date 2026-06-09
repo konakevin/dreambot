@@ -742,7 +742,12 @@ export default function InboxScreen() {
                 {/* Painter mascot stands in for the bell glyph — same
                     rotating set as welcome-gift, picked stable per mount. */}
                 <Image source={emptyMascot} style={styles.emptyMascot} contentFit="contain" />
-                <Text style={styles.emptyTitle}>All caught up ✨</Text>
+                {/* Ionicons sparkle, not a raw ✨ emoji — the emoji rendered as
+                    a tofu box in the bold title font (no emoji fallback). */}
+                <View style={styles.emptyTitleRow}>
+                  <Text style={styles.emptyTitle}>All caught up</Text>
+                  <Ionicons name="sparkles" size={fontScale(18)} color={colors.accent} />
+                </View>
                 <Text style={styles.emptySubtitle}>
                   Your DreamBot&rsquo;s snoozing. Hearts, comments, follows, and fresh dreams will
                   land right here.
@@ -1028,6 +1033,11 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 24,
     marginBottom: verticalScale(4),
+  },
+  emptyTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   emptyTitle: {
     color: colors.textPrimary,
