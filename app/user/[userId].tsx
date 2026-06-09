@@ -384,8 +384,9 @@ export default function PublicProfileScreen() {
           })}
         </View>
       )}
-      {/* One-line explainer under the Posts/Reposts toggle. */}
-      {activeTab === 'posts' && canSeePosts && (
+      {/* One-line explainer under the Posts/Reposts toggle — own profile only.
+          On other users' profiles the help text is suppressed. */}
+      {activeTab === 'posts' && canSeePosts && isOwnProfile && (
         <Text style={styles.albumSubheader}>
           {gridView === 'reposts'
             ? 'Dreams this user has reposted'
