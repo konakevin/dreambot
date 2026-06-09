@@ -49,11 +49,30 @@ const ME_IMPERATIVES = [
 
 const ME_SELF_OVERRIDES = [/\bshow me (in|at|on|as)\b/i, /\bmake me (a|an|into|look)\b/i];
 
-/** Word lists to build the "my ___" relationship/pet patterns from. Defaults to
- *  the canonical constants; generate-dream passes engine_config's live values. */
+/** Live-config inputs (from engine_config). All optional — each falls back to a
+ *  hardcoded default. relationshipWords/petWords build the "my ___" patterns;
+ *  selfRefRegex overrides the self-PRONOUN matcher (the same override the client
+ *  already honors), so both runtimes agree. The "me" imperative logic is NOT
+ *  overridable — it's structural, not a word list, and stays in code. NOTE: a
+ *  selfRefRegex override should NOT include bare "me" (me is handled separately
+ *  with imperative filtering, e.g. "show me a castle" ≠ self). */
 export interface DetectWords {
   relationshipWords?: string;
   petWords?: string;
+  selfRefRegex?: string | null;
+}
+
+/** Build the self-pronoun matcher from an admin override, falling back to the
+ *  built-in pronouns on null/empty or an invalid pattern (never throws). */
+function buildSelfRegex(override?: string | null): RegExp {
+  if (override) {
+    try {
+      return new RegExp(override, 'i');
+    } catch {
+      // invalid admin pattern → fall through to the safe default
+    }
+  }
+  return SELF_PRONOUNS;
 }
 
 // ── Main detection ───────────────────────────────────────────────────
@@ -68,13 +87,14 @@ export function detectSelfInsert(prompt: string, words: DetectWords = {}): SelfI
   const MY_PET = new RegExp(`\\bmy\\s+(${petWords})\\b`, 'i');
   // "my [anything else]" → self-reference (my face, my childhood home)
   const MY_SELF = new RegExp(`\\bmy\\b(?!\\s+(${relWords}|${petWords}))`, 'i');
+  const SELF_RE = buildSelfRegex(words.selfRefRegex);
 
   // 1. Check relationship references ("my wife", "my dog")
   if (MY_PLUS_ONE.test(text)) roles.add('plus_one');
   if (MY_PET.test(text)) roles.add('pet');
 
-  // 2. Check self-pronouns (I, I'm, myself, mine, selfie)
-  if (SELF_PRONOUNS.test(text)) roles.add('self');
+  // 2. Check self-pronouns (I, I'm, myself, mine, selfie) — admin-overridable.
+  if (SELF_RE.test(text)) roles.add('self');
 
   // 3. Check "my [non-relationship]" (my face, my childhood home)
   if (MY_SELF.test(text)) roles.add('self');

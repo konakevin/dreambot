@@ -790,6 +790,7 @@ Output ONLY the prompt.`;
         ? detectSelfInsert(userSubject, {
             relationshipWords: castCfg.relationshipWords,
             petWords: castCfg.petWords,
+            selfRefRegex: castCfg.selfRefRegex,
           })
         : { isSelfInsert: false, cleanedPrompt: '', referencedRoles: new Set<string>() };
 

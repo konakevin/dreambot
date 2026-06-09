@@ -231,4 +231,27 @@ describe('detectSelfInsert', () => {
     const result = detectSelfInsert('AI art of a dragon');
     expect(result.isSelfInsert).toBe(false);
   });
+
+  // ── ADMIN OVERRIDES (engine_config word lists / self-ref regex) ──────
+  describe('live-config overrides', () => {
+    it('custom relationshipWords detects a term not in the default list', () => {
+      const result = detectSelfInsert('my study buddy at the library', {
+        relationshipWords: 'study buddy|workmate',
+      });
+      expect(result.referencedRoles.has('plus_one')).toBe(true);
+      expect(result.referencedRoles.has('self')).toBe(false);
+    });
+
+    it('custom selfRefRegex overrides the pronoun matcher', () => {
+      const result = detectSelfInsert('yours truly on a mountain', {
+        selfRefRegex: 'yours truly',
+      });
+      expect(result.referencedRoles.has('self')).toBe(true);
+    });
+
+    it('invalid selfRefRegex falls back to the built-in pronouns (no throw)', () => {
+      const result = detectSelfInsert("I'm in a forest", { selfRefRegex: '(' });
+      expect(result.referencedRoles.has('self')).toBe(true);
+    });
+  });
 });
