@@ -11,6 +11,7 @@
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { DEFAULT_RELATIONSHIP_WORDS, DEFAULT_PET_WORDS } from './selfInsertDetector.ts';
 
 export interface EngineConfig {
   baseSparkleCost: number;
@@ -22,6 +23,11 @@ export interface EngineConfig {
   nightlyMaxJobs: number;
   selfRefRegex: string | null;
   relationshipRegex: string | null;
+  // Cast-detection word lists (migration 256) — the single live source the
+  // self-insert detector builds its "my ___" regexes from. Falls back to the
+  // canonical constants in selfInsertDetector.ts when the DB value is missing.
+  relationshipWords: string;
+  petWords: string;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -35,6 +41,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   nightlyMaxJobs: 5000,
   selfRefRegex: null,
   relationshipRegex: null,
+  relationshipWords: DEFAULT_RELATIONSHIP_WORDS,
+  petWords: DEFAULT_PET_WORDS,
 };
 
 let cached: EngineConfig | null = null;
@@ -42,13 +50,10 @@ let cached: EngineConfig | null = null;
 /** Load engine_config (cached per invocation). Falls back to defaults on error. */
 export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfig> {
   if (cached) return cached;
-  const { data, error } = await sb
-    .from('engine_config')
-    .select(
-      'base_sparkle_cost, welcome_sparkle_bonus, pro_trial_days, prompt_max_length, photo_preprocess_width, photo_preprocess_quality, nightly_max_jobs, self_ref_regex, relationship_regex'
-    )
-    .eq('id', 1)
-    .single();
+  // select('*') (not an explicit column list) so adding a column in a later
+  // migration can never 400 this fetch before the migration is applied — a
+  // missing column just isn't in `data` and falls back to the default below.
+  const { data, error } = await sb.from('engine_config').select('*').eq('id', 1).single();
   if (error || !data) {
     console.warn('[engineConfig] engine_config missing — using defaults:', error?.message);
     cached = DEFAULT_ENGINE_CONFIG;
@@ -71,6 +76,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     selfRefRegex: (data.self_ref_regex as string | null) ?? DEFAULT_ENGINE_CONFIG.selfRefRegex,
     relationshipRegex:
       (data.relationship_regex as string | null) ?? DEFAULT_ENGINE_CONFIG.relationshipRegex,
+    relationshipWords:
+      (data.relationship_words as string | null) || DEFAULT_ENGINE_CONFIG.relationshipWords,
+    petWords: (data.pet_words as string | null) || DEFAULT_ENGINE_CONFIG.petWords,
   };
   return cached;
 }

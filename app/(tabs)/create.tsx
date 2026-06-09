@@ -57,15 +57,20 @@ import { useEngineConfig } from '@/hooks/useEngineConfig';
 // as part of the same brand surface.
 const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
-// Cast-detection patterns (defaults). Admin-overridable via engine_config; see
-// SELF_REF_REGEX / RELATIONSHIP_REGEX below.
+// Cast-detection patterns (defaults). The LIVE source is engine_config
+// (relationship_words / pet_words, migration 256) — the same word lists the
+// server detector uses, so editing them in the dashboard fixes BOTH the render
+// and this helper text with no deploy. These constants are the bundled fallback
+// for when the DB value is null/offline; keep them in sync with
+// DEFAULT_RELATIONSHIP_WORDS / DEFAULT_PET_WORDS in selfInsertDetector.ts.
 const DEFAULT_SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
-// Keep in sync with RELATIONSHIP_WORDS + PET_WORDS in the server detector
-// (supabase/functions/_shared/selfInsertDetector.ts). "plus one" / "+1" lead —
-// the app's own term for the +1 was missing and fell through to a solo-self
-// render (2026-06-08).
-const DEFAULT_RELATIONSHIP_REGEX =
-  /\bmy\s+(plus[\s-]?one|plus\s?1|\+\s?1|significant other|partner|wife|husband|girlfriend|boyfriend|gf|bf|spouse|fiancée?|fiancé|fiance|fiancee|friend|best friend|bestie|buddy|bff|pal|mate|mom|mum|dad|mother|father|parent|brother|sister|sibling|twin|son|daughter|kid|kids|child|children|cousin|aunt|uncle|niece|nephew|grandma|grandpa|grandmother|grandfather|granny|roommate|neighbour|neighbor|coworker|colleague|teammate|classmate|hubby|wifey|family|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
+const DEFAULT_RELATIONSHIP_WORDS =
+  'plus[\\s-]?one|plus\\s?1|\\+\\s?1|significant other|partner|wife|husband|girlfriend|boyfriend|gf|bf|spouse|fiancée?|fiancé|fiance|fiancee|friend|best friend|bestie|buddy|bff|pal|mate|mom|mum|dad|mother|father|parent|brother|sister|sibling|twin|son|daughter|kid|kids|child|children|cousin|aunt|uncle|niece|nephew|grandma|grandpa|grandmother|grandfather|granny|roommate|neighbour|neighbor|coworker|colleague|teammate|classmate|hubby|wifey|family';
+const DEFAULT_PET_WORDS = 'dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo';
+const DEFAULT_RELATIONSHIP_REGEX = new RegExp(
+  `\\bmy\\s+(${DEFAULT_RELATIONSHIP_WORDS}|${DEFAULT_PET_WORDS})\\b`,
+  'i'
+);
 
 /** Build a case-insensitive RegExp from an admin-provided string; fall back to
  *  `fallback` when the pattern is null/empty or invalid (never throws in render). */
@@ -222,13 +227,20 @@ export default function CreateScreen() {
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
 
-  // Self-reference + relationship detection. Patterns are admin-overridable via
-  // engine_config (self_ref_regex / relationship_regex); null → the built-in
-  // defaults below. safeRegex falls back if an admin saves an invalid pattern.
+  // Self-reference + relationship detection. The relationship/pet patterns are
+  // built from engine_config word lists (relationship_words / pet_words) — the
+  // SAME live source the server detector uses, so the helper + the render stay
+  // in sync from one dashboard edit. safeRegex falls back to the bundled
+  // constants if the DB value is null or an admin saves an invalid pattern.
   const SELF_REF_REGEX = safeRegex(engineConfig.selfRefRegex, DEFAULT_SELF_REF_REGEX);
   const mentionsSelf = hasPrompt && !hasPhoto && SELF_REF_REGEX.test(config.userPrompt);
 
-  const RELATIONSHIP_REGEX = safeRegex(engineConfig.relationshipRegex, DEFAULT_RELATIONSHIP_REGEX);
+  const relWords = engineConfig.relationshipWords || DEFAULT_RELATIONSHIP_WORDS;
+  const petWords = engineConfig.petWords || DEFAULT_PET_WORDS;
+  const RELATIONSHIP_REGEX = safeRegex(
+    `\\bmy\\s+(${relWords}|${petWords})\\b`,
+    DEFAULT_RELATIONSHIP_REGEX
+  );
   const mentionsOther = hasPrompt && !hasPhoto && RELATIONSHIP_REGEX.test(config.userPrompt);
 
   // Whether the selected medium face-swaps (composites real face into scene)

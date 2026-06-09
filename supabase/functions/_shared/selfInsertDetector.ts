@@ -19,22 +19,20 @@ export interface SelfInsertResult {
   referencedRoles: Set<CastRole>;
 }
 
-// ── Relationship words (require "my" prefix) ─────────────────────────
+// ── Relationship + pet word lists (require "my" prefix) ──────────────
 
-// NOTE: "plus one" / "+1" lead the list — that's the app's OWN term for the
-// second cast member, and its absence used to fall through the MY_SELF catch-all
-// below and wrongly cast SELF (Kevin, 2026-06-08: "show my plus one" → solo me).
-// Keep this in sync with DEFAULT_RELATIONSHIP_REGEX in app/(tabs)/create.tsx
-// (the client helper-text regex — separate runtime, must not diverge).
-const RELATIONSHIP_WORDS =
+// CANONICAL CODE FALLBACK. The LIVE source is engine_config.relationship_words /
+// pet_words (migration 256) — generate-dream passes those in via opts so an admin
+// can fix detection from the dashboard with NO deploy. These constants only apply
+// when the DB value is missing/unreachable. "plus one" / "+1" lead the list —
+// the app's own term for the second cast member; its absence used to fall through
+// the MY_SELF catch-all and wrongly cast SELF (Kevin, 2026-06-08).
+//
+// MUST match the DEFAULTs in migration 256 AND the client fallback in
+// app/(tabs)/create.tsx (separate RN runtime — can't import this Deno module).
+export const DEFAULT_RELATIONSHIP_WORDS =
   'plus[\\s-]?one|plus\\s?1|\\+\\s?1|significant other|partner|wife|husband|girlfriend|boyfriend|gf|bf|spouse|fiancée?|fiancé|fiance|fiancee|friend|best friend|bestie|buddy|bff|pal|mate|mom|mum|dad|mother|father|parent|brother|sister|sibling|twin|son|daughter|kid|kids|child|children|cousin|aunt|uncle|niece|nephew|grandma|grandpa|grandmother|grandfather|granny|roommate|neighbour|neighbor|coworker|colleague|teammate|classmate|hubby|wifey|family';
-const PET_WORDS = 'dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo';
-
-const MY_PLUS_ONE = new RegExp(`\\bmy\\s+(${RELATIONSHIP_WORDS})\\b`, 'i');
-const MY_PET = new RegExp(`\\bmy\\s+(${PET_WORDS})\\b`, 'i');
-
-// "my [anything else]" → self-reference (my face, my childhood home)
-const MY_SELF = new RegExp(`\\bmy\\b(?!\\s+(${RELATIONSHIP_WORDS}|${PET_WORDS}))`, 'i');
+export const DEFAULT_PET_WORDS = 'dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo';
 
 // ── Self-pronouns (always mean the user themselves) ──────────────────
 
@@ -51,16 +49,25 @@ const ME_IMPERATIVES = [
 
 const ME_SELF_OVERRIDES = [/\bshow me (in|at|on|as)\b/i, /\bmake me (a|an|into|look)\b/i];
 
-// ── Cleaning patterns ────────────────────────────────────────────────
-
-const CLEAN_PLUS_ONE = new RegExp(`\\bmy\\s+(${RELATIONSHIP_WORDS})\\b`, 'gi');
-const CLEAN_PET = new RegExp(`\\bmy\\s+(${PET_WORDS})\\b`, 'gi');
+/** Word lists to build the "my ___" relationship/pet patterns from. Defaults to
+ *  the canonical constants; generate-dream passes engine_config's live values. */
+export interface DetectWords {
+  relationshipWords?: string;
+  petWords?: string;
+}
 
 // ── Main detection ───────────────────────────────────────────────────
 
-export function detectSelfInsert(prompt: string): SelfInsertResult {
+export function detectSelfInsert(prompt: string, words: DetectWords = {}): SelfInsertResult {
   const text = prompt.trim();
   const roles = new Set<CastRole>();
+
+  const relWords = words.relationshipWords || DEFAULT_RELATIONSHIP_WORDS;
+  const petWords = words.petWords || DEFAULT_PET_WORDS;
+  const MY_PLUS_ONE = new RegExp(`\\bmy\\s+(${relWords})\\b`, 'i');
+  const MY_PET = new RegExp(`\\bmy\\s+(${petWords})\\b`, 'i');
+  // "my [anything else]" → self-reference (my face, my childhood home)
+  const MY_SELF = new RegExp(`\\bmy\\b(?!\\s+(${relWords}|${petWords}))`, 'i');
 
   // 1. Check relationship references ("my wife", "my dog")
   if (MY_PLUS_ONE.test(text)) roles.add('plus_one');
@@ -98,12 +105,14 @@ export function detectSelfInsert(prompt: string): SelfInsertResult {
 
   return {
     isSelfInsert,
-    cleanedPrompt: isSelfInsert ? cleanSelfReferences(text) : prompt,
+    cleanedPrompt: isSelfInsert ? cleanSelfReferences(text, relWords, petWords) : prompt,
     referencedRoles: roles,
   };
 }
 
-function cleanSelfReferences(prompt: string): string {
+function cleanSelfReferences(prompt: string, relWords: string, petWords: string): string {
+  const CLEAN_PLUS_ONE = new RegExp(`\\bmy\\s+(${relWords})\\b`, 'gi');
+  const CLEAN_PET = new RegExp(`\\bmy\\s+(${petWords})\\b`, 'gi');
   const cleaned = prompt
     // Relationship words first (before generic "my" replacement)
     .replace(CLEAN_PLUS_ONE, 'a companion')

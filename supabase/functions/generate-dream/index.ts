@@ -781,8 +781,16 @@ Output ONLY the prompt.`;
       const userSubject = rawPrompt ?? hint ?? '';
 
       // ── V2 SELF-INSERT / CAST DETECTION ──
+      // Word lists come from engine_config so cast detection is tunable from the
+      // dashboard with no deploy (migration 256). fetchEngineConfig is cached
+      // per-invocation, so this is a free lookup; it falls back to the canonical
+      // constants when the DB value is missing.
+      const castCfg = await fetchEngineConfig(supabase);
       const selfInsertResult = userSubject
-        ? detectSelfInsert(userSubject)
+        ? detectSelfInsert(userSubject, {
+            relationshipWords: castCfg.relationshipWords,
+            petWords: castCfg.petWords,
+          })
         : { isSelfInsert: false, cleanedPrompt: '', referencedRoles: new Set<string>() };
 
       const dreamCast: DreamCastMember[] = vibeProfile?.dream_cast ?? [];

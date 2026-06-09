@@ -21,6 +21,10 @@ export interface EngineConfig {
   photoPreprocessQuality: number;
   selfRefRegex: string | null;
   relationshipRegex: string | null;
+  // Cast-detection word lists (migration 256). The helper-text regex is built
+  // from these; null → create.tsx falls back to its bundled word-list constants.
+  relationshipWords: string | null;
+  petWords: string | null;
 }
 
 // Defaults = the values previously hardcoded in the client (behavior unchanged
@@ -34,6 +38,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   photoPreprocessQuality: 0.8,
   selfRefRegex: null,
   relationshipRegex: null,
+  relationshipWords: null,
+  petWords: null,
 };
 
 function num(v: unknown, d: number): number {
@@ -73,6 +79,11 @@ export function useEngineConfig(): EngineConfig {
           typeof c.relationship_regex === 'string'
             ? c.relationship_regex
             : DEFAULT_ENGINE_CONFIG.relationshipRegex,
+        relationshipWords:
+          typeof c.relationship_words === 'string'
+            ? c.relationship_words
+            : DEFAULT_ENGINE_CONFIG.relationshipWords,
+        petWords: typeof c.pet_words === 'string' ? c.pet_words : DEFAULT_ENGINE_CONFIG.petWords,
       };
     },
     staleTime: 5 * 60_000,
