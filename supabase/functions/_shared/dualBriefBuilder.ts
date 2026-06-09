@@ -58,7 +58,32 @@ export function buildDualBrief(input: CompilerInput): CompilerOutput {
   // ── Composition path: pick once, prepend at end via postProcess ──
   const dualPath = pickDualCompositionPath();
   const realisticFaceTag = '';
-  const dualPrepend = dualPath.prepend.replace('{realisticFaceTag}', realisticFaceTag);
+
+  // ── Gender front-load (2026-06-09 incident fix) ──
+  // Deterministically front-load each side's gender from the STORED cast
+  // genderLocks (cast[0]=LEFT, cast[1]=RIGHT). CLIP attends most to the first
+  // tokens, but we were relying on Sonnet to place "man/woman" well — and when
+  // it buried the gender mid-prompt, flux-1.1-pro rendered TWO same-gender
+  // bodies. The downstream gender routing can only correct an L/R FLIP, not a
+  // same-gender render, so the female source landed on a male (bearded) body
+  // ("wife's face on a bearded man"). Getting the render right here is the only
+  // place that can prevent it. Skip only when a gender is genuinely unknown.
+  const parseGender = (lock?: string | null): 'male' | 'female' | null =>
+    !lock
+      ? null
+      : lock.startsWith('FEMALE character')
+        ? 'female'
+        : lock.startsWith('MALE character')
+          ? 'male'
+          : null;
+  const leftG = parseGender(cast[0].genderLock);
+  const rightG = parseGender(cast[1].genderLock);
+  const genderFront =
+    leftG && rightG
+      ? `${leftG === 'male' ? 'MAN' : 'WOMAN'} on the LEFT, ${rightG === 'male' ? 'MAN' : 'WOMAN'} on the RIGHT, `
+      : '';
+  const dualPrepend =
+    genderFront + dualPath.prepend.replace('{realisticFaceTag}', realisticFaceTag);
 
   // ── Cast description block ──
   const cast1 = cast[0];
