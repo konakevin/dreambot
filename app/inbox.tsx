@@ -16,7 +16,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import ReanimatedSwipeable, {
+  type SwipeableMethods,
+} from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
 import { routeFromNotification } from '@/lib/notificationRouting';
@@ -342,6 +344,7 @@ function GroupRow({
   onPress,
   onLongPress,
   onDelete,
+  onSwipeOpen,
   selectMode,
   isSelected,
   onToggleSelect,
@@ -350,10 +353,14 @@ function GroupRow({
   onPress: () => void;
   onLongPress: () => void;
   onDelete: () => void;
+  /** Reports this row's swipeable as it starts opening so the screen can close
+   *  any other open row (one-open-at-a-time, iOS Mail style). */
+  onSwipeOpen: (ref: SwipeableMethods | null) => void;
   selectMode: boolean;
   isSelected: boolean;
   onToggleSelect: () => void;
 }) {
+  const swipeRef = useRef<SwipeableMethods>(null);
   const { subject, subtext } = getGroupText(group);
   const icon = iconForGroup(group);
   // "New since last inbox view" — drives the pip overlay on the icon
@@ -369,6 +376,9 @@ function GroupRow({
       // Swipe LEFT reveals a red Delete action. Disabled in select mode so the
       // swipe doesn't fight the bulk-select checkboxes. Delete is the same
       // optimistic useDeleteGroup the long-press → confirm path uses.
+      ref={swipeRef}
+      // Opening this row closes any other open row (one-at-a-time, iOS Mail).
+      onSwipeableWillOpen={() => onSwipeOpen(swipeRef.current)}
       enabled={!selectMode}
       friction={2}
       rightThreshold={40}
@@ -463,6 +473,17 @@ export default function InboxScreen() {
   const { mutate: deleteGroup } = useDeleteGroup();
   const { mutate: deleteAll } = useDeleteAllNotifications();
   const { mutate: markInboxViewed } = useMarkInboxViewed();
+
+  // One swipe row open at a time: when a row starts opening, close the
+  // previously-open one (iOS Mail behavior). Holds the currently-open row's
+  // swipeable methods.
+  const openRowRef = useRef<SwipeableMethods | null>(null);
+  const handleSwipeOpen = useCallback((ref: SwipeableMethods | null) => {
+    if (openRowRef.current && openRowRef.current !== ref) {
+      openRowRef.current.close();
+    }
+    openRowRef.current = ref;
+  }, []);
 
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -669,6 +690,7 @@ export default function InboxScreen() {
               onPress={() => handleTap(item)}
               onLongPress={() => handleLongPress(item)}
               onDelete={() => deleteGroup(item.groupKey)}
+              onSwipeOpen={handleSwipeOpen}
               selectMode={selectMode}
               isSelected={selected.has(item.groupKey)}
               onToggleSelect={() => toggleSelect(item.groupKey)}
