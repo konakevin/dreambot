@@ -24,7 +24,7 @@ function loadIfExists(name) {
 module.exports = {
   PALETTES: load('palettes'),
   LIGHTING: load('lighting'),
-  // Bot-wide "look register" (2026-06-09) — 13 gorgeous rendering styles
+  // Bot-wide "look register" (2026-06-09) — 12 gorgeous rendering styles
   // (oil / watercolor / woodblock / stained-glass / pop-art / impasto /
   // crystalline / etc.) rolled per render via rollSharedDNA. The neutral
   // medium defers all finish to the rolled look; see BOT_SCENE_QUALITY_
