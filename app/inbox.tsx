@@ -11,7 +11,6 @@ import {
   RefreshControl,
   Modal,
   Pressable,
-  ActionSheetIOS,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -475,6 +474,11 @@ export default function InboxScreen() {
   const { mutate: deleteAll } = useDeleteAllNotifications();
   const { mutate: markInboxViewed } = useMarkInboxViewed();
 
+  // "•••" header dropdown — custom branded menu. headerH (measured) positions
+  // the dropdown right under the header.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [headerH, setHeaderH] = useState(0);
+
   // One swipe row open at a time: when a row starts opening, close the
   // previously-open one (iOS Mail behavior). Holds the currently-open row's
   // swipeable methods.
@@ -608,33 +612,26 @@ export default function InboxScreen() {
     ]);
   }
 
-  // Top-right "•••" menu — surfaces the bulk actions that used to be buried
-  // behind "Edit": one-tap Clear all (the common "wipe my inbox" intent) +
-  // Select for partial multi-delete. Single-row deletes are handled by swipe.
-  function openInboxMenu() {
-    Haptics.selectionAsync();
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ['Clear all', 'Select', 'Cancel'],
-        destructiveButtonIndex: 0,
-        cancelButtonIndex: 2,
-      },
-      (index) => {
-        if (index === 0) {
-          showAlert('Clear all notifications?', 'This cannot be undone.', [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Clear all', style: 'destructive', onPress: () => deleteAll() },
-          ]);
-        } else if (index === 1) {
-          setSelectMode(true);
-        }
-      }
-    );
+  // Top-right "•••" menu — a custom on-brand dropdown (not the system action
+  // sheet). Surfaces the bulk actions that used to be buried behind "Edit":
+  // one-tap Clear all + Select for partial multi-delete. Single-row deletes are
+  // handled by swipe. The backdrop sits ON TOP of the list, so a tap-to-dismiss
+  // is consumed there and never falls through to open the row beneath it.
+  function handleMenuClearAll() {
+    setMenuOpen(false);
+    showAlert('Clear all notifications?', 'This cannot be undone.', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Clear all', style: 'destructive', onPress: () => deleteAll() },
+    ]);
+  }
+  function handleMenuSelect() {
+    setMenuOpen(false);
+    setSelectMode(true);
   }
 
   return (
     <SafeAreaView style={styles.root}>
-      <View style={styles.header}>
+      <View style={styles.header} onLayout={(e) => setHeaderH(e.nativeEvent.layout.height)}>
         {selectMode ? (
           <>
             <TouchableOpacity onPress={exitSelectMode} activeOpacity={0.7}>
@@ -679,7 +676,14 @@ export default function InboxScreen() {
             <Text style={styles.headerTitle}>Inbox</Text>
             <View style={styles.headerActions}>
               {hasAny && (
-                <TouchableOpacity onPress={openInboxMenu} activeOpacity={0.7} hitSlop={8}>
+                <TouchableOpacity
+                  onPress={() => {
+                    Haptics.selectionAsync();
+                    setMenuOpen(true);
+                  }}
+                  activeOpacity={0.7}
+                  hitSlop={8}
+                >
                   <Ionicons name="ellipsis-horizontal" size={22} color={colors.textPrimary} />
                 </TouchableOpacity>
               )}
@@ -755,6 +759,36 @@ export default function InboxScreen() {
         titleAction={expandedTitle}
         onClose={() => setExpandedGroupKey(null)}
       />
+
+      {/* "•••" dropdown. The backdrop fills the screen ON TOP of the list, so a
+          tap-to-dismiss is consumed here — it never falls through to open the
+          row beneath it. The card stops its own taps from bubbling to it. */}
+      {menuOpen && (
+        <Pressable style={styles.menuBackdrop} onPress={() => setMenuOpen(false)}>
+          <Pressable
+            style={[styles.menuCard, { top: headerH + verticalScale(4) }]}
+            onPress={() => {}}
+          >
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={handleMenuClearAll}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="trash-outline" size={18} color={colors.error} />
+              <Text style={[styles.menuItemText, { color: colors.error }]}>Clear all</Text>
+            </TouchableOpacity>
+            <View style={styles.menuDivider} />
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={handleMenuSelect}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="checkmark-circle-outline" size={18} color={colors.textPrimary} />
+              <Text style={styles.menuItemText}>Select</Text>
+            </TouchableOpacity>
+          </Pressable>
+        </Pressable>
+      )}
     </SafeAreaView>
   );
 }
@@ -809,6 +843,42 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(12),
     fontWeight: '600',
+  },
+  // "•••" dropdown menu.
+  menuBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 50,
+  },
+  menuCard: {
+    position: 'absolute',
+    right: 12,
+    minWidth: horizontalScale(180),
+    backgroundColor: colors.card,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingVertical: verticalScale(4),
+    shadowColor: '#000',
+    shadowOpacity: 0.45,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingVertical: verticalScale(12),
+  },
+  menuItemText: {
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    fontWeight: '600',
+  },
+  menuDivider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
   },
   // Icon tile — 40x40 rounded tile, tinted with the type's accent at 10%
   // opacity ('1A' alpha) so the glyph stands out without shouting.
