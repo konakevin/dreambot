@@ -26,7 +26,7 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
-  // Bot-wide "look register" (2026-06-07) — 13 cute film/storybook rendering
+  // Bot-wide "look register" (2026-06-07) — 12 cute film/storybook rendering
   // styles rolled per render via rollSharedDNA on look-enabled paths, so the
   // same path renders in a different animation look each time (Pixar / Disney
   // CG / Ghibli / storybook / Pop-Mart / etc.). Mirrors YumBot's look_register.
