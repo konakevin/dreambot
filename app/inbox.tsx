@@ -16,6 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
 import { routeFromNotification } from '@/lib/notificationRouting';
@@ -32,7 +33,7 @@ import {
   useDenyFollowRequest,
 } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 
 function formatTimeAgo(dateStr: string): string {
   const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
@@ -340,6 +341,7 @@ function GroupRow({
   group,
   onPress,
   onLongPress,
+  onDelete,
   selectMode,
   isSelected,
   onToggleSelect,
@@ -347,6 +349,7 @@ function GroupRow({
   group: InboxGroup;
   onPress: () => void;
   onLongPress: () => void;
+  onDelete: () => void;
   selectMode: boolean;
   isSelected: boolean;
   onToggleSelect: () => void;
@@ -362,59 +365,82 @@ function GroupRow({
   const firstActorId = group.previewActorIds[0] ?? null;
 
   return (
-    <TouchableOpacity
-      style={styles.row}
-      onPress={() => (selectMode ? onToggleSelect() : onPress())}
-      onLongPress={selectMode ? undefined : onLongPress}
-      delayLongPress={400}
-      activeOpacity={0.7}
+    <ReanimatedSwipeable
+      // Swipe LEFT reveals a red Delete action. Disabled in select mode so the
+      // swipe doesn't fight the bulk-select checkboxes. Delete is the same
+      // optimistic useDeleteGroup the long-press → confirm path uses.
+      enabled={!selectMode}
+      friction={2}
+      rightThreshold={40}
+      overshootRight={false}
+      renderRightActions={() => (
+        <TouchableOpacity
+          style={styles.deleteAction}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            onDelete();
+          }}
+          activeOpacity={0.85}
+        >
+          <Ionicons name="trash-outline" size={22} color="#fff" />
+          <Text style={styles.deleteActionText}>Delete</Text>
+        </TouchableOpacity>
+      )}
     >
-      {selectMode && (
-        <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
-          {isSelected && <Ionicons name="checkmark" size={14} color="#000" />}
-        </View>
-      )}
-
-      {/* Icon tile — per-type glyph + optional "new" pip top-right. */}
-      <View style={styles.iconTileWrap}>
-        <View style={[styles.iconTile, { backgroundColor: `${icon.color}1A` }]}>
-          <Ionicons name={icon.name} size={20} color={icon.color} />
-        </View>
-        {isNew && <View style={styles.newPip} pointerEvents="none" />}
-      </View>
-
-      {/* Text — subject (1 line, no truncation) + optional subtext (1 line,
-          server-capped to 28 chars so no ellipsis needed). */}
-      <View style={styles.textCol}>
-        <Text style={styles.subject} numberOfLines={1}>
-          {subject}
-        </Text>
-        {subtext && (
-          <Text style={styles.subtext} numberOfLines={1}>
-            {subtext}
-          </Text>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => (selectMode ? onToggleSelect() : onPress())}
+        onLongPress={selectMode ? undefined : onLongPress}
+        delayLongPress={400}
+        activeOpacity={0.7}
+      >
+        {selectMode && (
+          <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+            {isSelected && <Ionicons name="checkmark" size={14} color="#000" />}
+          </View>
         )}
-      </View>
 
-      {/* Follow-request approve/deny — only on the actor's own follow request. */}
-      {group.type === 'follow_request' && isNew && firstActorId && (
-        <FollowRequestActions actorId={firstActorId} />
-      )}
+        {/* Icon tile — per-type glyph + optional "new" pip top-right. */}
+        <View style={styles.iconTileWrap}>
+          <View style={[styles.iconTile, { backgroundColor: `${icon.color}1A` }]}>
+            <Ionicons name={icon.name} size={20} color={icon.color} />
+          </View>
+          {isNew && <View style={styles.newPip} pointerEvents="none" />}
+        </View>
 
-      {/* Post thumbnail — tap propagates the row press (route to /photo/[id]). */}
-      {group.uploadImageUrl && (
-        <Image
-          source={{ uri: group.uploadImageUrl }}
-          style={styles.thumbnail}
-          contentFit="cover"
-          cachePolicy="memory-disk"
-          placeholder={group.uploadThumbhash ? { thumbhash: group.uploadThumbhash } : null}
-          placeholderContentFit="cover"
-        />
-      )}
+        {/* Text — subject (1 line, no truncation) + optional subtext (1 line,
+          server-capped to 28 chars so no ellipsis needed). */}
+        <View style={styles.textCol}>
+          <Text style={styles.subject} numberOfLines={1}>
+            {subject}
+          </Text>
+          {subtext && (
+            <Text style={styles.subtext} numberOfLines={1}>
+              {subtext}
+            </Text>
+          )}
+        </View>
 
-      <Text style={styles.time}>{formatTimeAgo(group.lastAt)}</Text>
-    </TouchableOpacity>
+        {/* Follow-request approve/deny — only on the actor's own follow request. */}
+        {group.type === 'follow_request' && isNew && firstActorId && (
+          <FollowRequestActions actorId={firstActorId} />
+        )}
+
+        {/* Post thumbnail — tap propagates the row press (route to /photo/[id]). */}
+        {group.uploadImageUrl && (
+          <Image
+            source={{ uri: group.uploadImageUrl }}
+            style={styles.thumbnail}
+            contentFit="cover"
+            cachePolicy="memory-disk"
+            placeholder={group.uploadThumbhash ? { thumbhash: group.uploadThumbhash } : null}
+            placeholderContentFit="cover"
+          />
+        )}
+
+        <Text style={styles.time}>{formatTimeAgo(group.lastAt)}</Text>
+      </TouchableOpacity>
+    </ReanimatedSwipeable>
   );
 }
 
@@ -642,6 +668,7 @@ export default function InboxScreen() {
               group={item}
               onPress={() => handleTap(item)}
               onLongPress={() => handleLongPress(item)}
+              onDelete={() => deleteGroup(item.groupKey)}
               selectMode={selectMode}
               isSelected={selected.has(item.groupKey)}
               onToggleSelect={() => toggleSelect(item.groupKey)}
@@ -723,6 +750,22 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: colors.card,
     gap: 12,
+    // Opaque so the swipe-revealed red Delete action doesn't bleed through the
+    // row content as it slides left.
+    backgroundColor: colors.background,
+  },
+  // Swipe-left delete action — full-height red button behind the row.
+  deleteAction: {
+    backgroundColor: colors.error,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: horizontalScale(80),
+    gap: verticalScale(3),
+  },
+  deleteActionText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(12),
+    fontWeight: '600',
   },
   // Icon tile — 40x40 rounded tile, tinted with the type's accent at 10%
   // opacity ('1A' alpha) so the glyph stands out without shouting.
