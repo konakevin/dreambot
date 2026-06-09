@@ -21,6 +21,11 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
   return `You are a sci-fi character-painter writing a ROBOT MOMENT scene for StarBot — a solo ornate machine doing something visually compelling in a living environment. The robot is a SHOWPIECE — every surface tells a story. Output wraps with style prefix + suffix.
 
+━━━ THE CANDID ACTION LEADS — START HERE (most important) ━━━
+${moment}
+
+OPEN your prompt with this ACTION + a dynamic candid camera angle. The robot is CAUGHT MID-ACTION in this exact split-second — off-balance, kinetic, mid-motion, DOING the thing (firing / drilling / scaling / breaching / wading / cutting / hammering). THE #1 FAILURE TO AVOID: a robot STANDING or LOOMING front-on, posed for the camera like a museum turntable. That is BANNED. No static standing loom, no contemplative beauty pose, no symmetric front-on framing. Catch it mid-motion from an OFF-AXIS angle like a documentary frame grabbed at the peak of the action.
+
 ━━━ CRITICAL — MATCH THE ROBOT'S IDENTITY ━━━
 The robot description below defines WHAT KIND of machine this is. READ it and render THAT specific robot with OBSESSIVE SURFACE DETAIL — every engraving, every patina layer, every glowing element, every scratch and modification. Do NOT default to:
 - the same weathered-paint-and-panel-seams on every robot (some are pristine, some are crystalline, some are alien-organic, some are armored, some are skeletal)
@@ -84,7 +89,7 @@ ${vibeDirective.slice(0, 250)}
 The world around this robot is NOT a blank backdrop. It REACTS to the robot's presence — displaced debris, reflected light, heat shimmer, footprints, disturbed dust, bent vegetation, melted frost, scattered wildlife. The environment has its own texture and life independent of the robot.
 
 ━━━ COMPOSITION ━━━
-Use the camera angle above as your framing guide. ONE robot, no companions. The robot is the focal point — render it with the detail of a museum piece. Body language tells the story. Depth and layering — foreground environment detail, midground robot sharp and ornate, background world stretching out.
+Use the camera angle above as your framing guide. ONE robot, no companions. The robot is the focal point — render it with obsessive detail. Caught MID-ACTION — the body is in motion, not posed, NOT a static front-on loom. Depth and layering — foreground environment detail, midground robot sharp and ornate, background world stretching out.
 
 CRITICAL — LEG COUNT FIDELITY (NON-NEGOTIABLE): if the ROBOT description specifies a leg count (tripedal / quadrupedal / hexapod / octopod / four-legged / six-legged), the polished prompt MUST repeat the exact leg count TWICE — once near the start ("hexapod war-mech with six pneumatic legs") and once mid-prompt ("all six legs splayed across the rocky surface"). Flux defaults to bipedal humanoid forms unless the leg count is HEAVILY reinforced. If seed says "tripedal" → render MUST show three legs. If "hexapod" → six legs. NO exceptions, NO collapsing to bipedal. For multi-armed seeds (four-armed / six-armed) same rule: repeat the arm count twice.
 
@@ -100,5 +105,5 @@ CRITICAL — AVOID CYCLOPS / SINGLE-DOMINATING-EYE FACE: do NOT design the robot
 
 CRITICAL — NO FEMININE-CYBORG DRIFT: this is a MACHINE, not a humanoid character. NEVER render with breast-plate / chest-bust / hourglass-torso / feminine-figure curves. The body is mechanical and angular. If the seed says "humanoid chassis," interpret as armored mechanical chassis with no human-anatomy mimicry — flat or geometric chest plating, NOT human-figure shaping. (Cyborg-woman is a separate path.)
 
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the ROBOT'S ACTION (the mid-motion verb) + the camera angle.`;
 };
