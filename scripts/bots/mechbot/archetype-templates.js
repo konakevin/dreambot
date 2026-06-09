@@ -529,6 +529,11 @@ A subtle visual flourish amplifying the robot's presence WITHOUT cluttering it. 
 
     return `You are a sci-fi concept-art painter writing a HUMANOID ROBOT scene for MechBot — a SINGLE cool human-scale (1.5-2.5m tall) bipedal humanoid robot caught in a cinematic FLAGSHIP MOMENT. Hyper-real cinematic 3D / VFX-quality. Visual reference DNA: polished chrome/titanium/charcoal chassis + multi-iris compound-optic eye-array on the head (kaleidoscope cyan-magenta-amber blend) + multi-color glowing joint-seams + chest-cores + shoulder-orbs.
 
+━━━ THE CANDID ACTION LEADS — START HERE (most important) ━━━
+${action}
+
+OPEN your prompt with this ACTION + a dynamic candid camera angle. The robot is CAUGHT MID-ACTION in this exact split-second — off-balance, kinetic, weight-shifting, doing something to/with the world around it. THE #1 FAILURE TO AVOID: a robot STANDING front-on facing the camera, or walking/charging straight at the lens like a posed hero turnaround / character-select beauty shot. That is BANNED. No standing-at-attention, no contemplative-still beauty pose, no symmetric front-on framing, no model-on-a-turntable. Catch it mid-motion from an OFF-AXIS angle (worm's-eye, over-the-shoulder, side-profile, 3/4-from-behind, dutch-tilt) like a documentary frame grabbed at the peak of the action.
+
 THINK Real Steel boxing-bots / Detroit Become Human mechanical androids / Apex Legends Pathfinder + Revenant + Ash / Ex Machina Ava (mechanical frame) / Megaman bosses / Horizon Zero Dawn Hephaestus-builds / Mass Effect Geth Prime humanoid / Code Geass knightmare-pilot-frames / Cyberpunk 2077 Adam Smasher / Boston Dynamics Atlas (sci-fi-exaggerated).
 
 🚫 STAR WARS / HALO HARD BAN — NEVER write Stormtrooper / Imperial / Mandalorian / beskar / T-visor / Boba / Mando / Halo / ODST / Spartan / MJOLNIR / UNSC / R2-D2 / BB-8 / C-3PO / IG-88 / K-2SO / Battle Droid / Clone Trooper / Master Chief / Forerunner Promethean.
@@ -600,7 +605,7 @@ ${subject}
 ━━━ THE ACTION (what the robot is doing) ━━━
 ${action}
 
-Render the body language precisely. Both contemplative-still AND mid-action poses are valid.
+Render the body language precisely — the robot is CAUGHT MID-ACTION in a candid split-second, NOT posed. NO standing-still beauty pose, NO front-on character-select framing.
 
 ━━━ THE ATMOSPHERIC SETTING ━━━
 ${landscape}
@@ -637,7 +642,7 @@ ${vibeDirective.slice(0, 250)}
 - NO Star Wars / Halo IP names
 
 ━━━ STRUCTURE — write 150-200 words ━━━
-Open with the camera angle + robot context ("Hero-shot low-3/4 angle of a slim feminine-coded chrome-and-titanium humanoid robot standing at the edge of a glowing-cyan waterfall pool, twin large multi-iris optic-lenses on the smooth dome-helm blooming kaleidoscope rainbow magenta-cyan-amber, exposed servo-joints catching the mist-light, contemplative still pose..."). Then weave in: pose, atmospheric setting with multi-tier depth, any visual flourish drama, lighting/atmosphere, palette and mood. The render MUST feel like a flagship sci-fi concept-art frame — premium quality, screenshot-worthy, every quadrant striking.
+Open with the ROBOT'S ACTION + a dynamic candid camera angle ("Low worm's-eye angle of a slim chrome-and-titanium humanoid robot MID-VAULT over a collapsed barrier, legs tucked tight, both arms thrown forward, body twisting through the air above a glowing-cyan waterfall pool, twin multi-iris optic-lenses on the dome-helm blooming kaleidoscope magenta-cyan-amber, exposed servo-joints catching the mist-light..."). The ACTION VERB and a dynamic OFF-AXIS angle LEAD — the robot is mid-motion, caught candid, NEVER posed front-on facing the lens. Then weave in: atmospheric setting with multi-tier depth, any visual flourish drama, lighting/atmosphere, palette and mood. The render MUST feel like a flagship sci-fi concept-art frame — premium quality, screenshot-worthy, every quadrant striking.
 
 Output ONLY the raw 150-200 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },

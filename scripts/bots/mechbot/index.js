@@ -369,15 +369,14 @@ module.exports = {
     // raytraced reflections / cinematic lighting precision" anchors carry
     // the VFX-render register.
     render:
-      'high-end cinematic 3D render — feature-film VFX quality, physically-based rendering with realistic subsurface-scatter and raytraced reflections, practical-plus-digital hybrid aesthetic, volumetric atmospheric depth, cinematic lighting precision',
+      'high-end cinematic 3D render, realistic materials and reflections, volumetric atmosphere',
   },
 
   // 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed` (prefix)
   // and `hyper detailed` (suffix) tech-spec adjectives. MechBot's index.js
   // overrides the shared-blocks PROMPT_PREFIX/SUFFIX so both layers needed
   // the same edit.
-  promptPrefix:
-    'cinematic sci-fi concept art, mechanical surfaces, ornate machinery, production-art polish',
+  promptPrefix: 'cinematic sci-fi concept art, intricate mechanical surfaces',
   promptSuffix: 'no text, no words, no watermarks, masterpiece quality',
 
   vibes: ['cinematic'],
