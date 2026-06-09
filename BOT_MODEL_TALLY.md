@@ -14,14 +14,14 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | ------------------ | ------ | ------------------ |
 | Nano Banana        | ✅     | —                  |
 | GPT Image 2        | ✅     | —                  |
-| Flux Dev           | ❌     | dropped 2026-06-01 |
-| Flux 2 Pro         | ❌     | dropped 2026-06-04 |
-| Flux 1.1 Pro       | ✅     | —                  |
-| Flux 1.1 Pro Ultra | ✅     | —                  |
-| Flux 2 Flex        | ❌     | dropped 2026-06-01 |
-| Flux 2 Max         | ❌     | dropped 2026-06-04 |
+| Flux Dev           | ❌     | dropped 2026-06-01            |
+| Flux 2 Pro         | ✅     | re-added 2026-06-09           |
+| Flux 1.1 Pro       | ✅     | —                             |
+| Flux 1.1 Pro Ultra | ✅     | —                             |
+| Flux 2 Flex        | ❌     | dropped 2026-06-01            |
+| Flux 2 Max         | ✅     | re-added 2026-06-09           |
 
-**Final allowedModels:** 4 — Banana, GPT2, F1.1 Pro Ultra, F1.1 Pro
+**Final allowedModels:** 6 — Banana, GPT2, F1.1 Pro Ultra, F1.1 Pro, F2 Pro, F2 Max
 
 ---
 
