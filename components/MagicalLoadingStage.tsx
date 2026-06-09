@@ -16,6 +16,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -27,6 +29,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
+
+// Same brand gradient as the Create + Inbox wordmarks (moon purple → cloud
+// pink → star teal), applied to the "Dreaming" title.
+const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 // 5 DreamBot painter variants — same character DNA, same dreamy
 // lavender/cloud/star scene, different painting poses (standing
@@ -126,7 +132,13 @@ export function MagicalLoadingStage({ subtext }: MagicalLoadingStageProps = {}) 
     <View style={styles.stage}>
       <Image source={mascotSource} style={styles.mascot} contentFit="contain" />
       <WaveLoader />
-      <Text style={styles.title}>Dreaming</Text>
+      {/* Gradient wordmark — same MaskedView + LinearGradient pattern as the
+          Create / Inbox titles. White Text defines the shape; gradient fills. */}
+      <MaskedView maskElement={<Text style={[styles.title, { color: '#FFFFFF' }]}>Dreaming</Text>}>
+        <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+          <Text style={[styles.title, { opacity: 0 }]}>Dreaming</Text>
+        </LinearGradient>
+      </MaskedView>
       {subtext ? <Text style={styles.subtext}>{subtext}</Text> : null}
     </View>
   );
