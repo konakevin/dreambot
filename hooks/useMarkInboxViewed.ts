@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Notifications from 'expo-notifications';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
@@ -26,13 +27,19 @@ export function useMarkInboxViewed() {
 
   return useMutation({
     mutationFn: async () => {
-      const { error } = await supabase
-        .from('users')
-        .update({ last_inbox_view_at: new Date().toISOString() })
-        .eq('id', user!.id);
+      // Use the SERVER clock via the RPC (now()) — NOT a client-side
+      // `new Date()`. notifications.created_at is stamped with the server
+      // clock, so a phone whose clock runs behind the server would set
+      // last_inbox_view_at to a moment BEFORE recent notifications, leaving
+      // them "new" forever → the badge clears then snaps right back. The
+      // push-tap path already uses this RPC; this keeps both paths identical.
+      const { error } = await supabase.rpc('mark_inbox_viewed', { p_user_id: user!.id });
       if (error) throw error;
     },
     onMutate: () => {
+      // Clear the OS badge immediately (don't wait for the count refetch) so
+      // the home-screen badge drops the instant the inbox opens.
+      Notifications.setBadgeCountAsync(0).catch(() => {});
       qc.setQueryData<number>(['newNotificationCount', user!.id], 0);
       qc.setQueryData(['inboxGrouped', user!.id], (data: unknown) => {
         if (!data || typeof data !== 'object') return data;

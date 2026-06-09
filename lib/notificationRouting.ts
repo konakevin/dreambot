@@ -16,6 +16,7 @@
  * push immediately).
  */
 import { InteractionManager } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import { useAlbumStore } from '@/store/album';
 import { queryClient } from '@/lib/queryClient';
 import { supabase } from '@/lib/supabase';
@@ -114,9 +115,12 @@ async function markInboxViewed(): Promise<void> {
     const { error } = await supabase.rpc('mark_inbox_viewed', { p_user_id: userId });
     if (error && __DEV__) console.warn('[notif] mark_inbox_viewed failed:', error.message);
 
-    // Optimistic local clear so the OS badge updates the instant the user taps,
-    // even before the RPC round-trip + refetch lands. useBadgeSync watches
-    // ['newNotificationCount', userId] → setBadgeCountAsync(0).
+    // Clear the OS badge directly + zero the cache so the home-screen badge
+    // drops the instant the user taps, before the RPC round-trip + refetch
+    // lands. The direct setBadgeCountAsync is the belt-and-suspenders for the
+    // case where the cached count was already 0 (push set the OS badge while
+    // backgrounded) — useBadgeSync's value-keyed effect wouldn't re-fire.
+    Notifications.setBadgeCountAsync(0).catch(() => {});
     queryClient.setQueryData(['newNotificationCount', userId], 0);
     queryClient.invalidateQueries({ queryKey: ['newNotificationCount', userId] });
     queryClient.invalidateQueries({ queryKey: ['inboxGrouped', userId] });

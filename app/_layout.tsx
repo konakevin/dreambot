@@ -353,6 +353,14 @@ function DataPrefetcher() {
       touchLastActive('foreground');
       Notifications.dismissAllNotificationsAsync().catch(() => {});
 
+      // EVERY foreground re-syncs the notification count → the iOS app-icon
+      // badge (via useBadgeSync). A push set the OS badge while backgrounded;
+      // without this the badge wouldn't re-sync until the 30s poll on a quick
+      // re-open. Cheap RPC, always worth it for badge correctness.
+      if (user) {
+        queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
+      }
+
       if (backgroundedAt.current === 0) return;
       const elapsed = Date.now() - backgroundedAt.current;
       if (elapsed > 60 * 1000) {
@@ -360,7 +368,6 @@ function DataPrefetcher() {
         if (user) {
           queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
           queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
-          queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
         }
       }
 

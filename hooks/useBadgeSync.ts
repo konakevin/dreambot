@@ -19,12 +19,19 @@ import { useNewNotificationCount } from './useNewNotificationCount';
  * the in-app dot are always identical.
  */
 export function useBadgeSync() {
-  const { data: unreadCount } = useNewNotificationCount();
+  const { data: unreadCount, dataUpdatedAt } = useNewNotificationCount();
 
+  // dataUpdatedAt is in the deps ON PURPOSE. A push sets the OS badge to N
+  // while backgrounded; if React's cached count was already 0 (you'd viewed
+  // everything), marking-viewed sets it to 0 — no value change — so an effect
+  // keyed only on `unreadCount` would NEVER re-issue setBadgeCountAsync and the
+  // OS badge keeps the push's N (the "stuck badge"). Keying on dataUpdatedAt
+  // re-pushes the count to the OS on EVERY refetch (foreground, mark-viewed,
+  // 30s poll, realtime), so the badge re-syncs even when the value is unchanged.
   useEffect(() => {
     if (unreadCount === undefined) return; // no user / not loaded yet — don't stomp the badge
     Notifications.setBadgeCountAsync(unreadCount).catch(() => {
       // Badge is cosmetic; a failure here must never surface to the user.
     });
-  }, [unreadCount]);
+  }, [unreadCount, dataUpdatedAt]);
 }
