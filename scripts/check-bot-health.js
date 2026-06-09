@@ -64,6 +64,13 @@ const INACTIVE_HOURS = parseInt(getKey('INACTIVE_HOURS') || '12', 10);
 const STALE_HOURS = parseInt(getKey('STALE_HOURS') || '18', 10);
 const DEACTIVATED_ALARM = parseInt(getKey('DEACTIVATED_ALARM') || '8', 10);
 const RECENT_FAILURE_HOURS = parseInt(getKey('RECENT_FAILURE_HOURS') || '24', 10);
+// ANY auto-deactivation is worth an alarm — the old deactivated-spike (≥8) had
+// a blind spot the gothbot/brickbot/yumbot incident (2026-06-09) fell into: 3
+// bots killed by a missing GEMINI/OPENAI key, well under 8.
+const AUTO_DEACTIVATED_ALARM = parseInt(getKey('AUTO_DEACTIVATED_ALARM') || '1', 10);
+// Early-warning: an active bot climbing toward the 5-failure cutoff, regardless
+// of reason (key missing, 429, credit). Catches it BEFORE it goes dark.
+const FAILURE_ALARM = parseInt(getKey('FAILURE_ALARM') || '3', 10);
 
 if (!SUPABASE_KEY) {
   console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
@@ -83,7 +90,9 @@ const CREDIT_PATTERNS = [
   // needed.
   const { data: schedules, error } = await sb
     .from('bot_schedules')
-    .select('bot_name, active, last_posted_at, consecutive_failures, last_failure_at, last_failure_reason, notes')
+    .select(
+      'bot_name, active, last_posted_at, consecutive_failures, last_failure_at, last_failure_reason, notes'
+    )
     .order('bot_name');
 
   if (error) {
@@ -125,38 +134,80 @@ const CREDIT_PATTERNS = [
     return CREDIT_PATTERNS.some((re) => re.test(b.last_failure_reason));
   });
 
+  // ─ Auto-deactivated bots ─ the dispatcher flips active=false + stamps an
+  //   "auto-deactivated" note after 5 consecutive failures. Excludes bots
+  //   disabled by hand (no such note) so an intentional pause never alarms.
+  const autoDeactivated = inactive.filter((b) => /auto-deactivated/i.test(b.notes || ''));
+
+  // ─ Active bots climbing toward the 5-failure cutoff (early warning) ─
+  const elevatedFailures = active.filter((b) => (b.consecutive_failures || 0) >= FAILURE_ALARM);
+
   // ─ Summary ─
   console.log(`Active bots: ${active.length}, inactive: ${inactive.length}`);
-  console.log(`Active with last_posted_at within ${INACTIVE_HOURS}h: ${activeWithRecentPost.length}`);
+  console.log(`Auto-deactivated bots: ${autoDeactivated.length}`);
+  console.log(
+    `Active bots with >= ${FAILURE_ALARM} consecutive failures: ${elevatedFailures.length}`
+  );
+  console.log(
+    `Active with last_posted_at within ${INACTIVE_HOURS}h: ${activeWithRecentPost.length}`
+  );
   console.log(`Active stale (last_posted > ${STALE_HOURS}h): ${activeStale.length}`);
-  console.log(`Bots with credit-exhaustion failure in last ${RECENT_FAILURE_HOURS}h: ${creditExhausted.length}`);
+  console.log(
+    `Bots with credit-exhaustion failure in last ${RECENT_FAILURE_HOURS}h: ${creditExhausted.length}`
+  );
 
   let alarm = false;
 
   if (fleetInactive) {
     console.error(
-      `::error::FLEET INACTIVE — every one of ${active.length} active bot(s) has no post within ${INACTIVE_HOURS}h. Likely fleet-wide infra outage (credits / Replicate / dispatcher cron). Check the most recent bots-dispatcher workflow run.`,
+      `::error::FLEET INACTIVE — every one of ${active.length} active bot(s) has no post within ${INACTIVE_HOURS}h. Likely fleet-wide infra outage (credits / Replicate / dispatcher cron). Check the most recent bots-dispatcher workflow run.`
     );
     alarm = true;
   }
 
   if (activeStale.length > 0) {
     console.error(
-      `::error::${activeStale.length} active bot(s) stale (last_posted > ${STALE_HOURS}h): ${activeStale.map((b) => b.bot_name).join(', ')}`,
+      `::error::${activeStale.length} active bot(s) stale (last_posted > ${STALE_HOURS}h): ${activeStale.map((b) => b.bot_name).join(', ')}`
     );
     alarm = true;
   }
 
   if (inactive.length >= DEACTIVATED_ALARM) {
     console.error(
-      `::error::${inactive.length} inactive bot(s) (>= ${DEACTIVATED_ALARM} threshold) — possible wave of auto-deactivations. Inactive: ${inactive.map((b) => b.bot_name).join(', ')}`,
+      `::error::${inactive.length} inactive bot(s) (>= ${DEACTIVATED_ALARM} threshold) — possible wave of auto-deactivations. Inactive: ${inactive.map((b) => b.bot_name).join(', ')}`
+    );
+    alarm = true;
+  }
+
+  if (autoDeactivated.length >= AUTO_DEACTIVATED_ALARM) {
+    console.error(
+      `::error::${autoDeactivated.length} bot(s) AUTO-DEACTIVATED after consecutive failures: ${autoDeactivated
+        .map(
+          (b) =>
+            `${b.bot_name} [${(b.last_failure_reason || 'no reason')
+              .replace(/[^\x20-\x7E]/g, '')
+              .trim()
+              .slice(0, 70)}]`
+        )
+        .join(
+          '; '
+        )}. Fix the root cause, then reactivate (active=true, next_due_at=now, consecutive_failures=0).`
+    );
+    alarm = true;
+  }
+
+  if (elevatedFailures.length > 0) {
+    console.error(
+      `::error::${elevatedFailures.length} active bot(s) at >= ${FAILURE_ALARM} consecutive failures — heading toward auto-deactivation: ${elevatedFailures
+        .map((b) => `${b.bot_name}=${b.consecutive_failures}`)
+        .join(', ')}`
     );
     alarm = true;
   }
 
   if (creditExhausted.length > 0) {
     console.error(
-      `::error::Anthropic credit-exhaustion failure recorded on ${creditExhausted.length} bot(s) within the last ${RECENT_FAILURE_HOURS}h. Top up at https://console.anthropic.com/settings/billing — bots cannot Sonnet-brief without credits. Affected: ${creditExhausted.map((b) => b.bot_name).join(', ')}`,
+      `::error::Anthropic credit-exhaustion failure recorded on ${creditExhausted.length} bot(s) within the last ${RECENT_FAILURE_HOURS}h. Top up at https://console.anthropic.com/settings/billing — bots cannot Sonnet-brief without credits. Affected: ${creditExhausted.map((b) => b.bot_name).join(', ')}`
     );
     alarm = true;
   }
@@ -166,7 +217,7 @@ const CREDIT_PATTERNS = [
     schedules.forEach((b) => {
       const ageH = lastPostAge(b) === null ? 'NEVER' : (lastPostAge(b) / 3600_000).toFixed(1) + 'h';
       console.log(
-        `  ${b.bot_name.padEnd(12)} active=${b.active}  fails=${b.consecutive_failures || 0}  last_post=${ageH}`,
+        `  ${b.bot_name.padEnd(12)} active=${b.active}  fails=${b.consecutive_failures || 0}  last_post=${ageH}`
       );
     });
     process.exit(1);
