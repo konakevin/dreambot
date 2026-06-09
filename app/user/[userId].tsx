@@ -354,9 +354,10 @@ export default function PublicProfileScreen() {
         }}
         onMorePress={handleMoreMenu}
       />
-      {/* Posts / Reposts icon toggle — only on the posts view, and only when
-          the viewer is allowed to see this account's posts. */}
-      {activeTab === 'posts' && canSeePosts && (
+      {/* Posts / Reposts icon toggle — only on the posts view, only when
+          the viewer is allowed to see this account's posts, and never for
+          bots (bots don't repost, so there's only the Posts album). */}
+      {activeTab === 'posts' && canSeePosts && !isBot && (
         <View style={styles.gridToggleRow}>
           {(
             [
@@ -484,9 +485,11 @@ export default function PublicProfileScreen() {
           {canSeePosts ? (
             <PostGrid
               source={
-                gridView === 'reposts' ? { type: 'reposts', userId } : { type: 'user', userId }
+                gridView === 'reposts' && !isBot
+                  ? { type: 'reposts', userId }
+                  : { type: 'user', userId }
               }
-              emptyText={gridView === 'reposts' ? 'No reposts yet' : 'No posts yet'}
+              emptyText={gridView === 'reposts' && !isBot ? 'No reposts yet' : 'No posts yet'}
               ListHeaderComponent={header}
               highlightPostId={viewedPost}
               onScrollProgress={handleScrollProgress}
