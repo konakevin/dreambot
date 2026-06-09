@@ -24,6 +24,12 @@ function loadIfExists(name) {
 module.exports = {
   PALETTES: load('palettes'),
   LIGHTING: load('lighting'),
+  // Bot-wide "look register" (2026-06-09) — 13 gorgeous rendering styles
+  // (oil / watercolor / woodblock / stained-glass / pop-art / impasto /
+  // crystalline / etc.) rolled per render via rollSharedDNA. The neutral
+  // medium defers all finish to the rolled look; see BOT_SCENE_QUALITY_
+  // PLAYBOOK.md "Medium Looks". Flowers stay the hero on every look.
+  BLOOM_LOOK_REGISTER: load('bloom_look_register'),
   // ─── landscape path: declarative axis-system pools (2026-05-16 migration) ───
   BLOOMBOT_LANDSCAPE_LANDFORM: loadIfExists('bloombot_landscape_landform'),
   BLOOMBOT_LANDSCAPE_SCALE_PROVER: loadIfExists('bloombot_landscape_scale_prover'),

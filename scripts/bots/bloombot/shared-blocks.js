@@ -37,6 +37,17 @@ const PROMPT_SUFFIX =
 const GPT_CLEAN =
   'Cinematic floral illustration, clean editorial-poster render with clearly readable blooms and recognizable petal detail, lush layered composition with atmospheric depth, abundant garden register';
 
+// BLOOM_NEUTRAL — the "Medium Looks" neutral medium fragment (2026-06-09).
+// Overrides the DB bloom_hyperreal_cgi.flux_fragment (which baked a fixed
+// "hyperreal painterly CGI" finish) so the bot-wide look-register axis can
+// set the rendering MEDIUM per render instead. Locks ONLY content (lush
+// flowers fill the frame as the hero, color stays within the scene's
+// palette) — NO rendering-medium / finish tokens. The rolled look that
+// LEADS the Sonnet output carries the medium. The old painterly-CGI finish
+// is preserved as look #1 in bloom_look_register.json, so nothing is lost.
+const BLOOM_NEUTRAL =
+  "lush abundant blooms filling the frame as the unmistakable hero, every petal crisp and color-saturated strictly within the scene's chosen palette; the rendering medium, finish, surface and palette treatment are set by the look-register tokens that OPEN the prompt";
+
 const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE — NON-NEGOTIABLE ━━━
 No humans, no faces, no figures, no silhouettes, no shadows of people anywhere in the frame. Wildlife (hummingbird, bee, butterfly, dragonfly, small lizard) is allowed only as peripheral accent — never the subject.`;
 
@@ -57,6 +68,7 @@ module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   GPT_CLEAN,
+  BLOOM_NEUTRAL,
   NO_PEOPLE_BLOCK,
   DENSITY_BLOCK,
   ARRANGEMENT_BLOCK,

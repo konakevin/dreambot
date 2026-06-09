@@ -165,6 +165,29 @@ The `cleanMediumByModel` rule auto-swaps gpt-image-2 + nano-banana to a `*_gpt_c
 
 ---
 
+## "Medium Looks" — 4TH PROVEN BOT: BloomBot gorgeous-art looks (2026-06-09)
+
+**Result:** shipped the look-register axis to BloomBot — **13 fine-art rendering styles** (hyperreal painterly-CGI / Dutch Golden Age oil / botanical watercolor / impressionist oil / ukiyo-e woodblock / Tiffany stained glass / macro photography / pop-art screenprint / gongbi ink-wash / vintage seed-catalogue litho / impasto oil / iridescent crystalline glass / crewelwork tapestry). BloomBot is a **CAST-identity bot** (flowers are always the hero) like YumBot, but it taught three things the first three bots didn't.
+
+**NEW LESSON A — a bot with a CENTRAL brief-injection point needs NO per-template `lookOverride()`.** YumBot/MangaBot/ChibiBot inject the override into each path's archetype template. BloomBot's `buildBrief` already prepends a single `LUSH_HERO_MANDATE` to **every** path (declarative string, declarative `{brief}`, AND legacy function paths) — so the look override goes there ONCE, covering all 18 paths with zero per-template edits. If a bot funnels every path through one brief-assembly point, inject there. Handle all return shapes (string / `{brief}` / legacy function return).
+
+**NEW LESSON B — you may not need a new DB medium or migration.** Instead of adding a `bloom_neutral` `dream_mediums` row, BloomBot **reused its existing `bloom_hyperreal_cgi` key** and neutralized it in code: `bot.mediumStyles['bloom_hyperreal_cgi'] = BLOOM_NEUTRAL` (a content-only fragment) overrides the DB `flux_fragment` (which baked the fixed painterly-CGI finish). The old CGI finish was preserved as **look #1** so nothing was lost, and the existing `dlt_clean_mediums` row kept DLT working untouched. No migration, no new medium, no DLT row. Works when the bot's `mediumStyles[key]` override path exists (engine line ~1334) — the override beats the DB fragment.
+
+**NEW LESSON C — for a HERO-IDENTITY bot, keep the content prefix LEADING and let the look FOLLOW (don't replace the prefix).** YumBot/MangaBot replaced the bot `PROMPT_PREFIX` with a short anchor via `promptPrefixByMedium` so the rolled look LEADS CLIP. BloomBot deliberately did NOT — its `PROMPT_PREFIX` ("breathtaking LUSH flower scene, abundant blooms filling the frame as the unmistakable hero…") is **pure content with no rendering-medium tokens**, so it's safe to keep leading; the look lands right after it (inside Sonnet's output). Kevin's call (option 1): for a bot whose entire bar is "flowers are the unmistakable hero," protect that hero-identity by letting it lead, and accept the look as a strong follow rather than the lead anchor. Validated: 14-render batch, 0 fails, looks rendered distinctly while flowers stayed hero on every one. **Rule of thumb: replace the prefix to make the look lead ONLY when the prefix carries competing STYLE tokens; if the prefix is content-only and the bot's identity is the cast-as-hero, keep it leading.**
+
+**NEW LESSON D — artist-subject-drag kills a look even when phrased technique-only.** "Art Nouveau decorative botanical panel" was hearted→banned: Art Nouveau drags a Mucha-style woman-with-flowers into frame even when the entry names only technique (whiplash linework / gold leaf / poster-litho). Curate OUT any look whose canonical subject is NOT the bot's cast — same family as the photographer/artist name-drag lesson. The other 13 (oil / watercolor / glass / print / textile registers) have no human-subject prior and composed cleanly.
+
+**Model note.** Built + validated on `flux-1.1-pro-ultra` only (the medium gate was locked to ultra during the build, which also meant zero `cleanMediumByModel` leak). Re-opened afterward to the 6-model mix (banana / gpt2 / ultra / 1.1-pro / f2-pro / f2-max) by widening `dream_mediums.allowed_models` — gpt-2 + nano-banana still route to `bloombot_gpt_clean` (no look) via `cleanMediumByModel`; the 4 flux models carry the looks. (The bot `allowedModels` list only FILTERS the medium's `allowed_models` — to actually enable a model for a medium you must widen the MEDIUM's `allowed_models`, not just the bot list. This bit us mid-session: re-adding f2-pro/max to the bot list rendered 100% ultra because the medium gated to ultra-only.)
+
+**Files (BloomBot — clone for the next cast-identity bot with a central brief point):**
+- Look pool: `scripts/bots/bloombot/seeds/bloom_look_register.json` (13, pure-rendering-style)
+- Neutral fragment: `scripts/bots/bloombot/shared-blocks.js` `BLOOM_NEUTRAL`
+- Wiring: `scripts/bots/bloombot/index.js` (`mediumStyles['bloom_hyperreal_cgi']` override + `rollSharedDNA.lookRegister` + the `lookOverride` block prepended in `buildBrief`)
+- Pool load: `scripts/bots/bloombot/pools.js` `BLOOM_LOOK_REGISTER`
+- DB: none (reused `bloom_hyperreal_cgi` + its existing `dlt_clean_mediums` row)
+
+---
+
 ## ⚠️ ADDING A BOT MEDIUM? You MUST also add a "cleaned medium" for DLT (2026-05-25)
 
 When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` row), you **must also create a corresponding row in `dlt_clean_mediums`**. This is not optional — skipping it silently breaks "Dream Like This."

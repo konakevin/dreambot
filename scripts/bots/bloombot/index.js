@@ -92,6 +92,13 @@ module.exports = {
   },
   mediumStyles: {
     bloombot_gpt_clean: blocks.GPT_CLEAN,
+    // Override the DB bloom_hyperreal_cgi flux_fragment with the neutral
+    // content-only fragment so the bot-wide look register (rolled in
+    // rollSharedDNA, injected at the top of the brief in buildBrief) sets
+    // the rendering medium per render. The old painterly-CGI finish lives
+    // on as look #1 in bloom_look_register.json. See "Medium Looks" in
+    // BOT_SCENE_QUALITY_PLAYBOOK.md.
+    bloom_hyperreal_cgi: blocks.BLOOM_NEUTRAL,
   },
   promptPrefixByMedium: {
     bloombot_gpt_clean: 'lush flower scene',
@@ -280,6 +287,11 @@ module.exports = {
       flowerTheme: fc.theme,
       flowerRegister: fc.register,
       tropical: arrangementTropical,
+      // Bot-wide "Medium Looks" axis — one of 14 gorgeous rendering styles
+      // per render. Consumed in buildBrief, injected at the TOP of the brief
+      // so Sonnet opens its Flux prompt with these tokens (the medium leads
+      // CLIP). Recency-aware so the same look never clusters back-to-back.
+      lookRegister: picker.pickWithRecency(pools.BLOOM_LOOK_REGISTER, 'look_register'),
     };
   },
 
@@ -290,6 +302,19 @@ module.exports = {
     // ARRANGEMENT blocks, so the "lush flower hero" bar must be injected here.
     const LUSH_HERO_MANDATE = `━━━ BLOOMBOT BAR — LUSH FLOWER HERO (NON-NEGOTIABLE, READ FIRST) ━━━
 This MUST be a lush, beautiful FLOWER scene. Flowers are the unmistakable HERO and FILL the frame — either a monumental bloom-form or a dense, overflowing bloom-mass dominating 60%+ of the composition. Any setting (ruin / valley / wall / waterfall / architecture / landscape) is ONLY a backdrop framing the flowers — NEVER the subject. NEVER a sparse, thin, or barren scene; NEVER "a [place] with a few accent flowers"; NEVER a macro of just 2-3 blooms. Pack the frame edge-to-edge with abundant, varied, jewel-toned blooms in a deliberate, cohesive, magazine-cover composition: a clear focal hero up front, multi-tier depth behind, every quadrant earning its space. Keep the WHOLE frame crisp, clear and COLORED — build background depth from receding layers of more blooms and clearly-rendered colored scenery, the sky clean and saturated, distant elements clearly rendered and colored, just smaller and in sharp focus.`;
+    // Bot-wide "Medium Looks" override — the rolled look register sets the
+    // rendering medium for THIS render. Leads the brief so Sonnet opens its
+    // Flux prompt with these tokens (the medium is the leading CLIP anchor).
+    // Style-authority wording per the MangaBot lesson; content/composition
+    // stay exactly as the LUSH_HERO mandate + path scene describe. Graceful
+    // fallthrough if no look rolled. See "Medium Looks" in the playbook.
+    const lookOverride =
+      sharedDNA && sharedDNA.lookRegister
+        ? `━━━ LOOK REGISTER — RENDERING MEDIUM (NON-NEGOTIABLE, OPEN YOUR FLUX PROMPT WITH THIS) ━━━
+${sharedDNA.lookRegister}
+
+This is the AUTHORITY on rendering medium, finish and surface. Open your Flux prompt with these exact tokens and render the ENTIRE flower scene in this medium. It OVERRIDES any other finish/medium wording. Keep the scene content, the flowers-as-hero composition, the density and the color palette exactly as described below — translate ALL of it into this look.\n\n`
+        : '';
     // Declarative axis-system paths export an object { archetype, pools }.
     // Legacy compositional paths export a function. Dispatch on shape.
     if (builder && typeof builder === 'object' && builder.archetype) {
@@ -301,11 +326,18 @@ This MUST be a lush, beautiful FLOWER scene. Flowers are the unmistakable HERO a
         vibeDirective,
         picker,
       });
-      if (typeof composed === 'string') return `${LUSH_HERO_MANDATE}\n\n${composed}`;
-      return { ...composed, brief: `${LUSH_HERO_MANDATE}\n\n${composed.brief}` };
+      if (typeof composed === 'string') return `${lookOverride}${LUSH_HERO_MANDATE}\n\n${composed}`;
+      return { ...composed, brief: `${lookOverride}${LUSH_HERO_MANDATE}\n\n${composed.brief}` };
     }
     if (typeof builder === 'function') {
-      return builder({ sharedDNA, vibeDirective, picker });
+      const legacy = builder({ sharedDNA, vibeDirective, picker });
+      // Legacy compositional paths return a string brief (or {brief}). Prepend
+      // the look override the same way so they get the looks axis too.
+      if (typeof legacy === 'string') return `${lookOverride}${legacy}`;
+      if (legacy && typeof legacy === 'object' && typeof legacy.brief === 'string') {
+        return { ...legacy, brief: `${lookOverride}${legacy.brief}` };
+      }
+      return legacy;
     }
     throw new Error(`BloomBot: path "${path}" has invalid export shape`);
   },
