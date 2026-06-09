@@ -41,6 +41,15 @@ export interface DualSwapRouting {
    *   'classify-failed'    — vision call threw → positional
    */
   routing: string;
+  /**
+   * TRUE only when the cast is mixed-gender but the render produced TWO
+   * SAME-gender bodies — i.e. there is no opposite-gender body to route one of
+   * the faces onto, so any swap WILL paste a mismatched-gender face (the
+   * 2026-06-09 "wife's face on a bearded man" failure). The caller re-renders
+   * once and, if it persists, falls back to a single swap. Never true for
+   * same-sex casts (two same-gender bodies is correct there).
+   */
+  collision: boolean;
 }
 
 /** Map a castResolver genderLock sentence to a plain gender. */
@@ -71,13 +80,22 @@ export async function routeDualSwapByGender(
 
   // Same-sex or unknown gender → can't gender-swap → keep positional, no call.
   if (!mixed) {
-    return { leftSource: a.sourceUrl, rightSource: b.sourceUrl, routing: 'positional-samesex' };
+    return {
+      leftSource: a.sourceUrl,
+      rightSource: b.sourceUrl,
+      routing: 'positional-samesex',
+      collision: false,
+    };
   }
 
   try {
     const maleSource = a.gender === 'male' ? a.sourceUrl : b.sourceUrl;
     const femaleSource = a.gender === 'male' ? b.sourceUrl : a.sourceUrl;
     const { left, right } = await classifyDualGenders(renderedUrl, replicateToken);
+    // COLLISION: mixed cast, but both rendered bodies read the SAME gender →
+    // there is no opposite-gender body to route one face onto. The caller
+    // re-renders / falls back. (Both reads must be present + equal.)
+    const collision = left !== null && right !== null && left === right;
     // Trust the left read; if only the right is readable, take its complement.
     const leftBody = left ?? (right === 'male' ? 'female' : right === 'female' ? 'male' : null);
 
@@ -86,6 +104,7 @@ export async function routeDualSwapByGender(
         leftSource: maleSource,
         rightSource: femaleSource,
         routing: maleSource !== a.sourceUrl ? 'corrected-flip' : 'confirmed',
+        collision,
       };
     }
     if (leftBody === 'female') {
@@ -93,11 +112,22 @@ export async function routeDualSwapByGender(
         leftSource: femaleSource,
         rightSource: maleSource,
         routing: femaleSource !== a.sourceUrl ? 'corrected-flip' : 'confirmed',
+        collision,
       };
     }
-    return { leftSource: a.sourceUrl, rightSource: b.sourceUrl, routing: 'unread' };
+    return {
+      leftSource: a.sourceUrl,
+      rightSource: b.sourceUrl,
+      routing: 'unread',
+      collision: false,
+    };
   } catch (err) {
     console.warn('[routeDualSwapByGender] classify failed, positional:', (err as Error).message);
-    return { leftSource: a.sourceUrl, rightSource: b.sourceUrl, routing: 'classify-failed' };
+    return {
+      leftSource: a.sourceUrl,
+      rightSource: b.sourceUrl,
+      routing: 'classify-failed',
+      collision: false,
+    };
   }
 }

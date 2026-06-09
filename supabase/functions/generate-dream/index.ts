@@ -1169,7 +1169,7 @@ Output ONLY the prompt.`;
       // Flux often flips the two subjects' L/R placement vs the prompt; the swap
       // pastes onto whatever body is in each crop, so on a mixed-gender couple a
       // flip becomes a gender swap. Route male→male body, female→female body.
-      const { leftSource, rightSource, routing } = await routeDualSwapByGender(
+      let { leftSource, rightSource, routing, collision } = await routeDualSwapByGender(
         {
           sourceUrl: faceSwapSources[0].sourceUrl,
           gender: genderFromLock(faceSwapSources[0].genderLock),
@@ -1184,82 +1184,28 @@ Output ONLY the prompt.`;
       logAxes.dualGenderRouting = routing;
       console.log(`[generate-dream] Dual gender routing: ${routing}`);
 
-      const FACE_SWAP_MAX_RETRIES = 3;
-      const FACE_SWAP_BACKOFF_MS = [2_000, 4_000]; // before attempt 2, attempt 3
-      let swapSuccess = false;
-      for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
-        try {
-          if (attempt > 1) {
-            const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
-            console.log(`[generate-dream] Backoff ${delay}ms before retry ${attempt}`);
-            await new Promise((r) => setTimeout(r, delay));
-          }
-          console.log(
-            `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
-          );
-          tempUrl = await dispatchDualFaceSwap(
-            leftSource,
-            rightSource,
-            tempUrl,
-            REPLICATE_TOKEN,
-            supabase,
-            userId,
-            t0 + 140_000
-          );
-          lap('dual-face-swap');
-          console.log('[generate-dream] Dual face swap complete');
-          logAxes.faceSwapResult = 'dual-success';
-          logAxes.faceSwapAttempts = attempt;
-          swapSuccess = true;
-          break;
-        } catch (err) {
-          console.warn(
-            `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
-            (err as Error).message
-          );
-          if (attempt === FACE_SWAP_MAX_RETRIES) {
-            fallbackReasons.push(`dual_face_swap_failed_${attempt}x:${(err as Error).message}`);
-            logAxes.faceSwapResult = 'dual-failed';
-            logAxes.faceSwapError = (err as Error).message;
-            logAxes.faceSwapAttempts = attempt;
-          }
-        }
-      }
-      // Phase 3 / Option A: if all 3 attempts exhausted both primary and the
-      // entire fallback chain, this is a hard fail. The user paid for
-      // "me + my wife" but face-swap couldn't deliver it. Throw so the outer
-      // catch refunds the sparkle. Previously this fell through with
-      // unswapped output (random Sonnet faces) and no refund.
-      if (!swapSuccess) {
-        // ── One final escape: re-render Flux + re-attempt dual swap ──
-        // The 3-attempt internal loop tries the SAME flux output every time;
-        // 9 (3 × 3 models) "no face found" rejections means the rendered
-        // scene has undetectable face geometry — usually faces too small,
-        // off-canvas, or occluded. A fresh Flux render with different seed
-        // generally fixes this. We cap at one re-render (2x total render
-        // cost on the dual path) — beyond that it's structural and the
-        // hard-fail + refund is correct. 2026-05-30, Kevin hardening pass.
+      // ── Gender-collision guard (2026-06-09 incident) ──
+      // Mixed-gender cast but the render produced two SAME-gender bodies → any
+      // swap pastes a mismatched-gender face (wife's face on a bearded man).
+      // The front-loaded gender directive makes this rare; when it still
+      // happens, re-render ONCE (a fresh roll usually fixes it) + re-route.
+      if (collision) {
         console.warn(
-          '[generate-dream] Dual swap exhausted — re-rendering Flux once for fresh face geometry'
+          '[generate-dream] ⚠ Dual gender COLLISION (two same-gender bodies) — re-rendering once'
         );
-        fallbackReasons.push('dual_render_retry');
+        fallbackReasons.push('dual_gender_collision_rerender');
         try {
-          const retryGen = await generateImage(
+          const cg = await generateImage(
             effectiveMode,
             finalPrompt,
             effectiveInputImage,
-            {
-              replicateToken: REPLICATE_TOKEN,
-              openaiKey: OPENAI_KEY,
-              geminiKey: GEMINI_KEY,
-            },
+            { replicateToken: REPLICATE_TOKEN, openaiKey: OPENAI_KEY, geminiKey: GEMINI_KEY },
             pickedModel,
             'jpg'
           );
-          tempUrl = retryGen.url;
-          replicatePredictionId = retryGen.predictionId;
-          // Re-route by gender — the fresh render may have flipped L/R.
-          const routed2 = await routeDualSwapByGender(
+          tempUrl = cg.url;
+          replicatePredictionId = cg.predictionId;
+          ({ leftSource, rightSource, routing, collision } = await routeDualSwapByGender(
             {
               sourceUrl: faceSwapSources[0].sourceUrl,
               gender: genderFromLock(faceSwapSources[0].genderLock),
@@ -1270,23 +1216,145 @@ Output ONLY the prompt.`;
             },
             tempUrl,
             REPLICATE_TOKEN
+          ));
+          logAxes.dualGenderRoutingRetry = routing;
+          console.log(
+            `[generate-dream] Post-collision re-route: ${routing} (collision=${collision})`
           );
-          tempUrl = await dispatchDualFaceSwap(
-            routed2.leftSource,
-            routed2.rightSource,
-            tempUrl,
-            REPLICATE_TOKEN,
-            supabase,
-            userId,
-            t0 + 140_000
+        } catch (e) {
+          console.warn(
+            '[generate-dream] collision re-render failed, proceeding:',
+            (e as Error).message
           );
-          console.log('[generate-dream] Dual face swap recovered after Flux re-render');
-          logAxes.faceSwapResult = 'dual-success-rerender';
-          swapSuccess = true;
-        } catch (rerenderErr) {
+        }
+      }
+
+      if (collision) {
+        // ── Persisted collision → single-swap fallback ──
+        // Do NOT paste a mismatched-gender face. Swap ONLY the user's own face;
+        // the companion renders as a generic described person. Degraded (the
+        // +1 likeness is lost) but never grotesque — far better than the wife's
+        // face on a bearded man.
+        console.error(
+          '[generate-dream] ⚠ Dual gender collision PERSISTED after re-render — single-swap fallback (self only)'
+        );
+        logAxes.dualGenderRouting = 'collision-fallback-single';
+        fallbackReasons.push('dual_gender_collision_single_fallback');
+        const selfSource =
+          faceSwapSources.find((s) => s.role === 'self')?.sourceUrl ?? faceSwapSources[0].sourceUrl;
+        try {
+          tempUrl = await faceSwap(selfSource, tempUrl, REPLICATE_TOKEN, supabase, userId);
+          logAxes.faceSwapResult = 'single-fallback-success';
+        } catch (err) {
           throw new Error(
-            `face_swap: dual cast face swap exhausted after ${FACE_SWAP_MAX_RETRIES} attempts + 1 re-render (${(rerenderErr as Error).message.slice(0, 160)})`
+            `face_swap: single-swap fallback after gender collision failed (${(err as Error).message.slice(0, 160)})`
           );
+        }
+      } else {
+        const FACE_SWAP_MAX_RETRIES = 3;
+        const FACE_SWAP_BACKOFF_MS = [2_000, 4_000]; // before attempt 2, attempt 3
+        let swapSuccess = false;
+        for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
+          try {
+            if (attempt > 1) {
+              const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
+              console.log(`[generate-dream] Backoff ${delay}ms before retry ${attempt}`);
+              await new Promise((r) => setTimeout(r, delay));
+            }
+            console.log(
+              `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
+            );
+            tempUrl = await dispatchDualFaceSwap(
+              leftSource,
+              rightSource,
+              tempUrl,
+              REPLICATE_TOKEN,
+              supabase,
+              userId,
+              t0 + 140_000
+            );
+            lap('dual-face-swap');
+            console.log('[generate-dream] Dual face swap complete');
+            logAxes.faceSwapResult = 'dual-success';
+            logAxes.faceSwapAttempts = attempt;
+            swapSuccess = true;
+            break;
+          } catch (err) {
+            console.warn(
+              `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
+              (err as Error).message
+            );
+            if (attempt === FACE_SWAP_MAX_RETRIES) {
+              fallbackReasons.push(`dual_face_swap_failed_${attempt}x:${(err as Error).message}`);
+              logAxes.faceSwapResult = 'dual-failed';
+              logAxes.faceSwapError = (err as Error).message;
+              logAxes.faceSwapAttempts = attempt;
+            }
+          }
+        }
+        // Phase 3 / Option A: if all 3 attempts exhausted both primary and the
+        // entire fallback chain, this is a hard fail. The user paid for
+        // "me + my wife" but face-swap couldn't deliver it. Throw so the outer
+        // catch refunds the sparkle. Previously this fell through with
+        // unswapped output (random Sonnet faces) and no refund.
+        if (!swapSuccess) {
+          // ── One final escape: re-render Flux + re-attempt dual swap ──
+          // The 3-attempt internal loop tries the SAME flux output every time;
+          // 9 (3 × 3 models) "no face found" rejections means the rendered
+          // scene has undetectable face geometry — usually faces too small,
+          // off-canvas, or occluded. A fresh Flux render with different seed
+          // generally fixes this. We cap at one re-render (2x total render
+          // cost on the dual path) — beyond that it's structural and the
+          // hard-fail + refund is correct. 2026-05-30, Kevin hardening pass.
+          console.warn(
+            '[generate-dream] Dual swap exhausted — re-rendering Flux once for fresh face geometry'
+          );
+          fallbackReasons.push('dual_render_retry');
+          try {
+            const retryGen = await generateImage(
+              effectiveMode,
+              finalPrompt,
+              effectiveInputImage,
+              {
+                replicateToken: REPLICATE_TOKEN,
+                openaiKey: OPENAI_KEY,
+                geminiKey: GEMINI_KEY,
+              },
+              pickedModel,
+              'jpg'
+            );
+            tempUrl = retryGen.url;
+            replicatePredictionId = retryGen.predictionId;
+            // Re-route by gender — the fresh render may have flipped L/R.
+            const routed2 = await routeDualSwapByGender(
+              {
+                sourceUrl: faceSwapSources[0].sourceUrl,
+                gender: genderFromLock(faceSwapSources[0].genderLock),
+              },
+              {
+                sourceUrl: faceSwapSources[1].sourceUrl,
+                gender: genderFromLock(faceSwapSources[1].genderLock),
+              },
+              tempUrl,
+              REPLICATE_TOKEN
+            );
+            tempUrl = await dispatchDualFaceSwap(
+              routed2.leftSource,
+              routed2.rightSource,
+              tempUrl,
+              REPLICATE_TOKEN,
+              supabase,
+              userId,
+              t0 + 140_000
+            );
+            console.log('[generate-dream] Dual face swap recovered after Flux re-render');
+            logAxes.faceSwapResult = 'dual-success-rerender';
+            swapSuccess = true;
+          } catch (rerenderErr) {
+            throw new Error(
+              `face_swap: dual cast face swap exhausted after ${FACE_SWAP_MAX_RETRIES} attempts + 1 re-render (${(rerenderErr as Error).message.slice(0, 160)})`
+            );
+          }
         }
       }
     } else if (faceSwapSource && tempUrl) {
