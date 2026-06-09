@@ -11,6 +11,7 @@ import {
   RefreshControl,
   Modal,
   Pressable,
+  ActionSheetIOS,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -607,6 +608,30 @@ export default function InboxScreen() {
     ]);
   }
 
+  // Top-right "•••" menu — surfaces the bulk actions that used to be buried
+  // behind "Edit": one-tap Clear all (the common "wipe my inbox" intent) +
+  // Select for partial multi-delete. Single-row deletes are handled by swipe.
+  function openInboxMenu() {
+    Haptics.selectionAsync();
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Clear all', 'Select', 'Cancel'],
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 2,
+      },
+      (index) => {
+        if (index === 0) {
+          showAlert('Clear all notifications?', 'This cannot be undone.', [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Clear all', style: 'destructive', onPress: () => deleteAll() },
+          ]);
+        } else if (index === 1) {
+          setSelectMode(true);
+        }
+      }
+    );
+  }
+
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.header}>
@@ -654,12 +679,8 @@ export default function InboxScreen() {
             <Text style={styles.headerTitle}>Inbox</Text>
             <View style={styles.headerActions}>
               {hasAny && (
-                <TouchableOpacity
-                  onPress={() => setSelectMode(true)}
-                  activeOpacity={0.7}
-                  hitSlop={8}
-                >
-                  <Text style={styles.editText}>Edit</Text>
+                <TouchableOpacity onPress={openInboxMenu} activeOpacity={0.7} hitSlop={8}>
+                  <Ionicons name="ellipsis-horizontal" size={22} color={colors.textPrimary} />
                 </TouchableOpacity>
               )}
             </View>
@@ -918,11 +939,6 @@ const styles = StyleSheet.create({
   selectAllText: {
     color: colors.accent,
     fontSize: fontScale(13),
-    fontWeight: '600',
-  },
-  editText: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
     fontWeight: '600',
   },
   footer: {
