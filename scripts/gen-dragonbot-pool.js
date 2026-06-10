@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // DRAGON-BATTLE PATH (2026-06-10 — new). Dragon mid-combat,
+  // fire on a castle/army or clashing with a rival.
+  // ════════════════════════════════════════════════════════
+
+  dragon_battle_dragon: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BATTLE — the colossal Western DRAGON on the attack (the hero). Each entry 30-50 words. TRADITIONAL WESTERN dragon ONLY: four legs + two massive membrane wings (ALWAYS visible) + horned reptilian skull + thick scaled body + long muscular tail. NEVER an Eastern serpent/snake/wyrm or wingless/two-legged wyvern.
+
+VARIETY MANDATE — ~25 dramatically different war-dragons by COLOR + SCALE + HORNS + BREATH-element + signature: a crimson fire dragon with a blazing throat; an obsidian-black dragon breathing blue-white flame; a frost dragon exhaling a blizzard; a storm-grey dragon crackling lightning; a molten volcanic dragon dripping lava; a poison-green dragon spewing acid; a bone-white undead dragon breathing necrotic fire; a bronze war-dragon scarred from a hundred battles; a colossal red wyrm-tyrant. Each names color + scale + horns + wings + breath-element + a battle-scar or war trait.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal Western war-dragon (4 legs + 2 wings + horns) mid-attack in 30-50 words — color + scale + horns + wings + breath-element. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal crimson fire dragon, armored scales glowing molten at the seams, twin sweeping black horns, vast ribbed wings flared wide, throat blazing white-hot as it gathers a torrent of flame, long spiked tail lashing.
+2. An obsidian-black war-dragon scarred across the flank, blood-red wing-membranes spread, a crown of broken horns, exhaling a roaring jet of blue-white fire, smoke pouring from its fanged maw.
+3. A storm-grey dragon crackling with arcs of lightning along its spines, pale wings beating hard, horns like splintered iron, its open jaws crackling with gathering electric breath.`,
+  },
+
+  dragon_battle_action: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BATTLE ACTION — the peak combat moment. Each entry 15-30 words. The verb leads. Maximum destruction.
+
+VARIETY MANDATE — ~25 distinct combat actions: unleashing a torrent of fire down onto a target; strafing low over an army breathing flame; diving talons-first onto a tower; clashing midair with a rival dragon, jaws locked; seizing a catapult in its claws; smashing a wall with its tail; rearing to loose a fireball; biting down on a knight; landing amid soldiers scattering them; wings buffeting defenders off a wall; breathing frost to freeze a charge; mid-roar wreathed in flame. Render the destruction the action causes.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE peak combat action in 15-30 words, verb-led, with destruction. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. UNLEASHING FIRE — the dragon pours a torrent of flame down onto the battlements, stone exploding and defenders scattering as the inferno washes over them.
+2. CLASHING MIDAIR — the dragon collides with a rival, jaws locked on its throat, both tumbling through the sky wreathed in fire and torn wing-membrane.
+3. STRAFING THE ARMY — the dragon skims low over the ranks, a river of flame trailing from its jaws, soldiers diving and banners igniting in its wake.`,
+  },
+
+  dragon_battle_target: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BATTLE TARGET — what the dragon is attacking. Each entry 20-35 words.
+
+VARIETY MANDATE — ~25 distinct targets: a besieged castle's battlements; a massed army on the field; a phalanx of knights with shields raised; a rival dragon mid-clash; a fleet of ships in a harbor; a fortified gatehouse; a wizard's tower firing back with spells; a column of cavalry; a city's burning rooftops; siege-engines and catapults; a defending ballista-crew; a hero standing alone with a raised sword. Render the target under assault — crumbling, fleeing, or fighting back.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE target under assault in 20-35 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A besieged castle's battlements crumbling under the assault, defenders flung from the walls, towers cracking and catching fire, archers loosing a futile volley.
+2. A massed army on the field breaking in panic, ranks scattering, banners falling, shields raised uselessly against the descending flame.
+3. A rival dragon mid-clash, wings torn and bleeding, jaws snapping back, locked talon-to-talon with the attacker in the smoke-filled sky.`,
+  },
+
+  dragon_battle_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BATTLE SETTING — the battlefield stage. Each entry 25-45 words. Multi-layer depth, smoke, fire, chaos.
+
+VARIETY MANDATE — ~25 distinct battle settings: a burning castle under a blood-red sky; a vast battlefield strewn with armies and siege-engines; a stormy mountain pass; a coastal fortress over a burning harbor; a city ablaze at night; a snow-field churned to mud and ash; a desert siege under a harsh sun; a forest fortress half-consumed by flame; a clifftop keep in a thunderstorm; a river-crossing choked with soldiers; a volcanic battlefield. Each names the setting + the chaos + depth layers.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE battle setting in 25-45 words with smoke/fire/depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A burning castle on a crag under a blood-red sky, towers wreathed in flame and black smoke, the army's tents ablaze on the plains far below, embers raining across the frame.
+2. A vast battlefield at dusk strewn with two clashing armies, siege-towers and catapults silhouetted, smoke drifting over the dead, a far city burning on the horizon.
+3. A coastal fortress above a harbor of burning ships, flame reflected on the black water, defenders tiny on the cracking walls, storm-clouds boiling overhead.`,
+  },
+
+  dragon_battle_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BATTLE DRAMA — a secondary chaos event, fires ~40%. Each entry 15-30 words. Does NOT eclipse the dragon's attack.
+
+VARIETY MANDATE — ~25 distinct dramas: a tower collapsing in a cascade of stone; a second dragon entering the fight; a volley of flaming arrows arcing up; a ballista-bolt striking the dragon's wing; a magic shield flaring under the fire; a hero leaping from a wall sword-raised; an explosion of a powder-store; a cavalry charge breaking; a wizard's counter-spell lancing up; a banner falling in flames; a wall breach flooding with soldiers.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary chaos event in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A great tower collapses in a cascade of stone and dust behind the dragon, defenders falling with it.
+2. A ballista-bolt the size of a tree strikes the dragon's wing-membrane, punching through in a spray of blood.
+3. A wizard on the wall hurls a lance of blue counter-fire up at the dragon, splitting the descending flame.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DRAGON-HOARD PATH (2026-06-10 — new). Dragon coiled on a
   // mountain of treasure in its lair (Smaug).
   // ════════════════════════════════════════════════════════

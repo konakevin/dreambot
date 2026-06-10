@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DRAGON_BATTLE: {
+    description:
+      'PATH-BESPOKE — DragonBot dragon-battle path (2026-06-10). A colossal Western dragon mid-combat — breathing fire on a castle/army, or clashing with a rival dragon or knights. Action spectacle. Path-bespoke: dragon + combat_action (fire/clash/strafe) + target (castle/army/knights/rival) + battle_setting + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['dragon', 'combat_action', 'target', 'battle_setting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_HOARD: {
     description:
       'PATH-BESPOKE — DragonBot dragon-hoard path (2026-06-10). A colossal Western dragon coiled atop a mountain of treasure in its lair (Smaug archetype). Path-bespoke: dragon + hoard (treasure) + lair (cavern) + dragon_pose (sleeping/roused/guarding) + intruder (40% gated tiny thief/knight). Universal lighting + atmosphere reused.',

@@ -1920,6 +1920,69 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGON_BATTLE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, dragon, combat_action, target, battle_setting, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+A secondary focal point adding chaos + awe (NOT eclipsing the dragon's attack).
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a DRAGON IN BATTLE scene for DragonBot — a colossal Western dragon unleashing destruction, breathing fire on a castle or army or clashing with a rival. Frank Frazetta + Brom + Boris Vallejo painted-fantasy-novel-cover oil tradition. GoT / LOTR / Warcraft battle-energy. The scene should be EXPLOSIVE and make the viewer GASP.
+
+━━━ TRADITIONAL WESTERN DRAGON ANATOMY — NON-NEGOTIABLE ━━━
+A TRADITIONAL high-fantasy WESTERN dragon — Smaug / GoT / Elden Ring archetype. FOUR muscular legs, TWO MASSIVE membrane wings (ALWAYS visible), HORNED reptilian-skull head, THICK SCALED armored body, LONG MUSCULAR TAIL, clawed feet. NEVER an Eastern serpent, snake, wyrm, or wingless/two-legged wyvern.
+
+━━━ THE DRAGON ━━━
+${dragon}
+
+Render the EXACT anatomy + color + horn/wing/body features. The dragon is COLOSSAL and on the attack.
+
+━━━ THE COMBAT ACTION — what the dragon is doing RIGHT NOW ━━━
+${combat_action}
+
+Captured at the PEAK of violence — mid-fire-breath, mid-strafe, mid-clash, mid-strike. Render the destruction: flame, smoke, debris, shockwave, scattering defenders.
+
+━━━ THE TARGET — what it is attacking ━━━
+${target}
+
+Render the target being assaulted — under fire, crumbling, fleeing, or fighting back. This is the dragon's victim/opponent in the scene.
+
+━━━ THE BATTLE SETTING (the stage) ━━━
+${battle_setting}
+
+Multi-layer depth — foreground destruction → midground the dragon + target → deep distance battle-scale. Smoke, fire, chaos.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Fire-lit, dramatic, high-contrast — the dragon's flame casts hard orange light, deep shadows, embers in the air.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic, explosive, painterly. The colossal dragon mid-attack dominates the frame, fire and destruction everywhere, the target reeling. Dynamic diagonal energy, smoke and embers, sense of overwhelming power. NEVER static; NEVER a calm scene — this is the peak of a battle.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a colossal Western dragon mid-attack (DOING THE COMBAT ACTION) against the target, in the battle setting — the dragon's attack leads], [the dragon's exact anatomy + color + wings], [the destruction — fire/smoke/debris], [the target reeling], [the battle setting with depth], [fire-lit dramatic lighting], [palette + explosive mood]
+
+CRITICAL — render a TRUE Western dragon (4 legs + 2 wings + horns) mid-attack with visible destruction. Do NOT render a serpent/wyvern or a calm static scene.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DRAGON_HOARD: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, dragon, hoard, lair, dragon_pose, intruder } = slots;
 
