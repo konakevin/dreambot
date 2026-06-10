@@ -358,16 +358,16 @@ module.exports = {
     // curving up + overhead. Pools scaled after Kevin's heart-review.
     'ring-habitat',
     // NEW 2026-06-09 — impossible-sky: colossal ringed giant over an alien
-    // horizon, the wallpaper money-shot. MVP-25 pools. Seed-test-then-scale.
+    // horizon + 40% tiny-witness layer. Pools scaled to 200 (Kevin-approved).
     'impossible-sky',
     // NEW 2026-06-09 — crystalline-world: titanic crystal prisms fracturing
-    // starlight into rainbow caustics. MVP-25 pools. Seed-test-then-scale.
+    // starlight; composition axis kills architecture repetition. Scaled to 200.
     'crystalline-world',
     // NEW 2026-06-09 — derelict: dead abandoned ship + lone explorer's beam,
-    // Alien/Dead-Space awe-horror. MVP-25 pools. Seed-test-then-scale.
+    // Alien/Dead-Space awe-horror. Pools scaled to 200 (Kevin-approved).
     'derelict',
     // NEW 2026-06-09 — leviathan: colossal living alien, first contact. Purely
-    // alien biology (no space whales). MVP-25 pools. Seed-test-then-scale.
+    // organic biology (no space whales). Pools scaled to 200 (Kevin-approved).
     'leviathan',
     // 8 franchise paths (aliens / dune / guardians / halo / mass-effect /
     // star-trek / starcraft / starwars) all DELETED 2026-05-14. Multiple
