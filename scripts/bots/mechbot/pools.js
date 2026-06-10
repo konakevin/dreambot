@@ -22,6 +22,48 @@ const CYBORG_EYE_STYLES = load('cyborg_eye_styles');
 const CYBORG_INTERNAL_EXPOSURE = load('cyborg_female_internal');
 const CYBORG_MALE_INTERNAL_EXPOSURE = load('cyborg_male_internal');
 const CYBORG_GLOW_COLORS = load('cyborg_glow_colors');
+// Bot-wide-style VISUAL TREATMENT axis for cyborg-woman (2026-06-09) — rolls a
+// different rendering register per render to break the homogenized glossy-
+// photoreal-cyber-pinup look. Pure rendering-style (palette/light/finish), no
+// anatomy. Consumed by the MECHBOT_CYBORG_WOMAN template look-override block.
+const CYBORG_WOMAN_LOOK_REGISTER = load('cyborg_woman_look_register');
+// scifi-cyborg-female — NEW from-scratch exotic path (2026-06-09). 6 bespoke
+// pools: alien-cyborg hero being + showstopper feature + alien biome + look
+// register + composition + 40%-gated exotic phenomenon.
+const SCIFI_CYBORG_XENO_BEING = load('scifi_cyborg_xeno_being');
+const SCIFI_CYBORG_SIGNATURE_WOW = load('scifi_cyborg_signature_wow');
+const SCIFI_CYBORG_BIOME = load('scifi_cyborg_biome');
+const SCIFI_CYBORG_LOOK = load('scifi_cyborg_look');
+const SCIFI_CYBORG_COMPOSITION = load('scifi_cyborg_composition');
+const SCIFI_CYBORG_DRAMA = load('scifi_cyborg_drama');
+// The ORGANIC side (face + alien biology — human/alien variety, exotic anatomy)
+// + glowing-eyes RNG axis (2026-06-09, Kevin).
+const SCIFI_CYBORG_ORGANIC = load('scifi_cyborg_organic');
+const SCIFI_CYBORG_EYES = load('scifi_cyborg_eyes');
+// killer-cyborgs — verbatim config clone of scifi-cyborg-female (2026-06-09).
+// Pools start as copies; they'll be regen'd as we tilt toward menacing
+// evil-robot / killer-cyborg content.
+const KILLER_CYBORG_XENO_BEING = load('killer_cyborg_xeno_being');
+const KILLER_CYBORG_ORGANIC = load('killer_cyborg_organic');
+// killer-cyborgs-male — MALE mirror; only the gendered subject + face pools are
+// new, the rest are shared with the female killer-cyborgs path.
+const KILLER_CYBORG_MALE_XENO_BEING = load('killer_cyborg_male_xeno_being');
+const KILLER_CYBORG_MALE_ORGANIC = load('killer_cyborg_male_organic');
+const KILLER_CYBORG_EYES = load('killer_cyborg_eyes');
+const KILLER_CYBORG_SIGNATURE_WOW = load('killer_cyborg_signature_wow');
+const KILLER_CYBORG_BIOME = load('killer_cyborg_biome');
+const KILLER_CYBORG_LOOK = load('killer_cyborg_look');
+const KILLER_CYBORG_COMPOSITION = load('killer_cyborg_composition');
+const KILLER_CYBORG_DRAMA = load('killer_cyborg_drama');
+// og-cyborg-female — beautiful sexy human-proportioned female cyborgs, glossy
+// chassis + exposed joints + glowing accents, photoreal (Kevin's "OG" refs).
+const OG_CYBORG_SUBJECT = load('og_cyborg_subject');
+const OG_CYBORG_HAIR = load('og_cyborg_hair');
+const OG_CYBORG_CYBER_FEATURE = load('og_cyborg_cyber_feature');
+const OG_CYBORG_EYES = load('og_cyborg_eyes');
+const OG_CYBORG_SETTING = load('og_cyborg_setting');
+const OG_CYBORG_COMPOSITION = load('og_cyborg_composition');
+const OG_CYBORG_DRAMA = load('og_cyborg_drama');
 
 // ─────────────────────────────────────────────────────────────
 // CYBORG-WOMAN POOLS
@@ -69,6 +111,32 @@ module.exports = {
   CYBORG_EYE_STYLES,
   CYBORG_INTERNAL_EXPOSURE,
   CYBORG_GLOW_COLORS,
+  CYBORG_WOMAN_LOOK_REGISTER,
+  SCIFI_CYBORG_XENO_BEING,
+  SCIFI_CYBORG_SIGNATURE_WOW,
+  SCIFI_CYBORG_BIOME,
+  SCIFI_CYBORG_LOOK,
+  SCIFI_CYBORG_COMPOSITION,
+  SCIFI_CYBORG_DRAMA,
+  SCIFI_CYBORG_ORGANIC,
+  SCIFI_CYBORG_EYES,
+  KILLER_CYBORG_XENO_BEING,
+  KILLER_CYBORG_ORGANIC,
+  KILLER_CYBORG_MALE_XENO_BEING,
+  KILLER_CYBORG_MALE_ORGANIC,
+  KILLER_CYBORG_EYES,
+  KILLER_CYBORG_SIGNATURE_WOW,
+  KILLER_CYBORG_BIOME,
+  KILLER_CYBORG_LOOK,
+  KILLER_CYBORG_COMPOSITION,
+  KILLER_CYBORG_DRAMA,
+  OG_CYBORG_SUBJECT,
+  OG_CYBORG_HAIR,
+  OG_CYBORG_CYBER_FEATURE,
+  OG_CYBORG_EYES,
+  OG_CYBORG_SETTING,
+  OG_CYBORG_COMPOSITION,
+  OG_CYBORG_DRAMA,
   // CYBORG_FEATURES: 200 body-distributed entries + 40 head/temple variant entries +
   // 80 color-varied entries (2026-05-17). The original 200-entry pool was ~50% chrome-
   // mentioning, biasing renders toward white/chrome chassis. The 80 color-varied

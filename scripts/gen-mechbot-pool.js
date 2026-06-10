@@ -61,6 +61,645 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════════════
+  // scifi-cyborg-female — NEW from-scratch path (2026-06-09)
+  // "Truly out there" exotic alien-cyborg females. NO baggage from the
+  // legacy cyborg-woman beauty-portrait. Alien races + extreme cyborg
+  // fusion + wow-inducing. Tasteful-sexy via exotic elegance, NOT pinup.
+  // ════════════════════════════════════════════════════════════════
+  scifi_cyborg_xeno_being: {
+    format: 'simple',
+    theme: `EXOTIC ALIEN-CYBORG FEMALE BEINGS — the HERO axis. Each entry is ONE wildly distinct otherworldly cyborg woman: her ALIEN SPECIES / lineage + her non-human anatomy + how machine technology fuses into her body + the exotic MATERIAL her body is made of. 30-45 words. This is the single biggest variety lever — EVERY entry must be a DIFFERENT alien race so no two renders feel alike.
+
+⚠️ THE BAR — "WOW, what IS that?!" This is an AI dream-image app; the subject is perfect material to go FULLY exotic. Think Final-Fantasy summon / Mass Effect alien / Horizon machine / Nier automata / Cronenberg-beauty / Giger-elegant / Avatar-Na'vi-meets-machine / bioluminescent-deep-sea-goddess. She is SIMULTANEOUSLY a beautiful feminine being AND something genuinely alien and machine. Push HARD into the strange.
+
+⚠️ FEMININE + TASTEFUL, NOT PINUP. She reads as an elegant feminine BEING — graceful, otherworldly, alluring through her EXOTIC alien beauty, not through skin. Her own exotic anatomy / chassis / chitin / scales / plating IS her covering. NEVER a "sexy robot in a bikini-chassis", NEVER cleavage-as-the-focus, NEVER pin-up. The allure is the WONDER of what she is.
+
+🚫 BANS (positive-led — describe what she IS):
+• NO generic "pretty human woman with a few chrome bits" — she must be GENUINELY alien
+• NO bikini-chassis / bare-midriff-as-design / cleavage-focus / lingerie-coded plating
+• NO single boring register — vary the species family HARD across the pool
+• NO SKELETAL ANATOMY — never ribcage / exposed ribs / spine / vertebrae / bones / marrow / osseous / skull-faced / endoskeleton-or-exoskeleton-as-ribs (Kevin dislikes skeletal features). Her body is sleek and WHOLE — use "carapace / shell / chassis / inner-frame / dorsal plating", never bone/skeleton language
+
+✓ DISTRIBUTION — one DIFFERENT alien family per entry (~25 entries):
+  • INSECTOID — chitinous mantis / wasp / beetle-iridescent exoskeleton fused with chrome actuators
+  • CRYSTALLINE — living silicon / quartz / gemstone body with refracting light-cores
+  • CEPHALOPOD / DEEP-SEA — translucent bioluminescent skin, tentacle-cabling, anglerfish-lure light
+  • REPTILIAN / SERPENTINE — iridescent scaled naga / draconic-cyborg with chrome spinal plating
+  • FUNGAL / BOTANICAL — mycelial-grown bio-tech, glowing spore-pods, bark-and-circuit fusion
+  • PLASMA / ENERGY-BEING — semi-corporeal body of contained light / liquid-metal held in a field
+  • AVIAN / LEPIDOPTERAN — feathered-or-moth-winged, hollow-boned chrome frame
+  • CORAL / REEF — calcified branching coral-body with living polyps and circuit-inlay
+  • CERAMIC / PORCELAIN-DOLL — cracked porcelain chassis with glowing seams, uncanny-beautiful
+  • VOID / COSMIC — body like a window into starfield, event-horizon skin, nebula-in-glass
+  • ARACHNID — elegant chrome-and-silk spider-cyborg, multi-limbed, jewel-eyed
+  • AMPHIBIAN / TRANSLUCENT — glass-frog translucency revealing glowing internal machinery
+  • CETACEAN / WHALE-SONG — vast-eyed, smooth bio-ceramic, sonar-light organs
+  • Plus ~12 more INVENTED alien families — keep going, never repeat a family
+
+Each entry names the SPECIES FAMILY + her non-human anatomy + the cyborg fusion + her exotic body material. She is always recognizably FEMININE and graceful.`,
+    touchpoints: [
+      'MANTIS-EMPRESS — a tall, elegant insectoid cyborg woman, emerald-iridescent chitin exoskeleton seamlessly fused with brushed-chrome actuators at every joint, a slender translucent thorax revealing a slowly-pulsing amber bio-reactor, fine antennae sweeping back from a beautiful angular face, four delicate scythe-limbs folded at rest',
+      'DEEP-ABYSS LUMA — a cephalopod-lineage cyborg woman, translucent indigo skin glowing from bioluminescent organs within, a crown of slow tentacle-cables haloing her head, an anglerfish lure-light hovering on a chrome filament above her brow, her lower body dissolving into living cable-tendrils',
+      'QUARTZ-CHOIR — a crystalline cyborg woman grown from living rose-quartz and clear silicon, her body refracting light into prismatic shards, a faceted heart-core glowing violet through her translucent chest, chrome circuitry threaded like veins of gold through the crystal',
+      'NAGA-OF-CHROME — a serpentine cyborg woman, iridescent oil-slick scales fused with segmented chrome spinal plating, a long coiling lower body of articulated metal vertebrae, jeweled slit-pupil eyes, delicate fin-frills of light along her arms',
+      'MYCELIAL-MOTHER — a fungal-botanical cyborg woman, pale bark-and-circuit skin laced with glowing turquoise spore-veins, clusters of luminous mushroom-pods growing from her shoulders and collar, root-cabling descending from her hands into the floor',
+      'PORCELAIN-REVENANT — a ceramic-doll cyborg woman of cracked white porcelain, fine gold-glowing seams running through every hairline fracture, hollow joints revealing soft inner light, an uncanny-beautiful serene face, kintsugi-circuitry repairing her',
+      'EVENT-HORIZON — a cosmic void-being cyborg woman whose smooth obsidian skin is a window onto a slow-turning starfield, a ring of orbiting light-shards around her head, chrome containment-bands holding the cosmos inside her form',
+      'CORAL-SAINT — a reef-lineage cyborg woman, calcified branching coral growing across a chrome endoskeleton, living polyps glowing pink and gold along the branches, sea-fan frills of circuit-laced calcium framing a serene face',
+    ],
+    instructions: `Each entry is ONE exotic alien-cyborg FEMALE being, 30-45 words. Format: "SPECIES-NAME CAPS — alien anatomy + cyborg fusion + exotic body material + feminine grace". EVERY entry a DIFFERENT alien family — never repeat. Genuinely strange + beautiful + feminine + TASTEFUL (no pinup/bikini-chassis). Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  scifi_cyborg_signature_wow: {
+    format: 'simple',
+    theme: `THE ONE SHOWSTOPPER — a single jaw-dropping "wow" element per render that makes the viewer gasp and screenshot it. 18-30 words. NOT her whole body — ONE spectacular feature layered onto the scene. This is the "WOW!!" lever.
+
+⚠️ THE BAR — one unforgettable hero-detail: floating / orbiting / unfolding / growing / shattering / light-based / reality-bending. The kind of thing that makes the image feel like a frame from an unmade sci-fi epic.
+
+✓ DISTRIBUTION (~25 entries, vary the TYPE):
+  • FLOATING / ORBITING — a halo of slowly-orbiting mechanical petals / a ring of suspended light-shards / drifting drone-fragments circling her
+  • UNFOLDING — her face/chest splits into elegant panels revealing inner light / armor blooming open like a flower
+  • LIGHT-WINGS — wings of fractal light / holographic feathers / a mantle of projected energy
+  • EXPOSED CORE — a visible glowing heart-reactor / a translucent skull revealing a galaxy-brain / a spine of pure light
+  • GROWTH — crystal blooming from her shoulder / coral spreading across her arm / circuitry growing like vines
+  • REALITY-BEND — space rippling around her / her reflection lagging / a tear in the air leaking light
+  • SWARM — a cloud of nanite-fireflies forming a shape / a school of light-fish circling
+  • LIQUID — liquid metal flowing up her arm / a droplet of mercury suspended mid-air / chrome dripping upward
+  • TRAILING — ribbons of light trailing from her fingertips / data-streams pouring from her eyes`,
+    touchpoints: [
+      'A HALO of a dozen slowly-orbiting chrome petals suspended around her head, each one trailing a thread of soft light, rotating in silent zero-gravity',
+      'WINGS of fractal holographic light unfurling from her shoulders, each feather a shard of refracted prism, flickering like a slow heartbeat',
+      'Her chest-plate UNFOLDING into six elegant panels, revealing a small contained galaxy turning slowly inside her ribcage',
+      'A SWARM of nanite-fireflies streaming from her open palm, coalescing in the air into the shape of a second, smaller face',
+      'LIQUID CHROME flowing UPWARD off her shoulders against gravity, beading into floating mirror-droplets that hang suspended around her',
+      'A translucent crystal BLOOMING in real-time from her collarbone, branching into a glowing geode that lights her face from below',
+      'RIBBONS of liquid light trailing from each fingertip, writing slow luminous glyphs in the air behind her hand',
+      'SPACE itself RIPPLING in concentric rings around her silhouette, her edges fracturing into prismatic chromatic-aberration',
+    ],
+    instructions: `Each entry is ONE showstopper feature, 18-30 words. Format: a single spectacular hero-detail (floating / unfolding / light / growth / swarm / reality-bend). NOT her whole body — ONE wow element. NO skeletal features — no exposed ribcage / ribs / spine / vertebrae / skull-as-skeleton. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  scifi_cyborg_biome: {
+    format: 'simple',
+    theme: `EXOTIC ALIEN ENVIRONMENTS — the stage she's in. 22-35 words. Otherworldly sci-fi settings that frame an exotic cyborg woman. Multi-tier depth (foreground / midground / deep distance). NEVER a plain studio void or flat backdrop.
+
+⚠️ THE BAR — alien, wondrous, cinematic. The kind of place that couldn't exist on Earth. Bioluminescent / crystalline / organic-megastructure / cosmic / derelict-xeno.
+
+✓ DISTRIBUTION (~25 entries, vary HARD):
+  • BIOLUMINESCENT ABYSS — deep-alien-ocean trench glowing with living light
+  • CRYSTAL CATHEDRAL — vast cavern of glowing crystal spires
+  • ORGANIC STARSHIP — the wet, ribbed interior of a living vessel
+  • NEBULA OBSERVATION DECK — a glass platform suspended in cosmic gas-clouds
+  • FUNGAL ALIEN JUNGLE — towering glowing mushroom-forest
+  • GAS-GIANT CLOUD CITY — floating platforms in swirling storm-bands
+  • XENO TEMPLE — ancient alien ruins with unknown geometry
+  • CORAL MEGASTRUCTURE — a city grown from living reef
+  • FROZEN METHANE WORLD — blue ice plains under alien rings
+  • VOLCANIC FORGE-WORLD — rivers of light-lava and obsidian
+  • DERELICT XENO-HIVE — abandoned insectoid architecture
+  • DATA-VOID — an abstract digital realm of floating geometry and light-grids
+  • DESERT OF GLASS — wind-sculpted glass dunes under twin suns
+  • Plus invented alien biomes — keep going`,
+    touchpoints: [
+      'A bioluminescent abyssal trench, towering hydrothermal spires glowing turquoise and magenta, schools of light-organisms drifting in the dark water, deep distance fading into black',
+      'A vast crystal cathedral-cavern, kilometre-high glowing amethyst spires, refracted light scattering everywhere, a mirror-still mineral pool reflecting the ceiling',
+      'The wet ribbed interior of a living organic starship, pulsing bio-luminescent veins along the walls, translucent membrane-doors, a vaulted chamber breathing slowly',
+      'A glass observation deck suspended inside a nebula, swirling violet and gold cosmic gas-clouds pressing against the windows, distant newborn stars igniting',
+      'A towering fungal alien jungle, glowing turquoise mushroom-canopies fifty metres tall, drifting luminous spores, bioluminescent undergrowth, deep misty distance',
+      'A floating platform-city in a gas-giant, swirling amber storm-bands below, other platforms drifting in the haze, lightning arcing in the deep clouds',
+      'Ancient xeno-temple ruins of impossible non-Euclidean geometry, monolithic alien glyphs glowing faintly, dust-light shafts, a sense of deep time',
+      'A derelict insectoid hive-structure, honeycombed chitin architecture, shafts of pale light through cracked resin, abandoned and vast',
+    ],
+    instructions: `Each entry is ONE exotic alien environment, 22-35 words. Format: setting + multi-tier depth + atmosphere. Otherworldly, cinematic, NEVER a plain studio. Avoid the word "skeletal" as a descriptor. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  scifi_cyborg_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the cinematic RENDERING TREATMENT of the whole image (palette + lighting mood + finish). 16-28 words. PURE rendering-style — palette, light quality, mood, finish, named cinematography. NO anatomy, NO subject, NO scene content (those come from other axes). This axis exists so the LOOK varies render-to-render instead of collapsing to one glossy register.
+
+⚠️ THE BAR — each entry a DISTINCT, exotic, cinematic visual register. The look should lead CLIP and set the entire mood.
+
+✓ DISTRIBUTION (~25 entries, vary HARD across palette + mood):
+  • DEEP-SEA BIOLUMINESCENT — near-black with glowing turquoise/magenta accents, volumetric god-rays through water
+  • COSMIC NEBULA — saturated violet-gold-teal cosmic grade, soft star-glow, dreamy
+  • ULTRAVIOLET BLACKLIGHT — neon-reactive blues and magentas glowing on near-black, club-noir
+  • VOLCANIC INFERNAL — molten orange-and-obsidian, hard ember light, dramatic
+  • ARCTIC CRYSTALLINE — icy cyan-white high-key, crisp cold light, clean
+  • REGAL BAROQUE-SCIFI — gold-and-oxblood opulence, chiaroscuro, ornate
+  • NEON-NOIR — crushed blacks, one bold neon key color raking, anamorphic flare
+  • IRIDESCENT DREAM — pastel oil-slick rainbow, soft high-key, ethereal
+  • MONOCHROME CHROME — near-greyscale steel palette, hard editorial light
+  • TOXIC ACID — radioactive green-and-black, eerie glow
+  • GOLDEN-HOUR FILM — warm backlit honey light, soft halation, 35mm
+  • HOLOGRAPHIC GLITCH — chromatic-aberration, scanline shimmer, digital
+  • INFRARED THERMAL — false-color heat-map gradient on cold dark field
+  • Plus invented exotic registers — keep going`,
+    touchpoints: [
+      'DEEP-SEA BIOLUMINESCENT — near-black frame lit only by glowing turquoise and magenta organic light, volumetric god-rays slanting through dark water, wet specular highlights',
+      'COSMIC NEBULA GRADE — saturated violet, gold and teal cosmic palette, soft diffused star-glow, dreamy atmospheric haze, gentle bloom',
+      'ULTRAVIOLET BLACKLIGHT — electric blues and hot magentas glowing neon-reactive against a near-black field, club-noir mood, hard rim accents',
+      'VOLCANIC INFERNAL — molten orange and deep obsidian, hard low ember key-light, dramatic cast shadows, heat-shimmer',
+      'NEON-NOIR — crushed inky blacks, ONE bold neon key color (acid-green or sodium-amber) raking hard across, anamorphic lens flare, heavy fog',
+      'REGAL BAROQUE-SCIFI — opulent gold and oxblood palette, dramatic chiaroscuro single-source, ornate museum-canvas richness',
+      'ARCTIC CRYSTALLINE — icy cyan-and-white high-key, crisp cold directional light, clean minimal, frost-bloom',
+      'IRIDESCENT DREAM — pastel oil-slick rainbow sheen, soft high-key wraparound light, ethereal glowing haze',
+    ],
+    instructions: `Each entry is ONE rendering register, 16-28 words. Format: "REGISTER-NAME CAPS — palette + light quality + mood + finish". PURE style — NO anatomy, NO subject, NO scene. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  scifi_cyborg_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + POSE — how she's framed and what she's doing. 18-30 words. Varied, dynamic, cinematic. Vary framing (full-body / medium / dramatic close) AND pose (graceful, powerful, mid-motion, regal). Tasteful — elegance and power, never pin-up.
+
+⚠️ THE BAR — a striking, intentional composition. Mix portrait-presence with full-body wonder and dynamic motion so renders don't all sit at the same distance.
+
+⚠️ TASTEFUL — graceful, powerful, regal, or mid-action poses. NEVER a pin-up / cheesecake / bare-thigh-seated / chest-thrust pose. The power and wonder carry it.
+
+✓ DISTRIBUTION (~25 entries):
+  • ~6 FULL-BODY HERO — head-to-foot, she dominates the frame in her environment
+  • ~5 DRAMATIC LOW-ANGLE — camera below, she towers, monumental
+  • ~4 FLOATING / ZERO-G — suspended mid-air, hair/limbs/cables drifting
+  • ~4 MEDIUM PORTRAIT-IN-PLACE — waist-up with the alien environment readable behind
+  • ~3 MID-MOTION — turning / reaching / channeling-energy / rising
+  • ~3 REGAL / ENTHRONED — seated or standing in command, composed and powerful`,
+    touchpoints: [
+      'Full-body hero shot, head-to-foot, she stands tall and central in her alien environment, the deep scene receding behind her, monumental presence',
+      'Dramatic low-angle from below, she towers over the camera, silhouette against the glowing sky, regal and imposing',
+      'Floating in zero-gravity, suspended mid-frame, her hair and cabling and limbs drifting weightless, serene and surreal',
+      'Medium waist-up framing, three-quarter turn, the exotic environment sharp and readable behind her, her face the focal anchor',
+      'Caught mid-motion, turning toward the camera with one arm rising, energy trailing from the gesture, a split-second of grace',
+      'Enthroned and composed, seated in command at the center of her domain, perfectly still and powerful, framed by her environment',
+      'Rising upward through the frame, body elongated in graceful ascent, light blooming below her, an ascension moment',
+      'Walking toward the frame through her world, full-body, deliberate and powerful, the environment opening around her',
+    ],
+    instructions: `Each entry is ONE composition+pose, 18-30 words. Format: framing + pose + relationship to environment. Varied distances, tasteful (graceful/powerful/regal/mid-motion, never pin-up). Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  scifi_cyborg_drama: {
+    format: 'simple',
+    theme: `EXOTIC PHENOMENON (40%-gated atmospheric drama) — a spectacular environmental event woven into the scene ~40% of renders. 18-28 words. Amplifies the wow WITHOUT cluttering her as the focal subject.
+
+✓ DISTRIBUTION (~25 entries):
+  • ENERGY DISCHARGE — arcs of plasma / a contained reactor-flare / lightning between spires
+  • SWARM — a cloud of light-organisms / drifting spore-bloom / a school of light-fish passing
+  • REFRACTION STORM — shafts of prismatic light fracturing through the scene
+  • FLOATING DEBRIS — a slow-drifting field of shattered crystal / suspended rubble / orbiting fragments
+  • BLOOM — a sudden bioluminescent bloom rippling outward / flowers of light opening
+  • RAIN — luminous rain / falling ash-light / drifting cosmic snow
+  • PORTAL — a tear in space leaking light / a slow-opening gateway behind her`,
+    touchpoints: [
+      'Arcs of contained plasma crackling between distant spires behind her, casting flickering electric-blue light across the scene',
+      'A slow-drifting bloom of bioluminescent spores rippling outward through the air, each mote a pinprick of turquoise light',
+      'Shafts of prismatic light fracturing through the scene as something unseen refracts the air into rainbow bands',
+      'A slow field of shattered crystal fragments drifting weightless around her, each shard catching and throwing light',
+      'Luminous rain falling in slow vertical threads of light, beading on every surface and glowing as it lands',
+      'A school of translucent light-fish drifting through the frame behind her, their glow rippling across her chassis',
+      'A tear in space slowly opening in the deep distance, leaking warm impossible light into the alien dark',
+      'A sudden bioluminescent bloom opening across the environment like flowers of cold fire unfurling in sequence',
+    ],
+    instructions: `Each entry is ONE exotic phenomenon, 18-28 words. Format: a spectacular environmental event that amplifies the scene without stealing focus from her. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  scifi_cyborg_organic: {
+    format: 'simple',
+    theme: `THE ORGANIC SIDE — the living FACE + alien BIOLOGY of the cyborg female. 18-32 words. This axis makes her ORGANIC half vary across humans and genuinely ALIEN biology — the cyborg/machine side comes from other axes; THIS is her living flesh, face, skin, AND exotic alien anatomy. Kevin: "not just the skin colors — i want alien biology mixed in."
+
+⚠️ THE BAR — go beyond "human with green skin." Most entries are genuinely ALIEN females with EXOTIC BIOLOGY: extra eyes, head-tendrils or sensory frills instead of hair, gill-slits, bioluminescent organs glowing under translucent skin, chromatophore color-shifting skin, crested or ridged skulls, feathered or membrane crests, antennae, faint scales, nictitating membranes. She is ALWAYS feminine and beautiful in an alien way — exotic and graceful, NEVER monstrous, NEVER a gross creature. A few HUMAN women of varied ethnicity for range.
+
+⚠️ TASTEFUL — describe the FACE + head + skin + alien biological features. NEVER body / chest / cleavage / curves. No "sultry / seductive / sensual" language. Alien beauty, not sex.
+
+✓ DISTRIBUTION (~25 entries):
+  HUMAN (~5) — varied global ethnicity + skin tone (ebony / sienna / olive / porcelain-freckled / bronze), beautiful human face
+  ALIEN-BIOLOGY (~20) — exotic skin color PLUS a real alien feature. Mix these features hard:
+   • EYES — four eyes / a third eye / large lidless eyes / compound-faceted eyes / vertical slit-pupils / a row of small ocelli across the brow
+   • CRANIAL — head-tendrils or soft cephalopod mantle instead of hair / sweeping sensory antennae / a crown of coral-frills / a crest of fine feathers / curved ridge-horns / a finned sensory crest
+   • SKIN — chromatophore color-shifting skin / translucent skin revealing soft glowing organs / faint iridescent scales across cheek and brow / bioluminescent freckle-constellations / patterned dermal markings that pulse with light
+   • OTHER — gill-slits at the neck / a luminous throat-sac / petal-like facial frills / delicate barbels / a nictitating inner eyelid
+   • SKIN COLORS to draw from: jade-green / cobalt-blue / amethyst-violet / ashen moon-grey / coral-pink / gold-leaf / dusky teal / iridescent-pearl / obsidian / translucent-glass / silver-mercury`,
+    touchpoints: [
+      'An alien woman with jade-green skin and four calm luminous eyes set in an elegant elongated face, soft sensory tendrils flowing back where hair would be',
+      'An alien woman with deep cobalt-blue chromatophore skin shifting faintly to teal at the edges, a crest of fine iridescent feathers along her crown, high serene features',
+      'An alien woman with translucent moon-pale skin revealing soft glowing turquoise organs beneath, large lidless dark eyes, delicate gill-slits along her graceful neck',
+      'An alien woman with amethyst-violet skin, a third softly-glowing eye centered on her brow, sweeping antennae, fine bioluminescent freckle-constellations across her cheekbones',
+      'An alien woman with coral-pink skin and petal-like sensory frills framing her face instead of hair, vertical slit-pupils, a faint pearlescent shimmer over alien-high cheekbones',
+      'An alien woman with iridescent-pearl scaled skin shimmering across cheek and brow, a soft cephalopod mantle of tendrils crowning her head, calm jewel-bright eyes',
+      'A human woman with deep ebony skin, high sculpted cheekbones, full lips, a calm regal face, fine freckles dusted across the nose',
+      'An alien woman with ashen grey skin and a crown of curved coral-frills, a row of tiny glowing ocelli across her brow above two large gentle eyes',
+    ],
+    instructions: `Each entry is ONE organic identity, 18-32 words. ~5 human (varied ethnicity), ~20 ALIEN with REAL alien biology (extra eyes / head-tendrils-or-frills / translucent-organ skin / chromatophores / crests / gills) + exotic skin color. FACE + HEAD + alien BIOLOGY only — tasteful, feminine, beautiful, NEVER monstrous. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  scifi_cyborg_eyes: {
+    format: 'simple',
+    theme: `GLOWING EYES — a luminous eye color + glow style for the cyborg female. 8-16 words. A pure RNG accent axis (Kevin: "glowing eyes as a random RNG axis"). Each entry is ONE striking glowing-eye treatment. Vary color + intensity + style HARD across the pool.
+
+✓ DISTRIBUTION (~25 entries) — vary the color + style:
+  • molten gold / electric cyan / plasma violet / blood-red ember / emerald-green / arctic silver-white / sodium-amber / hot magenta / deep sapphire / acid-lime
+  • styles: solid glowing irises / glowing slit-pupils / fully-luminous no-pupil / ringed-iris glow / heterochromatic (two colors) / starfield-black with glowing flecks / scanning-bar optic / soft-pulsing glow / hard-bright laser-glow / dual-tone gradient iris`,
+    touchpoints: [
+      'molten-gold glowing irises, soft inner pulse',
+      'electric-cyan eyes glowing with no visible pupil, faint light spilling onto the cheeks',
+      'plasma-violet glowing slit-pupils, hard and bright',
+      'heterochromatic eyes — one ember-red, one ice-blue, both faintly luminous',
+      'starfield-black eyes flecked with tiny glowing silver points of light',
+      'emerald-green ringed-iris glow with a thin scanning-bar of light across them',
+      'arctic silver-white luminous eyes, cold and serene',
+      'dual-tone gradient irises shifting magenta-to-gold, softly glowing',
+    ],
+    instructions: `Each entry is ONE glowing-eye treatment, 8-16 words. Format: "[color] glowing [style]". Vary color + style hard. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // og-cyborg-female — NEW path (2026-06-09). Replicates Kevin's "OG"
+  // reference aesthetic: beautiful SEXY human-proportioned female cyborgs,
+  // glossy sculpted chassis + exposed mechanical joints + glowing accents,
+  // real hair OR chrome cranium, glowing eyes, a cyber head/neck feature.
+  // Sorayama-chrome meets Ghost-in-the-Shell beauty. PHOTOREAL. Grounded,
+  // NOT the wild alien-creature register of scifi-cyborg-female.
+  // ════════════════════════════════════════════════════════════════
+  og_cyborg_subject: {
+    format: 'simple',
+    theme: `BEAUTIFUL SEXY HUMAN-PROPORTIONED FEMALE CYBORGS — the HERO axis. Each entry is ONE stunning cyborg woman: her SKIN + a flawless beautiful human face + her curvy feminine figure clad in a GLOSSY SCULPTED CHASSIS. 30-45 words. Photoreal. Sorayama-chrome / Ghost-in-the-Shell Major / Alita / Cyberpunk-2077 / Detroit-Become-Human lineage.
+
+⚠️ THE BAR — a GORGEOUS WOMAN who is a cyborg. Human-proportioned, beautiful human(oid) FACE, curvy feminine figure. She is sexy and elegant and high-detail photoreal. This is NOT an alien creature, NOT insectoid, NOT a monster — she reads as a beautiful woman first, cyborg second.
+
+⚠️ INTEGRATED CYBORG FACE — NOT a head on a robot (THE #1 FAILURE TO AVOID). The cybernetics INTEGRATE INTO her FACE and HEAD: partial chrome face-plating across the temple / crown / cheek / jaw, glossy chrome flowing seamlessly from her neck up into her face, glowing circuitry tracing her skin, her glossy skin and the chassis ONE continuous surface. She is a single seamless cyborg design — NEVER a plain human head pasted on top of a separate generic robot body. The MACHINE and the WOMAN are fused, including on her face.
+
+⚠️ THE CHASSIS — a sleek GLOSSY chassis (mirror-white / chrome / pearl / or a colored glossy panel — emerald / orange / violet / cobalt) sculpted smoothly over her curvy human figure, with EXPOSED MECHANICAL DETAIL at the joints (neck / shoulders / spine / arm-segments — visible servos, cabling, paneling seams) and GLOWING ACCENT LIGHTS threaded through (orange / green / cyan / magenta pinpoints and strips).
+
+⚠️ TASTEFUL-SEXY — the glossy chassis COVERS her body; she's sexy through curvy sculpted FORM + gloss + beauty, NEVER through bare skin. NO bare breasts, NO nipples, NO topless, NO lingerie. The chassis/panels are her covering.
+
+✓ DISTRIBUTION (~25 entries) — vary SKIN + chassis color:
+  • PALE / FAIR skin (~8) — fair-porcelain / cool-ivory / soft-alabaster / pale-olive / light-rose — a flawless beautiful face (the sci-fi-cyborg default is pale / fair skin)
+  • EXOTIC SCI-FI SKIN (~17) — emerald-green glittery skin with gold sparkle-freckles / cobalt-blue glossy / pearl-white iridescent / soft-violet / chrome-silver / dusky-teal / amethyst / rose-gold / stylized OBSIDIAN jet-black GLOSSY synthetic skin (a stylized sci-fi black finish, NOT a realistic human race) — STILL a gorgeous human-shaped face
+  🚫 NO realistic ethnic-RACE skin tones — NO "African-American" / deep-ebony / dark-brown realistic-race skin. These are sci-fi cyborgs: keep skin PALE / FAIR or a STYLIZED exotic/synthetic color only.`,
+    touchpoints: [
+      'A stunning emerald-green-skinned cyborg woman, glittery skin dusted with gold sparkle-freckles, chrome face-plating flowing across her crown and temple into her cheek, a flawless beautiful face, a glossy white-and-green chassis over her curvy figure continuous with the skin of her neck, glowing orange accent-lights',
+      'A gorgeous fair-porcelain-skinned cyborg woman, glossy chrome plating integrated along her jaw and temple flowing seamlessly into a mirror-white chassis, a flawless face, intricate exposed mechanical paneling at the shoulders, glowing cyan pinpoint-lights, photoreal',
+      'A beautiful cobalt-blue-skinned cyborg woman, smooth glossy blue skin with fine glowing circuitry tracing one cheek, a flawless face, a pearl-and-chrome chassis flowing up from her neck into her jaw, glowing magenta accent-strips, sexy and high-detail',
+      'A striking stylized-obsidian jet-black glossy cyborg woman (a synthetic sci-fi finish, not a human race), chrome face-plating across her brow and cheek, a glossy violet chassis sculpted to her curvy figure, glowing orange glow-cores, beautiful and powerful',
+      'A radiant pearl-white iridescent cyborg woman, glossy chrome flowing from a glowing-orange neck column up into a chrome cheek-plate, a flawless serene face, exposed mechanical shoulders, photoreal beauty',
+      'A beautiful soft-violet-skinned cyborg woman, glossy skin with a chrome temple-implant integrated into her hairline, a glossy emerald-and-silver chassis over her curvy figure, glowing green accent-lights, a gorgeous face',
+      'A gorgeous green-haired pale-olive cyborg woman, a chrome jaw-and-neck plate flowing into a glossy white-and-gold chassis sculpted over her curvy figure, exposed brass mechanical detail at the shoulder, photoreal high-gloss',
+      'A stunning rose-gold-skinned cyborg woman, glossy skin with glowing circuitry across her temple, a flawless human face, a chrome liquid-metal chassis with gold-sparkle dusting, glowing orange eye-glow on her cheeks, elegant and exotic',
+    ],
+    instructions: `Each entry is ONE beautiful sexy human-proportioned female cyborg, 30-45 words. Format: skin (pale/fair OR stylized exotic — NO realistic ethnic-race tones) + flawless face WITH integrated chrome face/head plating (NOT a head on a robot) + glossy chassis continuous with the skin + exposed mechanical joints + glowing accents. ALWAYS a gorgeous human-FACED woman, NEVER a creature, NEVER a head-on-a-robot. Tasteful-sexy, chassis covers her. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  og_cyborg_hair: {
+    format: 'simple',
+    theme: `HAIR or CHROME CRANIUM for the cyborg woman. 8-16 words. Either real beautiful hair (style + color) OR a sleek glittery chrome/painted cranium (no hair). Vary HARD.
+
+✓ DISTRIBUTION (~25): long glossy black / platinum-white braided crown / flowing emerald-green / soft lavender / windswept blonde / dark cornrow-braids / slicked-back wet-look / silver high-ponytail / pale-pink long / chestnut pompadour / white waist-length / OR a sleek glittery chrome cranium (bald, sparkle-dusted) / a painted-panel cranium with a glowing seam / a transparent dome-cranium`,
+    touchpoints: [
+      'long glossy jet-black hair, sleek and straight',
+      'platinum-white hair in an intricate braided crown',
+      'flowing emerald-green hair, soft and windswept',
+      'soft lavender hair, long and loose',
+      'dark hair in fine cornrow-braids gathered into a ponytail',
+      'a sleek bald chrome cranium dusted with gold sparkle, no hair',
+      'windswept blonde hair catching the light',
+      'a smooth painted-panel cranium with a single glowing seam, no hair',
+    ],
+    instructions: `Each entry is ONE hair or cranium treatment, 8-16 words. ~80% real hair (varied style + color), ~20% chrome/painted cranium. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  og_cyborg_cyber_feature: {
+    format: 'simple',
+    theme: `THE SIGNATURE CYBER HEAD/NECK FEATURE — the standout cybernetic detail on her head, face, or neck. 14-24 words. This is what makes her unmistakably a cyborg. PHOTOREAL, beautiful, integrated.
+
+✓ DISTRIBUTION (~25):
+  • EAR MODULES — headphone-style chrome ear-discs / a glowing spiral ear-disc / sensor-pods at the ear
+  • FACE — glowing circuitry tracing one cheek / a glowing mandala implant at the temple or crown / a chrome jaw-and-cheek plate / subtle glowing freckle-circuitry
+  • NECK/NAPE — an intricate GLOWING cybernetic neck-and-nape column of fine circuitry / chrome cervical plating with glowing threads / cabling flowing into the collar (beautiful glowing tech, never a bare skeleton)
+  • CRANIAL — a transparent crown-panel revealing glowing inner tech / temple-ports / a glowing third-eye gem implant`,
+    touchpoints: [
+      'large chrome headphone-style ear-disc modules framing the side of her head, softly glowing',
+      'a glowing mandala implant set into her temple, pulsing soft violet light',
+      'fine glowing circuitry tracing across one cheekbone, lit in soft orange',
+      'an intricate glowing cybernetic neck-and-nape column of fine luminous circuitry beneath her jaw',
+      'a glowing spiral ear-disc, concentric rings of warm orange light at the side of her head',
+      'a transparent crown-panel revealing softly glowing inner tech above her brow',
+      'chrome cervical plating at the throat threaded with glowing-cyan luminous lines',
+      'a glowing third-eye gem implant centered on her forehead, set in fine chrome filigree',
+    ],
+    instructions: `Each entry is ONE cyber head/neck feature, 14-24 words. PHOTOREAL, beautiful, integrated. Glowing tech is welcome (incl. luminous neck/nape circuitry) — but NEVER a bare skeleton / exposed ribs / skull-look. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  og_cyborg_eyes: {
+    format: 'simple',
+    theme: `GLOWING EYES — a luminous eye color + style for the cyborg woman. 8-16 words. Pure RNG accent. Vary color + style HARD.
+
+✓ DISTRIBUTION (~25): glowing violet / hot magenta / molten orange / electric cyan / amber-gold / soft pink / emerald-green / ice-blue / dual-tone — styles: solid glowing irises / soft-glow spilling onto cheeks / bright luminous no-pupil / ringed-iris glow / gentle pulse`,
+    touchpoints: [
+      'glowing violet eyes, soft light spilling onto her cheeks',
+      'hot-magenta glowing irises, bright and luminous',
+      'molten-orange glowing eyes with a soft inner pulse',
+      'electric-cyan luminous eyes, no visible pupil',
+      'soft-pink glowing eyes, gentle and warm',
+      'amber-gold glowing irises catching the light',
+      'emerald-green glowing eyes, cool and bright',
+      'ice-blue luminous eyes with a faint glow-bloom',
+    ],
+    instructions: `Each entry is ONE glowing-eye treatment, 8-16 words. Format: "[color] glowing [style]". Vary hard. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  og_cyborg_setting: {
+    format: 'simple',
+    theme: `BACKGROUND — a simple, subject-focused setting. 12-22 words. The CYBORG WOMAN is the focus; the background is soft / bokeh / atmospheric, never busy or competing.
+
+✓ DISTRIBUTION (~25): soft grey-blue studio bokeh / a sunlit rocky canyon, blurred / a neon-lit corridor with bokeh lights / a soft snowy field with drifting sparkle-bokeh / blurred ancient stone columns / a misty industrial bay / warm sunset haze / a dark backdrop with floating glow-bokeh / a pale clean gradient`,
+    touchpoints: [
+      'a soft out-of-focus grey-blue studio backdrop with gentle gradient light',
+      'a sunlit rocky canyon blurred far behind her, warm dust-light',
+      'a neon-lit corridor dissolving into colorful bokeh lights behind her',
+      'a soft snowy field with drifting sparkle-bokeh and pale cool light',
+      'blurred ancient stone columns receding into warm haze',
+      'a dark moody backdrop scattered with floating warm glow-bokeh',
+      'a misty industrial bay softly out of focus, cool atmospheric light',
+      'a warm sunset-haze gradient, soft and dreamy behind her',
+    ],
+    instructions: `Each entry is ONE simple subject-focused background, 12-22 words. Soft / bokeh / atmospheric — never busy. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  og_cyborg_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + POSE — a beauty-shot framing of the cyborg woman. 14-24 words. Mostly portrait / profile / medium upper-body (like a high-end character beauty render). Elegant, a little sexy, always tasteful.
+
+⚠️ PULL THE CAMERA BACK — EVERY entry is WAIST-UP or WIDER, most are FULL-BODY. NEVER a neck-up headshot or a face close-up. We want to SEE HER BODY — chassis, figure, pose.
+
+✓ DISTRIBUTION (~25):
+  • ~10 FULL-BODY — head-to-foot, full figure + chassis + pose visible in her setting
+  • ~7 THREE-QUARTER WAIST-UP-OR-LOWER — turned toward camera, upper body + hips visible
+  • ~4 DYNAMIC / LOW-ANGLE — camera low (monumental), OR a turning / walking / reaching pose, full or 3/4 body
+  • ~4 SIDE PROFILE — waist-up or fuller, never just the head`,
+    touchpoints: [
+      'Full-body shot head-to-foot, she stands poised in her setting, her whole glossy chassis and figure visible',
+      'Full-body three-quarter view, one hand on her hip, confident and statuesque in her setting',
+      'Dynamic low-angle from below looking up, full body, she towers monumental against the light',
+      'Three-quarter waist-up turned toward the camera, hips and chassis detail visible, glowing accents catching the light',
+      'Caught mid-motion walking toward the camera, full body, hair and light trailing, a split-second of grace',
+      'Elegant side profile waist-up, her integrated cyber-face and chassis sharp against soft bokeh',
+      'Full-body, she turns to glance over her shoulder, her whole figure and chassis in frame',
+      'Medium waist-up, slight turn, her chassis paneling and figure clearly readable',
+    ],
+    instructions: `Each entry is ONE composition, 14-24 words. EVERY entry is WAIST-UP or WIDER — most FULL-BODY. NEVER a neck-up headshot / face close-up. Show her body, chassis, figure. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  og_cyborg_drama: {
+    format: 'simple',
+    theme: `SUBTLE ATMOSPHERE (40%-gated) — a soft glow/particle accent that adds beauty without clutter. 10-18 words.
+
+✓ DISTRIBUTION (~25): drifting warm bokeh-embers / soft floating sparkle-motes / a gentle glow-bloom / faint drifting snow / soft lens-flare / luminous dust catching light / a soft halo of backlight / drifting petals of light`,
+    touchpoints: [
+      'drifting warm bokeh-embers floating softly around her',
+      'soft floating sparkle-motes catching the light',
+      'a gentle glow-bloom haloing her silhouette',
+      'faint drifting snow sparkling in the cool light',
+      'a soft warm lens-flare grazing the frame',
+      'luminous dust drifting slowly through the light',
+      'a soft halo of golden backlight behind her',
+      'drifting petals of light floating past',
+    ],
+    instructions: `Each entry is ONE subtle atmospheric accent, 10-18 words. Soft, beautiful, never cluttering. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // killer-cyborgs — MENACING ASSASSIN CYBORGS (2026-06-09). Full-blown
+  // badass lethal killing machines that look SORT OF human but you'd run.
+  // Wild aesthetics; can be sleek-ninja OR raw / unrefined / utilitarian.
+  // Weapons (gun / sword / laser-sword), capes. Grievous = ONE touchpoint,
+  // don't overdo it. Pool slots reuse the scifi names (signature_wow→WEAPON,
+  // organic→HEAD) — the killer template rewords them.
+  // ════════════════════════════════════════════════════════════════
+  killer_cyborg_xeno_being: {
+    format: 'simple',
+    theme: `HUMAN / CYBORG FEMALE HYBRID ASSASSIN-THIEVES — the HERO axis. Each entry is ONE beautiful, striking, LETHAL female cyborg who is an agile ASSASSIN / THIEF / ROGUE. 30-45 words. She is a HUMAN woman (a real beautiful human FACE + a female figure) fused with a sleek CYBORG chassis and augments — a deadly, lithe, stealthy infiltrator. Ghost-in-the-Shell Major / sexy cyber-ninja / lethal cat-burglar lineage.
+
+⚠️ THE BAR — a gorgeous, DEADLY woman who is a cyborg. A beautiful human female FACE (with a cold lethal edge), a female figure, a sleek cyborg chassis + integrated augments, LITHE and AGILE, armed and stealthy. The thieves and assassins of the cyborg world — HUMAN/CYBORG FEMALE HYBRIDS you'd run from.
+
+⚠️ HUMAN-CYBORG HYBRID — NOT a robot, NOT a mech, NOT a skeleton, NOT genderless. She reads as a beautiful lethal WOMAN first, cyborg second. The chrome/tech INTEGRATES into her (face-plating at the temple/jaw, chassis flowing from her skin), over a human female figure, with real hair.
+
+⚠️ ALWAYS LITHE + AGILE — slender, athletic, low-profile, built to sneak / climb / vault / vanish. A sleek glossy OR matte-black stealth chassis sculpted over her female figure, integrated cyber-augments (exposed mechanical at joints, glowing accents). NEVER bulky / hulking.
+
+🚫 NOT a faceless robot / mech / bulky brute / bare-bone skeleton, NOT genderless, NOT cute. Skin: pale / fair OR a stylized exotic color (emerald / cobalt / pearl / violet) — NEVER realistic ethnic-race. Tasteful-sexy (chassis covers her) but LETHAL.
+
+✓ DISTRIBUTION (~25) — vary the female-assassin archetype:
+  • CYBER-NINJA ASSASSIN (~6) — lithe stealth-suited female killer, matte-black, silent
+  • CAT-BURGLAR THIEF (~5) — agile female rogue, slim stealth-gear, nimble break-in artist
+  • PHANTOM ASSASSIN (~4) — slender hooded female killer, cloaked, vanishing
+  • ELITE INFILTRATOR (~4) — sleek high-tech female operative, polished chassis, deadly
+  • STREET-ROGUE (~3) — scrappy lithe female thief, scavenged stealth-gear, still sexy-lethal
+  • EXOTIC FEMALE ASSASSIN (~3) — wild lethal female-cyborg designs (still human-faced)
+
+Each entry: female-assassin archetype + beautiful human female face + lithe figure + sleek/matte cyborg chassis + integrated augments + lethal stealthy presence.`,
+    touchpoints: [
+      'WIDOW-CIPHER — a lithe, gorgeous female cyber-ninja assassin, matte-black stealth-suit chassis sculpted over a slim figure, chrome face-plating along one cheekbone, a cold beautiful face, long black hair, glowing red eyes, blade-quick and silent',
+      'NIGHT-LACE — a sleek female cat-burglar thief, a flawless human face and a slender figure in a form-fitting dark stealth-chassis, a grapple-line at the hip, fine glowing circuitry tracing her arm, agile and nimble',
+      'PALE-PHANTOM — a slender female phantom-assassin, a fair beautiful face with a chrome temple-implant, a tattered dark hood over a lithe chrome-and-matte frame, long pale hair, glowing violet eyes, here then gone',
+      'VESPER — an elite female infiltrator, a striking human face and athletic figure in a polished gunmetal stealth-chassis with cyan glow-accents, integrated chrome neck-augments, deadly and composed',
+      'EMBER-FOX — a scrappy lithe female street-rogue, a pretty sharp-eyed face, slim scavenged stealth-gear over a chrome-augmented figure, exposed wiring at the forearm, quick and dangerous',
+      'JADE-SCALPEL — an exotic emerald-skinned female assassin-cyborg, a gorgeous human face, glittering green skin, a sleek dark chassis over a lithe figure, glowing amber eyes, lethal grace',
+      'CHROME-SAINT — a sleek female assassin in a glossy white-and-chrome stealth-chassis over a slender figure, a flawless face with a glowing optic at one temple, platinum hair, cold and beautiful and deadly',
+      'SHADE-VIOLET — a lithe female cyber-ninja, soft-violet skin and a beautiful face behind a thin visor, a matte stealth-chassis sculpted to her figure, wrist-blades sheathed, silent and quick',
+    ],
+    instructions: `Each entry is ONE human/cyborg FEMALE assassin-thief, 30-45 words. Format: "NAME CAPS — female-assassin archetype + beautiful human female face + lithe figure + sleek/matte cyborg chassis + integrated augments + lethal stealthy presence". ALWAYS a beautiful lethal WOMAN (human face + female figure) fused with cyborg tech — NEVER a robot / mech / skeleton / genderless. Lithe + agile. Tasteful-sexy but deadly. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  killer_cyborg_signature_wow: {
+    format: 'simple',
+    theme: `THE WEAPON — what the assassin carries or wields. 14-26 words. She/it is CARRYING, RAISING, or mid-STRIKE with a lethal weapon. Vary the weapon hard, including crude / utilitarian ones.
+
+✓ DISTRIBUTION (~25): glowing energy laser-sword / twin laser-swords (Grievous-style, sparingly) / a long chrome katana / a heavy slug-throwing rifle / dual pistols / forearm wrist-blades / an energy glaive-staff / a wicked scythe / an arm-mounted plasma-cannon / a serrated cleaver / a crude welded scrap-blade / a chain-whip / a railgun / twin tonfa-blades / a hooked vibro-dagger`,
+    touchpoints: [
+      'a glowing crimson energy laser-sword held low in one hand, humming, ready to strike',
+      'a long chrome katana drawn and raised, light running down the edge',
+      'a heavy slug-throwing rifle braced against the shoulder, barrel still smoking',
+      'twin forearm wrist-blades extended, dripping coolant, caught mid-lunge',
+      'an arm-mounted plasma-cannon spun up and glowing, aimed at the viewer',
+      'a crude serrated scrap-blade welded to one fist, notched and bloodied',
+      'a long energy glaive-staff spun horizontal, both blades crackling',
+      'dual heavy pistols crossed and firing, muzzle-flash lighting the frame',
+    ],
+    instructions: `Each entry is ONE weapon being carried or wielded, 14-26 words. Vary the weapon hard. Lethal, menacing, sometimes crude/utilitarian. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  killer_cyborg_organic: {
+    format: 'simple',
+    theme: `THE FACE — a beautiful human female face with a cold lethal edge + integrated cyber. 14-26 words. She has a real, striking WOMAN'S face (NOT a mask, NOT a robot head) with cybernetic augments worked into it. A killer's face — gorgeous but dangerous.
+
+✓ DISTRIBUTION (~25): a flawless cold-beautiful face with chrome face-plating along one cheekbone / a striking face with a glowing optic at one temple / a beautiful face half-shadowed by a hood, eyes glowing / a sharp pretty face with fine glowing circuitry tracing the jaw / a serene deadly face with a chrome jaw-augment / a beautiful face behind a thin sleek visor (face still visible) / a gorgeous face with a cybernetic ear-and-temple implant / an exotic-skinned (emerald/cobalt/violet) beautiful face with subtle augments.
+🚫 NOT a mask-only / faceless / robot head — her human female FACE is ALWAYS visible and beautiful. Skin pale/fair OR stylized-exotic, never realistic ethnic-race.`,
+    touchpoints: [
+      'a flawless, cold-beautiful face with sleek chrome face-plating tracing along one cheekbone into her hairline',
+      'a striking face with a small glowing-cyan optic set at one temple, the rest of her face fully human and lovely',
+      'a beautiful face half-shadowed under a dark hood, only her glowing eyes and sharp jaw catching the light',
+      'a sharp, pretty face with fine glowing circuitry tracing down her jaw and neck',
+      'a serene, deadly-beautiful face with a brushed-chrome jaw-and-cheek augment integrated seamlessly',
+      'a gorgeous face behind a thin sleek visor that leaves her eyes and lips visible',
+      'a lovely face with a cybernetic ear-and-temple implant glowing softly, framed by loose hair',
+      'an exotic emerald-skinned beautiful face with subtle gold glow-freckles and a chrome temple-line',
+    ],
+    instructions: `Each entry is ONE beautiful human female face + integrated cyber, 14-26 words. Her WOMAN'S face is always visible and gorgeous, with a cold lethal edge. NEVER a faceless mask / robot head. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  killer_cyborg_eyes: {
+    format: 'simple',
+    theme: `GLOWING MENACING EYES — the killer's eyes/optics. 8-16 words. Cold, lethal, intimidating. Vary color + style.
+
+✓ DISTRIBUTION (~25): a single glowing red optic / two cold red slits / sickly amber sensor-glow / harsh white scanning-glow / a row of small red tracking-lenses / a hard cyan targeting-glow / a flickering orange optic / dead-grey lenses with a faint red pinpoint / a thin glowing visor-bar`,
+    touchpoints: [
+      'a single glowing-red cyclopean optic, cold and unblinking',
+      'two narrow red optic-slits glowing in a dark face',
+      'a harsh white scanning-glow sweeping behind the visor',
+      'a row of small red tracking-lenses lighting one at a time',
+      'a hard cyan targeting-glow locking on',
+      'a sickly amber sensor-glow flickering',
+      'a thin red glowing visor-bar across the eyes',
+      'dead-grey lenses with a single faint red pinpoint deep inside',
+    ],
+    instructions: `Each entry is ONE menacing eye/optic treatment, 8-16 words. Cold, lethal. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  killer_cyborg_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the menacing cinematic rendering treatment (palette + light + mood + finish). 16-28 words. PURE rendering-style — NO subject/anatomy. Dark, gritty, lethal registers so the look varies render to render.
+
+✓ DISTRIBUTION (~25): gritty industrial gunmetal grade / blood-red noir / cold steel-blue ominous / smoky backlit silhouette / harsh tactical floodlight + hard shadow / grimy war-torn desaturation / volcanic-ember menace / acid-green toxic gloom / stark high-contrast black-and-red / rain-soaked neon-noir / fire-lit orange-and-black / cold morgue-white clinical dread`,
+    touchpoints: [
+      'GRITTY INDUSTRIAL — desaturated gunmetal palette, harsh overhead work-light, grime and oil sheen, hard shadow',
+      'BLOOD-RED NOIR — crushed blacks with one bleeding crimson key light, heavy shadow, ominous',
+      'COLD STEEL-BLUE — icy desaturated blue-grey, hard directional light, clinical and merciless',
+      'SMOKY BACKLIT — silhouette against smoke and a single hot backlight, edges glowing, the rest in shadow',
+      'VOLCANIC EMBER — molten orange and deep black, hard ember underlight, heat-shimmer menace',
+      'STARK BLACK-AND-RED — near-monochrome black with violent red accents, high contrast, graphic dread',
+      'RAIN-SOAKED NEON-NOIR — wet reflective surfaces, cold neon glow through rain, moody',
+      'HARSH TACTICAL — flat hard floodlight, blown highlights, deep black shadow, interrogation-cold',
+    ],
+    instructions: `Each entry is ONE menacing rendering register, 16-28 words. PURE style — palette + light + mood + finish, NO subject. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  killer_cyborg_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + POSE — a menacing showcase of the killer. 16-28 words. The KILLER is the main focus, large and central. Intimidating, lethal poses. Mostly full-body or three-quarter so the weapon and chassis read. Cape welcome.
+
+✓ DISTRIBUTION (~25) — AGILE + STEALTHY, the lithe rogue moving like a shadow:
+  • ~7 FULL-BODY AGILE STANCE — head-to-foot, lithe coiled-ready crouch, weapon in hand
+  • ~5 STEALTH CROUCH / PERCHED — crouched low on a ledge, rooftop, or pipe, coiled to spring
+  • ~4 MID-PARKOUR / IN MOTION — vaulting, wall-running, leaping a gap, sliding low and fast
+  • ~4 DRAWING A BLADE FROM SHADOW — slipping a weapon free, half in darkness, about to strike
+  • ~3 CLINGING / CLIMBING — gripping a wall, pipe, or vent, scaling unseen
+  • ~2 EMERGING FROM SHADOW — slipping silently out of the dark, half-revealed`,
+    touchpoints: [
+      'Full-body agile stance, head-to-foot, lithe and coiled in a low ready crouch, blade in hand',
+      'Crouched low and perched on a narrow ledge, the whole lithe body coiled to spring, glowing eyes scanning below',
+      'Caught mid-parkour vaulting a gap, full body airborne and twisting, fast and weightless',
+      'Slipping a thin blade free from shadow, half the lithe body in darkness, about to strike',
+      'Clinging to a wall halfway up, gripping with clawed hands, scaling silently, full figure visible',
+      'Wall-running low and fast along a corridor, the lithe frame stretched mid-stride',
+      'Emerging silently out of the dark, a slim shadow half-revealed, weapon already drawn',
+      'Three-quarter full-body, dropping into a soundless landing crouch, ready to move again',
+    ],
+    instructions: `Each entry is ONE AGILE / STEALTHY composition, 16-28 words. The lithe rogue is the main focus, full-body / three-quarter so the agile build + weapon read. Crouching / perched / parkour / climbing / shadow — never a heavy looming brute. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  killer_cyborg_biome: {
+    format: 'simple',
+    theme: `THE SETTING — a cool, menacing sci-fi environment that frames the killer (it stays the focus). 18-30 words. Dark, atmospheric, dangerous. Multi-tier depth.
+
+✓ DISTRIBUTION (~25): a war-torn ruined city at night / a dark industrial hangar with hanging chains / a blood-red battlefield under smoke / a rain-soaked neon-noir alley / the derelict interior of a dead warship / a fire-lit wasteland / a cold steel interrogation-bay / a scrapyard graveyard of dead machines / a flooded reactor corridor / a foggy graveyard of war-mechs`,
+    touchpoints: [
+      'A war-torn ruined city at night, broken towers and burning wreckage receding into smoke behind him',
+      'A dark industrial hangar, hanging chains and gantries, a single harsh work-light, deep shadow',
+      'A blood-red battlefield under rolling smoke, distant fires and silhouetted wreckage',
+      'A rain-soaked neon-noir alley, wet reflective ground, cold neon bleeding through the downpour',
+      'The derelict interior of a dead warship, flickering emergency light, debris drifting',
+      'A fire-lit wasteland, embers drifting, the black silhouettes of dead machines on the horizon',
+      'A scrapyard graveyard of dead war-machines, mangled metal heaped into the haze',
+      'A cold steel interrogation-bay, flat overhead light, a single drain in the floor',
+    ],
+    instructions: `Each entry is ONE menacing sci-fi setting, 18-30 words. Dark, atmospheric, multi-tier depth, frames the killer without stealing focus. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  killer_cyborg_drama: {
+    format: 'simple',
+    theme: `MENACING ATMOSPHERE (40%-gated) — a dangerous atmospheric accent. 12-20 words. Amplifies the threat without stealing focus.
+
+✓ DISTRIBUTION (~25): drifting smoke / showering sparks / falling embers / blood-red haze / falling ash / a muzzle-flash flicker / arcing electricity / steam venting / drifting war-dust / a strobing alarm-light`,
+    touchpoints: [
+      'drifting smoke curling around the killer',
+      'showering sparks raining off nearby metal',
+      'falling embers drifting through the dark',
+      'a heavy blood-red haze hanging in the air',
+      'arcing electricity crackling off damaged conduits',
+      'steam venting in hard jets from the floor',
+      'a strobing red alarm-light pulsing across the scene',
+      'falling grey ash settling on every surface',
+    ],
+    instructions: `Each entry is ONE menacing atmospheric accent, 12-20 words. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ─── killer-cyborgs-male — MALE mirror of killer-cyborgs (2026-06-09).
+  //     Only the gendered axes are new (subject + face); weapon / biome / look /
+  //     composition / eyes / drama are SHARED with the female path. ───
+  killer_cyborg_male_xeno_being: {
+    format: 'simple',
+    theme: `SLEEK COOL ANTIHERO OUTLAW CYBORGS — the HERO axis. Each entry is ONE sleek, stylish, COOL cyberpunk OUTLAW antihero with PERSONALITY. 30-45 words. Lethal + characterful + STYLISH — a cool antihero (gunslinger / bounty-hunter / merc / rogue / smuggler / lone-ronin) with polished sleek gear + a signature stylish flair + cool attitude. Cyberpunk-2077 V / Cowboy-Bebop Spike / sleek Star-Wars-bounty-hunter lineage.
+
+⚠️ THE BAR — a SLEEK, COOL antihero outlaw, stylish and lethal. Polished sleek cyber-augments + sleek personalized gear (a sharp tailored long coat / a sleek hood or cowl / sleek goggles or visor / a clean bandolier / a sleek cybernetic arm) + a cool attitude (a confident smirk / cold swagger). Characterful but POLISHED and STYLISH — a cool antihero you'd put on a poster.
+
+🚫 NO HATS — absolutely NO fedora / cowboy-hat / wide-brim hat / brimmed hat of ANY kind (Kevin hates the look). Hoods / cowls / face-wraps / goggles / visors are fine; HATS are banned.
+
+⚠️ SLEEK + COOL, NOT SCRUFFY — sleek polished armored gear, clean stylish lines, a cool antihero vibe. Personal flair done with STYLE — NEVER junkyard-scrap, NEVER grubby-scavenger, NEVER war-paint-raider, NEVER bushy-bearded-brute. Cool, sharp, badass.
+
+⚠️ FACE — a MIX: ~half a sleek MASK / visor / goggles / face-wrap (cool + mysterious, cold eyes showing); ~half a striking COOL VISIBLE face — sharp, hard, confident, with cool flair (a thin scar / a glowing optic / a smirk) + integrated cyber.
+
+🚫 ALWAYS A COVERED TORSO — a sleek coat / armored chassis / tactical gear over his chest. NEVER shirtless, NEVER bare-chested, NEVER an open / exposed muscular chest. NOT a faceless generic robot / mech / skeleton / bare-skull-face. Build lean-to-athletic. NEVER a pretty-boy. Skin pale/fair OR a stylized exotic color (emerald/cobalt/violet/ashen) — NEVER realistic ethnic-race.
+
+✓ DISTRIBUTION (~25) — vary the cool antihero archetype:
+  • SLEEK SHOOTER (~5) — sleek gun-for-hire antihero, a sharp long coat, a sleek hand-cannon / sidearm (NO hat)
+  • BOUNTY-HUNTER (~5) — sleek polished armored hunter, a clean visor, a bandolier worn with style, composed
+  • SLEEK MERC (~4) — sleek tactical operative-for-hire, polished gear with clean glowing lines, lethal cool
+  • ROGUE-SMUGGLER (~4) — slick stylish charming rogue, a sharp coat, sleek holsters, a confident smirk
+  • LONE RONIN-DRIFTER (~4) — sleek lone-wolf antihero, a long dark coat or wrap, a chrome blade, cold cool
+  • EXOTIC ANTIHERO (~3) — exotic-skinned but SLEEK + COOL outlaw designs
+
+Each entry: cool antihero archetype + sleek stylish personalized gear + a signature flair + sleek cyber-augments + a cool confident attitude (a sleek mask/visor on ~half, a cool visible face on ~half).`,
+    touchpoints: [
+      'BLACKJACK — a sleek gun-for-hire antihero, a sharp tailored black coat over polished dark armor, sleek goggles glinting, a cool hard visible face, a chrome sidearm spun on one finger, a cold confident smirk',
+      'HALCYON — a sleek bounty-hunter cyborg, polished gunmetal armor with clean glowing-cyan lines, a sleek targeting-visor across the eyes, a bandolier worn with style, composed and lethal',
+      'RONIN-7 — a sleek lone ronin-drifter antihero, a long dark coat over a sleek matte chassis, a chrome blade at the hip, a cool hard visible face with a single glowing optic, quiet menace',
+      'SILK — a slick rogue-smuggler cyborg, a sharp stylish long coat, dual sleek holsters, a confident grin and a glowing eye on a cool sharp face, charming and dangerous',
+      'NOMAD-X — a sleek merc-for-hire, polished tactical armor with clean lines, a sleek half-mask and visor, a sleek rifle slung cool over the shoulder, lethal and composed',
+      'ASH-VECTOR — an exotic ashen-skinned cool antihero, a sharp dark coat over sleek augments, a sleek visor, a thin scar and a cold confident stare, stylish and deadly',
+      'DUSK — a sleek hooded shooter antihero, a sharp coat and a sleek face-wrap leaving cold eyes visible, a sleek hand-cannon, cool and unbothered',
+      'JADE-ACE — an exotic emerald-skinned sleek rogue, a stylish long coat over polished augments, a sharp confident visible face with a glowing amber eye, a sleek blade, cool swagger',
+    ],
+    instructions: `Each entry is ONE sleek COOL antihero OUTLAW cyborg, 30-45 words. Format: "NAME CAPS — cool antihero archetype + sleek stylish personalized gear + signature flair + sleek cyber-augments + cool confident attitude (a sleek mask/visor on ~half, a cool visible face on ~half)". STYLISH + POLISHED + COOL — NEVER scruffy / junkyard / war-paint-raider / bushy-bearded. ALWAYS a covered torso (no shirtless). NEVER a pretty-boy / skull-face / faceless robot. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  killer_cyborg_male_organic: {
+    format: 'simple',
+    theme: `THE FACE/HEAD — a COOL male antihero face OR a sleek mask/visor, with integrated cyber. 14-26 words. ~Half are a sleek MASK / visor / goggles / face-wrap (cool, mysterious, cold sharp eyes showing). ~Half are a striking COOL VISIBLE face — sharp, hard, confident, with cool flair (a thin scar / a glowing optic / a faint smirk / sharp features). A cool antihero, lethal and stylish. FACE/HEAD only, NEVER torso.
+
+⚠️ COOL + STYLISH — sharp, hard, confident, cool. NOT a generic pretty-boy, NOT a grubby scruffy bum, NOT a bushy-bearded brute, NOT the same face twice. Light stubble OK; lean into COOL.
+
+✓ DISTRIBUTION (~25): a sleek matte half-mask + a glowing optic-slit / a sleek visor + goggles over cold sharp eyes / a sharp confident face with a glowing optic and a faint smirk / a hard cool face with a thin scar + a sleek chrome cheek-plate / a sleek dark face-wrap leaving cold sharp eyes / a sharp cool face under a sleek hood / a striking hard face with clean integrated cyber along the jaw / an exotic-skinned cool sharp face with a glowing eye.
+🚫 NOT a pretty-boy, NOT a bare skull / death's-head, NOT a grubby scruffy face, NOT a bushy-bearded brute, NOT a generic robot helmet, and NO HATS (no fedora / cowboy-hat / brimmed hat — hoods/cowls OK) — a COOL antihero (sleek mask OR cool sharp face). Skin pale/fair OR stylized-exotic, never realistic ethnic-race. FACE/HEAD only.`,
+    touchpoints: [
+      'a sleek matte-black half-mask with a single glowing-cyan optic-slit, cool and mysterious',
+      'a sleek tech-visor and goggles over a sharp hard jaw, a cold confident set',
+      'a sharp confident face with a faint smirk, a glowing-amber optic, and sleek temple-augments',
+      'a hard cool face with a thin scar through one brow and a sleek chrome cheek-plate',
+      'a sleek dark face-wrap leaving only cold sharp eyes and a strong jaw visible',
+      'a cool sharp face under a sleek dark hood, sleek goggles pushed up on the brow, a steady cold stare',
+      'a striking hard face with a glowing optic and clean integrated cyber along the jaw, confident',
+      'an exotic emerald-skinned cool sharp face with a glowing amber eye and a sleek temple-line',
+    ],
+    instructions: `Each entry is ONE cool antihero face/head + integrated cyber, 14-26 words. ~Half a sleek mask/visor/goggles/face-wrap, ~half a striking cool VISIBLE face (sharp, hard, confident + cool flair). COOL + STYLISH — NEVER a pretty-boy / bare-skull / scruffy-bum / bushy-bearded / generic robot helmet. FACE/HEAD only. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
   // cyborg-man REBUILD → "android-man" register (2026-05-26)
   // MOSTLY-MACHINE male android-BEING. Synthetic chassis dominates the
   // silhouette; organic shows ONLY at eyes / a partial face-panel. A human

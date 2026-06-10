@@ -16,6 +16,10 @@ const pathBuilders = {
   'robot-moment': require('./paths/robot-moment'),
   'humanoid-robots': require('./paths/humanoid-robots'),
   'cyborg-woman': require('./paths/cyborg-woman'),
+  'scifi-cyborg-female': require('./paths/scifi-cyborg-female'),
+  'killer-cyborgs': require('./paths/killer-cyborgs'),
+  'killer-cyborgs-male': require('./paths/killer-cyborgs-male'),
+  'og-cyborg-female': require('./paths/og-cyborg-female'),
   // 2026-05-17: DISABLED per Kevin — only the axis cyborg-woman path fires now.
   // Legacy function-form preserved at paths/legacy/cyborg-woman.js for reference.
   // 'cyborg-female-legacy': require('./paths/legacy/cyborg-woman'),
@@ -230,9 +234,12 @@ module.exports = {
   // subtraction of ALL_ENABLED_AI_MODELS) so the lineup is auditable.
   // BOT_MODEL_TALLY.md is the source of truth.
   useModelPicker: true,
+  // gpt-image-2 BANNED bot-wide 2026-06-09 (Kevin) — its MechBot renders came
+  // out messy / hard-to-read: it can't resolve dense hard-surface mech + cyborg
+  // machinery into coherent forms, rendering busy greeble-clutter instead.
+  // Flux + nano-banana handle hard-surface detail cleanly; gpt-2 doesn't.
   allowedModels: [
     'google/gemini-2-image',
-    'openai/gpt-image-2',
     'black-forest-labs/flux-dev',
     'black-forest-labs/flux-1.1-pro-ultra',
     'black-forest-labs/flux-1.1-pro',
@@ -251,8 +258,10 @@ module.exports = {
   // body locks) are unlisted here, so they're KEPT on the swap.
   // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'mechbot_gpt_clean' },
-    'google/gemini-2-image': { medium: 'mechbot_gpt_clean' },
+    // scifi-cyborg-female skips the mech-clean swap — that medium is mech-coded
+    // ("recognizable machinery") and fights the exotic alien-cyborg aesthetic;
+    // banana renders the look-led brief directly instead.
+    'google/gemini-2-image': { medium: 'mechbot_gpt_clean', skipPaths: ['scifi-cyborg-female'] },
   },
 
   promptPrefixByMedium: {
@@ -263,8 +272,30 @@ module.exports = {
     // ── Character paths — Banana RE-ENABLED 2026-06-05 for character-path audit.
     'cyborg-woman': [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // NEW exotic path — Flux (highest fidelity for dense exotic detail) +
+    // nano-banana. gpt-2 excluded bot-wide; flux-dev excluded for fidelity.
+    // Locked to Flux 1.1-pro + ultra (2026-06-09, Kevin) — banana goes painterly
+    // and fights the photoreal alien/cyborg hybrid look.
+    'scifi-cyborg-female': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // killer-cyborgs — Flux-locked like its scifi parent (verbatim clone).
+    'killer-cyborgs': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'killer-cyborgs-male': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // OG path — FLUX ONLY for the photoreal glossy beauty look (banana goes
+    // painterly + breaks the photoreal register; gpt-2 banned bot-wide).
+    'og-cyborg-female': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -275,31 +306,26 @@ module.exports = {
     // over-represented in the bland front-on renders + lowest Flux fidelity.
     'droid-assassin': [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'mecha-pilots': [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'humanoid-robots': [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'power-armor-infantry': [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'robot-moment': [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -332,8 +358,13 @@ module.exports = {
     'cyborg-man': '',
     'cyborg-male-legacy':
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
+    // 2026-06-09: dropped the "beautiful woman" lead — it front-loaded the same
+    // glossy-pinup centroid on every render (look-homogenization). Kept only the
+    // identity GUARD (human-bodied, not a robotic chassis); the visual REGISTER
+    // is now set per-render by the rolled look-register (see the template's LOOK
+    // OVERRIDE block). The template still enforces the full cyborg-woman DNA.
     'cyborg-woman':
-      'beautiful woman, cybernetic breakthroughs integrated into a human body rather than a robotic chassis',
+      'a woman, cybernetics integrated into a human body, not a robotic chassis',
     'cyborg-female-legacy':
       'beautiful woman, cybernetic breakthroughs integrated into a human body rather than a robotic chassis',
     'droid-assassin':
@@ -346,6 +377,12 @@ module.exports = {
     'power-armor-infantry': '',
     'post-apoc-rust-tech': '',
     'humanoid-robots': '',
+    // NEW exotic path — empty per the wrapper-strip lesson; the look-led Sonnet
+    // body leads. The exotic identity lives entirely in the bespoke pools.
+    'scifi-cyborg-female': '',
+    'killer-cyborgs': '',
+    'killer-cyborgs-male': '',
+    'og-cyborg-female': '',
     // cyborg-woman keeps its legacy prefix (defined above) since it's the
     // load-bearing "beautiful woman with cybernetic breakthroughs integrated
     // into human body" coherence cue — preserved during axis migration.
@@ -381,7 +418,11 @@ module.exports = {
   paths: [
     'robot-moment',
     'humanoid-robots',
-    'cyborg-woman',
+    // 'cyborg-woman',  // TEMP DISABLED 2026-06-09 — replaced in rotation by the 4 new cyborg-female paths below. Re-enable by uncommenting.
+    'scifi-cyborg-female',
+    'killer-cyborgs',
+    'killer-cyborgs-male',
+    'og-cyborg-female',
     // 'cyborg-female-legacy',  // 2026-05-17 DISABLED — see pathBuilders comment
     'droid-assassin',
     // 'cyborg-man',  // 2026-06-05 DISABLED (Kevin) — even after killing the mandatory opening tag, renders are unusable; redesign deferred
@@ -551,6 +592,12 @@ module.exports = {
       base.hair = picker.pick(pools.CYBORG_HAIR_STYLES);
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
+      // Visual-treatment axis (2026-06-09) — rolls a different rendering register
+      // per render so the look stops collapsing to one glossy-photoreal pinpup.
+      base.lookRegister = picker.pickWithRecency(
+        pools.CYBORG_WOMAN_LOOK_REGISTER,
+        'cyborg_look_register'
+      );
     }
     if (path === 'droid-assassin') {
       // 2026-05-17: NINJA-BOT path (path name retained for back-compat). Pure

@@ -671,17 +671,20 @@ A subtle atmospheric flourish amplifying her presence WITHOUT cluttering her as 
 
     return `You are a cinematographer writing a CYBORG WOMAN scene for MechBot — a half-human half-machine BEING rendered in hyper-real cinematic 3D. She is simultaneously the most beautiful and most terrifying thing in the frame. Ex Machina / Alita / Ghost in the Shell / Blade Runner 2049 / Westworld / Cyberpunk 2077 / Mass Effect / The Expanse lineage.
 
-━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL BEAUTY-PORTRAIT (every render) ━━━
-Every render is a PAINTERLY HYPERREAL BEAUTY-PORTRAIT — high-end concept-art beauty study with sci-fi cyborg jewelry integrated into the face. NOT cinematic action still. NOT gritty cyberpunk tactical concept-art. NOT movie-poster wide-vista. Think: a master digital painter doing a portrait study of a beautiful woman who happens to be cyborg, with refined brushwork, soft volumetric lighting, atmospheric diffusion, painterly skin rendering, gentle haze.
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — open your prompt with this) ━━━
+${sharedDNA.lookRegister || 'cinematic concept-art render'}
 
-Style targets to lock in every render:
-  • SOFT VOLUMETRIC LIGHTING — wraparound key-light with atmospheric haze diffusing through the air, no harsh tactical contrast
-  • PAINTERLY HYPERREAL skin rendering — visible pores + subsurface scattering, but smooth refined finish like a digital painter's portrait, NOT photorealistic-skin-blemished
-  • BEAUTIFUL FIRST, CYBORG SECOND — her face is the gorgeous focal point; cyborg machinery is the elegant JEWELRY enhancing her beauty, not competing with it
-  • QUIET CONTEMPLATIVE EXPRESSION — eyes-closed or distant-gaze or parted-lips-in-wonder; never fierce / never action / never camera-direct
-  • SOFT BOKEH BACKGROUND — impressionistic atmospheric haze with maybe 1-2 small pinprick lights for depth. NOT detailed cinematic environment. NOT foreground-midground-background depth layers. The figure IS the entire focus; the background is a quiet color-field with diffused light.
+This is the AUTHORITY on rendering style, palette, lighting, and finish. It OVERRIDES any other style / medium / lighting / finish wording anywhere below (e.g. "painterly hyperreal", "soft volumetric", "soft bokeh", "3D render"). OPEN your Flux prompt with these look tokens. Keep the SUBJECT — her cyborg identity, the exposed inner-workings, every hard rule — exactly as written, but render ALL of it in THIS look. Each render rolls a DIFFERENT look; never default to the glossy-photoreal beauty-portrait.
 
-Mood target — mesmerizing, ethereal, alien-mysterious, future-haunted beauty study. The viewer should feel they're looking at a master portrait, not an action still.
+━━━ ABSOLUTE BAR — A STRIKING CYBORG-WOMAN PORTRAIT (every render) ━━━
+Every render is a striking portrait of a cyborg woman — simultaneously the most beautiful and most haunting thing in frame, with sci-fi cyborg detail integrated into her face and body. The LOOK REGISTER above decides HOW it is rendered (palette, lighting, finish, medium) — do NOT lock one fixed treatment.
+
+Hold these CONSTANT across every look (everything else follows the look):
+  • BEAUTIFUL + STRIKING FIRST, CYBORG SECOND — her face is the focal point; the cyborg machinery is elegant integration enhancing her, not competing with her
+  • HER FACE READS CLEARLY — the portrait is about HER; framing favours the figure over a busy environment
+  • EXPRESSION + MOOD FOLLOW THE LOOK — a neon-noir look is moody and hard-lit, a golden-hour look is warm and soft, an editorial look is bold and direct, a war-photo look is candid and raw. Let the rolled look set the emotional register instead of always "quiet contemplative haze".
+
+The ONE constant is: a beautiful, unmistakably cyborg woman, rendered with conviction in the rolled look. Everything else — lighting, palette, skin/surface finish, background treatment, mood — is set by the LOOK REGISTER above.
 
 ━━━ ALIEN-HYBRID VARIANTS WELCOME (~30% of renders) ━━━
 She MAY be alien-hybrid — non-human-coded skin (moss-green / robin-egg-blue / deep-plum / coral-pink / juniper-green / viridian / opal-iridescent / silver-mercury / cobalt-shimmer), bioluminescent freckles or scale-patterns across cheekbones, slightly elongated facial proportions, alien-tilted eyes, non-human iris colors. STILL beautiful and feminine, just exotic. Lean alien-hybrid when the skin DNA from sharedDNA suggests it (any non-human color is the cue). The "pretty girl off-guard" effect intensifies with alien-hybrid variants — exotic AND mesmerizing.
@@ -1508,5 +1511,306 @@ GOOD OPENING EXAMPLES (vary across all 5 registers):
 Then weave: chassis material, mechanical feature, VISIBLE WEAPONS, action (predator-lens), SCENE (atmospheric sci-fi context), lighting/atmosphere, palette, mood. Foreground PREDATORY POSE + VISIBLE ARMAMENT + ATMOSPHERIC SCENE + DRAMATIC RIM-LIGHT.
 
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  // killer-cyborgs-male — MALE mirror of MECHBOT_KILLER_CYBORGS (2026-06-09).
+  MECHBOT_KILLER_CYBORGS_MALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      xeno_being,
+      organic,
+      eyes,
+      signature_wow,
+      biome,
+      look,
+      composition,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ MENACING ATMOSPHERE (weave in — don't let it steal focus from the killer) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a master photoreal sci-fi artist rendering a SLEEK COOL ANTIHERO OUTLAW CYBORG for MechBot — a stylish, cool cyberpunk antihero with PERSONALITY (gun-for-hire / bounty-hunter / merc / rogue / smuggler / lone-ronin). He is a lethal, STYLISH man fused with sleek polished cyborg gear + a signature stylish flair — a cool antihero you'd put on a poster, NOT a scruffy scavenger. Lean into sleek, cool, stylish Cyberpunk-2077 / Cowboy-Bebop antihero cyberpunk. NEVER a pretty-boy, NEVER scruffy/junkyard, NEVER bare-chested.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE ASSASSIN CYBORG (the HERO — render with obsessive, lethal detail) ━━━
+${xeno_being}
+
+He is the focal subject: a sleek, COOL antihero OUTLAW cyborg with PERSONALITY. Render his face (a sleek mask/visor OR a cool sharp visible face), his sleek stylish gear, his signature flair, and his sleek cyborg augments + weapon EXACTLY as described — a different cool antihero every render. Lethal, stylish, cool.
+
+━━━ SLEEK COOL ANTIHERO — stylish, NOT scruffy ━━━
+He is a SLEEK, COOL cyberpunk antihero — a stylish man with cool ATTITUDE (a confident smirk / cold swagger), fused with SLEEK, POLISHED, personalized cyborg gear + a SIGNATURE stylish flair (a sharp tailored long coat / a sleek hood or cowl / sleek goggles or visor / a clean bandolier / a sleek cybernetic arm). Lean-to-athletic build. Polished, sharp, badass — every render a DIFFERENT cool antihero. NEVER scruffy / junkyard / war-paint-raider / bushy-bearded, NEVER a pretty-boy, NEVER a faceless robot / mech / skeleton. ABSOLUTELY NO HATS — no fedora / cowboy-hat / wide-brim / brimmed hat of any kind (hoods/cowls/visors only).
+
+━━━ HIS FACE/HEAD — sleek mask OR cool sharp face (render clearly) ━━━
+${organic}
+
+Render his FACE/HEAD EXACTLY as described — EITHER a sleek mask / visor / goggles / face-wrap (cool, mysterious) OR a striking cool sharp visible face (hard, confident, with cool flair) + integrated cyber. COOL and stylish — NEVER a pretty-boy, NEVER a bare-skull, NEVER a scruffy bum, NEVER a generic robot helmet.
+
+━━━ HIS EYES (glowing) ━━━
+${eyes}
+Render his eyes exactly this way — cold and lethal.
+
+━━━ THE WEAPON (render it prominently — carried or being used) ━━━
+${signature_wow}
+
+━━━ COMPOSITION — HE IS THE MAIN FOCUS ━━━
+${composition}
+He is the HERO of the frame — large, central, his lethal presence, agile build, and weapon reading clearly. A striking, dangerous presence (full-body or three-quarter favored).
+
+━━━ THE COOL/DARK SCI-FI SETTING (but HE stays the focus) ━━━
+${biome}
+
+Render a cool, dark, atmospheric sci-fi environment with real depth behind and around him — but HE is the main focus, large and central. The setting frames and elevates him without stealing attention.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ LETHAL — NOT SHIRTLESS, NOT PIN-UP ━━━
+He is a cool, dangerous antihero. His torso is ALWAYS FULLY COVERED by a sleek coat / armored chassis / tactical gear — NO shirtless, NO bare chest, NO exposed muscular pecs/abs, NO oiled-pecs, NO open-vest, NO pin-up posing. He's fully dressed and cool. A sharp coat / cloak is welcome.
+
+━━━ NO SKULL-FACE / NO SKELETON ━━━
+His augments are sleek tech integrated into a weathered human male body, and his FACE is human FLESH (eyes, nose, lips, skin) + cyber. NEVER a bare skull / metal-skull face / skull-head / death's-head / exposed-teeth grinning skull, and NO exposed bone ribcage / ribs / spine. A real characterful human face and a whole body — never a skeleton.
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the male cyborg assassin, his weapon, the agile composition/pose, the dark sci-fi setting with depth, lighting/atmosphere, mood. Every render must feel like a frame from an unmade sci-fi epic — striking, lethal, badass.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  // killer-cyborgs — MENACING ASSASSIN CYBORGS (2026-06-09). Tilted off the
+  // scifi clone toward lethal killing machines. signature_wow→WEAPON,
+  // organic→HEAD/FACE. Wild + raw/utilitarian; you'd run if you saw one.
+  MECHBOT_KILLER_CYBORGS: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      xeno_being,
+      organic,
+      eyes,
+      signature_wow,
+      biome,
+      look,
+      composition,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ MENACING ATMOSPHERE (weave in — don't let it steal focus from the killer) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a master photoreal sci-fi artist rendering a HUMAN/CYBORG FEMALE ASSASSIN for MechBot — a beautiful, LETHAL woman who is a cyborg. She is a gorgeous human female (a real face + a female figure) fused with a sleek cyborg chassis — a deadly, agile ASSASSIN / THIEF / ROGUE. Stunning but dangerous, the kind you'd run from. Lean into sleek, lethal, sexy-but-deadly cyberpunk.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE ASSASSIN CYBORG (the HERO — render with obsessive, lethal detail) ━━━
+${xeno_being}
+
+She is the focal subject: a beautiful, LITHE, AGILE female cyborg assassin/thief. Render her human female face, her figure, and her sleek cyborg chassis + integrated augments EXACTLY as described — a different lethal woman every render. Quick, stealthy, deadly.
+
+━━━ HUMAN/CYBORG FEMALE HYBRID — NOT a robot/mech ━━━
+She is a beautiful WOMAN who is a cyborg — a human female FACE + a female figure, with the chrome/tech INTEGRATED into her (face-plating at the temple/jaw, chassis flowing from her skin), and real hair. LITHE, slender, ATHLETIC, low-profile — a cat-burglar / cyber-ninja / phantom assassin built to sneak, climb, vault, and vanish. A sleek matte-black or glossy stealth chassis sculpted over her figure, integrated augments, glowing accents. NEVER a faceless robot / mech / bulky brute / skeleton — a lethal WOMAN first, cyborg second.
+
+━━━ HER FACE — beautiful human female + integrated cyber (render clearly) ━━━
+${organic}
+
+Render her FACE EXACTLY as described — a beautiful human female face with a cold lethal edge and integrated cyber. Her woman's face is ALWAYS visible and gorgeous. NEVER a faceless mask or robot head.
+
+━━━ HER EYES (glowing) ━━━
+${eyes}
+Render her eyes exactly this way — cold and lethal.
+
+━━━ THE WEAPON (render it prominently — carried or being used) ━━━
+${signature_wow}
+
+━━━ COMPOSITION — SHE IS THE MAIN FOCUS ━━━
+${composition}
+She is the HERO of the frame — large, central, her lethal beauty, agile build, and weapon reading clearly. A striking, dangerous presence (full-body or three-quarter favored).
+
+━━━ THE COOL/DARK SCI-FI SETTING (but SHE stays the focus) ━━━
+${biome}
+
+Render a cool, dark, atmospheric sci-fi environment with real depth behind and around her — but SHE is the main focus, large and central. The setting frames and elevates her without stealing attention.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ LETHAL — NOT CUTE, NOT PIN-UP ━━━
+She is a KILLER — beautiful but deadly, dangerous, the kind you'd run from. Sexy-but-deadly is the vibe, but TASTEFUL: her chassis/stealth-suit covers her — no bare breasts, no nipples, no lingerie, no pin-up posing. The lethal edge carries it. A cloak / hood is welcome.
+
+━━━ NO BARE SKELETON ━━━
+Her augments are sleek tech integrated into a human female body. NO bare bone skeleton — no exposed ribcage / ribs / spine / vertebrae / bone-skull. Whole and lethal, never skeletal.
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the female cyborg assassin, her weapon, the agile composition/pose, the dark sci-fi setting with depth, lighting/atmosphere, mood. Every render must feel like a frame from an unmade sci-fi epic — beautiful, lethal, badass.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  MECHBOT_SCIFI_CYBORG_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      xeno_being,
+      organic,
+      eyes,
+      signature_wow,
+      biome,
+      look,
+      composition,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ EXOTIC PHENOMENON (weave in — don't let it steal focus from her) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing an EXOTIC ALIEN-CYBORG FEMALE scene for MechBot. The goal is a "WOW!!" — a genuinely out-there, otherworldly cyborg woman that makes the viewer stop scrolling and stare. She is SIMULTANEOUSLY a beautiful feminine being AND something truly alien and machine. Push HARD into the strange and wondrous — this is an AI dream-app, lean all the way into exotic sci-fi.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default glossy register.
+
+━━━ THE ALIEN-CYBORG BEING (the HERO — render with obsessive, otherworldly detail) ━━━
+${xeno_being}
+
+She is the focal subject: an elegant, FEMININE, genuinely ALIEN cyborg woman. Render her exotic anatomy + cyborg fusion + body material EXACTLY as described — a different alien race every render, so commit fully to what she IS. Beautiful and strange in equal measure.
+
+━━━ LEAN HARD INTO THE ALIEN/CYBORG HYBRID (the cool look) ━━━
+The magic is the HYBRID — exotic ALIEN biology fused with a sleek CHROME CYBORG chassis, into ONE being, with glowing internal light or accent-glow threaded through. Push BOTH sides hard: polished chrome plating / sculpted mechanical panels / exposed servo-and-cable detail / glowing cores — fused seamlessly with her exotic alien features (elongated head / crests / exotic glossy skin / alien eyes). Half-organic, half-machine, gorgeous and otherworldly. This hybrid LOOK is the whole point.
+
+━━━ HER ORGANIC SIDE — THE LIVING FACE + ALIEN BIOLOGY (render this clearly) ━━━
+${organic}
+
+This is the AUTHORITY on her face, skin, and organic biology — render her face and exposed flesh EXACTLY as described (human or alien, with whatever alien biology it specifies: extra eyes / head-tendrils / translucent-organ skin / crests / gills / skin color). Where the being above and this organic side meet, the machine is fused INTO this living flesh. Her face reads clearly and beautifully.
+
+━━━ HER EYES (glowing) ━━━
+${eyes}
+Render her eyes exactly this way (honour any eye-count her alien biology specifies above).
+
+━━━ THE SHOWSTOPPER (the ONE wow-element — render it prominently) ━━━
+${signature_wow}
+
+━━━ COMPOSITION — THE CHARACTER IS THE MAIN FOCUS ━━━
+${composition}
+She is the HERO of the frame — large, central, her hybrid design the star. Use the rolled framing as a hint, but DO NOT bury her in an elaborate ACTION or narrative (no descending-staircases / mid-stride / theatrical staging) — showcase her cool alien/cyborg LOOK with a striking, mostly-still presence.
+
+━━━ THE COOL SCI-FI SETTING (keep it cool — but SHE stays the focus) ━━━
+${biome}
+
+Render a cool, atmospheric sci-fi environment with real depth behind and around her — but SHE is the main focus, large and central. The setting frames and elevates her without stealing attention.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ TASTEFUL — exotic elegance, NOT pinup ━━━
+She is alluring through ALIEN WONDER and elegant power, never through skin. Her own exotic anatomy / chassis / chitin / scales / plating is her covering. No bikini-chassis, no cleavage-as-focus, no pin-up posing — the awe of WHAT SHE IS carries it.
+
+━━━ NEVER SKELETAL ━━━
+She is a sleek, WHOLE, elegant FEMININE figure with a clearly readable face. NEVER skeletal anatomy — no exposed ribcage, no visible ribs, no exposed spine or vertebrae, no bones, no skull-faced or skeleton look. Exotic surfaces and forms, never a skeleton or a bare creature-skull.
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the alien-cyborg being, her showstopper feature, the composition/pose, the exotic environment with depth, lighting/atmosphere, mood. Every render must feel like a frame from an unmade sci-fi epic — exotic, wondrous, jaw-dropping.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  MECHBOT_OG_CYBORG_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, hair, cyber_feature, eyes, setting, composition, drama } =
+      slots;
+
+    const dramaSection = drama
+      ? `
+━━━ SUBTLE ATMOSPHERE (soft accent — never clutter) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a master photoreal sci-fi artist rendering a BEAUTIFUL SEXY FEMALE CYBORG for MechBot — Sorayama-chrome meets Ghost-in-the-Shell beauty. She is a GORGEOUS WOMAN who is a cyborg: human-proportioned, a flawless beautiful face, a curvy feminine figure clad in a glossy sculpted chassis. HYPER-PHOTOREAL — high-end cinematic 3D render quality, realistic skin and reflections, crisp detail.
+
+━━━ ABSOLUTE BAR — BEAUTIFUL WOMAN FIRST, CYBORG SECOND ━━━
+She reads as a stunning woman first, cyborg second. A real, beautiful human(oid) FACE — NEVER an alien creature, NEVER insectoid, NEVER a monster, NEVER a faceless mannequin. Photoreal beauty render.
+
+━━━ INTEGRATED FACE — NOT A HEAD ON A ROBOT (the #1 failure to avoid) ━━━
+The chrome and tech INTEGRATE INTO her face and head — partial chrome face-plating across the temple / crown / cheek / jaw, glossy chrome flowing seamlessly from her neck UP INTO her face, glowing circuitry on her skin, her glossy skin and the chassis ONE continuous surface. She is a single seamless cyborg design. NEVER a plain human head pasted on top of a separate generic robot body.
+
+━━━ SKIN ━━━
+Pale / fair OR a STYLIZED exotic sci-fi color (emerald-green-glitter / cobalt-blue / pearl-white / soft-violet / chrome-silver / rose-gold / stylized-obsidian jet-black synthetic finish). NEVER a realistic ethnic-RACE skin tone (no African-American / deep-ebony / dark-brown realistic-race skin).
+
+━━━ FRAMING — PULL THE CAMERA BACK (important) ━━━
+Show her from at least the WAIST UP, and frequently FULL-BODY (head-to-hip or head-to-foot). We must SEE HER BODY — her chassis, her figure, her pose. Do NOT default to a neck-up headshot or a face close-up. The composition axis below sets the exact framing; when in doubt go WIDER, never tighter than waist-up.
+
+━━━ THE CYBORG WOMAN (the HERO — render exactly) ━━━
+${subject}
+
+Render her skin, her flawless face, her curvy figure, and her glossy sculpted chassis EXACTLY as described — sleek panels over her body, exposed mechanical detail at the joints (neck / shoulders / spine / arms), glowing accent-lights threaded through. High-gloss, photoreal.
+
+━━━ HAIR ━━━
+${hair}
+
+━━━ SIGNATURE CYBER FEATURE (render prominently) ━━━
+${cyber_feature}
+
+━━━ EYES (glowing) ━━━
+${eyes}
+
+━━━ COMPOSITION + POSE ━━━
+${composition}
+
+━━━ BACKGROUND (soft — she is the focus) ━━━
+${setting}
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 180)}
+
+━━━ TASTEFUL-SEXY ━━━
+She is sexy through her curvy sculpted form, gloss, and beauty — NEVER through bare skin. The glossy chassis / panels COVER her body. NO bare breasts, NO nipples, NO topless, NO lingerie. NO exposed ribcage / skeleton — her chassis is smooth and whole.
+
+━━━ STRUCTURE — write 100-140 words ━━━
+Open with the cyborg woman (skin + beautiful face + glossy chassis), then weave: hair, her signature cyber feature, glowing eyes, composition/pose, soft background, lighting/atmosphere. PHOTOREAL beauty render — crisp, glossy, gorgeous.
+
+Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 };

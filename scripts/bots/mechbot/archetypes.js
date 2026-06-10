@@ -110,6 +110,62 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_SCIFI_CYBORG_FEMALE: {
+    description:
+      'PATH-BESPOKE — MechBot scifi-cyborg-female (2026-06-09, NEW from scratch). "Truly out there" exotic alien-cyborg females — built with NO baggage from the legacy cyborg-woman beauty-portrait. The xeno_being HERO axis rolls a genuinely DIFFERENT alien race per render (insectoid / crystalline / cephalopod / fungal / cosmic-void / porcelain / coral / etc.); signature_wow layers ONE showstopper feature; the look axis varies the rendering register so nothing homogenizes; biome sets an exotic alien stage; composition varies framing/pose. 5 path-bespoke pools + 1 conditional drama (40%-gated exotic phenomenon). Tasteful-sexy via exotic elegance, never pinup. No look-lock in the template — the look axis leads.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['xeno_being', 'organic', 'eyes', 'signature_wow', 'biome', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MECHBOT_KILLER_CYBORGS: {
+    description:
+      'PATH-BESPOKE — MechBot killer-cyborgs (2026-06-09, NEW). Verbatim config clone of scifi-cyborg-female as an equal baseline, to fan out toward more MENACING / "evil robot" + killer-cyborg looks. Pools start as copies of the scifi pools; they will be regen\'d as the path tilts evil. Same 5 path slots + organic + eyes + 40%-gated drama. Flux-locked.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['xeno_being', 'organic', 'eyes', 'signature_wow', 'biome', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MECHBOT_KILLER_CYBORGS_MALE: {
+    description:
+      'PATH-BESPOKE — MechBot killer-cyborgs-male (2026-06-09). MALE mirror of killer-cyborgs: handsome/rugged lethal MALE cyborg assassin-thieves — agile, sleek, dangerous. Same architecture; only the gendered subject + face pools are male-specific (weapon / biome / look / composition / eyes / drama are SHARED with the female killer path). Flux-locked.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['xeno_being', 'organic', 'eyes', 'signature_wow', 'biome', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MECHBOT_OG_CYBORG_FEMALE: {
+    description:
+      'PATH-BESPOKE — MechBot og-cyborg-female (2026-06-09, NEW). Replicates Kevin\'s "OG" reference aesthetic: beautiful SEXY human-proportioned female cyborgs — glossy sculpted chassis + exposed mechanical joints + glowing accents, real hair OR chrome cranium, glowing eyes, a signature cyber head/neck feature. Sorayama-chrome meets Ghost-in-the-Shell beauty, PHOTOREAL. Grounded, NOT the wild alien-creature register of scifi-cyborg-female. 6 path-bespoke pools (subject HERO / hair / cyber_feature / eyes / setting / composition) + 1 conditional drama (40%-gated soft atmosphere). Uses the photoreal render medium; no look-axis (the consistent photoreal glossy look IS the aesthetic). Tasteful-sexy — glossy chassis covers her, never bare skin.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'hair', 'cyber_feature', 'eyes', 'setting', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MECHBOT_CYBORG_MAN: {
     description:
       'PATH-BESPOKE — MechBot cyborg-man path (2026-05-17 axis migration; mirror of MECHBOT_CYBORG_WOMAN with male badass recoding per Kevin: rugged / handsome / capable / mysterious / NOT sexy). Solid Snake / Adam Jensen / Geralt-as-cyborg / Marcus Fenix / Cyberpunk 2077 male V lineage. Half-human half-machine MALE being. Character DNA from bot.rollSharedDNA(cyborg-man) — existing male pools (CYBORG_MALE_FEATURES / CYBORG_MALE_CHARACTERS / CYBORG_MALE_ACTIONS / etc.). 5 path-bespoke pools (cyborg_feature / cyborg_material / action / landscape / composition) + 1 conditional drama (40%-gated). Composition pool bespoke 50/50 closeup-badass + full-body-action (CYBORG_MAN_COMPOSITION). Material + drama reuse the gender-neutral CYBORG_WOMAN_* pools. Template recodes masculinity hard — mandatory opening anchor tag ("Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build"), banned feminine words list (pretty / beautiful / delicate / sexy / etc.), badass replacement words (rugged / weathered / capable / lethal / mysterious). Preserves all cyborg safety rails (face human-visible + part-cyborg, multi-reveal mandate, full-body cyborg-detail mandate to prevent glamour failure, solo composition, banned imagery, NO full body armor since combat-droid territory).',
