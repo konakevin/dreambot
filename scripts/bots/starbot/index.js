@@ -25,6 +25,7 @@ const pathBuilders = {
   'male-explorer': require('./paths/male-explorer'),
   megastructure: require('./paths/megastructure'),
   'space-femme': require('./paths/space-femme'),
+  spacewalk: require('./paths/spacewalk'),
 };
 
 module.exports = {
@@ -345,6 +346,9 @@ module.exports = {
     'male-explorer',
     'megastructure',
     'space-femme',
+    // NEW 2026-06-09 — zero-G EVA spacewalk (figure + void co-heroes).
+    // MVP-25 pools; default starbot_hyperreal medium. Seed-test-then-scale.
+    'spacewalk',
     // 8 franchise paths (aliens / dune / guardians / halo / mass-effect /
     // star-trek / starcraft / starwars) all DELETED 2026-05-14. Multiple
     // migration attempts produced "hallway" renders that Kevin rejected;
@@ -361,7 +365,9 @@ module.exports = {
   // (silhouette/echo distortions).
   chaos: {
     enabled: true,
-    skipPaths: [],
+    // spacewalk skips chaos for the MVP — protect the hero figure + clean
+    // void composition from silhouette/echo distortion while we validate it.
+    skipPaths: ['spacewalk'],
     allowSubjectChaosPaths: [
       'cosmic-vista',
       'alien-landscape',
@@ -390,8 +396,9 @@ module.exports = {
     // space-femme is a declarative axis-system path — Haiku polish strips its
     // load-bearing curated language (push-to-11 stack, biome, background drama,
     // props, poster framing). Axis-system paths default to polish OFF.
-    // (feedback_axis_system_skip_polish)
-    skipPaths: ['space-femme'],
+    // (feedback_axis_system_skip_polish). spacewalk same — keep its rich suit /
+    // visor-reflection / void-backdrop language intact (MVP 2026-06-09).
+    skipPaths: ['space-femme', 'spacewalk'],
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
@@ -454,6 +461,7 @@ module.exports = {
       'cosmic-oracle': 'scene',
       megastructure: 'scene',
       'space-femme': 'explorer-female',
+      spacewalk: 'spacewalk',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

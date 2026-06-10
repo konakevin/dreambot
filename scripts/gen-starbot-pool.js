@@ -60,6 +60,119 @@ if (!POOL) {
 // touchpoints Sonnet should draw from. Same format the playbook uses.
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // SPACEWALK PATH (2026-06-09 — new StarBot path)
+  // The iconic zero-G EVA shot. Figure + void are co-heroes.
+  // Gravity / 2001 / Interstellar film-still tradition.
+  // ════════════════════════════════════════════════════════
+
+  spacewalk_suit: {
+    format: 'simple',
+    theme: `STARBOT SPACEWALK SUIT — the sealed EVA spacesuit a lone astronaut wears while floating in hard vacuum. Gender-NEUTRAL (the body is fully sealed; never describe a face, gender, skin, or hair — only the SUIT). Each entry 30-50 words: one complete, distinct suit reading the viewer could pick out of a lineup.
+
+VARIETY MANDATE — invent ~25 DRAMATICALLY different suit archetypes across the whole spectrum of sci-fi space gear. Span (don't limit to): sleek modern hard-shell EVA suit; bulky retro pressure suit with ribbed fabric joints and a fishbowl helm; heavy armored military exo-suit with plate panels; battered deep-space salvage/mining rig caked in scoring; elegant ceramic-white explorer suit with gold-mirror visor; matte-black stealth EVA suit with thin glowing seams; ornate ceremonial void-suit with engraved chestplate; transparent-domed bubble helm over a slim suit; exoskeleton frame with exposed pistons and cabling; ablative re-entry suit with heat-scarred underbelly; bio-mechanical organic-looking suit; bright hazard-orange rescue suit with reflective stripes; ancient patched-together suit of mismatched panels; high-tech holographic-HUD suit with projected readouts.
+
+Each entry MUST name: (1) overall suit silhouette + bulk, (2) the material + finish (brushed metal / matte composite / ribbed fabric / ceramic / scuffed plate), (3) the HELMET + visor type (gold mirror visor / wide bubble dome / narrow T-visor / faceted faceplate), (4) one glowing tech detail (power-cell glow / seam-light / chest readout), (5) a touch of wear or signature color accent. Keep it HARD-SCI-FI and readable. NO franchise/brand names.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE distinct sealed EVA suit, 30-50 words, comma-separated prose. Describe ONLY the suit (no face/gender/skin). Output a NUMBERED list. Each must be a DRAMATICALLY different suit from the others. NO franchise names (no "NASA", "Mandalorian", "MJOLNIR", etc.) — describe features.
+
+EXAMPLES (4):
+1. Sleek ceramic-white hard-shell pressure suit, smooth segmented plates with a satin finish, articulated accordion joints at elbows and knees, broad gold mirror-visor helmet, soft cyan seam-lights tracing the ribs, one scuffed shoulder plate stamped with a faded chevron.
+2. Bulky burnt-orange salvage rig, ribbed fabric limbs over a dented steel torso shell, fishbowl dome helmet fogged at the rim, a cracked amber faceplate, exposed copper cabling looped at the hip, deep carbon-scoring streaked down one arm from a thruster burn.
+3. Matte-black stealth EVA suit, slim form-fit composite plating with razor-thin magenta seam-glow, a narrow angular T-visor reflecting nothing but starlight, integrated wrist console pulsing softly, micro-meteorite pocks freckling the chestplate.
+4. Heavy armored military exo-suit, overlapping graphite plate panels with exposed hydraulic pistons at every joint, a wide faceted faceplate over a sealed helm, twin power-cells glowing hot-blue at the lower back, reinforced gauntlets, battle-scarred and field-patched.`,
+  },
+
+  spacewalk_eva_action: {
+    format: 'simple',
+    theme: `STARBOT SPACEWALK EVA ACTION — what the floating astronaut is DOING in zero gravity at this exact instant. The VERB leads. ZERO-G body language ONLY — weightless, free-falling, tether drifting, body at a diagonal — NEVER standing, NEVER feet-on-ground. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct candid EVA moments: drifting untethered with arms spread; reaching toward a drifting tool/object just out of grasp; hand-over-hand hauling along a guide-wire; welding/cutting a hull panel with a shower of sparks; tumbling slowly end-over-end; pushing off a hull with both boots; hanging head-down relative to the planet below; anchoring a cable to a truss; retrieving a drifting cargo crate; twisting to look back over the shoulder at the viewer; bracing against recoil while firing a maneuvering thruster; cradling a recovered component to the chest; reaching the apex of a tether arc; inspecting a glowing instrument up close. The reader must SEE the action in the first 5 words.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE zero-G EVA action in 15-30 words. Format: "ACTION-VERB-CAP — body position in free-fall + what they interact with". ALWAYS weightless/floating, NEVER grounded. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. DRIFTING UNTETHERED — body turned slow at a diagonal, arms spread wide, safety tether trailing in a loose curve behind, helmet tipped toward the world below.
+2. REACHING FOR A LOST TOOL — one arm fully extended after a wrench tumbling just beyond gloved fingertips, the other anchored to a handrail, legs floating free.
+3. WELDING A HULL BREACH — braced upside-down against the plating, plasma-cutter throwing a fan of white sparks that drift and die in the vacuum.
+4. PUSHING OFF THE HULL — both boots planted mid-shove, body launching backward into the void, tether snapping taut in a lazy arc.`,
+  },
+
+  spacewalk_visor_reflection: {
+    format: 'simple',
+    theme: `STARBOT SPACEWALK VISOR REFLECTION — what is mirrored across the astronaut's curved helmet visor. This is the SIGNATURE money-shot detail — the soul of the image. The face behind may be a faint silhouette or lost in glare; the REFLECTION is the hero. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct reflections: the curved limb of a banded gas giant; a planet's day/night terminator with glittering city-lights on the dark side; a blazing white sun with sharp diffraction spikes; a swirling magenta-and-cyan nebula; the looming hull of the ship they came from with running lights; a glowing amber HUD overlay projected on the inside of the glass; an oncoming debris field; twin suns low on a planet's curve; a rippling aurora; the tiny reflection of the astronaut's own gloved hand reaching toward the viewer; a distant fleet of running-lights; a moon's cratered grey face.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE visor reflection in 15-30 words. Describe what the curved mirror-visor shows. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The curved gold visor mirrors the colossal banded limb of an amber gas giant, its storm-bands smeared across the faceplate, the face behind lost in the glare.
+2. A blazing white sun with knife-sharp diffraction spikes burns across the visor, the helmet rim haloed, the figure's silhouette a black shape behind the glare.
+3. The visor reflects a planet's terminator line — a glittering arc of golden city-lights strung along the dark hemisphere, deep blue dayside curving above.
+4. Amber HUD glyphs and a targeting reticle glow on the inside of the glass, overlaid on the swirling magenta nebula mirrored across the faceplate.`,
+  },
+
+  spacewalk_void_backdrop: {
+    format: 'simple',
+    theme: `STARBOT SPACEWALK VOID BACKDROP — the colossal cosmic environment the astronaut floats AGAINST, filling 65%+ of the frame. This is the "OUT IN SPACE" hero of the shot — it must be BREATHTAKING and never an empty black background. Each entry 30-50 words.
+
+VARIETY MANDATE — ~25 jaw-dropping deep-space backdrops: the vast curved limb of a banded gas giant with churning storm-bands and a thin atmosphere glow; a planet's day/night terminator with city-lights sprinkled across the dark side; a towering nebula wall in magenta, cyan and gold lit from within; a ringed planet with its rings slicing across the whole frame at a dramatic tilt; the roiling orange corona of a sun with arcing prominences; a star-dense field with the bright band of a galaxy's core overhead; a cratered moon's surface sliding past below; an ice-blue ocean world wrapped in spiral storms; a blood-red dying star bloated on the horizon; a distant blue marble hung in pure black with the Milky Way behind. Each must establish overwhelming scale + color + atmospheric depth.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE breathtaking deep-space backdrop in 30-50 words, comma-separated prose. It dominates the frame behind the floating figure. NEVER empty black — always rich + colored + detailed. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The immense curved limb of a banded amber gas giant fills the lower half of the frame, churning cream-and-rust storm-bands and a great oval cyclone, a razor-thin blue atmosphere-glow rimming its edge against deep black.
+2. A planet's day-night terminator sweeps across the frame, the dark hemisphere sprinkled with the gold web of sprawling city-lights, the dayside a luminous arc of ocean-blue and white cloud curving into atmosphere haze.
+3. A towering nebula wall climbs the whole frame, magenta and teal pillars lit from within, threaded with newborn blue-white stars and dark dust lanes, fading into a deep star-dense field.
+4. A ringed planet hangs huge and tilted, its banded ice-and-cobalt rings slicing diagonally across the entire frame casting banded shadows, three small moons strung along the ring-plane into the distance.`,
+  },
+
+  spacewalk_nearby_structure: {
+    format: 'simple',
+    theme: `STARBOT SPACEWALK NEARBY STRUCTURE — the hard-surface tech in the FOREGROUND that the astronaut floats against, clings to, or works on. It grounds the figure in a real place in space and adds tactile mechanical detail. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct foreground structures: a battered hull surface of riveted panels, antennae and grab-rails; a vast gold-foil solar-array wing; a girdered docking truss with clamps and cabling; the looming dark hull of a derelict ship; a tumbling satellite with a dish and folded panels; a tether snaking off-frame to an unseen ship; an open airlock hatch with interior glow; a drifting cargo container with hazard stripes; a damaged engine nozzle scorched and cracked; a comms dish the size of a building; the ribbed spine of a starship stretching into the distance; a habitat module with lit portholes. Hard-surface, mechanical, detailed.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE foreground hard-surface structure in 20-40 words, comma-separated prose. Mechanical, tactile, detailed — panels/rivets/cabling/antennae. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A battered hull surface fills one edge of the frame — riveted grey panels streaked with scoring, a row of grab-rails, a cluster of antennae and a glowing inspection-light, the astronaut's gloved hand braced on a handhold.
+2. A vast gold-foil solar-array wing stretches diagonally across the foreground, its segmented cells catching brilliant sunlight, a thin truss spine and bundled cabling running its length toward an unseen ship.
+3. The dark looming hull of a derelict ship dominates one side, hull-plates peeled and twisted, a shattered porthole, dead antennae, the astronaut tiny against its silent scarred flank.
+4. A girdered docking truss crosses the foreground, heavy clamps and coiled umbilical lines, a tether running from the astronaut's waist to an anchor-point, a winking status-beacon.`,
+  },
+
+  spacewalk_suit_detail: {
+    format: 'simple',
+    theme: `STARBOT SPACEWALK SUIT DETAIL — a small stacked detail rendered ON the suit or its immediate gear (two are picked and combined per render). Each entry 10-20 words. These add tactile richness to the figure.
+
+VARIETY MANDATE — ~25 distinct details: thrusters venting a jet of crystallizing white vapor; a coiled safety tether trailing in a slow loop; a bulky MMU maneuvering pack with nozzle clusters; a glowing power-cell pack at the lower back; faded mission patches and a small flag on the shoulder; frost rimming the edge of the visor; a handheld plasma-cutter clipped to the chest; a tool drifting on its lanyard; deep micro-meteorite pocks across the plating; a wrist-mounted display glowing amber; an oxygen umbilical line curling away; reflective hazard-stripes catching the sun; a cracked-and-sealed patch on one knee; a small drone-camera hovering at the shoulder.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE small suit/gear detail in 10-20 words. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Maneuvering thrusters at the hips venting twin jets of crystallizing white vapor into the black.
+2. A coiled safety tether trailing from the waist in a slow weightless loop, clip glinting.
+3. Frost creeping across the lower rim of the visor, and a faded shoulder patch half-scoured away.
+4. A glowing hot-blue power-cell pack at the lower back and a tool drifting on its lanyard.`,
+  },
+
+  spacewalk_cosmic_event: {
+    format: 'simple',
+    theme: `STARBOT SPACEWALK COSMIC EVENT — a distant drama beat in the deep background that fires on ~50% of renders. It adds story and scale but stays FAR from the figure (deep background, never crowding the foreground). Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct distant events: a solar flare erupting in a great arc off a far sun; a meteor / debris chunk streaking past trailing ablation; a second tiny EVA figure working far across the hull; a green-and-violet aurora rippling over the planet below; a spacecraft firing its thrusters on a slow approach; a satellite catching the sun in a brilliant flare; a shooting star burning up in the atmosphere far below; a slow shower of glittering debris tumbling through frame; a distant ship's running-lights blinking against the dark; a far-off explosion blooming silently. Distant, silent, awe-inducing.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE distant cosmic event in 20-40 words. It sits in the DEEP background, far from the figure. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Far across the curve of the world below, a green-and-violet aurora ripples in slow curtains over the night hemisphere, mirrored faintly in the dark ocean.
+2. A second tiny suited figure works far down the hull, their helmet-light a lone spark against the vast plating, tether a thin thread between them.
+3. A meteor streaks past in the deep distance trailing a thin line of glowing ablation, burning silently against the star-field before winking out.
+4. A distant spacecraft fires its thrusters on a slow approach, twin plasma-blue cones glowing, running-lights blinking as it closes from far across the void.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // SPACE-FEMME PATH (2026-05-23 — new StarBot path)
   // Push-to-11 ornate female-figure poster art.
   // Anchored on Kevin's 15-heart female-explorer calibration.

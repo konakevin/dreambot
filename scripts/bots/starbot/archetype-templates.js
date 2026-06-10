@@ -900,6 +900,100 @@ Every entry you pull from the axes above must be NAMED IN THE PROMPT with a coun
 Output ONLY the raw 130-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the scene content.`;
   },
 
+  SPACEWALK: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      suit,
+      eva_action,
+      visor_reflection,
+      void_backdrop,
+      nearby_structure,
+      suit_detail,
+      cosmic_event,
+    } = slots;
+
+    const eventSection = cosmic_event
+      ? `
+━━━ COSMIC EVENT — a distant drama beat woven into the void (deep background, NOT touching the figure) ━━━
+${cosmic_event}
+
+Place this far away in the deep background — it adds story and scale but must NOT crowd the figure or the foreground structure. The figure stays the readable hero; this is a distant wonder beyond them.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing the single most iconic SPACE image for StarBot — a ZERO-GRAVITY SPACEWALK. One lone suited figure FLOATING in the open vacuum of space, weightless, caught in a candid loaded instant of an EVA. Same universe as our cosmic vistas and alien worlds. Think the breath-held silence of Gravity / 2001 / Interstellar — a real human-scale figure dwarfed by, but vivid against, the overwhelming cosmos. Output wraps with style prefix + suffix.
+
+━━━ ZERO-G — ABSOLUTE FIRST RULE ━━━
+The figure FLOATS. Weightless, free-falling in vacuum — NO feet on any ground, NO standing pose, NO "down" direction. Limbs drift, the safety tether snakes loose in a slow curve, the body is oriented at a cinematic diagonal (NOT bolt-upright). This is the OPPOSITE of standing on a planet. Free-float body language in EVERY pose.
+
+━━━ OPEN SPACE — ALWAYS THE AIRLESS VOID (positive anchor) ━━━
+The setting is ALWAYS the open airless black void of outer space — high above any world, in hard vacuum, surrounded by the star-field and the cosmic backdrop below. The environment is pure orbital space: the curve of a planet seen from orbit, a nebula, a star, or a colossal spacecraft hull adrift in the black. The safety tether is a loose weightless line floating in vacuum (NOT a taut climbing rope). Keep the whole frame in deep space — the void backdrop below is a WORLD SEEN FROM ORBIT, sky and vacuum, never a ground-level landscape the figure could stand in.
+
+━━━ THE EVA ACTION — what the figure is doing in this exact frame (verb leads the prompt) ━━━
+${eva_action}
+
+Render this action EXACTLY, captured at a loaded mid-instant — the body position flows from the action, in free-fall.
+
+━━━ CO-HEROES — THE FIGURE AND THE VOID, BOTH FULLY DETAILED ━━━
+This render has TWO heroes and both must be richly rendered:
+1. THE FIGURE — a single suited astronaut, ~20-35% of the frame, FULL BODY visible, suit and gear tack-sharp and READABLE. Not a tiny lost speck, not a centered portrait — a readable human-scale figure floating in the vast frame.
+2. THE VOID — the cosmic environment behind and around them fills the remaining 65%+ of frame with breathtaking, detailed deep-space spectacle. NEVER an empty black background — the void is alive with the backdrop below.
+
+━━━ THE SUIT (the figure's identity — render every detail) ━━━
+${suit}
+
+The suit is SEALED — this is hard vacuum. The helmet is on, visor down. Render the suit's silhouette, material/finish, plating, joints, and glowing tech EXACTLY as described — crisp and readable at full-body scale.
+
+━━━ THE VISOR REFLECTION — the signature detail ━━━
+${visor_reflection}
+
+The curved helmet visor is a mirror — render this reflection clearly across the faceplate. It is the soul of the shot. The face behind it may be a faint silhouette or hidden in glare — the REFLECTION is the hero of the helmet.
+
+━━━ SUIT / GEAR DETAILS (render these on the suit) ━━━
+${suit_detail}
+
+━━━ THE VOID BACKDROP (the cosmic environment — the "out in space" hero) ━━━
+${void_backdrop}
+
+This dominates the deep background — colossal, detailed, breathtaking. The figure floats AGAINST it. Render it with full atmospheric depth, color, and scale so the frame screams "we are OUT IN SPACE."
+
+━━━ FOREGROUND STRUCTURE — hard-surface tech near the figure ━━━
+${nearby_structure}
+
+This grounds the figure in a real place in space and adds tactile foreground detail — panels, rivets, antennae, cabling. The figure interacts with or floats just off it.
+${eventSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Harsh, directional sunlight in vacuum — brilliant rim-light on one side of the suit, deep black shadow on the other, with soft fill bouncing off the void backdrop (planet-glow, nebula-wash). High dynamic range, cinematic.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ SOLO FIGURE ONLY ━━━
+EXACTLY ONE suited figure (a distant second EVA figure is allowed ONLY if the cosmic-event slot above named one). No crowds. This astronaut ALONE in the silence.
+
+━━━ NO FRANCHISE NAMES ━━━
+Describe the suit and tech by their FEATURES, never by franchise / trademark. No "EVA", "NASA", "spacesuit-model", brand, or named-program text in the output — describe the hardware.
+
+━━━ COMPOSITION ━━━
+Cinematic wide film-still. The figure floats OFF-CENTER (rule of thirds), oriented at a dramatic diagonal, full-body. The void backdrop fills the majority of the frame behind them with deep, detailed spectacle. Foreground structure anchors one edge or corner. Strong sense of scale, isolation, and silence. NEVER a centered head-and-shoulders portrait. NEVER an empty black frame.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a wide cinematic shot of a lone suited astronaut FLOATING weightless in space, DOING THE EXACT EVA ACTION — the action verb leads], [the suit rendered in full material detail — plating / joints / glowing tech / gear], [the visor reflection mirroring the cosmos], [the colossal void backdrop filling the frame behind them], [the foreground structure they float against], [lighting — harsh vacuum sun + void-glow fill], [color palette and silent, awestruck mood]
+
+CRITICAL — the OPENING tokens are "[lone astronaut] [FLOATING / DOING ACTION] in space" — the zero-g action leads. The figure is readable full-body at 20-35% of frame; the void fills the rest with detailed deep-space spectacle. Render the EXACT slot-pool details above — DO NOT substitute generic descriptions.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   MEGASTRUCTURE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

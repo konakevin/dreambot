@@ -250,6 +250,37 @@ PREMIUM-TIER axis stack (2026-05-31 reactivation + enrichment — paritying spac
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  SPACEWALK: {
+    description: `PATH-BESPOKE — StarBot spacewalk path (2026-06-09, new). The iconic ZERO-G EVA shot: a single suited figure FLOATING in the open void, untethered or working in vacuum, the curve of a world / a blazing star / a colossal hull behind them. Gravity / 2001 / Interstellar film-still tradition. BOTH the figure (suit + visor reflection + gear, fully readable) AND the void environment (planet curve / nebula / structure, richly detailed) are the show — co-heroes. The figure is dwarfed but NOT a tiny silhouette: ~20-35% of frame, full-body free-floating, suit detail crisp.
+
+7 bespoke slots + 1 conditional cosmic event (50%-gated):
+  • suit              — the EVA suit (the figure's identity — sealed, gender-neutral): silhouette + material/finish + helmet/visor + glowing tech + wear
+  • eva_action        — what they're DOING in zero-G (verb-led): untethered drift / hull repair / reaching / tumbling / hand-over-hand on a line / pushing off — FREE-FLOAT body language, never grounded
+  • visor_reflection  — the signature detail: what's mirrored in the curved visor (planet curve / blazing star / nebula / the hull / HUD glow / their own ship)
+  • void_backdrop     — the dominant cosmic environment they float against (gas-giant curve / planet terminator with city-lights / nebula wall / ringed planet / solar corona / star-dense field) — the "out in space" hero
+  • nearby_structure  — the foreground hard-surface tech near them (battered hull panels / solar array / docking truss / derelict / satellite / tether to an offscreen ship)
+  • suit_detail pickN:2 — stacked suit/gear details (thrusters venting crystallizing vapor / coiled safety tether / MMU pack / glowing power cells / mission patches / frost-rimmed visor / handheld tool)
+  • CONDITIONAL (50% gate): cosmic_event — a distant drama beat (solar flare / debris streak / a second tiny EVA figure / aurora on the world below / a craft on approach)
+
+ZERO-G MANDATE — the figure FLOATS. No "feet on ground", no standing pose, no down direction. Tether and limbs drift in free-fall. This is the opposite of the explorer paths (which are grounded on a biome). Photoreal cinematic film-still on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: [
+        'suit',
+        'eva_action',
+        'visor_reflection',
+        'void_backdrop',
+        'nearby_structure',
+        'suit_detail',
+      ],
+    },
+    pickN: { suit_detail: 2 },
+    conditionalLayer: { slot: 'cosmic_event', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   PHOTOREAL_ASTRO: {
     description: `NASA-grade photoreal astrophotography — Hubble / JWST / Chandra / ALMA / EHT cranked-to-11 framing.
 

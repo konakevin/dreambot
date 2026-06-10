@@ -42,6 +42,15 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── spacewalk path (2026-06-09, NEW) — zero-G EVA shot. MVP-25 pools. ───
+  SPACEWALK_SUIT: load('spacewalk_suit'),
+  SPACEWALK_EVA_ACTION: load('spacewalk_eva_action'),
+  SPACEWALK_VISOR_REFLECTION: load('spacewalk_visor_reflection'),
+  SPACEWALK_VOID_BACKDROP: load('spacewalk_void_backdrop'),
+  SPACEWALK_NEARBY_STRUCTURE: load('spacewalk_nearby_structure'),
+  SPACEWALK_SUIT_DETAIL: load('spacewalk_suit_detail'),
+  SPACEWALK_COSMIC_EVENT: load('spacewalk_cosmic_event'),
+
   // Story-scene template axes (added 2026-05-11) — every path rolls one of
   // each so renders carry a story beat + explicit subject presence +
   // massive-scale anchor. Replaces the static "just describe the world"
@@ -276,6 +285,13 @@ module.exports = {
       temperature: load('sensory_scene_temperature'),
       weight: load('sensory_scene_weight'),
       air: load('sensory_scene_air'),
+      lightcolor: load('sensory_scene_lightcolor'),
+    },
+    // spacewalk (2026-06-09) — hard vacuum + zero-G. ONLY lightcolor; the
+    // weight / air / temperature / smell channels inject gravity, breathable
+    // air, and warmth that fight the airless free-fall void. Reuses the scene
+    // lightcolor pool (vacuum-safe — it's about light + color only).
+    spacewalk: {
       lightcolor: load('sensory_scene_lightcolor'),
     },
   },
