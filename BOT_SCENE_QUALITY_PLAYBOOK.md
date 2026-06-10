@@ -190,6 +190,50 @@ The `cleanMediumByModel` rule auto-swaps gpt-image-2 + nano-banana to a `*_gpt_c
 
 ---
 
+## Inventing NEW PATHS for a bot — the full repeatable process (2026-06-09, StarBot)
+
+A bot's path roster is its content range. When a bot "feels samey" or a theme is under-served (Kevin on StarBot: "push the vibe more sci-fi / out in space"), the move is to **invent new paths that fill the gap**, not retune the existing ones. This section is the end-to-end method, proven by adding 3 paths to StarBot (`spacewalk`, `ring-habitat`, `impossible-sky`) in one session — all called "really good" / "absolute bangers" on the FIRST MVP render batch. **Replicate this on any bot.**
+
+### Step 1 — AUDIT the bot against the playbook FIRST (non-negotiable)
+Re-read this playbook in full, then map the bot's CURRENT paths. Spawn an Explore agent to read every `paths/*.js` + README and report, per path: (1) the core scene it renders, (2) its medium + model locks, (3) its axes/pools, (4) whether it leans CHARACTER / SCENE / OBJECT and how strongly it already hits the target vibe. The output is a one-screen map of what the bot already covers. **You cannot find the gap without the map.**
+
+### Step 2 — GAP ANALYSIS → tiered idea list
+Cluster the existing paths by what they cover, then name what's MISSING relative to the target vibe. On StarBot the 12 paths clustered into alien-surfaces / deep-space-phenomena / ships+megastructures / interiors — and the diagnosis was: **almost every path is GROUNDED** (characters stand on planets, vistas seen from a surface). The "out in space" gap was the actual VOID — figures floating in it, worlds seen from orbit, the inside of impossible structures. Present ideas in **tiers**:
+- **Tier 1** = biggest vibe-pushers that fill the core gap (StarBot: spacewalk/EVA, orbital descent, ring-habitat interior — put us IN the void / in orbit / inside the structure).
+- **Tier 2** = fresh tone or subject variety the bot lacks (derelict-horror, a living creature hero).
+- **Tier 3** = adjacent / lower-distinctness.
+Also keep a **pure-spectacle tier** ("wow that's fucking cool" — black-hole close-pass, FTL-jump moment, ringed-giant sky, crystalline world). Let Kevin pick from the menu; he steers which get built.
+
+### Step 3 — DESIGN THE AXES (this is the craft — where the quality lives)
+Each new path is a fresh `{ archetype, pools }`. Design a bespoke axis set so EVERY render is rich and varied. The axis-design principles that worked:
+- **Name 5-7 bespoke axes** that decompose the scene into independently-varying parts. For a CHARACTER-in-environment path: split FIGURE axes from ENVIRONMENT axes so BOTH are detailed (Kevin's bar: "the figure AND the scenery should all look really well detailed and filled out"). Spacewalk = `suit` / `eva_action` / `visor_reflection` (figure) + `void_backdrop` / `nearby_structure` (environment) + `suit_detail` (×2 stacked).
+- **Give every path ONE signature money-shot axis** — the detail that makes the shot iconic. Spacewalk's is `visor_reflection` (the cosmos mirrored in the faceplate). Find the one detail a great example of this shot is famous for and make it its own axis.
+- **Encode the load-bearing constraint as a NON-NEGOTIABLE template mandate**, not just a pool. The path's whole identity is one hard rule: spacewalk = ZERO-G FREE-FLOAT (never grounded); ring-habitat = the horizon CURVES UP and overhead; impossible-sky = the SKY is 60-70% of frame and the giant DOMINATES it. State it as the ABSOLUTE FIRST RULE in the template.
+- **`pickN: 2` on a "stack" axis** for density (suit_detail ×2, sky_companions ×2) — combines two picks per render for richness without a separate slot each.
+- **One 40-50%-gated `conditionalLayer`** for drama that's great sometimes but forced if always-on (cosmic_event / habitat_event / sky_event). See the "Probabilistic conditional axis layer" section.
+- **SCENE paths** (place is hero) get tiny scale-provers + a self-lit environment (often `universal: []`, `bot: []` — fully path-bespoke, because the bot's universal lighting/sky pools are coded for a DIFFERENT context and will fight an interior or an orbital scene).
+- Mirror an existing close-analog archetype's slot SHAPE (spacewalk cloned FEMALE_EXPLORER's character+environment structure; ring-habitat/impossible-sky cloned the scene-vista shape) so the composer + template wiring is known-good.
+
+### Step 4 — WRITE archetype + template + path file
+1. Add the archetype to `scripts/bots/<bot>/archetypes.js` (slots: universal/bot/path + pickN + conditionalLayer + anchorScaleRange). A rich `description` documents the path for future-you.
+2. Add the template fn to `scripts/bots/<bot>/archetype-templates.js` — interpolate the resolved slots into a Sonnet brief. Lead with the action/hero; state the NON-NEGOTIABLE mandate first; give an explicit STRUCTURE block ("write the prompt in this order") so the hero leads CLIP. Handle the conditional slot with a `${slot ? section : ''}` ternary. End with "Output ONLY the raw 90-120 word scene description…".
+3. Add the path file `paths/<name>.js` = `{ archetype, pools: { slot: 'POOL_KEY' } }`.
+
+### Step 5 — GENERATE bespoke pools with the gen script (NEVER hand-author at scale)
+Add one recipe per pool to `gen-starbot-pool.js` `POOL_RECIPES` (`{ format:'simple', theme, touchpoints:[], instructions }`). The `theme` carries a **VARIETY MANDATE** listing ~14-25 distinct archetypes to span; `instructions` gives the word-count + 4 concrete EXAMPLES. Then `node scripts/gen-starbot-pool.js --pool <name> --count 25` per pool. **MVP-25 only** — never gen 200 on an unproven recipe (Kevin's hard rule [[feedback_always_seed_25_to_test_then_scale]]). The gen script's **programmatic signature-based dedup** (within-batch + cross-batch, `signatureOf`/`dedupe`, NOT Sonnet-trust) is mandatory — see "Pool generation MUST have dedup".
+
+### Step 6 — RENDER-TEST the MVP (no post), READ the JPEGs, fix the failure mode
+`node scripts/iter-bot.js --bot <bot> --mode <path> --count 6` (no `--post` → saves to /tmp). Read every image. Grade for: does it hit the mandate? Are figure AND scene detailed? What drifts? On spacewalk, 2/8 drifted to a terrestrial canyon — diagnosis: (a) a `weight` sensory anchor injecting gravity into a zero-G scene, (b) the tether reading as a climbing rope. Fix with a POSITIVE anchor (never a negation cascade): added an "OPEN SPACE — always the airless void" template block + a path-specific lightcolor-only sensory context. Retest → 0 drift. **One change per round; re-read the images.**
+- GOTCHA — sensory anchors: channel SELECTION is global, so a vacuum/space path still rolls `weight`/`air`; give it its own `SENSORY_POOLS` context with only the safe channels and map `sensoryAnchors.pathContext[path]` to it.
+- New axis-system paths: add to `twoPassPolish.skipPaths` (Haiku strips curated language) AND `chaos.skipPaths` for the MVP (protect the hero composition while validating).
+
+### Step 7 — SHOW Kevin → on approval, SCALE pools 25→200, then move on
+Post a batch (`--post`) for his heart-review, OR show inline. On sign-off, scale each pool: `node scripts/gen-starbot-pool.js --pool <name> --target 200` (iterative gen+dedup loop, appends to the 25, overgens ~40%/iter). Pools settle 130-200 at the semantic ceiling — **take what's unique, don't fight it**. Run scale-ups as background tasks and build the NEXT path's code while they grind (gen is the only API-bound step; archetype/template/wiring is free). Commit per path.
+
+**Why this works:** the bot already has the engine (composer, sensory, chaos, model-picker, two-pass); a new path is just (archetype shape) + (rich template with a hard mandate) + (5-7 bespoke deduped pools). The leverage is entirely in **axis design** (step 3) and **reading the renders** (step 6). MVP-25 keeps the cost of a wrong recipe at ~$0.30 + 40s instead of ~$6. Three StarBot paths landed as first-batch bangers using exactly this.
+
+---
+
 ## ⚠️ ADDING A BOT MEDIUM? You MUST also add a "cleaned medium" for DLT (2026-05-25)
 
 When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` row), you **must also create a corresponding row in `dlt_clean_mediums`**. This is not optional — skipping it silently breaks "Dream Like This."
