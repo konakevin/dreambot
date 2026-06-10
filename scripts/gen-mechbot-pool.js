@@ -1306,6 +1306,221 @@ Each entry: NAME CAPS + samurai archetype + ornate armor silhouette + 2-3 mech/f
   },
 
   // ════════════════════════════════════════════════════════════════
+  // arena-titans — NEW path (2026-06-10). Mech-GLADIATOR spectacle — combat-mechs
+  // dueling in a colossal roaring arena under spotlights, packed crowds. Distinct
+  // from titan-war (battlefield) + power-armor (squad) — this is single-combat
+  // SPECTACLE. FIGURE (gladiator HERO + arsenal money-shot) + ENVIRONMENT (arena +
+  // look) + composition + 40%-gated combat drama. universal:[].
+  // ════════════════════════════════════════════════════════════════
+  arena_gladiator: {
+    format: 'simple',
+    theme: `ARENA GLADIATOR-MECHS — the HERO axis. Each entry is ONE battle-scarred combat-mech built for the gladiatorial arena. 30-45 words. Armed for spectacle and single-combat, crowd-pleasing and brutal. Lineage: Real Steel / Pacific Rim / gladiator-Colosseum / BattleBots-titan / Warhammer arena-champion.
+
+⚠️ THE BAR — a gladiator combat-mech clearly built for the ARENA: battle-scarred armor, a signature spectacle-weapon, theatrical and brutal, mid-fight or posturing for the crowd. A recognizable gladiator archetype with a distinct silhouette and weapon. Spectacle + menace.
+
+⚠️ GLADIATOR + ARENA (the overriding rule) — this is single-combat SPECTACLE, not a battlefield soldier. Battle-scarred, armed with a theatrical melee weapon, often chained / branded / crowd-facing. Mech-scale combat-machines.
+
+✓ VARIETY MANDATE (~25):
+  • HEAVY JUGGERNAUTS (~4) — hulking armored bruisers, hammers/maces
+  • SLEEK DUELISTS (~4) — fast bladed swordsman-mechs, perfect form
+  • BEAST-STYLED BRAWLERS (~3) — animal-motif arena fighters, claws
+  • CHAINED PRISONER-MECHS (~3) — branded, shackled, savage gladiator-slaves
+  • ORNATE CHAMPIONS (~3) — decorated crowd-favorite mechs, banners + laurels
+  • QUAD-ARMED FIGHTERS (~3) — multi-limbed weapon-wielding gladiators
+  • NET-AND-TRIDENT (~2) — retiarius-style net + trident mechs
+  • FLAIL / CHAIN BRUISERS (~3) — spiked-flail and wrecking-ball gladiators
+
+Each entry: NAME CAPS + gladiator archetype + battle-scarred armor silhouette + signature spectacle-weapon + a brutal/theatrical trait.`,
+    touchpoints: [
+      'GORE-MAXIMUS — a heavy juggernaut gladiator-mech, hulking dented crimson armor over a chrome chassis, a massive spiked wrecking-maul, a roaring crowd-facing visage, scarred and unbeaten',
+      'SILVERSTRIKE — a sleek duelist gladiator-mech, polished alloy armor and a long humming arena-blade, fast and elegant in perfect fighting form, a crowd-favorite',
+      'THE-CHAINED-BEAST — a branded prisoner-mech, savage scrap-iron armor still trailing broken shackle-chains, jagged claw-gauntlets, a snarling caged fury',
+      'LAUREL-PRIME — an ornate champion mech, decorated gold-and-white armor draped with victory-banners, a ceremonial glowing spear, posturing for the stands',
+      'OCTOBLADE — a quad-armed gladiator-mech, four articulated arms each gripping a different blade, a low spinning guard, dazzling and lethal',
+      'TRIDENT-9 — a retiarius gladiator-mech, light agile armor, a weighted energy-net in one hand and a long trident in the other, circling its prey',
+      'WRECKER — a flail bruiser gladiator-mech, squat heavy plating, a great chained spiked ball swinging in a glowing arc, slow and devastating',
+    ],
+    instructions: `Each entry is ONE arena gladiator combat-mech, 30-45 words. Format: "NAME CAPS — gladiator archetype + battle-scarred armor silhouette + signature spectacle-weapon + a brutal/theatrical trait". Built for single-combat SPECTACLE, not a battlefield. Vary the archetype HARD. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  arena_arsenal: {
+    format: 'simple',
+    theme: `THE ARSENAL — the SIGNATURE money-shot: the gladiatorial weapon, mid-swing or raised. 12-24 words. A great chained spiked flail, twin humming arena-blades, a buzzsaw-shield, a spiked gauntlet, a weighted net + trident, a wrecking-maul raised for a finishing blow, sparks of clashing weapons. Theatrical + brutal.`,
+    touchpoints: [
+      'a great chained spiked flail swinging in a wide glowing arc, sparks trailing',
+      'twin humming arena-blades crossed in a guard, light running their edges',
+      'a buzzsaw-shield spun up to a screaming blur, throwing sparks',
+      'a massive wrecking-maul raised overhead for a finishing blow, the crowd rising',
+      'a weighted energy-net flung wide, a long trident leveled behind it',
+      'a spiked power-gauntlet cocked back, knuckle-plating crackling with charge',
+    ],
+    instructions: `Each entry is ONE gladiatorial weapon moment, 12-24 words. Theatrical + brutal, mid-swing or raised. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  arena_setting: {
+    format: 'simple',
+    theme: `THE ARENA — the colossal combat stadium (its own lighting/mood; the gladiator stays the focus). 18-32 words. A vast colosseum under blazing spotlights, packed roaring crowds in tiered stands, a sand-and-rubble combat-floor, holographic-banner-draped tiers, a fire-lit pit-arena, a neon mega-stadium. Spectacle, crowd, lights, dust.`,
+    touchpoints: [
+      'a colossal colosseum under blazing spotlights, tiered stands packed with a roaring crowd, dust and sand kicked up across the combat-floor',
+      'a neon mega-stadium at night, holographic banners and sponsor-logos blazing over a sea of cheering spectators, spotlight-beams crossing',
+      'a fire-lit pit-arena, braziers ringing a sand floor, a savage crowd pressed against the cage-walls, smoke drifting',
+      'a vast ancient-modern coliseum, crumbling stone tiers retrofitted with floodlights and jumbotrons, a deafening packed crowd',
+      'an underground combat-pit, harsh worklights and chain-link, a wild bloodthirsty crowd jammed onto scaffolding all around',
+    ],
+    instructions: `Each entry is ONE colossal arena setting, 18-32 words, with its own lighting/mood + crowd. The gladiator stays the focus. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  arena_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the RENDERING STYLE only (leads CLIP, anti-homogenize). 8-16 words. PURE rendering technique: palette + lighting mood + finish + reference. NO subject, NO setting — style only.`,
+    touchpoints: [
+      'epic blockbuster realism, hard spotlight key and dust-haze, Real Steel / Pacific Rim register',
+      'gritty combat realism, desaturated palette with hot spotlight pools, raw and visceral',
+      'neon sports-spectacle, saturated jumbotron glow, high-contrast stadium lighting',
+      'sleek hard-surface concept-art, dramatic rim-light through dust, crisp detail',
+      'dark cinematic, deep shadow and a single blazing spotlight, Villeneuve register',
+      'golden coliseum grandeur, warm raking light, sand-dust in the air, painterly epic',
+    ],
+    instructions: `Each entry is ONE pure rendering-style register, 8-16 words. Palette + lighting + finish + reference ONLY. NO subject, NO setting. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  arena_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING — DYNAMIC ACTION + SPECTACLE, often TWO mechs in frame. 14-26 words. ALWAYS full-body (read the whole mech), the arena + roaring crowd around. Favor energetic mid-motion: a CLASH between two gladiator-mechs, a mid-swing strike, a charge, a grapple, a finishing blow over a downed foe, a champion POSTURING for the crowd. NEVER a static standing pose, NEVER a tight head-only crop.`,
+    touchpoints: [
+      'two gladiator-mechs clashing mid-arena, weapons locked, dust and sparks flying, the roaring crowd blazing behind, both full figures legible',
+      'a dynamic three-quarter mid-swing, the hero mech bringing its weapon down on a lunging rival, spotlights flaring',
+      'the hero gladiator-mech posturing for the crowd, arms thrown wide, a defeated rival sparking on the sand behind, tiers roaring',
+      'a low-angle charge, two mechs rushing each other across the floor, dust kicked up, crowd a blur of light',
+      'a grapple, two gladiator-mechs locked chest-to-chest and straining, the packed arena towering around them',
+      'a victory-posture mid-roar, the champion-mech weapon raised over a toppled foe, flares raining from the stands',
+    ],
+    instructions: `Each entry is ONE DYNAMIC composition for arena gladiator-mechs, 14-26 words. Full body + the arena/crowd, energetic mid-action, OFTEN two mechs in frame (clash / charge / grapple / posturing). Never static, never cropped. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  arena_drama: {
+    format: 'simple',
+    theme: `THE ENGAGEMENT — the action beat (fires often). 14-26 words. Bias toward MULTI-MECH ACTION + POSTURING: a rival gladiator-mech clashing/lunging, a melee of several mechs, a downed foe with the hero posturing to the crowd, two mechs grappling, the crowd erupting with flares, a finishing blow mid-swing.`,
+    touchpoints: [
+      'a rival gladiator-mech crashing in weapon-first, the two about to collide in a shower of sparks',
+      'a melee — three or four gladiator-mechs clashing across the arena floor, weapons swinging',
+      'a defeated rival mech toppling and sparking as the hero throws its arms up to the roaring crowd',
+      'two mechs grappling chest-to-chest, servos straining, the crowd surging to its feet',
+      'the crowd erupting, flares and debris raining as the hero plants a boot on a downed foe',
+      'a finishing blow mid-swing, the rival mech reeling, shrapnel bursting across the sand',
+    ],
+    instructions: `Each entry is ONE engagement/action beat, 14-26 words. Multi-mech action (rival clash / melee / grapple) or crowd-posturing. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // void-lancers — NEW path (2026-06-10). ZERO-G orbital mech-KNIGHT combat — EVA
+  // combat-mechs free-floating in the vacuum, lances + thrusters, a planet's curve
+  // below. MECH-FOCUSED (not StarBot cosmic vistas; not mech-skyships' atmospheric
+  // flight). FIGURE (lancer HERO + maneuver money-shot) + ENVIRONMENT (void + look)
+  // + composition (zero-G free-float) + 40%-gated orbital-combat drama. universal:[].
+  // Non-negotiable: ALWAYS weightless in vacuum, a planet/station for orbital scale.
+  // ════════════════════════════════════════════════════════════════
+  void_lancer: {
+    format: 'simple',
+    theme: `ZERO-G ORBITAL MECH-KNIGHTS — the HERO axis. Each entry is ONE HUMANOID combat-MECH — a robot/mecha with a HEAD, a TORSO, TWO ARMS and TWO LEGS — in armor, built for weightless orbital combat. 30-45 words. A KNIGHT IN SPACE: an armored humanoid mecha with back/limb thruster-pods, a glowing visor, wielding a lance or blade, free-floating in vacuum. Lineage: Gundam space-knight / Knights of Sidonia / For Honor in orbit / a vacuum-paladin.
+
+⚠️ THE BAR — a HUMANOID MECH with a clear robot BODY: a head, a torso, two arms, two legs, in vacuum-armor, holding a lance/blade/melee weapon, posed FREE-FLOATING in zero-G. A space KNIGHT — you can count its limbs.
+
+🚫 NEVER A SHIP (the overriding rule) — it is NOT a spaceship, starfighter, craft, torpedo, missile, drone, gun-platform, or winged vehicle. BAN ship words entirely: NO "frame", NO "fins", NO "streamlined hull", NO "swept wings", NO "torpedo-bodied", NO "fuselage", NO "fighter". It is a humanoid ROBOT with a head and four limbs you can see.
+
+⚠️ HUMANOID + ZERO-G — the head/torso/arms/legs are always clearly visible; thruster-pods on the back/shoulders/legs fire for attitude; free-floating (no ground, no gravity). Knightly armor + a weapon in hand.
+
+✓ VARIETY MANDATE (~25), all HUMANOID:
+  • LANCE-KNIGHTS (~6) — humanoid mechs couching a glowing energy-lance
+  • VOID-PALADINS (~5) — ornate knightly humanoid mechs, shield + lance
+  • BOARDING-KNIGHTS (~5) — heavy humanoid mechs, grapnel-hands + cutting-tools
+  • SHIELDED CHARGERS (~4) — humanoid mechs behind a ram-shield, thrusters blazing
+  • DUELIST KNIGHTS (~3) — agile humanoid sword-mechs in a fencing guard
+  • TETHERED KNIGHTS (~2) — humanoid salvage-knight mechs on a cable
+
+Each entry: NAME CAPS + HUMANOID mech-knight archetype + armored body (head/torso/two-arms/two-legs) + back/limb thrusters + a lance/weapon in hand + a weightless/knightly trait.`,
+    touchpoints: [
+      'LANCE-PRIME — a humanoid mech-knight, white armored body with a helmeted head, two arms and two legs, back-mounted thruster-pods flaring, couching a long glowing energy-lance in both hands, free-floating mid-charge',
+      'AURELIUS — a humanoid void-paladin mech, ornate gold-and-ivory knight-armor over a clear two-legged robot body, a kite-shield on one arm and a crackling lance in the other, a glowing visor-slit, regal in the vacuum',
+      'IRONCLAD-9 — a heavy humanoid boarding-knight, blocky tungsten armor on a two-armed two-legged body, grapnel-claw hands and a plasma-cutter, shoulder-thrusters venting, drifting toward a hull',
+      'RAMPART — a humanoid shielded-charger mech, a broad armored body crouched behind a vast glowing ram-shield, two legs braced, back-thrusters blazing for a weightless charge',
+      'KENSEI-V — an agile humanoid duelist-knight mech, a slim armored body in a fencing guard, a glowing blade in one hand, attitude-jets at hips and shoulders, poised in the black',
+      'CHAIN-VAGRANT — a humanoid tethered salvage-knight, patchwork armor on a clear two-legged body, a cutting-torch arm, a long cable trailing from its waist to a wreck, hard-eyed and lone',
+      'GALEN — a humanoid lance-knight, a dark armored mech-body with a horned helm, two arms gripping a great energy-lance two-handed, leg-thrusters firing, hunting in orbit',
+    ],
+    instructions: `Each entry is ONE HUMANOID zero-G mech-knight, 30-45 words. Format: "NAME CAPS — humanoid mech-knight archetype + armored body (head/torso/two-arms/two-legs) + thrusters + weapon in hand + a weightless/knightly trait". It is a humanoid ROBOT (limbs countable), NEVER a ship/craft/fighter/drone — and NO ship words (frame/fins/hull/wings/torpedo). Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  void_maneuver: {
+    format: 'simple',
+    theme: `THE MANEUVER — the SIGNATURE money-shot: the zero-G combat moment/weapon. 12-24 words. A glowing energy-lance couched mid-charge, a thruster-burn corkscrew, a lance shattering a foe's hull, twin railguns firing recoil-less, a tether snapping taut, a shield-bash, weightless debris spinning past. Vacuum + motion.`,
+    touchpoints: [
+      'a glowing energy-lance couched forward mid-charge, thrusters streaking a corkscrew burn behind',
+      'attitude-thrusters firing in a spray of glowing jets, the mech spinning to bring weapons to bear',
+      'the lance punching through a foe-mech’s hull, debris and frozen vapor erupting weightless',
+      'twin railguns firing recoil-less, bright tracer-lines streaking off into the starfield',
+      'a cutting-torch arm shearing through a wreck, sparks drifting in a slow weightless arc',
+      'a salvage-tether snapping taut, the mech swinging weightless around its anchor-point',
+    ],
+    instructions: `Each entry is ONE zero-G combat maneuver/weapon moment, 12-24 words. Weightless + dynamic. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  void_setting: {
+    format: 'simple',
+    theme: `THE VOID — the orbital setting (its own lighting/mood; the mech stays the focus). 18-32 words. High orbit with a planet's curve filling part of the frame, a debris-field of wrecked ships, a damaged space-station, a ring-station, an asteroid, a distant fleet engagement, a planet's day/night terminator. Starfield, hard sunlight, planet-glow.`,
+    touchpoints: [
+      'high orbit over a blue planet’s curve, the day/night terminator slicing the world below, hard white sunlight and a deep black starfield',
+      'a vast debris-field of shattered warships drifting, frozen vapor and tumbling wreckage, a distant sun flaring off torn hull-plates',
+      'beside a damaged ring-station, severed modules venting atmosphere in glittering plumes, a planet glowing beyond',
+      'amid a distant orbital battle, far-off ships trading silent tracer-fire and silent blooming explosions against the stars',
+      'over a rust-red planet, dust-storms visible far below, a thin atmosphere-glow on the limb, a derelict station tumbling near',
+    ],
+    instructions: `Each entry is ONE orbital setting, 18-32 words, with hard vacuum lighting + a planet/station for scale. The mech stays the focus. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  void_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the RENDERING STYLE only (leads CLIP, anti-homogenize). 8-16 words. PURE rendering technique: palette + lighting mood + finish + reference. NO subject, NO setting — style only.`,
+    touchpoints: [
+      'hard sci-fi realism, brutal vacuum lighting (hot white sun, ink-black shadow), The Expanse register',
+      'sleek hard-surface concept-art, crisp rim-light, clean detail, Vitaly-Bulgarov register',
+      'cinematic space epic, planet-glow fill and lens-flare, Gundam / Knights of Sidonia register',
+      'cold high-contrast vacuum, stark specular highlights on metal, deep starfield black',
+      'painterly space-opera, luminous nebula-tint, dramatic scale, classic sci-fi cover register',
+      'gritty used-future realism, scorched panels and grime, hard sun, lived-in hardware',
+    ],
+    instructions: `Each entry is ONE pure rendering-style register, 8-16 words. Palette + lighting + finish + reference ONLY. NO subject, NO setting. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  void_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING — DYNAMIC ZERO-G ACTION, often TWO mech-knights ENGAGED. 14-26 words. ALWAYS free-floating (no ground), full-body, with a planet's curve / station / debris for orbital scale. Favor energetic combat: a CHARGE toward camera (lance leveled at a closing rival), two knights CLASHING/dueling, a lance-strike landing, a thruster-corkscrew dodge, a pursuit. NEVER a static drift, NEVER a tiny-mech-against-planet wide shot, NEVER a grounded pose, NEVER a tight crop.`,
+    touchpoints: [
+      'two mech-knights clashing weightless mid-frame, energy-lances meeting in a burst of sparks, debris spinning, both full figures legible against the stars',
+      'a dynamic Dutch-angle as the hero charges weightless toward camera, lance leveled at a closing rival, planet-curve below',
+      'a lance-strike landing on a foe-mech, the two locked mid-impact, frozen vapor erupting, full bodies in frame',
+      'two mechs in a weightless duel, blades crossed, thrusters flaring as they wheel around each other, planet-glow behind',
+      'the hero corkscrewing on a thruster-burn to evade a rival’s lance-thrust, both mechs dynamic against the starfield',
+      'a pursuit, the hero chasing a fleeing foe-mech through a tumbling debris-field, thrusters blazing, both in frame',
+    ],
+    instructions: `Each entry is ONE DYNAMIC composition for orbital mech-knights, 14-26 words. WEIGHTLESS free-float (no ground), full body + orbital scale, energetic combat, OFTEN two knights engaged. Never static, never cropped. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  void_drama: {
+    format: 'simple',
+    theme: `THE ENGAGEMENT — the orbital-combat beat (fires often). 14-26 words. Bias toward MULTI-MECH ACTION: a rival mech-knight charging/dueling, lances clashing, a melee of knights, a strike shattering a foe, a pursuit, a warship exploding lighting the duel.`,
+    touchpoints: [
+      'a rival mech-knight charging in lance-first from the opposite vector, the closing instant before lances meet',
+      'a melee — several mech-knights duelling across the void, lances and blades flashing',
+      'the hero’s lance shattering a foe-mech’s hull, debris and frozen vapor erupting weightless',
+      'two rivals wheeling around each other on flaring thrusters, trading lance-blows',
+      'a defeated foe-mech tumbling away severed and venting as the hero powers past',
+      'a warship detonating nearby, the silent bloom backlighting the clashing knights',
+    ],
+    instructions: `Each entry is ONE engagement/action beat, 14-26 words. Multi-mech orbital combat (rival charge / duel / melee / strike). Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
   // cyborg-man REBUILD → "android-man" register (2026-05-26)
   // MOSTLY-MACHINE male android-BEING. Synthetic chassis dominates the
   // silhouette; organic shows ONLY at eyes / a partial face-panel. A human

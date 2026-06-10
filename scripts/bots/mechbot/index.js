@@ -25,6 +25,8 @@ const pathBuilders = {
   'abyss-mechs': require('./paths/abyss-mechs'),
   'sentinels': require('./paths/sentinels'),
   'chrome-shogun': require('./paths/chrome-shogun'),
+  'arena-titans': require('./paths/arena-titans'),
+  'void-lancers': require('./paths/void-lancers'),
   // 2026-05-17: DISABLED per Kevin — only the axis cyborg-woman path fires now.
   // Legacy function-form preserved at paths/legacy/cyborg-woman.js for reference.
   // 'cyborg-female-legacy': require('./paths/legacy/cyborg-woman'),
@@ -323,6 +325,16 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
+    // arena-titans — Flux-locked for crisp gladiator-mech detail + stadium spectacle.
+    'arena-titans': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // void-lancers — Flux-locked for crisp zero-G orbital mech-knight hardware.
+    'void-lancers': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
     // OG path — FLUX ONLY for the photoreal glossy beauty look (banana goes
     // painterly + breaks the photoreal register; gpt-2 banned bot-wide).
     'og-cyborg-female': [
@@ -418,6 +430,8 @@ module.exports = {
     'abyss-mechs': '',
     'sentinels': '',
     'chrome-shogun': '',
+    'arena-titans': '',
+    'void-lancers': '',
     // cyborg-woman keeps its legacy prefix (defined above) since it's the
     // load-bearing "beautiful woman with cybernetic breakthroughs integrated
     // into human body" coherence cue — preserved during axis migration.
@@ -463,6 +477,8 @@ module.exports = {
     'abyss-mechs',
     'sentinels',
     'chrome-shogun',
+    'arena-titans',
+    'void-lancers',
     // 'cyborg-female-legacy',  // 2026-05-17 DISABLED — see pathBuilders comment
     'droid-assassin',
     // 'cyborg-man',  // 2026-06-05 DISABLED (Kevin) — even after killing the mandatory opening tag, renders are unusable; redesign deferred

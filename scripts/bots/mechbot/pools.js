@@ -102,6 +102,22 @@ const SHOGUN_DOMAIN = load('shogun_domain');
 const SHOGUN_LOOK = load('shogun_look');
 const SHOGUN_COMPOSITION = load('shogun_composition');
 const SHOGUN_DRAMA = load('shogun_drama');
+// arena-titans — mech-GLADIATOR spectacle in a colossal roaring arena (2026-06-10).
+// universal:[].
+const ARENA_GLADIATOR = load('arena_gladiator');
+const ARENA_ARSENAL = load('arena_arsenal');
+const ARENA_SETTING = load('arena_setting');
+const ARENA_LOOK = load('arena_look');
+const ARENA_COMPOSITION = load('arena_composition');
+const ARENA_DRAMA = load('arena_drama');
+// void-lancers — ZERO-G orbital mech-KNIGHT combat, free-float, planet below
+// (2026-06-10). universal:[]. Mech-focused (not StarBot cosmic vistas).
+const VOID_LANCER = load('void_lancer');
+const VOID_MANEUVER = load('void_maneuver');
+const VOID_SETTING = load('void_setting');
+const VOID_LOOK = load('void_look');
+const VOID_COMPOSITION = load('void_composition');
+const VOID_DRAMA = load('void_drama');
 // og-cyborg-female — beautiful sexy human-proportioned female cyborgs, glossy
 // chassis + exposed joints + glowing accents, photoreal (Kevin's "OG" refs).
 const OG_CYBORG_SUBJECT = load('og_cyborg_subject');
@@ -210,6 +226,18 @@ module.exports = {
   SHOGUN_LOOK,
   SHOGUN_COMPOSITION,
   SHOGUN_DRAMA,
+  ARENA_GLADIATOR,
+  ARENA_ARSENAL,
+  ARENA_SETTING,
+  ARENA_LOOK,
+  ARENA_COMPOSITION,
+  ARENA_DRAMA,
+  VOID_LANCER,
+  VOID_MANEUVER,
+  VOID_SETTING,
+  VOID_LOOK,
+  VOID_COMPOSITION,
+  VOID_DRAMA,
   OG_CYBORG_SUBJECT,
   OG_CYBORG_HAIR,
   OG_CYBORG_CYBER_FEATURE,

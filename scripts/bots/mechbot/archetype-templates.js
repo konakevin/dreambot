@@ -1673,6 +1673,102 @@ OPEN with the LOOK REGISTER tokens, then weave: the female cyborg assassin, her 
 Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
   },
 
+  MECHBOT_VOID_LANCERS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lancer, maneuver, void: voidSetting, look, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ THE ENGAGEMENT — RENDER THIS ACTION PROMINENTLY (it's the main event) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing a VOID-LANCERS scene for MechBot — a ZERO-G orbital mech-KNIGHT in weightless vacuum combat. The goal is a "WOW!!" — a free-floating combat-mech, a planet's curve below, hard sunlight and a deep starfield. Hyper-real cinematic 3D (Gundam space-combat / Knights of Sidonia / The Expanse).
+
+━━━ THE ABSOLUTE FIRST RULE — A HUMANOID MECH-KNIGHT, FREE-FLOATING IN ORBIT (NEVER A SHIP) ━━━
+The hero is a HUMANOID combat-MECH — a robot with a HEAD, a TORSO, TWO ARMS and TWO LEGS, in vacuum-armor, holding a lance or blade — posed WEIGHTLESS and free-floating in the vacuum of orbit, attitude-thrusters firing. 🚫 NEVER a spaceship / starfighter / craft / torpedo / drone / winged vehicle / gun-platform — it is a humanoid ROBOT KNIGHT whose limbs you can count. A planet's curve / a station / a debris-field provides orbital scale. NEVER a grounded standing pose, NEVER atmospheric flight, NEVER a planet-surface scene.
+
+⚡ DYNAMIC ACTION — show the knight ENGAGED and MID-COMBAT: charging lance-first, striking, dueling, corkscrewing on thrusters, or running down a foe. OFTEN a SECOND mech-knight (a rival/opponent) is in the frame, mid-clash or tumbling defeated. NOT a static floating pose — this is a fight.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE ORBITAL MECH-KNIGHT (the HERO — render with sleek vacuum-rated detail) ━━━
+${lancer}
+
+This is the focal subject: ONE zero-G orbital combat-mech. Render its archetype + vacuum-armor + thrusters + weapon EXACTLY as described — free-floating and weightless, knightly and lethal.
+
+━━━ THE MANEUVER — the SIGNATURE money-shot (render the zero-G action) ━━━
+${maneuver}
+This is the iconic detail — the weightless combat maneuver (lance-charge, thruster-burn, clash). Make it a dynamic focal element, all motion read as ZERO-G.
+
+━━━ COMPOSITION — THE WHOLE MECH, WEIGHTLESS + ORBITAL SCALE ━━━
+${composition}
+The lancer is the HERO of the frame — full body, free-floating (never grounded), with a planet-curve / station / debris for orbital scale. Pull back enough to show the whole mech, never a tight crop.
+
+━━━ THE VOID — the orbital setting (its OWN lighting/mood; the mech stays the focus) ━━━
+${voidSetting}
+
+Render this orbital setting with hard vacuum lighting and a planet/station for scale around the mech — its lighting and mood as described — but the MECH is the main focus, central and weightless.
+${dramaSection}
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the orbital mech-knight, its zero-G maneuver/weapon, the weightless full-body composition, the orbital void with a planet/station for scale, any orbital combat, mood. Every render must feel like a frame from an unmade sci-fi epic — a weightless knight of the vacuum.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  MECHBOT_ARENA_TITANS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { gladiator, arsenal, arena, look, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ THE ENGAGEMENT — RENDER THIS ACTION PROMINENTLY (it's the main event) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing an ARENA-TITANS scene for MechBot — a mech GLADIATOR in a colossal roaring combat-arena. The goal is a "WOW!!" — spectacle, brutality, a packed crowd, blazing spotlights. Hyper-real cinematic 3D (Real Steel / Pacific Rim / gladiator-Colosseum).
+
+━━━ THE ABSOLUTE FIRST RULE — DYNAMIC GLADIATORIAL ACTION + SPECTACLE ━━━
+This is DYNAMIC GLADIATORIAL ACTION: battle-scarred combat-mechs FIGHTING, clashing, charging, grappling, or POSTURING for a PACKED ROARING CROWD in a COLOSSAL ARENA under blazing spotlights. Show energetic MID-MOTION — and OFTEN a SECOND mech (a rival / opponent) in the frame, mid-duel or defeated on the sand. NOT a static standing pose, NOT a battlefield, NOT a squad, NOT a quiet scene — a brutal, lively stadium spectacle with crowds and lights.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE GLADIATOR-MECH (the HERO — render with brutal, theatrical detail) ━━━
+${gladiator}
+
+This is the focal subject: ONE arena gladiator combat-mech. Render its archetype + battle-scarred armor + signature weapon EXACTLY as described — theatrical, scarred, built for the crowd.
+
+━━━ THE ARSENAL — the SIGNATURE money-shot (render the weapon prominently) ━━━
+${arsenal}
+This is the iconic detail — the gladiatorial weapon, mid-swing or raised. Make it a dramatic focal element.
+
+━━━ COMPOSITION — THE WHOLE MECH + THE ROARING ARENA (spectacle) ━━━
+${composition}
+The gladiator is the HERO of the frame — pull the camera back to show the FULL mech (not a tight crop) and the arena + crowd around it for scale and spectacle.
+
+━━━ THE ARENA — the colossal combat stadium (its OWN lighting/mood; the gladiator stays the focus) ━━━
+${arena}
+
+Render this colossal arena with a packed roaring crowd and blazing spotlights, real depth and dust around the mech — its lighting and spectacle mood as described — but the GLADIATOR is the main focus, central and dominant.
+${dramaSection}
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the gladiator-mech, its weapon mid-swing, the full-body composition, the colossal roaring arena with crowd and spotlights, any combat beat, mood. Every render must feel like a frame from an unmade sci-fi epic — a brutal stadium spectacle.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
   MECHBOT_CHROME_SHOGUN: ({ slots, sharedDNA, vibeDirective }) => {
     const { shogun, blade, domain, look, composition, drama } = slots;
 

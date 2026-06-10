@@ -152,6 +152,34 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_VOID_LANCERS: {
+    description:
+      'PATH-BESPOKE — MechBot void-lancers (2026-06-10, NEW; 2026-06-10 made DYNAMIC + multi-mech per Kevin). ZERO-G orbital mech-KNIGHT combat — EVA combat-mechs FIGHTING / charging / dueling in vacuum, lances + thrusters, often TWO mechs ENGAGED, a planet curve below. MECH-FOCUSED (not StarBot cosmic vistas, not mech-skyships atmospheric flight). FIGURE (lancer HERO + maneuver money-shot) + ENVIRONMENT (void + look) + composition(dynamic zero-G action) + 85%-gated engagement (multi-mech orbital combat). universal:[] (ALWAYS weightless in vacuum + planet/station for orbital scale). Flux-locked, wrapper-strip.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['lancer', 'maneuver', 'void', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.85 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MECHBOT_ARENA_TITANS: {
+    description:
+      'PATH-BESPOKE — MechBot arena-titans (2026-06-10, NEW; 2026-06-10 made DYNAMIC + multi-mech per Kevin). Mech-GLADIATOR spectacle — combat-mechs FIGHTING / posturing / clashing in a colossal roaring arena, often TWO mechs in frame. Distinct from titan-war (battlefield) + power-armor (squad). FIGURE (gladiator HERO + arsenal money-shot) + ENVIRONMENT (arena + look) + composition(dynamic action) + 85%-gated engagement (multi-mech action / posturing). universal:[]. Flux-locked, wrapper-strip.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['gladiator', 'arsenal', 'arena', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.85 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MECHBOT_CHROME_SHOGUN: {
     description:
       'PATH-BESPOKE — MechBot chrome-shogun (2026-06-09, NEW). Feudal-future SAMURAI WAR-MECHS — machine-samurai in ornate kabuto/do/menpo armor, plasma-katana, honor + ceremony + menace. Fills the eastern-mecha/honor register. Ghost of Tsushima / Gundam samurai / Sekiro / Afro Samurai. Distinct from killer-cyborgs-male (street cyber-ninja). FIGURE (shogun HERO + blade money-shot) + ENVIRONMENT (domain + look) + composition + 40%-gated honor-duel drama. universal:[] (bot space-lighting fights a cherry-blossom scene; domain/look carry the light). Flux-locked, wrapper-strip.',
