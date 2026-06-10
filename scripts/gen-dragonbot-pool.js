@@ -122,16 +122,16 @@ EXAMPLES (3):
 
   dragon_rider_mount_detail: {
     format: 'simple',
-    theme: `DRAGONBOT DRAGON-RIDER MOUNT DETAIL — the rider's gear ON the dragon. Each entry 12-22 words.
+    theme: `DRAGONBOT DRAGON-RIDER HARNESS — the ORNATE riding HARNESS / SADDLE-RIG the rider is SECURED IN (NOT just sitting on the dragon's bare back). An elaborate, decorated, substantial rig that visibly straps the rider in place. Each entry 18-32 words. This is a PROMINENT rendered element.
 
-VARIETY MANDATE — ~25 distinct mount details: a leather-and-steel war-saddle strapped behind the neck-ridge; reins clipped to the horns; a riding-harness across the shoulders; saddlebags and a strapped banner; a foot-stirrup along the scales; a chain bridle; a fur-lined saddle for cold heights; war-barding plates on the dragon's chest; a quiver and lance-rest mounted on the saddle; trailing pennants from the harness; a horn-tip guard; reinforced grips along the spine-ridge.`,
+VARIETY MANDATE — ~25 ornate harness rigs across cultures + materials, each securing the rider: an engraved-steel war-saddle with a high cantle and crossing chest-straps buckling the rider in; an ornate leather-and-brass harness tooled with runes, stirrups and a lap safety-strap; a gilded ceremonial howdah-saddle with a low rail; a barbaric bone-and-hide rig lashed with rope and trophy-fangs; an elven filigree-silver harness of slender straps and a curved backrest; a dwarven riveted-iron saddle with a winch-anchored harness; a dragon-scale-and-gold saddle fused to the neck-ridge; a layered war-barding harness with shoulder-plates the rider buckles into; a nomad's woven-and-tasseled saddle-rig with crossing chest-bands; a black spiked rogue's harness clipped with ringed lines; a feathered tribal harness; a jeweled royal saddle with a canopy-frame. Each names the harness MATERIAL + ORNAMENTATION + how it SECURES the rider (chest-straps / lap-belt / buckles / high cantle / clipped lines).`,
     touchpoints: [],
-    instructions: `Each entry is ONE mount/gear detail in 12-22 words. Output a NUMBERED list.
+    instructions: `Each entry is ONE ORNATE harness/saddle-rig in 18-32 words — material + ornamentation + how it straps the rider IN. The rider is SECURED in it, not just sitting. Output a NUMBERED list.
 
 EXAMPLES (3):
-1. A leather-and-steel war-saddle strapped behind the neck-ridge, buckles glinting, a lance-rest and quiver mounted at the rider's side.
-2. Reins of braided chain clipped to the dragon's horns, taut as the rider steers it through the turn.
-3. War-barding plates armor the dragon's chest and shoulders, a tattered house-banner streaming from the saddle-horn.`,
+1. An elaborate engraved-steel war-saddle with a high cantle and crossing chest-straps buckling the rider firmly in, stirrups along the scales, a lance-rest at the side.
+2. An ornate leather-and-brass harness tooled with glowing runes, a lap safety-strap and shoulder-buckles cinching the rider down, braided reins running to the horns.
+3. An elven filigree-silver riding-rig of slender interlaced straps and a curved backrest, delicate buckles securing the rider, tasseled pennants trailing from the cantle.`,
   },
 
   dragon_rider_drama: {

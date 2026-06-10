@@ -2076,7 +2076,7 @@ Render the EXACT anatomy + color + horn/wing/body features. Wings ALWAYS visible
 ━━━ THE RIDER (mounted on the dragon) ━━━
 ${rider}
 
-Render the rider seated astride the dragon — armor/garb, pose, weapon if any. ONE rider only. They grip the dragon or a saddle, leaning with the motion. NEVER standing beside the dragon — they are MOUNTED on it.
+Render the rider seated astride the dragon and SECURED IN AN ORNATE RIDING HARNESS / SADDLE-RIG (detailed below) — NOT just perched on bare scales. Armor/garb, pose, weapon if any. ONE rider only, strapped and buckled into the elaborate rig, leaning with the motion. NEVER standing beside the dragon, NEVER sitting on a bare back — they are HARNESSED onto it.
 
 ━━━ THE ACTION — what dragon + rider are doing RIGHT NOW ━━━
 ${action}
@@ -2088,8 +2088,10 @@ ${setting}
 
 Render multi-layer depth — foreground detail → midground → deep atmospheric distance. Never a flat backdrop.
 
-━━━ MOUNT DETAIL (the rider's gear on the dragon) ━━━
+━━━ THE ORNATE HARNESS — render this prominently; the rider is STRAPPED INTO it ━━━
 ${mount_detail}
+
+This elaborate riding harness/saddle-rig is a KEY visible element — render its straps, buckles, cantle, ornamentation clearly, with the rider secured in it. NOT a bare-backed dragon.
 ${dramaSection}
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -2104,7 +2106,7 @@ ${sharedDNA.scenePalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Cinematic, dynamic, painterly. The dragon dominates the frame with the rider mounted and readable. Sense of scale, motion, and awe. Three-quarter or dramatic angle showing both dragon and rider. NEVER static; NEVER the rider on the ground beside the dragon.
+Cinematic, dynamic, painterly. The dragon dominates the frame with the rider mounted and READABLE — frame the dragon's upper body / neck / shoulders close enough that the rider AND THEIR ORNATE HARNESS are clearly visible (the straps, buckles, cantle, ornamentation), NOT a tiny speck on a distant full-body dragon. Sense of scale, motion, and awe. Three-quarter or dramatic angle showing both dragon and the harnessed rider. NEVER static; NEVER the rider on the ground beside the dragon; NEVER the rider too small to see the harness.
 
 ━━━ STRUCTURE (write the prompt in this exact order) ━━━
 [OPENING — a colossal Western dragon with a rider mounted on its back, DOING THE ACTION, in the setting — the dragon + mounted rider lead], [the dragon's exact anatomy + color + wings], [the rider astride it — armor + pose], [the setting with depth], [mount gear], [lighting + atmosphere], [palette + epic mood]
