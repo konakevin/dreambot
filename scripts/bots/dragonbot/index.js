@@ -530,8 +530,9 @@ module.exports = {
     'dragon-scene',
     // NEW 2026-06-10 — dragon-rider (rider mounted on a dragon). MVP-25.
     'dragon-rider',
-    // NEW 2026-06-10 — dragon-hoard (dragon coiled on treasure). MVP-25.
-    'dragon-hoard',
+    // KILLED 2026-06-10 (Kevin) — dragon-hoard not landing; the "dragon on a
+    // pile of treasure" trope was too sticky to bend out of. Disabled from
+    // rotation (code + pools kept, revivable). 'dragon-hoard',
     // NEW 2026-06-10 — dragon-battle (dragon mid-combat). MVP-25.
     'dragon-battle',
     'female-adventurer',

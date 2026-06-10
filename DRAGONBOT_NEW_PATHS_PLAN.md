@@ -22,7 +22,7 @@
 | # | Tier | Path | Built | Pools@25 | Posted | Tweaks | Committed | Scaled@200 |
 |---|------|------|:-----:|:--------:|:------:|:------:|:---------:|:----------:|
 | 1 | 1 | dragon-rider | ✅ | ✅ | ✅ | 0 | ✅ | ⬜ |
-| 2 | 1 | dragon-hoard | ✅ | ✅ | ✅ | 0 | ✅ | ⬜ |
+| 2 | 1 | ~~dragon-hoard~~ | ❌ KILLED | – | – | 2 | ✅ | – |
 | 3 | 1 | dragon-battle | ✅ | ✅ | ✅ | 0 | ✅ | ⬜ |
 | 4 | 1 | dragon-flight | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 5 | 1 | dragon-brood | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
