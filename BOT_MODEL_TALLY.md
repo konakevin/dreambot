@@ -15,13 +15,13 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 | Nano Banana        | ✅     | —                  |
 | GPT Image 2        | ❌     | banned 2026-06-09             |
 | Flux Dev           | ❌     | dropped 2026-06-01            |
-| Flux 2 Pro         | ✅     | re-added 2026-06-09           |
+| Flux 2 Pro         | ❌     | re-added then banned 2026-06-09 |
 | Flux 1.1 Pro       | ✅     | —                             |
 | Flux 1.1 Pro Ultra | ✅     | —                             |
 | Flux 2 Flex        | ❌     | dropped 2026-06-01            |
-| Flux 2 Max         | ✅     | re-added 2026-06-09           |
+| Flux 2 Max         | ❌     | re-added then banned 2026-06-09 |
 
-**Final allowedModels:** 5 — Banana, F1.1 Pro Ultra, F1.1 Pro, F2 Pro, F2 Max
+**Final allowedModels:** 3 — Banana, F1.1 Pro Ultra, F1.1 Pro
 
 **Render gate:** `dream_mediums.allowed_models` for `bloom_hyperreal_cgi` must match this list (the bot `allowedModels` only filters it). Banana routes to `bloombot_gpt_clean` (no look) via `cleanMediumByModel`; the 4 flux models carry the Medium Looks axis.
 
