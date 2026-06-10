@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // DRAGON-FLIGHT PATH (2026-06-10 — new). Majestic dragon
+  // soaring over an epic vista, aerial, no rider.
+  // ════════════════════════════════════════════════════════
+
+  dragon_flight_dragon: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-FLIGHT — the colossal Western DRAGON in flight (the hero). Each entry 30-50 words. TRADITIONAL WESTERN dragon ONLY: four legs (tucked/trailing in flight) + two massive membrane wings (fully spread or beating — the STAR of a flight shot) + horned reptilian skull + thick scaled body + long streaming tail. NEVER an Eastern serpent, snake, wyrm, or wingless/two-legged wyvern.
+
+VARIETY MANDATE — ~25 dramatically different dragons by COLOR + SCALE-TEXTURE + WING-membrane color/pattern + horns + signature: a crimson fire-dragon with sun-glowing red wings; an obsidian-black dragon with vast tattered wings; a frost-blue dragon trailing ice-crystals from its wing-tips; a bronze-gold dragon with translucent amber wings glowing in sunlight; an emerald forest-dragon with leaf-veined wings; a storm-grey dragon wreathed in cloud; a pearl-white dragon with feathered-look wing-edges; a molten volcanic dragon shedding embers; a deep-sea teal dragon with fin-frilled wings; a royal-purple dragon with star-flecked wings. Each names color + scale + WING detail + horns + a signature trait. Wings prominent + spread.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal Western dragon (4 legs + 2 wings + horns) in flight, 30-50 words — color + scale + WING detail + horns. Wings prominent. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal crimson fire-dragon, scales glowing molten at the seams, vast ribbed wings spread wide with deep-red membranes lit from behind by the sun, twin black horns, long spiked tail streaming behind as it soars.
+2. An obsidian-black dragon with enormous tattered wings beating against the wind, blood-red membranes, a crown of back-swept horns, amber eyes, smoke curling from its nostrils, legs tucked tight to its scaled belly.
+3. A frost-blue dragon rimed in pale scales, broad translucent wings shedding glittering ice-crystals from the tips, curved white horns, a long whip-tail trailing frost, climbing through cold air.`,
+  },
+
+  dragon_flight_pose: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-FLIGHT POSE — the dragon's flight MOTION at this loaded instant. Each entry 15-30 words. The verb leads. Dynamic, alive, NOT static.
+
+VARIETY MANDATE — ~25 distinct flight moments: soaring on spread wings riding a thermal; banking hard into a steep turn, one wingtip down; diving nose-first with wings tucked; climbing with powerful wingbeats; skimming low over the terrain, wake trailing; bursting up through a cloud-bank; gliding silent and level; wheeling in a slow circle; pulling up out of a dive; cresting a mountain ridge; rolling mid-air; beating hard against a headwind; chasing prey streamlined and fast. Each conveys motion + wing position + body angle.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dynamic flight pose in 15-30 words, verb-led, with visible motion. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. SOARING on fully spread wings, riding a thermal high above the world, body level and serene, only the wingtips flexing in the rising air.
+2. BANKING HARD into a steep turn, one wingtip dipped toward the ground far below, body rolled into the curve, tail swinging out for balance.
+3. DIVING nose-first with wings tucked tight, plummeting toward the landscape, wind tearing at its scales, the ground rushing up.`,
+  },
+
+  dragon_flight_vista: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-FLIGHT VISTA — the epic fantasy world far BELOW that the dragon flies over. Each entry 25-45 words. Conveys altitude + scale + depth.
+
+VARIETY MANDATE — ~25 distinct vistas seen from on high: a vast mountain range with snow-capped peaks and deep valleys; an endless green forest to the horizon; a winding river through golden plains; a coastline with cliffs and a churning sea; a great fantasy castle-city on a crag; rolling farmland and villages; a desert of dunes and a distant oasis; a frozen tundra and glaciers; a canyon-land of mesas and spires; an archipelago of islands in a blue sea; a misty valley of waterfalls; a volcanic badland; an ancient ruined city overgrown. Each conveys the world far below + atmospheric depth.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE epic vista far below in 25-45 words, conveying altitude + depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast mountain range far below, snow-capped peaks marching to a hazy horizon, deep green valleys and silver rivers threading between them, cloud-shadows drifting across the slopes.
+2. An endless emerald forest stretching to the horizon below, broken by a winding river catching the light and the tiny clearing of a distant village, all softening into blue distance-haze.
+3. A dramatic coastline far beneath, white cliffs plunging into a churning sea, a fantasy castle-city perched on a headland, waves breaking on rocks, the ocean fading to mist.`,
+  },
+
+  dragon_flight_sky: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-FLIGHT SKY — the dramatic sky the dragon flies through. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct skies: a golden sunset blazing across a sea of cloud; towering storm-thunderheads with lightning; a clear cobalt sky with scattered fair-weather clouds; a misty dawn with the sun breaking through; a star-strewn twilight with a huge moon; an aurora rippling overhead; a sky of dramatic god-rays piercing cloud; a blood-red sunset; a sea of cloud below the dragon with peaks breaking through; a stormy sky with rain-curtains; a serene high-altitude blue with thin cirrus. Each sets the sky's color + cloud + light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dramatic sky in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A golden sunset blazing across a vast sea of cloud, the sun a molten disc on the horizon, the cloud-tops gilded amber and rose.
+2. Towering black storm-thunderheads boiling around the dragon, forks of lightning splitting the dark, rain-curtains slanting in the distance.
+3. A clear high-altitude cobalt sky scattered with bright fair-weather clouds, the sun warm and the air crystalline, thin cirrus far above.`,
+  },
+
+  dragon_flight_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-FLIGHT DRAMA — a secondary event adding awe, fires ~40%. Each entry 15-30 words. Does NOT eclipse the soaring dragon.
+
+VARIETY MANDATE — ~25 distinct dramas: a flock of smaller dragons/wyverns wheeling in the distance; a second dragon far off catching the light; a flock of birds scattering from the dragon's path; a burst of flame from the dragon's jaws lighting the cloud; a distant castle or city on a far peak; a shaft of god-rays breaking through cloud onto the land; a comet or shooting star; a rainbow arcing below; an eagle dwarfed beside the dragon; a storm-front rolling in; a far waterfall catching the sun.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama event in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A distant flock of smaller wyverns wheels far below and behind, tiny against the vast landscape, following in the great dragon's wake.
+2. A shaft of golden god-rays breaks through the cloud onto the land far below, lighting a single bright patch of the world.
+3. The dragon breathes a short burst of flame that lights the cloud around it from within, embers scattering on the wind.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DRAGON-BATTLE PATH (2026-06-10 — new). Dragon mid-combat,
   // fire on a castle/army or clashing with a rival.
   // ════════════════════════════════════════════════════════

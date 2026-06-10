@@ -21,6 +21,7 @@ const pathBuilders = {
   'dragon-rider': require('./paths/dragon-rider'),
   'dragon-hoard': require('./paths/dragon-hoard'),
   'dragon-battle': require('./paths/dragon-battle'),
+  'dragon-flight': require('./paths/dragon-flight'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -109,6 +110,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // dragon-flight: anchor the Western dragon soaring with prominent wings.
+    'dragon-flight':
+      'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — SOARING in dynamic FLIGHT, wings fully spread and the STAR of the shot, high over an epic fantasy vista, NO rider, sense of altitude motion and grace, painterly atmospheric grandeur, LOTR + GoT + Skyrim visual lineage, awe-inducing concept-art masterwork',
     // dragon-battle: anchor the Western war-dragon mid-attack.
     'dragon-battle':
       'Frank Frazetta + Brom + Boris Vallejo painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — MID-ATTACK breathing fire and unleashing destruction on a castle or army, explosive battle spectacle with flame smoke embers and chaos, dramatic fire-lit grandeur, painterly atmospheric depth, GoT + LOTR + Warcraft visual lineage, awe-inducing concept-art masterwork',
@@ -550,6 +554,8 @@ module.exports = {
     // rotation (code + pools kept, revivable). 'dragon-hoard',
     // NEW 2026-06-10 — dragon-battle (dragon mid-combat). MVP-25.
     'dragon-battle',
+    // NEW 2026-06-10 — dragon-flight (dragon soaring over a vista). MVP-25.
+    'dragon-flight',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -583,7 +589,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -638,6 +644,7 @@ module.exports = {
       'dragon-rider',
       'dragon-hoard',
       'dragon-battle',
+      'dragon-flight',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -672,6 +679,7 @@ module.exports = {
       'dragon-rider': 'creature',
       'dragon-hoard': 'creature',
       'dragon-battle': 'creature',
+      'dragon-flight': 'creature',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

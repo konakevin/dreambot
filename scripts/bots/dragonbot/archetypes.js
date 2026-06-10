@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DRAGON_FLIGHT: {
+    description:
+      'PATH-BESPOKE — DragonBot dragon-flight path (2026-06-10). A majestic Western dragon in dynamic FLIGHT (soaring / banking / diving) over an epic fantasy vista seen from on high, wings spread, full of MOTION. NO rider/characters. Distinct from dragon-scene (grounded/perched subject). Path-bespoke: dragon + flight_pose + vista_below + sky + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['dragon', 'flight_pose', 'vista_below', 'sky'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_BATTLE: {
     description:
       'PATH-BESPOKE — DragonBot dragon-battle path (2026-06-10). A colossal Western dragon mid-combat — breathing fire on a castle/army, or clashing with a rival dragon or knights. Action spectacle. Path-bespoke: dragon + combat_action (fire/clash/strafe) + target (castle/army/knights/rival) + battle_setting + drama (40% gated). Universal lighting + atmosphere reused.',

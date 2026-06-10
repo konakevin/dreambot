@@ -1920,6 +1920,68 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGON_FLIGHT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, dragon, flight_pose, vista_below, sky, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+A secondary focal point adding awe (NOT eclipsing the soaring dragon).
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a DRAGON IN FLIGHT scene for DragonBot — a majestic Western dragon SOARING through the sky over an epic fantasy world, full of motion and grace. Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition. The scene should make the viewer GASP at the scale and the flight.
+
+━━━ TRADITIONAL WESTERN DRAGON ANATOMY — NON-NEGOTIABLE ━━━
+A TRADITIONAL high-fantasy WESTERN dragon — Smaug / GoT / Elden Ring archetype. FOUR muscular legs (tucked or trailing in flight), TWO MASSIVE membrane wings (bat-like, ribbed, fully spread or beating — the wings are the STAR of a flight shot), HORNED reptilian-skull head, THICK SCALED armored body, LONG MUSCULAR TAIL streaming behind, clawed feet. NEVER an Eastern wingless serpent, snake/wyrm body, or wingless/two-legged wyvern.
+
+━━━ NO CHARACTERS — ABSOLUTE ━━━
+No humans, no riders, no people. The dragon flies ALONE. (A tiny distant bird/creature or a far structure via drama is fine at scale-prover scale only.)
+
+━━━ THE DRAGON ━━━
+${dragon}
+
+Render the EXACT anatomy + color + horn/wing/body features. Wings ALWAYS prominent and spread/beating.
+
+━━━ THE FLIGHT — the dragon in MOTION (the loaded instant) ━━━
+${flight_pose}
+
+The dragon is a LIVING ANIMAL IN MOTION — soaring, banking, diving, climbing, or skimming — NOT a static heraldic pose. Wings catch the air, the body tilts into the turn, the tail streams, momentum is visible. Think a great eagle mid-flight, not a statue.
+
+━━━ THE VISTA BELOW (the epic world it flies over) ━━━
+${vista_below}
+
+Render multi-layer depth — the vast landscape far below and receding to a hazy horizon, conveying the dragon's altitude and the world's scale.
+
+━━━ THE SKY ━━━
+${sky}
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic, dynamic, painterly. The soaring dragon — WINGS SPREAD — is the hero, the epic vista vast below, the sky dramatic around it. A dynamic flying angle (from above / below / banking three-quarter). Sense of altitude, motion, freedom, and scale. NEVER static; NEVER hovering motionless; NEVER a heraldic spread-wing symbol.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a majestic Western dragon SOARING (DOING THE FLIGHT POSE), wings spread, high over an epic vista — the flying dragon leads], [the dragon's exact anatomy + color + the prominent wings], [the motion — wings catching air, body banking, tail streaming], [the vast vista far below], [the dramatic sky], [lighting + atmosphere], [palette + soaring epic mood]
+
+CRITICAL — render a TRUE Western dragon (4 legs + 2 wings + horns) in dynamic FLIGHT with prominent spread wings, NO rider. Do NOT render a serpent/wyvern, a grounded dragon, or a static heraldic pose.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DRAGON_BATTLE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, dragon, combat_action, target, battle_setting, drama } = slots;
 

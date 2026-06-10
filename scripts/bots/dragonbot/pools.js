@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── dragon-flight path (2026-06-10, NEW) — dragon soaring. MVP-25. ───
+  DRAGON_FLIGHT_DRAGON: load('dragon_flight_dragon'),
+  DRAGON_FLIGHT_POSE: load('dragon_flight_pose'),
+  DRAGON_FLIGHT_VISTA: load('dragon_flight_vista'),
+  DRAGON_FLIGHT_SKY: load('dragon_flight_sky'),
+  DRAGON_FLIGHT_DRAMA: load('dragon_flight_drama'),
+
   // ─── dragon-battle path (2026-06-10, NEW) — dragon mid-combat. MVP-25. ───
   DRAGON_BATTLE_DRAGON: load('dragon_battle_dragon'),
   DRAGON_BATTLE_ACTION: load('dragon_battle_action'),
