@@ -85,9 +85,15 @@ module.exports = {
   // models into abstract botanical plates; the clean medium + ''-prefix (see
   // promptPrefixByMedium) strip them so the seed's bloom subject leads.
   // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
+  // 2026-06-09: Nano Banana (google/gemini-2-image) was REMOVED from this
+  // map so it renders bloom_hyperreal_cgi (neutral) + the rolled look
+  // DIRECTLY instead of swapping to the look-less clean medium (Kevin wants
+  // Banana to carry the looks too — ChibiBot precedent: gpt-2/banana handle
+  // concrete style tags with no abstract drift). gpt-image-2 stays mapped in
+  // case it's ever re-enabled, but it's currently banned (not in
+  // allowed_models) so this entry is dormant.
   cleanMediumByModel: {
     'openai/gpt-image-2': { medium: 'bloombot_gpt_clean' },
-    'google/gemini-2-image': { medium: 'bloombot_gpt_clean' },
   },
   mediumStyles: {
     bloombot_gpt_clean: blocks.GPT_CLEAN,
