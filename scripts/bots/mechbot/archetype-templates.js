@@ -1673,6 +1673,78 @@ OPEN with the LOOK REGISTER tokens, then weave: the female cyborg assassin, her 
 Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
   },
 
+  MECHBOT_MECH_INSECT_HYBRIDS: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      being,
+      material,
+      eyes,
+      signature_wow,
+      biome,
+      look,
+      composition,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA PHENOMENON (weave in — don't let it steal focus from the hero) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi creature-design concept artist writing a MECHANICAL-INSECT HYBRID scene for MechBot. The goal is a "WOW!!" — a crazy, poster-worthy hybrid where a living INSECT and a MACHINE have fused into ONE wild sci-fi creature. Lean ALL the way into the strange: this is an AI dream-app, push the bio-mechanical insect design hard.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE MECHANICAL-INSECT HYBRID (the HERO — render with obsessive detail) ━━━
+${being}
+
+This is the focal subject: ONE crazy mechanical-insect hybrid. Render its insect order + machine archetype + fused anatomy EXACTLY as described — a different hybrid every render, so commit fully to what it IS.
+
+━━━ INSECT + MECHANICAL DOMINATES (the overriding rule) ━━━
+Both the INSECT and the MACHINE must be unmistakable and fused into ONE creature. The insect anatomy (chitin carapace / wing-cases / mandibles / segmented legs / antennae / compound eyes) and the machine (servos / hydraulics / chrome plating / reactors / turbines / circuitry) merge seamlessly. Even if the hybrid is an insectoid-HUMANOID, the insect + mechanical features DOMINATE the silhouette — NEVER a plain human in armor, NEVER a non-insect robot. The bug-machine fusion IS the whole point.
+
+━━━ THE FUSION MATERIAL — where chitin meets chrome (render this surface clearly) ━━━
+${material}
+
+Render the hybrid's surfaces EXACTLY as described — the seam where living insect biology meets machine, with its finishes, sheens, and exposed mechanisms.
+
+━━━ THE OPTICS / EYES (glowing) ━━━
+${eyes}
+Render its eyes/sensors exactly this way — insect optics fused with machine.
+
+━━━ THE SHOWSTOPPER (the ONE wow-element — render it prominently) ━━━
+${signature_wow}
+
+━━━ COMPOSITION — THE HYBRID IS THE MAIN FOCUS ━━━
+${composition}
+The hybrid is the HERO of the frame — large, central, legible, its bio-mechanical design the star.
+
+━━━ THE COOL SCI-FI SETTING (keep it cool — but the HERO stays the focus) ━━━
+${biome}
+
+Render a cool, atmospheric sci-fi environment with real depth behind and around the hybrid — but the CREATURE is the main focus, large and central. The setting frames and elevates it without stealing attention.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the mechanical-insect hybrid, the fusion material, its showstopper feature, the composition, the sci-fi environment with depth, lighting/atmosphere, mood. Every render must feel like a frame from an unmade sci-fi epic — a crazy bug-machine you'd stop scrolling to stare at.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
   MECHBOT_SCIFI_CYBORG_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,

@@ -700,6 +700,142 @@ Each entry: cool antihero archetype + sleek stylish personalized gear + a signat
   },
 
   // ════════════════════════════════════════════════════════════════
+  // mech-insect-hybrids — NEW exotic path (2026-06-09). Mechanical/live
+  // hybrid insects: an insectoid race where machine + insect fuse into wild
+  // sci-fi hybrids. Insect + mechanical aesthetic OVERRULES (insectoid-
+  // humanoids allowed but insect/mech dominates). Mirrors scifi-cyborg-female
+  // architecture: being(HERO) + fusion_material + eyes + signature_wow + biome
+  // + look(register, anti-homogenize) + composition + drama(40%-gated). NO
+  // insect-type enumeration in any prefix (first-named-noun lock); the HERO
+  // pool carries the species, the look leads CLIP.
+  // ════════════════════════════════════════════════════════════════
+  mech_insect_being: {
+    format: 'simple',
+    theme: `MECHANICAL-INSECT HYBRID BEINGS — the HERO axis. Each entry is ONE crazy sci-fi mechanical/insect hybrid — a living insect fused with machine into a wild, poster-worthy hybrid. 30-45 words. Insect anatomy + mechanical engineering MERGED: chitin + chrome, wings + turbines, mandibles + servos, compound eyes + sensor-arrays. Lineage: District-9 / Starship-Troopers bug / Horizon-Zero-Dawn machine / Vitaly-Bulgarov / Sparth bio-mech.
+
+⚠️ THE BAR — clearly an INSECT (a recognizable order: beetle / mantis / wasp / moth / dragonfly / ant / cicada / etc.) fused with MACHINE (servos / hydraulics / chrome plating / reactors / turbines / circuitry). Crazy, exotic, sci-fi. The hybrid IS the hero of the frame.
+
+⚠️ INSECT + MECHANICAL DOMINATES (the overriding rule) — even an insectoid-HUMANOID reads insect-first (chitin carapace, extra limbs, wing-cases, mandibles, compound eyes) + machine-second. NEVER just a human in armor. NEVER a plain humanoid robot with no insect anatomy. The bug + the machine are BOTH unmistakable.
+
+✓ DISTRIBUTION (~25) — vary the insect ORDER + the machine ARCHETYPE HARD:
+  • BEETLE-class (~4) — armored beetle-tanks / scarab-constructs / stag-beetle-mechs
+  • MANTIS-class (~4) — mantis-drones / scythe-armed mantis-assassins
+  • WASP / HORNET-class (~3) — wasp-gunships / hornet-warframes / stinger-drones
+  • MOTH / BUTTERFLY-class (~3) — moth-androids / iridescent butterfly-machines
+  • DRAGONFLY-class (~3) — dragonfly recon-drones / hover-hunters
+  • ANT / TERMITE-class (~3) — ant soldier-constructs / swarm-mech units
+  • OTHER-class (~3) — cicada-cyborg / firefly-lantern-bot / stick-insect walker / locust-swarmframe
+  • INSECTOID-HUMANOID (~2) — a humanoid whose insect+machine features dominate
+
+Each entry: NAME CAPS + insect order + machine archetype + 2-3 fused anatomical details + a wild signature trait.`,
+    touchpoints: [
+      'CARAPEX — a hulking rhinoceros-beetle war-construct, glossy black-iridescent chitin shell riveted over brushed steel plating, a massive hydraulic horn-ram, six pistoned legs, a glowing orange reactor-thorax, lumbering and unstoppable',
+      'GLAIVE-MANTIS — a tall mantis-drone assassin, slender chrome-and-emerald carapace, two folded-steel scythe forelimbs, a triangular sensor-head with glowing compound eyes, poised mid-strike and lethal',
+      'VESPABREAKER — a wasp-gunship hybrid, a segmented yellow-and-black armored thorax bristling with gun-barrels, four buzzing turbine-wings, a chrome stinger-cannon curling beneath, hovering menace',
+      'LUNARA — a moth-android, soft grey fractal-scaled wings spanning wide over a sleek white chassis, feathered antenna-sensors, glowing lilac ocelli, an eerie graceful machine',
+      'SKIMMER-NINE — a dragonfly recon-drone, an iridescent elongated chrome abdomen, four blurring glass-and-carbon wings, a huge wraparound compound-eye optic dome, darting and precise',
+      'MYRMIDON — an ant soldier-construct, matte-black exo-plated body, oversized hydraulic mandibles, segmented cable-muscled legs, a glowing red thorax-core, one of a marching swarm',
+      'CICADA-VOX — a cicada-cyborg, translucent amber-resin wing-cases over exposed copper circuitry, a vibrating sound-membrane drum, glowing green eyes, perched and humming with power',
+      'STILT-WEAVER — a stick-insect walker-mech, an impossibly tall spindly frame of green-anodized rods and servos, twig-thin camouflaged limbs, a tiny sensor-head, a silent striding sentinel',
+      'CHITINE — an insectoid-humanoid warrior, a slender humanoid frame sheathed in beetle-black chitin armor, four arms (two ending in mantis-blades), folded wing-cases on the back, a mandibled faceplate and glowing compound eyes',
+    ],
+    instructions: `Each entry is ONE mechanical-insect hybrid BEING, 30-45 words. Format: "NAME CAPS — insect order + machine archetype + 2-3 fused anatomical details + a wild signature trait". INSECT + MECHANICAL must BOTH be unmistakable in every entry. Vary the insect order + machine archetype HARD. Insectoid-humanoids OK occasionally but insect/mech features dominate. NEVER a plain human-in-armor or a non-insect robot. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  mech_insect_material: {
+    format: 'simple',
+    theme: `FUSION MATERIAL — the surface/material truth where the insect biology meets the machine on the hybrid's body. 12-24 words. Describe the seam where chitin meets chrome — finishes, sheens, exposed mechanisms. NO whole-creature description (that's the being axis); JUST the material fusion.`,
+    touchpoints: [
+      'glossy black beetle-chitin riveted to brushed-steel plating, oil-sheen iridescence pooling along the seams',
+      'translucent amber-resin wing-cases over exposed copper circuitry and tiny glowing capacitors',
+      'iridescent green-gold carapace fused to chrome actuators, hydraulic fluid glistening at every joint',
+      'matte wasp-paper composite layered over carbon-fiber struts, faint warning-stripe glow beneath',
+      'pearlescent moth-scale dust over a sleek ceramic chassis, micro-LED veins threading the wing membranes',
+      'cracked weathered exoplate patched with scavenged steel, rust and verdigris over warm brass mechanisms',
+    ],
+    instructions: `Each entry is ONE insect/machine fusion-material description, 12-24 words. Surface + finish + where biology meets machinery only. NO full-creature description. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  mech_insect_eyes: {
+    format: 'simple',
+    theme: `THE OPTICS — the hybrid insect-machine's eye/sensor system. 10-20 words. Compound eyes, multi-lens optic clusters, glowing ocelli, sensor-domes — bug optics fused with machine sensors.`,
+    touchpoints: [
+      'a massive wraparound compound eye of a thousand glowing-cyan hexagonal lenses',
+      'three crimson ocelli glowing above twitching mechanical antenna-sensors',
+      'a clustered optic dome of black glass lenses, each ringed with a faint amber aperture-glow',
+      'huge faceted emerald compound eyes with a rotating targeting-iris at each center',
+      'a band of tiny white sensor-lenses wrapping the skull beneath feathered antenna-arrays',
+    ],
+    instructions: `Each entry is ONE insect-machine optic/eye description, 10-20 words. Compound eyes / optic clusters / ocelli / sensor-domes, glowing. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  mech_insect_feature: {
+    format: 'simple',
+    theme: `THE SIGNATURE FEATURE — the ONE showstopper detail that makes the render pop. 14-28 words. A wow moment: unfolding chitin-plated wings, snapping servo-mandibles, a glowing thorax-reactor, a deploying chrome stinger/ovipositor-weapon, segmented hydraulic legs mid-spring, a swarm-spawning abdomen-hatch.`,
+    touchpoints: [
+      'enormous iridescent wing-cases cracking open to unfurl four humming glass-and-circuitry flight-wings, light pouring through the membranes',
+      'twin scythe-forelimbs of folded chrome snapping wide, hydraulics hissing, edges catching the light',
+      'a glowing molten-core thorax pulsing visibly beneath translucent armor plating, venting heat-shimmer',
+      'a chrome segmented stinger-cannon arcing up and forward, a bead of glowing venom-plasma at the tip',
+      'an abdomen-hatch splitting open to release a glittering cloud of tiny mechanical drone-larvae',
+    ],
+    instructions: `Each entry is ONE showstopper signature feature, 14-28 words. ONE dramatic insect-machine detail in action. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  mech_insect_biome: {
+    format: 'simple',
+    theme: `THE SETTING — a cool sci-fi environment that frames the mech-insect (it stays the focus). 18-30 words. Dark, atmospheric, multi-tier depth. Bio-mechanical hive-foundries, swarm-megastructures, resin-and-steel nests, alien insect-worlds, bio-mech labs, derelict bio-ships crawling with machine-bugs.`,
+    touchpoints: [
+      'inside a towering bio-mechanical hive-foundry, hexagonal resin cells glowing over molten-metal channels, swarm-silhouettes deep in the haze',
+      'an alien insect-world canopy of chrome-veined fungal towers, spore-light drifting, a vast nest-structure looming behind',
+      'a derelict bio-ship corridor, ribbed organic-metal walls dripping condensation, dim red emergency glow and distant skittering',
+      'a sterile white bio-mech lab, suspended specimen-pods and holographic schematics, harsh overhead light raking the subject',
+      'a resin-and-steel nest cavern, amber egg-clusters glowing, cable-roots and pipework threading the dark walls',
+    ],
+    instructions: `Each entry is ONE sci-fi environment for a mech-insect, 18-30 words. Multi-tier depth, atmospheric, the creature stays the focus. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  mech_insect_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the RENDERING STYLE only (this LEADS the prompt and anti-homogenizes the path). 8-16 words. PURE rendering technique: palette + lighting mood + finish + render reference. NO anatomy, NO creature content, NO setting — style only.`,
+    touchpoints: [
+      'sleek hard-surface concept-art render, clean key light, crisp detail, Vitaly-Bulgarov / Sparth register',
+      'gritty bio-mechanical realism, grimy industrial palette, harsh practical lighting, District-9 register',
+      'lush macro-photography look, shallow depth of field, dewy iridescent detail, nature-documentary register',
+      'dark cinematic sci-fi, deep shadows and a single cold rim-light, Villeneuve register',
+      'glowing neon-noir, wet reflective highlights, saturated teal-and-magenta haze',
+      'painterly creature-design illustration, warm rendered light, visible brushwork, Heavy-Metal register',
+    ],
+    instructions: `Each entry is ONE pure rendering-style register, 8-16 words. Palette + lighting + finish + reference ONLY. NO anatomy, NO creature, NO setting. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  mech_insect_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING for the mech-insect hero. 14-26 words. Camera angle + framing that makes the hybrid read large and legible, ALWAYS pulled back enough that the WHOLE creature is in frame (full body, not cropped). Pulled-back hero shot / full-body three-quarter / low-angle menace / perched-silhouette / one hero large in front of a deep swarm.`,
+    touchpoints: [
+      'dramatic low-angle three-quarter, the hybrid looming large and central with its full body in frame, deep environment falling away behind',
+      'a pulled-back hero shot framing the whole creature, compound eyes and mandibles still crisp and prominent',
+      'full-body profile mid-stride, the whole silhouette legible against a glowing backdrop',
+      'a perched full-body high-vantage silhouette, wings half-spread, the world small beneath',
+      'the hero large and sharp in the foreground with its full body in frame, a blurred swarm of its kind receding into depth',
+    ],
+    instructions: `Each entry is ONE composition/framing for a mech-insect hero, 14-26 words. The WHOLE hybrid is in frame (full body, pulled back enough to show the complete creature), large + central + legible — never cropped. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  mech_insect_drama: {
+    format: 'simple',
+    theme: `DRAMA PHENOMENON — a 40%-gated extra beat woven in (must NOT steal focus from the hero). 14-26 words. A hatching brood, a swarm boiling up behind, venom-drip and sparks, a secondary smaller machine-bug, an attack mid-launch, atmospheric menace.`,
+    touchpoints: [
+      'a seething swarm of smaller machine-bugs boiling up out of the depths behind the hero',
+      'an egg-cluster hatching nearby, tiny chrome larvae unfurling wet wings',
+      'sparks and a thin drip of glowing venom-plasma falling from a snapping mandible',
+      'a smaller scout-drone-bug hovering at the edge of frame, optics trained on the hero',
+      'the hero mid-launch, wing-cases flung open, dust and debris kicked up beneath it',
+    ],
+    instructions: `Each entry is ONE 40%-gated drama beat, 14-26 words. Adds menace/action without stealing focus from the hero. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
   // cyborg-man REBUILD → "android-man" register (2026-05-26)
   // MOSTLY-MACHINE male android-BEING. Synthetic chassis dominates the
   // silhouette; organic shows ONLY at eyes / a partial face-panel. A human

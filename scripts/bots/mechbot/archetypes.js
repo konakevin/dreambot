@@ -138,6 +138,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_MECH_INSECT_HYBRIDS: {
+    description:
+      'PATH-BESPOKE — MechBot mech-insect-hybrids (2026-06-09, NEW). Mechanical/live hybrid insects: an insectoid race where machine + insect fuse into wild sci-fi hybrids. Insect + mechanical aesthetic OVERRULES (insectoid-humanoids allowed but insect/mech dominates). being(HERO) + fusion_material + eyes + signature_wow + biome + look(register, anti-homogenize) + composition + 40%-gated drama. Flux-locked, wrapper-strip.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['being', 'material', 'eyes', 'signature_wow', 'biome', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MECHBOT_KILLER_CYBORGS_MALE: {
     description:
       'PATH-BESPOKE — MechBot killer-cyborgs-male (2026-06-09). MALE mirror of killer-cyborgs: handsome/rugged lethal MALE cyborg assassin-thieves — agile, sleek, dangerous. Same architecture; only the gendered subject + face pools are male-specific (weapon / biome / look / composition / eyes / drama are SHARED with the female killer path). Flux-locked.',

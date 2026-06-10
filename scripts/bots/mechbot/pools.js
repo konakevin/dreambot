@@ -55,6 +55,16 @@ const KILLER_CYBORG_BIOME = load('killer_cyborg_biome');
 const KILLER_CYBORG_LOOK = load('killer_cyborg_look');
 const KILLER_CYBORG_COMPOSITION = load('killer_cyborg_composition');
 const KILLER_CYBORG_DRAMA = load('killer_cyborg_drama');
+// mech-insect-hybrids — mechanical/live hybrid insects; insect + machine fused
+// into wild sci-fi hybrids (2026-06-09). look LEADS (anti-homogenize).
+const MECH_INSECT_BEING = load('mech_insect_being');
+const MECH_INSECT_MATERIAL = load('mech_insect_material');
+const MECH_INSECT_EYES = load('mech_insect_eyes');
+const MECH_INSECT_FEATURE = load('mech_insect_feature');
+const MECH_INSECT_BIOME = load('mech_insect_biome');
+const MECH_INSECT_LOOK = load('mech_insect_look');
+const MECH_INSECT_COMPOSITION = load('mech_insect_composition');
+const MECH_INSECT_DRAMA = load('mech_insect_drama');
 // og-cyborg-female — beautiful sexy human-proportioned female cyborgs, glossy
 // chassis + exposed joints + glowing accents, photoreal (Kevin's "OG" refs).
 const OG_CYBORG_SUBJECT = load('og_cyborg_subject');
@@ -130,6 +140,14 @@ module.exports = {
   KILLER_CYBORG_LOOK,
   KILLER_CYBORG_COMPOSITION,
   KILLER_CYBORG_DRAMA,
+  MECH_INSECT_BEING,
+  MECH_INSECT_MATERIAL,
+  MECH_INSECT_EYES,
+  MECH_INSECT_FEATURE,
+  MECH_INSECT_BIOME,
+  MECH_INSECT_LOOK,
+  MECH_INSECT_COMPOSITION,
+  MECH_INSECT_DRAMA,
   OG_CYBORG_SUBJECT,
   OG_CYBORG_HAIR,
   OG_CYBORG_CYBER_FEATURE,
