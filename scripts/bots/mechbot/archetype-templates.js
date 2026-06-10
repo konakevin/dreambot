@@ -1673,6 +1673,197 @@ OPEN with the LOOK REGISTER tokens, then weave: the female cyborg assassin, her 
 Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
   },
 
+  MECHBOT_CHROME_SHOGUN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { shogun, blade, domain, look, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ CLASH / HONOR (weave in — don't let it steal focus from the hero) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing a CHROME-SHOGUN scene for MechBot — a feudal-future SAMURAI WAR-MECH, a machine built in the samurai aesthetic. The goal is a "WOW!!" — honor, ceremony, and lethal menace in one frame. Hyper-real cinematic 3D, intricate mechanical surfaces (Ghost of Tsushima / Gundam / Sekiro / Afro Samurai).
+
+━━━ THE ABSOLUTE FIRST RULE — A FEUDAL SAMURAI WAR-MECH ━━━
+This is a MACHINE-SAMURAI: a mech (chrome, lacquered alloy, servos, glowing accents) built in ornate samurai armor — horned kabuto helm, do chest-armor, sode shoulder-guards, menpo war-mask, sashimono back-banner — bearing a katana or naginata. The samurai aesthetic DOMINATES, but it is unmistakably a machine. Honor + ceremony + menace, feudal-future, NEVER modern military, NEVER a human in cosplay.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE SAMURAI WAR-MECH (the HERO — render with ornate, lethal detail) ━━━
+${shogun}
+
+This is the focal subject: ONE machine-samurai. Render its archetype + ornate armor silhouette + mech/feudal detail EXACTLY as described — a different samurai-mech every render, poised and lethal.
+
+━━━ THE BLADE — the SIGNATURE money-shot (render it prominently) ━━━
+${blade}
+This is the iconic detail — the glowing samurai weapon, drawn or mid-strike. Make it a focal, dramatic element of the frame.
+
+━━━ COMPOSITION — THE WHOLE MECH IS THE FOCUS, dramatic + honorable ━━━
+${composition}
+The samurai-mech is the HERO of the frame — large, central, legible. PULL THE CAMERA BACK so the ENTIRE mech is visible (full silhouette, not a tight crop), framed with cinematic, honorable drama.
+
+━━━ THE DOMAIN — the feudal-future setting (its OWN lighting/mood; the mech stays the focus) ━━━
+${domain}
+
+Render this feudal-future landscape with real multi-tier depth around the samurai-mech — its lighting and mood as described — but the MECH is the main focus, large and central. The setting frames and elevates it.
+${dramaSection}
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the samurai war-mech, its glowing blade, the full-body honorable composition, the feudal-future domain with depth and its own lighting, any clash/ceremony, mood. Every render must feel like a frame from an unmade sci-fi epic — a machine-samurai of honor and menace.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  MECHBOT_SENTINELS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { sentinel, awakening, realm, look, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ STIRRING (weave in — reverent awe, never let it become an action scene) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing a SENTINEL scene for MechBot — a colossal ANCIENT GUARDIAN-MACHINE, monumentally huge and half-dormant, weathered and overgrown after ages. The goal is AWE — a "stop and stare" frame of sacred, melancholy, godlike scale. Lineage: Shadow of the Colossus / Horizon / Ghibli / Castle in the Sky.
+
+━━━ THE ABSOLUTE FIRST RULE — COLOSSAL, ANCIENT, DORMANT, DWARFING EVERYTHING ━━━
+This is a MONUMENTAL guardian-mech, so vast it dwarfs a human to an ant. It is ANCIENT — weathered metal-and-stone reclaimed by nature (moss, vines, coral, sand, ice, rust) — and DORMANT or only just stirring. The register is AWE + sacred stillness + melancholy, NEVER combat, NEVER a shiny new war-machine. It is a MACHINE (a guardian-mech), even overgrown.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE COLOSSAL GUARDIAN (the HERO — render with monumental, ancient detail) ━━━
+${sentinel}
+
+This is the focal subject: ONE colossal ancient guardian-machine. Render its archetype + weathered overgrown silhouette + ancient detail EXACTLY as described — a different guardian every render, monumental and still.
+
+━━━ THE AWAKENING — the SIGNATURE money-shot (render it with quiet drama) ━━━
+${awakening}
+This is the iconic detail — the light-of-life kindling in an ancient face/core, or its deep dormancy. Make it a focal, reverent element.
+
+━━━ COMPOSITION — PROVE THE COLOSSAL SCALE (the guardian is the focus) ━━━
+${composition}
+The guardian is the HERO of the frame — monumental, towering, legible. ALWAYS include the tiny scale-prover described, dwarfed to nothing, so the godlike size reads instantly. PULL THE CAMERA BACK to show the full colossus; never a tight crop.
+
+━━━ THE REALM — the sacred awe-landscape (its OWN lighting/mood; the guardian stays the focus) ━━━
+${realm}
+
+Render this sacred, atmospheric landscape with real multi-tier depth around the guardian — its lighting and mood as described — but the COLOSSUS is the main focus, monumental and central. The setting frames and elevates it.
+${dramaSection}
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the colossal ancient guardian, the awakening detail, the full-body composition with its tiny scale-prover, the sacred landscape with depth, any reverent stirring, mood. Every render must feel like a frame from an unmade sci-fi epic — an ancient sleeping god of metal that makes you feel small.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  MECHBOT_ABYSS_MECHS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { mech, lumens, abyss, look, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DEEP-SEA PHENOMENON (weave in — don't let it steal focus from the mech) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing a DEEP-SEA MECH scene for MechBot. The goal is a "WOW!!" — a lone MACHINE in the crushing abyssal dark, lit only by its own lamps and bioluminescence. Hyper-real cinematic 3D, intricate mechanical surfaces (The Abyss / Subnautica / BioShock / Pacific Rim underwater).
+
+━━━ THE ABSOLUTE FIRST RULE — DEEP UNDERWATER, CRUSHING ABYSSAL DARK ━━━
+The entire scene is FULLY SUBMERGED in the deep ocean — crushing black water, marine snow (particulate) suspended and drifting, surface light long gone into black above, immense pressure. NEVER surfaced, NEVER dry, NEVER an air-filled room. The hero is a MACHINE built for the deep — a deep-sea mech — NOT a sea-animal.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE DEEP-SEA MECH (the HERO — render with obsessive detail) ━━━
+${mech}
+
+This is the focal subject: ONE machine engineered for the abyss. Render its archetype + pressure-hull silhouette + mechanical detail EXACTLY as described — a different machine every render. It is a MACHINE, never a sea-creature.
+
+━━━ THE LIGHTS IN THE DARK — the SIGNATURE money-shot (render it vivid) ━━━
+${lumens}
+This is the iconic deep-sea shot — the mech's lamps and bioluminescence carving the crushing black, volumetric beams full of drifting marine snow. Make it a focal, dramatic element.
+
+━━━ COMPOSITION — THE WHOLE MECH IS THE FOCUS, crushing scale + isolation ━━━
+${composition}
+The mech is the HERO of the frame — large, central, legible. PULL THE CAMERA BACK so the ENTIRE machine is visible (full silhouette, not a tight crop), and convey the crushing scale and isolation of the deep.
+
+━━━ THE ABYSS — the deep-sea setting (its OWN lighting/mood; the mech stays the focus) ━━━
+${abyss}
+
+Render this deep-sea environment with real multi-tier depth fading into black around the mech — its lighting and mood as described, marine snow throughout — but the MACHINE is the main focus, large and central. The setting frames and elevates it.
+${dramaSection}
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the deep-sea mech, the vivid lamps/bioluminescence cutting the black, the full-body composition with crushing scale, the abyssal environment fading into dark with marine snow, any deep-sea phenomenon, mood. Every render must feel like a frame from an unmade sci-fi epic — a lone machine in the deep that makes you feel the pressure and the dark.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  MECHBOT_HUNTER_KILLERS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { unit, armament, sensor, hunting_ground, look, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ CONTACT / KILL (weave in — don't let it steal focus from the hunter) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing a HUNTER-KILLER scene for MechBot. The goal is a "WOW!!" — a cold, lethal AUTONOMOUS MACHINE on the hunt, the kind of frame that makes the viewer feel hunted. Hyper-real cinematic 3D, intricate mechanical surfaces (Terminator / Blade Runner / Ghost in the Shell / Oblivion).
+
+━━━ THE ABSOLUTE FIRST RULE — PURE-MACHINE HUNTER, HUNTING THE VIEWER ━━━
+This is a FULLY AUTONOMOUS robot hunter-killer — NO pilot, NO rider, NO cockpit-with-a-person, NO organic creature. The MACHINE itself is the predator, mid-hunt (stalking / sweeping / closing in), and the composition should make the viewer feel like the PREY in its sights. If any human appears, they are distant prey, NEVER an operator.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE HUNTER-KILLER UNIT (the HERO — render with obsessive, menacing detail) ━━━
+${unit}
+
+This is the focal subject: ONE autonomous hunter-killer machine. Render its archetype + chassis/silhouette + mechanical detail EXACTLY as described — a different machine every render, cold and lethal.
+
+━━━ ITS ARMAMENT (render the weapons prominently) ━━━
+${armament}
+
+━━━ THE HUNT-SENSOR — the SIGNATURE money-shot (render it vivid) ━━━
+${sensor}
+This is the iconic "it is hunting you" detail — the scan / targeting beam / locking optic. Make it a focal, dramatic element of the frame.
+
+━━━ COMPOSITION — THE WHOLE UNIT IS THE FOCUS, framed as hunting the viewer ━━━
+${composition}
+The hunter is the HERO of the frame — large, central, legible. PULL THE CAMERA BACK so the ENTIRE unit is visible (full silhouette, not a tight head-only crop), and frame it so it feels aimed at the viewer.
+
+━━━ THE HUNTING GROUND — dark dystopian setting (its OWN lighting/mood; the unit stays the focus) ━━━
+${hunting_ground}
+
+Render this dark, atmospheric, cinematic environment with real multi-tier depth behind and around the hunter — its lighting and mood as described — but the MACHINE is the main focus, large and central. The setting frames and elevates it.
+${dramaSection}
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the hunter-killer unit, its armament, the vivid hunt-sensor, the full-body composition aimed at the viewer, the dark hunting-ground with depth and its own lighting, any contact/kill action, mood. Every render must feel like a frame from an unmade sci-fi epic — a cold lethal machine that has found you.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
   MECHBOT_MECH_INSECT_HYBRIDS: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,

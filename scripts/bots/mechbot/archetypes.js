@@ -152,6 +152,62 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_CHROME_SHOGUN: {
+    description:
+      'PATH-BESPOKE — MechBot chrome-shogun (2026-06-09, NEW). Feudal-future SAMURAI WAR-MECHS — machine-samurai in ornate kabuto/do/menpo armor, plasma-katana, honor + ceremony + menace. Fills the eastern-mecha/honor register. Ghost of Tsushima / Gundam samurai / Sekiro / Afro Samurai. Distinct from killer-cyborgs-male (street cyber-ninja). FIGURE (shogun HERO + blade money-shot) + ENVIRONMENT (domain + look) + composition + 40%-gated honor-duel drama. universal:[] (bot space-lighting fights a cherry-blossom scene; domain/look carry the light). Flux-locked, wrapper-strip.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['shogun', 'blade', 'domain', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MECHBOT_SENTINELS: {
+    description:
+      'PATH-BESPOKE — MechBot sentinels (2026-06-09, NEW). COLOSSAL ancient dormant guardian-mechs, half-asleep + overgrown + weathered after ages, in sacred awe-landscapes. Fills MechBot quiet/awe register. Shadow of the Colossus / Horizon tallneck / Ghibli-Mononoke / Castle in the Sky. FIGURE (sentinel HERO) + signature money-shot (awakening = ancient optics kindling to life) + ENVIRONMENT (realm + look) + composition(always a scale-prover) + 40%-gated stirring drama. universal:[] (bot space-lighting fights a misty-valley/temple scene; realm/look carry the light). Awe + ancient majesty, NOT action. Flux-locked, wrapper-strip.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['sentinel', 'awakening', 'realm', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MECHBOT_ABYSS_MECHS: {
+    description:
+      'PATH-BESPOKE — MechBot abyss-mechs (2026-06-09, NEW). Deep-sea MACHINES in the crushing abyssal dark — dive-mechs / submersible war-rigs / leviathan-constructs / hadal sentinels (NOT sea-animals). Fills the missing aquatic biome. Subnautica / The Abyss / BioShock Big-Daddy. FIGURE (mech HERO) + signature money-shot (lumens = lights cutting the black) + ENVIRONMENT (abyss + look) + composition(crushing scale) + 40%-gated deep-sea drama. universal:[] (bot space-lighting fights underwater; abyss/lumens/look carry the light). ALWAYS fully submerged. Flux-locked, wrapper-strip.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['mech', 'lumens', 'abyss', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MECHBOT_HUNTER_KILLERS: {
+    description:
+      'PATH-BESPOKE — MechBot hunter-killers (2026-06-09, NEW). PURE-MACHINE autonomous hunter-killer drones/units ON THE HUNT (no pilot, no organic) sweeping dead cities + wastelands. Terminator HK / ED-209 / Boston-Dynamics-gone-rogue / Oblivion drone. Split FIGURE (unit HERO + armament + sensor money-shot) from ENVIRONMENT (hunting_ground + look). unit + armament + sensor + hunting_ground + look(register) + composition(hunting the viewer) + 40%-gated contact/kill drama. universal:[] (bot space-lighting would fight the grounded scene — hunting_ground/look carry the light). Flux-locked, wrapper-strip.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['unit', 'armament', 'sensor', 'hunting_ground', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MECHBOT_KILLER_CYBORGS_MALE: {
     description:
       'PATH-BESPOKE — MechBot killer-cyborgs-male (2026-06-09). MALE mirror of killer-cyborgs: handsome/rugged lethal MALE cyborg assassin-thieves — agile, sleek, dangerous. Same architecture; only the gendered subject + face pools are male-specific (weapon / biome / look / composition / eyes / drama are SHARED with the female killer path). Flux-locked.',

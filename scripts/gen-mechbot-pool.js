@@ -836,6 +836,476 @@ Each entry: NAME CAPS + insect order + machine archetype + 2-3 fused anatomical 
   },
 
   // ════════════════════════════════════════════════════════════════
+  // hunter-killers — NEW path (2026-06-09). PURE-MACHINE autonomous hunter-
+  // killer drones/units ON THE HUNT (no pilot, no organic) sweeping dead cities
+  // + wastelands. Terminator HK / ED-209 / Boston-Dynamics-gone-rogue / Oblivion
+  // drone. Axis design per playbook "Inventing new paths" Step 3: split FIGURE
+  // (unit + armament + sensor) from ENVIRONMENT (hunting_ground + look), a
+  // signature MONEY-SHOT axis (sensor = the targeting/scan moment), framed as
+  // hunting the VIEWER, + 40%-gated contact/kill drama. universal:[] (bot's
+  // space-coded lighting/atmosphere would fight a grounded dead-city scene —
+  // the hunting_ground + look carry the light). NO unit-type enumeration in any
+  // prefix (first-named-noun lock); the HERO pool carries the archetype.
+  // ════════════════════════════════════════════════════════════════
+  hk_unit: {
+    format: 'simple',
+    theme: `AUTONOMOUS HUNTER-KILLER UNITS — the HERO axis. Each entry is ONE cold, lethal, PURE-MACHINE autonomous hunter-killer ON THE HUNT. 30-45 words. NO pilot, NO rider, NO cockpit-with-a-person, NO organic — the MACHINE itself is the hunter. Sleek or brutal military death-machines. Lineage: Terminator HK-aerial/HK-tank / ED-209 / Boston-Dynamics-gone-rogue / Oblivion drone / Horizon military-machine / Maximum Overdrive.
+
+⚠️ THE BAR — a menacing autonomous war-machine CLEARLY built to HUNT and KILL: cold, precise, lethal, predatory. A recognizable HK archetype with a distinct silhouette, glowing sensors, and weapon hardpoints, mid-hunt (stalking / sweeping / closing in). It IS the predator — the viewer is the prey.
+
+⚠️ PURE MACHINE (the overriding rule) — NO pilot, NO rider, NO visible person operating it, NO organic creature, NO animal. It is a fully autonomous robot hunter. If a human appears at all it is distant PREY, never an operator.
+
+✓ VARIETY MANDATE (~25) — span the HK archetypes HARD:
+  • QUADRUPED STALKERS (~4) — fast 4-legged hunter-units (robot-dog/big-cat builds), digitigrade legs
+  • AERIAL DRONES (~4) — gunship-drones / VTOL hunter-killers / hovering recon-killers
+  • WALKERS (~3) — spider-walkers / tripod-walkers / chicken-walker enforcers
+  • SERPENTINE / CRAWLERS (~3) — snake-sentries / centipede-crawlers / tendril-units
+  • BIPEDAL ENFORCERS (~3) — humanoid ED-209-style enforcer-droids (still PURE machine, no pilot)
+  • TREADED / WHEELED (~3) — tank-hunters / wheeled pursuit-units
+  • SNIPER / SENTINEL (~2) — perched long-range sentinel-units
+  • SWARM (~3) — clusters of small coordinated hunter-drones moving as one
+
+Each entry: NAME CAPS + HK archetype + chassis/silhouette + 2-3 mechanical details + a predatory hunting trait.`,
+    touchpoints: [
+      'REAPER-K9 — a quadruped stalker-unit, a sleek matte-black four-legged hunter the size of a wolf, hydraulic digitigrade legs, a faceless sensor-head sweeping side to side, twin shoulder-autocannons, fast and silent',
+      'VULTURE-7 — an aerial gunship-drone, a black delta-winged hunter-killer hovering on ducted fans, a chin-mounted minigun and underslung missile-pods, a single red scanner-eye raking the ground below',
+      'WIDOW-WALKER — a spider-walker unit, a low-slung armored body on six articulated legs, a cluster of optic-lenses, a dorsal railgun, picking across rubble with cold mechanical patience',
+      'IRON-VERDICT — a bipedal enforcer-droid, a hulking ED-209-style chassis stomping forward, dual arm-cannons spun up, hazard-striped armor, a glowing visor-slit, pure machine menace',
+      'SIDEWINDER — a serpentine sentry-unit, a segmented chrome snake-body coiling through a shattered doorway, a sensor-crowned head, a built-in flechette-launcher, silent and relentless',
+      'GRAVEDIGGER — a treaded tank-hunter, a squat armored hull on heavy tracks, a turret bristling with a chain-gun and a targeting-array, grinding over wreckage',
+      'PALE-SNIPER — a perched sentinel-unit, a long-limbed tripod sniper anchored to a rooftop, a meters-long railgun barrel, a glowing telescopic optic, motionless and patient',
+      'LOCUST-SWARM — a swarm of small coordinated hunter-drones, dozens of palm-sized quad-rotor killers with needle-stingers, moving together as one dark cloud through the streets',
+    ],
+    instructions: `Each entry is ONE autonomous hunter-killer UNIT, 30-45 words. Format: "NAME CAPS — HK archetype + chassis/silhouette + 2-3 mechanical details + a predatory hunting trait". PURE MACHINE — NO pilot/rider/person/organic. Vary the HK archetype HARD. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  hk_armament: {
+    format: 'simple',
+    theme: `ARMAMENT — the weapon system that makes the hunter-killer lethal. 10-22 words. Chain-guns, rail-cannons, missile-pods, plasma-lances, grapple-claws, buzzsaw-limbs, net-launchers, flechette-throwers — the deadly hardware, often mid-deploy or spinning up.`,
+    touchpoints: [
+      'twin shoulder-mounted autocannons spinning up, brass casings already raining onto the ground',
+      'an underslung missile-pod hinging open, a row of target-locks blinking red',
+      'a dorsal railgun charging with a rising electric whine, the coils glowing hot',
+      'hydraulic grapple-claws flexing beside a humming buzzsaw forelimb',
+      'a chin-turret minigun, six barrels blurring into a glowing ring',
+      'a forearm flechette-launcher cycling, darts gleaming in the chamber',
+    ],
+    instructions: `Each entry is ONE HK weapon-system description, 10-22 words. The deadly hardware only, often mid-deploy. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  hk_sensor: {
+    format: 'simple',
+    theme: `THE HUNT-SENSOR — the SIGNATURE money-shot detail: the moment it is SCANNING / TARGETING / HUNTING. 12-24 words. A sweeping red search-laser, a targeting-grid projected on the ground, a hard spotlight-cone cutting fog, a laser-painting line crawling a wall, a glowing optic-cluster locking on, a thermal-optic glare. THIS is the iconic "it is hunting YOU" detail — render it vivid.`,
+    touchpoints: [
+      'a single red search-laser sweeping a slow arc across the rubble, dust swirling visibly through the beam',
+      'a green targeting-grid projected across the ground, boxes snapping onto every heat-source',
+      'a hard white spotlight-cone stabbing through the fog, panning left to right, hunting',
+      'a cluster of glowing optic-lenses irising down to pinpoints as it locks on a target',
+      'a thin laser-painting line crawling up a wall toward a hidden figure',
+      'a thermal-optic glare washing the scene in ghostly white-hot false-color',
+    ],
+    instructions: `Each entry is ONE hunt-sensor / targeting moment, 12-24 words. The vivid "it is scanning/hunting" beam or grid or optic. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  hk_hunting_ground: {
+    format: 'simple',
+    theme: `THE HUNTING GROUND — a dark dystopian sci-fi environment the hunter-killer patrols, WITH its own lighting + mood baked in (the unit stays the focus). 18-32 words. MechBot vibe (Blade Runner / Terminator / Ghost in the Shell). Dead neon megacities, foggy rubble-fields, abandoned overpasses, derelict industrial zones, collapsed metro tunnels, war-torn plazas, floodlit perimeters. Multi-tier depth, atmospheric, intricate.`,
+    touchpoints: [
+      'a dead neon megacity street at night, rain-slick asphalt mirroring dead holographic signs, smoke drifting between black towers',
+      'a foggy rubble-field at dusk, collapsed concrete and twisted rebar, a low blood-orange sky bleeding through the haze',
+      'a derelict industrial zone under harsh sodium floodlights, chain-link fences and venting steam casting long hard shadows',
+      'a collapsed metro tunnel, red emergency strip-lighting flickering, black water on the tracks, dead carriages and debris',
+      'an abandoned highway overpass at night, dead cars stacked, a pale moon behind smog, distant fires glowing orange',
+    ],
+    instructions: `Each entry is ONE dark dystopian hunting-ground, 18-32 words, with its own lighting/mood. MechBot vibe, multi-tier depth, the unit stays the focus. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  hk_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the RENDERING STYLE only (this LEADS the prompt and anti-homogenizes the path). 8-16 words. PURE rendering technique: palette + lighting mood + finish + render reference. NO subject, NO setting — style only.`,
+    touchpoints: [
+      'grim military realism, desaturated steel-and-concrete palette, harsh practical light, Terminator register',
+      'neon-noir, wet reflective highlights, saturated teal-and-red haze, Blade Runner 2049 register',
+      'sleek hard-surface concept-art render, clean cold key light, crisp detail, Vitaly-Bulgarov register',
+      'muted overcast realism, flat grey light, raw textured finish, Simon Stalenhag register',
+      'dark cinematic, deep shadows and a single hard rim-light, Denis Villeneuve register',
+      'high-contrast thriller grade, cold blue shadows and hot amber practicals, anamorphic flare',
+    ],
+    instructions: `Each entry is ONE pure rendering-style register, 8-16 words. Palette + lighting + finish + reference ONLY. NO subject, NO setting. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  hk_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING for the hunter-killer — make it feel like the machine is HUNTING THE VIEWER. 14-26 words. ALWAYS pulled back enough to read the WHOLE unit (full body, not cropped). Low-angle menace / the unit closing in toward camera / a wide patrol-sweep / a perched sentinel scanning down / its beam finding the lens. NEVER a tight head-only crop.`,
+    touchpoints: [
+      'a low-angle shot as the unit strides toward camera, its sensor swinging to face the viewer, full body in frame',
+      'a wide patrol-sweep, the whole unit small-to-mid in a vast dead street, scale and dread clear',
+      'a perched high-angle as the sentinel scans down a ruined canyon-street, full silhouette against the sky',
+      'the unit emerging from fog straight at the lens, search-beam flaring toward the camera, complete body visible',
+      'a three-quarter full-body as it freezes mid-prowl, head turned to fix the viewer in its optics',
+    ],
+    instructions: `Each entry is ONE composition for an HK unit, 14-26 words, framed as hunting the viewer. The WHOLE unit in frame (full body), never cropped. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  hk_drama: {
+    format: 'simple',
+    theme: `CONTACT / KILL — a 40%-gated action beat (must NOT steal focus from the hero unit). 14-26 words. Tracer-fire raking the dark, a distant fleeing prey-silhouette caught in the searchlight, a downed sparking rival drone, a pack of HK units converging, an explosion backlighting the hunter, prey scattering.`,
+    touchpoints: [
+      'tracer-fire and muzzle-flash strobing from its guns into the dark, a target lighting up downrange',
+      'a lone distant human silhouette frozen mid-run in its searchlight beam, the moment before',
+      'a downed rival drone sparking on the ground beneath it, its optics dimming out',
+      'two more identical HK units converging from side-streets, their search-beams crossing',
+      'an explosion blooming behind it, backlighting the hunter in a wash of orange',
+    ],
+    instructions: `Each entry is ONE 40%-gated contact/kill beat, 14-26 words. Adds action/menace; any human is distant PREY only. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // abyss-mechs — NEW path (2026-06-09). Deep-sea MACHINES in the crushing
+  // abyssal dark — dive-mechs / submersible war-rigs / leviathan-constructs /
+  // hadal sentinels (NOT sea-animals; those were the rejected cyber-beast).
+  // Fills the missing AQUATIC biome. Subnautica / The Abyss / BioShock Big-Daddy
+  // / Pacific Rim underwater. Axis design per playbook Step 3: FIGURE (mech HERO)
+  // + signature MONEY-SHOT (lumens = the lights cutting the black) + ENVIRONMENT
+  // (abyss + look) + composition (crushing scale) + 40%-gated deep-sea drama.
+  // universal:[] (bot space-lighting fights underwater; abyss/lumens/look carry
+  // the light). Non-negotiable: ALWAYS fully submerged in the crushing dark.
+  // ════════════════════════════════════════════════════════════════
+  abyss_mech: {
+    format: 'simple',
+    theme: `DEEP-SEA MECHS — the HERO axis. Each entry is ONE machine engineered for the crushing abyssal deep. 30-45 words. A MACHINE in the deep (NOT a sea-animal) — heavy pressure-hull plating, domed viewports, ballast-tanks, thruster-pods, manipulator-claws, floodlight-arrays. Lineage: Subnautica / The Abyss / BioShock Big-Daddy / Pacific Rim underwater / deep-sea-ROV-gone-titan.
+
+⚠️ THE BAR — a machine clearly built to survive the abyss: heavy pressure-hull, glowing viewports/lamps, engineered for the crushing deep. A recognizable deep-sea-mech archetype, mid-descent or prowling the black seafloor. It is a MACHINE, never a creature.
+
+⚠️ MACHINE, NOT A SEA-ANIMAL (the overriding rule) — even a serpentine sub-mech is a hull-segmented MACHINE, not a living eel. Pressure-plating, rivets, thrusters, lamps, viewports. NO scales/fins/gills/flesh as the body. The machine IS the hero.
+
+✓ VARIETY MANDATE (~25):
+  • ARMORED DIVE-MECHS (~5) — humanoid deep-suit war-mechs (Big-Daddy / atmospheric-diving-suit scaled up), heavy pressure-plating
+  • SUBMERSIBLE WALKERS (~4) — multi-legged abyssal walker-rigs crawling the seafloor
+  • LEVIATHAN-CONSTRUCTS (~4) — colossal building-scale machine-titans of the deep, slow
+  • ROV / DRONE-MECHS (~3) — autonomous thruster-driven submersible hunter/recon mechs
+  • INDUSTRIAL RIGS (~3) — deep-sea mining/salvage mechs, drill-arms, harvester-claws
+  • HADAL SENTINELS (~3) — anchored dormant guardian-mechs at trench-mouths, glowing
+  • SERPENTINE SUB-MECHS (~3) — segmented hull-bodied submersible machines (still MACHINE)
+
+Each entry: NAME CAPS + deep-sea-mech archetype + pressure-hull silhouette + 2-3 mechanical details (viewports / thrusters / claws / lamps) + a deep-sea trait.`,
+    touchpoints: [
+      'TRIDENT-DEEP — an armored dive-mech, a hulking humanoid pressure-suit-mech of riveted brass-and-steel plating, a domed porthole-helm glowing warm from within, hydraulic claw-hands, ballast-tanks venting bubbles, trudging the seafloor',
+      'ABYSSAL-CRAWLER — a submersible walker-rig, a heavy armored pod on six hydraulic legs picking across black silt, floodlight-arrays blazing forward, a folded manipulator-arm beneath',
+      'LEVIATHAN-IX — a colossal machine-construct, a building-scale deep-titan of barnacled hull-plating, rows of glowing viewport-windows down its flank, slow thruster-wash stirring the dark',
+      'NAUTILUS-K — an ROV hunter-mech, a sleek torpedo-bodied drone trailing thruster-glow, a cluster of sensor-lamps and a grabber-claw, darting through the black water',
+      'DRILLHEAD — a deep-sea mining mech, a squat industrial rig with a massive rotary drill-bit, harvester-claws and a floodlit cage-frame, grinding into a vent-wall',
+      'WARDEN-0 — a hadal sentinel, a tall dormant guardian-mech anchored at a trench-mouth, a single eye-lamp pulsing slowly in the dark, encrusted with deep-sea growth',
+      'EELRIG — a serpentine sub-mech, a segmented chrome hull-bodied submersible undulating through the water, running-lights tracing its length, a sensor-head leading',
+      'IRONJAW — a salvage mech, a broad armored hull with hydraulic jaw-clamps and a winch-arm, dragging a chain across a sunken wreck, lamps cutting the murk',
+    ],
+    instructions: `Each entry is ONE deep-sea MECH, 30-45 words. Format: "NAME CAPS — deep-sea-mech archetype + pressure-hull silhouette + 2-3 mechanical details + a deep-sea trait". A MACHINE, never a sea-animal. Vary the archetype HARD. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  abyss_lumens: {
+    format: 'simple',
+    theme: `THE LIGHTS IN THE DARK — the SIGNATURE money-shot: the mech's own lamps + bioluminescence cutting the crushing abyssal black. 12-24 words. Floodlight-cones stabbing the black water (volumetric, marine-snow drifting through), glowing viewport-domes, hull running-lights, bioluminescent glow rippling off the wet chassis. THE iconic deep-sea-light shot.`,
+    touchpoints: [
+      'twin floodlight-cones stabbing into the black water, marine snow drifting like dust through the beams',
+      'warm light glowing from a domed viewport-helm, the only warmth in the crushing dark',
+      'a row of hull running-lights tracing the machine, reflections rippling on its wet plating',
+      'cold blue bioluminescence washing over the chassis from unseen creatures nearby',
+      'a sweeping searchlight raking the seafloor silt, kicking up glittering particulate',
+      'green chemical-glow lamps casting long shadows through the suspended deep-sea haze',
+    ],
+    instructions: `Each entry is ONE deep-sea light detail, 12-24 words. The mech's lamps + bioluminescence cutting the black, volumetric, marine-snow. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  abyss_biome: {
+    format: 'simple',
+    theme: `THE ABYSS — the deep-sea environment in the crushing dark, WITH its own lighting/mood (the mech stays the focus). 18-32 words. A hadal trench, a sunken reactor-wreck, a black-smoker hydrothermal vent-field, a bioluminescent abyssal plain, a derelict underwater city, a colossal sunken megastructure. Marine snow, surface-light fading to black above, crushing depth.`,
+    touchpoints: [
+      'a hadal trench wall dropping into bottomless black, ledges of pale sediment, marine snow drifting endlessly down through the dark',
+      'a sunken reactor-wreck half-buried in silt, broken hull-plates and a faint radioactive glow leaking from its core, debris suspended',
+      'a hydrothermal vent-field of black-smoker chimneys belching mineral clouds, ghostly tube-worm colonies glowing at their bases',
+      'a derelict underwater city, drowned towers furred with growth, broken dome-glass, schools of glow drifting through dead windows',
+      'a colossal sunken megastructure looming out of the murk, rows of dead portholes, its scale lost in the fading dark above',
+    ],
+    instructions: `Each entry is ONE deep-sea environment, 18-32 words, with its own lighting/mood. Crushing dark, marine snow, the mech stays the focus. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  abyss_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the RENDERING STYLE only (leads CLIP, anti-homogenize). 8-16 words. PURE rendering technique: palette + lighting mood + finish + reference. NO subject, NO setting — style only.`,
+    touchpoints: [
+      'deep-sea documentary realism, murky blue-green palette, volumetric god-rays, BBC Blue Planet register',
+      'bioluminescent neon-noir, glowing teal-and-magenta accents against crushing black',
+      'dark cinematic, a single cold light-source in the void, The Abyss / Villeneuve register',
+      'sleek hard-surface concept-art, cold key light through water, crisp detail, Vitaly-Bulgarov register',
+      'muted painterly realism, suspended particulate, moody desaturation, Simon Stalenhag register',
+      'high-contrast murk, hard floodlight against absolute black, heavy atmospheric depth',
+    ],
+    instructions: `Each entry is ONE pure rendering-style register, 8-16 words. Palette + lighting + finish + reference ONLY. NO subject, NO setting. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  abyss_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING for the deep-sea mech — convey CRUSHING SCALE + ISOLATION. 14-26 words. ALWAYS pulled back enough to read the WHOLE machine (full body, not cropped). The mech descending into the black / dwarfed by an abyssal structure / prowling the lit seafloor / surface god-rays fading above and the bottomless deep below. NEVER a tight crop.`,
+    touchpoints: [
+      'a wide shot, the mech tiny against a colossal sunken structure, scale and isolation overwhelming, full body in frame',
+      'the mech descending into the black, faint surface god-rays fading above, the bottomless deep below, complete silhouette',
+      'a low-angle as the mech trudges the seafloor toward camera, floodlights flaring, the whole machine legible',
+      'a three-quarter full-body, the mech prowling a vent-field, its lamps carving the murk, environment deep behind',
+      'the mech mid-water and dwarfed, marine snow streaking past, full body framed against the fading blue void',
+    ],
+    instructions: `Each entry is ONE composition for a deep-sea mech, 14-26 words, conveying crushing scale + isolation. The WHOLE machine in frame (full body), never cropped. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  abyss_drama: {
+    format: 'simple',
+    theme: `DEEP-SEA PHENOMENON — a 40%-gated beat (must NOT steal focus from the mech hero). 14-26 words. A colossal leviathan-SHADOW passing in the dark, a swarm of glowing bioluminescent creatures drifting past, a black-smoker vent erupting, a wreck collapsing in slow silt-clouds, a distant anglerfish-lure glowing. Atmosphere, not the hero.`,
+    touchpoints: [
+      'a colossal dark leviathan-shape passing slowly in the deep murk behind the mech, barely seen',
+      'a drifting swarm of glowing jellyfish and siphonophores pulsing past in the dark',
+      'a black-smoker vent erupting nearby, a billowing cloud of superheated mineral-smoke',
+      'a slow silt-cloud blooming as a section of wreck collapses behind the machine',
+      'a single distant anglerfish-lure glowing in the black, the only other light for miles',
+    ],
+    instructions: `Each entry is ONE 40%-gated deep-sea phenomenon, 14-26 words. Atmospheric (distant leviathan / glowing life / vent / collapse), never stealing focus from the mech. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // sentinels — NEW path (2026-06-09). COLOSSAL ancient guardian-mechs, half-
+  // dormant + overgrown after ages, in sacred awe-landscapes. Fills MechBot's
+  // missing QUIET/AWE register (everything else is action-forward). Shadow of
+  // the Colossus / Horizon tallneck / Ghibli-Mononoke / Castle in the Sky. Axis
+  // design per playbook Step 3: FIGURE (sentinel HERO) + signature MONEY-SHOT
+  // (awakening = ancient optics kindling to life) + ENVIRONMENT (realm + look) +
+  // composition (always a scale-prover proving godlike size) + 40%-gated stirring
+  // drama. universal:[] (bot space-lighting fights a misty-valley/temple scene;
+  // realm/look/awakening carry the light). Awe + ancient majesty, NOT action.
+  // ════════════════════════════════════════════════════════════════
+  sentinel_being: {
+    format: 'simple',
+    theme: `COLOSSAL ANCIENT GUARDIAN-MECHS — the HERO axis. Each entry is ONE monumentally huge, ancient, half-dormant guardian-MACHINE, weathered and overgrown by ages. 30-45 words. Godlike scale, sacred, slumbering. Lineage: Shadow of the Colossus / Horizon tallneck / NieR / Castle in the Sky robot / Princess Mononoke forest-god / a buried titan.
+
+⚠️ THE BAR — a COLOSSAL ancient guardian that DWARFS everything (a human is an ant at its foot), weathered and overgrown after ages of dormancy, sacred and awe-inspiring. A recognizable guardian archetype, monumental and still. Ancient majesty — NOT a shiny new war-machine, NOT mid-battle.
+
+⚠️ ANCIENT + OVERGROWN + DORMANT (the overriding rule) — weathered metal-and-stone reclaimed by nature (moss, vines, lichen, coral, sand, ice, rust-streaks), half-asleep or just stirring. The awe is its AGE + SCALE + stillness, never combat. It is a MACHINE (a guardian-mech), even when overgrown.
+
+✓ VARIETY MANDATE (~25):
+  • HUMANOID COLOSSI (~5) — towering ancient humanoid guardian-giants
+  • STRIDING QUADRUPEDS (~4) — long-legged tallneck/colossus-strider machine-walkers (NOT animals)
+  • SEATED IDOL-MECHS (~4) — temple-guardian seated colossi, idol-like, dormant
+  • BURIED / EMERGING TITANS (~3) — half-buried colossi rising from sand/earth/sea
+  • WINGED SKY-SENTINELS (~3) — vast winged guardian-machines perched on peaks
+  • GATE / WALL GUARDIANS (~3) — colossal guardians built into ancient gates/walls/cliffs
+  • OBELISK / TOWER SENTINELS (~3) — monolithic tower-guardians with carved faces
+
+Each entry: NAME CAPS + guardian archetype + colossal weathered silhouette + 2-3 ancient/overgrown details + a dormant/sacred trait.`,
+    touchpoints: [
+      'VERDANT-WARDEN — a towering humanoid colossus, a hundred-meter guardian of green-patinated bronze and mossed stone, vines cascading from its shoulders, a serene weathered face, one hand resting on the valley floor, long dormant',
+      'STRIDER-OF-AGES — a colossal quadruped tallneck-strider, impossibly long legs of weathered iron, a great disc-crowned head wreathed in cloud, lichen furring its flanks, stepping slow across the mountains',
+      'THE-SEATED-KING — a seated temple-idol-mech, a monumental guardian throned in a jungle ruin, roots binding its folded limbs, a cracked ornate faceplate, dark dormant eye-sockets, sacred and still',
+      'SAND-COLOSSUS — a half-buried titan, a giant guardian-mech rising shoulder-deep from desert dunes, sand pouring off corroded golden plating, an eroded crowned head facing the sun, ancient',
+      'SKY-SENTINEL VANE — a vast winged guardian perched on a cliff-peak, ragged metal wings furred with frost, a beaked stone-and-bronze visage, talons gripping the summit, watching the clouds',
+      'THE-GATE-WARDENS — colossal twin guardians built into an ancient mountain gate, flanking a chasm, vines and waterfalls spilling over their armored forms, eyes long dark',
+      'OBELISK-PRIME — a monolithic tower-sentinel, a weathered black-stone-and-iron monolith with a carved guardian-face, runic seams threading its height, half-swallowed by jungle, dormant',
+      'CORAL-LEVIATHAN — a half-sunk colossus in a flooded ruin, a giant guardian waist-deep in still water, coral and barnacles crusting its bronze flanks, a tilted serene head, ages-still',
+    ],
+    instructions: `Each entry is ONE colossal ancient guardian-mech, 30-45 words. Format: "NAME CAPS — guardian archetype + colossal weathered silhouette + 2-3 ancient/overgrown details + a dormant/sacred trait". MONUMENTAL + ANCIENT + OVERGROWN + DORMANT, a MACHINE, never a shiny war-mech, never mid-battle. Vary the archetype HARD. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  sentinel_awakening: {
+    format: 'simple',
+    theme: `THE AWAKENING — the SIGNATURE money-shot: the moment of dormancy or first stirring. 12-24 words. Ancient optics kindling from black to a faint glow in a weathered face, a chest-core pulsing slowly back to life, dust + dry moss cascading as it stirs, runic seams lighting up — OR fully dormant (cold dark eyes, asleep). The light-of-life returning to an ancient god.`,
+    touchpoints: [
+      'ancient eye-sockets kindling from black to a faint warm amber glow for the first time in ages',
+      'a deep chest-core pulsing slowly awake, light bleeding through cracks in the mossed armor',
+      'dust and dry moss cascading off its shoulders as it stirs, joints grinding after centuries',
+      'runic seams igniting in a slow wave of pale-blue light up its weathered body',
+      'cold dark eye-sockets and unlit seams — fully dormant, asleep, a sleeping god',
+      'a single great eye-lamp flickering, struggling, then steadying to a low sacred glow',
+    ],
+    instructions: `Each entry is ONE awakening/dormancy detail, 12-24 words. The light-of-life kindling in an ancient guardian (or fully asleep). Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  sentinel_realm: {
+    format: 'simple',
+    theme: `THE REALM — the awe-inspiring sacred landscape the guardian stands in, WITH its own lighting/mood (the sentinel stays the focus). 18-32 words. A misty mountain valley, an overgrown jungle temple, a vast desert with the colossus half-buried, a frozen aurora-tundra, a flooded ruin, a cliff-edge above a sea of clouds, an ancient cathedral-canyon. Monumental, atmospheric, sacred, multi-tier depth.`,
+    touchpoints: [
+      'a misty green mountain valley at dawn, waterfalls threading distant cliffs, low fog pooling around the colossus feet, soft god-rays breaking through',
+      'an overgrown jungle temple-ruin, broken ziggurat steps swallowed by roots, shafts of green light through the canopy, birds drifting',
+      'a vast desert at golden hour, endless dunes, the low sun casting the colossus shadow for miles, heat-haze shimmering',
+      'a frozen tundra under aurora, snow drifting over ancient ruins, the guardian black against a pale glowing sky',
+      'a cliff-edge above an endless sea of clouds at sunset, the guardian silhouetted on the brink, gold light raking its weathered form',
+    ],
+    instructions: `Each entry is ONE sacred awe-landscape, 18-32 words, with its own lighting/mood. Monumental, atmospheric, the sentinel stays the focus. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  sentinel_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the RENDERING STYLE only (leads CLIP, anti-homogenize). 8-16 words. PURE rendering technique: palette + lighting mood + finish + reference. NO subject, NO setting — style only.`,
+    touchpoints: [
+      'lush painterly fantasy realism, warm golden-hour light, soft atmospheric haze, Studio Ghibli register',
+      'muted melancholic realism, desaturated greens and greys, soft overcast light, Shadow of the Colossus register',
+      'epic concept-art render, dramatic god-rays, crisp detail, Horizon Zero Dawn register',
+      'misty romantic landscape painting, luminous fog, deep tonal depth, Ivan Shishkin register',
+      'sacred cinematic, low warm key light and long shadows, reverent stillness, Villeneuve register',
+      'sun-drenched hazy realism, dust motes in golden light, weathered patina, archaeological-awe register',
+    ],
+    instructions: `Each entry is ONE pure rendering-style register, 8-16 words. Palette + lighting + finish + reference ONLY. NO subject, NO setting. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  sentinel_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING — PROVE THE COLOSSAL SCALE. 14-26 words. ALWAYS a tiny scale-prover (a lone human / pilgrim / traveler / bird-flock / village) dwarfed by the guardian. Full-body monumental — the sentinel towering and dominating, low-angle awe, or filling the sky. Convey godlike scale + reverence. NEVER a tight crop, NEVER without a scale cue.`,
+    touchpoints: [
+      'a tiny lone figure standing at the colossus foot, dwarfed to an ant, the full guardian towering into the mist above, scale overwhelming',
+      'a low-angle looking up the full height of the guardian, a flock of birds wheeling tiny around its head, monumental',
+      'a wide vista, the colossus dominating the valley, a tiny traveler at its base for scale, full body in frame',
+      'the guardian filling most of the frame against the sky, a minuscule human silhouette on a ridge below gazing up',
+      'a distant reverent wide shot, the seated colossus and a tiny pilgrim on the temple steps before it, sacred scale',
+    ],
+    instructions: `Each entry is ONE composition for a colossal guardian, 14-26 words, ALWAYS with a tiny scale-prover. Full-body monumental, godlike scale, never cropped. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  sentinel_drama: {
+    format: 'simple',
+    theme: `STIRRING — a 40%-gated awe-beat (must NOT steal focus from the guardian hero). 14-26 words. The sentinel taking a first ground-quaking step (dust/debris falling), a flock of birds exploding off it, light blazing from its newly-woken core, a pilgrim kneeling before it, golden god-rays breaking over it, a slow turn of its great head.`,
+    touchpoints: [
+      'its great head turning slowly for the first time in ages, dust and birds scattering from the movement',
+      'a first colossal step landing, the ground quaking, debris and dust cascading down its legs',
+      'light blazing suddenly from its woken core, washing the valley in warm sacred glow',
+      'a tiny robed pilgrim kneeling at its feet, minuscule against the waking god',
+      'golden god-rays breaking through cloud to crown the guardian, birds wheeling around its head',
+    ],
+    instructions: `Each entry is ONE 40%-gated stirring/awe beat, 14-26 words. Adds reverent awe (not combat); any human is a tiny scale-prover. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // chrome-shogun — NEW path (2026-06-09). Feudal-future SAMURAI WAR-MECHS —
+  // machine-samurai in ornate kabuto/do/menpo armor, plasma-katana, honor +
+  // ceremony + menace. Fills the eastern-mecha/honor register. Ghost of Tsushima
+  // / Gundam samurai / Sekiro / Nioh / Afro Samurai. Distinct from killer-
+  // cyborgs-male (street cyber-ninja). Axis design per playbook Step 3: FIGURE
+  // (shogun HERO + blade money-shot) + ENVIRONMENT (domain + look) + composition
+  // + 40%-gated honor-duel drama. universal:[] (bot space-lighting fights a
+  // cherry-blossom-courtyard scene; domain/look carry the light).
+  // ════════════════════════════════════════════════════════════════
+  shogun_being: {
+    format: 'simple',
+    theme: `FEUDAL-FUTURE SAMURAI WAR-MECHS — the HERO axis. Each entry is ONE armored MACHINE-SAMURAI (a robot/mecha built in the samurai aesthetic). 30-45 words. Ornate samurai armor (horned kabuto helm, do chest-armor, sode shoulder-guards, menpo war-mask, sashimono back-banner) rebuilt in chrome + lacquered alloy, bearing a katana or naginata. Honor + ceremony + lethal menace. Lineage: Ghost of Tsushima / Gundam samurai / Sekiro / Nioh / Afro Samurai.
+
+⚠️ THE BAR — a samurai WAR-MECH: a machine in samurai form, ornate feudal armor reimagined in chrome/lacquer/alloy with glowing accents, a blade in hand, honorable and lethal. A recognizable samurai archetype, in a poised or dueling moment. A machine-samurai — NOT a human in cosplay.
+
+⚠️ FEUDAL + SAMURAI + MACHINE (the overriding rule) — the samurai aesthetic DOMINATES (kabuto, menpo mask, lacquer-armor, banner, katana) but it IS a mech (chrome, servos, glowing accents, alloy). Honor + ceremony + menace, NOT modern military. Both human-scale android-samurai and larger mecha-samurai welcome.
+
+✓ VARIETY MANDATE (~25):
+  • DAIMYO WARLORDS (~4) — towering ornate lord-mechs, horned kabuto, commanding
+  • RONIN WANDERERS (~4) — weathered masterless samurai-mechs, worn armor, lone
+  • ONI-MASKED WARLORDS (~3) — demon-masked menacing samurai-mechs, red/black lacquer
+  • KENSEI DUELISTS (~4) — sleek master-swordsman mechs, perfect form, drawn blade
+  • SOHEI WARRIOR-MONKS (~3) — naginata-wielding monk-mechs, prayer-beads, robed-armor
+  • ASHIGARU SOLDIERS (~3) — simpler foot-soldier samurai-mechs, yari spears, banners
+  • GIANT MECHA-SAMURAI (~3) — building-scale samurai war-mechs, Gundam-scale
+
+Each entry: NAME CAPS + samurai archetype + ornate armor silhouette + 2-3 mech/feudal details + an honor/menace trait.`,
+    touchpoints: [
+      'AKAGANE-DONO — a towering daimyo war-mech, lacquered crimson-and-gold do-armor over a chrome chassis, a great horned kabuto crowned with a glowing mon-crest, a menpo war-mask, a sashimono banner rising from its back, commanding and lethal',
+      'THE-GREY-RONIN — a weathered masterless samurai-mech, dull battle-scarred steel armor, a cracked menpo mask, a single chipped chrome katana at its hip, a tattered horo cape, walking alone',
+      'ONI-NO-TETSU — an oni-masked warlord mech, black-and-red lacquer plating, a snarling horned demon-mask glowing from within, twin energy-katana crossed on its back, menacing and still',
+      'SHIRANUI — a sleek kensei duelist mech, polished pale alloy armor in perfect samurai form, a slender glowing plasma-katana drawn low in iaijutsu stance, calm and deadly',
+      'MYORIN — a sohei warrior-monk mech, robed armor over a brass-and-iron frame, a long energy-naginata, strings of glowing prayer-beads, a serene masked face',
+      'ASHI-NINE — an ashigaru foot-soldier mech, simple riveted armor and a conical jingasa helm, a long energy-yari spear, a clan-banner on its back, one of a marching line',
+      'TENGU-O — a giant mecha-samurai, a building-scale war-mech in ornate red samurai armor, a vast horned helm, a tower-tall nodachi blade planted in the earth, monumental',
+      'YUKI-KAGE — a wandering ronin-mech in snow-pale armor, a wide amigasa straw-hat over a chrome menpo, a frost-rimed katana, breath-vapor venting from its mask, solitary',
+    ],
+    instructions: `Each entry is ONE feudal samurai WAR-MECH, 30-45 words. Format: "NAME CAPS — samurai archetype + ornate armor silhouette + 2-3 mech/feudal details + an honor/menace trait". A MACHINE-samurai (chrome/lacquer/alloy mech in samurai form), NOT a human. Vary the archetype HARD. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  shogun_blade: {
+    format: 'simple',
+    theme: `THE BLADE — the SIGNATURE money-shot: the samurai weapon, glowing and drawn. 12-24 words. A plasma-katana held in stance, a humming energy-naginata, twin glowing wakizashi, a drawn nodachi catching light, the iaijutsu flash of a draw-cut, a kanabo club crackling with energy. The iconic samurai-mech weapon.`,
+    touchpoints: [
+      'a slender plasma-katana drawn and held low, its edge a line of humming white-blue light',
+      'a long energy-naginata spun to a ready guard, the blade trailing a faint glowing arc',
+      'twin glowing wakizashi crossed before its mask, light pooling on the lacquered armor',
+      'the white flash of an iaijutsu draw-cut, the katana a blur of light mid-strike',
+      'a tower-tall nodachi planted point-down in the earth, energy crawling up the fuller',
+      'twin katana drawn in a dual-wield stance, a mirrored glow tracing both edges',
+    ],
+    instructions: `Each entry is ONE samurai-mech weapon moment, 12-24 words. The glowing blade, drawn or mid-strike. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  shogun_domain: {
+    format: 'simple',
+    theme: `THE DOMAIN — a DARK, CINEMATIC feudal-future landscape (its own lighting/mood; the samurai-mech stays the focus). 18-32 words. This world is DARK, moody, weathered and lived-in — Ghost of Tsushima's grim hours, NOT a bright tourist postcard. It must sit alongside MechBot's other dark sci-fi paths (dead cities, abyssal deeps, ruined wastes). Span MANY distinct settings.
+
+🚫 STRICT BANS (keep it ON-BRAND with MechBot's dark sci-fi world):
+  • NEVER a torii gate or any vermilion / orange wooden gate-arch — off-brand cliché, banned outright; do not depict one
+  • NEVER bright sunny tourist-postcard Japan — no pristine pink cherry-blossom courtyards, no clean pagoda postcards, no calm zen-garden brochures, no daylight travel-magazine scenes
+  • Keep it DARK, atmospheric, moody, cinematic, weathered — fog, rain, snow, smoke, night, dusk, storm
+
+✓ VARIETY MANDATE (~25) — span these, distribute roughly even:
+  • burning castle-towns / besieged fortresses (~4)
+  • misty battlefields with broken banners + fallen war-mechs (~4)
+  • dark bamboo / cedar forests at night (~3)
+  • snow-bound mountain fortresses / blizzard passes (~3)
+  • neon-rain cyber-Edo backstreets, dark and wet (~3)
+  • storm-lashed coastal cliffs with dark keeps (~2)
+  • ruined, overgrown, half-collapsed feudal structures, dark (~2)
+  • war-camps at night — braziers, tents, clan-banners (~2)
+  • dark castle interiors / great halls, lantern-lit (~2)`,
+    touchpoints: [
+      'a burning feudal castle-town at night, embers and paper lanterns rising into black smoke, a tiered castle silhouetted in flame',
+      'a misty battlefield at dawn, broken banners and fallen war-mechs half-sunk in mud, a dull blood-red sun behind the fog',
+      'a dark bamboo forest at night, cold moonlight slicing between the stalks, fog pooling low, deep shadow all around',
+      'a snow-bound mountain fortress in a blizzard, dark stone ramparts and frozen banners, wind driving the snow sideways',
+      'a neon cyber-Edo backstreet in heavy rain, holographic kanji signage bleeding light onto wet black stone, steam and shadow',
+      'a storm-lashed coastal cliff at dusk, a dark tiered keep clinging to the rock, waves smashing far below',
+      'a war-camp at night on a black plain, rows of braziers and clan-banners, tents and drifting smoke under a starless sky',
+      'a ruined, half-collapsed great hall swallowed by dark forest, broken timbers and moss, a single shaft of cold grey light',
+    ],
+    instructions: `Each entry is ONE DARK, cinematic feudal-future landscape, 18-32 words, with its own moody lighting. NEVER a torii gate / vermilion gate-arch, NEVER bright tourist-postcard Japan — keep it dark, weathered, atmospheric, on-brand with MechBot's sci-fi world. The samurai-mech stays the focus. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  shogun_look: {
+    format: 'simple',
+    theme: `THE LOOK REGISTER — the RENDERING STYLE only (leads CLIP, anti-homogenize). 8-16 words. PURE rendering technique: palette + lighting mood + finish + reference. NO subject, NO setting — style only.`,
+    touchpoints: [
+      'cinematic samurai realism, moody desaturated palette, hard low light, Ghost of Tsushima register',
+      'ukiyo-e-meets-realism, flat bold color planes, woodblock texture over photoreal form',
+      'sumi-e ink-wash drama, monochrome with one red accent, negative space, brush-stroke edges',
+      'golden-hour epic, warm raking light and long shadows, dust and petals in the air',
+      'neon cyber-Edo noir, wet teal-and-vermilion reflections, holographic glow',
+      'dark cinematic, deep shadow and a single hard rim-light, Kurosawa-via-Villeneuve register',
+    ],
+    instructions: `Each entry is ONE pure rendering-style register, 8-16 words. Palette + lighting + finish + reference ONLY. NO subject, NO setting. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  shogun_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING for the samurai-mech — dramatic + honorable. 14-26 words. ALWAYS pulled back enough to read the WHOLE mech (full body, not cropped). A duel-stance, a lone-warrior-in-landscape, a low-angle hero, the blade catching light, a stand against a vast sky. NEVER a tight head-only crop.`,
+    touchpoints: [
+      'a lone full-body hero shot, the samurai-mech standing against a vast dusk sky, blade drawn, complete silhouette',
+      'a low-angle duel-stance, the mech coiled to strike, petals swirling, full body legible',
+      'a wide landscape shot, the lone samurai-mech small-to-mid against a sweeping feudal vista, scale and solitude',
+      'a dramatic three-quarter, the mech mid-draw, light flaring off the blade, whole figure in frame',
+      'the samurai-mech silhouetted on a ridge against a blood moon, banner snapping, full body framed',
+    ],
+    instructions: `Each entry is ONE composition for a samurai-mech, 14-26 words. The WHOLE mech in frame (full body), dramatic + honorable, never cropped. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  shogun_drama: {
+    format: 'simple',
+    theme: `CLASH — a 40%-gated honor/battle beat (must NOT steal focus from the hero samurai-mech). 14-26 words. A duel mid-strike against a rival samurai-mech, cherry-blossom petals exploding, a dawn standoff, a battlefield of banners + fallen mechs, an iaijutsu flash-cut, a kneeling vow before battle.`,
+    touchpoints: [
+      'mid-duel, blades locked against a rival samurai-mech, sparks erupting where the energy-edges meet',
+      'a storm of cherry-blossom petals exploding outward as it completes a strike',
+      'a battlefield of planted banners and fallen mechs stretching behind it under a blood moon',
+      'a second samurai-mech facing it across a courtyard, both blades drawn, the held breath before',
+      'kneeling on one knee, blade planted, head bowed in a vow before the coming battle',
+    ],
+    instructions: `Each entry is ONE 40%-gated honor/clash beat, 14-26 words. Adds duel/ceremony drama without stealing focus from the hero. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
   // cyborg-man REBUILD → "android-man" register (2026-05-26)
   // MOSTLY-MACHINE male android-BEING. Synthetic chassis dominates the
   // silhouette; organic shows ONLY at eyes / a partial face-panel. A human

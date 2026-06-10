@@ -65,6 +65,43 @@ const MECH_INSECT_BIOME = load('mech_insect_biome');
 const MECH_INSECT_LOOK = load('mech_insect_look');
 const MECH_INSECT_COMPOSITION = load('mech_insect_composition');
 const MECH_INSECT_DRAMA = load('mech_insect_drama');
+// hunter-killers — PURE-MACHINE autonomous hunter-killer drones/units on the hunt
+// (no pilot, no organic) in dead cities + wastelands (2026-06-09). universal:[] —
+// hunting_ground + look carry the lighting. look LEADS (anti-homogenize).
+const HK_UNIT = load('hk_unit');
+const HK_ARMAMENT = load('hk_armament');
+const HK_SENSOR = load('hk_sensor');
+const HK_HUNTING_GROUND = load('hk_hunting_ground');
+const HK_LOOK = load('hk_look');
+const HK_COMPOSITION = load('hk_composition');
+const HK_DRAMA = load('hk_drama');
+// abyss-mechs — deep-sea MACHINES (dive-mechs / submersible rigs / leviathan-
+// constructs) in the crushing abyssal dark (2026-06-09). NEW aquatic biome.
+// universal:[] — abyss/lumens/look carry the light. look LEADS (anti-homogenize).
+const ABYSS_MECH = load('abyss_mech');
+const ABYSS_LUMENS = load('abyss_lumens');
+const ABYSS_BIOME = load('abyss_biome');
+const ABYSS_LOOK = load('abyss_look');
+const ABYSS_COMPOSITION = load('abyss_composition');
+const ABYSS_DRAMA = load('abyss_drama');
+// sentinels — COLOSSAL ancient dormant guardian-mechs, overgrown + weathered, in
+// sacred awe-landscapes (2026-06-09). Fills the quiet/awe register. universal:[] —
+// realm/look/awakening carry the light. look LEADS (anti-homogenize).
+const SENTINEL_BEING = load('sentinel_being');
+const SENTINEL_AWAKENING = load('sentinel_awakening');
+const SENTINEL_REALM = load('sentinel_realm');
+const SENTINEL_LOOK = load('sentinel_look');
+const SENTINEL_COMPOSITION = load('sentinel_composition');
+const SENTINEL_DRAMA = load('sentinel_drama');
+// chrome-shogun — feudal-future SAMURAI WAR-MECHS (machine-samurai, ornate kabuto/
+// menpo armor, plasma-katana, honor + ceremony) (2026-06-09). universal:[] —
+// domain/look carry the light. look LEADS (anti-homogenize).
+const SHOGUN_BEING = load('shogun_being');
+const SHOGUN_BLADE = load('shogun_blade');
+const SHOGUN_DOMAIN = load('shogun_domain');
+const SHOGUN_LOOK = load('shogun_look');
+const SHOGUN_COMPOSITION = load('shogun_composition');
+const SHOGUN_DRAMA = load('shogun_drama');
 // og-cyborg-female — beautiful sexy human-proportioned female cyborgs, glossy
 // chassis + exposed joints + glowing accents, photoreal (Kevin's "OG" refs).
 const OG_CYBORG_SUBJECT = load('og_cyborg_subject');
@@ -148,6 +185,31 @@ module.exports = {
   MECH_INSECT_LOOK,
   MECH_INSECT_COMPOSITION,
   MECH_INSECT_DRAMA,
+  HK_UNIT,
+  HK_ARMAMENT,
+  HK_SENSOR,
+  HK_HUNTING_GROUND,
+  HK_LOOK,
+  HK_COMPOSITION,
+  HK_DRAMA,
+  ABYSS_MECH,
+  ABYSS_LUMENS,
+  ABYSS_BIOME,
+  ABYSS_LOOK,
+  ABYSS_COMPOSITION,
+  ABYSS_DRAMA,
+  SENTINEL_BEING,
+  SENTINEL_AWAKENING,
+  SENTINEL_REALM,
+  SENTINEL_LOOK,
+  SENTINEL_COMPOSITION,
+  SENTINEL_DRAMA,
+  SHOGUN_BEING,
+  SHOGUN_BLADE,
+  SHOGUN_DOMAIN,
+  SHOGUN_LOOK,
+  SHOGUN_COMPOSITION,
+  SHOGUN_DRAMA,
   OG_CYBORG_SUBJECT,
   OG_CYBORG_HAIR,
   OG_CYBORG_CYBER_FEATURE,

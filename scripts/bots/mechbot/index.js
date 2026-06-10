@@ -21,6 +21,10 @@ const pathBuilders = {
   'killer-cyborgs-male': require('./paths/killer-cyborgs-male'),
   'og-cyborg-female': require('./paths/og-cyborg-female'),
   'mech-insect-hybrids': require('./paths/mech-insect-hybrids'),
+  'hunter-killers': require('./paths/hunter-killers'),
+  'abyss-mechs': require('./paths/abyss-mechs'),
+  'sentinels': require('./paths/sentinels'),
+  'chrome-shogun': require('./paths/chrome-shogun'),
   // 2026-05-17: DISABLED per Kevin — only the axis cyborg-woman path fires now.
   // Legacy function-form preserved at paths/legacy/cyborg-woman.js for reference.
   // 'cyborg-female-legacy': require('./paths/legacy/cyborg-woman'),
@@ -299,6 +303,26 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
+    // hunter-killers — Flux-locked for crisp hard-surface military-machine detail.
+    'hunter-killers': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // abyss-mechs — Flux-locked for crisp hard-surface deep-sea machine detail.
+    'abyss-mechs': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // sentinels — Flux-locked for the colossal ancient-guardian awe register.
+    'sentinels': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // chrome-shogun — Flux-locked for crisp ornate samurai-mech armor detail.
+    'chrome-shogun': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
     // OG path — FLUX ONLY for the photoreal glossy beauty look (banana goes
     // painterly + breaks the photoreal register; gpt-2 banned bot-wide).
     'og-cyborg-female': [
@@ -390,6 +414,10 @@ module.exports = {
     'killer-cyborgs-male': '',
     'og-cyborg-female': '',
     'mech-insect-hybrids': '',
+    'hunter-killers': '',
+    'abyss-mechs': '',
+    'sentinels': '',
+    'chrome-shogun': '',
     // cyborg-woman keeps its legacy prefix (defined above) since it's the
     // load-bearing "beautiful woman with cybernetic breakthroughs integrated
     // into human body" coherence cue — preserved during axis migration.
@@ -431,6 +459,10 @@ module.exports = {
     'killer-cyborgs-male',
     'og-cyborg-female',
     'mech-insect-hybrids',
+    'hunter-killers',
+    'abyss-mechs',
+    'sentinels',
+    'chrome-shogun',
     // 'cyborg-female-legacy',  // 2026-05-17 DISABLED — see pathBuilders comment
     'droid-assassin',
     // 'cyborg-man',  // 2026-06-05 DISABLED (Kevin) — even after killing the mandatory opening tag, renders are unusable; redesign deferred
