@@ -21,10 +21,10 @@
 
 | # | Tier | Path | Built | Pools@25 | Posted | Tweaks | Committed | Scaled@200 |
 |---|------|------|:-----:|:--------:|:------:|:------:|:---------:|:----------:|
-| 1 | 1 | dragon-rider | ✅ | ✅ | ✅ | 0 | ✅ | ⬜ |
+| 1 | 1 | dragon-rider | ✅ | ✅ | ✅ | 3 | ✅ | ✅ |
 | 2 | 1 | ~~dragon-hoard~~ | ❌ KILLED | – | – | 2 | ✅ | – |
-| 3 | 1 | dragon-battle | ✅ | ✅ | ✅ | 0 | ✅ | ⬜ |
-| 4 | 1 | dragon-flight | ✅ | ✅ | (skip) | 0 | ✅ | scaling |
+| 3 | 1 | dragon-battle | ✅ | ✅ | ✅ | 0 | ✅ | ✅ |
+| 4 | 1 | dragon-flight | ✅ | ✅ | (skip) | 0 | ✅ | ✅ |
 | 5 | 1 | dragon-brood | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 6 | 1 | dragon-breeds | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 7 | 2 | clash-of-armies | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
