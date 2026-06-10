@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DRAGON_RIDER: {
+    description:
+      'PATH-BESPOKE — DragonBot dragon-rider path (2026-06-10). The ICONIC fantasy image: a rider mounted on a colossal Western dragon (4 legs + 2 wings + horned skull) in flight or battle. Dragon + rider are co-heroes. Eragon / HTTYD / GoT / Temeraire energy. Path-bespoke: dragon + rider + action + setting + mount_detail + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['dragon', 'rider', 'action', 'setting', 'mount_detail'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_SCENE: {
     description:
       'PATH-BESPOKE — DragonBot dragon-scene path. Traditional Western dragon (4 legs + 2 wings + horned reptilian skull) is the SUBJECT in a jaw-dropping fantasy landscape. NO characters/riders/humans. Path-bespoke pools for dragon (anatomy) + action (mid-action moment) + landscape (epic biome) + drama (40% gated environmental event) + surprise_element (tiny secondary subject). Canonical-LITE — DragonBot uses minimal wrapper layer so Sonnet body leads.',

@@ -59,6 +59,95 @@ if (!POOL) {
 // Per-pool recipe — what kind of scenes this pool authors + aesthetic
 // touchpoints Sonnet should draw from. Same format the playbook uses.
 const POOL_RECIPES = {
+  // ════════════════════════════════════════════════════════
+  // DRAGON-RIDER PATH (2026-06-10 — new). Rider mounted on a
+  // colossal Western dragon, in flight or battle. Co-heroes.
+  // ════════════════════════════════════════════════════════
+
+  dragon_rider_dragon: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-RIDER — the colossal Western DRAGON being ridden (the hero mount). Each entry 30-50 words. TRADITIONAL WESTERN dragon anatomy ONLY: four legs + two massive membrane wings (ALWAYS visible) + horned reptilian skull + thick scaled body + long muscular tail. NEVER an Eastern serpent, snake, wyrm, or wingless/two-legged wyvern.
+
+VARIETY MANDATE — ~25 dramatically different dragons by COLOR + SCALE-TEXTURE + HORN/CREST shape + WING-membrane color + signature feature: a crimson-scaled fire dragon with black horns and smoldering throat; an obsidian-black dragon with red wing-membranes; a frost-blue dragon rimed with ice and crystalline spines; a bronze-gold dragon with a fan of swept horns; an emerald forest dragon mossy and antlered; a storm-grey dragon crackling with static; a bone-white dragon with tattered wings; a molten-veined volcanic dragon; a deep-sea teal dragon with fin-frills; a royal-purple dragon with a feathered crest. Each names color + scale + horns + wings + one signature trait. Wings ALWAYS visible.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal Western dragon (4 legs + 2 wings + horns) in 30-50 words — color + scale-texture + horn/crest + wing color + a signature feature. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal crimson-scaled fire dragon, armored plates glowing molten at the seams, twin sweeping black horns and a jagged dorsal crest, vast ribbed wings with deep-red membranes, a smoldering throat and smoke curling from its fanged maw, long spike-tipped tail.
+2. A frost-blue dragon sheathed in frost-rimed scales and crystalline ice-spines down its spine, pale translucent wing-membranes glittering, curved white horns, breath fogging cold in the air, a long whip-tail tipped with an ice-shard fan.
+3. An obsidian-black dragon with matte armored scales and blood-red wing-membranes, a crown of back-swept horns, amber slit eyes, muscular shoulders and a barbed tail, every plate edged with a faint ember glow.`,
+  },
+
+  dragon_rider_rider: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-RIDER — the single RIDER mounted on the dragon. Each entry 20-35 words. ONE rider, seated astride the dragon's neck-base/shoulders. High-fantasy garb. WIDE variety of fantasy races + classes (NOT default-pale-human-knight every time).
+
+VARIETY MANDATE — ~25 distinct riders across race + class + gear: an armored dragon-knight in scaled plate with a lance; a hooded elven ranger with a longbow; a horned tiefling sorcerer trailing arcane fire; a fur-cloaked barbarian warlord; a robed battlemage with a glowing staff; a drow rider in dark spiked armor; a young rider in leathers gripping the reins; a crowned warrior-queen; a dwarven rider with a war-axe; an orc warchief; a masked assassin; a winged-helm valkyrie. Vary race (human/elf/drow/tiefling/orc/dwarf/dragonborn) AND class (knight/ranger/mage/barbarian/rogue). Describe garb + pose + weapon. ONE rider, MOUNTED (never on the ground).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE mounted rider in 20-35 words — race + class + garb + pose + weapon, seated astride the dragon. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An armored dragon-knight in dark scaled plate and a horned helm, cloak streaming, leaning low over the dragon's neck with a long lance couched, seated astride the shoulders.
+2. A hooded elven ranger in green-and-leather, longbow drawn mid-flight, braced against the dragon's neck-ridge, silver hair whipping in the wind, quiver at the hip.
+3. A horned tiefling sorceress in crimson robes, arcane fire wreathing one raised hand, the other gripping a saddle-horn, seated high on the dragon's shoulders, eyes glowing.`,
+  },
+
+  dragon_rider_action: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-RIDER ACTION — what the dragon + rider are doing at this loaded instant. Each entry 15-30 words. The verb leads. Flight or battle maneuvers.
+
+VARIETY MANDATE — ~25 distinct actions: diving steeply at a target; banking hard through a canyon; climbing into storm-clouds; the dragon breathing fire mid-flight as the rider braces; charging into an aerial battle; bursting up through cloud; skimming low over a battlefield; the rider loosing an arrow mid-dive; rearing to a hover before a foe; the dragon clawing at a rival mid-air; taking off from a cliff in a burst; weaving through arrow-fire; a triumphant climb at dawn. The action defines wing position + the rider's lean.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dragon+rider action in 15-30 words, verb-led. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. DIVING at a target — the dragon folds its wings and plunges nose-down, the rider flattened low against its neck, wind screaming, ground rushing up.
+2. BREATHING FIRE MID-FLIGHT — the dragon's jaws blaze a torrent of flame across the sky as the rider shields their face and grips on.
+3. BANKING THROUGH A CANYON — the dragon tilts hard, one wing-tip near the rock wall, the rider leaning into the turn, tail streaming.`,
+  },
+
+  dragon_rider_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-RIDER SETTING — the epic stage (sky / fantasy biome) the flight or battle happens in. Each entry 25-45 words. Multi-layer depth.
+
+VARIETY MANDATE — ~25 distinct settings: a storm-wracked sky over jagged mountains; a golden sunset above a sea of cloud; over a besieged castle wreathed in smoke; through a deep canyon of waterfalls; above an endless forest at dawn; over a frozen tundra and glaciers; among floating sky-islands; above a vast army on a battlefield; over a stormy sea and shipwrecks; through volcanic ash-clouds; above an ancient ruined city; over rolling hills toward a far citadel. Each names the biome + sky + depth layers.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE epic flight setting in 25-45 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A storm-wracked sky over jagged snow-capped peaks, lightning forking between black thunderheads, rain slashing sideways, distant valleys lost in grey haze far below.
+2. A golden sunset above an endless sea of cloud, the sun a molten disc on the horizon, peaks breaking through the cloud-floor like islands, warm light gilding everything.
+3. Above a besieged castle wreathed in smoke and fire, siege-engines and tiny armies on the plains below, banners burning, a far mountain range hazed in the distance.`,
+  },
+
+  dragon_rider_mount_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-RIDER MOUNT DETAIL — the rider's gear ON the dragon. Each entry 12-22 words.
+
+VARIETY MANDATE — ~25 distinct mount details: a leather-and-steel war-saddle strapped behind the neck-ridge; reins clipped to the horns; a riding-harness across the shoulders; saddlebags and a strapped banner; a foot-stirrup along the scales; a chain bridle; a fur-lined saddle for cold heights; war-barding plates on the dragon's chest; a quiver and lance-rest mounted on the saddle; trailing pennants from the harness; a horn-tip guard; reinforced grips along the spine-ridge.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE mount/gear detail in 12-22 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A leather-and-steel war-saddle strapped behind the neck-ridge, buckles glinting, a lance-rest and quiver mounted at the rider's side.
+2. Reins of braided chain clipped to the dragon's horns, taut as the rider steers it through the turn.
+3. War-barding plates armor the dragon's chest and shoulders, a tattered house-banner streaming from the saddle-horn.`,
+  },
+
+  dragon_rider_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-RIDER DRAMA — a secondary event adding awe, fires ~40%. Each entry 15-30 words. Does NOT eclipse the dragon + rider.
+
+VARIETY MANDATE — ~25 distinct dramas: a second dragon-rider closing in for battle; a volley of arrows or ballista-bolts streaking up; a burning castle below; a lightning strike splitting a cloud; a flock of lesser dragons or wyverns; an army massed on the plains; a rival dragon breathing fire across the frame; a collapsing tower; a meteor or comet overhead; sunbeams breaking through storm; a distant erupting volcano.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama event in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A second dragon-rider banks in from the side, its dragon's jaws already glowing with gathering fire, closing for the clash.
+2. A volley of flaming ballista-bolts streaks up from the castle below, arcing past the dragon's wings trailing smoke.
+3. A rival dragon breathes a torrent of fire across the far side of the frame, lighting the storm-clouds from within.`,
+  },
+
   // ─── DRAGONBOT dark-realm path (2026-05-14, migration from legacy
   // function-based form to bespoke 5-axis system). Corrupted wastelands /
   // necromancer kingdoms / fallen empires / cursed lands. Mordor /

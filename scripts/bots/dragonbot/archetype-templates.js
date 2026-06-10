@@ -1920,6 +1920,73 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGON_RIDER: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, dragon, rider, action, setting, mount_detail, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+A secondary focal point adding awe (NOT eclipsing the dragon + rider).
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing the most ICONIC image in fantasy for DragonBot — a RIDER mounted on a colossal Western DRAGON, in flight or battle. Frank Frazetta + Brom + Boris Vallejo + Michael Whelan painted-fantasy-novel-cover oil tradition. Eragon / How-to-Train-Your-Dragon / GoT / Temeraire / Skyrim energy. The scene should make the viewer GASP.
+
+━━━ DRAGON + RIDER ARE CO-HEROES — ABSOLUTE FIRST RULE ━━━
+The frame shows ONE colossal dragon WITH a single rider mounted on its back/neck. BOTH are clearly readable: the dragon huge and magnificent, the rider seated astride it (on the neck-base or shoulders), both rendered in full detail. The rider is SMALL relative to the dragon (the dragon dwarfs them) but clearly visible and mounted.
+
+━━━ TRADITIONAL WESTERN DRAGON ANATOMY — NON-NEGOTIABLE ━━━
+A TRADITIONAL high-fantasy WESTERN dragon — Smaug / GoT / Elden Ring archetype. Anatomy MUST include: FOUR muscular legs, TWO MASSIVE membrane wings (bat-like, ribbed, ALWAYS visible), HORNED reptilian-skull head with rows of fangs, THICK SCALED armored body, LONG MUSCULAR TAIL, clawed feet. NEVER an Eastern wingless serpent, NEVER a snake/wyrm body, NEVER a wingless or two-legged wyvern (4 legs + 2 wings = TRUE dragon).
+
+━━━ THE DRAGON ━━━
+${dragon}
+
+Render the EXACT anatomy + color + horn/wing/body features. Wings ALWAYS visible.
+
+━━━ THE RIDER (mounted on the dragon) ━━━
+${rider}
+
+Render the rider seated astride the dragon — armor/garb, pose, weapon if any. ONE rider only. They grip the dragon or a saddle, leaning with the motion. NEVER standing beside the dragon — they are MOUNTED on it.
+
+━━━ THE ACTION — what dragon + rider are doing RIGHT NOW ━━━
+${action}
+
+Captured at a LOADED INSTANT — diving, banking, climbing, breathing fire mid-flight, charging into battle, taking off. The action defines wing position + body angle + the rider's lean.
+
+━━━ THE SETTING (the stage — epic sky / fantasy biome) ━━━
+${setting}
+
+Render multi-layer depth — foreground detail → midground → deep atmospheric distance. Never a flat backdrop.
+
+━━━ MOUNT DETAIL (the rider's gear on the dragon) ━━━
+${mount_detail}
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic, dynamic, painterly. The dragon dominates the frame with the rider mounted and readable. Sense of scale, motion, and awe. Three-quarter or dramatic angle showing both dragon and rider. NEVER static; NEVER the rider on the ground beside the dragon.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a colossal Western dragon with a rider mounted on its back, DOING THE ACTION, in the setting — the dragon + mounted rider lead], [the dragon's exact anatomy + color + wings], [the rider astride it — armor + pose], [the setting with depth], [mount gear], [lighting + atmosphere], [palette + epic mood]
+
+CRITICAL — render a TRUE Western dragon (4 legs + 2 wings + horns) with ONE rider MOUNTED on it. Do NOT render a wyvern/serpent, do NOT put the rider on the ground.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DRAGON_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, dragon, action, landscape, surprise_element, drama } = slots;
 

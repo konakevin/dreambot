@@ -18,6 +18,7 @@ const pathBuilders = {
   // from epic-moment (50/50 castle + event). Pure establishing-shot energy.
   castle: require('./paths/castle'),
   'dragon-scene': require('./paths/dragon-scene'),
+  'dragon-rider': require('./paths/dragon-rider'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -94,6 +95,10 @@ module.exports = {
   promptPrefixByPath: {
     'dragon-scene':
       'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, traditional Western high-fantasy DRAGON as the hero — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long muscular tail (NOT a serpent NOT a wyvern), jaw-dropping epic fantasy landscape with multi-layer depth, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Warcraft + D&D visual lineage, awe-inducing concept-art masterwork',
+    // dragon-rider: anchor the Western-dragon + mounted-rider + painted-oil
+    // lineage so Flux reads "dragon with a rider on it" first (2026-06-10).
+    'dragon-rider':
+      'Frank Frazetta + Brom + Boris Vallejo + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — WITH A SINGLE RIDER MOUNTED ASTRIDE its neck/shoulders, dynamic flight-or-battle moment, epic fantasy sky with multi-layer depth, painterly atmospheric grandeur, Eragon + GoT + Skyrim visual lineage, awe-inducing concept-art masterwork',
     // EMPTY by design (2026-05-14). The historic May-3 era female-warrior
     // renders had varied races (tabaxi, drow, night elf, half-elf, jaguar-
     // furred warrior in cinnabar-red lacquer) because the wrapper was just
@@ -515,6 +520,8 @@ module.exports = {
     'epic-moment',
     'castle',
     'dragon-scene',
+    // NEW 2026-06-10 — dragon-rider (rider mounted on a dragon). MVP-25.
+    'dragon-rider',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -546,7 +553,9 @@ module.exports = {
   // chaos on scenery + dragon paths so silhouette/echo distortions can fire.
   chaos: {
     enabled: true,
-    skipPaths: [],
+    // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
+    // dragon+rider / subject composition from distortion while we test).
+    skipPaths: ['dragon-rider'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -596,6 +605,9 @@ module.exports = {
       // strips that detail. Same lesson as ChibiBot bath-time
       // (playbook line 2134 — polish strips setting-as-co-hero context).
       'cozy-arcane',
+      // NEW 2026-06-10 axis paths — skip polish so the curated dragon/rider/
+      // subject language survives (Haiku strips load-bearing detail).
+      'dragon-rider',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -627,6 +639,7 @@ module.exports = {
       'male-explorer': 'male',
       'male-action-scenes': 'male',
       'dragon-scene': 'creature',
+      'dragon-rider': 'creature',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',
