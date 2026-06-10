@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DRAGON_HOARD: {
+    description:
+      'PATH-BESPOKE — DragonBot dragon-hoard path (2026-06-10). A colossal Western dragon coiled atop a mountain of treasure in its lair (Smaug archetype). Path-bespoke: dragon + hoard (treasure) + lair (cavern) + dragon_pose (sleeping/roused/guarding) + intruder (40% gated tiny thief/knight). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['dragon', 'hoard', 'lair', 'dragon_pose'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'intruder', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_RIDER: {
     description:
       'PATH-BESPOKE — DragonBot dragon-rider path (2026-06-10). The ICONIC fantasy image: a rider mounted on a colossal Western dragon (4 legs + 2 wings + horned skull) in flight or battle. Dragon + rider are co-heroes. Eragon / HTTYD / GoT / Temeraire energy. Path-bespoke: dragon + rider + action + setting + mount_detail + drama (40% gated). Universal lighting + atmosphere reused.',

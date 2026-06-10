@@ -19,6 +19,7 @@ const pathBuilders = {
   castle: require('./paths/castle'),
   'dragon-scene': require('./paths/dragon-scene'),
   'dragon-rider': require('./paths/dragon-rider'),
+  'dragon-hoard': require('./paths/dragon-hoard'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -99,6 +100,9 @@ module.exports = {
     // lineage so Flux reads "dragon with a rider on it" first (2026-06-10).
     'dragon-rider':
       'Frank Frazetta + Brom + Boris Vallejo + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — WITH A SINGLE RIDER MOUNTED ASTRIDE its neck/shoulders, dynamic flight-or-battle moment, epic fantasy sky with multi-layer depth, painterly atmospheric grandeur, Eragon + GoT + Skyrim visual lineage, awe-inducing concept-art masterwork',
+    // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
+    'dragon-hoard':
+      'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — coiled atop an OVERWHELMING mountain of glittering golden treasure in its cavern lair, opulent Smaug-on-the-hoard grandeur, dramatic warm light catching the gold, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
     // EMPTY by design (2026-05-14). The historic May-3 era female-warrior
     // renders had varied races (tabaxi, drow, night elf, half-elf, jaguar-
     // furred warrior in cinnabar-red lacquer) because the wrapper was just
@@ -522,6 +526,8 @@ module.exports = {
     'dragon-scene',
     // NEW 2026-06-10 — dragon-rider (rider mounted on a dragon). MVP-25.
     'dragon-rider',
+    // NEW 2026-06-10 — dragon-hoard (dragon coiled on treasure). MVP-25.
+    'dragon-hoard',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -555,7 +561,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider'],
+    skipPaths: ['dragon-rider', 'dragon-hoard'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -608,6 +614,7 @@ module.exports = {
       // NEW 2026-06-10 axis paths — skip polish so the curated dragon/rider/
       // subject language survives (Haiku strips load-bearing detail).
       'dragon-rider',
+      'dragon-hoard',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -640,6 +647,7 @@ module.exports = {
       'male-action-scenes': 'male',
       'dragon-scene': 'creature',
       'dragon-rider': 'creature',
+      'dragon-hoard': 'creature',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

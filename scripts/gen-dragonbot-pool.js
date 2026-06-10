@@ -148,6 +148,81 @@ EXAMPLES (3):
 3. A rival dragon breathes a torrent of fire across the far side of the frame, lighting the storm-clouds from within.`,
   },
 
+  // ════════════════════════════════════════════════════════
+  // DRAGON-HOARD PATH (2026-06-10 — new). Dragon coiled on a
+  // mountain of treasure in its lair (Smaug).
+  // ════════════════════════════════════════════════════════
+
+  dragon_hoard_dragon: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-HOARD — the colossal Western DRAGON coiled on the treasure (the hero). Each entry 30-50 words. TRADITIONAL WESTERN dragon ONLY: four legs + two massive membrane wings (folded/half-furled over the hoard, ALWAYS visible) + horned reptilian skull + thick scaled body + long muscular tail. NEVER an Eastern serpent, snake, wyrm, or wingless/two-legged wyvern.
+
+VARIETY MANDATE — ~25 dramatically different dragons by COLOR + SCALE-TEXTURE + HORNS + signature: a vast crimson-gold fire dragon glowing with inner heat; an obsidian-black dragon with red eyes; an ancient bronze dragon green with age and verdigris; a frost-white dragon rimed in ice; a deep-emerald dragon with mossy plates; a molten-veined dragon; a regal purple dragon with a feathered crest; a scarred old grey-green wyrm-king; a bronze-and-copper hoard-tyrant. Each names color + scale + horns + a signature trait, wings folded over the gold.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal Western dragon (4 legs + 2 wings + horns) in 30-50 words, wings folded/visible over a hoard. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal crimson-and-gold fire dragon glowing with inner heat, molten light leaking between armored scales, twin black horns and a spined crest, vast leathery wings half-furled over the gold, a long spiked tail coiled through the treasure.
+2. An ancient obsidian-black dragon, matte scales edged with ember-red, a crown of back-swept horns, smoldering amber eyes, blood-red wing-membranes draped over the hoard, smoke curling from its nostrils.
+3. A scarred old bronze dragon green with verdigris and age, broad battered horns, notched wing-membranes, gold coins fused to its underbelly scales, a vast muscular tail buried in treasure.`,
+  },
+
+  dragon_hoard_hoard: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-HOARD — the overwhelming mountain of TREASURE. Each entry 25-45 words. Dense, glittering, deep, spilling everywhere.
+
+VARIETY MANDATE — ~25 distinct hoards: oceans of gold coins; mounds of cut gemstones; piles of crowns and scepters; stacked enchanted weapons and shields; gem-encrusted goblets and chalices; jeweled armor and chainmail; ancient artifacts and relics; chests overflowing with jewels; golden statues and idols; strings of pearls and necklaces; magical glowing items; royal regalia; a mix of all of it heaped kilometers deep. Each names the treasure types + how it spills/mounds.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE overwhelming treasure hoard in 25-45 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An ocean of gold coins spilling in glittering dunes to every wall, studded with cut rubies and emeralds, jeweled crowns and goblets half-buried, golden idols rising from the drifts.
+2. Mounded heaps of treasure — stacked enchanted swords and shields, gem-crusted armor, chests vomiting pearls and sapphires, golden chalices and a fallen jeweled throne tilted in the pile.
+3. A deep sea of mixed plunder — coins, crowns, relics and glowing magical artifacts heaped in glittering ridges, strings of pearls draped across golden statues, gems catching the light like embers.`,
+  },
+
+  dragon_hoard_lair: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-HOARD — the LAIR (cavern/setting) holding the hoard. Each entry 25-45 words. With depth + a light source.
+
+VARIETY MANDATE — ~25 distinct lairs: a vast volcanic cavern with lava channels glowing; a crystal grotto refracting light; the ruined vault of a fallen dwarven hold; a flooded sea-cave with shafts of light; an immense natural cathedral-cavern with stalactites; the throne-hall of a dead king; a mountain's hollow heart; a tomb-complex of carved pillars; a glacier ice-cave; a temple sanctum overgrown with roots; a bottomless pit-cavern. Each names the cavern type + scale + its light source.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE lair/cavern in 25-45 words with depth + a light source. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast volcanic cavern, lava channels glowing molten-orange through the floor, the rough black walls rising into shadow, heat-haze shimmering above the treasure, stalactites dripping far overhead.
+2. An immense ruined dwarven vault, colossal carved stone pillars and broken arches receding into darkness, a single shaft of pale light lancing down from a cracked ceiling onto the gold.
+3. A crystal grotto where great translucent crystals jut from the walls, refracting a soft inner glow across the treasure in shifting rainbow light, the cavern vaulting into glittering darkness.`,
+  },
+
+  dragon_hoard_pose: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-HOARD — the dragon's POSE on the hoard. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct poses: coiled asleep with head resting on its claws; one eye cracked open, watchful; rearing up roused and roaring; head lowered, glaring straight at the viewer; draped lazily across the gold; protectively curled around the treasure; lifting its head from slumber; spreading its wings in a threat-display; lounging like a king on a throne of gold; sifting coins through its claws; just landed, settling onto the pile. Each defines body + head + wing position.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dragon pose on the hoard in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Coiled asleep atop the gold, massive head resting on crossed foreclaws, wings folded like a tent over the treasure, smoke trickling slowly from its nostrils.
+2. Roused and rearing, neck arched and jaws parting in a roar, wings flaring half-open, coins cascading off its scales as it lifts from the pile.
+3. Head lowered and glaring straight at the viewer, one claw splayed possessively over the treasure, wings mantled, eyes burning — a clear warning.`,
+  },
+
+  dragon_hoard_intruder: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-HOARD INTRUDER — a TINY secondary subject (scale-prover), fires ~40%. Each entry 12-25 words. A speck against the colossal dragon + hoard.
+
+VARIETY MANDATE — ~25 distinct intruders: a tiny armored knight creeping in with a drawn sword; a small thief reaching for a single goblet; a hooded figure with a torch at the cavern mouth; a lone adventurer frozen in awe; a single glowing dragon-egg nestled in the gold; a fallen would-be hero's skeleton in rusted armor; a burglar tiptoeing across the coins; a wizard with a staff at a distance; a pair of small treasure-hunters peeking from behind a pillar. Always TINY + deep in the scene.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny intruder/scale-prover in 12-25 words, a speck in the scene. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A tiny armored knight creeps in from the cavern mouth, sword drawn, dwarfed to a speck beneath the colossal sleeping dragon.
+2. A small hooded thief reaches for a single jeweled goblet at the edge of the hoard, frozen mid-step.
+3. A would-be hero's skeleton in rusted armor lies half-buried in the gold, a grim warning to the next.`,
+  },
+
   // ─── DRAGONBOT dark-realm path (2026-05-14, migration from legacy
   // function-based form to bespoke 5-axis system). Corrupted wastelands /
   // necromancer kingdoms / fallen empires / cursed lands. Mordor /

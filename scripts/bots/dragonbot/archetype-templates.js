@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGON_HOARD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, dragon, hoard, lair, dragon_pose, intruder } = slots;
+
+    const intruderSection = intruder
+      ? `
+━━━ AN INTRUDER — a tiny secondary subject (scale-prover, deep in the scene) ━━━
+${intruder}
+
+Render this TINY against the colossal dragon and hoard — a speck that proves the scale and adds story. NEVER a foreground figure competing with the dragon.
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a DRAGON'S HOARD scene for DragonBot — a colossal Western dragon coiled atop a mountain of treasure in its lair. The Smaug-on-the-gold archetype. Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition. The scene should make the viewer GASP at the wealth and the beast.
+
+━━━ TRADITIONAL WESTERN DRAGON ANATOMY — NON-NEGOTIABLE ━━━
+A TRADITIONAL high-fantasy WESTERN dragon — Smaug archetype. FOUR muscular legs, TWO MASSIVE membrane wings (folded or half-furled over the hoard, ALWAYS visible), HORNED reptilian-skull head, THICK SCALED armored body, LONG MUSCULAR TAIL coiled through the treasure, clawed feet. NEVER an Eastern serpent, snake, wyrm, or wingless/two-legged wyvern.
+
+━━━ THE DRAGON ━━━
+${dragon}
+
+Render the EXACT anatomy + color + horn/wing/body features. The dragon is COLOSSAL, draped and coiled over the treasure, dominating the frame.
+
+━━━ THE DRAGON'S POSE ON THE HOARD ━━━
+${dragon_pose}
+
+━━━ THE HOARD — the mountain of treasure ━━━
+${hoard}
+
+An overwhelming mass of treasure — render it dense, glittering, deep, spilling in every direction. The dragon rests ON and AMONG it.
+
+━━━ THE LAIR — the cavern/setting ━━━
+${lair}
+
+Render the lair with depth — the cavern walls, the scale, the light source within. The hoard fills the floor; the dragon crowns it.
+${intruderSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+The light catches the gold and the dragon's scales — warm glints across the treasure, the dragon lit dramatically.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, opulent. The colossal dragon coiled atop a glittering mountain of treasure dominates the frame, the lair receding into shadowed depth. A sense of immense wealth, scale, and menace. NEVER a small dragon; NEVER an empty cave — the hoard is overwhelming.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a colossal Western dragon coiled atop a vast mountain of glittering treasure in its lair — the dragon-on-the-hoard leads], [the dragon's exact anatomy + color + wings], [its pose on the hoard], [the overwhelming treasure mass], [the cavern lair with depth], [lighting catching the gold], [palette + opulent menacing mood]
+
+CRITICAL — render a TRUE Western dragon (4 legs + 2 wings + horns) coiled on an OVERWHELMING hoard of treasure. Do NOT render a serpent/wyvern or a sparse cave.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DRAGON_RIDER: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, dragon, rider, action, setting, mount_detail, drama } = slots;
 

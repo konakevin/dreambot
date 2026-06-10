@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── dragon-hoard path (2026-06-10, NEW) — dragon on treasure. MVP-25. ───
+  DRAGON_HOARD_DRAGON: load('dragon_hoard_dragon'),
+  DRAGON_HOARD_HOARD: load('dragon_hoard_hoard'),
+  DRAGON_HOARD_LAIR: load('dragon_hoard_lair'),
+  DRAGON_HOARD_POSE: load('dragon_hoard_pose'),
+  DRAGON_HOARD_INTRUDER: load('dragon_hoard_intruder'),
+
   // ─── dragon-rider path (2026-06-10, NEW) — rider on a dragon. MVP-25. ───
   DRAGON_RIDER_DRAGON: load('dragon_rider_dragon'),
   DRAGON_RIDER_RIDER: load('dragon_rider_rider'),
