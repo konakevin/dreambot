@@ -244,30 +244,62 @@ EXAMPLES (3):
 
   dragon_hoard_hoard: {
     format: 'simple',
-    theme: `DRAGONBOT DRAGON-HOARD — the overwhelming mountain of TREASURE. Each entry 25-45 words. Dense, glittering, deep, spilling everywhere.
+    theme: `DRAGONBOT DRAGON-HOARD COLLECTION — the COLLECTION this dragon has gathered, which REFLECTS ITS NATURE. The whole point of this axis is VARIETY: dragons collect FAR more than gold, and every dragon's hoard is DIFFERENT. Each entry 25-45 words. Gold is just ONE option among many — heavily favor the non-gold collections.
 
-VARIETY MANDATE — ~25 distinct hoards: oceans of gold coins; mounds of cut gemstones; piles of crowns and scepters; stacked enchanted weapons and shields; gem-encrusted goblets and chalices; jeweled armor and chainmail; ancient artifacts and relics; chests overflowing with jewels; golden statues and idols; strings of pearls and necklaces; magical glowing items; royal regalia; a mix of all of it heaped kilometers deep. Each names the treasure types + how it spills/mounds.`,
+VARIETY MANDATE — ~25 DRAMATICALLY different collections, each themed to a kind of dragon. SPAN these (gold ≤ 15% of entries):
+  • A SCHOLAR-dragon's library — towering shelves of ancient books, scrolls, maps, orreries, star-charts
+  • A WAR-dragon's trophy hall — racked weapons, shields, banners, suits of armor of slain knights, mounted skulls
+  • A SEA-dragon's drowned plunder — shipwreck-timbers, anchors, pearls, coral, sea-chests, barnacled treasure
+  • A NATURE-dragon's living hoard — antlers, bones, amber, petrified wood, blooming moss, a hoard of seeds and gems grown over with vines
+  • An ART-collector dragon — marble statues, tapestries, paintings, sculptures, masks, a gallery of stolen beauty
+  • A CRYSTAL-dragon's geode hoard — raw gemstones, growing crystal clusters, geodes split open glowing
+  • A BONE/DEATH dragon's ossuary — skulls, bones, sarcophagi, funerary masks, grave-goods
+  • A MAGE-dragon's relic vault — glowing magical artifacts, staves, enchanted orbs, runic tomes, bottled spells
+  • A MAGPIE-dragon's curiosities — mismatched shiny oddities, mirrors, instruments, clocks, trinkets, a chaotic jackdaw nest of stuff
+  • A ROYAL hoard — crowns, scepters, thrones, royal regalia, jeweled finery
+  • An EGG/brood hoard — a nest of dragon-eggs cradled among soft treasures
+  • A MINIMALIST dragon — just a FEW chosen precious relics on bare stone, curated not piled
+  • Classic GOLD (only occasionally) — coins, jewels, the cliché done richly
+Each names WHAT is collected + how it's arranged (piled / shelved / racked / nested / displayed / strewn). Make the collection tell you what KIND of dragon lives here.`,
     touchpoints: [],
-    instructions: `Each entry is ONE overwhelming treasure hoard in 25-45 words. Output a NUMBERED list.
+    instructions: `Each entry is ONE themed dragon collection in 25-45 words that reflects a kind of dragon. Gold is rare; favor books / weapons / shipwrecks / bones / art / crystals / curiosities / eggs / nature / relics. Output a NUMBERED list.
 
-EXAMPLES (3):
-1. An ocean of gold coins spilling in glittering dunes to every wall, studded with cut rubies and emeralds, jeweled crowns and goblets half-buried, golden idols rising from the drifts.
-2. Mounded heaps of treasure — stacked enchanted swords and shields, gem-crusted armor, chests vomiting pearls and sapphires, golden chalices and a fallen jeweled throne tilted in the pile.
-3. A deep sea of mixed plunder — coins, crowns, relics and glowing magical artifacts heaped in glittering ridges, strings of pearls draped across golden statues, gems catching the light like embers.`,
+EXAMPLES (4):
+1. A scholar-dragon's library — colossal shelves of ancient leather tomes and rolled scrolls climbing the cavern walls, brass orreries and star-charts on reading-stands, loose parchments drifting underfoot.
+2. A war-dragon's trophy hall — racks of notched swords and shattered shields, the dented armor of slain knights mounted on the walls, tattered banners hanging, a heap of horned skulls in the corner.
+3. A sea-dragon's drowned plunder — barnacled chests and shipwreck-timbers, drifts of pearls and pink coral, rusted anchors and a ship's figurehead, treasure crusted with salt and sea-glass.
+4. A nature-dragon's living hoard — great antlers and bleached bones woven through with blooming vines, chunks of amber glowing with trapped insects, petrified logs and a scatter of gems grown over with moss.`,
   },
 
   dragon_hoard_lair: {
     format: 'simple',
-    theme: `DRAGONBOT DRAGON-HOARD — the LAIR (cavern/setting) holding the hoard. Each entry 25-45 words. With depth + a light source.
+    theme: `DRAGONBOT DRAGON-HOARD HOME — the LAIR / DWELLING the dragon lives in. The point of this axis is VARIETY: a dragon's home is as distinct as the dragon — NOT always a generic dark cavern. Each entry 25-45 words, with depth + a light source. This is a lived-in HOME, not just a hole in a rock.
 
-VARIETY MANDATE — ~25 distinct lairs: a vast volcanic cavern with lava channels glowing; a crystal grotto refracting light; the ruined vault of a fallen dwarven hold; a flooded sea-cave with shafts of light; an immense natural cathedral-cavern with stalactites; the throne-hall of a dead king; a mountain's hollow heart; a tomb-complex of carved pillars; a glacier ice-cave; a temple sanctum overgrown with roots; a bottomless pit-cavern. Each names the cavern type + scale + its light source.`,
+VARIETY MANDATE — ~25 DRAMATICALLY different dragon homes. SPAN across:
+  • A glowing VOLCANIC forge-cavern, lava channels and a natural smithy
+  • A drowned SEA-PALACE / flooded throne-room, shafts of green light through water
+  • A frozen GLACIER ice-cave, blue ice walls, frozen relics suspended in the ice
+  • A treetop AERIE / cliffside eyrie open to the sky, a great nest of timber and bone
+  • A claimed ancient LIBRARY-TEMPLE, vaulted stone shelves and broken stained-glass
+  • A ruined royal THRONE-HALL the dragon has made its own, fallen banners and a cracked dome
+  • A crystal GEODE cavern, walls of growing gemstone refracting light
+  • An overgrown JUNGLE-RUIN, roots and vines through carved stone, dappled green light
+  • A desert TOMB / pyramid vault, sand-drifted hieroglyph walls, a shaft of harsh sun
+  • A hollow behind a great WATERFALL, mist and rainbows, wet black stone
+  • A floating SKY-ISLAND ruin open to the clouds
+  • A vast abandoned DWARVEN HALL, colossal carved pillars and dead forge-fires
+  • A swamp BOG-LAIR among sunken roots and will-o-wisps
+  • A natural CATHEDRAL-CAVERN of stalactites and an underground lake
+  • A mountaintop OPEN PEAK, a windswept summit roost under the stars
+Each names the home type + scale + its light source + a touch of how the dragon has made it home.`,
     touchpoints: [],
-    instructions: `Each entry is ONE lair/cavern in 25-45 words with depth + a light source. Output a NUMBERED list.
+    instructions: `Each entry is ONE distinct dragon HOME in 25-45 words (not always a cavern) with depth + light. Output a NUMBERED list.
 
-EXAMPLES (3):
-1. A vast volcanic cavern, lava channels glowing molten-orange through the floor, the rough black walls rising into shadow, heat-haze shimmering above the treasure, stalactites dripping far overhead.
-2. An immense ruined dwarven vault, colossal carved stone pillars and broken arches receding into darkness, a single shaft of pale light lancing down from a cracked ceiling onto the gold.
-3. A crystal grotto where great translucent crystals jut from the walls, refracting a soft inner glow across the treasure in shifting rainbow light, the cavern vaulting into glittering darkness.`,
+EXAMPLES (4):
+1. A drowned sea-palace, the flooded throne-room of a sunken kingdom, broken columns and a tilted throne wreathed in seaweed, pale green light filtering down through the water far above.
+2. A frozen glacier ice-cave, walls of deep blue ice shot through with cracks, ancient relics and a frozen longship suspended within the ice, cold daylight glowing through the translucent ceiling.
+3. A treetop aerie atop a colossal ancient tree, a vast nest of timber, bone and gathered treasure open to a sunset sky, the forest canopy rolling away far below.
+4. A claimed library-temple, soaring vaulted stone, shelves carved into the walls, shafts of colored light falling through shattered stained-glass onto the dragon's gathered tomes.`,
   },
 
   dragon_hoard_pose: {

@@ -1996,7 +1996,10 @@ Render this TINY against the colossal dragon and hoard — a speck that proves t
 `
       : '';
 
-    return `You are a fantasy concept-art painter writing a DRAGON'S HOARD scene for DragonBot — a colossal Western dragon coiled atop a mountain of treasure in its lair. The Smaug-on-the-gold archetype. Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition. The scene should make the viewer GASP at the wealth and the beast.
+    return `You are a fantasy concept-art painter writing a DRAGON IN ITS LAIR scene for DragonBot — a colossal Western dragon AT HOME in its unique lair, surrounded by the collection it has gathered over centuries. Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition. The scene should make the viewer GASP — and feel like a real lived-in DRAGON'S HOME.
+
+━━━ EVERY DRAGON'S HOME IS DIFFERENT — ABSOLUTE FIRST RULE ━━━
+This is NOT a generic "dragon on a pile of gold." Each dragon has a DISTINCT home and a DISTINCT collection that reflects its nature — a scholar-dragon's library, a sea-dragon's drowned palace of shipwreck-treasure, a war-dragon's trophy hall of armor and banners, a frost-dragon's ice-locked relics, an art-collector's gallery of statues. Render the SPECIFIC home + SPECIFIC collection below as a cohesive, characterful dwelling — gold is rare and never the default.
 
 ━━━ TRADITIONAL WESTERN DRAGON ANATOMY — NON-NEGOTIABLE ━━━
 A TRADITIONAL high-fantasy WESTERN dragon — Smaug archetype. FOUR muscular legs, TWO MASSIVE membrane wings (folded or half-furled over the hoard, ALWAYS visible), HORNED reptilian-skull head, THICK SCALED armored body, LONG MUSCULAR TAIL coiled through the treasure, clawed feet. NEVER an Eastern serpent, snake, wyrm, or wingless/two-legged wyvern.
@@ -2009,15 +2012,15 @@ Render the EXACT anatomy + color + horn/wing/body features. The dragon is COLOSS
 ━━━ THE DRAGON'S POSE ON THE HOARD ━━━
 ${dragon_pose}
 
-━━━ THE HOARD — the mountain of treasure ━━━
+━━━ THE COLLECTION — what THIS dragon hoards (reflects its nature) ━━━
 ${hoard}
 
-An overwhelming mass of treasure — render it dense, glittering, deep, spilling in every direction. The dragon rests ON and AMONG it.
+Render this SPECIFIC collection in rich detail — it tells you what kind of dragon lives here. It may be piled, shelved, racked, nested, or displayed. NOT a generic gold pile unless the entry says gold.
 
-━━━ THE LAIR — the cavern/setting ━━━
+━━━ THE HOME — the dragon's lair/dwelling ━━━
 ${lair}
 
-Render the lair with depth — the cavern walls, the scale, the light source within. The hoard fills the floor; the dragon crowns it.
+Render this distinct HOME with depth and its own light source — a lived-in dwelling the dragon has claimed. The collection fills it; the dragon resides in it as its master.
 ${intruderSection}
 ━━━ LIGHTING ━━━
 ${lighting}
