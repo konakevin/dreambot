@@ -2073,10 +2073,10 @@ ${dragon}
 
 Render the EXACT anatomy + color + horn/wing/body features. Wings ALWAYS visible.
 
-━━━ THE RIDER (mounted on the dragon) ━━━
+━━━ THE RIDER (mounted on the dragon — render their SPECIFIC race/lineage) ━━━
 ${rider}
 
-Render the rider seated astride the dragon and SECURED IN AN ORNATE RIDING HARNESS / SADDLE-RIG (detailed below) — NOT just perched on bare scales. Armor/garb, pose, weapon if any. ONE rider only, strapped and buckled into the elaborate rig, leaning with the motion. NEVER standing beside the dragon, NEVER sitting on a bare back — they are HARNESSED onto it.
+Render the rider's EXACT race/lineage as a defining visual property — e.g. drow obsidian skin + white hair, tiefling horns + red/violet skin, orc green skin + tusks, elf pointed ears, dragonborn scaled face, tabaxi feline features, dwarf stout build + braided beard, gnome/goblin small stature, aasimar inner glow. Do NOT default every rider to the same generic blonde human warrior. Render their armor/garb, pose, and weapon. ONE rider only, seated in the saddle/harness, leaning with the motion. NEVER standing beside the dragon, NEVER on a bare back.
 
 ━━━ THE ACTION — what dragon + rider are doing RIGHT NOW ━━━
 ${action}

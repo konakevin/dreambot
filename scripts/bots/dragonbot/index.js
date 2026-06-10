@@ -99,8 +99,13 @@ module.exports = {
       'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, traditional Western high-fantasy DRAGON as the hero — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long muscular tail (NOT a serpent NOT a wyvern), jaw-dropping epic fantasy landscape with multi-layer depth, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Warcraft + D&D visual lineage, awe-inducing concept-art masterwork',
     // dragon-rider: anchor the Western-dragon + mounted-rider + painted-oil
     // lineage so Flux reads "dragon with a rider on it" first (2026-06-10).
+    // 2026-06-10: REMOVED the artist names (Frazetta/Brom/Vallejo/Whelan) — same
+    // training-data lock as artsy-girl: they forced every rider into the same
+    // Conan/Norse blonde-barbarian-hero figure regardless of the rolled race/
+    // class. Descriptive painted-oil prefix instead + race-leads so varied
+    // riders (drow/tiefling/orc/elf/dragonborn/etc.) render.
     'dragon-rider':
-      'Frank Frazetta + Brom + Boris Vallejo + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — WITH A SINGLE RIDER MOUNTED ASTRIDE its neck/shoulders, dynamic flight-or-battle moment, epic fantasy sky with multi-layer depth, painterly atmospheric grandeur, Eragon + GoT + Skyrim visual lineage, awe-inducing concept-art masterwork',
+      'classic painted fantasy-novel-cover oil illustration, hand-painted oil-on-canvas with visible painterly brushwork in rich full color, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — WITH A SINGLE RIDER of a SPECIFIC fantasy race/lineage MOUNTED ASTRIDE its neck/shoulders, the rider rendered with their EXACT race anatomy + class as the defining feature, dynamic flight-or-battle moment, epic fantasy sky with multi-layer depth, painterly atmospheric grandeur, Eragon + GoT + Skyrim visual lineage, awe-inducing concept-art masterwork',
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
@@ -220,6 +225,13 @@ module.exports = {
   // To unban: add the model id back to that path's array.
   // To extend a ban: remove the model id from the array.
   modelByPath: {
+    // dragon-rider locked to Flux 1.1 Pro + Ultra + GPT-2 (Kevin 2026-06-10 —
+    // Flux 2 / banana didn't land the rider). 3 models.
+    'dragon-rider': [
+      'openai/gpt-image-2',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
     // ── Character paths — Banana BANNED (Kevin 2026-06-05 after character-path
     // ── audit: Banana lost on every DragonBot character path).
     'artsy-girl': [
