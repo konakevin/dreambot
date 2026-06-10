@@ -225,10 +225,13 @@ module.exports = {
   // To unban: add the model id back to that path's array.
   // To extend a ban: remove the model id from the array.
   modelByPath: {
-    // dragon-rider locked to Flux 1.1 Pro + Ultra + GPT-2 (Kevin 2026-06-10 —
-    // Flux 2 / banana didn't land the rider). 3 models.
+    // dragon-rider locked to GPT-2 + Nano Banana + Flux 1.1 Pro + Ultra
+    // (Kevin 2026-06-10 — Flux 2 didn't land the rider). 4 models. NOTE:
+    // banana isn't in cleanMediumByModel for DragonBot, so it renders the
+    // full painted_fantasy medium directly (the version Kevin reviewed).
     'dragon-rider': [
       'openai/gpt-image-2',
+      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
